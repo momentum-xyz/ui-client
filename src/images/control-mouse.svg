@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="92.5" height="95.5" viewBox="0 0 92.5 95.5">
+  <defs>
+    <filter id="Path_159" x="0" y="10.5" width="63" height="85" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="icon_mouse" data-name="icon mouse" transform="translate(9.5 0.5)">
+    <g transform="matrix(1, 0, 0, 1, -9.5, -0.5)" filter="url(#Path_159)">
+      <path id="Path_159-2" data-name="Path 159" d="M22.75,71.25h0a22,22,0,0,1-22-22v-22a22,22,0,0,1,22-22h0a22,22,0,0,1,22,22v22a22,22,0,0,1-22,22Z" transform="translate(8.75 11.75)" fill="rgba(18,37,70,0.4)" stroke="#6aa3c4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+    <line id="Line_24" data-name="Line 24" x2="44" transform="translate(0 44)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Path_160" data-name="Path 160" d="M6.75,44.75V17.25h0A16.5,16.5,0,0,1,23.25.75h0a16.5,16.5,0,0,1,16.5,16.5V25.5A13.75,13.75,0,0,0,53.5,39.25h0A13.75,13.75,0,0,0,67.25,25.5V.75" transform="translate(15.25 -0.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+@keyframes skeleton-animation {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+$skeleton-base-color: #3c3b57;
+$skeleton-hightlight-color: #9997be;
+
+
+.loading-skeleton {
+    background-color:$skeleton-base-color;
+    background-image: linear-gradient(
+      90deg,
+      $skeleton-base-color,
+      $skeleton-hightlight-color,
+    $skeleton-base-color 
+    );
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    // border-radius: 1px;
+    display: inline-block;
+    line-height: 1;
+    font-size: inherit;
+    width: 100%;
+    min-width: 120px;
+    animation: skeleton-animation 3s ease-in-out infinite;
+}

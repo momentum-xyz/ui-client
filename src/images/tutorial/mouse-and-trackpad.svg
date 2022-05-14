@@ -1,0 +1,40 @@
+<svg width="161" height="83" viewBox="0 0 161 83" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#MouseAndTrackpadClip0)">
+<path d="M22.5015 82.5C16.6667 82.5 11.0709 80.1822 6.94512 76.0564C2.81932 71.9305 0.501465 66.3348 0.501465 60.5V38.5C0.501465 32.6652 2.81932 27.0695 6.94512 22.9437C11.0709 18.8179 16.6667 16.5 22.5015 16.5C28.3362 16.5 33.932 18.8179 38.0578 22.9437C42.1836 27.0695 44.5015 32.6652 44.5015 38.5V60.5C44.5015 66.3348 42.1836 71.9305 38.0578 76.0564C33.932 80.1822 28.3362 82.5 22.5015 82.5Z" fill="url(#MouseAndTrackpadPaint0_linear)" fill-opacity="0.2"/>
+<path d="M22.5015 82C16.7993 82 11.3307 79.7348 7.29867 75.7028C3.26664 71.6708 1.00146 66.2022 1.00146 60.5V38.5C1.00146 32.7978 3.26664 27.3292 7.29867 23.2972C11.3307 19.2652 16.7993 17 22.5015 17C28.2036 17 33.6722 19.2652 37.7043 23.2972C41.7363 27.3292 44.0015 32.7978 44.0015 38.5V60.5C44.0015 66.2022 41.7363 71.6708 37.7043 75.7028C33.6722 79.7348 28.2036 82 22.5015 82Z" stroke="url(#MouseAndTrackpadpaint1_linear)" stroke-opacity="0.2"/>
+<path d="M0.501465 44H44.5015" stroke="url(#paint2_linear)" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22.5015 44V16.5C22.5015 12.1239 24.2399 7.92709 27.3342 4.83274C30.4286 1.73839 34.6254 0 39.0015 0V0C43.3775 0 47.5744 1.73839 50.6687 4.83274C53.7631 7.92709 55.5015 12.1239 55.5015 16.5V24.75C55.5015 28.3967 56.9501 31.8941 59.5287 34.4727C62.1074 37.0513 65.6047 38.5 69.2515 38.5V38.5C72.8982 38.5 76.3956 37.0513 78.9742 34.4727C81.5528 31.8941 83.0015 28.3967 83.0015 24.75V0" stroke="url(#MouseAndTrackpadPaint3_linear)" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M160.666 36.0004C160.666 32.3208 157.678 29.3336 153.999 29.3336H99.6679C95.9886 29.3336 93.0015 32.3208 93.0015 36.0004V75.8336C93.0015 79.5129 95.9886 82.5 99.6679 82.5H153.999C157.678 82.5 160.666 79.5129 160.666 75.8336V36.0004Z" fill="url(#MouseAndTrackpadPaint4_linear)" fill-opacity="0.2"/>
+<path d="M153.999 29.8336C157.402 29.8336 160.166 32.597 160.166 36.0004V75.8336C160.166 79.2366 157.402 82 153.999 82H99.6679C96.2648 82 93.5015 79.2367 93.5015 75.8336V36.0004C93.5015 32.5969 96.2648 29.8336 99.6679 29.8336H153.999Z" stroke="url(#MouseAndTrackpadPaint5_linear)" stroke-opacity="0.2"/>
+<path d="M151.487 33.8336C154.558 33.8336 156.999 36.1674 156.999 38.9764V72.6912C156.999 75.4998 154.558 77.8336 151.487 77.8336H102.508C99.4374 77.8336 96.9985 75.4999 96.9985 72.6912V38.9764C96.9985 36.1673 99.4374 33.8336 102.508 33.8336H151.487Z" stroke="#05F2F2"/>
+</g>
+<defs>
+<linearGradient id="MouseAndTrackpadPaint0_linear" x1="0.501465" y1="16.5" x2="61.4245" y2="57.1154" gradientUnits="userSpaceOnUse">
+<stop stop-color="#05F2F2"/>
+<stop offset="1" stop-color="#07DB9F"/>
+</linearGradient>
+<linearGradient id="MouseAndTrackpadPaint1_linear" x1="0.501465" y1="16.5" x2="61.4245" y2="57.1154" gradientUnits="userSpaceOnUse">
+<stop stop-color="#05F2F2"/>
+<stop offset="1" stop-color="#07DB9F"/>
+</linearGradient>
+<linearGradient id="MouseAndTrackpadPaint2_linear" x1="0.501465" y1="44" x2="0.546896" y2="45.999" gradientUnits="userSpaceOnUse">
+<stop stop-color="#05F2F2"/>
+<stop offset="1" stop-color="#07DB9F"/>
+</linearGradient>
+<linearGradient id="MouseAndTrackpadPaint3_linear" x1="22.5015" y1="0" x2="64.3609" y2="57.5568" gradientUnits="userSpaceOnUse">
+<stop stop-color="#05F2F2"/>
+<stop offset="1" stop-color="#07DB9F"/>
+</linearGradient>
+<linearGradient id="MouseAndTrackpadPaint4_linear" x1="93.0015" y1="29.3336" x2="144.659" y2="95.0779" gradientUnits="userSpaceOnUse">
+<stop stop-color="#05F2F2"/>
+<stop offset="1" stop-color="#07DB9F"/>
+</linearGradient>
+<linearGradient id="MouseAndTrackpadPaint5_linear" x1="93.0015" y1="29.3336" x2="144.659" y2="95.0779" gradientUnits="userSpaceOnUse">
+<stop stop-color="#05F2F2"/>
+<stop offset="1" stop-color="#07DB9F"/>
+</linearGradient>
+<clipPath id="MouseAndTrackpadClip0">
+<rect width="160.165" height="82.5" fill="white" transform="translate(0.501465)"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,88 @@
+:root {
+  /** Primary colors **/
+  --danger: #ffae63;
+  --blue-dark: #051745;
+  --online: #01ffb3;
+  --offline: #ffae63;
+  --accent-color: #01ffb3;
+  --color-picker-bg: #25355e;
+  --uploader-bg: #132247;
+  --color-dropdown-bg: #25355e;
+  --danger-red: #f25d05;
+  --toolbar-bg: #0c0c0c4d;
+
+  --white: #ffffff;
+  --black: #000000;
+  --black-selected: #000101;
+
+  --white-30: #fff2f14d;
+
+  --black-100: #0c1019f2;
+  --black-90: #0c1019e6;
+  --black-80: #0c1019cc;
+  --black-70: #0c1019b3;
+  --black-60: #0c101999;
+  --black-50: #0c101980;
+  --black-40: #0c101966;
+  --black-30: #0c10194d;
+  --black-20: #0c101933;
+  --black-10: #0c10191a;
+
+  --prime-blue-100: #05f2f2;
+  --prime-blue-90: #05f2f2e6;
+  --prime-blue-80: #05f2f2cc;
+  --prime-blue-70: #05f2f2b3;
+  --prime-blue-60: #05f2f299;
+  --prime-blue-50: #05f2f280;
+  --prime-blue-40: #05f2f266;
+  --prime-blue-30: #05f2f24d;
+  --prime-blue-20: #05f2f233;
+  --prime-blue-10: #05f2f21a;
+
+  --new-blue-100: #051745;
+  --new-blue-90: #051745e5;
+  --new-blue-80: #051745cc;
+  --new-blue-70: #051745b3;
+  --new-blue-60: #05174599;
+  --new-blue-50: #05174580;
+  --new-blue-40: #05174566;
+  --new-blue-30: #0517454d;
+  --new-blue-20: #05174533;
+  --new-blue-10: #0517451a;
+
+  /** Input colors **/
+
+  --input-background: #121c34;
+  --hover-background: #25355e;
+
+  /** Toast messages **/
+  --success-background: rgba(7, 219, 159, 0.5);
+  --success-border-color: rgba(7, 219, 159, 1);
+  --warning-border-color: rgba(240, 145, 2, 1);
+  --warning-background: rgba(240, 145, 2, 0.5);
+  --default-progress-bar: rgba(240, 145, 2, 1);
+
+  /** Typography **/
+  --font-size-xxl: 25px;
+  --font-size-xl: 18px;
+  --font-size-l: 16px;
+  --font-size-m: 14px;
+  --font-size-s: 13px;
+  --font-size-xs: 12px;
+  --font-size-xxs: 11px;
+
+  --font-weight-bold: 700;
+
+  /* Transition */
+  --tr-100-ei: 100ms ease-in;
+  --tr-150-ei: 150ms ease-in;
+  --tr-200-ei: 200ms ease-in;
+
+  /* File Uploader */
+  --file-uploader-width: 480px;
+  --file-uploader-height: 110px;
+
+  /* Z INDEXES */
+  --dialog-z-index: 100;
+  --overlay-z-index: 40;
+}

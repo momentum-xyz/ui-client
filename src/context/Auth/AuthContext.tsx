@@ -1,0 +1,71 @@
+import React, {useEffect, useReducer} from 'react';
+import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router-dom';
+
+import {useStore, useSession} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+
+import UnityService from '../Unity/UnityService';
+import WebsocketService from '../Websocket/WebsocketService';
+
+import {authDefaultState, AuthState} from './AuthState';
+import {AUTH_LOGGED_IN_ACTION, authReducer} from './AuthReducer';
+
+export interface IAuthContextProps {
+  authState: AuthState;
+}
+
+// TODO: Must be removed
+export const AuthContext = React.createContext<IAuthContextProps | undefined>(undefined);
+
+const AuthComponent: React.FC = (props) => {
+  const {sessionStore} = useStore();
+  const {userId, profile} = sessionStore;
+
+  const history = useHistory();
+
+  const onSuccess = (token?: string) => UnityService.setAuthToken(token);
+  const onError = () => history.push(ROUTES.login);
+
+  const {isReady, idToken} = useSession(onSuccess, onError);
+
+  /* 1. Load user profile */
+  useEffect(() => {
+    if (isReady && !profile) {
+      sessionStore.init(idToken);
+      WebsocketService.initialize();
+    }
+  }, [isReady, profile]);
+
+  /* 2. Open Complete Registration form */
+  useEffect(() => {
+    if (isReady && !!profile && !profile.profile?.onBoarded) {
+      history.push(ROUTES.signUpComplete);
+    }
+  }, [isReady, profile]);
+
+  // TODO: Move to mst-store
+  const [authState, authDispatch] = useReducer(authReducer, authDefaultState);
+
+  // TODO: Already implemented inside SessionStore. Removal
+  useEffect(() => {
+    if (profile && !authState.user) {
+      authDispatch({
+        type: AUTH_LOGGED_IN_ACTION,
+        payload: {
+          // @ts-ignore
+          user: {...profile},
+          subject: userId
+        }
+      });
+    }
+  }, [profile, authState.user]);
+
+  return (
+    <AuthContext.Provider value={{authState}}>
+      {profile?.profile?.onBoarded && props.children}
+    </AuthContext.Provider>
+  );
+};
+
+export default observer(AuthComponent);

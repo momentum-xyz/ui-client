@@ -1,0 +1,51 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: react-client-deployment
+  labels:
+    app: react-client
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-client
+  template:
+    metadata:
+      labels:
+        app: react-client
+    spec:
+      containers:
+        - name: react-client
+          image: odysseyprod.azurecr.io/react-client:latest
+          env:
+            - name: DEPLOYMENT_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: base_url
+            - name: REACT_APP_AUTH_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: backend_aad_client_id
+            - name: REACT_APP_AUTH_TENANT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: aad_tenant_id
+            - name: REACT_APP_AUTH_API_SCOPE
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: aad_auth_api_scope
+            - name: REACT_APP_AUTH_REDIRECT_URI
+              value: $(DEPLOYMENT_BASE_URL)/
+            - name: BACKEND_ENDPOINT_URL
+              value: $(DEPLOYMENT_BASE_URL)/backend/api/v1
+          tty: true 
+          ports:
+            - name: web
+              containerPort: 80
+   

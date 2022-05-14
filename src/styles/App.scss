@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap');
+@import 'modules/nav';
+@import 'modules/unity';
+// @import "components/loader";
+@import 'components/skeleton';
+@import 'components/modal';
+
+.Online__users-max-height {
+  max-height: calc(100vh - 70px - 10px);
+}
+
+.Online__users-full-height {
+  height: calc(100vh - 70px - 10px);
+}
+
+.Online__users-max-height {
+  height: max-content;
+}
+
+.pointer-events-all{
+  pointer-events: all;
+}
+
+.aspect-ratio-video {
+  aspect-ratio: 16 / 9;
+}
+
+.hyphens-auto {
+  hyphens: auto;
+}

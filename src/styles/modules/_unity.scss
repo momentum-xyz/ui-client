@@ -1,0 +1,57 @@
+// Unity
+// ------------------
+//
+// 1.  Unity active
+
+// 1.  Unity active
+// ------------------
+//
+// Only works with a 'unity-active' class in the body
+//
+
+.unity-active {
+  #unity-container {
+    z-index: 10;
+
+    * {
+      z-index: 10;
+    }
+  }
+
+  #main {
+    z-index: 0;
+
+    // * {
+    //     z-index: 10;
+    // }
+  }
+
+  .z-main-u {
+      z-index: 30;
+  }
+}
+
+#unity-container {
+  z-index: 0;
+
+  * {
+    z-index: 0;
+  }
+}
+
+.debug-bg {
+    background-color: #101044;
+    background: linear-gradient(135deg, #bfa36a55 25%, transparent 25%) -21px 0/
+        42px 42px,
+      linear-gradient(225deg, #bfa36a 25%, transparent 25%) -21px 0/ 42px 42px,
+      linear-gradient(315deg, #bfa36a55 25%, transparent 25%) 0px 0/ 42px 42px,
+      linear-gradient(45deg, #bfa36a 25%, #101044 25%) 0px 0/ 42px 42px;
+}
+
+#main {
+  z-index: 30;
+}
+
+* {
+    z-index: inherit;
+  }
