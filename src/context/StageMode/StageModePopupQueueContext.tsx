@@ -1,0 +1,102 @@
+import React, {useContext, useState} from 'react';
+
+import useWebsocketEvent from '../Websocket/hooks/useWebsocketEvent';
+
+export enum StageModePopupType {
+  AWAITING_PERMISSION = 'AWAITING_PERMISSION',
+  RECEIVED_PERMISSION_REQUEST = 'RECEIVED_PERMISSION_REQUEST'
+}
+
+export interface StageModePopupOptions {
+  user?: string;
+  userId?: string;
+  onAccept?: () => Promise<boolean>;
+  onDecline?: () => Promise<boolean>;
+}
+
+export interface StageModePopupInfo {
+  userId?: string;
+  type: StageModePopupType;
+  user?: string;
+  onAccept?: () => Promise<boolean>;
+  onDecline?: () => Promise<boolean>;
+}
+
+export interface StageModePopupQueueContextInterface {
+  popups: StageModePopupInfo[];
+  addRequestPopup: (userId: string, options?: StageModePopupOptions) => void;
+  removeRequestPopup: (userId: string) => void;
+  addAwaitingPermissionPopup: () => void;
+  removeAwaitingPermissionPopup: () => void;
+}
+
+const StageModePopupQueueContext = React.createContext<StageModePopupQueueContextInterface>({
+  popups: [],
+  addRequestPopup: () => {},
+  removeRequestPopup: () => {},
+  addAwaitingPermissionPopup: () => {},
+  removeAwaitingPermissionPopup: () => {}
+});
+
+export const StageModePopupQueueProvider: React.FC = ({children}) => {
+  const [popups, setPopups] = useState<StageModePopupInfo[]>([]);
+
+  const addRequestPopup = (userId: string, options?: StageModePopupOptions) => {
+    setPopups([
+      ...popups,
+      {
+        userId: userId,
+        type: StageModePopupType.RECEIVED_PERMISSION_REQUEST,
+        ...options
+      }
+    ]);
+  };
+
+  const addAwaitingPermissionPopup = () => {
+    setPopups([
+      ...popups,
+      {
+        type: StageModePopupType.AWAITING_PERMISSION
+      }
+    ]);
+  };
+
+  const removeRequestPopup = () => {
+    const filteredPopups = popups.filter(
+        (info) => info.type !== StageModePopupType.RECEIVED_PERMISSION_REQUEST);
+    setPopups(filteredPopups);
+  };
+
+  const removeAwaitingPermissionPopup = () => {
+    const filteredPopups = popups.filter(
+      (info) => info.type !== StageModePopupType.AWAITING_PERMISSION
+    );
+    setPopups(filteredPopups);
+  };
+
+  useWebsocketEvent('stage-mode-accepted', () => {
+    removeRequestPopup();
+  });
+
+  useWebsocketEvent('stage-mode-declined', () => {
+    removeRequestPopup();
+  });
+
+  return (
+    <StageModePopupQueueContext.Provider
+      value={{
+        popups,
+        addRequestPopup,
+        addAwaitingPermissionPopup,
+        removeAwaitingPermissionPopup,
+        removeRequestPopup
+      }}
+    >
+      {children}
+    </StageModePopupQueueContext.Provider>
+  );
+};
+
+export default StageModePopupQueueContext;
+
+export const useStageModePopupQueueContext = () => useContext(StageModePopupQueueContext);

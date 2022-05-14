@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  unity.client:
+    container_name: react-client
+    image: react-client
+    build: .
+    networks:
+      - om
+    restart: always
+    ports:
+      - 80:80
+    command: sh -c "/usr/local/bin/start.sh"
+    tty: true
+    
