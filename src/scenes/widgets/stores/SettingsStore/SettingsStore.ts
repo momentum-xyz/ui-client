@@ -30,11 +30,13 @@ const SettingsStore = types
 
       if (microphoneConsent) {
         const devices = yield navigator.mediaDevices.enumerateDevices();
+        // @ts-ignore
         self.audioInputs = devices.filter((device) => device.kind === 'audioinput');
       }
 
       if (cameraConsent) {
         const devices = yield navigator.mediaDevices.enumerateDevices();
+        // @ts-ignore
         self.videoInputs = devices.filter((device) => device.kind === 'videoinput');
       }
     }),

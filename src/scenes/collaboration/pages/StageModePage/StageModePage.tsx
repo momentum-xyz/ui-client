@@ -48,7 +48,7 @@ const StageModePage: FC = () => {
       <TopBar title={space.name ?? ''} subtitle="stage" onClose={leaveCollaborationSpace}>
         {(spaceStore.isAdmin || spaceStore.isMember) && (
           <styled.ToggleContainer>
-            <Toggle checked={stageMode} onChange={(checked) => setStageMode(checked ? 1 : 0)} />
+            <Toggle checked={!!stageMode} onChange={(checked) => setStageMode(checked ? 1 : 0)} />
             <Text theme={theme} text="Stage active" size="xs" />
           </styled.ToggleContainer>
         )}

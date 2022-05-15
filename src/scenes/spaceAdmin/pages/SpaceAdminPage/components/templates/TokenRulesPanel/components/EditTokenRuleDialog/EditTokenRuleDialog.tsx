@@ -45,6 +45,7 @@ const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
     });
   };
 
+  // @ts-ignore
   const renderRoleInput = ({field: {onChange, value}}) => (
     <Dropdown
       value={value}

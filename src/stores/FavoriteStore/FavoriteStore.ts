@@ -72,7 +72,7 @@ const FavoriteStore = types.compose(
       get isSpaceFavorite() {
         return !!self.favorites.find((favorite) => favorite.spaceId === self.spaceId);
       },
-      isFavorite(spaceId) {
+      isFavorite(spaceId: string) {
         return !!self.favorites.find((favorite) => favorite.spaceId === spaceId);
       }
     }))

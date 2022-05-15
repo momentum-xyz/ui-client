@@ -28,7 +28,7 @@ const OptionList: FC<PropsInterface> = (props) => {
           <styled.DropdownOption
             key={index}
             onClick={() => onOptionSelect(option)}
-            className={cn(SKIP_OUTSIDE_CLICK_CLASS, {['selected']: isSelected})}
+            className={cn(SKIP_OUTSIDE_CLICK_CLASS, {'selected': isSelected})}
           >
             {option.icon && <IconSvg name={option.icon} size="normal" isCustom />} {option.label}
           </styled.DropdownOption>

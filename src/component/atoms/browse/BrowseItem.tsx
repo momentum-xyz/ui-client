@@ -5,6 +5,7 @@ import {ReactComponent as ContinueIcon} from '../../../images/icons/arrow-right-
 export interface BrowseItemProps {
   title: string;
   selected: boolean;
+  // @ts-ignore: refactoring
   onClick: (event) => void;
 }
 

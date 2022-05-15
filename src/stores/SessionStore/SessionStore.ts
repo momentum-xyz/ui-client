@@ -63,7 +63,7 @@ const SessionStore = types
     },
     get loginType(): LoginTypeEnum | null {
       const type = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);
-      return !!type ? (type as LoginTypeEnum) : null;
+      return type ? (type as LoginTypeEnum) : null;
     },
     get oidcConfig(): OidcClientSettings {
       return this.loginType === LoginTypeEnum.Web3 ? web3ProviderConfig : keycloakProviderConfig;

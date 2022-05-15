@@ -79,6 +79,7 @@ const TokenRulesPanelView: React.FC<TokenRulesPanelViewProps> = ({
     [getConfirmation]
   );
 
+  // @ts-ignore
   const openTokenRuleItem = (item) => {
     setTokenRuleReview(item);
     tokenRuleReviewModal.current?.open();
@@ -86,6 +87,7 @@ const TokenRulesPanelView: React.FC<TokenRulesPanelViewProps> = ({
 
   const renderTokenRules = () => {
     if (!tokenRules) return;
+    // @ts-ignore
     const rows = tokenRules.map((item, i) => (
       <div
         key={i}

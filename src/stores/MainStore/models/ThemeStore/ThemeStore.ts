@@ -17,7 +17,7 @@ const ThemeStore = types
   .actions((self) => ({
     init(): void {
       const stored = storage.get<ThemeInterface>(StorageKeyEnum.Theme);
-      self.theme = cast(!!stored ? (stored as ThemeInterface) : DefaultThemeConfig);
+      self.theme = cast(stored ? (stored as ThemeInterface) : DefaultThemeConfig);
     },
     changeAccentColor(accent: string): void {
       self.theme = {...self.theme, accent};

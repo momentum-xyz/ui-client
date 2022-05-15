@@ -11,6 +11,7 @@ import StageModeStage from './StageModeStage';
 
 const StageModePIP: React.FC = () => {
   const {collaborationState} = useCollaboration();
+  // eslint-disable-next-line no-empty-pattern
   const {} = useContext(AgoraContext);
   const history = useHistory();
   const {isOnStage} = useAgoraStageMode();

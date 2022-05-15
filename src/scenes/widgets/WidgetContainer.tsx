@@ -128,6 +128,7 @@ const WidgetContainer: FC = () => {
   });
 
   useEffect(() => {
+    // @ts-ignore: What is it for?
     const unlisten = history.listen((location) => {
       if (location.pathname === ROUTES.base) {
         checkForUserOwnedSpaces();

@@ -38,7 +38,7 @@ const Controls: React.FC = () => {
             size="xs"
             theme={theme}
           />
-          <styled.DropDownIcon className={cn({['opened']: isOpen})}>
+          <styled.DropDownIcon className={cn({'opened': isOpen})}>
             <IconSvg name="chevron" size="normal" isCustom onClick={handleExpand} />
           </styled.DropDownIcon>
         </styled.Div>

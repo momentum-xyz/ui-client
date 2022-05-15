@@ -23,6 +23,7 @@ interface DialogCallback {
   actionCallback?: (accepted: boolean) => void;
 }
 
+// @ts-ignore: Refactoring
 export const ConfirmationDialogProvider = ({children}) => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [dialogConfig, setDialogConfig] = React.useState<(DialogConfig & DialogCallback) | null>(

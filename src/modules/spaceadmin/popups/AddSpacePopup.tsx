@@ -7,6 +7,7 @@ import Select from '../../../component/atoms/input/Select';
 import {ReactComponent as Loader} from '../../../images/tail-sping.svg';
 
 type props = {
+  // @ts-ignore
   onSave: (space) => void;
   onClose: () => void;
   allowedSubspaces: string[] | undefined;
@@ -25,11 +26,13 @@ export const AddSpacePopup = ({onSave, onClose, allowedSubspaces, spaceName = ''
     }
   }, [allowedSubspaces]);
 
+  // @ts-ignore
   const submit = (e) => {
     e.preventDefault();
     onSave(space);
   };
 
+  // @ts-ignore
   const handleType = (event) => {
     event.persist();
     setSpace({
@@ -38,6 +41,7 @@ export const AddSpacePopup = ({onSave, onClose, allowedSubspaces, spaceName = ''
     });
   };
 
+  // @ts-ignore
   const handleName = (event) => {
     event.persist();
     setSpace({
@@ -51,6 +55,7 @@ export const AddSpacePopup = ({onSave, onClose, allowedSubspaces, spaceName = ''
     else return ' "' + spaceName + '"';
   };
 
+  // @ts-ignore
   const getSelectableSpaceTypes = () => {
     if (allowedSubspaces && allowedSubspaces.length > 0) {
       return allowedSubspaces.map((subSpace) => (

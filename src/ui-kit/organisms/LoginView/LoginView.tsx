@@ -3,14 +3,14 @@ import cn from 'classnames';
 
 import {Text, Button, PropsWithThemeInterface, ButtonInfoInterface} from 'ui-kit';
 
+import * as styled from './LoginView.styled';
+
 interface PropsInterface extends PropsWithThemeInterface {
   logo: string;
   title: string;
   okBtn?: ButtonInfoInterface;
   backBtn?: ButtonInfoInterface;
 }
-
-import * as styled from './LoginView.styled';
 
 const LoginView: FC<PropsInterface> = (props) => {
   const {theme, logo, title, okBtn, backBtn, children} = props;

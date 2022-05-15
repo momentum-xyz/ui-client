@@ -65,7 +65,7 @@ const Dropdown: FC<PropsInterface> = ({
     <styled.Dropdown ref={ref} className={cn(isError && 'error')}>
       <ValueContainer theme={theme} variant={variant} onClick={handleContainerClick}>
         <SelectedValue valueType={valueType} placeholder={placeholder} selected={selectedOption} />
-        <styled.DropdownIcon className={cn({['opened']: isOpen})}>
+        <styled.DropdownIcon className={cn({'opened': isOpen})}>
           <IconSvg theme={theme} name="chevron" size="normal" />
         </styled.DropdownIcon>
       </ValueContainer>

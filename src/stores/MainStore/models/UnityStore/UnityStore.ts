@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {types} from 'mobx-state-tree';
 
 import UnityService from 'context/Unity/UnityService';
 import {ROUTES} from 'core/constants';
@@ -9,10 +9,10 @@ const UnityStore = types
     teleportReady: false
   })
   .actions((self) => ({
-    teleportToUser: flow(function* (userId: string, navigationCallback: (path: string) => void) {
+    teleportToUser(userId: string, navigationCallback: (path: string) => void) {
       UnityService.teleportToUser(userId);
       navigationCallback(ROUTES.base);
-    }),
+    },
     teleportToSpace(spaceId: string) {
       UnityService.teleportToSpace(spaceId);
     },
@@ -29,7 +29,7 @@ const UnityStore = types
     resume() {
       self.isPaused = false;
       UnityService.resume();
-	},
+    },
     teleportIsReady() {
       self.teleportReady = true;
     }

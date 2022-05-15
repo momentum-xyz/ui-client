@@ -52,6 +52,7 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
     }
   }, [allowedSubSpaceTypes]);
 
+  // @ts-ignore
   const renderNameInput = ({field: {onChange, value}}) => (
     <Input
       defaultValue={value}
@@ -63,6 +64,7 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
     />
   );
 
+  // @ts-ignore
   const renderTypeInput = ({field: {onChange, value}}) => (
     <>
       <Dropdown

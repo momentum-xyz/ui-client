@@ -108,6 +108,7 @@ export const UsersPanelView: React.FC<UsersPanelViewProps> = ({space, onUpdate})
     }
   };
 
+  // @ts-ignore
   const removeUser = (user) => {
     const removeUser: AssignUserDTO = {
       spaceId: bytesToUuid(space.id.data),
@@ -162,6 +163,7 @@ export const UsersPanelView: React.FC<UsersPanelViewProps> = ({space, onUpdate})
     [getConfirmation]
   );
 
+  // @ts-ignore
   const editUser = (user) => {
     setEditMember({
       spaceId: bytesToUuid(space.id.data),

@@ -123,6 +123,7 @@ const StageModeControlPanelLayout: React.FC = () => {
     }
   }, [user, selectedRemoteUserIdForRemove]);
 
+  // @ts-ignore
   const onStageModeToggle = (shouldActivate) => {
     console.info('spaceId: ' + collaborationState.collaborationSpace?.id);
     if (collaborationState.collaborationSpace) {

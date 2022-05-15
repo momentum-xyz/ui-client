@@ -18,7 +18,7 @@ describe('Button', () => {
       </Portal>
     );
 
-    expect(within(rendered.baseElement).queryByTestId('Portal-child')).not.toBeNull();
+    expect(within(rendered.baseElement).getByTestId('Portal-child')).not.toBeNull();
   });
 });
 

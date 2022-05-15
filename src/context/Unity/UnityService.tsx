@@ -276,17 +276,17 @@ export class UnityService {
     this.unityContext?.send('UnityManager', 'lookAtWisp', userId);
   }
 
-  teleportToSpace(id) {
+  teleportToSpace(id: string) {
     this.resume();
     this.unityContext?.send('UnityManager', 'teleportToSpace', id);
   }
 
-  teleportToVector3(vector) {
+  teleportToVector3(vector: any) {
     this.resume();
     this.unityContext?.send('UnityManager', 'teleportToVector3', vector);
   }
 
-  teleportToUser(id) {
+  teleportToUser(id: string) {
     this.resume();
     this.unityContext?.send('UnityManager', 'teleportToUser', id);
   }
@@ -320,6 +320,7 @@ export class UnityService {
     });
   }
 
+  // @ts-ignore: refactoring
   simpleNotificationHandler(handler: (kind: PosBusNotificationType, flag, msg) => void) {
     this.unityContext?.on('SimpleNotification', (kind: number, flag: number, message: string) => {
       handler(kind, flag, message);

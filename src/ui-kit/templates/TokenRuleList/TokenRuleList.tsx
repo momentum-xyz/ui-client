@@ -62,9 +62,9 @@ const TokenRuleList: FC<PropsInterface> = ({columnHeaders, onEventClick, store})
         </styled.Span>
       );
     }
-    {
-      return item[key];
-    }
+
+    // @ts-ignore: refactoring
+    return <>{item[key]}</>;
   };
 
   return (

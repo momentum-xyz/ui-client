@@ -20,11 +20,13 @@ export const AddUserPopup = ({onSave, onEmailSend, onClose, spaceName = ''}: pro
   const [errorMessage, setErrorMessage] = useState<string>();
   const [showDropdown, setShowDropdown] = useState(false);
 
+  // @ts-ignore
   const validateEmail = (email) => {
     const re = /^([A-Za-z0-9_\-.+])+@([A-Za-z0-9_\-.])+$/;
     return re.test(String(email).toLowerCase());
   };
 
+  // @ts-ignore
   const submit = (e) => {
     e.preventDefault();
     if (selectedUserId) {
@@ -36,6 +38,7 @@ export const AddUserPopup = ({onSave, onEmailSend, onClose, spaceName = ''}: pro
     }
   };
 
+  // @ts-ignore
   const handleQueryInputChange = (event) => {
     const newQuery = event.target.value;
     setSelectedUserId(undefined);
@@ -48,6 +51,7 @@ export const AddUserPopup = ({onSave, onEmailSend, onClose, spaceName = ''}: pro
     setShowDropdown(false);
   };
 
+  // @ts-ignore
   const handleRole = (event) => {
     setAdmin(event.target.value === 'admin');
   };

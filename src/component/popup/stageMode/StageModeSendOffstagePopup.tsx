@@ -1,5 +1,6 @@
 import React from 'react';
 import {toast} from 'react-toastify';
+import {t} from 'i18next';
 
 import {ToastContent} from 'ui-kit';
 
@@ -10,7 +11,6 @@ import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import User from '../../../context/type/User';
 import {useStageModeSendOffstage} from '../../../hooks/api/useStageModeService';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import {t} from 'i18next';
 
 export interface StageModeSendOffstagePopupProps {
   user: User | undefined;

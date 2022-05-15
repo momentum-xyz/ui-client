@@ -8,12 +8,12 @@ describe('ToolTip', () => {
   test('is rendered as in top', () => {
     const renderedComponent = render(<Tooltip label="" placement="top" visible={true} />);
 
-    expect(within(renderedComponent.baseElement).queryAllByTestId('Tooltip-test')).not.toBeNull();
+    expect(within(renderedComponent.baseElement).getByTestId('Tooltip-test')).not.toBeNull();
   });
 
-  test("contains 'Text'", () => {
+  test("contains 'Text'", async () => {
     const rendered = render(<Tooltip label="Text" placement="bottom" visible={true} />);
-    expect(rendered.findByText('Text')).not.toBeNull();
+    expect(await rendered.findByText('Text')).not.toBeNull();
   });
 });
 

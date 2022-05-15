@@ -1,3 +1,4 @@
+// @ts-ignore
 const TokenListItem = ({title, content}) => {
   return (
     <div className="">

@@ -1,3 +1,4 @@
+// @ts-ignore
 const createImage = (url): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image();
@@ -7,6 +8,7 @@ const createImage = (url): Promise<HTMLImageElement> =>
     image.src = url;
   });
 
+// @ts-ignore
 const getRadianAngle = (degreeValue) => (degreeValue * Math.PI) / 180;
 
 /**
@@ -15,6 +17,7 @@ const getRadianAngle = (degreeValue) => (degreeValue * Math.PI) / 180;
  * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
  * @param {number} rotation - optional rotation parameter
  */
+// @ts-ignore
 export const getCroppedImg = async (imageSrc, pixelCrop, rotation = 0) => {
   const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
@@ -59,6 +62,7 @@ export const getCroppedImg = async (imageSrc, pixelCrop, rotation = 0) => {
   // })
 };
 
+// @ts-ignore
 export const getRotatedImage = async (imageSrc, rotation = 0) => {
   const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');

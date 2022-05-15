@@ -41,6 +41,7 @@ export const PopupTitle: React.FC<PopupTitleProps> = ({
   icon,
   onClose
 }) => {
+  // @ts-ignore
   useEffect(() => {
     const unity = document.getElementById('unity-container');
 

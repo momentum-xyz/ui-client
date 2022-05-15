@@ -36,8 +36,11 @@ const EventList: FC<PropsInterface> = ({
     if (!selectedEventId || events.length === 0) return;
     const element = document.getElementById(selectedEventId);
 
+    // TODO: Fix flow.
     // First line fixes a bug in chrome
+    // eslint-disable-next-line no-restricted-globals
     location.href = '#';
+    // eslint-disable-next-line no-restricted-globals
     location.href = `#${selectedEventId}`;
 
     // Highlights temporarily the event that a magic link brings you too

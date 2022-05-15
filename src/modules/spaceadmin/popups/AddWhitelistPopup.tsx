@@ -8,6 +8,7 @@ import {NetworkType, TokenDto, TokenType} from '../../../context/type/Token';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 
 export interface AddWhitelistPopupProps {
+  // @ts-ignore
   onSave: (TokenDto) => void;
   onClose: () => void;
   worldId: Buffer;
@@ -33,11 +34,13 @@ const AddWhitelistPopup: React.FC<AddWhitelistPopupProps> = ({
       setWhitelist({status: 'PENDING', worldId: bytesToUuid(worldId), spaceId: spaceId});
   }, [whitelist]);
 
+  // @ts-ignore
   const submit = (e) => {
     e.preventDefault();
     onSave(whitelist);
   };
 
+  // @ts-ignore
   const handleAsset = (event) => {
     event.persist();
     setWhitelist({
@@ -47,6 +50,7 @@ const AddWhitelistPopup: React.FC<AddWhitelistPopupProps> = ({
     setAssetType(event.target.value);
   };
 
+  // @ts-ignore
   const handleNetwork = (event) => {
     event.persist();
     setWhitelist({
@@ -56,6 +60,7 @@ const AddWhitelistPopup: React.FC<AddWhitelistPopupProps> = ({
     setNetwork(event.target.value);
   };
 
+  // @ts-ignore
   const handleTokenRuleInputChange = (event) => {
     event.persist();
     setWhitelist({
@@ -65,6 +70,7 @@ const AddWhitelistPopup: React.FC<AddWhitelistPopupProps> = ({
     setTokenRule(event.target.value);
   };
 
+  // @ts-ignore
   const handleSmartContractInputChange = (event) => {
     event.persist();
     setWhitelist({

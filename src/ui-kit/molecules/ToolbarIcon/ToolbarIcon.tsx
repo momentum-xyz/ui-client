@@ -27,6 +27,7 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
   exact = false
 }) => {
   return (
+    // @ts-ignore: take a look
     <styled.StyledTransition
       show={visible}
       enter={cn(animate && 'animate')}
@@ -40,7 +41,11 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
       <Tooltip label={title} placement="top">
         {link ? (
           <NavLink to={link} activeClassName="active" exact={exact}>
-            {icon ? <SvgButton iconName={icon} size={size} isWhite theme={theme} /> : children}
+            {icon ? (
+              <SvgButton iconName={icon} size={size} isWhite theme={theme} />
+            ) : (
+              <>{children}</>
+            )}
           </NavLink>
         ) : icon ? (
           <SvgButton iconName={icon} size={size} isWhite theme={theme} />

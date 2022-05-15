@@ -97,6 +97,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
     // Bug with mobx, without it showResults wouldn't force rerender
   }, [searchUsersStore.showResults]);
 
+  // @ts-ignore: refactoring
   const renderQueryInput = ({field: {onChange, value}}) => (
     <styled.QueryContainer>
       <Input
@@ -128,6 +129,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
     </styled.QueryContainer>
   );
 
+  // @ts-ignore: refactoring
   const renderRoleInput = ({field: {onChange, value}}) => (
     <styled.InputContainer>
       <Heading

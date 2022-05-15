@@ -34,6 +34,7 @@ const GoogleDriveLayout: FC = () => {
     if (collaborationSpace?.id === id) refetch();
   });
 
+  // @ts-ignore
   const pickerCallBack = (data) => {
     if (
       data[(window as any).google.picker.Response.ACTION] ===

@@ -63,6 +63,7 @@ export const TilePopup = ({onSave, onClose}: props) => {
   const [tile, setTile] = useState<Tile>(defaultTiles[TileType.TILE_TYPE_TEXT]);
   const [file, setFile] = useState<File | null>(null);
 
+  // @ts-ignore
   const handleTitle = (event) => {
     event.persist();
     event.target.setCustomValidity(
@@ -78,6 +79,7 @@ export const TilePopup = ({onSave, onClose}: props) => {
     }));
   };
 
+  // @ts-ignore
   const handleText = (event) => {
     event.persist();
     event.target.setCustomValidity(
@@ -92,6 +94,7 @@ export const TilePopup = ({onSave, onClose}: props) => {
     }));
   };
 
+  // @ts-ignore
   const handleURL = (event) => {
     event.persist();
     event.target.setCustomValidity(
@@ -106,11 +109,13 @@ export const TilePopup = ({onSave, onClose}: props) => {
     }));
   };
 
+  // @ts-ignore
   const handleFile = (event) => {
     const file: File = event.target.files[0];
     setFile(file);
   };
 
+  // @ts-ignore
   const submit = (e) => {
     e.preventDefault();
 
@@ -130,6 +135,7 @@ export const TilePopup = ({onSave, onClose}: props) => {
         <Select value={tile.type} onChange={(e) => setTile(defaultTiles[e.target.value])}>
           {Object.keys(tileTypes).map((type, i) => (
             <Option value={type} key={i}>
+              {/* @ts-ignore */}
               {tileTypes[type]}
             </Option>
           ))}

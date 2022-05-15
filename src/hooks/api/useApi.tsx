@@ -36,6 +36,7 @@ export const useFetch = <T,>(url: string, options?: UseApiOptionsProps) => {
   // eslint-disable-next-line no-param-reassign
   options = {...DefaultOptions, ...options};
   const {fetchPolicy, lazy, ready} = options;
+  // eslint-disable-next-line no-prototype-builtins
   const isInCache = apiCache.hasOwnProperty(url);
   const useCache = fetchPolicy !== 'network-only';
   const useNetwork =
@@ -119,6 +120,7 @@ export const promiseFetch = async <T,>(
   headers?: AxiosRequestConfig,
   fetchPolicy: 'network-only' | 'cache-first' | 'cache-and-network' | 'cache-only' = 'cache-first'
 ) => {
+  // eslint-disable-next-line no-prototype-builtins
   const isInCache = apiCache.hasOwnProperty(url);
   const useCache = fetchPolicy !== 'network-only';
 
@@ -249,6 +251,7 @@ export const usePut = <T, R = any>(url: string, options?: UsePutOptionsProps<T>)
   return response;
 };
 
+// @ts-ignore: TODO: Refactor
 export const useDelete = <T, R = any>(url: string, options?) => {
   // eslint-disable-next-line no-param-reassign
   options = {...options};

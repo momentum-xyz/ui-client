@@ -185,6 +185,7 @@ export const TextChatProvider: React.FC = ({children}) => {
     }
   }, [collaborationState.collaborationSpace?.id]);
 
+  // @ts-ignore: TODO: Refactor
   useEffect(() => {
     if (currentChannel) {
       currentChannel.on('ChannelMessage', (message, memberId) => {

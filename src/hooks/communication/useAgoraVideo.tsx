@@ -164,7 +164,9 @@ const useAgoraVideo = () => {
     const isScreenshare = rUser?.uid.split('|')[0] === 'ss';
     switch (events.event) {
       case 'volume-indicator':
+        // eslint-disable-next-line no-case-declarations
         const soundLevels = events.data.result.reduce(
+          // @ts-ignore: Refactoring
           (acc, curr) => ({...acc, [curr.uid]: curr}),
           {}
         );

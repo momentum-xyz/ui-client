@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
+import {t} from 'i18next';
 
 import {ToastContent} from 'ui-kit';
 
@@ -14,7 +15,6 @@ import StageModeLabel from '../../atoms/StageMode/StageModeLabel';
 import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';
-import {t} from 'i18next';
 
 const StageModeGuestLayout: React.FC = () => {
   const {collaborationState, currentUserId} = useCollaboration();

@@ -8,7 +8,7 @@ import * as styled from './SvgButton.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   iconName: IconName;
   size: SizeType;
-  onClick?: (event?) => void;
+  onClick?: (event?: Event) => void;
   isDanger?: boolean;
   isWhite?: boolean;
 }
@@ -22,6 +22,7 @@ const SvgButton: FC<PropsInterface> = ({
   isWhite = false
 }) => {
   return (
+    // @ts-ignore: div doesn't have onClick
     <styled.Container onClick={onClick}>
       <IconSvg
         name={iconName}

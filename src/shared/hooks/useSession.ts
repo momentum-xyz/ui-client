@@ -29,7 +29,7 @@ export const useSession = (
     auth
       .signinSilent()
       .then((user) => {
-        if (!!user?.access_token) {
+        if (user?.access_token) {
           setTokens(user.access_token);
           console.log('refreshed');
         } else {

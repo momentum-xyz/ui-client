@@ -15,6 +15,7 @@ import * as styled from './OnlineUsersWidget.styled';
 
 interface OnlineUsersWidgetsProps {
   // TODO: Move selecting to spaces panel store when refactoring it
+  // @ts-ignore
   onUserInitiativeSelect: (Buffer) => void;
 }
 

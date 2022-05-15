@@ -8,6 +8,7 @@ import {SocialSearchMinimalCharacters} from '../../atoms/socialui/SocialSearch';
 
 interface SocialSpacesListProps {
   spaceId: Buffer;
+  // @ts-ignore
   onSpaceSelect: (Buffer) => void;
   searchQuery?: string;
   searchedSpaces?: Space[];
@@ -24,6 +25,7 @@ const SocialSpacesList: React.FC<SocialSpacesListProps> = ({
   const renderList = () => {
     if (!spaceResponse?.space.children) return;
 
+    // @ts-ignore
     const sorter = (a, b) => a.name.localeCompare(b.name);
 
     if (searchQuery && searchQuery.length >= SocialSearchMinimalCharacters) {

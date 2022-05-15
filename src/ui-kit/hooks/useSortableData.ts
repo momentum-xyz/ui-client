@@ -1,5 +1,6 @@
 import {useState, useMemo} from 'react';
 
+// @ts-ignore: define types
 const useSortableData = (items, config = null) => {
   const [sortConfig, setSortConfig] = useState<{key: string; direction: string} | null>(config);
 
@@ -19,7 +20,7 @@ const useSortableData = (items, config = null) => {
     return sortableItems;
   }, [items, sortConfig]);
 
-  const requestSort = (key) => {
+  const requestSort = (key: string) => {
     let direction = 'asc';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';

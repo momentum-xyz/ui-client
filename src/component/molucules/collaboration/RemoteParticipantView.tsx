@@ -40,6 +40,7 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
 
   const noVideo = totalParticipants > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
+  // @ts-ignore
   useEffect(() => {
     console.info(`Agora audio track changes for user ${userName}`, participant.audioTrack);
 
@@ -53,6 +54,7 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participant.audioTrack]);
 
+  // @ts-ignore
   useEffect(() => {
     console.info(`Agora video track changes for user ${userName}`, participant.videoTrack);
 

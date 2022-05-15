@@ -12,13 +12,13 @@ const MagicLink = types
   })
   .actions((self) => ({
     generate: flow(function* (type: MagicTypeEnum, id: string | null, position: any) {
-      const payload = !!id ? {type, data: {id}} : {type, data: {position}};
+      const payload = id ? {type, data: {id}} : {type, data: {position}};
       const response: MagicLinkResponse = yield self.request.send(
         api.magicRepository.generateLink,
         payload
       );
 
-      if (!!response?.id) {
+      if (response?.id) {
         self.id = response.id;
         self.address = `${document.location.origin}/magic/${response.id}`;
       }

@@ -33,11 +33,15 @@ export const UnityDevPopup: React.FC<UnityDevPopupProps> = ({onClose}) => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
 
+  // @ts-ignore
   const submit = (event) => {
     event.preventDefault();
+    // @ts-ignore
     if (Events[type].length > 0) {
+      // @ts-ignore
       const vars = Events[type].map((key) => {
         if (key === 'position') return {x: 0, y: 0, z: 0};
+        // @ts-ignore
         return formData[key];
       });
       console.info(`Emitting a "${type}" unity event: `, vars);
@@ -60,6 +64,7 @@ export const UnityDevPopup: React.FC<UnityDevPopupProps> = ({onClose}) => {
             </Option>
           ))}
         </Select>
+        {/* @ts-ignore */}
         {Events[type].map((key) => {
           if (key === 'position') return null;
           // if(key === "owner") return (

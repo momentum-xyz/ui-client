@@ -93,6 +93,7 @@ const Tooltip: React.FC<ToolTipProps> = ({children, className, label, direction 
     const refStyle = tipRef?.current?.style;
     if (refStyle) {
       refStyle.opacity = '1';
+      // @ts-ignore
       refStyle[`margin${capitalize(settings[direction].opposite)}`] = '20px';
     }
     setPosition();
@@ -102,6 +103,7 @@ const Tooltip: React.FC<ToolTipProps> = ({children, className, label, direction 
     const refStyle = tipRef?.current?.style;
     if (refStyle) {
       refStyle.opacity = '0';
+      // @ts-ignore
       refStyle[`margin${capitalize(settings[direction].opposite)}`] = '10px';
     }
   }

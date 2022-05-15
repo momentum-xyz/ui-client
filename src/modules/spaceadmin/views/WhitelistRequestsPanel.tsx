@@ -30,6 +30,7 @@ const WhitelistRequestsPanel: React.FC<WhitelistRequestsPanelProps> = ({
     setWhitelists(whitelistItems.tokenWhitelistRequests);
   }, [whitelistItems]);
 
+  // @ts-ignore
   const openReviewWhitelist = (item) => {
     setReviewWhitelist(item);
     reviewWhitelistModal.current?.open();
@@ -37,6 +38,7 @@ const WhitelistRequestsPanel: React.FC<WhitelistRequestsPanelProps> = ({
   // whitelists are being filtered in the backend to be shown only those with pending status
   const renderWhitelistRequests = () => {
     if (whitelists.length < 1 || !whitelists) return;
+    // @ts-ignore
     return whitelists.map((item, i) => (
       <div
         key={i}

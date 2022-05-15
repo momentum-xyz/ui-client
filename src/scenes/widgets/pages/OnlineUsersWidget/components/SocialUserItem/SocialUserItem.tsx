@@ -11,6 +11,7 @@ import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 import * as styled from './SocialUserItem.styled';
 
 export interface SocialUserItemProps {
+  // @ts-ignore
   onClick: (e) => void;
   currentUserId: string;
   invite: boolean;

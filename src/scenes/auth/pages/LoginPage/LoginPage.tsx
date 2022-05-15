@@ -44,7 +44,7 @@ const LoginPage: FC = () => {
             }
           })}
         >
-          {!!errorMessage ? (
+          {errorMessage ? (
             <WalletError error={errorMessage} />
           ) : (
             <styled.Networks>

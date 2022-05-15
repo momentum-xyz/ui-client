@@ -17,6 +17,7 @@ const SocialSearch: React.FC<SocialSearchProps> = ({searchQuery, setSearchQuery,
   const [searchFocused, setSearchFocused] = useState(false);
   const ref = useRef<InputRef>(null);
 
+  // @ts-ignore
   const handleQueryInputChange = (event) => {
     const newQuery = event.target.value;
     setSearchQuery(newQuery);

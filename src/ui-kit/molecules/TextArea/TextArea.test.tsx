@@ -1,6 +1,8 @@
-import {render, within} from 'ui-kit/utils/test.utils';
-import TextArea from './TextArea';
 import React from 'react';
+
+import {render} from 'ui-kit/utils/test.utils';
+
+import TextArea from './TextArea';
 
 describe('TextArea', () => {
   it('is rendered', () => {
