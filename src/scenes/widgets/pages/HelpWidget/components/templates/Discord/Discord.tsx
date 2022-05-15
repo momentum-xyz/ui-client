@@ -49,12 +49,12 @@ const Discord: React.FC = () => {
             size="xs"
             theme={theme}
           />
-          <styled.DropDownIcon className={cn({'opened': isOpen})}>
+          <styled.DropDownIcon className={cn({opened: isOpen})}>
             <IconSvg name="chevron" size="normal" isCustom onClick={handleExpand} />
           </styled.DropDownIcon>
         </styled.Div>
       </styled.TopContainer>
-      <styled.BottomContainer className={cn({'hide': !isOpen})}>
+      <styled.BottomContainer className={cn({hide: !isOpen})}>
         <styled.Border />
         <styled.TextItemTop>
           {t('helpSection.discord.topTextOne')}

@@ -1,4 +1,4 @@
-import { BN, BN_TEN, BN_THOUSAND, formatBalance } from "@polkadot/util";
+import {BN, BN_TEN, BN_THOUSAND, formatBalance} from '@polkadot/util';
 
 export const formatExistential = (value: BN): string => {
   console.log(value);

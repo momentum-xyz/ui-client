@@ -37,15 +37,15 @@ const VibeButton: React.FC<VibeButtonProps> = (props) => {
 
   if (canVibe !== undefined) {
     return (
-        <>
-          <div className="w-1" />
-          <Button type={canVibe ? 'ghost' : 'primary'} size="s" onClick={handleVibeToggle}>
+      <>
+        <div className="w-1" />
+        <Button type={canVibe ? 'ghost' : 'primary'} size="s" onClick={handleVibeToggle}>
           <span className={`mr-.5 uppercase ${canVibe ? '' : 'font-bold'}`}>
             {vibeCount === 1 ? `${vibeCount} vibe` : `${vibeCount} vibes`}
           </span>
-            {canVibe ? <VibeIconBlue className="w-1.5" /> : <VibeIcon className="w-1.5" />}
-          </Button>
-        </>
+          {canVibe ? <VibeIconBlue className="w-1.5" /> : <VibeIcon className="w-1.5" />}
+        </Button>
+      </>
     );
   }
 
@@ -53,4 +53,3 @@ const VibeButton: React.FC<VibeButtonProps> = (props) => {
 };
 
 export default VibeButton;
-

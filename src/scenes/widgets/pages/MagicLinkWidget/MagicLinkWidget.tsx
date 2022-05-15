@@ -14,7 +14,7 @@ import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import * as styled from './MagicLinkWidget.styled';
 
 const DIALOG_OFFSET_RIGHT = 105;
-const DIALOG_OFFSET_BOTTOM = 65;
+const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {
   const {magicLinkStore} = useStore().widgetStore;

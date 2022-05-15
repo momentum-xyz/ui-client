@@ -1,7 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 
-
 import {useStore} from 'shared/hooks';
 import {SCANNER_LIST} from 'core/constants';
 

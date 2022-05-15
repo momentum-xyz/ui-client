@@ -8,8 +8,8 @@ import {endpoints} from 'api/constants';
 
 import * as styled from './ProfileMenuWidget.styled';
 
-const DIALOG_OFFSET_RIGHT = 350;
-const DIALOG_OFFSET_BOTTOM = 65;
+const DIALOG_OFFSET_RIGHT = 175;
+const DIALOG_OFFSET_BOTTOM = 60;
 
 const ProfileMenuWidget: FC = () => {
   const {widgetStore, sessionStore} = useStore();

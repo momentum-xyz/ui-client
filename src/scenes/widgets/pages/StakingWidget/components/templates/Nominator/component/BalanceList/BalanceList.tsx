@@ -4,7 +4,7 @@ import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 
-import {BalanceItem} from "../BalanceItem";
+import {BalanceItem} from '../BalanceItem';
 
 import * as styled from './BalanceList.styled';
 

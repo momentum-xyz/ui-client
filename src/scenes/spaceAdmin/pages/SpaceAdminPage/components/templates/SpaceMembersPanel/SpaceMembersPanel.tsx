@@ -18,8 +18,11 @@ const SpaceMembersPanel: FC = () => {
     space: {users}
   } = spaceStore;
 
-  const [selectedUser, setSelectedUser] =
-    useState<{id: string; name?: string; isAdmin?: boolean}>();
+  const [selectedUser, setSelectedUser] = useState<{
+    id: string;
+    name?: string;
+    isAdmin?: boolean;
+  }>();
 
   const handleUserEdit = (userId: string, type?: string) => {
     setSelectedUser({id: userId, isAdmin: type === 'admin'});

@@ -36,7 +36,7 @@ import {
 import {useStore} from 'shared/hooks';
 import {endpoints} from 'api/constants';
 import {StakingWidget} from 'scenes/widgets/pages';
-import { ValidatorList } from "scenes/widgets/pages/StakingWidget/components/templates/Validators/components/ValidatorList";
+import {ValidatorList} from 'scenes/widgets/pages/StakingWidget/components/templates/Validators/components/ValidatorList';
 
 import * as styled from './StoryBookPage.styled';
 

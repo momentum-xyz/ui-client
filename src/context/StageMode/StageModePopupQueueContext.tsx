@@ -63,7 +63,8 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
 
   const removeRequestPopup = () => {
     const filteredPopups = popups.filter(
-        (info) => info.type !== StageModePopupType.RECEIVED_PERMISSION_REQUEST);
+      (info) => info.type !== StageModePopupType.RECEIVED_PERMISSION_REQUEST
+    );
     setPopups(filteredPopups);
   };
 
