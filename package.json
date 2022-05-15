@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "TAILWIND_MODE=watch craco start",
-    "build": "DISABLE_ESLINT_PLUGIN=true craco build",
+    "build": "craco build",
     "test": "craco test",
     "dev": "chmod +x ./env.sh && ./env.sh && cp env-config.js ./public/ && react-scripts start",
     "analyze": "source-map-explorer 'build/static/js/*.js' --no-border-checks",
