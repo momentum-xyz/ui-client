@@ -43,7 +43,9 @@ export const ChangeAvatarPopup = ({onSave, onClose}: props) => {
                 />
               );
               setIsSaving(false);
-              if (onSave) {onSave();}
+              if (onSave) {
+                onSave();
+              }
             })
             .catch(() => {
               toast.error(

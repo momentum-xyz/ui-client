@@ -21,7 +21,9 @@ const VisualSettingsPanel: FC<PropsInterface> = ({
   onAccentColorSelect,
   onBackgroundColorSelect
 }) => {
-  if (!theme) {return null;}
+  if (!theme) {
+    return null;
+  }
 
   return (
     <PanelLayout theme={theme}>

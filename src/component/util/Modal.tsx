@@ -30,19 +30,25 @@ const Modal = React.forwardRef<ModalHandle, ModalProps>(
 
     const handleEscape = useCallback(
       (event) => {
-        if (event.keyCode === 27) {close();}
+        if (event.keyCode === 27) {
+          close();
+        }
       },
       [close]
     );
 
     useEffect(() => {
-      if (show) {document.addEventListener('keydown', handleEscape, false);}
+      if (show) {
+        document.addEventListener('keydown', handleEscape, false);
+      }
       return () => {
         document.removeEventListener('keydown', handleEscape, false);
       };
     }, [handleEscape, show]);
 
-    if (!modalElement) {return null;}
+    if (!modalElement) {
+      return null;
+    }
     return createPortal(
       show ? (
         <div className="modal-wrapper">

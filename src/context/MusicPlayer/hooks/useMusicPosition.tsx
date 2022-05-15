@@ -30,8 +30,9 @@ export const useMusicPosition = (config: UseAudioPositionConfig = {}): AudioPosi
 
   useEffect(() => {
     let timeout: number;
-    if (!highRefreshRate && player && playing)
-      {timeout = window.setInterval(() => setPosition(player.seek()), 1000);}
+    if (!highRefreshRate && player && playing) {
+      timeout = window.setInterval(() => setPosition(player.seek()), 1000);
+    }
     return () => clearTimeout(timeout);
   }, [highRefreshRate, player, playing, setPosition]);
 
@@ -58,7 +59,9 @@ export const useMusicPosition = (config: UseAudioPositionConfig = {}): AudioPosi
 
   const seek = useCallback(
     (position) => {
-      if (!player) {return 0;}
+      if (!player) {
+        return 0;
+      }
 
       // it appears that howler returns the Howl object when seek is given a position
       // to get the latest potion you must call seek again with no parameters

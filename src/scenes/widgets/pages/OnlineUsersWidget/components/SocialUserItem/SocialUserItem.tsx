@@ -38,11 +38,15 @@ const SocialUserItem: React.FC<SocialUserItemProps> = ({onClick, currentUserId, 
 
   useEffect(() => {
     if (user.invited) {
-      if (inviteTimeout) {clearTimeout(inviteTimeout);}
+      if (inviteTimeout) {
+        clearTimeout(inviteTimeout);
+      }
 
       setInviteTimeout(setTimeout(() => user.setInvited(false), 30000));
     } else {
-      if (inviteTimeout) {clearTimeout(inviteTimeout);}
+      if (inviteTimeout) {
+        clearTimeout(inviteTimeout);
+      }
       setInviteTimeout(undefined);
     }
   }, [user.invited]);

@@ -26,12 +26,16 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
       const timeout = setTimeout(() => setLeftCollaborationSpace(undefined), 15000);
       return () => clearTimeout(timeout);
     }
-    if (collaborationState.collaborationSpace) {setLeftCollaborationSpace(undefined);}
+    if (collaborationState.collaborationSpace) {
+      setLeftCollaborationSpace(undefined);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collaborationState.collaborationSpace]);
 
   const rejoin = useCallback(() => {
-    if (leftCollaborationSpace) {joinCollaborationSpace(leftCollaborationSpace);}
+    if (leftCollaborationSpace) {
+      joinCollaborationSpace(leftCollaborationSpace);
+    }
   }, [joinCollaborationSpace, leftCollaborationSpace]);
 
   return (

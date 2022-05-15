@@ -35,7 +35,9 @@ const ProfileStore = types.compose(
         );
       }),
       fetchUserTable: flow(function* () {
-        if (!self.userProfile) {return;}
+        if (!self.userProfile) {
+          return;
+        }
 
         self.userTableId = yield self.findTablesRequest.send(api.tablesRepository.findTable, {
           userId: self.userProfile.uuid
@@ -89,7 +91,9 @@ const ProfileStore = types.compose(
         return response;
       }),
       sendHighFive: flow(function* () {
-        if (!self.userProfile) {return;}
+        if (!self.userProfile) {
+          return;
+        }
 
         yield WebsocketService.sendHighFive(self.userProfile.uuid);
       }),

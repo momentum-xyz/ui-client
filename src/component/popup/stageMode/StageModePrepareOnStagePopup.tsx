@@ -48,7 +48,9 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
   const getCommunicationDevices = () => {
     getMicrophoneConsent()
       .then((microphoneConsent) => {
-        if (!microphoneConsent) {return;}
+        if (!microphoneConsent) {
+          return;
+        }
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           setAudioOutputs(devices.filter((device) => device.kind === 'audiooutput'));
           setAudioInputs(devices.filter((device) => device.kind === 'audioinput'));
@@ -57,7 +59,9 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
         return getCameraConsent();
       })
       .then((cameraConsent) => {
-        if (!cameraConsent) {return;}
+        if (!cameraConsent) {
+          return;
+        }
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           setVideoInputs(devices.filter((device) => device.kind === 'videoinput'));
         });

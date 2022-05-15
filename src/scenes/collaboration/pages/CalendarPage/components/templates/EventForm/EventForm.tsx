@@ -57,9 +57,9 @@ const EventForm: FC = () => {
     if (space.id) {
       let isSuccess = false;
 
-      if (currentEvent?.id)
-        {isSuccess = await eventFormStore.updateEvent(data, space.id, currentEvent.id, image);}
-      else {
+      if (currentEvent?.id) {
+        isSuccess = await eventFormStore.updateEvent(data, space.id, currentEvent.id, image);
+      } else {
         isSuccess = await eventFormStore.createEvent(data, space.id, image);
       }
 
@@ -80,7 +80,9 @@ const EventForm: FC = () => {
   };
 
   const handleEndDate = (date: Date) => {
-    if (date) {setEndDate(date);}
+    if (date) {
+      setEndDate(date);
+    }
   };
 
   const handleImage = (file: File | undefined) => {

@@ -27,14 +27,20 @@ const SocialUserInitiativesList: React.FC<SocialUsersInitiativesListProps> = ({
     }
 
     return userInitiatives.map((item) => {
-      if (!item.space) {return null;}
+      if (!item.space) {
+        return null;
+      }
 
       const handleClick = () => {
-        if (item.space) {onInitiativeSelect(item.space.id.data);}
+        if (item.space) {
+          onInitiativeSelect(item.space.id.data);
+        }
       };
 
       const handleFlyToSpace = () => {
-        if (!item.space) {return;}
+        if (!item.space) {
+          return;
+        }
 
         UnityService.teleportToSpace(bytesToUuid(item.space.id.data));
         history.push(ROUTES.base);

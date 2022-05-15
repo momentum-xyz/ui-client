@@ -60,7 +60,9 @@ const LaunchInitiativeWidget: FC = () => {
           );
         }
 
-        if (!spaceId) {throw new Error('Missing field "spaceId"');}
+        if (!spaceId) {
+          throw new Error('Missing field "spaceId"');
+        }
 
         return spaceId;
       })

@@ -68,8 +68,12 @@ export const useJoinCollaborationSpace = () => {
 
   const joinCollaborationSpace = useCallback(
     async (collaborationSpace: CollaborationSpace, isTable?: boolean) => {
-      if (!microphoneConsent) {await getMicrophoneConsent();}
-      if (!cameraConsent) {await getCameraConsent();}
+      if (!microphoneConsent) {
+        await getMicrophoneConsent();
+      }
+      if (!cameraConsent) {
+        await getCameraConsent();
+      }
 
       if (isTable) {
         collaborationDispatch({

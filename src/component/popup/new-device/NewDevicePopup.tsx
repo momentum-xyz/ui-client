@@ -30,7 +30,9 @@ const NewDevicePopup: React.FC<NewDevicePopupProps> = ({
   const getCommunicationDevices = () => {
     getMicrophoneConsent()
       .then((microphoneConsent) => {
-        if (!microphoneConsent) {return;}
+        if (!microphoneConsent) {
+          return;
+        }
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           setAudioInputs(devices.filter((device) => device.kind === 'audioinput'));
         });
@@ -38,7 +40,9 @@ const NewDevicePopup: React.FC<NewDevicePopupProps> = ({
         return getCameraConsent();
       })
       .then((cameraConsent) => {
-        if (!cameraConsent) {return;}
+        if (!cameraConsent) {
+          return;
+        }
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           setVideoInputs(devices.filter((device) => device.kind === 'videoinput'));
         });
@@ -56,11 +60,12 @@ const NewDevicePopup: React.FC<NewDevicePopupProps> = ({
       console.info(`device id: ${deviceId as string}`);
       console.info(audioInputs);
       const device = audioInputs.find((device) => device.deviceId === deviceId);
-      if (device)
-        {collaborationDispatch({
+      if (device) {
+        collaborationDispatch({
           type: COLLABORATION_AUDIO_DEVICE_ACTION_UPDATE,
           audioDevice: device
-        });}
+        });
+      }
     },
     [audioInputs, collaborationDispatch]
   );
@@ -69,11 +74,12 @@ const NewDevicePopup: React.FC<NewDevicePopupProps> = ({
     (e) => {
       const deviceId = e.target.value;
       const device = videoInputs.find((device) => device.deviceId === deviceId);
-      if (device)
-        {collaborationDispatch({
+      if (device) {
+        collaborationDispatch({
           type: COLLABORATION_VIDEO_DEVICE_ACTION_UPDATE,
           videoDevice: device
-        });}
+        });
+      }
     },
     [collaborationDispatch, videoInputs]
   );

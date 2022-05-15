@@ -39,7 +39,9 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
   } = useForm<UpdateUserRequest>();
 
   useEffect(() => {
-    if (!userProfile?.profile) {return;}
+    if (!userProfile?.profile) {
+      return;
+    }
 
     setValue('name', userProfile.name);
     setValue('profile', userProfile.profile);
@@ -97,7 +99,9 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
             <ChangeAvatarPopup
               onClose={editAvatarDialog.close}
               onSave={() => {
-                if (!profileStore.userProfile?.uuid) {return;}
+                if (!profileStore.userProfile?.uuid) {
+                  return;
+                }
                 profileStore.fetchProfile(profileStore.userProfile.uuid);
                 editAvatarDialog.close();
               }}

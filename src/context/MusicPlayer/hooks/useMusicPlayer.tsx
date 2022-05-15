@@ -24,12 +24,16 @@ export const useMusicPlayer = (options?: HowlOptions): MusicPlayerControls => {
     // if useAudioPlayer is called without arguments
     // don't do anything: the user will have access
     // to the current context
-    if (!src) {return;}
+    if (!src) {
+      return;
+    }
     load({src, ...restOptions});
   }, [options, load]);
 
   const togglePlayPause = useCallback(() => {
-    if (!player) {return;}
+    if (!player) {
+      return;
+    }
 
     if (player.playing()) {
       player.pause();

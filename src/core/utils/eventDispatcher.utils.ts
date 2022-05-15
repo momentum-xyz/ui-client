@@ -77,7 +77,9 @@ export class EventEmitter<EventMap extends DefaultEventMap = DefaultEventMap>
   ) => {
     if (this.events[event]) {
       const len = this.events[event].length;
-      for (const e of this.events[event]) {e(...args);}
+      for (const e of this.events[event]) {
+        e(...args);
+      }
       return !!len;
     }
     return false;
@@ -107,10 +109,14 @@ export class EventEmitter<EventMap extends DefaultEventMap = DefaultEventMap>
     event: EventKey,
     listener: EventMap[EventKey]
   ): this => {
-    if (!(event in this.events)) {this.events[event] = [listener];}
-    else {this.events[event].push(listener);}
-    if (this.maxListeners !== Infinity && this.maxListeners <= this.events[event].length)
-      {console.warn(`Maximum event listeners for "${event as string}" event!`);}
+    if (!(event in this.events)) {
+      this.events[event] = [listener];
+    } else {
+      this.events[event].push(listener);
+    }
+    if (this.maxListeners !== Infinity && this.maxListeners <= this.events[event].length) {
+      console.warn(`Maximum event listeners for "${event as string}" event!`);
+    }
     return this;
   };
 
@@ -120,7 +126,9 @@ export class EventEmitter<EventMap extends DefaultEventMap = DefaultEventMap>
   ): this => {
     if (event in this.events) {
       const i = this.events[event].indexOf(listener);
-      if (i !== -1) {this.events[event].splice(i, 1);}
+      if (i !== -1) {
+        this.events[event].splice(i, 1);
+      }
     }
     return this;
   };
@@ -133,8 +141,11 @@ export class EventEmitter<EventMap extends DefaultEventMap = DefaultEventMap>
     event: EventKey,
     listener: EventMap[EventKey]
   ): this => {
-    if (!(event in this.events)) {this.events[event] = [listener];}
-    else {this.events[event].unshift(listener);}
+    if (!(event in this.events)) {
+      this.events[event] = [listener];
+    } else {
+      this.events[event].unshift(listener);
+    }
     return this;
   };
 
@@ -158,7 +169,9 @@ export class EventEmitter<EventMap extends DefaultEventMap = DefaultEventMap>
   };
 
   removeAllListeners = <EventKey extends keyof EventMap = string>(event?: EventKey): this => {
-    if (event) {delete this.events[event];}
+    if (event) {
+      delete this.events[event];
+    }
     return this;
   };
 

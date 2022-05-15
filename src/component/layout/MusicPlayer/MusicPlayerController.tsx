@@ -17,12 +17,16 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
   const [stop, setStop] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!playlistHash) {return;}
+    if (!playlistHash) {
+      return;
+    }
     setPlaylist(playlistHash);
   }, [playlistHash, show]);
 
   useEffect(() => {
-    if (!playlist) {return;}
+    if (!playlist) {
+      return;
+    }
     if (show) {
       console.info('Playlist:', playlist);
     }
@@ -35,9 +39,13 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
   }, [togglePlayPause]);
   // ended && !stop ? !playing : playing
   useEffect(() => {
-    if (!playlistHash || !playlist) {return;}
+    if (!playlistHash || !playlist) {
+      return;
+    }
 
-    if (currentTrackIndex > playlist.length) {setCurrentTrackIndex(0);}
+    if (currentTrackIndex > playlist.length) {
+      setCurrentTrackIndex(0);
+    }
     if (
       (show && playlist && playlist[currentTrackIndex]) ||
       (ended && playlist && playlist[currentTrackIndex])
@@ -60,7 +68,9 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
   }, [currentTrackIndex, playlist]);
 
   useEffect(() => {
-    if (!ended) {return;}
+    if (!ended) {
+      return;
+    }
 
     if (currentTrackIndex === (playlist?.length ?? 0) - 1) {
       setCurrentTrackIndex(0);

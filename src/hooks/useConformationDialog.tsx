@@ -42,12 +42,16 @@ export const ConfirmationDialogProvider = ({children}) => {
 
   const onConfirm = () => {
     resetDialog();
-    if (dialogConfig?.actionCallback) {dialogConfig.actionCallback(true);}
+    if (dialogConfig?.actionCallback) {
+      dialogConfig.actionCallback(true);
+    }
   };
 
   const onDismiss = () => {
     resetDialog();
-    if (dialogConfig?.actionCallback) {dialogConfig.actionCallback(false);}
+    if (dialogConfig?.actionCallback) {
+      dialogConfig.actionCallback(false);
+    }
   };
 
   return (

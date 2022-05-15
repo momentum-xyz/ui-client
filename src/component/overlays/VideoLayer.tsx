@@ -51,9 +51,11 @@ const VideoLayer: React.FC<VideoLayerProps> = () => {
     setDashboardId(null);
   };
 
-  if (type === 'DASHBOARD_VIDEO')
-    {return <div>{dashboardId && <DashboardVideo dashboardId={dashboardId} onClose={close} />}</div>;}
-  else {return null;}
+  if (type === 'DASHBOARD_VIDEO') {
+    return <div>{dashboardId && <DashboardVideo dashboardId={dashboardId} onClose={close} />}</div>;
+  } else {
+    return null;
+  }
 };
 
 export default VideoLayer;

@@ -259,8 +259,11 @@ export class UnityService {
 
   toggleAllSound() {
     const muted = useUnityStore.getState().muted;
-    if (muted) {this.unityContext?.send('UnityManager', 'turnAllSoundOn');}
-    else {this.unityContext?.send('UnityManager', 'turnAllSoundOff');}
+    if (muted) {
+      this.unityContext?.send('UnityManager', 'turnAllSoundOn');
+    } else {
+      this.unityContext?.send('UnityManager', 'turnAllSoundOff');
+    }
     useUnityStore.setState({muted: !muted});
   }
 

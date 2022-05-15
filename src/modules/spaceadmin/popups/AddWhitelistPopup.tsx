@@ -30,8 +30,9 @@ const AddWhitelistPopup: React.FC<AddWhitelistPopupProps> = ({
   const [whitelist, setWhitelist] = useState<TokenDto>();
 
   useEffect(() => {
-    if (!whitelist)
-      {setWhitelist({status: 'PENDING', worldId: bytesToUuid(worldId), spaceId: spaceId});}
+    if (!whitelist) {
+      setWhitelist({status: 'PENDING', worldId: bytesToUuid(worldId), spaceId: spaceId});
+    }
   }, [whitelist]);
 
   // @ts-ignore

@@ -38,7 +38,9 @@ export const useImageBase64Cache = (url: string) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
-  if (images[url]) {return images[url];}
+  if (images[url]) {
+    return images[url];
+  }
 
   return url;
 };
