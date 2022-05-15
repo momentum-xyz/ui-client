@@ -153,8 +153,8 @@ const TokenForm: FC<PropsInterface> = () => {
                   <Input
                     value={value}
                     onChange={(value) => {
-                      if (value === '') setIsDisabledID(true);
-                      else setIsDisabledID(false);
+                      if (value === '') {setIsDisabledID(true);}
+                      else {setIsDisabledID(false);}
                       onChange(value);
                     }}
                     label={t('tokenRules.tokenForm.tokenIDLabel')}

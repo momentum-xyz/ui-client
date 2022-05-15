@@ -59,7 +59,7 @@ const SocialOnlineUsersList: React.FC<SocialOnlineUsersListProps> = ({invite = f
   };
 
   const renderList = () => {
-    if (!onlineUsersStore.users || !profile) return;
+    if (!onlineUsersStore.users || !profile) {return;}
 
     if (onlineUsersStore.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
       return onlineUsersStore.searchedUsers

@@ -21,18 +21,18 @@ const DashboardVideo: React.FC<DashboardVideoProps> = ({dashboardId, onClose}) =
       if (videoItem) {
         setVideoURL(videoItem?.content?.url);
       } else {
-        if (onClose) onClose(true);
+        if (onClose) {onClose(true);}
       }
     }
   }, [dashboard]);
 
   const closeVideo = () => {
     setVideoURL(null);
-    if (onClose) onClose(false);
+    if (onClose) {onClose(false);}
   };
 
   if (videoURL)
-    return (
+    {return (
       <>
         <div className="fixed z-pop-over shadow-black bg-dark-blue-90 transition-all transform w-3/4 bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 max-h-[80vh]">
           <div>
@@ -54,8 +54,8 @@ const DashboardVideo: React.FC<DashboardVideoProps> = ({dashboardId, onClose}) =
           </div>
         </div>
       </>
-    );
-  else return null;
+    );}
+  else {return null;}
 };
 
 export default DashboardVideo;

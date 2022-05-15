@@ -41,7 +41,7 @@ const SocialSelectedSpace: React.FC<SocialSelectedSpaceProps> = ({
   };
 
   useEffect(() => {
-    if (!spaceResponse?.space.id.data) return;
+    if (!spaceResponse?.space.id.data) {return;}
 
     if (spaceId !== bytesToUuid(spaceResponse.space.id.data)) {
       setSelectedSpace(undefined);

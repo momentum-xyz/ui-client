@@ -67,7 +67,7 @@ const SocialLayout: React.FC = () => {
     }
   }, [location]);
 
-  if (!showLayer) return null;
+  if (!showLayer) {return null;}
 
   const handleUserInitiativeSelect = (spaceId: Buffer) => {
     setSelectedUserInitiative(spaceId);

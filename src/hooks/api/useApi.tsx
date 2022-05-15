@@ -91,12 +91,12 @@ export const useFetch = <T,>(url: string, options?: UseApiOptionsProps) => {
   );
 
   useEffect(() => {
-    if (!ready) return;
+    if (!ready) {return;}
     setData((prev) => (isInCache && useCache ? apiCache[url].data : lazy ? prev : undefined));
     setLoading(!(isInCache && useCache));
     setError(null);
     if (useNetwork) {
-      if (!useCache) setLoading(true);
+      if (!useCache) {setLoading(true);}
       cancelCurrentRequest.current = fetchFromNetwork();
     }
     return () => {
@@ -124,7 +124,7 @@ export const promiseFetch = async <T,>(
   const isInCache = apiCache.hasOwnProperty(url);
   const useCache = fetchPolicy !== 'network-only';
 
-  if (useCache && isInCache) return apiCache[url].data as T;
+  if (useCache && isInCache) {return apiCache[url].data as T;}
 
   const response = await request.get(url, headers);
 
@@ -156,7 +156,7 @@ export const usePost = <T, R = any>(url: string, options?: UsePostOptionsProps<T
   const postRequest = useCallback(
     (data) => {
       setLoading(true);
-      if (!lazy) setData(undefined);
+      if (!lazy) {setData(undefined);}
       return new Promise<T>((resolve, reject) => {
         request
           .post(url, data)
@@ -213,7 +213,7 @@ export const usePut = <T, R = any>(url: string, options?: UsePutOptionsProps<T>)
   const putRequest = useCallback(
     (data) => {
       setLoading(true);
-      if (!lazy) setData(undefined);
+      if (!lazy) {setData(undefined);}
       return new Promise<T>((resolve, reject) => {
         request
           .put(url, data)

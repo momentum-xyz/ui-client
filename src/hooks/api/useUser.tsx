@@ -50,11 +50,11 @@ export const useUserList = (initialIds: string[]) => {
 
     Object.keys(newUsers).forEach((x) => {
       if (typeof x === 'string')
-        promiseFetch<User>(window._env_.BACKEND_ENDPOINT_URL + `/users/profile/${x}`).then(
+        {promiseFetch<User>(window._env_.BACKEND_ENDPOINT_URL + `/users/profile/${x}`).then(
           (user) => {
             setUsers((users) => ({...users, [bytesToUuid(user.id?.data)]: user}));
           }
-        );
+        );}
     });
   }, [ids]);
 

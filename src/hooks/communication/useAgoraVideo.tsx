@@ -138,7 +138,7 @@ const useAgoraVideo = () => {
       if (client.channelName !== collaborationState.collaborationSpace.id) {
         leaveCall().then(() => {
           if (collaborationState.collaborationSpace)
-            startCallAndStream(collaborationState.collaborationSpace.id);
+            {startCallAndStream(collaborationState.collaborationSpace.id);}
         });
       }
     } else if (collaborationState.collaborationTable?.id) {
@@ -146,11 +146,11 @@ const useAgoraVideo = () => {
       if (client.channelName !== collaborationState.collaborationTable.id) {
         leaveCall().then(() => {
           if (collaborationState.collaborationTable)
-            startCallAndStream(collaborationState.collaborationTable.id);
+            {startCallAndStream(collaborationState.collaborationTable.id);}
         });
       }
     } else {
-      if (client.connectionState === 'CONNECTED') leaveCall();
+      if (client.connectionState === 'CONNECTED') {leaveCall();}
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -171,7 +171,7 @@ const useAgoraVideo = () => {
           {}
         );
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (soundLevels[uid as string]) setUserSoundLevel(soundLevels[uid as string].level);
+        if (soundLevels[uid as string]) {setUserSoundLevel(soundLevels[uid as string].level);}
         setRemoteParticipants((users) =>
           users.map((user) => {
             user.soundLevel = soundLevels[user.uid]?.level || 0;
@@ -189,7 +189,7 @@ const useAgoraVideo = () => {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           setScreenShare(rUser.videoTrack);
         } else
-          setRemoteParticipants((users) => [
+          {setRemoteParticipants((users) => [
             ...users,
             {
               uid: rUser.uid,
@@ -199,13 +199,13 @@ const useAgoraVideo = () => {
               hasVideo: rUser.hasVideo,
               soundLevel: 0
             }
-          ]);
+          ]);}
         break;
       case 'user-published':
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (isScreenshare) setScreenShare(rUser.videoTrack);
+        if (isScreenshare) {setScreenShare(rUser.videoTrack);}
         else
-          setRemoteParticipants((users) =>
+          {setRemoteParticipants((users) =>
             users.map((user) =>
               user.uid === rUser.uid
                 ? {
@@ -218,7 +218,7 @@ const useAgoraVideo = () => {
                   }
                 : user
             )
-          );
+          );}
         break;
       case 'user-unpublished':
         setRemoteParticipants((users) =>
@@ -237,12 +237,12 @@ const useAgoraVideo = () => {
         );
         break;
       case 'user-left':
-        if (isScreenshare) setScreenShare(null);
+        if (isScreenshare) {setScreenShare(null);}
         else
-          setRemoteParticipants((users) => {
+          {setRemoteParticipants((users) => {
             const user = rUser;
             return users.filter((oldUser) => oldUser.uid !== user.uid);
-          });
+          });}
         break;
     }
   }, [events]);

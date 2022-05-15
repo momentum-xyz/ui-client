@@ -97,7 +97,7 @@ const Collaboration: React.FC<Props> = () => {
 
   useEffect(() => {
     console.info(stageModeState);
-    if (!stageModeState?.data) return;
+    if (!stageModeState?.data) {return;}
 
     const shouldActivateStageMode =
       stageModeState?.data.stageModeStatus === StageModeStatus.INITIATED;

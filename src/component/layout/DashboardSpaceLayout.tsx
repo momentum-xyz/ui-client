@@ -50,7 +50,7 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
   useEffect(() => {
     setDashboardEdited(true);
     if (dashboard) {
-      if (playing) togglePlayPause();
+      if (playing) {togglePlayPause();}
       dashboard.tiles.forEach((tile) => {
         if (
           !tile.edited &&

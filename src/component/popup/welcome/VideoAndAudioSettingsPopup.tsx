@@ -43,7 +43,7 @@ const VideoAndAudioSettingsPopup: React.FC<VideoAndAudioSettingsPopupProps> = ({
   const getCommunicationDevices = () => {
     getMicrophoneConsent()
       .then((microphoneConsent) => {
-        if (!microphoneConsent) return;
+        if (!microphoneConsent) {return;}
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           setAudioOutputs(devices.filter((device) => device.kind === 'audiooutput'));
           setAudioInputs(devices.filter((device) => device.kind === 'audioinput'));
@@ -52,7 +52,7 @@ const VideoAndAudioSettingsPopup: React.FC<VideoAndAudioSettingsPopupProps> = ({
         return getCameraConsent();
       })
       .then((cameraConsent) => {
-        if (!cameraConsent) return;
+        if (!cameraConsent) {return;}
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           setVideoInputs(devices.filter((device) => device.kind === 'videoinput'));
         });
@@ -83,10 +83,10 @@ const VideoAndAudioSettingsPopup: React.FC<VideoAndAudioSettingsPopupProps> = ({
       const deviceId = e.target.value;
       const device = audioInputs.find((device) => device.deviceId === deviceId);
       if (device)
-        collaborationDispatch({
+        {collaborationDispatch({
           type: COLLABORATION_AUDIO_DEVICE_ACTION_UPDATE,
           audioDevice: device
-        });
+        });}
     },
     [audioInputs, collaborationDispatch]
   );

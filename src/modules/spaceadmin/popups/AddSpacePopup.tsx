@@ -51,8 +51,8 @@ export const AddSpacePopup = ({onSave, onClose, allowedSubspaces, spaceName = ''
   };
 
   const getSpaceName = () => {
-    if (spaceName === '') return;
-    else return ' "' + spaceName + '"';
+    if (spaceName === '') {return;}
+    else {return ' "' + spaceName + '"';}
   };
 
   // @ts-ignore

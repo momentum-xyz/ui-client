@@ -33,7 +33,9 @@ const EventList: FC<PropsInterface> = ({
   onWeblinkClick
 }) => {
   useEffect(() => {
-    if (!selectedEventId || events.length === 0) return;
+    if (!selectedEventId || events.length === 0) {
+      return;
+    }
     const element = document.getElementById(selectedEventId);
 
     // TODO: Fix flow.
@@ -44,7 +46,9 @@ const EventList: FC<PropsInterface> = ({
     location.href = `#${selectedEventId}`;
 
     // Highlights temporarily the event that a magic link brings you too
-    if (element) element.className += ' highlighted';
+    if (element) {
+      element.className += ' highlighted';
+    }
   }, [events.length]);
 
   if (isLoading || events.length === 0) {

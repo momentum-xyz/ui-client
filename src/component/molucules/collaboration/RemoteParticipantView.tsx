@@ -48,7 +48,7 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
       participant.audioTrack.play();
 
       return () => {
-        if (participant.audioTrack) participant.audioTrack.stop();
+        if (participant.audioTrack) {participant.audioTrack.stop();}
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,15 +59,15 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
     console.info(`Agora video track changes for user ${userName}`, participant.videoTrack);
 
     if (collaborationState.stageMode) {
-      if (participant.videoTrack?.isPlaying) participant.videoTrack?.stop();
+      if (participant.videoTrack?.isPlaying) {participant.videoTrack?.stop();}
       return;
     }
 
     if (participant.hasVideo && participant.videoTrack && videoRef.current) {
-      if (!noVideo) participant.videoTrack.play(videoRef.current);
+      if (!noVideo) {participant.videoTrack.play(videoRef.current);}
 
       return () => {
-        if (participant.videoTrack) participant.videoTrack.stop();
+        if (participant.videoTrack) {participant.videoTrack.stop();}
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

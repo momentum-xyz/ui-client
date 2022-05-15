@@ -27,7 +27,7 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
   }, [key]);
 
   const handleMagic = () => {
-    if (!magicStore.magic) return;
+    if (!magicStore.magic) {return;}
 
     if (magicStore.magic.expired) {
       history.replace({pathname: ROUTES.base});

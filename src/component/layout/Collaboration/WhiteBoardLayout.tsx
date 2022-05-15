@@ -40,7 +40,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
   }, [miroboard]);
 
   useWebsocketEvent('miro-board-change', (id) => {
-    if (collaborationSpace?.id === id) refetch();
+    if (collaborationSpace?.id === id) {refetch();}
   });
 
   const pickBoard = useCallback(() => {
@@ -64,11 +64,11 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
 
   const actions = useMemo(() => {
     if (userIsTeamleader)
-      return (
+      {return (
         <Button type="ghost" size="s" onClick={pickBoard}>
           change board
         </Button>
-      );
+      );}
     return null;
   }, [pickBoard, userIsTeamleader]);
 

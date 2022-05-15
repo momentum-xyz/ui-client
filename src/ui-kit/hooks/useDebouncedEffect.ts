@@ -22,7 +22,7 @@ export const useDebouncedEffect = (effect: () => void, delay: number, deps: any[
 
   useEffect(() => {
     return () => {
-      if (callbackRef.current) callbackRef.current();
+      if (callbackRef.current) {callbackRef.current();}
     };
   }, []);
 };

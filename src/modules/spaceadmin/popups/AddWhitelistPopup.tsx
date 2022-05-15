@@ -31,7 +31,7 @@ const AddWhitelistPopup: React.FC<AddWhitelistPopupProps> = ({
 
   useEffect(() => {
     if (!whitelist)
-      setWhitelist({status: 'PENDING', worldId: bytesToUuid(worldId), spaceId: spaceId});
+      {setWhitelist({status: 'PENDING', worldId: bytesToUuid(worldId), spaceId: spaceId});}
   }, [whitelist]);
 
   // @ts-ignore

@@ -119,8 +119,8 @@ export const useAgoraStageMode = () => {
 
   useWebsocketEvent('stage-mode-user-joined', (userId) => {
     //if (spaceId !== collaborationState.collaborationSpace?.id) return;
-    if (stageModeUsers.filter((user) => user.uid === userId).length !== 0) return;
-    if (userId === currentUserId) return;
+    if (stageModeUsers.filter((user) => user.uid === userId).length !== 0) {return;}
+    if (userId === currentUserId) {return;}
 
     setStageModeUsers([
       ...stageModeUsers,
@@ -140,7 +140,7 @@ export const useAgoraStageMode = () => {
   const createLocalTracks = useCallback(async (): Promise<
     [IMicrophoneAudioTrack, ICameraVideoTrack]
   > => {
-    if (!microphoneConsent) await getMicrophoneConsent();
+    if (!microphoneConsent) {await getMicrophoneConsent();}
 
     const microphoneTrack = await AgoraRTC.createMicrophoneAudioTrack({
       microphoneId: collaborationState.audioDevice?.deviceId
@@ -235,7 +235,7 @@ export const useAgoraStageMode = () => {
   }, [clientRoleOptions, appId, authState.subject]);
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) {return;}
 
     setRemoteUsers(() =>
       Array.from(
@@ -310,7 +310,7 @@ export const useAgoraStageMode = () => {
   }, [client]);
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) {return;}
 
     client.remoteUsers.forEach((user: IAgoraRTCRemoteUser) => {
       client.setRemoteVideoStreamType(user.uid, lowQualityEnabled ? 1 : 0).then();
@@ -318,12 +318,12 @@ export const useAgoraStageMode = () => {
   }, [client, lowQualityEnabled]);
 
   useEffect(() => {
-    if (!collaborationState.stageMode) leave().then();
+    if (!collaborationState.stageMode) {leave().then();}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collaborationState.stageMode]);
 
   const canEnterStage = useCallback(() => {
-    if (!client) return false;
+    if (!client) {return false;}
 
     return client.remoteUsers.length + (isOnStage ? 1 : 0) < CONFIG.video.MAX_STAGE_USERS;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -349,7 +349,7 @@ export const useAgoraStageMode = () => {
   };
 
   useEffect(() => {
-    if (client.localTracks.length === 0) updateMuteTogglingState(false);
+    if (client.localTracks.length === 0) {updateMuteTogglingState(false);}
     client.localTracks.forEach((localTrack) => {
       if (localTrack.trackMediaType === 'audio') {
         localTrack.setEnabled(!collaborationState.muted).then(() => {
@@ -362,7 +362,7 @@ export const useAgoraStageMode = () => {
 
   useEffect(() => {
     console.info('cam off true');
-    if (client.localTracks.length === 0) updateCameraTogglingState(false);
+    if (client.localTracks.length === 0) {updateCameraTogglingState(false);}
     client.localTracks.forEach((localTrack) => {
       if (localTrack.trackMediaType === 'video') {
         localTrack.setEnabled(!collaborationState.cameraOff).then(() => {

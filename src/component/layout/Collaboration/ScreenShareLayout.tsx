@@ -48,7 +48,7 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
     startScreenCast()
       .then((client) => {
         console.info('=> client', client);
-        if (!client) setSettingUp(false);
+        if (!client) {setSettingUp(false);}
       })
       .catch(() => {
         setSettingUp(false);
@@ -102,11 +102,11 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
 
   const actions = useMemo(() => {
     if (screenSharingClient)
-      return (
+      {return (
         <Button type="ghost" size="s" onClick={stopScreenCast}>
           stop screenshare
         </Button>
-      );
+      );}
     return null;
   }, [screenSharingClient, stopScreenCast]);
 

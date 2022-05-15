@@ -35,7 +35,7 @@ const TokenRulesPanelView: React.FC<TokenRulesPanelViewProps> = ({
   // const [tokenRuleDelete, setTokenRuleDelete] = useState<any>();
 
   useEffect(() => {
-    if (!tokenRulesList) return;
+    if (!tokenRulesList) {return;}
     setTokenRules(tokenRulesList?.tokenRules);
   }, [tokenRulesList]);
 
@@ -86,7 +86,7 @@ const TokenRulesPanelView: React.FC<TokenRulesPanelViewProps> = ({
   };
 
   const renderTokenRules = () => {
-    if (!tokenRules) return;
+    if (!tokenRules) {return;}
     // @ts-ignore
     const rows = tokenRules.map((item, i) => (
       <div

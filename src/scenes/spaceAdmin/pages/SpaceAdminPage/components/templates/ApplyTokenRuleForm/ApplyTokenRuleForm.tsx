@@ -80,8 +80,8 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
   };
 
   const handleSearchTokenRules = (value: string) => {
-    if (selectedTokenRule) setSelectedTokenRule(undefined);
-    if (!isDisabledButton) setIsDisabledButton(true);
+    if (selectedTokenRule) {setSelectedTokenRule(undefined);}
+    if (!isDisabledButton) {setIsDisabledButton(true);}
     if (value.length > 1) {
       applyTokenRuleStore.searchRequest.cancel();
       debouncedSearch(value);
@@ -163,7 +163,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                     ]}
                     onOptionSelect={(option) => {
                       onChange(option.value);
-                      if (isDisabledDropdown) setIsDisabledDropdown(false);
+                      if (isDisabledDropdown) {setIsDisabledDropdown(false);}
                     }}
                     variant="secondary"
                   />

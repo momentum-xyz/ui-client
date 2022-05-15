@@ -48,7 +48,7 @@ const MediaPlayer = (props: VideoPlayerProps) => {
   }, [user]);
 
   useEffect(() => {
-    if (!stagevideocontainer.current) return;
+    if (!stagevideocontainer.current) {return;}
 
     props.videoTrack?.play(stagevideocontainer.current);
     return () => {

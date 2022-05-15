@@ -73,7 +73,7 @@ const StageModeGuestLayout: React.FC = () => {
   };
 
   const handleUserRequest = () => {
-    if (!currentUserId) return;
+    if (!currentUserId) {return;}
 
     joinRequest(currentUserId)
       .then((response) => {
