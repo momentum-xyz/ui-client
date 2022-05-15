@@ -1,3 +1,4 @@
+// @ts-ignore
 const TokenDetails = ({title, content}) => {
   return (
     <div className="w-full bg-gradient-input mb-1">

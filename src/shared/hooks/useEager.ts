@@ -56,7 +56,7 @@ export const useEager = (
     if (account) {
       const injector = await web3FromSource(account.meta.source);
       const signRaw = injector?.signer?.signRaw;
-      if (!!signRaw) {
+      if (signRaw) {
         const publicKey = decodeAddress(account.address);
         const hexPublicKey = u8aToHex(publicKey);
         const nonce = (await getChallengeForSign(login_challenge, hexPublicKey)).address_challenge;

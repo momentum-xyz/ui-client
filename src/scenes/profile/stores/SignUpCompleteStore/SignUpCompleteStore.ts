@@ -24,7 +24,7 @@ const SignUpCompleteStore = types.compose(
       updateProfile: flow(function* (form: SignUpFormInterface) {
         // 1. Avatar uploading.
         let avatarHash;
-        if (!!form.avatar) {
+        if (form.avatar) {
           const data = {avatar: form.avatar};
           const userResponse: UploadAvatarResponse = yield self.avatarRequest.send(
             api.userRepository.uploadAvatar,

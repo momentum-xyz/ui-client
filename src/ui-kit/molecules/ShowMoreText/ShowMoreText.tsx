@@ -31,7 +31,7 @@ const ShowMoreText: FC<PropsInterface> = ({text, textProps, isCustom = false, li
   const [collapsed, setCollapsed] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
-  const hasClamping = (el) => {
+  const hasClamping = (el: HTMLDivElement) => {
     const {clientHeight, scrollHeight} = el;
     return clientHeight < scrollHeight;
   };

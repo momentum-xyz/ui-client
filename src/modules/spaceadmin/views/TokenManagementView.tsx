@@ -58,6 +58,7 @@ const TokenManagementView: React.FC<TokenManagementViewpProps> = ({
     });
   };
 
+  // @ts-ignore
   const saveWhitelist = (whiteList) => {
     createWhitelist(whiteList)
       .then(() => {

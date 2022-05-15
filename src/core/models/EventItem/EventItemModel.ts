@@ -51,6 +51,7 @@ const EventItemModel = types
         .toUpperCase();
     },
     get timeZone() {
+      // @ts-ignore
       return self.start.toLocaleDateString('en-US', {timeZoneName: 'short'}).split(' ').at(-1);
     },
     get asCalendarEvent(): EventCalendarInterface {

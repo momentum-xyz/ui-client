@@ -1,6 +1,7 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import {t} from 'i18next';
 
 import {request} from 'api/request';
 import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
@@ -16,7 +17,6 @@ import {Space, SpaceDTO} from '../../../context/type/Space';
 import {usePostSpace} from '../../../hooks/api/useSpaceService';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {DeleteSpacePopup} from '../popups/DeleteSpacePopup';
-import {t} from 'i18next';
 
 export interface SpacesPanelViewProps {
   space: Space;
@@ -59,6 +59,7 @@ export const SpacesPanelView: React.FC<SpacesPanelViewProps> = ({
     }
   };
 
+  // @ts-ignore: TODO: Refactor
   const addSpace = (newSpace) => {
     const spaceDTO: SpaceDTO = {
       parentId: bytesToUuid(space.id.data),
@@ -115,12 +116,13 @@ export const SpacesPanelView: React.FC<SpacesPanelViewProps> = ({
     [getConfirmation]
   );
 
+  // @ts-ignore: TODO: Refactor
   const extraCheckValid = (spaceToDelete) => {
     deleteSpaceModal.current?.close();
     deleteSpace(bytesToUuid(spaceToDelete.id.data)).then(onUpdate);
   };
 
-  const editSpace = (id) => {
+  const editSpace = (id: string) => {
     // const tile = internalTiles.flat().find((tile) => tile.id === id);
     // setEditingTile(tile || null);
     history.replace({pathname: '/space/' + id + '/admin'});

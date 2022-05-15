@@ -18,6 +18,7 @@ const ProfileMenuWidget: FC = () => {
 
   const auth = useAuth();
 
+  // @ts-ignore
   const signOutUser = (e) => {
     e.preventDefault();
     sessionStore.logout(auth);

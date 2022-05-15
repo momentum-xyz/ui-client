@@ -6,6 +6,7 @@ export interface SocialPanelProps {
   title: string;
   headerIcon?: ReactNode;
   isOpen: boolean;
+  // @ts-ignore
   setIsOpen: (boolean) => void;
   position: 'left' | 'right';
   detailView?: ReactNode;

@@ -27,7 +27,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, theme}) => {
   const {items, requestSort, sortConfig} = useSortableData(data);
 
-  const getSortIconNameFor = (name) => {
+  const getSortIconNameFor = (name: string) => {
     if (!sortConfig) {
       return 'sort';
     }
@@ -46,6 +46,7 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
     } else if (key === 'hasLink' && item[key]) {
       return <IconSvg name="rocket" size="medium" isCustom />;
     } else {
+      // @ts-ignore
       return <span title={item[key]}>{item[key]}</span>;
     }
   };

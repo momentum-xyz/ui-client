@@ -10,6 +10,7 @@ import {ROUTES} from '../../../core/constants';
 
 export interface SocialUsersInitiativesListProps {
   userInitiatives: UserSpace[];
+  // @ts-ignore
   onInitiativeSelect: (Buffer) => void;
 }
 

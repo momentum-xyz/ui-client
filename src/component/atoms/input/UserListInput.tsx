@@ -12,6 +12,7 @@ export interface UserInputProps {
 const UserListInput: React.FC<UserInputProps> = ({query, onSelect, setQuery}) => {
   const [userResponse] = useFindUser(query);
 
+  // @ts-ignore
   const handleItemSelect = (event, item) => {
     event.preventDefault();
     onSelect(bytesToUuid(item.id.data));

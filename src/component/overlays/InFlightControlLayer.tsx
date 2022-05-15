@@ -19,13 +19,14 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
 
   const [leftCollaborationSpace, setLeftCollaborationSpace] = useState<CollaborationSpace>();
 
+  // @ts-ignore
   useEffect(() => {
     if (!!prevCollaborationSpace && !collaborationState.collaborationSpace) {
       setLeftCollaborationSpace(prevCollaborationSpace);
       const timeout = setTimeout(() => setLeftCollaborationSpace(undefined), 15000);
       return () => clearTimeout(timeout);
     }
-    if (!!collaborationState.collaborationSpace) setLeftCollaborationSpace(undefined);
+    if (collaborationState.collaborationSpace) setLeftCollaborationSpace(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collaborationState.collaborationSpace]);
 

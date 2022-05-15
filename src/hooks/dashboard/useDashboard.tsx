@@ -10,6 +10,7 @@ import {
   useUpdateSpecialTile
 } from '../api/useDashboardService';
 
+// @ts-ignore
 export const useDashboardManager = (dashboard: Dashboard, numberOfColumns, space) => {
   console.info(space);
   const tileMatrix: Tile[][] = useMemo(() => {
@@ -37,6 +38,7 @@ export const useDashboardManager = (dashboard: Dashboard, numberOfColumns, space
   const updateSpecialTile = useUpdateSpecialTile();
   const [updateDashboard] = useUpdateDashboard();
 
+  // @ts-ignore
   const createOrUpdateDashboard = async (tile: Tile, file, type) => {
     let response;
     let newTile = {...tile};

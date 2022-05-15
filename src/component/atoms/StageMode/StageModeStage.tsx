@@ -26,6 +26,7 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
 
   const client = useStageClient();
 
+  // @ts-ignore
   const handleVolumeIndicator = (volumes) => {
     setSoundLevels(volumes as Volume[]);
   };

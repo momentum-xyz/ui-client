@@ -20,7 +20,7 @@ const ToolbarLink: React.FC<PropsInterface> = ({
     e.preventDefault();
   }, []);
 
-  if (!!link)
+  if (link)
     return (
       <Tooltip label={title}>
         <NavLink
@@ -30,6 +30,7 @@ const ToolbarLink: React.FC<PropsInterface> = ({
           title={title}
           className="w-4 h-4 p-1 flex items-center justify-center filter hover:drop-shadow-white focus-within:drop-shadow-white"
         >
+          {/* @ts-ignore: TODO: Refactor */}
           {children}
         </NavLink>
       </Tooltip>

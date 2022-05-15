@@ -43,5 +43,6 @@ export const inputToBN = (
     result = new BN(input.replace(/[^\d]/g, '')).mul(BN_TEN.pow(siPower));
   }
 
+  // @ts-ignore
   return result;
 };

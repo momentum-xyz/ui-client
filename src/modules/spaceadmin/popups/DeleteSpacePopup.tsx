@@ -6,6 +6,7 @@ import Input from '../../../component/atoms/input/Input';
 import {Space} from '../../../context/type/Space';
 
 type props = {
+  // @ts-ignore: TODO: Refactor
   onSave: (space) => void;
   onClose: () => void;
   space: Space;
@@ -14,12 +15,14 @@ type props = {
 export const DeleteSpacePopup = ({onSave, onClose, space}: props) => {
   const [confirmName, setConfirmName] = useState<string>('');
 
+  // @ts-ignore: TODO: Refactor
   const submit = (e) => {
     e.preventDefault();
     //check name the same
     if (confirmName === space.name) onSave(space);
   };
 
+  // @ts-ignore: TODO: Refactor
   const handleName = (event) => {
     event.persist();
     setConfirmName(event.target.value);

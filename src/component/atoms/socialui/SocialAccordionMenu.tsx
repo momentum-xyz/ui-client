@@ -3,6 +3,7 @@ import React from 'react';
 import {ReactComponent as ExpandIcon} from '../../../images/icons/SocialNext.svg';
 
 export interface SocialAccordionMenuProps {
+  // @ts-ignore
   setIsOpen: (boolean) => void;
   isOpen: boolean;
 }

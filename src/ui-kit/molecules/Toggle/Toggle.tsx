@@ -4,7 +4,7 @@ import cn from 'classnames';
 import * as styled from './Toggle.styled';
 
 interface PropsInterface extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
-  checked;
+  checked: boolean;
   onChange: (checked: boolean) => void;
 }
 

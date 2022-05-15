@@ -23,7 +23,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   offset?: OffsetInterface;
   approveInfo?: ButtonInfoInterface;
   declineInfo?: ButtonInfoInterface;
-  onClose?: (event?) => void;
+  onClose?: (event?: Event) => void;
   closeOnBackgroundClick?: boolean;
   showCloseButton?: boolean;
   withOpacity?: boolean;
@@ -72,18 +72,18 @@ const Dialog: FC<DialogPropsInterface> = ({
   useEffect(() => {
     if (controlUnityKeyboardControll) {
       unityStore.changeKeyboardControl(false);
-
-      return () => {
-        unityStore.changeKeyboardControl(true);
-      };
     }
+
+    return () => {
+      unityStore.changeKeyboardControl(true);
+    };
   }, []);
 
   return (
     <Portal>
       <styled.Modal
         theme={theme}
-        className={cn(position, {['opacity']: withOpacity, ['showBackground']: showBackground})}
+        className={cn(position, {opacity: withOpacity, showBackground: showBackground})}
       >
         <styled.Container ref={ref} className={position} offset={offset}>
           <PanelLayout

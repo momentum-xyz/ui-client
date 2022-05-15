@@ -14,11 +14,13 @@ type props = {
 export const EditUserPopup = ({onSave, onClose, user}: props) => {
   const [editUser, setEditUser] = useState<AssignUserDTO>(user);
 
+  // @ts-ignore
   const submit = (e) => {
     e.preventDefault();
     onSave(editUser);
   };
 
+  // @ts-ignore
   const handleRole = (event) => {
     setEditUser({
       ...editUser,

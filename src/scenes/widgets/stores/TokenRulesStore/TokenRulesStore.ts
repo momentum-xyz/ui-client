@@ -37,13 +37,13 @@ const TokenRulesStore = types.compose(
         const response = yield self.request.send(api.tokenRuleRepository.fetchOptions, {});
         if (response) {
           self.networks = cast(
-            response.networks.map((network) => ({
+            response.networks.map((network: string) => ({
               value: network,
               label: network.toUpperCase()
             }))
           );
           self.types = cast(
-            response.types.map((type) => ({
+            response.types.map((type: string) => ({
               value: type,
               label: type.toUpperCase()
             }))

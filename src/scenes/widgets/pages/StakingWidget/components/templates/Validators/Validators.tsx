@@ -40,7 +40,7 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
   };
 
   const nextStepHandle = () => {
-    if (!!operatorSpaceId) {
+    if (operatorSpaceId) {
       UnityService.triggerInteractionMsg?.(
         PosBusInteractionType.TriggerStake,
         operatorSpaceId,

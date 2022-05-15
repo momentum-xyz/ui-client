@@ -22,7 +22,7 @@ const WorldStatsWidget: FC = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    if (!!worldStore.worldId) {
+    if (worldStore.worldId) {
       worldStatsStore.init(worldStore.worldId);
     }
 

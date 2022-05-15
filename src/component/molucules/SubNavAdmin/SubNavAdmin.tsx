@@ -11,7 +11,7 @@ interface TabInterface {
 }
 
 const SubNavAdmin = () => {
-  const {spaceId} = useParams<{spaceId}>();
+  const {spaceId} = useParams<{spaceId: string}>();
 
   const tabs: TabInterface[] = [
     {

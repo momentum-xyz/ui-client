@@ -203,6 +203,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               >
                 <RemoteParticipantView
                   key={`participant-${participant.uid as string}`}
+                  // @ts-ignore
                   participant={participant}
                   canEnterStage={canEnterStage()}
                   totalParticipants={

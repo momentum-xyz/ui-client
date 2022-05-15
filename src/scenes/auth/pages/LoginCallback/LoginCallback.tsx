@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useAuth} from 'react-oidc-context';
 
@@ -11,20 +11,19 @@ const LoginCallback: FC = () => {
   const history = useHistory();
   const auth = useAuth();
 
-  const urlParams = new URLSearchParams(search as string);
-
   useEffect(() => {
+    const urlParams = new URLSearchParams(search as string);
     if (urlParams.get('error')) {
       loginStore.setIsSessionExpired(true);
       history.push(ROUTES.login);
     }
-  }, []);
+  }, [history, loginStore, search]);
 
   useEffect(() => {
     if (!auth.isLoading && auth.isAuthenticated) {
       history.push(ROUTES.base);
     }
-  }, [auth.isAuthenticated]);
+  }, [auth.isAuthenticated, auth.isLoading, history]);
 
   return <></>;
 };

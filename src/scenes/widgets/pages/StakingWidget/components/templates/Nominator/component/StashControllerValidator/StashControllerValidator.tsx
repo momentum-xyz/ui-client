@@ -25,7 +25,9 @@ const StashControllerValidator: FC<PropsInterface> = ({theme}) => {
   });
 
   useEffect(() => {
+    // @ts-ignore
     let newError;
+    // @ts-ignore
     let errorType;
     if (controllerAccountValidation.isMappedToAnotherStash) {
       errorType = 'danger';
@@ -44,6 +46,7 @@ const StashControllerValidator: FC<PropsInterface> = ({theme}) => {
     }
 
     setError((state) =>
+      // @ts-ignore
       state.errorMessage !== newError ? {errorMessage: newError, errorType} : state
     );
   }, [

@@ -70,6 +70,7 @@ const SpaceDetailsPanel: FC = () => {
     }
   }, [space]);
 
+  // @ts-ignore: FIX
   const renderSecretInput = ({field: {onChange, value}}) => (
     <styled.Access>
       <Text text={t('spaceAdmin.spaceDetails.privateSpaceText')} size="xs" />
@@ -77,6 +78,7 @@ const SpaceDetailsPanel: FC = () => {
     </styled.Access>
   );
 
+  // @ts-ignore: FIX
   const renderNameInput = ({field: {onChange, value}}) => (
     <Input
       defaultValue={value}

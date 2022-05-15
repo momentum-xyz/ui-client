@@ -24,6 +24,7 @@ const MusicPlayerLayout: React.FC<MusicPlayerLayoutProps> = () => {
     if (!playlistHash) return;
 
     const newPlaylist = [] as any;
+    // @ts-ignore
     playlistHash.map(({track}) => {
       return newPlaylist.push([track.file_hash, track.name]);
     });

@@ -17,6 +17,7 @@ export const TileEditPopup = ({onSave, onClose, tile}: props) => {
   const [file, setFile] = useState<File | null>(null);
   const [internalTile, setTile] = useState<Tile>(tile);
 
+  // @ts-ignore: refactoring
   const handleTitle = (event) => {
     event.persist();
     setTile((tile) => ({
@@ -28,6 +29,7 @@ export const TileEditPopup = ({onSave, onClose, tile}: props) => {
     }));
   };
 
+  // @ts-ignore: refactoring
   const handleURL = (event) => {
     event.persist();
     setTile((tile) => ({
@@ -39,6 +41,7 @@ export const TileEditPopup = ({onSave, onClose, tile}: props) => {
     }));
   };
 
+  // @ts-ignore: refactoring
   const handleText = (event) => {
     event.persist();
     setTile((tile) => ({
@@ -50,6 +53,7 @@ export const TileEditPopup = ({onSave, onClose, tile}: props) => {
     }));
   };
 
+  // @ts-ignore: refactoring
   const handleFile = async (event) => {
     const file: File = event.target.files[0];
     setFile(file);
@@ -81,6 +85,7 @@ export const TileEditPopup = ({onSave, onClose, tile}: props) => {
     // reader.readAsDataURL(file);
   };
 
+  // @ts-ignore: refactoring
   const submit = (e) => {
     e.preventDefault();
     onSave(

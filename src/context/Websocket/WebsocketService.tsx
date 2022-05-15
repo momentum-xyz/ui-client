@@ -76,6 +76,7 @@ class WebsocketService {
     }
   }
 
+  // @ts-ignore: TODO: Refactor
   relayToUnity(topic, message) {
     const unityMessage = {
       topic,
@@ -84,6 +85,8 @@ class WebsocketService {
     UnityService.sendWebsocketMessage(JSON.stringify(unityMessage));
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   handleGlobalInteraction(topic, message) {
     const [, senderId, type] = topic.split('/');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -181,6 +184,7 @@ class WebsocketService {
   handleIncomingStageMode(message: StageModeMessage) {
     switch (message.action) {
       case 'state':
+        // eslint-disable-next-line no-case-declarations
         const parsedStatus = Number(message.value) === 0 ? 'stopped' : 'initiated';
         WebsocketEventEmitter.emit('stage-mode-toggled', parsedStatus as StageModeStatus);
         break;
@@ -188,6 +192,7 @@ class WebsocketService {
         WebsocketEventEmitter.emit('stage-mode-request', message.userId);
         break;
       case 'accept-request':
+        // eslint-disable-next-line no-case-declarations
         const eventName = message.value === 1 ? 'stage-mode-accepted' : 'stage-mode-declined';
         WebsocketEventEmitter.emit(eventName);
         break;
@@ -215,7 +220,7 @@ class WebsocketService {
     this.handleHighFiveReceived(message.senderId, message.message);
   }
 
-  handleRelayMessage(target: string, message): void {
+  handleRelayMessage(target: string, message: any): void {
     console.debug('unity-relay:', target, message);
     // WARNING: hack: bridging new controller unity message to old legacy mqtt code.
     switch (target) {

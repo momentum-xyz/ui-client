@@ -22,6 +22,7 @@ const SimpleTile: React.FC<SimpleTileProps> = ({icon, title, text, children}) =>
       </div>
       <div className="text-sm whitespace-pre-wrap break-all hyphens-auto">
         <Linkify
+          // @ts-ignore: refactoring
           componentDecorator={(decoratedHref, decoratedText, key) => (
             <a
               className="underline"
@@ -34,6 +35,7 @@ const SimpleTile: React.FC<SimpleTileProps> = ({icon, title, text, children}) =>
             </a>
           )}
         >
+          {/* @ts-ignore: refactoring */}
           {text}
         </Linkify>
       </div>

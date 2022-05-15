@@ -121,6 +121,7 @@ export const AgoraProvider = ({client, stageClient, appId, children}: AgoraProvi
   }, [microphoneConsent, getConfirmation]);
 
   useEffect(() => {
+    // @ts-ignore
     getMicrophoneConsent().then((consent) => {
       if (consent) return getCameraConsent();
     });

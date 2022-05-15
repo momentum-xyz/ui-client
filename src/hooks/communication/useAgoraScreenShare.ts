@@ -14,6 +14,7 @@ export const useAgoraScreenShare = () => {
   const {appId, setScreenSharingClient, screenSharingClient} = useContext(AgoraContext);
   const {getConfirmation} = useConfirmationDialog();
 
+  // @ts-ignore
   const startScreenCast = useCallback(async () => {
     if (collaborationState.collaborationSpace) {
       const screenClient = AgoraRTC.createClient({

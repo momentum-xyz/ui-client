@@ -49,6 +49,7 @@ export const MetaPanelView: React.FC<MetaPanelViewProps> = ({space, onUpdate, an
     setSpaceSettings(spaceDTO);
   }, []);
 
+  // @ts-ignore
   const saveSpace = (e) => {
     e.preventDefault();
     if (spaceSettings) {
@@ -114,6 +115,7 @@ export const MetaPanelView: React.FC<MetaPanelViewProps> = ({space, onUpdate, an
     history.replace({pathname: '/space/' + id + '/admin'});
   };
 
+  // @ts-ignore
   const getChild = (ancestors: Space[], index = 0) => {
     if (ancestors && index < ancestors.length) {
       const ancestor = ancestors[index];

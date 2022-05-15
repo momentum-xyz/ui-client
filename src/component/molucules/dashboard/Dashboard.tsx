@@ -122,6 +122,7 @@ const DashboardDynamicView = React.forwardRef<DashboardHandle, DashboardProps>(
       [getConfirmation]
     );
 
+    // @ts-ignore
     const showEditModal = (id) => {
       const tile = internalTiles.flat().find((tile) => tile.id === id);
       setEditingTile(tile || null);

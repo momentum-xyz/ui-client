@@ -1,0 +1,125 @@
+/*
+ * Rule enabling options:
+ * 0=off, 1=warn, 2=error
+ */
+{
+  "root": true,
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "eqeqeq": [
+      "warn",
+      "always"
+    ],
+    "max-len": [
+      "warn",
+      {
+        "code": 100,
+        "ignoreUrls": true,
+        "ignoreStrings": true,
+        "ignoreComments": true,
+        "ignoreTemplateLiterals": true,
+        "ignorePattern": "^\\s*var\\s.+=\\s*require\\s*\\("
+      }
+    ],
+    "react/no-unused-prop-types": 1,
+    "react/jsx-curly-brace-presence": [
+      2,
+      {
+        "props": "never",
+        "children": "never"
+      }
+    ],
+    "react/jsx-first-prop-new-line": [
+      1,
+      "multiline"
+    ],
+    "react/jsx-indent-props": [
+      1,
+      "first"
+    ],
+    "react/jsx-key": [
+      2,
+      {
+        "checkFragmentShorthand": true
+      }
+    ],
+    "react-hooks/exhaustive-deps": 1,
+    "testing-library/render-result-naming-convention": 1,
+    "testing-library/prefer-screen-queries": 1,
+    "@typescript-eslint/require-await": 1,
+    "@typescript-eslint/no-floating-promises": 0,
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "@typescript-eslint/no-unused-vars": 2,
+    "@typescript-eslint/typedef": [
+      2,
+      {
+        "propertyDeclaration": true
+      }
+    ],
+    "@typescript-eslint/ban-ts-comment": [
+      1,
+      {
+        "ts-ignore": "allow-with-description"
+      }
+    ],
+    "@typescript-eslint/naming-convention": [
+      1,
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "suffix": ["Interface"]
+      },
+      {
+        "selector": "enum",
+        "format": ["PascalCase"],
+        "suffix": ["Enum"]
+      },
+      {
+        "selector": "typeAlias",
+        "format": ["PascalCase"],
+        "suffix": ["Type"]
+      }
+    ],
+    "import/no-cycle": [
+      2,
+      {
+        "maxDepth": 1
+      }
+    ],
+    "import/order": [
+      2,
+      {
+        "groups": ["index", ["builtin", "external"], "internal", "parent", "sibling"],
+        "newlines-between": "always"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": [
+          "node_modules",
+          "src/"
+        ]
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
+  }
+}

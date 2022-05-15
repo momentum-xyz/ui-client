@@ -16,7 +16,7 @@ import * as styled from './ProfileWidget.styled';
 interface ProfileWidgetPropsInterface {
   userId: string;
   onClose: () => void;
-  onUserInitiativeSelect: (Buffer) => void;
+  onUserInitiativeSelect: (user: Buffer) => void;
   onEditUser: (userId: string) => void;
 }
 

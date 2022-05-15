@@ -75,11 +75,12 @@ export const refreshAxiosInterceptors = (
   callback?: (token?: string) => void,
   errorCallback?: () => void
 ) => {
+  // @ts-ignore: strange types
   const refreshAuthLogic = (failedRequest) =>
     authProps
       .signinSilent()
       .then((user) => {
-        if (!!user?.access_token) {
+        if (user?.access_token) {
           setAccessToken(user.access_token);
           failedRequest.response.config.headers.Authorization = `${TOKEN_TYPE} ${user.access_token}`;
           if (callback) {

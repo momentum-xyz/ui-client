@@ -23,7 +23,7 @@ const RequestModel = types
   })
   .actions((self) => {
     let cancel: CancelTokenSource | null = null;
-
+    // @ts-ignore: MST-actions
     const actions = {
       send: flow(function* send<T, R extends {data: unknown; config: AxiosRequestConfig}>(
         action: (options: T) => Promise<R>,

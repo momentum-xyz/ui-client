@@ -68,6 +68,7 @@ const VideoAndAudioSettingsPopup: React.FC<VideoAndAudioSettingsPopupProps> = ({
   useEffect(() => {
     const videoDeviceId = collaborationState.videoDevice?.deviceId;
 
+    // @ts-ignore
     navigator.mediaDevices.getUserMedia({video: {deviceId: videoDeviceId}}).then((mediaStream) => {
       const video = videoRef.current;
       if (video) {
@@ -90,9 +91,8 @@ const VideoAndAudioSettingsPopup: React.FC<VideoAndAudioSettingsPopupProps> = ({
     [audioInputs, collaborationDispatch]
   );
 
-  const updateAudioOutputDevice = useCallback(
-    (e) => {
-      const deviceId = e.target.value;
+  const updateAudioOutputDevice = useCallback(() => {
+    /*const deviceId = e.target.value;
       const device = audioOutputs.find((device) => device.deviceId === deviceId);
 
       if (device) {
@@ -100,10 +100,8 @@ const VideoAndAudioSettingsPopup: React.FC<VideoAndAudioSettingsPopupProps> = ({
       // collaborationDispatch({
       //   type: COLLABORATION_AUDIO_DEVICE_ACTION_UPDATE,
       //   audioDevice: device,
-      // });
-    },
-    [audioOutputs, collaborationDispatch]
-  );
+      // });*/
+  }, []);
 
   const updateVideoDevice = useCallback(
     (e) => {
@@ -115,6 +113,7 @@ const VideoAndAudioSettingsPopup: React.FC<VideoAndAudioSettingsPopupProps> = ({
           videoDevice: device
         });
 
+        // @ts-ignore
         navigator.mediaDevices.getUserMedia({video: {deviceId: deviceId}}).then((mediaStream) => {
           const video = videoRef.current;
           if (video) {

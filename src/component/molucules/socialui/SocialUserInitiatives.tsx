@@ -6,6 +6,7 @@ import SocialUserInitiativesList from './SocialUserInitiativesList';
 
 export interface SocialUserInitiativesProps {
   userId: string;
+  // @ts-ignore
   onInitiativeSelect: (Buffer) => void;
 }
 

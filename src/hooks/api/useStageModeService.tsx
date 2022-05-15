@@ -96,6 +96,7 @@ export const useStageModeRequestAcceptOrDecline = (spaceId?: string) => {
       });
   };
 
+  // @ts-ignore
   const stageModeAcceptOrDecline: [(userId) => Promise<void>, (userId) => Promise<void>] = [
     stageModeRequestAcceptOrDecline(StageModeRequestType.ACCEPT),
     stageModeRequestAcceptOrDecline(StageModeRequestType.DECLINE)

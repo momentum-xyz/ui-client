@@ -26,6 +26,7 @@ module 'react-add-to-calendar-hoc' {
     event?: CalendarEventInterface;
     items?: SHARE_SITES[];
     linkProps?: object;
+    // @ts-ignore: refactoring
     onRequestClose?: (event) => void;
   }
 

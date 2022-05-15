@@ -62,6 +62,7 @@ export const ChangeAvatarPopup = ({onSave, onClose}: props) => {
     }
   }, [croppedImage]);
 
+  // @ts-ignore
   const readFile = (file) => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -71,6 +72,7 @@ export const ChangeAvatarPopup = ({onSave, onClose}: props) => {
     });
   };
 
+  // @ts-ignore
   const onFileChange = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -97,6 +99,7 @@ export const ChangeAvatarPopup = ({onSave, onClose}: props) => {
     }
   }, [imageSrc, croppedAreaPixels]);
 
+  // @ts-ignore
   const submit = (e) => {
     e.preventDefault();
     setIsSaving(true);

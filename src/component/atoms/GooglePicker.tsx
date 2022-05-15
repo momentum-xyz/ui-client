@@ -6,20 +6,35 @@ require('../../styles/atoms/_google-picker.scss');
 let scriptLoadingStarted = false;
 
 const useGooglePicker = ({
+  // @ts-ignore
   authImmediate,
+  // @ts-ignore
   clientId,
+  // @ts-ignore
   developerKey,
+  // @ts-ignore
   disabled,
+  // @ts-ignore
   origin,
+  // @ts-ignore
   onChange,
+  // @ts-ignore
   onAuthenticate,
+  // @ts-ignore
   onAuthFailed,
+  // @ts-ignore
   createPicker,
+  // @ts-ignore
   mimeTypes,
+  // @ts-ignore
   multiselect,
+  // @ts-ignore
   scope,
+  // @ts-ignore
   navHidden,
+  // @ts-ignore
   viewId,
+  // @ts-ignore
   query
 }) => {
   const onApiLoad = () => {
@@ -39,7 +54,7 @@ const useGooglePicker = ({
     return !!(window as any).google.picker;
   };
 
-  const loadScript = (src, onLoad: () => void) => {
+  const loadScript = (src: string, onLoad: () => void) => {
     const script = document.createElement(`script`);
     script.src = src;
     script.async = true;
@@ -62,6 +77,7 @@ const useGooglePicker = ({
     }
   }, []);
 
+  // @ts-ignore
   const doAuth = (callback) => {
     (window as any).gapi.auth.authorize(
       {
@@ -73,6 +89,7 @@ const useGooglePicker = ({
     );
   };
 
+  // @ts-ignore
   const handleCreatePicker = (oauthToken) => {
     onAuthenticate(oauthToken);
 
@@ -115,6 +132,7 @@ const useGooglePicker = ({
     picker.build().setVisible(true);
   };
 
+  // @ts-ignore: refactoring
   const onChoose = () => {
     if (!isGoogleReady() || !isGoogleAuthReady() || !isGooglePickerReady() || disabled) {
       return null;
@@ -126,6 +144,7 @@ const useGooglePicker = ({
     if (oauthToken) {
       handleCreatePicker(oauthToken);
     } else {
+      // @ts-ignore
       doAuth((response) => {
         if (response.access_token) {
           handleCreatePicker(response.access_token);
@@ -144,21 +163,37 @@ const useGooglePicker = ({
 //export default useGooglePicker;
 
 const GooglePicker = ({
+  // @ts-ignore
   authImmediate,
+  // @ts-ignore
   children,
+  // @ts-ignore
   clientId,
+  // @ts-ignore
   developerKey,
+  // @ts-ignore
   disabled,
+  // @ts-ignore
   origin,
+  // @ts-ignore
   onChange,
+  // @ts-ignore
   onAuthenticate,
+  // @ts-ignore
   onAuthFailed,
+  // @ts-ignore
   createPicker,
+  // @ts-ignore
   mimeTypes,
+  // @ts-ignore
   multiselect,
+  // @ts-ignore
   scope,
+  // @ts-ignore
   navHidden,
+  // @ts-ignore
   viewId,
+  // @ts-ignore
   query
 }) => {
   const {onChoose} = useGooglePicker({

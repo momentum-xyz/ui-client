@@ -6,12 +6,13 @@ import Tooltip from '../Tooltip';
 type TopbarButtonProps = {
   title: string;
   link?: string;
+  // @ts-ignore: add types
   isActive?: (match, location) => boolean;
   onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
 };
 
 const TopbarButton: React.FC<TopbarButtonProps> = ({children, isActive, title, onClick, link}) => {
-  if (!!link)
+  if (link)
     return (
       <Tooltip className="ml-2" direction="bottom" label={title}>
         <NavLink
@@ -22,6 +23,7 @@ const TopbarButton: React.FC<TopbarButtonProps> = ({children, isActive, title, o
           onClick={onClick}
           className="h-2 w-2 filter hover:drop-shadow-white focus-within:drop-shadow-white"
         >
+          {/* @ts-ignore */}
           {children}
         </NavLink>
       </Tooltip>

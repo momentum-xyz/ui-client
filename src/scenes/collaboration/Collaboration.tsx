@@ -131,6 +131,7 @@ const Collaboration: React.FC<Props> = () => {
     setNewDevice(undefined);
   };
 
+  // @ts-ignore
   const newDeviceKindDescription = () => {
     switch (newDevice?.kind) {
       case 'videoinput':

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {render, within, waitFor, fireEvent} from 'ui-kit/utils/test.utils';
+import {render, waitFor, fireEvent} from 'ui-kit/utils/test.utils';
 
 import FileUploader from './FileUploader';
 
@@ -33,6 +33,7 @@ describe('FileUploader', () => {
     const uploader = getByTestId('FileUploader-input-test') as HTMLInputElement;
 
     await waitFor(() =>
+      // eslint-disable-next-line testing-library/no-wait-for-side-effects
       fireEvent.change(uploader, {
         target: {files: [file]}
       })

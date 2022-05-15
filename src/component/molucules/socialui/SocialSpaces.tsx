@@ -12,6 +12,7 @@ import SocialSelectedSpace from './SocialSelectedSpace';
 
 export interface SocialSpacesProps {
   isOpen: boolean;
+  // @ts-ignore
   setIsOpen: (boolean) => void;
   worldId: string;
   selectedUserInitiative: Buffer | undefined;

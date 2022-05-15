@@ -14,6 +14,7 @@ import {Space} from '../../../context/type/Space';
 
 export interface SocialSpaceItemProps {
   space: Space;
+  // @ts-ignore
   onSelect: (Buffer) => void;
 }
 

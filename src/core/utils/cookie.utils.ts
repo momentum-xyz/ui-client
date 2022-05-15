@@ -1,10 +1,14 @@
-export const createCookieInHours = (cookieName, cookieValue, hoursToExpire) => {
+export const createCookieInHours = (
+  cookieName: string,
+  cookieValue: string,
+  hoursToExpire: number
+) => {
   const date = new Date();
   date.setTime(date.getTime() + hoursToExpire * 60 * 60 * 1000);
   document.cookie = cookieName + ' = ' + cookieValue + ';Path=/; Expires = ' + date.toUTCString();
 };
 
-export const getCookie = (cname) => {
+export const getCookie = (cname: string) => {
   const name = cname + '=';
   const decodedCookie = decodeURIComponent(document.cookie);
   const ca = decodedCookie.split(';');
@@ -20,15 +24,13 @@ export const getCookie = (cname) => {
   return null;
 };
 
-export const hasCookie = (cname) => {
+export const hasCookie = (cname: string) => {
   const cookie = getCookie(cname);
 
-  if (cookie === null) return false;
-
-  return true;
+  return cookie !== null;
 };
 
-export const deleteCookieByName = (cname) => {
+export const deleteCookieByName = (cname: string) => {
   console.info('DELETE COOkIE ' + cname + ' - ' + window.location.hostname);
   document.cookie =
     cname +

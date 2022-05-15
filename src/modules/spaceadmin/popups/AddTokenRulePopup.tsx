@@ -68,6 +68,7 @@ const AddTokenRulePopup: React.FC<AddTokenRulePopopProps> = ({
     });
   }, [tokenid]);
 
+  // @ts-ignore
   const submit = (e) => {
     e.preventDefault();
     createTokenRule(tokenRule)
@@ -86,6 +87,7 @@ const AddTokenRulePopup: React.FC<AddTokenRulePopopProps> = ({
       });
   };
 
+  // @ts-ignore
   const handleTokenRuleNameInputChange = (event) => {
     event.persist();
     setTokenRule({
@@ -95,12 +97,14 @@ const AddTokenRulePopup: React.FC<AddTokenRulePopopProps> = ({
     setTokenRuleName(event.target.value);
   };
 
+  // @ts-ignore
   const handleTokenSelect = (event) => {
     event.persist();
     if (!whitelistItems) return;
     setSelectedToken(whitelistItems[event.target.value]);
   };
 
+  // @ts-ignore
   const handleMinimumBalanceChange = (event) => {
     event.persist();
     setRule({...rule, minBalance: Number(event.target.value)});
