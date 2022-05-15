@@ -37,8 +37,9 @@ const OnlineUsersWidget: FC<OnlineUsersWidgetsProps> = ({onUserInitiativeSelect}
       onlineUsersStore.selectedUserId &&
       profile &&
       onlineUsersStore.selectedUserId === profile.uuid
-    )
-      {return;}
+    ) {
+      return;
+    }
 
     if (profileDialog.isOpen && profile) {
       onlineUsersStore.selectUser(profile.uuid);

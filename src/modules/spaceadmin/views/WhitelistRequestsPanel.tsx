@@ -26,7 +26,9 @@ const WhitelistRequestsPanel: React.FC<WhitelistRequestsPanelProps> = ({
   const [worldSpace] = useGetSpace(bytesToUuid(currentWorld));
 
   useEffect(() => {
-    if (!whitelistItems) {return;}
+    if (!whitelistItems) {
+      return;
+    }
     setWhitelists(whitelistItems.tokenWhitelistRequests);
   }, [whitelistItems]);
 
@@ -37,7 +39,9 @@ const WhitelistRequestsPanel: React.FC<WhitelistRequestsPanelProps> = ({
   };
   // whitelists are being filtered in the backend to be shown only those with pending status
   const renderWhitelistRequests = () => {
-    if (whitelists.length < 1 || !whitelists) {return;}
+    if (whitelists.length < 1 || !whitelists) {
+      return;
+    }
     // @ts-ignore
     return whitelists.map((item, i) => (
       <div

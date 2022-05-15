@@ -62,13 +62,17 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
   };
 
   const renderDate = () => {
-    if (!userProfile?.createdAt) {return;}
+    if (!userProfile?.createdAt) {
+      return;
+    }
     const date = new Date(userProfile.createdAt);
     return monthAndYearString(date);
   };
 
   const isItMe = () => {
-    if (!currentUser || !userProfile) {return false;}
+    if (!currentUser || !userProfile) {
+      return false;
+    }
     return currentUser.uuid === userProfile.uuid;
   };
 

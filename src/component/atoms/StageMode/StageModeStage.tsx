@@ -38,7 +38,9 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
     }
 
     return () => {
-      if (client) {client.off('volume-indicator', handleVolumeIndicator);}
+      if (client) {
+        client.off('volume-indicator', handleVolumeIndicator);
+      }
     };
   }, [client]);
 
@@ -74,8 +76,12 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
     // console.info('[STAGEMODE] localtracks update:', client)
     const cameraTrack = client.localTracks.find((track) => track.trackMediaType === 'video');
     const audioTrack = client.localTracks.find((track) => track.trackMediaType === 'audio');
-    if (cameraTrack) {setIsLocalVideoMuted(!cameraTrack.enabled);}
-    if (audioTrack) {setIsLocalAudioMuted(!audioTrack.enabled);}
+    if (cameraTrack) {
+      setIsLocalVideoMuted(!cameraTrack.enabled);
+    }
+    if (audioTrack) {
+      setIsLocalAudioMuted(!audioTrack.enabled);
+    }
     setLocalCameraTrack(cameraTrack as ILocalVideoTrack);
   }, [client, client.localTracks]);
 
@@ -148,7 +154,9 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
                   <button
                     className="hover:text-prime-blue-100 w-4"
                     onClick={() => {
-                      if (onRemoteUserClick) {onRemoteUserClick(user, 'mute');}
+                      if (onRemoteUserClick) {
+                        onRemoteUserClick(user, 'mute');
+                      }
                     }}
                   >
                     <div className="flex flex-col gap-1 justify-center items-center">
@@ -159,7 +167,9 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
                   <button
                     className="hover:text-prime-blue-100 w-4"
                     onClick={() => {
-                      if (onRemoteUserClick) {onRemoteUserClick(user, 'remove');}
+                      if (onRemoteUserClick) {
+                        onRemoteUserClick(user, 'remove');
+                      }
                     }}
                   >
                     <div className="flex flex-col gap-1 justify-center items-center">

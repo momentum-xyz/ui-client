@@ -28,7 +28,9 @@ const ReviewWhitelistPopup: React.FC<ReviewWhitelistPopupProps> = ({
   const [updateTokenStatus, , ,] = useUpdateTokenStatus(tokenWhitelistRequestId);
 
   useEffect(() => {
-    if (!whitelist) {return;}
+    if (!whitelist) {
+      return;
+    }
     setTokenWhitelistRequestId(bytesToUuid(whitelist.id?.data));
   }, [whitelist]);
 

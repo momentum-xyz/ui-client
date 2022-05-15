@@ -12,8 +12,8 @@ type TopbarButtonProps = {
 };
 
 const TopbarButton: React.FC<TopbarButtonProps> = ({children, isActive, title, onClick, link}) => {
-  if (link)
-    {return (
+  if (link) {
+    return (
       <Tooltip className="ml-2" direction="bottom" label={title}>
         <NavLink
           activeClassName="drop-shadow-white"
@@ -27,7 +27,8 @@ const TopbarButton: React.FC<TopbarButtonProps> = ({children, isActive, title, o
           {children}
         </NavLink>
       </Tooltip>
-    );}
+    );
+  }
 
   return (
     <Tooltip className="ml-2" direction="bottom" label={title}>

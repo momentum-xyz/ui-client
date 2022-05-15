@@ -32,7 +32,9 @@ const SubSpacesPanel: FC = () => {
   };
 
   const removeSubSpace = () => {
-    if (!selectedSpace) {return;}
+    if (!selectedSpace) {
+      return;
+    }
 
     spaceManagerStore.deleteSubSpace(selectedSpace.id).then(() => {
       removeSubSpaceConfirmationDialog.close();

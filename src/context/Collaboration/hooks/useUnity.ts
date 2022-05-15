@@ -30,7 +30,9 @@ export const useUnityUserPosition = () => {
 
   useEffect(() => {
     const userPos = UnityService.getUserPosition?.();
-    if (userPos) {setUserPosition(userPos);}
+    if (userPos) {
+      setUserPosition(userPos);
+    }
   }, []);
 
   return userPosition;

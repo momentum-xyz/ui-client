@@ -54,7 +54,9 @@ const CalendarPage: FC = () => {
   // TODO , move to Calendar world page
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (!space.id) {return;}
+    if (!space.id) {
+      return;
+    }
 
     calendarStore.showMagicLink(space.id, eventId);
   };

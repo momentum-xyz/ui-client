@@ -35,7 +35,9 @@ const SpaceMembersPanel: FC = () => {
   };
 
   const removeUser = () => {
-    if (!selectedUser) {return;}
+    if (!selectedUser) {
+      return;
+    }
 
     spaceStore
       .removeUser(selectedUser.id)

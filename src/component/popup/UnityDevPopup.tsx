@@ -40,7 +40,9 @@ export const UnityDevPopup: React.FC<UnityDevPopupProps> = ({onClose}) => {
     if (Events[type].length > 0) {
       // @ts-ignore
       const vars = Events[type].map((key) => {
-        if (key === 'position') {return {x: 0, y: 0, z: 0};}
+        if (key === 'position') {
+          return {x: 0, y: 0, z: 0};
+        }
         // @ts-ignore
         return formData[key];
       });
@@ -50,7 +52,9 @@ export const UnityDevPopup: React.FC<UnityDevPopupProps> = ({onClose}) => {
       console.info(`Emitting a "${type}" unity event`);
       UnityEventEmitter.emit(type as keyof UnityEvents);
     }
-    if (close && onClose) {onClose();}
+    if (close && onClose) {
+      onClose();
+    }
   };
 
   return (
@@ -66,7 +70,9 @@ export const UnityDevPopup: React.FC<UnityDevPopupProps> = ({onClose}) => {
         </Select>
         {/* @ts-ignore */}
         {Events[type].map((key) => {
-          if (key === 'position') {return null;}
+          if (key === 'position') {
+            return null;
+          }
           // if(key === "owner") return (
           // <Select name={key} onChange={handleChange}>
           //     {Object.keys(OwnerType).map((type, i) => (

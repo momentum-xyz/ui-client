@@ -91,7 +91,9 @@ export const useAgoraLocalTracks = () => {
   }, [client.localTracks]);
 
   const updateMuteTogglingState = (state = false) => {
-    if (collaborationState.stageMode) {return;}
+    if (collaborationState.stageMode) {
+      return;
+    }
     collaborationDispatch({
       type: COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
       isTogglingMute: state
@@ -99,7 +101,9 @@ export const useAgoraLocalTracks = () => {
   };
 
   const updateCameraTogglingState = (state = false) => {
-    if (collaborationState.stageMode) {return;}
+    if (collaborationState.stageMode) {
+      return;
+    }
     collaborationDispatch({
       type: COLLABORATION_IS_TOGGLING_CAMERA_ACTION_UPDATE,
       isTogglingCamera: state

@@ -20,8 +20,8 @@ const ToolbarLink: React.FC<PropsInterface> = ({
     e.preventDefault();
   }, []);
 
-  if (link)
-    {return (
+  if (link) {
+    return (
       <Tooltip label={title}>
         <NavLink
           activeClassName="active"
@@ -34,7 +34,8 @@ const ToolbarLink: React.FC<PropsInterface> = ({
           {children}
         </NavLink>
       </Tooltip>
-    );}
+    );
+  }
 
   return (
     <Tooltip label={title}>

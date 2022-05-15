@@ -30,7 +30,9 @@ const CalendarStore = types.compose(
         self.deleteConfirmationDialog.open();
       },
       removeEvent: flow(function* (spaceId: string) {
-        if (!self.eventIdToRemove) {return;}
+        if (!self.eventIdToRemove) {
+          return;
+        }
 
         yield self.removeEventRequest.send(api.eventsRepository.deleteEvent, {
           spaceId,

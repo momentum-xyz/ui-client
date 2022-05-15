@@ -38,7 +38,9 @@ const AddTokenRulePopup: React.FC<AddTokenRulePopopProps> = ({
   const [tokenid, setTokenid] = useState<any>();
 
   useEffect(() => {
-    if (!whitelists) {return;}
+    if (!whitelists) {
+      return;
+    }
     setWhitelistItems(whitelists.token);
   }, [whitelists]);
 
@@ -60,7 +62,9 @@ const AddTokenRulePopup: React.FC<AddTokenRulePopopProps> = ({
   }, [selectedToken]);
 
   useEffect(() => {
-    if (!tokenid) {return;}
+    if (!tokenid) {
+      return;
+    }
     setTokenRule({
       ...tokenRule,
       tokenId: bytesToUuid(tokenid),
@@ -100,7 +104,9 @@ const AddTokenRulePopup: React.FC<AddTokenRulePopopProps> = ({
   // @ts-ignore
   const handleTokenSelect = (event) => {
     event.persist();
-    if (!whitelistItems) {return;}
+    if (!whitelistItems) {
+      return;
+    }
     setSelectedToken(whitelistItems[event.target.value]);
   };
 

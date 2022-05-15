@@ -82,15 +82,17 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
     }
   };
 
-  if (!open) {return null;}
+  if (!open) {
+    return null;
+  }
 
   return (
     <Panel className="w-1/3 ml-1" padding={false}>
       <ul className="p-2 flex-grow overflow-y-auto overflow-x-hidden" ref={messageListRef}>
         {messages.map((message: Message, index) => {
           // const direction: string = message.author === id ? 'out' : 'in';
-          if (message.messageType === 'SYSTEM')
-            {return (
+          if (message.messageType === 'SYSTEM') {
+            return (
               <li key={index} className={` border-b-1 py-1 border-prime-blue-20`}>
                 <span className="font-bold text-base uppercase flex justify-between text-red-sunset-100">
                   <div className="text-sm text-white-40">{message?.text || ''}</div>
@@ -99,7 +101,8 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
                   </time>
                 </span>
               </li>
-            );}
+            );
+          }
           return (
             <li key={index} className={` border-b-1 py-1 border-prime-blue-20`}>
               <span className="font-bold text-base uppercase flex justify-between">

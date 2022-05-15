@@ -23,7 +23,9 @@ const SocialSpacesList: React.FC<SocialSpacesListProps> = ({
   const [spaceResponse] = useGetSpace(bytesToUuid(spaceId));
 
   const renderList = () => {
-    if (!spaceResponse?.space.children) {return;}
+    if (!spaceResponse?.space.children) {
+      return;
+    }
 
     // @ts-ignore
     const sorter = (a, b) => a.name.localeCompare(b.name);

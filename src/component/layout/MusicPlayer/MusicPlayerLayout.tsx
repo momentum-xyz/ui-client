@@ -21,7 +21,9 @@ const MusicPlayerLayout: React.FC<MusicPlayerLayoutProps> = () => {
   const {handleMusicPlayer, show} = useMusicPlayer();
 
   useEffect(() => {
-    if (!playlistHash) {return;}
+    if (!playlistHash) {
+      return;
+    }
 
     const newPlaylist = [] as any;
     // @ts-ignore
@@ -32,7 +34,9 @@ const MusicPlayerLayout: React.FC<MusicPlayerLayoutProps> = () => {
   }, [playlistHash]);
 
   useEffect(() => {
-    if (show) {refetch();}
+    if (show) {
+      refetch();
+    }
   }, [show, refetch, worldStore.worldId]);
 
   const handleMusicPlayerStatus = () => {

@@ -22,8 +22,8 @@ const StageModeSendOffstagePopup: React.FC<StageModeSendOffstagePopupProps> = ({
   const [sendOffstage, ,] = useStageModeSendOffstage(collaborationState.collaborationSpace?.id);
 
   const handleSendOffstage = () => {
-    if (user?.id.data)
-      {sendOffstage(bytesToUuid(user.id.data))
+    if (user?.id.data) {
+      sendOffstage(bytesToUuid(user.id.data))
         .then(onClose)
         .catch(() =>
           toast.error(
@@ -37,7 +37,8 @@ const StageModeSendOffstagePopup: React.FC<StageModeSendOffstagePopupProps> = ({
               isCloseButton
             />
           )
-        );}
+        );
+    }
   };
 
   return (

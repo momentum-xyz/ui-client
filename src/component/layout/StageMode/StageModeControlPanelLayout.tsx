@@ -86,8 +86,8 @@ const StageModeControlPanelLayout: React.FC = () => {
       cancelButton: 'No, cancel'
     }).then((result) => {
       if (result) {
-        if (user?.id.data)
-          {sendOffstage(bytesToUuid(user.id.data))
+        if (user?.id.data) {
+          sendOffstage(bytesToUuid(user.id.data))
             .then(() => {
               setSelectedRemoteUserIdForRemove(null);
             })
@@ -104,7 +104,8 @@ const StageModeControlPanelLayout: React.FC = () => {
                   isCloseButton
                 />
               );
-            });}
+            });
+        }
       } else {
         setSelectedRemoteUserIdForRemove(null);
       }
@@ -112,8 +113,11 @@ const StageModeControlPanelLayout: React.FC = () => {
   }, [getConfirmation, user]);
 
   const remoteUserClicked = (remoteUser: IAgoraRTCRemoteUser, event = 'remove') => {
-    if (event === 'remove') {setSelectedRemoteUserIdForRemove(remoteUser.uid as string);}
-    else if (event === 'mute') {muteUserRequest(remoteUser.uid as string).then();}
+    if (event === 'remove') {
+      setSelectedRemoteUserIdForRemove(remoteUser.uid as string);
+    } else if (event === 'mute') {
+      muteUserRequest(remoteUser.uid as string).then();
+    }
   };
 
   useEffect(() => {

@@ -19,7 +19,9 @@ export const DeleteSpacePopup = ({onSave, onClose, space}: props) => {
   const submit = (e) => {
     e.preventDefault();
     //check name the same
-    if (confirmName === space.name) {onSave(space);}
+    if (confirmName === space.name) {
+      onSave(space);
+    }
   };
 
   // @ts-ignore: TODO: Refactor

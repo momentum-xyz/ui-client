@@ -57,8 +57,11 @@ export const AddUserPopup = ({onSave, onEmailSend, onClose, spaceName = ''}: pro
   };
 
   const getSpaceName = () => {
-    if (spaceName === '') {return;}
-    else {return ' "' + spaceName + '"';}
+    if (spaceName === '') {
+      return;
+    } else {
+      return ' "' + spaceName + '"';
+    }
   };
 
   return (

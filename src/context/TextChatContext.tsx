@@ -92,7 +92,9 @@ export const TextChatProvider: React.FC = ({children}) => {
   };
 
   const joinChannel = () => {
-    if (!collaborationState.collaborationSpace || !chatClient) {return;}
+    if (!collaborationState.collaborationSpace || !chatClient) {
+      return;
+    }
     setMembers([]);
     setMessages([]);
     console.info('[agora] Creating channel...');
@@ -113,7 +115,9 @@ export const TextChatProvider: React.FC = ({children}) => {
   };
 
   const leaveChannel = () => {
-    if (!isLoggedIn) {return;}
+    if (!isLoggedIn) {
+      return;
+    }
     console.info('[agora] Leaving AgoraRTM channel');
     currentChannel?.leave().then(() => {
       setCurrentChannel(null);
@@ -122,7 +126,9 @@ export const TextChatProvider: React.FC = ({children}) => {
   };
 
   useEffect(() => {
-    if (!appId || !authState.user) {return;}
+    if (!appId || !authState.user) {
+      return;
+    }
 
     const client = AgoraRTM.createInstance(appId);
     setChatClient(client);
@@ -151,7 +157,9 @@ export const TextChatProvider: React.FC = ({children}) => {
       });
 
     return () => {
-      if (!isLoggedIn) {return;}
+      if (!isLoggedIn) {
+        return;
+      }
       console.info('[agora] Cleaning up AgoraRTM client');
       chatClient
         ?.logout()
@@ -167,7 +175,9 @@ export const TextChatProvider: React.FC = ({children}) => {
   }, [appId, authState.user]);
 
   useEffect(() => {
-    if (!isLoggedIn || !chatClient) {return;}
+    if (!isLoggedIn || !chatClient) {
+      return;
+    }
 
     if (currentChannel && !collaborationState.collaborationSpace) {
       leaveChannel();

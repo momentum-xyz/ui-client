@@ -64,7 +64,9 @@ const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
   const formSubmitHandler: SubmitHandler<TokenRuleFormInterface> = (
     data: TokenRuleFormInterface
   ) => {
-    if (spaceStore.space.id) {tokenRuleFormStore.createTokenRule(data, spaceStore.space.id);}
+    if (spaceStore.space.id) {
+      tokenRuleFormStore.createTokenRule(data, spaceStore.space.id);
+    }
   };
 
   const handleClose = () => {
@@ -140,8 +142,11 @@ const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
                   <Input
                     value={value}
                     onChange={(value) => {
-                      if (value === '') {setIsDisabledTokenName(true);}
-                      else {setIsDisabledTokenName(false);}
+                      if (value === '') {
+                        setIsDisabledTokenName(true);
+                      } else {
+                        setIsDisabledTokenName(false);
+                      }
                       onChange(value);
                     }}
                     label={t('tokenRules.tokenRuleForm.tokenRuleNameLabel')}
@@ -174,8 +179,11 @@ const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
                   <Input
                     value={value}
                     onChange={(value) => {
-                      if (value === '') {setIsDisabledMinBalance(true);}
-                      else {setIsDisabledMinBalance(false);}
+                      if (value === '') {
+                        setIsDisabledMinBalance(true);
+                      } else {
+                        setIsDisabledMinBalance(false);
+                      }
                       onChange(value);
                     }}
                     label={t('tokenRules.tokenRuleForm.minimumBalanceLabel')}

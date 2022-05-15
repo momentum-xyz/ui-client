@@ -28,7 +28,9 @@ const SpaceStore = types.compose(
         self.space.id = spaceId;
       },
       fetchSpaceInformation: flow(function* () {
-        if (!self.space.id) {return;}
+        if (!self.space.id) {
+          return;
+        }
 
         const response: SpaceResponse = yield self.request.send(api.spaceRepository.fetchSpace, {
           spaceId: self.space.id
@@ -72,7 +74,9 @@ const SpaceStore = types.compose(
         }
       }),
       addUser: flow(function* (userId: string, isAdmin: boolean) {
-        if (!self.space.id) {return;}
+        if (!self.space.id) {
+          return;
+        }
 
         yield self.addUserRequest.send(api.spaceRepository.addUser, {
           user: {
@@ -83,7 +87,9 @@ const SpaceStore = types.compose(
         });
       }),
       inviteUser: flow(function* (email: string, isAdmin: boolean) {
-        if (!self.space.id) {return;}
+        if (!self.space.id) {
+          return;
+        }
 
         yield self.inviteUserRequest.send(api.userRepository.inviteToSpace, {
           invitedUser: {
@@ -94,7 +100,9 @@ const SpaceStore = types.compose(
         });
       }),
       removeUser: flow(function* (userId: string) {
-        if (!self.space.id) {return;}
+        if (!self.space.id) {
+          return;
+        }
 
         yield self.removeUserRequest.send(api.spaceRepository.removeUser, {
           user: {
@@ -104,7 +112,9 @@ const SpaceStore = types.compose(
         });
       }),
       editUser: flow(function* (userId: string, isAdmin: boolean) {
-        if (!self.space.id) {return;}
+        if (!self.space.id) {
+          return;
+        }
 
         yield self.editUserRequest.send(api.spaceRepository.editUser, {
           user: {
@@ -126,7 +136,9 @@ const SpaceStore = types.compose(
         });
       }),
       fetchAllowedSubSpaceTypes: flow(function* () {
-        if (!self.space.id) {return;}
+        if (!self.space.id) {
+          return;
+        }
 
         const response: GetAllowedSpaceTypesResponse = yield self.allowedSpaceTypesRequest.send(
           api.spaceTypeRepository.fetchAllowedSpaceTypes,

@@ -78,12 +78,13 @@ const AppLayers: FC = ({children}) => {
   });
 
   // if (loading && process.env.NODE_ENV === 'production')
-  if (loading)
-    {return (
+  if (loading) {
+    return (
       <div className="App">
         <UnityLoading />
       </div>
-    );}
+    );
+  }
 
   return (
     <>

@@ -63,7 +63,9 @@ const DashboardDynamicView = React.forwardRef<DashboardHandle, DashboardProps>(
           result.splice(destination.index, 0, removed);
           setInternalTiles((tiles) => {
             const final = tiles.map((column, id) => (id === sourceId ? result : column));
-            if (onRearrange) {onRearrange(final);}
+            if (onRearrange) {
+              onRearrange(final);
+            }
             return final;
           });
         } else {
@@ -76,7 +78,9 @@ const DashboardDynamicView = React.forwardRef<DashboardHandle, DashboardProps>(
             const final = tiles.map((column, id) =>
               id === sourceId ? sourceClone : id === destinationId ? destClone : column
             );
-            if (onRearrange) {onRearrange(final);}
+            if (onRearrange) {
+              onRearrange(final);
+            }
             return final;
           });
         }
