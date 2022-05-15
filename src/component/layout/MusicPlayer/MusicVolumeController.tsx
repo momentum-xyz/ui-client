@@ -21,8 +21,8 @@ export const MusicVolumeController: React.FC<MusicVolumeControllerProps> = ({lab
   }, [volume]);
 
   useEffect(() => {
-    if (volumeLevel > 0.01) setMuted(false);
-    else if (volumeLevel === 0.01) setMuted(true);
+    if (volumeLevel > 0.01) {setMuted(false);}
+    else if (volumeLevel === 0.01) {setMuted(true);}
   }, [volumeLevel]);
 
   useEffect(() => {

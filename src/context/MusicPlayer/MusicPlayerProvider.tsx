@@ -49,7 +49,7 @@ export const MusicPlayerProvider: React.FC<MusicPlayerProviderProps> = ({childre
         // internal Howl _src property is sometimes an array and other times a single string
         // still need to to do more research on why this is
         const prevSrc = Array.isArray(_src) ? _src[0] : _src;
-        if (prevSrc === src) return;
+        if (prevSrc === src) {return;}
         // if the previous sound is still loading then destroy it as soon as it finishes
         if (loading) {
           prevPlayer.current = playerRef.current;
@@ -117,7 +117,7 @@ export const MusicPlayerProvider: React.FC<MusicPlayerProviderProps> = ({childre
   useEffect(() => {
     // unload the player on unmount
     return () => {
-      if (playerRef.current) playerRef.current.unload();
+      if (playerRef.current) {playerRef.current.unload();}
     };
   }, []);
 

@@ -31,7 +31,7 @@ const GoogleDriveLayout: FC = () => {
   const [closeGoogleDrive] = useIntegrationDisable();
 
   useWebsocketEvent('google-drive-file-change', (id) => {
-    if (collaborationSpace?.id === id) refetch();
+    if (collaborationSpace?.id === id) {refetch();}
   });
 
   // @ts-ignore
@@ -106,7 +106,7 @@ const GoogleDriveLayout: FC = () => {
 
   const actions = useMemo(() => {
     if (userIsTeamleader)
-      return (
+      {return (
         <>
           <GooglePicker
             clientId={window._env_.GOOGLE_API_CLIENT_ID}
@@ -132,7 +132,7 @@ const GoogleDriveLayout: FC = () => {
             </Button>
           )}
         </>
-      );
+      );}
     return null;
   }, [pickerCallBack]);
 

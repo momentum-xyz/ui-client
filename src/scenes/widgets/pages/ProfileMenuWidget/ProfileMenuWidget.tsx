@@ -39,7 +39,7 @@ const ProfileMenuWidget: FC = () => {
     profileMenuStore.profileMenuDialog.close();
   };
 
-  if (!profile?.profile) return null;
+  if (!profile?.profile) {return null;}
 
   return (
     <Dialog

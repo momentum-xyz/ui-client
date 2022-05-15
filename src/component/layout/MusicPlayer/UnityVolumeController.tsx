@@ -33,7 +33,7 @@ export const UnityVolumeController: React.FC<UnityVolumeControllerProps> = ({lab
   };
 
   const handleUnmute = () => {
-    if (volumeLevel === 1) return;
+    if (volumeLevel === 1) {return;}
     const newVolume = Math.min((UnityMuted ? 0 : volumeLevel) + 0.1, 1.0);
     setVolumeLevel(newVolume);
     UnityService.setSoundEffectVolume(newVolume.toString());
@@ -44,8 +44,8 @@ export const UnityVolumeController: React.FC<UnityVolumeControllerProps> = ({lab
 
   const handleChange = (slider: ChangeEvent<HTMLInputElement>) => {
     const volValue = parseFloat(slider.target.value);
-    if (!UnityMuted && volValue === 0.01) UnityService.toggleAllSound();
-    if (UnityMuted && volValue > 0.01) UnityService.toggleAllSound();
+    if (!UnityMuted && volValue === 0.01) {UnityService.toggleAllSound();}
+    if (UnityMuted && volValue > 0.01) {UnityService.toggleAllSound();}
     setVolumeLevel(volValue);
     UnityService.setSoundEffectVolume(volValue.toString());
   };

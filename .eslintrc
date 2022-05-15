@@ -19,6 +19,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
+    "curly": 2,
     "eqeqeq": [
       "warn",
       "always"

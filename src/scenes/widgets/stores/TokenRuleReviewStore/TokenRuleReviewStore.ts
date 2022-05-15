@@ -27,7 +27,7 @@ const TokenRuleReviewStore = types.compose(
         };
       },
       delete: flow(function* () {
-        if (!self.currentTokenRule?.id) return;
+        if (!self.currentTokenRule?.id) {return;}
 
         yield self.deleteTokeRuleRequest.send(api.tokenRuleRepository.deleteTokenRule, {
           tokenRuleId: self.currentTokenRule?.id
@@ -36,7 +36,7 @@ const TokenRuleReviewStore = types.compose(
         return self.deleteTokeRuleRequest.isDone;
       }),
       approve: flow(function* () {
-        if (!self.currentTokenRule?.id) return;
+        if (!self.currentTokenRule?.id) {return;}
 
         yield self.acceptTokenRuleRequest.send(api.tokenRuleRepository.processTokenRule, {
           tokenRuleId: self.currentTokenRule.id,
@@ -46,7 +46,7 @@ const TokenRuleReviewStore = types.compose(
         return self.acceptTokenRuleRequest.isDone;
       }),
       decline: flow(function* () {
-        if (!self.currentTokenRule?.id) return;
+        if (!self.currentTokenRule?.id) {return;}
 
         yield self.declineTokenRuleRequest.send(api.tokenRuleRepository.processTokenRule, {
           tokenRuleId: self.currentTokenRule.id,

@@ -103,10 +103,10 @@ const LiveStreamLayer: React.FC<LiveStreamLayerProps> = () => {
     }
   };
 
-  if (!url && stopped) return null;
+  if (!url && stopped) {return null;}
 
   if (url && stopped)
-    return (
+    {return (
       <div
         className="fixed z-pop-over bottom-1.5"
         style={{right: process.env.NODE_ENV === 'development' ? '790px' : '360px'}}
@@ -115,7 +115,7 @@ const LiveStreamLayer: React.FC<LiveStreamLayerProps> = () => {
           open livestream
         </Button>
       </div>
-    );
+    );}
 
   return (
     <>

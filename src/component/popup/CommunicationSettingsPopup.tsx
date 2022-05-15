@@ -24,7 +24,7 @@ const CommunicationSettingsPopup: React.FC<CommunicationSettingsPopupProps> = ({
 
   const getCommunicationDevices = () => {
     getMicrophoneConsent().then((consent) => {
-      if (!consent) return;
+      if (!consent) {return;}
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         setVideoInputs(devices.filter((device) => device.kind === 'videoinput'));
         setAudioInputs(devices.filter((device) => device.kind === 'audioinput'));
@@ -42,10 +42,10 @@ const CommunicationSettingsPopup: React.FC<CommunicationSettingsPopupProps> = ({
       const deviceId = e.target.value;
       const device = audioInputs.find((device) => device.deviceId === deviceId);
       if (device)
-        collaborationDispatch({
+        {collaborationDispatch({
           type: COLLABORATION_AUDIO_DEVICE_ACTION_UPDATE,
           audioDevice: device
-        });
+        });}
     },
     [audioInputs, collaborationDispatch]
   );
@@ -55,10 +55,10 @@ const CommunicationSettingsPopup: React.FC<CommunicationSettingsPopupProps> = ({
       const deviceId = e.target.value;
       const device = videoInputs.find((device) => device.deviceId === deviceId);
       if (device)
-        collaborationDispatch({
+        {collaborationDispatch({
           type: COLLABORATION_VIDEO_DEVICE_ACTION_UPDATE,
           videoDevice: device
-        });
+        });}
     },
     [collaborationDispatch, videoInputs]
   );

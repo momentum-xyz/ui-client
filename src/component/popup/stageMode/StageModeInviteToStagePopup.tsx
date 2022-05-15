@@ -27,7 +27,7 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
 
   const handleInviteClick = () => {
     if (user?.id.data)
-      inviteRequest(bytesToUuid(user.id.data))
+      {inviteRequest(bytesToUuid(user.id.data))
         .then(onClose)
         .catch(() =>
           toast.error(
@@ -41,7 +41,7 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
               isCloseButton
             />
           )
-        );
+        );}
   };
 
   return (

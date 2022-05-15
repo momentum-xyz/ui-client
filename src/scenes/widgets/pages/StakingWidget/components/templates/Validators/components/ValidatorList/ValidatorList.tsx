@@ -52,7 +52,7 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
   };
 
   const handleCellClick = (header: ColumnHeader, item: ValidatorItemModelInterface) => {
-    if (header.eventName) onEventClick(header.eventName, item);
+    if (header.eventName) {onEventClick(header.eventName, item);}
   };
 
   return (
@@ -64,7 +64,7 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
               <th
                 key={header.key}
                 onClick={() => {
-                  if (header.sortable) requestSort(header.key);
+                  if (header.sortable) {requestSort(header.key);}
                 }}
                 className={`${header.sortable ? 'clickable' : ''}`}
               >

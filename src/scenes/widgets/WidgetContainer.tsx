@@ -158,7 +158,7 @@ const WidgetContainer: FC = () => {
   }, [stakingDialog.isOpen]);
 
   const toggleMute = () => {
-    if (collaborationState.isTogglingMute) return;
+    if (collaborationState.isTogglingMute) {return;}
     collaborationDispatch({
       type: COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
       isTogglingMute: true

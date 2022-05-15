@@ -100,7 +100,7 @@ class WebsocketService {
       const [clicked, setClicked] = useState(false);
 
       const handleClick = () => {
-        if (clicked) return;
+        if (clicked) {return;}
 
         setClicked(true);
         setTimeout(() => {
