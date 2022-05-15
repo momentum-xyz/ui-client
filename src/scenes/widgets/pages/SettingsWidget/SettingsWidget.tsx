@@ -15,7 +15,7 @@ import {AgoraContext} from 'context/AgoraContext';
 import * as styled from './SettingsWidget.styled';
 
 const DIALOG_OFFSET_RIGHT = 20;
-const DIALOG_OFFSET_BOTTOM = 65;
+const DIALOG_OFFSET_BOTTOM = 60;
 
 const SettingsWidget: FC = () => {
   const {

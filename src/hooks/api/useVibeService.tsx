@@ -15,7 +15,9 @@ export const useVibeCheck = (spaceId: string) => {
 };
 
 export const useVibeToggle = (spaceId: string) => {
-  return usePost<any, VibeToggleDto>(window._env_.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/toggle`);
+  return usePost<any, VibeToggleDto>(
+    window._env_.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/toggle`
+  );
 };
 
 export const useGetVibeCount = (spaceId: string) => {
@@ -23,4 +25,3 @@ export const useGetVibeCount = (spaceId: string) => {
     fetchPolicy: 'network-only'
   });
 };
-

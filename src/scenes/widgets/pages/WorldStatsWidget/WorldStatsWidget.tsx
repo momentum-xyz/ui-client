@@ -9,7 +9,7 @@ import {StatisticsBlockList} from './components';
 import * as styled from './WorldStatsWidget.styled';
 
 const DIALOG_OFFSET_RIGHT = 15;
-const DIALOG_OFFSET_BOTTOM = 65;
+const DIALOG_OFFSET_BOTTOM = 60;
 
 const WorldStatsWidget: FC = () => {
   const {

@@ -45,7 +45,7 @@ export const enGb = {
         staked: 'Staked',
         unbonding: 'Unbonding'
       },
-      noActiveStakes: 'This Account Doesn\'t Have Any Active Stakes At The Moment',
+      noActiveStakes: "This Account Doesn't Have Any Active Stakes At The Moment",
       changeNominator: 'change nominator',
       stakingWalletAccountHeading: 'Staking Wallet Account',
       pickAccount: 'Pick a wallet account',

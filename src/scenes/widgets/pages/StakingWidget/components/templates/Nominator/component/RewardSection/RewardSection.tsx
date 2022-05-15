@@ -12,12 +12,8 @@ import * as styled from './RewardSection.styled';
 
 const RewardSection = () => {
   const theme = useTheme();
-  const {
-    controllerAccount,
-    stashAccount,
-    setPaymentDestination,
-    paymentDestination
-  } = useStore().widgetStore.stakingStore.polkadotProviderStore;
+  const {controllerAccount, stashAccount, setPaymentDestination, paymentDestination} =
+    useStore().widgetStore.stakingStore.polkadotProviderStore;
   const paymentDestinationOptions =
     stashAccount && controllerAccount ? REWARD_DESTINATION_TYPES : [];
 

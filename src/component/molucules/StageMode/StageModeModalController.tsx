@@ -15,7 +15,6 @@ import {useStageModeInvitationAcceptOrDecline} from '../../../hooks/api/useStage
 import AcceptedToJoinOnStagePopup from '../../popup/stageMode/AcceptedToJoinOnStagePopup';
 import DeclinedToJoinOnStagePopup from '../../popup/stageMode/DeclinedToJoinOnStagePopup';
 
-
 const StageModeModalController: React.FC = () => {
   const {collaborationState} = useCollaboration();
   const {enterStage, isOnStage} = useAgoraStageMode();
