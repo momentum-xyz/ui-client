@@ -10,73 +10,47 @@ In the project directory, you can run:
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance. 
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Code quality
+1. Enable `prettier` using IDE preferences. Apple rules in `.prettierrc`.
+2. Enable `eslint` using IDE preferences.
+3. Enable `husky using `yarn run postinstall`
 
-### Code quality
+## Local development
 
-#### Prettier
+#### Before `yarn start`
 
-Enable prettier in IDE preferences. Check option `Run for files on save`.<br />
-Apple rules in `.prettierrc`.
-
-#### Eslint
-
-Enable eslint in IDE preferences.
-
-### Local development
+Run following script `$ bash ./dev-env.sh`
 
 #### GIT lfs
 To develop locally there are a few steps that need to be taken.<br />
 Firstly the project uses `git-lfs` to load large files.<br />
 use `git lfs install` to initialize the git hooks
 
-#### Env vars
-Environment variables are loaded using the env-config.js file.<br />
-This file is normally created during build or when deploying to a k8 pod.<br />
-To create this file first run `yarn dev`.<br />
-This will create a config file in the `/public` folder.<br />
-In the file change the `base_url` variable to the development server’s domain.
-
-#### Running
-Run following scripts:<br />
-`$ bash ./dev-env.sh`<br />
-`$ yarn start`
-
-### How to add a new icon to the svg-sprite?
+#### How to add a new icon to the svg-sprite?
 1. Copy a new svg-icon to the `ui-kit/assets/icons` folder<br />
 2. Change value of `fill` tag to `currentColor`<br />
 3. Run `$ yarn run svg-sprite:build`<br />
 4. Run `$ yarn run svg-sprite:type`<br />
 5. Add the icon to the StoryBook page
 
-### Project structure
+## Project structure
     .
     ├── public
     │   |── env-config.js           # Enviroment config file that loads relevant keys and backend routes
     │   └── ...
     ├── src
-    │   ├── api                     # Folder can be moved to a separate repo
+    │   ├── api                     # Api calls
     │   │   ├── constants           # 
     │   │   ├── repositoris         # Api calls
     │   │   ├── request             # Define axios request
     │   │   └── api.ts              #
-    │   ├── ui-kit                  # Folder can be moved to a separate repo
+    │   ├── ui-kit                  # Core reusable components
     │   │   ├── atoms               # Small components
     │   │   ├── molecules           # Components without BL
     │   │   ├── hooks               # DOM-hooks (like useClickOutside, etc.)
@@ -85,36 +59,31 @@ Run following scripts:<br />
     │   │   ├── assets
     │   │   │   └── svg-sprite      # Svg-icons & svg-sprite
     │   │   └── ...
-    │   ├── core                    # Folder will be moved to a separate repo
+    │   ├── core                    # Core functionality
     │   │   ├── enums               #
     │   │   ├── constants           #
+    │   │   ├── insterfaces         #
     │   │   ├── models              # Common Mobx-state-three (e.g. Request, ...)
     │   │   ├── utils               #
     │   │   ├── services            #
     │   │   └── ...
-    │   ├── services                #
-    │   │   ├── keycloak            # Init keycloak
-    │   │   ├── web3                # Init web3 auth
-    │   │   └── ...
     │   ├── shared                  # Stuff can be copy pasted to each MF
-    │   │   ├── i18n                # Init translations
-    │   │   ├── hooks               #
-    │   │   └── ...
+    │   │   ├── hooks               # Hooks for mst-store & user
+    │   │   ├── services            #
+    │   │   │     ├── i18n          # Init translations
+    │   │   │     ├── keycloak      # Init keycloak
+    │   │   │     ├── web3          # Init web3 auth
+    │   │   └──   └── ...
     │   ├── static                  # Static content
     │   │   ├── images              #
     │   │   ├── styles              #
     │   │   └── fonts               #
     │   ├── scenes                  # Scene can be transformed to microfronted
-    │   │   ├── auth      
-    │   │   │   └── ...             # Structure like "default"    
     │   │   ├── default             # Home page. Just for sample.
-    │   │   │   ├── components      #
-    │   │   │   │   ├── organisms   # Components must contain molecules
-    │   │   │   │   └── templates   # High-level components without connection to store
     │   │   │   ├── pages           # Main components connected only to own store
     │   │   │   ├── stores          # Using Mobx-state-three
-    │   │   │   └── shared          # 
-    │   │   ├── unity      
+    │   │   │   └── index.ts        # 
+    │   │   ├── auth      
     │   │   │   └── ...             # Structure like "default"
     │   │   ├── collaboration      
     │   │   │   └── ...             # Structure like "default"
@@ -125,40 +94,14 @@ Run following scripts:<br />
     │   │   └── AppRouter.tsx       
     │   ├── stores                  # Main store & links to substores
     │   │   ├── MainStore           # Main stores which affect all UI
-    │   │   │   ├── SessionStore    # 
+    │   │   │   ├── UnityStore      # 
     │   │   │   ├── ThemeStore      # 
-    │   │   │   ├── AgoraStore      # 
-    │   │   │   ├── MagicStore      # 
+    │   │   │   ├── WorldStore      #
     │   │   │   └── ...             # 
+    │   │   ├── SessionStore        # Store for current user
     │   │   ├── RootStore.ts        #
     │   │   └── ...
     │   ├── index.tsx                
-    │   └── ...   
-    ├── README.md       
-    └── ... 
-
-### Project structure (old)
-    .
-    ├── public
-    │   |── env-config.js           # Enviroment config file that loads relevant keys and backend routes
-    │   └── ...
-    ├── src                         
-    │   ├── component
-    │   │   ├── atoms               # Small components that only handle display and maby very simple local state
-    │   │   ├── layout              # Components that manage/ contain the logic for entire routes. (could be renamed organisems)
-    │   │   ├── molucules           # Complexer components that make up layouts or main interface. Can contain state and logic relevant to their own goals.
-    │   │   ├── overlays            # Special components that are oudside of layouts or routing and provide non routing based features.
-    │   │   ├── popup               # Old folder still containing some popups this file needs to be merged into molucules as a subfolder
-    │   │   ├── utils               # Old folder containing random mostly atoms that need to be relocated
-    │   │   ├── view                # Old folder containing mostly molucules that need to be relocated.
-    │   │   ├── ...
-    │   ├── context                 # Context contains global state objects and relevant hooks and classes
-    │   ├── hooks                   # Container for global hooks that can be reused
-    │   ├── store                   # contains zustand stores (expiremental to see if this is a better system than context)
-    │   ├── utils                   # Random utility functions not specificaly grouped
-    │   ├── index.tsx               # entry point of application
-    │   ├── App-new.tsx             # main application component
-    │   ├── config.ts               # internal static variables (not enviroment)
     │   └── ...   
     ├── README.md       
     └── ... 
