@@ -25,7 +25,7 @@ Your app is ready to be deployed!
 
 #### Before `yarn start`
 
-Run following script `$ bash ./dev-env.sh`
+Run following script `$ bash ./scripts/env-dev.sh`
 
 #### GIT lfs
 To develop locally there are a few steps that need to be taken.<br />
