@@ -6,18 +6,16 @@ import {SocialOnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/comp
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import {useStore} from 'shared/hooks';
 import {ExpandableLayout} from 'ui-kit';
-
-import {ProfileEditWidget} from '../ProfileEditWidget';
-import {ProfileWidget} from '../ProfileWidget';
+import {ProfileEditWidget, ProfileWidget} from 'scenes/widgets/pages';
 
 import * as styled from './OnlineUsersWidget.styled';
 
-interface OnlineUsersWidgetsProps {
+interface OnlineUsersWidgetsPropsInterface {
   // TODO: Move selecting to spaces panel store when refactoring it
   onUserInitiativeSelect: (initiativeId: Buffer) => void;
 }
 
-const OnlineUsersWidget: FC<OnlineUsersWidgetsProps> = ({onUserInitiativeSelect}) => {
+const OnlineUsersWidget: FC<OnlineUsersWidgetsPropsInterface> = ({onUserInitiativeSelect}) => {
   const {
     sessionStore,
     widgetStore: {profileMenuStore, onlineUsersStore}
