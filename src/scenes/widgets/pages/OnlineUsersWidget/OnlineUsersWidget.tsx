@@ -1,6 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {Position} from 'react-beautiful-dnd';
 import {observer} from 'mobx-react-lite';
+import {t} from 'i18next';
 
 import {SocialOnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components/SocialOnlineUsersList';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
@@ -9,6 +10,8 @@ import {ExpandableLayout} from 'ui-kit';
 import {ProfileEditWidget, ProfileWidget} from 'scenes/widgets/pages';
 
 import * as styled from './OnlineUsersWidget.styled';
+
+const LAYOUT_WIDTH = '200px';
 
 interface OnlineUsersWidgetsPropsInterface {
   // TODO: Move selecting to spaces panel store when refactoring it
@@ -76,11 +79,11 @@ const OnlineUsersWidget: FC<OnlineUsersWidgetsPropsInterface> = ({onUserInitiati
         </div>
       )}
       <ExpandableLayout
-        name="People"
+        name={t('labels.people')}
         iconName="people"
         isExpanded={onlineUsersStore.expanded}
         setExpand={onlineUsersStore.toggleExpand}
-        size={{width: '200px'}}
+        size={{width: LAYOUT_WIDTH}}
       >
         <SocialOnlineUsersList />
       </ExpandableLayout>

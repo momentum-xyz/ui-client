@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useHistory} from 'react-router';
 import {t} from 'i18next';
 
-import {Button, SvgButton, Avatar, Text} from 'ui-kit';
+import {Button, SvgButton, Avatar} from 'ui-kit';
 import {endpoints} from 'api/constants';
 import {useStore} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
@@ -10,15 +10,19 @@ import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
 import * as styled from './SocialUserItem.styled';
 
-export interface SocialUserItemProps {
-  // @ts-ignore
-  onClick: (e) => void;
+export interface SocialUserItemPropsInterface {
+  onClick: React.MouseEventHandler<HTMLDivElement>;
   currentUserId: string;
   invite: boolean;
   user: UserProfileModelInterface;
 }
 
-const SocialUserItem: React.FC<SocialUserItemProps> = ({onClick, currentUserId, invite, user}) => {
+const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
+  onClick,
+  currentUserId,
+  invite,
+  user
+}) => {
   const {
     mainStore: {unityStore},
     collaborationStore: {spaceStore}
@@ -66,7 +70,7 @@ const SocialUserItem: React.FC<SocialUserItemProps> = ({onClick, currentUserId, 
           }
           size="small"
         />
-        <Text text={user.name.trim()} size="s" align="left" isCustom isMultiline={false} />
+        <styled.StyledText text={user.name.trim()} size="s" align="left" isMultiline={false} />
       </styled.InfoContainer>
       {currentUserId !== user.uuid &&
         (invite ? (
