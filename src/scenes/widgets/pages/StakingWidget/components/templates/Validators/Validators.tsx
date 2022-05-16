@@ -83,6 +83,22 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
           <Text text={t('staking.validators.withIdentity')} size="xs" />
         </styled.ToggleContainer>
         <styled.Legend>
+          <Tooltip darkBackground placement="bottom" label={t('staking.stakingTab.selectTooltip')}>
+            <styled.LegendItem>
+              <IconSvg name="checkmark" size="medium" isCustom />
+              {t('staking.validators.legendSelect')}
+            </styled.LegendItem>
+          </Tooltip>
+          <Tooltip
+              darkBackground
+              placement="bottom"
+              label={t('staking.stakingTab.favouriteTooltip')}
+          >
+            <styled.LegendItem>
+              <IconSvg name="starOn" size="medium" isCustom />
+              {t('staking.validators.legendBookmark')}
+            </styled.LegendItem>
+          </Tooltip>
           <Tooltip
             label={
               <styled.SortInfo type="1">
@@ -100,22 +116,6 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
             <styled.LegendItem className="tooltip">
               <IconSvg name="question" size="medium" isCustom />
               {t(`staking.stakingTab.sortingInfo.label`)}
-            </styled.LegendItem>
-          </Tooltip>
-          <Tooltip
-            darkBackground
-            placement="bottom"
-            label={t('staking.stakingTab.favouriteTooltip')}
-          >
-            <styled.LegendItem>
-              <IconSvg name="starOn" size="medium" isCustom />
-              {t('staking.validators.legendBookmark')}
-            </styled.LegendItem>
-          </Tooltip>
-          <Tooltip darkBackground placement="bottom" label={t('staking.stakingTab.selectTooltip')}>
-            <styled.LegendItem>
-              <IconSvg name="checkmark" size="medium" isCustom />
-              {t('staking.validators.legendSelect')}
             </styled.LegendItem>
           </Tooltip>
           {/*<styled.LegendItem>*/}

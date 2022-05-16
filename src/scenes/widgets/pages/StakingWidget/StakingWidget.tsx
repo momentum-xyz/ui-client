@@ -33,7 +33,7 @@ const StakingWidget: FC = () => {
     {
       id: '3',
       title: t('staking.stakingTab.authorization'),
-      label: t('staking.stakingTab.authorization'),
+      label: t('staking.authorization'),
       icon: 'lightningDuotone',
       disabled: true
     }
