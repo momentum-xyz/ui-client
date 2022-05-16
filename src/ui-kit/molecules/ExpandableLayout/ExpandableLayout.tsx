@@ -31,11 +31,11 @@ const ExpandableLayout: FC<ExpandableLayoutPropsInterface> = ({
     >
       <styled.ToggleHeader onClick={() => setExpand(!isExpanded)}>
         <styled.ToggleHeaderInfo>
-          <IconSvg name={iconName} size="medium" isCustom />
+          <IconSvg name={iconName} size="medium" />
           <Heading label={name} type="h4" />
         </styled.ToggleHeaderInfo>
         <styled.ToggleContainer className={cn(isExpanded && 'expanded')}>
-          <IconSvg name="chevron" size="medium" isCustom />
+          <styled.ChevronIconSvg name="chevron" size="medium" />
         </styled.ToggleContainer>
       </styled.ToggleHeader>
       {isExpanded && children}

@@ -1,7 +1,10 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
+import {IconSvg} from 'ui-kit/atoms';
 import {ComponentSizeInterface} from 'ui-kit/interfaces';
+
+export const ChevronIconSvg = styled(IconSvg)``;
 
 export const Container = styled.div<ComponentSizeInterface>`
   display: flex;
@@ -26,7 +29,7 @@ export const Container = styled.div<ComponentSizeInterface>`
   }
 
   &.fullHeight {
-    height: calc(100vh - 70px - 10px);
+    height: calc(100vh - 80px);
   }
 
   :not(&.fullHeight) {
@@ -51,12 +54,12 @@ export const ToggleHeaderInfo = styled.div`
 `;
 
 export const ToggleContainer = styled.div`
-  .IconSvg-custom {
+  ${ChevronIconSvg} {
     opacity: 0.5;
   }
 
   &.expanded {
-    .IconSvg-custom {
+    ${ChevronIconSvg} {
       svg {
         transform: rotate(180deg);
       }

@@ -6,7 +6,7 @@ import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Text.styled';
 
-export interface TextProps extends PropsWithThemeInterface {
+export interface TextPropsInterface extends PropsWithThemeInterface {
   text?: string;
   size: TextSize;
   transform?: TextTransform;
@@ -15,9 +15,10 @@ export interface TextProps extends PropsWithThemeInterface {
   weight?: TextWeightType;
   isCustom?: boolean;
   firstBoldSentences?: number;
+  className?: string;
 }
 
-const Text: FC<TextProps> = ({
+const Text: FC<TextPropsInterface> = ({
   theme,
   text = '',
   size,
@@ -26,7 +27,8 @@ const Text: FC<TextProps> = ({
   isMultiline = true,
   isCustom = false,
   weight = 'normal',
-  firstBoldSentences
+  firstBoldSentences,
+  className
 }) => {
   const generateText = () => {
     if (firstBoldSentences && text) {
@@ -51,7 +53,8 @@ const Text: FC<TextProps> = ({
         !isMultiline && 'singleLine',
         align,
         isCustom && 'Text-custom',
-        `weight-${weight}`
+        `weight-${weight}`,
+        className
       )}
       theme={theme}
     >
