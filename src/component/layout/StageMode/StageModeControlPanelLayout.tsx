@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
@@ -29,6 +29,7 @@ import {
 import {IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
 import {StageModeStatus} from '../../../context/type/StageMode';
 import useContextAuth from '../../../context/Auth/hooks/useContextAuth';
+import Button from '../../atoms/Button';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';
 
@@ -185,11 +186,28 @@ const StageModeControlPanelLayout: React.FC = () => {
     </div>
   );
 
+  const actions = useMemo(() => {
+    return (
+      <>
+        {collaborationState.stageMode && (canEnterStage() || isOnStage) && (
+          <Button
+            type={isOnStage ? 'ghost-red' : 'ghost'}
+            onClick={isOnStage ? handleLeaveStage : handleEnterStage}
+          >
+            {isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+          </Button>
+        )}
+        {collaborationState.stageMode && !canEnterStage() && <span>Stage is full</span>}
+      </>
+    );
+  }, [collaborationState, canEnterStage, isOnStage, handleLeaveStage, handleEnterStage]);
+
   return (
     <Page
       title={collaborationState.collaborationSpace?.name || ''}
       subtitle="Stage Mode&nbsp;&nbsp;/&nbsp;&nbsp;Control panel"
       collaboration
+      actions={actions}
     >
       <div className="flex w-full">
         <div className="flex flex-col space-y-1">

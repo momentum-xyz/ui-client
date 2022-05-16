@@ -121,32 +121,32 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     <Transition
       show={collaborationState.enabled || collaborationState.stageMode}
       unmount={false}
-      className="z-main-u ml-auto pt-1 mr-1"
-      enter="transition-width ease-out duration-300"
-      enterFrom="w-0 "
-      enterTo="w-8 "
-      leave="transition-all ease-in duration-300"
-      leaveFrom="w-8 "
-      leaveTo="w-0 "
+      className="z-main-u ml-auto pt-1 mr-1 "
+      enter="transform transition-transform ease-out duration-300"
+      enterFrom="translate-x-5 "
+      enterTo="translate-x-0 "
+      leave="transform transition-transform ease-in duration-300"
+      leaveFrom="translate-x-0 "
+      leaveTo="translate-x-5 "
     >
       <ul className="h-full" style={{paddingBottom: '100px'}}>
         <Transition
           show={!unityStore.isPaused}
           unmount={false}
           enter="transition-all transform ease-out duration-300"
-          enterFrom="-translate-y-6 h-0"
-          enterTo="translate-y-0 h-8"
-          leave="transition-all transform  ease-in duration-300"
-          leaveFrom="translate-y-0 h-8"
-          leaveTo="-translate-y-6 h-0"
-          className="pb-.5"
+          enterFrom="-translate-y-8 h-0"
+          enterTo="translate-y-0 h-8 "
+          leave="transition-all transform ease-in duration-300"
+          leaveFrom="translate-y-0 h-8 "
+          leaveTo="-translate-y-8 h-0"
+          className="mb-1 overflow-hidden"
           as="li"
         >
           <div
             className="relative rounded-full h-8 w-8 m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
               if (collaborationState.collaborationSpace || collaborationState.collaborationTable) {
-                leaveCollaborationSpaceCall(false);
+                leaveCollaborationSpaceCall(false).then();
               } else if (collaborationState.stageMode) {
                 collaborationDispatch({
                   type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
