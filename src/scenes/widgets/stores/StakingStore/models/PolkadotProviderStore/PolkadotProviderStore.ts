@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {ApiPromise} from '@polkadot/api';
 import {BN, BN_ZERO, formatBalance} from '@polkadot/util';
 import {cloneDeep} from 'lodash-es';
-import {DeriveStakingAccount} from '@polkadot/api-derive/staking/types';
+import {DeriveStakingAccount} from '@polkadot/api-derive/types';
 
 import {
   PolkadotActiveStake,
@@ -51,6 +51,11 @@ const PolkadotProviderStore = types
           icon: 'wallet' as IconName
         }));
       },
+      get stashAccountBalance() {
+        return {
+
+        }
+      },
       get controllerAccountValidation() {
         const isMappedToAnotherStash =
           self.bondedAddress && self.stashAccount?.address !== self.controllerAccount?.address;
@@ -83,8 +88,14 @@ const PolkadotProviderStore = types
       }
     };
   })
-  .volatile<{channel: ApiPromise | null}>(() => ({
-    channel: null
+  .volatile<{
+    channel: ApiPromise | null;
+    stakingInfo: DeriveStakingAccount | null;
+    sessionProgress: string | number | boolean | null | undefined;
+  }>(() => ({
+    channel: null,
+    stakingInfo: null,
+    sessionProgress: null
   }))
   .actions((self) => ({
     async init() {
@@ -103,6 +114,13 @@ const PolkadotProviderStore = types
     getAddresses: flow(function* () {
       const addresses = yield SubstrateProvider.getAddresses(self.ss58Format);
       self.addresses = cast(addresses);
+    }),
+    getSessionProgress: flow(function* () {
+      self.sessionProgress = yield self.channel?.derive.session.progress();
+    }),
+    getStakingInfo: flow(function* (address: string) {
+      self.stakingInfo =
+        self.channel !== null ? yield self.channel.derive.staking?.account(address) : null;
     }),
     getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalance) {
       const balanceAll =
@@ -184,6 +202,7 @@ const PolkadotProviderStore = types
     }),
     async initAccount() {
       await this.getAddresses();
+      await this.getSessionProgress();
       this.setStashAccount(self.addresses[0].address);
       if (self.stashAccount?.address) {
         await this.setControllerAccount(self.stashAccount.address);
@@ -210,6 +229,7 @@ const PolkadotProviderStore = types
       const result = self.addresses.find((account) => account.address === address);
       self.stashAccount = cast(cloneDeep(result));
       await this.getBalances(address, 'stashAccountBalance');
+      await this.getStakingInfo(address);
     },
     async setControllerAccount(address: string) {
       const result = self.addresses.find((account) => account.address === address);
