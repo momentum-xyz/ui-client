@@ -1,7 +1,6 @@
 import {BN, BN_TEN, BN_THOUSAND, formatBalance} from '@polkadot/util';
 
 export const formatExistential = (value: BN): string => {
-  console.log(value);
   let fmt = (
     value
       .mul(BN_THOUSAND)
