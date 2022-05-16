@@ -28,7 +28,7 @@ const StakingAmountSection: FC<PropsInterface> = ({theme}) => {
         <styled.LabelContainer>
           <Text
             theme={theme}
-            text={t('staking.bondedAmount')}
+            text={t('staking.setAmount')}
             size="xxs"
             align="right"
             weight="bold"
