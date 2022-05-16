@@ -37,6 +37,7 @@ export interface OnlineUserInterface {
   };
   name: string;
   profile: UserProfileInterface;
+  status: string;
 }
 
 /** CHECK USER **/
