@@ -23,7 +23,7 @@ const SpaceAdmin: FC = () => {
 
   const routes = useMemo(() => {
     return PRIVATE_ROUTES(path);
-  }, []);
+  }, [path]);
 
   useEffect(() => {
     if (spaceId) {
@@ -32,13 +32,13 @@ const SpaceAdmin: FC = () => {
     }
 
     return spaceManagerStore.resetModel;
-  }, [history.location.pathname]);
+  }, [history.location.pathname, spaceId, spaceManagerStore]);
 
   useEffect(() => {
     unityStore.changeKeyboardControl(false);
 
     return () => unityStore.changeKeyboardControl(true);
-  }, []);
+  }, [unityStore]);
 
   return <Switch>{createRoutesByConfig(routes)}</Switch>;
 };
