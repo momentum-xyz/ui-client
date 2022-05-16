@@ -9,15 +9,23 @@ type TopbarButtonProps = {
   // @ts-ignore: add types
   isActive?: (match, location) => boolean;
   onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+  state?: object;
 };
 
-const TopbarButton: React.FC<TopbarButtonProps> = ({children, isActive, title, onClick, link}) => {
+const TopbarButton: React.FC<TopbarButtonProps> = ({
+  children,
+  isActive,
+  title,
+  onClick,
+  link,
+  state
+}) => {
   if (link) {
     return (
       <Tooltip className="ml-2" direction="bottom" label={title}>
         <NavLink
           activeClassName="drop-shadow-white"
-          to={link}
+          to={{pathname: link, state}}
           isActive={isActive}
           title={title}
           onClick={onClick}
