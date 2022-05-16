@@ -14,8 +14,7 @@ import * as styled from './OnlineUsersWidget.styled';
 
 interface OnlineUsersWidgetsProps {
   // TODO: Move selecting to spaces panel store when refactoring it
-  // @ts-ignore
-  onUserInitiativeSelect: (Buffer) => void;
+  onUserInitiativeSelect: (initiativeId: Buffer) => void;
 }
 
 const OnlineUsersWidget: FC<OnlineUsersWidgetsProps> = ({onUserInitiativeSelect}) => {
@@ -59,7 +58,7 @@ const OnlineUsersWidget: FC<OnlineUsersWidgetsProps> = ({onUserInitiativeSelect}
   return (
     <styled.Container>
       {onlineUsersStore.selectedUserId && (
-        <div className="max-h-full">
+        <div>
           {onlineUsersStore.editedUserId ? (
             <ProfileEditWidget
               userId={onlineUsersStore.editedUserId}
