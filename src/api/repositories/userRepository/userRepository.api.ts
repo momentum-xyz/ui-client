@@ -69,7 +69,7 @@ export const search: RequestInterface<UserSearchRequest, UserSearchResponse> = (
 
   restOptions.params = {
     q,
-    online: online && (online ? 'true' : 'false'),
+    online: online && online.toString(),
     worldId
   };
 
