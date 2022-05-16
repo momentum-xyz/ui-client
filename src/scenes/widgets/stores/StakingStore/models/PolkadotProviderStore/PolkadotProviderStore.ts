@@ -52,9 +52,7 @@ const PolkadotProviderStore = types
         }));
       },
       get stashAccountBalance() {
-        return {
-
-        }
+        return {};
       },
       get controllerAccountValidation() {
         const isMappedToAnotherStash =

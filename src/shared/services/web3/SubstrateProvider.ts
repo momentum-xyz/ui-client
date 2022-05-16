@@ -9,7 +9,7 @@ import {endpoints} from 'api/constants';
 type Unlocking = {
   remainingEras: BN;
   value: BN;
-}
+};
 
 export type DeriveUnbondingProgressReturnType = [Unlocking, BN, BN][] | [[], BN];
 
