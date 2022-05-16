@@ -13,7 +13,11 @@ const SpaceAdmin: FC = () => {
 
   const {spaceId} = useParams<{spaceId?: string}>();
 
-  const {spaceManagerStore} = useStore().spaceAdminStore;
+  const {
+    spaceAdminStore,
+    mainStore: {unityStore}
+  } = useStore();
+  const {spaceManagerStore} = spaceAdminStore;
 
   const history = useHistory();
 
@@ -29,6 +33,12 @@ const SpaceAdmin: FC = () => {
 
     return spaceManagerStore.resetModel;
   }, [history.location.pathname]);
+
+  useEffect(() => {
+    unityStore.changeKeyboardControl(false);
+
+    return () => unityStore.changeKeyboardControl(true);
+  }, []);
 
   return <Switch>{createRoutesByConfig(routes)}</Switch>;
 };
