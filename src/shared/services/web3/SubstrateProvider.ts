@@ -6,12 +6,12 @@ import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/
 
 import {endpoints} from 'api/constants';
 
-interface Unlocking {
+type Unlocking = {
   remainingEras: BN;
   value: BN;
 }
 
-type DeriveUnbondingProgressReturnType = [Unlocking, BN, BN][] | [[], BN];
+export type DeriveUnbondingProgressReturnType = [Unlocking, BN, BN][] | [[], BN];
 
 export default class SubstrateProvider {
   static FORMAT_OPTIONS = {withSi: false, forceUnit: '-'};
