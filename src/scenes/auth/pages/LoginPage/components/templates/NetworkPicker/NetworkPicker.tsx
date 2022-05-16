@@ -42,7 +42,6 @@ const NetworkPicker: FC<PropsInterface> = (props) => {
         theme={theme}
         iconName="profile"
         label={t(`networks.${Web3ConnectorEnum.Guest}`)}
-        disabled
         onClick={() => onSelect({name: Web3ConnectorEnum.Guest, connector: null})}
       />
     </>

@@ -8,8 +8,7 @@ import {ROUTES} from 'core/constants';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import {LoginTypeEnum, StorageKeyEnum, Web3ConnectorEnum, Web3ConnectorEnumList} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {keycloakOidcConfig} from 'shared/auth/keycloak';
-import {web3OidcConfig} from 'shared/auth/web3';
+import {keycloakOidcConfig, web3OidcConfig, guestOidcConfig} from 'shared/auth';
 
 const LoginStore = types.compose(
   ResetModel,
@@ -64,7 +63,14 @@ const LoginStore = types.compose(
         storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Web3);
         const origin = window.history.state?.origin || ROUTES.base;
         const userManager = new UserManager(web3OidcConfig);
-        // @ts-ignore
+        // @ts-ignore: oidc bug
+        await userManager.signinRedirect({state: {origin: origin}, login_hint: self.loginType});
+      },
+      async guestSignIn(): Promise<void> {
+        storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Guest);
+        const origin = window.history.state?.origin || ROUTES.base;
+        const userManager = new UserManager(guestOidcConfig);
+        // @ts-ignore: oidc bug
         await userManager.signinRedirect({state: {origin: origin}, login_hint: self.loginType});
       }
     }))
