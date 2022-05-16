@@ -8,8 +8,8 @@ import {api, FetchUserResponse} from 'api';
 import {RequestModel, UserProfileModel} from 'core/models';
 import {bytesToUuid, deleteCookieByName} from 'core/utils';
 import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
-import {web3ProviderConfig} from 'shared/services/web3';
-import {keycloakProviderConfig} from 'shared/services/keycloak';
+import {web3ProviderConfig} from 'shared/auth/web3';
+import {keycloakProviderConfig} from 'shared/auth/keycloak';
 
 const SessionStore = types
   .model('SessionStore', {

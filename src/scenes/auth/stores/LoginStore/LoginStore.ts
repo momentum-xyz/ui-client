@@ -8,8 +8,8 @@ import {ROUTES} from 'core/constants';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import {LoginTypeEnum, StorageKeyEnum, Web3ConnectorEnum, Web3ConnectorEnumList} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {keycloakOidcConfig} from 'shared/services/keycloak';
-import {web3OidcConfig} from 'shared/services/web3';
+import {keycloakOidcConfig} from 'shared/auth/keycloak';
+import {web3OidcConfig} from 'shared/auth/web3';
 
 const LoginStore = types.compose(
   ResetModel,
