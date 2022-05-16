@@ -66,7 +66,7 @@ const SocialUserItem: React.FC<SocialUserItemProps> = ({onClick, currentUserId, 
           }
           size="small"
         />
-        <Text text={user.name.trim()} size="s" isCustom />
+        <Text text={user.name.trim()} size="s" align="left" isCustom isMultiline={false} />
       </styled.InfoContainer>
       {currentUserId !== user.uuid &&
         (invite ? (
