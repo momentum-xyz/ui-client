@@ -35,7 +35,7 @@ const ExpandableLayout: FC<ExpandableLayoutPropsInterface> = ({
           <Heading label={name} type="h4" />
         </styled.ToggleHeaderInfo>
         <styled.ToggleContainer className={cn(isExpanded && 'expanded')}>
-          <IconSvg name="chevron" size='medium' isCustom />
+          <IconSvg name="chevron" size="medium" isCustom />
         </styled.ToggleContainer>
       </styled.ToggleHeader>
       {isExpanded && children}

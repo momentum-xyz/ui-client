@@ -51,9 +51,9 @@ export const ToggleHeaderInfo = styled.div`
 `;
 
 export const ToggleContainer = styled.div`
- .IconSvg-custom {
-   opacity: 0.5;
- }
+  .IconSvg-custom {
+    opacity: 0.5;
+  }
 
   &.expanded {
     .IconSvg-custom {
