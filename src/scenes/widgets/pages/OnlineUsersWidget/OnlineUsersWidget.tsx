@@ -3,10 +3,9 @@ import {Position} from 'react-beautiful-dnd';
 import {observer} from 'mobx-react-lite';
 
 import {SocialOnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components/SocialOnlineUsersList';
-import SocialPanel from 'component/molucules/socialui/SocialPanel';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import {useStore} from 'shared/hooks';
-import {IconSvg} from 'ui-kit';
+import {ExpandableLayout} from 'ui-kit';
 
 import {ProfileEditWidget} from '../ProfileEditWidget';
 import {ProfileWidget} from '../ProfileWidget';
@@ -59,38 +58,35 @@ const OnlineUsersWidget: FC<OnlineUsersWidgetsProps> = ({onUserInitiativeSelect}
 
   return (
     <styled.Container>
-      {/*TODO: Refactor to new structure*/}
-      <SocialPanel
-        title="People"
-        headerIcon={<IconSvg name="people" />}
-        isOpen={onlineUsersStore.expanded}
-        setIsOpen={onlineUsersStore.toggleExpand}
-        position="right"
-        detailView={
-          onlineUsersStore.selectedUserId && (
-            <div className="max-h-full">
-              {onlineUsersStore.editedUserId ? (
-                <ProfileEditWidget
-                  userId={onlineUsersStore.editedUserId}
-                  onClose={onlineUsersStore.endEditingUser}
-                />
-              ) : (
-                <ProfileWidget
-                  userId={onlineUsersStore.selectedUserId}
-                  onClose={() => {
-                    onlineUsersStore.unselectUser();
-                    profileDialog.close();
-                  }}
-                  onUserInitiativeSelect={onUserInitiativeSelect}
-                  onEditUser={handleUserEdit}
-                />
-              )}
-            </div>
-          )
-        }
+      {onlineUsersStore.selectedUserId && (
+        <div className="max-h-full">
+          {onlineUsersStore.editedUserId ? (
+            <ProfileEditWidget
+              userId={onlineUsersStore.editedUserId}
+              onClose={onlineUsersStore.endEditingUser}
+            />
+          ) : (
+            <ProfileWidget
+              userId={onlineUsersStore.selectedUserId}
+              onClose={() => {
+                onlineUsersStore.unselectUser();
+                profileDialog.close();
+              }}
+              onUserInitiativeSelect={onUserInitiativeSelect}
+              onEditUser={handleUserEdit}
+            />
+          )}
+        </div>
+      )}
+      <ExpandableLayout
+        name="People"
+        iconName="people"
+        isExpanded={onlineUsersStore.expanded}
+        setExpand={onlineUsersStore.toggleExpand}
+        size={{width: '200px'}}
       >
-        {onlineUsersStore.expanded && <SocialOnlineUsersList />}
-      </SocialPanel>
+        <SocialOnlineUsersList />
+      </ExpandableLayout>
     </styled.Container>
   );
 };
