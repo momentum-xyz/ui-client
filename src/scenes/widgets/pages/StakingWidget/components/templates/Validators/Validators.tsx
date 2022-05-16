@@ -90,9 +90,9 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
             </styled.LegendItem>
           </Tooltip>
           <Tooltip
-              darkBackground
-              placement="bottom"
-              label={t('staking.stakingTab.favouriteTooltip')}
+            darkBackground
+            placement="bottom"
+            label={t('staking.stakingTab.favouriteTooltip')}
           >
             <styled.LegendItem>
               <IconSvg name="starOn" size="medium" isCustom />
