@@ -21,10 +21,13 @@ const Web3ConsentPage: FC = () => {
   }, [challenge, web3ConsentStore]);
 
   useEffect(() => {
-    if (loginType && loginType === LoginTypeEnum.Guest) {
-      web3ConsentStore.guestConsentAccept(challenge);
+    if (!loginType) {
+      return;
     }
-    if (loginType && loginType !== LoginTypeEnum.Guest) {
+
+    if (loginType === LoginTypeEnum.Guest) {
+      web3ConsentStore.guestConsentAccept(challenge);
+    } else {
       web3ConsentStore.web3consentAccept(challenge);
     }
   }, [challenge, loginType, web3ConsentStore]);
