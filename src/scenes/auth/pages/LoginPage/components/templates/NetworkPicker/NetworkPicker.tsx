@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {Web3ConnectorEnum} from 'core/enums';
+import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import {NetworkButton, PropsWithThemeInterface} from 'ui-kit';
 import walletConnect from 'static/images/walletConnect.svg';
@@ -21,9 +21,9 @@ const NetworkPicker: FC<PropsInterface> = (props) => {
     <>
       {web3Connectors.map((connector) => {
         let imageSrc = polkadot;
-        if (connector.name === Web3ConnectorEnum.Metamask) {
+        if (connector.name === LoginTypeEnum.Metamask) {
           imageSrc = metamask;
-        } else if (connector.name === Web3ConnectorEnum.WalletConnect) {
+        } else if (connector.name === LoginTypeEnum.WalletConnect) {
           imageSrc = walletConnect;
         }
 
@@ -41,8 +41,8 @@ const NetworkPicker: FC<PropsInterface> = (props) => {
       <NetworkButton
         theme={theme}
         iconName="profile"
-        label={t(`networks.${Web3ConnectorEnum.Guest}`)}
-        onClick={() => onSelect({name: Web3ConnectorEnum.Guest, connector: null})}
+        label={t(`networks.${LoginTypeEnum.Guest}`)}
+        onClick={() => onSelect({name: LoginTypeEnum.Guest, connector: null})}
       />
     </>
   );

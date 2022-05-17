@@ -6,7 +6,7 @@ import {storage} from 'core/services';
 import {ResetModel} from 'core/models';
 import {ROUTES} from 'core/constants';
 import {Web3ConnectorInterface} from 'core/interfaces';
-import {LoginTypeEnum, StorageKeyEnum, Web3ConnectorEnum, Web3ConnectorEnumList} from 'core/enums';
+import {LoginTypeEnum, StorageKeyEnum, LoginTypeEnumList} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {keycloakOidcConfig, web3OidcConfig, guestOidcConfig} from 'shared/auth';
 
@@ -14,7 +14,7 @@ const LoginStore = types.compose(
   ResetModel,
   types
     .model('LoginStore', {
-      loginType: types.maybeNull(types.enumeration(Web3ConnectorEnumList)),
+      loginType: types.maybeNull(types.enumeration(LoginTypeEnumList)),
       errorMessage: types.maybeNull(types.string),
       isSessionExpired: false,
       isWeb3LoginStarted: false,
@@ -26,15 +26,14 @@ const LoginStore = types.compose(
         self.isSessionExpired = isSessionExpired;
       },
       chooseNetwork: flow(function* (connector: Web3ConnectorInterface) {
-        storage.setString(StorageKeyEnum.Web3Connector, connector.name);
         self.loginType = connector.name;
 
-        if (connector.name === Web3ConnectorEnum.Guest) {
+        if (connector.name === LoginTypeEnum.Guest) {
           self.isGuestLoginStarted = true;
           return;
         }
 
-        if (connector.name === Web3ConnectorEnum.Polkadot) {
+        if (connector.name === LoginTypeEnum.Polkadot) {
           if (!(yield SubstrateProvider.isExtensionEnabled())) {
             const name = t(`networks.${connector.name}`);
             self.errorMessage = t('errors.ethereumExtension', {name});
@@ -60,14 +59,22 @@ const LoginStore = types.compose(
         await userManager.signinRedirect({state: {origin: origin}});
       },
       async web3SignIn(): Promise<void> {
-        storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Web3);
+        if (!self.loginType) {
+          return;
+        }
+
+        storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
         const userManager = new UserManager(web3OidcConfig);
         // @ts-ignore: oidc bug
         await userManager.signinRedirect({state: {origin: origin}, login_hint: self.loginType});
       },
       async guestSignIn(): Promise<void> {
-        storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Guest);
+        if (!self.loginType) {
+          return;
+        }
+
+        storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
         const userManager = new UserManager(guestOidcConfig);
         // @ts-ignore: oidc bug

@@ -24,9 +24,10 @@ echo "KEYCLOAK_OPENID_SCOPE: \"openid offline_access\"," >> $OUTPUT
 echo "OPENID_REDIRECT_URL : frontend_url+\"/oidc/callback\"," >> $OUTPUT
 echo "HYDRA_OPENID_CONNECT_URL: \"https://oidc.dev.odyssey.ninja/\"," >> $OUTPUT
 echo "HYDRA_OPENID_CLIENT_ID: \"8ad3d327-e2cf-4828-80c2-d218cf6a547d\"," >> $OUTPUT
-echo "HYDRA_OPENID_GUEST_CLIENT_ID: \"93f4f60-a56d-4689-947a-0529630167ad\"," >> $OUTPUT
+echo "HYDRA_OPENID_GUEST_CLIENT_ID: \"93f4f607-a56d-4689-947a-0529630167ad\"," >> $OUTPUT
 echo "HYDRA_OPENID_SCOPE: \"openid offline\"," >> $OUTPUT
 echo "WEB3_IDENTITY_PROVIDER_URL: \"https://dev.odyssey.ninja/web3-idp\"," >> $OUTPUT
+echo "GUEST_IDENTITY_PROVIDER_URL: \"https://dev.odyssey.ninja/guest-idp\"," >> $OUTPUT
 echo "WEBSOCKET_URL: \"wss://dev.odyssey.ninja/ws\"," >> $OUTPUT
 # Read each line in .env file
 # Each line represents key=value pairs

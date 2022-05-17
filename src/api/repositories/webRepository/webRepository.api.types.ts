@@ -8,6 +8,16 @@ export interface Web3LoginHintResponse {
   loginHint: string;
 }
 
+/** GET LOGIN HINT BY CONSENT **/
+
+export interface Web3LoginHintConsentRequest {
+  consent_challenge: string;
+}
+
+export interface Web3LoginHintConsentResponse {
+  loginHint: string;
+}
+
 /** WEB3 CHALLENGE **/
 
 export interface Web3ChallengeRequest {
