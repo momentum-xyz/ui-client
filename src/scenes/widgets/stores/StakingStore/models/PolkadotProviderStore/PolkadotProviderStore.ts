@@ -101,6 +101,7 @@ const PolkadotProviderStore = types
       await this.connectToChain();
       await this.setIsWeb3Injected();
       await this.getChainInformation();
+      await this.getSessionProgress();
       await this.initAccount();
     },
     connectToChain: flow(function* () {
@@ -126,7 +127,7 @@ const PolkadotProviderStore = types
       const balanceAll =
         self.channel !== null ? yield self.channel.derive.balances?.all(address) : null;
 
-      const stakingInfo: DeriveStakingAccount =
+      const stakingInfo =
         self.channel !== null ? yield self.channel.derive.staking?.account(address) : null;
 
       const locked = formatBalance(
@@ -221,7 +222,6 @@ const PolkadotProviderStore = types
     }),
     async initAccount() {
       await this.getAddresses();
-      await this.getSessionProgress();
       this.setStashAccount(self.addresses[0].address);
       if (self.stashAccount?.address) {
         await this.setControllerAccount(self.stashAccount.address);
