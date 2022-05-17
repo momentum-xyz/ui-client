@@ -65,9 +65,9 @@ const LoginStore = types.compose(
 
         storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
+        const args = {state: {origin: origin}, login_hint: self.loginType};
         const userManager = new UserManager(web3OidcConfig);
-        // @ts-ignore: oidc bug
-        await userManager.signinRedirect({state: {origin: origin}, login_hint: self.loginType});
+        await userManager.signinRedirect(args);
       },
       async guestSignIn(): Promise<void> {
         if (!self.loginType) {
@@ -76,9 +76,9 @@ const LoginStore = types.compose(
 
         storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
+        const args = {state: {origin: origin}, login_hint: self.loginType};
         const userManager = new UserManager(guestOidcConfig);
-        // @ts-ignore: oidc bug
-        await userManager.signinRedirect({state: {origin: origin}, login_hint: self.loginType});
+        await userManager.signinRedirect(args);
       }
     }))
 );

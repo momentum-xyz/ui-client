@@ -11,7 +11,7 @@ import {
 } from 'api';
 
 const Web3ConsentStore = types
-  .model('Web3Store', {
+  .model('Web3ConsentStore', {
     loginHintRequest: types.optional(RequestModel, {}),
     consentRequest: types.optional(RequestModel, {}),
     loginType: types.maybeNull(types.enumeration(LoginTypeEnumList)),

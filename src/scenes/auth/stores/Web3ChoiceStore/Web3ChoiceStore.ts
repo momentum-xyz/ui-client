@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {RequestModel, ResetModel} from 'core/models';
@@ -36,7 +36,8 @@ const Web3ChoiceStore = types.compose(
       }),
       fetchAccountList: flow(function* () {
         if (yield SubstrateProvider.isExtensionEnabled()) {
-          self.accounts = yield SubstrateProvider.getAddresses();
+          const addressesList = yield SubstrateProvider.getAddresses();
+          self.accounts = cast(addressesList);
         }
       }),
       guestLogin: flow(function* (challenge: string) {

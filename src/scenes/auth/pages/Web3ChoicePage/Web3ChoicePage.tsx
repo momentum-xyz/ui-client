@@ -32,10 +32,7 @@ const Web3ChoicePage: FC = () => {
     params.append('login_type', loginType || '');
     params.append('login_account', selectedAccount || '');
 
-    history.push({
-      pathname: ROUTES.loginWeb3,
-      search: params.toString()
-    });
+    history.push({pathname: ROUTES.loginWeb3, search: params.toString()});
   }, [challenge, history, loginType, selectedAccount]);
 
   useEffect(() => {
@@ -63,7 +60,6 @@ const Web3ChoicePage: FC = () => {
     }
   }, [loginType, openChallengePage, web3ChoiceStore]);
 
-  // 3. It will open challenge page if user has 1 account
   useEffect(() => {
     if (loginType === LoginTypeEnum.Polkadot && accountList.length === 1) {
       selectAccount(accountList[0].address);
@@ -99,12 +95,14 @@ const Web3ChoicePage: FC = () => {
             }
           }}
         >
-          <AccountPicker
-            theme={theme}
-            accountList={accountList}
-            selectedAccount={selectedAccount}
-            onSelect={selectAccount}
-          />
+          {accountList.length && (
+            <AccountPicker
+              theme={theme}
+              accountList={accountList}
+              selectedAccount={selectedAccount}
+              onSelect={selectAccount}
+            />
+          )}
         </LoginView>
       </PanelLayout>
     </styled.Background>
