@@ -6,7 +6,7 @@ import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {isWeb3Injected, web3Accounts, web3Enable, web3FromSource} from '@polkadot/extension-dapp';
 
-import {Web3ConnectorEnum} from 'core/enums';
+import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import {PolkadotExtensionException} from 'core/exceptions';
 
@@ -15,9 +15,9 @@ const POLKADOT_CANCELED_ERROR = 'Eager: Polkadot auth canceled';
 const WEB3_ACTIVATE_ERROR = 'Eager: Activate state callback error';
 const WEB3_SIGN_ERROR = 'Eager: Error occurred while signing the message';
 
-// @ts-ignore. Fix internal error of wallet connect
+// @ts-ignore: Fix internal error of wallet connect
 (window as any).global = window;
-// @ts-ignore
+// @ts-ignore: Fix internal error of wallet connect
 window.Buffer = window.Buffer || Buffer;
 
 export const useEager = (
@@ -37,7 +37,7 @@ export const useEager = (
 
   const {name, connector} = web3Connector;
   const isWeb3Connector = connector instanceof AbstractConnector;
-  const isPolkadotConnector = name === Web3ConnectorEnum.Polkadot;
+  const isPolkadotConnector = name === LoginTypeEnum.Polkadot;
 
   const wait = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
 

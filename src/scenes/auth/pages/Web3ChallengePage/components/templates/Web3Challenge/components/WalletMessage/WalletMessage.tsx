@@ -2,18 +2,18 @@ import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {PropsWithThemeInterface} from 'ui-kit';
-import {Web3ConnectorEnum} from 'core/enums';
+import {LoginTypeEnum} from 'core/enums';
 
 import * as styled from './WalletMessage.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  connectorType: string | null;
+  loginType: string | null;
   walletError?: Error | null;
   getErrorMessage: (error: Error) => string;
 }
 
 const WalletMessage: FC<PropsInterface> = (props) => {
-  const {connectorType, walletError, getErrorMessage} = props;
+  const {loginType, walletError, getErrorMessage} = props;
 
   const {t} = useTranslation();
 
@@ -21,8 +21,8 @@ const WalletMessage: FC<PropsInterface> = (props) => {
     <>
       {!walletError && (
         <styled.Message>
-          {t('messages.extensionOpen', {name: t(`networks.${connectorType || ''}`)})}
-          {connectorType === Web3ConnectorEnum.Polkadot && (
+          {t('messages.extensionOpen', {name: t(`networks.${loginType || ''}`)})}
+          {loginType === LoginTypeEnum.Polkadot && (
             <styled.ExtensionMessage>{t('messages.extensionWindow')}</styled.ExtensionMessage>
           )}
         </styled.Message>

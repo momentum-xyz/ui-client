@@ -19,5 +19,5 @@ export const web3OidcConfig: OidcClientSettings = {
 export const web3ProviderConfig: AuthProviderProps = {
   ...web3OidcConfig,
   automaticSilentRenew: false,
-  userStore: new WebStorageStateStore()
+  userStore: new WebStorageStateStore({store: localStorage})
 };

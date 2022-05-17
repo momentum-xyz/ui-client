@@ -19,5 +19,5 @@ export const guestOidcConfig: OidcClientSettings = {
 export const guestProviderConfig: AuthProviderProps = {
   ...guestOidcConfig,
   automaticSilentRenew: false,
-  userStore: new WebStorageStateStore()
+  userStore: new WebStorageStateStore({store: localStorage})
 };

@@ -21,6 +21,7 @@ const LoginPage: FC = () => {
 
   useEffect(() => {
     localStorage.clear();
+    sessionStorage.clear();
   }, []);
 
   useEffect(() => {

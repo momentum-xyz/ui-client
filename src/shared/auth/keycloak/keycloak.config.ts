@@ -16,5 +16,5 @@ export const keycloakOidcConfig: OidcClientSettings = {
 export const keycloakProviderConfig: AuthProviderProps = {
   ...keycloakOidcConfig,
   automaticSilentRenew: false,
-  userStore: new WebStorageStateStore()
+  userStore: new WebStorageStateStore({store: localStorage})
 };

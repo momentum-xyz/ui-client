@@ -1,11 +1,26 @@
+/**
+ * Enum for login type.
+ * @readonly
+ * @enum {string}
+ */
+
 export enum LoginTypeEnum {
+  Polkadot = 'polkadot',
+  Metamask = 'metamask',
+  WalletConnect = 'walletconnect',
   Keycloak = 'keycloak',
-  Web3 = 'web3',
   Guest = 'guest'
 }
 
+/**
+ * Login type list based on LoginTypeEnum.
+ * @readonly
+ */
+
 export const LoginTypeEnumList: LoginTypeEnum[] = [
+  LoginTypeEnum.Polkadot,
+  LoginTypeEnum.Metamask,
+  LoginTypeEnum.WalletConnect,
   LoginTypeEnum.Keycloak,
-  LoginTypeEnum.Web3,
   LoginTypeEnum.Guest
 ];

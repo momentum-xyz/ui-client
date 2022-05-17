@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
@@ -6,7 +6,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {Web3ConnectorEnum} from 'core/enums';
+import {LoginTypeEnum} from 'core/enums';
 import {LoginView, PanelLayout} from 'ui-kit';
 import background from 'static/images/bg.png';
 import momentum from 'static/images/momentum.svg';
@@ -16,7 +16,7 @@ import * as styled from './Web3ChoicePage.styled';
 
 const Web3ChoicePage: FC = () => {
   const {web3ChoiceStore} = useStore().authStore;
-  const {loginType, accountList, selectAccount, selectedAccount} = web3ChoiceStore;
+  const {loginType, accountList, selectAccount, selectedAccount, guestRedirect} = web3ChoiceStore;
 
   const {search} = useLocation();
   const {t} = useTranslation();
@@ -26,35 +26,56 @@ const Web3ChoicePage: FC = () => {
   const urlParams = new URLSearchParams(search as string);
   const challenge = urlParams.get('login_challenge') || '';
 
-  const openChallengePage = () => {
-    history.push(`${ROUTES.loginWeb3}${search as string}`);
-  };
+  const openChallengePage = useCallback(() => {
+    const params = new URLSearchParams();
+    params.append('login_challenge', challenge);
+    params.append('login_type', loginType || '');
+    params.append('login_account', selectedAccount || '');
 
-  // 1. Load login type (polkadot, metamask, etc)
+    history.push({
+      pathname: ROUTES.loginWeb3,
+      search: params.toString()
+    });
+  }, [challenge, history, loginType, selectedAccount]);
+
   useEffect(() => {
     web3ChoiceStore.fetchLoginType(challenge);
-
     return () => {
       web3ChoiceStore.resetModel();
     };
-  }, [web3ChoiceStore]);
+  }, [challenge, web3ChoiceStore]);
 
-  // 2. It will load account list if login type is polkadot
   useEffect(() => {
-    if (loginType === Web3ConnectorEnum.Polkadot) {
+    if (loginType === LoginTypeEnum.Polkadot) {
       web3ChoiceStore.fetchAccountList();
-    } else if (loginType) {
+    }
+  }, [loginType, web3ChoiceStore]);
+
+  useEffect(() => {
+    if (loginType === LoginTypeEnum.Guest) {
+      web3ChoiceStore.guestLogin(challenge);
+    }
+  }, [challenge, loginType, web3ChoiceStore]);
+
+  useEffect(() => {
+    if (loginType && loginType !== LoginTypeEnum.Polkadot && loginType !== LoginTypeEnum.Guest) {
       openChallengePage();
     }
-  }, [loginType]);
+  }, [loginType, openChallengePage, web3ChoiceStore]);
 
   // 3. It will open challenge page if user has 1 account
   useEffect(() => {
-    if (loginType === Web3ConnectorEnum.Polkadot && accountList.length === 1) {
+    if (loginType === LoginTypeEnum.Polkadot && accountList.length === 1) {
       selectAccount(accountList[0].address);
       openChallengePage();
     }
-  }, [loginType, accountList]);
+  }, [loginType, accountList, selectAccount, openChallengePage]);
+
+  useEffect(() => {
+    if (guestRedirect) {
+      window.location.href = guestRedirect;
+    }
+  }, [guestRedirect]);
 
   return (
     <styled.Background style={{backgroundImage: `url(${background})`}}>
