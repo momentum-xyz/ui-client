@@ -3,7 +3,7 @@ import {IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
-import {ToastContent} from 'ui-kit';
+import {ToastContent, Toggle} from 'ui-kit';
 
 import StageModeToggle from '../../atoms/StageMode/StageModeToggle';
 import Page from '../../molucules/Page';
@@ -30,13 +30,19 @@ import {IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
 import {StageModeStatus} from '../../../context/type/StageMode';
 import useContextAuth from '../../../context/Auth/hooks/useContextAuth';
 import Button from '../../atoms/Button';
+import CONFIG from '../../../config/config';
+import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';
 
 const StageModeControlPanelLayout: React.FC = () => {
+  const [stageStats, setStageStats] = useState<{speakers: number; audience: number}>({
+    speakers: 0,
+    audience: 0
+  });
   const {collaborationState} = useCollaboration();
   const {authState} = useContextAuth();
-  const {isOnStage, enterStage, leaveStage, canEnterStage} = useAgoraStageMode();
+  const {isOnStage, enterStage, leaveStage, canEnterStage, stageModeUsers} = useAgoraStageMode();
   const {addRequestPopup} = useStageModePopupQueueContext();
   const [enableStageMode] = useIntegrationEnable();
   const [disableStageMode] = useIntegrationDisable();
@@ -186,19 +192,49 @@ const StageModeControlPanelLayout: React.FC = () => {
     </div>
   );
 
+  useEffect(() => {
+    const audience = stageModeUsers.filter((user) => {
+      return user.role === ParticipantRole.AUDIENCE_MEMBER;
+    });
+
+    const speakers = stageModeUsers.filter((user) => {
+      return user.role === ParticipantRole.SPEAKER;
+    });
+
+    setStageStats({
+      speakers: isOnStage ? speakers.length + 1 : speakers.length,
+      audience: isOnStage ? audience.length - 1 : audience.length
+    });
+  }, [stageModeUsers, isOnStage]);
+
   const actions = useMemo(() => {
     return (
-      <>
+      <div className="flex items-center justify-between mx-4 gap-2 flex-grow">
+        <div className="flex items-center gap-1">
+          <Toggle
+            checked={collaborationState.stageMode}
+            onChange={(checked) => onStageModeToggle(checked ? true : false)}
+          />
+          <span className="text-sm">
+            {collaborationState.stageMode
+              ? 'Stage is active'
+              : 'Stage is inactive. Toggle to activate.'}
+          </span>
+        </div>
         {collaborationState.stageMode && (canEnterStage() || isOnStage) && (
-          <Button
-            type={isOnStage ? 'ghost-red' : 'ghost'}
-            onClick={isOnStage ? handleLeaveStage : handleEnterStage}
-          >
-            {isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
-          </Button>
+          <>
+            Speakers:{stageStats.speakers} /{CONFIG.video.MAX_STAGE_USERS}
+            Audience: {stageStats.audience}
+            <Button
+              type={isOnStage ? 'ghost-red' : 'ghost'}
+              onClick={isOnStage ? handleLeaveStage : handleEnterStage}
+            >
+              {isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+            </Button>
+          </>
         )}
         {collaborationState.stageMode && !canEnterStage() && <span>Stage is full</span>}
-      </>
+      </div>
     );
   }, [collaborationState, canEnterStage, isOnStage, handleLeaveStage, handleEnterStage]);
 
