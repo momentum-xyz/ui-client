@@ -114,14 +114,14 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const noVideo = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   const stageModeAudience = stageModeUsers.filter((user) => {
-    return user.role === ParticipantRole.AUDIENCE_MEMBER;
+    return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== currentUserId;
   });
 
   return (
     <Transition
       show={collaborationState.enabled || collaborationState.stageMode}
       unmount={false}
-      className="z-main-u ml-auto pt-1 mr-1 "
+      className="z-main-u ml-auto mr-1 "
       enter="transform transition-transform ease-out duration-300"
       enterFrom="translate-x-5 "
       enterTo="translate-x-0 "
@@ -134,20 +134,20 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           show={!unityStore.isPaused}
           unmount={false}
           enter="transition-all transform ease-out duration-300"
-          enterFrom="-translate-y-8 h-0"
-          enterTo="translate-y-0 h-8 "
+          enterFrom="-translate-y-8 h-0 mt-0"
+          enterTo="translate-y-0 h-8 mt-1"
           leave="transition-all transform ease-in duration-300"
-          leaveFrom="translate-y-0 h-8 "
-          leaveTo="-translate-y-8 h-0"
-          className="mb-1 overflow-hidden"
+          leaveFrom="translate-y-0 h-8 mt-1"
+          leaveTo="-translate-y-8 h-0 mt-0"
+          className="mb-1 overflow-hidden pr-.1"
           as="li"
         >
           <div
-            className="relative rounded-full h-8 w-8 m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
+            className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
-              if (collaborationState.collaborationSpace || collaborationState.collaborationTable) {
-                leaveCollaborationSpaceCall(false).then();
-              } else if (collaborationState.stageMode) {
+              // if (collaborationState.collaborationSpace || collaborationState.collaborationTable) {
+              leaveCollaborationSpaceCall(false).then();
+              if (collaborationState.stageMode) {
                 collaborationDispatch({
                   type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
                   stageMode: false
@@ -160,7 +160,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         </Transition>
         {/*{localUser.uid && cameraConsent && <LocalParticipantView localUser={localUser} />}*/}
 
-        <li className="overflow-y-scroll h-full">
+        <li className="overflow-y-scroll h-full pr-.1">
           <ul>
             {collaborationState.stageMode
               ? !isOnStage && <LocalParticipantView stageLocalUserId={currentUserId} />
