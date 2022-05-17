@@ -73,40 +73,44 @@ const Web3ChoicePage: FC = () => {
     }
   }, [guestRedirect]);
 
-  return (
-    <styled.Background style={{backgroundImage: `url(${background})`}}>
-      <PanelLayout isBodyExtendingToEdges>
-        <LoginView
-          logo={momentum}
-          title={t('actions.selectPolkadotAccount')}
-          okBtn={{
-            variant: 'primary',
-            title: t('actions.ok'),
-            disabled: !selectedAccount,
-            onClick: () => {
-              openChallengePage();
-            }
-          }}
-          backBtn={{
-            variant: 'primary',
-            title: t('actions.back'),
-            onClick: () => {
-              window.history.back();
-            }
-          }}
-        >
-          {accountList.length && (
-            <AccountPicker
-              theme={theme}
-              accountList={accountList}
-              selectedAccount={selectedAccount}
-              onSelect={selectAccount}
-            />
-          )}
-        </LoginView>
-      </PanelLayout>
-    </styled.Background>
-  );
+  if (loginType === LoginTypeEnum.Polkadot) {
+    return (
+      <styled.Background style={{backgroundImage: `url(${background})`}}>
+        <PanelLayout isBodyExtendingToEdges>
+          <LoginView
+            logo={momentum}
+            title={t('actions.selectPolkadotAccount')}
+            okBtn={{
+              variant: 'primary',
+              title: t('actions.ok'),
+              disabled: !selectedAccount,
+              onClick: () => {
+                openChallengePage();
+              }
+            }}
+            backBtn={{
+              variant: 'primary',
+              title: t('actions.back'),
+              onClick: () => {
+                window.history.back();
+              }
+            }}
+          >
+            {accountList.length && (
+              <AccountPicker
+                theme={theme}
+                accountList={accountList}
+                selectedAccount={selectedAccount}
+                onSelect={selectAccount}
+              />
+            )}
+          </LoginView>
+        </PanelLayout>
+      </styled.Background>
+    );
+  }
+
+  return <></>;
 };
 
 export default observer(Web3ChoicePage);
