@@ -5,26 +5,31 @@ import {observer} from 'mobx-react-lite';
 import {IconSvg} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {SubSpaceModelInterface} from 'core/models';
 
 import {ReactComponent as FlyToIcon} from '../../../images/icons/space-rocket-flying.svg';
 import {ReactComponent as NextIcon} from '../../../images/icons/SocialNext.svg';
-import UnityService from '../../../context/Unity/UnityService';
-import {bytesToUuid} from '../../../core/utils/uuid.utils';
-import {Space} from '../../../context/type/Space';
 
-export interface SocialSpaceItemProps {
-  space: Space;
-  // @ts-ignore
-  onSelect: (Buffer) => void;
+export interface SpaceItemPropsInterface {
+  space: SubSpaceModelInterface;
+  hasSubspaces: boolean;
+  onSelect: (spaceId?: string) => void;
 }
 
-const SocialSpaceItem: React.FC<SocialSpaceItemProps> = ({space, onSelect}) => {
+const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, onSelect, hasSubspaces}) => {
   const history = useHistory();
-  const {favoriteStore} = useStore();
+  const {
+    favoriteStore,
+    mainStore: {unityStore}
+  } = useStore();
+
+  if (!space.id) {
+    return null;
+  }
 
   const handleFlyToSpace = () => {
-    if (space.id.data) {
-      UnityService.teleportToSpace(bytesToUuid(space.id.data));
+    if (space.id) {
+      unityStore.teleportToSpace(space.id);
       history.push(ROUTES.base);
     }
   };
@@ -36,21 +41,19 @@ const SocialSpaceItem: React.FC<SocialSpaceItemProps> = ({space, onSelect}) => {
       </button>
       <button
         className="flex w-full hover:text-green-light-100 hover:stroke-current"
-        onClick={() => onSelect(space.id.data)}
+        onClick={() => onSelect(space.id)}
       >
         <p className="cursor-pointer pl-1 text-sm text-left">{space.name}</p>
         <div className="flex-grow" />
-        {favoriteStore.isFavorite(bytesToUuid(space.id.data)) && (
+        {space.id && favoriteStore.isFavorite(space.id) && (
           <div className="pr-1">
             <IconSvg name="starOn" size="normal" isCustom />
           </div>
         )}
-        {space.children?.length !== 0 && (
-          <NextIcon className="text-green-light-80 hover:text-green-light-100" />
-        )}
+        {hasSubspaces && <NextIcon className="text-green-light-80 hover:text-green-light-100" />}
       </button>
     </div>
   );
 };
 
-export default observer(SocialSpaceItem);
+export default observer(SpaceItem);

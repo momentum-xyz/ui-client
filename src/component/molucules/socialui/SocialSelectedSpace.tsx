@@ -2,16 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
+import {SpacesList} from 'scenes/widgets/pages/ExploreWidget/components';
 
 import {useGetSpace} from '../../../hooks/api/useSpaceService';
-import {bytesToUuid} from '../../../core/utils/uuid.utils';
+import {bytesToUuid, uuidToBytes} from '../../../core/utils/uuid.utils';
 import {useJoinCollaborationSpaceByAssign} from '../../../context/Collaboration/hooks/useCollaboration';
 import UnityService from '../../../context/Unity/UnityService';
 import {ReactComponent as SpaceRocketIcon} from '../../../images/icons/space-rocket-flying.svg';
 import {ReactComponent as NextIcon} from '../../../images/icons/SocialNext.svg';
 import SocialButton from '../../atoms/socialui/SocialButton';
-
-import SocialSpacesList from './SocialSpacesList';
 
 interface SocialSelectedSpaceProps {
   spaceId: string;
@@ -95,9 +94,10 @@ const SocialSelectedSpace: React.FC<SocialSelectedSpaceProps> = ({
         <div className="flex flex-col pt-1 overflow-hidden">
           <h1 className="text-sm text-green-light-100 px-1 pb-1 overflow-hidden">Subspaces:</h1>
           {spaceResponse && (
-            <SocialSpacesList
-              spaceId={spaceResponse.space.id.data}
-              onSpaceSelect={setSelectedSpace}
+            // TODO: refactor to new
+            <SpacesList
+              spaceId={bytesToUuid(spaceResponse.space.id.data)}
+              onSpaceSelect={(id) => setSelectedSpace(id ? uuidToBytes(id) : undefined)}
             />
           )}
         </div>

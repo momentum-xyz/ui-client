@@ -18,6 +18,8 @@ import {
   EditUserResponse,
   RemoveUserRequest,
   RemoveUserResponse,
+  SearchSpacesRequest,
+  SearchSpacesResponse,
   SpaceRequest,
   SpaceResponse,
   UserOwnedSpacesRequest,
@@ -94,4 +96,17 @@ export const createInitiative: RequestInterface<
 > = (options) => {
   const {initiative, ...restOptions} = options;
   return request.post(spaceRepositoryEndpoints.createInitiative, initiative, restOptions);
+};
+
+export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesResponse> = (
+  options
+) => {
+  const {q, worldId, ...restOptions} = options;
+
+  restOptions.params = {
+    q,
+    worldId
+  };
+
+  return request.get(spaceRepositoryEndpoints.search, restOptions);
 };

@@ -10,8 +10,8 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 import {OnlineUsersWidget} from 'scenes/widgets/pages/OnlineUsersWidget';
+import {ExploreWidget} from 'scenes/widgets/pages';
 
-import SocialSpaces from '../../molucules/socialui/SocialSpaces';
 import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
 import {useGetSpace} from '../../../hooks/api/useSpaceService';
 import {useJoinCollaborationSpaceByAssign} from '../../../context/Collaboration/hooks/useCollaboration';
@@ -19,11 +19,9 @@ import UnityService from '../../../context/Unity/UnityService';
 
 const SocialLayout: React.FC = () => {
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const {worldStore, unityStore} = useStore().mainStore;
+  const {unityStore} = useStore().mainStore;
   const location = useLocation();
   const [showLayer, setShowLayer] = useState<boolean>();
-  const [selectedUserInitiative, setSelectedUserInitiative] = useState<Buffer>();
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
 
@@ -71,20 +69,10 @@ const SocialLayout: React.FC = () => {
     return null;
   }
 
-  const handleUserInitiativeSelect = (spaceId: Buffer) => {
-    setSelectedUserInitiative(spaceId);
-  };
-
   return (
     <div className="relative flex flex-row justify-between w-full z-overlay pointer-events-none h-full mt-2 mx-.3">
-      <SocialSpaces
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-        worldId={worldStore.worldId}
-        selectedUserInitiative={selectedUserInitiative}
-        setSelectedUserInitiative={setSelectedUserInitiative}
-      />
-      <OnlineUsersWidget onUserInitiativeSelect={handleUserInitiativeSelect} />
+      <ExploreWidget />
+      <OnlineUsersWidget />
     </div>
   );
 };

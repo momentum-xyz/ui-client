@@ -13,15 +13,10 @@ import * as styled from './OnlineUsersWidget.styled';
 
 const LAYOUT_WIDTH = '200px';
 
-interface OnlineUsersWidgetsPropsInterface {
-  // TODO: Move selecting to spaces panel store when refactoring it
-  onUserInitiativeSelect: (initiativeId: Buffer) => void;
-}
-
-const OnlineUsersWidget: FC<OnlineUsersWidgetsPropsInterface> = ({onUserInitiativeSelect}) => {
+const OnlineUsersWidget: FC = () => {
   const {
     sessionStore,
-    widgetStore: {profileMenuStore, onlineUsersStore}
+    widgetStore: {profileMenuStore, onlineUsersStore, exploreStore}
   } = useStore();
   const {profile} = sessionStore;
   const {profileDialog} = profileMenuStore;
@@ -72,7 +67,7 @@ const OnlineUsersWidget: FC<OnlineUsersWidgetsPropsInterface> = ({onUserInitiati
                 onlineUsersStore.unselectUser();
                 profileDialog.close();
               }}
-              onUserInitiativeSelect={onUserInitiativeSelect}
+              onUserInitiativeSelect={exploreStore.selectSpace}
               onEditUser={handleUserEdit}
             />
           )}

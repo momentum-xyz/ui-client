@@ -1,4 +1,4 @@
-import {types, flow, cast} from 'mobx-state-tree';
+import {types, flow, cast, Instance} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel, SpaceModel} from 'core/models';
 import {api} from 'api';
@@ -67,8 +67,9 @@ const SpaceStore = types.compose(
 
           self.space.subSpaces = cast(
             response.children.map((subSpace) => ({
-              id: subSpace.id,
-              name: subSpace.name
+              id: bytesToUuid(subSpace.id.data),
+              name: subSpace.name,
+              hasSubspaces: (subSpace.children?.length ?? 0) > 0
             }))
           );
         }
@@ -153,5 +154,7 @@ const SpaceStore = types.compose(
       })
     }))
 );
+
+export interface SpaceStoreInterface extends Instance<typeof SpaceStore> {}
 
 export {SpaceStore};

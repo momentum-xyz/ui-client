@@ -10,5 +10,6 @@ export const spaceRepositoryEndpoints = {
   unassignUser: `${BASE_URL}/unassign-user`,
   assignUser: `${BASE_URL}/assign-user`,
   ownedSpaces: `${BASE_URL}/owned-spaces`,
-  createInitiative: `${BASE_URL}/create-initiative`
+  createInitiative: `${BASE_URL}/create-initiative`,
+  search: `${BASE_URL}/search`
 };

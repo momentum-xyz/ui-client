@@ -9,3 +9,4 @@ export * from './TokenRulesWidget';
 export * from './TokenRuleReviewWidget';
 export * from './LaunchInitiativeWidget';
 export * from './SettingsWidget';
+export * from './ExploreWidget';
