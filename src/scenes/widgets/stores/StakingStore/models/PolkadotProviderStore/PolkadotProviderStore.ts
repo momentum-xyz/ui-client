@@ -1,8 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {ApiPromise} from '@polkadot/api';
-import {BN, BN_ZERO, formatBalance} from '@polkadot/util';
+import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@polkadot/util';
 import {cloneDeep} from 'lodash-es';
-import {DeriveStakingAccount} from '@polkadot/api-derive/types';
+import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 
 import {
   PolkadotActiveStake,
@@ -24,6 +24,7 @@ const PolkadotProviderStore = types
       stashAccountBalance: types.maybeNull(PolkadotAddressBalance),
       controllerAccount: types.maybeNull(PolkadotAddress),
       controllerAccountBalance: types.maybeNull(PolkadotAddressBalance),
+      unlockingDuration: types.optional(types.string, ''),
       activeStakes: types.array(PolkadotActiveStake),
       chainDecimals: types.maybe(types.number),
       tokenSymbol: types.optional(types.string, ''),
@@ -89,7 +90,7 @@ const PolkadotProviderStore = types
   .volatile<{
     channel: ApiPromise | null;
     stakingInfo: DeriveStakingAccount | null;
-    sessionProgress: string | number | boolean | null | undefined;
+    sessionProgress: DeriveSessionProgress | null;
   }>(() => ({
     channel: null,
     stakingInfo: null,
@@ -114,7 +115,8 @@ const PolkadotProviderStore = types
       self.addresses = cast(addresses);
     }),
     getSessionProgress: flow(function* () {
-      self.sessionProgress = yield self.channel?.derive.session.progress();
+      self.sessionProgress =
+        self.channel !== null ? yield self.channel?.derive.session.progress() : null;
     }),
     getStakingInfo: flow(function* (address: string) {
       self.stakingInfo =
@@ -197,6 +199,25 @@ const PolkadotProviderStore = types
         self.chainDecimals
       );
       self.minNominatorBond = cast(minNominatorBondFormatted);
+    }),
+    calculateUnlockingDuration: flow(function* (blocks: BN)  {
+      const A_DAY = new BN(24 * 60 * 60 * 1000);
+      const THRESHOLD = BN_THOUSAND.div(BN_TWO);
+      const DEFAULT_TIME = new BN(6_000);
+
+      const interval = bnMin(
+        A_DAY,
+        self.channel?.consts.babe?.expectedBlockTime ||
+          self.channel?.consts.difficulty?.targetBlockTime ||
+          self.channel?.consts.subspace?.expectedBlockTime ||
+          // @ts-ignore
+          (self.channel?.consts.timestamp?.minimumPeriod.gte(THRESHOLD)
+            ? // @ts-ignore
+              self.channel?.consts.timestamp.minimumPeriod.mul(BN_TWO)
+            : yield self.channel?.query.parachainSystem ? DEFAULT_TIME.mul(BN_TWO) : DEFAULT_TIME)
+      );
+      const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));
+      self.unlockingDuration = cast(duration);
     }),
     async initAccount() {
       await this.getAddresses();
