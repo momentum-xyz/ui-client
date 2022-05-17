@@ -42,23 +42,23 @@ export default class SubstrateProvider {
   }
 
   static deriveUnbondingProgress(
-      stakingInfo: DeriveStakingAccount | null,
-      progress: DeriveSessionProgress | null
+    stakingInfo: DeriveStakingAccount | null,
+    progress: DeriveSessionProgress | null
   ): DeriveUnbondingProgressReturnType {
     if (!stakingInfo?.unlocking || !progress) {
       return [[], BN_ZERO];
     } else {
       const mapped = stakingInfo.unlocking
-          .filter(({remainingEras, value}) => value.gt(BN_ZERO) && remainingEras.gt(BN_ZERO))
-          .map((unlock): [Unlocking, BN, BN] => [
-            unlock,
-            unlock.remainingEras,
-            unlock.remainingEras
-                .sub(BN_ONE)
-                .imul(progress.eraLength)
-                .iadd(progress.eraLength)
-                .isub(progress.eraProgress)
-          ]);
+        .filter(({remainingEras, value}) => value.gt(BN_ZERO) && remainingEras.gt(BN_ZERO))
+        .map((unlock): [Unlocking, BN, BN] => [
+          unlock,
+          unlock.remainingEras,
+          unlock.remainingEras
+            .sub(BN_ONE)
+            .imul(progress.eraLength)
+            .iadd(progress.eraLength)
+            .isub(progress.eraProgress)
+        ]);
       const total = mapped.reduce((total, [{value}]) => total.iadd(value), new BN(0));
       return [mapped, total];
     }
@@ -74,14 +74,14 @@ export default class SubstrateProvider {
       hours ? (hours > 1 ? t('{{hours}} hrs', {replace: {hours}}) : t('1hr')) : null,
       minutes ? (minutes > 1 ? t('{{minutes}} mins', {replace: {minutes}}) : t('1 min')) : null,
       seconds
-          ? seconds > 1
-              ? t<string>('{{seconds}} s', {replace: {seconds}})
-              : t<string>('1 s')
-          : null
+        ? seconds > 1
+          ? t<string>('{{seconds}} s', {replace: {seconds}})
+          : t<string>('1 s')
+        : null
     ]
-        .filter((s): s is string => !!s)
-        .slice(0, 2)
-        .join(' ')}`;
+      .filter((s): s is string => !!s)
+      .slice(0, 2)
+      .join(' ')}`;
   }
 
   static isValidSubstrateAddress(address: string) {
@@ -93,4 +93,3 @@ export default class SubstrateProvider {
     }
   }
 }
-

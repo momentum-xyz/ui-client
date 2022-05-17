@@ -200,7 +200,7 @@ const PolkadotProviderStore = types
       );
       self.minNominatorBond = cast(minNominatorBondFormatted);
     }),
-    calculateUnlockingDuration: flow(function* (blocks: BN)  {
+    calculateUnlockingDuration: flow(function* (blocks: BN) {
       const A_DAY = new BN(24 * 60 * 60 * 1000);
       const THRESHOLD = BN_THOUSAND.div(BN_TWO);
       const DEFAULT_TIME = new BN(6_000);
