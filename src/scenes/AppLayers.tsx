@@ -28,7 +28,8 @@ const AppLayers: FC = ({children}) => {
   const theme = useTheme();
   const {
     favoriteStore,
-    mainStore: {worldStore, unityStore}
+    mainStore: {worldStore, unityStore},
+    widgetStore: {helpStore}
   } = useStore();
 
   const [loading, setLoading] = useState(true);
@@ -46,6 +47,7 @@ const AppLayers: FC = ({children}) => {
     UnityService.setAuthToken(auth.user?.access_token);
     if (!localStorage.getItem('no-welcome')) {
       welcomeModal.current?.open();
+      helpStore.helpDialog.open();
     }
   });
 
