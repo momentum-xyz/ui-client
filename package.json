@@ -17,7 +17,8 @@
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "nibble": "eslint-nibble --ext .js,.jsx,.ts,.tsx src",
     "svg-sprite:build": "node scripts/buildSvgSprite.js",
-    "svg-sprite:type": "node scripts/generateIconsType.js"
+    "svg-sprite:type": "node scripts/generateIconsType.js",
+    "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest ."
   },
   "dependencies": {
     "@headlessui/react": "^1.2.0",
