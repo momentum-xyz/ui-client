@@ -2,7 +2,11 @@ import {types} from 'mobx-state-tree';
 
 import {DialogModel, ResetModel} from 'core/models';
 
-export type HelpSectionType = 'Discord' | 'Controls' | 'Momentum';
+export enum HelpSectionType {
+  Discord = 'Discord',
+  Momentum = 'Momentum',
+  Controls = 'Controls'
+}
 
 const HelpStore = types
   .compose(

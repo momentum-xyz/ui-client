@@ -6,8 +6,9 @@ import {useHistory} from 'react-router-dom';
 import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {MOMENTUM_SPACE_DEV, MOMENTUM_SPACE, ROUTES} from 'core/constants';
+import {MOMENTUM_SPACE_DEV, MOMENTUM_SPACE, ROUTES, IS_DEV_ENVIRONMENT} from 'core/constants';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
+import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Momentum.styled';
 
@@ -22,7 +23,7 @@ const Momentum: React.FC = () => {
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
 
   const handleExpand = () => {
-    helpStore.toggleSection('Momentum');
+    helpStore.toggleSection(HelpSectionType.Momentum);
   };
 
   const flyToSpaceAndJoin = (spaceId: string) => {
@@ -35,7 +36,7 @@ const Momentum: React.FC = () => {
   };
 
   const handleFlyToSpace = () => {
-    if (process.env.NODE_ENV === 'development') {
+    if (IS_DEV_ENVIRONMENT) {
       flyToSpaceAndJoin(MOMENTUM_SPACE_DEV);
     } else {
       flyToSpaceAndJoin(MOMENTUM_SPACE);
