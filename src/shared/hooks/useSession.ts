@@ -61,7 +61,6 @@ export const useSession = (
   /* 2. Start checking token expiration time */
   useEffect(() => {
     signInInterval.current = setInterval(() => {
-      console.log(auth.user?.expires_in);
       if (auth.user && (auth.user.expires_in || 0) <= REMAINING_SEC) {
         signInSilent();
       }

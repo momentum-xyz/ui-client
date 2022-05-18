@@ -1,5 +1,9 @@
 export const enGb = {
   translation: {
+    days: '{{days}} days',
+    hours: '{{hours}} hours',
+    minutes: '{{minutes}} minutes',
+    seconds: '{{seconds}} seconds',
     back: 'back',
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
@@ -46,6 +50,8 @@ export const enGb = {
         staked: 'Staked',
         unbonding: 'Unbonding'
       },
+      stakingBlocks: '{{blocks}} blocks',
+      erasRemaining: '{{eras}} eras remaining',
       noActiveStakes: "This Account Doesn't Have Any Active Stakes At The Moment",
       changeNominator: 'change nominator',
       stakingWalletAccountHeading: 'Staking Wallet Account',

@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {BN} from '@polkadot/util';
+import {BN, formatNumber} from '@polkadot/util';
+import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 
@@ -9,21 +10,23 @@ interface PropsInterface {
 }
 
 const BlockTime = ({blocks}: PropsInterface) => {
-  const {calculateUnlockingDuration, unlockingDuration} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {calculateUnlockingDuration, unlockingDuration} = polkadotProviderStore;
+
   useEffect(() => {
     calculateUnlockingDuration(blocks);
   }, [calculateUnlockingDuration, blocks]);
 
-  console.log(unlockingDuration);
-
   return (
     <div>
-      {unlockingDuration?.split(' ').map((v, index) => (
-        <span className={index % 2 ? 'timeUnits' : undefined} key={index}>
-          {v}
-        </span>
-      ))}
+      {`${t('staking.stakingBlocks', {blocks: formatNumber(blocks)})}, `}
+      {unlockingDuration && (
+        <>
+          {unlockingDuration?.days && <span>{`${unlockingDuration?.days} `}</span>}
+          {unlockingDuration?.hours && <span>{`${unlockingDuration?.hours} `}</span>}
+          {unlockingDuration?.minutes && <span>{`${unlockingDuration?.minutes} `}</span>}
+        </>
+      )}
     </div>
   );
 };

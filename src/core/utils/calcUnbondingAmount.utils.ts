@@ -1,7 +1,7 @@
 import {BN, BN_ZERO} from '@polkadot/util';
 import {DeriveStakingAccount} from '@polkadot/api-derive/staking/types';
 
-export const calcUnbonding = (stakingInfo: DeriveStakingAccount) => {
+export const calcUnbondingAmount = (stakingInfo: DeriveStakingAccount) => {
   if (!stakingInfo?.unlocking) {
     return BN_ZERO;
   }
