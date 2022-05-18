@@ -25,12 +25,6 @@ const ActiveStake: FC<PropsInterface> = ({theme}) => {
           {stashAccountBalance?.unbonding && Number(stashAccountBalance?.unbonding) !== 0 && (
             <styled.StakeColumn>
               <UnbondingIndicator />
-              <Text
-                text={`${t('staking.balanceTypes.unbonding')} ${
-                  stashAccountBalance?.unbonding
-                } ${tokenSymbol}`}
-                size="xs"
-              />
             </styled.StakeColumn>
           )}
           {stashAccountBalance?.bonded && Number(stashAccountBalance?.bonded) !== 0 && (
