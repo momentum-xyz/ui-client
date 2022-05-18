@@ -1,13 +1,12 @@
 FROM node:16-alpine AS build
 
 WORKDIR /usr/src/app
-COPY public ./public
-# RUN mkdir /usr/src/app/build
-# COPY ./env.sh /usr/src/app/build/env.sh
-# COPY ./.env.base /usr/src/app/build/env.base
-COPY tsconfig.json package.json yarn.lock craco.config.js tailwind.config.js ./
-RUN yarn install
-COPY src ./src
+
+# separate for docker layer caching
+COPY package.json yarn.lock ./
+RUN yarn install --immutable --immutable-cache --check-cache
+
+COPY . .
 RUN yarn build
 
 
