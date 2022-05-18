@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
@@ -16,12 +16,6 @@ const HelpWidget: React.FC = () => {
   const {helpStore} = widgetStore;
 
   const theme = useTheme();
-
-  useEffect(() => {
-    if (!localStorage.getItem('no-welcome')) {
-      localStorage.setItem('no-welcome', '1');
-    }
-  }, []);
 
   return (
     <Dialog
@@ -49,11 +43,11 @@ const HelpWidget: React.FC = () => {
           </styled.ImageItem>
         </styled.TopContainer>
         <styled.BottomContainer>
-          <styled.DiscordDropDown>
-            <Discord />
-          </styled.DiscordDropDown>
           <styled.Item>
             <Controls />
+          </styled.Item>
+          <styled.Item>
+            <Discord />
           </styled.Item>
         </styled.BottomContainer>
       </styled.Container>
