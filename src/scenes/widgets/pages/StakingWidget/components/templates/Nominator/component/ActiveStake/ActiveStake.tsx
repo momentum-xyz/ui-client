@@ -37,10 +37,12 @@ const ActiveStake: FC<PropsInterface> = ({theme}) => {
               />
             </styled.StakeColumn>
           )}
-          <styled.DetailsColumn>
-            <Text text={t('staking.unbondFunds')} size="xs" />
-            <IconSvg name="arrow" size="normal" />
-          </styled.DetailsColumn>
+          {stashAccountBalance?.unbonding && Number(stashAccountBalance?.unbonding) === 0 && (
+            <styled.DetailsColumn>
+              <Text text={t('staking.unbondFunds')} size="xs" />
+              <IconSvg name="arrow" size="normal" />
+            </styled.DetailsColumn>
+          )}
         </styled.ActiveStake>
       )}
     </>
