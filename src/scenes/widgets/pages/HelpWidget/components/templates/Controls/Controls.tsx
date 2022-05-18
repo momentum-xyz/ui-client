@@ -16,7 +16,7 @@ const Controls: React.FC = () => {
   } = useStore();
 
   const handleExpand = () => {
-    helpStore.togglSection('Controls');
+    helpStore.toggleSection('Controls');
   };
 
   return (
