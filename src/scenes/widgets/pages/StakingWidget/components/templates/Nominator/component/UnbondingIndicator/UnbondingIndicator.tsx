@@ -3,7 +3,7 @@ import {t} from 'i18next';
 import {formatBalance, formatNumber} from '@polkadot/util';
 import {observer} from 'mobx-react-lite';
 
-import {IconSvg, PropsWithThemeInterface, Tooltip} from 'ui-kit';
+import {IconSvg, PropsWithThemeInterface, Text, Tooltip} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 
@@ -15,7 +15,8 @@ interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondingIndicator: FC<PropsInterface> = ({theme}) => {
   const {widgetStore} = useStore();
-  const {stakingInfo, sessionProgress, channel} = widgetStore.stakingStore.polkadotProviderStore;
+  const {stakingInfo, sessionProgress, channel, stashAccountBalance, tokenSymbol} =
+    widgetStore.stakingStore.polkadotProviderStore;
   const [mapped] = SubstrateProvider.deriveUnbondingProgress(stakingInfo, sessionProgress);
   return (
     <Tooltip
@@ -35,10 +36,16 @@ const UnbondingIndicator: FC<PropsInterface> = ({theme}) => {
       )}
       placement="top"
       darkBackground
-      size={{width: '200px'}}
+      size={{width: '240px'}}
     >
       <styled.UnbondingIndicator>
         <IconSvg name="clock" theme={theme} size="large" />
+        <Text
+          text={`${t('staking.balanceTypes.unbonding')} ${
+            stashAccountBalance?.unbonding
+          } ${tokenSymbol}`}
+          size="xs"
+        />
       </styled.UnbondingIndicator>
     </Tooltip>
   );
