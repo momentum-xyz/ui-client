@@ -33,7 +33,11 @@ const SpaceAdminPage: FC = () => {
   } = spaceManagerStore;
 
   const handleClose = () => {
-    history.push(ROUTES.collaboration);
+    if (history.location.state?.canGoBack) {
+      history.goBack();
+    } else {
+      history.push(ROUTES.base);
+    }
   };
 
   return (
