@@ -534,6 +534,26 @@ export const enGb = {
         spaceBarTextSecond: ' while not moving: Look around',
         spaceBarIconLabel: 'space-bar'
       },
+      momentum: {
+        title: 'Momentum Space',
+        paragraphs: {
+          one: "You're diggin' it and you want to be more involved?",
+          two: {
+            partOne: 'Join us at our ',
+            highlightedPart: 'Weekly KSMverse Community Calls',
+            partTwo:
+              ', on Wednesdays and Fridays 3pm CEST, in the Kusamaverse, where we will talk about all things Dotsmama, metaversal and phygital!'
+          },
+          three: {
+            partOne: 'Check out ',
+            highlightedPart: 'the Calendar on our Momentum space',
+            partTwo:
+              ' or updates on topics. Want to be a guest speaker and share your insights with the community? Do reach out to us on Discord.'
+          },
+          four: 'Wanna chat, or have any more questions, crazy ideas or suggestions to us? Check out our momentum space. LFG!'
+        },
+        visitSpace: 'Visit the Momentum Space'
+      },
       openLabel: 'Expand',
       closeLabel: 'Minimize'
     },
