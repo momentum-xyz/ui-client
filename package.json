@@ -1,7 +1,7 @@
 {
   "name": "momentum-ui-client",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "postinstall": "husky install",
     "start": "TAILWIND_MODE=watch craco start",
@@ -17,7 +17,9 @@
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "nibble": "eslint-nibble --ext .js,.jsx,.ts,.tsx src",
     "svg-sprite:build": "node scripts/buildSvgSprite.js",
-    "svg-sprite:type": "node scripts/generateIconsType.js"
+    "svg-sprite:type": "node scripts/generateIconsType.js",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "dependencies": {
     "@headlessui/react": "^1.2.0",
@@ -106,6 +108,7 @@
     "eslint-plugin-import": "^2.26.0",
     "husky": "^8.0.1",
     "jest": "26.6.0",
+    "pinst": "^3.0.0",
     "postcss": "^7",
     "sass": "^1.49.9",
     "source-map-explorer": "^2.5.2",
