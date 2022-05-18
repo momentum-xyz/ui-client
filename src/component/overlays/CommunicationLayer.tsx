@@ -67,9 +67,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         />,
         TOAST_GROUND_OPTIONS
       );
-    }
-
-    if (!shouldActivateStageMode && collaborationState.stageMode) {
+    } else if (!shouldActivateStageMode && collaborationState.stageMode) {
       collaborationDispatch({
         type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
         stageMode: false
@@ -195,11 +193,11 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                 key={`participant-${participant.uid as string}`}
                 appear={true}
                 enter="transition-all transform ease-out duration-300"
-                enterFrom="translate-x-6 w-0"
-                enterTo="translate-x-0 w-6"
+                enterFrom="translate-x-8"
+                enterTo="translate-x-0 "
                 leave="transition-all transform  ease-in duration-300"
-                leaveFrom="translate-x-0 w-6"
-                leaveTo="translate-x-6 w-0"
+                leaveFrom="translate-x-0 "
+                leaveTo="translate-x-8"
               >
                 <RemoteParticipantView
                   key={`participant-${participant.uid as string}`}
