@@ -7,7 +7,7 @@ export const web3OidcConfig: OidcClientSettings = {
   authority: window._env_.HYDRA_OPENID_CONNECT_URL,
   client_id: window._env_.HYDRA_OPENID_CLIENT_ID,
   redirect_uri: `${absolute_base_url}/oidc/web3/callback`,
-  post_logout_redirect_uri: `${absolute_base_url}/`,
+  post_logout_redirect_uri: `${absolute_base_url}/login`,
   response_type: 'code',
   scope: window._env_.HYDRA_OPENID_SCOPE || 'openid',
   loadUserInfo: true,
