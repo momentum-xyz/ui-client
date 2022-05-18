@@ -3,6 +3,7 @@ import {ApiPromise} from '@polkadot/api';
 import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@polkadot/util';
 import {cloneDeep} from 'lodash-es';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
+import {u64} from '@polkadot/types-codec/primitive/U64';
 
 import {
   PolkadotAddress,
@@ -207,8 +208,8 @@ const PolkadotProviderStore = types
         self.channel?.consts.babe?.expectedBlockTime ||
           self.channel?.consts.difficulty?.targetBlockTime ||
           self.channel?.consts.subspace?.expectedBlockTime ||
-          (self.channel?.consts.timestamp?.minimumPeriod.gte(THRESHOLD)
-            ? self.channel?.consts.timestamp.minimumPeriod.mul(BN_TWO)
+          ((self.channel?.consts.timestamp?.minimumPeriod as u64).gte(THRESHOLD)
+            ? (self.channel?.consts.timestamp.minimumPeriod as u64).mul(BN_TWO)
             : yield self.channel?.query.parachainSystem ? DEFAULT_TIME.mul(BN_TWO) : DEFAULT_TIME)
       );
       const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));
