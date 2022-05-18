@@ -61,5 +61,3 @@ export const BottomContainer = styled.div`
   padding: 0 5px 0 5px;
   width: 100%;
 `;
-export const DiscordDropDown = styled.div``;
-export const ControlsDropDown = styled.div``;
