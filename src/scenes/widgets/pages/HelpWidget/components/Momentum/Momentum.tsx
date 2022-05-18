@@ -1,11 +1,13 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {useHistory} from 'react-router-dom';
 
 import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {MOMENTUM_SPACE_DEV, MOMENTUM_SPACE} from 'core/constants';
+import {MOMENTUM_SPACE_DEV, MOMENTUM_SPACE, ROUTES} from 'core/constants';
+import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 
 import * as styled from './Momentum.styled';
 
@@ -15,16 +17,31 @@ const Momentum: React.FC = () => {
     mainStore: {unityStore}
   } = useStore();
 
+  const history = useHistory();
+
+  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
+
   const handleExpand = () => {
     helpStore.toggleSection('Momentum');
   };
 
+  const flyToSpaceAndJoin = (spaceId: string) => {
+    joinMeetingSpace(spaceId).then(() => {
+      unityStore.teleportToSpace(spaceId);
+      setTimeout(() => {
+        history.push(ROUTES.collaboration);
+      }, 2000);
+    });
+  };
+
   const handleFlyToSpace = () => {
     if (process.env.NODE_ENV === 'development') {
-      unityStore.teleportToSpace(MOMENTUM_SPACE_DEV);
+      flyToSpaceAndJoin(MOMENTUM_SPACE_DEV);
     } else {
-      unityStore.teleportToSpace(MOMENTUM_SPACE);
+      flyToSpaceAndJoin(MOMENTUM_SPACE);
     }
+
+    helpStore.helpDialog.close();
   };
 
   return (
