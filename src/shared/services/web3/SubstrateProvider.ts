@@ -27,6 +27,7 @@ export type UnlockingDurationReturnType = {
   minutes: string | null;
   seconds?: string | null;
 };
+
 export type DeriveUnbondingProgressReturnType = [[Unlocking, BN, BN][]] | [never[], BN];
 
 export default class SubstrateProvider {
