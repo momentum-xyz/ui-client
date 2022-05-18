@@ -1,19 +1,22 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import cn from 'classnames';
 import {t} from 'i18next';
 
 import {Heading, IconSvg, Text} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './Controls.styled';
 
 const Controls: React.FC = () => {
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const {
+    widgetStore: {helpStore}
+  } = useStore();
 
   const handleExpand = () => {
-    setIsOpen(!isOpen);
+    helpStore.toggleSection('Controls');
   };
 
   return (
@@ -32,18 +35,22 @@ const Controls: React.FC = () => {
         </styled.Div>
         <styled.Div>
           <Text
-            text={isOpen ? t('helpSection.closeLabel') : t('helpSection.openLabel')}
+            text={
+              helpStore.showControlsSection
+                ? t('helpSection.closeLabel')
+                : t('helpSection.openLabel')
+            }
             align="left"
             weight="normal"
             size="xs"
             theme={theme}
           />
-          <styled.DropDownIcon className={cn({opened: isOpen})}>
+          <styled.DropDownIcon className={cn({opened: helpStore.showControlsSection})}>
             <IconSvg name="chevron" size="normal" isCustom onClick={handleExpand} />
           </styled.DropDownIcon>
         </styled.Div>
       </styled.TopContainer>
-      {isOpen && (
+      {helpStore.showControlsSection && (
         <styled.BottomContainer>
           <styled.Border />
           <styled.IconsContainer>
