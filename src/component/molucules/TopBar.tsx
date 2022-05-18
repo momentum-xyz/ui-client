@@ -148,6 +148,7 @@ const TopBar = ({
               isActive={(match, location) => {
                 return location.pathname.includes('/space/' + spaceId + '/admin');
               }}
+              state={{canGoBack: true}}
             >
               <PencilIcon />
             </TopbarButton>

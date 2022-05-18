@@ -10,9 +10,18 @@ interface PropsInterface extends PropsWithThemeInterface {
   iconName: IconName;
   path: string;
   exact?: boolean;
+  replace?: boolean;
+  state?: object;
 }
 
-const NavigationBarItem: FC<PropsInterface> = ({iconName, path, theme, exact = false}) => {
+const NavigationBarItem: FC<PropsInterface> = ({
+  iconName,
+  path,
+  theme,
+  exact = false,
+  replace = false,
+  state
+}) => {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -22,7 +31,14 @@ const NavigationBarItem: FC<PropsInterface> = ({iconName, path, theme, exact = f
       theme={theme}
       data-testid="NavigationBarItem-test"
     >
-      <NavLink exact={exact} to={path} key={path} activeClassName="active" className="NavLink">
+      <NavLink
+        exact={exact}
+        to={{pathname: path, state}}
+        key={path}
+        activeClassName="active"
+        className="NavLink"
+        replace={replace}
+      >
         <div className={`icon ${hovered ? 'hovered' : ''}`}>
           <IconSvg name={iconName} size="large" theme={theme} />
         </div>

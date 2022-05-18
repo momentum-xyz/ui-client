@@ -1,25 +1,24 @@
 import React, {FC, useEffect} from 'react';
 import {Position} from 'react-beautiful-dnd';
 import {observer} from 'mobx-react-lite';
+import {t} from 'i18next';
 
 import {SocialOnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components/SocialOnlineUsersList';
-import SocialPanel from 'component/molucules/socialui/SocialPanel';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import {useStore} from 'shared/hooks';
-import {IconSvg} from 'ui-kit';
-
-import {ProfileEditWidget} from '../ProfileEditWidget';
-import {ProfileWidget} from '../ProfileWidget';
+import {ExpandableLayout} from 'ui-kit';
+import {ProfileEditWidget, ProfileWidget} from 'scenes/widgets/pages';
 
 import * as styled from './OnlineUsersWidget.styled';
 
-interface OnlineUsersWidgetsProps {
+const LAYOUT_WIDTH = '200px';
+
+interface OnlineUsersWidgetsPropsInterface {
   // TODO: Move selecting to spaces panel store when refactoring it
-  // @ts-ignore
-  onUserInitiativeSelect: (Buffer) => void;
+  onUserInitiativeSelect: (initiativeId: Buffer) => void;
 }
 
-const OnlineUsersWidget: FC<OnlineUsersWidgetsProps> = ({onUserInitiativeSelect}) => {
+const OnlineUsersWidget: FC<OnlineUsersWidgetsPropsInterface> = ({onUserInitiativeSelect}) => {
   const {
     sessionStore,
     widgetStore: {profileMenuStore, onlineUsersStore}
@@ -59,38 +58,35 @@ const OnlineUsersWidget: FC<OnlineUsersWidgetsProps> = ({onUserInitiativeSelect}
 
   return (
     <styled.Container>
-      {/*TODO: Refactor to new structure*/}
-      <SocialPanel
-        title="People"
-        headerIcon={<IconSvg name="people" />}
-        isOpen={onlineUsersStore.expanded}
-        setIsOpen={onlineUsersStore.toggleExpand}
-        position="right"
-        detailView={
-          onlineUsersStore.selectedUserId && (
-            <div className="max-h-full">
-              {onlineUsersStore.editedUserId ? (
-                <ProfileEditWidget
-                  userId={onlineUsersStore.editedUserId}
-                  onClose={onlineUsersStore.endEditingUser}
-                />
-              ) : (
-                <ProfileWidget
-                  userId={onlineUsersStore.selectedUserId}
-                  onClose={() => {
-                    onlineUsersStore.unselectUser();
-                    profileDialog.close();
-                  }}
-                  onUserInitiativeSelect={onUserInitiativeSelect}
-                  onEditUser={handleUserEdit}
-                />
-              )}
-            </div>
-          )
-        }
+      {onlineUsersStore.selectedUserId && (
+        <div>
+          {onlineUsersStore.editedUserId ? (
+            <ProfileEditWidget
+              userId={onlineUsersStore.editedUserId}
+              onClose={onlineUsersStore.endEditingUser}
+            />
+          ) : (
+            <ProfileWidget
+              userId={onlineUsersStore.selectedUserId}
+              onClose={() => {
+                onlineUsersStore.unselectUser();
+                profileDialog.close();
+              }}
+              onUserInitiativeSelect={onUserInitiativeSelect}
+              onEditUser={handleUserEdit}
+            />
+          )}
+        </div>
+      )}
+      <ExpandableLayout
+        name={t('labels.people')}
+        iconName="people"
+        isExpanded={onlineUsersStore.expanded}
+        setExpand={onlineUsersStore.toggleExpand}
+        size={{width: LAYOUT_WIDTH}}
       >
-        {onlineUsersStore.expanded && <SocialOnlineUsersList />}
-      </SocialPanel>
+        <SocialOnlineUsersList />
+      </ExpandableLayout>
     </styled.Container>
   );
 };
