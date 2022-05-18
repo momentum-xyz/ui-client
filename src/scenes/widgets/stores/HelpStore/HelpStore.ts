@@ -14,7 +14,7 @@ const HelpStore = types
     })
   )
   .actions((self) => ({
-    togglSection(section: HelpSectionType, show?: boolean) {
+    toggleSection(section: HelpSectionType, show?: boolean) {
       if (show) {
         self[`show${section}Section`] = show;
         return;

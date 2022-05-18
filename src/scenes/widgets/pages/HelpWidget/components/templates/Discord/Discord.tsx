@@ -20,7 +20,7 @@ const Discord: React.FC = () => {
   const techSupportDiscord = 'https://discord.gg/VfTmyeguDC';
 
   const handleExpand = () => {
-    helpStore.togglSection('Discord');
+    helpStore.toggleSection('Discord');
   };
 
   const handleSupportChannelClick = () => {
