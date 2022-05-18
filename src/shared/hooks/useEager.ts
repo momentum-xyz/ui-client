@@ -40,11 +40,7 @@ export const useEager = (
   const isWeb3Connector = connector instanceof AbstractConnector;
   const isPolkadotConnector = name === LoginTypeEnum.Polkadot;
 
-  const wait = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
-
   const activePolkadotExtension = async () => {
-    await wait(100);
-
     const extensions = await web3Enable(WEB3_ENABLE_ORIGIN_NAME);
     if (!isWeb3Injected || extensions.length === 0) {
       const err: any = new PolkadotExtensionException();
@@ -122,10 +118,12 @@ export const useEager = (
   };
 
   useEffect(() => {
-    if (isWeb3Connector) {
-      activateWeb3Extension();
-    } else if (isPolkadotConnector) {
-      activePolkadotExtension();
+    if (!walletConnectionState.error) {
+      if (isWeb3Connector) {
+        activateWeb3Extension();
+      } else if (isPolkadotConnector) {
+        activePolkadotExtension();
+      }
     }
   }, [isWeb3Connector, isPolkadotConnector]);
 
