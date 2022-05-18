@@ -21,8 +21,13 @@ type Unlocking = {
   value: BN;
 };
 
-export type UnlockingDurationReturnType = string;
-export type DeriveUnbondingProgressReturnType = [[Unlocking, BN, BN][], BN];
+export type UnlockingDurationReturnType = {
+  days: string | null;
+  hours: string | null;
+  minutes: string | null;
+  seconds?: string | null;
+};
+export type DeriveUnbondingProgressReturnType = [[Unlocking, BN, BN][]] | [never[], BN];
 
 export default class SubstrateProvider {
   static FORMAT_OPTIONS = {withSi: false, forceUnit: '-'};
@@ -59,29 +64,30 @@ export default class SubstrateProvider {
             .iadd(progress.eraLength)
             .isub(progress.eraProgress)
         ]);
-      const total = mapped.reduce((total, [{value}]) => total.iadd(value), new BN(0));
-      return [mapped, total];
+      return [mapped];
     }
   }
 
-  static formatUnlockingDuration(blockTime: BN, blocks: BN): UnlockingDurationReturnType {
-    const value = bnMin(BN_MAX_INTEGER, blockTime.mul(blocks)).toNumber();
-    const time = extractTime(Math.abs(value));
-    const {days, hours, minutes, seconds} = time;
+  static formatUnlockingDuration(blockTime: BN, blocks: BN): UnlockingDurationReturnType | null {
+    const result = bnMin(BN_MAX_INTEGER, blockTime.mul(blocks)).toNumber();
+    const {days, hours, minutes, seconds} = extractTime(Math.abs(result));
 
-    return `${value < 0 ? '+' : ''}${[
-      days ? (days > 1 ? t('{{days}} days', {replace: {days}}) : t('1day')) : null,
-      hours ? (hours > 1 ? t('{{hours}} hrs', {replace: {hours}}) : t('1hr')) : null,
-      minutes ? (minutes > 1 ? t('{{minutes}} mins', {replace: {minutes}}) : t('1 min')) : null,
-      seconds
-        ? seconds > 1
-          ? t<string>('{{seconds}} s', {replace: {seconds}})
-          : t<string>('1 s')
-        : null
-    ]
-      .filter((s): s is string => !!s)
-      .slice(0, 2)
-      .join(' ')}`;
+    return result < 0
+      ? null
+      : {
+          days: days ? (days > 1 ? t('days', {days}) : t('days', {days: 1})) : null,
+          hours: hours ? (hours > 1 ? t('hours', {hours}) : t('hours', {hours: 1})) : null,
+          minutes: minutes
+            ? minutes > 1
+              ? t('minutes', {minutes})
+              : t('minutes', {minutes: 1})
+            : null,
+          seconds: seconds
+            ? seconds > 1
+              ? t('seconds', {seconds})
+              : t('seconds', {seconds: 1})
+            : null
+        };
   }
 
   static isValidSubstrateAddress(address: string) {

@@ -5,13 +5,13 @@ import {cloneDeep} from 'lodash-es';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 
 import {
-  PolkadotActiveStake,
   PolkadotAddress,
   PolkadotAddressBalance,
+  PolkadotUnlockingDuration,
   ResetModel
 } from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {calcUnbonding, formatExistential} from 'core/utils';
+import {calcUnbondingAmount, formatExistential} from 'core/utils';
 import {AccountTypeBalance} from 'core/types';
 import {Payee} from 'core/enums';
 
@@ -24,8 +24,7 @@ const PolkadotProviderStore = types
       stashAccountBalance: types.maybeNull(PolkadotAddressBalance),
       controllerAccount: types.maybeNull(PolkadotAddress),
       controllerAccountBalance: types.maybeNull(PolkadotAddressBalance),
-      unlockingDuration: types.optional(types.string, ''),
-      activeStakes: types.array(PolkadotActiveStake),
+      unlockingDuration: types.maybeNull(PolkadotUnlockingDuration),
       chainDecimals: types.maybe(types.number),
       tokenSymbol: types.optional(types.string, ''),
       existentialDeposit: types.optional(types.frozen(), 0),
@@ -51,9 +50,6 @@ const PolkadotProviderStore = types
           value: account.address,
           icon: 'wallet' as IconName
         }));
-      },
-      get stashAccountBalance() {
-        return {};
       },
       get controllerAccountValidation() {
         const isMappedToAnotherStash =
@@ -121,7 +117,7 @@ const PolkadotProviderStore = types
     }),
     getStakingInfo: flow(function* (address: string) {
       self.stakingInfo =
-        self.channel !== null ? yield self.channel.derive.staking?.account(address) : null;
+        self.channel !== null ? yield self.channel?.derive.staking.account(address) : null;
     }),
     getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalance) {
       const balanceAll =
@@ -165,7 +161,7 @@ const PolkadotProviderStore = types
         self.chainDecimals
       );
       const unbonding = formatBalance(
-        calcUnbonding(stakingInfo),
+        calcUnbondingAmount(stakingInfo),
         SubstrateProvider.FORMAT_OPTIONS,
         self.chainDecimals
       );
@@ -211,10 +207,8 @@ const PolkadotProviderStore = types
         self.channel?.consts.babe?.expectedBlockTime ||
           self.channel?.consts.difficulty?.targetBlockTime ||
           self.channel?.consts.subspace?.expectedBlockTime ||
-          // @ts-ignore
           (self.channel?.consts.timestamp?.minimumPeriod.gte(THRESHOLD)
-            ? // @ts-ignore
-              self.channel?.consts.timestamp.minimumPeriod.mul(BN_TWO)
+            ? self.channel?.consts.timestamp.minimumPeriod.mul(BN_TWO)
             : yield self.channel?.query.parachainSystem ? DEFAULT_TIME.mul(BN_TWO) : DEFAULT_TIME)
       );
       const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));

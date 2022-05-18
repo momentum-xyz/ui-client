@@ -1,1 +1,1 @@
-export {UnbondingIndicator} from './UnbondingIndicator';
+export {default as UnbondingIndicator} from './UnbondingIndicator';
