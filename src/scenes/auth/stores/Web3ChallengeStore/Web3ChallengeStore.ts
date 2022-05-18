@@ -8,7 +8,7 @@ import {
 } from '@web3-react/injected-connector';
 
 import {RequestModel} from 'core/models';
-import {PolkadotExtensionException} from 'core/exceptions';
+import {PolkadotExtensionException, SessionException} from 'core/exceptions';
 import {api, Web3ChallengeRequest, Web3LoginAcceptRequest} from 'api';
 import {i18n} from 'shared/services/i18n';
 
@@ -41,6 +41,8 @@ const Web3ChallengeStore = types
         error instanceof UserRejectedRequestError
       ) {
         return i18n.t('errors.ethereumAccess');
+      } else if (error instanceof SessionException) {
+        return i18n.t('errors.oidcSession');
       } else if (error instanceof PolkadotExtensionException) {
         return error.message;
       } else {

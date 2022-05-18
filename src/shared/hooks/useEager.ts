@@ -8,10 +8,11 @@ import {isWeb3Injected, web3Accounts, web3Enable, web3FromSource} from '@polkado
 
 import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
-import {PolkadotExtensionException} from 'core/exceptions';
+import {PolkadotExtensionException, SessionException} from 'core/exceptions';
 
 const WEB3_ENABLE_ORIGIN_NAME = 'momentum-world';
 const POLKADOT_CANCELED_ERROR = 'Eager: Polkadot auth canceled';
+const SESSION_CANCELED_ERROR = 'OIDC: Session auth canceled';
 const WEB3_ACTIVATE_ERROR = 'Eager: Activate state callback error';
 const WEB3_SIGN_ERROR = 'Eager: Error occurred while signing the message';
 
@@ -71,8 +72,15 @@ export const useEager = (
         });
 
         if (result?.signature) {
-          const loginAcceptResponse = await loginAccept(result?.signature, login_challenge, name);
-          window.location.href = loginAcceptResponse.redirect;
+          const acceptResult = await loginAccept(result?.signature, login_challenge, name);
+          if (!acceptResult?.redirect) {
+            console.error(SESSION_CANCELED_ERROR);
+            const exception: any = new SessionException();
+            setWalletConnectionState({connected: false, error: exception});
+            return;
+          }
+
+          window.location.href = acceptResult.redirect;
         }
       }
     }
@@ -125,7 +133,7 @@ export const useEager = (
     if (isWeb3Connector && active && library) {
       signMessage();
     }
-  }, [isWeb3Connector, active, account, library]);
+  }, [isWeb3Connector, active, library, signMessage]);
 
   useEffect(() => {
     if (!walletConnectionState.connected && active && !walletConnectionState.error) {

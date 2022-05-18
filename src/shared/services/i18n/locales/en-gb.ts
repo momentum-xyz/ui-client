@@ -113,6 +113,7 @@ export const enGb = {
       enableStaking: 'Login with a polkadot.js account to enable on chain activities'
     },
     errors: {
+      oidcSession: 'Something wrong with session',
       sessionExpired: 'The login session has expired. Please try again.',
       unknownError: 'Could not login please try again.',
       noAccounts:
