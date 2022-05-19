@@ -2,7 +2,11 @@ import {types} from 'mobx-state-tree';
 
 import {DialogModel, ResetModel} from 'core/models';
 
-export type HelpSectionType = 'Discord' | 'Controls';
+export enum HelpSectionType {
+  Discord = 'Discord',
+  Momentum = 'Momentum',
+  Controls = 'Controls'
+}
 
 const HelpStore = types
   .compose(
@@ -10,7 +14,8 @@ const HelpStore = types
     types.model('HelpStore', {
       helpDialog: types.optional(DialogModel, {}),
       showDiscordSection: false,
-      showControlsSection: false
+      showControlsSection: false,
+      showMomentumSection: false
     })
   )
   .actions((self) => ({
