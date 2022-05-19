@@ -20,4 +20,5 @@ export const DetailsColumn = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 7px;
+  cursor: pointer;
 `;

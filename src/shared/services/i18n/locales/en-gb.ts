@@ -32,6 +32,8 @@ export const enGb = {
           }
         }
       },
+      unbondingInfoAccounts:
+        'The stash and controller pair, here the controller will be used to send the transaction.',
       fee: 'fee',
       bond: 'bond()',
       nominateCall: 'nominate()',
@@ -50,6 +52,7 @@ export const enGb = {
         staked: 'Staked',
         unbonding: 'Unbonding'
       },
+      unbond: 'Unbond',
       stakingBlocks: '{{blocks}} blocks',
       erasRemaining: '{{eras}} eras remaining',
       noActiveStakes: "This Account Doesn't Have Any Active Stakes At The Moment",

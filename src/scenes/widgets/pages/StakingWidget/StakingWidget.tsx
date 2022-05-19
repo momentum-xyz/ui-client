@@ -78,7 +78,10 @@ const StakingWidget: FC = () => {
           ) : (
             <>
               {selectedTab?.id === '1' && (
-                <Nominator nextTab={() => setSelectedTab(tabBarTabs[1])} />
+                <Nominator
+                  validatorsTab={() => setSelectedTab(tabBarTabs[1])}
+                  authorizationTab={() => setSelectedTab(tabBarTabs[2])}
+                />
               )}
               {selectedTab?.id === '2' && (
                 <Validators
