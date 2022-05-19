@@ -5,16 +5,22 @@ export const Container = styled.div`
   display: flex;
   border: var(--white) 1.25px solid;
   border-radius: 10px;
-  width: 32px;
-  height: 20px;
   align-items: center;
   justify-content: center;
+
+  &.normal {
+    width: 32px;
+    height: 20px;
+  }
+
+  &.small {
+    width: 20px;
+    height: 12.5px;
+  }
 `;
 
 export const Background = styled.div`
   display: flex;
-  height: 12px;
-  width: 24px;
   background: var(--white-30);
   border-radius: 10px;
 
@@ -26,13 +32,31 @@ export const Background = styled.div`
   &.off {
     justify-content: start;
   }
+
+  &.normal {
+    height: 12px;
+    width: 24px;
+  }
+
+  &.small {
+    height: 7.5px;
+    width: 15px;
+  }
 `;
 
 export const Toggle = styled.div`
   border-radius: 100%;
-  height: 12px;
-  width: 12px;
   background: var(--white);
+
+  &.normal {
+    height: 12px;
+    width: 12px;
+  }
+
+  &.small {
+    height: 7.5px;
+    width: 7.5px;
+  }
 `;
 
 export const HiddenInput = styled.input`

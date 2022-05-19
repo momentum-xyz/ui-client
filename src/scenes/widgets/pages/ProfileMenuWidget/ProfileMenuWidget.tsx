@@ -1,9 +1,10 @@
-import React, {FC} from 'react';
-import {t} from 'i18next';
+import React, {FC, useEffect} from 'react';
 import {useAuth} from 'react-oidc-context';
+import {useTranslation} from 'react-i18next';
+import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
-import {Avatar, Dialog, IconSvg, Text} from 'ui-kit';
+import {Avatar, Dialog, IconSvg, Text, Toggle} from 'ui-kit';
 import {endpoints} from 'api/constants';
 
 import * as styled from './ProfileMenuWidget.styled';
@@ -17,6 +18,12 @@ const ProfileMenuWidget: FC = () => {
   const {profileMenuStore, settingsStore, tokenRulesStore} = widgetStore;
 
   const auth = useAuth();
+
+  const {t} = useTranslation();
+
+  useEffect(() => {
+    profileMenuStore.fetchStatus();
+  }, [profileMenuStore]);
 
   // @ts-ignore
   const signOutUser = (e) => {
@@ -37,6 +44,10 @@ const ProfileMenuWidget: FC = () => {
   const handleTokenRulesOpen = () => {
     tokenRulesStore.widgetDialog.open();
     profileMenuStore.profileMenuDialog.close();
+  };
+
+  const handleChangeStatus = (checked: boolean) => {
+    profileMenuStore.changeStatus(checked ? 'online' : 'dnd');
   };
 
   if (!profile?.profile) {
@@ -61,6 +72,14 @@ const ProfileMenuWidget: FC = () => {
             />
           </styled.IconContainer>
           <Text text={profile.name} size="xxs" />
+        </styled.Option>
+        <styled.Option onClick={() => handleChangeStatus(profileMenuStore.status !== 'online')}>
+          <Toggle
+            size="small"
+            checked={profileMenuStore.status === 'online'}
+            onChange={handleChangeStatus}
+          />
+          <Text text={t('labels.available')} size="xxs" />
         </styled.Option>
         {profile.isNodeAdmin && (
           <styled.Option onClick={handleTokenRulesOpen}>
@@ -87,4 +106,4 @@ const ProfileMenuWidget: FC = () => {
   );
 };
 
-export default ProfileMenuWidget;
+export default observer(ProfileMenuWidget);
