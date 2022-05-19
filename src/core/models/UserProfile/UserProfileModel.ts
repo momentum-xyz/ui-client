@@ -21,7 +21,7 @@ const UserProfileModel = types
     isNodeAdmin: types.optional(types.boolean, false),
     inviteRequest: types.optional(RequestModel, {}),
     invited: false,
-    status: types.maybe(types.frozen<UserStatusEnum>())
+    status: types.maybe(types.enumeration(Object.values(UserStatusEnum)))
   })
   .views((self) => ({
     get uuid(): string {

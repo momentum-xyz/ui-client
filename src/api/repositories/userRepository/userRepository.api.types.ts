@@ -30,6 +30,7 @@ export interface UserInterface {
   updatedAt: string | null;
   profile: UserProfileInterface;
   isNodeAdmin: boolean;
+  status: UserStatusEnum;
 }
 
 export interface OnlineUserInterface {

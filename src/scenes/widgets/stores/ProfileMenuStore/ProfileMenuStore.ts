@@ -1,6 +1,7 @@
 import {types} from 'mobx-state-tree';
 
 import {DialogModel, ResetModel} from 'core/models';
+
 const ProfileMenuStore = types.compose(
   ResetModel,
   types.model('ProfileMenuStore', {
