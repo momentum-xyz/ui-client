@@ -39,7 +39,7 @@ const SignUpCompletePage: FC = () => {
   );
 
   return (
-    <styled.Background style={{backgroundImage: `url(${background})`}}>
+    <styled.Background background={background}>
       <PanelLayout isBodyExtendingToEdges>
         <styled.Wrapper>
           <styled.Logo src={momentum} />

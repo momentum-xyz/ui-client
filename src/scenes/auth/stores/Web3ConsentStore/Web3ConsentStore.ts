@@ -32,6 +32,7 @@ const Web3ConsentStore = types
     web3consentAccept: flow(function* (consent_challenge: string) {
       const data: Web3ConsentAcceptRequest = {consent_challenge};
       const response = yield self.consentRequest.send(api.webRepository.consentAccept, data);
+
       if (response) {
         self.redirectUrl = response.redirect;
       }
@@ -39,6 +40,7 @@ const Web3ConsentStore = types
     guestConsentAccept: flow(function* (challenge: string) {
       const data: GuestConsentRequest = {challenge};
       const response = yield self.consentRequest.send(api.guestRepository.loginConsent, data);
+
       if (response) {
         self.redirectUrl = response.redirect;
       }
