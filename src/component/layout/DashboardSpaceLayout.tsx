@@ -42,8 +42,10 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
   const [showPeopleToInviteList, setShowPeopleToInviteList] = useState(false);
   const {togglePlayPause, playing} = useMusicPlayer();
 
-  const {stakingStore} = useStore().widgetStore;
+  const {widgetStore, sessionStore} = useStore();
+  const {stakingStore} = widgetStore;
   const {stakingDialog} = stakingStore;
+  const {isGuest} = sessionStore;
 
   const inviteRef = useRef<HTMLInputElement>(null);
 
@@ -126,7 +128,7 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
             </div>
           </Button>
         </div>
-        {isStakeShown && (
+        {!isGuest && isStakeShown && (
           <div>
             <Button
               type="ghost"
