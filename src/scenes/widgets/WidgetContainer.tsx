@@ -41,6 +41,7 @@ import {
   LaunchInitiativeWidget,
   SettingsWidget
 } from 'scenes/widgets/pages';
+import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './WidgetContainer.styled';
 
@@ -261,7 +262,7 @@ const WidgetContainer: FC = () => {
             {currentProfile?.profile && (
               <ToolbarIcon title="Profile" onClick={profileMenuDialog.open}>
                 <Avatar
-                  state="online"
+                  status={UserStatusEnum.ONLINE}
                   size="extra-small"
                   avatarSrc={
                     currentProfile.profile.avatarHash &&
