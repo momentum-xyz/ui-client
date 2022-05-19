@@ -1,6 +1,6 @@
-import {types, flow, cast} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
-import {OidcClientSettings} from 'oidc-client-ts';
+import {OidcClientSettings, SignoutRedirectArgs} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
 
 import {storage} from 'core/services';
@@ -8,8 +8,7 @@ import {api, FetchUserResponse} from 'api';
 import {RequestModel, UserProfileModel} from 'core/models';
 import {bytesToUuid, deleteCookieByName} from 'core/utils';
 import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
-import {web3ProviderConfig} from 'shared/services/web3';
-import {keycloakProviderConfig} from 'shared/services/keycloak';
+import {keycloakProviderConfig, web3ProviderConfig, guestProviderConfig} from 'shared/auth';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -51,9 +50,7 @@ const SessionStore = types
       const id_token_hint = auth.user?.id_token;
       yield auth.revokeTokens();
       yield auth.removeUser();
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      yield auth.signoutRedirect({id_token_hint: id_token_hint} as any); // BUG in typedefs oidc-client-ts
+      yield auth.signoutRedirect({id_token_hint: id_token_hint} as SignoutRedirectArgs);
       deleteCookieByName('CREATE_INITIATIVE_SHOWN');
     })
   }))
@@ -62,11 +59,25 @@ const SessionStore = types
       return !self.request.isPending && !self.profileRequest.isPending && !!self.profile;
     },
     get loginType(): LoginTypeEnum | null {
-      const type = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);
-      return type ? (type as LoginTypeEnum) : null;
+      const loginType = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);
+      return loginType ? (loginType as LoginTypeEnum) : null;
     },
-    get oidcConfig(): OidcClientSettings {
-      return this.loginType === LoginTypeEnum.Web3 ? web3ProviderConfig : keycloakProviderConfig;
+    get isGuest(): boolean {
+      return this.loginType === LoginTypeEnum.Guest;
+    },
+    get oidcConfig(): OidcClientSettings | null {
+      switch (this.loginType) {
+        case LoginTypeEnum.Keycloak:
+          return keycloakProviderConfig;
+        case LoginTypeEnum.Guest:
+          return guestProviderConfig;
+        case LoginTypeEnum.Polkadot:
+        case LoginTypeEnum.Metamask:
+        case LoginTypeEnum.WalletConnect:
+          return web3ProviderConfig;
+        default:
+          return null;
+      }
     }
   }));
 

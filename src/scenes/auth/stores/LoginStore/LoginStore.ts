@@ -6,16 +6,15 @@ import {storage} from 'core/services';
 import {ResetModel} from 'core/models';
 import {ROUTES} from 'core/constants';
 import {Web3ConnectorInterface} from 'core/interfaces';
-import {LoginTypeEnum, StorageKeyEnum, Web3ConnectorEnum, Web3ConnectorEnumList} from 'core/enums';
+import {LoginTypeEnum, StorageKeyEnum, LoginTypeEnumList} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {keycloakOidcConfig} from 'shared/services/keycloak';
-import {web3OidcConfig} from 'shared/services/web3';
+import {keycloakOidcConfig, web3OidcConfig, guestOidcConfig} from 'shared/auth';
 
 const LoginStore = types.compose(
   ResetModel,
   types
     .model('LoginStore', {
-      loginType: types.maybeNull(types.enumeration(Web3ConnectorEnumList)),
+      loginType: types.maybeNull(types.enumeration(LoginTypeEnumList)),
       errorMessage: types.maybeNull(types.string),
       isSessionExpired: false,
       isWeb3LoginStarted: false,
@@ -27,15 +26,14 @@ const LoginStore = types.compose(
         self.isSessionExpired = isSessionExpired;
       },
       chooseNetwork: flow(function* (connector: Web3ConnectorInterface) {
-        storage.setString(StorageKeyEnum.Web3Connector, connector.name);
         self.loginType = connector.name;
 
-        if (connector.name === Web3ConnectorEnum.Guest) {
+        if (connector.name === LoginTypeEnum.Guest) {
           self.isGuestLoginStarted = true;
           return;
         }
 
-        if (connector.name === Web3ConnectorEnum.Polkadot) {
+        if (connector.name === LoginTypeEnum.Polkadot) {
           if (!(yield SubstrateProvider.isExtensionEnabled())) {
             const name = t(`networks.${connector.name}`);
             self.errorMessage = t('errors.ethereumExtension', {name});
@@ -44,7 +42,7 @@ const LoginStore = types.compose(
           }
 
           /* User doesn't have any accounts */
-          const accountList = yield SubstrateProvider.getAddresses();
+          const accountList = yield SubstrateProvider.getAllAddresses();
           if (accountList.length === 0) {
             self.errorMessage = t('errors.noAccounts');
             self.isRefreshButtonShown = true;
@@ -54,19 +52,32 @@ const LoginStore = types.compose(
           self.isWeb3LoginStarted = true;
         }
       }),
-      async keycloakSignIn(): Promise<void> {
+      keycloakSignIn: flow(function* () {
         storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Keycloak);
         const origin = window.history.state?.origin || ROUTES.base;
         const userManager = new UserManager(keycloakOidcConfig);
-        await userManager.signinRedirect({state: {origin: origin}});
-      },
-      async web3SignIn(): Promise<void> {
-        storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Web3);
+        yield userManager.signinRedirect({state: {origin: origin}});
+      }),
+      web3SignIn: flow(function* () {
+        if (!self.loginType) {
+          return;
+        }
+        storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
+        const args = {state: {origin: origin}, login_hint: self.loginType};
         const userManager = new UserManager(web3OidcConfig);
-        // @ts-ignore
-        await userManager.signinRedirect({state: {origin: origin}, login_hint: self.loginType});
-      }
+        yield userManager.signinRedirect(args);
+      }),
+      guestSignIn: flow(function* () {
+        if (!self.loginType) {
+          return;
+        }
+        storage.setString(StorageKeyEnum.LoginType, self.loginType);
+        const origin = window.history.state?.origin || ROUTES.base;
+        const args = {state: {origin: origin}, login_hint: self.loginType};
+        const userManager = new UserManager(guestOidcConfig);
+        yield userManager.signinRedirect(args);
+      })
     }))
 );
 
