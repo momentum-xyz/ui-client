@@ -1,5 +1,7 @@
+import {UserStatusEnum} from 'core/enums';
+
 export interface StatusRequestInterface {
-  status: 'online' | 'dnd';
+  status: UserStatusEnum;
 }
 
 export interface StatusResponseInterface {}

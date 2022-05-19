@@ -70,10 +70,10 @@ const ProfileMenuWidget: FC = () => {
           </styled.IconContainer>
           <Text text={profile.name} size="xxs" />
         </styled.Option>
-        <styled.Option onClick={() => handleChangeStatus(profile.status !== 'online')}>
+        <styled.Option onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}>
           <Toggle
             size="small"
-            checked={profile.status === 'online'}
+            checked={profile.status === UserStatusEnum.ONLINE}
             onChange={handleChangeStatus}
           />
           <Text text={t('labels.available')} size="xxs" />
