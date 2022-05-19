@@ -42,7 +42,7 @@ const LoginStore = types.compose(
           }
 
           /* User doesn't have any accounts */
-          const accountList = yield SubstrateProvider.getAddresses();
+          const accountList = yield SubstrateProvider.getAllAddresses();
           if (accountList.length === 0) {
             self.errorMessage = t('errors.noAccounts');
             self.isRefreshButtonShown = true;

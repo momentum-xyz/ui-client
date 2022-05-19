@@ -36,7 +36,7 @@ const Web3ChoiceStore = types.compose(
       }),
       fetchAccountList: flow(function* () {
         if (yield SubstrateProvider.isExtensionEnabled()) {
-          const addressesList = yield SubstrateProvider.getAddresses();
+          const addressesList = yield SubstrateProvider.getAllAddresses();
           self.accounts = cast(addressesList);
         }
       }),

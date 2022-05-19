@@ -26,6 +26,10 @@ export default class SubstrateProvider {
     return connection.length !== 0 || isWeb3Injected;
   }
 
+  static async getAllAddresses() {
+    return web3Accounts().then((accounts) => accounts);
+  }
+
   static async getAddresses(ss58Format = 42) {
     return web3Accounts({ss58Format}).then((accounts) => accounts);
   }
