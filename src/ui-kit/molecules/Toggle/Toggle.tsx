@@ -5,8 +5,7 @@ import {SizeType} from 'ui-kit/types';
 
 import * as styled from './Toggle.styled';
 
-interface PropsInterface
-  extends Omit<Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>, 'size'> {
+interface PropsInterface extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
   checked: boolean;
   size?: SizeType;
   onChange: (checked: boolean) => void;
