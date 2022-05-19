@@ -98,6 +98,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
               `${endpoints.renderService}/get/${userProfile.profile.avatarHash}`
             }
             size="large"
+            status={isItMe() ? currentUser?.status : userProfile?.status}
           />
           {!isItMe() ? (
             <>
