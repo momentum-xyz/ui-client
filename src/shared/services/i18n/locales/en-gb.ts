@@ -32,8 +32,11 @@ export const enGb = {
           }
         }
       },
+      accountPair: 'Stash & Controller Pair',
       unbondingInfoAccounts:
         'The stash and controller pair, here the controller will be used to send the transaction.',
+      unbondingPeriod:
+        'The funds will only be available for withdrawal after the unbonding period, however will not be part of the staked amount after the next validator election. You can follow the unlock countdown in the UI.',
       fee: 'fee',
       bond: 'bond()',
       nominateCall: 'nominate()',
@@ -62,6 +65,7 @@ export const enGb = {
       pickDestination: 'Pick a reward destination',
       stashLabel: 'stash',
       rewardDestination: 'reward destination',
+      unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       nominateAndBond: 'Nominate & Bond',
       signAndSubmit: 'Sign & Submit',
