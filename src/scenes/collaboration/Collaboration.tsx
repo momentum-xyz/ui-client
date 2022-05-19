@@ -28,7 +28,6 @@ const Collaboration: React.FC<Props> = () => {
   const {path} = useRouteMatch();
   const history = useHistory();
   const {collaborationState, collaborationDispatch} = useCollaboration();
-  // const {collaborationState, collaborationDispatch, currentUserId} = useCollaboration();
   const stageModeState = useStageModeStatusInfo(collaborationState.collaborationSpace?.id);
   const switchDeviceModal = useRef<ModalRef>(null);
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
@@ -77,8 +76,6 @@ const Collaboration: React.FC<Props> = () => {
               .filter(
                 (integrationUser) =>
                   integrationUser.flag !== ParticipantStatus.STATUS_LEFT && integrationUser.userId
-                // I believe the check below is not nessecary since we want the loggedin user to be a member of the audience as well and in case if he had a different role at one point, we want to reset that to an audience member
-                // bytesToUuid(integrationUser.userId.data) !== currentUserId
               )
               .map((integrationUser) => ({
                 uid: bytesToUuid(integrationUser.userId.data),

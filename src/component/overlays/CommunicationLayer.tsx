@@ -143,7 +143,6 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           <div
             className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
-              // if (collaborationState.collaborationSpace || collaborationState.collaborationTable) {
               leaveCollaborationSpaceCall(false).then();
               if (collaborationState.stageMode) {
                 collaborationDispatch({
@@ -156,7 +155,6 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
             <CloseIcon className="w-1/4" />
           </div>
         </Transition>
-        {/*{localUser.uid && cameraConsent && <LocalParticipantView localUser={localUser} />}*/}
 
         <li className="overflow-y-scroll h-full pr-.1">
           <ul>
