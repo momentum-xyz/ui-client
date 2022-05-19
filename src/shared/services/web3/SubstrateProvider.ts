@@ -27,7 +27,7 @@ export default class SubstrateProvider {
   }
 
   static async getAllAddresses() {
-    return web3Accounts().then((accounts) => accounts);
+    return await web3Accounts();
   }
 
   static async getAddresses(ss58Format = 42) {

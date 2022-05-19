@@ -52,34 +52,32 @@ const LoginStore = types.compose(
           self.isWeb3LoginStarted = true;
         }
       }),
-      async keycloakSignIn(): Promise<void> {
+      keycloakSignIn: flow(function* () {
         storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Keycloak);
         const origin = window.history.state?.origin || ROUTES.base;
         const userManager = new UserManager(keycloakOidcConfig);
-        await userManager.signinRedirect({state: {origin: origin}});
-      },
-      async web3SignIn(): Promise<void> {
+        yield userManager.signinRedirect({state: {origin: origin}});
+      }),
+      web3SignIn: flow(function* () {
         if (!self.loginType) {
           return;
         }
-
         storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
         const args = {state: {origin: origin}, login_hint: self.loginType};
         const userManager = new UserManager(web3OidcConfig);
-        await userManager.signinRedirect(args);
-      },
-      async guestSignIn(): Promise<void> {
+        yield userManager.signinRedirect(args);
+      }),
+      guestSignIn: flow(function* () {
         if (!self.loginType) {
           return;
         }
-
         storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
         const args = {state: {origin: origin}, login_hint: self.loginType};
         const userManager = new UserManager(guestOidcConfig);
-        await userManager.signinRedirect(args);
-      }
+        yield userManager.signinRedirect(args);
+      })
     }))
 );
 
