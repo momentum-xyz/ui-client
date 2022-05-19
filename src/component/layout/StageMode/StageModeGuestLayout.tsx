@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
@@ -6,20 +6,25 @@ import {ToastContent} from 'ui-kit';
 
 import Page from '../../molucules/Page';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import StageModeButton from '../../atoms/StageMode/StageModeButton';
 import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
 import {useJoinRequest} from '../../../hooks/api/useStageModeService';
 import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
-import StageModeLabel from '../../atoms/StageMode/StageModeLabel';
 import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
+import Button from '../../atoms/Button';
+import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
+import CONFIG from '../../../config/config';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';
 
 const StageModeGuestLayout: React.FC = () => {
+  const [stageStats, setStageStats] = useState<{speakers: number; audience: number}>({
+    speakers: 0,
+    audience: 0
+  });
   const {collaborationState, currentUserId} = useCollaboration();
   // const [currentSpace, , ,] = useOnlineUserSpaceCheck(currentUserId);
-  const {canEnterStage, joinedStage, leaveStage, isOnStage} = useAgoraStageMode();
+  const {canEnterStage, joinedStage, leaveStage, isOnStage, stageModeUsers} = useAgoraStageMode();
   const joinRequest = useJoinRequest(collaborationState.collaborationSpace?.id);
   const [requestMade, setRequestMade] = useState<boolean>();
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
@@ -29,22 +34,12 @@ const StageModeGuestLayout: React.FC = () => {
     console.info('[STAGEMODE] HAS JOINED STATE CHANGED');
   }, [joinedStage]);
 
-  // useEffect(() => {
-  //   createLocalTracks().then();
-  //
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isOnStage]);
-
   useWebsocketEvent('stage-mode-accepted', () => {
-    //if (userId !== currentUserId) return;
-
     removeAwaitingPermissionPopup();
     setRequestMade(false);
   });
 
   useWebsocketEvent('stage-mode-declined', () => {
-    //if (userId !== currentUserId) return;
-
     removeAwaitingPermissionPopup();
     setRequestMade(false);
   });
@@ -98,27 +93,64 @@ const StageModeGuestLayout: React.FC = () => {
       });
   };
 
+  useEffect(() => {
+    const audience = stageModeUsers.filter((user) => {
+      return user.role === ParticipantRole.AUDIENCE_MEMBER;
+    });
+
+    const speakers = stageModeUsers.filter((user) => {
+      return user.role === ParticipantRole.SPEAKER;
+    });
+
+    setStageStats({
+      speakers: isOnStage ? speakers.length + 1 : speakers.length,
+      audience: isOnStage ? audience.length - 1 : audience.length
+    });
+  }, [stageModeUsers, isOnStage]);
+
+  const actions = useMemo(() => {
+    return (
+      <div className="flex items-center justify-between mx-4 gap-2 flex-grow">
+        {collaborationState.stageMode && (
+          <div className="flex items-center gap-1">
+            <span>
+              Speakers: {stageStats.speakers}/{CONFIG.video.MAX_STAGE_USERS}
+            </span>
+            <span>Audience: {stageStats.audience}</span>
+          </div>
+        )}
+
+        {collaborationState.stageMode && !requestMade && (
+          <Button
+            type={isOnStage ? 'ghost-red' : 'ghost'}
+            onClick={isOnStage ? leaveStage : handleUserRequest}
+          >
+            {isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+          </Button>
+        )}
+        {collaborationState.stageMode && requestMade && <span>Request to go on stage pending</span>}
+        {collaborationState.stageMode && !canEnterStage() && <span>Stage is full</span>}
+      </div>
+    );
+  }, [
+    collaborationState,
+    canEnterStage,
+    isOnStage,
+    leaveStage,
+    requestMade,
+    stageStats,
+    handleUserRequest
+  ]);
+
   return (
     <Page
       title={collaborationState.collaborationSpace?.name || ''}
       subtitle="Stage Mode"
       collaboration
+      actions={actions}
     >
       <div className="flex w-full">
         <div className="flex flex-col space-y-1">
-          {collaborationState.stageMode && !requestMade && (
-            <StageModeButton
-              type={isOnStage ? 'ghost-red' : 'ghost-green'}
-              text={isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
-              onClick={isOnStage ? leaveStage : handleUserRequest}
-            />
-          )}
-          {collaborationState.stageMode && requestMade && (
-            <StageModeButton type="ghost-white" text="Pending request" />
-          )}
-          {collaborationState.stageMode && !canEnterStage() && (
-            <StageModeLabel type="ghost-red" text="Stage is full" />
-          )}
           <StageModePopupQueueComponent />
         </div>
         {collaborationState.stageMode ? usersOnStage() : stageModeOffMessage()}

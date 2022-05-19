@@ -67,9 +67,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         />,
         TOAST_GROUND_OPTIONS
       );
-    }
-
-    if (!shouldActivateStageMode && collaborationState.stageMode) {
+    } else if (!shouldActivateStageMode && collaborationState.stageMode) {
       collaborationDispatch({
         type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
         stageMode: false
@@ -114,40 +112,39 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const noVideo = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   const stageModeAudience = stageModeUsers.filter((user) => {
-    return user.role === ParticipantRole.AUDIENCE_MEMBER;
+    return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== currentUserId;
   });
 
   return (
     <Transition
       show={collaborationState.enabled || collaborationState.stageMode}
       unmount={false}
-      className="z-main-u ml-auto pt-1 mr-1"
-      enter="transition-width ease-out duration-300"
-      enterFrom="w-0 "
-      enterTo="w-8 "
-      leave="transition-all ease-in duration-300"
-      leaveFrom="w-8 "
-      leaveTo="w-0 "
+      className="z-main-u ml-auto mr-1 "
+      enter="transform transition-transform ease-out duration-300"
+      enterFrom="translate-x-5 "
+      enterTo="translate-x-0 "
+      leave="transform transition-transform ease-in duration-300"
+      leaveFrom="translate-x-0 "
+      leaveTo="translate-x-5 "
     >
       <ul className="h-full" style={{paddingBottom: '100px'}}>
         <Transition
           show={!unityStore.isPaused}
           unmount={false}
           enter="transition-all transform ease-out duration-300"
-          enterFrom="-translate-y-6 h-0"
-          enterTo="translate-y-0 h-8"
-          leave="transition-all transform  ease-in duration-300"
-          leaveFrom="translate-y-0 h-8"
-          leaveTo="-translate-y-6 h-0"
-          className="pb-.5"
+          enterFrom="-translate-y-8 h-0 mt-0"
+          enterTo="translate-y-0 h-8 mt-1"
+          leave="transition-all transform ease-in duration-300"
+          leaveFrom="translate-y-0 h-8 mt-1"
+          leaveTo="-translate-y-8 h-0 mt-0"
+          className="mb-1 overflow-hidden pr-.1"
           as="li"
         >
           <div
-            className="relative rounded-full h-8 w-8 m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
+            className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
-              if (collaborationState.collaborationSpace || collaborationState.collaborationTable) {
-                leaveCollaborationSpaceCall(false);
-              } else if (collaborationState.stageMode) {
+              leaveCollaborationSpaceCall(false).then();
+              if (collaborationState.stageMode) {
                 collaborationDispatch({
                   type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
                   stageMode: false
@@ -158,9 +155,8 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
             <CloseIcon className="w-1/4" />
           </div>
         </Transition>
-        {/*{localUser.uid && cameraConsent && <LocalParticipantView localUser={localUser} />}*/}
 
-        <li className="overflow-y-scroll h-full">
+        <li className="overflow-y-scroll h-full pr-.1">
           <ul>
             {collaborationState.stageMode
               ? !isOnStage && <LocalParticipantView stageLocalUserId={currentUserId} />
@@ -195,11 +191,11 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                 key={`participant-${participant.uid as string}`}
                 appear={true}
                 enter="transition-all transform ease-out duration-300"
-                enterFrom="translate-x-6 w-0"
-                enterTo="translate-x-0 w-6"
+                enterFrom="translate-x-8"
+                enterTo="translate-x-0 "
                 leave="transition-all transform  ease-in duration-300"
-                leaveFrom="translate-x-0 w-6"
-                leaveTo="translate-x-6 w-0"
+                leaveFrom="translate-x-0 "
+                leaveTo="translate-x-8"
               >
                 <RemoteParticipantView
                   key={`participant-${participant.uid as string}`}

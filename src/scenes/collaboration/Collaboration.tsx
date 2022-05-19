@@ -27,7 +27,7 @@ interface Props {}
 const Collaboration: React.FC<Props> = () => {
   const {path} = useRouteMatch();
   const history = useHistory();
-  const {collaborationState, collaborationDispatch, currentUserId} = useCollaboration();
+  const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeState = useStageModeStatusInfo(collaborationState.collaborationSpace?.id);
   const switchDeviceModal = useRef<ModalRef>(null);
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
@@ -75,9 +75,7 @@ const Collaboration: React.FC<Props> = () => {
             const retrievedIntegrationUsers = spaceIntegrationUsers
               .filter(
                 (integrationUser) =>
-                  integrationUser.flag !== ParticipantStatus.STATUS_LEFT &&
-                  integrationUser.userId &&
-                  bytesToUuid(integrationUser.userId.data) !== currentUserId
+                  integrationUser.flag !== ParticipantStatus.STATUS_LEFT && integrationUser.userId
               )
               .map((integrationUser) => ({
                 uid: bytesToUuid(integrationUser.userId.data),
