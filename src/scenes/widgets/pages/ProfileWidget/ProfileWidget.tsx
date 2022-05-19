@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useHistory} from 'react-router';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
@@ -70,23 +70,23 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
     return monthAndYearString(date);
   };
 
-  const isItMe = () => {
+  const isItMe = useMemo(() => {
     if (!currentUser || !userProfile) {
       return false;
     }
     return currentUser.uuid === userProfile.uuid;
-  };
+  }, [currentUser, userProfile]);
 
   return (
     <PanelLayout
       title={
-        isItMe()
+        isItMe
           ? t('labels.myBio')
           : userProfile && t('labels.someonesBio', {name: userProfile.name})
       }
       captureAllPointerEvents
       headerActions={
-        isItMe() && <SvgButton iconName="edit" size="normal" onClick={() => onEditUser(userId)} />
+        isItMe && <SvgButton iconName="edit" size="normal" onClick={() => onEditUser(userId)} />
       }
       onClose={onClose}
     >
@@ -98,9 +98,9 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
               `${endpoints.renderService}/get/${userProfile.profile.avatarHash}`
             }
             size="large"
-            status={isItMe() ? currentUser?.status : userProfile?.status}
+            status={isItMe ? currentUser?.status : userProfile?.status}
           />
-          {!isItMe() ? (
+          {!isItMe ? (
             <>
               <Button label={t('actions.flyTo')} onClick={handleFlyToUser} size="small" />
               {userProfile?.status !== UserStatusEnum.DO_NOT_DISTURB && (
