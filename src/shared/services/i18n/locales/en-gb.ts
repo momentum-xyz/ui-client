@@ -483,12 +483,8 @@ export const enGb = {
     },
     helpSection: {
       title: 'help',
-      formTitle: 'Well hello weary traveler.',
       helpNote:
-        'Your first virtual flight in the Momentiverse can be quite challenging. I am here to\n' +
-        '                help you out as your metaphysical, fully knighted neon flamingo. Your personal\n' +
-        '                animal spirit guide. Everyone can learn how to fly and navigate Odyssey Momentum\n' +
-        '                (even flamingo’s).',
+        'You are about to embark on your flight in Momentum.\n\n Below we have a good dose of the essentials for you to get started.\n\n We have long term plans with Momentum, yet we are at humble beginnings with the release of this first milestone. We are so delighted you are flying with us!\n\n We invite you to help us improve Momentum, as we are at humble beginnings with the release of this first milestone. So...\n\n Something doesn’t work for you? Let us know!\n Something you are missing? Let us know!\n Something you feel should be different? Let us know!\n\nWant to help building Momentum? Let us know ;)',
       discord: {
         iconLabel: 'discord',
         dropDownLabel: 'Join discord',
