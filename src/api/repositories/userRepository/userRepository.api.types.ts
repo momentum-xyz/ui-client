@@ -1,5 +1,7 @@
 /** COMMON **/
 
+import {UserStatusEnum} from 'core/enums';
+
 export interface UserProfileInterface {
   bio?: string;
   location?: string;
@@ -38,7 +40,7 @@ export interface OnlineUserInterface {
   };
   name: string;
   profile: UserProfileInterface;
-  status: string;
+  status: UserStatusEnum;
 }
 
 /** CHECK USER **/

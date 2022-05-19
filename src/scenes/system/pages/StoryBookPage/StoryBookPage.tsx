@@ -37,6 +37,7 @@ import {useStore} from 'shared/hooks';
 import {endpoints} from 'api/constants';
 import {StakingWidget} from 'scenes/widgets/pages';
 import {ValidatorList} from 'scenes/widgets/pages/StakingWidget/components/templates/Validators/components/ValidatorList';
+import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './StoryBookPage.styled';
 
@@ -429,19 +430,23 @@ const StoryBookPage: FC = () => {
             <Avatar size="small" avatarSrc={avatarExampleSrc} />
           </styled.Item>
           <styled.Item>
-            <Avatar size="small" state="online" avatarSrc={avatarExampleSrc} />
+            <Avatar size="small" status={UserStatusEnum.ONLINE} avatarSrc={avatarExampleSrc} />
           </styled.Item>
           <styled.Item>
-            <Avatar size="normal" state="online" avatarSrc={avatarExampleSrc} />
+            <Avatar size="normal" status={UserStatusEnum.ONLINE} avatarSrc={avatarExampleSrc} />
           </styled.Item>
           <styled.Item>
-            <Avatar size="normal" state="offline" avatarSrc={avatarExampleSrc} />
+            <Avatar
+              size="normal"
+              status={UserStatusEnum.DO_NOT_DISTURB}
+              avatarSrc={avatarExampleSrc}
+            />
           </styled.Item>
           <styled.Item>
             <Avatar size="large" avatarSrc={avatarExampleSrc} />
           </styled.Item>
           <styled.Item>
-            <Avatar size="large" state="offline" avatarSrc={avatarExampleSrc} />
+            <Avatar size="large" status={UserStatusEnum.ONLINE} avatarSrc={avatarExampleSrc} />
           </styled.Item>
           <styled.Item>
             <Avatar size="large" />
