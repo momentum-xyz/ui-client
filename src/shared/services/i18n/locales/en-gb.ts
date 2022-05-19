@@ -141,7 +141,8 @@ export const enGb = {
       tokenRules: 'Token Rules',
       nameOfInitiative: 'Name of Initiative',
       description: 'Description',
-      people: 'People'
+      people: 'People',
+      available: 'Available'
     },
     messages: {
       signIn: 'Sign In Or Create An Account',
