@@ -26,14 +26,18 @@ const Web3ChoicePage: FC = () => {
   const urlParams = new URLSearchParams(search as string);
   const challenge = urlParams.get('login_challenge') || '';
 
-  const openChallengePage = useCallback(() => {
-    const params = new URLSearchParams();
-    params.append('login_challenge', challenge);
-    params.append('login_type', loginType || '');
-    params.append('login_account', selectedAccount || '');
+  const openChallengePage = useCallback(
+    (skipChoiceRedirect: boolean) => {
+      const params = new URLSearchParams();
+      params.append('login_challenge', challenge);
+      params.append('login_type', loginType || '');
+      params.append('login_account', selectedAccount || '');
+      params.append('skip_choice_redirect', skipChoiceRedirect ? '1' : '');
 
-    history.push({pathname: ROUTES.loginWeb3, search: params.toString()});
-  }, [challenge, history, loginType, selectedAccount]);
+      history.push({pathname: ROUTES.loginWeb3, search: params.toString()});
+    },
+    [challenge, history, loginType, selectedAccount]
+  );
 
   useEffect(() => {
     web3ChoiceStore.fetchLoginType(challenge);
@@ -56,13 +60,13 @@ const Web3ChoicePage: FC = () => {
 
   useEffect(() => {
     if (loginType && loginType !== LoginTypeEnum.Polkadot && loginType !== LoginTypeEnum.Guest) {
-      openChallengePage();
+      openChallengePage(true);
     }
   }, [loginType, openChallengePage, web3ChoiceStore]);
 
   useEffect(() => {
     if (loginType === LoginTypeEnum.Polkadot && accountList.length === 1) {
-      openChallengePage();
+      openChallengePage(true);
     }
   }, [loginType, accountList, selectAccount, openChallengePage]);
 
@@ -84,7 +88,7 @@ const Web3ChoicePage: FC = () => {
               title: t('actions.ok'),
               disabled: !selectedAccount,
               onClick: () => {
-                openChallengePage();
+                openChallengePage(false);
               }
             }}
             backBtn={{

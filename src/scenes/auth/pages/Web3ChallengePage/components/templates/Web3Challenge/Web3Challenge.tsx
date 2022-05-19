@@ -17,10 +17,11 @@ interface PropsInterface {
   web3Connector: Web3ConnectorInterface;
   challenge: string;
   loginAccount: string;
+  skipChoiceRedirect: boolean;
 }
 
 const Web3Challenge: FC<PropsInterface> = (props) => {
-  const {web3Connector, challenge, loginAccount} = props;
+  const {web3Connector, challenge, loginAccount, skipChoiceRedirect} = props;
 
   const {web3ChallengeStore} = useStore().authStore;
   const {getChallengeForSign, loginAccept, getErrorMessage} = web3ChallengeStore;
@@ -37,6 +38,17 @@ const Web3Challenge: FC<PropsInterface> = (props) => {
       web3Connector.connector = null;
     }
   }, [web3Connector]);
+
+  // Prevent cycle redirects
+  const goBack = useCallback(() => {
+    if (skipChoiceRedirect) {
+      // User didn't choose account. System must redirect to main login page
+      window.history.go(-2);
+    } else {
+      // User chose account. System must redirect to main account list page
+      window.history.go(-1);
+    }
+  }, [skipChoiceRedirect]);
 
   const {error} = useEager(
     challenge,
@@ -57,7 +69,7 @@ const Web3Challenge: FC<PropsInterface> = (props) => {
           backBtn={{
             variant: 'primary',
             title: t('actions.back'),
-            onClick: () => window.history.back()
+            onClick: goBack
           }}
         >
           <styled.Container>
