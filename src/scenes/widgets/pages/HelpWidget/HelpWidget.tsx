@@ -54,10 +54,10 @@ const HelpWidget: React.FC = () => {
             <Controls />
           </styled.Item>
           <styled.Item>
-            <Discord />
+            <Wiki />
           </styled.Item>
           <styled.Item>
-            <Wiki />
+            <Discord />
           </styled.Item>
         </styled.BottomContainer>
       </styled.Container>
