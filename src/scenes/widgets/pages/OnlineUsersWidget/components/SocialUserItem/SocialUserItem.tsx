@@ -69,6 +69,7 @@ const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
             user.profile?.avatarHash && `${endpoints.renderService}/get/${user.profile.avatarHash}`
           }
           size="small"
+          status={user.status}
         />
         <styled.StyledText text={user.name.trim()} size="s" align="left" isMultiline={false} />
       </styled.InfoContainer>
