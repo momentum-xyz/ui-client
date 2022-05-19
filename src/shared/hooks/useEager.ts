@@ -6,18 +6,19 @@ import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {isWeb3Injected, web3Accounts, web3Enable, web3FromSource} from '@polkadot/extension-dapp';
 
-import {Web3ConnectorEnum} from 'core/enums';
+import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
-import {PolkadotExtensionException} from 'core/exceptions';
+import {PolkadotExtensionException, SessionException} from 'core/exceptions';
 
 const WEB3_ENABLE_ORIGIN_NAME = 'momentum-world';
 const POLKADOT_CANCELED_ERROR = 'Eager: Polkadot auth canceled';
+const SESSION_CANCELED_ERROR = 'OIDC: Session auth canceled';
 const WEB3_ACTIVATE_ERROR = 'Eager: Activate state callback error';
 const WEB3_SIGN_ERROR = 'Eager: Error occurred while signing the message';
 
-// @ts-ignore. Fix internal error of wallet connect
+// @ts-ignore: Fix internal error of wallet connect
 (window as any).global = window;
-// @ts-ignore
+// @ts-ignore: Fix internal error of wallet connect
 window.Buffer = window.Buffer || Buffer;
 
 export const useEager = (
@@ -37,13 +38,9 @@ export const useEager = (
 
   const {name, connector} = web3Connector;
   const isWeb3Connector = connector instanceof AbstractConnector;
-  const isPolkadotConnector = name === Web3ConnectorEnum.Polkadot;
-
-  const wait = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
+  const isPolkadotConnector = name === LoginTypeEnum.Polkadot;
 
   const activePolkadotExtension = async () => {
-    await wait(100);
-
     const extensions = await web3Enable(WEB3_ENABLE_ORIGIN_NAME);
     if (!isWeb3Injected || extensions.length === 0) {
       const err: any = new PolkadotExtensionException();
@@ -71,8 +68,15 @@ export const useEager = (
         });
 
         if (result?.signature) {
-          const loginAcceptResponse = await loginAccept(result?.signature, login_challenge, name);
-          window.location.href = loginAcceptResponse.redirect;
+          const acceptResult = await loginAccept(result?.signature, login_challenge, name);
+          if (!acceptResult?.redirect) {
+            console.error(SESSION_CANCELED_ERROR);
+            const exception: any = new SessionException();
+            setWalletConnectionState({connected: false, error: exception});
+            return;
+          }
+
+          window.location.href = acceptResult.redirect;
         }
       }
     }
@@ -114,10 +118,12 @@ export const useEager = (
   };
 
   useEffect(() => {
-    if (isWeb3Connector) {
-      activateWeb3Extension();
-    } else if (isPolkadotConnector) {
-      activePolkadotExtension();
+    if (!walletConnectionState.error) {
+      if (isWeb3Connector) {
+        activateWeb3Extension();
+      } else if (isPolkadotConnector) {
+        activePolkadotExtension();
+      }
     }
   }, [isWeb3Connector, isPolkadotConnector]);
 
@@ -125,7 +131,7 @@ export const useEager = (
     if (isWeb3Connector && active && library) {
       signMessage();
     }
-  }, [isWeb3Connector, active, account, library]);
+  }, [isWeb3Connector, active, library, signMessage]);
 
   useEffect(() => {
     if (!walletConnectionState.connected && active && !walletConnectionState.error) {

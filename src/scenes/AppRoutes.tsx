@@ -79,6 +79,12 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     exact: true,
     sidebar: () => null,
     main: () => <LoginCallback />
+  },
+  {
+    path: ROUTES.guestCallBack,
+    exact: true,
+    sidebar: () => null,
+    main: () => <LoginCallback />
   }
 ];
 

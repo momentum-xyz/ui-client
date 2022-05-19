@@ -9,6 +9,7 @@ import {Redirect, Switch, useLocation} from 'react-router-dom';
 import {AuthProvider} from 'react-oidc-context';
 
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {WrongBrowser} from 'ui-kit';
 
@@ -70,49 +71,68 @@ const App: FC = () => {
     );
   }
 
-  return (
-    <ThemeProvider theme={themeStore.theme}>
-      <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-        {/* public routes */}
-        {isTargetRoute(pathname as string, PUBLIC_ROUTES) && (
+  // PUBLIC ROUTES
+  if (isTargetRoute(pathname as string, PUBLIC_ROUTES)) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <Switch>{createRoutesByConfig(PUBLIC_ROUTES)}</Switch>
-        )}
+        </Web3ReactProvider>
+      </ThemeProvider>
+    );
+  }
 
-        {/* core routes */}
-        {isTargetRoute(pathname as string, CORE_ROUTES) && (
+  // NO OIDC CONFIG
+  if (!sessionStore.oidcConfig) {
+    return (
+      <Switch>
+        <Redirect to={ROUTES.login} />
+      </Switch>
+    );
+  }
+
+  // CORE ROUTES
+  if (isTargetRoute(pathname as string, CORE_ROUTES)) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
             <Switch>{createRoutesByConfig(CORE_ROUTES)}</Switch>
           </AuthProvider>
-        )}
+        </Web3ReactProvider>
+      </ThemeProvider>
+    );
+  }
 
-        {/* private routes */}
-        {isTargetRoute(pathname as string, PRIVATE_ROUTES) && (
-          <ConfirmationDialogProvider>
-            <AuthProvider {...sessionStore.oidcConfig}>
-              <AuthComponent>
-                <CollaborationProvider>
-                  <MusicPlayerProvider>
-                    <AgoraProvider
-                      client={agoraClient}
-                      stageClient={stageClient}
-                      appId={window._env_.AGORA_APP_ID}
-                    >
-                      <TextChatProvider>
-                        <UnityComponent unityContext={unityContext} />
-                        <AppLayers>
-                          <Switch>
-                            {createRoutesByConfig(PRIVATE_ROUTES)}
-                            <Redirect to="/" />
-                          </Switch>
-                        </AppLayers>
-                      </TextChatProvider>
-                    </AgoraProvider>
-                  </MusicPlayerProvider>
-                </CollaborationProvider>
-              </AuthComponent>
-            </AuthProvider>
-          </ConfirmationDialogProvider>
-        )}
+  // PRIVATE ROUTES
+  return (
+    <ThemeProvider theme={themeStore.theme}>
+      <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
+        <ConfirmationDialogProvider>
+          <AuthProvider {...sessionStore.oidcConfig}>
+            <AuthComponent>
+              <CollaborationProvider>
+                <MusicPlayerProvider>
+                  <AgoraProvider
+                    client={agoraClient}
+                    stageClient={stageClient}
+                    appId={window._env_.AGORA_APP_ID}
+                  >
+                    <TextChatProvider>
+                      <UnityComponent unityContext={unityContext} />
+                      <AppLayers>
+                        <Switch>
+                          {createRoutesByConfig(PRIVATE_ROUTES)}
+                          <Redirect to="/" />
+                        </Switch>
+                      </AppLayers>
+                    </TextChatProvider>
+                  </AgoraProvider>
+                </MusicPlayerProvider>
+              </CollaborationProvider>
+            </AuthComponent>
+          </AuthProvider>
+        </ConfirmationDialogProvider>
       </Web3ReactProvider>
     </ThemeProvider>
   );

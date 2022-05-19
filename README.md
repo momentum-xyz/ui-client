@@ -68,11 +68,11 @@ use `git lfs install` to initialize the git hooks
     │   │   ├── services            #
     │   │   └── ...
     │   ├── shared                  # Stuff can be copy pasted to each MF
-    │   │   ├── hooks               # Hooks for mst-store & user
+    │   │   ├── auth                # Configs for web3, guests, keycloak sessions
+    │   │   ├── hooks               # Special hooks for mst-store & user
     │   │   ├── services            #
     │   │   │     ├── i18n          # Init translations
-    │   │   │     ├── keycloak      # Init keycloak
-    │   │   │     ├── web3          # Init web3 auth
+    │   │   │     ├── web3          # Web3 common helpers
     │   │   └──   └── ...
     │   ├── static                  # Static content
     │   │   ├── images              #

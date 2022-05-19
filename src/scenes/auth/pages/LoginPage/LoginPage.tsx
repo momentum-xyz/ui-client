@@ -13,7 +13,8 @@ import * as styled from './LoginPage.styled';
 
 const LoginPage: FC = () => {
   const {loginStore, web3ConnectorsFiltered} = useStore().authStore;
-  const {isRefreshButtonShown, isWeb3LoginStarted, isSessionExpired, errorMessage} = loginStore;
+  const {isRefreshButtonShown, isSessionExpired, errorMessage} = loginStore;
+  const {isWeb3LoginStarted, isGuestLoginStarted} = loginStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
@@ -27,6 +28,12 @@ const LoginPage: FC = () => {
       loginStore.web3SignIn();
     }
   }, [isWeb3LoginStarted, loginStore]);
+
+  useEffect(() => {
+    if (isGuestLoginStarted) {
+      loginStore.guestSignIn();
+    }
+  }, [isGuestLoginStarted, loginStore]);
 
   return (
     <styled.Background background={background}>

@@ -1,4 +1,5 @@
 import * as webRepository from './repositories/webRepository';
+import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
 import * as profileRepository from './repositories/profileRepository';
 import * as eventsRepository from './repositories/eventsRepository';
@@ -26,6 +27,7 @@ import * as statsRepository from './repositories/statsRepository';
  */
 export const api = {
   webRepository,
+  guestRepository,
   userRepository,
   profileRepository,
   eventsRepository,
@@ -49,6 +51,7 @@ export const api = {
  * This is a contract between API and frontend
  */
 export * from './repositories/webRepository/webRepository.api.types';
+export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/profileRepository/profileRepository.api.types';
