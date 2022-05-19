@@ -9,9 +9,11 @@ import {UnbondingIndicator} from '../UnbondingIndicator';
 
 import * as styled from './ActiveStake.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {}
+interface PropsInterface extends PropsWithThemeInterface {
+  unbond: () => void;
+}
 
-const ActiveStake: FC<PropsInterface> = ({theme}) => {
+const ActiveStake: FC<PropsInterface> = ({theme, unbond}) => {
   const {stakingStore} = useStore().widgetStore;
   const {stashAccountBalance, tokenSymbol} = stakingStore.polkadotProviderStore;
 
@@ -38,7 +40,7 @@ const ActiveStake: FC<PropsInterface> = ({theme}) => {
             </styled.StakeColumn>
           )}
           {stashAccountBalance?.unbonding && Number(stashAccountBalance?.unbonding) === 0 && (
-            <styled.DetailsColumn>
+            <styled.DetailsColumn onClick={unbond}>
               <Text text={t('staking.unbondFunds')} size="xs" />
               <IconSvg name="arrow" size="normal" />
             </styled.DetailsColumn>
