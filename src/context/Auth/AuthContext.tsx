@@ -19,7 +19,10 @@ export interface IAuthContextProps {
 export const AuthContext = React.createContext<IAuthContextProps | undefined>(undefined);
 
 const AuthComponent: React.FC = (props) => {
-  const {sessionStore} = useStore();
+  const {
+    sessionStore,
+    widgetStore: {helpStore}
+  } = useStore();
   const {userId, profile} = sessionStore;
 
   const history = useHistory();
@@ -41,6 +44,7 @@ const AuthComponent: React.FC = (props) => {
   useEffect(() => {
     if (isReady && !!profile && !profile.profile?.onBoarded) {
       history.push(ROUTES.signUpComplete);
+      helpStore.helpDialog.open();
     }
   }, [isReady, profile]);
 

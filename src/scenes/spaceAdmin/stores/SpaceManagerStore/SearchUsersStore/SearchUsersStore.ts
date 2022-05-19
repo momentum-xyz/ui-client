@@ -14,11 +14,12 @@ const SearchUsersStore = types.compose(
       searchRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      search: flow(function* (query: string) {
+      search: flow(function* (query: string, worldId: string) {
         const response: UserSearchResponse = yield self.searchRequest.send(
           api.userRepository.search,
           {
-            q: query
+            q: query,
+            worldId
           }
         );
 

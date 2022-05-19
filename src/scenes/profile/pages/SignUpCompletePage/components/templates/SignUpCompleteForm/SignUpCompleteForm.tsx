@@ -5,12 +5,20 @@ import {useTranslation} from 'react-i18next';
 
 import {endpoints} from 'api/constants';
 import {FieldErrorInterface} from 'api/interfaces';
-import {Button, FileUploader, IconSvg, InputDark, Text, TextAreaDark, TextProps} from 'ui-kit';
+import {
+  Button,
+  FileUploader,
+  IconSvg,
+  InputDark,
+  Text,
+  TextAreaDark,
+  TextPropsInterface
+} from 'ui-kit';
 import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
 
 import * as styled from './SignUpCompleteForm.styled';
 
-const TEXT_PROPS: TextProps = {
+const TEXT_PROPS: TextPropsInterface = {
   size: 'xxs',
   align: 'left',
   weight: 'bold',

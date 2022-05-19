@@ -1,6 +1,10 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
+import {Text} from 'ui-kit';
+
+export const StyledText = styled(Text)``;
+
 export const Container = styled.div`
   display: flex;
   align-items: center;
@@ -18,8 +22,8 @@ export const InfoContainer = styled.div`
   gap: 10px;
 
   :hover {
-    .Text-custom {
-      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)} !important;
+    ${StyledText} {
+      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
     }
   }
 `;
