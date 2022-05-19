@@ -4,7 +4,7 @@ import {InjectedConnector} from '@web3-react/injected-connector';
 import {WalletConnectConnector} from '@web3-react/walletconnect-connector';
 
 import {endpoints} from 'api/constants';
-import {Web3ConnectorEnum} from 'core/enums';
+import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
 
 import {LoginStore} from './LoginStore';
@@ -46,15 +46,18 @@ const RootAuthStore = types
       });
 
       self.web3Connectors = [
-        {name: Web3ConnectorEnum.Polkadot, connector: null},
-        {name: Web3ConnectorEnum.Metamask, connector: metaMask},
-        {name: Web3ConnectorEnum.WalletConnect, connector: walletConnect}
+        {name: LoginTypeEnum.Polkadot, connector: null},
+        {name: LoginTypeEnum.Metamask, connector: metaMask},
+        {name: LoginTypeEnum.WalletConnect, connector: walletConnect}
       ];
+    },
+    getWeb3Connector(name: string): Web3ConnectorInterface | null {
+      return self.web3Connectors.find((item) => item.name === name) || null;
     }
   }))
   .views((self) => ({
     get web3ConnectorsFiltered(): Web3ConnectorInterface[] {
-      return self.web3Connectors.filter((item) => item.name === Web3ConnectorEnum.Polkadot);
+      return self.web3Connectors.filter((item) => item.name === LoginTypeEnum.Polkadot);
     }
   }));
 
