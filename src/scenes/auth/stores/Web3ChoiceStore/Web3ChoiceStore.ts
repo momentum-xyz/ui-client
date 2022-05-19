@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
+import {DELAY_DEFAULT, wait} from 'core/utils';
 import {RequestModel, ResetModel} from 'core/models';
 import {LoginTypeEnum, LoginTypeEnumList} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
@@ -35,6 +36,9 @@ const Web3ChoiceStore = types.compose(
         }
       }),
       fetchAccountList: flow(function* () {
+        // Waiting for polkadot.js extension
+        yield wait(DELAY_DEFAULT);
+
         if (yield SubstrateProvider.isExtensionEnabled()) {
           const addressesList = yield SubstrateProvider.getAllAddresses();
           self.accounts = cast(addressesList);
