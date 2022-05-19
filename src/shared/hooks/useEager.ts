@@ -53,7 +53,11 @@ export const useEager = (
     }
 
     const allAccounts = await web3Accounts();
-    const account = allAccounts.find((i) => i.address === polkadotAddress);
+    if (allAccounts.length === 0) {
+      return;
+    }
+
+    const account = allAccounts.find((i) => i.address === polkadotAddress) || allAccounts[0];
     if (account) {
       const injector = await web3FromSource(account.meta.source);
       const signRaw = injector?.signer?.signRaw;
