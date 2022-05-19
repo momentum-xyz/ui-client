@@ -10,6 +10,7 @@ import {Button, IconSvg, SvgButton, Avatar, PanelLayout, Text} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 import SocialUserInitiatives from 'component/molucules/socialui/SocialUserInitiatives';
 import {endpoints} from 'api/constants';
+import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './ProfileWidget.styled';
 
@@ -101,20 +102,24 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
           {!isItMe() ? (
             <>
               <Button label={t('actions.flyTo')} onClick={handleFlyToUser} size="small" />
-              <Button
-                label={t('actions.grabTable')}
-                onClick={() => {
-                  grabATable();
-                }}
-                size="small"
-              />
-              <Button
-                label={t('actions.highFive')}
-                onClick={() => {
-                  profileStore.sendHighFive();
-                }}
-                size="small"
-              />
+              {userProfile?.status !== UserStatusEnum.DO_NOT_DISTURB && (
+                <>
+                  <Button
+                    label={t('actions.grabTable')}
+                    onClick={() => {
+                      grabATable();
+                    }}
+                    size="small"
+                  />
+                  <Button
+                    label={t('actions.highFive')}
+                    onClick={() => {
+                      profileStore.sendHighFive();
+                    }}
+                    size="small"
+                  />
+                </>
+              )}
             </>
           ) : (
             profileStore.canCreateInitiative && (
