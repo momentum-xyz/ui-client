@@ -73,10 +73,11 @@ const ProfileMenuWidget: FC = () => {
         <styled.Option onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}>
           <Toggle
             size="small"
+            variant="availability"
             checked={profile.status === UserStatusEnum.ONLINE}
             onChange={handleChangeStatus}
           />
-          <Text text={t('labels.available')} size="xxs" />
+          <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
         </styled.Option>
         {profile.isNodeAdmin && (
           <styled.Option onClick={handleTokenRulesOpen}>

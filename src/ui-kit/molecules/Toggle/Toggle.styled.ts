@@ -24,9 +24,16 @@ export const Background = styled.div`
   background: var(--white-30);
   border-radius: 10px;
 
+  &.variant-availability {
+    background: var(--black);
+  }
+
   &.on {
     justify-content: end;
-    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
+
+    &.variant-normal {
+      background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
+    }
   }
 
   &.off {
@@ -46,7 +53,20 @@ export const Background = styled.div`
 
 export const Toggle = styled.div`
   border-radius: 100%;
-  background: var(--white);
+
+  &.variant-normal {
+    background: var(--white);
+  }
+
+  &.variant-availability {
+    &.on {
+      background: var(--online);
+    }
+
+    &.off {
+      background: var(--dnd);
+    }
+  }
 
   &.normal {
     height: 12px;
