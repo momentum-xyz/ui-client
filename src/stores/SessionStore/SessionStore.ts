@@ -58,10 +58,15 @@ const SessionStore = types
     get isUserReady(): boolean {
       return !self.request.isPending && !self.profileRequest.isPending && !!self.profile;
     },
-    get oidcConfig(): OidcClientSettings | null {
+    get loginType(): LoginTypeEnum | null {
       const loginType = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);
-
-      switch (loginType) {
+      return loginType ? (loginType as LoginTypeEnum) : null;
+    },
+    get isGuest(): boolean {
+      return this.loginType === LoginTypeEnum.Guest;
+    },
+    get oidcConfig(): OidcClientSettings | null {
+      switch (this.loginType) {
         case LoginTypeEnum.Keycloak:
           return keycloakProviderConfig;
         case LoginTypeEnum.Guest:
