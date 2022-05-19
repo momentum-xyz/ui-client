@@ -65,6 +65,9 @@ const SessionStore = types
     get isGuest(): boolean {
       return this.loginType === LoginTypeEnum.Guest;
     },
+    get isSessionExists(): boolean {
+      return !!storage.getByPrefix('oidc.user');
+    },
     get oidcConfig(): OidcClientSettings | null {
       switch (this.loginType) {
         case LoginTypeEnum.Keycloak:
