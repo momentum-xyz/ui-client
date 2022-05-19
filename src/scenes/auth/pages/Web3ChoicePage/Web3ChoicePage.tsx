@@ -96,7 +96,7 @@ const Web3ChoicePage: FC = () => {
               }
             }}
           >
-            {accountList.length && (
+            {accountList.length > 0 && (
               <AccountPicker
                 theme={theme}
                 accountList={accountList}
