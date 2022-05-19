@@ -1,5 +1,6 @@
 import {types, Instance} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
+import {format} from 'date-fns';
 
 import {durationInHours, formattedStringFromDate} from 'core/utils';
 
@@ -27,28 +28,10 @@ const EventItemModel = types
       return Buffer.from(self.id.replace(/-/g, ''), 'hex');
     },
     get startDateAndTime() {
-      return self.start
-        .toLocaleString('default', {
-          month: 'long',
-          day: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true
-        })
-        .toUpperCase();
+      return format(new Date(self.start), 'EEE, MMM M - h:mm aa').toUpperCase();
     },
     get endDateAndTime() {
-      return self.end
-        .toLocaleString('default', {
-          month: 'long',
-          day: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true
-        })
-        .toUpperCase();
+      return format(new Date(self.end), 'MMM M h:mm aa').toUpperCase();
     },
     get timeZone() {
       // @ts-ignore

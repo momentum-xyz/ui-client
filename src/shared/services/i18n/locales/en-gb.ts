@@ -263,7 +263,7 @@ export const enGb = {
       noGatherings: 'There are no gatherings scheduled for this space.',
       eventItem: {
         live: 'Live',
-        websiteLink: 'Website Link',
+        websiteLink: 'Learn More',
         magicLinkDialog: {
           title: 'Magic Link',
           copyLabel: 'Copy Link'
@@ -273,7 +273,7 @@ export const enGb = {
           copyLabel: 'Copy Link'
         },
         flyToSpace: 'Fly To',
-        gatheringLink: 'Gathering Magiclink',
+        gatheringLink: 'Share',
         addToCalendar: 'Add to My Calendar',
         joinGathering: 'Join The Gathering',
         by: 'By',

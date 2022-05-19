@@ -41,6 +41,7 @@
     "agora-rtm-sdk": "^1.4.2",
     "axios": "^0.21.4",
     "axios-auth-refresh": "^3.2.2",
+    "date-fns": "^2.28.0",
     "detect-browser": "^5.2.0",
     "history": "^5.3.0",
     "howler": "^2.2.3",

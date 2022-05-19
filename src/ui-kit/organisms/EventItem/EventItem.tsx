@@ -53,21 +53,24 @@ const EventItem: FC<PropsInterface> = ({
             noWhitespaceWrap
           />
         )}
-        {!!event.web_link && (
-          <Button
-            label={t('eventList.eventItem.websiteLink')}
-            icon="link"
-            // @ts-ignore
-            onClick={() => onWeblinkClick(event.web_link)}
-          />
-        )}
+
         <Button
           onClick={() => {
             onMagicLinkOpen(event.id, event.spaceId ?? undefined);
           }}
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
+          isCustom
         />
+        {!!event.web_link && (
+          <Button
+            label={t('eventList.eventItem.websiteLink')}
+            icon="link"
+            isCustom
+            // @ts-ignore
+            onClick={() => onWeblinkClick(event.web_link)}
+          />
+        )}
       </styled.Buttons>
       <styled.Buttons>
         {event.isLive() && (
@@ -103,14 +106,13 @@ const EventItem: FC<PropsInterface> = ({
 
   const info = () => (
     <styled.Info>
+      <styled.Header>
+        <Heading type="h1" align="left" label={event.title} transform="uppercase" />
+        <Text text="/" size="xl" />
+        <Text text={event.hosted_by} size="xl" transform="uppercase" />
+      </styled.Header>
       <styled.Row>
         <styled.BaseInfo>
-          <Text
-            text={`${t('eventList.eventItem.by')}: ${event.hosted_by}`}
-            size="l"
-            weight="bold"
-            align="left"
-          />
           {isWorldCalendar && (
             <Text
               text={`${t('eventList.eventItem.at')}: ${event.spaceName ?? ''}`}
@@ -119,20 +121,25 @@ const EventItem: FC<PropsInterface> = ({
               align="left"
             />
           )}
-          <Text
-            text={`${t('eventList.eventItem.from')}: ${event.startDateAndTime}`}
-            size="l"
-            weight="bold"
-            align="left"
-          />
-          <Text
-            text={`${t('eventList.eventItem.to')}: ${event.endDateAndTime}`}
-            size="l"
-            weight="bold"
-            align="left"
-          />
-          <Text text={event.timeZone} size="l" weight="bold" align="left" />
+          <styled.DateRow>
+            <Text
+              text={`${event.startDateAndTime.split('-')[0]} -`}
+              size="l"
+              weight="bold"
+              align="left"
+            />
+            <Text text={event.startDateAndTime.split('-')[1]} size="l" align="left" />
+            <Text
+              text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
+              size="l"
+              transform="uppercase"
+              align="left"
+            />
+            <Text text={event.timeZone} size="l" align="left" />
+          </styled.DateRow>
         </styled.BaseInfo>
+      </styled.Row>
+      <styled.TextRow>
         <ShowMoreText
           text={event.description}
           textProps={{
@@ -143,8 +150,28 @@ const EventItem: FC<PropsInterface> = ({
           }}
           isCustom
         />
-      </styled.Row>
+      </styled.TextRow>
       {buttons()}
+      <styled.Actions>
+        {onRemove && (
+          <SvgButton
+            iconName="bin"
+            size="medium"
+            onClick={() => {
+              onRemove(event.id);
+            }}
+          />
+        )}
+        {onEdit && (
+          <SvgButton
+            iconName="edit"
+            size="medium"
+            onClick={() => {
+              onEdit(event);
+            }}
+          />
+        )}
+      </styled.Actions>
     </styled.Info>
   );
 
@@ -160,33 +187,8 @@ const EventItem: FC<PropsInterface> = ({
 
   return (
     <styled.Container style={{zIndex: zIndex}} id={event.id}>
-      <styled.Row className="header">
-        <Heading type="h1" align="left" label={event.title} transform="uppercase" />
-        <styled.Actions>
-          {onRemove && (
-            <SvgButton
-              iconName="bin"
-              size="medium"
-              onClick={() => {
-                onRemove(event.id);
-              }}
-            />
-          )}
-          {onEdit && (
-            <SvgButton
-              iconName="edit"
-              size="medium"
-              onClick={() => {
-                onEdit(event);
-              }}
-            />
-          )}
-        </styled.Actions>
-      </styled.Row>
-      <styled.Row className="body">
-        {image()}
-        {info()}
-      </styled.Row>
+      <styled.Row className="header">{image()}</styled.Row>
+      {info()}
     </styled.Container>
   );
 };
