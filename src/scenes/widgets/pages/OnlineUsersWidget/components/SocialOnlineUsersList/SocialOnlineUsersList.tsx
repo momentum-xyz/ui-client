@@ -42,6 +42,10 @@ const SocialOnlineUsersList: React.FC<SocialOnlineUsersListProps> = ({invite = f
     return () => clearInterval(timeInterval);
   }, []);
 
+  useEffect(() => {
+    onlineUsersStore.fetchUsers(worldStore.worldId);
+  }, [profile?.status]);
+
   const handleClick = (id: string) => {
     if (onlineUsersStore.selectedUserId !== id) {
       onlineUsersStore.selectUser(id);

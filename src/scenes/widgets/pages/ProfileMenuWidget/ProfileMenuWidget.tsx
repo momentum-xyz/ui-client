@@ -48,7 +48,7 @@ const ProfileMenuWidget: FC = () => {
   };
 
   const handleChangeStatus = (checked: boolean) => {
-    profileMenuStore.changeStatus(checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB);
+    sessionStore.changeStatus(checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB);
   };
 
   if (!profile?.profile) {
@@ -74,10 +74,10 @@ const ProfileMenuWidget: FC = () => {
           </styled.IconContainer>
           <Text text={profile.name} size="xxs" />
         </styled.Option>
-        <styled.Option onClick={() => handleChangeStatus(profileMenuStore.status !== 'online')}>
+        <styled.Option onClick={() => handleChangeStatus(profile.status !== 'online')}>
           <Toggle
             size="small"
-            checked={profileMenuStore.status === 'online'}
+            checked={profile.status === 'online'}
             onChange={handleChangeStatus}
           />
           <Text text={t('labels.available')} size="xxs" />
