@@ -28,7 +28,14 @@ const SubNavAdmin = () => {
     <styled.Container>
       <NavigationBar>
         {tabs.map((tab) => (
-          <NavigationBarItem exact key={tab.path} iconName={tab.iconName} path={tab.path} />
+          <NavigationBarItem
+            exact
+            key={tab.path}
+            iconName={tab.iconName}
+            path={tab.path}
+            replace
+            state={{canGoBack: true}}
+          />
         ))}
       </NavigationBar>
     </styled.Container>

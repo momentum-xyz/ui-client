@@ -67,7 +67,11 @@ export const inviteToSpace: RequestInterface<InviteToSpaceRequest, InviteToSpace
 export const search: RequestInterface<UserSearchRequest, UserSearchResponse> = (options) => {
   const {q, online, worldId, ...restOptions} = options;
 
-  restOptions.params = {q, online: online ? 'true' : 'false', worldId};
+  restOptions.params = {
+    q,
+    online: online && online.toString(),
+    worldId
+  };
 
   return request.get(userRepositoryEndpoints.search, restOptions);
 };

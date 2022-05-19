@@ -43,11 +43,11 @@ const HelpWidget: React.FC = () => {
           </styled.ImageItem>
         </styled.TopContainer>
         <styled.BottomContainer>
-          <styled.DiscordDropDown>
-            <Discord />
-          </styled.DiscordDropDown>
           <styled.Item>
             <Controls />
+          </styled.Item>
+          <styled.Item>
+            <Discord />
           </styled.Item>
         </styled.BottomContainer>
       </styled.Container>

@@ -9,6 +9,7 @@
     "test": "craco test",
     "dev": "chmod +x ./env.sh && ./env.sh && cp env-config.js ./public/ && react-scripts start",
     "analyze": "source-map-explorer 'build/static/js/*.js' --no-border-checks",
+    "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"src/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",
     "prettier:fix": "npm run prettier -- --write",
@@ -120,13 +121,15 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 edge version",
+      "last 1 safari version"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
+      "last 1 edge version",
       "last 1 safari version"
     ]
   }
