@@ -2,6 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 
 import {DialogModel, RequestModel, ResetModel} from 'core/models';
 import {api, FetchUserResponse} from 'api';
+import {UserStatusEnum} from 'core/enums';
 
 const ProfileMenuStore = types
   .compose(
@@ -11,11 +12,11 @@ const ProfileMenuStore = types
       profileMenuDialog: types.optional(DialogModel, {}),
       statusChangeRequest: types.optional(RequestModel, {}),
       statusFetchRequest: types.optional(RequestModel, {}),
-      status: types.maybe(types.frozen<'online' | 'dnd'>())
+      status: types.maybe(types.frozen<UserStatusEnum>())
     })
   )
   .actions((self) => ({
-    changeStatus: flow(function* (status: 'online' | 'dnd') {
+    changeStatus: flow(function* (status: UserStatusEnum) {
       yield self.statusChangeRequest.send(api.statusRepository.changeStatus, {status});
 
       if (self.statusChangeRequest.isDone && !self.statusChangeRequest.isError) {

@@ -6,6 +6,7 @@ import {observer} from 'mobx-react-lite';
 import {useStore} from 'shared/hooks';
 import {Avatar, Dialog, IconSvg, Text, Toggle} from 'ui-kit';
 import {endpoints} from 'api/constants';
+import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './ProfileMenuWidget.styled';
 
@@ -47,7 +48,7 @@ const ProfileMenuWidget: FC = () => {
   };
 
   const handleChangeStatus = (checked: boolean) => {
-    profileMenuStore.changeStatus(checked ? 'online' : 'dnd');
+    profileMenuStore.changeStatus(checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB);
   };
 
   if (!profile?.profile) {
