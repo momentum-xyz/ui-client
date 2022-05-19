@@ -13,3 +13,4 @@ export * from './eventDispatcher.utils';
 export * from './youtubeVideoPath.utils';
 export * from './inputToBN.utils';
 export * from './formatExistential.utils';
+export * from './promise.utils';
