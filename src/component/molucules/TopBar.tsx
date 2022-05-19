@@ -120,7 +120,7 @@ const TopBar = ({
   };
 
   return (
-    <div className="flex flex-shrink-0 items-center h-6 min-h-6 bg-gradient-blue-green-20 backdrop-filter backdrop-blur px-2 m-1 box-content rounded">
+    <div className="flex flex-shrink-0 items-center h-6 min-h-6 bg-new-blue-80 backdrop-filter backdrop-blur px-2 m-1 box-content rounded">
       <div>
         <h2
           className="font-bold font-sans uppercase text-xl pl-0 h-2 overflow-hidden overflow-ellipsis whitespace-nowrap"
