@@ -62,7 +62,6 @@ const Web3ChoicePage: FC = () => {
 
   useEffect(() => {
     if (loginType === LoginTypeEnum.Polkadot && accountList.length === 1) {
-      selectAccount(accountList[0].address);
       openChallengePage();
     }
   }, [loginType, accountList, selectAccount, openChallengePage]);
