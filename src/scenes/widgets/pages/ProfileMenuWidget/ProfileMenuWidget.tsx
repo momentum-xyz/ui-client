@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {useAuth} from 'react-oidc-context';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -21,10 +21,6 @@ const ProfileMenuWidget: FC = () => {
   const auth = useAuth();
 
   const {t} = useTranslation();
-
-  useEffect(() => {
-    profileMenuStore.fetchStatus();
-  }, [profileMenuStore]);
 
   // @ts-ignore
   const signOutUser = (e) => {
