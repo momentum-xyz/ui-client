@@ -122,9 +122,6 @@ export const useAgoraStageMode = () => {
     if (stageModeUsers.filter((user) => user.uid === userId).length !== 0) {
       return;
     }
-    if (userId === currentUserId) {
-      return;
-    }
 
     setStageModeUsers([
       ...stageModeUsers,

@@ -135,8 +135,8 @@ const TopBar = ({
           )}
         </h2>
       </div>
-      <div className="pl-1 flex items-center gap-2">{actions}</div>
-      <div className="flex-grow" />
+      <div className="pl-1 flex items-center gap-2 flex-grow">{actions}</div>
+
       {!!isAdmin &&
         !!spaceId &&
         spaceType !== SpaceType.GRAB_A_TABLE &&
