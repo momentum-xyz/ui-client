@@ -59,6 +59,15 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (messageListRef) {
+      const list: HTMLUListElement | null = messageListRef.current;
+      if (list) {
+        list.scrollTop = list.scrollHeight;
+      }
+    }
+  }, [open]);
+
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.currentTarget.value;
 
