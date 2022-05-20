@@ -121,7 +121,6 @@ export const Button = styled.button`
     height: 30px;
     gap: 10px;
     padding: 0 22px;
-    text-transform: uppercase;
     font-size: var(--font-size-xs);
     font-weight: 500;
   }
@@ -130,14 +129,12 @@ export const Button = styled.button`
     font-size: var(--font-size-xxs);
     width: 100%;
     padding: 5px;
-    text-transform: uppercase;
   }
 
   &.medium {
     height: 28px;
     gap: 5px;
     padding: 0 9px;
-    text-transform: uppercase;
     font-size: var(--font-size-xs);
     font-weight: 500;
   }
@@ -148,5 +145,21 @@ export const Button = styled.button`
 
   &.noWhitespaceWrap {
     white-space: nowrap;
+  }
+
+  &.transform-normal {
+    text-transform: none;
+  }
+
+  &.transform-capitalized {
+    text-transform: capitalize;
+  }
+
+  &.transform-uppercase {
+    text-transform: uppercase;
+  }
+
+  &.transform-lowercase {
+    text-transform: lowercase;
   }
 `;
