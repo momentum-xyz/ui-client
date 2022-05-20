@@ -1,9 +1,13 @@
 import {types, Instance} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 
-import {durationInHours, formattedStringFromDate} from 'core/utils';
-
-import {formatEndDate, formatStartDate, formatStartTime} from '../../utils/dateFormat.utils';
+import {
+  durationInHours,
+  formatEndDate,
+  formatStartDate,
+  formatStartTime,
+  formattedStringFromDate
+} from 'core/utils';
 
 const EventItemModel = types
   .model('EventItem', {
