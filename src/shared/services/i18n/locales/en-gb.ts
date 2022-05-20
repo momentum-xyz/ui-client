@@ -553,6 +553,14 @@ export const enGb = {
         },
         visitSpace: 'Visit the Momentum Space'
       },
+      wiki: {
+        title: 'Wiki',
+        partOne: `Please feel free to deep-dive into the Kusamaverse, its nooks and crannies and feature map in `,
+        highlightedPart: 'our Wiki',
+        partTwo:
+          '. While we do our best to keep our wiki updated please bare in mind this is a living breathing ecosystem that is subject to constant change.',
+        link: 'Wiki Link'
+      },
       openLabel: 'Expand',
       closeLabel: 'Minimize'
     },
