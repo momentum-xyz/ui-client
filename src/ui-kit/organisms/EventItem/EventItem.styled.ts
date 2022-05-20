@@ -34,14 +34,6 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const Actions = styled.div`
-  display: flex;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  gap: 10px;
-`;
-
 export const Div = styled.div`
   display: flex;
   flex-direction: column;
@@ -66,30 +58,6 @@ export const Row = styled.div`
 export const TextRow = styled.div`
   max-width: 50%;
   margin-bottom: 10px;
-`;
-
-export const Header = styled.div`
-  display: block-inline;
-  gap: 3px;
-`;
-export const SpaceHeader = styled.div``;
-export const WorldHeader = styled.div``;
-export const BoldHeader = styled.span`
-  color: ${(props) => props.theme.accent};
-  font-size: var(--font-size-xl);
-  text-transform: uppercase;
-  font-weight: bold;
-  text-align: left;
-  &.notBold {
-    font-weight: normal;
-  }
-`;
-
-export const NormalHeader = styled.span`
-  font-size: var(--font-size-xl);
-  text-transform: uppercase;
-  font-weight: normal;
-  text-align: left;
 `;
 
 export const DateRow = styled.div`
