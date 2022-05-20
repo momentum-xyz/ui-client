@@ -8,7 +8,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  white-space: pre-wrap;
+  white-space: pre;
 `;
 
 export const Text = styled.div`
