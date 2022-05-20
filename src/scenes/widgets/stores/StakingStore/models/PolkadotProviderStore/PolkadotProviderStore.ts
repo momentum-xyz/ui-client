@@ -34,7 +34,7 @@ const PolkadotProviderStore = types
       isWeb3Injected: false,
       paymentDestination: types.optional(types.string, ''),
       stakingAmount: types.optional(types.string, ''),
-      unbondAmount: types.optional(types.number, 0),
+      unbondAmount: types.optional(types.string, ''),
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string)
     })
@@ -81,6 +81,14 @@ const PolkadotProviderStore = types
           ltThenExistentialDeposit,
           ltMinNominatorBond,
           isBondAmountAcceptable: gtStashFunds || ltMinNominatorBond || ltThenExistentialDeposit
+        };
+      },
+      get unbondAmountValidation() {
+        const minAmount = Number(self.unbondAmount) <= 0;
+        const maxAmount = Number(self.unbondAmount) > Number(self.stashAccountBalance?.bonded);
+        return {
+          minAmount,
+          maxAmount
         };
       }
     };
@@ -199,23 +207,25 @@ const PolkadotProviderStore = types
       );
       self.minNominatorBond = cast(minNominatorBondFormatted);
     }),
-    calculateUnlockingDuration: flow(function* (blocks: BN) {
+    async calculateUnlockingDuration(blocks: BN) {
       const A_DAY = new BN(24 * 60 * 60 * 1000);
       const THRESHOLD = BN_THOUSAND.div(BN_TWO);
       const DEFAULT_TIME = new BN(6_000);
 
-      const interval = bnMin(
-        A_DAY,
+      const time =
         self.channel?.consts.babe?.expectedBlockTime ||
-          self.channel?.consts.difficulty?.targetBlockTime ||
-          self.channel?.consts.subspace?.expectedBlockTime ||
-          ((self.channel?.consts.timestamp?.minimumPeriod as u64).gte(THRESHOLD)
-            ? (self.channel?.consts.timestamp.minimumPeriod as u64).mul(BN_TWO)
-            : yield self.channel?.query.parachainSystem ? DEFAULT_TIME.mul(BN_TWO) : DEFAULT_TIME)
-      );
+        self.channel?.consts.difficulty?.targetBlockTime ||
+        self.channel?.consts.subspace?.expectedBlockTime ||
+        ((self.channel?.consts.timestamp?.minimumPeriod as u64).gte(THRESHOLD)
+          ? (self.channel?.consts.timestamp.minimumPeriod as u64).mul(BN_TWO)
+          : (await self.channel?.query.parachainSystem)
+          ? DEFAULT_TIME.mul(BN_TWO)
+          : DEFAULT_TIME);
+
+      const interval = bnMin(A_DAY, time as BN);
       const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));
       self.unlockingDuration = cast(duration);
-    }),
+    },
     async initAccount() {
       await this.getAddresses();
       this.setStashAccount(self.addresses[0].address);
@@ -251,7 +261,7 @@ const PolkadotProviderStore = types
       self.controllerAccount = cast(cloneDeep(result));
       await this.getBalances(address, 'controllerAccountBalance');
     },
-    setUnbondAmount(amount: number) {
+    setUnbondAmount(amount: string) {
       self.unbondAmount = cast(amount);
     },
     setPaymentDestination(payee: Payee) {

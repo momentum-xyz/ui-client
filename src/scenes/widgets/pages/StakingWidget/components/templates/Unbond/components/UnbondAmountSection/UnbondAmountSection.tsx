@@ -16,12 +16,12 @@ const UnbondAmountSection: FC<PropsInterface> = ({theme}) => {
   const {unbondAmount, setUnbondAmount, stashAccountBalance} = polkadotProviderStore;
 
   useEffect(() => {
-    setUnbondAmount(Number(stashAccountBalance?.bonded));
+    stashAccountBalance?.bonded && setUnbondAmount(stashAccountBalance?.bonded);
   }, [stashAccountBalance?.bonded, setUnbondAmount]);
 
   const unbondAmountHandler = (value: string) => {
     if (stakingInputRegex(value)) {
-      setUnbondAmount(Number(value));
+      setUnbondAmount(value);
     }
   };
   return (

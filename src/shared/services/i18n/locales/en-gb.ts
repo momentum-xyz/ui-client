@@ -78,6 +78,9 @@ export const enGb = {
       controllerAccount: 'Controller Account',
       signedSuccess: 'Transaction finished. Bonding was successful!',
       validation: {
+        unbondMinAmount: 'Minimum amount for unbonding should be a positive number',
+        unbondMaxAmount:
+          'Maximum amount for unbonding should not be over the bonded amount of {{bonded}}',
         controller: {
           stashed:
             'A controller account should not map to another stash. This selected controller is a stash, controlled by {{bondedAddress}}',

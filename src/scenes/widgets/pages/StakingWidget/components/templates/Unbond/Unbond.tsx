@@ -4,9 +4,7 @@ import {t} from 'i18next';
 import {Button, Heading, Text} from 'ui-kit';
 
 import * as styled from './Unbond.styled';
-import {UnbondDetails} from './components';
-import UnbondAmountSection from './components/UnbondAmountSection/UnbondAmountSection';
-import UnbondAmountValidation from './components/UnbondAmountValidation/UnbondAmountValidation';
+import {UnbondDetails, UnbondAmountSection, UnbondAmountValidation} from './components';
 
 interface PropsInterface {
   nominatorTab: () => void;
