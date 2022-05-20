@@ -44,6 +44,7 @@ const EventItem: FC<PropsInterface> = ({
               event.spaceName && event.spaceName.slice(0, 12)
             } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
             isCustom
+            transform="capitalized"
             onClick={() => onFlyToSpace?.(event.spaceId ?? '')}
             icon="fly-to"
             noWhitespaceWrap
@@ -56,12 +57,14 @@ const EventItem: FC<PropsInterface> = ({
           }}
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
+          transform="capitalized"
           isCustom
         />
         {!!event.web_link && (
           <Button
             label={t('eventList.eventItem.websiteLink')}
             icon="link"
+            transform="capitalized"
             isCustom
             // @ts-ignore
             onClick={() => onWeblinkClick(event.web_link)}
@@ -81,7 +84,8 @@ const EventItem: FC<PropsInterface> = ({
             buttonProps={{
               label: t('eventList.eventItem.addToCalendar'),
               icon: 'calendar',
-              isCustom: true
+              isCustom: true,
+              transform: 'capitalized'
             }}
             items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL, SHARE_SITES.OUTLOOK]}
             className="AddToCalendarContainer"
@@ -92,6 +96,7 @@ const EventItem: FC<PropsInterface> = ({
             variant="inverted"
             icon="fly-to"
             label={t('eventList.eventItem.joinGathering')}
+            transform="capitalized"
             // @ts-ignore
             onClick={() => onFlyToGathering?.(event.spaceId)}
           />
