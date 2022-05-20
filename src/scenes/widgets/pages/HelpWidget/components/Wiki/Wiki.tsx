@@ -9,6 +9,8 @@ import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Wiki.styled';
 
+const WIKI_URL = 'https://wiki.odyssey.org/';
+
 const Wiki: React.FC = () => {
   const {
     widgetStore: {helpStore}
@@ -19,7 +21,7 @@ const Wiki: React.FC = () => {
   };
 
   const handleLinkClick = () => {
-    window.open('https://wiki.odyssey.org/', '_blank');
+    window.open(WIKI_URL, '_blank');
   };
 
   return (
