@@ -36,11 +36,7 @@ const UnbondAmountValidation: FC<PropsInterface> = ({theme}) => {
     setError((state) =>
       state.errorMessage !== newError ? {errorMessage: newError, errorType} : state
     );
-  }, [
-    unbondAmountValidation.minAmount,
-    unbondAmountValidation.maxAmount,
-    stashAccountBalance?.bonded
-  ]);
+  }, [unbondAmountValidation, stashAccountBalance?.bonded]);
 
   return (
     <>
