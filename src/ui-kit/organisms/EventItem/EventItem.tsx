@@ -3,15 +3,7 @@ import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 
 import {EventItemModelInterface} from 'core/models/EventItem';
-import {
-  AddToCalendarDropdown,
-  Button,
-  Heading,
-  IconSvg,
-  ShowMoreText,
-  SvgButton,
-  Text
-} from 'ui-kit';
+import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, SvgButton, Text} from 'ui-kit';
 import {endpoints} from 'api/constants';
 
 import * as styled from './EventItem.styled';
@@ -46,7 +38,9 @@ const EventItem: FC<PropsInterface> = ({
       <styled.Buttons>
         {isWorldCalendar && event.spaceId && (
           <Button
-            label={t('eventList.eventItem.flyToSpace')}
+            label={`${t('eventList.eventItem.flyToSpace')} ${
+              event.spaceName && event.spaceName.slice(0, 12)
+            } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
             isCustom
             onClick={() => onFlyToSpace?.(event.spaceId ?? '')}
             icon="fly-to"
@@ -84,7 +78,6 @@ const EventItem: FC<PropsInterface> = ({
             event={event.asCalendarEvent}
             buttonProps={{
               label: t('eventList.eventItem.addToCalendar'),
-              variant: 'inverted',
               icon: 'calendar',
               isCustom: true
             }}
@@ -95,6 +88,7 @@ const EventItem: FC<PropsInterface> = ({
         {event.isLive() && isWorldCalendar && event.spaceId && (
           <Button
             variant="inverted"
+            icon="fly-to"
             label={t('eventList.eventItem.joinGathering')}
             // @ts-ignore
             onClick={() => onFlyToGathering?.(event.spaceId)}
@@ -104,75 +98,88 @@ const EventItem: FC<PropsInterface> = ({
     </styled.Buttons>
   );
 
-  const info = () => (
-    <styled.Info>
-      <styled.Header>
-        <Heading type="h1" align="left" label={event.title} transform="uppercase" />
-        <Text text="/" size="xl" />
-        <Text text={event.hosted_by} size="xl" transform="uppercase" />
-      </styled.Header>
-      <styled.Row>
-        <styled.BaseInfo>
-          {isWorldCalendar && (
-            <Text
-              text={`${t('eventList.eventItem.at')}: ${event.spaceName ?? ''}`}
-              size="l"
-              weight="bold"
-              align="left"
-            />
-          )}
-          <styled.DateRow>
-            <Text
-              text={`${event.startDateAndTime.split('-')[0]} -`}
-              size="l"
-              weight="bold"
-              align="left"
-            />
-            <Text text={event.startDateAndTime.split('-')[1]} size="l" align="left" />
-            <Text
-              text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
-              size="l"
-              transform="uppercase"
-              align="left"
-            />
-            <Text text={event.timeZone} size="l" align="left" />
-          </styled.DateRow>
-        </styled.BaseInfo>
-      </styled.Row>
-      <styled.TextRow>
-        <ShowMoreText
-          text={event.description}
-          textProps={{
-            size: 's',
-            align: 'left',
-            firstBoldSentences: 1,
-            isCustom: true
+  const header = () => (
+    <styled.Header>
+      {isWorldCalendar ? (
+        <styled.WorldHeader>
+          <styled.BoldHeader>{event.spaceName ?? ''}</styled.BoldHeader>
+          <styled.BoldHeader> / </styled.BoldHeader>
+          <styled.BoldHeader className="notBold">{event.title}</styled.BoldHeader>
+          <styled.BoldHeader className="notBold"> / </styled.BoldHeader>
+          <styled.NormalHeader>{event.hosted_by}</styled.NormalHeader>
+        </styled.WorldHeader>
+      ) : (
+        <styled.SpaceHeader>
+          <styled.BoldHeader>{event.title}</styled.BoldHeader>
+          <styled.BoldHeader className="notBold"> / </styled.BoldHeader>
+          <styled.NormalHeader>{event.hosted_by}</styled.NormalHeader>
+        </styled.SpaceHeader>
+      )}
+    </styled.Header>
+  );
+
+  const date = () => (
+    <styled.DateRow>
+      <Text
+        text={`${event.startDateAndTime.split('-')[0]} -`}
+        size="l"
+        weight="bold"
+        align="left"
+      />
+      <Text text={event.startDateAndTime.split('-')[1]} size="l" align="left" />
+      <Text
+        text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
+        size="l"
+        transform="uppercase"
+        align="left"
+      />
+    </styled.DateRow>
+  );
+
+  const actions = () => (
+    <styled.Actions>
+      {onRemove && (
+        <SvgButton
+          iconName="bin"
+          size="medium"
+          onClick={() => {
+            onRemove(event.id);
           }}
-          isCustom
         />
-      </styled.TextRow>
-      {buttons()}
-      <styled.Actions>
-        {onRemove && (
-          <SvgButton
-            iconName="bin"
-            size="medium"
-            onClick={() => {
-              onRemove(event.id);
+      )}
+      {onEdit && (
+        <SvgButton
+          iconName="edit"
+          size="medium"
+          onClick={() => {
+            onEdit(event);
+          }}
+        />
+      )}
+    </styled.Actions>
+  );
+
+  const info = () => (
+    <styled.Div>
+      {header()}
+      {date()}
+      <styled.Info>
+        <styled.TextRow>
+          <ShowMoreText
+            text={event.description}
+            textProps={{
+              size: 's',
+              align: 'left',
+              firstBoldSentences: 1,
+              isCustom: true
             }}
+            isCustom
           />
-        )}
-        {onEdit && (
-          <SvgButton
-            iconName="edit"
-            size="medium"
-            onClick={() => {
-              onEdit(event);
-            }}
-          />
-        )}
-      </styled.Actions>
-    </styled.Info>
+        </styled.TextRow>
+        {buttons()}
+        {actions()}
+      </styled.Info>
+    </styled.Div>
   );
 
   const image = () => (

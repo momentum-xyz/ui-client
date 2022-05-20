@@ -281,7 +281,7 @@ export const enGb = {
         from: 'From',
         to: 'To',
         showMore: 'Show more',
-        collapse: 'Collapse'
+        collapse: 'Show less'
       }
     },
     eventForm: {

@@ -34,10 +34,6 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const BaseInfo = styled.div`
-  flex-shrink: 0;
-`;
-
 export const Actions = styled.div`
   display: flex;
   position: absolute;
@@ -46,7 +42,13 @@ export const Actions = styled.div`
   gap: 10px;
 `;
 
-export const Div = styled.div``;
+export const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px 5px;
+  width: 100%;
+  height: 100%;
+`;
 
 export const Row = styled.div`
   display: flex;
@@ -62,17 +64,36 @@ export const Row = styled.div`
 `;
 
 export const TextRow = styled.div`
-  max-width: 90%;
+  max-width: 50%;
   margin-bottom: 10px;
 `;
 
 export const Header = styled.div`
-  display: flex;
+  display: block-inline;
   gap: 3px;
+`;
+export const SpaceHeader = styled.div``;
+export const WorldHeader = styled.div``;
+export const BoldHeader = styled.span`
+  color: ${(props) => props.theme.accent};
+  font-size: var(--font-size-xl);
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: left;
+  &.notBold {
+    font-weight: normal;
+  }
+`;
+
+export const NormalHeader = styled.span`
+  font-size: var(--font-size-xl);
+  text-transform: uppercase;
+  font-weight: normal;
+  text-align: left;
 `;
 
 export const DateRow = styled.div`
-  margin: 15px 0;
+  margin: 10px 0;
   display: flex;
   gap: 5px;
 `;
@@ -83,7 +104,6 @@ export const Info = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  padding: 0 15px 5px;
 `;
 
 export const Container = styled.div`
