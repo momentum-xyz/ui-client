@@ -15,9 +15,13 @@ export const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => 
   return (
     <styled.Container>
       <Heading type="h2" align="left" weight="bold" label={t('staking.accountPair')} />
-      <Text text={t('staking.unbondingInfoAccounts')} size="s" align="left" />
+      <styled.TextContainer>
+        <Text text={t('staking.unbondingInfoAccounts')} size="s" align="left" />
+      </styled.TextContainer>
       <UnbondDetails />
-      <Text text={t('staking.unbondingPeriod')} size="s" align="left" />
+      <styled.TextContainer>
+        <Text text={t('staking.unbondingPeriod')} size="s" align="left" />
+      </styled.TextContainer>
       <UnbondAmountSection />
       <UnbondAmountValidation />
       <styled.ButtonContainer>
