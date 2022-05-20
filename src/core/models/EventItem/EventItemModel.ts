@@ -36,7 +36,7 @@ const EventItemModel = types
       return formatStartDate(new Date(self.start));
     },
     get startTime() {
-      return formatStartTime(new Date(self.end));
+      return formatStartTime(new Date(self.start));
     },
     get endDateAndTime() {
       return formatEndDate(new Date(self.end));
