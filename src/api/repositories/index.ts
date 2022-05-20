@@ -1,3 +1,4 @@
+export * from './configRepository';
 export * from './webRepository';
 export * from './guestRepository';
 export * from './userRepository';
