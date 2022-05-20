@@ -1,3 +1,4 @@
+import * as configRepository from './repositories/configRepository';
 import * as webRepository from './repositories/webRepository';
 import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
@@ -27,6 +28,7 @@ import * as statusRepository from './repositories/statusRepository';
  * An object containing methods for requests from/to our backend API
  */
 export const api = {
+  configRepository,
   webRepository,
   guestRepository,
   userRepository,
@@ -52,6 +54,7 @@ export const api = {
  * Types can include Request and Response namespaces
  * This is a contract between API and frontend
  */
+export * from './repositories/configRepository/configRepository.api.types';
 export * from './repositories/webRepository/webRepository.api.types';
 export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
