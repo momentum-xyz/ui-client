@@ -51,7 +51,7 @@ const unityContext = new UnityContext({
 UnityService.initialize(unityContext);
 
 const App: FC = () => {
-  const {sessionStore, mainStore, initApplication} = useStore();
+  const {configStore, sessionStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
 
   const {pathname} = useLocation();
@@ -60,6 +60,11 @@ const App: FC = () => {
   useEffect(() => {
     initApplication();
   }, [initApplication]);
+
+  // TODO: use isConfigReady and isConfigWrong
+  useEffect(() => {
+    configStore.fetchConfig();
+  }, [configStore]);
 
   if (!isBrowserSupported()) {
     return (
