@@ -62,10 +62,6 @@ const App: FC = () => {
     initApplication();
   }, [initApplication]);
 
-  useEffect(() => {
-    configStore.fetchConfig();
-  }, [configStore]);
-
   if (!isConfigReady) {
     return <></>;
   }
