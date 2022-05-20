@@ -8,7 +8,6 @@ import {useStore} from 'shared/hooks/useStore';
 import * as styled from './Unbond.styled';
 import {UnbondDetails, UnbondAmountSection, UnbondAmountValidation} from './components';
 
-
 interface PropsInterface {
   nominatorTab: () => void;
   authorizationTab: () => void;
