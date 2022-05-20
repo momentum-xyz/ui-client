@@ -34,14 +34,18 @@ const StageModeGuestLayout: React.FC = () => {
     console.info('[STAGEMODE] HAS JOINED STATE CHANGED');
   }, [joinedStage]);
 
-  useWebsocketEvent('stage-mode-accepted', () => {
-    removeAwaitingPermissionPopup();
-    setRequestMade(false);
+  useWebsocketEvent('stage-mode-accepted', (userId) => {
+    if (userId === currentUserId) {
+      removeAwaitingPermissionPopup();
+      setRequestMade(false);
+    }
   });
 
-  useWebsocketEvent('stage-mode-declined', () => {
-    removeAwaitingPermissionPopup();
-    setRequestMade(false);
+  useWebsocketEvent('stage-mode-declined', (userId) => {
+    if (userId === currentUserId) {
+      removeAwaitingPermissionPopup();
+      setRequestMade(false);
+    }
   });
 
   const usersOnStage = () => (
