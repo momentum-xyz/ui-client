@@ -59,16 +59,10 @@ const Web3ChoicePage: FC = () => {
   }, [challenge, loginType, web3ChoiceStore]);
 
   useEffect(() => {
-    if (loginType && loginType !== LoginTypeEnum.Polkadot && loginType !== LoginTypeEnum.Guest) {
+    if (loginType === LoginTypeEnum.Metamask || loginType === LoginTypeEnum.WalletConnect) {
       openChallengePage(true);
     }
   }, [loginType, openChallengePage, web3ChoiceStore]);
-
-  useEffect(() => {
-    if (loginType === LoginTypeEnum.Polkadot && accountList.length === 1) {
-      openChallengePage(true);
-    }
-  }, [loginType, accountList, selectAccount, openChallengePage]);
 
   useEffect(() => {
     if (guestRedirect) {
