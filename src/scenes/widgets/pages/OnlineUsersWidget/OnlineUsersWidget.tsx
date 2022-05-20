@@ -3,7 +3,7 @@ import {Position} from 'react-beautiful-dnd';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {SocialOnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components/SocialOnlineUsersList';
+import {OnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import {useStore} from 'shared/hooks';
 import {ExpandableLayout} from 'ui-kit';
@@ -85,7 +85,7 @@ const OnlineUsersWidget: FC<OnlineUsersWidgetsPropsInterface> = ({onUserInitiati
         setExpand={onlineUsersStore.toggleExpand}
         size={{width: LAYOUT_WIDTH}}
       >
-        <SocialOnlineUsersList />
+        <OnlineUsersList />
       </ExpandableLayout>
     </styled.Container>
   );

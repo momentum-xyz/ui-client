@@ -1,6 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useHistory} from 'react-router';
 import {t} from 'i18next';
+import {observer} from 'mobx-react-lite';
 
 import {Button, SvgButton, Avatar} from 'ui-kit';
 import {endpoints} from 'api/constants';
@@ -8,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
 import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
-import * as styled from './SocialUserItem.styled';
+import * as styled from './UserItem.styled';
 
 export interface SocialUserItemPropsInterface {
   onClick: React.MouseEventHandler<HTMLDivElement>;
@@ -25,7 +26,8 @@ const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
 }) => {
   const {
     mainStore: {unityStore},
-    collaborationStore: {spaceStore}
+    collaborationStore: {spaceStore},
+    sessionStore: {profile}
   } = useStore();
   const history = useHistory();
   const handleFlyToUser = () => {
@@ -61,6 +63,10 @@ const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
     }
   }, [spaceStore.space.id]);
 
+  const isItMe = useMemo(() => {
+    return currentUserId === user.uuid;
+  }, [currentUserId, user.uuid]);
+
   return (
     <styled.Container>
       <styled.InfoContainer onClick={onClick}>
@@ -69,11 +75,16 @@ const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
             user.profile?.avatarHash && `${endpoints.renderService}/get/${user.profile.avatarHash}`
           }
           size="small"
-          status={user.status}
+          status={isItMe ? profile?.status : user.status}
         />
-        <styled.StyledText text={user.name.trim()} size="s" align="left" isMultiline={false} />
+        <styled.StyledText
+          text={(isItMe ? profile?.name ?? '' : user.name).trim()}
+          size="s"
+          align="left"
+          isMultiline={false}
+        />
       </styled.InfoContainer>
-      {currentUserId !== user.uuid &&
+      {!isItMe &&
         (invite ? (
           <styled.InviteButtonContainer>
             <Button
@@ -90,4 +101,4 @@ const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
   );
 };
 
-export default SocialUserItem;
+export default observer(SocialUserItem);
