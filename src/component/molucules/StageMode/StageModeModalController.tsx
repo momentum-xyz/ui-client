@@ -16,7 +16,7 @@ import AcceptedToJoinOnStagePopup from '../../popup/stageMode/AcceptedToJoinOnSt
 import DeclinedToJoinOnStagePopup from '../../popup/stageMode/DeclinedToJoinOnStagePopup';
 
 const StageModeModalController: React.FC = () => {
-  const {collaborationState} = useCollaboration();
+  const {collaborationState, currentUserId} = useCollaboration();
   const {enterStage, isOnStage, canEnterStage} = useAgoraStageMode();
 
   const invitedToStageModalRef = useRef<ModalRef>(null);
@@ -47,15 +47,20 @@ const StageModeModalController: React.FC = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-accepted', () => {
-    if (!isHandlingInviteOrRequest()) {
-      acceptedToJoin.current?.open();
-      setAccepted(true);
+  useWebsocketEvent('stage-mode-accepted', (userId) => {
+    if (userId === currentUserId) {
+      if (!isHandlingInviteOrRequest()) {
+        acceptedToJoin.current?.open();
+        setAccepted(true);
+      }
     }
   });
 
-  useWebsocketEvent('stage-mode-declined', () => {
-    declinedToJoin.current?.open();
+  useWebsocketEvent('stage-mode-declined', (userId) => {
+    //check user
+    if (userId === currentUserId) {
+      declinedToJoin.current?.open();
+    }
   });
 
   const handleDecline = () => {
