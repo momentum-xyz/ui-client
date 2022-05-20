@@ -173,8 +173,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
 
         <li className="overflow-y-scroll h-full pr-.1">
           <p className="text-center whitespace-nowrap">
-            {numberOfPeople}{' '}
-            {(numberOfPeople === 1 ? t('labels.person') : t('labels.people')).toUpperCase()}
+            {t('counts.people', {count: numberOfPeople}).toUpperCase()}
           </p>
           <ul>
             {collaborationState.stageMode
