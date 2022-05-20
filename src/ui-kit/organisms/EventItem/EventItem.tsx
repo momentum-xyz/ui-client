@@ -3,10 +3,12 @@ import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 
 import {EventItemModelInterface} from 'core/models/EventItem';
-import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, SvgButton, Text} from 'ui-kit';
+import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
 import {endpoints} from 'api/constants';
 
 import * as styled from './EventItem.styled';
+import Header from './components/Header/Header';
+import Actions from './components/Actions/Actions';
 
 interface PropsInterface {
   event: EventItemModelInterface;
@@ -98,26 +100,6 @@ const EventItem: FC<PropsInterface> = ({
     </styled.Buttons>
   );
 
-  const header = () => (
-    <styled.Header>
-      {isWorldCalendar ? (
-        <styled.WorldHeader>
-          <styled.BoldHeader>{event.spaceName ?? ''}</styled.BoldHeader>
-          <styled.BoldHeader> / </styled.BoldHeader>
-          <styled.BoldHeader className="notBold">{event.title}</styled.BoldHeader>
-          <styled.BoldHeader className="notBold"> / </styled.BoldHeader>
-          <styled.NormalHeader>{event.hosted_by}</styled.NormalHeader>
-        </styled.WorldHeader>
-      ) : (
-        <styled.SpaceHeader>
-          <styled.BoldHeader>{event.title}</styled.BoldHeader>
-          <styled.BoldHeader className="notBold"> / </styled.BoldHeader>
-          <styled.NormalHeader>{event.hosted_by}</styled.NormalHeader>
-        </styled.SpaceHeader>
-      )}
-    </styled.Header>
-  );
-
   const date = () => (
     <styled.DateRow>
       <Text
@@ -136,32 +118,9 @@ const EventItem: FC<PropsInterface> = ({
     </styled.DateRow>
   );
 
-  const actions = () => (
-    <styled.Actions>
-      {onRemove && (
-        <SvgButton
-          iconName="bin"
-          size="medium"
-          onClick={() => {
-            onRemove(event.id);
-          }}
-        />
-      )}
-      {onEdit && (
-        <SvgButton
-          iconName="edit"
-          size="medium"
-          onClick={() => {
-            onEdit(event);
-          }}
-        />
-      )}
-    </styled.Actions>
-  );
-
   const info = () => (
     <styled.Div>
-      {header()}
+      <Header event={event} isWorldCalendar={isWorldCalendar} />
       {date()}
       <styled.Info>
         <styled.TextRow>
@@ -177,7 +136,7 @@ const EventItem: FC<PropsInterface> = ({
           />
         </styled.TextRow>
         {buttons()}
-        {actions()}
+        <Actions event={event} onEdit={onEdit} onRemove={onRemove} />
       </styled.Info>
     </styled.Div>
   );
