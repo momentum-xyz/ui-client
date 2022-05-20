@@ -35,8 +35,8 @@ export type WebsocketEvents = {
   'stage-mode-invite': () => void;
   'stage-mode-kick': (userId: string) => void;
   'stage-mode-mute': () => void;
-  'stage-mode-accepted': () => void;
-  'stage-mode-declined': () => void;
+  'stage-mode-accepted': (userId: string) => void;
+  'stage-mode-declined': (userId: string) => void;
   'stage-mode-user-joined': (userId: string) => void;
   'stage-mode-user-left': (userId: string) => void;
   'user-wowed': (spaceId: string, count: number) => void;
@@ -196,7 +196,7 @@ class WebsocketService {
       case 'accept-request':
         // eslint-disable-next-line no-case-declarations
         const eventName = message.value === 1 ? 'stage-mode-accepted' : 'stage-mode-declined';
-        WebsocketEventEmitter.emit(eventName);
+        WebsocketEventEmitter.emit(eventName, message.userId);
         break;
       case 'invite':
         // TODO: pass message.invitor

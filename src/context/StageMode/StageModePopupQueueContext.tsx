@@ -61,9 +61,10 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
     ]);
   };
 
-  const removeRequestPopup = () => {
+  const removeRequestPopup = (userId: string) => {
     const filteredPopups = popups.filter(
-      (info) => info.type !== StageModePopupType.RECEIVED_PERMISSION_REQUEST
+      (info) =>
+        info.type === StageModePopupType.RECEIVED_PERMISSION_REQUEST && info.userId !== userId
     );
     setPopups(filteredPopups);
   };
@@ -75,12 +76,12 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
     setPopups(filteredPopups);
   };
 
-  useWebsocketEvent('stage-mode-accepted', () => {
-    removeRequestPopup();
+  useWebsocketEvent('stage-mode-accepted', (userId) => {
+    removeRequestPopup(userId);
   });
 
-  useWebsocketEvent('stage-mode-declined', () => {
-    removeRequestPopup();
+  useWebsocketEvent('stage-mode-declined', (userId) => {
+    removeRequestPopup(userId);
   });
 
   return (
