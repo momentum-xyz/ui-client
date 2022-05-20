@@ -61,12 +61,12 @@ export const useAgoraStageMode = () => {
       // @ts-ignore
       client.localTracks.forEach((localTrack) => {
         localTrack.setEnabled(false);
-        // localTrack.stop();
+        localTrack.stop();
         // localTrack.close();
       });
       await client.unpublish();
-      await client.setClientRole('audience', clientRoleOptions);
       setIsOnStage(false);
+      await client.setClientRole('audience', clientRoleOptions);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client]);
@@ -153,7 +153,6 @@ export const useAgoraStageMode = () => {
       await getCameraConsent();
     }
 
-    console.info('Create cameratrack check device id', collaborationState.videoDevice?.deviceId);
     const cameraTrack = collaborationState.videoDevice?.deviceId
       ? await AgoraRTC.createCameraVideoTrack({
           cameraId: collaborationState.videoDevice?.deviceId,
@@ -165,7 +164,7 @@ export const useAgoraStageMode = () => {
 
     return [microphoneTrack, cameraTrack];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [collaborationState]);
 
   useEffect(() => {
     setStageModeUsers(
