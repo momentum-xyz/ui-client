@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
-import {Unbond} from '../Unbond/Unbond';
+import {Unbond} from '../index';
 
 import {
   ActiveStake,
