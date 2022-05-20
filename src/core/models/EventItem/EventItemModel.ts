@@ -28,10 +28,10 @@ const EventItemModel = types
       return Buffer.from(self.id.replace(/-/g, ''), 'hex');
     },
     get startDateAndTime() {
-      return format(new Date(self.start), 'EEE, MMM M - h:mm aa').toUpperCase();
+      return format(new Date(self.start), 'iii, MMM d - h:mm aa').toUpperCase();
     },
     get endDateAndTime() {
-      return format(new Date(self.end), 'MMM M h:mm aa').toUpperCase();
+      return format(new Date(self.end), 'MMM d h:mm aa').toUpperCase();
     },
     get timeZone() {
       // @ts-ignore
