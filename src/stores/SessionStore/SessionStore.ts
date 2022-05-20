@@ -59,7 +59,9 @@ const SessionStore = types
     changeStatus: flow(function* (status: UserStatusEnum) {
       yield self.statusChangeRequest.send(api.statusRepository.changeStatus, {status});
 
-      self.reload();
+      if (self.profile && self.statusChangeRequest.isDone) {
+        self.profile.status = status;
+      }
     })
   }))
   .views((self) => ({
