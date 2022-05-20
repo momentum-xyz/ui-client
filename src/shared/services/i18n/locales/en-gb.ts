@@ -125,6 +125,10 @@ export const enGb = {
       couldNotRemoveEvent: 'Could not remove the event.',
       endDateGraterThanStartDate: 'End date has to be grater than start date'
     },
+    counts: {
+      people_one: '{{count}} Person',
+      people_other: '{{count}} People'
+    },
     labels: {
       calendar: 'World Calendar',
       staking: 'Staking',
