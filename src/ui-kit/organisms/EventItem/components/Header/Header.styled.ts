@@ -5,21 +5,23 @@ export const Container = styled.div`
   gap: 3px;
 `;
 
-export const Header = styled.div``;
-export const BoldHeader = styled.span`
+export const Header = styled.span`
   color: ${(props) => props.theme.accent};
   font-size: var(--font-size-xl);
   text-transform: uppercase;
-  font-weight: bold;
   text-align: left;
+  &.bold {
+    font-weight: bold;
+  }
   &.notBold {
     font-weight: normal;
   }
 `;
 
-export const NormalHeader = styled.span`
+export const TextHeader = styled.span`
+  color: ${(props) => props.theme.text};
   font-size: var(--font-size-xl);
-  text-transform: uppercase;
   font-weight: normal;
+  text-transform: uppercase;
   text-align: left;
 `;

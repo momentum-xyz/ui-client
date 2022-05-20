@@ -14,17 +14,17 @@ const Header: FC<PropsInterface> = ({event, isWorldCalendar}) => {
     <styled.Container>
       {isWorldCalendar ? (
         <styled.Header>
-          <styled.BoldHeader>{event.spaceName ?? ''}</styled.BoldHeader>
-          <styled.BoldHeader> / </styled.BoldHeader>
-          <styled.BoldHeader className="notBold">{event.title}</styled.BoldHeader>
-          <styled.BoldHeader className="notBold"> / </styled.BoldHeader>
-          <styled.NormalHeader>{event.hosted_by}</styled.NormalHeader>
+          <styled.Header className="bold">{event.spaceName ?? ''}</styled.Header>
+          <styled.Header className="bold"> / </styled.Header>
+          <styled.Header className="notBold">{event.title}</styled.Header>
+          <styled.TextHeader> / </styled.TextHeader>
+          <styled.TextHeader>{event.hosted_by}</styled.TextHeader>
         </styled.Header>
       ) : (
         <styled.Header>
-          <styled.BoldHeader>{event.title}</styled.BoldHeader>
-          <styled.BoldHeader className="notBold"> / </styled.BoldHeader>
-          <styled.NormalHeader>{event.hosted_by}</styled.NormalHeader>
+          <styled.Header className="bold">{event.title}</styled.Header>
+          <styled.Header className="bold"> / </styled.Header>
+          <styled.TextHeader>{event.hosted_by}</styled.TextHeader>
         </styled.Header>
       )}
     </styled.Container>

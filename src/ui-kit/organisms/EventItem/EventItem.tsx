@@ -6,9 +6,8 @@ import {EventItemModelInterface} from 'core/models/EventItem';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
 import {endpoints} from 'api/constants';
 
+import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
-import Header from './components/Header/Header';
-import Actions from './components/Actions/Actions';
 
 interface PropsInterface {
   event: EventItemModelInterface;
@@ -107,13 +106,8 @@ const EventItem: FC<PropsInterface> = ({
 
   const date = () => (
     <styled.DateRow>
-      <Text
-        text={`${event.startDateAndTime.split('-')[0]} -`}
-        size="l"
-        weight="bold"
-        align="left"
-      />
-      <Text text={event.startDateAndTime.split('-')[1]} size="l" align="left" />
+      <Text text={event.startDate} size="l" weight="bold" align="left" />
+      <Text text={event.startTime} size="l" align="left" />
       <Text
         text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
         size="l"
