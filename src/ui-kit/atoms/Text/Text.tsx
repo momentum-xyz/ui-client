@@ -32,7 +32,7 @@ const Text: FC<TextPropsInterface> = ({
 }) => {
   const generateText = () => {
     if (firstBoldSentences && text) {
-      return text.match(/[^.?!]+[.!?]+[\])'"`’”]*|.+/g)?.map((sentence, index) => {
+      return text.match(/([\w\r\n\s])+[.,;:?"']*/g)?.map((sentence, index) => {
         if (index < firstBoldSentences) {
           return <styled.BoldSpan>{sentence}</styled.BoldSpan>;
         }
