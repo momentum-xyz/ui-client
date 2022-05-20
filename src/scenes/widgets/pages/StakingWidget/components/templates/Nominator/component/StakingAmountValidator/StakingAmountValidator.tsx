@@ -49,12 +49,12 @@ const StakingAmountValidator = () => {
   return (
     <>
       {errorMessage && (
-        <styled.StakingAmountValidatorStyled>
+        <styled.Container>
           <Message type={errorType as MessageType} theme={theme}>
             <IconSvg name="warning" size="normal" isWhite={true} />
             <Text text={errorMessage} weight="normal" align="left" size="xs" />
           </Message>
-        </styled.StakingAmountValidatorStyled>
+        </styled.Container>
       )}
     </>
   );
