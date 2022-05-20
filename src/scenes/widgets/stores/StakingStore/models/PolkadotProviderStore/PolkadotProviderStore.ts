@@ -34,6 +34,7 @@ const PolkadotProviderStore = types
       isWeb3Injected: false,
       paymentDestination: types.optional(types.string, ''),
       stakingAmount: types.optional(types.string, ''),
+      unbondAmount: types.optional(types.number, 0),
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string)
     })
@@ -249,6 +250,9 @@ const PolkadotProviderStore = types
       const result = self.addresses.find((account) => account.address === address);
       self.controllerAccount = cast(cloneDeep(result));
       await this.getBalances(address, 'controllerAccountBalance');
+    },
+    setUnbondAmount(amount: number) {
+      self.unbondAmount = cast(amount);
     },
     setPaymentDestination(payee: Payee) {
       self.paymentDestination = cast(payee);

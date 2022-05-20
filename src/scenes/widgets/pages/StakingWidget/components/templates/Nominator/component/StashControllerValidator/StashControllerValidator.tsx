@@ -50,22 +50,22 @@ const StashControllerValidator: FC<PropsInterface> = ({theme}) => {
       state.errorMessage !== newError ? {errorMessage: newError, errorType} : state
     );
   }, [
+    bondedAddress,
     controllerAccount?.address,
     controllerAccountValidation,
     stashAccount?.address,
-    usedStashAddress,
-    t
+    usedStashAddress
   ]);
 
   return (
     <>
       {errorMessage && errorType && (
-        <styled.StashControllerValidator>
+        <styled.Container>
           <Message type={errorType} theme={theme}>
             <IconSvg name="warning" size="normal" isWhite={true} />
             <Text text={errorMessage} weight="normal" align="left" size="xs" />
           </Message>
-        </styled.StashControllerValidator>
+        </styled.Container>
       )}
     </>
   );
