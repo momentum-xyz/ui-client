@@ -10,7 +10,7 @@ const StageModePopupQueueComponent: React.FC = () => {
   const {canEnterStage} = useAgoraStageMode();
 
   return (
-    <div className="flex flex-col space-y-2 h-full">
+    <div className="flex flex-col space-y-2 h-full overflow-y-auto">
       {popups.map((info) => (
         <StageModePopup
           info={info}
