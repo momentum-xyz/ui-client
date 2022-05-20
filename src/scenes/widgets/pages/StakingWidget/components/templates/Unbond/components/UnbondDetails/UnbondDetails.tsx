@@ -1,3 +1,3 @@
 export const UnbondDetails = () => {
-  return <div></div>;
+  return <div />;
 };
