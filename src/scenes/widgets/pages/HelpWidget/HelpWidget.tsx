@@ -36,9 +36,6 @@ const HelpWidget: React.FC = () => {
           <styled.Div>
             <styled.MomentumImage src={momentum} />
             <styled.Item>
-              <Text text={t('helpSection.formTitle')} size="xxl" align="left" />
-            </styled.Item>
-            <styled.Item>
               <Text text={t('helpSection.helpNote')} size="xs" align="left" />
             </styled.Item>
           </styled.Div>
