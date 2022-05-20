@@ -62,7 +62,12 @@ const SessionStore = types
       if (self.profile && self.statusChangeRequest.isDone) {
         self.profile.status = status;
       }
-    })
+    }),
+    updateName(name: string) {
+      if (self.profile) {
+        self.profile.name = name;
+      }
+    }
   }))
   .views((self) => ({
     get isUserReady(): boolean {
