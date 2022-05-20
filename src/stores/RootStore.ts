@@ -35,6 +35,7 @@ const RootStore = types
   })
   .actions((self) => ({
     initApplication(): void {
+      self.configStore.fetchConfig();
       self.mainStore.init();
     }
   }));
