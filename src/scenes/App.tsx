@@ -104,6 +104,15 @@ const App: FC = () => {
     );
   }
 
+  // NO OIDC USER. To await white screen
+  if (!sessionStore.isSessionExists) {
+    return (
+      <Switch>
+        <Redirect to={ROUTES.login} />
+      </Switch>
+    );
+  }
+
   // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>

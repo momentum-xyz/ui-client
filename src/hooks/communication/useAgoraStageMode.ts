@@ -61,12 +61,12 @@ export const useAgoraStageMode = () => {
       // @ts-ignore
       client.localTracks.forEach((localTrack) => {
         localTrack.setEnabled(false);
-        // localTrack.stop();
+        localTrack.stop();
         // localTrack.close();
       });
       await client.unpublish();
-      await client.setClientRole('audience', clientRoleOptions);
       setIsOnStage(false);
+      await client.setClientRole('audience', clientRoleOptions);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client]);
@@ -139,7 +139,7 @@ export const useAgoraStageMode = () => {
   });
 
   const createLocalTracks = useCallback(async (): Promise<
-    [IMicrophoneAudioTrack, ICameraVideoTrack]
+    [IMicrophoneAudioTrack, ICameraVideoTrack | undefined]
   > => {
     if (!microphoneConsent) {
       await getMicrophoneConsent();
@@ -153,16 +153,18 @@ export const useAgoraStageMode = () => {
       await getCameraConsent();
     }
 
-    const cameraTrack = await AgoraRTC.createCameraVideoTrack({
-      cameraId: collaborationState.videoDevice?.deviceId,
-      facingMode: 'user',
-      // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
-      encoderConfig: '480p_1'
-    });
+    const cameraTrack = collaborationState.videoDevice?.deviceId
+      ? await AgoraRTC.createCameraVideoTrack({
+          cameraId: collaborationState.videoDevice?.deviceId,
+          facingMode: 'user',
+          // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
+          encoderConfig: '480p_1'
+        })
+      : undefined;
 
     return [microphoneTrack, cameraTrack];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [collaborationState]);
 
   useEffect(() => {
     setStageModeUsers(
@@ -224,7 +226,11 @@ export const useAgoraStageMode = () => {
         microphoneTrack.setEnabled(!collaborationState.muted).then();
         cameraTrack?.setEnabled(!collaborationState.cameraOff).then();
 
-        await client.publish([microphoneTrack, cameraTrack]);
+        if (cameraTrack) {
+          await client.publish([microphoneTrack, cameraTrack]);
+        } else {
+          await client.publish([microphoneTrack]);
+        }
         setIsOnStage(true);
         setRemoteUsers(client.remoteUsers);
 

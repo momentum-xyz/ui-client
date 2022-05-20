@@ -14,6 +14,7 @@ import * as spaceTypeRepository from './repositories/spaceTypeRepository';
 import * as tablesRepository from './repositories/tablesRepository';
 import * as spaceInviteRepository from './repositories/spaceInviteRepository';
 import * as statsRepository from './repositories/statsRepository';
+import * as statusRepository from './repositories/statusRepository';
 
 /**
  * This layer is responsible for:
@@ -41,7 +42,8 @@ export const api = {
   spaceTypeRepository,
   tablesRepository,
   spaceInviteRepository,
-  statsRepository
+  statsRepository,
+  statusRepository
 };
 
 /**

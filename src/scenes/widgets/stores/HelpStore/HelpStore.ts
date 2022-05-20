@@ -5,7 +5,8 @@ import {DialogModel, ResetModel} from 'core/models';
 export enum HelpSectionType {
   Discord = 'Discord',
   Momentum = 'Momentum',
-  Controls = 'Controls'
+  Controls = 'Controls',
+  Wiki = 'Wiki'
 }
 
 const HelpStore = types
@@ -15,7 +16,8 @@ const HelpStore = types
       helpDialog: types.optional(DialogModel, {}),
       showDiscordSection: false,
       showControlsSection: false,
-      showMomentumSection: false
+      showMomentumSection: false,
+      showWikiSection: false
     })
   )
   .actions((self) => ({

@@ -29,7 +29,8 @@ interface ProfileEditWidgetPropsInterface {
 }
 
 const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, userId}) => {
-  const {profileStore} = useStore().widgetStore;
+  const {widgetStore, sessionStore} = useStore();
+  const {profileStore} = widgetStore;
   const {userProfile, editAvatarDialog} = profileStore;
   const {
     control,
@@ -75,6 +76,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
             isCloseButton
           />
         );
+        sessionStore.updateName(name);
       } else {
         toast.error(
           <ToastContent
