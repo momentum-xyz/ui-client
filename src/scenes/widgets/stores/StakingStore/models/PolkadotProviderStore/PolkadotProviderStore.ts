@@ -88,7 +88,8 @@ const PolkadotProviderStore = types
         const maxAmount = Number(self.unbondAmount) > Number(self.stashAccountBalance?.bonded);
         return {
           minAmount,
-          maxAmount
+          maxAmount,
+          isBondAmountAcceptable: minAmount || maxAmount
         };
       }
     };
