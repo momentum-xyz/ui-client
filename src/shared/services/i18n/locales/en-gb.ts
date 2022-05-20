@@ -186,7 +186,8 @@ export const enGb = {
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
-      stageModeFull: 'The stage is currently full. Try again later to go on stage.'
+      stageModeFull: 'The stage is currently full. Try again later to go on stage.',
+      stageModeMuted: 'You have been muted by a member of the space.'
     },
     titles: {
       alert: 'alert',
