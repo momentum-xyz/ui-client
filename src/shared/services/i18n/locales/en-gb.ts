@@ -121,7 +121,7 @@ export const enGb = {
       unsupportedNetwork: "You're connected to an unsupported network.",
       ethereumAccess: 'Please authorize this website to access your Ethereum account.',
       ethereumExtension:
-        'No Ethereum browser extension detected, please install {{name}} to continue here.',
+        'No {{name}} extension detected, please install {{name}} to continue here.',
       couldNotRemoveEvent: 'Could not remove the event.',
       endDateGraterThanStartDate: 'End date has to be grater than start date'
     },
