@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {t} from 'i18next';
+import {observer} from 'mobx-react-lite';
 
 import {Button, Heading, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks/useStore';
@@ -7,12 +8,13 @@ import {useStore} from 'shared/hooks/useStore';
 import * as styled from './Unbond.styled';
 import {UnbondDetails, UnbondAmountSection, UnbondAmountValidation} from './components';
 
+
 interface PropsInterface {
   nominatorTab: () => void;
   authorizationTab: () => void;
 }
 
-export const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
+const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
   const {unbondAmountValidation} = useStore().widgetStore.stakingStore.polkadotProviderStore;
   return (
     <styled.Container>
@@ -46,3 +48,5 @@ export const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => 
     </styled.Container>
   );
 };
+
+export default observer(Unbond);
