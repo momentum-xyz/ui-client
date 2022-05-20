@@ -32,4 +32,14 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   IS_DEV_ENVIRONMENT: boolean;
   GOOGLE_SDK_URL: string;
   YOUTUBE_API: string;
+
+  // TODO: Move to the AppConfigInterface
+  UNITY_CLIENT_LOADER_URL: string;
+  UNITY_CLIENT_DATA_URL: string;
+  UNITY_CLIENT_FRAMEWORK_URL: string;
+  UNITY_CLIENT_CODE_URL: string;
+  UNITY_CLIENT_STREAMING_ASSETS_URL: string;
+  UNITY_CLIENT_COMPANY_NAME: string;
+  UNITY_CLIENT_PRODUCT_NAME: string;
+  UNITY_CLIENT_PRODUCT_VERSION: string;
 }

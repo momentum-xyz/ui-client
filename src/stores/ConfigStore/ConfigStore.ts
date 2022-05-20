@@ -23,6 +23,14 @@ const ConfigStore = types
           appConstants[key as keyof AppConfigInterface] = value;
         });
 
+        // FIXME: It comes from BE
+        appConstants.UNITY_CLIENT_LOADER_URL = `${appConstants.UNITY_CLIENT_URL}/WebGL.loader.js`;
+        appConstants.UNITY_CLIENT_DATA_URL = `${appConstants.UNITY_CLIENT_URL}/WebGL.data.gz`;
+        appConstants.UNITY_CLIENT_FRAMEWORK_URL = `${appConstants.UNITY_CLIENT_URL}/WebGL.framework.js.gz`;
+        appConstants.UNITY_CLIENT_CODE_URL = `${appConstants.UNITY_CLIENT_URL}/WebGL.wasm.gz`;
+
+        console.log(appConstants);
+
         self.isConfigReady = true;
       }
     })
