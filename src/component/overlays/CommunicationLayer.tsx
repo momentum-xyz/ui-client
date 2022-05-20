@@ -100,16 +100,15 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   };
 
   useEffect(() => {
-    if (
-      remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1 &&
-      !maxVideoStreamsShown
-    ) {
+    const isLimitReached = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+
+    if (isLimitReached && !maxVideoStreamsShown) {
       setMaxVideoStreamsShown(true);
       showMaxVideoStreamsReached();
-    } else if (maxVideoStreamsShown) {
+    } else if (maxVideoStreamsShown && !isLimitReached) {
       setMaxVideoStreamsShown(false);
     }
-  }, [remoteParticipants.length]);
+  }, [maxVideoStreamsShown, remoteParticipants.length]);
 
   // useEffect(() => {
   //   if (collaborationState.collaborationSpace) {
