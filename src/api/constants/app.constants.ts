@@ -27,5 +27,14 @@ export const appConstants: AppConfigExtendedInterface = {
   MIRO_APP_ID: '',
   YOUTUBE_KEY: '',
   GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
-  YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems'
+  YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
+  // FIXME: It comes from BE
+  UNITY_CLIENT_LOADER_URL: '',
+  UNITY_CLIENT_DATA_URL: '',
+  UNITY_CLIENT_FRAMEWORK_URL: '',
+  UNITY_CLIENT_CODE_URL: '',
+  UNITY_CLIENT_STREAMING_ASSETS_URL: 'StreamingAssets',
+  UNITY_CLIENT_COMPANY_NAME: 'Odyssey',
+  UNITY_CLIENT_PRODUCT_NAME: 'Odyssey Momentum',
+  UNITY_CLIENT_PRODUCT_VERSION: '0.1'
 };
