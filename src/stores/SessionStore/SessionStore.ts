@@ -7,7 +7,7 @@ import {storage} from 'core/services';
 import {api, FetchUserResponse} from 'api';
 import {RequestModel, UserProfileModel} from 'core/models';
 import {bytesToUuid, deleteCookieByName} from 'core/utils';
-import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
+import {LoginTypeEnum, StorageKeyEnum, UserStatusEnum} from 'core/enums';
 import {keycloakProviderConfig, web3ProviderConfig, guestProviderConfig} from 'shared/auth';
 
 const SessionStore = types
@@ -15,6 +15,7 @@ const SessionStore = types
     request: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
     profile: types.maybeNull(UserProfileModel),
+    statusChangeRequest: types.optional(RequestModel, {}),
     idToken: types.maybe(types.string),
     userId: ''
   })
@@ -54,6 +55,15 @@ const SessionStore = types
       deleteCookieByName('CREATE_INITIATIVE_SHOWN');
     })
   }))
+  .actions((self) => ({
+    changeStatus: flow(function* (status: UserStatusEnum) {
+      yield self.statusChangeRequest.send(api.statusRepository.changeStatus, {status});
+
+      if (self.profile && self.statusChangeRequest.isDone) {
+        self.profile.status = status;
+      }
+    })
+  }))
   .views((self) => ({
     get isUserReady(): boolean {
       return !self.request.isPending && !self.profileRequest.isPending && !!self.profile;
@@ -64,6 +74,9 @@ const SessionStore = types
     },
     get isGuest(): boolean {
       return this.loginType === LoginTypeEnum.Guest;
+    },
+    get isSessionExists(): boolean {
+      return !!storage.getByPrefix('oidc.user');
     },
     get oidcConfig(): OidcClientSettings | null {
       switch (this.loginType) {

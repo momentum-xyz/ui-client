@@ -141,7 +141,9 @@ export const enGb = {
       tokenRules: 'Token Rules',
       nameOfInitiative: 'Name of Initiative',
       description: 'Description',
-      people: 'People'
+      people: 'People',
+      online: 'Available',
+      dnd: 'Do Not Disturb'
     },
     messages: {
       signIn: 'Sign In Or Create An Account',
@@ -483,12 +485,8 @@ export const enGb = {
     },
     helpSection: {
       title: 'help',
-      formTitle: 'Well hello weary traveler.',
       helpNote:
-        'Your first virtual flight in the Momentiverse can be quite challenging. I am here to\n' +
-        '                help you out as your metaphysical, fully knighted neon flamingo. Your personal\n' +
-        '                animal spirit guide. Everyone can learn how to fly and navigate Odyssey Momentum\n' +
-        '                (even flamingo’s).',
+        'You are about to embark on your flight in Momentum.\n\n Below we have a good dose of the essentials for you to get started.\n\n We have long term plans with Momentum, yet we are at humble beginnings with the release of this first milestone. We are so delighted you are flying with us!\n\n We invite you to help us improve Momentum, as we are at humble beginnings with the release of this first milestone. So...\n\n Something doesn’t work for you? Let us know!\n Something you are missing? Let us know!\n Something you feel should be different? Let us know!\n\nWant to help building Momentum? Let us know ;)',
       discord: {
         iconLabel: 'discord',
         dropDownLabel: 'Join discord',
@@ -556,6 +554,14 @@ export const enGb = {
           four: 'Wanna chat, or have any more questions, crazy ideas or suggestions to us? Check out our momentum space. LFG!'
         },
         visitSpace: 'Visit the Momentum Space'
+      },
+      wiki: {
+        title: 'Wiki',
+        partOne: `Please feel free to deep-dive into the Kusamaverse, its nooks and crannies and feature map in `,
+        highlightedPart: 'our Wiki',
+        partTwo:
+          '. While we do our best to keep our wiki updated please bare in mind this is a living breathing ecosystem that is subject to constant change.',
+        link: 'Wiki Link'
       },
       openLabel: 'Expand',
       closeLabel: 'Minimize'
