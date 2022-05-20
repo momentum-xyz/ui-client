@@ -142,6 +142,7 @@ export const enGb = {
       nameOfInitiative: 'Name of Initiative',
       description: 'Description',
       people: 'People',
+      person: 'Person',
       online: 'Available',
       dnd: 'Do Not Disturb'
     },
