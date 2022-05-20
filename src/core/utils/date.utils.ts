@@ -1,7 +1,7 @@
 /*
  * Returns date as string in YYYYMMDDTHHmmss format
  */
-import {format} from 'date-fns-tz';
+import {formatInTimeZone} from 'date-fns-tz';
 
 export const formattedStringFromDate = (date: Date) => {
   return date.toISOString().replace(/:|-/g, '').split('.')[0] + 'Z';
@@ -63,19 +63,13 @@ export const monthAndYearString = (date: Date) => {
 };
 
 export const formatStartDate = (date: Date) => {
-  return format(date, 'iii, MMM d ', {
-    timeZone: 'Europe/Berlin'
-  }).toUpperCase();
+  return formatInTimeZone(date, 'Europe/Berlin', 'iii, MMM d ').toUpperCase();
 };
 
 export const formatStartTime = (date: Date) => {
-  return format(date, '- h:mm aa', {
-    timeZone: 'Europe/Berlin'
-  }).toUpperCase();
+  return formatInTimeZone(date, 'Europe/Berlin', '- h:mm aa').toUpperCase();
 };
 
 export const formatEndDate = (date: Date) => {
-  return format(date, 'MMM d h:mm aa z', {
-    timeZone: 'Europe/Berlin'
-  }).toUpperCase();
+  return formatInTimeZone(date, 'Europe/Berlin', 'MMM d h:mm aa z').toUpperCase();
 };
