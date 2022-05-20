@@ -19,11 +19,10 @@ const ConfigStore = types
 
       if (configResponse) {
         Object.entries(configResponse).forEach((entry) => {
-          const [constantKey, constantValue] = entry;
-          appConstants[constantKey as keyof AppConfigInterface] = constantValue;
+          const [key, value] = entry;
+          appConstants[key as keyof AppConfigInterface] = value;
         });
 
-        console.log(appConstants);
         self.isConfigReady = true;
       }
     })
