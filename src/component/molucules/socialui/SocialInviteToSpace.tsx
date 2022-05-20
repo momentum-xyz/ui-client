@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {SocialOnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components/SocialOnlineUsersList';
+import {OnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components';
 import {useStore} from 'shared/hooks';
 
 import {ReactComponent as PeopleIcon} from '../../../images/icons/location-user.svg';
@@ -29,7 +29,7 @@ const SocialInviteToSpace: React.FC<SocialInviteToSpaceProps> = ({onClose}) => {
           <CloseIcon className="hover:drop-shadow-white focus-within:drop-shadow-white" />
         </button>
       </div>
-      <SocialOnlineUsersList invite />
+      <OnlineUsersList invite />
     </div>
   );
 };

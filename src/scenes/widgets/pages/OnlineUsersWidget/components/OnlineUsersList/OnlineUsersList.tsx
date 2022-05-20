@@ -2,13 +2,13 @@ import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
+import {UserItem} from 'scenes/widgets/pages/OnlineUsersWidget/components';
 import {useStore} from 'shared/hooks';
 import {SearchInput, useDebouncedEffect} from 'ui-kit';
 import {UserProfileModelInterface} from 'core/models';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
-import {SocialUserItem} from 'scenes/widgets/pages/OnlineUsersWidget/components/SocialUserItem';
 
-import * as styled from './SocialOnlineUsersList.styled';
+import * as styled from './OnlineUsersList.styled';
 
 export interface SocialOnlineUsersListProps {
   invite?: boolean;
@@ -42,10 +42,6 @@ const SocialOnlineUsersList: React.FC<SocialOnlineUsersListProps> = ({invite = f
     return () => clearInterval(timeInterval);
   }, []);
 
-  useEffect(() => {
-    onlineUsersStore.fetchUsers(worldStore.worldId);
-  }, [profile?.status]);
-
   const handleClick = (id: string) => {
     if (onlineUsersStore.selectedUserId !== id) {
       onlineUsersStore.selectUser(id);
@@ -71,7 +67,7 @@ const SocialOnlineUsersList: React.FC<SocialOnlineUsersListProps> = ({invite = f
       return onlineUsersStore.searchedUsers
         .filter((user) => (invite ? user.uuid !== profile?.uuid : true))
         .map((user) => (
-          <SocialUserItem
+          <UserItem
             user={user}
             key={user.uuid}
             currentUserId={profile.uuid}
@@ -87,7 +83,7 @@ const SocialOnlineUsersList: React.FC<SocialOnlineUsersListProps> = ({invite = f
     ];
 
     return sortedUsers.map((user) => (
-      <SocialUserItem
+      <UserItem
         key={user.uuid}
         currentUserId={profile.uuid}
         user={user}
