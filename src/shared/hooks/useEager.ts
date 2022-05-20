@@ -9,6 +9,7 @@ import {isWeb3Injected, web3Accounts, web3Enable, web3FromSource} from '@polkado
 import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import {PolkadotExtensionException, SessionException} from 'core/exceptions';
+import {DELAY_DEFAULT, wait} from 'core/utils';
 
 const WEB3_ENABLE_ORIGIN_NAME = 'momentum-world';
 const POLKADOT_CANCELED_ERROR = 'Eager: Polkadot auth canceled';
@@ -41,6 +42,9 @@ export const useEager = (
   const isPolkadotConnector = name === LoginTypeEnum.Polkadot;
 
   const activePolkadotExtension = async () => {
+    // Waiting for polkadot.js extension
+    await wait(DELAY_DEFAULT);
+
     const extensions = await web3Enable(WEB3_ENABLE_ORIGIN_NAME);
     if (!isWeb3Injected || extensions.length === 0) {
       const err: any = new PolkadotExtensionException();
@@ -49,7 +53,11 @@ export const useEager = (
     }
 
     const allAccounts = await web3Accounts();
-    const account = allAccounts.find((i) => i.address === polkadotAddress);
+    if (allAccounts.length === 0) {
+      return;
+    }
+
+    const account = allAccounts.find((i) => i.address === polkadotAddress) || allAccounts[0];
     if (account) {
       const injector = await web3FromSource(account.meta.source);
       const signRaw = injector?.signer?.signRaw;
