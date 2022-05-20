@@ -14,6 +14,7 @@ const Web3ChallengePage: FC = () => {
   const loginAccount = searchParams.get('login_account') || '';
   const challenge = searchParams.get('login_challenge') || '';
   const loginType = searchParams.get('login_type') || '';
+  const skipChoiceRedirect = !!searchParams.get('skip_choice_redirect');
 
   const web3Connector = getWeb3Connector(loginType);
   if (web3Connector) {
@@ -22,6 +23,7 @@ const Web3ChallengePage: FC = () => {
         challenge={challenge}
         web3Connector={web3Connector}
         loginAccount={loginAccount}
+        skipChoiceRedirect={skipChoiceRedirect}
       />
     );
   }

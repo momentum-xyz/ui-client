@@ -8,7 +8,7 @@ import momentum from 'static/images/momentum.svg';
 import flamingo from 'static/images/flamingo.svg';
 import {useStore} from 'shared/hooks';
 
-import {Discord, Controls, Momentum} from './components';
+import {Discord, Controls, Momentum, Wiki} from './components';
 import * as styled from './HelpWidget.styled';
 
 const HelpWidget: React.FC = () => {
@@ -36,9 +36,6 @@ const HelpWidget: React.FC = () => {
           <styled.Div>
             <styled.MomentumImage src={momentum} />
             <styled.Item>
-              <Text text={t('helpSection.formTitle')} size="xxl" align="left" />
-            </styled.Item>
-            <styled.Item>
               <Text text={t('helpSection.helpNote')} size="xs" align="left" />
             </styled.Item>
           </styled.Div>
@@ -52,6 +49,9 @@ const HelpWidget: React.FC = () => {
           </styled.Item>
           <styled.Item>
             <Controls />
+          </styled.Item>
+          <styled.Item>
+            <Wiki />
           </styled.Item>
           <styled.Item>
             <Discord />

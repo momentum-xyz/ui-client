@@ -11,3 +11,4 @@ export * from './tokenRules.enum';
 export * from './sortDirection.enum';
 export * from './scanner.enum';
 export * from './payee.enum';
+export * from './userStatus.enum';
