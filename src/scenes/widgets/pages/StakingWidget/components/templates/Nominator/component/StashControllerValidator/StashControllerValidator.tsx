@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {IconSvg, Text, Message, PropsWithThemeInterface} from 'ui-kit';
-import {StakeValidatorErrorType} from 'core/types';
+import {StakeValidatorErrorType, MessageType} from 'core/types';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './StashControllerValidator.styled';
@@ -20,15 +20,13 @@ const StashControllerValidator: FC<PropsInterface> = ({theme}) => {
   } = useStore().widgetStore.stakingStore.polkadotProviderStore;
 
   const [{errorMessage, errorType}, setError] = useState<StakeValidatorErrorType>({
-    errorMessage: null,
+    errorMessage: '',
     errorType: ''
   });
 
   useEffect(() => {
-    // @ts-ignore
-    let newError;
-    // @ts-ignore
-    let errorType;
+    let newError: string;
+    let errorType: MessageType | '';
     if (controllerAccountValidation.isMappedToAnotherStash) {
       errorType = 'danger';
       newError = t('staking.validation.controller.stashed', {bondedAddress});
@@ -42,15 +40,14 @@ const StashControllerValidator: FC<PropsInterface> = ({theme}) => {
       errorType = 'warning';
       newError = t('staking.validation.controller.distinctAccounts');
     } else {
-      newError = null;
+      newError = '';
+      errorType = '';
     }
 
     setError((state) =>
-      // @ts-ignore
       state.errorMessage !== newError ? {errorMessage: newError, errorType} : state
     );
   }, [
-    bondedAddress,
     controllerAccount?.address,
     controllerAccountValidation,
     stashAccount?.address,
