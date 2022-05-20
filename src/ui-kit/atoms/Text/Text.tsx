@@ -3,6 +3,7 @@ import cn from 'classnames';
 
 import {TextAlignType, TextSize, TextTransform, TextWeightType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
+import {splitIntoFirstNSentencesAndRest} from 'core/utils';
 
 import * as styled from './Text.styled';
 
@@ -32,13 +33,17 @@ const Text: FC<TextPropsInterface> = ({
 }) => {
   const generateText = () => {
     if (firstBoldSentences && text) {
-      return text.match(/([\w\r\n\s])+[.,;:?"']*/g)?.map((sentence, index) => {
-        if (index < firstBoldSentences) {
-          return <styled.BoldSpan>{sentence}</styled.BoldSpan>;
-        }
+      const [firstSentences, restSentences] = splitIntoFirstNSentencesAndRest(
+        text,
+        firstBoldSentences
+      );
 
-        return sentence;
-      });
+      return (
+        <>
+          <styled.BoldSpan>{firstSentences.join()}</styled.BoldSpan>
+          {restSentences.join()}
+        </>
+      );
     }
 
     return text;
