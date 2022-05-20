@@ -78,6 +78,8 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
     const audioTrack = client.localTracks.find((track) => track.trackMediaType === 'audio');
     if (cameraTrack) {
       setIsLocalVideoMuted(!cameraTrack.enabled);
+    } else {
+      setIsLocalVideoMuted(true);
     }
     if (audioTrack) {
       setIsLocalAudioMuted(!audioTrack.enabled);

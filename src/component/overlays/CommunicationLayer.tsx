@@ -75,6 +75,18 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     }
   });
 
+  useWebsocketEvent('stage-mode-mute', () => {
+    toast.info(
+      <ToastContent
+        headerIconName="alert"
+        title={t('titles.alert')}
+        text={t('messages.stageModeMuted')}
+        isCloseButton
+      />,
+      TOAST_GROUND_OPTIONS
+    );
+  });
+
   const showMaxVideoStreamsReached = () => {
     toast.info(
       <ToastContent
