@@ -10,11 +10,11 @@ import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 
 import * as styled from './OnlineUsersList.styled';
 
-export interface SocialOnlineUsersListProps {
+export interface OnlineUsersListProps {
   invite?: boolean;
 }
 
-const SocialOnlineUsersList: React.FC<SocialOnlineUsersListProps> = ({invite = false}) => {
+const OnlineUsersList: React.FC<OnlineUsersListProps> = ({invite = false}) => {
   const {
     sessionStore,
     mainStore: {worldStore, unityStore},
@@ -107,4 +107,4 @@ const SocialOnlineUsersList: React.FC<SocialOnlineUsersListProps> = ({invite = f
   );
 };
 
-export default observer(SocialOnlineUsersList);
+export default observer(OnlineUsersList);

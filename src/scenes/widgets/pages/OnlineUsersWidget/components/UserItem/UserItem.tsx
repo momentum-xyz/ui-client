@@ -11,19 +11,14 @@ import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
 import * as styled from './UserItem.styled';
 
-export interface SocialUserItemPropsInterface {
+export interface UserItemPropsInterface {
   onClick: React.MouseEventHandler<HTMLDivElement>;
   currentUserId: string;
   invite: boolean;
   user: UserProfileModelInterface;
 }
 
-const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
-  onClick,
-  currentUserId,
-  invite,
-  user
-}) => {
+const UserItem: React.FC<UserItemPropsInterface> = ({onClick, currentUserId, invite, user}) => {
   const {
     mainStore: {unityStore},
     collaborationStore: {spaceStore},
@@ -101,4 +96,4 @@ const SocialUserItem: React.FC<SocialUserItemPropsInterface> = ({
   );
 };
 
-export default observer(SocialUserItem);
+export default observer(UserItem);
