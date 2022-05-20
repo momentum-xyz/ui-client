@@ -31,7 +31,7 @@ const UnbondAmountSection: FC<PropsInterface> = ({theme}) => {
           theme={theme}
           text={t('staking.unbondAmount')}
           size="xxs"
-          align="right"
+          align="left"
           weight="bold"
           transform="uppercase"
         />

@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {t} from 'i18next';
 
 import {Button, Heading, Text} from 'ui-kit';
+import {useStore} from 'shared/hooks/useStore';
 
 import * as styled from './Unbond.styled';
 import {UnbondDetails, UnbondAmountSection, UnbondAmountValidation} from './components';
@@ -12,6 +13,7 @@ interface PropsInterface {
 }
 
 export const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
+  const {unbondAmountValidation} = useStore().widgetStore.stakingStore.polkadotProviderStore;
   return (
     <styled.Container>
       <Heading type="h2" align="left" weight="bold" label={t('staking.accountPair')} />
@@ -35,6 +37,7 @@ export const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => 
         <Button
           variant="primary"
           label={t('staking.unbond')}
+          disabled={unbondAmountValidation.isBondAmountAcceptable}
           icon="lightningDuotone"
           wide={false}
           onClick={authorizationTab}
