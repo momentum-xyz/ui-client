@@ -1,11 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
-import {ToastContent} from 'ui-kit';
+import {ToastContent, Toggle} from 'ui-kit';
 
-import StageModeToggle from '../../atoms/StageMode/StageModeToggle';
 import Page from '../../molucules/Page';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
@@ -20,8 +19,6 @@ import StageModeStage from '../../atoms/StageMode/StageModeStage';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {useUser} from '../../../hooks/api/useUser';
-import StageModeButton from '../../atoms/StageMode/StageModeButton';
-import StageModeLabel from '../../atoms/StageMode/StageModeLabel';
 import {
   useIntegrationDisable,
   useIntegrationEnable
@@ -29,13 +26,20 @@ import {
 import {IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
 import {StageModeStatus} from '../../../context/type/StageMode';
 import useContextAuth from '../../../context/Auth/hooks/useContextAuth';
+import Button from '../../atoms/Button';
+import CONFIG from '../../../config/config';
+import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';
 
 const StageModeControlPanelLayout: React.FC = () => {
+  const [stageStats, setStageStats] = useState<{speakers: number; audience: number}>({
+    speakers: 0,
+    audience: 0
+  });
   const {collaborationState} = useCollaboration();
   const {authState} = useContextAuth();
-  const {isOnStage, enterStage, leaveStage, canEnterStage} = useAgoraStageMode();
+  const {isOnStage, enterStage, leaveStage, canEnterStage, stageModeUsers} = useAgoraStageMode();
   const {addRequestPopup} = useStageModePopupQueueContext();
   const [enableStageMode] = useIntegrationEnable();
   const [disableStageMode] = useIntegrationDisable();
@@ -185,28 +189,65 @@ const StageModeControlPanelLayout: React.FC = () => {
     </div>
   );
 
+  useEffect(() => {
+    const audience = stageModeUsers.filter((user) => {
+      return user.role === ParticipantRole.AUDIENCE_MEMBER;
+    });
+
+    const speakers = stageModeUsers.filter((user) => {
+      return user.role === ParticipantRole.SPEAKER;
+    });
+
+    setStageStats({
+      speakers: isOnStage ? speakers.length + 1 : speakers.length,
+      audience: isOnStage ? audience.length - 1 : audience.length
+    });
+  }, [stageModeUsers, isOnStage]);
+
+  const actions = useMemo(() => {
+    return (
+      <div className="flex items-center justify-between mx-4 gap-2 flex-grow">
+        <div className="flex items-center gap-1">
+          <Toggle
+            checked={collaborationState.stageMode}
+            onChange={(checked) => onStageModeToggle(checked ? true : false)}
+          />
+          <span className="text-sm">
+            {collaborationState.stageMode
+              ? 'Stage is active'
+              : 'Stage is inactive. Toggle to activate.'}
+          </span>
+        </div>
+        {collaborationState.stageMode && (canEnterStage() || isOnStage) && (
+          <>
+            <div className="flex items-center gap-1">
+              <span>
+                Speakers: {stageStats.speakers}/{CONFIG.video.MAX_STAGE_USERS}
+              </span>
+              <span>Audience: {stageStats.audience}</span>
+            </div>
+            <Button
+              type={isOnStage ? 'ghost-red' : 'ghost'}
+              onClick={isOnStage ? handleLeaveStage : handleEnterStage}
+            >
+              {isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+            </Button>
+          </>
+        )}
+        {collaborationState.stageMode && !canEnterStage() && <span>Stage is full</span>}
+      </div>
+    );
+  }, [collaborationState, canEnterStage, isOnStage, handleLeaveStage, handleEnterStage]);
+
   return (
     <Page
       title={collaborationState.collaborationSpace?.name || ''}
-      subtitle="Stage Mode&nbsp;&nbsp;/&nbsp;&nbsp;Control panel"
+      subtitle="Stage Mode"
       collaboration
+      actions={actions}
     >
       <div className="flex w-full">
         <div className="flex flex-col space-y-1">
-          <StageModeToggle
-            isActivated={collaborationState.stageMode}
-            onToggle={onStageModeToggle}
-          />
-          {collaborationState.stageMode && (canEnterStage() || isOnStage) && (
-            <StageModeButton
-              type={isOnStage ? 'ghost-red' : 'ghost-green'}
-              text={isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
-              onClick={isOnStage ? handleLeaveStage : handleEnterStage}
-            />
-          )}
-          {collaborationState.stageMode && !canEnterStage() && (
-            <StageModeLabel type="ghost-red" text="Stage is full" />
-          )}
           <StageModePopupQueueComponent />
         </div>
         {collaborationState.stageMode ? usersOnStage() : stageModeOffMessage()}

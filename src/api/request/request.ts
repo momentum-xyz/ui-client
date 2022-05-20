@@ -72,7 +72,7 @@ export const extendAxiosInterceptors = (token: string) => {
 
 export const refreshAxiosInterceptors = (
   authProps: AuthContextProps,
-  callback?: (token?: string) => void,
+  callback?: (token: string) => void,
   errorCallback?: () => void
 ) => {
   // @ts-ignore: strange types

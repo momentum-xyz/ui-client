@@ -127,7 +127,7 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
             ) : (
               <AstronautIcon className="w-4 h-4" title={userName} />
             )}
-            {collaborationState.stageMode && hovered && (
+            {collaborationState.stageMode && isModerator && hovered && (
               <div
                 className="flex flex-col bg-dark-blue-50 rounded-full absolute h-full w-full items-center justify-center space-y-.5"
                 onClick={

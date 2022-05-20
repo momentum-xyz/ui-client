@@ -59,6 +59,7 @@ declare type IconName =
   | 'miro'
   | 'mouse-pad'
   | 'music'
+  | 'notes'
   | 'people'
   | 'planet'
   | 'polkadotprofile'

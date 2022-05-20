@@ -1,10 +1,12 @@
 import React, {FC} from 'react';
-import {t} from 'i18next';
 import {useAuth} from 'react-oidc-context';
+import {useTranslation} from 'react-i18next';
+import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
-import {Avatar, Dialog, IconSvg, Text} from 'ui-kit';
+import {Avatar, Dialog, IconSvg, Text, Toggle} from 'ui-kit';
 import {endpoints} from 'api/constants';
+import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './ProfileMenuWidget.styled';
 
@@ -17,6 +19,8 @@ const ProfileMenuWidget: FC = () => {
   const {profileMenuStore, settingsStore, tokenRulesStore} = widgetStore;
 
   const auth = useAuth();
+
+  const {t} = useTranslation();
 
   // @ts-ignore
   const signOutUser = (e) => {
@@ -37,6 +41,10 @@ const ProfileMenuWidget: FC = () => {
   const handleTokenRulesOpen = () => {
     tokenRulesStore.widgetDialog.open();
     profileMenuStore.profileMenuDialog.close();
+  };
+
+  const handleChangeStatus = (checked: boolean) => {
+    sessionStore.changeStatus(checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB);
   };
 
   if (!profile?.profile) {
@@ -61,6 +69,15 @@ const ProfileMenuWidget: FC = () => {
             />
           </styled.IconContainer>
           <Text text={profile.name} size="xxs" />
+        </styled.Option>
+        <styled.Option onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}>
+          <Toggle
+            size="small"
+            variant="availability"
+            checked={profile.status === UserStatusEnum.ONLINE}
+            onChange={handleChangeStatus}
+          />
+          <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
         </styled.Option>
         {profile.isNodeAdmin && (
           <styled.Option onClick={handleTokenRulesOpen}>
@@ -87,4 +104,4 @@ const ProfileMenuWidget: FC = () => {
   );
 };
 
-export default ProfileMenuWidget;
+export default observer(ProfileMenuWidget);
