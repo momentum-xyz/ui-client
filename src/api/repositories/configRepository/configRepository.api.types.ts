@@ -1,7 +1,7 @@
+import {AppConfigInterface} from 'api/interfaces';
+
 /** ENV VARIABLES LIST **/
 
-export interface EnvVariablesRequest {}
+export interface AppConfigRequest {}
 
-export interface EnvVariablesResponse {
-  redirect: string;
-}
+export interface AppConfigResponse extends AppConfigInterface {}
