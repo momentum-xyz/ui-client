@@ -180,12 +180,10 @@ const PolkadotProviderStore = types
     getBondedAddress: flow(function* (address: string) {
       const bonded =
         self.channel !== null ? yield self.channel.query.staking.bonded(address) : null;
-      console.log(bonded.toJSON());
       self.bondedAddress = cast(bonded.toJSON());
     }),
     getUsedStashAddress: flow(function* (address: string) {
       const stash = self.channel !== null ? yield self.channel.query.staking.ledger(address) : null;
-      console.log(stash.toJSON());
       const stashId = stash.toJSON() !== null ? stash.toJSON().stash : null;
       self.usedStashAddress = cast(stashId);
     }),
