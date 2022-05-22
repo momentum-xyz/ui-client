@@ -14,7 +14,12 @@ const WithdrawUnbondDetails = () => {
     <>
       <Heading type="h2" align="left" weight="bold" label={t('staking.transactionCalls')} />
       <styled.Row>
-        <Text text={t('staking.withdrawUnbondedCall')} size="xs" weight="bold" transform="uppercase" />
+        <Text
+          text={t('staking.withdrawUnbondedCall')}
+          size="xs"
+          weight="bold"
+          transform="uppercase"
+        />
         <styled.CurrentAddress>
           <Text text={`${unbondAmount} ${tokenSymbol}`} size="xs" align="left" />
         </styled.CurrentAddress>
