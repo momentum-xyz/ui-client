@@ -22,13 +22,13 @@ export interface CollaborationState {
 
 export const collaborationStateDefaults: CollaborationState = {
   enabled: false,
-  muted: false,
+  muted: true,
   isTogglingMute: false,
   isTogglingCamera: false,
   deafen: false,
   chatOpen: false,
   stageMode: false,
-  cameraOff: false,
+  cameraOff: true,
   collaborationSpace: null,
   collaborationTable: null,
   removedCollaborationSpace: false,

@@ -78,6 +78,8 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
     const audioTrack = client.localTracks.find((track) => track.trackMediaType === 'audio');
     if (cameraTrack) {
       setIsLocalVideoMuted(!cameraTrack.enabled);
+    } else {
+      setIsLocalVideoMuted(true);
     }
     if (audioTrack) {
       setIsLocalAudioMuted(!audioTrack.enabled);
@@ -86,7 +88,7 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
   }, [client, client.localTracks]);
 
   return (
-    <div className="relative w-full h-full flex items-center p-1">
+    <div className="relative w-full h-full flex items-center p-1 max-h-[80vh] max-w-[142vh]">
       {/*<div className="absolute top-0 z-pop-over">*/}
       {/*  DEBUG:<br/>*/}
       {/*  onstage:{isOnStage? 'true':'false'}<br/>*/}

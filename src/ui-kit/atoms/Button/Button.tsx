@@ -1,7 +1,7 @@
 import React, {FC, memo, MouseEventHandler} from 'react';
 import cn from 'classnames';
 
-import {SizeType, VariantType} from 'ui-kit/types';
+import {SizeType, TextTransform, VariantType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 import {IconSvg} from 'ui-kit';
 
@@ -12,6 +12,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   icon?: IconName;
   size?: SizeType;
   variant?: VariantType;
+  transform?: TextTransform;
   wide?: boolean;
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
@@ -28,6 +29,7 @@ const Button: FC<PropsInterface> = (props) => {
     label,
     submit = false,
     theme,
+    transform = 'uppercase',
     disabled,
     onClick,
     icon,
@@ -44,6 +46,7 @@ const Button: FC<PropsInterface> = (props) => {
       className={cn(
         variant,
         size,
+        `transform-${transform}`,
         wide && 'wide',
         isCustom && 'Button-custom',
         noWhitespaceWrap && 'noWhitespaceWrap'

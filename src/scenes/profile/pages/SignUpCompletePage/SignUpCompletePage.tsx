@@ -25,7 +25,7 @@ const SignUpCompletePage: FC = () => {
     if (idToken) {
       sessionStore.init(idToken);
     }
-  }, [idToken]);
+  }, [idToken, sessionStore]);
 
   const updateProfileHandle = useCallback(
     async (form: SignUpFormInterface) => {
@@ -35,11 +35,11 @@ const SignUpCompletePage: FC = () => {
         history.push(ROUTES.base);
       }
     },
-    [signUpCompleteStore, sessionStore]
+    [signUpCompleteStore, sessionStore, history]
   );
 
   return (
-    <styled.Background style={{backgroundImage: `url(${background})`}}>
+    <styled.Background background={background}>
       <PanelLayout isBodyExtendingToEdges>
         <styled.Wrapper>
           <styled.Logo src={momentum} />
@@ -53,7 +53,6 @@ const SignUpCompletePage: FC = () => {
               }}
               fieldErrors={errors}
               isSubmitDisabled={isUpdating}
-              /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
               onSubmit={updateProfileHandle}
             />
           )}

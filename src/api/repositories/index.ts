@@ -1,4 +1,5 @@
 export * from './webRepository';
+export * from './guestRepository';
 export * from './userRepository';
 export * from './profileRepository';
 export * from './eventsRepository';
@@ -10,3 +11,4 @@ export * from './favoriteRepository';
 export * from './tokenRepository';
 export * from './spaceTypeRepository';
 export * from './spaceInviteRepository';
+export * from './statusRepository';

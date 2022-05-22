@@ -3,6 +3,7 @@ import {types, Instance, flow} from 'mobx-state-tree';
 import {UUIDModel} from 'core/models/UUID';
 import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';
+import {UserStatusEnum} from 'core/enums';
 
 import {RequestModel} from '../Request';
 
@@ -19,7 +20,8 @@ const UserProfileModel = types
     profile: types.maybeNull(types.frozen<UserProfileInterface>()),
     isNodeAdmin: types.optional(types.boolean, false),
     inviteRequest: types.optional(RequestModel, {}),
-    invited: false
+    invited: false,
+    status: types.maybe(types.enumeration(Object.values(UserStatusEnum)))
   })
   .views((self) => ({
     get uuid(): string {

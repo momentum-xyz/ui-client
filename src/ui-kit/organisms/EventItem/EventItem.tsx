@@ -3,17 +3,10 @@ import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 
 import {EventItemModelInterface} from 'core/models/EventItem';
-import {
-  AddToCalendarDropdown,
-  Button,
-  Heading,
-  IconSvg,
-  ShowMoreText,
-  SvgButton,
-  Text
-} from 'ui-kit';
+import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
 import {endpoints} from 'api/constants';
 
+import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
 
 interface PropsInterface {
@@ -46,28 +39,36 @@ const EventItem: FC<PropsInterface> = ({
       <styled.Buttons>
         {isWorldCalendar && event.spaceId && (
           <Button
-            label={t('eventList.eventItem.flyToSpace')}
+            label={`${t('eventList.eventItem.flyToSpace')} ${
+              event.spaceName && event.spaceName.slice(0, 12)
+            } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
             isCustom
+            transform="capitalized"
             onClick={() => onFlyToSpace?.(event.spaceId ?? '')}
             icon="fly-to"
             noWhitespaceWrap
           />
         )}
-        {!!event.web_link && (
-          <Button
-            label={t('eventList.eventItem.websiteLink')}
-            icon="link"
-            // @ts-ignore
-            onClick={() => onWeblinkClick(event.web_link)}
-          />
-        )}
+
         <Button
           onClick={() => {
             onMagicLinkOpen(event.id, event.spaceId ?? undefined);
           }}
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
+          transform="capitalized"
+          isCustom
         />
+        {!!event.web_link && (
+          <Button
+            label={t('eventList.eventItem.websiteLink')}
+            icon="link"
+            transform="capitalized"
+            isCustom
+            // @ts-ignore
+            onClick={() => onWeblinkClick(event.web_link)}
+          />
+        )}
       </styled.Buttons>
       <styled.Buttons>
         {event.isLive() && (
@@ -81,9 +82,9 @@ const EventItem: FC<PropsInterface> = ({
             event={event.asCalendarEvent}
             buttonProps={{
               label: t('eventList.eventItem.addToCalendar'),
-              variant: 'inverted',
               icon: 'calendar',
-              isCustom: true
+              isCustom: true,
+              transform: 'capitalized'
             }}
             items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL, SHARE_SITES.OUTLOOK]}
             className="AddToCalendarContainer"
@@ -92,7 +93,9 @@ const EventItem: FC<PropsInterface> = ({
         {event.isLive() && isWorldCalendar && event.spaceId && (
           <Button
             variant="inverted"
+            icon="fly-to"
             label={t('eventList.eventItem.joinGathering')}
+            transform="capitalized"
             // @ts-ignore
             onClick={() => onFlyToGathering?.(event.spaceId)}
           />
@@ -101,51 +104,40 @@ const EventItem: FC<PropsInterface> = ({
     </styled.Buttons>
   );
 
+  const date = () => (
+    <styled.DateRow>
+      <Text text={event.startDate} size="l" weight="bold" align="left" />
+      <Text text={event.startTime} size="l" align="left" />
+      <Text
+        text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
+        size="l"
+        transform="uppercase"
+        align="left"
+      />
+    </styled.DateRow>
+  );
+
   const info = () => (
-    <styled.Info>
-      <styled.Row>
-        <styled.BaseInfo>
-          <Text
-            text={`${t('eventList.eventItem.by')}: ${event.hosted_by}`}
-            size="l"
-            weight="bold"
-            align="left"
+    <styled.Div>
+      <Header event={event} isWorldCalendar={isWorldCalendar} />
+      {date()}
+      <styled.Info>
+        <styled.TextRow>
+          <ShowMoreText
+            text={event.description}
+            textProps={{
+              size: 's',
+              align: 'left',
+              firstBoldSentences: 1,
+              isCustom: true
+            }}
+            isCustom
           />
-          {isWorldCalendar && (
-            <Text
-              text={`${t('eventList.eventItem.at')}: ${event.spaceName ?? ''}`}
-              size="l"
-              weight="bold"
-              align="left"
-            />
-          )}
-          <Text
-            text={`${t('eventList.eventItem.from')}: ${event.startDateAndTime}`}
-            size="l"
-            weight="bold"
-            align="left"
-          />
-          <Text
-            text={`${t('eventList.eventItem.to')}: ${event.endDateAndTime}`}
-            size="l"
-            weight="bold"
-            align="left"
-          />
-          <Text text={event.timeZone} size="l" weight="bold" align="left" />
-        </styled.BaseInfo>
-        <ShowMoreText
-          text={event.description}
-          textProps={{
-            size: 's',
-            align: 'left',
-            firstBoldSentences: 1,
-            isCustom: true
-          }}
-          isCustom
-        />
-      </styled.Row>
-      {buttons()}
-    </styled.Info>
+        </styled.TextRow>
+        {buttons()}
+        <Actions event={event} onEdit={onEdit} onRemove={onRemove} />
+      </styled.Info>
+    </styled.Div>
   );
 
   const image = () => (
@@ -160,33 +152,8 @@ const EventItem: FC<PropsInterface> = ({
 
   return (
     <styled.Container style={{zIndex: zIndex}} id={event.id}>
-      <styled.Row className="header">
-        <Heading type="h1" align="left" label={event.title} transform="uppercase" />
-        <styled.Actions>
-          {onRemove && (
-            <SvgButton
-              iconName="bin"
-              size="medium"
-              onClick={() => {
-                onRemove(event.id);
-              }}
-            />
-          )}
-          {onEdit && (
-            <SvgButton
-              iconName="edit"
-              size="medium"
-              onClick={() => {
-                onEdit(event);
-              }}
-            />
-          )}
-        </styled.Actions>
-      </styled.Row>
-      <styled.Row className="body">
-        {image()}
-        {info()}
-      </styled.Row>
+      <styled.Row className="header">{image()}</styled.Row>
+      {info()}
     </styled.Container>
   );
 };

@@ -1,21 +1,21 @@
-import {types, flow, cast} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
-import {OidcClientSettings} from 'oidc-client-ts';
+import {OidcClientSettings, SignoutRedirectArgs} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
 
 import {storage} from 'core/services';
 import {api, FetchUserResponse} from 'api';
 import {RequestModel, UserProfileModel} from 'core/models';
 import {bytesToUuid, deleteCookieByName} from 'core/utils';
-import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
-import {web3ProviderConfig} from 'shared/services/web3';
-import {keycloakProviderConfig} from 'shared/services/keycloak';
+import {LoginTypeEnum, StorageKeyEnum, UserStatusEnum} from 'core/enums';
+import {keycloakProviderConfig, web3ProviderConfig, guestProviderConfig} from 'shared/auth';
 
 const SessionStore = types
   .model('SessionStore', {
     request: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
     profile: types.maybeNull(UserProfileModel),
+    statusChangeRequest: types.optional(RequestModel, {}),
     idToken: types.maybe(types.string),
     userId: ''
   })
@@ -51,22 +51,51 @@ const SessionStore = types
       const id_token_hint = auth.user?.id_token;
       yield auth.revokeTokens();
       yield auth.removeUser();
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      yield auth.signoutRedirect({id_token_hint: id_token_hint} as any); // BUG in typedefs oidc-client-ts
+      yield auth.signoutRedirect({id_token_hint: id_token_hint} as SignoutRedirectArgs);
       deleteCookieByName('CREATE_INITIATIVE_SHOWN');
     })
+  }))
+  .actions((self) => ({
+    changeStatus: flow(function* (status: UserStatusEnum) {
+      yield self.statusChangeRequest.send(api.statusRepository.changeStatus, {status});
+
+      if (self.profile && self.statusChangeRequest.isDone) {
+        self.profile.status = status;
+      }
+    }),
+    updateName(name: string) {
+      if (self.profile) {
+        self.profile.name = name;
+      }
+    }
   }))
   .views((self) => ({
     get isUserReady(): boolean {
       return !self.request.isPending && !self.profileRequest.isPending && !!self.profile;
     },
     get loginType(): LoginTypeEnum | null {
-      const type = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);
-      return type ? (type as LoginTypeEnum) : null;
+      const loginType = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);
+      return loginType ? (loginType as LoginTypeEnum) : null;
     },
-    get oidcConfig(): OidcClientSettings {
-      return this.loginType === LoginTypeEnum.Web3 ? web3ProviderConfig : keycloakProviderConfig;
+    get isGuest(): boolean {
+      return this.loginType === LoginTypeEnum.Guest;
+    },
+    get isSessionExists(): boolean {
+      return !!storage.getByPrefix('oidc.user');
+    },
+    get oidcConfig(): OidcClientSettings | null {
+      switch (this.loginType) {
+        case LoginTypeEnum.Keycloak:
+          return keycloakProviderConfig;
+        case LoginTypeEnum.Guest:
+          return guestProviderConfig;
+        case LoginTypeEnum.Polkadot:
+        case LoginTypeEnum.Metamask:
+        case LoginTypeEnum.WalletConnect:
+          return web3ProviderConfig;
+        default:
+          return null;
+      }
     }
   }));
 
