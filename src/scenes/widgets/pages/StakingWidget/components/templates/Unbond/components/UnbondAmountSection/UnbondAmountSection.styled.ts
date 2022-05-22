@@ -8,5 +8,9 @@ export const FormField = styled.div`
 `;
 
 export const LabelContainer = styled.div`
-  width: 80px;
+  width: 60px;
+`;
+
+export const InputContainer = styled.div`
+  width: 79%;
 `;
