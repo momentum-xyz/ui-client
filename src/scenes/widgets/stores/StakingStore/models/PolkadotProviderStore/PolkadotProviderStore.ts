@@ -354,7 +354,6 @@ const PolkadotProviderStore = types
       return self.channel?.tx.staking.withdrawUnbonded();
     },
     async calculateFee(extrinsics: SubmittableExtrinsic | undefined) {
-      console.log(extrinsics?.toHuman());
       const calculatedFee = await extrinsics?.paymentInfo(self.transactionSigner?.address as any);
       const feeFormatted = formatBalance(calculatedFee?.partialFee, {withSiFull: true}, 12);
       this.setTransactionFee(feeFormatted);
