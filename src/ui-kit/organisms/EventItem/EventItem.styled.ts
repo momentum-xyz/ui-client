@@ -3,6 +3,7 @@ import {rgba} from 'polished';
 
 export const Buttons = styled.div`
   display: flex;
+
   &.base {
     justify-content: space-between;
     margin-right: 20px;
@@ -11,6 +12,7 @@ export const Buttons = styled.div`
 
   .Button-custom {
     max-width: 200px;
+    min-width: 150px;
   }
 
   :not(.base) {
@@ -19,11 +21,10 @@ export const Buttons = styled.div`
 `;
 
 export const ImageContainer = styled.div`
-  width: 151px;
-  height: 141px;
+  width: 220px;
+  height: 220px;
   flex-shrink: 0;
-  padding-right: 15px;
-  padding-top: 10px;
+  padding: 5px;
 
   img {
     border-radius: 5px;
@@ -33,21 +34,16 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const BaseInfo = styled.div`
-  flex-shrink: 0;
-`;
-
-export const Actions = styled.div`
+export const Div = styled.div`
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  padding: 0 15px 5px;
+  width: 100%;
+  height: 100%;
 `;
 
 export const Row = styled.div`
   display: flex;
-
-  &.header {
-    justify-content: space-between;
-  }
 
   &.body {
     height: 100%;
@@ -57,34 +53,33 @@ export const Row = styled.div`
     align-items: center;
     gap: 10px;
   }
+`;
 
-  ${BaseInfo} ~ .ShowMoreText-custom {
-    margin-left: 20px;
-  }
+export const TextRow = styled.div`
+  max-width: 50%;
+  margin-bottom: 10px;
+`;
+
+export const DateRow = styled.div`
+  margin: 10px 0;
+  display: flex;
+  gap: 5px;
 `;
 
 export const Info = styled.div`
-  padding: 5px;
-  padding-bottom: 0;
-  height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden;
-
-  ${Row} ~ ${Buttons} {
-    margin-top: 10px;
-  }
+  width: 100%;
+  height: 100%;
 `;
 
 export const Container = styled.div`
-  width: 100%;
   display: flex;
-  flex-direction: column;
-  padding: 20px;
+  width: 100%;
   backdrop-filter: blur(10px);
   border-radius: 10px;
+  padding: 10px;
 
   @keyframes cssAnimation {
     0% {

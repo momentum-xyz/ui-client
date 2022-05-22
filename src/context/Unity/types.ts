@@ -72,6 +72,7 @@ export type StageModeRequest = {
 export type StageModeAdmit = {
   action: 'accept-request';
   value: 0 | 1;
+  userId: string;
 };
 
 export type StageModeInvite = {

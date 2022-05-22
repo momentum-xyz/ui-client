@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
@@ -8,7 +8,7 @@ import momentum from 'static/images/momentum.svg';
 import flamingo from 'static/images/flamingo.svg';
 import {useStore} from 'shared/hooks';
 
-import {Discord, Controls} from './components';
+import {Discord, Controls, Momentum, Wiki} from './components';
 import * as styled from './HelpWidget.styled';
 
 const HelpWidget: React.FC = () => {
@@ -16,6 +16,10 @@ const HelpWidget: React.FC = () => {
   const {helpStore} = widgetStore;
 
   const theme = useTheme();
+
+  useEffect(() => {
+    return helpStore.resetModel;
+  }, [helpStore]);
 
   return (
     <Dialog
@@ -32,9 +36,6 @@ const HelpWidget: React.FC = () => {
           <styled.Div>
             <styled.MomentumImage src={momentum} />
             <styled.Item>
-              <Text text={t('helpSection.formTitle')} size="xxl" align="left" />
-            </styled.Item>
-            <styled.Item>
               <Text text={t('helpSection.helpNote')} size="xs" align="left" />
             </styled.Item>
           </styled.Div>
@@ -43,11 +44,17 @@ const HelpWidget: React.FC = () => {
           </styled.ImageItem>
         </styled.TopContainer>
         <styled.BottomContainer>
-          <styled.DiscordDropDown>
-            <Discord />
-          </styled.DiscordDropDown>
+          <styled.Item>
+            <Momentum />
+          </styled.Item>
           <styled.Item>
             <Controls />
+          </styled.Item>
+          <styled.Item>
+            <Wiki />
+          </styled.Item>
+          <styled.Item>
+            <Discord />
           </styled.Item>
         </styled.BottomContainer>
       </styled.Container>

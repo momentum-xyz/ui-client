@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
-import {ToastContent} from 'ui-kit';
+import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
 import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
 import Modal, {ModalRef} from '../../util/Modal';
@@ -16,8 +16,8 @@ import AcceptedToJoinOnStagePopup from '../../popup/stageMode/AcceptedToJoinOnSt
 import DeclinedToJoinOnStagePopup from '../../popup/stageMode/DeclinedToJoinOnStagePopup';
 
 const StageModeModalController: React.FC = () => {
-  const {collaborationState} = useCollaboration();
-  const {enterStage, isOnStage} = useAgoraStageMode();
+  const {collaborationState, currentUserId} = useCollaboration();
+  const {enterStage, isOnStage, canEnterStage} = useAgoraStageMode();
 
   const invitedToStageModalRef = useRef<ModalRef>(null);
   const prepareToJoinStageModalRef = useRef<ModalRef>(null);
@@ -47,15 +47,20 @@ const StageModeModalController: React.FC = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-accepted', () => {
-    if (!isHandlingInviteOrRequest()) {
-      acceptedToJoin.current?.open();
-      setAccepted(true);
+  useWebsocketEvent('stage-mode-accepted', (userId) => {
+    if (userId === currentUserId) {
+      if (!isHandlingInviteOrRequest()) {
+        acceptedToJoin.current?.open();
+        setAccepted(true);
+      }
     }
   });
 
-  useWebsocketEvent('stage-mode-declined', () => {
-    declinedToJoin.current?.open();
+  useWebsocketEvent('stage-mode-declined', (userId) => {
+    //check user
+    if (userId === currentUserId) {
+      declinedToJoin.current?.open();
+    }
   });
 
   const handleDecline = () => {
@@ -63,6 +68,20 @@ const StageModeModalController: React.FC = () => {
   };
 
   const handleCountdownEnded = () => {
+    if (!canEnterStage()) {
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.stageModeFull')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
+      countdownModalRef.current?.close();
+      return;
+    }
+
     if (!accepted) {
       accept()
         .then(enterStage)

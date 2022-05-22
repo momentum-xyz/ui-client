@@ -1,1 +1,1 @@
-export * from './WalletMessage';
+export * from './Web3Challenge';
