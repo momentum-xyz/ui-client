@@ -24,6 +24,7 @@ const BlockTime = ({blocks}: PropsInterface) => {
         <>
           {unlockingDuration?.days && <span>{`${unlockingDuration?.days} `}</span>}
           {unlockingDuration?.hours && <span>{`${unlockingDuration?.hours} `}</span>}
+          {unlockingDuration?.minutes && <span>{`${unlockingDuration?.minutes} `}</span>}
         </>
       )}
     </div>

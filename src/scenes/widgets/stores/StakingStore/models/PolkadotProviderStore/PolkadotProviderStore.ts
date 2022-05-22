@@ -294,8 +294,8 @@ const PolkadotProviderStore = types
       self.controllerAccount = cast(cloneDeep(result));
       await this.getBalances(address, 'controllerAccountBalance');
     },
-    setUnbondAmount(amount: string) {
-      self.unbondAmount = cast(amount);
+    setTransactionType(transactionType: StakingTransactionType) {
+      self.transactionType = cast(transactionType);
     },
     setPaymentDestination(payee: Payee) {
       self.paymentDestination = cast(payee);
@@ -303,9 +303,9 @@ const PolkadotProviderStore = types
     setStakingAmount(amount: string) {
       self.stakingAmount = cast(amount);
     },
-    setTransactionType(transactionType: StakingTransactionType) {
-      self.transactionType = cast(transactionType);
-    }
+    setUnbondAmount(amount: string) {
+      self.unbondAmount = cast(amount);
+    },
   }));
 
 export {PolkadotProviderStore};
