@@ -5,7 +5,6 @@ import {observer} from 'mobx-react-lite';
 
 import {IconSvg, PropsWithThemeInterface, Text, Tooltip} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 
 import {BlockTime} from '../BlockTime';
 
@@ -14,10 +13,9 @@ import * as styled from './UnbondingIndicator.styled';
 interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondingIndicator: FC<PropsInterface> = ({theme}) => {
-  const {widgetStore} = useStore();
-  const {stakingInfo, sessionProgress, channel, stashAccountBalance, tokenSymbol} =
-    widgetStore.stakingStore.polkadotProviderStore;
-  const [mapped] = SubstrateProvider.deriveUnbondingProgress(stakingInfo, sessionProgress);
+  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {channel, stashAccountBalance, tokenSymbol, unlockingProgress} = polkadotProviderStore;
+  const [mapped] = unlockingProgress;
   return (
     <Tooltip
       label={mapped.map(

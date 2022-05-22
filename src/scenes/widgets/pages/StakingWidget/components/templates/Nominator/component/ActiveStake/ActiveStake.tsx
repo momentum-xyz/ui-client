@@ -15,8 +15,12 @@ interface PropsInterface extends PropsWithThemeInterface {
 
 const ActiveStake: FC<PropsInterface> = ({theme, unbond}) => {
   const {stakingStore} = useStore().widgetStore;
-  const {stashAccountBalance, tokenSymbol} = stakingStore.polkadotProviderStore;
+  const {stashAccountBalance, tokenSymbol, isUnbondingPermitted, isStakingAccountUnlocking} =
+    stakingStore.polkadotProviderStore;
 
+  const unbondHandler = () => {
+    isUnbondingPermitted && unbond();
+  };
   return (
     <>
       <Heading type="h2" align="left" weight="bold" label={t('staking.activeStake')} />
@@ -24,7 +28,7 @@ const ActiveStake: FC<PropsInterface> = ({theme, unbond}) => {
         <styled.ActiveStake theme={theme}>{t('staking.noActiveStakes')}</styled.ActiveStake>
       ) : (
         <styled.ActiveStake theme={theme}>
-          {stashAccountBalance?.unbonding && Number(stashAccountBalance?.unbonding) !== 0 && (
+          {isStakingAccountUnlocking && (
             <styled.StakeColumn>
               <UnbondingIndicator />
             </styled.StakeColumn>
@@ -39,12 +43,13 @@ const ActiveStake: FC<PropsInterface> = ({theme, unbond}) => {
               />
             </styled.StakeColumn>
           )}
-          {stashAccountBalance?.unbonding && Number(stashAccountBalance?.unbonding) === 0 && (
-            <styled.DetailsColumn onClick={unbond}>
-              <Text text={t('staking.unbondFunds')} size="xs" />
-              <IconSvg name="arrow" size="normal" />
-            </styled.DetailsColumn>
-          )}
+          <styled.DetailsColumn
+            onClick={unbondHandler}
+            style={{opacity: isUnbondingPermitted ? 1 : 0.3}}
+          >
+            <Text text={t('staking.unbondFunds')} size="xs" />
+            <IconSvg name="arrow" size="normal" />
+          </styled.DetailsColumn>
         </styled.ActiveStake>
       )}
     </>

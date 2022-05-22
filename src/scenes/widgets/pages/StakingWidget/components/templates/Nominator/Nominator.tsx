@@ -1,9 +1,10 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {StakingTransactionType} from 'core/enums';
 
 import {Unbond} from '../index';
 
@@ -23,9 +24,17 @@ interface PropsInterface {
 }
 
 const Nominator: FC<PropsInterface> = ({authorizationTab, validatorsTab}) => {
-  const {paymentDestination, controllerAccountValidation, bondAmountValidation} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+  const {
+    paymentDestination,
+    controllerAccountValidation,
+    bondAmountValidation,
+    setTransactionType
+  } = useStore().widgetStore.stakingStore.polkadotProviderStore;
   const [section, setSection] = useState<'nominator' | 'unbond'>('nominator');
+
+  useEffect(() => {
+    setTransactionType(StakingTransactionType.Bond);
+  }, [setTransactionType]);
 
   return section === 'nominator' ? (
     <styled.Container>
