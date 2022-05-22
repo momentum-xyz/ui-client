@@ -36,12 +36,14 @@ const UnbondAmountSection: FC<PropsInterface> = ({theme}) => {
           transform="uppercase"
         />
       </styled.LabelContainer>
-      <Input
-        value={unbondAmount}
-        onChange={unbondAmountHandler}
-        label=""
-        placeholder={t('staking.selectAmount')}
-      />
+      <styled.InputContainer>
+        <Input
+          value={unbondAmount}
+          onChange={unbondAmountHandler}
+          label=""
+          placeholder={t('staking.selectAmount')}
+        />
+      </styled.InputContainer>
     </styled.FormField>
   );
 };
