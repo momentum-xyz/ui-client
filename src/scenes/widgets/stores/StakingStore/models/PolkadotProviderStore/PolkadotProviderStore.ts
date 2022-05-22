@@ -4,6 +4,7 @@ import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@p
 import {cloneDeep} from 'lodash-es';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
+import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
 
 import {
   PolkadotAddress,
@@ -15,6 +16,7 @@ import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
 import {AccountTypeBalance} from 'core/types';
 import {Payee, StakingTransactionType} from 'core/enums';
+import {inputToBN} from 'core/utils';
 
 const PolkadotProviderStore = types
   .compose(
@@ -40,7 +42,8 @@ const PolkadotProviderStore = types
       usedControllerAddress: types.optional(types.string, ''),
       transactionType: types.maybe(
         types.union(types.literal('bond'), types.literal('unbond'), types.literal('withdrawUnbond'))
-      )
+      ),
+      transactionFee: types.optional(types.string, '')
     })
   )
   .volatile<{
@@ -125,6 +128,13 @@ const PolkadotProviderStore = types
           maxAmount,
           isBondAmountAcceptable: minAmount || maxAmount
         };
+      },
+      get transactionSigner() {
+        const signerAddress =
+          self.transactionType !== StakingTransactionType.Bond
+            ? self.stashAccount?.address
+            : self.usedControllerAddress;
+        return self.addresses.find((account) => account.address === signerAddress);
       }
     };
   })
@@ -306,6 +316,49 @@ const PolkadotProviderStore = types
     setUnbondAmount(amount: string) {
       self.unbondAmount = cast(amount);
     },
+    setTransactionFee(amount: string) {
+      self.transactionFee = cast(amount);
+    },
+    bondExtrinsics(selectedValidators: string[]) {
+      const amountBN = inputToBN(self.stakingAmount, self.chainDecimals, self.tokenSymbol);
+      const txBatched: Array<SubmittableExtrinsic | undefined> = [];
+
+      if (self.stashAccount?.address === self.controllerAccount?.address) {
+        txBatched.push(
+          self.channel?.tx.staking.bond(
+            self.stashAccount?.address,
+            amountBN,
+            self.paymentDestination
+          )
+        );
+        txBatched.push(self.channel?.tx.staking.nominate(selectedValidators));
+      } else if (self.stashAccount?.address !== self.controllerAccount?.address) {
+        txBatched.push(
+          self.channel?.tx.staking.bond(
+            self.stashAccount?.address,
+            amountBN,
+            self.paymentDestination
+          )
+        );
+        txBatched.push(self.channel?.tx.staking.setController(self.controllerAccount?.address));
+        txBatched.push(self.channel?.tx.staking.nominate(selectedValidators));
+      }
+
+      return self.channel?.tx.utility.batchAll(txBatched);
+    },
+    unbondExtrinsics() {
+      const amountBN = inputToBN(self.unbondAmount, self.chainDecimals, self.tokenSymbol);
+      return self.channel?.tx.staking.unbond(amountBN);
+    },
+    withdrawUnbondedExtrinsics() {
+      return self.channel?.tx.staking.withdrawUnbonded();
+    },
+    async calculateFee(extrinsics: SubmittableExtrinsic | undefined) {
+      console.log(extrinsics?.toHuman());
+      const calculatedFee = await extrinsics?.paymentInfo(self.transactionSigner?.address as any);
+      const feeFormatted = formatBalance(calculatedFee?.partialFee, {withSiFull: true}, 12);
+      this.setTransactionFee(feeFormatted);
+    }
   }));
 
 export {PolkadotProviderStore};
