@@ -38,7 +38,9 @@ export const enGb = {
       unbondingPeriod:
         'The funds will only be available for withdrawal after the unbonding period, however will not be part of the staked amount after the next validator election. You can follow the unlock countdown in the UI.',
       fee: 'fee',
-      bond: 'bond()',
+      bondCall: 'bond()',
+      unbondCall: 'unbond()',
+      withdrawUnbondedCall: 'withdrawUnbonded()',
       nominateCall: 'nominate()',
       setController: 'setController()',
       transactionCalls: 'Transaction Calls To Execute',

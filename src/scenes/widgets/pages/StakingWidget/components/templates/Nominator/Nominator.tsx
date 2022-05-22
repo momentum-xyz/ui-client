@@ -15,7 +15,7 @@ import {
   RewardSection,
   ScannerList,
   StakingAmountSection
-} from './component';
+} from './components';
 import * as styled from './Nominator.styled';
 
 interface PropsInterface {
