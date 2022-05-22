@@ -9,7 +9,8 @@ import {
   isHex,
   bnMin,
   BN_MAX_INTEGER,
-  extractTime
+  extractTime,
+  formatBalance
 } from '@polkadot/util';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 import {t} from 'i18next';
@@ -43,7 +44,7 @@ export default class SubstrateProvider {
     return connection.length !== 0 || isWeb3Injected;
   }
 
-  static async getAddresses(ss58Format = 42) {
+  static async getAddresses(ss58Format = 2) {
     return web3Accounts({ss58Format}).then((accounts) => accounts);
   }
 
@@ -89,6 +90,13 @@ export default class SubstrateProvider {
               : t('seconds', {seconds: 1})
             : null
         };
+  }
+
+  static setDefaultBalanceFormatting(chainDecimals = 2, chainTokens = 'KSM') {
+    formatBalance.setDefaults({
+      decimals: chainDecimals,
+      unit: chainTokens
+    });
   }
 
   static isValidSubstrateAddress(address: string) {

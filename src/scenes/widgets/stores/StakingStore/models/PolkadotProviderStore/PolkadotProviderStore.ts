@@ -14,7 +14,7 @@ import {
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
 import {AccountTypeBalance} from 'core/types';
-import {Payee} from 'core/enums';
+import {Payee, StakingTransactionType} from 'core/enums';
 
 const PolkadotProviderStore = types
   .compose(
@@ -36,7 +36,10 @@ const PolkadotProviderStore = types
       stakingAmount: types.optional(types.string, ''),
       unbondAmount: types.optional(types.string, ''),
       bondedAddress: types.maybeNull(types.string),
-      usedStashAddress: types.maybeNull(types.string)
+      usedStashAddress: types.maybeNull(types.string),
+      transactionType: types.maybe(
+        types.union(types.literal('bond'), types.literal('unbond'), types.literal('withdrawUnbond'))
+      )
     })
   )
   .views((self) => {
@@ -243,10 +246,10 @@ const PolkadotProviderStore = types
 
       self.ss58Format = cast(self.channel?.registry.chainSS58);
       self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
-      formatBalance.setDefaults({
-        decimals: self.channel?.registry.chainDecimals[0],
-        unit: self.channel?.registry.chainTokens[0]
-      });
+      SubstrateProvider.setDefaultBalanceFormatting(
+        self.channel?.registry.chainDecimals[0],
+        self.channel?.registry.chainTokens[0]
+      );
 
       self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
       await this.getMinNominatorBond();
@@ -270,6 +273,9 @@ const PolkadotProviderStore = types
     },
     setStakingAmount(amount: string) {
       self.stakingAmount = cast(amount);
+    },
+    setTransactionType(transactionType: StakingTransactionType) {
+      self.transactionType = cast(transactionType);
     }
   }));
 
