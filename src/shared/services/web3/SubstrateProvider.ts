@@ -48,7 +48,7 @@ export default class SubstrateProvider {
     return web3Accounts({ss58Format}).then((accounts) => accounts);
   }
 
-  static deriveUnbondingProgress(
+  static deriveUnlockingProgress(
     stakingInfo: DeriveStakingAccount | null,
     progress: DeriveSessionProgress | null
   ): DeriveUnbondingProgressReturnType {

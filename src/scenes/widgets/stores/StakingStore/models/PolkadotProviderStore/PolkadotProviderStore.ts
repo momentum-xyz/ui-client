@@ -37,15 +37,28 @@ const PolkadotProviderStore = types
       unbondAmount: types.optional(types.string, ''),
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
+      usedControllerAddress: types.optional(types.string, ''),
       transactionType: types.maybe(
         types.union(types.literal('bond'), types.literal('unbond'), types.literal('withdrawUnbond'))
       )
     })
   )
+  .volatile<{
+    channel: ApiPromise | null;
+    stakingInfo: DeriveStakingAccount | null;
+    sessionProgress: DeriveSessionProgress | null;
+  }>(() => ({
+    channel: null,
+    stakingInfo: null,
+    sessionProgress: null
+  }))
   .views((self) => {
     return {
       get hasAddresses() {
         return !!self.addresses.length;
+      },
+      get accountAddresses() {
+        return self.addresses.map((account) => account.address);
       },
       get addressOptions() {
         return self.addresses.map((account) => ({
@@ -86,6 +99,24 @@ const PolkadotProviderStore = types
           isBondAmountAcceptable: gtStashFunds || ltMinNominatorBond || ltThenExistentialDeposit
         };
       },
+      get unlockingProgress() {
+        return SubstrateProvider.deriveUnlockingProgress(self.stakingInfo, self.sessionProgress);
+      },
+      get isStakingAccountUnlocking() {
+        const [mapped] = this.unlockingProgress;
+        return !(!self.stakingInfo || !mapped.length);
+      },
+      get isUnbondingPermitted() {
+        const isOwnController = this.accountAddresses.includes(
+          self.stakingInfo?.controllerId?.toJSON() || ''
+        );
+        return !(
+          !isOwnController ||
+          !self.stakingInfo ||
+          !self.stakingInfo?.stakingLedger ||
+          self.stakingInfo?.stakingLedger.active?.isEmpty
+        );
+      },
       get unbondAmountValidation() {
         const minAmount = Number(self.unbondAmount) <= 0;
         const maxAmount = Number(self.unbondAmount) > Number(self.stashAccountBalance?.bonded);
@@ -97,15 +128,6 @@ const PolkadotProviderStore = types
       }
     };
   })
-  .volatile<{
-    channel: ApiPromise | null;
-    stakingInfo: DeriveStakingAccount | null;
-    sessionProgress: DeriveSessionProgress | null;
-  }>(() => ({
-    channel: null,
-    stakingInfo: null,
-    sessionProgress: null
-  }))
   .actions((self) => ({
     async init() {
       await this.connectToChain();
@@ -200,6 +222,12 @@ const PolkadotProviderStore = types
       const stashId = stash.toJSON() !== null ? stash.toJSON().stash : null;
       self.usedStashAddress = cast(stashId);
     }),
+    getUsedControllerAddress() {
+      const usedControllerAddress = self.stakingInfo?.controllerId?.toJSON()
+        ? self.stakingInfo?.controllerId?.toJSON()
+        : '';
+      self.usedControllerAddress = cast(usedControllerAddress);
+    },
     getMinNominatorBond: flow(function* () {
       const minNominatorBond = self.channel
         ? yield self.channel?.query.staking.minNominatorBond()
@@ -259,6 +287,7 @@ const PolkadotProviderStore = types
       self.stashAccount = cast(cloneDeep(result));
       await this.getBalances(address, 'stashAccountBalance');
       await this.getStakingInfo(address);
+      await this.getUsedControllerAddress();
     },
     async setControllerAccount(address: string) {
       const result = self.addresses.find((account) => account.address === address);

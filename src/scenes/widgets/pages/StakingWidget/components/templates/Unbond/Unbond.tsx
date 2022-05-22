@@ -1,9 +1,10 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 
 import {Button, Heading, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks/useStore';
+import {StakingTransactionType} from 'core/enums';
 
 import * as styled from './Unbond.styled';
 import {UnbondDetails, UnbondAmountSection, UnbondAmountValidation} from './components';
@@ -14,7 +15,11 @@ interface PropsInterface {
 }
 
 const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
-  const {unbondAmountValidation} = useStore().widgetStore.stakingStore.polkadotProviderStore;
+  const {unbondAmountValidation, setTransactionType} =
+    useStore().widgetStore.stakingStore.polkadotProviderStore;
+  useEffect(() => {
+    setTransactionType(StakingTransactionType.Unbond);
+  }, [setTransactionType]);
   return (
     <styled.Container>
       <Heading type="h2" align="left" weight="bold" label={t('staking.accountPair')} />
