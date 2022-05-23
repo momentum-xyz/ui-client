@@ -2,18 +2,17 @@ import React from 'react';
 import {useHistory} from 'react-router';
 import {observer} from 'mobx-react-lite';
 
-import {IconSvg} from 'ui-kit';
+import {SvgButton, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {SubSpaceModelInterface} from 'core/models';
 
-import {ReactComponent as FlyToIcon} from '../../../images/icons/space-rocket-flying.svg';
-import {ReactComponent as NextIcon} from '../../../images/icons/SocialNext.svg';
+import * as styled from './SpaceItem.styled';
 
 export interface SpaceItemPropsInterface {
   space: SubSpaceModelInterface;
   hasSubspaces: boolean;
-  onSelect: (spaceId?: string) => void;
+  onSelect: (spaceId: string) => void;
 }
 
 const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, onSelect, hasSubspaces}) => {
@@ -35,24 +34,17 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, onSelect, hasSubsp
   };
 
   return (
-    <div className="flex px-1 py-1.2 border-t-1 border-green-light-10">
-      <button onClick={() => handleFlyToSpace()}>
-        <FlyToIcon className="w-1.6 h-1.6 text-green-light-50 hover:text-green-light-100" />
-      </button>
-      <button
-        className="flex w-full hover:text-green-light-100 hover:stroke-current"
-        onClick={() => onSelect(space.id)}
-      >
-        <p className="cursor-pointer pl-1 text-sm text-left">{space.name}</p>
+    <styled.Container>
+      <SvgButton iconName="rocket" size="medium" onClick={() => handleFlyToSpace()} />
+      <styled.ClickableItem onClick={() => onSelect(space.id)}>
+        <Text text={space.name} size="xs" align="left" />
         <div className="flex-grow" />
         {space.id && favoriteStore.isFavorite(space.id) && (
-          <div className="pr-1">
-            <IconSvg name="starOn" size="normal" isCustom />
-          </div>
+          <styled.FavouriteIcon name="starOn" size="normal" isCustom />
         )}
-        {hasSubspaces && <NextIcon className="text-green-light-80 hover:text-green-light-100" />}
-      </button>
-    </div>
+        {hasSubspaces && <styled.NextButton iconName="chevron" size="medium" />}
+      </styled.ClickableItem>
+    </styled.Container>
   );
 };
 

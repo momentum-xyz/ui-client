@@ -149,7 +149,8 @@ export const enGb = {
       explore: 'Explore',
       person: 'Person',
       online: 'Available',
-      dnd: 'Do Not Disturb'
+      dnd: 'Do Not Disturb',
+      subspaces: 'Subspaces'
     },
     messages: {
       signIn: 'Sign In Or Create An Account',
@@ -209,7 +210,8 @@ export const enGb = {
     },
     placeholders: {
       search: 'Search',
-      searchForPeople: 'Search for people...'
+      searchForPeople: 'Search for people...',
+      searchForSpaces: 'Search for spaces...'
     },
     fields: {
       nickname: 'Nickname',
@@ -242,6 +244,7 @@ export const enGb = {
       copyLink: 'Copy Link',
       createInitiative: 'Launch new initiative',
       flyTo: 'Fly to',
+      flyToThisSpace: 'Fly to this space',
       grabTable: 'Grab table',
       highFive: 'High five',
       saveChanges: 'Save changes',

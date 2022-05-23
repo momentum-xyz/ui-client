@@ -1,11 +1,13 @@
-import React, {FC} from 'react';
+import React, {FC, HTMLProps} from 'react';
 
 import {IconSvg, SizeType} from 'ui-kit';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './SvgButton.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+interface PropsInterface
+  extends PropsWithThemeInterface,
+    Pick<HTMLProps<HTMLDivElement>, 'className'> {
   iconName: IconName;
   size: SizeType;
   onClick?: (event?: Event) => void;
@@ -19,7 +21,8 @@ const SvgButton: FC<PropsInterface> = ({
   isDanger,
   size,
   iconName,
-  isWhite = false
+  isWhite = false,
+  className
 }) => {
   return (
     // @ts-ignore: div doesn't have onClick
@@ -31,6 +34,7 @@ const SvgButton: FC<PropsInterface> = ({
         isCustom
         isDanger={isDanger}
         isWhite={isWhite}
+        className={className}
       />
     </styled.Container>
   );

@@ -1,46 +1,24 @@
 import React from 'react';
+import {observer} from 'mobx-react-lite';
 
-import {useStore} from 'shared/hooks';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {Text} from 'ui-kit';
 import {SpaceItem} from 'scenes/widgets/pages/ExploreWidget/components';
-import {SpaceModelInterface, SubSpaceModelInterface} from 'core/models';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './SpacesList.styled';
 
-interface SpacesListPropsInterface {
-  spaceId: string;
-  onSpaceSelect: (spaceId?: string) => void;
-  searchQuery?: string;
-  searchedSpaces?: SpaceModelInterface[];
-}
-
-const SpacesList: React.FC<SpacesListPropsInterface> = ({
-  spaceId,
-  onSpaceSelect,
-  searchQuery,
-  searchedSpaces
-}) => {
-  const {
-    widgetStore: {exploreStore}
-  } = useStore();
-  const {selectedSpaceStore} = exploreStore;
-
-  const {space: selectedSpace} = selectedSpaceStore;
+const SpacesList: React.FC = () => {
+  const {exploreStore} = useStore().widgetStore;
+  const {selectedSpace, searchQuery, searchedSpaces} = exploreStore;
 
   const renderList = () => {
-    if (!selectedSpace.subSpaces) {
+    if (!selectedSpace?.subSpaces) {
       return;
     }
 
-    const spaceStoreSorter = (spaceA: SpaceModelInterface, spaceB: SpaceModelInterface) =>
-      spaceA.name?.localeCompare(spaceB?.name ?? '') ?? 0;
-
-    const spaceSorter = (a: SubSpaceModelInterface, b: SubSpaceModelInterface) =>
-      a.name?.localeCompare(b.name ?? '') ?? 0;
-
     if (searchQuery && searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-      return searchedSpaces?.sort(spaceStoreSorter).map((space) => (
+      return searchedSpaces?.map((space) => (
         <SpaceItem
           space={{
             id: space.id ?? '',
@@ -48,7 +26,7 @@ const SpacesList: React.FC<SpacesListPropsInterface> = ({
             hasSubspaces: space.subSpaces.length > 0
           }}
           hasSubspaces={space.subSpaces.length > 0}
-          onSelect={onSpaceSelect}
+          onSelect={exploreStore.selectSpace}
           key={`space-${space.id}`}
         />
       ));
@@ -63,19 +41,17 @@ const SpacesList: React.FC<SpacesListPropsInterface> = ({
       );
     }
 
-    return selectedSpace.subSpaces
-      .sort(spaceSorter)
-      .map((space) => (
-        <SpaceItem
-          space={space}
-          hasSubspaces={space.hasSubspaces}
-          onSelect={onSpaceSelect}
-          key={`space-${space.id}`}
-        />
-      ));
+    return selectedSpace.subSpaces.map((space) => (
+      <SpaceItem
+        space={space}
+        hasSubspaces={space.hasSubspaces}
+        onSelect={exploreStore.selectSpace}
+        key={`space-${space.id}`}
+      />
+    ));
   };
 
   return <styled.Container>{renderList()}</styled.Container>;
 };
 
-export default SpacesList;
+export default observer(SpacesList);

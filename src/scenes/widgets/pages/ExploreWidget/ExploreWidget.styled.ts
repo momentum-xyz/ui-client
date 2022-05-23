@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  margin-left: 20px;
+  margin-top: 20px;
+`;
 
 export const WorldNameContainer = styled.div`
   display: flex;

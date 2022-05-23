@@ -1,9 +1,8 @@
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 
-import {SpacesList} from 'scenes/widgets/pages/ExploreWidget/components';
-import SocialSelectedSpace from 'component/molucules/socialui/SocialSelectedSpace';
+import {SpacesList, SelectedSpace} from 'scenes/widgets/pages/ExploreWidget/components';
 import {useStore} from 'shared/hooks';
 import {ExpandableLayout, Heading, SearchInput, useDebouncedEffect} from 'ui-kit';
 
@@ -15,8 +14,9 @@ const ExploreWidget: FC = () => {
     mainStore: {unityStore, worldStore}
   } = useStore();
 
+  const {t} = useTranslation();
+
   const {
-    worldSpaceStore: {space: world},
     selectedSpaceStore: {space: selectedSpace}
   } = exploreStore;
 
@@ -24,25 +24,13 @@ const ExploreWidget: FC = () => {
     unityStore.changeKeyboardControl(!isFocused);
   };
 
-  const handleSpaceSelect = (spaceId?: string) => {
-    if (spaceId) {
-      exploreStore.selectSpace(spaceId);
-    } else {
-      exploreStore.unselectSpace();
-    }
-  };
-
-  const handleGoBackClick = () => {
-    exploreStore.unselectSpace();
+  const handleGoBackToWorld = () => {
+    exploreStore.selectSpace(worldStore.worldId);
     // setSelectedUserInitiative(undefined);
   };
 
   useEffect(() => {
-    if (exploreStore.isExpanded) {
-      exploreStore.fetchWorldInformation(worldStore.worldId);
-    }
-
-    return exploreStore.worldSpaceStore.resetModel;
+    exploreStore.selectSpace(worldStore.worldId);
   }, [exploreStore, worldStore.worldId]);
 
   useDebouncedEffect(
@@ -60,35 +48,28 @@ const ExploreWidget: FC = () => {
         name={t('labels.explore')}
         isExpanded={exploreStore.isExpanded}
         setExpand={exploreStore.toggleExpand}
+        size={{width: '200px'}}
       >
         <SearchInput
           value={exploreStore.searchQuery}
           onChange={exploreStore.setSearchQuery}
+          placeholder={t(`placeholders.searchForSpaces`)}
           onFocus={() => handleSearchFocus(true)}
           onBlur={() => handleSearchFocus(false)}
         />
         <styled.Body>
-          {!selectedSpace && (
-            <styled.WorldNameContainer onClick={handleGoBackClick}>
-              <Heading label={world.name ?? ''} type="h4" align="left" />
+          {selectedSpace.id === worldStore.worldId && (
+            <styled.WorldNameContainer onClick={handleGoBackToWorld}>
+              <Heading
+                label={selectedSpace.name ?? ''}
+                type="h1"
+                align="left"
+                transform="uppercase"
+              />
             </styled.WorldNameContainer>
           )}
-          {selectedSpace.id && (
-            <SocialSelectedSpace
-              spaceId={selectedSpace.id}
-              fatherSpaceName={world.name ?? ''}
-              ancestors={world.name ? [world.name] : []}
-              onBack={handleGoBackClick}
-            />
-          )}
-          {!selectedSpace && world.id && (
-            <SpacesList
-              spaceId={world.id}
-              onSpaceSelect={handleSpaceSelect}
-              searchQuery={exploreStore.searchQuery}
-              searchedSpaces={exploreStore.searchedSpaces}
-            />
-          )}
+          {selectedSpace.id !== worldStore.worldId && <SelectedSpace />}
+          {selectedSpace.id === worldStore.worldId && <SpacesList />}
         </styled.Body>
       </ExpandableLayout>
     </styled.Container>
