@@ -177,6 +177,7 @@ export const enGb = {
       dnd: 'Do Not Disturb'
     },
     messages: {
+      welcome: "Login successful. We invite you to Momentum's intro. Hit play below!",
       signIn: 'Sign In Or Create An Account',
       linkCopied: 'The link is copied to your clipboard.',
       fullyEnjoy: 'Connect your wallet to fully enjoy Momentum!',
