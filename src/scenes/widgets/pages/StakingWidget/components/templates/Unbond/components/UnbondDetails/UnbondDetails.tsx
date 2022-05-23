@@ -1,4 +1,5 @@
 import React from 'react';
+import {t} from "i18next";
 
 import {Text} from 'ui-kit';
 import {useStore} from 'shared/hooks/useStore';
@@ -11,13 +12,13 @@ export const UnbondDetails = () => {
   return (
     <>
       <styled.row>
-        <Text text="stash account" size="xs" weight="bold" transform="uppercase" />
+        <Text text={t('staking.stashAccount')} size="xs" weight="bold" transform="uppercase" />
         <styled.address>
           <Text text={stashAccount?.address || ''} size="xs" align="left" />
         </styled.address>
       </styled.row>
       <styled.row>
-        <Text text="controller account" size="xs" weight="bold" transform="uppercase" />
+        <Text text={t('staking.controllerAccount')} size="xs" weight="bold" transform="uppercase" />
         <styled.address>
           <Text text={usedControllerAddress} size="xs" align="left" />
         </styled.address>

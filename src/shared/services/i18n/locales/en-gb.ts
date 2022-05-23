@@ -84,6 +84,7 @@ export const enGb = {
       stashIncreaseAmount: 'Stash Account (re-stake reward)',
       stashNoIncreaseAmount: 'Stash Account (do not re-stake reward)',
       controllerAccount: 'Controller Account',
+      stashAccount: 'Stash Account',
       signedSuccess: 'Transaction finished. Bonding was successful!',
       validation: {
         unbondMinAmount: 'Minimum amount for unbonding should be a positive number',
