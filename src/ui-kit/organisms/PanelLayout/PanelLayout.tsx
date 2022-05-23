@@ -25,6 +25,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   isCloseButton?: boolean;
   iconSize?: SizeType;
   isCustom?: boolean;
+  hasBorder?: boolean;
   headerActions?: ReactNode;
   captureAllPointerEvents?: boolean;
   componentSize?: ComponentSizeInterface;
@@ -37,6 +38,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isBodyExtendingToEdges = false,
     isDanger = false,
     isCustom = false,
+    hasBorder = false,
     iconSize = 'small',
     captureAllPointerEvents = false,
     componentSize,
@@ -47,6 +49,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     <styled.Container
       className={cn(
         isCustom && 'PanelLayout-custom',
+        hasBorder && 'hasBorder',
         captureAllPointerEvents && 'allPointerEvents'
       )}
       {...componentSize}
