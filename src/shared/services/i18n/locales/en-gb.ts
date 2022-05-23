@@ -113,6 +113,7 @@ export const enGb = {
       enableStaking: 'Login with a polkadot.js account to enable on chain activities'
     },
     errors: {
+      oidcSession: 'Something wrong with session',
       sessionExpired: 'The login session has expired. Please try again.',
       unknownError: 'Could not login please try again.',
       noAccounts:
@@ -120,9 +121,13 @@ export const enGb = {
       unsupportedNetwork: "You're connected to an unsupported network.",
       ethereumAccess: 'Please authorize this website to access your Ethereum account.',
       ethereumExtension:
-        'No Ethereum browser extension detected, please install {{name}} to continue here.',
+        'No {{name}} extension detected, please install {{name}} to continue here.',
       couldNotRemoveEvent: 'Could not remove the event.',
       endDateGraterThanStartDate: 'End date has to be grater than start date'
+    },
+    counts: {
+      people_one: '{{count}} Person',
+      people_other: '{{count}} People'
     },
     labels: {
       calendar: 'World Calendar',
@@ -141,7 +146,10 @@ export const enGb = {
       nameOfInitiative: 'Name of Initiative',
       description: 'Description',
       people: 'People',
-      explore: 'Explore'
+      explore: 'Explore',
+      person: 'Person',
+      online: 'Available',
+      dnd: 'Do Not Disturb'
     },
     messages: {
       signIn: 'Sign In Or Create An Account',
@@ -185,7 +193,9 @@ export const enGb = {
       subSpaceDeleteFailure: 'There was an error deleting the subspace',
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
-        'The stage has been enabled right now. Want to participate? Ask to go on stage.'
+        'The stage has been enabled right now. Want to participate? Ask to go on stage.',
+      stageModeFull: 'The stage is currently full. Try again later to go on stage.',
+      stageModeMuted: 'You have been muted by a member of the space.'
     },
     titles: {
       alert: 'alert',
@@ -263,7 +273,7 @@ export const enGb = {
       noGatherings: 'There are no gatherings scheduled for this space.',
       eventItem: {
         live: 'Live',
-        websiteLink: 'Website Link',
+        websiteLink: 'Learn More',
         magicLinkDialog: {
           title: 'Magic Link',
           copyLabel: 'Copy Link'
@@ -273,7 +283,7 @@ export const enGb = {
           copyLabel: 'Copy Link'
         },
         flyToSpace: 'Fly To',
-        gatheringLink: 'Gathering Magiclink',
+        gatheringLink: 'Share',
         addToCalendar: 'Add to My Calendar',
         joinGathering: 'Join The Gathering',
         by: 'By',
@@ -281,7 +291,7 @@ export const enGb = {
         from: 'From',
         to: 'To',
         showMore: 'Show more',
-        collapse: 'Collapse'
+        collapse: 'Show less'
       }
     },
     eventForm: {
@@ -481,12 +491,8 @@ export const enGb = {
     },
     helpSection: {
       title: 'help',
-      formTitle: 'Well hello weary traveler.',
       helpNote:
-        'Your first virtual flight in the Momentiverse can be quite challenging. I am here to\n' +
-        '                help you out as your metaphysical, fully knighted neon flamingo. Your personal\n' +
-        '                animal spirit guide. Everyone can learn how to fly and navigate Odyssey Momentum\n' +
-        '                (even flamingo’s).',
+        'You are about to embark on your flight in Momentum.\n\n Below we have a good dose of the essentials for you to get started.\n\n We have long term plans with Momentum, yet we are at humble beginnings with the release of this first milestone. We are so delighted you are flying with us!\n\n We invite you to help us improve Momentum, as we are at humble beginnings with the release of this first milestone. So...\n\n Something doesn’t work for you? Let us know!\n Something you are missing? Let us know!\n Something you feel should be different? Let us know!\n\nWant to help building Momentum? Let us know ;)',
       discord: {
         iconLabel: 'discord',
         dropDownLabel: 'Join discord',
@@ -534,6 +540,34 @@ export const enGb = {
         spaceBarBoldText: ' space',
         spaceBarTextSecond: ' while not moving: Look around',
         spaceBarIconLabel: 'space-bar'
+      },
+      momentum: {
+        title: 'Momentum Space',
+        paragraphs: {
+          one: "You're diggin' it and you want to be more involved?",
+          two: {
+            partOne: 'Join us at our ',
+            highlightedPart: 'Weekly KSMverse Community Calls',
+            partTwo:
+              ', on Wednesdays and Fridays 3pm CEST, in the Kusamaverse, where we will talk about all things Dotsmama, metaversal and phygital!'
+          },
+          three: {
+            partOne: 'Check out ',
+            highlightedPart: 'the Calendar on our Momentum space',
+            partTwo:
+              ' or updates on topics. Want to be a guest speaker and share your insights with the community? Do reach out to us on Discord.'
+          },
+          four: 'Wanna chat, or have any more questions, crazy ideas or suggestions to us? Check out our momentum space. LFG!'
+        },
+        visitSpace: 'Visit the Momentum Space'
+      },
+      wiki: {
+        title: 'Wiki',
+        partOne: `Please feel free to deep-dive into the Kusamaverse, its nooks and crannies and feature map in `,
+        highlightedPart: 'our Wiki',
+        partTwo:
+          '. While we do our best to keep our wiki updated please bare in mind this is a living breathing ecosystem that is subject to constant change.',
+        link: 'Wiki Link'
       },
       openLabel: 'Expand',
       closeLabel: 'Minimize'

@@ -1,15 +1,16 @@
 import React, {FC, memo, useState} from 'react';
 import cn from 'classnames';
 
-import {SizeType, AvatarStateType} from 'ui-kit/types';
+import {SizeType} from 'ui-kit/types';
 import {ReactComponent as AstronautIcon} from 'ui-kit/icons/professions-man-astronaut.svg';
+import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './Avatar.styled';
 
 interface AvatarProps {
   avatarSrc?: string;
   size: SizeType;
-  state?: AvatarStateType;
+  status?: UserStatusEnum;
   onClick?: () => void;
   showBorder?: boolean;
   showHover?: boolean;
@@ -18,7 +19,7 @@ interface AvatarProps {
 const Avatar: FC<AvatarProps> = ({
   avatarSrc,
   size,
-  state = 'none',
+  status = 'none',
   onClick,
   showBorder = false,
   showHover = false
@@ -37,11 +38,9 @@ const Avatar: FC<AvatarProps> = ({
       ) : (
         <AstronautIcon className="avatar" data-testid="Avatar-placeholder-test" />
       )}
-      {state !== 'none' && (
-        <styled.IndicatorWrapper className={size}>
-          <styled.Indicator className={`${state} ${size}`} />
-        </styled.IndicatorWrapper>
-      )}
+      <styled.IndicatorWrapper className={size}>
+        <styled.Indicator className={`${status} ${size}`} />
+      </styled.IndicatorWrapper>
     </styled.Container>
   );
 };

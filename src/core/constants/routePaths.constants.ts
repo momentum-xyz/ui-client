@@ -9,6 +9,7 @@ export const ROUTES = {
   signUpComplete: '/profile/signUpComplete',
   callBack: '/oidc/callback',
   web3CallBack: '/oidc/web3/callback',
+  guestCallBack: '/oidc/guest/callback',
   spaceDashboard: '/dashboard/space/:id',
   spaceAdmin: '/space/:spaceId/admin',
   collaboration: '/collaboration',

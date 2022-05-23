@@ -129,7 +129,7 @@ export const Indicator = styled.div`
     background: var(--online);
   }
 
-  &.offline {
-    background: var(--offline);
+  &.dnd {
+    background: var(--dnd);
   }
 `;

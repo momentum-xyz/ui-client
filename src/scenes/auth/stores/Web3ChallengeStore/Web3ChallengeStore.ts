@@ -6,11 +6,11 @@ import {
   NoEthereumProviderError,
   UserRejectedRequestError as UserRejectedRequestErrorInjected
 } from '@web3-react/injected-connector';
+import {t} from 'i18next';
 
 import {RequestModel} from 'core/models';
-import {PolkadotExtensionException} from 'core/exceptions';
+import {PolkadotExtensionException, SessionException} from 'core/exceptions';
 import {api, Web3ChallengeRequest, Web3LoginAcceptRequest} from 'api';
-import {i18n} from 'shared/services/i18n';
 
 const Web3ChallengeStore = types
   .model('Web3ChallengeStore', {
@@ -32,20 +32,22 @@ const Web3ChallengeStore = types
     }),
     getErrorMessage(error: Error): string {
       if (error instanceof NoEthereumProviderError) {
-        return i18n.t('errors.ethereumExtension');
+        return t('errors.ethereumExtension');
       } else if (error instanceof UnsupportedChainIdError) {
-        return i18n.t('errors.unsupportedNetwork');
+        return t('errors.unsupportedNetwork');
       } else if (
         error instanceof UserRejectedRequestErrorInjected ||
         error instanceof UserRejectedRequestErrorWalletConnect ||
         error instanceof UserRejectedRequestError
       ) {
-        return i18n.t('errors.ethereumAccess');
+        return t('errors.ethereumAccess');
+      } else if (error instanceof SessionException) {
+        return t('errors.oidcSession');
       } else if (error instanceof PolkadotExtensionException) {
         return error.message;
       } else {
         console.error(error);
-        return i18n.t('errors.unknownError');
+        return t('errors.unknownError');
       }
     }
   }));

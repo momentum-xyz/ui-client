@@ -66,7 +66,7 @@ const WidgetContainer: FC = () => {
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
   const {profileMenuDialog} = profileMenuStore;
-  const {profile: currentProfile} = sessionStore;
+  const {profile: currentProfile, isGuest} = sessionStore;
 
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const {handleMusicPlayer, show} = useMusicPlayer();
@@ -192,14 +192,6 @@ const WidgetContainer: FC = () => {
   };
 
   const mainToolbarIcons: ToolbarIconInterface[] = [
-    {
-      title: t('labels.staking'),
-      icon: 'wallet',
-      onClick: () => {
-        stakingStore.setOperatorSpaceId('');
-        stakingDialog.open();
-      }
-    },
     {title: t('labels.worldStats'), icon: 'stats', onClick: statsDialog.open},
     {
       title: t('labels.calendar'),
@@ -269,7 +261,7 @@ const WidgetContainer: FC = () => {
             {currentProfile?.profile && (
               <ToolbarIcon title="Profile" onClick={profileMenuDialog.open}>
                 <Avatar
-                  state="online"
+                  status={sessionStore.profile?.status}
                   size="extra-small"
                   avatarSrc={
                     currentProfile.profile.avatarHash &&
@@ -279,6 +271,16 @@ const WidgetContainer: FC = () => {
                   showHover
                 />
               </ToolbarIcon>
+            )}
+            {!isGuest && (
+              <ToolbarIcon
+                title={t('labels.staking')}
+                icon="wallet"
+                onClick={() => {
+                  stakingStore.setOperatorSpaceId('');
+                  stakingDialog.open();
+                }}
+              />
             )}
             {mainToolbarIcons.map((item) => (
               <ToolbarIcon key={item.title} {...item} />
