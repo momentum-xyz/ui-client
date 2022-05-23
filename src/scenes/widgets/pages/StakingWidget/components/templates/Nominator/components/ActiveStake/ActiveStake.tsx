@@ -5,6 +5,7 @@ import {t} from 'i18next';
 import {Heading, IconSvg, PropsWithThemeInterface, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionType} from 'core/enums';
+import {Button} from 'ui-kit';
 
 import {UnbondingIndicator} from '../UnbondingIndicator';
 
@@ -47,15 +48,16 @@ const ActiveStake: FC<PropsInterface> = ({theme, withdraw, unbond}) => {
             </styled.StakeColumn>
           )}
           {isWithdrawUnbondedPermitted && (
-            <styled.StakeColumn onClick={withdrawUnbonded}>
-              <IconSvg name="lock" size="normal" />
-              <Text
-                text={`${t('staking.balanceTypes.redeemable')} ${
-                  stashAccountBalance?.redeemable
-                } ${tokenSymbol}`}
-                size="xs"
-              />
-            </styled.StakeColumn>
+            <>
+              <styled.StakeColumn>
+                <Text
+                  text={`${t('staking.balanceTypes.redeemable')} ${
+                    stashAccountBalance?.redeemable
+                  } ${tokenSymbol}`}
+                  size="xs"
+                />
+              </styled.StakeColumn>
+            </>
           )}
           {stashAccountBalance?.bonded && Number(stashAccountBalance?.bonded) !== 0 && (
             <styled.StakeColumn>
@@ -67,6 +69,14 @@ const ActiveStake: FC<PropsInterface> = ({theme, withdraw, unbond}) => {
               />
             </styled.StakeColumn>
           )}
+          <styled.StakeColumn>
+            <Button
+              size="small"
+              label={t('staking.withdrawUnbonded')}
+              disabled={!isWithdrawUnbondedPermitted}
+              onClick={withdrawUnbonded}
+            />
+          </styled.StakeColumn>
           <styled.DetailsColumn
             onClick={unbondHandler}
             style={{opacity: isUnbondingPermitted ? 1 : 0.3}}
