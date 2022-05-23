@@ -1,10 +1,11 @@
 export const enGb = {
   translation: {
-    days: '{{days}} days',
-    hours: '{{hours}} hours',
-    minutes: '{{minutes}} minutes',
-    seconds: '{{seconds}} seconds',
-    back: 'back',
+    time: {
+      days: '{{days}} days',
+      hours: '{{hours}} hours',
+      minutes: '{{minutes}} minutes',
+      seconds: '{{seconds}} seconds',
+    },
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
       stopStaking: 'Stop Staking',

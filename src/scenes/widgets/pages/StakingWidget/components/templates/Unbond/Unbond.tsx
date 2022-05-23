@@ -35,7 +35,7 @@ const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
       <styled.ButtonContainer>
         <Button
           variant="primary"
-          label={t('back')}
+          label={t('actions.back')}
           icon="lightningDuotone"
           wide={false}
           onClick={nominatorTab}
