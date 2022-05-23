@@ -1,6 +1,6 @@
 import {useTheme} from 'styled-components';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
@@ -38,13 +38,13 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
   const [isDisabledButton, setIsDisabledButton] = useState(true);
   const [isDisabledDropdown, setIsDisabledDropdown] = useState(true);
 
-  const {
-    control,
-    setValue,
-    // formState: {errors},
-    handleSubmit,
-    reset
-  } = useForm<ApplyTokenRuleInterface>();
+  const {control, setValue, handleSubmit} = useForm<ApplyTokenRuleInterface>();
+
+  useEffect(() => {
+    if (applyTokenRuleStore.tokenRuleApplied) {
+      tokenRulesListStore.fetchTokenRules(spaceStore.space.id);
+    }
+  }, [applyTokenRuleStore.applyRequest.state]);
 
   const formSubmitHandler: SubmitHandler<ApplyTokenRuleInterface> = ({role, tokenGroupUserId}) => {
     if (spaceStore.space.id) {
@@ -65,9 +65,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
   };
 
   const handleClose = () => {
-    reset();
     applyTokenRuleFormDialog.close();
-    tokenRulesListStore.fetchTokenRules(spaceStore.space.id);
     applyTokenRuleStore.resetModel();
   };
 
@@ -100,7 +98,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
       theme={theme}
       title={t('tokenRules.applyTokenRuleForm.title')}
       showCloseButton
-      onClose={applyTokenRuleFormDialog.close}
+      onClose={handleClose}
       approveInfo={{
         title: applyTokenRuleStore.tokenRuleApplied
           ? t('tokenRules.applyTokenRuleForm.succeedButtonLabel')
