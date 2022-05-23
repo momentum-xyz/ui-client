@@ -40,14 +40,7 @@ const PolkadotProviderStore = types
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
       usedControllerAddress: types.optional(types.string, ''),
-      transactionType: types.maybe(
-        types.union(
-          types.literal('bond'),
-          types.literal('unbond'),
-          types.literal('withdrawUnbond'),
-          types.literal('chill')
-        )
-      ),
+      transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionType))),
       transactionFee: types.optional(types.string, '')
     })
   )

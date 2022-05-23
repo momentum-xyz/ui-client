@@ -35,7 +35,7 @@ export default class SubstrateProvider {
   static FORMAT_OPTIONS = {withSi: false, forceUnit: '-'};
 
   static async initAPI() {
-    const provider = new WsProvider(endpoints.westendTestWebsocketServer);
+    const provider = new WsProvider(endpoints.kusamaWebsocketServer);
     return ApiPromise.create({provider});
   }
 
