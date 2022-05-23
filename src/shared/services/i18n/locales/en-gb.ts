@@ -1,24 +1,32 @@
 export const enGb = {
   translation: {
-    back: 'back',
+    time: {
+      days: '{{days}} days',
+      hours: '{{hours}} hours',
+      minutes: '{{minutes}} minutes',
+      seconds: '{{seconds}} seconds'
+    },
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
+      stopStaking: 'Stop Staking',
+      withdrawUnbonded: 'Withdraw',
       unbondFunds: 'Unbond Funds',
       nominator: 'Nominator',
       validatorsTab: 'Validators',
       account: 'Account',
+      authorization: 'Authorization',
       stakingTab: {
-        stakingDashboard: 'Setup Nominator',
-        validators: 'Setup Validators',
-        authorization: 'Authorization',
+        stakingDashboard: 'Stake KSM - Setup Nominator',
+        validators: 'Stake KSM - Select Validators',
+        authorization: 'Stake KSM - Authorization',
         favouriteTooltip: 'Create your list of favorite nodes for quick staking',
         selectTooltip: 'Create your diverse set of validators from below list',
         sortingInfo: {
           label: 'How we sort',
           header: 'Below list is sorted according to:',
           points: {
-            1: '1) Favorited operators on top',
-            2: '2) Operators with claimed space in Kusamaverse',
+            1: '1) Favorite operators on top',
+            2: '2) Operators in Kusamaverse',
             3: '3) Least commission',
             4: '4) Most own stake',
             5: '5) Least amount of nodes',
@@ -27,8 +35,17 @@ export const enGb = {
           }
         }
       },
+      accountPair: 'Stash & Controller Pair',
+      unbondingInfoAccounts:
+        'The stash and controller pair, here the controller will be used to send the transaction.',
+      unbondingPeriod:
+        'The funds will only be available for withdrawal after the unbonding period, however will not be part of the staked amount after the next validator election. You can follow the unlock countdown in the UI.',
       fee: 'fee',
-      bond: 'bond()',
+      bondCall: 'bond()',
+      unbondCall: 'unbond()',
+      withdrawUnbondedCall: 'withdrawUnbonded()',
+      chillCall: 'chill()',
+      chillInfo: 'Declare no desire to either validate or nominate',
       nominateCall: 'nominate()',
       setController: 'setController()',
       transactionCalls: 'Transaction Calls To Execute',
@@ -43,8 +60,12 @@ export const enGb = {
         account: 'Account Balance',
         transferable: 'Transferable',
         staked: 'Staked',
-        unbonding: 'Unbonding'
+        unbonding: 'Unbonding',
+        redeemable: 'Redeemable'
       },
+      unbond: 'Unbond',
+      stakingBlocks: '{{blocks}} blocks',
+      erasRemaining: '{{eras}} eras remaining',
       noActiveStakes: "This Account Doesn't Have Any Active Stakes At The Moment",
       changeNominator: 'change nominator',
       stakingWalletAccountHeading: 'Staking Wallet Account',
@@ -52,18 +73,23 @@ export const enGb = {
       pickDestination: 'Pick a reward destination',
       stashLabel: 'stash',
       rewardDestination: 'reward destination',
-      bondedAmount: 'bonded amount',
+      unbondAmount: 'Unbond Amount',
+      setAmount: 'Set Amount',
       nominateAndBond: 'Nominate & Bond',
       signAndSubmit: 'Sign & Submit',
       stashController: 'Controller',
       selectAmount: 'Select amount to stake',
       available: 'Available',
       feeInfo: 'Fees of {{fee}} will be applied for submission',
-      stashIncreaseAmount: 'Stash Account (increase the amount at stake)',
-      stashNoIncreaseAmount: 'Stash Account (do not increase the amount at stake)',
+      stashIncreaseAmount: 'Stash Account (re-stake reward)',
+      stashNoIncreaseAmount: 'Stash Account (do not re-stake reward)',
       controllerAccount: 'Controller Account',
+      stashAccount: 'Stash Account',
       signedSuccess: 'Transaction finished. Bonding was successful!',
       validation: {
+        unbondMinAmount: 'Minimum amount for unbonding should be a positive number',
+        unbondMaxAmount:
+          'Maximum amount for unbonding should not be over the bonded amount of {{bonded}}',
         controller: {
           stashed:
             'A controller account should not map to another stash. This selected controller is a stash, controlled by {{bondedAddress}}',
