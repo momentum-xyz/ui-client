@@ -190,7 +190,7 @@ const Validators: FC<PropsInterface> = ({
       <styled.ButtonContainer>
         <Button
           variant="primary"
-          label={t('back')}
+          label={t('actions.back')}
           icon="lightningDuotone"
           wide={false}
           theme={theme}

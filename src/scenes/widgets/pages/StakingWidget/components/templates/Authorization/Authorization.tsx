@@ -168,7 +168,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
       <styled.ButtonContainer>
         <Button
           variant="primary"
-          label={t('back')}
+          label={t('actions.back')}
           icon="lightningDuotone"
           wide={false}
           onClick={goBackHandler}
