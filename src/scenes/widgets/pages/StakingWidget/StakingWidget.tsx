@@ -33,7 +33,7 @@ const StakingWidget: FC = () => {
     {
       id: '3',
       title: t('staking.stakingTab.authorization'),
-      label: t('staking.stakingTab.authorization'),
+      label: t('staking.authorization'),
       icon: 'lightningDuotone',
       disabled: true
     }
@@ -78,16 +78,24 @@ const StakingWidget: FC = () => {
           ) : (
             <>
               {selectedTab?.id === '1' && (
-                <Nominator nextTab={() => setSelectedTab(tabBarTabs[1])} />
+                <Nominator
+                  goToValidators={() => setSelectedTab(tabBarTabs[1])}
+                  goToAuthorization={() => setSelectedTab(tabBarTabs[2])}
+                />
               )}
               {selectedTab?.id === '2' && (
                 <Validators
                   operatorSpaceId={operatorSpaceId}
-                  previousTab={() => setSelectedTab(tabBarTabs[0])}
-                  nextTab={() => setSelectedTab(tabBarTabs[2])}
+                  goToNominator={() => setSelectedTab(tabBarTabs[0])}
+                  goToAuthorization={() => setSelectedTab(tabBarTabs[2])}
                 />
               )}
-              {selectedTab?.id === '3' && <Authorization />}
+              {selectedTab?.id === '3' && (
+                <Authorization
+                  goToNominator={() => setSelectedTab(tabBarTabs[0])}
+                  goToValidators={() => setSelectedTab(tabBarTabs[1])}
+                />
+              )}
             </>
           )}
         </styled.TabContainer>

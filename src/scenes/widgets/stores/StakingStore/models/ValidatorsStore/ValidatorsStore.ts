@@ -65,7 +65,7 @@ const ValidatorsStore = types.compose(
         return values(self.validators).filter((validator) => validator.selected).length;
       },
       get validatorsTotals() {
-        return `${this.selectedValidatorsCount}/16`;
+        return `${this.selectedValidatorsCount}/24`;
       },
       get bookmarkedValidatorsCount() {
         return values(self.validators).filter((validator) => validator.isBookmarked).length;
@@ -93,7 +93,7 @@ const ValidatorsStore = types.compose(
         });
       },
       get selectedValidatorsValidation() {
-        return this.selectedValidators.length > 0 && this.selectedValidators.length <= 16;
+        return this.selectedValidators.length > 0 && this.selectedValidators.length <= 24;
       }
     }))
 );
