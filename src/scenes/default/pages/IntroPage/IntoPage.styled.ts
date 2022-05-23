@@ -1,6 +1,16 @@
 import styled from 'styled-components';
 
-export const Background = styled.div<{background: string}>`
+export const Header = styled.div`
+  display: flex;
+  padding: 0 12px;
+  width: 100%;
+  height: 50px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const Background = styled.div`
   --icon-offset: 15px;
 
   position: absolute;
@@ -8,9 +18,10 @@ export const Background = styled.div<{background: string}>`
   width: 100%;
   height: 100vh;
   background-size: cover;
-  background-color: var(--black);
+  background: ${(props) => props.theme.bg};
   align-items: end;
   justify-content: center;
+  flex-direction: column;
   z-index: 1;
 
   .youtube {
@@ -22,13 +33,6 @@ export const Background = styled.div<{background: string}>`
 
   .youtubeIframe {
     width: 100%;
-    height: calc(100% - 50px);
+    height: 100%;
   }
-`;
-
-export const CloseIcon = styled.div`
-  position: absolute;
-  top: var(--icon-offset);
-  right: var(--icon-offset);
-  z-index: 2;
 `;
