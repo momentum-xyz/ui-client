@@ -23,6 +23,8 @@ import StageModePIP from '../atoms/StageMode/StageModePIP';
 import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import {StageModeStatus} from '../../context/type/StageMode';
 import {ROUTES} from '../../core/constants';
+import {useStageModePopupQueueContext} from '../../context/StageMode/StageModePopupQueueContext';
+import {useStageModeRequestAcceptOrDecline} from '../../hooks/api/useStageModeService';
 
 export interface CommunicationLayerProps {}
 
@@ -35,6 +37,10 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
+  const {addRequestPopup} = useStageModePopupQueueContext();
+  const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
+    collaborationState.collaborationSpace?.id
+  );
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
@@ -45,6 +51,31 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       }
     }
   }, [collaborationState.stageMode]);
+
+  useWebsocketEvent('stage-mode-request', (userId) => {
+    addRequestPopup(userId, {
+      user: userId,
+      onAccept: () => {
+        return acceptRequest(userId)
+          .then(() => true)
+          .catch(() => {
+            toast.error(
+              <ToastContent
+                isDanger
+                headerIconName="alert"
+                title={t('titles.alert')}
+                text={t('messages.userRequestDeny')}
+                isCloseButton
+              />
+            );
+            return false;
+          });
+      },
+      onDecline: () => {
+        return declineRequest(userId).then(() => true);
+      }
+    });
+  });
 
   useWebsocketEvent('stage-mode-toggled', (stageModeStatus) => {
     //if (collaborationState.collaborationSpace?.id !== spaceId) return;
