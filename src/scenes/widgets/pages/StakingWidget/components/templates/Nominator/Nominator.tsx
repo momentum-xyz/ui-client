@@ -24,12 +24,13 @@ interface PropsInterface {
 }
 
 const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
+  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
   const {
     paymentDestination,
     controllerAccountValidation,
     bondAmountValidation,
     setTransactionType
-  } = useStore().widgetStore.stakingStore.polkadotProviderStore;
+  } = polkadotProviderStore;
   const [section, setSection] = useState<'nominator' | 'unbond'>('nominator');
 
   useEffect(() => {
