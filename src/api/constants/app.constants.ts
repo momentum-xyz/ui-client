@@ -7,8 +7,18 @@ import {AppConfigExtendedInterface} from 'api/interfaces';
 
 export const appConstants: AppConfigExtendedInterface = {
   IS_DEV_ENVIRONMENT: process.env.NODE_ENV === 'development',
+  GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
+  YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
   BACKEND_ENDPOINT_URL: '',
   UNITY_CLIENT_URL: '',
+  UNITY_CLIENT_LOADER_URL: '',
+  UNITY_CLIENT_DATA_URL: '',
+  UNITY_CLIENT_FRAMEWORK_URL: '',
+  UNITY_CLIENT_CODE_URL: '',
+  UNITY_CLIENT_STREAMING_ASSETS_URL: '',
+  UNITY_CLIENT_COMPANY_NAME: '',
+  UNITY_CLIENT_PRODUCT_NAME: '',
+  UNITY_CLIENT_PRODUCT_VERSION: '',
   RENDER_SERVICE_URL: '',
   AUTH_SERVICE_URL: '',
   KEYCLOAK_OPENID_CONNECT_URL: '',
@@ -25,16 +35,5 @@ export const appConstants: AppConfigExtendedInterface = {
   GOOGLE_API_CLIENT_ID: '',
   GOOGLE_API_DEVELOPER_KEY: '',
   MIRO_APP_ID: '',
-  YOUTUBE_KEY: '',
-  GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
-  YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
-  // FIXME: It comes from BE
-  UNITY_CLIENT_LOADER_URL: '',
-  UNITY_CLIENT_DATA_URL: '',
-  UNITY_CLIENT_FRAMEWORK_URL: '',
-  UNITY_CLIENT_CODE_URL: '',
-  UNITY_CLIENT_STREAMING_ASSETS_URL: 'StreamingAssets',
-  UNITY_CLIENT_COMPANY_NAME: 'Odyssey',
-  UNITY_CLIENT_PRODUCT_NAME: 'Odyssey Momentum',
-  UNITY_CLIENT_PRODUCT_VERSION: '0.1'
+  YOUTUBE_KEY: ''
 };
