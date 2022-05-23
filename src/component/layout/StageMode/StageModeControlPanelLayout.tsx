@@ -7,13 +7,7 @@ import {ToastContent, Toggle} from 'ui-kit';
 
 import Page from '../../molucules/Page';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
-import {
-  useStageModeMute,
-  useStageModeRequestAcceptOrDecline,
-  useStageModeSendOffstage
-} from '../../../hooks/api/useStageModeService';
-import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
+import {useStageModeMute, useStageModeSendOffstage} from '../../../hooks/api/useStageModeService';
 import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
@@ -40,14 +34,11 @@ const StageModeControlPanelLayout: React.FC = () => {
   const {collaborationState} = useCollaboration();
   const {authState} = useContextAuth();
   const {isOnStage, enterStage, leaveStage, canEnterStage, stageModeUsers} = useAgoraStageMode();
-  const {addRequestPopup} = useStageModePopupQueueContext();
+
   const [enableStageMode] = useIntegrationEnable();
   const [disableStageMode] = useIntegrationDisable();
   const [sendOffstage, ,] = useStageModeSendOffstage(collaborationState.collaborationSpace?.id);
   const muteUserRequest = useStageModeMute(collaborationState.collaborationSpace?.id);
-  const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
-    collaborationState.collaborationSpace?.id
-  );
   const [selectedRemoteUserIdForRemove, setSelectedRemoteUserIdForRemove] = useState<string | null>(
     null
   );
@@ -55,31 +46,6 @@ const StageModeControlPanelLayout: React.FC = () => {
   const [user] = useUser(selectedRemoteUserIdForRemove as string);
 
   const {getConfirmation} = useConfirmationDialog();
-
-  useWebsocketEvent('stage-mode-request', (userId) => {
-    addRequestPopup(userId, {
-      user: userId,
-      onAccept: () => {
-        return acceptRequest(userId)
-          .then(() => true)
-          .catch(() => {
-            toast.error(
-              <ToastContent
-                isDanger
-                headerIconName="alert"
-                title={t('titles.alert')}
-                text={t('messages.userRequestDeny')}
-                isCloseButton
-              />
-            );
-            return false;
-          });
-      },
-      onDecline: () => {
-        return declineRequest(userId).then(() => true);
-      }
-    });
-  });
 
   const confirmRemoveUserFromStage = useCallback(() => {
     getConfirmation({
