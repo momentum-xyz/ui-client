@@ -18,7 +18,7 @@ export const CurrentAddress = styled.div`
   opacity: 0.7;
 `;
 
-export const ErrorMessageContainer = styled.div`
+export const ResponseMessageContainer = styled.div`
   width: 600px;
   margin: 0 auto;
 `;
