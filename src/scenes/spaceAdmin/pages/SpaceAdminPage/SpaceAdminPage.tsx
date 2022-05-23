@@ -69,7 +69,7 @@ const SpaceAdminPage: FC = () => {
           onClose={tokenRuleReviewDialog.close}
         />
       )}
-      {tokenRuleFormDialog.isOpen && <TokenRuleForm onClose={tokenRuleFormDialog.close} />}
+      {tokenRuleFormDialog.isOpen && <TokenRuleForm />}
       {tokenFormDialog.isOpen && <TokenForm />}
       {applyTokenRuleFormDialog.isOpen && <ApplyTokenRuleForm />}
     </styled.Container>
