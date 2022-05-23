@@ -8,8 +8,7 @@ import {Heading, Text} from 'ui-kit';
 import * as styled from './ChillDetails.styled';
 
 const ChillDetails = () => {
-  const {transactionSigner} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+  const {transactionSigner} = useStore().widgetStore.stakingStore.polkadotProviderStore;
   return (
     <>
       <Heading type="h2" align="left" weight="bold" label={t('staking.transactionCalls')} />
