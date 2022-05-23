@@ -19,11 +19,11 @@ import {
 import * as styled from './Nominator.styled';
 
 interface PropsInterface {
-  validatorsTab: () => void;
-  authorizationTab: () => void;
+  goToValidators: () => void;
+  goToAuthorization: () => void;
 }
 
-const Nominator: FC<PropsInterface> = ({authorizationTab, validatorsTab}) => {
+const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   const {
     paymentDestination,
     controllerAccountValidation,
@@ -44,7 +44,7 @@ const Nominator: FC<PropsInterface> = ({authorizationTab, validatorsTab}) => {
         <ScannerList />
       </styled.Holder>
       <BalanceList />
-      <ActiveStake unbond={() => setSection('unbond')} withdraw={authorizationTab} />
+      <ActiveStake unbond={() => setSection('unbond')} withdraw={goToAuthorization} />
       <RewardSection />
       <StakingAmountSection />
       <styled.ButtonContainer>
@@ -58,12 +58,12 @@ const Nominator: FC<PropsInterface> = ({authorizationTab, validatorsTab}) => {
           }
           icon="lightningDuotone"
           wide={false}
-          onClick={validatorsTab}
+          onClick={goToValidators}
         />
       </styled.ButtonContainer>
     </styled.Container>
   ) : (
-    <Unbond nominatorTab={() => setSection('nominator')} authorizationTab={authorizationTab} />
+    <Unbond nominatorTab={() => setSection('nominator')} authorizationTab={goToAuthorization} />
   );
 };
 export default observer(Nominator);
