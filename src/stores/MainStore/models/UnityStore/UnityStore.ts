@@ -20,7 +20,9 @@ const UnityStore = types
       UnityService.teleportToVector3(vector);
     },
     changeKeyboardControl(isActive: boolean) {
-      UnityService.setKeyboardControl(isActive);
+      if (!self.isPaused) {
+        UnityService.setKeyboardControl(isActive);
+      }
     },
     pause() {
       self.isPaused = true;
