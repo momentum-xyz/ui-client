@@ -2,6 +2,10 @@ import {endpoints} from 'api/constants';
 
 const BASE_URL = `${endpoints.backendUrl}/users`;
 
+console.log('--------------------');
+// @ts-ignore
+console.log(window.globalConfig);
+
 export const userRepositoryEndpoints = {
   me: `${BASE_URL}/me`,
   check: `${BASE_URL}/check`,
