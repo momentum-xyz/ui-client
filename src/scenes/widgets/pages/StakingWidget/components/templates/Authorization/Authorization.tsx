@@ -27,6 +27,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
     unbondExtrinsics,
     withdrawUnbondedExtrinsics,
     transactionType,
+    setTransactionFee,
     transactionSigner
   } = polkadotProviderStore;
   const {selectedValidators} = validatorsStore;
@@ -46,7 +47,14 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
     }
   }, [transactionType, selectedValidators]);
 
+  const clearTransactionState = () => {
+    setTransactionFee('');
+    setErrorMessage('');
+    setSuccessMessage(false);
+  };
+
   const goBackHandler = () => {
+    clearTransactionState();
     transactionType === StakingTransactionType.Bond && goToValidators();
     transactionType === StakingTransactionType.Unbond && goToNominator();
     transactionType === StakingTransactionType.WithdrawUnbond && goToNominator();
@@ -110,7 +118,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
     deriveExtrinsics().then((txBatch) => {
       txBatch && calculateFee(txBatch);
     });
-  }, [calculateFee, selectedValidators, deriveExtrinsics]);
+  }, []);
 
   return (
     <styled.Container theme={theme}>
