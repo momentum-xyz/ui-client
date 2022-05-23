@@ -354,7 +354,7 @@ const PolkadotProviderStore = types
       return self.channel?.tx.staking.unbond(amountBN);
     },
     async withdrawUnbondedExtrinsics() {
-      const args = await self.channel?.tx.staking.withdrawUnbonded.meta.args.length === 1;
+      const args = (await self.channel?.tx.staking.withdrawUnbonded.meta.args.length) === 1;
       const spanCount = await self.channel?.query.staking.slashingSpans(self.stakingInfo?.stashId);
       const params = args ? [spanCount] : [];
       return self.channel?.tx.staking.withdrawUnbonded(params);
