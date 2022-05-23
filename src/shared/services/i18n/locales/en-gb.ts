@@ -7,6 +7,7 @@ export const enGb = {
     back: 'back',
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
+      withdrawUnbonded: 'Withdraw Unbonded',
       unbondFunds: 'Unbond Funds',
       nominator: 'Nominator',
       validatorsTab: 'Validators',

@@ -31,13 +31,13 @@ const Authorization: FC<PropsInterface> = ({theme}) => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [loader, setLoader] = useState<boolean>(false);
 
-  const deriveExtrinsics = useCallback(() => {
+  const deriveExtrinsics = useCallback(async () => {
     if (transactionType === StakingTransactionType.Bond) {
       return bondExtrinsics(selectedValidators);
     } else if (transactionType === StakingTransactionType.Unbond) {
       return unbondExtrinsics();
     } else if (transactionType === StakingTransactionType.WithdrawUnbond) {
-      return withdrawUnbondedExtrinsics();
+      return await withdrawUnbondedExtrinsics();
     } else {
       return null;
     }
@@ -68,7 +68,7 @@ const Authorization: FC<PropsInterface> = ({theme}) => {
   };
 
   const sign = async () => {
-    const txBatch = deriveExtrinsics();
+    const txBatch = await deriveExtrinsics();
     const injector =
       transactionSigner?.meta && (await web3FromSource(transactionSigner?.meta?.source));
     setLoader(true);
@@ -94,8 +94,9 @@ const Authorization: FC<PropsInterface> = ({theme}) => {
   };
 
   useEffect(() => {
-    const txBatch = deriveExtrinsics();
-    txBatch && calculateFee(txBatch);
+    deriveExtrinsics().then((txBatch) => {
+      txBatch && calculateFee(txBatch);
+    });
   }, [calculateFee, selectedValidators, deriveExtrinsics]);
 
   return (

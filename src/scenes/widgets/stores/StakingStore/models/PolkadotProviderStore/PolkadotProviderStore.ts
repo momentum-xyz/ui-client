@@ -353,8 +353,11 @@ const PolkadotProviderStore = types
       const amountBN = inputToBN(self.unbondAmount, self.chainDecimals, self.tokenSymbol);
       return self.channel?.tx.staking.unbond(amountBN);
     },
-    withdrawUnbondedExtrinsics() {
-      return self.channel?.tx.staking.withdrawUnbonded();
+    async withdrawUnbondedExtrinsics() {
+      const args = await self.channel?.tx.staking.withdrawUnbonded.meta.args.length === 1;
+      const spanCount = await self.channel?.query.staking.slashingSpans(self.stakingInfo?.stashId);
+      const params = args ? [spanCount] : [];
+      return self.channel?.tx.staking.withdrawUnbonded(params);
     },
     async calculateFee(extrinsics: SubmittableExtrinsic | undefined) {
       const calculatedFee = await extrinsics?.paymentInfo(self.transactionSigner?.address as any);
