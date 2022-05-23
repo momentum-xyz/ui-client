@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
-import {OidcClientSettings, SignoutRedirectArgs} from 'oidc-client-ts';
+import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
 
 import {storage} from 'core/services';
@@ -48,10 +48,8 @@ const SessionStore = types
       return library;
     },
     logout: flow(function* (auth: AuthContextProps) {
-      const id_token_hint = auth.user?.id_token;
       yield auth.revokeTokens();
       yield auth.removeUser();
-      yield auth.signoutRedirect({id_token_hint: id_token_hint} as SignoutRedirectArgs);
       deleteCookieByName('CREATE_INITIATIVE_SHOWN');
     })
   }))
