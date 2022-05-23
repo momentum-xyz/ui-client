@@ -11,8 +11,8 @@ interface DataInterface {
 }
 
 interface PropsInterface {
-  data: DataInterface[];
-  ButtonLabel: string;
+  data?: DataInterface[];
+  ButtonLabel?: string;
   onClick?: (item: any) => void;
   value: string;
   isFocused: boolean;
@@ -21,7 +21,8 @@ interface PropsInterface {
   search: (value: string) => void;
   searchInputLabel: string;
   searchInputPlaceholder: string;
-  onButtonClick: () => void;
+  onButtonClick?: () => void;
+  height?: string;
 }
 
 const SearchDropdown: FC<PropsInterface> = ({
@@ -33,6 +34,7 @@ const SearchDropdown: FC<PropsInterface> = ({
   setIsFocused,
   setValue,
   search,
+  height = '65vh',
   searchInputLabel,
   searchInputPlaceholder,
   onButtonClick
@@ -63,21 +65,28 @@ const SearchDropdown: FC<PropsInterface> = ({
           value={value}
         />
         {isFocused && (
-          <styled.Container ref={panelRef} className={cn('hasBorder')}>
-            <styled.Div className={cn(data.length >= 1 && 'hasBorder')}>
-              <styled.TextItem>
-                <Text text={ButtonLabel} size="s" />
-              </styled.TextItem>
-              <styled.IconItem>
-                <IconSvg name="add" onClick={onButtonClick} />
-              </styled.IconItem>
-            </styled.Div>
+          <styled.Container ref={panelRef} className={cn('hasBorder')} height={height}>
+            {ButtonLabel && (
+              <styled.Div className={cn(data && data.length >= 1 && 'hasBorder')}>
+                <styled.TextItem>
+                  <Text text={ButtonLabel} size="s" />
+                </styled.TextItem>
+                <styled.IconItem>
+                  <IconSvg name="add" onClick={onButtonClick} />
+                </styled.IconItem>
+              </styled.Div>
+            )}
 
-            {data.map((item) => (
-              <styled.ListItem key={item.id} onClick={() => onClick?.(item)}>
-                {item.name && <Text text={item.name} size="s" align="left" />}
-              </styled.ListItem>
-            ))}
+            {data &&
+              data.map((item) => (
+                <styled.ListItem key={item.id} onClick={() => onClick?.(item)}>
+                  {item.name && (
+                    <styled.TextRow>
+                      <Text text={item.name} size="s" align="left" noWrap />
+                    </styled.TextRow>
+                  )}
+                </styled.ListItem>
+              ))}
           </styled.Container>
         )}
       </styled.StyledSearchDiv>
