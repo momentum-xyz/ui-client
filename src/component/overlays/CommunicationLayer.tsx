@@ -1,8 +1,8 @@
 import {Transition} from '@headlessui/react';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
-import {t} from 'i18next';
 import {useHistory} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -35,6 +35,8 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
@@ -100,32 +102,32 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   };
 
   useEffect(() => {
-    if (
-      remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1 &&
-      !maxVideoStreamsShown
-    ) {
+    const isLimitReached = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+
+    if (isLimitReached && !maxVideoStreamsShown) {
       setMaxVideoStreamsShown(true);
       showMaxVideoStreamsReached();
-    } else if (maxVideoStreamsShown) {
+    } else if (maxVideoStreamsShown && !isLimitReached) {
       setMaxVideoStreamsShown(false);
     }
-  }, [remoteParticipants.length]);
-
-  // useEffect(() => {
-  //   if (collaborationState.collaborationSpace) {
-  //     if (collaborationState.stageMode) {
-  //       join(collaborationState.collaborationSpace.id).then();
-  //     } else {
-  //       leave().then();
-  //     }
-  //   }
-  // }, [collaborationState.stageMode]);
+  }, [maxVideoStreamsShown, remoteParticipants.length]);
 
   const noVideo = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   const stageModeAudience = stageModeUsers.filter((user) => {
     return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== currentUserId;
   });
+
+  const numberOfPeople = useMemo(() => {
+    return collaborationState.stageMode
+      ? stageModeAudience.length + Number(!isOnStage)
+      : remoteParticipants.length + 1;
+  }, [
+    collaborationState.stageMode,
+    isOnStage,
+    remoteParticipants.length,
+    stageModeAudience.length
+  ]);
 
   return (
     <Transition
@@ -169,6 +171,9 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         </Transition>
 
         <li className="overflow-y-scroll h-full pr-.1">
+          <p className="text-center whitespace-nowrap">
+            {t('counts.people', {count: numberOfPeople}).toUpperCase()}
+          </p>
           <ul>
             {collaborationState.stageMode
               ? !isOnStage && <LocalParticipantView stageLocalUserId={currentUserId} />
