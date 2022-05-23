@@ -114,6 +114,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
       closeOnBackgroundClick={false}
       icon="check-on"
       iconSize="medium"
+      hasBorder
     >
       {applyTokenRuleStore.tokenRuleApplied ? (
         <styled.Container>
