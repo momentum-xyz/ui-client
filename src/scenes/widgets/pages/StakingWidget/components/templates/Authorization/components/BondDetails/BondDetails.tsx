@@ -29,7 +29,7 @@ const BondDetails = () => {
               placeholder={t('staking.selectedNominees')}
               value={selectedValidatorsOptions[0].value}
               options={selectedValidatorsOptions}
-              onOptionSelect={() => void 0}
+              onOptionSelect={() => {}}
               variant="secondary"
             />
           </styled.CurrentAddress>

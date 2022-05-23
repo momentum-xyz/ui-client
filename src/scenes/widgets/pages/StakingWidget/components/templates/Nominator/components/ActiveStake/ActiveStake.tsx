@@ -6,7 +6,7 @@ import {Heading, IconSvg, PropsWithThemeInterface, Text, Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionType} from 'core/enums';
 
-import {UnbondingIndicator} from '../UnbondingIndicator';
+import {UnbondingIndicator} from '../index';
 
 import * as styled from './ActiveStake.styled';
 

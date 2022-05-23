@@ -8,8 +8,8 @@ import {useStore} from 'shared/hooks/useStore';
 import * as styled from './WithdrawUnbondDetails.styled';
 
 const WithdrawUnbondDetails = () => {
-  const {tokenSymbol, transactionSigner, stashAccountBalance} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {tokenSymbol, transactionSigner, stashAccountBalance} = polkadotProviderStore;
   return (
     <>
       <Heading type="h2" align="left" weight="bold" label={t('staking.transactionCalls')} />
