@@ -12,9 +12,12 @@ import {StakingTransactionType} from 'core/enums';
 import * as styled from './Authorization.styled';
 import {BondDetails, UnbondDetails, WithdrawUnbondDetails} from './components';
 
-interface PropsInterface extends PropsWithThemeInterface {}
+interface PropsInterface extends PropsWithThemeInterface {
+  goToValidators: () => void;
+  goToNominator: () => void;
+}
 
-const Authorization: FC<PropsInterface> = ({theme}) => {
+const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator}) => {
   const {polkadotProviderStore, validatorsStore} = useStore().widgetStore.stakingStore;
   const {
     channel,
@@ -43,7 +46,11 @@ const Authorization: FC<PropsInterface> = ({theme}) => {
     }
   }, [transactionType, selectedValidators]);
 
-  const previousTabHandler = () => {};
+  const goBackHandler = () => {
+    transactionType === StakingTransactionType.Bond && goToValidators();
+    transactionType === StakingTransactionType.Unbond && goToNominator();
+    transactionType === StakingTransactionType.WithdrawUnbond && goToNominator();
+  };
 
   const formatErrorHandler = (failedExtrinsicData: EventRecord[]) => {
     failedExtrinsicData.forEach(
@@ -147,7 +154,7 @@ const Authorization: FC<PropsInterface> = ({theme}) => {
           label={t('back')}
           icon="lightningDuotone"
           wide={false}
-          onClick={previousTabHandler}
+          onClick={goBackHandler}
         />
         <Button
           variant="primary"

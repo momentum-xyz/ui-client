@@ -21,11 +21,16 @@ import * as styled from './Validators.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   operatorSpaceId?: string;
-  nextTab: () => void;
-  previousTab: () => void;
+  goToNominator: () => void;
+  goToAuthorization: () => void;
 }
 
-const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previousTab}) => {
+const Validators: FC<PropsInterface> = ({
+  theme,
+  goToAuthorization,
+  operatorSpaceId,
+  goToNominator
+}) => {
   const {widgetStore, favoriteStore} = useStore();
   const {stakingStore} = widgetStore;
   const {validatorsStore} = stakingStore;
@@ -48,7 +53,7 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
         ''
       );
     }
-    nextTab();
+    goToAuthorization();
   };
 
   const handleListItemClick = async (eventName: string, item: ValidatorItemModelInterface) => {
@@ -189,7 +194,7 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
           icon="lightningDuotone"
           wide={false}
           theme={theme}
-          onClick={() => previousTab()}
+          onClick={() => goToNominator()}
         />
         <Button
           variant="primary"
