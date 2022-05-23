@@ -28,9 +28,9 @@ const IntoPage: FC = () => {
 
   const opts = {
     playerVars: {
-      autoplay: 1,
-      mute: 1,
-      controls: 1
+      autoplay: 0,
+      mute: 0,
+      controls: 0
     }
   };
 
