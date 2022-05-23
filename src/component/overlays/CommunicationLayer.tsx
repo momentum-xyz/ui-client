@@ -37,12 +37,16 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
-  const {addRequestPopup} = useStageModePopupQueueContext();
+  const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
   const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
     collaborationState.collaborationSpace?.id
   );
 
   const {t} = useTranslation();
+
+  useEffect(() => {
+    clearPopups();
+  }, [collaborationState.collaborationSpace]);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
