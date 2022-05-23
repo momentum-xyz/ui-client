@@ -24,7 +24,10 @@ import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import {StageModeStatus} from '../../context/type/StageMode';
 import {ROUTES} from '../../core/constants';
 import {useStageModePopupQueueContext} from '../../context/StageMode/StageModePopupQueueContext';
-import {useStageModeRequestAcceptOrDecline} from '../../hooks/api/useStageModeService';
+import {
+  useStageModeLeave,
+  useStageModeRequestAcceptOrDecline
+} from '../../hooks/api/useStageModeService';
 
 export interface CommunicationLayerProps {}
 
@@ -38,6 +41,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
   const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
   const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
     collaborationState.collaborationSpace?.id
   );
@@ -192,7 +196,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           <div
             className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
-              leaveCollaborationSpaceCall(false).then();
+              leaveCollaborationSpaceCall(false).then(stageModeLeave);
               if (collaborationState.stageMode) {
                 collaborationDispatch({
                   type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
