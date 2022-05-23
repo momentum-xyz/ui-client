@@ -1,7 +1,13 @@
 import {types, Instance} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 
-import {durationInHours, formattedStringFromDate} from 'core/utils';
+import {
+  durationInHours,
+  formatEndDate,
+  formatStartDate,
+  formatStartTime,
+  formattedStringFromDate
+} from 'core/utils';
 
 const EventItemModel = types
   .model('EventItem', {
@@ -26,29 +32,14 @@ const EventItemModel = types
     get toBytes() {
       return Buffer.from(self.id.replace(/-/g, ''), 'hex');
     },
-    get startDateAndTime() {
-      return self.start
-        .toLocaleString('default', {
-          month: 'long',
-          day: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true
-        })
-        .toUpperCase();
+    get startDate() {
+      return formatStartDate(new Date(self.start));
+    },
+    get startTime() {
+      return formatStartTime(new Date(self.start));
     },
     get endDateAndTime() {
-      return self.end
-        .toLocaleString('default', {
-          month: 'long',
-          day: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true
-        })
-        .toUpperCase();
+      return formatEndDate(new Date(self.end));
     },
     get timeZone() {
       // @ts-ignore

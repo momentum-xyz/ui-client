@@ -121,9 +121,13 @@ export const enGb = {
       unsupportedNetwork: "You're connected to an unsupported network.",
       ethereumAccess: 'Please authorize this website to access your Ethereum account.',
       ethereumExtension:
-        'No Ethereum browser extension detected, please install {{name}} to continue here.',
+        'No {{name}} extension detected, please install {{name}} to continue here.',
       couldNotRemoveEvent: 'Could not remove the event.',
       endDateGraterThanStartDate: 'End date has to be grater than start date'
+    },
+    counts: {
+      people_one: '{{count}} Person',
+      people_other: '{{count}} People'
     },
     labels: {
       calendar: 'World Calendar',
@@ -142,6 +146,7 @@ export const enGb = {
       nameOfInitiative: 'Name of Initiative',
       description: 'Description',
       people: 'People',
+      person: 'Person',
       online: 'Available',
       dnd: 'Do Not Disturb'
     },
@@ -267,7 +272,7 @@ export const enGb = {
       noGatherings: 'There are no gatherings scheduled for this space.',
       eventItem: {
         live: 'Live',
-        websiteLink: 'Website Link',
+        websiteLink: 'Learn More',
         magicLinkDialog: {
           title: 'Magic Link',
           copyLabel: 'Copy Link'
@@ -277,7 +282,7 @@ export const enGb = {
           copyLabel: 'Copy Link'
         },
         flyToSpace: 'Fly To',
-        gatheringLink: 'Gathering Magiclink',
+        gatheringLink: 'Share',
         addToCalendar: 'Add to My Calendar',
         joinGathering: 'Join The Gathering',
         by: 'By',
@@ -285,7 +290,7 @@ export const enGb = {
         from: 'From',
         to: 'To',
         showMore: 'Show more',
-        collapse: 'Collapse'
+        collapse: 'Show less'
       }
     },
     eventForm: {
