@@ -27,11 +27,15 @@ const SpaceAdmin: FC = () => {
 
   useEffect(() => {
     if (spaceId) {
+      unityStore.changeKeyboardControl(false);
       spaceManagerStore.resetModel();
       spaceManagerStore.init(spaceId);
     }
 
-    return spaceManagerStore.resetModel;
+    return () => {
+      unityStore.changeKeyboardControl(true);
+      spaceManagerStore.resetModel();
+    };
   }, [history.location.pathname, spaceId, spaceManagerStore]);
 
   useEffect(() => {

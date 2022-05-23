@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div`
-  max-height: 35vh;
+export const Container = styled.div<{height: string}>`
   z-index: 110;
   position: relative;
   overflow: auto;
+  max-height: ${(props) => props.height};
   background: ${(props) => props.theme.bg};
   &.hasBorder {
     border-bottom-right-radius: 5px;
@@ -38,6 +38,14 @@ export const Div = styled.div`
   justify-items: center;
   justify-content: space-between;
   padding: 5px;
+`;
+
+export const TextRow = styled.div`
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const ListItem = styled.div`
