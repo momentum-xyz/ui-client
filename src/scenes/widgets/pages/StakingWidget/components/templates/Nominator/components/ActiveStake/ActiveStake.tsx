@@ -2,10 +2,9 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {Heading, IconSvg, PropsWithThemeInterface, Text} from 'ui-kit';
+import {Heading, IconSvg, PropsWithThemeInterface, Text, Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionType} from 'core/enums';
-import {Button} from 'ui-kit';
 
 import {UnbondingIndicator} from '../UnbondingIndicator';
 
@@ -75,24 +74,26 @@ const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond})
               />
             </styled.StakeColumn>
           )}
-          <styled.StakeColumn>
+          <styled.WithdrawColumn>
             <Button
+              variant="primary"
               icon="lock"
-              size="small"
+              wide={false}
               label={t('staking.withdrawUnbonded')}
               disabled={!isWithdrawUnbondedPermitted}
               onClick={withdrawUnbonded}
             />
-          </styled.StakeColumn>
-          <styled.StakeColumn>
+          </styled.WithdrawColumn>
+          <styled.StopStaking>
             <Button
-              icon="lock"
-              size="small"
+              variant="primary"
+              icon="stop"
+              wide={false}
               label={t('staking.stopStaking')}
               disabled={isStakingAccountUnlocking}
               onClick={stopStaking}
             />
-          </styled.StakeColumn>
+          </styled.StopStaking>
           <styled.DetailsColumn
             onClick={unbondHandler}
             style={{opacity: isUnbondingPermitted ? 1 : 0.3}}

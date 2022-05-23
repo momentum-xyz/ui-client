@@ -14,6 +14,13 @@ export const StakeColumn = styled.div`
   align-items: center;
   gap: 5px;
 `;
+export const WithdrawColumn = styled(StakeColumn)`
+  flex: 0.4;
+`;
+
+export const StopStaking = styled(StakeColumn)`
+  flex: 0.4;
+`;
 
 export const DetailsColumn = styled.div`
   display: flex;

@@ -11,6 +11,7 @@ import {StakingTransactionType} from 'core/enums';
 
 import * as styled from './Authorization.styled';
 import {BondDetails, UnbondDetails, WithdrawUnbondDetails} from './components';
+import ChillDetails from './components/ChillDetails/ChillDetails';
 
 interface PropsInterface extends PropsWithThemeInterface {
   goToValidators: () => void;
@@ -58,9 +59,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
 
   const goBackHandler = () => {
     clearTransactionState();
-    transactionType === StakingTransactionType.Bond && goToValidators();
-    transactionType === StakingTransactionType.Unbond && goToNominator();
-    transactionType === StakingTransactionType.WithdrawUnbond && goToNominator();
+    transactionType === StakingTransactionType.Bond ? goToValidators() : goToNominator();
   };
 
   const formatErrorHandler = (failedExtrinsicData: EventRecord[]) => {
@@ -128,6 +127,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
       {transactionType === StakingTransactionType.Bond && <BondDetails />}
       {transactionType === StakingTransactionType.Unbond && <UnbondDetails />}
       {transactionType === StakingTransactionType.WithdrawUnbond && <WithdrawUnbondDetails />}
+      {transactionType === StakingTransactionType.Chill && <ChillDetails />}
       <styled.AuthorizationRow>
         <Text text={t('staking.fee')} size="xs" weight="bold" transform="uppercase" />
         <styled.CurrentAddress>

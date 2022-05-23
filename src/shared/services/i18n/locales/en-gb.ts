@@ -8,7 +8,7 @@ export const enGb = {
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
       stopStaking: 'Stop Staking',
-      withdrawUnbonded: 'Withdraw Unbonded',
+      withdrawUnbonded: 'Withdraw',
       unbondFunds: 'Unbond Funds',
       nominator: 'Nominator',
       validatorsTab: 'Validators',
@@ -43,6 +43,8 @@ export const enGb = {
       bondCall: 'bond()',
       unbondCall: 'unbond()',
       withdrawUnbondedCall: 'withdrawUnbonded()',
+      chillCall: 'chill()',
+      chillInfo: 'Declare no desire to either validate or nominate',
       nominateCall: 'nominate()',
       setController: 'setController()',
       transactionCalls: 'Transaction Calls To Execute',
