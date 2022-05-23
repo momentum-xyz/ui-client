@@ -44,7 +44,7 @@ const Nominator: FC<PropsInterface> = ({authorizationTab, validatorsTab}) => {
         <ScannerList />
       </styled.Holder>
       <BalanceList />
-      <ActiveStake unbond={() => setSection('unbond')} />
+      <ActiveStake unbond={() => setSection('unbond')} withdraw={authorizationTab} />
       <RewardSection />
       <StakingAmountSection />
       <styled.ButtonContainer>

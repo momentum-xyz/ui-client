@@ -55,7 +55,8 @@ export const enGb = {
         account: 'Account Balance',
         transferable: 'Transferable',
         staked: 'Staked',
-        unbonding: 'Unbonding'
+        unbonding: 'Unbonding',
+        redeemable: 'Redeemable'
       },
       unbond: 'Unbond',
       stakingBlocks: '{{blocks}} blocks',

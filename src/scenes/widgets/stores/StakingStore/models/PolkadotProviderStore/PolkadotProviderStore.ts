@@ -135,6 +135,9 @@ const PolkadotProviderStore = types
             ? self.stashAccount?.address
             : self.usedControllerAddress;
         return self.addresses.find((account) => account.address === signerAddress);
+      },
+      get isWithdrawUnbondedPermitted() {
+        return !!self.stakingInfo?.redeemable?.gtn(0);
       }
     };
   })

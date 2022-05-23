@@ -10,9 +10,7 @@ import {useStore} from 'shared/hooks';
 import {StakingTransactionType} from 'core/enums';
 
 import * as styled from './Authorization.styled';
-import BondDetails from './components/BondDetails/BondDetails';
-import UnbondDetails from './components/UnbondDetails/UnbondDetails';
-import WithdrawUnbondDetails from './components/WithdrawUnbondDetails/WithdrawUnbondDetails';
+import {BondDetails, UnbondDetails, WithdrawUnbondDetails} from './components';
 
 interface PropsInterface extends PropsWithThemeInterface {}
 
@@ -136,9 +134,11 @@ const Authorization: FC<PropsInterface> = ({theme}) => {
         </Message>
       )}
       {errorMessage && (
-        <Message type="danger">
-          <Text text={errorMessage} isCustom={true} weight="normal" align="center" size="xs" />
-        </Message>
+        <styled.ErrorMessageContainer>
+          <Message type="danger">
+            <Text text={errorMessage} isCustom={true} weight="normal" align="center" size="xs" />
+          </Message>
+        </styled.ErrorMessageContainer>
       )}
       <styled.ButtonContainer>
         <Button
