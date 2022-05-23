@@ -42,7 +42,6 @@ const NetworkPicker: FC<PropsInterface> = (props) => {
         theme={theme}
         iconName="profile"
         label={t(`networks.${LoginTypeEnum.Guest}`)}
-        disabled
         onClick={() => onSelect({name: LoginTypeEnum.Guest, connector: null})}
       />
     </>

@@ -85,6 +85,14 @@ export const Text = styled.div`
   &.weight-bolder {
     font-weight: bolder;
   }
+
+  &.noWrap {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 export const BoldSpan = styled.span`

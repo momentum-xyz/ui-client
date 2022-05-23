@@ -23,6 +23,11 @@ import StageModePIP from '../atoms/StageMode/StageModePIP';
 import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import {StageModeStatus} from '../../context/type/StageMode';
 import {ROUTES} from '../../core/constants';
+import {useStageModePopupQueueContext} from '../../context/StageMode/StageModePopupQueueContext';
+import {
+  useStageModeLeave,
+  useStageModeRequestAcceptOrDecline
+} from '../../hooks/api/useStageModeService';
 
 export interface CommunicationLayerProps {}
 
@@ -35,8 +40,17 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
+  const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
+  const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
+    collaborationState.collaborationSpace?.id
+  );
 
   const {t} = useTranslation();
+
+  useEffect(() => {
+    clearPopups();
+  }, [collaborationState.collaborationSpace]);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
@@ -47,6 +61,31 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       }
     }
   }, [collaborationState.stageMode]);
+
+  useWebsocketEvent('stage-mode-request', (userId) => {
+    addRequestPopup(userId, {
+      user: userId,
+      onAccept: () => {
+        return acceptRequest(userId)
+          .then(() => true)
+          .catch(() => {
+            toast.error(
+              <ToastContent
+                isDanger
+                headerIconName="alert"
+                title={t('titles.alert')}
+                text={t('messages.userRequestDeny')}
+                isCloseButton
+              />
+            );
+            return false;
+          });
+      },
+      onDecline: () => {
+        return declineRequest(userId).then(() => true);
+      }
+    });
+  });
 
   useWebsocketEvent('stage-mode-toggled', (stageModeStatus) => {
     //if (collaborationState.collaborationSpace?.id !== spaceId) return;
@@ -157,7 +196,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           <div
             className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
-              leaveCollaborationSpaceCall(false).then();
+              leaveCollaborationSpaceCall(false).then(stageModeLeave);
               if (collaborationState.stageMode) {
                 collaborationDispatch({
                   type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,

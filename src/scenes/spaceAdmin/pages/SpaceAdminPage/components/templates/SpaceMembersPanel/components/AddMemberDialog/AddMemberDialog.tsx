@@ -1,14 +1,22 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useState} from 'react';
 import {t} from 'i18next';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
-import {Dialog, Dropdown, Heading, Input, Text, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
+import {
+  Dialog,
+  Dropdown,
+  Heading,
+  Text,
+  ToastContent,
+  TOAST_COMMON_OPTIONS,
+  SearchDropdown
+} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {useDebouncedCallback} from 'ui-kit/hooks';
-import {OptionInterface} from 'ui-kit';
 import {validateEmail} from 'core/utils';
+import {UserModelInterface} from 'core/models/UserModel';
 
 import * as styled from './AddMemberDialog.styled';
 
@@ -18,7 +26,7 @@ interface PropsInterface {
 
 interface AddMemberFormInterface {
   role?: 'member' | 'admin';
-  query: string;
+  user: string;
 }
 
 const AddMemberDialog: FC<PropsInterface> = (props) => {
@@ -28,31 +36,30 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
   } = useStore();
   const {spaceManagerStore} = spaceAdminStore;
   const {spaceStore, searchUsersStore} = spaceManagerStore;
+  const [isFocused, setIsFocused] = useState(false);
+  const [userSelected, setUserSelected] = useState<string>('');
 
   const {
     control,
     handleSubmit,
     setError,
+    setValue,
     formState: {errors}
   } = useForm<AddMemberFormInterface>({
     defaultValues: {
       role: undefined,
-      query: ''
+      user: ''
     }
   });
 
-  const debouncedSearch = useDebouncedCallback((query: string) => {
-    searchUsersStore.search(query, worldStore.worldId);
-  }, 500);
-
-  const formSubmitHandler: SubmitHandler<AddMemberFormInterface> = ({role, query}) => {
+  const formSubmitHandler: SubmitHandler<AddMemberFormInterface> = ({role, user}) => {
     if (searchUsersStore.selectedUserId) {
       spaceStore.addUser(searchUsersStore.selectedUserId, role === 'admin').then(() => {
         toast.info(
           <ToastContent
             headerIconName="alert"
             title={t('titles.alert')}
-            text={t('spaceAdmin.users.addMemberDialog.success')}
+            text={t('spaceAdmin.users.addMemberDialog.successAdd')}
             isCloseButton
           />,
           TOAST_COMMON_OPTIONS
@@ -61,8 +68,8 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
         spaceStore.fetchSpaceInformation();
         props.onClose();
       });
-    } else if (validateEmail(query)) {
-      spaceStore.inviteUser(query, role === 'admin').then(() => {
+    } else if (validateEmail(user)) {
+      spaceStore.inviteUser(user, role === 'admin').then(() => {
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -76,62 +83,34 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
         props.onClose();
       });
     } else {
-      setError('query', {
+      setError('user', {
         message: t('spaceAdmin.users.addMemberDialog.query.errors.nonSelected')
       });
     }
   };
 
-  const handleUserSelect = (option: OptionInterface, onChange: (value: string) => void) => {
-    searchUsersStore.selectUser(option.value);
-    onChange(option.label);
+  const handleSelectUser = (user: UserModelInterface) => {
+    setIsFocused(false);
+    setIsFocused(false);
+    setValue('user', user.id);
+    searchUsersStore.selectUser(user.id);
+    setUserSelected(user.name);
   };
 
-  const handleQueryInputChange = (onChange: (value?: string) => void, newValue?: string) => {
+  const debounceSearch = useDebouncedCallback((query: string) => {
+    searchUsersStore.search(query, worldStore.worldId);
+  }, 500);
+
+  const handleSearch = (value: string) => {
     searchUsersStore.selectUser(undefined);
     searchUsersStore.hideResults();
-    if (newValue && newValue.length > 1) {
+    if (value && value.length > 1) {
       searchUsersStore.searchRequest.cancel();
-      debouncedSearch(newValue);
+      debounceSearch(value);
+    } else {
+      searchUsersStore.resetModel();
     }
-    onChange(newValue);
   };
-
-  useEffect(() => {
-    // Bug with mobx, without it showResults wouldn't force rerender
-  }, [searchUsersStore.showResults]);
-
-  // @ts-ignore: refactoring
-  const renderQueryInput = ({field: {onChange, value}}) => (
-    <styled.QueryContainer>
-      <Input
-        label={t('spaceAdmin.users.addMemberDialog.query.label')}
-        value={value}
-        onChange={(value) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          handleQueryInputChange(onChange, value);
-        }}
-        placeholder={t('spaceAdmin.users.addMemberDialog.query.placeholder')}
-        errorMessage={errors.query?.message}
-        isError={!!errors.query}
-      />
-      {searchUsersStore.showResults && value.length > 1 && (
-        <Dropdown
-          value=""
-          variant="secondary"
-          placeholder={t('spaceAdmin.users.addMemberDialog.query.dropdownPlaceholder')}
-          options={searchUsersStore.results.map((result) => ({
-            label: result.name,
-            value: result.uuid
-          }))}
-          onOptionSelect={(option) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            handleUserSelect(option, onChange);
-          }}
-        />
-      )}
-    </styled.QueryContainer>
-  );
 
   // @ts-ignore: refactoring
   const renderRoleInput = ({field: {onChange, value}}) => (
@@ -179,23 +158,27 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
       }}
       onClose={props.onClose}
       showCloseButton
+      closeOnBackgroundClick={false}
+      hasBorder
     >
       <styled.Body>
-        <Text
-          text={t('spaceAdmin.users.addMemberDialog.message', {spaceName: spaceStore.space.name})}
-          size="s"
-        />
-        <Controller
-          control={control}
-          name="query"
-          render={renderQueryInput}
-          rules={{
-            required: {
-              value: true,
-              message: t('spaceAdmin.users.addMemberDialog.query.errors.required')
-            }
-          }}
-        />
+        <styled.TextRow>
+          <Text text={t('spaceAdmin.users.addMemberDialog.message')} align="left" size="s" />
+        </styled.TextRow>
+        <styled.QueryContainer>
+          <SearchDropdown
+            data={searchUsersStore.resultsList.slice()}
+            onClick={handleSelectUser}
+            value={userSelected}
+            setValue={setUserSelected}
+            isFocused={isFocused}
+            setIsFocused={setIsFocused}
+            search={handleSearch}
+            searchInputLabel={t('spaceAdmin.users.addMemberDialog.query.label')}
+            searchInputPlaceholder={t('spaceAdmin.users.addMemberDialog.query.placeholder')}
+            height="10vh"
+          />
+        </styled.QueryContainer>
         <Controller
           control={control}
           name="role"

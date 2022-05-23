@@ -28,6 +28,7 @@ export interface StageModePopupQueueContextInterface {
   removeRequestPopup: (userId: string) => void;
   addAwaitingPermissionPopup: () => void;
   removeAwaitingPermissionPopup: () => void;
+  clearPopups: () => void;
 }
 
 const StageModePopupQueueContext = React.createContext<StageModePopupQueueContextInterface>({
@@ -35,7 +36,8 @@ const StageModePopupQueueContext = React.createContext<StageModePopupQueueContex
   addRequestPopup: () => {},
   removeRequestPopup: () => {},
   addAwaitingPermissionPopup: () => {},
-  removeAwaitingPermissionPopup: () => {}
+  removeAwaitingPermissionPopup: () => {},
+  clearPopups: () => {}
 });
 
 export const StageModePopupQueueProvider: React.FC = ({children}) => {
@@ -76,6 +78,10 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
     setPopups(filteredPopups);
   };
 
+  const clearPopups = () => {
+    setPopups([]);
+  };
+
   useWebsocketEvent('stage-mode-accepted', (userId) => {
     removeRequestPopup(userId);
   });
@@ -91,7 +97,8 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
         addRequestPopup,
         addAwaitingPermissionPopup,
         removeAwaitingPermissionPopup,
-        removeRequestPopup
+        removeRequestPopup,
+        clearPopups
       }}
     >
       {children}

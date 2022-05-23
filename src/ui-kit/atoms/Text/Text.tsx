@@ -17,6 +17,7 @@ export interface TextPropsInterface extends PropsWithThemeInterface {
   isCustom?: boolean;
   firstBoldSentences?: number;
   className?: string;
+  noWrap?: boolean;
 }
 
 const Text: FC<TextPropsInterface> = ({
@@ -28,6 +29,7 @@ const Text: FC<TextPropsInterface> = ({
   isMultiline = true,
   isCustom = false,
   weight = 'normal',
+  noWrap = false,
   firstBoldSentences,
   className
 }) => {
@@ -57,6 +59,7 @@ const Text: FC<TextPropsInterface> = ({
         `transform-${transform}`,
         !isMultiline && 'singleLine',
         align,
+        noWrap && 'noWrap',
         isCustom && 'Text-custom',
         `weight-${weight}`,
         className
