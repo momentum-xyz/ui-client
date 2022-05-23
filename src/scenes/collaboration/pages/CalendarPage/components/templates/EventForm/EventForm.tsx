@@ -16,7 +16,7 @@ import {endpoints} from 'api/constants';
 import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
-  const theme = useTheme(); //spaceStore
+  const theme = useTheme();
   const {
     calendarStore,
     spaceStore: {space}
@@ -117,6 +117,7 @@ const EventForm: FC = () => {
         onClick: handleSubmit(formSubmitHandler),
         disabled: eventFormRequest.isPending
       }}
+      hasBorder
     >
       <styled.Container>
         <styled.Item>
