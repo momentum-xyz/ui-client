@@ -7,7 +7,6 @@ export * from './fullscreen.utils';
 export * from './email.utils';
 export * from './url.utils';
 export * from './calcUnbondingAmount.utils';
-export * from './cookie.utils';
 export * from './stakingInputRegex.utils';
 export * from './eventDispatcher.utils';
 export * from './youtubeVideoPath.utils';

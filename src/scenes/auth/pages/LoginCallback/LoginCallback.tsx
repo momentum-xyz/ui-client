@@ -2,8 +2,10 @@ import {FC, useEffect} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useAuth} from 'react-oidc-context';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+import {cookie} from 'core/services';
+import {CookieKeyEnum} from 'core/enums';
 
 const LoginCallback: FC = () => {
   const {loginStore} = useStore().authStore;
@@ -21,7 +23,11 @@ const LoginCallback: FC = () => {
 
   useEffect(() => {
     if (!auth.isLoading && auth.isAuthenticated) {
-      history.push(ROUTES.base);
+      if (!cookie.has(CookieKeyEnum.INTRO)) {
+        history.push(ROUTES.intro);
+      } else {
+        history.push(ROUTES.base);
+      }
     }
   }, [auth.isAuthenticated, auth.isLoading, history]);
 
