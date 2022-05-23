@@ -4,7 +4,7 @@ export const enGb = {
       days: '{{days}} days',
       hours: '{{hours}} hours',
       minutes: '{{minutes}} minutes',
-      seconds: '{{seconds}} seconds',
+      seconds: '{{seconds}} seconds'
     },
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
