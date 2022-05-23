@@ -19,7 +19,7 @@ export const WithdrawColumn = styled(StakeColumn)`
 `;
 
 export const StopStaking = styled(StakeColumn)`
-  flex: 0.4;
+  flex: 0.45;
 `;
 
 export const DetailsColumn = styled.div`

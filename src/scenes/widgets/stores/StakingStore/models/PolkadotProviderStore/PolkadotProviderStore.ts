@@ -129,7 +129,7 @@ const PolkadotProviderStore = types
       },
       get transactionSigner() {
         const signerAddress =
-          self.transactionType !== StakingTransactionType.Bond
+          self.transactionType === StakingTransactionType.Bond
             ? self.stashAccount?.address
             : self.usedControllerAddress;
         return self.addresses.find((account) => account.address === signerAddress);
@@ -140,32 +140,6 @@ const PolkadotProviderStore = types
     };
   })
   .actions((self) => ({
-    async init() {
-      await this.connectToChain();
-      await this.setIsWeb3Injected();
-      await this.getChainInformation();
-      await this.getSessionProgress();
-      await this.initAccount();
-    },
-    connectToChain: flow(function* () {
-      self.channel = yield SubstrateProvider.initAPI();
-    }),
-    setIsWeb3Injected: flow(function* () {
-      const isEnabled = yield SubstrateProvider.isExtensionEnabled();
-      self.isWeb3Injected = cast(isEnabled);
-    }),
-    getAddresses: flow(function* () {
-      const addresses = yield SubstrateProvider.getAddresses(self.ss58Format);
-      self.addresses = cast(addresses);
-    }),
-    getSessionProgress: flow(function* () {
-      self.sessionProgress =
-        self.channel !== null ? yield self.channel?.derive.session.progress() : null;
-    }),
-    getStakingInfo: flow(function* (address: string) {
-      self.stakingInfo =
-        self.channel !== null ? yield self.channel?.derive.staking.account(address) : null;
-    }),
     getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalance) {
       const balanceAll =
         self.channel !== null ? yield self.channel.derive.balances?.all(address) : null;
@@ -223,22 +197,30 @@ const PolkadotProviderStore = types
         transferableWithoutFee
       });
     }),
-    getBondedAddress: flow(function* (address: string) {
-      const bonded =
-        self.channel !== null ? yield self.channel.query.staking.bonded(address) : null;
-      self.bondedAddress = cast(bonded.toJSON());
-    }),
-    getUsedStashAddress: flow(function* (address: string) {
-      const stash = self.channel !== null ? yield self.channel.query.staking.ledger(address) : null;
-      const stashId = stash.toJSON() !== null ? stash.toJSON().stash : null;
-      self.usedStashAddress = cast(stashId);
+    getStakingInfo: flow(function* (address: string) {
+      self.stakingInfo =
+        self.channel !== null ? yield self.channel?.derive.staking.account(address) : null;
     }),
     getUsedControllerAddress() {
       const usedControllerAddress = self.stakingInfo?.controllerId?.toJSON()
         ? self.stakingInfo?.controllerId?.toJSON()
         : '';
       self.usedControllerAddress = cast(usedControllerAddress);
-    },
+    }
+  }))
+  .actions((self) => ({
+    getAddresses: flow(function* () {
+      const addresses = yield SubstrateProvider.getAddresses(self.ss58Format);
+      self.addresses = cast(addresses);
+    }),
+
+    setStashAccount: flow(function* (address: string) {
+      const result = self.addresses.find((account) => account.address === address);
+      self.stashAccount = cast(cloneDeep(result));
+      yield self.getBalances(address, 'stashAccountBalance');
+      yield self.getStakingInfo(address);
+      self.getUsedControllerAddress();
+    }),
     getMinNominatorBond: flow(function* () {
       const minNominatorBond = self.channel
         ? yield self.channel?.query.staking.minNominatorBond()
@@ -249,6 +231,43 @@ const PolkadotProviderStore = types
         self.chainDecimals
       );
       self.minNominatorBond = cast(minNominatorBondFormatted);
+    }),
+    setControllerAccount: flow(function* (address: string) {
+      const result = self.addresses.find((account) => account.address === address);
+      self.controllerAccount = cast(cloneDeep(result));
+      yield self.getBalances(address, 'controllerAccountBalance');
+    }),
+    getBondedAddress: flow(function* (address: string) {
+      const bonded =
+        self.channel !== null ? yield self.channel.query.staking.bonded(address) : null;
+      self.bondedAddress = cast(bonded.toJSON());
+    }),
+    getUsedStashAddress: flow(function* (address: string) {
+      const stash = self.channel !== null ? yield self.channel.query.staking.ledger(address) : null;
+      const stashId = stash.toJSON() !== null ? stash.toJSON().stash : null;
+      self.usedStashAddress = cast(stashId);
+    })
+  }))
+  .actions((self) => ({
+    connectToChain: flow(function* () {
+      self.channel = yield SubstrateProvider.initAPI();
+    }),
+    setIsWeb3Injected: flow(function* () {
+      const isEnabled = yield SubstrateProvider.isExtensionEnabled();
+      self.isWeb3Injected = cast(isEnabled);
+    }),
+    getSessionProgress: flow(function* () {
+      self.sessionProgress =
+        self.channel !== null ? yield self.channel?.derive.session.progress() : null;
+    }),
+    initAccount: flow(function* () {
+      yield self.getAddresses();
+      yield self.setStashAccount(self.addresses[0].address);
+      if (self.stashAccount?.address) {
+        yield self.setControllerAccount(self.stashAccount.address);
+        yield self.getBondedAddress(self.stashAccount.address);
+        yield self.getUsedStashAddress(self.stashAccount.address);
+      }
     }),
     async calculateUnlockingDuration(blocks: BN) {
       const A_DAY = new BN(24 * 60 * 60 * 1000);
@@ -269,16 +288,7 @@ const PolkadotProviderStore = types
       const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));
       self.unlockingDuration = cast(duration);
     },
-    async initAccount() {
-      await this.getAddresses();
-      this.setStashAccount(self.addresses[0].address);
-      if (self.stashAccount?.address) {
-        await this.setControllerAccount(self.stashAccount.address);
-        await this.getBondedAddress(self.stashAccount.address);
-        await this.getUsedStashAddress(self.stashAccount.address);
-      }
-    },
-    async getChainInformation() {
+    getChainInformation: flow(function* () {
       self.tokenSymbol = cast(
         self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
       );
@@ -291,20 +301,8 @@ const PolkadotProviderStore = types
       );
 
       self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
-      await this.getMinNominatorBond();
-    },
-    async setStashAccount(address: string) {
-      const result = self.addresses.find((account) => account.address === address);
-      self.stashAccount = cast(cloneDeep(result));
-      await this.getBalances(address, 'stashAccountBalance');
-      await this.getStakingInfo(address);
-      await this.getUsedControllerAddress();
-    },
-    async setControllerAccount(address: string) {
-      const result = self.addresses.find((account) => account.address === address);
-      self.controllerAccount = cast(cloneDeep(result));
-      await this.getBalances(address, 'controllerAccountBalance');
-    },
+      yield self.getMinNominatorBond();
+    }),
     setTransactionType(transactionType: StakingTransactionType) {
       self.transactionType = cast(transactionType);
     },
@@ -365,6 +363,15 @@ const PolkadotProviderStore = types
       const feeFormatted = formatBalance(calculatedFee?.partialFee, {withSiFull: true}, 12);
       this.setTransactionFee(feeFormatted);
     }
+  }))
+  .actions((self) => ({
+    init: flow(function* () {
+      yield self.connectToChain();
+      yield self.setIsWeb3Injected();
+      yield self.getChainInformation();
+      yield self.getSessionProgress();
+      yield self.initAccount();
+    })
   }));
 
 export {PolkadotProviderStore};
