@@ -28,7 +28,8 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
     withdrawUnbondedExtrinsics,
     transactionType,
     setTransactionFee,
-    transactionSigner
+    transactionSigner,
+    chillExtrinsics
   } = polkadotProviderStore;
   const {selectedValidators} = validatorsStore;
   const [successMessage, setSuccessMessage] = useState<boolean>(false);
@@ -42,6 +43,8 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
       return unbondExtrinsics();
     } else if (transactionType === StakingTransactionType.WithdrawUnbond) {
       return await withdrawUnbondedExtrinsics();
+    } else if (transactionType === StakingTransactionType.Chill) {
+      return chillExtrinsics();
     } else {
       return null;
     }

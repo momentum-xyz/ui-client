@@ -41,7 +41,12 @@ const PolkadotProviderStore = types
       usedStashAddress: types.maybeNull(types.string),
       usedControllerAddress: types.optional(types.string, ''),
       transactionType: types.maybe(
-        types.union(types.literal('bond'), types.literal('unbond'), types.literal('withdrawUnbond'))
+        types.union(
+          types.literal('bond'),
+          types.literal('unbond'),
+          types.literal('withdrawUnbond'),
+          types.literal('chill')
+        )
       ),
       transactionFee: types.optional(types.string, '')
     })
@@ -358,6 +363,9 @@ const PolkadotProviderStore = types
       const spanCount = await self.channel?.query.staking.slashingSpans(self.stakingInfo?.stashId);
       const params = args ? [spanCount] : [];
       return self.channel?.tx.staking.withdrawUnbonded(params);
+    },
+    chillExtrinsics() {
+      return self.channel?.tx.staking.chill()
     },
     async calculateFee(extrinsics: SubmittableExtrinsic | undefined) {
       const calculatedFee = await extrinsics?.paymentInfo(self.transactionSigner?.address as any);

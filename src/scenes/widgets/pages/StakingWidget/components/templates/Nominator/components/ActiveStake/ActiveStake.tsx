@@ -12,11 +12,11 @@ import {UnbondingIndicator} from '../UnbondingIndicator';
 import * as styled from './ActiveStake.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  unbond: () => void;
-  withdraw: () => void;
+  goToUnbond: () => void;
+  goToAuthorization: () => void;
 }
 
-const ActiveStake: FC<PropsInterface> = ({theme, withdraw, unbond}) => {
+const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond}) => {
   const {stakingStore} = useStore().widgetStore;
   const {
     stashAccountBalance,
@@ -27,11 +27,17 @@ const ActiveStake: FC<PropsInterface> = ({theme, withdraw, unbond}) => {
     setTransactionType
   } = stakingStore.polkadotProviderStore;
 
-  const unbondHandler = () => isUnbondingPermitted && unbond();
+  const unbondHandler = () => isUnbondingPermitted && goToUnbond();
   const withdrawUnbonded = () => {
     if (isWithdrawUnbondedPermitted) {
       setTransactionType(StakingTransactionType.WithdrawUnbond);
-      withdraw();
+      goToAuthorization();
+    }
+  };
+  const stopStaking = () => {
+    if (!isStakingAccountUnlocking) {
+      setTransactionType(StakingTransactionType.Chill);
+      goToAuthorization();
     }
   };
 
@@ -71,10 +77,20 @@ const ActiveStake: FC<PropsInterface> = ({theme, withdraw, unbond}) => {
           )}
           <styled.StakeColumn>
             <Button
+              icon="lock"
               size="small"
               label={t('staking.withdrawUnbonded')}
               disabled={!isWithdrawUnbondedPermitted}
               onClick={withdrawUnbonded}
+            />
+          </styled.StakeColumn>
+          <styled.StakeColumn>
+            <Button
+              icon="lock"
+              size="small"
+              label={t('staking.stopStaking')}
+              disabled={isStakingAccountUnlocking}
+              onClick={stopStaking}
             />
           </styled.StakeColumn>
           <styled.DetailsColumn

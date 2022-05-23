@@ -1,5 +1,6 @@
 export enum StakingTransactionType {
   Bond = 'bond',
   Unbond = 'unbond',
-  WithdrawUnbond = 'withdrawUnbond'
+  WithdrawUnbond = 'withdrawUnbond',
+  Chill = 'chill'
 }
