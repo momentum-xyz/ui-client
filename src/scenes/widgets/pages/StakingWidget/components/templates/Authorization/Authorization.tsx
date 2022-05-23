@@ -92,8 +92,14 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
               channel?.events.system.ExtrinsicSuccess.is(event)
             );
 
-            failedExtrinsicData && formatErrorHandler(failedExtrinsicData);
-            successExtrinsicData && successExtrinsicData.length && setSuccessMessage(true);
+            if (failedExtrinsicData) {
+              setLoader(false);
+              formatErrorHandler(failedExtrinsicData);
+            }
+            if (successExtrinsicData && successExtrinsicData.length) {
+              setLoader(false);
+              setSuccessMessage(true);
+            }
           }
         }
       );
