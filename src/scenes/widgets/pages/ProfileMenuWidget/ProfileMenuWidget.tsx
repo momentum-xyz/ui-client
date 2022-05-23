@@ -3,6 +3,7 @@ import {useAuth} from 'react-oidc-context';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {Avatar, Dialog, IconSvg, Text, Toggle} from 'ui-kit';
 import {endpoints} from 'api/constants';
@@ -22,10 +23,9 @@ const ProfileMenuWidget: FC = () => {
 
   const {t} = useTranslation();
 
-  // @ts-ignore
-  const signOutUser = (e) => {
-    e.preventDefault();
-    sessionStore.logout(auth);
+  const signOutUser = async () => {
+    await sessionStore.logout(auth);
+    document.location.href = ROUTES.login;
   };
 
   const handleProfileOpen = () => {
