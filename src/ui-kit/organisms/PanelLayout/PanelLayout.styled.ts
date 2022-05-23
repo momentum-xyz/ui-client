@@ -69,6 +69,10 @@ export const Container = styled.div<ComponentSizeInterface>`
     pointer-events: all;
   }
 
+  &.hasBorder {
+    border: 1px solid ${(props) => props.theme.accent};
+  }
+
   ${(props) => props.width && `width: ${props.width}`}
   ${(props) => props.height && `height: ${props.height}`}
   ${(props) => props.maxWidth && `max-width: ${props.maxWidth}`}

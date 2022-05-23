@@ -17,6 +17,7 @@ import UnityService from '../context/Unity/UnityService';
 import VideoLayer from '../component/overlays/VideoLayer';
 import SocialLayout from '../component/layout/SocialUI/SocialLayout';
 import MusicPlayerLayout from '../component/layout/MusicPlayer/MusicPlayerLayout';
+import {StageModePopupQueueProvider} from '../context/StageMode/StageModePopupQueueContext';
 
 const AppLayers: FC = ({children}) => {
   const theme = useTheme();
@@ -76,13 +77,14 @@ const AppLayers: FC = ({children}) => {
       <InFlightControlLayer />
       <div className="bg-dark-blue-70">
         <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
-
-        <main id="main" className="h-screen pb-7 flex ">
-          {children}
-          <SocialLayout />
-          <MusicPlayerLayout />
-          <CommunicationLayer />
-        </main>
+        <StageModePopupQueueProvider>
+          <main id="main" className="h-screen pb-7 flex ">
+            {children}
+            <SocialLayout />
+            <MusicPlayerLayout />
+            <CommunicationLayer />
+          </main>
+        </StageModePopupQueueProvider>
 
         <WidgetContainer />
       </div>

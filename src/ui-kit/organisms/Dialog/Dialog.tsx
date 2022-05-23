@@ -35,6 +35,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   layoutSize?: ComponentSizeInterface;
   controlUnityKeyboardControll?: boolean;
   headerActions?: React.ReactNode;
+  hasBorder?: boolean;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -50,6 +51,7 @@ const Dialog: FC<DialogPropsInterface> = ({
   showCloseButton = false,
   withOpacity = false,
   headerStyle = 'divider-uppercase',
+  hasBorder = false,
   onClose,
   icon,
   iconSize,
@@ -96,6 +98,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             isBodyExtendingToEdges={isBodyExtendingToEdges}
             componentSize={layoutSize}
             headerActions={headerActions}
+            hasBorder={hasBorder}
           >
             {children}
             <styled.Buttons>

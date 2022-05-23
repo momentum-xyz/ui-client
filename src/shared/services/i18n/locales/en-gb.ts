@@ -451,7 +451,7 @@ export const enGb = {
         },
         addMemberDialog: {
           title: 'Invite new member',
-          message: 'You are about to invite a new member to the space "{{spaceName}}".',
+          message: 'You are about to invite a new member to the space.',
           query: {
             label: 'Query',
             placeholder: 'Search for name or email',
@@ -473,7 +473,7 @@ export const enGb = {
           approveLabel: 'Add member',
           declineLabel: 'Cancel',
           successInvite: 'Invitation sent!',
-          successAdd: 'Added User!',
+          successAdd: 'User added to the space sucessfully',
           failure: 'There was an error inviting the member'
         },
         editMemberDialog: {
