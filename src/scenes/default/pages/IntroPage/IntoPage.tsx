@@ -1,12 +1,12 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {useHistory} from 'react-router';
+import {useTranslation} from 'react-i18next';
 import YouTube from 'react-youtube';
 
 import {cookie} from 'core/services';
 import {CookieKeyEnum} from 'core/enums';
-import {SvgButton} from 'ui-kit';
+import {SvgButton, Text} from 'ui-kit';
 import {ROUTES} from 'core/constants';
-import background from 'static/images/bg.png';
 
 import * as styled from './IntoPage.styled';
 
@@ -15,6 +15,7 @@ const YOUTUBE_INTRO_VIDEO_ID = '0ZctdA2SxKk';
 
 const IntoPage: FC = () => {
   const history = useHistory();
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (!cookie.has(CookieKeyEnum.INTRO)) {
@@ -29,16 +30,16 @@ const IntoPage: FC = () => {
   const opts = {
     playerVars: {
       autoplay: 0,
-      mute: 0,
-      controls: 0
+      mute: 0
     }
   };
 
   return (
-    <styled.Background background={background}>
-      <styled.CloseIcon>
+    <styled.Background>
+      <styled.Header>
+        <Text text={t('messages.welcome')} size="l" weight="normal" align="left" />
         <SvgButton iconName="close" size="medium-large" isWhite onClick={closeHandler} />
-      </styled.CloseIcon>
+      </styled.Header>
       <YouTube
         videoId={YOUTUBE_INTRO_VIDEO_ID}
         onEnd={closeHandler}
