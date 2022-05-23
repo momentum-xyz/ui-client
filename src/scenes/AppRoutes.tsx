@@ -15,6 +15,7 @@ import {
   Web3ChallengePage,
   Web3ConsentPage
 } from './auth/pages';
+import {IntoPage} from './default/pages';
 import {SignUpCompletePage} from './profile';
 import {StoryBookPage} from './system/pages';
 import {Collaboration} from './collaboration';
@@ -85,6 +86,12 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     exact: true,
     sidebar: () => null,
     main: () => <LoginCallback />
+  },
+  {
+    path: ROUTES.intro,
+    exact: true,
+    sidebar: () => null,
+    main: () => <IntoPage />
   }
 ];
 
