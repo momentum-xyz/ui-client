@@ -365,7 +365,7 @@ const PolkadotProviderStore = types
       return self.channel?.tx.staking.withdrawUnbonded(params);
     },
     chillExtrinsics() {
-      return self.channel?.tx.staking.chill()
+      return self.channel?.tx.staking.chill();
     },
     async calculateFee(extrinsics: SubmittableExtrinsic | undefined) {
       const calculatedFee = await extrinsics?.paymentInfo(self.transactionSigner?.address as any);
