@@ -178,6 +178,8 @@ export const enGb = {
     },
     messages: {
       welcome: "Login successful. We invite you to Momentum's intro. Hit play below!",
+      loginSuccessful: 'Login Successful',
+      playFriggin: 'Play the Friggin’ Intro',
       signIn: 'Sign In Or Create An Account',
       linkCopied: 'The link is copied to your clipboard.',
       fullyEnjoy: 'Connect your wallet to fully enjoy Momentum!',
@@ -288,7 +290,8 @@ export const enGb = {
       launchInitiativeSuccess: 'Launched initiative succesfully, you will be now teleported.',
       lunchingInitiative: 'launching initiative',
       invite: 'Invite',
-      invited: 'Invited'
+      invited: 'Invited',
+      closeAndContinue: 'Close and Continue'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
