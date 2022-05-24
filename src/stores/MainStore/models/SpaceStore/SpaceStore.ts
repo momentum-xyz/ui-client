@@ -21,10 +21,12 @@ const SpaceStore = types.compose(
       isAdmin: false,
       isMember: false,
       space: types.optional(SpaceModel, {}),
-      allowedSpaceTypes: types.optional(types.array(types.string), [])
+      allowedSpaceTypes: types.optional(types.array(types.string), []),
+      didFetchSpaceInformation: false
     })
     .actions((self) => ({
       setSpace(spaceId: string) {
+        self.didFetchSpaceInformation = false;
         self.space.id = spaceId;
       },
       fetchSpaceInformation: flow(function* () {
@@ -72,6 +74,8 @@ const SpaceStore = types.compose(
               hasSubspaces: (subSpace.children?.length ?? 0) > 0
             }))
           );
+
+          self.didFetchSpaceInformation = true;
         }
       }),
       addUser: flow(function* (userId: string, isAdmin: boolean) {

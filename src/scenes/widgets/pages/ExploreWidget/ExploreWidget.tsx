@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 
 import {SpacesList, SelectedSpace} from 'scenes/widgets/pages/ExploreWidget/components';
 import {useStore} from 'shared/hooks';
-import {ExpandableLayout, Heading, SearchInput, useDebouncedEffect} from 'ui-kit';
+import {ExpandableLayout, Heading, Loader, SearchInput, useDebouncedEffect} from 'ui-kit';
 
 import * as styled from './ExploreWidget.styled';
 
@@ -24,18 +24,15 @@ const ExploreWidget: FC = () => {
     unityStore.changeKeyboardControl(!isFocused);
   };
 
-  const handleGoBackToWorld = () => {
-    exploreStore.selectSpace(worldStore.worldId);
-    // setSelectedUserInitiative(undefined);
-  };
-
   useEffect(() => {
     exploreStore.selectSpace(worldStore.worldId);
   }, [exploreStore, worldStore.worldId]);
 
   useDebouncedEffect(
     () => {
-      exploreStore.search(exploreStore.searchQuery, worldStore.worldId);
+      if (exploreStore.isSearching) {
+        exploreStore.search(exploreStore.searchQuery, worldStore.worldId);
+      }
     },
     200,
     [exploreStore.searchQuery, worldStore.worldId]
@@ -57,20 +54,42 @@ const ExploreWidget: FC = () => {
           onFocus={() => handleSearchFocus(true)}
           onBlur={() => handleSearchFocus(false)}
         />
-        <styled.Body>
-          {selectedSpace.id === worldStore.worldId && (
-            <styled.WorldNameContainer onClick={handleGoBackToWorld}>
+        {exploreStore.isSearching && (
+          <>
+            <styled.WorldNameContainer>
               <Heading
-                label={selectedSpace.name ?? ''}
+                label={t('labels.searchResults')}
                 type="h1"
                 align="left"
                 transform="uppercase"
               />
             </styled.WorldNameContainer>
-          )}
-          {selectedSpace.id !== worldStore.worldId && <SelectedSpace />}
-          {selectedSpace.id === worldStore.worldId && <SpacesList />}
-        </styled.Body>
+            {exploreStore.searchRequest.isPending ? <Loader /> : <SpacesList />}
+          </>
+        )}
+        {!exploreStore.isSearching &&
+          (exploreStore.selectedSpaceStore.didFetchSpaceInformation ? (
+            <styled.Body>
+              {exploreStore.previousItem &&
+              exploreStore.selectedSpace?.id !== worldStore.worldId ? (
+                <SelectedSpace />
+              ) : (
+                <>
+                  <styled.WorldNameContainer>
+                    <Heading
+                      label={selectedSpace.name ?? ''}
+                      type="h1"
+                      align="left"
+                      transform="uppercase"
+                    />
+                  </styled.WorldNameContainer>
+                  <SpacesList />
+                </>
+              )}
+            </styled.Body>
+          ) : (
+            <Loader />
+          ))}
       </ExpandableLayout>
     </styled.Container>
   );

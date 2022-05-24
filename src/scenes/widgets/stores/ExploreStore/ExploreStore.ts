@@ -4,6 +4,7 @@ import {RequestModel, ResetModel, SpaceModel, SpaceModelInterface} from 'core/mo
 import {SpaceStore} from 'stores/MainStore/models';
 import {api, SearchSpacesResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
+import { SEARCH_MINIMAL_CHARACTER_COUNT } from 'core/constants';
 
 import {SpaceHistoryItemModel} from './models';
 
@@ -25,6 +26,8 @@ const ExploreStore = types
       self.isExpanded = isExpanded;
     },
     selectSpace(spaceId: string) {
+      self.searchQuery = "";
+
       if (self.previousItem) {
         self.spaceHistory.push({...self.previousItem});
       }
@@ -40,18 +43,21 @@ const ExploreStore = types
       self.selectedSpaceStore.fetchSpaceInformation();
     },
     goBack() {
-      if (!self.previousItem) {
+      const previousItem = self.spaceHistory.pop();
+      const previousItemId = self.previousItem?.spaceId;
+
+      if (!previousItemId) {
         return;
       }
 
-      self.selectedSpaceStore.setSpace(self.previousItem?.spaceId);
-      self.selectedSpaceStore.fetchSpaceInformation();
-
-      const previousItem = self.spaceHistory.pop();
-
       if (previousItem) {
         self.previousItem = {...previousItem};
+      } else {
+        self.previousItem = undefined;
       }
+
+      self.selectedSpaceStore.setSpace(previousItemId);
+      self.selectedSpaceStore.fetchSpaceInformation();
     },
     unselectSpace() {
       self.selectedSpaceStore.resetModel();
@@ -82,6 +88,9 @@ const ExploreStore = types
       }
 
       return self.selectedSpaceStore.space;
+    },
+    get isSearching() {
+      return self.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT;
     }
   }));
 
