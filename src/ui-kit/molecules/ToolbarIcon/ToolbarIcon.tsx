@@ -57,7 +57,7 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
             disabled={disabled}
           />
         ) : (
-          children
+          <div onClick={onClick}>{children}</div>
         )}
       </Tooltip>
     </styled.StyledTransition>
