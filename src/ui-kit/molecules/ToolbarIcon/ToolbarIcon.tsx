@@ -24,7 +24,8 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
   animate = false,
   visible = true,
   size = 'medium-large',
-  exact = false
+  exact = false,
+  disabled
 }) => {
   return (
     // @ts-ignore: take a look
@@ -36,7 +37,6 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
       enterTo="visible"
       leaveFrom="visible"
       leaveTo="not-visible"
-      onClick={onClick}
     >
       <Tooltip label={title} placement="top">
         {link ? (
@@ -48,7 +48,14 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
             )}
           </NavLink>
         ) : icon ? (
-          <SvgButton iconName={icon} size={size} isWhite theme={theme} />
+          <SvgButton
+            iconName={icon}
+            size={size}
+            isWhite
+            theme={theme}
+            onClick={onClick}
+            disabled={disabled}
+          />
         ) : (
           children
         )}
