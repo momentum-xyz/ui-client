@@ -56,7 +56,7 @@ const SelectedSpace: React.FC = () => {
         />
       </styled.Header>
       <styled.Details className={cn({empty: selectedSpace?.subSpaces.length === 0})}>
-        <Heading label={selectedSpace.name ?? ''} type="h1" align="left" transform="uppercase" />
+        <Heading label={selectedSpace.name ?? ''} type="h2" align="left" transform="uppercase" />
         <Text text={selectedSpace?.description} size="s" />
         <styled.FlyToButtonContainer>
           <Button icon="rocket" onClick={handleFlyToSpace} label={t('actions.flyToThisSpace')} />
