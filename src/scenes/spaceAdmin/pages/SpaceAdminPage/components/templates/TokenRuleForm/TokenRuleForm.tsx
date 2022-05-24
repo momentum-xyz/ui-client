@@ -11,11 +11,9 @@ import {TokenItemModelInterface} from 'core/models';
 
 import * as styled from './TokenRuleForm.styled';
 
-interface PropsInterface {
-  onClose: () => void;
-}
+interface PropsInterface {}
 
-const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
+const TokenRuleForm: FC<PropsInterface> = () => {
   const theme = useTheme();
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {
@@ -36,8 +34,7 @@ const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
     control,
     setValue,
     formState: {errors},
-    handleSubmit,
-    reset
+    handleSubmit
   } = useForm<TokenRuleFormInterface>();
 
   useEffect(() => {
@@ -70,7 +67,6 @@ const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
   };
 
   const handleClose = () => {
-    reset();
     tokenRuleFormDialog.close();
     tokenRuleFormStore.resetModel();
   };
@@ -100,12 +96,11 @@ const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
       theme={theme}
       title={t('tokenRules.tokenRuleForm.title')}
       showCloseButton
-      onClose={onClose}
+      onClose={handleClose}
       approveInfo={{
         title: tokenRuleFormStore.tokenRuleCreated
           ? 'Okay'
           : t('tokenRules.tokenRuleForm.submitButtonLabel'),
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick: tokenRuleFormStore.tokenRuleCreated
           ? handleClose
           : handleSubmit(formSubmitHandler),
@@ -114,6 +109,7 @@ const TokenRuleForm: FC<PropsInterface> = ({onClose}) => {
       icon="check-on"
       iconSize="medium"
       closeOnBackgroundClick={false}
+      hasBorder
     >
       {tokenRuleFormStore.tokenRuleCreated ? (
         <styled.Container>

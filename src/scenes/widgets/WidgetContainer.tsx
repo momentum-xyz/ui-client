@@ -4,42 +4,44 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 
+import {cookie} from 'core/services';
+import {CookieKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {
   Avatar,
-  ToolbarIcon,
-  ToastContent,
-  ToolbarIconInterface,
-  ToolbarIconList,
   TOAST_GROUND_OPTIONS,
-  TOAST_NOT_AUTO_CLOSE_OPTIONS
+  TOAST_NOT_AUTO_CLOSE_OPTIONS,
+  ToastContent,
+  ToolbarIcon,
+  ToolbarIconInterface,
+  ToolbarIconList
 } from 'ui-kit';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {endpoints} from 'api/constants';
 import {
-  COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
-  COLLABORATION_MUTED_ACTION_UPDATE,
+  COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
   COLLABORATION_IS_TOGGLING_CAMERA_ACTION_UPDATE,
-  COLLABORATION_CAMERA_OFF_ACTION_UPDATE
+  COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
+  COLLABORATION_MUTED_ACTION_UPDATE
 } from 'context/Collaboration/CollaborationReducer';
 import UnityService from 'context/Unity/UnityService';
-import {createCookieInHours, hasCookie, switchFullscreen} from 'core/utils';
+import {switchFullscreen} from 'core/utils';
 import {useMusicPlayer} from 'context/MusicPlayer/hooks/useMusicPlayer';
 import {useGetUserOwnedSpaces} from 'modules/profile/hooks/useUserSpace';
 import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {
-  StakingWidget,
   HelpWidget,
+  LaunchInitiativeWidget,
   MagicLinkWidget,
   ProfileMenuWidget,
-  TokenRulesWidget,
+  SettingsWidget,
+  StakingWidget,
   TokenRuleReviewWidget,
-  WorldStatsWidget,
-  LaunchInitiativeWidget,
-  SettingsWidget
+  TokenRulesWidget,
+  WorldStatsWidget
 } from 'scenes/widgets/pages';
 
 import * as styled from './WidgetContainer.styled';
@@ -106,8 +108,8 @@ const WidgetContainer: FC = () => {
   };
 
   const checkForUserOwnedSpaces = () => {
-    if (!hasCookie('CREATE_INITIATIVE_SHOWN')) {
-      createCookieInHours('CREATE_INITIATIVE_SHOWN', '1', 1);
+    if (!cookie.has(CookieKeyEnum.INITIATIVE)) {
+      cookie.create(CookieKeyEnum.INITIATIVE, '1');
       getUserOwnedSpaces(worldStore.worldId).then((resp) => {
         if (resp.data.canCreate && resp.data.ownedSpaces.length === 0) {
           // Only show it for the first space
