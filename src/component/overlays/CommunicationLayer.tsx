@@ -11,7 +11,6 @@ import CONFIG from '../../config/config';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from '../../context/Collaboration/hooks/useCollaboration';
-// import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import useAgoraVideo from '../../hooks/communication/useAgoraVideo';
 import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
 import LocalParticipantView from '../molucules/collaboration/LocalParticipantView';
@@ -24,7 +23,11 @@ import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import {StageModeStatus} from '../../context/type/StageMode';
 import {ROUTES} from '../../core/constants';
 import {useStageModePopupQueueContext} from '../../context/StageMode/StageModePopupQueueContext';
-import {useStageModeRequestAcceptOrDecline} from '../../hooks/api/useStageModeService';
+import {
+  useStageModeLeave,
+  useStageModeRequestAcceptOrDecline
+} from '../../hooks/api/useStageModeService';
+import {useModerator} from '../../context/Integration/hooks/useIntegration';
 
 export interface CommunicationLayerProps {}
 
@@ -38,7 +41,12 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
   const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
   const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
+    collaborationState.collaborationSpace?.id
+  );
+  const [isModerator, , ,] = useModerator(
+    // @ts-ignore
     collaborationState.collaborationSpace?.id
   );
 
@@ -59,28 +67,30 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   }, [collaborationState.stageMode]);
 
   useWebsocketEvent('stage-mode-request', (userId) => {
-    addRequestPopup(userId, {
-      user: userId,
-      onAccept: () => {
-        return acceptRequest(userId)
-          .then(() => true)
-          .catch(() => {
-            toast.error(
-              <ToastContent
-                isDanger
-                headerIconName="alert"
-                title={t('titles.alert')}
-                text={t('messages.userRequestDeny')}
-                isCloseButton
-              />
-            );
-            return false;
-          });
-      },
-      onDecline: () => {
-        return declineRequest(userId).then(() => true);
-      }
-    });
+    if (isModerator) {
+      addRequestPopup(userId, {
+        user: userId,
+        onAccept: () => {
+          return acceptRequest(userId)
+            .then(() => true)
+            .catch(() => {
+              toast.error(
+                <ToastContent
+                  isDanger
+                  headerIconName="alert"
+                  title={t('titles.alert')}
+                  text={t('messages.userRequestDeny')}
+                  isCloseButton
+                />
+              );
+              return false;
+            });
+        },
+        onDecline: () => {
+          return declineRequest(userId).then(() => true);
+        }
+      });
+    }
   });
 
   useWebsocketEvent('stage-mode-toggled', (stageModeStatus) => {
@@ -192,7 +202,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           <div
             className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
-              leaveCollaborationSpaceCall(false).then();
+              leaveCollaborationSpaceCall(false).then(stageModeLeave);
               if (collaborationState.stageMode) {
                 collaborationDispatch({
                   type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,

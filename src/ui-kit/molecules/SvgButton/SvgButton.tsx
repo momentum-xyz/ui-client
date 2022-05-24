@@ -11,6 +11,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   onClick?: (event?: Event) => void;
   isDanger?: boolean;
   isWhite?: boolean;
+  disabled?: boolean;
 }
 
 const SvgButton: FC<PropsInterface> = ({
@@ -19,11 +20,12 @@ const SvgButton: FC<PropsInterface> = ({
   isDanger,
   size,
   iconName,
-  isWhite = false
+  isWhite = false,
+  disabled = false
 }) => {
   return (
     // @ts-ignore: div doesn't have onClick
-    <styled.Container onClick={onClick}>
+    <styled.Container onClick={onClick} disabled={disabled}>
       <IconSvg
         name={iconName}
         theme={theme}

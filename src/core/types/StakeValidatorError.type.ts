@@ -1,6 +1,6 @@
 import {MessageType} from './Message.type';
 
 export type StakeValidatorErrorType = {
-  errorMessage: string | null;
+  errorMessage: string;
   errorType: MessageType | '';
 };

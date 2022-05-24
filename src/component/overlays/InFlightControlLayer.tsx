@@ -1,19 +1,26 @@
 import {Transition} from '@headlessui/react';
 import React, {useCallback, useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
 
 import {usePrevious} from 'ui-kit/hooks';
 
 import CollaborationSpace from '../../context/Collaboration/CollaborationTypes';
 import useCollaboration, {
-  useJoinCollaborationSpace
+  // useJoinCollaborationSpace,
+  useJoinCollaborationSpaceByAssign
 } from '../../context/Collaboration/hooks/useCollaboration';
 import Button from '../atoms/Button';
+import {ROUTES} from '../../core/constants';
+import {useStore} from '../../shared/hooks';
 
 export interface InFlightControlLayerProps {}
 
 const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
   const {collaborationState} = useCollaboration();
-  const joinCollaborationSpace = useJoinCollaborationSpace();
+  // const joinCollaborationSpace = useJoinCollaborationSpace();
+  const {unityStore} = useStore().mainStore;
+  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
+  const history = useHistory();
 
   const prevCollaborationSpace = usePrevious(collaborationState.collaborationSpace);
 
@@ -32,11 +39,20 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collaborationState.collaborationSpace]);
 
+  // const rejoin = useCallback(() => {
+  //   if (leftCollaborationSpace) {
+  //     joinCollaborationSpace(leftCollaborationSpace);
+  //   }
+  // }, [joinCollaborationSpace, leftCollaborationSpace]);
+
   const rejoin = useCallback(() => {
     if (leftCollaborationSpace) {
-      joinCollaborationSpace(leftCollaborationSpace);
+      joinMeetingSpace(leftCollaborationSpace.id).then(() => {
+        unityStore.pause();
+        history.push({pathname: ROUTES.dashboard});
+      });
     }
-  }, [joinCollaborationSpace, leftCollaborationSpace]);
+  }, [leftCollaborationSpace, joinMeetingSpace, history]);
 
   return (
     <>
