@@ -9,7 +9,7 @@ import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Wiki.styled';
 
-const WIKI_URL = 'https://wiki.odyssey.org/';
+const WIKI_URL = 'https://momentumxyz.gitbook.io/momentumxyz-wiki/';
 
 const Wiki: React.FC = () => {
   const {
