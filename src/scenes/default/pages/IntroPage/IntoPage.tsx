@@ -13,7 +13,7 @@ import background from 'static/images/bg.png';
 import * as styled from './IntoPage.styled';
 
 // FIXME: Move to constants
-const YOUTUBE_INTRO_VIDEO_ID = '05StN46VZtw';
+const YOUTUBE_INTRO_VIDEO_ID = 'UmSJIEZQAyQ';
 
 const IntoPage: FC = () => {
   const [messageShown, setMessageShown] = useState<boolean>(true);
