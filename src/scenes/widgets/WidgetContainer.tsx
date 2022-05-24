@@ -43,6 +43,7 @@ import {
   TokenRulesWidget,
   WorldStatsWidget
 } from 'scenes/widgets/pages';
+import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 
 import * as styled from './WidgetContainer.styled';
 
@@ -79,6 +80,7 @@ const WidgetContainer: FC = () => {
   const getUserOwnedSpaces = useGetUserOwnedSpaces();
 
   const [unityWasPaused, setUnityWasPaused] = useState(false);
+  const {isOnStage} = useAgoraStageMode();
 
   useInteractionHandlers();
 
@@ -243,18 +245,31 @@ const WidgetContainer: FC = () => {
           {process.env.NODE_ENV === 'development' && <FooterDevTools />}
           <ToolbarIconList>
             <ToolbarIcon
-              title={collaborationState.cameraOff ? 'Camera on' : 'Camera off'}
+              title={
+                collaborationState.stageMode && !isOnStage
+                  ? 'You are in the audience, stage mode is on'
+                  : collaborationState.cameraOff
+                  ? 'Camera on'
+                  : 'Camera off'
+              }
               icon={collaborationState.cameraOff ? 'cameraOff' : 'cameraOn'}
               onClick={toggleCameraOn}
-              disabled={collaborationState.isTogglingCamera}
+              disabled={
+                collaborationState.isTogglingCamera || (collaborationState.stageMode && !isOnStage)
+              }
             />
             <ToolbarIcon
-              title={collaborationState.muted ? 'Unmute' : 'Mute'}
+              title={
+                collaborationState.stageMode && !isOnStage
+                  ? 'You are in the audience, stage mode is on'
+                  : collaborationState.muted
+                  ? 'Unmute'
+                  : 'Mute'
+              }
               icon={collaborationState.muted ? 'microphoneOff' : 'microphoneOn'}
               onClick={toggleMute}
               disabled={
-                collaborationState.isTogglingMute ||
-                (collaborationState.isLoading && !collaborationState.stageMode)
+                collaborationState.isTogglingMute || (collaborationState.stageMode && !isOnStage)
               }
             />
           </ToolbarIconList>
