@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {StakingTransactionType} from 'core/enums';
+
+import {Unbond} from '../index';
 
 import {
   ActiveStake,
@@ -12,19 +15,29 @@ import {
   RewardSection,
   ScannerList,
   StakingAmountSection
-} from './component';
+} from './components';
 import * as styled from './Nominator.styled';
 
-type NominatorProps = {
-  nextTab: () => void;
-};
+interface PropsInterface {
+  goToValidators: () => void;
+  goToAuthorization: () => void;
+}
 
-const Nominator = ({nextTab}: NominatorProps) => {
+const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
-  const {paymentDestination, controllerAccountValidation, bondAmountValidation} =
-    polkadotProviderStore;
+  const {
+    paymentDestination,
+    controllerAccountValidation,
+    bondAmountValidation,
+    setTransactionType
+  } = polkadotProviderStore;
+  const [section, setSection] = useState<'nominator' | 'unbond'>('nominator');
 
-  return (
+  useEffect(() => {
+    setTransactionType(StakingTransactionType.Bond);
+  }, [setTransactionType]);
+
+  return section === 'nominator' ? (
     <styled.Container>
       <AccountSection />
       <styled.Holder>
@@ -32,7 +45,7 @@ const Nominator = ({nextTab}: NominatorProps) => {
         <ScannerList />
       </styled.Holder>
       <BalanceList />
-      <ActiveStake />
+      <ActiveStake goToUnbond={() => setSection('unbond')} goToAuthorization={goToAuthorization} />
       <RewardSection />
       <StakingAmountSection />
       <styled.ButtonContainer>
@@ -46,10 +59,12 @@ const Nominator = ({nextTab}: NominatorProps) => {
           }
           icon="lightningDuotone"
           wide={false}
-          onClick={nextTab}
+          onClick={goToValidators}
         />
       </styled.ButtonContainer>
     </styled.Container>
+  ) : (
+    <Unbond nominatorTab={() => setSection('nominator')} authorizationTab={goToAuthorization} />
   );
 };
 export default observer(Nominator);
