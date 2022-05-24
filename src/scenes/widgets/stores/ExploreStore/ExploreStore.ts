@@ -4,7 +4,7 @@ import {RequestModel, ResetModel, SpaceModel, SpaceModelInterface} from 'core/mo
 import {SpaceStore} from 'stores/MainStore/models';
 import {api, SearchSpacesResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
-import { SEARCH_MINIMAL_CHARACTER_COUNT } from 'core/constants';
+import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 
 import {SpaceHistoryItemModel} from './models';
 
@@ -26,7 +26,7 @@ const ExploreStore = types
       self.isExpanded = isExpanded;
     },
     selectSpace(spaceId: string) {
-      self.searchQuery = "";
+      self.searchQuery = '';
 
       if (self.previousItem) {
         self.spaceHistory.push({...self.previousItem});

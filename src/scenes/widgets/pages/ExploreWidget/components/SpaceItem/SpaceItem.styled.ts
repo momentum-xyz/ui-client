@@ -7,7 +7,9 @@ export const NextButton = styled(SvgButton)`
   transform: rotate(-90deg);
 `;
 
-export const SpaceNameText = styled(Text)``;
+export const SpaceNameText = styled(Text)`
+  width: 19ch;
+`;
 
 export const Container = styled.div`
   display: flex;
