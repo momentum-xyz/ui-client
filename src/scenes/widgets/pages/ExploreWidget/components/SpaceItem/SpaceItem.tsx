@@ -2,7 +2,7 @@ import React from 'react';
 import {useHistory} from 'react-router';
 import {observer} from 'mobx-react-lite';
 
-import {SvgButton, Text} from 'ui-kit';
+import {SvgButton} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {SubSpaceModelInterface} from 'core/models';
@@ -12,14 +12,14 @@ import * as styled from './SpaceItem.styled';
 export interface SpaceItemPropsInterface {
   space: SubSpaceModelInterface;
   hasSubspaces: boolean;
-  onSelect: (spaceId: string) => void;
 }
 
-const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, onSelect, hasSubspaces}) => {
+const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces}) => {
   const history = useHistory();
   const {
     favoriteStore,
-    mainStore: {unityStore}
+    mainStore: {unityStore},
+    widgetStore: {exploreStore}
   } = useStore();
 
   if (!space.id) {
@@ -33,11 +33,15 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, onSelect, hasSubsp
     }
   };
 
+  const handleSelect = () => {
+    exploreStore.selectSpace(space.id);
+  };
+
   return (
     <styled.Container>
       <SvgButton iconName="rocket" size="medium" onClick={() => handleFlyToSpace()} />
-      <styled.ClickableItem onClick={() => onSelect(space.id)}>
-        <Text text={space.name} size="xs" align="left" />
+      <styled.ClickableItem onClick={handleSelect}>
+        <styled.SpaceNameText text={space.name} size="xs" align="left" />
         <div className="flex-grow" />
         {space.id && favoriteStore.isFavorite(space.id) && (
           <styled.FavouriteIcon name="starOn" size="normal" isCustom />

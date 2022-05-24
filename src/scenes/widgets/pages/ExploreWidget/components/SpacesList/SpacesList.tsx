@@ -2,7 +2,6 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
-import {Text} from 'ui-kit';
 import {SpaceItem} from 'scenes/widgets/pages/ExploreWidget/components';
 import {useStore} from 'shared/hooks';
 
@@ -26,28 +25,17 @@ const SpacesList: React.FC = () => {
             hasSubspaces: space.subSpaces.length > 0
           }}
           hasSubspaces={space.subSpaces.length > 0}
-          onSelect={exploreStore.selectSpace}
           key={`space-${space.id}`}
         />
       ));
     }
 
     if (selectedSpace.subSpaces.length === 0) {
-      return (
-        <div>
-          <Text text="This space doesn't" size="xs" align="left" />
-          <Text text="have any subspaces" size="xs" align="left" />
-        </div>
-      );
+      return null;
     }
 
     return selectedSpace.subSpaces.map((space) => (
-      <SpaceItem
-        space={space}
-        hasSubspaces={space.hasSubspaces}
-        onSelect={exploreStore.selectSpace}
-        key={`space-${space.id}`}
-      />
+      <SpaceItem space={space} hasSubspaces={space.hasSubspaces} key={`space-${space.id}`} />
     ));
   };
 

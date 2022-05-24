@@ -1,6 +1,8 @@
 import React from 'react';
 import {useHistory} from 'react-router';
 
+import {useStore} from 'shared/hooks';
+
 import {UserSpace} from '../../../context/type/Space';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {ReactComponent as FlyToIcon} from '../../../images/icons/space-rocket-flying.svg';
@@ -10,16 +12,17 @@ import {ROUTES} from '../../../core/constants';
 
 export interface SocialUsersInitiativesListProps {
   userInitiatives: UserSpace[];
-  // @ts-ignore
-  onInitiativeSelect: (Buffer) => void;
 }
 
 const SocialUserInitiativesList: React.FC<SocialUsersInitiativesListProps> = ({
-  userInitiatives,
-  onInitiativeSelect
+  userInitiatives
 }) => {
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
+
+  const {
+    widgetStore: {exploreStore}
+  } = useStore();
 
   const renderInitiatives = () => {
     if (!userInitiatives) {
@@ -33,7 +36,7 @@ const SocialUserInitiativesList: React.FC<SocialUsersInitiativesListProps> = ({
 
       const handleClick = () => {
         if (item.space) {
-          onInitiativeSelect(item.space.id.data);
+          exploreStore.selectSpace(bytesToUuid(item.space.id.data));
         }
       };
 

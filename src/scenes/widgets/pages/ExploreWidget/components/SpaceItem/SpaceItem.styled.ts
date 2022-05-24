@@ -1,11 +1,13 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-import {IconSvg, SvgButton} from 'ui-kit';
+import {IconSvg, SvgButton, Text} from 'ui-kit';
 
 export const NextButton = styled(SvgButton)`
   transform: rotate(-90deg);
 `;
+
+export const SpaceNameText = styled(Text)``;
 
 export const Container = styled.div`
   display: flex;
@@ -24,6 +26,10 @@ export const ClickableItem = styled.button`
     color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
 
     ${NextButton} {
+      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
+    }
+
+    ${SpaceNameText} {
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
     }
   }

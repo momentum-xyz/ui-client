@@ -6,14 +6,9 @@ import SocialUserInitiativesList from './SocialUserInitiativesList';
 
 export interface SocialUserInitiativesProps {
   userId: string;
-  // @ts-ignore
-  onInitiativeSelect: (Buffer) => void;
 }
 
-const SocialUserInitiatives: React.FC<SocialUserInitiativesProps> = ({
-  userId,
-  onInitiativeSelect
-}) => {
+const SocialUserInitiatives: React.FC<SocialUserInitiativesProps> = ({userId}) => {
   const [initiatives, , ,] = useInitiatives(userId);
   const [userInitiatives, setUserInitiatives] = useState<any>();
 
@@ -28,10 +23,7 @@ const SocialUserInitiatives: React.FC<SocialUserInitiativesProps> = ({
         {userInitiatives && userInitiatives.length < 1 ? (
           <div className="ml-.3">-</div>
         ) : (
-          <SocialUserInitiativesList
-            userInitiatives={userInitiatives}
-            onInitiativeSelect={onInitiativeSelect}
-          />
+          <SocialUserInitiativesList userInitiatives={userInitiatives} />
         )}
       </div>
     </div>

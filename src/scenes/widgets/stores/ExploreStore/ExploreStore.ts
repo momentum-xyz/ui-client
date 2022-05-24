@@ -5,6 +5,8 @@ import {SpaceStore} from 'stores/MainStore/models';
 import {api, SearchSpacesResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
 
+import {SpaceHistoryItemModel} from './models';
+
 const ExploreStore = types
   .compose(
     ResetModel,
@@ -14,8 +16,8 @@ const ExploreStore = types
       searchRequest: types.optional(RequestModel, {}),
       searchQuery: '',
       searchedSpaces: types.optional(types.array(types.optional(SpaceModel, {})), []),
-      spaceNameHistory: types.optional(types.array(types.string), []),
-      parentName: types.maybe(types.string)
+      spaceHistory: types.optional(types.array(SpaceHistoryItemModel), []),
+      previousItem: types.maybe(SpaceHistoryItemModel)
     })
   )
   .actions((self) => ({
@@ -23,23 +25,33 @@ const ExploreStore = types
       self.isExpanded = isExpanded;
     },
     selectSpace(spaceId: string) {
-      if (self.parentName) {
-        self.spaceNameHistory.push(self.parentName);
+      if (self.previousItem) {
+        self.spaceHistory.push({...self.previousItem});
       }
 
-      self.parentName = self.selectedSpaceStore.space.name;
+      if (self.selectedSpaceStore.space.name && self.selectedSpaceStore.space.id) {
+        self.previousItem = cast({
+          spaceName: self.selectedSpaceStore.space.name,
+          spaceId: self.selectedSpaceStore.space.id
+        });
+      }
 
       self.selectedSpaceStore.setSpace(spaceId);
       self.selectedSpaceStore.fetchSpaceInformation();
     },
     goBack() {
-      if (!self.selectedSpaceStore.space.parentUUID) {
+      if (!self.previousItem) {
         return;
       }
 
-      self.selectedSpaceStore.setSpace(self.selectedSpaceStore.space.parentUUID);
+      self.selectedSpaceStore.setSpace(self.previousItem?.spaceId);
       self.selectedSpaceStore.fetchSpaceInformation();
-      self.parentName = self.spaceNameHistory.pop();
+
+      const previousItem = self.spaceHistory.pop();
+
+      if (previousItem) {
+        self.previousItem = {...previousItem};
+      }
     },
     unselectSpace() {
       self.selectedSpaceStore.resetModel();

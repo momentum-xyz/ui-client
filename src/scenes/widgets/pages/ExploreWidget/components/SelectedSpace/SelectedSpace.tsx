@@ -49,7 +49,11 @@ const SelectedSpace: React.FC = () => {
     <styled.Container>
       <styled.Header onClick={handleGoBack}>
         <styled.BackIconSvg name="chevron" />
-        <styled.ParentHeading type="h3" label={exploreStore.parentName ?? ''} align="left" />
+        <styled.ParentHeading
+          type="h3"
+          label={exploreStore.previousItem?.spaceName ?? ''}
+          align="left"
+        />
       </styled.Header>
       <styled.Details className={cn({empty: selectedSpace?.subSpaces.length === 0})}>
         <Heading label={selectedSpace.name ?? ''} type="h1" align="left" transform="uppercase" />

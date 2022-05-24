@@ -5,7 +5,7 @@ import {t} from 'i18next';
 import {capitalize} from 'lodash-es';
 
 import {useStore} from 'shared/hooks';
-import {absoluteLink, bytesToUuid, monthAndYearString} from 'core/utils';
+import {absoluteLink, monthAndYearString} from 'core/utils';
 import {Button, IconSvg, SvgButton, Avatar, PanelLayout, Text} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 import SocialUserInitiatives from 'component/molucules/socialui/SocialUserInitiatives';
@@ -17,16 +17,10 @@ import * as styled from './ProfileWidget.styled';
 interface ProfileWidgetPropsInterface {
   userId: string;
   onClose: () => void;
-  onUserInitiativeSelect: (user: string) => void;
   onEditUser: (userId: string) => void;
 }
 
-const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
-  userId,
-  onClose,
-  onUserInitiativeSelect,
-  onEditUser
-}) => {
+const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({userId, onClose, onEditUser}) => {
   const {
     widgetStore,
     sessionStore,
@@ -162,10 +156,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
               </styled.InfoItem>
             )}
           </styled.Info>
-          <SocialUserInitiatives
-            userId={userId}
-            onInitiativeSelect={(id) => onUserInitiativeSelect(bytesToUuid(id))}
-          />
+          <SocialUserInitiatives userId={userId} />
         </styled.Details>
       </styled.Body>
     </PanelLayout>

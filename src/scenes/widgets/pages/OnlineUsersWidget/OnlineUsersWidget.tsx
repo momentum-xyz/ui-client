@@ -16,7 +16,7 @@ const LAYOUT_WIDTH = '200px';
 const OnlineUsersWidget: FC = () => {
   const {
     sessionStore,
-    widgetStore: {profileMenuStore, onlineUsersStore, exploreStore}
+    widgetStore: {profileMenuStore, onlineUsersStore}
   } = useStore();
   const {profile} = sessionStore;
   const {profileDialog} = profileMenuStore;
@@ -67,7 +67,6 @@ const OnlineUsersWidget: FC = () => {
                 onlineUsersStore.unselectUser();
                 profileDialog.close();
               }}
-              onUserInitiativeSelect={exploreStore.selectSpace}
               onEditUser={handleUserEdit}
             />
           )}
