@@ -7,7 +7,6 @@
     "start": "TAILWIND_MODE=watch craco start",
     "build": "craco build",
     "test": "craco test",
-    "dev": "chmod +x ./env.sh && ./env.sh && cp env-config.js ./public/ && react-scripts start",
     "analyze": "source-map-explorer 'build/static/js/*.js' --no-border-checks",
     "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"src/**/*.{ts,tsx}\" --parser typescript",
