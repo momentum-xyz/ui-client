@@ -1,2 +1,2 @@
-export * from './DefaultPage';
+export * from './HomePage';
 export * from './IntroPage';

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {OnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components';
+import {OnlineUsersList} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 
 import {ReactComponent as PeopleIcon} from '../../../images/icons/location-user.svg';
@@ -12,8 +12,8 @@ interface SocialInviteToSpaceProps {
 
 const SocialInviteToSpace: React.FC<SocialInviteToSpaceProps> = ({onClose}) => {
   const {
-    widgetStore: {onlineUsersStore}
-  } = useStore();
+    homeStore: {onlineUsersStore}
+  } = useStore().defaultStore;
 
   useEffect(() => {
     onlineUsersStore.setSearchQuery('');

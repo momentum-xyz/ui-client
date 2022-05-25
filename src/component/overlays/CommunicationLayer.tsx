@@ -4,11 +4,12 @@ import {toast} from 'react-toastify';
 import {useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-import {ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import CONFIG from '../../config/config';
 import useCollaboration, {
+  useJoinCollaborationSpaceByAssign,
   useLeaveCollaborationSpace
 } from '../../context/Collaboration/hooks/useCollaboration';
 import useAgoraVideo from '../../hooks/communication/useAgoraVideo';
@@ -28,6 +29,7 @@ import {
   useStageModeRequestAcceptOrDecline
 } from '../../hooks/api/useStageModeService';
 import {useModerator} from '../../context/Integration/hooks/useIntegration';
+import {useGetSpace} from '../../hooks/api/useSpaceService';
 
 export interface CommunicationLayerProps {}
 
@@ -38,6 +40,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const {localUser, remoteParticipants} = useAgoraVideo();
   const {stageModeUsers, isOnStage, canEnterStage} = useAgoraStageMode();
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
+  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
   const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
@@ -132,6 +135,37 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       />,
       TOAST_GROUND_OPTIONS
     );
+  });
+
+  useWebsocketEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
+    const handleJoinSpace = () => {
+      unityStore.teleportToSpace(spaceId);
+
+      joinMeetingSpace(spaceId, uiTypeId === '285ba49f-fee3-40d2-ab55-256b5804c20c').then(() => {
+        if (uiTypeId !== '285ba49f-fee3-40d2-ab55-256b5804c20c') {
+          unityStore.pause();
+          history.push({pathname: ROUTES.collaboration});
+        }
+      });
+    };
+
+    const Content: React.FC = () => {
+      const [spaceInfo, , ,] = useGetSpace(spaceId);
+
+      return (
+        <ToastContent
+          headerIconName="alert"
+          text={t('messages.joinSpaceWelcome')}
+          title={t('messages.spaceInvitationNote', {
+            invitor: invitorName,
+            spaceName: spaceInfo?.space.name
+          })}
+          approveInfo={{title: t('titles.joinSpace'), onClick: handleJoinSpace}}
+        />
+      );
+    };
+
+    toast.info(<Content />, TOAST_BASE_OPTIONS);
   });
 
   const showMaxVideoStreamsReached = () => {

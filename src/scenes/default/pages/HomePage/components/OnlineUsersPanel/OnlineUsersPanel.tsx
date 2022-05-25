@@ -3,21 +3,23 @@ import {Position} from 'react-beautiful-dnd';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {OnlineUsersList} from 'scenes/widgets/pages/OnlineUsersWidget/components';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import {useStore} from 'shared/hooks';
 import {ExpandableLayout} from 'ui-kit';
 import {ProfileEditWidget, ProfileWidget} from 'scenes/widgets/pages';
+import {OnlineUsersList} from 'scenes/default/pages/HomePage/components';
 
-import * as styled from './OnlineUsersWidget.styled';
+import * as styled from './OnlineUsersPanel.styled';
 
 const LAYOUT_WIDTH = '200px';
 
-const OnlineUsersWidget: FC = () => {
+const OnlineUsersPanel: FC = () => {
   const {
     sessionStore,
-    widgetStore: {profileMenuStore, onlineUsersStore}
+    widgetStore: {profileMenuStore},
+    defaultStore: {homeStore}
   } = useStore();
+  const {onlineUsersStore} = homeStore;
   const {profile} = sessionStore;
   const {profileDialog} = profileMenuStore;
 
@@ -85,4 +87,4 @@ const OnlineUsersWidget: FC = () => {
   );
 };
 
-export default observer(OnlineUsersWidget);
+export default observer(OnlineUsersPanel);

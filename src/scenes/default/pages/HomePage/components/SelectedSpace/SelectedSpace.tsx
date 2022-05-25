@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {ROUTES} from 'core/constants';
-import {SpacesList} from 'scenes/widgets/pages/ExploreWidget/components';
+import {SpacesList} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 import {Heading, Text, Button} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
@@ -14,9 +14,10 @@ import * as styled from './SelectedSpace.styled';
 
 const SelectedSpace: React.FC = () => {
   const {
-    widgetStore: {exploreStore},
+    defaultStore: {homeStore},
     mainStore: {unityStore}
   } = useStore();
+  const {exploreStore} = homeStore;
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
 

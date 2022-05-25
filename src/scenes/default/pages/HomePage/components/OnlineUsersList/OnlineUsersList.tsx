@@ -2,11 +2,11 @@ import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {UserItem} from 'scenes/widgets/pages/OnlineUsersWidget/components';
 import {useStore} from 'shared/hooks';
 import {SearchInput, useDebouncedEffect} from 'ui-kit';
 import {UserProfileModelInterface} from 'core/models';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
+import {UserItem} from 'scenes/default/pages/HomePage/components';
 
 import * as styled from './OnlineUsersList.styled';
 
@@ -18,8 +18,9 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({invite = false}) => {
   const {
     sessionStore,
     mainStore: {worldStore, unityStore},
-    widgetStore: {onlineUsersStore}
+    defaultStore: {homeStore}
   } = useStore();
+  const {onlineUsersStore} = homeStore;
   const {profile} = sessionStore;
 
   useDebouncedEffect(

@@ -2,18 +2,18 @@ import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {SpacesList, SelectedSpace} from 'scenes/widgets/pages/ExploreWidget/components';
+import {SpacesList, SelectedSpace} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 import {ExpandableLayout, Heading, Loader, SearchInput, useDebouncedEffect} from 'ui-kit';
 
-import * as styled from './ExploreWidget.styled';
+import * as styled from './ExplorePanel.styled';
 
-const ExploreWidget: FC = () => {
+const ExplorePanel: FC = () => {
   const {
-    widgetStore: {exploreStore},
+    defaultStore: {homeStore},
     mainStore: {unityStore, worldStore}
   } = useStore();
-
+  const {exploreStore} = homeStore;
   const {t} = useTranslation();
 
   const {
@@ -95,4 +95,4 @@ const ExploreWidget: FC = () => {
   );
 };
 
-export default observer(ExploreWidget);
+export default observer(ExplorePanel);

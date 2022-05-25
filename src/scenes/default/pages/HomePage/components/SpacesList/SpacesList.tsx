@@ -2,13 +2,15 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
-import {SpaceItem} from 'scenes/widgets/pages/ExploreWidget/components';
+import {SpaceItem} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './SpacesList.styled';
 
 const SpacesList: React.FC = () => {
-  const {exploreStore} = useStore().widgetStore;
+  const {
+    homeStore: {exploreStore}
+  } = useStore().defaultStore;
   const {selectedSpace, searchQuery, searchedSpaces} = exploreStore;
 
   const renderList = () => {

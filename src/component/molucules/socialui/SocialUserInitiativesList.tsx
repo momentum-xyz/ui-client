@@ -21,8 +21,8 @@ const SocialUserInitiativesList: React.FC<SocialUsersInitiativesListProps> = ({
   const history = useHistory();
 
   const {
-    widgetStore: {exploreStore}
-  } = useStore();
+    homeStore: {exploreStore}
+  } = useStore().defaultStore;
 
   const renderInitiatives = () => {
     if (!userInitiatives) {

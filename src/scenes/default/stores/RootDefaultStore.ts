@@ -1,10 +1,10 @@
 import {Instance, types} from 'mobx-state-tree';
 
-import {DefaultStore} from './DefaultStore';
+import {HomeStore} from './HomeStore';
 
 const RootDefaultStore = types
   .model('RootDefaultStore', {
-    defaultStore: types.optional(DefaultStore, {})
+    homeStore: types.optional(HomeStore, {})
   })
   .actions(() => ({}))
   .views(() => ({}));

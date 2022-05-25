@@ -19,8 +19,10 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces}) => 
   const {
     favoriteStore,
     mainStore: {unityStore},
-    widgetStore: {exploreStore}
+    defaultStore: {homeStore}
   } = useStore();
+
+  const {exploreStore} = homeStore;
 
   if (!space.id) {
     return null;
