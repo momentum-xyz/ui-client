@@ -1,14 +1,14 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
-import {OidcClientSettings, SignoutRedirectArgs} from 'oidc-client-ts';
+import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
 
-import {storage} from 'core/services';
+import {cookie, storage} from 'core/services';
 import {api, FetchUserResponse} from 'api';
 import {RequestModel, UserProfileModel} from 'core/models';
-import {bytesToUuid, deleteCookieByName} from 'core/utils';
-import {LoginTypeEnum, StorageKeyEnum, UserStatusEnum} from 'core/enums';
-import {keycloakProviderConfig, web3ProviderConfig, guestProviderConfig} from 'shared/auth';
+import {bytesToUuid} from 'core/utils';
+import {CookieKeyEnum, LoginTypeEnum, StorageKeyEnum, UserStatusEnum} from 'core/enums';
+import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 'shared/auth';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -48,11 +48,9 @@ const SessionStore = types
       return library;
     },
     logout: flow(function* (auth: AuthContextProps) {
-      const id_token_hint = auth.user?.id_token;
       yield auth.revokeTokens();
       yield auth.removeUser();
-      yield auth.signoutRedirect({id_token_hint: id_token_hint} as SignoutRedirectArgs);
-      deleteCookieByName('CREATE_INITIATIVE_SHOWN');
+      cookie.delete(CookieKeyEnum.INITIATIVE);
     })
   }))
   .actions((self) => ({

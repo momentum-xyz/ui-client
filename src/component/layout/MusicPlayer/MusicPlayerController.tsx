@@ -14,7 +14,7 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
   const {load, togglePlayPause, playing, ended, show, vol} = useMusicPlayer();
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(0);
   const [playlist, setPlaylist] = useState<string[]>();
-  const [stop, setStop] = useState<boolean>(false);
+  // const [stop, setStop] = useState<boolean>(false);
 
   useEffect(() => {
     if (!playlistHash) {
@@ -35,7 +35,7 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
   }, [show]);
 
   useEffect(() => {
-    setStop(false);
+    // setStop(false);
   }, [togglePlayPause]);
   // ended && !stop ? !playing : playing
   useEffect(() => {
@@ -46,13 +46,15 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
     if (currentTrackIndex > playlist.length) {
       setCurrentTrackIndex(0);
     }
+    // show &&
     if (
-      (show && playlist && playlist[currentTrackIndex]) ||
+      (playlist && playlist[currentTrackIndex]) ||
       (ended && playlist && playlist[currentTrackIndex])
     ) {
+      // ended && !stop ? !playing : playing,
       load({
         src: window._env_.RENDER_SERVICE_URL + `/track/${playlist[currentTrackIndex][0]}`,
-        autoplay: ended && !stop ? !playing : playing,
+        autoplay: !playing,
         volume: vol,
         html5: true,
         format: ['mp3', 'ogg', 'wave']
@@ -72,7 +74,7 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
       return;
     }
 
-    if (currentTrackIndex === (playlist?.length ?? 0) - 1) {
+    if (playlist && currentTrackIndex === playlist?.length - 1) {
       setCurrentTrackIndex(0);
       // setStop(true);
       return;

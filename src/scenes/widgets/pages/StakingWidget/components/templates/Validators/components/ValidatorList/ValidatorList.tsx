@@ -73,7 +73,6 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
                 className={`${header.sortable ? 'clickable' : ''}`}
               >
                 <div className="th-container">
-                  {header.icon && <IconSvg name={header.icon} size="normal" isCustom />}
                   <div>{header.label}</div>
                   {header.sortable && (
                     <button>
