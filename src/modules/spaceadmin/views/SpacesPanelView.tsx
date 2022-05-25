@@ -5,6 +5,7 @@ import {t} from 'i18next';
 
 import {request} from 'api/request';
 import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
+import {appVariables} from 'api/constants';
 
 import Panel, {PanelBody, PanelTitle} from '../../../component/atoms/Panel';
 import Modal, {ModalRef} from '../../../component/util/Modal';
@@ -44,7 +45,7 @@ export const SpacesPanelView: React.FC<SpacesPanelViewProps> = ({
 
   const deleteSpace = async (id: string) => {
     try {
-      await request.delete(window._env_.BACKEND_ENDPOINT_URL + `/space/delete/${id}`);
+      await request.delete(appVariables.BACKEND_ENDPOINT_URL + `/space/delete/${id}`);
     } catch (err) {
       toast.error(
         <ToastContent

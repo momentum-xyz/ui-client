@@ -37,6 +37,7 @@ export interface AppConfigInterface {
  */
 
 export interface AppConfigExtendedInterface extends AppConfigInterface {
+  FE_URL: string;
   IS_DEV_ENVIRONMENT: boolean;
   WEB3_PUBLIC_RPC_URL_MAINNET: string;
   WEB3_PUBLIC_RPC_URL_RINKEBY: string;

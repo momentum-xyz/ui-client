@@ -1,3 +1,5 @@
+import {appVariables} from 'api/constants';
+
 import {useFetch, usePost} from './useApi';
 
 export interface Dashboard {
@@ -65,16 +67,16 @@ export enum TileType {
 }
 
 export const useDashboard = (id: string) => {
-  return useFetch<Dashboard>(window._env_.BACKEND_ENDPOINT_URL + `/dashboard/${id}`, {
+  return useFetch<Dashboard>(appVariables.BACKEND_ENDPOINT_URL + `/dashboard/${id}`, {
     fetchPolicy: 'network-only'
   });
 };
 
 export const useUpdateDashboard = () => {
   return usePost<Dashboard, DashboardDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + '/dashboard/update-positions',
+    appVariables.BACKEND_ENDPOINT_URL + '/dashboard/update-positions',
     {
-      cacheKeyGenerator: (data) => window._env_.BACKEND_ENDPOINT_URL + `/${data.owner_id}`
+      cacheKeyGenerator: (data) => appVariables.BACKEND_ENDPOINT_URL + `/${data.owner_id}`
     }
   );
 };
@@ -82,9 +84,9 @@ export const useUpdateDashboard = () => {
 export const useDeleteMedia = (spaceId: string | undefined) => {
   return usePost<Tile, Tile | undefined>(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/media/${spaceId}/remove`,
+    appVariables.BACKEND_ENDPOINT_URL + `/media/${spaceId}/remove`,
     {
-      cacheKeyGenerator: (data) => window._env_.BACKEND_ENDPOINT_URL + `/${data.id}`
+      cacheKeyGenerator: (data) => appVariables.BACKEND_ENDPOINT_URL + `/${data.id}`
     }
   );
 };

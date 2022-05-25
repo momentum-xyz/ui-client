@@ -84,13 +84,13 @@ const SessionStore = types
     get oidcConfig(): OidcClientSettings | null {
       switch (this.loginType) {
         case LoginTypeEnum.Keycloak:
-          return keycloakProviderConfig;
+          return keycloakProviderConfig();
         case LoginTypeEnum.Guest:
-          return guestProviderConfig;
+          return guestProviderConfig();
         case LoginTypeEnum.Polkadot:
         case LoginTypeEnum.Metamask:
         case LoginTypeEnum.WalletConnect:
-          return web3ProviderConfig;
+          return web3ProviderConfig();
         default:
           return null;
       }

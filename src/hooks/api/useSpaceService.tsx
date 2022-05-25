@@ -1,3 +1,5 @@
+import {appVariables} from 'api/constants';
+
 import {
   SpaceDTO,
   SpaceResponse,
@@ -34,37 +36,37 @@ export interface AssignUserDTO {
 }
 
 export const useGetSpace = (id: string) => {
-  return useFetch<SpaceResponse>(window._env_.BACKEND_ENDPOINT_URL + `/space/user/${id}`, {
+  return useFetch<SpaceResponse>(appVariables.BACKEND_ENDPOINT_URL + `/space/user/${id}`, {
     fetchPolicy: 'network-only'
   });
 };
 
 export const usePostSpace = () => {
   return usePost<SpaceCreateResponse, SpaceDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + `/space/create`
+    appVariables.BACKEND_ENDPOINT_URL + `/space/create`
   );
 };
 
 export const usePutSpace = (id: string) => {
   return usePut<SpaceSettingsDto, SpaceSettingsDto>(
-    window._env_.BACKEND_ENDPOINT_URL + `/space/edit/${id}`
+    appVariables.BACKEND_ENDPOINT_URL + `/space/edit/${id}`
   );
 };
 
 export const useAssignUserToSpace = () => {
   return usePost<AssignUserDTO, AssignUserDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + `/space/assign-user`
+    appVariables.BACKEND_ENDPOINT_URL + `/space/assign-user`
   );
 };
 
 export const useUnAssignUserToSpace = () => {
   return usePost<AssignUserDTO, AssignUserDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + `/space/unassign-user`
+    appVariables.BACKEND_ENDPOINT_URL + `/space/unassign-user`
   );
 };
 
 export const useSpaceUsers = (id: string) => {
-  return useFetch<SpaceUserResponse>(window._env_.BACKEND_ENDPOINT_URL + `/space/${id}/users`, {
+  return useFetch<SpaceUserResponse>(appVariables.BACKEND_ENDPOINT_URL + `/space/${id}/users`, {
     fetchPolicy: 'cache-and-network'
   });
 };
@@ -72,7 +74,7 @@ export const useSpaceUsers = (id: string) => {
 export const useSpaceSearch = () => {
   return (searchQuery: string, worldId: string) =>
     promiseFetch<SearchResults<Space>>(
-      window._env_.BACKEND_ENDPOINT_URL + `/space/search?q=${searchQuery}&worldId=${worldId}`,
+      appVariables.BACKEND_ENDPOINT_URL + `/space/search?q=${searchQuery}&worldId=${worldId}`,
       {},
       'network-only'
     );
