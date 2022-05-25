@@ -14,7 +14,6 @@ export interface AppConfigInterface {
   UNITY_CLIENT_PRODUCT_NAME: string;
   UNITY_CLIENT_PRODUCT_VERSION: string;
   RENDER_SERVICE_URL: string;
-  AUTH_SERVICE_URL: string;
   KEYCLOAK_OPENID_CONNECT_URL: string;
   KEYCLOAK_OPENID_CLIENT_ID: string;
   KEYCLOAK_OPENID_SCOPE: string;
