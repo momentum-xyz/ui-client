@@ -12,6 +12,7 @@ import {useHistory} from 'react-router-dom';
 
 import {request} from 'api/request';
 import {ROUTES} from 'core/constants';
+import {appVariables} from 'api/constants';
 
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';
 import {AgoraContext} from '../../context/AgoraContext';
@@ -194,7 +195,7 @@ export const useAgoraStageMode = () => {
           await client.setClientRole('audience', clientRoleOptions);
 
           const tokenResponse = await request.get(
-            window._env_.BACKEND_ENDPOINT_URL + `/agora/token/stage-${channel}`
+            appVariables.BACKEND_ENDPOINT_URL + `/agora/token/stage-${channel}`
           );
 
           console.info('[STAGEMODE] Got token response: ', tokenResponse);

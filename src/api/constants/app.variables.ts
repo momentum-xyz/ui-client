@@ -33,6 +33,7 @@ export const appVariables: AppConfigExtendedInterface = {
   GOOGLE_API_DEVELOPER_KEY: '',
   MIRO_APP_ID: '',
   YOUTUBE_KEY: '',
+  FE_URL: document.location.origin,
   IS_DEV_ENVIRONMENT: process.env.NODE_ENV === 'development',
   WEB3_PUBLIC_RPC_URL_MAINNET: 'https://mainnet.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
   WEB3_PUBLIC_RPC_URL_RINKEBY: 'https://rinkeby.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',

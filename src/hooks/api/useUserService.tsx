@@ -1,4 +1,5 @@
 import {UserSearchResults} from '../../context/type/User';
+import {appVariables} from '../../api/constants';
 
 import {useFetch, usePost} from './useApi';
 
@@ -10,7 +11,7 @@ export interface InviteUserByEmailDTO {
 
 export const useFindUser = (query: string) => {
   return useFetch<UserSearchResults>(
-    window._env_.BACKEND_ENDPOINT_URL + `/users/search?q=${query}`,
+    appVariables.BACKEND_ENDPOINT_URL + `/users/search?q=${query}`,
     {
       fetchPolicy: 'network-only'
     }
@@ -19,6 +20,6 @@ export const useFindUser = (query: string) => {
 
 export const useInviteUserToSpace = () => {
   return usePost<InviteUserByEmailDTO, InviteUserByEmailDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + '/users/invite'
+    appVariables.BACKEND_ENDPOINT_URL + '/users/invite'
   );
 };

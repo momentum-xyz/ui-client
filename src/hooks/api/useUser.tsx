@@ -2,6 +2,7 @@ import {Dispatch, SetStateAction, useCallback, useEffect, useState} from 'react'
 
 import {request} from 'api/request';
 import {useStore} from 'shared/hooks';
+import {appVariables} from 'api/constants';
 
 import {bytesToUuid} from '../../core/utils/uuid.utils';
 import User, {IOnlineUser} from '../../context/type/User';
@@ -12,7 +13,7 @@ import {promiseFetch, UseApiOptionsProps, useFetch} from './useApi';
 
 export const useUser = (id: string, options?: UseApiOptionsProps) => {
   const response = useFetch<User>(
-    window._env_.BACKEND_ENDPOINT_URL + `/users/profile/${id}`,
+    appVariables.BACKEND_ENDPOINT_URL + `/users/profile/${id}`,
     options
   );
   return response;
@@ -20,14 +21,14 @@ export const useUser = (id: string, options?: UseApiOptionsProps) => {
 
 export const useEditUserName = () => {
   return useCallback(async (data) => {
-    return request.put(window._env_.BACKEND_ENDPOINT_URL + `/users/set-name`, data);
+    return request.put(appVariables.BACKEND_ENDPOINT_URL + `/users/set-name`, data);
   }, []);
 };
 
 export const useEditAddress = () => {
   return useCallback(async (address) => {
     return request.put(
-      window._env_.BACKEND_ENDPOINT_URL + `/address/edit/${bytesToUuid(address.id.data)}`,
+      appVariables.BACKEND_ENDPOINT_URL + `/address/edit/${bytesToUuid(address.id.data)}`,
       address
     );
   }, []);
@@ -50,7 +51,7 @@ export const useUserList = (initialIds: string[]) => {
 
     Object.keys(newUsers).forEach((x) => {
       if (typeof x === 'string') {
-        promiseFetch<User>(window._env_.BACKEND_ENDPOINT_URL + `/users/profile/${x}`).then(
+        promiseFetch<User>(appVariables.BACKEND_ENDPOINT_URL + `/users/profile/${x}`).then(
           (user) => {
             setUsers((users) => ({...users, [bytesToUuid(user.id?.data)]: user}));
           }
@@ -69,14 +70,14 @@ export const useUserList = (initialIds: string[]) => {
 // https://dev.odyssey.ninja/api/v3/backend/users/online/
 export const useOnlineUsers = (id: string) => {
   const response = useFetch<IOnlineUser[]>(
-    window._env_.BACKEND_ENDPOINT_URL + `/users/online/${id}`
+    appVariables.BACKEND_ENDPOINT_URL + `/users/online/${id}`
   );
   return response;
 };
 
 export const useInitiatives = (id: string) => {
   const {worldStore} = useStore().mainStore;
-  let apiUrl = window._env_.BACKEND_ENDPOINT_URL + `/users/${id}/initiatives`;
+  let apiUrl = appVariables.BACKEND_ENDPOINT_URL + `/users/${id}/initiatives`;
   if (worldStore.worldId) {
     apiUrl = `${apiUrl}?world=${worldStore.worldId}`;
   }
@@ -85,7 +86,7 @@ export const useInitiatives = (id: string) => {
 };
 
 export const useCurrentUser = () => {
-  const response = useFetch<User>(window._env_.BACKEND_ENDPOINT_URL + `/users/me`, {
+  const response = useFetch<User>(appVariables.BACKEND_ENDPOINT_URL + `/users/me`, {
     fetchPolicy: 'network-only'
   });
   return response;
@@ -94,7 +95,7 @@ export const useCurrentUser = () => {
 export const useUserSearch = () => {
   return (searchQuery: string, online: boolean, worldId: string) =>
     promiseFetch<SearchResults<User>>(
-      window._env_.BACKEND_ENDPOINT_URL +
+      appVariables.BACKEND_ENDPOINT_URL +
         `/users/search?q=${searchQuery}&online=${online ? 'true' : 'false'}&worldId=${worldId}`,
       {},
       'network-only'

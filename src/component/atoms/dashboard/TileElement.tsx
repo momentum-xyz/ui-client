@@ -1,6 +1,8 @@
 import React from 'react';
 import {DraggableProvided} from 'react-beautiful-dnd';
 
+import {appVariables} from 'api/constants';
+
 import {PermanentType, Tile, TileType} from '../../../hooks/api/useDashboardService';
 
 import EditPanelMenu from './EditPanelMenu';
@@ -41,7 +43,7 @@ const TileElement: React.FC<TileProps> = ({
           />
         );
       } else {
-        const url = `${window._env_.RENDER_SERVICE_URL as string}/get/${
+        const url = `${appVariables.RENDER_SERVICE_URL}/get/${
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           tile.permanentType === PermanentType.VIDEO ? tile.content.url : tile.hash
         }`;

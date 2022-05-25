@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
+import {appVariables} from 'api/constants';
 import {ToastContent, TOAST_BASE_OPTIONS, TOAST_COMMON_OPTIONS} from 'ui-kit';
 
 import Panel, {PanelBody, PanelTitle} from '../../../component/atoms/Panel';
@@ -33,7 +34,7 @@ export const MetaPanelView: React.FC<MetaPanelViewProps> = ({space, onUpdate, an
   const history = useHistory();
   const leaveCollaborationSpace = useLeaveCollaborationSpace();
   const [deleteSpace, , ,] = useDelete(
-    window._env_.BACKEND_ENDPOINT_URL + `/space/delete/${bytesToUuid(space.id.data)}`
+    appVariables.BACKEND_ENDPOINT_URL + `/space/delete/${bytesToUuid(space.id.data)}`
   );
 
   const [spaceSettings, setSpaceSettings] = useState<SpaceSettingsDto>();
