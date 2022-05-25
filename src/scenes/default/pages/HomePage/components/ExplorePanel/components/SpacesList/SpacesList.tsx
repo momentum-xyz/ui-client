@@ -2,9 +2,9 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
-import {SpaceItem} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 
+import {SpaceItem} from './components';
 import * as styled from './SpacesList.styled';
 
 const SpacesList: React.FC = () => {

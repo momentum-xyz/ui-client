@@ -10,5 +10,5 @@ export const userRepositoryEndpoints = {
   search: `${BASE_URL}/search`,
   profile: `${BASE_URL}/profile`,
   online: `${BASE_URL}/online`,
-  initiatives: (userId: string) => `/users/${userId}/initiatives`
+  initiatives: `${BASE_URL}/users/:userId/initiatives`
 };

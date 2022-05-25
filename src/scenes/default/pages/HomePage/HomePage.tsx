@@ -4,8 +4,6 @@ import {observer} from 'mobx-react-lite';
 import {ExplorePanel, OnlineUsersPanel} from './components';
 import * as styled from './HomePage.styled';
 
-/* Just for sample */
-
 const HomePage: FC = () => {
   return (
     <styled.Container>

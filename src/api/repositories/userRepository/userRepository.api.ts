@@ -1,4 +1,5 @@
 import {Method} from 'axios';
+import {generatePath} from 'react-router-dom';
 
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
@@ -100,7 +101,7 @@ export const fetchUserInitiatives: RequestInterface<
 > = (options) => {
   const {userId, ...restOptions} = options;
 
-  const URL = userRepositoryEndpoints.initiatives(userId);
+  const url = generatePath(userRepositoryEndpoints.initiatives, {userId});
 
-  return request.get(URL, restOptions);
+  return request.get(url, restOptions);
 };

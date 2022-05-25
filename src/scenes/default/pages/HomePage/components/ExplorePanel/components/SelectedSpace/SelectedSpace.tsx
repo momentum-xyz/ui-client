@@ -5,10 +5,11 @@ import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {ROUTES} from 'core/constants';
-import {SpacesList} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 import {Heading, Text, Button} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
+
+import {SpacesList} from '../SpacesList';
 
 import * as styled from './SelectedSpace.styled';
 

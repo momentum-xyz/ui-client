@@ -2,10 +2,10 @@ import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {SpacesList, SelectedSpace} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 import {ExpandableLayout, Heading, Loader, SearchInput, useDebouncedEffect} from 'ui-kit';
 
+import {SpacesList, SelectedSpace} from './components';
 import * as styled from './ExplorePanel.styled';
 
 const ExplorePanel: FC = () => {
