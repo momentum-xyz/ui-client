@@ -5,7 +5,13 @@ import {AppConfigExtendedInterface} from 'api/interfaces';
  * @readonly
  */
 
+const BASE_URL =
+  process.env.NODE_ENV === 'development'
+    ? process.env.REACT_APP_CONFIG_URL || ''
+    : document.location.origin;
+
 export const appVariables: AppConfigExtendedInterface = {
+  APP_VERSION: 'v0.14.2',
   BACKEND_ENDPOINT_URL: '',
   UNITY_CLIENT_URL: '',
   UNITY_CLIENT_LOADER_URL: '',
@@ -34,6 +40,7 @@ export const appVariables: AppConfigExtendedInterface = {
   MIRO_APP_ID: '',
   YOUTUBE_KEY: '',
   FE_URL: document.location.origin,
+  BE_URL: BASE_URL,
   IS_DEV_ENVIRONMENT: process.env.NODE_ENV === 'development',
   WEB3_PUBLIC_RPC_URL_MAINNET: 'https://mainnet.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
   WEB3_PUBLIC_RPC_URL_RINKEBY: 'https://rinkeby.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
