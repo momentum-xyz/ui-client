@@ -1,7 +1,9 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/space-type`;
+export const spaceTypeRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/space-type`;
 
-export const spaceTypeRepositoryEndpoints = {
-  allowedTypes: `${BASE_URL}`
+  return {
+    allowedTypes: `${BASE_URL}`
+  };
 };

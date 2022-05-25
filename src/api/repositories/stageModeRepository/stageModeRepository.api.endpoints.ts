@@ -1,8 +1,11 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/stage-mode`;
+export const stageModeRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/stage-mode`;
 
-export const stageModeRepositoryEndpoints = {
-  leave: (spaceId: string) => `${BASE_URL}/${spaceId}/leave`,
-  join: (spaceId: string) => `${BASE_URL}/${spaceId}/join`
+  // FIXME: use params :spaceId
+  return {
+    leave: (spaceId: string) => `${BASE_URL}/${spaceId}/leave`,
+    join: (spaceId: string) => `${BASE_URL}/${spaceId}/join`
+  };
 };

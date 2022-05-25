@@ -13,13 +13,13 @@ export const generateLink: RequestInterface<MagicLinkGenerateRequest, MagicLinkR
 ) => {
   const {id, key, data, type, ...restOptions} = options;
 
-  const URL = magicRepositoryEndpoints.generateLink;
+  const URL = magicRepositoryEndpoints().generateLink;
   return request.post(URL, {id, key, data, type}, restOptions);
 };
 
 export const getMagicLink: RequestInterface<MagicLinkGetRequest, MagicLinkResponse> = (options) => {
   const {key, ...restOptions} = options;
 
-  const URL = `${magicRepositoryEndpoints.base}/${key}`;
+  const URL = `${magicRepositoryEndpoints().base}/${key}`;
   return request.get(URL, restOptions);
 };

@@ -14,5 +14,5 @@ export const update: RequestInterface<UpdateUserRequest, UpdateUserResponse> = (
     ...rest
   };
 
-  return request(userRepositoryEndpoints.edit, requestParams);
+  return request(userRepositoryEndpoints().edit, requestParams);
 };

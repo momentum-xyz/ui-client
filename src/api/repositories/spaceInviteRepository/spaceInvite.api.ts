@@ -8,14 +8,7 @@ export const inviteToSpaceOrTable: RequestInterface<SpaceInviteRequest, SpaceInv
   options
 ) => {
   const {spaceId, userId, isTable, ...restOptions} = options;
+  const data = {spaceId, userId, isTable};
 
-  return request.post(
-    spaceInviteEndpoints.base,
-    {
-      spaceId,
-      userId,
-      isTable
-    },
-    restOptions
-  );
+  return request.post(spaceInviteEndpoints().base, data, restOptions);
 };

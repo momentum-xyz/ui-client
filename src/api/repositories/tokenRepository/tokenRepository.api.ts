@@ -15,7 +15,7 @@ import {
 
 export const fetchTokens: RequestInterface<BaseTokensRequest, FetchTokensResponse> = (options) => {
   const {...restOptions} = options;
-  const url = tokenRepositoryEndpoints.base;
+  const url = tokenRepositoryEndpoints().base;
 
   return request.get(url, {...restOptions});
 };
@@ -24,7 +24,7 @@ export const fetchTokenName: RequestInterface<TokenNameRequest, FetchTokenNameRe
   options
 ) => {
   const {address, network} = options;
-  const url = tokenRepositoryEndpoints.info;
+  const url = tokenRepositoryEndpoints().info;
   options.params = {network, address};
   return request.get(url, options);
 };
@@ -32,7 +32,7 @@ export const fetchTokenName: RequestInterface<TokenNameRequest, FetchTokenNameRe
 export const createToken: RequestInterface<CreateTokenRequest, CreateTokenResponse> = (options) => {
   const {data, ...restOptions} = options;
 
-  const url = tokenRepositoryEndpoints.create;
+  const url = tokenRepositoryEndpoints().create;
 
   return request.post(url, data, restOptions);
 };
@@ -42,5 +42,5 @@ export const searchToken: RequestInterface<TokenSearchRequest, TokenSearchRespon
 
   options.params = {q};
 
-  return request.get(tokenRepositoryEndpoints.search, options);
+  return request.get(tokenRepositoryEndpoints().search, options);
 };

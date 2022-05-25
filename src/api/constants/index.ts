@@ -1,2 +1,2 @@
-export * from './app.constants';
+export * from './app.variables';
 export * from './endpoint.constants';

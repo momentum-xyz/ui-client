@@ -1,8 +1,10 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/magic`;
+export const magicRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/magic`;
 
-export const magicRepositoryEndpoints = {
-  base: BASE_URL,
-  generateLink: `${BASE_URL}/generate-link`
+  return {
+    base: BASE_URL,
+    generateLink: `${BASE_URL}/generate-link`
+  };
 };

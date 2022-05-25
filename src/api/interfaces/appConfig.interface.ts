@@ -33,11 +33,14 @@ export interface AppConfigInterface {
 }
 
 /**
- * Additional constants are defined in app.constants.ts
+ * Additional constants are defined in app.variables.ts
  */
 
 export interface AppConfigExtendedInterface extends AppConfigInterface {
   IS_DEV_ENVIRONMENT: boolean;
   GOOGLE_SDK_URL: string;
   YOUTUBE_API: string;
+  POLKADOT_CONNECTION_STRING: string;
+  WESTEND_TEST_WS_SERVER: string;
+  KUSAMA_WS_SERVER: string;
 }

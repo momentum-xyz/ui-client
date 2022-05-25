@@ -1,8 +1,10 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/space`;
+export const validatorRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/space`;
 
-export const validatorRepositoryEndpoints = {
-  getValidators: `${BASE_URL}/get-validators`,
-  bookmark: `${BASE_URL}/bookmark`
+  return {
+    getValidators: `${BASE_URL}/get-validators`,
+    bookmark: `${BASE_URL}/bookmark`
+  };
 };
