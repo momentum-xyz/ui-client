@@ -9,7 +9,7 @@ import {absoluteLink, monthAndYearString} from 'core/utils';
 import {Button, IconSvg, SvgButton, Avatar, PanelLayout, Text} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 import SocialUserInitiatives from 'component/molucules/socialui/SocialUserInitiatives';
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './ProfileWidget.styled';
@@ -95,7 +95,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
           <Avatar
             avatarSrc={
               userProfile?.profile?.avatarHash &&
-              `${endpoints.renderService}/get/${userProfile.profile.avatarHash}`
+              `${appVariables.RENDER_SERVICE_URL}/get/${userProfile.profile.avatarHash}`
             }
             size="large"
             status={isItMe ? currentUser?.status : userProfile?.status}

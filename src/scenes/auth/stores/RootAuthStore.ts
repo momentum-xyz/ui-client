@@ -3,7 +3,7 @@ import {AbstractConnector} from '@web3-react/abstract-connector';
 import {InjectedConnector} from '@web3-react/injected-connector';
 import {WalletConnectConnector} from '@web3-react/walletconnect-connector';
 
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
 
@@ -14,11 +14,6 @@ import {Web3ConsentStore} from './Web3ConsentStore';
 
 const SUPPORTED_CHAIN_IDS: number[] = [1, 3, 4, 5, 42];
 const QRCODE_OPTIONS: string[] = ['metamask', 'trust'];
-
-const RPC_URLS: {[chainId: number]: string} = {
-  1: endpoints.web3MainNet,
-  4: endpoints.web3RinkeBy
-};
 
 const RootAuthStore = types
   .model('RootAuthStore', {
@@ -36,8 +31,13 @@ const RootAuthStore = types
         supportedChainIds: SUPPORTED_CHAIN_IDS
       });
 
+      const rpcUrls: {[chainId: number]: string} = {
+        1: appVariables.WEB3_PUBLIC_RPC_URL_MAINNET,
+        4: appVariables.WEB3_PUBLIC_RPC_URL_RINKEBY
+      };
+
       const walletConnect: AbstractConnector = new WalletConnectConnector({
-        rpc: RPC_URLS,
+        rpc: rpcUrls,
         qrcode: true,
         qrcodeModalOptions: {
           mobileLinks: QRCODE_OPTIONS,

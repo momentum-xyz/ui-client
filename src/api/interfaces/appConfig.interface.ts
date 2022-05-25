@@ -38,9 +38,11 @@ export interface AppConfigInterface {
 
 export interface AppConfigExtendedInterface extends AppConfigInterface {
   IS_DEV_ENVIRONMENT: boolean;
-  GOOGLE_SDK_URL: string;
-  YOUTUBE_API: string;
+  WEB3_PUBLIC_RPC_URL_MAINNET: string;
+  WEB3_PUBLIC_RPC_URL_RINKEBY: string;
   POLKADOT_CONNECTION_STRING: string;
   WESTEND_TEST_WS_SERVER: string;
   KUSAMA_WS_SERVER: string;
+  GOOGLE_SDK_URL: string;
+  YOUTUBE_API: string;
 }
