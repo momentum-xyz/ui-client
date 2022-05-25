@@ -21,11 +21,16 @@ import * as styled from './Validators.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   operatorSpaceId?: string;
-  nextTab: () => void;
-  previousTab: () => void;
+  goToNominator: () => void;
+  goToAuthorization: () => void;
 }
 
-const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previousTab}) => {
+const Validators: FC<PropsInterface> = ({
+  theme,
+  goToAuthorization,
+  operatorSpaceId,
+  goToNominator
+}) => {
   const {widgetStore, favoriteStore} = useStore();
   const {stakingStore} = widgetStore;
   const {validatorsStore} = stakingStore;
@@ -48,7 +53,7 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
         ''
       );
     }
-    nextTab();
+    goToAuthorization();
   };
 
   const handleListItemClick = async (eventName: string, item: ValidatorItemModelInterface) => {
@@ -83,6 +88,22 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
           <Text text={t('staking.validators.withIdentity')} size="xs" />
         </styled.ToggleContainer>
         <styled.Legend>
+          <Tooltip darkBackground placement="bottom" label={t('staking.stakingTab.selectTooltip')}>
+            <styled.LegendItem>
+              <IconSvg name="checkmark" size="medium" isCustom />
+              {t('staking.validators.legendSelect')}
+            </styled.LegendItem>
+          </Tooltip>
+          <Tooltip
+            darkBackground
+            placement="bottom"
+            label={t('staking.stakingTab.favouriteTooltip')}
+          >
+            <styled.LegendItem>
+              <IconSvg name="starOn" size="medium" isCustom />
+              {t('staking.validators.legendBookmark')}
+            </styled.LegendItem>
+          </Tooltip>
           <Tooltip
             label={
               <styled.SortInfo type="1">
@@ -100,22 +121,6 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
             <styled.LegendItem className="tooltip">
               <IconSvg name="question" size="medium" isCustom />
               {t(`staking.stakingTab.sortingInfo.label`)}
-            </styled.LegendItem>
-          </Tooltip>
-          <Tooltip
-            darkBackground
-            placement="bottom"
-            label={t('staking.stakingTab.favouriteTooltip')}
-          >
-            <styled.LegendItem>
-              <IconSvg name="starOn" size="medium" isCustom />
-              {t('staking.validators.legendBookmark')}
-            </styled.LegendItem>
-          </Tooltip>
-          <Tooltip darkBackground placement="bottom" label={t('staking.stakingTab.selectTooltip')}>
-            <styled.LegendItem>
-              <IconSvg name="checkmark" size="medium" isCustom />
-              {t('staking.validators.legendSelect')}
             </styled.LegendItem>
           </Tooltip>
           {/*<styled.LegendItem>*/}
@@ -185,11 +190,11 @@ const Validators: FC<PropsInterface> = ({theme, nextTab, operatorSpaceId, previo
       <styled.ButtonContainer>
         <Button
           variant="primary"
-          label={t('back')}
+          label={t('actions.back')}
           icon="lightningDuotone"
           wide={false}
           theme={theme}
-          onClick={() => previousTab()}
+          onClick={() => goToNominator()}
         />
         <Button
           variant="primary"

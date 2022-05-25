@@ -40,8 +40,10 @@ const UnityStore = types
     teleportToVector3(vector: any): void {
       UnityService.teleportToVector3(vector);
     },
-    changeKeyboardControl(isActive: boolean): void {
-      UnityService.setKeyboardControl(isActive);
+    changeKeyboardControl(isActive: boolean) {
+      if (!self.isPaused) {
+        UnityService.setKeyboardControl(isActive);
+      }
     },
     pause(): void {
       self.isPaused = true;

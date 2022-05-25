@@ -1,8 +1,8 @@
 import {Transition} from '@headlessui/react';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
-import {t} from 'i18next';
 import {useHistory} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -11,7 +11,6 @@ import CONFIG from '../../config/config';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from '../../context/Collaboration/hooks/useCollaboration';
-// import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import useAgoraVideo from '../../hooks/communication/useAgoraVideo';
 import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
 import LocalParticipantView from '../molucules/collaboration/LocalParticipantView';
@@ -23,6 +22,12 @@ import StageModePIP from '../atoms/StageMode/StageModePIP';
 import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import {StageModeStatus} from '../../context/type/StageMode';
 import {ROUTES} from '../../core/constants';
+import {useStageModePopupQueueContext} from '../../context/StageMode/StageModePopupQueueContext';
+import {
+  useStageModeLeave,
+  useStageModeRequestAcceptOrDecline
+} from '../../hooks/api/useStageModeService';
+import {useModerator} from '../../context/Integration/hooks/useIntegration';
 
 export interface CommunicationLayerProps {}
 
@@ -35,6 +40,21 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {unityStore} = useStore().mainStore;
+  const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
+  const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
+    collaborationState.collaborationSpace?.id
+  );
+  const [isModerator, , ,] = useModerator(
+    // @ts-ignore
+    collaborationState.collaborationSpace?.id
+  );
+
+  const {t} = useTranslation();
+
+  useEffect(() => {
+    clearPopups();
+  }, [collaborationState.collaborationSpace]);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
@@ -45,6 +65,33 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       }
     }
   }, [collaborationState.stageMode]);
+
+  useWebsocketEvent('stage-mode-request', (userId) => {
+    if (isModerator) {
+      addRequestPopup(userId, {
+        user: userId,
+        onAccept: () => {
+          return acceptRequest(userId)
+            .then(() => true)
+            .catch(() => {
+              toast.error(
+                <ToastContent
+                  isDanger
+                  headerIconName="alert"
+                  title={t('titles.alert')}
+                  text={t('messages.userRequestDeny')}
+                  isCloseButton
+                />
+              );
+              return false;
+            });
+        },
+        onDecline: () => {
+          return declineRequest(userId).then(() => true);
+        }
+      });
+    }
+  });
 
   useWebsocketEvent('stage-mode-toggled', (stageModeStatus) => {
     //if (collaborationState.collaborationSpace?.id !== spaceId) return;
@@ -100,32 +147,32 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   };
 
   useEffect(() => {
-    if (
-      remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1 &&
-      !maxVideoStreamsShown
-    ) {
+    const isLimitReached = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+
+    if (isLimitReached && !maxVideoStreamsShown) {
       setMaxVideoStreamsShown(true);
       showMaxVideoStreamsReached();
-    } else if (maxVideoStreamsShown) {
+    } else if (maxVideoStreamsShown && !isLimitReached) {
       setMaxVideoStreamsShown(false);
     }
-  }, [remoteParticipants.length]);
-
-  // useEffect(() => {
-  //   if (collaborationState.collaborationSpace) {
-  //     if (collaborationState.stageMode) {
-  //       join(collaborationState.collaborationSpace.id).then();
-  //     } else {
-  //       leave().then();
-  //     }
-  //   }
-  // }, [collaborationState.stageMode]);
+  }, [maxVideoStreamsShown, remoteParticipants.length]);
 
   const noVideo = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   const stageModeAudience = stageModeUsers.filter((user) => {
     return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== currentUserId;
   });
+
+  const numberOfPeople = useMemo(() => {
+    return collaborationState.stageMode
+      ? stageModeAudience.length + Number(!isOnStage)
+      : remoteParticipants.length + 1;
+  }, [
+    collaborationState.stageMode,
+    isOnStage,
+    remoteParticipants.length,
+    stageModeAudience.length
+  ]);
 
   return (
     <Transition
@@ -155,7 +202,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           <div
             className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
             onClick={() => {
-              leaveCollaborationSpaceCall(false).then();
+              leaveCollaborationSpaceCall(false).then(stageModeLeave);
               if (collaborationState.stageMode) {
                 collaborationDispatch({
                   type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
@@ -169,6 +216,9 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         </Transition>
 
         <li className="overflow-y-scroll h-full pr-.1">
+          <p className="text-center whitespace-nowrap">
+            {t('counts.people', {count: numberOfPeople}).toUpperCase()}
+          </p>
           <ul>
             {collaborationState.stageMode
               ? !isOnStage && <LocalParticipantView stageLocalUserId={currentUserId} />

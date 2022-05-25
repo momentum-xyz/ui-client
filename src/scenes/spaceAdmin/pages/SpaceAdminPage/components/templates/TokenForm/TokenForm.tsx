@@ -95,6 +95,7 @@ const TokenForm: FC<PropsInterface> = () => {
       closeOnBackgroundClick={false}
       icon="check-on"
       iconSize="medium"
+      hasBorder
     >
       {tokenFormStore.createTokenDone ? (
         <styled.Container>

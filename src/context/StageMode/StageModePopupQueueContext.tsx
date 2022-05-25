@@ -28,6 +28,7 @@ export interface StageModePopupQueueContextInterface {
   removeRequestPopup: (userId: string) => void;
   addAwaitingPermissionPopup: () => void;
   removeAwaitingPermissionPopup: () => void;
+  clearPopups: () => void;
 }
 
 const StageModePopupQueueContext = React.createContext<StageModePopupQueueContextInterface>({
@@ -35,7 +36,8 @@ const StageModePopupQueueContext = React.createContext<StageModePopupQueueContex
   addRequestPopup: () => {},
   removeRequestPopup: () => {},
   addAwaitingPermissionPopup: () => {},
-  removeAwaitingPermissionPopup: () => {}
+  removeAwaitingPermissionPopup: () => {},
+  clearPopups: () => {}
 });
 
 export const StageModePopupQueueProvider: React.FC = ({children}) => {
@@ -61,9 +63,10 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
     ]);
   };
 
-  const removeRequestPopup = () => {
+  const removeRequestPopup = (userId: string) => {
     const filteredPopups = popups.filter(
-      (info) => info.type !== StageModePopupType.RECEIVED_PERMISSION_REQUEST
+      (info) =>
+        info.type === StageModePopupType.RECEIVED_PERMISSION_REQUEST && info.userId !== userId
     );
     setPopups(filteredPopups);
   };
@@ -75,12 +78,16 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
     setPopups(filteredPopups);
   };
 
-  useWebsocketEvent('stage-mode-accepted', () => {
-    removeRequestPopup();
+  const clearPopups = () => {
+    setPopups([]);
+  };
+
+  useWebsocketEvent('stage-mode-accepted', (userId) => {
+    removeRequestPopup(userId);
   });
 
-  useWebsocketEvent('stage-mode-declined', () => {
-    removeRequestPopup();
+  useWebsocketEvent('stage-mode-declined', (userId) => {
+    removeRequestPopup(userId);
   });
 
   return (
@@ -90,7 +97,8 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
         addRequestPopup,
         addAwaitingPermissionPopup,
         removeAwaitingPermissionPopup,
-        removeRequestPopup
+        removeRequestPopup,
+        clearPopups
       }}
     >
       {children}

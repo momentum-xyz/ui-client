@@ -1,18 +1,26 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div`
+export const Container = styled.button`
   cursor: pointer;
 
-  .IconSvg-custom {
-    color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.7)};
-
-    &.danger {
-      color: var(--danger);
+  :disabled {
+    .IconSvg-custom {
+      opacity: 0.2;
     }
+  }
 
-    :hover {
-      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)} !important;
+  :not(:disabled) {
+    .IconSvg-custom {
+      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.7)};
+
+      &.danger {
+        color: var(--danger);
+      }
+
+      :hover {
+        color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)} !important;
+      }
     }
   }
 `;

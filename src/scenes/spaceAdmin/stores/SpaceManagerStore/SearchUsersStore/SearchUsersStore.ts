@@ -2,7 +2,8 @@ import {flow, types, cast} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel} from 'core/models';
 import {api, UserSearchResponse} from 'api';
-import {SpaceUserModel} from 'core/models';
+import {SpaceUserModel, UserModel} from 'core/models';
+import {bytesToUuid} from 'core/utils';
 
 const SearchUsersStore = types.compose(
   ResetModel,
@@ -11,6 +12,7 @@ const SearchUsersStore = types.compose(
       selectedUserId: types.maybe(types.string),
       showResults: false,
       results: types.optional(types.array(SpaceUserModel), []),
+      userSearchResults: types.optional(types.array(UserModel), []),
       searchRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
@@ -34,6 +36,14 @@ const SearchUsersStore = types.compose(
       selectUser(id?: string) {
         self.selectedUserId = id;
         self.showResults = false;
+      }
+    }))
+    .views((self) => ({
+      get resultsList() {
+        return self.results.map((user) => ({
+          id: bytesToUuid(user.id.data),
+          name: user.name
+        }));
       }
     }))
 );
