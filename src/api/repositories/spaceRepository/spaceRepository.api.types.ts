@@ -15,7 +15,7 @@ export interface UserEditInterface {
   spaceId: string;
 }
 
-interface UserSpaceInterface {
+export interface UserSpaceInterface {
   user: UserInterface;
   isAdmin: boolean;
   spaceId?: {

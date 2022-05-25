@@ -2,6 +2,9 @@ import styled from 'styled-components';
 
 export const Heading = styled.div`
   color: ${(props) => props.theme.accent};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
   .uppercase {
     text-transform: uppercase;

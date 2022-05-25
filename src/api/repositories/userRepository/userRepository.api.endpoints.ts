@@ -9,5 +9,6 @@ export const userRepositoryEndpoints = {
   inviteToSpace: `${BASE_URL}/invite`,
   search: `${BASE_URL}/search`,
   profile: `${BASE_URL}/profile`,
-  online: `${BASE_URL}/online`
+  online: `${BASE_URL}/online`,
+  initiatives: (userId: string) => `/users/${userId}/initiatives`
 };

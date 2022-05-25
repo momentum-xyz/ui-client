@@ -170,6 +170,7 @@ export const enGb = {
       worldStats: 'World stats',
       tokenRules: 'Token Rules',
       nameOfInitiative: 'Name of Initiative',
+      initiatives: 'Initiatives',
       description: 'Description',
       people: 'People',
       explore: 'Explore',

@@ -1,5 +1,6 @@
 /** COMMON **/
 
+import {UserSpaceInterface} from 'api/repositories/spaceRepository/spaceRepository.api.types';
 import {UserStatusEnum} from 'core/enums';
 
 export interface UserProfileInterface {
@@ -115,3 +116,9 @@ export interface OnlineUsersRequest {
 }
 
 export interface OnlineUsersResponse extends Array<OnlineUserInterface> {}
+
+export interface FetchUserInitiativesRequest {
+  userId: string;
+}
+
+export interface FetchUserInitiativesResponse extends Array<UserSpaceInterface> {}

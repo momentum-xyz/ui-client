@@ -6,6 +6,8 @@ import {RequestInterface} from 'api/interfaces';
 import {
   CheckUserRequest,
   CheckUserResponse,
+  FetchUserInitiativesRequest,
+  FetchUserInitiativesResponse,
   FetchUserRequest,
   FetchUserResponse,
   InviteToSpaceRequest,
@@ -88,6 +90,17 @@ export const fetchOnlineUsers: RequestInterface<OnlineUsersRequest, OnlineUsersR
 ) => {
   const {worldId, ...restOptions} = options;
   const URL = `${userRepositoryEndpoints.online}/${worldId}`;
+
+  return request.get(URL, restOptions);
+};
+
+export const fetchUserInitiatives: RequestInterface<
+  FetchUserInitiativesRequest,
+  FetchUserInitiativesResponse
+> = (options) => {
+  const {userId, ...restOptions} = options;
+
+  const URL = userRepositoryEndpoints.initiatives(userId);
 
   return request.get(URL, restOptions);
 };

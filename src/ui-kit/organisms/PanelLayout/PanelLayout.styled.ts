@@ -5,6 +5,7 @@ import {ComponentSizeInterface} from 'ui-kit';
 
 export const HeaderItem = styled.div`
   display: flex;
+  overflow: hidden;
 `;
 
 export const Whitespace = styled.div`
@@ -19,11 +20,13 @@ export const HeaderActions = styled.div`
 export const Header = styled.div`
   display: flex;
   align-items: center;
-  width: calc(100% - 30px);
   margin-bottom: 20px;
-  margin-left: 15px;
-  margin-right: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
   padding-top: 15px;
+  overflow: hidden;
+  width: 100%;
+  gap: 10px;
 
   &.noTitle,
   &.normal,
