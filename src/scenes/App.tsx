@@ -9,6 +9,7 @@ import {AuthProvider} from 'react-oidc-context';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {appVariables} from 'api/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {WrongBrowser} from 'ui-kit';
 
@@ -36,7 +37,7 @@ stageClient.enableDualStream();
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
   const {isConfigReady} = configStore;
-  const {themeStore, unityStore} = mainStore;
+  const {themeStore, unityStore, sentryStore} = mainStore;
 
   const {pathname} = useLocation();
   const {t} = useTranslation();
@@ -47,9 +48,10 @@ const App: FC = () => {
 
   useEffect(() => {
     if (isConfigReady) {
+      sentryStore.init();
       unityStore.init();
     }
-  }, [isConfigReady, unityStore]);
+  }, [isConfigReady, sentryStore, unityStore]);
 
   if (!isConfigReady) {
     return <></>;
@@ -124,14 +126,14 @@ const App: FC = () => {
                   <AgoraProvider
                     client={agoraClient}
                     stageClient={stageClient}
-                    appId={window._env_.AGORA_APP_ID}
+                    appId={appVariables.AGORA_APP_ID}
                   >
                     <TextChatProvider>
                       <UnityComponent unityContext={unityStore.unityContext} />
                       <AppLayers>
                         <Switch>
                           {createRoutesByConfig(PRIVATE_ROUTES)}
-                          <Redirect to="/" />
+                          <Redirect to={ROUTES.base} />
                         </Switch>
                       </AppLayers>
                     </TextChatProvider>

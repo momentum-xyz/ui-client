@@ -23,7 +23,6 @@ const ConfigStore = types
           appVariables[key as keyof AppConfigInterface] = value;
         });
 
-        console.log(appVariables);
         self.isConfigReady = true;
       }
     })
