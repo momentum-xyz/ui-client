@@ -15,7 +15,7 @@ import {
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 import {t} from 'i18next';
 
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
 type Unlocking = {
   remainingEras: BN;
@@ -35,12 +35,12 @@ export default class SubstrateProvider {
   static FORMAT_OPTIONS = {withSi: false, forceUnit: '-'};
 
   static async initAPI() {
-    const provider = new WsProvider(endpoints.kusamaWebsocketServer);
+    const provider = new WsProvider(appVariables.KUSAMA_WS_SERVER);
     return ApiPromise.create({provider});
   }
 
   static async isExtensionEnabled() {
-    const connection = await web3Enable(endpoints.polkadotConnectionString);
+    const connection = await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
     return connection.length !== 0 || isWeb3Injected;
   }
 

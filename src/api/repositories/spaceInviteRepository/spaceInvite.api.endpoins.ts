@@ -1,7 +1,9 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/space-invite`;
+export const spaceInviteEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/space-invite`;
 
-export const spaceInviteEndpoints = {
-  base: `${BASE_URL}`
+  return {
+    base: `${BASE_URL}`
+  };
 };

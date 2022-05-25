@@ -2,7 +2,7 @@ import {types, flow} from 'mobx-state-tree';
 
 import {RequestModel} from 'core/models';
 import {api, AppConfigResponse} from 'api';
-import {appConstants} from 'api/constants';
+import {appVariables} from 'api/constants';
 import {AppConfigInterface} from 'api/interfaces';
 
 const ConfigStore = types
@@ -20,10 +20,10 @@ const ConfigStore = types
       if (configResponse) {
         Object.entries(configResponse).forEach((entry) => {
           const [key, value] = entry;
-          appConstants[key as keyof AppConfigInterface] = value;
+          appVariables[key as keyof AppConfigInterface] = value;
         });
 
-        console.log(appConstants);
+        console.log(appVariables);
         self.isConfigReady = true;
       }
     })

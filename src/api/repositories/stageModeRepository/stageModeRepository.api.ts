@@ -6,14 +6,14 @@ import {stageModeRepositoryEndpoints} from './stageModeRepository.api.endpoints'
 
 export const leaveStageMode: RequestInterface<StageModeRequest, StageModeResponse> = (options) => {
   const {spaceId, ...restOptions} = options;
-  const url = stageModeRepositoryEndpoints.leave(spaceId);
+  const url = stageModeRepositoryEndpoints().leave(spaceId);
 
   return request.post(url, restOptions);
 };
 
 export const joinStageMode: RequestInterface<StageModeRequest, StageModeResponse> = (options) => {
   const {spaceId, ...restOptions} = options;
-  const url = stageModeRepositoryEndpoints.join(spaceId);
+  const url = stageModeRepositoryEndpoints().join(spaceId);
 
   return request.post<StageModeResponse>(url, restOptions);
 };

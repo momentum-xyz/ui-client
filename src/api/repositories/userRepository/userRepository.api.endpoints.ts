@@ -1,17 +1,15 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/users`;
+export const userRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/users`;
 
-console.log('--------------------');
-// @ts-ignore
-console.log(window.globalConfig);
-
-export const userRepositoryEndpoints = {
-  me: `${BASE_URL}/me`,
-  check: `${BASE_URL}/check`,
-  avatarUpload: `${BASE_URL}/avatar/upload`,
-  inviteToSpace: `${BASE_URL}/invite`,
-  search: `${BASE_URL}/search`,
-  profile: `${BASE_URL}/profile`,
-  online: `${BASE_URL}/online`
+  return {
+    me: `${BASE_URL}/me`,
+    check: `${BASE_URL}/check`,
+    avatarUpload: `${BASE_URL}/avatar/upload`,
+    inviteToSpace: `${BASE_URL}/invite`,
+    search: `${BASE_URL}/search`,
+    profile: `${BASE_URL}/profile`,
+    online: `${BASE_URL}/online`
+  };
 };

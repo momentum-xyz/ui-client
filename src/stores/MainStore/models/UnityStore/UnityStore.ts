@@ -2,7 +2,7 @@ import {types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 
 import {ROUTES} from 'core/constants';
-import {appConstants} from 'api/constants';
+import {appVariables} from 'api/constants';
 import UnityService from 'context/Unity/UnityService';
 
 const UnityStore = types
@@ -17,14 +17,14 @@ const UnityStore = types
   .actions((self) => ({
     init(): void {
       self.unityContext = new UnityContext({
-        loaderUrl: appConstants.UNITY_CLIENT_LOADER_URL,
-        dataUrl: appConstants.UNITY_CLIENT_DATA_URL,
-        frameworkUrl: appConstants.UNITY_CLIENT_FRAMEWORK_URL,
-        codeUrl: appConstants.UNITY_CLIENT_CODE_URL,
-        streamingAssetsUrl: appConstants.UNITY_CLIENT_STREAMING_ASSETS_URL,
-        companyName: appConstants.UNITY_CLIENT_COMPANY_NAME,
-        productName: appConstants.UNITY_CLIENT_PRODUCT_NAME,
-        productVersion: appConstants.UNITY_CLIENT_PRODUCT_VERSION
+        loaderUrl: appVariables.UNITY_CLIENT_LOADER_URL,
+        dataUrl: appVariables.UNITY_CLIENT_DATA_URL,
+        frameworkUrl: appVariables.UNITY_CLIENT_FRAMEWORK_URL,
+        codeUrl: appVariables.UNITY_CLIENT_CODE_URL,
+        streamingAssetsUrl: appVariables.UNITY_CLIENT_STREAMING_ASSETS_URL,
+        companyName: appVariables.UNITY_CLIENT_COMPANY_NAME,
+        productName: appVariables.UNITY_CLIENT_PRODUCT_NAME,
+        productVersion: appVariables.UNITY_CLIENT_PRODUCT_VERSION
       });
 
       UnityService.initialize(self.unityContext);

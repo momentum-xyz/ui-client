@@ -19,7 +19,7 @@ export const loginGuest: RequestInterface<GuestLoginRequest, GuestLoginResponse>
     ...rest
   };
 
-  const URL: string = guestRepositoryEndpoints.login;
+  const URL: string = guestRepositoryEndpoints().login;
   return request(URL, requestParams);
 };
 
@@ -33,6 +33,6 @@ export const loginConsent: RequestInterface<GuestConsentRequest, GuestConsentRes
     ...rest
   };
 
-  const URL: string = guestRepositoryEndpoints.consent;
+  const URL: string = guestRepositoryEndpoints().consent;
   return request(URL, requestParams);
 };

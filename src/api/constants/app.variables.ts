@@ -5,10 +5,7 @@ import {AppConfigExtendedInterface} from 'api/interfaces';
  * @readonly
  */
 
-export const appConstants: AppConfigExtendedInterface = {
-  IS_DEV_ENVIRONMENT: process.env.NODE_ENV === 'development',
-  GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
-  YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
+export const appVariables: AppConfigExtendedInterface = {
   BACKEND_ENDPOINT_URL: '',
   UNITY_CLIENT_URL: '',
   UNITY_CLIENT_LOADER_URL: '',
@@ -35,5 +32,11 @@ export const appConstants: AppConfigExtendedInterface = {
   GOOGLE_API_CLIENT_ID: '',
   GOOGLE_API_DEVELOPER_KEY: '',
   MIRO_APP_ID: '',
-  YOUTUBE_KEY: ''
+  YOUTUBE_KEY: '',
+  IS_DEV_ENVIRONMENT: process.env.NODE_ENV === 'development',
+  GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
+  YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
+  POLKADOT_CONNECTION_STRING: 'momentum-connections',
+  WESTEND_TEST_WS_SERVER: 'wss://westend.api.onfinality.io/public-ws',
+  KUSAMA_WS_SERVER: 'wss://kusama-rpc.polkadot.io/'
 };

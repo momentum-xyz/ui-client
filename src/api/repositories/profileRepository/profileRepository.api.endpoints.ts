@@ -1,7 +1,9 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/profile`;
+export const userRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/profile`;
 
-export const userRepositoryEndpoints = {
-  edit: `${BASE_URL}/edit`
+  return {
+    edit: `${BASE_URL}/edit`
+  };
 };
