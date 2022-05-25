@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
-import {ROUTES} from 'core/constants';
+import {IS_DEV_ENVIRONMENT, ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {Heading, Text, Button} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
@@ -34,7 +34,7 @@ const SelectedSpace: React.FC = () => {
     unityStore.teleportToSpace(selectedSpace.id);
     history.push(ROUTES.base);
 
-    if (process.env.NODE_ENV === 'development' && selectedSpace) {
+    if (IS_DEV_ENVIRONMENT && selectedSpace) {
       joinMeetingSpace(selectedSpace.id);
     }
   };

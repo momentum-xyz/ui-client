@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {useState} from 'react';
 
+import {appVariables} from 'api/constants';
+
 import {ReactComponent as AstronautIcon} from '../../images/icons/professions-man-astronaut.svg';
 
 export interface AvatarProps {
@@ -43,7 +45,7 @@ const Avatar: React.FC<AvatarProps> = ({className, avatarHash, size = 'm', onCli
 
   useEffect(() => {
     if (avatarHash) {
-      setImgUrl(window._env_.RENDER_SERVICE_URL + `/get/${avatarHash}`);
+      setImgUrl(appVariables.RENDER_SERVICE_URL + `/get/${avatarHash}`);
     } else {
       setImgUrl(null);
     }

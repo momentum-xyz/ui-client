@@ -1,5 +1,7 @@
 import React, {FC, useMemo} from 'react';
 
+import {appVariables} from 'api/constants';
+
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import {useOwner} from '../../../hooks/api/useOwner';
 import Button from '../../atoms/Button';
@@ -87,8 +89,8 @@ const GoogleDriveLayout: FC = () => {
   const openGoogleDriveDialog = useMemo(() => {
     return (
       <GooglePicker
-        clientId={window._env_.GOOGLE_API_CLIENT_ID}
-        developerKey={window._env_.GOOGLE_API_DEVELOPER_KEY}
+        clientId={appVariables.GOOGLE_API_CLIENT_ID}
+        developerKey={appVariables.GOOGLE_API_DEVELOPER_KEY}
         scope={['https://www.googleapis.com/auth/drive.file']}
         onChange={(data) => pickerCallBack(data)}
         onAuthFailed={(data) => console.info('on auth failed:', data)}
@@ -111,8 +113,8 @@ const GoogleDriveLayout: FC = () => {
       return (
         <>
           <GooglePicker
-            clientId={window._env_.GOOGLE_API_CLIENT_ID}
-            developerKey={window._env_.GOOGLE_API_DEVELOPER_KEY}
+            clientId={appVariables.GOOGLE_API_CLIENT_ID}
+            developerKey={appVariables.GOOGLE_API_DEVELOPER_KEY}
             scope={['https://www.googleapis.com/auth/drive.file']}
             onChange={(data) => pickerCallBack(data)}
             onAuthFailed={(data) => console.info('on auth failed:', data)}

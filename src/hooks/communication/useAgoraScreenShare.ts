@@ -7,6 +7,7 @@ import useContextAuth from '../../context/Auth/hooks/useContextAuth';
 import useCollaboration from '../../context/Collaboration/hooks/useCollaboration';
 import {useConfirmationDialog} from '../useConformationDialog';
 import {AgoraContext} from '../../context/AgoraContext';
+import {appVariables} from '../../api/constants';
 
 export const useAgoraScreenShare = () => {
   const {authState} = useContextAuth();
@@ -30,7 +31,7 @@ export const useAgoraScreenShare = () => {
       }
 
       const response = await request.get(
-        window._env_.BACKEND_ENDPOINT_URL +
+        appVariables.BACKEND_ENDPOINT_URL +
           `/agora/token/${collaborationState.stageMode ? 'stage-' : ''}${
             collaborationState.collaborationSpace.id
           }/screenshare`

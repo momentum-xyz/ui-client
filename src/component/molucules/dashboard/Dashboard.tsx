@@ -13,6 +13,7 @@ import Modal, {ModalRef} from '../../util/Modal';
 import {useDashboardManager} from '../../../hooks/dashboard/useDashboard';
 import {Space, SpaceType} from '../../../context/type/Space';
 import {ReactComponent as Loader} from '../../../images/odyssey-stamp.svg';
+import {appVariables} from '../../../api/constants';
 
 export interface DashboardProps {
   dashboard: Dashboard | undefined;
@@ -111,7 +112,7 @@ const DashboardDynamicView = React.forwardRef<DashboardHandle, DashboardProps>(
         }).then(async (result) => {
           if (result) {
             const response = await request.post(
-              window._env_.BACKEND_ENDPOINT_URL + `/dashboard/delete/${id}`,
+              appVariables.BACKEND_ENDPOINT_URL + `/dashboard/delete/${id}`,
               {}
             );
 

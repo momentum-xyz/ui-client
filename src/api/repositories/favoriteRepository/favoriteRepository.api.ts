@@ -15,7 +15,7 @@ export const fetchFavorites: RequestInterface<BaseFavoritesRequest, FetchFavorit
   options
 ) => {
   const {...restOptions} = options;
-  return request.get(favoriteRepositoryEndpoints.base, restOptions);
+  return request.get(favoriteRepositoryEndpoints().base, restOptions);
 };
 
 export const postFavorite: RequestInterface<PostFavoritesRequest, PostFavoriteResponse> = (
@@ -23,13 +23,13 @@ export const postFavorite: RequestInterface<PostFavoritesRequest, PostFavoriteRe
 ) => {
   const {spaceId, ...restOptions} = options;
 
-  return request.post(favoriteRepositoryEndpoints.base, {spaceId}, restOptions);
+  return request.post(favoriteRepositoryEndpoints().base, {spaceId}, restOptions);
 };
 
 export const deleteFavorite: RequestInterface<DeleteFavoritesRequest, BaseFavoritesResponse> = (
   options
 ) => {
   const {spaceId, ...restOptions} = options;
-  const url = favoriteRepositoryEndpoints.base + `/${spaceId}`;
+  const url = favoriteRepositoryEndpoints().base + `/${spaceId}`;
   return request.delete(url, restOptions);
 };

@@ -23,10 +23,6 @@ Your app is ready to be deployed!
 
 ## Local development
 
-#### Before `yarn start`
-
-Run following script `$ bash ./scripts/env-dev.sh`
-
 #### GIT lfs
 To develop locally there are a few steps that need to be taken.<br />
 Firstly the project uses `git-lfs` to load large files.<br />
@@ -42,7 +38,6 @@ use `git lfs install` to initialize the git hooks
 ## Project structure
     .
     ├── public
-    │   |── env-config.js           # Enviroment config file that loads relevant keys and backend routes
     │   └── ...
     ├── src
     │   ├── api                     # Api calls
@@ -93,12 +88,14 @@ use `git lfs install` to initialize the git hooks
     │   │   ├── App.tsx             
     │   │   └── AppRouter.tsx       
     │   ├── stores                  # Main store & links to substores
+    │   │   ├── ConfigStore         # Init app variables
+    │   │   ├── SessionStore        # Store for current user
     │   │   ├── MainStore           # Main stores which affect all UI
     │   │   │   ├── UnityStore      # 
+    │   │   │   ├── SentryStore     #
     │   │   │   ├── ThemeStore      # 
     │   │   │   ├── WorldStore      #
-    │   │   │   └── ...             # 
-    │   │   ├── SessionStore        # Store for current user
+    │   │   │   └── ...             #
     │   │   ├── RootStore.ts        #
     │   │   └── ...
     │   ├── index.tsx                

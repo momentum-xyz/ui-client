@@ -1,9 +1,10 @@
 import {useFetch, usePost} from '../../../hooks/api/useApi';
 import {IntegrationDTO, IntegrationTypes} from '../IntegrationTypes';
+import {appVariables} from '../../../api/constants';
 
 export const useIntegrationFetch = (spaceId: string, integrationType: IntegrationTypes) => {
   const response = useFetch<IntegrationDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + `/space-integrations/${spaceId}/${integrationType}`,
+    appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/${spaceId}/${integrationType}`,
     {
       fetchPolicy: 'cache-and-network'
     }
@@ -13,18 +14,18 @@ export const useIntegrationFetch = (spaceId: string, integrationType: Integratio
 
 export const useIntegrationEnable = () => {
   return usePost<IntegrationDTO, IntegrationDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + `/space-integrations/enable`
+    appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/enable`
   );
 };
 
 export const useIntegrationDisable = () => {
   return usePost<IntegrationDTO, IntegrationDTO>(
-    window._env_.BACKEND_ENDPOINT_URL + `/space-integrations/disable`
+    appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/disable`
   );
 };
 
 export const useModerator = (id: string) => {
-  return useFetch(window._env_.BACKEND_ENDPOINT_URL + `/space-integrations/${id}/check`, {
+  return useFetch(appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/${id}/check`, {
     fetchPolicy: 'network-only'
   });
 };

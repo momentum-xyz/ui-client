@@ -1,5 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
+import {appVariables} from 'api/constants';
+
 import {MiroBoard} from '../../../context/Collaboration/CollaborationTypes';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
@@ -49,7 +51,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
     if (collaborationSpace) {
       //@ts-ignore
       miroBoardsPicker.open({
-        clientId: window._env_.MIRO_APP_ID,
+        clientId: appVariables.MIRO_APP_ID,
         action: 'access-link',
         success: function (board: MiroBoard) {
           addMiroBoard({

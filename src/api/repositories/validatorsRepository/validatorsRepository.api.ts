@@ -24,7 +24,7 @@ export const fetchValidators: RequestInterface<BaseValidatorsRequest, FetchValid
     }
   };
 
-  const url = validatorRepositoryEndpoints.getValidators;
+  const url = validatorRepositoryEndpoints().getValidators;
   return request.get(url, config);
 };
 
@@ -39,5 +39,5 @@ export const updateBookmark: RequestInterface<
     ...rest
   };
 
-  return request(validatorRepositoryEndpoints.bookmark, requestParams);
+  return request(validatorRepositoryEndpoints().bookmark, requestParams);
 };

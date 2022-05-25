@@ -29,7 +29,7 @@ import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
 export const fetchSpace: RequestInterface<SpaceRequest, SpaceResponse> = (options) => {
   const {spaceId, ...restOptions} = options;
-  const url = `${spaceRepositoryEndpoints.user}/${spaceId}`;
+  const url = `${spaceRepositoryEndpoints().user}/${spaceId}`;
 
   return request.get(url, restOptions);
 };
@@ -37,7 +37,7 @@ export const fetchSpace: RequestInterface<SpaceRequest, SpaceResponse> = (option
 export const editSpace: RequestInterface<EditSpaceRequest, EditSpaceResponse> = (options) => {
   const {settings, spaceId, ...restOptions} = options;
 
-  const url = `${spaceRepositoryEndpoints.edit}/${spaceId}`;
+  const url = `${spaceRepositoryEndpoints().edit}/${spaceId}`;
 
   return request.put(url, settings, restOptions);
 };
@@ -45,7 +45,7 @@ export const editSpace: RequestInterface<EditSpaceRequest, EditSpaceResponse> = 
 export const deleteSpace: RequestInterface<DeleteSpaceRequest, DeleteSpaceResponse> = (options) => {
   const {spaceId, ...restOptions} = options;
 
-  const url = `${spaceRepositoryEndpoints.delete}/${spaceId}`;
+  const url = `${spaceRepositoryEndpoints().delete}/${spaceId}`;
 
   return request.delete(url, restOptions);
 };
@@ -53,25 +53,25 @@ export const deleteSpace: RequestInterface<DeleteSpaceRequest, DeleteSpaceRespon
 export const removeUser: RequestInterface<RemoveUserRequest, RemoveUserResponse> = (options) => {
   const {user, ...restOptions} = options;
 
-  return request.post(spaceRepositoryEndpoints.unassignUser, user, restOptions);
+  return request.post(spaceRepositoryEndpoints().unassignUser, user, restOptions);
 };
 
 export const editUser: RequestInterface<EditUserRequest, EditUserResponse> = (options) => {
   const {user, ...restOptions} = options;
 
-  return request.post(spaceRepositoryEndpoints.assignUser, user, restOptions);
+  return request.post(spaceRepositoryEndpoints().assignUser, user, restOptions);
 };
 
 export const addUser: RequestInterface<AddUserRequest, AddUserResponse> = (options) => {
   const {user, ...restOptions} = options;
 
-  return request.post(spaceRepositoryEndpoints.assignUser, user, restOptions);
+  return request.post(spaceRepositoryEndpoints().assignUser, user, restOptions);
 };
 
 export const create: RequestInterface<CreateSpaceRequest, CreateSpaceResponse> = (options) => {
   const {newSpace, ...restOptions} = options;
 
-  return request.post(spaceRepositoryEndpoints.create, newSpace, restOptions);
+  return request.post(spaceRepositoryEndpoints().create, newSpace, restOptions);
 };
 
 export const fetchUserOwnedSpaces: RequestInterface<
@@ -87,7 +87,7 @@ export const fetchUserOwnedSpaces: RequestInterface<
     }
   };
 
-  return request.get(spaceRepositoryEndpoints.ownedSpaces, config);
+  return request.get(spaceRepositoryEndpoints().ownedSpaces, config);
 };
 
 export const createInitiative: RequestInterface<
@@ -95,7 +95,7 @@ export const createInitiative: RequestInterface<
   CreateInitiativeResponse
 > = (options) => {
   const {initiative, ...restOptions} = options;
-  return request.post(spaceRepositoryEndpoints.createInitiative, initiative, restOptions);
+  return request.post(spaceRepositoryEndpoints().createInitiative, initiative, restOptions);
 };
 
 export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesResponse> = (
@@ -108,5 +108,5 @@ export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesRes
     worldId
   };
 
-  return request.get(spaceRepositoryEndpoints.search, restOptions);
+  return request.get(spaceRepositoryEndpoints().search, restOptions);
 };

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, {useEffect} from 'react';
 
+import {appVariables} from 'api/constants';
+
 require('../../styles/atoms/_google-picker.scss');
 
 let scriptLoadingStarted = false;
@@ -71,7 +73,7 @@ const useGooglePicker = ({
     } else if (!scriptLoadingStarted) {
       // load google api and the init
       scriptLoadingStarted = true;
-      loadScript(window._env_.GOOGLE_SDK_URL, onApiLoad);
+      loadScript(appVariables.GOOGLE_SDK_URL, onApiLoad);
     } else {
       // is loading
     }

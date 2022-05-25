@@ -1,3 +1,5 @@
+import {appVariables} from 'api/constants';
+
 import {
   AdmitOrKickDTO,
   ModType,
@@ -11,8 +13,7 @@ import {useFetch, usePost} from './useApi';
 
 export const useStageModeJoin = (spaceId?: string) => {
   const [stageModeJoin, , ,] = usePost<IntegrationDTO>(
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/join`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/join`
   );
 
   return () => stageModeJoin({});
@@ -21,7 +22,7 @@ export const useStageModeJoin = (spaceId?: string) => {
 export const useStageModeLeave = (spaceId?: string) => {
   const [stageModeLeave, , ,] = usePost<IntegrationDTO>(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/leave`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/leave`
   );
 
   return () => {
@@ -33,7 +34,7 @@ export const useStageModeStatusInfo = (spaceId?: string) => {
   const [data, , ,] = useFetch<StageModeStatusInfoDto>(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     // window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}`,
-    window._env_.BACKEND_ENDPOINT_URL + `/space-integrations/${spaceId ? spaceId : ''}/stage_mode`,
+    appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/${spaceId ? spaceId : ''}/stage_mode`,
     {
       fetchPolicy: 'network-only'
     }
@@ -45,7 +46,7 @@ export const useStageModeStatusInfo = (spaceId?: string) => {
 export const useStageModeRequestInvite = (spaceId?: string) => {
   const [postRequest, , ,] = usePost(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/invite`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/invite`
   );
 
   const body = (userId: string) => {
@@ -60,7 +61,7 @@ export const useStageModeRequestInvite = (spaceId?: string) => {
 export const useStageModeInvitationAcceptOrDecline = (spaceId?: string) => {
   const [postResponse, , ,] = usePost<void, StageModeRequestDto>(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/invite/response`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/invite/response`
   );
 
   const stageModeInvitationAcceptOrDecline = (
@@ -83,7 +84,7 @@ export const useStageModeInvitationAcceptOrDecline = (spaceId?: string) => {
 export const useStageModeRequestAcceptOrDecline = (spaceId?: string) => {
   const [postResponse, , ,] = usePost<void, StageModeRequestDto>(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/request/response`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/request/response`
   );
 
   const stageModeRequestAcceptOrDecline = (
@@ -108,7 +109,7 @@ export const useStageModeRequestAcceptOrDecline = (spaceId?: string) => {
 export const useStageModeSendOffstage = (spaceId?: string) => {
   const [postRequest, response, , error] = usePost<AdmitOrKickDTO, AdmitOrKickDTO>(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/admit-or-kick`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/admit-or-kick`
   );
 
   const sendOffstage = (userId: string) =>
@@ -129,7 +130,7 @@ export const useStageModeSendOffstage = (spaceId?: string) => {
 export const useJoinRequest = (spaceId?: string) => {
   const [postRequest, , ,] = usePost(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/request`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/request`
   );
 
   const body = (userId: string) => {
@@ -146,7 +147,7 @@ export const useJoinRequest = (spaceId?: string) => {
 export const useStageModeMute = (spaceId?: string) => {
   const [postRequest, , ,] = usePost(
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    window._env_.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/mute`
+    appVariables.BACKEND_ENDPOINT_URL + `/stage-mode/${spaceId}/mute`
   );
 
   const body = (userId: string) => {

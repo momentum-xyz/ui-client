@@ -12,7 +12,7 @@ export const fetchAllowedSpaceTypes: RequestInterface<
   GetAllowedSpaceTypesResponse
 > = (options) => {
   const {spaceId, ...restOptions} = options;
-  const url = `${spaceTypeRepositoryEndpoints.allowedTypes}/${spaceId}`;
+  const url = `${spaceTypeRepositoryEndpoints().allowedTypes}/${spaceId}`;
 
   return request.get(url, restOptions);
 };

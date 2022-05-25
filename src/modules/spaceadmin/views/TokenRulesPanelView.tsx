@@ -2,6 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {toast} from 'react-toastify';
 
 import {request} from 'api/request';
+import {appVariables} from 'api/constants';
 
 import Panel, {PanelBody, PanelTitle} from '../../../component/atoms/Panel';
 import TopbarButton from '../../../component/atoms/topbar/TopbarButton';
@@ -57,7 +58,7 @@ const TokenRulesPanelView: React.FC<TokenRulesPanelViewProps> = ({
         if (result) {
           try {
             const response = await request.delete(
-              window._env_.BACKEND_ENDPOINT_URL + '/token-rule/' + bytesToUuid(item.id.data)
+              appVariables.BACKEND_ENDPOINT_URL + '/token-rule/' + bytesToUuid(item.id.data)
             );
             onUpdate();
             if (response.status) {

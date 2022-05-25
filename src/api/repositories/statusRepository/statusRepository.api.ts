@@ -9,5 +9,5 @@ export const changeStatus: RequestInterface<StatusRequestInterface, StatusRespon
 ) => {
   const {status, ...restOptions} = options;
 
-  return request.put(statusRepositoryEndpoints.base, {status}, restOptions);
+  return request.put(statusRepositoryEndpoints().base, {status}, restOptions);
 };

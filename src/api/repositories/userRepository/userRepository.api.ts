@@ -32,11 +32,11 @@ export const check: RequestInterface<CheckUserRequest, CheckUserResponse> = (opt
     ...rest
   };
 
-  return request(userRepositoryEndpoints.check, requestParams);
+  return request(userRepositoryEndpoints().check, requestParams);
 };
 
 export const fetchMe: RequestInterface<FetchUserRequest, FetchUserResponse> = (options) => {
-  return request.get(userRepositoryEndpoints.me, options);
+  return request.get(userRepositoryEndpoints().me, options);
 };
 
 export const uploadAvatar: RequestInterface<UploadAvatarRequest, UploadAvatarResponse> = (
@@ -55,7 +55,7 @@ export const uploadAvatar: RequestInterface<UploadAvatarRequest, UploadAvatarRes
     ...restOptions
   };
 
-  const URL = `${userRepositoryEndpoints.avatarUpload}`;
+  const URL = `${userRepositoryEndpoints().avatarUpload}`;
   return request.post(URL, formData, requestParams);
 };
 
@@ -64,7 +64,7 @@ export const inviteToSpace: RequestInterface<InviteToSpaceRequest, InviteToSpace
 ) => {
   const {invitedUser, ...restOptions} = options;
 
-  return request.post(userRepositoryEndpoints.inviteToSpace, invitedUser, restOptions);
+  return request.post(userRepositoryEndpoints().inviteToSpace, invitedUser, restOptions);
 };
 
 export const search: RequestInterface<UserSearchRequest, UserSearchResponse> = (options) => {
@@ -76,12 +76,12 @@ export const search: RequestInterface<UserSearchRequest, UserSearchResponse> = (
     worldId
   };
 
-  return request.get(userRepositoryEndpoints.search, restOptions);
+  return request.get(userRepositoryEndpoints().search, restOptions);
 };
 
 export const fetchProfile: RequestInterface<ProfileRequest, ProfileResponse> = (options) => {
   const {userId, ...restOptions} = options;
-  const URL = `${userRepositoryEndpoints.profile}/${userId}`;
+  const URL = `${userRepositoryEndpoints().profile}/${userId}`;
 
   return request.get(URL, restOptions);
 };
@@ -90,7 +90,7 @@ export const fetchOnlineUsers: RequestInterface<OnlineUsersRequest, OnlineUsersR
   options
 ) => {
   const {worldId, ...restOptions} = options;
-  const URL = `${userRepositoryEndpoints.online}/${worldId}`;
+  const URL = `${userRepositoryEndpoints().online}/${worldId}`;
 
   return request.get(URL, restOptions);
 };
@@ -101,7 +101,7 @@ export const fetchUserInitiatives: RequestInterface<
 > = (options) => {
   const {userId, ...restOptions} = options;
 
-  const url = generatePath(userRepositoryEndpoints.initiatives, {userId});
+  const url = generatePath(userRepositoryEndpoints().initiatives, {userId});
 
   return request.get(url, restOptions);
 };

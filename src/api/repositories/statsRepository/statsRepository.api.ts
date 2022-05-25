@@ -8,6 +8,6 @@ export const fetchWorldStats: RequestInterface<WorldStatsRequest, WorldStatsResp
   options
 ) => {
   const {spaceId, ...rest} = options;
-  const URL = `${statsRepositoryEndpoints.stats}/${spaceId}`;
+  const URL = `${statsRepositoryEndpoints().stats}/${spaceId}`;
   return request.get(URL, rest);
 };
