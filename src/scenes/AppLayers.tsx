@@ -15,7 +15,6 @@ import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
 import useUnityEvent from '../context/Unity/hooks/useUnityEvent';
 import UnityService from '../context/Unity/UnityService';
 import VideoLayer from '../component/overlays/VideoLayer';
-import SocialLayout from '../component/layout/SocialUI/SocialLayout';
 import MusicPlayerLayout from '../component/layout/MusicPlayer/MusicPlayerLayout';
 import {StageModePopupQueueProvider} from '../context/StageMode/StageModePopupQueueContext';
 
@@ -80,7 +79,6 @@ const AppLayers: FC = ({children}) => {
         <StageModePopupQueueProvider>
           <main id="main" className="h-screen pb-7 flex ">
             {children}
-            <SocialLayout />
             <MusicPlayerLayout />
             <CommunicationLayer />
           </main>

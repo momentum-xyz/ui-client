@@ -1,4 +1,5 @@
 import {Method} from 'axios';
+import {generatePath} from 'react-router-dom';
 
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
@@ -6,6 +7,8 @@ import {RequestInterface} from 'api/interfaces';
 import {
   CheckUserRequest,
   CheckUserResponse,
+  FetchUserInitiativesRequest,
+  FetchUserInitiativesResponse,
   FetchUserRequest,
   FetchUserResponse,
   InviteToSpaceRequest,
@@ -90,4 +93,15 @@ export const fetchOnlineUsers: RequestInterface<OnlineUsersRequest, OnlineUsersR
   const URL = `${userRepositoryEndpoints().online}/${worldId}`;
 
   return request.get(URL, restOptions);
+};
+
+export const fetchUserInitiatives: RequestInterface<
+  FetchUserInitiativesRequest,
+  FetchUserInitiativesResponse
+> = (options) => {
+  const {userId, ...restOptions} = options;
+
+  const url = generatePath(userRepositoryEndpoints().initiatives, {userId});
+
+  return request.get(url, restOptions);
 };

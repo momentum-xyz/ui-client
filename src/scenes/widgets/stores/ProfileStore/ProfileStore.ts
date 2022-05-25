@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
-import {DialogModel, RequestModel, ResetModel, UserProfileModel} from 'core/models';
-import {api, UserProfileInterface} from 'api';
+import {DialogModel, RequestModel, ResetModel, UserProfileModel, SpaceModel} from 'core/models';
+import {api, FetchUserInitiativesResponse, UserProfileInterface} from 'api';
 import {
   CreateSpaceResponse,
   NewSpaceDetails,
@@ -18,13 +18,15 @@ const ProfileStore = types.compose(
       userProfile: types.maybe(UserProfileModel),
       canCreateInitiative: types.maybe(types.boolean),
       userTableId: types.maybe(types.string),
+      userInitiatives: types.optional(types.array(SpaceModel), []),
       profileFetchRequest: types.optional(RequestModel, {}),
       findTablesRequest: types.optional(RequestModel, {}),
       createTableRequest: types.optional(RequestModel, {}),
       inviteToTableRequest: types.optional(RequestModel, {}),
       editProfileRequest: types.optional(RequestModel, {}),
       userOwnedSpacesRequest: types.optional(RequestModel, {}),
-      editAvatarDialog: types.optional(DialogModel, {})
+      editAvatarDialog: types.optional(DialogModel, {}),
+      userInitiativesRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       fetchProfile: flow(function* (userId: string) {
@@ -42,6 +44,16 @@ const ProfileStore = types.compose(
         self.userTableId = yield self.findTablesRequest.send(api.tablesRepository.findTable, {
           userId: self.userProfile.uuid
         });
+      }),
+      fetchUserInitiatives: flow(function* () {
+        const response: FetchUserInitiativesResponse = yield self.userInitiativesRequest.send(
+          api.userRepository.fetchUserInitiatives,
+          {userId: self.userProfile?.uuid}
+        );
+
+        if (response !== undefined) {
+          self.userInitiatives = cast(response);
+        }
       }),
       grabATable: flow(function* (worldId: string, userId: string) {
         const newSpace: NewSpaceDetails = {

@@ -79,27 +79,27 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 isDanger={isDanger}
               />
             )}
+            {restProps.subtitle && (
+              <>
+                <Heading
+                  theme={restProps.theme}
+                  type="h3"
+                  label="/"
+                  transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
+                  isDanger={isDanger}
+                />
+                <styled.Whitespace />
+                <Heading
+                  theme={restProps.theme}
+                  type="h3"
+                  label={restProps.subtitle}
+                  transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
+                  weight="normal"
+                  isDanger={isDanger}
+                />
+              </>
+            )}
           </styled.HeaderItem>
-          {restProps.subtitle && (
-            <styled.HeaderItem>
-              <Heading
-                theme={restProps.theme}
-                type="h3"
-                label="/"
-                transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
-                isDanger={isDanger}
-              />
-              <styled.Whitespace />
-              <Heading
-                theme={restProps.theme}
-                type="h3"
-                label={restProps.subtitle}
-                transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
-                weight="normal"
-                isDanger={isDanger}
-              />
-            </styled.HeaderItem>
-          )}
           <styled.Spacer />
           <styled.HeaderActions>
             {props.headerActions}

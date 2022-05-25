@@ -66,9 +66,9 @@ const SubSpacesPanel: FC = () => {
         )}
         {space.subSpaces.map((subSpace) => (
           <AdminListItem
-            key={subSpace.uuid}
+            key={subSpace.id}
             name={subSpace.name}
-            userId={subSpace.uuid}
+            userId={subSpace.id}
             onEdit={handleSubSpaceEdit}
             onRemove={handleSubSpaceRemove}
           />

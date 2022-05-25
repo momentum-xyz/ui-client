@@ -8,25 +8,19 @@ import {useStore} from 'shared/hooks';
 import {absoluteLink, monthAndYearString} from 'core/utils';
 import {Button, IconSvg, SvgButton, Avatar, PanelLayout, Text} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
-import SocialUserInitiatives from 'component/molucules/socialui/SocialUserInitiatives';
 import {appVariables} from 'api/constants';
 import {UserStatusEnum} from 'core/enums';
 
+import {UserInitiativesList} from './components';
 import * as styled from './ProfileWidget.styled';
 
 interface ProfileWidgetPropsInterface {
   userId: string;
   onClose: () => void;
-  onUserInitiativeSelect: (user: Buffer) => void;
   onEditUser: (userId: string) => void;
 }
 
-const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
-  userId,
-  onClose,
-  onUserInitiativeSelect,
-  onEditUser
-}) => {
+const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({userId, onClose, onEditUser}) => {
   const {
     widgetStore,
     sessionStore,
@@ -89,6 +83,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
         isItMe && <SvgButton iconName="edit" size="normal" onClick={() => onEditUser(userId)} />
       }
       onClose={onClose}
+      componentSize={{width: '430px'}}
     >
       <styled.Body>
         <styled.Actions>
@@ -162,7 +157,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
               </styled.InfoItem>
             )}
           </styled.Info>
-          <SocialUserInitiatives userId={userId} onInitiativeSelect={onUserInitiativeSelect} />
+          <UserInitiativesList />
         </styled.Details>
       </styled.Body>
     </PanelLayout>

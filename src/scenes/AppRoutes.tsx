@@ -15,7 +15,7 @@ import {
   Web3ChallengePage,
   Web3ConsentPage
 } from './auth/pages';
-import {IntoPage} from './default/pages';
+import {HomePage, IntoPage} from './default/pages';
 import {SignUpCompletePage} from './profile';
 import {StoryBookPage} from './system/pages';
 import {Collaboration} from './collaboration';
@@ -100,7 +100,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.base,
     exact: true,
     sidebar: () => null,
-    main: () => null
+    main: () => <HomePage />
   },
   {
     path: ROUTES.spaceDashboard,

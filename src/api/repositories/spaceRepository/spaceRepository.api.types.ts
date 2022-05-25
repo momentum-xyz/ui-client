@@ -15,7 +15,7 @@ export interface UserEditInterface {
   spaceId: string;
 }
 
-interface UserSpaceInterface {
+export interface UserSpaceInterface {
   user: UserInterface;
   isAdmin: boolean;
   spaceId?: {
@@ -178,4 +178,20 @@ export interface CreateInitiativeRequest {
 
 export interface CreateInitiativeResponse {
   id: string;
+}
+
+/** Serach **/
+
+export interface SearchSpacesRequest {
+  q: string;
+  worldId: string;
+}
+
+export interface SearchSpacesResponse {
+  results: SpaceInterface[];
+  itemCount: number;
+  totalItems: number;
+  itemsPerPage: number;
+  totalPages: number;
+  currentPage: number;
 }

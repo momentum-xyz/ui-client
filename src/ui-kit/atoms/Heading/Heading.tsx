@@ -1,4 +1,4 @@
-import React, {FC, memo} from 'react';
+import React, {FC, HTMLProps, memo} from 'react';
 import cn from 'classnames';
 
 import {HeadingType, TextAlignType, TextTransform, TextWeightType} from 'ui-kit/types';
@@ -6,7 +6,9 @@ import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Heading.styled';
 
-interface HeadingProps extends PropsWithThemeInterface {
+interface HeadingProps
+  extends PropsWithThemeInterface,
+    Pick<HTMLProps<HTMLDivElement>, 'className'> {
   type: HeadingType;
   label: string;
   isCustom?: boolean;
@@ -64,7 +66,13 @@ const Heading: FC<HeadingProps> = (props) => {
   return (
     <styled.Heading
       theme={restProps.theme}
-      className={cn(align, weight, isCustom && 'Heading-custom', isDanger && 'danger')}
+      className={cn(
+        align,
+        weight,
+        isCustom && 'Heading-custom',
+        isDanger && 'danger',
+        restProps.className
+      )}
     >
       {content()}
     </styled.Heading>

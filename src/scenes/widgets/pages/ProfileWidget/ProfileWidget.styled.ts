@@ -4,7 +4,6 @@ export const Body = styled.div`
   display: flex;
   overflow: hidden;
   max-height: calc(100% - 50px);
-  width: 400px;
   margin-top: 10px;
 `;
 
