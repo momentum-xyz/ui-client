@@ -34,6 +34,8 @@ export const appVariables: AppConfigExtendedInterface = {
   MIRO_APP_ID: '',
   YOUTUBE_KEY: '',
   IS_DEV_ENVIRONMENT: process.env.NODE_ENV === 'development',
+  WEB3_PUBLIC_RPC_URL_MAINNET: 'https://mainnet.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
+  WEB3_PUBLIC_RPC_URL_RINKEBY: 'https://rinkeby.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
   GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
   YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
   POLKADOT_CONNECTION_STRING: 'momentum-connections',

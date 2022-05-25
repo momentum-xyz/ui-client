@@ -19,7 +19,7 @@ import {
 } from 'ui-kit';
 import UnityService from 'context/Unity/UnityService';
 import {ChangeAvatarPopup} from 'modules/profile/popups/ChangeAvatarPopup';
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
 import * as styled from './ProfileEditWidget.styled';
 
@@ -118,7 +118,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
               <Avatar
                 avatarSrc={
                   userProfile?.profile?.avatarHash &&
-                  `${endpoints.renderService}/get/${userProfile.profile.avatarHash}`
+                  `${appVariables.RENDER_SERVICE_URL}/get/${userProfile.profile.avatarHash}`
                 }
                 onClick={editAvatarDialog.open}
                 size="large"

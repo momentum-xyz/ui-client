@@ -3,7 +3,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 import {FieldErrorInterface} from 'api/interfaces';
 import {
   Button,
@@ -68,7 +68,9 @@ const SignUpCompleteForm: FC<Props> = (props) => {
             <styled.AvatarImageUpload>
               {value && <styled.ImagePreview src={URL.createObjectURL(value)} />}
               {!value && !!user.avatarHash && (
-                <styled.ImagePreview src={`${endpoints.renderService}/get/${user.avatarHash}`} />
+                <styled.ImagePreview
+                  src={`${appVariables.RENDER_SERVICE_URL}/get/${user.avatarHash}`}
+                />
               )}
               <FileUploader
                 theme={theme}
