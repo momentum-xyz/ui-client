@@ -10,19 +10,10 @@ COPY . .
 RUN yarn build
 
 
-FROM nginx:alpine as production-build
-WORKDIR /usr/share/nginx/html
+FROM nginx:1.20.2-alpine as production-build
+WORKDIR /opt/srv
 
 ADD ./docker_assets/nginx.conf /etc/nginx/nginx.conf
 
-## Remove default nginx index page
-RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build /usr/src/app/build /opt/srv
 
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
-
-COPY scripts/env.sh .
-COPY ./.env.base .
-
-EXPOSE 80
-
-CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && exec nginx -g \"daemon off;\""]

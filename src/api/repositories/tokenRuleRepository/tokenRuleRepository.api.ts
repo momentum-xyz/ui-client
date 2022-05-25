@@ -24,7 +24,7 @@ export const fetchTokenRules: RequestInterface<BaseTokenRulesRequest, FetchToken
   options
 ) => {
   const {spaceId, query, children, ...restOptions} = options;
-  const url = tokenRuleRepositoryEndpoints.all + (spaceId ? `/${spaceId}` : '');
+  const url = tokenRuleRepositoryEndpoints().all + (spaceId ? `/${spaceId}` : '');
 
   return request.get(url, {...restOptions, params: {children: children, q: query}});
 };
@@ -33,7 +33,7 @@ export const deleteTokenRule: RequestInterface<DeleteTokenRuleRequest, DeleteTok
   options
 ) => {
   const {tokenRuleId, ...restOptions} = options;
-  const url = tokenRuleRepositoryEndpoints.base + `/${tokenRuleId}`;
+  const url = tokenRuleRepositoryEndpoints().base + `/${tokenRuleId}`;
 
   return request.delete(url, restOptions);
 };
@@ -50,7 +50,7 @@ export const createTokenRule: RequestInterface<CreateTokenRuleRequest, CreateTok
     tokenId: data.tokenId,
     name: data.name
   };
-  const url = tokenRuleRepositoryEndpoints.create;
+  const url = tokenRuleRepositoryEndpoints().create;
 
   return request.post(url, payload, restOptions);
 };
@@ -61,7 +61,7 @@ export const processTokenRule: RequestInterface<
 > = (options) => {
   const {tokenRuleId, status, ...restOptions} = options;
 
-  const URL = `${tokenRuleRepositoryEndpoints.process}/${tokenRuleId}`;
+  const URL = `${tokenRuleRepositoryEndpoints().process}/${tokenRuleId}`;
 
   return request.post(URL, {status}, restOptions);
 };
@@ -69,7 +69,7 @@ export const processTokenRule: RequestInterface<
 export const fetchOptions: RequestInterface<TokenRulesOptionRequest, TokenRulesOptionResponse> = (
   options
 ) => {
-  const url = tokenRuleRepositoryEndpoints.allowedOptions;
+  const url = tokenRuleRepositoryEndpoints().allowedOptions;
   return request.get(url, options);
 };
 
@@ -80,7 +80,7 @@ export const searchTokenRule: RequestInterface<TokenRuleSearchRequest, TokenRule
 
   restOptions.params = {q};
 
-  return request.get(tokenRuleRepositoryEndpoints.search, restOptions);
+  return request.get(tokenRuleRepositoryEndpoints().search, restOptions);
 };
 
 export const applyTokenRule: RequestInterface<ApplyTokenRuleRequest, ApplyTokenRuleResponse> = (
@@ -88,7 +88,7 @@ export const applyTokenRule: RequestInterface<ApplyTokenRuleRequest, ApplyTokenR
 ) => {
   const {data, spaceId, ...restOptions} = options;
 
-  const url = tokenRuleRepositoryEndpoints.apply + `/${spaceId}`;
+  const url = tokenRuleRepositoryEndpoints().apply + `/${spaceId}`;
 
   return request.post(url, data, restOptions);
 };
@@ -98,7 +98,7 @@ export const fetchAppliedTokenRules: RequestInterface<
   FetchTokenRulesResponse
 > = (options) => {
   const {spaceId, ...restOptions} = options;
-  const url = tokenRuleRepositoryEndpoints.all + `/${spaceId}`;
+  const url = tokenRuleRepositoryEndpoints().all + `/${spaceId}`;
 
   return request.get(url, restOptions);
 };

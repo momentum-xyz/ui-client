@@ -7,7 +7,7 @@ import {tablesRepositoryEndpoints} from './tablesRepository.api.endpoints';
 export const findTable: RequestInterface<FindTableRequest, FindTableResponse> = (options) => {
   const {userId, ...restOptions} = options;
 
-  const URL = `${tablesRepositoryEndpoints.find}/${userId}`;
+  const URL = `${tablesRepositoryEndpoints().find}/${userId}`;
 
   return request.get(URL, restOptions);
 };

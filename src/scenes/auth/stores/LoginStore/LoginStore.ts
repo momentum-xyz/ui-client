@@ -55,7 +55,7 @@ const LoginStore = types.compose(
       keycloakSignIn: flow(function* () {
         storage.setString(StorageKeyEnum.LoginType, LoginTypeEnum.Keycloak);
         const origin = window.history.state?.origin || ROUTES.base;
-        const userManager = new UserManager(keycloakOidcConfig);
+        const userManager = new UserManager(keycloakOidcConfig());
         yield userManager.signinRedirect({state: {origin: origin}});
       }),
       web3SignIn: flow(function* () {
@@ -65,7 +65,7 @@ const LoginStore = types.compose(
         storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
         const args = {state: {origin: origin}, login_hint: self.loginType};
-        const userManager = new UserManager(web3OidcConfig);
+        const userManager = new UserManager(web3OidcConfig());
         yield userManager.signinRedirect(args);
       }),
       guestSignIn: flow(function* () {
@@ -75,7 +75,7 @@ const LoginStore = types.compose(
         storage.setString(StorageKeyEnum.LoginType, self.loginType);
         const origin = window.history.state?.origin || ROUTES.base;
         const args = {state: {origin: origin}, login_hint: self.loginType};
-        const userManager = new UserManager(guestOidcConfig);
+        const userManager = new UserManager(guestOidcConfig());
         yield userManager.signinRedirect(args);
       })
     }))

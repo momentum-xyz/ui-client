@@ -1,13 +1,15 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/token-rule`;
+export const tokenRuleRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/token-rule`;
 
-export const tokenRuleRepositoryEndpoints = {
-  base: `${BASE_URL}`,
-  create: `${BASE_URL}/create`,
-  all: `${BASE_URL}/all`,
-  process: `${BASE_URL}/process`,
-  allowedOptions: `${BASE_URL}/allowed-options`,
-  search: `${BASE_URL}/search`,
-  apply: `${BASE_URL}/apply`
+  return {
+    base: `${BASE_URL}`,
+    create: `${BASE_URL}/create`,
+    all: `${BASE_URL}/all`,
+    process: `${BASE_URL}/process`,
+    allowedOptions: `${BASE_URL}/allowed-options`,
+    search: `${BASE_URL}/search`,
+    apply: `${BASE_URL}/apply`
+  };
 };

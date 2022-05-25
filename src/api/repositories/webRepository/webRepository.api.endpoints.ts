@@ -1,9 +1,11 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.web3ProviderUrl}/v0/web3`;
+export const web3RepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.WEB3_IDENTITY_PROVIDER_URL}/v0/web3`;
 
-export const web3RepositoryEndpoints = {
-  challenge: `${BASE_URL}/challenge`,
-  login: `${BASE_URL}/login`,
-  consent: `${BASE_URL}/consent`
+  return {
+    challenge: `${BASE_URL}/challenge`,
+    login: `${BASE_URL}/login`,
+    consent: `${BASE_URL}/consent`
+  };
 };

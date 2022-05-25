@@ -1,7 +1,9 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/tables`;
+export const tablesRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/tables`;
 
-export const tablesRepositoryEndpoints = {
-  find: `${BASE_URL}/find`
+  return {
+    find: `${BASE_URL}/find`
+  };
 };

@@ -1,7 +1,9 @@
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
-const BASE_URL = `${endpoints.backendUrl}/status`;
+export const statusRepositoryEndpoints = () => {
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/status`;
 
-export const statusRepositoryEndpoints = {
-  base: `${BASE_URL}`
+  return {
+    base: `${BASE_URL}`
+  };
 };

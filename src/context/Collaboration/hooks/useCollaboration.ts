@@ -14,6 +14,7 @@ import {
 import CollaborationSpace from '../CollaborationTypes';
 import {Space} from '../../type/Space';
 import {PosBusInteractionType} from '../../Unity/UnityService';
+import {appVariables} from '../../../api/constants';
 
 // eslint-disable-next-line import/no-cycle
 
@@ -107,7 +108,7 @@ export const useJoinCollaborationSpaceByAssign = () => {
 
   const joinCollaborationSpaceByType = useCallback(
     async (id: string, isTable?: boolean) => {
-      const url = window._env_.BACKEND_ENDPOINT_URL + `/space/user/${id}`;
+      const url = appVariables.BACKEND_ENDPOINT_URL + `/space/user/${id}`;
       const response = await request.get(url);
 
       const collaborationSpaceOwner: Space = response.data.space;

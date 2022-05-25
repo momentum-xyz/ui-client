@@ -1,7 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import AgoraRTC from 'agora-rtc-sdk-ng';
-import {UnityContext} from 'react-unity-webgl';
 import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
@@ -10,11 +9,11 @@ import {AuthProvider} from 'react-oidc-context';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {appVariables} from 'api/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {WrongBrowser} from 'ui-kit';
 
 // TODO: To be refactored
-import UnityService from '../context/Unity/UnityService';
 import {AgoraProvider} from '../context/AgoraContext';
 import {ConfirmationDialogProvider} from '../hooks/useConformationDialog';
 import AuthComponent from '../context/Auth/AuthContext';
@@ -35,24 +34,10 @@ const agoraClient = AgoraRTC.createClient({mode: 'rtc', codec: 'h264'});
 const stageClient = AgoraRTC.createClient({mode: 'live', codec: 'vp8'});
 stageClient.enableDualStream();
 
-// TODO: Refactoring. Move to separate service
-const buildUrl = window._env_.UNITY_CLIENT_URL;
-const unityContext = new UnityContext({
-  loaderUrl: buildUrl + '/WebGL.loader.js',
-  dataUrl: buildUrl + '/WebGL.data.gz',
-  frameworkUrl: buildUrl + '/WebGL.framework.js.gz',
-  codeUrl: buildUrl + '/WebGL.wasm.gz',
-  streamingAssetsUrl: 'StreamingAssets',
-  companyName: 'Odyssey',
-  productName: 'Odyssey Momentum',
-  productVersion: '0.1'
-});
-
-UnityService.initialize(unityContext);
-
 const App: FC = () => {
-  const {sessionStore, mainStore, initApplication} = useStore();
-  const {themeStore} = mainStore;
+  const {configStore, sessionStore, mainStore, initApplication} = useStore();
+  const {isConfigReady} = configStore;
+  const {themeStore, unityStore, sentryStore} = mainStore;
 
   const {pathname} = useLocation();
   const {t} = useTranslation();
@@ -60,6 +45,17 @@ const App: FC = () => {
   useEffect(() => {
     initApplication();
   }, [initApplication]);
+
+  useEffect(() => {
+    if (isConfigReady) {
+      sentryStore.init();
+      unityStore.init();
+    }
+  }, [isConfigReady, sentryStore, unityStore]);
+
+  if (!isConfigReady) {
+    return <></>;
+  }
 
   if (!isBrowserSupported()) {
     return (
@@ -113,6 +109,11 @@ const App: FC = () => {
     );
   }
 
+  // UNITY WAITING
+  if (!unityStore.isInitialized || !unityStore.unityContext) {
+    return <></>;
+  }
+
   // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>
@@ -125,14 +126,14 @@ const App: FC = () => {
                   <AgoraProvider
                     client={agoraClient}
                     stageClient={stageClient}
-                    appId={window._env_.AGORA_APP_ID}
+                    appId={appVariables.AGORA_APP_ID}
                   >
                     <TextChatProvider>
-                      <UnityComponent unityContext={unityContext} />
+                      <UnityComponent unityContext={unityStore.unityContext} />
                       <AppLayers>
                         <Switch>
                           {createRoutesByConfig(PRIVATE_ROUTES)}
-                          <Redirect to="/" />
+                          <Redirect to={ROUTES.base} />
                         </Switch>
                       </AppLayers>
                     </TextChatProvider>

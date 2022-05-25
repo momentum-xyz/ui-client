@@ -11,7 +11,7 @@ import {Input, Dialog, FileUploader, TextArea} from 'ui-kit';
 import {DATE_TIME_FORMAT} from 'core/constants';
 import {EventFormInterface} from 'api';
 import {timeFromNow} from 'core/utils';
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 
 import * as styled from './EventForm.styled';
 
@@ -242,7 +242,7 @@ const EventForm: FC = () => {
                 src={
                   (image && URL.createObjectURL(image)) ||
                   (currentEvent?.image_hash &&
-                    `${endpoints.renderService}/get/${currentEvent.image_hash}`) ||
+                    `${appVariables.RENDER_SERVICE_URL}/get/${currentEvent.image_hash}`) ||
                   undefined
                 }
               />

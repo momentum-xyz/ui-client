@@ -2,6 +2,7 @@ import React, {Dispatch, SetStateAction, useContext, useEffect, useState} from '
 import AgoraRTM, {RtmChannel, RtmClient, RtmMessage} from 'agora-rtm-sdk';
 
 import {request} from 'api/request';
+import {appVariables} from 'api/constants';
 
 import {promiseFetch} from '../hooks/api/useApi';
 import {useUserList} from '../hooks/api/useUser';
@@ -139,7 +140,7 @@ export const TextChatProvider: React.FC = ({children}) => {
 
     console.info('[agora] AgoraRTM logging in...');
     request
-      .get(window._env_.BACKEND_ENDPOINT_URL + `/agora/token`)
+      .get(appVariables.BACKEND_ENDPOINT_URL + `/agora/token`)
       .then((response) => {
         return client.login({
           token: response.data,
@@ -203,7 +204,7 @@ export const TextChatProvider: React.FC = ({children}) => {
       });
       currentChannel.on('MemberJoined', (memberId) => {
         setMembers((members) => [...members, memberId]);
-        promiseFetch<User>(window._env_.BACKEND_ENDPOINT_URL + `/users/profile/${memberId}`).then(
+        promiseFetch<User>(appVariables.BACKEND_ENDPOINT_URL + `/users/profile/${memberId}`).then(
           (user) => {
             setMessages((messages) => [
               ...messages,
@@ -218,7 +219,7 @@ export const TextChatProvider: React.FC = ({children}) => {
         );
       });
       currentChannel.on('MemberLeft', (memberId) => {
-        promiseFetch<User>(window._env_.BACKEND_ENDPOINT_URL + `/users/profile/${memberId}`).then(
+        promiseFetch<User>(appVariables.BACKEND_ENDPOINT_URL + `/users/profile/${memberId}`).then(
           (user) => {
             setMessages((messages) => [
               ...messages,

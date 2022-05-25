@@ -1,3 +1,5 @@
+import {appVariables} from 'api/constants';
+
 import {useFetch, usePost} from './useApi';
 
 export interface VibeToggleDto {
@@ -9,19 +11,19 @@ export interface VibeCountDTO {
 }
 
 export const useVibeCheck = (spaceId: string) => {
-  return useFetch<boolean>(window._env_.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/check`, {
+  return useFetch<boolean>(appVariables.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/check`, {
     fetchPolicy: 'network-only'
   });
 };
 
 export const useVibeToggle = (spaceId: string) => {
   return usePost<any, VibeToggleDto>(
-    window._env_.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/toggle`
+    appVariables.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/toggle`
   );
 };
 
 export const useGetVibeCount = (spaceId: string) => {
-  return useFetch<VibeCountDTO>(window._env_.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/count`, {
+  return useFetch<VibeCountDTO>(appVariables.BACKEND_ENDPOINT_URL + `/vibes/${spaceId}/count`, {
     fetchPolicy: 'network-only'
   });
 };

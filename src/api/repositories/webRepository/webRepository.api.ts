@@ -25,7 +25,7 @@ export const getLoginHintByLogin: RequestInterface<Web3LoginHintRequest, Web3Log
     params: {login_challenge},
     ...rest
   };
-  const URL: string = web3RepositoryEndpoints.login;
+  const URL: string = web3RepositoryEndpoints().login;
   return request.get(URL, requestParams);
 };
 
@@ -38,7 +38,7 @@ export const getLoginHintByConsent: RequestInterface<
     params: {consent_challenge},
     ...rest
   };
-  const URL: string = web3RepositoryEndpoints.consent;
+  const URL: string = web3RepositoryEndpoints().consent;
   return request.get(URL, requestParams);
 };
 
@@ -50,7 +50,7 @@ export const getChallengeForSign: RequestInterface<Web3ChallengeRequest, Web3Cha
     params: {login_challenge, address},
     ...rest
   };
-  const URL: string = web3RepositoryEndpoints.challenge;
+  const URL: string = web3RepositoryEndpoints().challenge;
   return request.get(URL, requestParams);
 };
 
@@ -64,7 +64,7 @@ export const loginAccept: RequestInterface<Web3LoginAcceptRequest, Web3LoginAcce
     ...rest
   };
 
-  const URL: string = web3RepositoryEndpoints.login;
+  const URL: string = web3RepositoryEndpoints().login;
   return request(URL, requestParams);
 };
 
@@ -79,6 +79,6 @@ export const consentAccept: RequestInterface<
     ...rest
   };
 
-  const URL: string = web3RepositoryEndpoints.consent;
+  const URL: string = web3RepositoryEndpoints().consent;
   return request(URL, requestParams);
 };

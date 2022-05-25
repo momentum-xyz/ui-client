@@ -4,7 +4,7 @@ import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 
 import {Button, SvgButton, Avatar} from 'ui-kit';
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 import {useStore} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
 import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
@@ -67,7 +67,8 @@ const UserItem: React.FC<UserItemPropsInterface> = ({onClick, currentUserId, inv
       <styled.InfoContainer onClick={onClick}>
         <Avatar
           avatarSrc={
-            user.profile?.avatarHash && `${endpoints.renderService}/get/${user.profile.avatarHash}`
+            user.profile?.avatarHash &&
+            `${appVariables.RENDER_SERVICE_URL}/get/${user.profile.avatarHash}`
           }
           size="small"
           status={isItMe ? profile?.status : user.status}

@@ -10,6 +10,7 @@ import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 
+import {ConfigStore} from './ConfigStore';
 import {MainStore} from './MainStore';
 import {SessionStore} from './SessionStore';
 import {FavoriteStore} from './FavoriteStore';
@@ -17,6 +18,7 @@ import {FavoriteStore} from './FavoriteStore';
 const RootStore = types
   .model('RootStore', {
     /* Connect core stores */
+    configStore: types.optional(ConfigStore, {}),
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     /* Connect independent stores */
@@ -33,6 +35,7 @@ const RootStore = types
   })
   .actions((self) => ({
     initApplication(): void {
+      self.configStore.fetchConfig();
       self.mainStore.init();
     }
   }));

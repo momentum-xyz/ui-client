@@ -21,14 +21,14 @@ import {
 
 export const fetchEvents: RequestInterface<BaseEventsRequest, FetchEventsResponse> = (options) => {
   const {spaceId, children, ...restOptions} = options;
-  const url = eventsRepositoryEndpoints.base + `/${spaceId}`;
+  const url = eventsRepositoryEndpoints().base + `/${spaceId}`;
 
   return request.get(url, {...restOptions, params: {children: children}});
 };
 
 export const fetchEvent: RequestInterface<FetchEventRequest, FetchEventResponse> = (options) => {
   const {spaceId, eventId, ...restOptions} = options;
-  const url = eventsRepositoryEndpoints.base + `/${spaceId}/${eventId}`;
+  const url = eventsRepositoryEndpoints().base + `/${spaceId}/${eventId}`;
 
   return request.get(url, restOptions);
 };
@@ -40,21 +40,21 @@ export const createEvent: RequestInterface<CreateEventRequest, CreateEventRespon
     data,
     ...rest
   };
-  const url = eventsRepositoryEndpoints.base + `/${spaceId}`;
+  const url = eventsRepositoryEndpoints().base + `/${spaceId}`;
 
   return request(url, requestParams);
 };
 
 export const updateEvent: RequestInterface<UpdateEventRequest, UpdateEventResponse> = (options) => {
   const {spaceId, eventId, data, ...restOptions} = options;
-  const url = eventsRepositoryEndpoints.base + `/${spaceId}/${eventId}`;
+  const url = eventsRepositoryEndpoints().base + `/${spaceId}/${eventId}`;
 
   return request.put(url, data, restOptions);
 };
 
 export const deleteEvent: RequestInterface<DeleteEventRequest, DeleteEventResponse> = (options) => {
   const {spaceId, eventId, ...restOptions} = options;
-  const url = eventsRepositoryEndpoints.base + `/${spaceId}/${eventId}`;
+  const url = eventsRepositoryEndpoints().base + `/${spaceId}/${eventId}`;
 
   return request.delete(url, restOptions);
 };
@@ -72,6 +72,6 @@ export const uploadImage: RequestInterface<UploadFileRequest, UploadImageRespons
     ...restOptions
   };
 
-  const URL = `${eventsRepositoryEndpoints.base}/${spaceId}/${eventId}/image`;
+  const URL = `${eventsRepositoryEndpoints().base}/${spaceId}/${eventId}/image`;
   return request.post(URL, formData, requestParams);
 };

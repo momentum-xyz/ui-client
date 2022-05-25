@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {request} from 'api/request';
+import {appVariables} from 'api/constants';
 
 import {
   Dashboard,
@@ -47,7 +48,7 @@ export const useDashboardManager = (dashboard: Dashboard, numberOfColumns, space
       const formData = new FormData();
       formData.append('file', file);
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      const url = `${window._env_.BACKEND_ENDPOINT_URL}/upload`;
+      const url = `${appVariables.BACKEND_ENDPOINT_URL}/upload`;
       const hashResponse = await request.post(url, formData, {
         headers: {
           'Content-Type': 'image/png'
@@ -66,12 +67,12 @@ export const useDashboardManager = (dashboard: Dashboard, numberOfColumns, space
 
     if (type === 'create') {
       response = await request.post(
-        window._env_.BACKEND_ENDPOINT_URL + `/dashboard/create/${dashboard.owner_id}`,
+        appVariables.BACKEND_ENDPOINT_URL + `/dashboard/create/${dashboard.owner_id}`,
         newTile
       );
     } else {
       response = await request.post(
-        window._env_.BACKEND_ENDPOINT_URL + `/dashboard/update/${tile.id}`,
+        appVariables.BACKEND_ENDPOINT_URL + `/dashboard/update/${tile.id}`,
         newTile
       );
     }

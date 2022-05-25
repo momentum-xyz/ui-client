@@ -11,6 +11,7 @@ import {useHistory} from 'react-router-dom';
 
 import {request} from 'api/request';
 import {ROUTES} from 'core/constants';
+import {appVariables} from 'api/constants';
 
 import {AgoraContext} from '../../context/AgoraContext';
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';
@@ -117,7 +118,7 @@ const useAgoraVideo = () => {
         console.info('CHANNEL');
         console.info(channel);
         const tokenResponse = await request.get(
-          window._env_.BACKEND_ENDPOINT_URL + `/agora/token/${channel}`
+          appVariables.BACKEND_ENDPOINT_URL + `/agora/token/${channel}`
         );
 
         console.info('STARING CALL...');

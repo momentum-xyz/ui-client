@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
+import {appVariables} from 'api/constants';
+
 import {useMusicPlayer} from '../../../context/MusicPlayer/hooks/useMusicPlayer';
 import {ReactComponent as PlayBackIcon} from '../../../images/icons/music-playback.svg';
 import {ReactComponent as LeftArrowIcon} from '../../../images/icons/music-left-arrow.svg';
@@ -53,7 +55,7 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
     ) {
       // ended && !stop ? !playing : playing,
       load({
-        src: window._env_.RENDER_SERVICE_URL + `/track/${playlist[currentTrackIndex][0]}`,
+        src: appVariables.RENDER_SERVICE_URL + `/track/${playlist[currentTrackIndex][0]}`,
         autoplay: !playing,
         volume: vol,
         html5: true,

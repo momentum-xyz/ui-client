@@ -34,7 +34,7 @@ import {
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 import {StakingWidget} from 'scenes/widgets/pages';
 import {ValidatorList} from 'scenes/widgets/pages/StakingWidget/components/templates/Validators/components/ValidatorList';
 import {UserStatusEnum} from 'core/enums';
@@ -53,7 +53,8 @@ const StoryBookPage: FC = () => {
   const {changeAccentColor, changeBackgroundColor} = themeStore;
   const {dialogOne, dialogTwo, dialogThree, dialogFour, dialogFive} = systemStore.storyBookStore;
 
-  const avatarExampleSrc = endpoints.renderService + '/get/2c192ae7cf19a1a782258d07278af61b';
+  const avatarExampleSrc =
+    appVariables.RENDER_SERVICE_URL + '/get/2c192ae7cf19a1a782258d07278af61b';
   const exampleFileUploadMaxSize = 10 * Math.pow(2, 20);
 
   const {t} = useTranslation();

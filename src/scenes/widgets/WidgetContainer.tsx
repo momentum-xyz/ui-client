@@ -18,7 +18,7 @@ import {
   ToolbarIconList
 } from 'ui-kit';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
-import {endpoints} from 'api/constants';
+import {appVariables} from 'api/constants';
 import {
   COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
   COLLABORATION_IS_TOGGLING_CAMERA_ACTION_UPDATE,
@@ -282,7 +282,7 @@ const WidgetContainer: FC = () => {
                   size="extra-small"
                   avatarSrc={
                     currentProfile.profile.avatarHash &&
-                    `${endpoints.renderService}/get/${currentProfile.profile.avatarHash}`
+                    `${appVariables.RENDER_SERVICE_URL}/get/${currentProfile.profile.avatarHash}`
                   }
                   showBorder
                   showHover

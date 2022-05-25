@@ -8,6 +8,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 
 import {bytesToUuid} from 'core/utils';
+import {appVariables} from 'api/constants';
 
 import {useUser} from '../../hooks/api/useUser';
 import {ReactComponent as MicOff} from '../../images/icons/microphone-off.svg';
@@ -41,7 +42,7 @@ const MediaPlayer = (props: VideoPlayerProps) => {
     console.info('avatarhash', avatarHash);
 
     if (avatarHash) {
-      setImgUrl(window._env_.RENDER_SERVICE_URL + `/get/${avatarHash}`);
+      setImgUrl(appVariables.RENDER_SERVICE_URL + `/get/${avatarHash}`);
     } else {
       setImgUrl(null);
     }
