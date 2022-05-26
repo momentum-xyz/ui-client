@@ -56,7 +56,7 @@ const MusicPlayerController: React.FC<MusicPlayerControllerProps> = ({playlistHa
       // ended && !stop ? !playing : playing,
       load({
         src: appVariables.RENDER_SERVICE_URL + `/track/${playlist[currentTrackIndex][0]}`,
-        autoplay: !playing,
+        autoplay: false,
         volume: vol,
         html5: true,
         format: ['mp3', 'ogg', 'wave']
