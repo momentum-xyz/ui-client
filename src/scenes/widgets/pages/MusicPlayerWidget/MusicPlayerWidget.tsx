@@ -12,8 +12,18 @@ const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
   const {musicPlayerStore} = useStore().widgetStore;
-  const {setPlayer, init, musicPlayerWidget, handleOnLoad, handleOnPlay, playing} =
-    musicPlayerStore;
+  const {
+    setPlayer,
+    init,
+    musicPlayerWidget,
+    handleOnLoad,
+    handleOnPlay,
+    handleOnEnd,
+    loop,
+    mute,
+    volume,
+    playing
+  } = musicPlayerStore;
 
   useEffect(() => {
     init();
@@ -38,7 +48,11 @@ const MusicPlayerWidget: FC = () => {
         src={['sound2.mp3']}
         onLoad={handleOnLoad}
         onPlay={handleOnPlay}
+        onEnd={handleOnEnd}
         playing={playing}
+        loop={loop}
+        mute={mute}
+        volume={volume}
         html5={true}
         ref={(ref) => setPlayer(ref)}
       />
