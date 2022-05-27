@@ -27,7 +27,7 @@ import {
 } from 'context/Collaboration/CollaborationReducer';
 import UnityService from 'context/Unity/UnityService';
 import {switchFullscreen} from 'core/utils';
-import {useMusicPlayer} from 'context/MusicPlayer/hooks/useMusicPlayer';
+// import {useMusicPlayer} from 'context/MusicPlayer/hooks/useMusicPlayer';
 import {useGetUserOwnedSpaces} from 'modules/profile/hooks/useUserSpace';
 import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
@@ -36,6 +36,7 @@ import {
   HelpWidget,
   LaunchInitiativeWidget,
   MagicLinkWidget,
+  MusicPlayerWidget,
   ProfileMenuWidget,
   SettingsWidget,
   StakingWidget,
@@ -62,7 +63,8 @@ const WidgetContainer: FC = () => {
     profileMenuStore,
     tokenRulesStore,
     launchInitiativeStore,
-    settingsStore
+    settingsStore,
+    musicPlayerStore
   } = widgetStore;
 
   const {magicLinkDialog} = magicLinkStore;
@@ -72,7 +74,7 @@ const WidgetContainer: FC = () => {
   const {profile: currentProfile, isGuest} = sessionStore;
 
   const {collaborationState, collaborationDispatch} = useCollaboration();
-  const {handleMusicPlayer, show} = useMusicPlayer();
+  // const {handleMusicPlayer, show} = useMusicPlayer();
 
   const history = useHistory();
   const location = useLocation();
@@ -186,9 +188,9 @@ const WidgetContainer: FC = () => {
     });
   };
 
-  const handleMusicPlayerStatus = () => {
-    handleMusicPlayer(!show);
-  };
+  // const handleMusicPlayerStatus = () => {
+  //   handleMusicPlayer(!show);
+  // };
 
   const handleRuleReviewClose = () => {
     tokenRulesStore.tokenRuleReviewDialog.close();
@@ -203,7 +205,11 @@ const WidgetContainer: FC = () => {
       link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.worldCalendar
     },
     {title: t('labels.minimap'), icon: 'minimap', onClick: () => UnityService.toggleMiniMap()},
-    {title: t('labels.musicPlayer'), icon: 'music', onClick: handleMusicPlayerStatus},
+    {
+      title: t('labels.musicPlayer'),
+      icon: 'music',
+      onClick: musicPlayerStore.musicPlayerWidget.open
+    },
     {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
     {title: t('labels.information'), icon: 'question', onClick: helpStore.helpDialog.open},
     {title: t('labels.fullscreen'), icon: 'fullscreen', onClick: switchFullscreen}
@@ -217,6 +223,7 @@ const WidgetContainer: FC = () => {
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {tokenRulesStore.widgetDialog.isOpen && <TokenRulesWidget />}
+      {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {tokenRulesStore.tokenRuleReviewDialog.isOpen && (
         <TokenRuleReviewWidget
           onClose={handleRuleReviewClose}
