@@ -139,6 +139,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
                 onChange={onChange}
                 errorMessage={t('editProfileWidget.nameRequired')}
                 isError={!!errors.name}
+                required
               />
             )}
             rules={{required: true}}

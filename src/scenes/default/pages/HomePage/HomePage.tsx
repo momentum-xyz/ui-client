@@ -7,8 +7,12 @@ import * as styled from './HomePage.styled';
 const HomePage: FC = () => {
   return (
     <styled.Container>
-      <ExplorePanel />
-      <OnlineUsersPanel />
+      <styled.PanelWrapper>
+        <ExplorePanel />
+      </styled.PanelWrapper>
+      <styled.PanelWrapper>
+        <OnlineUsersPanel />
+      </styled.PanelWrapper>
     </styled.Container>
   );
 };

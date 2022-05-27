@@ -32,21 +32,25 @@ const Input: FC<PropsInterface> = (props) => {
     onChange,
     isError = false,
     errorMessage,
+    required,
     ...restProps
   } = props;
 
   return (
     <styled.Container className={cn(isCustom && 'Input-custom')}>
-      {!!label && (
-        <Heading
-          type="h4"
-          align="left"
-          theme={theme}
-          label={label}
-          transform="uppercase"
-          isCustom
-        />
-      )}
+      <styled.Label>
+        {!!label && (
+          <Heading
+            type="h4"
+            align="left"
+            theme={theme}
+            label={label}
+            transform="uppercase"
+            isCustom
+          />
+        )}
+        {required && <styled.RequiredIndicator>*</styled.RequiredIndicator>}
+      </styled.Label>
       <styled.InputContainer theme={theme} className={cn(selected && 'highlighted')}>
         <input
           data-testid="Input-test"
