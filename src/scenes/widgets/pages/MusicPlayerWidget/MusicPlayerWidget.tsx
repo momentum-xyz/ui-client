@@ -6,6 +6,7 @@ import {Dialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './MusicPlayerWidget.styled';
+import {PlayerController} from './components';
 
 const DIALOG_OFFSET_RIGHT = 105;
 const DIALOG_OFFSET_BOTTOM = 60;
@@ -40,7 +41,6 @@ const MusicPlayerWidget: FC = () => {
       headerStyle="uppercase"
       title="music"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
-      approveInfo={{title: 'play', onClick: handleClick}}
       onClose={musicPlayerWidget.close}
       showCloseButton
     >
@@ -56,7 +56,9 @@ const MusicPlayerWidget: FC = () => {
         html5={true}
         ref={(ref) => setPlayer(ref)}
       />
-      <styled.Div></styled.Div>
+      <styled.Div>
+        <PlayerController onPlay={handleClick} />
+      </styled.Div>
     </Dialog>
   );
 };
