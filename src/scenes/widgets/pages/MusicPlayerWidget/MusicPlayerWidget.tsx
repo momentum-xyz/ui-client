@@ -30,11 +30,6 @@ const MusicPlayerWidget: FC = () => {
     init();
   }, []);
 
-  const handleClick = () => {
-    musicPlayerStore.handleToggle();
-    console.info('playing', playing);
-  };
-
   return (
     <Dialog
       position="rightBottom"
@@ -43,6 +38,7 @@ const MusicPlayerWidget: FC = () => {
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       onClose={musicPlayerWidget.close}
       showCloseButton
+      closeOnBackgroundClick={false}
     >
       <ReactHowler
         src={['sound2.mp3']}
@@ -57,7 +53,7 @@ const MusicPlayerWidget: FC = () => {
         ref={(ref) => setPlayer(ref)}
       />
       <styled.Div>
-        <PlayerController onPlay={handleClick} />
+        <PlayerController />
       </styled.Div>
     </Dialog>
   );
