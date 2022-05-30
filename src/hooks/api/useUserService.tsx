@@ -1,13 +1,7 @@
 import {UserSearchResults} from '../../context/type/User';
 import {appVariables} from '../../api/constants';
 
-import {useFetch, usePost} from './useApi';
-
-export interface InviteUserByEmailDTO {
-  email: string;
-  isAdmin: boolean;
-  spaceId: string;
-}
+import {useFetch} from './useApi';
 
 export const useFindUser = (query: string) => {
   return useFetch<UserSearchResults>(
@@ -15,11 +9,5 @@ export const useFindUser = (query: string) => {
     {
       fetchPolicy: 'network-only'
     }
-  );
-};
-
-export const useInviteUserToSpace = () => {
-  return usePost<InviteUserByEmailDTO, InviteUserByEmailDTO>(
-    appVariables.BACKEND_ENDPOINT_URL + '/users/invite'
   );
 };
