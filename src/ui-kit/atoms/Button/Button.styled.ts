@@ -13,6 +13,10 @@ export const Button = styled.button`
   transition: border var(--tr-150-ei), color var(--tr-150-ei), background var(--tr-150-ei);
   /* VARIANTS */
 
+  &.withBackground {
+    background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
+  }
+
   &.primary {
     color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
     border-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};

@@ -1,4 +1,4 @@
-import React, {FC, memo, MouseEventHandler} from 'react';
+import React, {FC, HTMLProps, memo, MouseEventHandler} from 'react';
 import cn from 'classnames';
 
 import {SizeType, TextTransform, VariantType} from 'ui-kit/types';
@@ -7,7 +7,9 @@ import {IconSvg} from 'ui-kit';
 
 import * as styled from './Button.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+interface PropsInterface
+  extends PropsWithThemeInterface,
+    Pick<HTMLProps<HTMLButtonElement>, 'className'> {
   label: string;
   icon?: IconName;
   size?: SizeType;
@@ -19,6 +21,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   submit?: boolean;
   isCustom?: boolean;
   noWhitespaceWrap?: boolean;
+  withBackground?: boolean;
 }
 
 const Button: FC<PropsInterface> = (props) => {
@@ -34,7 +37,9 @@ const Button: FC<PropsInterface> = (props) => {
     onClick,
     icon,
     isCustom = false,
-    noWhitespaceWrap = false
+    noWhitespaceWrap = false,
+    withBackground = false,
+    className
   } = props;
 
   return (
@@ -49,7 +54,9 @@ const Button: FC<PropsInterface> = (props) => {
         `transform-${transform}`,
         wide && 'wide',
         isCustom && 'Button-custom',
-        noWhitespaceWrap && 'noWhitespaceWrap'
+        noWhitespaceWrap && 'noWhitespaceWrap',
+        withBackground && 'withBackground',
+        className
       )}
       type={submit ? 'submit' : 'button'}
     >
