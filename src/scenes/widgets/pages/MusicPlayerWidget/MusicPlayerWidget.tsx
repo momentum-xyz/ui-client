@@ -6,7 +6,7 @@ import {Dialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './MusicPlayerWidget.styled';
-import {PlayerController} from './components';
+import {PlayerController, SeekBarController} from './components';
 
 const DIALOG_OFFSET_RIGHT = 105;
 const DIALOG_OFFSET_BOTTOM = 60;
@@ -54,6 +54,7 @@ const MusicPlayerWidget: FC = () => {
       />
       <styled.Div>
         <PlayerController />
+        <SeekBarController />
       </styled.Div>
     </Dialog>
   );

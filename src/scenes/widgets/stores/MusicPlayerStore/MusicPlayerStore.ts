@@ -111,6 +111,11 @@ const MusicPlayerStore = types.compose(
         self.handleSeekingChange = self.handleSeekingChange.bind(self);
       }
     }))
+    .views((self) => ({
+      get calculateDurationBarWidth() {
+        return `${(self.seek / self.duration) * 100}%`;
+      }
+    }))
 );
 
 export {MusicPlayerStore};
