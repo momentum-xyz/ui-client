@@ -14,7 +14,7 @@ const MusicPlayerStore = types.compose(
       loaded: types.optional(types.boolean, false),
       loop: types.optional(types.boolean, false),
       mute: types.optional(types.boolean, false),
-      volume: types.optional(types.number, 0.9),
+      volume: types.optional(types.number, 0.2),
       duration: types.optional(types.number, 0),
       seek: types.optional(types.number, 0.0),
       rate: types.optional(types.number, 1),
@@ -28,6 +28,9 @@ const MusicPlayerStore = types.compose(
     .actions((self) => ({
       setPlayer(ref: ReactHowler | null) {
         self.player = ref;
+      },
+      setVolume(volume: number) {
+        self.volume = volume;
       },
       handleToggle() {
         console.info('toggle');
@@ -93,6 +96,23 @@ const MusicPlayerStore = types.compose(
         self.player?.stop();
         self.playing = false; // Need to update our local state so we don't immediately invoke autoplay
         self.renderSeekPos();
+      },
+      handleUnmuteButton() {
+        if (self.mute) {
+          self.handleMuteToggle();
+          self.setVolume(0.1);
+        } else if (self.volume <= 0.9) {
+          self.setVolume(self.volume + 0.1);
+        } else {
+          self.setVolume(1);
+        }
+      },
+      handleMuteButton() {
+        if (self.mute) {
+          return;
+        }
+        self.handleMuteToggle();
+        self.setVolume(0);
       }
     }))
     .actions((self) => ({
