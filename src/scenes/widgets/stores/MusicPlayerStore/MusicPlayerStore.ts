@@ -5,7 +5,7 @@ import raf from 'raf';
 
 import {DialogModel, ResetModel} from 'core/models';
 
-import {UnityVolume} from './models';
+import {PlayListStore, UnityVolume} from './models';
 
 const MusicPlayerStore = types.compose(
   ResetModel,
@@ -13,6 +13,7 @@ const MusicPlayerStore = types.compose(
     .model('MusicPlayerStore', {
       musicPlayerWidget: types.optional(DialogModel, {}),
       unityVolumeStore: types.optional(UnityVolume, {}),
+      playlistStore: types.optional(PlayListStore, {}),
       playing: types.optional(types.boolean, false),
       loaded: types.optional(types.boolean, false),
       loop: types.optional(types.boolean, false),

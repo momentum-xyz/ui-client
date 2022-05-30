@@ -72,6 +72,7 @@ const WidgetContainer: FC = () => {
   const {statsDialog} = worldStatsStore;
   const {profileMenuDialog} = profileMenuStore;
   const {profile: currentProfile, isGuest} = sessionStore;
+  const {playlistStore} = musicPlayerStore;
 
   const {collaborationState, collaborationDispatch} = useCollaboration();
   // const {handleMusicPlayer, show} = useMusicPlayer();
@@ -132,6 +133,10 @@ const WidgetContainer: FC = () => {
       checkForUserOwnedSpaces();
     }
   });
+
+  useEffect(() => {
+    playlistStore.fetchPlaylist(worldStore.worldId);
+  }, [worldStore.worldId]);
 
   useEffect(() => {
     // @ts-ignore: What is it for?
@@ -197,6 +202,11 @@ const WidgetContainer: FC = () => {
     tokenRulesStore.tokenRulesListStore.fetchTokenRules();
   };
 
+  const handleClick = () => {
+    musicPlayerStore.musicPlayerWidget.open();
+    playlistStore.fetchPlaylist(worldStore.worldId);
+  };
+
   const mainToolbarIcons: ToolbarIconInterface[] = [
     {title: t('labels.worldStats'), icon: 'stats', onClick: statsDialog.open},
     {
@@ -208,7 +218,7 @@ const WidgetContainer: FC = () => {
     {
       title: t('labels.musicPlayer'),
       icon: 'music',
-      onClick: musicPlayerStore.musicPlayerWidget.open
+      onClick: handleClick
     },
     {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
     {title: t('labels.information'), icon: 'question', onClick: helpStore.helpDialog.open},

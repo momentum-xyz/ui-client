@@ -28,18 +28,26 @@ const MusicPlayerWidget: FC = () => {
     loop,
     mute,
     volume,
-    playing
+    playing,
+    playlistStore
   } = musicPlayerStore;
+  const {tracks} = playlistStore;
 
   useEffect(() => {
     init();
   }, []);
+
+  useEffect(() => {
+    console.info(tracks[0].name);
+  }, [tracks]);
 
   return (
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
       title="music"
+      titleWidth="145px"
+      centerTitle
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       onClose={musicPlayerWidget.close}
       showCloseButton

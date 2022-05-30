@@ -29,6 +29,8 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerActions?: ReactNode;
   captureAllPointerEvents?: boolean;
   componentSize?: ComponentSizeInterface;
+  centerTitle?: boolean;
+  titleWidth?: string;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -40,6 +42,8 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isCustom = false,
     hasBorder = false,
     iconSize = 'small',
+    centerTitle = false,
+    titleWidth = '100px',
     captureAllPointerEvents = false,
     componentSize,
     ...restProps
@@ -60,16 +64,16 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           theme={restProps.theme}
         >
           {restProps.headerIconName && (
-            <styled.HeaderItem>
+            <styled.HeaderIconItem>
               <IconSvg
                 theme={restProps.theme}
                 name={restProps.headerIconName}
                 size={iconSize}
                 isDanger={isDanger}
               />
-            </styled.HeaderItem>
+            </styled.HeaderIconItem>
           )}
-          <styled.HeaderItem>
+          <styled.HeaderItem className={cn(centerTitle && 'centerTitle')} titleWidth={titleWidth}>
             {restProps.title && (
               <Heading
                 theme={restProps.theme}

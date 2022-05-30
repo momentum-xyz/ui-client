@@ -36,6 +36,8 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   controlUnityKeyboardControll?: boolean;
   headerActions?: React.ReactNode;
   hasBorder?: boolean;
+  centerTitle?: boolean;
+  titleWidth?: string;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -47,6 +49,8 @@ const Dialog: FC<DialogPropsInterface> = ({
   declineInfo,
   children,
   theme,
+  centerTitle,
+  titleWidth,
   closeOnBackgroundClick = true,
   showCloseButton = false,
   withOpacity = false,
@@ -92,6 +96,8 @@ const Dialog: FC<DialogPropsInterface> = ({
             title={title}
             subtitle={subtitle}
             headerStyle={headerStyle}
+            centerTitle={centerTitle}
+            titleWidth={titleWidth}
             headerIconName={icon}
             onClose={showCloseButton ? onClose : undefined}
             iconSize={iconSize}

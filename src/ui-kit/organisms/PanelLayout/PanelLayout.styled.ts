@@ -3,7 +3,21 @@ import {rgba} from 'polished';
 
 import {ComponentSizeInterface} from 'ui-kit';
 
-export const HeaderItem = styled.div`
+export const HeaderItem = styled.div<{titleWidth: string}>`
+  display: flex;
+  overflow: hidden;
+  &.centerTitle {
+    align-items: center;
+    justify-content: center;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: ${(props) => props.titleWidth};
+  }
+`;
+
+export const HeaderIconItem = styled.div`
   display: flex;
   overflow: hidden;
 `;
