@@ -5,7 +5,7 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: var(--font-size-ts);
+  font-size: var(--font-size-xxs);
   width: 160px;
   padding-top: 15px; ;
 `;
