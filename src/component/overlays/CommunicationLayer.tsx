@@ -122,6 +122,16 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
         stageMode: false
       });
+
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.stage')}
+          text={t('messages.stageModeDeActivated')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
     }
   });
 
