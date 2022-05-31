@@ -28,7 +28,7 @@ const AuthComponent: React.FC = (props) => {
   const history = useHistory();
 
   const onSuccess = (token?: string) => UnityService.setAuthToken(token);
-  const onError = () => history.push(ROUTES.login);
+  const onError = () => history.push(ROUTES.login, {from: history.location.pathname});
 
   const {isReady, idToken} = useSession(onSuccess, onError);
 

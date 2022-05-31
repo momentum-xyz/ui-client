@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {LoginView, PanelLayout} from 'ui-kit';
@@ -18,9 +19,12 @@ const LoginPage: FC = () => {
 
   const theme = useTheme();
   const {t} = useTranslation();
+  const history = useHistory();
 
   useEffect(() => {
     localStorage.clear();
+    console.log('from-' + history.location?.state?.from);
+    // http://localhost:3000/magic/f4b873a9-9e29-45d0-8b12-181bf1772675
   }, []);
 
   useEffect(() => {

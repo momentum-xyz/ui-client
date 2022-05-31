@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {useAuth} from 'react-oidc-context';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -20,12 +21,13 @@ const ProfileMenuWidget: FC = () => {
   const {profileMenuStore, settingsStore, tokenRulesStore} = widgetStore;
 
   const auth = useAuth();
+  const history = useHistory();
 
   const {t} = useTranslation();
 
   const signOutUser = async () => {
     await sessionStore.logout(auth);
-    document.location.href = ROUTES.login;
+    history.push(ROUTES.login, {from: history.location.pathname});
   };
 
   const handleProfileOpen = () => {
