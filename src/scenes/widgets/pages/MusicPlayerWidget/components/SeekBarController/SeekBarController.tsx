@@ -36,7 +36,7 @@ const SeekBarController: FC<PropsInterface> = () => {
           onMouseUp={handleMouseUpSeek}
         />
       </styled.SeekBarContainer>
-      <styled.Duration>{`${formatDurationTime(duration)}`}</styled.Duration>
+      <styled.Duration>{formatDurationTime(duration)}</styled.Duration>
     </styled.Container>
   );
 };

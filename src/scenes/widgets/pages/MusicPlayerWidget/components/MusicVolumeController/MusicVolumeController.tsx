@@ -16,7 +16,7 @@ const MusicVolumeController: FC<PropsInterface> = () => {
     <styled.Container>
       <styled.Title>Music Volume</styled.Title>
       <styled.VolumeContainer>
-        <SvgButton iconName="player-mute" size="normal" onClick={handleMuteButton} />
+        <SvgButton iconName="player-mute" size="medium" onClick={handleMuteButton} />
         <styled.VolumeBarContainer width={100 + '%'}>
           <styled.BarThumbPosition width={volume * 100 + '%'} />
           <styled.VolumeBar
@@ -28,7 +28,7 @@ const MusicVolumeController: FC<PropsInterface> = () => {
             onChange={(e) => setVolume(parseFloat(e.target.value))}
           />
         </styled.VolumeBarContainer>
-        <SvgButton iconName="player-unmute" size="normal" onClick={handleUnmuteButton} />
+        <SvgButton iconName="player-unmute" size="medium" onClick={handleUnmuteButton} />
       </styled.VolumeContainer>
     </styled.Container>
   );

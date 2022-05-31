@@ -15,6 +15,7 @@ const MusicPlayerStore = types.compose(
       unityVolumeStore: types.optional(UnityVolume, {}),
       playlistStore: types.optional(PlayListStore, {}),
       playing: types.optional(types.boolean, false),
+      currentPlaying: types.optional(types.boolean, false),
       loaded: types.optional(types.boolean, false),
       loop: types.optional(types.boolean, false),
       mute: types.optional(types.boolean, false),
@@ -42,6 +43,7 @@ const MusicPlayerStore = types.compose(
         console.info(self.playing);
 
         self.playing = !self.playing;
+        self.currentPlaying = !self.currentPlaying;
       },
       handleOnLoad() {
         console.info('onLoad');
@@ -89,13 +91,10 @@ const MusicPlayerStore = types.compose(
       handleOnPlay() {
         console.info('onPlay');
 
-        self.playing = true;
+        // self.playing = true;
         self.renderSeekPos();
       },
-      handleOnEnd() {
-        self.playing = false;
-        self.clearRAF();
-      },
+
       handleStop() {
         self.player?.stop();
         self.playing = false; // Need to update our local state so we don't immediately invoke autoplay
@@ -117,6 +116,33 @@ const MusicPlayerStore = types.compose(
         }
         self.handleMuteToggle();
         self.setVolume(0);
+      },
+      handleNext() {
+        console.info('playing', self.playing);
+        console.info('cplaying', self.currentPlaying);
+        if (self.playlistStore.tracks.length - 1 > self.playlistStore.currentSrcIndex) {
+          self.playlistStore.next();
+        } else if (
+          self.playlistStore.tracks.length - 1 === self.playlistStore.currentSrcIndex &&
+          self.loop
+        ) {
+          self.playlistStore.first();
+          if (self.playing) {
+            self.handleToggle();
+          }
+        } else if (
+          self.playlistStore.tracks.length - 1 === self.playlistStore.currentSrcIndex &&
+          !self.loop
+        ) {
+          self.playlistStore.first();
+        }
+      }
+    }))
+    .actions((self) => ({
+      handleOnEnd() {
+        self.playing = false;
+        self.clearRAF();
+        self.handleNext();
       }
     }))
     .actions((self) => ({
@@ -133,6 +159,14 @@ const MusicPlayerStore = types.compose(
         self.handleMouseDownSeek = self.handleMouseDownSeek.bind(self);
         self.handleMouseUpSeek = self.handleMouseUpSeek.bind(self);
         self.handleSeekingChange = self.handleSeekingChange.bind(self);
+      },
+      handlePrevious() {
+        if (self.playlistStore.currentSrcIndex > 0) {
+          self.playlistStore.previous();
+        } else if (self.playlistStore.currentSrcIndex === 0) {
+          self.playlistStore.first();
+          self.handleStop();
+        }
       }
     }))
     .views((self) => ({

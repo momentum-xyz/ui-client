@@ -9,7 +9,8 @@ import {
   HeaderStyleType,
   PlacementType,
   SizeType,
-  ComponentSizeInterface
+  ComponentSizeInterface,
+  HeaderWeightType
 } from 'ui-kit';
 import {useClickOutside} from 'ui-kit/hooks';
 import {useStore} from 'shared/hooks';
@@ -38,6 +39,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   hasBorder?: boolean;
   centerTitle?: boolean;
   titleWidth?: string;
+  headerWeight?: HeaderWeightType;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -57,6 +59,7 @@ const Dialog: FC<DialogPropsInterface> = ({
   headerStyle = 'divider-uppercase',
   hasBorder = false,
   onClose,
+  headerWeight,
   icon,
   iconSize,
   isBodyExtendingToEdges,
@@ -105,6 +108,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             componentSize={layoutSize}
             headerActions={headerActions}
             hasBorder={hasBorder}
+            headerWeight={headerWeight}
           >
             {children}
             <styled.Buttons>

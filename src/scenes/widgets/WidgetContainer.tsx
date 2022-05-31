@@ -3,6 +3,7 @@ import {t} from 'i18next';
 import {useHistory, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
+import ReactHowler from 'react-howler';
 
 import {cookie} from 'core/services';
 import {CookieKeyEnum} from 'core/enums';
@@ -72,7 +73,19 @@ const WidgetContainer: FC = () => {
   const {statsDialog} = worldStatsStore;
   const {profileMenuDialog} = profileMenuStore;
   const {profile: currentProfile, isGuest} = sessionStore;
-  const {playlistStore} = musicPlayerStore;
+  const {
+    setPlayer,
+    musicPlayerWidget,
+    handleOnLoad,
+    handleOnPlay,
+    handleOnEnd,
+    init,
+    mute,
+    volume,
+    playing,
+    playlistStore
+  } = musicPlayerStore;
+  const {fetchPlaylist, currentTrackHash} = playlistStore;
 
   const {collaborationState, collaborationDispatch} = useCollaboration();
   // const {handleMusicPlayer, show} = useMusicPlayer();
@@ -135,7 +148,8 @@ const WidgetContainer: FC = () => {
   });
 
   useEffect(() => {
-    playlistStore.fetchPlaylist(worldStore.worldId);
+    fetchPlaylist(worldStore.worldId);
+    init();
   }, [worldStore.worldId]);
 
   useEffect(() => {
@@ -202,9 +216,8 @@ const WidgetContainer: FC = () => {
     tokenRulesStore.tokenRulesListStore.fetchTokenRules();
   };
 
-  const handleClick = () => {
-    musicPlayerStore.musicPlayerWidget.open();
-    playlistStore.fetchPlaylist(worldStore.worldId);
+  const handleMusicPlayerClick = () => {
+    musicPlayerWidget.open();
   };
 
   const mainToolbarIcons: ToolbarIconInterface[] = [
@@ -218,7 +231,7 @@ const WidgetContainer: FC = () => {
     {
       title: t('labels.musicPlayer'),
       icon: 'music',
-      onClick: handleClick
+      onClick: handleMusicPlayerClick
     },
     {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
     {title: t('labels.information'), icon: 'question', onClick: helpStore.helpDialog.open},
@@ -242,7 +255,18 @@ const WidgetContainer: FC = () => {
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {settingsStore.dialog.isOpen && <SettingsWidget />}
-
+      <ReactHowler
+        src={currentTrackHash ?? ['']}
+        onLoad={handleOnLoad}
+        onPlay={handleOnPlay}
+        onEnd={handleOnEnd}
+        playing={playing}
+        loop={false}
+        mute={mute}
+        volume={volume}
+        html5={true}
+        ref={(ref) => setPlayer(ref)}
+      />
       <styled.Footer>
         <styled.MainLinks>
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />

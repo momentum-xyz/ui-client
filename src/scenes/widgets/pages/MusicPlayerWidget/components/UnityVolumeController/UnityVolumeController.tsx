@@ -44,7 +44,7 @@ const UnityVolumeController: FC<PropsInterface> = () => {
     <styled.Container>
       <styled.Title>Sound Effects Volume</styled.Title>
       <styled.VolumeContainer>
-        <SvgButton iconName="player-mute" size="normal" onClick={handleMute} />
+        <SvgButton iconName="player-mute" size="medium" onClick={handleMute} />
         <styled.VolumeBarContainer width={100 + '%'}>
           <styled.BarThumbPosition width={volume * 100 + '%'} />
           <styled.VolumeBar
@@ -56,7 +56,7 @@ const UnityVolumeController: FC<PropsInterface> = () => {
             onChange={handleChange}
           />
         </styled.VolumeBarContainer>
-        <SvgButton iconName="player-unmute" size="normal" onClick={handleUnmute} />
+        <SvgButton iconName="player-unmute" size="medium" onClick={handleUnmute} />
       </styled.VolumeContainer>
     </styled.Container>
   );

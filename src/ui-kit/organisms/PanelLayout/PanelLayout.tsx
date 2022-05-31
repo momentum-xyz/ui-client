@@ -8,7 +8,8 @@ import {
   IconSvg,
   HeaderStyleType,
   SizeType,
-  ComponentSizeInterface
+  ComponentSizeInterface,
+  HeaderWeightType
 } from 'ui-kit';
 
 import * as styled from './PanelLayout.styled';
@@ -31,6 +32,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   componentSize?: ComponentSizeInterface;
   centerTitle?: boolean;
   titleWidth?: string;
+  headerWeight?: HeaderWeightType;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -43,6 +45,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     hasBorder = false,
     iconSize = 'small',
     centerTitle = false,
+    headerWeight = 'h3',
     titleWidth = '100px',
     captureAllPointerEvents = false,
     componentSize,
@@ -75,9 +78,9 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           )}
           <styled.HeaderItem className={cn(centerTitle && 'centerTitle')} titleWidth={titleWidth}>
             {restProps.title && (
-              <Heading
+              <styled.TitleHeading
                 theme={restProps.theme}
-                type="h3"
+                type={headerWeight}
                 label={restProps.title}
                 transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                 isDanger={isDanger}
@@ -87,7 +90,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
               <>
                 <Heading
                   theme={restProps.theme}
-                  type="h3"
+                  type={headerWeight}
                   label="/"
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   isDanger={isDanger}
@@ -95,7 +98,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 <styled.Whitespace />
                 <Heading
                   theme={restProps.theme}
-                  type="h3"
+                  type={headerWeight}
                   label={restProps.subtitle}
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   weight="normal"

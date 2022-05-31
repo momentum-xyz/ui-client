@@ -1,6 +1,5 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
-import ReactHowler from 'react-howler';
 
 import {Dialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -13,59 +12,31 @@ import {
   UnityVolumeController
 } from './components';
 
-const DIALOG_OFFSET_RIGHT = 105;
+const DIALOG_OFFSET_RIGHT = 130;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
   const {musicPlayerStore} = useStore().widgetStore;
-  const {
-    setPlayer,
-    init,
-    musicPlayerWidget,
-    handleOnLoad,
-    handleOnPlay,
-    handleOnEnd,
-    loop,
-    mute,
-    volume,
-    playing,
-    playlistStore
-  } = musicPlayerStore;
-  const {tracks} = playlistStore;
+  const {musicPlayerWidget, playlistStore} = musicPlayerStore;
+  const {currentTrackName} = playlistStore;
 
-  useEffect(() => {
-    init();
-  }, []);
-
-  useEffect(() => {
-    console.info(tracks[0].name);
-  }, [tracks]);
+  const ref = useRef(null);
 
   return (
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
-      title="music"
+      title={currentTrackName}
       titleWidth="145px"
       centerTitle
+      headerWeight="h4"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       onClose={musicPlayerWidget.close}
       showCloseButton
+      showBackground={false}
       closeOnBackgroundClick={false}
     >
-      <ReactHowler
-        src={['sound2.mp3']}
-        onLoad={handleOnLoad}
-        onPlay={handleOnPlay}
-        onEnd={handleOnEnd}
-        playing={playing}
-        loop={loop}
-        mute={mute}
-        volume={volume}
-        html5={true}
-        ref={(ref) => setPlayer(ref)}
-      />
-      <styled.Div>
+      <styled.Div ref={ref}>
         <PlayerController />
         <SeekBarController />
         <MusicVolumeController />

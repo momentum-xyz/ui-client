@@ -1,19 +1,21 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-import {ComponentSizeInterface} from 'ui-kit';
+import {ComponentSizeInterface, Heading} from 'ui-kit';
 
 export const HeaderItem = styled.div<{titleWidth: string}>`
   display: flex;
   overflow: hidden;
+  width: ${(props) => props.titleWidth};
   &.centerTitle {
-    align-items: center;
     justify-content: center;
-    display: inline-block;
-    text-align: center;
-    white-space: nowrap;
+  }
+`;
+
+export const TitleHeading = styled(Heading)`
+  h4 {
     text-overflow: ellipsis;
-    width: ${(props) => props.titleWidth};
+    overflow: hidden;
   }
 `;
 

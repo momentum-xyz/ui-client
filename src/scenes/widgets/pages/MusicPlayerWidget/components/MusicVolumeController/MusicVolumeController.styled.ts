@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
-  padding-top: 20px;
+  padding-top: 18px;
 `;
 export const Title = styled.div`
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
   padding: 0 0 2px 2px;
-  font-size: var(--font-size-xxs);
+  font-size: var(--font-size-xs);
+  font-weight: 400;
 `;
 
 export const VolumeContainer = styled.div`
