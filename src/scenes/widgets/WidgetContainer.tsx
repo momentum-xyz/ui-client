@@ -237,7 +237,7 @@ const WidgetContainer: FC = () => {
       onClick: handleMusicPlayerClick
     },
     {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
-    {title: t('labels.information'), icon: 'question', onClick: helpStore.helpDialog.open},
+    {title: t('labels.help'), icon: 'question', onClick: helpStore.helpDialog.open},
     {title: t('labels.fullscreen'), icon: 'fullscreen', onClick: switchFullscreen}
   ];
 
