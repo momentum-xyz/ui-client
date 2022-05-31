@@ -218,7 +218,7 @@ const WidgetContainer: FC = () => {
     if (musicPlayerWidget.isOpen) {
       musicPlayerWidget.close();
     } else {
-      handleOnLoad();
+      fetchPlaylist(worldStore.worldId);
       musicPlayerWidget.open();
     }
   };

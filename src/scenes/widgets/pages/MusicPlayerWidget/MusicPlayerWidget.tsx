@@ -26,7 +26,7 @@ const MusicPlayerWidget: FC = () => {
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
-      title={currentTrackName}
+      title={currentTrackName ?? 'No Track'}
       titleWidth="145px"
       centerTitle
       headerWeight="h4"

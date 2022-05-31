@@ -37,6 +37,9 @@ const MusicPlayerStore = types.compose(
         self.volume = volume;
       },
       handleToggle() {
+        if (self.playlistStore.tracks.length < 1) {
+          return;
+        }
         self.playing = !self.playing;
       },
       handleOnLoad() {
@@ -112,6 +115,9 @@ const MusicPlayerStore = types.compose(
         self.setVolume(0);
       },
       handleNext() {
+        if (self.playlistStore.tracks.length < 1) {
+          return;
+        }
         if (self.playlistStore.tracks.length - 1 > self.playlistStore.currentSrcIndex) {
           self.playlistStore.next();
         } else if (
@@ -137,6 +143,9 @@ const MusicPlayerStore = types.compose(
         self.handleNext();
       },
       handlePrevious() {
+        if (self.playlistStore.tracks.length < 1) {
+          return;
+        }
         if (self.playlistStore.currentSrcIndex > 0) {
           self.playlistStore.previous();
         } else if (self.playlistStore.currentSrcIndex === 0) {

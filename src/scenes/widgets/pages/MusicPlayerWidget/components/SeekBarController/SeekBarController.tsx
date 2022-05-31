@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
@@ -16,13 +16,8 @@ const SeekBarController: FC<PropsInterface> = () => {
     handleSeekingChange,
     handleMouseDownSeek,
     handleMouseUpSeek,
-    calculateDurationBarWidth,
-    playlistStore
+    calculateDurationBarWidth
   } = musicPlayerStore;
-
-  useEffect(() => {
-    console.info(playlistStore.currentTrackHash);
-  }, [playlistStore.currentTrackHash]);
 
   const elapsed = seek;
   return (
