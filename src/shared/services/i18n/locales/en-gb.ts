@@ -298,7 +298,9 @@ export const enGb = {
       lunchingInitiative: 'launching initiative',
       invite: 'Invite',
       invited: 'Invited',
-      closeAndContinue: 'Close and Continue'
+      closeAndContinue: 'Close and Continue',
+      return: 'Return',
+      leave: 'Leave'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
