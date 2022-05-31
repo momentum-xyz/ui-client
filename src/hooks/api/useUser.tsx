@@ -5,9 +5,8 @@ import {useStore} from 'shared/hooks';
 import {appVariables} from 'api/constants';
 
 import {bytesToUuid} from '../../core/utils/uuid.utils';
-import User, {IOnlineUser} from '../../context/type/User';
+import User from '../../context/type/User';
 import {UserSpace} from '../../context/type/Space';
-import {SearchResults} from '../../context/type/Search';
 
 import {promiseFetch, UseApiOptionsProps, useFetch} from './useApi';
 
@@ -67,13 +66,6 @@ export const useUserList = (initialIds: string[]) => {
 
   return returnValue;
 };
-// https://dev.odyssey.ninja/api/v3/backend/users/online/
-export const useOnlineUsers = (id: string) => {
-  const response = useFetch<IOnlineUser[]>(
-    appVariables.BACKEND_ENDPOINT_URL + `/users/online/${id}`
-  );
-  return response;
-};
 
 export const useInitiatives = (id: string) => {
   const {worldStore} = useStore().mainStore;
@@ -90,14 +82,4 @@ export const useCurrentUser = () => {
     fetchPolicy: 'network-only'
   });
   return response;
-};
-
-export const useUserSearch = () => {
-  return (searchQuery: string, online: boolean, worldId: string) =>
-    promiseFetch<SearchResults<User>>(
-      appVariables.BACKEND_ENDPOINT_URL +
-        `/users/search?q=${searchQuery}&online=${online ? 'true' : 'false'}&worldId=${worldId}`,
-      {},
-      'network-only'
-    );
 };
