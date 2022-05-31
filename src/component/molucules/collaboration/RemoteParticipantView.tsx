@@ -82,7 +82,7 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
   }, [participant.videoTrack, noVideo, collaborationState.stageMode]);
 
   useEffect(() => {
-    console.info(`Agora remote participant user updated for ${userName}`, participant);
+    // console.info(`Agora remote participant user updated for ${userName}`, participant);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participant]);
 

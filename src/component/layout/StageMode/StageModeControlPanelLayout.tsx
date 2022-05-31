@@ -33,7 +33,8 @@ const StageModeControlPanelLayout: React.FC = () => {
   });
   const {collaborationState} = useCollaboration();
   const {authState} = useContextAuth();
-  const {isOnStage, enterStage, leaveStage, canEnterStage, stageModeUsers} = useAgoraStageMode();
+  const {isOnStage, enterStage, joinedStage, leaveStage, canEnterStage, stageModeUsers} =
+    useAgoraStageMode();
 
   const [enableStageMode] = useIntegrationEnable();
   const [disableStageMode] = useIntegrationDisable();
@@ -42,8 +43,8 @@ const StageModeControlPanelLayout: React.FC = () => {
   const [selectedRemoteUserIdForRemove, setSelectedRemoteUserIdForRemove] = useState<string | null>(
     null
   );
-
   const [user] = useUser(selectedRemoteUserIdForRemove as string);
+  const [userToggledStageOn, setUserToggledStageOn] = useState<boolean>(false);
 
   const {getConfirmation} = useConfirmationDialog();
 
@@ -97,6 +98,15 @@ const StageModeControlPanelLayout: React.FC = () => {
     }
   }, [user, selectedRemoteUserIdForRemove]);
 
+  useEffect(() => {
+    if (joinedStage) {
+      if (userToggledStageOn) {
+        setUserToggledStageOn(false);
+        handleEnterStage();
+      }
+    }
+  }, [joinedStage, userToggledStageOn]);
+
   // @ts-ignore
   const onStageModeToggle = (shouldActivate) => {
     console.info('spaceId: ' + collaborationState.collaborationSpace?.id);
@@ -109,7 +119,9 @@ const StageModeControlPanelLayout: React.FC = () => {
             userId: bytesToUuid(authState.user.id.data),
             stageModeStatus: StageModeStatus.INITIATED
           }
-        }).then();
+        }).then(() => {
+          setUserToggledStageOn(true);
+        });
       } else {
         disableStageMode({
           spaceId: collaborationState.collaborationSpace.id,

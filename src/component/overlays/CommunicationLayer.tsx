@@ -1,7 +1,7 @@
 import {Transition} from '@headlessui/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
@@ -35,6 +35,7 @@ export interface CommunicationLayerProps {}
 
 const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const history = useHistory();
+  const location = useLocation();
   const {collaborationState, collaborationDispatch, currentUserId} = useCollaboration();
   const agoraStageMode = useAgoraStageMode();
   const {localUser, remoteParticipants} = useAgoraVideo();
@@ -106,8 +107,10 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
         stageMode: true
       });
-      history.push(ROUTES.stageMode);
-
+      //check if current route
+      if (!location.pathname.includes(ROUTES.stageMode)) {
+        history.push(ROUTES.stageMode);
+      }
       toast.info(
         <ToastContent
           headerIconName="alert"
