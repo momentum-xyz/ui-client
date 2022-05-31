@@ -226,6 +226,7 @@ export const enGb = {
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
+      stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.'
     },
@@ -237,7 +238,7 @@ export const enGb = {
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       later: 'later',
       create: 'create',
-      stage: 'Stage enabled'
+      stage: 'Stage mode'
     },
     placeholders: {
       search: 'Search',
