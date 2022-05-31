@@ -162,6 +162,7 @@ export const enGb = {
       musicPlayer: 'Music Player',
       shareLocation: 'Share location',
       information: 'Information',
+      help: 'Help',
       settings: 'Settings',
       fullscreen: 'Fullscreen',
       someonesBio: "{{name}}'s Bio",
