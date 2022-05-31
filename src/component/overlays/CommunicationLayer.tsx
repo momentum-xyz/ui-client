@@ -107,7 +107,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
         stageMode: true
       });
-      //check if current route
+
       if (!location.pathname.includes(ROUTES.stageMode)) {
         history.push(ROUTES.stageMode);
       }
