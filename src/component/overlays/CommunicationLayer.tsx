@@ -3,8 +3,10 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import styled from 'styled-components';
+import {observer} from 'mobx-react-lite';
 
-import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {Button, ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import CONFIG from '../../config/config';
@@ -13,7 +15,6 @@ import useCollaboration, {
   useLeaveCollaborationSpace
 } from '../../context/Collaboration/hooks/useCollaboration';
 import useAgoraVideo from '../../hooks/communication/useAgoraVideo';
-import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
 import LocalParticipantView from '../molucules/collaboration/LocalParticipantView';
 import RemoteParticipantView from '../molucules/collaboration/RemoteParticipantView';
 import {ParticipantRole} from '../../context/Collaboration/CollaborationTypes';
@@ -32,6 +33,13 @@ import {useModerator} from '../../context/Integration/hooks/useIntegration';
 import {useGetSpace} from '../../hooks/api/useSpaceService';
 
 export interface CommunicationLayerProps {}
+
+// TODO: Refactor this styled component
+const StyledButton = styled(Button)`
+  width: 95px;
+  margin-right: 0;
+  align-self: center;
+`;
 
 const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const history = useHistory();
@@ -122,6 +130,16 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
         stageMode: false
       });
+
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.stage')}
+          text={t('messages.stageModeDeActivated')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
     }
   });
 
@@ -223,18 +241,28 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       <ul className="h-full" style={{paddingBottom: '100px'}}>
         <Transition
           show={!unityStore.isPaused}
-          unmount={false}
+          unmount={true}
           enter="transition-all transform ease-out duration-300"
           enterFrom="-translate-y-8 h-0 mt-0"
           enterTo="translate-y-0 h-8 mt-1"
           leave="transition-all transform ease-in duration-300"
           leaveFrom="translate-y-0 h-8 mt-1"
           leaveTo="-translate-y-8 h-0 mt-0"
-          className="mb-1 overflow-hidden pr-.1"
+          className={`mb-1 ${!unityStore.isPaused ? 'mt-4' : ''} overflow-hidden pr-.1 space-y-1`}
           as="li"
         >
-          <div
-            className="relative rounded-full h-8 w-8  m-auto bg-red-sunset-10 border cursor-pointer text-white-100 flex border-red-sunset-70 justify-center items-center backdrop-filter backdrop-blur"
+          <StyledButton
+            variant="primary-background"
+            label={t('actions.return')}
+            icon="collaboration"
+            onClick={() => {
+              history.push(ROUTES.collaboration);
+            }}
+          />
+          <StyledButton
+            variant="danger-background"
+            label={t('actions.leave')}
+            icon="leave"
             onClick={() => {
               leaveCollaborationSpaceCall(false).then(stageModeLeave);
               if (collaborationState.stageMode) {
@@ -244,12 +272,10 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                 });
               }
             }}
-          >
-            <CloseIcon className="w-1/4" />
-          </div>
+          />
         </Transition>
 
-        <li className="overflow-y-scroll h-full pr-.1">
+        <li className="overflow-y-scroll h-full pr-.1 mt-1">
           <p className="text-center whitespace-nowrap">
             {t('counts.people', {count: numberOfPeople}).toUpperCase()}
           </p>
@@ -314,4 +340,4 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   );
 };
 
-export default CommunicationLayer;
+export default observer(CommunicationLayer);

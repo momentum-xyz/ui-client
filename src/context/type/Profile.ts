@@ -4,12 +4,3 @@ export interface Profile {
   avatarHash?: string;
   profileLink?: string;
 }
-
-export interface ProfileEditDTO {
-  profile: Profile;
-}
-
-export interface ProfileEditResponse {
-  status: number;
-  message: string;
-}
