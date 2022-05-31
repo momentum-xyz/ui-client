@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
 import {appVariables} from 'api/constants';
 import {FieldErrorInterface} from 'api/interfaces';
@@ -15,6 +16,7 @@ import {
   TextPropsInterface
 } from 'ui-kit';
 import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './SignUpCompleteForm.styled';
 
@@ -37,6 +39,7 @@ const SignUpCompleteForm: FC<Props> = (props) => {
 
   const {t} = useTranslation();
   const theme = useTheme();
+  const history = useHistory();
 
   const {
     control,
@@ -50,6 +53,10 @@ const SignUpCompleteForm: FC<Props> = (props) => {
   const onUpdateProfile = handleSubmit((data: SignUpFormInterface) => {
     onSubmit(data);
   });
+
+  const onCancel = () => {
+    history.push(ROUTES.login);
+  };
 
   useEffect(() => {
     fieldErrors.forEach(({fieldName, errorMessage}) => {
@@ -143,6 +150,7 @@ const SignUpCompleteForm: FC<Props> = (props) => {
       </styled.Field>
 
       <styled.Actions>
+        <Button theme={theme} label={t('actions.cancel')} variant="danger" onClick={onCancel} />
         <Button
           theme={theme}
           label={t('actions.saveProfile')}

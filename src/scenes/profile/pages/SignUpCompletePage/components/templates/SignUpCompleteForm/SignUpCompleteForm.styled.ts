@@ -49,4 +49,5 @@ export const Divider = styled.div`
 export const Actions = styled.div`
   display: flex;
   justify-content: right;
+  gap: 20px;
 `;
