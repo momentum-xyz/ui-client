@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {SvgButton} from 'ui-kit';
@@ -15,7 +16,7 @@ const MusicVolumeController: FC<PropsInterface> = () => {
 
   return (
     <styled.Container>
-      <styled.Title>Music Volume</styled.Title>
+      <styled.Title>{t('musicPlayer.playerVolume')}</styled.Title>
       <styled.VolumeContainer>
         <SvgButton iconName="player-mute" size="medium" onClick={handleMuteButton} />
         <styled.VolumeBarContainer width={100 + '%'}>

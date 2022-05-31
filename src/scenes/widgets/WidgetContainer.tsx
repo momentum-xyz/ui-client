@@ -79,7 +79,6 @@ const WidgetContainer: FC = () => {
     handleOnLoad,
     handleOnPlay,
     handleOnEnd,
-    init,
     mute,
     volume,
     playing,
@@ -149,7 +148,6 @@ const WidgetContainer: FC = () => {
 
   useEffect(() => {
     fetchPlaylist(worldStore.worldId);
-    init();
   }, [worldStore.worldId]);
 
   useEffect(() => {
@@ -217,7 +215,12 @@ const WidgetContainer: FC = () => {
   };
 
   const handleMusicPlayerClick = () => {
-    musicPlayerWidget.open();
+    if (musicPlayerWidget.isOpen) {
+      musicPlayerWidget.close();
+    } else {
+      handleOnLoad();
+      musicPlayerWidget.open();
+    }
   };
 
   const mainToolbarIcons: ToolbarIconInterface[] = [
@@ -256,11 +259,12 @@ const WidgetContainer: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {settingsStore.dialog.isOpen && <SettingsWidget />}
       <ReactHowler
-        src={currentTrackHash ?? ['']}
+        src={[currentTrackHash]}
         onLoad={handleOnLoad}
         onPlay={handleOnPlay}
         onEnd={handleOnEnd}
         playing={playing}
+        preload={true}
         loop={false}
         mute={mute}
         volume={volume}

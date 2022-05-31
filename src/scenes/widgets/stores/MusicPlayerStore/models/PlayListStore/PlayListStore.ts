@@ -9,13 +9,14 @@ const PlayListStore = types
     request: types.optional(RequestModel, {}),
     tracks: types.optional(types.array(TrackModel), []),
     currentSrcIndex: types.optional(types.number, 0),
-    currentTrackHash: types.maybe(types.string),
+    currentTrackHash: types.optional(types.string, ''),
     currentTrackName: types.maybe(types.string)
   })
   .actions((self) => ({
     setCurrentTrackHash() {
-      self.currentTrackHash =
-        appVariables.RENDER_SERVICE_URL + `/track/${self.tracks[self.currentSrcIndex].trackHash}`;
+      self.currentTrackHash = cast(
+        appVariables.RENDER_SERVICE_URL + `/track/${self.tracks[self.currentSrcIndex].trackHash}`
+      );
     },
     setCurrentTrackName() {
       self.currentTrackName = self.tracks[self.currentSrcIndex].name;
