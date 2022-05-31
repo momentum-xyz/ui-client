@@ -10,7 +10,8 @@ export interface PropsInterface {}
 
 const MusicVolumeController: FC<PropsInterface> = () => {
   const {musicPlayerStore} = useStore().widgetStore;
-  const {volume, setVolume, handleUnmuteButton, handleMuteButton} = musicPlayerStore;
+  const {volume, setVolume, handleUnmuteButton, handleMuteButton, mute, handleMuteToggle} =
+    musicPlayerStore;
 
   return (
     <styled.Container>
@@ -25,7 +26,12 @@ const MusicVolumeController: FC<PropsInterface> = () => {
             max="1"
             step=".01"
             value={volume}
-            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            onChange={(e) => {
+              if (mute) {
+                handleMuteToggle();
+              }
+              setVolume(parseFloat(e.target.value));
+            }}
           />
         </styled.VolumeBarContainer>
         <SvgButton iconName="player-unmute" size="medium" onClick={handleUnmuteButton} />
