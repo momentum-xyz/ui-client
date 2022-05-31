@@ -205,7 +205,7 @@ const WidgetContainer: FC = () => {
     {title: t('labels.minimap'), icon: 'minimap', onClick: () => UnityService.toggleMiniMap()},
     {title: t('labels.musicPlayer'), icon: 'music', onClick: handleMusicPlayerStatus},
     {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
-    {title: t('labels.information'), icon: 'question', onClick: helpStore.helpDialog.open},
+    {title: t('labels.help'), icon: 'question', onClick: helpStore.helpDialog.open},
     {title: t('labels.fullscreen'), icon: 'fullscreen', onClick: switchFullscreen}
   ];
 
