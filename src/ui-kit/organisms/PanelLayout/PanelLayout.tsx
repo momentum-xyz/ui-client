@@ -46,7 +46,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     iconSize = 'small',
     centerTitle = false,
     headerWeight = 'h3',
-    titleWidth = '100px',
+    titleWidth = '100%',
     captureAllPointerEvents = false,
     componentSize,
     ...restProps
