@@ -7,7 +7,16 @@ export const HeaderItem = styled.div<{titleWidth: string}>`
   display: flex;
   overflow: hidden;
   width: ${(props) => props.titleWidth};
-  &.centerTitle {
+
+  &.left {
+    justify-content: left;
+  }
+
+  &.right {
+    justify-content: right;
+  }
+
+  &.center {
     justify-content: center;
   }
 `;

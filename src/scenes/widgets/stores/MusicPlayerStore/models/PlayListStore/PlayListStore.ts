@@ -1,4 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import {t} from 'i18next';
 
 import {api, PlaylistResponse} from 'api';
 import {TrackModel, RequestModel} from 'core/models';
@@ -23,7 +24,7 @@ const PlayListStore = types
     },
     setCurrentTrackName() {
       if (self.tracks.length < 1) {
-        self.currentTrackName = 'No Track';
+        self.currentTrackName = t('musicPlayer.noTrackTitle');
         return;
       }
       self.currentTrackName = self.tracks[self.currentSrcIndex].name;

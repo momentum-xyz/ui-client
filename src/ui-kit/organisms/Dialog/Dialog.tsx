@@ -10,7 +10,8 @@ import {
   PlacementType,
   SizeType,
   ComponentSizeInterface,
-  HeaderWeightType
+  HeaderWeightType,
+  HeaderItem
 } from 'ui-kit';
 import {useClickOutside} from 'ui-kit/hooks';
 import {useStore} from 'shared/hooks';
@@ -37,7 +38,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   controlUnityKeyboardControll?: boolean;
   headerActions?: React.ReactNode;
   hasBorder?: boolean;
-  centerTitle?: boolean;
+  headerItem?: HeaderItem;
   titleWidth?: string;
   headerWeight?: HeaderWeightType;
 }
@@ -51,7 +52,7 @@ const Dialog: FC<DialogPropsInterface> = ({
   declineInfo,
   children,
   theme,
-  centerTitle,
+  headerItem,
   titleWidth,
   closeOnBackgroundClick = true,
   showCloseButton = false,
@@ -99,7 +100,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             title={title}
             subtitle={subtitle}
             headerStyle={headerStyle}
-            centerTitle={centerTitle}
+            headerItem={headerItem}
             titleWidth={titleWidth}
             headerIconName={icon}
             onClose={showCloseButton ? onClose : undefined}

@@ -26,7 +26,7 @@ const MusicPlayerWidget: FC = () => {
       headerStyle="uppercase"
       title={currentTrackName}
       titleWidth="145px"
-      centerTitle
+      headerItem="center"
       headerWeight="h4"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       onClose={musicPlayerWidget.close}

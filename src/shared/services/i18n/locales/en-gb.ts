@@ -634,7 +634,8 @@ export const enGb = {
     },
     musicPlayer: {
       playerVolume: 'Music Volume',
-      unityVolume: 'Sound Effects Volume'
+      unityVolume: 'Sound Effects Volume',
+      noTrackTitle: 'No Track'
     }
   }
 };

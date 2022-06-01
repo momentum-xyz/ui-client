@@ -203,10 +203,6 @@ const WidgetContainer: FC = () => {
     });
   };
 
-  // const handleMusicPlayerStatus = () => {
-  //   handleMusicPlayer(!show);
-  // };
-
   const handleRuleReviewClose = () => {
     tokenRulesStore.tokenRuleReviewDialog.close();
     tokenRulesStore.tokenRulesListStore.fetchTokenRules();

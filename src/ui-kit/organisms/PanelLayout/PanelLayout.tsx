@@ -9,7 +9,8 @@ import {
   HeaderStyleType,
   SizeType,
   ComponentSizeInterface,
-  HeaderWeightType
+  HeaderWeightType,
+  HeaderItem
 } from 'ui-kit';
 
 import * as styled from './PanelLayout.styled';
@@ -30,7 +31,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerActions?: ReactNode;
   captureAllPointerEvents?: boolean;
   componentSize?: ComponentSizeInterface;
-  centerTitle?: boolean;
+  headerItem?: HeaderItem;
   titleWidth?: string;
   headerWeight?: HeaderWeightType;
 }
@@ -44,7 +45,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isCustom = false,
     hasBorder = false,
     iconSize = 'small',
-    centerTitle = false,
+    headerItem = 'left',
     headerWeight = 'h3',
     titleWidth = '100%',
     captureAllPointerEvents = false,
@@ -76,7 +77,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
               />
             </styled.HeaderIconItem>
           )}
-          <styled.HeaderItem className={cn(centerTitle && 'centerTitle')} titleWidth={titleWidth}>
+          <styled.HeaderItem className={cn(headerItem)} titleWidth={titleWidth}>
             {restProps.title && (
               <styled.TitleHeading
                 theme={restProps.theme}
