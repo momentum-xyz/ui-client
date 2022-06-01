@@ -9,7 +9,7 @@ import {
   HeaderStyleType,
   SizeType,
   ComponentSizeInterface,
-  HeaderWeightType,
+  HeaderType,
   HeaderItem
 } from 'ui-kit';
 
@@ -33,7 +33,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   componentSize?: ComponentSizeInterface;
   headerItem?: HeaderItem;
   titleWidth?: string;
-  headerWeight?: HeaderWeightType;
+  headerType?: HeaderType;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -46,7 +46,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     hasBorder = false,
     iconSize = 'small',
     headerItem = 'left',
-    headerWeight = 'h3',
+    headerType = 'h3',
     titleWidth = '100%',
     captureAllPointerEvents = false,
     componentSize,
@@ -81,7 +81,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
             {restProps.title && (
               <styled.TitleHeading
                 theme={restProps.theme}
-                type={headerWeight}
+                type={headerType}
                 label={restProps.title}
                 transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                 isDanger={isDanger}
@@ -91,7 +91,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
               <>
                 <Heading
                   theme={restProps.theme}
-                  type={headerWeight}
+                  type={headerType}
                   label="/"
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   isDanger={isDanger}
@@ -99,7 +99,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 <styled.Whitespace />
                 <Heading
                   theme={restProps.theme}
-                  type={headerWeight}
+                  type={headerType}
                   label={restProps.subtitle}
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   weight="normal"

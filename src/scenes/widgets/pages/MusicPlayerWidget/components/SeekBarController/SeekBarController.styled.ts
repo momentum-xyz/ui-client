@@ -25,6 +25,7 @@ export const SeekBar = styled.input`
     background: white;
   }
 `;
+
 export const SeekBarContainer = styled.div`
   position: relative;
   align-items: center;
@@ -33,6 +34,7 @@ export const SeekBarContainer = styled.div`
   height: 2.39px;
   width: 100%;
 `;
+
 export const BarThumbPosition = styled.div<{width: string}>`
   position: absolute;
   background: ${(props) => props.theme.accent};
@@ -41,7 +43,6 @@ export const BarThumbPosition = styled.div<{width: string}>`
   width: ${(props) => props.width};
 `;
 
-export const SeekBarWrapper = styled.div``;
 export const Duration = styled.div`
   color: var(--player-default-color);
 `;

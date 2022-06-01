@@ -8,7 +8,7 @@ export const fetchPlaylist: RequestInterface<BaseRequestInterface, BaseResponseI
   options
 ) => {
   const {worldId, ...restOptions} = options;
-  const url = playlistRepositoryEndpoints().base + worldId;
+  const url = `${playlistRepositoryEndpoints().base}/${worldId}`;
 
   return request.get(url, {...restOptions});
 };

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {Dialog} from 'ui-kit';
@@ -16,18 +16,27 @@ const DIALOG_OFFSET_RIGHT = 130;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
-  const {musicPlayerStore} = useStore().widgetStore;
+  const {
+    mainStore: {worldStore},
+    widgetStore
+  } = useStore();
+  const {musicPlayerStore} = widgetStore;
   const {musicPlayerWidget, playlistStore} = musicPlayerStore;
-  const {currentTrackName} = playlistStore;
+
+  useEffect(() => {
+    if (musicPlayerWidget.isOpen) {
+      playlistStore.fetchPlaylist(worldStore.worldId);
+    }
+  }, [musicPlayerWidget.isOpen]);
 
   return (
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
-      title={currentTrackName}
+      title={playlistStore.currentTrackName}
       titleWidth="145px"
       headerItem="center"
-      headerWeight="h4"
+      headerType="h4"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       onClose={musicPlayerWidget.close}
       showCloseButton

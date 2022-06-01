@@ -14,8 +14,8 @@ const SeekBarController: FC<PropsInterface> = () => {
     duration,
     seek,
     handleSeekingChange,
-    handleMouseDownSeek,
-    handleMouseUpSeek,
+    seekingStarted,
+    seekingEnded,
     calculateDurationBarWidth
   } = musicPlayerStore;
 
@@ -31,8 +31,8 @@ const SeekBarController: FC<PropsInterface> = () => {
           step=".01"
           value={seek}
           onChange={handleSeekingChange}
-          onMouseDown={handleMouseDownSeek}
-          onMouseUp={handleMouseUpSeek}
+          onMouseDown={seekingStarted}
+          onMouseUp={seekingEnded}
         />
       </styled.SeekBarContainer>
       <styled.Duration>{formatDurationTime(duration)}</styled.Duration>

@@ -4,6 +4,7 @@ import {rgba} from 'polished';
 export const Container = styled.div`
   padding-top: 22px;
 `;
+
 export const Title = styled.div`
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
   padding: 0 0 2px 2px;
