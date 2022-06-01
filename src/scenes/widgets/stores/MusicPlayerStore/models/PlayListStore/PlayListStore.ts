@@ -11,7 +11,7 @@ const PlayListStore = types
     tracks: types.optional(types.array(TrackModel), []),
     currentSrcIndex: types.optional(types.number, 0),
     currentTrackHash: types.optional(types.string, ''),
-    currentTrackName: types.optional(types.string, 'No Track')
+    currentTrackName: types.optional(types.string, t('musicPlayer.noTrackTitle'))
   })
   .actions((self) => ({
     setCurrentTrackHash() {
