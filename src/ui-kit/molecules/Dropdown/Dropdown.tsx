@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import {IconSvg, Portal, ValueType, VariantType} from 'ui-kit';
 import {useClickOutside, useResize, useScroll} from 'ui-kit/hooks';
-import {PropsWithThemeInterface, OptionInterface} from 'ui-kit/interfaces';
+import {PropsWithThemeInterface, OptionInterface, ComponentSizeInterface} from 'ui-kit/interfaces';
 
 import {OptionList, SelectedValue, ValueContainer} from './components';
 import * as styled from './Dropdown.styled';
@@ -16,6 +16,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   options: OptionInterface[];
   onOptionSelect: (option: OptionInterface) => void | Promise<void>;
   isError?: boolean;
+  dropdownSize?: ComponentSizeInterface;
 }
 
 const Dropdown: FC<PropsInterface> = ({
@@ -26,7 +27,8 @@ const Dropdown: FC<PropsInterface> = ({
   options = [],
   onOptionSelect,
   variant = 'primary',
-  isError
+  isError,
+  dropdownSize
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<OptionInterface | undefined>();
@@ -77,6 +79,7 @@ const Dropdown: FC<PropsInterface> = ({
               optionList={options}
               selectedOption={selectedOption}
               onOptionSelect={handleOptionSelect}
+              size={dropdownSize}
             />
           </styled.Options>
         </Portal>
