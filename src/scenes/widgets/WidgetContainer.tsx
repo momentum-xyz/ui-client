@@ -259,7 +259,7 @@ const WidgetContainer: FC = () => {
       <ReactHowler
         src={[currentTrackHash]}
         onLoad={handleOnLoad}
-        format={['mp3', 'ogg', 'wave']}
+        format={['mp3', 'ogg', 'acc', 'webm']}
         onPlay={handleOnPlay}
         onEnd={handleOnEnd}
         playing={playing}
