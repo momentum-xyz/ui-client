@@ -6,16 +6,14 @@ import YouTube from 'react-youtube';
 
 import {cookie} from 'core/services';
 import {CookieKeyEnum} from 'core/enums';
+import {appVariables} from 'api/constants';
 import {Button, SvgButton} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import background from 'static/images/bg.png';
 
-import * as styled from './IntoPage.styled';
+import * as styled from './IntroPage.styled';
 
-// FIXME: Move to constants
-const YOUTUBE_INTRO_VIDEO_ID = 'UmSJIEZQAyQ';
-
-const IntoPage: FC = () => {
+const IntroPage: FC = () => {
   const [messageShown, setMessageShown] = useState<boolean>(true);
 
   const history = useHistory();
@@ -29,7 +27,7 @@ const IntoPage: FC = () => {
   }, []);
 
   const closeHandler = useCallback(() => {
-    history.push(ROUTES.base);
+    history.push(window.history.state?.state?.from || ROUTES.base);
   }, [history]);
 
   const opts = {
@@ -57,7 +55,7 @@ const IntoPage: FC = () => {
         </styled.CloseButton>
 
         <YouTube
-          videoId={YOUTUBE_INTRO_VIDEO_ID}
+          videoId={appVariables.YOUTUBE_INTRO_VIDEO_ID}
           onPlay={() => setMessageShown(false)}
           onEnd={closeHandler}
           className="youtube"
@@ -80,4 +78,4 @@ const IntoPage: FC = () => {
   );
 };
 
-export default IntoPage;
+export default IntroPage;

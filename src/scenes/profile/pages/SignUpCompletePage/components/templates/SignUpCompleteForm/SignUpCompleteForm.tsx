@@ -2,9 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
 import {FieldErrorInterface} from 'api/interfaces';
 import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
@@ -32,14 +30,14 @@ interface PropsInterface {
   fieldErrors: FieldErrorInterface[];
   isSubmitDisabled?: boolean;
   onSubmit: (form: SignUpFormInterface) => void;
+  onCancel: () => void;
 }
 
 const SignUpCompleteForm: FC<PropsInterface> = (props) => {
-  const {user, fieldErrors, isSubmitDisabled, onSubmit} = props;
+  const {user, fieldErrors, isSubmitDisabled, onSubmit, onCancel} = props;
 
   const {t} = useTranslation();
   const theme = useTheme();
-  const history = useHistory();
 
   const {
     control,
@@ -53,10 +51,6 @@ const SignUpCompleteForm: FC<PropsInterface> = (props) => {
   const onUpdateProfile = handleSubmit((data: SignUpFormInterface) => {
     onSubmit(data);
   });
-
-  const onCancel = () => {
-    history.push(ROUTES.login);
-  };
 
   useEffect(() => {
     fieldErrors.forEach(({fieldName, errorMessage}) => {
@@ -150,8 +144,15 @@ const SignUpCompleteForm: FC<PropsInterface> = (props) => {
       </styled.Field>
 
       <styled.Actions>
-        <Button theme={theme} label={t('actions.cancel')} variant="danger" onClick={onCancel} />
         <Button
+          wide
+          theme={theme}
+          label={t('actions.cancel')}
+          variant="danger"
+          onClick={onCancel}
+        />
+        <Button
+          wide
           theme={theme}
           label={t('actions.saveProfile')}
           disabled={isSubmitDisabled}

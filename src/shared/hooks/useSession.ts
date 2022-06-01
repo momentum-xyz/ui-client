@@ -12,7 +12,7 @@ const REMAINING_SEC = 15;
 */
 
 export const useSession = (
-  tokenRefreshedCallback: (token?: string) => void,
+  tokenRefreshedCallback?: (token?: string) => void,
   tokenNotRefreshedCallback?: (error?: string) => void
 ) => {
   const signInInterval = useRef<NodeJS.Timeout | null>(null);
@@ -23,7 +23,7 @@ export const useSession = (
   const setTokens = useCallback(
     (access_token: string) => {
       extendAxiosInterceptors(access_token);
-      tokenRefreshedCallback(access_token);
+      tokenRefreshedCallback?.(access_token);
     },
     [tokenRefreshedCallback]
   );
@@ -80,5 +80,8 @@ export const useSession = (
     }
   }, [auth.isLoading, auth.isAuthenticated, auth.user, setTokens]);
 
-  return {isReady: auth.isAuthenticated, idToken: auth.user?.id_token || ''};
+  return {
+    isReady: auth.isAuthenticated,
+    idToken: auth.user?.id_token || ''
+  };
 };

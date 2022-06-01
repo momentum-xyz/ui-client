@@ -38,15 +38,15 @@ const AuthComponent: React.FC = (props) => {
       sessionStore.init(idToken);
       WebsocketService.initialize();
     }
-  }, [isReady, profile]);
+  }, [idToken, isReady, profile, sessionStore]);
 
   /* 2. Open Complete Registration form */
   useEffect(() => {
     if (isReady && !!profile && !profile.profile?.onBoarded) {
-      history.push(ROUTES.signUpComplete);
+      history.push(ROUTES.signUpComplete, {from: history.location.pathname});
       helpStore.helpDialog.open();
     }
-  }, [isReady, profile]);
+  }, [helpStore, history, isReady, profile]);
 
   // TODO: Move to mst-store
   const [authState, authDispatch] = useReducer(authReducer, authDefaultState);
@@ -63,7 +63,7 @@ const AuthComponent: React.FC = (props) => {
         }
       });
     }
-  }, [profile, authState.user]);
+  }, [profile, authState.user, userId]);
 
   return (
     <AuthContext.Provider value={{authState}}>
