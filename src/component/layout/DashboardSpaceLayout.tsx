@@ -40,8 +40,9 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
   const [showPeopleToInviteList, setShowPeopleToInviteList] = useState(false);
 
   const {widgetStore, sessionStore} = useStore();
-  const {stakingStore} = widgetStore;
+  const {stakingStore, musicPlayerStore} = widgetStore;
   const {stakingDialog} = stakingStore;
+  const {handleToggle, playing} = musicPlayerStore;
   const {isGuest} = sessionStore;
 
   const inviteRef = useRef<HTMLInputElement>(null);
@@ -49,6 +50,9 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
   useEffect(() => {
     setDashboardEdited(true);
     if (dashboard) {
+      if (playing) {
+        handleToggle();
+      }
       dashboard.tiles.forEach((tile) => {
         if (
           !tile.edited &&

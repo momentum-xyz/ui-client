@@ -14,7 +14,7 @@ const MusicPlayerStore = types.compose(
       musicPlayerWidget: types.optional(DialogModel, {}),
       unityVolumeStore: types.optional(UnityVolume, {}),
       playlistStore: types.optional(PlayListStore, {}),
-      playing: types.optional(types.boolean, false),
+      playing: types.optional(types.boolean, true),
       start: types.optional(types.boolean, false),
       next: types.optional(types.boolean, true),
       loaded: types.optional(types.boolean, false),
