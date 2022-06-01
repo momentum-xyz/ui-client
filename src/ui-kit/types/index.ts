@@ -12,3 +12,4 @@ export * from './textWeight.type';
 export * from './dropdownVariant.type';
 export * from './valueType.type';
 export * from './toggleVariant.type';
+export * from './dropdownSize.type';

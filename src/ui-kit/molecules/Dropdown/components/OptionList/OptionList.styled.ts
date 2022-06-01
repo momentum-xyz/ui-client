@@ -23,6 +23,14 @@ export const DropdownOptionsList = styled.div<{size?: ComponentSizeInterface}>`
   &.secondary {
     --borderRadius: 5px;
   }
+
+  &.normal {
+    max-height: 300px;
+  }
+
+  &.small {
+    max-height: 115px;
+  }
 `;
 
 export const DropdownIcon = styled.div`

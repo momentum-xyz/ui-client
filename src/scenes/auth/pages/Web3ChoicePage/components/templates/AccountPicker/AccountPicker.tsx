@@ -36,7 +36,6 @@ const AccountPicker: FC<PropsInterface> = (props) => {
         valueType="wallet"
         options={accountOptions}
         onOptionSelect={(option) => onSelect(option.value)}
-        dropdownSize={{maxHeight: 'calc(50vh - 10px)'}}
       />
     </styled.Wrapper>
   );
