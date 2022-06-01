@@ -45,7 +45,7 @@ const EventItemModel = types
       );
 
       if (response) {
-        self.magicLink = `${window.location.protocol}//${window.location.host}/magic/${response.id}`;
+        self.magicLink = `${window.location.origin}/magic/${response.id}`;
       }
     })
   }))
