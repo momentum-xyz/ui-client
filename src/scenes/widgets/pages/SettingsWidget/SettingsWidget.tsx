@@ -90,6 +90,7 @@ const SettingsWidget: FC = () => {
               onOptionSelect={(option) => {
                 settingsStore.selectVideoInput(option.value);
               }}
+              dropdownSize="small"
             />
           </styled.DropdownContainer>
         </styled.DeviceInput>
@@ -113,6 +114,7 @@ const SettingsWidget: FC = () => {
               onOptionSelect={(option) => {
                 settingsStore.selectAudioInput(option.value);
               }}
+              dropdownSize="small"
             />
           </styled.DropdownContainer>
         </styled.DeviceInput>
