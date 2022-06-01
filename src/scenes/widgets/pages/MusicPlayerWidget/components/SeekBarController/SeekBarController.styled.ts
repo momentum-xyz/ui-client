@@ -6,14 +6,14 @@ export const Container = styled.div`
   align-items: center;
   gap: 5px;
   font-size: var(--font-size-xxs);
-  width: 160px;
+  width: 170px;
   padding-top: 15px; ;
 `;
 
 export const SeekBar = styled.input`
   position: absolute;
   align-items: center;
-  transition: width 2s;
+  transition: width 1s;
   height: 2.39px;
   background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.0)};
   ::-webkit-slider-thumb {

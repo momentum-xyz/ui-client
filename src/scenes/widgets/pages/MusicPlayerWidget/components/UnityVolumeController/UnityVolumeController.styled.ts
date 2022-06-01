@@ -18,7 +18,7 @@ export const VolumeContainer = styled.div`
   align-items: center;
   gap: 5px;
 
-  width: 190px;
+  width: 195px;
 `;
 
 export const VolumeBarContainer = styled.div`
