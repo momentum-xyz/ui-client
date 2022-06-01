@@ -81,7 +81,7 @@ const App: FC = () => {
   if (!sessionStore.oidcConfig) {
     return (
       <Switch>
-        <Redirect to={ROUTES.login} />
+        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
       </Switch>
     );
   }
@@ -103,7 +103,7 @@ const App: FC = () => {
   if (!sessionStore.isSessionExists) {
     return (
       <Switch>
-        <Redirect to={ROUTES.login} />
+        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
       </Switch>
     );
   }
