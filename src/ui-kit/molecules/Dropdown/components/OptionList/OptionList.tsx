@@ -18,7 +18,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 const OptionList: FC<PropsInterface> = (props) => {
   const {theme, variant, selectedOption, optionList, onOptionSelect, size} = props;
   return (
-    <styled.DropdownOptionsList className={cn(SKIP_OUTSIDE_CLICK_CLASS, variant)} size={size}>
+    <styled.DropdownOptionsList className={cn(SKIP_OUTSIDE_CLICK_CLASS, variant)} style={{...size}}>
       <styled.DropdownIcon className="opened">
         <IconSvg theme={theme} name="chevron" size="normal" />
       </styled.DropdownIcon>

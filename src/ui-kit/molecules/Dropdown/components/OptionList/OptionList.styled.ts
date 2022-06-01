@@ -16,11 +16,6 @@ export const DropdownOptionsList = styled.div<{size?: ComponentSizeInterface}>`
   z-index: 200;
   overflow-y: scroll;
 
-  ${(props) => (props.size?.maxHeight ? `max-height: ${props.size.maxHeight};` : '')}
-  ${(props) => (props.size?.maxWidth ? `max-width: ${props.size.maxWidth};` : '')}
-  ${(props) => (props.size?.height ? `height: ${props.size.height};` : '')}
-  ${(props) => (props.size?.width ? `width: ${props.size.width};` : '')}
-
   &.primary {
     --borderRadius: 11px;
   }
