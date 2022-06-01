@@ -28,7 +28,6 @@ import {
 } from 'context/Collaboration/CollaborationReducer';
 import UnityService from 'context/Unity/UnityService';
 import {switchFullscreen} from 'core/utils';
-// import {useMusicPlayer} from 'context/MusicPlayer/hooks/useMusicPlayer';
 import {useGetUserOwnedSpaces} from 'modules/profile/hooks/useUserSpace';
 import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
@@ -87,7 +86,6 @@ const WidgetContainer: FC = () => {
   const {fetchPlaylist, currentTrackHash} = playlistStore;
 
   const {collaborationState, collaborationDispatch} = useCollaboration();
-  // const {handleMusicPlayer, show} = useMusicPlayer();
 
   const history = useHistory();
   const location = useLocation();
