@@ -1,4 +1,4 @@
-import {types, Instance} from 'mobx-state-tree';
+import {types, Instance, flow} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 
 import {
@@ -8,6 +8,9 @@ import {
   formatStartTime,
   formattedStringFromDate
 } from 'core/utils';
+import {api, MagicLinkResponse} from 'api';
+
+import {RequestModel} from '../Request';
 
 const EventItemModel = types
   .model('EventItem', {
@@ -20,13 +23,31 @@ const EventItemModel = types
     spaceName: types.maybeNull(types.string),
     spaceId: types.maybeNull(types.string),
     start: types.Date,
-    end: types.Date
+    end: types.Date,
+    magicLink: types.maybe(types.string),
+    magicRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     isLive(): boolean {
       const nowDate = new Date();
       return nowDate >= self.start && nowDate <= self.end;
-    }
+    },
+    fetchMagicLink: flow(function* () {
+      const response: MagicLinkResponse = yield self.magicRequest.send(
+        api.magicRepository.generateLink,
+        {
+          type: 'event',
+          data: {
+            id: self.spaceId,
+            eventId: self.id
+          }
+        }
+      );
+
+      if (response) {
+        self.magicLink = `${window.location.origin}/magic/${response.id}`;
+      }
+    })
   }))
   .views((self) => ({
     get toBytes() {
@@ -51,7 +72,8 @@ const EventItemModel = types
         duration: durationInHours(self.start, self.end),
         endDatetime: formattedStringFromDate(self.end),
         startDatetime: formattedStringFromDate(self.start),
-        title: self.title
+        title: self.title,
+        location: self.magicLink
       };
     }
   }));

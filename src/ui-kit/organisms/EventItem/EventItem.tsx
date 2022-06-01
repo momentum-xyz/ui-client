@@ -1,6 +1,7 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
+import {observer} from 'mobx-react-lite';
 
 import {EventItemModelInterface} from 'core/models/EventItem';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
@@ -33,6 +34,10 @@ const EventItem: FC<PropsInterface> = ({
   onWeblinkClick
 }) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
+
+  useEffect(() => {
+    event.fetchMagicLink();
+  }, [event]);
 
   const buttons = () => (
     <styled.Buttons className="base">
@@ -161,4 +166,4 @@ const EventItem: FC<PropsInterface> = ({
   );
 };
 
-export default EventItem;
+export default observer(EventItem);
