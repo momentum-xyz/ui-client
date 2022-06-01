@@ -23,13 +23,16 @@ const LoginCallback: FC = () => {
 
   useEffect(() => {
     if (!auth.isLoading && auth.isAuthenticated) {
+      // @ts-ignore: state has type unknown
+      const origin = auth.user?.state?.from || ROUTES.base;
+
       if (!cookie.has(CookieKeyEnum.INTRO)) {
-        history.push(ROUTES.intro);
+        history.push(ROUTES.intro, {from: origin});
       } else {
-        history.push(ROUTES.base);
+        history.push(origin);
       }
     }
-  }, [auth.isAuthenticated, auth.isLoading, history]);
+  }, [auth.isAuthenticated, auth.isLoading, auth.user, history]);
 
   return <></>;
 };

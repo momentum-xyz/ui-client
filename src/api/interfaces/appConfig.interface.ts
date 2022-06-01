@@ -47,4 +47,5 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   KUSAMA_WS_SERVER: string;
   GOOGLE_SDK_URL: string;
   YOUTUBE_API: string;
+  YOUTUBE_INTRO_VIDEO_ID: string;
 }
