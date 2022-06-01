@@ -13,5 +13,5 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
 
-  padding-top: 14px;
+  padding-top: 18px;
 `;

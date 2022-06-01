@@ -15,8 +15,10 @@ const MusicPlayerStore = types.compose(
       unityVolumeStore: types.optional(UnityVolume, {}),
       playlistStore: types.optional(PlayListStore, {}),
       playing: types.optional(types.boolean, false),
+      start: types.optional(types.boolean, false),
+      next: types.optional(types.boolean, true),
       loaded: types.optional(types.boolean, false),
-      loop: types.optional(types.boolean, false),
+      loop: types.optional(types.boolean, true),
       mute: types.optional(types.boolean, false),
       volume: types.optional(types.number, 0.2),
       duration: types.optional(types.number, 0),
@@ -41,15 +43,19 @@ const MusicPlayerStore = types.compose(
           return;
         }
         self.playing = !self.playing;
+        if (!self.playing) {
+          self.next = false;
+        } else {
+          self.start = true;
+          self.next = true;
+        }
       },
       handleOnLoad() {
-        console.info('onLoad');
         if (!self.player) {
           return;
         }
         self.loaded = true;
         self.duration = self.player.duration();
-        console.info(self.duration);
       },
       renderSeekPos() {
         if (!self.player) {
@@ -60,7 +66,6 @@ const MusicPlayerStore = types.compose(
         }
         if (self.playing) {
           self._raf = raf(this.renderSeekPos);
-          console.info(self._raf);
         }
       },
       handleLoopToggle() {
@@ -82,19 +87,18 @@ const MusicPlayerStore = types.compose(
       },
       clearRAF() {
         raf.cancel(self._raf);
+        self.seek = 0.0;
       }
     }))
     .actions((self) => ({
       handleOnPlay() {
-        console.info('onPlay');
-
         // self.playing = true;
         self.renderSeekPos();
       },
-
       handleStop() {
         self.player?.stop();
         self.playing = false; // Need to update our local state so we don't immediately invoke autoplay
+        self.next = false;
         self.renderSeekPos();
       },
       handleUnmuteButton() {
@@ -118,14 +122,19 @@ const MusicPlayerStore = types.compose(
         if (self.playlistStore.tracks.length < 1) {
           return;
         }
+        self.seek = 0.0;
+        self.playing = false;
         if (self.playlistStore.tracks.length - 1 > self.playlistStore.currentSrcIndex) {
           self.playlistStore.next();
+          if (self.next && self.start) {
+            self.handleToggle();
+          }
         } else if (
           self.playlistStore.tracks.length - 1 === self.playlistStore.currentSrcIndex &&
           self.loop
         ) {
           self.playlistStore.first();
-          if (self.playing) {
+          if (self.next && self.start) {
             self.handleToggle();
           }
         } else if (
@@ -146,6 +155,7 @@ const MusicPlayerStore = types.compose(
         if (self.playlistStore.tracks.length < 1) {
           return;
         }
+        self.seek = 0.0;
         if (self.playlistStore.currentSrcIndex > 0) {
           self.playlistStore.previous();
         } else if (self.playlistStore.currentSrcIndex === 0) {

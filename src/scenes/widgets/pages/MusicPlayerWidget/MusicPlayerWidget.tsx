@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {Dialog} from 'ui-kit';
@@ -20,13 +20,11 @@ const MusicPlayerWidget: FC = () => {
   const {musicPlayerWidget, playlistStore} = musicPlayerStore;
   const {currentTrackName} = playlistStore;
 
-  const ref = useRef(null);
-
   return (
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
-      title={currentTrackName ?? 'No Track'}
+      title={currentTrackName}
       titleWidth="145px"
       centerTitle
       headerWeight="h4"
@@ -36,7 +34,7 @@ const MusicPlayerWidget: FC = () => {
       showBackground={false}
       closeOnBackgroundClick={false}
     >
-      <styled.Div ref={ref}>
+      <styled.Div>
         <PlayerController />
         <SeekBarController />
         <MusicVolumeController />

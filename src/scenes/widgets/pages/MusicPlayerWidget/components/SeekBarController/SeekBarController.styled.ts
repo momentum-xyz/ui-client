@@ -25,13 +25,13 @@ export const SeekBar = styled.input`
     background: white;
   }
 `;
-export const SeekBarContainer = styled.div<{width: string}>`
+export const SeekBarContainer = styled.div`
   position: relative;
   align-items: center;
   background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
   border-radius: 10px;
   height: 2.39px;
-  width: ${(props) => props.width};
+  width: 100%;
 `;
 export const BarThumbPosition = styled.div<{width: string}>`
   position: absolute;

@@ -23,6 +23,7 @@ const PlayListStore = types
     },
     setCurrentTrackName() {
       if (self.tracks.length < 1) {
+        self.currentTrackName = 'No Track';
         return;
       }
       self.currentTrackName = self.tracks[self.currentSrcIndex].name;
@@ -38,7 +39,6 @@ const PlayListStore = types
       );
 
       if (response) {
-        console.info(response);
         self.tracks = cast(
           response.map((track) => ({
             trackHash: track.track.file_hash,

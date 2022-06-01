@@ -46,7 +46,7 @@ const UnityVolumeController: FC<PropsInterface> = () => {
       <styled.Title>{t('musicPlayer.unityVolume')}</styled.Title>
       <styled.VolumeContainer>
         <SvgButton iconName="player-mute" size="medium" onClick={handleMute} />
-        <styled.VolumeBarContainer width={100 + '%'}>
+        <styled.VolumeBarContainer>
           <styled.BarThumbPosition width={volume * 100 + '%'} />
           <styled.VolumeBar
             type="range"

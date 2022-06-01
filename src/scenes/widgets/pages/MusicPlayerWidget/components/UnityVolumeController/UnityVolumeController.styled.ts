@@ -21,13 +21,13 @@ export const VolumeContainer = styled.div`
   width: 190px;
 `;
 
-export const VolumeBarContainer = styled.div<{width: string}>`
+export const VolumeBarContainer = styled.div`
   position: relative;
   align-items: center;
   background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
   border-radius: 10px;
   height: 2.39px;
-  width: ${(props) => props.width};
+  width: 100%;
 `;
 
 export const BarThumbPosition = styled.div<{width: string}>`

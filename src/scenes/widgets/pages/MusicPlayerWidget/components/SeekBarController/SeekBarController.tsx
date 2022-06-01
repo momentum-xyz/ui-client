@@ -19,11 +19,10 @@ const SeekBarController: FC<PropsInterface> = () => {
     calculateDurationBarWidth
   } = musicPlayerStore;
 
-  const elapsed = seek;
   return (
     <styled.Container>
-      <styled.Elapsed>{`${formatDurationTime(elapsed)}`}</styled.Elapsed>
-      <styled.SeekBarContainer width={100 + '%'}>
+      <styled.Elapsed>{`${formatDurationTime(seek)}`}</styled.Elapsed>
+      <styled.SeekBarContainer>
         <styled.BarThumbPosition width={calculateDurationBarWidth} />
         <styled.SeekBar
           type="range"

@@ -19,7 +19,7 @@ const MusicVolumeController: FC<PropsInterface> = () => {
       <styled.Title>{t('musicPlayer.playerVolume')}</styled.Title>
       <styled.VolumeContainer>
         <SvgButton iconName="player-mute" size="medium" onClick={handleMuteButton} />
-        <styled.VolumeBarContainer width={100 + '%'}>
+        <styled.VolumeBarContainer>
           <styled.BarThumbPosition width={volume * 100 + '%'} />
           <styled.VolumeBar
             type="range"
