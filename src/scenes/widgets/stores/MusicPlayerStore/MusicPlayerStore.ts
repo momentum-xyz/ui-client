@@ -76,7 +76,7 @@ const MusicPlayerStore = types.compose(
       seekingStarted() {
         self.isSeeking = true;
       },
-      seekingEnded(event: ChangeEvent<{value: number}>) {
+      seekingEnded(event: {target: {value: number}}) {
         self.isSeeking = false;
 
         self.player?.seek(event.target.value);
