@@ -32,9 +32,7 @@ const MusicPlayerStore = types.compose(
         if (self.playlist.tracks.length < 1) {
           return;
         }
-        if (self.musicPlayer.isPlaying) {
-          self.musicPlayer.firstLoadNextShouldBePlaying = true;
-        }
+        self.musicPlayer.firstLoadNextShouldBePlaying = true;
         self.musicPlayer.seek = 0.0;
         self.musicPlayer.isPlaying = false;
         if (self.playlist.tracks.length - 1 > self.playlist.currentSrcIndex) {
