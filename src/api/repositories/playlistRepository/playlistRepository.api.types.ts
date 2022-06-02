@@ -3,8 +3,9 @@ export interface BaseRequestInterface {
 }
 
 export interface BaseResponseInterface {}
+export interface PlaylistResponse extends Array<Track> {}
 
-export interface PlaylistResponse {
+export interface Track {
   order: number;
   spaceId: {
     type: string;

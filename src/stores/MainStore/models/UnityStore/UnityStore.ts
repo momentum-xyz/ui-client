@@ -11,7 +11,8 @@ const UnityStore = types
     isInitialized: false,
     isPaused: false,
     teleportReady: false,
-    volume: types.optional(types.number, 0.0)
+    volume: types.optional(types.number, 0.1),
+    muted: types.optional(types.boolean, false)
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -58,33 +59,36 @@ const UnityStore = types
     teleportIsReady(): void {
       self.teleportReady = true;
     },
+    setInitialVolume() {
+      UnityService.setSoundEffectVolume('0.1');
+    },
     setVolume(volume: number) {
       self.volume = volume;
     },
-    muteUnity(unityMuted: boolean) {
-      if (!unityMuted) {
+    mute() {
+      if (!self.muted) {
         UnityService.toggleAllSound();
         UnityService.setSoundEffectVolume('0');
         self.volume = 0;
       }
     },
-    unmuteUnity(unityMuted: boolean) {
+    unmute() {
       if (self.volume === 1) {
         return;
       }
-      const newVolume = Math.min((unityMuted ? 0 : self.volume) + 0.1, 1.0);
+      const newVolume = Math.min((self.muted ? 0 : self.volume) + 0.1, 1.0);
       self.volume = newVolume;
       UnityService.setSoundEffectVolume(newVolume.toString());
-      if (unityMuted) {
+      if (self.muted) {
         UnityService.toggleAllSound();
       }
     },
-    volumeChange(slider: ChangeEvent<HTMLInputElement>, unityMuted: boolean) {
+    volumeChange(slider: ChangeEvent<HTMLInputElement>) {
       const newVolume = parseFloat(slider.target.value);
-      if (!unityMuted && newVolume === 0) {
+      if (!self.muted && newVolume === 0) {
         UnityService.toggleAllSound();
       }
-      if (unityMuted && newVolume > 0) {
+      if (self.muted && newVolume > 0) {
         UnityService.toggleAllSound();
       }
       self.volume = newVolume;

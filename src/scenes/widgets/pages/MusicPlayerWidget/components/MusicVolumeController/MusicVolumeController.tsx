@@ -7,9 +7,7 @@ import {SvgButton} from 'ui-kit';
 
 import * as styled from './MusicVolumeController.styled';
 
-export interface PropsInterface {}
-
-const MusicVolumeController: FC<PropsInterface> = () => {
+const MusicVolumeController: FC = () => {
   const {musicPlayerStore} = useStore().widgetStore;
   const {musicPlayer} = musicPlayerStore;
 

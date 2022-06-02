@@ -1,49 +1,24 @@
-import React, {ChangeEvent, FC, useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {SvgButton} from 'ui-kit';
-import {useUnityStore} from 'store/unityStore';
-import UnityService from 'context/Unity/UnityService';
 
 import * as styled from './UnityVolumeController.styled';
 
-export interface PropsInterface {}
-
-const UnityVolumeController: FC<PropsInterface> = () => {
-  const UnityMuted = useUnityStore((state) => state.muted);
+const UnityVolumeController: FC = () => {
   const {unityStore} = useStore().mainStore;
 
   useEffect(() => {
-    if (!UnityMuted) {
-      UnityService.setSoundEffectVolume('0.1');
-      unityStore.setVolume(0.1);
-      console.info('UnityMuted?? FALSE', UnityMuted);
-    } else if (UnityMuted) {
-      UnityService.setSoundEffectVolume('0');
-      unityStore.setVolume(0);
-      console.info('UnityMuted?? TRUE', UnityMuted);
-    }
-  }, [UnityMuted]);
-
-  const handleMute = () => {
-    unityStore.muteUnity(UnityMuted);
-  };
-
-  const handleUnmute = () => {
-    unityStore.unmuteUnity(UnityMuted);
-  };
-
-  const handleChange = (slider: ChangeEvent<HTMLInputElement>) => {
-    unityStore.volumeChange(slider, UnityMuted);
-  };
+    unityStore.setInitialVolume();
+  }, []);
 
   return (
     <styled.Container>
       <styled.Title>{t('musicPlayer.unityVolume')}</styled.Title>
       <styled.VolumeContainer>
-        <SvgButton iconName="player-mute" size="medium" onClick={handleMute} />
+        <SvgButton iconName="player-mute" size="medium" onClick={unityStore.mute} />
         <styled.VolumeBarContainer>
           <styled.BarThumbPosition width={unityStore.volume * 100 + '%'} />
           <styled.VolumeBar
@@ -52,10 +27,10 @@ const UnityVolumeController: FC<PropsInterface> = () => {
             max="1"
             step=".01"
             value={unityStore.volume}
-            onChange={handleChange}
+            onChange={unityStore.volumeChange}
           />
         </styled.VolumeBarContainer>
-        <SvgButton iconName="player-unmute" size="medium" onClick={handleUnmute} />
+        <SvgButton iconName="player-unmute" size="medium" onClick={unityStore.unmute} />
       </styled.VolumeContainer>
     </styled.Container>
   );

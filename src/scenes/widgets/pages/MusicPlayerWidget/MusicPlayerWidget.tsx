@@ -24,9 +24,7 @@ const MusicPlayerWidget: FC = () => {
   const {musicPlayerWidget, playlist} = musicPlayerStore;
 
   useEffect(() => {
-    if (musicPlayerWidget.isOpen) {
-      playlist.fetchPlaylist(worldStore.worldId);
-    }
+    playlist.fetchPlaylist(worldStore.worldId);
   }, [musicPlayerWidget.isOpen]);
 
   return (

@@ -14,31 +14,45 @@ const Playlist = types
     currentTrackName: types.optional(types.string, t('musicPlayer.noTrackTitle'))
   })
   .actions((self) => ({
-    setCurrentTrackHash() {
+    setCurrentTrackHash(): void {
       if (self.tracks.length < 1) {
         return;
       }
-      self.currentTrackHash = cast(
-        appVariables.RENDER_SERVICE_URL + `/track/${self.tracks[self.currentSrcIndex].trackHash}`
-      );
+      self.currentTrackHash = `${appVariables.RENDER_SERVICE_URL}/track/${
+        self.tracks[self.currentSrcIndex].trackHash
+      }`;
     },
-    setCurrentTrackName() {
+    setCurrentTrackName(): void {
       if (self.tracks.length < 1) {
         self.currentTrackName = t('musicPlayer.noTrackTitle');
         return;
       }
       self.currentTrackName = self.tracks[self.currentSrcIndex].name;
+    },
+    next() {
+      self.currentSrcIndex = self.currentSrcIndex + 1;
+      this.setCurrentTrackHash();
+      this.setCurrentTrackName();
+    },
+    previous() {
+      self.currentSrcIndex = self.currentSrcIndex - 1;
+      this.setCurrentTrackHash();
+      this.setCurrentTrackName();
+    },
+    first() {
+      self.currentSrcIndex = 0;
+      this.setCurrentTrackHash();
+      this.setCurrentTrackName();
     }
   }))
   .actions((self) => ({
     fetchPlaylist: flow(function* (worldId: string) {
-      const response: PlaylistResponse[] = yield self.request.send(
+      const response: PlaylistResponse = yield self.request.send(
         api.playlistRepository.fetchPlaylist,
         {
           worldId
         }
       );
-
       if (response) {
         self.tracks = cast(
           response.map((track) => ({
@@ -50,23 +64,5 @@ const Playlist = types
         self.setCurrentTrackName();
       }
     })
-  }))
-  .actions((self) => ({
-    next() {
-      self.currentSrcIndex = self.currentSrcIndex + 1;
-      self.setCurrentTrackHash();
-      self.setCurrentTrackName();
-    },
-    previous() {
-      self.currentSrcIndex = self.currentSrcIndex - 1;
-      self.setCurrentTrackHash();
-      self.setCurrentTrackName();
-    },
-    first() {
-      self.currentSrcIndex = 0;
-      self.setCurrentTrackHash();
-      self.setCurrentTrackName();
-    }
   }));
-
 export {Playlist};

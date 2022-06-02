@@ -5,8 +5,8 @@ import raf from 'raf';
 const MusicPlayer = types
   .model('MusicPlayer', {
     isPlaying: types.optional(types.boolean, true),
-    start: types.optional(types.boolean, false),
-    next: types.optional(types.boolean, true),
+    firstLoadNextShouldBePlaying: types.optional(types.boolean, false),
+    nextSongShouldBePlaying: types.optional(types.boolean, true),
     loaded: types.optional(types.boolean, false),
     loop: types.optional(types.boolean, true),
     muted: types.optional(types.boolean, false),
@@ -28,14 +28,14 @@ const MusicPlayer = types
     setVolume(volume: number) {
       self.volume = volume;
     },
-    startLoading() {
+    startLoading(): void {
       if (!self.player) {
         return;
       }
       self.loaded = true;
       self.duration = self.player.duration();
     },
-    renderSeekPos() {
+    renderSeekPos(): void {
       if (!self.player) {
         return;
       }
@@ -46,13 +46,13 @@ const MusicPlayer = types
         self.seekPosRenderer = raf(this.renderSeekPos);
       }
     },
-    toggleLoop() {
+    toggleLoop(): void {
       self.loop = !self.loop;
     },
-    toggleMute() {
+    toggleMute(): void {
       self.muted = !self.muted;
     },
-    seekingStarted() {
+    seekingStarted(): void {
       self.isSeeking = true;
     },
     seekingEnded(e: any) {
@@ -63,21 +63,21 @@ const MusicPlayer = types
     seekingChange(e: any) {
       self.seek = parseFloat(e.target.value);
     },
-    resetSeekPosRenderer() {
+    resetSeekPosRenderer(): void {
       raf.cancel(self.seekPosRenderer ?? 0);
       self.seek = 0.0;
     },
-    startedPlaying() {
+    startedPlaying(): void {
       // self.playing = true;
       this.renderSeekPos();
     },
-    stoppedPlaying() {
+    stoppedPlaying(): void {
       self.player?.stop();
       self.isPlaying = false; // Need to update our local state so we don't immediately invoke autoplay
-      self.next = false;
+      self.nextSongShouldBePlaying = false;
       this.renderSeekPos();
     },
-    mute() {
+    mute(): void {
       if (self.muted) {
         this.toggleMute();
         this.setVolume(0.1);
@@ -87,7 +87,7 @@ const MusicPlayer = types
         this.setVolume(1);
       }
     },
-    unmute() {
+    unmute(): void {
       if (self.muted) {
         return;
       }

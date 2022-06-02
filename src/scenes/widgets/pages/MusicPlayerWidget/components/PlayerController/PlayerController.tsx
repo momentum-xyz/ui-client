@@ -6,9 +6,7 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './PlayerController.styled';
 
-export interface PropsInterface {}
-
-const PlayerController: FC<PropsInterface> = () => {
+const PlayerController: FC = () => {
   const {musicPlayerStore} = useStore().widgetStore;
   const {musicPlayer, togglePlayback, nextSong, previousSong} = musicPlayerStore;
 

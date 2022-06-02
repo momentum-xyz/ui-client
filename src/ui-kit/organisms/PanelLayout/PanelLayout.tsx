@@ -77,7 +77,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
               />
             </styled.HeaderIconItem>
           )}
-          <styled.HeaderItem className={cn(headerItem)} titleWidth={titleWidth}>
+          <styled.HeaderItem className={cn(headerItem)} style={{width: titleWidth}}>
             {restProps.title && (
               <styled.TitleHeading
                 theme={restProps.theme}

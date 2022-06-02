@@ -22,21 +22,27 @@ const MusicPlayerStore = types.compose(
         }
         self.musicPlayer.isPlaying = !self.musicPlayer.isPlaying;
         if (!self.musicPlayer.isPlaying) {
-          self.musicPlayer.next = false;
+          self.musicPlayer.nextSongShouldBePlaying = false;
         } else {
-          self.musicPlayer.start = true;
-          self.musicPlayer.next = true;
+          self.musicPlayer.firstLoadNextShouldBePlaying = true;
+          self.musicPlayer.nextSongShouldBePlaying = true;
         }
       },
       nextSong(): void {
         if (self.playlist.tracks.length < 1) {
           return;
         }
+        if (self.musicPlayer.isPlaying) {
+          self.musicPlayer.firstLoadNextShouldBePlaying = true;
+        }
         self.musicPlayer.seek = 0.0;
         self.musicPlayer.isPlaying = false;
         if (self.playlist.tracks.length - 1 > self.playlist.currentSrcIndex) {
           self.playlist.next();
-          if (self.musicPlayer.next && self.musicPlayer.start) {
+          if (
+            self.musicPlayer.nextSongShouldBePlaying &&
+            self.musicPlayer.firstLoadNextShouldBePlaying
+          ) {
             this.togglePlayback();
           }
         } else if (
@@ -44,7 +50,10 @@ const MusicPlayerStore = types.compose(
           self.musicPlayer.loop
         ) {
           self.playlist.first();
-          if (self.musicPlayer.next && self.musicPlayer.start) {
+          if (
+            self.musicPlayer.nextSongShouldBePlaying &&
+            self.musicPlayer.firstLoadNextShouldBePlaying
+          ) {
             this.togglePlayback();
           }
         } else if (

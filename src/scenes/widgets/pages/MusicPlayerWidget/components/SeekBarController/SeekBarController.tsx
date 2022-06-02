@@ -6,9 +6,7 @@ import {formatDurationTime} from 'core/utils';
 
 import * as styled from './SeekBarController.styled';
 
-export interface PropsInterface {}
-
-const SeekBarController: FC<PropsInterface> = () => {
+const SeekBarController: FC = () => {
   const {musicPlayerStore} = useStore().widgetStore;
   const {musicPlayer} = musicPlayerStore;
 

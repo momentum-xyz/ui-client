@@ -3,10 +3,9 @@ import {rgba} from 'polished';
 
 import {ComponentSizeInterface, Heading} from 'ui-kit';
 
-export const HeaderItem = styled.div<{titleWidth: string}>`
+export const HeaderItem = styled.div`
   display: flex;
   overflow: hidden;
-  width: ${(props) => props.titleWidth};
 
   &.left {
     justify-content: left;
