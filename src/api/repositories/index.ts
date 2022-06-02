@@ -13,3 +13,4 @@ export * from './tokenRepository';
 export * from './spaceTypeRepository';
 export * from './spaceInviteRepository';
 export * from './statusRepository';
+export * from './playlistRepository';

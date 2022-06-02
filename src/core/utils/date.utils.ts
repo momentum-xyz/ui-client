@@ -73,3 +73,9 @@ export const formatStartTime = (date: Date) => {
 export const formatEndDate = (date: Date) => {
   return formatInTimeZone(date, 'Europe/Berlin', 'MMM d h:mm aa z').toUpperCase();
 };
+
+export const formatDurationTime = (seconds: number) => {
+  const floored = Math.floor(seconds);
+
+  return new Date(floored * 1000).toISOString().match(/(?<=\d\d:)\d\d:\d\d/)?.[0];
+};

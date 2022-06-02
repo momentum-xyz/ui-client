@@ -631,6 +631,11 @@ export const enGb = {
       microphone: 'microphone',
       video: 'video',
       audio: 'audio'
+    },
+    musicPlayer: {
+      playerVolume: 'Music Volume',
+      unityVolume: 'Sound Effects Volume',
+      noTrackTitle: 'No Track'
     }
   }
 };
