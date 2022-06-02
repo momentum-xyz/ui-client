@@ -21,9 +21,9 @@ const SeekBarController: FC = () => {
           max={musicPlayer.duration ? musicPlayer.duration.toFixed(2) : 0}
           step=".01"
           value={musicPlayer.seek}
-          onChange={musicPlayer.seekingChange}
+          onChange={(e) => musicPlayer.seekingChange(e.target.value)}
           onMouseDown={musicPlayer.seekingStarted}
-          onMouseUp={musicPlayer.seekingEnded}
+          onMouseUp={(e) => musicPlayer.seekingEnded(e.currentTarget.value)}
         />
       </styled.SeekBarContainer>
       <styled.Duration>{formatDurationTime(musicPlayer.duration)}</styled.Duration>

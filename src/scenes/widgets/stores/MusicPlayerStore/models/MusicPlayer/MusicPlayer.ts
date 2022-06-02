@@ -55,13 +55,12 @@ const MusicPlayer = types
     seekingStarted(): void {
       self.isSeeking = true;
     },
-    seekingEnded(e: any) {
+    seekingEnded(seekValue: string) {
       self.isSeeking = false;
-
-      self.player?.seek(e.target.value);
+      self.player?.seek(+seekValue);
     },
-    seekingChange(e: any) {
-      self.seek = parseFloat(e.target.value);
+    seekingChange(seekValue: string) {
+      self.seek = parseFloat(seekValue);
     },
     resetSeekPosRenderer(): void {
       raf.cancel(self.seekPosRenderer ?? 0);
