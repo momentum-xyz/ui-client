@@ -99,11 +99,9 @@ const StageModeControlPanelLayout: React.FC = () => {
   }, [user, selectedRemoteUserIdForRemove]);
 
   useEffect(() => {
-    if (joinedStage) {
-      if (userToggledStageOn) {
-        setUserToggledStageOn(false);
-        handleEnterStage();
-      }
+    if (joinedStage && userToggledStageOn) {
+      setUserToggledStageOn(false);
+      handleEnterStage();
     }
   }, [joinedStage, userToggledStageOn]);
 
