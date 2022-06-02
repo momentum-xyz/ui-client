@@ -10,7 +10,7 @@ const MusicPlayer = types
     loaded: types.optional(types.boolean, false),
     loop: types.optional(types.boolean, true),
     muted: types.optional(types.boolean, false),
-    volume: types.optional(types.number, 0.2),
+    volume: types.optional(types.number, 0.1),
     duration: types.optional(types.number, 0),
     seek: types.optional(types.number, 0.0),
     rate: types.optional(types.number, 1),

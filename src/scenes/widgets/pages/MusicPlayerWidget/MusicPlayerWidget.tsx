@@ -12,7 +12,7 @@ import {
   UnityVolumeController
 } from './components';
 
-const DIALOG_OFFSET_RIGHT = 130;
+const DIALOG_OFFSET_RIGHT = 120;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
