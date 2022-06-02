@@ -70,6 +70,7 @@ const UnityStore = types
         UnityService.toggleAllSound();
         UnityService.setSoundEffectVolume('0');
         self.volume = 0;
+        self.muted = true;
       }
     },
     unmute() {
@@ -81,6 +82,7 @@ const UnityStore = types
       UnityService.setSoundEffectVolume(newVolume.toString());
       if (self.muted) {
         UnityService.toggleAllSound();
+        self.muted = false;
       }
     },
     volumeChange(slider: ChangeEvent<HTMLInputElement>) {
