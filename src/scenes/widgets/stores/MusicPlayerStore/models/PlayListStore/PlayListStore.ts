@@ -68,4 +68,5 @@ const PlayListStore = types
       self.setCurrentTrackName();
     }
   }));
+
 export {PlayListStore};

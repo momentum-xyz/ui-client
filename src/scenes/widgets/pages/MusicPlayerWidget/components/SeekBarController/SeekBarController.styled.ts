@@ -46,6 +46,7 @@ export const BarThumbPosition = styled.div<{width: string}>`
 export const Duration = styled.div`
   color: var(--player-default-color);
 `;
+
 export const Elapsed = styled.div`
   color: var(--player-default-color);
 `;

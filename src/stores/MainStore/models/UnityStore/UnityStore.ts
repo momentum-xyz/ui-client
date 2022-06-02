@@ -1,5 +1,6 @@
 import {types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
+import {ChangeEvent} from 'react';
 
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
@@ -9,7 +10,8 @@ const UnityStore = types
   .model('UnityStore', {
     isInitialized: false,
     isPaused: false,
-    teleportReady: false
+    teleportReady: false,
+    volume: types.optional(types.number, 0.0)
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -55,6 +57,38 @@ const UnityStore = types
     },
     teleportIsReady(): void {
       self.teleportReady = true;
+    },
+    setVolume(volume: number) {
+      self.volume = volume;
+    },
+    muteUnity(unityMuted: boolean) {
+      if (!unityMuted) {
+        UnityService.toggleAllSound();
+        UnityService.setSoundEffectVolume('0');
+        self.volume = 0;
+      }
+    },
+    unmuteUnity(unityMuted: boolean) {
+      if (self.volume === 1) {
+        return;
+      }
+      const newVolume = Math.min((unityMuted ? 0 : self.volume) + 0.1, 1.0);
+      self.volume = newVolume;
+      UnityService.setSoundEffectVolume(newVolume.toString());
+      if (unityMuted) {
+        UnityService.toggleAllSound();
+      }
+    },
+    volumeChange(slider: ChangeEvent<HTMLInputElement>, unityMuted: boolean) {
+      const newVolume = parseFloat(slider.target.value);
+      if (!unityMuted && newVolume === 0) {
+        UnityService.toggleAllSound();
+      }
+      if (unityMuted && newVolume > 0) {
+        UnityService.toggleAllSound();
+      }
+      self.volume = newVolume;
+      UnityService.setSoundEffectVolume(newVolume.toString());
     }
   }));
 

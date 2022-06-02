@@ -90,7 +90,7 @@ const AppLayers: FC = ({children}) => {
       </div>
       <ReactHowler
         src={[playlistStore.currentTrackHash]}
-        onLoad={musicPlayerStore.handleOnLoad}
+        onLoad={musicPlayerStore.startLoading}
         format={['mp3', 'ogg', 'acc', 'webm']}
         onPlay={musicPlayerStore.startedPlaying}
         onEnd={musicPlayerStore.songEnded}

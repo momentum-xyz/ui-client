@@ -31,6 +31,7 @@
     "@sentry/react": "^5.30.0",
     "@sentry/tracing": "^5.30.0",
     "@tailwindcss/forms": "^0.3.2",
+    "@types/raf": "^3.4.0",
     "@types/react-howler": "^5.2.0",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",

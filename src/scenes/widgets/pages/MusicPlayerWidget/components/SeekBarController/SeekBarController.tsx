@@ -10,14 +10,8 @@ export interface PropsInterface {}
 
 const SeekBarController: FC<PropsInterface> = () => {
   const {musicPlayerStore} = useStore().widgetStore;
-  const {
-    duration,
-    seek,
-    handleSeekingChange,
-    seekingStarted,
-    seekingEnded,
-    calculateDurationBarWidth
-  } = musicPlayerStore;
+  const {duration, seek, seekingChange, seekingStarted, seekingEnded, calculateDurationBarWidth} =
+    musicPlayerStore;
 
   return (
     <styled.Container>
@@ -30,7 +24,7 @@ const SeekBarController: FC<PropsInterface> = () => {
           max={duration ? duration.toFixed(2) : 0}
           step=".01"
           value={seek}
-          onChange={handleSeekingChange}
+          onChange={seekingChange}
           onMouseDown={seekingStarted}
           onMouseUp={seekingEnded}
         />

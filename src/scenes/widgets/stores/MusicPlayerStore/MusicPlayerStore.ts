@@ -1,18 +1,17 @@
 import {types} from 'mobx-state-tree';
 import ReactHowler from 'react-howler';
-// @ts-ignore
 import raf from 'raf';
+import {ChangeEvent} from 'react';
 
 import {DialogModel, ResetModel} from 'core/models';
 
-import {PlayListStore, UnityVolume} from './models';
+import {PlayListStore} from './models';
 
 const MusicPlayerStore = types.compose(
   ResetModel,
   types
     .model('MusicPlayerStore', {
       musicPlayerWidget: types.optional(DialogModel, {}),
-      unityVolumeStore: types.optional(UnityVolume, {}),
       playlistStore: types.optional(PlayListStore, {}),
       isPlaying: types.optional(types.boolean, true),
       start: types.optional(types.boolean, false),
@@ -26,7 +25,7 @@ const MusicPlayerStore = types.compose(
       rate: types.optional(types.number, 1),
       isSeeking: types.optional(types.boolean, false),
       html5: types.optional(types.boolean, true),
-      _raf: types.maybeNull(types.frozen<raf>())
+      seekPosRenderer: types.maybe(types.number)
     })
     .volatile<{player: ReactHowler | null}>(() => ({
       player: null
@@ -50,7 +49,7 @@ const MusicPlayerStore = types.compose(
           self.next = true;
         }
       },
-      handleOnLoad() {
+      startLoading() {
         if (!self.player) {
           return;
         }
@@ -65,10 +64,10 @@ const MusicPlayerStore = types.compose(
           self.seek = self.player.seek();
         }
         if (self.isPlaying) {
-          self._raf = raf(this.renderSeekPos);
+          self.seekPosRenderer = raf(this.renderSeekPos);
         }
       },
-      handleLoopToggle() {
+      toggleLoop() {
         self.loop = !self.loop;
       },
       toggleMute() {
@@ -77,16 +76,16 @@ const MusicPlayerStore = types.compose(
       seekingStarted() {
         self.isSeeking = true;
       },
-      seekingEnded(e: any) {
+      seekingEnded(event: ChangeEvent<{value: number}>) {
         self.isSeeking = false;
 
-        self.player?.seek(e.target.value);
+        self.player?.seek(event.target.value);
       },
-      handleSeekingChange(e: any) {
-        self.seek = parseFloat(e.target.value);
+      seekingChange(event: ChangeEvent<{value: string}>) {
+        self.seek = parseFloat(event.target.value);
       },
       resetSeekPosRenderer() {
-        raf.cancel(self._raf);
+        raf.cancel(self.seekPosRenderer ?? 0);
         self.seek = 0.0;
       }
     }))
