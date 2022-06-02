@@ -82,11 +82,6 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
   }, [participant.videoTrack, noVideo, collaborationState.stageMode]);
 
   useEffect(() => {
-    console.info(`Agora remote participant user updated for ${userName}`, participant);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [participant]);
-
-  useEffect(() => {
     const volume = collaborationState.deafen ? 0 : 100;
     participant.audioTrack?.setVolume(volume);
   }, [collaborationState.deafen, participant.audioTrack]);
