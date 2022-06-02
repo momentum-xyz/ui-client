@@ -1,171 +1,75 @@
 import {types} from 'mobx-state-tree';
-import ReactHowler from 'react-howler';
-import raf from 'raf';
-import {ChangeEvent} from 'react';
 
 import {DialogModel, ResetModel} from 'core/models';
 
-import {PlayListStore} from './models';
+import {MusicPlayer, Playlist} from './models';
 
 const MusicPlayerStore = types.compose(
   ResetModel,
   types
     .model('MusicPlayerStore', {
       musicPlayerWidget: types.optional(DialogModel, {}),
-      playlistStore: types.optional(PlayListStore, {}),
-      isPlaying: types.optional(types.boolean, true),
-      start: types.optional(types.boolean, false),
-      next: types.optional(types.boolean, true),
-      loaded: types.optional(types.boolean, false),
-      loop: types.optional(types.boolean, true),
-      muted: types.optional(types.boolean, false),
-      volume: types.optional(types.number, 0.2),
-      duration: types.optional(types.number, 0),
-      seek: types.optional(types.number, 0.0),
-      rate: types.optional(types.number, 1),
-      isSeeking: types.optional(types.boolean, false),
-      html5: types.optional(types.boolean, true),
-      seekPosRenderer: types.maybe(types.number)
+      playlist: types.optional(Playlist, {}),
+      musicPlayer: types.optional(MusicPlayer, {})
     })
-    .volatile<{player: ReactHowler | null}>(() => ({
-      player: null
-    }))
     .actions((self) => ({
-      setPlayer(ref: ReactHowler | null) {
-        self.player = ref;
+      init(worldId: string): void {
+        self.playlist.fetchPlaylist(worldId);
       },
-      setVolume(volume: number) {
-        self.volume = volume;
-      },
-      togglePlayback() {
-        if (self.playlistStore.tracks.length < 1) {
+      togglePlayback(): void {
+        if (self.playlist.tracks.length < 1) {
           return;
         }
-        self.isPlaying = !self.isPlaying;
-        if (!self.isPlaying) {
-          self.next = false;
+        self.musicPlayer.isPlaying = !self.musicPlayer.isPlaying;
+        if (!self.musicPlayer.isPlaying) {
+          self.musicPlayer.next = false;
         } else {
-          self.start = true;
-          self.next = true;
+          self.musicPlayer.start = true;
+          self.musicPlayer.next = true;
         }
       },
-      startLoading() {
-        if (!self.player) {
+      nextSong(): void {
+        if (self.playlist.tracks.length < 1) {
           return;
         }
-        self.loaded = true;
-        self.duration = self.player.duration();
-      },
-      renderSeekPos() {
-        if (!self.player) {
-          return;
-        }
-        if (!self.isSeeking) {
-          self.seek = self.player.seek();
-        }
-        if (self.isPlaying) {
-          self.seekPosRenderer = raf(this.renderSeekPos);
-        }
-      },
-      toggleLoop() {
-        self.loop = !self.loop;
-      },
-      toggleMute() {
-        self.muted = !self.muted;
-      },
-      seekingStarted() {
-        self.isSeeking = true;
-      },
-      seekingEnded(event: {target: {value: number}}) {
-        self.isSeeking = false;
-
-        self.player?.seek(event.target.value);
-      },
-      seekingChange(event: ChangeEvent<{value: string}>) {
-        self.seek = parseFloat(event.target.value);
-      },
-      resetSeekPosRenderer() {
-        raf.cancel(self.seekPosRenderer ?? 0);
-        self.seek = 0.0;
-      }
-    }))
-    .actions((self) => ({
-      startedPlaying() {
-        // self.playing = true;
-        self.renderSeekPos();
-      },
-      stoppedPlaying() {
-        self.player?.stop();
-        self.isPlaying = false; // Need to update our local state so we don't immediately invoke autoplay
-        self.next = false;
-        self.renderSeekPos();
-      },
-      mute() {
-        if (self.muted) {
-          self.toggleMute();
-          self.setVolume(0.1);
-        } else if (self.volume <= 0.9) {
-          self.setVolume(self.volume + 0.1);
-        } else {
-          self.setVolume(1);
-        }
-      },
-      unmute() {
-        if (self.muted) {
-          return;
-        }
-        self.toggleMute();
-        self.setVolume(0);
-      },
-      nextSong() {
-        if (self.playlistStore.tracks.length < 1) {
-          return;
-        }
-        self.seek = 0.0;
-        self.isPlaying = false;
-        if (self.playlistStore.tracks.length - 1 > self.playlistStore.currentSrcIndex) {
-          self.playlistStore.next();
-          if (self.next && self.start) {
-            self.togglePlayback();
+        self.musicPlayer.seek = 0.0;
+        self.musicPlayer.isPlaying = false;
+        if (self.playlist.tracks.length - 1 > self.playlist.currentSrcIndex) {
+          self.playlist.next();
+          if (self.musicPlayer.next && self.musicPlayer.start) {
+            this.togglePlayback();
           }
         } else if (
-          self.playlistStore.tracks.length - 1 === self.playlistStore.currentSrcIndex &&
-          self.loop
+          self.playlist.tracks.length - 1 === self.playlist.currentSrcIndex &&
+          self.musicPlayer.loop
         ) {
-          self.playlistStore.first();
-          if (self.next && self.start) {
-            self.togglePlayback();
+          self.playlist.first();
+          if (self.musicPlayer.next && self.musicPlayer.start) {
+            this.togglePlayback();
           }
         } else if (
-          self.playlistStore.tracks.length - 1 === self.playlistStore.currentSrcIndex &&
-          !self.loop
+          self.playlist.tracks.length - 1 === self.playlist.currentSrcIndex &&
+          !self.musicPlayer.loop
         ) {
-          self.playlistStore.first();
+          self.playlist.first();
         }
-      }
-    }))
-    .actions((self) => ({
-      songEnded() {
-        self.isPlaying = false;
-        self.resetSeekPosRenderer();
-        self.nextSong();
       },
-      previousSong() {
-        if (self.playlistStore.tracks.length < 1) {
+      songEnded(): void {
+        self.musicPlayer.isPlaying = false;
+        self.musicPlayer.resetSeekPosRenderer();
+        this.nextSong();
+      },
+      previousSong(): void {
+        if (self.playlist.tracks.length < 1) {
           return;
         }
-        self.seek = 0.0;
-        if (self.playlistStore.currentSrcIndex > 0) {
-          self.playlistStore.previous();
-        } else if (self.playlistStore.currentSrcIndex === 0) {
-          self.playlistStore.first();
-          self.stoppedPlaying();
+        self.musicPlayer.seek = 0.0;
+        if (self.playlist.currentSrcIndex > 0) {
+          self.playlist.previous();
+        } else if (self.playlist.currentSrcIndex === 0) {
+          self.playlist.first();
+          self.musicPlayer.stoppedPlaying();
         }
-      }
-    }))
-    .views((self) => ({
-      get calculateDurationBarWidth() {
-        return `${(self.seek / self.duration) * 100}%`;
       }
     }))
 );

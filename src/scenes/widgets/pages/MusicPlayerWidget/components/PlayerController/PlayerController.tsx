@@ -10,13 +10,13 @@ export interface PropsInterface {}
 
 const PlayerController: FC<PropsInterface> = () => {
   const {musicPlayerStore} = useStore().widgetStore;
-  const {isPlaying, togglePlayback, nextSong, previousSong} = musicPlayerStore;
+  const {musicPlayer, togglePlayback, nextSong, previousSong} = musicPlayerStore;
 
   return (
     <styled.Container>
       <styled.Div>
         <SvgButton iconName="player-backward" size="normal" onClick={previousSong} />
-        {isPlaying ? (
+        {musicPlayer.isPlaying ? (
           <SvgButton iconName="player-pause" size="medium-large" onClick={togglePlayback} />
         ) : (
           <SvgButton iconName="play-button" size="medium-large" onClick={togglePlayback} />

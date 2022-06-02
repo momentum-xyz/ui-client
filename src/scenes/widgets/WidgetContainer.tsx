@@ -3,6 +3,7 @@ import {t} from 'i18next';
 import {useHistory, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
+import ReactHowler from 'react-howler';
 
 import {cookie} from 'core/services';
 import {CookieKeyEnum} from 'core/enums';
@@ -71,9 +72,7 @@ const WidgetContainer: FC = () => {
   const {statsDialog} = worldStatsStore;
   const {profileMenuDialog} = profileMenuStore;
   const {profile: currentProfile, isGuest} = sessionStore;
-  const {musicPlayerWidget, playlistStore} = musicPlayerStore;
-  const {fetchPlaylist} = playlistStore;
-
+  const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {collaborationState, collaborationDispatch} = useCollaboration();
 
   const history = useHistory();
@@ -134,7 +133,7 @@ const WidgetContainer: FC = () => {
   });
 
   useEffect(() => {
-    fetchPlaylist(worldStore.worldId);
+    musicPlayerStore.init(worldStore.worldId);
   }, [worldStore.worldId]);
 
   useEffect(() => {
@@ -232,7 +231,20 @@ const WidgetContainer: FC = () => {
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {settingsStore.dialog.isOpen && <SettingsWidget />}
-
+      <ReactHowler
+        src={[playlist.currentTrackHash]}
+        onLoad={musicPlayer.startLoading}
+        format={['mp3', 'ogg', 'acc', 'webm']}
+        onPlay={musicPlayer.startedPlaying}
+        onEnd={musicPlayerStore.songEnded}
+        playing={musicPlayer.isPlaying}
+        preload={true}
+        loop={false}
+        mute={musicPlayer.muted}
+        volume={musicPlayer.volume}
+        html5={true}
+        ref={(ref) => musicPlayer.setPlayer(ref)}
+      />
       <styled.Footer>
         <styled.MainLinks>
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />

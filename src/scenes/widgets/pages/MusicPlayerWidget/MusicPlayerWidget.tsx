@@ -21,11 +21,11 @@ const MusicPlayerWidget: FC = () => {
     widgetStore
   } = useStore();
   const {musicPlayerStore} = widgetStore;
-  const {musicPlayerWidget, playlistStore} = musicPlayerStore;
+  const {musicPlayerWidget, playlist} = musicPlayerStore;
 
   useEffect(() => {
     if (musicPlayerWidget.isOpen) {
-      playlistStore.fetchPlaylist(worldStore.worldId);
+      playlist.fetchPlaylist(worldStore.worldId);
     }
   }, [musicPlayerWidget.isOpen]);
 
@@ -33,7 +33,7 @@ const MusicPlayerWidget: FC = () => {
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
-      title={playlistStore.currentTrackName}
+      title={playlist.currentTrackName}
       titleWidth="145px"
       headerItem="center"
       headerType="h4"

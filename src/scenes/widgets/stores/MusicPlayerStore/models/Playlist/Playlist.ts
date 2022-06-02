@@ -5,8 +5,8 @@ import {api, PlaylistResponse} from 'api';
 import {TrackModel, RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
 
-const PlayListStore = types
-  .model('PlayListStore', {
+const Playlist = types
+  .model('Playlist', {
     request: types.optional(RequestModel, {}),
     tracks: types.optional(types.array(TrackModel), []),
     currentSrcIndex: types.optional(types.number, 0),
@@ -69,4 +69,4 @@ const PlayListStore = types
     }
   }));
 
-export {PlayListStore};
+export {Playlist};

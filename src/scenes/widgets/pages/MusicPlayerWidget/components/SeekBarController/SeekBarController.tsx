@@ -10,26 +10,25 @@ export interface PropsInterface {}
 
 const SeekBarController: FC<PropsInterface> = () => {
   const {musicPlayerStore} = useStore().widgetStore;
-  const {duration, seek, seekingChange, seekingStarted, seekingEnded, calculateDurationBarWidth} =
-    musicPlayerStore;
+  const {musicPlayer} = musicPlayerStore;
 
   return (
     <styled.Container>
-      <styled.Elapsed>{`${formatDurationTime(seek)}`}</styled.Elapsed>
+      <styled.Elapsed>{`${formatDurationTime(musicPlayer.seek)}`}</styled.Elapsed>
       <styled.SeekBarContainer>
-        <styled.BarThumbPosition width={calculateDurationBarWidth} />
+        <styled.BarThumbPosition width={musicPlayer.calculateDurationBarWidth} />
         <styled.SeekBar
           type="range"
           min="0"
-          max={duration ? duration.toFixed(2) : 0}
+          max={musicPlayer.duration ? musicPlayer.duration.toFixed(2) : 0}
           step=".01"
-          value={seek}
-          onChange={seekingChange}
-          onMouseDown={seekingStarted}
-          onMouseUp={seekingEnded}
+          value={musicPlayer.seek}
+          onChange={musicPlayer.seekingChange}
+          onMouseDown={musicPlayer.seekingStarted}
+          onMouseUp={musicPlayer.seekingEnded}
         />
       </styled.SeekBarContainer>
-      <styled.Duration>{formatDurationTime(duration)}</styled.Duration>
+      <styled.Duration>{formatDurationTime(musicPlayer.duration)}</styled.Duration>
     </styled.Container>
   );
 };

@@ -3,7 +3,6 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
-import ReactHowler from 'react-howler';
 
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
@@ -22,11 +21,8 @@ const AppLayers: FC = ({children}) => {
   const theme = useTheme();
   const {
     favoriteStore,
-    mainStore: {worldStore, unityStore},
-    widgetStore
+    mainStore: {worldStore, unityStore}
   } = useStore();
-  const {musicPlayerStore} = widgetStore;
-  const {playlistStore} = musicPlayerStore;
 
   const [loading, setLoading] = useState(true);
   const auth = useAuth();
@@ -88,20 +84,6 @@ const AppLayers: FC = ({children}) => {
 
         <WidgetContainer />
       </div>
-      <ReactHowler
-        src={[playlistStore.currentTrackHash]}
-        onLoad={musicPlayerStore.startLoading}
-        format={['mp3', 'ogg', 'acc', 'webm']}
-        onPlay={musicPlayerStore.startedPlaying}
-        onEnd={musicPlayerStore.songEnded}
-        playing={musicPlayerStore.isPlaying}
-        preload={true}
-        loop={false}
-        mute={musicPlayerStore.muted}
-        volume={musicPlayerStore.volume}
-        html5={true}
-        ref={(ref) => musicPlayerStore.setPlayer(ref)}
-      />
       <VideoLayer />
       <LiveStreamLayer />
     </>

@@ -41,6 +41,7 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
 
   const {widgetStore, sessionStore} = useStore();
   const {stakingStore, musicPlayerStore} = widgetStore;
+  const {musicPlayer} = musicPlayerStore;
   const {stakingDialog} = stakingStore;
   const {isGuest} = sessionStore;
 
@@ -49,7 +50,7 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
   useEffect(() => {
     setDashboardEdited(true);
     if (dashboard) {
-      if (musicPlayerStore.isPlaying) {
+      if (musicPlayer.isPlaying) {
         musicPlayerStore.togglePlayback();
       }
       dashboard.tiles.forEach((tile) => {
