@@ -1,25 +1,25 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-import CONFIG from '../../../config/config';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import {useUser} from '../../../hooks/api/useUser';
-import {AgoraParticipant} from '../../../hooks/communication/useAgoraVideo';
-import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
-import {ReactComponent as AstronautIcon} from '../../../images/icons/professions-man-astronaut.svg';
-import {ReactComponent as AddIcon} from '../../../images/icons/add.svg';
-import Avatar from '../../atoms/Avatar';
-import Modal, {ModalRef} from '../../util/Modal';
-import StageModeInviteToStagePopup from '../../popup/stageMode/StageModeInviteToStagePopup';
-import {useModerator} from '../../../context/Integration/hooks/useIntegration';
+import CONFIG from 'config/config';
+import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+import {useUser} from 'hooks/api/useUser';
+import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
+import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
+import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
+import {ReactComponent as AddIcon} from 'images/icons/add.svg';
+import Avatar from 'component/atoms/Avatar';
+import Modal, {ModalRef} from 'component/util/Modal';
+import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
+import {useModerator} from 'context/Integration/hooks/useIntegration';
 //import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 
-export interface RemoteParticipantViewProps {
+export interface RemoteParticipantProps {
   participant: AgoraParticipant;
   totalParticipants: number;
   canEnterStage: boolean;
 }
 
-const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
+const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
   totalParticipants,
   canEnterStage
@@ -162,4 +162,4 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
   );
 };
 
-export default RemoteParticipantView;
+export default RemoteParticipant;

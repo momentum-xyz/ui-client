@@ -3,44 +3,39 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import styled from 'styled-components';
 import {observer} from 'mobx-react-lite';
 
-import {Button, ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
-import CONFIG from '../../config/config';
+import CONFIG from '../../../../config/config';
 import useCollaboration, {
   useJoinCollaborationSpaceByAssign,
   useLeaveCollaborationSpace
-} from '../../context/Collaboration/hooks/useCollaboration';
-import useAgoraVideo from '../../hooks/communication/useAgoraVideo';
-import LocalParticipantView from '../molucules/collaboration/LocalParticipantView';
-import RemoteParticipantView from '../molucules/collaboration/RemoteParticipantView';
-import {ParticipantRole} from '../../context/Collaboration/CollaborationTypes';
-import {useAgoraStageMode} from '../../hooks/communication/useAgoraStageMode';
-import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from '../../context/Collaboration/CollaborationReducer';
-import StageModePIP from '../atoms/StageMode/StageModePIP';
-import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
-import {StageModeStatus} from '../../context/type/StageMode';
-import {ROUTES} from '../../core/constants';
-import {useStageModePopupQueueContext} from '../../context/StageMode/StageModePopupQueueContext';
+} from '../../../../context/Collaboration/hooks/useCollaboration';
+import useAgoraVideo from '../../../../hooks/communication/useAgoraVideo';
+import {ParticipantRole} from '../../../../context/Collaboration/CollaborationTypes';
+import {useAgoraStageMode} from '../../../../hooks/communication/useAgoraStageMode';
+import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from '../../../../context/Collaboration/CollaborationReducer';
+import StageModePIP from '../../../../component/atoms/StageMode/StageModePIP';
+import useWebsocketEvent from '../../../../context/Websocket/hooks/useWebsocketEvent';
+import {StageModeStatus} from '../../../../context/type/StageMode';
+import {ROUTES} from '../../../../core/constants';
+import {useStageModePopupQueueContext} from '../../../../context/StageMode/StageModePopupQueueContext';
 import {
   useStageModeLeave,
   useStageModeRequestAcceptOrDecline
-} from '../../hooks/api/useStageModeService';
-import {useModerator} from '../../context/Integration/hooks/useIntegration';
-import {useGetSpace} from '../../hooks/api/useSpaceService';
+} from '../../../../hooks/api/useStageModeService';
+import {useModerator} from '../../../../context/Integration/hooks/useIntegration';
+import {useGetSpace} from '../../../../hooks/api/useSpaceService';
+
+import {RemoteParticipant} from './components/RemoteParticipant';
+import {LocalParticipant} from './components/LocalParticipant';
+import * as styled from './CommunicationLayer.styled';
 
 export interface CommunicationLayerProps {}
 
-// TODO: Refactor this styled component
-const StyledButton = styled(Button)`
-  width: 95px;
-  margin-right: 0;
-  align-self: center;
-`;
-
+// TODO: Refactor this component to new structure
 const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const history = useHistory();
   const location = useLocation();
@@ -254,7 +249,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           className="overflow-hidden pr-.1 space-y-1"
           as="li"
         >
-          <StyledButton
+          <styled.ActionButton
             variant="primary-background"
             label={t('actions.return')}
             icon="collaboration"
@@ -262,7 +257,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               history.push(ROUTES.collaboration);
             }}
           />
-          <StyledButton
+          <styled.ActionButton
             variant="danger-background"
             label={t('actions.leave')}
             icon="leave"
@@ -284,8 +279,8 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           </p>
           <ul>
             {collaborationState.stageMode
-              ? !isOnStage && <LocalParticipantView stageLocalUserId={currentUserId} />
-              : localUser.uid && <LocalParticipantView localUser={localUser} />}
+              ? !isOnStage && <LocalParticipant stageLocalUserId={currentUserId} />
+              : localUser.uid && <LocalParticipant localUser={localUser} />}
             {noVideo && (
               <li
                 className="mb-.5 p-.5
@@ -322,7 +317,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                 leaveFrom="translate-x-0 "
                 leaveTo="translate-x-8"
               >
-                <RemoteParticipantView
+                <RemoteParticipant
                   key={`participant-${participant.uid as string}`}
                   // @ts-ignore
                   participant={participant}

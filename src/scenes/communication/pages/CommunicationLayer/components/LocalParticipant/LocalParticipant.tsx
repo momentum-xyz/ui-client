@@ -1,22 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-import {useAgoraClient} from '../../../hooks/communication/useAgoraClient';
-import {ILocalUser} from '../../../hooks/communication/useAgoraVideo';
-import {ReactComponent as AstronautIcon} from '../../../images/icons/professions-man-astronaut.svg';
-import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import Avatar from '../../atoms/Avatar';
-import {useUser} from '../../../hooks/api/useUser';
+import {useAgoraClient} from 'hooks/communication/useAgoraClient';
+import {ILocalUser} from 'hooks/communication/useAgoraVideo';
+import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
+import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
+import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+import Avatar from 'component/atoms/Avatar';
+import {useUser} from 'hooks/api/useUser';
 
-export interface LocalParticipantViewProps {
+export interface LocalParticipantProps {
   localUser?: ILocalUser;
   stageLocalUserId?: string;
 }
 
-const LocalParticipantView: React.FC<LocalParticipantViewProps> = ({
-  localUser,
-  stageLocalUserId
-}) => {
+const LocalParticipant: React.FC<LocalParticipantProps> = ({localUser, stageLocalUserId}) => {
   const {collaborationState} = useCollaboration();
   const videoRef = useRef<HTMLDivElement>(null);
   const client = useAgoraClient();
@@ -117,4 +114,4 @@ const LocalParticipantView: React.FC<LocalParticipantViewProps> = ({
   );
 };
 
-export default LocalParticipantView;
+export default LocalParticipant;

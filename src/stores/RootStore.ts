@@ -1,5 +1,6 @@
 import {Instance, types} from 'mobx-state-tree';
 
+import {RootCommunicationStore} from 'scenes/communication/stores';
 import {RootAuthStore} from 'scenes/auth/stores';
 import {RootDefaultStore} from 'scenes/default/stores';
 import {RootSystemStore} from 'scenes/system/stores';
@@ -27,6 +28,7 @@ const RootStore = types
     systemStore: types.optional(RootSystemStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
+    communicationStore: types.optional(RootCommunicationStore, {}),
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),

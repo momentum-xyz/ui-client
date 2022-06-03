@@ -7,9 +7,9 @@ import {useTheme} from 'styled-components';
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
+import {Communication} from 'scenes/communication';
 
 import UnityLoading from '../component/atoms/UnityLoading';
-import CommunicationLayer from '../component/overlays/CommunicationLayer';
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
 import useUnityEvent from '../context/Unity/hooks/useUnityEvent';
@@ -78,7 +78,7 @@ const AppLayers: FC = ({children}) => {
         <StageModePopupQueueProvider>
           <main id="main" className="h-screen pb-7 flex ">
             {children}
-            <CommunicationLayer />
+            <Communication />
           </main>
         </StageModePopupQueueProvider>
 
