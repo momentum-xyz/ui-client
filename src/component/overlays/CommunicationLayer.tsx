@@ -241,17 +241,17 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       leaveFrom="translate-x-0 "
       leaveTo="translate-x-5 "
     >
-      <ul className="h-full" style={{paddingBottom: '100px'}}>
+      <ul className="h-full mt-1 overflow-hidden">
         <Transition
           show={!unityStore.isPaused}
           unmount={true}
           enter="transition-all transform ease-out duration-300"
-          enterFrom="-translate-y-8 h-0 mt-0"
-          enterTo="translate-y-0 h-8 mt-1"
+          enterFrom="-translate-y-8 pt-0"
+          enterTo="translate-y-0 pt-[30px] pb-1"
           leave="transition-all transform ease-in duration-300"
-          leaveFrom="translate-y-0 h-8 mt-1"
-          leaveTo="-translate-y-8 h-0 mt-0"
-          className={`mb-1 ${!unityStore.isPaused ? 'mt-4' : ''} overflow-hidden pr-.1 space-y-1`}
+          leaveFrom="translate-y-0 pt-[30px] pb-1"
+          leaveTo="-translate-y-8 pt-0 hidden"
+          className="overflow-hidden pr-.1 space-y-1"
           as="li"
         >
           <StyledButton
@@ -278,7 +278,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
           />
         </Transition>
 
-        <li className="overflow-y-scroll h-full pr-.1 mt-1">
+        <li className="overflow-y-scroll h-full pr-.1">
           <p className="text-center whitespace-nowrap">
             {t('counts.people', {count: numberOfPeople}).toUpperCase()}
           </p>
