@@ -73,6 +73,7 @@ declare type IconName =
   | 'profile'
   | 'question'
   | 'qweasd'
+  | 'remove-user'
   | 'requested'
   | 'rocket'
   | 'screenshare'

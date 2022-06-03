@@ -11,6 +11,8 @@ import Avatar from 'component/atoms/Avatar';
 import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
+
+import {ParticipantMenu} from '../ParticipantMenu';
 //import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 
 export interface RemoteParticipantProps {
@@ -103,7 +105,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       </Modal>
       <li
         className={` mb-.5 p-.5
-        relative
         rounded-full 
         border-1
         ${soundlevel > 3 ? ' border-prime-blue-70' : ' border-transparant'}`}
@@ -158,6 +159,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       >
         {userName}
       </p>
+      <ParticipantMenu />
     </>
   );
 };

@@ -236,102 +236,103 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       leaveFrom="translate-x-0 "
       leaveTo="translate-x-5 "
     >
-      <ul className="h-full mt-1 overflow-hidden">
-        <Transition
-          show={!unityStore.isPaused}
-          unmount={false}
-          enter="transition-all transform ease-out duration-300"
-          enterFrom="-translate-y-8 pt-0"
-          enterTo="translate-y-0 pt-[30px] pb-1"
-          leave="transition-all transform ease-in duration-300"
-          leaveFrom="translate-y-0 pt-[30px] pb-1"
-          leaveTo="-translate-y-8 pt-0 hidden"
-          className="overflow-hidden pr-.1 space-y-1"
-          as="li"
-        >
-          <styled.ActionButton
-            variant="primary-background"
-            label={t('actions.return')}
-            icon="collaboration"
-            onClick={() => {
-              history.push(ROUTES.collaboration);
-            }}
-          />
-          <styled.ActionButton
-            variant="danger-background"
-            label={t('actions.leave')}
-            icon="leave"
-            onClick={() => {
-              leaveCollaborationSpaceCall(false).then(stageModeLeave);
-              if (collaborationState.stageMode) {
-                collaborationDispatch({
-                  type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
-                  stageMode: false
-                });
-              }
-            }}
-          />
-        </Transition>
-
-        <li className="overflow-y-scroll h-full pr-.1">
-          <p className="text-center whitespace-nowrap">
-            {t('counts.people', {count: numberOfPeople}).toUpperCase()}
-          </p>
-          <ul>
-            {collaborationState.stageMode
-              ? !isOnStage && <LocalParticipant stageLocalUserId={currentUserId} />
-              : localUser.uid && <LocalParticipant localUser={localUser} />}
-            {noVideo && (
-              <li
-                className="mb-.5 p-.5
+      <ul className="h-full mt-1">
+        <styled.List>
+          <Transition
+            show={!unityStore.isPaused}
+            unmount={false}
+            enter="transition-all transform ease-out duration-300"
+            enterFrom="-translate-y-8 pt-0"
+            enterTo="translate-y-0 pt-[30px] pb-1"
+            leave="transition-all transform ease-in duration-300"
+            leaveFrom="translate-y-0 pt-[30px] pb-1"
+            leaveTo="-translate-y-8 pt-0 hidden"
+            className="pr-.1 space-y-1 pointer-all"
+            as="li"
+          >
+            <styled.ActionButton
+              variant="primary-background"
+              label={t('actions.return')}
+              icon="collaboration"
+              onClick={() => {
+                history.push(ROUTES.collaboration);
+              }}
+            />
+            <styled.ActionButton
+              variant="danger-background"
+              label={t('actions.leave')}
+              icon="leave"
+              onClick={() => {
+                leaveCollaborationSpaceCall(false).then(stageModeLeave);
+                if (collaborationState.stageMode) {
+                  collaborationDispatch({
+                    type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
+                    stageMode: false
+                  });
+                }
+              }}
+            />
+          </Transition>
+          <styled.ListContent>
+            <p className="text-center whitespace-nowrap">
+              {t('counts.people', {count: numberOfPeople}).toUpperCase()}
+            </p>
+            <ul>
+              {collaborationState.stageMode
+                ? !isOnStage && <LocalParticipant stageLocalUserId={currentUserId} />
+                : localUser.uid && <LocalParticipant localUser={localUser} />}
+              {noVideo && (
+                <li
+                  className="mb-.5 p-.5
         relative
         rounded-full
         border-1 border-transparant"
-              >
-                <div
-                  className="h-8 w-8 flex items-center rounded-full bg-dark-blue-100 overflow-hidden relative cursor-pointer"
-                  onClick={() => showMaxVideoStreamsReached()}
                 >
-                  <span className="p-.5 text-xs text-prime-blue-100 text-center flex-grow-0">
-                    Video limit reached
-                  </span>
-                </div>
-              </li>
-            )}
-            {(collaborationState.stageMode
-              ? stageModeAudience.map((user) => {
-                  return {
-                    ...user,
-                    soundLevel: 0
-                  };
-                })
-              : remoteParticipants
-            ).map((participant) => (
-              <Transition
-                key={`participant-${participant.uid as string}`}
-                appear={true}
-                enter="transition-all transform ease-out duration-300"
-                enterFrom="translate-x-8"
-                enterTo="translate-x-0 "
-                leave="transition-all transform  ease-in duration-300"
-                leaveFrom="translate-x-0 "
-                leaveTo="translate-x-8"
-              >
-                <RemoteParticipant
+                  <div
+                    className="h-8 w-8 flex items-center rounded-full bg-dark-blue-100 cursor-pointer"
+                    onClick={() => showMaxVideoStreamsReached()}
+                  >
+                    <span className="p-.5 text-xs text-prime-blue-100 text-center flex-grow-0">
+                      Video limit reached
+                    </span>
+                  </div>
+                </li>
+              )}
+              {(collaborationState.stageMode
+                ? stageModeAudience.map((user) => {
+                    return {
+                      ...user,
+                      soundLevel: 0
+                    };
+                  })
+                : remoteParticipants
+              ).map((participant) => (
+                <Transition
                   key={`participant-${participant.uid as string}`}
-                  // @ts-ignore
-                  participant={participant}
-                  canEnterStage={canEnterStage()}
-                  totalParticipants={
-                    collaborationState.stageMode
-                      ? stageModeAudience.length
-                      : remoteParticipants.length
-                  }
-                />
-              </Transition>
-            ))}
-          </ul>
-        </li>
+                  appear={true}
+                  enter="transition-all transform ease-out duration-300"
+                  enterFrom="translate-x-8"
+                  enterTo="translate-x-0 "
+                  leave="transition-all transform  ease-in duration-300"
+                  leaveFrom="translate-x-0 "
+                  leaveTo="translate-x-8"
+                >
+                  <RemoteParticipant
+                    key={`participant-${participant.uid as string}`}
+                    // @ts-ignore
+                    participant={participant}
+                    canEnterStage={canEnterStage()}
+                    totalParticipants={
+                      collaborationState.stageMode
+                        ? stageModeAudience.length
+                        : remoteParticipants.length
+                    }
+                  />
+                </Transition>
+              ))}
+            </ul>
+          </styled.ListContent>
+        </styled.List>
       </ul>
       {!window.location.href.includes('stage-mode') && <StageModePIP />}
     </Transition>
