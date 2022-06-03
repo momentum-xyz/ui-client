@@ -71,6 +71,10 @@ export const Button = styled.button`
     border-color: ${rgba(DANGER_COLOR, 0.9)};
     border-radius: 5px;
 
+    .IconSvg-custom {
+      color: ${(props) => props.theme.accent && rgba(DANGER_COLOR, 0.9)};
+    }
+
     &:hover,
     &:active {
       color: var(--danger);
