@@ -87,7 +87,8 @@ const AppLayers: FC = ({children}) => {
                 marginRight:
                   collaborationState.enabled || collaborationState.stageMode ? '90px' : undefined,
                 width: '100%',
-                zIndex: 1
+                zIndex: 1,
+                pointerEvents: 'none'
               }}
             >
               {children}

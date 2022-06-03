@@ -301,7 +301,9 @@ export const enGb = {
       invited: 'Invited',
       closeAndContinue: 'Close and Continue',
       return: 'Return',
-      leave: 'Leave'
+      leave: 'Leave',
+      muteName: 'Mute {{name}}',
+      kickName: 'Kick {{Name}}'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

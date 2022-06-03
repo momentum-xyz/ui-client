@@ -46,7 +46,11 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
-  const {unityStore} = useStore().mainStore;
+  const {
+    mainStore,
+    communicationStore: {communicationLayerStore}
+  } = useStore();
+  const {unityStore} = mainStore;
   const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
   const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
@@ -57,11 +61,32 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     collaborationState.collaborationSpace?.id
   );
 
+  const stageModeAudience = useMemo(() => {
+    return stageModeUsers.filter((user) => {
+      return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== currentUserId;
+    });
+  }, [currentUserId, stageModeUsers]);
+
+  const numberOfPeople = useMemo(() => {
+    return collaborationState.stageMode
+      ? stageModeAudience.length + Number(!isOnStage)
+      : remoteParticipants.length + 1;
+  }, [
+    collaborationState.stageMode,
+    isOnStage,
+    remoteParticipants.length,
+    stageModeAudience.length
+  ]);
+
   const {t} = useTranslation();
 
   useEffect(() => {
     clearPopups();
   }, [collaborationState.collaborationSpace]);
+
+  useEffect(() => {
+    communicationLayerStore.changeMode(collaborationState.stageMode);
+  }, [collaborationState.stageMode, communicationLayerStore]);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
@@ -209,21 +234,6 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
 
   const noVideo = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
-  const stageModeAudience = stageModeUsers.filter((user) => {
-    return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== currentUserId;
-  });
-
-  const numberOfPeople = useMemo(() => {
-    return collaborationState.stageMode
-      ? stageModeAudience.length + Number(!isOnStage)
-      : remoteParticipants.length + 1;
-  }, [
-    collaborationState.stageMode,
-    isOnStage,
-    remoteParticipants.length,
-    stageModeAudience.length
-  ]);
-
   return (
     <Transition
       show={collaborationState.enabled || collaborationState.stageMode}
@@ -321,6 +331,9 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                     key={`participant-${participant.uid as string}`}
                     // @ts-ignore
                     participant={participant}
+                    participantModel={communicationLayerStore.participants.find(
+                      (p) => p.uid === participant.uid
+                    )}
                     canEnterStage={canEnterStage()}
                     totalParticipants={
                       collaborationState.stageMode

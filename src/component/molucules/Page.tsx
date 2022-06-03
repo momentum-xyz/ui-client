@@ -19,7 +19,7 @@ const Page: React.FC<PageProps> = ({
   adminActions
 }) => {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full" style={{pointerEvents: 'all'}}>
       <TopBar
         title={title}
         subtitle={subtitle}

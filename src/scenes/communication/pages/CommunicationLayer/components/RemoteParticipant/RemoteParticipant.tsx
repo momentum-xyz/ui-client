@@ -1,9 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {observer} from 'mobx-react-lite';
 
 import CONFIG from 'config/config';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {useUser} from 'hooks/api/useUser';
-import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
 import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
 import {ReactComponent as AddIcon} from 'images/icons/add.svg';
@@ -11,18 +11,23 @@ import Avatar from 'component/atoms/Avatar';
 import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
+import {ParticipantModelInterface} from 'scenes/communication/stores/CommunicationLayerStore/models';
+import {useStore} from 'shared/hooks';
+import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
 
 import {ParticipantMenu} from '../ParticipantMenu';
 //import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 
 export interface RemoteParticipantProps {
   participant: AgoraParticipant;
+  participantModel?: ParticipantModelInterface;
   totalParticipants: number;
   canEnterStage: boolean;
 }
 
 const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
+  participantModel,
   totalParticipants,
   canEnterStage
 }) => {
@@ -33,6 +38,10 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   const id = participant.uid as string;
   const [isModerator, , ,] = useModerator(collaborationState.collaborationSpace?.id ?? '');
   const [hovered, setIsHovered] = useState(false);
+
+  const {
+    communicationStore: {communicationLayerStore}
+  } = useStore();
 
   const [user] = useUser(id);
 
@@ -93,6 +102,15 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     console.info(`clicked on ${userName} with ${id}`);
   };
 
+  const handleUserClick = () => {
+    if (communicationLayerStore.selectedParticipant === participant.uid) {
+      communicationLayerStore.selectParticipant(undefined);
+    } else {
+      communicationLayerStore.selectParticipant(participant.uid);
+    }
+    console.info(`clicked on ${userName} with ${id}`);
+  };
+
   return (
     <>
       <Modal ref={inviteOnStageModalRef}>
@@ -111,6 +129,11 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         title={userName}
+        onClick={() => {
+          if (communicationLayerStore.isNormalMode && isModerator) {
+            handleUserClick();
+          }
+        }}
       >
         <div
           className={`h-8 w-8 rounded-full overflow-hidden relative border-2 
@@ -150,7 +173,10 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
           </div>
         </div>
         {!participant.hasAudio && !collaborationState.stageMode && (
-          <MicOff className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5" />
+          <MicOff
+            className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5"
+            style={{top: '70px'}}
+          />
         )}
       </li>
       <p
@@ -159,9 +185,11 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       >
         {userName}
       </p>
-      <ParticipantMenu />
+      {communicationLayerStore.selectedParticipant === participant.uid && (
+        <ParticipantMenu name={userName} uid={participant.uid} />
+      )}
     </>
   );
 };
 
-export default RemoteParticipant;
+export default observer(RemoteParticipant);
