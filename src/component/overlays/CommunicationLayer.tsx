@@ -244,7 +244,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       <ul className="h-full mt-1 overflow-hidden">
         <Transition
           show={!unityStore.isPaused}
-          unmount={true}
+          unmount={false}
           enter="transition-all transform ease-out duration-300"
           enterFrom="-translate-y-8 pt-0"
           enterTo="translate-y-0 pt-[30px] pb-1"
