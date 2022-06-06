@@ -8,10 +8,11 @@ import * as styled from './ParticipantMenu.styled';
 interface PropsInterface {
   name: string;
   uid: string | number;
+  removeParticipant?: () => void;
 }
 
 // TODO: Implement methods for muting and kicking in the CommunicationLayerStore and call them for each Option
-const ParticipantMenu: FC<PropsInterface> = ({name}) => {
+const ParticipantMenu: FC<PropsInterface> = ({name, removeParticipant}) => {
   const {t} = useTranslation();
 
   return (
@@ -23,7 +24,7 @@ const ParticipantMenu: FC<PropsInterface> = ({name}) => {
           </styled.IconContainer>
           <Text text={t('actions.muteName', {name})} size="xxs" />
         </styled.Option>
-        <styled.Option>
+        <styled.Option onClick={removeParticipant}>
           <styled.IconContainer>
             <IconSvg name="remove-user" />
           </styled.IconContainer>

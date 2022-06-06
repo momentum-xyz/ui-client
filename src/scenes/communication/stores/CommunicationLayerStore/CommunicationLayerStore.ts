@@ -1,6 +1,7 @@
-import {Instance, types} from 'mobx-state-tree';
+import {flow, Instance, types} from 'mobx-state-tree';
 
-import {ResetModel} from 'core/models';
+import {RequestModel, ResetModel} from 'core/models';
+import {api} from 'api';
 
 import {ParticipantModel} from './models';
 
@@ -8,6 +9,7 @@ const CommunicationLayerStore = types
   .compose(
     ResetModel,
     types.model('CommunicationLayerStore', {
+      request: types.optional(RequestModel, {}),
       participants: types.array(ParticipantModel),
       isNormalMode: false,
       selectedParticipant: types.maybe(types.union(types.string, types.number))
@@ -19,7 +21,13 @@ const CommunicationLayerStore = types
     },
     changeMode(isStageMode: boolean) {
       self.isNormalMode = !isStageMode;
-    }
+    },
+    removeParticipant: flow(function* (spaceId?: string, userId?: string | number) {
+      yield self.request.send(api.communicationRepository.removeParticipant, {
+        spaceId,
+        userId
+      });
+    })
   }));
 
 export interface CommunicationLayerStoreInterface

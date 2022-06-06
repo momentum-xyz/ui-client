@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+import {toast} from 'react-toastify';
+import {t} from 'i18next';
 
 import CONFIG from 'config/config';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {useUser} from 'hooks/api/useUser';
 import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
@@ -14,8 +15,16 @@ import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {ParticipantModelInterface} from 'scenes/communication/stores/CommunicationLayerStore/models';
 import {useStore} from 'shared/hooks';
 import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
+import UnityService from 'context/Unity/UnityService';
+import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
+import useCollaboration, {
+  useLeaveCollaborationSpace
+} from 'context/Collaboration/hooks/useCollaboration';
+import {PosBusInteractionType} from 'context/Unity/UnityService';
+import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 
 import {ParticipantMenu} from '../ParticipantMenu';
+
 //import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 
 export interface RemoteParticipantProps {
@@ -33,6 +42,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 }) => {
   const {collaborationState} = useCollaboration();
   // const {canEnterStage} = useAgoraStageMode();
+  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const videoRef = useRef<HTMLDivElement>(null);
   const inviteOnStageModalRef = useRef<ModalRef>(null);
   const id = participant.uid as string;
@@ -40,7 +50,8 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   const [hovered, setIsHovered] = useState(false);
 
   const {
-    communicationStore: {communicationLayerStore}
+    communicationStore: {communicationLayerStore},
+    collaborationStore: {spaceStore}
   } = useStore();
 
   const [user] = useUser(id);
@@ -110,6 +121,29 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     }
     console.info(`clicked on ${userName} with ${id}`);
   };
+
+  const handleRemoveParticipant = () => {
+    communicationLayerStore.removeParticipant(
+      spaceStore.space.id,
+      communicationLayerStore.selectedParticipant
+    );
+  };
+
+  useWebsocketEvent('communication-user-kick', (spaceId) => {
+    console.info('SPACEID ', spaceId);
+    UnityService.triggerInteractionMsg?.(PosBusInteractionType.LeftSpace, spaceId, 0, '');
+    leaveCollaborationSpaceCall(false).then(() => {
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="you are kicked out of the space"
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    });
+  });
 
   return (
     <>
@@ -186,7 +220,11 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         {userName}
       </p>
       {communicationLayerStore.selectedParticipant === participant.uid && (
-        <ParticipantMenu name={userName} uid={participant.uid} />
+        <ParticipantMenu
+          removeParticipant={handleRemoveParticipant}
+          name={userName}
+          uid={participant.uid}
+        />
       )}
     </>
   );

@@ -303,7 +303,7 @@ export const enGb = {
       return: 'Return',
       leave: 'Leave',
       muteName: 'Mute {{name}}',
-      kickName: 'Kick {{Name}}'
+      kickName: 'Kick {{name}}'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
