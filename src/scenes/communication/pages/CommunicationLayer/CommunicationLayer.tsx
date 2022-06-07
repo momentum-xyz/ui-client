@@ -16,7 +16,10 @@ import useCollaboration, {
 import useAgoraVideo from '../../../../hooks/communication/useAgoraVideo';
 import {ParticipantRole} from '../../../../context/Collaboration/CollaborationTypes';
 import {useAgoraStageMode} from '../../../../hooks/communication/useAgoraStageMode';
-import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from '../../../../context/Collaboration/CollaborationReducer';
+import {
+  COLLABORATION_MUTED_ACTION_UPDATE,
+  COLLABORATION_STAGE_MODE_ACTION_UPDATE
+} from '../../../../context/Collaboration/CollaborationReducer';
 import StageModePIP from '../../../../component/atoms/StageMode/StageModePIP';
 import useWebsocketEvent from '../../../../context/Websocket/hooks/useWebsocketEvent';
 import {StageModeStatus} from '../../../../context/type/StageMode';
@@ -162,6 +165,13 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
         TOAST_GROUND_OPTIONS
       );
     }
+  });
+
+  useWebsocketEvent('meeting-mute', (spaceId) => {
+    collaborationDispatch({
+      type: COLLABORATION_MUTED_ACTION_UPDATE,
+      muted: true
+    });
   });
 
   useWebsocketEvent('stage-mode-mute', () => {

@@ -30,6 +30,7 @@ export type WebsocketEvents = {
   'google-drive-file-change': (id: string) => void;
   broadcast: (broadcast: any) => void;
   'meeting-kick': (userId: string) => void;
+  'meeting-mute': (userId: string) => void;
   'stage-mode-toggled': (
     stageModeStatus: StageModeStatus.INITIATED | StageModeStatus.STOPPED
   ) => void;
@@ -189,6 +190,9 @@ class WebsocketService {
     switch (message.action) {
       case 'kick':
         WebsocketEventEmitter.emit('meeting-kick', message.spaceId);
+        break;
+      case 'mute':
+        WebsocketEventEmitter.emit('meeting-mute', message.spaceId);
         break;
       default:
     }

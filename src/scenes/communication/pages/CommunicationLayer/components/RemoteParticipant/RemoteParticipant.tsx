@@ -117,6 +117,14 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     communicationLayerStore.selectParticipant(undefined);
   };
 
+  const handleMuteParticipant = () => {
+    communicationLayerStore.muteParticipant(
+      spaceStore.space.id,
+      communicationLayerStore.selectedParticipant
+    );
+    communicationLayerStore.selectParticipant(undefined);
+  };
+
   const handleCloseMenu = () => {
     communicationLayerStore.selectParticipant(undefined);
   };
@@ -199,9 +207,10 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       </p>
       {communicationLayerStore.selectedParticipant === participant.uid && (
         <ParticipantMenu
+          muteParticipant={handleMuteParticipant}
           removeParticipant={handleRemoveParticipant}
           name={userName}
-          uid={participant.uid}
+          participant={participant}
           onClose={handleCloseMenu}
         />
       )}
