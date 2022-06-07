@@ -55,7 +55,7 @@ export type CommunicationKick = {
 };
 
 export type CommunicationMute = {
-  action: 'kick';
+  action: 'mute';
   spaceId: string;
 };
 

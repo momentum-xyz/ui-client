@@ -2,8 +2,8 @@ import {Transition} from '@headlessui/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
 import {useHistory, useLocation} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
+import {t} from 'i18next';
 
 import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -78,18 +78,12 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     stageModeAudience.length
   ]);
 
-  const {t} = useTranslation();
-
   useEffect(() => {
     clearPopups();
     if (collaborationState.collaborationSpace?.id) {
       communicationLayerStore.setKicked(false);
     }
   }, [collaborationState.collaborationSpace]);
-
-  useEffect(() => {
-    communicationLayerStore.changeMode(collaborationState.stageMode);
-  }, [collaborationState.stageMode, communicationLayerStore]);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {

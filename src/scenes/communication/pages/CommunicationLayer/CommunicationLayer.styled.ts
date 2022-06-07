@@ -2,13 +2,11 @@ import styled from 'styled-components';
 
 import {Button} from 'ui-kit';
 
-export const Container = styled.div``;
-
 export const ActionButton = styled(Button)`
   width: 95px;
   margin-right: 0;
   align-self: center;
-  pointer-events: all;
+  pointer-events: auto;
 `;
 
 //overflow-y-scroll h-full pr-.1
@@ -30,5 +28,5 @@ export const ListContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  pointer-events: all;
+  pointer-events: auto;
 `;

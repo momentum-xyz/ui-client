@@ -60,7 +60,11 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
   return (
     <>
       <Transition
-        show={!!leftCollaborationSpace && !collaborationState.removedCollaborationSpace}
+        show={
+          !!leftCollaborationSpace &&
+          !collaborationState.removedCollaborationSpace &&
+          !communicationLayerStore.isKicked
+        }
         enter="transition-opacity delay-500 duration-200"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -69,11 +73,9 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
         leaveTo="opacity-0"
         className="fixed z-unity-interface top-2 right-23"
       >
-        {!communicationLayerStore.isKicked && (
-          <Button type="ghost" onClick={rejoin}>
-            rejoin meeting
-          </Button>
-        )}
+        <Button type="ghost" onClick={rejoin}>
+          rejoin meeting
+        </Button>
       </Transition>
     </>
   );

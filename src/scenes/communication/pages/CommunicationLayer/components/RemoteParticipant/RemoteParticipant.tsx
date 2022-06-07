@@ -101,13 +101,12 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     console.info(`clicked on ${userName} with ${id}`);
   };
 
-  const handleUserClick = () => {
+  const handleOpenMenu = () => {
     if (communicationLayerStore.selectedParticipant === participant.uid) {
       communicationLayerStore.selectParticipant(undefined);
     } else {
       communicationLayerStore.selectParticipant(participant.uid);
     }
-    console.info(`clicked on ${userName} with ${id}`);
   };
 
   const handleRemoveParticipant = () => {
@@ -140,11 +139,13 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         title={userName}
-        onClick={() => {
-          if (communicationLayerStore.isNormalMode && isModerator) {
-            handleUserClick();
-          }
-        }}
+        onClick={
+          !collaborationState.stageMode && isModerator
+            ? () => {
+                handleOpenMenu();
+              }
+            : undefined
+        }
       >
         <div
           className={`h-8 w-8 rounded-full overflow-hidden relative border-2 

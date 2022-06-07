@@ -11,8 +11,8 @@ import useCollaboration, {
 } from 'context/Collaboration/hooks/useCollaboration';
 import Avatar from 'component/atoms/Avatar';
 import {useUser} from 'hooks/api/useUser';
-import UnityService from 'context/Unity/UnityService';
 import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
+import UnityService from 'context/Unity/UnityService';
 import {PosBusInteractionType} from 'context/Unity/UnityService';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -27,12 +27,11 @@ const LocalParticipant: React.FC<LocalParticipantProps> = ({localUser, stageLoca
   const videoRef = useRef<HTMLDivElement>(null);
   const client = useAgoraClient();
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
+  const [hasCameraState, setHasCameraState] = useState(false);
+  const [avatarHash, setAvatarHash] = useState('');
   const {
     communicationStore: {communicationLayerStore}
   } = useStore();
-
-  const [hasCameraState, setHasCameraState] = useState(false);
-  const [avatarHash, setAvatarHash] = useState('');
 
   const id = localUser?.uid ?? stageLocalUserId;
 

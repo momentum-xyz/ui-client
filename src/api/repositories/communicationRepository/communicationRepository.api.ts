@@ -12,7 +12,6 @@ export const removeParticipant: RequestInterface<
   RemoveParticipantRespond
 > = (options) => {
   const {spaceId, userId, ...restOptions} = options;
-  console.info(spaceId, userId, restOptions);
   const url = communicationRepositoryEndpoints().remove(spaceId, userId);
 
   return request.post(url, restOptions);
