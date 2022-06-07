@@ -82,6 +82,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     clearPopups();
     if (collaborationState.collaborationSpace?.id) {
       communicationLayerStore.setKicked(false);
+      communicationLayerStore.selectParticipant(undefined);
     }
   }, [collaborationState.collaborationSpace]);
 
