@@ -1,9 +1,33 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-import {ComponentSizeInterface} from 'ui-kit';
+import {ComponentSizeInterface, Heading} from 'ui-kit';
 
 export const HeaderItem = styled.div`
+  display: flex;
+  overflow: hidden;
+
+  &.left {
+    justify-content: left;
+  }
+
+  &.right {
+    justify-content: right;
+  }
+
+  &.center {
+    justify-content: center;
+  }
+`;
+
+export const TitleHeading = styled(Heading)`
+  h4 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+`;
+
+export const HeaderIconItem = styled.div`
   display: flex;
   overflow: hidden;
 `;

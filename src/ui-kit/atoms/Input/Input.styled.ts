@@ -83,3 +83,12 @@ export const ErrorMessage = styled.div`
   font-size: var(--font-size-xs);
   pointer-events: none;
 `;
+
+export const RequiredIndicator = styled.div`
+  color: ${(props) => props.theme.accentDanger};
+`;
+
+export const Label = styled.div`
+  display: flex;
+  gap: 1px;
+`;

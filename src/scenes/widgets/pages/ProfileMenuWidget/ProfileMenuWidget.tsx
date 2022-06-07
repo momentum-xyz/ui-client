@@ -25,7 +25,7 @@ const ProfileMenuWidget: FC = () => {
 
   const signOutUser = async () => {
     await sessionStore.logout(auth);
-    document.location.href = ROUTES.login;
+    document.location.href = ROUTES.base;
   };
 
   const handleProfileOpen = () => {

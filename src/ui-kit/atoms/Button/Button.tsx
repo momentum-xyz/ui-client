@@ -19,6 +19,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   submit?: boolean;
   isCustom?: boolean;
   noWhitespaceWrap?: boolean;
+  className?: string;
 }
 
 const Button: FC<PropsInterface> = (props) => {
@@ -34,7 +35,8 @@ const Button: FC<PropsInterface> = (props) => {
     onClick,
     icon,
     isCustom = false,
-    noWhitespaceWrap = false
+    noWhitespaceWrap = false,
+    className
   } = props;
 
   return (
@@ -49,7 +51,8 @@ const Button: FC<PropsInterface> = (props) => {
         `transform-${transform}`,
         wide && 'wide',
         isCustom && 'Button-custom',
-        noWhitespaceWrap && 'noWhitespaceWrap'
+        noWhitespaceWrap && 'noWhitespaceWrap',
+        className
       )}
       type={submit ? 'submit' : 'button'}
     >

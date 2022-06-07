@@ -11,12 +11,9 @@ import {usePostSpace} from '../../../hooks/api/useSpaceService';
 import {SpaceDTO, SpaceType} from '../../../context/type/Space';
 
 const FooterDevTools: React.FC = () => {
-  // useJoinCollaborationSpaceByAssign();
-  // const createTable = useCreateCollaborationTable();
   const [postSpace] = usePostSpace();
   const {worldStore} = useStore().mainStore;
   const unityModal = useRef<ModalRef>(null);
-  // const {collaborationState} = useCollaboration();
 
   const {widgetStore} = useStore();
   const {stakingStore} = widgetStore;
@@ -49,17 +46,6 @@ const FooterDevTools: React.FC = () => {
     };
     await postSpace(spaceDTO);
   };
-
-  // const inviteToTable = async () => {
-  //   if (collaborationState.collaborationTable) {
-  //     await inviteChannel(collaborationState.collaborationTable.id, [
-  //       'e4eec468-50c5-4749-b4a4-096b803269cb'
-  //     ]);
-  //   } else {
-  //     await createTable();
-  //     // if (channel) await inviteChannel(channel.id, ['e4eec468-50c5-4749-b4a4-096b803269cb']);
-  //   }
-  // };
 
   const openStaking = () => {
     console.info('openstaking');

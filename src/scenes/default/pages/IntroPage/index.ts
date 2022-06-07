@@ -1,1 +1,1 @@
-export {default as IntoPage} from './IntoPage';
+export {default as IntroPage} from './IntroPage';

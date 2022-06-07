@@ -153,19 +153,21 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
             >
               <div className="h-full flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                 <div className="flex bg-black-70 gap-2 rounded p-1">
-                  <button
-                    className="hover:text-prime-blue-100 w-4"
-                    onClick={() => {
-                      if (onRemoteUserClick) {
-                        onRemoteUserClick(user, 'mute');
-                      }
-                    }}
-                  >
-                    <div className="flex flex-col gap-1 justify-center items-center">
-                      <MicOff className="w-2" />
-                      <span className="text-sm">Mute</span>
-                    </div>
-                  </button>
+                  {user.hasAudio && (
+                    <button
+                      className="hover:text-prime-blue-100 w-4"
+                      onClick={() => {
+                        if (onRemoteUserClick) {
+                          onRemoteUserClick(user, 'mute');
+                        }
+                      }}
+                    >
+                      <div className="flex flex-col gap-1 justify-center items-center">
+                        <MicOff className="w-2" />
+                        <span className="text-sm">Mute</span>
+                      </div>
+                    </button>
+                  )}
                   <button
                     className="hover:text-prime-blue-100 w-4"
                     onClick={() => {

@@ -13,4 +13,5 @@ export const Container = styled.div`
 
 export const PanelWrapper = styled.div`
   pointer-events: all;
+  height: 100%;
 `;

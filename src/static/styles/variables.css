@@ -86,4 +86,8 @@
   /* Z INDEXES */
   --dialog-z-index: 100;
   --overlay-z-index: 40;
+
+
+  /* MUSIC PLAYER */
+  --player-default-color: rgba(255, 255, 255, 0.5);
 }

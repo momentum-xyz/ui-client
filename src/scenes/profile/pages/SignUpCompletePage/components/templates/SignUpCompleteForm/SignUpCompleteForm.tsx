@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 
 import {appVariables} from 'api/constants';
 import {FieldErrorInterface} from 'api/interfaces';
+import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
 import {
   Button,
   FileUploader,
@@ -14,7 +15,6 @@ import {
   TextAreaDark,
   TextPropsInterface
 } from 'ui-kit';
-import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
 
 import * as styled from './SignUpCompleteForm.styled';
 
@@ -25,15 +25,16 @@ const TEXT_PROPS: TextPropsInterface = {
   transform: 'uppercase'
 };
 
-interface Props {
+interface PropsInterface {
   user: SignUpFormInterface;
   fieldErrors: FieldErrorInterface[];
   isSubmitDisabled?: boolean;
   onSubmit: (form: SignUpFormInterface) => void;
+  onCancel: () => void;
 }
 
-const SignUpCompleteForm: FC<Props> = (props) => {
-  const {user, fieldErrors, isSubmitDisabled, onSubmit} = props;
+const SignUpCompleteForm: FC<PropsInterface> = (props) => {
+  const {user, fieldErrors, isSubmitDisabled, onSubmit, onCancel} = props;
 
   const {t} = useTranslation();
   const theme = useTheme();
@@ -55,7 +56,7 @@ const SignUpCompleteForm: FC<Props> = (props) => {
     fieldErrors.forEach(({fieldName, errorMessage}) => {
       setError(fieldName as keyof SignUpFormInterface, {type: 'custom', message: errorMessage});
     });
-  }, [fieldErrors]);
+  }, [fieldErrors, setError]);
 
   return (
     <div>
@@ -144,6 +145,14 @@ const SignUpCompleteForm: FC<Props> = (props) => {
 
       <styled.Actions>
         <Button
+          wide
+          theme={theme}
+          label={t('actions.cancel')}
+          variant="danger"
+          onClick={onCancel}
+        />
+        <Button
+          wide
           theme={theme}
           label={t('actions.saveProfile')}
           disabled={isSubmitDisabled}

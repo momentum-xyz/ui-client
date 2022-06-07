@@ -162,6 +162,7 @@ export const enGb = {
       musicPlayer: 'Music Player',
       shareLocation: 'Share location',
       information: 'Information',
+      help: 'Help',
       settings: 'Settings',
       fullscreen: 'Fullscreen',
       someonesBio: "{{name}}'s Bio",
@@ -226,6 +227,7 @@ export const enGb = {
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
+      stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.'
     },
@@ -237,7 +239,7 @@ export const enGb = {
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       later: 'later',
       create: 'create',
-      stage: 'Stage enabled'
+      stage: 'Stage mode'
     },
     placeholders: {
       search: 'Search',
@@ -297,7 +299,9 @@ export const enGb = {
       lunchingInitiative: 'launching initiative',
       invite: 'Invite',
       invited: 'Invited',
-      closeAndContinue: 'Close and Continue'
+      closeAndContinue: 'Close and Continue',
+      return: 'Return',
+      leave: 'Leave'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
@@ -627,6 +631,11 @@ export const enGb = {
       microphone: 'microphone',
       video: 'video',
       audio: 'audio'
+    },
+    musicPlayer: {
+      playerVolume: 'Music Volume',
+      unityVolume: 'Sound Effects Volume',
+      noTrackTitle: 'No Track'
     }
   }
 };

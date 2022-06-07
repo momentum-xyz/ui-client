@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const DropdownOptionsList = styled.div`
+import {ComponentSizeInterface} from 'ui-kit';
+
+export const DropdownOptionsList = styled.div<{size?: ComponentSizeInterface}>`
   --borderRadius: initial;
 
   position: absolute;
@@ -12,6 +14,7 @@ export const DropdownOptionsList = styled.div`
   border-radius: var(--borderRadius);
   text-align: left;
   z-index: 200;
+  overflow-y: scroll;
 
   &.primary {
     --borderRadius: 11px;
@@ -19,6 +22,14 @@ export const DropdownOptionsList = styled.div`
 
   &.secondary {
     --borderRadius: 5px;
+  }
+
+  &.normal {
+    max-height: 300px;
+  }
+
+  &.small {
+    max-height: 115px;
   }
 `;
 

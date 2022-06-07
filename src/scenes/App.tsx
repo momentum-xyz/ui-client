@@ -20,7 +20,6 @@ import AuthComponent from '../context/Auth/AuthContext';
 import {CollaborationProvider} from '../context/Collaboration/CollaborationContext';
 import UnityComponent from '../context/Unity/UnityContext';
 import {TextChatProvider} from '../context/TextChatContext';
-import {MusicPlayerProvider} from '../context/MusicPlayer/MusicPlayerProvider';
 
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
 import AppLayers from './AppLayers';
@@ -82,7 +81,7 @@ const App: FC = () => {
   if (!sessionStore.oidcConfig) {
     return (
       <Switch>
-        <Redirect to={ROUTES.login} />
+        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
       </Switch>
     );
   }
@@ -104,7 +103,7 @@ const App: FC = () => {
   if (!sessionStore.isSessionExists) {
     return (
       <Switch>
-        <Redirect to={ROUTES.login} />
+        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
       </Switch>
     );
   }
@@ -122,23 +121,21 @@ const App: FC = () => {
           <AuthProvider {...sessionStore.oidcConfig}>
             <AuthComponent>
               <CollaborationProvider>
-                <MusicPlayerProvider>
-                  <AgoraProvider
-                    client={agoraClient}
-                    stageClient={stageClient}
-                    appId={appVariables.AGORA_APP_ID}
-                  >
-                    <TextChatProvider>
-                      <UnityComponent unityContext={unityStore.unityContext} />
-                      <AppLayers>
-                        <Switch>
-                          {createRoutesByConfig(PRIVATE_ROUTES)}
-                          <Redirect to={ROUTES.base} />
-                        </Switch>
-                      </AppLayers>
-                    </TextChatProvider>
-                  </AgoraProvider>
-                </MusicPlayerProvider>
+                <AgoraProvider
+                  client={agoraClient}
+                  stageClient={stageClient}
+                  appId={appVariables.AGORA_APP_ID}
+                >
+                  <TextChatProvider>
+                    <UnityComponent unityContext={unityStore.unityContext} />
+                    <AppLayers>
+                      <Switch>
+                        {createRoutesByConfig(PRIVATE_ROUTES)}
+                        <Redirect to={ROUTES.base} />
+                      </Switch>
+                    </AppLayers>
+                  </TextChatProvider>
+                </AgoraProvider>
               </CollaborationProvider>
             </AuthComponent>
           </AuthProvider>

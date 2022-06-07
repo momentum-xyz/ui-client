@@ -16,6 +16,7 @@ import * as tablesRepository from './repositories/tablesRepository';
 import * as spaceInviteRepository from './repositories/spaceInviteRepository';
 import * as statsRepository from './repositories/statsRepository';
 import * as statusRepository from './repositories/statusRepository';
+import * as playlistRepository from './repositories/playlistRepository';
 
 /**
  * This layer is responsible for:
@@ -45,7 +46,8 @@ export const api = {
   tablesRepository,
   spaceInviteRepository,
   statsRepository,
-  statusRepository
+  statusRepository,
+  playlistRepository
 };
 
 /**
@@ -67,3 +69,4 @@ export * from './repositories/magicRepository/magicRepository.api.types';
 export * from './repositories/favoriteRepository/favoriteRepository.api.types';
 export * from './repositories/tokenRepository/tokenRepository.api.types';
 export * from './repositories/statsRepository/statsRepository.api.types';
+export * from './repositories/playlistRepository/playlistRepository.api.types';

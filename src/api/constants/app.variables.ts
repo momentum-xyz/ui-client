@@ -45,6 +45,7 @@ export const appVariables: AppConfigExtendedInterface = {
   WEB3_PUBLIC_RPC_URL_RINKEBY: 'https://rinkeby.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
   GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
   YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
+  YOUTUBE_INTRO_VIDEO_ID: 'UmSJIEZQAyQ',
   POLKADOT_CONNECTION_STRING: 'momentum-connections',
   WESTEND_TEST_WS_SERVER: 'wss://westend.api.onfinality.io/public-ws',
   KUSAMA_WS_SERVER: 'wss://kusama-rpc.polkadot.io/'
