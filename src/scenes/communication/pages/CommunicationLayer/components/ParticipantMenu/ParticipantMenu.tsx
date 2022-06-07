@@ -1,22 +1,29 @@
-import React, {FC} from 'react';
+import React, {FC, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {IconSvg, Text} from 'ui-kit';
+import {IconSvg, Text, useClickOutside} from 'ui-kit';
 
 import * as styled from './ParticipantMenu.styled';
 
 interface PropsInterface {
   name: string;
   uid: string | number;
+  onClose?: (event?: Event) => void;
   removeParticipant?: () => void;
 }
 
 // TODO: Implement methods for muting and kicking in the CommunicationLayerStore and call them for each Option
-const ParticipantMenu: FC<PropsInterface> = ({name, removeParticipant}) => {
+const ParticipantMenu: FC<PropsInterface> = ({name, removeParticipant, onClose}) => {
   const {t} = useTranslation();
+  const ref = useRef(null);
+
+  useClickOutside(ref, () => {
+    const event = new Event('backgroundClick');
+    onClose?.(event);
+  });
 
   return (
-    <styled.Container>
+    <styled.Container ref={ref}>
       <styled.Content>
         <styled.Option>
           <styled.IconContainer>

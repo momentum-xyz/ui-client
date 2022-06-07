@@ -18,7 +18,10 @@ export interface InFlightControlLayerProps {}
 const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
   const {collaborationState} = useCollaboration();
   // const joinCollaborationSpace = useJoinCollaborationSpace();
-  const {unityStore} = useStore().mainStore;
+  const {
+    communicationStore: {communicationLayerStore},
+    mainStore: {unityStore}
+  } = useStore();
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
 
@@ -66,9 +69,11 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
         leaveTo="opacity-0"
         className="fixed z-unity-interface top-2 right-23"
       >
-        <Button type="ghost" onClick={rejoin}>
-          rejoin meeting
-        </Button>
+        {!communicationLayerStore.isKicked && (
+          <Button type="ghost" onClick={rejoin}>
+            rejoin meeting
+          </Button>
+        )}
       </Transition>
     </>
   );

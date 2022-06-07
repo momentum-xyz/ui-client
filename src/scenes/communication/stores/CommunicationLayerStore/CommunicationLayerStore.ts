@@ -12,6 +12,7 @@ const CommunicationLayerStore = types
       request: types.optional(RequestModel, {}),
       participants: types.array(ParticipantModel),
       isNormalMode: false,
+      isKicked: false,
       selectedParticipant: types.maybe(types.union(types.string, types.number))
     })
   )
@@ -21,6 +22,9 @@ const CommunicationLayerStore = types
     },
     changeMode(isStageMode: boolean) {
       self.isNormalMode = !isStageMode;
+    },
+    setKicked(join: boolean) {
+      self.isKicked = join;
     },
     removeParticipant: flow(function* (spaceId?: string, userId?: string | number) {
       yield self.request.send(api.communicationRepository.removeParticipant, {

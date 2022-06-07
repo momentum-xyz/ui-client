@@ -29,7 +29,7 @@ export type WebsocketEvents = {
   'miro-board-change': (id: string) => void;
   'google-drive-file-change': (id: string) => void;
   broadcast: (broadcast: any) => void;
-  'communication-user-kick': (userId: string) => void;
+  'meeting-kick': (userId: string) => void;
   'stage-mode-toggled': (
     stageModeStatus: StageModeStatus.INITIATED | StageModeStatus.STOPPED
   ) => void;
@@ -188,7 +188,7 @@ class WebsocketService {
   handleIncomingCommunication(message: CommunicationMessage) {
     switch (message.action) {
       case 'kick':
-        WebsocketEventEmitter.emit('communication-user-kick', message.spaceId);
+        WebsocketEventEmitter.emit('meeting-kick', message.spaceId);
         break;
       default:
     }

@@ -229,7 +229,8 @@ export const enGb = {
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
-      stageModeMuted: 'You have been muted by a member of the space.'
+      stageModeMuted: 'You have been muted by a member of the space.',
+      kickedFromMeeting: 'You are kicked from the meeting'
     },
     titles: {
       alert: 'alert',
