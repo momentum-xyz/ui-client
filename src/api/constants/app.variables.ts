@@ -11,7 +11,7 @@ const BASE_URL =
     : document.location.origin;
 
 export const appVariables: AppConfigExtendedInterface = {
-  APP_VERSION: 'v0.14.2',
+  APP_VERSION: 'v0.18.0',
   BACKEND_ENDPOINT_URL: '',
   UNITY_CLIENT_URL: '',
   UNITY_CLIENT_LOADER_URL: '',
