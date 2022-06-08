@@ -1,9 +1,9 @@
-import {FC} from 'react';
+import React from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {CommunicationLayer} from './pages';
 
-const Communication: FC = () => {
+const Communication: React.FC = () => {
   return <CommunicationLayer />;
 };
 

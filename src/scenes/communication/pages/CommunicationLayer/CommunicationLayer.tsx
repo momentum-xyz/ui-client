@@ -5,35 +5,30 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS, SvgButton, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-
-import CONFIG from '../../../../config/config';
+import CONFIG from 'config/config';
 import useCollaboration, {
   useJoinCollaborationSpaceByAssign,
   useLeaveCollaborationSpace
-} from '../../../../context/Collaboration/hooks/useCollaboration';
-import useAgoraVideo from '../../../../hooks/communication/useAgoraVideo';
-import {ParticipantRole} from '../../../../context/Collaboration/CollaborationTypes';
-import {useAgoraStageMode} from '../../../../hooks/communication/useAgoraStageMode';
+} from 'context/Collaboration/hooks/useCollaboration';
+import useAgoraVideo from 'hooks/communication/useAgoraVideo';
+import {ParticipantRole} from 'context/Collaboration/CollaborationTypes';
+import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 import {
   COLLABORATION_MUTED_ACTION_UPDATE,
   COLLABORATION_STAGE_MODE_ACTION_UPDATE
-} from '../../../../context/Collaboration/CollaborationReducer';
-import StageModePIP from '../../../../component/atoms/StageMode/StageModePIP';
-import useWebsocketEvent from '../../../../context/Websocket/hooks/useWebsocketEvent';
-import {StageModeStatus} from '../../../../context/type/StageMode';
-import {ROUTES} from '../../../../core/constants';
-import {useStageModePopupQueueContext} from '../../../../context/StageMode/StageModePopupQueueContext';
-import {
-  useStageModeLeave,
-  useStageModeRequestAcceptOrDecline
-} from '../../../../hooks/api/useStageModeService';
-import {useModerator} from '../../../../context/Integration/hooks/useIntegration';
-import {useGetSpace} from '../../../../hooks/api/useSpaceService';
+} from 'context/Collaboration/CollaborationReducer';
+import StageModePIP from 'component/atoms/StageMode/StageModePIP';
+import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
+import {StageModeStatus} from 'context/type/StageMode';
+import {ROUTES} from 'core/constants';
+import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
+import {useStageModeLeave, useStageModeRequestAcceptOrDecline} from 'hooks/api/useStageModeService';
+import {useModerator} from 'context/Integration/hooks/useIntegration';
+import {useGetSpace} from 'hooks/api/useSpaceService';
 
-import {RemoteParticipant} from './components/RemoteParticipant';
-import {LocalParticipant} from './components/LocalParticipant';
+import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
 
 export interface CommunicationLayerProps {}
@@ -51,7 +46,8 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {
     mainStore,
-    communicationStore: {communicationLayerStore}
+    communicationStore: {communicationLayerStore},
+    collaborationStore: {spaceStore}
   } = useStore();
   const {unityStore} = mainStore;
   const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
@@ -167,7 +163,18 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     }
   });
 
-  useWebsocketEvent('meeting-mute', (spaceId) => {
+  useWebsocketEvent('meeting-mute', () => {
+    collaborationDispatch({
+      type: COLLABORATION_MUTED_ACTION_UPDATE,
+      muted: true
+    });
+  });
+
+  useWebsocketEvent('meeting-mute-all', (moderatorId) => {
+    if (currentUserId === moderatorId) {
+      return;
+    }
+
     collaborationDispatch({
       type: COLLABORATION_MUTED_ACTION_UPDATE,
       muted: true
@@ -295,6 +302,21 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
             <p className="text-center whitespace-nowrap">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
+            {!collaborationState.stageMode && numberOfPeople > 2 && isModerator && (
+              <styled.MuteButtonContainer>
+                <styled.MuteButton>
+                  <SvgButton
+                    iconName="microphoneOff"
+                    size="extra-large"
+                    onClick={() => {
+                      console.info(currentUserId);
+                      communicationLayerStore.muteAllParticipants(spaceStore.space.id);
+                    }}
+                  />
+                </styled.MuteButton>
+                <Text text="Mute All" transform="uppercase" size="s" />
+              </styled.MuteButtonContainer>
+            )}
             <ul>
               {collaborationState.stageMode
                 ? !isOnStage && <LocalParticipant stageLocalUserId={currentUserId} />

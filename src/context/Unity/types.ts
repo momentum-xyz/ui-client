@@ -47,7 +47,7 @@ export type StageModeAction =
 
 export type StageModeStatus = 'initiated' | 'stopped';
 
-export type CommunicationMessage = CommunicationKick | CommunicationMute;
+export type CommunicationMessage = CommunicationKick | CommunicationMute | CommunicationMuteAll;
 
 export type CommunicationKick = {
   action: 'kick';
@@ -56,7 +56,11 @@ export type CommunicationKick = {
 
 export type CommunicationMute = {
   action: 'mute';
-  spaceId: string;
+};
+
+export type CommunicationMuteAll = {
+  action: 'mute-all';
+  moderatorId: string;
 };
 
 export type StageModeMessage =

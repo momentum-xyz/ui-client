@@ -230,7 +230,7 @@ export const enGb = {
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.',
-      kickedFromMeeting: 'You are kicked from the meeting'
+      kickedFromMeeting: 'A Space Admin has kicked you from the space'
     },
     titles: {
       alert: 'alert',
@@ -240,7 +240,8 @@ export const enGb = {
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       later: 'later',
       create: 'create',
-      stage: 'Stage mode'
+      stage: 'Stage mode',
+      kickedFromMeeting: 'You have been kicked from a space'
     },
     placeholders: {
       search: 'Search',

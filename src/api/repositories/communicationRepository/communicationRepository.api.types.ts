@@ -4,3 +4,7 @@ export interface BaseParticipantRequest {
 }
 
 export interface BaseParticipantRespond {}
+
+export interface ParticipantsMuteRequest {
+  spaceId: string;
+}

@@ -125,10 +125,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     communicationLayerStore.selectParticipant(undefined);
   };
 
-  const handleCloseMenu = () => {
-    communicationLayerStore.selectParticipant(undefined);
-  };
-
   return (
     <>
       <Modal ref={inviteOnStageModalRef}>
@@ -211,7 +207,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
           removeParticipant={handleRemoveParticipant}
           name={userName}
           participant={participant}
-          onClose={handleCloseMenu}
+          onClose={() => communicationLayerStore.selectParticipant(undefined)}
         />
       )}
     </>

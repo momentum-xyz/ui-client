@@ -29,8 +29,9 @@ export type WebsocketEvents = {
   'miro-board-change': (id: string) => void;
   'google-drive-file-change': (id: string) => void;
   broadcast: (broadcast: any) => void;
-  'meeting-kick': (userId: string) => void;
-  'meeting-mute': (userId: string) => void;
+  'meeting-kick': (spaceId: string) => void;
+  'meeting-mute': () => void;
+  'meeting-mute-all': (moderatorId: string) => void;
   'stage-mode-toggled': (
     stageModeStatus: StageModeStatus.INITIATED | StageModeStatus.STOPPED
   ) => void;
@@ -192,7 +193,10 @@ class WebsocketService {
         WebsocketEventEmitter.emit('meeting-kick', message.spaceId);
         break;
       case 'mute':
-        WebsocketEventEmitter.emit('meeting-mute', message.spaceId);
+        WebsocketEventEmitter.emit('meeting-mute');
+        break;
+      case 'mute-all':
+        WebsocketEventEmitter.emit('meeting-mute-all', message.moderatorId);
         break;
       default:
     }
