@@ -150,6 +150,7 @@ const EventForm: FC = () => {
                 showTimeSelect
                 timeInputLabel="Start Time"
                 startDate={startDate}
+                // timeIntervals={1}
                 dateFormat={DATE_TIME_FORMAT}
                 endDate={endDate}
               />
