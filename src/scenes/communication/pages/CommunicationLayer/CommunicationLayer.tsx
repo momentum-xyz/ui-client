@@ -191,7 +191,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     };
     toast.info(
       <ToastContent
-        headerIconName="alert"
+        headerIconName="calendar"
         title={t('titles.joinGathering')}
         text={t('messages.joinGathering', {title: message.name})}
         approveInfo={{title: 'Join', onClick: handleJoinSpace}}
