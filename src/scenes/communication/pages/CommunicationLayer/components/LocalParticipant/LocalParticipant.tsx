@@ -70,8 +70,8 @@ const LocalParticipant: React.FC<LocalParticipantProps> = ({localUser, stageLoca
     leaveCollaborationSpaceCall(false).then(() => {
       toast.info(
         <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
+          headerIconName="logout"
+          title={t('titles.kickedFromMeeting')}
           text={t('messages.kickedFromMeeting')}
           isCloseButton
         />,

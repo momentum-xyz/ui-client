@@ -1,6 +1,10 @@
-export interface RemoveParticipantRequest {
+export interface BaseParticipantRequest {
   spaceId: string;
   userId: string;
 }
 
-export interface RemoveParticipantRespond {}
+export interface BaseParticipantRespond {}
+
+export interface ParticipantsMuteRequest {
+  spaceId: string;
+}

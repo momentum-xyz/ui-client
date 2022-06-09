@@ -31,6 +31,17 @@ const CommunicationLayerStore = types
         spaceId,
         userId
       });
+    }),
+    muteParticipant: flow(function* (spaceId?: string, userId?: string | number) {
+      yield self.request.send(api.communicationRepository.muteParticipant, {
+        spaceId,
+        userId
+      });
+    }),
+    muteAllParticipants: flow(function* (spaceId?: string) {
+      yield self.request.send(api.communicationRepository.muteAllParticipants, {
+        spaceId
+      });
     })
   }));
 
