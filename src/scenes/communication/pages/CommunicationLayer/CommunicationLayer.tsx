@@ -171,14 +171,12 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
   });
 
   useWebsocketEvent('meeting-mute-all', (moderatorId) => {
-    if (currentUserId === moderatorId) {
-      return;
+    if (currentUserId !== moderatorId) {
+      collaborationDispatch({
+        type: COLLABORATION_MUTED_ACTION_UPDATE,
+        muted: true
+      });
     }
-
-    collaborationDispatch({
-      type: COLLABORATION_MUTED_ACTION_UPDATE,
-      muted: true
-    });
   });
 
   useWebsocketEvent('stage-mode-mute', () => {
@@ -309,7 +307,6 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                     iconName="microphoneOff"
                     size="extra-large"
                     onClick={() => {
-                      console.info(currentUserId);
                       communicationLayerStore.muteAllParticipants(spaceStore.space.id);
                     }}
                   />
