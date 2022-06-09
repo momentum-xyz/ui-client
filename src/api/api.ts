@@ -17,6 +17,7 @@ import * as spaceInviteRepository from './repositories/spaceInviteRepository';
 import * as statsRepository from './repositories/statsRepository';
 import * as statusRepository from './repositories/statusRepository';
 import * as playlistRepository from './repositories/playlistRepository';
+import * as communicationRepository from './repositories/communicationRepository';
 
 /**
  * This layer is responsible for:
@@ -47,7 +48,8 @@ export const api = {
   spaceInviteRepository,
   statsRepository,
   statusRepository,
-  playlistRepository
+  playlistRepository,
+  communicationRepository
 };
 
 /**
@@ -70,3 +72,4 @@ export * from './repositories/favoriteRepository/favoriteRepository.api.types';
 export * from './repositories/tokenRepository/tokenRepository.api.types';
 export * from './repositories/statsRepository/statsRepository.api.types';
 export * from './repositories/playlistRepository/playlistRepository.api.types';
+export * from './repositories/communicationRepository/communicationRepository.api.types';

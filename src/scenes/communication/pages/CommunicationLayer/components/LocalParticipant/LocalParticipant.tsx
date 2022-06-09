@@ -1,28 +1,37 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {toast} from 'react-toastify';
+import {t} from 'i18next';
 
-import {useAgoraClient} from '../../../hooks/communication/useAgoraClient';
-import {ILocalUser} from '../../../hooks/communication/useAgoraVideo';
-import {ReactComponent as AstronautIcon} from '../../../images/icons/professions-man-astronaut.svg';
-import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import Avatar from '../../atoms/Avatar';
-import {useUser} from '../../../hooks/api/useUser';
+import {useAgoraClient} from 'hooks/communication/useAgoraClient';
+import {ILocalUser} from 'hooks/communication/useAgoraVideo';
+import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
+import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
+import useCollaboration, {
+  useLeaveCollaborationSpace
+} from 'context/Collaboration/hooks/useCollaboration';
+import Avatar from 'component/atoms/Avatar';
+import {useUser} from 'hooks/api/useUser';
+import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
+import UnityService from 'context/Unity/UnityService';
+import {PosBusInteractionType} from 'context/Unity/UnityService';
+import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
-export interface LocalParticipantViewProps {
+export interface LocalParticipantProps {
   localUser?: ILocalUser;
   stageLocalUserId?: string;
 }
 
-const LocalParticipantView: React.FC<LocalParticipantViewProps> = ({
-  localUser,
-  stageLocalUserId
-}) => {
+const LocalParticipant: React.FC<LocalParticipantProps> = ({localUser, stageLocalUserId}) => {
   const {collaborationState} = useCollaboration();
   const videoRef = useRef<HTMLDivElement>(null);
   const client = useAgoraClient();
-
+  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const [hasCameraState, setHasCameraState] = useState(false);
   const [avatarHash, setAvatarHash] = useState('');
+  const {
+    communicationStore: {communicationLayerStore}
+  } = useStore();
 
   const id = localUser?.uid ?? stageLocalUserId;
 
@@ -54,6 +63,22 @@ const LocalParticipantView: React.FC<LocalParticipantViewProps> = ({
       cameraTrack.play(videoRef.current);
     }
   }, [client.localTracks, collaborationState.stageMode, collaborationState.cameraOff]);
+
+  useWebsocketEvent('meeting-kick', (spaceId) => {
+    communicationLayerStore.setKicked(true);
+    UnityService.triggerInteractionMsg?.(PosBusInteractionType.LeftSpace, spaceId, 0, '');
+    leaveCollaborationSpaceCall(false).then(() => {
+      toast.info(
+        <ToastContent
+          headerIconName="logout"
+          title={t('titles.kickedFromMeeting')}
+          text={t('messages.kickedFromMeeting')}
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    });
+  });
 
   return (
     <>
@@ -117,4 +142,4 @@ const LocalParticipantView: React.FC<LocalParticipantViewProps> = ({
   );
 };
 
-export default LocalParticipantView;
+export default LocalParticipant;

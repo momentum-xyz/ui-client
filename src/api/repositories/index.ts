@@ -14,3 +14,4 @@ export * from './spaceTypeRepository';
 export * from './spaceInviteRepository';
 export * from './statusRepository';
 export * from './playlistRepository';
+export * from './communicationRepository';

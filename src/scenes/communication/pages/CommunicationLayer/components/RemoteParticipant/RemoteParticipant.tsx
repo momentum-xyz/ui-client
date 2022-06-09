@@ -1,36 +1,46 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {observer} from 'mobx-react-lite';
 
-import CONFIG from '../../../config/config';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import {useUser} from '../../../hooks/api/useUser';
-import {AgoraParticipant} from '../../../hooks/communication/useAgoraVideo';
-import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
-import {ReactComponent as AstronautIcon} from '../../../images/icons/professions-man-astronaut.svg';
-import {ReactComponent as AddIcon} from '../../../images/icons/add.svg';
-import Avatar from '../../atoms/Avatar';
-import Modal, {ModalRef} from '../../util/Modal';
-import StageModeInviteToStagePopup from '../../popup/stageMode/StageModeInviteToStagePopup';
-import {useModerator} from '../../../context/Integration/hooks/useIntegration';
-//import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
+import CONFIG from 'config/config';
+import {useUser} from 'hooks/api/useUser';
+import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
+import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
+import {ReactComponent as AddIcon} from 'images/icons/add.svg';
+import Avatar from 'component/atoms/Avatar';
+import Modal, {ModalRef} from 'component/util/Modal';
+import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
+import {useModerator} from 'context/Integration/hooks/useIntegration';
+import {ParticipantModelInterface} from 'scenes/communication/stores/CommunicationLayerStore/models';
+import {useStore} from 'shared/hooks';
+import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
+import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 
-export interface RemoteParticipantViewProps {
+import {ParticipantMenu} from '../ParticipantMenu';
+
+export interface RemoteParticipantProps {
   participant: AgoraParticipant;
+  participantModel?: ParticipantModelInterface;
   totalParticipants: number;
   canEnterStage: boolean;
 }
 
-const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
+const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
+  participantModel,
   totalParticipants,
   canEnterStage
 }) => {
   const {collaborationState} = useCollaboration();
-  // const {canEnterStage} = useAgoraStageMode();
   const videoRef = useRef<HTMLDivElement>(null);
   const inviteOnStageModalRef = useRef<ModalRef>(null);
   const id = participant.uid as string;
   const [isModerator, , ,] = useModerator(collaborationState.collaborationSpace?.id ?? '');
   const [hovered, setIsHovered] = useState(false);
+
+  const {
+    communicationStore: {communicationLayerStore},
+    collaborationStore: {spaceStore}
+  } = useStore();
 
   const [user] = useUser(id);
 
@@ -91,6 +101,30 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
     console.info(`clicked on ${userName} with ${id}`);
   };
 
+  const handleOpenMenu = () => {
+    if (communicationLayerStore.selectedParticipant === participant.uid) {
+      communicationLayerStore.selectParticipant(undefined);
+    } else {
+      communicationLayerStore.selectParticipant(participant.uid);
+    }
+  };
+
+  const handleRemoveParticipant = () => {
+    communicationLayerStore.removeParticipant(
+      spaceStore.space.id,
+      communicationLayerStore.selectedParticipant
+    );
+    communicationLayerStore.selectParticipant(undefined);
+  };
+
+  const handleMuteParticipant = () => {
+    communicationLayerStore.muteParticipant(
+      spaceStore.space.id,
+      communicationLayerStore.selectedParticipant
+    );
+    communicationLayerStore.selectParticipant(undefined);
+  };
+
   return (
     <>
       <Modal ref={inviteOnStageModalRef}>
@@ -103,13 +137,19 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
       </Modal>
       <li
         className={` mb-.5 p-.5
-        relative
         rounded-full 
         border-1
         ${soundlevel > 3 ? ' border-prime-blue-70' : ' border-transparant'}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         title={userName}
+        onClick={
+          !collaborationState.stageMode && isModerator
+            ? () => {
+                handleOpenMenu();
+              }
+            : undefined
+        }
       >
         <div
           className={`h-8 w-8 rounded-full overflow-hidden relative border-2 
@@ -149,7 +189,10 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
           </div>
         </div>
         {!participant.hasAudio && !collaborationState.stageMode && (
-          <MicOff className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5" />
+          <MicOff
+            className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5"
+            style={{top: '70px'}}
+          />
         )}
       </li>
       <p
@@ -158,8 +201,17 @@ const RemoteParticipantView: React.FC<RemoteParticipantViewProps> = ({
       >
         {userName}
       </p>
+      {communicationLayerStore.selectedParticipant === participant.uid && (
+        <ParticipantMenu
+          muteParticipant={handleMuteParticipant}
+          removeParticipant={handleRemoveParticipant}
+          name={userName}
+          participant={participant}
+          onClose={() => communicationLayerStore.selectParticipant(undefined)}
+        />
+      )}
     </>
   );
 };
 
-export default RemoteParticipantView;
+export default observer(RemoteParticipant);

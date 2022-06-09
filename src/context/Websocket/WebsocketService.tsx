@@ -6,6 +6,7 @@ import {EventEmitter} from 'core/utils';
 import {
   BroadcastMessage,
   CollaborationMessage,
+  CommunicationMessage,
   High5Message,
   InviteMessage,
   StageModeMessage,
@@ -28,6 +29,9 @@ export type WebsocketEvents = {
   'miro-board-change': (id: string) => void;
   'google-drive-file-change': (id: string) => void;
   broadcast: (broadcast: any) => void;
+  'meeting-kick': (spaceId: string) => void;
+  'meeting-mute': () => void;
+  'meeting-mute-all': (moderatorId: string) => void;
   'stage-mode-toggled': (
     stageModeStatus: StageModeStatus.INITIATED | StageModeStatus.STOPPED
   ) => void;
@@ -183,6 +187,21 @@ class WebsocketService {
     WebsocketEventEmitter.emit('broadcast', message);
   }
 
+  handleIncomingCommunication(message: CommunicationMessage) {
+    switch (message.action) {
+      case 'kick':
+        WebsocketEventEmitter.emit('meeting-kick', message.spaceId);
+        break;
+      case 'mute':
+        WebsocketEventEmitter.emit('meeting-mute');
+        break;
+      case 'mute-all':
+        WebsocketEventEmitter.emit('meeting-mute-all', message.moderatorId);
+        break;
+      default:
+    }
+  }
+
   handleIncomingStageMode(message: StageModeMessage) {
     switch (message.action) {
       case 'state':
@@ -234,6 +253,9 @@ class WebsocketService {
         break;
       case 'collaboration':
         this.handleIncomingCollaboration(message as CollaborationMessage);
+        break;
+      case 'meeting':
+        this.handleIncomingCommunication(message as CommunicationMessage);
         break;
       case 'broadcast':
         this.handleIncomingBroadcast(message as BroadcastMessage);
