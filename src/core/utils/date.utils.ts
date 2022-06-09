@@ -57,7 +57,7 @@ export const timeFromNow = (hours: number) => {
 };
 
 export const monthAndYearString = (date: Date) => {
-  const today = new Date();
+  const today = new Date(date);
   const options = {year: 'numeric', month: 'short'} as const;
   return today.toLocaleDateString('en-US', options);
 };
