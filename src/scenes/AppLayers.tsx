@@ -82,13 +82,10 @@ const AppLayers: FC = ({children}) => {
         <StageModePopupQueueProvider>
           <main id="main" className="h-screen pb-7 flex">
             <div
-              className="flex"
+              className="main-container"
               style={{
                 marginRight:
-                  collaborationState.enabled || collaborationState.stageMode ? '90px' : undefined,
-                width: '100%',
-                zIndex: 1,
-                pointerEvents: 'none'
+                  collaborationState.enabled || collaborationState.stageMode ? '90px' : undefined
               }}
             >
               {children}
