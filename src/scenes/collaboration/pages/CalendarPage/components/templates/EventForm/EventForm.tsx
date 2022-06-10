@@ -148,7 +148,6 @@ const EventForm: FC = () => {
                 customInput={<Input label={t('eventForm.startDateTimeLabel')} />}
                 selectsStart
                 showTimeSelect
-                timeIntervals={2}
                 timeInputLabel="Start Time"
                 startDate={startDate}
                 dateFormat={DATE_TIME_FORMAT}
