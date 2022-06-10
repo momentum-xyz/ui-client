@@ -5,7 +5,14 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {ToastContent, TOAST_BASE_OPTIONS, TOAST_GROUND_OPTIONS, SvgButton, Text} from 'ui-kit';
+import {
+  ToastContent,
+  TOAST_BASE_OPTIONS,
+  TOAST_GROUND_OPTIONS,
+  SvgButton,
+  Text,
+  TOAST_NOT_AUTO_CLOSE_OPTIONS
+} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import CONFIG from 'config/config';
 import useCollaboration, {
@@ -27,6 +34,7 @@ import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQue
 import {useStageModeLeave, useStageModeRequestAcceptOrDecline} from 'hooks/api/useStageModeService';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useGetSpace} from 'hooks/api/useSpaceService';
+import UnityService from 'context/Unity/UnityService';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
@@ -168,6 +176,28 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       type: COLLABORATION_MUTED_ACTION_UPDATE,
       muted: true
     });
+  });
+
+  useWebsocketEvent('notify-gathering-start', (message) => {
+    const handleJoinSpace = () => {
+      if (message.spaceId) {
+        UnityService.teleportToSpace(message.spaceId);
+
+        joinMeetingSpace(message.spaceId).then(() => {
+          unityStore.pause();
+          history.push({pathname: ROUTES.collaboration});
+        });
+      }
+    };
+    toast.info(
+      <ToastContent
+        headerIconName="calendar"
+        title={t('titles.joinGathering')}
+        text={t('messages.joinGathering', {title: message.name})}
+        approveInfo={{title: 'Join', onClick: handleJoinSpace}}
+      />,
+      TOAST_NOT_AUTO_CLOSE_OPTIONS
+    );
   });
 
   useWebsocketEvent('meeting-mute-all', (moderatorId) => {

@@ -126,3 +126,9 @@ export type High5Message = {
   receiverId: string;
   message: string;
 };
+
+export type NotifyMessage = {
+  spaceId: string;
+  name: string;
+  start: Date;
+};

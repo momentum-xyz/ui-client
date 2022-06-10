@@ -9,6 +9,7 @@ import {
   CommunicationMessage,
   High5Message,
   InviteMessage,
+  NotifyMessage,
   StageModeMessage,
   VibeMessage
 } from 'context/Unity/types';
@@ -24,6 +25,7 @@ export type WebsocketEvents = {
   connected: () => void;
   connectionFailed: () => void;
   notification: (type: NotificationTypes, message: string) => void;
+  'notify-gathering-start': (message: NotifyMessage) => void;
   interaction: (type: InteractionTypes, senderId: string, message: string) => void;
   collaboration: (type: CollaborationTypes, channel: string, receiverId: string) => void;
   'miro-board-change': (id: string) => void;
@@ -241,6 +243,10 @@ class WebsocketService {
     this.handleHighFiveReceived(message.senderId, message.message);
   }
 
+  handleNotifyGathering(message: NotifyMessage) {
+    WebsocketEventEmitter.emit('notify-gathering-start', message);
+  }
+
   handleRelayMessage(target: string, message: any): void {
     console.debug('unity-relay:', target, message);
     // WARNING: hack: bridging new controller unity message to old legacy mqtt code.
@@ -265,6 +271,9 @@ class WebsocketService {
         break;
       case 'high5':
         this.handleIncomingHigh5(message as High5Message);
+        break;
+      case 'event':
+        this.handleNotifyGathering(message as NotifyMessage);
         break;
       default:
         console.debug('Unknown relay message type', target);

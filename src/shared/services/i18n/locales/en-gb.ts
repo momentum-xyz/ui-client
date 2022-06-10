@@ -230,7 +230,8 @@ export const enGb = {
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.',
-      kickedFromMeeting: 'A Space Admin has kicked you from the space'
+      kickedFromMeeting: 'A Space Admin has kicked you from the space',
+      joinGathering: 'The gathering {{title}} is about to start'
     },
     titles: {
       alert: 'alert',
@@ -241,7 +242,8 @@ export const enGb = {
       later: 'later',
       create: 'create',
       stage: 'Stage mode',
-      kickedFromMeeting: 'You have been kicked from a space'
+      kickedFromMeeting: 'You have been kicked from a space',
+      joinGathering: 'Gathering Event is starting now'
     },
     placeholders: {
       search: 'Search',
