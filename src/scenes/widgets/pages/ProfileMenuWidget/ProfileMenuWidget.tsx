@@ -70,7 +70,7 @@ const ProfileMenuWidget: FC = () => {
               showBorder
             />
           </styled.IconContainer>
-          <Text text={profile.name} size="xxs" />
+          <Text text={profile.name} size="xxs" isMultiline={false} />
         </styled.Option>
         <styled.Option onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}>
           <Toggle
