@@ -3,3 +3,7 @@ export const absoluteLink = (urlString: string) => {
     ? urlString
     : `https://${urlString}`;
 };
+
+export const withoutProtocol = (urlString: string) => {
+  return urlString.replace(/^https?:\/\//, '');
+};
