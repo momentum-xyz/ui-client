@@ -1,9 +1,13 @@
+import React from 'react';
 import {useCallback} from 'react';
 import {useHistory} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {api} from 'api';
+import {ToastContent} from 'ui-kit';
 
 import {useJoinCollaborationSpaceByAssign} from '../../Collaboration/hooks/useCollaboration';
 
@@ -14,13 +18,23 @@ const useInteractionHandlers = () => {
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
 
+  const {t} = useTranslation();
+
   const clickDashboardCallback = useCallback(
     (id) => {
       api.spaceRepository.fetchSpace({spaceId: id}).then((response) => {
         const {space, admin, member} = response.data;
 
         if (space.secret === 1 && !(admin || member)) {
-          history.push({pathname: ROUTES.privateSpace, state: {spaceName: space.name}});
+          toast.error(
+            <ToastContent
+              isDanger
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('collaboration.spaceIsPrivate')}
+              isCloseButton
+            />
+          );
         } else {
           joinMeetingSpace(id).then(() => {
             unityStore.pause();
@@ -58,7 +72,15 @@ const useInteractionHandlers = () => {
         const {space, admin, member} = response.data;
 
         if (space.secret === 1 && !(admin || member)) {
-          history.push({pathname: ROUTES.privateSpace, state: {spaceName: space.name}});
+          toast.error(
+            <ToastContent
+              isDanger
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('collaboration.spaceIsPrivate')}
+              isCloseButton
+            />
+          );
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           joinMeetingSpace(id).then(() => {

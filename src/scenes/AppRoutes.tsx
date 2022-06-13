@@ -22,7 +22,6 @@ import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
 import {MagicPage} from './magic/pages';
-import {PrivateSpacePage} from './collaboration/pages';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -132,10 +131,5 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.worldCalendar,
     sidebar: () => null,
     main: () => <WorldCalendar />
-  },
-  {
-    path: ROUTES.privateSpace,
-    renderBackground: true,
-    main: () => <PrivateSpacePage />
   }
 ];

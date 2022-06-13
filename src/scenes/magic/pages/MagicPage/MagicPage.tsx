@@ -1,12 +1,15 @@
 import React, {useEffect} from 'react';
 import {useHistory, useParams} from 'react-router';
 import {observer} from 'mobx-react-lite';
+import {toast} from 'react-toastify';
+import {useTranslation} from 'react-i18next';
 
 import {MagicTypeEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 import {api} from 'api';
+import {ToastContent} from 'ui-kit';
 
 interface MagicPageProps {
   children?: React.ReactNode;
@@ -20,6 +23,8 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
   const {key} = useParams<{key: string}>();
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (key) {
@@ -44,7 +49,16 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
         unityStore.teleportToSpace(id);
         api.spaceRepository.fetchSpace({spaceId: id}).then(({data: {space, admin, member}}) => {
           if (space.secret === 1 && !(admin || member)) {
-            history.push({pathname: ROUTES.privateSpace, state: {spaceName: space.name}});
+            toast.error(
+              <ToastContent
+                isDanger
+                headerIconName="alert"
+                title={t('titles.alert')}
+                text={t('collaboration.spaceIsPrivate')}
+                isCloseButton
+              />
+            );
+
             return;
           }
 
@@ -64,7 +78,16 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
         unityStore.teleportToSpace(id);
         api.spaceRepository.fetchSpace({spaceId: id}).then(({data: {space, admin, member}}) => {
           if (space.secret === 1 && !(admin || member)) {
-            history.push({pathname: ROUTES.privateSpace, state: {spaceName: space.name}});
+            toast.error(
+              <ToastContent
+                isDanger
+                headerIconName="alert"
+                title={t('titles.alert')}
+                text={t('collaboration.spaceIsPrivate')}
+                isCloseButton
+              />
+            );
+
             return;
           }
 

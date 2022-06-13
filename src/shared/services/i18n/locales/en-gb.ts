@@ -449,6 +449,7 @@ export const enGb = {
         title: 'Space details',
         typeLabel: 'Type',
         accessLabel: 'Access',
+        accessWarning: 'Turning on private only allows members and admins of the space to enter',
         privateSpaceText: 'Private space',
         spaceNameLabel: 'Space Name',
         deleteSpaceLabel: 'Delete Space',
