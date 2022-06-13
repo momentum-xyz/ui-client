@@ -2,11 +2,17 @@ import styled from 'styled-components';
 
 export const Info = styled.div`
   width: 100%;
+
+  &.row {
+    display: flex;
+    gap: 10px;
+  }
 `;
 
 export const Access = styled.div`
   display: flex;
   gap: 14px;
+  flex-shrink: 0;
 `;
 
 export const Body = styled.div`
