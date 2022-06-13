@@ -644,7 +644,7 @@ export const enGb = {
       noTrackTitle: 'No Track'
     },
     collaboration: {
-      spaceIsPrivate: 'This space is set to private by its admin'
+      spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
     }
   }
 };

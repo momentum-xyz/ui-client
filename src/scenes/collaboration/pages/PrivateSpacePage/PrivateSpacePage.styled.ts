@@ -25,6 +25,6 @@ export const PanelLayoutCustom = styled(PanelLayout)`
   align-items: center;
 
   *:first-child {
-    margin-top: calc(123px / 4 - 5px);
+    margin-top: calc(123px / 4 - 10px);
   }
 `;
