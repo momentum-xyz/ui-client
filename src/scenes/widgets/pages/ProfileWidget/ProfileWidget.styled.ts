@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {Text} from 'ui-kit';
+
 export const Body = styled.div`
   display: flex;
   overflow: hidden;
@@ -25,24 +27,24 @@ export const Details = styled.div`
 
 export const Info = styled.div`
   display: flex;
-  gap: 5px;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
 `;
 
 export const InfoItem = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
-
-  &.restricted {
-    .Text-custom {
-      max-width: 9ch;
-    }
-  }
 `;
 
 export const Link = styled.a`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 60px;
+  max-width: 285px;
+`;
+
+export const LocationText = styled(Text)`
+  max-width: 282px;
 `;

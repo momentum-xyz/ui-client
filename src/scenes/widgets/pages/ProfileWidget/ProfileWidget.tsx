@@ -5,7 +5,7 @@ import {t} from 'i18next';
 import {capitalize} from 'lodash-es';
 
 import {useStore} from 'shared/hooks';
-import {absoluteLink, monthAndYearString} from 'core/utils';
+import {absoluteLink, monthAndYearString, withoutProtocol} from 'core/utils';
 import {Button, IconSvg, SvgButton, Avatar, PanelLayout, Text} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 import {appVariables} from 'api/constants';
@@ -133,9 +133,22 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({userId, onClose, 
           )}
           <styled.Info>
             {userProfile?.profile?.location && (
-              <styled.InfoItem className="restricted">
+              <styled.InfoItem>
                 <IconSvg name="location" size="normal" />
-                <Text text={userProfile.profile.location} size="xxs" isMultiline={false} isCustom />
+                <styled.LocationText
+                  text={userProfile.profile.location}
+                  size="xxs"
+                  isMultiline={false}
+                />
+              </styled.InfoItem>
+            )}
+
+            {userProfile?.profile?.profileLink && (
+              <styled.InfoItem>
+                <IconSvg name="link" size="normal" />
+                <styled.Link href={absoluteLink(userProfile.profile.profileLink)} target="_blank">
+                  {withoutProtocol(userProfile.profile.profileLink)}
+                </styled.Link>
               </styled.InfoItem>
             )}
 
@@ -147,15 +160,6 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({userId, onClose, 
                 isMultiline={false}
               />
             </styled.InfoItem>
-
-            {userProfile?.profile?.profileLink && (
-              <styled.InfoItem>
-                <IconSvg name="link" size="normal" />
-                <styled.Link href={absoluteLink(userProfile.profile.profileLink)} target="_blank">
-                  {userProfile.profile.profileLink}
-                </styled.Link>
-              </styled.InfoItem>
-            )}
           </styled.Info>
           <UserInitiativesList />
         </styled.Details>
