@@ -20,6 +20,7 @@ export const ROUTES = {
   screenShare: '/collaboration/screenshare',
   miro: '/collaboration/miro',
   googleDrive: '/collaboration/google-drive',
+  privateSpace: '/private-space',
   createSpace: '/profile?createspace=1',
   magic: '/magic/:key',
   worldCalendar: '/calendar',

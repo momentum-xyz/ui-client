@@ -3,6 +3,7 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
+import {api} from 'api';
 
 import {useJoinCollaborationSpaceByAssign} from '../../Collaboration/hooks/useCollaboration';
 
@@ -15,9 +16,17 @@ const useInteractionHandlers = () => {
 
   const clickDashboardCallback = useCallback(
     (id) => {
-      joinMeetingSpace(id).then(() => {
-        unityStore.pause();
-        history.push({pathname: ROUTES.dashboard});
+      api.spaceRepository.fetchSpace({spaceId: id}).then((response) => {
+        const {space, admin, member} = response.data;
+
+        if (space.secret === 1 && !(admin || member)) {
+          history.push({pathname: ROUTES.privateSpace, state: {spaceName: space.name}});
+        } else {
+          joinMeetingSpace(id).then(() => {
+            unityStore.pause();
+            history.push({pathname: ROUTES.dashboard});
+          });
+        }
       });
     },
     [history]
@@ -45,10 +54,18 @@ const useInteractionHandlers = () => {
 
   const plasmaClickCallback = useCallback(
     (id) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      joinMeetingSpace(id).then(() => {
-        unityStore.pause();
-        history.push({pathname: ROUTES.collaboration});
+      api.spaceRepository.fetchSpace({spaceId: id}).then((response) => {
+        const {space, admin, member} = response.data;
+
+        if (space.secret === 1 && !(admin || member)) {
+          history.push({pathname: ROUTES.privateSpace, state: {spaceName: space.name}});
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          joinMeetingSpace(id).then(() => {
+            unityStore.pause();
+            history.push({pathname: ROUTES.collaboration});
+          });
+        }
       });
     },
     [history, joinMeetingSpace]

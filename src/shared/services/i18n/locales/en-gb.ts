@@ -642,6 +642,9 @@ export const enGb = {
       playerVolume: 'Music Volume',
       unityVolume: 'Sound Effects Volume',
       noTrackTitle: 'No Track'
+    },
+    collaboration: {
+      spaceIsPrivate: 'This space is set to private by its admin'
     }
   }
 };
