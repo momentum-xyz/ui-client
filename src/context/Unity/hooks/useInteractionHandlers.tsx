@@ -43,28 +43,9 @@ const useInteractionHandlers = () => {
         }
       });
     },
-    [history]
+    [history, joinMeetingSpace, t, unityStore]
   );
   useUnityEvent('ClickEventDashboard', clickDashboardCallback);
-
-  // const screenClick2Callback = useCallback(() => {
-  //   unityStore.pause();
-  //   history?.push({
-  //     pathname: `/livestream`,
-  //   });
-  // }, [history]);
-  // useUnityEvent('Screen2ClickEvent', screenClick2Callback);
-
-  // const screenClick3Callback = useCallback(
-  //   (id) => {
-  //     joinMeetingSpace(id).then(() => {
-  //       unityStore.pause();
-  //       history.push({ pathname: '/collaboration/dashboard' });
-  //     });
-  //   },
-  //   [history],
-  // );
-  // useUnityEvent('Screen3ClickEvent', screenClick3Callback);
 
   const plasmaClickCallback = useCallback(
     (id) => {
@@ -82,7 +63,6 @@ const useInteractionHandlers = () => {
             />
           );
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           joinMeetingSpace(id).then(() => {
             unityStore.pause();
             history.push({pathname: ROUTES.collaboration});
@@ -90,7 +70,7 @@ const useInteractionHandlers = () => {
         }
       });
     },
-    [history, joinMeetingSpace]
+    [history, joinMeetingSpace, t, unityStore]
   );
   useUnityEvent('PlasmaClickEvent', plasmaClickCallback);
 };
