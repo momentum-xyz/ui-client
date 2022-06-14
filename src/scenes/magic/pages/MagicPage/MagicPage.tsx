@@ -8,7 +8,6 @@ import {MagicTypeEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
-import {api} from 'api';
 import {ToastContent} from 'ui-kit';
 
 interface MagicPageProps {
@@ -47,8 +46,17 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
     switch (magicStore.magic.type) {
       case MagicTypeEnum.OPEN_SPACE:
         unityStore.teleportToSpace(id);
-        api.spaceRepository.fetchSpace({spaceId: id}).then(({data: {space, admin, member}}) => {
-          if (space.secret === 1 && !(admin || member)) {
+        magicStore
+          .requestSpaceEnter(id)
+          .then(() => joinMeetingSpace(id))
+          .then(() => {
+            setTimeout(() => {
+              history.replace({
+                pathname: ROUTES.dashboard
+              });
+            }, 3000);
+          })
+          .catch(() => {
             toast.error(
               <ToastContent
                 isDanger
@@ -58,16 +66,7 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
                 isCloseButton
               />
             );
-
-            return;
-          }
-
-          joinMeetingSpace(id).then(() => {
-            setTimeout(() => {
-              history.replace({pathname: ROUTES.dashboard});
-            }, 3000);
           });
-        });
         break;
       case MagicTypeEnum.FLY: {
         unityStore.teleportToVector3(magicStore.magic.data.position);
@@ -76,8 +75,17 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
       }
       case MagicTypeEnum.EVENT: {
         unityStore.teleportToSpace(id);
-        api.spaceRepository.fetchSpace({spaceId: id}).then(({data: {space, admin, member}}) => {
-          if (space.secret === 1 && !(admin || member)) {
+        magicStore
+          .requestSpaceEnter(id)
+          .then(() => joinMeetingSpace(id))
+          .then(() => {
+            setTimeout(() => {
+              history.replace({
+                pathname: `${ROUTES.calendar}/${magicStore.magic?.data.eventId ?? ''}`
+              });
+            }, 3000);
+          })
+          .catch(() => {
             toast.error(
               <ToastContent
                 isDanger
@@ -87,18 +95,7 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
                 isCloseButton
               />
             );
-
-            return;
-          }
-
-          joinMeetingSpace(id).then(() => {
-            setTimeout(() => {
-              history.replace({
-                pathname: `${ROUTES.calendar}/${magicStore.magic?.data.eventId ?? ''}`
-              });
-            }, 3000);
           });
-        });
         break;
       }
       default:
