@@ -29,8 +29,14 @@ interface ProfileEditWidgetPropsInterface {
 }
 
 const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, userId}) => {
-  const {widgetStore, sessionStore} = useStore();
+  const {
+    widgetStore,
+    sessionStore,
+    defaultStore: {homeStore},
+    mainStore: {worldStore}
+  } = useStore();
   const {profileStore} = widgetStore;
+  const {onlineUsersStore} = homeStore;
   const {userProfile, editAvatarDialog} = profileStore;
   const {
     control,
@@ -46,7 +52,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
 
     setValue('name', userProfile.name);
     setValue('profile', userProfile.profile);
-  }, [userProfile]);
+  }, [userProfile?.name, userProfile?.profile, setValue]);
 
   useEffect(() => {
     UnityService.setKeyboardControl(false);
@@ -62,7 +68,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
     return () => {
       profileStore.resetModel();
     };
-  }, [userId]);
+  }, [profileStore, userId]);
 
   const formSubmitHandler: SubmitHandler<UpdateUserRequest> = ({profile, name}) => {
     profileStore.editProfile(name, profile).then((isSuccess) => {
@@ -91,6 +97,17 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
     });
   };
 
+  const handleAvatarSave = () => {
+    if (!profileStore.userProfile?.uuid) {
+      return;
+    }
+
+    profileStore.fetchProfile(profileStore.userProfile.uuid);
+    sessionStore.loadUserProfile();
+    onlineUsersStore.fetchUsers(worldStore.worldId);
+    editAvatarDialog.close();
+  };
+
   return (
     <>
       {/* TODO: To refactor in the future into a Dialog */}
@@ -98,16 +115,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
         <Portal>
           <div style={{zIndex: 100}}>
             <div onClick={editAvatarDialog.close} className="fixed inset-0 bg-dark-blue-70" />
-            <ChangeAvatarPopup
-              onClose={editAvatarDialog.close}
-              onSave={() => {
-                if (!profileStore.userProfile?.uuid) {
-                  return;
-                }
-                profileStore.fetchProfile(profileStore.userProfile.uuid);
-                editAvatarDialog.close();
-              }}
-            />
+            <ChangeAvatarPopup onClose={editAvatarDialog.close} onSave={handleAvatarSave} />
           </div>
         </Portal>
       )}
