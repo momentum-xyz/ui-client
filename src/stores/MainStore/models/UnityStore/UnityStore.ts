@@ -4,7 +4,7 @@ import {ChangeEvent} from 'react';
 
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
-import UnityService from 'context/Unity/UnityService';
+import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 
 const UnityStore = types
   .model('UnityStore', {
@@ -95,6 +95,14 @@ const UnityStore = types
       }
       self.volume = newVolume;
       UnityService.setSoundEffectVolume(newVolume.toString());
+    },
+    triggerInteractionMessage(
+      interaction: PosBusInteractionType,
+      targetId: string,
+      flag: number,
+      message: string
+    ) {
+      UnityService.triggerInteractionMsg?.(interaction, targetId, flag, message);
     }
   }));
 

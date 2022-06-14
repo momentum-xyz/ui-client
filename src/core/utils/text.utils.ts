@@ -1,8 +1,8 @@
 export const splitIntoSentences = (text: string, preseringWhiteSpaces = true) => {
   if (preseringWhiteSpaces) {
-    return text.match(/([\w\r\n\s])+[.,;:?"']*/g);
+    return text.match(/([^.,;:?]|[\n\r\s])+[.,;:?]*/g);
   } else {
-    return text.match(/([\w])+[.,;:?"']*/g);
+    return text.match(/([^.,;:?])+[.,;:?]*/g);
   }
 };
 

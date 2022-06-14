@@ -9,6 +9,7 @@ export const Container = styled.nav`
   border-radius: 9px;
   display: flex;
   flex-direction: column;
+  pointer-events: all;
 
   ${Item} ~ ${Item} {
     margin-top: 10px;

@@ -16,8 +16,9 @@ export const Container = styled.div`
   width: 100% !important;
 `;
 
-export const TextItem = styled.div`
-  padding-left: 34px;
+export const TextItem = styled.span`
+  margin-left: 33px;
+  padding-top: 5px;
 `;
 
 export const ToastContainer = styled.div`

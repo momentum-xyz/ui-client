@@ -78,7 +78,7 @@ const MediaPlayer = (props: VideoPlayerProps) => {
     >
       <div ref={stagevideocontainer} className="w-full aspect-ratio-video " />
       {props.isVideoMuted && (
-        <div className="absolute w-full h-full left-0 top-0 flex items-center justify-center bg-dark-blue-100 text-green-light-100">
+        <div className="absolute w-full h-full left-0 top-0 flex items-center justify-center bg-dark-blue-100 text-green-light-100 pointer-events-none">
           {imgUrl ? (
             <img
               className="w-full h-full object-cover "

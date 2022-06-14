@@ -7,15 +7,17 @@ import {useTheme} from 'styled-components';
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
+import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 
 import UnityLoading from '../component/atoms/UnityLoading';
-import CommunicationLayer from '../component/overlays/CommunicationLayer';
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
 import useUnityEvent from '../context/Unity/hooks/useUnityEvent';
 import UnityService from '../context/Unity/UnityService';
 import VideoLayer from '../component/overlays/VideoLayer';
 import {StageModePopupQueueProvider} from '../context/StageMode/StageModePopupQueueContext';
+
+import {Communication} from './communication';
 
 const AppLayers: FC = ({children}) => {
   const theme = useTheme();
@@ -26,6 +28,8 @@ const AppLayers: FC = ({children}) => {
 
   const [loading, setLoading] = useState(true);
   const auth = useAuth();
+
+  const {collaborationState} = useCollaboration();
 
   useUnityEvent('MomentumLoaded', () => {
     console.info('MomentumLoaded');
@@ -76,9 +80,17 @@ const AppLayers: FC = ({children}) => {
       <div className="bg-dark-blue-70">
         <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
         <StageModePopupQueueProvider>
-          <main id="main" className="h-screen pb-7 flex ">
-            {children}
-            <CommunicationLayer />
+          <main id="main" className="h-screen pb-7 flex">
+            <div
+              className="main-container"
+              style={{
+                marginRight:
+                  collaborationState.enabled || collaborationState.stageMode ? '90px' : undefined
+              }}
+            >
+              {children}
+            </div>
+            <Communication />
           </main>
         </StageModePopupQueueProvider>
 

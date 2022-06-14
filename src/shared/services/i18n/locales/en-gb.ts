@@ -229,7 +229,9 @@ export const enGb = {
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
-      stageModeMuted: 'You have been muted by a member of the space.'
+      stageModeMuted: 'You have been muted by a member of the space.',
+      kickedFromMeeting: 'A Space Admin has kicked you from the space',
+      joinGathering: 'The gathering {{title}} is about to start'
     },
     titles: {
       alert: 'alert',
@@ -239,7 +241,9 @@ export const enGb = {
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       later: 'later',
       create: 'create',
-      stage: 'Stage mode'
+      stage: 'Stage mode',
+      kickedFromMeeting: 'You have been kicked from a space',
+      joinGathering: 'Gathering Event is starting now'
     },
     placeholders: {
       search: 'Search',
@@ -301,7 +305,9 @@ export const enGb = {
       invited: 'Invited',
       closeAndContinue: 'Close and Continue',
       return: 'Return',
-      leave: 'Leave'
+      leave: 'Leave',
+      muteName: 'Mute {{name}}',
+      kickName: 'Kick {{name}}'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
@@ -443,6 +449,7 @@ export const enGb = {
         title: 'Space details',
         typeLabel: 'Type',
         accessLabel: 'Access',
+        accessWarning: 'Turning on private only allows members and admins of the space to enter',
         privateSpaceText: 'Private space',
         spaceNameLabel: 'Space Name',
         deleteSpaceLabel: 'Delete Space',
@@ -636,6 +643,9 @@ export const enGb = {
       playerVolume: 'Music Volume',
       unityVolume: 'Sound Effects Volume',
       noTrackTitle: 'No Track'
+    },
+    collaboration: {
+      spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
     }
   }
 };

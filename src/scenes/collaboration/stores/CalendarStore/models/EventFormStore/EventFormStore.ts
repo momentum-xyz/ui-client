@@ -13,8 +13,11 @@ const EventFormStore = types.compose(
     })
     .actions((self) => ({
       editEvent(event: EventItemModelInterface) {
+        const item = {...event};
+        item.magicRequest = {...event.magicRequest};
+
         self.currentEvent = {
-          ...event
+          ...item
         };
       },
       createEvent: flow(function* (data: EventFormInterface, spaceId: string, file?: File) {

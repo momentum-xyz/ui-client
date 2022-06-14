@@ -21,6 +21,7 @@ export const TopContanerChild = styled.div`
   gap: 10px;
   align-items: center;
   padding: 20px 0;
+  pointer-events: none;
 `;
 
 export const DropDownIcon = styled(IconSvg)`
