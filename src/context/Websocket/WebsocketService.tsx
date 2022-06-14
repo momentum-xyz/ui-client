@@ -6,10 +6,13 @@ import {EventEmitter} from 'core/utils';
 import {
   BroadcastMessage,
   CollaborationMessage,
+  CommunicationMessage,
   High5Message,
   InviteMessage,
+  NotifyMessage,
   StageModeMessage,
-  VibeMessage
+  VibeMessage,
+  PosBusMessage
 } from 'context/Unity/types';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
@@ -23,11 +26,15 @@ export type WebsocketEvents = {
   connected: () => void;
   connectionFailed: () => void;
   notification: (type: NotificationTypes, message: string) => void;
+  'notify-gathering-start': (message: NotifyMessage) => void;
   interaction: (type: InteractionTypes, senderId: string, message: string) => void;
   collaboration: (type: CollaborationTypes, channel: string, receiverId: string) => void;
   'miro-board-change': (id: string) => void;
   'google-drive-file-change': (id: string) => void;
   broadcast: (broadcast: any) => void;
+  'meeting-kick': (spaceId: string) => void;
+  'meeting-mute': () => void;
+  'meeting-mute-all': (moderatorId: string) => void;
   'stage-mode-toggled': (
     stageModeStatus: StageModeStatus.INITIATED | StageModeStatus.STOPPED
   ) => void;
@@ -41,6 +48,8 @@ export type WebsocketEvents = {
   'stage-mode-user-left': (userId: string) => void;
   'user-wowed': (spaceId: string, count: number) => void;
   'user-vibed': (type: string, count: number) => void;
+  'posbus-connected': () => void;
+  'posbus-disconnected': () => void;
   'space-invite': (
     spaceId: string,
     invitorId: string,
@@ -183,6 +192,21 @@ class WebsocketService {
     WebsocketEventEmitter.emit('broadcast', message);
   }
 
+  handleIncomingCommunication(message: CommunicationMessage) {
+    switch (message.action) {
+      case 'kick':
+        WebsocketEventEmitter.emit('meeting-kick', message.spaceId);
+        break;
+      case 'mute':
+        WebsocketEventEmitter.emit('meeting-mute');
+        break;
+      case 'mute-all':
+        WebsocketEventEmitter.emit('meeting-mute-all', message.moderatorId);
+        break;
+      default:
+    }
+  }
+
   handleIncomingStageMode(message: StageModeMessage) {
     switch (message.action) {
       case 'state':
@@ -222,6 +246,10 @@ class WebsocketService {
     this.handleHighFiveReceived(message.senderId, message.message);
   }
 
+  handleNotifyGathering(message: NotifyMessage) {
+    WebsocketEventEmitter.emit('notify-gathering-start', message);
+  }
+
   handleRelayMessage(target: string, message: any): void {
     console.debug('unity-relay:', target, message);
     // WARNING: hack: bridging new controller unity message to old legacy mqtt code.
@@ -235,6 +263,9 @@ class WebsocketService {
       case 'collaboration':
         this.handleIncomingCollaboration(message as CollaborationMessage);
         break;
+      case 'meeting':
+        this.handleIncomingCommunication(message as CommunicationMessage);
+        break;
       case 'broadcast':
         this.handleIncomingBroadcast(message as BroadcastMessage);
         break;
@@ -244,8 +275,27 @@ class WebsocketService {
       case 'high5':
         this.handleIncomingHigh5(message as High5Message);
         break;
+      case 'event':
+        this.handleNotifyGathering(message as NotifyMessage);
+        break;
+      case 'posbus':
+        this.handlePosBusMessage(message as PosBusMessage);
+        break;
       default:
         console.debug('Unknown relay message type', target);
+    }
+  }
+
+  handlePosBusMessage(message: PosBusMessage) {
+    switch (message.status) {
+      case 'connected':
+        WebsocketEventEmitter.emit('posbus-connected');
+        break;
+      case 'disconnected':
+        WebsocketEventEmitter.emit('posbus-disconnected');
+        break;
+      default:
+        console.warn('Unknown posbus status', message.status);
     }
   }
 

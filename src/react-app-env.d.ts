@@ -9,6 +9,7 @@ module 'react-add-to-calendar-hoc' {
     endDatetime: string;
     startDatetime: string;
     title: string;
+    location?: string;
   }
 
   export enum SHARE_SITES {

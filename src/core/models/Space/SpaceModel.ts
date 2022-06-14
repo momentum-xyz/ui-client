@@ -22,6 +22,9 @@ const SpaceModel = types
   .views((self) => ({
     get parentUUID() {
       return self.parentId ? bytesToUuid(self.parentId.data) : undefined;
+    },
+    get isPrivate() {
+      return self.secret === 1;
     }
   }));
 

@@ -39,59 +39,56 @@ const ExplorePanel: FC = () => {
   );
 
   return (
-    <styled.Container>
-      <ExpandableLayout
-        iconName="explore"
-        name={t('labels.explore')}
-        isExpanded={exploreStore.isExpanded}
-        setExpand={exploreStore.toggleExpand}
-        size={{width: '200px'}}
-      >
-        <SearchInput
-          value={exploreStore.searchQuery}
-          onChange={exploreStore.setSearchQuery}
-          placeholder={t(`placeholders.searchForSpaces`)}
-          onFocus={() => handleSearchFocus(true)}
-          onBlur={() => handleSearchFocus(false)}
-        />
-        {exploreStore.isSearching && (
-          <>
-            <styled.WorldNameContainer>
-              <Heading
-                label={t('labels.searchResults')}
-                type="h1"
-                align="left"
-                transform="uppercase"
-              />
-            </styled.WorldNameContainer>
-            {exploreStore.searchRequest.isPending ? <Loader /> : <SpacesList />}
-          </>
-        )}
-        {!exploreStore.isSearching &&
-          (exploreStore.selectedSpaceStore.didFetchSpaceInformation ? (
-            <styled.Body>
-              {exploreStore.previousItem &&
-              exploreStore.selectedSpace?.id !== worldStore.worldId ? (
-                <SelectedSpace />
-              ) : (
-                <>
-                  <styled.WorldNameContainer>
-                    <Heading
-                      label={selectedSpace.name ?? ''}
-                      type="h1"
-                      align="left"
-                      transform="uppercase"
-                    />
-                  </styled.WorldNameContainer>
-                  <SpacesList />
-                </>
-              )}
-            </styled.Body>
-          ) : (
-            <Loader />
-          ))}
-      </ExpandableLayout>
-    </styled.Container>
+    <ExpandableLayout
+      iconName="explore"
+      name={t('labels.explore')}
+      isExpanded={exploreStore.isExpanded}
+      setExpand={exploreStore.toggleExpand}
+      size={{width: '200px'}}
+    >
+      <SearchInput
+        value={exploreStore.searchQuery}
+        onChange={exploreStore.setSearchQuery}
+        placeholder={t(`placeholders.searchForSpaces`)}
+        onFocus={() => handleSearchFocus(true)}
+        onBlur={() => handleSearchFocus(false)}
+      />
+      {exploreStore.isSearching && (
+        <>
+          <styled.WorldNameContainer>
+            <Heading
+              label={t('labels.searchResults')}
+              type="h1"
+              align="left"
+              transform="uppercase"
+            />
+          </styled.WorldNameContainer>
+          {exploreStore.searchRequest.isPending ? <Loader /> : <SpacesList />}
+        </>
+      )}
+      {!exploreStore.isSearching &&
+        (exploreStore.selectedSpaceStore.didFetchSpaceInformation ? (
+          <styled.Body>
+            {exploreStore.previousItem && exploreStore.selectedSpace?.id !== worldStore.worldId ? (
+              <SelectedSpace />
+            ) : (
+              <>
+                <styled.WorldNameContainer>
+                  <Heading
+                    label={selectedSpace.name ?? ''}
+                    type="h1"
+                    align="left"
+                    transform="uppercase"
+                  />
+                </styled.WorldNameContainer>
+                <SpacesList />
+              </>
+            )}
+          </styled.Body>
+        ) : (
+          <Loader />
+        ))}
+    </ExpandableLayout>
   );
 };
 

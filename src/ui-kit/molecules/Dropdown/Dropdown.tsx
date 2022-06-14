@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import cn from 'classnames';
 
-import {IconSvg, Portal, ValueType, VariantType} from 'ui-kit';
+import {IconSvg, Portal, ValueType, VariantType, DropdownSizeType} from 'ui-kit';
 import {useClickOutside, useResize, useScroll} from 'ui-kit/hooks';
 import {PropsWithThemeInterface, OptionInterface} from 'ui-kit/interfaces';
 
@@ -16,6 +16,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   options: OptionInterface[];
   onOptionSelect: (option: OptionInterface) => void | Promise<void>;
   isError?: boolean;
+  dropdownSize?: DropdownSizeType;
 }
 
 const Dropdown: FC<PropsInterface> = ({
@@ -26,7 +27,8 @@ const Dropdown: FC<PropsInterface> = ({
   options = [],
   onOptionSelect,
   variant = 'primary',
-  isError
+  isError,
+  dropdownSize = 'normal'
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<OptionInterface | undefined>();
@@ -77,6 +79,7 @@ const Dropdown: FC<PropsInterface> = ({
               optionList={options}
               selectedOption={selectedOption}
               onOptionSelect={handleOptionSelect}
+              size={dropdownSize}
             />
           </styled.Options>
         </Portal>

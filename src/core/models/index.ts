@@ -14,3 +14,4 @@ export * from './SubSpace';
 export * from './SortedField';
 export * from './TokenItem';
 export * from './UserModel';
+export * from './TrackModel';

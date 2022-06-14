@@ -3,6 +3,7 @@ import {t} from 'i18next';
 import {useHistory, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
+import ReactHowler from 'react-howler';
 
 import {cookie} from 'core/services';
 import {CookieKeyEnum} from 'core/enums';
@@ -27,7 +28,6 @@ import {
 } from 'context/Collaboration/CollaborationReducer';
 import UnityService from 'context/Unity/UnityService';
 import {switchFullscreen} from 'core/utils';
-import {useMusicPlayer} from 'context/MusicPlayer/hooks/useMusicPlayer';
 import {useGetUserOwnedSpaces} from 'modules/profile/hooks/useUserSpace';
 import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
@@ -36,6 +36,7 @@ import {
   HelpWidget,
   LaunchInitiativeWidget,
   MagicLinkWidget,
+  MusicPlayerWidget,
   ProfileMenuWidget,
   SettingsWidget,
   StakingWidget,
@@ -62,7 +63,8 @@ const WidgetContainer: FC = () => {
     profileMenuStore,
     tokenRulesStore,
     launchInitiativeStore,
-    settingsStore
+    settingsStore,
+    musicPlayerStore
   } = widgetStore;
 
   const {magicLinkDialog} = magicLinkStore;
@@ -70,9 +72,8 @@ const WidgetContainer: FC = () => {
   const {statsDialog} = worldStatsStore;
   const {profileMenuDialog} = profileMenuStore;
   const {profile: currentProfile, isGuest} = sessionStore;
-
+  const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {collaborationState, collaborationDispatch} = useCollaboration();
-  const {handleMusicPlayer, show} = useMusicPlayer();
 
   const history = useHistory();
   const location = useLocation();
@@ -132,6 +133,10 @@ const WidgetContainer: FC = () => {
   });
 
   useEffect(() => {
+    musicPlayerStore.init(worldStore.worldId);
+  }, [worldStore.worldId]);
+
+  useEffect(() => {
     // @ts-ignore: What is it for?
     const unlisten = history.listen((location) => {
       if (location.pathname === ROUTES.base) {
@@ -186,10 +191,6 @@ const WidgetContainer: FC = () => {
     });
   };
 
-  const handleMusicPlayerStatus = () => {
-    handleMusicPlayer(!show);
-  };
-
   const handleRuleReviewClose = () => {
     tokenRulesStore.tokenRuleReviewDialog.close();
     tokenRulesStore.tokenRulesListStore.fetchTokenRules();
@@ -203,9 +204,13 @@ const WidgetContainer: FC = () => {
       link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.worldCalendar
     },
     {title: t('labels.minimap'), icon: 'minimap', onClick: () => UnityService.toggleMiniMap()},
-    {title: t('labels.musicPlayer'), icon: 'music', onClick: handleMusicPlayerStatus},
+    {
+      title: t('labels.musicPlayer'),
+      icon: 'music',
+      onClick: musicPlayerWidget.toggle
+    },
     {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
-    {title: t('labels.information'), icon: 'question', onClick: helpStore.helpDialog.open},
+    {title: t('labels.help'), icon: 'question', onClick: helpStore.helpDialog.open},
     {title: t('labels.fullscreen'), icon: 'fullscreen', onClick: switchFullscreen}
   ];
 
@@ -217,6 +222,7 @@ const WidgetContainer: FC = () => {
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {tokenRulesStore.widgetDialog.isOpen && <TokenRulesWidget />}
+      {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {tokenRulesStore.tokenRuleReviewDialog.isOpen && (
         <TokenRuleReviewWidget
           onClose={handleRuleReviewClose}
@@ -225,7 +231,20 @@ const WidgetContainer: FC = () => {
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {settingsStore.dialog.isOpen && <SettingsWidget />}
-
+      <ReactHowler
+        src={[playlist.currentTrackHash]}
+        onLoad={musicPlayer.startLoading}
+        format={['mp3', 'ogg', 'acc', 'webm']}
+        onPlay={musicPlayer.startedPlaying}
+        onEnd={musicPlayerStore.songEnded}
+        playing={musicPlayer.isPlaying}
+        preload={true}
+        loop={false}
+        mute={musicPlayer.muted}
+        volume={musicPlayer.volume}
+        html5={true}
+        ref={(ref) => musicPlayer.setPlayer(ref)}
+      />
       <styled.Footer>
         <styled.MainLinks>
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />

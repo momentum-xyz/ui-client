@@ -12,6 +12,8 @@ export type InviteMessage = {
 
 export type IntegrationTypes = 'miro' | 'google_drive' | 'broadcast' | 'stage_mode';
 
+export type PosBusStatusType = 'connected' | 'disconnected';
+
 export type CollaborationMessage = {
   integrationType: IntegrationTypes;
   spaceId: string;
@@ -46,6 +48,22 @@ export type StageModeAction =
   | 'mute';
 
 export type StageModeStatus = 'initiated' | 'stopped';
+
+export type CommunicationMessage = CommunicationKick | CommunicationMute | CommunicationMuteAll;
+
+export type CommunicationKick = {
+  action: 'kick';
+  spaceId: string;
+};
+
+export type CommunicationMute = {
+  action: 'mute';
+};
+
+export type CommunicationMuteAll = {
+  action: 'mute-all';
+  moderatorId: string;
+};
 
 export type StageModeMessage =
   | StageModeStateMessage
@@ -109,4 +127,14 @@ export type High5Message = {
   senderId: string;
   receiverId: string;
   message: string;
+};
+
+export type NotifyMessage = {
+  spaceId: string;
+  name: string;
+  start: Date;
+};
+
+export type PosBusMessage = {
+  status: PosBusStatusType;
 };

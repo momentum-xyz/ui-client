@@ -1,15 +1,18 @@
 import {types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
+import {ChangeEvent} from 'react';
 
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
-import UnityService from 'context/Unity/UnityService';
+import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 
 const UnityStore = types
   .model('UnityStore', {
     isInitialized: false,
     isPaused: false,
-    teleportReady: false
+    teleportReady: false,
+    volume: types.optional(types.number, 0.1),
+    muted: types.optional(types.boolean, false)
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -55,6 +58,51 @@ const UnityStore = types
     },
     teleportIsReady(): void {
       self.teleportReady = true;
+    },
+    setInitialVolume() {
+      UnityService.setSoundEffectVolume('0.1');
+    },
+    setVolume(volume: number) {
+      self.volume = volume;
+    },
+    mute() {
+      if (!self.muted) {
+        UnityService.toggleAllSound();
+        UnityService.setSoundEffectVolume('0');
+        self.volume = 0;
+        self.muted = true;
+      }
+    },
+    unmute() {
+      if (self.volume === 1) {
+        return;
+      }
+      const newVolume = Math.min((self.muted ? 0 : self.volume) + 0.1, 1.0);
+      self.volume = newVolume;
+      UnityService.setSoundEffectVolume(newVolume.toString());
+      if (self.muted) {
+        UnityService.toggleAllSound();
+        self.muted = false;
+      }
+    },
+    volumeChange(slider: ChangeEvent<HTMLInputElement>) {
+      const newVolume = parseFloat(slider.target.value);
+      if (!self.muted && newVolume === 0) {
+        UnityService.toggleAllSound();
+      }
+      if (self.muted && newVolume > 0) {
+        UnityService.toggleAllSound();
+      }
+      self.volume = newVolume;
+      UnityService.setSoundEffectVolume(newVolume.toString());
+    },
+    triggerInteractionMessage(
+      interaction: PosBusInteractionType,
+      targetId: string,
+      flag: number,
+      message: string
+    ) {
+      UnityService.triggerInteractionMsg?.(interaction, targetId, flag, message);
     }
   }));
 

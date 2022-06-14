@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import cn from 'classnames';
 
-import {IconSvg, VariantType} from 'ui-kit';
+import {IconSvg, VariantType, DropdownSizeType} from 'ui-kit';
 import {SKIP_OUTSIDE_CLICK_CLASS} from 'ui-kit/hooks';
 import {PropsWithThemeInterface, OptionInterface} from 'ui-kit/interfaces';
 
@@ -12,12 +12,13 @@ interface PropsInterface extends PropsWithThemeInterface {
   selectedOption?: OptionInterface;
   optionList: OptionInterface[];
   onOptionSelect: (option: OptionInterface) => void;
+  size?: DropdownSizeType;
 }
 
 const OptionList: FC<PropsInterface> = (props) => {
-  const {theme, variant, selectedOption, optionList, onOptionSelect} = props;
+  const {theme, variant, selectedOption, optionList, onOptionSelect, size} = props;
   return (
-    <styled.DropdownOptionsList className={cn(SKIP_OUTSIDE_CLICK_CLASS, variant)}>
+    <styled.DropdownOptionsList className={cn(SKIP_OUTSIDE_CLICK_CLASS, variant, size)}>
       <styled.DropdownIcon className="opened">
         <IconSvg theme={theme} name="chevron" size="normal" />
       </styled.DropdownIcon>

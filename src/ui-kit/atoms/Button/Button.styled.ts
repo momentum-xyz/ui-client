@@ -13,7 +13,8 @@ export const Button = styled.button`
   transition: border var(--tr-150-ei), color var(--tr-150-ei), background var(--tr-150-ei);
   /* VARIANTS */
 
-  &.primary {
+  &.primary,
+  &.primary-background {
     color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
     border-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
     border-radius: 5px;
@@ -34,6 +35,10 @@ export const Button = styled.button`
         cursor: not-allowed;
       }
     }
+  }
+
+  &.primary-background {
+    background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
   }
 
   &.secondary {
@@ -60,10 +65,15 @@ export const Button = styled.button`
     }
   }
 
-  &.danger {
+  &.danger,
+  &.danger-background {
     color: ${rgba(DANGER_COLOR, 0.9)};
     border-color: ${rgba(DANGER_COLOR, 0.9)};
     border-radius: 5px;
+
+    .IconSvg-custom {
+      color: ${(props) => props.theme.accent && rgba(DANGER_COLOR, 0.9)};
+    }
 
     &:hover,
     &:active {
@@ -81,6 +91,10 @@ export const Button = styled.button`
         cursor: not-allowed;
       }
     }
+  }
+
+  &.danger-background {
+    background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
   }
 
   &.inverted {

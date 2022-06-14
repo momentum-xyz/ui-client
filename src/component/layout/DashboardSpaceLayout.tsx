@@ -1,8 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
-import {useMusicPlayer} from 'context/MusicPlayer/hooks/useMusicPlayer';
-
 import {PermanentType, useDashboard} from '../../hooks/api/useDashboardService';
 import Button from '../atoms/Button';
 import DashboardDynamicView, {DashboardRef} from '../molucules/dashboard/Dashboard';
@@ -40,10 +38,10 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
   const [isOwner, setIsOwner] = useState(false);
   const [isStakeShown, setIsStakeShown] = useState<boolean>(false);
   const [showPeopleToInviteList, setShowPeopleToInviteList] = useState(false);
-  const {togglePlayPause, playing} = useMusicPlayer();
 
   const {widgetStore, sessionStore} = useStore();
-  const {stakingStore} = widgetStore;
+  const {stakingStore, musicPlayerStore} = widgetStore;
+  const {musicPlayer} = musicPlayerStore;
   const {stakingDialog} = stakingStore;
   const {isGuest} = sessionStore;
 
@@ -52,8 +50,8 @@ const DashboardSpaceLayout: React.FC<DashboardSpaceLayoutProps> = (props) => {
   useEffect(() => {
     setDashboardEdited(true);
     if (dashboard) {
-      if (playing) {
-        togglePlayPause();
+      if (musicPlayer.isPlaying) {
+        musicPlayerStore.togglePlayback();
       }
       dashboard.tiles.forEach((tile) => {
         if (

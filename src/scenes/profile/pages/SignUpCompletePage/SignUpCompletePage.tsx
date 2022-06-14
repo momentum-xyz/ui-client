@@ -27,16 +27,20 @@ const SignUpCompletePage: FC = () => {
     }
   }, [idToken, sessionStore]);
 
-  const updateProfileHandle = useCallback(
+  const onSubmitHandle = useCallback(
     async (form: SignUpFormInterface) => {
       const result = await signUpCompleteStore.updateProfile(form);
       if (result?.userOnboarded) {
         await sessionStore.reload();
-        history.push(ROUTES.base);
+        history.push(window.history.state?.state?.from || ROUTES.base);
       }
     },
     [signUpCompleteStore, sessionStore, history]
   );
+
+  const onCancelHandle = useCallback(() => {
+    history.push(ROUTES.login, {from: window.history.state?.state?.from || ROUTES.base});
+  }, [history]);
 
   return (
     <styled.Background background={background}>
@@ -53,7 +57,8 @@ const SignUpCompletePage: FC = () => {
               }}
               fieldErrors={errors}
               isSubmitDisabled={isUpdating}
-              onSubmit={updateProfileHandle}
+              onSubmit={onSubmitHandle}
+              onCancel={onCancelHandle}
             />
           )}
         </styled.Wrapper>

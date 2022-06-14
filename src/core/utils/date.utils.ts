@@ -57,7 +57,7 @@ export const timeFromNow = (hours: number) => {
 };
 
 export const monthAndYearString = (date: Date) => {
-  const today = new Date();
+  const today = new Date(date);
   const options = {year: 'numeric', month: 'short'} as const;
   return today.toLocaleDateString('en-US', options);
 };
@@ -72,4 +72,10 @@ export const formatStartTime = (date: Date) => {
 
 export const formatEndDate = (date: Date) => {
   return formatInTimeZone(date, 'Europe/Berlin', 'MMM d h:mm aa z').toUpperCase();
+};
+
+export const formatDurationTime = (seconds: number) => {
+  const floored = Math.floor(seconds);
+
+  return new Date(floored * 1000).toISOString().match(/(?<=\d\d:)\d\d:\d\d/)?.[0];
 };

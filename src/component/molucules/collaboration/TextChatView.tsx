@@ -114,12 +114,14 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
           }
           return (
             <li key={index} className={` border-b-1 py-1 border-prime-blue-20`}>
-              <span className="font-bold text-base uppercase flex justify-between">
-                {message.author === currentUserId
-                  ? 'you'
-                  : users[message.author]?.name || message.author}
+              <div className="font-bold text-base uppercase gap-1 flex justify-between">
+                <span className="truncate" title={users[message.author]?.name || message.author}>
+                  {message.author === currentUserId
+                    ? 'you'
+                    : users[message.author]?.name || message.author}
+                </span>
                 <time className="font-normal text-white-50">{dateToTimeString(message.date)}</time>
-              </span>
+              </div>
               {message.messageType === 'TEXT' && (
                 <p className="text-sm break-words">{message.text}</p>
               )}

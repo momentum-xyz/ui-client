@@ -26,8 +26,12 @@
     // }
   }
 
+  .main-container{
+    pointer-events: none;
+  }
+
   .z-main-u {
-      z-index: 30;
+      z-index: 32;
   }
 }
 
@@ -37,6 +41,13 @@
   * {
     z-index: 0;
   }
+}
+
+.main-container{
+  pointer-events: auto;
+  z-index: 1;
+  width:100%;
+  display: flex;
 }
 
 .debug-bg {

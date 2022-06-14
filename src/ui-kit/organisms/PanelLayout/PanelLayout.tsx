@@ -8,7 +8,9 @@ import {
   IconSvg,
   HeaderStyleType,
   SizeType,
-  ComponentSizeInterface
+  ComponentSizeInterface,
+  HeaderType,
+  HeaderItem
 } from 'ui-kit';
 
 import * as styled from './PanelLayout.styled';
@@ -29,6 +31,10 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerActions?: ReactNode;
   captureAllPointerEvents?: boolean;
   componentSize?: ComponentSizeInterface;
+  headerItem?: HeaderItem;
+  titleWidth?: string;
+  headerType?: HeaderType;
+  className?: string;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -40,8 +46,12 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isCustom = false,
     hasBorder = false,
     iconSize = 'small',
+    headerItem = 'left',
+    headerType = 'h3',
+    titleWidth = '100%',
     captureAllPointerEvents = false,
     componentSize,
+    className,
     ...restProps
   } = props;
 
@@ -50,7 +60,8 @@ const PanelLayout: FC<PropsInterface> = (props) => {
       className={cn(
         isCustom && 'PanelLayout-custom',
         hasBorder && 'hasBorder',
-        captureAllPointerEvents && 'allPointerEvents'
+        captureAllPointerEvents && 'allPointerEvents',
+        className
       )}
       {...componentSize}
     >
@@ -60,20 +71,20 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           theme={restProps.theme}
         >
           {restProps.headerIconName && (
-            <styled.HeaderItem>
+            <styled.HeaderIconItem>
               <IconSvg
                 theme={restProps.theme}
                 name={restProps.headerIconName}
                 size={iconSize}
                 isDanger={isDanger}
               />
-            </styled.HeaderItem>
+            </styled.HeaderIconItem>
           )}
-          <styled.HeaderItem>
+          <styled.HeaderItem className={cn(headerItem)} style={{width: titleWidth}}>
             {restProps.title && (
-              <Heading
+              <styled.TitleHeading
                 theme={restProps.theme}
-                type="h3"
+                type={headerType}
                 label={restProps.title}
                 transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                 isDanger={isDanger}
@@ -83,7 +94,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
               <>
                 <Heading
                   theme={restProps.theme}
-                  type="h3"
+                  type={headerType}
                   label="/"
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   isDanger={isDanger}
@@ -91,7 +102,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 <styled.Whitespace />
                 <Heading
                   theme={restProps.theme}
-                  type="h3"
+                  type={headerType}
                   label={restProps.subtitle}
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   weight="normal"
