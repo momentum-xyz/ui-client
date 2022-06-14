@@ -12,6 +12,8 @@ export type InviteMessage = {
 
 export type IntegrationTypes = 'miro' | 'google_drive' | 'broadcast' | 'stage_mode';
 
+export type PosBusStatusType = 'connected' | 'disconnected';
+
 export type CollaborationMessage = {
   integrationType: IntegrationTypes;
   spaceId: string;
@@ -131,4 +133,8 @@ export type NotifyMessage = {
   spaceId: string;
   name: string;
   start: Date;
+};
+
+export type PosBusMessage = {
+  status: PosBusStatusType;
 };
