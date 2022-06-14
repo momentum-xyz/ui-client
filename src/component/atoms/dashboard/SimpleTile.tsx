@@ -20,7 +20,7 @@ const SimpleTile: React.FC<SimpleTileProps> = ({icon, title, text, children}) =>
           <img src={cachedUrl} className="h-1.6" alt="Expand" />
         </div>
       </div>
-      <div className="text-sm whitespace-pre-wrap break-all hyphens-auto">
+      <div className="text-sm whitespace-pre-wrap hyphens-auto">
         <Linkify
           // @ts-ignore: refactoring
           componentDecorator={(decoratedHref, decoratedText, key) => (
