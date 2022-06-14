@@ -34,6 +34,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerItem?: HeaderItem;
   titleWidth?: string;
   headerType?: HeaderType;
+  className?: string;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -50,6 +51,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     titleWidth = '100%',
     captureAllPointerEvents = false,
     componentSize,
+    className,
     ...restProps
   } = props;
 
@@ -58,7 +60,8 @@ const PanelLayout: FC<PropsInterface> = (props) => {
       className={cn(
         isCustom && 'PanelLayout-custom',
         hasBorder && 'hasBorder',
-        captureAllPointerEvents && 'allPointerEvents'
+        captureAllPointerEvents && 'allPointerEvents',
+        className
       )}
       {...componentSize}
     >
