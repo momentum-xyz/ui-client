@@ -2,7 +2,11 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {ApiPromise} from '@polkadot/api';
 import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@polkadot/util';
 import {cloneDeep} from 'lodash-es';
-import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
+import {
+  DeriveBalancesAll,
+  DeriveSessionProgress,
+  DeriveStakingAccount
+} from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
 
@@ -46,10 +50,12 @@ const PolkadotProviderStore = types
   )
   .volatile<{
     channel: ApiPromise | null;
+    balanceAll: DeriveBalancesAll | null;
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
   }>(() => ({
     channel: null,
+    balanceAll: null,
     stakingInfo: null,
     sessionProgress: null
   }))
@@ -197,10 +203,15 @@ const PolkadotProviderStore = types
         transferableWithoutFee
       });
     }),
-    getStakingInfo: flow(function* (address: string) {
-      self.stakingInfo =
-        self.channel !== null ? yield self.channel?.derive.staking.account(address) : null;
-    }),
+    setStakingInfo(payload: DeriveStakingAccount) {
+      self.stakingInfo = payload;
+    },
+    setBalanceAll(payload: DeriveBalancesAll) {
+      self.balanceAll = payload;
+    },
+    setSessionProgress(payload: DeriveSessionProgress) {
+      self.sessionProgress = payload;
+    },
     getUsedControllerAddress() {
       const usedControllerAddress = self.stakingInfo?.controllerId?.toJSON()
         ? self.stakingInfo?.controllerId?.toJSON()
@@ -218,7 +229,6 @@ const PolkadotProviderStore = types
       const result = self.addresses.find((account) => account.address === address);
       self.stashAccount = cast(cloneDeep(result));
       yield self.getBalances(address, 'stashAccountBalance');
-      yield self.getStakingInfo(address);
       self.getUsedControllerAddress();
     }),
     getMinNominatorBond: flow(function* () {
@@ -256,10 +266,6 @@ const PolkadotProviderStore = types
       const isEnabled = yield SubstrateProvider.isExtensionEnabled();
       self.isWeb3Injected = cast(isEnabled);
     }),
-    getSessionProgress: flow(function* () {
-      self.sessionProgress =
-        self.channel !== null ? yield self.channel?.derive.session.progress() : null;
-    }),
     initAccount: flow(function* () {
       yield self.getAddresses();
       yield self.setStashAccount(self.addresses[0].address);
@@ -268,6 +274,21 @@ const PolkadotProviderStore = types
         yield self.getBondedAddress(self.stashAccount.address);
         yield self.getUsedStashAddress(self.stashAccount.address);
       }
+    }),
+    getChainInformation: flow(function* () {
+      self.tokenSymbol = cast(
+        self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
+      );
+
+      self.ss58Format = cast(self.channel?.registry.chainSS58);
+      self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
+      SubstrateProvider.setDefaultBalanceFormatting(
+        self.channel?.registry.chainDecimals[0],
+        self.channel?.registry.chainTokens[0]
+      );
+
+      self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
+      yield self.getMinNominatorBond();
     }),
     async calculateUnlockingDuration(blocks: BN) {
       const A_DAY = new BN(24 * 60 * 60 * 1000);
@@ -286,23 +307,9 @@ const PolkadotProviderStore = types
 
       const interval = bnMin(A_DAY, time as BN);
       const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));
+
       self.unlockingDuration = cast(duration);
     },
-    getChainInformation: flow(function* () {
-      self.tokenSymbol = cast(
-        self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
-      );
-
-      self.ss58Format = cast(self.channel?.registry.chainSS58);
-      self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
-      SubstrateProvider.setDefaultBalanceFormatting(
-        self.channel?.registry.chainDecimals[0],
-        self.channel?.registry.chainTokens[0]
-      );
-
-      self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
-      yield self.getMinNominatorBond();
-    }),
     setTransactionType(transactionType: StakingTransactionType) {
       self.transactionType = cast(transactionType);
     },
@@ -359,7 +366,9 @@ const PolkadotProviderStore = types
       return self.channel?.tx.staking.chill();
     },
     async calculateFee(extrinsics: SubmittableExtrinsic | undefined) {
-      const calculatedFee = await extrinsics?.paymentInfo(self.transactionSigner?.address as any);
+      const calculatedFee = await extrinsics?.paymentInfo(
+        self.transactionSigner?.address as string
+      );
       const feeFormatted = formatBalance(calculatedFee?.partialFee, {withSiFull: true}, 12);
       this.setTransactionFee(feeFormatted);
     }
@@ -369,7 +378,6 @@ const PolkadotProviderStore = types
       yield self.connectToChain();
       yield self.setIsWeb3Injected();
       yield self.getChainInformation();
-      yield self.getSessionProgress();
       yield self.initAccount();
     })
   }));
