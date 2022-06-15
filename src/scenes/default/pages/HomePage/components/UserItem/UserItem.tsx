@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useHistory} from 'react-router';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
 
 import {Button, SvgButton, Avatar} from 'ui-kit';
 import {appVariables} from 'api/constants';
@@ -64,7 +65,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({onClick, currentUserId, inv
 
   return (
     <styled.Container>
-      <styled.InfoContainer onClick={onClick}>
+      <styled.InfoContainer onClick={onClick} className={cn(invite && 'invite')}>
         <Avatar
           avatarSrc={
             user.profile?.avatarHash &&
