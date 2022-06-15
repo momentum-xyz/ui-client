@@ -26,6 +26,12 @@ export const InfoContainer = styled.div`
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
     }
   }
+
+  &.invite {
+    ${StyledText} {
+      width: 10ch;
+    }
+  }
 `;
 
 export const InviteButtonContainer = styled.div`
