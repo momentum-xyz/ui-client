@@ -73,7 +73,7 @@ const WorldCalendarPage: FC = () => {
           onClose={magicDialog.close}
         />
       )}
-      <TopBar title="World Calendar" onClose={() => history.push(ROUTES.base)} />
+      <TopBar title="World Calendar" onClose={() => history.goBack()} />
       <EventList
         events={eventListStore.events}
         onMagicLinkOpen={handleMagicLinkOpen}
