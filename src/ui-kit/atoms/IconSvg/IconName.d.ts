@@ -72,6 +72,7 @@ declare type IconName =
   | 'polkadotprofile'
   | 'profile'
   | 'question'
+  | 'questions'
   | 'qweasd'
   | 'remove-user'
   | 'requested'
