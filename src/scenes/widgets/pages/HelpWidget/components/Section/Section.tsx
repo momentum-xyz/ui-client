@@ -12,6 +12,7 @@ export interface SectionPropsInterface {
   name: string;
   expanded: boolean;
   onExpandToggle: () => void;
+  withBorder?: boolean;
 }
 
 const Section: React.FC<SectionPropsInterface> = ({
@@ -19,6 +20,7 @@ const Section: React.FC<SectionPropsInterface> = ({
   name,
   expanded,
   onExpandToggle,
+  withBorder = true,
   children
 }) => {
   return (
@@ -45,7 +47,7 @@ const Section: React.FC<SectionPropsInterface> = ({
         </styled.TopContanerChild>
       </styled.TopContainer>
       <styled.BottomContainer className={cn({hide: !expanded})}>
-        <styled.Border />
+        {withBorder && <styled.Border />}
         {children}
       </styled.BottomContainer>
     </styled.Container>

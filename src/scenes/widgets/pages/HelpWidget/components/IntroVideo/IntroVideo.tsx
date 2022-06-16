@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import YouTube from 'react-youtube';
 
 import {appVariables} from 'api/constants';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components';
@@ -28,8 +29,11 @@ const IntroVideo: FC = () => {
       icon="screenshare"
       expanded={helpStore.showIntroVideoSection}
       onExpandToggle={handleExpand}
+      withBorder={false}
     >
-      <styled.Video videoId={appVariables.YOUTUBE_INTRO_VIDEO_ID} opts={opts} />
+      <styled.VideoWrapper>
+        <YouTube videoId={appVariables.YOUTUBE_INTRO_VIDEO_ID} opts={opts} />
+      </styled.VideoWrapper>
     </Section>
   );
 };

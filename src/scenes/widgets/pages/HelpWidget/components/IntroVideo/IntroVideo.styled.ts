@@ -1,12 +1,13 @@
-import YouTube from 'react-youtube';
 import styled from 'styled-components';
 
-// @ts-ignore Youtube type isn't compatible with styled-components, but works
-export const Video = styled(YouTube)`
+export const VideoWrapper = styled.div`
   width: 100%;
+  padding: 0 0 20px 0;
 
   iframe {
     width: 100%;
     height: 264px;
+    border-radius: 10px;
+    overflow: hidden;
   }
 `;
