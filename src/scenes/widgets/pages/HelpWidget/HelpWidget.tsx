@@ -10,6 +10,7 @@ import {useStore} from 'shared/hooks';
 
 import {Discord, Controls, Momentum, Wiki} from './components';
 import * as styled from './HelpWidget.styled';
+import {IntroVideo} from './components/IntroVideo';
 
 const HelpWidget: React.FC = () => {
   const {widgetStore} = useStore();
@@ -44,6 +45,9 @@ const HelpWidget: React.FC = () => {
           </styled.ImageItem>
         </styled.TopContainer>
         <styled.BottomContainer>
+          <styled.Item>
+            <IntroVideo />
+          </styled.Item>
           <styled.Item>
             <Momentum />
           </styled.Item>
