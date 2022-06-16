@@ -1,4 +1,4 @@
-import {types, Instance, flow} from 'mobx-state-tree';
+import {types, Instance, flow, cast} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 
 import {
@@ -9,8 +9,9 @@ import {
   formattedStringFromDate
 } from 'core/utils';
 import {api, MagicLinkResponse} from 'api';
-
-import {RequestModel} from '../Request';
+import {RequestModel, AttendeeModel} from 'core/models';
+import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
+import {ATTENDEES_PREVIEW_COUNT} from 'core/constants';
 
 const EventItemModel = types
   .model('EventItem', {
@@ -25,13 +26,27 @@ const EventItemModel = types
     start: types.Date,
     end: types.Date,
     magicLink: types.maybe(types.string),
-    magicRequest: types.optional(RequestModel, {})
+    magicRequest: types.optional(RequestModel, {}),
+    fetchAttendeesRequest: types.optional(RequestModel, {}),
+    attendees: types.optional(types.array(AttendeeModel), []),
+    numberOfAllAttendees: types.optional(types.number, 0)
   })
   .actions((self) => ({
     isLive(): boolean {
       const nowDate = new Date();
       return nowDate >= self.start && nowDate <= self.end;
     },
+    fetchAttendees: flow(function* (limit?: number) {
+      const response: AttendeesResponseInterface = yield self.fetchAttendeesRequest.send(
+        api.attendeesRepository.fetchAttendees,
+        {eventId: self.id, limit}
+      );
+
+      if (response) {
+        self.attendees = cast(response.attendees);
+        self.numberOfAllAttendees = response.count;
+      }
+    }),
     fetchMagicLink: flow(function* () {
       const response: MagicLinkResponse = yield self.magicRequest.send(
         api.magicRepository.generateLink,
@@ -48,6 +63,12 @@ const EventItemModel = types
         self.magicLink = `${window.location.origin}/magic/${response.id}`;
       }
     })
+  }))
+  .actions((self) => ({
+    init() {
+      self.fetchMagicLink();
+      self.fetchAttendees(ATTENDEES_PREVIEW_COUNT);
+    }
   }))
   .views((self) => ({
     get toBytes() {

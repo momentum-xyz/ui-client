@@ -15,3 +15,4 @@ export * from './SortedField';
 export * from './TokenItem';
 export * from './UserModel';
 export * from './TrackModel';
+export * from './AttendeeModel';

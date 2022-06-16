@@ -36,7 +36,7 @@ const EventItem: FC<PropsInterface> = ({
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
   useEffect(() => {
-    event.fetchMagicLink();
+    event.init();
   }, [event]);
 
   const buttons = () => (

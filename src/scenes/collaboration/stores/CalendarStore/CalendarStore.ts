@@ -1,8 +1,15 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 
-import {DialogModel, EventItemModelInterface, RequestModel, ResetModel} from 'core/models';
+import {
+  AttendeeModel,
+  DialogModel,
+  EventItemModelInterface,
+  RequestModel,
+  ResetModel
+} from 'core/models';
 import {api} from 'api';
 import {MagicTypeEnum} from 'core/enums';
+import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 
 import {EventFormStore, EventListStore} from './models';
 
@@ -18,7 +25,10 @@ const CalendarStore = types.compose(
       magicId: types.maybe(types.string),
       magicLinkRequest: types.optional(RequestModel, {}),
       removeEventRequest: types.optional(RequestModel, {}),
-      eventIdToRemove: types.maybe(types.string)
+      eventIdToRemove: types.maybe(types.string),
+      fullAttendeesListDialog: types.optional(DialogModel, {}),
+      attendeesList: types.optional(types.array(AttendeeModel), []),
+      attendeesRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       editEvent(event: EventItemModelInterface) {
@@ -60,7 +70,24 @@ const CalendarStore = types.compose(
           self.magicId = response.id;
           self.magicDialog.open();
         }
-      })
+      }),
+      showFullAttendeesList: flow(function* (spaceId: string, eventId: string) {
+        const response: AttendeesResponseInterface = yield self.attendeesRequest.send(
+          api.attendeesRepository.fetchAttendees,
+          {
+            spaceId
+          }
+        );
+
+        if (response) {
+          self.attendeesList = cast(response.attendees);
+          self.fullAttendeesListDialog.open();
+        }
+      }),
+      hideFullAttendeesList() {
+        self.fullAttendeesListDialog.close();
+        self.attendeesList = cast([]);
+      }
     }))
 );
 
