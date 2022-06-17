@@ -143,11 +143,11 @@ const EventItem: FC<PropsInterface> = ({
 
   const info = () => (
     <styled.Div>
-      <Header event={event} isWorldCalendar={isWorldCalendar} />
-      {date()}
       <styled.Info>
         <styled.ContentRow>
           <styled.TextRow>
+            <Header event={event} isWorldCalendar={isWorldCalendar} />
+            {date()}
             <ShowMoreText
               text={event.description}
               textProps={{

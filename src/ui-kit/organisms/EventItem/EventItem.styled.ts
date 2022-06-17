@@ -67,6 +67,8 @@ export const DateRow = styled.div`
   margin: 10px 0;
   display: flex;
   gap: 5px;
+  flex-shrink: 0;
+  width: max-content;
 `;
 
 export const Info = styled.div`
@@ -121,6 +123,7 @@ export const LiveIndicator = styled.div`
 export const ContentRow = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 20px;
 `;
 
 export const AttendeesContainer = styled.div`
@@ -131,6 +134,7 @@ export const AttendeesContainer = styled.div`
   grid-template-rows: 70px 70px;
   grid-auto-flow: dense;
   transform: rotateY(180deg);
+  margin: 30px 0;
 `;
 
 export const AttendeeAvatar = styled(Avatar)`
