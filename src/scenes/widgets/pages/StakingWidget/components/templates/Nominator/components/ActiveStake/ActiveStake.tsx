@@ -23,7 +23,8 @@ const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond})
     isUnbondingPermitted,
     isStakingAccountUnlocking,
     isWithdrawUnbondedPermitted,
-    setTransactionType
+    setTransactionType,
+    stakingInfo
   } = stakingStore.polkadotProviderStore;
 
   const unbondHandler = () => isUnbondingPermitted && goToUnbond();
@@ -84,16 +85,19 @@ const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond})
               onClick={withdrawUnbonded}
             />
           </styled.WithdrawColumn>
-          <styled.StopStaking>
-            <Button
-              variant="primary"
-              icon="stop"
-              wide={false}
-              label={t('staking.stopStaking')}
-              disabled={isStakingAccountUnlocking}
-              onClick={stopStaking}
-            />
-          </styled.StopStaking>
+          {!!stakingInfo?.nominators?.length && (
+            <styled.StopStaking>
+              <Button
+                variant="primary"
+                icon="stop"
+                wide={false}
+                label={t('staking.stopStaking')}
+                disabled={isStakingAccountUnlocking}
+                onClick={stopStaking}
+              />
+            </styled.StopStaking>
+          )}
+
           <styled.DetailsColumn
             onClick={unbondHandler}
             style={{opacity: isUnbondingPermitted ? 1 : 0.3}}
