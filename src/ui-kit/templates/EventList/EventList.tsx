@@ -8,6 +8,7 @@ import {EventItemModelInterface} from 'core/models';
 import * as styled from './EventList.styled';
 
 interface PropsInterface {
+  currentUserId: string;
   selectedEventId?: string;
   events: EventItemModelInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
@@ -21,6 +22,7 @@ interface PropsInterface {
 }
 
 const EventList: FC<PropsInterface> = ({
+  currentUserId,
   events,
   onEventEdit,
   onEventRemove,
@@ -69,6 +71,7 @@ const EventList: FC<PropsInterface> = ({
     <styled.Container className="noScrollIndicator">
       {events.map((event, index) => (
         <EventItem
+          currentUserId={currentUserId}
           zIndex={events.length - index}
           key={event.id}
           event={event}

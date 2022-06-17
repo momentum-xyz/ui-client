@@ -1,12 +1,23 @@
 import {types} from 'mobx-state-tree';
 
-import {UserStatusEnum} from 'core/enums';
+import {appVariables} from 'api/constants';
+import {UserProfileModel} from 'core/models/UserProfile';
 
-const AttendeeModel = types.model('Attendee', {
-  name: types.string,
-  id: types.string,
-  avatarHash: types.string,
-  status: types.maybe(types.enumeration(Object.values(UserStatusEnum)))
-});
+const AttendeeModel = types
+  .model('AttendeeModel', {
+    user: UserProfileModel
+  })
+  .views((self) => ({
+    get id() {
+      return self.user.uuid;
+    },
+    get name() {
+      return self.user.name;
+    },
+    get avatarSrc() {
+      const avatarHash = self.user.profile?.avatarHash;
+      return avatarHash ? `${appVariables.RENDER_SERVICE_URL}/get/${avatarHash}` : undefined;
+    }
+  }));
 
 export {AttendeeModel};

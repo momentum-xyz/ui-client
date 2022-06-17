@@ -1,14 +1,12 @@
-import {UserStatusEnum} from 'core/enums';
+import {UserInterface} from 'api/repositories/userRepository/userRepository.api.types';
 
 export interface AttendeesRequestInterface {
   eventId: string;
+  spaceId: string;
 }
 
 export interface AttendeeInterface {
-  name: string;
-  id: string;
-  avatarHash: string;
-  status: UserStatusEnum;
+  user: UserInterface;
 }
 
 export interface AttendeesResponseInterface {
@@ -17,5 +15,5 @@ export interface AttendeesResponseInterface {
 }
 
 export interface FetchAttendeesRequestInterface extends AttendeesRequestInterface {
-  limit?: number;
+  limit?: boolean;
 }

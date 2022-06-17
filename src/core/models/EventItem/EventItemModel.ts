@@ -9,9 +9,9 @@ import {
   formattedStringFromDate
 } from 'core/utils';
 import {api, MagicLinkResponse} from 'api';
-import {RequestModel, AttendeeModel} from 'core/models';
+import {RequestModel} from 'core/models';
+import {AttendeeModel} from 'core/models/AttendeeModel';
 import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
-import {ATTENDEES_PREVIEW_COUNT} from 'core/constants';
 
 const EventItemModel = types
   .model('EventItem', {
@@ -29,17 +29,14 @@ const EventItemModel = types
     magicRequest: types.optional(RequestModel, {}),
     fetchAttendeesRequest: types.optional(RequestModel, {}),
     attendees: types.optional(types.array(AttendeeModel), []),
-    numberOfAllAttendees: types.optional(types.number, 0)
+    numberOfAllAttendees: types.optional(types.number, 0),
+    attendRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    isLive(): boolean {
-      const nowDate = new Date();
-      return nowDate >= self.start && nowDate <= self.end;
-    },
-    fetchAttendees: flow(function* (limit?: number) {
+    fetchAttendees: flow(function* (limit?: boolean) {
       const response: AttendeesResponseInterface = yield self.fetchAttendeesRequest.send(
         api.attendeesRepository.fetchAttendees,
-        {eventId: self.id, limit}
+        {eventId: self.id, spaceId: self.spaceId, limit}
       );
 
       if (response) {
@@ -67,8 +64,28 @@ const EventItemModel = types
   .actions((self) => ({
     init() {
       self.fetchMagicLink();
-      self.fetchAttendees(ATTENDEES_PREVIEW_COUNT);
-    }
+      self.fetchAttendees(true);
+    },
+    isLive(): boolean {
+      const nowDate = new Date();
+      return nowDate >= self.start && nowDate <= self.end;
+    },
+    attend: flow(function* () {
+      yield self.attendRequest.send(api.attendeesRepository.addAttendee, {
+        eventId: self.id,
+        spaceId: self.spaceId
+      });
+
+      self.fetchAttendees(true);
+    }),
+    stopAttending: flow(function* () {
+      yield self.attendRequest.send(api.attendeesRepository.removeAttendee, {
+        eventId: self.id,
+        spaceId: self.spaceId
+      });
+
+      self.fetchAttendees(true);
+    })
   }))
   .views((self) => ({
     get toBytes() {
@@ -96,6 +113,9 @@ const EventItemModel = types
         title: self.title,
         location: self.magicLink
       };
+    },
+    isAttending(userId: string) {
+      return self.attendees.some((attendee) => attendee.id === userId);
     }
   }));
 

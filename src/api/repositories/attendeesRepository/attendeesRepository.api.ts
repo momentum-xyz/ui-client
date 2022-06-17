@@ -12,9 +12,9 @@ export const fetchAttendees: RequestInterface<
   FetchAttendeesRequestInterface,
   AttendeesResponseInterface
 > = (options) => {
-  const {eventId, limit, ...restOptions} = options;
+  const {eventId, spaceId, limit, ...restOptions} = options;
 
-  const url = `${attendeesRepositoryEndpoints().base}/${eventId}${
+  const url = `${attendeesRepositoryEndpoints().base}/${spaceId}/${eventId}${
     limit !== undefined ? `/${limit}` : ''
   }`;
 
@@ -25,9 +25,9 @@ export const addAttendee: RequestInterface<
   AttendeesRequestInterface,
   AttendeesResponseInterface
 > = (options) => {
-  const {eventId, ...restOptions} = options;
+  const {eventId, spaceId, ...restOptions} = options;
 
-  const url = `${attendeesRepositoryEndpoints().add}/${eventId}`;
+  const url = `${attendeesRepositoryEndpoints().add}/${spaceId}/${eventId}`;
 
   return request.post(url, {}, restOptions);
 };
@@ -36,9 +36,9 @@ export const removeAttendee: RequestInterface<
   AttendeesRequestInterface,
   AttendeesResponseInterface
 > = (options) => {
-  const {eventId, ...restOptions} = options;
+  const {eventId, spaceId, ...restOptions} = options;
 
-  const url = `${attendeesRepositoryEndpoints().remove}/${eventId}`;
+  const url = `${attendeesRepositoryEndpoints().remove}/${spaceId}/${eventId}`;
 
   return request.post(url, {}, restOptions);
 };

@@ -12,6 +12,7 @@ import * as styled from './EventItem.styled';
 
 interface PropsInterface {
   event: EventItemModelInterface;
+  currentUserId: string;
   onEdit?: (event: EventItemModelInterface) => void;
   onRemove?: (eventId: string) => void;
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
@@ -24,6 +25,7 @@ interface PropsInterface {
 
 const EventItem: FC<PropsInterface> = ({
   event,
+  currentUserId,
   onEdit,
   onRemove,
   zIndex,
@@ -38,6 +40,14 @@ const EventItem: FC<PropsInterface> = ({
   useEffect(() => {
     event.init();
   }, [event]);
+
+  const handleAttendingButtonClick = () => {
+    if (event.isAttending(currentUserId)) {
+      event.stopAttending();
+    } else {
+      event.attend();
+    }
+  };
 
   const buttons = () => (
     <styled.Buttons className="base">
@@ -76,6 +86,14 @@ const EventItem: FC<PropsInterface> = ({
         )}
       </styled.Buttons>
       <styled.Buttons>
+        <Button
+          variant="inverted"
+          icon="fly-to"
+          disabled={event.attendRequest.isPending}
+          label={event.isAttending(currentUserId) ? 'Do not attend' : 'attend'}
+          transform="capitalized"
+          onClick={handleAttendingButtonClick}
+        />
         {event.isLive() && (
           <styled.LiveIndicator>
             <IconSvg name="live" size="medium-large" isWhite />
@@ -128,18 +146,33 @@ const EventItem: FC<PropsInterface> = ({
       <Header event={event} isWorldCalendar={isWorldCalendar} />
       {date()}
       <styled.Info>
-        <styled.TextRow>
-          <ShowMoreText
-            text={event.description}
-            textProps={{
-              size: 's',
-              align: 'left',
-              firstBoldSentences: 1,
-              isCustom: true
-            }}
-            isCustom
-          />
-        </styled.TextRow>
+        <styled.ContentRow>
+          <styled.TextRow>
+            <ShowMoreText
+              text={event.description}
+              textProps={{
+                size: 's',
+                align: 'left',
+                firstBoldSentences: 1,
+                isCustom: true
+              }}
+              isCustom
+            />
+          </styled.TextRow>
+          <styled.AttendeesContainer>
+            {event.attendees.map((attendee) => (
+              <styled.AttendeeContrainer key={attendee.id}>
+                <styled.AttendeeAvatar size="normal" avatarSrc={attendee.avatarSrc} />
+                <styled.AttendeeNameText
+                  text={attendee.name}
+                  size="s"
+                  align="center"
+                  isMultiline={false}
+                />
+              </styled.AttendeeContrainer>
+            ))}
+          </styled.AttendeesContainer>
+        </styled.ContentRow>
         {buttons()}
         <Actions event={event} onEdit={onEdit} onRemove={onRemove} />
       </styled.Info>

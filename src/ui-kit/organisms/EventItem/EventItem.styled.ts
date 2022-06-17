@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {Text} from 'ui-kit/atoms';
+import {Avatar} from 'ui-kit/molecules';
+
 export const Buttons = styled.div`
   display: flex;
 
@@ -113,4 +116,38 @@ export const LiveIndicator = styled.div`
   font-weight: bold;
   text-transform: uppercase;
   align-items: center;
+`;
+
+export const ContentRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const AttendeesContainer = styled.div`
+  display: grid;
+  grid-row-gap: 20px;
+  grid-column-gap: 5px;
+  grid-template-columns: 100px 100px 100px 100px;
+  grid-template-rows: 70px 70px;
+  grid-auto-flow: dense;
+  transform: rotateY(180deg);
+`;
+
+export const AttendeeAvatar = styled(Avatar)`
+  width: 40px !important;
+  height: 40px !important;
+`;
+
+export const AttendeeNameText = styled(Text)`
+  width: inherit;
+`;
+
+export const AttendeeContrainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  overflow: hidden;
+  gap: 10px;
+  transform: rotateY(180deg);
 `;

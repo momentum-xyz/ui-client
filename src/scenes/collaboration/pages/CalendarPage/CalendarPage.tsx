@@ -17,7 +17,7 @@ import * as styled from './CalendarPage.styled';
 import {DeleteEventConfirmationDialog, EventForm} from './components';
 
 const CalendarPage: FC = () => {
-  const {collaborationStore} = useStore();
+  const {collaborationStore, sessionStore} = useStore();
   const {calendarStore, spaceStore} = collaborationStore;
   const theme = useTheme();
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
@@ -118,6 +118,7 @@ const CalendarPage: FC = () => {
         )}
       </TopBar>
       <EventList
+        currentUserId={sessionStore.userId}
         events={eventListStore.events}
         selectedEventId={eventId}
         onMagicLinkOpen={handleMagicLinkOpen}
