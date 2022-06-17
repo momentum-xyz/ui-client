@@ -63,15 +63,15 @@ export const monthAndYearString = (date: Date) => {
 };
 
 export const formatStartDate = (date: Date) => {
-  return format(date, 'iii, MMM d ').toUpperCase();
+  return format(date, 'iii, MMM d ');
 };
 
 export const formatStartTime = (date: Date) => {
-  return format(date, '- h:mm aa').toUpperCase();
+  return format(date, '- h:mm aa');
 };
 
 export const formatEndDate = (date: Date) => {
-  return format(date, 'MMM d h:mm aa zzz').toUpperCase();
+  return format(date, 'MMM d h:mm aa zzz');
 };
 
 export const formatDurationTime = (seconds: number) => {

@@ -138,7 +138,7 @@ const EventItem: FC<PropsInterface> = ({
 
   const date = () => (
     <styled.DateRow>
-      <Text text={event.startDate} size="l" weight="bold" align="left" />
+      <Text text={event.startDate} size="l" weight="bold" align="left" transform="uppercase" />
       <Text text={event.startTime} size="l" align="left" />
       <Text
         text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
