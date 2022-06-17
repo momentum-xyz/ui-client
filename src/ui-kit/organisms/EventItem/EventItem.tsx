@@ -89,7 +89,8 @@ const EventItem: FC<PropsInterface> = ({
               label: t('eventList.eventItem.addToCalendar'),
               icon: 'calendar',
               isCustom: true,
-              transform: 'capitalized'
+              transform: 'capitalized',
+              noWhitespaceWrap: true
             }}
             items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL, SHARE_SITES.OUTLOOK]}
             className="AddToCalendarContainer"

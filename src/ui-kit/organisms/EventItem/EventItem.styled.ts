@@ -99,15 +99,7 @@ export const Container = styled.div`
   }
 
   .AddToCalendarContainer {
-    border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
-    border-radius: 7px;
-    background: ${(props) => props.theme.bg && rgba(props.theme.bg, 1)};
-    position: absolute;
-    right: 20px;
-
-    .Button-custom {
-      white-space: nowrap;
-    }
+    position: relative;
   }
 `;
 
