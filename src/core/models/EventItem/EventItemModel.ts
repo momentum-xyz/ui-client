@@ -1,4 +1,4 @@
-import {types, Instance, flow} from 'mobx-state-tree';
+import {types, Instance, flow, cast} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 
 import {
@@ -9,8 +9,9 @@ import {
   formattedStringFromDate
 } from 'core/utils';
 import {api, MagicLinkResponse} from 'api';
-
-import {RequestModel} from '../Request';
+import {RequestModel} from 'core/models';
+import {AttendeeModel} from 'core/models/AttendeeModel';
+import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 
 const EventItemModel = types
   .model('EventItem', {
@@ -25,13 +26,24 @@ const EventItemModel = types
     start: types.Date,
     end: types.Date,
     magicLink: types.maybe(types.string),
-    magicRequest: types.optional(RequestModel, {})
+    magicRequest: types.optional(RequestModel, {}),
+    fetchAttendeesRequest: types.optional(RequestModel, {}),
+    attendees: types.optional(types.array(AttendeeModel), []),
+    numberOfAllAttendees: types.optional(types.number, 0),
+    attendRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    isLive(): boolean {
-      const nowDate = new Date();
-      return nowDate >= self.start && nowDate <= self.end;
-    },
+    fetchAttendees: flow(function* (limit?: boolean) {
+      const response: AttendeesResponseInterface = yield self.fetchAttendeesRequest.send(
+        api.attendeesRepository.fetchAttendees,
+        {eventId: self.id, spaceId: self.spaceId, limit}
+      );
+
+      if (response) {
+        self.attendees = cast(response.attendees);
+        self.numberOfAllAttendees = response.count;
+      }
+    }),
     fetchMagicLink: flow(function* () {
       const response: MagicLinkResponse = yield self.magicRequest.send(
         api.magicRepository.generateLink,
@@ -47,6 +59,32 @@ const EventItemModel = types
       if (response) {
         self.magicLink = `${window.location.origin}/magic/${response.id}`;
       }
+    })
+  }))
+  .actions((self) => ({
+    init() {
+      self.fetchMagicLink();
+      self.fetchAttendees(true);
+    },
+    isLive(): boolean {
+      const nowDate = new Date();
+      return nowDate >= self.start && nowDate <= self.end;
+    },
+    attend: flow(function* () {
+      yield self.attendRequest.send(api.attendeesRepository.addAttendee, {
+        eventId: self.id,
+        spaceId: self.spaceId
+      });
+
+      self.fetchAttendees(true);
+    }),
+    stopAttending: flow(function* () {
+      yield self.attendRequest.send(api.attendeesRepository.removeAttendee, {
+        eventId: self.id,
+        spaceId: self.spaceId
+      });
+
+      self.fetchAttendees(true);
     })
   }))
   .views((self) => ({
@@ -75,6 +113,9 @@ const EventItemModel = types
         title: self.title,
         location: self.magicLink
       };
+    },
+    isAttending(userId: string) {
+      return self.attendees.some((attendee) => attendee.id === userId);
     }
   }));
 
