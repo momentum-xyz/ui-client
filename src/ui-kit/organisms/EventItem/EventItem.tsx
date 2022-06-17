@@ -87,20 +87,26 @@ const EventItem: FC<PropsInterface> = ({
         )}
       </styled.Buttons>
       <styled.Buttons>
-        <styled.AttendeesButton
+        <Button
           variant="primary"
-          icon={event.isAttending(currentUserId) ? 'check' : 'add'}
-          disabled={event.attendRequest.isPending}
-          label="Interested"
+          label={t('eventList.eventItem.attendees', {count: event.numberOfAllAttendees})}
           transform="capitalized"
-          onClick={handleAttendingButtonClick}
-          className={cn(event.isAttending(currentUserId) && 'interested')}
         />
-        {event.isLive() && (
+        {event.isLive() ? (
           <styled.LiveIndicator>
             <IconSvg name="live" size="medium-large" isWhite />
             <p>{t('eventList.eventItem.live')}</p>
           </styled.LiveIndicator>
+        ) : (
+          <styled.AttendeesButton
+            variant="primary"
+            icon={event.isAttending(currentUserId) ? 'check' : 'add'}
+            disabled={event.attendRequest.isPending}
+            label={t('eventList.eventItem.interested')}
+            transform="capitalized"
+            onClick={handleAttendingButtonClick}
+            className={cn(event.isAttending(currentUserId) && 'interested')}
+          />
         )}
         {!event.isLive() && (
           <AddToCalendarComponent
