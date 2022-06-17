@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
 
 import {EventItemModelInterface} from 'core/models/EventItem';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
@@ -86,13 +87,14 @@ const EventItem: FC<PropsInterface> = ({
         )}
       </styled.Buttons>
       <styled.Buttons>
-        <Button
-          variant="inverted"
-          icon="fly-to"
+        <styled.AttendeesButton
+          variant="primary"
+          icon={event.isAttending(currentUserId) ? 'check' : 'add'}
           disabled={event.attendRequest.isPending}
-          label={event.isAttending(currentUserId) ? 'Do not attend' : 'attend'}
+          label="Interested"
           transform="capitalized"
           onClick={handleAttendingButtonClick}
+          className={cn(event.isAttending(currentUserId) && 'interested')}
         />
         {event.isLive() && (
           <styled.LiveIndicator>

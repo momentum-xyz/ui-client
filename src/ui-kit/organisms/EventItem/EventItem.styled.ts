@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-import {Text} from 'ui-kit/atoms';
+import {Button, Text} from 'ui-kit/atoms';
 import {Avatar} from 'ui-kit/molecules';
 
 export const Buttons = styled.div`
@@ -154,4 +154,15 @@ export const AttendeeContrainer = styled.div`
   overflow: hidden;
   gap: 10px;
   transform: rotateY(180deg);
+`;
+
+export const AttendeesButton = styled(Button)`
+  &.interested {
+    border-color: #8febff !important;
+    color: #8febff !important;
+
+    .IconSvg-custom {
+      color: #8febff !important;
+    }
+  }
 `;
