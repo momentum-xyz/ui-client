@@ -1,1 +1,0 @@
-export const ATTENDEES_PREVIEW_COUNT = 7;

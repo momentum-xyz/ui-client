@@ -5,4 +5,3 @@ export * from './routePaths.constants';
 export * from './search.constants';
 export * from './momentumSpace.constants';
 export * from './app.constants';
-export * from './attendees.constants';
