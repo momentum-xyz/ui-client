@@ -336,7 +336,10 @@ export const enGb = {
         from: 'From',
         to: 'To',
         showMore: 'Show more',
-        collapse: 'Show less'
+        collapse: 'Show less',
+        attendees_one: `{{count}} Attendee`,
+        attendees_other: `{{count}} Attendees`,
+        interested: 'Interested'
       }
     },
     eventForm: {
