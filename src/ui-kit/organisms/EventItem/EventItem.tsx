@@ -41,6 +41,8 @@ const EventItem: FC<PropsInterface> = ({
 
   useEffect(() => {
     eventStore.init();
+
+    return eventStore.resetModel();
   }, [eventStore]);
 
   const handleAttendingButtonClick = () => {
