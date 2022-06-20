@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
 
 import {EventItemModelInterface} from 'core/models/EventItem';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
@@ -12,6 +13,7 @@ import * as styled from './EventItem.styled';
 
 interface PropsInterface {
   event: EventItemModelInterface;
+  currentUserId: string;
   onEdit?: (event: EventItemModelInterface) => void;
   onRemove?: (eventId: string) => void;
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
@@ -24,6 +26,7 @@ interface PropsInterface {
 
 const EventItem: FC<PropsInterface> = ({
   event,
+  currentUserId,
   onEdit,
   onRemove,
   zIndex,
@@ -36,8 +39,16 @@ const EventItem: FC<PropsInterface> = ({
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
   useEffect(() => {
-    event.fetchMagicLink();
+    event.init();
   }, [event]);
+
+  const handleAttendingButtonClick = () => {
+    if (event.isAttending(currentUserId)) {
+      event.stopAttending();
+    } else {
+      event.attend();
+    }
+  };
 
   const buttons = () => (
     <styled.Buttons className="base">
@@ -76,11 +87,26 @@ const EventItem: FC<PropsInterface> = ({
         )}
       </styled.Buttons>
       <styled.Buttons>
-        {event.isLive() && (
+        <Button
+          variant="primary"
+          label={t('eventList.eventItem.attendees', {count: event.numberOfAllAttendees})}
+          transform="capitalized"
+        />
+        {event.isLive() ? (
           <styled.LiveIndicator>
             <IconSvg name="live" size="medium-large" isWhite />
             <p>{t('eventList.eventItem.live')}</p>
           </styled.LiveIndicator>
+        ) : (
+          <styled.AttendeesButton
+            variant="primary"
+            icon={event.isAttending(currentUserId) ? 'check' : 'add'}
+            disabled={event.attendRequest.isPending}
+            label={t('eventList.eventItem.interested')}
+            transform="capitalized"
+            onClick={handleAttendingButtonClick}
+            className={cn(event.isAttending(currentUserId) && 'interested')}
+          />
         )}
         {!event.isLive() && (
           <AddToCalendarComponent
@@ -89,7 +115,8 @@ const EventItem: FC<PropsInterface> = ({
               label: t('eventList.eventItem.addToCalendar'),
               icon: 'calendar',
               isCustom: true,
-              transform: 'capitalized'
+              transform: 'capitalized',
+              noWhitespaceWrap: true
             }}
             items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL, SHARE_SITES.OUTLOOK]}
             className="AddToCalendarContainer"
@@ -111,7 +138,7 @@ const EventItem: FC<PropsInterface> = ({
 
   const date = () => (
     <styled.DateRow>
-      <Text text={event.startDate} size="l" weight="bold" align="left" />
+      <Text text={event.startDate} size="l" weight="bold" align="left" transform="uppercase" />
       <Text text={event.startTime} size="l" align="left" />
       <Text
         text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
@@ -124,21 +151,36 @@ const EventItem: FC<PropsInterface> = ({
 
   const info = () => (
     <styled.Div>
-      <Header event={event} isWorldCalendar={isWorldCalendar} />
-      {date()}
       <styled.Info>
-        <styled.TextRow>
-          <ShowMoreText
-            text={event.description}
-            textProps={{
-              size: 's',
-              align: 'left',
-              firstBoldSentences: 1,
-              isCustom: true
-            }}
-            isCustom
-          />
-        </styled.TextRow>
+        <styled.ContentRow>
+          <styled.TextRow>
+            <Header event={event} isWorldCalendar={isWorldCalendar} />
+            {date()}
+            <ShowMoreText
+              text={event.description}
+              textProps={{
+                size: 's',
+                align: 'left',
+                firstBoldSentences: 1,
+                isCustom: true
+              }}
+              isCustom
+            />
+          </styled.TextRow>
+          <styled.AttendeesContainer>
+            {event.attendees.map((attendee) => (
+              <styled.AttendeeContrainer key={attendee.id}>
+                <styled.AttendeeAvatar size="normal" avatarSrc={attendee.avatarSrc} />
+                <styled.AttendeeNameText
+                  text={attendee.name}
+                  size="s"
+                  align="center"
+                  isMultiline={false}
+                />
+              </styled.AttendeeContrainer>
+            ))}
+          </styled.AttendeesContainer>
+        </styled.ContentRow>
         {buttons()}
         <Actions event={event} onEdit={onEdit} onRemove={onRemove} />
       </styled.Info>

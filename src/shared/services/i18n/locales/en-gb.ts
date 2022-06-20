@@ -336,7 +336,10 @@ export const enGb = {
         from: 'From',
         to: 'To',
         showMore: 'Show more',
-        collapse: 'Show less'
+        collapse: 'Show less',
+        attendees_one: `{{count}} Attendee`,
+        attendees_other: `{{count}} Attendees`,
+        interested: 'Interested'
       }
     },
     eventForm: {
@@ -449,6 +452,7 @@ export const enGb = {
         title: 'Space details',
         typeLabel: 'Type',
         accessLabel: 'Access',
+        accessWarning: 'Turning on private only allows members and admins of the space to enter',
         privateSpaceText: 'Private space',
         spaceNameLabel: 'Space Name',
         deleteSpaceLabel: 'Delete Space',
@@ -642,6 +646,9 @@ export const enGb = {
       playerVolume: 'Music Volume',
       unityVolume: 'Sound Effects Volume',
       noTrackTitle: 'No Track'
+    },
+    collaboration: {
+      spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
     }
   }
 };

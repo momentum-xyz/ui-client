@@ -14,11 +14,13 @@ interface AvatarProps {
   onClick?: () => void;
   showBorder?: boolean;
   showHover?: boolean;
+  className?: string;
 }
 
 const Avatar: FC<AvatarProps> = ({
   avatarSrc,
   size,
+  className,
   status = 'none',
   onClick,
   showBorder = false,
@@ -28,7 +30,7 @@ const Avatar: FC<AvatarProps> = ({
 
   return (
     <styled.Container
-      className={cn(size, showBorder && 'showBorder', showHover && 'showHover')}
+      className={cn(size, showBorder && 'showBorder', showHover && 'showHover', className)}
       onClick={onClick}
     >
       {avatarSrc && !error ? (

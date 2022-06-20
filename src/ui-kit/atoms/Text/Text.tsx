@@ -42,7 +42,7 @@ const Text: FC<TextPropsInterface> = ({
 
       return (
         <>
-          <styled.BoldSpan>{firstSentences.join()}</styled.BoldSpan>
+          <styled.BoldSpan>{firstSentences.join('')}</styled.BoldSpan>
           {restSentences.join('')}
         </>
       );

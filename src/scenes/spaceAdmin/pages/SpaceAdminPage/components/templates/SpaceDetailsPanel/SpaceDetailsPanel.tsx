@@ -130,7 +130,10 @@ const SpaceDetailsPanel: FC = () => {
               size="xs"
               align="left"
             />
-            <Controller name="secret" control={control} render={renderSecretInput} />
+            <styled.Info className="row">
+              <Controller name="secret" control={control} render={renderSecretInput} />
+              <Text text={t('spaceAdmin.spaceDetails.accessWarning')} size="xxs" align="left" />
+            </styled.Info>
           </styled.Info>
         )}
         <styled.Info>

@@ -17,7 +17,8 @@ const WorldCalendarPage: FC = () => {
   // @ts-ignore
   const {
     worldCalendarStore: {calendarStore},
-    mainStore: {worldStore, unityStore}
+    mainStore: {worldStore, unityStore},
+    sessionStore
   } = useStore();
   const {magicDialog, eventListStore} = calendarStore;
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
@@ -73,8 +74,9 @@ const WorldCalendarPage: FC = () => {
           onClose={magicDialog.close}
         />
       )}
-      <TopBar title="World Calendar" onClose={() => history.push(ROUTES.base)} />
+      <TopBar title="World Calendar" onClose={() => history.goBack()} />
       <EventList
+        currentUserId={sessionStore.userId}
         events={eventListStore.events}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={false}

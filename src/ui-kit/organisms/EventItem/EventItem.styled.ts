@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {Button, Text} from 'ui-kit/atoms';
+import {Avatar} from 'ui-kit/molecules';
+
 export const Buttons = styled.div`
   display: flex;
 
@@ -64,6 +67,8 @@ export const DateRow = styled.div`
   margin: 10px 0;
   display: flex;
   gap: 5px;
+  flex-shrink: 0;
+  width: max-content;
 `;
 
 export const Info = styled.div`
@@ -99,15 +104,7 @@ export const Container = styled.div`
   }
 
   .AddToCalendarContainer {
-    border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
-    border-radius: 7px;
-    background: ${(props) => props.theme.bg && rgba(props.theme.bg, 1)};
-    position: absolute;
-    right: 20px;
-
-    .Button-custom {
-      white-space: nowrap;
-    }
+    position: relative;
   }
 `;
 
@@ -121,4 +118,51 @@ export const LiveIndicator = styled.div`
   font-weight: bold;
   text-transform: uppercase;
   align-items: center;
+`;
+
+export const ContentRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+`;
+
+export const AttendeesContainer = styled.div`
+  display: grid;
+  grid-row-gap: 20px;
+  grid-column-gap: 5px;
+  grid-template-columns: 100px 100px 100px 100px;
+  grid-template-rows: 70px 70px;
+  grid-auto-flow: dense;
+  transform: rotateY(180deg);
+  margin: 30px 0;
+`;
+
+export const AttendeeAvatar = styled(Avatar)`
+  width: 40px !important;
+  height: 40px !important;
+`;
+
+export const AttendeeNameText = styled(Text)`
+  width: inherit;
+`;
+
+export const AttendeeContrainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  overflow: hidden;
+  gap: 10px;
+  transform: rotateY(180deg);
+`;
+
+export const AttendeesButton = styled(Button)`
+  &.interested {
+    border-color: #8febff !important;
+    color: #8febff !important;
+
+    .IconSvg-custom {
+      color: #8febff !important;
+    }
+  }
 `;

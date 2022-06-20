@@ -248,17 +248,6 @@ const WidgetContainer: FC = () => {
       <styled.Footer>
         <styled.MainLinks>
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
-          <ToolbarIcon
-            title="Collaboration"
-            size="large"
-            link={ROUTES.collaboration}
-            icon="collaboration"
-            animate
-            visible={!!collaborationState.collaborationSpace}
-            isActive={(match, location) => {
-              return location.pathname.includes(ROUTES.collaboration);
-            }}
-          />
         </styled.MainLinks>
         <styled.Toolbars>
           {process.env.NODE_ENV === 'development' && <FooterDevTools />}

@@ -149,6 +149,11 @@ export class UnityService {
       }
     });
 
+    // InvalidToken
+    this.unityContext.on('InvalidToken', () => {
+      console.info('Got Invalid Token from Unity');
+    });
+
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
       console.info('ProfileHasBeenClicked', identifier);
       const [id, rawLocation] = identifier.split('|');

@@ -11,7 +11,8 @@ import {
   InviteMessage,
   NotifyMessage,
   StageModeMessage,
-  VibeMessage
+  VibeMessage,
+  PosBusMessage
 } from 'context/Unity/types';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
@@ -47,6 +48,8 @@ export type WebsocketEvents = {
   'stage-mode-user-left': (userId: string) => void;
   'user-wowed': (spaceId: string, count: number) => void;
   'user-vibed': (type: string, count: number) => void;
+  'posbus-connected': () => void;
+  'posbus-disconnected': () => void;
   'space-invite': (
     spaceId: string,
     invitorId: string,
@@ -266,8 +269,24 @@ class WebsocketService {
       case 'event':
         this.handleNotifyGathering(message as NotifyMessage);
         break;
+      case 'posbus':
+        this.handlePosBusMessage(message as PosBusMessage);
+        break;
       default:
         console.debug('Unknown relay message type', target);
+    }
+  }
+
+  handlePosBusMessage(message: PosBusMessage) {
+    switch (message.status) {
+      case 'connected':
+        WebsocketEventEmitter.emit('posbus-connected');
+        break;
+      case 'disconnected':
+        WebsocketEventEmitter.emit('posbus-disconnected');
+        break;
+      default:
+        console.warn('Unknown posbus status', message.status);
     }
   }
 

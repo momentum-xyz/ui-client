@@ -15,10 +15,11 @@ import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from 'context/Collaboration/Coll
 import {ParticipantRole, ParticipantStatus} from 'context/Collaboration/CollaborationTypes';
 import {bytesToUuid, createRoutesByConfig} from 'core/utils';
 import {StageModeStatus} from 'context/type/StageMode';
-import UnityService from 'context/Unity/UnityService';
+import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
 import {ROUTES} from 'core/constants';
+import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
 import {PRIVATE_ROUTES} from './CollaborationRoutes';
 
@@ -35,7 +36,22 @@ const Collaboration: React.FC<Props> = () => {
   const stageModeJoin = useStageModeJoin(collaborationState.collaborationSpace?.id);
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
-  const {collaborationStore} = useStore();
+  const {
+    collaborationStore,
+    mainStore: {unityStore}
+  } = useStore();
+
+  useWebsocketEvent('posbus-connected', () => {
+    if (!collaborationStore.spaceStore.space.id) {
+      return;
+    }
+    unityStore.triggerInteractionMessage(
+      PosBusInteractionType.EnteredSpace,
+      collaborationStore.spaceStore.space.id,
+      0,
+      ''
+    );
+  });
 
   const routes = useMemo(() => {
     return PRIVATE_ROUTES(path, collaborationState.collaborationSpace?.id ?? '');
