@@ -6,7 +6,8 @@ import {
   formatEndDate,
   formatStartDate,
   formatStartTime,
-  formattedStringFromDate
+  formattedStringFromDate,
+  isOtherYearThanToday
 } from 'core/utils';
 import {api, MagicLinkResponse} from 'api';
 import {RequestModel} from 'core/models';
@@ -92,13 +93,15 @@ const EventItemModel = types
       return Buffer.from(self.id.replace(/-/g, ''), 'hex');
     },
     get startDate() {
-      return formatStartDate(new Date(self.start));
+      const showYear = isOtherYearThanToday(self.start) || isOtherYearThanToday(self.end);
+
+      return formatStartDate(new Date(self.start), showYear);
     },
     get startTime() {
       return formatStartTime(new Date(self.start));
     },
     get endDateAndTime() {
-      return formatEndDate(new Date(self.end));
+      return formatEndDate(new Date(self.end), true);
     },
     get timeZone() {
       // @ts-ignore
