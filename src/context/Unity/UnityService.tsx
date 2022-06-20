@@ -9,12 +9,6 @@ export type UnityEvents = {
   MomentumLoaded: () => void;
   TeleportReady: () => void;
   ExterminateUnity: (topic: string) => void;
-  PublishMessage: (topic: string, message: string) => void;
-  SubscribeToTopic: (topic: string) => void;
-  UnsubscribeFromTopic: (topic: string) => void;
-  Screen1ClickEvent: (id: string) => void;
-  Screen2ClickEvent: (id: string) => void;
-  Screen3ClickEvent: (id: string) => void;
   ClickEventDashboard: (id: string) => void;
   ClickEventVideo: (id: string) => void;
   PlasmaClickEvent: (id: string) => void;
@@ -54,7 +48,24 @@ const stringToPosition = (posString: string): Position => {
   return {x, y, z};
 };
 
+interface UnityAPI {
+  toggleMinimap(): any;
+  teleportToUser(userGuid: string) : any;
+  teleportToSpace(spaceGuid: string) : any;
+  teleportToVector3(position:string) : any;
+  lookAtWisp(userGuid: string) : any;
+  controlKeyboard(unityIsInControl: boolean) : any;
+  controlVolume(gain: string) : any;
+  controlSound(isOn: boolean) : any;
+  pauseUnity(isPaused: boolean) : any;
+  setToken(token?: string) : any;
+  getCurrentWorld() : string;
+  getUserPosition() : string;
+  triggerInteractionMsg(kind: number, guid: string, flag: number, message: string) : any;
+}
+
 export class UnityService {
+  unityApi?: UnityAPI;
   unityContext?: UnityContext;
 
   getCurrentWorld?: () => void;
@@ -73,6 +84,7 @@ export class UnityService {
 
   constructor() {
     this.unityContext = undefined;
+    this.unityApi = undefined;
     this.getCurrentWorld = undefined;
     this.getUserPosition = undefined;
     this.getIntState = undefined;
@@ -94,75 +106,31 @@ export class UnityService {
     // Game state
 
     this.unityContext.on('MomentumLoaded', () => {
-      // @ts-ignore
-      this.getCurrentWorld = unityContext?.unityInstance?.Module?.cwrap?.(
-        'extGetCurrentWorld',
-        'string',
-        []
-      );
-      // @ts-ignore
-      this.getUserPosition = unityContext?.unityInstance?.Module?.cwrap?.(
-        'extGetUserPosition',
-        'string',
-        []
-      );
+
+      this.unityApi = this.unityContext?.unityInstance?.Module.UnityAPI;
 
       // @ts-ignore
-      this.getIntState = unityContext?.unityInstance?.Module.cwrap('extGetIntState', 'number', [
-        'string',
-        'string'
-      ]);
+      this.getCurrentWorld = function() {
+        return this.unityApi?.getCurrentWorld();
+      }
       // @ts-ignore
-      this.setIntState = unityContext?.unityInstance?.Module.cwrap('extSetIntState', null, [
-        'string',
-        'string',
-        'number'
-      ]);
+      this.getUserPosition = function() {
+        return this.unityApi?.getUserPosition();
+      }
+
       // @ts-ignore
-      this.getStrState = unityContext?.unityInstance?.Module.cwrap('extGetStrState', 'string', [
-        'string',
-        'string'
-      ]);
-      // @ts-ignore
-      this.setStrState = unityContext?.unityInstance?.Module.cwrap('extSetStrState', null, [
-        'string',
-        'string',
-        'string'
-      ]);
-      // @ts-ignore
-      this.triggerInteractionMsg = unityContext?.unityInstance?.Module.cwrap(
-        'extTriggerInteractionMsg',
-        null,
-        ['int', 'string', 'int', 'string']
-      );
+      this.triggerInteractionMsg = function(kind: number, guid: string, flag: number, message: string) {
+        this.unityApi?.triggerInteractionMsg(kind, guid, flag, message);
+      }
 
       UnityEventEmitter.emit('MomentumLoaded');
 
-      if (useUnityStore.getState().muted) {
-        this.unityContext?.send('UnityManager', 'turnAllSoundOff');
-      } else {
-        this.unityContext?.send('UnityManager', 'turnAllSoundOn');
-      }
+      this.unityApi?.controlSound(useUnityStore.getState().muted);
+    
     });
 
     this.unityContext.on('TeleportReady', () => {
       UnityEventEmitter.emit('TeleportReady');
-    });
-
-    // websockets proxy
-
-    this.unityContext.on('PublishMessage', (payload: string) => {
-      const [topic, message] = payload.split('|');
-
-      UnityEventEmitter.emit('PublishMessage', topic, message);
-    });
-
-    this.unityContext.on('SubscribeToTopic', (topic: string) => {
-      UnityEventEmitter.emit('SubscribeToTopic', topic);
-    });
-
-    this.unityContext.on('UnsubscribeFromTopic', (topic: string) => {
-      UnityEventEmitter.emit('UnsubscribeFromTopic', topic);
     });
 
     this.unityContext.on('ExterminateUnity', (topic: string) => {
@@ -181,32 +149,10 @@ export class UnityService {
       }
     });
 
-    //deprecated by ClickEvent
-    // this.unityContext.on('Screen1ClickEvent', (identifier: string) => {
-    //   //console.info('Screen1ClickEvent', identifier);
-    //   // const [type, id] = identifier.split('|');
-    //   //UnityEventEmitter.emit('Screen1ClickEvent', id);
-    // });
-    //
-    // //deprecated by ClickEvent
-    // this.unityContext.on('Screen2ClickEvent', (identifier: string) => {
-    //   //console.info('Screen2ClickEvent', identifier);
-    //   // const [type, id] = identifier.split('|');
-    //   //UnityEventEmitter.emit('Screen2ClickEvent',  id);
-    // });
-    //
-    // //deprecated by ClickEvent
-    // this.unityContext.on('Screen3ClickEvent', (identifier: string) => {
-    //   //console.info('Screen3ClickEvent', identifier);
-    //   // const [type, id] = identifier.split('|');
-    //   //UnityEventEmitter.emit('Screen3ClickEvent', id);
-    // });
-    //
-    // this.unityContext.on('TeamPlasmaClickEvent', (identifier: string) => {
-    //   //console.info('PlasmaClickEvent', identifier);
-    //   // const [type, id] = identifier.split('|');
-    //   //UnityEventEmitter.emit('PlasmaClickEvent', id);
-    // });
+    // InvalidToken
+    this.unityContext.on('InvalidToken', () => {
+      console.info('Got Invalid Token from Unity');
+    });
 
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
       console.info('ProfileHasBeenClicked', identifier);
@@ -214,96 +160,68 @@ export class UnityService {
       UnityEventEmitter.emit('ProfileClickEvent', id, stringToPosition(rawLocation));
     });
 
-    // if (process.env.NODE_ENV === 'development')
-    //   setTimeout(() => {
-    //     UnityEventEmitter.emit('MomentumLoaded');
-    //   }, 3000);
-    //
-    //   setTimeout(() => {
-    //     UnityEventEmitter.emit('TeleportReady');
-    //   }, 3500);
   }
 
   setAuthToken(token?: string) {
-    this.unityContext?.send('UnityManager', 'setToken', token);
-  }
-
-  setOverrideDomain(domain: string) {
-    this.unityContext?.send('UnityManager', 'setOverwriteDomain', domain);
-  }
-
-  sendWebsocketMessage(message: string) {
-    this.unityContext?.send('UnityManager', 'consumeMessage', message);
+    this.unityApi?.setToken(token);
   }
 
   pause() {
     document.body.classList.remove('unity-active');
-    this.unityContext?.send('UnityManager', 'pauseUnityClient');
+    this.unityApi?.pauseUnity(true);
   }
 
   resume() {
     document.body.classList.add('unity-active');
-    this.unityContext?.send('UnityManager', 'resumeUnityClient');
+    this.unityApi?.pauseUnity(false);
   }
 
   pauseSound() {
-    this.unityContext?.send('UnityManager', 'turnAllSoundOff');
+    this.unityApi?.controlSound(false);
   }
 
   continueSound() {
     const muted = useUnityStore.getState().muted;
     if (!muted) {
-      this.unityContext?.send('UnityManager', 'turnAllSoundOn');
+      this.unityApi?.controlSound(true);
     }
   }
 
   toggleAllSound() {
     const muted = useUnityStore.getState().muted;
-    if (muted) {
-      this.unityContext?.send('UnityManager', 'turnAllSoundOn');
-    } else {
-      this.unityContext?.send('UnityManager', 'turnAllSoundOff');
-    }
+    this.unityApi?.controlSound(!muted);
     useUnityStore.setState({muted: !muted});
   }
 
-  enableStageMode(spaceId: string) {
-    this.setIntState?.(spaceId, 'stagemode', 1);
-  }
-
-  disableStageMode(spaceId: string) {
-    this.setIntState?.(spaceId, 'stagemode', 0);
-  }
-
   lookAtWisp(userId: string) {
-    this.unityContext?.send('UnityManager', 'lookAtWisp', userId);
+    this.unityApi?.lookAtWisp(userId);
   }
 
   teleportToSpace(id: string) {
     this.resume();
-    this.unityContext?.send('UnityManager', 'teleportToSpace', id);
+    this.unityApi?.teleportToSpace(id);
   }
 
   teleportToVector3(vector: any) {
     this.resume();
-    this.unityContext?.send('UnityManager', 'teleportToVector3', vector);
+    this.unityApi?.teleportToVector3(vector);
   }
 
   teleportToUser(id: string) {
     this.resume();
-    this.unityContext?.send('UnityManager', 'teleportToUser', id);
+    this.unityApi?.teleportToUser(id);
   }
 
   toggleMiniMap() {
-    this.unityContext?.send('UnityManager', 'toggleMinimap');
+    this.unityApi?.toggleMinimap();
   }
 
   setKeyboardControl(value: boolean) {
-    this.unityContext?.send('UnityManager', 'controlKeyboard', value ? 1 : 0);
+    this.unityApi?.controlKeyboard(value);
   }
 
   setSoundEffectVolume(value: string) {
-    this.unityContext?.send('UnityManager', 'setVolume', value);
+    this.unityApi?.controlVolume(value);
   }
 
   relayMessageHandler(handler: (target: string, msg: any) => void) {
