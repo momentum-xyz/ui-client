@@ -69,7 +69,7 @@ export const isOtherYearThanToday = (date: Date) => {
 };
 
 export const formatStartDate = (date: Date, showYear = false) => {
-  return format(date, `iii, MMM d ${showYear ? 'yyyy' : ''}`);
+  return format(date, `iii, MMM d ${showYear ? 'yyyy ' : ''}`);
 };
 
 export const formatStartTime = (date: Date) => {
