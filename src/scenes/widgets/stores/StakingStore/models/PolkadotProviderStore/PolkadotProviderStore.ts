@@ -43,7 +43,6 @@ const PolkadotProviderStore = types
       unbondAmount: types.optional(types.string, ''),
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
-      usedControllerAddress: types.optional(types.string, ''),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionType))),
       transactionFee: types.optional(types.string, '')
     })
@@ -133,11 +132,14 @@ const PolkadotProviderStore = types
           isBondAmountAcceptable: minAmount || maxAmount
         };
       },
+      get bondedControllerAddress() {
+        return self.stakingInfo?.controllerId?.toJSON();
+      },
       get transactionSigner() {
         const signerAddress =
           self.transactionType === StakingTransactionType.Bond
             ? self.stashAccount?.address
-            : self.usedControllerAddress;
+            : this.bondedControllerAddress;
         return self.addresses.find((account) => account.address === signerAddress);
       },
       get isWithdrawUnbondedPermitted() {
@@ -211,12 +213,6 @@ const PolkadotProviderStore = types
     },
     setSessionProgress(payload: DeriveSessionProgress) {
       self.sessionProgress = payload;
-    },
-    getUsedControllerAddress() {
-      const usedControllerAddress = self.stakingInfo?.controllerId?.toJSON()
-        ? self.stakingInfo?.controllerId?.toJSON()
-        : '';
-      self.usedControllerAddress = cast(usedControllerAddress);
     }
   }))
   .actions((self) => ({
@@ -229,7 +225,6 @@ const PolkadotProviderStore = types
       const result = self.addresses.find((account) => account.address === address);
       self.stashAccount = cast(cloneDeep(result));
       yield self.getBalances(address, 'stashAccountBalance');
-      self.getUsedControllerAddress();
     }),
     getMinNominatorBond: flow(function* () {
       const minNominatorBond = self.channel
