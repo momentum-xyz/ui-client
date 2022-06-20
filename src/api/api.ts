@@ -18,6 +18,7 @@ import * as statsRepository from './repositories/statsRepository';
 import * as statusRepository from './repositories/statusRepository';
 import * as playlistRepository from './repositories/playlistRepository';
 import * as communicationRepository from './repositories/communicationRepository';
+import * as attendeesRepository from './repositories/attendeesRepository';
 
 /**
  * This layer is responsible for:
@@ -49,7 +50,8 @@ export const api = {
   statsRepository,
   statusRepository,
   playlistRepository,
-  communicationRepository
+  communicationRepository,
+  attendeesRepository
 };
 
 /**
