@@ -62,16 +62,22 @@ export const monthAndYearString = (date: Date) => {
   return today.toLocaleDateString('en-US', options);
 };
 
-export const formatStartDate = (date: Date) => {
-  return format(date, 'iii, MMM d ');
+export const isOtherYearThanToday = (date: Date) => {
+  const today = new Date();
+
+  return today.getFullYear() !== date.getFullYear();
+};
+
+export const formatStartDate = (date: Date, showYear = false) => {
+  return format(date, `iii, MMM d ${showYear ? 'yyyy ' : ''}`);
 };
 
 export const formatStartTime = (date: Date) => {
   return format(date, '- h:mm aa');
 };
 
-export const formatEndDate = (date: Date) => {
-  return format(date, 'MMM d h:mm aa zzz');
+export const formatEndDate = (date: Date, showYear = false) => {
+  return format(date, `MMM d${showYear ? ' yyyy' : ''} h:mm aa zzz`);
 };
 
 export const formatDurationTime = (seconds: number) => {
