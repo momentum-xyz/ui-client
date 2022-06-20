@@ -92,7 +92,6 @@ const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond})
                 icon="stop"
                 wide={false}
                 label={t('staking.stopStaking')}
-                disabled={isStakingAccountUnlocking}
                 onClick={stopStaking}
               />
             </styled.StopStaking>
