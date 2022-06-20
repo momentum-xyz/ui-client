@@ -13,12 +13,7 @@ const EventFormStore = types.compose(
     })
     .actions((self) => ({
       editEvent(event: EventItemModelInterface) {
-        const item = {...event};
-        item.magicRequest = {...event.magicRequest};
-
-        self.currentEvent = {
-          ...item
-        };
+        self.currentEvent = {...event};
       },
       createEvent: flow(function* (data: EventFormInterface, spaceId: string, file?: File) {
         const response: CreateEventResponse = yield self.eventFormRequest.send(

@@ -4,13 +4,14 @@ import {t} from 'i18next';
 
 import {Loader, PanelLayout, Text, EventItem} from 'ui-kit';
 import {EventItemModelInterface} from 'core/models';
+import {EventStoreInterface} from 'stores/MainStore/models';
 
 import * as styled from './EventList.styled';
 
 interface PropsInterface {
   currentUserId: string;
   selectedEventId?: string;
-  events: EventItemModelInterface[];
+  eventStores: EventStoreInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   isLoading: boolean;
   isWorld?: boolean;
@@ -23,7 +24,7 @@ interface PropsInterface {
 
 const EventList: FC<PropsInterface> = ({
   currentUserId,
-  events,
+  eventStores,
   onEventEdit,
   onEventRemove,
   onMagicLinkOpen,
@@ -35,7 +36,7 @@ const EventList: FC<PropsInterface> = ({
   onWeblinkClick
 }) => {
   useEffect(() => {
-    if (!selectedEventId || events.length === 0) {
+    if (!selectedEventId || eventStores.length === 0) {
       return;
     }
     const element = document.getElementById(selectedEventId);
@@ -51,9 +52,9 @@ const EventList: FC<PropsInterface> = ({
     if (element) {
       element.className += ' highlighted';
     }
-  }, [events.length]);
+  }, [eventStores.length]);
 
-  if (isLoading || events.length === 0) {
+  if (isLoading || eventStores.length === 0) {
     return (
       <styled.Container className="empty noScrollIndicator">
         {isLoading ? (
@@ -69,12 +70,12 @@ const EventList: FC<PropsInterface> = ({
 
   return (
     <styled.Container className="noScrollIndicator">
-      {events.map((event, index) => (
+      {eventStores.map((eventStore, index) => (
         <EventItem
           currentUserId={currentUserId}
-          zIndex={events.length - index}
-          key={event.id}
-          event={event}
+          zIndex={eventStores.length - index}
+          key={eventStore.event?.id}
+          eventStore={eventStore}
           onEdit={onEventEdit}
           onRemove={onEventRemove}
           onMagicLinkOpen={onMagicLinkOpen}

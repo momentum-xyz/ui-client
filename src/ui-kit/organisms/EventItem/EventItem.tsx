@@ -7,12 +7,13 @@ import cn from 'classnames';
 import {EventItemModelInterface} from 'core/models/EventItem';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
 import {appVariables} from 'api/constants';
+import {EventStoreInterface} from 'stores/MainStore/models';
 
 import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
 
 interface PropsInterface {
-  event: EventItemModelInterface;
+  eventStore: EventStoreInterface;
   currentUserId: string;
   onEdit?: (event: EventItemModelInterface) => void;
   onRemove?: (eventId: string) => void;
@@ -25,7 +26,7 @@ interface PropsInterface {
 }
 
 const EventItem: FC<PropsInterface> = ({
-  event,
+  eventStore,
   currentUserId,
   onEdit,
   onRemove,
@@ -39,28 +40,36 @@ const EventItem: FC<PropsInterface> = ({
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
   useEffect(() => {
-    event.init();
-  }, [event]);
+    eventStore.init();
+  }, [eventStore]);
 
   const handleAttendingButtonClick = () => {
-    if (event.isAttending(currentUserId)) {
-      event.stopAttending();
+    if (eventStore.isAttending(currentUserId)) {
+      eventStore.stopAttending();
     } else {
-      event.attend();
+      eventStore.attend();
     }
   };
+
+  if (!eventStore.event) {
+    return null;
+  }
 
   const buttons = () => (
     <styled.Buttons className="base">
       <styled.Buttons>
-        {isWorldCalendar && event.spaceId && (
+        {isWorldCalendar && eventStore.event.spaceId && (
           <Button
             label={`${t('eventList.eventItem.flyToSpace')} ${
-              event.spaceName && event.spaceName.slice(0, 12)
-            } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
+              eventStore.event.spaceName && eventStore.event.spaceName.slice(0, 12)
+            } ${
+              eventStore.event.spaceName && (eventStore.event.spaceName.length > 12 ? '...' : '')
+            }`}
             isCustom
             transform="capitalized"
-            onClick={() => onFlyToSpace?.(event.spaceId ?? '')}
+            onClick={() => {
+              onFlyToSpace?.(eventStore.event?.spaceId ?? '');
+            }}
             icon="fly-to"
             noWhitespaceWrap
           />
@@ -68,31 +77,36 @@ const EventItem: FC<PropsInterface> = ({
 
         <Button
           onClick={() => {
-            onMagicLinkOpen(event.id, event.spaceId ?? undefined);
+            if (eventStore.event) {
+              onMagicLinkOpen(eventStore.event.id, eventStore.event.spaceId ?? undefined);
+            }
           }}
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
           transform="capitalized"
           isCustom
         />
-        {!!event.web_link && (
+        {!!eventStore.event.web_link && (
           <Button
             label={t('eventList.eventItem.websiteLink')}
             icon="link"
             transform="capitalized"
             isCustom
-            // @ts-ignore
-            onClick={() => onWeblinkClick(event.web_link)}
+            onClick={() => {
+              if (eventStore.event?.web_link) {
+                onWeblinkClick(eventStore.event.web_link);
+              }
+            }}
           />
         )}
       </styled.Buttons>
       <styled.Buttons>
         <Button
           variant="primary"
-          label={t('eventList.eventItem.attendees', {count: event.numberOfAllAttendees})}
+          label={t('eventList.eventItem.attendees', {count: eventStore.numberOfAllAttendees})}
           transform="capitalized"
         />
-        {event.isLive() ? (
+        {eventStore.event.isLive ? (
           <styled.LiveIndicator>
             <IconSvg name="live" size="medium-large" isWhite />
             <p>{t('eventList.eventItem.live')}</p>
@@ -100,17 +114,17 @@ const EventItem: FC<PropsInterface> = ({
         ) : (
           <styled.AttendeesButton
             variant="primary"
-            icon={event.isAttending(currentUserId) ? 'check' : 'add'}
-            disabled={event.attendRequest.isPending}
+            icon={eventStore.isAttending(currentUserId) ? 'check' : 'add'}
+            disabled={eventStore.attendRequest.isPending}
             label={t('eventList.eventItem.interested')}
             transform="capitalized"
             onClick={handleAttendingButtonClick}
-            className={cn(event.isAttending(currentUserId) && 'interested')}
+            className={cn(eventStore.isAttending(currentUserId) && 'interested')}
           />
         )}
-        {!event.isLive() && (
+        {!eventStore.event.isLive && (
           <AddToCalendarComponent
-            event={event.asCalendarEvent}
+            event={eventStore.asCalendarEvent}
             buttonProps={{
               label: t('eventList.eventItem.addToCalendar'),
               icon: 'calendar',
@@ -122,14 +136,17 @@ const EventItem: FC<PropsInterface> = ({
             className="AddToCalendarContainer"
           />
         )}
-        {event.isLive() && isWorldCalendar && event.spaceId && (
+        {eventStore.event.isLive && isWorldCalendar && eventStore.event.id && (
           <Button
             variant="inverted"
             icon="fly-to"
             label={t('eventList.eventItem.joinGathering')}
             transform="capitalized"
-            // @ts-ignore
-            onClick={() => onFlyToGathering?.(event.spaceId)}
+            onClick={() => {
+              if (eventStore.event?.spaceId) {
+                onFlyToGathering?.(eventStore.event.spaceId);
+              }
+            }}
           />
         )}
       </styled.Buttons>
@@ -138,10 +155,16 @@ const EventItem: FC<PropsInterface> = ({
 
   const date = () => (
     <styled.DateRow>
-      <Text text={event.startDate} size="l" weight="bold" align="left" transform="uppercase" />
-      <Text text={event.startTime} size="l" align="left" />
       <Text
-        text={`${t('eventList.eventItem.to')} ${event.endDateAndTime}`}
+        text={eventStore.event.startDate}
+        size="l"
+        weight="bold"
+        align="left"
+        transform="uppercase"
+      />
+      <Text text={eventStore.event.startTime} size="l" align="left" />
+      <Text
+        text={`${t('eventList.eventItem.to')} ${eventStore.event.endDateAndTime}`}
         size="l"
         transform="uppercase"
         align="left"
@@ -154,10 +177,10 @@ const EventItem: FC<PropsInterface> = ({
       <styled.Info>
         <styled.ContentRow>
           <styled.TextRow>
-            <Header event={event} isWorldCalendar={isWorldCalendar} />
+            <Header event={eventStore.event} isWorldCalendar={isWorldCalendar} />
             {date()}
             <ShowMoreText
-              text={event.description}
+              text={eventStore.event.description}
               textProps={{
                 size: 's',
                 align: 'left',
@@ -168,7 +191,7 @@ const EventItem: FC<PropsInterface> = ({
             />
           </styled.TextRow>
           <styled.AttendeesContainer>
-            {event.attendees.map((attendee) => (
+            {eventStore.attendees.map((attendee) => (
               <styled.AttendeeContrainer key={attendee.id}>
                 <styled.AttendeeAvatar size="normal" avatarSrc={attendee.avatarSrc} />
                 <styled.AttendeeNameText
@@ -182,17 +205,17 @@ const EventItem: FC<PropsInterface> = ({
           </styled.AttendeesContainer>
         </styled.ContentRow>
         {buttons()}
-        <Actions event={event} onEdit={onEdit} onRemove={onRemove} />
+        <Actions event={eventStore.event} onEdit={onEdit} onRemove={onRemove} />
       </styled.Info>
     </styled.Div>
   );
 
   const image = () => (
     <styled.ImageContainer>
-      {event.image_hash ? (
+      {eventStore.event.image_hash ? (
         <img
-          alt={event.image_hash}
-          src={`${appVariables.RENDER_SERVICE_URL}/get/${event.image_hash}`}
+          alt={eventStore.event.image_hash}
+          src={`${appVariables.RENDER_SERVICE_URL}/get/${eventStore.event.image_hash}`}
         />
       ) : (
         <img alt="placeholder" src="/img/events/placeholder.png" />
@@ -201,7 +224,7 @@ const EventItem: FC<PropsInterface> = ({
   );
 
   return (
-    <styled.Container style={{zIndex: zIndex}} id={event.id}>
+    <styled.Container style={{zIndex: zIndex}} id={eventStore.event.id}>
       <styled.Row className="header">{image()}</styled.Row>
       {info()}
     </styled.Container>

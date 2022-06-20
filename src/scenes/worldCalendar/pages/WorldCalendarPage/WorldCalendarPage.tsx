@@ -77,7 +77,7 @@ const WorldCalendarPage: FC = () => {
       <TopBar title="World Calendar" onClose={() => history.goBack()} />
       <EventList
         currentUserId={sessionStore.userId}
-        events={eventListStore.events}
+        eventStores={eventListStore.events}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={false}
         onWeblinkClick={handleWeblink}

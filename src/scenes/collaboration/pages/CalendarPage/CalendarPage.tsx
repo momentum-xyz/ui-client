@@ -119,7 +119,7 @@ const CalendarPage: FC = () => {
       </TopBar>
       <EventList
         currentUserId={sessionStore.userId}
-        events={eventListStore.events}
+        eventStores={eventListStore.eventStores}
         selectedEventId={eventId}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={eventListStore.areEventsLoading}
