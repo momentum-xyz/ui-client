@@ -85,15 +85,6 @@ class WebsocketService {
     }
   }
 
-  // @ts-ignore: TODO: Refactor
-  relayToUnity(topic, message) {
-    const unityMessage = {
-      topic,
-      message: message
-    };
-    UnityService.sendWebsocketMessage(JSON.stringify(unityMessage));
-  }
-
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   handleGlobalInteraction(topic, message) {
