@@ -181,6 +181,11 @@ export class UnityService {
       }
     });
 
+    // InvalidToken
+    this.unityContext.on('InvalidToken', () => {
+      console.info('Got Invalid Token from Unity');
+    });
+
     //deprecated by ClickEvent
     // this.unityContext.on('Screen1ClickEvent', (identifier: string) => {
     //   //console.info('Screen1ClickEvent', identifier);
