@@ -48,6 +48,27 @@ const RewardSection = () => {
           variant="secondary"
         />
       </styled.FormField>
+      {paymentDestination === Payee.Account && (
+        <styled.FormField>
+          <styled.LabelContainer>
+            <Text
+              theme={theme}
+              text={t('staking.rewardDestination')}
+              size="xxs"
+              align="right"
+              weight="bold"
+              transform="uppercase"
+            />
+          </styled.LabelContainer>
+          <Dropdown
+            placeholder={t('staking.pickDestination')}
+            value={paymentDestination}
+            options={paymentDestinationOptions}
+            onOptionSelect={selectPaymentDestinationHandler}
+            variant="secondary"
+          />
+        </styled.FormField>
+      )}
     </>
   );
 };

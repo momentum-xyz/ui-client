@@ -17,5 +17,10 @@ export const REWARD_DESTINATION_TYPES = [
     label: t('staking.controllerAccount'),
     value: Payee.Controller,
     icon: 'wallet' as IconName
+  },
+  {
+    label: t('staking.specifiedPaymentAccount'),
+    value: Payee.Account,
+    icon: 'wallet' as IconName
   }
 ];
