@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
@@ -38,12 +38,6 @@ const EventItem: FC<PropsInterface> = ({
   onWeblinkClick
 }) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
-
-  useEffect(() => {
-    eventStore.init();
-
-    return eventStore.resetModel();
-  }, [eventStore]);
 
   const handleAttendingButtonClick = () => {
     if (eventStore.isAttending(currentUserId)) {

@@ -21,6 +21,10 @@ const EventListStore = types.compose(
         );
 
         if (response) {
+          self.eventStores.forEach((eventStore) => {
+            eventStore.resetModel();
+          });
+
           self.eventStores = cast(
             response.map<EventStoreInterface>((event) => {
               return cast({
@@ -39,6 +43,10 @@ const EventListStore = types.compose(
               });
             })
           );
+
+          self.eventStores.forEach((eventStore) => {
+            eventStore.init();
+          });
         }
       })
     }))
