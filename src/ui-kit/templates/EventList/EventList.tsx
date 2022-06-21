@@ -19,7 +19,7 @@ interface PropsInterface {
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
-  onShowAttendeesList: () => void;
+  onShowAttendeesList: (eventId: string, spaceId: string) => void;
 }
 
 const EventList: FC<PropsInterface> = ({

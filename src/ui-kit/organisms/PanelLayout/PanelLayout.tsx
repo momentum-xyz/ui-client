@@ -92,6 +92,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
             )}
             {restProps.subtitle && (
               <>
+                <styled.Whitespace />
                 <Heading
                   theme={restProps.theme}
                   type={headerType}
