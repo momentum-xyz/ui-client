@@ -18,7 +18,8 @@ const WorldCalendarPage: FC = () => {
   const {
     worldCalendarStore: {calendarStore},
     mainStore: {worldStore, unityStore},
-    sessionStore
+    sessionStore,
+    widgetStore: {attendeesListStore}
   } = useStore();
   const {magicDialog, eventListStore} = calendarStore;
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
@@ -33,7 +34,7 @@ const WorldCalendarPage: FC = () => {
   );
 
   useEffect(() => {
-    eventListStore.fetchEvents(worldStore.worldId);
+    eventListStore.fetchEvents(worldStore.worldId, true);
 
     return () => eventListStore.resetModel();
   }, [worldStore.worldId]);
@@ -77,12 +78,13 @@ const WorldCalendarPage: FC = () => {
       <TopBar title="World Calendar" onClose={() => history.goBack()} />
       <EventList
         currentUserId={sessionStore.userId}
-        eventStores={eventListStore.events}
+        events={eventListStore.events}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={false}
         onWeblinkClick={handleWeblink}
         onFlyToSpace={handleFlyToSpace}
         onFlyToGathering={handleFlyToGathering}
+        onShowAttendeesList={attendeesListStore.showAttendees}
         isWorld
       />
     </styled.Container>

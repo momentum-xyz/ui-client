@@ -16,4 +16,5 @@ export interface AttendeesResponseInterface {
 
 export interface FetchAttendeesRequestInterface extends AttendeesRequestInterface {
   limit?: boolean;
+  query?: string;
 }

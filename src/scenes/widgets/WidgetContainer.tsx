@@ -33,6 +33,7 @@ import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {
+  AttendeesWidget,
   HelpWidget,
   LaunchInitiativeWidget,
   MagicLinkWidget,
@@ -64,7 +65,8 @@ const WidgetContainer: FC = () => {
     tokenRulesStore,
     launchInitiativeStore,
     settingsStore,
-    musicPlayerStore
+    musicPlayerStore,
+    attendeesListStore
   } = widgetStore;
 
   const {magicLinkDialog} = magicLinkStore;
@@ -231,6 +233,7 @@ const WidgetContainer: FC = () => {
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {settingsStore.dialog.isOpen && <SettingsWidget />}
+      {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}

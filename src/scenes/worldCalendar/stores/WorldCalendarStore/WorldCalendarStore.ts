@@ -3,8 +3,7 @@ import {flow, types} from 'mobx-state-tree';
 import {DialogModel, RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
 import {MagicTypeEnum} from 'core/enums';
-
-import {WorldEventListStore} from './WorldEventListStore';
+import {EventListStore} from 'scenes/collaboration/stores/CalendarStore/models';
 
 const WorldCalendarStore = types.compose(
   ResetModel,
@@ -12,7 +11,7 @@ const WorldCalendarStore = types.compose(
     .model('WorldCalendarStore', {
       weblinkDialog: types.optional(DialogModel, {}),
       magicDialog: types.optional(DialogModel, {}),
-      eventListStore: types.optional(WorldEventListStore, {}),
+      eventListStore: types.optional(EventListStore, {}),
       magicId: types.maybe(types.string),
       magicLinkRequest: types.optional(RequestModel, {})
     })

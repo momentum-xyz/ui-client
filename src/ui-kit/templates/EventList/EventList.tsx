@@ -4,14 +4,13 @@ import {t} from 'i18next';
 
 import {Loader, PanelLayout, Text, EventItem} from 'ui-kit';
 import {EventItemModelInterface} from 'core/models';
-import {EventStoreInterface} from 'stores/MainStore/models';
 
 import * as styled from './EventList.styled';
 
 interface PropsInterface {
   currentUserId: string;
   selectedEventId?: string;
-  eventStores: EventStoreInterface[];
+  events: EventItemModelInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   isLoading: boolean;
   isWorld?: boolean;
@@ -20,11 +19,12 @@ interface PropsInterface {
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
+  onShowAttendeesList: () => void;
 }
 
 const EventList: FC<PropsInterface> = ({
   currentUserId,
-  eventStores,
+  events,
   onEventEdit,
   onEventRemove,
   onMagicLinkOpen,
@@ -33,10 +33,11 @@ const EventList: FC<PropsInterface> = ({
   isWorld = false,
   onFlyToGathering,
   onFlyToSpace,
-  onWeblinkClick
+  onWeblinkClick,
+  onShowAttendeesList
 }) => {
   useEffect(() => {
-    if (!selectedEventId || eventStores.length === 0) {
+    if (!selectedEventId || events.length === 0) {
       return;
     }
     const element = document.getElementById(selectedEventId);
@@ -52,9 +53,9 @@ const EventList: FC<PropsInterface> = ({
     if (element) {
       element.className += ' highlighted';
     }
-  }, [eventStores.length]);
+  }, [events.length]);
 
-  if (isLoading || eventStores.length === 0) {
+  if (isLoading || events.length === 0) {
     return (
       <styled.Container className="empty noScrollIndicator">
         {isLoading ? (
@@ -70,12 +71,12 @@ const EventList: FC<PropsInterface> = ({
 
   return (
     <styled.Container className="noScrollIndicator">
-      {eventStores.map((eventStore, index) => (
+      {events.map((event, index) => (
         <EventItem
           currentUserId={currentUserId}
-          zIndex={eventStores.length - index}
-          key={eventStore.event?.id}
-          eventStore={eventStore}
+          zIndex={events.length - index}
+          key={event?.id}
+          event={event}
           onEdit={onEventEdit}
           onRemove={onEventRemove}
           onMagicLinkOpen={onMagicLinkOpen}
@@ -83,6 +84,7 @@ const EventList: FC<PropsInterface> = ({
           onFlyToGathering={onFlyToGathering}
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
+          onShowAttendeesList={onShowAttendeesList}
         />
       ))}
     </styled.Container>
