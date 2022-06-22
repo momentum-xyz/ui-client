@@ -17,7 +17,11 @@ import * as styled from './CalendarPage.styled';
 import {DeleteEventConfirmationDialog, EventForm} from './components';
 
 const CalendarPage: FC = () => {
-  const {collaborationStore, sessionStore} = useStore();
+  const {
+    collaborationStore,
+    sessionStore,
+    widgetStore: {attendeesListStore}
+  } = useStore();
   const {calendarStore, spaceStore} = collaborationStore;
   const theme = useTheme();
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
@@ -126,6 +130,7 @@ const CalendarPage: FC = () => {
         onEventEdit={spaceStore.isAdmin ? calendarStore.editEvent : undefined}
         onEventRemove={spaceStore.isAdmin ? calendarStore.selectEventToRemove : undefined}
         onWeblinkClick={handleWeblink}
+        onShowAttendeesList={attendeesListStore.showAttendees}
       />
       {calendarStore.formDialog.isOpen && <EventForm />}
     </styled.Container>

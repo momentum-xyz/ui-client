@@ -12,13 +12,11 @@ export const fetchAttendees: RequestInterface<
   FetchAttendeesRequestInterface,
   AttendeesResponseInterface
 > = (options) => {
-  const {eventId, spaceId, limit, ...restOptions} = options;
+  const {eventId, spaceId, limit = false, query, ...restOptions} = options;
 
-  const url = `${attendeesRepositoryEndpoints().base}/${spaceId}/${eventId}${
-    limit !== undefined ? `/${limit}` : ''
-  }`;
+  const url = `${attendeesRepositoryEndpoints().base}/${spaceId}/${eventId}/${limit}`;
 
-  return request.get(url, restOptions);
+  return request.get(url, {...restOptions, params: {q: query !== '' ? query : undefined}});
 };
 
 export const addAttendee: RequestInterface<

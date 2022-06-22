@@ -86,9 +86,6 @@ export const Container = styled.div<ComponentSizeInterface>`
   flex-direction: column;
   align-items: flex-start;
 
-  position: relative;
-  overflow: hidden;
-
   backdrop-filter: blur(10px);
   border-radius: 10px;
 
@@ -98,6 +95,10 @@ export const Container = styled.div<ComponentSizeInterface>`
 
   &.hasBorder {
     border: 1px solid ${(props) => props.theme.accent};
+  }
+
+  :not(&.showOverflow) {
+    overflow: hidden;
   }
 
   ${(props) => props.width && `width: ${props.width}`}
