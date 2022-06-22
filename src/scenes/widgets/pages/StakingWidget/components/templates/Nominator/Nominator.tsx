@@ -1,6 +1,7 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
+import {DeriveBalancesAll, DeriveStakingAccount} from '@polkadot/api-derive/types';
 
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -29,9 +30,75 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     paymentDestination,
     controllerAccountValidation,
     bondAmountValidation,
-    setTransactionType
+    setTransactionType,
+    channel,
+    setStakingInfo,
+    setBalanceAll,
+    controllerAccount,
+    stashAccount,
+    setSessionProgress
   } = polkadotProviderStore;
   const [section, setSection] = useState<'nominator' | 'unbond'>('nominator');
+
+  const stakingSubscription = useCallback(
+    async () =>
+      await channel?.derive.staking.account(
+        stashAccount?.address as string,
+        (payload: DeriveStakingAccount) => setStakingInfo(payload)
+      ),
+    [channel, stashAccount?.address, setStakingInfo]
+  );
+
+  const balanceSubscription = useCallback(
+    async (address: string) =>
+      await channel?.derive.balances?.all(address, (payload: DeriveBalancesAll) =>
+        setBalanceAll(payload)
+      ),
+    [channel, setBalanceAll]
+  );
+
+  const sessionProgressSubscription = useCallback(
+    async () => await channel?.derive.session.progress((payload) => setSessionProgress(payload)),
+    [channel, setSessionProgress]
+  );
+
+  useEffect(() => {
+    let unsubscribe: any;
+    stashAccount?.address &&
+      balanceSubscription(stashAccount?.address).then((unsub) => {
+        unsubscribe = unsub;
+      });
+
+    return () => unsubscribe && unsubscribe();
+  }, [balanceSubscription, stashAccount?.address]);
+
+  useEffect(() => {
+    let unsubscribe: any;
+    controllerAccount?.address &&
+      balanceSubscription(controllerAccount?.address).then((unsub) => {
+        unsubscribe = unsub;
+      });
+
+    return () => unsubscribe && unsubscribe();
+  }, [balanceSubscription, controllerAccount?.address]);
+
+  useEffect(() => {
+    let unsubscribe: any;
+    stakingSubscription().then((unsub) => {
+      unsubscribe = unsub;
+    });
+
+    return () => unsubscribe && unsubscribe();
+  }, [stakingSubscription]);
+
+  useEffect(() => {
+    let unsubscribe: any;
+    sessionProgressSubscription().then((unsub) => {
+      unsubscribe = unsub;
+    });
+
+    return () => unsubscribe && unsubscribe();
+  }, [sessionProgressSubscription]);
 
   useEffect(() => {
     setTransactionType(StakingTransactionType.Bond);

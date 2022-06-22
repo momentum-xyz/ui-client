@@ -6,7 +6,8 @@ export enum HelpSectionType {
   Discord = 'Discord',
   Momentum = 'Momentum',
   Controls = 'Controls',
-  Wiki = 'Wiki'
+  Wiki = 'Wiki',
+  IntroVideo = 'IntroVideo'
 }
 
 const HelpStore = types
@@ -15,6 +16,7 @@ const HelpStore = types
     types.model('HelpStore', {
       helpDialog: types.optional(DialogModel, {}),
       showDiscordSection: false,
+      showIntroVideoSection: false,
       showControlsSection: false,
       showMomentumSection: false,
       showWikiSection: false

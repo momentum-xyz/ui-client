@@ -11,11 +11,12 @@ const EventListStore = types.compose(
       events: types.optional(types.array(EventItemModel), [])
     })
     .actions((self) => ({
-      fetchEvents: flow(function* fetchEvents(spaceId: string) {
+      fetchEvents: flow(function* fetchEvents(spaceId: string, children?: boolean) {
         const response: FetchEventsResponse = yield self.request.send(
           api.eventsRepository.fetchEvents,
           {
-            spaceId
+            spaceId,
+            children
           }
         );
 
@@ -29,7 +30,8 @@ const EventListStore = types.compose(
               image_hash: event.image_hash ?? null,
               web_link: event.web_link,
               start: new Date(event.start),
-              end: new Date(event.end)
+              end: new Date(event.end),
+              spaceId: event.spaceId
             }))
           );
         }

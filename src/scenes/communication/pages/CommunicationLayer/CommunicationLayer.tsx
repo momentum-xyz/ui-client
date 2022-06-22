@@ -326,7 +326,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               }}
             />
           </Transition>
-          <styled.ListContent>
+          <styled.ListContent className="noScrollIndicator">
             <p className="text-center whitespace-nowrap">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
