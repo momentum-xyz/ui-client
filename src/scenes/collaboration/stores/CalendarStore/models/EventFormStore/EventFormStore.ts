@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {flow, types, cast} from 'mobx-state-tree';
 
 import {EventItemModel, EventItemModelInterface, RequestModel, ResetModel} from 'core/models';
 import {api, CreateEventResponse, EventFormInterface} from 'api';
@@ -13,7 +13,15 @@ const EventFormStore = types.compose(
     })
     .actions((self) => ({
       editEvent(event: EventItemModelInterface) {
-        self.currentEvent = {...event};
+        const item = {...event};
+        item.magicRequest = {...event.magicRequest};
+        item.fetchAttendeesRequest = {...event.fetchAttendeesRequest};
+        item.attendRequest = {...event.attendRequest};
+        item.attendees = cast([]);
+
+        self.currentEvent = {
+          ...item
+        };
       },
       createEvent: flow(function* (data: EventFormInterface, spaceId: string, file?: File) {
         const response: CreateEventResponse = yield self.eventFormRequest.send(
