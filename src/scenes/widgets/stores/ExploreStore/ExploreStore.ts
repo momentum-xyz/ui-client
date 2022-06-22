@@ -1,12 +1,13 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 
-import {RequestModel, ResetModel, SpaceModel, SpaceModelInterface} from 'core/models';
+import {RequestModel, ResetModel, SpaceModelInterface} from 'core/models';
 import {SpaceStore} from 'stores/MainStore/models';
-import {api, SearchSpacesResponse} from 'api';
-import {bytesToUuid} from 'core/utils';
+import {api} from 'api';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
+import {ExploreResponse} from 'api/repositories/spaceTypeRepository/spaceTypeRepository.api.types';
+import {bytesToUuid} from 'core/utils';
 
-import {SpaceHistoryItemModel} from './models';
+import {ExploreCategoryModel, SpaceHistoryItemModel} from './models';
 
 const ExploreStore = types
   .compose(
@@ -16,7 +17,7 @@ const ExploreStore = types
       isExpanded: true,
       searchRequest: types.optional(RequestModel, {}),
       searchQuery: '',
-      searchedSpaces: types.optional(types.array(types.optional(SpaceModel, {})), []),
+      searchedSpacesByCategory: types.optional(types.array(ExploreCategoryModel), []),
       spaceHistory: types.optional(types.array(SpaceHistoryItemModel), []),
       previousItem: types.maybe(SpaceHistoryItemModel)
     })
@@ -66,17 +67,23 @@ const ExploreStore = types
       self.searchQuery = query;
     },
     search: flow(function* (query: string, worldId: string) {
-      const response: SearchSpacesResponse = yield self.searchRequest.send(
-        api.spaceRepository.searchSpaces,
+      const response: ExploreResponse = yield self.searchRequest.send(
+        api.spaceTypeRepository.searchExplore,
         {
-          q: query,
+          searchQuery: query,
           worldId
         }
       );
 
       if (response) {
-        self.searchedSpaces = cast(
-          response.results.map((item) => ({...item, id: bytesToUuid(item.id.data)}))
+        self.searchedSpacesByCategory = cast(
+          response.map((category) => ({
+            ...category,
+            spaces: category.spaces.map((space) => ({
+              ...space,
+              id: bytesToUuid(space.id.data)
+            }))
+          }))
         );
       }
     })
