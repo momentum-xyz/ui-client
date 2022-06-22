@@ -23,34 +23,50 @@ const AttendeesWidget: FC = () => {
   );
 
   return (
-    <Dialog
-      title="Gathering Name"
-      subtitle={`Attendee List / ${t('counts.attendees', {
-        count: attendeesListStore.numberOfAttendees
-      })}`}
-      onClose={attendeesListStore.resetModel}
-      headerStyle="uppercase"
-      icon="profile"
-      iconSize="large"
-      hasBorder
-      showCloseButton
-    >
-      <styled.Container>
-        <SearchInput
-          placeholder={t('placeholders.searchForAttendees')}
-          onChange={(query) => attendeesListStore.changeQuery(query)}
-          withBackground
-        />
-        <styled.List className="noScrollIndicator">
-          {attendeesListStore.attendees.map((attendee) => (
-            <styled.Item key={attendee.id}>
-              <Avatar avatarSrc={attendee.avatarSrc} size="small" />
-              <Text size="s" text={attendee.name} />
-            </styled.Item>
-          ))}
-        </styled.List>
-      </styled.Container>
-    </Dialog>
+    <>
+      <Dialog
+        title="Gathering Name"
+        subtitle={`Attendee List / ${t('counts.attendees', {
+          count: attendeesListStore.numberOfAttendees
+        })}`}
+        onClose={attendeesListStore.resetModel}
+        headerStyle="uppercase"
+        icon="profile"
+        iconSize="large"
+        hasBorder
+        showCloseButton
+        showOverflow
+      >
+        {attendeesListStore.attendeeDialog.isOpen && attendeesListStore.selectedAttendeeId && (
+          <styled.AttendeeWidget
+            userId={attendeesListStore.selectedAttendeeId}
+            onClose={attendeesListStore.hideAttendee}
+            showUserInteractions={false}
+            hasBorder
+          />
+        )}
+        <styled.Container>
+          <SearchInput
+            placeholder={t('placeholders.searchForAttendees')}
+            onChange={(query) => attendeesListStore.changeQuery(query)}
+            withBackground
+          />
+          <styled.List className="noScrollIndicator">
+            {attendeesListStore.attendees.map((attendee) => (
+              <styled.Item
+                key={attendee.id}
+                onClick={() => {
+                  attendeesListStore.selectAttendee(attendee);
+                }}
+              >
+                <Avatar avatarSrc={attendee.avatarSrc} size="small" />
+                <Text size="s" text={attendee.name} />
+              </styled.Item>
+            ))}
+          </styled.List>
+        </styled.Container>
+      </Dialog>
+    </>
   );
 };
 

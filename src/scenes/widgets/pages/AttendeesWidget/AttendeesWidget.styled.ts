@@ -1,8 +1,14 @@
+import {rgba} from 'polished';
 import styled from 'styled-components';
+
+import {ProfileWidget} from '../ProfileWidget';
+
+const PROFILE_WIDGET_X_POSITION = 549;
 
 export const Container = styled.div`
   margin-top: 20px;
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 519px;
   height: 481px;
@@ -23,4 +29,18 @@ export const Item = styled.div`
   gap: 10px;
   align-items: center;
   padding: 5px 0;
+
+  :hover {
+    background: rgba(255, 255, 255, 10%);
+  }
+`;
+
+export const AttendeeWidget = styled(ProfileWidget)`
+  position: absolute;
+  left: ${PROFILE_WIDGET_X_POSITION}px;
+  top: 0;
+
+  margin-left: 20px;
+
+  background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
 `;
