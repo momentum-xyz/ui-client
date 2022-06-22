@@ -17,10 +17,22 @@ import * as styled from './ProfileWidget.styled';
 interface ProfileWidgetPropsInterface {
   userId: string;
   onClose: () => void;
-  onEditUser: (userId: string) => void;
+  onEditUser?: (userId: string) => void;
+  className?: string;
+  hasBorder?: boolean;
+  showUserInteractions?: boolean;
+  showOverflow?: boolean;
 }
 
-const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({userId, onClose, onEditUser}) => {
+const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
+  userId,
+  onClose,
+  onEditUser,
+  className,
+  hasBorder,
+  showOverflow,
+  showUserInteractions = true
+}) => {
   const {
     widgetStore,
     sessionStore,
@@ -80,10 +92,14 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({userId, onClose, 
       }
       captureAllPointerEvents
       headerActions={
-        isItMe && <SvgButton iconName="edit" size="normal" onClick={() => onEditUser(userId)} />
+        isItMe &&
+        onEditUser && <SvgButton iconName="edit" size="normal" onClick={() => onEditUser(userId)} />
       }
       onClose={onClose}
       componentSize={{width: '430px'}}
+      className={className}
+      hasBorder={hasBorder}
+      showOverflow={showOverflow}
     >
       <styled.Body>
         <styled.Actions>
@@ -95,37 +111,37 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({userId, onClose, 
             size="large"
             status={isItMe ? currentUser?.status : userProfile?.status}
           />
-          {!isItMe ? (
-            <>
-              <Button label={t('actions.flyTo')} onClick={handleFlyToUser} size="small" />
-              {userProfile?.status !== UserStatusEnum.DO_NOT_DISTURB && (
+          {!isItMe
+            ? showUserInteractions && (
                 <>
-                  <Button
-                    label={t('actions.grabTable')}
-                    onClick={() => {
-                      grabATable();
-                    }}
-                    size="small"
-                  />
-                  <Button
-                    label={t('actions.highFive')}
-                    onClick={() => {
-                      profileStore.sendHighFive();
-                    }}
-                    size="small"
-                  />
+                  <Button label={t('actions.flyTo')} onClick={handleFlyToUser} size="small" />
+                  {userProfile?.status !== UserStatusEnum.DO_NOT_DISTURB && (
+                    <>
+                      <Button
+                        label={t('actions.grabTable')}
+                        onClick={() => {
+                          grabATable();
+                        }}
+                        size="small"
+                      />
+                      <Button
+                        label={t('actions.highFive')}
+                        onClick={() => {
+                          profileStore.sendHighFive();
+                        }}
+                        size="small"
+                      />
+                    </>
+                  )}
                 </>
+              )
+            : profileStore.canCreateInitiative && (
+                <Button
+                  label={t('actions.createInitiative')}
+                  onClick={launchInitiativeStore.dialog.open}
+                  size="small"
+                />
               )}
-            </>
-          ) : (
-            profileStore.canCreateInitiative && (
-              <Button
-                label={t('actions.createInitiative')}
-                onClick={launchInitiativeStore.dialog.open}
-                size="small"
-              />
-            )
-          )}
         </styled.Actions>
         <styled.Details>
           {userProfile?.profile?.bio && (

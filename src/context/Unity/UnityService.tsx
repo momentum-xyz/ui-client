@@ -50,18 +50,18 @@ const stringToPosition = (posString: string): Position => {
 
 interface UnityAPI {
   toggleMinimap(): any;
-  teleportToUser(userGuid: string) : any;
-  teleportToSpace(spaceGuid: string) : any;
-  teleportToVector3(position:string) : any;
-  lookAtWisp(userGuid: string) : any;
-  controlKeyboard(unityIsInControl: boolean) : any;
-  controlVolume(gain: string) : any;
-  controlSound(isOn: boolean) : any;
-  pauseUnity(isPaused: boolean) : any;
-  setToken(token?: string) : any;
-  getCurrentWorld() : string;
-  getUserPosition() : string;
-  triggerInteractionMsg(kind: number, guid: string, flag: number, message: string) : any;
+  teleportToUser(userGuid: string): any;
+  teleportToSpace(spaceGuid: string): any;
+  teleportToVector3(position: string): any;
+  lookAtWisp(userGuid: string): any;
+  controlKeyboard(unityIsInControl: boolean): any;
+  controlVolume(gain: string): any;
+  controlSound(isOn: boolean): any;
+  pauseUnity(isPaused: boolean): any;
+  setToken(token?: string): any;
+  getCurrentWorld(): string;
+  getUserPosition(): string;
+  triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
 }
 
 export class UnityService {
@@ -106,27 +106,30 @@ export class UnityService {
     // Game state
 
     this.unityContext.on('MomentumLoaded', () => {
-
       this.unityApi = this.unityContext?.unityInstance?.Module.UnityAPI;
 
       // @ts-ignore
-      this.getCurrentWorld = function() {
+      this.getCurrentWorld = function () {
         return this.unityApi?.getCurrentWorld();
-      }
+      };
       // @ts-ignore
-      this.getUserPosition = function() {
+      this.getUserPosition = function () {
         return this.unityApi?.getUserPosition();
-      }
+      };
 
       // @ts-ignore
-      this.triggerInteractionMsg = function(kind: number, guid: string, flag: number, message: string) {
+      this.triggerInteractionMsg = function (
+        kind: number,
+        guid: string,
+        flag: number,
+        message: string
+      ) {
         this.unityApi?.triggerInteractionMsg(kind, guid, flag, message);
-      }
+      };
 
       UnityEventEmitter.emit('MomentumLoaded');
 
       this.unityApi?.controlSound(useUnityStore.getState().muted);
-    
     });
 
     this.unityContext.on('TeleportReady', () => {
@@ -159,7 +162,6 @@ export class UnityService {
       const [id, rawLocation] = identifier.split('|');
       UnityEventEmitter.emit('ProfileClickEvent', id, stringToPosition(rawLocation));
     });
-
   }
 
   setAuthToken(token?: string) {

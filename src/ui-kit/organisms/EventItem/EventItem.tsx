@@ -22,6 +22,7 @@ interface PropsInterface {
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
+  onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
 }
 
 const EventItem: FC<PropsInterface> = ({
@@ -34,7 +35,8 @@ const EventItem: FC<PropsInterface> = ({
   onMagicLinkOpen,
   onFlyToGathering,
   onFlyToSpace,
-  onWeblinkClick
+  onWeblinkClick,
+  onShowAttendeesList
 }) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
@@ -60,7 +62,9 @@ const EventItem: FC<PropsInterface> = ({
             } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
             isCustom
             transform="capitalized"
-            onClick={() => onFlyToSpace?.(event.spaceId ?? '')}
+            onClick={() => {
+              onFlyToSpace?.(event?.spaceId ?? '');
+            }}
             icon="fly-to"
             noWhitespaceWrap
           />
@@ -68,7 +72,9 @@ const EventItem: FC<PropsInterface> = ({
 
         <Button
           onClick={() => {
-            onMagicLinkOpen(event.id, event.spaceId ?? undefined);
+            if (event) {
+              onMagicLinkOpen(event.id, event.spaceId ?? undefined);
+            }
           }}
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
@@ -81,16 +87,20 @@ const EventItem: FC<PropsInterface> = ({
             icon="link"
             transform="capitalized"
             isCustom
-            // @ts-ignore
-            onClick={() => onWeblinkClick(event.web_link)}
+            onClick={() => {
+              if (event?.web_link) {
+                onWeblinkClick(event.web_link);
+              }
+            }}
           />
         )}
       </styled.Buttons>
       <styled.Buttons>
         <Button
           variant="primary"
-          label={t('eventList.eventItem.attendees', {count: event.numberOfAllAttendees})}
+          label={t('counts.attendees', {count: event.numberOfAllAttendees})}
           transform="capitalized"
+          onClick={() => onShowAttendeesList(event.title, event.id, event.spaceId ?? '')}
         />
         {event.isLive() ? (
           <styled.LiveIndicator>
@@ -122,14 +132,17 @@ const EventItem: FC<PropsInterface> = ({
             className="AddToCalendarContainer"
           />
         )}
-        {event.isLive() && isWorldCalendar && event.spaceId && (
+        {event.isLive() && isWorldCalendar && event.id && (
           <Button
             variant="inverted"
             icon="fly-to"
             label={t('eventList.eventItem.joinGathering')}
             transform="capitalized"
-            // @ts-ignore
-            onClick={() => onFlyToGathering?.(event.spaceId)}
+            onClick={() => {
+              if (event?.spaceId) {
+                onFlyToGathering?.(event.spaceId);
+              }
+            }}
           />
         )}
       </styled.Buttons>

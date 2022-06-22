@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {flow, types, cast} from 'mobx-state-tree';
 
 import {EventItemModel, EventItemModelInterface, RequestModel, ResetModel} from 'core/models';
 import {api, CreateEventResponse, EventFormInterface} from 'api';
@@ -15,6 +15,9 @@ const EventFormStore = types.compose(
       editEvent(event: EventItemModelInterface) {
         const item = {...event};
         item.magicRequest = {...event.magicRequest};
+        item.fetchAttendeesRequest = {...event.fetchAttendeesRequest};
+        item.attendRequest = {...event.attendRequest};
+        item.attendees = cast([]);
 
         self.currentEvent = {
           ...item
