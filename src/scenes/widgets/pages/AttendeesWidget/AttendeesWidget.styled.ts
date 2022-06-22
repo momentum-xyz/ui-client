@@ -1,7 +1,7 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-import {ProfileWidget} from '../ProfileWidget';
+import {ProfileWidget} from 'scenes/widgets/pages/ProfileWidget';
 
 const PROFILE_WIDGET_X_POSITION = 549;
 
