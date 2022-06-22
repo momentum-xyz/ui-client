@@ -12,7 +12,6 @@ export const ActionButton = styled(Button)`
 //overflow-y-scroll h-full pr-.1
 export const List = styled.li`
   padding-right: 1px;
-  overflow-y: scroll;
   align-items: end;
   display: flex;
   flex-direction: column;
@@ -27,6 +26,8 @@ export const List = styled.li`
 export const ListContent = styled.div`
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  height: 100%;
   align-items: center;
   pointer-events: auto;
 `;
