@@ -33,7 +33,7 @@ const ValidatorsStore = types.compose(
                 spaceId: id,
                 hasLink: !!operatorSpaceId,
                 address: validator_info.accountId,
-                entity: validator_info.entity.name,
+                entity: validator_info.entity.name ?? '',
                 validator: validator_info.validatorAccountDetails.name,
                 commission: validator_info.commission,
                 ownStake: formatBalance(new BN(validator_info.ownStake), {
