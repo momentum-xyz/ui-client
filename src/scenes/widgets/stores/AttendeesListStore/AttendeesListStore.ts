@@ -21,6 +21,7 @@ const AttendeesListStore = types
       request: types.optional(RequestModel, {}),
       spaceId: types.maybe(types.string),
       eventId: types.maybe(types.string),
+      eventName: types.maybe(types.string),
       selectedAttendeeId: types.maybe(types.string),
       attendeeDialog: types.optional(DialogModel, {})
     })
@@ -46,7 +47,8 @@ const AttendeesListStore = types
     }
   }))
   .actions((self) => ({
-    showAttendees: flow(function* (eventId: string, spaceId: string) {
+    showAttendees: flow(function* (eventName: string, eventId: string, spaceId: string) {
+      self.eventName = eventName;
       self.eventId = eventId;
       self.spaceId = spaceId;
       self.dialog.open();

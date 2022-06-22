@@ -22,7 +22,7 @@ interface PropsInterface {
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
-  onShowAttendeesList: (eventId: string, spaceId: string) => void;
+  onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
 }
 
 const EventItem: FC<PropsInterface> = ({
@@ -100,7 +100,7 @@ const EventItem: FC<PropsInterface> = ({
           variant="primary"
           label={t('counts.attendees', {count: event.numberOfAllAttendees})}
           transform="capitalized"
-          onClick={() => onShowAttendeesList(event.id, event.spaceId ?? '')}
+          onClick={() => onShowAttendeesList(event.title, event.id, event.spaceId ?? '')}
         />
         {event.isLive() ? (
           <styled.LiveIndicator>

@@ -25,8 +25,8 @@ const AttendeesWidget: FC = () => {
   return (
     <>
       <Dialog
-        title="Gathering Name"
-        subtitle={`Attendee List / ${t('counts.attendees', {
+        title={attendeesListStore.eventName}
+        subtitle={`${t('labels.attendeeList')} / ${t('counts.attendees', {
           count: attendeesListStore.numberOfAttendees
         })}`}
         onClose={attendeesListStore.resetModel}
@@ -36,6 +36,7 @@ const AttendeesWidget: FC = () => {
         hasBorder
         showCloseButton
         showOverflow
+        layoutSize={{width: '519px;'}}
       >
         {attendeesListStore.attendeeDialog.isOpen && attendeesListStore.selectedAttendeeId && (
           <styled.AttendeeWidget

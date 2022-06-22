@@ -181,7 +181,8 @@ export const enGb = {
       online: 'Available',
       dnd: 'Do Not Disturb',
       subspaces: 'Subspaces',
-      searchResults: 'Search Results'
+      searchResults: 'Search Results',
+      attendeeList: 'Attendee List'
     },
     messages: {
       welcome: "Login successful. We invite you to Momentum's intro. Hit play below!",
