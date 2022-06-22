@@ -8,12 +8,19 @@ import {useStore} from 'shared/hooks';
 import {REWARD_DESTINATION_TYPES} from 'core/constants';
 import {Payee} from 'core/enums';
 
+import {SpecificPaymentDestinationInput} from '../index';
+
 import * as styled from './RewardSection.styled';
 
 const RewardSection = () => {
   const theme = useTheme();
-  const {controllerAccount, stashAccount, setPaymentDestination, paymentDestination} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+  const {
+    controllerAccount,
+    stashAccount,
+    setPaymentDestination,
+    paymentDestination,
+    addressOptions
+  } = useStore().widgetStore.stakingStore.polkadotProviderStore;
   const paymentDestinationOptions =
     stashAccount && controllerAccount ? REWARD_DESTINATION_TYPES : [];
 
@@ -60,12 +67,16 @@ const RewardSection = () => {
               transform="uppercase"
             />
           </styled.LabelContainer>
-          <Dropdown
-            placeholder={t('staking.pickDestination')}
+          <SpecificPaymentDestinationInput
             value={paymentDestination}
-            options={paymentDestinationOptions}
-            onOptionSelect={selectPaymentDestinationHandler}
-            variant="secondary"
+            options={addressOptions}
+            onOptionSelect={() => setPaymentDestination}
+            isFocused={false}
+            search={function (value: string): void {
+              throw new Error('Function not implemented.');
+            }}
+            searchInputLabel=""
+            searchInputPlaceholder=""
           />
         </styled.FormField>
       )}
