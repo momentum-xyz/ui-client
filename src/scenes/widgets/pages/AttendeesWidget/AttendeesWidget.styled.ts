@@ -34,6 +34,7 @@ export const Item = styled.div`
   }
 `;
 
+// TODO: - Split Profile Widget to Widget and Popup for calendar
 export const AttendeeWidget = styled(ProfileWidget)`
   position: absolute;
   left: ${PROFILE_WIDGET_X_POSITION}px;

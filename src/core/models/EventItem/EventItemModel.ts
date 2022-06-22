@@ -14,6 +14,7 @@ import {RequestModel} from 'core/models';
 import {AttendeeModel} from 'core/models/AttendeeModel';
 import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 
+// TODO: - Wait for BE changes to include attendees and magicLink inside each event, and then remove requests.
 const EventItemModel = types
   .model('EventItem', {
     id: types.string,
