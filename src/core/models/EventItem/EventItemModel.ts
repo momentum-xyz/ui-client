@@ -1,4 +1,4 @@
-import {types, Instance, flow} from 'mobx-state-tree';
+import {types, Instance, flow, cast} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 
 import {
@@ -6,12 +6,15 @@ import {
   formatEndDate,
   formatStartDate,
   formatStartTime,
-  formattedStringFromDate
+  formattedStringFromDate,
+  isOtherYearThanToday
 } from 'core/utils';
 import {api, MagicLinkResponse} from 'api';
+import {RequestModel} from 'core/models';
+import {AttendeeModel} from 'core/models/AttendeeModel';
+import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 
-import {RequestModel} from '../Request';
-
+// TODO: - Wait for BE changes to include attendees and magicLink inside each event, and then remove requests.
 const EventItemModel = types
   .model('EventItem', {
     id: types.string,
@@ -25,13 +28,24 @@ const EventItemModel = types
     start: types.Date,
     end: types.Date,
     magicLink: types.maybe(types.string),
-    magicRequest: types.optional(RequestModel, {})
+    magicRequest: types.optional(RequestModel, {}),
+    fetchAttendeesRequest: types.optional(RequestModel, {}),
+    attendees: types.optional(types.array(AttendeeModel), []),
+    numberOfAllAttendees: types.optional(types.number, 0),
+    attendRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    isLive(): boolean {
-      const nowDate = new Date();
-      return nowDate >= self.start && nowDate <= self.end;
-    },
+    fetchAttendees: flow(function* (limit?: boolean) {
+      const response: AttendeesResponseInterface = yield self.fetchAttendeesRequest.send(
+        api.attendeesRepository.fetchAttendees,
+        {eventId: self.id, spaceId: self.spaceId, limit}
+      );
+
+      if (response) {
+        self.attendees = cast(response.attendees);
+        self.numberOfAllAttendees = response.count;
+      }
+    }),
     fetchMagicLink: flow(function* () {
       const response: MagicLinkResponse = yield self.magicRequest.send(
         api.magicRepository.generateLink,
@@ -49,18 +63,46 @@ const EventItemModel = types
       }
     })
   }))
+  .actions((self) => ({
+    init() {
+      self.fetchMagicLink();
+      self.fetchAttendees(true);
+    },
+    isLive(): boolean {
+      const nowDate = new Date();
+      return nowDate >= self.start && nowDate <= self.end;
+    },
+    attend: flow(function* () {
+      yield self.attendRequest.send(api.attendeesRepository.addAttendee, {
+        eventId: self.id,
+        spaceId: self.spaceId
+      });
+
+      self.fetchAttendees(true);
+    }),
+    stopAttending: flow(function* () {
+      yield self.attendRequest.send(api.attendeesRepository.removeAttendee, {
+        eventId: self.id,
+        spaceId: self.spaceId
+      });
+
+      self.fetchAttendees(true);
+    })
+  }))
   .views((self) => ({
     get toBytes() {
       return Buffer.from(self.id.replace(/-/g, ''), 'hex');
     },
     get startDate() {
-      return formatStartDate(new Date(self.start));
+      const showYear = isOtherYearThanToday(self.start) || isOtherYearThanToday(self.end);
+
+      return formatStartDate(new Date(self.start), showYear);
     },
     get startTime() {
       return formatStartTime(new Date(self.start));
     },
     get endDateAndTime() {
-      return formatEndDate(new Date(self.end));
+      return formatEndDate(new Date(self.end), true);
     },
     get timeZone() {
       // @ts-ignore
@@ -75,6 +117,9 @@ const EventItemModel = types
         title: self.title,
         location: self.magicLink
       };
+    },
+    isAttending(userId: string) {
+      return self.attendees.some((attendee) => attendee.id === userId);
     }
   }));
 

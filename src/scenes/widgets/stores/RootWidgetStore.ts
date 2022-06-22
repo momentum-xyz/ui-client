@@ -10,6 +10,7 @@ import {HelpStore} from './HelpStore';
 import {LaunchInitiativeStore} from './LaunchInitiativeStore';
 import {SettingsStore} from './SettingsStore';
 import {MusicPlayerStore} from './MusicPlayerStore';
+import {AttendeesListStore} from './AttendeesListStore';
 
 const RootWidgetStore = types.model('RootWidgetStore', {
   magicLinkStore: types.optional(MagicLinkStore, {}),
@@ -21,7 +22,8 @@ const RootWidgetStore = types.model('RootWidgetStore', {
   tokenRulesStore: types.optional(TokenRulesStore, {}),
   launchInitiativeStore: types.optional(LaunchInitiativeStore, {}),
   settingsStore: types.optional(SettingsStore, {}),
-  musicPlayerStore: types.optional(MusicPlayerStore, {})
+  musicPlayerStore: types.optional(MusicPlayerStore, {}),
+  attendeesListStore: types.optional(AttendeesListStore, {})
 });
 
 export interface RootMeetingSpaceStoreInterface extends Instance<typeof RootWidgetStore> {}

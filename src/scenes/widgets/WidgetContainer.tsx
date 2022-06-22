@@ -33,6 +33,7 @@ import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {
+  AttendeesWidget,
   HelpWidget,
   LaunchInitiativeWidget,
   MagicLinkWidget,
@@ -64,7 +65,8 @@ const WidgetContainer: FC = () => {
     tokenRulesStore,
     launchInitiativeStore,
     settingsStore,
-    musicPlayerStore
+    musicPlayerStore,
+    attendeesListStore
   } = widgetStore;
 
   const {magicLinkDialog} = magicLinkStore;
@@ -231,6 +233,7 @@ const WidgetContainer: FC = () => {
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {settingsStore.dialog.isOpen && <SettingsWidget />}
+      {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -248,17 +251,6 @@ const WidgetContainer: FC = () => {
       <styled.Footer>
         <styled.MainLinks>
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
-          <ToolbarIcon
-            title="Collaboration"
-            size="large"
-            link={ROUTES.collaboration}
-            icon="collaboration"
-            animate
-            visible={!!collaborationState.collaborationSpace}
-            isActive={(match, location) => {
-              return location.pathname.includes(ROUTES.collaboration);
-            }}
-          />
         </styled.MainLinks>
         <styled.Toolbars>
           {process.env.NODE_ENV === 'development' && <FooterDevTools />}

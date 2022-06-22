@@ -64,12 +64,7 @@ const TileElement: React.FC<TileProps> = ({
       }
     case TileType.TILE_TYPE_TEXT:
       return (
-        <SimpleTile
-          key={tile.id}
-          icon="/icons/icon-help.svg"
-          title={tile.content.title}
-          text={tile.content.text}
-        >
+        <SimpleTile key={tile.id} title={tile.content.title} text={tile.content.text}>
           {editable && (
             <EditPanelMenu
               id={tile.id}

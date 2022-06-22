@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks/useStore';
 import * as styled from './UbondDetails.styled';
 
 export const UnbondDetails = () => {
-  const {stashAccount, usedControllerAddress} =
+  const {stashAccount, bondedControllerAddress} =
     useStore().widgetStore.stakingStore.polkadotProviderStore;
   return (
     <>
@@ -20,7 +20,7 @@ export const UnbondDetails = () => {
       <styled.row>
         <Text text={t('staking.controllerAccount')} size="xs" weight="bold" transform="uppercase" />
         <styled.address>
-          <Text text={usedControllerAddress} size="xs" align="left" />
+          <Text text={bondedControllerAddress} size="xs" align="left" />
         </styled.address>
       </styled.row>
     </>

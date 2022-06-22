@@ -8,6 +8,7 @@ import {EventItemModelInterface} from 'core/models';
 import * as styled from './EventList.styled';
 
 interface PropsInterface {
+  currentUserId: string;
   selectedEventId?: string;
   events: EventItemModelInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
@@ -18,9 +19,11 @@ interface PropsInterface {
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
+  onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
 }
 
 const EventList: FC<PropsInterface> = ({
+  currentUserId,
   events,
   onEventEdit,
   onEventRemove,
@@ -30,7 +33,8 @@ const EventList: FC<PropsInterface> = ({
   isWorld = false,
   onFlyToGathering,
   onFlyToSpace,
-  onWeblinkClick
+  onWeblinkClick,
+  onShowAttendeesList
 }) => {
   useEffect(() => {
     if (!selectedEventId || events.length === 0) {
@@ -69,8 +73,9 @@ const EventList: FC<PropsInterface> = ({
     <styled.Container className="noScrollIndicator">
       {events.map((event, index) => (
         <EventItem
+          currentUserId={currentUserId}
           zIndex={events.length - index}
-          key={event.id}
+          key={event?.id}
           event={event}
           onEdit={onEventEdit}
           onRemove={onEventRemove}
@@ -79,6 +84,7 @@ const EventList: FC<PropsInterface> = ({
           onFlyToGathering={onFlyToGathering}
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
+          onShowAttendeesList={onShowAttendeesList}
         />
       ))}
     </styled.Container>
