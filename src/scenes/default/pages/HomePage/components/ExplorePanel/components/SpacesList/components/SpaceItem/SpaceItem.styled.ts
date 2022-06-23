@@ -14,9 +14,13 @@ export const SpaceNameText = styled(Text)`
 export const Container = styled.div`
   display: flex;
   padding: 12px 10px;
-  border-top: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
+  border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
   align-items: center;
   gap: 10px;
+
+  &.noBorder {
+    border-bottom: none;
+  }
 `;
 
 export const ClickableItem = styled.button`
