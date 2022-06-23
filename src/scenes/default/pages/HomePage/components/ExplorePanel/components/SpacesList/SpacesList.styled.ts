@@ -20,8 +20,6 @@ export const Container = styled.div`
   ::-webkit-scrollbar-track-piece:end {
     margin-bottom: 10px;
   }
-  ::-webkit-scrollbar-track-piece:start {
-  }
 `;
 
 export const Category = styled.div``;

@@ -4,7 +4,7 @@ import {SpaceModel} from 'core/models';
 
 const ExploreCategoryModel = types.model('ExploreCategoryModel', {
   name: types.string,
-  spaces: types.optional(types.array(types.optional(SpaceModel, {})), [])
+  spaces: types.optional(types.array(SpaceModel), [])
 });
 
 export interface ExploreCategoryModelInterface extends Instance<typeof ExploreCategoryModel> {}
