@@ -39,6 +39,7 @@ const PolkadotProviderStore = types
       ss58Format: types.maybe(types.number),
       isWeb3Injected: false,
       paymentDestination: types.optional(types.string, ''),
+      customPaymentDestination: types.optional(types.string, ''),
       stakingAmount: types.optional(types.string, ''),
       unbondAmount: types.optional(types.string, ''),
       bondedAddress: types.maybeNull(types.string),
@@ -310,6 +311,9 @@ const PolkadotProviderStore = types
     },
     setPaymentDestination(payee: Payee) {
       self.paymentDestination = cast(payee);
+    },
+    setCustomPaymentDestination(address: string) {
+      self.customPaymentDestination = cast(address);
     },
     setStakingAmount(amount: string) {
       self.stakingAmount = cast(amount);

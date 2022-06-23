@@ -8,6 +8,7 @@ export const enGb = {
     },
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
+      customRewardDestination: 'Account Address',
       stopStaking: 'Stop Staking',
       withdrawUnbonded: 'Withdraw',
       unbondFunds: 'Unbond Funds',

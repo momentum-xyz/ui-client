@@ -10,4 +10,3 @@ export {StashControllerValidator} from './StashControllerValidator';
 export {StakingAmountValidator} from './StakingAmountValidator';
 export {UnbondingIndicator} from './UnbondingIndicator';
 export {BlockTime} from './BlockTime';
-export {SpecificPaymentDestinationInput} from './SpecificPaymentDestinationInput';
