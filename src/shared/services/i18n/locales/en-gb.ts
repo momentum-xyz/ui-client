@@ -74,6 +74,7 @@ export const enGb = {
       pickDestination: 'Pick a reward destination',
       stashLabel: 'stash',
       rewardDestination: 'reward destination',
+      specificDestination: 'Specific Destination',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       nominateAndBond: 'Nominate & Bond',

@@ -61,7 +61,7 @@ const RewardSection = () => {
           <styled.LabelContainer>
             <Text
               theme={theme}
-              text={t('staking.rewardDestination')}
+              text={t('staking.specificDestination')}
               size="xxs"
               align="right"
               weight="bold"
@@ -69,6 +69,7 @@ const RewardSection = () => {
             />
           </styled.LabelContainer>
           <Dropdown
+            dropdownSize="small"
             placeholder={t('staking.customRewardDestination')}
             value={stashAccount?.address}
             options={addressOptions}
