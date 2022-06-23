@@ -281,7 +281,7 @@ export const enGb = {
       chooseAvatar: 'Choose an image for your avatar',
       saveProfile: 'Save profile',
       selectAccount: 'Select account',
-      selectPolkadotAccount: 'Select Polkadot Account To Login',
+      selectPolkadotAccount: 'Select your Kusama address to login',
       copyLink: 'Copy Link',
       createInitiative: 'Launch new initiative',
       flyTo: 'Fly to',

@@ -40,7 +40,7 @@ const Web3ChoiceStore = types.compose(
         yield wait(DELAY_DEFAULT);
 
         if (yield SubstrateProvider.isExtensionEnabled()) {
-          const addressesList = yield SubstrateProvider.getNormalAddresses();
+          const addressesList = yield SubstrateProvider.getAddresses();
           self.accounts = cast(addressesList);
         }
       }),
