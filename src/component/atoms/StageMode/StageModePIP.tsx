@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useRef, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
@@ -17,47 +17,34 @@ const StageModePIP: React.FC = () => {
   const history = useHistory();
   const {isOnStage} = useAgoraStageMode();
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [translate, setTranslate] = useState({
-    x: 0,
-    y: 0
-  });
+  const ref = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({x: 0, y: 0});
 
-  const handlePointerDown = () => {
-    setIsDragging(true);
-  };
-
-  const handlePointerUp = () => {
-    setIsDragging(false);
-  };
-
-  const handlePointerLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (isDragging) {
-      handleDragMove(e);
-    }
-  };
-
-  const handleDragMove = (e: React.PointerEvent) => {
-    setTranslate({
-      x: translate.x + e.movementX,
-      y: translate.y + e.movementY
-    });
-  };
+  const onMouseDown = useCallback(
+    (event: React.MouseEvent) => {
+      const onMouseMove = (event: MouseEvent) => {
+        position.x += event.movementX;
+        position.y += event.movementY;
+        if (ref.current) {
+          ref.current.style.transform = `translate(${position.x}px, ${position.y}px)`;
+        }
+        setPosition(position);
+      };
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    },
+    [position, setPosition, ref]
+  );
 
   if (collaborationState.stageMode) {
     return (
       <div
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
-        onPointerMove={handlePointerMove}
-        onPointerLeave={handlePointerLeave}
-        style={{
-          transform: `translateX(${translate.x}px) translateY(${translate.y}px)`
-        }}
+        ref={ref}
+        onMouseDown={onMouseDown}
         title="Click to go to stage-mode"
         className="absolute overflow-hidden bg-black-80 rounded bottom-5 opacity-80 hover:opacity-100 right-10.5 w-30 max-h-32 cursor-pointer"
       >
