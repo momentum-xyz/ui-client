@@ -4,6 +4,7 @@ import {toast} from 'react-toastify';
 import {useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import cn from 'classnames';
 
 import {
   ToastContent,
@@ -326,7 +327,12 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               }}
             />
           </Transition>
-          <styled.ListContent className="noScrollIndicator">
+          <styled.ListContent
+            className={cn(
+              communicationLayerStore.selectedParticipant && 'showMenu',
+              'noScrollIndicator'
+            )}
+          >
             <p className="text-center whitespace-nowrap">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>

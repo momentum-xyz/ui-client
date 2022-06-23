@@ -27,6 +27,9 @@ export const ListContent = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  &.showMenu {
+    padding-left: 180px;
+  }
   height: 100%;
   align-items: center;
   pointer-events: auto;
