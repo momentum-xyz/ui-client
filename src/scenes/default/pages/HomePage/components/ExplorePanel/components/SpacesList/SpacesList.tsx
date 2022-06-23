@@ -22,7 +22,7 @@ const SpacesList: React.FC = () => {
       return searchedSpacesByCategory?.map((category) => (
         <styled.Category key={category.name}>
           <styled.CategoryName label={category.name} type="h4" align="left" />
-          {category.spaces.map((space) => (
+          {category.spaces.map((space, index) => (
             <SpaceItem
               space={{
                 id: space.id ?? '',
@@ -31,6 +31,7 @@ const SpacesList: React.FC = () => {
               }}
               hasSubspaces={space.subSpaces.length > 0}
               key={`space-${space.id}`}
+              lastItem={category.spaces.length - 1 === index}
             />
           ))}
         </styled.Category>
@@ -41,8 +42,13 @@ const SpacesList: React.FC = () => {
       return null;
     }
 
-    return selectedSpace.subSpaces.map((space) => (
-      <SpaceItem space={space} hasSubspaces={space.hasSubspaces} key={`space-${space.id}`} />
+    return selectedSpace.subSpaces.map((space, index) => (
+      <SpaceItem
+        space={space}
+        hasSubspaces={space.hasSubspaces}
+        key={`space-${space.id}`}
+        lastItem={selectedSpace.subSpaces.length - 1 === index}
+      />
     ));
   };
 
