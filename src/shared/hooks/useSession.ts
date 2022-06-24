@@ -16,7 +16,7 @@ export const useSession = (
   tokenNotRefreshedCallback?: (error?: string) => void
 ) => {
   const signInInterval = useRef<NodeJS.Timeout | null>(null);
-  const isInitialized = useRef<boolean>(false);
+  const wasInitialized = useRef<boolean>(false);
   const isStopping = useRef<boolean>(false);
 
   const auth = useAuth();
@@ -79,9 +79,9 @@ export const useSession = (
 
   /* 4. User is ready. It must be called once. */
   useEffect(() => {
-    if (auth.isAuthenticated && !!auth.user?.access_token && !isInitialized.current) {
+    if (auth.isAuthenticated && !!auth.user?.access_token && !wasInitialized.current) {
       setTokens(auth.user.access_token);
-      isInitialized.current = true;
+      wasInitialized.current = true;
     }
   }, [auth.isAuthenticated, auth.user?.access_token, setTokens]);
 
