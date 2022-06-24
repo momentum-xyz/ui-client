@@ -3,6 +3,7 @@ export interface ValidatorInterface {
   id: string;
   parentId: string;
   spaceTypeId: string;
+  name: string;
   operatorSpaceId?: string;
   uiTypeId: string;
   isFavorited: boolean;
