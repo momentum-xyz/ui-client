@@ -53,22 +53,15 @@ export const useSession = (
 
   /* 2. Start checking token expiration time */
   useEffect(() => {
-    if (auth.user?.expires_in) {
-      console.log(`Expired in ${auth.user?.expires_in}`);
+    if (!!auth.user && !signInInterval.current) {
+      console.log(`It expires in ${auth.user?.expires_in}`);
+      signInInterval.current = setInterval(() => {
+        if (auth.user && (auth.user.expires_in || 0) <= REMAINING_SEC) {
+          signInSilent();
+        }
+      }, CHECK_INTERVAL_MS);
     }
-
-    signInInterval.current = setInterval(() => {
-      if (auth.user && (auth.user.expires_in || 0) <= REMAINING_SEC) {
-        signInSilent();
-      }
-    }, CHECK_INTERVAL_MS);
-
-    return () => {
-      if (signInInterval.current) {
-        clearInterval(signInInterval.current);
-      }
-    };
-  }, [auth, signInSilent]);
+  }, [auth.user, signInSilent]);
 
   /* 3. Try to refresh token once */
   useEffect(() => {
@@ -84,6 +77,15 @@ export const useSession = (
       wasInitialized.current = true;
     }
   }, [auth.isAuthenticated, auth.user?.access_token, setTokens]);
+
+  useEffect(() => {
+    return () => {
+      if (signInInterval.current) {
+        clearInterval(signInInterval.current);
+        signInInterval.current = null;
+      }
+    };
+  }, []);
 
   return {isReady: auth.isAuthenticated, idToken: auth.user?.id_token || ''};
 };
