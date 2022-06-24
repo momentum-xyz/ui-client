@@ -8,7 +8,8 @@ export const enGb = {
     },
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
-      rewardAccountError: 'The selected destination account does not exist and cannot be used to receive rewards',
+      rewardAccountError:
+        'The selected destination account does not exist and cannot be used to receive rewards',
       customRewardDestination: 'Account Address',
       stopStaking: 'Stop Staking',
       withdrawUnbonded: 'Withdraw',
