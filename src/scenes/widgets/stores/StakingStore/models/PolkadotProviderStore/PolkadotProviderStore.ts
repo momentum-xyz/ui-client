@@ -324,26 +324,27 @@ const PolkadotProviderStore = types
     setTransactionFee(amount: string) {
       self.transactionFee = cast(amount);
     },
+    derivePaymentDestination() {
+      return self.paymentDestination === Payee.Account
+        ? {
+            Account: self.customPaymentDestination
+          }
+        : self.paymentDestination;
+    },
     bondExtrinsics(selectedValidators: string[]) {
       const amountBN = inputToBN(self.stakingAmount, self.chainDecimals, self.tokenSymbol);
       const txBatched: Array<SubmittableExtrinsic | undefined> = [];
 
+      const paymentDestination = this.derivePaymentDestination();
+
       if (self.stashAccount?.address === self.controllerAccount?.address) {
         txBatched.push(
-          self.channel?.tx.staking.bond(
-            self.stashAccount?.address,
-            amountBN,
-            self.paymentDestination
-          )
+          self.channel?.tx.staking.bond(self.stashAccount?.address, amountBN, paymentDestination)
         );
         txBatched.push(self.channel?.tx.staking.nominate(selectedValidators));
       } else if (self.stashAccount?.address !== self.controllerAccount?.address) {
         txBatched.push(
-          self.channel?.tx.staking.bond(
-            self.stashAccount?.address,
-            amountBN,
-            self.paymentDestination
-          )
+          self.channel?.tx.staking.bond(self.stashAccount?.address, amountBN, paymentDestination)
         );
         txBatched.push(self.channel?.tx.staking.setController(self.controllerAccount?.address));
         txBatched.push(self.channel?.tx.staking.nominate(selectedValidators));
