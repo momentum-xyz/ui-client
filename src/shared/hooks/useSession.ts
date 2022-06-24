@@ -78,14 +78,5 @@ export const useSession = (
     }
   }, [auth.isAuthenticated, auth.user?.access_token, setTokens]);
 
-  useEffect(() => {
-    return () => {
-      if (signInInterval.current) {
-        clearInterval(signInInterval.current);
-        signInInterval.current = null;
-      }
-    };
-  }, []);
-
   return {isReady: auth.isAuthenticated, idToken: auth.user?.id_token || ''};
 };
