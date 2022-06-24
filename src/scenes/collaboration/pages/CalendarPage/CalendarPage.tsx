@@ -12,6 +12,7 @@ import useCollaboration, {
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 import {absoluteLink} from 'core/utils';
+import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 
 import * as styled from './CalendarPage.styled';
 import {DeleteEventConfirmationDialog, EventForm} from './components';
@@ -38,6 +39,12 @@ const CalendarPage: FC = () => {
   // TODO: make as action in store
   const leaveCollaborationSpace = () => {
     if (collaborationState.collaborationSpace) {
+      UnityService.triggerInteractionMsg?.(
+        PosBusInteractionType.LeftSpace,
+        collaborationState.collaborationSpace.id,
+        0,
+        ''
+      );
       leaveCollaborationSpaceCall(false).then(stageModeLeave);
 
       if (collaborationState.stageMode) {
