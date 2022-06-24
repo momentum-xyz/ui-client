@@ -4,14 +4,14 @@ import {useEffect, useState} from 'react';
 import {AbstractConnector} from '@web3-react/abstract-connector';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
-import {isWeb3Injected, web3Accounts, web3Enable, web3FromSource} from '@polkadot/extension-dapp';
+import {web3FromSource} from '@polkadot/extension-dapp';
 
 import {LoginTypeEnum} from 'core/enums';
+import {DELAY_DEFAULT, wait} from 'core/utils';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import {PolkadotExtensionException, SessionException} from 'core/exceptions';
-import {DELAY_DEFAULT, wait} from 'core/utils';
+import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 
-const WEB3_ENABLE_ORIGIN_NAME = 'momentum-world';
 const POLKADOT_CANCELED_ERROR = 'Eager: Polkadot auth canceled';
 const SESSION_CANCELED_ERROR = 'OIDC: Session auth canceled';
 const WEB3_ACTIVATE_ERROR = 'Eager: Activate state callback error';
@@ -45,14 +45,13 @@ export const useEager = (
     // Waiting for polkadot.js extension
     await wait(DELAY_DEFAULT);
 
-    const extensions = await web3Enable(WEB3_ENABLE_ORIGIN_NAME);
-    if (!isWeb3Injected || extensions.length === 0) {
+    if (!(await SubstrateProvider.isExtensionEnabled())) {
       const err: any = new PolkadotExtensionException();
       setWalletConnectionState({connected: false, error: err});
       return;
     }
 
-    const allAccounts = await web3Accounts();
+    const allAccounts = await SubstrateProvider.getAddresses();
     if (allAccounts.length === 0) {
       return;
     }

@@ -19,6 +19,7 @@ interface PropsInterface {
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
+  onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
 }
 
 const EventList: FC<PropsInterface> = ({
@@ -32,7 +33,8 @@ const EventList: FC<PropsInterface> = ({
   isWorld = false,
   onFlyToGathering,
   onFlyToSpace,
-  onWeblinkClick
+  onWeblinkClick,
+  onShowAttendeesList
 }) => {
   useEffect(() => {
     if (!selectedEventId || events.length === 0) {
@@ -73,7 +75,7 @@ const EventList: FC<PropsInterface> = ({
         <EventItem
           currentUserId={currentUserId}
           zIndex={events.length - index}
-          key={event.id}
+          key={event?.id}
           event={event}
           onEdit={onEventEdit}
           onRemove={onEventRemove}
@@ -82,6 +84,7 @@ const EventList: FC<PropsInterface> = ({
           onFlyToGathering={onFlyToGathering}
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
+          onShowAttendeesList={onShowAttendeesList}
         />
       ))}
     </styled.Container>

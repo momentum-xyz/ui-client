@@ -1,4 +1,4 @@
-import {types} from 'mobx-state-tree';
+import {types, Instance} from 'mobx-state-tree';
 
 import {appVariables} from 'api/constants';
 import {UserProfileModel} from 'core/models/UserProfile';
@@ -19,5 +19,7 @@ const AttendeeModel = types
       return avatarHash ? `${appVariables.RENDER_SERVICE_URL}/get/${avatarHash}` : undefined;
     }
   }));
+
+export interface AttendeeModelInterface extends Instance<typeof AttendeeModel> {}
 
 export {AttendeeModel};

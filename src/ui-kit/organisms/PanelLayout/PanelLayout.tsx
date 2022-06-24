@@ -35,6 +35,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   titleWidth?: string;
   headerType?: HeaderType;
   className?: string;
+  showOverflow?: boolean;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -50,6 +51,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     headerType = 'h3',
     titleWidth = '100%',
     captureAllPointerEvents = false,
+    showOverflow = false,
     componentSize,
     className,
     ...restProps
@@ -61,6 +63,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
         isCustom && 'PanelLayout-custom',
         hasBorder && 'hasBorder',
         captureAllPointerEvents && 'allPointerEvents',
+        showOverflow && 'showOverflow',
         className
       )}
       {...componentSize}
@@ -92,6 +95,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
             )}
             {restProps.subtitle && (
               <>
+                <styled.Whitespace />
                 <Heading
                   theme={restProps.theme}
                   type={headerType}

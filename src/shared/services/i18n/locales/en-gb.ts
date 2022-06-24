@@ -158,7 +158,9 @@ export const enGb = {
     },
     counts: {
       people_one: '{{count}} Person',
-      people_other: '{{count}} People'
+      people_other: '{{count}} People',
+      attendees_one: `{{count}} Attendee`,
+      attendees_other: `{{count}} Attendees`
     },
     labels: {
       calendar: 'World Calendar',
@@ -184,7 +186,8 @@ export const enGb = {
       online: 'Available',
       dnd: 'Do Not Disturb',
       subspaces: 'Subspaces',
-      searchResults: 'Search Results'
+      searchResults: 'Search Results',
+      attendeeList: 'Attendee List'
     },
     messages: {
       welcome: "Login successful. We invite you to Momentum's intro. Hit play below!",
@@ -253,7 +256,8 @@ export const enGb = {
     placeholders: {
       search: 'Search',
       searchForPeople: 'Search for people...',
-      searchForSpaces: 'Search for spaces...'
+      searchForSpaces: 'Search for spaces...',
+      searchForAttendees: 'Search for attendees...'
     },
     fields: {
       nickname: 'Nickname',
@@ -282,7 +286,7 @@ export const enGb = {
       chooseAvatar: 'Choose an image for your avatar',
       saveProfile: 'Save profile',
       selectAccount: 'Select account',
-      selectPolkadotAccount: 'Select Polkadot Account To Login',
+      selectPolkadotAccount: 'Select your Kusama address to login',
       copyLink: 'Copy Link',
       createInitiative: 'Launch new initiative',
       flyTo: 'Fly to',

@@ -1,6 +1,7 @@
 import React from 'react';
 import {useHistory} from 'react-router';
 import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
 
 import {SvgButton} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -12,9 +13,10 @@ import * as styled from './SpaceItem.styled';
 export interface SpaceItemPropsInterface {
   space: SubSpaceModelInterface;
   hasSubspaces: boolean;
+  lastItem: boolean;
 }
 
-const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces}) => {
+const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, lastItem}) => {
   const history = useHistory();
   const {
     favoriteStore,
@@ -40,7 +42,7 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces}) => 
   };
 
   return (
-    <styled.Container>
+    <styled.Container className={cn(lastItem && 'noBorder')}>
       <SvgButton iconName="rocket" size="medium" onClick={() => handleFlyToSpace()} />
       <styled.ClickableItem onClick={handleSelect}>
         <styled.SpaceNameText text={space.name} size="xs" align="left" isMultiline={false} />

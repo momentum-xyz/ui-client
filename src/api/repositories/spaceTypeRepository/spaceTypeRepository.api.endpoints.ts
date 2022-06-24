@@ -4,6 +4,7 @@ export const spaceTypeRepositoryEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/space-type`;
 
   return {
-    allowedTypes: `${BASE_URL}`
+    allowedTypes: `${BASE_URL}`,
+    explore: `${BASE_URL}/explore`
   };
 };
