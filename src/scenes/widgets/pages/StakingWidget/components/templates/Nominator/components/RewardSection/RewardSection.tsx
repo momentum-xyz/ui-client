@@ -8,6 +8,8 @@ import {useStore} from 'shared/hooks';
 import {REWARD_DESTINATION_TYPES} from 'core/constants';
 import {Payee} from 'core/enums';
 
+import {RewardValidator} from '../index';
+
 import * as styled from './RewardSection.styled';
 
 const RewardSection = () => {
@@ -58,26 +60,29 @@ const RewardSection = () => {
         />
       </styled.FormField>
       {paymentDestination === Payee.Account && (
-        <styled.FormField>
-          <styled.LabelContainer>
-            <Text
-              theme={theme}
-              text={t('staking.specificDestination')}
-              size="xxs"
-              align="right"
-              weight="bold"
-              transform="uppercase"
+        <>
+          <styled.FormField>
+            <styled.LabelContainer>
+              <Text
+                theme={theme}
+                text={t('staking.specificDestination')}
+                size="xxs"
+                align="right"
+                weight="bold"
+                transform="uppercase"
+              />
+            </styled.LabelContainer>
+            <Dropdown
+              dropdownSize="small"
+              placeholder={t('staking.customRewardDestination')}
+              value={stashAccount?.address}
+              options={addressOptions}
+              onOptionSelect={selectCustomPaymentDestinationHandler}
+              variant="secondary"
             />
-          </styled.LabelContainer>
-          <Dropdown
-            dropdownSize="small"
-            placeholder={t('staking.customRewardDestination')}
-            value={stashAccount?.address}
-            options={addressOptions}
-            onOptionSelect={selectCustomPaymentDestinationHandler}
-            variant="secondary"
-          />
-        </styled.FormField>
+          </styled.FormField>
+          <RewardValidator />
+        </>
       )}
     </>
   );

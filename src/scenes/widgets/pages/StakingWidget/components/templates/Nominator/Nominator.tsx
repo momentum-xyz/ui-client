@@ -36,7 +36,10 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     setBalanceAll,
     controllerAccount,
     stashAccount,
-    setSessionProgress
+    setSessionProgress,
+    customPaymentDestination,
+    setCustomRewardDestinationBalance,
+    hasCustomRewardValidation
   } = polkadotProviderStore;
   const [section, setSection] = useState<'nominator' | 'unbond'>('nominator');
 
@@ -57,6 +60,14 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     [channel, setBalanceAll]
   );
 
+  const balanceRewardSubscription = useCallback(
+    async () =>
+      await channel?.derive.balances?.all(customPaymentDestination, (payload: DeriveBalancesAll) =>
+        setCustomRewardDestinationBalance(payload)
+      ),
+    [channel, customPaymentDestination, setCustomRewardDestinationBalance]
+  );
+
   const sessionProgressSubscription = useCallback(
     async () => await channel?.derive.session.progress((payload) => setSessionProgress(payload)),
     [channel, setSessionProgress]
@@ -71,6 +82,16 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
 
     return () => unsubscribe && unsubscribe();
   }, [balanceSubscription, stashAccount?.address]);
+
+  useEffect(() => {
+    let unsubscribe: any;
+    customPaymentDestination &&
+      balanceRewardSubscription().then((unsub) => {
+        unsubscribe = unsub;
+      });
+
+    return () => unsubscribe && unsubscribe();
+  }, [balanceRewardSubscription, customPaymentDestination]);
 
   useEffect(() => {
     let unsubscribe: any;
@@ -121,6 +142,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
           label={t('staking.nominate')}
           disabled={
             controllerAccountValidation.isNominatorAcceptable ||
+            hasCustomRewardValidation ||
             bondAmountValidation.isBondAmountAcceptable ||
             !paymentDestination
           }

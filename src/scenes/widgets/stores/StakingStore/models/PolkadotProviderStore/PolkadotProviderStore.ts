@@ -51,11 +51,13 @@ const PolkadotProviderStore = types
   .volatile<{
     channel: ApiPromise | null;
     balanceAll: DeriveBalancesAll | null;
+    customRewardDestinationBalance: DeriveBalancesAll | null;
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
   }>(() => ({
     channel: null,
     balanceAll: null,
+    customRewardDestinationBalance: null,
     stakingInfo: null,
     sessionProgress: null
   }))
@@ -88,6 +90,17 @@ const PolkadotProviderStore = types
           isNominatorAcceptable:
             isMappedToAnotherStash || isManagingMultipleStashes || sufficientFunds
         };
+      },
+      get customRewardDestinationValidation() {
+        return (
+          self.customRewardDestinationBalance?.freeBalance.isZero() ||
+          !self.customPaymentDestination
+        );
+      },
+      get hasCustomRewardValidation() {
+        return self.paymentDestination === Payee.Account
+          ? this.customRewardDestinationValidation
+          : false;
       },
       get bondAmountValidation() {
         const gtStashFunds =
@@ -211,6 +224,9 @@ const PolkadotProviderStore = types
     },
     setBalanceAll(payload: DeriveBalancesAll) {
       self.balanceAll = payload;
+    },
+    setCustomRewardDestinationBalance(payload: DeriveBalancesAll) {
+      self.customRewardDestinationBalance = payload;
     },
     setSessionProgress(payload: DeriveSessionProgress) {
       self.sessionProgress = payload;
