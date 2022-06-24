@@ -25,7 +25,7 @@ const ValidatorsStore = types.compose(
         if (response) {
           self.validators = cast(
             response.map((validator) => {
-              const {metadata, id, parentId, operatorSpaceId, isFavorited} = validator;
+              const {metadata, id, parentId, operatorSpaceId, isFavorited, name} = validator;
               const {kusama_metadata} = metadata;
               const {validator_info, validator_reward} = kusama_metadata;
               return {
@@ -33,7 +33,7 @@ const ValidatorsStore = types.compose(
                 spaceId: id,
                 hasLink: !!operatorSpaceId,
                 address: validator_info.accountId,
-                entity: validator_info.entity.name ?? '',
+                entity: name,
                 validator: validator_info.validatorAccountDetails.name,
                 commission: validator_info.commission,
                 ownStake: formatBalance(new BN(validator_info.ownStake), {
