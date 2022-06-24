@@ -16,6 +16,7 @@ export const useSession = (
   tokenNotRefreshedCallback?: (error?: string) => void
 ) => {
   const signInInterval = useRef<NodeJS.Timeout | null>(null);
+  const isInitialized = useRef<boolean>(false);
   const isStopping = useRef<boolean>(false);
 
   const auth = useAuth();
@@ -52,8 +53,11 @@ export const useSession = (
 
   /* 2. Start checking token expiration time */
   useEffect(() => {
+    if (auth.user?.expires_in) {
+      console.log(`Expired in ${auth.user?.expires_in}`);
+    }
+
     signInInterval.current = setInterval(() => {
-      console.log(`Refresh Token in ${auth.user?.expires_in}`);
       if (auth.user && (auth.user.expires_in || 0) <= REMAINING_SEC) {
         signInSilent();
       }
@@ -73,15 +77,13 @@ export const useSession = (
     }
   }, [auth.isLoading, auth.isAuthenticated, signInSilent]);
 
-  /* 4. User is ready */
+  /* 4. User is ready. It must be called once. */
   useEffect(() => {
-    if (!auth.isLoading && auth.isAuthenticated && !!auth?.user) {
+    if (auth.isAuthenticated && !!auth.user?.access_token && !isInitialized.current) {
       setTokens(auth.user.access_token);
+      isInitialized.current = true;
     }
-  }, [auth.isLoading, auth.isAuthenticated, auth.user, setTokens]);
+  }, [auth.isAuthenticated, auth.user?.access_token, setTokens]);
 
-  return {
-    isReady: auth.isAuthenticated,
-    idToken: auth.user?.id_token || ''
-  };
+  return {isReady: auth.isAuthenticated, idToken: auth.user?.id_token || ''};
 };
