@@ -3,6 +3,7 @@ import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {DeriveBalancesAll, DeriveStakingAccount} from '@polkadot/api-derive/types';
 
+import {UnsubscribeType} from 'core/types';
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionType} from 'core/enums';
@@ -36,7 +37,10 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     setBalanceAll,
     controllerAccount,
     stashAccount,
-    setSessionProgress
+    setSessionProgress,
+    customPaymentDestination,
+    setCustomRewardDestinationBalance,
+    hasCustomRewardValidation
   } = polkadotProviderStore;
   const [section, setSection] = useState<'nominator' | 'unbond'>('nominator');
 
@@ -57,13 +61,21 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     [channel, setBalanceAll]
   );
 
+  const balanceRewardSubscription = useCallback(
+    async () =>
+      await channel?.derive.balances?.all(customPaymentDestination, (payload: DeriveBalancesAll) =>
+        setCustomRewardDestinationBalance(payload)
+      ),
+    [channel, customPaymentDestination, setCustomRewardDestinationBalance]
+  );
+
   const sessionProgressSubscription = useCallback(
     async () => await channel?.derive.session.progress((payload) => setSessionProgress(payload)),
     [channel, setSessionProgress]
   );
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     stashAccount?.address &&
       balanceSubscription(stashAccount?.address).then((unsub) => {
         unsubscribe = unsub;
@@ -73,7 +85,17 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [balanceSubscription, stashAccount?.address]);
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
+    customPaymentDestination &&
+      balanceRewardSubscription().then((unsub) => {
+        unsubscribe = unsub;
+      });
+
+    return () => unsubscribe && unsubscribe();
+  }, [balanceRewardSubscription, customPaymentDestination]);
+
+  useEffect(() => {
+    let unsubscribe: UnsubscribeType | undefined;
     controllerAccount?.address &&
       balanceSubscription(controllerAccount?.address).then((unsub) => {
         unsubscribe = unsub;
@@ -83,7 +105,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [balanceSubscription, controllerAccount?.address]);
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     stakingSubscription().then((unsub) => {
       unsubscribe = unsub;
     });
@@ -92,7 +114,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [stakingSubscription]);
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     sessionProgressSubscription().then((unsub) => {
       unsubscribe = unsub;
     });
@@ -121,6 +143,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
           label={t('staking.nominate')}
           disabled={
             controllerAccountValidation.isNominatorAcceptable ||
+            hasCustomRewardValidation ||
             bondAmountValidation.isBondAmountAcceptable ||
             !paymentDestination
           }
