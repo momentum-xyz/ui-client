@@ -1,0 +1,47 @@
+import React, {FC} from 'react';
+import {observer} from 'mobx-react-lite';
+
+import {TopBar} from 'ui-kit';
+import useCollaboration, {
+  useLeaveCollaborationSpace
+} from 'context/Collaboration/hooks/useCollaboration';
+import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
+import {useStageModeLeave} from 'hooks/api/useStageModeService';
+
+import * as styled from './DashboardPage.styled';
+import {DashboardViewPanel} from './templates/DashboardViewPanel';
+
+const DashboardPage: FC = () => {
+  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
+  const {collaborationState, collaborationDispatch} = useCollaboration();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
+
+  // TODO: make as action in store
+  const leaveCollaborationSpace = () => {
+    if (collaborationState.collaborationSpace) {
+      UnityService.triggerInteractionMsg?.(
+        PosBusInteractionType.LeftSpace,
+        collaborationState.collaborationSpace.id,
+        0,
+        ''
+      );
+      leaveCollaborationSpaceCall(false).then(stageModeLeave);
+
+      if (collaborationState.stageMode) {
+        collaborationDispatch({
+          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
+          stageMode: false
+        });
+      }
+    }
+  };
+
+  return (
+    <styled.Container>
+      <TopBar title="title" subtitle="dashboard" onClose={leaveCollaborationSpace}></TopBar>
+      <DashboardViewPanel />
+    </styled.Container>
+  );
+};
+
+export default observer(DashboardPage);
