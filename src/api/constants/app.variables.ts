@@ -48,5 +48,6 @@ export const appVariables: AppConfigExtendedInterface = {
   YOUTUBE_INTRO_VIDEO_ID: 'UmSJIEZQAyQ',
   POLKADOT_CONNECTION_STRING: 'momentum-connections',
   WESTEND_TEST_WS_SERVER: 'wss://westend.api.onfinality.io/public-ws',
-  KUSAMA_WS_SERVER: 'wss://kusama-rpc.polkadot.io/'
+  KUSAMA_WS_SERVER: 'wss://kusama-rpc.polkadot.io/',
+  WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support'
 };

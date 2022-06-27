@@ -19,6 +19,9 @@ const FavoriteStore = types.compose(
       spaceId: types.optional(types.string, '')
     })
     .actions((self) => ({
+      init(): void {
+        this.fetchFavorites();
+      },
       fetchFavorites: flow(function* () {
         const favoritesResponse: FetchFavoritesResponse = yield self.request.send(
           api.favoriteRepository.fetchFavorites,

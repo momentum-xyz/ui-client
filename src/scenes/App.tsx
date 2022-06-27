@@ -34,9 +34,9 @@ const stageClient = AgoraRTC.createClient({mode: 'live', codec: 'vp8'});
 stageClient.enableDualStream();
 
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, initApplication} = useStore();
-  const {isConfigReady} = configStore;
+  const {configStore, sessionStore, mainStore, favoriteStore, initApplication} = useStore();
   const {themeStore, unityStore, sentryStore} = mainStore;
+  const {isConfigReady} = configStore;
 
   const {pathname} = useLocation();
   const {t} = useTranslation();
@@ -47,10 +47,11 @@ const App: FC = () => {
 
   useEffect(() => {
     if (isConfigReady) {
+      favoriteStore.init();
       sentryStore.init();
       unityStore.init();
     }
-  }, [isConfigReady, sentryStore, unityStore]);
+  }, [favoriteStore, isConfigReady, sentryStore, unityStore]);
 
   if (!isConfigReady) {
     return <></>;
