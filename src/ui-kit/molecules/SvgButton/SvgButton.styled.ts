@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.button`
+  display: flex;
   cursor: pointer;
 
   :disabled {
