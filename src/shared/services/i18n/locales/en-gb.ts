@@ -190,6 +190,11 @@ export const enGb = {
       attendeeList: 'Attendee List'
     },
     messages: {
+      loading: 'Loading Odyssey Momentum',
+      onlineArena: 'Online Mass Collaboration Arena',
+      loading30sec: 'If Momentum does not load within 30 seconds, please',
+      clearCache: 'Clear your cache',
+      version: 'Version {{version}}',
       welcome: "Login successful. We invite you to Momentum's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',

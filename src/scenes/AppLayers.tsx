@@ -47,7 +47,7 @@ const AppLayers: FC = ({children}) => {
   });
 
   if (!unityStore.isTeleportReady) {
-    return <UnityLoader />;
+    return <UnityLoader theme={theme} />;
   }
 
   return (

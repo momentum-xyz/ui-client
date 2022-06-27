@@ -48,4 +48,5 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   GOOGLE_SDK_URL: string;
   YOUTUBE_API: string;
   YOUTUBE_INTRO_VIDEO_ID: string;
+  WIKI_URL: string;
 }
