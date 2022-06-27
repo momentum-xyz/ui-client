@@ -105,10 +105,10 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
   };
 
   useEffect(() => {
-    if (unityStore.teleportReady) {
+    if (unityStore.isTeleportReady) {
       handleMagic();
     }
-  }, [magicStore.magic, unityStore.teleportReady]);
+  }, [handleMagic, unityStore.isTeleportReady]);
 
   return <>{props.children}</>;
 };

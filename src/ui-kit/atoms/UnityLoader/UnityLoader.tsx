@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from 'react';
 
 import {appVariables} from 'api/constants';
+import {ReactComponent as Loader} from 'ui-kit/assets/images/common/odyssey-stamp.svg';
 
-import {ReactComponent as Loader} from '../../images/odyssey-stamp.svg';
+const MESSAGE_TIMEOUT_MS = 5 * 1000;
 
-const UnityLoading: React.FC = () => {
+const UnityLoader: React.FC = () => {
   const [showCacheClear, setShowCacheClear] = useState(false);
 
   useEffect(() => {
-    const cachetimer = setTimeout(() => setShowCacheClear(true), 5000);
+    const timeout = setTimeout(() => {
+      setShowCacheClear(true);
+    }, MESSAGE_TIMEOUT_MS);
 
     return () => {
-      clearTimeout(cachetimer);
+      clearTimeout(timeout);
     };
   }, []);
 
@@ -45,4 +48,4 @@ const UnityLoading: React.FC = () => {
   );
 };
 
-export default UnityLoading;
+export default UnityLoader;
