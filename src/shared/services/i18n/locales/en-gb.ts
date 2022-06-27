@@ -8,6 +8,9 @@ export const enGb = {
     },
     somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
+      rewardAccountError:
+        'The selected destination account does not exist and cannot be used to receive rewards',
+      customRewardDestination: 'Account Address',
       stopStaking: 'Stop Staking',
       withdrawUnbonded: 'Withdraw',
       unbondFunds: 'Unbond Funds',
@@ -73,6 +76,7 @@ export const enGb = {
       pickDestination: 'Pick a reward destination',
       stashLabel: 'stash',
       rewardDestination: 'reward destination',
+      specificDestination: 'Specific Destination',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       nominateAndBond: 'Nominate & Bond',
@@ -84,6 +88,7 @@ export const enGb = {
       stashIncreaseAmount: 'Stash Account (re-stake reward)',
       stashNoIncreaseAmount: 'Stash Account (do not re-stake reward)',
       controllerAccount: 'Controller Account',
+      specifiedPaymentAccount: 'Specified Payment Account',
       stashAccount: 'Stash Account',
       signedSuccess: 'Transaction finished. Bonding was successful!',
       validation: {
@@ -185,6 +190,11 @@ export const enGb = {
       attendeeList: 'Attendee List'
     },
     messages: {
+      loading: 'Loading Odyssey Momentum',
+      onlineArena: 'Online Mass Collaboration Arena',
+      loading30sec: 'If Momentum does not load within 30 seconds, please',
+      clearCache: 'Clear your cache',
+      version: 'Version {{version}}',
       welcome: "Login successful. We invite you to Momentum's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',

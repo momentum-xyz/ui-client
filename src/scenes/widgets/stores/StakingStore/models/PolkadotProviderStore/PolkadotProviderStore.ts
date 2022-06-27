@@ -33,28 +33,31 @@ const PolkadotProviderStore = types
       controllerAccountBalance: types.maybeNull(PolkadotAddressBalance),
       unlockingDuration: types.maybeNull(PolkadotUnlockingDuration),
       chainDecimals: types.maybe(types.number),
-      tokenSymbol: types.optional(types.string, ''),
+      tokenSymbol: '',
       existentialDeposit: types.optional(types.frozen(), 0),
-      minNominatorBond: types.optional(types.string, ''),
+      minNominatorBond: '',
       ss58Format: types.maybe(types.number),
       isWeb3Injected: false,
-      paymentDestination: types.optional(types.string, ''),
-      stakingAmount: types.optional(types.string, ''),
-      unbondAmount: types.optional(types.string, ''),
+      paymentDestination: '',
+      customPaymentDestination: '',
+      stakingAmount: '',
+      unbondAmount: '',
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionType))),
-      transactionFee: types.optional(types.string, '')
+      transactionFee: ''
     })
   )
   .volatile<{
     channel: ApiPromise | null;
     balanceAll: DeriveBalancesAll | null;
+    customRewardDestinationBalance: DeriveBalancesAll | null;
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
   }>(() => ({
     channel: null,
     balanceAll: null,
+    customRewardDestinationBalance: null,
     stakingInfo: null,
     sessionProgress: null
   }))
@@ -87,6 +90,17 @@ const PolkadotProviderStore = types
           isNominatorAcceptable:
             isMappedToAnotherStash || isManagingMultipleStashes || sufficientFunds
         };
+      },
+      get customRewardDestinationValidation() {
+        return (
+          self.customRewardDestinationBalance?.freeBalance.isZero() ||
+          !self.customPaymentDestination
+        );
+      },
+      get hasCustomRewardValidation() {
+        return self.paymentDestination === Payee.Account
+          ? this.customRewardDestinationValidation
+          : false;
       },
       get bondAmountValidation() {
         const gtStashFunds =
@@ -211,6 +225,9 @@ const PolkadotProviderStore = types
     setBalanceAll(payload: DeriveBalancesAll) {
       self.balanceAll = payload;
     },
+    setCustomRewardDestinationBalance(payload: DeriveBalancesAll) {
+      self.customRewardDestinationBalance = payload;
+    },
     setSessionProgress(payload: DeriveSessionProgress) {
       self.sessionProgress = payload;
     }
@@ -311,6 +328,9 @@ const PolkadotProviderStore = types
     setPaymentDestination(payee: Payee) {
       self.paymentDestination = cast(payee);
     },
+    setCustomPaymentDestination(address: string) {
+      self.customPaymentDestination = cast(address);
+    },
     setStakingAmount(amount: string) {
       self.stakingAmount = cast(amount);
     },
@@ -320,26 +340,27 @@ const PolkadotProviderStore = types
     setTransactionFee(amount: string) {
       self.transactionFee = cast(amount);
     },
+    derivePaymentDestination() {
+      return self.paymentDestination === Payee.Account
+        ? {
+            Account: self.customPaymentDestination
+          }
+        : self.paymentDestination;
+    },
     bondExtrinsics(selectedValidators: string[]) {
       const amountBN = inputToBN(self.stakingAmount, self.chainDecimals, self.tokenSymbol);
       const txBatched: Array<SubmittableExtrinsic | undefined> = [];
 
+      const paymentDestination = this.derivePaymentDestination();
+
       if (self.stashAccount?.address === self.controllerAccount?.address) {
         txBatched.push(
-          self.channel?.tx.staking.bond(
-            self.stashAccount?.address,
-            amountBN,
-            self.paymentDestination
-          )
+          self.channel?.tx.staking.bond(self.stashAccount?.address, amountBN, paymentDestination)
         );
         txBatched.push(self.channel?.tx.staking.nominate(selectedValidators));
       } else if (self.stashAccount?.address !== self.controllerAccount?.address) {
         txBatched.push(
-          self.channel?.tx.staking.bond(
-            self.stashAccount?.address,
-            amountBN,
-            self.paymentDestination
-          )
+          self.channel?.tx.staking.bond(self.stashAccount?.address, amountBN, paymentDestination)
         );
         txBatched.push(self.channel?.tx.staking.setController(self.controllerAccount?.address));
         txBatched.push(self.channel?.tx.staking.nominate(selectedValidators));

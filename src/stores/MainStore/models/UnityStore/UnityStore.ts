@@ -9,10 +9,10 @@ import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 const UnityStore = types
   .model('UnityStore', {
     isInitialized: false,
+    isTeleportReady: false,
     isPaused: false,
-    teleportReady: false,
-    volume: types.optional(types.number, 0.1),
-    muted: types.optional(types.boolean, false)
+    muted: false,
+    volume: types.optional(types.number, 0.1)
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -32,6 +32,9 @@ const UnityStore = types
 
       UnityService.initialize(self.unityContext);
       self.isInitialized = true;
+    },
+    teleportIsReady(): void {
+      self.isTeleportReady = true;
     },
     teleportToUser(userId: string, navigationCallback: (path: string) => void): void {
       UnityService.teleportToUser(userId);
@@ -55,9 +58,6 @@ const UnityStore = types
     resume(): void {
       self.isPaused = false;
       UnityService.resume();
-    },
-    teleportIsReady(): void {
-      self.teleportReady = true;
     },
     setInitialVolume() {
       UnityService.setSoundEffectVolume('0.1');

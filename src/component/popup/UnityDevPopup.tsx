@@ -9,6 +9,7 @@ import Popup, {PopupTitle} from '../atoms/Popup';
 const Events: {[key in keyof UnityEvents]: string[]} = {
   MomentumLoaded: [],
   TeleportReady: [],
+  InvalidToken: [],
   ExterminateUnity: ['topic'],
   ClickEventVideo: ['id'],
   ClickEventDashboard: ['id'],
