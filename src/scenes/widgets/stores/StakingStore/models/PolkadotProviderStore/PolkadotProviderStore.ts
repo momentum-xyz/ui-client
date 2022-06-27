@@ -39,7 +39,7 @@ const PolkadotProviderStore = types
       ss58Format: types.maybe(types.number),
       isWeb3Injected: false,
       paymentDestination: types.optional(types.string, ''),
-      customPaymentDestination: types.optional(types.string, ''),
+      customPaymentDestination: '',
       stakingAmount: types.optional(types.string, ''),
       unbondAmount: types.optional(types.string, ''),
       bondedAddress: types.maybeNull(types.string),
