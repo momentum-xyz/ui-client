@@ -3,6 +3,9 @@ import {useAuth} from 'react-oidc-context';
 
 import {extendAxiosInterceptors, refreshAxiosInterceptors} from 'api/request';
 
+// TODO: Refactoring
+import useUnityEvent from '../../context/Unity/hooks/useUnityEvent';
+
 const CHECK_INTERVAL_MS = 8 * 1000;
 const REMAINING_SEC = 15;
 
@@ -45,6 +48,11 @@ export const useSession = (
         tokenNotRefreshedCallback?.();
       });
   }, [auth, setTokens, tokenNotRefreshedCallback]);
+
+  /* 0. Unity has invalid token by some reason */
+  useUnityEvent('InvalidToken', () => {
+    signInSilent();
+  });
 
   /* 1. Subscribe on 401 error of BE  */
   useEffect(() => {
