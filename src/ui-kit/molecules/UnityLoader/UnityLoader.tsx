@@ -7,7 +7,7 @@ import image from 'ui-kit/assets/images/common/odyssey-stamp.svg';
 
 import * as styled from './UnityLoader.styled';
 
-const MESSAGE_TIMEOUT_MS = 5 * 1000;
+const MESSAGE_TIMEOUT_MS = 5000;
 
 const UnityLoader: React.FC<PropsWithThemeInterface> = ({theme}) => {
   const [messageShown, setMessageShown] = useState<boolean>(false);
