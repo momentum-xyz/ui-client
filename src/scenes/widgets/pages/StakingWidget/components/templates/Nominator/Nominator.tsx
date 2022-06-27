@@ -3,11 +3,10 @@ import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {DeriveBalancesAll, DeriveStakingAccount} from '@polkadot/api-derive/types';
 
-import { UnsubscribeType } from "core/types";
+import {UnsubscribeType} from 'core/types';
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionType} from 'core/enums';
-
 
 import {Unbond} from '../index';
 

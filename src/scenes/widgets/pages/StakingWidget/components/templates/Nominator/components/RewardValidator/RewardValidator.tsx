@@ -8,7 +8,6 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './RewardValidator.styled';
 
-
 const RewardValidator: FC<PropsWithThemeInterface> = ({theme}) => {
   const {customRewardDestinationValidation} =
     useStore().widgetStore.stakingStore.polkadotProviderStore;
