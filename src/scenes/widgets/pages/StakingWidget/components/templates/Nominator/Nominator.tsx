@@ -3,9 +3,11 @@ import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {DeriveBalancesAll, DeriveStakingAccount} from '@polkadot/api-derive/types';
 
+import { UnsubscribeType } from "core/types";
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionType} from 'core/enums';
+
 
 import {Unbond} from '../index';
 
@@ -74,7 +76,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   );
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     stashAccount?.address &&
       balanceSubscription(stashAccount?.address).then((unsub) => {
         unsubscribe = unsub;
@@ -84,7 +86,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [balanceSubscription, stashAccount?.address]);
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     customPaymentDestination &&
       balanceRewardSubscription().then((unsub) => {
         unsubscribe = unsub;
@@ -94,7 +96,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [balanceRewardSubscription, customPaymentDestination]);
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     controllerAccount?.address &&
       balanceSubscription(controllerAccount?.address).then((unsub) => {
         unsubscribe = unsub;
@@ -104,7 +106,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [balanceSubscription, controllerAccount?.address]);
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     stakingSubscription().then((unsub) => {
       unsubscribe = unsub;
     });
@@ -113,7 +115,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [stakingSubscription]);
 
   useEffect(() => {
-    let unsubscribe: any;
+    let unsubscribe: UnsubscribeType | undefined;
     sessionProgressSubscription().then((unsub) => {
       unsubscribe = unsub;
     });

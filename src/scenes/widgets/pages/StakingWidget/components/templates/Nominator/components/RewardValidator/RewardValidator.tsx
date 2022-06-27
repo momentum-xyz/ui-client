@@ -8,9 +8,8 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './RewardValidator.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {}
 
-const RewardValidator: FC<PropsInterface> = ({theme}) => {
+const RewardValidator: FC<PropsWithThemeInterface> = ({theme}) => {
   const {customRewardDestinationValidation} =
     useStore().widgetStore.stakingStore.polkadotProviderStore;
 
