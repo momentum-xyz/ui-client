@@ -33,19 +33,19 @@ const PolkadotProviderStore = types
       controllerAccountBalance: types.maybeNull(PolkadotAddressBalance),
       unlockingDuration: types.maybeNull(PolkadotUnlockingDuration),
       chainDecimals: types.maybe(types.number),
-      tokenSymbol: types.optional(types.string, ''),
+      tokenSymbol: '',
       existentialDeposit: types.optional(types.frozen(), 0),
-      minNominatorBond: types.optional(types.string, ''),
+      minNominatorBond: '',
       ss58Format: types.maybe(types.number),
       isWeb3Injected: false,
-      paymentDestination: types.optional(types.string, ''),
+      paymentDestination: '',
       customPaymentDestination: '',
-      stakingAmount: types.optional(types.string, ''),
-      unbondAmount: types.optional(types.string, ''),
+      stakingAmount: '',
+      unbondAmount: '',
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionType))),
-      transactionFee: types.optional(types.string, '')
+      transactionFee: ''
     })
   )
   .volatile<{
