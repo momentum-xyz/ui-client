@@ -18,9 +18,10 @@ import {
 } from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
-import {AccountTypeBalanceType, KeyringAddressesType} from 'core/types';
+import {AccountTypeBalanceType, KeyringAddressType} from 'core/types';
 import {Payee, StakingTransactionType} from 'core/enums';
 import {inputToBN} from 'core/utils';
+
 const PolkadotProviderStore = types
   .compose(
     ResetModel,
@@ -230,7 +231,7 @@ const PolkadotProviderStore = types
     setSessionProgress(payload: DeriveSessionProgress) {
       self.sessionProgress = payload;
     },
-    setInjectAddresses(payload: KeyringAddressesType[]) {
+    setInjectAddresses(payload: KeyringAddressType[]) {
       self.addresses = cast(payload);
     }
   }))
