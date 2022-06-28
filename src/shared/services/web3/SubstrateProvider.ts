@@ -69,7 +69,7 @@ export default class SubstrateProvider {
   static getKeyringAddresses() {
     const keyringAccounts = keyring.getAccounts();
     return keyringAccounts.map((account) => {
-      const { address, meta, publicKey} = account;
+      const {address, meta, publicKey} = account;
       return {
         address,
         meta,
