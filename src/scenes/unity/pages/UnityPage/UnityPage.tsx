@@ -1,9 +1,14 @@
-import React, {FC, useEffect} from 'react';
-import Unity from 'react-unity-webgl';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useAuth} from 'react-oidc-context';
+import {useTheme} from 'styled-components';
+import Unity from 'react-unity-webgl';
 
-import {Portal} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {Portal, UnityLoader} from 'ui-kit';
+
+import useUnityEvent from '../../../../context/Unity/hooks/useUnityEvent';
+import UnityService from '../../../../context/Unity/UnityService';
 
 const UnityContextCSS = {
   width: '100vw',
@@ -12,12 +17,31 @@ const UnityContextCSS = {
 
 const UnityPage: FC = () => {
   const {mainStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, worldStore} = mainStore;
   const {unityContext} = unityStore;
 
-  useEffect(() => {
-    //unityStore.init();
-  }, [unityStore]);
+  const theme = useTheme();
+  const auth = useAuth();
+
+  useUnityEvent('MomentumLoaded', () => {
+    UnityService.setAuthToken(auth.user?.access_token);
+  });
+
+  useUnityEvent('TeleportReady', () => {
+    const worldId = UnityService.getCurrentWorld?.();
+    if (worldId) {
+      unityStore.teleportIsReady();
+      worldStore.init(worldId);
+    }
+  });
+
+  useUnityEvent('Error', (message: string) => {
+    console.info('Unity Error handling', message);
+  });
+
+  useUnityEvent('ExterminateUnity', () => {
+    window.location.href = '/disconnect.html';
+  });
 
   if (!unityContext) {
     return <></>;
@@ -31,6 +55,7 @@ const UnityPage: FC = () => {
       >
         <Unity unityContext={unityContext} className="unity-canvas" style={UnityContextCSS} />
       </div>
+      {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>
   );
 };

@@ -1,18 +1,15 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
 
 import {useStore} from 'shared/hooks';
-import {UnityLoader, ToastMessage} from 'ui-kit';
+import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
-import useUnityEvent from '../context/Unity/hooks/useUnityEvent';
-import UnityService from '../context/Unity/UnityService';
 import VideoLayer from '../component/overlays/VideoLayer';
 import {StageModePopupQueueProvider} from '../context/StageMode/StageModePopupQueueContext';
 
@@ -20,34 +17,13 @@ import {Communication} from './communication';
 
 const AppLayers: FC = ({children}) => {
   const {mainStore} = useStore();
-  const {worldStore, unityStore} = mainStore;
+  const {unityStore} = mainStore;
 
   const {collaborationState} = useCollaboration();
   const theme = useTheme();
-  const auth = useAuth();
-
-  useUnityEvent('MomentumLoaded', () => {
-    UnityService.setAuthToken(auth.user?.access_token);
-  });
-
-  useUnityEvent('TeleportReady', () => {
-    const worldId = UnityService.getCurrentWorld?.();
-    if (worldId) {
-      unityStore.teleportIsReady();
-      worldStore.init(worldId);
-    }
-  });
-
-  useUnityEvent('Error', (message: string) => {
-    console.info('Unity Error handling', message);
-  });
-
-  useUnityEvent('ExterminateUnity', () => {
-    window.location.href = '/disconnect.html';
-  });
 
   if (!unityStore.isTeleportReady) {
-    return <UnityLoader theme={theme} />;
+    return <></>;
   }
 
   return (

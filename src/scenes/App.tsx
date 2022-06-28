@@ -109,11 +109,6 @@ const App: FC = () => {
     );
   }
 
-  // UNITY WAITING
-  if (!unityStore.isInitialized || !unityStore.unityContext) {
-    return <></>;
-  }
-
   // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>
