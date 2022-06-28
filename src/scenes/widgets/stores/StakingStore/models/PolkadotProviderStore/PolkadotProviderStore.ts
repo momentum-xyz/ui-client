@@ -9,6 +9,7 @@ import {
 } from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {
   PolkadotAddress,
@@ -230,12 +231,21 @@ const PolkadotProviderStore = types
     },
     setSessionProgress(payload: DeriveSessionProgress) {
       self.sessionProgress = payload;
+    },
+    setInjectAddresses(payload: InjectedAccountWithMeta[]) {
+      self.addresses = cast(payload);
     }
   }))
   .actions((self) => ({
     getAddresses: flow(function* () {
-      const addresses = yield SubstrateProvider.getAddresses(self.ss58Format);
-      self.addresses = cast(addresses);
+      yield SubstrateProvider.getAddresses(self.ss58Format).then((injectedAccounts) => {
+        self.setInjectAddresses(injectedAccounts);
+        SubstrateProvider.loadToKeyring(
+          injectedAccounts,
+          self.ss58Format,
+          self.channel?.genesisHash
+        );
+      });
     }),
 
     setStashAccount: flow(function* (address: string) {

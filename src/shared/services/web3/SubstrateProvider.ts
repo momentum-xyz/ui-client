@@ -14,12 +14,22 @@ import {
 } from '@polkadot/util';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 import {t} from 'i18next';
+import {keyring} from '@polkadot/ui-keyring';
+import {KeyringJson$Meta} from '@polkadot/ui-keyring/types';
+import {KeypairType} from '@polkadot/util-crypto/types';
+import {IU8a} from '@polkadot/types-codec/types/interfaces';
 
 import {appVariables} from 'api/constants';
 
 type UnlockingType = {
   remainingEras: BN;
   value: BN;
+};
+
+type InjectedAddressType = {
+  address: string;
+  meta: KeyringJson$Meta;
+  type?: KeypairType;
 };
 
 export type UnlockingDurationReturnType = {
@@ -42,6 +52,29 @@ export default class SubstrateProvider {
   static async isExtensionEnabled() {
     const connection = await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
     return connection.length !== 0 || isWeb3Injected;
+  }
+
+  static isKeyringLoaded() {
+    try {
+      return !!keyring.keyring;
+    } catch {
+      return false;
+    }
+  }
+
+  static loadToKeyring(
+    InjectedAddress: InjectedAddressType[],
+    ss58Format: number | undefined,
+    genesisHash: IU8a | undefined
+  ) {
+    SubstrateProvider.isKeyringLoaded() ||
+      keyring.loadAll(
+        {
+          genesisHash,
+          ss58Format
+        },
+        InjectedAddress
+      );
   }
 
   static async getAddresses(ss58Format = 2) {
