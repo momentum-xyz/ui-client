@@ -2,7 +2,6 @@ import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
-import {keyring} from '@polkadot/ui-keyring';
 
 import {Dialog, Loader, TabBar, TabBarTabInterface} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -40,15 +39,10 @@ const StakingWidget: FC = () => {
     }
   ];
 
-  const connectToChain = () => {
+  const connectToChain = async () => {
     setIsLoading(true);
-    polkadotProviderStore.init().then(() => {
-      setIsLoading(false);
-      keyring.accounts.subject.subscribe((accounts = {}) => {
-        console.log('useAccounts hook');
-        console.log(accounts);
-      });
-    });
+    await polkadotProviderStore.init();
+    setIsLoading(false);
   };
 
   useEffect(() => {

@@ -54,12 +54,28 @@ export default class SubstrateProvider {
     return connection.length !== 0 || isWeb3Injected;
   }
 
+  static async getAddresses(ss58Format = 2) {
+    return await web3Accounts({ss58Format});
+  }
+
   static isKeyringLoaded() {
     try {
       return !!keyring.keyring;
     } catch {
       return false;
     }
+  }
+
+  static getKeyringAddresses() {
+    const keyringAccounts = keyring.getAccounts();
+    return keyringAccounts.map((account) => {
+      const { address, meta, publicKey} = account;
+      return {
+        address,
+        meta,
+        publicKey: publicKey[Symbol.toStringTag]
+      };
+    });
   }
 
   static loadToKeyring(
@@ -75,10 +91,6 @@ export default class SubstrateProvider {
         },
         InjectedAddress
       );
-  }
-
-  static async getAddresses(ss58Format = 2) {
-    return await web3Accounts({ss58Format});
   }
 
   static deriveUnlockingProgress(

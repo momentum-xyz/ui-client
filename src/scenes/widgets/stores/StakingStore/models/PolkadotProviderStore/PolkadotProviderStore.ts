@@ -9,7 +9,6 @@ import {
 } from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {
   PolkadotAddress,
@@ -19,10 +18,9 @@ import {
 } from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
-import {AccountTypeBalance} from 'core/types';
+import {AccountTypeBalanceType, KeyringAddressesType} from 'core/types';
 import {Payee, StakingTransactionType} from 'core/enums';
 import {inputToBN} from 'core/utils';
-
 const PolkadotProviderStore = types
   .compose(
     ResetModel,
@@ -163,7 +161,7 @@ const PolkadotProviderStore = types
     };
   })
   .actions((self) => ({
-    getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalance) {
+    getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalanceType) {
       const balanceAll =
         self.channel !== null ? yield self.channel.derive.balances?.all(address) : null;
 
@@ -232,20 +230,21 @@ const PolkadotProviderStore = types
     setSessionProgress(payload: DeriveSessionProgress) {
       self.sessionProgress = payload;
     },
-    setInjectAddresses(payload: InjectedAccountWithMeta[]) {
+    setInjectAddresses(payload: KeyringAddressesType[]) {
       self.addresses = cast(payload);
     }
   }))
   .actions((self) => ({
     getAddresses: flow(function* () {
       yield SubstrateProvider.getAddresses(self.ss58Format).then((injectedAccounts) => {
-        self.setInjectAddresses(injectedAccounts);
         SubstrateProvider.loadToKeyring(
           injectedAccounts,
           self.ss58Format,
           self.channel?.genesisHash
         );
       });
+      const injectedAddresses = SubstrateProvider.getKeyringAddresses();
+      self.setInjectAddresses(injectedAddresses);
     }),
 
     setStashAccount: flow(function* (address: string) {
@@ -289,7 +288,6 @@ const PolkadotProviderStore = types
       self.isWeb3Injected = cast(isEnabled);
     }),
     initAccount: flow(function* () {
-      yield self.getAddresses();
       yield self.setStashAccount(self.addresses[0].address);
       if (self.stashAccount?.address) {
         yield self.setControllerAccount(self.stashAccount.address);
@@ -404,6 +402,7 @@ const PolkadotProviderStore = types
       yield self.connectToChain();
       yield self.setIsWeb3Injected();
       yield self.getChainInformation();
+      yield self.getAddresses();
       yield self.initAccount();
     })
   }));
