@@ -7,6 +7,7 @@ import Unity from 'react-unity-webgl';
 import {useStore} from 'shared/hooks';
 import {Portal, UnityLoader} from 'ui-kit';
 
+// TODO: Refactoring
 import useUnityEvent from '../../../../context/Unity/hooks/useUnityEvent';
 import UnityService from '../../../../context/Unity/UnityService';
 
@@ -16,9 +17,8 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore} = useStore();
-  const {unityStore, worldStore} = mainStore;
-  const {unityContext} = unityStore;
+  const {mainStore, applicationLoaded} = useStore();
+  const {unityStore} = mainStore;
 
   const theme = useTheme();
   const auth = useAuth();
@@ -30,8 +30,7 @@ const UnityPage: FC = () => {
   useUnityEvent('TeleportReady', () => {
     const worldId = UnityService.getCurrentWorld?.();
     if (worldId) {
-      unityStore.teleportIsReady();
-      worldStore.init(worldId);
+      applicationLoaded(worldId);
     }
   });
 
@@ -43,7 +42,7 @@ const UnityPage: FC = () => {
     window.location.href = '/disconnect.html';
   });
 
-  if (!unityContext) {
+  if (!unityStore.unityContext) {
     return <></>;
   }
 
@@ -53,7 +52,11 @@ const UnityPage: FC = () => {
         className={`unity-desktop ${process.env.NODE_ENV === 'development' ? 'debug-bg' : ''}`}
         style={{position: 'absolute', top: 0}}
       >
-        <Unity unityContext={unityContext} className="unity-canvas" style={UnityContextCSS} />
+        <Unity
+          unityContext={unityStore.unityContext}
+          className="unity-canvas"
+          style={UnityContextCSS}
+        />
       </div>
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>

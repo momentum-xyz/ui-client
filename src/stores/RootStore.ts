@@ -37,8 +37,13 @@ const RootStore = types
   })
   .actions((self) => ({
     initApplication(): void {
-      self.configStore.fetchConfig();
-      self.mainStore.init();
+      self.configStore.init();
+      self.mainStore.themeStore.init();
+    },
+    applicationLoaded(worldId: string): void {
+      self.favoriteStore.init();
+      self.mainStore.unityStore.teleportIsReady();
+      self.mainStore.worldStore.init(worldId);
     }
   }));
 
