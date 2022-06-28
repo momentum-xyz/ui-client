@@ -12,7 +12,7 @@ import {TilePopup} from '../../popup/dashboard/TilePopup';
 import Modal, {ModalRef} from '../../util/Modal';
 import {useDashboardManager} from '../../../hooks/dashboard/useDashboard';
 import {Space, SpaceType} from '../../../context/type/Space';
-import {ReactComponent as Loader} from '../../../images/odyssey-stamp.svg';
+import {ReactComponent as Loader} from '../../../ui-kit/assets/images/common/odyssey-stamp.svg';
 import {appVariables} from '../../../api/constants';
 
 export interface DashboardProps {

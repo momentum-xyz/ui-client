@@ -2,7 +2,7 @@ import React, {FC, memo, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
-import {ReactComponent as AstronautIcon} from 'ui-kit/icons/professions-man-astronaut.svg';
+import {ReactComponent as AstronautIcon} from 'ui-kit/assets/images/common/professions-man-astronaut.svg';
 import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './Avatar.styled';
