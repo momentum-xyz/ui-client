@@ -3,10 +3,9 @@ import {useLocation} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useStore, useUnityEvent} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 
-import useUnityEvent from '../../context/Unity/hooks/useUnityEvent';
 import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import Button from '../atoms/Button';
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';

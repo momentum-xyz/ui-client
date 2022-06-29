@@ -4,14 +4,12 @@ import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
 import {api} from 'api';
+import {ROUTES} from 'core/constants';
+import {useStore, useUnityEvent} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
 import {useJoinCollaborationSpaceByAssign} from '../../Collaboration/hooks/useCollaboration';
-
-import useUnityEvent from './useUnityEvent';
 
 const useInteractionHandlers = () => {
   const {unityStore} = useStore().mainStore;

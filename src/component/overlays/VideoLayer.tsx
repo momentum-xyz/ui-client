@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {useStore} from 'shared/hooks';
+import {useStore, useUnityEvent} from 'shared/hooks';
 
-import useUnityEvent from '../../context/Unity/hooks/useUnityEvent';
 import DashboardVideo from '../atoms/video/DashboardVideo';
 import {useJoinCollaborationSpaceByAssign} from '../../context/Collaboration/hooks/useCollaboration';
 import {ROUTES} from '../../core/constants';

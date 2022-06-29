@@ -8,7 +8,7 @@ import ReactHowler from 'react-howler';
 import {cookie} from 'core/services';
 import {CookieKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useStore, useUnityEvent} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 import {
   Avatar,
@@ -30,7 +30,6 @@ import {
 import {switchFullscreen} from 'core/utils';
 import {useGetUserOwnedSpaces} from 'modules/profile/hooks/useUserSpace';
 import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
-import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {
   AttendeesWidget,
