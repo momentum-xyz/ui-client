@@ -12,10 +12,10 @@ import {
   Toggle,
   Tooltip
 } from 'ui-kit';
+import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 import {ValidatorItemModelInterface} from 'core/models';
-import {PosBusInteractionType} from 'shared/services/unity/UnityService';
 
 import {ValidatorList} from './components';
 import * as styled from './Validators.styled';
@@ -47,12 +47,7 @@ const Validators: FC<PropsInterface> = ({
 
   const nextStepHandle = () => {
     if (operatorSpaceId) {
-      UnityService.triggerInteractionMsg?.(
-        PosBusInteractionType.TriggerStake,
-        operatorSpaceId,
-        0,
-        ''
-      );
+      UnityService.triggerInteractionMsg?.(PosBusEventEnum.TriggerStake, operatorSpaceId, 0, '');
     }
     goToAuthorization();
   };

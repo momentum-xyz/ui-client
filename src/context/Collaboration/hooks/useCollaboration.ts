@@ -1,6 +1,7 @@
 import {useCallback, useContext} from 'react';
 
 import {request} from 'api/request';
+import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 
 import {AgoraContext} from '../../AgoraContext';
@@ -13,7 +14,6 @@ import {
 } from '../CollaborationReducer';
 import CollaborationSpace from '../CollaborationTypes';
 import {Space} from '../../type/Space';
-import {PosBusInteractionType} from '../../../shared/services/unity/UnityService';
 import {appVariables} from '../../../api/constants';
 
 // eslint-disable-next-line import/no-cycle
@@ -89,7 +89,7 @@ export const useJoinCollaborationSpace = () => {
       }
 
       UnityService.triggerInteractionMsg?.(
-        PosBusInteractionType.EnteredSpace,
+        PosBusEventEnum.EnteredSpace,
         collaborationSpace.id,
         0,
         ''

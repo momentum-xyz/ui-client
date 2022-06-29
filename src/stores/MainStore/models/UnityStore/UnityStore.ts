@@ -2,10 +2,10 @@ import {types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {ChangeEvent} from 'react';
 
+import {PosBusEventEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
 import {UnityService} from 'shared/services';
-import {PosBusInteractionType} from 'shared/services/unity/UnityService';
 
 const UnityStore = types
   .model('UnityStore', {
@@ -98,7 +98,7 @@ const UnityStore = types
       UnityService.setSoundEffectVolume(newVolume.toString());
     },
     triggerInteractionMessage(
-      interaction: PosBusInteractionType,
+      interaction: PosBusEventEnum,
       targetId: string,
       flag: number,
       message: string

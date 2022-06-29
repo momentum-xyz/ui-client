@@ -6,15 +6,6 @@ import {UnityPositionInterface} from 'core/interfaces';
 
 import {useUnityStore} from '../../../store/unityStore';
 
-export enum PosBusInteractionType {
-  None = 0,
-  Wow = 1,
-  HighFive = 2,
-  EnteredSpace = 3,
-  LeftSpace = 4,
-  TriggerStake = 5
-}
-
 export enum PosBusNotificationType {
   None = 0,
   Wow = 1,

@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Switch, useHistory, useRouteMatch} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
+import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {
@@ -16,7 +17,6 @@ import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from 'context/Collaboration/Coll
 import {ParticipantRole, ParticipantStatus} from 'context/Collaboration/CollaborationTypes';
 import {bytesToUuid, createRoutesByConfig} from 'core/utils';
 import {StageModeStatus} from 'context/type/StageMode';
-import {PosBusInteractionType} from 'shared/services/unity/UnityService';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
 import {ROUTES} from 'core/constants';
@@ -47,7 +47,7 @@ const Collaboration: React.FC<Props> = () => {
       return;
     }
     unityStore.triggerInteractionMessage(
-      PosBusInteractionType.EnteredSpace,
+      PosBusEventEnum.EnteredSpace,
       collaborationStore.spaceStore.space.id,
       0,
       ''
