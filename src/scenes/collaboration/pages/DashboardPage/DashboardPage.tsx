@@ -9,7 +9,7 @@ import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
 import * as styled from './DashboardPage.styled';
-import {DashboardViewPanel} from './templates/DashboardViewPanel';
+import Dashboard from './components/templates/Dashboard/Dashboard';
 
 const DashboardPage: FC = () => {
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
@@ -39,7 +39,7 @@ const DashboardPage: FC = () => {
   return (
     <styled.Container>
       <TopBar title="title" subtitle="dashboard" onClose={leaveCollaborationSpace}></TopBar>
-      <DashboardViewPanel />
+      <Dashboard />
     </styled.Container>
   );
 };

@@ -34,7 +34,9 @@ export const useDashboardManager = (dashboard: Dashboard, numberOfColumns, space
 
   const [internalTiles, setInternalTiles] = useState(tileMatrix);
 
-  useEffect(() => setInternalTiles(tileMatrix), [tileMatrix]);
+  useEffect(() => {
+    setInternalTiles(tileMatrix);
+  }, [tileMatrix]);
 
   const updateSpecialTile = useUpdateSpecialTile();
   const [updateDashboard] = useUpdateDashboard();

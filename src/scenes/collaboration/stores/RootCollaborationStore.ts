@@ -3,13 +3,13 @@ import {Instance, types} from 'mobx-state-tree';
 import {SpaceStore} from 'stores/MainStore/models';
 
 import {CalendarStore} from './CalendarStore';
-import {DashboardStore} from './DashboardManagerStore/DashboardStore';
+import {Dashboard} from './DashboardStore/models/Dashboard';
 
 const RootCollaborationStore = types
   .model('RootCollaborationStore', {
     spaceStore: types.optional(SpaceStore, {}),
     calendarStore: types.optional(CalendarStore, {}),
-    dashboardStore: types.optional(DashboardStore, {})
+    dashboardStore: types.optional(Dashboard, {})
   })
   .actions((self) => ({
     init(spaceId: string) {

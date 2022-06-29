@@ -5,7 +5,8 @@ export const Container = styled.div`
   height: 100%;
   overflow-y: scroll;
   pointer-events: auto;
-
+  margin-top: 10px;
+  padding: 1px;
   ::-webkit-scrollbar {
     display: none;
   }

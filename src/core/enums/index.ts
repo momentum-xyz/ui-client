@@ -14,3 +14,4 @@ export * from './scanner.enum';
 export * from './payee.enum';
 export * from './stakingTransactionType.enum';
 export * from './userStatus.enum';
+export * from './tiles.enum';
