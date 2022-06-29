@@ -26,7 +26,6 @@ const ConfigStore = types
         self.isConfigReady = true;
       }
     })
-  }))
-  .views(() => ({}));
+  }));
 
 export {ConfigStore};
