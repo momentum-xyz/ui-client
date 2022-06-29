@@ -15,7 +15,8 @@ const MainStore = types.compose(
     })
     .actions((self) => ({
       init(): void {
-        self.themeStore.init();
+        self.sentryStore.init();
+        self.unityStore.init();
       }
     }))
 );

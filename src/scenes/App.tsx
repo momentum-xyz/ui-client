@@ -1,24 +1,24 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import AgoraRTC from 'agora-rtc-sdk-ng';
+import {Redirect, Switch, useLocation} from 'react-router-dom';
+import {AuthProvider} from 'react-oidc-context';
 import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
-import {Redirect, Switch, useLocation} from 'react-router-dom';
-import {AuthProvider} from 'react-oidc-context';
+import AgoraRTC from 'agora-rtc-sdk-ng';
 
+import {WrongBrowser} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
-import {WrongBrowser} from 'ui-kit';
+import {UnityPage} from 'scenes/unity';
 
 // TODO: To be refactored
 import {AgoraProvider} from '../context/AgoraContext';
 import {ConfirmationDialogProvider} from '../hooks/useConformationDialog';
 import AuthComponent from '../context/Auth/AuthContext';
 import {CollaborationProvider} from '../context/Collaboration/CollaborationContext';
-import UnityComponent from '../context/Unity/UnityContext';
 import {TextChatProvider} from '../context/TextChatContext';
 
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
@@ -34,8 +34,8 @@ const stageClient = AgoraRTC.createClient({mode: 'live', codec: 'vp8'});
 stageClient.enableDualStream();
 
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, favoriteStore, initApplication} = useStore();
-  const {themeStore, unityStore, sentryStore} = mainStore;
+  const {configStore, sessionStore, mainStore, initApplication} = useStore();
+  const {themeStore} = mainStore;
   const {isConfigReady} = configStore;
 
   const {pathname} = useLocation();
@@ -47,11 +47,9 @@ const App: FC = () => {
 
   useEffect(() => {
     if (isConfigReady) {
-      favoriteStore.init();
-      sentryStore.init();
-      unityStore.init();
+      mainStore.init();
     }
-  }, [favoriteStore, isConfigReady, sentryStore, unityStore]);
+  }, [isConfigReady, mainStore]);
 
   if (!isConfigReady) {
     return <></>;
@@ -109,11 +107,6 @@ const App: FC = () => {
     );
   }
 
-  // UNITY WAITING
-  if (!unityStore.isInitialized || !unityStore.unityContext) {
-    return <></>;
-  }
-
   // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>
@@ -128,7 +121,7 @@ const App: FC = () => {
                   appId={appVariables.AGORA_APP_ID}
                 >
                   <TextChatProvider>
-                    <UnityComponent unityContext={unityStore.unityContext} />
+                    <UnityPage />
                     <AppLayers>
                       <Switch>
                         {createRoutesByConfig(PRIVATE_ROUTES)}

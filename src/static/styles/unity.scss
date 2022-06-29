@@ -1,0 +1,36 @@
+#unity-container {
+  z-index: 0;
+
+  * {
+    z-index: 0;
+  }
+}
+
+.main-container {
+  display: flex;
+  width:100%;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.unity-active {
+  #unity-container {
+    z-index: 10;
+
+    * {
+      z-index: 10;
+    }
+  }
+
+  #main {
+    z-index: 0;
+  }
+
+  .main-container {
+    pointer-events: none;
+  }
+
+  .z-main-u {
+      z-index: 32;
+  }
+}

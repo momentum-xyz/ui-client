@@ -10,10 +10,10 @@ import 'shared/services/i18n';
 import {App} from './scenes';
 import {RootStore} from './stores';
 
+import './static/styles/main.scss';
 // FIXME: Must be deleted
 import './styles/App.scss';
 import './styles/tailwind.css';
-import './static/styles/main.css';
 
 /**
  * init rootStore and pass dependencies
