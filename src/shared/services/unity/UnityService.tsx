@@ -1,9 +1,9 @@
 import {UnityContext} from 'react-unity-webgl';
 
 import {EventEmitter} from 'core/utils';
+import {UnityPositionInterface} from 'core/interfaces';
 
 import {useUnityStore} from '../../../store/unityStore';
-import {Position} from '../../../context/type/Position';
 
 export type UnityEvents = {
   MomentumLoaded: () => void;
@@ -13,7 +13,7 @@ export type UnityEvents = {
   ClickEventDashboard: (id: string) => void;
   ClickEventVideo: (id: string) => void;
   PlasmaClickEvent: (id: string) => void;
-  ProfileClickEvent: (id: string, position: Position) => void;
+  ProfileClickEvent: (id: string, position: UnityPositionInterface) => void;
   Error: (message: string) => void;
 };
 
@@ -44,7 +44,7 @@ export enum PosBusNotificationType {
 
 export const UnityEventEmitter = new EventEmitter<UnityEvents>();
 
-const stringToPosition = (posString: string): Position => {
+const stringToPosition = (posString: string): UnityPositionInterface => {
   const [x, y, z] = posString.split(':').map(Number);
   return {x, y, z};
 };
