@@ -1,13 +1,25 @@
-// Unity
-// ------------------
-//
-// 1.  Unity active
+#unity-container {
+  z-index: 0;
 
-// 1.  Unity active
-// ------------------
-//
-// Only works with a 'unity-active' class in the body
-//
+  * {
+    z-index: 0;
+  }
+}
+
+.main-container{
+  display: flex;
+  width:100%;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+#main {
+  z-index: 30;
+}
+
+* {
+  z-index: inherit;
+}
 
 .unity-active {
   #unity-container {
@@ -20,13 +32,9 @@
 
   #main {
     z-index: 0;
-
-    // * {
-    //     z-index: 10;
-    // }
   }
 
-  .main-container{
+  .main-container {
     pointer-events: none;
   }
 
@@ -34,35 +42,3 @@
       z-index: 32;
   }
 }
-
-#unity-container {
-  z-index: 0;
-
-  * {
-    z-index: 0;
-  }
-}
-
-.main-container{
-  pointer-events: auto;
-  z-index: 1;
-  width:100%;
-  display: flex;
-}
-
-.debug-bg {
-    background-color: #101044;
-    background: linear-gradient(135deg, #bfa36a55 25%, transparent 25%) -21px 0/
-        42px 42px,
-      linear-gradient(225deg, #bfa36a 25%, transparent 25%) -21px 0/ 42px 42px,
-      linear-gradient(315deg, #bfa36a55 25%, transparent 25%) 0px 0/ 42px 42px,
-      linear-gradient(45deg, #bfa36a 25%, #101044 25%) 0px 0/ 42px 42px;
-}
-
-#main {
-  z-index: 30;
-}
-
-* {
-    z-index: inherit;
-  }

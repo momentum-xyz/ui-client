@@ -40,7 +40,7 @@ const RootStore = types
       self.configStore.init();
       self.mainStore.themeStore.init();
     },
-    applicationLoaded(worldId: string): void {
+    unityLoaded(worldId: string): void {
       self.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);

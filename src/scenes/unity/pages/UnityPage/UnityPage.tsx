@@ -11,13 +11,15 @@ import {Portal, UnityLoader} from 'ui-kit';
 import useUnityEvent from '../../../../context/Unity/hooks/useUnityEvent';
 import UnityService from '../../../../context/Unity/UnityService';
 
+import * as styled from './UnityPage.styled';
+
 const UnityContextCSS = {
   width: '100vw',
   height: '100vh'
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, applicationLoaded} = useStore();
+  const {mainStore, unityLoaded} = useStore();
   const {unityStore} = mainStore;
 
   const theme = useTheme();
@@ -30,7 +32,7 @@ const UnityPage: FC = () => {
   useUnityEvent('TeleportReady', () => {
     const worldId = UnityService.getCurrentWorld?.();
     if (worldId) {
-      applicationLoaded(worldId);
+      unityLoaded(worldId);
     }
   });
 
@@ -48,16 +50,9 @@ const UnityPage: FC = () => {
 
   return (
     <Portal>
-      <div
-        className={`unity-desktop ${process.env.NODE_ENV === 'development' ? 'debug-bg' : ''}`}
-        style={{position: 'absolute', top: 0}}
-      >
-        <Unity
-          unityContext={unityStore.unityContext}
-          className="unity-canvas"
-          style={UnityContextCSS}
-        />
-      </div>
+      <styled.Inner>
+        <Unity unityContext={unityStore.unityContext} style={UnityContextCSS} />
+      </styled.Inner>
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>
   );
