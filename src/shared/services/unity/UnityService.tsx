@@ -1,21 +1,10 @@
 import {UnityContext} from 'react-unity-webgl';
 
 import {EventEmitter} from 'core/utils';
+import {UnityEventType} from 'core/types';
 import {UnityPositionInterface} from 'core/interfaces';
 
 import {useUnityStore} from '../../../store/unityStore';
-
-export type UnityEvents = {
-  MomentumLoaded: () => void;
-  TeleportReady: () => void;
-  InvalidToken: () => void;
-  ExterminateUnity: (topic: string) => void;
-  ClickEventDashboard: (id: string) => void;
-  ClickEventVideo: (id: string) => void;
-  PlasmaClickEvent: (id: string) => void;
-  ProfileClickEvent: (id: string, position: UnityPositionInterface) => void;
-  Error: (message: string) => void;
-};
 
 export enum PosBusInteractionType {
   None = 0,
@@ -42,7 +31,7 @@ export enum PosBusNotificationType {
   Legacy = 1000
 }
 
-export const UnityEventEmitter = new EventEmitter<UnityEvents>();
+export const UnityEventEmitter = new EventEmitter<UnityEventType>();
 
 const stringToPosition = (posString: string): UnityPositionInterface => {
   const [x, y, z] = posString.split(':').map(Number);
@@ -98,27 +87,22 @@ export class UnityService {
   initialize(unityContext: UnityContext) {
     this.unityContext = unityContext;
 
-    // Error handling
     this.unityContext.on('Error', (message: string) => {
-      console.info('unitycontext error', message);
+      console.info('UnityContext error', message);
       UnityEventEmitter.emit('Error', message);
     });
-
-    // Game state
 
     this.unityContext.on('MomentumLoaded', () => {
       this.unityApi = this.unityContext?.unityInstance?.Module.UnityAPI;
 
-      // @ts-ignore
       this.getCurrentWorld = function () {
         return this.unityApi?.getCurrentWorld();
       };
-      // @ts-ignore
+
       this.getUserPosition = function () {
         return this.unityApi?.getUserPosition();
       };
 
-      // @ts-ignore
       this.triggerInteractionMsg = function (
         kind: number,
         guid: string,
@@ -141,7 +125,6 @@ export class UnityService {
       UnityEventEmitter.emit('ExterminateUnity', topic);
     });
 
-    // Interactions
     this.unityContext.on('ClickEvent', (identifier: string) => {
       console.info('ClickEvent', identifier);
       const [type, id] = identifier.split('|');
@@ -249,7 +232,6 @@ export class UnityService {
       handler(kind, flag, message);
     });
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }
 
 export default new UnityService();

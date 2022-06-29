@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 
-import {UnityEventEmitter, UnityEvents} from '../../shared/services/unity/UnityService';
+import {UnityEventType} from 'core/types';
+
+import {UnityEventEmitter} from '../../shared/services/unity/UnityService';
 import Button from '../atoms/Button';
 import Input, {Checkbox} from '../atoms/input/Input';
 import Select, {Option} from '../atoms/input/Select';
 import Popup, {PopupTitle} from '../atoms/Popup';
 
-const Events: {[key in keyof UnityEvents]: string[]} = {
+const Events: {[key in keyof UnityEventType]: string[]} = {
   MomentumLoaded: [],
   TeleportReady: [],
   InvalidToken: [],
@@ -42,10 +44,10 @@ export const UnityDevPopup: React.FC<UnityDevPopupProps> = ({onClose}) => {
         return formData[key];
       });
       console.info(`Emitting a "${type}" unity event: `, vars);
-      UnityEventEmitter.emit(type as keyof UnityEvents, ...vars);
+      UnityEventEmitter.emit(type as keyof UnityEventType, ...vars);
     } else {
       console.info(`Emitting a "${type}" unity event`);
-      UnityEventEmitter.emit(type as keyof UnityEvents);
+      UnityEventEmitter.emit(type as keyof UnityEventType);
     }
     if (close && onClose) {
       onClose();

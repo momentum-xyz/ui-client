@@ -1,10 +1,12 @@
 import {useEffect, useRef} from 'react';
 
-import {UnityEventEmitter, UnityEvents} from '../../../shared/services/unity/UnityService';
+import {UnityEventType} from 'core/types';
 
-const useUnityEvent = <EventKey extends keyof UnityEvents>(
+import {UnityEventEmitter} from '../../../shared/services/unity/UnityService';
+
+const useUnityEvent = <EventKey extends keyof UnityEventType>(
   event: EventKey,
-  callback: UnityEvents[EventKey]
+  callback: UnityEventType[EventKey]
 ) => {
   const callbackRef = useRef(callback);
   useEffect(() => {
@@ -15,6 +17,7 @@ const useUnityEvent = <EventKey extends keyof UnityEvents>(
     //@ts-ignore
     const callProxy = (...args) => callbackRef.current(...args);
     UnityEventEmitter.addListener(event, callProxy);
+
     return () => {
       UnityEventEmitter.removeListener(event, callProxy);
     };
