@@ -3,7 +3,7 @@ import {UnityContext} from 'react-unity-webgl';
 import {EventEmitter} from 'core/utils';
 import {UnityEventType} from 'core/types';
 import {PosBusNotificationEnum} from 'core/enums';
-import {UnityPositionInterface} from 'core/interfaces';
+import {UnityApiInterface, UnityPositionInterface} from 'core/interfaces';
 
 import {useUnityStore} from '../../../store/unityStore';
 
@@ -14,24 +14,8 @@ const stringToPosition = (posString: string): UnityPositionInterface => {
   return {x, y, z};
 };
 
-interface UnityAPI {
-  toggleMinimap(): any;
-  teleportToUser(userGuid: string): any;
-  teleportToSpace(spaceGuid: string): any;
-  teleportToVector3(position: string): any;
-  lookAtWisp(userGuid: string): any;
-  controlKeyboard(unityIsInControl: boolean): any;
-  controlVolume(gain: string): any;
-  controlSound(isOn: boolean): any;
-  pauseUnity(isPaused: boolean): any;
-  setToken(token?: string): any;
-  getCurrentWorld(): string;
-  getUserPosition(): string;
-  triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
-}
-
 export class UnityService {
-  unityApi?: UnityAPI;
+  unityApi?: UnityApiInterface;
   unityContext?: UnityContext;
 
   getCurrentWorld?: () => void;
