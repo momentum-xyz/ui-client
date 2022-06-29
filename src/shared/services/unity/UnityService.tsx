@@ -2,25 +2,10 @@ import {UnityContext} from 'react-unity-webgl';
 
 import {EventEmitter} from 'core/utils';
 import {UnityEventType} from 'core/types';
+import {PosBusNotificationEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
 
 import {useUnityStore} from '../../../store/unityStore';
-
-export enum PosBusNotificationType {
-  None = 0,
-  Wow = 1,
-  HighFive = 2,
-  StageModeAccept = 10,
-  StageModeInvitation = 11,
-  StageModeSet = 12,
-  StageModeStageJoin = 13,
-  StageModeStageRequest = 14,
-  StageModeStageDeclined = 15,
-  TextMessage = 500,
-  Relay = 501,
-  Generic = 999,
-  Legacy = 1000
-}
 
 export const UnityEventEmitter = new EventEmitter<UnityEventType>();
 
@@ -50,17 +35,11 @@ export class UnityService {
   unityContext?: UnityContext;
 
   getCurrentWorld?: () => void;
-
   getUserPosition?: () => void;
-
   getIntState?: (spaceId: string, key: string) => number;
-
   setIntState?: (spaceId: string, key: string, value: number) => void;
-
   getStrState?: (spaceId: string, key: string) => string;
-
   setStrState?: (spaceId: string, key: string, value: string) => void;
-
   triggerInteractionMsg?: (type: number, targetId: string, flag: number, message: string) => void;
 
   constructor() {
@@ -218,7 +197,7 @@ export class UnityService {
   }
 
   // @ts-ignore: refactoring
-  simpleNotificationHandler(handler: (kind: PosBusNotificationType, flag, msg) => void) {
+  simpleNotificationHandler(handler: (kind: PosBusNotificationEnum, flag, msg) => void) {
     this.unityContext?.on('SimpleNotification', (kind: number, flag: number, message: string) => {
       handler(kind, flag, message);
     });
