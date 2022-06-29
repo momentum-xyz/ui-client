@@ -6,13 +6,14 @@ import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import {Button, TopBar, EventList, LinkDialog, ToastContent} from 'ui-kit';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 import {absoluteLink} from 'core/utils';
-import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
+import {PosBusInteractionType} from 'shared/services/unity/UnityService';
 
 import * as styled from './CalendarPage.styled';
 import {DeleteEventConfirmationDialog, EventForm} from './components';

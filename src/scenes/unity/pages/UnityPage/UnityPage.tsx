@@ -5,11 +5,11 @@ import {useTheme} from 'styled-components';
 import Unity from 'react-unity-webgl';
 
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import {Portal, UnityLoader} from 'ui-kit';
 
 // TODO: Refactoring
 import useUnityEvent from '../../../../context/Unity/hooks/useUnityEvent';
-import UnityService from '../../../../context/Unity/UnityService';
 
 import * as styled from './UnityPage.styled';
 

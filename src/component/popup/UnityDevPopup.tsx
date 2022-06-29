@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {UnityEventEmitter, UnityEvents} from '../../context/Unity/UnityService';
+import {UnityEventEmitter, UnityEvents} from '../../shared/services/unity/UnityService';
 import Button from '../atoms/Button';
 import Input, {Checkbox} from '../atoms/input/Input';
 import Select, {Option} from '../atoms/input/Select';

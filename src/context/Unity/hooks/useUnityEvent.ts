@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react';
 
-import {UnityEventEmitter, UnityEvents} from '../UnityService';
+import {UnityEventEmitter, UnityEvents} from '../../../shared/services/unity/UnityService';
 
 const useUnityEvent = <EventKey extends keyof UnityEvents>(
   event: EventKey,

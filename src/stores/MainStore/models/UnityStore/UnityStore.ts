@@ -4,7 +4,8 @@ import {ChangeEvent} from 'react';
 
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
-import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
+import {UnityService} from 'shared/services';
+import {PosBusInteractionType} from 'shared/services/unity/UnityService';
 
 const UnityStore = types
   .model('UnityStore', {

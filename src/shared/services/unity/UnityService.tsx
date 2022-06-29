@@ -2,8 +2,8 @@ import {UnityContext} from 'react-unity-webgl';
 
 import {EventEmitter} from 'core/utils';
 
-import {useUnityStore} from '../../store/unityStore';
-import {Position} from '../type/Position';
+import {useUnityStore} from '../../../store/unityStore';
+import {Position} from '../../../context/type/Position';
 
 export type UnityEvents = {
   MomentumLoaded: () => void;

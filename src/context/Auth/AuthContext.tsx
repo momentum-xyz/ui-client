@@ -2,10 +2,10 @@ import React, {useEffect, useReducer} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
-import {useStore, useSession} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {useStore, useSession} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 
-import UnityService from '../Unity/UnityService';
 import WebsocketService from '../Websocket/WebsocketService';
 
 import {authDefaultState, AuthState} from './AuthState';
@@ -19,11 +19,9 @@ export interface IAuthContextProps {
 export const AuthContext = React.createContext<IAuthContextProps | undefined>(undefined);
 
 const AuthComponent: React.FC = (props) => {
-  const {
-    sessionStore,
-    widgetStore: {helpStore}
-  } = useStore();
+  const {sessionStore, widgetStore} = useStore();
   const {userId, profile} = sessionStore;
+  const {helpStore} = widgetStore;
 
   const history = useHistory();
 

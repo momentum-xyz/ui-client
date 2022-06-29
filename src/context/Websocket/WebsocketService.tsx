@@ -15,9 +15,13 @@ import {
   PosBusMessage
 } from 'context/Unity/types';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
+import {UnityService} from 'shared/services';
 
 import {InteractionTypes} from '../type/Notification';
-import UnityService, {PosBusInteractionType, PosBusNotificationType} from '../Unity/UnityService';
+import {
+  PosBusInteractionType,
+  PosBusNotificationType
+} from '../../shared/services/unity/UnityService';
 import {StageModeStatus} from '../type/StageMode';
 
 import {CollaborationTypes, NotificationTypes} from './WebsocketTypes';

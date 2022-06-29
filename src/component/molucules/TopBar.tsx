@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
+import {UnityService} from 'shared/services';
 import {useStore} from 'shared/hooks';
 import {IconSvg} from 'ui-kit';
 
@@ -18,7 +19,7 @@ import {AddUserPopup} from '../../modules/spaceadmin/popups/AddUserPopup';
 import Modal, {ModalRef} from '../util/Modal';
 import {useStageModeLeave} from '../../hooks/api/useStageModeService';
 import {useTextChatContext} from '../../context/TextChatContext';
-import UnityService, {PosBusInteractionType} from '../../context/Unity/UnityService';
+import {PosBusInteractionType} from '../../shared/services/unity/UnityService';
 import {SpaceType} from '../../context/type/Space';
 
 export type TopBarProps = {

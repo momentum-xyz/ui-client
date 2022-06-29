@@ -13,8 +13,9 @@ import {
   Tooltip
 } from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import {ValidatorItemModelInterface} from 'core/models';
-import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
+import {PosBusInteractionType} from 'shared/services/unity/UnityService';
 
 import {ValidatorList} from './components';
 import * as styled from './Validators.styled';

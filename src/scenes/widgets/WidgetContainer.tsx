@@ -9,6 +9,7 @@ import {cookie} from 'core/services';
 import {CookieKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import {
   Avatar,
   TOAST_GROUND_OPTIONS,
@@ -26,7 +27,6 @@ import {
   COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
   COLLABORATION_MUTED_ACTION_UPDATE
 } from 'context/Collaboration/CollaborationReducer';
-import UnityService from 'context/Unity/UnityService';
 import {switchFullscreen} from 'core/utils';
 import {useGetUserOwnedSpaces} from 'modules/profile/hooks/useUserSpace';
 import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';

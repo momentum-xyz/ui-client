@@ -4,9 +4,9 @@ import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 
 import useUnityEvent from '../../context/Unity/hooks/useUnityEvent';
-import UnityService from '../../context/Unity/UnityService';
 import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import Button from '../atoms/Button';
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';
