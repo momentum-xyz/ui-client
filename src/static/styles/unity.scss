@@ -6,19 +6,11 @@
   }
 }
 
-.main-container{
+.main-container {
   display: flex;
   width:100%;
   pointer-events: auto;
   z-index: 1;
-}
-
-#main {
-  z-index: 30;
-}
-
-* {
-  z-index: inherit;
 }
 
 .unity-active {

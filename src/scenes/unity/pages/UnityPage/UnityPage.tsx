@@ -40,6 +40,7 @@ const UnityPage: FC = () => {
     console.info('Unity Error handling', message);
   });
 
+  // TODO: Make route path + page
   useUnityEvent('ExterminateUnity', () => {
     window.location.href = '/disconnect.html';
   });

@@ -1,0 +1,20 @@
+@import './fonts';
+@import './variables.css';
+@import './unity';
+
+#main {
+  z-index: 30;
+}
+
+* {
+  z-index: inherit;
+}
+
+.noScrollIndicator {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.noScrollIndicator::-webkit-scrollbar {
+  display: none;
+}
