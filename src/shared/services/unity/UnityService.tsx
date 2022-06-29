@@ -1,18 +1,11 @@
 import {UnityContext} from 'react-unity-webgl';
 
-import {EventEmitter} from 'core/utils';
-import {UnityEventType} from 'core/types';
+import {getUnityPosition} from 'core/utils';
+import {UnityEventEmitter} from 'core/constants';
 import {PosBusNotificationEnum} from 'core/enums';
-import {UnityApiInterface, UnityPositionInterface} from 'core/interfaces';
+import {UnityApiInterface} from 'core/interfaces';
 
 import {useUnityStore} from '../../../store/unityStore';
-
-export const UnityEventEmitter = new EventEmitter<UnityEventType>();
-
-const stringToPosition = (posString: string): UnityPositionInterface => {
-  const [x, y, z] = posString.split(':').map(Number);
-  return {x, y, z};
-};
 
 export class UnityService {
   unityApi?: UnityApiInterface;
@@ -97,7 +90,7 @@ export class UnityService {
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
       console.info('ProfileHasBeenClicked', identifier);
       const [id, rawLocation] = identifier.split('|');
-      UnityEventEmitter.emit('ProfileClickEvent', id, stringToPosition(rawLocation));
+      UnityEventEmitter.emit('ProfileClickEvent', id, getUnityPosition(rawLocation));
     });
   }
 
