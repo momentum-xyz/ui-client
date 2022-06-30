@@ -45,7 +45,8 @@ const PolkadotProviderStore = types
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionType))),
-      transactionFee: ''
+      transactionFee: '',
+      isLoading: false
     })
   )
   .volatile<{
@@ -219,6 +220,9 @@ const PolkadotProviderStore = types
         transferableWithoutFee
       });
     }),
+    setIsLoading(payload: boolean) {
+      self.isLoading = payload;
+    },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
     },
@@ -400,11 +404,13 @@ const PolkadotProviderStore = types
   }))
   .actions((self) => ({
     init: flow(function* () {
+      self.setIsLoading(true);
       yield self.connectToChain();
       yield self.setIsWeb3Injected();
       yield self.getChainInformation();
       yield self.getAddresses();
       yield self.initAccount();
+      self.setIsLoading(false);
     })
   }));
 
