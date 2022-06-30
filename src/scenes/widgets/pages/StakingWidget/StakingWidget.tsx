@@ -49,7 +49,7 @@ const StakingWidget: FC = () => {
 
   useEffect(() => {
     polkadotProviderStore.init();
-  }, []);
+  }, [polkadotProviderStore]);
 
   return (
     <Dialog
