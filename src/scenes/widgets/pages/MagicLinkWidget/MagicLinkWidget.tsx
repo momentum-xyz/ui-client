@@ -4,10 +4,10 @@ import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 
-import {Button, Dialog, Location, Text, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 import {MagicTypeEnum} from 'core/enums';
 import {copyToClipboard} from 'core/utils';
-import {useStore} from 'shared/hooks';
+import {Button, Dialog, Location, Text, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 
 // TODO: Refactoring
 import useCollaboration from '../../../../context/Collaboration/hooks/useCollaboration';
