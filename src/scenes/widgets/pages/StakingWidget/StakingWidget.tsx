@@ -10,11 +10,16 @@ import {Validators, Authorization, Nominator} from './components/templates';
 import * as styled from './StakingWidget.styled';
 
 const StakingWidget: FC = () => {
-  const theme = useTheme();
-  const {stakingStore} = useStore().widgetStore;
+  const {mainStore, widgetStore} = useStore();
+  const {unityStore} = mainStore;
+  const {stakingStore} = widgetStore;
   const {stakingDialog, validatorsStore, operatorSpaceId, polkadotProviderStore} = stakingStore;
+
   const [selectedTab, setSelectedTab] = useState<TabBarTabInterface>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const theme = useTheme();
+
   const tabBarTabs: TabBarTabInterface[] = [
     {
       id: '1',
@@ -44,6 +49,16 @@ const StakingWidget: FC = () => {
     await polkadotProviderStore.init();
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    unityStore.pause();
+
+    return () => {
+      if (!operatorSpaceId) {
+        unityStore.resume();
+      }
+    };
+  }, [operatorSpaceId, unityStore]);
 
   useEffect(() => {
     stakingStore.fetchValidators();

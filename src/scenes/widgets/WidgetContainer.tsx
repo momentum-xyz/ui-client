@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import ReactHowler from 'react-howler';
@@ -39,7 +39,7 @@ import * as styled from './WidgetContainer.styled';
 
 const WidgetContainer: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
-  const {worldStore, unityStore} = mainStore;
+  const {worldStore} = mainStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -61,8 +61,6 @@ const WidgetContainer: FC = () => {
   const {collaborationState, collaborationDispatch} = useCollaboration();
 
   const location = useLocation();
-
-  const [unityWasPaused, setUnityWasPaused] = useState(false);
   const {isOnStage} = useAgoraStageMode();
 
   useInteractionHandlers();
@@ -70,21 +68,6 @@ const WidgetContainer: FC = () => {
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
   }, [musicPlayerStore, worldStore.worldId]);
-
-  useEffect(() => {
-    if (!unityStore.isPaused && stakingDialog.isOpen) {
-      //if unity not paused and stakingdialog opens pause unity
-      setUnityWasPaused(false);
-      unityStore.pause();
-    } else if (unityStore.isPaused && stakingDialog.isOpen) {
-      //if unity was paused and stakingdialog opens keep track that unity was already paused
-      setUnityWasPaused(true);
-    } else if (!unityWasPaused && !stakingDialog.isOpen) {
-      //if unity was not paused before and stakingdialog closes resume unity
-      setUnityWasPaused(false);
-      unityStore.resume();
-    }
-  }, [stakingDialog.isOpen]);
 
   const toggleMute = () => {
     if (collaborationState.isTogglingMute) {
