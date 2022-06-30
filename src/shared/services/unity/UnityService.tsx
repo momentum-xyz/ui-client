@@ -58,8 +58,6 @@ export class UnityService {
       };
 
       UnityEventEmitter.emit('MomentumLoaded');
-
-      //this.unityApi?.controlSound(useUnityStore.getState().muted);
     });
 
     this.unityContext.on('TeleportReady', () => {
@@ -71,9 +69,7 @@ export class UnityService {
     });
 
     this.unityContext.on('ClickEvent', (identifier: string) => {
-      console.info('ClickEvent', identifier);
       const [type, id] = identifier.split('|');
-
       if (type === 'video') {
         UnityEventEmitter.emit('ClickEventVideo', id);
       } else {
@@ -86,7 +82,6 @@ export class UnityService {
     });
 
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
-      console.info('ProfileHasBeenClicked', identifier);
       const [id, rawLocation] = identifier.split('|');
       UnityEventEmitter.emit('ProfileClickEvent', id, getUnityPosition(rawLocation));
     });

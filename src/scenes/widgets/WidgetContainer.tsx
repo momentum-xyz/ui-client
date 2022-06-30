@@ -31,7 +31,6 @@ import {
   COLLABORATION_MUTED_ACTION_UPDATE
 } from 'context/Collaboration/CollaborationReducer';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
-import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
 import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 
@@ -62,8 +61,6 @@ const WidgetContainer: FC = () => {
 
   const location = useLocation();
   const {isOnStage} = useAgoraStageMode();
-
-  useInteractionHandlers();
 
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);

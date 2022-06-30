@@ -37,6 +37,12 @@ const UnityStore = types
     teleportIsReady(): void {
       self.isTeleportReady = true;
     },
+    setAuthToken(token?: string): void {
+      UnityService.setAuthToken(token);
+    },
+    getCurrentWorld(): string | null {
+      return UnityService.getCurrentWorld?.() || null;
+    },
     teleportToUser(userId: string, navigationCallback: (path: string) => void): void {
       UnityService.teleportToUser(userId);
       navigationCallback(ROUTES.base);
