@@ -1,36 +1,15 @@
 import React, {FC, useEffect, useState} from 'react';
-import {t} from 'i18next';
-import {useHistory, useLocation} from 'react-router-dom';
-import {toast} from 'react-toastify';
+import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import ReactHowler from 'react-howler';
+import {t} from 'i18next';
 
-import {cookie} from 'core/services';
-import {CookieKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
-import {useStore, useUnityEvent} from 'shared/hooks';
-import {UnityService} from 'shared/services';
-import {
-  Avatar,
-  TOAST_GROUND_OPTIONS,
-  TOAST_NOT_AUTO_CLOSE_OPTIONS,
-  ToastContent,
-  ToolbarIcon,
-  ToolbarIconInterface,
-  ToolbarIconList
-} from 'ui-kit';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+import {useStore} from 'shared/hooks';
 import {appVariables} from 'api/constants';
-import {
-  COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
-  COLLABORATION_IS_TOGGLING_CAMERA_ACTION_UPDATE,
-  COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
-  COLLABORATION_MUTED_ACTION_UPDATE
-} from 'context/Collaboration/CollaborationReducer';
 import {switchFullscreen} from 'core/utils';
-import {useGetUserOwnedSpaces} from 'modules/profile/hooks/useUserSpace';
-import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
-import FooterDevTools from 'component/molucules/footer/FooterDevTools';
+import {UnityService} from 'shared/services';
+import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from 'ui-kit';
 import {
   AttendeesWidget,
   HelpWidget,
@@ -44,17 +23,23 @@ import {
   TokenRulesWidget,
   WorldStatsWidget
 } from 'scenes/widgets/pages';
+// TODO: Refactoring
+import {
+  COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
+  COLLABORATION_IS_TOGGLING_CAMERA_ACTION_UPDATE,
+  COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
+  COLLABORATION_MUTED_ACTION_UPDATE
+} from 'context/Collaboration/CollaborationReducer';
+import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+import useInteractionHandlers from 'context/Unity/hooks/useInteractionHandlers';
+import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 
 import * as styled from './WidgetContainer.styled';
 
 const WidgetContainer: FC = () => {
-  const {
-    sessionStore,
-    mainStore: {worldStore, unityStore},
-    widgetStore
-  } = useStore();
-
+  const {sessionStore, mainStore, widgetStore} = useStore();
+  const {worldStore, unityStore} = mainStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -67,7 +52,6 @@ const WidgetContainer: FC = () => {
     musicPlayerStore,
     attendeesListStore
   } = widgetStore;
-
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
@@ -76,81 +60,16 @@ const WidgetContainer: FC = () => {
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {collaborationState, collaborationDispatch} = useCollaboration();
 
-  const history = useHistory();
   const location = useLocation();
-
-  const getUserOwnedSpaces = useGetUserOwnedSpaces();
 
   const [unityWasPaused, setUnityWasPaused] = useState(false);
   const {isOnStage} = useAgoraStageMode();
 
   useInteractionHandlers();
 
-  const showAddUserSpaceLater = () => {
-    toast.info(
-      <ToastContent
-        headerIconName="people"
-        title={t('titles.createSpace')}
-        text={t('messages.launchInitiativeNote')}
-        isCloseButton
-      />,
-      TOAST_GROUND_OPTIONS
-    );
-  };
-
-  const showAddUserSpaceToast = () => {
-    toast.info(
-      <ToastContent
-        headerIconName="collaboration"
-        text={t('messages.launchSpaceNote')}
-        title={t('titles.ownSpaceInvite')}
-        declineInfo={{title: t('titles.later'), onClick: showAddUserSpaceLater}}
-        approveInfo={{title: t('titles.create'), onClick: () => history.push(ROUTES.createSpace)}}
-      />,
-      TOAST_NOT_AUTO_CLOSE_OPTIONS
-    );
-  };
-
-  const checkForUserOwnedSpaces = () => {
-    if (!cookie.has(CookieKeyEnum.INITIATIVE)) {
-      cookie.create(CookieKeyEnum.INITIATIVE, '1');
-      getUserOwnedSpaces(worldStore.worldId).then((resp) => {
-        if (resp.data.canCreate && resp.data.ownedSpaces.length === 0) {
-          // Only show it for the first space
-          showAddUserSpaceToast();
-        }
-      });
-    }
-  };
-
-  useUnityEvent('TeleportReady', () => {
-    if (location.pathname !== ROUTES.base) {
-      if (location.pathname.indexOf('magic') === -1) {
-        unityStore.pause();
-      }
-    } else {
-      checkForUserOwnedSpaces();
-    }
-  });
-
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
-  }, [worldStore.worldId]);
-
-  useEffect(() => {
-    // @ts-ignore: What is it for?
-    const unlisten = history.listen((location) => {
-      if (location.pathname === ROUTES.base) {
-        checkForUserOwnedSpaces();
-        unityStore.resume();
-      } else {
-        unityStore.pause();
-      }
-    });
-    return function cleanup() {
-      unlisten();
-    };
-  }, []);
+  }, [musicPlayerStore, worldStore.worldId]);
 
   useEffect(() => {
     if (!unityStore.isPaused && stakingDialog.isOpen) {

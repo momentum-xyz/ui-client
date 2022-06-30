@@ -53,12 +53,16 @@ const UnityStore = types
       }
     },
     pause(): void {
-      self.isPaused = true;
-      UnityService.pause();
+      if (!self.isPaused) {
+        self.isPaused = true;
+        UnityService.pause();
+      }
     },
     resume(): void {
-      self.isPaused = false;
-      UnityService.resume();
+      if (self.isPaused) {
+        self.isPaused = false;
+        UnityService.resume();
+      }
     },
     setInitialVolume() {
       UnityService.setSoundEffectVolume('0.1');
@@ -68,10 +72,10 @@ const UnityStore = types
     },
     mute() {
       if (!self.muted) {
-        UnityService.toggleAllSound();
-        UnityService.setSoundEffectVolume('0');
         self.volume = 0;
         self.muted = true;
+        UnityService.toggleAllSound(self.muted);
+        UnityService.setSoundEffectVolume('0');
       }
     },
     unmute() {
@@ -82,17 +86,17 @@ const UnityStore = types
       self.volume = newVolume;
       UnityService.setSoundEffectVolume(newVolume.toString());
       if (self.muted) {
-        UnityService.toggleAllSound();
+        UnityService.toggleAllSound(self.muted);
         self.muted = false;
       }
     },
     volumeChange(slider: ChangeEvent<HTMLInputElement>) {
       const newVolume = parseFloat(slider.target.value);
       if (!self.muted && newVolume === 0) {
-        UnityService.toggleAllSound();
+        UnityService.toggleAllSound(self.muted);
       }
       if (self.muted && newVolume > 0) {
-        UnityService.toggleAllSound();
+        UnityService.toggleAllSound(self.muted);
       }
       self.volume = newVolume;
       UnityService.setSoundEffectVolume(newVolume.toString());

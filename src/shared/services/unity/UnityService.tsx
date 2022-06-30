@@ -5,8 +5,6 @@ import {UnityEventEmitter} from 'core/constants';
 import {PosBusNotificationEnum} from 'core/enums';
 import {UnityApiInterface} from 'core/interfaces';
 
-import {useUnityStore} from '../../../store/unityStore';
-
 export class UnityService {
   unityApi?: UnityApiInterface;
   unityContext?: UnityContext;
@@ -61,7 +59,7 @@ export class UnityService {
 
       UnityEventEmitter.emit('MomentumLoaded');
 
-      this.unityApi?.controlSound(useUnityStore.getState().muted);
+      //this.unityApi?.controlSound(useUnityStore.getState().muted);
     });
 
     this.unityContext.on('TeleportReady', () => {
@@ -113,16 +111,11 @@ export class UnityService {
   }
 
   continueSound() {
-    const muted = useUnityStore.getState().muted;
-    if (!muted) {
-      this.unityApi?.controlSound(true);
-    }
+    this.unityApi?.controlSound(true);
   }
 
-  toggleAllSound() {
-    const muted = useUnityStore.getState().muted;
+  toggleAllSound(muted: boolean) {
     this.unityApi?.controlSound(!muted);
-    useUnityStore.setState({muted: !muted});
   }
 
   lookAtWisp(userId: string) {
