@@ -1,10 +1,8 @@
 import {useCallback, useEffect, useRef} from 'react';
 import {useAuth} from 'react-oidc-context';
 
+import {useUnityEvent} from 'shared/hooks';
 import {extendAxiosInterceptors, refreshAxiosInterceptors} from 'api/request';
-
-// TODO: Refactoring
-import useUnityEvent from '../../context/Unity/hooks/useUnityEvent';
 
 const CHECK_INTERVAL_MS = 8 * 1000;
 const REMAINING_SEC = 15;

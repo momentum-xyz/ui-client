@@ -14,6 +14,7 @@ import {
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import CONFIG from 'config/config';
 import useCollaboration, {
   useJoinCollaborationSpaceByAssign,
@@ -34,7 +35,6 @@ import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQue
 import {useStageModeLeave, useStageModeRequestAcceptOrDecline} from 'hooks/api/useStageModeService';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useGetSpace} from 'hooks/api/useSpaceService';
-import UnityService from 'context/Unity/UnityService';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';

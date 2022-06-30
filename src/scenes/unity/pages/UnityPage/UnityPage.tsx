@@ -2,14 +2,17 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
+import {useHistory} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
 
-import {useStore} from 'shared/hooks';
-import {Portal, UnityLoader} from 'ui-kit';
+import {ROUTES} from 'core/constants';
+import {useStore, useUnityEvent} from 'shared/hooks';
+import {Portal, ToastContent, UnityLoader} from 'ui-kit';
 
 // TODO: Refactoring
-import useUnityEvent from '../../../../context/Unity/hooks/useUnityEvent';
-import UnityService from '../../../../context/Unity/UnityService';
+import {useJoinCollaborationSpaceByAssign} from '../../../../context/Collaboration/hooks/useCollaboration';
 
 import * as styled from './UnityPage.styled';
 
@@ -19,18 +22,22 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded} = useStore();
+  const {mainStore, unityLoaded, collaborationStore} = useStore();
+  const {spaceStore} = collaborationStore;
   const {unityStore} = mainStore;
 
-  const theme = useTheme();
   const auth = useAuth();
+  const theme = useTheme();
+  const history = useHistory();
+  const {t} = useTranslation();
+  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
 
   useUnityEvent('MomentumLoaded', () => {
-    UnityService.setAuthToken(auth.user?.access_token);
+    unityStore.setAuthToken(auth.user?.access_token);
   });
 
   useUnityEvent('TeleportReady', () => {
-    const worldId = UnityService.getCurrentWorld?.();
+    const worldId = unityStore.getCurrentWorld();
     if (worldId) {
       unityLoaded(worldId);
     }
@@ -40,9 +47,42 @@ const UnityPage: FC = () => {
     console.info('Unity Error handling', message);
   });
 
-  // TODO: Make route path + page
   useUnityEvent('ExterminateUnity', () => {
     window.location.href = '/disconnect.html';
+  });
+
+  useUnityEvent('ClickEventDashboard', async (spaceId: string) => {
+    if (await spaceStore.canUserJoin(spaceId)) {
+      await joinMeetingSpace(spaceId);
+      history.push({pathname: ROUTES.dashboard});
+    } else {
+      toast.error(
+        <ToastContent
+          isDanger
+          isCloseButton
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('collaboration.spaceIsPrivate')}
+        />
+      );
+    }
+  });
+
+  useUnityEvent('PlasmaClickEvent', async (spaceId: string) => {
+    if (await spaceStore.canUserJoin(spaceId)) {
+      await joinMeetingSpace(spaceId);
+      history.push({pathname: ROUTES.collaboration});
+    } else {
+      toast.error(
+        <ToastContent
+          isDanger
+          isCloseButton
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('collaboration.spaceIsPrivate')}
+        />
+      );
+    }
   });
 
   if (!unityStore.unityContext) {
