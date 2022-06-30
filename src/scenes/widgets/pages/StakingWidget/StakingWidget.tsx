@@ -48,7 +48,7 @@ const StakingWidget: FC = () => {
   }, [stakingStore]);
 
   useEffect(() => {
-    polkadotProviderStore.init()
+    polkadotProviderStore.init();
   }, []);
 
   return (
