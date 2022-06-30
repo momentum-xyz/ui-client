@@ -1,6 +1,6 @@
 import {Instance, types} from 'mobx-state-tree';
 
-import { PolkadotAddressMeta } from "../PolkadotAddressMeta/PolkadotAddressMeta";
+import {PolkadotAddressMeta} from '../PolkadotAddressMeta/PolkadotAddressMeta';
 
 const PolkadotAddress = types.model('PolkadotAddress', {
   address: types.string,

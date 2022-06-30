@@ -3,7 +3,7 @@ export type KeyringMetaType = {
   isInjected?: boolean;
   name: string;
   source: string;
-}
+};
 
 export type KeyringAddressType = {
   readonly address: string;
