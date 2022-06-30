@@ -36,7 +36,7 @@ export type BroadcastMessage = {
   users: string[];
 };
 
-export type StageModeAction =
+/*export type StageModeAction =
   | 'state'
   | 'request'
   | 'accept-request'
@@ -45,9 +45,9 @@ export type StageModeAction =
   | 'joined-stage'
   | 'left-stage'
   | 'kick'
-  | 'mute';
+  | 'mute';*/
 
-export type StageModeStatus = 'initiated' | 'stopped';
+/*export type StageModeStatus = 'initiated' | 'stopped';*/
 
 export type CommunicationMessage = CommunicationKick | CommunicationMute | CommunicationMuteAll;
 
