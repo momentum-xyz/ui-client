@@ -39,10 +39,8 @@ import {useGetSpace} from 'hooks/api/useSpaceService';
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
 
-export interface CommunicationLayerPropsInterface {}
-
 // TODO: Refactor this component to new structure
-const CommunicationLayer: React.FC<CommunicationLayerPropsInterface> = () => {
+const CommunicationLayer = () => {
   const history = useHistory();
   const location = useLocation();
   const {collaborationState, collaborationDispatch, currentUserId} = useCollaboration();
