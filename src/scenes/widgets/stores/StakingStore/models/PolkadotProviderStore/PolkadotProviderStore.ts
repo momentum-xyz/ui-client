@@ -18,7 +18,7 @@ import {
 } from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
-import {AccountTypeBalance} from 'core/types';
+import {AccountTypeBalanceType, KeyringAddressType} from 'core/types';
 import {Payee, StakingTransactionType} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
@@ -45,7 +45,8 @@ const PolkadotProviderStore = types
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionType))),
-      transactionFee: ''
+      transactionFee: '',
+      isLoading: false
     })
   )
   .volatile<{
@@ -162,7 +163,7 @@ const PolkadotProviderStore = types
     };
   })
   .actions((self) => ({
-    getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalance) {
+    getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalanceType) {
       const balanceAll =
         self.channel !== null ? yield self.channel.derive.balances?.all(address) : null;
 
@@ -219,6 +220,9 @@ const PolkadotProviderStore = types
         transferableWithoutFee
       });
     }),
+    setIsLoading(payload: boolean) {
+      self.isLoading = payload;
+    },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
     },
@@ -230,12 +234,22 @@ const PolkadotProviderStore = types
     },
     setSessionProgress(payload: DeriveSessionProgress) {
       self.sessionProgress = payload;
+    },
+    setInjectAddresses(payload: KeyringAddressType[]) {
+      self.addresses = cast(payload);
     }
   }))
   .actions((self) => ({
     getAddresses: flow(function* () {
-      const addresses = yield SubstrateProvider.getAddresses(self.ss58Format);
-      self.addresses = cast(addresses);
+      yield SubstrateProvider.getAddresses(self.ss58Format).then((injectedAccounts) => {
+        SubstrateProvider.loadToKeyring(
+          injectedAccounts,
+          self.ss58Format,
+          self.channel?.genesisHash
+        );
+      });
+      const injectedAddresses = SubstrateProvider.getKeyringAddresses();
+      self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
     }),
 
     setStashAccount: flow(function* (address: string) {
@@ -279,7 +293,6 @@ const PolkadotProviderStore = types
       self.isWeb3Injected = cast(isEnabled);
     }),
     initAccount: flow(function* () {
-      yield self.getAddresses();
       yield self.setStashAccount(self.addresses[0].address);
       if (self.stashAccount?.address) {
         yield self.setControllerAccount(self.stashAccount.address);
@@ -391,10 +404,13 @@ const PolkadotProviderStore = types
   }))
   .actions((self) => ({
     init: flow(function* () {
+      self.setIsLoading(true);
       yield self.connectToChain();
       yield self.setIsWeb3Injected();
       yield self.getChainInformation();
+      yield self.getAddresses();
       yield self.initAccount();
+      self.setIsLoading(false);
     })
   }));
 
