@@ -5,14 +5,7 @@ import {PolkadotAddressMeta} from '../PolkadotAddressMeta/PolkadotAddressMeta';
 const PolkadotAddress = types.model('PolkadotAddress', {
   address: types.string,
   meta: types.maybeNull(PolkadotAddressMeta),
-  type: types.maybe(
-    types.union(
-      types.literal('ed25519'),
-      types.literal('sr25519'),
-      types.literal('ecdsa'),
-      types.literal('ethereum')
-    )
-  )
+  publicKey: types.string
 });
 
 export interface PolkadotAddressInterface extends Instance<typeof PolkadotAddress> {}

@@ -16,7 +16,6 @@ const StakingWidget: FC = () => {
   const {stakingDialog, validatorsStore, operatorSpaceId, polkadotProviderStore} = stakingStore;
 
   const [selectedTab, setSelectedTab] = useState<TabBarTabInterface>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const theme = useTheme();
 
@@ -44,12 +43,6 @@ const StakingWidget: FC = () => {
     }
   ];
 
-  const connectToChain = async () => {
-    setIsLoading(true);
-    await polkadotProviderStore.init();
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     unityStore.pause();
 
@@ -70,8 +63,8 @@ const StakingWidget: FC = () => {
   }, [stakingStore]);
 
   useEffect(() => {
-    connectToChain();
-  }, []);
+    polkadotProviderStore.init();
+  }, [polkadotProviderStore]);
 
   return (
     <Dialog
@@ -88,7 +81,7 @@ const StakingWidget: FC = () => {
           onTabSelect={(tab) => setSelectedTab(tab)}
         />
         <styled.TabContainer>
-          {isLoading ? (
+          {polkadotProviderStore.isLoading ? (
             <Loader />
           ) : (
             <>

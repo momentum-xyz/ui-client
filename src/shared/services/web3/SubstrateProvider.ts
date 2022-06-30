@@ -14,12 +14,22 @@ import {
 } from '@polkadot/util';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 import {t} from 'i18next';
+import {keyring} from '@polkadot/ui-keyring';
+import {KeyringJson$Meta} from '@polkadot/ui-keyring/types';
+import {KeypairType} from '@polkadot/util-crypto/types';
+import {IU8a} from '@polkadot/types-codec/types/interfaces';
 
 import {appVariables} from 'api/constants';
 
 type UnlockingType = {
   remainingEras: BN;
   value: BN;
+};
+
+type InjectedAddressType = {
+  address: string;
+  meta: KeyringJson$Meta;
+  type?: KeypairType;
 };
 
 export type UnlockingDurationReturnType = {
@@ -46,6 +56,41 @@ export default class SubstrateProvider {
 
   static async getAddresses(ss58Format = 2) {
     return await web3Accounts({ss58Format});
+  }
+
+  static isKeyringLoaded() {
+    try {
+      return !!keyring.keyring;
+    } catch {
+      return false;
+    }
+  }
+
+  static getKeyringAddresses() {
+    const keyringAccounts = keyring.getAccounts();
+    return keyringAccounts.map((account) => {
+      const {address, meta, publicKey} = account;
+      return {
+        address,
+        meta,
+        publicKey: publicKey.toString()
+      };
+    });
+  }
+
+  static loadToKeyring(
+    InjectedAddress: InjectedAddressType[],
+    ss58Format: number | undefined,
+    genesisHash: IU8a | undefined
+  ) {
+    SubstrateProvider.isKeyringLoaded() ||
+      keyring.loadAll(
+        {
+          genesisHash,
+          ss58Format
+        },
+        InjectedAddress
+      );
   }
 
   static deriveUnlockingProgress(
