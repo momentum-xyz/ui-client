@@ -39,10 +39,8 @@ import {useGetSpace} from 'hooks/api/useSpaceService';
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
 
-export interface CommunicationLayerProps {}
-
 // TODO: Refactor this component to new structure
-const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
+const CommunicationLayer = () => {
   const history = useHistory();
   const location = useLocation();
   const {collaborationState, collaborationDispatch, currentUserId} = useCollaboration();
@@ -290,7 +288,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       leaveTo="translate-x-5 "
     >
       <ul className="h-full mt-1">
-        <styled.List>
+        <styled.ListItem>
           <Transition
             show={!unityStore.isPaused}
             unmount={false}
@@ -301,7 +299,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
             leaveFrom="translate-y-0 pt-[30px] pb-1"
             leaveTo="-translate-y-8 pt-0 hidden"
             className="pr-.1 space-y-1 pointer-all"
-            as="li"
+            as="div"
           >
             <styled.ActionButton
               variant="primary-background"
@@ -326,7 +324,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               }}
             />
           </Transition>
-          <styled.ListContent className="noScrollIndicator">
+          <styled.ListItemContent className="noScrollIndicator">
             <p className="text-center whitespace-nowrap">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
@@ -351,7 +349,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               {noVideo && (
                 <li
                   className="mb-.5 p-.5
-        relative
+relative
         rounded-full
         border-1 border-transparant"
                 >
@@ -401,8 +399,8 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                 </Transition>
               ))}
             </ul>
-          </styled.ListContent>
-        </styled.List>
+          </styled.ListItemContent>
+        </styled.ListItem>
       </ul>
       {!window.location.href.includes('stage-mode') && <StageModePIP />}
     </Transition>
