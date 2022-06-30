@@ -8,8 +8,9 @@ import {Button, Dialog, Location, Text, ToastContent, TOAST_COMMON_OPTIONS} from
 import {MagicTypeEnum} from 'core/enums';
 import {copyToClipboard} from 'core/utils';
 import {useStore} from 'shared/hooks';
-import {useUnityUserPosition} from 'context/Collaboration/hooks/useUnity';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+
+// TODO: Refactoring
+import useCollaboration from '../../../../context/Collaboration/hooks/useCollaboration';
 
 import * as styled from './MagicLinkWidget.styled';
 
@@ -17,33 +18,33 @@ const DIALOG_OFFSET_RIGHT = 105;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {
-  const {magicLinkStore} = useStore().widgetStore;
+  const {widgetStore, mainStore} = useStore();
+  const {magicLinkStore} = widgetStore;
   const {magicLinkDialog, magicLink} = magicLinkStore;
   const {generate, address} = magicLink;
+  const {unityStore} = mainStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
-
   const {collaborationState} = useCollaboration();
-  const userPosition = useUnityUserPosition();
-
-  useEffect(() => {
-    const {collaborationSpace, collaborationTable} = collaborationState;
-
-    if (collaborationSpace?.id) {
-      generate(MagicTypeEnum.OPEN_SPACE, collaborationSpace?.id, null);
-    } else if (collaborationTable?.id) {
-      generate(MagicTypeEnum.JOIN_MEETING, collaborationTable?.id, null);
-    } else if (userPosition) {
-      generate(MagicTypeEnum.FLY, null, userPosition);
-    }
-  }, [collaborationState, userPosition]);
 
   useEffect(() => {
     return () => {
       magicLinkStore.resetModel();
     };
   }, [magicLinkStore]);
+
+  useEffect(() => {
+    const {collaborationSpace, collaborationTable} = collaborationState;
+
+    if (collaborationSpace?.id) {
+      generate(MagicTypeEnum.OPEN_SPACE, collaborationSpace.id, null);
+    } else if (collaborationTable?.id) {
+      generate(MagicTypeEnum.JOIN_MEETING, collaborationTable.id, null);
+    } else {
+      generate(MagicTypeEnum.FLY, null, unityStore.getUserPosition());
+    }
+  }, [collaborationState, generate, unityStore]);
 
   const copyHandle = useCallback(async () => {
     await copyToClipboard(address || '');
@@ -57,7 +58,7 @@ const MagicLinkWidget: FC = () => {
       TOAST_COMMON_OPTIONS
     );
     magicLinkDialog.close();
-  }, [copyToClipboard, magicLinkDialog, address]);
+  }, [address, t, magicLinkDialog]);
 
   return (
     <Dialog

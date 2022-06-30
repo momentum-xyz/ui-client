@@ -43,6 +43,9 @@ const UnityStore = types
     getCurrentWorld(): string | null {
       return UnityService.getCurrentWorld?.() || null;
     },
+    getUserPosition() {
+      return UnityService.getUserPosition?.();
+    },
     teleportToUser(userId: string, navigationCallback: (path: string) => void): void {
       UnityService.teleportToUser(userId);
       navigationCallback(ROUTES.base);
