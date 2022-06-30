@@ -11,7 +11,7 @@ const ConfigStore = types
     isConfigReady: false
   })
   .actions((self) => ({
-    fetchConfig: flow(function* () {
+    init: flow(function* () {
       const configResponse: AppConfigResponse = yield self.request.send(
         api.configRepository.fetchConfig,
         {}
@@ -26,10 +26,6 @@ const ConfigStore = types
         self.isConfigReady = true;
       }
     })
-  }))
-  .views((self) => ({
-    get isConfigWrong() {
-      return self.request.isError;
-    }
   }));
+
 export {ConfigStore};
