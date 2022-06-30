@@ -2,6 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
+import {PosBusEventEnum} from 'core/enums';
+import {UnityService} from 'shared/services';
 import {useAgoraClient} from 'hooks/communication/useAgoraClient';
 import {ILocalUser} from 'hooks/communication/useAgoraVideo';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
@@ -12,8 +14,6 @@ import useCollaboration, {
 import Avatar from 'component/atoms/Avatar';
 import {useUser} from 'hooks/api/useUser';
 import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
-import UnityService from 'context/Unity/UnityService';
-import {PosBusInteractionType} from 'context/Unity/UnityService';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
@@ -66,7 +66,7 @@ const LocalParticipant: React.FC<LocalParticipantProps> = ({localUser, stageLoca
 
   useWebsocketEvent('meeting-kick', (spaceId) => {
     communicationLayerStore.setKicked(true);
-    UnityService.triggerInteractionMsg?.(PosBusInteractionType.LeftSpace, spaceId, 0, '');
+    UnityService.triggerInteractionMsg?.(PosBusEventEnum.LeftSpace, spaceId, 0, '');
     leaveCollaborationSpaceCall(false).then(() => {
       toast.info(
         <ToastContent

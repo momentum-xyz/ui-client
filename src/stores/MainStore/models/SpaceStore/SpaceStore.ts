@@ -29,6 +29,10 @@ const SpaceStore = types.compose(
         self.didFetchSpaceInformation = false;
         self.space.id = spaceId;
       },
+      canUserJoin: flow(function* (spaceId: string) {
+        const response = yield self.request.send(api.spaceRepository.fetchSpace, {spaceId});
+        return response && !(response.space.secret === 1 && !(response.admin || response.member));
+      }),
       fetchSpaceInformation: flow(function* () {
         if (!self.space.id) {
           return;

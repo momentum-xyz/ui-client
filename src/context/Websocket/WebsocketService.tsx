@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {t} from 'i18next';
 
 import {EventEmitter} from 'core/utils';
+import {PosBusEventEnum, PosBusNotificationEnum} from 'core/enums';
 import {
   BroadcastMessage,
   CollaborationMessage,
@@ -15,9 +16,9 @@ import {
   PosBusMessage
 } from 'context/Unity/types';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
+import {UnityService} from 'shared/services';
 
 import {InteractionTypes} from '../type/Notification';
-import UnityService, {PosBusInteractionType, PosBusNotificationType} from '../Unity/UnityService';
 import {StageModeStatus} from '../type/StageMode';
 
 import {CollaborationTypes, NotificationTypes} from './WebsocketTypes';
@@ -70,7 +71,7 @@ class WebsocketService {
       this.handleRelayMessage(target, message)
     );
     UnityService.simpleNotificationHandler(
-      (kind: PosBusNotificationType, flag: number, message: string) => {
+      (kind: PosBusNotificationEnum, flag: number, message: string) => {
         console.debug('React simple notification', kind, flag, message);
         this.handleSimpleNotification(kind, flag, message);
       }
@@ -126,7 +127,7 @@ class WebsocketService {
 
   async sendHighFive(receiverId: string) {
     try {
-      UnityService.triggerInteractionMsg?.(PosBusInteractionType.HighFive, receiverId, 0, '');
+      UnityService.triggerInteractionMsg?.(PosBusEventEnum.HighFive, receiverId, 0, '');
       // const topic = 'users/' + this.userId + '/action';
       // this.client?.publish(topic, JSON.stringify({type: InteractionTypes.HIGHFIVE, receiverId}), {
       //   qos: 1
@@ -140,7 +141,7 @@ class WebsocketService {
 
   async sendWow(receiver_id: string) {
     try {
-      UnityService.triggerInteractionMsg?.(PosBusInteractionType.Wow, receiver_id, 0, '');
+      UnityService.triggerInteractionMsg?.(PosBusEventEnum.Wow, receiver_id, 0, '');
       // const topic = 'interactions/' + this.userId + '/' + receiver_id + '/' + InteractionTypes.WOW;
 
       // this.client?.publish(topic, '', {qos: 1});
@@ -290,9 +291,9 @@ class WebsocketService {
     }
   }
 
-  handleSimpleNotification(kind: PosBusNotificationType, flag: number, message: string) {
+  handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
     // Example call: 500 0 "High five sent!"
-    if (kind === PosBusNotificationType.TextMessage) {
+    if (kind === PosBusNotificationEnum.TextMessage) {
       // move markup to proper component.
 
       toast.info(
