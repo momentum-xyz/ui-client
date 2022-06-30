@@ -102,13 +102,11 @@ const ProfileStore = types.compose(
 
         return response;
       }),
-      sendHighFive: flow(function* () {
-        if (!self.userProfile) {
-          return;
+      sendHighFive() {
+        if (self.userProfile) {
+          WebsocketService.sendHighFive(self.userProfile.uuid);
         }
-
-        yield WebsocketService.sendHighFive(self.userProfile.uuid);
-      }),
+      },
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {
         yield self.editProfileRequest.send(api.profileRepository.update, {
           name,

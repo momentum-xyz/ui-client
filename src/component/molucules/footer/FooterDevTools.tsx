@@ -31,9 +31,7 @@ const FooterDevTools: React.FC = () => {
   };
 
   const highFive = () => {
-    WebsocketService.sendHighFive('e4eec468-50c5-4749-b4a4-096b803269cb')
-      .then(console.info)
-      .catch(console.error);
+    WebsocketService.sendHighFive('e4eec468-50c5-4749-b4a4-096b803269cb');
   };
 
   const createTable = async () => {

@@ -64,7 +64,7 @@ export const WebsocketEventEmitter = new EventEmitter<WebsocketEvents>();
 
 // TODO: refactor into proper unity hook :)
 class WebsocketService {
-  async initialize() {
+  initialize() {
     console.debug('INITIALIZE Unity relay message handling.');
     // since this isn't a react hook, we can't easily inject UnityService context.
     UnityService.relayMessageHandler((target: string, message: any) =>
@@ -86,12 +86,9 @@ class WebsocketService {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  handleGlobalInteraction(topic, message) {
+  handleGlobalInteraction(topic: string, message: string) {
     const [, senderId, type] = topic.split('/');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    WebsocketEventEmitter.emit('interaction', type, senderId, message);
+    WebsocketEventEmitter.emit('interaction', type as InteractionTypes, senderId, message);
   }
 
   handleHighFiveReceived(senderId: string, message: string) {
@@ -107,7 +104,7 @@ class WebsocketService {
 
         setClicked(true);
         setTimeout(() => {
-          this.sendHighFive(senderId).then();
+          this.sendHighFive(senderId);
           UnityService.lookAtWisp(senderId);
         }, 500);
       };
@@ -125,26 +122,17 @@ class WebsocketService {
     toast.info(<Content />, TOAST_BASE_OPTIONS);
   }
 
-  async sendHighFive(receiverId: string) {
+  sendHighFive(receiverId: string) {
     try {
       UnityService.triggerInteractionMsg?.(PosBusEventEnum.HighFive, receiverId, 0, '');
-      // const topic = 'users/' + this.userId + '/action';
-      // this.client?.publish(topic, JSON.stringify({type: InteractionTypes.HIGHFIVE, receiverId}), {
-      //   qos: 1
-      // });
-
-      // return topic;
     } catch (error) {
       console.error(error);
     }
   }
 
-  async sendWow(receiver_id: string) {
+  sendWow(receiver_id: string) {
     try {
       UnityService.triggerInteractionMsg?.(PosBusEventEnum.Wow, receiver_id, 0, '');
-      // const topic = 'interactions/' + this.userId + '/' + receiver_id + '/' + InteractionTypes.WOW;
-
-      // this.client?.publish(topic, '', {qos: 1});
     } catch (error) {
       console.error(error);
     }
@@ -294,8 +282,6 @@ class WebsocketService {
   handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
     // Example call: 500 0 "High five sent!"
     if (kind === PosBusNotificationEnum.TextMessage) {
-      // move markup to proper component.
-
       toast.info(
         <ToastContent
           headerIconName="check"
