@@ -73,7 +73,7 @@ export default class SubstrateProvider {
       return {
         address,
         meta,
-        publicKey: publicKey[Symbol.toStringTag]
+        publicKey: publicKey.toString()
       };
     });
   }

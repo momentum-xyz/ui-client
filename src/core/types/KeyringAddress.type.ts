@@ -1,7 +1,12 @@
-import {KeyringJson$Meta} from '@polkadot/ui-keyring/types';
+export type KeyringMetaType = {
+  genesisHash?: string | null;
+  isInjected?: boolean;
+  name: string;
+  source: string;
+}
 
 export type KeyringAddressType = {
   readonly address: string;
-  readonly meta: KeyringJson$Meta;
+  readonly meta: KeyringMetaType;
   readonly publicKey: string;
 };

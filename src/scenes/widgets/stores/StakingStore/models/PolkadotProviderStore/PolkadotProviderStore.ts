@@ -245,7 +245,7 @@ const PolkadotProviderStore = types
         );
       });
       const injectedAddresses = SubstrateProvider.getKeyringAddresses();
-      self.setInjectAddresses(injectedAddresses);
+      self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
     }),
 
     setStashAccount: flow(function* (address: string) {
