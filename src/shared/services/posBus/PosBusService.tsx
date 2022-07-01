@@ -18,7 +18,7 @@ import {
 } from 'context/Unity/types';
 
 class PosBusService {
-  sendHighFive(receiverId: string) {
+  static sendHighFive(receiverId: string) {
     try {
       UnityService.triggerInteractionMsg?.(PosBusEventEnum.HighFive, receiverId, 0, '');
     } catch (error) {
@@ -26,17 +26,17 @@ class PosBusService {
     }
   }
 
-  handleIncomingVibe(message: VibeMessage) {
+  static handleIncomingVibe(message: VibeMessage) {
     const {count, type} = message;
     PosBusEventEmitter.emit('user-vibed', type, count);
   }
 
-  handleIncomingInvite(message: InviteMessage) {
+  static handleIncomingInvite(message: InviteMessage) {
     const {spaceId, sender, uiTypeId, uiTypeName} = message;
     PosBusEventEmitter.emit('space-invite', spaceId, sender.id, sender.name, uiTypeId, uiTypeName);
   }
 
-  handleIncomingCollaboration(message: CollaborationMessageType) {
+  static handleIncomingCollaboration(message: CollaborationMessageType) {
     const {integrationType, spaceId} = message;
     switch (integrationType) {
       case 'miro':
@@ -49,11 +49,11 @@ class PosBusService {
     }
   }
 
-  handleIncomingBroadcast(message: BroadcastMessage) {
+  static handleIncomingBroadcast(message: BroadcastMessage) {
     PosBusEventEmitter.emit('broadcast', message);
   }
 
-  handleIncomingCommunication(message: CommunicationMessage) {
+  static handleIncomingCommunication(message: CommunicationMessage) {
     switch (message.action) {
       case 'kick':
         PosBusEventEmitter.emit('meeting-kick', message.spaceId);
@@ -68,7 +68,7 @@ class PosBusService {
     }
   }
 
-  handleIncomingStageMode(message: StageModeMessage) {
+  static handleIncomingStageMode(message: StageModeMessage) {
     switch (message.action) {
       case 'state':
         // eslint-disable-next-line no-case-declarations
@@ -103,7 +103,7 @@ class PosBusService {
     }
   }
 
-  handleIncomingHigh5(message: High5Message) {
+  static handleIncomingHigh5(message: High5Message) {
     const Content: React.FC = () => {
       const [clicked, setClicked] = useState(false);
 
@@ -132,11 +132,11 @@ class PosBusService {
     toast.info(<Content />, TOAST_BASE_OPTIONS);
   }
 
-  handleNotifyGathering(message: PosBusGatheringMessageType) {
+  static handleNotifyGathering(message: PosBusGatheringMessageType) {
     PosBusEventEmitter.emit('notify-gathering-start', message);
   }
 
-  handlePosBusMessage(message: PosBusMessage) {
+  static handlePosBusMessage(message: PosBusMessage) {
     switch (message.status) {
       case 'connected':
         PosBusEventEmitter.emit('posbus-connected');
@@ -149,7 +149,7 @@ class PosBusService {
     }
   }
 
-  handleRelayMessage(target: string, message: any): void {
+  static handleRelayMessage(target: string, message: any): void {
     console.log('[unity message]:', target, message);
 
     switch (target) {
@@ -185,7 +185,7 @@ class PosBusService {
     }
   }
 
-  handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
+  static handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
     console.log('[unity simple message]:', kind, flag, message);
 
     // Example call: 500 0 "High five sent!"
@@ -202,4 +202,4 @@ class PosBusService {
   }
 }
 
-export default new PosBusService();
+export default PosBusService;

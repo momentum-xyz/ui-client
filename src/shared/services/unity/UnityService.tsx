@@ -32,10 +32,7 @@ export class UnityService {
   initialize(unityContext: UnityContext) {
     this.unityContext = unityContext;
 
-    this.unityContext.on('Error', (message: string) => {
-      console.info('UnityContext error', message);
-      UnityEventEmitter.emit('Error', message);
-    });
+    /* Unity Events */
 
     this.unityContext.on('MomentumLoaded', () => {
       this.unityApi = this.unityContext?.unityInstance?.Module.UnityAPI;
@@ -77,14 +74,21 @@ export class UnityService {
       }
     });
 
-    this.unityContext.on('InvalidToken', () => {
-      UnityEventEmitter.emit('InvalidToken');
-    });
-
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
       const [id, rawLocation] = identifier.split('|');
       UnityEventEmitter.emit('ProfileClickEvent', id, getUnityPosition(rawLocation));
     });
+
+    this.unityContext.on('InvalidToken', () => {
+      UnityEventEmitter.emit('InvalidToken');
+    });
+
+    this.unityContext.on('Error', (message: string) => {
+      console.info('UnityContext error', message);
+      UnityEventEmitter.emit('Error', message);
+    });
+
+    /* PosBus Events */
 
     this.unityContext?.on('RelayMessage', (target: string, message: string) => {
       let msgJSON;
