@@ -5,15 +5,18 @@ import {t} from 'i18next';
 import {UnityService} from 'shared/services';
 import {PosBusEventEmitter} from 'core/constants';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
-import {PosBusGatheringMessageType, CollaborationMessageType} from 'core/types';
 import {PosBusEventEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
+import {
+  PosBusVibeMessageType,
+  PosBusInviteMessageType,
+  PosBusGatheringMessageType,
+  PosBusCollaborationMessageType
+} from 'core/types';
 import {
   BroadcastMessage,
   CommunicationMessage,
   High5Message,
-  InviteMessage,
   StageModeMessage,
-  VibeMessage,
   PosBusMessage
 } from 'context/Unity/types';
 
@@ -26,17 +29,17 @@ class PosBusService {
     }
   }
 
-  static handleIncomingVibe(message: VibeMessage) {
+  static handleIncomingVibe(message: PosBusVibeMessageType) {
     const {count, type} = message;
     PosBusEventEmitter.emit('user-vibed', type, count);
   }
 
-  static handleIncomingInvite(message: InviteMessage) {
+  static handleIncomingInvite(message: PosBusInviteMessageType) {
     const {spaceId, sender, uiTypeId, uiTypeName} = message;
     PosBusEventEmitter.emit('space-invite', spaceId, sender.id, sender.name, uiTypeId, uiTypeName);
   }
 
-  static handleIncomingCollaboration(message: CollaborationMessageType) {
+  static handleIncomingCollaboration(message: PosBusCollaborationMessageType) {
     const {integrationType, spaceId} = message;
     switch (integrationType) {
       case 'miro':
@@ -99,7 +102,6 @@ class PosBusService {
       case 'mute':
         PosBusEventEmitter.emit('stage-mode-mute');
         break;
-      default:
     }
   }
 
@@ -153,14 +155,17 @@ class PosBusService {
     console.log('[unity message]:', target, message);
 
     switch (target) {
+      case 'collaboration':
+        this.handleIncomingCollaboration(message as PosBusCollaborationMessageType);
+        break;
+      case 'event':
+        this.handleNotifyGathering(message as PosBusGatheringMessageType);
+        break;
       case 'vibe':
-        this.handleIncomingVibe(message as VibeMessage);
+        this.handleIncomingVibe(message as PosBusVibeMessageType);
         break;
       case 'invite':
-        this.handleIncomingInvite(message as InviteMessage);
-        break;
-      case 'collaboration':
-        this.handleIncomingCollaboration(message as CollaborationMessageType);
+        this.handleIncomingInvite(message as PosBusInviteMessageType);
         break;
       case 'meeting':
         this.handleIncomingCommunication(message as CommunicationMessage);
@@ -173,9 +178,6 @@ class PosBusService {
         break;
       case 'high5':
         this.handleIncomingHigh5(message as High5Message);
-        break;
-      case 'event':
-        this.handleNotifyGathering(message as PosBusGatheringMessageType);
         break;
       case 'posbus':
         this.handlePosBusMessage(message as PosBusMessage);

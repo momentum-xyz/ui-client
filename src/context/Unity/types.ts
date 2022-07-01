@@ -1,15 +1,3 @@
-export type VibeMessage = {count: number; type: '-1' | '+1'};
-
-export type InviteMessage = {
-  spaceId: string;
-  sender: {
-    id: string;
-    name: string;
-  };
-  uiTypeId: string;
-  uiTypeName: string;
-};
-
 export type PosBusStatusType = 'connected' | 'disconnected';
 
 export type BroadcastStatus =

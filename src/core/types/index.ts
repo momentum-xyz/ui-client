@@ -4,6 +4,6 @@ export * from './StakeValidatorError.type';
 export * from './Unsubscribe.type';
 export * from './KeyringAddress.type';
 export * from './unityEvent.type';
-export * from './posBus.type';
+export * from './posBusMessage.type';
 export * from './posBusEvent.type';
 export * from './intergation.type';
