@@ -1,3 +1,5 @@
+import {StageModeStatusEnum} from 'core/enums';
+
 export interface IntegrationDTO {
   spaceId: string;
   integrationType: IntegrationTypes;
@@ -17,7 +19,7 @@ export interface IntegrationData {
   embedHtml?: string;
   accessLink?: string;
   accessLinkPolicy?: string;
-  stageModeStatus?: StageModeStatus;
+  stageModeStatus?: StageModeStatusEnum;
   userId?: string;
 }
 
@@ -63,11 +65,6 @@ export enum BroadcastStatus {
 export enum ModerationType {
   ADMIT = 'admit',
   KICK = 'kick'
-}
-
-export enum StageModeStatus {
-  INITIATED = 'initiated',
-  STOPPED = 'stopped'
 }
 
 export enum StageModeUserRole {

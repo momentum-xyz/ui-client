@@ -1,15 +1,17 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
+import {SpaceType} from 'core/enums';
+import {bytesToUuid} from 'core/utils';
+import {PosBusService} from 'shared/services';
 import {DialogModel, RequestModel, ResetModel, UserProfileModel, SpaceModel} from 'core/models';
-import {api, FetchUserInitiativesResponse, UserProfileInterface} from 'api';
 import {
+  api,
+  FetchUserInitiativesResponse,
+  UserProfileInterface,
   CreateSpaceResponse,
   NewSpaceDetails,
   UserOwnedSpacesResponse
-} from 'api/repositories/spaceRepository/spaceRepository.api.types';
-import {SpaceType} from 'core/enums';
-import WebsocketService from 'context/Websocket/WebsocketService';
-import {bytesToUuid} from 'core/utils';
+} from 'api';
 
 const ProfileStore = types.compose(
   ResetModel,
@@ -104,7 +106,7 @@ const ProfileStore = types.compose(
       }),
       sendHighFive() {
         if (self.userProfile) {
-          WebsocketService.sendHighFive(self.userProfile.uuid);
+          PosBusService.sendHighFive(self.userProfile.uuid);
         }
       },
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {

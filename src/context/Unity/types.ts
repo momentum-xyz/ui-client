@@ -10,14 +10,7 @@ export type InviteMessage = {
   uiTypeName: string;
 };
 
-export type IntegrationTypes = 'miro' | 'google_drive' | 'broadcast' | 'stage_mode';
-
 export type PosBusStatusType = 'connected' | 'disconnected';
-
-export type CollaborationMessage = {
-  integrationType: IntegrationTypes;
-  spaceId: string;
-};
 
 export type BroadcastStatus =
   | 'force_small'
@@ -114,12 +107,6 @@ export type High5Message = {
   senderId: string;
   receiverId: string;
   message: string;
-};
-
-export type NotifyMessage = {
-  spaceId: string;
-  name: string;
-  start: Date;
 };
 
 export type PosBusMessage = {

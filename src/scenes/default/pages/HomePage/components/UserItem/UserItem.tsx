@@ -6,9 +6,8 @@ import cn from 'classnames';
 
 import {Button, SvgButton, Avatar} from 'ui-kit';
 import {appVariables} from 'api/constants';
-import {useStore} from 'shared/hooks';
+import {useStore, usePosBusEvent} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
-import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
 import * as styled from './UserItem.styled';
 
@@ -32,7 +31,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({onClick, currentUserId, inv
 
   const [inviteTimeout, setInviteTimeout] = useState<NodeJS.Timeout>();
 
-  useWebsocketEvent('stage-mode-user-joined', (userId: string) => {
+  usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     if (userId === user.uuid) {
       user.setInvited(false);
     }

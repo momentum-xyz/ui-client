@@ -1,13 +1,10 @@
+import {StageModeStatusEnum} from 'core/enums';
+
 export enum StageModeRequestType {
   REQUEST = 'request',
   INVITE = 'invite',
   ACCEPT = 'accept',
   DECLINE = 'decline'
-}
-
-export enum StageModeStatus {
-  INITIATED = 'initiated',
-  STOPPED = 'stopped'
 }
 
 export enum ModType {
@@ -35,7 +32,7 @@ export interface StageModeStatusInfoDto {
   data: {
     channelId: string;
     userId: string;
-    stageModeStatus: StageModeStatus;
+    stageModeStatus: StageModeStatusEnum;
   };
 }
 

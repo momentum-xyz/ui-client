@@ -1,12 +1,12 @@
 import React, {useRef} from 'react';
 import {v4 as uuidv4} from 'uuid';
 
+import {useStore} from 'shared/hooks';
+import {PosBusService} from 'shared/services';
 import {ToolbarIcon, ToolbarIconList} from 'ui-kit';
 
 import {UnityDevPopup} from '../../popup/UnityDevPopup';
 import Modal, {ModalRef} from '../../util/Modal';
-import WebsocketService from '../../../context/Websocket/WebsocketService';
-import {useStore} from '../../../shared/hooks';
 import {usePostSpace} from '../../../hooks/api/useSpaceService';
 import {SpaceDTO, SpaceType} from '../../../context/type/Space';
 
@@ -31,7 +31,7 @@ const FooterDevTools: React.FC = () => {
   };
 
   const highFive = () => {
-    WebsocketService.sendHighFive('e4eec468-50c5-4749-b4a4-096b803269cb');
+    PosBusService.sendHighFive('e4eec468-50c5-4749-b4a4-096b803269cb');
   };
 
   const createTable = async () => {

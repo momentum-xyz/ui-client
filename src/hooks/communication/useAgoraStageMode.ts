@@ -13,11 +13,11 @@ import {useHistory} from 'react-router-dom';
 import {request} from 'api/request';
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
+import {usePosBusEvent} from 'shared/hooks';
 
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';
 import {AgoraContext} from '../../context/AgoraContext';
 import CONFIG from '../../config/config';
-import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import useCollaboration from '../../context/Collaboration/hooks/useCollaboration';
 import {ParticipantRole} from '../../context/Collaboration/CollaborationTypes';
 import {
@@ -99,7 +99,7 @@ export const useAgoraStageMode = () => {
     );
   };
 
-  useWebsocketEvent('stage-mode-kick', (userId) => {
+  usePosBusEvent('stage-mode-kick', (userId) => {
     //if (spaceId !== collaborationState.collaborationSpace?.id) return;
 
     if (userId !== currentUserId) {
@@ -111,14 +111,14 @@ export const useAgoraStageMode = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-mute', () => {
+  usePosBusEvent('stage-mode-mute', () => {
     collaborationDispatch({
       type: COLLABORATION_MUTED_ACTION_UPDATE,
       muted: true
     });
   });
 
-  useWebsocketEvent('stage-mode-user-joined', (userId) => {
+  usePosBusEvent('stage-mode-user-joined', (userId) => {
     //if (spaceId !== collaborationState.collaborationSpace?.id) return;
     if (stageModeUsers.filter((user) => user.uid === userId).length !== 0) {
       return;
@@ -133,7 +133,7 @@ export const useAgoraStageMode = () => {
     ]);
   });
 
-  useWebsocketEvent('stage-mode-user-left', (userId) => {
+  usePosBusEvent('stage-mode-user-left', (userId) => {
     //if (spaceId !== collaborationState.collaborationSpace?.id) return;
 
     setStageModeUsers(stageModeUsers.filter((user) => user.uid !== userId));

@@ -13,7 +13,7 @@ import {
   Text,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
-import {useStore} from 'shared/hooks';
+import {useStore, usePosBusEvent} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 import CONFIG from 'config/config';
 import useCollaboration, {
@@ -28,9 +28,8 @@ import {
   COLLABORATION_STAGE_MODE_ACTION_UPDATE
 } from 'context/Collaboration/CollaborationReducer';
 import StageModePIP from 'component/atoms/StageMode/StageModePIP';
-import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
-import {StageModeStatus} from 'context/type/StageMode';
 import {ROUTES} from 'core/constants';
+import {StageModeStatusEnum} from 'core/enums';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useStageModeLeave, useStageModeRequestAcceptOrDecline} from 'hooks/api/useStageModeService';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
@@ -101,7 +100,7 @@ const CommunicationLayer = () => {
     }
   }, [collaborationState.stageMode]);
 
-  useWebsocketEvent('stage-mode-request', (userId) => {
+  usePosBusEvent('stage-mode-request', (userId) => {
     if (isModerator) {
       addRequestPopup(userId, {
         user: userId,
@@ -128,10 +127,10 @@ const CommunicationLayer = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-toggled', (stageModeStatus) => {
+  usePosBusEvent('stage-mode-toggled', (stageModeStatus) => {
     //if (collaborationState.collaborationSpace?.id !== spaceId) return;
 
-    const shouldActivateStageMode = stageModeStatus === StageModeStatus.INITIATED;
+    const shouldActivateStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
 
     if (shouldActivateStageMode && !collaborationState.stageMode) {
       collaborationDispatch({
@@ -169,14 +168,14 @@ const CommunicationLayer = () => {
     }
   });
 
-  useWebsocketEvent('meeting-mute', () => {
+  usePosBusEvent('meeting-mute', () => {
     collaborationDispatch({
       type: COLLABORATION_MUTED_ACTION_UPDATE,
       muted: true
     });
   });
 
-  useWebsocketEvent('notify-gathering-start', (message) => {
+  usePosBusEvent('notify-gathering-start', (message) => {
     const handleJoinSpace = () => {
       if (message.spaceId) {
         UnityService.teleportToSpace(message.spaceId);
@@ -198,7 +197,7 @@ const CommunicationLayer = () => {
     );
   });
 
-  useWebsocketEvent('meeting-mute-all', (moderatorId) => {
+  usePosBusEvent('meeting-mute-all', (moderatorId) => {
     if (currentUserId !== moderatorId) {
       collaborationDispatch({
         type: COLLABORATION_MUTED_ACTION_UPDATE,
@@ -207,7 +206,7 @@ const CommunicationLayer = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-mute', () => {
+  usePosBusEvent('stage-mode-mute', () => {
     toast.info(
       <ToastContent
         headerIconName="alert"
@@ -219,7 +218,7 @@ const CommunicationLayer = () => {
     );
   });
 
-  useWebsocketEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
+  usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 

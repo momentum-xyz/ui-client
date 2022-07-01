@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {appVariables} from 'api/constants';
+import {usePosBusEvent} from 'shared/hooks';
 
 import {MiroBoard} from '../../../context/Collaboration/CollaborationTypes';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
 import {useOwner} from '../../../hooks/api/useOwner';
 import 'core/utils/boardsPicker.1.0.js';
 import Button from '../../atoms/Button';
@@ -41,7 +41,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
     }
   }, [miroboard]);
 
-  useWebsocketEvent('miro-board-change', (id) => {
+  usePosBusEvent('miro-board-change', (id) => {
     if (collaborationSpace?.id === id) {
       refetch();
     }

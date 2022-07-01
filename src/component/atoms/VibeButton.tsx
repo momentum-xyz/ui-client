@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
+import {usePosBusEvent} from 'shared/hooks';
+
 import {useGetVibeCount, useVibeCheck, useVibeToggle} from '../../hooks/api/useVibeService';
-import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import {ReactComponent as VibeIconBlue} from '../../images/icons/bulb-prime-blue.svg';
 import {ReactComponent as VibeIcon} from '../../images/icons/bulb.svg';
 
@@ -17,7 +18,7 @@ const VibeButton: React.FC<VibeButtonProps> = (props) => {
   const [vibeCountResponse, , ,] = useGetVibeCount(props.spaceId);
   const [vibeCount, setVibeCount] = useState(0);
 
-  useWebsocketEvent('user-vibed', (type, count) => {
+  usePosBusEvent('user-vibed', (type, count) => {
     setVibeCount(count);
   });
 
