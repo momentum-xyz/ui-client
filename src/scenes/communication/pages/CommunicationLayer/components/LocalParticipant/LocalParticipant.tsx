@@ -13,9 +13,8 @@ import useCollaboration, {
 } from 'context/Collaboration/hooks/useCollaboration';
 import Avatar from 'component/atoms/Avatar';
 import {useUser} from 'hooks/api/useUser';
-import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
-import {useStore} from 'shared/hooks';
+import {useStore, usePosBusEvent} from 'shared/hooks';
 
 export interface LocalParticipantProps {
   localUser?: ILocalUser;
@@ -64,7 +63,7 @@ const LocalParticipant: React.FC<LocalParticipantProps> = ({localUser, stageLoca
     }
   }, [client.localTracks, collaborationState.stageMode, collaborationState.cameraOff]);
 
-  useWebsocketEvent('meeting-kick', (spaceId) => {
+  usePosBusEvent('meeting-kick', (spaceId) => {
     communicationLayerStore.setKicked(true);
     UnityService.triggerInteractionMsg?.(PosBusEventEnum.LeftSpace, spaceId, 0, '');
     leaveCollaborationSpaceCall(false).then(() => {

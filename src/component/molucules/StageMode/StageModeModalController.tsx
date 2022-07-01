@@ -3,8 +3,8 @@ import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
+import {usePosBusEvent} from 'shared/hooks';
 
-import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
 import Modal, {ModalRef} from '../../util/Modal';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import StageModeInvitedOnStagePopup from '../../popup/stageMode/StageModeInvitedOnStagePopup';
@@ -40,14 +40,14 @@ const StageModeModalController: React.FC = () => {
     );
   };
 
-  useWebsocketEvent('stage-mode-invite', () => {
+  usePosBusEvent('stage-mode-invite', () => {
     if (!isHandlingInviteOrRequest()) {
       invitedToStageModalRef.current?.open();
       setAccepted(false);
     }
   });
 
-  useWebsocketEvent('stage-mode-accepted', (userId) => {
+  usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === currentUserId) {
       if (!isHandlingInviteOrRequest()) {
         acceptedToJoin.current?.open();
@@ -56,7 +56,7 @@ const StageModeModalController: React.FC = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-declined', (userId) => {
+  usePosBusEvent('stage-mode-declined', (userId) => {
     //check user
     if (userId === currentUserId) {
       declinedToJoin.current?.open();

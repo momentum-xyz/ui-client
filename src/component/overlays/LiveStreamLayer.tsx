@@ -3,10 +3,9 @@ import {useLocation} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
-import {useStore, useUnityEvent} from 'shared/hooks';
+import {useStore, useUnityEvent, usePosBusEvent} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 
-import useWebsocketEvent from '../../context/Websocket/hooks/useWebsocketEvent';
 import Button from '../atoms/Button';
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';
 import {BroadcastStatus} from '../../context/type/Broadcast';
@@ -80,7 +79,7 @@ const LiveStreamLayer: React.FC<LiveStreamLayerProps> = () => {
     }
   });
 
-  useWebsocketEvent('broadcast', (broadcast: LiveStream) => {
+  usePosBusEvent('broadcast', (broadcast: LiveStream) => {
     broadcast.users.forEach((u) => {
       if (u === authState.subject) {
         broadcasts.push(broadcast);

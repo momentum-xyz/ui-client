@@ -2,8 +2,8 @@ import {UnityContext} from 'react-unity-webgl';
 
 import {getUnityPosition} from 'core/utils';
 import {UnityEventEmitter} from 'core/constants';
-import {PosBusNotificationEnum} from 'core/enums';
 import {UnityApiInterface} from 'core/interfaces';
+import {PosBusService} from 'shared/services';
 
 export class UnityService {
   unityApi?: UnityApiInterface;
@@ -32,10 +32,7 @@ export class UnityService {
   initialize(unityContext: UnityContext) {
     this.unityContext = unityContext;
 
-    this.unityContext.on('Error', (message: string) => {
-      console.info('UnityContext error', message);
-      UnityEventEmitter.emit('Error', message);
-    });
+    /* Unity Events */
 
     this.unityContext.on('MomentumLoaded', () => {
       this.unityApi = this.unityContext?.unityInstance?.Module.UnityAPI;
@@ -77,13 +74,39 @@ export class UnityService {
       }
     });
 
+    this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
+      const [id, rawLocation] = identifier.split('|');
+      UnityEventEmitter.emit('ProfileClickEvent', id, getUnityPosition(rawLocation));
+    });
+
     this.unityContext.on('InvalidToken', () => {
       UnityEventEmitter.emit('InvalidToken');
     });
 
-    this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
-      const [id, rawLocation] = identifier.split('|');
-      UnityEventEmitter.emit('ProfileClickEvent', id, getUnityPosition(rawLocation));
+    this.unityContext.on('Error', (message: string) => {
+      console.info('UnityContext error', message);
+      UnityEventEmitter.emit('Error', message);
+    });
+
+    /* PosBus Events */
+
+    this.unityContext?.on('RelayMessage', (target: string, message: string) => {
+      let msgJSON;
+      try {
+        msgJSON = JSON.parse(message);
+      } catch (e) {
+        console.error(`No valid JSON in relay message "${message}"`);
+        msgJSON = '';
+      }
+      try {
+        PosBusService.handleRelayMessage(target, msgJSON);
+      } catch (e) {
+        console.error('Error in RelayMessage handler.', e);
+      }
+    });
+
+    this.unityContext?.on('SimpleNotification', (kind: number, flag: number, message: string) => {
+      PosBusService.handleSimpleNotification(kind, flag, message);
     });
   }
 
@@ -142,30 +165,6 @@ export class UnityService {
 
   setSoundEffectVolume(value: string) {
     this.unityApi?.controlVolume(value);
-  }
-
-  relayMessageHandler(handler: (target: string, msg: any) => void) {
-    this.unityContext?.on('RelayMessage', (target: string, message: string) => {
-      let msgJSON;
-      try {
-        msgJSON = JSON.parse(message);
-      } catch (e) {
-        console.error(`No valid JSON in relay message "${message}"`);
-        msgJSON = '';
-      }
-      try {
-        handler(target, msgJSON);
-      } catch (e) {
-        console.error('Error in RelayMessage handler.', e);
-      }
-    });
-  }
-
-  // @ts-ignore: refactoring
-  simpleNotificationHandler(handler: (kind: PosBusNotificationEnum, flag, msg) => void) {
-    this.unityContext?.on('SimpleNotification', (kind: number, flag: number, message: string) => {
-      handler(kind, flag, message);
-    });
   }
 }
 

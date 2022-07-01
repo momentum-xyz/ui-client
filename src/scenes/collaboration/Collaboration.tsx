@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Switch, useHistory, useRouteMatch} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
-import {PosBusEventEnum} from 'core/enums';
+import {PosBusEventEnum, StageModeStatusEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {
@@ -12,15 +12,13 @@ import {
 } from 'hooks/api/useStageModeService';
 import Modal, {ModalRef} from 'component/util/Modal';
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
-import {useStore} from 'shared/hooks';
+import {useStore, usePosBusEvent} from 'shared/hooks';
 import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
 import {ParticipantRole, ParticipantStatus} from 'context/Collaboration/CollaborationTypes';
 import {bytesToUuid, createRoutesByConfig} from 'core/utils';
-import {StageModeStatus} from 'context/type/StageMode';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
 import {ROUTES} from 'core/constants';
-import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
 import {PRIVATE_ROUTES} from './CollaborationRoutes';
 
@@ -42,7 +40,7 @@ const Collaboration: React.FC<Props> = () => {
     mainStore: {unityStore}
   } = useStore();
 
-  useWebsocketEvent('posbus-connected', () => {
+  usePosBusEvent('posbus-connected', () => {
     if (!collaborationStore.spaceStore.space.id) {
       return;
     }
@@ -117,7 +115,7 @@ const Collaboration: React.FC<Props> = () => {
     }
 
     const shouldActivateStageMode =
-      stageModeState?.data.stageModeStatus === StageModeStatus.INITIATED;
+      stageModeState?.data.stageModeStatus === StageModeStatusEnum.INITIATED;
 
     if (shouldActivateStageMode && !collaborationState.stageMode) {
       joinStageMode();

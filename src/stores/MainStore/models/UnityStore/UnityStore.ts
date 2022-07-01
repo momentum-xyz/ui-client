@@ -2,9 +2,9 @@ import {types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {ChangeEvent} from 'react';
 
-import {PosBusEventEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
+import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 
 const UnityStore = types
@@ -32,6 +32,7 @@ const UnityStore = types
       });
 
       UnityService.initialize(self.unityContext);
+
       self.isInitialized = true;
     },
     teleportIsReady(): void {

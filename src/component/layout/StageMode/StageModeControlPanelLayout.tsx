@@ -4,6 +4,7 @@ import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
 import {ToastContent, Toggle} from 'ui-kit';
+import {StageModeStatusEnum} from 'core/enums';
 
 import Page from '../../molucules/Page';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
@@ -18,7 +19,6 @@ import {
   useIntegrationEnable
 } from '../../../context/Integration/hooks/useIntegration';
 import {IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
-import {StageModeStatus} from '../../../context/type/StageMode';
 import useContextAuth from '../../../context/Auth/hooks/useContextAuth';
 import Button from '../../atoms/Button';
 import CONFIG from '../../../config/config';
@@ -115,7 +115,7 @@ const StageModeControlPanelLayout: React.FC = () => {
           integrationType: IntegrationTypes.STAGE_MODE,
           data: {
             userId: bytesToUuid(authState.user.id.data),
-            stageModeStatus: StageModeStatus.INITIATED
+            stageModeStatus: StageModeStatusEnum.INITIATED
           }
         }).then(() => {
           setUserToggledStageOn(true);
@@ -125,7 +125,7 @@ const StageModeControlPanelLayout: React.FC = () => {
           spaceId: collaborationState.collaborationSpace.id,
           integrationType: IntegrationTypes.STAGE_MODE,
           data: {
-            stageModeStatus: StageModeStatus.STOPPED
+            stageModeStatus: StageModeStatusEnum.STOPPED
           }
         }).then();
       }

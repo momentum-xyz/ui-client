@@ -12,9 +12,3 @@ export const useCreateUserAvatar = () => {
     });
   }, []);
 };
-
-export const useGetUserAvatar = () => {
-  return useCallback(async (userhash: string) => {
-    return request.get(appVariables.RENDER_SERVICE_URL + `/get/${userhash}`);
-  }, []);
-};

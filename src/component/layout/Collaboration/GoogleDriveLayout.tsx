@@ -1,6 +1,7 @@
 import React, {FC, useMemo} from 'react';
 
 import {appVariables} from 'api/constants';
+import {usePosBusEvent} from 'shared/hooks';
 
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import {useOwner} from '../../../hooks/api/useOwner';
@@ -8,7 +9,6 @@ import Button from '../../atoms/Button';
 import Panel from '../../atoms/Panel';
 import Page from '../../molucules/Page';
 import GooglePicker from '../../atoms/GooglePicker';
-import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
 import {
   useIntegrationDisable,
   useIntegrationEnable,
@@ -32,7 +32,7 @@ const GoogleDriveLayout: FC = () => {
   const [addGoogleDriveFile] = useIntegrationEnable();
   const [closeGoogleDrive] = useIntegrationDisable();
 
-  useWebsocketEvent('google-drive-file-change', (id) => {
+  usePosBusEvent('google-drive-file-change', (id) => {
     if (collaborationSpace?.id === id) {
       refetch();
     }
