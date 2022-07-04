@@ -2,10 +2,10 @@ import {Instance, types} from 'mobx-state-tree';
 
 const Content = types
   .model('Content', {
-    text: types.maybeNull(types.string),
-    title: types.maybeNull(types.string),
-    type: types.maybeNull(types.string),
-    url: types.maybeNull(types.string)
+    text: types.maybe(types.string),
+    title: types.maybe(types.string),
+    type: types.maybe(types.string),
+    url: types.maybe(types.string)
   })
   .views((self) => ({}));
 

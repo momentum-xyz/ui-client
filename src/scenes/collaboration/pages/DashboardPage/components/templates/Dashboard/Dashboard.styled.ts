@@ -18,8 +18,15 @@ export const Content = styled.div`
 
 export const CoreContainer = styled.div`
   display: flex;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  pointer-events: auto;
+  margin-top: 10px;
+  padding: 1px;
   width: 100%;
   height: 100%;
   align-items: stretch;
-  gap: 4px;
+  gap: 8px;
 `;

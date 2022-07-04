@@ -74,7 +74,12 @@ export const Body = styled.div`
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 15px;
-
+  &.noPadding {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
   &.extendToEdges {
     padding: 0;
   }

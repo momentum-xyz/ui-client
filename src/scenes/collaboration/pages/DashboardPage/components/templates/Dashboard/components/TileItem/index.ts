@@ -1,1 +1,1 @@
-export {default as TileElement} from './TileItem';
+export {default as TileItem} from './TileItem';

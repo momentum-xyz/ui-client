@@ -5,6 +5,6 @@ export const dashboardRepositoryApiEndpoints = () => {
 
   return {
     base: BASE_URL,
-    create: `${BASE_URL}/create`
+    updatePositions: `${BASE_URL}/update-positions`
   };
 };

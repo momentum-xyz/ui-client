@@ -36,6 +36,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerType?: HeaderType;
   className?: string;
   showOverflow?: boolean;
+  noPadding?: boolean;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -46,6 +47,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isDanger = false,
     isCustom = false,
     hasBorder = false,
+    noPadding = false,
     iconSize = 'small',
     headerItem = 'left',
     headerType = 'h3',
@@ -130,7 +132,9 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           </styled.HeaderActions>
         </styled.Header>
       )}
-      <styled.Body className={cn(isBodyExtendingToEdges && 'extendToEdges')}>
+      <styled.Body
+        className={cn(isBodyExtendingToEdges && 'extendToEdges', noPadding && 'noPadding')}
+      >
         {children}
       </styled.Body>
     </styled.Container>
