@@ -97,6 +97,12 @@ const UnityPage: FC = () => {
     );
   });
 
+  usePosBusEvent('high-five-sent', (message) => {
+    toast.info(
+      <ToastContent headerIconName="check" title={t('titles.alert')} text={message} isCloseButton />
+    );
+  });
+
   if (!unityStore.unityContext) {
     return <></>;
   }

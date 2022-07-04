@@ -1,9 +1,4 @@
-import React from 'react';
-import {toast} from 'react-toastify';
-import {t} from 'i18next';
-
 import {PosBusEventEmitter} from 'core/constants';
-import {ToastContent} from 'ui-kit';
 import {PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
   PosBusVibeMessageType,
@@ -153,17 +148,8 @@ class PosBusService {
 
   static handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
     console.log('[unity simple message]:', kind, flag, message);
-
-    // Example call: 500 0 "High five sent!"
     if (kind === PosBusNotificationEnum.TextMessage) {
-      toast.info(
-        <ToastContent
-          headerIconName="check"
-          title={t('titles.alert')}
-          text={message}
-          isCloseButton
-        />
-      );
+      PosBusEventEmitter.emit('high-five-sent', message);
     }
   }
 }
