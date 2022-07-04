@@ -3,21 +3,19 @@ import {useLocation} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
+import {BroadcastStatusEnum} from 'core/enums';
 import {useStore, useUnityEvent, usePosBusEvent} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 
 import Button from '../atoms/Button';
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';
-import {BroadcastStatus} from '../../context/type/Broadcast';
 import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
 import {ReactComponent as FullScreenIcon} from '../../images/icons/expand-full.svg';
 import {ReactComponent as SpaceRocketIcon} from '../../images/icons/space-rocket-flying.svg';
 import {useJoinCollaborationSpaceByAssign} from '../../context/Collaboration/hooks/useCollaboration';
 
-export interface LiveStreamLayerProps {}
-
 export interface LiveStream {
-  broadcastStatus: BroadcastStatus;
+  broadcastStatus: BroadcastStatusEnum;
   url: string;
   users: string[];
   youtubeUrl: string;
@@ -25,7 +23,7 @@ export interface LiveStream {
   spaceName?: string;
 }
 
-const LiveStreamLayer: React.FC<LiveStreamLayerProps> = () => {
+const LiveStreamLayer: React.FC = () => {
   const {unityStore} = useStore().mainStore;
   const [url, setUrl] = useState<string>();
   const [space, setSpace] = useState<{spaceId: string; spaceName: string}>();
@@ -56,7 +54,7 @@ const LiveStreamLayer: React.FC<LiveStreamLayerProps> = () => {
     broadcastsState?.forEach((b) => {
       // There is a broadcast available for logged in user
       switch (b.broadcastStatus) {
-        case BroadcastStatus.PLAY:
+        case BroadcastStatusEnum.PLAY:
           setSpace({
             spaceId: b.spaceId ? b.spaceId : '',
             spaceName: b.spaceName ? b.spaceName : ''
@@ -64,7 +62,7 @@ const LiveStreamLayer: React.FC<LiveStreamLayerProps> = () => {
           setUrl(b.url);
           setStopped(false);
           break;
-        case BroadcastStatus.STOP:
+        case BroadcastStatusEnum.STOP:
           setUrl('');
           setStopped(true);
           break;

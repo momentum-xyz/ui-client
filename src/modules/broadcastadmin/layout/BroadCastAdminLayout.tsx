@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {youtubeVideoPath} from 'core/utils';
+import {BroadcastStatusEnum} from 'core/enums';
 
 import Page from '../../../component/molucules/Page';
 import {useGetSpace} from '../../../hooks/api/useSpaceService';
@@ -11,7 +12,6 @@ import Button from '../../../component/atoms/Button';
 import {CountdownPopup} from '../popups/CountdownPopup';
 import Modal, {ModalRef} from '../../../component/util/Modal';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
-import {BroadcastStatus} from '../../../context/type/Broadcast';
 import {
   useIntegrationDisable,
   useIntegrationEnable,
@@ -23,7 +23,7 @@ export interface Broadcast {
   data: {
     url: string;
     youtubeUrl: string;
-    broadcastStatus: BroadcastStatus;
+    broadcastStatus: BroadcastStatusEnum;
   };
 }
 
@@ -51,7 +51,7 @@ const BroadCastAdminLayout: React.FC = () => {
     if (broadcast) {
       setUrl(broadcast.data.url ?? '');
       setYoutubeUrl(broadcast.data.youtubeUrl ?? '');
-      setIsBroadcasting(broadcast.data.broadcastStatus === BroadcastStatus.PLAY);
+      setIsBroadcasting(broadcast.data.broadcastStatus === BroadcastStatusEnum.PLAY);
     }
   }, [broadcast]);
 
@@ -62,7 +62,7 @@ const BroadCastAdminLayout: React.FC = () => {
       data: {
         url: url,
         youtubeUrl: youtubeUrl,
-        broadcastStatus: BroadcastStatus.PLAY
+        broadcastStatus: BroadcastStatusEnum.PLAY
       }
     };
 
@@ -77,7 +77,7 @@ const BroadCastAdminLayout: React.FC = () => {
       data: {
         url: '',
         youtubeUrl: '',
-        broadcastStatus: BroadcastStatus.STOP
+        broadcastStatus: BroadcastStatusEnum.STOP
       }
     };
 

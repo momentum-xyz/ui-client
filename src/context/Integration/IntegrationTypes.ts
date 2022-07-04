@@ -1,4 +1,4 @@
-import {StageModeStatusEnum} from 'core/enums';
+import {StageModeStatusEnum, BroadcastStatusEnum} from 'core/enums';
 
 export interface IntegrationDTO {
   spaceId: string;
@@ -11,7 +11,7 @@ export interface IntegrationDTO {
 
 export interface IntegrationData {
   id?: string;
-  broadcastStatus?: BroadcastStatus;
+  broadcastStatus?: BroadcastStatusEnum;
   name?: string;
   url?: string;
   youtubeUrl?: string;
@@ -51,15 +51,6 @@ export enum StageModeRequestType {
   ACCEPT = 'accept',
   DECLINE = 'decline',
   NONE = ''
-}
-
-export enum BroadcastStatus {
-  FORCE_SMALL = 'force_small',
-  PLAY_SMALL = 'play_small',
-  FORCE_LARGE = 'force_large',
-  PLAY_LARGE = 'play_large',
-  PLAY = 'play',
-  STOP = 'stop'
 }
 
 export enum ModerationType {

@@ -38,7 +38,6 @@ export interface StageModeStatusInfoDto {
 
 export interface AdmitOrKickDTO {
   modType: ModType;
-  // spaceId?: string;
   userId: string;
 }
 

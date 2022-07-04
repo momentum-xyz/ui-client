@@ -18,3 +18,4 @@ export * from './posBusEvent.enum';
 export * from './posBusNotification.enum';
 export * from './posBus.enum';
 export * from './stageMode.enum';
+export * from './broadcastStatus.enum';

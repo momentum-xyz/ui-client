@@ -1,5 +1,5 @@
-import {toast} from 'react-toastify';
 import React, {useState} from 'react';
+import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
 import {UnityService} from 'shared/services';
@@ -8,17 +8,15 @@ import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 import {PosBusEventEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
   PosBusVibeMessageType,
+  PosBusHigh5MessageType,
+  PosBusMessageStatusType,
   PosBusInviteMessageType,
+  PosBusBroadcastMessageType,
   PosBusGatheringMessageType,
-  PosBusCollaborationMessageType
+  PosBusStageModeMessageType,
+  PosBusCollaborationMessageType,
+  PosBusCommunicationMessageType
 } from 'core/types';
-import {
-  BroadcastMessage,
-  CommunicationMessage,
-  High5Message,
-  StageModeMessage,
-  PosBusMessage
-} from 'context/Unity/types';
 
 class PosBusService {
   static sendHighFive(receiverId: string) {
@@ -52,11 +50,11 @@ class PosBusService {
     }
   }
 
-  static handleIncomingBroadcast(message: BroadcastMessage) {
+  static handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
     PosBusEventEmitter.emit('broadcast', message);
   }
 
-  static handleIncomingCommunication(message: CommunicationMessage) {
+  static handleIncomingCommunication(message: PosBusCommunicationMessageType) {
     switch (message.action) {
       case 'kick':
         PosBusEventEmitter.emit('meeting-kick', message.spaceId);
@@ -71,7 +69,7 @@ class PosBusService {
     }
   }
 
-  static handleIncomingStageMode(message: StageModeMessage) {
+  static handleIncomingStageMode(message: PosBusStageModeMessageType) {
     switch (message.action) {
       case 'state':
         // eslint-disable-next-line no-case-declarations
@@ -105,7 +103,7 @@ class PosBusService {
     }
   }
 
-  static handleIncomingHigh5(message: High5Message) {
+  static handleIncomingHigh5(message: PosBusHigh5MessageType) {
     const Content: React.FC = () => {
       const [clicked, setClicked] = useState(false);
 
@@ -138,7 +136,7 @@ class PosBusService {
     PosBusEventEmitter.emit('notify-gathering-start', message);
   }
 
-  static handlePosBusMessage(message: PosBusMessage) {
+  static handlePosBusMessage(message: PosBusMessageStatusType) {
     switch (message.status) {
       case 'connected':
         PosBusEventEmitter.emit('posbus-connected');
@@ -168,19 +166,19 @@ class PosBusService {
         this.handleIncomingInvite(message as PosBusInviteMessageType);
         break;
       case 'meeting':
-        this.handleIncomingCommunication(message as CommunicationMessage);
+        this.handleIncomingCommunication(message as PosBusCommunicationMessageType);
         break;
       case 'broadcast':
-        this.handleIncomingBroadcast(message as BroadcastMessage);
+        this.handleIncomingBroadcast(message as PosBusBroadcastMessageType);
         break;
       case 'stage':
-        this.handleIncomingStageMode(message as StageModeMessage);
+        this.handleIncomingStageMode(message as PosBusStageModeMessageType);
         break;
       case 'high5':
-        this.handleIncomingHigh5(message as High5Message);
+        this.handleIncomingHigh5(message as PosBusHigh5MessageType);
         break;
       case 'posbus':
-        this.handlePosBusMessage(message as PosBusMessage);
+        this.handlePosBusMessage(message as PosBusMessageStatusType);
         break;
       default:
         console.debug('Unknown relay message type', target);

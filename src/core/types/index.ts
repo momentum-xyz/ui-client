@@ -7,3 +7,4 @@ export * from './unityEvent.type';
 export * from './posBusMessage.type';
 export * from './posBusEvent.type';
 export * from './intergation.type';
+export * from './stageMode.type';
