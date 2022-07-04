@@ -24,6 +24,7 @@ export type PosBusEventType = {
   'stage-mode-user-left': (userId: string) => void;
   'user-wowed': (spaceId: string, count: number) => void;
   'user-vibed': (type: string, count: number) => void;
+  'high-five': (senderId: string, message: string) => void;
   'space-invite': (
     spaceId: string,
     invitorId: string,

@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
-import {UnityService} from 'shared/services';
 import {PosBusEventEmitter} from 'core/constants';
-import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
+import {ToastContent} from 'ui-kit';
 import {PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
   PosBusVibeMessageType,
@@ -97,32 +96,7 @@ class PosBusService {
   }
 
   static handleIncomingHigh5(message: PosBusHigh5MessageType) {
-    const Content: React.FC = () => {
-      const [clicked, setClicked] = useState(false);
-
-      const handleClick = () => {
-        if (clicked) {
-          return;
-        }
-
-        setClicked(true);
-        setTimeout(() => {
-          UnityService.sendHighFive(message.senderId);
-          UnityService.lookAtWisp(message.senderId);
-        }, 500);
-      };
-
-      return (
-        <ToastContent
-          headerIconName="hand"
-          text={t('messages.returnHighFive')}
-          title={message.message}
-          approveInfo={{title: t('titles.returnHighFive'), onClick: handleClick}}
-        />
-      );
-    };
-
-    toast.info(<Content />, TOAST_BASE_OPTIONS);
+    PosBusEventEmitter.emit('high-five', message.senderId, message.message);
   }
 
   static handleNotifyGathering(message: PosBusGatheringMessageType) {

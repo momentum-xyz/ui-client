@@ -65,6 +65,10 @@ const UnityStore = types
     sendHighFive(receiverId: string): void {
       UnityService.sendHighFive(receiverId);
     },
+    sendHighFiveBack(receiverId: string): void {
+      UnityService.sendHighFive(receiverId);
+      UnityService.lookAtWisp(receiverId);
+    },
     pause(): void {
       if (!self.isPaused) {
         self.isPaused = true;
