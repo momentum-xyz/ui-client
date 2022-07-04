@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {youtubeVideoPath} from 'core/utils';
+import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
 
 import Page from '../../../component/molucules/Page';
 import {useGetSpace} from '../../../hooks/api/useSpaceService';
@@ -11,19 +12,18 @@ import Button from '../../../component/atoms/Button';
 import {CountdownPopup} from '../popups/CountdownPopup';
 import Modal, {ModalRef} from '../../../component/util/Modal';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
-import {BroadcastStatus} from '../../../context/type/Broadcast';
 import {
   useIntegrationDisable,
   useIntegrationEnable,
   useIntegrationFetch
 } from '../../../context/Integration/hooks/useIntegration';
-import {IntegrationDTO, IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
+import {IntegrationDTO} from '../../../context/Integration/IntegrationTypes';
 
 export interface Broadcast {
   data: {
     url: string;
     youtubeUrl: string;
-    broadcastStatus: BroadcastStatus;
+    broadcastStatus: BroadcastStatusEnum;
   };
 }
 
@@ -35,7 +35,7 @@ const BroadCastAdminLayout: React.FC = () => {
   const [isBroadcasting, setIsBroadcasting] = useState<boolean>(false);
   const showCountdownModal = useRef<ModalRef>(null);
 
-  const [broadcast] = useIntegrationFetch(spaceId, IntegrationTypes.BROADCAST);
+  const [broadcast] = useIntegrationFetch(spaceId, IntegrationTypeEnum.BROADCAST);
   const [updateBroadcast] = useIntegrationEnable();
   const [stopBroadcast] = useIntegrationDisable();
 
@@ -51,18 +51,18 @@ const BroadCastAdminLayout: React.FC = () => {
     if (broadcast) {
       setUrl(broadcast.data.url ?? '');
       setYoutubeUrl(broadcast.data.youtubeUrl ?? '');
-      setIsBroadcasting(broadcast.data.broadcastStatus === BroadcastStatus.PLAY);
+      setIsBroadcasting(broadcast.data.broadcastStatus === BroadcastStatusEnum.PLAY);
     }
   }, [broadcast]);
 
   const update = async () => {
     const integration: IntegrationDTO = {
-      integrationType: IntegrationTypes.BROADCAST,
+      integrationType: IntegrationTypeEnum.BROADCAST,
       spaceId: spaceId,
       data: {
         url: url,
         youtubeUrl: youtubeUrl,
-        broadcastStatus: BroadcastStatus.PLAY
+        broadcastStatus: BroadcastStatusEnum.PLAY
       }
     };
 
@@ -72,12 +72,12 @@ const BroadCastAdminLayout: React.FC = () => {
 
   const stop = async () => {
     const integration: IntegrationDTO = {
-      integrationType: IntegrationTypes.BROADCAST,
+      integrationType: IntegrationTypeEnum.BROADCAST,
       spaceId: spaceId,
       data: {
         url: '',
         youtubeUrl: '',
-        broadcastStatus: BroadcastStatus.STOP
+        broadcastStatus: BroadcastStatusEnum.STOP
       }
     };
 

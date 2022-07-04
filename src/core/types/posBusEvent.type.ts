@@ -1,11 +1,11 @@
 import {PosBusGatheringMessageType} from 'core/types';
-import {PosBusCollaborationTypes, PosBusMessageStatusEnum, StageModeStatusEnum} from 'core/enums';
+import {PosBusCollaborationEnum, PosBusMessageStatusEnum, StageModeStatusEnum} from 'core/enums';
 
 export type PosBusEventType = {
   'posbus-connected': () => void;
   'posbus-disconnected': () => void;
   notification: (type: PosBusMessageStatusEnum, message: string) => void;
-  collaboration: (type: PosBusCollaborationTypes, channel: string, receiverId: string) => void;
+  collaboration: (type: PosBusCollaborationEnum, channel: string, receiverId: string) => void;
   broadcast: (broadcast: any) => void;
   'notify-gathering-start': (message: PosBusGatheringMessageType) => void;
   'miro-board-change': (id: string) => void;
@@ -24,6 +24,8 @@ export type PosBusEventType = {
   'stage-mode-user-left': (userId: string) => void;
   'user-wowed': (spaceId: string, count: number) => void;
   'user-vibed': (type: string, count: number) => void;
+  'high-five': (senderId: string, message: string) => void;
+  'high-five-sent': (message: string) => void;
   'space-invite': (
     spaceId: string,
     invitorId: string,

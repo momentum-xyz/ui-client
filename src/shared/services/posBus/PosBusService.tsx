@@ -1,42 +1,29 @@
-import {toast} from 'react-toastify';
-import React, {useState} from 'react';
-import {t} from 'i18next';
-
-import {UnityService} from 'shared/services';
 import {PosBusEventEmitter} from 'core/constants';
-import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
-import {PosBusGatheringMessageType, CollaborationMessageType} from 'core/types';
-import {PosBusEventEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
+import {PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
-  BroadcastMessage,
-  CommunicationMessage,
-  High5Message,
-  InviteMessage,
-  StageModeMessage,
-  VibeMessage,
-  PosBusMessage
-} from 'context/Unity/types';
+  PosBusVibeMessageType,
+  PosBusHigh5MessageType,
+  PosBusMessageStatusType,
+  PosBusInviteMessageType,
+  PosBusBroadcastMessageType,
+  PosBusGatheringMessageType,
+  PosBusStageModeMessageType,
+  PosBusCollaborationMessageType,
+  PosBusCommunicationMessageType
+} from 'core/types';
 
 class PosBusService {
-  static sendHighFive(receiverId: string) {
-    try {
-      UnityService.triggerInteractionMsg?.(PosBusEventEnum.HighFive, receiverId, 0, '');
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  static handleIncomingVibe(message: VibeMessage) {
+  static handleIncomingVibe(message: PosBusVibeMessageType) {
     const {count, type} = message;
     PosBusEventEmitter.emit('user-vibed', type, count);
   }
 
-  static handleIncomingInvite(message: InviteMessage) {
+  static handleIncomingInvite(message: PosBusInviteMessageType) {
     const {spaceId, sender, uiTypeId, uiTypeName} = message;
     PosBusEventEmitter.emit('space-invite', spaceId, sender.id, sender.name, uiTypeId, uiTypeName);
   }
 
-  static handleIncomingCollaboration(message: CollaborationMessageType) {
+  static handleIncomingCollaboration(message: PosBusCollaborationMessageType) {
     const {integrationType, spaceId} = message;
     switch (integrationType) {
       case 'miro':
@@ -49,11 +36,11 @@ class PosBusService {
     }
   }
 
-  static handleIncomingBroadcast(message: BroadcastMessage) {
+  static handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
     PosBusEventEmitter.emit('broadcast', message);
   }
 
-  static handleIncomingCommunication(message: CommunicationMessage) {
+  static handleIncomingCommunication(message: PosBusCommunicationMessageType) {
     switch (message.action) {
       case 'kick':
         PosBusEventEmitter.emit('meeting-kick', message.spaceId);
@@ -68,23 +55,24 @@ class PosBusService {
     }
   }
 
-  static handleIncomingStageMode(message: StageModeMessage) {
+  static handleIncomingStageMode(message: PosBusStageModeMessageType) {
     switch (message.action) {
       case 'state':
-        // eslint-disable-next-line no-case-declarations
-        const parsedStatus = Number(message.value) === 0 ? 'stopped' : 'initiated';
-        PosBusEventEmitter.emit('stage-mode-toggled', parsedStatus as StageModeStatusEnum);
+        PosBusEventEmitter.emit(
+          'stage-mode-toggled',
+          message.value === '0' ? StageModeStatusEnum.STOPPED : StageModeStatusEnum.INITIATED
+        );
         break;
       case 'request':
         PosBusEventEmitter.emit('stage-mode-request', message.userId);
         break;
       case 'accept-request':
-        // eslint-disable-next-line no-case-declarations
-        const eventName = message.value === 1 ? 'stage-mode-accepted' : 'stage-mode-declined';
-        PosBusEventEmitter.emit(eventName, message.userId);
+        PosBusEventEmitter.emit(
+          message.value === 1 ? 'stage-mode-accepted' : 'stage-mode-declined',
+          message.userId
+        );
         break;
       case 'invite':
-        // TODO: pass message.invitor
         PosBusEventEmitter.emit('stage-mode-invite');
         break;
       case 'joined-stage':
@@ -99,44 +87,18 @@ class PosBusService {
       case 'mute':
         PosBusEventEmitter.emit('stage-mode-mute');
         break;
-      default:
     }
   }
 
-  static handleIncomingHigh5(message: High5Message) {
-    const Content: React.FC = () => {
-      const [clicked, setClicked] = useState(false);
-
-      const handleClick = () => {
-        if (clicked) {
-          return;
-        }
-
-        setClicked(true);
-        setTimeout(() => {
-          this.sendHighFive(message.senderId);
-          UnityService.lookAtWisp(message.senderId);
-        }, 500);
-      };
-
-      return (
-        <ToastContent
-          headerIconName="hand"
-          text={t('messages.returnHighFive')}
-          title={message.message}
-          approveInfo={{title: t('titles.returnHighFive'), onClick: handleClick}}
-        />
-      );
-    };
-
-    toast.info(<Content />, TOAST_BASE_OPTIONS);
+  static handleIncomingHigh5(message: PosBusHigh5MessageType) {
+    PosBusEventEmitter.emit('high-five', message.senderId, message.message);
   }
 
   static handleNotifyGathering(message: PosBusGatheringMessageType) {
     PosBusEventEmitter.emit('notify-gathering-start', message);
   }
 
-  static handlePosBusMessage(message: PosBusMessage) {
+  static handlePosBusMessage(message: PosBusMessageStatusType) {
     switch (message.status) {
       case 'connected':
         PosBusEventEmitter.emit('posbus-connected');
@@ -151,34 +113,33 @@ class PosBusService {
 
   static handleRelayMessage(target: string, message: any): void {
     console.log('[unity message]:', target, message);
-
     switch (target) {
-      case 'vibe':
-        this.handleIncomingVibe(message as VibeMessage);
-        break;
-      case 'invite':
-        this.handleIncomingInvite(message as InviteMessage);
-        break;
       case 'collaboration':
-        this.handleIncomingCollaboration(message as CollaborationMessageType);
-        break;
-      case 'meeting':
-        this.handleIncomingCommunication(message as CommunicationMessage);
-        break;
-      case 'broadcast':
-        this.handleIncomingBroadcast(message as BroadcastMessage);
-        break;
-      case 'stage':
-        this.handleIncomingStageMode(message as StageModeMessage);
-        break;
-      case 'high5':
-        this.handleIncomingHigh5(message as High5Message);
+        this.handleIncomingCollaboration(message as PosBusCollaborationMessageType);
         break;
       case 'event':
         this.handleNotifyGathering(message as PosBusGatheringMessageType);
         break;
+      case 'vibe':
+        this.handleIncomingVibe(message as PosBusVibeMessageType);
+        break;
+      case 'invite':
+        this.handleIncomingInvite(message as PosBusInviteMessageType);
+        break;
+      case 'meeting':
+        this.handleIncomingCommunication(message as PosBusCommunicationMessageType);
+        break;
+      case 'broadcast':
+        this.handleIncomingBroadcast(message as PosBusBroadcastMessageType);
+        break;
+      case 'stage':
+        this.handleIncomingStageMode(message as PosBusStageModeMessageType);
+        break;
+      case 'high5':
+        this.handleIncomingHigh5(message as PosBusHigh5MessageType);
+        break;
       case 'posbus':
-        this.handlePosBusMessage(message as PosBusMessage);
+        this.handlePosBusMessage(message as PosBusMessageStatusType);
         break;
       default:
         console.debug('Unknown relay message type', target);
@@ -187,17 +148,8 @@ class PosBusService {
 
   static handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
     console.log('[unity simple message]:', kind, flag, message);
-
-    // Example call: 500 0 "High five sent!"
     if (kind === PosBusNotificationEnum.TextMessage) {
-      toast.info(
-        <ToastContent
-          headerIconName="check"
-          title={t('titles.alert')}
-          text={message}
-          isCloseButton
-        />
-      );
+      PosBusEventEmitter.emit('high-five-sent', message);
     }
   }
 }

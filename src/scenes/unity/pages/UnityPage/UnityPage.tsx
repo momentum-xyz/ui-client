@@ -8,8 +8,8 @@ import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
 
 import {ROUTES} from 'core/constants';
-import {useStore, useUnityEvent} from 'shared/hooks';
-import {Portal, ToastContent, UnityLoader} from 'ui-kit';
+import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
+import {HighFiveContent, Portal, TOAST_BASE_OPTIONS, ToastContent, UnityLoader} from 'ui-kit';
 
 // TODO: Refactoring
 import {useJoinCollaborationSpaceByAssign} from '../../../../context/Collaboration/hooks/useCollaboration';
@@ -83,6 +83,24 @@ const UnityPage: FC = () => {
         />
       );
     }
+  });
+
+  usePosBusEvent('high-five', (senderId, message) => {
+    toast.info(
+      <HighFiveContent
+        message={message}
+        sendBack={() => {
+          unityStore.sendHighFiveBack(senderId);
+        }}
+      />,
+      TOAST_BASE_OPTIONS
+    );
+  });
+
+  usePosBusEvent('high-five-sent', (message) => {
+    toast.info(
+      <ToastContent headerIconName="check" title={t('titles.alert')} text={message} isCloseButton />
+    );
   });
 
   if (!unityStore.unityContext) {

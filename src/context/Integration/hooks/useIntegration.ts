@@ -1,8 +1,9 @@
 import {useFetch, usePost} from '../../../hooks/api/useApi';
-import {IntegrationDTO, IntegrationTypes} from '../IntegrationTypes';
+import {IntegrationDTO} from '../IntegrationTypes';
 import {appVariables} from '../../../api/constants';
+import {IntegrationTypeEnum} from '../../../core/enums';
 
-export const useIntegrationFetch = (spaceId: string, integrationType: IntegrationTypes) => {
+export const useIntegrationFetch = (spaceId: string, integrationType: IntegrationTypeEnum) => {
   const response = useFetch<IntegrationDTO>(
     appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/${spaceId}/${integrationType}`,
     {
