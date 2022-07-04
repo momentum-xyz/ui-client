@@ -1,12 +1,13 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 
 import {TopBar} from 'ui-kit';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
+import {UnityService} from 'shared/services';
+import {PosBusEventEnum} from 'core/enums';
 
 import * as styled from './DashboardPage.styled';
 import Dashboard from './components/templates/Dashboard/Dashboard';
@@ -20,7 +21,7 @@ const DashboardPage: FC = () => {
   const leaveCollaborationSpace = () => {
     if (collaborationState.collaborationSpace) {
       UnityService.triggerInteractionMsg?.(
-        PosBusInteractionType.LeftSpace,
+        PosBusEventEnum.LeftSpace,
         collaborationState.collaborationSpace.id,
         0,
         ''
