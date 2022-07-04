@@ -90,7 +90,7 @@ export const enGb = {
       controllerAccount: 'Controller Account',
       specifiedPaymentAccount: 'Specified Payment Account',
       stashAccount: 'Stash Account',
-      signedSuccess: 'Transaction finished. Bonding was successful!',
+      signedSuccess: 'Transaction finished. Writing to block was successful!',
       validation: {
         unbondMinAmount: 'Minimum amount for unbonding should be a positive number',
         unbondMaxAmount:
@@ -585,7 +585,7 @@ export const enGb = {
         upWardLabel: ' - UPWARD',
         buttonsIconLabel: 'qweasd',
         arrowsTextFirst: 'You can also use the ',
-        arrowsTextSecond: ' for forward,\n' + '              backward, left and right movement.',
+        arrowsTextSecond: ' for forward,\r\n backward, left and right movement.',
         arrowsBoldText: 'Arrow Keys',
         arrowsIconLabel: 'arrow-keys',
         shiftTextFirst: 'Hold ',
