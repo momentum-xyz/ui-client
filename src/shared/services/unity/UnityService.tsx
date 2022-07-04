@@ -4,6 +4,7 @@ import {getUnityPosition} from 'core/utils';
 import {UnityEventEmitter} from 'core/constants';
 import {UnityApiInterface} from 'core/interfaces';
 import {PosBusService} from 'shared/services';
+import {PosBusEventEnum} from 'core/enums';
 
 export class UnityService {
   unityApi?: UnityApiInterface;
@@ -134,6 +135,14 @@ export class UnityService {
 
   toggleAllSound(muted: boolean) {
     this.unityApi?.controlSound(!muted);
+  }
+
+  sendHighFive(receiverId: string) {
+    try {
+      this.unityApi?.triggerInteractionMsg?.(PosBusEventEnum.HighFive, receiverId, 0, '');
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   lookAtWisp(userId: string) {

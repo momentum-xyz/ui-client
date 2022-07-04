@@ -5,7 +5,7 @@ import {t} from 'i18next';
 import {UnityService} from 'shared/services';
 import {PosBusEventEmitter} from 'core/constants';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
-import {PosBusEventEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
+import {PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
   PosBusVibeMessageType,
   PosBusHigh5MessageType,
@@ -19,14 +19,6 @@ import {
 } from 'core/types';
 
 class PosBusService {
-  static sendHighFive(receiverId: string) {
-    try {
-      UnityService.triggerInteractionMsg?.(PosBusEventEnum.HighFive, receiverId, 0, '');
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   static handleIncomingVibe(message: PosBusVibeMessageType) {
     const {count, type} = message;
     PosBusEventEmitter.emit('user-vibed', type, count);
@@ -115,7 +107,7 @@ class PosBusService {
 
         setClicked(true);
         setTimeout(() => {
-          this.sendHighFive(message.senderId);
+          UnityService.sendHighFive(message.senderId);
           UnityService.lookAtWisp(message.senderId);
         }, 500);
       };

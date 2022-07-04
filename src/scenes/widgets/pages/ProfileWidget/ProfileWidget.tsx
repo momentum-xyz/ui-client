@@ -127,7 +127,9 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
                       <Button
                         label={t('actions.highFive')}
                         onClick={() => {
-                          profileStore.sendHighFive();
+                          if (userProfile?.uuid) {
+                            unityStore.sendHighFive(userProfile.uuid);
+                          }
                         }}
                         size="small"
                       />

@@ -62,6 +62,9 @@ const UnityStore = types
         UnityService.setKeyboardControl(isActive);
       }
     },
+    sendHighFive(receiverId: string): void {
+      UnityService.sendHighFive(receiverId);
+    },
     pause(): void {
       if (!self.isPaused) {
         self.isPaused = true;
