@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 
 import {TopBar} from 'ui-kit';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
-import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
 import * as styled from './DashboardPage.styled';

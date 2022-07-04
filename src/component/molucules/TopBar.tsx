@@ -2,6 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
+import {UnityService} from 'shared/services';
+import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 import {IconSvg} from 'ui-kit';
 
@@ -18,7 +20,6 @@ import {AddUserPopup} from '../../modules/spaceadmin/popups/AddUserPopup';
 import Modal, {ModalRef} from '../util/Modal';
 import {useStageModeLeave} from '../../hooks/api/useStageModeService';
 import {useTextChatContext} from '../../context/TextChatContext';
-import UnityService, {PosBusInteractionType} from '../../context/Unity/UnityService';
 import {SpaceType} from '../../context/type/Space';
 
 export type TopBarProps = {
@@ -54,7 +55,7 @@ const TopBar = ({
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
   const history = useHistory();
   const currentLocation = useLocation();
-  const {favoriteStore} = useStore();
+  const {favoriteStore} = useStore().mainStore;
 
   const addUserModal = useRef<ModalRef>(null);
 
@@ -64,7 +65,7 @@ const TopBar = ({
   const leaveCollaborationSpace = () => {
     if (collaborationState.collaborationSpace && collaboration) {
       UnityService.triggerInteractionMsg?.(
-        PosBusInteractionType.LeftSpace,
+        PosBusEventEnum.LeftSpace,
         collaborationState.collaborationSpace.id,
         0,
         ''

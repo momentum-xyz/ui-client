@@ -23,7 +23,7 @@ export const Container = styled.div`
   }
 `;
 
-export const ClickableItem = styled.button`
+export const ClickableItem = styled.div`
   display: flex;
   width: 100%;
   cursor: pointer;

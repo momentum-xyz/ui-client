@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 
-import useWebsocketEvent from '../Websocket/hooks/useWebsocketEvent';
+import {usePosBusEvent} from 'shared/hooks';
 
 export enum StageModePopupType {
   AWAITING_PERMISSION = 'AWAITING_PERMISSION',
@@ -82,11 +82,11 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
     setPopups([]);
   };
 
-  useWebsocketEvent('stage-mode-accepted', (userId) => {
+  usePosBusEvent('stage-mode-accepted', (userId) => {
     removeRequestPopup(userId);
   });
 
-  useWebsocketEvent('stage-mode-declined', (userId) => {
+  usePosBusEvent('stage-mode-declined', (userId) => {
     removeRequestPopup(userId);
   });
 

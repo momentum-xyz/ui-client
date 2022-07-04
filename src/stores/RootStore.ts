@@ -14,7 +14,6 @@ import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {ConfigStore} from './ConfigStore';
 import {MainStore} from './MainStore';
 import {SessionStore} from './SessionStore';
-import {FavoriteStore} from './FavoriteStore';
 
 const RootStore = types
   .model('RootStore', {
@@ -32,13 +31,17 @@ const RootStore = types
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
-    favoriteStore: types.optional(FavoriteStore, {}),
     magicStore: types.optional(MagicStore, {})
   })
   .actions((self) => ({
     initApplication(): void {
-      self.configStore.fetchConfig();
-      self.mainStore.init();
+      self.configStore.init();
+      self.mainStore.themeStore.init();
+    },
+    unityLoaded(worldId: string): void {
+      self.mainStore.favoriteStore.init();
+      self.mainStore.unityStore.teleportIsReady();
+      self.mainStore.worldStore.init(worldId);
     }
   }));
 

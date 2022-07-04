@@ -1,1 +1,1 @@
-export type AccountTypeBalance = 'stashAccountBalance' | 'controllerAccountBalance';
+export type AccountTypeBalanceType = 'stashAccountBalance' | 'controllerAccountBalance';

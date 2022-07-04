@@ -7,3 +7,4 @@ export * from './LoginView';
 export * from './EventItem';
 export * from './SearchPanel';
 export * from './SearchDropdown';
+export * from './HighFiveContent';

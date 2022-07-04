@@ -19,8 +19,7 @@ export interface SpaceItemPropsInterface {
 const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, lastItem}) => {
   const history = useHistory();
   const {
-    favoriteStore,
-    mainStore: {unityStore},
+    mainStore: {unityStore, favoriteStore},
     defaultStore: {homeStore}
   } = useStore();
 

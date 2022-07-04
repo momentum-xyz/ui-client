@@ -5,14 +5,15 @@ import {useParams} from 'react-router-dom';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
+import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import {Button, TopBar, EventList, LinkDialog, ToastContent} from 'ui-kit';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 import {absoluteLink} from 'core/utils';
-import UnityService, {PosBusInteractionType} from 'context/Unity/UnityService';
 
 import * as styled from './CalendarPage.styled';
 import {DeleteEventConfirmationDialog, EventForm} from './components';
@@ -40,7 +41,7 @@ const CalendarPage: FC = () => {
   const leaveCollaborationSpace = () => {
     if (collaborationState.collaborationSpace) {
       UnityService.triggerInteractionMsg?.(
-        PosBusInteractionType.LeftSpace,
+        PosBusEventEnum.LeftSpace,
         collaborationState.collaborationSpace.id,
         0,
         ''

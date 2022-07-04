@@ -13,7 +13,8 @@ import {
   Text,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
-import {useStore} from 'shared/hooks';
+import {useStore, usePosBusEvent} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import CONFIG from 'config/config';
 import useCollaboration, {
   useJoinCollaborationSpaceByAssign,
@@ -27,22 +28,18 @@ import {
   COLLABORATION_STAGE_MODE_ACTION_UPDATE
 } from 'context/Collaboration/CollaborationReducer';
 import StageModePIP from 'component/atoms/StageMode/StageModePIP';
-import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
-import {StageModeStatus} from 'context/type/StageMode';
 import {ROUTES} from 'core/constants';
+import {StageModeStatusEnum} from 'core/enums';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useStageModeLeave, useStageModeRequestAcceptOrDecline} from 'hooks/api/useStageModeService';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useGetSpace} from 'hooks/api/useSpaceService';
-import UnityService from 'context/Unity/UnityService';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
 
-export interface CommunicationLayerProps {}
-
 // TODO: Refactor this component to new structure
-const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
+const CommunicationLayer = () => {
   const history = useHistory();
   const location = useLocation();
   const {collaborationState, collaborationDispatch, currentUserId} = useCollaboration();
@@ -103,7 +100,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     }
   }, [collaborationState.stageMode]);
 
-  useWebsocketEvent('stage-mode-request', (userId) => {
+  usePosBusEvent('stage-mode-request', (userId) => {
     if (isModerator) {
       addRequestPopup(userId, {
         user: userId,
@@ -130,10 +127,10 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-toggled', (stageModeStatus) => {
+  usePosBusEvent('stage-mode-toggled', (stageModeStatus) => {
     //if (collaborationState.collaborationSpace?.id !== spaceId) return;
 
-    const shouldActivateStageMode = stageModeStatus === StageModeStatus.INITIATED;
+    const shouldActivateStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
 
     if (shouldActivateStageMode && !collaborationState.stageMode) {
       collaborationDispatch({
@@ -171,14 +168,14 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     }
   });
 
-  useWebsocketEvent('meeting-mute', () => {
+  usePosBusEvent('meeting-mute', () => {
     collaborationDispatch({
       type: COLLABORATION_MUTED_ACTION_UPDATE,
       muted: true
     });
   });
 
-  useWebsocketEvent('notify-gathering-start', (message) => {
+  usePosBusEvent('notify-gathering-start', (message) => {
     const handleJoinSpace = () => {
       if (message.spaceId) {
         UnityService.teleportToSpace(message.spaceId);
@@ -200,7 +197,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     );
   });
 
-  useWebsocketEvent('meeting-mute-all', (moderatorId) => {
+  usePosBusEvent('meeting-mute-all', (moderatorId) => {
     if (currentUserId !== moderatorId) {
       collaborationDispatch({
         type: COLLABORATION_MUTED_ACTION_UPDATE,
@@ -209,7 +206,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     }
   });
 
-  useWebsocketEvent('stage-mode-mute', () => {
+  usePosBusEvent('stage-mode-mute', () => {
     toast.info(
       <ToastContent
         headerIconName="alert"
@@ -221,7 +218,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
     );
   });
 
-  useWebsocketEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
+  usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 
@@ -290,7 +287,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
       leaveTo="translate-x-5 "
     >
       <ul className="h-full mt-1">
-        <styled.List>
+        <styled.ListItem>
           <Transition
             show={!unityStore.isPaused}
             unmount={false}
@@ -301,7 +298,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
             leaveFrom="translate-y-0 pt-[30px] pb-1"
             leaveTo="-translate-y-8 pt-0 hidden"
             className="pr-.1 space-y-1 pointer-all"
-            as="li"
+            as="div"
           >
             <styled.ActionButton
               variant="primary-background"
@@ -326,7 +323,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               }}
             />
           </Transition>
-          <styled.ListContent className="noScrollIndicator">
+          <styled.ListItemContent className="noScrollIndicator">
             <p className="text-center whitespace-nowrap">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
@@ -351,7 +348,7 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
               {noVideo && (
                 <li
                   className="mb-.5 p-.5
-        relative
+relative
         rounded-full
         border-1 border-transparant"
                 >
@@ -401,8 +398,8 @@ const CommunicationLayer: React.FC<CommunicationLayerProps> = () => {
                 </Transition>
               ))}
             </ul>
-          </styled.ListContent>
-        </styled.List>
+          </styled.ListItemContent>
+        </styled.ListItem>
       </ul>
       {!window.location.href.includes('stage-mode') && <StageModePIP />}
     </Transition>

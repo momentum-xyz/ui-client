@@ -3,13 +3,13 @@ import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
 import {ToastContent} from 'ui-kit';
+import {usePosBusEvent} from 'shared/hooks';
 
 import Page from '../../molucules/Page';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
 import {useJoinRequest} from '../../../hooks/api/useStageModeService';
-import useWebsocketEvent from '../../../context/Websocket/hooks/useWebsocketEvent';
 import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
 import Button from '../../atoms/Button';
 import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
@@ -34,14 +34,14 @@ const StageModeGuestLayout: React.FC = () => {
     console.info('[STAGEMODE] HAS JOINED STATE CHANGED');
   }, [joinedStage]);
 
-  useWebsocketEvent('stage-mode-accepted', (userId) => {
+  usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === currentUserId) {
       removeAwaitingPermissionPopup();
       setRequestMade(false);
     }
   });
 
-  useWebsocketEvent('stage-mode-declined', (userId) => {
+  usePosBusEvent('stage-mode-declined', (userId) => {
     if (userId === currentUserId) {
       removeAwaitingPermissionPopup();
       setRequestMade(false);

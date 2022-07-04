@@ -14,3 +14,4 @@ export * from './inputToBN.utils';
 export * from './formatExistential.utils';
 export * from './promise.utils';
 export * from './text.utils';
+export * from './unity.utils';

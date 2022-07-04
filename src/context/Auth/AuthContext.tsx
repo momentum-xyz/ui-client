@@ -2,11 +2,8 @@ import React, {useEffect, useReducer} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
-import {useStore, useSession} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-
-import UnityService from '../Unity/UnityService';
-import WebsocketService from '../Websocket/WebsocketService';
+import {useStore, useSession} from 'shared/hooks';
 
 import {authDefaultState, AuthState} from './AuthState';
 import {AUTH_LOGGED_IN_ACTION, authReducer} from './AuthReducer';
@@ -19,15 +16,14 @@ export interface IAuthContextProps {
 export const AuthContext = React.createContext<IAuthContextProps | undefined>(undefined);
 
 const AuthComponent: React.FC = (props) => {
-  const {
-    sessionStore,
-    widgetStore: {helpStore}
-  } = useStore();
+  const {sessionStore, widgetStore, mainStore} = useStore();
   const {userId, profile} = sessionStore;
+  const {helpStore} = widgetStore;
+  const {unityStore} = mainStore;
 
   const history = useHistory();
 
-  const onSuccess = (token?: string) => UnityService.setAuthToken(token);
+  const onSuccess = (token?: string) => unityStore.setAuthToken(token);
   const onError = () => history.push(ROUTES.login, {from: history.location.pathname});
 
   const {isReady, idToken} = useSession(onSuccess, onError);
@@ -36,7 +32,6 @@ const AuthComponent: React.FC = (props) => {
   useEffect(() => {
     if (isReady && !profile) {
       sessionStore.init(idToken);
-      WebsocketService.initialize();
     }
   }, [idToken, isReady, profile, sessionStore]);
 

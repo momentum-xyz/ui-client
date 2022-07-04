@@ -17,7 +17,7 @@ import {
   TextArea,
   ToastContent
 } from 'ui-kit';
-import UnityService from 'context/Unity/UnityService';
+import {UnityService} from 'shared/services';
 import {ChangeAvatarPopup} from 'modules/profile/popups/ChangeAvatarPopup';
 import {appVariables} from 'api/constants';
 

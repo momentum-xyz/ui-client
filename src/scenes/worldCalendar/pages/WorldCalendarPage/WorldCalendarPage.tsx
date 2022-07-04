@@ -5,8 +5,8 @@ import {t} from 'i18next';
 
 import {TopBar, EventList, LinkDialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import UnityService from 'context/Unity/UnityService';
 import {absoluteLink} from 'core/utils';
+import {UnityService} from 'shared/services';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 import {ROUTES} from 'core/constants';
 
@@ -14,13 +14,14 @@ import * as styled from './WorldCalendarPage.styled';
 
 const WorldCalendarPage: FC = () => {
   const history = useHistory();
-  // @ts-ignore
+
   const {
     worldCalendarStore: {calendarStore},
     mainStore: {worldStore, unityStore},
     sessionStore,
     widgetStore: {attendeesListStore}
   } = useStore();
+
   const {magicDialog, eventListStore} = calendarStore;
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
 

@@ -1,15 +1,16 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
+import {SpaceType} from 'core/enums';
+import {bytesToUuid} from 'core/utils';
 import {DialogModel, RequestModel, ResetModel, UserProfileModel, SpaceModel} from 'core/models';
-import {api, FetchUserInitiativesResponse, UserProfileInterface} from 'api';
 import {
+  api,
+  FetchUserInitiativesResponse,
+  UserProfileInterface,
   CreateSpaceResponse,
   NewSpaceDetails,
   UserOwnedSpacesResponse
-} from 'api/repositories/spaceRepository/spaceRepository.api.types';
-import {SpaceType} from 'core/enums';
-import WebsocketService from 'context/Websocket/WebsocketService';
-import {bytesToUuid} from 'core/utils';
+} from 'api';
 
 const ProfileStore = types.compose(
   ResetModel,
@@ -85,9 +86,7 @@ const ProfileStore = types.compose(
         });
 
         const {data: response} = yield api.spaceRepository.fetchSpace({spaceId: tableId});
-
         const typeUuid = bytesToUuid(response.space.uiTypeId.data as Buffer);
-
         return {tableId, typeUuid};
       }),
       fetchUserOwnedSpaces: flow(function* (worldId: string) {
@@ -99,15 +98,7 @@ const ProfileStore = types.compose(
         );
 
         self.canCreateInitiative = response.canCreate;
-
         return response;
-      }),
-      sendHighFive: flow(function* () {
-        if (!self.userProfile) {
-          return;
-        }
-
-        yield WebsocketService.sendHighFive(self.userProfile.uuid);
       }),
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {
         yield self.editProfileRequest.send(api.profileRepository.update, {

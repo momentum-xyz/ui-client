@@ -1,23 +1,8 @@
-export enum StageModeRequestType {
-  REQUEST = 'request',
-  INVITE = 'invite',
-  ACCEPT = 'accept',
-  DECLINE = 'decline'
-}
-
-export enum StageModeStatus {
-  INITIATED = 'initiated',
-  STOPPED = 'stopped'
-}
-
-export enum ModType {
-  KICK = 'kick',
-  ADMIT = 'admit'
-}
+import {ModerationEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 
 export interface StageModeRequestDto {
   userId?: string;
-  stageModeRequestType: StageModeRequestType;
+  stageModeRequestType: StageModeRequestEnum;
   data?: {
     userId?: string;
   };
@@ -35,13 +20,12 @@ export interface StageModeStatusInfoDto {
   data: {
     channelId: string;
     userId: string;
-    stageModeStatus: StageModeStatus;
+    stageModeStatus: StageModeStatusEnum;
   };
 }
 
 export interface AdmitOrKickDTO {
-  modType: ModType;
-  // spaceId?: string;
+  modType: ModerationEnum;
   userId: string;
 }
 

@@ -10,7 +10,7 @@ export const ActionButton = styled(Button)`
 `;
 
 //overflow-y-scroll h-full pr-.1
-export const List = styled.li`
+export const ListItem = styled.li`
   padding-right: 1px;
   align-items: end;
   display: flex;
@@ -23,7 +23,7 @@ export const List = styled.li`
   gap: 10px;
 `;
 
-export const ListContent = styled.div`
+export const ListItemContent = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
