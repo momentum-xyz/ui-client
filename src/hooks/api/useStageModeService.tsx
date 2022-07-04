@@ -1,10 +1,9 @@
 import {appVariables} from 'api/constants';
+import {ModerationEnum, StageModeRequestEnum} from 'core/enums';
 
 import {
   AdmitOrKickDTO,
-  ModType,
   StageModeRequestDto,
-  StageModeRequestType,
   StageModeStatusInfoDto
 } from '../../context/type/StageMode';
 import {IntegrationDTO} from '../../context/Integration/IntegrationTypes';
@@ -65,7 +64,7 @@ export const useStageModeInvitationAcceptOrDecline = (spaceId?: string) => {
   );
 
   const stageModeInvitationAcceptOrDecline = (
-    responseType: StageModeRequestType.ACCEPT | StageModeRequestType.DECLINE
+    responseType: StageModeRequestEnum.ACCEPT | StageModeRequestEnum.DECLINE
   ) => {
     return () =>
       postResponse({
@@ -74,8 +73,8 @@ export const useStageModeInvitationAcceptOrDecline = (spaceId?: string) => {
   };
 
   const stageModeAcceptOrDecline: [() => Promise<void>, () => Promise<void>] = [
-    stageModeInvitationAcceptOrDecline(StageModeRequestType.ACCEPT),
-    stageModeInvitationAcceptOrDecline(StageModeRequestType.DECLINE)
+    stageModeInvitationAcceptOrDecline(StageModeRequestEnum.ACCEPT),
+    stageModeInvitationAcceptOrDecline(StageModeRequestEnum.DECLINE)
   ];
 
   return stageModeAcceptOrDecline;
@@ -88,7 +87,7 @@ export const useStageModeRequestAcceptOrDecline = (spaceId?: string) => {
   );
 
   const stageModeRequestAcceptOrDecline = (
-    responseType: StageModeRequestType.ACCEPT | StageModeRequestType.DECLINE
+    responseType: StageModeRequestEnum.ACCEPT | StageModeRequestEnum.DECLINE
   ) => {
     return (userId: string) =>
       postResponse({
@@ -99,8 +98,8 @@ export const useStageModeRequestAcceptOrDecline = (spaceId?: string) => {
 
   // @ts-ignore
   const stageModeAcceptOrDecline: [(userId) => Promise<void>, (userId) => Promise<void>] = [
-    stageModeRequestAcceptOrDecline(StageModeRequestType.ACCEPT),
-    stageModeRequestAcceptOrDecline(StageModeRequestType.DECLINE)
+    stageModeRequestAcceptOrDecline(StageModeRequestEnum.ACCEPT),
+    stageModeRequestAcceptOrDecline(StageModeRequestEnum.DECLINE)
   ];
 
   return stageModeAcceptOrDecline;
@@ -115,7 +114,7 @@ export const useStageModeSendOffstage = (spaceId?: string) => {
   const sendOffstage = (userId: string) =>
     postRequest({
       userId: userId,
-      modType: ModType.KICK
+      modType: ModerationEnum.KICK
     });
 
   const stageModeSendOffstage: [
@@ -138,7 +137,7 @@ export const useJoinRequest = (spaceId?: string) => {
       data: {
         userId: userId
       },
-      stageModeRequestType: StageModeRequestType.REQUEST
+      stageModeRequestType: StageModeRequestEnum.REQUEST
     };
   };
   return (userId: string) => postRequest(body(userId));

@@ -1,20 +1,8 @@
-import {StageModeStatusEnum} from 'core/enums';
-
-export enum StageModeRequestType {
-  REQUEST = 'request',
-  INVITE = 'invite',
-  ACCEPT = 'accept',
-  DECLINE = 'decline'
-}
-
-export enum ModType {
-  KICK = 'kick',
-  ADMIT = 'admit'
-}
+import {ModerationEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 
 export interface StageModeRequestDto {
   userId?: string;
-  stageModeRequestType: StageModeRequestType;
+  stageModeRequestType: StageModeRequestEnum;
   data?: {
     userId?: string;
   };
@@ -37,7 +25,7 @@ export interface StageModeStatusInfoDto {
 }
 
 export interface AdmitOrKickDTO {
-  modType: ModType;
+  modType: ModerationEnum;
   userId: string;
 }
 

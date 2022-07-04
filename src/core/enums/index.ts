@@ -19,3 +19,5 @@ export * from './posBusNotification.enum';
 export * from './posBus.enum';
 export * from './stageMode.enum';
 export * from './broadcastStatus.enum';
+export * from './moderation.enum';
+export * from './integrationType.enum';

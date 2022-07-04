@@ -1,11 +1,18 @@
-import {StageModeStatusEnum, BroadcastStatusEnum} from 'core/enums';
+import {
+  ModerationEnum,
+  StageModeStatusEnum,
+  BroadcastStatusEnum,
+  StageModeRequestEnum,
+  StageModeUserRoleEnum,
+  IntegrationTypeEnum
+} from 'core/enums';
 
 export interface IntegrationDTO {
   spaceId: string;
-  integrationType: IntegrationTypes;
-  stageModeRequestType?: StageModeRequestType;
+  integrationType: IntegrationTypeEnum;
+  stageModeRequestType?: StageModeRequestEnum;
   spaceIntegrationUsers?: SpaceIntegrationUser[];
-  modType?: ModerationType;
+  modType?: ModerationEnum;
   data: IntegrationData;
 }
 
@@ -35,31 +42,5 @@ export interface SpaceIntegrationUser {
 }
 
 export interface SpaceIntegrationUserData {
-  role?: StageModeUserRole;
-}
-
-export enum IntegrationTypes {
-  MIRO = 'miro',
-  GOOGLE_DRIVE = 'google_drive',
-  BROADCAST = 'broadcast',
-  STAGE_MODE = 'stage_mode'
-}
-
-export enum StageModeRequestType {
-  REQUEST = 'request',
-  INVITE = 'invite',
-  ACCEPT = 'accept',
-  DECLINE = 'decline',
-  NONE = ''
-}
-
-export enum ModerationType {
-  ADMIT = 'admit',
-  KICK = 'kick'
-}
-
-export enum StageModeUserRole {
-  SPEAKER = 'speaker',
-  INVITED = 'invited',
-  AUDIENCE_MEMBER = 'audience_member'
+  role?: StageModeUserRoleEnum;
 }

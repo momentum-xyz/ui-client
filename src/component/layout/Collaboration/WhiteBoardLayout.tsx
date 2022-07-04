@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {appVariables} from 'api/constants';
 import {usePosBusEvent} from 'shared/hooks';
+import {IntegrationTypeEnum} from 'core/enums';
 
 import {MiroBoard} from '../../../context/Collaboration/CollaborationTypes';
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
@@ -10,7 +11,6 @@ import 'core/utils/boardsPicker.1.0.js';
 import Button from '../../atoms/Button';
 import Panel from '../../atoms/Panel';
 import Page from '../../molucules/Page';
-import {IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
 import {
   useIntegrationEnable,
   useIntegrationFetch
@@ -24,7 +24,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
   const {collaborationSpace} = collaborationState;
   const [miroboard, , , refetch] = useIntegrationFetch(
     collaborationSpace?.id.toString() ?? '',
-    IntegrationTypes.MIRO
+    IntegrationTypeEnum.MIRO
   );
 
   const [owner] = useOwner(collaborationSpace?.id || '');
@@ -55,7 +55,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
         action: 'access-link',
         success: function (board: MiroBoard) {
           addMiroBoard({
-            integrationType: IntegrationTypes.MIRO,
+            integrationType: IntegrationTypeEnum.MIRO,
             spaceId: collaborationSpace.id,
             data: board
           }).then(() => {

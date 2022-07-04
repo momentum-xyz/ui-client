@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {youtubeVideoPath} from 'core/utils';
-import {BroadcastStatusEnum} from 'core/enums';
+import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
 
 import Page from '../../../component/molucules/Page';
 import {useGetSpace} from '../../../hooks/api/useSpaceService';
@@ -17,7 +17,7 @@ import {
   useIntegrationEnable,
   useIntegrationFetch
 } from '../../../context/Integration/hooks/useIntegration';
-import {IntegrationDTO, IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
+import {IntegrationDTO} from '../../../context/Integration/IntegrationTypes';
 
 export interface Broadcast {
   data: {
@@ -35,7 +35,7 @@ const BroadCastAdminLayout: React.FC = () => {
   const [isBroadcasting, setIsBroadcasting] = useState<boolean>(false);
   const showCountdownModal = useRef<ModalRef>(null);
 
-  const [broadcast] = useIntegrationFetch(spaceId, IntegrationTypes.BROADCAST);
+  const [broadcast] = useIntegrationFetch(spaceId, IntegrationTypeEnum.BROADCAST);
   const [updateBroadcast] = useIntegrationEnable();
   const [stopBroadcast] = useIntegrationDisable();
 
@@ -57,7 +57,7 @@ const BroadCastAdminLayout: React.FC = () => {
 
   const update = async () => {
     const integration: IntegrationDTO = {
-      integrationType: IntegrationTypes.BROADCAST,
+      integrationType: IntegrationTypeEnum.BROADCAST,
       spaceId: spaceId,
       data: {
         url: url,
@@ -72,7 +72,7 @@ const BroadCastAdminLayout: React.FC = () => {
 
   const stop = async () => {
     const integration: IntegrationDTO = {
-      integrationType: IntegrationTypes.BROADCAST,
+      integrationType: IntegrationTypeEnum.BROADCAST,
       spaceId: spaceId,
       data: {
         url: '',

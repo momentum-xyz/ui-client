@@ -72,20 +72,21 @@ class PosBusService {
   static handleIncomingStageMode(message: PosBusStageModeMessageType) {
     switch (message.action) {
       case 'state':
-        // eslint-disable-next-line no-case-declarations
-        const parsedStatus = Number(message.value) === 0 ? 'stopped' : 'initiated';
-        PosBusEventEmitter.emit('stage-mode-toggled', parsedStatus as StageModeStatusEnum);
+        PosBusEventEmitter.emit(
+          'stage-mode-toggled',
+          message.value === '0' ? StageModeStatusEnum.STOPPED : StageModeStatusEnum.INITIATED
+        );
         break;
       case 'request':
         PosBusEventEmitter.emit('stage-mode-request', message.userId);
         break;
       case 'accept-request':
-        // eslint-disable-next-line no-case-declarations
-        const eventName = message.value === 1 ? 'stage-mode-accepted' : 'stage-mode-declined';
-        PosBusEventEmitter.emit(eventName, message.userId);
+        PosBusEventEmitter.emit(
+          message.value === 1 ? 'stage-mode-accepted' : 'stage-mode-declined',
+          message.userId
+        );
         break;
       case 'invite':
-        // TODO: pass message.invitor
         PosBusEventEmitter.emit('stage-mode-invite');
         break;
       case 'joined-stage':
@@ -151,7 +152,6 @@ class PosBusService {
 
   static handleRelayMessage(target: string, message: any): void {
     console.log('[unity message]:', target, message);
-
     switch (target) {
       case 'collaboration':
         this.handleIncomingCollaboration(message as PosBusCollaborationMessageType);
