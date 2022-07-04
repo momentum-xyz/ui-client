@@ -23,7 +23,6 @@ const RewardSection = () => {
     setCustomPaymentDestination
   } = useStore().widgetStore.stakingStore.polkadotProviderStore;
 
-
   const paymentDestinationOptions =
     stashAccount && controllerAccount ? REWARD_DESTINATION_TYPES : [];
 

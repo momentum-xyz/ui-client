@@ -1,7 +1,6 @@
 import {Payee} from 'core/enums';
 
-import { i18n } from '../../shared/services/index'
-
+import {i18n} from '../../shared/services/index';
 
 export const REWARD_DESTINATION_TYPES = [
   {
