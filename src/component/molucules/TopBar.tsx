@@ -55,7 +55,7 @@ const TopBar = ({
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
   const history = useHistory();
   const currentLocation = useLocation();
-  const {favoriteStore} = useStore();
+  const {favoriteStore} = useStore().mainStore;
 
   const addUserModal = useRef<ModalRef>(null);
 
