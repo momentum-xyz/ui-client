@@ -114,8 +114,10 @@ class WebsocketService {
       return (
         <ToastContent
           headerIconName="hand"
-          text={t('messages.returnHighFive')}
-          title={message}
+          text={t('messages.highFiveReceivedText')}
+          title={t('messages.highFiveReceivedTitle', {
+            name: message.trim().split(' ').slice(0, 4).join(' ')
+          })}
           approveInfo={{title: t('titles.returnHighFive'), onClick: handleClick}}
         />
       );
@@ -300,6 +302,17 @@ class WebsocketService {
           headerIconName="check"
           title={t('titles.alert')}
           text={message}
+          isCloseButton
+        />
+      );
+    } else if (kind === PosBusNotificationType.HighFive) {
+      toast.info(
+        <ToastContent
+          headerIconName="check"
+          title={t('messages.highFiveSentTitle', {
+            name: message.trim().split(' ').slice(0, 4).join(' ')
+          })}
+          text={t('messages.highFiveSentText')}
           isCloseButton
         />
       );
