@@ -102,7 +102,7 @@ const UnityPage: FC = () => {
       <ToastContent
         headerIconName="check"
         title={t('messages.highFiveSentTitle', {
-          name: message.trim().split(' ').slice(0, 4).join(' ')
+          name: message
         })}
         text={t('messages.highFiveSentText')}
         isCloseButton
