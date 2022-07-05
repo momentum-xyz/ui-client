@@ -103,6 +103,12 @@ const UnityPage: FC = () => {
     );
   });
 
+  usePosBusEvent('simple-notification', (message) => {
+    toast.info(
+      <ToastContent headerIconName="check" title={t('titles.alert')} text={message} isCloseButton />
+    );
+  });
+
   if (!unityStore.unityContext) {
     return <></>;
   }

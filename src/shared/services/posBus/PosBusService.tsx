@@ -149,6 +149,8 @@ class PosBusService {
   static handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
     console.log('[unity simple message]:', kind, flag, message);
     if (kind === PosBusNotificationEnum.TextMessage) {
+      PosBusEventEmitter.emit('simple-notification', message);
+    } else if (kind === PosBusNotificationEnum.HighFive) {
       PosBusEventEmitter.emit('high-five-sent', message);
     }
   }
