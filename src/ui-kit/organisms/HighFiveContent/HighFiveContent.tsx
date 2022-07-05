@@ -16,15 +16,17 @@ const HighFiveContent: FC<PropsInterface> = ({message, sendBack}) => {
   const handleClick = () => {
     if (!clicked) {
       setClicked(true);
-      setTimeout(() => sendBack, 500);
+      setTimeout(() => sendBack(), 500);
     }
   };
 
   return (
     <ToastContent
       headerIconName="hand"
-      text={t('messages.returnHighFive')}
-      title={message}
+      text={t('messages.highFiveReceivedText')}
+      title={t('messages.highFiveReceivedTitle', {
+        name: message.trim().split(' ').slice(0, 4).join(' ')
+      })}
       approveInfo={{title: t('titles.returnHighFive'), onClick: handleClick}}
     />
   );
