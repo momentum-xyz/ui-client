@@ -46,8 +46,10 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
     } else if (key === 'hasLink' && item[key]) {
       return <IconSvg name="rocket" size="medium" isCustom />;
     } else {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      return <span title={item[key]}>{item[key]}</span>;
+      const value = item[key] ? item[key] : '';
+      return <span title={value}>{value}</span>;
     }
   };
 

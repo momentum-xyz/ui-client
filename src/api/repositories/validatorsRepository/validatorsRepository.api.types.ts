@@ -5,6 +5,7 @@ export interface ValidatorInterface {
   spaceTypeId: string;
   operatorSpaceId?: string;
   uiTypeId: string;
+  operatorSpaceName: string;
   name: string;
   isFavorited: boolean;
   metadata: {

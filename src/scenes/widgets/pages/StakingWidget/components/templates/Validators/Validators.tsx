@@ -144,7 +144,7 @@ const Validators: FC<PropsInterface> = ({
                 isSmall: true
               },
               {
-                key: 'entity',
+                key: 'operatorSpaceName',
                 label: t('staking.validators.columnHeaderOperator'),
                 sortable: false,
                 truncate: true

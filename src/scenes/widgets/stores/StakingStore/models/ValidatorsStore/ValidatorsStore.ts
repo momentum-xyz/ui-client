@@ -25,7 +25,15 @@ const ValidatorsStore = types.compose(
         if (response) {
           self.validators = cast(
             response.map((validator) => {
-              const {metadata, id, parentId, operatorSpaceId, isFavorited, name} = validator;
+              const {
+                metadata,
+                id,
+                parentId,
+                operatorSpaceId,
+                isFavorited,
+                name,
+                operatorSpaceName
+              } = validator;
               const {kusama_metadata} = metadata;
               const {validator_info, validator_reward} = kusama_metadata;
               return {
@@ -34,6 +42,7 @@ const ValidatorsStore = types.compose(
                 hasLink: !!operatorSpaceId,
                 address: validator_info.accountId,
                 entity: name,
+                operatorSpaceName,
                 validator: validator_info.validatorAccountDetails.name,
                 commission: validator_info.commission,
                 ownStake: formatBalance(new BN(validator_info.ownStake), {
@@ -71,6 +80,8 @@ const ValidatorsStore = types.compose(
         return values(self.validators).filter((validator) => validator.isBookmarked).length;
       },
       get validatorsSearched() {
+        console.log(self.validators[0].validator);
+        console.log(self.validators[0].operatorSpaceName);
         return self.validators.filter(
           (validator) =>
             validator.entity.toLowerCase().includes(self.search.toLowerCase()) ||
