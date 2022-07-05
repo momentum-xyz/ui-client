@@ -80,8 +80,6 @@ const ValidatorsStore = types.compose(
         return values(self.validators).filter((validator) => validator.isBookmarked).length;
       },
       get validatorsSearched() {
-        console.log(self.validators[0].validator);
-        console.log(self.validators[0].operatorSpaceName);
         return self.validators.filter(
           (validator) =>
             validator.entity.toLowerCase().includes(self.search.toLowerCase()) ||
