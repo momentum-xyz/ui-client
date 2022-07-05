@@ -3,7 +3,7 @@ import {values} from 'mobx';
 import {BN, formatBalance} from '@polkadot/util';
 
 import {ValidatorItemModel, ResetModel, RequestModel} from 'core/models';
-import {api, FetchValidatorsResponse} from 'api';
+import {api, FetchValidatorsResponseInterface} from 'api';
 
 const ValidatorsStore = types.compose(
   ResetModel,
@@ -17,7 +17,7 @@ const ValidatorsStore = types.compose(
     })
     .actions((self) => ({
       fetch: flow(function* (spaceId?: string) {
-        const response: FetchValidatorsResponse = yield self.request.send(
+        const response: FetchValidatorsResponseInterface = yield self.request.send(
           api.validatorsRepository.fetchValidators,
           {withIdentity: self.withIdentity}
         );
