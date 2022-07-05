@@ -2,6 +2,7 @@ import React, {FC, useMemo} from 'react';
 
 import {appVariables} from 'api/constants';
 import {usePosBusEvent} from 'shared/hooks';
+import {IntegrationTypeEnum} from 'core/enums';
 
 import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import {useOwner} from '../../../hooks/api/useOwner';
@@ -14,14 +15,14 @@ import {
   useIntegrationEnable,
   useIntegrationFetch
 } from '../../../context/Integration/hooks/useIntegration';
-import {IntegrationData, IntegrationTypes} from '../../../context/Integration/IntegrationTypes';
+import {IntegrationData} from '../../../context/Integration/IntegrationTypes';
 
 const GoogleDriveLayout: FC = () => {
   const {collaborationState} = useCollaboration();
   const {collaborationSpace} = collaborationState;
   const [googledrive, , , refetch] = useIntegrationFetch(
     collaborationSpace?.id.toString() ?? '',
-    IntegrationTypes.GOOGLE_DRIVE
+    IntegrationTypeEnum.GOOGLE_DRIVE
   );
 
   const [owner] = useOwner(collaborationSpace?.id || '');
@@ -57,7 +58,7 @@ const GoogleDriveLayout: FC = () => {
       if (collaborationSpace) {
         addGoogleDriveFile({
           spaceId: collaborationSpace.id,
-          integrationType: IntegrationTypes.GOOGLE_DRIVE,
+          integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
           data: newDriveFile
         }).then(() => {
           refetch();
@@ -77,7 +78,7 @@ const GoogleDriveLayout: FC = () => {
     };
     if (collaborationSpace) {
       closeGoogleDrive({
-        integrationType: IntegrationTypes.GOOGLE_DRIVE,
+        integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
         spaceId: collaborationSpace.id,
         data: newDriveFile
       }).then(() => {

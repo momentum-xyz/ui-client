@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {v4 as uuidv4} from 'uuid';
 
 import {useStore} from 'shared/hooks';
-import {PosBusService} from 'shared/services';
+import {UnityService} from 'shared/services';
 import {ToolbarIcon, ToolbarIconList} from 'ui-kit';
 
 import {UnityDevPopup} from '../../popup/UnityDevPopup';
@@ -31,7 +31,7 @@ const FooterDevTools: React.FC = () => {
   };
 
   const highFive = () => {
-    PosBusService.sendHighFive('e4eec468-50c5-4749-b4a4-096b803269cb');
+    UnityService.sendHighFive('e4eec468-50c5-4749-b4a4-096b803269cb');
   };
 
   const createTable = async () => {

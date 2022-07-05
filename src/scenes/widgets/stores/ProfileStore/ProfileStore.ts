@@ -2,7 +2,6 @@ import {cast, flow, types} from 'mobx-state-tree';
 
 import {SpaceType} from 'core/enums';
 import {bytesToUuid} from 'core/utils';
-import {PosBusService} from 'shared/services';
 import {DialogModel, RequestModel, ResetModel, UserProfileModel, SpaceModel} from 'core/models';
 import {
   api,
@@ -87,9 +86,7 @@ const ProfileStore = types.compose(
         });
 
         const {data: response} = yield api.spaceRepository.fetchSpace({spaceId: tableId});
-
         const typeUuid = bytesToUuid(response.space.uiTypeId.data as Buffer);
-
         return {tableId, typeUuid};
       }),
       fetchUserOwnedSpaces: flow(function* (worldId: string) {
@@ -101,14 +98,8 @@ const ProfileStore = types.compose(
         );
 
         self.canCreateInitiative = response.canCreate;
-
         return response;
       }),
-      sendHighFive() {
-        if (self.userProfile) {
-          PosBusService.sendHighFive(self.userProfile.uuid);
-        }
-      },
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {
         yield self.editProfileRequest.send(api.profileRepository.update, {
           name,

@@ -38,8 +38,6 @@ const FavoriteStore = types.compose(
         }
       }),
       addFavorite: flow(function* (spaceId: string) {
-        //check
-
         const response: PostFavoriteResponse = yield self.addFavoriteRequest.send(
           api.favoriteRepository.postFavorite,
           {
@@ -51,7 +49,6 @@ const FavoriteStore = types.compose(
           self.favorites.push(cast({spaceId: response.spaceId, name: response.name}));
         }
       }),
-
       removeFavorite: flow(function* (spaceId: string) {
         const response: BaseFavoritesResponse = yield self.removeFavoriteRequest.send(
           api.favoriteRepository.deleteFavorite,

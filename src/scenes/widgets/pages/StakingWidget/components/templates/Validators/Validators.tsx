@@ -32,8 +32,9 @@ const Validators: FC<PropsInterface> = ({
   operatorSpaceId,
   goToNominator
 }) => {
-  const {widgetStore, favoriteStore} = useStore();
+  const {widgetStore, mainStore} = useStore();
   const {stakingStore} = widgetStore;
+  const {favoriteStore} = mainStore;
   const {validatorsStore} = stakingStore;
 
   const handleSearch = (value: string) => {
