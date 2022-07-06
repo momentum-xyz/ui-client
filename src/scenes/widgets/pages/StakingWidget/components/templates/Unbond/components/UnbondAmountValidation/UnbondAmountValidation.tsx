@@ -14,7 +14,7 @@ interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondAmountValidation: FC<PropsInterface> = ({theme}) => {
   const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
-  const {unbondAmountValidation, stashAccountBalance} = polkadotProviderStore;
+  const {unbondAmountValidation, stashStakingBalance} = polkadotProviderStore;
   const [{errorMessage, errorType}, setError] = useState<StakeValidatorErrorType>({
     errorMessage: '',
     errorType: ''
@@ -27,7 +27,7 @@ const UnbondAmountValidation: FC<PropsInterface> = ({theme}) => {
       newError = t('staking.validation.unbondMinAmount');
       errorType = 'danger';
     } else if (unbondAmountValidation.maxAmount) {
-      newError = t('staking.validation.unbondMaxAmount', {bonded: stashAccountBalance?.bonded});
+      newError = t('staking.validation.unbondMaxAmount', {bonded: stashStakingBalance.bonded});
       errorType = 'danger';
     } else {
       newError = '';
@@ -36,7 +36,7 @@ const UnbondAmountValidation: FC<PropsInterface> = ({theme}) => {
     setError((state) =>
       state.errorMessage !== newError ? {errorMessage: newError, errorType} : state
     );
-  }, [unbondAmountValidation, stashAccountBalance?.bonded]);
+  }, [unbondAmountValidation, stashStakingBalance.bonded]);
 
   return (
     <>

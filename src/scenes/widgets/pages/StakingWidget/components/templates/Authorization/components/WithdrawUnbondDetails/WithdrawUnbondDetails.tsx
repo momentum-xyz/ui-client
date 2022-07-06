@@ -9,7 +9,7 @@ import * as styled from './WithdrawUnbondDetails.styled';
 
 const WithdrawUnbondDetails = () => {
   const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
-  const {tokenSymbol, transactionSigner, stashAccountBalance} = polkadotProviderStore;
+  const {tokenSymbol, transactionSigner, stashStakingBalance} = polkadotProviderStore;
   return (
     <>
       <Heading type="h2" align="left" weight="bold" label={t('staking.transactionCalls')} />
@@ -21,7 +21,7 @@ const WithdrawUnbondDetails = () => {
           transform="uppercase"
         />
         <styled.CurrentAddress>
-          <Text text={`${stashAccountBalance?.redeemable} ${tokenSymbol}`} size="xs" align="left" />
+          <Text text={`${stashStakingBalance.redeemable} ${tokenSymbol}`} size="xs" align="left" />
         </styled.CurrentAddress>
       </styled.Row>
       <Heading type="h2" align="left" weight="bold" label={t('staking.sendingFrom')} />

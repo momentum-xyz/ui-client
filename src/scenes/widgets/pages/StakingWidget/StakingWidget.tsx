@@ -72,6 +72,7 @@ const StakingWidget: FC = () => {
       title={selectedTab?.title ? selectedTab.title : ''}
       headerStyle="uppercase"
       showCloseButton
+      showOverflow
       onClose={stakingDialog.close}
     >
       <styled.Container>

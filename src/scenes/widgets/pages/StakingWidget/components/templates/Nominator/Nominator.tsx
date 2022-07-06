@@ -67,7 +67,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     async () =>
       await channel?.derive.balances?.all(
         controllerAccount?.address as string,
-        (payload: DeriveBalancesAll) => setStashBalanceAll(payload)
+        (payload: DeriveBalancesAll) => setControllerBalanceAll(payload)
       ),
     [channel, setControllerBalanceAll, controllerAccount?.address]
   );
@@ -112,7 +112,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
       });
 
     return () => unsubscribe && unsubscribe();
-  }, [controllerBalanceSubscription]);
+  }, [controllerBalanceSubscription, controllerAccount?.address]);
 
   useEffect(() => {
     let unsubscribe: UnsubscribeType | undefined;

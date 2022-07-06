@@ -13,11 +13,11 @@ interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondAmountSection: FC<PropsInterface> = ({theme}) => {
   const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
-  const {unbondAmount, setUnbondAmount, stashAccountBalance} = polkadotProviderStore;
+  const {unbondAmount, setUnbondAmount, stashStakingBalance} = polkadotProviderStore;
 
   useEffect(() => {
-    stashAccountBalance?.bonded && setUnbondAmount(stashAccountBalance?.bonded);
-  }, [stashAccountBalance?.bonded, setUnbondAmount]);
+    stashStakingBalance.bonded && setUnbondAmount(stashStakingBalance.bonded);
+  }, [stashStakingBalance.bonded, setUnbondAmount]);
 
   const unbondAmountHandler = (value: string) => {
     if (stakingInputRegex(value)) {

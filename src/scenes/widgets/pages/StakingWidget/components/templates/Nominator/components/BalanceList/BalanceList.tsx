@@ -10,24 +10,24 @@ import * as styled from './BalanceList.styled';
 
 const BalanceList = () => {
   const {widgetStore} = useStore();
-  const {stashAccountBalance, tokenSymbol} = widgetStore.stakingStore.polkadotProviderStore;
+  const {stashStakingBalance, tokenSymbol} = widgetStore.stakingStore.polkadotProviderStore;
 
   const Balance = [
     {
       label: t('staking.balanceTypes.account'),
-      value: `${stashAccountBalance?.total || ''} ${tokenSymbol}`
+      value: `${stashStakingBalance.total} ${tokenSymbol}`
     },
     {
       label: t('staking.balanceTypes.transferable'),
-      value: `${stashAccountBalance?.transferable || ''} ${tokenSymbol}`
+      value: `${stashStakingBalance.transferable} ${tokenSymbol}`
     },
     {
       label: t('staking.balanceTypes.staked'),
-      value: `${stashAccountBalance?.bonded || ''} ${tokenSymbol}`
+      value: `${stashStakingBalance.bonded} ${tokenSymbol}`
     },
     {
       label: t('staking.balanceTypes.unbonding'),
-      value: `${stashAccountBalance?.unbonding || ''} ${tokenSymbol}`
+      value: `${stashStakingBalance.unbonding} ${tokenSymbol}`
     }
   ];
 

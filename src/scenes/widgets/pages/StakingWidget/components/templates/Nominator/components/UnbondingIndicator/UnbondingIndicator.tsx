@@ -14,7 +14,7 @@ interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondingIndicator: FC<PropsInterface> = ({theme}) => {
   const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
-  const {channel, stashAccountBalance, tokenSymbol, unlockingProgress} = polkadotProviderStore;
+  const {channel, stashStakingBalance, tokenSymbol, unlockingProgress} = polkadotProviderStore;
   const [mapped] = unlockingProgress;
   return (
     <Tooltip
@@ -40,7 +40,7 @@ const UnbondingIndicator: FC<PropsInterface> = ({theme}) => {
         <IconSvg name="clock" theme={theme} size="large" />
         <Text
           text={`${t('staking.balanceTypes.unbonding')} ${
-            stashAccountBalance?.unbonding
+            stashStakingBalance.unbonding
           } ${tokenSymbol}`}
           size="xs"
         />
