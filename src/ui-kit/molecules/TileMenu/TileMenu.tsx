@@ -1,6 +1,8 @@
 import React, {FC} from 'react';
 import {DraggableProvided} from 'react-beautiful-dnd';
 
+import {SvgButton} from 'ui-kit';
+
 import * as styled from './TileMenu.styled';
 
 interface PropsInterface {
@@ -13,14 +15,9 @@ interface PropsInterface {
 const TileMenu: FC<PropsInterface> = ({onEdit, onDelete, provided, isDelete}) => {
   return (
     <styled.Container>
-      <styled.SvgItem iconName="trash" size="normal" onClick={onDelete} isWhite />
-      {isDelete && <styled.SvgItem iconName="pencil" size="normal" onClick={onEdit} isWhite />}
-      <styled.SvgItem
-        iconName="direction-arrows"
-        size="normal"
-        isWhite
-        {...provided?.dragHandleProps}
-      />
+      <SvgButton iconName="trash" size="normal" onClick={onDelete} isWhite />
+      {isDelete && <SvgButton iconName="pencil" size="normal" onClick={onEdit} isWhite />}
+      <SvgButton iconName="direction-arrows" size="normal" isWhite {...provided?.dragHandleProps} />
     </styled.Container>
   );
 };

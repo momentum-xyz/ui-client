@@ -1,10 +1,10 @@
-export enum TileType {
+export enum TileTypeEnum {
   TILE_TYPE_TEXT = 'TILE_TYPE_TEXT',
   TILE_TYPE_MEDIA = 'TILE_TYPE_MEDIA',
   TILE_TYPE_VIDEO = 'TILE_TYPE_VIDEO'
 }
 
-export enum ContentType {
+export enum ContentTypeEnum {
   PROBLEM = 'problem',
   SOLUTION = 'solution',
   DESCRIPTION = 'description',
@@ -13,7 +13,7 @@ export enum ContentType {
   POSTER = 'poster'
 }
 
-export enum PermanentType {
+export enum PermanentTypeEnum {
   NONE = 'none',
   POSTER = 'poster',
   MEME = 'meme',

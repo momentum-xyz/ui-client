@@ -262,7 +262,7 @@ export const enGb = {
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
-      updateSpace: 'UPDATE YOUR SPACE WITH SOME ENTICING CONTENT'
+      updateSpace: 'update your space with some enticing content'
     },
     placeholders: {
       search: 'Search',

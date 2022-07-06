@@ -1,4 +1,4 @@
-import {TileListInterface} from '../../../core/models';
+import {TileListInterface} from 'core/models';
 
 export interface DashboardRequestInterface {
   spaceId: string;

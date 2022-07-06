@@ -1,16 +1,16 @@
 import {Instance, types} from 'mobx-state-tree';
 
-import {PermanentType, TileType} from 'core/enums';
+import {PermanentTypeEnum, TileTypeEnum} from 'core/enums';
 import {ContentInterface, UUIDModel} from 'core/models';
 
 const Tile = types
   .model('Tile', {
     id: types.maybe(types.string),
     hash: types.string,
-    permanentType: types.maybeNull(types.enumeration(Object.values(PermanentType))),
+    permanentType: types.maybeNull(types.enumeration(Object.values(PermanentTypeEnum))),
     column: types.number,
     row: types.number,
-    type: types.enumeration(Object.values(TileType)),
+    type: types.enumeration(Object.values(TileTypeEnum)),
     content: types.maybe(types.frozen<ContentInterface>()),
     edited: types.maybe(types.number),
     internal: types.maybe(types.boolean),

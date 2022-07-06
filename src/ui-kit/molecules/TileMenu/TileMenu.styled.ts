@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import {SvgButton} from '../SvgButton';
-
 export const Container = styled.div`
   display: flex;
   gap: 10px;
@@ -21,5 +19,3 @@ export const Container = styled.div`
 
   mixblendmode: difference;
 `;
-
-export const SvgItem = styled(SvgButton)``;

@@ -3,9 +3,9 @@ import {DropResult} from 'react-beautiful-dnd';
 
 import {RequestModel, ResetModel, TileListInterface, TileList, TileInterface} from 'core/models';
 import {api} from 'api';
-import {PermanentType} from 'core/enums';
+import {PermanentTypeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {youtubeVideoPath} from 'core/utils';
+import {youtubeVideoFullPath} from 'core/utils';
 
 const Dashboard = types.compose(
   ResetModel,
@@ -31,10 +31,10 @@ const Dashboard = types.compose(
           response.tiles.map((tile) => {
             if (
               !tile.edited &&
-              (tile.permanentType === PermanentType.POSTER ||
-                tile.permanentType === PermanentType.MEME ||
-                tile.permanentType === PermanentType.DESCRIPTION ||
-                tile.permanentType === PermanentType.VIDEO)
+              (tile.permanentType === PermanentTypeEnum.POSTER ||
+                tile.permanentType === PermanentTypeEnum.MEME ||
+                tile.permanentType === PermanentTypeEnum.DESCRIPTION ||
+                tile.permanentType === PermanentTypeEnum.VIDEO)
             ) {
               self.dashboardIsEdited = false;
             }
@@ -48,16 +48,13 @@ const Dashboard = types.compose(
       }),
       setImageUrl(tile: TileInterface) {
         self.imageUrl = `${appVariables.RENDER_SERVICE_URL}/get/${
-          tile.permanentType === PermanentType.VIDEO ? tile.content?.url : tile.hash
+          tile.permanentType === PermanentTypeEnum.VIDEO ? tile.content?.url : tile.hash
         }`;
       },
       setVideoUrl(tile: TileInterface) {
-        self.videoUrl = `https://www.youtube.com/embed/${youtubeVideoPath(
-          tile.content?.url ?? '',
-          tile.id
-        )}`;
+        self.videoUrl = youtubeVideoFullPath(tile.content?.url ?? '', tile.id);
       },
-      setTilesWithPositions(tiles: TileInterface[][]) {
+      setTilesWithPositions(tiles: TileInterface[][]): TileInterface[] {
         const tilesWithPositions: TileInterface[] = tiles
           .map((col, colI) =>
             col.map((t, rowI) => ({
@@ -71,10 +68,11 @@ const Dashboard = types.compose(
 
         self.tileList.updateTiles(tilesWithPositions);
         this.updatePositions(tilesWithPositions);
+        return tilesWithPositions;
       },
-      onDragEnd({source, destination}: DropResult) {
+      onDragEnd({source, destination}: DropResult): TileInterface[][] {
         if (!destination) {
-          return;
+          return self.tileList.tileMatrix;
         }
         const sourceId = parseInt(source.droppableId);
         const destinationId = parseInt(destination.droppableId);
@@ -88,6 +86,7 @@ const Dashboard = types.compose(
             id === sourceId ? result : column
           );
           this.setTilesWithPositions(final);
+          return final;
         } else {
           const sourceClone = Array.from(self.tileList.tileMatrix[sourceId]);
           const destClone = Array.from(self.tileList.tileMatrix[destinationId]);
@@ -98,6 +97,7 @@ const Dashboard = types.compose(
             id === sourceId ? sourceClone : id === destinationId ? destClone : column
           );
           this.setTilesWithPositions(final);
+          return final;
         }
       }
     }))
