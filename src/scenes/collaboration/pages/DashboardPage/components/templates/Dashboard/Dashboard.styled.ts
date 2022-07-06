@@ -1,22 +1,24 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  width: 100%;
+export const ColumnContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+`;
+
+export const RowContainer = styled.div`
+  display: flex;
+  flex: 1;
   height: 100%;
-  overflow-y: scroll;
-  pointer-events: auto;
-  margin-top: 10px;
-  padding: 1px;
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  flex-direction: column;
+  gap: 8px;
 `;
 
 export const Content = styled.div`
   padding-bottom: 40px;
 `;
 
-export const CoreContainer = styled.div`
+export const Container = styled.div`
   display: flex;
   overflow-y: scroll;
   ::-webkit-scrollbar {

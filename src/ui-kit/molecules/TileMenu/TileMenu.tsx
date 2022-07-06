@@ -7,13 +7,14 @@ interface PropsInterface {
   onEdit: () => void;
   onDelete: () => void;
   provided?: DraggableProvided;
+  isDelete: boolean;
 }
 
-const TileMenu: FC<PropsInterface> = ({onEdit, onDelete, provided}) => {
+const TileMenu: FC<PropsInterface> = ({onEdit, onDelete, provided, isDelete}) => {
   return (
     <styled.Container>
       <styled.SvgItem iconName="trash" size="normal" onClick={onDelete} isWhite />
-      <styled.SvgItem iconName="pencil" size="normal" onClick={onEdit} isWhite />
+      {isDelete && <styled.SvgItem iconName="pencil" size="normal" onClick={onEdit} isWhite />}
       <styled.SvgItem
         iconName="direction-arrows"
         size="normal"

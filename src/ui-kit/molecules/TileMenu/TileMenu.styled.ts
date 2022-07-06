@@ -22,10 +22,4 @@ export const Container = styled.div`
   mixblendmode: difference;
 `;
 
-export const SvgItem = styled(SvgButton)`
-  opacity: 0.2;
-
-  :hover {
-    opacity: 100;
-  }
-`;
+export const SvgItem = styled(SvgButton)``;

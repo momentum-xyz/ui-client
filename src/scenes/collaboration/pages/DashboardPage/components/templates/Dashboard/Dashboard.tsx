@@ -1,59 +1,65 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
 
-import {useStore} from 'shared/hooks';
 import {COLUMNS} from 'core/constants';
+import {TileInterface} from 'core/models';
 
 import {TileItem} from './components/TileItem';
 import * as styled from './Dashboard.styled';
 
-const Dashboard: FC = () => {
-  const {
-    collaborationStore: {dashboardStore, spaceStore}
-  } = useStore();
+interface PropsInterface {
+  tilesList: TileInterface[][];
+  onDragEnd: ({source, destination}: DropResult) => void;
+  canDrag: boolean;
+}
 
-  useEffect(() => {
-    if (spaceStore.space.id) {
-      dashboardStore.fetchDashboard(spaceStore.space.id);
-    }
-    return () => {
-      dashboardStore.resetModel();
-    };
-  }, []);
-
-  useEffect(() => {}, [dashboardStore.tileList.tileMatrix]);
-
+const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag}) => {
   return (
-    <styled.CoreContainer>
-      <DragDropContext onDragEnd={dashboardStore.onDragEnd}>
-        {COLUMNS.map((column, index) => (
-          <Droppable key={index} droppableId={index.toString()}>
-            {(provided, snapshot) => (
-              <div className="flex-1 flex flex-col gap-1">
-                {column}
-                <div className="h-full flex flex-col gap-1" ref={provided.innerRef}>
-                  {dashboardStore.tileList.tileMatrix[index].map((tile, index) => (
-                    <Draggable key={tile.id} draggableId={tile.id ?? ''} index={index}>
-                      {(provided, _) => (
-                        <div
-                          style={provided.draggableProps.style}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                        >
-                          <TileItem tile={tile} provided={provided} />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+    <styled.Container>
+      {canDrag && (
+        <DragDropContext onDragEnd={onDragEnd}>
+          {COLUMNS.map((column, index) => (
+            <Droppable key={index} droppableId={index.toString()}>
+              {(provided, snapshot) => (
+                <styled.ColumnContainer>
+                  {column}
+                  <styled.RowContainer ref={provided.innerRef}>
+                    {tilesList[index].map((tile, index) => (
+                      <Draggable key={tile.id} draggableId={tile.id ?? ''} index={index}>
+                        {(provided, _) => (
+                          <div
+                            style={provided.draggableProps.style}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                          >
+                            <TileItem tile={tile} provided={provided} />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </styled.RowContainer>
+                </styled.ColumnContainer>
+              )}
+            </Droppable>
+          ))}
+        </DragDropContext>
+      )}
+      {!canDrag &&
+        COLUMNS.map((column, index) => (
+          <styled.ColumnContainer key={index}>
+            {column}
+            <styled.RowContainer>
+              {tilesList[index].map((tile, index) => (
+                <div key={index}>
+                  <TileItem tile={tile} />
                 </div>
-              </div>
-            )}
-          </Droppable>
+              ))}
+            </styled.RowContainer>
+          </styled.ColumnContainer>
         ))}
-      </DragDropContext>
-    </styled.CoreContainer>
+    </styled.Container>
   );
 };
 

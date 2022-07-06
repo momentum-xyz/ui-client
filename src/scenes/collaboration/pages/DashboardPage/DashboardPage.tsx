@@ -1,8 +1,8 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {IconSvg, Text, TopBar} from 'ui-kit';
+import {IconSvg, Text, TopBar, Button} from 'ui-kit';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
@@ -11,13 +11,26 @@ import {UnityService} from 'shared/services';
 import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 
-import * as styled from './DashboardPage.styled';
 import Dashboard from './components/templates/Dashboard/Dashboard';
+import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {
-    collaborationStore: {dashboardStore, spaceStore}
+    collaborationStore: {dashboardStore, spaceStore},
+    sessionStore
   } = useStore();
+
+  const {tileList, onDragEnd} = dashboardStore;
+
+  useEffect(() => {
+    if (spaceStore.space.id) {
+      dashboardStore.fetchDashboard(spaceStore.space.id);
+    }
+    return () => {
+      dashboardStore.resetModel();
+    };
+  }, []);
+
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
@@ -44,7 +57,20 @@ const DashboardPage: FC = () => {
 
   return (
     <styled.Container>
-      <TopBar title="title" subtitle="dashboard" onClose={leaveCollaborationSpace}></TopBar>
+      <TopBar
+        title={spaceStore.space.name ?? ''}
+        subtitle="dashboard"
+        onClose={leaveCollaborationSpace}
+      >
+        <Button label="vibe" variant="primary" />
+        {(spaceStore.isAdmin || spaceStore.isMember) && (
+          <Button label="add tile" variant="primary" />
+        )}
+        <Button label="invite people" icon="invite-user" variant="primary" />
+        {!sessionStore.isGuest && spaceStore.isStakeShown && (
+          <Button label="stake" variant="primary" />
+        )}
+      </TopBar>
       {!dashboardStore.dashboardIsEdited && spaceStore.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
@@ -60,7 +86,11 @@ const DashboardPage: FC = () => {
           </styled.AlertContent>
         </styled.AlertContainer>
       )}
-      <Dashboard />
+      <Dashboard
+        tilesList={tileList.tileMatrix}
+        onDragEnd={onDragEnd}
+        canDrag={spaceStore.isAdmin || spaceStore.isMember}
+      />
     </styled.Container>
   );
 };

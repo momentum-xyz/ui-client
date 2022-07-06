@@ -43,7 +43,12 @@ const TileDetail: FC<PropsInterface> = ({tile, videoUrl, imageUrl, provided}) =>
         </styled.VideoWrapper>
       )}
       {(spaceStore.isAdmin || spaceStore.isMember) && (
-        <TileMenu onEdit={handleEdit} onDelete={handleDelete} provided={provided} />
+        <TileMenu
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          provided={provided}
+          isDelete={tile.permanentType === null}
+        />
       )}
     </PanelLayout>
   );
