@@ -1,2 +1,1 @@
-export * from './UserInitiativesList';
-export * from './UserInitiativeItem';
+export * from './templates';

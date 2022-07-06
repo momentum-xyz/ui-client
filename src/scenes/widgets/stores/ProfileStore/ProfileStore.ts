@@ -2,14 +2,20 @@ import {cast, flow, types} from 'mobx-state-tree';
 
 import {SpaceType} from 'core/enums';
 import {bytesToUuid} from 'core/utils';
-import {DialogModel, RequestModel, ResetModel, UserProfileModel, SpaceModel} from 'core/models';
+import {
+  DialogModel,
+  RequestModel,
+  ResetModel,
+  UserProfileModel,
+  UserSpaceDetails
+} from 'core/models';
 import {
   api,
-  FetchUserInitiativesResponse,
   UserProfileInterface,
   CreateSpaceResponse,
   NewSpaceDetails,
-  UserOwnedSpacesResponse
+  UserOwnedSpacesResponse,
+  UserSpaceListItemResponse
 } from 'api';
 
 const ProfileStore = types.compose(
@@ -19,7 +25,7 @@ const ProfileStore = types.compose(
       userProfile: types.maybe(UserProfileModel),
       canCreateInitiative: types.maybe(types.boolean),
       userTableId: types.maybe(types.string),
-      userInitiatives: types.optional(types.array(SpaceModel), []),
+      userSpaceList: types.optional(types.array(UserSpaceDetails), []),
       profileFetchRequest: types.optional(RequestModel, {}),
       findTablesRequest: types.optional(RequestModel, {}),
       createTableRequest: types.optional(RequestModel, {}),
@@ -46,14 +52,14 @@ const ProfileStore = types.compose(
           userId: self.userProfile.uuid
         });
       }),
-      fetchUserInitiatives: flow(function* () {
-        const response: FetchUserInitiativesResponse = yield self.userInitiativesRequest.send(
-          api.userRepository.fetchUserInitiatives,
-          {userId: self.userProfile?.uuid}
+      fetchUserSpaceList: flow(function* (userId: string) {
+        const response: UserSpaceListItemResponse[] = yield self.userInitiativesRequest.send(
+          api.spaceRepository.fetchUserSpaceList,
+          {userId}
         );
 
-        if (response !== undefined) {
-          self.userInitiatives = cast(response);
+        if (response) {
+          self.userSpaceList = cast(response);
         }
       }),
       grabATable: flow(function* (worldId: string, userId: string) {

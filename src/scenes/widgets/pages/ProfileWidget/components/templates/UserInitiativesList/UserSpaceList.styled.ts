@@ -5,7 +5,6 @@ import {Text} from 'ui-kit';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
   height: 100%;
   padding-top: 10px;
   overflow: hidden;
