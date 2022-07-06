@@ -132,17 +132,18 @@ const PolkadotProviderStore = types
         const isMappedToAnotherStash =
           self.bondedAddress && self.stashAccount?.address !== self.controllerAccount?.address;
         const isManagingMultipleStashes = !!self.usedStashAddress;
-        const sufficientFunds = formatBalance(
-          self.controllerBalanceAll?.availableBalance,
-          SubstrateProvider.FORMAT_OPTIONS,
-          self.chainDecimals
-        );
+        const sufficientFunds =
+          formatBalance(
+            self.controllerBalanceAll?.availableBalance,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          ) === '0';
         return {
           isMappedToAnotherStash,
           isManagingMultipleStashes,
           sufficientFunds,
           isNominatorAcceptable:
-            isMappedToAnotherStash || isManagingMultipleStashes || sufficientFunds === '0'
+            isMappedToAnotherStash || isManagingMultipleStashes || sufficientFunds
         };
       },
       get customRewardDestinationValidation() {
