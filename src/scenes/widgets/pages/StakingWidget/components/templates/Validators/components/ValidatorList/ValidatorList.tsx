@@ -36,7 +36,7 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
       : 'sort';
   };
 
-  const getCell = (key: string, item: ValidatorItemModelInterface) => {
+  const getCell = (key: keyof ValidatorItemModelInterface, item: ValidatorItemModelInterface) => {
     if (key === 'isBookmarked') {
       return <IconSvg name={item[key] ? 'starOn' : 'star'} size="medium" isCustom />;
     } else if (key === 'selected') {
@@ -46,8 +46,6 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
     } else if (key === 'hasLink' && item[key]) {
       return <IconSvg name="rocket" size="medium" isCustom />;
     } else {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       const value = item[key] ? item[key] : '';
       return <span title={value}>{value}</span>;
     }
@@ -103,7 +101,10 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
                   key={item.id + '-' + header.key}
                   onClick={() => handleCellClick(header, item as ValidatorItemModelInterface)}
                 >
-                  {getCell(header.key, item as ValidatorItemModelInterface)}
+                  {getCell(
+                    header.key as keyof ValidatorItemModelInterface,
+                    item as ValidatorItemModelInterface
+                  )}
                 </td>
               ))}
             </tr>
