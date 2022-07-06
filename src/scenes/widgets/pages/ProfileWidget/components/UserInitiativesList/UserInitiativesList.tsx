@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react';
+import React from 'react';
+import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
 import {Heading} from 'ui-kit';
@@ -12,19 +13,15 @@ const SocialUserInitiatives: React.FC = () => {
   const {profileStore} = useStore().widgetStore;
   const {t} = useTranslation();
 
-  useEffect(() => {
-    profileStore.fetchUserInitiatives();
-  }, [profileStore]);
-
   return (
     <styled.Container>
       <Heading type="h4" label={`${t('labels.initiatives')}:`} align="left" />
       <styled.Body>
-        {profileStore.userInitiatives.length === 0 ? (
+        {profileStore.userSpaceList.length === 0 ? (
           <styled.Placeholder text="-" size="s" align="left" />
         ) : (
           <styled.ListContainer>
-            {profileStore.userInitiatives.map(
+            {profileStore.userSpaceList.map(
               (space) =>
                 space.id &&
                 space.name && (
@@ -38,4 +35,4 @@ const SocialUserInitiatives: React.FC = () => {
   );
 };
 
-export default SocialUserInitiatives;
+export default observer(SocialUserInitiatives);

@@ -46,6 +46,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
 
   useEffect(() => {
     profileStore.fetchProfile(userId);
+    profileStore.fetchUserSpaceList(userId);
 
     return () => {
       profileStore.resetModel();
