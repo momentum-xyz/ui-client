@@ -18,7 +18,7 @@ import {
 } from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
-import {AccountTypeBalanceType, KeyringAddressType} from 'core/types';
+import {KeyringAddressType} from 'core/types';
 import {Payee, StakingTransactionType} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
@@ -51,13 +51,15 @@ const PolkadotProviderStore = types
   )
   .volatile<{
     channel: ApiPromise | null;
-    balanceAll: DeriveBalancesAll | null;
+    stashBalanceAll: DeriveBalancesAll | null;
+    controllerBalanceAll: DeriveBalancesAll | null;
     customRewardDestinationBalance: DeriveBalancesAll | null;
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
   }>(() => ({
     channel: null,
-    balanceAll: null,
+    stashBalanceAll: null,
+    controllerBalanceAll: null,
     customRewardDestinationBalance: null,
     stakingInfo: null,
     sessionProgress: null
@@ -78,6 +80,60 @@ const PolkadotProviderStore = types
           value: account.address,
           icon: 'wallet' as IconName
         }));
+      },
+      get stashStakingBalance() {
+        let locked, total, transferable, transferableWithoutFee, bonded, redeemable, unbonding;
+        if (self.stashBalanceAll && self.stakingInfo) {
+          locked = formatBalance(
+            self.stashBalanceAll.lockedBalance,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          total = formatBalance(
+            self.stashBalanceAll.freeBalance.add(self.stashBalanceAll.reservedBalance),
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          transferable = formatBalance(
+            self.stashBalanceAll.availableBalance,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+
+          transferableWithoutFee = formatBalance(
+            self.stashBalanceAll.freeBalance.gt(self.existentialDeposit)
+              ? self.stashBalanceAll.freeBalance.sub(self.existentialDeposit)
+              : BN_ZERO,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+
+          bonded = formatBalance(
+            self.stakingInfo.stakingLedger.active.unwrap(),
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          redeemable = formatBalance(
+            self.stakingInfo.redeemable,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          unbonding = formatBalance(
+            calcUnbondingAmount(self.stakingInfo),
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+        }
+
+        return {
+          locked,
+          total,
+          transferable,
+          transferableWithoutFee,
+          bonded,
+          redeemable,
+          unbonding
+        };
       },
       get controllerAccountValidation() {
         const isMappedToAnotherStash =
@@ -163,71 +219,17 @@ const PolkadotProviderStore = types
     };
   })
   .actions((self) => ({
-    getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalanceType) {
-      const balanceAll =
-        self.channel !== null ? yield self.channel.derive.balances?.all(address) : null;
-
-      const stakingInfo =
-        self.channel !== null ? yield self.channel.derive.staking?.account(address) : null;
-
-      const locked = formatBalance(
-        balanceAll.lockedBalance,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const total = formatBalance(
-        balanceAll.freeBalance.add(balanceAll.reservedBalance),
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const transferable = formatBalance(
-        balanceAll.availableBalance,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-
-      const transferableWithoutFee = formatBalance(
-        balanceAll.freeBalance.gt(self.existentialDeposit)
-          ? balanceAll.freeBalance.sub(self.existentialDeposit)
-          : BN_ZERO,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-
-      const bonded = formatBalance(
-        stakingInfo.stakingLedger.active.unwrap(),
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const redeemable = formatBalance(
-        stakingInfo.redeemable,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const unbonding = formatBalance(
-        calcUnbondingAmount(stakingInfo),
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-
-      self[accountTypeBalance] = cast({
-        locked,
-        total,
-        transferable,
-        bonded,
-        redeemable,
-        unbonding,
-        transferableWithoutFee
-      });
-    }),
     setIsLoading(payload: boolean) {
       self.isLoading = payload;
     },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
     },
-    setBalanceAll(payload: DeriveBalancesAll) {
-      self.balanceAll = payload;
+    setStashBalanceAll(payload: DeriveBalancesAll) {
+      self.stashBalanceAll = payload;
+    },
+    setControllerBalanceAll(payload: DeriveBalancesAll) {
+      self.controllerBalanceAll = payload;
     },
     setCustomRewardDestinationBalance(payload: DeriveBalancesAll) {
       self.customRewardDestinationBalance = payload;
@@ -237,6 +239,14 @@ const PolkadotProviderStore = types
     },
     setInjectAddresses(payload: KeyringAddressType[]) {
       self.addresses = cast(payload);
+    },
+    setStashAccount(address: string) {
+      const result = self.addresses.find((account) => account.address === address);
+      self.stashAccount = cast(cloneDeep(result));
+    },
+    setControllerAccount(address: string) {
+      const result = self.addresses.find((account) => account.address === address);
+      self.controllerAccount = cast(cloneDeep(result));
     }
   }))
   .actions((self) => ({
@@ -251,12 +261,6 @@ const PolkadotProviderStore = types
       const injectedAddresses = SubstrateProvider.getKeyringAddresses();
       self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
     }),
-
-    setStashAccount: flow(function* (address: string) {
-      const result = self.addresses.find((account) => account.address === address);
-      self.stashAccount = cast(cloneDeep(result));
-      yield self.getBalances(address, 'stashAccountBalance');
-    }),
     getMinNominatorBond: flow(function* () {
       const minNominatorBond = self.channel
         ? yield self.channel?.query.staking.minNominatorBond()
@@ -268,11 +272,7 @@ const PolkadotProviderStore = types
       );
       self.minNominatorBond = cast(minNominatorBondFormatted);
     }),
-    setControllerAccount: flow(function* (address: string) {
-      const result = self.addresses.find((account) => account.address === address);
-      self.controllerAccount = cast(cloneDeep(result));
-      yield self.getBalances(address, 'controllerAccountBalance');
-    }),
+
     getBondedAddress: flow(function* (address: string) {
       const bonded =
         self.channel !== null ? yield self.channel.query.staking.bonded(address) : null;
@@ -292,13 +292,11 @@ const PolkadotProviderStore = types
       const isEnabled = yield SubstrateProvider.isExtensionEnabled();
       self.isWeb3Injected = cast(isEnabled);
     }),
-    initAccount: flow(function* () {
-      yield self.setStashAccount(self.addresses[0].address);
-      if (self.stashAccount?.address) {
-        yield self.setControllerAccount(self.stashAccount.address);
-        yield self.getBondedAddress(self.stashAccount.address);
-        yield self.getUsedStashAddress(self.stashAccount.address);
-      }
+    initAccounts: flow(function* () {
+      self.setStashAccount(self.addresses[0].address);
+      self.setControllerAccount(self.stashAccount.address);
+      yield self.getBondedAddress(self.stashAccount.address);
+      yield self.getUsedStashAddress(self.stashAccount.address);
     }),
     getChainInformation: flow(function* () {
       self.tokenSymbol = cast(
@@ -409,7 +407,7 @@ const PolkadotProviderStore = types
       yield self.setIsWeb3Injected();
       yield self.getChainInformation();
       yield self.getAddresses();
-      yield self.initAccount();
+      yield self.initAccounts();
       self.setIsLoading(false);
     })
   }));
