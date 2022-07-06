@@ -112,6 +112,27 @@ export interface DeleteSpaceResponse {
   message: string;
 }
 
+/** User Space List **/
+
+export interface UserSpaceListRequest {
+  userId: string;
+}
+
+export interface UserSpaceListItemResponse {
+  id: string;
+  name: string;
+  ownedById: string;
+  name_hash: string;
+  created_at: string;
+  updated_at: string;
+  uiTypeId: string;
+  parentId: string;
+  minimap: number;
+  visible: number;
+  isAdmin: number;
+  spaceTypeName: string;
+}
+
 /** Remove user from space **/
 
 export interface RemoveUserRequest {

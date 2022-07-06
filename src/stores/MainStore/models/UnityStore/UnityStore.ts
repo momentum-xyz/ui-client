@@ -36,6 +36,8 @@ const UnityStore = types
       self.isInitialized = true;
     },
     teleportIsReady(): void {
+      UnityService.resume();
+      self.isPaused = false;
       self.isTeleportReady = true;
     },
     setAuthToken(token?: string): void {

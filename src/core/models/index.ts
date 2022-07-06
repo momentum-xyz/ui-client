@@ -19,3 +19,4 @@ export * from './AttendeeModel';
 export * from './TileList';
 export * from './Tile';
 export * from './Content';
+export * from './UserSpaceDetails';

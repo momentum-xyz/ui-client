@@ -29,7 +29,7 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
+  margin: 10px 0;
 `;
 
 export const InfoItem = styled.div`
