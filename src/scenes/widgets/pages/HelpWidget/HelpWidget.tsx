@@ -8,7 +8,7 @@ import momentum from 'static/images/momentum.svg';
 import flamingo from 'static/images/flamingo.svg';
 import {useStore} from 'shared/hooks';
 
-import {Discord, Controls, Momentum, Wiki} from './components';
+import {Discord, Controls, Wiki} from './components';
 import * as styled from './HelpWidget.styled';
 import {IntroVideo} from './components/IntroVideo';
 
@@ -48,9 +48,11 @@ const HelpWidget: React.FC = () => {
           <styled.Item>
             <IntroVideo />
           </styled.Item>
+          {/* TODO: Temporaryly disabled, see #1754, re-enable when backend is resolved.
           <styled.Item>
             <Momentum />
           </styled.Item>
+          */}
           <styled.Item>
             <Controls />
           </styled.Item>

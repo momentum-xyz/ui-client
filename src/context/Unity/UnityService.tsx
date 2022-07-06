@@ -8,6 +8,7 @@ import {Position} from '../type/Position';
 export type UnityEvents = {
   MomentumLoaded: () => void;
   TeleportReady: () => void;
+  InvalidToken: () => void;
   ExterminateUnity: (topic: string) => void;
   ClickEventDashboard: (id: string) => void;
   ClickEventVideo: (id: string) => void;
@@ -152,9 +153,8 @@ export class UnityService {
       }
     });
 
-    // InvalidToken
     this.unityContext.on('InvalidToken', () => {
-      console.info('Got Invalid Token from Unity');
+      UnityEventEmitter.emit('InvalidToken');
     });
 
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {

@@ -3,6 +3,9 @@ import {useAuth} from 'react-oidc-context';
 
 import {extendAxiosInterceptors, refreshAxiosInterceptors} from 'api/request';
 
+// TODO: Refactoring
+import useUnityEvent from '../../context/Unity/hooks/useUnityEvent';
+
 const CHECK_INTERVAL_MS = 8 * 1000;
 const REMAINING_SEC = 15;
 
@@ -16,6 +19,7 @@ export const useSession = (
   tokenNotRefreshedCallback?: (error?: string) => void
 ) => {
   const signInInterval = useRef<NodeJS.Timeout | null>(null);
+  const wasInitialized = useRef<boolean>(false);
   const isStopping = useRef<boolean>(false);
 
   const auth = useAuth();
@@ -45,6 +49,11 @@ export const useSession = (
       });
   }, [auth, setTokens, tokenNotRefreshedCallback]);
 
+  /* 0. Unity has invalid token by some reason */
+  useUnityEvent('InvalidToken', () => {
+    signInSilent();
+  });
+
   /* 1. Subscribe on 401 error of BE  */
   useEffect(() => {
     refreshAxiosInterceptors(auth, setTokens, tokenNotRefreshedCallback);
@@ -52,19 +61,15 @@ export const useSession = (
 
   /* 2. Start checking token expiration time */
   useEffect(() => {
-    signInInterval.current = setInterval(() => {
-      console.log(`Refresh Token in ${auth.user?.expires_in}`);
-      if (auth.user && (auth.user.expires_in || 0) <= REMAINING_SEC) {
-        signInSilent();
-      }
-    }, CHECK_INTERVAL_MS);
-
-    return () => {
-      if (signInInterval.current) {
-        clearInterval(signInInterval.current);
-      }
-    };
-  }, [auth, signInSilent]);
+    if (!!auth.user && !signInInterval.current) {
+      console.log(`It expires in ${auth.user?.expires_in}`);
+      signInInterval.current = setInterval(() => {
+        if (auth.user && (auth.user.expires_in || 0) <= REMAINING_SEC) {
+          signInSilent();
+        }
+      }, CHECK_INTERVAL_MS);
+    }
+  }, [auth.user, signInSilent]);
 
   /* 3. Try to refresh token once */
   useEffect(() => {
@@ -73,15 +78,13 @@ export const useSession = (
     }
   }, [auth.isLoading, auth.isAuthenticated, signInSilent]);
 
-  /* 4. User is ready */
+  /* 4. User is ready. It must be called once. */
   useEffect(() => {
-    if (!auth.isLoading && auth.isAuthenticated && !!auth?.user) {
+    if (auth.isAuthenticated && !!auth.user?.access_token && !wasInitialized.current) {
       setTokens(auth.user.access_token);
+      wasInitialized.current = true;
     }
-  }, [auth.isLoading, auth.isAuthenticated, auth.user, setTokens]);
+  }, [auth.isAuthenticated, auth.user?.access_token, setTokens]);
 
-  return {
-    isReady: auth.isAuthenticated,
-    idToken: auth.user?.id_token || ''
-  };
+  return {isReady: auth.isAuthenticated, idToken: auth.user?.id_token || ''};
 };
