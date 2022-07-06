@@ -666,6 +666,13 @@ export const enGb = {
     },
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
+    },
+    dashboard: {
+      subtitle: 'dashboard',
+      vibe: 'vibe',
+      addTile: 'add tile',
+      invitePeople: 'invite people',
+      stake: 'stake'
     }
   }
 };

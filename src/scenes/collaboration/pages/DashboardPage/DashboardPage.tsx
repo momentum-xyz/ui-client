@@ -59,16 +59,16 @@ const DashboardPage: FC = () => {
     <styled.Container>
       <TopBar
         title={spaceStore.space.name ?? ''}
-        subtitle="dashboard"
+        subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
       >
-        <Button label="vibe" variant="primary" />
+        <Button label={t('dashboard.vibe')} variant="primary" />
         {(spaceStore.isAdmin || spaceStore.isMember) && (
-          <Button label="add tile" variant="primary" />
+          <Button label={t('dashboard.addTile')} variant="primary" />
         )}
-        <Button label="invite people" icon="invite-user" variant="primary" />
+        <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
         {!sessionStore.isGuest && spaceStore.isStakeShown && (
-          <Button label="stake" variant="primary" />
+          <Button label={t('dashboard.stake')} variant="primary" />
         )}
       </TopBar>
       {!dashboardStore.dashboardIsEdited && spaceStore.isOwner && (
