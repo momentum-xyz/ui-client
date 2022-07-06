@@ -9,3 +9,17 @@ export const Container = styled.div`
   overflow: hidden;
   pointer-events: auto;
 `;
+
+export const AlertContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 15px 15px;
+  border-radius: 10px;
+  background: var(--danger-red-50);
+  border: 1px solid var(--danger-red);
+`;
+export const AlertContent = styled.div`
+  margin-left: 15px;
+`;

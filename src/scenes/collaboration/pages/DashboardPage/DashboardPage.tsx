@@ -1,18 +1,22 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import {TopBar} from 'ui-kit';
+import {IconSvg, Text, TopBar} from 'ui-kit';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 import {UnityService} from 'shared/services';
 import {PosBusEventEnum} from 'core/enums';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './DashboardPage.styled';
 import Dashboard from './components/templates/Dashboard/Dashboard';
 
 const DashboardPage: FC = () => {
+  const {
+    collaborationStore: {dashboardStore, spaceStore}
+  } = useStore();
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
@@ -40,6 +44,26 @@ const DashboardPage: FC = () => {
   return (
     <styled.Container>
       <TopBar title="title" subtitle="dashboard" onClose={leaveCollaborationSpace}></TopBar>
+      {!dashboardStore.dashboardIsEdited && spaceStore.isOwner && (
+        <styled.AlertContainer>
+          <IconSvg name="alert" size="large" isWhite />
+          <styled.AlertContent>
+            <Text
+              text="UPDATE YOUR SPACE WITH SOME ENTICING CONTENT"
+              size="s"
+              weight="bold"
+              align="left"
+              transform="uppercase"
+            />
+            <Text
+              text="Please update your space with a meme and a poster within 1 week (otherwise your space
+              will be archived)."
+              size="s"
+              align="left"
+            />
+          </styled.AlertContent>
+        </styled.AlertContainer>
+      )}
       <Dashboard />
     </styled.Container>
   );

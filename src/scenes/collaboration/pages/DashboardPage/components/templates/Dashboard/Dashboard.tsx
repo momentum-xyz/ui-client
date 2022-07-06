@@ -36,7 +36,11 @@ const Dashboard: FC = () => {
                   {dashboardStore.tileList.tileMatrix[index].map((tile, index) => (
                     <Draggable key={tile.id} draggableId={tile.id ?? ''} index={index}>
                       {(provided, _) => (
-                        <div ref={provided.innerRef} {...provided.draggableProps}>
+                        <div
+                          style={provided.draggableProps.style}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                        >
                           <TileItem tile={tile} provided={provided} />
                         </div>
                       )}

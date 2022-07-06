@@ -14,6 +14,7 @@ const Dashboard = types.compose(
       updateRequest: types.optional(RequestModel, {}),
       request: types.optional(RequestModel, {}),
       tileList: types.optional(TileList, {}),
+      dashboardIsEdited: true,
       imageUrl: types.maybe(types.string),
       videoUrl: types.maybe(types.string)
     })
@@ -27,6 +28,17 @@ const Dashboard = types.compose(
         );
         if (response) {
           self.tileList = cast(response);
+          response.tiles.map((tile) => {
+            if (
+              !tile.edited &&
+              (tile.permanentType === PermanentType.POSTER ||
+                tile.permanentType === PermanentType.MEME ||
+                tile.permanentType === PermanentType.DESCRIPTION ||
+                tile.permanentType === PermanentType.VIDEO)
+            ) {
+              self.dashboardIsEdited = false;
+            }
+          });
         }
       }),
       updatePositions: flow(function* updatePositions(tiles: TileInterface[]) {

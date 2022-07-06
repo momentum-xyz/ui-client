@@ -20,6 +20,7 @@ const SpaceStore = types.compose(
       allowedSpaceTypesRequest: types.optional(RequestModel, {}),
       isAdmin: false,
       isMember: false,
+      isOwner: false,
       space: types.optional(SpaceModel, {}),
       allowedSpaceTypes: types.optional(types.array(types.string), []),
       didFetchSpaceInformation: false
@@ -48,6 +49,7 @@ const SpaceStore = types.compose(
           // Here you can add any info about space needed
           self.isAdmin = response.admin;
           self.isMember = response.member ?? false;
+          self.isOwner = response.owner ?? false;
           self.space.secret = response.space.secret;
           self.space.type = response.spaceType;
           self.space.parentId = response.space.parentId;
