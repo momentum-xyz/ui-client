@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {t} from 'i18next';
 
 import {IconSvg, Text, TopBar} from 'ui-kit';
 import useCollaboration, {
@@ -49,18 +50,13 @@ const DashboardPage: FC = () => {
           <IconSvg name="alert" size="large" isWhite />
           <styled.AlertContent>
             <Text
-              text="UPDATE YOUR SPACE WITH SOME ENTICING CONTENT"
+              text={t('titles.updateSpace')}
               size="s"
               weight="bold"
               align="left"
               transform="uppercase"
             />
-            <Text
-              text="Please update your space with a meme and a poster within 1 week (otherwise your space
-              will be archived)."
-              size="s"
-              align="left"
-            />
+            <Text text={t('messages.updateSpace')} size="s" align="left" />
           </styled.AlertContent>
         </styled.AlertContainer>
       )}
