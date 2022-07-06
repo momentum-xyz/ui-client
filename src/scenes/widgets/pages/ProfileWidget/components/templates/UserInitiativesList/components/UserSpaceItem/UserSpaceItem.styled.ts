@@ -11,7 +11,7 @@ export const Container = styled.div`
   border-bottom: 1px ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
   align-items: center;
   cursor: pointer;
-  padding: 10px 0;
+  padding: 5px 0;
   justify-content: left;
 
   :hover {

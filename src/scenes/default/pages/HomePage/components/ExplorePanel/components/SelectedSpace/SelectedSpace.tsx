@@ -4,10 +4,9 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
-import {IS_DEV_ENVIRONMENT, ROUTES} from 'core/constants';
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {Heading, Text, Button} from 'ui-kit';
-import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 
 import {SpacesList} from '../SpacesList';
 
@@ -19,7 +18,6 @@ const SelectedSpace: React.FC = () => {
     mainStore: {unityStore}
   } = useStore();
   const {exploreStore} = homeStore;
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
 
   const {t} = useTranslation();
@@ -33,10 +31,6 @@ const SelectedSpace: React.FC = () => {
 
     unityStore.teleportToSpace(selectedSpace.id);
     history.push(ROUTES.base);
-
-    if (IS_DEV_ENVIRONMENT && selectedSpace) {
-      joinMeetingSpace(selectedSpace.id);
-    }
   };
 
   const handleGoBack = () => {

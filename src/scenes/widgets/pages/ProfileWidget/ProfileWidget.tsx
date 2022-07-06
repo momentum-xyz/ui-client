@@ -1,17 +1,18 @@
 import React, {useEffect, useMemo} from 'react';
 import {useHistory} from 'react-router';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
+import {useTranslation} from 'react-i18next';
 import {capitalize} from 'lodash-es';
 
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+import {appVariables} from 'api/constants';
+import {UserStatusEnum} from 'core/enums';
 import {absoluteLink, monthAndYearString, withoutProtocol} from 'core/utils';
 import {Button, IconSvg, SvgButton, Avatar, PanelLayout, Text} from 'ui-kit';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
-import {appVariables} from 'api/constants';
-import {UserStatusEnum} from 'core/enums';
 
-import {UserInitiativesList} from './components';
+import {UserSpaceList} from './components';
 import * as styled from './ProfileWidget.styled';
 
 interface ProfileWidgetPropsInterface {
@@ -33,24 +34,26 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
   showOverflow,
   showUserInteractions = true
 }) => {
-  const {
-    widgetStore,
-    sessionStore,
-    mainStore: {unityStore, worldStore}
-  } = useStore();
-  const {profile: currentUser} = sessionStore;
+  const {widgetStore, sessionStore, mainStore, defaultStore} = useStore();
   const {profileStore, launchInitiativeStore} = widgetStore;
-  const {userProfile} = profileStore;
+  const {unityStore, worldStore} = mainStore;
+  const {profile: currentUser} = sessionStore;
+  const {userProfile, userSpaceList} = profileStore;
+  const {homeStore} = defaultStore;
+  const {exploreStore} = homeStore;
+
   const history = useHistory();
+  const {t} = useTranslation();
   const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
 
   useEffect(() => {
     profileStore.fetchProfile(userId);
+    profileStore.fetchUserSpaceList(userId);
 
     return () => {
       profileStore.resetModel();
     };
-  }, [userId]);
+  }, [profileStore, userId]);
 
   useEffect(() => {
     profileStore.fetchUserOwnedSpaces(worldStore.worldId);
@@ -66,6 +69,15 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
     if (userProfile?.uuid) {
       unityStore.teleportToUser(userProfile.uuid, history.push as (path: string) => void);
     }
+  };
+
+  const handleSelectSpace = (spaceId: string) => {
+    exploreStore.selectSpace(spaceId);
+  };
+
+  const handleFlyToSpace = (spaceId: string) => {
+    unityStore.teleportToSpace(spaceId);
+    history.push(ROUTES.base);
   };
 
   const renderDate = () => {
@@ -179,7 +191,11 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
               />
             </styled.InfoItem>
           </styled.Info>
-          <UserInitiativesList />
+          <UserSpaceList
+            spaceList={userSpaceList}
+            flyToSpace={handleFlyToSpace}
+            selectSpace={handleSelectSpace}
+          />
         </styled.Details>
       </styled.Body>
     </PanelLayout>

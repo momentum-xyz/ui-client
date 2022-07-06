@@ -1,8 +1,10 @@
 import {AxiosRequestConfig} from 'axios';
+import {generatePath} from 'react-router-dom';
 
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
 
+import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 import {
   AddUserRequest,
   AddUserResponse,
@@ -23,9 +25,10 @@ import {
   SpaceRequest,
   SpaceResponse,
   UserOwnedSpacesRequest,
-  UserOwnedSpacesResponse
+  UserOwnedSpacesResponse,
+  UserSpaceListItemResponse,
+  UserSpaceListRequest
 } from './spaceRepository.api.types';
-import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
 export const fetchSpace: RequestInterface<SpaceRequest, SpaceResponse> = (options) => {
   const {spaceId, ...restOptions} = options;
@@ -88,6 +91,15 @@ export const fetchUserOwnedSpaces: RequestInterface<
   };
 
   return request.get(spaceRepositoryEndpoints().ownedSpaces, config);
+};
+
+export const fetchUserSpaceList: RequestInterface<
+  UserSpaceListRequest,
+  UserSpaceListItemResponse[]
+> = (options) => {
+  const {userId, ...restOptions} = options;
+  const url = generatePath(spaceRepositoryEndpoints().userSpaceList, {userId});
+  return request.get(url, restOptions);
 };
 
 export const createInitiative: RequestInterface<
