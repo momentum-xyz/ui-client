@@ -221,7 +221,10 @@ export const enGb = {
       spaceDeleteFailure: 'There was an error deleting the space',
       joinSpaceWelcome: 'Click on the button to join the space!',
       spaceInvitationNote: '{{invitor}} has invited you to {{spaceName}}',
-      returnHighFive: 'Click on the button to high five back!',
+      highFiveSentTitle: 'High five sent to {{name}}',
+      highFiveSentText: 'You sent a high five',
+      highFiveReceivedTitle: '{{name}} has sent you a high five',
+      highFiveReceivedText: 'Click on the button to high five back!',
       launchInitiativeNote: 'Feel free to launch your initiative at a later time.',
       launchSpaceNote: 'Launch your initiative in just one minute',
       maximumParticipants:
