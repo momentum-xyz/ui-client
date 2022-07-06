@@ -99,6 +99,19 @@ const UnityPage: FC = () => {
 
   usePosBusEvent('high-five-sent', (message) => {
     toast.info(
+      <ToastContent
+        headerIconName="check"
+        title={t('messages.highFiveSentTitle', {
+          name: message
+        })}
+        text={t('messages.highFiveSentText')}
+        isCloseButton
+      />
+    );
+  });
+
+  usePosBusEvent('simple-notification', (message) => {
+    toast.info(
       <ToastContent headerIconName="check" title={t('titles.alert')} text={message} isCloseButton />
     );
   });
