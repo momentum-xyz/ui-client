@@ -16,3 +16,4 @@ export * from './TokenItem';
 export * from './UserModel';
 export * from './TrackModel';
 export * from './AttendeeModel';
+export * from './UserSpaceDetails';
