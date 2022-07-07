@@ -19,3 +19,9 @@ export const AvatarSettings = styled.div`
 export const AvatarContainer = styled.div`
   flex-shrink: 0;
 `;
+
+export const InputsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+`;

@@ -100,13 +100,13 @@ const SignUpCompleteForm: FC<PropsInterface> = (props) => {
         <Controller
           name="name"
           control={control}
-          rules={{required: true}}
+          rules={{required: true, maxLength: 32, minLength: 2}}
           render={({field: {onChange, value}}) => (
             <InputDark
               theme={theme}
               value={value || ''}
               isError={!!errors.name}
-              errorMessage={errors.name?.message}
+              errorMessage={t('errors.nameConstraints')}
               onChange={onChange}
             />
           )}
