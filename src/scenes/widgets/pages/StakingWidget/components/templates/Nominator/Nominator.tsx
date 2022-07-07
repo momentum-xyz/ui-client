@@ -34,7 +34,8 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     setTransactionType,
     channel,
     setStakingInfo,
-    setBalanceAll,
+    setStashBalanceAll,
+    setControllerBalanceAll,
     controllerAccount,
     stashAccount,
     setSessionProgress,
@@ -53,12 +54,22 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
     [channel, stashAccount?.address, setStakingInfo]
   );
 
-  const balanceSubscription = useCallback(
-    async (address: string) =>
-      await channel?.derive.balances?.all(address, (payload: DeriveBalancesAll) =>
-        setBalanceAll(payload)
+  const stashBalanceSubscription = useCallback(
+    async () =>
+      await channel?.derive.balances?.all(
+        stashAccount?.address as string,
+        (payload: DeriveBalancesAll) => setStashBalanceAll(payload)
       ),
-    [channel, setBalanceAll]
+    [channel, setStashBalanceAll, stashAccount?.address]
+  );
+
+  const controllerBalanceSubscription = useCallback(
+    async () =>
+      await channel?.derive.balances?.all(
+        controllerAccount?.address as string,
+        (payload: DeriveBalancesAll) => setControllerBalanceAll(payload)
+      ),
+    [channel, setControllerBalanceAll, controllerAccount?.address]
   );
 
   const balanceRewardSubscription = useCallback(
@@ -76,13 +87,12 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
 
   useEffect(() => {
     let unsubscribe: UnsubscribeType | undefined;
-    stashAccount?.address &&
-      balanceSubscription(stashAccount?.address).then((unsub) => {
-        unsubscribe = unsub;
-      });
+    stashBalanceSubscription().then((unsub) => {
+      unsubscribe = unsub;
+    });
 
     return () => unsubscribe && unsubscribe();
-  }, [balanceSubscription, stashAccount?.address]);
+  }, [stashBalanceSubscription]);
 
   useEffect(() => {
     let unsubscribe: UnsubscribeType | undefined;
@@ -97,12 +107,12 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   useEffect(() => {
     let unsubscribe: UnsubscribeType | undefined;
     controllerAccount?.address &&
-      balanceSubscription(controllerAccount?.address).then((unsub) => {
+      controllerBalanceSubscription().then((unsub) => {
         unsubscribe = unsub;
       });
 
     return () => unsubscribe && unsubscribe();
-  }, [balanceSubscription, controllerAccount?.address]);
+  }, [controllerBalanceSubscription, controllerAccount?.address]);
 
   useEffect(() => {
     let unsubscribe: UnsubscribeType | undefined;

@@ -5,6 +5,7 @@ export interface ValidatorInterface {
   spaceTypeId: string;
   operatorSpaceId?: string;
   uiTypeId: string;
+  operatorSpaceName: string;
   name: string;
   isFavorited: boolean;
   metadata: {
@@ -31,26 +32,26 @@ export interface KusamaMetaDataInterface {
   };
 }
 
-export interface ValidatorEntity {
+export interface ValidatorEntityInterface {
   name: string;
   accountId: string;
 }
 
 /** FETCH EVENTS **/
-export interface FetchValidatorsResponse extends Array<ValidatorInterface> {}
+export interface FetchValidatorsResponseInterface extends Array<ValidatorInterface> {}
 
-export interface BaseValidatorsRequest {
+export interface BaseValidatorsRequestInterface {
   withIdentity: boolean;
   parentSpaceId?: string;
 }
 
 /** BOOKMARK **/
-export interface UpdateValidatorBookmarkRequest {
+export interface UpdateValidatorBookmarkRequestInterface {
   id: string;
   bookmark: boolean;
 }
 
-export interface UpdateValidatorBookmarkResponse {
+export interface UpdateValidatorBookmarkResponseInterface {
   id: string;
   bookmark: boolean;
 }

@@ -9,6 +9,7 @@ const ValidatorItemModel = types
     entity: types.string,
     address: types.string,
     validator: types.string,
+    operatorSpaceName: types.string,
     commission: types.union(types.string, types.number),
     isBookmarked: types.optional(types.boolean, false),
     info: types.optional(types.boolean, false),

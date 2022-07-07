@@ -10,15 +10,10 @@ import {
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
 
-import {
-  PolkadotAddress,
-  PolkadotAddressBalance,
-  PolkadotUnlockingDuration,
-  ResetModel
-} from 'core/models';
+import {PolkadotAddress, PolkadotUnlockingDuration, ResetModel} from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
-import {AccountTypeBalanceType, KeyringAddressType} from 'core/types';
+import {KeyringAddressType} from 'core/types';
 import {Payee, StakingTransactionType} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
@@ -28,9 +23,7 @@ const PolkadotProviderStore = types
     types.model('PolkadotProvider', {
       addresses: types.optional(types.array(PolkadotAddress), []),
       stashAccount: types.maybeNull(PolkadotAddress),
-      stashAccountBalance: types.maybeNull(PolkadotAddressBalance),
       controllerAccount: types.maybeNull(PolkadotAddress),
-      controllerAccountBalance: types.maybeNull(PolkadotAddressBalance),
       unlockingDuration: types.maybeNull(PolkadotUnlockingDuration),
       chainDecimals: types.maybe(types.number),
       tokenSymbol: '',
@@ -51,13 +44,15 @@ const PolkadotProviderStore = types
   )
   .volatile<{
     channel: ApiPromise | null;
-    balanceAll: DeriveBalancesAll | null;
+    stashBalanceAll: DeriveBalancesAll | null;
+    controllerBalanceAll: DeriveBalancesAll | null;
     customRewardDestinationBalance: DeriveBalancesAll | null;
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
   }>(() => ({
     channel: null,
-    balanceAll: null,
+    stashBalanceAll: null,
+    controllerBalanceAll: null,
     customRewardDestinationBalance: null,
     stakingInfo: null,
     sessionProgress: null
@@ -79,11 +74,70 @@ const PolkadotProviderStore = types
           icon: 'wallet' as IconName
         }));
       },
+      get stashStakingBalance() {
+        let locked, total, transferable, transferableWithoutFee, bonded, redeemable, unbonding;
+        if (self.stashBalanceAll && self.stakingInfo) {
+          locked = formatBalance(
+            self.stashBalanceAll.lockedBalance,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          total = formatBalance(
+            self.stashBalanceAll.freeBalance.add(self.stashBalanceAll.reservedBalance),
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          transferable = formatBalance(
+            self.stashBalanceAll.availableBalance,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+
+          transferableWithoutFee = formatBalance(
+            self.stashBalanceAll.freeBalance.gt(self.existentialDeposit)
+              ? self.stashBalanceAll.freeBalance.sub(self.existentialDeposit)
+              : BN_ZERO,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+
+          bonded = formatBalance(
+            self.stakingInfo.stakingLedger.active.unwrap(),
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          redeemable = formatBalance(
+            self.stakingInfo.redeemable,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+          unbonding = formatBalance(
+            calcUnbondingAmount(self.stakingInfo),
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          );
+        }
+
+        return {
+          locked,
+          total,
+          transferable,
+          transferableWithoutFee,
+          bonded,
+          redeemable,
+          unbonding
+        };
+      },
       get controllerAccountValidation() {
         const isMappedToAnotherStash =
           self.bondedAddress && self.stashAccount?.address !== self.controllerAccount?.address;
         const isManagingMultipleStashes = !!self.usedStashAddress;
-        const sufficientFunds = self.controllerAccountBalance?.transferable === '0';
+        const sufficientFunds =
+          formatBalance(
+            self.controllerBalanceAll?.availableBalance,
+            SubstrateProvider.FORMAT_OPTIONS,
+            self.chainDecimals
+          ) === '0';
         return {
           isMappedToAnotherStash,
           isManagingMultipleStashes,
@@ -105,8 +159,8 @@ const PolkadotProviderStore = types
       },
       get bondAmountValidation() {
         const gtStashFunds =
-          Number(self.stashAccountBalance?.transferableWithoutFee) !== 0 &&
-          Number(self.stakingAmount) > Number(self.stashAccountBalance?.transferableWithoutFee);
+          Number(this.stashStakingBalance.transferableWithoutFee) !== 0 &&
+          Number(self.stakingAmount) > Number(this.stashStakingBalance.transferableWithoutFee);
         const ltThenExistentialDeposit =
           Number(self.stakingAmount) < Number(formatExistential(self.existentialDeposit as BN));
         const ltMinNominatorBond =
@@ -140,7 +194,7 @@ const PolkadotProviderStore = types
       },
       get unbondAmountValidation() {
         const minAmount = Number(self.unbondAmount) <= 0;
-        const maxAmount = Number(self.unbondAmount) > Number(self.stashAccountBalance?.bonded);
+        const maxAmount = Number(self.unbondAmount) > Number(this.stashStakingBalance.bonded);
         return {
           minAmount,
           maxAmount,
@@ -163,71 +217,17 @@ const PolkadotProviderStore = types
     };
   })
   .actions((self) => ({
-    getBalances: flow(function* (address: string, accountTypeBalance: AccountTypeBalanceType) {
-      const balanceAll =
-        self.channel !== null ? yield self.channel.derive.balances?.all(address) : null;
-
-      const stakingInfo =
-        self.channel !== null ? yield self.channel.derive.staking?.account(address) : null;
-
-      const locked = formatBalance(
-        balanceAll.lockedBalance,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const total = formatBalance(
-        balanceAll.freeBalance.add(balanceAll.reservedBalance),
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const transferable = formatBalance(
-        balanceAll.availableBalance,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-
-      const transferableWithoutFee = formatBalance(
-        balanceAll.freeBalance.gt(self.existentialDeposit)
-          ? balanceAll.freeBalance.sub(self.existentialDeposit)
-          : BN_ZERO,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-
-      const bonded = formatBalance(
-        stakingInfo.stakingLedger.active.unwrap(),
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const redeemable = formatBalance(
-        stakingInfo.redeemable,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      const unbonding = formatBalance(
-        calcUnbondingAmount(stakingInfo),
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-
-      self[accountTypeBalance] = cast({
-        locked,
-        total,
-        transferable,
-        bonded,
-        redeemable,
-        unbonding,
-        transferableWithoutFee
-      });
-    }),
     setIsLoading(payload: boolean) {
       self.isLoading = payload;
     },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
     },
-    setBalanceAll(payload: DeriveBalancesAll) {
-      self.balanceAll = payload;
+    setStashBalanceAll(payload: DeriveBalancesAll) {
+      self.stashBalanceAll = payload;
+    },
+    setControllerBalanceAll(payload: DeriveBalancesAll) {
+      self.controllerBalanceAll = payload;
     },
     setCustomRewardDestinationBalance(payload: DeriveBalancesAll) {
       self.customRewardDestinationBalance = payload;
@@ -237,103 +237,14 @@ const PolkadotProviderStore = types
     },
     setInjectAddresses(payload: KeyringAddressType[]) {
       self.addresses = cast(payload);
-    }
-  }))
-  .actions((self) => ({
-    getAddresses: flow(function* () {
-      yield SubstrateProvider.getAddresses(self.ss58Format).then((injectedAccounts) => {
-        SubstrateProvider.loadToKeyring(
-          injectedAccounts,
-          self.ss58Format,
-          self.channel?.genesisHash
-        );
-      });
-      const injectedAddresses = SubstrateProvider.getKeyringAddresses();
-      self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
-    }),
-
-    setStashAccount: flow(function* (address: string) {
+    },
+    setStashAccount(address: string) {
       const result = self.addresses.find((account) => account.address === address);
       self.stashAccount = cast(cloneDeep(result));
-      yield self.getBalances(address, 'stashAccountBalance');
-    }),
-    getMinNominatorBond: flow(function* () {
-      const minNominatorBond = self.channel
-        ? yield self.channel?.query.staking.minNominatorBond()
-        : null;
-      const minNominatorBondFormatted = formatBalance(
-        minNominatorBond,
-        SubstrateProvider.FORMAT_OPTIONS,
-        self.chainDecimals
-      );
-      self.minNominatorBond = cast(minNominatorBondFormatted);
-    }),
-    setControllerAccount: flow(function* (address: string) {
+    },
+    setControllerAccount(address: string) {
       const result = self.addresses.find((account) => account.address === address);
       self.controllerAccount = cast(cloneDeep(result));
-      yield self.getBalances(address, 'controllerAccountBalance');
-    }),
-    getBondedAddress: flow(function* (address: string) {
-      const bonded =
-        self.channel !== null ? yield self.channel.query.staking.bonded(address) : null;
-      self.bondedAddress = cast(bonded.toJSON());
-    }),
-    getUsedStashAddress: flow(function* (address: string) {
-      const stash = self.channel !== null ? yield self.channel.query.staking.ledger(address) : null;
-      const stashId = stash.toJSON() !== null ? stash.toJSON().stash : null;
-      self.usedStashAddress = cast(stashId);
-    })
-  }))
-  .actions((self) => ({
-    connectToChain: flow(function* () {
-      self.channel = yield SubstrateProvider.initAPI();
-    }),
-    setIsWeb3Injected: flow(function* () {
-      const isEnabled = yield SubstrateProvider.isExtensionEnabled();
-      self.isWeb3Injected = cast(isEnabled);
-    }),
-    initAccount: flow(function* () {
-      yield self.setStashAccount(self.addresses[0].address);
-      if (self.stashAccount?.address) {
-        yield self.setControllerAccount(self.stashAccount.address);
-        yield self.getBondedAddress(self.stashAccount.address);
-        yield self.getUsedStashAddress(self.stashAccount.address);
-      }
-    }),
-    getChainInformation: flow(function* () {
-      self.tokenSymbol = cast(
-        self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
-      );
-
-      self.ss58Format = cast(self.channel?.registry.chainSS58);
-      self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
-      SubstrateProvider.setDefaultBalanceFormatting(
-        self.channel?.registry.chainDecimals[0],
-        self.channel?.registry.chainTokens[0]
-      );
-
-      self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
-      yield self.getMinNominatorBond();
-    }),
-    async calculateUnlockingDuration(blocks: BN) {
-      const A_DAY = new BN(24 * 60 * 60 * 1000);
-      const THRESHOLD = BN_THOUSAND.div(BN_TWO);
-      const DEFAULT_TIME = new BN(6_000);
-
-      const time =
-        self.channel?.consts.babe?.expectedBlockTime ||
-        self.channel?.consts.difficulty?.targetBlockTime ||
-        self.channel?.consts.subspace?.expectedBlockTime ||
-        ((self.channel?.consts.timestamp?.minimumPeriod as u64).gte(THRESHOLD)
-          ? (self.channel?.consts.timestamp.minimumPeriod as u64).mul(BN_TWO)
-          : (await self.channel?.query.parachainSystem)
-          ? DEFAULT_TIME.mul(BN_TWO)
-          : DEFAULT_TIME);
-
-      const interval = bnMin(A_DAY, time as BN);
-      const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));
-
-      self.unlockingDuration = cast(duration);
     },
     setTransactionType(transactionType: StakingTransactionType) {
       self.transactionType = cast(transactionType);
@@ -385,14 +296,14 @@ const PolkadotProviderStore = types
       const amountBN = inputToBN(self.unbondAmount, self.chainDecimals, self.tokenSymbol);
       return self.channel?.tx.staking.unbond(amountBN);
     },
+    chillExtrinsics() {
+      return self.channel?.tx.staking.chill();
+    },
     async withdrawUnbondedExtrinsics() {
       const args = (await self.channel?.tx.staking.withdrawUnbonded.meta.args.length) === 1;
       const spanCount = await self.channel?.query.staking.slashingSpans(self.stakingInfo?.stashId);
       const params = args ? [spanCount] : [];
       return self.channel?.tx.staking.withdrawUnbonded(params);
-    },
-    chillExtrinsics() {
-      return self.channel?.tx.staking.chill();
     },
     async calculateFee(extrinsics: SubmittableExtrinsic | undefined) {
       const calculatedFee = await extrinsics?.paymentInfo(
@@ -400,7 +311,92 @@ const PolkadotProviderStore = types
       );
       const feeFormatted = formatBalance(calculatedFee?.partialFee, {withSiFull: true}, 12);
       this.setTransactionFee(feeFormatted);
+    },
+    async calculateUnlockingDuration(blocks: BN) {
+      const A_DAY = new BN(24 * 60 * 60 * 1000);
+      const THRESHOLD = BN_THOUSAND.div(BN_TWO);
+      const DEFAULT_TIME = new BN(6_000);
+
+      const time =
+        self.channel?.consts.babe?.expectedBlockTime ||
+        self.channel?.consts.difficulty?.targetBlockTime ||
+        self.channel?.consts.subspace?.expectedBlockTime ||
+        ((self.channel?.consts.timestamp?.minimumPeriod as u64).gte(THRESHOLD)
+          ? (self.channel?.consts.timestamp.minimumPeriod as u64).mul(BN_TWO)
+          : (await self.channel?.query.parachainSystem)
+          ? DEFAULT_TIME.mul(BN_TWO)
+          : DEFAULT_TIME);
+
+      const interval = bnMin(A_DAY, time as BN);
+      const duration = SubstrateProvider.formatUnlockingDuration(interval, bnToBn(blocks));
+
+      self.unlockingDuration = cast(duration);
     }
+  }))
+  .actions((self) => ({
+    getAddresses: flow(function* () {
+      yield SubstrateProvider.getAddresses(self.ss58Format).then((injectedAccounts) => {
+        SubstrateProvider.loadToKeyring(
+          injectedAccounts,
+          self.ss58Format,
+          self.channel?.genesisHash
+        );
+      });
+      const injectedAddresses = SubstrateProvider.getKeyringAddresses();
+      self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
+    }),
+    getMinNominatorBond: flow(function* () {
+      const minNominatorBond = self.channel
+        ? yield self.channel?.query.staking.minNominatorBond()
+        : null;
+      const minNominatorBondFormatted = formatBalance(
+        minNominatorBond,
+        SubstrateProvider.FORMAT_OPTIONS,
+        self.chainDecimals
+      );
+      self.minNominatorBond = cast(minNominatorBondFormatted);
+    }),
+
+    getBondedAddress: flow(function* (address: string) {
+      const bonded =
+        self.channel !== null ? yield self.channel.query.staking.bonded(address) : null;
+      self.bondedAddress = cast(bonded.toJSON());
+    }),
+    getUsedStashAddress: flow(function* (address: string) {
+      const stash = self.channel !== null ? yield self.channel.query.staking.ledger(address) : null;
+      const stashId = stash.toJSON() !== null ? stash.toJSON().stash : null;
+      self.usedStashAddress = cast(stashId);
+    })
+  }))
+  .actions((self) => ({
+    connectToChain: flow(function* () {
+      self.channel = yield SubstrateProvider.initAPI();
+    }),
+    setIsWeb3Injected: flow(function* () {
+      const isEnabled = yield SubstrateProvider.isExtensionEnabled();
+      self.isWeb3Injected = cast(isEnabled);
+    }),
+    initAccounts: flow(function* () {
+      self.setStashAccount(self.addresses[0].address);
+      self.setControllerAccount(self.addresses[0].address);
+      yield self.getBondedAddress(self.addresses[0].address);
+      yield self.getUsedStashAddress(self.addresses[0].address);
+    }),
+    getChainInformation: flow(function* () {
+      self.tokenSymbol = cast(
+        self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
+      );
+
+      self.ss58Format = cast(self.channel?.registry.chainSS58);
+      self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
+      SubstrateProvider.setDefaultBalanceFormatting(
+        self.channel?.registry.chainDecimals[0],
+        self.channel?.registry.chainTokens[0]
+      );
+
+      self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
+      yield self.getMinNominatorBond();
+    })
   }))
   .actions((self) => ({
     init: flow(function* () {
@@ -409,7 +405,7 @@ const PolkadotProviderStore = types
       yield self.setIsWeb3Injected();
       yield self.getChainInformation();
       yield self.getAddresses();
-      yield self.initAccount();
+      yield self.initAccounts();
       self.setIsLoading(false);
     })
   }));
