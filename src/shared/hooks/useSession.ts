@@ -2,10 +2,7 @@ import {useCallback, useEffect, useRef} from 'react';
 import {useAuth} from 'react-oidc-context';
 
 import {useUnityEvent} from 'shared/hooks';
-import {extendAxiosInterceptors, refreshAxiosInterceptors} from 'api/request';
-
-const CHECK_INTERVAL_MS = 8 * 1000;
-const REMAINING_SEC = 15;
+import {refreshAxiosToken} from 'api/request';
 
 /*
    This hook can be used once.
@@ -16,15 +13,13 @@ export const useSession = (
   tokenRefreshedCallback?: (token?: string) => void,
   tokenNotRefreshedCallback?: (error?: string) => void
 ) => {
-  const signInInterval = useRef<NodeJS.Timeout | null>(null);
   const wasInitialized = useRef<boolean>(false);
-  const isStopping = useRef<boolean>(false);
 
   const auth = useAuth();
 
   const setTokens = useCallback(
     (access_token: string) => {
-      extendAxiosInterceptors(access_token);
+      refreshAxiosToken(access_token);
       tokenRefreshedCallback?.(access_token);
     },
     [tokenRefreshedCallback]
@@ -37,12 +32,10 @@ export const useSession = (
         if (user?.access_token) {
           setTokens(user.access_token);
         } else {
-          isStopping.current = true;
           tokenNotRefreshedCallback?.();
         }
       })
       .catch(() => {
-        isStopping.current = true;
         tokenNotRefreshedCallback?.();
       });
   }, [auth, setTokens, tokenNotRefreshedCallback]);
@@ -52,29 +45,24 @@ export const useSession = (
     signInSilent();
   });
 
-  /* 1. Subscribe on 401 error of BE  */
   useEffect(() => {
-    refreshAxiosInterceptors(auth, setTokens, tokenNotRefreshedCallback);
-  }, [auth, setTokens, tokenNotRefreshedCallback]);
-
-  /* 2. Start checking token expiration time */
-  useEffect(() => {
-    if (!!auth.user && !signInInterval.current) {
-      console.log(`It expires in ${auth.user?.expires_in}`);
-      signInInterval.current = setInterval(() => {
-        if (auth.user && (auth.user.expires_in || 0) <= REMAINING_SEC) {
-          signInSilent();
-        }
-      }, CHECK_INTERVAL_MS);
-    }
-  }, [auth.user, signInSilent]);
-
-  /* 3. Try to refresh token once */
-  useEffect(() => {
-    if (!auth.isLoading && !auth.isAuthenticated && !isStopping.current) {
+    return auth.events.addAccessTokenExpiring(() => {
+      console.log(`[Auth: expiring ${auth.user?.expires_in}]`);
       signInSilent();
-    }
-  }, [auth.isLoading, auth.isAuthenticated, signInSilent]);
+    });
+  }, [auth, signInSilent]);
+
+  useEffect(() => {
+    return auth.events.addAccessTokenExpired(() => {
+      console.log(`[Auth: expired ${auth.user?.expires_in}]`);
+      signInSilent();
+    });
+  }, [auth, signInSilent]);
+
+  // Remove
+  useEffect(() => {
+    console.log(`[Auth: expires in ${auth.user?.expires_in}]`);
+  }, [auth.user]);
 
   /* 4. User is ready. It must be called once. */
   useEffect(() => {
