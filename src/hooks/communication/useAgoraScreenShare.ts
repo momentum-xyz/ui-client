@@ -12,7 +12,8 @@ import {appVariables} from '../../api/constants';
 export const useAgoraScreenShare = () => {
   const {authState} = useContextAuth();
   const {collaborationState} = useCollaboration();
-  const {appId, setScreenSharingClient, screenSharingClient} = useContext(AgoraContext);
+  const {appId, setScreenSharingClient, screenSharingClient, screenShare} =
+    useContext(AgoraContext);
   const {getConfirmation} = useConfirmationDialog();
 
   // @ts-ignore
@@ -101,5 +102,5 @@ export const useAgoraScreenShare = () => {
     }
   }, [screenSharingClient, setScreenSharingClient]);
 
-  return {startScreenCast, stopScreenCast};
+  return {startScreenCast, stopScreenCast, screenShare};
 };

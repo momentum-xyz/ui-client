@@ -1,5 +1,6 @@
 import React, {FC, useState} from 'react';
 import {NavLink} from 'react-router-dom';
+import cn from 'classnames';
 
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 import {IconSvg} from 'ui-kit/index';
@@ -12,6 +13,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   exact?: boolean;
   replace?: boolean;
   state?: object;
+  isActive?: boolean;
 }
 
 const NavigationBarItem: FC<PropsInterface> = ({
@@ -20,6 +22,7 @@ const NavigationBarItem: FC<PropsInterface> = ({
   theme,
   exact = false,
   replace = false,
+  isActive = false,
   state
 }) => {
   const [hovered, setHovered] = useState(false);
@@ -39,7 +42,7 @@ const NavigationBarItem: FC<PropsInterface> = ({
         className="NavLink"
         replace={replace}
       >
-        <div className={`icon ${hovered ? 'hovered' : ''}`}>
+        <div className={cn('icon', isActive && 'isActive', hovered && 'hovered')}>
           <IconSvg name={iconName} size="large" theme={theme} />
         </div>
       </NavLink>
