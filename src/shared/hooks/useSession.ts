@@ -40,11 +40,17 @@ export const useSession = (
       });
   }, [auth, setTokens, tokenNotRefreshedCallback]);
 
+  // TODO: Remove. For testing
+  useEffect(() => {
+    console.log(`[Auth: expires in ${auth.user?.expires_in}]`);
+  }, [auth.user]);
+
   /* 0. Unity has invalid token by some reason */
   useUnityEvent('InvalidToken', () => {
     signInSilent();
   });
 
+  /* 1. Token is expiring */
   useEffect(() => {
     return auth.events.addAccessTokenExpiring(() => {
       console.log(`[Auth: expiring ${auth.user?.expires_in}]`);
@@ -52,6 +58,7 @@ export const useSession = (
     });
   }, [auth, signInSilent]);
 
+  /* 2. Token was expired */
   useEffect(() => {
     return auth.events.addAccessTokenExpired(() => {
       console.log(`[Auth: expired ${auth.user?.expires_in}]`);
@@ -59,12 +66,7 @@ export const useSession = (
     });
   }, [auth, signInSilent]);
 
-  // Remove
-  useEffect(() => {
-    console.log(`[Auth: expires in ${auth.user?.expires_in}]`);
-  }, [auth.user]);
-
-  /* 4. User is ready. It must be called once. */
+  /* 3. User is ready. It must be called once. */
   useEffect(() => {
     if (auth.isAuthenticated && !!auth.user?.access_token && !wasInitialized.current) {
       setTokens(auth.user.access_token);
