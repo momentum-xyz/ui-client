@@ -22,7 +22,7 @@ const InputDark: FC<PropsType> = (props) => {
         onChange={(event) => onChange?.(event.target.value)}
         className={cn(isError && 'error')}
       />
-      {errorMessage && <styled.Error>{errorMessage}</styled.Error>}
+      {isError && <styled.Error>{errorMessage}</styled.Error>}
     </styled.InputContainer>
   );
 };

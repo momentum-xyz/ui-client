@@ -12,6 +12,8 @@ export const spaceRepositoryEndpoints = () => {
     assignUser: `${BASE_URL}/assign-user`,
     ownedSpaces: `${BASE_URL}/owned-spaces`,
     createInitiative: `${BASE_URL}/create-initiative`,
-    search: `${BASE_URL}/search`
+    search: `${BASE_URL}/search`,
+    userSpaceList: `${BASE_URL}/user-spaces/:userId`,
+    worldConfig: `${BASE_URL}/:worldId/world-config`
   };
 };

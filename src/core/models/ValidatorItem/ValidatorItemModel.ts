@@ -7,6 +7,7 @@ const ValidatorItemModel = types
   .model('ValidatorItemModel', {
     id: types.string,
     entity: types.string,
+    operatorSpaceName: types.string,
     address: types.string,
     validator: types.string,
     commission: types.union(types.string, types.number),

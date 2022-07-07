@@ -137,42 +137,44 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
               <Text text={t('editProfileWidget.avatarInstructions')} size="s" align="left" />
             </div>
           </styled.AvatarSettings>
-          <Controller
-            control={control}
-            name="name"
-            render={({field: {value, onChange}}) => (
-              <Input
-                label={t('fields.name')}
-                value={value}
-                onChange={onChange}
-                errorMessage={t('editProfileWidget.nameRequired')}
-                isError={!!errors.name}
-                required
-              />
-            )}
-            rules={{required: true}}
-          />
-          <Controller
-            control={control}
-            name="profile.location"
-            render={({field: {value, onChange}}) => (
-              <Input label={t('fields.location')} value={value} onChange={onChange} />
-            )}
-          />
-          <Controller
-            control={control}
-            name="profile.profileLink"
-            render={({field: {value, onChange}}) => (
-              <Input label={t('fields.site')} value={value} onChange={onChange} />
-            )}
-          />
-          <Controller
-            control={control}
-            name="profile.bio"
-            render={({field: {value, onChange}}) => (
-              <TextArea name={`${t('fields.bio')}:`} value={value} onChange={onChange} />
-            )}
-          />
+          <styled.InputsContainer>
+            <Controller
+              control={control}
+              name="name"
+              rules={{required: true, maxLength: 32, minLength: 2}}
+              render={({field: {value, onChange}}) => (
+                <Input
+                  label={t('fields.name')}
+                  value={value}
+                  onChange={onChange}
+                  errorMessage={t('errors.nameConstraints')}
+                  isError={!!errors.name}
+                  required
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="profile.location"
+              render={({field: {value, onChange}}) => (
+                <Input label={t('fields.location')} value={value} onChange={onChange} />
+              )}
+            />
+            <Controller
+              control={control}
+              name="profile.profileLink"
+              render={({field: {value, onChange}}) => (
+                <Input label={t('fields.site')} value={value} onChange={onChange} />
+              )}
+            />
+            <Controller
+              control={control}
+              name="profile.bio"
+              render={({field: {value, onChange}}) => (
+                <TextArea name={`${t('fields.bio')}:`} value={value} onChange={onChange} />
+              )}
+            />
+          </styled.InputsContainer>
           <Button
             label={t('actions.saveChanges')}
             onClick={(e) => {

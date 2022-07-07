@@ -38,6 +38,20 @@ export const Item = styled.div`
       opacity: 1;
     }
 
+    &.isActive:not(&.hovered) {
+      @keyframes pulse {
+        from {
+          opacity: 0.3;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      animation: pulse 1s ease-in-out alternate infinite;
+    }
+
     svg {
       fill: currentColor;
     }

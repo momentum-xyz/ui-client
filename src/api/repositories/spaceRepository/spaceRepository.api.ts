@@ -1,4 +1,5 @@
 import {AxiosRequestConfig} from 'axios';
+import {generatePath} from 'react-router-dom';
 
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
@@ -23,7 +24,11 @@ import {
   SpaceRequest,
   SpaceResponse,
   UserOwnedSpacesRequest,
-  UserOwnedSpacesResponse
+  UserOwnedSpacesResponse,
+  UserSpaceListRequest,
+  UserSpaceListItemResponse,
+  WorldConfigRequest,
+  WorldConfigResponse
 } from './spaceRepository.api.types';
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
@@ -90,6 +95,15 @@ export const fetchUserOwnedSpaces: RequestInterface<
   return request.get(spaceRepositoryEndpoints().ownedSpaces, config);
 };
 
+export const fetchUserSpaceList: RequestInterface<
+  UserSpaceListRequest,
+  UserSpaceListItemResponse[]
+> = (options) => {
+  const {userId, ...restOptions} = options;
+  const url = generatePath(spaceRepositoryEndpoints().userSpaceList, {userId});
+  return request.get(url, restOptions);
+};
+
 export const createInitiative: RequestInterface<
   CreateInitiativeRequest,
   CreateInitiativeResponse
@@ -109,4 +123,14 @@ export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesRes
   };
 
   return request.get(spaceRepositoryEndpoints().search, restOptions);
+};
+
+export const fetchWorldConfig: RequestInterface<WorldConfigRequest, WorldConfigResponse> = (
+  options
+) => {
+  const {worldId, ...restOptions} = options;
+
+  const url = generatePath(spaceRepositoryEndpoints().worldConfig, {worldId});
+
+  return request.get(url, restOptions);
 };
