@@ -13,6 +13,7 @@ export const spaceRepositoryEndpoints = () => {
     ownedSpaces: `${BASE_URL}/owned-spaces`,
     createInitiative: `${BASE_URL}/create-initiative`,
     search: `${BASE_URL}/search`,
-    userSpaceList: `${BASE_URL}/user-spaces/:userId`
+    userSpaceList: `${BASE_URL}/user-spaces/:userId`,
+    worldConfig: `${BASE_URL}/:worldId/world-config`
   };
 };
