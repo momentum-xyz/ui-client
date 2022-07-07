@@ -10,6 +10,8 @@ import {useStageModeLeave} from 'hooks/api/useStageModeService';
 import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 
+import TopbarButton from '../../../../component/atoms/topbar/TopbarButton';
+
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
@@ -49,12 +51,32 @@ const DashboardPage: FC = () => {
     }
   };
 
+  const actions = () => {
+    return (
+      <>
+        {spaceStore.isAdmin && (
+          <TopbarButton
+            title="Open Admin"
+            link={'/space/' + spaceStore.space.id + '/admin'}
+            isActive={(match, location) => {
+              return location.pathname.includes('/space/' + spaceStore.space.id + '/admin');
+            }}
+            state={{canGoBack: true}}
+          >
+            <IconSvg name="pencil" size="medium-large" />
+          </TopbarButton>
+        )}
+      </>
+    );
+  };
+
   return (
     <styled.Container>
       <TopBar
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
+        actions={actions()}
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(spaceStore.isAdmin || spaceStore.isMember) && (
