@@ -1,4 +1,5 @@
 import {SpaceType} from 'core/enums';
+import {MetadataFieldType} from 'core/types';
 
 interface AuxProjectInterface {
   problem: string;
@@ -222,8 +223,6 @@ export interface SearchSpacesResponse {
 export interface WorldConfigRequest {
   worldId: string;
 }
-
-export type MetadataFieldType = 'community_space_id' | 'help_space_id';
 
 export type WorldConfig = {
   [field in MetadataFieldType]: string;
