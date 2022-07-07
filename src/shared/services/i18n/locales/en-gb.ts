@@ -155,7 +155,7 @@ export const enGb = {
         'No {{name}} extension detected, please install {{name}} to continue here.',
       couldNotRemoveEvent: 'Could not remove the event.',
       endDateGraterThanStartDate: 'End date has to be grater than start date',
-      nameConstraints: 'please enter a name with 2-32 characters'
+      nameConstraints: 'Please enter a name with 2-32 characters'
     },
     counts: {
       people_one: '{{count}} Person',
