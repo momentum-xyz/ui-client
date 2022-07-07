@@ -40,7 +40,7 @@ const errorHandler = (error: AxiosError) => {
 /**
  * Configure actual token
  */
-export const setAccessToken = (token: string): void => {
+const setAccessToken = (token: string): void => {
   localStorage.setItem(TOKEN_KEY, token);
 };
 
