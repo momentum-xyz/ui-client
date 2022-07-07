@@ -216,3 +216,17 @@ export interface SearchSpacesResponse {
   totalPages: number;
   currentPage: number;
 }
+
+/** World Config **/
+
+export interface WorldConfigRequest {
+  worldId: string;
+}
+
+export type MetadataFieldType = 'community_space_id' | 'help_space_id';
+
+export type WorldConfig = {
+  [field in MetadataFieldType]: string;
+};
+
+export interface WorldConfigResponse extends WorldConfig {}
