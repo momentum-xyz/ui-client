@@ -4,7 +4,6 @@ import {useTheme} from 'styled-components';
 import {DraggableProvided} from 'react-beautiful-dnd';
 
 import {PanelLayout, TileMenu} from 'ui-kit';
-import {useStore} from 'shared/hooks';
 import {TileInterface} from 'core/models';
 
 import * as styled from './TileDetail.styled';
@@ -14,13 +13,19 @@ interface PropsInterface {
   videoUrl?: string;
   imageUrl?: string;
   provided?: DraggableProvided;
+  isAdmin: boolean;
+  isMember: boolean;
 }
 
-const TileDetail: FC<PropsInterface> = ({tile, videoUrl, imageUrl, provided}) => {
+const TileDetail: FC<PropsInterface> = ({
+  tile,
+  videoUrl,
+  imageUrl,
+  provided,
+  isAdmin,
+  isMember
+}) => {
   const theme = useTheme();
-  const {
-    collaborationStore: {spaceStore}
-  } = useStore();
 
   const handleEdit = () => {
     console.info('');
@@ -42,7 +47,7 @@ const TileDetail: FC<PropsInterface> = ({tile, videoUrl, imageUrl, provided}) =>
           <iframe title={`video-${tile.id}`} src={videoUrl} allowFullScreen />
         </styled.VideoWrapper>
       )}
-      {(spaceStore.isAdmin || spaceStore.isMember) && (
+      {(isAdmin || isMember) && (
         <TileMenu
           onEdit={handleEdit}
           onDelete={handleDelete}

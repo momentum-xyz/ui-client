@@ -2,13 +2,12 @@ import {cast, Instance, types} from 'mobx-state-tree';
 import {cloneDeep} from 'lodash-es';
 
 import {COLUMNS} from 'core/constants';
-
-import {Tile, TileInterface} from '../Tile';
+import {TileInterface} from 'core/models';
 
 const TileList = types
   .model('TileList', {
     owner_id: types.maybe(types.string),
-    tiles: types.optional(types.array(Tile), []),
+    tiles: types.optional(types.array(types.frozen<TileInterface>()), []),
     status: types.maybe(types.number),
     message: types.maybe(types.string)
   })
@@ -18,7 +17,7 @@ const TileList = types
     }
   }))
   .views((self) => ({
-    get tileMatrix() {
+    get tileMatrix(): TileInterface[][] {
       const tiles = [...self.tiles];
       return tiles
         .sort((a, b) => a.row - b.row)

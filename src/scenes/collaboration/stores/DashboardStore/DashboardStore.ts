@@ -9,7 +9,7 @@ const DashboardStore = types.compose(
   types
     .model('DashboardStore', {
       tileList: types.optional(TileList, {}),
-      dashboardStore: types.optional(Dashboard, {})
+      dashboard: types.optional(Dashboard, {})
     })
     .actions((self) => ({}))
 );

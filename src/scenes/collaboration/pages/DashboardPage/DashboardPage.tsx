@@ -7,27 +7,26 @@ import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
-import {UnityService} from 'shared/services';
-import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {
-    collaborationStore: {dashboardStore, spaceStore},
+    collaborationStore: {dashboard, spaceStore},
     sessionStore
   } = useStore();
 
-  const {tileList, onDragEnd} = dashboardStore;
+  const {tileList, onDragEnd} = dashboard;
 
   useEffect(() => {
     if (spaceStore.space.id) {
-      dashboardStore.fetchDashboard(spaceStore.space.id);
+      dashboard.fetchDashboard(spaceStore.space.id);
     }
     return () => {
-      dashboardStore.resetModel();
+      dashboard.resetModel();
     };
   }, []);
 
@@ -38,12 +37,7 @@ const DashboardPage: FC = () => {
   // TODO: make as action in store
   const leaveCollaborationSpace = () => {
     if (collaborationState.collaborationSpace) {
-      UnityService.triggerInteractionMsg?.(
-        PosBusEventEnum.LeftSpace,
-        collaborationState.collaborationSpace.id,
-        0,
-        ''
-      );
+      UnityService.leaveSpace(collaborationState.collaborationSpace.id);
       leaveCollaborationSpaceCall(false).then(stageModeLeave);
 
       if (collaborationState.stageMode) {
@@ -71,7 +65,7 @@ const DashboardPage: FC = () => {
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
       </TopBar>
-      {!dashboardStore.dashboardIsEdited && spaceStore.isOwner && (
+      {!dashboard.dashboardIsEdited && spaceStore.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
           <styled.AlertContent>

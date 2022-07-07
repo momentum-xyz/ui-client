@@ -9,13 +9,13 @@ const RootCollaborationStore = types
   .model('RootCollaborationStore', {
     spaceStore: types.optional(SpaceStore, {}),
     calendarStore: types.optional(CalendarStore, {}),
-    dashboardStore: types.optional(Dashboard, {})
+    dashboard: types.optional(Dashboard, {})
   })
   .actions((self) => ({
     init(spaceId: string) {
       self.spaceStore.setSpace(spaceId);
       self.spaceStore.fetchSpaceInformation();
-      self.dashboardStore.fetchDashboard(spaceId);
+      self.dashboard.fetchDashboard(spaceId);
     }
   }));
 

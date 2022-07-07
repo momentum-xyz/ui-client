@@ -14,18 +14,35 @@ export interface PropsInterface {
 
 const TileItem: FC<PropsInterface> = ({tile, provided}) => {
   const {
-    collaborationStore: {dashboardStore}
+    collaborationStore: {dashboard, spaceStore}
   } = useStore();
+  const {isAdmin, isMember} = spaceStore;
 
   switch (tile.type) {
     case TileTypeEnum.TILE_TYPE_MEDIA:
-      dashboardStore.setImageUrl(tile);
-      return <TileDetail tile={tile} imageUrl={dashboardStore.imageUrl} provided={provided} />;
+      dashboard.setImageUrl(tile);
+      return (
+        <TileDetail
+          tile={tile}
+          imageUrl={dashboard.imageUrl}
+          provided={provided}
+          isAdmin={isAdmin}
+          isMember={isMember}
+        />
+      );
     case TileTypeEnum.TILE_TYPE_TEXT:
-      return <TileDetail tile={tile} provided={provided} />;
+      return <TileDetail tile={tile} provided={provided} isAdmin={isAdmin} isMember={isMember} />;
     case TileTypeEnum.TILE_TYPE_VIDEO:
-      dashboardStore.setVideoUrl(tile);
-      return <TileDetail tile={tile} videoUrl={dashboardStore.videoUrl} provided={provided} />;
+      dashboard.setVideoUrl(tile);
+      return (
+        <TileDetail
+          tile={tile}
+          videoUrl={dashboard.videoUrl}
+          provided={provided}
+          isAdmin={isAdmin}
+          isMember={isMember}
+        />
+      );
     default:
       return null;
   }
