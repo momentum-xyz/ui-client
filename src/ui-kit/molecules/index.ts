@@ -17,3 +17,4 @@ export * from './NetworkButton';
 export * from './ToolbarIcon';
 export * from './ExpandableLayout';
 export * from './UnityLoader';
+export * from './TileMenu';

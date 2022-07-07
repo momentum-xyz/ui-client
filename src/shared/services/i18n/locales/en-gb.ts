@@ -248,7 +248,9 @@ export const enGb = {
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.',
       kickedFromMeeting: 'A Space Admin has kicked you from the space',
-      joinGathering: 'The gathering {{title}} is about to start'
+      joinGathering: 'The gathering {{title}} is about to start',
+      updateSpace:
+        'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).'
     },
     titles: {
       alert: 'alert',
@@ -260,7 +262,8 @@ export const enGb = {
       create: 'create',
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
-      joinGathering: 'Gathering Event is starting now'
+      joinGathering: 'Gathering Event is starting now',
+      updateSpace: 'update your space with some enticing content'
     },
     placeholders: {
       search: 'Search',
@@ -666,6 +669,13 @@ export const enGb = {
     },
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
+    },
+    dashboard: {
+      subtitle: 'dashboard',
+      vibe: 'vibe',
+      addTile: 'add tile',
+      invitePeople: 'invite people',
+      stake: 'stake'
     }
   }
 };

@@ -76,6 +76,7 @@ export interface SpaceResponse {
   space: SpaceInterface;
   admin: boolean;
   member?: boolean;
+  owner?: boolean;
   status: number;
   message: string;
   spaceType: SpaceType;

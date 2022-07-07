@@ -3,13 +3,12 @@ import {Redirect} from 'react-router-dom';
 
 // TODO: Refactor
 import {RouteConfigInterface} from 'core/interfaces';
-import DashboardSpaceLayout from 'component/layout/DashboardSpaceLayout';
 import StageModeRouter from 'component/layout/StageMode/StageModeRouter';
 import WhiteBoardLayout from 'component/layout/Collaboration/WhiteBoardLayout';
 import ScreenShareLayout from 'component/layout/Collaboration/ScreenShareLayout';
 import GoogleDriveLayout from 'component/layout/Collaboration/GoogleDriveLayout';
 
-import {CalendarPage} from './pages';
+import {CalendarPage, DashboardPage} from './pages';
 
 export const PRIVATE_ROUTES = (path: string, spaceId: string) => {
   const routes: RouteConfigInterface[] = [
@@ -21,7 +20,7 @@ export const PRIVATE_ROUTES = (path: string, spaceId: string) => {
     {
       path: `${path}/dashboard`,
       exact: true,
-      main: () => <DashboardSpaceLayout id={spaceId} />
+      main: () => <DashboardPage />
     },
     {
       path: `${path}/calendar/:eventId`,

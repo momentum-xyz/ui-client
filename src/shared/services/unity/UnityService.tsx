@@ -175,6 +175,14 @@ export class UnityService {
   setSoundEffectVolume(value: string) {
     this.unityApi?.controlVolume(value);
   }
+
+  leaveSpace(id: string) {
+    try {
+      this.unityApi?.triggerInteractionMsg?.(PosBusEventEnum.LeftSpace, id, 0, '');
+    } catch (error) {
+      console.info(error);
+    }
+  }
 }
 
 export default new UnityService();

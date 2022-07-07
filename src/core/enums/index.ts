@@ -14,6 +14,7 @@ export * from './scanner.enum';
 export * from './payee.enum';
 export * from './stakingTransactionType.enum';
 export * from './userStatus.enum';
+export * from './tiles.enum';
 export * from './posBusEvent.enum';
 export * from './posBusNotification.enum';
 export * from './posBus.enum';
