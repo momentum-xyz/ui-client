@@ -26,7 +26,9 @@ import {
   UserOwnedSpacesRequest,
   UserOwnedSpacesResponse,
   UserSpaceListRequest,
-  UserSpaceListItemResponse
+  UserSpaceListItemResponse,
+  WorldConfigRequest,
+  WorldConfigResponse
 } from './spaceRepository.api.types';
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
@@ -121,4 +123,14 @@ export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesRes
   };
 
   return request.get(spaceRepositoryEndpoints().search, restOptions);
+};
+
+export const fetchWorldConfig: RequestInterface<WorldConfigRequest, WorldConfigResponse> = (
+  options
+) => {
+  const {worldId, ...restOptions} = options;
+
+  const url = generatePath(spaceRepositoryEndpoints().worldConfig, {worldId});
+
+  return request.get(url, restOptions);
 };

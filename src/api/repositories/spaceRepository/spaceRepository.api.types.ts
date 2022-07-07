@@ -1,4 +1,5 @@
 import {SpaceType} from 'core/enums';
+import {MetadataFieldType} from 'core/types';
 
 interface AuxProjectInterface {
   problem: string;
@@ -216,3 +217,15 @@ export interface SearchSpacesResponse {
   totalPages: number;
   currentPage: number;
 }
+
+/** World Config **/
+
+export interface WorldConfigRequest {
+  worldId: string;
+}
+
+export type WorldConfig = {
+  [field in MetadataFieldType]: string;
+};
+
+export interface WorldConfigResponse extends WorldConfig {}
