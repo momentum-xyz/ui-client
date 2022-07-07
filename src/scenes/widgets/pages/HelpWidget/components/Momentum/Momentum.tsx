@@ -6,7 +6,7 @@ import {useHistory} from 'react-router-dom';
 import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {MOMENTUM_SPACE_DEV, MOMENTUM_SPACE, ROUTES, IS_DEV_ENVIRONMENT} from 'core/constants';
+import {ROUTES} from 'core/constants';
 import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
 
@@ -15,8 +15,10 @@ import * as styled from './Momentum.styled';
 const Momentum: React.FC = () => {
   const {
     widgetStore: {helpStore},
-    mainStore: {unityStore}
+    mainStore: {unityStore, worldStore}
   } = useStore();
+
+  const {worldConfig} = worldStore;
 
   const history = useHistory();
 
@@ -26,23 +28,17 @@ const Momentum: React.FC = () => {
     helpStore.toggleSection(HelpSectionType.Momentum);
   };
 
-  const flyToSpaceAndJoin = (spaceId: string) => {
-    joinMeetingSpace(spaceId).then(() => {
-      unityStore.teleportToSpace(spaceId);
-      setTimeout(() => {
-        history.push(ROUTES.collaboration);
-      }, 2000);
-    });
-  };
+  const handleFlyToSpace = (openCalendar = false) => {
+    if (worldConfig?.community_space_id) {
+      joinMeetingSpace(worldConfig.community_space_id).then(() => {
+        unityStore.teleportToSpace(worldConfig.community_space_id);
+        setTimeout(() => {
+          history.push(openCalendar ? ROUTES.calendar : ROUTES.collaboration);
+        }, 2000);
+      });
 
-  const handleFlyToSpace = () => {
-    if (IS_DEV_ENVIRONMENT) {
-      flyToSpaceAndJoin(MOMENTUM_SPACE_DEV);
-    } else {
-      flyToSpaceAndJoin(MOMENTUM_SPACE);
+      helpStore.helpDialog.close();
     }
-
-    helpStore.helpDialog.close();
   };
 
   return (
@@ -55,14 +51,14 @@ const Momentum: React.FC = () => {
       <styled.TextItem>{t('helpSection.momentum.paragraphs.one')}</styled.TextItem>
       <styled.TextItem>
         {t('helpSection.momentum.paragraphs.two.partOne')}
-        <styled.HighlightedSpan>
+        <styled.HighlightedSpan onClick={() => handleFlyToSpace()}>
           {t('helpSection.momentum.paragraphs.two.highlightedPart')}
         </styled.HighlightedSpan>
         {t('helpSection.momentum.paragraphs.two.partTwo')}
       </styled.TextItem>
       <styled.TextItem>
         {t('helpSection.momentum.paragraphs.three.partOne')}
-        <styled.HighlightedSpan>
+        <styled.HighlightedSpan onClick={() => handleFlyToSpace(true)}>
           {t('helpSection.momentum.paragraphs.three.highlightedPart')}
         </styled.HighlightedSpan>
         {t('helpSection.momentum.paragraphs.three.partTwo')}
@@ -72,7 +68,7 @@ const Momentum: React.FC = () => {
         <Button
           label={t('helpSection.momentum.visitSpace')}
           icon="fly-to"
-          onClick={handleFlyToSpace}
+          onClick={() => handleFlyToSpace()}
         />
       </styled.Buttons>
     </Section>
