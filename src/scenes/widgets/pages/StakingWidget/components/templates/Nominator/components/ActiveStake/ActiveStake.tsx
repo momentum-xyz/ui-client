@@ -18,7 +18,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond}) => {
   const {stakingStore} = useStore().widgetStore;
   const {
-    stashAccountBalance,
+    stashStakingBalance,
     tokenSymbol,
     isUnbondingPermitted,
     isStakingAccountUnlocking,
@@ -58,18 +58,18 @@ const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond})
               <styled.StakeColumn>
                 <Text
                   text={`${t('staking.balanceTypes.redeemable')} ${
-                    stashAccountBalance?.redeemable
+                    stashStakingBalance.redeemable
                   } ${tokenSymbol}`}
                   size="xs"
                 />
               </styled.StakeColumn>
             </>
           )}
-          {stashAccountBalance?.bonded && Number(stashAccountBalance?.bonded) !== 0 && (
+          {stashStakingBalance.bonded && Number(stashStakingBalance.bonded) !== 0 && (
             <styled.StakeColumn>
               <Text
                 text={`${t('staking.balanceTypes.staked')} ${
-                  stashAccountBalance?.bonded
+                  stashStakingBalance.bonded
                 } ${tokenSymbol}`}
                 size="xs"
               />

@@ -5,15 +5,16 @@ import {RequestInterface} from 'api/interfaces';
 
 import {validatorRepositoryEndpoints} from './validatorsRepository.api.endpoints';
 import {
-  FetchValidatorsResponse,
-  BaseValidatorsRequest,
-  UpdateValidatorBookmarkRequest,
-  UpdateValidatorBookmarkResponse
+  FetchValidatorsResponseInterface,
+  BaseValidatorsRequestInterface,
+  UpdateValidatorBookmarkRequestInterface,
+  UpdateValidatorBookmarkResponseInterface
 } from './validatorsRepository.api.types';
 
-export const fetchValidators: RequestInterface<BaseValidatorsRequest, FetchValidatorsResponse> = (
-  options
-) => {
+export const fetchValidators: RequestInterface<
+  BaseValidatorsRequestInterface,
+  FetchValidatorsResponseInterface
+> = (options) => {
   const {withIdentity, parentSpaceId, ...restOptions} = options;
 
   const config: AxiosRequestConfig = {
@@ -29,8 +30,8 @@ export const fetchValidators: RequestInterface<BaseValidatorsRequest, FetchValid
 };
 
 export const updateBookmark: RequestInterface<
-  UpdateValidatorBookmarkRequest,
-  UpdateValidatorBookmarkResponse
+  UpdateValidatorBookmarkRequestInterface,
+  UpdateValidatorBookmarkResponseInterface
 > = (options) => {
   const {id, bookmark, ...rest} = options;
   const requestParams = {

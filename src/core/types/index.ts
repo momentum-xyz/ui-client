@@ -1,4 +1,3 @@
-export * from './AccountTypeBalance.type';
 export * from './Message.type';
 export * from './StakeValidatorError.type';
 export * from './Unsubscribe.type';
@@ -6,5 +5,5 @@ export * from './KeyringAddress.type';
 export * from './unityEvent.type';
 export * from './posBusMessage.type';
 export * from './posBusEvent.type';
-export * from './intergation.type';
+export * from './Integration.type';
 export * from './stageMode.type';
