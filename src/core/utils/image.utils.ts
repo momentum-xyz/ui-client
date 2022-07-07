@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 
-// @ts-ignore
-function toDataURL(url: string, callback) {
+function toDataURL(url: string, callback: any) {
   const xhr = new XMLHttpRequest();
   xhr.onload = function () {
     const reader = new FileReader();
