@@ -19,7 +19,7 @@ const EditMemberDialog: FC<PropsInterface> = (props) => {
   const {isAdmin, userId} = props;
 
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore} = spaceManagerStore;
+  const {space: spaceStore} = spaceManagerStore;
 
   const {control, handleSubmit} = useForm<{role: 'member' | 'admin'}>({
     defaultValues: {

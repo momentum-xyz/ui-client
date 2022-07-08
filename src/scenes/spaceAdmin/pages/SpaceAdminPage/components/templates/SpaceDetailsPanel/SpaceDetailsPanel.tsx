@@ -15,9 +15,7 @@ import * as styled from './SpaceDetailsPanel.styled';
 
 const SpaceDetailsPanel: FC = () => {
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore, spaceDetailsFormStore, deleteSpaceConfirmationDialog} = spaceManagerStore;
-
-  const {space} = spaceStore;
+  const {space, spaceDetailsFormStore, deleteSpaceConfirmationDialog} = spaceManagerStore;
 
   const history = useHistory();
   const leaveCollaborationSpace = useLeaveCollaborationSpace();
@@ -42,7 +40,7 @@ const SpaceDetailsPanel: FC = () => {
     settings: SpaceSettingsInterface
   ) => {
     if (space.id) {
-      spaceDetailsFormStore.saveDetails(settings, space.id).then(spaceStore.fetchSpaceInformation);
+      spaceDetailsFormStore.saveDetails(settings, space.id).then(space.fetchSpaceInformation);
     }
   };
 
@@ -121,7 +119,7 @@ const SpaceDetailsPanel: FC = () => {
             <Text text={space.type} size="xs" align="left" />
           </styled.Info>
         )}
-        {spaceStore.space.secret !== undefined && (
+        {space.secret !== undefined && (
           <styled.Info>
             <Text
               text={t('spaceAdmin.spaceDetails.accessLabel')}

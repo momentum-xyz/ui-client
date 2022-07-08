@@ -41,12 +41,12 @@ const Collaboration: React.FC<Props> = () => {
   } = useStore();
 
   usePosBusEvent('posbus-connected', () => {
-    if (!collaborationStore.spaceStore.space.id) {
+    if (!collaborationStore.space.id) {
       return;
     }
     unityStore.triggerInteractionMessage(
       PosBusEventEnum.EnteredSpace,
-      collaborationStore.spaceStore.space.id,
+      collaborationStore.space.id,
       0,
       ''
     );

@@ -19,7 +19,7 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
   const {parentId, allowedSubSpaceTypes} = props;
 
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore} = spaceManagerStore;
+  const {space: spaceStore} = spaceManagerStore;
 
   const {
     control,

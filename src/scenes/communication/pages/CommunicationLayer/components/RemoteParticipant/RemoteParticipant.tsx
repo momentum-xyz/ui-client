@@ -39,7 +39,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   const {
     communicationStore: {communicationLayerStore},
-    collaborationStore: {spaceStore}
+    collaborationStore: {space}
   } = useStore();
 
   const [user] = useUser(id);
@@ -91,11 +91,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participant.videoTrack, noVideo, collaborationState.stageMode]);
 
-  useEffect(() => {
-    const volume = collaborationState.deafen ? 0 : 100;
-    participant.audioTrack?.setVolume(volume);
-  }, [collaborationState.deafen, participant.audioTrack]);
-
   const handleStageModeUserClick = () => {
     inviteOnStageModalRef.current?.open();
     console.info(`clicked on ${userName} with ${id}`);
@@ -111,17 +106,14 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   const handleRemoveParticipant = () => {
     communicationLayerStore.removeParticipant(
-      spaceStore.space.id,
+      space.id,
       communicationLayerStore.selectedParticipant
     );
     communicationLayerStore.selectParticipant(undefined);
   };
 
   const handleMuteParticipant = () => {
-    communicationLayerStore.muteParticipant(
-      spaceStore.space.id,
-      communicationLayerStore.selectedParticipant
-    );
+    communicationLayerStore.muteParticipant(space.id, communicationLayerStore.selectedParticipant);
     communicationLayerStore.selectParticipant(undefined);
   };
 

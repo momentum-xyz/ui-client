@@ -1,7 +1,12 @@
 import {flow, types} from 'mobx-state-tree';
 
-import {DialogModel, RequestModel, ResetModel, TokenRuleItemModelInterface} from 'core/models';
-import {SpaceStore} from 'stores/MainStore/models';
+import {
+  DialogModel,
+  RequestModel,
+  ResetModel,
+  TokenRuleItemModelInterface,
+  Space
+} from 'core/models';
 import {api} from 'api';
 import {TokenRulesListStore} from 'scenes/widgets/stores/TokenRulesListStore';
 import {TokenRuleReviewStore} from 'scenes/widgets/stores/TokenRuleReviewStore';
@@ -27,7 +32,7 @@ const SpaceManagerStore = types.compose(
       tokenRuleFormStore: types.optional(TokenRuleFormStore, {}),
       tokenFormStore: types.optional(TokenFormStore, {}),
       applyTokenRuleStore: types.optional(ApplyTokenRuleStore, {}),
-      spaceStore: types.optional(SpaceStore, {}),
+      space: types.optional(Space, {}),
       spaceDetailsFormStore: types.optional(SpaceDetailsFormStore, {}),
       deleteSpaceConfirmationDialog: types.optional(DialogModel, {}),
       removeUserConfirmationDialog: types.optional(DialogModel, {}),
@@ -43,9 +48,9 @@ const SpaceManagerStore = types.compose(
     })
     .actions((self) => ({
       init(spaceId: string) {
-        self.spaceStore.setSpace(spaceId);
-        self.spaceStore.fetchSpaceInformation();
-        self.spaceStore.fetchAllowedSubSpaceTypes();
+        self.space.setup(spaceId);
+        self.space.fetchSpaceInformation();
+        self.space.fetchAllowedSubSpaceTypes();
         self.tokenRulesListStore.fetchTokenRules(spaceId);
         self.tokenRuleStore.fetchOptions();
       },

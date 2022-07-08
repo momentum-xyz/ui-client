@@ -25,7 +25,7 @@ const SpaceAdminPage: FC = () => {
   const {spaceManagerStore} = spaceAdminStore;
   const {
     tokenRuleReviewDialog,
-    spaceStore,
+    space: spaceStore,
     tokenRuleFormDialog,
     tokenFormDialog,
     tokenRuleReviewStore,
@@ -43,7 +43,7 @@ const SpaceAdminPage: FC = () => {
   return (
     <styled.Container>
       <TopBar
-        title={spaceStore?.space.name ?? ''}
+        title={spaceStore?.name ?? ''}
         subtitle={t('spaceAdmin.subtitle')}
         onClose={handleClose}
       />

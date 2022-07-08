@@ -52,7 +52,7 @@ const CommunicationLayer = () => {
   const {
     mainStore,
     communicationStore: {communicationLayerStore},
-    collaborationStore: {spaceStore}
+    collaborationStore: {space}
   } = useStore();
   const {unityStore} = mainStore;
   const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
@@ -334,7 +334,7 @@ const CommunicationLayer = () => {
                     iconName="microphoneOff"
                     size="extra-large"
                     onClick={() => {
-                      communicationLayerStore.muteAllParticipants(spaceStore.space.id);
+                      communicationLayerStore.muteAllParticipants(space.id);
                     }}
                   />
                 </styled.MuteButton>

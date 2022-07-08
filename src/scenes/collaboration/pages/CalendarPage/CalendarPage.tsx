@@ -24,11 +24,9 @@ const CalendarPage: FC = () => {
     sessionStore,
     widgetStore: {attendeesListStore}
   } = useStore();
-  const {calendarStore, spaceStore} = collaborationStore;
+  const {calendarStore, space} = collaborationStore;
   const theme = useTheme();
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
-
-  const {space} = spaceStore;
 
   const {eventId} = useParams<{eventId: string}>();
 
@@ -125,7 +123,7 @@ const CalendarPage: FC = () => {
         />
       )}
       <TopBar title={space.name ?? ''} subtitle="calendar" onClose={leaveCollaborationSpace}>
-        {spaceStore.isAdmin && (
+        {space.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
         )}
       </TopBar>
@@ -135,8 +133,8 @@ const CalendarPage: FC = () => {
         selectedEventId={eventId}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={eventListStore.areEventsLoading}
-        onEventEdit={spaceStore.isAdmin ? calendarStore.editEvent : undefined}
-        onEventRemove={spaceStore.isAdmin ? calendarStore.selectEventToRemove : undefined}
+        onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
+        onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
         onWeblinkClick={handleWeblink}
         onShowAttendeesList={attendeesListStore.showAttendees}
       />

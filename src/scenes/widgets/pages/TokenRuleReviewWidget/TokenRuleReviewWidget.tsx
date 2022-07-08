@@ -22,7 +22,7 @@ const TokenRuleReviewWidget: FC<PropsInterface> = ({onClose, tokenRuleReviewStor
     spaceAdminStore: {spaceManagerStore},
     sessionStore
   } = useStore();
-  const {tokenRulesListStore, spaceStore} = spaceManagerStore;
+  const {tokenRulesListStore, space: spaceStore} = spaceManagerStore;
   const {currentTokenRule} = tokenRuleReviewStore;
   const {profile} = sessionStore;
 
@@ -115,7 +115,7 @@ const TokenRuleReviewWidget: FC<PropsInterface> = ({onClose, tokenRuleReviewStor
       tokenRuleReviewStore.declineTokenRuleRequest.isDone ||
       tokenRuleReviewStore.deleteTokeRuleRequest.isDone
     ) {
-      tokenRulesListStore.fetchTokenRules(spaceStore.space.id);
+      tokenRulesListStore.fetchTokenRules(spaceStore.id);
     }
   }, [
     tokenRuleReviewStore.acceptTokenRuleRequest.state,

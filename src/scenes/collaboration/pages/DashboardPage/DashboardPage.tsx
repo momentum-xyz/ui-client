@@ -17,15 +17,15 @@ import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {
-    collaborationStore: {dashboard, spaceStore},
+    collaborationStore: {dashboard, space},
     sessionStore
   } = useStore();
 
   const {tileList, onDragEnd} = dashboard;
 
   useEffect(() => {
-    if (spaceStore.space.id) {
-      dashboard.fetchDashboard(spaceStore.space.id);
+    if (space.id) {
+      dashboard.fetchDashboard(space.id);
     }
     return () => {
       dashboard.resetModel();
@@ -54,12 +54,12 @@ const DashboardPage: FC = () => {
   const actions = () => {
     return (
       <>
-        {spaceStore.isAdmin && (
+        {space.isAdmin && (
           <TopbarButton
             title="Open Admin"
-            link={'/space/' + spaceStore.space.id + '/admin'}
+            link={'/space/' + space.id + '/admin'}
             isActive={(match, location) => {
-              return location.pathname.includes('/space/' + spaceStore.space.id + '/admin');
+              return location.pathname.includes('/space/' + space.id + '/admin');
             }}
             state={{canGoBack: true}}
           >
@@ -73,21 +73,21 @@ const DashboardPage: FC = () => {
   return (
     <styled.Container>
       <TopBar
-        title={spaceStore.space.name ?? ''}
+        title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
         actions={actions()}
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
-        {(spaceStore.isAdmin || spaceStore.isMember) && (
+        {(space.isAdmin || space.isMember) && (
           <Button label={t('dashboard.addTile')} variant="primary" />
         )}
         <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
-        {!sessionStore.isGuest && spaceStore.isStakeShown && (
+        {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
       </TopBar>
-      {!dashboard.dashboardIsEdited && spaceStore.isOwner && (
+      {!dashboard.dashboardIsEdited && space.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
           <styled.AlertContent>
@@ -105,7 +105,7 @@ const DashboardPage: FC = () => {
       <Dashboard
         tilesList={tileList.tileMatrix}
         onDragEnd={onDragEnd}
-        canDrag={spaceStore.isAdmin || spaceStore.isMember}
+        canDrag={space.isAdmin || space.isMember}
       />
     </styled.Container>
   );

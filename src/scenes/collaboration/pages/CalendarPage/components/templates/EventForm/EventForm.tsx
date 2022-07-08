@@ -17,10 +17,7 @@ import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {
-    calendarStore,
-    spaceStore: {space}
-  } = useStore().collaborationStore;
+  const {calendarStore, space} = useStore().collaborationStore;
   const {eventFormStore, formDialog, eventListStore} = calendarStore;
   const {eventFormRequest, currentEvent} = eventFormStore;
 

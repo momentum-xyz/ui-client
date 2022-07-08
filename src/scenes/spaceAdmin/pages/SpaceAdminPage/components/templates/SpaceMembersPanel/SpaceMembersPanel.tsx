@@ -12,11 +12,8 @@ import * as styled from './SpaceMembersPanel.styled';
 
 const SpaceMembersPanel: FC = () => {
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {removeUserConfirmationDialog, editUserDialog, addUserDialog, spaceStore} =
-    spaceManagerStore;
-  const {
-    space: {users}
-  } = spaceStore;
+  const {removeUserConfirmationDialog, editUserDialog, addUserDialog, space} = spaceManagerStore;
+  const {users} = space;
 
   const [selectedUser, setSelectedUser] = useState<{
     id: string;
@@ -39,7 +36,7 @@ const SpaceMembersPanel: FC = () => {
       return;
     }
 
-    spaceStore
+    space
       .removeUser(selectedUser.id)
       .catch(() => {
         toast.error(
@@ -54,7 +51,7 @@ const SpaceMembersPanel: FC = () => {
         );
       })
       .then(() => {
-        spaceStore.fetchSpaceInformation();
+        space.fetchSpaceInformation();
         toast.info(
           <ToastContent
             headerIconName="alert"

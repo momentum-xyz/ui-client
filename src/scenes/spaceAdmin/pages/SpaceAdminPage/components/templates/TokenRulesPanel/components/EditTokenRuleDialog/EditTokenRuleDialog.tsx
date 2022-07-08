@@ -20,7 +20,7 @@ const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
   const {isAdmin, tokenGroupUserId} = props;
 
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore} = spaceManagerStore;
+  const {space: spaceStore} = spaceManagerStore;
 
   const {control, handleSubmit} = useForm<{role: TokenRuleRoles.MEMBER | TokenRuleRoles.ADMIN}>({
     defaultValues: {

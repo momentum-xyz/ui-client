@@ -14,8 +14,7 @@ import * as styled from './StageModePage.styled';
 const StageModePage: FC = () => {
   const theme = useTheme();
   const {collaborationStore} = useStore();
-  const {spaceStore} = collaborationStore;
-  const {space} = spaceStore;
+  const {space} = collaborationStore;
 
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
@@ -26,7 +25,7 @@ const StageModePage: FC = () => {
 
   // TODO: make as action in store
   const leaveCollaborationSpace = () => {
-    spaceStore.resetModel();
+    space.resetModel();
     if (collaborationState.collaborationSpace) {
       leaveCollaborationSpaceCall(false).then(stageModeLeave);
 
@@ -46,7 +45,7 @@ const StageModePage: FC = () => {
   return (
     <styled.Container>
       <TopBar title={space.name ?? ''} subtitle="stage" onClose={leaveCollaborationSpace}>
-        {(spaceStore.isAdmin || spaceStore.isMember) && (
+        {(space.isAdmin || space.isMember) && (
           <styled.ToggleContainer>
             <Toggle checked={!!stageMode} onChange={(checked) => setStageMode(checked ? 1 : 0)} />
             <Text theme={theme} text="Stage active" size="xs" />

@@ -23,7 +23,7 @@ const UnityContextCSS = {
 
 const UnityPage: FC = () => {
   const {mainStore, unityLoaded, collaborationStore} = useStore();
-  const {spaceStore} = collaborationStore;
+  const {space: spaceStore} = collaborationStore;
   const {unityStore} = mainStore;
 
   const auth = useAuth();

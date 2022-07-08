@@ -35,7 +35,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
     spaceAdminStore
   } = useStore();
   const {spaceManagerStore} = spaceAdminStore;
-  const {spaceStore, searchUsersStore} = spaceManagerStore;
+  const {space: spaceStore, searchUsersStore} = spaceManagerStore;
   const [isFocused, setIsFocused] = useState(false);
   const [userSelected, setUserSelected] = useState<string>('');
 

@@ -20,7 +20,7 @@ const TokenRuleForm: FC<PropsInterface> = () => {
     tokenFormStore,
     tokenRuleFormStore,
     tokenRuleFormDialog,
-    spaceStore,
+    space,
     tokenFormDialog,
     tokenRulesListStore
   } = spaceManagerStore;
@@ -38,8 +38,8 @@ const TokenRuleForm: FC<PropsInterface> = () => {
   } = useForm<TokenRuleFormInterface>();
 
   useEffect(() => {
-    if (spaceStore.space.id && tokenRuleFormStore.tokenRuleFormRequest.isDone) {
-      tokenRulesListStore.fetchTokenRules(spaceStore.space.id);
+    if (space.id && tokenRuleFormStore.tokenRuleFormRequest.isDone) {
+      tokenRulesListStore.fetchTokenRules(space.id);
     }
   }, [tokenRuleFormStore.tokenRuleFormRequest.state]);
 
@@ -61,8 +61,8 @@ const TokenRuleForm: FC<PropsInterface> = () => {
   const formSubmitHandler: SubmitHandler<TokenRuleFormInterface> = (
     data: TokenRuleFormInterface
   ) => {
-    if (spaceStore.space.id) {
-      tokenRuleFormStore.createTokenRule(data, spaceStore.space.id);
+    if (space.id) {
+      tokenRuleFormStore.createTokenRule(data, space.id);
     }
   };
 
