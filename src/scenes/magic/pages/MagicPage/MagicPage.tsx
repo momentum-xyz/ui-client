@@ -52,7 +52,7 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
           .then(() => {
             setTimeout(() => {
               history.replace({
-                pathname: ROUTES.dashboard
+                pathname: ROUTES.collaboration.dashboard
               });
             }, 3000);
           })
@@ -81,7 +81,7 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
           .then(() => {
             setTimeout(() => {
               history.replace({
-                pathname: `${ROUTES.calendar}/${magicStore.magic?.data.eventId ?? ''}`
+                pathname: `${ROUTES.collaboration.calendar}/${magicStore.magic?.data.eventId ?? ''}`
               });
             }, 3000);
           })

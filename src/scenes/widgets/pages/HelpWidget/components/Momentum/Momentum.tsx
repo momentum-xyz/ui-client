@@ -33,7 +33,7 @@ const Momentum: React.FC = () => {
       joinMeetingSpace(worldConfig.community_space_id).then(() => {
         unityStore.teleportToSpace(worldConfig.community_space_id);
         setTimeout(() => {
-          history.push(openCalendar ? ROUTES.calendar : ROUTES.collaboration);
+          history.push(openCalendar ? ROUTES.collaboration.calendar : ROUTES.collaboration);
         }, 2000);
       });
 

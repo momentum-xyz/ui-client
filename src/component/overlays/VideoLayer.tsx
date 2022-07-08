@@ -42,7 +42,7 @@ const VideoLayer: React.FC<VideoLayerProps> = () => {
       if (dashboardId) {
         joinMeetingSpace(dashboardId).then(() => {
           unityStore.pause();
-          history.push({pathname: ROUTES.dashboard});
+          history.push({pathname: ROUTES.collaboration.dashboard});
         });
       }
     }

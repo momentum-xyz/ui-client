@@ -116,7 +116,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     renderBackground: true
   },
   {
-    path: ROUTES.collaboration,
+    path: ROUTES.collaboration.base,
     sidebar: () => <SubNav />,
     main: () => <Collaboration />,
     renderBackground: true

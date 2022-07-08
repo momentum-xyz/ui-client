@@ -15,27 +15,27 @@ interface TabInterface {
 const SubNav: FC = () => {
   const tabs: TabInterface[] = [
     {
-      path: ROUTES.dashboard,
+      path: ROUTES.collaboration.dashboard,
       iconName: 'tiles'
     },
     {
-      path: ROUTES.calendar,
+      path: ROUTES.collaboration.calendar,
       iconName: 'calendar'
     },
     {
-      path: ROUTES.stageMode,
+      path: ROUTES.collaboration.stageMode,
       iconName: 'stage'
     },
     {
-      path: ROUTES.screenShare,
+      path: ROUTES.collaboration.screenShare,
       iconName: 'screenshare'
     },
     {
-      path: ROUTES.miro,
+      path: ROUTES.collaboration.miro,
       iconName: 'miro'
     },
     {
-      path: ROUTES.googleDrive,
+      path: ROUTES.collaboration.googleDrive,
       iconName: 'drive'
     }
   ];
@@ -54,8 +54,8 @@ const SubNav: FC = () => {
             iconName={tab.iconName}
             path={tab.path}
             isActive={
-              (tab.path === ROUTES.screenShare && !!screenShare) ||
-              (tab.path === ROUTES.stageMode && stageMode)
+              (tab.path === ROUTES.collaboration.screenShare && !!screenShare) ||
+              (tab.path === ROUTES.collaboration.stageMode && stageMode)
             }
           />
         ))}

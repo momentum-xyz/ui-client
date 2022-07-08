@@ -138,8 +138,8 @@ const CommunicationLayer = () => {
         stageMode: true
       });
 
-      if (!location.pathname.includes(ROUTES.stageMode)) {
-        history.push(ROUTES.stageMode);
+      if (!location.pathname.includes(ROUTES.collaboration.stageMode)) {
+        history.push(ROUTES.collaboration.stageMode);
       }
       toast.info(
         <ToastContent

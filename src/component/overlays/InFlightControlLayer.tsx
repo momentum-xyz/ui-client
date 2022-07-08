@@ -52,7 +52,7 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
     if (leftCollaborationSpace) {
       joinMeetingSpace(leftCollaborationSpace.id).then(() => {
         unityStore.pause();
-        history.push({pathname: ROUTES.dashboard});
+        history.push({pathname: ROUTES.collaboration.dashboard});
       });
     }
   }, [leftCollaborationSpace, joinMeetingSpace, history]);

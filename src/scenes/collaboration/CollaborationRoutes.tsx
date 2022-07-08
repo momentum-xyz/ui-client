@@ -1,8 +1,9 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 
-// TODO: Refactor
+import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
+// TODO: Refactor
 import StageModeRouter from 'component/layout/StageMode/StageModeRouter';
 import WhiteBoardLayout from 'component/layout/Collaboration/WhiteBoardLayout';
 import ScreenShareLayout from 'component/layout/Collaboration/ScreenShareLayout';
@@ -10,45 +11,41 @@ import GoogleDriveLayout from 'component/layout/Collaboration/GoogleDriveLayout'
 
 import {CalendarPage, DashboardPage} from './pages';
 
-export const PRIVATE_ROUTES = (path: string, spaceId: string) => {
-  const routes: RouteConfigInterface[] = [
-    {
-      path: `${path}/`,
-      exact: true,
-      main: () => <Redirect to={`${path}/dashboard`} />
-    },
-    {
-      path: `${path}/dashboard`,
-      exact: true,
-      main: () => <DashboardPage />
-    },
-    {
-      path: `${path}/calendar/:eventId`,
-      main: () => <CalendarPage />
-    },
-    {
-      path: `${path}/calendar`,
-      main: () => <CalendarPage />,
-      exact: true
-    },
-    {
-      path: `${path}/stage-mode`,
-      main: () => <StageModeRouter />
-    },
-    {
-      path: `${path}/miro`,
-      exact: true,
-      main: () => <WhiteBoardLayout />
-    },
-    {
-      path: `${path}/screenshare`,
-      main: () => <ScreenShareLayout />
-    },
-    {
-      path: `${path}/google-drive`,
-      main: () => <GoogleDriveLayout />
-    }
-  ];
-
-  return routes;
-};
+export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
+  {
+    path: ROUTES.collaboration.dashboard,
+    exact: true,
+    main: () => <DashboardPage />
+  },
+  {
+    path: ROUTES.collaboration.calendarEvent,
+    main: () => <CalendarPage />
+  },
+  {
+    path: ROUTES.collaboration.calendar,
+    main: () => <CalendarPage />,
+    exact: true
+  },
+  {
+    path: ROUTES.collaboration.stageMode,
+    main: () => <StageModeRouter />
+  },
+  {
+    path: ROUTES.collaboration.miro,
+    exact: true,
+    main: () => <WhiteBoardLayout />
+  },
+  {
+    path: ROUTES.collaboration.screenShare,
+    main: () => <ScreenShareLayout />
+  },
+  {
+    path: ROUTES.collaboration.googleDrive,
+    main: () => <GoogleDriveLayout />
+  },
+  {
+    path: ROUTES.collaboration.base,
+    exact: true,
+    main: () => <Redirect to={ROUTES.collaboration.dashboard} />
+  }
+];
