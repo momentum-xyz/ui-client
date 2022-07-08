@@ -13,10 +13,8 @@ export const COLLABORATION_CAMERA_OFF_ACTION_UPDATE = 'COLLABORATION_CAMERA_OFF_
 export const COLLABORATION_SPACE_ACTION_UPDATE = 'COLLABORATION_SPACE_ACTION_UPDATE';
 export const COLLABORATION_ACTION_UPDATE_AGORA_TOKEN = 'COLLABORATION_ACTION_UPDATE_AGORA_TOKEN';
 export const COLLABORATION_SEARCH_TOGGLE = 'COLLABORATION_SEARCH_TOGGLE';
-export const COLLABORATION_GRAND_CAFE_LOADING = 'COLLABORATION_GRAND_CAFE_LOADING';
 export const COLLABORATION_AUDIO_DEVICE_ACTION_UPDATE = 'COLLABORATION_AUDIO_DEVICE_ACTION_UPDATE';
 export const COLLABORATION_VIDEO_DEVICE_ACTION_UPDATE = 'COLLABORATION_VIDEO_DEVICE_ACTION_UPDATE';
-export const COLLABORATION_EVENT_ACTION = 'COLLABORATION_EVENT_ACTION';
 export const COLLABORATION_TABLE_UPDATE = 'COLLABORATION_TABLE_UPDATE';
 export const COLLABORATION_SPACE_ACTION_REMOVE = 'COLLABORATION_SPACE_ACTION_REMOVE';
 export const COLLABORATION_LOADING_UPDATE = 'COLLABORATION_LOADING_UPDATE';
@@ -41,7 +39,7 @@ interface CollaborationIsTogglingCameraAction {
   isTogglingCamera: boolean;
 }
 
-interface CollaborationDeafenAction {
+interface CollaborationCameraOffAction {
   type: typeof COLLABORATION_CAMERA_OFF_ACTION_UPDATE;
   cameraOff: boolean;
 }
@@ -71,11 +69,6 @@ interface CollaborationVideoDeviceAction {
   videoDevice: MediaDeviceInfo;
 }
 
-interface CollaborationEventAction {
-  type: typeof COLLABORATION_EVENT_ACTION;
-  event: string[];
-}
-
 interface CollaborationTableAction {
   type: typeof COLLABORATION_TABLE_UPDATE;
   collaborationTable: CollaborationTable | null;
@@ -94,6 +87,7 @@ interface CollaborationLoadingAction {
 export type CollaborationActionTypes =
   | CollaborationEnabledAction
   | CollaborationMutedAction
+  | CollaborationCameraOffAction
   | CollaborationIsTogglingMuteAction
   | CollaborationIsTogglingCameraAction
   | CollaborationChatAction
@@ -101,8 +95,6 @@ export type CollaborationActionTypes =
   | CollaborationSpaceAction
   | CollaborationAudioDeviceAction
   | CollaborationVideoDeviceAction
-  | CollaborationDeafenAction
-  | CollaborationEventAction
   | CollaborationTableAction
   | CollaborationRemovedSpaceAction
   | CollaborationLoadingAction;
@@ -141,9 +133,6 @@ export const collaborationReducer = (
       return {...CollaborationState};
     case COLLABORATION_VIDEO_DEVICE_ACTION_UPDATE:
       CollaborationState.videoDevice = action.videoDevice;
-      return {...CollaborationState};
-    case COLLABORATION_EVENT_ACTION:
-      CollaborationState.event = action.event;
       return {...CollaborationState};
     case COLLABORATION_TABLE_UPDATE:
       CollaborationState.collaborationTable = action.collaborationTable;
