@@ -22,7 +22,7 @@ const MainStore = types.compose(
       leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean)
     })
     .volatile(() => ({
-      leftMeetingTimer: new NodeJS.Timeout()
+      leftMeetingTimer: setTimeout(() => {}, 0)
     }))
     .actions((self) => ({
       init(): void {
