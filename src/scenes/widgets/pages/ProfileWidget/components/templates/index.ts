@@ -1,1 +1,1 @@
-export * from './UserInitiativesList';
+export * from './UserSpaceList';
