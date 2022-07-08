@@ -60,19 +60,21 @@ const Collaboration: FC = () => {
   const joinMeeting = useCallback(async () => {
     if (await spaceStore.canUserJoin(spaceId)) {
       await joinMeetingSpace(spaceId);
-    } else {
-      history.push(ROUTES.base);
-      toast.error(
-        <ToastContent
-          isDanger
-          isCloseButton
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('collaboration.spaceIsPrivate')}
-        />
-      );
+      collaborationStore.init(spaceId);
+      return;
     }
-  }, [history, joinMeetingSpace, spaceId, spaceStore, t]);
+
+    history.push(ROUTES.base);
+    toast.error(
+      <ToastContent
+        isDanger
+        isCloseButton
+        headerIconName="alert"
+        title={t('titles.alert')}
+        text={t('collaboration.spaceIsPrivate')}
+      />
+    );
+  }, [collaborationStore, history, joinMeetingSpace, spaceId, spaceStore, t]);
 
   const joinStageMode = () => {
     collaborationDispatch({
@@ -91,12 +93,6 @@ const Collaboration: FC = () => {
   useEffect(() => {
     joinMeeting().then();
   }, []);
-
-  useEffect(() => {
-    if (collaborationState.collaborationSpace?.id) {
-      collaborationStore.init(collaborationState.collaborationSpace.id);
-    }
-  }, [collaborationState.collaborationSpace?.id]);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
