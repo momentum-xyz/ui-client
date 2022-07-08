@@ -31,7 +31,8 @@ const EventListStore = types.compose(
               web_link: event.web_link,
               start: new Date(event.start),
               end: new Date(event.end),
-              spaceId: event.spaceId
+              spaceId: event.spaceId,
+              spaceName: event.spaceName
             }))
           );
         }
