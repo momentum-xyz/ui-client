@@ -1,4 +1,5 @@
 export enum StorageKeyEnum {
   Theme = 'theme',
-  LoginType = 'loginType'
+  LoginType = 'loginType',
+  NoCameraInfo = 'no-camera-info'
 }
