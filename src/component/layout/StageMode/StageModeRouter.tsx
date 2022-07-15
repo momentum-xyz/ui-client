@@ -29,7 +29,6 @@ const StageModeRouter: React.FC = () => {
         open: chatOpen
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

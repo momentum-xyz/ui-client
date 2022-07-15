@@ -1,11 +1,12 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
-import {Switch, useHistory, useParams} from 'react-router-dom';
+import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
-import {ToastContent} from 'ui-kit';
+import {NavigationTabInterface} from 'core/interfaces';
+import {Navigation, ToastContent} from 'ui-kit';
 import {UnityService} from 'shared/services';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {PosBusEventEnum, StageModeStatusEnum} from 'core/enums';
@@ -21,6 +22,7 @@ import {
 } from 'hooks/api/useStageModeService';
 import Modal, {ModalRef} from 'component/util/Modal';
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
+import {useAgoraScreenShare} from 'hooks/communication/useAgoraScreenShare';
 import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
 import {ParticipantRole, ParticipantStatus} from 'context/Collaboration/CollaborationTypes';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
@@ -37,6 +39,7 @@ const Collaboration: FC = () => {
   const {t} = useTranslation();
   const history = useHistory();
 
+  const {screenShare} = useAgoraScreenShare();
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeState = useStageModeStatusInfo(collaborationState.collaborationSpace?.id);
   const switchDeviceModal = useRef<ModalRef>(null);
@@ -160,7 +163,6 @@ const Collaboration: FC = () => {
     setNewDevice(undefined);
   };
 
-  // @ts-ignore
   const newDeviceKindDescription = () => {
     switch (newDevice?.kind) {
       case 'videoinput':
@@ -169,11 +171,43 @@ const Collaboration: FC = () => {
         return 'audio input';
       case 'audiooutput':
         return 'audio output';
+      default:
+        return '';
     }
   };
 
+  const tabs: NavigationTabInterface[] = [
+    {
+      path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
+      iconName: 'tiles'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
+      iconName: 'calendar'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
+      iconName: 'stage',
+      isActive: collaborationState.stageMode
+    },
+    {
+      path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
+      iconName: 'screenshare',
+      isActive: !!screenShare
+    },
+    {
+      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
+      iconName: 'miro'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
+      iconName: 'drive'
+    }
+  ];
+
   return (
     <>
+      <Navigation tabs={tabs} />
       <StageModeModalController />
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
       <Modal ref={switchDeviceModal}>

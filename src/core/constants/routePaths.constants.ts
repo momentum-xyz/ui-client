@@ -12,7 +12,6 @@ export const ROUTES = {
   guestCallBack: '/oidc/guest/callback',
   intro: '/intro',
   spaceDashboard: '/dashboard/space/:id',
-  spaceAdmin: '/space/:spaceId/admin',
   collaboration: {
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
@@ -22,6 +21,10 @@ export const ROUTES = {
     screenShare: '/collaboration/:spaceId/screenshare',
     miro: '/collaboration/:spaceId/miro',
     googleDrive: '/collaboration/:spaceId/google-drive'
+  },
+  spaceAdmin: {
+    base: '/space/:spaceId/admin',
+    broadcast: '/space/:spaceId/admin/broadcast'
   },
   createSpace: '/profile?createspace=1',
   magic: '/magic/:key',
