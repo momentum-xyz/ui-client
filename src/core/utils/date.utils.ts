@@ -2,6 +2,7 @@
  * Returns date as string in YYYYMMDDTHHmmss format
  */
 import {format} from 'date-fns-tz';
+import {addMinutes} from 'date-fns';
 
 export const formattedStringFromDate = (date: Date) => {
   return date.toISOString().replace(/:|-/g, '').split('.')[0] + 'Z';
@@ -81,7 +82,7 @@ export const formatEndDate = (date: Date, showYear = false) => {
 };
 
 export const formatDurationTime = (seconds: number) => {
-  const floored = Math.floor(seconds);
-
-  return new Date(floored * 1000).toISOString().match(/(?<=\d\d:)\d\d:\d\d/)?.[0];
+  const initialDate = new Date(seconds * 1000);
+  const targetDate = addMinutes(initialDate, initialDate.getTimezoneOffset());
+  return format(targetDate, 'mm:ss');
 };
