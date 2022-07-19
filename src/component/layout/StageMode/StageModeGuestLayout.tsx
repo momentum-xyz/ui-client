@@ -24,15 +24,11 @@ const StageModeGuestLayout: React.FC = () => {
   });
   const {collaborationState, currentUserId} = useCollaboration();
   // const [currentSpace, , ,] = useOnlineUserSpaceCheck(currentUserId);
-  const {canEnterStage, joinedStage, leaveStage, isOnStage, stageModeUsers} = useAgoraStageMode();
+  const {canEnterStage, leaveStage, isOnStage, stageModeUsers} = useAgoraStageMode();
   const joinRequest = useJoinRequest(collaborationState.collaborationSpace?.id);
   const [requestMade, setRequestMade] = useState<boolean>();
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     useStageModePopupQueueContext();
-
-  useEffect(() => {
-    console.info('[STAGEMODE] HAS JOINED STATE CHANGED');
-  }, [joinedStage]);
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === currentUserId) {

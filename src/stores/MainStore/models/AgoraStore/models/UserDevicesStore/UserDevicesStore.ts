@@ -1,7 +1,7 @@
 import {flow, Instance, types} from 'mobx-state-tree';
-import {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
+import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 
-import {DialogModel, ResetModel} from 'core/models';
+import {ResetModel, DialogModel} from 'core/models';
 import {storage} from 'core/services';
 import {StorageKeyEnum} from 'core/enums';
 
@@ -17,7 +17,9 @@ const UserDevicesStore = types
         microphoneRequirementDialog: types.optional(DialogModel, {}),
         cameraRequirementDialog: types.optional(DialogModel, {}),
         muted: true,
-        camerOff: true
+        cameraOff: true,
+        isTogglingMicrophone: false,
+        isTogglingCamera: false
       })
       .volatile<{
         audioInputs: MediaDeviceInfo[];
@@ -67,13 +69,7 @@ const UserDevicesStore = types
     }
   }))
   .actions((self) => ({
-    init: flow(function* (
-      currentAudioInput: MediaDeviceInfo | undefined,
-      currentVideoInput: MediaDeviceInfo | undefined
-    ) {
-      self.currentAudioInput = currentAudioInput;
-      self.currentVideoInput = currentVideoInput;
-
+    init: flow(function* () {
       self.getMicrophoneConsent();
       self.getMicrophoneConsent();
 
@@ -83,6 +79,15 @@ const UserDevicesStore = types
         self.audioInputs = devices.filter(
           (device: MediaDeviceInfo) => device.kind === 'audioinput'
         );
+
+        try {
+          self.currentAudioInput =
+            self.audioInputs.find(
+              (item) => item.deviceId === storage.get(StorageKeyEnum.PreferredAudioInput)
+            ) ?? (yield AgoraRTC.getMicrophones())[0];
+        } catch (error) {
+          console.error('[UserDevicesStore] Got audio devices error!', error);
+        }
       }
 
       if (self.cameraConsent) {
@@ -91,15 +96,28 @@ const UserDevicesStore = types
         self.videoInputs = devices.filter(
           (device: MediaDeviceInfo) => device.kind === 'videoinput'
         );
+
+        try {
+          self.currentVideoInput =
+            self.videoInputs.find(
+              (item) => item.deviceId === storage.get(StorageKeyEnum.PreferredVideoInput)
+            ) ?? (yield AgoraRTC.getCameras())[0];
+        } catch (error) {
+          console.error('[UserDevicesStore] Got video devices error!', error);
+        }
       }
     }),
     selectAudioInput(deviceId: string) {
       const device = self.audioInputs.find((device) => device.deviceId === deviceId);
       self.currentAudioInput = device;
+
+      storage.set(StorageKeyEnum.PreferredAudioInput, deviceId);
     },
     selectVideoInput(deviceId: string) {
       const device = self.videoInputs.find((device) => device.deviceId === deviceId);
       self.currentVideoInput = device;
+
+      storage.set(StorageKeyEnum.PreferredVideoInput, deviceId);
     },
     createLocalTracks: flow(function* (
       createAudioTrack: (deviceId?: string) => Promise<ILocalAudioTrack>,
@@ -120,39 +138,55 @@ const UserDevicesStore = types
         ? yield createVideoTrack(self.currentVideoInput?.deviceId)
         : undefined;
 
-      self.localVideoTrack?.setEnabled(!self.camerOff);
+      self.localVideoTrack?.setEnabled(!self.cameraOff);
     }),
+    cleanupLocalTracks() {
+      self.localAudioTrack = undefined;
+      self.localVideoTrack = undefined;
+    },
     mute: flow(function* () {
       if (!self.localAudioTrack) {
         return;
       }
 
+      self.isTogglingMicrophone = true;
+
       yield self.localAudioTrack?.setEnabled(false);
       self.muted = true;
+      self.isTogglingMicrophone = false;
     }),
     unmute: flow(function* () {
       if (!self.localAudioTrack) {
         return;
       }
 
+      self.isTogglingMicrophone = true;
+
       yield self.localAudioTrack?.setEnabled(true);
       self.muted = false;
+      self.isTogglingMicrophone = false;
     }),
     turnOffCamera: flow(function* () {
       if (!self.localVideoTrack) {
         return;
       }
 
+      self.isTogglingCamera = true;
+
       yield self.localVideoTrack?.setEnabled(false);
-      self.camerOff = true;
+      self.cameraOff = true;
+      self.isTogglingCamera = false;
     }),
     turnOnCamera: flow(function* () {
       if (!self.localVideoTrack) {
         return;
       }
 
+      self.isTogglingCamera = true;
+
       yield self.localVideoTrack?.setEnabled(true);
-      self.camerOff = false;
+      self.cameraOff = false;
+      self.isTogglingCamera = false;
     })
   }));
 

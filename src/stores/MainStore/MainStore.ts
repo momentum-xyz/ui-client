@@ -3,7 +3,6 @@ import {types} from 'mobx-state-tree';
 import {ResetModel} from 'core/models';
 
 import {ThemeStore, SentryStore, UnityStore, WorldStore, FavoriteStore, AgoraStore} from './models';
-import {UserDevicesStore} from './models/UserDevicesStore';
 
 const MainStore = types.compose(
   ResetModel,
@@ -16,7 +15,6 @@ const MainStore = types.compose(
       worldStore: types.optional(WorldStore, {}),
       favoriteStore: types.optional(FavoriteStore, {}),
       agoraStore: types.optional(AgoraStore, {}),
-      userDevicesStore: types.optional(UserDevicesStore, {}),
 
       // collaboration
       meetingSpaceId: types.maybe(types.string),
@@ -32,7 +30,7 @@ const MainStore = types.compose(
         self.sentryStore.init();
         self.unityStore.init();
 
-        self.agoraStore.init(self.userDevicesStore);
+        self.agoraStore.init();
       },
       joinMeeting(spaceId: string, isTable = false) {
         clearTimeout(self.leftMeetingTimer);
