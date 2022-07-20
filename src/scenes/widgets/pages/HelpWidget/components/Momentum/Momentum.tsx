@@ -1,28 +1,23 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
+import {generatePath, useHistory} from 'react-router-dom';
 import {t} from 'i18next';
-import {useHistory} from 'react-router-dom';
 
 import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {ROUTES} from 'core/constants';
-import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
+import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Momentum.styled';
 
 const Momentum: React.FC = () => {
-  const {
-    widgetStore: {helpStore},
-    mainStore: {unityStore, worldStore}
-  } = useStore();
-
+  const {widgetStore, mainStore} = useStore();
+  const {unityStore, worldStore} = mainStore;
   const {worldConfig} = worldStore;
+  const {helpStore} = widgetStore;
 
   const history = useHistory();
-
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
 
   const handleExpand = () => {
     helpStore.toggleSection(HelpSectionType.Momentum);
@@ -30,14 +25,16 @@ const Momentum: React.FC = () => {
 
   const handleFlyToSpace = (openCalendar = false) => {
     if (worldConfig?.community_space_id) {
-      joinMeetingSpace(worldConfig.community_space_id).then(() => {
-        unityStore.teleportToSpace(worldConfig.community_space_id);
-        setTimeout(() => {
-          history.push(openCalendar ? ROUTES.collaboration.calendar : ROUTES.collaboration);
-        }, 2000);
-      });
-
       helpStore.helpDialog.close();
+      unityStore.teleportToSpace(worldConfig.community_space_id);
+      setTimeout(() => {
+        const params = {spaceId: worldConfig.community_space_id};
+        history.push(
+          openCalendar
+            ? generatePath(ROUTES.collaboration.calendar, params)
+            : generatePath(ROUTES.collaboration.dashboard, params)
+        );
+      }, TELEPORT_DELAY_MS);
     }
   };
 
