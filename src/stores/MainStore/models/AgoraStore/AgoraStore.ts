@@ -59,7 +59,8 @@ const AgoraStore = types
     remoteUsers: []
   }))
   .actions((self) => ({
-    // Common
+    // --- COMMON ---
+
     init() {
       AgoraRTC.setLogLevel(4);
       self.stageModeClient.enableDualStream();
@@ -127,7 +128,7 @@ const AgoraStore = types
       }
     },
 
-    // Video call
+    // --- VIDEO CALL ---
 
     joinOrStartVideoCall: flow(function* (spaceId: string, authStateSubject: string) {
       self.spaceId = spaceId;
@@ -149,7 +150,7 @@ const AgoraStore = types
       self.remoteUsers = self.videoCallClient.remoteUsers;
     }),
 
-    // Stage Mode
+    // --- STAGE MODE ---
 
     joinStageMode: flow(function* (spaceId: string, authStateSubject: string) {
       yield self.stageModeClient.setClientRole('audience');
@@ -248,7 +249,7 @@ const AgoraStore = types
       self.stageModeUsers = cast(stageModeUsers);
     },
 
-    // Screen Sharing
+    // --- SCREENSHARE ---
 
     stopScreenShare() {
       self.screenShareClient?.localTracks.forEach((track) => {
@@ -258,7 +259,8 @@ const AgoraStore = types
       self.screenShareClient = undefined;
     },
 
-    // Agora listeners
+    // --- AGORA LISTENERS ---
+
     handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
       if (isScreenshare) {
@@ -335,7 +337,7 @@ const AgoraStore = types
     }
   }))
   .actions((self) => ({
-    // Common
+    // --- COMMON ---
     setupAgoraListeners(onScreenShare: () => void) {
       if (self.isStageMode) {
         self.stageModeClient.on('user-published', self.handleUserPublished);
@@ -372,7 +374,7 @@ const AgoraStore = types
       self.isLowQualityModeEnabled = !self.isLowQualityModeEnabled;
     }),
 
-    // Video Call
+    // --- VIDEO CALL ---
     leaveCall: flow(function* () {
       self.cleanupLocalTracks();
       self.stopScreenShare();
@@ -382,7 +384,8 @@ const AgoraStore = types
       yield self.videoCallClient.leave();
     }),
 
-    // Stage Mode
+    // --- STAGE MODE ---
+
     leaveStageModeIfNeeded: flow(function* () {
       if (!self.isStageMode) {
         yield self.leaveStageMode();
