@@ -40,6 +40,7 @@ const VideoLayer: React.FC<VideoLayerProps> = () => {
     if (shouldOpenDashboard) {
       console.info('shouldOpenDashboard');
       if (dashboardId) {
+        // TODO: Refactoring
         joinMeetingSpace(dashboardId).then(() => {
           unityStore.pause();
           history.push({pathname: ROUTES.collaboration.dashboard});

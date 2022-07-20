@@ -1,7 +1,7 @@
 import {Transition} from '@headlessui/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
-import {useHistory, useLocation} from 'react-router-dom';
+import {generatePath, useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
@@ -14,7 +14,6 @@ import {
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {UnityService} from 'shared/services';
 import CONFIG from 'config/config';
 import useCollaboration, {
   useJoinCollaborationSpaceByAssign,
@@ -28,7 +27,7 @@ import {
   COLLABORATION_STAGE_MODE_ACTION_UPDATE
 } from 'context/Collaboration/CollaborationReducer';
 import StageModePIP from 'component/atoms/StageMode/StageModePIP';
-import {ROUTES} from 'core/constants';
+import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {StageModeStatusEnum} from 'core/enums';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useStageModeLeave, useStageModeRequestAcceptOrDecline} from 'hooks/api/useStageModeService';
@@ -177,13 +176,12 @@ const CommunicationLayer = () => {
 
   usePosBusEvent('notify-gathering-start', (message) => {
     const handleJoinSpace = () => {
+      const {spaceId} = message;
       if (message.spaceId) {
-        UnityService.teleportToSpace(message.spaceId);
-
-        joinMeetingSpace(message.spaceId).then(() => {
-          unityStore.pause();
-          history.push({pathname: ROUTES.collaboration});
-        });
+        unityStore.teleportToSpace(spaceId);
+        setTimeout(() => {
+          history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+        }, TELEPORT_DELAY_MS);
       }
     };
     toast.info(
@@ -222,6 +220,7 @@ const CommunicationLayer = () => {
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 
+      // TODO: Refactoring
       joinMeetingSpace(spaceId, uiTypeId === '285ba49f-fee3-40d2-ab55-256b5804c20c').then(() => {
         if (uiTypeId !== '285ba49f-fee3-40d2-ab55-256b5804c20c') {
           unityStore.pause();
