@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {IconSvg, Text, TopBar, Button} from 'ui-kit';
+import {IconSvg, Text, TopBar, Button, ToolbarIcon, Separator} from 'ui-kit';
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
@@ -10,7 +10,8 @@ import {useStageModeLeave} from 'hooks/api/useStageModeService';
 import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';
 
-import TopbarButton from '../../../../component/atoms/topbar/TopbarButton';
+import {COLLABORATION_CHAT_ACTION_UPDATE} from '../../../../context/Collaboration/CollaborationReducer';
+import {useTextChatContext} from '../../../../context/TextChatContext';
 
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
@@ -18,10 +19,16 @@ import * as styled from './DashboardPage.styled';
 const DashboardPage: FC = () => {
   const {
     collaborationStore: {dashboard, spaceStore},
-    sessionStore
+    sessionStore,
+    mainStore: {favoriteStore}
   } = useStore();
 
   const {tileList, onDragEnd} = dashboard;
+
+  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
+  const {numberOfUnreadMessages} = useTextChatContext();
+  const {collaborationState, collaborationDispatch} = useCollaboration();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
   useEffect(() => {
     if (spaceStore.space.id) {
@@ -31,10 +38,6 @@ const DashboardPage: FC = () => {
       dashboard.resetModel();
     };
   }, []);
-
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
   // TODO: make as action in store
   const leaveCollaborationSpace = () => {
@@ -51,24 +54,61 @@ const DashboardPage: FC = () => {
     }
   };
 
-  const actions = () => {
-    return (
-      <>
-        {spaceStore.isAdmin && (
-          <TopbarButton
+  const toggleChat = () => {
+    collaborationDispatch({
+      type: COLLABORATION_CHAT_ACTION_UPDATE,
+      open: !collaborationState.chatOpen
+    });
+  };
+
+  const toggleFavorite = () => {
+    if (spaceStore.space.id) {
+      if (favoriteStore.isSpaceFavorite) {
+        favoriteStore.removeFavorite(spaceStore.space.id);
+      } else {
+        favoriteStore.addFavorite(spaceStore.space.id);
+      }
+    }
+  };
+
+  const actions = () => (
+    <>
+      {spaceStore.isAdmin && (
+        <>
+          <ToolbarIcon
             title="Open Admin"
+            icon="pencil"
             link={'/space/' + spaceStore.space.id + '/admin'}
             isActive={(match, location) => {
               return location.pathname.includes('/space/' + spaceStore.space.id + '/admin');
             }}
             state={{canGoBack: true}}
-          >
-            <IconSvg name="pencil" size="medium-large" />
-          </TopbarButton>
+            isWhite={false}
+            toolTipPlacement="bottom"
+          />
+          <Separator />
+        </>
+      )}
+      <ToolbarIcon
+        title={collaborationState.chatOpen ? 'Close chat' : 'Open chat'}
+        icon="chat"
+        onClick={toggleChat}
+        isWhite={false}
+      >
+        {numberOfUnreadMessages > 0 && (
+          <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>
         )}
-      </>
-    );
-  };
+      </ToolbarIcon>
+      <ToolbarIcon
+        title="Favorite"
+        icon={favoriteStore.isSpaceFavorite ? 'starOn' : 'star'}
+        onClick={toggleFavorite}
+        isWhite={false}
+      />
+      <Separator />
+      <ToolbarIcon title="Fly Around" icon="fly-to" link="/" />
+    </>
+  );
 
   return (
     <styled.Container>

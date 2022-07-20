@@ -37,7 +37,7 @@ const Collaboration: React.FC<Props> = () => {
 
   const {
     collaborationStore,
-    mainStore: {unityStore}
+    mainStore: {unityStore, favoriteStore}
   } = useStore();
 
   usePosBusEvent('posbus-connected', () => {
@@ -77,6 +77,7 @@ const Collaboration: React.FC<Props> = () => {
 
     if (collaborationState.collaborationSpace?.id) {
       collaborationStore.init(collaborationState.collaborationSpace.id);
+      favoriteStore.setSpaceId(collaborationState.collaborationSpace.id);
     }
   }, [collaborationState.collaborationSpace]);
 

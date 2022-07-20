@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {SvgButton, Text} from 'ui-kit';
+import {SvgButton, Text, Tooltip} from 'ui-kit';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './TopBar.styled';
@@ -42,7 +42,9 @@ const TopBar: FC<Props> = (props) => {
       <styled.Actions>
         {props.actions}
         {props.onClose && (
-          <SvgButton iconName="close" size="medium-large" onClick={() => props.onClose?.()} />
+          <Tooltip label="Close" placement="bottom">
+            <SvgButton iconName="close" size="medium-large" onClick={() => props.onClose?.()} />
+          </Tooltip>
         )}
       </styled.Actions>
     </styled.Container>

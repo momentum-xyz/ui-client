@@ -37,6 +37,7 @@ export const Container = styled.div`
   border-radius: 10px;
   backdrop-filter: blur(10px);
   pointer-events: all;
+  z-index: calc(var(--base-z-index) + 1);
 
   ${Title} ~ ${SubTitle} {
     margin-left: 1ch;
