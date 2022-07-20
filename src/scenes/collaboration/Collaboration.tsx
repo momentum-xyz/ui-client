@@ -94,8 +94,13 @@ const Collaboration: FC = () => {
   };
 
   useEffect(() => {
+    unityStore.pause();
     joinMeeting().then();
-  }, []);
+
+    return () => {
+      unityStore.resume();
+    };
+  }, [unityStore]);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {

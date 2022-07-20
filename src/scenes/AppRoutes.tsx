@@ -111,6 +111,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.worldCalendar,
-    main: () => <WorldCalendar />
+    main: () => <WorldCalendar />,
+    renderBackground: true
   }
 ];

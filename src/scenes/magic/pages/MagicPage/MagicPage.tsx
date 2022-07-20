@@ -3,11 +3,9 @@ import {observer} from 'mobx-react-lite';
 import {useHistory, useParams} from 'react-router';
 import {generatePath} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
+import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {MagicTypeEnum} from 'core/enums';
-
-const TELEPORT_DELAY_MS = 3000;
 
 const MagicPage: FC = () => {
   const {mainStore, magicStore} = useStore();
