@@ -1,3 +1,5 @@
+import {generatePath} from 'react-router-dom';
+
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
 
@@ -17,9 +19,11 @@ export const generateLink: RequestInterface<MagicLinkGenerateRequest, MagicLinkR
   return request.post(URL, {id, key, data, type}, restOptions);
 };
 
-export const getMagicLink: RequestInterface<MagicLinkGetRequest, MagicLinkResponse> = (options) => {
+export const fetchMagicLink: RequestInterface<MagicLinkGetRequest, MagicLinkResponse> = (
+  options
+) => {
   const {key, ...restOptions} = options;
 
-  const URL = `${magicRepositoryEndpoints().base}/${key}`;
+  const URL = generatePath(magicRepositoryEndpoints().fetchLink, {key});
   return request.get(URL, restOptions);
 };

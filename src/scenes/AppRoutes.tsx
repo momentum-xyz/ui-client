@@ -107,8 +107,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.magic,
-    main: () => <MagicPage />,
-    renderBackground: true
+    main: () => <MagicPage />
   },
   {
     path: ROUTES.worldCalendar,

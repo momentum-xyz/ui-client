@@ -4,7 +4,7 @@ export const magicRepositoryEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/magic`;
 
   return {
-    base: BASE_URL,
+    fetchLink: `${BASE_URL}/:key`,
     generateLink: `${BASE_URL}/generate-link`
   };
 };

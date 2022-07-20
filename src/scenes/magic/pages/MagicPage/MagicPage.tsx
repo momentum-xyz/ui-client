@@ -1,37 +1,23 @@
-import React, {useEffect} from 'react';
-import {useHistory, useParams} from 'react-router';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {toast} from 'react-toastify';
-import {useTranslation} from 'react-i18next';
+import {useHistory, useParams} from 'react-router';
+import {generatePath} from 'react-router-dom';
 
-import {MagicTypeEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
-import {ToastContent} from 'ui-kit';
+import {MagicTypeEnum} from 'core/enums';
 
-interface MagicPageProps {
-  children?: React.ReactNode;
-}
+const TELEPORT_DELAY_MS = 3000;
 
-const MagicPage: React.FC<MagicPageProps> = (props) => {
-  const {
-    mainStore: {unityStore},
-    magicStore
-  } = useStore();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
-  const history = useHistory();
+const MagicPage: FC = () => {
+  const {mainStore, magicStore} = useStore();
+  const {unityStore} = mainStore;
+  const {magic} = magicStore;
+
   const {key} = useParams<{key: string}>();
+  const history = useHistory();
 
-  const {t} = useTranslation();
-
-  useEffect(() => {
-    if (key) {
-      magicStore.getMagicLink(key);
-    }
-  }, [key]);
-
-  const handleMagic = () => {
+  const handleMagic = useCallback(() => {
     if (!magicStore.magic) {
       return;
     }
@@ -44,73 +30,46 @@ const MagicPage: React.FC<MagicPageProps> = (props) => {
     const id = magicStore.magic.data.id;
 
     switch (magicStore.magic.type) {
-      case MagicTypeEnum.OPEN_SPACE:
-        unityStore.teleportToSpace(id);
-        magicStore
-          .requestSpaceEnter(id)
-          .then(() => joinMeetingSpace(id))
-          .then(() => {
-            setTimeout(() => {
-              history.replace({
-                pathname: ROUTES.collaboration.dashboard
-              });
-            }, 3000);
-          })
-          .catch(() => {
-            toast.error(
-              <ToastContent
-                isDanger
-                headerIconName="alert"
-                title={t('titles.alert')}
-                text={t('collaboration.spaceIsPrivate')}
-                isCloseButton
-              />
-            );
-          });
-        break;
       case MagicTypeEnum.FLY: {
         unityStore.teleportToVector3(magicStore.magic.data.position);
         history.replace({pathname: ROUTES.base});
         break;
       }
+
+      case MagicTypeEnum.OPEN_SPACE:
+        unityStore.teleportToSpace(id);
+        setTimeout(() => {
+          const params = {spaceId: id};
+          history.push(generatePath(ROUTES.collaboration.dashboard, params));
+        }, TELEPORT_DELAY_MS);
+        break;
+
       case MagicTypeEnum.EVENT: {
         unityStore.teleportToSpace(id);
-        magicStore
-          .requestSpaceEnter(id)
-          .then(() => joinMeetingSpace(id))
-          .then(() => {
-            setTimeout(() => {
-              history.replace({
-                pathname: `${ROUTES.collaboration.calendar}/${magicStore.magic?.data.eventId ?? ''}`
-              });
-            }, 3000);
-          })
-          .catch(() => {
-            toast.error(
-              <ToastContent
-                isDanger
-                headerIconName="alert"
-                title={t('titles.alert')}
-                text={t('collaboration.spaceIsPrivate')}
-                isCloseButton
-              />
-            );
-          });
+        setTimeout(() => {
+          const params = {spaceId: id, eventId: magicStore.magic?.data.eventId ?? ''};
+          history.push(generatePath(ROUTES.collaboration.calendarEvent, params));
+        }, TELEPORT_DELAY_MS);
         break;
       }
+
       default:
         history.replace({pathname: ROUTES.base});
         break;
     }
-  };
+  }, [history, magicStore.magic, unityStore]);
 
   useEffect(() => {
-    if (unityStore.isTeleportReady) {
+    magicStore.getMagicLink(key);
+  }, [key, magicStore]);
+
+  useEffect(() => {
+    if (unityStore.isTeleportReady && magic?.id) {
       handleMagic();
     }
-  }, [handleMagic, unityStore.isTeleportReady]);
+  }, [handleMagic, magic?.id, unityStore.isTeleportReady]);
 
-  return <>{props.children}</>;
+  return <></>;
 };
 
 export default observer(MagicPage);
