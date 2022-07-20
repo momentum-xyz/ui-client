@@ -4,12 +4,11 @@ import {Redirect} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 // TODO: Refactor
-import StageModeRouter from 'component/layout/StageMode/StageModeRouter';
 import WhiteBoardLayout from 'component/layout/Collaboration/WhiteBoardLayout';
 import ScreenShareLayout from 'component/layout/Collaboration/ScreenShareLayout';
 import GoogleDriveLayout from 'component/layout/Collaboration/GoogleDriveLayout';
 
-import {CalendarPage, DashboardPage} from './pages';
+import {DashboardPage, CalendarPage, StageModeRouter} from './pages';
 
 export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   {

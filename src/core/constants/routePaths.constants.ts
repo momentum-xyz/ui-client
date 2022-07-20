@@ -15,6 +15,7 @@ export const ROUTES = {
   collaboration: {
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
+    stageModeControl: `/collaboration/:spaceId/stage-mode/control`,
     dashboard: '/collaboration/:spaceId/dashboard',
     calendar: '/collaboration/:spaceId/calendar',
     calendarEvent: '/collaboration/:spaceId/calendar/:eventId',
