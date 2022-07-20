@@ -7,7 +7,6 @@ import {toast} from 'react-toastify';
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface} from 'core/interfaces';
 import {Navigation, ToastContent} from 'ui-kit';
-import {UnityService} from 'shared/services';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {PosBusEventEnum, StageModeStatusEnum} from 'core/enums';
 import {bytesToUuid, createRoutesByConfig} from 'core/utils';
@@ -94,13 +93,8 @@ const Collaboration: FC = () => {
   };
 
   useEffect(() => {
-    unityStore.pause();
     joinMeeting().then();
-
-    return () => {
-      unityStore.resume();
-    };
-  }, [unityStore]);
+  }, []);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
@@ -149,7 +143,6 @@ const Collaboration: FC = () => {
   }, [stageModeState]);
 
   useEffect(() => {
-    UnityService.pauseSound();
     navigator.mediaDevices.ondevicechange = () => {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         setNewDevice(devices[1]);
@@ -158,7 +151,6 @@ const Collaboration: FC = () => {
     };
 
     return () => {
-      UnityService.continueSound();
       navigator.mediaDevices.ondevicechange = null;
     };
   }, []);

@@ -20,14 +20,6 @@ const WorldCalendarPage: FC = () => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    unityStore.pause();
-
-    return () => {
-      unityStore.resume();
-    };
-  }, [unityStore]);
-
   const handleMagicLinkOpen = useCallback(
     (eventId: string, spaceId?: string) => {
       if (spaceId) {
