@@ -4,7 +4,7 @@ import {generatePath, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {usePrevious} from 'ui-kit/hooks';
-import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
+import {ROUTES} from 'core/constants';
 
 // TODO: Refactor
 import CollaborationSpace from '../../context/Collaboration/CollaborationTypes';
@@ -39,10 +39,8 @@ const InFlightControlLayer: React.FC = () => {
   const rejoin = useCallback(() => {
     if (leftCollaborationSpace) {
       unityStore.teleportToSpace(leftCollaborationSpace.id);
-      setTimeout(() => {
-        const params = {spaceId: leftCollaborationSpace.id};
-        history.push(generatePath(ROUTES.collaboration.dashboard, params));
-      }, TELEPORT_DELAY_MS);
+      const params = {spaceId: leftCollaborationSpace.id};
+      history.push(generatePath(ROUTES.collaboration.dashboard, params));
     }
   }, [history, leftCollaborationSpace, unityStore]);
 
