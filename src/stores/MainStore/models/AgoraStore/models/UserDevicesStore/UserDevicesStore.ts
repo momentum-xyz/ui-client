@@ -34,6 +34,7 @@ const UserDevicesStore = types
       }))
   )
   .actions((self) => ({
+    // TODO: Remove returns
     getMicrophoneConsent: flow(function* () {
       if (!self.microphoneConsent) {
         self.microphoneAccessDialog.open();
@@ -41,12 +42,17 @@ const UserDevicesStore = types
           yield navigator.mediaDevices.getUserMedia({audio: true});
           self.microphoneAccessDialog.close();
           self.microphoneConsent = true;
+          return true;
         } catch {
           self.microphoneRequirementDialog.open();
           self.microphoneConsent = false;
+          return false;
         }
       }
+
+      return true;
     }),
+    // TODO: Remove returns
     getCameraConsent: flow(function* () {
       if (!self.cameraConsent) {
         const shouldNotShowCameraDialog = storage.get(StorageKeyEnum.NoCameraInfo);
@@ -59,19 +65,63 @@ const UserDevicesStore = types
           yield navigator.mediaDevices.getUserMedia({video: true});
           self.cameraAccessDialog.close();
           self.cameraConsent = true;
+          return true;
         } catch {
           self.cameraRequirementDialog.open();
+          return false;
         }
       }
+
+      return true;
     }),
     doNotShowCameraRequirementDialogAgain() {
       storage.set(StorageKeyEnum.NoCameraInfo, 1);
-    }
+    },
+    mute: flow(function* () {
+      self.isTogglingMicrophone = true;
+
+      if (self.localAudioTrack) {
+        yield self.localAudioTrack.setEnabled(false);
+      }
+
+      self.muted = true;
+      self.isTogglingMicrophone = false;
+    }),
+    unmute: flow(function* () {
+      self.isTogglingMicrophone = true;
+
+      if (self.localAudioTrack) {
+        yield self.localAudioTrack.setEnabled(true);
+      }
+
+      self.muted = false;
+      self.isTogglingMicrophone = false;
+    }),
+    turnOffCamera: flow(function* () {
+      self.isTogglingCamera = true;
+
+      if (self.localVideoTrack) {
+        yield self.localVideoTrack.setEnabled(false);
+      }
+
+      self.cameraOff = true;
+      self.isTogglingCamera = false;
+    }),
+    turnOnCamera: flow(function* () {
+      self.isTogglingCamera = true;
+
+      if (self.localVideoTrack) {
+        yield self.localVideoTrack.setEnabled(true);
+      }
+
+      self.cameraOff = false;
+      self.isTogglingCamera = false;
+    })
   }))
   .actions((self) => ({
     init: flow(function* () {
-      self.getMicrophoneConsent();
-      self.getMicrophoneConsent();
+      yield self.getMicrophoneConsent();
+      yield self.getCameraConsent();
 
       if (self.microphoneConsent) {
         const devices = yield navigator.mediaDevices.enumerateDevices();
@@ -144,50 +194,20 @@ const UserDevicesStore = types
       self.localAudioTrack = undefined;
       self.localVideoTrack = undefined;
     },
-    mute: flow(function* () {
-      if (!self.localAudioTrack) {
-        return;
+    toggleMicrophone() {
+      if (self.muted) {
+        self.unmute();
+      } else {
+        self.mute();
       }
-
-      self.isTogglingMicrophone = true;
-
-      yield self.localAudioTrack?.setEnabled(false);
-      self.muted = true;
-      self.isTogglingMicrophone = false;
-    }),
-    unmute: flow(function* () {
-      if (!self.localAudioTrack) {
-        return;
+    },
+    toggleCamera() {
+      if (self.cameraOff) {
+        self.turnOnCamera();
+      } else {
+        self.turnOffCamera();
       }
-
-      self.isTogglingMicrophone = true;
-
-      yield self.localAudioTrack?.setEnabled(true);
-      self.muted = false;
-      self.isTogglingMicrophone = false;
-    }),
-    turnOffCamera: flow(function* () {
-      if (!self.localVideoTrack) {
-        return;
-      }
-
-      self.isTogglingCamera = true;
-
-      yield self.localVideoTrack?.setEnabled(false);
-      self.cameraOff = true;
-      self.isTogglingCamera = false;
-    }),
-    turnOnCamera: flow(function* () {
-      if (!self.localVideoTrack) {
-        return;
-      }
-
-      self.isTogglingCamera = true;
-
-      yield self.localVideoTrack?.setEnabled(true);
-      self.cameraOff = false;
-      self.isTogglingCamera = false;
-    })
+    }
   }));
 
 export interface UserDevicesStoreInterface extends Instance<typeof UserDevicesStore> {}

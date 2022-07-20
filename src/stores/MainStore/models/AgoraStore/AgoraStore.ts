@@ -20,7 +20,7 @@ const AgoraStore = types
     ResetModel,
     types.model('AgoraStore', {
       // Common
-      appId: appVariables.AGORA_APP_ID,
+      appId: '',
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
       userDevicesStore: types.optional(UserDevicesStore, {}),
@@ -61,8 +61,10 @@ const AgoraStore = types
   .actions((self) => ({
     // Common
     init() {
+      AgoraRTC.setLogLevel(4);
       self.stageModeClient.enableDualStream();
       self.userDevicesStore.init();
+      self.appId = appVariables.AGORA_APP_ID;
     },
     createVideoTrackAndPublish: flow(function* () {
       if (self.isStageMode && self.stageModeClient.connectionState === 'CONNECTED') {
@@ -128,7 +130,6 @@ const AgoraStore = types
     // Video call
 
     joinOrStartVideoCall: flow(function* (spaceId: string, authStateSubject: string) {
-      self.userId = yield self.videoCallClient.join(self.appId, spaceId, authStateSubject);
       self.spaceId = spaceId;
 
       const tokenResponse: string = yield self.tokenRequest.send(
@@ -138,7 +139,12 @@ const AgoraStore = types
         }
       );
 
-      yield self.videoCallClient.join(self.appId, spaceId, tokenResponse, authStateSubject);
+      self.userId = yield self.videoCallClient.join(
+        self.appId,
+        spaceId,
+        tokenResponse,
+        authStateSubject
+      );
 
       self.remoteUsers = self.videoCallClient.remoteUsers;
     }),

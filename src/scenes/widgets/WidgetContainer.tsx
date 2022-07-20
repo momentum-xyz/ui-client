@@ -23,22 +23,15 @@ import {
   TokenRulesWidget,
   WorldStatsWidget
 } from 'scenes/widgets/pages';
-// TODO: Refactoring
-import {
-  COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
-  COLLABORATION_IS_TOGGLING_CAMERA_ACTION_UPDATE,
-  COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
-  COLLABORATION_MUTED_ACTION_UPDATE
-} from 'context/Collaboration/CollaborationReducer';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import FooterDevTools from 'component/molucules/footer/FooterDevTools';
+// TODO: Refactoring
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 
 import * as styled from './WidgetContainer.styled';
 
 const WidgetContainer: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
-  const {worldStore} = mainStore;
+  const {worldStore, agoraStore} = mainStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -57,7 +50,7 @@ const WidgetContainer: FC = () => {
   const {profileMenuDialog} = profileMenuStore;
   const {profile: currentProfile, isGuest} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
-  const {collaborationState, collaborationDispatch} = useCollaboration();
+  const {userDevicesStore} = agoraStore;
 
   const location = useLocation();
   const {isOnStage} = useAgoraStageMode();
@@ -67,28 +60,19 @@ const WidgetContainer: FC = () => {
   }, [musicPlayerStore, worldStore.worldId]);
 
   const toggleMute = () => {
-    if (collaborationState.isTogglingMute) {
+    if (userDevicesStore.isTogglingMicrophone) {
       return;
     }
-    collaborationDispatch({
-      type: COLLABORATION_IS_TOGGLING_MUTE_ACTION_UPDATE,
-      isTogglingMute: true
-    });
-    collaborationDispatch({
-      type: COLLABORATION_MUTED_ACTION_UPDATE,
-      muted: !collaborationState.muted
-    });
+
+    userDevicesStore.toggleMicrophone();
   };
 
   const toggleCameraOn = () => {
-    collaborationDispatch({
-      type: COLLABORATION_IS_TOGGLING_CAMERA_ACTION_UPDATE,
-      isTogglingCamera: true
-    });
-    collaborationDispatch({
-      type: COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
-      cameraOff: !collaborationState.cameraOff
-    });
+    if (userDevicesStore.isTogglingCamera) {
+      return;
+    }
+
+    userDevicesStore.toggleCamera();
   };
 
   const handleRuleReviewClose = () => {
@@ -155,30 +139,28 @@ const WidgetContainer: FC = () => {
           <ToolbarIconList>
             <ToolbarIcon
               title={
-                collaborationState.stageMode && !isOnStage
+                agoraStore.isStageMode && !isOnStage
                   ? 'You are in the audience, stage mode is on'
-                  : collaborationState.cameraOff
+                  : userDevicesStore.cameraOff
                   ? 'Camera on'
                   : 'Camera off'
               }
-              icon={collaborationState.cameraOff ? 'cameraOff' : 'cameraOn'}
+              icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
               onClick={toggleCameraOn}
-              disabled={
-                collaborationState.isTogglingCamera || (collaborationState.stageMode && !isOnStage)
-              }
+              disabled={userDevicesStore.isTogglingCamera || (agoraStore.isStageMode && !isOnStage)}
             />
             <ToolbarIcon
               title={
-                collaborationState.stageMode && !isOnStage
+                agoraStore.isStageMode && !isOnStage
                   ? 'You are in the audience, stage mode is on'
-                  : collaborationState.muted
+                  : userDevicesStore.muted
                   ? 'Unmute'
                   : 'Mute'
               }
-              icon={collaborationState.muted ? 'microphoneOff' : 'microphoneOn'}
+              icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
               onClick={toggleMute}
               disabled={
-                collaborationState.isTogglingMute || (collaborationState.stageMode && !isOnStage)
+                userDevicesStore.isTogglingMicrophone || (agoraStore.isStageMode && !isOnStage)
               }
             />
           </ToolbarIconList>

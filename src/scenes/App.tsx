@@ -5,12 +5,10 @@ import {AuthProvider} from 'react-oidc-context';
 import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
-import AgoraRTC from 'agora-rtc-sdk-ng';
 
 import {WrongBrowser} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {appVariables} from 'api/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
 
@@ -26,12 +24,6 @@ import AppLayers from './AppLayers';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
-
-// TODO: Refactoring. Move to separate service
-AgoraRTC.setLogLevel(4);
-const agoraClient = AgoraRTC.createClient({mode: 'rtc', codec: 'h264'});
-const stageClient = AgoraRTC.createClient({mode: 'live', codec: 'vp8'});
-stageClient.enableDualStream();
 
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
@@ -115,11 +107,7 @@ const App: FC = () => {
           <AuthProvider {...sessionStore.oidcConfig}>
             <AuthComponent>
               <CollaborationProvider>
-                <AgoraProvider
-                  client={agoraClient}
-                  stageClient={stageClient}
-                  appId={appVariables.AGORA_APP_ID}
-                >
+                <AgoraProvider>
                   <TextChatProvider>
                     <UnityPage />
                     <AppLayers>
