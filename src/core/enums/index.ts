@@ -22,3 +22,4 @@ export * from './stageMode.enum';
 export * from './broadcastStatus.enum';
 export * from './moderation.enum';
 export * from './integrationType.enum';
+export * from './videoType.enum';

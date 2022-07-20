@@ -1,21 +1,15 @@
 import React, {useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
-import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
-import {useStore, useUnityEvent} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
 import DashboardVideo from 'component/atoms/video/DashboardVideo';
+import {VideoTypeEnum} from 'core/enums';
 
 import * as styled from './VideoPage.styled';
 
 const VideoPage: React.FC = () => {
-  const {
-    mainStore: {unityStore},
-    videoStore
-  } = useStore();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
-  const history = useHistory();
+  const {mainStore, videoStore} = useStore();
+  const {unityStore} = mainStore;
 
   useEffect(() => {
     if (!videoStore.type) {
@@ -25,15 +19,12 @@ const VideoPage: React.FC = () => {
     }
   }, [unityStore, videoStore.type]);
 
-  useUnityEvent('ClickEventVideo', videoStore.handleClickEventVideo);
-
   const handleClose = () => {
-    videoStore.close(joinMeetingSpace, unityStore.pause, () => {
-      history.push({pathname: ROUTES.dashboard});
-    });
+    videoStore.setType(undefined);
+    videoStore.setDashboardId(undefined);
   };
 
-  if (videoStore.type === 'DASHBOARD_VIDEO') {
+  if (videoStore.type === VideoTypeEnum.DASHBOARD_VIDEO) {
     return (
       <styled.Container>
         {videoStore.dashboardId && (

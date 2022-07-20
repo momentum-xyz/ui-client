@@ -22,7 +22,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded, collaborationStore} = useStore();
+  const {mainStore, unityLoaded, collaborationStore, videoStore} = useStore();
   const {spaceStore} = collaborationStore;
   const {unityStore} = mainStore;
 
@@ -84,6 +84,8 @@ const UnityPage: FC = () => {
       );
     }
   });
+
+  useUnityEvent('ClickEventVideo', videoStore.handleClickEventVideo);
 
   usePosBusEvent('high-five', (senderId, message) => {
     toast.info(

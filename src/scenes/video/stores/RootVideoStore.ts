@@ -1,40 +1,27 @@
-import {flow, Instance, types} from 'mobx-state-tree';
+import {types} from 'mobx-state-tree';
 
 import {ResetModel} from 'core/models';
+import {VideoTypeEnum} from 'core/enums';
 
 const RootVideoStore = types
   .compose(
     ResetModel,
     types.model('RootVideoStore', {
-      type: types.maybe(types.string),
+      type: types.maybe(types.enumeration(Object.values(VideoTypeEnum))),
       dashboardId: types.maybe(types.string)
     })
   )
   .actions((self) => ({
     handleClickEventVideo(id: string) {
       self.dashboardId = id;
-      self.type = 'DASHBOARD_VIDEO';
+      self.type = VideoTypeEnum.DASHBOARD_VIDEO;
     },
-    close: flow(function* (
-      onJoin: (dashboardId: string) => Promise<void>,
-      pauseUnity: () => void,
-      onNavigation: () => void,
-      shouldOpenDashboard = false
-    ) {
-      self.type = undefined;
-
-      if (shouldOpenDashboard) {
-        if (self.dashboardId) {
-          yield onJoin(self.dashboardId);
-          pauseUnity();
-          onNavigation();
-        }
-      }
-
-      self.dashboardId = undefined;
-    })
+    setType(type?: VideoTypeEnum): void {
+      self.type = type;
+    },
+    setDashboardId(id?: string): void {
+      self.dashboardId = id;
+    }
   }));
-
-export interface RootVideoStoreInterface extends Instance<typeof RootVideoStore> {}
 
 export {RootVideoStore};
