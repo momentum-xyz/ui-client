@@ -10,6 +10,7 @@ import {RootWidgetStore} from 'scenes/widgets/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
+import {RootVideoStore} from 'scenes/video/stores';
 
 import {ConfigStore} from './ConfigStore';
 import {MainStore} from './MainStore';
@@ -31,7 +32,8 @@ const RootStore = types
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
-    magicStore: types.optional(MagicStore, {})
+    magicStore: types.optional(MagicStore, {}),
+    videoStore: types.optional(RootVideoStore, {})
   })
   .actions((self) => ({
     initApplication(): void {

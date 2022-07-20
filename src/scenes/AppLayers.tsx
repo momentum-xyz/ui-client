@@ -7,10 +7,10 @@ import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+// import {VideoPage} from 'scenes/video/pages';
 
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
-import VideoLayer from '../component/overlays/VideoLayer';
 import {StageModePopupQueueProvider} from '../context/StageMode/StageModePopupQueueContext';
 
 import {Communication} from './communication';
@@ -48,7 +48,6 @@ const AppLayers: FC = ({children}) => {
 
         <WidgetContainer />
       </div>
-      <VideoLayer />
       <LiveStreamLayer />
     </>
   );
