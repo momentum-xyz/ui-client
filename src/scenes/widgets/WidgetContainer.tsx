@@ -31,7 +31,6 @@ import {
   COLLABORATION_MUTED_ACTION_UPDATE
 } from 'context/Collaboration/CollaborationReducer';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
-import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 
 import * as styled from './WidgetContainer.styled';
@@ -151,7 +150,6 @@ const WidgetContainer: FC = () => {
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
         </styled.MainLinks>
         <styled.Toolbars>
-          {process.env.NODE_ENV === 'development' && <FooterDevTools />}
           <ToolbarIconList>
             <ToolbarIcon
               title={
