@@ -22,8 +22,8 @@ export const generateLink: RequestInterface<MagicLinkGenerateRequest, MagicLinkR
 export const fetchMagicLink: RequestInterface<MagicLinkGetRequest, MagicLinkResponse> = (
   options
 ) => {
-  const {key, ...restOptions} = options;
+  const {id, ...restOptions} = options;
 
-  const URL = generatePath(magicRepositoryEndpoints().fetchLink, {key});
+  const URL = generatePath(magicRepositoryEndpoints().fetchLink, {id});
   return request.get(URL, restOptions);
 };

@@ -12,7 +12,7 @@ const MagicPage: FC = () => {
   const {unityStore} = mainStore;
   const {magic} = magicStore;
 
-  const {key} = useParams<{key: string}>();
+  const {id} = useParams<{id: string}>();
   const history = useHistory();
 
   const handleMagic = useCallback(() => {
@@ -58,8 +58,8 @@ const MagicPage: FC = () => {
   }, [history, magicStore.magic, unityStore]);
 
   useEffect(() => {
-    magicStore.getMagicLink(key);
-  }, [key, magicStore]);
+    magicStore.getMagicLink(id);
+  }, [id, magicStore]);
 
   useEffect(() => {
     if (unityStore.isTeleportReady && magic?.id) {

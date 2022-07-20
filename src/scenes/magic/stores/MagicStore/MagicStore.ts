@@ -13,10 +13,10 @@ const MagicStore = types
     })
   )
   .actions((self) => ({
-    getMagicLink: flow(function* (key: string) {
+    getMagicLink: flow(function* (id: string) {
       const response: MagicLinkResponse = yield self.request.send(
         api.magicRepository.fetchMagicLink,
-        {key}
+        {id}
       );
 
       self.magic = cast(response);

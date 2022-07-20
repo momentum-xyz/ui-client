@@ -177,7 +177,7 @@ const CommunicationLayer = () => {
   usePosBusEvent('notify-gathering-start', (message) => {
     const handleJoinSpace = () => {
       const {spaceId} = message;
-      if (message.spaceId) {
+      if (spaceId) {
         unityStore.teleportToSpace(spaceId);
         setTimeout(() => {
           history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));

@@ -28,7 +28,7 @@ export const ROUTES = {
     broadcast: '/space/:spaceId/admin/broadcast'
   },
   createSpace: '/profile?createspace=1',
-  magic: '/magic/:key',
+  magic: '/magic/:id',
   worldCalendar: '/calendar',
   help: '/help'
 };
