@@ -47,7 +47,6 @@ const AgoraStore = types
     screenShare?: IRemoteVideoTrack;
     clientRoleOptions: {level: number};
     remoteUsers: (IAgoraRTCRemoteUser & {soundLevel?: number})[];
-    connectionState: ConnectionState;
   }>(() => ({
     videoCallClient: AgoraRTC.createClient({mode: 'rtc', codec: 'h264'}),
     stageModeClient: AgoraRTC.createClient({mode: 'live', codec: 'vp8'}),
@@ -57,8 +56,7 @@ const AgoraStore = types
     },
 
     // Stage Mode
-    remoteUsers: [],
-    connectionState: 'DISCONNECTED'
+    remoteUsers: []
   }))
   .actions((self) => ({
     // Common
