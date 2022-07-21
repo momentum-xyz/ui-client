@@ -283,7 +283,7 @@ export const useAgoraStageMode = () => {
       console.info('[STAGEMODE] handleUserJoined ');
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
       if (isScreenshare) {
-        history.push({pathname: ROUTES.screenShare});
+        history.push({pathname: ROUTES.collaboration.screenShare});
         setScreenShare(user?.videoTrack ? user?.videoTrack : null);
       }
 

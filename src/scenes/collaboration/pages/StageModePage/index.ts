@@ -1,1 +1,1 @@
-export {default as StageModePage} from './StageModePage';
+export {default as StageModeRouter} from './StageModeRouter';

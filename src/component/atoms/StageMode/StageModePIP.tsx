@@ -56,7 +56,7 @@ const StageModePIP: React.FC = () => {
         <div
           className="bg-black-80 rounded-bl p-.5 px-1 text-xs text-white-50 hover:text-white-100 font-bold uppercase absolute right-0 top-0"
           onClick={() => {
-            history.push(ROUTES.stageMode);
+            history.push(ROUTES.collaboration.stageMode);
           }}
         >
           <FullScreenIcon className="w-1.5 h-1.5 " />

@@ -1,10 +1,19 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Switch, useHistory, useRouteMatch} from 'react-router-dom';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
+import {toast} from 'react-toastify';
 
+import {ROUTES} from 'core/constants';
+import {NavigationTabInterface} from 'core/interfaces';
+import {Navigation, ToastContent} from 'ui-kit';
+import {useStore, usePosBusEvent} from 'shared/hooks';
 import {PosBusEventEnum, StageModeStatusEnum} from 'core/enums';
-import {UnityService} from 'shared/services';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+import {bytesToUuid, createRoutesByConfig} from 'core/utils';
+// TODO: Refactoring
+import useCollaboration, {
+  useJoinCollaborationSpaceByAssign
+} from 'context/Collaboration/hooks/useCollaboration';
 import {
   useStageModeJoin,
   useStageModeLeave,
@@ -12,49 +21,62 @@ import {
 } from 'hooks/api/useStageModeService';
 import Modal, {ModalRef} from 'component/util/Modal';
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
-import {useStore, usePosBusEvent} from 'shared/hooks';
+import {useAgoraScreenShare} from 'hooks/communication/useAgoraScreenShare';
 import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
 import {ParticipantRole, ParticipantStatus} from 'context/Collaboration/CollaborationTypes';
-import {bytesToUuid, createRoutesByConfig} from 'core/utils';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
-import {ROUTES} from 'core/constants';
 
-import {PRIVATE_ROUTES} from './CollaborationRoutes';
+import {COLLABORATION_ROUTES} from './CollaborationRoutes';
 
-interface Props {}
+const Collaboration: FC = () => {
+  const {collaborationStore, mainStore} = useStore();
+  const {spaceStore} = collaborationStore;
+  const {unityStore} = mainStore;
 
-const Collaboration: React.FC<Props> = () => {
-  const {path} = useRouteMatch();
+  const {spaceId} = useParams<{spaceId: string}>();
+  const {t} = useTranslation();
   const history = useHistory();
+
+  const {screenShare} = useAgoraScreenShare();
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeState = useStageModeStatusInfo(collaborationState.collaborationSpace?.id);
   const switchDeviceModal = useRef<ModalRef>(null);
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
   const agoraStageMode = useAgoraStageMode();
+  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const stageModeJoin = useStageModeJoin(collaborationState.collaborationSpace?.id);
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
-  const {
-    collaborationStore,
-    mainStore: {unityStore, favoriteStore}
-  } = useStore();
-
   usePosBusEvent('posbus-connected', () => {
-    if (!collaborationStore.spaceStore.space.id) {
-      return;
+    if (collaborationStore.spaceStore.space.id) {
+      unityStore.triggerInteractionMessage(
+        PosBusEventEnum.EnteredSpace,
+        collaborationStore.spaceStore.space.id,
+        0,
+        ''
+      );
     }
-    unityStore.triggerInteractionMessage(
-      PosBusEventEnum.EnteredSpace,
-      collaborationStore.spaceStore.space.id,
-      0,
-      ''
-    );
   });
 
-  const routes = useMemo(() => {
-    return PRIVATE_ROUTES(path, collaborationState.collaborationSpace?.id ?? '');
-  }, []);
+  const joinMeeting = useCallback(async () => {
+    if (await spaceStore.canUserJoin(spaceId)) {
+      await joinMeetingSpace(spaceId);
+      collaborationStore.init(spaceId);
+      return;
+    }
+
+    history.push(ROUTES.base);
+    toast.error(
+      <ToastContent
+        isDanger
+        isCloseButton
+        headerIconName="alert"
+        title={t('titles.alert')}
+        text={t('collaboration.spaceIsPrivate')}
+      />
+    );
+  }, [collaborationStore, history, joinMeetingSpace, spaceId, spaceStore, t]);
 
   const joinStageMode = () => {
     collaborationDispatch({
@@ -71,15 +93,8 @@ const Collaboration: React.FC<Props> = () => {
   };
 
   useEffect(() => {
-    if (!collaborationState.collaborationSpace) {
-      history.push(ROUTES.base);
-    }
-
-    if (collaborationState.collaborationSpace?.id) {
-      collaborationStore.init(collaborationState.collaborationSpace.id);
-      favoriteStore.setSpaceId(collaborationState.collaborationSpace.id);
-    }
-  }, [collaborationState.collaborationSpace]);
+    joinMeeting().then();
+  }, []);
 
   useEffect(() => {
     if (collaborationState.collaborationSpace) {
@@ -128,7 +143,6 @@ const Collaboration: React.FC<Props> = () => {
   }, [stageModeState]);
 
   useEffect(() => {
-    UnityService.pauseSound();
     navigator.mediaDevices.ondevicechange = () => {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         setNewDevice(devices[1]);
@@ -137,7 +151,6 @@ const Collaboration: React.FC<Props> = () => {
     };
 
     return () => {
-      UnityService.continueSound();
       navigator.mediaDevices.ondevicechange = null;
     };
   }, []);
@@ -147,7 +160,6 @@ const Collaboration: React.FC<Props> = () => {
     setNewDevice(undefined);
   };
 
-  // @ts-ignore
   const newDeviceKindDescription = () => {
     switch (newDevice?.kind) {
       case 'videoinput':
@@ -156,13 +168,45 @@ const Collaboration: React.FC<Props> = () => {
         return 'audio input';
       case 'audiooutput':
         return 'audio output';
+      default:
+        return '';
     }
   };
 
+  const tabs: NavigationTabInterface[] = [
+    {
+      path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
+      iconName: 'tiles'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
+      iconName: 'calendar'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
+      iconName: 'stage',
+      isActive: collaborationState.stageMode
+    },
+    {
+      path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
+      iconName: 'screenshare',
+      isActive: !!screenShare
+    },
+    {
+      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
+      iconName: 'miro'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
+      iconName: 'drive'
+    }
+  ];
+
   return (
     <>
+      <Navigation tabs={tabs} />
       <StageModeModalController />
-      <Switch>{createRoutesByConfig(routes)}</Switch>
+      <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
       <Modal ref={switchDeviceModal}>
         <NewDevicePopup
           onClose={handleSwitchDeviceModalClose}

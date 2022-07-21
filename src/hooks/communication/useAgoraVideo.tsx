@@ -192,7 +192,7 @@ const useAgoraVideo = () => {
         break;
       case 'user-joined':
         if (isScreenshare) {
-          history.push({pathname: ROUTES.screenShare});
+          history.push({pathname: ROUTES.collaboration.screenShare});
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           setScreenShare(rUser.videoTrack);
         } else {
