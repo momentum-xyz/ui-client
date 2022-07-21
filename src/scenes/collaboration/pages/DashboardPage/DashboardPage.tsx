@@ -6,16 +6,14 @@ import {t} from 'i18next';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {UnityService} from 'shared/services';
-import {IconSvg, Text, TopBar, Button, ToolbarIcon, Separator} from 'ui-kit';
+import {IconSvg, Text, TopBar, Button} from 'ui-kit';
 // TODO: Refactoring
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
-import {COLLABORATION_CHAT_ACTION_UPDATE} from '../../../../context/Collaboration/CollaborationReducer';
-import {useTextChatContext} from '../../../../context/TextChatContext';
-
+import {TopBarActions} from './components/templates/TopBarActions';
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
@@ -28,7 +26,6 @@ const DashboardPage: FC = () => {
   const history = useHistory();
 
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const {numberOfUnreadMessages} = useTextChatContext();
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
@@ -54,66 +51,9 @@ const DashboardPage: FC = () => {
           stageMode: false
         });
       }
-
       history.push(ROUTES.base);
     }
   };
-
-  const toggleChat = () => {
-    collaborationDispatch({
-      type: COLLABORATION_CHAT_ACTION_UPDATE,
-      open: !collaborationState.chatOpen
-    });
-  };
-
-  const toggleFavorite = () => {
-    if (spaceStore.space.id) {
-      if (favoriteStore.isSpaceFavorite) {
-        favoriteStore.removeFavorite(spaceStore.space.id);
-      } else {
-        favoriteStore.addFavorite(spaceStore.space.id);
-      }
-    }
-  };
-
-  const actions = () => (
-    <>
-      {spaceStore.isAdmin && (
-        <>
-          <ToolbarIcon
-            title="Open Admin"
-            icon="pencil"
-            link={'/space/' + spaceStore.space.id + '/admin'}
-            isActive={(match, location) => {
-              return location.pathname.includes('/space/' + spaceStore.space.id + '/admin');
-            }}
-            state={{canGoBack: true}}
-            isWhite={false}
-            toolTipPlacement="bottom"
-          />
-          <Separator />
-        </>
-      )}
-      <ToolbarIcon
-        title={collaborationState.chatOpen ? 'Close chat' : 'Open chat'}
-        icon="chat"
-        onClick={toggleChat}
-        isWhite={false}
-      >
-        {numberOfUnreadMessages > 0 && (
-          <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>
-        )}
-      </ToolbarIcon>
-      <ToolbarIcon
-        title="Favorite"
-        icon={favoriteStore.isSpaceFavorite ? 'starOn' : 'star'}
-        onClick={toggleFavorite}
-        isWhite={false}
-      />
-      <Separator />
-      <ToolbarIcon title="Fly Around" icon="fly-to" link="/" />
-    </>
-  );
 
   return (
     <styled.Container>
@@ -121,7 +61,13 @@ const DashboardPage: FC = () => {
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
-        actions={actions()}
+        actions={
+          <TopBarActions
+            favoriteStore={favoriteStore}
+            spaceId={spaceStore.space.id}
+            isAdmin={spaceStore.isAdmin}
+          />
+        }
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(spaceStore.isAdmin || spaceStore.isMember) && (

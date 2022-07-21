@@ -1,4 +1,4 @@
-import {types, flow, cast} from 'mobx-state-tree';
+import {types, flow, cast, Instance} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel} from 'core/models';
 import {api, BaseFavoritesResponse, FetchFavoritesResponse, PostFavoriteResponse} from 'api';
@@ -77,5 +77,7 @@ const FavoriteStore = types.compose(
       }
     }))
 );
+
+export interface FavoriteStoreInterface extends Instance<typeof FavoriteStore> {}
 
 export {FavoriteStore};
