@@ -1,4 +1,4 @@
-import {Instance, types} from 'mobx-state-tree';
+import {types} from 'mobx-state-tree';
 
 import {SpaceStore} from 'stores/MainStore/models';
 
@@ -18,7 +18,5 @@ const RootCollaborationStore = types
       self.dashboard.fetchDashboard(spaceId);
     }
   }));
-
-export interface RootMeetingSpaceStoreInterface extends Instance<typeof RootCollaborationStore> {}
 
 export {RootCollaborationStore};

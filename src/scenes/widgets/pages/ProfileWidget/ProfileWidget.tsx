@@ -59,6 +59,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
     profileStore.fetchUserOwnedSpaces(worldStore.worldId);
   }, [worldStore.worldId, userId]);
 
+  // TODO: Refactoring
   const grabATable = async () => {
     const {tableId, typeUuid} = await profileStore.grabATable(worldStore.worldId, userId);
     await joinMeetingSpace(tableId, typeUuid === '285ba49f-fee3-40d2-ab55-256b5804c20c');

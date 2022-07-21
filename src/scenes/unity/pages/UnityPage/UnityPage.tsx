@@ -1,8 +1,8 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
@@ -10,9 +10,6 @@ import Unity from 'react-unity-webgl';
 import {ROUTES} from 'core/constants';
 import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
 import {HighFiveContent, Portal, TOAST_BASE_OPTIONS, ToastContent, UnityLoader} from 'ui-kit';
-
-// TODO: Refactoring
-import {useJoinCollaborationSpaceByAssign} from '../../../../context/Collaboration/hooks/useCollaboration';
 
 import * as styled from './UnityPage.styled';
 
@@ -22,15 +19,22 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded, collaborationStore} = useStore();
-  const {spaceStore} = collaborationStore;
+  const {mainStore, unityLoaded} = useStore();
   const {unityStore} = mainStore;
 
   const auth = useAuth();
   const theme = useTheme();
   const history = useHistory();
   const {t} = useTranslation();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === ROUTES.base) {
+      unityStore.resume();
+    } else {
+      unityStore.pause();
+    }
+  }, [location, unityStore]);
 
   useUnityEvent('MomentumLoaded', () => {
     unityStore.setAuthToken(auth.user?.access_token);
@@ -51,38 +55,12 @@ const UnityPage: FC = () => {
     window.location.href = '/disconnect.html';
   });
 
-  useUnityEvent('ClickEventDashboard', async (spaceId: string) => {
-    if (await spaceStore.canUserJoin(spaceId)) {
-      await joinMeetingSpace(spaceId);
-      history.push({pathname: ROUTES.dashboard});
-    } else {
-      toast.error(
-        <ToastContent
-          isDanger
-          isCloseButton
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('collaboration.spaceIsPrivate')}
-        />
-      );
-    }
+  useUnityEvent('ClickEventDashboard', (spaceId: string) => {
+    history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
   });
 
-  useUnityEvent('PlasmaClickEvent', async (spaceId: string) => {
-    if (await spaceStore.canUserJoin(spaceId)) {
-      await joinMeetingSpace(spaceId);
-      history.push({pathname: ROUTES.collaboration});
-    } else {
-      toast.error(
-        <ToastContent
-          isDanger
-          isCloseButton
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('collaboration.spaceIsPrivate')}
-        />
-      );
-    }
+  useUnityEvent('PlasmaClickEvent', (spaceId: string) => {
+    history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
   });
 
   usePosBusEvent('high-five', (senderId, message) => {

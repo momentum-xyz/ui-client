@@ -1,27 +1,28 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
 
+import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+import {UnityService} from 'shared/services';
 import {IconSvg, Text, TopBar, Button} from 'ui-kit';
+// TODO: Refactoring
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
-import {useStore} from 'shared/hooks';
-import {UnityService} from 'shared/services';
-
-import TopbarButton from '../../../../component/atoms/topbar/TopbarButton';
+import TopbarButton from 'component/atoms/topbar/TopbarButton';
 
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
-  const {
-    collaborationStore: {dashboard, spaceStore},
-    sessionStore
-  } = useStore();
-
+  const {collaborationStore, sessionStore} = useStore();
+  const {dashboard, spaceStore} = collaborationStore;
   const {tileList, onDragEnd} = dashboard;
+
+  const history = useHistory();
 
   useEffect(() => {
     if (spaceStore.space.id) {
@@ -30,13 +31,13 @@ const DashboardPage: FC = () => {
     return () => {
       dashboard.resetModel();
     };
-  }, []);
+  }, [dashboard, spaceStore.space.id]);
 
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
-  // TODO: make as action in store
+  // TODO: make as reusable action in store
   const leaveCollaborationSpace = () => {
     if (collaborationState.collaborationSpace) {
       UnityService.leaveSpace(collaborationState.collaborationSpace.id);
@@ -48,6 +49,8 @@ const DashboardPage: FC = () => {
           stageMode: false
         });
       }
+
+      history.push(ROUTES.base);
     }
   };
 
