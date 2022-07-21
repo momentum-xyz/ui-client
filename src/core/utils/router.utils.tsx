@@ -15,7 +15,6 @@ export const createRoutesByConfig = (
   return routes.map(({path, exact, ...rest}) => (
     <Route key={path} path={path} exact={exact}>
       {!!rest.main() && rest.renderBackground && <div className="fixed inset-0 bg-dark-blue-70" />}
-      {!!rest.sidebar && <rest.sidebar />}
       <rest.main />
     </Route>
   ));

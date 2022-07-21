@@ -9,7 +9,7 @@ export interface MagicLinkGenerateRequest {
 }
 
 export interface MagicLinkGetRequest {
-  key: string;
+  id: string;
 }
 
 export interface MagicLinkResponse extends MagicLinkInterface {}

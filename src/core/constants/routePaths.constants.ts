@@ -12,16 +12,23 @@ export const ROUTES = {
   guestCallBack: '/oidc/guest/callback',
   intro: '/intro',
   spaceDashboard: '/dashboard/space/:id',
-  spaceAdmin: '/space/:spaceId/admin',
-  collaboration: '/collaboration',
-  stageMode: '/collaboration/stage-mode',
-  dashboard: '/collaboration/dashboard',
-  calendar: '/collaboration/calendar',
-  screenShare: '/collaboration/screenshare',
-  miro: '/collaboration/miro',
-  googleDrive: '/collaboration/google-drive',
+  collaboration: {
+    base: '/collaboration/:spaceId',
+    stageMode: `/collaboration/:spaceId/stage-mode`,
+    stageModeControl: `/collaboration/:spaceId/stage-mode/control`,
+    dashboard: '/collaboration/:spaceId/dashboard',
+    calendar: '/collaboration/:spaceId/calendar',
+    calendarEvent: '/collaboration/:spaceId/calendar/:eventId',
+    screenShare: '/collaboration/:spaceId/screenshare',
+    miro: '/collaboration/:spaceId/miro',
+    googleDrive: '/collaboration/:spaceId/google-drive'
+  },
+  spaceAdmin: {
+    base: '/space/:spaceId/admin',
+    broadcast: '/space/:spaceId/admin/broadcast'
+  },
   createSpace: '/profile?createspace=1',
-  magic: '/magic/:key',
+  magic: '/magic/:id',
   worldCalendar: '/calendar',
   help: '/help'
 };

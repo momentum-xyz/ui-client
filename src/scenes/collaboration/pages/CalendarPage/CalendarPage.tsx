@@ -1,41 +1,41 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {useParams} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
-import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+import {absoluteLink} from 'core/utils';
+import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 import {Button, TopBar, EventList, LinkDialog, ToastContent} from 'ui-kit';
+// TODO: Refactoring
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
-import {absoluteLink} from 'core/utils';
 
-import * as styled from './CalendarPage.styled';
 import {DeleteEventConfirmationDialog, EventForm} from './components';
+import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const {
-    collaborationStore,
-    sessionStore,
-    widgetStore: {attendeesListStore}
-  } = useStore();
+  const {collaborationStore, sessionStore, widgetStore} = useStore();
   const {calendarStore, space} = collaborationStore;
-  const theme = useTheme();
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
+  const {attendeesListStore} = widgetStore;
 
   const {eventId} = useParams<{eventId: string}>();
+  const history = useHistory();
+  const theme = useTheme();
 
   // TODO: Refactor legacy hooks to mobx
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
-  // TODO: make as action in store
+  // TODO: make as reusable action in store
   const leaveCollaborationSpace = () => {
     if (collaborationState.collaborationSpace) {
       UnityService.triggerInteractionMsg?.(
@@ -52,6 +52,8 @@ const CalendarPage: FC = () => {
           stageMode: false
         });
       }
+
+      history.push(ROUTES.base);
     }
   };
   const handleWeblink = (weblink: string) => {

@@ -23,7 +23,6 @@ import {
   TokenRulesWidget,
   WorldStatsWidget
 } from 'scenes/widgets/pages';
-import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 // TODO: Refactoring
 import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 
@@ -135,7 +134,6 @@ const WidgetContainer: FC = () => {
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
         </styled.MainLinks>
         <styled.Toolbars>
-          {process.env.NODE_ENV === 'development' && <FooterDevTools />}
           <ToolbarIconList>
             <ToolbarIcon
               title={
