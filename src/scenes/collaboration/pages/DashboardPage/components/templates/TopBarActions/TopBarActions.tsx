@@ -1,12 +1,14 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {generatePath} from 'react-router-dom';
 
 import {Separator, ToolbarIcon} from 'ui-kit';
 import {FavoriteStoreInterface} from 'stores/MainStore/models';
 import {COLLABORATION_CHAT_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {useTextChatContext} from 'context/TextChatContext';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './TopBarActions.styled';
 
@@ -44,9 +46,9 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
           <ToolbarIcon
             title={t('tooltipTitles.openAdmin')}
             icon="pencil"
-            link={'/space/' + spaceId + '/admin'}
+            link={generatePath(ROUTES.spaceAdmin.base, {spaceId})}
             isActive={(match, location) => {
-              return location.pathname.includes('/space/' + spaceId + '/admin');
+              return location.pathname.includes(generatePath(ROUTES.spaceAdmin.base, {spaceId}));
             }}
             state={{canGoBack: true}}
             isWhite={false}
@@ -74,7 +76,7 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
         isWhite={false}
       />
       <Separator />
-      <ToolbarIcon title={t('tooltipTitles.flyAround')} icon="fly-to" link="/" />
+      <ToolbarIcon title={t('tooltipTitles.flyAround')} icon="fly-to" link={ROUTES.base} />
     </>
   );
 };
