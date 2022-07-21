@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {t} from 'i18next';
 
 import {SvgButton, Text, Tooltip} from 'ui-kit';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
@@ -42,7 +43,7 @@ const TopBar: FC<Props> = (props) => {
       <styled.Actions>
         {props.actions}
         {props.onClose && (
-          <Tooltip label="Close" placement="bottom">
+          <Tooltip label={t('tooltipTitles.close')} placement="bottom">
             <SvgButton iconName="close" size="medium-large" onClick={() => props.onClose?.()} />
           </Tooltip>
         )}
