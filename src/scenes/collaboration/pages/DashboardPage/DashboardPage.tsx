@@ -34,6 +34,7 @@ const DashboardPage: FC = () => {
 
   useEffect(() => {
     if (spaceStore.space.id) {
+      favoriteStore.setSpaceId(spaceStore.space.id);
       dashboard.fetchDashboard(spaceStore.space.id);
     }
     return () => {
