@@ -2,7 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {UserManager} from 'oidc-client-ts';
 import {t} from 'i18next';
 
-import {storage} from 'core/services';
+import {storage} from 'shared/services';
 import {ResetModel} from 'core/models';
 import {ROUTES} from 'core/constants';
 import {Web3ConnectorInterface} from 'core/interfaces';

@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, memo, useEffect} from 'react';
 import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
@@ -11,7 +11,7 @@ import StageModeGuestLayout from '../../../../component/layout/StageMode/StageMo
 import StageModeControlPanelLayout from '../../../../component/layout/StageMode/StageModeControlPanelLayout';
 
 // TODO: Refactor
-const StageModeRouter: FC = () => {
+const StageModePage: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
 
   const {collaborationState, collaborationDispatch} = useCollaboration();
@@ -55,4 +55,4 @@ const StageModeRouter: FC = () => {
   );
 };
 
-export default StageModeRouter;
+export default memo(StageModePage);

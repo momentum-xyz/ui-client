@@ -14,7 +14,7 @@ import useCollaboration from '../../../../context/Collaboration/hooks/useCollabo
 
 import * as styled from './MagicLinkWidget.styled';
 
-const DIALOG_OFFSET_RIGHT = 105;
+const DIALOG_OFFSET_RIGHT = 20;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {
@@ -68,6 +68,7 @@ const MagicLinkWidget: FC = () => {
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       title={t('labels.shareLocation')}
       onClose={magicLinkDialog.close}
+      showBackground={false}
       showCloseButton
     >
       <styled.Container>
