@@ -3,11 +3,11 @@ import {AuthContextProps} from 'react-oidc-context';
 import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
 
-import {cookie, storage} from 'shared/services';
+import {storage} from 'shared/services';
 import {api, FetchUserResponse} from 'api';
 import {RequestModel, UserProfileModel} from 'core/models';
 import {bytesToUuid} from 'core/utils';
-import {CookieKeyEnum, LoginTypeEnum, StorageKeyEnum, UserStatusEnum} from 'core/enums';
+import {LoginTypeEnum, StorageKeyEnum, UserStatusEnum} from 'core/enums';
 import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 'shared/auth';
 
 const SessionStore = types
@@ -50,7 +50,6 @@ const SessionStore = types
     logout: flow(function* (auth: AuthContextProps) {
       yield auth.revokeTokens();
       yield auth.removeUser();
-      cookie.delete(CookieKeyEnum.INITIATIVE);
     })
   }))
   .actions((self) => ({
