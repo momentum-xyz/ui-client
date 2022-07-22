@@ -8,7 +8,7 @@ import WhiteBoardLayout from 'component/layout/Collaboration/WhiteBoardLayout';
 import ScreenShareLayout from 'component/layout/Collaboration/ScreenShareLayout';
 import GoogleDriveLayout from 'component/layout/Collaboration/GoogleDriveLayout';
 
-import {DashboardPage, CalendarPage, StageModeRouter} from './pages';
+import {DashboardPage, CalendarPage, StageModePage} from './pages';
 
 export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   {
@@ -27,7 +27,7 @@ export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.collaboration.stageMode,
-    main: () => <StageModeRouter />
+    main: () => <StageModePage />
   },
   {
     path: ROUTES.collaboration.miro,
