@@ -12,30 +12,32 @@ import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
-import TopbarButton from 'component/atoms/topbar/TopbarButton';
 
+import {TopBarActions} from './components/templates/TopBarActions';
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
-  const {collaborationStore, sessionStore} = useStore();
+  const {collaborationStore, sessionStore, mainStore} = useStore();
   const {dashboard, spaceStore} = collaborationStore;
+  const {favoriteStore} = mainStore;
   const {tileList, onDragEnd} = dashboard;
 
   const history = useHistory();
 
+  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
+  const {collaborationState, collaborationDispatch} = useCollaboration();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
+
   useEffect(() => {
     if (spaceStore.space.id) {
+      favoriteStore.setSpaceId(spaceStore.space.id);
       dashboard.fetchDashboard(spaceStore.space.id);
     }
     return () => {
       dashboard.resetModel();
     };
   }, [dashboard, spaceStore.space.id]);
-
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
   // TODO: make as reusable action in store
   const leaveCollaborationSpace = () => {
@@ -49,28 +51,8 @@ const DashboardPage: FC = () => {
           stageMode: false
         });
       }
-
       history.push(ROUTES.base);
     }
-  };
-
-  const actions = () => {
-    return (
-      <>
-        {spaceStore.isAdmin && (
-          <TopbarButton
-            title="Open Admin"
-            link={'/space/' + spaceStore.space.id + '/admin'}
-            isActive={(match, location) => {
-              return location.pathname.includes('/space/' + spaceStore.space.id + '/admin');
-            }}
-            state={{canGoBack: true}}
-          >
-            <IconSvg name="pencil" size="medium-large" />
-          </TopbarButton>
-        )}
-      </>
-    );
   };
 
   return (
@@ -79,7 +61,13 @@ const DashboardPage: FC = () => {
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
-        actions={actions()}
+        actions={
+          <TopBarActions
+            favoriteStore={favoriteStore}
+            spaceId={spaceStore.space.id}
+            isAdmin={spaceStore.isAdmin}
+          />
+        }
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(spaceStore.isAdmin || spaceStore.isMember) && (

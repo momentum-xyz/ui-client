@@ -61,8 +61,8 @@ const Collaboration: FC = () => {
 
   const joinMeeting = useCallback(async () => {
     if (await spaceStore.canUserJoin(spaceId)) {
-      await joinMeetingSpace(spaceId);
       collaborationStore.init(spaceId);
+      await joinMeetingSpace(spaceId);
       return;
     }
 

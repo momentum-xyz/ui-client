@@ -17,6 +17,7 @@ interface PropsInterface
 }
 
 const SvgButton: FC<PropsInterface> = ({
+  children,
   theme,
   onClick,
   isDanger,
@@ -39,6 +40,7 @@ const SvgButton: FC<PropsInterface> = ({
         isWhite={isWhite}
         className={className}
       />
+      {children}
     </styled.Container>
   );
 };

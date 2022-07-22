@@ -15,8 +15,8 @@ interface PropsInterface {
 const TileMenu: FC<PropsInterface> = ({onEdit, onDelete, provided, isDelete}) => {
   return (
     <styled.Container>
-      <SvgButton iconName="trash" size="normal" onClick={onDelete} isWhite />
-      {isDelete && <SvgButton iconName="pencil" size="normal" onClick={onEdit} isWhite />}
+      {isDelete && <SvgButton iconName="trash" size="normal" onClick={onDelete} isWhite />}
+      <SvgButton iconName="pencil" size="normal" onClick={onEdit} isWhite />
       <SvgButton iconName="direction-arrows" size="normal" isWhite {...provided?.dragHandleProps} />
     </styled.Container>
   );

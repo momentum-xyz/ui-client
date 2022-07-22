@@ -87,6 +87,7 @@
   /* Z INDEXES */
   --dialog-z-index: 100;
   --overlay-z-index: 40;
+  --base-z-index: 1;
 
 
   /* MUSIC PLAYER */

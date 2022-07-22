@@ -19,13 +19,21 @@ export const Content = styled.div`
 `;
 
 export const Container = styled.div`
+  height: 100%;
+  display: flex;
+  min-height: 0;
+  padding: 0 10px;
+  margin-top: 10px;
+`;
+
+export const DashboardContainer = styled.div`
   display: flex;
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
   }
   pointer-events: auto;
-  margin-top: 10px;
+
   padding: 1px;
   width: 100%;
   height: 100%;

@@ -265,6 +265,14 @@ export const enGb = {
       joinGathering: 'Gathering Event is starting now',
       updateSpace: 'update your space with some enticing content'
     },
+    tooltipTitles: {
+      openAdmin: 'Open Admin',
+      closeChat: 'Close Chat',
+      openChat: 'Open Chat',
+      favorite: 'Favorite',
+      flyAround: 'Fly Around',
+      close: 'Close'
+    },
     placeholders: {
       search: 'Search',
       searchForPeople: 'Search for people...',
