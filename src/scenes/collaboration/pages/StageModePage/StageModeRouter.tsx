@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, memo, useEffect} from 'react';
 import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
@@ -55,4 +55,4 @@ const StageModeRouter: FC = () => {
   );
 };
 
-export default StageModeRouter;
+export default memo(StageModeRouter);

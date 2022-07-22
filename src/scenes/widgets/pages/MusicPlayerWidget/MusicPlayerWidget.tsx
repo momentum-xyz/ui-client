@@ -12,7 +12,7 @@ import {
   UnityVolumeController
 } from './components';
 
-const DIALOG_OFFSET_RIGHT = 120;
+const DIALOG_OFFSET_RIGHT = 20;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
@@ -39,7 +39,6 @@ const MusicPlayerWidget: FC = () => {
       onClose={musicPlayerWidget.close}
       showCloseButton
       showBackground={false}
-      closeOnBackgroundClick={false}
     >
       <styled.Div>
         <PlayerController />
