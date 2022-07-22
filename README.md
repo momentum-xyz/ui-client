@@ -117,7 +117,7 @@ use `git lfs install` to initialize the git hooks
     │   │   │   └── ...             #
     │   │   ├── RootStore.ts        # Connecting all stores of application
     │   │   └── ...
-    │   ├── index.tsx               # Entry point for react rendering        
+    │   ├── index.tsx               # Entry point of react        
     │   └── ...
     │   
     ├── LICENSE.txt
