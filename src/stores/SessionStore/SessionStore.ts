@@ -3,7 +3,7 @@ import {AuthContextProps} from 'react-oidc-context';
 import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
 
-import {cookie, storage} from 'core/services';
+import {cookie, storage} from 'shared/services';
 import {api, FetchUserResponse} from 'api';
 import {RequestModel, UserProfileModel} from 'core/models';
 import {bytesToUuid} from 'core/utils';

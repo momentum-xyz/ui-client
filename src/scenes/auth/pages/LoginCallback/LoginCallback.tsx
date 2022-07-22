@@ -4,7 +4,7 @@ import {useAuth} from 'react-oidc-context';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {cookie} from 'core/services';
+import {cookie} from 'shared/services';
 import {CookieKeyEnum} from 'core/enums';
 
 const LoginCallback: FC = () => {

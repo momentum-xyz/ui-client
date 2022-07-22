@@ -37,69 +37,90 @@ use `git lfs install` to initialize the git hooks
 
 ## Project structure
     .
-    ├── public
+    ├── public                      # Static public content
     │   └── ...
+    │   
+    ├── scripts                     # Scripts for development
+    │   ├── buildSvgSprite.js       # Svg-sprite builder
+    │   └── generateIconsType.js.   # The IconName type builder. Type is based on svg-sprite
+    │   
     ├── src
-    │   ├── api                     # Api calls
-    │   │   ├── constants           # 
+    │   ├── api                     # BackEnd integration
+    │   │   ├── constants           # Api constants
+    │   │   ├── interfaces          # Common API interfaces
     │   │   ├── repositoris         # Api calls
     │   │   ├── request             # Define axios request
-    │   │   └── api.ts              #
-    │   ├── ui-kit                  # Core reusable components
+    │   │   └── api.ts              # Whole avaliable api
+    │   │
+    │   ├── ui-kit                  # Reusable components. It can be converted to package
     │   │   ├── atoms               # Small components
-    │   │   ├── molecules           # Components without BL
+    │   │   ├── molecules           # Components without BL. Bigger that atoms
+    │   │   ├── organismes          # Components without BL. Bigger that molecules
+    │   │   ├── templates           # Components without BL. Bigger that organismes
     │   │   ├── hooks               # DOM-hooks (like useClickOutside, etc.)
     │   │   ├── types               # Types for atoms
     │   │   ├── themes              # Theming via styled-components
     │   │   ├── assets
-    │   │   │   └── svg-sprite      # Svg-icons & svg-sprite
+    │   │   ├── assets
+    │   │   │   ├── icons           # Icons for svg-sprite
+    │   │   │   ├── images          # Images for ui-kit
+    │   │   │   └── svg-sprite      # Folder contains ready to use svg-sprite
     │   │   └── ...
-    │   ├── core                    # Core functionality
-    │   │   ├── enums               #
-    │   │   ├── constants           #
-    │   │   ├── insterfaces         #
-    │   │   ├── models              # Common Mobx-state-three (e.g. Request, ...)
-    │   │   ├── utils               #
-    │   │   ├── services            #
+    │   │
+    │   ├── core                    # Core stuff. It can be converted to package
+    │   │   ├── enums               # Application enums
+    │   │   ├── constants           # Application contants
+    │   │   ├── insterfaces         # Application insterfaces
+    │   │   ├── models              # Common MST-models (e.g. Request, ...)
+    │   │   ├── utils               # Bussiness logic utils
     │   │   └── ...
-    │   ├── shared                  # Stuff can be copy pasted to each MF
+    │   │
+    │   ├── shared                  # General stuff which won't be converted to separate package
     │   │   ├── auth                # Configs for web3, guests, keycloak sessions
     │   │   ├── hooks               # Special hooks for mst-store & user
     │   │   ├── services            #
     │   │   │     ├── i18n          # Init translations
     │   │   │     ├── web3          # Web3 common helpers
+    │   │   │     ├── unity         # Unity intergation
+    │   │   │     ├── posBus        # Event processor
+    │   │   │     ├── cookie        # Cookie service
+    │   │   │     ├── storage       # LocalStorage service
     │   │   └──   └── ...
+    │   │
     │   ├── static                  # Static content
-    │   │   ├── images              #
-    │   │   ├── styles              #
-    │   │   └── fonts               #
-    │   ├── scenes                  # Scene can be transformed to microfronted
-    │   │   ├── default             # Home page. Just for sample.
-    │   │   │   ├── pages           # Main components connected only to own store
-    │   │   │   ├── stores          # Using Mobx-state-three
+    │   │   ├── images              # Images for scenes
+    │   │   └── styles              # Core css-styles
+    │   │
+    │   ├── scenes                  # General scenes
+    │   │   ├── default             # Default pages. Just for sample.
+    │   │   │   ├── pages           # General pages connected only to own stores
+    │   │   │   ├── stores          # Own MST-stores
     │   │   │   └── index.ts        # 
     │   │   ├── auth      
     │   │   │   └── ...             # Structure like "default"
     │   │   ├── collaboration      
     │   │   │   └── ...             # Structure like "default"
-    │   │   ├── stageMode      
+    │   │   ├── communication      
     │   │   │   └── ...             # Structure like "default"
     │   │   ├── ...                 # Another scenes (e.g. userProfile, dashboard, ...)
     │   │   ├── App.tsx             
-    │   │   └── AppRouter.tsx       
-    │   ├── stores                  # Main store & links to substores
-    │   │   ├── ConfigStore         # Init app variables
+    │   │   └── AppRoutes.tsx       # List of routes
+    │   │
+    │   ├── stores                  # General store & links to substores
+    │   │   ├── ConfigStore         # Init app variables / constants
     │   │   ├── SessionStore        # Store for current user
     │   │   ├── MainStore           # Main stores which affect all UI
-    │   │   │   ├── UnityStore      # 
-    │   │   │   ├── SentryStore     #
-    │   │   │   ├── ThemeStore      # 
-    │   │   │   ├── WorldStore      #
+    │   │   │   ├── UnityStore      # Unity integration
+    │   │   │   ├── SentryStore     # Sentry integration
+    │   │   │   ├── ThemeStore      # Theme functionality
+    │   │   │   ├── WorldStore      # Current world store
     │   │   │   └── ...             #
-    │   │   ├── RootStore.ts        #
+    │   │   ├── RootStore.ts        # Connecting all stores of application
     │   │   └── ...
-    │   ├── index.tsx                
-    │   └── ...   
+    │   ├── index.tsx               # Entry point for react rendering        
+    │   └── ...
+    │   
+    ├── LICENSE.txt
     ├── README.md       
     └── ... 
 

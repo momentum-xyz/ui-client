@@ -1,6 +1,6 @@
 import {cast, types} from 'mobx-state-tree';
 
-import {storage} from 'core/services';
+import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import {
   AccentColorList,
