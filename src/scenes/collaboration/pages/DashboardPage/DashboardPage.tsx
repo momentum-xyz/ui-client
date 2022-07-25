@@ -13,13 +13,13 @@ import useCollaboration, {
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
-import {TopBarActions} from './components/templates/TopBarActions';
-import Dashboard from './components/templates/Dashboard/Dashboard';
+import {Dashboard, TileForm, TopBarActions} from './components';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
-  const {dashboard, spaceStore} = collaborationStore;
+  const {dashboardManager, spaceStore} = collaborationStore;
+  const {dashboard, tileDialog} = dashboardManager;
   const {favoriteStore} = mainStore;
   const {tileList, onDragEnd} = dashboard;
 
@@ -57,6 +57,7 @@ const DashboardPage: FC = () => {
 
   return (
     <styled.Container>
+      {tileDialog.isOpen && <TileForm />}
       <TopBar
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
@@ -71,13 +72,14 @@ const DashboardPage: FC = () => {
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(spaceStore.isAdmin || spaceStore.isMember) && (
-          <Button label={t('dashboard.addTile')} variant="primary" />
+          <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
         <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
         {!sessionStore.isGuest && spaceStore.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
       </TopBar>
+
       {!dashboard.dashboardIsEdited && spaceStore.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
