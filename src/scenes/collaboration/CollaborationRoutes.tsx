@@ -4,11 +4,10 @@ import {Redirect} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 // TODO: Refactor
-import WhiteBoardLayout from 'component/layout/Collaboration/WhiteBoardLayout';
 import ScreenShareLayout from 'component/layout/Collaboration/ScreenShareLayout';
 import GoogleDriveLayout from 'component/layout/Collaboration/GoogleDriveLayout';
 
-import {DashboardPage, CalendarPage, StageModePage} from './pages';
+import {DashboardPage, CalendarPage, StageModePage, MiroBoardPage} from './pages';
 
 export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   {
@@ -32,7 +31,7 @@ export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.collaboration.miro,
     exact: true,
-    main: () => <WhiteBoardLayout />
+    main: () => <MiroBoardPage />
   },
   {
     path: ROUTES.collaboration.screenShare,

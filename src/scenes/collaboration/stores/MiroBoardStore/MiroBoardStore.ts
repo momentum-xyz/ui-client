@@ -28,6 +28,12 @@ const MiroBoardStore = types.compose(
           spaceId: spaceId,
           data: data
         });
+      }),
+      disableMiroBoard: flow(function* (spaceId: string) {
+        yield self.request.send(api.integrationRepository.disableIntegration, {
+          integrationType: IntegrationTypeEnum.MIRO,
+          spaceId: spaceId
+        });
       })
     }))
     .views((self) => ({

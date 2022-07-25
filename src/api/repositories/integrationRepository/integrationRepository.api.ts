@@ -40,6 +40,8 @@ export const disableIntegration: RequestInterface<
 > = (options) => {
   const {spaceId, integrationType, data, ...rest} = options;
 
+  alert(1);
+
   const URL: string = integrationRepositoryEndpoints().disable;
   return request.post(URL, {spaceId, integrationType, data}, rest);
 };

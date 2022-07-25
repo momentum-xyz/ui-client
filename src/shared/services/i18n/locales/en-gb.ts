@@ -336,7 +336,9 @@ export const enGb = {
       return: 'Return',
       leave: 'Leave',
       muteName: 'Mute {{name}}',
-      kickName: 'Kick {{name}}'
+      kickName: 'Kick {{name}}',
+      changeBoard: 'Change board',
+      chooseBoard: 'Choose a Miro board'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
