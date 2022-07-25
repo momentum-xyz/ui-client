@@ -8,17 +8,14 @@ import {ROUTES} from 'core/constants';
 import {UnityService} from 'shared/services';
 import {IconSvg, Text, TopBar, Button} from 'ui-kit';
 // TODO: Refactoring
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from 'context/Collaboration/hooks/useCollaboration';
-import {useStageModeLeave} from 'hooks/api/useStageModeService';
 import TopbarButton from 'component/atoms/topbar/TopbarButton';
 
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
-  const {collaborationStore, sessionStore} = useStore();
+  const {collaborationStore, sessionStore, mainStore} = useStore();
+  const {agoraStore} = mainStore;
   const {dashboard, space} = collaborationStore;
   const {tileList, onDragEnd} = dashboard;
 
@@ -33,22 +30,11 @@ const DashboardPage: FC = () => {
     };
   }, [dashboard, space.id]);
 
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-
-  // TODO: make as reusable action in store
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace) {
-      UnityService.leaveSpace(collaborationState.collaborationSpace.id);
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
+  const leaveCollaborationSpace = async () => {
+    if (collaborationStore.space.isSet && collaborationStore.space.id) {
+      UnityService.leaveSpace(collaborationStore.space.id);
+      await agoraStore.leaveMeetingSpace();
+      collaborationStore.resetModel();
 
       history.push(ROUTES.base);
     }

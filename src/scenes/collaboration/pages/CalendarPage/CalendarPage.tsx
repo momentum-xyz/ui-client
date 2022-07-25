@@ -11,18 +11,14 @@ import {absoluteLink} from 'core/utils';
 import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 import {Button, TopBar, EventList, LinkDialog, ToastContent} from 'ui-kit';
-// TODO: Refactoring
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from 'context/Collaboration/hooks/useCollaboration';
-import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
 import {DeleteEventConfirmationDialog, EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const {collaborationStore, sessionStore, widgetStore} = useStore();
+  const {collaborationStore, sessionStore, widgetStore, mainStore} = useStore();
   const {calendarStore, space} = collaborationStore;
+  const {agoraStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
@@ -30,32 +26,22 @@ const CalendarPage: FC = () => {
   const history = useHistory();
   const theme = useTheme();
 
-  // TODO: Refactor legacy hooks to mobx
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-
-  // TODO: make as reusable action in store
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace) {
+  const handleClose = async () => {
+    if (collaborationStore.space.isSet && collaborationStore.space.id) {
       UnityService.triggerInteractionMsg?.(
         PosBusEventEnum.LeftSpace,
-        collaborationState.collaborationSpace.id,
+        collaborationStore.space.id,
         0,
         ''
       );
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
 
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
+      await agoraStore.leaveMeetingSpace();
+      collaborationStore.resetModel();
 
       history.push(ROUTES.base);
     }
   };
+
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
   };
@@ -104,7 +90,7 @@ const CalendarPage: FC = () => {
     }
 
     return () => eventListStore.resetModel();
-  }, [space.id]);
+  }, [eventListStore, space.id]);
 
   return (
     <styled.Container>
@@ -124,7 +110,7 @@ const CalendarPage: FC = () => {
           onClose={deleteConfirmationDialog.close}
         />
       )}
-      <TopBar title={space.name ?? ''} subtitle="calendar" onClose={leaveCollaborationSpace}>
+      <TopBar title={space.name ?? ''} subtitle="calendar" onClose={handleClose}>
         {space.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
         )}

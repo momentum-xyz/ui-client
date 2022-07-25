@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 
 import {usePosBusEvent} from 'shared/hooks';
 
@@ -78,9 +78,9 @@ export const StageModePopupQueueProvider: React.FC = ({children}) => {
     setPopups(filteredPopups);
   };
 
-  const clearPopups = () => {
+  const clearPopups = useCallback(() => {
     setPopups([]);
-  };
+  }, []);
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
     removeRequestPopup(userId);

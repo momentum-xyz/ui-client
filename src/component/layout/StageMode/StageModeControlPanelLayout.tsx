@@ -2,23 +2,16 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
+import {observer} from 'mobx-react-lite';
 
 import {ToastContent, Toggle} from 'ui-kit';
-import {IntegrationTypeEnum, StageModeStatusEnum} from 'core/enums';
+import {useStore} from 'shared/hooks';
 
 import Page from '../../molucules/Page';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import {useStageModeMute, useStageModeSendOffstage} from '../../../hooks/api/useStageModeService';
-import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {useUser} from '../../../hooks/api/useUser';
-import {
-  useIntegrationDisable,
-  useIntegrationEnable
-} from '../../../context/Integration/hooks/useIntegration';
-import useContextAuth from '../../../context/Auth/hooks/useContextAuth';
 import Button from '../../atoms/Button';
 import CONFIG from '../../../config/config';
 import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
@@ -30,15 +23,10 @@ const StageModeControlPanelLayout: React.FC = () => {
     speakers: 0,
     audience: 0
   });
-  const {collaborationState} = useCollaboration();
-  const {authState} = useContextAuth();
-  const {isOnStage, enterStage, joinedStage, leaveStage, canEnterStage, stageModeUsers} =
-    useAgoraStageMode();
+  const {mainStore, collaborationStore} = useStore();
+  const {agoraStore} = mainStore;
+  const {space} = collaborationStore;
 
-  const [enableStageMode] = useIntegrationEnable();
-  const [disableStageMode] = useIntegrationDisable();
-  const [sendOffstage, ,] = useStageModeSendOffstage(collaborationState.collaborationSpace?.id);
-  const muteUserRequest = useStageModeMute(collaborationState.collaborationSpace?.id);
   const [selectedRemoteUserIdForRemove, setSelectedRemoteUserIdForRemove] = useState<string | null>(
     null
   );
@@ -54,95 +42,71 @@ const StageModeControlPanelLayout: React.FC = () => {
       message: `Are you sure you want remove this ${user?.name as string} from stage`,
       confirmButton: 'Yes, remove from stage',
       cancelButton: 'No, cancel'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result) {
         if (user?.id.data) {
-          sendOffstage(bytesToUuid(user.id.data))
-            .then(() => {
-              setSelectedRemoteUserIdForRemove(null);
-            })
-            .catch(() => {
-              setSelectedRemoteUserIdForRemove(null);
-              toast.error(
-                <ToastContent
-                  isDanger
-                  headerIconName="alert"
-                  title={t('titles.alert')}
-                  text={t('messages.offStageFailure', {
-                    user: user.name
-                  })}
-                  isCloseButton
-                />
-              );
-            });
+          try {
+            await agoraStore.kickUserOffStage(bytesToUuid(user.id.data));
+            setSelectedRemoteUserIdForRemove(null);
+          } catch {
+            setSelectedRemoteUserIdForRemove(null);
+            toast.error(
+              <ToastContent
+                isDanger
+                headerIconName="alert"
+                title={t('titles.alert')}
+                text={t('messages.offStageFailure', {
+                  user: user.name
+                })}
+                isCloseButton
+              />
+            );
+          }
         }
       } else {
         setSelectedRemoteUserIdForRemove(null);
       }
     });
-  }, [getConfirmation, user]);
+  }, [agoraStore, getConfirmation, user?.id.data, user?.name]);
 
-  const remoteUserClicked = (remoteUser: IAgoraRTCRemoteUser, event = 'remove') => {
-    if (event === 'remove') {
-      setSelectedRemoteUserIdForRemove(remoteUser.uid as string);
-    } else if (event === 'mute') {
-      muteUserRequest(remoteUser.uid as string).then();
-    }
-  };
+  const remoteUserClicked = useCallback(
+    async (remoteUser: IAgoraRTCRemoteUser, event = 'remove') => {
+      if (event === 'remove') {
+        setSelectedRemoteUserIdForRemove(remoteUser.uid as string);
+      } else if (event === 'mute') {
+        await agoraStore.muteRemoteUser(remoteUser.uid as string);
+      }
+    },
+    [agoraStore]
+  );
 
   useEffect(() => {
     if (selectedRemoteUserIdForRemove && user) {
       //display remove from stage confirmation when use data is collected
       confirmRemoveUserFromStage();
     }
-  }, [user, selectedRemoteUserIdForRemove]);
+  }, [user, selectedRemoteUserIdForRemove, confirmRemoveUserFromStage]);
 
   useEffect(() => {
-    if (joinedStage && userToggledStageOn) {
+    if (agoraStore.joinedStageMode && userToggledStageOn) {
       setUserToggledStageOn(false);
       handleEnterStage();
     }
-  }, [joinedStage, userToggledStageOn]);
+  }, [agoraStore.joinedStageMode, userToggledStageOn]);
 
-  // @ts-ignore
-  const onStageModeToggle = (shouldActivate) => {
-    console.info('spaceId: ' + collaborationState.collaborationSpace?.id);
-    if (collaborationState.collaborationSpace) {
-      if (shouldActivate && authState.user) {
-        enableStageMode({
-          spaceId: collaborationState.collaborationSpace.id,
-          integrationType: IntegrationTypeEnum.STAGE_MODE,
-          data: {
-            userId: bytesToUuid(authState.user.id.data),
-            stageModeStatus: StageModeStatusEnum.INITIATED
-          }
-        }).then(() => {
-          setUserToggledStageOn(true);
-        });
-      } else {
-        disableStageMode({
-          spaceId: collaborationState.collaborationSpace.id,
-          integrationType: IntegrationTypeEnum.STAGE_MODE,
-          data: {
-            stageModeStatus: StageModeStatusEnum.STOPPED
-          }
-        }).then();
-      }
-    }
-  };
-
-  const handleEnterStage = () => {
-    if (!canEnterStage()) {
+  const handleEnterStage = useCallback(() => {
+    if (!agoraStore.canEnterStage) {
       toast.error(`The stage is full`);
       return;
     }
-    enterStage().then();
-  };
 
-  const handleLeaveStage = () => {
+    agoraStore.enterStage();
+  }, [agoraStore]);
+
+  const handleLeaveStage = useCallback(() => {
     console.info('[stagemode] LEAVE STAGE');
-    leaveStage().then();
-  };
+    agoraStore.leaveStage();
+  }, [agoraStore]);
 
   const stageModeOffMessage = () => (
     <div className="flex flex-grow z-0">
@@ -159,41 +123,36 @@ const StageModeControlPanelLayout: React.FC = () => {
   const usersOnStage = () => (
     <div className="flex flex-grow z-0">
       <div className="flex-grow" />
-      <StageModeStage isOnStage={isOnStage} onRemoteUserClick={remoteUserClicked} />
+      <StageModeStage onRemoteUserClick={remoteUserClicked} />
       <div className="flex-grow" />
     </div>
   );
 
   useEffect(() => {
-    const audience = stageModeUsers.filter((user) => {
+    const audience = agoraStore.stageModeUsers.filter((user) => {
       return user.role === ParticipantRole.AUDIENCE_MEMBER;
     });
 
-    const speakers = stageModeUsers.filter((user) => {
+    const speakers = agoraStore.stageModeUsers.filter((user) => {
       return user.role === ParticipantRole.SPEAKER;
     });
 
     setStageStats({
-      speakers: isOnStage ? speakers.length + 1 : speakers.length,
-      audience: isOnStage ? audience.length - 1 : audience.length
+      speakers: agoraStore.isOnStage ? speakers.length + 1 : speakers.length,
+      audience: agoraStore.isOnStage ? audience.length - 1 : audience.length
     });
-  }, [stageModeUsers, isOnStage]);
+  }, [agoraStore.stageModeUsers, agoraStore.isOnStage]);
 
   const actions = useMemo(() => {
     return (
       <div className="flex items-center justify-between mx-4 gap-2 flex-grow">
         <div className="flex items-center gap-1">
-          <Toggle
-            checked={collaborationState.stageMode}
-            onChange={(checked) => onStageModeToggle(checked ? true : false)}
-          />
+          <Toggle checked={agoraStore.isStageMode} onChange={agoraStore.toggleStageMode} />
           <span className="text-sm">
-            {collaborationState.stageMode
-              ? 'Stage is active'
-              : 'Stage is inactive. Toggle to activate.'}
+            {agoraStore.isStageMode ? 'Stage is active' : 'Stage is inactive. Toggle to activate.'}
           </span>
         </div>
-        {collaborationState.stageMode && (canEnterStage() || isOnStage) && (
+        {agoraStore.isStageMode && (agoraStore.canEnterStage || agoraStore.isOnStage) && (
           <>
             <div className="flex items-center gap-1">
               <span>
@@ -202,33 +161,37 @@ const StageModeControlPanelLayout: React.FC = () => {
               <span>Audience: {stageStats.audience}</span>
             </div>
             <Button
-              type={isOnStage ? 'ghost-red' : 'ghost'}
-              onClick={isOnStage ? handleLeaveStage : handleEnterStage}
+              type={agoraStore.isOnStage ? 'ghost-red' : 'ghost'}
+              onClick={agoraStore.isOnStage ? handleLeaveStage : handleEnterStage}
             >
-              {isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+              {agoraStore.isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
             </Button>
           </>
         )}
-        {collaborationState.stageMode && !canEnterStage() && <span>Stage is full</span>}
+        {agoraStore.isStageMode && !agoraStore.canEnterStage && <span>Stage is full</span>}
       </div>
     );
-  }, [collaborationState, canEnterStage, isOnStage, handleLeaveStage, handleEnterStage]);
+  }, [
+    agoraStore.isStageMode,
+    agoraStore.toggleStageMode,
+    agoraStore.canEnterStage,
+    agoraStore.isOnStage,
+    stageStats.speakers,
+    stageStats.audience,
+    handleLeaveStage,
+    handleEnterStage
+  ]);
 
   return (
-    <Page
-      title={collaborationState.collaborationSpace?.name || ''}
-      subtitle="Stage Mode"
-      collaboration
-      actions={actions}
-    >
+    <Page title={space.name || ''} subtitle="Stage Mode" collaboration actions={actions}>
       <div className="flex w-full">
         <div className="flex flex-col space-y-1">
           <StageModePopupQueueComponent />
         </div>
-        {collaborationState.stageMode ? usersOnStage() : stageModeOffMessage()}
+        {agoraStore.isStageMode ? usersOnStage() : stageModeOffMessage()}
       </div>
     </Page>
   );
 };
 
-export default StageModeControlPanelLayout;
+export default observer(StageModeControlPanelLayout);

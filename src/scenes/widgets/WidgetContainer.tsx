@@ -23,8 +23,6 @@ import {
   TokenRulesWidget,
   WorldStatsWidget
 } from 'scenes/widgets/pages';
-// TODO: Refactoring
-import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
 
 import * as styled from './WidgetContainer.styled';
 
@@ -52,7 +50,6 @@ const WidgetContainer: FC = () => {
   const {userDevicesStore} = agoraStore;
 
   const location = useLocation();
-  const {isOnStage} = useAgoraStageMode();
 
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
@@ -137,7 +134,7 @@ const WidgetContainer: FC = () => {
           <ToolbarIconList>
             <ToolbarIcon
               title={
-                agoraStore.isStageMode && !isOnStage
+                agoraStore.isStageMode && !agoraStore.isOnStage
                   ? 'You are in the audience, stage mode is on'
                   : userDevicesStore.cameraOff
                   ? 'Camera on'
@@ -145,11 +142,14 @@ const WidgetContainer: FC = () => {
               }
               icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
               onClick={toggleCameraOn}
-              disabled={userDevicesStore.isTogglingCamera || (agoraStore.isStageMode && !isOnStage)}
+              disabled={
+                userDevicesStore.isTogglingCamera ||
+                (agoraStore.isStageMode && !agoraStore.isOnStage)
+              }
             />
             <ToolbarIcon
               title={
-                agoraStore.isStageMode && !isOnStage
+                agoraStore.isStageMode && !agoraStore.isOnStage
                   ? 'You are in the audience, stage mode is on'
                   : userDevicesStore.muted
                   ? 'Unmute'
@@ -158,7 +158,8 @@ const WidgetContainer: FC = () => {
               icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
               onClick={toggleMute}
               disabled={
-                userDevicesStore.isTogglingMicrophone || (agoraStore.isStageMode && !isOnStage)
+                userDevicesStore.isTogglingMicrophone ||
+                (agoraStore.isStageMode && !agoraStore.isOnStage)
               }
             />
           </ToolbarIconList>

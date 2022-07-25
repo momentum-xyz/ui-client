@@ -1,15 +1,13 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
+import {observer} from 'mobx-react-lite';
 
 import {ToastContent} from 'ui-kit';
-import {usePosBusEvent} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 
 import Page from '../../molucules/Page';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
-import {useJoinRequest} from '../../../hooks/api/useStageModeService';
 import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
 import Button from '../../atoms/Button';
 import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
@@ -22,23 +20,22 @@ const StageModeGuestLayout: React.FC = () => {
     speakers: 0,
     audience: 0
   });
-  const {collaborationState, currentUserId} = useCollaboration();
+  const {mainStore, collaborationStore, sessionStore} = useStore();
+  const {agoraStore} = mainStore;
   // const [currentSpace, , ,] = useOnlineUserSpaceCheck(currentUserId);
-  const {canEnterStage, leaveStage, isOnStage, stageModeUsers} = useAgoraStageMode();
-  const joinRequest = useJoinRequest(collaborationState.collaborationSpace?.id);
   const [requestMade, setRequestMade] = useState<boolean>();
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     useStageModePopupQueueContext();
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
-    if (userId === currentUserId) {
+    if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
       setRequestMade(false);
     }
   });
 
   usePosBusEvent('stage-mode-declined', (userId) => {
-    if (userId === currentUserId) {
+    if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
       setRequestMade(false);
     }
@@ -47,7 +44,7 @@ const StageModeGuestLayout: React.FC = () => {
   const usersOnStage = () => (
     <div className="flex flex-grow z-0">
       <div className="flex-grow" />
-      <StageModeStage isOnStage={isOnStage} />
+      <StageModeStage />
       <div className="flex-grow" />
     </div>
   );
@@ -63,55 +60,49 @@ const StageModeGuestLayout: React.FC = () => {
     </div>
   );
 
-  const showSuccessStageModeRequestSubmissionToast = () => {
+  const showSuccessStageModeRequestSubmissionToast = useCallback(() => {
     addAwaitingPermissionPopup();
-  };
+  }, [addAwaitingPermissionPopup]);
 
-  const handleUserRequest = () => {
-    if (!currentUserId) {
-      return;
+  const handleUserRequest = useCallback(async () => {
+    try {
+      await agoraStore.joinStageModeRequest();
+      showSuccessStageModeRequestSubmissionToast();
+      setRequestMade(true);
+    } catch (e) {
+      console.info(e);
+      toast.error(
+        <ToastContent
+          isDanger
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.joinStageRequestFailure')}
+          isCloseButton
+        />
+      );
+      setRequestMade(false);
     }
-
-    joinRequest(currentUserId)
-      .then((response) => {
-        console.info(response);
-        showSuccessStageModeRequestSubmissionToast();
-        setRequestMade(true);
-      })
-      .catch((e) => {
-        console.info(e);
-        toast.error(
-          <ToastContent
-            isDanger
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('messages.joinStageRequestFailure')}
-            isCloseButton
-          />
-        );
-        setRequestMade(false);
-      });
-  };
+  }, [agoraStore, showSuccessStageModeRequestSubmissionToast]);
 
   useEffect(() => {
-    const audience = stageModeUsers.filter((user) => {
+    const audience = agoraStore.stageModeUsers.filter((user) => {
       return user.role === ParticipantRole.AUDIENCE_MEMBER;
     });
 
-    const speakers = stageModeUsers.filter((user) => {
+    const speakers = agoraStore.stageModeUsers.filter((user) => {
       return user.role === ParticipantRole.SPEAKER;
     });
 
     setStageStats({
-      speakers: isOnStage ? speakers.length + 1 : speakers.length,
-      audience: isOnStage ? audience.length - 1 : audience.length
+      speakers: agoraStore.isOnStage ? speakers.length + 1 : speakers.length,
+      audience: agoraStore.isOnStage ? audience.length - 1 : audience.length
     });
-  }, [stageModeUsers, isOnStage]);
+  }, [agoraStore.stageModeUsers, agoraStore.isOnStage]);
 
   const actions = useMemo(() => {
     return (
       <div className="flex items-center justify-between mx-4 gap-2 flex-grow">
-        {collaborationState.stageMode && (
+        {agoraStore.isStageMode && (
           <div className="flex items-center gap-1">
             <span>
               Speakers: {stageStats.speakers}/{CONFIG.video.MAX_STAGE_USERS}
@@ -120,31 +111,32 @@ const StageModeGuestLayout: React.FC = () => {
           </div>
         )}
 
-        {collaborationState.stageMode && !requestMade && (
+        {agoraStore.isStageMode && !requestMade && (
           <Button
-            type={isOnStage ? 'ghost-red' : 'ghost'}
-            onClick={isOnStage ? leaveStage : handleUserRequest}
+            type={agoraStore.isStageMode ? 'ghost-red' : 'ghost'}
+            onClick={agoraStore.isStageMode ? agoraStore.leaveStage : handleUserRequest}
           >
-            {isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+            {agoraStore.isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
           </Button>
         )}
-        {collaborationState.stageMode && requestMade && <span>Request to go on stage pending</span>}
-        {collaborationState.stageMode && !canEnterStage() && <span>Stage is full</span>}
+        {agoraStore.isStageMode && requestMade && <span>Request to go on stage pending</span>}
+        {agoraStore.isStageMode && !agoraStore.canEnterStage && <span>Stage is full</span>}
       </div>
     );
   }, [
-    collaborationState,
-    canEnterStage,
-    isOnStage,
-    leaveStage,
+    agoraStore.isStageMode,
+    agoraStore.leaveStage,
+    agoraStore.isOnStage,
+    agoraStore.canEnterStage,
+    stageStats.speakers,
+    stageStats.audience,
     requestMade,
-    stageStats,
     handleUserRequest
   ]);
 
   return (
     <Page
-      title={collaborationState.collaborationSpace?.name || ''}
+      title={collaborationStore.space.name || ''}
       subtitle="Stage Mode"
       collaboration
       actions={actions}
@@ -153,10 +145,10 @@ const StageModeGuestLayout: React.FC = () => {
         <div className="flex flex-col space-y-1">
           <StageModePopupQueueComponent />
         </div>
-        {collaborationState.stageMode ? usersOnStage() : stageModeOffMessage()}
+        {agoraStore.isStageMode ? usersOnStage() : stageModeOffMessage()}
       </div>
     </Page>
   );
 };
 
-export default StageModeGuestLayout;
+export default observer(StageModeGuestLayout);

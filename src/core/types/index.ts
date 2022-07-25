@@ -8,3 +8,4 @@ export * from './posBusEvent.type';
 export * from './Integration.type';
 export * from './stageMode.type';
 export * from './metadataField.type';
+export * from './agoraRemoteUser.type';

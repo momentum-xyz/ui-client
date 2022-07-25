@@ -1,16 +1,16 @@
-import React, {Dispatch, SetStateAction, useContext, useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useCallback, useContext, useEffect, useState} from 'react';
 import AgoraRTM, {RtmChannel, RtmClient, RtmMessage} from 'agora-rtm-sdk';
+import {observer} from 'mobx-react-lite';
 
 import {request} from 'api/request';
 import {appVariables} from 'api/constants';
+import {useStore} from 'shared/hooks';
 
 import {promiseFetch} from '../hooks/api/useApi';
 import {useUserList} from '../hooks/api/useUser';
 
-import useCollaboration from './Collaboration/hooks/useCollaboration';
 import useContextAuth from './Auth/hooks/useContextAuth';
 import User from './type/User';
-import {AgoraContext} from './AgoraContext';
 
 interface TextChatContextInterface {
   chatClient: RtmClient | null;
@@ -55,10 +55,8 @@ const TextChatContext = React.createContext<TextChatContextInterface>({
 
 export const useTextChatContext = () => useContext(TextChatContext);
 
-export const TextChatProvider: React.FC = ({children}) => {
-  const {appId} = useContext(AgoraContext);
+const TextChatProviderComponent: React.FC = ({children}) => {
   const [chatClient, setChatClient] = useState<RtmClient | null>(null);
-  const {collaborationState} = useCollaboration();
 
   const [currentUserId, setCurrentUserId] = useState<string>();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -69,12 +67,16 @@ export const TextChatProvider: React.FC = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [users, updateMembers] = useUserList(members);
 
+  const {mainStore} = useStore();
+  const {agoraStore} = mainStore;
+
   const {authState} = useContextAuth();
 
   useEffect(() => {
     updateMembers(members);
   }, [members, updateMembers]);
 
+  // TODO: Refactor to AgoraStore
   const sendMessage = (message: RtmMessage) => {
     if (currentChannel && currentUserId) {
       currentChannel
@@ -92,14 +94,15 @@ export const TextChatProvider: React.FC = ({children}) => {
     }
   };
 
-  const joinChannel = () => {
-    if (!collaborationState.collaborationSpace || !chatClient) {
+  // TODO: Refactor to AgoraStore
+  const joinChannel = useCallback(() => {
+    if (!agoraStore.spaceId || !chatClient) {
       return;
     }
     setMembers([]);
     setMessages([]);
     console.info('[agora] Creating channel...');
-    const channel = chatClient.createChannel(collaborationState.collaborationSpace.id);
+    const channel = chatClient.createChannel(agoraStore.spaceId);
 
     channel
       .join()
@@ -113,9 +116,10 @@ export const TextChatProvider: React.FC = ({children}) => {
       .catch((error) => {
         console.error('[agora] AgoraRTM channel failed to connect to meeting channel', error);
       });
-  };
+  }, [agoraStore.spaceId, chatClient]);
 
-  const leaveChannel = () => {
+  // TODO: Refactor to AgoraStore
+  const leaveChannel = useCallback(() => {
     if (!isLoggedIn) {
       return;
     }
@@ -124,14 +128,15 @@ export const TextChatProvider: React.FC = ({children}) => {
       setCurrentChannel(null);
       console.info('[agora] Left AgoraRTM channel successfully');
     });
-  };
+  }, [currentChannel, isLoggedIn]);
 
+  // TODO: Refactor to AgoraStore
   useEffect(() => {
-    if (!appId || !authState.user) {
+    if (!agoraStore.appId || !authState.user || chatClient) {
       return;
     }
 
-    const client = AgoraRTM.createInstance(appId);
+    const client = AgoraRTM.createInstance(agoraStore.appId);
     setChatClient(client);
 
     client.on('ConnectionStateChanged', (newState, reason) => {
@@ -162,7 +167,7 @@ export const TextChatProvider: React.FC = ({children}) => {
         return;
       }
       console.info('[agora] Cleaning up AgoraRTM client');
-      chatClient
+      client
         ?.logout()
         .then(() => {
           setIsLoggedIn(false);
@@ -171,30 +176,22 @@ export const TextChatProvider: React.FC = ({children}) => {
         .catch((error) => {
           console.error('[agora] AgoraRTM client logout error', error);
         });
-      chatClient?.removeAllListeners();
+      client?.removeAllListeners();
     };
-  }, [appId, authState.user]);
+  }, [agoraStore.appId, authState.subject, authState.user, chatClient, isLoggedIn]);
 
+  // TODO: Refactor to AgoraStore
   useEffect(() => {
     if (!isLoggedIn || !chatClient) {
       return;
     }
 
-    if (currentChannel && !collaborationState.collaborationSpace) {
-      leaveChannel();
-    } else if (!currentChannel && collaborationState.collaborationSpace) {
+    if (agoraStore.hasJoined && !currentChannel) {
       joinChannel();
-    } else if (currentChannel && collaborationState.collaborationSpace) {
-      // So a active channel, but space was changed...
-      // leaveChannel(), but we don't want to change currentChannel state to null
-      // and trigger more changes, the joinChannel will do that.
-      currentChannel.leave().then(() => {
-        //setCurrentChannel(null);
-        console.info('[agora] Left AgoraRTM channel successfully');
-        joinChannel();
-      });
+    } else if (!agoraStore.hasJoined && currentChannel) {
+      leaveChannel();
     }
-  }, [collaborationState.collaborationSpace?.id]);
+  }, [agoraStore.hasJoined, chatClient, currentChannel, isLoggedIn, joinChannel, leaveChannel]);
 
   // @ts-ignore: TODO: Refactor
   useEffect(() => {
@@ -260,4 +257,5 @@ export const TextChatProvider: React.FC = ({children}) => {
   );
 };
 
+export const TextChatProvider = observer(TextChatProviderComponent);
 export default TextChatContext;

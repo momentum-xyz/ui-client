@@ -1,11 +1,11 @@
 import React, {FC, useEffect} from 'react';
 import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
 
 import {ROUTES} from 'core/constants';
+// TODO: Refactor;
+import {useStore} from 'shared/hooks';
 
-// TODO: Refactor
-import {COLLABORATION_CHAT_ACTION_UPDATE} from '../../../../context/Collaboration/CollaborationReducer';
-import useCollaboration from '../../../../context/Collaboration/hooks/useCollaboration';
 import {useModerator} from '../../../../context/Integration/hooks/useIntegration';
 import StageModeGuestLayout from '../../../../component/layout/StageMode/StageModeGuestLayout';
 import StageModeControlPanelLayout from '../../../../component/layout/StageMode/StageModeControlPanelLayout';
@@ -13,27 +13,20 @@ import StageModeControlPanelLayout from '../../../../component/layout/StageMode/
 // TODO: Refactor
 const StageModeRouter: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
+  const {agoraStore} = useStore().mainStore;
 
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const [isModerator, moderatorLoading, ,] = useModerator(
-    // @ts-ignore
-    collaborationState.collaborationSpace?.id
-  );
+  const [isModerator, moderatorLoading, ,] = useModerator(agoraStore.spaceId ?? '');
 
   useEffect(() => {
-    const chatOpen = collaborationState.chatOpen;
-    collaborationDispatch({
-      type: COLLABORATION_CHAT_ACTION_UPDATE,
-      open: true
-    });
+    const chatWasOpen = agoraStore.isChatOpen;
+    agoraStore.showChat();
 
     return () => {
-      collaborationDispatch({
-        type: COLLABORATION_CHAT_ACTION_UPDATE,
-        open: chatOpen
-      });
+      if (!chatWasOpen) {
+        agoraStore.hideChat();
+      }
     };
-  }, []);
+  }, [agoraStore]);
 
   if (moderatorLoading) {
     return null;
@@ -55,4 +48,4 @@ const StageModeRouter: FC = () => {
   );
 };
 
-export default StageModeRouter;
+export default observer(StageModeRouter);

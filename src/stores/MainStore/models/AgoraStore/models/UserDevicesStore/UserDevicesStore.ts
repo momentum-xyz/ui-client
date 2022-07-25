@@ -170,14 +170,16 @@ const UserDevicesStore = types
       storage.set(StorageKeyEnum.PreferredVideoInput, deviceId);
     },
     createLocalTracks: flow(function* (
-      createAudioTrack: (deviceId?: string) => Promise<ILocalAudioTrack>,
-      createVideoTrack: (deviceId?: string) => Promise<ILocalVideoTrack>
+      createAudioTrack: (deviceId: string) => Promise<ILocalAudioTrack | undefined>,
+      createVideoTrack: (deviceId: string) => Promise<ILocalVideoTrack | undefined>
     ) {
       if (!self.microphoneConsent) {
         yield self.getMicrophoneConsent();
       }
 
-      self.localAudioTrack = yield createAudioTrack(self.currentAudioInput?.deviceId);
+      self.localAudioTrack = self.currentAudioInput?.deviceId
+        ? yield createAudioTrack(self.currentAudioInput?.deviceId)
+        : undefined;
       self.localAudioTrack?.setEnabled(!self.muted);
 
       if (!self.cameraConsent) {
@@ -194,14 +196,24 @@ const UserDevicesStore = types
       self.localAudioTrack = undefined;
       self.localVideoTrack = undefined;
     },
-    toggleMicrophone() {
+    toggleMicrophone(mute?: boolean) {
+      if (mute !== undefined) {
+        mute ? self.mute() : self.unmute();
+        return;
+      }
+
       if (self.muted) {
         self.unmute();
       } else {
         self.mute();
       }
     },
-    toggleCamera() {
+    toggleCamera(turnOffCamera?: boolean) {
+      if (turnOffCamera !== undefined) {
+        turnOffCamera ? self.turnOffCamera() : self.turnOnCamera();
+        return;
+      }
+
       if (self.cameraOff) {
         self.turnOnCamera();
       } else {

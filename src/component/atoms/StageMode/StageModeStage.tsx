@@ -1,91 +1,44 @@
-import React, {useEffect, useState} from 'react';
-import {IAgoraRTCRemoteUser, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
+import React, {useEffect, useMemo, useState} from 'react';
+import {IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
+import {observer} from 'mobx-react-lite';
+
+import {useStore} from 'shared/hooks';
 
 import MediaPlayer from '../MediaPlayer';
-import {useStageClient} from '../../../hooks/communication/useAgoraClient';
 import {useCurrentUser} from '../../../hooks/api/useUser';
-import {bytesToUuid} from '../../../core/utils';
 import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
 import {ReactComponent as RemoveIcon} from '../../../images/icons/remove.svg';
-import {Volume} from '../../../context/type/StageMode';
 
 export interface StageModeStageProps {
-  isOnStage: boolean;
   onRemoteUserClick?: (remoteUser: IAgoraRTCRemoteUser, type: string) => void;
 }
 
-const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserClick}) => {
+const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
   const [gridCols, setGridCols] = useState<string>('grid-cols-1');
-  const [numStageUsers, setStageNumUsers] = useState<number>(0);
-  const [localCameraTrack, setLocalCameraTrack] = useState<ILocalVideoTrack | undefined>();
-  const [agoraRemoteUsers, setAgoraRemoteUsers] = useState<IAgoraRTCRemoteUser[]>([]);
-  const [isLocalVideoMuted, setIsLocalVideoMuted] = useState<boolean>(false);
-  const [isLocalAudioMuted, setIsLocalAudioMuted] = useState<boolean>(false);
-  const [soundLevels, setSoundLevels] = useState<Volume[]>([]);
   const [currentUser, , ,] = useCurrentUser();
 
-  const client = useStageClient();
+  const {
+    mainStore: {agoraStore}
+  } = useStore();
+  const {userDevicesStore} = agoraStore;
 
-  // @ts-ignore
-  const handleVolumeIndicator = (volumes) => {
-    setSoundLevels(volumes as Volume[]);
-  };
-
-  useEffect(() => {
-    if (client) {
-      client.enableAudioVolumeIndicator();
-      client.on('volume-indicator', handleVolumeIndicator);
-    }
-
-    return () => {
-      if (client) {
-        client.off('volume-indicator', handleVolumeIndicator);
-      }
-    };
-  }, [client]);
+  const stageCount = useMemo(
+    () =>
+      agoraStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length,
+    [agoraStore.isOnStage, agoraStore.remoteUsers.length]
+  );
 
   useEffect(() => {
-    console.info('[stagemode] stage is onstage', isOnStage);
-
-    const numUsers = isOnStage ? agoraRemoteUsers.length + 1 : agoraRemoteUsers.length;
-
-    if (numUsers === 1) {
+    if (stageCount === 1) {
       setGridCols('grid-cols-1');
-    } else if (numUsers > 1 && numUsers <= 4) {
+    } else if (stageCount > 1 && stageCount <= 4) {
       setGridCols('grid-cols-2');
-    } else if (numUsers > 4 && numUsers <= 9) {
+    } else if (stageCount > 4 && stageCount <= 9) {
       setGridCols('grid-cols-3');
-    } else if (numUsers > 9) {
+    } else if (stageCount > 9) {
       setGridCols('grid-cols-4');
     }
-
-    setStageNumUsers(numUsers);
-  }, [agoraRemoteUsers.length, isOnStage]);
-
-  useEffect(() => {
-    setAgoraRemoteUsers(() =>
-      Array.from(
-        client.remoteUsers.filter((item) => {
-          return (item.uid as string).split('|')[0] !== 'ss';
-        })
-      )
-    );
-  }, [client.remoteUsers, client.remoteUsers.length]);
-
-  useEffect(() => {
-    // console.info('[STAGEMODE] localtracks update:', client)
-    const cameraTrack = client.localTracks.find((track) => track.trackMediaType === 'video');
-    const audioTrack = client.localTracks.find((track) => track.trackMediaType === 'audio');
-    if (cameraTrack) {
-      setIsLocalVideoMuted(!cameraTrack.enabled);
-    } else {
-      setIsLocalVideoMuted(true);
-    }
-    if (audioTrack) {
-      setIsLocalAudioMuted(!audioTrack.enabled);
-    }
-    setLocalCameraTrack(cameraTrack as ILocalVideoTrack);
-  }, [client, client.localTracks]);
+  }, [stageCount]);
 
   return (
     <div className="relative w-full h-full flex items-center p-1 max-h-[80vh] max-w-[142vh]">
@@ -99,7 +52,7 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
       {/*</div>*/}
 
       <div className={`w-full max-h-full grid gap-0 ${gridCols} items-center `}>
-        {numStageUsers === 0 && (
+        {stageCount === 0 && (
           <div className="mt-2 text-center">
             <p className="text-xl uppercase text-white-50 self-center text-center font-bold">
               There are currently no participants on stage.
@@ -107,27 +60,23 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
           </div>
         )}
 
-        {isOnStage && currentUser && (
+        {agoraStore.isOnStage && currentUser && (
           <div
             className="w-full max-h-full aspect-ratio-video bg-black-100 flex items-center justify-center overflow-hidden"
             key="stageuser-local"
           >
             <MediaPlayer
-              videoTrack={localCameraTrack}
+              videoTrack={userDevicesStore.localVideoTrack}
               audioTrack={undefined}
-              isVideoMuted={isLocalVideoMuted}
-              isAudioMuted={isLocalAudioMuted}
+              isVideoMuted={userDevicesStore.cameraOff}
+              isAudioMuted={userDevicesStore.muted}
               currentUser={currentUser}
-              soundLevel={
-                soundLevels.find(({uid}) => uid === bytesToUuid(currentUser?.id.data))?.level
-                  ? soundLevels.find(({uid}) => uid === bytesToUuid(currentUser?.id.data))?.level
-                  : 0
-              }
+              soundLevel={agoraStore.localSoundLevel}
             />
           </div>
         )}
 
-        {agoraRemoteUsers.map((user) => (
+        {agoraStore.remoteUsers.map((user) => (
           <div
             className={`relative w-full max-h-full aspect-ratio-video bg-black-100 flex items-center justify-center overflow-hidden group ${
               onRemoteUserClick ? '' : ''
@@ -140,11 +89,7 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
               isVideoMuted={!user.hasVideo}
               audioTrack={user.audioTrack}
               isAudioMuted={!user.hasAudio}
-              soundLevel={
-                soundLevels.find(({uid}) => uid === user.uid)?.level
-                  ? soundLevels.find(({uid}) => uid === user.uid)?.level
-                  : 0
-              }
+              soundLevel={agoraStore.remoteUsers.find(({uid}) => uid === user.uid)?.soundLevel ?? 0}
             />
             <div
               className={`absolute inset-0 hidden justify-center items-center   ${
@@ -191,4 +136,4 @@ const StageModeStage: React.FC<StageModeStageProps> = ({isOnStage, onRemoteUserC
   );
 };
 
-export default StageModeStage;
+export default observer(StageModeStage);

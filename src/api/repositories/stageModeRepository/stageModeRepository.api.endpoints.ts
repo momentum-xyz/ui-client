@@ -5,7 +5,13 @@ export const stageModeRepositoryEndpoints = () => {
 
   // FIXME: use params :spaceId
   return {
-    leave: (spaceId: string) => `${BASE_URL}/${spaceId}/leave`,
-    join: (spaceId: string) => `${BASE_URL}/${spaceId}/join`
+    leave: `${BASE_URL}/:spaceId/leave`,
+    join: `${BASE_URL}/:spaceId/join`,
+    invite: `${BASE_URL}/:spaceId/invite`,
+    inviteResponse: `${BASE_URL}/:spaceId/invite/response`,
+    request: `${BASE_URL}/:spaceId/request`,
+    requestResponse: `${BASE_URL}/:spaceId/request/response`,
+    admitOrKick: `${BASE_URL}/:spaceId/admit-or-kick`,
+    mute: `${BASE_URL}/:spaceId/mute`
   };
 };

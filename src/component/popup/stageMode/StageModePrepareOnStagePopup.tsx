@@ -1,13 +1,10 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {observer} from 'mobx-react-lite';
+
+import {useStore} from 'shared/hooks';
 
 import Popup, {PopupTitle} from '../../atoms/Popup';
 import Button from '../../atoms/Button';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
-import {AgoraContext} from '../../../context/AgoraContext';
-import {
-  COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
-  COLLABORATION_MUTED_ACTION_UPDATE
-} from '../../../context/Collaboration/CollaborationReducer';
 import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
 import {ReactComponent as MicOn} from '../../../images/icons/microphone.svg';
 import {ReactComponent as CameraOff} from '../../../images/icons/camera-off.svg';
@@ -25,15 +22,11 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
   onReady
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const {getMicrophoneConsent, getCameraConsent} = useContext(AgoraContext);
+  const {agoraStore} = useStore().mainStore;
+  const {userDevicesStore} = agoraStore;
 
-  const [, setVideoInputs] = useState<MediaDeviceInfo[]>([]);
-  const [, setAudioOutputs] = useState<MediaDeviceInfo[]>([]);
-  const [, setAudioInputs] = useState<MediaDeviceInfo[]>([]);
-
-  const [muted, setMuted] = useState(collaborationState.muted);
-  const [webcamEnabled, setWebcamEnabled] = useState(!collaborationState.cameraOff);
+  const [muted, setMuted] = useState(userDevicesStore.muted);
+  const [webcamEnabled, setWebcamEnabled] = useState(!userDevicesStore.cameraOff);
   const [user, , ,] = useCurrentUser();
 
   const cleanupVideo = () => {
@@ -45,31 +38,7 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
     }
   };
 
-  const getCommunicationDevices = () => {
-    getMicrophoneConsent()
-      .then((microphoneConsent) => {
-        if (!microphoneConsent) {
-          return;
-        }
-        navigator.mediaDevices.enumerateDevices().then((devices) => {
-          setAudioOutputs(devices.filter((device) => device.kind === 'audiooutput'));
-          setAudioInputs(devices.filter((device) => device.kind === 'audioinput'));
-        });
-
-        return getCameraConsent();
-      })
-      .then((cameraConsent) => {
-        if (!cameraConsent) {
-          return;
-        }
-        navigator.mediaDevices.enumerateDevices().then((devices) => {
-          setVideoInputs(devices.filter((device) => device.kind === 'videoinput'));
-        });
-      });
-  };
-
   useEffect(() => {
-    getCommunicationDevices();
     return cleanupVideo;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -88,7 +57,7 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
   }, [webcamEnabled]);
 
   useEffect(() => {
-    const videoDeviceId = collaborationState.videoDevice?.deviceId;
+    const videoDeviceId = userDevicesStore.currentVideoInput?.deviceId;
 
     navigator.mediaDevices.getUserMedia({video: {deviceId: videoDeviceId}}).then((mediaStream) => {
       const video = videoRef.current;
@@ -96,7 +65,7 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
         video.srcObject = mediaStream;
       }
     });
-  }, [videoRef, collaborationState.audioDevice, collaborationState.videoDevice]);
+  }, [videoRef, userDevicesStore.currentVideoInput?.deviceId]);
 
   return (
     <Popup className="w-36">
@@ -142,14 +111,8 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
             type="ghost"
             onClick={() => {
               if (onReady) {
-                collaborationDispatch({
-                  type: COLLABORATION_CAMERA_OFF_ACTION_UPDATE,
-                  cameraOff: !webcamEnabled
-                });
-                collaborationDispatch({
-                  type: COLLABORATION_MUTED_ACTION_UPDATE,
-                  muted: muted
-                });
+                userDevicesStore.toggleCamera(!webcamEnabled);
+                userDevicesStore.toggleMicrophone(muted);
 
                 onReady();
                 onClose?.();
@@ -167,4 +130,4 @@ const StageModePrepareOnStagePopup: React.FC<StageModePrepareOnStagePopupProps> 
   );
 };
 
-export default StageModePrepareOnStagePopup;
+export default observer(StageModePrepareOnStagePopup);

@@ -1,11 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {appVariables} from 'api/constants';
-import {usePosBusEvent} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 import {IntegrationTypeEnum} from 'core/enums';
 
 import {MiroBoard} from '../../../context/Collaboration/CollaborationTypes';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import {useOwner} from '../../../hooks/api/useOwner';
 import 'core/utils/boardsPicker.1.0.js';
 import Button from '../../atoms/Button';
@@ -20,14 +19,14 @@ export interface WhiteBoardProps {}
 
 const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
   const [subPageTitle, setSubPageTitle] = useState<string>('');
-  const {collaborationState} = useCollaboration();
-  const {collaborationSpace} = collaborationState;
+  const {collaborationStore} = useStore();
+  const {space} = collaborationStore;
   const [miroboard, , , refetch] = useIntegrationFetch(
-    collaborationSpace?.id.toString() ?? '',
+    space.id?.toString() ?? '',
     IntegrationTypeEnum.MIRO
   );
 
-  const [owner] = useOwner(collaborationSpace?.id || '');
+  const [owner] = useOwner(space?.id || '');
 
   const [addMiroBoard] = useIntegrationEnable();
   const userIsInTeam = !!owner?.admin;
@@ -42,13 +41,13 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
   }, [miroboard]);
 
   usePosBusEvent('miro-board-change', (id) => {
-    if (collaborationSpace?.id === id) {
+    if (space?.id === id) {
       refetch();
     }
   });
 
   const pickBoard = useCallback(() => {
-    if (collaborationSpace) {
+    if (space.id) {
       //@ts-ignore
       miroBoardsPicker.open({
         clientId: appVariables.MIRO_APP_ID,
@@ -56,7 +55,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
         success: function (board: MiroBoard) {
           addMiroBoard({
             integrationType: IntegrationTypeEnum.MIRO,
-            spaceId: collaborationSpace.id,
+            spaceId: space.id ?? '',
             data: board
           }).then(() => {
             refetch();
@@ -64,7 +63,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
         }
       });
     }
-  }, [addMiroBoard, collaborationSpace, refetch]);
+  }, [addMiroBoard, space, refetch]);
 
   const actions = useMemo(() => {
     if (userIsTeamleader) {
@@ -125,12 +124,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
   };
 
   return (
-    <Page
-      title={collaborationState.collaborationSpace?.name || ''}
-      subtitle={subPageTitle}
-      actions={actions}
-      collaboration
-    >
+    <Page title={space.name || ''} subtitle={subPageTitle} actions={actions} collaboration>
       {getView()}
     </Page>
   );

@@ -10,31 +10,27 @@ import Avatar from 'component/atoms/Avatar';
 import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
-import {ParticipantModelInterface} from 'scenes/communication/stores/CommunicationLayerStore/models';
 import {useStore} from 'shared/hooks';
-import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+import {AgoraRemoteUserType} from 'core/types';
 
 import {ParticipantMenu} from '../ParticipantMenu';
 
 export interface RemoteParticipantProps {
-  participant: AgoraParticipant;
-  participantModel?: ParticipantModelInterface;
+  participant: AgoraRemoteUserType;
   totalParticipants: number;
   canEnterStage: boolean;
 }
 
 const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
-  participantModel,
   totalParticipants,
   canEnterStage
 }) => {
-  const {collaborationState} = useCollaboration();
+  const {agoraStore} = useStore().mainStore;
   const videoRef = useRef<HTMLDivElement>(null);
   const inviteOnStageModalRef = useRef<ModalRef>(null);
   const id = participant.uid as string;
-  const [isModerator, , ,] = useModerator(collaborationState.collaborationSpace?.id ?? '');
+  const [isModerator, , ,] = useModerator(agoraStore.spaceId ?? '');
   const [hovered, setIsHovered] = useState(false);
 
   const {
@@ -43,8 +39,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   } = useStore();
 
   const [user] = useUser(id);
-
-  const soundlevel = participant.soundLevel || 0;
 
   const userName = user?.name || id;
 
@@ -70,7 +64,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   useEffect(() => {
     console.info(`Agora video track changes for user ${userName}`, participant.videoTrack);
 
-    if (collaborationState.stageMode) {
+    if (agoraStore.isStageMode) {
       if (participant.videoTrack?.isPlaying) {
         participant.videoTrack?.stop();
       }
@@ -88,8 +82,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         }
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [participant.videoTrack, noVideo, collaborationState.stageMode]);
+  }, [participant.videoTrack, noVideo, agoraStore.isStageMode, userName, participant.hasVideo]);
 
   const handleStageModeUserClick = () => {
     inviteOnStageModalRef.current?.open();
@@ -131,12 +124,12 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         className={` mb-.5 p-.5
         rounded-full 
         border-1
-        ${soundlevel > 3 ? ' border-prime-blue-70' : ' border-transparant'}`}
+        ${(participant.soundLevel ?? 0) > 3 ? ' border-prime-blue-70' : ' border-transparant'}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         title={userName}
         onClick={
-          !collaborationState.stageMode && isModerator
+          !agoraStore.isStageMode && isModerator
             ? () => {
                 handleOpenMenu();
               }
@@ -145,7 +138,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       >
         <div
           className={`h-8 w-8 rounded-full overflow-hidden relative border-2 
-          ${soundlevel > 3 ? ' border-prime-blue-100' : ' border-transparant'}`}
+          ${(participant.soundLevel ?? 0) > 3 ? ' border-prime-blue-100' : ' border-transparant'}`}
           ref={videoRef}
         >
           <div className="h-full w-full absolute bg-dark-blue-100 text-green-light-100  flex flex-col justify-center items-center">
@@ -154,13 +147,13 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
             ) : (
               <AstronautIcon className="w-4 h-4" title={userName} />
             )}
-            {collaborationState.stageMode && isModerator && hovered && (
+            {agoraStore.isStageMode && isModerator && hovered && (
               <div
                 className="flex flex-col bg-dark-blue-50 rounded-full absolute h-full w-full items-center justify-center space-y-.5"
                 onClick={
                   canEnterStage
                     ? () => {
-                        if (collaborationState.stageMode && isModerator) {
+                        if (agoraStore.isStageMode && isModerator) {
                           console.log('I am a moderator');
                           handleStageModeUserClick();
                         }
@@ -180,7 +173,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
             )}
           </div>
         </div>
-        {!participant.hasAudio && !collaborationState.stageMode && (
+        {!participant.hasAudio && !agoraStore.isStageMode && (
           <MicOff
             className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5"
             style={{top: '70px'}}

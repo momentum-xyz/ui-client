@@ -1,14 +1,14 @@
 import React, {FC, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
+import {AgoraRemoteUserType} from 'core/types';
 import {IconSvg, Text, useClickOutside} from 'ui-kit';
-import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
 
 import * as styled from './ParticipantMenu.styled';
 
 interface PropsInterface {
   name: string;
-  participant: AgoraParticipant;
+  participant: AgoraRemoteUserType;
   onClose?: (event?: Event) => void;
   removeParticipant?: () => void;
   muteParticipant?: () => void;

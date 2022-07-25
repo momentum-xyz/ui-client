@@ -21,6 +21,7 @@ import * as communicationRepository from './repositories/communicationRepository
 import * as attendeesRepository from './repositories/attendeesRepository';
 import * as dashboardRepository from './repositories/dashboardRepository';
 import * as agoraRepository from './repositories/agoraRepository';
+import * as spaceIntegrationsRepository from './repositories/spaceIntegrationsRepository';
 
 /**
  * This layer is responsible for:
@@ -55,7 +56,8 @@ export const api = {
   communicationRepository,
   attendeesRepository,
   dashboardRepository,
-  agoraRepository
+  agoraRepository,
+  spaceIntegrationsRepository
 };
 
 /**

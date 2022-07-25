@@ -13,7 +13,6 @@ import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/util
 import {UnityPage} from 'scenes/unity';
 
 // TODO: To be refactored
-import {AgoraProvider} from '../context/AgoraContext';
 import {ConfirmationDialogProvider} from '../hooks/useConformationDialog';
 import AuthComponent from '../context/Auth/AuthContext';
 import {CollaborationProvider} from '../context/Collaboration/CollaborationContext';
@@ -107,17 +106,15 @@ const App: FC = () => {
           <AuthProvider {...sessionStore.oidcConfig}>
             <AuthComponent>
               <CollaborationProvider>
-                <AgoraProvider>
-                  <TextChatProvider>
-                    <UnityPage />
-                    <AppLayers>
-                      <Switch>
-                        {createRoutesByConfig(PRIVATE_ROUTES)}
-                        <Redirect to={ROUTES.base} />
-                      </Switch>
-                    </AppLayers>
-                  </TextChatProvider>
-                </AgoraProvider>
+                <TextChatProvider>
+                  <UnityPage />
+                  <AppLayers>
+                    <Switch>
+                      {createRoutesByConfig(PRIVATE_ROUTES)}
+                      <Redirect to={ROUTES.base} />
+                    </Switch>
+                  </AppLayers>
+                </TextChatProvider>
               </CollaborationProvider>
             </AuthComponent>
           </AuthProvider>

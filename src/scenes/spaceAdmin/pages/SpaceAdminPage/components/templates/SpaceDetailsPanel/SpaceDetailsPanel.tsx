@@ -7,18 +7,17 @@ import {useHistory} from 'react-router';
 import {Button, Heading, Input, SectionPanel, Text, Toggle} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {SpaceSettingsInterface} from 'api/repositories/spaceRepository/spaceRepository.api.types';
-import {useLeaveCollaborationSpace} from 'context/Collaboration/hooks/useCollaboration';
 import {DeleteSpaceConfirmationDialog} from 'scenes/spaceAdmin/pages/SpaceAdminPage/components/organisms';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './SpaceDetailsPanel.styled';
 
 const SpaceDetailsPanel: FC = () => {
-  const {spaceManagerStore} = useStore().spaceAdminStore;
+  const {spaceAdminStore, mainStore, collaborationStore} = useStore();
+  const {spaceManagerStore} = spaceAdminStore;
   const {space, spaceDetailsFormStore, deleteSpaceConfirmationDialog} = spaceManagerStore;
-
+  const {agoraStore} = mainStore;
   const history = useHistory();
-  const leaveCollaborationSpace = useLeaveCollaborationSpace();
 
   const parentClicked = (id: string) => {
     history.push({pathname: '/space/' + id + '/admin'});
@@ -48,7 +47,8 @@ const SpaceDetailsPanel: FC = () => {
     if (space.id) {
       spaceDetailsFormStore
         .deleteSpace(space.id)
-        .then(() => leaveCollaborationSpace(true))
+        .then(agoraStore.leaveMeetingSpace)
+        .then(collaborationStore.resetModel)
         .then(() => {
           history.replace({pathname: ROUTES.base});
         });

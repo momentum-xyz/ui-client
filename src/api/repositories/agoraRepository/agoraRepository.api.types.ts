@@ -1,5 +1,6 @@
 export interface AgoraTokenRequest {
   isStageMode: boolean;
+  isScreenShare?: boolean;
   spaceId: string;
 }
 

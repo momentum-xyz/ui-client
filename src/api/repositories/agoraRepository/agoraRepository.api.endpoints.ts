@@ -4,6 +4,7 @@ export const agoraRepositoryApiEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/agora`;
 
   return {
-    token: `${BASE_URL}/token`
+    token: `${BASE_URL}/token/:channelId`,
+    tokenScreenshare: `${BASE_URL}/token/:channelId/screenshare`
   };
 };

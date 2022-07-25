@@ -1,10 +1,9 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useCallback, useMemo} from 'react';
 
 import {appVariables} from 'api/constants';
-import {usePosBusEvent} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 import {IntegrationTypeEnum} from 'core/enums';
 
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import {useOwner} from '../../../hooks/api/useOwner';
 import Button from '../../atoms/Button';
 import Panel from '../../atoms/Panel';
@@ -18,14 +17,14 @@ import {
 import {IntegrationData} from '../../../context/Integration/IntegrationTypes';
 
 const GoogleDriveLayout: FC = () => {
-  const {collaborationState} = useCollaboration();
-  const {collaborationSpace} = collaborationState;
+  const {collaborationStore} = useStore();
+  const {space} = collaborationStore;
   const [googledrive, , , refetch] = useIntegrationFetch(
-    collaborationSpace?.id.toString() ?? '',
+    space.id?.toString() ?? '',
     IntegrationTypeEnum.GOOGLE_DRIVE
   );
 
-  const [owner] = useOwner(collaborationSpace?.id || '');
+  const [owner] = useOwner(space?.id || '');
 
   const userIsInTeam = !!owner?.admin;
   const userIsTeamleader = !!owner?.admin;
@@ -34,40 +33,42 @@ const GoogleDriveLayout: FC = () => {
   const [closeGoogleDrive] = useIntegrationDisable();
 
   usePosBusEvent('google-drive-file-change', (id) => {
-    if (collaborationSpace?.id === id) {
+    if (space?.id === id) {
       refetch();
     }
   });
 
-  // @ts-ignore
-  const pickerCallBack = (data) => {
-    if (
-      data[(window as any).google.picker.Response.ACTION] ===
-      (window as any).google.picker.Action.PICKED
-    ) {
-      const doc = data[(window as any).google.picker.Response.DOCUMENTS][0];
-      const newDriveFile: IntegrationData = {
-        id: doc[(window as any).google.picker.Document.ID],
-        name: doc[(window as any).google.picker.Document.NAME],
-        // description: doc[(window as any).google.picker.Document.DESCRIPTION],
-        // type: doc[(window as any).google.picker.Document.TYPE],
-        url: doc[(window as any).google.picker.Document.URL]
-        // embedUrl: doc[(window as any).google.picker.Document.EMBEDDABLE_URL]
-      };
+  const pickerCallBack = useCallback(
+    (data) => {
+      if (
+        data[(window as any).google.picker.Response.ACTION] ===
+        (window as any).google.picker.Action.PICKED
+      ) {
+        const doc = data[(window as any).google.picker.Response.DOCUMENTS][0];
+        const newDriveFile: IntegrationData = {
+          id: doc[(window as any).google.picker.Document.ID],
+          name: doc[(window as any).google.picker.Document.NAME],
+          // description: doc[(window as any).google.picker.Document.DESCRIPTION],
+          // type: doc[(window as any).google.picker.Document.TYPE],
+          url: doc[(window as any).google.picker.Document.URL]
+          // embedUrl: doc[(window as any).google.picker.Document.EMBEDDABLE_URL]
+        };
 
-      if (collaborationSpace) {
-        addGoogleDriveFile({
-          spaceId: collaborationSpace.id,
-          integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
-          data: newDriveFile
-        }).then(() => {
-          refetch();
-        });
+        if (space.id) {
+          addGoogleDriveFile({
+            spaceId: space.id,
+            integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
+            data: newDriveFile
+          }).then(() => {
+            refetch();
+          });
+        }
       }
-    }
-  };
+    },
+    [addGoogleDriveFile, refetch, space.id]
+  );
 
-  const closeGoogleDriveDocument = () => {
+  const closeGoogleDriveDocument = useCallback(() => {
     const newDriveFile = {
       id: '',
       name: '',
@@ -76,16 +77,16 @@ const GoogleDriveLayout: FC = () => {
       url: '',
       embedUrl: ''
     };
-    if (collaborationSpace) {
+    if (space.id) {
       closeGoogleDrive({
         integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
-        spaceId: collaborationSpace.id,
+        spaceId: space.id,
         data: newDriveFile
       }).then(() => {
         refetch();
       });
     }
-  };
+  }, [closeGoogleDrive, refetch, space.id]);
 
   const openGoogleDriveDialog = useMemo(() => {
     return (
@@ -140,7 +141,7 @@ const GoogleDriveLayout: FC = () => {
       );
     }
     return null;
-  }, [pickerCallBack]);
+  }, [closeGoogleDriveDocument, googledrive?.data?.url, pickerCallBack, userIsTeamleader]);
 
   const getView = () => {
     if (googledrive?.data?.url) {
@@ -188,12 +189,7 @@ const GoogleDriveLayout: FC = () => {
   };
 
   return (
-    <Page
-      title={collaborationState.collaborationSpace?.name || ''}
-      subtitle="Google Drive"
-      actions={actions}
-      collaboration
-    >
+    <Page title={space.name || ''} subtitle="Google Drive" actions={actions} collaboration>
       {getView()}
     </Page>
   );

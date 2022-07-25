@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -6,47 +6,58 @@ import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface} from 'core/interfaces';
-import {Navigation, ToastContent} from 'ui-kit';
+import {Navigation, ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {PosBusEventEnum, StageModeStatusEnum} from 'core/enums';
-import {bytesToUuid, createRoutesByConfig} from 'core/utils';
+import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
+import {createRoutesByConfig} from 'core/utils';
 // TODO: Refactoring
-import useCollaboration, {
-  useJoinCollaborationSpaceByAssign
-} from 'context/Collaboration/hooks/useCollaboration';
-import {
-  useStageModeJoin,
-  useStageModeLeave,
-  useStageModeStatusInfo
-} from 'hooks/api/useStageModeService';
 import Modal, {ModalRef} from 'component/util/Modal';
-import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
-import {useAgoraScreenShare} from 'hooks/communication/useAgoraScreenShare';
-import {COLLABORATION_STAGE_MODE_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
-import {ParticipantRole, ParticipantStatus} from 'context/Collaboration/CollaborationTypes';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
+import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
+import {useModerator} from 'context/Integration/hooks/useIntegration';
+import {PrivateSpaceError} from 'core/errors';
 
 import {COLLABORATION_ROUTES} from './CollaborationRoutes';
 
 const Collaboration: FC = () => {
-  const {collaborationStore, mainStore} = useStore();
-  const {space} = collaborationStore;
-  const {unityStore} = mainStore;
+  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {unityStore, agoraStore} = mainStore;
+
+  const {addRequestPopup} = useStageModePopupQueueContext();
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
+  const [isModerator, , ,] = useModerator(spaceId);
 
-  const {screenShare} = useAgoraScreenShare();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const stageModeState = useStageModeStatusInfo(collaborationState.collaborationSpace?.id);
   const switchDeviceModal = useRef<ModalRef>(null);
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
-  const agoraStageMode = useAgoraStageMode();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
-  const stageModeJoin = useStageModeJoin(collaborationState.collaborationSpace?.id);
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await collaborationStore.joinMeetingSpace(spaceId);
+        await agoraStore.joinMeetingSpace(sessionStore.userId, spaceId);
+      } catch (e) {
+        if (e instanceof PrivateSpaceError) {
+          toast.error(
+            <ToastContent
+              isDanger
+              isCloseButton
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('collaboration.spaceIsPrivate')}
+            />
+          );
+        }
+      }
+    })();
+
+    return () => {
+      agoraStore.leaveMeetingSpace();
+    };
+  }, [agoraStore, collaborationStore, collaborationStore.space, sessionStore.userId, spaceId, t]);
 
   usePosBusEvent('posbus-connected', () => {
     if (collaborationStore.space.id) {
@@ -59,88 +70,64 @@ const Collaboration: FC = () => {
     }
   });
 
-  const joinMeeting = useCallback(async () => {
-    if (await space.canUserJoin(spaceId)) {
-      await joinMeetingSpace(spaceId);
-      collaborationStore.init(spaceId);
-      return;
-    }
-
-    history.push(ROUTES.base);
-    toast.error(
-      <ToastContent
-        isDanger
-        isCloseButton
-        headerIconName="alert"
-        title={t('titles.alert')}
-        text={t('collaboration.spaceIsPrivate')}
-      />
-    );
-  }, [collaborationStore, history, joinMeetingSpace, spaceId, space, t]);
-
-  const joinStageMode = () => {
-    collaborationDispatch({
-      type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
-      stageMode: true
-    });
-  };
-
-  const leaveStageMode = () => {
-    collaborationDispatch({
-      type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
-      stageMode: false
-    });
-  };
-
-  useEffect(() => {
-    joinMeeting().then();
-  }, []);
-
-  useEffect(() => {
-    if (collaborationState.collaborationSpace) {
-      if (collaborationState.stageMode) {
-        console.info('[STAGEMODE] Stage Mode Enabled');
-        stageModeJoin().then(({spaceIntegrationUsers}) => {
-          console.info('[STAGEMODE] spaceIntegrationUsers', spaceIntegrationUsers);
-          if (spaceIntegrationUsers) {
-            const retrievedIntegrationUsers = spaceIntegrationUsers
-              .filter(
-                (integrationUser) =>
-                  integrationUser.flag !== ParticipantStatus.STATUS_LEFT && integrationUser.userId
-              )
-              .map((integrationUser) => ({
-                uid: bytesToUuid(integrationUser.userId.data),
-                role: ParticipantRole.AUDIENCE_MEMBER,
-                status: integrationUser.flag
-              }));
-            console.info('[stagemode] retrievedIntegrationUsers', retrievedIntegrationUsers);
-            agoraStageMode.setStageModeUsers(retrievedIntegrationUsers);
+  usePosBusEvent('stage-mode-request', (userId) => {
+    if (isModerator) {
+      addRequestPopup(userId, {
+        user: userId,
+        onAccept: async () => {
+          try {
+            await agoraStore.requestRespond(userId, StageModeRequestEnum.ACCEPT);
+            return true;
+          } catch {
+            toast.error(
+              <ToastContent
+                isDanger
+                headerIconName="alert"
+                title={t('titles.alert')}
+                text={t('messages.userRequestDeny')}
+                isCloseButton
+              />
+            );
+            return false;
           }
-        });
-      } else {
-        console.info('[STAGEMODE] Stage Mode Disabled');
-        stageModeLeave().then();
-      }
+        },
+        onDecline: async () => {
+          try {
+            await agoraStore.requestRespond(userId, StageModeRequestEnum.DECLINE);
+            return true;
+          } catch {
+            return false;
+          }
+        }
+      });
     }
-  }, [collaborationState.stageMode]);
+  });
 
-  useEffect(() => {
-    console.info(stageModeState);
-    if (!stageModeState?.data) {
-      return;
+  usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
+    await agoraStore.joinMeetingSpace(sessionStore.userId);
+
+    const isStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
+
+    if (isStageMode) {
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.stage')}
+          text={t('messages.stageModeActivated')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
+      history.push(ROUTES.collaboration.stageMode);
+    } else {
+      <ToastContent
+        headerIconName="alert"
+        title={t('titles.stage')}
+        text={t('messages.stageModeActivated')}
+        isCloseButton
+      />;
     }
-
-    const shouldActivateStageMode =
-      stageModeState?.data.stageModeStatus === StageModeStatusEnum.INITIATED;
-
-    if (shouldActivateStageMode && !collaborationState.stageMode) {
-      joinStageMode();
-    }
-
-    if (!shouldActivateStageMode && collaborationState.stageMode) {
-      leaveStageMode();
-    }
-  }, [stageModeState]);
+  });
 
   useEffect(() => {
     navigator.mediaDevices.ondevicechange = () => {
@@ -185,12 +172,12 @@ const Collaboration: FC = () => {
     {
       path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
       iconName: 'stage',
-      isActive: collaborationState.stageMode
+      isActive: agoraStore.isStageMode
     },
     {
       path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
       iconName: 'screenshare',
-      isActive: !!screenShare
+      isActive: !!agoraStore.screenShare
     },
     {
       path: generatePath(ROUTES.collaboration.miro, {spaceId}),

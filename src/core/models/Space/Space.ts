@@ -29,6 +29,7 @@ const Space = types
       isAdmin: false,
       isMember: false,
       isOwner: false,
+      isTable: false,
 
       // Requests
       fetchSpaceInformationRequest: types.optional(RequestModel, {}),
@@ -50,9 +51,10 @@ const Space = types
     })
   )
   .actions((self) => ({
-    setup(spaceId: string) {
+    setup(spaceId: string, isTable = false) {
       self.didFetchSpaceInformation = false;
       self.id = spaceId;
+      self.isTable = isTable;
     },
     canUserJoin: flow(function* (spaceId: string) {
       const response = yield self.fetchSpaceInformationRequest.send(
@@ -200,6 +202,9 @@ const Space = types
     },
     get isPrivate() {
       return self.secret === 1;
+    },
+    get isSet() {
+      return self.id !== undefined;
     }
   }));
 

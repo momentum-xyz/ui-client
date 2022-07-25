@@ -6,7 +6,6 @@ import {useTheme} from 'styled-components';
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
@@ -18,8 +17,8 @@ import {Communication} from './communication';
 const AppLayers: FC = ({children}) => {
   const {mainStore} = useStore();
   const {unityStore} = mainStore;
+  const {agoraStore} = mainStore;
 
-  const {collaborationState} = useCollaboration();
   const theme = useTheme();
 
   if (!unityStore.isTeleportReady) {
@@ -36,8 +35,7 @@ const AppLayers: FC = ({children}) => {
             <div
               className="main-container"
               style={{
-                marginRight:
-                  collaborationState.enabled || collaborationState.stageMode ? '90px' : undefined
+                marginRight: agoraStore.hasJoined ? '90px' : undefined
               }}
             >
               {children}
