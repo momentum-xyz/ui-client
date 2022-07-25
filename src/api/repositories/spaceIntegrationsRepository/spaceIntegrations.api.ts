@@ -2,7 +2,7 @@ import {generatePath} from 'react-router-dom';
 
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
-import {IntegrationTypeEnum} from 'core/enums';
+import {IntegrationTypeEnum, StageModeStatusEnum} from 'core/enums';
 
 import {spaceIntegrationsEndpoints} from './spaceIntegrations.api.endpoints';
 import {
@@ -22,14 +22,18 @@ export const fetchStageModeStatus: RequestInterface<
 };
 
 export const enableStageMode: RequestInterface<SpaceIntegrationEnableRequest, void> = (options) => {
-  const {spaceId, ...restOptions} = options;
+  const {spaceId, userId, ...restOptions} = options;
   const url = spaceIntegrationsEndpoints().enable;
 
   return request.post(
     url,
     {
       spaceId,
-      integrationType: IntegrationTypeEnum.STAGE_MODE
+      integrationType: IntegrationTypeEnum.STAGE_MODE,
+      data: {
+        userId,
+        stageModeStatus: StageModeStatusEnum.INITIATED
+      }
     },
     restOptions
   );
@@ -38,14 +42,18 @@ export const enableStageMode: RequestInterface<SpaceIntegrationEnableRequest, vo
 export const disableStageMode: RequestInterface<SpaceIntegrationEnableRequest, void> = (
   options
 ) => {
-  const {spaceId, ...restOptions} = options;
+  const {spaceId, userId, ...restOptions} = options;
   const url = spaceIntegrationsEndpoints().disable;
 
   return request.post(
     url,
     {
       spaceId,
-      integrationType: IntegrationTypeEnum.STAGE_MODE
+      integrationType: IntegrationTypeEnum.STAGE_MODE,
+      data: {
+        userId,
+        stageModeStatus: StageModeStatusEnum.STOPPED
+      }
     },
     restOptions
   );

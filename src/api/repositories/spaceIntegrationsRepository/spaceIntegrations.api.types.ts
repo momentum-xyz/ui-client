@@ -64,8 +64,10 @@ export interface SpaceIntegrationsStageModeResponse
 
 export interface SpaceIntegrationEnableRequest {
   spaceId: string;
+  userId: string;
 }
 
-export interface SpaceIntegrationDisablevoidRequest {
+export interface SpaceIntegrationDisableRequest {
   spaceId: string;
+  userId: string;
 }

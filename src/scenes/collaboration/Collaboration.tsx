@@ -35,6 +35,12 @@ const Collaboration: FC = () => {
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
 
   useEffect(() => {
+    unityStore.pause();
+
+    return unityStore.resume;
+  }, [unityStore]);
+
+  useEffect(() => {
     (async () => {
       try {
         await collaborationStore.joinMeetingSpace(spaceId);

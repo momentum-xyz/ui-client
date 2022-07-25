@@ -233,7 +233,7 @@ const CommunicationLayer = () => {
               </styled.MuteButtonContainer>
             )}
             <ul>
-              <LocalParticipant />
+              {(!agoraStore.isStageMode || !agoraStore.isOnStage) && <LocalParticipant />}
               {maxVideoStreamsShown && (
                 <li
                   className="mb-.5 p-.5

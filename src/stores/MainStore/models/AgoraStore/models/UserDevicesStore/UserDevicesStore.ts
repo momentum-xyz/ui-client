@@ -180,7 +180,6 @@ const UserDevicesStore = types
       self.localAudioTrack = self.currentAudioInput?.deviceId
         ? yield createAudioTrack(self.currentAudioInput?.deviceId)
         : undefined;
-      self.localAudioTrack?.setEnabled(!self.muted);
 
       if (!self.cameraConsent) {
         yield self.getCameraConsent();
@@ -189,8 +188,6 @@ const UserDevicesStore = types
       self.localVideoTrack = self.currentVideoInput?.deviceId
         ? yield createVideoTrack(self.currentVideoInput?.deviceId)
         : undefined;
-
-      self.localVideoTrack?.setEnabled(!self.cameraOff);
     }),
     cleanupLocalTracks() {
       self.localAudioTrack = undefined;

@@ -23,7 +23,7 @@ const StageModeControlPanelLayout: React.FC = () => {
     speakers: 0,
     audience: 0
   });
-  const {mainStore, collaborationStore} = useStore();
+  const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
   const {space} = collaborationStore;
 
@@ -147,7 +147,12 @@ const StageModeControlPanelLayout: React.FC = () => {
     return (
       <div className="flex items-center justify-between mx-4 gap-2 flex-grow">
         <div className="flex items-center gap-1">
-          <Toggle checked={agoraStore.isStageMode} onChange={agoraStore.toggleStageMode} />
+          <Toggle
+            checked={agoraStore.isStageMode}
+            onChange={() => {
+              agoraStore.toggleStageMode(sessionStore.userId);
+            }}
+          />
           <span className="text-sm">
             {agoraStore.isStageMode ? 'Stage is active' : 'Stage is inactive. Toggle to activate.'}
           </span>
