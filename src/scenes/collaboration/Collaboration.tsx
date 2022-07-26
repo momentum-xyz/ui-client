@@ -31,7 +31,7 @@ import {COLLABORATION_ROUTES} from './CollaborationRoutes';
 
 const Collaboration: FC = () => {
   const {collaborationStore, mainStore} = useStore();
-  const {spaceStore} = collaborationStore;
+  const {spaceStore, miroBoardStore} = collaborationStore;
   const {unityStore} = mainStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -94,6 +94,12 @@ const Collaboration: FC = () => {
 
   useEffect(() => {
     joinMeeting().then();
+
+    return () => {
+      if (spaceStore.isAdmin) {
+        miroBoardStore.disableMiroBoard(spaceId);
+      }
+    };
   }, []);
 
   useEffect(() => {
