@@ -98,6 +98,10 @@ const Collaboration: FC = () => {
     return () => {
       if (spaceStore.isAdmin) {
         miroBoardStore.disableMiroBoard(spaceId);
+        // TODO: Disable:
+        // 1. Stage Mode
+        // 2. Google Drive
+        // 3. Screen Sharing
       }
     };
   }, []);
