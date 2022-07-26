@@ -49,7 +49,7 @@ const MiroBoardPage: FC = () => {
   return (
     <styled.Inner>
       <TopBar title={space?.name ?? ''} subtitle={miroBoardTitle} onClose={() => {}}>
-        {isAdmin && !!miroBoard?.data && (
+        {isAdmin && !!miroBoard?.data?.accessLink && (
           <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
         )}
       </TopBar>

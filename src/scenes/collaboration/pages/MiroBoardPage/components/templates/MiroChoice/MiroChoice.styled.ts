@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.7)};
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
   overflow: hidden;
 `;
 

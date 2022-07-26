@@ -3,11 +3,15 @@ import {Redirect} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
-// TODO: Refactor
-import ScreenShareLayout from 'component/layout/Collaboration/ScreenShareLayout';
-import GoogleDriveLayout from 'component/layout/Collaboration/GoogleDriveLayout';
 
-import {DashboardPage, CalendarPage, StageModePage, MiroBoardPage} from './pages';
+import {
+  DashboardPage,
+  CalendarPage,
+  StageModePage,
+  MiroBoardPage,
+  ScreenSharePage,
+  GoogleDrivePage
+} from './pages';
 
 export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   {
@@ -35,11 +39,11 @@ export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.collaboration.screenShare,
-    main: () => <ScreenShareLayout />
+    main: () => <ScreenSharePage />
   },
   {
     path: ROUTES.collaboration.googleDrive,
-    main: () => <GoogleDriveLayout />
+    main: () => <GoogleDrivePage />
   },
   {
     path: ROUTES.collaboration.base,
