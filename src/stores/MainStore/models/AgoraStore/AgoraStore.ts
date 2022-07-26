@@ -254,11 +254,19 @@ const AgoraStore = types
       return undefined;
     }),
     cleanupLocalTracks() {
-      self.stageModeClient.localTracks.forEach((localTrack) => {
-        localTrack.setEnabled(false);
-        localTrack.stop();
-        localTrack.close();
-      });
+      if (self.isStageMode) {
+        self.stageModeClient.localTracks.forEach((localTrack) => {
+          localTrack.setEnabled(false);
+          localTrack.stop();
+          localTrack.close();
+        });
+      } else {
+        self.videoCallClient.localTracks.forEach((localTrack) => {
+          localTrack.setEnabled(false);
+          localTrack.stop();
+          localTrack.close();
+        });
+      }
 
       self.userDevicesStore.cleanupLocalTracks();
     },
