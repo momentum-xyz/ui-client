@@ -117,6 +117,7 @@ const CalendarPage: FC = () => {
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.space?.id}
         onClose={leaveCollaborationSpace}
+        editSpaceHidden
       >
         {spaceStore.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />

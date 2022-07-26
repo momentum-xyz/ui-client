@@ -15,10 +15,11 @@ import * as styled from './RightSection.styled';
 interface PropsInterface {
   isAdmin?: boolean;
   spaceId?: string;
+  editSpaceHidden?: boolean;
   favoriteStore: FavoriteStoreInterface;
 }
 
-const RightSection: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) => {
+const RightSection: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId, editSpaceHidden}) => {
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const {numberOfUnreadMessages} = useTextChatContext();
 
@@ -41,7 +42,7 @@ const RightSection: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) => 
 
   return (
     <>
-      {isAdmin && (
+      {isAdmin && !editSpaceHidden && (
         <>
           <ToolbarIcon
             title={t('tooltipTitles.openAdmin')}

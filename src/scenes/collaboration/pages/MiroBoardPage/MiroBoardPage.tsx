@@ -55,6 +55,7 @@ const MiroBoardPage: FC = () => {
         favoriteStore={favoriteStore}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.space?.id}
+        editSpaceHidden
         onClose={() => {}}
       >
         {isAdmin && !!miroBoard?.data?.accessLink && (

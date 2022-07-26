@@ -2,11 +2,11 @@ import React from 'react';
 
 import {render} from 'ui-kit/utils/test.utils';
 
-import TopBar from './TopBar';
+import PageTopBar from './PageTopBar';
 
-describe('TopBar', () => {
+describe('PageTopBar', () => {
   test('renders', () => {
-    const topBar = render(<TopBar title="" />);
+    const topBar = render(<PageTopBar title="" />);
 
     expect(topBar.baseElement).not.toBeNull();
   });

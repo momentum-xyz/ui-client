@@ -4,7 +4,7 @@ import {t} from 'i18next';
 import {SvgButton, Text, Tooltip} from 'ui-kit';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
-import * as styled from './TopBar.styled';
+import * as styled from './PageTopBar.styled';
 
 interface Props extends PropsWithThemeInterface {
   title: string;
@@ -13,7 +13,7 @@ interface Props extends PropsWithThemeInterface {
   actions?: React.ReactElement;
 }
 
-const TopBar: FC<Props> = (props) => {
+const PageTopBar: FC<Props> = (props) => {
   return (
     <styled.Container>
       <styled.Titles>
@@ -52,4 +52,4 @@ const TopBar: FC<Props> = (props) => {
   );
 };
 
-export default TopBar;
+export default PageTopBar;
