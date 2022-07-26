@@ -1,3 +1,5 @@
+import {ParticipantRole, ParticipantStatus} from 'core/enums';
+
 import {SpaceType} from '../type/Space';
 
 export interface CollaborationSpace {
@@ -79,16 +81,6 @@ export interface Participant {
   channel?: Channel;
   created_at: Date;
   updated_at: Date;
-}
-
-export enum ParticipantStatus {
-  STATUS_JOINED = 1,
-  STATUS_LEFT = 0
-}
-
-export enum ParticipantRole {
-  SPEAKER = 'speaker',
-  AUDIENCE_MEMBER = 'audience_member'
 }
 
 export default CollaborationSpace;

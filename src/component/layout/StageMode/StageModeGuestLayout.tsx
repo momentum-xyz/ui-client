@@ -5,12 +5,12 @@ import {observer} from 'mobx-react-lite';
 
 import {ToastContent} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
+import {ParticipantRole} from 'core/enums';
 
 import Page from '../../molucules/Page';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
 import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
 import Button from '../../atoms/Button';
-import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
 import CONFIG from '../../../config/config';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';

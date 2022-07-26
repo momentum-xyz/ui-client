@@ -15,7 +15,7 @@ import {
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import CONFIG from 'config/config';
-import {ParticipantRole} from 'context/Collaboration/CollaborationTypes';
+import {ParticipantRole} from 'core/enums';
 import StageModePIP from 'component/atoms/StageMode/StageModePIP';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';

@@ -6,6 +6,7 @@ import {observer} from 'mobx-react-lite';
 
 import {ToastContent, Toggle} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {ParticipantRole} from 'core/enums';
 
 import Page from '../../molucules/Page';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
@@ -14,7 +15,6 @@ import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {useUser} from '../../../hooks/api/useUser';
 import Button from '../../atoms/Button';
 import CONFIG from '../../../config/config';
-import {ParticipantRole} from '../../../context/Collaboration/CollaborationTypes';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';
 
