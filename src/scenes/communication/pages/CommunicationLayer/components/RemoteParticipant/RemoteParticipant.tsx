@@ -44,44 +44,18 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   const noVideo = totalParticipants > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
-  // @ts-ignore
   useEffect(() => {
-    console.info(`Agora audio track changes for user ${userName}`, participant.audioTrack);
+    return () => {
+      participant.audioTrack?.stop();
+      participant.videoTrack?.stop();
+    };
+  }, [participant]);
 
-    if (participant.hasAudio && participant.audioTrack) {
-      participant.audioTrack.play();
-
-      return () => {
-        if (participant.audioTrack) {
-          participant.audioTrack.stop();
-        }
-      };
-    }
-  }, [participant.audioTrack, participant.hasAudio, userName]);
-
-  // @ts-ignore
   useEffect(() => {
-    console.info(`Agora video track changes for user ${userName}`, participant.videoTrack);
-
-    if (agoraStore.isStageMode) {
-      if (participant.videoTrack?.isPlaying) {
-        participant.videoTrack?.stop();
-      }
-      return;
+    if (participant.hasVideo && videoRef.current && !noVideo) {
+      participant.videoTrack?.play(videoRef.current);
     }
-
-    if (participant.hasVideo && participant.videoTrack && videoRef.current) {
-      if (!noVideo) {
-        participant.videoTrack.play(videoRef.current);
-      }
-
-      return () => {
-        if (participant.videoTrack) {
-          participant.videoTrack.stop();
-        }
-      };
-    }
-  }, [participant.videoTrack, noVideo, agoraStore.isStageMode, userName, participant.hasVideo]);
+  }, [noVideo, participant]);
 
   const handleStageModeUserClick = () => {
     inviteOnStageModalRef.current?.open();

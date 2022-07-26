@@ -1,5 +1,5 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
 import {ROUTES} from 'core/constants';
@@ -52,7 +52,9 @@ const StageModePIP: React.FC = () => {
         <div
           className="bg-black-80 rounded-bl p-.5 px-1 text-xs text-white-50 hover:text-white-100 font-bold uppercase absolute right-0 top-0"
           onClick={() => {
-            history.push(ROUTES.collaboration.stageMode);
+            history.push(
+              generatePath(ROUTES.collaboration.stageMode, {spaceId: agoraStore.spaceId})
+            );
           }}
         >
           <FullScreenIcon className="w-1.5 h-1.5 " />

@@ -395,8 +395,14 @@ const AgoraStore = types
 
     // --- AGORA LISTENERS ---
 
-    handleUser(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
+
+      yield (self.isStageMode ? self.stageModeClient : self.videoCallClient).subscribe(
+        user,
+        mediaType
+      );
+
       if (isScreenshare) {
         self.screenShare = user?.videoTrack;
       } else {
@@ -412,11 +418,48 @@ const AgoraStore = types
                 }
               : remoteUser;
           });
+
+          if (mediaType === 'audio') {
+            user.audioTrack?.play();
+          }
         } else {
           self.remoteUsers = [...self.remoteUsers, user];
         }
       }
-    },
+    }),
+    handleUserUnpublished: flow(function* (
+      user: IAgoraRTCRemoteUser,
+      mediaType: 'audio' | 'video'
+    ) {
+      const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
+
+      if (isScreenshare) {
+        self.screenShare = undefined;
+      } else {
+        const foundUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
+
+        if (foundUser) {
+          self.remoteUsers = self.remoteUsers.map((remoteUser) => {
+            return remoteUser.uid === foundUser.uid
+              ? {
+                  ...remoteUser,
+                  videoTrack: mediaType === 'video' ? undefined : remoteUser.videoTrack,
+                  audioTrack: mediaType === 'audio' ? undefined : remoteUser.audioTrack
+                }
+              : remoteUser;
+          });
+
+          if (mediaType === 'audio') {
+            user.audioTrack?.stop();
+          }
+        }
+      }
+
+      yield (self.isStageMode ? self.stageModeClient : self.videoCallClient).unsubscribe(
+        user,
+        mediaType
+      );
+    }),
     handleUserJoined(user: IAgoraRTCRemoteUser) {
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
       if (isScreenshare) {
@@ -451,16 +494,16 @@ const AgoraStore = types
         self.joinedStageMode = true;
       }
     },
-    handleVolumeIndicator(users: IAgoraRTCRemoteUser[]) {
+    handleVolumeIndicator(users: {uid: string; level: number}[]) {
       const currentUser = users.find((user) => user.uid === self.userId);
 
-      self.localSoundLevel = currentUser?.audioTrack?.getVolumeLevel() ?? 0;
+      self.localSoundLevel = currentUser?.level ?? 0;
 
       self.remoteUsers = self.remoteUsers.map((remoteUser) => {
         const user = users.find((user) => remoteUser.uid === user.uid);
         return {
           ...remoteUser,
-          soundLevel: user?.audioTrack?.getVolumeLevel() ?? 0
+          soundLevel: user?.level ?? 0
         };
       });
     },
@@ -480,8 +523,8 @@ const AgoraStore = types
       if (self.isStageMode) {
         self.stageModeClient.enableAudioVolumeIndicator();
 
-        self.stageModeClient.on('user-published', self.handleUser);
-        self.stageModeClient.on('user-unpublished', self.handleUser);
+        self.stageModeClient.on('user-published', self.handleUserPublished);
+        self.stageModeClient.on('user-unpublished', self.handleUserPublished);
         self.stageModeClient.on('user-joined', self.handleUserJoined);
         self.stageModeClient.on('user-left', self.handleUserLeft);
         self.stageModeClient.on('connection-state-change', self.handleConnectionStateChange);
@@ -489,8 +532,8 @@ const AgoraStore = types
       } else {
         self.videoCallClient.enableAudioVolumeIndicator();
 
-        self.videoCallClient.on('user-published', self.handleUser);
-        self.videoCallClient.on('user-unpublished', self.handleUser);
+        self.videoCallClient.on('user-published', self.handleUserPublished);
+        self.videoCallClient.on('user-unpublished', self.handleUserPublished);
         self.videoCallClient.on('user-joined', self.handleUserJoined);
         self.videoCallClient.on('user-left', self.handleUserLeft);
         self.videoCallClient.on('connection-state-change', self.handleConnectionStateChange);

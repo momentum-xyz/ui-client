@@ -124,7 +124,7 @@ const Collaboration: FC = () => {
         />,
         TOAST_GROUND_OPTIONS
       );
-      history.push(ROUTES.collaboration.stageMode);
+      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId}));
     } else {
       <ToastContent
         headerIconName="alert"
