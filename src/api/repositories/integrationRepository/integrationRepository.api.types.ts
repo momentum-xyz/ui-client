@@ -10,8 +10,14 @@ import {
 /** COMMON **/
 
 export interface IntegrationInterface {
-  spaceId: string;
-  integrationType: IntegrationTypeEnum;
+  spaceId: {
+    type: string;
+    data: Buffer;
+  };
+  integrationTypeId: {
+    type: string;
+    data: Buffer;
+  };
   data: IntegrationDataInterface;
   stageModeRequestType?: StageModeRequestEnum;
   spaceIntegrationUsers?: IntegrationUserInterface[];
@@ -63,18 +69,19 @@ export interface FetchIntegrationRequest {
 
 export interface FetchIntegrationResponse extends IntegrationInterface {}
 
-/** ENABLE INTEGRATION **/
+/** ENABLE MIRO INTEGRATION **/
 
-export interface EnableIntegrationRequest {
+export interface EnableMiroIntegrationRequest {
   spaceId: string;
-  integrationType: IntegrationTypeEnum;
   data: MiroBoardInterface;
 }
 
-export interface EnableIntegrationResponse {}
+export interface EnableMiroIntegrationResponse {}
 
-/** DISABLE INTEGRATION **/
+/** DISABLE MIRO INTEGRATION **/
 
-export interface DisableIntegrationRequest extends IntegrationInterface {}
+export interface DisableMiroIntegrationRequest {
+  spaceId: string;
+}
 
-export interface DisableIntegrationResponse extends IntegrationInterface {}
+export interface DisableMiroIntegrationResponse extends IntegrationInterface {}

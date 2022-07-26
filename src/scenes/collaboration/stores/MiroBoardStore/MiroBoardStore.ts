@@ -1,4 +1,5 @@
 import {flow, types, cast} from 'mobx-state-tree';
+import {t} from 'i18next';
 
 import {api, MiroBoardInterface} from 'api';
 import {IntegrationTypeEnum} from 'core/enums';
@@ -23,22 +24,22 @@ const MiroBoardStore = types.compose(
         }
       }),
       enableMiroBoard: flow(function* (spaceId: string, data: MiroBoardInterface) {
-        yield self.request.send(api.integrationRepository.enableIntegration, {
-          integrationType: IntegrationTypeEnum.MIRO,
+        yield self.request.send(api.integrationRepository.enableMiroIntegration, {
           spaceId: spaceId,
           data: data
         });
       }),
       disableMiroBoard: flow(function* (spaceId: string) {
-        yield self.request.send(api.integrationRepository.disableIntegration, {
-          integrationType: IntegrationTypeEnum.MIRO,
+        yield self.request.send(api.integrationRepository.disableMiroIntegration, {
           spaceId: spaceId
         });
       })
     }))
     .views((self) => ({
       get miroBoardTitle(): string {
-        return self.miroBoard?.data?.name ? `Miro / ${self.miroBoard.data.name}` : 'Miro';
+        return self.miroBoard?.data?.name
+          ? `${t('labels.miro')} / ${self.miroBoard.data.name}`
+          : t('labels.miro');
       }
     }))
 );

@@ -29,7 +29,6 @@ const MiroBoardPage: FC = () => {
   useEffect(() => {
     if (space?.id) {
       miroBoardStore.fetchMiroBoard(space.id);
-      //miroBoardStore.disableMiroBoard(space.id);
     }
   }, [miroBoardStore, space.id]);
 
@@ -48,20 +47,20 @@ const MiroBoardPage: FC = () => {
   }, [miroBoardStore, space.id]);
 
   return (
-    <styled.Container>
+    <styled.Inner>
       <TopBar title={space?.name ?? ''} subtitle={miroBoardTitle} onClose={() => {}}>
         {isAdmin && !!miroBoard?.data && (
           <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
         )}
       </TopBar>
-      <div>
+      <styled.Container>
         {!miroBoard?.data?.accessLink ? (
           <MiroChoice isAdmin={isAdmin} pickBoard={pickBoard} />
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}
-      </div>
-    </styled.Container>
+      </styled.Container>
+    </styled.Inner>
   );
 };
 

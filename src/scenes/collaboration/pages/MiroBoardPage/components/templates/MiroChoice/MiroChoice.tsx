@@ -1,8 +1,9 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {useTheme} from 'styled-components';
 
-import {Button} from 'ui-kit';
+import {Button, Text} from 'ui-kit';
 
 import * as styled from './MiroChoice.styled';
 
@@ -13,16 +14,24 @@ interface PropsInterface {
 
 const MiroChoice: FC<PropsInterface> = ({isAdmin, pickBoard}) => {
   const {t} = useTranslation();
+  const theme = useTheme();
 
   return (
     <styled.Wrapper>
       {isAdmin ? (
-        <>
-          <h2 className="font-bold">Your team does not have a Miro board yet</h2>
-          <Button label={t('actions.chooseBoard')} variant="primary" onClick={pickBoard} />
-        </>
+        <styled.Actions>
+          <Text text={t('messages.noTeamMiroBoard')} theme={theme} size="s" />
+          <Button
+            theme={theme}
+            variant="primary"
+            label={t('actions.chooseBoard')}
+            onClick={pickBoard}
+          />
+        </styled.Actions>
       ) : (
-        <h2 className="font-bold">This team does not have a Miro board yet</h2>
+        <styled.Actions>
+          <Text text={t('messages.noMiroBoard')} theme={theme} size="s" />
+        </styled.Actions>
       )}
     </styled.Wrapper>
   );

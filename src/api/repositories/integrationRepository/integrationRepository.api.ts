@@ -2,15 +2,16 @@ import {generatePath} from 'react-router-dom';
 
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
+import {IntegrationTypeEnum} from 'core/enums';
 
 import {integrationRepositoryEndpoints} from './integrationRepository.api.endpoints';
 import {
   FetchIntegrationRequest,
   FetchIntegrationResponse,
-  EnableIntegrationRequest,
-  EnableIntegrationResponse,
-  DisableIntegrationRequest,
-  DisableIntegrationResponse
+  EnableMiroIntegrationRequest,
+  EnableMiroIntegrationResponse,
+  DisableMiroIntegrationRequest,
+  DisableMiroIntegrationResponse
 } from './integrationRepository.api.types';
 
 export const fetchIntegration: RequestInterface<
@@ -24,24 +25,28 @@ export const fetchIntegration: RequestInterface<
   return request.get(URL, rest);
 };
 
-export const enableIntegration: RequestInterface<
-  EnableIntegrationRequest,
-  EnableIntegrationResponse
+export const enableMiroIntegration: RequestInterface<
+  EnableMiroIntegrationRequest,
+  EnableMiroIntegrationResponse
 > = (options) => {
-  const {spaceId, integrationType, data, ...rest} = options;
+  const {spaceId, data, ...rest} = options;
 
   const URL: string = integrationRepositoryEndpoints().enable;
-  return request.post(URL, {spaceId, integrationType, data}, rest);
+  return request.post(URL, {spaceId, integrationType: IntegrationTypeEnum.MIRO, data}, rest);
 };
 
-export const disableIntegration: RequestInterface<
-  DisableIntegrationRequest,
-  DisableIntegrationResponse
+export const disableMiroIntegration: RequestInterface<
+  DisableMiroIntegrationRequest,
+  DisableMiroIntegrationResponse
 > = (options) => {
-  const {spaceId, integrationType, data, ...rest} = options;
+  const {spaceId, ...rest} = options;
 
-  alert(1);
+  const data = {
+    spaceId,
+    integrationType: IntegrationTypeEnum.MIRO,
+    data: {id: '', name: '', description: '', viewLink: '', accessLink: '', embedHtml: ''}
+  };
 
   const URL: string = integrationRepositoryEndpoints().disable;
-  return request.post(URL, {spaceId, integrationType, data}, rest);
+  return request.post(URL, data, rest);
 };
