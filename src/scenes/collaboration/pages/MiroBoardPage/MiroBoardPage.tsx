@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {Button, TopBar} from 'ui-kit';
+import {SpaceTopBar, Button} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 
 import 'core/utils/boardsPicker.1.0.js';
@@ -13,10 +13,11 @@ import {MiroBoard, MiroChoice} from './components/templates';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
-  const {collaborationStore} = useStore();
+  const {collaborationStore, mainStore} = useStore();
   const {spaceStore, miroBoardStore} = collaborationStore;
   const {space, isAdmin} = spaceStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
+  const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
 
@@ -48,11 +49,18 @@ const MiroBoardPage: FC = () => {
 
   return (
     <styled.Inner>
-      <TopBar title={space?.name ?? ''} subtitle={miroBoardTitle} onClose={() => {}}>
+      <SpaceTopBar
+        title={space?.name ?? ''}
+        subtitle={miroBoardTitle}
+        favoriteStore={favoriteStore}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.space?.id}
+        onClose={() => {}}
+      >
         {isAdmin && !!miroBoard?.data?.accessLink && (
           <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
         )}
-      </TopBar>
+      </SpaceTopBar>
       <styled.Container>
         {!miroBoard?.data?.accessLink ? (
           <MiroChoice isAdmin={isAdmin} pickBoard={pickBoard} />

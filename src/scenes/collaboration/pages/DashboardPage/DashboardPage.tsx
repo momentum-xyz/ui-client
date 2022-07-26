@@ -6,14 +6,13 @@ import {t} from 'i18next';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {UnityService} from 'shared/services';
-import {IconSvg, Text, TopBar, Button} from 'ui-kit';
+import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 // TODO: Refactoring
 import useCollaboration, {
   useLeaveCollaborationSpace
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
-import {TopBarActions} from './components/templates/TopBarActions';
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
@@ -57,17 +56,13 @@ const DashboardPage: FC = () => {
 
   return (
     <styled.Container>
-      <TopBar
+      <SpaceTopBar
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
-        actions={
-          <TopBarActions
-            favoriteStore={favoriteStore}
-            spaceId={spaceStore.space.id}
-            isAdmin={spaceStore.isAdmin}
-          />
-        }
+        favoriteStore={favoriteStore}
+        spaceId={spaceStore.space.id}
+        isAdmin={spaceStore.isAdmin}
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(spaceStore.isAdmin || spaceStore.isMember) && (
@@ -77,7 +72,7 @@ const DashboardPage: FC = () => {
         {!sessionStore.isGuest && spaceStore.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
-      </TopBar>
+      </SpaceTopBar>
       {!dashboard.dashboardIsEdited && spaceStore.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />

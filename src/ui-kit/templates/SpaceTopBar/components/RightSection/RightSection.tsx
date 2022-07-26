@@ -3,14 +3,14 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {generatePath} from 'react-router-dom';
 
-import {Separator, ToolbarIcon} from 'ui-kit';
+import {Separator, ToolbarIcon} from 'ui-kit/index';
 import {FavoriteStoreInterface} from 'stores/MainStore/models';
 import {COLLABORATION_CHAT_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {useTextChatContext} from 'context/TextChatContext';
 import {ROUTES} from 'core/constants';
 
-import * as styled from './TopBarActions.styled';
+import * as styled from './RightSection.styled';
 
 interface PropsInterface {
   isAdmin?: boolean;
@@ -18,7 +18,7 @@ interface PropsInterface {
   favoriteStore: FavoriteStoreInterface;
 }
 
-const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) => {
+const RightSection: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) => {
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const {numberOfUnreadMessages} = useTextChatContext();
 
@@ -81,4 +81,4 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
   );
 };
 
-export default observer(TopBarActions);
+export default observer(RightSection);
