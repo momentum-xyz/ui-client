@@ -6,8 +6,8 @@ import {IntegrationUserData} from './models';
 
 const IntegrationUser = types.model('IntegrationUser', {
   userId: UUIDModel,
-  spaceId: types.frozen<Buffer>(),
-  integrationTypeId: types.frozen<Buffer>(),
+  spaceId: UUIDModel,
+  integrationTypeId: UUIDModel,
   flag: types.number,
   data: IntegrationUserData
 });
