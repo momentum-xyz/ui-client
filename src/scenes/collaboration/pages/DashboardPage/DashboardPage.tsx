@@ -24,6 +24,7 @@ const DashboardPage: FC = () => {
 
   const history = useHistory();
 
+  // TODO: Removal
   const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);

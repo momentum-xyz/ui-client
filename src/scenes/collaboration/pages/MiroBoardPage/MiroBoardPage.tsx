@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
 import {SpaceTopBar, Button} from 'ui-kit';
@@ -9,6 +11,12 @@ import {usePosBusEvent, useStore} from 'shared/hooks';
 
 // TODO: Refactor
 import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
+// TODO: Removal
+import {useStageModeLeave} from '../../../../hooks/api/useStageModeService';
+import {UnityService} from '../../../../shared/services';
+import useCollaboration, {
+  useLeaveCollaborationSpace
+} from '../../../../context/Collaboration/hooks/useCollaboration';
 
 import 'core/utils/boardsPicker.1.0.js';
 
@@ -23,6 +31,12 @@ const MiroBoardPage: FC = () => {
   const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
+  const history = useHistory();
+
+  // TODO: Removal
+  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
+  const {collaborationState, collaborationDispatch} = useCollaboration();
+  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
 
   usePosBusEvent('miro-board-change', (id) => {
     if (space?.id === id && space?.id) {
@@ -50,6 +64,22 @@ const MiroBoardPage: FC = () => {
     });
   }, [miroBoardStore, space.id]);
 
+  // TODO: make as reusable action in store
+  const leaveCollaborationSpace = () => {
+    if (collaborationState.collaborationSpace) {
+      UnityService.leaveSpace(collaborationState.collaborationSpace.id);
+      leaveCollaborationSpaceCall(false).then(stageModeLeave);
+
+      if (collaborationState.stageMode) {
+        collaborationDispatch({
+          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
+          stageMode: false
+        });
+      }
+      history.push(ROUTES.base);
+    }
+  };
+
   return (
     <styled.Inner>
       <SpaceTopBar
@@ -60,7 +90,7 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(spaceStore.space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        onClose={() => {}}
+        onClose={leaveCollaborationSpace}
       >
         {isAdmin && !!miroBoard?.data?.accessLink && (
           <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
