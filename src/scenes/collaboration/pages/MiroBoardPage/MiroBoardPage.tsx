@@ -55,9 +55,10 @@ const MiroBoardPage: FC = () => {
       <SpaceTopBar
         title={space?.name ?? ''}
         subtitle={miroBoardTitle}
-        favoriteStore={favoriteStore}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.space?.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.space?.id || '')}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         onClose={() => {}}
       >

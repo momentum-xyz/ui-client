@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 
 import {PageTopBar} from 'ui-kit';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
-import {FavoriteStoreInterface} from 'stores/MainStore/models';
 
 import {RightSection} from './components';
 
@@ -13,14 +12,16 @@ interface PropsInterface extends PropsWithThemeInterface {
   isAdmin?: boolean;
   spaceId?: string;
   editSpaceHidden?: boolean;
-  favoriteStore: FavoriteStoreInterface;
+  isSpaceFavorite: boolean;
+  toggleIsSpaceFavorite: (spaceId: string) => void;
 }
 
 const SpaceTopBar: FC<PropsInterface> = ({
   title,
   subtitle,
   spaceId,
-  favoriteStore,
+  isSpaceFavorite,
+  toggleIsSpaceFavorite,
   isAdmin,
   editSpaceHidden,
   children,
@@ -32,12 +33,17 @@ const SpaceTopBar: FC<PropsInterface> = ({
       subtitle={subtitle}
       onClose={onClose}
       actions={
-        <RightSection
-          editSpaceHidden={editSpaceHidden}
-          favoriteStore={favoriteStore}
-          spaceId={spaceId}
-          isAdmin={isAdmin}
-        />
+        <>
+          {!!spaceId && (
+            <RightSection
+              isAdmin={isAdmin}
+              spaceId={spaceId}
+              editSpaceHidden={editSpaceHidden}
+              isSpaceFavorite={isSpaceFavorite}
+              toggleIsSpaceFavorite={toggleIsSpaceFavorite}
+            />
+          )}
+        </>
       }
     >
       {children}

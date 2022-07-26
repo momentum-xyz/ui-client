@@ -60,7 +60,8 @@ const DashboardPage: FC = () => {
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
-        favoriteStore={favoriteStore}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.space?.id || '')}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         spaceId={spaceStore.space.id}
         isAdmin={spaceStore.isAdmin}
       >

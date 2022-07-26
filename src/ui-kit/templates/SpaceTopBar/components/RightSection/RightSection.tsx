@@ -3,41 +3,39 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {generatePath} from 'react-router-dom';
 
-import {Separator, ToolbarIcon} from 'ui-kit/index';
-import {FavoriteStoreInterface} from 'stores/MainStore/models';
+import {ROUTES} from 'core/constants';
+import {Separator, ToolbarIcon} from 'ui-kit';
+// TODO: Refactoring
 import {COLLABORATION_CHAT_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {useTextChatContext} from 'context/TextChatContext';
-import {ROUTES} from 'core/constants';
 
 import * as styled from './RightSection.styled';
 
 interface PropsInterface {
   isAdmin?: boolean;
-  spaceId?: string;
+  spaceId: string;
   editSpaceHidden?: boolean;
-  favoriteStore: FavoriteStoreInterface;
+  isSpaceFavorite: boolean;
+  toggleIsSpaceFavorite: (spaceId: string) => void;
 }
 
-const RightSection: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId, editSpaceHidden}) => {
+const RightSection: FC<PropsInterface> = ({
+  spaceId,
+  editSpaceHidden,
+  isAdmin,
+  isSpaceFavorite,
+  toggleIsSpaceFavorite
+}) => {
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const {numberOfUnreadMessages} = useTextChatContext();
 
+  // TODO: Refactoring
   const toggleChat = () => {
     collaborationDispatch({
       type: COLLABORATION_CHAT_ACTION_UPDATE,
       open: !collaborationState.chatOpen
     });
-  };
-
-  const toggleFavorite = () => {
-    if (spaceId) {
-      if (favoriteStore.isSpaceFavorite) {
-        favoriteStore.removeFavorite(spaceId);
-      } else {
-        favoriteStore.addFavorite(spaceId);
-      }
-    }
   };
 
   return (
@@ -72,8 +70,8 @@ const RightSection: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId, edit
       </ToolbarIcon>
       <ToolbarIcon
         title={t('tooltipTitles.favorite')}
-        icon={favoriteStore.isSpaceFavorite ? 'starOn' : 'star'}
-        onClick={toggleFavorite}
+        icon={isSpaceFavorite ? 'starOn' : 'star'}
+        onClick={() => toggleIsSpaceFavorite(spaceId)}
         isWhite={false}
       />
       <Separator />
