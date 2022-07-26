@@ -188,233 +188,8 @@ const AgoraStore = types
       });
     })
   }))
+  // Listeners for Agora Client
   .actions((self) => ({
-    // --- COMMON ---
-
-    init() {
-      AgoraRTC.setLogLevel(4);
-      self.stageModeClient.enableDualStream();
-      self.userDevicesStore.init();
-      self.appId = appVariables.AGORA_APP_ID;
-    },
-
-    createVideoTrackAndPublish: flow(function* (deviceId: string) {
-      if (self.isStageMode && self.stageModeClient.connectionState === 'CONNECTED') {
-        const publishedCameraTrack = yield AgoraRTC.createCameraVideoTrack({
-          cameraId: deviceId,
-          facingMode: 'user',
-          // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
-          encoderConfig: '480p_1'
-        });
-
-        yield self.stageModeClient.publish(publishedCameraTrack);
-        yield publishedCameraTrack.setEnabled(!self.userDevicesStore.cameraOff);
-
-        return publishedCameraTrack;
-      } else if (self.videoCallClient.connectionState === 'CONNECTED') {
-        const publishedCameraTrack = yield AgoraRTC.createCameraVideoTrack({
-          cameraId: deviceId,
-          facingMode: 'user',
-          // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
-          encoderConfig: '240p_1'
-        });
-
-        yield self.videoCallClient.publish(publishedCameraTrack);
-        yield publishedCameraTrack.setEnabled(!self.userDevicesStore.cameraOff);
-
-        return publishedCameraTrack;
-      }
-
-      return undefined;
-    }),
-    createAudioTrackAndPublish: flow<IMicrophoneAudioTrack, [deviceId: string]>(function* (
-      deviceId: string
-    ) {
-      if (self.isStageMode && self.stageModeClient.connectionState === 'CONNECTED') {
-        const publishedAudioTrack: IMicrophoneAudioTrack =
-          yield AgoraRTC.createMicrophoneAudioTrack({
-            microphoneId: deviceId
-          });
-
-        yield self.stageModeClient.publish(publishedAudioTrack);
-        publishedAudioTrack.setEnabled(!self.userDevicesStore.muted);
-
-        return publishedAudioTrack;
-      } else if (self.videoCallClient.connectionState === 'CONNECTED') {
-        const publishedAudioTrack = yield AgoraRTC.createMicrophoneAudioTrack({
-          microphoneId: deviceId
-        });
-
-        yield self.videoCallClient.publish(publishedAudioTrack);
-        publishedAudioTrack.setEnabled(!self.userDevicesStore.muted);
-
-        return publishedAudioTrack;
-      }
-
-      return undefined;
-    }),
-    cleanupLocalTracks() {
-      if (self.isStageMode) {
-        self.stageModeClient.localTracks.forEach((localTrack) => {
-          localTrack.setEnabled(false);
-          localTrack.stop();
-          localTrack.close();
-        });
-      } else {
-        self.videoCallClient.localTracks.forEach((localTrack) => {
-          localTrack.setEnabled(false);
-          localTrack.stop();
-          localTrack.close();
-        });
-      }
-
-      self.userDevicesStore.cleanupLocalTracks();
-    },
-
-    // --- STAGE MODE ---
-
-    joinStageMode: flow(function* (spaceId: string, authStateSubject: string) {
-      if (self.isStageMode) {
-        return;
-      }
-
-      const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
-        api.stageModeRepository.joinStageMode,
-        {
-          spaceId: spaceId
-        }
-      );
-
-      yield self.stageModeClient.setClientRole('audience');
-      self.spaceId = spaceId;
-
-      const tokenResponse = yield self.getAgoraToken(true, spaceId);
-
-      yield self.stageModeClient.join(
-        self.appId,
-        `stage-${spaceId}`,
-        tokenResponse,
-        authStateSubject
-      );
-
-      self.joinedStageMode = true;
-      self.isStageMode = true;
-      self.stageModeUsers = cast(
-        stageModeResponse.spaceIntegrationUsers?.map((user) => ({
-          uid: bytesToUuid(user.userId.data),
-          role:
-            user.data.role === 'speaker' ? ParticipantRole.SPEAKER : ParticipantRole.AUDIENCE_MEMBER
-        }))
-      );
-    }),
-    leaveStageMode: flow(function* () {
-      yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
-        spaceId: self.spaceId
-      });
-
-      self.stageModeClient.localTracks.forEach((localTrack) => {
-        localTrack.setEnabled(false);
-        localTrack.stop();
-        localTrack.close();
-      });
-
-      yield self.stageModeClient.leave();
-      self.remoteUsers = [];
-      self.joinedStageMode = false;
-      self.isOnStage = false;
-      self.isStageMode = false;
-    }),
-    leaveStage: flow(function* () {
-      self.stageModeClient.localTracks.forEach((localTrack) => {
-        localTrack.setEnabled(false);
-        localTrack.stop();
-      });
-
-      yield self.stageModeClient.unpublish();
-      self.isOnStage = false;
-      yield self.stageModeClient.setClientRole('audience', self.clientRoleOptions);
-    }),
-    moveToAudience(userId: string) {
-      const userToBeMoved = self.stageModeUsers.find((user) => user.uid === userId);
-
-      if (userToBeMoved) {
-        userToBeMoved.role = ParticipantRole.AUDIENCE_MEMBER;
-      }
-    },
-    updateStageModeUsers() {
-      self.stageModeUsers.forEach((stageModeUser) => {
-        stageModeUser.role = self.remoteUsers.find(
-          (remoteUser) => remoteUser.uid === stageModeUser.uid
-        )
-          ? ParticipantRole.SPEAKER
-          : ParticipantRole.AUDIENCE_MEMBER;
-      });
-    },
-
-    // --- SCREENSHARE ---
-
-    stopScreenShare() {
-      self.screenShareClient?.localTracks.forEach((track) => {
-        track.close();
-      });
-      self.screenShareClient?.leave();
-      self.screenShareClient = undefined;
-    },
-
-    startScreenShare: flow(function* (authStateSubject: string) {
-      if (self.spaceId) {
-        const screenClient = AgoraRTC.createClient({
-          mode: self.isStageMode ? 'live' : 'rtc',
-          codec: 'h264'
-        });
-
-        if (self.isStageMode) {
-          yield screenClient.setClientRole('host');
-        }
-
-        const response: string = yield self.screenShareTokenRequest.send(
-          api.agoraRepository.getAgoraToken,
-          {
-            spaceId: self.spaceId,
-            isScreenShare: true,
-            isStageMode: self.isStageMode
-          }
-        );
-
-        const screenTrack = yield AgoraRTC.createScreenVideoTrack(
-          {
-            encoderConfig: {
-              width: {
-                max: 1280
-              },
-              height: {
-                max: 720
-              },
-              frameRate: {
-                max: 30
-              },
-              bitrateMax: 2000
-            }
-          },
-          'disable'
-        );
-
-        if (screenTrack) {
-          yield screenClient.join(
-            self.appId,
-            self.isStageMode ? 'stage-' + self.spaceId : self.spaceId,
-            response,
-            'ss|' + authStateSubject
-          );
-
-          yield screenClient.publish(screenTrack);
-          self.screenShareClient = screenClient;
-        }
-      }
-    }),
-
-    // --- AGORA LISTENERS ---
-
     handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
 
@@ -501,10 +276,138 @@ const AgoraStore = types
         remoteUser.soundLevel = user?.level ?? 0;
         return remoteUser;
       });
+    }
+  }))
+  // Initializer and track creation
+  .actions((self) => ({
+    init() {
+      AgoraRTC.setLogLevel(4);
+      self.stageModeClient.enableDualStream();
+      self.userDevicesStore.init();
+      self.appId = appVariables.AGORA_APP_ID;
     },
+    createVideoTrackAndPublish: flow(function* (deviceId: string) {
+      if (self.isStageMode && self.stageModeClient.connectionState === 'CONNECTED') {
+        const publishedCameraTrack = yield AgoraRTC.createCameraVideoTrack({
+          cameraId: deviceId,
+          facingMode: 'user',
+          // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
+          encoderConfig: '480p_1'
+        });
 
-    // --- CHAT ---
+        yield self.stageModeClient.publish(publishedCameraTrack);
+        yield publishedCameraTrack.setEnabled(!self.userDevicesStore.cameraOff);
 
+        return publishedCameraTrack;
+      } else if (self.videoCallClient.connectionState === 'CONNECTED') {
+        const publishedCameraTrack = yield AgoraRTC.createCameraVideoTrack({
+          cameraId: deviceId,
+          facingMode: 'user',
+          // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
+          encoderConfig: '240p_1'
+        });
+
+        yield self.videoCallClient.publish(publishedCameraTrack);
+        yield publishedCameraTrack.setEnabled(!self.userDevicesStore.cameraOff);
+
+        return publishedCameraTrack;
+      }
+
+      return undefined;
+    }),
+    createAudioTrackAndPublish: flow<IMicrophoneAudioTrack, [deviceId: string]>(function* (
+      deviceId: string
+    ) {
+      if (self.isStageMode && self.stageModeClient.connectionState === 'CONNECTED') {
+        const publishedAudioTrack: IMicrophoneAudioTrack =
+          yield AgoraRTC.createMicrophoneAudioTrack({
+            microphoneId: deviceId
+          });
+
+        yield self.stageModeClient.publish(publishedAudioTrack);
+        publishedAudioTrack.setEnabled(!self.userDevicesStore.muted);
+
+        return publishedAudioTrack;
+      } else if (self.videoCallClient.connectionState === 'CONNECTED') {
+        const publishedAudioTrack = yield AgoraRTC.createMicrophoneAudioTrack({
+          microphoneId: deviceId
+        });
+
+        yield self.videoCallClient.publish(publishedAudioTrack);
+        publishedAudioTrack.setEnabled(!self.userDevicesStore.muted);
+
+        return publishedAudioTrack;
+      }
+
+      return undefined;
+    }),
+
+    createScreenTrackAndPublish: flow(function* () {
+      if (!self.screenShareClient) {
+        return undefined;
+      }
+
+      const screenTrack = yield AgoraRTC.createScreenVideoTrack(
+        {
+          encoderConfig: {
+            width: {
+              max: 1280
+            },
+            height: {
+              max: 720
+            },
+            frameRate: {
+              max: 30
+            },
+            bitrateMax: 2000
+          }
+        },
+        'disable'
+      );
+
+      yield self.screenShareClient?.publish(screenTrack);
+      return screenTrack;
+    })
+  }))
+  // Screeensharing and chat visibility
+  .actions((self) => ({
+    stopScreenShare() {
+      self.screenShareClient?.localTracks.forEach((track) => {
+        track.close();
+      });
+      self.screenShareClient?.leave();
+      self.screenShareClient = undefined;
+    },
+    startScreenShare: flow(function* (authStateSubject: string) {
+      if (self.spaceId) {
+        self.screenShareClient = AgoraRTC.createClient({
+          mode: self.isStageMode ? 'live' : 'rtc',
+          codec: 'h264'
+        });
+
+        if (self.isStageMode) {
+          yield self.screenShareClient.setClientRole('host');
+        }
+
+        const response: string = yield self.screenShareTokenRequest.send(
+          api.agoraRepository.getAgoraToken,
+          {
+            spaceId: self.spaceId,
+            isScreenShare: true,
+            isStageMode: self.isStageMode
+          }
+        );
+
+        yield self.screenShareClient.join(
+          self.appId,
+          self.isStageMode ? 'stage-' + self.spaceId : self.spaceId,
+          response,
+          'ss|' + authStateSubject
+        );
+
+        yield self.createScreenTrackAndPublish();
+      }
+    }),
     showChat() {
       self.isChatOpen = true;
     },
@@ -512,6 +415,7 @@ const AgoraStore = types
       self.isChatOpen = false;
     }
   }))
+  // Agora calls setups and chat toggle
   .actions((self) => ({
     // --- COMMON ---
     setupAgoraListeners() {
@@ -542,18 +446,6 @@ const AgoraStore = types
         self.videoCallClient.removeAllListeners();
       }
     },
-    toggleQuality: flow(function* () {
-      yield Promise.all(
-        self.remoteUsers.map((user) =>
-          self.stageModeClient.setRemoteVideoStreamType(
-            user.uid,
-            self.isLowQualityModeEnabled ? 1 : 0
-          )
-        )
-      );
-
-      self.isLowQualityModeEnabled = !self.isLowQualityModeEnabled;
-    }),
 
     // --- VIDEO CALL ---
 
@@ -570,24 +462,12 @@ const AgoraStore = types
       );
 
       self.userDevicesStore.createLocalTracks(
-        async (deviceId) => {
-          if (deviceId) {
-            return await self.createAudioTrackAndPublish(deviceId);
-          }
-
-          return undefined;
-        },
-        async (deviceId) => {
-          if (deviceId) {
-            return await self.createVideoTrackAndPublish(deviceId);
-          }
-
-          return undefined;
-        }
+        self.createAudioTrackAndPublish,
+        self.createVideoTrackAndPublish
       );
     }),
     leaveCall: flow(function* () {
-      self.cleanupLocalTracks();
+      self.userDevicesStore.cleanupLocalTracks();
       self.stopScreenShare();
 
       yield self.videoCallClient.leave();
@@ -597,6 +477,53 @@ const AgoraStore = types
 
     // --- STAGE MODE ---
 
+    joinStageMode: flow(function* (spaceId: string, authStateSubject: string) {
+      if (self.isStageMode) {
+        return;
+      }
+
+      const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
+        api.stageModeRepository.joinStageMode,
+        {
+          spaceId: spaceId
+        }
+      );
+
+      yield self.stageModeClient.setClientRole('audience');
+      self.spaceId = spaceId;
+
+      const tokenResponse = yield self.getAgoraToken(true, spaceId);
+
+      yield self.stageModeClient.join(
+        self.appId,
+        `stage-${spaceId}`,
+        tokenResponse,
+        authStateSubject
+      );
+
+      self.joinedStageMode = true;
+      self.isStageMode = true;
+      self.stageModeUsers = cast(
+        stageModeResponse.spaceIntegrationUsers?.map((user) => ({
+          uid: bytesToUuid(user.userId.data),
+          role:
+            user.data.role === 'speaker' ? ParticipantRole.SPEAKER : ParticipantRole.AUDIENCE_MEMBER
+        }))
+      );
+    }),
+    leaveStageMode: flow(function* () {
+      yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
+        spaceId: self.spaceId
+      });
+
+      self.userDevicesStore.cleanupLocalTracks();
+
+      yield self.stageModeClient.leave();
+      self.remoteUsers = [];
+      self.joinedStageMode = false;
+      self.isOnStage = false;
+      self.isStageMode = false;
+    }),
     enterStage: flow(function* () {
       if (!self.userDevicesStore) {
         return;
@@ -611,34 +538,25 @@ const AgoraStore = types
 
       self.isOnStage = true;
     }),
-    leaveStageModeIfNeeded: flow(function* () {
-      if (!self.isStageMode) {
-        yield self.leaveStageMode();
-      }
-    }),
-    kickUserOffStage: flow(function* (userId: string) {
-      if (userId === self.userId) {
-        self.moveToAudience(userId);
-      } else {
-        yield self.leaveStage();
-        self.moveToAudience(userId);
-      }
-    }),
-    addStageModeUser(userId: string) {
-      if (self.stageModeUsers.filter((user) => user.uid === userId).length !== 0) {
-        return;
-      }
-
-      self.stageModeUsers.push({
-        uid: userId,
-        role: ParticipantRole.AUDIENCE_MEMBER
+    leaveStage: flow(function* () {
+      self.stageModeClient.localTracks.forEach((localTrack) => {
+        localTrack.setEnabled(false);
+        localTrack.stop();
       });
-    },
-    removeStageModeUser(userId: string) {
-      self.remoteUsers = self.remoteUsers.filter((user) => user.uid !== userId);
+
+      yield self.stageModeClient.unpublish();
+      self.isOnStage = false;
+      yield self.stageModeClient.setClientRole('audience', self.clientRoleOptions);
+    }),
+    moveToAudience(userId: string) {
+      const userToBeMoved = self.stageModeUsers.find((user) => user.uid === userId);
+
+      if (userToBeMoved) {
+        userToBeMoved.role = ParticipantRole.AUDIENCE_MEMBER;
+      }
     },
 
-    // --- CHAT ---
+    // --- CHAT TOGGLING ---
 
     toggleChat() {
       if (self.isChatOpen) {
@@ -648,6 +566,7 @@ const AgoraStore = types
       }
     }
   }))
+  // Meeting space managment
   .actions((self) => ({
     joinMeetingSpace: flow(function* (authStateSubject: string, spaceId?: string) {
       const status: SpaceIntegrationsStageModeResponse = yield self.getStageModeStatus(spaceId);
@@ -706,6 +625,7 @@ const AgoraStore = types
       self.spaceId = undefined;
     })
   }))
+  // Stage mode actions
   .actions((self) => ({
     toggleStageMode: flow(function* (userId: string) {
       if (!self.spaceId) {
@@ -723,7 +643,29 @@ const AgoraStore = types
           userId
         });
       }
-    })
+    }),
+    kickUserOffStage: flow(function* (userId: string) {
+      // TODO: Add API call to kick somone off stage
+      if (userId === self.userId) {
+        self.moveToAudience(userId);
+      } else {
+        yield self.leaveStage();
+        self.moveToAudience(userId);
+      }
+    }),
+    addStageModeUser(userId: string) {
+      if (self.stageModeUsers.filter((user) => user.uid === userId).length !== 0) {
+        return;
+      }
+
+      self.stageModeUsers.push({
+        uid: userId,
+        role: ParticipantRole.AUDIENCE_MEMBER
+      });
+    },
+    removeStageModeUser(userId: string) {
+      self.remoteUsers = self.remoteUsers.filter((user) => user.uid !== userId);
+    }
   }))
   .views((self) => ({
     get canEnterStage(): boolean {

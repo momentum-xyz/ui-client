@@ -190,6 +190,15 @@ const UserDevicesStore = types
         : undefined;
     }),
     cleanupLocalTracks() {
+      self.localAudioTrack?.setEnabled(false);
+      self.localVideoTrack?.setEnabled(false);
+
+      self.localAudioTrack?.stop();
+      self.localVideoTrack?.stop();
+
+      self.localAudioTrack?.close();
+      self.localVideoTrack?.close();
+
       self.localAudioTrack = undefined;
       self.localVideoTrack = undefined;
     },

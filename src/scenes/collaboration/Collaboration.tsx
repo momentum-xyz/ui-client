@@ -141,6 +141,9 @@ const Collaboration: FC = () => {
     }
   });
 
+  usePosBusEvent('stage-mode-user-joined', agoraStore.addStageModeUser);
+  usePosBusEvent('stage-mode-user-left', agoraStore.removeStageModeUser);
+
   useEffect(() => {
     navigator.mediaDevices.ondevicechange = () => {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
