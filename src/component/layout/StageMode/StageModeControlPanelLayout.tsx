@@ -133,15 +133,11 @@ const StageModeControlPanelLayout: React.FC = () => {
       return user.role === ParticipantRole.AUDIENCE_MEMBER;
     });
 
-    const speakers = agoraStore.stageModeUsers.filter((user) => {
-      return user.role === ParticipantRole.SPEAKER;
-    });
-
     setStageStats({
-      speakers: agoraStore.isOnStage ? speakers.length + 1 : speakers.length,
+      speakers: agoraStore.remoteUsers.length + (agoraStore.isOnStage ? 1 : 0),
       audience: agoraStore.isOnStage ? audience.length - 1 : audience.length
     });
-  }, [agoraStore.stageModeUsers, agoraStore.isOnStage]);
+  }, [agoraStore.stageModeUsers, agoraStore.isOnStage, agoraStore.remoteUsers]);
 
   const actions = useMemo(() => {
     return (

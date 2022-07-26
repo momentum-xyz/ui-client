@@ -1,6 +1,7 @@
 import {Transition} from '@headlessui/react';
 import React, {useCallback} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -44,4 +45,4 @@ const InFlightControlLayer: React.FC = () => {
   );
 };
 
-export default InFlightControlLayer;
+export default observer(InFlightControlLayer);

@@ -21,6 +21,7 @@ import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useGetSpace} from 'hooks/api/useSpaceService';
+import {AgoraRemoteUserType} from 'core/types';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
@@ -43,10 +44,12 @@ const CommunicationLayer = () => {
   const [isModerator, , ,] = useModerator(collaborationStore.space.id ?? '');
 
   const stageModeAudience = useMemo(() => {
-    return agoraStore.stageModeUsers.filter((user) => {
-      return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
-    });
-  }, [agoraStore.stageModeUsers, sessionStore.userId]);
+    return agoraStore.isStageMode
+      ? agoraStore.stageModeUsers.filter((user) => {
+          return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
+        })
+      : [];
+  }, [agoraStore.stageModeUsers, sessionStore.userId, agoraStore.isStageMode]);
 
   const numberOfPeople = useMemo(() => {
     return agoraStore.isStageMode
@@ -261,7 +264,7 @@ relative
                     };
                   })
                 : agoraStore.remoteUsers
-              ).map((participant) => (
+              ).map((participant: AgoraRemoteUserType) => (
                 <Transition
                   key={`participant-${participant.uid as string}`}
                   appear={true}

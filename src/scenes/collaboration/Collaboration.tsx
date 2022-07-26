@@ -65,6 +65,12 @@ const Collaboration: FC = () => {
     };
   }, [agoraStore, collaborationStore, collaborationStore.space, sessionStore.userId, spaceId, t]);
 
+  useEffect(() => {
+    if (agoraStore.screenShare) {
+      history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
+    }
+  }, [agoraStore.screenShare, history, spaceId]);
+
   usePosBusEvent('posbus-connected', () => {
     if (collaborationStore.space.id) {
       unityStore.triggerInteractionMessage(

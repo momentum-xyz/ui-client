@@ -45,17 +45,23 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   const noVideo = totalParticipants > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   useEffect(() => {
-    return () => {
-      participant.audioTrack?.stop();
-      participant.videoTrack?.stop();
-    };
-  }, [participant]);
-
-  useEffect(() => {
-    if (participant.hasVideo && videoRef.current && !noVideo) {
+    if (
+      participant.hasVideo &&
+      videoRef.current &&
+      !noVideo &&
+      !participant.videoTrack?.isPlaying
+    ) {
       participant.videoTrack?.play(videoRef.current);
     }
-  }, [noVideo, participant]);
+
+    if ((noVideo || !participant.hasVideo) && participant.videoTrack?.isPlaying) {
+      participant.videoTrack?.stop();
+    }
+
+    return () => {
+      participant.videoTrack?.stop();
+    };
+  }, [noVideo, participant.hasVideo, participant.videoTrack]);
 
   const handleStageModeUserClick = () => {
     inviteOnStageModalRef.current?.open();
