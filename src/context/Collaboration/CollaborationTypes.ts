@@ -12,21 +12,6 @@ export interface CollaborationTable {
   id: string;
 }
 
-export interface MiroBoard {
-  id: string;
-  name: string;
-  description: string;
-  viewLink: string;
-  accessLink: string;
-  embedHtml: string;
-}
-
-export interface MiroDTO {
-  id?: string;
-  owner_id: string;
-  data: MiroBoard;
-}
-
 export interface GoogleDriveFile {
   id?: string;
   name: string;
