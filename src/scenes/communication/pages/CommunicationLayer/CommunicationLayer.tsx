@@ -276,11 +276,7 @@ relative
                     key={`participant-${participant.uid as string}`}
                     participant={participant}
                     canEnterStage={agoraStore.canEnterStage}
-                    totalParticipants={
-                      agoraStore.isStageMode
-                        ? stageModeAudience.length
-                        : agoraStore.remoteUsers.length
-                    }
+                    totalParticipants={numberOfPeople}
                   />
                 </Transition>
               ))}

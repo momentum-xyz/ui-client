@@ -57,8 +57,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         }
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [participant.audioTrack]);
+  }, [participant.audioTrack, participant.hasAudio, userName]);
 
   // @ts-ignore
   useEffect(() => {
