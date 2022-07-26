@@ -46,6 +46,9 @@ export const TileImageUpload = styled.div`
   backdrop-filter: blur(10px);
   gap: 10px;
 
+  &.error {
+    border: 1px solid ${(props) => props.theme.accentDanger};
+  }
   .Button-custom {
     width: 110px;
     padding: 0;

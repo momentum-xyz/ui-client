@@ -9,3 +9,11 @@ export interface DashboardResponseInterface {}
 export interface TilesUpdatePositionInterface {
   data: TileListInterface;
 }
+
+export interface TileFormInterface {
+  type: string;
+  text_title?: string;
+  text_description?: string;
+  image?: File;
+  youtube_url?: string;
+}
