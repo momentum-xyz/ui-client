@@ -11,7 +11,7 @@ import StageModeGuestLayout from '../../../../component/layout/StageMode/StageMo
 import StageModeControlPanelLayout from '../../../../component/layout/StageMode/StageModeControlPanelLayout';
 
 // TODO: Refactor
-const StageModeRouter: FC = () => {
+const StageModePage: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
   const {agoraStore} = useStore().mainStore;
 
@@ -48,4 +48,4 @@ const StageModeRouter: FC = () => {
   );
 };
 
-export default observer(StageModeRouter);
+export default observer(StageModePage);

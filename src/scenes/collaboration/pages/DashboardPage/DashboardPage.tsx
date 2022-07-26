@@ -7,15 +7,14 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {UnityService} from 'shared/services';
 import {IconSvg, Text, TopBar, Button} from 'ui-kit';
-// TODO: Refactoring
-import TopbarButton from 'component/atoms/topbar/TopbarButton';
 
+import {TopBarActions} from './components/templates/TopBarActions';
 import Dashboard from './components/templates/Dashboard/Dashboard';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
-  const {agoraStore} = mainStore;
+  const {agoraStore, favoriteStore} = mainStore;
   const {dashboard, space} = collaborationStore;
   const {tileList, onDragEnd} = dashboard;
 
@@ -24,6 +23,7 @@ const DashboardPage: FC = () => {
   useEffect(() => {
     if (space.id) {
       dashboard.fetchDashboard(space.id);
+      favoriteStore.setSpaceId(space.id);
     }
     return () => {
       dashboard.resetModel();
@@ -40,32 +40,15 @@ const DashboardPage: FC = () => {
     }
   };
 
-  const actions = () => {
-    return (
-      <>
-        {space.isAdmin && (
-          <TopbarButton
-            title="Open Admin"
-            link={'/space/' + space.id + '/admin'}
-            isActive={(match, location) => {
-              return location.pathname.includes('/space/' + space.id + '/admin');
-            }}
-            state={{canGoBack: true}}
-          >
-            <IconSvg name="pencil" size="medium-large" />
-          </TopbarButton>
-        )}
-      </>
-    );
-  };
-
   return (
     <styled.Container>
       <TopBar
         title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
-        actions={actions()}
+        actions={
+          <TopBarActions favoriteStore={favoriteStore} spaceId={space.id} isAdmin={space.isAdmin} />
+        }
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(space.isAdmin || space.isMember) && (

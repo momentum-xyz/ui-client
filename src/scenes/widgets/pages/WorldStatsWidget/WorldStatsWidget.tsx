@@ -8,28 +8,28 @@ import {useStore} from 'shared/hooks';
 import {StatisticsBlockList} from './components';
 import * as styled from './WorldStatsWidget.styled';
 
-const DIALOG_OFFSET_RIGHT = 15;
+const DIALOG_OFFSET_RIGHT = 20;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const WorldStatsWidget: FC = () => {
-  const {
-    widgetStore: {worldStatsStore},
-    mainStore: {worldStore}
-  } = useStore();
+  const {widgetStore, mainStore} = useStore();
+  const {worldStore} = mainStore;
+  const {worldStatsStore} = widgetStore;
   const {statsDialog, worldStats} = worldStatsStore;
   const {statistics, isLoading} = worldStats;
+  const {worldId} = worldStore;
 
   const theme = useTheme();
 
   useEffect(() => {
-    if (worldStore.worldId) {
-      worldStatsStore.init(worldStore.worldId);
+    if (worldId) {
+      worldStatsStore.init(worldId);
     }
 
     return () => {
       worldStatsStore.resetModel();
     };
-  }, [worldStats, worldStore.worldId]);
+  }, [worldStats, worldStatsStore, worldId]);
 
   return (
     <Dialog
@@ -39,8 +39,8 @@ const WorldStatsWidget: FC = () => {
       headerStyle="uppercase"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       onClose={statsDialog.close}
+      showBackground={false}
       showCloseButton
-      withOpacity
     >
       <styled.Container>
         {isLoading && <Loader />}

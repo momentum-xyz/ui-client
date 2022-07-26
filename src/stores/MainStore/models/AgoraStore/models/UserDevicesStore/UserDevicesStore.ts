@@ -1,8 +1,8 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 
+import {storage} from 'shared/services';
 import {ResetModel, DialogModel} from 'core/models';
-import {storage} from 'core/services';
 import {StorageKeyEnum} from 'core/enums';
 
 const UserDevicesStore = types

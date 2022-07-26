@@ -1,4 +1,3 @@
-export * from './app.constants';
 export * from './date.constants';
 export * from './scanner.constants';
 export * from './rewardDestinations.constants';
