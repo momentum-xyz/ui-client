@@ -395,7 +395,7 @@ const AgoraStore = types
 
     // --- AGORA LISTENERS ---
 
-    handleUserPublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+    handleUser(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
       if (isScreenshare) {
         self.screenShare = user?.videoTrack;
@@ -403,32 +403,15 @@ const AgoraStore = types
         const foundUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
 
         if (foundUser) {
-          if (mediaType === 'audio') {
-            foundUser.audioTrack = user.audioTrack;
-          } else {
-            foundUser.videoTrack = user.videoTrack;
-          }
-        } else {
-          self.remoteUsers = [...self.remoteUsers, user];
-        }
-      }
-    },
-    handleUserUnpublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      // TODO: Might be refactored to use the same logic as handleUserPublished
-
-      const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
-
-      if (isScreenshare) {
-        self.screenShare = user.videoTrack;
-      } else {
-        const foundUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
-
-        if (foundUser) {
-          if (mediaType === 'audio') {
-            foundUser.audioTrack = user.audioTrack;
-          } else {
-            foundUser.videoTrack = user.videoTrack;
-          }
+          self.remoteUsers = self.remoteUsers.map((remoteUser) => {
+            return remoteUser.uid === foundUser.uid
+              ? {
+                  ...remoteUser,
+                  videoTrack: mediaType === 'video' ? user.videoTrack : remoteUser.videoTrack,
+                  audioTrack: mediaType === 'audio' ? user.audioTrack : remoteUser.audioTrack
+                }
+              : remoteUser;
+          });
         } else {
           self.remoteUsers = [...self.remoteUsers, user];
         }
@@ -473,9 +456,12 @@ const AgoraStore = types
 
       self.localSoundLevel = currentUser?.audioTrack?.getVolumeLevel() ?? 0;
 
-      self.remoteUsers.forEach((user) => {
-        const remoteUser = users.find((item) => item.uid === user.uid);
-        user.soundLevel = remoteUser?.audioTrack?.getVolumeLevel();
+      self.remoteUsers = self.remoteUsers.map((remoteUser) => {
+        const user = users.find((user) => remoteUser.uid === user.uid);
+        return {
+          ...remoteUser,
+          soundLevel: user?.audioTrack?.getVolumeLevel() ?? 0
+        };
       });
     },
 
@@ -494,8 +480,8 @@ const AgoraStore = types
       if (self.isStageMode) {
         self.stageModeClient.enableAudioVolumeIndicator();
 
-        self.stageModeClient.on('user-published', self.handleUserPublished);
-        self.stageModeClient.on('user-unpublished', self.handleUserUnpublished);
+        self.stageModeClient.on('user-published', self.handleUser);
+        self.stageModeClient.on('user-unpublished', self.handleUser);
         self.stageModeClient.on('user-joined', self.handleUserJoined);
         self.stageModeClient.on('user-left', self.handleUserLeft);
         self.stageModeClient.on('connection-state-change', self.handleConnectionStateChange);
@@ -503,8 +489,8 @@ const AgoraStore = types
       } else {
         self.videoCallClient.enableAudioVolumeIndicator();
 
-        self.videoCallClient.on('user-published', self.handleUserPublished);
-        self.videoCallClient.on('user-unpublished', self.handleUserUnpublished);
+        self.videoCallClient.on('user-published', self.handleUser);
+        self.videoCallClient.on('user-unpublished', self.handleUser);
         self.videoCallClient.on('user-joined', self.handleUserJoined);
         self.videoCallClient.on('user-left', self.handleUserLeft);
         self.videoCallClient.on('connection-state-change', self.handleConnectionStateChange);
