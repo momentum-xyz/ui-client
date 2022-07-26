@@ -4,9 +4,19 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import cn from 'classnames';
+import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, Dropdown, FileUploader, Heading, Input, TextArea} from 'ui-kit';
+import {
+  Dialog,
+  Dropdown,
+  FileUploader,
+  Heading,
+  Input,
+  TextArea,
+  TOAST_COMMON_OPTIONS,
+  ToastContent
+} from 'ui-kit';
 import {TileTypeEnum} from 'core/enums';
 import {TileFormInterface} from 'api';
 
@@ -15,8 +25,9 @@ import * as styled from './TileForm.styled';
 const TileForm: FC = () => {
   const theme = useTheme();
   const {collaborationStore} = useStore();
-  const {dashboardManager} = collaborationStore;
-  const {tileDialog} = dashboardManager;
+  const {dashboardManager, spaceStore} = collaborationStore;
+  const {tileDialog, tileFormStore, dashboard} = dashboardManager;
+  const {tileFormRequest} = tileFormStore;
 
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [image, setImage] = useState<File | undefined>(undefined);
@@ -35,10 +46,35 @@ const TileForm: FC = () => {
         setImageError(true);
         return;
       }
+
+      await tileFormStore.createTile(spaceStore.space.id, image, data);
       setImageError(false);
-      console.info(image);
     } else {
-      console.info(data);
+      await tileFormStore.createTile(spaceStore.space.id, undefined, data);
+    }
+    tileDialog.close();
+
+    if (tileFormRequest.isDone) {
+      await dashboard.fetchDashboard(spaceStore.space.id);
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="Your tile has been created successfully"
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    } else if (tileFormRequest.isError) {
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="There was a problem creating your tile"
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
     }
   };
 

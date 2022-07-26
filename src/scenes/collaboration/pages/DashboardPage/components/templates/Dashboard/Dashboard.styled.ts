@@ -27,7 +27,8 @@ export const Container = styled.div`
 `;
 
 export const DashboardContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
