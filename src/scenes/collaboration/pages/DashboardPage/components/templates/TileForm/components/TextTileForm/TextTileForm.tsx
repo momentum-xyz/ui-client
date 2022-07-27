@@ -1,23 +1,69 @@
 import React, {FC} from 'react';
-import {Controller} from 'react-hook-form';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
-import {Control} from 'react-hook-form/dist/types/form';
-import {FieldErrors} from 'react-hook-form/dist/types/errors';
+import {toast} from 'react-toastify';
 
-import {TileFormInterface} from 'api';
-import {Input, TextArea} from 'ui-kit';
+import {Button, Input, TextArea, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
+import {TextTileFormInterface} from 'api';
 
 import * as styled from './TextTileForm.styled';
 
 interface PropsInterface {
-  control: Control<TileFormInterface, any>;
-  errors: FieldErrors;
   currentTile: TileInterface | null;
+  spaceId: string;
+  createTile: (spaceId: string, data: TextTileFormInterface) => void;
+  onClose: () => void;
+  fetchDashboard: (spaceId: string) => void;
 }
 
-const TextTileForm: FC<PropsInterface> = ({control, errors, currentTile}) => {
+const TextTileForm: FC<PropsInterface> = ({
+  currentTile,
+  spaceId,
+  createTile,
+  onClose,
+  fetchDashboard
+}) => {
+  const {
+    control,
+    formState: {errors},
+    handleSubmit,
+    reset
+  } = useForm<TextTileFormInterface>();
+
+  const formSubmitHandler: SubmitHandler<TextTileFormInterface> = async (
+    data: TextTileFormInterface
+  ) => {
+    const isCreateSucceed = await createTile(spaceId, data);
+    onClose();
+    // @ts-ignore
+    if (isCreateSucceed) {
+      await fetchDashboard(spaceId);
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.tileCreateSuccess')}
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    } else {
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.tileCreateError')}
+          isDanger
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    }
+    reset();
+  };
+
   return (
     <styled.Item>
       <styled.TextItem>
@@ -56,6 +102,9 @@ const TextTileForm: FC<PropsInterface> = ({control, errors, currentTile}) => {
           )}
         />
       </styled.TextItem>
+      <styled.ButtonWrapper>
+        <Button label="create tile" onClick={handleSubmit(formSubmitHandler)} />
+      </styled.ButtonWrapper>
     </styled.Item>
   );
 };

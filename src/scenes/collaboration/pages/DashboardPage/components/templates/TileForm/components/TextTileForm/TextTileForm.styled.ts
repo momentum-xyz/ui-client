@@ -6,9 +6,19 @@ export const Container = styled.div`
   height: 20px;
 `;
 export const Item = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+`;
+
+export const ButtonWrapper = styled.div`
   padding-top: 10px;
 `;
 
 export const TextItem = styled.div`
   padding-bottom: 10px;
+  width: 460px;
+  height: 100%;
 `;

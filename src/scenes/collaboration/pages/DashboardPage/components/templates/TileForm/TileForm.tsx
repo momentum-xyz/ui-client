@@ -1,12 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useTheme} from 'styled-components';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, Dropdown, Heading, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {Dialog, Dropdown, Heading} from 'ui-kit';
 import {TileTypeEnum} from 'core/enums';
 import {TileFormInterface} from 'api';
 import {TILES_DROPDOWN_OPTIONS} from 'core/constants';
@@ -27,10 +26,8 @@ const TileForm: FC = () => {
 
   const {
     control,
-    handleSubmit,
     formState: {errors},
-    resetField,
-    reset
+    resetField
   } = useForm<TileFormInterface>();
 
   useEffect(() => {
@@ -41,83 +38,83 @@ const TileForm: FC = () => {
     return () => tileFormStore.resetModel();
   }, []);
 
-  const formSubmitHandler: SubmitHandler<TileFormInterface> = async (data: TileFormInterface) => {
-    let isUpdateSucceed = false;
-    let isCreateSucceed = false;
-    if (currentTile?.id) {
-      if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
-        if (!image) {
-          setImageError(true);
-          return;
-        }
-
-        isUpdateSucceed = await tileFormStore.updateImageTile(currentTile?.id, image);
-        setImageError(false);
-      } else {
-        isUpdateSucceed = await tileFormStore.updateTextOrVideoTile(currentTile?.id, data);
-      }
-      tileDialog.close();
-      if (isUpdateSucceed) {
-        await dashboard.fetchDashboard(spaceStore.space.id);
-        toast.info(
-          <ToastContent
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('messages.tileUpdateSuccess')}
-            isCloseButton
-          />,
-          TOAST_COMMON_OPTIONS
-        );
-      } else {
-        toast.error(
-          <ToastContent
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('messages.tileUpdateError')}
-            isDanger
-            isCloseButton
-          />,
-          TOAST_COMMON_OPTIONS
-        );
-      }
-    } else {
-      if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
-        if (!image) {
-          setImageError(true);
-          return;
-        }
-        isCreateSucceed = await tileFormStore.createImageTile(spaceStore.space.id, image);
-        setImageError(false);
-      } else {
-        isCreateSucceed = await tileFormStore.createTextOrVideoTile(spaceStore.space.id, data);
-      }
-      tileDialog.close();
-      if (isCreateSucceed) {
-        await dashboard.fetchDashboard(spaceStore.space.id);
-        toast.info(
-          <ToastContent
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('messages.tileCreateSuccess')}
-            isCloseButton
-          />,
-          TOAST_COMMON_OPTIONS
-        );
-      } else {
-        toast.error(
-          <ToastContent
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('messages.tileCreateError')}
-            isDanger
-            isCloseButton
-          />,
-          TOAST_COMMON_OPTIONS
-        );
-      }
-    }
-    reset();
-  };
+  // const formSubmitHandler: SubmitHandler<TileFormInterface> = async (data: TileFormInterface) => {
+  //   let isUpdateSucceed = false;
+  //   let isCreateSucceed = false;
+  //   if (currentTile?.id) {
+  //     if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
+  //       if (!image) {
+  //         setImageError(true);
+  //         return;
+  //       }
+  //
+  //       isUpdateSucceed = await tileFormStore.updateImageTile(currentTile?.id, image);
+  //       setImageError(false);
+  //     } else {
+  //       isUpdateSucceed = await tileFormStore.updateTextOrVideoTile(currentTile?.id, data);
+  //     }
+  //     tileDialog.close();
+  //     if (isUpdateSucceed) {
+  //       await dashboard.fetchDashboard(spaceStore.space.id);
+  //       toast.info(
+  //         <ToastContent
+  //           headerIconName="alert"
+  //           title={t('titles.alert')}
+  //           text={t('messages.tileUpdateSuccess')}
+  //           isCloseButton
+  //         />,
+  //         TOAST_COMMON_OPTIONS
+  //       );
+  //     } else {
+  //       toast.error(
+  //         <ToastContent
+  //           headerIconName="alert"
+  //           title={t('titles.alert')}
+  //           text={t('messages.tileUpdateError')}
+  //           isDanger
+  //           isCloseButton
+  //         />,
+  //         TOAST_COMMON_OPTIONS
+  //       );
+  //     }
+  //   } else {
+  //     if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
+  //       if (!image) {
+  //         setImageError(true);
+  //         return;
+  //       }
+  //       isCreateSucceed = await tileFormStore.createImageTile(spaceStore.space.id, image);
+  //       setImageError(false);
+  //     } else {
+  //       isCreateSucceed = await tileFormStore.createTextOrVideoTile(spaceStore.space.id, data);
+  //     }
+  //     tileDialog.close();
+  //     if (isCreateSucceed) {
+  //       await dashboard.fetchDashboard(spaceStore.space.id);
+  //       toast.info(
+  //         <ToastContent
+  //           headerIconName="alert"
+  //           title={t('titles.alert')}
+  //           text={t('messages.tileCreateSuccess')}
+  //           isCloseButton
+  //         />,
+  //         TOAST_COMMON_OPTIONS
+  //       );
+  //     } else {
+  //       toast.error(
+  //         <ToastContent
+  //           headerIconName="alert"
+  //           title={t('titles.alert')}
+  //           text={t('messages.tileCreateError')}
+  //           isDanger
+  //           isCloseButton
+  //         />,
+  //         TOAST_COMMON_OPTIONS
+  //       );
+  //     }
+  //   }
+  //   reset();
+  // };
 
   return (
     <Dialog
@@ -125,13 +122,6 @@ const TileForm: FC = () => {
       title={t('dashboard.tileForm.title')}
       showCloseButton
       onClose={tileDialog.close}
-      approveInfo={{
-        title: currentTile?.id
-          ? t('dashboard.tileForm.updateTile')
-          : t('dashboard.tileForm.createTile'),
-        onClick: handleSubmit(formSubmitHandler),
-        disabled: !selectedType
-      }}
       hasBorder
       closeOnBackgroundClick={false}
     >
@@ -172,7 +162,13 @@ const TileForm: FC = () => {
             <VideoTileForm control={control} errors={errors} currentTile={currentTile} />
           )}
           {selectedType === TileTypeEnum.TILE_TYPE_TEXT && (
-            <TextTileForm control={control} errors={errors} currentTile={currentTile} />
+            <TextTileForm
+              currentTile={currentTile}
+              spaceId={spaceStore.space.id ?? ''}
+              onClose={tileDialog.close}
+              createTile={tileFormStore.createTextTile}
+              fetchDashboard={dashboard.fetchDashboard}
+            />
           )}
           {selectedType === TileTypeEnum.TILE_TYPE_MEDIA && (
             <ImageTileForm

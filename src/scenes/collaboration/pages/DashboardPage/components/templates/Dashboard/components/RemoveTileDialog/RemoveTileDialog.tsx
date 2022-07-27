@@ -17,8 +17,7 @@ const RemoveTileDialog: FC = () => {
   }, []);
 
   const confirm = async () => {
-    let succeed = false;
-    succeed = await tileFormStore.deleteTile();
+    const succeed = await tileFormStore.deleteTile();
     tileRemoveDialog.close();
     if (succeed) {
       await dashboard.fetchDashboard(spaceStore.space.id);
