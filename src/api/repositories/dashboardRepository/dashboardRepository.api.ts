@@ -1,3 +1,5 @@
+import {generatePath} from 'react-router-dom';
+
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
 
@@ -8,8 +10,6 @@ import {
   DashboardResponseInterface,
   DeleteTileRequest,
   DeleteTileResponse,
-  ImageUploadRequest,
-  ImageUploadResponse,
   TilesUpdatePositionInterface,
   UpdateTileRequest,
   UpdateTileResponse
@@ -21,7 +21,7 @@ export const fetchDashboard: RequestInterface<
   DashboardResponseInterface
 > = (options) => {
   const {spaceId, ...restOptions} = options;
-  const url = `${dashboardRepositoryApiEndpoints().base}/${spaceId}`;
+  const url = generatePath(dashboardRepositoryApiEndpoints().fetchDashboard, {spaceId});
 
   return request.get(url, restOptions);
 };
@@ -31,40 +31,24 @@ export const updateDashboardPositions: RequestInterface<
   DashboardResponseInterface
 > = (options) => {
   const {data, ...restOptions} = options;
-  const url = `${dashboardRepositoryApiEndpoints().updatePositions}`;
+  const url = dashboardRepositoryApiEndpoints().updatePositions;
   return request.post(url, data, restOptions);
-};
-
-export const uploadTileImage: RequestInterface<ImageUploadRequest, ImageUploadResponse> = (
-  options
-) => {
-  const {file, ...restOptions} = options;
-  const formData: FormData = new FormData();
-  formData.append('file', file);
-  const requestParams = {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
-    ...restOptions
-  };
-  const url = `${dashboardRepositoryApiEndpoints().upload}`;
-  return request.post(url, formData, requestParams);
 };
 
 export const createTile: RequestInterface<CreateTileRequest, CreateTileResponse> = (options) => {
   const {data, spaceId, ...restOptions} = options;
-  const url = `${dashboardRepositoryApiEndpoints().create}/${spaceId}`;
+  const url = generatePath(dashboardRepositoryApiEndpoints().create, {spaceId});
   return request.post(url, data, restOptions);
 };
 
 export const updateTile: RequestInterface<UpdateTileRequest, UpdateTileResponse> = (options) => {
   const {data, tileId, ...restOptions} = options;
-  const url = `${dashboardRepositoryApiEndpoints().update}/${tileId}`;
+  const url = generatePath(dashboardRepositoryApiEndpoints().update, {tileId});
   return request.post(url, data, restOptions);
 };
 
 export const deleteTile: RequestInterface<DeleteTileRequest, DeleteTileResponse> = (options) => {
   const {tileId, ...restOptions} = options;
-  const url = `${dashboardRepositoryApiEndpoints().delete}/${tileId}`;
+  const url = generatePath(dashboardRepositoryApiEndpoints().delete, {tileId});
   return request.post(url, restOptions);
 };

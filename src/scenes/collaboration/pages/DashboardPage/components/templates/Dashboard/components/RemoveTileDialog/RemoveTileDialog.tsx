@@ -12,17 +12,16 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
   const {collaborationStore} = useStore();
   const {dashboardManager, spaceStore} = collaborationStore;
   const {tileRemoveDialog, tileFormStore, dashboard} = dashboardManager;
-  const {tileDeleteRequest} = tileFormStore;
 
   useEffect(() => {
     return () => tileFormStore.resetModel();
   }, []);
 
   const confirm = async () => {
-    await tileFormStore.deleteTile();
-
-    if (tileDeleteRequest.isDone) {
-      tileRemoveDialog.close();
+    let succeed = false;
+    succeed = await tileFormStore.deleteTile();
+    tileRemoveDialog.close();
+    if (succeed) {
       await dashboard.fetchDashboard(spaceStore.space.id);
       toast.info(
         <ToastContent
@@ -32,8 +31,7 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
         />,
         TOAST_COMMON_OPTIONS
       );
-    } else if (tileDeleteRequest.isError) {
-      tileRemoveDialog.close();
+    } else {
       toast.error(
         <ToastContent
           headerIconName="alert"

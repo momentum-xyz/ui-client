@@ -18,7 +18,7 @@ const TileFormStore = types.compose(
       createTile: flow(function* (spaceId?: string, file?: File, data?: TileFormInterface) {
         if (data?.type === TileTypeEnum.TILE_TYPE_MEDIA) {
           const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
-            api.dashboardRepository.uploadTileImage,
+            api.resources.uploadTileImage,
             {
               file
             }
@@ -66,7 +66,7 @@ const TileFormStore = types.compose(
       updateTile: flow(function* (tileId?: string, file?: File, data?: TileFormInterface) {
         if (data?.type === TileTypeEnum.TILE_TYPE_MEDIA) {
           const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
-            api.dashboardRepository.uploadTileImage,
+            api.resources.uploadTileImage,
             {
               file
             }
@@ -102,6 +102,7 @@ const TileFormStore = types.compose(
           yield self.tileDeleteRequest.send(api.dashboardRepository.deleteTile, {
             tileId: self.currentTile.id
           });
+          return self.tileDeleteRequest.isDone;
         }
       }),
       setTile(tile: TileInterface) {

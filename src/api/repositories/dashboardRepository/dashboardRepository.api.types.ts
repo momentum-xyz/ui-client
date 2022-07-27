@@ -46,12 +46,6 @@ export interface UploadTileImageResponse {
   hash: string;
 }
 
-export interface ImageUploadRequest {
-  file: File;
-}
-
-export interface ImageUploadResponse {}
-
 export interface DeleteTileResponse {}
 export interface DeleteTileRequest {
   tileId: string;

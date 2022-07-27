@@ -20,6 +20,7 @@ import {
 import {TileTypeEnum} from 'core/enums';
 import {TileFormInterface} from 'api';
 import {appVariables} from 'api/constants';
+import {TILES_DROPDOWN_OPTIONS, YOUTUBE_URL_PLACEHOLDER} from 'core/constants';
 
 import * as styled from './TileForm.styled';
 
@@ -168,20 +169,7 @@ const TileForm: FC = () => {
                 <Dropdown
                   placeholder={t('dashboard.tileForm.typePlaceholder')}
                   value={value}
-                  options={[
-                    {
-                      label: t('dashboard.tileForm.textType'),
-                      value: TileTypeEnum.TILE_TYPE_TEXT
-                    },
-                    {
-                      label: t('dashboard.tileForm.imageType'),
-                      value: TileTypeEnum.TILE_TYPE_MEDIA
-                    },
-                    {
-                      label: t('dashboard.tileForm.videoType'),
-                      value: TileTypeEnum.TILE_TYPE_VIDEO
-                    }
-                  ]}
+                  options={TILES_DROPDOWN_OPTIONS}
                   onOptionSelect={(option) => {
                     onChange(option.value);
                     resetField('text_title');
@@ -209,7 +197,7 @@ const TileForm: FC = () => {
                       label={t('dashboard.tileForm.videoLabel')}
                       value={value}
                       onChange={onChange}
-                      placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                      placeholder={YOUTUBE_URL_PLACEHOLDER}
                       isError={!!errors.youtube_url}
                       isCustom
                     />

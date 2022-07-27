@@ -59,8 +59,6 @@ const DashboardPage: FC = () => {
 
   return (
     <styled.Container>
-      {tileDialog.isOpen && <TileForm />}
-      {tileRemoveDialog.isOpen && <RemoveTileDialog />}
       <SpaceTopBar
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
@@ -99,6 +97,8 @@ const DashboardPage: FC = () => {
         onDragEnd={onDragEnd}
         canDrag={spaceStore.isAdmin || spaceStore.isMember}
       />
+      {tileDialog.isOpen && <TileForm />}
+      {tileRemoveDialog.isOpen && <RemoveTileDialog />}
     </styled.Container>
   );
 };
