@@ -6,6 +6,8 @@ import {
   CreateTileResponse,
   DashboardRequestInterface,
   DashboardResponseInterface,
+  DeleteTileRequest,
+  DeleteTileResponse,
   ImageUploadRequest,
   ImageUploadResponse,
   TilesUpdatePositionInterface
@@ -51,4 +53,10 @@ export const createTile: RequestInterface<CreateTileRequest, CreateTileResponse>
   const {data, spaceId, ...restOptions} = options;
   const url = `${dashboardRepositoryApiEndpoints().create}/${spaceId}`;
   return request.post(url, data, restOptions);
+};
+
+export const deleteTile: RequestInterface<DeleteTileRequest, DeleteTileResponse> = (options) => {
+  const {tileId, ...restOptions} = options;
+  const url = `${dashboardRepositoryApiEndpoints().delete}/${tileId}`;
+  return request.post(url, restOptions);
 };

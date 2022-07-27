@@ -15,11 +15,12 @@ import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
 import {Dashboard, TileForm, TopBarActions} from './components';
 import * as styled from './DashboardPage.styled';
+import {RemoveTileDialog} from './components/templates/Dashboard/components/RemoveTileDialog';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
   const {dashboardManager, spaceStore} = collaborationStore;
-  const {dashboard, tileDialog} = dashboardManager;
+  const {dashboard, tileDialog, tileRemoveDialog} = dashboardManager;
   const {favoriteStore} = mainStore;
   const {tileList, onDragEnd} = dashboard;
 
@@ -58,6 +59,7 @@ const DashboardPage: FC = () => {
   return (
     <styled.Container>
       {tileDialog.isOpen && <TileForm />}
+      {tileRemoveDialog.isOpen && <RemoveTileDialog />}
       <TopBar
         title={spaceStore.space.name ?? ''}
         subtitle={t('dashboard.subtitle')}

@@ -44,3 +44,8 @@ export interface ImageUploadRequest {
 }
 
 export interface ImageUploadResponse {}
+
+export interface DeleteTileResponse {}
+export interface DeleteTileRequest {
+  tileId: string;
+}

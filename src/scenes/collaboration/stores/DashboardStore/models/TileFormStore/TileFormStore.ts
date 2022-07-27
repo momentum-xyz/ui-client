@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 
-import {RequestModel, ResetModel} from 'core/models';
+import {RequestModel, ResetModel, TileInterface} from 'core/models';
 import {api, TileFormInterface, UploadTileImageResponse} from 'api';
 import {TileTypeEnum} from 'core/enums';
 
@@ -9,7 +9,8 @@ const TileFormStore = types.compose(
   types
     .model('TileFormStore', {
       tileFormRequest: types.optional(RequestModel, {}),
-      imageUploadRequest: types.optional(RequestModel, {})
+      imageUploadRequest: types.optional(RequestModel, {}),
+      tile: types.maybeNull(types.frozen<TileInterface>())
     })
     .actions((self) => ({
       createTile: flow(function* (spaceId?: string, file?: File, data?: TileFormInterface) {
@@ -59,7 +60,17 @@ const TileFormStore = types.compose(
         }
 
         return self.tileFormRequest.isDone;
-      })
+      }),
+      deleteTile: flow(function* () {
+        if (self.tile) {
+          yield self.tileFormRequest.send(api.dashboardRepository.deleteTile, {
+            tileId: self.tile.id
+          });
+        }
+      }),
+      setTile(tile: TileInterface) {
+        self.tile = tile;
+      }
     }))
 );
 

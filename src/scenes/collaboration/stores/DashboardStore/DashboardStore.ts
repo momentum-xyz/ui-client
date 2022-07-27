@@ -10,6 +10,7 @@ const DashboardStore = types.compose(
   types
     .model('DashboardStore', {
       tileDialog: types.optional(DialogModel, {}),
+      tileRemoveDialog: types.optional(DialogModel, {}),
       tileList: types.optional(TileList, {}),
       dashboard: types.optional(Dashboard, {}),
       tileFormStore: types.optional(TileFormStore, {})
