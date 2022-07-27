@@ -84,7 +84,7 @@ const TileForm: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="Your tile has been created successfully"
+          text={t('messages.tileCreateSuccess')}
           isCloseButton
         />,
         TOAST_COMMON_OPTIONS
@@ -95,7 +95,7 @@ const TileForm: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="There was a problem creating your tile"
+          text={t('messages.tileCreateError')}
           isDanger
           isCloseButton
         />,
@@ -108,7 +108,7 @@ const TileForm: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="Your tile has been updated successfully"
+          text={t('messages.tileUpdateSuccess')}
           isCloseButton
         />,
         TOAST_COMMON_OPTIONS
@@ -119,7 +119,7 @@ const TileForm: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="There was a problem updating your tile"
+          text={t('messages.tileUpdateError')}
           isDanger
           isCloseButton
         />,
@@ -137,11 +137,13 @@ const TileForm: FC = () => {
   return (
     <Dialog
       theme={theme}
-      title="CREATE A NEW TILE"
+      title={t('dashboard.tileForm.title')}
       showCloseButton
       onClose={tileDialog.close}
       approveInfo={{
-        title: currentTile?.id ? 'update tile' : 'create tile',
+        title: currentTile?.id
+          ? t('dashboard.tileForm.updateTile')
+          : t('dashboard.tileForm.createTile'),
         onClick: handleSubmit(formSubmitHandler),
         disabled: selectedType === null
       }}
@@ -151,26 +153,32 @@ const TileForm: FC = () => {
       <styled.Container>
         <styled.Div>
           <styled.DropDownContainer>
-            <Heading type="h4" align="left" label="Tile type" transform="uppercase" isCustom />
+            <Heading
+              type="h4"
+              align="left"
+              label={t('dashboard.tileForm.tileType')}
+              transform="uppercase"
+              isCustom
+            />
             <Controller
               name="type"
               defaultValue={currentTile?.type ? currentTile?.type : ''}
               control={control}
               render={({field: {onChange, value}}) => (
                 <Dropdown
-                  placeholder="Select a type"
+                  placeholder={t('dashboard.tileForm.typePlaceholder')}
                   value={value}
                   options={[
                     {
-                      label: 'Text',
+                      label: t('dashboard.tileForm.textType'),
                       value: TileTypeEnum.TILE_TYPE_TEXT
                     },
                     {
-                      label: 'Image',
+                      label: t('dashboard.tileForm.imageType'),
                       value: TileTypeEnum.TILE_TYPE_MEDIA
                     },
                     {
-                      label: 'Video',
+                      label: t('dashboard.tileForm.videoType'),
                       value: TileTypeEnum.TILE_TYPE_VIDEO
                     }
                   ]}
@@ -198,7 +206,7 @@ const TileForm: FC = () => {
                   rules={{required: true}}
                   render={({field: {onChange, value}}) => (
                     <Input
-                      label="Youtube video url"
+                      label={t('dashboard.tileForm.videoLabel')}
                       value={value}
                       onChange={onChange}
                       placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
@@ -220,11 +228,11 @@ const TileForm: FC = () => {
                   rules={{required: true}}
                   render={({field: {onChange, value}}) => (
                     <Input
-                      label="Title"
+                      label={t('dashboard.tileForm.textLabel')}
                       value={value}
                       onChange={onChange}
                       isError={!!errors.text_title}
-                      placeholder="Please choose a title"
+                      placeholder={t('dashboard.tileForm.textPlaceholder')}
                       isCustom
                     />
                   )}
@@ -238,10 +246,10 @@ const TileForm: FC = () => {
                   rules={{required: true}}
                   render={({field: {onChange, value}}) => (
                     <TextArea
-                      name="description"
+                      name={t('dashboard.tileForm.descriptionLabel')}
                       value={value}
                       onChange={onChange}
-                      placeholder="Please write a description"
+                      placeholder={t('dashboard.tileForm.descriptionPlaceholder')}
                       isError={!!errors.text_description}
                       isResizable={true}
                     />

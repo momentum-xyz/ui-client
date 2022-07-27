@@ -28,8 +28,7 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="Your tile has been successfully deleted"
-          isCloseButton
+          text={t('titles.tileRemoveSuccess')}
         />,
         TOAST_COMMON_OPTIONS
       );
@@ -39,7 +38,7 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="There was a problem deleting your tile"
+          text={t('titles.tileRemoveError')}
           isCloseButton
         />,
         TOAST_COMMON_OPTIONS
@@ -49,7 +48,7 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
 
   return (
     <Dialog
-      title="remove Tile from dashboard"
+      title={t('dashboard.removeTileForm.title')}
       approveInfo={{
         title: t('actions.no'),
         onClick: tileRemoveDialog.close
@@ -64,7 +63,7 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
       closeOnBackgroundClick={false}
     >
       <styled.Container>
-        <Text text="Are you sure you want to remove this tile?" size="m" />
+        <Text text={t('dashboard.removeTileForm.message')} size="m" />
       </styled.Container>
     </Dialog>
   );
