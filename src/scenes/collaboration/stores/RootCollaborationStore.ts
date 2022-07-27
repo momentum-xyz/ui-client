@@ -12,14 +12,14 @@ const RootCollaborationStore = types
     spaceStore: types.optional(SpaceStore, {}),
     calendarStore: types.optional(CalendarStore, {}),
     dashboard: types.optional(Dashboard, {}),
-    dashboardManager: types.optional(DashboardStore, {}),
+    dashboardStore: types.optional(DashboardStore, {}),
     miroBoardStore: types.optional(MiroBoardStore, {})
   })
   .actions((self) => ({
     init(spaceId: string) {
       self.spaceStore.setSpace(spaceId);
       self.spaceStore.fetchSpaceInformation();
-      self.dashboardManager.dashboard.fetchDashboard(spaceId);
+      self.dashboardStore.dashboard.fetchDashboard(spaceId);
     }
   }));
 

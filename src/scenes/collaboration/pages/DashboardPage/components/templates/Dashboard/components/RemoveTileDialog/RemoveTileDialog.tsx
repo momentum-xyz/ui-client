@@ -10,8 +10,8 @@ interface PropsInterface {}
 
 const RemoveTileDialog: FC<PropsInterface> = () => {
   const {collaborationStore} = useStore();
-  const {dashboardManager, spaceStore} = collaborationStore;
-  const {tileRemoveDialog, tileFormStore, dashboard} = dashboardManager;
+  const {dashboardStore, spaceStore} = collaborationStore;
+  const {tileRemoveDialog, tileFormStore, dashboard} = dashboardStore;
 
   useEffect(() => {
     return () => tileFormStore.resetModel();
@@ -27,7 +27,7 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text={t('titles.tileRemoveSuccess')}
+          text={t('messages.tileRemoveSuccess')}
         />,
         TOAST_COMMON_OPTIONS
       );
@@ -36,7 +36,7 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text={t('titles.tileRemoveError')}
+          text={t('messages.tileRemoveError')}
           isCloseButton
         />,
         TOAST_COMMON_OPTIONS

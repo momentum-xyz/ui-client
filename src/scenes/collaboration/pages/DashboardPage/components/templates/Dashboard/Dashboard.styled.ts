@@ -22,7 +22,6 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   min-height: 0;
-  padding: 0 10px;
   margin-top: 10px;
 `;
 

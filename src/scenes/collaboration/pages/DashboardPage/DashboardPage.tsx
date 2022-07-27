@@ -19,8 +19,8 @@ import {RemoveTileDialog} from './components/templates/Dashboard/components/Remo
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
-  const {dashboardManager, spaceStore} = collaborationStore;
-  const {dashboard, tileDialog, tileRemoveDialog} = dashboardManager;
+  const {dashboardStore, spaceStore} = collaborationStore;
+  const {dashboard, tileDialog, tileRemoveDialog} = dashboardStore;
   const {favoriteStore} = mainStore;
   const {tileList, onDragEnd} = dashboard;
 
