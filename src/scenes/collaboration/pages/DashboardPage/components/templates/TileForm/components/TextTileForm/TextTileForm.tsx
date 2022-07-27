@@ -14,7 +14,7 @@ interface PropsInterface {
   currentTile: TileInterface | null;
   spaceId: string;
   createTile: (spaceId: string, data: TextTileFormInterface) => void;
-  updateTile: (spaceId: string, data: TextTileFormInterface) => void;
+  updateTile: (tileId: string, data: TextTileFormInterface) => void;
   onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
 }

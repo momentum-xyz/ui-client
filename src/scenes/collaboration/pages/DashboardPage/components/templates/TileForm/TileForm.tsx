@@ -24,11 +24,7 @@ const TileForm: FC = () => {
   const [image, setImage] = useState<File | undefined>(undefined);
   const [imageError, setImageError] = useState<boolean>(false);
 
-  const {
-    control,
-    formState: {errors},
-    resetField
-  } = useForm<TileFormInterface>();
+  const {control, resetField} = useForm<TileFormInterface>();
 
   useEffect(() => {
     setSelectedType(currentTile?.type ?? '');
@@ -159,7 +155,14 @@ const TileForm: FC = () => {
             />
           </styled.DropDownContainer>
           {selectedType === TileTypeEnum.TILE_TYPE_VIDEO && (
-            <VideoTileForm control={control} errors={errors} currentTile={currentTile} />
+            <VideoTileForm
+              currentTile={currentTile}
+              spaceId={spaceStore.space.id ?? ''}
+              onClose={tileDialog.close}
+              createTile={tileFormStore.createVideoTile}
+              updateTile={tileFormStore.updateVideoTile}
+              fetchDashboard={dashboard.fetchDashboard}
+            />
           )}
           {selectedType === TileTypeEnum.TILE_TYPE_TEXT && (
             <TextTileForm
