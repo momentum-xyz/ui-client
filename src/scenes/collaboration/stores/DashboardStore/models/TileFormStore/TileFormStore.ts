@@ -85,6 +85,19 @@ const TileFormStore = types.compose(
         });
         return self.tileCreateRequest.isDone;
       }),
+      updateTextTile: flow(function* (tileId: string, data: TileFormInterface) {
+        yield self.tileUpdateRequest.send(api.dashboardRepository.updateTile, {
+          tileId,
+          data: {
+            ...self.currentTile,
+            content: {
+              title: data.text_title,
+              text: data.text_description
+            }
+          }
+        });
+        return self.tileUpdateRequest.isDone;
+      }),
       updateImageTile: flow(function* (tileId?: string, file?: File) {
         const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
           api.resourcesRepository.uploadTileImage,

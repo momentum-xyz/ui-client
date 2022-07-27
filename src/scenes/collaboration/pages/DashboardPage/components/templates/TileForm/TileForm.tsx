@@ -167,6 +167,7 @@ const TileForm: FC = () => {
               spaceId={spaceStore.space.id ?? ''}
               onClose={tileDialog.close}
               createTile={tileFormStore.createTextTile}
+              updateTile={tileFormStore.updateTextTile}
               fetchDashboard={dashboard.fetchDashboard}
             />
           )}

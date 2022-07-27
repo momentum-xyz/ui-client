@@ -14,6 +14,7 @@ interface PropsInterface {
   currentTile: TileInterface | null;
   spaceId: string;
   createTile: (spaceId: string, data: TextTileFormInterface) => void;
+  updateTile: (spaceId: string, data: TextTileFormInterface) => void;
   onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
 }
@@ -22,6 +23,7 @@ const TextTileForm: FC<PropsInterface> = ({
   currentTile,
   spaceId,
   createTile,
+  updateTile,
   onClose,
   fetchDashboard
 }) => {
@@ -35,32 +37,64 @@ const TextTileForm: FC<PropsInterface> = ({
   const formSubmitHandler: SubmitHandler<TextTileFormInterface> = async (
     data: TextTileFormInterface
   ) => {
-    const isCreateSucceed = await createTile(spaceId, data);
-    onClose();
-    // @ts-ignore
-    if (isCreateSucceed) {
-      await fetchDashboard(spaceId);
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('messages.tileCreateSuccess')}
-          isCloseButton
-        />,
-        TOAST_COMMON_OPTIONS
-      );
+    if (!currentTile?.id) {
+      const isSucceed = await createTile(spaceId, data);
+      onClose();
+      // @ts-ignore
+      if (isSucceed) {
+        await fetchDashboard(spaceId);
+        toast.info(
+          <ToastContent
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.tileCreateSuccess')}
+            isCloseButton
+          />,
+          TOAST_COMMON_OPTIONS
+        );
+      } else {
+        toast.error(
+          <ToastContent
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.tileCreateError')}
+            isDanger
+            isCloseButton
+          />,
+          TOAST_COMMON_OPTIONS
+        );
+      }
     } else {
-      toast.error(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('messages.tileCreateError')}
-          isDanger
-          isCloseButton
-        />,
-        TOAST_COMMON_OPTIONS
-      );
+      const isSucceed = await updateTile(currentTile.id, data);
+      onClose();
+      // @ts-ignore
+      if (isSucceed) {
+        await fetchDashboard(spaceId);
+        if (isSucceed) {
+          toast.info(
+            <ToastContent
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('messages.tileUpdateSuccess')}
+              isCloseButton
+            />,
+            TOAST_COMMON_OPTIONS
+          );
+        } else {
+          toast.error(
+            <ToastContent
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('messages.tileUpdateError')}
+              isDanger
+              isCloseButton
+            />,
+            TOAST_COMMON_OPTIONS
+          );
+        }
+      }
     }
+
     reset();
   };
 
@@ -103,7 +137,10 @@ const TextTileForm: FC<PropsInterface> = ({
         />
       </styled.TextItem>
       <styled.ButtonWrapper>
-        <Button label="create tile" onClick={handleSubmit(formSubmitHandler)} />
+        <Button
+          label={currentTile?.id ? 'update tile' : 'create tile'}
+          onClick={handleSubmit(formSubmitHandler)}
+        />
       </styled.ButtonWrapper>
     </styled.Item>
   );
