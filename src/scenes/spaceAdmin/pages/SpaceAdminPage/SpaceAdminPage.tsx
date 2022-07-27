@@ -25,7 +25,7 @@ const SpaceAdminPage: FC = () => {
   const {spaceManagerStore} = spaceAdminStore;
   const {
     tokenRuleReviewDialog,
-    space: spaceStore,
+    space,
     tokenRuleFormDialog,
     tokenFormDialog,
     tokenRuleReviewStore,
@@ -40,20 +40,20 @@ const SpaceAdminPage: FC = () => {
     }
   };
 
+  if (!space) {
+    return null;
+  }
+
   return (
     <styled.Container>
-      <TopBar
-        title={spaceStore?.name ?? ''}
-        subtitle={t('spaceAdmin.subtitle')}
-        onClose={handleClose}
-      />
+      <TopBar title={space.name ?? ''} subtitle={t('spaceAdmin.subtitle')} onClose={handleClose} />
       <styled.Body>
-        {spaceStore.isAdmin ? (
+        {space.isAdmin ? (
           <>
             <SpaceDetailsPanel />
             <TokenRulesPanel />
             <SpaceMembersPanel />
-            {spaceStore.allowedSpaceTypes.length > 0 && <SubSpacesPanel />}
+            {space.allowedSpaceTypes.length > 0 && <SubSpacesPanel />}
           </>
         ) : (
           <styled.NoAccess>

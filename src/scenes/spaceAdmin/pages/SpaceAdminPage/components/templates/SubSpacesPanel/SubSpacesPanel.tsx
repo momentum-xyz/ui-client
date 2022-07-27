@@ -16,7 +16,6 @@ import * as styled from './SubSpacesPanel.styled';
 const SubSpacesPanel: FC = () => {
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {removeSubSpaceConfirmationDialog, addSubSpaceDialog, space} = spaceManagerStore;
-  const {allowedSpaceTypesRequest, allowedSpaceTypes} = space;
 
   const history = useHistory();
 
@@ -38,12 +37,12 @@ const SubSpacesPanel: FC = () => {
 
     spaceManagerStore.deleteSubSpace(selectedSpace.id).then(() => {
       removeSubSpaceConfirmationDialog.close();
-      space.fetchSpaceInformation();
+      space?.fetchSpaceInformation();
     });
   };
 
   const handleAddSubSpace = () => {
-    if (space.id) {
+    if (space) {
       addSubSpaceDialog.open();
     }
   };
@@ -57,14 +56,14 @@ const SubSpacesPanel: FC = () => {
             onClose={removeSubSpaceConfirmationDialog.close}
           />
         )}
-        {addSubSpaceDialog.isOpen && space.id && allowedSpaceTypesRequest.isDone && (
+        {addSubSpaceDialog.isOpen && space && space.allowedSpaceTypesRequest.isDone && (
           <AddSubSpaceDialog
             parentId={space.id}
             onClose={addSubSpaceDialog.close}
-            allowedSubSpaceTypes={allowedSpaceTypes}
+            allowedSubSpaceTypes={space.allowedSpaceTypes}
           />
         )}
-        {space.subSpaces.map((subSpace) => (
+        {space?.subSpaces.map((subSpace) => (
           <AdminListItem
             key={subSpace.id}
             name={subSpace.name}

@@ -5,7 +5,6 @@ import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {UnityService} from 'shared/services';
 import {IconSvg, Text, TopBar, Button} from 'ui-kit';
 
 import {TopBarActions} from './components/templates/TopBarActions';
@@ -14,36 +13,40 @@ import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
-  const {agoraStore, favoriteStore} = mainStore;
+  const {agoraStore, favoriteStore, unityStore} = mainStore;
   const {dashboard, space} = collaborationStore;
   const {tileList, onDragEnd} = dashboard;
 
   const history = useHistory();
 
   useEffect(() => {
-    if (space.id) {
+    if (space) {
       dashboard.fetchDashboard(space.id);
       favoriteStore.setSpaceId(space.id);
     }
     return () => {
       dashboard.resetModel();
     };
-  }, [dashboard, space.id]);
+  }, [dashboard, favoriteStore, space]);
 
   const leaveCollaborationSpace = async () => {
-    if (collaborationStore.space.isSet && collaborationStore.space.id) {
-      UnityService.leaveSpace(collaborationStore.space.id);
+    if (space) {
+      unityStore.leaveSpace(space.id);
       await agoraStore.leaveMeetingSpace();
-      collaborationStore.resetModel();
+      collaborationStore.leaveMeetingSpace();
 
       history.push(ROUTES.base);
     }
   };
 
+  if (!space) {
+    return null;
+  }
+
   return (
     <styled.Container>
       <TopBar
-        title={space.name ?? ''}
+        title={space?.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
         actions={

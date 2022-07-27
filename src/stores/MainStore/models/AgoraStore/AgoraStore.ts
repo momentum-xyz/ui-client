@@ -11,14 +11,18 @@ import AgoraRTC, {
 import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 import {ResetModel, RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
-import {ParticipantRole, StageModeRequestEnum, StageModeUserRoleEnum} from 'core/enums';
+import {
+  ModerationEnum,
+  ParticipantRole,
+  StageModeRequestEnum,
+  StageModeUserRoleEnum
+} from 'core/enums';
 import {api} from 'api';
 import CONFIG from 'config/config';
 import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
 import {bytesToUuid} from 'core/utils';
-import {AgoraRemoteUserType} from 'core/types';
 
-import {StageModeUser, UserDevicesStore} from './models';
+import {AgoraRemoteUser, AgoraRemoteUserInterface, StageModeUser, UserDevicesStore} from './models';
 
 const AgoraStore = types
   .compose(
@@ -29,6 +33,7 @@ const AgoraStore = types
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
       userDevicesStore: types.optional(UserDevicesStore, {}),
+      remoteUsers: types.optional(types.array(AgoraRemoteUser), []),
 
       // Chat
       isChatOpen: false,
@@ -55,6 +60,7 @@ const AgoraStore = types
       stageModeInviteRequest: types.optional(RequestModel, {}),
       stageModeRequestRequest: types.optional(RequestModel, {}),
       stageModeMuteRequest: types.optional(RequestModel, {}),
+      stageModeKickRequest: types.optional(RequestModel, {}),
       muteRequest: types.optional(RequestModel, {}),
       muteAllRequest: types.optional(RequestModel, {}),
       toggleStageModeRequest: types.optional(RequestModel, {}),
@@ -66,28 +72,12 @@ const AgoraStore = types
     stageModeClient: IAgoraRTCClient;
     screenShareClient?: IAgoraRTCClient;
     _screenShare?: IRemoteVideoTrack;
-    clientRoleOptions: {level: number};
-    _remoteUsers: AgoraRemoteUserType[];
   }>(() => ({
     videoCallClient: AgoraRTC.createClient({mode: 'rtc', codec: 'h264'}),
     stageModeClient: AgoraRTC.createClient({mode: 'live', codec: 'vp8'}),
-    _screenShare: undefined,
-
-    clientRoleOptions: {
-      // Set latency level to low latency
-      level: 1
-    },
-
-    // Stage Mode
-    _remoteUsers: []
+    _screenShare: undefined
   }))
   .views((self) => ({
-    get remoteUsers(): AgoraRemoteUserType[] {
-      return self._remoteUsers;
-    },
-    set remoteUsers(value: AgoraRemoteUserType[]) {
-      self._remoteUsers = value;
-    },
     get screenShare(): IRemoteVideoTrack | undefined {
       return self._screenShare;
     },
@@ -194,19 +184,34 @@ const AgoraStore = types
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
 
       if (!isScreenshare) {
-        const foundUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
-
-        if (foundUser) {
+        if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
           yield (self.isStageMode ? self.stageModeClient : self.videoCallClient).subscribe(
-            foundUser,
+            user,
             mediaType
           );
+        }
 
-          if (mediaType === 'audio' && !foundUser.audioTrack?.isPlaying) {
-            foundUser.audioTrack?.play();
+        if (user.hasAudio && mediaType === 'audio') {
+          user.audioTrack?.play();
+        }
+
+        const updatedUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
+
+        if (updatedUser) {
+          updatedUser.participantInfo = user;
+          if (mediaType === 'audio') {
+            updatedUser.isMuted = !user.hasAudio;
+            updatedUser.audioTrack = user.audioTrack;
+          } else {
+            updatedUser.cameraOff = !user.hasVideo;
+            updatedUser.videoTrack = user.videoTrack;
           }
-        } else {
-          self.remoteUsers = [...self.remoteUsers, user];
+
+          self.remoteUsers = cast(
+            self.remoteUsers.map((remoteUser) =>
+              remoteUser.uid === user.uid ? updatedUser : remoteUser
+            )
+          );
         }
       } else {
         yield self.videoCallClient.subscribe(user, mediaType);
@@ -224,15 +229,25 @@ const AgoraStore = types
       } else {
         const foundUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
 
-        if (foundUser) {
+        if (foundUser?.participantInfo) {
           if (mediaType === 'audio' && foundUser.audioTrack?.isPlaying) {
             foundUser.audioTrack?.stop();
           }
 
           yield (self.isStageMode ? self.stageModeClient : self.videoCallClient).unsubscribe(
-            foundUser,
+            foundUser.participantInfo,
             mediaType
           );
+
+          const updatedUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
+
+          if (updatedUser) {
+            if (mediaType === 'audio') {
+              updatedUser.isMuted = true;
+            } else {
+              updatedUser.cameraOff = true;
+            }
+          }
         }
       }
     }),
@@ -241,18 +256,26 @@ const AgoraStore = types
       if (!isScreenshare) {
         const foundUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
 
+        const newUser: AgoraRemoteUserInterface = cast({
+          uid: user.uid,
+          participantInfo: user,
+          isMuted: true,
+          cameraOff: true
+        });
+
         if (!foundUser) {
-          self.remoteUsers = [...self.remoteUsers, user];
+          self.remoteUsers = cast([...self.remoteUsers, newUser]);
         }
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
-      const userId = user?.uid as string;
-      const isScreenshare = userId.split('|')[0] === 'ss';
+      const isScreenshare = (user.uid as string).split('|')[0] === 'ss';
       if (isScreenshare) {
         self.screenShare = undefined;
       } else {
-        self.remoteUsers = self.remoteUsers.filter((remoteUser) => remoteUser.uid !== userId);
+        self.remoteUsers = cast(
+          self.remoteUsers.filter((remoteUser) => remoteUser.uid !== user.uid)
+        );
       }
     },
     handleConnectionStateChange(
@@ -271,10 +294,9 @@ const AgoraStore = types
 
       self.localSoundLevel = currentUser?.level ?? 0;
 
-      self.remoteUsers = self.remoteUsers.map<AgoraRemoteUserType>((remoteUser) => {
+      self.remoteUsers.forEach((remoteUser) => {
         const user = users.find((user) => remoteUser.uid === user.uid);
         remoteUser.soundLevel = user?.level ?? 0;
-        return remoteUser;
       });
     }
   }))
@@ -472,7 +494,7 @@ const AgoraStore = types
 
       yield self.videoCallClient.leave();
       self.screenShare = undefined;
-      self.remoteUsers = [];
+      self.remoteUsers = cast([]);
     }),
 
     // --- STAGE MODE ---
@@ -519,7 +541,7 @@ const AgoraStore = types
       self.userDevicesStore.cleanupLocalTracks();
 
       yield self.stageModeClient.leave();
-      self.remoteUsers = [];
+      self.remoteUsers = cast([]);
       self.joinedStageMode = false;
       self.isOnStage = false;
       self.isStageMode = false;
@@ -546,15 +568,10 @@ const AgoraStore = types
 
       yield self.stageModeClient.unpublish();
       self.isOnStage = false;
-      yield self.stageModeClient.setClientRole('audience', self.clientRoleOptions);
+      yield self.stageModeClient.setClientRole('audience', {
+        level: 1
+      });
     }),
-    moveToAudience(userId: string) {
-      const userToBeMoved = self.stageModeUsers.find((user) => user.uid === userId);
-
-      if (userToBeMoved) {
-        userToBeMoved.role = ParticipantRole.AUDIENCE_MEMBER;
-      }
-    },
 
     // --- CHAT TOGGLING ---
 
@@ -623,7 +640,19 @@ const AgoraStore = types
       }
 
       self.spaceId = undefined;
-    })
+    }),
+
+    moveToAudience(userId: string) {
+      const userToBeMoved = self.stageModeUsers.find((user) => user.uid === userId);
+
+      if (userToBeMoved) {
+        userToBeMoved.role = ParticipantRole.AUDIENCE_MEMBER;
+      }
+
+      if (userId === self.userId) {
+        self.leaveStage();
+      }
+    }
   }))
   // Stage mode actions
   .actions((self) => ({
@@ -646,6 +675,16 @@ const AgoraStore = types
     }),
     kickUserOffStage: flow(function* (userId: string) {
       // TODO: Add API call to kick somone off stage
+      if (!self.spaceId) {
+        return;
+      }
+
+      yield self.stageModeKickRequest.send(api.stageModeRepository.admitOrKick, {
+        spaceId: self.spaceId,
+        userId,
+        modType: ModerationEnum.KICK
+      });
+
       if (userId === self.userId) {
         self.moveToAudience(userId);
       } else {
@@ -664,7 +703,7 @@ const AgoraStore = types
       });
     },
     removeStageModeUser(userId: string) {
-      self.remoteUsers = self.remoteUsers.filter((user) => user.uid !== userId);
+      self.remoteUsers = cast(self.remoteUsers.filter((user) => user.uid !== userId));
     }
   }))
   .views((self) => ({

@@ -19,7 +19,7 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
   const {parentId, allowedSubSpaceTypes} = props;
 
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {space: spaceStore} = spaceManagerStore;
+  const {space} = spaceManagerStore;
 
   const {
     control,
@@ -29,8 +29,8 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
   } = useForm<{type: string; name: string}>();
 
   const formSubmitHandler: SubmitHandler<{type: string; name: string}> = ({type, name}) => {
-    spaceStore.addSubSpace(parentId, name, type).then(() => {
-      spaceStore.fetchSpaceInformation();
+    space?.addSubSpace(parentId, name, type).then(() => {
+      space?.fetchSpaceInformation();
 
       toast.info(
         <ToastContent

@@ -21,7 +21,6 @@ import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useGetSpace} from 'hooks/api/useSpaceService';
-import {AgoraRemoteUserType} from 'core/types';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
@@ -41,7 +40,7 @@ const CommunicationLayer = () => {
   const {userDevicesStore} = agoraStore;
   const {clearPopups} = useStageModePopupQueueContext();
 
-  const [isModerator, , ,] = useModerator(collaborationStore.space.id ?? '');
+  const [isModerator, , ,] = useModerator(space?.id ?? '');
 
   const stageModeAudience = useMemo(() => {
     return agoraStore.isStageMode
@@ -64,11 +63,11 @@ const CommunicationLayer = () => {
 
   useEffect(() => {
     clearPopups();
-    if (space.id) {
+    if (space) {
       communicationLayerStore.setKicked(false);
       communicationLayerStore.selectParticipant(undefined);
     }
-  }, [clearPopups, communicationLayerStore, space.id]);
+  }, [clearPopups, communicationLayerStore, space]);
 
   usePosBusEvent('meeting-mute', userDevicesStore.mute);
 
@@ -100,6 +99,8 @@ const CommunicationLayer = () => {
   });
 
   usePosBusEvent('stage-mode-mute', () => {
+    userDevicesStore.mute();
+
     toast.info(
       <ToastContent
         headerIconName="alert"
@@ -228,7 +229,7 @@ const CommunicationLayer = () => {
                     iconName="microphoneOff"
                     size="extra-large"
                     onClick={() => {
-                      communicationLayerStore.muteAllParticipants(space.id);
+                      communicationLayerStore.muteAllParticipants(space?.id);
                     }}
                   />
                 </styled.MuteButton>
@@ -260,11 +261,15 @@ relative
                       ...user,
                       soundLevel: 0,
                       hasVideo: false,
-                      hasAudio: false
+                      hasAudio: false,
+                      isMuted: true,
+                      cameraOff: true,
+                      videoTrack: undefined,
+                      audioTrack: undefined
                     };
                   })
                 : agoraStore.remoteUsers
-              ).map((participant: AgoraRemoteUserType) => (
+              ).map((participant) => (
                 <Transition
                   key={`participant-${participant.uid as string}`}
                   appear={true}
@@ -279,7 +284,7 @@ relative
                     key={`participant-${participant.uid as string}`}
                     participant={participant}
                     canEnterStage={agoraStore.canEnterStage}
-                    totalParticipants={numberOfPeople}
+                    totalParticipants={agoraStore.remoteUsers.length}
                   />
                 </Transition>
               ))}

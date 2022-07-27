@@ -38,7 +38,7 @@ const TokenRuleForm: FC<PropsInterface> = () => {
   } = useForm<TokenRuleFormInterface>();
 
   useEffect(() => {
-    if (space.id && tokenRuleFormStore.tokenRuleFormRequest.isDone) {
+    if (space && tokenRuleFormStore.tokenRuleFormRequest.isDone) {
       tokenRulesListStore.fetchTokenRules(space.id);
     }
   }, [tokenRuleFormStore.tokenRuleFormRequest.state]);
@@ -61,7 +61,7 @@ const TokenRuleForm: FC<PropsInterface> = () => {
   const formSubmitHandler: SubmitHandler<TokenRuleFormInterface> = (
     data: TokenRuleFormInterface
   ) => {
-    if (space.id) {
+    if (space) {
       tokenRuleFormStore.createTokenRule(data, space.id);
     }
   };

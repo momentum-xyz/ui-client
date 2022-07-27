@@ -27,7 +27,7 @@ const CalendarPage: FC = () => {
   const theme = useTheme();
 
   const handleClose = async () => {
-    if (collaborationStore.space.isSet && collaborationStore.space.id) {
+    if (collaborationStore.space) {
       UnityService.triggerInteractionMsg?.(
         PosBusEventEnum.LeftSpace,
         collaborationStore.space.id,
@@ -52,7 +52,7 @@ const CalendarPage: FC = () => {
   // TODO , move to Calendar world page
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (!space.id) {
+    if (!space) {
       return;
     }
 
@@ -60,7 +60,7 @@ const CalendarPage: FC = () => {
   };
 
   const handleEventDelete = async () => {
-    if (space.id) {
+    if (space) {
       if (await calendarStore.removeEvent(space.id)) {
         toast.info(
           <ToastContent
@@ -85,12 +85,16 @@ const CalendarPage: FC = () => {
   };
 
   useEffect(() => {
-    if (space.id) {
+    if (space) {
       eventListStore.fetchEvents(space.id);
     }
 
     return () => eventListStore.resetModel();
-  }, [eventListStore, space.id]);
+  }, [eventListStore, space]);
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <styled.Container>

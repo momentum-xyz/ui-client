@@ -23,7 +23,7 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
   const {mainStore, collaborationStore} = useStore();
   const {agoraStore} = mainStore;
 
-  const open = agoraStore.isChatOpen && !!collaborationStore.space.isSet;
+  const open = agoraStore.isChatOpen && !!collaborationStore.space;
 
   const {
     messages,

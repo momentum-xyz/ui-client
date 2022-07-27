@@ -65,7 +65,7 @@ const ExplorePanel: FC = () => {
         </>
       )}
       {!exploreStore.isSearching &&
-        (exploreStore.selectedSpace.didFetchSpaceInformation ? (
+        (exploreStore.selectedSpace?.didFetchSpaceInformation ? (
           <styled.Body>
             {exploreStore.previousItem && exploreStore.selectedSpace?.id !== worldStore.worldId ? (
               <SelectedSpace />
@@ -73,7 +73,7 @@ const ExplorePanel: FC = () => {
               <>
                 <styled.WorldNameContainer>
                   <Heading
-                    label={selectedSpace.name ?? ''}
+                    label={selectedSpace?.name ?? ''}
                     type="h1"
                     align="left"
                     transform="uppercase"

@@ -134,6 +134,10 @@ const StageModeGuestLayout: React.FC = () => {
     handleUserRequest
   ]);
 
+  if (!collaborationStore.space) {
+    return null;
+  }
+
   return (
     <Page
       title={collaborationStore.space.name || ''}

@@ -42,12 +42,12 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
 
   useEffect(() => {
     if (applyTokenRuleStore.tokenRuleApplied) {
-      tokenRulesListStore.fetchTokenRules(space.id);
+      tokenRulesListStore.fetchTokenRules(space?.id);
     }
   }, [applyTokenRuleStore.applyRequest.state]);
 
   const formSubmitHandler: SubmitHandler<ApplyTokenRuleInterface> = ({role, tokenGroupUserId}) => {
-    if (space.id) {
+    if (space) {
       applyTokenRuleStore.applyTokenRule(tokenGroupUserId, role === TokenRuleRoles.ADMIN, space.id);
     }
   };

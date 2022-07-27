@@ -11,20 +11,20 @@ import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
 import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useStore} from 'shared/hooks';
-import {AgoraRemoteUserType} from 'core/types';
+import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 
 import {ParticipantMenu} from '../ParticipantMenu';
 
 export interface RemoteParticipantProps {
-  participant: AgoraRemoteUserType;
-  totalParticipants: number;
+  participant: AgoraRemoteUserInterface;
   canEnterStage: boolean;
+  totalParticipants: number;
 }
 
 const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
-  totalParticipants,
-  canEnterStage
+  canEnterStage,
+  totalParticipants
 }) => {
   const {agoraStore} = useStore().mainStore;
   const videoRef = useRef<HTMLDivElement>(null);
@@ -42,26 +42,30 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   const userName = user?.name || id;
 
-  const noVideo = totalParticipants > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+  const maximumParticipantsReached = totalParticipants > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   useEffect(() => {
     if (
-      participant.hasVideo &&
+      !participant.cameraOff &&
       videoRef.current &&
-      !noVideo &&
-      !participant.videoTrack?.isPlaying
+      !maximumParticipantsReached &&
+      participant.videoTrack &&
+      !participant.videoTrack.isPlaying
     ) {
-      participant.videoTrack?.play(videoRef.current);
+      participant.videoTrack.play(videoRef.current);
     }
 
-    if ((noVideo || !participant.hasVideo) && participant.videoTrack?.isPlaying) {
+    if (
+      (maximumParticipantsReached || participant.cameraOff) &&
+      participant.videoTrack?.isPlaying
+    ) {
       participant.videoTrack?.stop();
     }
 
     return () => {
       participant.videoTrack?.stop();
     };
-  }, [noVideo, participant.hasVideo, participant.videoTrack]);
+  }, [maximumParticipantsReached, participant.cameraOff, participant.videoTrack]);
 
   const handleStageModeUserClick = () => {
     inviteOnStageModalRef.current?.open();
@@ -78,14 +82,14 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   const handleRemoveParticipant = () => {
     communicationLayerStore.removeParticipant(
-      space.id,
+      space?.id,
       communicationLayerStore.selectedParticipant
     );
     communicationLayerStore.selectParticipant(undefined);
   };
 
   const handleMuteParticipant = () => {
-    communicationLayerStore.muteParticipant(space.id, communicationLayerStore.selectedParticipant);
+    communicationLayerStore.muteParticipant(space?.id, communicationLayerStore.selectedParticipant);
     communicationLayerStore.selectParticipant(undefined);
   };
 
@@ -152,7 +156,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
             )}
           </div>
         </div>
-        {!participant.hasAudio && !agoraStore.isStageMode && (
+        {participant.isMuted && !agoraStore.isStageMode && (
           <MicOff
             className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5"
             style={{top: '70px'}}

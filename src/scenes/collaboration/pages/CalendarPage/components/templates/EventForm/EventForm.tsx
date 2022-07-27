@@ -51,7 +51,7 @@ const EventForm: FC = () => {
       data.web_link = null;
     }
 
-    if (space.id) {
+    if (space) {
       let isSuccess = false;
 
       if (currentEvent?.id) {

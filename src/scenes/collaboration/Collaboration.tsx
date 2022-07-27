@@ -63,7 +63,7 @@ const Collaboration: FC = () => {
     return () => {
       agoraStore.leaveMeetingSpace();
     };
-  }, [agoraStore, collaborationStore, collaborationStore.space, sessionStore.userId, spaceId, t]);
+  }, [agoraStore, collaborationStore, sessionStore.userId, spaceId, t]);
 
   useEffect(() => {
     if (agoraStore.screenShare) {
@@ -72,7 +72,7 @@ const Collaboration: FC = () => {
   }, [agoraStore.screenShare, history, spaceId]);
 
   usePosBusEvent('posbus-connected', () => {
-    if (collaborationStore.space.id) {
+    if (collaborationStore.space) {
       unityStore.triggerInteractionMessage(
         PosBusEventEnum.EnteredSpace,
         collaborationStore.space.id,
@@ -143,6 +143,7 @@ const Collaboration: FC = () => {
 
   usePosBusEvent('stage-mode-user-joined', agoraStore.addStageModeUser);
   usePosBusEvent('stage-mode-user-left', agoraStore.removeStageModeUser);
+  usePosBusEvent('stage-mode-kick', agoraStore.moveToAudience);
 
   useEffect(() => {
     navigator.mediaDevices.ondevicechange = () => {

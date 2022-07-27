@@ -114,6 +114,10 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
     return null;
   }, [agoraStore.stopScreenShare, screenShareClient]);
 
+  if (!collaborationStore.space) {
+    return null;
+  }
+
   return (
     <Page
       title={collaborationStore.space.name || ''}

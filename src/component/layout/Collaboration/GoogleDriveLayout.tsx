@@ -20,7 +20,7 @@ const GoogleDriveLayout: FC = () => {
   const {collaborationStore} = useStore();
   const {space} = collaborationStore;
   const [googledrive, , , refetch] = useIntegrationFetch(
-    space.id?.toString() ?? '',
+    space?.id?.toString() ?? '',
     IntegrationTypeEnum.GOOGLE_DRIVE
   );
 
@@ -54,7 +54,7 @@ const GoogleDriveLayout: FC = () => {
           // embedUrl: doc[(window as any).google.picker.Document.EMBEDDABLE_URL]
         };
 
-        if (space.id) {
+        if (space) {
           addGoogleDriveFile({
             spaceId: space.id,
             integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
@@ -65,7 +65,7 @@ const GoogleDriveLayout: FC = () => {
         }
       }
     },
-    [addGoogleDriveFile, refetch, space.id]
+    [addGoogleDriveFile, refetch, space]
   );
 
   const closeGoogleDriveDocument = useCallback(() => {
@@ -77,7 +77,7 @@ const GoogleDriveLayout: FC = () => {
       url: '',
       embedUrl: ''
     };
-    if (space.id) {
+    if (space) {
       closeGoogleDrive({
         integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
         spaceId: space.id,
@@ -86,7 +86,7 @@ const GoogleDriveLayout: FC = () => {
         refetch();
       });
     }
-  }, [closeGoogleDrive, refetch, space.id]);
+  }, [closeGoogleDrive, refetch, space]);
 
   const openGoogleDriveDialog = useMemo(() => {
     return (
@@ -187,6 +187,10 @@ const GoogleDriveLayout: FC = () => {
       );
     }
   };
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <Page title={space.name || ''} subtitle="Google Drive" actions={actions} collaboration>

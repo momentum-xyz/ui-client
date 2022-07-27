@@ -45,7 +45,7 @@ const TokenForm: FC<PropsInterface> = () => {
   }, [tokenFormStore.tokenNameRequest.state]);
 
   const formSubmitHandler: SubmitHandler<TokenFormInterface> = (data: TokenFormInterface) => {
-    if (space.id) {
+    if (space) {
       tokenFormStore.createToken(data);
     }
   };

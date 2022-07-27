@@ -30,21 +30,21 @@ const SpaceDetailsPanel: FC = () => {
     setValue
   } = useForm<SpaceSettingsInterface>({
     defaultValues: {
-      name: space.name,
-      secret: space.secret
+      name: space?.name,
+      secret: space?.secret
     }
   });
 
   const formSubmitHandler: SubmitHandler<SpaceSettingsInterface> = (
     settings: SpaceSettingsInterface
   ) => {
-    if (space.id) {
+    if (space) {
       spaceDetailsFormStore.saveDetails(settings, space.id).then(space.fetchSpaceInformation);
     }
   };
 
   const handleDelete = () => {
-    if (space.id) {
+    if (space) {
       spaceDetailsFormStore
         .deleteSpace(space.id)
         .then(agoraStore.leaveMeetingSpace)
@@ -56,9 +56,9 @@ const SpaceDetailsPanel: FC = () => {
   };
 
   useEffect(() => {
-    setValue('parentId', space.parentUUID ?? '');
-    setValue('root', space.parentUUID === undefined);
-  }, [space.parentUUID]);
+    setValue('parentId', space?.parentUUID ?? '');
+    setValue('root', space?.parentUUID === undefined);
+  }, [space?.parentUUID]);
 
   useEffect(() => {
     if (space) {
@@ -87,6 +87,10 @@ const SpaceDetailsPanel: FC = () => {
       isError={!!errors.name}
     />
   );
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <SectionPanel title={t('spaceAdmin.spaceDetails.title')} isCustom>

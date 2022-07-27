@@ -16,7 +16,7 @@ const Space = types
     ResetModel,
     types.model('Space', {
       // Base information
-      id: types.maybe(types.string),
+      id: types.string,
       name: types.maybe(types.string),
       description: types.maybe(types.string),
       users: types.optional(types.array(SpaceUserModel), []),

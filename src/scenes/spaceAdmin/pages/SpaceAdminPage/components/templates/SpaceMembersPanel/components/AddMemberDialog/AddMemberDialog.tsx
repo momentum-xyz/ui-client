@@ -35,7 +35,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
     spaceAdminStore
   } = useStore();
   const {spaceManagerStore} = spaceAdminStore;
-  const {space: spaceStore, searchUsersStore} = spaceManagerStore;
+  const {space, searchUsersStore} = spaceManagerStore;
   const [isFocused, setIsFocused] = useState(false);
   const [userSelected, setUserSelected] = useState<string>('');
 
@@ -54,7 +54,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
 
   const formSubmitHandler: SubmitHandler<AddMemberFormInterface> = ({role, user}) => {
     if (searchUsersStore.selectedUserId) {
-      spaceStore.addUser(searchUsersStore.selectedUserId, role === 'admin').then(() => {
+      space?.addUser(searchUsersStore.selectedUserId, role === 'admin').then(() => {
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -65,11 +65,11 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
           TOAST_COMMON_OPTIONS
         );
 
-        spaceStore.fetchSpaceInformation();
+        space.fetchSpaceInformation();
         props.onClose();
       });
     } else if (validateEmail(user)) {
-      spaceStore.inviteUser(user, role === 'admin').then(() => {
+      space?.inviteUser(user, role === 'admin').then(() => {
         toast.info(
           <ToastContent
             headerIconName="alert"

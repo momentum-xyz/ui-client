@@ -183,6 +183,10 @@ const StageModeControlPanelLayout: React.FC = () => {
     handleEnterStage
   ]);
 
+  if (!space) {
+    return null;
+  }
+
   return (
     <Page title={space.name || ''} subtitle="Stage Mode" collaboration actions={actions}>
       <div className="flex w-full">

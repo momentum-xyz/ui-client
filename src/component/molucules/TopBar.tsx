@@ -55,7 +55,7 @@ const TopBar = ({
   const addUserModal = useRef<ModalRef>(null);
 
   const leaveCollaborationSpace = () => {
-    if (collaborationStore.space.id && collaboration) {
+    if (collaborationStore.space && collaboration) {
       UnityService.triggerInteractionMsg?.(
         PosBusEventEnum.LeftSpace,
         collaborationStore.space.id,
@@ -78,13 +78,13 @@ const TopBar = ({
   }, []);
 
   useEffect(() => {
-    if (space.id) {
+    if (space) {
       favoriteStore.setSpaceId(space.id);
     }
-  }, [favoriteStore, space.id]);
+  }, [favoriteStore, space]);
 
   const toggleFavorite = () => {
-    if (space.id) {
+    if (space) {
       if (favoriteStore.isSpaceFavorite) {
         favoriteStore.removeFavorite(space.id);
       } else {
@@ -94,6 +94,10 @@ const TopBar = ({
   };
 
   const isAdminShown = () => {
+    if (!space) {
+      return false;
+    }
+
     return currentLocation.pathname.includes('/space/' + space.id + '/admin');
   };
 
@@ -116,8 +120,8 @@ const TopBar = ({
       <div className="pl-1 flex items-center gap-2 flex-grow">{actions}</div>
 
       {!!isAdmin &&
-        !!space.isSet &&
-        space.type !== SpaceType.GRAB_A_TABLE &&
+        space &&
+        space?.type !== SpaceType.GRAB_A_TABLE &&
         !currentLocation.pathname.includes('/admin') && (
           <>
             <TopbarButton
@@ -134,13 +138,13 @@ const TopBar = ({
           </>
         )}
 
-      {!!(isAdmin && space.isSet && collaboration) && (
+      {!!(isAdmin && space && collaboration) && (
         <>
           <div className="bg-white-100 w-.1 h-2 ml-2" />
         </>
       )}
 
-      {!!(space.isSet && collaboration) && (
+      {!!(space && collaboration) && (
         <>
           <TopbarButton
             title={agoraStore.isChatOpen ? 'Close chat' : 'Open chat'}
@@ -173,7 +177,7 @@ const TopBar = ({
           isActive={() => false}
           link="/"
           onClick={() => leaveCollaborationSpace()}
-          title={space.isSet && collaboration ? 'Leave' : 'Close'}
+          title={space && collaboration ? 'Leave' : 'Close'}
         >
           <CloseIcon />
         </TopbarButton>

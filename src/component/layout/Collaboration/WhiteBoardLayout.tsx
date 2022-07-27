@@ -22,7 +22,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
   const {collaborationStore} = useStore();
   const {space} = collaborationStore;
   const [miroboard, , , refetch] = useIntegrationFetch(
-    space.id?.toString() ?? '',
+    space?.id.toString() ?? '',
     IntegrationTypeEnum.MIRO
   );
 
@@ -47,7 +47,7 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
   });
 
   const pickBoard = useCallback(() => {
-    if (space.id) {
+    if (space) {
       //@ts-ignore
       miroBoardsPicker.open({
         clientId: appVariables.MIRO_APP_ID,
@@ -122,6 +122,10 @@ const WhiteBoardLayout: React.FC<WhiteBoardProps> = () => {
       );
     }
   };
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <Page title={space.name || ''} subtitle={subPageTitle} actions={actions} collaboration>

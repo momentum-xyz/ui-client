@@ -53,10 +53,10 @@ const UserItem: React.FC<UserItemPropsInterface> = ({onClick, currentUserId, inv
   }, [user.invited]);
 
   const handleInvite = useCallback(() => {
-    if (space.id) {
+    if (space) {
       user.invite(space.id);
     }
-  }, [space.id]);
+  }, [space]);
 
   const isItMe = useMemo(() => {
     return currentUserId === user.uuid;

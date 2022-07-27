@@ -12,7 +12,7 @@ const RootCollaborationStore = types
   .compose(
     ResetModel,
     types.model('RootCollaborationStore', {
-      space: types.optional(Space, {}),
+      space: types.maybe(Space),
       calendarStore: types.optional(CalendarStore, {}),
       dashboard: types.optional(Dashboard, {}),
 
@@ -31,11 +31,12 @@ const RootCollaborationStore = types
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       clearTimeout(self.leftMeetingTimer);
 
-      if (!(yield self.space.canUserJoin(spaceId))) {
+      self.space = Space.create({id: spaceId, isTable});
+
+      if (!(yield self.space?.canUserJoin(spaceId))) {
         throw new PrivateSpaceError();
       }
 
-      self.space.setup(spaceId, isTable);
       yield self.space.fetchSpaceInformation();
 
       if (!isTable) {
@@ -45,9 +46,9 @@ const RootCollaborationStore = types
       UnityService.triggerInteractionMsg?.(PosBusEventEnum.EnteredSpace, spaceId, 0, '');
     }),
     leaveMeetingSpace() {
-      self.leftMeetingSpaceId = self.space.id;
-      self.leftMeetingSpaceWasAGrabbedTable = self.space.isTable;
-      self.space.resetModel();
+      self.leftMeetingSpaceId = self.space?.id;
+      self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
+      self.space = undefined;
 
       self.leftMeetingTimer = setTimeout(() => {
         self.leftMeetingSpaceId = undefined;
@@ -60,7 +61,10 @@ const RootCollaborationStore = types
         return;
       }
 
-      self.space.setup(self.leftMeetingSpaceId, self.leftMeetingSpaceWasAGrabbedTable);
+      self.space = Space.create({
+        id: self.leftMeetingSpaceId,
+        isTable: self.leftMeetingSpaceWasAGrabbedTable
+      });
       yield self.space.fetchSpaceInformation();
 
       if (self.leftMeetingSpaceWasAGrabbedTable === false) {
@@ -73,7 +77,7 @@ const RootCollaborationStore = types
   }))
   .views((self) => ({
     get isSpaceLoaded(): boolean {
-      return self.space.didFetchSpaceInformation;
+      return self.space?.didFetchSpaceInformation ?? false;
     }
   }));
 

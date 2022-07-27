@@ -13,7 +13,7 @@ const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
-      selectedSpace: types.optional(Space, {}),
+      selectedSpace: types.maybe(Space),
       isExpanded: true,
       searchRequest: types.optional(RequestModel, {}),
       searchQuery: '',
@@ -33,14 +33,14 @@ const ExploreStore = types
         self.spaceHistory.push({...self.previousItem});
       }
 
-      if (self.selectedSpace.name && self.selectedSpace.id) {
+      if (self.selectedSpace && self.selectedSpace.name) {
         self.previousItem = cast({
           spaceName: self.selectedSpace.name,
           spaceId: self.selectedSpace.id
         });
       }
 
-      self.selectedSpace.setup(spaceId);
+      self.selectedSpace = Space.create({id: spaceId});
       self.selectedSpace.fetchSpaceInformation();
     },
     goBack() {
@@ -57,11 +57,11 @@ const ExploreStore = types
         self.previousItem = undefined;
       }
 
-      self.selectedSpace.setup(previousItemId);
+      self.selectedSpace = Space.create({id: previousItemId});
       self.selectedSpace.fetchSpaceInformation();
     },
     unselectSpace() {
-      self.selectedSpace.resetModel();
+      self.selectedSpace = undefined;
     },
     setSearchQuery(query: string) {
       self.searchQuery = query;
