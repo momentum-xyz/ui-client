@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
@@ -7,6 +6,7 @@ import {observer} from 'mobx-react-lite';
 import {ToastContent, Toggle} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
+import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 
 import Page from '../../molucules/Page';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
@@ -70,7 +70,7 @@ const StageModeControlPanelLayout: React.FC = () => {
   }, [agoraStore, getConfirmation, user?.id.data, user?.name]);
 
   const remoteUserClicked = useCallback(
-    async (remoteUser: IAgoraRTCRemoteUser, event = 'remove') => {
+    async (remoteUser: AgoraRemoteUserInterface, event = 'remove') => {
       if (event === 'remove') {
         setSelectedRemoteUserIdForRemove(remoteUser.uid as string);
       } else if (event === 'mute') {

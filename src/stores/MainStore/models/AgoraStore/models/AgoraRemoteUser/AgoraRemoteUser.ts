@@ -18,9 +18,6 @@ const AgoraRemoteUser = types
         self.participantInfo.audioTrack = track;
       }
     },
-    get hasAudio(): boolean {
-      return self.participantInfo?.hasAudio ?? false;
-    },
     get videoTrack(): IRemoteVideoTrack | undefined {
       return self.participantInfo?.videoTrack;
     },
@@ -28,9 +25,6 @@ const AgoraRemoteUser = types
       if (self.participantInfo) {
         self.participantInfo.videoTrack = track;
       }
-    },
-    get hasVideo(): boolean {
-      return self.participantInfo?.hasVideo ?? false;
     }
   }));
 

@@ -1,8 +1,8 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
+import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 
 import MediaPlayer from '../MediaPlayer';
 import {useCurrentUser} from '../../../hooks/api/useUser';
@@ -10,7 +10,7 @@ import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg
 import {ReactComponent as RemoveIcon} from '../../../images/icons/remove.svg';
 
 export interface StageModeStageProps {
-  onRemoteUserClick?: (remoteUser: IAgoraRTCRemoteUser, type: string) => void;
+  onRemoteUserClick?: (remoteUser: AgoraRemoteUserInterface, type: string) => void;
 }
 
 const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
@@ -86,9 +86,9 @@ const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
             <MediaPlayer
               remoteUser={user}
               videoTrack={user.videoTrack}
-              isVideoMuted={!user.hasVideo}
+              isVideoMuted={user.cameraOff}
               audioTrack={user.audioTrack}
-              isAudioMuted={!user.hasAudio}
+              isAudioMuted={user.isMuted}
               soundLevel={agoraStore.remoteUsers.find(({uid}) => uid === user.uid)?.soundLevel ?? 0}
             />
             <div
@@ -98,7 +98,7 @@ const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
             >
               <div className="h-full flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                 <div className="flex bg-black-70 gap-2 rounded p-1">
-                  {user.hasAudio && (
+                  {!user.isMuted && (
                     <button
                       className="hover:text-prime-blue-100 w-4"
                       onClick={() => {
