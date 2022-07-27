@@ -1,13 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useTheme} from 'styled-components';
-import {Controller, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {Dialog, Dropdown, Heading} from 'ui-kit';
 import {TileTypeEnum} from 'core/enums';
-import {TileFormInterface} from 'api';
 import {TILES_DROPDOWN_OPTIONS} from 'core/constants';
 
 import {ImageTileForm, TextTileForm, VideoTileForm} from './components';
@@ -21,10 +19,6 @@ const TileForm: FC = () => {
   const {currentTile} = tileFormStore;
 
   const [selectedType, setSelectedType] = useState<string | undefined>(undefined);
-  const [image, setImage] = useState<File | undefined>(undefined);
-  const [imageError, setImageError] = useState<boolean>(false);
-
-  const {control, resetField} = useForm<TileFormInterface>();
 
   useEffect(() => {
     setSelectedType(currentTile?.type ?? '');
@@ -33,84 +27,6 @@ const TileForm: FC = () => {
   useEffect(() => {
     return () => tileFormStore.resetModel();
   }, []);
-
-  // const formSubmitHandler: SubmitHandler<TileFormInterface> = async (data: TileFormInterface) => {
-  //   let isUpdateSucceed = false;
-  //   let isCreateSucceed = false;
-  //   if (currentTile?.id) {
-  //     if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
-  //       if (!image) {
-  //         setImageError(true);
-  //         return;
-  //       }
-  //
-  //       isUpdateSucceed = await tileFormStore.updateImageTile(currentTile?.id, image);
-  //       setImageError(false);
-  //     } else {
-  //       isUpdateSucceed = await tileFormStore.updateTextOrVideoTile(currentTile?.id, data);
-  //     }
-  //     tileDialog.close();
-  //     if (isUpdateSucceed) {
-  //       await dashboard.fetchDashboard(spaceStore.space.id);
-  //       toast.info(
-  //         <ToastContent
-  //           headerIconName="alert"
-  //           title={t('titles.alert')}
-  //           text={t('messages.tileUpdateSuccess')}
-  //           isCloseButton
-  //         />,
-  //         TOAST_COMMON_OPTIONS
-  //       );
-  //     } else {
-  //       toast.error(
-  //         <ToastContent
-  //           headerIconName="alert"
-  //           title={t('titles.alert')}
-  //           text={t('messages.tileUpdateError')}
-  //           isDanger
-  //           isCloseButton
-  //         />,
-  //         TOAST_COMMON_OPTIONS
-  //       );
-  //     }
-  //   } else {
-  //     if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
-  //       if (!image) {
-  //         setImageError(true);
-  //         return;
-  //       }
-  //       isCreateSucceed = await tileFormStore.createImageTile(spaceStore.space.id, image);
-  //       setImageError(false);
-  //     } else {
-  //       isCreateSucceed = await tileFormStore.createTextOrVideoTile(spaceStore.space.id, data);
-  //     }
-  //     tileDialog.close();
-  //     if (isCreateSucceed) {
-  //       await dashboard.fetchDashboard(spaceStore.space.id);
-  //       toast.info(
-  //         <ToastContent
-  //           headerIconName="alert"
-  //           title={t('titles.alert')}
-  //           text={t('messages.tileCreateSuccess')}
-  //           isCloseButton
-  //         />,
-  //         TOAST_COMMON_OPTIONS
-  //       );
-  //     } else {
-  //       toast.error(
-  //         <ToastContent
-  //           headerIconName="alert"
-  //           title={t('titles.alert')}
-  //           text={t('messages.tileCreateError')}
-  //           isDanger
-  //           isCloseButton
-  //         />,
-  //         TOAST_COMMON_OPTIONS
-  //       );
-  //     }
-  //   }
-  //   reset();
-  // };
 
   return (
     <Dialog
@@ -131,27 +47,14 @@ const TileForm: FC = () => {
               transform="uppercase"
               isCustom
             />
-            <Controller
-              name="type"
-              defaultValue={currentTile?.type ? currentTile?.type : ''}
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <Dropdown
-                  placeholder={t('dashboard.tileForm.typePlaceholder')}
-                  value={value}
-                  options={TILES_DROPDOWN_OPTIONS}
-                  onOptionSelect={(option) => {
-                    onChange(option.value);
-                    resetField('text_title');
-                    resetField('text_description');
-                    resetField('youtube_url');
-                    setSelectedType(option.value);
-                    setImageError(false);
-                    setImage(undefined);
-                  }}
-                  variant="secondary"
-                />
-              )}
+            <Dropdown
+              placeholder={t('dashboard.tileForm.typePlaceholder')}
+              value={selectedType}
+              options={TILES_DROPDOWN_OPTIONS}
+              onOptionSelect={(option) => {
+                setSelectedType(option.value);
+              }}
+              variant="secondary"
             />
           </styled.DropDownContainer>
           {selectedType === TileTypeEnum.TILE_TYPE_VIDEO && (
@@ -176,11 +79,12 @@ const TileForm: FC = () => {
           )}
           {selectedType === TileTypeEnum.TILE_TYPE_MEDIA && (
             <ImageTileForm
-              setImage={setImage}
-              image={image}
-              setImageError={setImageError}
-              imageError={imageError}
+              spaceId={spaceStore.space.id ?? ''}
+              onClose={tileDialog.close}
+              createTile={tileFormStore.createImageTile}
+              updateTile={tileFormStore.updateImageTile}
               currentTile={currentTile}
+              fetchDashboard={dashboard.fetchDashboard}
             />
           )}
         </styled.Div>

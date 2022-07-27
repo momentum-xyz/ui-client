@@ -70,28 +70,26 @@ const TextTileForm: FC<PropsInterface> = ({
       // @ts-ignore
       if (isSucceed) {
         await fetchDashboard(spaceId);
-        if (isSucceed) {
-          toast.info(
-            <ToastContent
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('messages.tileUpdateSuccess')}
-              isCloseButton
-            />,
-            TOAST_COMMON_OPTIONS
-          );
-        } else {
-          toast.error(
-            <ToastContent
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('messages.tileUpdateError')}
-              isDanger
-              isCloseButton
-            />,
-            TOAST_COMMON_OPTIONS
-          );
-        }
+        toast.info(
+          <ToastContent
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.tileUpdateSuccess')}
+            isCloseButton
+          />,
+          TOAST_COMMON_OPTIONS
+        );
+      } else {
+        toast.error(
+          <ToastContent
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.tileUpdateError')}
+            isDanger
+            isCloseButton
+          />,
+          TOAST_COMMON_OPTIONS
+        );
       }
     }
 

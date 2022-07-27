@@ -11,14 +11,6 @@ export interface TilesUpdatePositionInterface {
   data: TileListInterface;
 }
 
-export interface TileFormInterface {
-  type: string;
-  text_title?: string;
-  text_description?: string;
-  file?: File;
-  youtube_url?: string;
-}
-
 export interface TextTileFormInterface {
   type: string;
   text_title: string;
