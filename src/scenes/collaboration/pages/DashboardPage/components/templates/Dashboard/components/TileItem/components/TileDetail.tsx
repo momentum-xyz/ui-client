@@ -5,6 +5,7 @@ import {DraggableProvided} from 'react-beautiful-dnd';
 
 import {PanelLayout, TileMenu} from 'ui-kit';
 import {TileInterface} from 'core/models';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './TileDetail.styled';
 
@@ -26,12 +27,17 @@ const TileDetail: FC<PropsInterface> = ({
   isMember
 }) => {
   const theme = useTheme();
+  const {collaborationStore} = useStore();
+  const {dashboardStore} = collaborationStore;
+  const {tileRemoveDialog, tileFormStore, tileDialog} = dashboardStore;
 
   const handleEdit = () => {
-    console.info('');
+    tileDialog.open();
+    tileFormStore.setTile(tile);
   };
   const handleDelete = () => {
-    console.info('');
+    tileRemoveDialog.open();
+    tileFormStore.setTile(tile);
   };
   return (
     <PanelLayout

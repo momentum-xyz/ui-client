@@ -13,12 +13,14 @@ import useCollaboration, {
 } from 'context/Collaboration/hooks/useCollaboration';
 import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
-import Dashboard from './components/templates/Dashboard/Dashboard';
+import {Dashboard, TileForm} from './components';
 import * as styled from './DashboardPage.styled';
+import {RemoveTileDialog} from './components/templates/Dashboard/components/RemoveTileDialog';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
-  const {dashboard, spaceStore} = collaborationStore;
+  const {dashboardStore, spaceStore} = collaborationStore;
+  const {dashboard, tileDialog, tileRemoveDialog} = dashboardStore;
   const {favoriteStore} = mainStore;
   const {tileList, onDragEnd} = dashboard;
 
@@ -68,7 +70,7 @@ const DashboardPage: FC = () => {
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(spaceStore.isAdmin || spaceStore.isMember) && (
-          <Button label={t('dashboard.addTile')} variant="primary" />
+          <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
         <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
         {!sessionStore.isGuest && spaceStore.isStakeShown && (
@@ -95,6 +97,8 @@ const DashboardPage: FC = () => {
         onDragEnd={onDragEnd}
         canDrag={spaceStore.isAdmin || spaceStore.isMember}
       />
+      {tileDialog.isOpen && <TileForm />}
+      {tileRemoveDialog.isOpen && <RemoveTileDialog />}
     </styled.Container>
   );
 };
