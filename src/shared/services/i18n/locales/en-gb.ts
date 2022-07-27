@@ -164,6 +164,7 @@ export const enGb = {
       attendees_other: `{{count}} Attendees`
     },
     labels: {
+      miro: 'Miro',
       calendar: 'World Calendar',
       staking: 'Staking',
       minimap: 'Minimap',
@@ -250,7 +251,9 @@ export const enGb = {
       kickedFromMeeting: 'A Space Admin has kicked you from the space',
       joinGathering: 'The gathering {{title}} is about to start',
       updateSpace:
-        'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).'
+        'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).',
+      noTeamMiroBoard: 'Your team does not have a Miro board yet',
+      noMiroBoard: 'This team does not have a Miro board yet'
     },
     titles: {
       alert: 'alert',
@@ -336,7 +339,9 @@ export const enGb = {
       return: 'Return',
       leave: 'Leave',
       muteName: 'Mute {{name}}',
-      kickName: 'Kick {{name}}'
+      kickName: 'Kick {{name}}',
+      changeBoard: 'Change board',
+      chooseBoard: 'Choose a Miro board'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

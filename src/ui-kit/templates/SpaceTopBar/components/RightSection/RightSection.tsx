@@ -3,25 +3,34 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {generatePath} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {Separator, ToolbarIcon} from 'ui-kit';
-import {FavoriteStoreInterface} from 'stores/MainStore/models';
+// TODO: Refactoring
 import {COLLABORATION_CHAT_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
 import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {useTextChatContext} from 'context/TextChatContext';
-import {ROUTES} from 'core/constants';
 
-import * as styled from './TopBarActions.styled';
+import * as styled from './RightSection.styled';
 
 interface PropsInterface {
   isAdmin?: boolean;
-  spaceId?: string;
-  favoriteStore: FavoriteStoreInterface;
+  spaceId: string;
+  editSpaceHidden?: boolean;
+  isSpaceFavorite: boolean;
+  toggleIsSpaceFavorite: (spaceId: string) => void;
 }
 
-const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) => {
+const RightSection: FC<PropsInterface> = ({
+  spaceId,
+  editSpaceHidden,
+  isAdmin,
+  isSpaceFavorite,
+  toggleIsSpaceFavorite
+}) => {
   const {collaborationState, collaborationDispatch} = useCollaboration();
   const {numberOfUnreadMessages} = useTextChatContext();
 
+  // TODO: Refactoring
   const toggleChat = () => {
     collaborationDispatch({
       type: COLLABORATION_CHAT_ACTION_UPDATE,
@@ -29,19 +38,9 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
     });
   };
 
-  const toggleFavorite = () => {
-    if (spaceId) {
-      if (favoriteStore.isSpaceFavorite) {
-        favoriteStore.removeFavorite(spaceId);
-      } else {
-        favoriteStore.addFavorite(spaceId);
-      }
-    }
-  };
-
   return (
     <>
-      {isAdmin && (
+      {isAdmin && !editSpaceHidden && (
         <>
           <ToolbarIcon
             title={t('tooltipTitles.openAdmin')}
@@ -71,8 +70,8 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
       </ToolbarIcon>
       <ToolbarIcon
         title={t('tooltipTitles.favorite')}
-        icon={favoriteStore.isSpaceFavorite ? 'starOn' : 'star'}
-        onClick={toggleFavorite}
+        icon={isSpaceFavorite ? 'starOn' : 'star'}
+        onClick={() => toggleIsSpaceFavorite(spaceId)}
         isWhite={false}
       />
       <Separator />
@@ -81,4 +80,4 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
   );
 };
 
-export default observer(TopBarActions);
+export default observer(RightSection);

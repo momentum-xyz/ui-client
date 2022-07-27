@@ -20,6 +20,7 @@ import * as playlistRepository from './repositories/playlistRepository';
 import * as communicationRepository from './repositories/communicationRepository';
 import * as attendeesRepository from './repositories/attendeesRepository';
 import * as dashboardRepository from './repositories/dashboardRepository';
+import * as integrationRepository from './repositories/integrationRepository';
 
 /**
  * This layer is responsible for:
@@ -53,7 +54,8 @@ export const api = {
   playlistRepository,
   communicationRepository,
   attendeesRepository,
-  dashboardRepository
+  dashboardRepository,
+  integrationRepository
 };
 
 /**
@@ -78,3 +80,4 @@ export * from './repositories/statsRepository/statsRepository.api.types';
 export * from './repositories/playlistRepository/playlistRepository.api.types';
 export * from './repositories/communicationRepository/communicationRepository.api.types';
 export * from './repositories/dashboardRepository/dashboardRepository.api.types';
+export * from './repositories/integrationRepository/integrationRepository.api.types';

@@ -6,7 +6,7 @@ import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
-import {TopBar, EventList, LinkDialog} from 'ui-kit';
+import {PageTopBar, EventList, LinkDialog} from 'ui-kit';
 import {absoluteLink} from 'core/utils';
 
 import * as styled from './WorldCalendarPage.styled';
@@ -66,7 +66,7 @@ const WorldCalendarPage: FC = () => {
           onClose={magicDialog.close}
         />
       )}
-      <TopBar title="World Calendar" onClose={() => history.goBack()} />
+      <PageTopBar title="World Calendar" onClose={() => history.goBack()} />
       <EventList
         currentUserId={sessionStore.userId}
         events={eventListStore.events}

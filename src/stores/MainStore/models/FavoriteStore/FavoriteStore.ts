@@ -37,6 +37,13 @@ const FavoriteStore = types.compose(
           );
         }
       }),
+      toggleFavorite(spaceId: string): void {
+        if (self.favorites.find((favorite) => favorite.spaceId === spaceId)) {
+          this.removeFavorite(spaceId);
+        } else {
+          this.addFavorite(spaceId);
+        }
+      },
       addFavorite: flow(function* (spaceId: string) {
         const response: PostFavoriteResponse = yield self.addFavoriteRequest.send(
           api.favoriteRepository.postFavorite,

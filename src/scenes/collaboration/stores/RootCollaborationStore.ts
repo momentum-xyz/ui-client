@@ -2,8 +2,9 @@ import {types} from 'mobx-state-tree';
 
 import {SpaceStore} from 'stores/MainStore/models';
 
-import {CalendarStore} from './CalendarStore';
 import {Dashboard} from './DashboardStore/models/Dashboard';
+import {CalendarStore} from './CalendarStore';
+import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
 
 const RootCollaborationStore = types
@@ -11,7 +12,8 @@ const RootCollaborationStore = types
     spaceStore: types.optional(SpaceStore, {}),
     calendarStore: types.optional(CalendarStore, {}),
     dashboard: types.optional(Dashboard, {}),
-    dashboardManager: types.optional(DashboardStore, {})
+    dashboardManager: types.optional(DashboardStore, {}),
+    miroBoardStore: types.optional(MiroBoardStore, {})
   })
   .actions((self) => ({
     init(spaceId: string) {
