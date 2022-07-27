@@ -6,9 +6,8 @@ import {Dialog, Text, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './RemoveTileDialog.styled';
-interface PropsInterface {}
 
-const RemoveTileDialog: FC<PropsInterface> = () => {
+const RemoveTileDialog: FC = () => {
   const {collaborationStore} = useStore();
   const {dashboardStore, spaceStore} = collaborationStore;
   const {tileRemoveDialog, tileFormStore, dashboard} = dashboardStore;

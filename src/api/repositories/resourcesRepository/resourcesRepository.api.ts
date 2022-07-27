@@ -1,8 +1,8 @@
-import {RequestInterface} from '../../interfaces';
-import {request} from '../../request';
+import {RequestInterface} from 'api/interfaces';
+import {request} from 'api/request';
 
-import {resourcesApiEndpoints} from './resources.api.endpoints';
-import {ImageUploadRequest, ImageUploadResponse} from './resources.types';
+import {resourcesRepositoryApiEndpoints} from './resourcesRepository.api.endpoints';
+import {ImageUploadRequest, ImageUploadResponse} from './resourcesRepository.types';
 
 export const uploadTileImage: RequestInterface<ImageUploadRequest, ImageUploadResponse> = (
   options
@@ -16,6 +16,6 @@ export const uploadTileImage: RequestInterface<ImageUploadRequest, ImageUploadRe
     },
     ...restOptions
   };
-  const url = resourcesApiEndpoints().upload;
+  const url = resourcesRepositoryApiEndpoints().upload;
   return request.post(url, formData, requestParams);
 };

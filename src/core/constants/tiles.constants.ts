@@ -1,6 +1,6 @@
 import {t} from 'i18next';
 
-import {TileTypeEnum} from '../enums';
+import {TileTypeEnum} from 'core/enums';
 
 export const TILES_DROPDOWN_OPTIONS = [
   {

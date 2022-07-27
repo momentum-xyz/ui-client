@@ -17,7 +17,7 @@ const TileFormStore = types.compose(
     .actions((self) => ({
       createImageTile: flow(function* (spaceId?: string, file?: File) {
         const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
-          api.resources.uploadTileImage,
+          api.resourcesRepository.uploadTileImage,
           {
             file
           }
@@ -65,7 +65,7 @@ const TileFormStore = types.compose(
       }),
       updateImageTile: flow(function* (tileId?: string, file?: File) {
         const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
-          api.resources.uploadTileImage,
+          api.resourcesRepository.uploadTileImage,
           {
             file
           }
