@@ -29,10 +29,11 @@ const TileDetail: FC<PropsInterface> = ({
   const theme = useTheme();
   const {collaborationStore} = useStore();
   const {dashboardManager} = collaborationStore;
-  const {tileRemoveDialog, tileFormStore} = dashboardManager;
+  const {tileRemoveDialog, tileFormStore, tileDialog} = dashboardManager;
 
   const handleEdit = () => {
-    console.info('');
+    tileDialog.open();
+    tileFormStore.setTile(tile);
   };
   const handleDelete = () => {
     tileRemoveDialog.open();

@@ -10,7 +10,9 @@ import {
   DeleteTileResponse,
   ImageUploadRequest,
   ImageUploadResponse,
-  TilesUpdatePositionInterface
+  TilesUpdatePositionInterface,
+  UpdateTileRequest,
+  UpdateTileResponse
 } from './dashboardRepository.api.types';
 import {dashboardRepositoryApiEndpoints} from './dashboardRepository.api.endpoints';
 
@@ -52,6 +54,12 @@ export const uploadTileImage: RequestInterface<ImageUploadRequest, ImageUploadRe
 export const createTile: RequestInterface<CreateTileRequest, CreateTileResponse> = (options) => {
   const {data, spaceId, ...restOptions} = options;
   const url = `${dashboardRepositoryApiEndpoints().create}/${spaceId}`;
+  return request.post(url, data, restOptions);
+};
+
+export const updateTile: RequestInterface<UpdateTileRequest, UpdateTileResponse> = (options) => {
+  const {data, tileId, ...restOptions} = options;
+  const url = `${dashboardRepositoryApiEndpoints().update}/${tileId}`;
   return request.post(url, data, restOptions);
 };
 

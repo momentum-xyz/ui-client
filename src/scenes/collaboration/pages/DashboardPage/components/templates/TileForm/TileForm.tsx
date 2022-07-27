@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useTheme} from 'styled-components';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
@@ -19,6 +19,7 @@ import {
 } from 'ui-kit';
 import {TileTypeEnum} from 'core/enums';
 import {TileFormInterface} from 'api';
+import {appVariables} from 'api/constants';
 
 import * as styled from './TileForm.styled';
 
@@ -27,7 +28,7 @@ const TileForm: FC = () => {
   const {collaborationStore} = useStore();
   const {dashboardManager, spaceStore} = collaborationStore;
   const {tileDialog, tileFormStore, dashboard} = dashboardManager;
-  const {tileFormRequest} = tileFormStore;
+  const {tileCreateRequest, tileUpdateRequest, currentTile} = tileFormStore;
 
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [image, setImage] = useState<File | undefined>(undefined);
@@ -37,24 +38,47 @@ const TileForm: FC = () => {
     control,
     handleSubmit,
     formState: {errors},
-    resetField
+    resetField,
+    reset
   } = useForm<TileFormInterface>();
 
+  useEffect(() => {
+    setSelectedType(currentTile?.type ?? '');
+  }, [currentTile]);
+
+  useEffect(() => {
+    return () => tileFormStore.resetModel();
+  }, []);
+
   const formSubmitHandler: SubmitHandler<TileFormInterface> = async (data: TileFormInterface) => {
-    if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
-      if (!image) {
-        setImageError(true);
-        return;
+    if (currentTile?.id) {
+      if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
+        if (!image) {
+          setImageError(true);
+          return;
+        }
+
+        await tileFormStore.updateTile(currentTile?.id, image, data);
+        setImageError(false);
+      } else {
+        await tileFormStore.updateTile(currentTile?.id, undefined, data);
       }
-
-      await tileFormStore.createTile(spaceStore.space.id, image, data);
-      setImageError(false);
     } else {
-      await tileFormStore.createTile(spaceStore.space.id, undefined, data);
-    }
-    tileDialog.close();
+      if (selectedType === TileTypeEnum.TILE_TYPE_MEDIA) {
+        if (!image) {
+          setImageError(true);
+          return;
+        }
 
-    if (tileFormRequest.isDone) {
+        await tileFormStore.createTile(spaceStore.space.id, image, data);
+        setImageError(false);
+      } else {
+        await tileFormStore.createTile(spaceStore.space.id, undefined, data);
+      }
+    }
+
+    if (tileCreateRequest.isDone) {
+      tileDialog.close();
       await dashboard.fetchDashboard(spaceStore.space.id);
       toast.info(
         <ToastContent
@@ -65,17 +89,44 @@ const TileForm: FC = () => {
         />,
         TOAST_COMMON_OPTIONS
       );
-    } else if (tileFormRequest.isError) {
+    } else if (tileCreateRequest.isError) {
+      tileDialog.close();
       toast.error(
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
           text="There was a problem creating your tile"
+          isDanger
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    } else if (tileUpdateRequest.isDone) {
+      tileDialog.close();
+      await dashboard.fetchDashboard(spaceStore.space.id);
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="Your tile has been updated successfully"
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    } else if (tileUpdateRequest.isError) {
+      tileDialog.close();
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="There was a problem updating your tile"
+          isDanger
           isCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );
     }
+    reset();
   };
 
   const handleImage = (file: File | undefined) => {
@@ -90,11 +141,12 @@ const TileForm: FC = () => {
       showCloseButton
       onClose={tileDialog.close}
       approveInfo={{
-        title: 'create tile',
+        title: currentTile?.id ? 'update tile' : 'create tile',
         onClick: handleSubmit(formSubmitHandler),
         disabled: selectedType === null
       }}
       hasBorder
+      closeOnBackgroundClick={false}
     >
       <styled.Container>
         <styled.Div>
@@ -102,6 +154,7 @@ const TileForm: FC = () => {
             <Heading type="h4" align="left" label="Tile type" transform="uppercase" isCustom />
             <Controller
               name="type"
+              defaultValue={currentTile?.type ? currentTile?.type : ''}
               control={control}
               render={({field: {onChange, value}}) => (
                 <Dropdown
@@ -141,6 +194,7 @@ const TileForm: FC = () => {
                 <Controller
                   name="youtube_url"
                   control={control}
+                  defaultValue={currentTile ? currentTile?.content?.url : ''}
                   rules={{required: true}}
                   render={({field: {onChange, value}}) => (
                     <Input
@@ -162,6 +216,7 @@ const TileForm: FC = () => {
                 <Controller
                   name="text_title"
                   control={control}
+                  defaultValue={currentTile ? currentTile?.content?.title : ''}
                   rules={{required: true}}
                   render={({field: {onChange, value}}) => (
                     <Input
@@ -179,6 +234,7 @@ const TileForm: FC = () => {
                 <Controller
                   name="text_description"
                   control={control}
+                  defaultValue={currentTile ? currentTile?.content?.text : ''}
                   rules={{required: true}}
                   render={({field: {onChange, value}}) => (
                     <TextArea
@@ -198,8 +254,15 @@ const TileForm: FC = () => {
             <styled.Item>
               <styled.FileUploaderItem>
                 <styled.TileImageUpload className={cn(imageError && 'error')}>
-                  {image && (
-                    <styled.ImagePreview src={(image && URL.createObjectURL(image)) || undefined} />
+                  {(image || currentTile?.hash) && (
+                    <styled.ImagePreview
+                      src={
+                        (image && URL.createObjectURL(image)) ||
+                        (currentTile?.hash &&
+                          `${appVariables.RENDER_SERVICE_URL}/get/${currentTile?.hash}`) ||
+                        undefined
+                      }
+                    />
                   )}
                   <FileUploader
                     label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}

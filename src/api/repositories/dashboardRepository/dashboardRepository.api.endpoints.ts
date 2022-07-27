@@ -9,6 +9,7 @@ export const dashboardRepositoryApiEndpoints = () => {
     upload: UPLOAD_URL,
     updatePositions: `${BASE_URL}/update-positions`,
     create: `${BASE_URL}/create`,
-    delete: `${BASE_URL}/delete`
+    delete: `${BASE_URL}/delete`,
+    update: `${BASE_URL}/update`
   };
 };

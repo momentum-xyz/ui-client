@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
@@ -12,12 +12,17 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
   const {collaborationStore} = useStore();
   const {dashboardManager, spaceStore} = collaborationStore;
   const {tileRemoveDialog, tileFormStore, dashboard} = dashboardManager;
-  const {tileFormRequest} = tileFormStore;
+  const {tileDeleteRequest} = tileFormStore;
+
+  useEffect(() => {
+    return () => tileFormStore.resetModel();
+  }, []);
 
   const confirm = async () => {
     await tileFormStore.deleteTile();
-    tileRemoveDialog.close();
-    if (tileFormRequest.isDone) {
+
+    if (tileDeleteRequest.isDone) {
+      tileRemoveDialog.close();
       await dashboard.fetchDashboard(spaceStore.space.id);
       toast.info(
         <ToastContent
@@ -28,7 +33,8 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
         />,
         TOAST_COMMON_OPTIONS
       );
-    } else if (tileFormRequest.isError) {
+    } else if (tileDeleteRequest.isError) {
+      tileRemoveDialog.close();
       toast.error(
         <ToastContent
           headerIconName="alert"
@@ -54,6 +60,8 @@ const RemoveTileDialog: FC<PropsInterface> = () => {
       }}
       onClose={tileRemoveDialog.close}
       showCloseButton
+      hasBorder
+      closeOnBackgroundClick={false}
     >
       <styled.Container>
         <Text text="Are you sure you want to remove this tile?" size="m" />

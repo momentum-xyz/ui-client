@@ -35,6 +35,13 @@ export interface CreateTileRequest {
   spaceId: string;
 }
 
+export interface UpdateTileResponse {}
+
+export interface UpdateTileRequest {
+  data: CreateTileDataRequest;
+  tileId: string;
+}
+
 export interface UploadTileImageResponse {
   hash: string;
 }

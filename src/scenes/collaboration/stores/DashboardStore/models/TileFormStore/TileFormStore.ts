@@ -8,9 +8,11 @@ const TileFormStore = types.compose(
   ResetModel,
   types
     .model('TileFormStore', {
-      tileFormRequest: types.optional(RequestModel, {}),
+      tileCreateRequest: types.optional(RequestModel, {}),
+      tileUpdateRequest: types.optional(RequestModel, {}),
+      tileDeleteRequest: types.optional(RequestModel, {}),
       imageUploadRequest: types.optional(RequestModel, {}),
-      tile: types.maybeNull(types.frozen<TileInterface>())
+      currentTile: types.maybeNull(types.frozen<TileInterface>())
     })
     .actions((self) => ({
       createTile: flow(function* (spaceId?: string, file?: File, data?: TileFormInterface) {
@@ -23,7 +25,7 @@ const TileFormStore = types.compose(
           );
           if (response && file) {
             const hash = response;
-            yield self.tileFormRequest.send(api.dashboardRepository.createTile, {
+            yield self.tileCreateRequest.send(api.dashboardRepository.createTile, {
               spaceId,
               data: {
                 hash: hash,
@@ -37,7 +39,7 @@ const TileFormStore = types.compose(
             });
           }
         } else {
-          yield self.tileFormRequest.send(api.dashboardRepository.createTile, {
+          yield self.tileCreateRequest.send(api.dashboardRepository.createTile, {
             spaceId,
             data: {
               column: 0,
@@ -59,17 +61,51 @@ const TileFormStore = types.compose(
           });
         }
 
-        return self.tileFormRequest.isDone;
+        return self.tileCreateRequest.isDone;
+      }),
+      updateTile: flow(function* (tileId?: string, file?: File, data?: TileFormInterface) {
+        if (data?.type === TileTypeEnum.TILE_TYPE_MEDIA) {
+          const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
+            api.dashboardRepository.uploadTileImage,
+            {
+              file
+            }
+          );
+          if (response && file) {
+            const hash = response;
+            yield self.tileUpdateRequest.send(api.dashboardRepository.updateTile, {
+              tileId,
+              data: {
+                ...self.currentTile,
+                hash: hash
+              }
+            });
+          }
+        } else {
+          yield self.tileUpdateRequest.send(api.dashboardRepository.updateTile, {
+            tileId,
+            data: {
+              ...self.currentTile,
+              content: {
+                title: data?.text_title,
+                text: data?.text_description,
+                url: data?.youtube_url
+              }
+            }
+          });
+        }
+
+        return self.tileUpdateRequest.isDone;
       }),
       deleteTile: flow(function* () {
-        if (self.tile) {
-          yield self.tileFormRequest.send(api.dashboardRepository.deleteTile, {
-            tileId: self.tile.id
+        if (self.currentTile) {
+          yield self.tileDeleteRequest.send(api.dashboardRepository.deleteTile, {
+            tileId: self.currentTile.id
           });
         }
       }),
       setTile(tile: TileInterface) {
-        self.tile = tile;
+        self.currentTile = tile;
       }
     }))
 );
