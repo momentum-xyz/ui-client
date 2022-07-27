@@ -202,9 +202,6 @@ const Space = types
     },
     get isPrivate() {
       return self.secret === 1;
-    },
-    get isSet() {
-      return self.id !== undefined;
     }
   }));
 
