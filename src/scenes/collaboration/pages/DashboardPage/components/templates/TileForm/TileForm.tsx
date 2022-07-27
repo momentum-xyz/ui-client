@@ -51,10 +51,10 @@ const TileForm: FC = () => {
           return;
         }
 
-        isUpdateSucceed = await tileFormStore.updateTile(currentTile?.id, image, data);
+        isUpdateSucceed = await tileFormStore.updateImageTile(currentTile?.id, image);
         setImageError(false);
       } else {
-        isUpdateSucceed = await tileFormStore.updateTile(currentTile?.id, undefined, data);
+        isUpdateSucceed = await tileFormStore.updateTextOrVideoTile(currentTile?.id, data);
       }
       tileDialog.close();
       if (isUpdateSucceed) {
@@ -86,10 +86,10 @@ const TileForm: FC = () => {
           setImageError(true);
           return;
         }
-        isCreateSucceed = await tileFormStore.createTile(spaceStore.space.id, image, data);
+        isCreateSucceed = await tileFormStore.createImageTile(spaceStore.space.id, image);
         setImageError(false);
       } else {
-        isCreateSucceed = await tileFormStore.createTile(spaceStore.space.id, undefined, data);
+        isCreateSucceed = await tileFormStore.createTextOrVideoTile(spaceStore.space.id, data);
       }
       tileDialog.close();
       if (isCreateSucceed) {
