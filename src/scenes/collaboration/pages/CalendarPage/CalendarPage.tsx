@@ -10,7 +10,7 @@ import {ROUTES} from 'core/constants';
 import {absoluteLink} from 'core/utils';
 import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
-import {Button, TopBar, EventList, LinkDialog, ToastContent} from 'ui-kit';
+import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
 
 import {DeleteEventConfirmationDialog, EventForm} from './components';
 import * as styled from './CalendarPage.styled';
@@ -18,7 +18,7 @@ import * as styled from './CalendarPage.styled';
 const CalendarPage: FC = () => {
   const {collaborationStore, sessionStore, widgetStore, mainStore} = useStore();
   const {calendarStore, space} = collaborationStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore, favoriteStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
@@ -98,27 +98,22 @@ const CalendarPage: FC = () => {
 
   return (
     <styled.Container>
-      {calendarStore.magicId && magicDialog.isOpen && (
-        <LinkDialog
-          title={t('eventList.eventItem.magicLinkDialog.title')}
-          copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
-          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
-          onClose={magicDialog.close}
-        />
-      )}
-      {deleteConfirmationDialog.isOpen && (
-        <DeleteEventConfirmationDialog
-          onConfirmation={() => {
-            handleEventDelete();
-          }}
-          onClose={deleteConfirmationDialog.close}
-        />
-      )}
-      <TopBar title={space.name ?? ''} subtitle="calendar" onClose={handleClose}>
+      <SpaceTopBar
+        title={space.name ?? ''}
+        subtitle="calendar"
+        isAdmin={space.isAdmin}
+        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        onClose={handleClose}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
+        editSpaceHidden
+      >
         {space.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
         )}
-      </TopBar>
+      </SpaceTopBar>
       <EventList
         currentUserId={sessionStore.userId}
         events={eventListStore.events}
@@ -130,7 +125,24 @@ const CalendarPage: FC = () => {
         onWeblinkClick={handleWeblink}
         onShowAttendeesList={attendeesListStore.showAttendees}
       />
+
       {calendarStore.formDialog.isOpen && <EventForm />}
+
+      {calendarStore.magicId && magicDialog.isOpen && (
+        <LinkDialog
+          title={t('eventList.eventItem.magicLinkDialog.title')}
+          copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
+          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
+          onClose={magicDialog.close}
+        />
+      )}
+
+      {deleteConfirmationDialog.isOpen && (
+        <DeleteEventConfirmationDialog
+          onConfirmation={handleEventDelete}
+          onClose={deleteConfirmationDialog.close}
+        />
+      )}
     </styled.Container>
   );
 };

@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 
-import {PanelLayout, Text, TopBar} from 'ui-kit';
+import {PanelLayout, Text, PageTopBar} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {TokenRuleReviewWidget} from 'scenes/widgets/pages';
 import {ROUTES} from 'core/constants';
@@ -46,7 +46,11 @@ const SpaceAdminPage: FC = () => {
 
   return (
     <styled.Container>
-      <TopBar title={space.name ?? ''} subtitle={t('spaceAdmin.subtitle')} onClose={handleClose} />
+      <PageTopBar
+        title={space?.name ?? ''}
+        subtitle={t('spaceAdmin.subtitle')}
+        onClose={handleClose}
+      />
       <styled.Body>
         {space.isAdmin ? (
           <>

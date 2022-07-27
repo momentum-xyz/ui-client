@@ -5,8 +5,10 @@ import {UnityService} from 'shared/services';
 import {PosBusEventEnum} from 'core/enums';
 import {PrivateSpaceError} from 'core/errors';
 
-import {CalendarStore} from './CalendarStore';
 import {Dashboard} from './DashboardStore/models/Dashboard';
+import {CalendarStore} from './CalendarStore';
+import {MiroBoardStore} from './MiroBoardStore';
+import {DashboardStore} from './DashboardStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -15,6 +17,8 @@ const RootCollaborationStore = types
       space: types.maybe(Space),
       calendarStore: types.optional(CalendarStore, {}),
       dashboard: types.optional(Dashboard, {}),
+      dashboardStore: types.optional(DashboardStore, {}),
+      miroBoardStore: types.optional(MiroBoardStore, {}),
 
       // collaboration
       leftMeetingSpaceId: types.maybe(types.string),

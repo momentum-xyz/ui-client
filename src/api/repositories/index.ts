@@ -16,4 +16,5 @@ export * from './statusRepository';
 export * from './playlistRepository';
 export * from './communicationRepository';
 export * from './dashboardRepository';
+export * from './resourcesRepository';
 export * from './spaceIntegrationsRepository';

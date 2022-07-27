@@ -13,9 +13,9 @@ export interface PropsInterface {
 }
 
 const TileItem: FC<PropsInterface> = ({tile, provided}) => {
-  const {
-    collaborationStore: {dashboard, space}
-  } = useStore();
+  const {collaborationStore} = useStore();
+  const {dashboardStore, space} = collaborationStore;
+  const {dashboard} = dashboardStore;
 
   switch (tile.type) {
     case TileTypeEnum.TILE_TYPE_MEDIA:

@@ -5,16 +5,17 @@ import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {IconSvg, Text, TopBar, Button} from 'ui-kit';
+import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 
-import {TopBarActions} from './components/templates/TopBarActions';
-import Dashboard from './components/templates/Dashboard/Dashboard';
+import {Dashboard, TileForm} from './components';
 import * as styled from './DashboardPage.styled';
+import {RemoveTileDialog} from './components/templates/Dashboard/components/RemoveTileDialog';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
+  const {dashboardStore, space} = collaborationStore;
+  const {dashboard, tileDialog, tileRemoveDialog} = dashboardStore;
   const {agoraStore, favoriteStore, unityStore} = mainStore;
-  const {dashboard, space} = collaborationStore;
   const {tileList, onDragEnd} = dashboard;
 
   const history = useHistory();
@@ -45,23 +46,26 @@ const DashboardPage: FC = () => {
 
   return (
     <styled.Container>
-      <TopBar
-        title={space?.name ?? ''}
+      <SpaceTopBar
+        title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         onClose={leaveCollaborationSpace}
-        actions={
-          <TopBarActions favoriteStore={favoriteStore} spaceId={space.id} isAdmin={space.isAdmin} />
-        }
+        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        spaceId={space.id}
+        isAdmin={space.isAdmin}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
         {(space.isAdmin || space.isMember) && (
-          <Button label={t('dashboard.addTile')} variant="primary" />
+          <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
         <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
         {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
-      </TopBar>
+      </SpaceTopBar>
       {!dashboard.dashboardIsEdited && space.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
@@ -82,6 +86,8 @@ const DashboardPage: FC = () => {
         onDragEnd={onDragEnd}
         canDrag={space.isAdmin || space.isMember}
       />
+      {tileDialog.isOpen && <TileForm />}
+      {tileRemoveDialog.isOpen && <RemoveTileDialog />}
     </styled.Container>
   );
 };

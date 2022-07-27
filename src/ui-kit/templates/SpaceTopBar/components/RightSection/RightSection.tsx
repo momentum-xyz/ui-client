@@ -3,37 +3,36 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {generatePath} from 'react-router-dom';
 
-import {Separator, ToolbarIcon} from 'ui-kit';
-import {FavoriteStoreInterface} from 'stores/MainStore/models';
-import {useTextChatContext} from 'context/TextChatContext';
 import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {Separator, ToolbarIcon} from 'ui-kit';
+import {useTextChatContext} from 'context/TextChatContext';
 
-import * as styled from './TopBarActions.styled';
+import * as styled from './RightSection.styled';
 
 interface PropsInterface {
   isAdmin?: boolean;
-  spaceId?: string;
-  favoriteStore: FavoriteStoreInterface;
+  spaceId: string;
+  editSpaceHidden?: boolean;
+  isSpaceFavorite: boolean;
+  isChatOpen: boolean;
+  toggleIsSpaceFavorite: (spaceId: string) => void;
+  toggleChat: () => void;
 }
 
-const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) => {
-  const {agoraStore} = useStore().mainStore;
+const RightSection: FC<PropsInterface> = ({
+  spaceId,
+  editSpaceHidden,
+  isAdmin,
+  isSpaceFavorite,
+  isChatOpen,
+  toggleIsSpaceFavorite,
+  toggleChat
+}) => {
   const {numberOfUnreadMessages} = useTextChatContext();
-
-  const toggleFavorite = () => {
-    if (spaceId) {
-      if (favoriteStore.isSpaceFavorite) {
-        favoriteStore.removeFavorite(spaceId);
-      } else {
-        favoriteStore.addFavorite(spaceId);
-      }
-    }
-  };
 
   return (
     <>
-      {isAdmin && (
+      {isAdmin && !editSpaceHidden && (
         <>
           <ToolbarIcon
             title={t('tooltipTitles.openAdmin')}
@@ -50,9 +49,9 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
         </>
       )}
       <ToolbarIcon
-        title={agoraStore.isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
+        title={isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
         icon="chat"
-        onClick={agoraStore.toggleChat}
+        onClick={toggleChat}
         isWhite={false}
       >
         {numberOfUnreadMessages > 0 && (
@@ -61,8 +60,8 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
       </ToolbarIcon>
       <ToolbarIcon
         title={t('tooltipTitles.favorite')}
-        icon={favoriteStore.isSpaceFavorite ? 'starOn' : 'star'}
-        onClick={toggleFavorite}
+        icon={isSpaceFavorite ? 'starOn' : 'star'}
+        onClick={() => toggleIsSpaceFavorite(spaceId)}
         isWhite={false}
       />
       <Separator />
@@ -71,4 +70,4 @@ const TopBarActions: FC<PropsInterface> = ({isAdmin, favoriteStore, spaceId}) =>
   );
 };
 
-export default observer(TopBarActions);
+export default observer(RightSection);

@@ -6,3 +6,4 @@ export * from './search.constants';
 export * from './dashboard.constants';
 export * from './eventEmitters.constants';
 export * from './unity.constants';
+export * from './tiles.constants';

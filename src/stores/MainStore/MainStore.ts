@@ -8,7 +8,6 @@ const MainStore = types.compose(
   ResetModel,
   types
     .model('MainStore', {
-      // stores
       themeStore: types.optional(ThemeStore, {}),
       sentryStore: types.optional(SentryStore, {}),
       unityStore: types.optional(UnityStore, {}),
@@ -20,7 +19,6 @@ const MainStore = types.compose(
       init(): void {
         self.sentryStore.init();
         self.unityStore.init();
-
         self.agoraStore.init();
       }
     }))
