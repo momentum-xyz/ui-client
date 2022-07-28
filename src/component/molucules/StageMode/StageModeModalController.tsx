@@ -1,23 +1,22 @@
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
+import {observer} from 'mobx-react-lite';
 
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
-import {usePosBusEvent} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
+import {StageModeRequestEnum} from 'core/enums';
 
 import Modal, {ModalRef} from '../../util/Modal';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 import StageModeInvitedOnStagePopup from '../../popup/stageMode/StageModeInvitedOnStagePopup';
 import StageModePrepareOnStagePopup from '../../popup/stageMode/StageModePrepareOnStagePopup';
 import {CountdownPopup} from '../../../modules/broadcastadmin/popups/CountdownPopup';
-import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
-import {useStageModeInvitationAcceptOrDecline} from '../../../hooks/api/useStageModeService';
 import AcceptedToJoinOnStagePopup from '../../popup/stageMode/AcceptedToJoinOnStagePopup';
 import DeclinedToJoinOnStagePopup from '../../popup/stageMode/DeclinedToJoinOnStagePopup';
 
 const StageModeModalController: React.FC = () => {
-  const {collaborationState, currentUserId} = useCollaboration();
-  const {enterStage, isOnStage, canEnterStage} = useAgoraStageMode();
+  const {mainStore, sessionStore} = useStore();
+  const {agoraStore} = mainStore;
 
   const invitedToStageModalRef = useRef<ModalRef>(null);
   const prepareToJoinStageModalRef = useRef<ModalRef>(null);
@@ -25,9 +24,6 @@ const StageModeModalController: React.FC = () => {
   const acceptedToJoin = useRef<ModalRef>(null);
   const declinedToJoin = useRef<ModalRef>(null);
 
-  const [accept, decline] = useStageModeInvitationAcceptOrDecline(
-    collaborationState.collaborationSpace?.id
-  );
   const [accepted, setAccepted] = useState<boolean>();
 
   const isHandlingInviteOrRequest = () => {
@@ -36,7 +32,7 @@ const StageModeModalController: React.FC = () => {
       invitedToStageModalRef.current?.isShown === true ||
       prepareToJoinStageModalRef.current?.isShown === true ||
       countdownModalRef.current?.isShown === true ||
-      isOnStage
+      agoraStore.isOnStage
     );
   };
 
@@ -48,7 +44,7 @@ const StageModeModalController: React.FC = () => {
   });
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
-    if (userId === currentUserId) {
+    if (userId === sessionStore.userId) {
       if (!isHandlingInviteOrRequest()) {
         acceptedToJoin.current?.open();
         setAccepted(true);
@@ -58,7 +54,7 @@ const StageModeModalController: React.FC = () => {
 
   usePosBusEvent('stage-mode-declined', (userId) => {
     //check user
-    if (userId === currentUserId) {
+    if (userId === sessionStore.userId) {
       declinedToJoin.current?.open();
     }
   });
@@ -67,8 +63,8 @@ const StageModeModalController: React.FC = () => {
     acceptedToJoin.current?.close();
   };
 
-  const handleCountdownEnded = () => {
-    if (!canEnterStage()) {
+  const handleCountdownEnded = useCallback(async () => {
+    if (!agoraStore.canEnterStage) {
       toast.error(
         <ToastContent
           headerIconName="alert"
@@ -83,45 +79,49 @@ const StageModeModalController: React.FC = () => {
     }
 
     if (!accepted) {
-      accept()
-        .then(enterStage)
-        .catch(() => {
-          toast.error(
-            <ToastContent
-              isDanger
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('messages.joinStageRefused')}
-              isCloseButton
-            />
-          );
-        })
-        .finally(countdownModalRef.current?.close);
+      try {
+        await agoraStore.invitationRespond(StageModeRequestEnum.ACCEPT);
+        await agoraStore.enterStage();
+      } catch {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.joinStageRefused')}
+            isCloseButton
+          />
+        );
+      } finally {
+        countdownModalRef.current?.close();
+      }
     } else if (accepted) {
-      enterStage()
-        .then(countdownModalRef.current?.close)
-        .catch(() => {
-          toast.error(
-            <ToastContent
-              isDanger
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('messages.joinStageRefused')}
-              isCloseButton
-            />
-          );
-        });
+      try {
+        await agoraStore.enterStage();
+        countdownModalRef.current?.close();
+      } catch {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.joinStageRefused')}
+            isCloseButton
+          />
+        );
+      }
     }
-  };
+  }, [accepted, agoraStore]);
 
   const handleCountdownCanceled = () => {
     countdownModalRef.current?.close();
     prepareToJoinStageModalRef.current?.close();
   };
 
-  const handleInviteDeclined = () => {
-    decline().then(invitedToStageModalRef.current?.close);
-  };
+  const handleInviteDeclined = useCallback(async () => {
+    await agoraStore.invitationRespond(StageModeRequestEnum.DECLINE);
+    invitedToStageModalRef.current?.close();
+  }, [agoraStore]);
 
   return (
     <>
@@ -159,4 +159,4 @@ const StageModeModalController: React.FC = () => {
   );
 };
 
-export default StageModeModalController;
+export default observer(StageModeModalController);

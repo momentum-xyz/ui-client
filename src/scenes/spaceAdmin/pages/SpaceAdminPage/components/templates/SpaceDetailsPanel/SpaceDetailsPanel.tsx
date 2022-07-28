@@ -7,20 +7,16 @@ import {useHistory} from 'react-router';
 import {Button, Heading, Input, SectionPanel, Text, Toggle} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {SpaceSettingsInterface} from 'api/repositories/spaceRepository/spaceRepository.api.types';
-import {useLeaveCollaborationSpace} from 'context/Collaboration/hooks/useCollaboration';
 import {DeleteSpaceConfirmationDialog} from 'scenes/spaceAdmin/pages/SpaceAdminPage/components/organisms';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './SpaceDetailsPanel.styled';
 
 const SpaceDetailsPanel: FC = () => {
-  const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore, spaceDetailsFormStore, deleteSpaceConfirmationDialog} = spaceManagerStore;
-
-  const {space} = spaceStore;
-
+  const {spaceAdminStore} = useStore();
+  const {spaceManagerStore} = spaceAdminStore;
+  const {space, spaceDetailsFormStore, deleteSpaceConfirmationDialog} = spaceManagerStore;
   const history = useHistory();
-  const leaveCollaborationSpace = useLeaveCollaborationSpace();
 
   const parentClicked = (id: string) => {
     history.push({pathname: '/space/' + id + '/admin'});
@@ -33,34 +29,31 @@ const SpaceDetailsPanel: FC = () => {
     setValue
   } = useForm<SpaceSettingsInterface>({
     defaultValues: {
-      name: space.name,
-      secret: space.secret
+      name: space?.name,
+      secret: space?.secret
     }
   });
 
   const formSubmitHandler: SubmitHandler<SpaceSettingsInterface> = (
     settings: SpaceSettingsInterface
   ) => {
-    if (space.id) {
-      spaceDetailsFormStore.saveDetails(settings, space.id).then(spaceStore.fetchSpaceInformation);
+    if (space) {
+      spaceDetailsFormStore.saveDetails(settings, space.id).then(space.fetchSpaceInformation);
     }
   };
 
   const handleDelete = () => {
-    if (space.id) {
-      spaceDetailsFormStore
-        .deleteSpace(space.id)
-        .then(() => leaveCollaborationSpace(true))
-        .then(() => {
-          history.replace({pathname: ROUTES.base});
-        });
+    if (space) {
+      spaceDetailsFormStore.deleteSpace(space.id).then(() => {
+        history.replace({pathname: ROUTES.base});
+      });
     }
   };
 
   useEffect(() => {
-    setValue('parentId', space.parentUUID ?? '');
-    setValue('root', space.parentUUID === undefined);
-  }, [space.parentUUID]);
+    setValue('parentId', space?.parentUUID ?? '');
+    setValue('root', space?.parentUUID === undefined);
+  }, [space?.parentUUID]);
 
   useEffect(() => {
     if (space) {
@@ -89,6 +82,10 @@ const SpaceDetailsPanel: FC = () => {
       isError={!!errors.name}
     />
   );
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <SectionPanel title={t('spaceAdmin.spaceDetails.title')} isCustom>
@@ -121,7 +118,7 @@ const SpaceDetailsPanel: FC = () => {
             <Text text={space.type} size="xs" align="left" />
           </styled.Info>
         )}
-        {spaceStore.space.secret !== undefined && (
+        {space.secret !== undefined && (
           <styled.Info>
             <Text
               text={t('spaceAdmin.spaceDetails.accessLabel')}

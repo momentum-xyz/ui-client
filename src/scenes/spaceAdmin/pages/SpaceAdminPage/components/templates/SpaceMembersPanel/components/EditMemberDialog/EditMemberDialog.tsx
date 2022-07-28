@@ -19,7 +19,7 @@ const EditMemberDialog: FC<PropsInterface> = (props) => {
   const {isAdmin, userId} = props;
 
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore} = spaceManagerStore;
+  const {space} = spaceManagerStore;
 
   const {control, handleSubmit} = useForm<{role: 'member' | 'admin'}>({
     defaultValues: {
@@ -28,8 +28,8 @@ const EditMemberDialog: FC<PropsInterface> = (props) => {
   });
 
   const formSubmitHandler: SubmitHandler<{role: 'member' | 'admin'}> = ({role}) => {
-    spaceStore.editUser(userId, role === 'admin').then(() => {
-      spaceStore.fetchSpaceInformation();
+    space?.editUser(userId, role === 'admin').then(() => {
+      space?.fetchSpaceInformation();
       toast.info(
         <ToastContent
           headerIconName="alert"

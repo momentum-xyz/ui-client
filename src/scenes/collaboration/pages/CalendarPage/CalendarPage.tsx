@@ -8,56 +8,27 @@ import {toast} from 'react-toastify';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {absoluteLink} from 'core/utils';
-import {PosBusEventEnum} from 'core/enums';
-import {UnityService} from 'shared/services';
 import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
-// TODO: Refactoring
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from 'context/Collaboration/hooks/useCollaboration';
-import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
 import {DeleteEventConfirmationDialog, EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const {collaborationStore, sessionStore, widgetStore, mainStore} = useStore();
-  const {calendarStore, spaceStore} = collaborationStore;
+  const rootStore = useStore();
+  const {collaborationStore, sessionStore, widgetStore, mainStore} = rootStore;
+  const {calendarStore, space} = collaborationStore;
+  const {agoraStore, favoriteStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
-  const {favoriteStore} = mainStore;
-  const {space} = spaceStore;
 
   const {eventId} = useParams<{eventId: string}>();
   const history = useHistory();
   const theme = useTheme();
 
-  // TODO: Refactor legacy hooks to mobx
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-
-  // TODO: make as reusable action in store
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace) {
-      UnityService.triggerInteractionMsg?.(
-        PosBusEventEnum.LeftSpace,
-        collaborationState.collaborationSpace.id,
-        0,
-        ''
-      );
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
-
-      history.push(ROUTES.base);
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
+
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
   };
@@ -68,7 +39,7 @@ const CalendarPage: FC = () => {
   // TODO , move to Calendar world page
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (!space.id) {
+    if (!space) {
       return;
     }
 
@@ -76,7 +47,7 @@ const CalendarPage: FC = () => {
   };
 
   const handleEventDelete = async () => {
-    if (space.id) {
+    if (space) {
       if (await calendarStore.removeEvent(space.id)) {
         toast.info(
           <ToastContent
@@ -101,26 +72,32 @@ const CalendarPage: FC = () => {
   };
 
   useEffect(() => {
-    if (space.id) {
+    if (space) {
       eventListStore.fetchEvents(space.id);
     }
 
     return () => eventListStore.resetModel();
-  }, [space.id]);
+  }, [eventListStore, space]);
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <styled.Container>
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle="calendar"
-        isAdmin={spaceStore.isAdmin}
-        spaceId={spaceStore.space?.id}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.space?.id || '')}
+        isAdmin={space.isAdmin}
+        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        onClose={leaveCollaborationSpace}
+        onClose={handleClose}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
         editSpaceHidden
       >
-        {spaceStore.isAdmin && (
+        {space.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
         )}
       </SpaceTopBar>
@@ -130,8 +107,8 @@ const CalendarPage: FC = () => {
         selectedEventId={eventId}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={eventListStore.areEventsLoading}
-        onEventEdit={spaceStore.isAdmin ? calendarStore.editEvent : undefined}
-        onEventRemove={spaceStore.isAdmin ? calendarStore.selectEventToRemove : undefined}
+        onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
+        onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
         onWeblinkClick={handleWeblink}
         onShowAttendeesList={attendeesListStore.showAttendees}
       />

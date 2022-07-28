@@ -9,7 +9,7 @@ import * as styled from './RemoveTileDialog.styled';
 
 const RemoveTileDialog: FC = () => {
   const {collaborationStore} = useStore();
-  const {dashboardStore, spaceStore} = collaborationStore;
+  const {dashboardStore, space} = collaborationStore;
   const {tileRemoveDialog, tileFormStore, dashboard} = dashboardStore;
 
   useEffect(() => {
@@ -17,11 +17,15 @@ const RemoveTileDialog: FC = () => {
   }, []);
 
   const confirm = async () => {
+    if (!space) {
+      return;
+    }
+
     let succeed = false;
     succeed = await tileFormStore.deleteTile();
     tileRemoveDialog.close();
     if (succeed) {
-      await dashboard.fetchDashboard(spaceStore.space.id);
+      await dashboard.fetchDashboard(space.id);
       toast.info(
         <ToastContent
           headerIconName="alert"

@@ -1,7 +1,7 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 
-import {RequestModel, ResetModel, SpaceModelInterface} from 'core/models';
-import {SpaceStore} from 'stores/MainStore/models';
+import {RequestModel, ResetModel} from 'core/models';
+import {Space} from 'core/models';
 import {api} from 'api';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {ExploreResponse} from 'api/repositories/spaceTypeRepository/spaceTypeRepository.api.types';
@@ -13,7 +13,7 @@ const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
-      selectedSpaceStore: types.optional(SpaceStore, {}),
+      selectedSpace: types.maybe(Space),
       isExpanded: true,
       searchRequest: types.optional(RequestModel, {}),
       searchQuery: '',
@@ -33,15 +33,15 @@ const ExploreStore = types
         self.spaceHistory.push({...self.previousItem});
       }
 
-      if (self.selectedSpaceStore.space.name && self.selectedSpaceStore.space.id) {
+      if (self.selectedSpace && self.selectedSpace.name) {
         self.previousItem = cast({
-          spaceName: self.selectedSpaceStore.space.name,
-          spaceId: self.selectedSpaceStore.space.id
+          spaceName: self.selectedSpace.name,
+          spaceId: self.selectedSpace.id
         });
       }
 
-      self.selectedSpaceStore.setSpace(spaceId);
-      self.selectedSpaceStore.fetchSpaceInformation();
+      self.selectedSpace = Space.create({id: spaceId});
+      self.selectedSpace.fetchSpaceInformation();
     },
     goBack() {
       const previousItem = self.spaceHistory.pop();
@@ -57,11 +57,11 @@ const ExploreStore = types
         self.previousItem = undefined;
       }
 
-      self.selectedSpaceStore.setSpace(previousItemId);
-      self.selectedSpaceStore.fetchSpaceInformation();
+      self.selectedSpace = Space.create({id: previousItemId});
+      self.selectedSpace.fetchSpaceInformation();
     },
     unselectSpace() {
-      self.selectedSpaceStore.resetModel();
+      self.selectedSpace = undefined;
     },
     setSearchQuery(query: string) {
       self.searchQuery = query;
@@ -81,7 +81,8 @@ const ExploreStore = types
             ...category,
             spaces: category.spaces.map((space) => ({
               ...space,
-              id: bytesToUuid(space.id.data)
+              id: bytesToUuid(space.id.data),
+              isAdmin: space.isAdmin === '1'
             }))
           }))
         );
@@ -89,13 +90,6 @@ const ExploreStore = types
     })
   }))
   .views((self) => ({
-    get selectedSpace(): SpaceModelInterface | undefined {
-      if (!self.selectedSpaceStore.space.id) {
-        return undefined;
-      }
-
-      return self.selectedSpaceStore.space;
-    },
     get isSearching() {
       return self.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT;
     }

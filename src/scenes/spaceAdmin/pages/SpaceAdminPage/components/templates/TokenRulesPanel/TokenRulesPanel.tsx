@@ -21,7 +21,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
     editTokenRuleDialog,
     removeTokenRuleDialog,
     tokenRulesListStore,
-    spaceStore
+    space
   } = spaceManagerStore;
   const {tokenRules, fetchTokenRules} = tokenRulesListStore;
 
@@ -56,7 +56,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
         />
       );
       removeTokenRuleDialog.close();
-      fetchTokenRules(spaceStore.space.id);
+      fetchTokenRules(space?.id);
     } else {
       toast.error(
         <ToastContent

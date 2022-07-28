@@ -1,5 +1,4 @@
 import {
-  IAgoraRTCRemoteUser,
   ILocalAudioTrack,
   ILocalVideoTrack,
   IRemoteAudioTrack,
@@ -9,6 +8,7 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import {bytesToUuid} from 'core/utils';
 import {appVariables} from 'api/constants';
+import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 
 import {useUser} from '../../hooks/api/useUser';
 import {ReactComponent as MicOff} from '../../images/icons/microphone-off.svg';
@@ -20,7 +20,7 @@ import astronautIconSrc, {
 
 export interface VideoPlayerProps {
   currentUser?: User;
-  remoteUser?: IAgoraRTCRemoteUser | undefined;
+  remoteUser?: AgoraRemoteUserInterface;
   videoTrack: ILocalVideoTrack | IRemoteVideoTrack | undefined;
   audioTrack: ILocalAudioTrack | IRemoteAudioTrack | undefined;
   isAudioMuted?: boolean;

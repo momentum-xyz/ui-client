@@ -13,6 +13,8 @@ interface PropsInterface extends PropsWithThemeInterface {
   spaceId?: string;
   editSpaceHidden?: boolean;
   isSpaceFavorite: boolean;
+  isChatOpen: boolean;
+  toggleChat: () => void;
   toggleIsSpaceFavorite: (spaceId: string) => void;
 }
 
@@ -22,8 +24,10 @@ const SpaceTopBar: FC<PropsInterface> = ({
   spaceId,
   isSpaceFavorite,
   toggleIsSpaceFavorite,
+  isChatOpen,
   isAdmin,
   editSpaceHidden,
+  toggleChat,
   children,
   onClose
 }) => {
@@ -36,6 +40,8 @@ const SpaceTopBar: FC<PropsInterface> = ({
         <>
           {!!spaceId && (
             <RightSection
+              isChatOpen={isChatOpen}
+              toggleChat={toggleChat}
               isAdmin={isAdmin}
               spaceId={spaceId}
               editSpaceHidden={editSpaceHidden}

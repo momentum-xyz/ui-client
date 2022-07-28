@@ -11,12 +11,6 @@ import {usePosBusEvent, useStore} from 'shared/hooks';
 
 // TODO: Refactor
 import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
-// TODO: Removal
-import {useStageModeLeave} from '../../../../hooks/api/useStageModeService';
-import {UnityService} from '../../../../shared/services';
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from '../../../../context/Collaboration/hooks/useCollaboration';
 
 import 'core/utils/boardsPicker.1.0.js';
 
@@ -25,30 +19,24 @@ import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
   const {collaborationStore, mainStore} = useStore();
-  const {spaceStore, miroBoardStore} = collaborationStore;
-  const {space, isAdmin} = spaceStore;
+  const {space, miroBoardStore} = collaborationStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
-  const {favoriteStore} = mainStore;
+  const {favoriteStore, agoraStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
 
-  // TODO: Removal
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-
   usePosBusEvent('miro-board-change', (id) => {
-    if (space?.id === id && space?.id) {
+    if (space?.id === id && space) {
       miroBoardStore.fetchMiroBoard(space.id);
     }
   });
 
   useEffect(() => {
-    if (space?.id) {
+    if (space) {
       miroBoardStore.fetchMiroBoard(space.id);
     }
-  }, [miroBoardStore, space.id]);
+  }, [miroBoardStore, space]);
 
   const pickBoard = useCallback(() => {
     // @ts-ignore: js-variable
@@ -62,43 +50,37 @@ const MiroBoardPage: FC = () => {
         }
       }
     });
-  }, [miroBoardStore, space.id]);
+  }, [miroBoardStore, space]);
 
-  // TODO: make as reusable action in store
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace) {
-      UnityService.leaveSpace(collaborationState.collaborationSpace.id);
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
-      history.push(ROUTES.base);
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <styled.Inner>
       <SpaceTopBar
-        title={space?.name ?? ''}
+        title={space.name ?? ''}
         subtitle={miroBoardTitle}
-        isAdmin={spaceStore.isAdmin}
-        spaceId={spaceStore.space?.id}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.space?.id || '')}
+        isAdmin={space.isAdmin}
+        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        onClose={leaveCollaborationSpace}
+        onClose={handleClose}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
       >
-        {isAdmin && !!miroBoard?.data?.accessLink && (
+        {space && !!miroBoard?.data?.accessLink && (
           <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
         )}
       </SpaceTopBar>
       <styled.Container>
         {!miroBoard?.data?.accessLink ? (
-          <MiroChoice isAdmin={isAdmin} pickBoard={pickBoard} />
+          <MiroChoice isAdmin={space.isAdmin} pickBoard={pickBoard} />
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}

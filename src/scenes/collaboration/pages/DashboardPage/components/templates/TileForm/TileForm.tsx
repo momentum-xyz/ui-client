@@ -17,7 +17,7 @@ import * as styled from './TileForm.styled';
 const TileForm: FC = () => {
   const theme = useTheme();
   const {collaborationStore} = useStore();
-  const {dashboardStore, spaceStore} = collaborationStore;
+  const {dashboardStore, space} = collaborationStore;
   const {tileDialog, tileFormStore, dashboard} = dashboardStore;
   const {currentTile} = tileFormStore;
 
@@ -42,6 +42,10 @@ const TileForm: FC = () => {
   }, []);
 
   const formSubmitHandler: SubmitHandler<TileFormInterface> = async (data: TileFormInterface) => {
+    if (!space) {
+      return;
+    }
+
     let isUpdateSucceed = false;
     let isCreateSucceed = false;
     if (currentTile?.id) {
@@ -58,7 +62,7 @@ const TileForm: FC = () => {
       }
       tileDialog.close();
       if (isUpdateSucceed) {
-        await dashboard.fetchDashboard(spaceStore.space.id);
+        await dashboard.fetchDashboard(space.id);
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -86,14 +90,14 @@ const TileForm: FC = () => {
           setImageError(true);
           return;
         }
-        isCreateSucceed = await tileFormStore.createImageTile(spaceStore.space.id, image);
+        isCreateSucceed = await tileFormStore.createImageTile(space.id, image);
         setImageError(false);
       } else {
-        isCreateSucceed = await tileFormStore.createTextOrVideoTile(spaceStore.space.id, data);
+        isCreateSucceed = await tileFormStore.createTextOrVideoTile(space.id, data);
       }
       tileDialog.close();
       if (isCreateSucceed) {
-        await dashboard.fetchDashboard(spaceStore.space.id);
+        await dashboard.fetchDashboard(space.id);
         toast.info(
           <ToastContent
             headerIconName="alert"
