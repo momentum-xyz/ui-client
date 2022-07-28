@@ -10,7 +10,7 @@ import * as styled from './RemoveTileDialog.styled';
 const RemoveTileDialog: FC = () => {
   const {collaborationStore} = useStore();
   const {dashboardStore, space} = collaborationStore;
-  const {tileRemoveDialog, tileFormStore, dashboard} = dashboardStore;
+  const {tileRemoveDialog, tileFormStore} = dashboardStore;
 
   useEffect(() => {
     return () => tileFormStore.resetModel();
@@ -23,7 +23,7 @@ const RemoveTileDialog: FC = () => {
     const succeed = await tileFormStore.deleteTile();
     tileRemoveDialog.close();
     if (succeed) {
-      await dashboard.fetchDashboard(space.id);
+      await dashboardStore.fetchDashboard(space.id);
       toast.info(
         <ToastContent
           headerIconName="alert"

@@ -15,15 +15,14 @@ export interface PropsInterface {
 const TileItem: FC<PropsInterface> = ({tile, provided}) => {
   const {collaborationStore} = useStore();
   const {dashboardStore, space} = collaborationStore;
-  const {dashboard} = dashboardStore;
 
   switch (tile.type) {
     case TileTypeEnum.TILE_TYPE_MEDIA:
-      dashboard.setImageUrl(tile);
+      dashboardStore.setImageUrl(tile);
       return (
         <TileDetail
           tile={tile}
-          imageUrl={dashboard.imageUrl}
+          imageUrl={dashboardStore.imageUrl}
           provided={provided}
           isAdmin={space?.isAdmin ?? false}
           isMember={space?.isMember ?? false}
@@ -39,11 +38,11 @@ const TileItem: FC<PropsInterface> = ({tile, provided}) => {
         />
       );
     case TileTypeEnum.TILE_TYPE_VIDEO:
-      dashboard.setVideoUrl(tile);
+      dashboardStore.setVideoUrl(tile);
       return (
         <TileDetail
           tile={tile}
-          videoUrl={dashboard.videoUrl}
+          videoUrl={dashboardStore.videoUrl}
           provided={provided}
           isAdmin={space?.isAdmin ?? false}
           isMember={space?.isMember ?? false}

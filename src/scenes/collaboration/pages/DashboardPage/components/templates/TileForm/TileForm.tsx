@@ -15,7 +15,7 @@ const TileForm: FC = () => {
   const theme = useTheme();
   const {collaborationStore} = useStore();
   const {dashboardStore, space} = collaborationStore;
-  const {tileDialog, tileFormStore, dashboard} = dashboardStore;
+  const {tileDialog, tileFormStore} = dashboardStore;
   const {currentTile, tileCreateRequest, tileUpdateRequest, imageUploadRequest} = tileFormStore;
 
   const {t} = useTranslation();
@@ -71,7 +71,7 @@ const TileForm: FC = () => {
             spaceId={space?.id ?? ''}
             createTile={tileFormStore.createVideoTile}
             updateTile={tileFormStore.updateVideoTile}
-            fetchDashboard={dashboard.fetchDashboard}
+            fetchDashboard={dashboardStore.fetchDashboard}
             createRequestPending={tileCreateRequest.isPending}
             updateRequestPending={tileUpdateRequest.isPending}
           />
@@ -82,7 +82,7 @@ const TileForm: FC = () => {
             spaceId={space?.id ?? ''}
             createTile={tileFormStore.createTextTile}
             updateTile={tileFormStore.updateTextTile}
-            fetchDashboard={dashboard.fetchDashboard}
+            fetchDashboard={dashboardStore.fetchDashboard}
             createRequestPending={tileCreateRequest.isPending}
             updateRequestPending={tileUpdateRequest.isPending}
           />
@@ -93,7 +93,7 @@ const TileForm: FC = () => {
             spaceId={space?.id ?? ''}
             createTile={tileFormStore.createImageTile}
             updateTile={tileFormStore.updateImageTile}
-            fetchDashboard={dashboard.fetchDashboard}
+            fetchDashboard={dashboardStore.fetchDashboard}
             createRequestPending={tileCreateRequest.isPending}
             updateRequestPending={tileUpdateRequest.isPending}
             uploadRequestPending={imageUploadRequest.isPending}
