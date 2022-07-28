@@ -1,4 +1,5 @@
 import {flow, types, cast} from 'mobx-state-tree';
+import {t} from 'i18next';
 
 import {api, GoogleDocumentInterface} from 'api';
 import {IntegrationTypeEnum} from 'core/enums';
@@ -33,6 +34,13 @@ const GoogleDriveStore = types.compose(
           spaceId: spaceId
         });
       })
+    }))
+    .views((self) => ({
+      get documentTitle(): string {
+        return self.googleDocument?.data?.name
+          ? `${t('labels.googleDrive')} / ${self.googleDocument.data.name}`
+          : t('labels.googleDrive');
+      }
     }))
 );
 

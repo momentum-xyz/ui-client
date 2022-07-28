@@ -15,7 +15,7 @@ import * as styled from './GoogleDrivePage.styled';
 const GoogleDrivePage: FC = () => {
   const {collaborationStore, mainStore} = useStore();
   const {space, googleDriveStore} = collaborationStore;
-  const {googleDocument} = googleDriveStore;
+  const {googleDocument, documentTitle} = googleDriveStore;
   const {favoriteStore, agoraStore} = mainStore;
 
   const {t} = useTranslation();
@@ -58,7 +58,7 @@ const GoogleDrivePage: FC = () => {
     <styled.Inner>
       <SpaceTopBar
         title={space.name ?? ''}
-        subtitle={t('labels.googleDrive')}
+        subtitle={documentTitle}
         isAdmin={space.isAdmin}
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
