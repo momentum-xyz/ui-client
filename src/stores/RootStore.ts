@@ -45,7 +45,6 @@ const RootStore = types
       self.mainStore.worldStore.init(worldId);
     },
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
-      self.mainStore.unityStore.teleportToSpace(spaceId);
       yield self.collaborationStore.joinMeetingSpace(spaceId, isTable);
       yield self.mainStore.agoraStore.joinMeetingSpace(self.sessionStore.userId, spaceId);
 

@@ -120,12 +120,15 @@ const Collaboration: FC = () => {
       );
       history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId}));
     } else {
-      <ToastContent
-        headerIconName="alert"
-        title={t('titles.stage')}
-        text={t('messages.stageModeActivated')}
-        isCloseButton
-      />;
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.stage')}
+          text={t('messages.stageModeActivated')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
     }
   });
 
