@@ -17,6 +17,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   onOptionSelect: (option: OptionInterface) => void | Promise<void>;
   isError?: boolean;
   dropdownSize?: DropdownSizeType;
+  isDisabled?: boolean;
 }
 
 const Dropdown: FC<PropsInterface> = ({
@@ -26,6 +27,7 @@ const Dropdown: FC<PropsInterface> = ({
   theme,
   options = [],
   onOptionSelect,
+  isDisabled = false,
   variant = 'primary',
   isError,
   dropdownSize = 'normal'
@@ -55,8 +57,10 @@ const Dropdown: FC<PropsInterface> = ({
   };
 
   const handleContainerClick = () => {
-    updateTooltipCoords();
-    setIsOpen(!isOpen);
+    if (!isDisabled) {
+      updateTooltipCoords();
+      setIsOpen(!isOpen);
+    }
   };
 
   useClickOutside(optionsRef, () => setIsOpen(false));
@@ -65,7 +69,12 @@ const Dropdown: FC<PropsInterface> = ({
 
   return (
     <styled.Dropdown ref={ref} className={cn(isError && 'error')}>
-      <ValueContainer theme={theme} variant={variant} onClick={handleContainerClick}>
+      <ValueContainer
+        theme={theme}
+        variant={variant}
+        isDisabled={isDisabled}
+        onClick={handleContainerClick}
+      >
         <SelectedValue valueType={valueType} placeholder={placeholder} selected={selectedOption} />
         <styled.DropdownIcon className={cn({opened: isOpen})}>
           <IconSvg theme={theme} name="chevron" size="normal" />

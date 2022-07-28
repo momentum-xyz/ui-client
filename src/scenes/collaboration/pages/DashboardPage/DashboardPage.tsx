@@ -14,21 +14,20 @@ import {RemoveTileDialog} from './components/templates/Dashboard/components/Remo
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
   const {dashboardStore, space} = collaborationStore;
-  const {dashboard, tileDialog, tileRemoveDialog} = dashboardStore;
+  const {tileDialog, tileRemoveDialog, tileList, onDragEnd} = dashboardStore;
   const {agoraStore, favoriteStore} = mainStore;
-  const {tileList, onDragEnd} = dashboard;
 
   const history = useHistory();
 
   useEffect(() => {
     if (space) {
-      dashboard.fetchDashboard(space.id);
+      dashboardStore.fetchDashboard(space.id);
       favoriteStore.setSpaceId(space.id);
     }
     return () => {
-      dashboard.resetModel();
+      dashboardStore.resetModel();
     };
-  }, [dashboard, favoriteStore, space]);
+  }, [dashboardStore, favoriteStore, space]);
 
   const handleClose = () => {
     history.push(ROUTES.base);
@@ -60,7 +59,7 @@ const DashboardPage: FC = () => {
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
       </SpaceTopBar>
-      {!dashboard.dashboardIsEdited && space.isOwner && (
+      {!dashboardStore.dashboardIsEdited && space.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
           <styled.AlertContent>
