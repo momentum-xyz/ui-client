@@ -100,7 +100,7 @@ export const useGooglePicker = (onChange: (data: any) => void) => {
   };
 
   // @ts-ignore: refactoring
-  const onChoose = () => {
+  const pickDocument = () => {
     if (!isGoogleReady() || !isGoogleAuthReady() || !isGooglePickerReady() || disabled) {
       return null;
     }
@@ -122,5 +122,5 @@ export const useGooglePicker = (onChange: (data: any) => void) => {
     }
   };
 
-  return {onChoose};
+  return {pickDocument};
 };

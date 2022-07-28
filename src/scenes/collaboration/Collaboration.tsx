@@ -23,6 +23,7 @@ const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
+  const {space, miroBoardStore, googleDriveStore} = collaborationStore;
 
   const {addRequestPopup} = useStageModePopupQueueContext();
 
@@ -50,6 +51,14 @@ const Collaboration: FC = () => {
 
     return () => {
       rootStore.leaveMeetingSpace();
+
+      if (space?.isAdmin) {
+        miroBoardStore.disableMiroBoard(spaceId);
+        googleDriveStore.disableGoogleDocument(spaceId);
+        // TODO: Disable:
+        // 1. Stage Mode
+        // 2. Screen Sharing
+      }
     };
   }, [rootStore, sessionStore.userId, spaceId, t]);
 
