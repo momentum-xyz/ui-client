@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {VideoTileFormInterface} from 'api';
-import {Button, Input, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {Button, Input, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {YOUTUBE_URL_PLACEHOLDER} from 'core/constants';
 import {TileInterface} from 'core/models';
 
@@ -18,6 +18,8 @@ interface PropsInterface {
   updateTile: (tileId: string, data: VideoTileFormInterface) => void;
   onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
+  createRequestPending?: boolean;
+  updateRequestPending?: boolean;
 }
 
 const VideoTileForm: FC<PropsInterface> = ({
@@ -26,7 +28,9 @@ const VideoTileForm: FC<PropsInterface> = ({
   createTile,
   updateTile,
   onClose,
-  fetchDashboard
+  fetchDashboard,
+  createRequestPending,
+  updateRequestPending
 }) => {
   const {
     control,
@@ -99,30 +103,38 @@ const VideoTileForm: FC<PropsInterface> = ({
 
   return (
     <styled.Item>
-      <styled.TextItem>
-        <Controller
-          name="youtube_url"
-          control={control}
-          defaultValue={currentTile ? currentTile?.content?.url : ''}
-          rules={{required: true}}
-          render={({field: {onChange, value}}) => (
-            <Input
-              label={t('dashboard.tileForm.videoLabel')}
-              value={value}
-              onChange={onChange}
-              placeholder={YOUTUBE_URL_PLACEHOLDER}
-              isError={!!errors.youtube_url}
-              isCustom
+      {updateRequestPending || createRequestPending ? (
+        <styled.LoaderContainer>
+          <Loader />
+        </styled.LoaderContainer>
+      ) : (
+        <>
+          <styled.TextItem>
+            <Controller
+              name="youtube_url"
+              control={control}
+              defaultValue={currentTile ? currentTile?.content?.url : ''}
+              rules={{required: true}}
+              render={({field: {onChange, value}}) => (
+                <Input
+                  label={t('dashboard.tileForm.videoLabel')}
+                  value={value}
+                  onChange={onChange}
+                  placeholder={YOUTUBE_URL_PLACEHOLDER}
+                  isError={!!errors.youtube_url}
+                  isCustom
+                />
+              )}
             />
-          )}
-        />
-      </styled.TextItem>
-      <styled.ButtonWrapper>
-        <Button
-          label={currentTile?.id ? 'update tile' : 'create tile'}
-          onClick={handleSubmit(formSubmitHandler)}
-        />
-      </styled.ButtonWrapper>
+          </styled.TextItem>
+          <styled.ButtonWrapper>
+            <Button
+              label={currentTile?.id ? 'update tile' : 'create tile'}
+              onClick={handleSubmit(formSubmitHandler)}
+            />
+          </styled.ButtonWrapper>
+        </>
+      )}
     </styled.Item>
   );
 };

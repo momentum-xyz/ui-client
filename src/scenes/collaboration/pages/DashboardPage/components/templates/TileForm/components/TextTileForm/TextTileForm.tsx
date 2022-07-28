@@ -4,7 +4,7 @@ import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
-import {Button, Input, TextArea, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {Button, Input, Loader, TextArea, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
 import {TextTileFormInterface} from 'api';
 
@@ -17,6 +17,8 @@ interface PropsInterface {
   updateTile: (tileId: string, data: TextTileFormInterface) => void;
   onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
+  createRequestPending?: boolean;
+  updateRequestPending?: boolean;
 }
 
 const TextTileForm: FC<PropsInterface> = ({
@@ -25,7 +27,9 @@ const TextTileForm: FC<PropsInterface> = ({
   createTile,
   updateTile,
   onClose,
-  fetchDashboard
+  fetchDashboard,
+  createRequestPending,
+  updateRequestPending
 }) => {
   const {
     control,
@@ -98,48 +102,56 @@ const TextTileForm: FC<PropsInterface> = ({
 
   return (
     <styled.Item>
-      <styled.TextItem>
-        <Controller
-          name="text_title"
-          control={control}
-          defaultValue={currentTile ? currentTile?.content?.title : ''}
-          rules={{required: true}}
-          render={({field: {onChange, value}}) => (
-            <Input
-              label={t('dashboard.tileForm.textLabel')}
-              value={value}
-              onChange={onChange}
-              isError={!!errors.text_title}
-              placeholder={t('dashboard.tileForm.textPlaceholder')}
-              isCustom
+      {updateRequestPending || createRequestPending ? (
+        <styled.LoaderContainer>
+          <Loader />
+        </styled.LoaderContainer>
+      ) : (
+        <>
+          <styled.TextItem>
+            <Controller
+              name="text_title"
+              control={control}
+              defaultValue={currentTile ? currentTile?.content?.title : ''}
+              rules={{required: true}}
+              render={({field: {onChange, value}}) => (
+                <Input
+                  label={t('dashboard.tileForm.textLabel')}
+                  value={value}
+                  onChange={onChange}
+                  isError={!!errors.text_title}
+                  placeholder={t('dashboard.tileForm.textPlaceholder')}
+                  isCustom
+                />
+              )}
             />
-          )}
-        />
-      </styled.TextItem>
-      <styled.TextItem>
-        <Controller
-          name="text_description"
-          control={control}
-          defaultValue={currentTile ? currentTile?.content?.text : ''}
-          rules={{required: true}}
-          render={({field: {onChange, value}}) => (
-            <TextArea
-              name={t('dashboard.tileForm.descriptionLabel')}
-              value={value}
-              onChange={onChange}
-              placeholder={t('dashboard.tileForm.descriptionPlaceholder')}
-              isError={!!errors.text_description}
-              isResizable={true}
+          </styled.TextItem>
+          <styled.TextItem>
+            <Controller
+              name="text_description"
+              control={control}
+              defaultValue={currentTile ? currentTile?.content?.text : ''}
+              rules={{required: true}}
+              render={({field: {onChange, value}}) => (
+                <TextArea
+                  name={t('dashboard.tileForm.descriptionLabel')}
+                  value={value}
+                  onChange={onChange}
+                  placeholder={t('dashboard.tileForm.descriptionPlaceholder')}
+                  isError={!!errors.text_description}
+                  isResizable={true}
+                />
+              )}
             />
-          )}
-        />
-      </styled.TextItem>
-      <styled.ButtonWrapper>
-        <Button
-          label={currentTile?.id ? 'update tile' : 'create tile'}
-          onClick={handleSubmit(formSubmitHandler)}
-        />
-      </styled.ButtonWrapper>
+          </styled.TextItem>
+          <styled.ButtonWrapper>
+            <Button
+              label={currentTile?.id ? 'update tile' : 'create tile'}
+              onClick={handleSubmit(formSubmitHandler)}
+            />
+          </styled.ButtonWrapper>
+        </>
+      )}
     </styled.Item>
   );
 };

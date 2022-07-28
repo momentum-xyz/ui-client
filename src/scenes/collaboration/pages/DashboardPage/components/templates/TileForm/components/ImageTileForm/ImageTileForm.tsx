@@ -6,7 +6,7 @@ import cn from 'classnames';
 import {toast} from 'react-toastify';
 
 import {appVariables} from 'api/constants';
-import {Button, FileUploader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {Button, FileUploader, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
 
 import * as styled from './ImageTileForm.styled';
@@ -18,6 +18,9 @@ interface PropsInterface {
   updateTile: (tileId: string, image: File) => void;
   onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
+  createRequestPending?: boolean;
+  updateRequestPending?: boolean;
+  uploadRequestPending?: boolean;
 }
 
 const ImageTileForm: FC<PropsInterface> = ({
@@ -26,7 +29,10 @@ const ImageTileForm: FC<PropsInterface> = ({
   createTile,
   updateTile,
   onClose,
-  fetchDashboard
+  fetchDashboard,
+  createRequestPending,
+  updateRequestPending,
+  uploadRequestPending
 }) => {
   const theme = useTheme();
 
@@ -39,7 +45,6 @@ const ImageTileForm: FC<PropsInterface> = ({
         setImageError(true);
         return;
       }
-      onClose();
       const isSucceed = await createTile(spaceId, image);
       setImageError(false);
 
@@ -73,7 +78,6 @@ const ImageTileForm: FC<PropsInterface> = ({
         return;
       }
       const isSucceed = await updateTile(currentTile?.id, image);
-      onClose();
       setImageError(false);
 
       // @ts-ignore
@@ -110,31 +114,42 @@ const ImageTileForm: FC<PropsInterface> = ({
 
   return (
     <styled.Item>
-      <styled.FileUploaderItem>
-        <styled.TileImageUpload className={cn(imageError && 'error')}>
-          {(image || currentTile?.hash) && (
-            <styled.ImagePreview
-              src={
-                (image && URL.createObjectURL(image)) ||
-                (currentTile?.hash &&
-                  `${appVariables.RENDER_SERVICE_URL}/get/${currentTile?.hash}`) ||
-                undefined
-              }
+      {updateRequestPending || createRequestPending || uploadRequestPending ? (
+        <styled.LoaderContainer>
+          <Loader />
+        </styled.LoaderContainer>
+      ) : (
+        <>
+          <styled.FileUploaderItem>
+            <styled.TileImageUpload className={cn(imageError && 'error')}>
+              {(image || currentTile?.hash) && (
+                <styled.ImagePreview
+                  src={
+                    (image && URL.createObjectURL(image)) ||
+                    (currentTile?.hash &&
+                      `${appVariables.RENDER_SERVICE_URL}/get/${currentTile?.hash}`) ||
+                    undefined
+                  }
+                />
+              )}
+              <FileUploader
+                label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}
+                dragActiveLabel={t('fileUploader.dragActiveLabel')}
+                fileType="image"
+                theme={theme}
+                onFilesUpload={handleImage}
+                buttonIsCustom
+              />
+            </styled.TileImageUpload>
+          </styled.FileUploaderItem>
+          <styled.ButtonWrapper>
+            <Button
+              label={currentTile?.id ? 'update tile' : 'create tile'}
+              onClick={handleSubmit}
             />
-          )}
-          <FileUploader
-            label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}
-            dragActiveLabel={t('fileUploader.dragActiveLabel')}
-            fileType="image"
-            theme={theme}
-            onFilesUpload={handleImage}
-            buttonIsCustom
-          />
-        </styled.TileImageUpload>
-      </styled.FileUploaderItem>
-      <styled.ButtonWrapper>
-        <Button label={currentTile?.id ? 'update tile' : 'create tile'} onClick={handleSubmit} />
-      </styled.ButtonWrapper>
+          </styled.ButtonWrapper>
+        </>
+      )}
     </styled.Item>
   );
 };

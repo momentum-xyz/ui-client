@@ -49,3 +49,8 @@ export const ImagePreview = styled.img`
   border-radius: 5px;
   object-fit: cover;
 `;
+
+export const LoaderContainer = styled.div`
+  width: 460px;
+  height: 100%;
+`;

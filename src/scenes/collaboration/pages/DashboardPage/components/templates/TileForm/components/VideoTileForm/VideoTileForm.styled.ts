@@ -22,3 +22,8 @@ export const TextItem = styled.div`
   width: 460px;
   height: 100%;
 `;
+
+export const LoaderContainer = styled.div`
+  width: 460px;
+  height: 100%;
+`;

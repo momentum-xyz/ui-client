@@ -16,7 +16,7 @@ const TileForm: FC = () => {
   const {collaborationStore} = useStore();
   const {dashboardStore, spaceStore} = collaborationStore;
   const {tileDialog, tileFormStore, dashboard} = dashboardStore;
-  const {currentTile} = tileFormStore;
+  const {currentTile, tileCreateRequest, tileUpdateRequest, imageUploadRequest} = tileFormStore;
 
   const [selectedType, setSelectedType] = useState<string | undefined>(undefined);
 
@@ -27,6 +27,12 @@ const TileForm: FC = () => {
   useEffect(() => {
     return () => tileFormStore.resetModel();
   }, []);
+
+  useEffect(() => {
+    if (tileCreateRequest.isDone || tileUpdateRequest.isDone) {
+      tileDialog.close();
+    }
+  }, [tileCreateRequest.state, tileUpdateRequest.state]);
 
   return (
     <Dialog
@@ -65,6 +71,8 @@ const TileForm: FC = () => {
               createTile={tileFormStore.createVideoTile}
               updateTile={tileFormStore.updateVideoTile}
               fetchDashboard={dashboard.fetchDashboard}
+              createRequestPending={tileCreateRequest.isPending}
+              updateRequestPending={tileUpdateRequest.isPending}
             />
           )}
           {selectedType === TileTypeEnum.TILE_TYPE_TEXT && (
@@ -75,6 +83,8 @@ const TileForm: FC = () => {
               createTile={tileFormStore.createTextTile}
               updateTile={tileFormStore.updateTextTile}
               fetchDashboard={dashboard.fetchDashboard}
+              createRequestPending={tileCreateRequest.isPending}
+              updateRequestPending={tileUpdateRequest.isPending}
             />
           )}
           {selectedType === TileTypeEnum.TILE_TYPE_MEDIA && (
@@ -85,6 +95,9 @@ const TileForm: FC = () => {
               updateTile={tileFormStore.updateImageTile}
               currentTile={currentTile}
               fetchDashboard={dashboard.fetchDashboard}
+              createRequestPending={tileCreateRequest.isPending}
+              updateRequestPending={tileUpdateRequest.isPending}
+              uploadRequestPending={imageUploadRequest.isPending}
             />
           )}
         </styled.Div>
