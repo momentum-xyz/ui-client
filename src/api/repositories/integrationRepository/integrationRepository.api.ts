@@ -11,7 +11,11 @@ import {
   EnableMiroIntegrationRequest,
   EnableMiroIntegrationResponse,
   DisableMiroIntegrationRequest,
-  DisableMiroIntegrationResponse
+  DisableMiroIntegrationResponse,
+  EnableGoogleDriveIntegrationRequest,
+  EnableGoogleDriveIntegrationResponse,
+  DisableGoogleDriveIntegrationRequest,
+  DisableGoogleDriveIntegrationResponse
 } from './integrationRepository.api.types';
 
 export const fetchIntegration: RequestInterface<
@@ -45,6 +49,33 @@ export const disableMiroIntegration: RequestInterface<
     spaceId,
     integrationType: IntegrationTypeEnum.MIRO,
     data: {id: '', name: '', description: '', viewLink: '', accessLink: '', embedHtml: ''}
+  };
+
+  const URL: string = integrationRepositoryEndpoints().disable;
+  return request.post(URL, data, rest);
+};
+
+export const enableGoogleDriveIntegration: RequestInterface<
+  EnableGoogleDriveIntegrationRequest,
+  EnableGoogleDriveIntegrationResponse
+> = (options) => {
+  const {spaceId, data, ...rest} = options;
+
+  const URL: string = integrationRepositoryEndpoints().enable;
+  const document = {spaceId, integrationType: IntegrationTypeEnum.GOOGLE_DRIVE, data};
+  return request.post(URL, document, rest);
+};
+
+export const disableGoogleDriveIntegration: RequestInterface<
+  DisableGoogleDriveIntegrationRequest,
+  DisableGoogleDriveIntegrationResponse
+> = (options) => {
+  const {spaceId, ...rest} = options;
+
+  const data = {
+    spaceId,
+    integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
+    data: {id: '', name: '', description: '', type: '', url: '', embedUrl: ''}
   };
 
   const URL: string = integrationRepositoryEndpoints().disable;

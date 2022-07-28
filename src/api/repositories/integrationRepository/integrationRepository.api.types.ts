@@ -60,6 +60,12 @@ export interface MiroBoardInterface {
   embedHtml: string;
 }
 
+export interface GoogleDocumentInterface {
+  id: string;
+  name: string;
+  url: string;
+}
+
 /** FETCH CURRENT INTEGRATION **/
 
 export interface FetchIntegrationRequest {
@@ -85,3 +91,20 @@ export interface DisableMiroIntegrationRequest {
 }
 
 export interface DisableMiroIntegrationResponse extends IntegrationInterface {}
+
+/** ENABLE GOOGLE DRIVE INTEGRATION **/
+
+export interface EnableGoogleDriveIntegrationRequest {
+  spaceId: string;
+  data: GoogleDocumentInterface;
+}
+
+export interface EnableGoogleDriveIntegrationResponse {}
+
+/** DISABLE GOOGLE DRIVE INTEGRATION **/
+
+export interface DisableGoogleDriveIntegrationRequest {
+  spaceId: string;
+}
+
+export interface DisableGoogleDriveIntegrationResponse extends IntegrationInterface {}
