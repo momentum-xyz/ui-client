@@ -3,7 +3,6 @@ import {useEffect, useRef} from 'react';
 import {appVariables} from 'api/constants';
 
 const DOCUMENT_VIEW_ID = 'DOCS';
-const DOCUMENT_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
 export const useGooglePicker = (onChange: (data: any) => void) => {
   const scriptLoadingStarted = useRef<boolean>(false);
@@ -46,7 +45,7 @@ export const useGooglePicker = (onChange: (data: any) => void) => {
   const doAuth = (callback: (data: any) => void) => {
     const config = {
       client_id: appVariables.GOOGLE_API_CLIENT_ID,
-      scope: [DOCUMENT_SCOPE],
+      scope: [appVariables.GOOGLE_DOCUMENT_SCOPE],
       immediate: false
     };
 
