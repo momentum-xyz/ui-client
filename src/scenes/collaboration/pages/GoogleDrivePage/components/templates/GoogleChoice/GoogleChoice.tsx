@@ -9,10 +9,10 @@ import * as styled from './GoogleChoice.styled';
 
 interface PropsInterface {
   isAdmin: boolean;
-  pickBoard: () => void;
+  pickDocument: () => void;
 }
 
-const GoogleChoice: FC<PropsInterface> = ({isAdmin, pickBoard}) => {
+const GoogleChoice: FC<PropsInterface> = ({isAdmin, pickDocument}) => {
   const {t} = useTranslation();
   const theme = useTheme();
 
@@ -25,7 +25,7 @@ const GoogleChoice: FC<PropsInterface> = ({isAdmin, pickBoard}) => {
             theme={theme}
             variant="primary"
             label={t('actions.chooseDocument')}
-            onClick={pickBoard}
+            onClick={pickDocument}
           />
         </styled.Actions>
       ) : (

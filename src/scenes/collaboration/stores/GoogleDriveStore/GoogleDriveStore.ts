@@ -1,6 +1,6 @@
 import {flow, types, cast} from 'mobx-state-tree';
 
-import {api, MiroBoardInterface} from 'api';
+import {api, GoogleDocumentInterface} from 'api';
 import {IntegrationTypeEnum} from 'core/enums';
 import {Integration, RequestModel, ResetModel} from 'core/models';
 
@@ -14,7 +14,7 @@ const GoogleDriveStore = types.compose(
     .actions((self) => ({
       fetchGoogleDocument: flow(function* (spaceId: string) {
         const response = yield self.request.send(api.integrationRepository.fetchIntegration, {
-          integrationType: IntegrationTypeEnum.MIRO,
+          integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
           spaceId: spaceId
         });
 
@@ -22,14 +22,14 @@ const GoogleDriveStore = types.compose(
           self.googleDocument = cast(response);
         }
       }),
-      enableGoogleDocument: flow(function* (spaceId: string, data: MiroBoardInterface) {
-        yield self.request.send(api.integrationRepository.enableMiroIntegration, {
+      enableGoogleDocument: flow(function* (spaceId: string, data: GoogleDocumentInterface) {
+        yield self.request.send(api.integrationRepository.enableGoogleDriveIntegration, {
           spaceId: spaceId,
           data: data
         });
       }),
       disableGoogleDocument: flow(function* (spaceId: string) {
-        yield self.request.send(api.integrationRepository.disableMiroIntegration, {
+        yield self.request.send(api.integrationRepository.disableGoogleDriveIntegration, {
           spaceId: spaceId
         });
       })

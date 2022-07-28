@@ -5,19 +5,19 @@ import {useTranslation} from 'react-i18next';
 import * as styled from './GoogleDocument.styled';
 
 interface PropsInterface {
-  miroUrl: string;
+  documentUrl: string;
 }
 
-const GoogleDocument: FC<PropsInterface> = ({miroUrl}) => {
+const GoogleDocument: FC<PropsInterface> = ({documentUrl}) => {
   const {t} = useTranslation();
 
   return (
     <styled.Wrapper>
       <iframe
-        title={t('labels.miro')}
+        title={t('labels.googleDrive')}
         width="800"
         height="500"
-        src={miroUrl}
+        src={documentUrl}
         frameBorder="0"
         scrolling="no"
         allowFullScreen
