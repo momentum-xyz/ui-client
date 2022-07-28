@@ -7,6 +7,7 @@ import {api} from 'api';
 import {CalendarStore} from './CalendarStore';
 import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
+import {GoogleDriveStore} from './GoogleDriveStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -16,6 +17,7 @@ const RootCollaborationStore = types
       calendarStore: types.optional(CalendarStore, {}),
       dashboardStore: types.optional(DashboardStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
+      googleDriveStore: types.optional(GoogleDriveStore, {}),
       isModerator: false,
 
       // collaboration

@@ -165,6 +165,7 @@ export const enGb = {
     },
     labels: {
       miro: 'Miro',
+      googleDrive: 'Google Drive',
       calendar: 'World Calendar',
       staking: 'Staking',
       minimap: 'Minimap',
@@ -254,6 +255,8 @@ export const enGb = {
         'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).',
       noTeamMiroBoard: 'Your team does not have a Miro board yet',
       noMiroBoard: 'This team does not have a Miro board yet',
+      noTeamDocument: 'Your team does not have a Google Drive Document open yet',
+      noDocument: 'This team does not have a Google Drive Document open yet',
       tileCreateSuccess: 'Your tile has been created successfully',
       tileCreateError: 'There was a problem creating your tile',
       tileUpdateSuccess: 'Your tile has been updated successfully',
@@ -347,7 +350,9 @@ export const enGb = {
       muteName: 'Mute {{name}}',
       kickName: 'Kick {{name}}',
       changeBoard: 'Change board',
-      chooseBoard: 'Choose a Miro board'
+      chooseBoard: 'Choose a Miro board',
+      chooseDocument: 'Choose a document',
+      changeDocument: 'Change document'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

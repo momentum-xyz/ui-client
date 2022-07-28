@@ -1,11 +1,87 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
-import GoogleDriveLayout from 'component/layout/Collaboration/GoogleDriveLayout';
+import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
+import {SpaceTopBar, Button} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 
-// TODO: Refactor like "MiroBoardPage"
+import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
+
+import {GoogleDocument, GoogleChoice} from './components/templates';
+import * as styled from './GoogleDrivePage.styled';
+
 const GoogleDrivePage: FC = () => {
-  return <GoogleDriveLayout />;
+  const {collaborationStore, mainStore} = useStore();
+  const {space, googleDriveStore} = collaborationStore;
+  const {googleDocument, documentTitle} = googleDriveStore;
+  const {favoriteStore, agoraStore} = mainStore;
+
+  const {t} = useTranslation();
+  const history = useHistory();
+
+  usePosBusEvent('google-drive-file-change', (id) => {
+    if (space?.id === id) {
+      googleDriveStore.fetchGoogleDocument(id);
+    }
+  });
+
+  const pickerCallBack = useCallback(
+    async (data) => {
+      const {picker} = (window as any).google;
+
+      if (data[picker.Response.ACTION] === picker.Action.PICKED) {
+        const content = data[picker.Response.DOCUMENTS][0];
+        const document = {
+          id: content[picker.Document.ID],
+          name: content[picker.Document.NAME],
+          url: content[picker.Document.URL]
+        };
+
+        if (space) {
+          await googleDriveStore.enableGoogleDocument(space.id, document);
+          await googleDriveStore.fetchGoogleDocument(space.id);
+        }
+      }
+    },
+    [googleDriveStore, space]
+  );
+
+  const {onChoose} = useGooglePicker(pickerCallBack);
+
+  if (!space) {
+    return null;
+  }
+
+  return (
+    <styled.Inner>
+      <SpaceTopBar
+        title={space.name ?? ''}
+        subtitle={documentTitle}
+        isAdmin={space.isAdmin}
+        spaceId={space?.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
+        editSpaceHidden
+        onClose={() => history.push(ROUTES.base)}
+      >
+        {space.isAdmin && !!googleDocument?.data?.url && (
+          <Button label={t('actions.changeDocument')} variant="primary" onClick={onChoose} />
+        )}
+      </SpaceTopBar>
+      <styled.Container>
+        {!googleDocument?.data?.url ? (
+          <GoogleChoice isAdmin={space.isAdmin} pickDocument={onChoose} />
+        ) : (
+          <GoogleDocument documentUrl={googleDocument.data.url} />
+        )}
+        <TextChatView />
+      </styled.Container>
+    </styled.Inner>
+  );
 };
 
 export default observer(GoogleDrivePage);
