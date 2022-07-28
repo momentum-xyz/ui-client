@@ -27,8 +27,8 @@ const MiroBoardPage: FC = () => {
   const history = useHistory();
 
   usePosBusEvent('miro-board-change', (id) => {
-    if (space?.id === id && space) {
-      miroBoardStore.fetchMiroBoard(space.id);
+    if (space?.id === id) {
+      miroBoardStore.fetchMiroBoard(id);
     }
   });
 

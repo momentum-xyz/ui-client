@@ -20,17 +20,17 @@ const GoogleChoice: FC<PropsInterface> = ({isAdmin, pickBoard}) => {
     <styled.Wrapper>
       {isAdmin ? (
         <styled.Actions>
-          <Text text={t('messages.noTeamMiroBoard')} theme={theme} size="s" />
+          <Text text={t('messages.noTeamDocument')} theme={theme} size="s" />
           <Button
             theme={theme}
             variant="primary"
-            label={t('actions.chooseBoard')}
+            label={t('actions.chooseDocument')}
             onClick={pickBoard}
           />
         </styled.Actions>
       ) : (
         <styled.Actions>
-          <Text text={t('messages.noMiroBoard')} theme={theme} size="s" />
+          <Text text={t('messages.noDocument')} theme={theme} size="s" />
         </styled.Actions>
       )}
     </styled.Wrapper>
