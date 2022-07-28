@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {useTheme} from 'styled-components';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
@@ -16,7 +16,7 @@ const TileForm: FC = () => {
   const {collaborationStore} = useStore();
   const {dashboardStore, space} = collaborationStore;
   const {tileDialog, tileFormStore} = dashboardStore;
-  const {currentTile, tileCreateRequest, tileUpdateRequest, imageUploadRequest} = tileFormStore;
+  const {currentTile, tileCreateRequest} = tileFormStore;
 
   const {t} = useTranslation();
 
@@ -30,11 +30,10 @@ const TileForm: FC = () => {
     return () => tileFormStore.resetModel();
   }, []);
 
-  useEffect(() => {
-    if (tileCreateRequest.isDone || tileUpdateRequest.isDone) {
-      tileDialog.close();
-    }
-  }, [tileCreateRequest.state, tileUpdateRequest.state]);
+  const onComplete = useCallback(() => {
+    dashboardStore.fetchDashboard(space?.id ?? '');
+    tileDialog.close();
+  }, [dashboardStore, space?.id, tileDialog]);
 
   return (
     <Dialog
@@ -71,9 +70,8 @@ const TileForm: FC = () => {
             spaceId={space?.id ?? ''}
             createTile={tileFormStore.createVideoTile}
             updateTile={tileFormStore.updateVideoTile}
-            fetchDashboard={dashboardStore.fetchDashboard}
-            createRequestPending={tileCreateRequest.isPending}
-            updateRequestPending={tileUpdateRequest.isPending}
+            onComplete={onComplete}
+            pendingRequest={tileFormStore.isLoading}
           />
         )}
         {selectedType === TileTypeEnum.TILE_TYPE_TEXT && (
@@ -82,9 +80,8 @@ const TileForm: FC = () => {
             spaceId={space?.id ?? ''}
             createTile={tileFormStore.createTextTile}
             updateTile={tileFormStore.updateTextTile}
-            fetchDashboard={dashboardStore.fetchDashboard}
-            createRequestPending={tileCreateRequest.isPending}
-            updateRequestPending={tileUpdateRequest.isPending}
+            onComplete={onComplete}
+            pendingRequest={tileFormStore.isLoading}
           />
         )}
         {selectedType === TileTypeEnum.TILE_TYPE_MEDIA && (
@@ -93,10 +90,8 @@ const TileForm: FC = () => {
             spaceId={space?.id ?? ''}
             createTile={tileFormStore.createImageTile}
             updateTile={tileFormStore.updateImageTile}
-            fetchDashboard={dashboardStore.fetchDashboard}
-            createRequestPending={tileCreateRequest.isPending}
-            updateRequestPending={tileUpdateRequest.isPending}
-            uploadRequestPending={imageUploadRequest.isPending}
+            onComplete={onComplete}
+            pendingRequest={tileFormStore.isLoading}
           />
         )}
       </styled.Container>

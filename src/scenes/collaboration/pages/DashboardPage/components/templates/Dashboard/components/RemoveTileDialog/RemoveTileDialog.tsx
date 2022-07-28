@@ -43,7 +43,7 @@ const RemoveTileDialog: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, []);
+  }, [dashboardStore, space, tileFormStore, tileRemoveDialog]);
 
   return (
     <Dialog

@@ -31,7 +31,7 @@ const DashboardStore = types.compose(
       videoUrl: types.maybe(types.string)
     })
     .actions((self) => ({
-      fetchDashboard: flow(function* fetchDashboard(spaceId: string) {
+      fetchDashboard: flow(function* (spaceId: string) {
         const response: TileListInterface = yield self.request.send(
           api.dashboardRepository.fetchDashboard,
           {
@@ -53,7 +53,7 @@ const DashboardStore = types.compose(
           });
         }
       }),
-      updatePositions: flow(function* updatePositions(tiles: TileInterface[]) {
+      updatePositions: flow(function* (tiles: TileInterface[]) {
         yield self.updateRequest.send(api.dashboardRepository.updateDashboardPositions, {
           data: {...self.tileList, tiles: tiles}
         });

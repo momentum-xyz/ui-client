@@ -132,6 +132,15 @@ const TileFormStore = types.compose(
         self.currentTile = tile;
       }
     }))
+    .views((self) => ({
+      get isLoading(): boolean {
+        return (
+          self.tileCreateRequest.isPending ||
+          self.tileUpdateRequest.isPending ||
+          self.imageUploadRequest.isPending
+        );
+      }
+    }))
 );
 
 export {TileFormStore};

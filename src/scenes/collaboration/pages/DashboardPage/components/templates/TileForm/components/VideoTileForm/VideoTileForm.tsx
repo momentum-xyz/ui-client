@@ -14,11 +14,10 @@ import * as styled from './VideoTileForm.styled';
 interface PropsInterface {
   currentTile?: TileInterface;
   spaceId: string;
-  createTile: (spaceId: string, data: VideoTileFormInterface) => void;
-  updateTile: (tileId: string, data: VideoTileFormInterface) => void;
-  fetchDashboard: (spaceId: string) => void;
-  createRequestPending?: boolean;
-  updateRequestPending?: boolean;
+  createTile: (spaceId: string, data: VideoTileFormInterface) => Promise<boolean>;
+  updateTile: (tileId: string, data: VideoTileFormInterface) => Promise<boolean>;
+  onComplete: () => void;
+  pendingRequest?: boolean;
 }
 
 const VideoTileForm: FC<PropsInterface> = ({
@@ -26,9 +25,8 @@ const VideoTileForm: FC<PropsInterface> = ({
   spaceId,
   createTile,
   updateTile,
-  fetchDashboard,
-  createRequestPending,
-  updateRequestPending
+  onComplete,
+  pendingRequest
 }) => {
   const {t} = useTranslation();
 
@@ -43,10 +41,8 @@ const VideoTileForm: FC<PropsInterface> = ({
     data: VideoTileFormInterface
   ) => {
     if (!currentTile?.id) {
-      const isSucceed = await createTile(spaceId, data);
-      // @ts-ignore
-      if (isSucceed) {
-        await fetchDashboard(spaceId);
+      if (await createTile(spaceId, data)) {
+        onComplete();
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -69,10 +65,8 @@ const VideoTileForm: FC<PropsInterface> = ({
         );
       }
     } else {
-      const isSucceed = await updateTile(currentTile.id, data);
-      await fetchDashboard(spaceId);
-      // @ts-ignore
-      if (isSucceed) {
+      if (await updateTile(currentTile.id, data)) {
+        onComplete();
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -101,7 +95,7 @@ const VideoTileForm: FC<PropsInterface> = ({
 
   return (
     <styled.Container>
-      {updateRequestPending || createRequestPending ? (
+      {pendingRequest ? (
         <styled.LoaderContainer>
           <Loader />
         </styled.LoaderContainer>

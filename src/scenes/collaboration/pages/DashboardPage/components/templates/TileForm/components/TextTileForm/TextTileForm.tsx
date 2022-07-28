@@ -13,11 +13,10 @@ import * as styled from './TextTileForm.styled';
 interface PropsInterface {
   currentTile?: TileInterface;
   spaceId: string;
-  createTile: (spaceId: string, data: TextTileFormInterface) => void;
-  updateTile: (tileId: string, data: TextTileFormInterface) => void;
-  fetchDashboard: (spaceId: string) => void;
-  createRequestPending?: boolean;
-  updateRequestPending?: boolean;
+  createTile: (spaceId: string, data: TextTileFormInterface) => Promise<boolean>;
+  updateTile: (tileId: string, data: TextTileFormInterface) => Promise<boolean>;
+  onComplete: () => void;
+  pendingRequest?: boolean;
 }
 
 const TextTileForm: FC<PropsInterface> = ({
@@ -25,9 +24,8 @@ const TextTileForm: FC<PropsInterface> = ({
   spaceId,
   createTile,
   updateTile,
-  fetchDashboard,
-  createRequestPending,
-  updateRequestPending
+  onComplete,
+  pendingRequest
 }) => {
   const {t} = useTranslation();
 
@@ -42,10 +40,8 @@ const TextTileForm: FC<PropsInterface> = ({
     data: TextTileFormInterface
   ) => {
     if (!currentTile?.id) {
-      const isSucceed = await createTile(spaceId, data);
-      // @ts-ignore
-      if (isSucceed) {
-        await fetchDashboard(spaceId);
+      if (await createTile(spaceId, data)) {
+        onComplete();
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -68,10 +64,8 @@ const TextTileForm: FC<PropsInterface> = ({
         );
       }
     } else {
-      const isSucceed = await updateTile(currentTile.id, data);
-      // @ts-ignore
-      if (isSucceed) {
-        await fetchDashboard(spaceId);
+      if (await updateTile(currentTile.id, data)) {
+        onComplete();
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -100,7 +94,7 @@ const TextTileForm: FC<PropsInterface> = ({
 
   return (
     <styled.Container>
-      {updateRequestPending || createRequestPending ? (
+      {pendingRequest ? (
         <styled.LoaderContainer>
           <Loader />
         </styled.LoaderContainer>

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import cn from 'classnames';
@@ -14,12 +14,10 @@ import * as styled from './ImageTileForm.styled';
 interface PropsInterface {
   currentTile?: TileInterface;
   spaceId: string;
-  createTile: (spaceId: string, image: File) => void;
-  updateTile: (tileId: string, image: File) => void;
-  fetchDashboard: (spaceId: string) => void;
-  createRequestPending?: boolean;
-  updateRequestPending?: boolean;
-  uploadRequestPending?: boolean;
+  createTile: (spaceId: string, image: File) => Promise<boolean>;
+  updateTile: (tileId: string, image: File) => Promise<boolean>;
+  onComplete: () => void;
+  pendingRequest?: boolean;
 }
 
 const ImageTileForm: FC<PropsInterface> = ({
@@ -27,10 +25,8 @@ const ImageTileForm: FC<PropsInterface> = ({
   spaceId,
   createTile,
   updateTile,
-  fetchDashboard,
-  createRequestPending,
-  updateRequestPending,
-  uploadRequestPending
+  onComplete,
+  pendingRequest
 }) => {
   const theme = useTheme();
   const {t} = useTranslation();
@@ -38,18 +34,15 @@ const ImageTileForm: FC<PropsInterface> = ({
   const [image, setImage] = useState<File>();
   const [imageError, setImageError] = useState<boolean>(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (!currentTile?.id) {
       if (!image) {
         setImageError(true);
         return;
       }
-      const isSucceed = await createTile(spaceId, image);
       setImageError(false);
-
-      // @ts-ignore
-      if (isSucceed) {
-        await fetchDashboard(spaceId);
+      if (await createTile(spaceId, image)) {
+        onComplete();
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -76,12 +69,9 @@ const ImageTileForm: FC<PropsInterface> = ({
         setImageError(true);
         return;
       }
-      const isSucceed = await updateTile(currentTile?.id, image);
       setImageError(false);
-
-      // @ts-ignore
-      if (isSucceed) {
-        await fetchDashboard(spaceId);
+      if (await updateTile(currentTile?.id, image)) {
+        onComplete();
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -104,7 +94,7 @@ const ImageTileForm: FC<PropsInterface> = ({
         );
       }
     }
-  };
+  }, [createTile, currentTile?.id, image, onComplete, spaceId, t, updateTile]);
 
   const handleImage = (file?: File) => {
     setImage(file);
@@ -113,7 +103,7 @@ const ImageTileForm: FC<PropsInterface> = ({
 
   return (
     <styled.Container>
-      {updateRequestPending || createRequestPending || uploadRequestPending ? (
+      {pendingRequest ? (
         <styled.LoaderContainer>
           <Loader />
         </styled.LoaderContainer>
