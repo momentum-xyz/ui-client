@@ -46,7 +46,7 @@ const RootStore = types
     },
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       self.mainStore.unityStore.teleportToSpace(spaceId);
-      yield self.collaborationStore.joinMeetingSpace(spaceId);
+      yield self.collaborationStore.joinMeetingSpace(spaceId, isTable);
       yield self.mainStore.agoraStore.joinMeetingSpace(self.sessionStore.userId, spaceId);
 
       self.mainStore.unityStore.triggerInteractionMessage(
