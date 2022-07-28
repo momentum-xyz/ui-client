@@ -1,7 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel, TileInterface} from 'core/models';
-import {api, TileFormInterface, UploadTileImageResponse} from 'api';
+import {api, TextTileFormInterface, UploadTileImageResponse, VideoTileFormInterface} from 'api';
 import {TileTypeEnum} from 'core/enums';
 
 const TileFormStore = types.compose(
@@ -15,7 +15,7 @@ const TileFormStore = types.compose(
       currentTile: types.maybeNull(types.frozen<TileInterface>())
     })
     .actions((self) => ({
-      createImageTile: flow(function* (spaceId?: string, file?: File) {
+      createImageTile: flow(function* (spaceId: string, file: File) {
         const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
           api.resourcesRepository.uploadTileImage,
           {
@@ -36,11 +36,10 @@ const TileFormStore = types.compose(
               render: 1
             }
           });
+          return self.tileCreateRequest.isDone;
         }
-
-        return self.tileCreateRequest.isDone;
       }),
-      createTextOrVideoTile: flow(function* (spaceId?: string, data?: TileFormInterface) {
+      createTextTile: flow(function* (spaceId: string, data: TextTileFormInterface) {
         yield self.tileCreateRequest.send(api.dashboardRepository.createTile, {
           spaceId,
           data: {
@@ -48,22 +47,61 @@ const TileFormStore = types.compose(
             row: 0,
             content: {
               type: 'normal',
-              title: data?.text_title,
-              text: data?.text_description,
-              url: data?.youtube_url
+              title: data.text_title,
+              text: data.text_description
             },
             permanentType: null,
-            type:
-              data?.type === TileTypeEnum.TILE_TYPE_VIDEO
-                ? TileTypeEnum.TILE_TYPE_VIDEO
-                : TileTypeEnum.TILE_TYPE_TEXT,
+            type: TileTypeEnum.TILE_TYPE_TEXT,
             internal: true,
-            render: data?.type === TileTypeEnum.TILE_TYPE_VIDEO ? 1 : 0
+            render: 0
           }
         });
         return self.tileCreateRequest.isDone;
       }),
-      updateImageTile: flow(function* (tileId?: string, file?: File) {
+      updateTextTile: flow(function* (tileId: string, data: TextTileFormInterface) {
+        yield self.tileUpdateRequest.send(api.dashboardRepository.updateTile, {
+          tileId,
+          data: {
+            ...self.currentTile,
+            content: {
+              title: data.text_title,
+              text: data.text_description
+            }
+          }
+        });
+        return self.tileUpdateRequest.isDone;
+      }),
+      createVideoTile: flow(function* (spaceId: string, data: VideoTileFormInterface) {
+        yield self.tileCreateRequest.send(api.dashboardRepository.createTile, {
+          spaceId,
+          data: {
+            column: 0,
+            row: 0,
+            content: {
+              type: 'normal',
+              url: data.youtube_url
+            },
+            permanentType: null,
+            type: TileTypeEnum.TILE_TYPE_VIDEO,
+            internal: true,
+            render: 1
+          }
+        });
+        return self.tileCreateRequest.isDone;
+      }),
+      updateVideoTile: flow(function* (tileId: string, data: VideoTileFormInterface) {
+        yield self.tileUpdateRequest.send(api.dashboardRepository.updateTile, {
+          tileId,
+          data: {
+            ...self.currentTile,
+            content: {
+              url: data.youtube_url
+            }
+          }
+        });
+        return self.tileUpdateRequest.isDone;
+      }),
+      updateImageTile: flow(function* (tileId: string, file: File) {
         const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
           api.resourcesRepository.uploadTileImage,
           {
@@ -82,20 +120,6 @@ const TileFormStore = types.compose(
         }
         return self.tileUpdateRequest.isDone;
       }),
-      updateTextOrVideoTile: flow(function* (tileId?: string, data?: TileFormInterface) {
-        yield self.tileUpdateRequest.send(api.dashboardRepository.updateTile, {
-          tileId,
-          data: {
-            ...self.currentTile,
-            content: {
-              title: data?.text_title,
-              text: data?.text_description,
-              url: data?.youtube_url
-            }
-          }
-        });
-        return self.tileUpdateRequest.isDone;
-      }),
       deleteTile: flow(function* () {
         if (self.currentTile) {
           yield self.tileDeleteRequest.send(api.dashboardRepository.deleteTile, {
@@ -106,6 +130,15 @@ const TileFormStore = types.compose(
       }),
       setTile(tile: TileInterface) {
         self.currentTile = tile;
+      }
+    }))
+    .views((self) => ({
+      get isLoading(): boolean {
+        return (
+          self.tileCreateRequest.isPending ||
+          self.tileUpdateRequest.isPending ||
+          self.imageUploadRequest.isPending
+        );
       }
     }))
 );

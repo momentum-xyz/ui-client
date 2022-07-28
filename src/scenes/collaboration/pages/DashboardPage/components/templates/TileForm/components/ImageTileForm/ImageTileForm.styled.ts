@@ -1,6 +1,14 @@
 import styled from 'styled-components';
 
-export const Item = styled.div`
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+`;
+
+export const ButtonWrapper = styled.div`
   padding-top: 10px;
 `;
 
@@ -10,12 +18,14 @@ export const TextItem = styled.div`
 
 export const FileUploaderItem = styled.div`
   flex: 50%;
-  padding-top: 15px;
+  padding: 15px 0 10px;
+  width: 460px;
+  height: 100%;
 `;
 
 export const TileImageUpload = styled.div`
   display: flex;
-  padding: 10px;
+  padding: 20px 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -38,4 +48,9 @@ export const ImagePreview = styled.img`
   height: 110px;
   border-radius: 5px;
   object-fit: cover;
+`;
+
+export const LoaderContainer = styled.div`
+  width: 460px;
+  height: 100%;
 `;

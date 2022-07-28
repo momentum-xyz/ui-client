@@ -4,7 +4,6 @@ import {Space, ResetModel, RequestModel} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
 import {api} from 'api';
 
-import {Dashboard} from './DashboardStore/models/Dashboard';
 import {CalendarStore} from './CalendarStore';
 import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
@@ -16,7 +15,6 @@ const RootCollaborationStore = types
     types.model('RootCollaborationStore', {
       space: types.maybe(Space),
       calendarStore: types.optional(CalendarStore, {}),
-      dashboard: types.optional(Dashboard, {}),
       dashboardStore: types.optional(DashboardStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
@@ -47,7 +45,7 @@ const RootCollaborationStore = types
       yield self.space.fetchSpaceInformation();
 
       if (!isTable) {
-        yield self.dashboard.fetchDashboard(spaceId);
+        yield self.dashboardStore.fetchDashboard(spaceId);
       }
 
       const isModerator: boolean = yield self.moderationRequest.send(
@@ -81,7 +79,7 @@ const RootCollaborationStore = types
       yield self.space.fetchSpaceInformation();
 
       if (self.leftMeetingSpaceWasAGrabbedTable === false) {
-        yield self.dashboard.fetchDashboard(self.leftMeetingSpaceId);
+        yield self.dashboardStore.fetchDashboard(self.leftMeetingSpaceId);
       }
 
       self.leftMeetingSpaceId = undefined;
