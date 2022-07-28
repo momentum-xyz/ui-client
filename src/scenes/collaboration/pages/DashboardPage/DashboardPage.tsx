@@ -5,77 +5,62 @@ import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {UnityService} from 'shared/services';
 import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
-// TODO: Refactoring
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from 'context/Collaboration/hooks/useCollaboration';
-import {useStageModeLeave} from 'hooks/api/useStageModeService';
 
-import Dashboard from './components/templates/Dashboard/Dashboard';
+import {Dashboard, TileForm} from './components';
 import * as styled from './DashboardPage.styled';
+import {RemoveTileDialog} from './components/templates/Dashboard/components/RemoveTileDialog';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
-  const {dashboard, spaceStore} = collaborationStore;
-  const {favoriteStore} = mainStore;
+  const {dashboardStore, space} = collaborationStore;
+  const {dashboard, tileDialog, tileRemoveDialog} = dashboardStore;
+  const {agoraStore, favoriteStore} = mainStore;
   const {tileList, onDragEnd} = dashboard;
 
   const history = useHistory();
 
-  // TODO: Removal
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-
   useEffect(() => {
-    if (spaceStore.space.id) {
-      favoriteStore.setSpaceId(spaceStore.space.id);
-      dashboard.fetchDashboard(spaceStore.space.id);
+    if (space) {
+      dashboard.fetchDashboard(space.id);
+      favoriteStore.setSpaceId(space.id);
     }
     return () => {
       dashboard.resetModel();
     };
-  }, [dashboard, spaceStore.space.id]);
+  }, [dashboard, favoriteStore, space]);
 
-  // TODO: make as reusable action in store
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace) {
-      UnityService.leaveSpace(collaborationState.collaborationSpace.id);
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
-      history.push(ROUTES.base);
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <styled.Container>
       <SpaceTopBar
-        title={spaceStore.space.name ?? ''}
+        title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
-        onClose={leaveCollaborationSpace}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.space?.id || '')}
+        onClose={handleClose}
+        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        spaceId={spaceStore.space.id}
-        isAdmin={spaceStore.isAdmin}
+        spaceId={space.id}
+        isAdmin={space.isAdmin}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
       >
         <Button label={t('dashboard.vibe')} variant="primary" />
-        {(spaceStore.isAdmin || spaceStore.isMember) && (
-          <Button label={t('dashboard.addTile')} variant="primary" />
+        {(space.isAdmin || space.isMember) && (
+          <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
         <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
-        {!sessionStore.isGuest && spaceStore.isStakeShown && (
+        {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
       </SpaceTopBar>
-      {!dashboard.dashboardIsEdited && spaceStore.isOwner && (
+      {!dashboard.dashboardIsEdited && space.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
           <styled.AlertContent>
@@ -93,8 +78,10 @@ const DashboardPage: FC = () => {
       <Dashboard
         tilesList={tileList.tileMatrix}
         onDragEnd={onDragEnd}
-        canDrag={spaceStore.isAdmin || spaceStore.isMember}
+        canDrag={space.isAdmin || space.isMember}
       />
+      {tileDialog.isOpen && <TileForm />}
+      {tileRemoveDialog.isOpen && <RemoveTileDialog />}
     </styled.Container>
   );
 };

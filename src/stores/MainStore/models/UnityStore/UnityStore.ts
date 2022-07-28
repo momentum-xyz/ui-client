@@ -127,6 +127,9 @@ const UnityStore = types
       message: string
     ) {
       UnityService.triggerInteractionMsg?.(interaction, targetId, flag, message);
+    },
+    leaveSpace(spaceId: string) {
+      UnityService.leaveSpace(spaceId);
     }
   }));
 

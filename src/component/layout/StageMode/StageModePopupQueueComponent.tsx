@@ -1,13 +1,15 @@
+import {observer} from 'mobx-react-lite';
 import React from 'react';
 
+import {useStore} from 'shared/hooks';
+
 import {useStageModePopupQueueContext} from '../../../context/StageMode/StageModePopupQueueContext';
-import {useAgoraStageMode} from '../../../hooks/communication/useAgoraStageMode';
 
 import StageModePopup from './StageModePopup';
 
 const StageModePopupQueueComponent: React.FC = () => {
   const {popups} = useStageModePopupQueueContext();
-  const {canEnterStage} = useAgoraStageMode();
+  const {agoraStore} = useStore().mainStore;
 
   return (
     <div className="flex flex-col space-y-2 h-full overflow-y-auto">
@@ -15,11 +17,11 @@ const StageModePopupQueueComponent: React.FC = () => {
         <StageModePopup
           info={info}
           key={'stagepop-up:' + info.userId}
-          canEnterStage={canEnterStage()}
+          canEnterStage={agoraStore.canEnterStage}
         />
       ))}
     </div>
   );
 };
 
-export default StageModePopupQueueComponent;
+export default observer(StageModePopupQueueComponent);

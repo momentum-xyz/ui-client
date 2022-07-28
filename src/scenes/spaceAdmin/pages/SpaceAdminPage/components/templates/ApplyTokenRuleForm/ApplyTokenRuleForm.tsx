@@ -29,7 +29,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
     applyTokenRuleFormDialog,
     applyTokenRuleStore,
     tokenRuleFormDialog,
-    spaceStore,
+    space,
     tokenRulesListStore
   } = spaceManagerStore;
   const [isFocused, setIsFocused] = useState(false);
@@ -42,17 +42,13 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
 
   useEffect(() => {
     if (applyTokenRuleStore.tokenRuleApplied) {
-      tokenRulesListStore.fetchTokenRules(spaceStore.space.id);
+      tokenRulesListStore.fetchTokenRules(space?.id);
     }
   }, [applyTokenRuleStore.applyRequest.state]);
 
   const formSubmitHandler: SubmitHandler<ApplyTokenRuleInterface> = ({role, tokenGroupUserId}) => {
-    if (spaceStore.space.id) {
-      applyTokenRuleStore.applyTokenRule(
-        tokenGroupUserId,
-        role === TokenRuleRoles.ADMIN,
-        spaceStore.space.id
-      );
+    if (space) {
+      applyTokenRuleStore.applyTokenRule(tokenGroupUserId, role === TokenRuleRoles.ADMIN, space.id);
     }
   };
 

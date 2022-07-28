@@ -1,1 +1,1 @@
-export * from './SpaceModel';
+export * from './Space';

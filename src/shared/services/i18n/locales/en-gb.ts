@@ -253,7 +253,13 @@ export const enGb = {
       updateSpace:
         'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).',
       noTeamMiroBoard: 'Your team does not have a Miro board yet',
-      noMiroBoard: 'This team does not have a Miro board yet'
+      noMiroBoard: 'This team does not have a Miro board yet',
+      tileCreateSuccess: 'Your tile has been created successfully',
+      tileCreateError: 'There was a problem creating your tile',
+      tileUpdateSuccess: 'Your tile has been updated successfully',
+      tileUpdateError: 'There was a problem updating your tile',
+      tileRemoveSuccess: 'Your tile has been successfully removed',
+      tileRemoveError: 'There was a problem removing your tile'
     },
     titles: {
       alert: 'alert',
@@ -688,7 +694,26 @@ export const enGb = {
       vibe: 'vibe',
       addTile: 'add tile',
       invitePeople: 'invite people',
-      stake: 'stake'
+      stake: 'stake',
+      tileForm: {
+        title: 'create a new tile',
+        createTile: 'create tile',
+        updateTile: 'update tile',
+        tileType: 'Tile type',
+        typePlaceholder: 'Select a type',
+        textType: 'Text',
+        imageType: 'Image',
+        videoType: 'Video',
+        videoLabel: 'Youtube video url',
+        textLabel: 'Title',
+        textPlaceholder: 'Please choose a title',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Please write a description'
+      },
+      removeTileForm: {
+        title: 'remove Tile from dashboard',
+        message: 'Are you sure you want to remove this tile?'
+      }
     }
   }
 };

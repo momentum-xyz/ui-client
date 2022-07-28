@@ -1,16 +1,16 @@
 import React from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
+import {observer} from 'mobx-react-lite';
 
 import {ToastContent} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
 import Popup, {PopupTitle} from '../../atoms/Popup';
 import Avatar from '../../atoms/Avatar';
 import Button from '../../atoms/Button';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import User from '../../../context/type/User';
-import {useStageModeRequestInvite} from '../../../hooks/api/useStageModeService';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 
 export interface StageModeInviteToStagePopupProps {
   user: User | undefined;
@@ -21,27 +21,26 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
   user,
   onClose
 }) => {
-  const {collaborationState} = useCollaboration();
+  const {agoraStore} = useStore().mainStore;
 
-  const inviteRequest = useStageModeRequestInvite(collaborationState.collaborationSpace?.id);
-
-  const handleInviteClick = () => {
+  const handleInviteClick = async () => {
     if (user?.id.data) {
-      inviteRequest(bytesToUuid(user.id.data))
-        .then(onClose)
-        .catch(() =>
-          toast.error(
-            <ToastContent
-              isDanger
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('messages.inviteToStageFailure', {
-                user: user.name
-              })}
-              isCloseButton
-            />
-          )
+      try {
+        await agoraStore.inviteToStage(bytesToUuid(user.id.data));
+        onClose?.();
+      } catch {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.inviteToStageFailure', {
+              user: user.name
+            })}
+            isCloseButton
+          />
         );
+      }
     }
   };
 
@@ -68,4 +67,4 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
   );
 };
 
-export default StageModeInviteToStagePopup;
+export default observer(StageModeInviteToStagePopup);

@@ -16,9 +16,7 @@ const ExplorePanel: FC = () => {
   const {exploreStore} = homeStore;
   const {t} = useTranslation();
 
-  const {
-    selectedSpaceStore: {space: selectedSpace}
-  } = exploreStore;
+  const {selectedSpace} = exploreStore;
 
   const handleSearchFocus = (isFocused: boolean) => {
     unityStore.changeKeyboardControl(!isFocused);
@@ -67,7 +65,7 @@ const ExplorePanel: FC = () => {
         </>
       )}
       {!exploreStore.isSearching &&
-        (exploreStore.selectedSpaceStore.didFetchSpaceInformation ? (
+        (exploreStore.selectedSpace?.didFetchSpaceInformation ? (
           <styled.Body>
             {exploreStore.previousItem && exploreStore.selectedSpace?.id !== worldStore.worldId ? (
               <SelectedSpace />
@@ -75,7 +73,7 @@ const ExplorePanel: FC = () => {
               <>
                 <styled.WorldNameContainer>
                   <Heading
-                    label={selectedSpace.name ?? ''}
+                    label={selectedSpace?.name ?? ''}
                     type="h1"
                     align="left"
                     transform="uppercase"

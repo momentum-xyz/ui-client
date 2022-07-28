@@ -5,9 +5,6 @@ import {generatePath} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {Separator, ToolbarIcon} from 'ui-kit';
-// TODO: Refactoring
-import {COLLABORATION_CHAT_ACTION_UPDATE} from 'context/Collaboration/CollaborationReducer';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
 import {useTextChatContext} from 'context/TextChatContext';
 
 import * as styled from './RightSection.styled';
@@ -17,7 +14,9 @@ interface PropsInterface {
   spaceId: string;
   editSpaceHidden?: boolean;
   isSpaceFavorite: boolean;
+  isChatOpen: boolean;
   toggleIsSpaceFavorite: (spaceId: string) => void;
+  toggleChat: () => void;
 }
 
 const RightSection: FC<PropsInterface> = ({
@@ -25,18 +24,11 @@ const RightSection: FC<PropsInterface> = ({
   editSpaceHidden,
   isAdmin,
   isSpaceFavorite,
-  toggleIsSpaceFavorite
+  isChatOpen,
+  toggleIsSpaceFavorite,
+  toggleChat
 }) => {
-  const {collaborationState, collaborationDispatch} = useCollaboration();
   const {numberOfUnreadMessages} = useTextChatContext();
-
-  // TODO: Refactoring
-  const toggleChat = () => {
-    collaborationDispatch({
-      type: COLLABORATION_CHAT_ACTION_UPDATE,
-      open: !collaborationState.chatOpen
-    });
-  };
 
   return (
     <>
@@ -57,9 +49,7 @@ const RightSection: FC<PropsInterface> = ({
         </>
       )}
       <ToolbarIcon
-        title={
-          collaborationState.chatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')
-        }
+        title={isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
         icon="chat"
         onClick={toggleChat}
         isWhite={false}

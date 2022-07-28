@@ -21,7 +21,8 @@ export const ROUTES = {
     calendarEvent: '/collaboration/:spaceId/calendar/:eventId',
     screenShare: '/collaboration/:spaceId/screenshare',
     miro: '/collaboration/:spaceId/miro',
-    googleDrive: '/collaboration/:spaceId/google-drive'
+    googleDrive: '/collaboration/:spaceId/google-drive',
+    table: `/collaboration/:spaceId/table`
   },
   spaceAdmin: {
     base: '/space/:spaceId/admin',

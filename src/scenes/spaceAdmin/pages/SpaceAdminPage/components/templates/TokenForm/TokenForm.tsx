@@ -15,7 +15,7 @@ interface PropsInterface {}
 const TokenForm: FC<PropsInterface> = () => {
   const theme = useTheme();
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore, tokenFormDialog, tokenRuleStore, tokenFormStore} = spaceManagerStore;
+  const {space, tokenFormDialog, tokenRuleStore, tokenFormStore} = spaceManagerStore;
   const {
     control,
     setValue,
@@ -45,7 +45,7 @@ const TokenForm: FC<PropsInterface> = () => {
   }, [tokenFormStore.tokenNameRequest.state]);
 
   const formSubmitHandler: SubmitHandler<TokenFormInterface> = (data: TokenFormInterface) => {
-    if (spaceStore.space.id) {
+    if (space) {
       tokenFormStore.createToken(data);
     }
   };
