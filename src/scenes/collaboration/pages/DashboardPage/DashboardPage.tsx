@@ -10,6 +10,7 @@ import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 import {Dashboard, TileForm} from './components';
 import * as styled from './DashboardPage.styled';
 import {RemoveTileDialog} from './components/templates/Dashboard/components/RemoveTileDialog';
+import {VibeButton} from './components/templates/Dashboard/components/VibeButton';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
@@ -50,7 +51,8 @@ const DashboardPage: FC = () => {
         isChatOpen={agoraStore.isChatOpen}
         toggleChat={agoraStore.toggleChat}
       >
-        <Button label={t('dashboard.vibe')} variant="primary" />
+        <VibeButton />
+        <Button label="Vibe" variant="primary" icon="vibe" />
         {(space.isAdmin || space.isMember) && (
           <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}

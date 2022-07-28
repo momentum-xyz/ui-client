@@ -15,6 +15,7 @@ import {appVariables} from 'api/constants';
 import {youtubeVideoFullPath} from 'core/utils';
 
 import {TileFormStore} from './models/TileFormStore';
+import {VibeStore} from './models/VibeStore';
 
 const DashboardStore = types.compose(
   ResetModel,
@@ -23,6 +24,7 @@ const DashboardStore = types.compose(
       tileDialog: types.optional(DialogModel, {}),
       tileRemoveDialog: types.optional(DialogModel, {}),
       tileFormStore: types.optional(TileFormStore, {}),
+      vibeStore: types.optional(VibeStore, {}),
       updateRequest: types.optional(RequestModel, {}),
       request: types.optional(RequestModel, {}),
       tileList: types.optional(TileList, {}),

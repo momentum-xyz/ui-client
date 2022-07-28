@@ -36,7 +36,8 @@ const Button: FC<PropsInterface> = (props) => {
     icon,
     isCustom = false,
     noWhitespaceWrap = false,
-    className
+    className,
+    children
   } = props;
 
   return (
@@ -57,6 +58,7 @@ const Button: FC<PropsInterface> = (props) => {
       type={submit ? 'submit' : 'button'}
     >
       {icon && <IconSvg name={icon} size="normal" isCustom isDanger={variant === 'danger'} />}
+      {children}
       {label}
     </styled.Button>
   );
