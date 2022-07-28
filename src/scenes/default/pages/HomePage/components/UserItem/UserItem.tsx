@@ -21,7 +21,7 @@ export interface UserItemPropsInterface {
 const UserItem: React.FC<UserItemPropsInterface> = ({onClick, currentUserId, invite, user}) => {
   const {
     mainStore: {unityStore},
-    collaborationStore: {spaceStore},
+    collaborationStore: {space},
     sessionStore: {profile}
   } = useStore();
   const history = useHistory();
@@ -53,10 +53,10 @@ const UserItem: React.FC<UserItemPropsInterface> = ({onClick, currentUserId, inv
   }, [user.invited]);
 
   const handleInvite = useCallback(() => {
-    if (spaceStore.space.id) {
-      user.invite(spaceStore.space.id);
+    if (space) {
+      user.invite(space.id);
     }
-  }, [spaceStore.space.id]);
+  }, [space]);
 
   const isItMe = useMemo(() => {
     return currentUserId === user.uuid;

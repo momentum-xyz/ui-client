@@ -1,16 +1,16 @@
 import React from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
+import {observer} from 'mobx-react-lite';
 
 import {ToastContent} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
 import Popup, {PopupTitle} from '../../atoms/Popup';
 import Avatar from '../../atoms/Avatar';
 import Button from '../../atoms/Button';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import User from '../../../context/type/User';
-import {useStageModeSendOffstage} from '../../../hooks/api/useStageModeService';
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
 
 export interface StageModeSendOffstagePopupProps {
   user: User | undefined;
@@ -18,26 +18,26 @@ export interface StageModeSendOffstagePopupProps {
 }
 
 const StageModeSendOffstagePopup: React.FC<StageModeSendOffstagePopupProps> = ({user, onClose}) => {
-  const {collaborationState} = useCollaboration();
-  const [sendOffstage, ,] = useStageModeSendOffstage(collaborationState.collaborationSpace?.id);
+  const {agoraStore} = useStore().mainStore;
 
-  const handleSendOffstage = () => {
+  const handleSendOffstage = async () => {
     if (user?.id.data) {
-      sendOffstage(bytesToUuid(user.id.data))
-        .then(onClose)
-        .catch(() =>
-          toast.error(
-            <ToastContent
-              isDanger
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('messages.offStageFailure', {
-                user: user.name
-              })}
-              isCloseButton
-            />
-          )
+      try {
+        await agoraStore.kickUserOffStage(bytesToUuid(user.id.data));
+        onClose?.();
+      } catch {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.offStageFailure', {
+              user: user.name
+            })}
+            isCloseButton
+          />
         );
+      }
     }
   };
 
@@ -59,4 +59,4 @@ const StageModeSendOffstagePopup: React.FC<StageModeSendOffstagePopupProps> = ({
   );
 };
 
-export default StageModeSendOffstagePopup;
+export default observer(StageModeSendOffstagePopup);

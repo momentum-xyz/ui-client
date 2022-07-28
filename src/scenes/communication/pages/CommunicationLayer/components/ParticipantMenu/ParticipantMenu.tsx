@@ -2,13 +2,13 @@ import React, {FC, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {IconSvg, Text, useClickOutside} from 'ui-kit';
-import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
+import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 
 import * as styled from './ParticipantMenu.styled';
 
 interface PropsInterface {
   name: string;
-  participant: AgoraParticipant;
+  participant: AgoraRemoteUserInterface;
   onClose?: (event?: Event) => void;
   removeParticipant?: () => void;
   muteParticipant?: () => void;
@@ -33,7 +33,7 @@ const ParticipantMenu: FC<PropsInterface> = ({
   return (
     <styled.Container ref={ref}>
       <styled.Content>
-        {participant.hasAudio && (
+        {!participant.isMuted && (
           <styled.Option onClick={muteParticipant}>
             <styled.IconContainer>
               <IconSvg name="microphoneOff" />

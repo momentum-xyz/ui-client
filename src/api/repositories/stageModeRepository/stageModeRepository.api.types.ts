@@ -1,4 +1,6 @@
-import {ParticipantStatus, ParticipantRole} from 'core/enums';
+import {ParticipantStatus, ParticipantRole, ModerationEnum, StageModeRequestEnum} from 'core/enums';
+
+import {SpaceIntegrationsStageModeResponse} from '../spaceIntegrationsRepository/spaceIntegrations.api.types';
 
 interface ChannelInterface {
   id: string;
@@ -27,8 +29,36 @@ export interface StageModeRequest {
   spaceId: string;
 }
 
+export interface StageModeJoinResponse extends SpaceIntegrationsStageModeResponse {}
+
 export interface StageModeResponse {
   id?: string;
   position: string;
   participants: ParticipantInterface[];
+}
+
+// ** Invitation response **
+
+export interface StageModeResponseRequest extends StageModeRequest {
+  userId?: string;
+  stageModeRequestType: StageModeRequestEnum.ACCEPT | StageModeRequestEnum.DECLINE;
+}
+
+// ** Admit or kick **
+
+export interface StageModeAdmitOrKickRequest extends StageModeRequest {
+  modType: ModerationEnum;
+  userId: string;
+}
+
+// ** Request **
+
+export interface StageModeRequestRequest extends StageModeRequest {
+  userId?: string;
+}
+
+// ** Invite **
+
+export interface StageModeInviteRequest extends StageModeRequest {
+  userId: string;
 }

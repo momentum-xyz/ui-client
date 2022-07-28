@@ -5,20 +5,16 @@ import {AuthProvider} from 'react-oidc-context';
 import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
-import AgoraRTC from 'agora-rtc-sdk-ng';
 
 import {WrongBrowser} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {appVariables} from 'api/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
 
 // TODO: To be refactored
-import {AgoraProvider} from '../context/AgoraContext';
 import {ConfirmationDialogProvider} from '../hooks/useConformationDialog';
 import AuthComponent from '../context/Auth/AuthContext';
-import {CollaborationProvider} from '../context/Collaboration/CollaborationContext';
 import {TextChatProvider} from '../context/TextChatContext';
 
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
@@ -26,12 +22,6 @@ import AppLayers from './AppLayers';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
-
-// TODO: Refactoring. Move to separate service
-AgoraRTC.setLogLevel(4);
-const agoraClient = AgoraRTC.createClient({mode: 'rtc', codec: 'h264'});
-const stageClient = AgoraRTC.createClient({mode: 'live', codec: 'vp8'});
-stageClient.enableDualStream();
 
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
@@ -114,23 +104,15 @@ const App: FC = () => {
         <ConfirmationDialogProvider>
           <AuthProvider {...sessionStore.oidcConfig}>
             <AuthComponent>
-              <CollaborationProvider>
-                <AgoraProvider
-                  client={agoraClient}
-                  stageClient={stageClient}
-                  appId={appVariables.AGORA_APP_ID}
-                >
-                  <TextChatProvider>
-                    <UnityPage />
-                    <AppLayers>
-                      <Switch>
-                        {createRoutesByConfig(PRIVATE_ROUTES)}
-                        <Redirect to={ROUTES.base} />
-                      </Switch>
-                    </AppLayers>
-                  </TextChatProvider>
-                </AgoraProvider>
-              </CollaborationProvider>
+              <TextChatProvider>
+                <UnityPage />
+                <AppLayers>
+                  <Switch>
+                    {createRoutesByConfig(PRIVATE_ROUTES)}
+                    <Redirect to={ROUTES.base} />
+                  </Switch>
+                </AppLayers>
+              </TextChatProvider>
             </AuthComponent>
           </AuthProvider>
         </ConfirmationDialogProvider>

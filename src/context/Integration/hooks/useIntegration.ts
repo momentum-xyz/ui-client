@@ -24,9 +24,3 @@ export const useIntegrationDisable = () => {
     appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/disable`
   );
 };
-
-export const useModerator = (id: string) => {
-  return useFetch(appVariables.BACKEND_ENDPOINT_URL + `/space-integrations/${id}/check`, {
-    fetchPolicy: 'network-only'
-  });
-};
