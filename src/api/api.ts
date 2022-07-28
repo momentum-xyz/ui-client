@@ -88,3 +88,4 @@ export * from './repositories/communicationRepository/communicationRepository.ap
 export * from './repositories/dashboardRepository/dashboardRepository.api.types';
 export * from './repositories/integrationRepository/integrationRepository.api.types';
 export * from './repositories/resourcesRepository/resourcesRepository.types';
+export * from './repositories/spaceTypeRepository/spaceTypeRepository.api.types';

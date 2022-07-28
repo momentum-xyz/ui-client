@@ -9,7 +9,7 @@ import {RequestModel} from 'core/models/Request';
 import {ResetModel} from 'core/models/ResetModel';
 import {api, SpaceResponse} from 'api';
 import {SpaceType} from 'core/enums';
-import {GetAllowedSpaceTypesResponse} from 'api/repositories/spaceTypeRepository/spaceTypeRepository.api.types';
+import {GetAllowedSpaceTypesResponse} from 'api';
 
 const Space = types
   .compose(
