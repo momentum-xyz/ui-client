@@ -52,10 +52,6 @@ const MiroBoardPage: FC = () => {
     });
   }, [miroBoardStore, space]);
 
-  const handleClose = () => {
-    history.push(ROUTES.base);
-  };
-
   if (!space) {
     return null;
   }
@@ -70,9 +66,9 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        onClose={handleClose}
         isChatOpen={agoraStore.isChatOpen}
         toggleChat={agoraStore.toggleChat}
+        onClose={() => history.push(ROUTES.base)}
       >
         {space && !!miroBoard?.data?.accessLink && (
           <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />

@@ -1,9 +1,11 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 
 import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
 
@@ -12,32 +14,38 @@ import * as styled from './GoogleDrivePage.styled';
 
 const GoogleDrivePage: FC = () => {
   const {collaborationStore, mainStore} = useStore();
-  const {spaceStore, googleDriveStore} = collaborationStore;
-  const {space, isAdmin} = spaceStore;
+  const {space, googleDriveStore} = collaborationStore;
   const {googleDocument} = googleDriveStore;
-  const {favoriteStore} = mainStore;
+  const {favoriteStore, agoraStore} = mainStore;
 
   const {t} = useTranslation();
+  const history = useHistory();
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <styled.Inner>
       <SpaceTopBar
-        title={space?.name ?? ''}
+        title={space.name ?? ''}
         subtitle="Google Drive"
-        isAdmin={spaceStore.isAdmin}
-        spaceId={spaceStore.space?.id}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.space?.id || '')}
+        isAdmin={space.isAdmin}
+        spaceId={space?.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
         editSpaceHidden
-        onClose={() => {}} // TODO
+        onClose={() => history.push(ROUTES.base)}
       >
-        {isAdmin && !!googleDocument?.data?.accessLink && (
+        {space.isAdmin && !!googleDocument?.data?.accessLink && (
           <Button label={t('actions.changeBoard')} variant="primary" />
         )}
       </SpaceTopBar>
       <styled.Container>
         {!googleDocument?.data?.accessLink ? (
-          <GoogleChoice isAdmin={isAdmin} pickBoard={() => {}} />
+          <GoogleChoice isAdmin={space.isAdmin} pickBoard={() => {}} />
         ) : (
           <GoogleDocument miroUrl={googleDocument.data.accessLink} />
         )}
