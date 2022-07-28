@@ -18,7 +18,6 @@ import {
   StageModeUserRoleEnum
 } from 'core/enums';
 import {api} from 'api';
-import CONFIG from 'config/config';
 import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
 import {bytesToUuid} from 'core/utils';
 
@@ -709,7 +708,7 @@ const AgoraStore = types
     get canEnterStage(): boolean {
       return (
         self.stageModeClient.remoteUsers.length + (self.isOnStage ? 1 : 0) <
-        CONFIG.video.MAX_STAGE_USERS
+        appVariables.MAX_STAGE_USERS
       );
     },
     get hasJoined(): boolean {

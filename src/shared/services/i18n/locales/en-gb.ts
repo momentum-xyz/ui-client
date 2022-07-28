@@ -165,6 +165,7 @@ export const enGb = {
     },
     labels: {
       miro: 'Miro',
+      stageMode: 'Stage Mode',
       calendar: 'World Calendar',
       staking: 'Staking',
       minimap: 'Minimap',
@@ -189,7 +190,9 @@ export const enGb = {
       dnd: 'Do Not Disturb',
       subspaces: 'Subspaces',
       searchResults: 'Search Results',
-      attendeeList: 'Attendee List'
+      attendeeList: 'Attendee List',
+      speakers: 'Speakers',
+      audience: 'Audience'
     },
     messages: {
       loading: 'Loading Odyssey Momentum',
@@ -245,6 +248,7 @@ export const enGb = {
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
+      stageModeNotActive: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.',
@@ -259,7 +263,9 @@ export const enGb = {
       tileUpdateSuccess: 'Your tile has been updated successfully',
       tileUpdateError: 'There was a problem updating your tile',
       tileRemoveSuccess: 'Your tile has been successfully removed',
-      tileRemoveError: 'There was a problem removing your tile'
+      tileRemoveError: 'There was a problem removing your tile',
+      pendingRequestToGoOnStage: 'Request to go on stage pending',
+      stageIsFull: 'Stage is full'
     },
     titles: {
       alert: 'alert',
@@ -306,7 +312,7 @@ export const enGb = {
     actions: {
       ok: 'OK',
       approve: 'Approve',
-      joinStage: 'Join stage',
+      joinStage: 'Join Stage',
       decline: 'Decline',
       cancel: 'Cancel',
       emailLogin: 'Email Login',
@@ -347,7 +353,9 @@ export const enGb = {
       muteName: 'Mute {{name}}',
       kickName: 'Kick {{name}}',
       changeBoard: 'Change board',
-      chooseBoard: 'Choose a Miro board'
+      chooseBoard: 'Choose a Miro board',
+      leaveStage: 'Leave stage',
+      goOnStage: 'Go on stage'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import CONFIG from 'config/config';
 import {useUser} from 'hooks/api/useUser';
 import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
@@ -11,6 +10,7 @@ import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {appVariables} from 'api/constants';
 
 import {ParticipantMenu} from '../ParticipantMenu';
 
@@ -38,7 +38,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   const userName = user?.name || id;
 
-  const maximumParticipantsReached = totalParticipants > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+  const maximumParticipantsReached = totalParticipants > appVariables.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   useEffect(() => {
     if (

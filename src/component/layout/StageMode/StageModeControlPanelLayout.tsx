@@ -7,6 +7,7 @@ import {ToastContent, Toggle} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {appVariables} from 'api/constants';
 
 import Page from '../../molucules/Page';
 import StageModeStage from '../../atoms/StageMode/StageModeStage';
@@ -14,7 +15,6 @@ import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {useUser} from '../../../hooks/api/useUser';
 import Button from '../../atoms/Button';
-import CONFIG from '../../../config/config';
 
 import StageModePopupQueueComponent from './StageModePopupQueueComponent';
 
@@ -157,7 +157,7 @@ const StageModeControlPanelLayout: React.FC = () => {
           <>
             <div className="flex items-center gap-1">
               <span>
-                Speakers: {stageStats.speakers}/{CONFIG.video.MAX_STAGE_USERS}
+                Speakers: {stageStats.speakers}/{appVariables.MAX_STAGE_USERS}
               </span>
               <span>Audience: {stageStats.audience}</span>
             </div>

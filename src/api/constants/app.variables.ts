@@ -49,5 +49,7 @@ export const appVariables: AppConfigExtendedInterface = {
   POLKADOT_CONNECTION_STRING: 'momentum-connections',
   WESTEND_TEST_WS_SERVER: 'wss://westend.api.onfinality.io/public-ws',
   KUSAMA_WS_SERVER: 'wss://kusama-rpc.polkadot.io/',
-  WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support'
+  WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support',
+  PARTICIPANTS_VIDEO_LIMIT: 17,
+  MAX_STAGE_USERS: 12
 };

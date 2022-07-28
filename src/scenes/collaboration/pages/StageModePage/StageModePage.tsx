@@ -3,11 +3,11 @@ import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom
 import {observer} from 'mobx-react-lite';
 
 import {ROUTES} from 'core/constants';
-// TODO: Refactor;
 import {useStore} from 'shared/hooks';
 
-import StageModeGuestLayout from '../../../../component/layout/StageMode/StageModeGuestLayout';
 import StageModeControlPanelLayout from '../../../../component/layout/StageMode/StageModeControlPanelLayout';
+
+import {StageModeGuest} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
@@ -36,7 +36,7 @@ const StageModePage: FC = () => {
         {collaborationStore.isModerator ? (
           <Redirect to={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})} />
         ) : (
-          <StageModeGuestLayout />
+          <StageModeGuest />
         )}
       </Route>
       <Route exact path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>

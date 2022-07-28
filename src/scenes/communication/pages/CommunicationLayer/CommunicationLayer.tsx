@@ -14,12 +14,12 @@ import {
   TOAST_BASE_OPTIONS
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import CONFIG from 'config/config';
 import {ParticipantRole} from 'core/enums';
 import StageModePIP from 'component/atoms/StageMode/StageModePIP';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useGetSpace} from 'hooks/api/useSpaceService';
+import {appVariables} from 'api/constants';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
@@ -158,7 +158,7 @@ const CommunicationLayer = () => {
 
   useEffect(() => {
     const isLimitReached =
-      agoraStore.remoteUsers.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+      agoraStore.remoteUsers.length > appVariables.PARTICIPANTS_VIDEO_LIMIT - 1;
 
     if (isLimitReached) {
       setMaxVideoStreamsShown((maxVideoStreamsShown) => {
