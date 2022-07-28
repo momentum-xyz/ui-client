@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {useTranslation} from 'react-i18next';
 
 import {Button, Input, Loader, TextArea, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
@@ -11,11 +11,10 @@ import {TextTileFormInterface} from 'api';
 import * as styled from './TextTileForm.styled';
 
 interface PropsInterface {
-  currentTile: TileInterface | null;
+  currentTile?: TileInterface;
   spaceId: string;
   createTile: (spaceId: string, data: TextTileFormInterface) => void;
   updateTile: (tileId: string, data: TextTileFormInterface) => void;
-  onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
   createRequestPending?: boolean;
   updateRequestPending?: boolean;
@@ -26,11 +25,12 @@ const TextTileForm: FC<PropsInterface> = ({
   spaceId,
   createTile,
   updateTile,
-  onClose,
   fetchDashboard,
   createRequestPending,
   updateRequestPending
 }) => {
+  const {t} = useTranslation();
+
   const {
     control,
     formState: {errors},
@@ -43,7 +43,6 @@ const TextTileForm: FC<PropsInterface> = ({
   ) => {
     if (!currentTile?.id) {
       const isSucceed = await createTile(spaceId, data);
-      onClose();
       // @ts-ignore
       if (isSucceed) {
         await fetchDashboard(spaceId);
@@ -70,7 +69,6 @@ const TextTileForm: FC<PropsInterface> = ({
       }
     } else {
       const isSucceed = await updateTile(currentTile.id, data);
-      onClose();
       // @ts-ignore
       if (isSucceed) {
         await fetchDashboard(spaceId);
@@ -101,7 +99,7 @@ const TextTileForm: FC<PropsInterface> = ({
   };
 
   return (
-    <styled.Item>
+    <styled.Container>
       {updateRequestPending || createRequestPending ? (
         <styled.LoaderContainer>
           <Loader />
@@ -112,7 +110,7 @@ const TextTileForm: FC<PropsInterface> = ({
             <Controller
               name="text_title"
               control={control}
-              defaultValue={currentTile ? currentTile?.content?.title : ''}
+              defaultValue={currentTile?.content?.title ?? ''}
               rules={{required: true}}
               render={({field: {onChange, value}}) => (
                 <Input
@@ -130,7 +128,7 @@ const TextTileForm: FC<PropsInterface> = ({
             <Controller
               name="text_description"
               control={control}
-              defaultValue={currentTile ? currentTile?.content?.text : ''}
+              defaultValue={currentTile?.content?.text ?? ''}
               rules={{required: true}}
               render={({field: {onChange, value}}) => (
                 <TextArea
@@ -152,7 +150,7 @@ const TextTileForm: FC<PropsInterface> = ({
           </styled.ButtonWrapper>
         </>
       )}
-    </styled.Item>
+    </styled.Container>
   );
 };
 

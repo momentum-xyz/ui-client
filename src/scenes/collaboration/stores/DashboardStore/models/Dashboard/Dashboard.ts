@@ -19,7 +19,7 @@ const Dashboard = types.compose(
       videoUrl: types.maybe(types.string)
     })
     .actions((self) => ({
-      fetchDashboard: flow(function* fetchDashboard(spaceId?: string) {
+      fetchDashboard: flow(function* fetchDashboard(spaceId: string) {
         const response: TileListInterface = yield self.request.send(
           api.dashboardRepository.fetchDashboard,
           {

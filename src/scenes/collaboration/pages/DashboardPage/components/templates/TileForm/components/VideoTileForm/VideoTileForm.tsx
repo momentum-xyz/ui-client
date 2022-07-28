@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {useTranslation} from 'react-i18next';
 
 import {VideoTileFormInterface} from 'api';
 import {Button, Input, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
@@ -12,11 +12,10 @@ import {TileInterface} from 'core/models';
 import * as styled from './VideoTileForm.styled';
 
 interface PropsInterface {
-  currentTile: TileInterface | null;
+  currentTile?: TileInterface;
   spaceId: string;
   createTile: (spaceId: string, data: VideoTileFormInterface) => void;
   updateTile: (tileId: string, data: VideoTileFormInterface) => void;
-  onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
   createRequestPending?: boolean;
   updateRequestPending?: boolean;
@@ -27,11 +26,12 @@ const VideoTileForm: FC<PropsInterface> = ({
   spaceId,
   createTile,
   updateTile,
-  onClose,
   fetchDashboard,
   createRequestPending,
   updateRequestPending
 }) => {
+  const {t} = useTranslation();
+
   const {
     control,
     formState: {errors},
@@ -44,7 +44,6 @@ const VideoTileForm: FC<PropsInterface> = ({
   ) => {
     if (!currentTile?.id) {
       const isSucceed = await createTile(spaceId, data);
-      onClose();
       // @ts-ignore
       if (isSucceed) {
         await fetchDashboard(spaceId);
@@ -71,7 +70,6 @@ const VideoTileForm: FC<PropsInterface> = ({
       }
     } else {
       const isSucceed = await updateTile(currentTile.id, data);
-      onClose();
       await fetchDashboard(spaceId);
       // @ts-ignore
       if (isSucceed) {
@@ -102,7 +100,7 @@ const VideoTileForm: FC<PropsInterface> = ({
   };
 
   return (
-    <styled.Item>
+    <styled.Container>
       {updateRequestPending || createRequestPending ? (
         <styled.LoaderContainer>
           <Loader />
@@ -113,7 +111,7 @@ const VideoTileForm: FC<PropsInterface> = ({
             <Controller
               name="youtube_url"
               control={control}
-              defaultValue={currentTile ? currentTile?.content?.url : ''}
+              defaultValue={currentTile?.content?.url ?? ''}
               rules={{required: true}}
               render={({field: {onChange, value}}) => (
                 <Input
@@ -135,7 +133,7 @@ const VideoTileForm: FC<PropsInterface> = ({
           </styled.ButtonWrapper>
         </>
       )}
-    </styled.Item>
+    </styled.Container>
   );
 };
 

@@ -14,12 +14,8 @@ export const Container = styled.div`
   padding: 0 10px 10px;
   width: 480px;
   margin-bottom: 10px;
-
-  position: relative;
-`;
-
-export const Div = styled.div`
   display: grid;
+  position: relative;
 `;
 
 export const Item = styled.div`

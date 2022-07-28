@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
@@ -16,11 +16,11 @@ const RemoveTileDialog: FC = () => {
     return () => tileFormStore.resetModel();
   }, []);
 
-  const confirm = async () => {
+  const confirm = useCallback(async () => {
     const succeed = await tileFormStore.deleteTile();
     tileRemoveDialog.close();
     if (succeed) {
-      await dashboard.fetchDashboard(spaceStore.space.id);
+      await dashboard.fetchDashboard(spaceStore.space.id ?? '');
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -40,7 +40,7 @@ const RemoveTileDialog: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  };
+  }, []);
 
   return (
     <Dialog

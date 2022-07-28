@@ -11,10 +11,10 @@ export const uploadTileImage: RequestInterface<ImageUploadRequest, ImageUploadRe
   const formData: FormData = new FormData();
   formData.append('file', file);
   const requestParams = {
+    ...restOptions,
     headers: {
       'Content-Type': 'multipart/form-data'
-    },
-    ...restOptions
+    }
   };
   const url = resourcesRepositoryApiEndpoints().upload;
   return request.post(url, formData, requestParams);

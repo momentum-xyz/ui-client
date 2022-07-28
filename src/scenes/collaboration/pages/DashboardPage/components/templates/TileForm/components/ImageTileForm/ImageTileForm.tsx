@@ -1,9 +1,9 @@
 import React, {FC, useState} from 'react';
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import cn from 'classnames';
 import {toast} from 'react-toastify';
+import {useTranslation} from 'react-i18next';
 
 import {appVariables} from 'api/constants';
 import {Button, FileUploader, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
@@ -12,11 +12,10 @@ import {TileInterface} from 'core/models';
 import * as styled from './ImageTileForm.styled';
 
 interface PropsInterface {
-  currentTile: TileInterface | null;
+  currentTile?: TileInterface;
   spaceId: string;
   createTile: (spaceId: string, image: File) => void;
   updateTile: (tileId: string, image: File) => void;
-  onClose: () => void;
   fetchDashboard: (spaceId: string) => void;
   createRequestPending?: boolean;
   updateRequestPending?: boolean;
@@ -28,15 +27,15 @@ const ImageTileForm: FC<PropsInterface> = ({
   spaceId,
   createTile,
   updateTile,
-  onClose,
   fetchDashboard,
   createRequestPending,
   updateRequestPending,
   uploadRequestPending
 }) => {
   const theme = useTheme();
+  const {t} = useTranslation();
 
-  const [image, setImage] = useState<File | undefined>(undefined);
+  const [image, setImage] = useState<File>();
   const [imageError, setImageError] = useState<boolean>(false);
 
   const handleSubmit = async () => {
@@ -107,13 +106,13 @@ const ImageTileForm: FC<PropsInterface> = ({
     }
   };
 
-  const handleImage = (file: File | undefined) => {
+  const handleImage = (file?: File) => {
     setImage(file);
     setImageError(false);
   };
 
   return (
-    <styled.Item>
+    <styled.Container>
       {updateRequestPending || createRequestPending || uploadRequestPending ? (
         <styled.LoaderContainer>
           <Loader />
@@ -150,7 +149,7 @@ const ImageTileForm: FC<PropsInterface> = ({
           </styled.ButtonWrapper>
         </>
       )}
-    </styled.Item>
+    </styled.Container>
   );
 };
 
