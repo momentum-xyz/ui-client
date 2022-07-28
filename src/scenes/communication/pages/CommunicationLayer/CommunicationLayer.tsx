@@ -19,7 +19,6 @@ import {ParticipantRole} from 'core/enums';
 import StageModePIP from 'component/atoms/StageMode/StageModePIP';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
-import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useGetSpace} from 'hooks/api/useSpaceService';
 
 import {RemoteParticipant, LocalParticipant} from './components';
@@ -39,8 +38,6 @@ const CommunicationLayer = () => {
   const {unityStore, agoraStore} = mainStore;
   const {userDevicesStore} = agoraStore;
   const {clearPopups} = useStageModePopupQueueContext();
-
-  const [isModerator, , ,] = useModerator(space?.id ?? '');
 
   const stageModeAudience = useMemo(() => {
     return agoraStore.isStageMode
@@ -121,7 +118,6 @@ const CommunicationLayer = () => {
         .joinMeetingSpace(spaceId, uiTypeId === '285ba49f-fee3-40d2-ab55-256b5804c20c')
         .then(() => {
           if (uiTypeId !== '285ba49f-fee3-40d2-ab55-256b5804c20c') {
-            unityStore.pause();
             history.push({pathname: ROUTES.collaboration.base, state: {spaceId}});
           } else {
             history.push({pathname: ROUTES.collaboration.table, state: {spaceId}});
@@ -177,6 +173,10 @@ const CommunicationLayer = () => {
     }
   }, [agoraStore.remoteUsers.length]);
 
+  const handleLeave = () => {
+    history.push(ROUTES.base);
+  };
+
   return (
     <Transition
       show={agoraStore.hasJoined}
@@ -215,14 +215,14 @@ const CommunicationLayer = () => {
               variant="danger-background"
               label={t('actions.leave')}
               icon="leave"
-              onClick={agoraStore.leaveMeetingSpace}
+              onClick={handleLeave}
             />
           </Transition>
           <styled.ListItemContent className="noScrollIndicator">
             <p className="text-center whitespace-nowrap">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
-            {!agoraStore.isStageMode && numberOfPeople > 2 && isModerator && (
+            {!agoraStore.isStageMode && numberOfPeople > 2 && collaborationStore.isModerator && (
               <styled.MuteButtonContainer>
                 <styled.MuteButton>
                   <SvgButton

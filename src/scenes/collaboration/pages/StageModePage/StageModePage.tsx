@@ -6,16 +6,14 @@ import {ROUTES} from 'core/constants';
 // TODO: Refactor;
 import {useStore} from 'shared/hooks';
 
-import {useModerator} from '../../../../context/Integration/hooks/useIntegration';
 import StageModeGuestLayout from '../../../../component/layout/StageMode/StageModeGuestLayout';
 import StageModeControlPanelLayout from '../../../../component/layout/StageMode/StageModeControlPanelLayout';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
-  const {agoraStore} = useStore().mainStore;
-
-  const [isModerator, moderatorLoading, ,] = useModerator(agoraStore.spaceId ?? '');
+  const {collaborationStore, mainStore} = useStore();
+  const {agoraStore} = mainStore;
 
   useEffect(() => {
     const chatWasOpen = agoraStore.isChatOpen;
@@ -28,14 +26,14 @@ const StageModePage: FC = () => {
     };
   }, [agoraStore]);
 
-  if (moderatorLoading) {
+  if (collaborationStore.moderationRequest.isPending) {
     return null;
   }
 
   return (
     <Switch>
       <Route exact path={generatePath(ROUTES.collaboration.stageMode, {spaceId})}>
-        {isModerator ? (
+        {collaborationStore.isModerator ? (
           <Redirect to={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})} />
         ) : (
           <StageModeGuestLayout />

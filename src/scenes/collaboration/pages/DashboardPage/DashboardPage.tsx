@@ -15,7 +15,7 @@ const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
   const {dashboardStore, space} = collaborationStore;
   const {dashboard, tileDialog, tileRemoveDialog} = dashboardStore;
-  const {agoraStore, favoriteStore, unityStore} = mainStore;
+  const {agoraStore, favoriteStore} = mainStore;
   const {tileList, onDragEnd} = dashboard;
 
   const history = useHistory();
@@ -30,14 +30,8 @@ const DashboardPage: FC = () => {
     };
   }, [dashboard, favoriteStore, space]);
 
-  const leaveCollaborationSpace = async () => {
-    if (space) {
-      unityStore.leaveSpace(space.id);
-      await agoraStore.leaveMeetingSpace();
-      collaborationStore.leaveMeetingSpace();
-
-      history.push(ROUTES.base);
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
 
   if (!space) {
@@ -49,7 +43,7 @@ const DashboardPage: FC = () => {
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
-        onClose={leaveCollaborationSpace}
+        onClose={handleClose}
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         spaceId={space.id}

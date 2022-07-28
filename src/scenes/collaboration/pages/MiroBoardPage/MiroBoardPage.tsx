@@ -21,7 +21,7 @@ const MiroBoardPage: FC = () => {
   const {collaborationStore, mainStore} = useStore();
   const {space, miroBoardStore} = collaborationStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
-  const {favoriteStore, agoraStore, unityStore} = mainStore;
+  const {favoriteStore, agoraStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -52,15 +52,8 @@ const MiroBoardPage: FC = () => {
     });
   }, [miroBoardStore, space]);
 
-  // TODO: Move it to root store
-  const leaveCollaborationSpace = async () => {
-    if (space) {
-      unityStore.leaveSpace(space.id);
-      await agoraStore.leaveMeetingSpace();
-      collaborationStore.leaveMeetingSpace();
-
-      history.push(ROUTES.base);
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
 
   if (!space) {
@@ -77,7 +70,7 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        onClose={leaveCollaborationSpace}
+        onClose={handleClose}
         isChatOpen={agoraStore.isChatOpen}
         toggleChat={agoraStore.toggleChat}
       >

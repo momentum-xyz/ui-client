@@ -2,9 +2,9 @@ import React, {useCallback, useState} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
 
 import {useUnityEvent} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 
 import DashboardVideo from '../atoms/video/DashboardVideo';
-import {ROUTES} from '../../core/constants';
 
 export interface VideoLayerProps {}
 

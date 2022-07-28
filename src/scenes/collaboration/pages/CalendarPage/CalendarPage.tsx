@@ -8,15 +8,14 @@ import {toast} from 'react-toastify';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {absoluteLink} from 'core/utils';
-import {PosBusEventEnum} from 'core/enums';
-import {UnityService} from 'shared/services';
 import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
 
 import {DeleteEventConfirmationDialog, EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const {collaborationStore, sessionStore, widgetStore, mainStore} = useStore();
+  const rootStore = useStore();
+  const {collaborationStore, sessionStore, widgetStore, mainStore} = rootStore;
   const {calendarStore, space} = collaborationStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
@@ -26,20 +25,8 @@ const CalendarPage: FC = () => {
   const history = useHistory();
   const theme = useTheme();
 
-  const handleClose = async () => {
-    if (collaborationStore.space) {
-      UnityService.triggerInteractionMsg?.(
-        PosBusEventEnum.LeftSpace,
-        collaborationStore.space.id,
-        0,
-        ''
-      );
-
-      await agoraStore.leaveMeetingSpace();
-      collaborationStore.resetModel();
-
-      history.push(ROUTES.base);
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
 
   const handleWeblink = (weblink: string) => {

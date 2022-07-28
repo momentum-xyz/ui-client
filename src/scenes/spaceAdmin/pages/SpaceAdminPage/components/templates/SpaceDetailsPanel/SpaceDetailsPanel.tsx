@@ -13,10 +13,9 @@ import {ROUTES} from 'core/constants';
 import * as styled from './SpaceDetailsPanel.styled';
 
 const SpaceDetailsPanel: FC = () => {
-  const {spaceAdminStore, mainStore, collaborationStore} = useStore();
+  const {spaceAdminStore} = useStore();
   const {spaceManagerStore} = spaceAdminStore;
   const {space, spaceDetailsFormStore, deleteSpaceConfirmationDialog} = spaceManagerStore;
-  const {agoraStore} = mainStore;
   const history = useHistory();
 
   const parentClicked = (id: string) => {
@@ -45,13 +44,9 @@ const SpaceDetailsPanel: FC = () => {
 
   const handleDelete = () => {
     if (space) {
-      spaceDetailsFormStore
-        .deleteSpace(space.id)
-        .then(agoraStore.leaveMeetingSpace)
-        .then(collaborationStore.resetModel)
-        .then(() => {
-          history.replace({pathname: ROUTES.base});
-        });
+      spaceDetailsFormStore.deleteSpace(space.id).then(() => {
+        history.replace({pathname: ROUTES.base});
+      });
     }
   };
 

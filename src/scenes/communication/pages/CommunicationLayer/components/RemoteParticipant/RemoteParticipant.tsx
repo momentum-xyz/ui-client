@@ -9,7 +9,6 @@ import {ReactComponent as AddIcon} from 'images/icons/add.svg';
 import Avatar from 'component/atoms/Avatar';
 import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
-import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 
@@ -26,17 +25,14 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   canEnterStage,
   totalParticipants
 }) => {
-  const {agoraStore} = useStore().mainStore;
+  const {collaborationStore, communicationStore, mainStore} = useStore();
+  const {agoraStore} = mainStore;
+  const {communicationLayerStore} = communicationStore;
+  const {space} = collaborationStore;
   const videoRef = useRef<HTMLDivElement>(null);
   const inviteOnStageModalRef = useRef<ModalRef>(null);
   const id = participant.uid as string;
-  const [isModerator, , ,] = useModerator(agoraStore.spaceId ?? '');
   const [hovered, setIsHovered] = useState(false);
-
-  const {
-    communicationStore: {communicationLayerStore},
-    collaborationStore: {space}
-  } = useStore();
 
   const [user] = useUser(id);
 
@@ -112,7 +108,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         onMouseLeave={() => setIsHovered(false)}
         title={userName}
         onClick={
-          !agoraStore.isStageMode && isModerator
+          !agoraStore.isStageMode && collaborationStore.isModerator
             ? () => {
                 handleOpenMenu();
               }
@@ -130,13 +126,13 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
             ) : (
               <AstronautIcon className="w-4 h-4" title={userName} />
             )}
-            {agoraStore.isStageMode && isModerator && hovered && (
+            {agoraStore.isStageMode && collaborationStore.isModerator && hovered && (
               <div
                 className="flex flex-col bg-dark-blue-50 rounded-full absolute h-full w-full items-center justify-center space-y-.5"
                 onClick={
                   canEnterStage
                     ? () => {
-                        if (agoraStore.isStageMode && isModerator) {
+                        if (agoraStore.isStageMode && collaborationStore.isModerator) {
                           console.log('I am a moderator');
                           handleStageModeUserClick();
                         }

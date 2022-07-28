@@ -7,14 +7,23 @@ import {agoraRepositoryApiEndpoints} from './agoraRepository.api.endpoints';
 import {AgoraTokenRequest, AgoraTokenResponse} from './agoraRepository.api.types';
 
 export const getAgoraToken: RequestInterface<AgoraTokenRequest, AgoraTokenResponse> = (options) => {
-  const {isStageMode, isScreenShare, spaceId, ...restOptions} = options;
+  const {isStageMode, spaceId, ...restOptions} = options;
 
-  const url = generatePath(
-    isScreenShare
-      ? agoraRepositoryApiEndpoints().tokenScreenshare
-      : agoraRepositoryApiEndpoints().token,
-    {channelId: isStageMode ? `stage-${spaceId}` : spaceId}
-  );
+  const url = generatePath(agoraRepositoryApiEndpoints().token, {
+    channelId: isStageMode ? `stage-${spaceId}` : spaceId
+  });
+
+  return request.get(url, restOptions);
+};
+
+export const getAgoraScreenShareToken: RequestInterface<AgoraTokenRequest, AgoraTokenResponse> = (
+  options
+) => {
+  const {isStageMode, spaceId, ...restOptions} = options;
+
+  const url = generatePath(agoraRepositoryApiEndpoints().tokenScreenshare, {
+    channelId: isStageMode ? `stage-${spaceId}` : spaceId
+  });
 
   return request.get(url, restOptions);
 };

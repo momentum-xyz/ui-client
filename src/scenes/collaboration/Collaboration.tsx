@@ -15,13 +15,13 @@ import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
-import {useModerator} from 'context/Integration/hooks/useIntegration';
 import {PrivateSpaceError} from 'core/errors';
 
 import {COLLABORATION_ROUTES} from './CollaborationRoutes';
 
 const Collaboration: FC = () => {
-  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const rootStore = useStore();
+  const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
 
   const {addRequestPopup} = useStageModePopupQueueContext();
@@ -29,41 +29,29 @@ const Collaboration: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
-  const [isModerator, , ,] = useModerator(spaceId);
 
   const switchDeviceModal = useRef<ModalRef>(null);
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
 
   useEffect(() => {
-    unityStore.pause();
-
-    return unityStore.resume;
-  }, [unityStore]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        await collaborationStore.joinMeetingSpace(spaceId);
-        await agoraStore.joinMeetingSpace(sessionStore.userId, spaceId);
-      } catch (e) {
-        if (e instanceof PrivateSpaceError) {
-          toast.error(
-            <ToastContent
-              isDanger
-              isCloseButton
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('collaboration.spaceIsPrivate')}
-            />
-          );
-        }
+    rootStore.joinMeetingSpace(spaceId).catch((e) => {
+      if (e instanceof PrivateSpaceError) {
+        toast.error(
+          <ToastContent
+            isDanger
+            isCloseButton
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('collaboration.spaceIsPrivate')}
+          />
+        );
       }
-    })();
+    });
 
     return () => {
-      agoraStore.leaveMeetingSpace();
+      rootStore.leaveMeetingSpace();
     };
-  }, [agoraStore, collaborationStore, sessionStore.userId, spaceId, t]);
+  }, [rootStore, sessionStore.userId, spaceId, t]);
 
   useEffect(() => {
     if (agoraStore.screenShare) {
@@ -83,7 +71,7 @@ const Collaboration: FC = () => {
   });
 
   usePosBusEvent('stage-mode-request', (userId) => {
-    if (isModerator) {
+    if (collaborationStore.isModerator) {
       addRequestPopup(userId, {
         user: userId,
         onAccept: async () => {

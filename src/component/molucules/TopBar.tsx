@@ -2,10 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
-import {UnityService} from 'shared/services';
-import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 import {IconSvg} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 
 import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
 import {ReactComponent as PencilIcon} from '../../images/icons/pencil.svg';
@@ -54,18 +53,8 @@ const TopBar = ({
 
   const addUserModal = useRef<ModalRef>(null);
 
-  const leaveCollaborationSpace = () => {
-    if (collaborationStore.space && collaboration) {
-      UnityService.triggerInteractionMsg?.(
-        PosBusEventEnum.LeftSpace,
-        collaborationStore.space.id,
-        0,
-        ''
-      );
-
-      collaborationStore.leaveMeetingSpace();
-      agoraStore.leaveMeetingSpace();
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
 
   useEffect(() => {
@@ -176,7 +165,7 @@ const TopBar = ({
         <TopbarButton
           isActive={() => false}
           link="/"
-          onClick={() => leaveCollaborationSpace()}
+          onClick={handleClose}
           title={space && collaboration ? 'Leave' : 'Close'}
         >
           <CloseIcon />

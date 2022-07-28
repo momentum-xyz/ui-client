@@ -7,6 +7,8 @@ import {IntegrationTypeEnum, StageModeStatusEnum} from 'core/enums';
 import {spaceIntegrationsEndpoints} from './spaceIntegrations.api.endpoints';
 import {
   SpaceIntegrationEnableRequest,
+  SpaceIntegrationsCheckRequest,
+  SpaceIntegrationsCheckResponse,
   SpaceIntegrationsStageModeRequest,
   SpaceIntegrationsStageModeResponse
 } from './spaceIntegrations.api.types';
@@ -57,4 +59,14 @@ export const disableStageMode: RequestInterface<SpaceIntegrationEnableRequest, v
     },
     restOptions
   );
+};
+
+export const checkSpaceModeration: RequestInterface<
+  SpaceIntegrationsCheckRequest,
+  SpaceIntegrationsCheckResponse
+> = (options) => {
+  const {spaceId, ...restOptions} = options;
+  const url = generatePath(spaceIntegrationsEndpoints().check, {spaceId});
+
+  return request.get(url, restOptions);
 };

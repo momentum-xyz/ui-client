@@ -51,11 +51,6 @@ const Space = types
     })
   )
   .actions((self) => ({
-    setup(spaceId: string, isTable = false) {
-      self.didFetchSpaceInformation = false;
-      self.id = spaceId;
-      self.isTable = isTable;
-    },
     canUserJoin: flow(function* (spaceId: string) {
       const response = yield self.fetchSpaceInformationRequest.send(
         api.spaceRepository.fetchSpace,

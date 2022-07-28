@@ -2,14 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router-dom';
 
-import {PosBusEventEnum} from 'core/enums';
-import {UnityService} from 'shared/services';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
 import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import Avatar from 'component/atoms/Avatar';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 
 const LocalParticipant: React.FC = () => {
   const videoRef = useRef<HTMLDivElement>(null);
@@ -17,10 +17,10 @@ const LocalParticipant: React.FC = () => {
   const {
     communicationStore: {communicationLayerStore},
     sessionStore: {profile},
-    mainStore: {agoraStore},
-    collaborationStore
+    mainStore: {agoraStore}
   } = useStore();
   const {userDevicesStore} = agoraStore;
+  const history = useHistory();
 
   useEffect(() => {
     if (userDevicesStore.localVideoTrack) {
@@ -56,10 +56,7 @@ const LocalParticipant: React.FC = () => {
 
   usePosBusEvent('meeting-kick', async (spaceId) => {
     communicationLayerStore.setKicked(true);
-    UnityService.triggerInteractionMsg?.(PosBusEventEnum.LeftSpace, spaceId, 0, '');
-
-    await agoraStore.leaveMeetingSpace();
-    collaborationStore.resetModel();
+    history.push(ROUTES.base);
 
     toast.info(
       <ToastContent

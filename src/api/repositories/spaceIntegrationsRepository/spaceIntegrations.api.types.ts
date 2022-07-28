@@ -71,3 +71,9 @@ export interface SpaceIntegrationDisableRequest {
   spaceId: string;
   userId: string;
 }
+
+export interface SpaceIntegrationsCheckRequest {
+  spaceId: string;
+}
+
+export interface SpaceIntegrationsCheckResponse extends Boolean {}
