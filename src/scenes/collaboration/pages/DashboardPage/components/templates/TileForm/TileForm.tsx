@@ -68,7 +68,7 @@ const TileForm: FC = () => {
         {selectedType === TileTypeEnum.TILE_TYPE_VIDEO && (
           <VideoTileForm
             currentTile={currentTile ?? undefined}
-            spaceId={space.id ?? ''}
+            spaceId={space?.id ?? ''}
             createTile={tileFormStore.createVideoTile}
             updateTile={tileFormStore.updateVideoTile}
             fetchDashboard={dashboard.fetchDashboard}
@@ -79,7 +79,7 @@ const TileForm: FC = () => {
         {selectedType === TileTypeEnum.TILE_TYPE_TEXT && (
           <TextTileForm
             currentTile={currentTile ?? undefined}
-            spaceId={space.id ?? ''}
+            spaceId={space?.id ?? ''}
             createTile={tileFormStore.createTextTile}
             updateTile={tileFormStore.updateTextTile}
             fetchDashboard={dashboard.fetchDashboard}
@@ -90,7 +90,7 @@ const TileForm: FC = () => {
         {selectedType === TileTypeEnum.TILE_TYPE_MEDIA && (
           <ImageTileForm
             currentTile={currentTile ?? undefined}
-            spaceId={space.id ?? ''}
+            spaceId={space?.id ?? ''}
             createTile={tileFormStore.createImageTile}
             updateTile={tileFormStore.updateImageTile}
             fetchDashboard={dashboard.fetchDashboard}
