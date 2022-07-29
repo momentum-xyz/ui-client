@@ -3,8 +3,8 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {MediaPlayer} from 'scenes/collaboration/pages/StageModePage/components';
 
-import MediaPlayer from '../MediaPlayer';
 import {useCurrentUser} from '../../../hooks/api/useUser';
 import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
 import {ReactComponent as RemoveIcon} from '../../../images/icons/remove.svg';
@@ -67,10 +67,8 @@ const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
           >
             <MediaPlayer
               videoTrack={userDevicesStore.localVideoTrack}
-              audioTrack={undefined}
-              isVideoMuted={userDevicesStore.cameraOff}
-              isAudioMuted={userDevicesStore.muted}
-              currentUser={currentUser}
+              isCameraOff={userDevicesStore.cameraOff}
+              isMuted={userDevicesStore.muted}
               soundLevel={agoraStore.localSoundLevel}
             />
           </div>
@@ -86,10 +84,9 @@ const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
             <MediaPlayer
               remoteUser={user}
               videoTrack={user.videoTrack}
-              isVideoMuted={user.cameraOff}
-              audioTrack={user.audioTrack}
-              isAudioMuted={user.isMuted}
-              soundLevel={agoraStore.remoteUsers.find(({uid}) => uid === user.uid)?.soundLevel ?? 0}
+              isCameraOff={user.cameraOff}
+              isMuted={user.isMuted}
+              soundLevel={user.soundLevel}
             />
             <div
               className={`absolute inset-0 hidden justify-center items-center   ${
