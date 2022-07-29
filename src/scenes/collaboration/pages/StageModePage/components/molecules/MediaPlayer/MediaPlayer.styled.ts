@@ -7,7 +7,7 @@ export const Container = styled.div`
   aspect-ratio: 16 / 9;
 
   &.showRing {
-    border: 2px solid var(--prime-blue-100);
+    border: 2px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
   }
 
   :not(&.showRing) {
