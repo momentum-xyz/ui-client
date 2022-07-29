@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
@@ -17,7 +17,6 @@ import * as styled from './StageModeGuest.styled';
 const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const [requestMade, setRequestMade] = useState<boolean>();
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     useStageModePopupQueueContext();
 
@@ -27,14 +26,14 @@ const StageModeGuest: React.FC = () => {
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
-      setRequestMade(false);
+      agoraStore.requestToGoOnstageWasHandled();
     }
   });
 
   usePosBusEvent('stage-mode-declined', (userId) => {
     if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
-      setRequestMade(false);
+      agoraStore.requestToGoOnstageWasHandled();
     }
   });
 
@@ -46,7 +45,6 @@ const StageModeGuest: React.FC = () => {
     try {
       await agoraStore.requestToGoOnStage();
       showSuccessStageModeRequestSubmissionToast();
-      setRequestMade(true);
     } catch (e) {
       console.info(e);
       toast.error(
@@ -58,7 +56,6 @@ const StageModeGuest: React.FC = () => {
           isCloseButton
         />
       );
-      setRequestMade(false);
     }
   }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
 
@@ -80,14 +77,14 @@ const StageModeGuest: React.FC = () => {
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}
 
-          {agoraStore.isStageMode && !requestMade && (
+          {agoraStore.isStageMode && !agoraStore.requestWasMadeToGoOnStage && (
             <Button
               label={agoraStore.isOnStage ? t('actions.leaveStage') : t('actions.goOnStage')}
               variant={agoraStore.isOnStage ? 'danger' : 'primary'}
               onClick={agoraStore.isOnStage ? agoraStore.leaveStage : handleUserRequest}
             />
           )}
-          {agoraStore.isStageMode && requestMade && (
+          {agoraStore.isStageMode && agoraStore.requestWasMadeToGoOnStage && (
             <Text text={t('messages.pendingRequestToGoOnStage')} size="m" />
           )}
           {agoraStore.isStageMode && !agoraStore.canEnterStage && (

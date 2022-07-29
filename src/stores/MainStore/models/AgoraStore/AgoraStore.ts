@@ -33,6 +33,7 @@ const AgoraStore = types
       spaceId: types.maybe(types.string),
       userDevicesStore: types.optional(UserDevicesStore, {}),
       remoteUsers: types.optional(types.array(AgoraRemoteUser), []),
+      requestWasMadeToGoOnStage: false,
 
       // Chat
       isChatOpen: false,
@@ -146,9 +147,16 @@ const AgoraStore = types
         return;
       }
 
-      yield self.stageModeRequestRequest.send(api.stageModeRepository.requestToJoin, {
-        spaceId: self.spaceId
-      });
+      self.requestWasMadeToGoOnStage = true;
+
+      try {
+        yield self.stageModeRequestRequest.send(api.stageModeRepository.requestToJoin, {
+          spaceId: self.spaceId
+        });
+      } catch (e) {
+        self.requestWasMadeToGoOnStage = false;
+        throw e;
+      }
     }),
     muteRemoteUser: flow(function* (userId: string) {
       if (!self.spaceId) {
@@ -672,7 +680,6 @@ const AgoraStore = types
       }
     }),
     kickUserOffStage: flow(function* (userId: string) {
-      // TODO: Add API call to kick somone off stage
       if (!self.spaceId) {
         return;
       }
@@ -702,6 +709,9 @@ const AgoraStore = types
     },
     removeStageModeUser(userId: string) {
       self.remoteUsers = cast(self.remoteUsers.filter((user) => user.uid !== userId));
+    },
+    requestToGoOnstageWasHandled() {
+      self.requestWasMadeToGoOnStage = false;
     }
   }))
   .views((self) => ({
