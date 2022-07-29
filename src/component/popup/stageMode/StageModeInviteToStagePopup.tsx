@@ -21,11 +21,12 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
   onClose
 }) => {
   const {agoraStore} = useStore().mainStore;
+  const {stageModeStore} = agoraStore;
 
   const handleInviteClick = async () => {
     if (user) {
       try {
-        await agoraStore.inviteToStage(user.uid);
+        await stageModeStore.inviteToStage(user.uid);
         onClose?.();
       } catch {
         toast.error(

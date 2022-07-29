@@ -16,16 +16,23 @@ const Toggle: FC<PropsInterface> = ({
   variant = 'normal',
   size = 'normal',
   checked,
+  disabled,
   onChange,
   ...restProps
 }) => {
   return (
-    <styled.Container className={cn(size)}>
+    <styled.Container className={cn(size, disabled && 'disabled')}>
       <styled.Background
         className={cn(checked ? 'on' : 'off', size, `variant-${variant}`)}
         onClick={() => onChange(!checked)}
       >
-        <styled.HiddenInput {...restProps} checked={checked} readOnly type="checkbox" />
+        <styled.HiddenInput
+          {...restProps}
+          disabled={disabled}
+          checked={checked}
+          readOnly
+          type="checkbox"
+        />
         <styled.Toggle className={cn(size, `variant-${variant}`, checked ? 'on' : 'off')} />
       </styled.Background>
     </styled.Container>

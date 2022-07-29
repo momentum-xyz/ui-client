@@ -10,6 +10,7 @@ import StageModePopup from './StageModePopup';
 const StageModePopupQueueComponent: React.FC = () => {
   const {popups} = useStageModePopupQueueContext();
   const {agoraStore} = useStore().mainStore;
+  const {stageModeStore} = agoraStore;
 
   return (
     <div className="flex flex-col space-y-2 h-full overflow-y-auto">
@@ -17,7 +18,7 @@ const StageModePopupQueueComponent: React.FC = () => {
         <StageModePopup
           info={info}
           key={'stagepop-up:' + info.userId}
-          canEnterStage={agoraStore.canEnterStage}
+          canEnterStage={stageModeStore.canEnterStage}
         />
       ))}
     </div>

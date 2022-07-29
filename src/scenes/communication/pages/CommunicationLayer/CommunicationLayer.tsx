@@ -40,23 +40,23 @@ const CommunicationLayer = () => {
   } = useStore();
   const {space} = collaborationStore;
   const {unityStore, agoraStore} = mainStore;
-  const {userDevicesStore} = agoraStore;
+  const {userDevicesStore, stageModeStore} = agoraStore;
   const {clearPopups} = useStageModePopupQueueContext();
 
   const stageModeAudience = useMemo(() => {
     return agoraStore.isStageMode
-      ? agoraStore.stageModeUsers.filter((user) => {
+      ? stageModeStore.users.filter((user) => {
           return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
         })
       : [];
-  }, [agoraStore.stageModeUsers, sessionStore.userId, agoraStore.isStageMode]);
+  }, [stageModeStore.users, sessionStore.userId, agoraStore.isStageMode]);
 
   const numberOfPeople = useMemo(() => {
     return agoraStore.isStageMode
-      ? stageModeAudience.length + Number(!agoraStore.isOnStage)
+      ? stageModeAudience.length + Number(!stageModeStore.isOnStage)
       : agoraStore.remoteUsers.length + 1;
   }, [
-    agoraStore.isOnStage,
+    stageModeStore.isOnStage,
     agoraStore.isStageMode,
     agoraStore.remoteUsers.length,
     stageModeAudience.length
@@ -241,7 +241,7 @@ const CommunicationLayer = () => {
               </styled.MuteButtonContainer>
             )}
             <ul>
-              {(!agoraStore.isStageMode || !agoraStore.isOnStage) && <LocalParticipant />}
+              {(!agoraStore.isStageMode || !stageModeStore.isOnStage) && <LocalParticipant />}
               {maxVideoStreamsShown && (
                 <li
                   className="mb-.5 p-.5
@@ -281,7 +281,7 @@ relative
                       audienceParticipant={
                         agoraStore.isStageMode ? (participant as StageModeUserInterface) : undefined
                       }
-                      canEnterStage={agoraStore.canEnterStage}
+                      canEnterStage={stageModeStore.canEnterStage}
                       totalParticipants={agoraStore.remoteUsers.length}
                     />
                   </Transition>

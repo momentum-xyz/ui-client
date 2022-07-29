@@ -17,14 +17,15 @@ const VideoContainer = () => {
   const {
     mainStore: {agoraStore}
   } = useStore();
+  const {screenShareStore} = agoraStore;
 
   useEffect(() => {
-    if (videoRef.current && agoraStore.screenShare) {
-      agoraStore.screenShare?.play(videoRef.current, {
+    if (videoRef.current && screenShareStore.screenShare) {
+      screenShareStore.screenShare?.play(videoRef.current, {
         fit: 'contain'
       });
     }
-  }, [agoraStore.screenShare]);
+  }, [screenShareStore.screenShare]);
 
   return (
     <Panel padding={false} grow={true}>
@@ -37,7 +38,8 @@ const VideoContainer = () => {
 const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
   const {agoraStore} = mainStore;
-  const {screenShare, screenShareClient} = agoraStore;
+  const {screenShareStore, stageModeStore} = agoraStore;
+  const {screenShare, client} = screenShareStore;
 
   const [settingUp, setSettingUp] = useState(false);
   const [userId, setUserId] = useState<string | null>();
@@ -47,23 +49,23 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
   const startScreenSharing = useCallback(() => {
     console.info('start screencast');
     setSettingUp(true);
-    agoraStore
+    screenShareStore
       .startScreenShare(sessionStore.userId)
       .then(() => {
-        if (!screenShareClient) {
+        if (!client) {
           setSettingUp(false);
         }
       })
       .catch(() => {
         setSettingUp(false);
       });
-  }, [agoraStore, screenShareClient, sessionStore.userId]);
+  }, [client, screenShareStore, sessionStore.userId]);
 
   useEffect(() => {
-    if (screenShareClient) {
-      screenShareClient.localTracks[0].on('track-ended', agoraStore.stopScreenShare);
+    if (client) {
+      client.localTracks[0].on('track-ended', screenShareStore.stopScreenShare);
     }
-  }, [agoraStore.stopScreenShare, screenShareClient]);
+  }, [client, screenShareStore.stopScreenShare]);
 
   useEffect(() => {
     console.info('start screen share', screenShare);
@@ -92,7 +94,7 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
         <Panel grow={true}>
           <div className="flex flex-col h-full items-center justify-center gap-4">
             <h2 className="font-bold">There is no one screensharing</h2>
-            {(!agoraStore.spaceId || agoraStore.isOnStage) && (
+            {(!agoraStore.spaceId || stageModeStore.isOnStage) && (
               <Button type="ghost" size="m" onClick={startScreenSharing}>
                 Start screensharing
               </Button>
@@ -101,18 +103,18 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
         </Panel>
       );
     }
-  }, [agoraStore.isOnStage, agoraStore.spaceId, screenShare, settingUp, startScreenSharing]);
+  }, [screenShare, settingUp, agoraStore.spaceId, stageModeStore.isOnStage, startScreenSharing]);
 
   const actions = useMemo(() => {
-    if (screenShareClient) {
+    if (client) {
       return (
-        <Button type="ghost" size="s" onClick={agoraStore.stopScreenShare}>
+        <Button type="ghost" size="s" onClick={screenShareStore.stopScreenShare}>
           stop screenshare
         </Button>
       );
     }
     return null;
-  }, [agoraStore.stopScreenShare, screenShareClient]);
+  }, [screenShareStore.stopScreenShare, client]);
 
   if (!collaborationStore.space) {
     return null;
