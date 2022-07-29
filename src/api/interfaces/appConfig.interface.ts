@@ -46,6 +46,7 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   WESTEND_TEST_WS_SERVER: string;
   KUSAMA_WS_SERVER: string;
   GOOGLE_SDK_URL: string;
+  GOOGLE_DOCUMENT_SCOPE: string;
   YOUTUBE_API: string;
   YOUTUBE_INTRO_VIDEO_ID: string;
   WIKI_URL: string;

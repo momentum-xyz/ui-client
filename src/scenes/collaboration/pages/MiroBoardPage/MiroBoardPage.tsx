@@ -52,6 +52,11 @@ const MiroBoardPage: FC = () => {
     });
   }, [miroBoardStore, space]);
 
+  const closeBoard = useCallback(async () => {
+    await miroBoardStore.disableMiroBoard(space?.id || '');
+    await miroBoardStore.fetchMiroBoard(space?.id || '');
+  }, [miroBoardStore, space?.id]);
+
   if (!space) {
     return null;
   }
@@ -71,7 +76,10 @@ const MiroBoardPage: FC = () => {
         onClose={() => history.push(ROUTES.base)}
       >
         {space && !!miroBoard?.data?.accessLink && (
-          <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
+          <>
+            <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
+            <Button label={t('actions.cancel')} variant="danger" onClick={closeBoard} />
+          </>
         )}
       </SpaceTopBar>
       <styled.Container>

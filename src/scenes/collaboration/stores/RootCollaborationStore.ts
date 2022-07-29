@@ -58,6 +58,12 @@ const RootCollaborationStore = types
     leaveMeetingSpace() {
       self.leftMeetingSpaceId = self.space?.id;
       self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
+
+      if (self.space && self.space.isAdmin) {
+        self.miroBoardStore.disableMiroBoard(self.space.id);
+        self.googleDriveStore.disableGoogleDocument(self.space.id);
+      }
+
       self.space = undefined;
       self.isModerator = false;
 

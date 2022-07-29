@@ -1,20 +1,11 @@
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 
 import {appVariables} from 'api/constants';
 
-let scriptLoadingStarted = false;
+const DOCUMENT_VIEW_ID = 'DOCS';
 
 export const useGooglePicker = (onChange: (data: any) => void) => {
-  const clientId = appVariables.GOOGLE_API_CLIENT_ID;
-  const developerKey = appVariables.GOOGLE_API_DEVELOPER_KEY;
-  const scope = ['https://www.googleapis.com/auth/drive.file'];
-  const multiselect = false;
-  const navHidden = false;
-  const authImmediate = false;
-  const disabled = false;
-  const query = '';
-  const viewId = 'DOCS';
-  const origin = '';
+  const scriptLoadingStarted = useRef<boolean>(false);
 
   const onApiLoad = () => {
     (window as any).gapi.load('auth');
@@ -45,34 +36,27 @@ export const useGooglePicker = (onChange: (data: any) => void) => {
   useEffect(() => {
     if (isGoogleReady()) {
       onApiLoad();
-    } else if (!scriptLoadingStarted) {
-      scriptLoadingStarted = true;
+    } else if (!scriptLoadingStarted.current) {
+      scriptLoadingStarted.current = true;
       loadScript(appVariables.GOOGLE_SDK_URL, onApiLoad);
     }
   }, []);
 
-  // @ts-ignore
-  const doAuth = (callback) => {
-    (window as any).gapi.auth.authorize(
-      {
-        client_id: clientId,
-        scope: scope,
-        immediate: authImmediate
-      },
-      callback
-    );
+  const doAuth = (callback: (data: any) => void) => {
+    const config = {
+      client_id: appVariables.GOOGLE_API_CLIENT_ID,
+      scope: [appVariables.GOOGLE_DOCUMENT_SCOPE],
+      immediate: false
+    };
+
+    (window as any).gapi.auth.authorize(config, callback);
   };
 
-  // @ts-ignore
-  const handleCreatePicker = (oauthToken) => {
-    const googleViewId = (window as any).google.picker.ViewId[viewId];
+  const handleCreatePicker = (oauthToken: string) => {
+    const googleViewId = (window as any).google.picker.ViewId[DOCUMENT_VIEW_ID];
     const view = new (window as any).google.picker.View(googleViewId);
 
     view.setMimeTypes([]);
-
-    if (query) {
-      view.setQuery(query);
-    }
 
     if (!view) {
       throw new Error("Can't find view by viewId");
@@ -81,28 +65,15 @@ export const useGooglePicker = (onChange: (data: any) => void) => {
     const picker = new (window as any).google.picker.PickerBuilder()
       .addView(view)
       .setOAuthToken(oauthToken)
-      .setDeveloperKey(developerKey)
+      .setDeveloperKey(appVariables.GOOGLE_API_DEVELOPER_KEY)
       .setCallback(onChange);
-
-    if (origin) {
-      picker.setOrigin(origin);
-    }
-
-    if (navHidden) {
-      picker.enableFeature((window as any).google.picker.Feature.NAV_HIDDEN);
-    }
-
-    if (multiselect) {
-      picker.enableFeature((window as any).google.picker.Feature.MULTISELECT_ENABLED);
-    }
 
     picker.build().setVisible(true);
   };
 
-  // @ts-ignore: refactoring
-  const onChoose = () => {
-    if (!isGoogleReady() || !isGoogleAuthReady() || !isGooglePickerReady() || disabled) {
-      return null;
+  const pickDocument = () => {
+    if (!isGoogleReady() || !isGoogleAuthReady() || !isGooglePickerReady()) {
+      return;
     }
 
     const token = (window as any).gapi.auth.getToken();
@@ -111,8 +82,7 @@ export const useGooglePicker = (onChange: (data: any) => void) => {
     if (oauthToken) {
       handleCreatePicker(oauthToken);
     } else {
-      // @ts-ignore
-      doAuth((response) => {
+      doAuth((response: any) => {
         if (response.access_token) {
           handleCreatePicker(response.access_token);
         } else {
@@ -122,5 +92,5 @@ export const useGooglePicker = (onChange: (data: any) => void) => {
     }
   };
 
-  return {onChoose};
+  return {pickDocument};
 };

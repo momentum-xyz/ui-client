@@ -48,7 +48,12 @@ const GoogleDrivePage: FC = () => {
     [googleDriveStore, space]
   );
 
-  const {onChoose} = useGooglePicker(pickerCallBack);
+  const closeDocument = useCallback(async () => {
+    await googleDriveStore.disableGoogleDocument(space?.id || '');
+    await googleDriveStore.fetchGoogleDocument(space?.id || '');
+  }, [googleDriveStore, space?.id]);
+
+  const {pickDocument} = useGooglePicker(pickerCallBack);
 
   if (!space) {
     return null;
@@ -69,12 +74,15 @@ const GoogleDrivePage: FC = () => {
         onClose={() => history.push(ROUTES.base)}
       >
         {space.isAdmin && !!googleDocument?.data?.url && (
-          <Button label={t('actions.changeDocument')} variant="primary" onClick={onChoose} />
+          <>
+            <Button label={t('actions.changeDocument')} variant="primary" onClick={pickDocument} />
+            <Button label={t('actions.cancel')} variant="danger" onClick={closeDocument} />
+          </>
         )}
       </SpaceTopBar>
       <styled.Container>
         {!googleDocument?.data?.url ? (
-          <GoogleChoice isAdmin={space.isAdmin} pickDocument={onChoose} />
+          <GoogleChoice isAdmin={space.isAdmin} pickDocument={pickDocument} />
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}
