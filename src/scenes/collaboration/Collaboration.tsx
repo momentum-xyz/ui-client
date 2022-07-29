@@ -125,7 +125,7 @@ const Collaboration: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.stage')}
-          text={t('messages.stageModeActivated')}
+          text={t('messages.stageModeDeActivated')}
           isCloseButton
         />,
         TOAST_GROUND_OPTIONS

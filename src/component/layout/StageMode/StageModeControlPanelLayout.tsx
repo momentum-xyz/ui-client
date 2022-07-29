@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
-import {observer} from 'mobx-react-lite';
+import {observer, useObserver} from 'mobx-react-lite';
 
 import {ToastContent, Toggle} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -140,7 +140,7 @@ const StageModeControlPanelLayout: React.FC = () => {
     });
   }, [stageModeStore.users, stageModeStore.isOnStage, agoraStore.remoteUsers]);
 
-  const actions = useMemo(() => {
+  const actions = useObserver(() => {
     return (
       <div className="flex items-center justify-between mx-4 gap-2 flex-grow">
         <div className="flex items-center gap-1">
@@ -173,16 +173,7 @@ const StageModeControlPanelLayout: React.FC = () => {
         {agoraStore.isStageMode && !stageModeStore.canEnterStage && <span>Stage is full</span>}
       </div>
     );
-  }, [
-    agoraStore,
-    handleEnterStage,
-    handleLeaveStage,
-    sessionStore.userId,
-    stageModeStore.canEnterStage,
-    stageModeStore.isOnStage,
-    stageStats.audience,
-    stageStats.speakers
-  ]);
+  });
 
   if (!space) {
     return null;
