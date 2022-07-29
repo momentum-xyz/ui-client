@@ -25,6 +25,7 @@ const StageModeControlPanelLayout: React.FC = () => {
   });
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
+  const {stageModeStore, userDevicesStore} = agoraStore;
   const {space} = collaborationStore;
 
   const [selectedRemoteUserIdForRemove, setSelectedRemoteUserIdForRemove] = useState<string | null>(
@@ -46,7 +47,7 @@ const StageModeControlPanelLayout: React.FC = () => {
       if (result) {
         if (user?.id.data) {
           try {
-            await agoraStore.kickUserOffStage(bytesToUuid(user.id.data));
+            await stageModeStore.kickUserOffStage(bytesToUuid(user.id.data));
             setSelectedRemoteUserIdForRemove(null);
           } catch {
             setSelectedRemoteUserIdForRemove(null);
@@ -67,7 +68,7 @@ const StageModeControlPanelLayout: React.FC = () => {
         setSelectedRemoteUserIdForRemove(null);
       }
     });
-  }, [agoraStore, getConfirmation, user?.id.data, user?.name]);
+  }, [getConfirmation, stageModeStore, user]);
 
   const remoteUserClicked = useCallback(
     async (remoteUser: AgoraRemoteUserInterface, event = 'remove') => {
@@ -87,26 +88,26 @@ const StageModeControlPanelLayout: React.FC = () => {
     }
   }, [user, selectedRemoteUserIdForRemove, confirmRemoveUserFromStage]);
 
-  useEffect(() => {
-    if (agoraStore.joinedStageMode && userToggledStageOn) {
-      setUserToggledStageOn(false);
-      handleEnterStage();
-    }
-  }, [agoraStore.joinedStageMode, userToggledStageOn]);
-
   const handleEnterStage = useCallback(() => {
-    if (!agoraStore.canEnterStage) {
+    if (!stageModeStore.canEnterStage) {
       toast.error(`The stage is full`);
       return;
     }
 
-    agoraStore.enterStage();
-  }, [agoraStore]);
+    stageModeStore.enterStage(userDevicesStore.createLocalTracks);
+  }, [stageModeStore, userDevicesStore]);
+
+  useEffect(() => {
+    if (stageModeStore.joined && userToggledStageOn) {
+      setUserToggledStageOn(false);
+      handleEnterStage();
+    }
+  }, [handleEnterStage, stageModeStore.joined, userToggledStageOn]);
 
   const handleLeaveStage = useCallback(() => {
     console.info('[stagemode] LEAVE STAGE');
-    agoraStore.leaveStage();
-  }, [agoraStore]);
+    stageModeStore.leaveStage();
+  }, [stageModeStore]);
 
   const stageModeOffMessage = () => (
     <div className="flex flex-grow z-0">
@@ -129,15 +130,15 @@ const StageModeControlPanelLayout: React.FC = () => {
   );
 
   useEffect(() => {
-    const audience = agoraStore.stageModeUsers.filter((user) => {
+    const audience = stageModeStore.users.filter((user) => {
       return user.role === ParticipantRole.AUDIENCE_MEMBER;
     });
 
     setStageStats({
-      speakers: agoraStore.remoteUsers.length + (agoraStore.isOnStage ? 1 : 0),
-      audience: agoraStore.isOnStage ? audience.length - 1 : audience.length
+      speakers: agoraStore.remoteUsers.length + (stageModeStore.isOnStage ? 1 : 0),
+      audience: stageModeStore.isOnStage ? audience.length - 1 : audience.length
     });
-  }, [agoraStore.stageModeUsers, agoraStore.isOnStage, agoraStore.remoteUsers]);
+  }, [stageModeStore.users, stageModeStore.isOnStage, agoraStore.remoteUsers]);
 
   const actions = useMemo(() => {
     return (
@@ -153,7 +154,7 @@ const StageModeControlPanelLayout: React.FC = () => {
             {agoraStore.isStageMode ? 'Stage is active' : 'Stage is inactive. Toggle to activate.'}
           </span>
         </div>
-        {agoraStore.isStageMode && (agoraStore.canEnterStage || agoraStore.isOnStage) && (
+        {agoraStore.isStageMode && (stageModeStore.canEnterStage || stageModeStore.isOnStage) && (
           <>
             <div className="flex items-center gap-1">
               <span>
@@ -162,25 +163,25 @@ const StageModeControlPanelLayout: React.FC = () => {
               <span>Audience: {stageStats.audience}</span>
             </div>
             <Button
-              type={agoraStore.isOnStage ? 'ghost-red' : 'ghost'}
-              onClick={agoraStore.isOnStage ? handleLeaveStage : handleEnterStage}
+              type={stageModeStore.isOnStage ? 'ghost-red' : 'ghost'}
+              onClick={stageModeStore.isOnStage ? handleLeaveStage : handleEnterStage}
             >
-              {agoraStore.isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+              {stageModeStore.isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
             </Button>
           </>
         )}
-        {agoraStore.isStageMode && !agoraStore.canEnterStage && <span>Stage is full</span>}
+        {agoraStore.isStageMode && !stageModeStore.canEnterStage && <span>Stage is full</span>}
       </div>
     );
   }, [
-    agoraStore.isStageMode,
-    agoraStore.toggleStageMode,
-    agoraStore.canEnterStage,
-    agoraStore.isOnStage,
-    stageStats.speakers,
-    stageStats.audience,
+    agoraStore,
+    handleEnterStage,
     handleLeaveStage,
-    handleEnterStage
+    sessionStore.userId,
+    stageModeStore.canEnterStage,
+    stageModeStore.isOnStage,
+    stageStats.audience,
+    stageStats.speakers
   ]);
 
   if (!space) {
