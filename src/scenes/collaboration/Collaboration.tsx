@@ -105,7 +105,7 @@ const Collaboration: FC = () => {
   });
 
   usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
-    await agoraStore.joinMeetingSpace(sessionStore.userId);
+    await agoraStore.toggledStageMode(sessionStore.userId);
 
     const isStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
 

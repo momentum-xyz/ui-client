@@ -149,6 +149,7 @@ const StageModeControlPanelLayout: React.FC = () => {
             onChange={() => {
               agoraStore.toggleStageMode(sessionStore.userId);
             }}
+            disabled={agoraStore.isTogglingStageMode}
           />
           <span className="text-sm">
             {agoraStore.isStageMode ? 'Stage is active' : 'Stage is inactive. Toggle to activate.'}

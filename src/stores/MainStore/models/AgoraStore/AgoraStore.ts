@@ -31,6 +31,7 @@ const AgoraStore = types
       userDevicesStore: types.optional(UserDevicesStore, {}),
       remoteUsers: types.optional(types.array(AgoraRemoteUser), []),
       isStageMode: false,
+      isTogglingStageMode: false,
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
 
@@ -318,6 +319,8 @@ const AgoraStore = types
         return;
       }
 
+      self.isTogglingStageMode = true;
+
       if (self.isStageMode) {
         yield self.toggleStageModeRequest.send(api.spaceIntegrationsRepository.disableStageMode, {
           spaceId: self.spaceId,
@@ -329,6 +332,10 @@ const AgoraStore = types
           userId
         });
       }
+    }),
+    toggledStageMode: flow(function* (user: string) {
+      yield self.joinMeetingSpace(user);
+      self.isTogglingStageMode = false;
     })
   }))
   .views((self) => ({
