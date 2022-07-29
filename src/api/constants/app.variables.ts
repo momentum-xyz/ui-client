@@ -44,6 +44,7 @@ export const appVariables: AppConfigExtendedInterface = {
   WEB3_PUBLIC_RPC_URL_MAINNET: 'https://mainnet.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
   WEB3_PUBLIC_RPC_URL_RINKEBY: 'https://rinkeby.infura.io/v3/9a6d8c8ccb1a4a51bcf4f30c1acd00df',
   GOOGLE_SDK_URL: 'https://apis.google.com/js/api.js',
+  GOOGLE_DOCUMENT_SCOPE: 'https://www.googleapis.com/auth/drive.file',
   YOUTUBE_API: 'https://www.googleapis.com/youtube/v3/playlistItems',
   YOUTUBE_INTRO_VIDEO_ID: 'UmSJIEZQAyQ',
   POLKADOT_CONNECTION_STRING: 'momentum-connections',
