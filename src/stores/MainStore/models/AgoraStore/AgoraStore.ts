@@ -183,7 +183,7 @@ const AgoraStore = types
       });
     }
   }))
-  // Initializer and track creation
+  // Initializer
   .actions((self) => ({
     init() {
       AgoraRTC.setLogLevel(4);
@@ -194,7 +194,7 @@ const AgoraStore = types
       self.videoCallStore.init(self.appId);
     }
   }))
-  // Screeensharing and chat visibility
+  // Chat visibility
   .actions((self) => ({
     showChat() {
       self.isChatOpen = true;

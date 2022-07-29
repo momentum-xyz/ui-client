@@ -24,6 +24,7 @@ const ScreenShareStore = types
       self._screenShare = value;
     }
   }))
+  // Track actions
   .actions((self) => ({
     createScreenTrackAndPublish: flow(function* () {
       if (!self.client) {
@@ -52,6 +53,7 @@ const ScreenShareStore = types
       return screenTrack;
     })
   }))
+  // State actions
   .actions((self) => ({
     init(appId: string, isStageMode: boolean, spaceId: string) {
       self.client = AgoraRTC.createClient({

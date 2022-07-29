@@ -20,6 +20,7 @@ const VideoCallStore = types
   .volatile(() => ({
     client: AgoraRTC.createClient({mode: 'rtc', codec: 'h264'})
   }))
+  // API Requests
   .actions((self) => ({
     muteRemoteUser: flow(function* (userId: string) {
       if (!self.spaceId) {
@@ -37,6 +38,7 @@ const VideoCallStore = types
       });
     })
   }))
+  // Common actions
   .actions((self) => ({
     init(appId: string) {
       self.client.enableAudioVolumeIndicator();
@@ -88,6 +90,7 @@ const VideoCallStore = types
       return tokenResponse;
     })
   }))
+  // State actions
   .actions((self) => ({
     join: flow(function* (
       spaceId: string,

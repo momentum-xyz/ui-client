@@ -37,6 +37,7 @@ const StageModeStore = types
   .volatile(() => ({
     client: AgoraRTC.createClient({mode: 'live', codec: 'vp8'})
   }))
+  // API Requests
   .actions((self) => ({
     inviteToStage: flow(function* (userId: string) {
       if (!self.spaceId) {
@@ -101,6 +102,7 @@ const StageModeStore = types
       });
     })
   }))
+  // Common actions
   .actions((self) => ({
     init(appId: string) {
       self.client.enableDualStream();
@@ -154,6 +156,7 @@ const StageModeStore = types
       return tokenResponse;
     })
   }))
+  // State actions
   .actions((self) => ({
     join: flow(function* (spaceId: string, authStateSubject: string) {
       const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
@@ -221,6 +224,7 @@ const StageModeStore = types
       });
     })
   }))
+  // Audience action
   .actions((self) => ({
     moveToAudience(userId: string) {
       const userToBeMoved = self.users.find((user) => user.uid === userId);
@@ -234,6 +238,7 @@ const StageModeStore = types
       }
     }
   }))
+  // User actions
   .actions((self) => ({
     kickUserOffStage: flow(function* (userId: string) {
       if (!self.spaceId) {
