@@ -18,7 +18,6 @@ import {
   StageModeUserRoleEnum
 } from 'core/enums';
 import {api} from 'api';
-import CONFIG from 'config/config';
 import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
 import {bytesToUuid} from 'core/utils';
 
@@ -34,6 +33,7 @@ const AgoraStore = types
       spaceId: types.maybe(types.string),
       userDevicesStore: types.optional(UserDevicesStore, {}),
       remoteUsers: types.optional(types.array(AgoraRemoteUser), []),
+      requestWasMadeToGoOnStage: false,
 
       // Chat
       isChatOpen: false,
@@ -147,9 +147,16 @@ const AgoraStore = types
         return;
       }
 
-      yield self.stageModeRequestRequest.send(api.stageModeRepository.requestToJoin, {
-        spaceId: self.spaceId
-      });
+      self.requestWasMadeToGoOnStage = true;
+
+      try {
+        yield self.stageModeRequestRequest.send(api.stageModeRepository.requestToJoin, {
+          spaceId: self.spaceId
+        });
+      } catch (e) {
+        self.requestWasMadeToGoOnStage = false;
+        throw e;
+      }
     }),
     muteRemoteUser: flow(function* (userId: string) {
       if (!self.spaceId) {
@@ -673,7 +680,6 @@ const AgoraStore = types
       }
     }),
     kickUserOffStage: flow(function* (userId: string) {
-      // TODO: Add API call to kick somone off stage
       if (!self.spaceId) {
         return;
       }
@@ -703,17 +709,32 @@ const AgoraStore = types
     },
     removeStageModeUser(userId: string) {
       self.remoteUsers = cast(self.remoteUsers.filter((user) => user.uid !== userId));
+    },
+    requestToGoOnstageWasHandled() {
+      self.requestWasMadeToGoOnStage = false;
     }
   }))
   .views((self) => ({
     get canEnterStage(): boolean {
       return (
         self.stageModeClient.remoteUsers.length + (self.isOnStage ? 1 : 0) <
-        CONFIG.video.MAX_STAGE_USERS
+        appVariables.MAX_STAGE_USERS
       );
     },
     get hasJoined(): boolean {
       return self.spaceId !== undefined;
+    },
+    get numberOfSpeakers(): number {
+      return (
+        self.stageModeUsers.filter((user) => user.role === ParticipantRole.SPEAKER).length +
+        (self.isOnStage ? 1 : 0)
+      );
+    },
+    get numberOfAudienceMembers(): number {
+      return (
+        self.stageModeUsers.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
+        (self.isOnStage ? 1 : 0)
+      );
     }
   }));
 
