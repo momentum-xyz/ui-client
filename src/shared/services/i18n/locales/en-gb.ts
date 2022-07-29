@@ -193,7 +193,8 @@ export const enGb = {
       searchResults: 'Search Results',
       attendeeList: 'Attendee List',
       speakers: 'Speakers',
-      audience: 'Audience'
+      audience: 'Audience',
+      you: 'You'
     },
     messages: {
       loading: 'Loading Odyssey Momentum',

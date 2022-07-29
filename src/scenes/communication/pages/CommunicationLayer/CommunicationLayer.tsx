@@ -20,6 +20,10 @@ import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useGetSpace} from 'hooks/api/useSpaceService';
 import {appVariables} from 'api/constants';
+import {
+  AgoraRemoteUserInterface,
+  StageModeUserInterface
+} from 'stores/MainStore/models/AgoraStore/models';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
@@ -255,39 +259,34 @@ relative
                   </div>
                 </li>
               )}
-              {(agoraStore.isStageMode
-                ? stageModeAudience.map((user) => {
-                    return {
-                      ...user,
-                      soundLevel: 0,
-                      hasVideo: false,
-                      hasAudio: false,
-                      isMuted: true,
-                      cameraOff: true,
-                      videoTrack: undefined,
-                      audioTrack: undefined
-                    };
-                  })
-                : agoraStore.remoteUsers
-              ).map((participant) => (
-                <Transition
-                  key={`participant-${participant.uid as string}`}
-                  appear={true}
-                  enter="transition-all transform ease-out duration-300"
-                  enterFrom="translate-x-8"
-                  enterTo="translate-x-0 "
-                  leave="transition-all transform  ease-in duration-300"
-                  leaveFrom="translate-x-0 "
-                  leaveTo="translate-x-8"
-                >
-                  <RemoteParticipant
+              {(agoraStore.isStageMode ? stageModeAudience : agoraStore.remoteUsers).map(
+                (participant) => (
+                  <Transition
                     key={`participant-${participant.uid as string}`}
-                    participant={participant}
-                    canEnterStage={agoraStore.canEnterStage}
-                    totalParticipants={agoraStore.remoteUsers.length}
-                  />
-                </Transition>
-              ))}
+                    appear={true}
+                    enter="transition-all transform ease-out duration-300"
+                    enterFrom="translate-x-8"
+                    enterTo="translate-x-0 "
+                    leave="transition-all transform  ease-in duration-300"
+                    leaveFrom="translate-x-0 "
+                    leaveTo="translate-x-8"
+                  >
+                    <RemoteParticipant
+                      key={`participant-${participant.uid as string}`}
+                      participant={
+                        !agoraStore.isStageMode
+                          ? (participant as AgoraRemoteUserInterface)
+                          : undefined
+                      }
+                      audienceParticipant={
+                        agoraStore.isStageMode ? (participant as StageModeUserInterface) : undefined
+                      }
+                      canEnterStage={agoraStore.canEnterStage}
+                      totalParticipants={agoraStore.remoteUsers.length}
+                    />
+                  </Transition>
+                )
+              )}
             </ul>
           </styled.ListItemContent>
         </styled.ListItem>
