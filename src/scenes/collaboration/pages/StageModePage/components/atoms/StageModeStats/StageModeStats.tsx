@@ -1,28 +1,26 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
+import {observer} from 'mobx-react-lite';
 
 import {appVariables} from 'api/constants';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './StageModeStats.styled';
 
-interface StageModeStatsPropsInterface {
-  speakers: number;
-  audience: number;
-}
-
-const StageModeStats: React.FC<StageModeStatsPropsInterface> = ({speakers, audience}) => {
+const StageModeStats: React.FC = () => {
   const {t} = useTranslation();
+  const {agoraStore} = useStore().mainStore;
 
   return (
     <styled.Container>
       <span>
-        {t('labels.speakers')}: {speakers}/{appVariables.MAX_STAGE_USERS}
+        {t('labels.speakers')}: {agoraStore.numberOfSpeakers}/{appVariables.MAX_STAGE_USERS}
       </span>
       <span>
-        {t('labels.audience')}: {audience}
+        {t('labels.audience')}: {agoraStore.numberOfAudienceMembers}
       </span>
     </styled.Container>
   );
 };
 
-export default StageModeStats;
+export default observer(StageModeStats);

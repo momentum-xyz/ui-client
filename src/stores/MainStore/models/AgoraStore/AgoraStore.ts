@@ -713,6 +713,18 @@ const AgoraStore = types
     },
     get hasJoined(): boolean {
       return self.spaceId !== undefined;
+    },
+    get numberOfSpeakers(): number {
+      return (
+        self.stageModeUsers.filter((user) => user.role === ParticipantRole.SPEAKER).length +
+        (self.isOnStage ? 1 : 0)
+      );
+    },
+    get numberOfAudienceMembers(): number {
+      return (
+        self.stageModeUsers.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
+        (self.isOnStage ? 1 : 0)
+      );
     }
   }));
 
