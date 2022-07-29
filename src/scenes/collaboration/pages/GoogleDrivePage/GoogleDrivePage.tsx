@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
@@ -26,6 +26,16 @@ const GoogleDrivePage: FC = () => {
       googleDriveStore.fetchGoogleDocument(id);
     }
   });
+
+  useEffect(() => {
+    if (space) {
+      googleDriveStore.fetchGoogleDocument(space.id);
+    }
+
+    return () => {
+      googleDriveStore.resetModel();
+    };
+  }, [googleDriveStore, space]);
 
   const pickerCallBack = useCallback(
     async (data) => {

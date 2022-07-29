@@ -36,6 +36,10 @@ const MiroBoardPage: FC = () => {
     if (space) {
       miroBoardStore.fetchMiroBoard(space.id);
     }
+
+    return () => {
+      miroBoardStore.resetModel();
+    };
   }, [miroBoardStore, space]);
 
   const pickBoard = useCallback(() => {
