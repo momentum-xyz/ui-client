@@ -18,14 +18,16 @@ const AgoraRemoteUser = types
   .volatile<{participantInfo?: IAgoraRTCRemoteUser}>(() => ({}))
   .actions((self) => ({
     fetchUser: flow(function* () {
-      const userId = self.uid as string;
+      const userId = self.uid.toString();
 
       const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
         userId
       });
 
-      self.profile = response.profile;
-      self.name = response.name;
+      if (response) {
+        self.profile = response.profile;
+        self.name = response.name;
+      }
     })
   }))
   .views((self) => ({

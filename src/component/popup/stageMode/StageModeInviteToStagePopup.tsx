@@ -5,15 +5,14 @@ import {observer} from 'mobx-react-lite';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {StageModeUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 
 import Popup, {PopupTitle} from '../../atoms/Popup';
 import Avatar from '../../atoms/Avatar';
 import Button from '../../atoms/Button';
-import {bytesToUuid} from '../../../core/utils/uuid.utils';
-import User from '../../../context/type/User';
 
 export interface StageModeInviteToStagePopupProps {
-  user: User | undefined;
+  user?: StageModeUserInterface;
   onClose?: () => void;
 }
 
@@ -24,9 +23,9 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
   const {agoraStore} = useStore().mainStore;
 
   const handleInviteClick = async () => {
-    if (user?.id.data) {
+    if (user) {
       try {
-        await agoraStore.inviteToStage(bytesToUuid(user.id.data));
+        await agoraStore.inviteToStage(user.uid);
         onClose?.();
       } catch {
         toast.error(
@@ -47,7 +46,7 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
   return (
     <Popup className="w-36">
       <PopupTitle>
-        <Avatar size="xm" avatarHash={user?.profile.avatarHash} />
+        <Avatar size="xm" avatarHash={user?.profile?.avatarHash} />
         <p className="pl-1 text-md">{user?.name}</p>
       </PopupTitle>
       <p className="text-sm">Invite this person to the stage?</p>

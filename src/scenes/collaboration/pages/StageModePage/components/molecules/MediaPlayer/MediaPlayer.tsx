@@ -4,8 +4,8 @@ import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
-import {useStore} from 'shared/hooks';
 import {IconSvg, Text} from 'ui-kit';
+import {UserProfileModelInterface} from 'core/models';
 
 import * as styled from './MediaPlayer.styled';
 
@@ -15,6 +15,8 @@ export interface VideoPlayerPropsInterface {
   isCameraOff?: boolean;
   isMuted?: boolean;
   soundLevel?: number;
+  currentUser?: UserProfileModelInterface;
+  loadCurrentUserProfile: () => void;
 }
 
 const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
@@ -22,9 +24,10 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
   videoTrack,
   isCameraOff,
   isMuted,
-  soundLevel
+  soundLevel,
+  currentUser,
+  loadCurrentUserProfile
 }) => {
-  const {sessionStore} = useStore();
   const stagevideocontainer = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
 
@@ -32,17 +35,17 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
     if (remoteUser) {
       remoteUser.fetchUser();
     } else {
-      sessionStore.loadUserProfile();
+      loadCurrentUserProfile();
     }
-  }, [remoteUser, sessionStore]);
+  }, [remoteUser, loadCurrentUserProfile]);
 
   const name = useMemo(() => {
-    return remoteUser?.name ?? sessionStore.profile?.name;
-  }, [remoteUser, sessionStore.profile?.name]);
+    return remoteUser?.name ?? currentUser?.name;
+  }, [remoteUser, currentUser]);
 
   const avatarSrc = useMemo(() => {
-    return remoteUser?.avatarSrc ?? sessionStore.profile?.avatarSrc;
-  }, [remoteUser, sessionStore.profile]);
+    return remoteUser?.avatarSrc ?? currentUser?.avatarSrc;
+  }, [remoteUser, currentUser]);
 
   useEffect(() => {
     if (!stagevideocontainer.current) {
@@ -69,13 +72,15 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
         </styled.AvatarContainer>
       )}
       <styled.InfoContainer>
-        {remoteUser && name ? (
-          <Text text={name} size="xs" />
-        ) : (
-          <Text text={t('labels.you')} size="xs" />
-        )}
-        {isCameraOff && <IconSvg name="cameraOff" size="medium" />}
-        {isMuted && <IconSvg name="microphoneOff" size="medium" />}
+        <styled.Info>
+          {remoteUser && name ? (
+            <Text text={name} size="xs" />
+          ) : (
+            <Text text={t('labels.you')} size="xs" />
+          )}
+          {isCameraOff && <IconSvg name="cameraOff" size="medium" />}
+          {isMuted && <IconSvg name="microphoneOff" size="medium" />}
+        </styled.Info>
       </styled.InfoContainer>
     </styled.Container>
   );

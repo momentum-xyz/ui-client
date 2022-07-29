@@ -5,8 +5,7 @@ import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {UserStatusEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-
-import {RequestModel} from '../Request';
+import {RequestModel} from 'core/models';
 
 const UserProfileModel = types
   .model('UserProfile', {

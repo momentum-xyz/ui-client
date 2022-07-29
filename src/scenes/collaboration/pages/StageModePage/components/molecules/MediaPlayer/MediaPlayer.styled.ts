@@ -47,8 +47,12 @@ export const InfoContainer = styled.div`
   right: 0;
   display: flex;
   justify-content: center;
+`;
+
+export const Info = styled.div`
   background: var(--black-40);
   padding: 5px;
   border-radius: 10px;
   gap: 10px;
+  display: flex;
 `;
