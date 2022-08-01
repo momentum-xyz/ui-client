@@ -41,8 +41,8 @@ const DashboardPage: FC = () => {
   };
 
   const handleToggleVibe = useCallback(async () => {
-    const succeed = await vibeStore.toggle(space?.id ?? '');
-    if (succeed) {
+    const success = await vibeStore.toggle(space?.id ?? '');
+    if (success) {
       vibeStore.toggleVibe();
     }
   }, [space?.id, vibeStore]);
