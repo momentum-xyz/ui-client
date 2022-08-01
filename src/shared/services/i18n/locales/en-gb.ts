@@ -166,6 +166,7 @@ export const enGb = {
     labels: {
       miro: 'Miro',
       googleDrive: 'Google Drive',
+      screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       calendar: 'World Calendar',
       staking: 'Staking',
@@ -262,6 +263,8 @@ export const enGb = {
       noMiroBoard: 'This team does not have a Miro board yet',
       noTeamDocument: 'Your team does not have a Google Drive Document open yet',
       noDocument: 'This team does not have a Google Drive Document open yet',
+      noScreenSharing: 'There is no one screensharing',
+      preparingScreenSharing: 'preparing screen share',
       tileCreateSuccess: 'Your tile has been created successfully',
       tileCreateError: 'There was a problem creating your tile',
       tileUpdateSuccess: 'Your tile has been updated successfully',
@@ -361,7 +364,8 @@ export const enGb = {
       chooseDocument: 'Choose a document',
       changeDocument: 'Change document',
       leaveStage: 'Leave stage',
-      goOnStage: 'Go on stage'
+      goOnStage: 'Go on stage',
+      startScreenShare: 'Start screensharing'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

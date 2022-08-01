@@ -1,124 +1,85 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
-import {observer, useObserver} from 'mobx-react-lite';
+import React, {FC, useCallback, useEffect} from 'react';
+import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import Button from 'component/atoms/Button';
-import Panel from 'component/atoms/Panel';
-import Page from 'component//molucules/Page';
-import {useUser} from 'hooks/api/useUser';
+import {SpaceTopBar, Button} from 'ui-kit';
 
 // TODO: Refactor
-const VideoContainer = observer(() => {
-  const videoRef = useRef<HTMLDivElement>(null);
-  const {
-    mainStore: {agoraStore}
-  } = useStore();
-  const {screenShareStore} = agoraStore;
+import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
 
-  useEffect(() => {
-    if (videoRef.current && screenShareStore.screenShare) {
-      screenShareStore.screenShare?.play(videoRef.current, {
-        fit: 'contain'
-      });
-    }
-  }, [screenShareStore.screenShare]);
-
-  return (
-    <Panel padding={false} grow={true}>
-      <div className="w-full h-full" ref={videoRef} />
-    </Panel>
-  );
-});
+import {ScreenChoice, ScreenVideo} from './components/templates';
+import * as styled from './ScreenSharePage.styled';
 
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
-  const {agoraStore} = mainStore;
-  const {screenShareStore, stageModeStore} = agoraStore;
-  const {screenShare, client} = screenShareStore;
+  const {space, screenShareStore} = collaborationStore;
+  const {agoraStore, favoriteStore} = mainStore;
+  const {agoraScreenShareStore, stageModeStore} = agoraStore;
+  const {screenShare, client} = agoraScreenShareStore;
+  const {isSettingUp, screenShareTitle} = screenShareStore;
 
-  const [settingUp, setSettingUp] = useState(false);
-  const [userId, setUserId] = useState<string | null>();
+  const {t} = useTranslation();
+  const history = useHistory();
 
-  const [user, , ,] = useUser(userId || '');
-
-  const startScreenSharing = useCallback(() => {
-    console.info('start screencast');
-    setSettingUp(true);
-    screenShareStore
-      .startScreenShare(sessionStore.userId)
-      .then(() => {
-        if (!client) {
-          setSettingUp(false);
-        }
-      })
-      .catch(() => {
-        setSettingUp(false);
-      });
-  }, [client, screenShareStore, sessionStore.userId]);
+  //const [user, , ,] = useUser(userId || '');
 
   useEffect(() => {
-    console.info('start screen share', screenShare);
     if (screenShare) {
-      setSettingUp(false);
-      const userId = screenShare?.getUserId() as string;
-      setUserId(userId.replace('ss|', ''));
+      const agoraUserId = screenShare?.getUserId() as string;
+      screenShareStore.setScreenOwnerId(agoraUserId);
+      screenShareStore.setIsSettingUp(false);
     } else {
-      setUserId(null);
+      screenShareStore.setScreenOwnerId(null);
     }
-  }, [screenShare]);
+  }, [screenShare, screenShareStore]);
 
-  const View = useObserver(() => {
-    if (screenShare) {
-      return <VideoContainer />;
-    } else if (settingUp) {
-      return (
-        <Panel grow={true}>
-          <div className="flex flex-col h-full items-center justify-center gap-4">
-            ...preparing screen share
-          </div>
-        </Panel>
-      );
-    } else {
-      return (
-        <Panel grow={true}>
-          <div className="flex flex-col h-full items-center justify-center gap-4">
-            <h2 className="font-bold">There is no one screensharing</h2>
-            {agoraStore.spaceId &&
-              (collaborationStore.space?.isAdmin === true || stageModeStore.isOnStage) && (
-                <Button type="ghost" size="m" onClick={startScreenSharing}>
-                  Start screensharing
-                </Button>
-              )}
-          </div>
-        </Panel>
-      );
-    }
-  });
+  const startScreenSharing = useCallback(async () => {
+    screenShareStore.setIsSettingUp(true);
+    await agoraScreenShareStore.startScreenShare(sessionStore.userId);
+  }, [agoraScreenShareStore, sessionStore.userId, screenShareStore]);
 
-  const actions = useObserver(() => {
-    if (client) {
-      return (
-        <Button type="ghost" size="s" onClick={screenShareStore.stopScreenShare}>
-          stop screenshare
-        </Button>
-      );
-    }
-    return null;
-  });
-
-  if (!collaborationStore.space) {
+  if (!space) {
     return null;
   }
 
   return (
-    <Page
-      title={collaborationStore.space.name || ''}
-      subtitle={`Screenshare ${userId && user ? ' / ' + user?.name : ''}`}
-      actions={actions}
-      collaboration
-    >
-      {View}
-    </Page>
+    <styled.Inner>
+      <SpaceTopBar
+        title={space.name ?? ''}
+        subtitle={screenShareTitle}
+        isAdmin={space.isAdmin}
+        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        editSpaceHidden
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
+        onClose={() => history.push(ROUTES.base)}
+      >
+        {client && (
+          <Button
+            label={t('actions.cancel')}
+            variant="danger"
+            onClick={agoraScreenShareStore.stopScreenShare}
+          />
+        )}
+      </SpaceTopBar>
+      <styled.Container>
+        {!agoraScreenShareStore.screenShare ? (
+          <ScreenChoice
+            isSettingUp={isSettingUp}
+            canShare={space.isAdmin || stageModeStore.isOnStage}
+            startScreenShare={startScreenSharing}
+          />
+        ) : (
+          <ScreenVideo videoTrack={agoraScreenShareStore.screenShare} />
+        )}
+        <TextChatView />
+      </styled.Container>
+    </styled.Inner>
   );
 };
 

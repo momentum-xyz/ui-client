@@ -4,15 +4,14 @@ import AgoraRTC, {IAgoraRTCClient, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
 
-const ScreenShareStore = types
+const AgoraScreenShareStore = types
   .compose(
     ResetModel,
-    types.model('ScreenShareStore', {
+    types.model('AgoraScreenShareStore', {
+      request: types.optional(RequestModel, {}),
       spaceId: types.maybe(types.string),
       appId: '',
-      isStageMode: false,
-
-      screenShareTokenRequest: types.optional(RequestModel, {})
+      isStageMode: false
     })
   )
   .volatile<{client?: IAgoraRTCClient; _screenShare?: IRemoteVideoTrack}>(() => ({}))
@@ -82,7 +81,7 @@ const ScreenShareStore = types
           yield self.client.setClientRole('host');
         }
 
-        const response: string = yield self.screenShareTokenRequest.send(
+        const response: string = yield self.request.send(
           api.agoraRepository.getAgoraScreenShareToken,
           {
             spaceId: self.spaceId,
@@ -92,9 +91,9 @@ const ScreenShareStore = types
 
         yield self.client.join(
           self.appId,
-          self.isStageMode ? 'stage-' + self.spaceId : self.spaceId,
+          self.isStageMode ? `stage-${self.spaceId}` : self.spaceId,
           response,
-          'ss|' + authStateSubject
+          `ss|${authStateSubject}`
         );
 
         yield self.createScreenTrackAndPublish();
@@ -108,4 +107,4 @@ const ScreenShareStore = types
     }
   }));
 
-export {ScreenShareStore};
+export {AgoraScreenShareStore};
