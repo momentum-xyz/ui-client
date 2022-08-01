@@ -4,13 +4,12 @@ import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
-import StageModeStage from 'component/atoms/StageMode/StageModeStage';
 import StageModePopupQueueComponent from 'component/layout/StageMode/StageModePopupQueueComponent';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ToastContent, Button, SpaceTopBar, Text} from 'ui-kit';
 import {ROUTES} from 'core/constants';
-import {StageModeStats} from 'scenes/collaboration/pages/StageModePage/components/atoms';
+import {StageModeStats, Stage} from 'scenes/collaboration/pages/StageModePage/components';
 
 import * as styled from './StageModeGuest.styled';
 
@@ -99,7 +98,7 @@ const StageModeGuest: React.FC = () => {
         </styled.PopupQueueWrapper>
         <styled.StageModeContainer>
           {agoraStore.isStageMode ? (
-            <StageModeStage />
+            <Stage />
           ) : (
             <styled.StageModeMessageText
               text={t('messages.stageModeNotActive')}

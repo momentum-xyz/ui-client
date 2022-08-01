@@ -271,7 +271,8 @@ export const enGb = {
       tileRemoveSuccess: 'Your tile has been successfully removed',
       tileRemoveError: 'There was a problem removing your tile',
       pendingRequestToGoOnStage: 'Request to go on stage pending',
-      stageIsFull: 'Stage is full'
+      stageIsFull: 'Stage is full',
+      noParticipantsOnStage: 'There are currently no participants on stage.'
     },
     titles: {
       alert: 'alert',
@@ -345,7 +346,7 @@ export const enGb = {
       joined: 'joined',
       refresh: 'Refresh',
       launch: 'Launch',
-      remove: 'yes, remove',
+      confirmRemove: 'yes, remove',
       removeRule: 'remove rule',
       no: 'no, cancel',
       save: 'save',
@@ -363,7 +364,9 @@ export const enGb = {
       chooseDocument: 'Choose a document',
       changeDocument: 'Change document',
       leaveStage: 'Leave stage',
-      goOnStage: 'Go on stage'
+      goOnStage: 'Go on stage',
+      remove: 'Remove',
+      mute: 'Mute'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

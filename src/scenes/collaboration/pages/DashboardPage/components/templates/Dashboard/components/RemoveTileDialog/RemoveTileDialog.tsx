@@ -53,7 +53,7 @@ const RemoveTileDialog: FC = () => {
         onClick: tileRemoveDialog.close
       }}
       declineInfo={{
-        title: t('actions.remove'),
+        title: t('actions.confirmRemove'),
         onClick: confirm
       }}
       onClose={tileRemoveDialog.close}

@@ -5,8 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {ROUTES} from 'core/constants';
 import {ReactComponent as FullScreenIcon} from 'images/icons/expand-full.svg';
 import {useStore} from 'shared/hooks';
-
-import StageModeStage from './StageModeStage';
+import {Stage} from 'scenes/collaboration/pages/StageModePage/components';
 
 const StageModePIP: React.FC = () => {
   const {mainStore} = useStore();
@@ -44,7 +43,7 @@ const StageModePIP: React.FC = () => {
         title="Click to go to stage-mode"
         className="absolute overflow-hidden bg-black-80 rounded bottom-5 opacity-80 hover:opacity-100 right-10.5 w-30 max-h-32 cursor-pointer"
       >
-        <StageModeStage />
+        <Stage />
 
         <div className="bg-black-80 rounded-br p-.5 px-1 text-xs text-white-50 font-bold uppercase absolute left-0 top-0">
           On stage
