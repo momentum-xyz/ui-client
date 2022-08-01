@@ -19,12 +19,12 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
     mainStore: {agoraStore},
     sessionStore
   } = useStore();
-  const {userDevicesStore} = agoraStore;
+  const {userDevicesStore, stageModeStore} = agoraStore;
 
   const stageCount = useMemo(
     () =>
-      agoraStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length,
-    [agoraStore.isOnStage, agoraStore.remoteUsers.length]
+      stageModeStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length,
+    [stageModeStore.isOnStage, agoraStore.remoteUsers.length]
   );
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
           </div>
         )}
 
-        {agoraStore.isOnStage && (
+        {stageModeStore.isOnStage && (
           <div
             className="w-full max-h-full aspect-ratio-video bg-black-100 flex items-center justify-center overflow-hidden"
             key="stageuser-local"
