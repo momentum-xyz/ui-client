@@ -161,7 +161,9 @@ export const enGb = {
       people_one: '{{count}} Person',
       people_other: '{{count}} People',
       attendees_one: `{{count}} Attendee`,
-      attendees_other: `{{count}} Attendees`
+      attendees_other: `{{count}} Attendees`,
+      vibes_one: '{{count}}  vibe',
+      vibes_other: '{{count}}  vibes'
     },
     labels: {
       miro: 'Miro',
@@ -706,6 +708,7 @@ export const enGb = {
     dashboard: {
       subtitle: 'dashboard',
       vibe: 'vibe',
+      vibes: 'vibes',
       addTile: 'add tile',
       invitePeople: 'invite people',
       stake: 'stake',
