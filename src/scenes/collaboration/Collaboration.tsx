@@ -23,6 +23,7 @@ const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
+  const {screenShareStore, stageModeStore} = agoraStore;
 
   const {addRequestPopup} = useStageModePopupQueueContext();
 
@@ -54,10 +55,10 @@ const Collaboration: FC = () => {
   }, [rootStore, sessionStore.userId, spaceId, t]);
 
   useEffect(() => {
-    if (agoraStore.screenShare) {
+    if (screenShareStore.screenShare) {
       history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
     }
-  }, [agoraStore.screenShare, history, spaceId]);
+  }, [screenShareStore.screenShare, history, spaceId]);
 
   usePosBusEvent('posbus-connected', () => {
     if (collaborationStore.space) {
@@ -76,7 +77,7 @@ const Collaboration: FC = () => {
         user: userId,
         onAccept: async () => {
           try {
-            await agoraStore.requestRespond(userId, StageModeRequestEnum.ACCEPT);
+            await stageModeStore.requestRespond(userId, StageModeRequestEnum.ACCEPT);
             return true;
           } catch {
             toast.error(
@@ -93,7 +94,7 @@ const Collaboration: FC = () => {
         },
         onDecline: async () => {
           try {
-            await agoraStore.requestRespond(userId, StageModeRequestEnum.DECLINE);
+            await stageModeStore.requestRespond(userId, StageModeRequestEnum.DECLINE);
             return true;
           } catch {
             return false;
@@ -104,7 +105,7 @@ const Collaboration: FC = () => {
   });
 
   usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
-    await agoraStore.joinMeetingSpace(sessionStore.userId);
+    await agoraStore.toggledStageMode(sessionStore.userId);
 
     const isStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
 
@@ -124,7 +125,7 @@ const Collaboration: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.stage')}
-          text={t('messages.stageModeActivated')}
+          text={t('messages.stageModeDeActivated')}
           isCloseButton
         />,
         TOAST_GROUND_OPTIONS
@@ -132,9 +133,9 @@ const Collaboration: FC = () => {
     }
   });
 
-  usePosBusEvent('stage-mode-user-joined', agoraStore.addStageModeUser);
-  usePosBusEvent('stage-mode-user-left', agoraStore.removeStageModeUser);
-  usePosBusEvent('stage-mode-kick', agoraStore.moveToAudience);
+  usePosBusEvent('stage-mode-user-joined', stageModeStore.addStageModeUser);
+  usePosBusEvent('stage-mode-user-left', stageModeStore.removeStageModeUser);
+  usePosBusEvent('stage-mode-kick', stageModeStore.moveToAudience);
 
   useEffect(() => {
     navigator.mediaDevices.ondevicechange = () => {
@@ -184,7 +185,7 @@ const Collaboration: FC = () => {
     {
       path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
       iconName: 'screenshare',
-      isActive: !!agoraStore.screenShare
+      isActive: !!screenShareStore.screenShare
     },
     {
       path: generatePath(ROUTES.collaboration.miro, {spaceId}),
