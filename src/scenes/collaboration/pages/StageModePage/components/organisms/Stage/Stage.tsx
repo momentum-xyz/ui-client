@@ -1,50 +1,44 @@
 import React, {useEffect, useState} from 'react';
-import {observer, useObserver} from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
-import {MediaPlayer} from 'scenes/collaboration/pages/StageModePage/components';
-import {IconSvg, Text} from 'ui-kit';
+import {IconSvg, Text, MediaPlayer} from 'ui-kit';
 
 import * as styled from './Stage.styled';
 
-export interface StagePropsInterface {
+interface StagePropsInterface {
   onRemoteUserClick?: (remoteUser: AgoraRemoteUserInterface, type: string) => void;
 }
 
 const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
-  const [cols, setCols] = useState<string>('cols-1');
-
-  const {
-    mainStore: {agoraStore},
-    sessionStore
-  } = useStore();
+  const {mainStore, sessionStore} = useStore();
+  const {agoraStore} = mainStore;
   const {userDevicesStore, stageModeStore} = agoraStore;
+
+  const [cols, setCols] = useState<string>('cols-1');
 
   const {t} = useTranslation();
 
-  const stageCount = useObserver(() =>
-    stageModeStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length
-  );
-
   useEffect(() => {
-    if (stageCount === 1) {
+    const {numberOfSpeakers} = stageModeStore;
+    if (numberOfSpeakers === 1) {
       setCols('cols-1');
-    } else if (stageCount > 1 && stageCount <= 4) {
+    } else if (numberOfSpeakers > 1 && numberOfSpeakers <= 4) {
       setCols('cols-2');
-    } else if (stageCount > 4 && stageCount <= 9) {
+    } else if (numberOfSpeakers > 4 && numberOfSpeakers <= 9) {
       setCols('cols-3');
-    } else if (stageCount > 9) {
+    } else if (numberOfSpeakers > 9) {
       setCols('cols-4');
     }
-  }, [stageCount]);
+  }, [stageModeStore]);
 
   return (
     <styled.Container>
       <styled.Grid className={cols}>
-        {stageCount === 0 && (
+        {stageModeStore.numberOfSpeakers === 0 && (
           <styled.MessageContainer>
             <Text
               text={t('messages.noParticipantsOnStage')}
@@ -57,7 +51,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
         )}
 
         {stageModeStore.isOnStage && (
-          <styled.MediaPlayerContainer key="stageuser-local">
+          <styled.MediaPlayerContainer>
             <MediaPlayer
               videoTrack={userDevicesStore.localVideoTrack}
               isCameraOff={userDevicesStore.cameraOff}
@@ -89,9 +83,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
                   {!user.isMuted && (
                     <styled.RemoteUserActionButton
                       onClick={() => {
-                        if (onRemoteUserClick) {
-                          onRemoteUserClick(user, 'mute');
-                        }
+                        onRemoteUserClick?.(user, 'mute');
                       }}
                     >
                       <styled.RemoteUserAction>
@@ -102,9 +94,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
                   )}
                   <styled.RemoteUserActionButton
                     onClick={() => {
-                      if (onRemoteUserClick) {
-                        onRemoteUserClick(user, 'remove');
-                      }
+                      onRemoteUserClick?.(user, 'remove');
                     }}
                   >
                     <styled.RemoteUserAction>

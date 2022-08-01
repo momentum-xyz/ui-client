@@ -285,10 +285,7 @@ const StageModeStore = types
       );
     },
     get numberOfSpeakers(): number {
-      return (
-        self.users.filter((user) => user.role === ParticipantRole.SPEAKER).length +
-        (self.isOnStage ? 1 : 0)
-      );
+      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
     },
     get numberOfAudienceMembers(): number {
       return (
