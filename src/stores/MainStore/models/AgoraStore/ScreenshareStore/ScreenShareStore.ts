@@ -1,5 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import AgoraRTC, {IAgoraRTCClient, ILocalVideoTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
+import AgoraRTC, {IAgoraRTCClient, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 
 import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
@@ -15,14 +15,12 @@ const ScreenShareStore = types
       screenShareTokenRequest: types.optional(RequestModel, {})
     })
   )
-  .volatile<{client?: IAgoraRTCClient; _screenShare?: IRemoteVideoTrack | ILocalVideoTrack}>(
-    () => ({})
-  )
+  .volatile<{client?: IAgoraRTCClient; _screenShare?: IRemoteVideoTrack}>(() => ({}))
   .views((self) => ({
-    get screenShare(): IRemoteVideoTrack | ILocalVideoTrack | undefined {
+    get screenShare(): IRemoteVideoTrack | undefined {
       return self._screenShare;
     },
-    set screenShare(value: IRemoteVideoTrack | ILocalVideoTrack | undefined) {
+    set screenShare(value: IRemoteVideoTrack | undefined) {
       self._screenShare = value;
     }
   }))

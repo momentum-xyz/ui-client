@@ -63,7 +63,7 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
 
   useEffect(() => {
     console.info('start screen share', screenShare);
-    if (screenShare && 'getUserId' in screenShare) {
+    if (screenShare) {
       setSettingUp(false);
       const userId = screenShare?.getUserId() as string;
       setUserId(userId.replace('ss|', ''));
