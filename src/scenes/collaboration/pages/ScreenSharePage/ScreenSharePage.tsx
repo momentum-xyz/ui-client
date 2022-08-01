@@ -1,5 +1,5 @@
-import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
-import {observer} from 'mobx-react-lite';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import {observer, useObserver} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import Button from 'component/atoms/Button';
@@ -8,26 +8,27 @@ import Page from 'component//molucules/Page';
 import {useUser} from 'hooks/api/useUser';
 
 // TODO: Refactor
-/*const VideoContainer = () => {
+const VideoContainer = observer(() => {
   const videoRef = useRef<HTMLDivElement>(null);
   const {
     mainStore: {agoraStore}
   } = useStore();
+  const {screenShareStore} = agoraStore;
 
   useEffect(() => {
-    if (videoRef.current && agoraStore.screenShare) {
-      agoraStore.screenShare?.play(videoRef.current, {
+    if (videoRef.current && screenShareStore.screenShare) {
+      screenShareStore.screenShare?.play(videoRef.current, {
         fit: 'contain'
       });
     }
-  }, [agoraStore.screenShare]);
+  }, [screenShareStore.screenShare]);
 
   return (
     <Panel padding={false} grow={true}>
       <div className="w-full h-full" ref={videoRef} />
     </Panel>
   );
-};*/
+});
 
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
@@ -56,12 +57,6 @@ const ScreenSharePage: FC = () => {
   }, [client, screenShareStore, sessionStore.userId]);
 
   useEffect(() => {
-    if (client) {
-      client.localTracks[0].on('track-ended', screenShareStore.stopScreenShare);
-    }
-  }, [client, screenShareStore.stopScreenShare]);
-
-  useEffect(() => {
     console.info('start screen share', screenShare);
     if (screenShare) {
       setSettingUp(false);
@@ -72,12 +67,9 @@ const ScreenSharePage: FC = () => {
     }
   }, [screenShare]);
 
-  const View = useMemo(() => {
+  const View = useObserver(() => {
     if (screenShare) {
-      return null;
-      {
-        /*<VideoContainer />;*/
-      }
+      return <VideoContainer />;
     } else if (settingUp) {
       return (
         <Panel grow={true}>
@@ -91,18 +83,19 @@ const ScreenSharePage: FC = () => {
         <Panel grow={true}>
           <div className="flex flex-col h-full items-center justify-center gap-4">
             <h2 className="font-bold">There is no one screensharing</h2>
-            {(!agoraStore.spaceId || stageModeStore.isOnStage) && (
-              <Button type="ghost" size="m" onClick={startScreenSharing}>
-                Start screensharing
-              </Button>
-            )}
+            {agoraStore.spaceId &&
+              (collaborationStore.space?.isAdmin === true || stageModeStore.isOnStage) && (
+                <Button type="ghost" size="m" onClick={startScreenSharing}>
+                  Start screensharing
+                </Button>
+              )}
           </div>
         </Panel>
       );
     }
-  }, [screenShare, settingUp, agoraStore.spaceId, stageModeStore.isOnStage, startScreenSharing]);
+  });
 
-  const actions = useMemo(() => {
+  const actions = useObserver(() => {
     if (client) {
       return (
         <Button type="ghost" size="s" onClick={screenShareStore.stopScreenShare}>
@@ -111,7 +104,7 @@ const ScreenSharePage: FC = () => {
       );
     }
     return null;
-  }, [screenShareStore.stopScreenShare, client]);
+  });
 
   if (!collaborationStore.space) {
     return null;
