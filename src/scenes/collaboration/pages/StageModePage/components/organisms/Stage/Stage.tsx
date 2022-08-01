@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {observer} from 'mobx-react-lite';
+import React, {useEffect, useState} from 'react';
+import {observer, useObserver} from 'mobx-react-lite';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
@@ -25,10 +25,8 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
 
   const {t} = useTranslation();
 
-  const stageCount = useMemo(
-    () =>
-      stageModeStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length,
-    [stageModeStore.isOnStage, agoraStore.remoteUsers.length]
+  const stageCount = useObserver(() =>
+    stageModeStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length
   );
 
   useEffect(() => {
