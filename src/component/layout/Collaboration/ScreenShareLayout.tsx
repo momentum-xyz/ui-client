@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import 'core/utils/boardsPicker.1.0.js';
-import {observer} from 'mobx-react-lite';
+import {observer, useObserver} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 
@@ -12,7 +12,7 @@ import {useUser} from '../../../hooks/api/useUser';
 export interface WhiteBoardProps {}
 
 // TODO: Refactor
-const VideoContainer = () => {
+const VideoContainer = observer(() => {
   const videoRef = useRef<HTMLDivElement>(null);
   const {
     mainStore: {agoraStore}
@@ -32,7 +32,7 @@ const VideoContainer = () => {
       <div className="w-full h-full" ref={videoRef} />
     </Panel>
   );
-};
+});
 
 // TODO: Refactor
 const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
@@ -62,14 +62,8 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
   }, [client, screenShareStore, sessionStore.userId]);
 
   useEffect(() => {
-    if (client) {
-      client.localTracks[0].on('track-ended', screenShareStore.stopScreenShare);
-    }
-  }, [client, screenShareStore.stopScreenShare]);
-
-  useEffect(() => {
     console.info('start screen share', screenShare);
-    if (screenShare) {
+    if (screenShare && 'getUserId' in screenShare) {
       setSettingUp(false);
       const userId = screenShare?.getUserId() as string;
       setUserId(userId.replace('ss|', ''));
@@ -78,7 +72,7 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
     }
   }, [screenShare]);
 
-  const View = useMemo(() => {
+  const View = useObserver(() => {
     if (screenShare) {
       return <VideoContainer />;
     } else if (settingUp) {
@@ -94,18 +88,19 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
         <Panel grow={true}>
           <div className="flex flex-col h-full items-center justify-center gap-4">
             <h2 className="font-bold">There is no one screensharing</h2>
-            {(!agoraStore.spaceId || stageModeStore.isOnStage) && (
-              <Button type="ghost" size="m" onClick={startScreenSharing}>
-                Start screensharing
-              </Button>
-            )}
+            {agoraStore.spaceId &&
+              (collaborationStore.space?.isAdmin === true || stageModeStore.isOnStage) && (
+                <Button type="ghost" size="m" onClick={startScreenSharing}>
+                  Start screensharing
+                </Button>
+              )}
           </div>
         </Panel>
       );
     }
-  }, [screenShare, settingUp, agoraStore.spaceId, stageModeStore.isOnStage, startScreenSharing]);
+  });
 
-  const actions = useMemo(() => {
+  const actions = useObserver(() => {
     if (client) {
       return (
         <Button type="ghost" size="s" onClick={screenShareStore.stopScreenShare}>
@@ -114,7 +109,7 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
       );
     }
     return null;
-  }, [screenShareStore.stopScreenShare, client]);
+  });
 
   if (!collaborationStore.space) {
     return null;

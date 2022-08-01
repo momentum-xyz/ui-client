@@ -1,5 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import AgoraRTC, {IAgoraRTCClient, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
+import AgoraRTC, {IAgoraRTCClient, ILocalVideoTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 
 import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
@@ -15,20 +15,33 @@ const ScreenShareStore = types
       screenShareTokenRequest: types.optional(RequestModel, {})
     })
   )
-  .volatile<{client?: IAgoraRTCClient; _screenShare?: IRemoteVideoTrack}>(() => ({}))
+  .volatile<{client?: IAgoraRTCClient; _screenShare?: IRemoteVideoTrack | ILocalVideoTrack}>(
+    () => ({})
+  )
   .views((self) => ({
-    get screenShare(): IRemoteVideoTrack | undefined {
+    get screenShare(): IRemoteVideoTrack | ILocalVideoTrack | undefined {
       return self._screenShare;
     },
-    set screenShare(value: IRemoteVideoTrack | undefined) {
+    set screenShare(value: IRemoteVideoTrack | ILocalVideoTrack | undefined) {
       self._screenShare = value;
+    }
+  }))
+  // Stop screensharing
+  .actions((self) => ({
+    stopScreenShare() {
+      self.client?.localTracks.forEach((track) => {
+        track.close();
+      });
+      self.client?.leave();
+      self.client = undefined;
+      self.screenShare = undefined;
     }
   }))
   // Track actions
   .actions((self) => ({
     createScreenTrackAndPublish: flow(function* () {
       if (!self.client) {
-        return undefined;
+        return;
       }
 
       const screenTrack = yield AgoraRTC.createScreenVideoTrack(
@@ -50,28 +63,15 @@ const ScreenShareStore = types
       );
 
       yield self.client.publish(screenTrack);
-      return screenTrack;
+      screenTrack.on('track-ended', self.stopScreenShare);
     })
   }))
   // State actions
   .actions((self) => ({
-    init(appId: string, isStageMode: boolean, spaceId: string) {
-      self.client = AgoraRTC.createClient({
-        mode: isStageMode ? 'live' : 'rtc',
-        codec: 'h264'
-      });
-
+    init(appId: string, isStageMode: boolean, spaceId?: string) {
       self.appId = appId;
       self.spaceId = spaceId;
       self.isStageMode = isStageMode;
-    },
-    stopScreenShare() {
-      self.client?.localTracks.forEach((track) => {
-        track.close();
-      });
-      self.client?.leave();
-      self.client = undefined;
-      self.screenShare = undefined;
     },
     startScreenShare: flow(function* (authStateSubject: string) {
       if (self.spaceId) {
