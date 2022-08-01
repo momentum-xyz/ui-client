@@ -8,8 +8,8 @@ import * as styled from './VibeButton.styled';
 
 interface PropsInterface {
   onToggle: () => void;
-  canVibe: boolean | null;
-  vibeCount?: number;
+  canVibe: boolean;
+  vibeCount: number;
 }
 
 const VibeButton: FC<PropsInterface> = ({onToggle, canVibe, vibeCount}) => {
@@ -17,15 +17,17 @@ const VibeButton: FC<PropsInterface> = ({onToggle, canVibe, vibeCount}) => {
 
   return (
     <styled.Container>
-      {/*@ts-ignore*/}
       <Button
-        label={vibeCount === 1 ? t('dashboard.vibe') : t('dashboard.vibes')}
+        label={
+          vibeCount === 1
+            ? t('counts.vibes_one', {count: vibeCount})
+            : t('counts.vibes_other', {count: vibeCount})
+        }
         variant={canVibe ? 'primary' : 'inverted'}
         icon="vibe"
         onClick={onToggle}
-      >
-        <styled.Counter>{vibeCount}</styled.Counter>
-      </Button>
+        countLabelSpace={true}
+      />
     </styled.Container>
   );
 };

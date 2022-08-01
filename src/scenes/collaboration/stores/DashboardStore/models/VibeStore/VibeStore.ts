@@ -1,6 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel} from 'core/models';
+import {VibeActionEnum} from 'core/enums';
 import {api, VibeCountResponse} from 'api';
 
 const VibeStore = types.compose(
@@ -10,8 +11,8 @@ const VibeStore = types.compose(
       checkVibeRequest: types.optional(RequestModel, {}),
       countVibeRequest: types.optional(RequestModel, {}),
       toggleVibeRequest: types.optional(RequestModel, {}),
-      canVibe: types.maybeNull(types.boolean),
-      vibeCount: types.maybe(types.number)
+      canVibe: false,
+      vibeCount: 0
     })
     .actions((self) => ({
       check: flow(function* (spaceId: string) {
@@ -39,7 +40,7 @@ const VibeStore = types.compose(
       toggle: flow(function* (spaceId: string) {
         yield self.toggleVibeRequest.send(api.vibeRepository.toggleVibe, {
           spaceId,
-          vibeAction: self.canVibe ? '+1' : '-1'
+          vibeAction: self.canVibe ? VibeActionEnum.INCREASE : VibeActionEnum.DECREASE
         });
 
         return self.toggleVibeRequest.isDone;

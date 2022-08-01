@@ -20,6 +20,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   isCustom?: boolean;
   noWhitespaceWrap?: boolean;
   className?: string;
+  countLabelSpace?: boolean;
 }
 
 const Button: FC<PropsInterface> = (props) => {
@@ -36,8 +37,8 @@ const Button: FC<PropsInterface> = (props) => {
     icon,
     isCustom = false,
     noWhitespaceWrap = false,
-    className,
-    children
+    countLabelSpace = false,
+    className
   } = props;
 
   return (
@@ -53,12 +54,12 @@ const Button: FC<PropsInterface> = (props) => {
         wide && 'wide',
         isCustom && 'Button-custom',
         noWhitespaceWrap && 'noWhitespaceWrap',
+        countLabelSpace && 'countLabelSpace',
         className
       )}
       type={submit ? 'submit' : 'button'}
     >
       {icon && <IconSvg name={icon} size="normal" isCustom isDanger={variant === 'danger'} />}
-      {children}
       {label}
     </styled.Button>
   );
