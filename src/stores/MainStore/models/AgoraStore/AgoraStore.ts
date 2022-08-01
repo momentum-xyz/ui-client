@@ -297,6 +297,7 @@ const AgoraStore = types
 
       self.setupAgoraListeners();
       self.isStageMode = isStageMode;
+      self.screenShareStore.init(self.appId, isStageMode, self.spaceId);
     }),
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();

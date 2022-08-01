@@ -24,11 +24,22 @@ const ScreenShareStore = types
       self._screenShare = value;
     }
   }))
+  // Stop screensharing
+  .actions((self) => ({
+    stopScreenShare() {
+      self.client?.localTracks.forEach((track) => {
+        track.close();
+      });
+      self.client?.leave();
+      self.client = undefined;
+      self.screenShare = undefined;
+    }
+  }))
   // Track actions
   .actions((self) => ({
     createScreenTrackAndPublish: flow(function* () {
       if (!self.client) {
-        return undefined;
+        return;
       }
 
       const screenTrack = yield AgoraRTC.createScreenVideoTrack(
@@ -50,28 +61,15 @@ const ScreenShareStore = types
       );
 
       yield self.client.publish(screenTrack);
-      return screenTrack;
+      screenTrack.on('track-ended', self.stopScreenShare);
     })
   }))
   // State actions
   .actions((self) => ({
-    init(appId: string, isStageMode: boolean, spaceId: string) {
-      self.client = AgoraRTC.createClient({
-        mode: isStageMode ? 'live' : 'rtc',
-        codec: 'h264'
-      });
-
+    init(appId: string, isStageMode: boolean, spaceId?: string) {
       self.appId = appId;
       self.spaceId = spaceId;
       self.isStageMode = isStageMode;
-    },
-    stopScreenShare() {
-      self.client?.localTracks.forEach((track) => {
-        track.close();
-      });
-      self.client?.leave();
-      self.client = undefined;
-      self.screenShare = undefined;
     },
     startScreenShare: flow(function* (authStateSubject: string) {
       if (self.spaceId) {
