@@ -7,6 +7,7 @@ export const Container = styled.div`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   &.normal {
     width: 32px;
@@ -16,6 +17,11 @@ export const Container = styled.div`
   &.small {
     width: 20px;
     height: 12.5px;
+  }
+
+  &.disabled {
+    cursor: wait;
+    opacity: 0.5;
   }
 `;
 
