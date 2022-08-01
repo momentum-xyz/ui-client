@@ -7,7 +7,6 @@ import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/model
 import * as styled from './ParticipantMenu.styled';
 
 interface PropsInterface {
-  name: string;
   participant: AgoraRemoteUserInterface;
   onClose?: (event?: Event) => void;
   removeParticipant?: () => void;
@@ -16,7 +15,6 @@ interface PropsInterface {
 
 // TODO: Implement methods for muting and kicking in the CommunicationLayerStore and call them for each Option
 const ParticipantMenu: FC<PropsInterface> = ({
-  name,
   removeParticipant,
   participant,
   muteParticipant,
@@ -38,14 +36,14 @@ const ParticipantMenu: FC<PropsInterface> = ({
             <styled.IconContainer>
               <IconSvg name="microphoneOff" />
             </styled.IconContainer>
-            <Text text={t('actions.muteName', {name})} size="xxs" />
+            <Text text={t('actions.muteName', {name: participant.name})} size="xxs" />
           </styled.Option>
         )}
         <styled.Option onClick={removeParticipant}>
           <styled.IconContainer>
             <IconSvg name="remove-user" />
           </styled.IconContainer>
-          <Text text={t('actions.kickName', {name})} size="xxs" />
+          <Text text={t('actions.kickName', {name: participant.name})} size="xxs" />
         </styled.Option>
       </styled.Content>
       <styled.Triangle />

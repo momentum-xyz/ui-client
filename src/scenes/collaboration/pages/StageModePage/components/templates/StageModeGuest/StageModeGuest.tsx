@@ -17,6 +17,7 @@ import * as styled from './StageModeGuest.styled';
 const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
+  const {stageModeStore} = agoraStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     useStageModePopupQueueContext();
 
@@ -26,14 +27,14 @@ const StageModeGuest: React.FC = () => {
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
-      agoraStore.requestToGoOnstageWasHandled();
+      stageModeStore.requestToGoOnstageWasHandled();
     }
   });
 
   usePosBusEvent('stage-mode-declined', (userId) => {
     if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
-      agoraStore.requestToGoOnstageWasHandled();
+      stageModeStore.requestToGoOnstageWasHandled();
     }
   });
 
@@ -43,7 +44,7 @@ const StageModeGuest: React.FC = () => {
 
   const handleUserRequest = useCallback(async () => {
     try {
-      await agoraStore.requestToGoOnStage();
+      await stageModeStore.requestToGoOnStage();
       showSuccessStageModeRequestSubmissionToast();
     } catch (e) {
       console.info(e);
@@ -77,17 +78,17 @@ const StageModeGuest: React.FC = () => {
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}
 
-          {agoraStore.isStageMode && !agoraStore.requestWasMadeToGoOnStage && (
+          {agoraStore.isStageMode && !stageModeStore.requestWasMadeToGoOnStage && (
             <Button
-              label={agoraStore.isOnStage ? t('actions.leaveStage') : t('actions.goOnStage')}
-              variant={agoraStore.isOnStage ? 'danger' : 'primary'}
-              onClick={agoraStore.isOnStage ? agoraStore.leaveStage : handleUserRequest}
+              label={stageModeStore.isOnStage ? t('actions.leaveStage') : t('actions.goOnStage')}
+              variant={stageModeStore.isOnStage ? 'danger' : 'primary'}
+              onClick={stageModeStore.isOnStage ? stageModeStore.leaveStage : handleUserRequest}
             />
           )}
-          {agoraStore.isStageMode && agoraStore.requestWasMadeToGoOnStage && (
+          {agoraStore.isStageMode && stageModeStore.requestWasMadeToGoOnStage && (
             <Text text={t('messages.pendingRequestToGoOnStage')} size="m" />
           )}
-          {agoraStore.isStageMode && !agoraStore.canEnterStage && (
+          {agoraStore.isStageMode && !stageModeStore.canEnterStage && (
             <Text text={t('messages.stageIsFull')} size="m" />
           )}
         </styled.Actions>

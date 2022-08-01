@@ -29,6 +29,7 @@ import * as styled from './WidgetContainer.styled';
 const WidgetContainer: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
+  const {stageModeStore} = agoraStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -134,7 +135,7 @@ const WidgetContainer: FC = () => {
           <ToolbarIconList>
             <ToolbarIcon
               title={
-                agoraStore.isStageMode && !agoraStore.isOnStage
+                agoraStore.isStageMode && !stageModeStore.isOnStage
                   ? 'You are in the audience, stage mode is on'
                   : userDevicesStore.cameraOff
                   ? 'Camera on'
@@ -144,12 +145,12 @@ const WidgetContainer: FC = () => {
               onClick={toggleCameraOn}
               disabled={
                 userDevicesStore.isTogglingCamera ||
-                (agoraStore.isStageMode && !agoraStore.isOnStage)
+                (agoraStore.isStageMode && !stageModeStore.isOnStage)
               }
             />
             <ToolbarIcon
               title={
-                agoraStore.isStageMode && !agoraStore.isOnStage
+                agoraStore.isStageMode && !stageModeStore.isOnStage
                   ? 'You are in the audience, stage mode is on'
                   : userDevicesStore.muted
                   ? 'Unmute'
@@ -159,7 +160,7 @@ const WidgetContainer: FC = () => {
               onClick={toggleMute}
               disabled={
                 userDevicesStore.isTogglingMicrophone ||
-                (agoraStore.isStageMode && !agoraStore.isOnStage)
+                (agoraStore.isStageMode && !stageModeStore.isOnStage)
               }
             />
           </ToolbarIconList>
