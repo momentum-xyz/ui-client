@@ -18,15 +18,11 @@ const VibeButton: FC<PropsInterface> = ({onToggle, canVibe, vibeCount}) => {
   return (
     <styled.Container>
       <Button
-        label={
-          vibeCount === 1
-            ? t('counts.vibes_one', {count: vibeCount})
-            : t('counts.vibes_other', {count: vibeCount})
-        }
+        label={t('counts.vibes', {count: vibeCount})}
         variant={canVibe ? 'primary' : 'inverted'}
         icon="vibe"
         onClick={onToggle}
-        countLabelSpace={true}
+        preserveSpaces={true}
       />
     </styled.Container>
   );

@@ -161,7 +161,7 @@ export const Button = styled.button`
     white-space: nowrap;
   }
 
-  &.countLabelSpace {
+  &.preservesSpaces {
     white-space: pre-wrap;
   }
 

@@ -20,7 +20,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   isCustom?: boolean;
   noWhitespaceWrap?: boolean;
   className?: string;
-  countLabelSpace?: boolean;
+  preserveSpaces?: boolean;
 }
 
 const Button: FC<PropsInterface> = (props) => {
@@ -37,7 +37,7 @@ const Button: FC<PropsInterface> = (props) => {
     icon,
     isCustom = false,
     noWhitespaceWrap = false,
-    countLabelSpace = false,
+    preserveSpaces = false,
     className
   } = props;
 
@@ -54,7 +54,7 @@ const Button: FC<PropsInterface> = (props) => {
         wide && 'wide',
         isCustom && 'Button-custom',
         noWhitespaceWrap && 'noWhitespaceWrap',
-        countLabelSpace && 'countLabelSpace',
+        preserveSpaces && 'preservesSpaces',
         className
       )}
       type={submit ? 'submit' : 'button'}
