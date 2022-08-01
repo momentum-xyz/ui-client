@@ -692,6 +692,7 @@ export const enGb = {
     dashboard: {
       subtitle: 'dashboard',
       vibe: 'vibe',
+      vibes: 'vibes',
       addTile: 'add tile',
       invitePeople: 'invite people',
       stake: 'stake',

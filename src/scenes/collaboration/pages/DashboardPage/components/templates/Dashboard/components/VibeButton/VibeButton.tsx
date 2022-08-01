@@ -1,5 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {Button} from 'ui-kit';
 
@@ -12,11 +13,13 @@ interface PropsInterface {
 }
 
 const VibeButton: FC<PropsInterface> = ({onToggle, canVibe, vibeCount}) => {
+  const {t} = useTranslation();
+
   return (
     <styled.Container>
       {/*@ts-ignore*/}
       <Button
-        label={vibeCount === 1 ? 'vibe' : 'vibes'}
+        label={vibeCount === 1 ? t('dashboard.vibe') : t('dashboard.vibes')}
         variant={canVibe ? 'primary' : 'inverted'}
         icon="vibe"
         onClick={onToggle}
