@@ -14,21 +14,6 @@ export interface CollaborationTable {
   id: string;
 }
 
-export interface GoogleDriveFile {
-  id?: string;
-  name: string;
-  description: string;
-  type: string;
-  url: string;
-  embedUrl: string;
-}
-
-export interface GoogleDriveDTO {
-  space_id?: string;
-  owner_id: string;
-  data: GoogleDriveFile | null;
-}
-
 export interface ChannelInviteDto {
   id: string;
   participants: ParticipantDto[];
