@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import 'core/utils/boardsPicker.1.0.js';
-import {observer} from 'mobx-react-lite';
+import {observer, useObserver} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 
@@ -12,32 +12,34 @@ import {useUser} from '../../../hooks/api/useUser';
 export interface WhiteBoardProps {}
 
 // TODO: Refactor
-const VideoContainer = () => {
+const VideoContainer = observer(() => {
   const videoRef = useRef<HTMLDivElement>(null);
   const {
     mainStore: {agoraStore}
   } = useStore();
+  const {screenShareStore} = agoraStore;
 
   useEffect(() => {
-    if (videoRef.current && agoraStore.screenShare) {
-      agoraStore.screenShare?.play(videoRef.current, {
+    if (videoRef.current && screenShareStore.screenShare) {
+      screenShareStore.screenShare?.play(videoRef.current, {
         fit: 'contain'
       });
     }
-  }, [agoraStore.screenShare]);
+  }, [screenShareStore.screenShare]);
 
   return (
     <Panel padding={false} grow={true}>
       <div className="w-full h-full" ref={videoRef} />
     </Panel>
   );
-};
+});
 
 // TODO: Refactor
 const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
   const {agoraStore} = mainStore;
-  const {screenShare, screenShareClient} = agoraStore;
+  const {screenShareStore, stageModeStore} = agoraStore;
+  const {screenShare, client} = screenShareStore;
 
   const [settingUp, setSettingUp] = useState(false);
   const [userId, setUserId] = useState<string | null>();
@@ -47,23 +49,17 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
   const startScreenSharing = useCallback(() => {
     console.info('start screencast');
     setSettingUp(true);
-    agoraStore
+    screenShareStore
       .startScreenShare(sessionStore.userId)
       .then(() => {
-        if (!screenShareClient) {
+        if (!client) {
           setSettingUp(false);
         }
       })
       .catch(() => {
         setSettingUp(false);
       });
-  }, [agoraStore, screenShareClient, sessionStore.userId]);
-
-  useEffect(() => {
-    if (screenShareClient) {
-      screenShareClient.localTracks[0].on('track-ended', agoraStore.stopScreenShare);
-    }
-  }, [agoraStore.stopScreenShare, screenShareClient]);
+  }, [client, screenShareStore, sessionStore.userId]);
 
   useEffect(() => {
     console.info('start screen share', screenShare);
@@ -76,7 +72,7 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
     }
   }, [screenShare]);
 
-  const View = useMemo(() => {
+  const View = useObserver(() => {
     if (screenShare) {
       return <VideoContainer />;
     } else if (settingUp) {
@@ -92,27 +88,28 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
         <Panel grow={true}>
           <div className="flex flex-col h-full items-center justify-center gap-4">
             <h2 className="font-bold">There is no one screensharing</h2>
-            {(!agoraStore.spaceId || agoraStore.isOnStage) && (
-              <Button type="ghost" size="m" onClick={startScreenSharing}>
-                Start screensharing
-              </Button>
-            )}
+            {agoraStore.spaceId &&
+              (collaborationStore.space?.isAdmin === true || stageModeStore.isOnStage) && (
+                <Button type="ghost" size="m" onClick={startScreenSharing}>
+                  Start screensharing
+                </Button>
+              )}
           </div>
         </Panel>
       );
     }
-  }, [agoraStore.isOnStage, agoraStore.spaceId, screenShare, settingUp, startScreenSharing]);
+  });
 
-  const actions = useMemo(() => {
-    if (screenShareClient) {
+  const actions = useObserver(() => {
+    if (client) {
       return (
-        <Button type="ghost" size="s" onClick={agoraStore.stopScreenShare}>
+        <Button type="ghost" size="s" onClick={screenShareStore.stopScreenShare}>
           stop screenshare
         </Button>
       );
     }
     return null;
-  }, [agoraStore.stopScreenShare, screenShareClient]);
+  });
 
   if (!collaborationStore.space) {
     return null;

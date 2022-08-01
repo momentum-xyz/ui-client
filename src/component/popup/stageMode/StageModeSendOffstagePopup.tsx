@@ -19,11 +19,12 @@ export interface StageModeSendOffstagePopupProps {
 
 const StageModeSendOffstagePopup: React.FC<StageModeSendOffstagePopupProps> = ({user, onClose}) => {
   const {agoraStore} = useStore().mainStore;
+  const {stageModeStore} = agoraStore;
 
   const handleSendOffstage = async () => {
     if (user?.id.data) {
       try {
-        await agoraStore.kickUserOffStage(bytesToUuid(user.id.data));
+        await stageModeStore.kickUserOffStage(bytesToUuid(user.id.data));
         onClose?.();
       } catch {
         toast.error(

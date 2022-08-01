@@ -3,9 +3,8 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {MediaPlayer} from 'scenes/collaboration/pages/StageModePage/components';
 
-import MediaPlayer from '../MediaPlayer';
-import {useCurrentUser} from '../../../hooks/api/useUser';
 import {ReactComponent as MicOff} from '../../../images/icons/microphone-off.svg';
 import {ReactComponent as RemoveIcon} from '../../../images/icons/remove.svg';
 
@@ -15,17 +14,17 @@ export interface StageModeStageProps {
 
 const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
   const [gridCols, setGridCols] = useState<string>('grid-cols-1');
-  const [currentUser, , ,] = useCurrentUser();
 
   const {
-    mainStore: {agoraStore}
+    mainStore: {agoraStore},
+    sessionStore
   } = useStore();
-  const {userDevicesStore} = agoraStore;
+  const {userDevicesStore, stageModeStore} = agoraStore;
 
   const stageCount = useMemo(
     () =>
-      agoraStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length,
-    [agoraStore.isOnStage, agoraStore.remoteUsers.length]
+      stageModeStore.isOnStage ? agoraStore.remoteUsers.length + 1 : agoraStore.remoteUsers.length,
+    [stageModeStore.isOnStage, agoraStore.remoteUsers.length]
   );
 
   useEffect(() => {
@@ -60,18 +59,18 @@ const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
           </div>
         )}
 
-        {agoraStore.isOnStage && currentUser && (
+        {stageModeStore.isOnStage && (
           <div
             className="w-full max-h-full aspect-ratio-video bg-black-100 flex items-center justify-center overflow-hidden"
             key="stageuser-local"
           >
             <MediaPlayer
               videoTrack={userDevicesStore.localVideoTrack}
-              audioTrack={undefined}
-              isVideoMuted={userDevicesStore.cameraOff}
-              isAudioMuted={userDevicesStore.muted}
-              currentUser={currentUser}
+              isCameraOff={userDevicesStore.cameraOff}
+              isMuted={userDevicesStore.muted}
               soundLevel={agoraStore.localSoundLevel}
+              currentUser={sessionStore.profile ?? undefined}
+              loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
           </div>
         )}
@@ -86,10 +85,11 @@ const StageModeStage: React.FC<StageModeStageProps> = ({onRemoteUserClick}) => {
             <MediaPlayer
               remoteUser={user}
               videoTrack={user.videoTrack}
-              isVideoMuted={user.cameraOff}
-              audioTrack={user.audioTrack}
-              isAudioMuted={user.isMuted}
-              soundLevel={agoraStore.remoteUsers.find(({uid}) => uid === user.uid)?.soundLevel ?? 0}
+              isCameraOff={user.cameraOff}
+              isMuted={user.isMuted}
+              soundLevel={user.soundLevel}
+              currentUser={sessionStore.profile ?? undefined}
+              loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
             <div
               className={`absolute inset-0 hidden justify-center items-center   ${

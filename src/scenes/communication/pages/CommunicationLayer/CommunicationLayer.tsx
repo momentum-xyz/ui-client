@@ -14,12 +14,16 @@ import {
   TOAST_BASE_OPTIONS
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import CONFIG from 'config/config';
 import {ParticipantRole} from 'core/enums';
 import StageModePIP from 'component/atoms/StageMode/StageModePIP';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useGetSpace} from 'hooks/api/useSpaceService';
+import {appVariables} from 'api/constants';
+import {
+  AgoraRemoteUserInterface,
+  StageModeUserInterface
+} from 'stores/MainStore/models/AgoraStore/models';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
@@ -36,23 +40,23 @@ const CommunicationLayer = () => {
   } = useStore();
   const {space} = collaborationStore;
   const {unityStore, agoraStore} = mainStore;
-  const {userDevicesStore} = agoraStore;
+  const {userDevicesStore, stageModeStore} = agoraStore;
   const {clearPopups} = useStageModePopupQueueContext();
 
   const stageModeAudience = useMemo(() => {
     return agoraStore.isStageMode
-      ? agoraStore.stageModeUsers.filter((user) => {
+      ? stageModeStore.users.filter((user) => {
           return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
         })
       : [];
-  }, [agoraStore.stageModeUsers, sessionStore.userId, agoraStore.isStageMode]);
+  }, [stageModeStore.users, sessionStore.userId, agoraStore.isStageMode]);
 
   const numberOfPeople = useMemo(() => {
     return agoraStore.isStageMode
-      ? stageModeAudience.length + Number(!agoraStore.isOnStage)
+      ? stageModeAudience.length + Number(!stageModeStore.isOnStage)
       : agoraStore.remoteUsers.length + 1;
   }, [
-    agoraStore.isOnStage,
+    stageModeStore.isOnStage,
     agoraStore.isStageMode,
     agoraStore.remoteUsers.length,
     stageModeAudience.length
@@ -158,7 +162,7 @@ const CommunicationLayer = () => {
 
   useEffect(() => {
     const isLimitReached =
-      agoraStore.remoteUsers.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+      agoraStore.remoteUsers.length > appVariables.PARTICIPANTS_VIDEO_LIMIT - 1;
 
     if (isLimitReached) {
       setMaxVideoStreamsShown((maxVideoStreamsShown) => {
@@ -237,7 +241,7 @@ const CommunicationLayer = () => {
               </styled.MuteButtonContainer>
             )}
             <ul>
-              {(!agoraStore.isStageMode || !agoraStore.isOnStage) && <LocalParticipant />}
+              {(!agoraStore.isStageMode || !stageModeStore.isOnStage) && <LocalParticipant />}
               {maxVideoStreamsShown && (
                 <li
                   className="mb-.5 p-.5
@@ -255,39 +259,34 @@ relative
                   </div>
                 </li>
               )}
-              {(agoraStore.isStageMode
-                ? stageModeAudience.map((user) => {
-                    return {
-                      ...user,
-                      soundLevel: 0,
-                      hasVideo: false,
-                      hasAudio: false,
-                      isMuted: true,
-                      cameraOff: true,
-                      videoTrack: undefined,
-                      audioTrack: undefined
-                    };
-                  })
-                : agoraStore.remoteUsers
-              ).map((participant) => (
-                <Transition
-                  key={`participant-${participant.uid as string}`}
-                  appear={true}
-                  enter="transition-all transform ease-out duration-300"
-                  enterFrom="translate-x-8"
-                  enterTo="translate-x-0 "
-                  leave="transition-all transform  ease-in duration-300"
-                  leaveFrom="translate-x-0 "
-                  leaveTo="translate-x-8"
-                >
-                  <RemoteParticipant
+              {(agoraStore.isStageMode ? stageModeAudience : agoraStore.remoteUsers).map(
+                (participant) => (
+                  <Transition
                     key={`participant-${participant.uid as string}`}
-                    participant={participant}
-                    canEnterStage={agoraStore.canEnterStage}
-                    totalParticipants={agoraStore.remoteUsers.length}
-                  />
-                </Transition>
-              ))}
+                    appear={true}
+                    enter="transition-all transform ease-out duration-300"
+                    enterFrom="translate-x-8"
+                    enterTo="translate-x-0 "
+                    leave="transition-all transform  ease-in duration-300"
+                    leaveFrom="translate-x-0 "
+                    leaveTo="translate-x-8"
+                  >
+                    <RemoteParticipant
+                      key={`participant-${participant.uid as string}`}
+                      participant={
+                        !agoraStore.isStageMode
+                          ? (participant as AgoraRemoteUserInterface)
+                          : undefined
+                      }
+                      audienceParticipant={
+                        agoraStore.isStageMode ? (participant as StageModeUserInterface) : undefined
+                      }
+                      canEnterStage={stageModeStore.canEnterStage}
+                      totalParticipants={agoraStore.remoteUsers.length}
+                    />
+                  </Transition>
+                )
+              )}
             </ul>
           </styled.ListItemContent>
         </styled.ListItem>

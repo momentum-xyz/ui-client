@@ -170,15 +170,21 @@ const UserDevicesStore = types
       storage.set(StorageKeyEnum.PreferredVideoInput, deviceId);
     },
     createLocalTracks: flow(function* (
-      createAudioTrack: (deviceId: string) => Promise<ILocalAudioTrack | undefined>,
-      createVideoTrack: (deviceId: string) => Promise<ILocalVideoTrack | undefined>
+      createAudioTrack: (
+        deviceId: string,
+        isTrackEnabled: boolean
+      ) => Promise<ILocalAudioTrack | undefined>,
+      createVideoTrack: (
+        deviceId: string,
+        isTrackEnabled: boolean
+      ) => Promise<ILocalVideoTrack | undefined>
     ) {
       if (!self.microphoneConsent) {
         yield self.getMicrophoneConsent();
       }
 
       self.localAudioTrack = self.currentAudioInput?.deviceId
-        ? yield createAudioTrack(self.currentAudioInput?.deviceId)
+        ? yield createAudioTrack(self.currentAudioInput?.deviceId, !self.muted)
         : undefined;
 
       if (!self.cameraConsent) {
@@ -186,7 +192,7 @@ const UserDevicesStore = types
       }
 
       self.localVideoTrack = self.currentVideoInput?.deviceId
-        ? yield createVideoTrack(self.currentVideoInput?.deviceId)
+        ? yield createVideoTrack(self.currentVideoInput?.deviceId, !self.cameraOff)
         : undefined;
     }),
     cleanupLocalTracks() {
