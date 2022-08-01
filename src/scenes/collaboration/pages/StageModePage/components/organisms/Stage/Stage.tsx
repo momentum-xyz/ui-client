@@ -1,10 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 import {MediaPlayer} from 'scenes/collaboration/pages/StageModePage/components';
-import {IconSvg} from 'ui-kit';
+import {IconSvg, Text} from 'ui-kit';
 
 import * as styled from './Stage.styled';
 
@@ -20,6 +22,8 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
     sessionStore
   } = useStore();
   const {userDevicesStore, stageModeStore} = agoraStore;
+
+  const {t} = useTranslation();
 
   const stageCount = useMemo(
     () =>
@@ -43,18 +47,19 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
     <styled.Container>
       <styled.Grid className={cols}>
         {stageCount === 0 && (
-          <div className="mt-2 text-center">
-            <p className="text-xl uppercase text-white-50 self-center text-center font-bold">
-              There are currently no participants on stage.
-            </p>
-          </div>
+          <styled.MessageContainer>
+            <Text
+              text={t('messages.noParticipantsOnStage')}
+              size="xl"
+              align="center"
+              transform="uppercase"
+              weight="bold"
+            />
+          </styled.MessageContainer>
         )}
 
         {stageModeStore.isOnStage && (
-          <div
-            className="w-full max-h-full aspect-ratio-video bg-black-100 flex items-center justify-center overflow-hidden"
-            key="stageuser-local"
-          >
+          <styled.MediaPlayerContainer key="stageuser-local">
             <MediaPlayer
               videoTrack={userDevicesStore.localVideoTrack}
               isCameraOff={userDevicesStore.cameraOff}
@@ -63,14 +68,12 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
               currentUser={sessionStore.profile ?? undefined}
               loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
-          </div>
+          </styled.MediaPlayerContainer>
         )}
 
         {agoraStore.remoteUsers.map((user) => (
-          <div
-            className={`relative w-full max-h-full aspect-ratio-video bg-black-100 flex items-center justify-center overflow-hidden group ${
-              onRemoteUserClick ? '' : ''
-            } `}
+          <styled.MediaPlayerContainer
+            className={cn('relative', onRemoteUserClick && 'showActionsOnHover')}
             key={`stageuser-${user.uid}`}
           >
             <MediaPlayer
@@ -82,45 +85,39 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
               currentUser={sessionStore.profile ?? undefined}
               loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
-            <div
-              className={`absolute inset-0 hidden justify-center items-center   ${
-                onRemoteUserClick ? 'group-hover:block ' : ''
-              }`}
-            >
-              <div className="h-full flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
-                <div className="flex bg-black-70 gap-2 rounded p-1">
+            <styled.RemoteUserActionsContainer>
+              <styled.RemoteUserActions>
+                <styled.RemoteUserActionButtons>
                   {!user.isMuted && (
-                    <button
-                      className="hover:text-prime-blue-100 w-4"
+                    <styled.RemoteUserActionButton
                       onClick={() => {
                         if (onRemoteUserClick) {
                           onRemoteUserClick(user, 'mute');
                         }
                       }}
                     >
-                      <div className="flex flex-col gap-1 justify-center items-center">
+                      <styled.RemoteUserAction>
                         <IconSvg name="microphoneOff" size="medium-large" />
-                        <span className="text-sm">Mute</span>
-                      </div>
-                    </button>
+                        <Text text={t('actions.mute')} size="s" />
+                      </styled.RemoteUserAction>
+                    </styled.RemoteUserActionButton>
                   )}
-                  <button
-                    className="hover:text-prime-blue-100 w-4"
+                  <styled.RemoteUserActionButton
                     onClick={() => {
                       if (onRemoteUserClick) {
                         onRemoteUserClick(user, 'remove');
                       }
                     }}
                   >
-                    <div className="flex flex-col gap-1 justify-center items-center">
+                    <styled.RemoteUserAction>
                       <IconSvg name="bin" size="medium-large" />
-                      <span className="text-sm">Remove</span>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+                      <Text text={t('actions.remove')} size="s" />
+                    </styled.RemoteUserAction>
+                  </styled.RemoteUserActionButton>
+                </styled.RemoteUserActionButtons>
+              </styled.RemoteUserActions>
+            </styled.RemoteUserActionsContainer>
+          </styled.MediaPlayerContainer>
         ))}
       </styled.Grid>
     </styled.Container>

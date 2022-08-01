@@ -8,9 +8,9 @@ import {useStore} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 import {appVariables} from 'api/constants';
+import {Stage} from 'scenes/collaboration/pages/StageModePage/components';
 
 import Page from '../../molucules/Page';
-import StageModeStage from '../../atoms/StageMode/StageModeStage';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {useUser} from '../../../hooks/api/useUser';
@@ -124,7 +124,7 @@ const StageModeControlPanelLayout: React.FC = () => {
   const usersOnStage = () => (
     <div className="flex flex-grow z-0">
       <div className="flex-grow" />
-      <StageModeStage onRemoteUserClick={remoteUserClicked} />
+      <Stage onRemoteUserClick={remoteUserClicked} />
       <div className="flex-grow" />
     </div>
   );
