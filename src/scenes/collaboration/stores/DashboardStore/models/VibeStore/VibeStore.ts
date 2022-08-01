@@ -1,17 +1,54 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 
-import {ResetModel} from 'core/models';
+import {RequestModel, ResetModel} from 'core/models';
+import {api, VibeCountResponse} from 'api';
 
 const VibeStore = types.compose(
   ResetModel,
   types
     .model('VibeStore', {
-      isVibe: false,
-      vibeCount: 1
+      checkVibeRequest: types.optional(RequestModel, {}),
+      countVibeRequest: types.optional(RequestModel, {}),
+      toggleVibeRequest: types.optional(RequestModel, {}),
+      canVibe: types.maybeNull(types.boolean),
+      vibeCount: types.maybe(types.number)
     })
     .actions((self) => ({
+      check: flow(function* (spaceId: string) {
+        const response = yield self.checkVibeRequest.send(api.vibeRepository.checkVibe, {
+          spaceId
+        });
+        if (response) {
+          self.canVibe = response;
+        }
+
+        return self.checkVibeRequest.isDone;
+      }),
+      count: flow(function* (spaceId: string) {
+        const response: VibeCountResponse = yield self.countVibeRequest.send(
+          api.vibeRepository.countVibe,
+          {
+            spaceId
+          }
+        );
+        if (response) {
+          self.vibeCount = response.count;
+        }
+        return self.countVibeRequest.isDone;
+      }),
+      toggle: flow(function* (spaceId: string) {
+        yield self.toggleVibeRequest.send(api.vibeRepository.toggleVibe, {
+          spaceId,
+          vibeAction: self.canVibe ? '+1' : '-1'
+        });
+
+        return self.toggleVibeRequest.isDone;
+      }),
+      setCount(count: number) {
+        self.vibeCount = count;
+      },
       toggleVibe() {
-        self.isVibe = !self.isVibe;
+        self.canVibe = !self.canVibe;
       }
     }))
 );

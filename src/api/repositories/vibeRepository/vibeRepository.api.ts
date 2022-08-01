@@ -22,14 +22,14 @@ export const checkVibe: RequestInterface<VibeCheckRequest, VibeCheckResponse> = 
 
 export const countVibe: RequestInterface<VibeCountRequest, VibeCountResponse> = (options) => {
   const {spaceId, ...restOptions} = options;
-  const url = generatePath(vibeRepositoryEndpoints().check, {spaceId});
+  const url = generatePath(vibeRepositoryEndpoints().count, {spaceId});
 
   return request.get(url, restOptions);
 };
 
 export const toggleVibe: RequestInterface<VibeToggleRequest, VibeToggleResponse> = (options) => {
   const {spaceId, vibeAction, ...restOptions} = options;
-  const url = generatePath(vibeRepositoryEndpoints().check, {spaceId});
+  const url = generatePath(vibeRepositoryEndpoints().toggle, {spaceId});
 
-  return request.post(url, vibeAction, restOptions);
+  return request.post(url, {vibeAction}, restOptions);
 };
