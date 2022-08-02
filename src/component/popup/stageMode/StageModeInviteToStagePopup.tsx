@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {StageModeUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {StageModeUserInterface} from 'core/models';
 
 import Popup, {PopupTitle} from '../../atoms/Popup';
 import Avatar from '../../atoms/Avatar';
@@ -21,12 +21,12 @@ const StageModeInviteToStagePopup: React.FC<StageModeInviteToStagePopupProps> = 
   onClose
 }) => {
   const {agoraStore} = useStore().mainStore;
-  const {stageModeStore} = agoraStore;
+  const {agoraStageModeStore} = agoraStore;
 
   const handleInviteClick = async () => {
     if (user) {
       try {
-        await stageModeStore.inviteToStage(user.uid);
+        await agoraStageModeStore.inviteToStage(user.uid);
         onClose?.();
       } catch {
         toast.error(

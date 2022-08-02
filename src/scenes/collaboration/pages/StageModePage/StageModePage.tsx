@@ -3,7 +3,7 @@ import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom
 import {observer} from 'mobx-react-lite';
 
 import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 
 import StageModeControlPanelLayout from '../../../../component/layout/StageMode/StageModeControlPanelLayout';
 
@@ -14,6 +14,7 @@ const StageModePage: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
   const {collaborationStore, mainStore} = useStore();
   const {agoraStore} = mainStore;
+  const {stageModeStore} = collaborationStore;
 
   useEffect(() => {
     const chatWasOpen = agoraStore.isChatOpen;
@@ -25,6 +26,14 @@ const StageModePage: FC = () => {
       }
     };
   }, [agoraStore]);
+
+  usePosBusEvent('stage-mode-accepted', (userId) => {
+    stageModeStore.removeRequestPopup(userId);
+  });
+
+  usePosBusEvent('stage-mode-declined', (userId) => {
+    stageModeStore.removeRequestPopup(userId);
+  });
 
   if (collaborationStore.moderationRequest.isPending) {
     return null;

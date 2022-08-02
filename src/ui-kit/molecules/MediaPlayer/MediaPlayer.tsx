@@ -3,9 +3,8 @@ import React, {useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
-import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 import {IconSvg, Text} from 'ui-kit';
-import {UserProfileModelInterface} from 'core/models';
+import {UserProfileModelInterface, AgoraRemoteUserInterface} from 'core/models';
 
 import * as styled from './MediaPlayer.styled';
 

@@ -9,6 +9,7 @@ import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
 import {GoogleDriveStore} from './GoogleDriveStore';
 import {ScreenShareStore} from './ScreenShareStore';
+import {StageModeStore} from './StageModeStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -20,6 +21,7 @@ const RootCollaborationStore = types
       screenShareStore: types.optional(ScreenShareStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
+      stageModeStore: types.optional(StageModeStore, {}),
       isModerator: false,
 
       leftMeetingSpaceId: types.maybe(types.string),

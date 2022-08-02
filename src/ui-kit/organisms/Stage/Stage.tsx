@@ -4,7 +4,7 @@ import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {AgoraRemoteUserInterface} from 'core/models';
 import {IconSvg, Text, MediaPlayer} from 'ui-kit';
 
 import * as styled from './Stage.styled';
@@ -16,14 +16,14 @@ interface StagePropsInterface {
 const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
   const {mainStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
-  const {userDevicesStore, stageModeStore} = agoraStore;
+  const {userDevicesStore, agoraStageModeStore} = agoraStore;
 
   const [cols, setCols] = useState<string>('cols-1');
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    const {numberOfSpeakers} = stageModeStore;
+    const {numberOfSpeakers} = agoraStageModeStore;
     if (numberOfSpeakers === 1) {
       setCols('cols-1');
     } else if (numberOfSpeakers > 1 && numberOfSpeakers <= 4) {
@@ -33,12 +33,12 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
     } else if (numberOfSpeakers > 9) {
       setCols('cols-4');
     }
-  }, [stageModeStore]);
+  }, [agoraStageModeStore]);
 
   return (
     <styled.Container>
       <styled.Grid className={cols}>
-        {stageModeStore.numberOfSpeakers === 0 && (
+        {agoraStageModeStore.numberOfSpeakers === 0 && (
           <styled.MessageContainer>
             <Text
               text={t('messages.noParticipantsOnStage')}
@@ -50,7 +50,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
           </styled.MessageContainer>
         )}
 
-        {stageModeStore.isOnStage && (
+        {agoraStageModeStore.isOnStage && (
           <styled.MediaPlayerContainer>
             <MediaPlayer
               videoTrack={userDevicesStore.localVideoTrack}

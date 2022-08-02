@@ -14,7 +14,6 @@ import {createRoutesByConfig} from 'core/utils';
 import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
-import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {PrivateSpaceError} from 'core/errors';
 
 import {COLLABORATION_ROUTES} from './CollaborationRoutes';
@@ -23,9 +22,8 @@ const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
-  const {agoraScreenShareStore, stageModeStore} = agoraStore;
-
-  const {addRequestPopup} = useStageModePopupQueueContext();
+  const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
+  const {stageModeStore} = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
@@ -73,11 +71,11 @@ const Collaboration: FC = () => {
 
   usePosBusEvent('stage-mode-request', (userId) => {
     if (collaborationStore.isModerator) {
-      addRequestPopup(userId, {
+      stageModeStore.addRequestPopup(userId, {
         user: userId,
         onAccept: async () => {
           try {
-            await stageModeStore.requestRespond(userId, StageModeRequestEnum.ACCEPT);
+            await agoraStageModeStore.requestRespond(userId, StageModeRequestEnum.ACCEPT);
             return true;
           } catch {
             toast.error(
@@ -94,7 +92,7 @@ const Collaboration: FC = () => {
         },
         onDecline: async () => {
           try {
-            await stageModeStore.requestRespond(userId, StageModeRequestEnum.DECLINE);
+            await agoraStageModeStore.requestRespond(userId, StageModeRequestEnum.DECLINE);
             return true;
           } catch {
             return false;
@@ -133,9 +131,9 @@ const Collaboration: FC = () => {
     }
   });
 
-  usePosBusEvent('stage-mode-user-joined', stageModeStore.addStageModeUser);
-  usePosBusEvent('stage-mode-user-left', stageModeStore.removeStageModeUser);
-  usePosBusEvent('stage-mode-kick', stageModeStore.moveToAudience);
+  usePosBusEvent('stage-mode-user-joined', agoraStageModeStore.addStageModeUser);
+  usePosBusEvent('stage-mode-user-left', agoraStageModeStore.removeStageModeUser);
+  usePosBusEvent('stage-mode-kick', agoraStageModeStore.moveToAudience);
 
   useEffect(() => {
     navigator.mediaDevices.ondevicechange = () => {

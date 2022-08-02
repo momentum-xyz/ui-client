@@ -8,10 +8,7 @@ import Avatar from 'component/atoms/Avatar';
 import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
 import {useStore} from 'shared/hooks';
-import {
-  AgoraRemoteUserInterface,
-  StageModeUserInterface
-} from 'stores/MainStore/models/AgoraStore/models';
+import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 import {appVariables} from 'api/constants';
 
 import {ParticipantMenu} from '../ParticipantMenu';
