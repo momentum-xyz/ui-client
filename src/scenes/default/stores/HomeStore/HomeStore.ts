@@ -2,7 +2,8 @@ import {types} from 'mobx-state-tree';
 
 import {ResetModel} from 'core/models';
 import {ExploreStore} from 'scenes/widgets/stores/ExploreStore';
-import {OnlineUsersStore} from 'scenes/widgets/stores/OnlineUsersStore';
+
+import {OnlineUsersStore} from './models';
 
 const HomeStore = types.compose(
   ResetModel,
