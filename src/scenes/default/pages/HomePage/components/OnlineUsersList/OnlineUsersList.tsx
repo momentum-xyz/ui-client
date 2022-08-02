@@ -25,12 +25,12 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({invite = false}) => {
 
   useDebouncedEffect(
     () => {
-      if (onlineUsersStore.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
+      if (onlineUsersStore.onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
         onlineUsersStore.searchUsers(worldStore.worldId, true);
       }
     },
     200,
-    [onlineUsersStore.searchQuery, worldStore.worldId]
+    [onlineUsersStore.onlineUsersList.searchQuery, worldStore.worldId]
   );
 
   useEffect(() => {
@@ -60,12 +60,12 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({invite = false}) => {
   };
 
   const renderList = () => {
-    if (!onlineUsersStore.users || !profile) {
+    if (!onlineUsersStore.onlineUsersList.users || !profile) {
       return;
     }
 
-    if (onlineUsersStore.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-      return onlineUsersStore.searchedUsers
+    if (onlineUsersStore.onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
+      return onlineUsersStore.onlineUsersList.searchedUsers
         .filter((user) => (invite ? user.uuid !== profile?.uuid : true))
         .map((user) => (
           <UserItem
@@ -79,8 +79,10 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({invite = false}) => {
     }
 
     const sortedUsers: UserProfileModelInterface[] = [
-      ...(invite ? [] : onlineUsersStore.users.filter((user) => user.uuid === profile.uuid)),
-      ...onlineUsersStore.users.filter((user) => user.uuid !== profile.uuid)
+      ...(invite
+        ? []
+        : onlineUsersStore.onlineUsersList.users.filter((user) => user.uuid === profile.uuid)),
+      ...onlineUsersStore.onlineUsersList.users.filter((user) => user.uuid !== profile.uuid)
     ];
 
     return sortedUsers.map((user) => (
@@ -97,7 +99,7 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({invite = false}) => {
   return (
     <styled.Container>
       <SearchInput
-        value={onlineUsersStore.searchQuery}
+        value={onlineUsersStore.onlineUsersList.searchQuery}
         onChange={onlineUsersStore.setSearchQuery}
         placeholder={t('placeholders.searchForPeople')}
         onFocus={() => handleSearchFocus(true)}

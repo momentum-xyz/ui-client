@@ -1,6 +1,6 @@
 import {flow, Instance, types, cast} from 'mobx-state-tree';
 
-import {RequestModel, ResetModel, UserProfileModel} from 'core/models';
+import {OnlineUsersList, RequestModel, ResetModel} from 'core/models';
 import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
 
 const OnlineUsersStore = types
@@ -9,12 +9,10 @@ const OnlineUsersStore = types
     types.model('OnlineUsersStore', {
       expanded: true,
       selectedUserId: types.maybe(types.string),
+      onlineUsersList: types.optional(OnlineUsersList, {}),
       editedUserId: types.maybe(types.string),
       usersRequest: types.optional(RequestModel, {}),
-      users: types.optional(types.array(UserProfileModel), []),
-      searchQuery: '',
-      searchUsersRequest: types.optional(RequestModel, {}),
-      searchedUsers: types.optional(types.array(UserProfileModel), [])
+      searchUsersRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -44,25 +42,25 @@ const OnlineUsersStore = types
       );
 
       if (response) {
-        self.users = cast(response);
+        self.onlineUsersList.users = cast(response);
       }
     }),
     searchUsers: flow(function* (worldId: string, online: boolean) {
       const response: UserSearchResponse = yield self.searchUsersRequest.send(
         api.userRepository.search,
         {
-          q: self.searchQuery,
+          q: self.onlineUsersList.searchQuery,
           worldId,
           online
         }
       );
 
       if (response) {
-        self.searchedUsers = cast(response.results);
+        self.onlineUsersList.searchedUsers = cast(response.results);
       }
     }),
     setSearchQuery(query: string) {
-      self.searchQuery = query;
+      self.onlineUsersList.searchQuery = query;
     }
   }));
 

@@ -18,6 +18,7 @@ const OnlineUsersPanel: FC = () => {
   const {worldStore, unityStore} = mainStore;
   const {homeStore} = defaultStore;
   const {onlineUsersStore} = homeStore;
+  const {onlineUsersList} = onlineUsersStore;
   const {profile} = sessionStore;
   const {profileDialog} = profileMenuStore;
 
@@ -81,10 +82,11 @@ const OnlineUsersPanel: FC = () => {
       >
         <OnlineUsersList
           onlineUsersStore={onlineUsersStore}
+          onlineUsersList={onlineUsersList}
+          searchQuery={onlineUsersList.searchQuery}
           changeKeyboardControl={unityStore.changeKeyboardControl}
           worldId={worldStore.worldId}
-          searchQuery={onlineUsersStore.searchQuery}
-          profile={profile}
+          profile={profile ?? undefined}
           teleportToUser={unityStore.teleportToUser}
           spaceId={space?.id ?? ''}
         />

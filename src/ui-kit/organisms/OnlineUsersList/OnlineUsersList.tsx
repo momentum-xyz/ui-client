@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {SearchInput, useDebouncedEffect} from 'ui-kit';
-import {UserProfileModelInterface} from 'core/models';
+import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {OnlineUsersStoreInterface} from 'scenes/widgets/stores/OnlineUsersStore';
 
@@ -15,15 +15,17 @@ export interface OnlineUsersListProps {
   onlineUsersStore: OnlineUsersStoreInterface;
   searchQuery: string;
   changeKeyboardControl: (active: boolean) => void;
-  profile: UserProfileModelInterface | null;
+  profile?: UserProfileModelInterface;
   teleportToUser: (userId: string, push: (path: string) => void) => void;
   spaceId: string;
+  onlineUsersList: OnlineUsersListInterface;
 }
 
 const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
   invite = false,
   worldId,
   onlineUsersStore,
+  onlineUsersList,
   searchQuery,
   profile,
   teleportToUser,
@@ -34,12 +36,12 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
 
   useDebouncedEffect(
     () => {
-      if (onlineUsersStore.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
+      if (searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
         onlineUsersStore.searchUsers(worldId, true);
       }
     },
     200,
-    [onlineUsersStore.searchQuery, worldId]
+    [searchQuery, worldId]
   );
 
   useEffect(() => {
@@ -69,12 +71,12 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
   };
 
   const renderList = () => {
-    if (!onlineUsersStore.users || !profile) {
+    if (!onlineUsersList.users || !profile) {
       return;
     }
 
-    if (onlineUsersStore.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-      return onlineUsersStore.searchedUsers
+    if (searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
+      return onlineUsersList.searchedUsers
         .filter((user) => (invite ? user.uuid !== profile?.uuid : true))
         .map((user) => (
           <UserItem
@@ -90,8 +92,8 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
     }
 
     const sortedUsers: UserProfileModelInterface[] = [
-      ...(invite ? [] : onlineUsersStore.users.filter((user) => user.uuid === profile.uuid)),
-      ...onlineUsersStore.users.filter((user) => user.uuid !== profile.uuid)
+      ...(invite ? [] : onlineUsersList.users.filter((user) => user.uuid === profile.uuid)),
+      ...onlineUsersList.users.filter((user) => user.uuid !== profile.uuid)
     ];
 
     return sortedUsers.map((user) => (

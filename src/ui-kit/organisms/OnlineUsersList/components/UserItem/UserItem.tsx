@@ -16,7 +16,7 @@ export interface UserItemPropsInterface {
   user: UserProfileModelInterface;
   teleportToUser: (userId: string, push: (path: string) => void) => void;
   spaceId: string;
-  profile: UserProfileModelInterface;
+  profile?: UserProfileModelInterface;
 }
 
 const UserItem: React.FC<UserItemPropsInterface> = ({
@@ -62,8 +62,8 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   }, [spaceId]);
 
   const isItMe = useMemo(() => {
-    return profile.uuid === user.uuid;
-  }, [profile.uuid, user.uuid]);
+    return profile?.uuid === user.uuid;
+  }, [profile?.uuid, user.uuid]);
 
   return (
     <styled.Container>
