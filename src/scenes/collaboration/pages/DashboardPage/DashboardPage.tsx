@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
@@ -11,14 +11,18 @@ import {Dashboard, TileForm} from './components';
 import * as styled from './DashboardPage.styled';
 import {RemoveTileDialog} from './components/templates/Dashboard/components/RemoveTileDialog';
 import {VibeButton} from './components/templates/Dashboard/components/VibeButton';
+import {InviteToSpaceMenu} from './components/templates/InviteToSpaceMenu';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
   const {dashboardStore, space} = collaborationStore;
-  const {tileDialog, tileRemoveDialog, tileList, onDragEnd, vibeStore} = dashboardStore;
+  const {tileDialog, tileRemoveDialog, tileList, onDragEnd, vibeStore, inviteToSpaceDialog} =
+    dashboardStore;
   const {agoraStore, favoriteStore} = mainStore;
 
   const history = useHistory();
+
+  const inviteRef = useRef<HTMLDivElement>(null);
 
   usePosBusEvent('user-vibed', (type, count) => {
     vibeStore.setCount(count);
@@ -72,11 +76,19 @@ const DashboardPage: FC = () => {
         {(space.isAdmin || space.isMember) && (
           <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
-        <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
+        <styled.InviteButtonWrapper ref={inviteRef}>
+          <Button
+            label={t('dashboard.invitePeople')}
+            icon="invite-user"
+            variant="primary"
+            onClick={inviteToSpaceDialog.open}
+          />
+        </styled.InviteButtonWrapper>
         {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
       </SpaceTopBar>
+
       {!dashboardStore.dashboardIsEdited && space.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
@@ -99,6 +111,15 @@ const DashboardPage: FC = () => {
       />
       {tileDialog.isOpen && <TileForm />}
       {tileRemoveDialog.isOpen && <RemoveTileDialog />}
+      {inviteToSpaceDialog.isOpen && (
+        <InviteToSpaceMenu
+          onClose={inviteToSpaceDialog.close}
+          leftOffSet={
+            (inviteRef.current?.offsetLeft ?? 0) +
+            (inviteRef.current?.offsetParent?.parentElement?.offsetLeft ?? 0)
+          }
+        />
+      )}
     </styled.Container>
   );
 };

@@ -2,6 +2,7 @@ export type PlacementType =
   | 'right'
   | 'left'
   | 'rightTop'
+  | 'leftTop'
   | 'rightBottom'
   | 'top'
   | 'bottom'

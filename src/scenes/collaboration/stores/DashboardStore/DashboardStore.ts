@@ -22,6 +22,7 @@ const DashboardStore = types.compose(
   types
     .model('DashboardStore', {
       tileDialog: types.optional(DialogModel, {}),
+      inviteToSpaceDialog: types.optional(DialogModel, {}),
       tileRemoveDialog: types.optional(DialogModel, {}),
       tileFormStore: types.optional(TileFormStore, {}),
       vibeStore: types.optional(VibeStore, {}),

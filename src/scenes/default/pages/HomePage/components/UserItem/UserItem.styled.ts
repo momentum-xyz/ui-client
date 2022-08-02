@@ -29,7 +29,7 @@ export const InfoContainer = styled.div`
 
   &.invite {
     ${StyledText} {
-      width: 10ch;
+      width: 12ch;
     }
   }
 `;
