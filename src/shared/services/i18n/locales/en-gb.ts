@@ -286,7 +286,9 @@ export const enGb = {
         '(This will enable the person to talk, screenshare, and transmit video)',
       stageIsCurrentlyFull:
         '(The stage is currently full, you must first remove someone from the stage before you can accept)',
-      youAreInAudience: 'You are in the audience, stage mode is on'
+      youAreInAudience: 'You are in the audience, stage mode is on',
+      newDeviceDetected:
+        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?'
     },
     titles: {
       alert: 'alert',
@@ -301,7 +303,8 @@ export const enGb = {
       joinGathering: 'Gathering Event is starting now',
       updateSpace: 'update your space with some enticing content',
       goToStageMode: 'Click to go to stage-mode',
-      userWantsToComeOnStage: '{{user}} wants to come on stage'
+      userWantsToComeOnStage: '{{user}} wants to come on stage',
+      newDeviceDetected: 'New Device Detected'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -385,7 +388,8 @@ export const enGb = {
       mute: 'Mute',
       unmute: 'Unmute',
       startScreenShare: 'Start screensharing',
-      accept: 'Accept'
+      accept: 'Accept',
+      switchDevice: 'Switch device'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
