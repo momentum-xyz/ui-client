@@ -13,7 +13,7 @@ import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrat
 import {AgoraRemoteUser, AgoraRemoteUserInterface, UserDevicesStore} from './models';
 import {VideoCallStore} from './VideoCallStore';
 import {AgoraStageModeStore} from './AgoraStageModeStore';
-import {ScreenShareStore} from './ScreenshareStore';
+import {AgoraScreenShareStore} from './AgoraScreenShareStore';
 
 const AgoraStore = types
   .compose(
@@ -22,7 +22,7 @@ const AgoraStore = types
       // stores
       videoCallStore: types.optional(VideoCallStore, {}),
       agoraStageModeStore: types.optional(AgoraStageModeStore, {}),
-      screenShareStore: types.optional(ScreenShareStore, {}),
+      agoraScreenShareStore: types.optional(AgoraScreenShareStore, {}),
 
       // Common
       appId: '',
@@ -102,7 +102,7 @@ const AgoraStore = types
       } else {
         yield self.videoCallStore.client.subscribe(user, mediaType);
         if (user.videoTrack) {
-          self.screenShareStore.screenShareStarted(user.videoTrack);
+          self.agoraScreenShareStore.screenShareStarted(user.videoTrack);
         }
       }
     }),
@@ -113,7 +113,7 @@ const AgoraStore = types
       const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
 
       if (isScreenshare) {
-        self.screenShareStore.client = undefined;
+        self.agoraScreenShareStore.client = undefined;
       } else {
         const foundUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
 
@@ -158,7 +158,7 @@ const AgoraStore = types
     handleUserLeft(user: IAgoraRTCRemoteUser) {
       const isScreenshare = (user.uid as string).split('|')[0] === 'ss';
       if (isScreenshare) {
-        self.screenShareStore.screenShareStopped();
+        self.agoraScreenShareStore.screenShareStopped();
       } else {
         self.remoteUsers = cast(
           self.remoteUsers.filter((remoteUser) => remoteUser.uid !== user.uid)
@@ -254,7 +254,7 @@ const AgoraStore = types
       if (isStageMode) {
         if (self.videoCallStore.joined) {
           self.userDevicesStore.cleanupLocalTracks();
-          self.screenShareStore.stopScreenShare();
+          self.agoraScreenShareStore.stopScreenShare();
           yield self.videoCallStore.leave();
           self.remoteUsers = cast([]);
         }
@@ -300,7 +300,7 @@ const AgoraStore = types
 
       self.setupAgoraListeners();
       self.isStageMode = isStageMode;
-      self.screenShareStore.init(self.appId, isStageMode, self.spaceId);
+      self.agoraScreenShareStore.init(self.appId, isStageMode, self.spaceId);
     }),
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
@@ -308,7 +308,7 @@ const AgoraStore = types
       if (self.isStageMode) {
         yield self.agoraStageModeStore.leave();
       } else {
-        self.screenShareStore.stopScreenShare();
+        self.agoraScreenShareStore.stopScreenShare();
         yield self.videoCallStore.leave();
       }
 
