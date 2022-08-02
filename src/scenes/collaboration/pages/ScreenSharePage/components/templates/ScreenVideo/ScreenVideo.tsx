@@ -5,7 +5,7 @@ import {IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 import * as styled from './ScreenVideo.styled';
 
 interface PropsInterface {
-  videoTrack: IRemoteVideoTrack | undefined;
+  videoTrack?: IRemoteVideoTrack;
 }
 
 const ScreenVideo: FC<PropsInterface> = ({videoTrack}) => {
