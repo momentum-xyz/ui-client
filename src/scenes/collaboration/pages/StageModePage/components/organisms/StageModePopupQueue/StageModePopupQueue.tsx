@@ -4,13 +4,15 @@ import React from 'react';
 import {useStore} from 'shared/hooks';
 import {StageModePopup} from 'scenes/collaboration/pages/StageModePage/components';
 
+import * as styled from './StageModePopupQueue.styled';
+
 const StageModePopupQueue: React.FC = () => {
   const {mainStore, collaborationStore} = useStore();
   const {stageModeStore} = collaborationStore;
   const {agoraStageModeStore} = mainStore.agoraStore;
 
   return (
-    <div className="flex flex-col space-y-2 h-full overflow-y-auto">
+    <styled.Container>
       {stageModeStore.popups.map((info) => (
         <StageModePopup
           info={info}
@@ -18,7 +20,7 @@ const StageModePopupQueue: React.FC = () => {
           canEnterStage={agoraStageModeStore.canEnterStage}
         />
       ))}
-    </div>
+    </styled.Container>
   );
 };
 
