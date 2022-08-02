@@ -27,7 +27,7 @@ const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
       title={t('titles.inviteUsers')}
       headerStyle="uppercase"
       position="leftTop"
-      icon="alert"
+      icon="people"
       iconSize="medium-large"
       offset={{top: 80, left: leftOffSet}}
       onClose={onClose}
