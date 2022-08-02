@@ -1,28 +1,42 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
 
+import {api} from 'api';
 import {RequestModel, ResetModel} from 'core/models';
 
 const ScreenShareStore = types.compose(
   ResetModel,
   types
     .model('ScreenShareStore', {
-      request: types.optional(RequestModel, {}),
+      ownerRequest: types.optional(RequestModel, {}),
       screenOwnerId: types.maybeNull(types.string),
+      screenOwnerName: types.maybeNull(types.string),
       isSettingUp: false
     })
     .actions((self) => ({
       setIsSettingUp(isSettingUp: boolean): void {
         self.isSettingUp = isSettingUp;
       },
-      setScreenOwnerId(agoraUserId: string | null): void {
-        self.screenOwnerId = agoraUserId ? agoraUserId.replace('ss|', '') : null;
-      }
+      setScreenOwner: flow(function* (agoraUserId: string | null) {
+        if (!agoraUserId) {
+          self.screenOwnerId = null;
+          self.screenOwnerName = null;
+          return;
+        }
+
+        const userId = agoraUserId.replace('ss|', '');
+        const response = yield self.ownerRequest.send(api.userRepository.fetchProfile, {userId});
+
+        if (response?.name) {
+          self.screenOwnerId = userId;
+          self.screenOwnerName = response.name;
+        }
+      })
     }))
     .views((self) => ({
       get screenShareTitle(): string {
-        return self.screenOwnerId
-          ? `${t('labels.screenShare')} / ${self.screenOwnerId}`
+        return self.screenOwnerName
+          ? `${t('labels.screenShare')} / ${self.screenOwnerName}`
           : t('labels.screenShare');
       }
     }))

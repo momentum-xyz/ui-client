@@ -16,30 +16,33 @@ import * as styled from './ScreenSharePage.styled';
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
   const {space, screenShareStore} = collaborationStore;
+  const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, stageModeStore} = agoraStore;
   const {screenShare, client} = agoraScreenShareStore;
-  const {isSettingUp, screenShareTitle} = screenShareStore;
 
   const {t} = useTranslation();
   const history = useHistory();
 
-  //const [user, , ,] = useUser(userId || '');
-
   useEffect(() => {
     if (screenShare) {
       const agoraUserId = screenShare?.getUserId() as string;
-      screenShareStore.setScreenOwnerId(agoraUserId);
+      screenShareStore.setScreenOwner(agoraUserId);
       screenShareStore.setIsSettingUp(false);
     } else {
-      screenShareStore.setScreenOwnerId(null);
+      screenShareStore.setScreenOwner(null);
     }
   }, [screenShare, screenShareStore]);
 
-  const startScreenSharing = useCallback(async () => {
+  const startScreenSharing = useCallback(() => {
     screenShareStore.setIsSettingUp(true);
-    await agoraScreenShareStore.startScreenShare(sessionStore.userId);
+    agoraScreenShareStore.startScreenShare(sessionStore.userId);
   }, [agoraScreenShareStore, sessionStore.userId, screenShareStore]);
+
+  const stopScreenSharing = useCallback(() => {
+    screenShareStore.setScreenOwner(null);
+    agoraScreenShareStore.stopScreenShare();
+  }, [agoraScreenShareStore, screenShareStore]);
 
   if (!space) {
     return null;
@@ -60,11 +63,7 @@ const ScreenSharePage: FC = () => {
         onClose={() => history.push(ROUTES.base)}
       >
         {client && (
-          <Button
-            label={t('actions.cancel')}
-            variant="danger"
-            onClick={agoraScreenShareStore.stopScreenShare}
-          />
+          <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
         )}
       </SpaceTopBar>
       <styled.Container>
