@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -6,14 +6,11 @@ import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface} from 'core/interfaces';
-import {Navigation, ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {Navigation, ToastContent, TOAST_GROUND_OPTIONS, NewDeviceDialog} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {createRoutesByConfig} from 'core/utils';
-// TODO: Refactoring
-import Modal, {ModalRef} from 'component/util/Modal';
 import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
-import NewDevicePopup from 'component/popup/new-device/NewDevicePopup';
 import {PrivateSpaceError} from 'core/errors';
 
 import {COLLABORATION_ROUTES} from './CollaborationRoutes';
@@ -22,14 +19,13 @@ const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
-  const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
-  const {stageModeStore} = collaborationStore;
+  const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
+  const {newDeviceDialog, stageModeStore} = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
 
-  const switchDeviceModal = useRef<ModalRef>(null);
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
 
   useEffect(() => {
@@ -139,19 +135,14 @@ const Collaboration: FC = () => {
     navigator.mediaDevices.ondevicechange = () => {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         setNewDevice(devices[1]);
-        switchDeviceModal.current?.open();
+        newDeviceDialog.open();
       });
     };
 
     return () => {
       navigator.mediaDevices.ondevicechange = null;
     };
-  }, []);
-
-  const handleSwitchDeviceModalClose = () => {
-    switchDeviceModal.current?.close();
-    setNewDevice(undefined);
-  };
+  }, [newDeviceDialog]);
 
   const newDeviceKindDescription = () => {
     switch (newDevice?.kind) {
@@ -200,13 +191,19 @@ const Collaboration: FC = () => {
       <Navigation tabs={tabs} />
       <StageModeModalController />
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
-      <Modal ref={switchDeviceModal}>
-        <NewDevicePopup
-          onClose={handleSwitchDeviceModalClose}
+      {newDeviceDialog.isOpen && (
+        <NewDeviceDialog
+          onClose={newDeviceDialog.close}
           deviceKindDescription={newDeviceKindDescription()}
           deviceLabel={newDevice?.label}
+          currentAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
+          currentVideoDeviceId={userDevicesStore.currentVideoInput?.deviceId}
+          audioDevices={userDevicesStore.audioInputOptions}
+          videoDevices={userDevicesStore.videoInputsOption}
+          onAudioDeviceSelect={userDevicesStore.selectAudioInput}
+          onVideoDeviceSelect={userDevicesStore.selectVideoInput}
         />
-      </Modal>
+      )}
     </>
   );
 };
