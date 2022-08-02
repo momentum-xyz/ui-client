@@ -161,7 +161,9 @@ export const enGb = {
       people_one: '{{count}} Person',
       people_other: '{{count}} People',
       attendees_one: `{{count}} Attendee`,
-      attendees_other: `{{count}} Attendees`
+      attendees_other: `{{count}} Attendees`,
+      vibes_one: '{{count}}  vibe',
+      vibes_other: '{{count}}  vibes'
     },
     labels: {
       miro: 'Miro',
@@ -272,7 +274,9 @@ export const enGb = {
       tileRemoveSuccess: 'Your tile has been successfully removed',
       tileRemoveError: 'There was a problem removing your tile',
       pendingRequestToGoOnStage: 'Request to go on stage pending',
-      stageIsFull: 'Stage is full'
+      stageIsFull: 'Stage is full',
+      noParticipantsOnStage: 'There are currently no participants on stage.',
+      onStage: 'On Stage'
     },
     titles: {
       alert: 'alert',
@@ -285,7 +289,8 @@ export const enGb = {
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
-      updateSpace: 'update your space with some enticing content'
+      updateSpace: 'update your space with some enticing content',
+      goToStageMode: 'Click to go to stage-mode'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -346,7 +351,7 @@ export const enGb = {
       joined: 'joined',
       refresh: 'Refresh',
       launch: 'Launch',
-      remove: 'yes, remove',
+      confirmRemove: 'yes, remove',
       removeRule: 'remove rule',
       no: 'no, cancel',
       save: 'save',
@@ -365,6 +370,8 @@ export const enGb = {
       changeDocument: 'Change document',
       leaveStage: 'Leave stage',
       goOnStage: 'Go on stage',
+      remove: 'Remove',
+      mute: 'Mute',
       startScreenShare: 'Start screensharing'
     },
     fileUploader: {
@@ -710,6 +717,7 @@ export const enGb = {
     dashboard: {
       subtitle: 'dashboard',
       vibe: 'vibe',
+      vibes: 'vibes',
       addTile: 'add tile',
       invitePeople: 'invite people',
       stake: 'stake',

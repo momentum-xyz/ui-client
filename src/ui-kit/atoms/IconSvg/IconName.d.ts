@@ -95,6 +95,7 @@ declare type IconName =
   | 'tiles'
   | 'trash'
   | 'unity'
+  | 'vibe'
   | 'wallet'
   | 'warning'
   | 'whitelist';

@@ -18,3 +18,4 @@ export * from './ToolbarIcon';
 export * from './ExpandableLayout';
 export * from './UnityLoader';
 export * from './TileMenu';
+export * from './MediaPlayer';
