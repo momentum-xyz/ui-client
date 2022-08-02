@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
 
 import {Dialog} from 'ui-kit';
-
-import {OnlineUsersList} from '../../../../../../default/pages/HomePage/components';
+import {OnlineUsersList} from 'scenes/default/pages/HomePage/components';
 
 import * as styled from './InviteToSpaceMenu.styled';
 
@@ -13,9 +13,10 @@ interface PropsInterface {
 }
 
 const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
+  const {t} = useTranslation();
   return (
     <Dialog
-      title="Invite users"
+      title={t('titles.inviteUsers')}
       headerStyle="uppercase"
       position="leftTop"
       icon="alert"
