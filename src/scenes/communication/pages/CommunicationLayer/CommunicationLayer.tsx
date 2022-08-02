@@ -1,22 +1,15 @@
 import {Transition} from '@headlessui/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
-import {generatePath, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {
-  ToastContent,
-  TOAST_GROUND_OPTIONS,
-  SvgButton,
-  Text,
-  TOAST_NOT_AUTO_CLOSE_OPTIONS,
-  TOAST_BASE_OPTIONS
-} from 'ui-kit';
+import {ToastContent, TOAST_GROUND_OPTIONS, SvgButton, Text, TOAST_BASE_OPTIONS} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
-import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
+import {ROUTES} from 'core/constants';
 import {useGetSpace} from 'hooks/api/useSpaceService';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
@@ -68,27 +61,6 @@ const CommunicationLayer = () => {
 
   usePosBusEvent('meeting-mute', userDevicesStore.mute);
 
-  usePosBusEvent('notify-gathering-start', (message) => {
-    const handleJoinSpace = () => {
-      const {spaceId} = message;
-      if (spaceId) {
-        unityStore.teleportToSpace(spaceId);
-        setTimeout(() => {
-          history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
-        }, TELEPORT_DELAY_MS);
-      }
-    };
-    toast.info(
-      <ToastContent
-        headerIconName="calendar"
-        title={t('titles.joinGathering')}
-        text={t('messages.joinGathering', {title: message.name})}
-        approveInfo={{title: 'Join', onClick: handleJoinSpace}}
-      />,
-      TOAST_NOT_AUTO_CLOSE_OPTIONS
-    );
-  });
-
   usePosBusEvent('meeting-mute-all', (moderatorId) => {
     if (sessionStore.userId !== moderatorId) {
       userDevicesStore.mute();
@@ -109,6 +81,7 @@ const CommunicationLayer = () => {
     );
   });
 
+  // TODO: Move to unity page
   usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
