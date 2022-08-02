@@ -2,8 +2,8 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
-import {Dialog} from 'ui-kit';
-import {OnlineUsersList} from 'scenes/default/pages/HomePage/components';
+import {Dialog, OnlineUsersList} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './InviteToSpaceMenu.styled';
 
@@ -14,6 +14,14 @@ interface PropsInterface {
 
 const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
   const {t} = useTranslation();
+
+  const {sessionStore, mainStore, collaborationStore, defaultStore} = useStore();
+  const {worldStore, unityStore} = mainStore;
+  const {homeStore} = defaultStore;
+  const {space} = collaborationStore;
+  const {onlineUsersStore} = homeStore;
+  const {profile} = sessionStore;
+
   return (
     <Dialog
       title={t('titles.inviteUsers')}
@@ -27,7 +35,16 @@ const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
       showCloseButton
     >
       <styled.Container>
-        <OnlineUsersList invite />
+        <OnlineUsersList
+          onlineUsersStore={onlineUsersStore}
+          teleportToUser={unityStore.teleportToUser}
+          spaceId={space?.id ?? ''}
+          profile={profile}
+          searchQuery={onlineUsersStore.searchQuery}
+          worldId={worldStore.worldId}
+          changeKeyboardControl={unityStore.changeKeyboardControl}
+          invite
+        />
       </styled.Container>
     </Dialog>
   );
