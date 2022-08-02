@@ -276,7 +276,9 @@ export const enGb = {
       pendingRequestToGoOnStage: 'Request to go on stage pending',
       stageIsFull: 'Stage is full',
       noParticipantsOnStage: 'There are currently no participants on stage.',
-      onStage: 'On Stage'
+      onStage: 'On Stage',
+      newDeviceDetected:
+        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?'
     },
     titles: {
       alert: 'alert',
@@ -290,7 +292,8 @@ export const enGb = {
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
       updateSpace: 'update your space with some enticing content',
-      goToStageMode: 'Click to go to stage-mode'
+      goToStageMode: 'Click to go to stage-mode',
+      newDeviceDetected: 'New Device Detected'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -372,7 +375,8 @@ export const enGb = {
       goOnStage: 'Go on stage',
       remove: 'Remove',
       mute: 'Mute',
-      startScreenShare: 'Start screensharing'
+      startScreenShare: 'Start screensharing',
+      switchDevice: 'Switch device'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 
-import {Space, ResetModel, RequestModel} from 'core/models';
+import {Space, ResetModel, RequestModel, DialogModel} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
 import {api} from 'api';
 
@@ -26,7 +26,9 @@ const RootCollaborationStore = types
       leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean),
 
       joinMeetingSpaceRequest: types.optional(RequestModel, {}),
-      moderationRequest: types.optional(RequestModel, {})
+      moderationRequest: types.optional(RequestModel, {}),
+
+      newDeviceDialog: types.optional(DialogModel, {})
     })
   )
   .volatile(() => ({
