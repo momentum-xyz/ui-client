@@ -8,23 +8,23 @@ import {CalendarStore} from './CalendarStore';
 import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
 import {GoogleDriveStore} from './GoogleDriveStore';
+import {ScreenShareStore} from './ScreenShareStore';
 
 const RootCollaborationStore = types
   .compose(
     ResetModel,
     types.model('RootCollaborationStore', {
       space: types.maybe(Space),
-      calendarStore: types.optional(CalendarStore, {}),
       dashboardStore: types.optional(DashboardStore, {}),
+      calendarStore: types.optional(CalendarStore, {}),
+      screenShareStore: types.optional(ScreenShareStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
       isModerator: false,
 
-      // collaboration
       leftMeetingSpaceId: types.maybe(types.string),
       leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean),
 
-      // requests
       joinMeetingSpaceRequest: types.optional(RequestModel, {}),
       moderationRequest: types.optional(RequestModel, {})
     })
