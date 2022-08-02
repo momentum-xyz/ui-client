@@ -2,32 +2,42 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
-import {useStore} from 'shared/hooks';
 import {Dialog, Dropdown, Text, Heading} from 'ui-kit';
 
 import * as styled from './NewDeviceDialog.styled';
+
+const NEWDEVICE_DIALOG_WIDTH = '360px';
 
 export interface NewDevicePopupPropsInterface {
   onClose: () => void;
   deviceKindDescription?: string;
   deviceLabel?: string;
+  audioDevices: MediaDeviceInfo[];
+  videoDevices: MediaDeviceInfo[];
+  currentAudioDeviceId?: string;
+  currentVideoDeviceId?: string;
+  onAudioDeviceSelect: (deviceId: string) => void;
+  onVideoDeviceSelect: (deviceId: string) => void;
 }
 
 const NewDevicePopup: React.FC<NewDevicePopupPropsInterface> = ({
   onClose,
   deviceKindDescription,
-  deviceLabel
+  deviceLabel,
+  audioDevices,
+  videoDevices,
+  currentAudioDeviceId,
+  currentVideoDeviceId,
+  onAudioDeviceSelect,
+  onVideoDeviceSelect
 }) => {
-  const {agoraStore} = useStore().mainStore;
-  const {userDevicesStore} = agoraStore;
-
   const {t} = useTranslation();
 
   return (
     <Dialog
       title={t('titles.newDeviceDetected')}
       onClose={onClose}
-      layoutSize={{width: '360px'}}
+      layoutSize={{width: NEWDEVICE_DIALOG_WIDTH}}
       headerStyle="uppercase"
       approveInfo={{
         title: t('actions.switchDevice'),
@@ -54,13 +64,13 @@ const NewDevicePopup: React.FC<NewDevicePopupPropsInterface> = ({
         <Dropdown
           placeholder={`${t('devices.video')} ${t('devices.device')}`}
           variant="secondary"
-          value={userDevicesStore.currentVideoInput?.deviceId}
-          options={userDevicesStore.videoInputs.map((input) => ({
+          value={currentVideoDeviceId}
+          options={videoDevices.map((input) => ({
             label: input.label,
             value: input.deviceId
           }))}
           onOptionSelect={(option) => {
-            userDevicesStore.selectVideoInput(option.value);
+            onVideoDeviceSelect(option.value);
           }}
           dropdownSize="small"
         />
@@ -74,13 +84,13 @@ const NewDevicePopup: React.FC<NewDevicePopupPropsInterface> = ({
         <Dropdown
           placeholder={`${t('devices.audio')} ${t('devices.device')}`}
           variant="secondary"
-          value={userDevicesStore.currentAudioInput?.deviceId}
-          options={userDevicesStore.audioInputs.map((input) => ({
+          value={currentAudioDeviceId}
+          options={audioDevices.map((input) => ({
             label: input.label,
             value: input.deviceId
           }))}
           onOptionSelect={(option) => {
-            userDevicesStore.selectAudioInput(option.value);
+            onAudioDeviceSelect(option.value);
           }}
           dropdownSize="small"
         />

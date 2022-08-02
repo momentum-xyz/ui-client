@@ -20,7 +20,7 @@ const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
-  const {agoraScreenShareStore, stageModeStore} = agoraStore;
+  const {agoraScreenShareStore, stageModeStore, userDevicesStore} = agoraStore;
   const {newDeviceDialog} = collaborationStore;
 
   const {addRequestPopup} = useStageModePopupQueueContext();
@@ -199,6 +199,12 @@ const Collaboration: FC = () => {
           onClose={newDeviceDialog.close}
           deviceKindDescription={newDeviceKindDescription()}
           deviceLabel={newDevice?.label}
+          currentAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
+          currentVideoDeviceId={userDevicesStore.currentVideoInput?.deviceId}
+          audioDevices={userDevicesStore.audioInputs}
+          videoDevices={userDevicesStore.videoInputs}
+          onAudioDeviceSelect={userDevicesStore.selectAudioInput}
+          onVideoDeviceSelect={userDevicesStore.selectVideoInput}
         />
       )}
     </>
