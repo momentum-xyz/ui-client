@@ -17,7 +17,7 @@ import DeclinedToJoinOnStagePopup from '../../popup/stageMode/DeclinedToJoinOnSt
 const StageModeModalController: React.FC = () => {
   const {mainStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
-  const {stageModeStore, userDevicesStore} = agoraStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore;
 
   const invitedToStageModalRef = useRef<ModalRef>(null);
   const prepareToJoinStageModalRef = useRef<ModalRef>(null);
@@ -33,7 +33,7 @@ const StageModeModalController: React.FC = () => {
       invitedToStageModalRef.current?.isShown === true ||
       prepareToJoinStageModalRef.current?.isShown === true ||
       countdownModalRef.current?.isShown === true ||
-      stageModeStore.isOnStage
+      agoraStageModeStore.isOnStage
     );
   };
 
@@ -65,7 +65,7 @@ const StageModeModalController: React.FC = () => {
   };
 
   const handleCountdownEnded = useCallback(async () => {
-    if (!stageModeStore.canEnterStage) {
+    if (!agoraStageModeStore.canEnterStage) {
       toast.error(
         <ToastContent
           headerIconName="alert"
@@ -81,8 +81,8 @@ const StageModeModalController: React.FC = () => {
 
     if (!accepted) {
       try {
-        await stageModeStore.invitationRespond(StageModeRequestEnum.ACCEPT);
-        await stageModeStore.enterStage(userDevicesStore.createLocalTracks);
+        await agoraStageModeStore.invitationRespond(StageModeRequestEnum.ACCEPT);
+        await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
       } catch {
         toast.error(
           <ToastContent
@@ -98,7 +98,7 @@ const StageModeModalController: React.FC = () => {
       }
     } else if (accepted) {
       try {
-        await stageModeStore.enterStage(userDevicesStore.createLocalTracks);
+        await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
         countdownModalRef.current?.close();
       } catch {
         toast.error(
@@ -120,7 +120,7 @@ const StageModeModalController: React.FC = () => {
   };
 
   const handleInviteDeclined = useCallback(async () => {
-    await stageModeStore.invitationRespond(StageModeRequestEnum.DECLINE);
+    await agoraStageModeStore.invitationRespond(StageModeRequestEnum.DECLINE);
     invitedToStageModalRef.current?.close();
   }, [agoraStore]);
 

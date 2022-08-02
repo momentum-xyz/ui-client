@@ -1,49 +1,48 @@
 import React from 'react';
 
-import Button from '../../atoms/Button';
-import {
-  useStageModePopupQueueContext,
-  StageModePopupType,
-  StageModePopupInfo
-} from '../../../context/StageMode/StageModePopupQueueContext';
-import {useUser} from '../../../hooks/api/useUser';
+import {StageModePopupInfoInterface} from 'core/interfaces';
+import {useStore} from 'shared/hooks';
+import {StageModePopupTypeEnum} from 'core/enums';
+import {Button} from 'ui-kit';
 
-export interface StageModePopupProps {
-  info: StageModePopupInfo;
+export interface StageModePopupPropsInterface {
+  info: StageModePopupInfoInterface;
   canEnterStage: boolean;
 }
 
-const StageModePopup: React.FC<StageModePopupProps> = ({info, canEnterStage}) => {
-  const {removeRequestPopup, removeAwaitingPermissionPopup} = useStageModePopupQueueContext();
+const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterStage}) => {
+  const {collaborationStore} = useStore();
+  const {stageModeStore} = collaborationStore;
+  const {removeRequestPopup, removeAwaitingPermissionPopup} = stageModeStore;
 
-  const [user] = useUser(info.userId as string);
-
-  const handleAccept = (info: StageModePopupInfo) => {
+  const handleAccept = (info: StageModePopupInfoInterface) => {
     info
       ?.onAccept?.()
       .then((shouldClose) => shouldClose && info.userId && removeRequestPopup(info.userId));
   };
 
-  const handleDecline = (info: StageModePopupInfo) => {
+  const handleDecline = (info: StageModePopupInfoInterface) => {
     info
       ?.onDecline?.()
       .then((shouldClose) => shouldClose && info.userId && removeRequestPopup(info.userId));
   };
 
-  const popupContent = (info: StageModePopupInfo) => {
+  const popupContent = (info: StageModePopupInfoInterface) => {
     switch (info.type) {
-      case StageModePopupType.AWAITING_PERMISSION:
+      case StageModePopupTypeEnum.AWAITING_PERMISSION:
         return (
           <div onClick={removeAwaitingPermissionPopup}>
             <p className="text-md">You have requested permission to go on stage</p>
             <p className="text-xs">Wait for the moderators to accept or deny your request</p>
           </div>
         );
-      case StageModePopupType.RECEIVED_PERMISSION_REQUEST:
+      case StageModePopupTypeEnum.RECEIVED_PERMISSION_REQUEST:
         return (
           <>
             <div className="border-b-1 border-prime-blue-20 pb-2">
-              <h1 className="text-md uppercase font-bold">{user?.name} Wants to come on Stage</h1>
+              <h1 className="text-md uppercase font-bold">
+                {info.userName} Wants to come on Stage
+              </h1>
             </div>
             <p className="text-md">This person wants to come on stage, invite them?</p>
             <p className="text-xs">
@@ -53,17 +52,16 @@ const StageModePopup: React.FC<StageModePopupProps> = ({info, canEnterStage}) =>
             </p>
             <div className="flex space-x-2 justify-center">
               {canEnterStage ? (
-                <Button type="ghost" size="s" onClick={() => handleAccept(info)}>
-                  Accept
-                </Button>
+                <Button
+                  label="Accept"
+                  variant="inverted"
+                  size="small"
+                  onClick={() => handleAccept(info)}
+                />
               ) : (
-                <Button type="outline" size="s">
-                  Accept
-                </Button>
+                <Button label="Accept" variant="primary" size="small" />
               )}
-              <Button type="ghost-red" size="s" onClick={() => handleDecline(info)}>
-                Decline
-              </Button>
+              <Button label="Decline" variant="secondary" onClick={() => handleDecline(info)} />
             </div>
           </>
         );

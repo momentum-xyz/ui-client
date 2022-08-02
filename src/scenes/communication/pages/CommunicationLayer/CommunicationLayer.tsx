@@ -17,7 +17,6 @@ import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
-import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useGetSpace} from 'hooks/api/useSpaceService';
 import {appVariables} from 'api/constants';
 import {
@@ -40,35 +39,35 @@ const CommunicationLayer = () => {
   } = useStore();
   const {space} = collaborationStore;
   const {unityStore, agoraStore} = mainStore;
-  const {userDevicesStore, stageModeStore} = agoraStore;
-  const {clearPopups} = useStageModePopupQueueContext();
+  const {userDevicesStore, agoraStageModeStore} = agoraStore;
+  const {removeAllPopups} = collaborationStore.stageModeStore;
 
   const stageModeAudience = useMemo(() => {
     return agoraStore.isStageMode
-      ? stageModeStore.users.filter((user) => {
+      ? agoraStageModeStore.users.filter((user) => {
           return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
         })
       : [];
-  }, [stageModeStore.users, sessionStore.userId, agoraStore.isStageMode]);
+  }, [agoraStageModeStore.users, sessionStore.userId, agoraStore.isStageMode]);
 
   const numberOfPeople = useMemo(() => {
     return agoraStore.isStageMode
-      ? stageModeAudience.length + Number(!stageModeStore.isOnStage)
+      ? stageModeAudience.length + Number(!agoraStageModeStore.isOnStage)
       : agoraStore.remoteUsers.length + 1;
   }, [
-    stageModeStore.isOnStage,
+    agoraStageModeStore.isOnStage,
     agoraStore.isStageMode,
     agoraStore.remoteUsers.length,
     stageModeAudience.length
   ]);
 
   useEffect(() => {
-    clearPopups();
+    removeAllPopups();
     if (space) {
       communicationLayerStore.setKicked(false);
       communicationLayerStore.selectParticipant(undefined);
     }
-  }, [clearPopups, communicationLayerStore, space]);
+  }, [removeAllPopups, communicationLayerStore, space]);
 
   usePosBusEvent('meeting-mute', userDevicesStore.mute);
 
@@ -241,7 +240,7 @@ const CommunicationLayer = () => {
               </styled.MuteButtonContainer>
             )}
             <ul>
-              {(!agoraStore.isStageMode || !stageModeStore.isOnStage) && <LocalParticipant />}
+              {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
               {maxVideoStreamsShown && (
                 <li
                   className="mb-.5 p-.5
@@ -281,7 +280,7 @@ relative
                       audienceParticipant={
                         agoraStore.isStageMode ? (participant as StageModeUserInterface) : undefined
                       }
-                      canEnterStage={stageModeStore.canEnterStage}
+                      canEnterStage={agoraStageModeStore.canEnterStage}
                       totalParticipants={agoraStore.remoteUsers.length}
                     />
                   </Transition>

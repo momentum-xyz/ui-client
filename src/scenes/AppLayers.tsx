@@ -10,7 +10,6 @@ import {WidgetContainer} from 'scenes/widgets';
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
 import VideoLayer from '../component/overlays/VideoLayer';
-import {StageModePopupQueueProvider} from '../context/StageMode/StageModePopupQueueContext';
 
 import {Communication} from './communication';
 
@@ -30,20 +29,18 @@ const AppLayers: FC = ({children}) => {
       <InFlightControlLayer />
       <div className="bg-dark-blue-70">
         <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
-        <StageModePopupQueueProvider>
-          <main id="main" className="h-screen pb-7 flex">
-            <div
-              className="main-container"
-              style={{
-                marginRight: agoraStore.hasJoined ? '90px' : undefined
-              }}
-            >
-              {children}
-            </div>
-            <Communication />
-          </main>
-        </StageModePopupQueueProvider>
-
+        <main id="main" className="h-screen pb-7 flex">
+          <div
+            className="main-container"
+            style={{
+              marginRight: agoraStore.hasJoined ? '90px' : undefined
+            }}
+          >
+            {children}
+          </div>
+          <Communication />
+        </main>
+        =
         <WidgetContainer />
       </div>
       <VideoLayer />

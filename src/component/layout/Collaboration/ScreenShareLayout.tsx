@@ -38,7 +38,7 @@ const VideoContainer = observer(() => {
 const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
   const {agoraStore} = mainStore;
-  const {screenShareStore, stageModeStore} = agoraStore;
+  const {screenShareStore, agoraStageModeStore} = agoraStore;
   const {screenShare, client} = screenShareStore;
 
   const [settingUp, setSettingUp] = useState(false);
@@ -89,7 +89,7 @@ const ScreenShareLayout: React.FC<WhiteBoardProps> = () => {
           <div className="flex flex-col h-full items-center justify-center gap-4">
             <h2 className="font-bold">There is no one screensharing</h2>
             {agoraStore.spaceId &&
-              (collaborationStore.space?.isAdmin === true || stageModeStore.isOnStage) && (
+              (collaborationStore.space?.isAdmin === true || agoraStageModeStore.isOnStage) && (
                 <Button type="ghost" size="m" onClick={startScreenSharing}>
                   Start screensharing
                 </Button>

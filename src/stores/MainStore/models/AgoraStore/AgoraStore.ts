@@ -12,7 +12,7 @@ import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrat
 
 import {AgoraRemoteUser, AgoraRemoteUserInterface, UserDevicesStore} from './models';
 import {VideoCallStore} from './VideoCallStore';
-import {StageModeStore} from './StageModeStore';
+import {AgoraStageModeStore} from './AgoraStageModeStore';
 import {ScreenShareStore} from './ScreenshareStore';
 
 const AgoraStore = types
@@ -21,7 +21,7 @@ const AgoraStore = types
     types.model('AgoraStore', {
       // stores
       videoCallStore: types.optional(VideoCallStore, {}),
-      stageModeStore: types.optional(StageModeStore, {}),
+      agoraStageModeStore: types.optional(AgoraStageModeStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
 
       // Common
@@ -59,7 +59,7 @@ const AgoraStore = types
       }
 
       if (self.isStageMode) {
-        yield self.stageModeStore.muteRemoteUser(userId);
+        yield self.agoraStageModeStore.muteRemoteUser(userId);
       } else {
         yield self.videoCallStore.muteRemoteUser(userId);
       }
@@ -73,7 +73,7 @@ const AgoraStore = types
       if (!isScreenshare) {
         if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
           yield (
-            self.isStageMode ? self.stageModeStore.client : self.videoCallStore.client
+            self.isStageMode ? self.agoraStageModeStore.client : self.videoCallStore.client
           ).subscribe(user, mediaType);
         }
 
@@ -123,7 +123,7 @@ const AgoraStore = types
           }
 
           yield (
-            self.isStageMode ? self.stageModeStore.client : self.videoCallStore.client
+            self.isStageMode ? self.agoraStageModeStore.client : self.videoCallStore.client
           ).unsubscribe(foundUser.participantInfo, mediaType);
 
           const updatedUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
@@ -190,7 +190,7 @@ const AgoraStore = types
       self.userDevicesStore.init();
       self.appId = appVariables.AGORA_APP_ID;
 
-      self.stageModeStore.init(self.appId);
+      self.agoraStageModeStore.init(self.appId);
       self.videoCallStore.init(self.appId);
     }
   }))
@@ -208,12 +208,15 @@ const AgoraStore = types
     // --- COMMON ---
     setupAgoraListeners() {
       if (self.isStageMode) {
-        self.stageModeStore.client.on('user-published', self.handleUserPublished);
-        self.stageModeStore.client.on('user-unpublished', self.handleUserPublished);
-        self.stageModeStore.client.on('user-joined', self.handleUserJoined);
-        self.stageModeStore.client.on('user-left', self.handleUserLeft);
-        self.stageModeStore.client.on('connection-state-change', self.handleConnectionStateChange);
-        self.stageModeStore.client.on('volume-indicator', self.handleVolumeIndicator);
+        self.agoraStageModeStore.client.on('user-published', self.handleUserPublished);
+        self.agoraStageModeStore.client.on('user-unpublished', self.handleUserPublished);
+        self.agoraStageModeStore.client.on('user-joined', self.handleUserJoined);
+        self.agoraStageModeStore.client.on('user-left', self.handleUserLeft);
+        self.agoraStageModeStore.client.on(
+          'connection-state-change',
+          self.handleConnectionStateChange
+        );
+        self.agoraStageModeStore.client.on('volume-indicator', self.handleVolumeIndicator);
       } else {
         self.videoCallStore.client.on('user-published', self.handleUserPublished);
         self.videoCallStore.client.on('user-unpublished', self.handleUserPublished);
@@ -225,7 +228,7 @@ const AgoraStore = types
     },
     clanupAgoraListeners() {
       if (self.isStageMode) {
-        self.stageModeStore.clanupListeners();
+        self.agoraStageModeStore.clanupListeners();
       } else {
         self.videoCallStore.clanupListeners();
       }
@@ -261,14 +264,14 @@ const AgoraStore = types
         }
 
         if (spaceId) {
-          yield self.stageModeStore.join(spaceId, authStateSubject);
+          yield self.agoraStageModeStore.join(spaceId, authStateSubject);
         } else if (self.spaceId) {
-          yield self.stageModeStore.join(self.spaceId, authStateSubject);
+          yield self.agoraStageModeStore.join(self.spaceId, authStateSubject);
         }
       } else {
-        if (self.stageModeStore.joined) {
+        if (self.agoraStageModeStore.joined) {
           self.userDevicesStore.cleanupLocalTracks();
-          yield self.stageModeStore.leave();
+          yield self.agoraStageModeStore.leave();
           self.remoteUsers = cast([]);
         }
 
@@ -303,7 +306,7 @@ const AgoraStore = types
       self.userDevicesStore.cleanupLocalTracks();
 
       if (self.isStageMode) {
-        yield self.stageModeStore.leave();
+        yield self.agoraStageModeStore.leave();
       } else {
         self.screenShareStore.stopScreenShare();
         yield self.videoCallStore.leave();

@@ -4,21 +4,22 @@ import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
-import StageModePopupQueueComponent from 'component/layout/StageMode/StageModePopupQueueComponent';
-import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ToastContent, Button, SpaceTopBar, Text, Stage} from 'ui-kit';
 import {ROUTES} from 'core/constants';
-import {StageModeStats} from 'scenes/collaboration/pages/StageModePage/components';
+import {
+  StageModePopupQueue,
+  StageModeStats
+} from 'scenes/collaboration/pages/StageModePage/components';
 
 import * as styled from './StageModeGuest.styled';
 
 const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const {stageModeStore} = agoraStore;
+  const {agoraStageModeStore} = agoraStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
-    useStageModePopupQueueContext();
+    collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -26,14 +27,14 @@ const StageModeGuest: React.FC = () => {
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
-      stageModeStore.requestToGoOnstageWasHandled();
+      agoraStageModeStore.requestToGoOnstageWasHandled();
     }
   });
 
   usePosBusEvent('stage-mode-declined', (userId) => {
     if (userId === sessionStore.userId) {
       removeAwaitingPermissionPopup();
-      stageModeStore.requestToGoOnstageWasHandled();
+      agoraStageModeStore.requestToGoOnstageWasHandled();
     }
   });
 
@@ -43,7 +44,7 @@ const StageModeGuest: React.FC = () => {
 
   const handleUserRequest = useCallback(async () => {
     try {
-      await stageModeStore.requestToGoOnStage();
+      await agoraStageModeStore.requestToGoOnStage();
       showSuccessStageModeRequestSubmissionToast();
     } catch (e) {
       console.info(e);
@@ -77,24 +78,28 @@ const StageModeGuest: React.FC = () => {
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}
 
-          {agoraStore.isStageMode && !stageModeStore.requestWasMadeToGoOnStage && (
+          {agoraStore.isStageMode && !agoraStageModeStore.requestWasMadeToGoOnStage && (
             <Button
-              label={stageModeStore.isOnStage ? t('actions.leaveStage') : t('actions.goOnStage')}
-              variant={stageModeStore.isOnStage ? 'danger' : 'primary'}
-              onClick={stageModeStore.isOnStage ? stageModeStore.leaveStage : handleUserRequest}
+              label={
+                agoraStageModeStore.isOnStage ? t('actions.leaveStage') : t('actions.goOnStage')
+              }
+              variant={agoraStageModeStore.isOnStage ? 'danger' : 'primary'}
+              onClick={
+                agoraStageModeStore.isOnStage ? agoraStageModeStore.leaveStage : handleUserRequest
+              }
             />
           )}
-          {agoraStore.isStageMode && stageModeStore.requestWasMadeToGoOnStage && (
+          {agoraStore.isStageMode && agoraStageModeStore.requestWasMadeToGoOnStage && (
             <Text text={t('messages.pendingRequestToGoOnStage')} size="m" />
           )}
-          {agoraStore.isStageMode && !stageModeStore.canEnterStage && (
+          {agoraStore.isStageMode && !agoraStageModeStore.canEnterStage && (
             <Text text={t('messages.stageIsFull')} size="m" />
           )}
         </styled.Actions>
       </SpaceTopBar>
       <styled.Body>
         <styled.PopupQueueWrapper>
-          <StageModePopupQueueComponent />
+          <StageModePopupQueue />
         </styled.PopupQueueWrapper>
         <styled.StageModeContainer>
           {agoraStore.isStageMode ? (

@@ -9,10 +9,10 @@ import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums'
 import {appVariables} from 'api/constants';
 import {StageModeUser} from 'stores/MainStore/models/AgoraStore/models';
 
-const StageModeStore = types
+const AgoraStageModeStore = types
   .compose(
     ResetModel,
-    types.model('StageModeStore', {
+    types.model('AgoraStageModeStore', {
       appId: '',
       spaceId: types.maybe(types.string),
       userId: types.maybe(types.string),
@@ -295,4 +295,4 @@ const StageModeStore = types
     }
   }));
 
-export {StageModeStore};
+export {AgoraStageModeStore};
