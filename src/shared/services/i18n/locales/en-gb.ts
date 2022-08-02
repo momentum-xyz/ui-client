@@ -285,7 +285,8 @@ export const enGb = {
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
-      updateSpace: 'update your space with some enticing content'
+      updateSpace: 'update your space with some enticing content',
+      goToStageMode: 'Click to go to stage-mode'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',

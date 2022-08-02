@@ -7,9 +7,9 @@ import {useHistory} from 'react-router-dom';
 import StageModePopupQueueComponent from 'component/layout/StageMode/StageModePopupQueueComponent';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {ToastContent, Button, SpaceTopBar, Text} from 'ui-kit';
+import {ToastContent, Button, SpaceTopBar, Text, Stage} from 'ui-kit';
 import {ROUTES} from 'core/constants';
-import {StageModeStats, Stage} from 'scenes/collaboration/pages/StageModePage/components';
+import {StageModeStats} from 'scenes/collaboration/pages/StageModePage/components';
 
 import * as styled from './StageModeGuest.styled';
 

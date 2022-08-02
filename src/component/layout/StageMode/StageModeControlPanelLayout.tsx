@@ -3,12 +3,11 @@ import {toast} from 'react-toastify';
 import {t} from 'i18next';
 import {observer, useObserver} from 'mobx-react-lite';
 
-import {ToastContent, Toggle} from 'ui-kit';
+import {ToastContent, Toggle, Stage} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
 import {appVariables} from 'api/constants';
-import {Stage} from 'scenes/collaboration/pages/StageModePage/components';
 
 import Page from '../../molucules/Page';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
