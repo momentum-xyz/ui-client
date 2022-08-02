@@ -4,7 +4,7 @@ import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {AgoraRemoteUserInterface} from 'core/models';
 import {IconSvg, Text, MediaPlayer} from 'ui-kit';
 
 import * as styled from './Stage.styled';

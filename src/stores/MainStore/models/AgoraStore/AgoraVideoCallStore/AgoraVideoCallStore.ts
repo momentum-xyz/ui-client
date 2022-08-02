@@ -4,7 +4,7 @@ import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
 
-const VideoCallStore = types
+const AgoraVideoCallStore = types
   .compose(
     ResetModel,
     types.model('VideoCallStore', {
@@ -122,4 +122,4 @@ const VideoCallStore = types
     }
   }));
 
-export {VideoCallStore};
+export {AgoraVideoCallStore as VideoCallStore};

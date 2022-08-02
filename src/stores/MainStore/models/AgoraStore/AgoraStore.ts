@@ -5,13 +5,13 @@ import AgoraRTC, {
   IAgoraRTCRemoteUser
 } from 'agora-rtc-sdk-ng';
 
-import {ResetModel, RequestModel} from 'core/models';
+import {ResetModel, RequestModel, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {appVariables} from 'api/constants';
 import {api} from 'api';
 import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
 
-import {AgoraRemoteUser, AgoraRemoteUserInterface, UserDevicesStore} from './models';
-import {VideoCallStore} from './VideoCallStore';
+import {UserDevicesStore} from './UserDevicesStore';
+import {VideoCallStore} from './AgoraVideoCallStore';
 import {AgoraStageModeStore} from './AgoraStageModeStore';
 import {AgoraScreenShareStore} from './AgoraScreenShareStore';
 
@@ -20,7 +20,8 @@ const AgoraStore = types
     ResetModel,
     types.model('AgoraStore', {
       // stores
-      videoCallStore: types.optional(VideoCallStore, {}),
+      userDevicesStore: types.optional(UserDevicesStore, {}),
+      agoraVideoCallStore: types.optional(VideoCallStore, {}),
       agoraStageModeStore: types.optional(AgoraStageModeStore, {}),
       agoraScreenShareStore: types.optional(AgoraScreenShareStore, {}),
 
@@ -28,7 +29,6 @@ const AgoraStore = types
       appId: '',
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
-      userDevicesStore: types.optional(UserDevicesStore, {}),
       remoteUsers: types.optional(types.array(AgoraRemoteUser), []),
       isStageMode: false,
       isTogglingStageMode: false,
@@ -61,7 +61,7 @@ const AgoraStore = types
       if (self.isStageMode) {
         yield self.agoraStageModeStore.muteRemoteUser(userId);
       } else {
-        yield self.videoCallStore.muteRemoteUser(userId);
+        yield self.agoraVideoCallStore.muteRemoteUser(userId);
       }
     })
   }))
@@ -73,7 +73,7 @@ const AgoraStore = types
       if (!isScreenshare) {
         if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
           yield (
-            self.isStageMode ? self.agoraStageModeStore.client : self.videoCallStore.client
+            self.isStageMode ? self.agoraStageModeStore.client : self.agoraVideoCallStore.client
           ).subscribe(user, mediaType);
         }
 
@@ -100,7 +100,7 @@ const AgoraStore = types
           );
         }
       } else {
-        yield self.videoCallStore.client.subscribe(user, mediaType);
+        yield self.agoraVideoCallStore.client.subscribe(user, mediaType);
         if (user.videoTrack) {
           self.agoraScreenShareStore.screenShareStarted(user.videoTrack);
         }
@@ -123,7 +123,7 @@ const AgoraStore = types
           }
 
           yield (
-            self.isStageMode ? self.agoraStageModeStore.client : self.videoCallStore.client
+            self.isStageMode ? self.agoraStageModeStore.client : self.agoraVideoCallStore.client
           ).unsubscribe(foundUser.participantInfo, mediaType);
 
           const updatedUser = self.remoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
@@ -191,7 +191,7 @@ const AgoraStore = types
       self.appId = appVariables.AGORA_APP_ID;
 
       self.agoraStageModeStore.init(self.appId);
-      self.videoCallStore.init(self.appId);
+      self.agoraVideoCallStore.init(self.appId);
     }
   }))
   // Chat visibility
@@ -218,19 +218,22 @@ const AgoraStore = types
         );
         self.agoraStageModeStore.client.on('volume-indicator', self.handleVolumeIndicator);
       } else {
-        self.videoCallStore.client.on('user-published', self.handleUserPublished);
-        self.videoCallStore.client.on('user-unpublished', self.handleUserPublished);
-        self.videoCallStore.client.on('user-joined', self.handleUserJoined);
-        self.videoCallStore.client.on('user-left', self.handleUserLeft);
-        self.videoCallStore.client.on('connection-state-change', self.handleConnectionStateChange);
-        self.videoCallStore.client.on('volume-indicator', self.handleVolumeIndicator);
+        self.agoraVideoCallStore.client.on('user-published', self.handleUserPublished);
+        self.agoraVideoCallStore.client.on('user-unpublished', self.handleUserPublished);
+        self.agoraVideoCallStore.client.on('user-joined', self.handleUserJoined);
+        self.agoraVideoCallStore.client.on('user-left', self.handleUserLeft);
+        self.agoraVideoCallStore.client.on(
+          'connection-state-change',
+          self.handleConnectionStateChange
+        );
+        self.agoraVideoCallStore.client.on('volume-indicator', self.handleVolumeIndicator);
       }
     },
     clanupAgoraListeners() {
       if (self.isStageMode) {
         self.agoraStageModeStore.clanupListeners();
       } else {
-        self.videoCallStore.clanupListeners();
+        self.agoraVideoCallStore.clanupListeners();
       }
     },
 
@@ -252,10 +255,10 @@ const AgoraStore = types
       const isStageMode = status.data?.stageModeStatus === 'initiated';
 
       if (isStageMode) {
-        if (self.videoCallStore.joined) {
+        if (self.agoraVideoCallStore.joined) {
           self.userDevicesStore.cleanupLocalTracks();
           self.agoraScreenShareStore.stopScreenShare();
-          yield self.videoCallStore.leave();
+          yield self.agoraVideoCallStore.leave();
           self.remoteUsers = cast([]);
         }
 
@@ -280,13 +283,13 @@ const AgoraStore = types
         }
 
         if (spaceId) {
-          yield self.videoCallStore.join(
+          yield self.agoraVideoCallStore.join(
             spaceId,
             authStateSubject,
             self.userDevicesStore.createLocalTracks
           );
         } else if (self.spaceId) {
-          yield self.videoCallStore.join(
+          yield self.agoraVideoCallStore.join(
             self.spaceId,
             authStateSubject,
             self.userDevicesStore.createLocalTracks
@@ -309,7 +312,7 @@ const AgoraStore = types
         yield self.agoraStageModeStore.leave();
       } else {
         self.agoraScreenShareStore.stopScreenShare();
-        yield self.videoCallStore.leave();
+        yield self.agoraVideoCallStore.leave();
       }
 
       self.remoteUsers = cast([]);

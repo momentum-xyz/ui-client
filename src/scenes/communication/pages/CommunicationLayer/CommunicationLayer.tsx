@@ -19,10 +19,7 @@ import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useGetSpace} from 'hooks/api/useSpaceService';
 import {appVariables} from 'api/constants';
-import {
-  AgoraRemoteUserInterface,
-  StageModeUserInterface
-} from 'stores/MainStore/models/AgoraStore/models';
+import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';

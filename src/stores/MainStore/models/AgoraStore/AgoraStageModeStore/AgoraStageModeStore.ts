@@ -1,13 +1,12 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 
-import {RequestModel, ResetModel} from 'core/models';
+import {RequestModel, ResetModel, StageModeUser} from 'core/models';
 import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 import {api} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {StageModeUser} from 'stores/MainStore/models/AgoraStore/models';
 
 const AgoraStageModeStore = types
   .compose(
