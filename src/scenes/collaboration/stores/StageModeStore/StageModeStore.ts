@@ -12,6 +12,32 @@ const StageModeStore = types
     request: types.optional(RequestModel, {})
   })
   .actions((self) => ({
+    // TODO: Remove after refactoring
+    initWithDummies() {
+      self.popups.push({
+        userId: 'sjksjsjkdaldalsjd',
+        type: StageModePopupTypeEnum.RECEIVED_PERMISSION_REQUEST,
+        user: 's',
+        userName: 'Daniel',
+        onAccept: async () => {
+          return Promise.resolve(true);
+        },
+        onDecline: async () => {
+          return Promise.resolve(true);
+        }
+      });
+
+      self.popups.push({
+        userId: 'sjksjsjkdaldal',
+        type: StageModePopupTypeEnum.AWAITING_PERMISSION,
+        onAccept: async () => {
+          return Promise.resolve(true);
+        },
+        onDecline: async () => {
+          return Promise.resolve(true);
+        }
+      });
+    },
     addRequestPopup: flow(function* (
       userId: string,
       options?: Omit<StageModePopupInfoInterface, 'type'>
@@ -37,14 +63,14 @@ const StageModeStore = types
       self.popups = cast(
         self.popups.filter(
           (popup) =>
-            popup.type === StageModePopupTypeEnum.RECEIVED_PERMISSION_REQUEST &&
+            popup.type !== StageModePopupTypeEnum.RECEIVED_PERMISSION_REQUEST &&
             popup.userId !== userId
         )
       );
     },
     removeAwaitingPermissionPopup() {
       self.popups = cast(
-        self.popups.filter((popup) => popup.type === StageModePopupTypeEnum.AWAITING_PERMISSION)
+        self.popups.filter((popup) => popup.type !== StageModePopupTypeEnum.AWAITING_PERMISSION)
       );
     },
     removeAllPopups() {

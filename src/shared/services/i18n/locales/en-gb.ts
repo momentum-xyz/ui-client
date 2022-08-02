@@ -276,7 +276,14 @@ export const enGb = {
       pendingRequestToGoOnStage: 'Request to go on stage pending',
       stageIsFull: 'Stage is full',
       noParticipantsOnStage: 'There are currently no participants on stage.',
-      onStage: 'On Stage'
+      onStage: 'On Stage',
+      requestedPermissionToGoOnStage: 'You have requested permission to go on stage',
+      waitForModeratorsToAccept: 'Wait for the moderators to accept or deny your request',
+      thisPersonWantsToComeOnStage: 'This person wants to come on stage, invite them?',
+      thisWillEnablePersonToUseStage:
+        '(This will enable the person to talk, screenshare, and transmit video)',
+      stageIsCurrentlyFull:
+        '(The stage is currently full, you must first remove someone from the stage before you can accept)'
     },
     titles: {
       alert: 'alert',
@@ -290,7 +297,8 @@ export const enGb = {
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
       updateSpace: 'update your space with some enticing content',
-      goToStageMode: 'Click to go to stage-mode'
+      goToStageMode: 'Click to go to stage-mode',
+      userWantsToComeOnStage: '{{user}} wants to come on stage'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -372,7 +380,8 @@ export const enGb = {
       goOnStage: 'Go on stage',
       remove: 'Remove',
       mute: 'Mute',
-      startScreenShare: 'Start screensharing'
+      startScreenShare: 'Start screensharing',
+      accept: 'Accept'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

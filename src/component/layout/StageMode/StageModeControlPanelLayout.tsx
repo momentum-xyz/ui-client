@@ -24,7 +24,7 @@ const StageModeControlPanelLayout: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {space} = collaborationStore;
+  const {space, stageModeStore} = collaborationStore;
 
   const [selectedRemoteUserIdForRemove, setSelectedRemoteUserIdForRemove] = useState<string | null>(
     null
@@ -78,6 +78,11 @@ const StageModeControlPanelLayout: React.FC = () => {
     },
     [agoraStore]
   );
+
+  // TODO: Remove after refactoring
+  useEffect(() => {
+    stageModeStore.initWithDummies();
+  }, [stageModeStore]);
 
   useEffect(() => {
     if (selectedRemoteUserIdForRemove && user) {
