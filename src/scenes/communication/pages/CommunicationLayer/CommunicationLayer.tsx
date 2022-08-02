@@ -15,7 +15,7 @@ import {
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
-import StageModePIP from 'component/atoms/StageMode/StageModePIP';
+import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
 import {useGetSpace} from 'hooks/api/useSpaceService';
@@ -291,7 +291,7 @@ relative
           </styled.ListItemContent>
         </styled.ListItem>
       </ul>
-      {!window.location.href.includes('stage-mode') && <StageModePIP />}
+      {!window.location.href.includes('stage-mode') && <StageModePIPWidget />}
     </Transition>
   );
 };
