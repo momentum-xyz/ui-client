@@ -7,11 +7,8 @@ import {usePosBusEvent, useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 
-import {Dashboard, TileForm} from './components';
+import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} from './components';
 import * as styled from './DashboardPage.styled';
-import {RemoveTileDialog} from './components/templates/Dashboard/components/RemoveTileDialog';
-import {VibeButton} from './components/templates/Dashboard/components/VibeButton';
-import {InviteToSpaceMenu} from './components/templates/InviteToSpaceMenu';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
@@ -31,7 +28,6 @@ const DashboardPage: FC = () => {
   useEffect(() => {
     if (space) {
       dashboardStore.fetchDashboard(space.id);
-      favoriteStore.setSpaceId(space.id);
       vibeStore.check(space.id);
       vibeStore.count(space.id);
     }
@@ -76,7 +72,6 @@ const DashboardPage: FC = () => {
         {(space.isAdmin || space.isMember) && (
           <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
-
         <Button
           ref={inviteRef}
           label={t('dashboard.invitePeople')}
