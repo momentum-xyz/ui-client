@@ -4,6 +4,7 @@ import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 import {storage} from 'shared/services';
 import {ResetModel, DialogModel} from 'core/models';
 import {StorageKeyEnum} from 'core/enums';
+import {OptionInterface} from 'ui-kit';
 
 const UserDevicesStore = types
   .compose(
@@ -33,6 +34,20 @@ const UserDevicesStore = types
         videoInputs: []
       }))
   )
+  .views((self) => ({
+    get audioInputOptions(): OptionInterface[] {
+      return self.audioInputs.map((input) => ({
+        value: input.deviceId,
+        label: input.label
+      }));
+    },
+    get videoInputsOption(): OptionInterface[] {
+      return self.videoInputs.map((input) => ({
+        value: input.deviceId,
+        label: input.label
+      }));
+    }
+  }))
   .actions((self) => ({
     // TODO: Remove returns
     getMicrophoneConsent: flow(function* () {
