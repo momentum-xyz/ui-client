@@ -22,17 +22,31 @@ const UserDevicesStore = types
         isTogglingCamera: false
       })
       .volatile<{
-        audioInputs: MediaDeviceInfo[];
-        videoInputs: MediaDeviceInfo[];
+        _audioInputs: MediaDeviceInfo[];
+        _videoInputs: MediaDeviceInfo[];
         currentVideoInput?: MediaDeviceInfo;
         currentAudioInput?: MediaDeviceInfo;
         localVideoTrack?: ILocalVideoTrack;
         localAudioTrack?: ILocalAudioTrack;
       }>(() => ({
-        audioInputs: [],
-        videoInputs: []
+        _audioInputs: [],
+        _videoInputs: []
       }))
   )
+  .views((self) => ({
+    get audioInputs() {
+      return self._audioInputs;
+    },
+    get videoInputs() {
+      return self._videoInputs;
+    },
+    set audioInputs(audioInputs: MediaDeviceInfo[]) {
+      self._audioInputs = audioInputs;
+    },
+    set videoInputs(videoInputs: MediaDeviceInfo[]) {
+      self._videoInputs = videoInputs;
+    }
+  }))
   .actions((self) => ({
     // TODO: Remove returns
     getMicrophoneConsent: flow(function* () {
