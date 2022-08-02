@@ -272,7 +272,8 @@ export const enGb = {
       tileRemoveError: 'There was a problem removing your tile',
       pendingRequestToGoOnStage: 'Request to go on stage pending',
       stageIsFull: 'Stage is full',
-      noParticipantsOnStage: 'There are currently no participants on stage.'
+      noParticipantsOnStage: 'There are currently no participants on stage.',
+      onStage: 'On Stage'
     },
     titles: {
       alert: 'alert',
@@ -465,7 +466,7 @@ export const enGb = {
         title: 'Apply a new token rule',
         submitButtonLabel: 'Add Rule',
         succeedButtonLabel: 'Okay',
-        description: 'Add a token gated access rule to your space.',
+        description: 'A dd a token gated access rule to your space.',
         tokenRuleAppliedSuccessMessage: 'The Token Rule has been applied to your space',
         searchInputLabel: 'Token rule',
         searchInputPlaceholder: 'Search for token rule or add new one',

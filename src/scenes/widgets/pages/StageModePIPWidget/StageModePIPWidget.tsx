@@ -30,7 +30,7 @@ const StageModePIPWidget: React.FC = () => {
           <Stage />
 
           <styled.HeaderElement className="left">
-            <Text text="On stage" size="xs" weight="bold" transform="uppercase" />
+            <Text text={t('messages.onStage')} size="xs" weight="bold" transform="uppercase" />
           </styled.HeaderElement>
           <styled.HeaderElement
             className="right"
