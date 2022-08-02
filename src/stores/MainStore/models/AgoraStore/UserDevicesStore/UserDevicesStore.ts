@@ -4,6 +4,7 @@ import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 import {storage} from 'shared/services';
 import {ResetModel, DialogModel} from 'core/models';
 import {StorageKeyEnum} from 'core/enums';
+import {OptionInterface} from 'ui-kit';
 
 const UserDevicesStore = types
   .compose(
@@ -22,29 +23,29 @@ const UserDevicesStore = types
         isTogglingCamera: false
       })
       .volatile<{
-        _audioInputs: MediaDeviceInfo[];
-        _videoInputs: MediaDeviceInfo[];
+        audioInputs: MediaDeviceInfo[];
+        videoInputs: MediaDeviceInfo[];
         currentVideoInput?: MediaDeviceInfo;
         currentAudioInput?: MediaDeviceInfo;
         localVideoTrack?: ILocalVideoTrack;
         localAudioTrack?: ILocalAudioTrack;
       }>(() => ({
-        _audioInputs: [],
-        _videoInputs: []
+        audioInputs: [],
+        videoInputs: []
       }))
   )
   .views((self) => ({
-    get audioInputs() {
-      return self._audioInputs;
+    get audioInputOptions(): OptionInterface[] {
+      return self.audioInputs.map((input) => ({
+        value: input.deviceId,
+        label: input.label
+      }));
     },
-    get videoInputs() {
-      return self._videoInputs;
-    },
-    set audioInputs(audioInputs: MediaDeviceInfo[]) {
-      self._audioInputs = audioInputs;
-    },
-    set videoInputs(videoInputs: MediaDeviceInfo[]) {
-      self._videoInputs = videoInputs;
+    get videoInputsOption(): OptionInterface[] {
+      return self.videoInputs.map((input) => ({
+        value: input.deviceId,
+        label: input.label
+      }));
     }
   }))
   .actions((self) => ({

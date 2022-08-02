@@ -198,8 +198,8 @@ const Collaboration: FC = () => {
           deviceLabel={newDevice?.label}
           currentAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
           currentVideoDeviceId={userDevicesStore.currentVideoInput?.deviceId}
-          audioDevices={userDevicesStore.audioInputs}
-          videoDevices={userDevicesStore.videoInputs}
+          audioDevices={userDevicesStore.audioInputOptions}
+          videoDevices={userDevicesStore.videoInputsOption}
           onAudioDeviceSelect={userDevicesStore.selectAudioInput}
           onVideoDeviceSelect={userDevicesStore.selectVideoInput}
         />

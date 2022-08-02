@@ -2,7 +2,7 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
-import {Dialog, Dropdown, Text, Heading} from 'ui-kit';
+import {Dialog, Dropdown, Text, Heading, OptionInterface} from 'ui-kit';
 
 import * as styled from './NewDeviceDialog.styled';
 
@@ -12,8 +12,8 @@ export interface NewDevicePopupPropsInterface {
   onClose: () => void;
   deviceKindDescription?: string;
   deviceLabel?: string;
-  audioDevices: MediaDeviceInfo[];
-  videoDevices: MediaDeviceInfo[];
+  audioDevices: OptionInterface[];
+  videoDevices: OptionInterface[];
   currentAudioDeviceId?: string;
   currentVideoDeviceId?: string;
   onAudioDeviceSelect: (deviceId: string) => void;
@@ -65,10 +65,7 @@ const NewDevicePopup: React.FC<NewDevicePopupPropsInterface> = ({
           placeholder={`${t('devices.video')} ${t('devices.device')}`}
           variant="secondary"
           value={currentVideoDeviceId}
-          options={videoDevices.map((input) => ({
-            label: input.label,
-            value: input.deviceId
-          }))}
+          options={videoDevices}
           onOptionSelect={(option) => {
             onVideoDeviceSelect(option.value);
           }}
@@ -85,10 +82,7 @@ const NewDevicePopup: React.FC<NewDevicePopupPropsInterface> = ({
           placeholder={`${t('devices.audio')} ${t('devices.device')}`}
           variant="secondary"
           value={currentAudioDeviceId}
-          options={audioDevices.map((input) => ({
-            label: input.label,
-            value: input.deviceId
-          }))}
+          options={audioDevices}
           onOptionSelect={(option) => {
             onAudioDeviceSelect(option.value);
           }}
