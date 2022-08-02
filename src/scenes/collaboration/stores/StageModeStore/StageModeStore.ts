@@ -1,6 +1,6 @@
 import {types, cast, flow} from 'mobx-state-tree';
 
-import {StageModePopupInfoInterface} from 'core/interfaces';
+import {StageModePopupInfoInterface, StageModePopupOptionsInterface} from 'core/interfaces';
 import {StageModePopupTypeEnum} from 'core/enums';
 import {RequestModel} from 'core/models';
 import {api, ProfileResponse} from 'api';
@@ -12,10 +12,7 @@ const StageModeStore = types
     request: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    addRequestPopup: flow(function* (
-      userId: string,
-      options?: Omit<StageModePopupInfoInterface, 'type'>
-    ) {
+    addRequestPopup: flow(function* (userId: string, options?: StageModePopupOptionsInterface) {
       const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
         userId
       });
@@ -27,7 +24,7 @@ const StageModeStore = types
         ...options
       });
     }),
-    addAwaitingPermissionPopup(options?: Omit<StageModePopupInfoInterface, 'type'>) {
+    addAwaitingPermissionPopup(options?: StageModePopupOptionsInterface) {
       self.popups.push({
         type: StageModePopupTypeEnum.AWAITING_PERMISSION,
         ...options

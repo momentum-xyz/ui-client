@@ -78,17 +78,21 @@ const StageModeGuest: React.FC = () => {
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}
 
-          {agoraStore.isStageMode && !agoraStageModeStore.requestWasMadeToGoOnStage && (
-            <Button
-              label={
-                agoraStageModeStore.isOnStage ? t('actions.leaveStage') : t('actions.goOnStage')
-              }
-              variant={agoraStageModeStore.isOnStage ? 'danger' : 'primary'}
-              onClick={
-                agoraStageModeStore.isOnStage ? agoraStageModeStore.leaveStage : handleUserRequest
-              }
-            />
-          )}
+          {agoraStore.isStageMode &&
+            !agoraStageModeStore.requestWasMadeToGoOnStage &&
+            (agoraStageModeStore.isOnStage ? (
+              <Button
+                label={t('actions.leaveStage')}
+                variant="danger"
+                onClick={agoraStageModeStore.leaveStage}
+              />
+            ) : (
+              <Button
+                label={t('actions.goOnStage')}
+                variant="primary"
+                onClick={handleUserRequest}
+              />
+            ))}
           {agoraStore.isStageMode && agoraStageModeStore.requestWasMadeToGoOnStage && (
             <Text text={t('messages.pendingRequestToGoOnStage')} size="m" />
           )}

@@ -40,7 +40,6 @@ const AppLayers: FC = ({children}) => {
           </div>
           <Communication />
         </main>
-        =
         <WidgetContainer />
       </div>
       <VideoLayer />

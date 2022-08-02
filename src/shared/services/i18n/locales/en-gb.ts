@@ -197,7 +197,9 @@ export const enGb = {
       attendeeList: 'Attendee List',
       speakers: 'Speakers',
       audience: 'Audience',
-      you: 'You'
+      you: 'You',
+      cameraOn: 'Camera on',
+      cameraOff: 'Camera off'
     },
     messages: {
       loading: 'Loading Odyssey Momentum',
@@ -283,7 +285,8 @@ export const enGb = {
       thisWillEnablePersonToUseStage:
         '(This will enable the person to talk, screenshare, and transmit video)',
       stageIsCurrentlyFull:
-        '(The stage is currently full, you must first remove someone from the stage before you can accept)'
+        '(The stage is currently full, you must first remove someone from the stage before you can accept)',
+      youAreInAudience: 'You are in the audience, stage mode is on'
     },
     titles: {
       alert: 'alert',
@@ -380,6 +383,7 @@ export const enGb = {
       goOnStage: 'Go on stage',
       remove: 'Remove',
       mute: 'Mute',
+      unmute: 'Unmute',
       startScreenShare: 'Start screensharing',
       accept: 'Accept'
     },

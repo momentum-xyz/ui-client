@@ -136,10 +136,10 @@ const WidgetContainer: FC = () => {
             <ToolbarIcon
               title={
                 agoraStore.isStageMode && !agoraStageModeStore.isOnStage
-                  ? 'You are in the audience, stage mode is on'
+                  ? t('messages.youAreInAudience')
                   : userDevicesStore.cameraOff
-                  ? 'Camera on'
-                  : 'Camera off'
+                  ? t('labels.cameraOn')
+                  : t('labels.cameraOff')
               }
               icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
               onClick={toggleCameraOn}
@@ -151,10 +151,10 @@ const WidgetContainer: FC = () => {
             <ToolbarIcon
               title={
                 agoraStore.isStageMode && !agoraStageModeStore.isOnStage
-                  ? 'You are in the audience, stage mode is on'
+                  ? t('messages.youAreInAudience')
                   : userDevicesStore.muted
-                  ? 'Unmute'
-                  : 'Mute'
+                  ? t('actions.unmute')
+                  : t('actions.mute')
               }
               icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
               onClick={toggleMute}

@@ -8,6 +8,8 @@ import {Button, PanelLayout, Text} from 'ui-kit';
 
 import * as styled from './StageModePopup.styled';
 
+const STAGEMODE_POPUP_WIDTH = '242px';
+
 export interface StageModePopupPropsInterface {
   info: StageModePopupInfoInterface;
   canEnterStage: boolean;
@@ -20,22 +22,34 @@ const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterS
 
   const {t} = useTranslation();
 
-  const handleAccept = (info: StageModePopupInfoInterface) => {
-    info
-      ?.onAccept?.()
-      .then((shouldClose) => shouldClose && info.userId && removeRequestPopup(info.userId));
+  const handleAccept = async (info: StageModePopupInfoInterface) => {
+    if (!info.onAccept) {
+      return;
+    }
+
+    const shouldClose = await info.onAccept();
+
+    if (shouldClose && info.userId) {
+      removeRequestPopup(info.userId);
+    }
   };
 
-  const handleDecline = (info: StageModePopupInfoInterface) => {
-    info
-      ?.onDecline?.()
-      .then((shouldClose) => shouldClose && info.userId && removeRequestPopup(info.userId));
+  const handleDecline = async (info: StageModePopupInfoInterface) => {
+    if (!info.onDecline) {
+      return;
+    }
+
+    const shouldClose = await info.onDecline();
+
+    if (shouldClose && info.userId) {
+      removeRequestPopup(info.userId);
+    }
   };
 
   switch (info.type) {
     case StageModePopupTypeEnum.AWAITING_PERMISSION:
       return (
-        <PanelLayout componentSize={{width: '242px'}}>
+        <PanelLayout componentSize={{width: STAGEMODE_POPUP_WIDTH}}>
           <styled.PermissionBody onClick={removeAwaitingPermissionPopup}>
             <Text text={t('messages.requestedPermissionToGoOnStage')} size="m" align="left" />
             <Text text={t('messages.waitForModeratorsToAccept')} size="xs" align="left" />
@@ -46,7 +60,7 @@ const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterS
       return (
         <PanelLayout
           title={t('titles.userWantsToComeOnStage', {user: info.userName})}
-          componentSize={{width: '242px'}}
+          componentSize={{width: STAGEMODE_POPUP_WIDTH}}
         >
           <styled.RequestBody>
             <Text text={t('messages.thisPersonWantsToComeOnStage')} size="m" align="left" />

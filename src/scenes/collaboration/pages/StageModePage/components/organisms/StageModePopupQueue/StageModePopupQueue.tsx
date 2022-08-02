@@ -16,7 +16,7 @@ const StageModePopupQueue: React.FC = () => {
       {stageModeStore.popups.map((info) => (
         <StageModePopup
           info={info}
-          key={'stagepop-up:' + info.userId}
+          key={info.userId}
           canEnterStage={agoraStageModeStore.canEnterStage}
         />
       ))}
