@@ -6,16 +6,15 @@ import {observer, useObserver} from 'mobx-react-lite';
 import {ToastContent, Toggle, Stage} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
-import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {AgoraRemoteUserInterface} from 'core/models';
 import {appVariables} from 'api/constants';
+import {StageModePopupQueue} from 'scenes/collaboration/pages/StageModePage/components';
 
 import Page from '../../molucules/Page';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
 import {bytesToUuid} from '../../../core/utils/uuid.utils';
 import {useUser} from '../../../hooks/api/useUser';
 import Button from '../../atoms/Button';
-
-import StageModePopupQueueComponent from './StageModePopupQueueComponent';
 
 const StageModeControlPanelLayout: React.FC = () => {
   const [stageStats, setStageStats] = useState<{speakers: number; audience: number}>({
@@ -24,7 +23,7 @@ const StageModeControlPanelLayout: React.FC = () => {
   });
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
-  const {stageModeStore, userDevicesStore} = agoraStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore;
   const {space} = collaborationStore;
 
   const [selectedRemoteUserIdForRemove, setSelectedRemoteUserIdForRemove] = useState<string | null>(
@@ -46,7 +45,7 @@ const StageModeControlPanelLayout: React.FC = () => {
       if (result) {
         if (user?.id.data) {
           try {
-            await stageModeStore.kickUserOffStage(bytesToUuid(user.id.data));
+            await agoraStageModeStore.kickUserOffStage(bytesToUuid(user.id.data));
             setSelectedRemoteUserIdForRemove(null);
           } catch {
             setSelectedRemoteUserIdForRemove(null);
@@ -67,7 +66,7 @@ const StageModeControlPanelLayout: React.FC = () => {
         setSelectedRemoteUserIdForRemove(null);
       }
     });
-  }, [getConfirmation, stageModeStore, user]);
+  }, [getConfirmation, agoraStageModeStore, user]);
 
   const remoteUserClicked = useCallback(
     async (remoteUser: AgoraRemoteUserInterface, event = 'remove') => {
@@ -88,25 +87,25 @@ const StageModeControlPanelLayout: React.FC = () => {
   }, [user, selectedRemoteUserIdForRemove, confirmRemoveUserFromStage]);
 
   const handleEnterStage = useCallback(() => {
-    if (!stageModeStore.canEnterStage) {
+    if (!agoraStageModeStore.canEnterStage) {
       toast.error(`The stage is full`);
       return;
     }
 
-    stageModeStore.enterStage(userDevicesStore.createLocalTracks);
-  }, [stageModeStore, userDevicesStore]);
+    agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
+  }, [agoraStageModeStore, userDevicesStore]);
 
   useEffect(() => {
-    if (stageModeStore.joined && userToggledStageOn) {
+    if (agoraStageModeStore.joined && userToggledStageOn) {
       setUserToggledStageOn(false);
       handleEnterStage();
     }
-  }, [handleEnterStage, stageModeStore.joined, userToggledStageOn]);
+  }, [handleEnterStage, agoraStageModeStore.joined, userToggledStageOn]);
 
   const handleLeaveStage = useCallback(() => {
     console.info('[stagemode] LEAVE STAGE');
-    stageModeStore.leaveStage();
-  }, [stageModeStore]);
+    agoraStageModeStore.leaveStage();
+  }, [agoraStageModeStore]);
 
   const stageModeOffMessage = () => (
     <div className="flex flex-grow z-0">
@@ -129,15 +128,15 @@ const StageModeControlPanelLayout: React.FC = () => {
   );
 
   useEffect(() => {
-    const audience = stageModeStore.users.filter((user) => {
+    const audience = agoraStageModeStore.users.filter((user) => {
       return user.role === ParticipantRole.AUDIENCE_MEMBER;
     });
 
     setStageStats({
-      speakers: agoraStore.remoteUsers.length + (stageModeStore.isOnStage ? 1 : 0),
-      audience: stageModeStore.isOnStage ? audience.length - 1 : audience.length
+      speakers: agoraStore.remoteUsers.length + (agoraStageModeStore.isOnStage ? 1 : 0),
+      audience: agoraStageModeStore.isOnStage ? audience.length - 1 : audience.length
     });
-  }, [stageModeStore.users, stageModeStore.isOnStage, agoraStore.remoteUsers]);
+  }, [agoraStageModeStore.users, agoraStageModeStore.isOnStage, agoraStore.remoteUsers]);
 
   const actions = useObserver(() => {
     return (
@@ -154,23 +153,24 @@ const StageModeControlPanelLayout: React.FC = () => {
             {agoraStore.isStageMode ? 'Stage is active' : 'Stage is inactive. Toggle to activate.'}
           </span>
         </div>
-        {agoraStore.isStageMode && (stageModeStore.canEnterStage || stageModeStore.isOnStage) && (
-          <>
-            <div className="flex items-center gap-1">
-              <span>
-                Speakers: {stageStats.speakers}/{appVariables.MAX_STAGE_USERS}
-              </span>
-              <span>Audience: {stageStats.audience}</span>
-            </div>
-            <Button
-              type={stageModeStore.isOnStage ? 'ghost-red' : 'ghost'}
-              onClick={stageModeStore.isOnStage ? handleLeaveStage : handleEnterStage}
-            >
-              {stageModeStore.isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
-            </Button>
-          </>
-        )}
-        {agoraStore.isStageMode && !stageModeStore.canEnterStage && <span>Stage is full</span>}
+        {agoraStore.isStageMode &&
+          (agoraStageModeStore.canEnterStage || agoraStageModeStore.isOnStage) && (
+            <>
+              <div className="flex items-center gap-1">
+                <span>
+                  Speakers: {stageStats.speakers}/{appVariables.MAX_STAGE_USERS}
+                </span>
+                <span>Audience: {stageStats.audience}</span>
+              </div>
+              <Button
+                type={agoraStageModeStore.isOnStage ? 'ghost-red' : 'ghost'}
+                onClick={agoraStageModeStore.isOnStage ? handleLeaveStage : handleEnterStage}
+              >
+                {agoraStageModeStore.isOnStage ? 'Leave Stage?' : 'Go on Stage?'}
+              </Button>
+            </>
+          )}
+        {agoraStore.isStageMode && !agoraStageModeStore.canEnterStage && <span>Stage is full</span>}
       </div>
     );
   });
@@ -183,7 +183,7 @@ const StageModeControlPanelLayout: React.FC = () => {
     <Page title={space.name || ''} subtitle="Stage Mode" collaboration actions={actions}>
       <div className="flex w-full">
         <div className="flex flex-col space-y-1">
-          <StageModePopupQueueComponent />
+          <StageModePopupQueue />
         </div>
         {agoraStore.isStageMode ? usersOnStage() : stageModeOffMessage()}
       </div>

@@ -197,7 +197,9 @@ export const enGb = {
       attendeeList: 'Attendee List',
       speakers: 'Speakers',
       audience: 'Audience',
-      you: 'You'
+      you: 'You',
+      cameraOn: 'Camera on',
+      cameraOff: 'Camera off'
     },
     messages: {
       loading: 'Loading Odyssey Momentum',
@@ -277,6 +279,14 @@ export const enGb = {
       stageIsFull: 'Stage is full',
       noParticipantsOnStage: 'There are currently no participants on stage.',
       onStage: 'On Stage',
+      requestedPermissionToGoOnStage: 'You have requested permission to go on stage',
+      waitForModeratorsToAccept: 'Wait for the moderators to accept or deny your request',
+      thisPersonWantsToComeOnStage: 'This person wants to come on stage, invite them?',
+      thisWillEnablePersonToUseStage:
+        '(This will enable the person to talk, screenshare, and transmit video)',
+      stageIsCurrentlyFull:
+        '(The stage is currently full, you must first remove someone from the stage before you can accept)',
+      youAreInAudience: 'You are in the audience, stage mode is on',
       newDeviceDetected:
         'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?'
     },
@@ -293,6 +303,7 @@ export const enGb = {
       joinGathering: 'Gathering Event is starting now',
       updateSpace: 'update your space with some enticing content',
       goToStageMode: 'Click to go to stage-mode',
+      userWantsToComeOnStage: '{{user}} wants to come on stage',
       newDeviceDetected: 'New Device Detected'
     },
     tooltipTitles: {
@@ -375,7 +386,9 @@ export const enGb = {
       goOnStage: 'Go on stage',
       remove: 'Remove',
       mute: 'Mute',
+      unmute: 'Unmute',
       startScreenShare: 'Start screensharing',
+      accept: 'Accept',
       switchDevice: 'Switch device'
     },
     fileUploader: {
