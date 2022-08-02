@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
+import {observer} from 'mobx-react-lite';
 
 import {SearchInput, useDebouncedEffect} from 'ui-kit';
 import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {OnlineUsersStoreInterface} from 'scenes/widgets/stores/OnlineUsersStore';
+import {InviteUsersStoreInterface} from 'scenes/collaboration/stores/DashboardStore/models';
 
 import {UserItem} from './components';
 import * as styled from './OnlineUsersList.styled';
@@ -12,7 +14,8 @@ import * as styled from './OnlineUsersList.styled';
 export interface OnlineUsersListProps {
   invite?: boolean;
   worldId: string;
-  onlineUsersStore: OnlineUsersStoreInterface;
+  usersStore?: OnlineUsersStoreInterface | InviteUsersStoreInterface;
+  onlineUsersStore?: OnlineUsersStoreInterface;
   searchQuery: string;
   changeKeyboardControl: (active: boolean) => void;
   profile?: UserProfileModelInterface;
@@ -24,8 +27,9 @@ export interface OnlineUsersListProps {
 const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
   invite = false,
   worldId,
-  onlineUsersStore,
+  usersStore,
   onlineUsersList,
+  onlineUsersStore,
   searchQuery,
   profile,
   teleportToUser,
@@ -37,7 +41,7 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
   useDebouncedEffect(
     () => {
       if (searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-        onlineUsersStore.searchUsers(worldId, true);
+        usersStore?.searchUsers(worldId, true);
       }
     },
     200,
@@ -45,20 +49,20 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
   );
 
   useEffect(() => {
-    onlineUsersStore.setSearchQuery('');
-    onlineUsersStore.fetchUsers(worldId);
+    usersStore?.setSearchQuery('');
+    usersStore?.fetchUsers(worldId);
     const timeInterval = setInterval(() => {
-      onlineUsersStore.fetchUsers(worldId);
+      usersStore?.fetchUsers(worldId);
     }, 30000);
 
     return () => clearInterval(timeInterval);
   }, []);
 
   const handleClick = (id: string) => {
-    if (onlineUsersStore.selectedUserId !== id) {
-      onlineUsersStore.selectUser(id);
+    if (onlineUsersStore?.selectedUserId !== id) {
+      onlineUsersStore?.selectUser(id);
     } else {
-      onlineUsersStore.unselectUser();
+      onlineUsersStore?.unselectUser();
     }
   };
 
@@ -113,7 +117,7 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
     <styled.Container>
       <SearchInput
         value={searchQuery}
-        onChange={onlineUsersStore.setSearchQuery}
+        onChange={usersStore?.setSearchQuery}
         placeholder={t('placeholders.searchForPeople')}
         onFocus={() => handleSearchFocus(true)}
         onBlur={() => handleSearchFocus(false)}
@@ -123,4 +127,4 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
   );
 };
 
-export default OnlineUsersList;
+export default observer(OnlineUsersList);

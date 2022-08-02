@@ -10,7 +10,7 @@ import * as styled from './SearchInput.styled';
 interface SearchPropsInterface extends Omit<InputHTMLAttributes<any>, 'onChange'> {
   variantSize?: SizeType;
   delay?: number;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   label?: string;
   withBackground?: boolean;
   focused?: boolean;
@@ -37,7 +37,7 @@ const SearchInput: FC<SearchPropsInterface> = ({
 
   const handleChange = (event: FormEvent<HTMLInputElement>) => {
     // debouncedChange(event.currentTarget.value);
-    onChange(event.currentTarget.value);
+    onChange?.(event.currentTarget.value);
   };
 
   return (

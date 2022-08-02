@@ -15,12 +15,11 @@ interface PropsInterface {
 const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
   const {t} = useTranslation();
 
-  const {sessionStore, mainStore, collaborationStore, defaultStore} = useStore();
+  const {sessionStore, mainStore, collaborationStore} = useStore();
   const {worldStore, unityStore} = mainStore;
-  const {homeStore} = defaultStore;
-  const {space} = collaborationStore;
-  const {onlineUsersStore} = homeStore;
-  const {onlineUsersList} = onlineUsersStore;
+  const {space, dashboardStore} = collaborationStore;
+  const {inviteUsersStore} = dashboardStore;
+  const {onlineUsersList} = inviteUsersStore;
   const {profile} = sessionStore;
 
   return (
@@ -37,7 +36,7 @@ const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
     >
       <styled.Container>
         <OnlineUsersList
-          onlineUsersStore={onlineUsersStore}
+          usersStore={inviteUsersStore}
           teleportToUser={unityStore.teleportToUser}
           spaceId={space?.id ?? ''}
           profile={profile ?? undefined}

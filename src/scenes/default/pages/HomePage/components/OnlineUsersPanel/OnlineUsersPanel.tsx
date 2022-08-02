@@ -82,6 +82,7 @@ const OnlineUsersPanel: FC = () => {
       >
         <OnlineUsersList
           onlineUsersStore={onlineUsersStore}
+          usersStore={onlineUsersStore}
           onlineUsersList={onlineUsersList}
           searchQuery={onlineUsersList.searchQuery}
           changeKeyboardControl={unityStore.changeKeyboardControl}

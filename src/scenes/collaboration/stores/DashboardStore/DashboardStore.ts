@@ -14,8 +14,7 @@ import {PermanentTypeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {youtubeVideoFullPath} from 'core/utils';
 
-import {TileFormStore} from './models/TileFormStore';
-import {VibeStore} from './models/VibeStore';
+import {TileFormStore, VibeStore, InviteUsersStore} from './models';
 
 const DashboardStore = types.compose(
   ResetModel,
@@ -23,6 +22,7 @@ const DashboardStore = types.compose(
     .model('DashboardStore', {
       tileDialog: types.optional(DialogModel, {}),
       inviteToSpaceDialog: types.optional(DialogModel, {}),
+      inviteUsersStore: types.optional(InviteUsersStore, {}),
       tileRemoveDialog: types.optional(DialogModel, {}),
       tileFormStore: types.optional(TileFormStore, {}),
       vibeStore: types.optional(VibeStore, {}),
