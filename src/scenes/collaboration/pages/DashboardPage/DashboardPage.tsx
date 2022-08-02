@@ -22,7 +22,7 @@ const DashboardPage: FC = () => {
 
   const history = useHistory();
 
-  const inviteRef = useRef<HTMLDivElement>(null);
+  const inviteRef = useRef<HTMLButtonElement>(null);
 
   usePosBusEvent('user-vibed', (type, count) => {
     vibeStore.setCount(count);
@@ -76,14 +76,15 @@ const DashboardPage: FC = () => {
         {(space.isAdmin || space.isMember) && (
           <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
-        <styled.InviteButtonWrapper ref={inviteRef}>
-          <Button
-            label={t('dashboard.invitePeople')}
-            icon="invite-user"
-            variant="primary"
-            onClick={inviteToSpaceDialog.open}
-          />
-        </styled.InviteButtonWrapper>
+
+        <Button
+          ref={inviteRef}
+          label={t('dashboard.invitePeople')}
+          icon="invite-user"
+          variant="primary"
+          onClick={inviteToSpaceDialog.open}
+        />
+
         {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}

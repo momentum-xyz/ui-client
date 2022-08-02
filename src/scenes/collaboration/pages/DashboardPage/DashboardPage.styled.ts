@@ -30,5 +30,3 @@ export const MessageCount = styled.span`
   top: 12px;
   margin-left: 21px;
 `;
-
-export const InviteButtonWrapper = styled.div``;
