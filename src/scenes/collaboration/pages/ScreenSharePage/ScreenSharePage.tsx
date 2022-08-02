@@ -19,20 +19,20 @@ const ScreenSharePage: FC = () => {
   const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, stageModeStore} = agoraStore;
-  const {screenShare, client} = agoraScreenShareStore;
+  const {videoTrack, client} = agoraScreenShareStore;
 
   const {t} = useTranslation();
   const history = useHistory();
 
   useEffect(() => {
-    if (screenShare) {
-      const agoraUserId = screenShare?.getUserId() as string;
+    if (videoTrack) {
+      const agoraUserId = videoTrack?.getUserId() as string;
       screenShareStore.setScreenOwner(agoraUserId);
       screenShareStore.setIsSettingUp(false);
     } else {
       screenShareStore.setScreenOwner(null);
     }
-  }, [screenShare, screenShareStore]);
+  }, [videoTrack, screenShareStore]);
 
   const startScreenSharing = useCallback(() => {
     screenShareStore.setIsSettingUp(true);
@@ -67,14 +67,14 @@ const ScreenSharePage: FC = () => {
         )}
       </SpaceTopBar>
       <styled.Container>
-        {!agoraScreenShareStore.screenShare ? (
+        {!videoTrack ? (
           <ScreenChoice
             isSettingUp={isSettingUp}
             canShare={space.isAdmin || stageModeStore.isOnStage}
             startScreenShare={startScreenSharing}
           />
         ) : (
-          <ScreenVideo videoTrack={agoraScreenShareStore.screenShare} />
+          <ScreenVideo videoTrack={videoTrack} />
         )}
         <TextChatView />
       </styled.Container>

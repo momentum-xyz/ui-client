@@ -55,10 +55,10 @@ const Collaboration: FC = () => {
   }, [rootStore, sessionStore.userId, spaceId, t]);
 
   useEffect(() => {
-    if (agoraScreenShareStore.screenShare) {
+    if (agoraScreenShareStore.videoTrack) {
       history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
     }
-  }, [agoraScreenShareStore.screenShare, history, spaceId]);
+  }, [agoraScreenShareStore.videoTrack, history, spaceId]);
 
   usePosBusEvent('posbus-connected', () => {
     if (collaborationStore.space) {
@@ -185,7 +185,7 @@ const Collaboration: FC = () => {
     {
       path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
       iconName: 'screenshare',
-      isActive: !!agoraScreenShareStore.screenShare
+      isActive: !!agoraScreenShareStore.videoTrack
     },
     {
       path: generatePath(ROUTES.collaboration.miro, {spaceId}),

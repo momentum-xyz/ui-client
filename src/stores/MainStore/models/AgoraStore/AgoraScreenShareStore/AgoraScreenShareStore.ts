@@ -1,8 +1,21 @@
 import {flow, types} from 'mobx-state-tree';
-import AgoraRTC, {IAgoraRTCClient, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
+import AgoraRTC, {
+  IAgoraRTCClient,
+  IRemoteVideoTrack,
+  ScreenVideoTrackInitConfig
+} from 'agora-rtc-sdk-ng';
 
-import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
+import {RequestModel, ResetModel} from 'core/models';
+
+const TRACK_CONFIG: ScreenVideoTrackInitConfig = {
+  encoderConfig: {
+    width: {max: 1280},
+    height: {max: 720},
+    frameRate: {max: 30},
+    bitrateMax: 2000
+  }
+};
 
 const AgoraScreenShareStore = types
   .compose(
@@ -14,62 +27,41 @@ const AgoraScreenShareStore = types
       isStageMode: false
     })
   )
-  .volatile<{client?: IAgoraRTCClient; _screenShare?: IRemoteVideoTrack}>(() => ({}))
-  .views((self) => ({
-    get screenShare(): IRemoteVideoTrack | undefined {
-      return self._screenShare;
-    },
-    set screenShare(value: IRemoteVideoTrack | undefined) {
-      self._screenShare = value;
-    }
+  .volatile<{client?: IAgoraRTCClient; videoTrack?: IRemoteVideoTrack}>(() => ({
+    client: undefined,
+    videoTrack: undefined
   }))
-  // Stop screensharing
-  .actions((self) => ({
-    stopScreenShare() {
-      self.client?.localTracks.forEach((track) => {
-        track.close();
-      });
-      self.client?.leave();
-      self.client = undefined;
-      self.screenShare = undefined;
-    }
-  }))
-  // Track actions
-  .actions((self) => ({
-    createScreenTrackAndPublish: flow(function* () {
-      if (!self.client) {
-        return;
-      }
-
-      const screenTrack = yield AgoraRTC.createScreenVideoTrack(
-        {
-          encoderConfig: {
-            width: {
-              max: 1280
-            },
-            height: {
-              max: 720
-            },
-            frameRate: {
-              max: 30
-            },
-            bitrateMax: 2000
-          }
-        },
-        'disable'
-      );
-
-      yield self.client.publish(screenTrack);
-      screenTrack.on('track-ended', self.stopScreenShare);
-    })
-  }))
-  // State actions
   .actions((self) => ({
     init(appId: string, isStageMode: boolean, spaceId?: string) {
       self.appId = appId;
       self.spaceId = spaceId;
       self.isStageMode = isStageMode;
     },
+    stopScreenShare() {
+      self.client?.localTracks.forEach((track) => {
+        track.close();
+      });
+      self.client?.leave();
+      self.client = undefined;
+      self.videoTrack = undefined;
+    },
+    screenShareStopped() {
+      self.videoTrack = undefined;
+    },
+    screenShareStarted(screenShare: IRemoteVideoTrack) {
+      self.videoTrack = screenShare;
+    }
+  }))
+  .actions((self) => ({
+    createScreenTrackAndPublish: flow(function* () {
+      if (self.client) {
+        const screenTrack = yield AgoraRTC.createScreenVideoTrack(TRACK_CONFIG, 'disable');
+        yield self.client.publish(screenTrack);
+        screenTrack.on('track-ended', self.stopScreenShare);
+      }
+    })
+  }))
+  .actions((self) => ({
     startScreenShare: flow(function* (authStateSubject: string) {
       if (self.spaceId) {
         self.client = AgoraRTC.createClient({
@@ -89,22 +81,11 @@ const AgoraScreenShareStore = types
           }
         );
 
-        yield self.client.join(
-          self.appId,
-          self.isStageMode ? `stage-${self.spaceId}` : self.spaceId,
-          response,
-          `ss|${authStateSubject}`
-        );
-
+        const token = self.isStageMode ? `stage-${self.spaceId}` : self.spaceId;
+        yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
         yield self.createScreenTrackAndPublish();
       }
-    }),
-    screenShareStopped() {
-      self.screenShare = undefined;
-    },
-    screenShareStarted(screenShare: IRemoteVideoTrack) {
-      self.screenShare = screenShare;
-    }
+    })
   }));
 
 export {AgoraScreenShareStore};
