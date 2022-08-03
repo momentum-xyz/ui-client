@@ -43,6 +43,8 @@ const UserProfileModel = types
       });
 
       self.invited = true;
+
+      return self.inviteRequest.isDone;
     }),
     setInvited(invited: boolean) {
       self.invited = invited;

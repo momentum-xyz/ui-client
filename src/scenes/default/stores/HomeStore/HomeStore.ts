@@ -1,8 +1,9 @@
 import {types} from 'mobx-state-tree';
 
-import {ResetModel} from 'core/models';
+import {OnlineUsersList, ResetModel} from 'core/models';
 import {ExploreStore} from 'scenes/widgets/stores/ExploreStore';
-import {OnlineUsersStore} from 'scenes/widgets/stores/OnlineUsersStore';
+
+import {OnlineUsersStore} from './models';
 
 const HomeStore = types.compose(
   ResetModel,
@@ -10,6 +11,7 @@ const HomeStore = types.compose(
     .model('HomeStore', {
       isActive: true,
       onlineUsersStore: types.optional(OnlineUsersStore, {}),
+      onlineUsersList: types.optional(OnlineUsersList, {}),
       exploreStore: types.optional(ExploreStore, {})
     })
     .actions((self) => ({

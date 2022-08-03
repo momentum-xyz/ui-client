@@ -3,6 +3,7 @@ import {DropResult} from 'react-beautiful-dnd';
 
 import {
   DialogModel,
+  OnlineUsersList,
   RequestModel,
   ResetModel,
   TileInterface,
@@ -14,14 +15,16 @@ import {PermanentTypeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {youtubeVideoFullPath} from 'core/utils';
 
-import {TileFormStore} from './models/TileFormStore';
-import {VibeStore} from './models/VibeStore';
+import {TileFormStore, VibeStore, InviteUsersStore} from './models';
 
 const DashboardStore = types.compose(
   ResetModel,
   types
     .model('DashboardStore', {
       tileDialog: types.optional(DialogModel, {}),
+      onlineUsersList: types.optional(OnlineUsersList, {}),
+      inviteToSpaceDialog: types.optional(DialogModel, {}),
+      inviteUsersStore: types.optional(InviteUsersStore, {}),
       tileRemoveDialog: types.optional(DialogModel, {}),
       tileFormStore: types.optional(TileFormStore, {}),
       vibeStore: types.optional(VibeStore, {}),

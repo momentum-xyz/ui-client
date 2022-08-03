@@ -52,6 +52,13 @@ export const Modal = styled.div`
     bottom: 0;
     right: 0;
   }
+
+  &.leftTop {
+    align-items: flex-start;
+    justify-content: flex-start;
+    top: 0;
+    left: 0;
+  }
 `;
 
 export const Container = styled.div<{offset: OffsetInterface}>`
@@ -64,5 +71,13 @@ export const Container = styled.div<{offset: OffsetInterface}>`
 
   &.rightTop {
     margin: ${(props) => props.offset?.top || 0}px ${(props) => props.offset?.right || 0}px 0 0;
+  }
+
+  &.leftTop {
+    margin: ${(props) => props.offset?.top || 0}px 0 0 ${(props) => props.offset?.left || 0}px;
+  }
+
+  &.topLeft {
+    margin: ${(props) => props.offset?.top || 0}px 0 0 60px;
   }
 `;
