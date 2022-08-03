@@ -37,6 +37,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   };
 
   const [inviteTimeout, setInviteTimeout] = useState<NodeJS.Timeout>();
+  const [invited, setInvited] = useState(false);
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     if (userId === user.uuid) {
@@ -45,14 +46,14 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   });
 
   useEffect(() => {
-    if (user.invited) {
+    if (invited) {
       if (inviteTimeout) {
         clearTimeout(inviteTimeout);
       }
 
       setInviteTimeout(
         setTimeout(() => {
-          user.setInvited(false);
+          setInvited(false);
         }, 30000)
       );
     } else {
@@ -61,12 +62,12 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
       }
       setInviteTimeout(undefined);
     }
-  }, [user.invited]);
+  }, [invited]);
 
   const handleInvite = useCallback(async () => {
     const success = await user.invite(spaceId);
     if (success) {
-      user.setInvited(true);
+      setInvited(true);
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -120,11 +121,11 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
         (invite ? (
           <styled.InviteButtonContainer>
             <Button
-              label={user.invited ? t('actions.invited') : t('actions.invite')}
+              label={invited ? t('actions.invited') : t('actions.invite')}
               onClick={handleInvite}
               variant="primary"
               size="small"
-              disabled={user.invited}
+              disabled={invited}
             />
           </styled.InviteButtonContainer>
         ) : (

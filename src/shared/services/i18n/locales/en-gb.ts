@@ -289,7 +289,7 @@ export const enGb = {
       youAreInAudience: 'You are in the audience, stage mode is on',
       newDeviceDetected:
         'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
-      inviteSuccess: 'You successfully invited {{user}} to the space',
+      inviteSuccess: 'You have successfully invited {{user}} to the space',
       inviteError: 'There was a problem inviting {{user}} to space'
     },
     titles: {
