@@ -1,5 +1,5 @@
 import {Transition} from '@headlessui/react';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
@@ -17,18 +17,14 @@ import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './MeetingRoomPage.styled';
 
 const MeetingRoomPage = () => {
-  const history = useHistory();
-  const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
-  const {
-    mainStore,
-    meetingStore: {meetingRoomStore},
-    collaborationStore,
-    sessionStore
-  } = useStore();
-  const {space} = collaborationStore;
+  const {mainStore, meetingStore, collaborationStore, sessionStore} = useStore();
+  const {meetingRoomStore} = meetingStore;
+  const {space, stageModeStore} = collaborationStore;
   const {unityStore, agoraStore} = mainStore;
   const {userDevicesStore, agoraStageModeStore} = agoraStore;
-  const {removeAllPopups} = collaborationStore.stageModeStore;
+  const {removeAllPopups} = stageModeStore;
+
+  const history = useHistory();
 
   const stageModeAudience = useMemo(() => {
     return agoraStore.isStageMode
@@ -92,21 +88,13 @@ const MeetingRoomPage = () => {
   };
 
   useEffect(() => {
-    const isLimitReached =
-      agoraStore.remoteUsers.length > appVariables.PARTICIPANTS_VIDEO_LIMIT - 1;
-
-    if (isLimitReached) {
-      setMaxVideoStreamsShown((maxVideoStreamsShown) => {
-        showMaxVideoStreamsReached();
-
-        return !maxVideoStreamsShown ? true : maxVideoStreamsShown;
-      });
+    if (agoraStore.remoteUsers.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT) {
+      showMaxVideoStreamsReached();
+      meetingRoomStore.setMaxVideoShown(true);
     } else {
-      setMaxVideoStreamsShown((maxVideoStreamsShown) => {
-        return maxVideoStreamsShown ? false : maxVideoStreamsShown;
-      });
+      meetingRoomStore.setMaxVideoShown(false);
     }
-  }, [agoraStore.remoteUsers.length]);
+  }, [agoraStore.remoteUsers.length, meetingRoomStore]);
 
   const handleLeave = () => {
     history.push(ROUTES.base);
@@ -173,7 +161,7 @@ const MeetingRoomPage = () => {
             )}
             <ul>
               {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
-              {maxVideoStreamsShown && (
+              {meetingRoomStore.maxVideoShown && (
                 <li className="mb-.5 p-.5 relative rounded-full border-1 border-transparant">
                   <div
                     className="h-8 w-8 flex items-center rounded-full bg-dark-blue-100 cursor-pointer"
