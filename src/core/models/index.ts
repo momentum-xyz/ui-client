@@ -23,3 +23,4 @@ export * from './UserSpaceDetails';
 export * from './Integration';
 export * from './AgoraRemoteUser';
 export * from './StageModeUser';
+export * from './OnlineUsersList';
