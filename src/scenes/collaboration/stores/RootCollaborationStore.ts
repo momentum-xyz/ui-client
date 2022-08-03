@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 
-import {Space, ResetModel, RequestModel} from 'core/models';
+import {Space, ResetModel, RequestModel, DialogModel} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
 import {api} from 'api';
 
@@ -9,6 +9,7 @@ import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
 import {GoogleDriveStore} from './GoogleDriveStore';
 import {ScreenShareStore} from './ScreenShareStore';
+import {StageModeStore} from './StageModeStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -20,13 +21,16 @@ const RootCollaborationStore = types
       screenShareStore: types.optional(ScreenShareStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
+      stageModeStore: types.optional(StageModeStore, {}),
       isModerator: false,
 
       leftMeetingSpaceId: types.maybe(types.string),
       leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean),
 
       joinMeetingSpaceRequest: types.optional(RequestModel, {}),
-      moderationRequest: types.optional(RequestModel, {})
+      moderationRequest: types.optional(RequestModel, {}),
+
+      newDeviceDialog: types.optional(DialogModel, {})
     })
   )
   .volatile(() => ({

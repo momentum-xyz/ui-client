@@ -18,7 +18,7 @@ const ScreenSharePage: FC = () => {
   const {space, screenShareStore} = collaborationStore;
   const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
-  const {agoraScreenShareStore, stageModeStore} = agoraStore;
+  const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
   const {videoTrack, client} = agoraScreenShareStore;
 
   const {t} = useTranslation();
@@ -70,7 +70,7 @@ const ScreenSharePage: FC = () => {
         {!videoTrack ? (
           <ScreenChoice
             isSettingUp={isSettingUp}
-            canShare={space.isAdmin || stageModeStore.isOnStage}
+            canShare={space.isAdmin || agoraStageModeStore.isOnStage}
             startScreenShare={startScreenSharing}
           />
         ) : (

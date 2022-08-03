@@ -2,7 +2,7 @@ import React, {FC, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {IconSvg, Text, useClickOutside} from 'ui-kit';
-import {AgoraRemoteUserInterface} from 'stores/MainStore/models/AgoraStore/models';
+import {AgoraRemoteUserInterface} from 'core/models';
 
 import * as styled from './ParticipantMenu.styled';
 

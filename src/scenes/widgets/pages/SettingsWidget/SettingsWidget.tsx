@@ -51,10 +51,7 @@ const SettingsWidget: FC = () => {
               placeholder={`${t('devices.video')} ${t('devices.device')}`}
               variant="secondary"
               value={userDevicesStore.currentVideoInput?.deviceId}
-              options={userDevicesStore.videoInputs.map((input) => ({
-                label: input.label,
-                value: input.deviceId
-              }))}
+              options={userDevicesStore.videoInputsOption}
               onOptionSelect={(option) => {
                 userDevicesStore.selectVideoInput(option.value);
               }}
@@ -75,10 +72,7 @@ const SettingsWidget: FC = () => {
               placeholder={`${t('devices.audio')} ${t('devices.device')}`}
               variant="secondary"
               value={userDevicesStore.currentAudioInput?.deviceId}
-              options={userDevicesStore.audioInputs.map((input) => ({
-                label: input.label,
-                value: input.deviceId
-              }))}
+              options={userDevicesStore.audioInputOptions}
               onOptionSelect={(option) => {
                 userDevicesStore.selectAudioInput(option.value);
               }}

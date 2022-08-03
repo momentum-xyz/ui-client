@@ -5,3 +5,5 @@ export * from './scanner.interface';
 export * from './unityPosition.interface';
 export * from './unityApi.interface';
 export * from './navigation.interface';
+export * from './stageModePopupInfo.interface';
+export * from './stageModePopupOptions.interface';
