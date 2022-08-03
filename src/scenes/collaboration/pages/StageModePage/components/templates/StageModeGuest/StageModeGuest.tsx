@@ -110,7 +110,7 @@ const StageModeGuest: React.FC = () => {
             <Stage />
           ) : (
             <styled.StageModeMessageText
-              text={t('messages.stageModeNotActive')}
+              text={t('messages.stageModeNotActiveGuest')}
               size="xl"
               transform="uppercase"
               align="center"

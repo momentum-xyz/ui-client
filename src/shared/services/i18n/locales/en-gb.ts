@@ -255,7 +255,8 @@ export const enGb = {
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
-      stageModeNotActive: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
+      stageModeNotActiveGuest: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
+      stageModeNotActiveModerator: `Stage Mode has not Been Toggled\n\nYou can toggle stage-mode, since you are a member of this space`,
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.',
@@ -277,6 +278,8 @@ export const enGb = {
       tileRemoveError: 'There was a problem removing your tile',
       pendingRequestToGoOnStage: 'Request to go on stage pending',
       stageIsFull: 'Stage is full',
+      stageIsActive: 'Stage is active',
+      stageIsInactiveToggleToActivate: 'Stage is inactive. Toggle to activate.',
       noParticipantsOnStage: 'There are currently no participants on stage.',
       onStage: 'On Stage',
       requestedPermissionToGoOnStage: 'You have requested permission to go on stage',

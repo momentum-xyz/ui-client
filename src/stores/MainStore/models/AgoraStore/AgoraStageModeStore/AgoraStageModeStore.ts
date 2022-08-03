@@ -7,6 +7,7 @@ import {api} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
+import {StageIsFullError} from 'core/errors';
 
 const AgoraStageModeStore = types
   .compose(
@@ -35,6 +36,25 @@ const AgoraStageModeStore = types
   )
   .volatile(() => ({
     client: AgoraRTC.createClient({mode: 'live', codec: 'vp8'})
+  }))
+  .views((self) => ({
+    get joined(): boolean {
+      return self.spaceId !== undefined;
+    },
+    get canEnterStage(): boolean {
+      return (
+        self.client.remoteUsers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS
+      );
+    },
+    get numberOfSpeakers(): number {
+      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
+    },
+    get numberOfAudienceMembers(): number {
+      return (
+        self.users.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
+        (self.isOnStage ? 1 : 0)
+      );
+    }
   }))
   // API Requests
   .actions((self) => ({
@@ -206,6 +226,10 @@ const AgoraStageModeStore = types
         ) => Promise<ILocalVideoTrack | undefined>
       ) => void
     ) {
+      if (!self.canEnterStage) {
+        throw new StageIsFullError();
+      }
+
       yield self.client.setClientRole('host');
       createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.isOnStage = true;
@@ -272,25 +296,6 @@ const AgoraStageModeStore = types
     },
     requestToGoOnstageWasHandled() {
       self.requestWasMadeToGoOnStage = false;
-    }
-  }))
-  .views((self) => ({
-    get joined(): boolean {
-      return self.spaceId !== undefined;
-    },
-    get canEnterStage(): boolean {
-      return (
-        self.client.remoteUsers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS
-      );
-    },
-    get numberOfSpeakers(): number {
-      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
-    },
-    get numberOfAudienceMembers(): number {
-      return (
-        self.users.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
-        (self.isOnStage ? 1 : 0)
-      );
     }
   }));
 

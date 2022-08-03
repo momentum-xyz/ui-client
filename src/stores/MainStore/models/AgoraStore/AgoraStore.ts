@@ -340,9 +340,14 @@ const AgoraStore = types
         });
       }
     }),
-    toggledStageMode: flow(function* (user: string) {
+    toggledStageMode: flow(function* (user: string, isModerator = true) {
       yield self.joinMeetingSpace(user);
+
       self.isTogglingStageMode = false;
+
+      if (isModerator) {
+        yield self.agoraStageModeStore.enterStage(self.userDevicesStore.createLocalTracks);
+      }
     })
   }))
   .views((self) => ({
