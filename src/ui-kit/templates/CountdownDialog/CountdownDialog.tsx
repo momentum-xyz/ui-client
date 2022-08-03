@@ -26,7 +26,7 @@ const CountdownDialog: FC<PropsInterface> = ({onSave, onClose, title}) => {
     } else {
       onSave();
     }
-  }, [countdown]);
+  }, [countdown, onSave]);
 
   return (
     <Dialog
