@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 
-import {OnlineUsersList} from 'scenes/default/pages/HomePage/components';
 import {useStore} from 'shared/hooks';
 
 import {ReactComponent as PeopleIcon} from '../../../images/icons/location-user.svg';
@@ -12,11 +11,11 @@ interface SocialInviteToSpaceProps {
 
 const SocialInviteToSpace: React.FC<SocialInviteToSpaceProps> = ({onClose}) => {
   const {
-    homeStore: {onlineUsersStore}
+    homeStore: {onlineUsersList}
   } = useStore().defaultStore;
 
   useEffect(() => {
-    onlineUsersStore.setSearchQuery('');
+    onlineUsersList.setSearchQuery('');
   }, []);
 
   return (
@@ -29,7 +28,6 @@ const SocialInviteToSpace: React.FC<SocialInviteToSpaceProps> = ({onClose}) => {
           <CloseIcon className="hover:drop-shadow-white focus-within:drop-shadow-white" />
         </button>
       </div>
-      <OnlineUsersList invite />
     </div>
   );
 };

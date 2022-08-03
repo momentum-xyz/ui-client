@@ -1,45 +1,27 @@
-import {flow, Instance, types, cast} from 'mobx-state-tree';
+import {flow, Instance, types} from 'mobx-state-tree';
 
-import {OnlineUsersList, RequestModel, ResetModel} from 'core/models';
-import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
+import {RequestModel, ResetModel} from 'core/models';
+import {api} from 'api';
 
 const InviteUsersStore = types
   .compose(
     ResetModel,
     types.model('InviteUsersStore', {
-      onlineUsersList: types.optional(OnlineUsersList, {}),
-      usersRequest: types.optional(RequestModel, {}),
-      searchUsersRequest: types.optional(RequestModel, {})
+      usersRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    fetchUsers: flow(function* (worldId: string) {
-      const response: OnlineUsersResponse = yield self.usersRequest.send(
-        api.userRepository.fetchOnlineUsers,
-        {worldId}
-      );
+    invite: flow(function* (spaceId: string, userId: string) {
+      console.info(spaceId);
+      console.info(userId);
+      yield self.usersRequest.send(api.spaceInviteRepository.inviteToSpaceOrTable, {
+        spaceId,
+        userId: userId,
+        isTable: false
+      });
 
-      if (response) {
-        self.onlineUsersList.users = cast(response);
-      }
-    }),
-    searchUsers: flow(function* (worldId: string, online: boolean) {
-      const response: UserSearchResponse = yield self.searchUsersRequest.send(
-        api.userRepository.search,
-        {
-          q: self.onlineUsersList.searchQuery,
-          worldId,
-          online
-        }
-      );
-
-      if (response) {
-        self.onlineUsersList.searchedUsers = cast(response.results);
-      }
-    }),
-    setSearchQuery(query: string) {
-      self.onlineUsersList.searchQuery = query;
-    }
+      return self.usersRequest.isDone;
+    })
   }));
 
 export interface InviteUsersStoreInterface extends Instance<typeof InviteUsersStore> {}

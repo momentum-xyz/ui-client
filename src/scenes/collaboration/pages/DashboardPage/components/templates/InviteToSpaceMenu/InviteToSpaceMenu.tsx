@@ -18,8 +18,7 @@ const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
   const {sessionStore, mainStore, collaborationStore} = useStore();
   const {worldStore, unityStore} = mainStore;
   const {space, dashboardStore} = collaborationStore;
-  const {inviteUsersStore} = dashboardStore;
-  const {onlineUsersList} = inviteUsersStore;
+  const {onlineUsersList} = dashboardStore;
   const {profile} = sessionStore;
 
   return (
@@ -36,12 +35,10 @@ const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
     >
       <styled.Container>
         <OnlineUsersList
-          usersStore={inviteUsersStore}
           teleportToUser={unityStore.teleportToUser}
           spaceId={space?.id ?? ''}
           profile={profile ?? undefined}
           onlineUsersList={onlineUsersList}
-          searchQuery={onlineUsersList.searchQuery}
           worldId={worldStore.worldId}
           changeKeyboardControl={unityStore.changeKeyboardControl}
           invite

@@ -2,8 +2,10 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useHistory} from 'react-router';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
+import {observer} from 'mobx-react-lite';
+import {toast} from 'react-toastify';
 
-import {Button, SvgButton, Avatar} from 'ui-kit/index';
+import {Button, SvgButton, Avatar, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {appVariables} from 'api/constants';
 import {usePosBusEvent} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
@@ -14,7 +16,7 @@ export interface UserItemPropsInterface {
   onClick: React.MouseEventHandler<HTMLDivElement>;
   invite: boolean;
   user: UserProfileModelInterface;
-  teleportToUser: (userId: string, push: (path: string) => void) => void;
+  teleportToUser?: (userId: string, push: (path: string) => void) => void;
   spaceId: string;
   profile?: UserProfileModelInterface;
 }
@@ -31,10 +33,11 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
 
   const history = useHistory();
   const handleFlyToUser = () => {
-    teleportToUser(user.uuid, history.push as (path: string) => void);
+    teleportToUser?.(user.uuid, history.push as (path: string) => void);
   };
 
   const [inviteTimeout, setInviteTimeout] = useState<NodeJS.Timeout>();
+  const [invited, setInvited] = useState(false);
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     if (userId === user.uuid) {
@@ -43,23 +46,54 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   });
 
   useEffect(() => {
-    if (user.invited) {
+    if (invited) {
       if (inviteTimeout) {
         clearTimeout(inviteTimeout);
       }
 
-      setInviteTimeout(setTimeout(() => user.setInvited(false), 30000));
+      setInviteTimeout(
+        setTimeout(() => {
+          setInvited(false);
+        }, 30000)
+      );
     } else {
       if (inviteTimeout) {
         clearTimeout(inviteTimeout);
       }
       setInviteTimeout(undefined);
     }
-  }, [user.invited]);
+  }, [invited]);
 
-  const handleInvite = useCallback(() => {
-    user.invite(spaceId);
-  }, [spaceId]);
+  const handleInvite = useCallback(async () => {
+    const success = await user.invite(spaceId);
+    if (success) {
+      setInvited(true);
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.inviteSuccess', {
+            user: user.name
+          })}
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    } else {
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.inviteError', {
+            user: user.name
+          })}
+          isDanger
+          isCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    }
+  }, [spaceId, t, user]);
 
   const isItMe = useMemo(() => {
     return profile?.uuid === user.uuid;
@@ -87,10 +121,11 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
         (invite ? (
           <styled.InviteButtonContainer>
             <Button
-              label={user.invited ? t('actions.invited') : t('actions.invite')}
-              onClick={user.invited ? undefined : handleInvite}
-              variant={user.invited ? 'inverted' : 'primary'}
+              label={invited ? t('actions.invited') : t('actions.invite')}
+              onClick={handleInvite}
+              variant="primary"
               size="small"
+              disabled={invited}
             />
           </styled.InviteButtonContainer>
         ) : (
@@ -100,4 +135,4 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   );
 };
 
-export default UserItem;
+export default observer(UserItem);

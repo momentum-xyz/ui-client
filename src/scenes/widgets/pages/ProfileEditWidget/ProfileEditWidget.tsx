@@ -36,7 +36,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
     mainStore: {worldStore}
   } = useStore();
   const {profileStore} = widgetStore;
-  const {onlineUsersStore} = homeStore;
+  const {onlineUsersList} = homeStore;
   const {userProfile, editAvatarDialog} = profileStore;
   const {
     control,
@@ -104,7 +104,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
 
     profileStore.fetchProfile(profileStore.userProfile.uuid);
     sessionStore.loadUserProfile();
-    onlineUsersStore.fetchUsers(worldStore.worldId);
+    onlineUsersList.fetchUsers(worldStore.worldId);
     editAvatarDialog.close();
   };
 

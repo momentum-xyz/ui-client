@@ -276,7 +276,9 @@ export const enGb = {
       pendingRequestToGoOnStage: 'Request to go on stage pending',
       stageIsFull: 'Stage is full',
       noParticipantsOnStage: 'There are currently no participants on stage.',
-      onStage: 'On Stage'
+      onStage: 'On Stage',
+      inviteSuccess: 'You successfully invited {{user}} to the space',
+      inviteError: 'There was a problem inviting {{user}} to space'
     },
     titles: {
       alert: 'alert',

@@ -3,6 +3,7 @@ import {DropResult} from 'react-beautiful-dnd';
 
 import {
   DialogModel,
+  OnlineUsersList,
   RequestModel,
   ResetModel,
   TileInterface,
@@ -21,6 +22,7 @@ const DashboardStore = types.compose(
   types
     .model('DashboardStore', {
       tileDialog: types.optional(DialogModel, {}),
+      onlineUsersList: types.optional(OnlineUsersList, {}),
       inviteToSpaceDialog: types.optional(DialogModel, {}),
       inviteUsersStore: types.optional(InviteUsersStore, {}),
       tileRemoveDialog: types.optional(DialogModel, {}),
