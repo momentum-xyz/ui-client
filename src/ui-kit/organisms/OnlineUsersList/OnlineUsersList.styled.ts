@@ -17,13 +17,16 @@ export const List = styled.div`
     width: 5px;
     height: 0;
   }
+
   ::-webkit-scrollbar-thumb {
     border-radius: 6px;
     border: 5px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.6)};
   }
+
   ::-webkit-scrollbar-track {
     display: none;
   }
+
   ::-webkit-scrollbar-track-piece:end {
     margin-bottom: 10px;
   }

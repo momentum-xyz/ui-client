@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
-import {Button, SvgButton, Avatar, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {Button, SvgButton, Avatar, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {appVariables} from 'api/constants';
 import {usePosBusEvent} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
@@ -37,7 +37,6 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   };
 
   const [inviteTimeout, setInviteTimeout] = useState<NodeJS.Timeout>();
-  const [invited, setInvited] = useState(false);
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     if (userId === user.uuid) {
@@ -46,14 +45,14 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   });
 
   useEffect(() => {
-    if (invited) {
+    if (user.invited) {
       if (inviteTimeout) {
         clearTimeout(inviteTimeout);
       }
 
       setInviteTimeout(
         setTimeout(() => {
-          setInvited(false);
+          user.setInvited(false);
         }, 30000)
       );
     } else {
@@ -62,12 +61,12 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
       }
       setInviteTimeout(undefined);
     }
-  }, [invited]);
+  }, [user.invited]);
 
   const handleInvite = useCallback(async () => {
     const success = await user.invite(spaceId);
     if (success) {
-      setInvited(true);
+      user.setInvited(true);
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -77,7 +76,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
           })}
           isCloseButton
         />,
-        TOAST_COMMON_OPTIONS
+        TOAST_GROUND_OPTIONS
       );
     } else {
       toast.error(
@@ -90,7 +89,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
           isDanger
           isCloseButton
         />,
-        TOAST_COMMON_OPTIONS
+        TOAST_GROUND_OPTIONS
       );
     }
   }, [spaceId, t, user]);
@@ -121,11 +120,11 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
         (invite ? (
           <styled.InviteButtonContainer>
             <Button
-              label={invited ? t('actions.invited') : t('actions.invite')}
+              label={user.invited ? t('actions.invited') : t('actions.invite')}
               onClick={handleInvite}
               variant="primary"
               size="small"
-              disabled={invited}
+              disabled={user.invited}
             />
           </styled.InviteButtonContainer>
         ) : (

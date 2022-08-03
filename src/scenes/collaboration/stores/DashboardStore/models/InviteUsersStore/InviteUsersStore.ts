@@ -12,8 +12,6 @@ const InviteUsersStore = types
   )
   .actions((self) => ({
     invite: flow(function* (spaceId: string, userId: string) {
-      console.info(spaceId);
-      console.info(userId);
       yield self.usersRequest.send(api.spaceInviteRepository.inviteToSpaceOrTable, {
         spaceId,
         userId: userId,

@@ -1,7 +1,7 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-import {Text} from 'ui-kit/index';
+import {Text} from 'ui-kit';
 
 export const StyledText = styled(Text)``;
 
@@ -32,6 +32,7 @@ export const InfoContainer = styled.div`
       width: 12ch;
       cursor: default;
     }
+
     :hover {
       ${StyledText} {
         color: white;

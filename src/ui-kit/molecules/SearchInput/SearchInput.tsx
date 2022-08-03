@@ -33,10 +33,7 @@ const SearchInput: FC<SearchPropsInterface> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  // const debouncedChange = useDebouncedCallback((val) => onChange(val), delay);
-
   const handleChange = (event: FormEvent<HTMLInputElement>) => {
-    // debouncedChange(event.currentTarget.value);
     onChange?.(event.currentTarget.value);
   };
 
