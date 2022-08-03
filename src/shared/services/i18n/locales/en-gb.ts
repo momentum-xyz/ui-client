@@ -288,7 +288,9 @@ export const enGb = {
         '(The stage is currently full, you must first remove someone from the stage before you can accept)',
       youAreInAudience: 'You are in the audience, stage mode is on',
       newDeviceDetected:
-        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?'
+        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
+      inviteSuccess: 'You have successfully invited {{user}} to the space',
+      inviteError: 'There was a problem inviting {{user}} to space'
     },
     titles: {
       alert: 'alert',
@@ -304,7 +306,8 @@ export const enGb = {
       updateSpace: 'update your space with some enticing content',
       goToStageMode: 'Click to go to stage-mode',
       userWantsToComeOnStage: '{{user}} wants to come on stage',
-      newDeviceDetected: 'New Device Detected'
+      newDeviceDetected: 'New Device Detected',
+      inviteUsers: 'Invite users'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',

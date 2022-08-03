@@ -4,21 +4,20 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {useStore, useUnityEvent} from 'shared/hooks';
-import {ExpandableLayout} from 'ui-kit';
+import {ExpandableLayout, OnlineUsersList} from 'ui-kit';
 import {ProfileEditWidget, ProfileWidget} from 'scenes/widgets/pages';
-import {OnlineUsersList} from 'scenes/default/pages/HomePage/components';
 
 import * as styled from './OnlineUsersPanel.styled';
 
 const LAYOUT_WIDTH = '200px';
 
 const OnlineUsersPanel: FC = () => {
-  const {
-    sessionStore,
-    widgetStore: {profileMenuStore},
-    defaultStore: {homeStore}
-  } = useStore();
-  const {onlineUsersStore} = homeStore;
+  const {sessionStore, widgetStore, mainStore, defaultStore, collaborationStore} = useStore();
+  const {space} = collaborationStore;
+  const {profileMenuStore} = widgetStore;
+  const {worldStore, unityStore} = mainStore;
+  const {homeStore} = defaultStore;
+  const {onlineUsersStore, onlineUsersList} = homeStore;
   const {profile} = sessionStore;
   const {profileDialog} = profileMenuStore;
 
@@ -80,7 +79,15 @@ const OnlineUsersPanel: FC = () => {
         setExpand={onlineUsersStore.toggleExpand}
         size={{width: LAYOUT_WIDTH}}
       >
-        <OnlineUsersList />
+        <OnlineUsersList
+          onlineUsersStore={onlineUsersStore}
+          onlineUsersList={onlineUsersList}
+          changeKeyboardControl={unityStore.changeKeyboardControl}
+          worldId={worldStore.worldId}
+          profile={profile ?? undefined}
+          teleportToUser={unityStore.teleportToUser}
+          spaceId={space?.id ?? ''}
+        />
       </ExpandableLayout>
     </styled.Container>
   );
