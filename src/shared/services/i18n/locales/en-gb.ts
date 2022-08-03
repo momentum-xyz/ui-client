@@ -291,7 +291,8 @@ export const enGb = {
         '(The stage is currently full, you must first remove someone from the stage before you can accept)',
       youAreInAudience: 'You are in the audience, stage mode is on',
       newDeviceDetected:
-        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?'
+        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
+      areYouSureYouWantToRemoveUserFromStage: `Are you sure you want remove {{name}} from stage?`
     },
     titles: {
       alert: 'alert',
@@ -307,7 +308,8 @@ export const enGb = {
       updateSpace: 'update your space with some enticing content',
       goToStageMode: 'Click to go to stage-mode',
       userWantsToComeOnStage: '{{user}} wants to come on stage',
-      newDeviceDetected: 'New Device Detected'
+      newDeviceDetected: 'New Device Detected',
+      removeParticipantFromStage: 'Remove Participant From Stage'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -370,7 +372,7 @@ export const enGb = {
       launch: 'Launch',
       confirmRemove: 'yes, remove',
       removeRule: 'remove rule',
-      no: 'no, cancel',
+      noCancel: 'no, cancel',
       save: 'save',
       launchInitiativeSuccess: 'Launched initiative succesfully, you will be now teleported.',
       lunchingInitiative: 'launching initiative',

@@ -42,18 +42,21 @@ const RemoveParticipantFromStageDialog: FC<RemoveParticipantFromStageDialogProps
 
   return (
     <Dialog
-      title="Remove participant from stage"
+      title={t('titles.removeParticipantFromStage')}
       approveInfo={{
-        title: 'Yes, remove from stage',
+        title: t('actions.confirmRemove'),
         onClick: handleUserKick
       }}
       declineInfo={{
-        title: 'No, cancel',
+        title: t('actions.noCancel'),
         onClick: collaborationStore.unselectUserToRemoveAndCloseDialog
       }}
     >
       <styled.Container>
-        <Text text={`Are you sure you want remove ${participant.name} from stage?`} size="m" />
+        <Text
+          text={t('messages.areYouSureYouWantToRemoveUserFromStage', {name: participant.name})}
+          size="m"
+        />
       </styled.Container>
     </Dialog>
   );
