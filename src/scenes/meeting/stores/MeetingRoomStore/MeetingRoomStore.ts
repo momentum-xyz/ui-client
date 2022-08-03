@@ -1,14 +1,14 @@
-import {flow, Instance, types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
 
 import {ParticipantModel} from './models';
 
-const CommunicationLayerStore = types
+const MeetingRoomStore = types
   .compose(
     ResetModel,
-    types.model('CommunicationLayerStore', {
+    types.model('MeetingRoomStore', {
       request: types.optional(RequestModel, {}),
       participants: types.array(ParticipantModel),
       isNormalMode: false,
@@ -45,7 +45,4 @@ const CommunicationLayerStore = types
     })
   }));
 
-export interface CommunicationLayerStoreInterface
-  extends Instance<typeof CommunicationLayerStore> {}
-
-export {CommunicationLayerStore};
+export {MeetingRoomStore};

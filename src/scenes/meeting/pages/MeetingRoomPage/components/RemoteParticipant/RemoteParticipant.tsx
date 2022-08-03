@@ -26,9 +26,9 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   canEnterStage,
   totalParticipants
 }) => {
-  const {collaborationStore, communicationStore, mainStore} = useStore();
+  const {collaborationStore, meetingStore, mainStore} = useStore();
   const {agoraStore} = mainStore;
-  const {communicationLayerStore} = communicationStore;
+  const {meetingRoomStore} = meetingStore;
   const {space} = collaborationStore;
   const videoRef = useRef<HTMLDivElement>(null);
   const inviteOnStageModalRef = useRef<ModalRef>(null);
@@ -78,24 +78,21 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       return;
     }
 
-    if (communicationLayerStore.selectedParticipant === participant.uid) {
-      communicationLayerStore.selectParticipant(undefined);
+    if (meetingRoomStore.selectedParticipant === participant.uid) {
+      meetingRoomStore.selectParticipant(undefined);
     } else {
-      communicationLayerStore.selectParticipant(participant.uid);
+      meetingRoomStore.selectParticipant(participant.uid);
     }
   };
 
   const handleRemoveParticipant = () => {
-    communicationLayerStore.removeParticipant(
-      space?.id,
-      communicationLayerStore.selectedParticipant
-    );
-    communicationLayerStore.selectParticipant(undefined);
+    meetingRoomStore.removeParticipant(space?.id, meetingRoomStore.selectedParticipant);
+    meetingRoomStore.selectParticipant(undefined);
   };
 
   const handleMuteParticipant = () => {
-    communicationLayerStore.muteParticipant(space?.id, communicationLayerStore.selectedParticipant);
-    communicationLayerStore.selectParticipant(undefined);
+    meetingRoomStore.muteParticipant(space?.id, meetingRoomStore.selectedParticipant);
+    meetingRoomStore.selectParticipant(undefined);
   };
 
   return (
@@ -177,12 +174,12 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       >
         {(participant ?? audienceParticipant)?.name}
       </p>
-      {participant && communicationLayerStore.selectedParticipant === participant?.uid && (
+      {participant && meetingRoomStore.selectedParticipant === participant?.uid && (
         <ParticipantMenu
           muteParticipant={handleMuteParticipant}
           removeParticipant={handleRemoveParticipant}
           participant={participant}
-          onClose={() => communicationLayerStore.selectParticipant(undefined)}
+          onClose={() => meetingRoomStore.selectParticipant(undefined)}
         />
       )}
     </>

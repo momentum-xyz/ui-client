@@ -15,15 +15,15 @@ import {appVariables} from 'api/constants';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
 import {RemoteParticipant, LocalParticipant} from './components';
-import * as styled from './CommunicationLayer.styled';
+import * as styled from './MeetingRoomPage.styled';
 
 // TODO: Refactor this component to new structure
-const CommunicationLayer = () => {
+const MeetingRoomPage = () => {
   const history = useHistory();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {
     mainStore,
-    communicationStore: {communicationLayerStore},
+    meetingStore: {meetingRoomStore},
     collaborationStore,
     sessionStore
   } = useStore();
@@ -54,10 +54,10 @@ const CommunicationLayer = () => {
   useEffect(() => {
     removeAllPopups();
     if (space) {
-      communicationLayerStore.setKicked(false);
-      communicationLayerStore.selectParticipant(undefined);
+      meetingRoomStore.setKicked(false);
+      meetingRoomStore.selectParticipant(undefined);
     }
-  }, [removeAllPopups, communicationLayerStore, space]);
+  }, [removeAllPopups, meetingRoomStore, space]);
 
   usePosBusEvent('meeting-mute', userDevicesStore.mute);
 
@@ -202,7 +202,7 @@ const CommunicationLayer = () => {
                     iconName="microphoneOff"
                     size="extra-large"
                     onClick={() => {
-                      communicationLayerStore.muteAllParticipants(space?.id);
+                      meetingRoomStore.muteAllParticipants(space?.id);
                     }}
                   />
                 </styled.MuteButton>
@@ -265,4 +265,4 @@ relative
   );
 };
 
-export default observer(CommunicationLayer);
+export default observer(MeetingRoomPage);

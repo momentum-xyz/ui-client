@@ -11,7 +11,7 @@ import Button from '../atoms/Button';
 const InFlightControlLayer: React.FC = () => {
   const {
     collaborationStore,
-    communicationStore: {communicationLayerStore},
+    meetingStore: {meetingRoomStore},
     mainStore: {unityStore}
   } = useStore();
   const history = useHistory();
@@ -28,7 +28,7 @@ const InFlightControlLayer: React.FC = () => {
   return (
     <>
       <Transition
-        show={!!collaborationStore.leftMeetingSpaceId && !communicationLayerStore.isKicked}
+        show={!!collaborationStore.leftMeetingSpaceId && !meetingRoomStore.isKicked}
         enter="transition-opacity delay-500 duration-200"
         enterFrom="opacity-0"
         enterTo="opacity-100"

@@ -11,12 +11,11 @@ import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
 import VideoLayer from '../component/overlays/VideoLayer';
 
-import {Communication} from './communication';
+import {MeetingRoomPage} from './meeting';
 
 const AppLayers: FC = ({children}) => {
   const {mainStore} = useStore();
-  const {unityStore} = mainStore;
-  const {agoraStore} = mainStore;
+  const {unityStore, agoraStore} = mainStore;
 
   const theme = useTheme();
 
@@ -38,7 +37,7 @@ const AppLayers: FC = ({children}) => {
           >
             {children}
           </div>
-          <Communication />
+          <MeetingRoomPage />
         </main>
         <WidgetContainer />
       </div>

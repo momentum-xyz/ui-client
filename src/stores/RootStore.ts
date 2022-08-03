@@ -1,11 +1,11 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
-import {RootCommunicationStore} from 'scenes/communication/stores';
 import {RootAuthStore} from 'scenes/auth/stores';
 import {RootDefaultStore} from 'scenes/default/stores';
 import {RootSystemStore} from 'scenes/system/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
+import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootWidgetStore} from 'scenes/widgets/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
@@ -28,7 +28,7 @@ const RootStore = types
     systemStore: types.optional(RootSystemStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
-    communicationStore: types.optional(RootCommunicationStore, {}),
+    meetingStore: types.optional(RootMeetingStore, {}),
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),

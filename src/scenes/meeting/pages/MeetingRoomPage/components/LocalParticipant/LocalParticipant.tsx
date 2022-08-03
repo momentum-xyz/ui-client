@@ -15,7 +15,7 @@ const LocalParticipant: React.FC = () => {
   const videoRef = useRef<HTMLDivElement>(null);
   const [hasCameraState, setHasCameraState] = useState(false);
   const {
-    communicationStore: {communicationLayerStore},
+    meetingStore: {meetingRoomStore},
     sessionStore: {profile},
     mainStore: {agoraStore}
   } = useStore();
@@ -55,7 +55,7 @@ const LocalParticipant: React.FC = () => {
   ]);
 
   usePosBusEvent('meeting-kick', async (spaceId) => {
-    communicationLayerStore.setKicked(true);
+    meetingRoomStore.setKicked(true);
     history.push(ROUTES.base);
 
     toast.info(
