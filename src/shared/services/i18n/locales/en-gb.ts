@@ -199,7 +199,11 @@ export const enGb = {
       audience: 'Audience',
       you: 'You',
       cameraOn: 'Camera on',
-      cameraOff: 'Camera off'
+      cameraOff: 'Camera off',
+      microphoneOn: 'Microphone on',
+      microphoneOff: 'Microphone off',
+      webcamPreview: 'Webcam Preview',
+      audioVideoSettings: 'Audio/Video Settings'
     },
     messages: {
       loading: 'Loading Odyssey Momentum',
@@ -294,7 +298,11 @@ export const enGb = {
         'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
       inviteSuccess: 'You have successfully invited {{user}} to the space',
       inviteError: 'There was a problem inviting {{user}} to space',
-      areYouSureYouWantToRemoveUserFromStage: `Are you sure you want remove {{name}} from stage?`
+      areYouSureYouWantToRemoveUserFromStage: `Are you sure you want remove {{name}} from stage?`,
+      wouldYouLikeToGoOnStage: 'Would you like to go on stage?',
+      thisWillEnableYouToUseStage:
+        '(This will enable you to talk, screenshare, and transmit video)',
+      pleaseTryAgainLater: 'Please try again later'
     },
     titles: {
       alert: 'alert',
@@ -312,7 +320,13 @@ export const enGb = {
       userWantsToComeOnStage: '{{user}} wants to come on stage',
       newDeviceDetected: 'New Device Detected',
       inviteUsers: 'Invite users',
-      removeParticipantFromStage: 'Remove Participant From Stage'
+      removeParticipantFromStage: 'Remove Participant From Stage',
+      yourRequestHasBeenAccepted: 'Your request has been accepted,',
+      getReadyToGetLive: 'Get ready. You are about to go live in.',
+      goingOnStage: 'Going On Stage',
+      yourRequestWasDeclined: 'Your request was declined',
+      youHaveBeenInvitedOnStage: 'You have been invited on stage',
+      prepareToGoOnStage: 'Prepare to go on stage'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -397,7 +411,11 @@ export const enGb = {
       unmute: 'Unmute',
       startScreenShare: 'Start screensharing',
       accept: 'Accept',
-      switchDevice: 'Switch device'
+      switchDevice: 'Switch device',
+      getReady: 'Get Ready',
+      close: 'Close',
+      inviteToStage: 'Invite to stage',
+      ready: 'Ready'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
