@@ -52,4 +52,5 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   WIKI_URL: string;
   PARTICIPANTS_VIDEO_LIMIT: number;
   MAX_STAGE_USERS: number;
+  GAT_UI_TYPE_ID: string;
 }

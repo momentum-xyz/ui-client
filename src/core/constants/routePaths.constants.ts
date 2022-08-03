@@ -19,7 +19,7 @@ export const ROUTES = {
     dashboard: '/collaboration/:spaceId/dashboard',
     calendar: '/collaboration/:spaceId/calendar',
     calendarEvent: '/collaboration/:spaceId/calendar/:eventId',
-    screenShare: '/collaboration/:spaceId/screenshare',
+    screenShare: '/collaboration/:spaceId/screenShare',
     miro: '/collaboration/:spaceId/miro',
     googleDrive: '/collaboration/:spaceId/google-drive',
     table: `/collaboration/:spaceId/table`
@@ -28,7 +28,6 @@ export const ROUTES = {
     base: '/space/:spaceId/admin',
     broadcast: '/space/:spaceId/admin/broadcast'
   },
-  createSpace: '/profile?createspace=1',
   magic: '/magic/:id',
   worldCalendar: '/calendar',
   help: '/help'

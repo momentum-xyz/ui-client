@@ -5,19 +5,17 @@ import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {ToastContent, TOAST_GROUND_OPTIONS, SvgButton, Text, TOAST_BASE_OPTIONS} from 'ui-kit';
+import {ToastContent, TOAST_GROUND_OPTIONS, SvgButton, Text} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {ROUTES} from 'core/constants';
-import {useGetSpace} from 'hooks/api/useSpaceService';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './MeetingRoomPage.styled';
 
-// TODO: Refactor this component to new structure
 const MeetingRoomPage = () => {
   const history = useHistory();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
@@ -79,42 +77,6 @@ const MeetingRoomPage = () => {
       />,
       TOAST_GROUND_OPTIONS
     );
-  });
-
-  // TODO: Move to unity page
-  usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
-    const handleJoinSpace = () => {
-      unityStore.teleportToSpace(spaceId);
-
-      // TODO: Refactoring
-      collaborationStore
-        .joinMeetingSpace(spaceId, uiTypeId === '285ba49f-fee3-40d2-ab55-256b5804c20c')
-        .then(() => {
-          if (uiTypeId !== '285ba49f-fee3-40d2-ab55-256b5804c20c') {
-            history.push({pathname: ROUTES.collaboration.base, state: {spaceId}});
-          } else {
-            history.push({pathname: ROUTES.collaboration.table, state: {spaceId}});
-          }
-        });
-    };
-
-    const Content: React.FC = () => {
-      const [spaceInfo, , ,] = useGetSpace(spaceId);
-
-      return (
-        <ToastContent
-          headerIconName="alert"
-          text={t('messages.joinSpaceWelcome')}
-          title={t('messages.spaceInvitationNote', {
-            invitor: invitorName,
-            spaceName: spaceInfo?.space.name
-          })}
-          approveInfo={{title: t('titles.joinSpace'), onClick: handleJoinSpace}}
-        />
-      );
-    };
-
-    toast.info(<Content />, TOAST_BASE_OPTIONS);
   });
 
   const showMaxVideoStreamsReached = () => {
@@ -212,12 +174,7 @@ const MeetingRoomPage = () => {
             <ul>
               {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
               {maxVideoStreamsShown && (
-                <li
-                  className="mb-.5 p-.5
-relative
-        rounded-full
-        border-1 border-transparant"
-                >
+                <li className="mb-.5 p-.5 relative rounded-full border-1 border-transparant">
                   <div
                     className="h-8 w-8 flex items-center rounded-full bg-dark-blue-100 cursor-pointer"
                     onClick={showMaxVideoStreamsReached}
