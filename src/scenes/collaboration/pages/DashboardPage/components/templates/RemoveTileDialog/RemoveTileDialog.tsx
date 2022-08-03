@@ -49,7 +49,7 @@ const RemoveTileDialog: FC = () => {
     <Dialog
       title={t('dashboard.removeTileForm.title')}
       approveInfo={{
-        title: t('actions.no'),
+        title: t('actions.noCancel'),
         onClick: tileRemoveDialog.close
       }}
       declineInfo={{

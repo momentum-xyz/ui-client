@@ -36,6 +36,25 @@ const AgoraStageModeStore = types
   .volatile(() => ({
     client: AgoraRTC.createClient({mode: 'live', codec: 'vp8'})
   }))
+  .views((self) => ({
+    get joined(): boolean {
+      return self.spaceId !== undefined;
+    },
+    get canEnterStage(): boolean {
+      return (
+        self.client.remoteUsers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS
+      );
+    },
+    get numberOfSpeakers(): number {
+      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
+    },
+    get numberOfAudienceMembers(): number {
+      return (
+        self.users.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
+        (self.isOnStage ? 1 : 0)
+      );
+    }
+  }))
   // API Requests
   .actions((self) => ({
     inviteToStage: flow(function* (userId: string) {
@@ -244,11 +263,15 @@ const AgoraStageModeStore = types
         return;
       }
 
-      yield self.stageModeKickRequest.send(api.stageModeRepository.admitOrKick, {
+      const isSuccess = yield self.stageModeKickRequest.send(api.stageModeRepository.admitOrKick, {
         spaceId: self.spaceId,
         userId,
         modType: ModerationEnum.KICK
       });
+
+      if (!isSuccess) {
+        return false;
+      }
 
       if (userId === self.userId) {
         self.moveToAudience(userId);
@@ -256,6 +279,8 @@ const AgoraStageModeStore = types
         yield self.leaveStage();
         self.moveToAudience(userId);
       }
+
+      return true;
     }),
     addStageModeUser(userId: string) {
       if (self.users.filter((user) => user.uid === userId).length !== 0) {
@@ -272,25 +297,6 @@ const AgoraStageModeStore = types
     },
     requestToGoOnstageWasHandled() {
       self.requestWasMadeToGoOnStage = false;
-    }
-  }))
-  .views((self) => ({
-    get joined(): boolean {
-      return self.spaceId !== undefined;
-    },
-    get canEnterStage(): boolean {
-      return (
-        self.client.remoteUsers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS
-      );
-    },
-    get numberOfSpeakers(): number {
-      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
-    },
-    get numberOfAudienceMembers(): number {
-      return (
-        self.users.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
-        (self.isOnStage ? 1 : 0)
-      );
     }
   }));
 

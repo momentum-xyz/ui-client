@@ -6,11 +6,15 @@ import {useTranslation} from 'react-i18next';
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'core/models';
 import {IconSvg, Text, MediaPlayer} from 'ui-kit';
+import {StageModeModerationEventEnum} from 'core/enums';
 
 import * as styled from './Stage.styled';
 
 interface StagePropsInterface {
-  onRemoteUserClick?: (remoteUser: AgoraRemoteUserInterface, type: string) => void;
+  onRemoteUserClick?: (
+    remoteUser: AgoraRemoteUserInterface,
+    type: StageModeModerationEventEnum
+  ) => void;
 }
 
 const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
@@ -83,7 +87,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
                   {!user.isMuted && (
                     <styled.RemoteUserActionButton
                       onClick={() => {
-                        onRemoteUserClick?.(user, 'mute');
+                        onRemoteUserClick?.(user, StageModeModerationEventEnum.MUTE);
                       }}
                     >
                       <styled.RemoteUserAction>
@@ -94,7 +98,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
                   )}
                   <styled.RemoteUserActionButton
                     onClick={() => {
-                      onRemoteUserClick?.(user, 'remove');
+                      onRemoteUserClick?.(user, StageModeModerationEventEnum.MUTE);
                     }}
                   >
                     <styled.RemoteUserAction>

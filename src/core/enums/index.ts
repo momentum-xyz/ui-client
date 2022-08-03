@@ -24,3 +24,4 @@ export * from './moderation.enum';
 export * from './integrationType.enum';
 export * from './vibeAction.enum';
 export * from './stageModePopupType.enum';
+export * from './stageModeModerationEvent.enum';

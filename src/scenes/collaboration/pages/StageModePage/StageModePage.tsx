@@ -5,9 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 
-import StageModeControlPanelLayout from '../../../../component/layout/StageMode/StageModeControlPanelLayout';
-
-import {StageModeGuest} from './components';
+import {StageModeGuest, StageModeModerator} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
@@ -49,7 +47,7 @@ const StageModePage: FC = () => {
         )}
       </Route>
       <Route exact path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>
-        <StageModeControlPanelLayout />
+        <StageModeModerator />
       </Route>
     </Switch>
   );
