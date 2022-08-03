@@ -1,10 +1,12 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
+import {useHistory} from 'react-router';
 
 import {youtubeVideoPath} from 'core/utils';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
+import {PageTopBar} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 
-import Page from '../../../component/molucules/Page';
 import {useGetSpace} from '../../../hooks/api/useSpaceService';
 import Panel, {PanelBody, PanelTitle} from '../../../component/atoms/Panel';
 import Input from '../../../component/atoms/input/Input';
@@ -19,6 +21,8 @@ import {
 } from '../../../context/Integration/hooks/useIntegration';
 import {IntegrationDTO} from '../../../context/Integration/IntegrationTypes';
 
+import * as styled from './BroadCastAdminLayout.styled';
+
 export interface Broadcast {
   data: {
     url: string;
@@ -28,6 +32,7 @@ export interface Broadcast {
 }
 
 const BroadCastAdminLayout: React.FC = () => {
+  const history = useHistory();
   const {spaceId} = useParams<{spaceId: string}>();
 
   const [url, setUrl] = useState<string>('');
@@ -105,6 +110,14 @@ const BroadCastAdminLayout: React.FC = () => {
         {item.name}
       </li>
     ));
+  };
+
+  const handleClose = () => {
+    if (history.location.state?.canGoBack) {
+      history.goBack();
+    } else {
+      history.push(ROUTES.base);
+    }
   };
 
   const getView = () => {
@@ -215,13 +228,14 @@ const BroadCastAdminLayout: React.FC = () => {
   };
 
   return (
-    <Page
-      title={spaceResponse?.space?.name || ''}
-      subtitle="Manage Broadcast"
-      isAdmin={spaceResponse?.admin}
-    >
-      {getView()}
-    </Page>
+    <styled.Container>
+      <PageTopBar
+        title={spaceResponse?.space?.name || ''}
+        subtitle="Manage Broadcast"
+        onClose={handleClose}
+      />
+      <styled.Body>{getView()}</styled.Body>
+    </styled.Container>
   );
 };
 
