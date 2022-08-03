@@ -1,1 +1,1 @@
-export * from './PrivateSpaceError';
+export * from './privateSpace.error';

@@ -255,7 +255,8 @@ export const enGb = {
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
-      stageModeNotActive: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
+      stageModeNotActiveGuest: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
+      stageModeNotActiveModerator: `Stage Mode has not Been Toggled\n\nYou can toggle stage-mode, since you are a member of this space`,
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.',
@@ -277,6 +278,8 @@ export const enGb = {
       tileRemoveError: 'There was a problem removing your tile',
       pendingRequestToGoOnStage: 'Request to go on stage pending',
       stageIsFull: 'Stage is full',
+      stageIsActive: 'Stage is active',
+      stageIsInactiveToggleToActivate: 'Stage is inactive. Toggle to activate.',
       noParticipantsOnStage: 'There are currently no participants on stage.',
       onStage: 'On Stage',
       requestedPermissionToGoOnStage: 'You have requested permission to go on stage',
@@ -290,7 +293,8 @@ export const enGb = {
       newDeviceDetected:
         'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
       inviteSuccess: 'You have successfully invited {{user}} to the space',
-      inviteError: 'There was a problem inviting {{user}} to space'
+      inviteError: 'There was a problem inviting {{user}} to space',
+      areYouSureYouWantToRemoveUserFromStage: `Are you sure you want remove {{name}} from stage?`
     },
     titles: {
       alert: 'alert',
@@ -307,7 +311,8 @@ export const enGb = {
       goToStageMode: 'Click to go to stage-mode',
       userWantsToComeOnStage: '{{user}} wants to come on stage',
       newDeviceDetected: 'New Device Detected',
-      inviteUsers: 'Invite users'
+      inviteUsers: 'Invite users',
+      removeParticipantFromStage: 'Remove Participant From Stage'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -370,7 +375,7 @@ export const enGb = {
       launch: 'Launch',
       confirmRemove: 'yes, remove',
       removeRule: 'remove rule',
-      no: 'no, cancel',
+      noCancel: 'no, cancel',
       save: 'save',
       launchInitiativeSuccess: 'Launched initiative succesfully, you will be now teleported.',
       lunchingInitiative: 'launching initiative',

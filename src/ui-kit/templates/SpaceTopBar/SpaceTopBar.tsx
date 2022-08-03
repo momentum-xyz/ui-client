@@ -1,3 +1,4 @@
+import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
 
 import {PageTopBar} from 'ui-kit';
@@ -57,4 +58,4 @@ const SpaceTopBar: FC<PropsInterface> = ({
   );
 };
 
-export default SpaceTopBar;
+export default observer(SpaceTopBar);

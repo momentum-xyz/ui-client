@@ -1,6 +1,13 @@
 import {flow, types} from 'mobx-state-tree';
 
-import {Space, ResetModel, RequestModel, DialogModel} from 'core/models';
+import {
+  Space,
+  ResetModel,
+  RequestModel,
+  DialogModel,
+  AgoraRemoteUser,
+  AgoraRemoteUserInterface
+} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
 import {api} from 'api';
 
@@ -26,11 +33,15 @@ const RootCollaborationStore = types
 
       leftMeetingSpaceId: types.maybe(types.string),
       leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean),
+      participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
+      // Requests
       joinMeetingSpaceRequest: types.optional(RequestModel, {}),
       moderationRequest: types.optional(RequestModel, {}),
 
-      newDeviceDialog: types.optional(DialogModel, {})
+      // Dialogs
+      newDeviceDialog: types.optional(DialogModel, {}),
+      removeParticipantFromStageDialog: types.optional(DialogModel, {})
     })
   )
   .volatile(() => ({
@@ -94,7 +105,15 @@ const RootCollaborationStore = types
 
       self.leftMeetingSpaceId = undefined;
       self.leftMeetingSpaceWasAGrabbedTable = false;
-    })
+    }),
+    selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
+      self.participantToRemoveFromStage = remoteUser;
+      self.removeParticipantFromStageDialog.open();
+    },
+    unselectUserToRemoveAndCloseDialog() {
+      self.participantToRemoveFromStage = undefined;
+      self.removeParticipantFromStageDialog.close();
+    }
   }))
   .views((self) => ({
     get isSpaceLoaded(): boolean {
