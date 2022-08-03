@@ -7,7 +7,6 @@ import {api} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {StageIsFullError} from 'core/errors';
 
 const AgoraStageModeStore = types
   .compose(
@@ -226,10 +225,6 @@ const AgoraStageModeStore = types
         ) => Promise<ILocalVideoTrack | undefined>
       ) => void
     ) {
-      if (!self.canEnterStage) {
-        throw new StageIsFullError();
-      }
-
       yield self.client.setClientRole('host');
       createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.isOnStage = true;
@@ -268,11 +263,15 @@ const AgoraStageModeStore = types
         return;
       }
 
-      yield self.stageModeKickRequest.send(api.stageModeRepository.admitOrKick, {
+      const isSuccess = yield self.stageModeKickRequest.send(api.stageModeRepository.admitOrKick, {
         spaceId: self.spaceId,
         userId,
         modType: ModerationEnum.KICK
       });
+
+      if (!isSuccess) {
+        return false;
+      }
 
       if (userId === self.userId) {
         self.moveToAudience(userId);
@@ -280,6 +279,8 @@ const AgoraStageModeStore = types
         yield self.leaveStage();
         self.moveToAudience(userId);
       }
+
+      return true;
     }),
     addStageModeUser(userId: string) {
       if (self.users.filter((user) => user.uid === userId).length !== 0) {

@@ -12,7 +12,6 @@ import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
-import {StageIsFullError} from 'core/errors';
 import {ROUTES} from 'core/constants';
 
 import {RemoveParticipantFromStageDialog} from './components';
@@ -38,21 +37,21 @@ const StageModeModerator: React.FC = () => {
   );
 
   const handleEnterStage = useCallback(async () => {
-    try {
-      await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
-    } catch (error) {
-      if (error instanceof StageIsFullError) {
-        toast.error(
-          <ToastContent
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('messages.stageIsFull')}
-            isCloseButton
-          />,
-          TOAST_GROUND_OPTIONS
-        );
-      }
+    if (!agoraStageModeStore.canEnterStage) {
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.stageIsFull')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
+
+      return;
     }
+
+    await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
   }, [agoraStageModeStore, userDevicesStore.createLocalTracks]);
 
   const handleLeaveStage = useCallback(() => {
@@ -65,12 +64,6 @@ const StageModeModerator: React.FC = () => {
 
   return (
     <>
-      {removeParticipantFromStageDialog.isOpen &&
-        collaborationStore.participantToRemoveFromStage && (
-          <RemoveParticipantFromStageDialog
-            participant={collaborationStore.participantToRemoveFromStage}
-          />
-        )}
       <styled.Container>
         <SpaceTopBar
           title={space.name ?? ''}
@@ -145,6 +138,12 @@ const StageModeModerator: React.FC = () => {
           </styled.StageContainer>
         </styled.Body>
       </styled.Container>
+      {removeParticipantFromStageDialog.isOpen &&
+        collaborationStore.participantToRemoveFromStage && (
+          <RemoveParticipantFromStageDialog
+            participant={collaborationStore.participantToRemoveFromStage}
+          />
+        )}
     </>
   );
 };

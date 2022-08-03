@@ -9,13 +9,11 @@ import {Dialog, Text, ToastContent} from 'ui-kit';
 
 import * as styled from './RemoveParticipantFromStageDialog.styled';
 
-interface RemoveParticipantFromStageDialogPropsInterface {
+interface PropsInterface {
   participant: AgoraRemoteUserInterface;
 }
 
-const RemoveParticipantFromStageDialog: FC<RemoveParticipantFromStageDialogPropsInterface> = ({
-  participant
-}) => {
+const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => {
   const {collaborationStore, mainStore} = useStore();
   const {agoraStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
@@ -23,9 +21,9 @@ const RemoveParticipantFromStageDialog: FC<RemoveParticipantFromStageDialogProps
   const {t} = useTranslation();
 
   const handleUserKick = useCallback(async () => {
-    try {
-      await agoraStageModeStore.kickUserOffStage(participant.uid.toString());
-    } catch {
+    const success = await agoraStageModeStore.kickUserOffStage(participant.uid.toString());
+
+    if (!success) {
       toast.error(
         <ToastContent
           isDanger
