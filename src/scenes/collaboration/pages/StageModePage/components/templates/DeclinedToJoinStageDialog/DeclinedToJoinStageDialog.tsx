@@ -5,13 +5,13 @@ import {Dialog, Text} from 'ui-kit';
 
 import * as styled from './DeclinedToJoinStageDialog.styled';
 
-export interface AcceptedToJoinProps {
+interface PropsInterface {
   onClose?: () => void;
 }
 
 const DIALOG_WIDTH = '370px';
 
-const DeclinedToJoinStagePopup: React.FC<AcceptedToJoinProps> = ({onClose}) => {
+const DeclinedToJoinStagePopup: React.FC<PropsInterface> = ({onClose}) => {
   const {t} = useTranslation();
 
   return (

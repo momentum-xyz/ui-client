@@ -5,7 +5,7 @@ import {Dialog, Text} from 'ui-kit';
 
 import * as styled from './InvitedOnStageDialog.styled';
 
-export interface PropsInterface {
+interface PropsInterface {
   onClose?: () => void;
   onGetReady?: () => void;
   onDecline?: () => void;

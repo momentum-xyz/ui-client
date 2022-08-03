@@ -9,14 +9,14 @@ import {StageModeUserInterface} from 'core/models';
 
 import * as styled from './InviteOnStageDialog.styled';
 
-export interface StageModeInviteToStagePopupProps {
+interface PropsInterface {
   user?: StageModeUserInterface;
   onClose?: () => void;
 }
 
 const DIALOG_WIDTH = '360px';
 
-const InviteOnStageDialog: React.FC<StageModeInviteToStagePopupProps> = ({user, onClose}) => {
+const InviteOnStageDialog: React.FC<PropsInterface> = ({user, onClose}) => {
   const {agoraStore} = useStore().mainStore;
   const {agoraStageModeStore} = agoraStore;
 

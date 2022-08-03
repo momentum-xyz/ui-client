@@ -9,7 +9,7 @@ import {appVariables} from 'api/constants';
 
 import * as styled from './PrepareOnStageDialog.styled';
 
-export interface PropsInterface {
+interface PropsInterface {
   onClose?: () => void;
   onReady?: () => void;
 }
