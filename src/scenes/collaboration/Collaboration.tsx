@@ -99,7 +99,22 @@ const Collaboration: FC = () => {
   });
 
   usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
-    await agoraStore.toggledStageMode(sessionStore.userId);
+    const showStageIsFull = await agoraStore.toggledStageMode(
+      sessionStore.userId,
+      collaborationStore.isModerator
+    );
+
+    if (showStageIsFull) {
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.stageIsFull')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
+    }
 
     const isStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
 

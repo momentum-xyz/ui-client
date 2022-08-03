@@ -3,9 +3,6 @@ import React from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-// TODO: Refactor each page
-import DashboardSpaceLayout from '../component/layout/DashboardSpaceLayout';
-
 import {
   LoginPage,
   LoginCallback,
@@ -88,12 +85,6 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.base,
     exact: true,
     main: () => <HomePage />
-  },
-  {
-    path: ROUTES.spaceDashboard,
-    exact: true,
-    main: () => <DashboardSpaceLayout />,
-    renderBackground: true
   },
   {
     path: ROUTES.spaceAdmin.base,

@@ -340,9 +340,22 @@ const AgoraStore = types
         });
       }
     }),
-    toggledStageMode: flow(function* (user: string) {
+    /**
+     * @returns {boolean} Boolean whether should show stage is full error
+     */
+    toggledStageMode: flow(function* (user: string, isModerator = true) {
       yield self.joinMeetingSpace(user);
+
       self.isTogglingStageMode = false;
+
+      if (isModerator && self.agoraStageModeStore.canEnterStage) {
+        yield self.agoraStageModeStore.enterStage(self.userDevicesStore.createLocalTracks);
+        return false;
+      } else if (isModerator) {
+        return true;
+      }
+
+      return false;
     })
   }))
   .views((self) => ({
