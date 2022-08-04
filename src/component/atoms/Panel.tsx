@@ -1,10 +1,8 @@
 import React from 'react';
 
 import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
-import {ReactComponent as AddIcon} from '../../images/icons/add.svg';
 
 import Button from './Button';
-import TopbarButton from './topbar/TopbarButton';
 
 interface Props {
   padding?: boolean;
@@ -29,8 +27,6 @@ export default Panel;
 interface PanelTitleProps {
   className?: string;
   onClose?: () => void;
-  onAddAction?: () => void;
-  addLabel?: string;
   onAction?: () => void;
   actionLabel?: string;
 }
@@ -40,9 +36,7 @@ export const PanelTitle: React.FC<PanelTitleProps> = ({
   className,
   onClose,
   actionLabel,
-  onAction,
-  onAddAction,
-  addLabel
+  onAction
 }) => {
   return (
     <>
@@ -52,11 +46,6 @@ export const PanelTitle: React.FC<PanelTitleProps> = ({
           <Button onClick={onAction} type="ghost" size="xs">
             {actionLabel}
           </Button>
-        )}
-        {onAddAction && addLabel && (
-          <TopbarButton onClick={onAddAction} title={addLabel}>
-            <AddIcon />
-          </TopbarButton>
         )}
         {onClose && <CloseIcon onClick={onClose} className="w-2 h-2" />}
       </div>
