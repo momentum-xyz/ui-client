@@ -46,6 +46,11 @@ export const Container = styled.div`
     height: 78.22px;
   }
 
+  &.extra-large {
+    width: 200px;
+    height: 200px;
+  }
+
   .avatar {
     width: 50%;
     height: 50%;

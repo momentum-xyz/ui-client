@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -6,27 +6,47 @@ import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface} from 'core/interfaces';
-import {Navigation, ToastContent, TOAST_GROUND_OPTIONS, NewDeviceDialog} from 'ui-kit';
+import {
+  Navigation,
+  ToastContent,
+  TOAST_GROUND_OPTIONS,
+  NewDeviceDialog,
+  CountdownDialog
+} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {createRoutesByConfig} from 'core/utils';
-import StageModeModalController from 'component/molucules/StageMode/StageModeModalController';
 import {PrivateSpaceError} from 'core/errors';
 
 import {COLLABORATION_ROUTES} from './CollaborationRoutes';
+import {
+  AcceptedToJoinStageDialog,
+  DeclinedToJoinStageDialog,
+  InvitedOnStageDialog,
+  PrepareOnStageDialog
+} from './pages/StageModePage/components';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {newDeviceDialog, stageModeStore} = collaborationStore;
+  const {
+    newDeviceDialog,
+    stageModeStore,
+    acceptedToJoinStageDialog,
+    declinedToJoinStageDialog,
+    invitedOnStageDialog,
+    prepareOnStageDialog,
+    countdownDialog
+  } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
 
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
+  const [accepted, setAccepted] = useState<boolean>();
 
   useEffect(() => {
     rootStore.joinMeetingSpace(spaceId).catch((e) => {
@@ -53,6 +73,102 @@ const Collaboration: FC = () => {
       history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
     }
   }, [agoraScreenShareStore.videoTrack, history, spaceId]);
+
+  const isHandlingInviteOrRequest = () => {
+    return (
+      acceptedToJoinStageDialog.isOpen ||
+      invitedOnStageDialog.isOpen ||
+      prepareOnStageDialog.isOpen ||
+      countdownDialog.isOpen ||
+      agoraStageModeStore.isOnStage
+    );
+  };
+
+  const handleDecline = () => {
+    acceptedToJoinStageDialog.close();
+  };
+
+  const handleCountdownEnded = useCallback(async () => {
+    if (!agoraStageModeStore.canEnterStage) {
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.stageModeFull')}
+          isCloseButton
+        />,
+        TOAST_GROUND_OPTIONS
+      );
+      countdownDialog.close();
+      return;
+    }
+
+    if (!accepted) {
+      try {
+        await agoraStageModeStore.invitationRespond(StageModeRequestEnum.ACCEPT);
+        await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
+      } catch {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.joinStageRefused')}
+            isCloseButton
+          />
+        );
+      } finally {
+        countdownDialog.close();
+      }
+    } else if (accepted) {
+      try {
+        await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
+        countdownDialog.close();
+      } catch {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('messages.joinStageRefused')}
+            isCloseButton
+          />
+        );
+      }
+    }
+  }, [agoraStageModeStore, countdownDialog, accepted, t, userDevicesStore.createLocalTracks]);
+
+  const handleCountdownCanceled = () => {
+    countdownDialog.close();
+    prepareOnStageDialog.close();
+  };
+
+  const handleInviteDeclined = useCallback(async () => {
+    await agoraStageModeStore.invitationRespond(StageModeRequestEnum.DECLINE);
+    invitedOnStageDialog.close();
+  }, [agoraStageModeStore, invitedOnStageDialog]);
+
+  usePosBusEvent('stage-mode-invite', () => {
+    if (!isHandlingInviteOrRequest()) {
+      invitedOnStageDialog.open();
+      setAccepted(false);
+    }
+  });
+
+  usePosBusEvent('stage-mode-accepted', (userId) => {
+    if (userId === sessionStore.userId) {
+      if (!isHandlingInviteOrRequest()) {
+        acceptedToJoinStageDialog.open();
+        setAccepted(true);
+      }
+    }
+  });
+
+  usePosBusEvent('stage-mode-declined', (userId) => {
+    if (userId === sessionStore.userId) {
+      declinedToJoinStageDialog.open();
+    }
+  });
 
   usePosBusEvent('posbus-connected', () => {
     if (collaborationStore.space) {
@@ -204,7 +320,6 @@ const Collaboration: FC = () => {
   return (
     <>
       <Navigation tabs={tabs} />
-      <StageModeModalController />
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
@@ -218,6 +333,33 @@ const Collaboration: FC = () => {
           onAudioDeviceSelect={userDevicesStore.selectAudioInput}
           onVideoDeviceSelect={userDevicesStore.selectVideoInput}
         />
+      )}
+      {acceptedToJoinStageDialog.isOpen && (
+        <AcceptedToJoinStageDialog
+          onReady={acceptedToJoinStageDialog.close}
+          onDecline={prepareOnStageDialog.open}
+          onClose={handleDecline}
+        />
+      )}
+      {countdownDialog.isOpen && (
+        <CountdownDialog
+          title={t('titles.goingOnStage')}
+          onSave={handleCountdownEnded}
+          onClose={handleCountdownCanceled}
+        />
+      )}
+      {declinedToJoinStageDialog.isOpen && (
+        <DeclinedToJoinStageDialog onClose={declinedToJoinStageDialog.close} />
+      )}
+      {invitedOnStageDialog.isOpen && (
+        <InvitedOnStageDialog
+          onClose={invitedOnStageDialog.close}
+          onGetReady={prepareOnStageDialog.open}
+          onDecline={handleInviteDeclined}
+        />
+      )}
+      {prepareOnStageDialog.isOpen && (
+        <PrepareOnStageDialog onClose={prepareOnStageDialog.close} onReady={countdownDialog.open} />
       )}
     </>
   );

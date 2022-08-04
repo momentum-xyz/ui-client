@@ -9,6 +9,7 @@ type props = {
   onClose: () => void;
 };
 
+// TODO: Remove if all components stop using it
 export const CountdownPopup = ({onSave, onClose, title}: props) => {
   const [countdown, setCountdown] = useState<number>(3);
 
