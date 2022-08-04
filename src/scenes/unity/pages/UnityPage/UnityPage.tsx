@@ -63,6 +63,10 @@ const UnityPage: FC = () => {
     history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
   });
 
+  useUnityEvent('ClickEventVideo', (spaceId: string) => {
+    history.push({pathname: generatePath(ROUTES.video, {spaceId})});
+  });
+
   usePosBusEvent('high-five', (senderId, message) => {
     toast.info(
       <HighFiveContent

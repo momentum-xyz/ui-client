@@ -18,6 +18,7 @@ import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
 import {MagicPage} from './magic/pages';
+import {VideoPage} from './video/pages';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -99,6 +100,10 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.magic,
     main: () => <MagicPage />
+  },
+  {
+    path: ROUTES.video,
+    main: () => <VideoPage />
   },
   {
     path: ROUTES.worldCalendar,

@@ -6,10 +6,10 @@ import {useTheme} from 'styled-components';
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
+// import {VideoPage} from 'scenes/video/pages';
 
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
-import VideoLayer from '../component/overlays/VideoLayer';
 
 import {Communication} from './communication';
 
@@ -42,7 +42,6 @@ const AppLayers: FC = ({children}) => {
         </main>
         <WidgetContainer />
       </div>
-      <VideoLayer />
       <LiveStreamLayer />
     </>
   );

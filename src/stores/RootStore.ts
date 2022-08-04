@@ -10,6 +10,7 @@ import {RootWidgetStore} from 'scenes/widgets/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
+import {VideoStore} from 'scenes/video/stores';
 import {PosBusEventEnum} from 'core/enums';
 
 import {ConfigStore} from './ConfigStore';
@@ -32,7 +33,8 @@ const RootStore = types
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
-    magicStore: types.optional(MagicStore, {})
+    magicStore: types.optional(MagicStore, {}),
+    videoStore: types.optional(VideoStore, {})
   })
   .actions((self) => ({
     initApplication(): void {
