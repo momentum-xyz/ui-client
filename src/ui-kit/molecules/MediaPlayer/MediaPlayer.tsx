@@ -2,6 +2,7 @@ import {ILocalVideoTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
+import {observer} from 'mobx-react-lite';
 
 import {IconSvg, Text} from 'ui-kit';
 import {UserProfileModelInterface, AgoraRemoteUserInterface} from 'core/models';
@@ -85,4 +86,4 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
   );
 };
 
-export default MediaPlayer;
+export default observer(MediaPlayer);
