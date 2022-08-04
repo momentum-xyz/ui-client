@@ -309,8 +309,6 @@ const AgoraStore = types
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
       self.clanupAgoraListeners();
-      self.agoraStageModeStore.resetModel();
-      self.agoraVideoCallStore.resetModel();
 
       if (self.isStageMode) {
         yield self.agoraStageModeStore.leave();
@@ -319,6 +317,8 @@ const AgoraStore = types
         yield self.agoraVideoCallStore.leave();
       }
 
+      self.agoraStageModeStore.resetModel();
+      self.agoraVideoCallStore.resetModel();
       self.resetModel();
     })
   }))

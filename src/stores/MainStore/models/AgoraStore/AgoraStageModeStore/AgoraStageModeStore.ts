@@ -34,7 +34,12 @@ const AgoraStageModeStore = types
     })
   )
   .volatile(() => ({
-    client: AgoraRTC.createClient({mode: 'live', codec: 'vp8'})
+    client: (() => {
+      const client = AgoraRTC.createClient({mode: 'live', codec: 'vp8'});
+      client.enableDualStream();
+
+      return client;
+    })()
   }))
   .views((self) => ({
     get joined(): boolean {
@@ -50,8 +55,9 @@ const AgoraStageModeStore = types
     },
     get numberOfAudienceMembers(): number {
       return (
-        self.users.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
-        (self.isOnStage ? 1 : 0)
+        self.users.filter((user) => {
+          return user.role === ParticipantRole.AUDIENCE_MEMBER;
+        }).length + Number(!self.isOnStage)
       );
     }
   }))
@@ -123,7 +129,6 @@ const AgoraStageModeStore = types
   // Common actions
   .actions((self) => ({
     init(appId: string) {
-      self.client.enableDualStream();
       self.client.enableAudioVolumeIndicator();
       self.appId = appId;
     },
