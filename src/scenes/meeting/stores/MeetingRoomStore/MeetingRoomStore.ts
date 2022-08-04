@@ -13,16 +13,12 @@ const MeetingRoomStore = types
       participants: types.array(ParticipantModel),
       selectedParticipant: types.maybe(types.union(types.string, types.number)),
       isNormalMode: false,
-      isKicked: false,
-      maxVideoShown: false
+      isKicked: false
     })
   )
   .actions((self) => ({
     selectParticipant(uid?: string | number) {
       self.selectedParticipant = uid;
-    },
-    setMaxVideoShown(maxVideoShown: boolean) {
-      self.maxVideoShown = maxVideoShown;
     },
     changeMode(isStageMode: boolean) {
       self.isNormalMode = !isStageMode;

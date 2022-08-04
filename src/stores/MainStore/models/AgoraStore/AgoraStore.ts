@@ -5,9 +5,9 @@ import AgoraRTC, {
   IAgoraRTCRemoteUser
 } from 'agora-rtc-sdk-ng';
 
-import {ResetModel, RequestModel, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
-import {appVariables} from 'api/constants';
 import {api} from 'api';
+import {appVariables} from 'api/constants';
+import {ResetModel, RequestModel, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
 
 import {UserDevicesStore} from './UserDevicesStore';
@@ -361,6 +361,9 @@ const AgoraStore = types
   .views((self) => ({
     get hasJoined(): boolean {
       return self.spaceId !== undefined;
+    },
+    get maxVideoStreamsReached(): boolean {
+      return self.remoteUsers.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT;
     }
   }));
 

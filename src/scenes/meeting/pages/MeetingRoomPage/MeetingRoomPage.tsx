@@ -10,7 +10,6 @@ import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ParticipantRole} from 'core/enums';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {ROUTES} from 'core/constants';
-import {appVariables} from 'api/constants';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
 import {RemoteParticipant, LocalParticipant} from './components';
@@ -87,18 +86,15 @@ const MeetingRoomPage = () => {
     );
   };
 
-  useEffect(() => {
-    if (agoraStore.remoteUsers.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT) {
-      showMaxVideoStreamsReached();
-      meetingRoomStore.setMaxVideoShown(true);
-    } else {
-      meetingRoomStore.setMaxVideoShown(false);
-    }
-  }, [agoraStore.remoteUsers.length, meetingRoomStore]);
-
   const handleLeave = () => {
     history.push(ROUTES.base);
   };
+
+  useEffect(() => {
+    if (agoraStore.maxVideoStreamsReached) {
+      showMaxVideoStreamsReached();
+    }
+  }, [agoraStore.maxVideoStreamsReached]);
 
   return (
     <Transition
@@ -161,7 +157,8 @@ const MeetingRoomPage = () => {
             )}
             <ul>
               {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
-              {meetingRoomStore.maxVideoShown && (
+
+              {agoraStore.maxVideoStreamsReached && (
                 <li className="mb-.5 p-.5 relative rounded-full border-1 border-transparant">
                   <div
                     className="h-8 w-8 flex items-center rounded-full bg-dark-blue-100 cursor-pointer"
