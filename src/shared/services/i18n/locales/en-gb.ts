@@ -326,7 +326,8 @@ export const enGb = {
       goingOnStage: 'Going On Stage',
       yourRequestWasDeclined: 'Your request was declined',
       youHaveBeenInvitedOnStage: 'You have been invited on stage',
-      prepareToGoOnStage: 'Prepare to go on stage'
+      prepareToGoOnStage: 'Prepare to go on stage',
+      broadcastManage: 'Manage Broadcast'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -547,6 +548,9 @@ export const enGb = {
       overview: {
         title: 'token rules Overview'
       }
+    },
+    broadcastAdmin: {
+      subtitle: 'Manage Broadcast'
     },
     spaceAdmin: {
       subtitle: 'Manage Space',
