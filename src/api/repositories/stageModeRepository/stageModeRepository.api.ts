@@ -33,9 +33,9 @@ export const joinStageMode: RequestInterface<StageModeRequest, StageModeJoinResp
 
 export const inviteToStage: RequestInterface<StageModeInviteRequest, void> = (options) => {
   const {spaceId, userId, ...restOptions} = options;
-  const url = generatePath(stageModeRepositoryEndpoints().invite, {spaceId, userId});
+  const url = generatePath(stageModeRepositoryEndpoints().invite, {spaceId});
 
-  return request.post(url, restOptions);
+  return request.post(url, {userId}, restOptions);
 };
 
 export const respondToInvite: RequestInterface<StageModeResponseRequest, void> = (options) => {

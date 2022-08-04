@@ -42,6 +42,13 @@ const AgoraStageModeStore = types
     })()
   }))
   .views((self) => ({
+    get audienceMembers(): StageModeUserInterface[] {
+      return self.users.filter((user) => {
+        return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== self.userId;
+      });
+    }
+  }))
+  .views((self) => ({
     get joined(): boolean {
       return self.spaceId !== undefined;
     },
@@ -54,16 +61,7 @@ const AgoraStageModeStore = types
       return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
     },
     get numberOfAudienceMembers(): number {
-      return (
-        self.users.filter((user) => {
-          return user.role === ParticipantRole.AUDIENCE_MEMBER;
-        }).length + Number(!self.isOnStage)
-      );
-    },
-    get audienceMembers(): StageModeUserInterface[] {
-      return self.users.filter((user) => {
-        return user.role === ParticipantRole.AUDIENCE_MEMBER;
-      });
+      return self.audienceMembers.length + Number(!self.isOnStage);
     }
   }))
   // API Requests
