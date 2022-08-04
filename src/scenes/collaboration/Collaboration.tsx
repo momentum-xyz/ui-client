@@ -336,9 +336,9 @@ const Collaboration: FC = () => {
       )}
       {acceptedToJoinStageDialog.isOpen && (
         <AcceptedToJoinStageDialog
-          onReady={acceptedToJoinStageDialog.close}
-          onDecline={prepareOnStageDialog.open}
-          onClose={handleDecline}
+          onReady={prepareOnStageDialog.open}
+          onDecline={handleDecline}
+          onClose={acceptedToJoinStageDialog.close}
         />
       )}
       {countdownDialog.isOpen && (

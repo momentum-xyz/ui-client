@@ -17,6 +17,12 @@ export const Body = styled.div`
   height: 100%;
 `;
 
+export const InnerBody = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+`;
+
 export const PopupQueueWrapper = styled.div`
   display: flex;
   flex-direction: column;
