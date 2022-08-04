@@ -13,6 +13,7 @@ import {
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
 import {ROUTES} from 'core/constants';
+import TextChatView from 'component/molucules/collaboration/TextChatView';
 
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
@@ -136,6 +137,7 @@ const StageModeModerator: React.FC = () => {
               />
             )}
           </styled.StageContainer>
+          <TextChatView />
         </styled.Body>
       </styled.Container>
       {removeParticipantFromStageDialog.isOpen &&

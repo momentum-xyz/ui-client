@@ -1,7 +1,7 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 
-import {RequestModel, ResetModel, StageModeUser} from 'core/models';
+import {RequestModel, ResetModel, StageModeUser, StageModeUserInterface} from 'core/models';
 import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 import {api} from 'api';
 import {bytesToUuid} from 'core/utils';
@@ -34,7 +34,12 @@ const AgoraStageModeStore = types
     })
   )
   .volatile(() => ({
-    client: AgoraRTC.createClient({mode: 'live', codec: 'vp8'})
+    client: (() => {
+      const client = AgoraRTC.createClient({mode: 'live', codec: 'vp8'});
+      client.enableDualStream();
+
+      return client;
+    })()
   }))
   .views((self) => ({
     get joined(): boolean {
@@ -50,9 +55,15 @@ const AgoraStageModeStore = types
     },
     get numberOfAudienceMembers(): number {
       return (
-        self.users.filter((user) => user.role === ParticipantRole.AUDIENCE_MEMBER).length -
-        (self.isOnStage ? 1 : 0)
+        self.users.filter((user) => {
+          return user.role === ParticipantRole.AUDIENCE_MEMBER;
+        }).length + Number(!self.isOnStage)
       );
+    },
+    get audienceMembers(): StageModeUserInterface[] {
+      return self.users.filter((user) => {
+        return user.role === ParticipantRole.AUDIENCE_MEMBER;
+      });
     }
   }))
   // API Requests
@@ -123,7 +134,6 @@ const AgoraStageModeStore = types
   // Common actions
   .actions((self) => ({
     init(appId: string) {
-      self.client.enableDualStream();
       self.client.enableAudioVolumeIndicator();
       self.appId = appId;
     },

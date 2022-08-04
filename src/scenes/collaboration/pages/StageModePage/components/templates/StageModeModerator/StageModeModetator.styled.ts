@@ -15,6 +15,7 @@ export const Container = styled.div`
 export const Body = styled.div`
   display: flex;
   height: 100%;
+  padding: 10px 0 0 0;
 `;
 
 export const PopupQueueContainer = styled.div`

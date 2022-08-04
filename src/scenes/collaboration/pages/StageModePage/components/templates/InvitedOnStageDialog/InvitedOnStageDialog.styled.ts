@@ -5,4 +5,5 @@ export const Body = styled.div`
   flex-direction: column;
   gap: 20px;
   padding-top: 10px;
+  padding-bottom: 20px;
 `;

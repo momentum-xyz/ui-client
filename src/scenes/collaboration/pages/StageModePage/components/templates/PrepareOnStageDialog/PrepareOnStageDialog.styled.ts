@@ -4,6 +4,7 @@ export const Body = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 20px;
 `;
 
 export const VideoContainer = styled.div`
