@@ -5,11 +5,10 @@ import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
 import {ReactComponent as AddIcon} from 'images/icons/add.svg';
 import Avatar from 'component/atoms/Avatar';
-import Modal, {ModalRef} from 'component/util/Modal';
-import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 import {appVariables} from 'api/constants';
+import {InviteOnStageDialog} from 'scenes/collaboration/pages/StageModePage/components';
 
 import {ParticipantMenu} from '../ParticipantMenu';
 
@@ -31,7 +30,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   const {communicationLayerStore} = communicationStore;
   const {space} = collaborationStore;
   const videoRef = useRef<HTMLDivElement>(null);
-  const inviteOnStageModalRef = useRef<ModalRef>(null);
   const id = (participant?.uid as string | undefined) ?? audienceParticipant?.uid;
   const [hovered, setIsHovered] = useState(false);
 
@@ -69,7 +67,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   }, [maximumParticipantsReached, participant]);
 
   const handleStageModeUserClick = () => {
-    inviteOnStageModalRef.current?.open();
+    collaborationStore.inviteOnStageDialog.open();
     console.info(`clicked on ${participant?.name ?? audienceParticipant?.name} with ${id}`);
   };
 
@@ -100,14 +98,14 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   return (
     <>
-      <Modal ref={inviteOnStageModalRef}>
-        <StageModeInviteToStagePopup
+      {collaborationStore.inviteOnStageDialog.isOpen && (
+        <InviteOnStageDialog
           user={audienceParticipant}
           onClose={() => {
-            inviteOnStageModalRef.current?.close();
+            collaborationStore.inviteOnStageDialog.close();
           }}
         />
-      </Modal>
+      )}
       <li
         className={` mb-.5 p-.5
         rounded-full 
