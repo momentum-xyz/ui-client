@@ -14,7 +14,6 @@ import {
   TOAST_BASE_OPTIONS
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {ParticipantRole} from 'core/enums';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useGetSpace} from 'hooks/api/useSpaceService';
@@ -40,12 +39,8 @@ const CommunicationLayer = () => {
   const {removeAllPopups} = collaborationStore.stageModeStore;
 
   const stageModeAudience = useMemo(() => {
-    return agoraStore.isStageMode
-      ? agoraStageModeStore.users.filter((user) => {
-          return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
-        })
-      : [];
-  }, [agoraStageModeStore.users, sessionStore.userId, agoraStore.isStageMode]);
+    return agoraStore.isStageMode ? agoraStageModeStore.audienceMembers : [];
+  }, [agoraStageModeStore.audienceMembers, agoraStore.isStageMode]);
 
   const numberOfPeople = useMemo(() => {
     return agoraStore.isStageMode

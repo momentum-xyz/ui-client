@@ -1,7 +1,7 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 
-import {RequestModel, ResetModel, StageModeUser} from 'core/models';
+import {RequestModel, ResetModel, StageModeUser, StageModeUserInterface} from 'core/models';
 import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 import {api} from 'api';
 import {bytesToUuid} from 'core/utils';
@@ -59,6 +59,11 @@ const AgoraStageModeStore = types
           return user.role === ParticipantRole.AUDIENCE_MEMBER;
         }).length + Number(!self.isOnStage)
       );
+    },
+    get audienceMembers(): StageModeUserInterface[] {
+      return self.users.filter((user) => {
+        return user.role === ParticipantRole.AUDIENCE_MEMBER;
+      });
     }
   }))
   // API Requests
