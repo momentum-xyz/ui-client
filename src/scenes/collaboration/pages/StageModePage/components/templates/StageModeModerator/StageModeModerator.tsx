@@ -13,6 +13,7 @@ import {
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
 import {ROUTES} from 'core/constants';
+import TextChatView from 'component/molucules/collaboration/TextChatView';
 
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
@@ -121,21 +122,24 @@ const StageModeModerator: React.FC = () => {
           </styled.ActionsContainer>
         </SpaceTopBar>
         <styled.Body>
-          <styled.PopupQueueContainer>
-            <StageModePopupQueue />
-          </styled.PopupQueueContainer>
-          <styled.StageContainer>
-            {agoraStore.isStageMode ? (
-              <Stage onRemoteUserClick={remoteUserClicked} />
-            ) : (
-              <styled.StageModeNotActiveText
-                text={t('messages.stageModeNotActiveModerator')}
-                size="xl"
-                transform="uppercase"
-                weight="bold"
-              />
-            )}
-          </styled.StageContainer>
+          <styled.InnerBody>
+            <styled.PopupQueueContainer>
+              <StageModePopupQueue />
+            </styled.PopupQueueContainer>
+            <styled.StageContainer>
+              {agoraStore.isStageMode ? (
+                <Stage onRemoteUserClick={remoteUserClicked} />
+              ) : (
+                <styled.StageModeNotActiveText
+                  text={t('messages.stageModeNotActiveModerator')}
+                  size="xl"
+                  transform="uppercase"
+                  weight="bold"
+                />
+              )}
+            </styled.StageContainer>
+          </styled.InnerBody>
+          <TextChatView />
         </styled.Body>
       </styled.Container>
       {removeParticipantFromStageDialog.isOpen &&

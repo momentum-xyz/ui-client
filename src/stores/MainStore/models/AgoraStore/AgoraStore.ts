@@ -189,9 +189,6 @@ const AgoraStore = types
       AgoraRTC.setLogLevel(4);
       self.userDevicesStore.init();
       self.appId = appVariables.AGORA_APP_ID;
-
-      self.agoraStageModeStore.init(self.appId);
-      self.agoraVideoCallStore.init(self.appId);
     }
   }))
   // Chat visibility
@@ -250,6 +247,10 @@ const AgoraStore = types
   // Meeting space managment
   .actions((self) => ({
     joinMeetingSpace: flow(function* (authStateSubject: string, spaceId?: string) {
+      self.init();
+      self.agoraStageModeStore.init(self.appId);
+      self.agoraVideoCallStore.init(self.appId);
+
       const status: SpaceIntegrationsStageModeResponse = yield self.getStageModeStatus(spaceId);
 
       const isStageMode = status.data?.stageModeStatus === 'initiated';
@@ -307,6 +308,7 @@ const AgoraStore = types
     }),
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
+      self.clanupAgoraListeners();
 
       if (self.isStageMode) {
         yield self.agoraStageModeStore.leave();
@@ -315,8 +317,9 @@ const AgoraStore = types
         yield self.agoraVideoCallStore.leave();
       }
 
-      self.remoteUsers = cast([]);
-      self.spaceId = undefined;
+      self.agoraStageModeStore.resetModel();
+      self.agoraVideoCallStore.resetModel();
+      self.resetModel();
     })
   }))
   // Stage mode actions

@@ -55,7 +55,14 @@ const RootCollaborationStore = types
     leftMeetingTimer: setTimeout(() => {}, 0)
   }))
   .actions((self) => ({
+    resetLeftMeetingSpace() {
+      self.leftMeetingSpaceId = undefined;
+      self.leftMeetingSpaceWasAGrabbedTable = undefined;
+    }
+  }))
+  .actions((self) => ({
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
+      self.resetLeftMeetingSpace();
       clearTimeout(self.leftMeetingTimer);
 
       self.space = Space.create({id: spaceId, isTable});
@@ -90,7 +97,7 @@ const RootCollaborationStore = types
       self.isModerator = false;
 
       self.leftMeetingTimer = setTimeout(() => {
-        self.leftMeetingSpaceId = undefined;
+        self.resetLeftMeetingSpace();
       }, 15000);
     },
     rejoinMeetingSpace: flow(function* () {
@@ -110,8 +117,7 @@ const RootCollaborationStore = types
         yield self.dashboardStore.fetchDashboard(self.leftMeetingSpaceId);
       }
 
-      self.leftMeetingSpaceId = undefined;
-      self.leftMeetingSpaceWasAGrabbedTable = false;
+      self.resetLeftMeetingSpace();
     }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
       self.participantToRemoveFromStage = remoteUser;

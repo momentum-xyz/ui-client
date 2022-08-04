@@ -36,7 +36,10 @@ const AgoraRemoteUser = types
     },
     set audioTrack(track: IRemoteAudioTrack | undefined) {
       if (self.participantInfo) {
-        self.participantInfo.audioTrack = track;
+        self.participantInfo = {
+          ...self.participantInfo,
+          audioTrack: track
+        };
       }
     },
     get videoTrack(): IRemoteVideoTrack | undefined {
@@ -44,7 +47,10 @@ const AgoraRemoteUser = types
     },
     set videoTrack(track: IRemoteVideoTrack | undefined) {
       if (self.participantInfo) {
-        self.participantInfo.videoTrack = track;
+        self.participantInfo = {
+          ...self.participantInfo,
+          videoTrack: track
+        };
       }
     },
     get avatarSrc(): string | undefined {
