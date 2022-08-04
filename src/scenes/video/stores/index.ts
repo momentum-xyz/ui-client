@@ -1,1 +1,1 @@
-export * from './RootVideoStore';
+export * from './VideoStore';

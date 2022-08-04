@@ -19,7 +19,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded, videoStore} = useStore();
+  const {mainStore, unityLoaded} = useStore();
   const {unityStore} = mainStore;
 
   const auth = useAuth();
@@ -63,7 +63,9 @@ const UnityPage: FC = () => {
     history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
   });
 
-  useUnityEvent('ClickEventVideo', videoStore.handleClickEventVideo);
+  useUnityEvent('ClickEventVideo', (spaceId: string) => {
+    history.push({pathname: generatePath(ROUTES.video, {spaceId})});
+  });
 
   usePosBusEvent('high-five', (senderId, message) => {
     toast.info(

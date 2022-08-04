@@ -29,6 +29,7 @@ export const ROUTES = {
   },
   createSpace: '/profile?createspace=1',
   magic: '/magic/:id',
+  video: '/video/:spaceId',
   worldCalendar: '/calendar',
   help: '/help'
 };
