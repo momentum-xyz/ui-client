@@ -39,7 +39,7 @@ const CountdownDialog: FC<PropsInterface> = ({onSave, onClose, title}) => {
       }}
     >
       <styled.Body>
-        <Text text={t('messages.getReadyToGetLive')} size="m" />
+        <Text text={t('titles.getReadyToGetLive')} size="m" />
         <Heading label={`${countdown}`} type="h1" />
       </styled.Body>
     </Dialog>

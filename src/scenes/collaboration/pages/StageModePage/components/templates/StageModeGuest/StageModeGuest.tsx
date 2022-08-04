@@ -11,6 +11,7 @@ import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
+import TextChatView from 'component/molucules/collaboration/TextChatView';
 
 import * as styled from './StageModeGuest.styled';
 
@@ -102,22 +103,25 @@ const StageModeGuest: React.FC = () => {
         </styled.Actions>
       </SpaceTopBar>
       <styled.Body>
-        <styled.PopupQueueWrapper>
-          <StageModePopupQueue />
-        </styled.PopupQueueWrapper>
-        <styled.StageModeContainer>
-          {agoraStore.isStageMode ? (
-            <Stage />
-          ) : (
-            <styled.StageModeMessageText
-              text={t('messages.stageModeNotActiveGuest')}
-              size="xl"
-              transform="uppercase"
-              align="center"
-              weight="bold"
-            />
-          )}
-        </styled.StageModeContainer>
+        <styled.InnerBody>
+          <styled.PopupQueueWrapper>
+            <StageModePopupQueue />
+          </styled.PopupQueueWrapper>
+          <styled.StageModeContainer>
+            {agoraStore.isStageMode ? (
+              <Stage />
+            ) : (
+              <styled.StageModeMessageText
+                text={t('messages.stageModeNotActiveGuest')}
+                size="xl"
+                transform="uppercase"
+                align="center"
+                weight="bold"
+              />
+            )}
+          </styled.StageModeContainer>
+        </styled.InnerBody>
+        <TextChatView />
       </styled.Body>
     </styled.Container>
   );

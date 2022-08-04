@@ -18,6 +18,12 @@ export const Body = styled.div`
   padding: 10px 0 0 0;
 `;
 
+export const InnerBody = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+`;
+
 export const PopupQueueContainer = styled.div`
   display: flex;
   flex-direction: column;
