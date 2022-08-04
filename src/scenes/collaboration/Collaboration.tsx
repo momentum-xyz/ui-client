@@ -165,7 +165,6 @@ const Collaboration: FC = () => {
   });
 
   usePosBusEvent('stage-mode-declined', (userId) => {
-    //check user
     if (userId === sessionStore.userId) {
       declinedToJoinStageDialog.open();
     }
