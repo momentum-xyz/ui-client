@@ -9,10 +9,10 @@ import * as styled from './DashboardVideo.styled';
 
 interface PropsInterface {
   onClose: () => void;
-  videoUrl: string;
+  youtubeHash: string;
 }
 
-const DashboardVideo: FC<PropsInterface> = ({onClose, videoUrl}) => {
+const DashboardVideo: FC<PropsInterface> = ({onClose, youtubeHash}) => {
   const theme = useTheme();
 
   const opts = {
@@ -29,7 +29,7 @@ const DashboardVideo: FC<PropsInterface> = ({onClose, videoUrl}) => {
           <SvgButton iconName="close" size="medium-large" isWhite onClick={onClose} theme={theme} />
         </styled.CloseButton>
         <YouTube
-          videoId={videoUrl}
+          videoId={youtubeHash}
           onEnd={onClose}
           className="youtube"
           iframeClassName="youtubeIframe"

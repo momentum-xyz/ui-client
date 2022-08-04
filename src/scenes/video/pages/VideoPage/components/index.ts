@@ -1,1 +1,1 @@
-export * from './DashboardVideo';
+export * from './templates';

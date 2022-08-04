@@ -5,8 +5,8 @@ import {useHistory} from 'react-router';
 
 import {useStore} from 'shared/hooks';
 
+import {DashboardVideo} from './components/templates/DashboardVideo';
 import * as styled from './VideoPage.styled';
-import {DashboardVideo} from './components';
 
 const VideoPage: React.FC = () => {
   const {videoStore} = useStore();
@@ -16,7 +16,7 @@ const VideoPage: React.FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
 
   useEffect(() => {
-    videoStore.fetchDashboardInformation(spaceId);
+    videoStore.fetchYoutubeHash(spaceId);
   }, [spaceId, videoStore]);
 
   const handleClose = () => {
@@ -26,7 +26,7 @@ const VideoPage: React.FC = () => {
 
   return (
     <styled.Container>
-      <DashboardVideo onClose={handleClose} videoUrl={videoStore.videoUrl} />
+      <DashboardVideo onClose={handleClose} youtubeHash={videoStore.youtubeHash} />
     </styled.Container>
   );
 };

@@ -12,11 +12,11 @@ const VideoStore = types
       request: types.optional(RequestModel, {}),
       type: types.maybe(types.enumeration(Object.values(VideoTypeEnum))),
       dashboardId: types.maybe(types.string),
-      videoUrl: ''
+      youtubeHash: ''
     })
   )
   .actions((self) => ({
-    fetchDashboardInformation: flow(function* (spaceId: string) {
+    fetchYoutubeHash: flow(function* (spaceId: string) {
       const response: TileListInterface = yield self.request.send(
         api.dashboardRepository.fetchDashboard,
         {
@@ -28,7 +28,7 @@ const VideoStore = types
           (item) => item.permanentType === 'video'
         );
         if (videoItem) {
-          self.videoUrl = youtubeVideoHash(videoItem?.content?.url ?? '', videoItem.id);
+          self.youtubeHash = youtubeVideoHash(videoItem?.content?.url ?? '', videoItem.id);
         }
       }
     })
