@@ -19,8 +19,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded, collaborationStore, videoStore} = useStore();
-  const {spaceStore} = collaborationStore;
+  const {mainStore, unityLoaded, videoStore} = useStore();
   const {unityStore} = mainStore;
 
   const auth = useAuth();
