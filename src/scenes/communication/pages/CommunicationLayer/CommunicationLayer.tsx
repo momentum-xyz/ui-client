@@ -213,7 +213,7 @@ const CommunicationLayer = () => {
             />
           </Transition>
           <styled.ListItemContent className="noScrollIndicator">
-            <p className="text-center whitespace-nowrap">
+            <p className="text-center whitespace-nowrap w-[92px]">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
             {!agoraStore.isStageMode && numberOfPeople > 2 && collaborationStore.isModerator && (
