@@ -49,13 +49,12 @@ const CommunicationLayer = () => {
 
   const numberOfPeople = useMemo(() => {
     return agoraStore.isStageMode
-      ? stageModeAudience.length + Number(!agoraStageModeStore.isOnStage)
+      ? agoraStageModeStore.numberOfAudienceMembers
       : agoraStore.remoteUsers.length + 1;
   }, [
-    agoraStageModeStore.isOnStage,
+    agoraStageModeStore.numberOfAudienceMembers,
     agoraStore.isStageMode,
-    agoraStore.remoteUsers.length,
-    stageModeAudience.length
+    agoraStore.remoteUsers.length
   ]);
 
   useEffect(() => {
@@ -287,7 +286,7 @@ relative
           </styled.ListItemContent>
         </styled.ListItem>
       </ul>
-      {!window.location.href.includes('stage-mode') && <StageModePIPWidget />}
+      {!history.location.pathname.includes('stage-mode') && <StageModePIPWidget />}
     </Transition>
   );
 };

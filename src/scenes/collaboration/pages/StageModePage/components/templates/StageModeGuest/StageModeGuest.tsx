@@ -70,7 +70,7 @@ const StageModeGuest: React.FC = () => {
         title={collaborationStore.space.name ?? ''}
         subtitle={t('labels.stageMode')}
         isSpaceFavorite={favoriteStore.isSpaceFavorite}
-        isChatOpen={false}
+        isChatOpen={agoraStore.isChatOpen}
         toggleChat={agoraStore.toggleChat}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         onClose={() => history.push(ROUTES.base)}

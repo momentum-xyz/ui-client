@@ -1,5 +1,5 @@
 import {ILocalVideoTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 import {observer} from 'mobx-react-lite';
@@ -39,14 +39,6 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
     }
   }, [remoteUser, loadCurrentUserProfile]);
 
-  const name = useMemo(() => {
-    return remoteUser?.name ?? currentUser?.name;
-  }, [remoteUser, currentUser]);
-
-  const avatarSrc = useMemo(() => {
-    return remoteUser?.avatarSrc ?? currentUser?.avatarSrc;
-  }, [remoteUser, currentUser]);
-
   useEffect(() => {
     if (!stagevideocontainer.current) {
       return;
@@ -64,8 +56,11 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
       <styled.VideoContainer ref={stagevideocontainer} />
       {isCameraOff && (
         <styled.AvatarContainer>
-          {avatarSrc ? (
-            <styled.Avatar src={avatarSrc} alt={name} />
+          {remoteUser?.avatarSrc || currentUser?.avatarSrc ? (
+            <styled.Avatar
+              src={remoteUser ? remoteUser?.avatarSrc : currentUser?.avatarSrc}
+              alt={remoteUser ? remoteUser?.name : currentUser?.name}
+            />
           ) : (
             <IconSvg name="astro" size="huge" />
           )}
@@ -73,8 +68,8 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
       )}
       <styled.InfoContainer>
         <styled.Info>
-          {remoteUser && name ? (
-            <Text text={name} size="xs" />
+          {remoteUser ? (
+            <Text text={remoteUser?.name} size="xs" />
           ) : (
             <Text text={t('labels.you')} size="xs" />
           )}
