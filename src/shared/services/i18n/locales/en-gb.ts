@@ -312,7 +312,8 @@ export const enGb = {
       userWantsToComeOnStage: '{{user}} wants to come on stage',
       newDeviceDetected: 'New Device Detected',
       inviteUsers: 'Invite users',
-      removeParticipantFromStage: 'Remove Participant From Stage'
+      removeParticipantFromStage: 'Remove Participant From Stage',
+      broadcastManage: 'Manage Broadcast'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -529,6 +530,9 @@ export const enGb = {
       overview: {
         title: 'token rules Overview'
       }
+    },
+    broadcastAdmin: {
+      subtitle: 'Manage Broadcast'
     },
     spaceAdmin: {
       subtitle: 'Manage Space',

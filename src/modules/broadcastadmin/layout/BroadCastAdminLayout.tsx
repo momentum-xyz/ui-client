@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useHistory} from 'react-router';
+import {t} from 'i18next';
 
 import {youtubeVideoPath} from 'core/utils';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
@@ -231,7 +232,7 @@ const BroadCastAdminLayout: React.FC = () => {
     <styled.Container>
       <PageTopBar
         title={spaceResponse?.space?.name || ''}
-        subtitle="Manage Broadcast"
+        subtitle={t('broadcastAdmin.subtitle')}
         onClose={handleClose}
       />
       <styled.Body>{getView()}</styled.Body>
