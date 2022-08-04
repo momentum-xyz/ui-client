@@ -1,60 +1,56 @@
-import React, {FC, useEffect, useState} from 'react';
-import {useTheme} from 'styled-components';
+import React, {FC, useEffect} from 'react';
+import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
 
-import {Text, Toggle, TopBar} from 'ui-kit';
-import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from '../../../../context/Collaboration/hooks/useCollaboration';
-import {useStageModeLeave} from '../../../../hooks/api/useStageModeService';
+import {StageModeGuest, StageModeModerator} from './components';
 
-import * as styled from './StageModePage.styled';
-
+// TODO: Refactor
 const StageModePage: FC = () => {
-  const theme = useTheme();
-  const {collaborationStore} = useStore();
-  const {spaceStore} = collaborationStore;
-  const {space} = spaceStore;
-
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-
-  // TODO: move to store
-  const [stageMode, setStageMode] = useState(0);
-
-  // TODO: make as action in store
-  const leaveCollaborationSpace = () => {
-    spaceStore.resetModel();
-    if (collaborationState.collaborationSpace) {
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
-    }
-  };
+  const {spaceId} = useParams<{spaceId: string}>();
+  const {collaborationStore, mainStore} = useStore();
+  const {agoraStore} = mainStore;
+  const {stageModeStore} = collaborationStore;
 
   useEffect(() => {
-    console.info('stageModePage');
-  }, []);
+    const chatWasOpen = agoraStore.isChatOpen;
+    agoraStore.showChat();
+
+    return () => {
+      if (!chatWasOpen) {
+        agoraStore.hideChat();
+      }
+    };
+  }, [agoraStore]);
+
+  usePosBusEvent('stage-mode-accepted', (userId) => {
+    stageModeStore.removeRequestPopup(userId);
+  });
+
+  usePosBusEvent('stage-mode-declined', (userId) => {
+    stageModeStore.removeRequestPopup(userId);
+  });
+
+  if (collaborationStore.moderationRequest.isPending) {
+    return null;
+  }
 
   return (
-    <styled.Container>
-      <TopBar title={space.name ?? ''} subtitle="stage" onClose={leaveCollaborationSpace}>
-        {(spaceStore.isAdmin || spaceStore.isMember) && (
-          <styled.ToggleContainer>
-            <Toggle checked={!!stageMode} onChange={(checked) => setStageMode(checked ? 1 : 0)} />
-            <Text theme={theme} text="Stage active" size="xs" />
-          </styled.ToggleContainer>
+    <Switch>
+      <Route exact path={generatePath(ROUTES.collaboration.stageMode, {spaceId})}>
+        {collaborationStore.isModerator ? (
+          <Redirect to={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})} />
+        ) : (
+          <StageModeGuest />
         )}
-      </TopBar>
-      <div>StageMode</div>
-    </styled.Container>
+      </Route>
+      <Route exact path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>
+        <StageModeModerator />
+      </Route>
+    </Switch>
   );
 };
-export default StageModePage;
+
+export default observer(StageModePage);

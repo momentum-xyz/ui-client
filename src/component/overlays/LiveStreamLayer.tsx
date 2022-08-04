@@ -12,7 +12,6 @@ import useContextAuth from '../../context/Auth/hooks/useContextAuth';
 import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
 import {ReactComponent as FullScreenIcon} from '../../images/icons/expand-full.svg';
 import {ReactComponent as SpaceRocketIcon} from '../../images/icons/space-rocket-flying.svg';
-import {useJoinCollaborationSpaceByAssign} from '../../context/Collaboration/hooks/useCollaboration';
 
 export interface LiveStream {
   broadcastStatus: BroadcastStatusEnum;
@@ -34,7 +33,6 @@ const LiveStreamLayer: React.FC = () => {
   const broadcasts: LiveStream[] = [];
   const location = useLocation();
   const history = useHistory();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
 
   //debug
   // useEffect(() =>{
@@ -91,11 +89,6 @@ const LiveStreamLayer: React.FC = () => {
     if (space?.spaceId) {
       UnityService.teleportToSpace(space?.spaceId);
       history.push(ROUTES.base);
-
-      if (process.env.NODE_ENV === 'development') {
-        // @ts-ignore
-        joinMeetingSpace(space?.spaceId);
-      }
     }
   };
 

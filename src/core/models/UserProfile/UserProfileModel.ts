@@ -4,8 +4,8 @@ import {UUIDModel} from 'core/models/UUID';
 import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {UserStatusEnum} from 'core/enums';
-
-import {RequestModel} from '../Request';
+import {appVariables} from 'api/constants';
+import {RequestModel} from 'core/models';
 
 const UserProfileModel = types
   .model('UserProfile', {
@@ -26,6 +26,12 @@ const UserProfileModel = types
   .views((self) => ({
     get uuid(): string {
       return bytesToUuid(self.id.data);
+    },
+    get avatarSrc(): string | undefined {
+      return (
+        self.profile?.avatarHash &&
+        `${appVariables.RENDER_SERVICE_URL}/get/${self.profile.avatarHash}`
+      );
     }
   }))
   .actions((self) => ({
@@ -37,6 +43,8 @@ const UserProfileModel = types
       });
 
       self.invited = true;
+
+      return self.inviteRequest.isDone;
     }),
     setInvited(invited: boolean) {
       self.invited = invited;

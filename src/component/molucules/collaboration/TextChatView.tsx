@@ -1,6 +1,8 @@
+import {observer} from 'mobx-react-lite';
 import React, {useEffect, useRef, useState} from 'react';
 
-import useCollaboration from '../../../context/Collaboration/hooks/useCollaboration';
+import {useStore} from 'shared/hooks';
+
 import {Message, useTextChatContext} from '../../../context/TextChatContext';
 import {TextArea} from '../../atoms/input/Input';
 import Panel from '../../atoms/Panel';
@@ -18,9 +20,10 @@ const dateToTimeString = (date: Date) => {
 };
 
 const TextChatView: React.FC<TextChatViewProps> = () => {
-  const {collaborationState} = useCollaboration();
+  const {mainStore, collaborationStore} = useStore();
+  const {agoraStore} = mainStore;
 
-  const open = collaborationState.chatOpen && !!collaborationState.collaborationSpace;
+  const open = agoraStore.isChatOpen && !!collaborationStore.space;
 
   const {
     messages,
@@ -145,4 +148,4 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
   );
 };
 
-export default TextChatView;
+export default observer(TextChatView);

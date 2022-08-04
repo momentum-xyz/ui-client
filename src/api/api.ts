@@ -20,6 +20,11 @@ import * as playlistRepository from './repositories/playlistRepository';
 import * as communicationRepository from './repositories/communicationRepository';
 import * as attendeesRepository from './repositories/attendeesRepository';
 import * as dashboardRepository from './repositories/dashboardRepository';
+import * as integrationRepository from './repositories/integrationRepository';
+import * as resourcesRepository from './repositories/resourcesRepository';
+import * as agoraRepository from './repositories/agoraRepository';
+import * as spaceIntegrationsRepository from './repositories/spaceIntegrationsRepository';
+import * as vibeRepository from './repositories/vibeRepository';
 
 /**
  * This layer is responsible for:
@@ -53,7 +58,12 @@ export const api = {
   playlistRepository,
   communicationRepository,
   attendeesRepository,
-  dashboardRepository
+  dashboardRepository,
+  agoraRepository,
+  spaceIntegrationsRepository,
+  integrationRepository,
+  resourcesRepository,
+  vibeRepository
 };
 
 /**
@@ -78,3 +88,7 @@ export * from './repositories/statsRepository/statsRepository.api.types';
 export * from './repositories/playlistRepository/playlistRepository.api.types';
 export * from './repositories/communicationRepository/communicationRepository.api.types';
 export * from './repositories/dashboardRepository/dashboardRepository.api.types';
+export * from './repositories/integrationRepository/integrationRepository.api.types';
+export * from './repositories/resourcesRepository/resourcesRepository.types';
+export * from './repositories/spaceTypeRepository/spaceTypeRepository.api.types';
+export * from './repositories/vibeRepository/vibeRepository.api.types';

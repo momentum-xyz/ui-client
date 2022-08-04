@@ -1,4 +1,4 @@
-import {types, flow, cast} from 'mobx-state-tree';
+import {types, flow, cast, Instance} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel} from 'core/models';
 import {api, BaseFavoritesResponse, FetchFavoritesResponse, PostFavoriteResponse} from 'api';
@@ -37,6 +37,13 @@ const FavoriteStore = types.compose(
           );
         }
       }),
+      toggleFavorite(spaceId: string): void {
+        if (self.favorites.find((favorite) => favorite.spaceId === spaceId)) {
+          this.removeFavorite(spaceId);
+        } else {
+          this.addFavorite(spaceId);
+        }
+      },
       addFavorite: flow(function* (spaceId: string) {
         const response: PostFavoriteResponse = yield self.addFavoriteRequest.send(
           api.favoriteRepository.postFavorite,
@@ -77,5 +84,7 @@ const FavoriteStore = types.compose(
       }
     }))
 );
+
+export interface FavoriteStoreInterface extends Instance<typeof FavoriteStore> {}
 
 export {FavoriteStore};

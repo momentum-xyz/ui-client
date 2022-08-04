@@ -1,93 +1,91 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
 
-import {IconSvg, Text, TopBar, Button} from 'ui-kit';
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from 'context/Collaboration/hooks/useCollaboration';
-import {useStageModeLeave} from 'hooks/api/useStageModeService';
-import {useStore} from 'shared/hooks';
-import {UnityService} from 'shared/services';
+import {usePosBusEvent, useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 
-import TopbarButton from '../../../../component/atoms/topbar/TopbarButton';
-
-import Dashboard from './components/templates/Dashboard/Dashboard';
+import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} from './components';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
-  const {
-    collaborationStore: {dashboard, spaceStore},
-    sessionStore
-  } = useStore();
+  const {collaborationStore, sessionStore, mainStore} = useStore();
+  const {dashboardStore, space} = collaborationStore;
+  const {tileDialog, tileRemoveDialog, tileList, onDragEnd, vibeStore, inviteToSpaceDialog} =
+    dashboardStore;
+  const {agoraStore, favoriteStore} = mainStore;
 
-  const {tileList, onDragEnd} = dashboard;
+  const history = useHistory();
+
+  const inviteRef = useRef<HTMLButtonElement>(null);
+
+  usePosBusEvent('user-vibed', (type, count) => {
+    vibeStore.setCount(count);
+  });
 
   useEffect(() => {
-    if (spaceStore.space.id) {
-      dashboard.fetchDashboard(spaceStore.space.id);
+    if (space) {
+      dashboardStore.fetchDashboard(space.id);
+      vibeStore.check(space.id);
+      vibeStore.count(space.id);
     }
     return () => {
-      dashboard.resetModel();
+      dashboardStore.resetModel();
     };
-  }, []);
+  }, [dashboardStore, favoriteStore, space, vibeStore]);
 
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
+  const handleClose = () => {
+    history.push(ROUTES.base);
+  };
 
-  // TODO: make as action in store
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace) {
-      UnityService.leaveSpace(collaborationState.collaborationSpace.id);
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
+  const handleToggleVibe = useCallback(async () => {
+    const success = await vibeStore.toggle(space?.id ?? '');
+    if (success) {
+      vibeStore.toggleVibe();
     }
-  };
+  }, [space?.id, vibeStore]);
 
-  const actions = () => {
-    return (
-      <>
-        {spaceStore.isAdmin && (
-          <TopbarButton
-            title="Open Admin"
-            link={'/space/' + spaceStore.space.id + '/admin'}
-            isActive={(match, location) => {
-              return location.pathname.includes('/space/' + spaceStore.space.id + '/admin');
-            }}
-            state={{canGoBack: true}}
-          >
-            <IconSvg name="pencil" size="medium-large" />
-          </TopbarButton>
-        )}
-      </>
-    );
-  };
+  if (!space) {
+    return null;
+  }
 
   return (
     <styled.Container>
-      <TopBar
-        title={spaceStore.space.name ?? ''}
+      <SpaceTopBar
+        title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
-        onClose={leaveCollaborationSpace}
-        actions={actions()}
+        onClose={handleClose}
+        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        spaceId={space.id}
+        isAdmin={space.isAdmin}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
       >
-        <Button label={t('dashboard.vibe')} variant="primary" />
-        {(spaceStore.isAdmin || spaceStore.isMember) && (
-          <Button label={t('dashboard.addTile')} variant="primary" />
+        <VibeButton
+          onToggle={handleToggleVibe}
+          canVibe={vibeStore.canVibe}
+          vibeCount={vibeStore.vibeCount}
+        />
+        {(space.isAdmin || space.isMember) && (
+          <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
-        <Button label={t('dashboard.invitePeople')} icon="invite-user" variant="primary" />
-        {!sessionStore.isGuest && spaceStore.isStakeShown && (
+        <Button
+          ref={inviteRef}
+          label={t('dashboard.invitePeople')}
+          icon="invite-user"
+          variant="primary"
+          onClick={inviteToSpaceDialog.open}
+        />
+
+        {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
-      </TopBar>
-      {!dashboard.dashboardIsEdited && spaceStore.isOwner && (
+      </SpaceTopBar>
+
+      {!dashboardStore.dashboardIsEdited && space.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
           <styled.AlertContent>
@@ -105,8 +103,19 @@ const DashboardPage: FC = () => {
       <Dashboard
         tilesList={tileList.tileMatrix}
         onDragEnd={onDragEnd}
-        canDrag={spaceStore.isAdmin || spaceStore.isMember}
+        canDrag={space.isAdmin || space.isMember}
       />
+      {tileDialog.isOpen && <TileForm />}
+      {tileRemoveDialog.isOpen && <RemoveTileDialog />}
+      {inviteToSpaceDialog.isOpen && (
+        <InviteToSpaceMenu
+          onClose={inviteToSpaceDialog.close}
+          leftOffSet={
+            (inviteRef.current?.offsetLeft ?? 0) +
+            (inviteRef.current?.offsetParent?.parentElement?.offsetLeft ?? 0)
+          }
+        />
+      )}
     </styled.Container>
   );
 };

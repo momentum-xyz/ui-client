@@ -1,4 +1,4 @@
-import React, {FC, memo, MouseEventHandler} from 'react';
+import React, {memo, MouseEventHandler, forwardRef} from 'react';
 import cn from 'classnames';
 
 import {SizeType, TextTransform, VariantType} from 'ui-kit/types';
@@ -20,9 +20,10 @@ interface PropsInterface extends PropsWithThemeInterface {
   isCustom?: boolean;
   noWhitespaceWrap?: boolean;
   className?: string;
+  preserveSpaces?: boolean;
 }
 
-const Button: FC<PropsInterface> = (props) => {
+const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
   const {
     variant = 'primary',
     size = 'normal',
@@ -36,11 +37,13 @@ const Button: FC<PropsInterface> = (props) => {
     icon,
     isCustom = false,
     noWhitespaceWrap = false,
+    preserveSpaces = false,
     className
   } = props;
 
   return (
     <styled.Button
+      ref={ref}
       data-testid="Button-test"
       theme={theme}
       disabled={disabled}
@@ -52,6 +55,7 @@ const Button: FC<PropsInterface> = (props) => {
         wide && 'wide',
         isCustom && 'Button-custom',
         noWhitespaceWrap && 'noWhitespaceWrap',
+        preserveSpaces && 'preservesSpaces',
         className
       )}
       type={submit ? 'submit' : 'button'}
@@ -60,6 +64,6 @@ const Button: FC<PropsInterface> = (props) => {
       {label}
     </styled.Button>
   );
-};
+});
 
 export default memo(Button);

@@ -1,39 +1,25 @@
 import {Transition} from '@headlessui/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {toast} from 'react-toastify';
-import {useHistory, useLocation} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {
   ToastContent,
-  TOAST_BASE_OPTIONS,
   TOAST_GROUND_OPTIONS,
   SvgButton,
   Text,
-  TOAST_NOT_AUTO_CLOSE_OPTIONS
+  TOAST_NOT_AUTO_CLOSE_OPTIONS,
+  TOAST_BASE_OPTIONS
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {UnityService} from 'shared/services';
-import CONFIG from 'config/config';
-import useCollaboration, {
-  useJoinCollaborationSpaceByAssign,
-  useLeaveCollaborationSpace
-} from 'context/Collaboration/hooks/useCollaboration';
-import useAgoraVideo from 'hooks/communication/useAgoraVideo';
-import {ParticipantRole} from 'context/Collaboration/CollaborationTypes';
-import {useAgoraStageMode} from 'hooks/communication/useAgoraStageMode';
-import {
-  COLLABORATION_MUTED_ACTION_UPDATE,
-  COLLABORATION_STAGE_MODE_ACTION_UPDATE
-} from 'context/Collaboration/CollaborationReducer';
-import StageModePIP from 'component/atoms/StageMode/StageModePIP';
-import {ROUTES} from 'core/constants';
-import {StageModeStatusEnum} from 'core/enums';
-import {useStageModePopupQueueContext} from 'context/StageMode/StageModePopupQueueContext';
-import {useStageModeLeave, useStageModeRequestAcceptOrDecline} from 'hooks/api/useStageModeService';
-import {useModerator} from 'context/Integration/hooks/useIntegration';
+import {ParticipantRole} from 'core/enums';
+import {StageModePIPWidget} from 'scenes/widgets/pages';
+import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useGetSpace} from 'hooks/api/useSpaceService';
+import {appVariables} from 'api/constants';
+import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
 import {RemoteParticipant, LocalParticipant} from './components';
 import * as styled from './CommunicationLayer.styled';
@@ -41,149 +27,55 @@ import * as styled from './CommunicationLayer.styled';
 // TODO: Refactor this component to new structure
 const CommunicationLayer = () => {
   const history = useHistory();
-  const location = useLocation();
-  const {collaborationState, collaborationDispatch, currentUserId} = useCollaboration();
-  const agoraStageMode = useAgoraStageMode();
-  const {localUser, remoteParticipants} = useAgoraVideo();
-  const {stageModeUsers, isOnStage, canEnterStage} = useAgoraStageMode();
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const [maxVideoStreamsShown, setMaxVideoStreamsShown] = useState<boolean>(false);
   const {
     mainStore,
     communicationStore: {communicationLayerStore},
-    collaborationStore: {spaceStore}
+    collaborationStore,
+    sessionStore
   } = useStore();
-  const {unityStore} = mainStore;
-  const {addRequestPopup, clearPopups} = useStageModePopupQueueContext();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-  const [acceptRequest, declineRequest] = useStageModeRequestAcceptOrDecline(
-    collaborationState.collaborationSpace?.id
-  );
-  const [isModerator, , ,] = useModerator(
-    // @ts-ignore
-    collaborationState.collaborationSpace?.id
-  );
+  const {space} = collaborationStore;
+  const {unityStore, agoraStore} = mainStore;
+  const {userDevicesStore, agoraStageModeStore} = agoraStore;
+  const {removeAllPopups} = collaborationStore.stageModeStore;
 
   const stageModeAudience = useMemo(() => {
-    return stageModeUsers.filter((user) => {
-      return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== currentUserId;
-    });
-  }, [currentUserId, stageModeUsers]);
+    return agoraStore.isStageMode
+      ? agoraStageModeStore.users.filter((user) => {
+          return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
+        })
+      : [];
+  }, [agoraStageModeStore.users, sessionStore.userId, agoraStore.isStageMode]);
 
   const numberOfPeople = useMemo(() => {
-    return collaborationState.stageMode
-      ? stageModeAudience.length + Number(!isOnStage)
-      : remoteParticipants.length + 1;
+    return agoraStore.isStageMode
+      ? stageModeAudience.length + Number(!agoraStageModeStore.isOnStage)
+      : agoraStore.remoteUsers.length + 1;
   }, [
-    collaborationState.stageMode,
-    isOnStage,
-    remoteParticipants.length,
+    agoraStageModeStore.isOnStage,
+    agoraStore.isStageMode,
+    agoraStore.remoteUsers.length,
     stageModeAudience.length
   ]);
 
   useEffect(() => {
-    clearPopups();
-    if (collaborationState.collaborationSpace?.id) {
+    removeAllPopups();
+    if (space) {
       communicationLayerStore.setKicked(false);
       communicationLayerStore.selectParticipant(undefined);
     }
-  }, [collaborationState.collaborationSpace]);
+  }, [removeAllPopups, communicationLayerStore, space]);
 
-  useEffect(() => {
-    if (collaborationState.collaborationSpace) {
-      if (collaborationState.stageMode) {
-        agoraStageMode.join(collaborationState.collaborationSpace.id).then();
-      } else {
-        agoraStageMode.leave().then();
-      }
-    }
-  }, [collaborationState.stageMode]);
-
-  usePosBusEvent('stage-mode-request', (userId) => {
-    if (isModerator) {
-      addRequestPopup(userId, {
-        user: userId,
-        onAccept: () => {
-          return acceptRequest(userId)
-            .then(() => true)
-            .catch(() => {
-              toast.error(
-                <ToastContent
-                  isDanger
-                  headerIconName="alert"
-                  title={t('titles.alert')}
-                  text={t('messages.userRequestDeny')}
-                  isCloseButton
-                />
-              );
-              return false;
-            });
-        },
-        onDecline: () => {
-          return declineRequest(userId).then(() => true);
-        }
-      });
-    }
-  });
-
-  usePosBusEvent('stage-mode-toggled', (stageModeStatus) => {
-    //if (collaborationState.collaborationSpace?.id !== spaceId) return;
-
-    const shouldActivateStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
-
-    if (shouldActivateStageMode && !collaborationState.stageMode) {
-      collaborationDispatch({
-        type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
-        stageMode: true
-      });
-
-      if (!location.pathname.includes(ROUTES.stageMode)) {
-        history.push(ROUTES.stageMode);
-      }
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.stage')}
-          text={t('messages.stageModeActivated')}
-          isCloseButton
-        />,
-        TOAST_GROUND_OPTIONS
-      );
-    } else if (!shouldActivateStageMode && collaborationState.stageMode) {
-      collaborationDispatch({
-        type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
-        stageMode: false
-      });
-
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.stage')}
-          text={t('messages.stageModeDeActivated')}
-          isCloseButton
-        />,
-        TOAST_GROUND_OPTIONS
-      );
-    }
-  });
-
-  usePosBusEvent('meeting-mute', () => {
-    collaborationDispatch({
-      type: COLLABORATION_MUTED_ACTION_UPDATE,
-      muted: true
-    });
-  });
+  usePosBusEvent('meeting-mute', userDevicesStore.mute);
 
   usePosBusEvent('notify-gathering-start', (message) => {
     const handleJoinSpace = () => {
-      if (message.spaceId) {
-        UnityService.teleportToSpace(message.spaceId);
-
-        joinMeetingSpace(message.spaceId).then(() => {
-          unityStore.pause();
-          history.push({pathname: ROUTES.collaboration});
-        });
+      const {spaceId} = message;
+      if (spaceId) {
+        unityStore.teleportToSpace(spaceId);
+        setTimeout(() => {
+          history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+        }, TELEPORT_DELAY_MS);
       }
     };
     toast.info(
@@ -198,15 +90,14 @@ const CommunicationLayer = () => {
   });
 
   usePosBusEvent('meeting-mute-all', (moderatorId) => {
-    if (currentUserId !== moderatorId) {
-      collaborationDispatch({
-        type: COLLABORATION_MUTED_ACTION_UPDATE,
-        muted: true
-      });
+    if (sessionStore.userId !== moderatorId) {
+      userDevicesStore.mute();
     }
   });
 
   usePosBusEvent('stage-mode-mute', () => {
+    userDevicesStore.mute();
+
     toast.info(
       <ToastContent
         headerIconName="alert"
@@ -222,12 +113,16 @@ const CommunicationLayer = () => {
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 
-      joinMeetingSpace(spaceId, uiTypeId === '285ba49f-fee3-40d2-ab55-256b5804c20c').then(() => {
-        if (uiTypeId !== '285ba49f-fee3-40d2-ab55-256b5804c20c') {
-          unityStore.pause();
-          history.push({pathname: ROUTES.collaboration});
-        }
-      });
+      // TODO: Refactoring
+      collaborationStore
+        .joinMeetingSpace(spaceId, uiTypeId === '285ba49f-fee3-40d2-ab55-256b5804c20c')
+        .then(() => {
+          if (uiTypeId !== '285ba49f-fee3-40d2-ab55-256b5804c20c') {
+            history.push({pathname: ROUTES.collaboration.base, state: {spaceId}});
+          } else {
+            history.push({pathname: ROUTES.collaboration.table, state: {spaceId}});
+          }
+        });
     };
 
     const Content: React.FC = () => {
@@ -262,21 +157,29 @@ const CommunicationLayer = () => {
   };
 
   useEffect(() => {
-    const isLimitReached = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+    const isLimitReached =
+      agoraStore.remoteUsers.length > appVariables.PARTICIPANTS_VIDEO_LIMIT - 1;
 
-    if (isLimitReached && !maxVideoStreamsShown) {
-      setMaxVideoStreamsShown(true);
-      showMaxVideoStreamsReached();
-    } else if (maxVideoStreamsShown && !isLimitReached) {
-      setMaxVideoStreamsShown(false);
+    if (isLimitReached) {
+      setMaxVideoStreamsShown((maxVideoStreamsShown) => {
+        showMaxVideoStreamsReached();
+
+        return !maxVideoStreamsShown ? true : maxVideoStreamsShown;
+      });
+    } else {
+      setMaxVideoStreamsShown((maxVideoStreamsShown) => {
+        return maxVideoStreamsShown ? false : maxVideoStreamsShown;
+      });
     }
-  }, [maxVideoStreamsShown, remoteParticipants.length]);
+  }, [agoraStore.remoteUsers.length]);
 
-  const noVideo = remoteParticipants.length > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
+  const handleLeave = () => {
+    history.push(ROUTES.base);
+  };
 
   return (
     <Transition
-      show={collaborationState.enabled || collaborationState.stageMode}
+      show={agoraStore.hasJoined}
       unmount={false}
       className="z-main-u ml-auto mr-1 "
       enter="transform transition-transform ease-out duration-300"
@@ -312,29 +215,21 @@ const CommunicationLayer = () => {
               variant="danger-background"
               label={t('actions.leave')}
               icon="leave"
-              onClick={() => {
-                leaveCollaborationSpaceCall(false).then(stageModeLeave);
-                if (collaborationState.stageMode) {
-                  collaborationDispatch({
-                    type: COLLABORATION_STAGE_MODE_ACTION_UPDATE,
-                    stageMode: false
-                  });
-                }
-              }}
+              onClick={handleLeave}
             />
           </Transition>
           <styled.ListItemContent className="noScrollIndicator">
             <p className="text-center whitespace-nowrap">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
-            {!collaborationState.stageMode && numberOfPeople > 2 && isModerator && (
+            {!agoraStore.isStageMode && numberOfPeople > 2 && collaborationStore.isModerator && (
               <styled.MuteButtonContainer>
                 <styled.MuteButton>
                   <SvgButton
                     iconName="microphoneOff"
                     size="extra-large"
                     onClick={() => {
-                      communicationLayerStore.muteAllParticipants(spaceStore.space.id);
+                      communicationLayerStore.muteAllParticipants(space?.id);
                     }}
                   />
                 </styled.MuteButton>
@@ -342,10 +237,8 @@ const CommunicationLayer = () => {
               </styled.MuteButtonContainer>
             )}
             <ul>
-              {collaborationState.stageMode
-                ? !isOnStage && <LocalParticipant stageLocalUserId={currentUserId} />
-                : localUser.uid && <LocalParticipant localUser={localUser} />}
-              {noVideo && (
+              {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
+              {maxVideoStreamsShown && (
                 <li
                   className="mb-.5 p-.5
 relative
@@ -354,7 +247,7 @@ relative
                 >
                   <div
                     className="h-8 w-8 flex items-center rounded-full bg-dark-blue-100 cursor-pointer"
-                    onClick={() => showMaxVideoStreamsReached()}
+                    onClick={showMaxVideoStreamsReached}
                   >
                     <span className="p-.5 text-xs text-prime-blue-100 text-center flex-grow-0">
                       Video limit reached
@@ -362,46 +255,39 @@ relative
                   </div>
                 </li>
               )}
-              {(collaborationState.stageMode
-                ? stageModeAudience.map((user) => {
-                    return {
-                      ...user,
-                      soundLevel: 0
-                    };
-                  })
-                : remoteParticipants
-              ).map((participant) => (
-                <Transition
-                  key={`participant-${participant.uid as string}`}
-                  appear={true}
-                  enter="transition-all transform ease-out duration-300"
-                  enterFrom="translate-x-8"
-                  enterTo="translate-x-0 "
-                  leave="transition-all transform  ease-in duration-300"
-                  leaveFrom="translate-x-0 "
-                  leaveTo="translate-x-8"
-                >
-                  <RemoteParticipant
+              {(agoraStore.isStageMode ? stageModeAudience : agoraStore.remoteUsers).map(
+                (participant) => (
+                  <Transition
                     key={`participant-${participant.uid as string}`}
-                    // @ts-ignore
-                    participant={participant}
-                    participantModel={communicationLayerStore.participants.find(
-                      (p) => p.uid === participant.uid
-                    )}
-                    canEnterStage={canEnterStage()}
-                    totalParticipants={
-                      collaborationState.stageMode
-                        ? stageModeAudience.length
-                        : remoteParticipants.length
-                    }
-                  />
-                </Transition>
-              ))}
+                    appear={true}
+                    enter="transition-all transform ease-out duration-300"
+                    enterFrom="translate-x-8"
+                    enterTo="translate-x-0 "
+                    leave="transition-all transform  ease-in duration-300"
+                    leaveFrom="translate-x-0 "
+                    leaveTo="translate-x-8"
+                  >
+                    <RemoteParticipant
+                      key={`participant-${participant.uid as string}`}
+                      participant={
+                        !agoraStore.isStageMode
+                          ? (participant as AgoraRemoteUserInterface)
+                          : undefined
+                      }
+                      audienceParticipant={
+                        agoraStore.isStageMode ? (participant as StageModeUserInterface) : undefined
+                      }
+                      canEnterStage={agoraStageModeStore.canEnterStage}
+                      totalParticipants={agoraStore.remoteUsers.length}
+                    />
+                  </Transition>
+                )
+              )}
             </ul>
           </styled.ListItemContent>
         </styled.ListItem>
       </ul>
-      {!window.location.href.includes('stage-mode') && <StageModePIP />}
+      {!window.location.href.includes('stage-mode') && <StageModePIPWidget />}
     </Transition>
   );
 };

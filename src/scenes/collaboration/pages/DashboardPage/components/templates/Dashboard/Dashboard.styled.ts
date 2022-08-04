@@ -19,13 +19,21 @@ export const Content = styled.div`
 `;
 
 export const Container = styled.div`
+  height: 100%;
   display: flex;
+  min-height: 0;
+  margin-top: 10px;
+`;
+
+export const DashboardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
   }
   pointer-events: auto;
-  margin-top: 10px;
+
   padding: 1px;
   width: 100%;
   height: 100%;

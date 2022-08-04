@@ -91,4 +91,5 @@ export const RequiredIndicator = styled.div`
 export const Label = styled.div`
   display: flex;
   gap: 1px;
+  padding-bottom: 5px;
 `;

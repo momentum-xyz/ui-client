@@ -2,15 +2,10 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
-import {UnityService} from 'shared/services';
-import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 import {IconSvg} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 
-import {COLLABORATION_CHAT_ACTION_UPDATE} from '../../context/Collaboration/CollaborationReducer';
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from '../../context/Collaboration/hooks/useCollaboration';
 import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
 import {ReactComponent as PencilIcon} from '../../images/icons/pencil.svg';
 import {ReactComponent as ChatIcon} from '../../images/icons/conversation-chat-1.svg';
@@ -18,7 +13,6 @@ import {ReactComponent as RocketIcon} from '../../images/icons/space-rocket-eart
 import TopbarButton from '../atoms/topbar/TopbarButton';
 import {AddUserPopup} from '../../modules/spaceadmin/popups/AddUserPopup';
 import Modal, {ModalRef} from '../util/Modal';
-import {useStageModeLeave} from '../../hooks/api/useStageModeService';
 import {useTextChatContext} from '../../context/TextChatContext';
 import {SpaceType} from '../../context/type/Space';
 
@@ -50,35 +44,17 @@ const TopBar = ({
   // const { title, subTitle, actions } = useContext(TopBarContext);
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
   const {numberOfUnreadMessages} = useTextChatContext();
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
   const history = useHistory();
   const currentLocation = useLocation();
-  const {favoriteStore} = useStore().mainStore;
+  const {mainStore, collaborationStore} = useStore();
+  const {favoriteStore, agoraStore} = mainStore;
+
+  const {space} = collaborationStore;
 
   const addUserModal = useRef<ModalRef>(null);
 
-  const spaceId = collaborationState.collaborationSpace?.id;
-  const spaceType = collaborationState.collaborationSpace?.type;
-
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace && collaboration) {
-      UnityService.triggerInteractionMsg?.(
-        PosBusEventEnum.LeftSpace,
-        collaborationState.collaborationSpace.id,
-        0,
-        ''
-      );
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
 
   useEffect(() => {
@@ -86,38 +62,32 @@ const TopBar = ({
       setWindowDimensions(getWindowDimensions());
     }
 
-    console.info('SPACE_TYPE');
-    console.info(spaceType);
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
-    if (collaborationState.collaborationSpace) {
-      favoriteStore.setSpaceId(collaborationState.collaborationSpace.id);
+    if (space) {
+      favoriteStore.setSpaceId(space.id);
     }
-  }, [collaborationState.collaborationSpace]);
-
-  const toggleChat = () => {
-    collaborationDispatch({
-      type: COLLABORATION_CHAT_ACTION_UPDATE,
-      open: !collaborationState.chatOpen
-    });
-  };
+  }, [favoriteStore, space]);
 
   const toggleFavorite = () => {
-    if (spaceId) {
+    if (space) {
       if (favoriteStore.isSpaceFavorite) {
-        favoriteStore.removeFavorite(spaceId);
+        favoriteStore.removeFavorite(space.id);
       } else {
-        favoriteStore.addFavorite(spaceId);
+        favoriteStore.addFavorite(space.id);
       }
     }
   };
 
   const isAdminShown = () => {
-    return currentLocation.pathname.includes('/space/' + spaceId + '/admin');
+    if (!space) {
+      return false;
+    }
+
+    return currentLocation.pathname.includes('/space/' + space.id + '/admin');
   };
 
   return (
@@ -139,15 +109,15 @@ const TopBar = ({
       <div className="pl-1 flex items-center gap-2 flex-grow">{actions}</div>
 
       {!!isAdmin &&
-        !!spaceId &&
-        spaceType !== SpaceType.GRAB_A_TABLE &&
+        space &&
+        space?.type !== SpaceType.GRAB_A_TABLE &&
         !currentLocation.pathname.includes('/admin') && (
           <>
             <TopbarButton
               title="Open Admin"
-              link={'/space/' + spaceId + '/admin'}
+              link={'/space/' + space.id + '/admin'}
               isActive={(match, location) => {
-                return location.pathname.includes('/space/' + spaceId + '/admin');
+                return location.pathname.includes('/space/' + space.id + '/admin');
               }}
               state={{canGoBack: true}}
             >
@@ -157,17 +127,17 @@ const TopBar = ({
           </>
         )}
 
-      {!!(isAdmin && collaborationState.collaborationSpace && collaboration) && (
+      {!!(isAdmin && space && collaboration) && (
         <>
           <div className="bg-white-100 w-.1 h-2 ml-2" />
         </>
       )}
 
-      {!!(collaborationState.collaborationSpace && collaboration) && (
+      {!!(space && collaboration) && (
         <>
           <TopbarButton
-            title={collaborationState.chatOpen ? 'Close chat' : 'Open chat'}
-            onClick={toggleChat}
+            title={agoraStore.isChatOpen ? 'Close chat' : 'Open chat'}
+            onClick={agoraStore.toggleChat}
           >
             <ChatIcon />
             {numberOfUnreadMessages > 0 && (
@@ -195,8 +165,8 @@ const TopBar = ({
         <TopbarButton
           isActive={() => false}
           link="/"
-          onClick={() => leaveCollaborationSpace()}
-          title={collaborationState.collaborationSpace && collaboration ? 'Leave' : 'Close'}
+          onClick={handleClose}
+          title={space && collaboration ? 'Leave' : 'Close'}
         >
           <CloseIcon />
         </TopbarButton>

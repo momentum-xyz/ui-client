@@ -161,6 +161,10 @@ export const Button = styled.button`
     white-space: nowrap;
   }
 
+  &.preservesSpaces {
+    white-space: pre-wrap;
+  }
+
   &.transform-normal {
     text-transform: none;
   }

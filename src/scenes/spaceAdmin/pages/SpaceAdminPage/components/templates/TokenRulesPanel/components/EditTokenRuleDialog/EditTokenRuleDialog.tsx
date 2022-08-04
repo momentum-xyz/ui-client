@@ -20,7 +20,7 @@ const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
   const {isAdmin, tokenGroupUserId} = props;
 
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {spaceStore} = spaceManagerStore;
+  const {space} = spaceManagerStore;
 
   const {control, handleSubmit} = useForm<{role: TokenRuleRoles.MEMBER | TokenRuleRoles.ADMIN}>({
     defaultValues: {
@@ -31,7 +31,7 @@ const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
   const formSubmitHandler: SubmitHandler<{
     role: TokenRuleRoles.MEMBER | TokenRuleRoles.ADMIN;
   }> = async ({role}) => {
-    spaceStore.editUser(tokenGroupUserId, role === TokenRuleRoles.ADMIN).then(() => {
+    space?.editUser(tokenGroupUserId, role === TokenRuleRoles.ADMIN).then(() => {
       toast.info(
         <ToastContent
           headerIconName="alert"

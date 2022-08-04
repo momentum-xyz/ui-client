@@ -1,3 +1,5 @@
+import {ParticipantRole, ParticipantStatus} from 'core/enums';
+
 import {SpaceType} from '../type/Space';
 
 export interface CollaborationSpace {
@@ -10,36 +12,6 @@ export interface CollaborationSpace {
 
 export interface CollaborationTable {
   id: string;
-}
-
-export interface MiroBoard {
-  id: string;
-  name: string;
-  description: string;
-  viewLink: string;
-  accessLink: string;
-  embedHtml: string;
-}
-
-export interface MiroDTO {
-  id?: string;
-  owner_id: string;
-  data: MiroBoard;
-}
-
-export interface GoogleDriveFile {
-  id?: string;
-  name: string;
-  description: string;
-  type: string;
-  url: string;
-  embedUrl: string;
-}
-
-export interface GoogleDriveDTO {
-  space_id?: string;
-  owner_id: string;
-  data: GoogleDriveFile | null;
 }
 
 export interface ChannelInviteDto {
@@ -79,16 +51,6 @@ export interface Participant {
   channel?: Channel;
   created_at: Date;
   updated_at: Date;
-}
-
-export enum ParticipantStatus {
-  STATUS_JOINED = 1,
-  STATUS_LEFT = 0
-}
-
-export enum ParticipantRole {
-  SPEAKER = 'speaker',
-  AUDIENCE_MEMBER = 'audience_member'
 }
 
 export default CollaborationSpace;

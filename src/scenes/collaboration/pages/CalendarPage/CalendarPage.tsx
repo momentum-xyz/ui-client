@@ -1,61 +1,34 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {useParams} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
-import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
-import {UnityService} from 'shared/services';
-import {Button, TopBar, EventList, LinkDialog, ToastContent} from 'ui-kit';
-import useCollaboration, {
-  useLeaveCollaborationSpace
-} from 'context/Collaboration/hooks/useCollaboration';
-import {useStageModeLeave} from 'hooks/api/useStageModeService';
+import {ROUTES} from 'core/constants';
 import {absoluteLink} from 'core/utils';
+import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
 
-import * as styled from './CalendarPage.styled';
 import {DeleteEventConfirmationDialog, EventForm} from './components';
+import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const {
-    collaborationStore,
-    sessionStore,
-    widgetStore: {attendeesListStore}
-  } = useStore();
-  const {calendarStore, spaceStore} = collaborationStore;
-  const theme = useTheme();
+  const rootStore = useStore();
+  const {collaborationStore, sessionStore, widgetStore, mainStore} = rootStore;
+  const {calendarStore, space} = collaborationStore;
+  const {agoraStore, favoriteStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
-
-  const {space} = spaceStore;
+  const {attendeesListStore} = widgetStore;
 
   const {eventId} = useParams<{eventId: string}>();
+  const history = useHistory();
+  const theme = useTheme();
 
-  // TODO: Refactor legacy hooks to mobx
-  const {collaborationState, collaborationDispatch} = useCollaboration();
-  const leaveCollaborationSpaceCall = useLeaveCollaborationSpace();
-  const stageModeLeave = useStageModeLeave(collaborationState.collaborationSpace?.id);
-
-  // TODO: make as action in store
-  const leaveCollaborationSpace = () => {
-    if (collaborationState.collaborationSpace) {
-      UnityService.triggerInteractionMsg?.(
-        PosBusEventEnum.LeftSpace,
-        collaborationState.collaborationSpace.id,
-        0,
-        ''
-      );
-      leaveCollaborationSpaceCall(false).then(stageModeLeave);
-
-      if (collaborationState.stageMode) {
-        collaborationDispatch({
-          type: 'COLLABORATION_STAGE_MODE_ACTION_UPDATE',
-          stageMode: false
-        });
-      }
-    }
+  const handleClose = () => {
+    history.push(ROUTES.base);
   };
+
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
   };
@@ -66,7 +39,7 @@ const CalendarPage: FC = () => {
   // TODO , move to Calendar world page
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (!space.id) {
+    if (!space) {
       return;
     }
 
@@ -74,7 +47,7 @@ const CalendarPage: FC = () => {
   };
 
   const handleEventDelete = async () => {
-    if (space.id) {
+    if (space) {
       if (await calendarStore.removeEvent(space.id)) {
         toast.info(
           <ToastContent
@@ -99,15 +72,49 @@ const CalendarPage: FC = () => {
   };
 
   useEffect(() => {
-    if (space.id) {
+    if (space) {
       eventListStore.fetchEvents(space.id);
     }
 
     return () => eventListStore.resetModel();
-  }, [space.id]);
+  }, [eventListStore, space]);
+
+  if (!space) {
+    return null;
+  }
 
   return (
     <styled.Container>
+      <SpaceTopBar
+        title={space.name ?? ''}
+        subtitle="calendar"
+        isAdmin={space.isAdmin}
+        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
+        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        onClose={handleClose}
+        isChatOpen={agoraStore.isChatOpen}
+        toggleChat={agoraStore.toggleChat}
+        editSpaceHidden
+      >
+        {space.isAdmin && (
+          <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
+        )}
+      </SpaceTopBar>
+      <EventList
+        currentUserId={sessionStore.userId}
+        events={eventListStore.events}
+        selectedEventId={eventId}
+        onMagicLinkOpen={handleMagicLinkOpen}
+        isLoading={eventListStore.areEventsLoading}
+        onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
+        onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
+        onWeblinkClick={handleWeblink}
+        onShowAttendeesList={attendeesListStore.showAttendees}
+      />
+
+      {calendarStore.formDialog.isOpen && <EventForm />}
+
       {calendarStore.magicId && magicDialog.isOpen && (
         <LinkDialog
           title={t('eventList.eventItem.magicLinkDialog.title')}
@@ -116,31 +123,13 @@ const CalendarPage: FC = () => {
           onClose={magicDialog.close}
         />
       )}
+
       {deleteConfirmationDialog.isOpen && (
         <DeleteEventConfirmationDialog
-          onConfirmation={() => {
-            handleEventDelete();
-          }}
+          onConfirmation={handleEventDelete}
           onClose={deleteConfirmationDialog.close}
         />
       )}
-      <TopBar title={space.name ?? ''} subtitle="calendar" onClose={leaveCollaborationSpace}>
-        {spaceStore.isAdmin && (
-          <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
-        )}
-      </TopBar>
-      <EventList
-        currentUserId={sessionStore.userId}
-        events={eventListStore.events}
-        selectedEventId={eventId}
-        onMagicLinkOpen={handleMagicLinkOpen}
-        isLoading={eventListStore.areEventsLoading}
-        onEventEdit={spaceStore.isAdmin ? calendarStore.editEvent : undefined}
-        onEventRemove={spaceStore.isAdmin ? calendarStore.selectEventToRemove : undefined}
-        onWeblinkClick={handleWeblink}
-        onShowAttendeesList={attendeesListStore.showAttendees}
-      />
-      {calendarStore.formDialog.isOpen && <EventForm />}
     </styled.Container>
   );
 };

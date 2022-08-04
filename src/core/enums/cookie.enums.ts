@@ -1,4 +1,3 @@
 export enum CookieKeyEnum {
-  INITIATIVE = 'MOMENTUM_NEW_INITIATIVE',
   INTRO = 'MOMENTUM_INTRO'
 }

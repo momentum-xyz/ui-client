@@ -9,16 +9,13 @@ import {MagicTypeEnum} from 'core/enums';
 import {copyToClipboard} from 'core/utils';
 import {Button, Dialog, Location, Text, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 
-// TODO: Refactoring
-import useCollaboration from '../../../../context/Collaboration/hooks/useCollaboration';
-
 import * as styled from './MagicLinkWidget.styled';
 
-const DIALOG_OFFSET_RIGHT = 105;
+const DIALOG_OFFSET_RIGHT = 20;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {
-  const {widgetStore, mainStore} = useStore();
+  const {widgetStore, mainStore, collaborationStore} = useStore();
   const {magicLinkStore} = widgetStore;
   const {magicLinkDialog, magicLink} = magicLinkStore;
   const {generate, address} = magicLink;
@@ -26,7 +23,6 @@ const MagicLinkWidget: FC = () => {
 
   const theme = useTheme();
   const {t} = useTranslation();
-  const {collaborationState} = useCollaboration();
 
   useEffect(() => {
     return () => {
@@ -35,16 +31,14 @@ const MagicLinkWidget: FC = () => {
   }, [magicLinkStore]);
 
   useEffect(() => {
-    const {collaborationSpace, collaborationTable} = collaborationState;
-
-    if (collaborationSpace?.id) {
-      generate(MagicTypeEnum.OPEN_SPACE, collaborationSpace.id, null);
-    } else if (collaborationTable?.id) {
-      generate(MagicTypeEnum.JOIN_MEETING, collaborationTable.id, null);
+    if (collaborationStore.space && !collaborationStore.space.isTable) {
+      generate(MagicTypeEnum.OPEN_SPACE, collaborationStore.space.id, null);
+    } else if (collaborationStore.space) {
+      generate(MagicTypeEnum.JOIN_MEETING, collaborationStore.space.id, null);
     } else {
       generate(MagicTypeEnum.FLY, null, unityStore.getUserPosition());
     }
-  }, [collaborationState, generate, unityStore]);
+  }, [collaborationStore.space, generate, unityStore]);
 
   const copyHandle = useCallback(async () => {
     await copyToClipboard(address || '');
@@ -68,6 +62,7 @@ const MagicLinkWidget: FC = () => {
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       title={t('labels.shareLocation')}
       onClose={magicLinkDialog.close}
+      showBackground={false}
       showCloseButton
     >
       <styled.Container>

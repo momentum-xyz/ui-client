@@ -25,11 +25,11 @@ const RemoveTokenRuleDialog: FC<PropsInterface> = ({
     <Dialog
       title={t('tokenRules.removeTokenRuleDialog.title')}
       approveInfo={{
-        title: t('actions.no'),
+        title: t('actions.noCancel'),
         onClick: onClose
       }}
       declineInfo={{
-        title: t('actions.remove'),
+        title: t('actions.confirmRemove'),
         onClick: confirm
       }}
       onClose={onClose}

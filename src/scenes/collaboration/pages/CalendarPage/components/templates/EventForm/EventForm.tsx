@@ -17,10 +17,7 @@ import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {
-    calendarStore,
-    spaceStore: {space}
-  } = useStore().collaborationStore;
+  const {calendarStore, space} = useStore().collaborationStore;
   const {eventFormStore, formDialog, eventListStore} = calendarStore;
   const {eventFormRequest, currentEvent} = eventFormStore;
 
@@ -54,7 +51,7 @@ const EventForm: FC = () => {
       data.web_link = null;
     }
 
-    if (space.id) {
+    if (space) {
       let isSuccess = false;
 
       if (currentEvent?.id) {

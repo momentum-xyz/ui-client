@@ -161,9 +161,15 @@ export const enGb = {
       people_one: '{{count}} Person',
       people_other: '{{count}} People',
       attendees_one: `{{count}} Attendee`,
-      attendees_other: `{{count}} Attendees`
+      attendees_other: `{{count}} Attendees`,
+      vibes_one: '{{count}}  vibe',
+      vibes_other: '{{count}}  vibes'
     },
     labels: {
+      miro: 'Miro',
+      googleDrive: 'Google Drive',
+      screenShare: 'Screenshare',
+      stageMode: 'Stage Mode',
       calendar: 'World Calendar',
       staking: 'Staking',
       minimap: 'Minimap',
@@ -188,7 +194,16 @@ export const enGb = {
       dnd: 'Do Not Disturb',
       subspaces: 'Subspaces',
       searchResults: 'Search Results',
-      attendeeList: 'Attendee List'
+      attendeeList: 'Attendee List',
+      speakers: 'Speakers',
+      audience: 'Audience',
+      you: 'You',
+      cameraOn: 'Camera on',
+      cameraOff: 'Camera off',
+      microphoneOn: 'Microphone on',
+      microphoneOff: 'Microphone off',
+      webcamPreview: 'Webcam Preview',
+      audioVideoSettings: 'Audio/Video Settings'
     },
     messages: {
       loading: 'Loading Odyssey Momentum',
@@ -244,13 +259,50 @@ export const enGb = {
       subSpaceCreateFailure: 'There was an error creating the subspace',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
+      stageModeNotActiveGuest: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
+      stageModeNotActiveModerator: `Stage Mode has not Been Toggled\n\nYou can toggle stage-mode, since you are a member of this space`,
       stageModeDeActivated: 'The stage has been disabled',
       stageModeFull: 'The stage is currently full. Try again later to go on stage.',
       stageModeMuted: 'You have been muted by a member of the space.',
       kickedFromMeeting: 'A Space Admin has kicked you from the space',
       joinGathering: 'The gathering {{title}} is about to start',
       updateSpace:
-        'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).'
+        'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).',
+      noTeamMiroBoard: 'Your team does not have a Miro board yet',
+      noMiroBoard: 'This team does not have a Miro board yet',
+      noTeamDocument: 'Your team does not have a Google Drive Document open yet',
+      noDocument: 'This team does not have a Google Drive Document open yet',
+      noScreenSharing: 'There is no one screensharing',
+      preparingScreenSharing: 'preparing screen share',
+      tileCreateSuccess: 'Your tile has been created successfully',
+      tileCreateError: 'There was a problem creating your tile',
+      tileUpdateSuccess: 'Your tile has been updated successfully',
+      tileUpdateError: 'There was a problem updating your tile',
+      tileRemoveSuccess: 'Your tile has been successfully removed',
+      tileRemoveError: 'There was a problem removing your tile',
+      pendingRequestToGoOnStage: 'Request to go on stage pending',
+      stageIsFull: 'Stage is full',
+      stageIsActive: 'Stage is active',
+      stageIsInactiveToggleToActivate: 'Stage is inactive. Toggle to activate.',
+      noParticipantsOnStage: 'There are currently no participants on stage.',
+      onStage: 'On Stage',
+      requestedPermissionToGoOnStage: 'You have requested permission to go on stage',
+      waitForModeratorsToAccept: 'Wait for the moderators to accept or deny your request',
+      thisPersonWantsToComeOnStage: 'This person wants to come on stage, invite them?',
+      thisWillEnablePersonToUseStage:
+        '(This will enable the person to talk, screenshare, and transmit video)',
+      stageIsCurrentlyFull:
+        '(The stage is currently full, you must first remove someone from the stage before you can accept)',
+      youAreInAudience: 'You are in the audience, stage mode is on',
+      newDeviceDetected:
+        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
+      inviteSuccess: 'You have successfully invited {{user}} to the space',
+      inviteError: 'There was a problem inviting {{user}} to space',
+      areYouSureYouWantToRemoveUserFromStage: `Are you sure you want remove {{name}} from stage?`,
+      wouldYouLikeToGoOnStage: 'Would you like to go on stage?',
+      thisWillEnableYouToUseStage:
+        '(This will enable you to talk, screenshare, and transmit video)',
+      pleaseTryAgainLater: 'Please try again later'
     },
     titles: {
       alert: 'alert',
@@ -263,7 +315,26 @@ export const enGb = {
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
-      updateSpace: 'update your space with some enticing content'
+      updateSpace: 'update your space with some enticing content',
+      goToStageMode: 'Click to go to stage-mode',
+      userWantsToComeOnStage: '{{user}} wants to come on stage',
+      newDeviceDetected: 'New Device Detected',
+      inviteUsers: 'Invite users',
+      removeParticipantFromStage: 'Remove Participant From Stage',
+      yourRequestHasBeenAccepted: 'Your request has been accepted,',
+      getReadyToGetLive: 'Get ready. You are about to go live in.',
+      goingOnStage: 'Going On Stage',
+      yourRequestWasDeclined: 'Your request was declined',
+      youHaveBeenInvitedOnStage: 'You have been invited on stage',
+      prepareToGoOnStage: 'Prepare to go on stage'
+    },
+    tooltipTitles: {
+      openAdmin: 'Open Admin',
+      closeChat: 'Close Chat',
+      openChat: 'Open Chat',
+      favorite: 'Favorite',
+      flyAround: 'Fly Around',
+      close: 'Close'
     },
     placeholders: {
       search: 'Search',
@@ -289,7 +360,7 @@ export const enGb = {
     actions: {
       ok: 'OK',
       approve: 'Approve',
-      joinStage: 'Join stage',
+      joinStage: 'Join Stage',
       decline: 'Decline',
       cancel: 'Cancel',
       emailLogin: 'Email Login',
@@ -316,9 +387,9 @@ export const enGb = {
       joined: 'joined',
       refresh: 'Refresh',
       launch: 'Launch',
-      remove: 'yes, remove',
+      confirmRemove: 'yes, remove',
       removeRule: 'remove rule',
-      no: 'no, cancel',
+      noCancel: 'no, cancel',
       save: 'save',
       launchInitiativeSuccess: 'Launched initiative succesfully, you will be now teleported.',
       lunchingInitiative: 'launching initiative',
@@ -328,7 +399,23 @@ export const enGb = {
       return: 'Return',
       leave: 'Leave',
       muteName: 'Mute {{name}}',
-      kickName: 'Kick {{name}}'
+      kickName: 'Kick {{name}}',
+      changeBoard: 'Change board',
+      chooseBoard: 'Choose a Miro board',
+      chooseDocument: 'Choose a document',
+      changeDocument: 'Change document',
+      leaveStage: 'Leave stage',
+      goOnStage: 'Go on stage',
+      remove: 'Remove',
+      mute: 'Mute',
+      unmute: 'Unmute',
+      startScreenShare: 'Start screensharing',
+      accept: 'Accept',
+      switchDevice: 'Switch device',
+      getReady: 'Get Ready',
+      close: 'Close',
+      inviteToStage: 'Invite to stage',
+      ready: 'Ready'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
@@ -673,9 +760,29 @@ export const enGb = {
     dashboard: {
       subtitle: 'dashboard',
       vibe: 'vibe',
+      vibes: 'vibes',
       addTile: 'add tile',
       invitePeople: 'invite people',
-      stake: 'stake'
+      stake: 'stake',
+      tileForm: {
+        title: 'create a new tile',
+        createTile: 'create tile',
+        updateTile: 'update tile',
+        tileType: 'Tile type',
+        typePlaceholder: 'Select a type',
+        textType: 'Text',
+        imageType: 'Image',
+        videoType: 'Video',
+        videoLabel: 'Youtube video url',
+        textLabel: 'Title',
+        textPlaceholder: 'Please choose a title',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Please write a description'
+      },
+      removeTileForm: {
+        title: 'remove Tile from dashboard',
+        message: 'Are you sure you want to remove this tile?'
+      }
     }
   }
 };

@@ -1,4 +1,4 @@
-import {Instance, types} from 'mobx-state-tree';
+import {Instance, types, flow} from 'mobx-state-tree';
 
 import {RootCommunicationStore} from 'scenes/communication/stores';
 import {RootAuthStore} from 'scenes/auth/stores';
@@ -11,6 +11,7 @@ import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {RootVideoStore} from 'scenes/video/stores';
+import {PosBusEventEnum} from 'core/enums';
 
 import {ConfigStore} from './ConfigStore';
 import {MainStore} from './MainStore';
@@ -44,7 +45,34 @@ const RootStore = types
       self.mainStore.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
-    }
+    },
+    joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
+      yield self.collaborationStore.joinMeetingSpace(spaceId, isTable);
+      yield self.mainStore.agoraStore.joinMeetingSpace(self.sessionStore.userId, spaceId);
+
+      self.mainStore.unityStore.triggerInteractionMessage(
+        PosBusEventEnum.EnteredSpace,
+        spaceId,
+        0,
+        ''
+      );
+    }),
+    leaveMeetingSpace: flow(function* () {
+      const spaceId = self.collaborationStore.space?.id;
+
+      yield self.mainStore.agoraStore.leaveMeetingSpace();
+      self.collaborationStore.leaveMeetingSpace();
+      self.mainStore.unityStore.resume();
+
+      if (spaceId) {
+        self.mainStore.unityStore.triggerInteractionMessage(
+          PosBusEventEnum.LeftSpace,
+          spaceId,
+          0,
+          ''
+        );
+      }
+    })
   }));
 
 export interface RootStoreInterface extends Instance<typeof RootStore> {}

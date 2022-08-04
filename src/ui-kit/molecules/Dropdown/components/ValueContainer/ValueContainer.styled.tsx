@@ -33,4 +33,14 @@ export const Container = styled.div`
     --borderRadius: 5px;
     --background: ${rgba(0, 1, 1, 0.2)};
   }
+
+  &.disabled {
+    color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
+    border-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
+    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
+
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
 `;

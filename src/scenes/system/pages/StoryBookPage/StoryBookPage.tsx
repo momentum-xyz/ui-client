@@ -25,7 +25,7 @@ import {
   TextArea,
   Input,
   SearchInput,
-  TopBar,
+  PageTopBar,
   TabBar,
   TabBarTabInterface,
   InputDark,
@@ -230,7 +230,7 @@ const StoryBookPage: FC = () => {
             </NavigationBar>
           </styled.Item>
           <styled.Item style={{width: '100%'}}>
-            <TopBar
+            <PageTopBar
               title="spacename"
               subtitle="calendar"
               theme={theme}
@@ -239,7 +239,7 @@ const StoryBookPage: FC = () => {
           </styled.Item>
         </styled.Row>
         <styled.Row>
-          <TopBar
+          <PageTopBar
             title="spacename"
             subtitle="calendar"
             theme={theme}
@@ -247,10 +247,10 @@ const StoryBookPage: FC = () => {
           >
             <Button variant="danger" label="154 Wows" theme={theme} />
             <Button variant="primary" label="Add Gathering" theme={theme} />
-          </TopBar>
+          </PageTopBar>
         </styled.Row>
         <styled.Row>
-          <TopBar
+          <PageTopBar
             title="spacename"
             subtitle="calendar"
             theme={theme}
@@ -263,7 +263,7 @@ const StoryBookPage: FC = () => {
           >
             <Button variant="danger" label="154 Wows" theme={theme} />
             <Button variant="primary" label="Add Gathering" theme={theme} />
-          </TopBar>
+          </PageTopBar>
         </styled.Row>
         <styled.Row>
           <styled.Item style={{width: '100%'}}>

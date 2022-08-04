@@ -10,7 +10,6 @@ import {appVariables} from 'api/constants';
 import {UserStatusEnum} from 'core/enums';
 import {absoluteLink, monthAndYearString, withoutProtocol} from 'core/utils';
 import {Button, IconSvg, SvgButton, Avatar, PanelLayout, Text} from 'ui-kit';
-import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
 
 import {UserSpaceList} from './components';
 import * as styled from './ProfileWidget.styled';
@@ -34,9 +33,9 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
   showOverflow,
   showUserInteractions = true
 }) => {
-  const {widgetStore, sessionStore, mainStore, defaultStore} = useStore();
+  const {widgetStore, sessionStore, mainStore, defaultStore, collaborationStore} = useStore();
   const {profileStore, launchInitiativeStore} = widgetStore;
-  const {unityStore, worldStore} = mainStore;
+  const {unityStore, worldStore, agoraStore} = mainStore;
   const {profile: currentUser} = sessionStore;
   const {userProfile, userSpaceList} = profileStore;
   const {homeStore} = defaultStore;
@@ -44,7 +43,6 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
 
   const history = useHistory();
   const {t} = useTranslation();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
 
   useEffect(() => {
     profileStore.fetchProfile(userId);
@@ -60,8 +58,10 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
   }, [worldStore.worldId, userId]);
 
   const grabATable = async () => {
-    const {tableId, typeUuid} = await profileStore.grabATable(worldStore.worldId, userId);
-    await joinMeetingSpace(tableId, typeUuid === '285ba49f-fee3-40d2-ab55-256b5804c20c');
+    const {tableId} = await profileStore.grabATable(worldStore.worldId, userId);
+
+    await collaborationStore.joinMeetingSpace(tableId, true);
+    await agoraStore.joinMeetingSpace(tableId, sessionStore.userId);
     onClose();
   };
 

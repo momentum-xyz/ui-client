@@ -12,11 +12,7 @@ import * as styled from './SpaceMembersPanel.styled';
 
 const SpaceMembersPanel: FC = () => {
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {removeUserConfirmationDialog, editUserDialog, addUserDialog, spaceStore} =
-    spaceManagerStore;
-  const {
-    space: {users}
-  } = spaceStore;
+  const {removeUserConfirmationDialog, editUserDialog, addUserDialog, space} = spaceManagerStore;
 
   const [selectedUser, setSelectedUser] = useState<{
     id: string;
@@ -39,8 +35,8 @@ const SpaceMembersPanel: FC = () => {
       return;
     }
 
-    spaceStore
-      .removeUser(selectedUser.id)
+    space
+      ?.removeUser(selectedUser.id)
       .catch(() => {
         toast.error(
           <ToastContent
@@ -54,7 +50,7 @@ const SpaceMembersPanel: FC = () => {
         );
       })
       .then(() => {
-        spaceStore.fetchSpaceInformation();
+        space.fetchSpaceInformation();
         toast.info(
           <ToastContent
             headerIconName="alert"
@@ -86,7 +82,7 @@ const SpaceMembersPanel: FC = () => {
         />
       )}
       <styled.List className="noScrollIndicator">
-        {users.map((user) => (
+        {space?.users.map((user) => (
           <AdminListItem
             key={user.uuid}
             name={user.name}

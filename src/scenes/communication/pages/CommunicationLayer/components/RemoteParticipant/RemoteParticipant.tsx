@@ -1,107 +1,81 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import CONFIG from 'config/config';
-import {useUser} from 'hooks/api/useUser';
 import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
 import {ReactComponent as AddIcon} from 'images/icons/add.svg';
 import Avatar from 'component/atoms/Avatar';
-import Modal, {ModalRef} from 'component/util/Modal';
-import StageModeInviteToStagePopup from 'component/popup/stageMode/StageModeInviteToStagePopup';
-import {useModerator} from 'context/Integration/hooks/useIntegration';
-import {ParticipantModelInterface} from 'scenes/communication/stores/CommunicationLayerStore/models';
 import {useStore} from 'shared/hooks';
-import {AgoraParticipant} from 'hooks/communication/useAgoraVideo';
-import useCollaboration from 'context/Collaboration/hooks/useCollaboration';
+import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
+import {appVariables} from 'api/constants';
+import {InviteOnStageDialog} from 'scenes/collaboration/pages/StageModePage/components';
 
 import {ParticipantMenu} from '../ParticipantMenu';
 
 export interface RemoteParticipantProps {
-  participant: AgoraParticipant;
-  participantModel?: ParticipantModelInterface;
-  totalParticipants: number;
+  participant?: AgoraRemoteUserInterface;
+  audienceParticipant?: StageModeUserInterface;
   canEnterStage: boolean;
+  totalParticipants: number;
 }
 
 const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
-  participantModel,
-  totalParticipants,
-  canEnterStage
+  audienceParticipant,
+  canEnterStage,
+  totalParticipants
 }) => {
-  const {collaborationState} = useCollaboration();
+  const {collaborationStore, communicationStore, mainStore} = useStore();
+  const {agoraStore} = mainStore;
+  const {communicationLayerStore} = communicationStore;
+  const {space} = collaborationStore;
   const videoRef = useRef<HTMLDivElement>(null);
-  const inviteOnStageModalRef = useRef<ModalRef>(null);
-  const id = participant.uid as string;
-  const [isModerator, , ,] = useModerator(collaborationState.collaborationSpace?.id ?? '');
+  const id = (participant?.uid as string | undefined) ?? audienceParticipant?.uid;
   const [hovered, setIsHovered] = useState(false);
 
-  const {
-    communicationStore: {communicationLayerStore},
-    collaborationStore: {spaceStore}
-  } = useStore();
-
-  const [user] = useUser(id);
-
-  const soundlevel = participant.soundLevel || 0;
-
-  const userName = user?.name || id;
-
-  const noVideo = totalParticipants > CONFIG.video.PARTICIPANTS_VIDEO_LIMIT - 1;
-
-  // @ts-ignore
-  useEffect(() => {
-    console.info(`Agora audio track changes for user ${userName}`, participant.audioTrack);
-
-    if (participant.hasAudio && participant.audioTrack) {
-      participant.audioTrack.play();
-
-      return () => {
-        if (participant.audioTrack) {
-          participant.audioTrack.stop();
-        }
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [participant.audioTrack]);
-
-  // @ts-ignore
-  useEffect(() => {
-    console.info(`Agora video track changes for user ${userName}`, participant.videoTrack);
-
-    if (collaborationState.stageMode) {
-      if (participant.videoTrack?.isPlaying) {
-        participant.videoTrack?.stop();
-      }
-      return;
-    }
-
-    if (participant.hasVideo && participant.videoTrack && videoRef.current) {
-      if (!noVideo) {
-        participant.videoTrack.play(videoRef.current);
-      }
-
-      return () => {
-        if (participant.videoTrack) {
-          participant.videoTrack.stop();
-        }
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [participant.videoTrack, noVideo, collaborationState.stageMode]);
+  const maximumParticipantsReached = totalParticipants > appVariables.PARTICIPANTS_VIDEO_LIMIT - 1;
 
   useEffect(() => {
-    const volume = collaborationState.deafen ? 0 : 100;
-    participant.audioTrack?.setVolume(volume);
-  }, [collaborationState.deafen, participant.audioTrack]);
+    if (participant) {
+      participant?.fetchUser();
+    } else if (audienceParticipant) {
+      audienceParticipant.fetchUser();
+    }
+  }, [audienceParticipant, participant]);
+
+  useEffect(() => {
+    if (
+      !participant?.cameraOff &&
+      videoRef.current &&
+      !maximumParticipantsReached &&
+      participant?.videoTrack &&
+      !participant.videoTrack.isPlaying
+    ) {
+      participant.videoTrack.play(videoRef.current);
+    }
+
+    if (
+      (maximumParticipantsReached || participant?.cameraOff) &&
+      participant?.videoTrack?.isPlaying
+    ) {
+      participant?.videoTrack?.stop();
+    }
+
+    return () => {
+      participant?.videoTrack?.stop();
+    };
+  }, [maximumParticipantsReached, participant]);
 
   const handleStageModeUserClick = () => {
-    inviteOnStageModalRef.current?.open();
-    console.info(`clicked on ${userName} with ${id}`);
+    collaborationStore.inviteOnStageDialog.open();
+    console.info(`clicked on ${participant?.name ?? audienceParticipant?.name} with ${id}`);
   };
 
   const handleOpenMenu = () => {
+    if (!participant) {
+      return;
+    }
+
     if (communicationLayerStore.selectedParticipant === participant.uid) {
       communicationLayerStore.selectParticipant(undefined);
     } else {
@@ -111,40 +85,37 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 
   const handleRemoveParticipant = () => {
     communicationLayerStore.removeParticipant(
-      spaceStore.space.id,
+      space?.id,
       communicationLayerStore.selectedParticipant
     );
     communicationLayerStore.selectParticipant(undefined);
   };
 
   const handleMuteParticipant = () => {
-    communicationLayerStore.muteParticipant(
-      spaceStore.space.id,
-      communicationLayerStore.selectedParticipant
-    );
+    communicationLayerStore.muteParticipant(space?.id, communicationLayerStore.selectedParticipant);
     communicationLayerStore.selectParticipant(undefined);
   };
 
   return (
     <>
-      <Modal ref={inviteOnStageModalRef}>
-        <StageModeInviteToStagePopup
-          user={user}
+      {collaborationStore.inviteOnStageDialog.isOpen && (
+        <InviteOnStageDialog
+          user={audienceParticipant}
           onClose={() => {
-            inviteOnStageModalRef.current?.close();
+            collaborationStore.inviteOnStageDialog.close();
           }}
         />
-      </Modal>
+      )}
       <li
         className={` mb-.5 p-.5
         rounded-full 
         border-1
-        ${soundlevel > 3 ? ' border-prime-blue-70' : ' border-transparant'}`}
+        ${(participant?.soundLevel ?? 0) > 3 ? ' border-prime-blue-70' : ' border-transparant'}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        title={userName}
+        title={participant?.name ?? audienceParticipant?.name}
         onClick={
-          !collaborationState.stageMode && isModerator
+          !agoraStore.isStageMode && collaborationStore.isModerator
             ? () => {
                 handleOpenMenu();
               }
@@ -153,22 +124,25 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       >
         <div
           className={`h-8 w-8 rounded-full overflow-hidden relative border-2 
-          ${soundlevel > 3 ? ' border-prime-blue-100' : ' border-transparant'}`}
+          ${(participant?.soundLevel ?? 0) > 3 ? ' border-prime-blue-100' : ' border-transparant'}`}
           ref={videoRef}
         >
           <div className="h-full w-full absolute bg-dark-blue-100 text-green-light-100  flex flex-col justify-center items-center">
-            {user?.profile.avatarHash ? (
-              <Avatar avatarHash={user?.profile.avatarHash} />
+            {(participant ?? audienceParticipant)?.profile?.avatarHash ? (
+              <Avatar avatarHash={(participant ?? audienceParticipant)?.profile?.avatarHash} />
             ) : (
-              <AstronautIcon className="w-4 h-4" title={userName} />
+              <AstronautIcon
+                className="w-4 h-4"
+                title={(participant ?? audienceParticipant)?.name}
+              />
             )}
-            {collaborationState.stageMode && isModerator && hovered && (
+            {agoraStore.isStageMode && collaborationStore.isModerator && hovered && (
               <div
                 className="flex flex-col bg-dark-blue-50 rounded-full absolute h-full w-full items-center justify-center space-y-.5"
                 onClick={
                   canEnterStage
                     ? () => {
-                        if (collaborationState.stageMode && isModerator) {
+                        if (agoraStore.isStageMode && collaborationStore.isModerator) {
                           console.log('I am a moderator');
                           handleStageModeUserClick();
                         }
@@ -188,7 +162,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
             )}
           </div>
         </div>
-        {!participant.hasAudio && !collaborationState.stageMode && (
+        {!audienceParticipant && participant?.isMuted && !agoraStore.isStageMode && (
           <MicOff
             className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5"
             style={{top: '70px'}}
@@ -199,13 +173,12 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
         className="uppercase h-2 w-8 overflow-hidden text-center"
         style={{textOverflow: 'ellipsis', width: '92px'}}
       >
-        {userName}
+        {(participant ?? audienceParticipant)?.name}
       </p>
-      {communicationLayerStore.selectedParticipant === participant.uid && (
+      {participant && communicationLayerStore.selectedParticipant === participant?.uid && (
         <ParticipantMenu
           muteParticipant={handleMuteParticipant}
           removeParticipant={handleRemoveParticipant}
-          name={userName}
           participant={participant}
           onClose={() => communicationLayerStore.selectParticipant(undefined)}
         />

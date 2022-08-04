@@ -1,29 +1,24 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {generatePath} from 'react-router-dom';
 import {useHistory} from 'react-router';
 import {t} from 'i18next';
 
-import {TopBar, EventList, LinkDialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
+import {PageTopBar, EventList, LinkDialog} from 'ui-kit';
 import {absoluteLink} from 'core/utils';
-import {UnityService} from 'shared/services';
-import {useJoinCollaborationSpaceByAssign} from 'context/Collaboration/hooks/useCollaboration';
-import {ROUTES} from 'core/constants';
 
 import * as styled from './WorldCalendarPage.styled';
 
 const WorldCalendarPage: FC = () => {
-  const history = useHistory();
-
-  const {
-    worldCalendarStore: {calendarStore},
-    mainStore: {worldStore, unityStore},
-    sessionStore,
-    widgetStore: {attendeesListStore}
-  } = useStore();
-
+  const {worldCalendarStore, mainStore, sessionStore, widgetStore} = useStore();
+  const {calendarStore} = worldCalendarStore;
   const {magicDialog, eventListStore} = calendarStore;
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
+  const {worldStore, unityStore} = mainStore;
+  const {attendeesListStore} = widgetStore;
+
+  const history = useHistory();
 
   const handleMagicLinkOpen = useCallback(
     (eventId: string, spaceId?: string) => {
@@ -31,14 +26,14 @@ const WorldCalendarPage: FC = () => {
         calendarStore.showMagicLink(spaceId, eventId);
       }
     },
-    [worldStore.worldId]
+    [calendarStore]
   );
 
   useEffect(() => {
     eventListStore.fetchEvents(worldStore.worldId, true);
 
     return () => eventListStore.resetModel();
-  }, [worldStore.worldId]);
+  }, [eventListStore, worldStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
@@ -46,23 +41,18 @@ const WorldCalendarPage: FC = () => {
 
   const handleFlyToGathering = (spaceId: string) => {
     if (spaceId) {
-      UnityService.teleportToSpace(spaceId);
-
-      joinMeetingSpace(spaceId).then(() => {
-        unityStore.pause();
-        history.push({pathname: ROUTES.collaboration});
-      });
+      history.push(ROUTES.base);
+      unityStore.teleportToSpace(spaceId);
+      setTimeout(() => {
+        history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+      }, TELEPORT_DELAY_MS);
     }
   };
 
   const handleFlyToSpace = (spaceId: string) => {
     if (spaceId) {
-      UnityService.teleportToSpace(spaceId);
+      unityStore.teleportToSpace(spaceId);
       history.push(ROUTES.base);
-
-      if (process.env.NODE_ENV === 'development') {
-        joinMeetingSpace(spaceId);
-      }
     }
   };
 
@@ -76,7 +66,7 @@ const WorldCalendarPage: FC = () => {
           onClose={magicDialog.close}
         />
       )}
-      <TopBar title="World Calendar" onClose={() => history.goBack()} />
+      <PageTopBar title="World Calendar" onClose={() => history.goBack()} />
       <EventList
         currentUserId={sessionStore.userId}
         events={eventListStore.events}

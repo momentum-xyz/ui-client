@@ -20,3 +20,7 @@ export * from './TileList';
 export * from './Tile';
 export * from './Content';
 export * from './UserSpaceDetails';
+export * from './Integration';
+export * from './AgoraRemoteUser';
+export * from './StageModeUser';
+export * from './OnlineUsersList';

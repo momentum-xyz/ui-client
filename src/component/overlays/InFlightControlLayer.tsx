@@ -1,70 +1,34 @@
 import {Transition} from '@headlessui/react';
-import React, {useCallback, useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import React, {useCallback} from 'react';
+import {generatePath, useHistory} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
 
-import {usePrevious} from 'ui-kit/hooks';
+import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 
-import CollaborationSpace from '../../context/Collaboration/CollaborationTypes';
-import useCollaboration, {
-  // useJoinCollaborationSpace,
-  useJoinCollaborationSpaceByAssign
-} from '../../context/Collaboration/hooks/useCollaboration';
 import Button from '../atoms/Button';
-import {ROUTES} from '../../core/constants';
-import {useStore} from '../../shared/hooks';
 
-export interface InFlightControlLayerProps {}
-
-const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
-  const {collaborationState} = useCollaboration();
-  // const joinCollaborationSpace = useJoinCollaborationSpace();
+const InFlightControlLayer: React.FC = () => {
   const {
+    collaborationStore,
     communicationStore: {communicationLayerStore},
     mainStore: {unityStore}
   } = useStore();
-  const joinMeetingSpace = useJoinCollaborationSpaceByAssign();
   const history = useHistory();
 
-  const prevCollaborationSpace = usePrevious(collaborationState.collaborationSpace);
-
-  const [leftCollaborationSpace, setLeftCollaborationSpace] = useState<CollaborationSpace>();
-
-  // @ts-ignore
-  useEffect(() => {
-    if (!!prevCollaborationSpace && !collaborationState.collaborationSpace) {
-      setLeftCollaborationSpace(prevCollaborationSpace);
-      const timeout = setTimeout(() => setLeftCollaborationSpace(undefined), 15000);
-      return () => clearTimeout(timeout);
-    }
-    if (collaborationState.collaborationSpace) {
-      setLeftCollaborationSpace(undefined);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collaborationState.collaborationSpace]);
-
-  // const rejoin = useCallback(() => {
-  //   if (leftCollaborationSpace) {
-  //     joinCollaborationSpace(leftCollaborationSpace);
-  //   }
-  // }, [joinCollaborationSpace, leftCollaborationSpace]);
-
   const rejoin = useCallback(() => {
-    if (leftCollaborationSpace) {
-      joinMeetingSpace(leftCollaborationSpace.id).then(() => {
-        unityStore.pause();
-        history.push({pathname: ROUTES.dashboard});
-      });
+    if (collaborationStore.leftMeetingSpaceId) {
+      unityStore.teleportToSpace(collaborationStore.leftMeetingSpaceId);
+      const params = {spaceId: collaborationStore.leftMeetingSpaceId};
+      history.push(generatePath(ROUTES.collaboration.dashboard, params));
+      collaborationStore.rejoinMeetingSpace();
     }
-  }, [leftCollaborationSpace, joinMeetingSpace, history]);
+  }, [collaborationStore, unityStore, history]);
 
   return (
     <>
       <Transition
-        show={
-          !!leftCollaborationSpace &&
-          !collaborationState.removedCollaborationSpace &&
-          !communicationLayerStore.isKicked
-        }
+        show={!!collaborationStore.leftMeetingSpaceId && !communicationLayerStore.isKicked}
         enter="transition-opacity delay-500 duration-200"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -81,4 +45,4 @@ const InFlightControlLayer: React.FC<InFlightControlLayerProps> = () => {
   );
 };
 
-export default InFlightControlLayer;
+export default observer(InFlightControlLayer);
