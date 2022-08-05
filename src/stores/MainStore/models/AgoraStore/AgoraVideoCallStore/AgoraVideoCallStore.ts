@@ -7,7 +7,7 @@ import {api} from 'api';
 const AgoraVideoCallStore = types
   .compose(
     ResetModel,
-    types.model('VideoCallStore', {
+    types.model('AgoraVideoCallStore', {
       appId: '',
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
@@ -122,4 +122,4 @@ const AgoraVideoCallStore = types
     }
   }));
 
-export {AgoraVideoCallStore as VideoCallStore};
+export {AgoraVideoCallStore};

@@ -1,4 +1,4 @@
-import {flow, Instance, types, cast} from 'mobx-state-tree';
+import {flow, types, cast} from 'mobx-state-tree';
 import AgoraRTC, {
   ConnectionDisconnectedReason,
   ConnectionState,
@@ -11,7 +11,7 @@ import {ResetModel, RequestModel, AgoraRemoteUser, AgoraRemoteUserInterface} fro
 import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
 
 import {UserDevicesStore} from './UserDevicesStore';
-import {VideoCallStore} from './AgoraVideoCallStore';
+import {AgoraVideoCallStore} from './AgoraVideoCallStore';
 import {AgoraStageModeStore} from './AgoraStageModeStore';
 import {AgoraScreenShareStore} from './AgoraScreenShareStore';
 
@@ -21,7 +21,7 @@ const AgoraStore = types
     types.model('AgoraStore', {
       // stores
       userDevicesStore: types.optional(UserDevicesStore, {}),
-      agoraVideoCallStore: types.optional(VideoCallStore, {}),
+      agoraVideoCallStore: types.optional(AgoraVideoCallStore, {}),
       agoraStageModeStore: types.optional(AgoraStageModeStore, {}),
       agoraScreenShareStore: types.optional(AgoraScreenShareStore, {}),
 
@@ -367,9 +367,12 @@ const AgoraStore = types
     },
     get maxVideoStreamsReached(): boolean {
       return self.remoteUsers.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT;
+    },
+    get meetingPeopleCount(): number {
+      return self.isStageMode
+        ? self.agoraStageModeStore.numberOfAudienceMembers
+        : self.remoteUsers.length + 1;
     }
   }));
-
-export interface AgoraStoreInterface extends Instance<typeof AgoraStore> {}
 
 export {AgoraStore};

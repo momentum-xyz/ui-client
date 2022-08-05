@@ -1,5 +1,5 @@
+import React, {FC, useEffect, useMemo} from 'react';
 import {Transition} from '@headlessui/react';
-import React, {useEffect, useMemo} from 'react';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
@@ -8,19 +8,17 @@ import {t} from 'i18next';
 import {ToastContent, TOAST_GROUND_OPTIONS, SvgButton, Text} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
-import {ROUTES} from 'core/constants';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
-import {RemoteParticipant, LocalParticipant} from './components';
+import {RemoteParticipant, LocalParticipant, JoinToSpaceBack} from './components';
 import * as styled from './MeetingRoomPage.styled';
 
-const MeetingRoomPage = () => {
+const MeetingRoomPage: FC = () => {
   const {mainStore, meetingStore, collaborationStore, sessionStore} = useStore();
   const {meetingRoomStore} = meetingStore;
   const {space, stageModeStore} = collaborationStore;
-  const {unityStore, agoraStore} = mainStore;
-  const {userDevicesStore, agoraStageModeStore} = agoraStore;
-  const {removeAllPopups} = stageModeStore;
+  const {agoraStore} = mainStore;
+  const {userDevicesStore, agoraStageModeStore, meetingPeopleCount} = agoraStore;
 
   const history = useHistory();
 
@@ -28,23 +26,13 @@ const MeetingRoomPage = () => {
     return agoraStore.isStageMode ? agoraStageModeStore.audienceMembers : [];
   }, [agoraStageModeStore.audienceMembers, agoraStore.isStageMode]);
 
-  const numberOfPeople = useMemo(() => {
-    return agoraStore.isStageMode
-      ? agoraStageModeStore.numberOfAudienceMembers
-      : agoraStore.remoteUsers.length + 1;
-  }, [
-    agoraStageModeStore.numberOfAudienceMembers,
-    agoraStore.isStageMode,
-    agoraStore.remoteUsers.length
-  ]);
-
   useEffect(() => {
-    removeAllPopups();
+    stageModeStore.removeAllPopups();
     if (space) {
       meetingRoomStore.setKicked(false);
       meetingRoomStore.selectParticipant(undefined);
     }
-  }, [removeAllPopups, meetingRoomStore, space]);
+  }, [stageModeStore, meetingRoomStore, space]);
 
   usePosBusEvent('meeting-mute', userDevicesStore.mute);
 
@@ -80,10 +68,6 @@ const MeetingRoomPage = () => {
     );
   };
 
-  const handleLeave = () => {
-    history.push(ROUTES.base);
-  };
-
   useEffect(() => {
     if (agoraStore.maxVideoStreamsReached) {
       showMaxVideoStreamsReached();
@@ -104,38 +88,14 @@ const MeetingRoomPage = () => {
     >
       <ul className="h-full mt-1">
         <styled.ListItem>
-          <Transition
-            show={!unityStore.isPaused}
-            unmount={false}
-            enter="transition-all transform ease-out duration-300"
-            enterFrom="-translate-y-8 pt-0"
-            enterTo="translate-y-0 pt-[30px] pb-1"
-            leave="transition-all transform ease-in duration-300"
-            leaveFrom="translate-y-0 pt-[30px] pb-1"
-            leaveTo="-translate-y-8 pt-0 hidden"
-            className="pr-.1 space-y-1 pointer-all"
-            as="div"
-          >
-            <styled.ActionButton
-              variant="primary-background"
-              label={t('actions.return')}
-              icon="collaboration"
-              onClick={() => {
-                history.push(ROUTES.collaboration);
-              }}
-            />
-            <styled.ActionButton
-              variant="danger-background"
-              label={t('actions.leave')}
-              icon="leave"
-              onClick={handleLeave}
-            />
-          </Transition>
+          {/* Leave & Return */}
+          <JoinToSpaceBack />
+
           <styled.ListItemContent className="noScrollIndicator">
             <p className="text-center whitespace-nowrap w-[92px]">
-              {t('counts.people', {count: numberOfPeople}).toUpperCase()}
+              {t('counts.people', {count: meetingPeopleCount}).toUpperCase()}
             </p>
-            {!agoraStore.isStageMode && numberOfPeople > 2 && collaborationStore.isModerator && (
+            {!agoraStore.isStageMode && meetingPeopleCount > 2 && collaborationStore.isModerator && (
               <styled.MuteButtonContainer>
                 <styled.MuteButton>
                   <SvgButton

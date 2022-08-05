@@ -1,15 +1,5 @@
 import styled from 'styled-components';
 
-import {Button} from 'ui-kit';
-
-export const ActionButton = styled(Button)`
-  width: 95px;
-  margin-right: 0;
-  align-self: center;
-  pointer-events: auto;
-`;
-
-//overflow-y-scroll h-full pr-.1
 export const ListItem = styled.li`
   padding-right: 1px;
   align-items: end;
