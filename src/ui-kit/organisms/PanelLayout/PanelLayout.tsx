@@ -19,8 +19,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   title?: string;
   subtitle?: string;
   headerIconName?: IconName;
-  // @ts-ignore: refactoring
-  onClose?: (event) => void;
+  onClose?: () => void;
   headerStyle?: HeaderStyleType;
   isBodyExtendingToEdges?: boolean;
   isDanger?: boolean;

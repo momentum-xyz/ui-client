@@ -1,26 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {toast} from 'react-toastify';
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
 
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
 import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import Avatar from 'component/atoms/Avatar';
-import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
-import {useStore, usePosBusEvent} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
 
 const LocalParticipant: React.FC = () => {
   const videoRef = useRef<HTMLDivElement>(null);
   const [hasCameraState, setHasCameraState] = useState(false);
   const {
-    meetingStore: {meetingRoomStore},
     sessionStore: {profile},
     mainStore: {agoraStore}
   } = useStore();
   const {userDevicesStore} = agoraStore;
-  const history = useHistory();
 
   useEffect(() => {
     if (userDevicesStore.localVideoTrack) {
@@ -53,21 +46,6 @@ const LocalParticipant: React.FC = () => {
     userDevicesStore.cameraOff,
     userDevicesStore.localVideoTrack
   ]);
-
-  usePosBusEvent('meeting-kick', async (spaceId) => {
-    meetingRoomStore.setKicked(true);
-    history.push(ROUTES.base);
-
-    toast.info(
-      <ToastContent
-        headerIconName="logout"
-        title={t('titles.kickedFromMeeting')}
-        text={t('messages.kickedFromMeeting')}
-        isCloseButton
-      />,
-      TOAST_COMMON_OPTIONS
-    );
-  });
 
   return (
     <>

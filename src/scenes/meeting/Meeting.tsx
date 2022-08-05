@@ -4,16 +4,18 @@ import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
+import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
+import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 
 import {MeetingRoomPage} from './pages';
 
 const Meeting: FC = () => {
-  const {mainStore, sessionStore} = useStore();
+  const {mainStore, sessionStore, meetingStore} = useStore();
   const {agoraStore} = mainStore;
   const {userDevicesStore} = agoraStore;
+  const {meetingRoomStore} = meetingStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -26,6 +28,21 @@ const Meeting: FC = () => {
     if (sessionStore.userId !== moderatorId) {
       userDevicesStore.mute();
     }
+  });
+
+  usePosBusEvent('meeting-kick', async (spaceId) => {
+    meetingRoomStore.setKicked(true);
+    history.push(ROUTES.base);
+
+    toast.info(
+      <ToastContent
+        headerIconName="logout"
+        title={t('titles.kickedFromMeeting')}
+        text={t('messages.kickedFromMeeting')}
+        isCloseButton
+      />,
+      TOAST_COMMON_OPTIONS
+    );
   });
 
   usePosBusEvent('stage-mode-mute', () => {
