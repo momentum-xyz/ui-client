@@ -6,12 +6,11 @@ import {useTheme} from 'styled-components';
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
-// import {VideoPage} from 'scenes/video/pages';
 
 import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
 import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
 
-import {MeetingRoomPage} from './meeting';
+import {Meeting} from './meeting';
 
 const AppLayers: FC = ({children}) => {
   const {mainStore} = useStore();
@@ -37,7 +36,7 @@ const AppLayers: FC = ({children}) => {
           >
             {children}
           </div>
-          <MeetingRoomPage />
+          <Meeting />
         </main>
         <WidgetContainer />
       </div>

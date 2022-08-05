@@ -1,1 +1,1 @@
-export * from './pages';
+export {default as Meeting} from './Meeting';
