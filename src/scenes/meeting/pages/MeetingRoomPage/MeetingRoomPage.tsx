@@ -20,10 +20,10 @@ const MeetingRoomPage: FC = () => {
   useEffect(() => {
     stageModeStore.removeAllPopups();
     if (space) {
-      meetingRoomStore.setKicked(false);
-      meetingRoomStore.selectParticipant(undefined);
+      meetingStore.setKicked(false);
+      meetingStore.selectParticipant(undefined);
     }
-  }, [stageModeStore, meetingRoomStore, space]);
+  }, [stageModeStore, meetingRoomStore, space, meetingStore]);
 
   return (
     <Transition

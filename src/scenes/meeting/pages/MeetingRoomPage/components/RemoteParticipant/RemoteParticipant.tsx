@@ -76,21 +76,21 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       return;
     }
 
-    if (meetingRoomStore.selectedParticipant === participant.uid) {
-      meetingRoomStore.selectParticipant(undefined);
+    if (meetingStore.selectedParticipant === participant.uid) {
+      meetingStore.selectParticipant(undefined);
     } else {
-      meetingRoomStore.selectParticipant(participant.uid);
+      meetingStore.selectParticipant(participant.uid);
     }
   };
 
   const handleRemoveParticipant = () => {
-    meetingRoomStore.removeParticipant(space?.id, meetingRoomStore.selectedParticipant);
-    meetingRoomStore.selectParticipant(undefined);
+    meetingRoomStore.removeParticipant(space?.id, meetingStore.selectedParticipant);
+    meetingStore.selectParticipant(undefined);
   };
 
   const handleMuteParticipant = () => {
-    meetingRoomStore.muteParticipant(space?.id, meetingRoomStore.selectedParticipant);
-    meetingRoomStore.selectParticipant(undefined);
+    meetingRoomStore.muteParticipant(space?.id, meetingStore.selectedParticipant);
+    meetingStore.selectParticipant(undefined);
   };
 
   return (
@@ -172,12 +172,12 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
       >
         {(participant ?? audienceParticipant)?.name}
       </p>
-      {participant && meetingRoomStore.selectedParticipant === participant?.uid && (
+      {participant && meetingStore.selectedParticipant === participant?.uid && (
         <ParticipantMenu
           muteParticipant={handleMuteParticipant}
           removeParticipant={handleRemoveParticipant}
           participant={participant}
-          onClose={() => meetingRoomStore.selectParticipant(undefined)}
+          onClose={() => meetingStore.selectParticipant(undefined)}
         />
       )}
     </>

@@ -15,7 +15,6 @@ const Meeting: FC = () => {
   const {mainStore, sessionStore, meetingStore} = useStore();
   const {agoraStore} = mainStore;
   const {userDevicesStore} = agoraStore;
-  const {meetingRoomStore} = meetingStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -31,7 +30,7 @@ const Meeting: FC = () => {
   });
 
   usePosBusEvent('meeting-kick', async (spaceId) => {
-    meetingRoomStore.setKicked(true);
+    meetingStore.setKicked(true);
     history.push(ROUTES.base);
 
     toast.info(
