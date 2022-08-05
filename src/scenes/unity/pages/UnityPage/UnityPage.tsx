@@ -70,6 +70,10 @@ const UnityPage: FC = () => {
     history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
   });
 
+  useUnityEvent('ClickEventVideo', (spaceId: string) => {
+    history.push({pathname: generatePath(ROUTES.video, {spaceId})});
+  });
+
   // TODO: Refactor GAT
   usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
     const handleJoinSpace = () => {

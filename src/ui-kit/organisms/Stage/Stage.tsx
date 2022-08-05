@@ -27,17 +27,22 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    const {numberOfSpeakers} = agoraStageModeStore;
-    if (numberOfSpeakers === 1) {
+    if (agoraStageModeStore.numberOfSpeakers === 1) {
       setCols('cols-1');
-    } else if (numberOfSpeakers > 1 && numberOfSpeakers <= 4) {
+    } else if (
+      agoraStageModeStore.numberOfSpeakers > 1 &&
+      agoraStageModeStore.numberOfSpeakers <= 4
+    ) {
       setCols('cols-2');
-    } else if (numberOfSpeakers > 4 && numberOfSpeakers <= 9) {
+    } else if (
+      agoraStageModeStore.numberOfSpeakers > 4 &&
+      agoraStageModeStore.numberOfSpeakers <= 9
+    ) {
       setCols('cols-3');
-    } else if (numberOfSpeakers > 9) {
+    } else if (agoraStageModeStore.numberOfSpeakers > 9) {
       setCols('cols-4');
     }
-  }, [agoraStageModeStore]);
+  }, [agoraStageModeStore.numberOfSpeakers]);
 
   return (
     <styled.Container>

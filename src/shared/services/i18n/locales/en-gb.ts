@@ -416,7 +416,8 @@ export const enGb = {
       getReady: 'Get Ready',
       close: 'Close',
       inviteToStage: 'Invite to stage',
-      ready: 'Ready'
+      ready: 'Ready',
+      inviteThisPersonToTheStage: 'Invite this person to the stage?'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

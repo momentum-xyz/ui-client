@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {useStore} from 'shared/hooks';
-import {Avatar, Dialog, IconSvg, Text} from 'ui-kit';
+import {Dialog, IconSvg, Text} from 'ui-kit';
 import {appVariables} from 'api/constants';
 
 import * as styled from './PrepareOnStageDialog.styled';
@@ -90,7 +90,7 @@ const PrepareOnStageDialog: React.FC<PropsInterface> = ({onClose, onReady}) => {
         <styled.VideoContainer>
           <styled.Video ref={videoRef} className={cn(videoRef.current?.paused && 'paused')} />
           {!webcamEnabled && (
-            <Avatar
+            <styled.AvatarStyled
               avatarSrc={`${appVariables.RENDER_SERVICE_URL}/get/${sessionStore.profile?.profile?.avatarHash}`}
               size="extra-large"
             />

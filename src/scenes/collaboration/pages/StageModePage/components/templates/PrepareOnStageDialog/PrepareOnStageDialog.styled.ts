@@ -1,15 +1,19 @@
 import styled from 'styled-components';
 
+import {Avatar} from 'ui-kit';
+
 export const Body = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 20px;
 `;
 
 export const VideoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 export const Video = styled.video`
@@ -41,4 +45,9 @@ export const AudioVideoButton = styled.button`
   display: flex;
   align-items: center;
   gap: 10px;
+`;
+
+export const AvatarStyled = styled(Avatar)`
+  position: absolute;
+  top: 0;
 `;

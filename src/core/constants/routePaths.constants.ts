@@ -28,6 +28,7 @@ export const ROUTES = {
     broadcast: '/space/:spaceId/admin/broadcast'
   },
   magic: '/magic/:id',
+  video: '/video/:spaceId',
   worldCalendar: '/calendar',
   help: '/help'
 };

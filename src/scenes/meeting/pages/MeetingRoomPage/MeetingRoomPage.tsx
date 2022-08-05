@@ -7,7 +7,6 @@ import {t} from 'i18next';
 
 import {ToastContent, TOAST_GROUND_OPTIONS, SvgButton, Text} from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {ParticipantRole} from 'core/enums';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {ROUTES} from 'core/constants';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
@@ -26,22 +25,17 @@ const MeetingRoomPage = () => {
   const history = useHistory();
 
   const stageModeAudience = useMemo(() => {
-    return agoraStore.isStageMode
-      ? agoraStageModeStore.users.filter((user) => {
-          return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== sessionStore.userId;
-        })
-      : [];
-  }, [agoraStageModeStore.users, sessionStore.userId, agoraStore.isStageMode]);
+    return agoraStore.isStageMode ? agoraStageModeStore.audienceMembers : [];
+  }, [agoraStageModeStore.audienceMembers, agoraStore.isStageMode]);
 
   const numberOfPeople = useMemo(() => {
     return agoraStore.isStageMode
-      ? stageModeAudience.length + Number(!agoraStageModeStore.isOnStage)
+      ? agoraStageModeStore.numberOfAudienceMembers
       : agoraStore.remoteUsers.length + 1;
   }, [
-    agoraStageModeStore.isOnStage,
+    agoraStageModeStore.numberOfAudienceMembers,
     agoraStore.isStageMode,
-    agoraStore.remoteUsers.length,
-    stageModeAudience.length
+    agoraStore.remoteUsers.length
   ]);
 
   useEffect(() => {
@@ -138,7 +132,7 @@ const MeetingRoomPage = () => {
             />
           </Transition>
           <styled.ListItemContent className="noScrollIndicator">
-            <p className="text-center whitespace-nowrap">
+            <p className="text-center whitespace-nowrap w-[92px]">
               {t('counts.people', {count: numberOfPeople}).toUpperCase()}
             </p>
             {!agoraStore.isStageMode && numberOfPeople > 2 && collaborationStore.isModerator && (
@@ -202,7 +196,7 @@ const MeetingRoomPage = () => {
           </styled.ListItemContent>
         </styled.ListItem>
       </ul>
-      {!window.location.href.includes('stage-mode') && <StageModePIPWidget />}
+      {!history.location.pathname.includes('stage-mode') && <StageModePIPWidget />}
     </Transition>
   );
 };
