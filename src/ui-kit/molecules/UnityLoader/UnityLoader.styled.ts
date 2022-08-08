@@ -29,7 +29,6 @@ export const Image = styled.img`
   margin: 0 0 20px 0;
   width: var(--spinner-size);
   height: var(--spinner-size);
-  animation: spin 1s linear infinite;
 `;
 
 export const Version = styled.div`

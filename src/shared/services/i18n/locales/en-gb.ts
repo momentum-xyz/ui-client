@@ -206,7 +206,7 @@ export const enGb = {
       audioVideoSettings: 'Audio/Video Settings'
     },
     messages: {
-      loading: 'Loading Odyssey Momentum',
+      loading: 'Loading Momentum',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Momentum does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
