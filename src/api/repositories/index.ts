@@ -18,3 +18,4 @@ export * from './communicationRepository';
 export * from './dashboardRepository';
 export * from './resourcesRepository';
 export * from './spaceIntegrationsRepository';
+export * from './textChatRepository';

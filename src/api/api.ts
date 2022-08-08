@@ -25,6 +25,7 @@ import * as resourcesRepository from './repositories/resourcesRepository';
 import * as agoraRepository from './repositories/agoraRepository';
 import * as spaceIntegrationsRepository from './repositories/spaceIntegrationsRepository';
 import * as vibeRepository from './repositories/vibeRepository';
+import * as textChatRepository from './repositories/textChatRepository';
 
 /**
  * This layer is responsible for:
@@ -63,7 +64,8 @@ export const api = {
   spaceIntegrationsRepository,
   integrationRepository,
   resourcesRepository,
-  vibeRepository
+  vibeRepository,
+  textChatRepository
 };
 
 /**
@@ -92,3 +94,4 @@ export * from './repositories/integrationRepository/integrationRepository.api.ty
 export * from './repositories/resourcesRepository/resourcesRepository.types';
 export * from './repositories/spaceTypeRepository/spaceTypeRepository.api.types';
 export * from './repositories/vibeRepository/vibeRepository.api.types';
+export * from './repositories/textChatRepository/textChatRepository.api.types';

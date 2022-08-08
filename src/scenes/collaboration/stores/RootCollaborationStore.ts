@@ -17,6 +17,7 @@ import {DashboardStore} from './DashboardStore';
 import {GoogleDriveStore} from './GoogleDriveStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
+import {TextChatStore} from './TextChatStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -24,6 +25,7 @@ const RootCollaborationStore = types
     types.model('RootCollaborationStore', {
       space: types.maybe(Space),
       dashboardStore: types.optional(DashboardStore, {}),
+      textChatStore: types.optional(TextChatStore, {}),
       calendarStore: types.optional(CalendarStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
