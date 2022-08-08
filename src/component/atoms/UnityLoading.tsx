@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import {appVariables} from 'api/constants';
 
-import {ReactComponent as Loader} from '../../images/odyssey-stamp.svg';
+import {ReactComponent as Loader} from '../../images/flamingo.svg';
 
 const UnityLoading: React.FC = () => {
   const [showCacheClear, setShowCacheClear] = useState(false);
@@ -17,9 +17,9 @@ const UnityLoading: React.FC = () => {
 
   return (
     <div className="z-pop-over fixed inset-0 flex flex-col justify-center items-center bg-dark-blue-100">
-      <Loader className="w-6 h-6 animate-spin" viewBox="0 0 180 180" />
+      <Loader className="w-6 h-6" />
       <div className="text-center mt-2">
-        <h2>Loading Odyssey Momentum</h2>
+        <h2>Loading Momentum</h2>
         <h3>Online Mass Collaboration Arena</h3>
         <h4 className="opacity-50">Version {appVariables.APP_VERSION}</h4>
 
