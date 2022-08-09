@@ -14,15 +14,15 @@ const Message: FC<MessagePropsInterface> = (props) => {
   const content = () => {
     switch (type) {
       case 'info':
-        return <styled.InfoMessage>{children}</styled.InfoMessage>;
+        return <styled.InfoMessage data-testid="Message-test">{children}</styled.InfoMessage>;
       case 'warning':
-        return <styled.WarningMessage>{children}</styled.WarningMessage>;
+        return <styled.WarningMessage data-testid="Message-test">{children}</styled.WarningMessage>;
       case 'danger':
-        return <styled.DangerMessage>{children}</styled.DangerMessage>;
+        return <styled.DangerMessage data-testid="Message-test">{children}</styled.DangerMessage>;
       case 'neutral':
-        return <styled.NeutralMessage>{children}</styled.NeutralMessage>;
+        return <styled.NeutralMessage data-testid="Message-test">{children}</styled.NeutralMessage>;
       case 'success':
-        return <styled.SuccessMessage>{children}</styled.SuccessMessage>;
+        return <styled.SuccessMessage data-testid="Message-test">{children}</styled.SuccessMessage>;
     }
   };
 

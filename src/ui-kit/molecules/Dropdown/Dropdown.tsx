@@ -68,7 +68,7 @@ const Dropdown: FC<PropsInterface> = ({
   useResize(ref, updateTooltipCoords);
 
   return (
-    <styled.Dropdown ref={ref} className={cn(isError && 'error')}>
+    <styled.Dropdown ref={ref} className={cn(isError && 'error')} data-testid="Dropdown-test">
       <ValueContainer
         theme={theme}
         variant={variant}

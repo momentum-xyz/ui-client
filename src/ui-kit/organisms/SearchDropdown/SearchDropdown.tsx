@@ -49,7 +49,7 @@ const SearchDropdown: FC<PropsInterface> = ({
   };
 
   return (
-    <styled.StyledSearchContainer>
+    <styled.StyledSearchContainer data-testid="SearchDropdown-test">
       <Heading type="h4" align="left" label={searchInputLabel} transform="uppercase" isCustom />
       <styled.StyledSearchDiv className={cn(isFocused && 'focus')}>
         <SearchInput

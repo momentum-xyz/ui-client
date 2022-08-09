@@ -52,7 +52,7 @@ const OnlineUsersPanel: FC = () => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="OnlineUsersPanel-test">
       {onlineUsersStore.selectedUserId && (
         <div>
           {onlineUsersStore.editedUserId ? (

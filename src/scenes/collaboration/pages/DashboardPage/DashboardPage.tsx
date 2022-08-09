@@ -52,7 +52,7 @@ const DashboardPage: FC = () => {
   }
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="DashboardPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}

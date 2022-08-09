@@ -26,6 +26,7 @@ const ExpandableLayout: FC<ExpandableLayoutPropsInterface> = ({
 }) => {
   return (
     <styled.Container
+      data-testid="ExpandableLayout-test"
       className={cn(fullHeight && 'fullHeight', isExpanded && 'expanded')}
       {...size}
     >

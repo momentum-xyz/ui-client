@@ -27,7 +27,7 @@ const VisualSettingsPanel: FC<PropsInterface> = ({
 
   return (
     <PanelLayout theme={theme}>
-      <styled.ColorControls>
+      <styled.ColorControls data-testid="VisualSettingsPanel-test">
         <styled.ColorControlsTitle>
           <Heading type="h2" theme={theme} label="Visual Settings" align="center" />
         </styled.ColorControlsTitle>

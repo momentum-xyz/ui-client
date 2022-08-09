@@ -104,7 +104,7 @@ const UnityPage: FC = () => {
 
   return (
     <Portal>
-      <styled.Inner>
+      <styled.Inner data-testid="UnityPage-test">
         <Unity unityContext={unityStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}

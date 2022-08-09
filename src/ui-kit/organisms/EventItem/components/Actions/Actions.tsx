@@ -13,7 +13,7 @@ interface PropsInterface {
 
 const Actions: FC<PropsInterface> = ({event, onRemove, onEdit}) => {
   return (
-    <styled.Actions>
+    <styled.Actions data-testid="Actions-test">
       {onRemove && (
         <SvgButton
           iconName="bin"

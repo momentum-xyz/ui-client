@@ -113,7 +113,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
       hasBorder={hasBorder}
       showOverflow={showOverflow}
     >
-      <styled.Body>
+      <styled.Body data-testid="ProfileWidget-test">
         <styled.Actions>
           <Avatar
             avatarSrc={

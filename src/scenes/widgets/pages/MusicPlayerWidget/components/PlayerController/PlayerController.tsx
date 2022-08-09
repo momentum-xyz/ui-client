@@ -11,7 +11,7 @@ const PlayerController: FC = () => {
   const {musicPlayer, togglePlayback, nextSong, previousSong} = musicPlayerStore;
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="PlayerController-test">
       <styled.Div>
         <SvgButton iconName="player-backward" size="normal" onClick={previousSong} />
         {musicPlayer.isPlaying ? (

@@ -108,7 +108,7 @@ const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="OnlineUsersList-test">
       <SearchInput
         value={onlineUsersList.searchQuery}
         onChange={onlineUsersList.setSearchQuery}

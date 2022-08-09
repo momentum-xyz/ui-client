@@ -70,7 +70,7 @@ const EventList: FC<PropsInterface> = ({
   }
 
   return (
-    <styled.Container className="noScrollIndicator">
+    <styled.Container className="noScrollIndicator" data-testid="EventList-test">
       {events.map((event, index) => (
         <EventItem
           currentUserId={currentUserId}

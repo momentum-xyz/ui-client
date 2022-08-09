@@ -84,7 +84,7 @@ const CalendarPage: FC = () => {
   }
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="CalendarPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle="calendar"

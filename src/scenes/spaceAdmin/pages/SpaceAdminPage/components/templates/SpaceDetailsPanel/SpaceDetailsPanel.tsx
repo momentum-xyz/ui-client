@@ -95,7 +95,7 @@ const SpaceDetailsPanel: FC = () => {
           onClose={deleteSpaceConfirmationDialog.close}
         />
       )}
-      <styled.Body>
+      <styled.Body data-testid="SpaceDetailsPanel-test">
         <styled.BreadCrumbsContainer>
           {space.adminAncestors?.map((ancestor) => (
             <styled.BreadcrumbContainer key={ancestor.id}>

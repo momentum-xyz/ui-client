@@ -46,7 +46,7 @@ const AttendeesWidget: FC = () => {
             hasBorder
           />
         )}
-        <styled.Container>
+        <styled.Container data-testid="AttendeesWidget-test">
           <SearchInput
             placeholder={t('placeholders.searchForAttendees')}
             onChange={(query) => attendeesListStore.changeQuery(query)}

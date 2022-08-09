@@ -72,7 +72,10 @@ const Web3ChoicePage: FC = () => {
 
   if (loginType === LoginTypeEnum.Polkadot) {
     return (
-      <styled.Background style={{backgroundImage: `url(${background})`}}>
+      <styled.Background
+        style={{backgroundImage: `url(${background})`}}
+        data-testid="Web3ChoicePage-test"
+      >
         <PanelLayout isBodyExtendingToEdges>
           <LoginView
             logo={momentum}

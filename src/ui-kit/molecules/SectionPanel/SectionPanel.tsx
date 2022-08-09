@@ -13,7 +13,10 @@ interface PropsInterface {
 
 const SectionPanel: FC<PropsInterface> = ({title, children, isCustom = false, onAdd}) => {
   return (
-    <styled.Container className={cn(isCustom && 'SectionPanel-custom')}>
+    <styled.Container
+      className={cn(isCustom && 'SectionPanel-custom')}
+      data-testid="SectionPanel-test"
+    >
       <PanelLayout isCustom>
         <styled.Header>
           {title && <Heading label={title} type="h1" align="left" transform="uppercase" />}

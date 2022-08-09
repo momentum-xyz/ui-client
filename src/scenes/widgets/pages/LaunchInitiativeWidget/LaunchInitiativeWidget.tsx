@@ -92,7 +92,7 @@ const LaunchInitiativeWidget: FC = () => {
       showCloseButton
       closeOnBackgroundClick
     >
-      <styled.Body>
+      <styled.Body data-testid="LaunchInitiativeWidget-test">
         <Text text={t('launchInitiativeWidget.description')} size="s" align="left" isCustom />
         <Controller
           control={control}

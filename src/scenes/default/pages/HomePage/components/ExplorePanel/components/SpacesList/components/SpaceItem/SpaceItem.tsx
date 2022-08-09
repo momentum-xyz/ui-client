@@ -41,7 +41,7 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, last
   };
 
   return (
-    <styled.Container className={cn(lastItem && 'noBorder')}>
+    <styled.Container className={cn(lastItem && 'noBorder')} data-testid="SpaceItem-test">
       <SvgButton iconName="rocket" size="medium" onClick={() => handleFlyToSpace()} />
       <styled.ClickableItem onClick={handleSelect}>
         <styled.SpaceNameText text={space.name} size="xs" align="left" isMultiline={false} />

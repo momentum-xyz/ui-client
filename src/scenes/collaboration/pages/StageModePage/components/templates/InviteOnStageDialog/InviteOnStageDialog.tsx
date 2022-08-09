@@ -58,7 +58,7 @@ const InviteOnStageDialog: React.FC<PropsInterface> = ({user, onClose}) => {
         }
       }}
     >
-      <styled.Body>
+      <styled.Body data-testid="InviteOnStageDialog-test">
         <Text text={t('actions.inviteThisPersonToTheStage')} size="s" align="left" />
         <Text text={t('messages.thisWillEnablePersonToUseStage')} size="xs" align="left" />
       </styled.Body>

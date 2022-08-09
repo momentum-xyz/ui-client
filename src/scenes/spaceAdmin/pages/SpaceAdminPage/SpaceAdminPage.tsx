@@ -45,7 +45,7 @@ const SpaceAdminPage: FC = () => {
   }
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="SpaceAdminPage-test">
       <PageTopBar
         title={space?.name ?? ''}
         subtitle={t('spaceAdmin.subtitle')}

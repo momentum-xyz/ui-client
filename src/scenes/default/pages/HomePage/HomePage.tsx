@@ -6,7 +6,7 @@ import * as styled from './HomePage.styled';
 
 const HomePage: FC = () => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="HomePage-test">
       <styled.PanelWrapper>
         <ExplorePanel />
       </styled.PanelWrapper>

@@ -35,6 +35,7 @@ const NewDevicePopup: React.FC<NewDevicePopupPropsInterface> = ({
 
   return (
     <Dialog
+      data-testid="NewDevicePopup-test"
       title={t('titles.newDeviceDetected')}
       onClose={onClose}
       layoutSize={{width: NEWDEVICE_DIALOG_WIDTH}}

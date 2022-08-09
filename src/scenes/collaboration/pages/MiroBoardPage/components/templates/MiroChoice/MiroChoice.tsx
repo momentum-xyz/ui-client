@@ -17,7 +17,7 @@ const MiroChoice: FC<PropsInterface> = ({isAdmin, pickBoard}) => {
   const theme = useTheme();
 
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="MiroChoice-test">
       {isAdmin ? (
         <styled.Actions>
           <Text text={t('messages.noTeamMiroBoard')} theme={theme} size="s" />

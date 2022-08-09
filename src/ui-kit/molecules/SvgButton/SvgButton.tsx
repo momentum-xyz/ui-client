@@ -30,7 +30,7 @@ const SvgButton: FC<PropsInterface> = ({
 }) => {
   return (
     // @ts-ignore: div doesn't have onClick
-    <styled.Container {...rest} onClick={onClick} disabled={disabled}>
+    <styled.Container {...rest} onClick={onClick} disabled={disabled} data-testid="SvgButton-test">
       <IconSvg
         name={iconName}
         theme={theme}

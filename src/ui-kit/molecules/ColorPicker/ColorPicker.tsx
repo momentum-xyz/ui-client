@@ -19,7 +19,7 @@ const ColorPicker: FC<PropsInterface> = ({theme, name, colors, onColorSelect, se
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="ColorPicker-test">
       <Text size="xxs" text={name} transform="uppercase" weight="bold" />
       <styled.ColorContainer>
         {colors.map((color, index) => (

@@ -52,7 +52,7 @@ const SpacesList: React.FC = () => {
     ));
   };
 
-  return <styled.Container>{renderList()}</styled.Container>;
+  return <styled.Container data-testid="SpacesList-test">{renderList()}</styled.Container>;
 };
 
 export default observer(SpacesList);

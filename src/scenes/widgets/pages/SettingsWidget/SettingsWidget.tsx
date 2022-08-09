@@ -32,7 +32,7 @@ const SettingsWidget: FC = () => {
       showBackground={false}
       showCloseButton
     >
-      <styled.Container>
+      <styled.Container data-testid="SettingsWidget-test">
         <Heading
           label={capitalize(`${t('devices.device')} ${t('labels.settings')}`)}
           type="h2"

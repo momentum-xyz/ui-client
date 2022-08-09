@@ -68,7 +68,7 @@ const TokenRuleList: FC<PropsInterface> = ({columnHeaders, onEventClick, store})
   };
 
   return (
-    <styled.TokenRuleListContainer className="noScrollIndicator">
+    <styled.TokenRuleListContainer className="noScrollIndicator" data-testid="TokenRuleList-test">
       <styled.TokenRuleListTable>
         <thead>
           <tr>
