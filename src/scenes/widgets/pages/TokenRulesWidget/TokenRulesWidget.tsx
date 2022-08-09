@@ -44,7 +44,7 @@ const TokenRulesWidget: FC = () => {
       closeOnBackgroundClick={false}
       controlUnityKeyboardControll
     >
-      <styled.Body>
+      <styled.Body data-testid="TokenRulesWidget-test">
         <SearchInput
           value={query}
           onChange={setQuery}

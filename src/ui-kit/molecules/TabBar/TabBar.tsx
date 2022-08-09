@@ -24,7 +24,7 @@ const TabBar: FC<PropsInterface> = ({tabs = [], selectedTab, onTabSelect, theme}
   };
 
   return (
-    <styled.TabBar theme={theme}>
+    <styled.TabBar theme={theme} data-testid="TabBar-test">
       {tabs.map((tab) => (
         <styled.Tab
           disabled={tab.disabled}

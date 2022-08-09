@@ -60,6 +60,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container
+      data-testid="PanelLayout-test"
       className={cn(
         isCustom && 'PanelLayout-custom',
         hasBorder && 'hasBorder',

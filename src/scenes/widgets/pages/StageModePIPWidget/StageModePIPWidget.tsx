@@ -26,9 +26,8 @@ const StageModePIPWidget: React.FC = () => {
   return (
     <Portal>
       <Draggable>
-        <styled.Container title={t('titles.goToStageMode')}>
+        <styled.Container title={t('titles.goToStageMode')} data-testid="StageModePIPWidget-test">
           <Stage />
-
           <styled.HeaderElement className="left">
             <Text text={t('messages.onStage')} size="xs" weight="bold" transform="uppercase" />
           </styled.HeaderElement>

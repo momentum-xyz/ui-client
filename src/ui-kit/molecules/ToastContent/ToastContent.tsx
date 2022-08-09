@@ -22,7 +22,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
     props;
 
   return (
-    <styled.ToastContainer>
+    <styled.ToastContainer data-testid="ToastContent-test">
       <PanelLayout
         isDanger={isDanger}
         title={title}

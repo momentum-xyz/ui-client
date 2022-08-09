@@ -120,7 +120,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
         </Portal>
       )}
       <PanelLayout onClose={onClose} title={t('editProfileWidget.title')} captureAllPointerEvents>
-        <styled.Container>
+        <styled.Container data-testid="ProfileEditWidget-test">
           <styled.AvatarSettings>
             <styled.AvatarContainer>
               <Avatar

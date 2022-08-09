@@ -25,7 +25,7 @@ const VideoPage: React.FC = () => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="VideoPage-test">
       <DashboardVideo onClose={handleClose} youtubeHash={videoStore.youtubeHash} />
     </styled.Container>
   );

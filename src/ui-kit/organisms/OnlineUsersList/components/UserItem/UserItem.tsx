@@ -100,7 +100,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   }, [profile?.uuid, user.uuid]);
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="UserItem-test">
       <styled.InfoContainer onClick={onClick} className={cn(invite && 'invite')}>
         <Avatar
           avatarSrc={

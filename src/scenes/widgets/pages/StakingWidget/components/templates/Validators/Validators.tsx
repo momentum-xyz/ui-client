@@ -71,7 +71,7 @@ const Validators: FC<PropsInterface> = ({
   };
 
   return (
-    <styled.Container theme={theme}>
+    <styled.Container theme={theme} data-testid="Validators-test">
       <SearchInput
         placeholder={t('staking.validators.searchInputPlaceholder')}
         value={validatorsStore.search}

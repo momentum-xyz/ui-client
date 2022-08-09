@@ -57,7 +57,7 @@ const WorldCalendarPage: FC = () => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="WorldCalendarPage-test">
       {calendarStore.magicId && magicDialog.isOpen && (
         <LinkDialog
           title={t('eventList.eventItem.magicLinkDialog.title')}

@@ -10,7 +10,7 @@ interface PropsInterface extends PropsWithThemeInterface {}
 const NetworkRemarks: FC<PropsInterface> = ({theme}) => {
   const {t} = useTranslation();
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="NetworkRemarks-test">
       <styled.Grid>
         <styled.GridItem>
           <Text theme={theme} size="l" text={t('messages.fullyEnjoy')} weight="light" />

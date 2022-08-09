@@ -25,7 +25,7 @@ const AppLayers: FC = ({children}) => {
   return (
     <>
       <InFlightControlLayer />
-      <div className="bg-dark-blue-70">
+      <div className="bg-dark-blue-70" data-testid="AppLayers-test">
         <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
         <main id="main" className="h-screen pb-7 flex">
           <div

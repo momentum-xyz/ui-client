@@ -25,7 +25,7 @@ const UnityLoader: React.FC<PropsWithThemeInterface> = ({theme}) => {
   }, []);
 
   return (
-    <styled.Inner>
+    <styled.Inner data-testid="UnityLoader-test">
       <styled.Wrapper>
         <styled.Image src={image} />
         <Text theme={theme} text={t('messages.loading')} size="s" />

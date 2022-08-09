@@ -50,7 +50,10 @@ const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterS
     case StageModePopupTypeEnum.AWAITING_PERMISSION:
       return (
         <PanelLayout componentSize={{width: STAGEMODE_POPUP_WIDTH}}>
-          <styled.PermissionBody onClick={removeAwaitingPermissionPopup}>
+          <styled.PermissionBody
+            onClick={removeAwaitingPermissionPopup}
+            data-testid="StageModePopup-test"
+          >
             <Text text={t('messages.requestedPermissionToGoOnStage')} size="m" align="left" />
             <Text text={t('messages.waitForModeratorsToAccept')} size="xs" align="left" />
           </styled.PermissionBody>
@@ -62,7 +65,7 @@ const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterS
           title={t('titles.userWantsToComeOnStage', {user: info.userName})}
           componentSize={{width: STAGEMODE_POPUP_WIDTH}}
         >
-          <styled.RequestBody>
+          <styled.RequestBody data-testid="StageModePopup-test">
             <Text text={t('messages.thisPersonWantsToComeOnStage')} size="m" align="left" />
             <Text
               text={

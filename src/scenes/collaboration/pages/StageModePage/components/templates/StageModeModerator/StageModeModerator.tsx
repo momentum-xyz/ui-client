@@ -65,7 +65,7 @@ const StageModeModerator: React.FC = () => {
 
   return (
     <>
-      <styled.Container>
+      <styled.Container data-testid="StageModeModerator-test">
         <SpaceTopBar
           title={space.name ?? ''}
           subtitle={t('labels.stageMode')}

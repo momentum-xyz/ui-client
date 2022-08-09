@@ -15,7 +15,7 @@ interface Props extends PropsWithThemeInterface {
 
 const PageTopBar: FC<Props> = (props) => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="PageTopBar-test">
       <styled.Titles>
         <styled.Title>
           <Text

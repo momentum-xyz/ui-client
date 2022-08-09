@@ -95,6 +95,7 @@ const Dialog: FC<DialogPropsInterface> = ({
     <Portal>
       <styled.Modal
         theme={theme}
+        data-testid="Dialog-test"
         className={cn(position, {opacity: withOpacity, showBackground: showBackground})}
       >
         <styled.Container ref={ref} className={position} offset={offset}>

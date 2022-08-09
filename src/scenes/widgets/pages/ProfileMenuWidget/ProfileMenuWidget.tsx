@@ -59,7 +59,7 @@ const ProfileMenuWidget: FC = () => {
       isBodyExtendingToEdges
       showBackground={false}
     >
-      <styled.Container>
+      <styled.Container data-testid="ProfileMenuWidget-test">
         <styled.Option onClick={handleProfileOpen}>
           <styled.IconContainer>
             <Avatar

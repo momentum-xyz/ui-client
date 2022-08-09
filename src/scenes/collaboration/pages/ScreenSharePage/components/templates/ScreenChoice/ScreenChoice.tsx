@@ -18,7 +18,7 @@ const ScreenChoice: FC<PropsInterface> = ({canShare, isSettingUp, startScreenSha
   const theme = useTheme();
 
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="ScreenChoice-test">
       {isSettingUp ? (
         <styled.SettingUpContainer>
           <Text text={`${t('messages.preparingScreenSharing')}...`} theme={theme} size="s" />

@@ -11,7 +11,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 const ProgressBar: FC<PropsInterface> = (props) => {
   const {percent} = props;
   return (
-    <styled.ProgressBar>
+    <styled.ProgressBar data-testid="ProgressBar-test">
       <styled.BarLine style={{width: `${percent}%`}} />
     </styled.ProgressBar>
   );

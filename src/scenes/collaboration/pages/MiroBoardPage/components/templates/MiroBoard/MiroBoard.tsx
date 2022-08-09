@@ -12,7 +12,7 @@ const MiroBoard: FC<PropsInterface> = ({miroUrl}) => {
   const {t} = useTranslation();
 
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="MiroBoard-test">
       <iframe
         title={t('labels.miro')}
         width="800"
