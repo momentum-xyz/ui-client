@@ -52,7 +52,10 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
   }, [stagevideocontainer, videoTrack]);
 
   return (
-    <styled.Container className={cn(soundLevel && soundLevel > 5 && 'showRing')}>
+    <styled.Container
+      data-testid="MediaPlayer-test"
+      className={cn(soundLevel && soundLevel > 5 && 'showRing')}
+    >
       <styled.VideoContainer ref={stagevideocontainer} />
       {isCameraOff && (
         <styled.AvatarContainer>

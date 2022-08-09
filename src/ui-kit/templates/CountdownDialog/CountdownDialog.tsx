@@ -38,7 +38,7 @@ const CountdownDialog: FC<PropsInterface> = ({onSave, onClose, title}) => {
         onClick: onClose
       }}
     >
-      <styled.Body>
+      <styled.Body data-testid="CountdownDialog-test">
         <Text text={t('titles.getReadyToGetLive')} size="m" />
         <Heading label={`${countdown}`} type="h1" />
       </styled.Body>

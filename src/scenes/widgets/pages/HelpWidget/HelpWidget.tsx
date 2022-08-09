@@ -32,7 +32,7 @@ const HelpWidget: React.FC = () => {
       showCloseButton
       onClose={helpStore.helpDialog.close}
     >
-      <styled.Container>
+      <styled.Container data-testid="HelpWidget-test">
         <styled.TopContainer>
           <styled.Div>
             <styled.MomentumImage src={momentum} />

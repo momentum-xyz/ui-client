@@ -23,7 +23,7 @@ const DashboardVideo: FC<PropsInterface> = ({onClose, youtubeHash}) => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="DashboardVideo-test">
       <styled.Wrapper>
         <styled.CloseButton>
           <SvgButton iconName="close" size="medium-large" isWhite onClick={onClose} theme={theme} />

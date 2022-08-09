@@ -15,7 +15,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 const LoginView: FC<PropsInterface> = (props) => {
   const {theme, logo, title, okBtn, backBtn, children} = props;
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="LoginView-test">
       <styled.Logo src={logo} />
       <styled.Title>
         <Text theme={theme} size="l" text={title} weight="medium" />

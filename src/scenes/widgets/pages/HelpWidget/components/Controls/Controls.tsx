@@ -25,7 +25,7 @@ const Controls: React.FC = () => {
       expanded={helpStore.showControlsSection}
       onExpandToggle={handleExpand}
     >
-      <styled.ItemRowContainer>
+      <styled.ItemRowContainer data-testid="Controls-test">
         <styled.TextItem>
           {t('helpSection.controls.buttonsText')}
           <br />

@@ -36,7 +36,7 @@ const LoginPage: FC = () => {
   }, [isGuestLoginStarted, loginStore]);
 
   return (
-    <styled.Background background={background}>
+    <styled.Background background={background} data-testid="LoginPage-test">
       <PanelLayout isBodyExtendingToEdges>
         <LoginView
           logo={momentum}

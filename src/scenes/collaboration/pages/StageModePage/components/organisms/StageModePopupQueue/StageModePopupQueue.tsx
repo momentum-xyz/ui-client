@@ -12,7 +12,7 @@ const StageModePopupQueue: React.FC = () => {
   const {agoraStageModeStore} = mainStore.agoraStore;
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="StageModePopupQueue-test">
       {stageModeStore.popups.map((info) => (
         <StageModePopup
           info={info}

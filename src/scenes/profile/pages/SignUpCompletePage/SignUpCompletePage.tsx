@@ -43,7 +43,7 @@ const SignUpCompletePage: FC = () => {
   }, [history]);
 
   return (
-    <styled.Background background={background}>
+    <styled.Background background={background} data-testid="SignUpCompletePage-test">
       <PanelLayout isBodyExtendingToEdges>
         <styled.Wrapper>
           <styled.Logo src={momentum} />

@@ -21,7 +21,7 @@ const Toggle: FC<PropsInterface> = ({
   ...restProps
 }) => {
   return (
-    <styled.Container className={cn(size, disabled && 'disabled')}>
+    <styled.Container className={cn(size, disabled && 'disabled')} data-testid="Toggle-test">
       <styled.Background
         className={cn(checked ? 'on' : 'off', size, `variant-${variant}`)}
         onClick={() => onChange(!checked)}

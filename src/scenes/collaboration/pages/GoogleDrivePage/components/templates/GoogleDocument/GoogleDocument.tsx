@@ -12,7 +12,7 @@ const GoogleDocument: FC<PropsInterface> = ({documentUrl}) => {
   const {t} = useTranslation();
 
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="GoogleDocument-test">
       <iframe
         title={t('labels.googleDrive')}
         width="800"

@@ -106,7 +106,7 @@ const TokenForm: FC<PropsInterface> = () => {
           <Loader />
         </styled.LoaderContainer>
       ) : (
-        <styled.Container className="noScrollIndicator">
+        <styled.Container className="noScrollIndicator" data-testid="TokenForm-test">
           <styled.Div>
             <styled.TextItem>
               <Text text={t('tokenRules.tokenForm.description')} size="s" align="left" />

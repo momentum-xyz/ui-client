@@ -164,7 +164,7 @@ const TokenRuleReviewWidget: FC<PropsInterface> = ({onClose, tokenRuleReviewStor
       }
       closeOnBackgroundClick={true}
     >
-      <styled.Container>
+      <styled.Container data-testid="TokenRuleReviewWidget-test">
         <styled.Div>
           <styled.TextItem>
             <Text text={t('tokenRules.tokenRuleReview.dialogDescription')} size="s" align="left" />

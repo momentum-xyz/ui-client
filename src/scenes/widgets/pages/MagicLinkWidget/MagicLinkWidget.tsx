@@ -65,7 +65,7 @@ const MagicLinkWidget: FC = () => {
       showBackground={false}
       showCloseButton
     >
-      <styled.Container>
+      <styled.Container data-testid="MagicLinkWidget-test">
         <Text theme={theme} text={t('messages.magicLink')} align="left" size="xxs" />
         <styled.Content>
           <Location icon="locate" theme={theme} value={address} />

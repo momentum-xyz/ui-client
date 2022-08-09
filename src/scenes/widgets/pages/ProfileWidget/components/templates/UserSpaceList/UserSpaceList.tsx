@@ -18,7 +18,7 @@ const UserSpaceList: FC<PropsInterface> = (props) => {
   const {t} = useTranslation();
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="UserSpaceList-test">
       <Heading type="h4" label={`${t('labels.initiatives')}:`} align="left" />
       <styled.Body>
         {spaceList.length === 0 ? (

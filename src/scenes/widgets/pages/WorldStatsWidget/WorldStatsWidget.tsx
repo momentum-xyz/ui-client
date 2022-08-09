@@ -42,7 +42,7 @@ const WorldStatsWidget: FC = () => {
       showBackground={false}
       showCloseButton
     >
-      <styled.Container>
+      <styled.Container data-testid="WorldStatsWidget-test">
         {isLoading && <Loader />}
         {!!statistics.length && <StatisticsBlockList theme={theme} blockList={statistics} />}
       </styled.Container>

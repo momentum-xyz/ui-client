@@ -75,7 +75,7 @@ const StakingWidget: FC = () => {
       showOverflow
       onClose={stakingDialog.close}
     >
-      <styled.Container>
+      <styled.Container data-testid="StakingWidget-test">
         <TabBar
           tabs={tabBarTabs}
           selectedTab={selectedTab}

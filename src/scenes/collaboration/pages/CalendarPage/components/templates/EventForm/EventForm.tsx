@@ -110,13 +110,12 @@ const EventForm: FC = () => {
       onClose={formDialog.close}
       approveInfo={{
         title: currentEvent?.id ? 'update' : 'submit',
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick: handleSubmit(formSubmitHandler),
         disabled: eventFormRequest.isPending
       }}
       hasBorder
     >
-      <styled.Container>
+      <styled.Container data-testid="EventForm-test">
         <styled.Item>
           <Controller
             name="title"

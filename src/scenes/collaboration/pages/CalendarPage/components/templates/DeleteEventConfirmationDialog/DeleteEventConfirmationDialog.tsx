@@ -25,7 +25,7 @@ const DeleteEventConfirmationDialog: FC<PropsInterface> = ({onConfirmation, onCl
       onClose={onClose}
       showCloseButton
     >
-      <styled.Container>
+      <styled.Container data-testid="DeleteEventConfirmationDialog-test">
         <Text text={t('messages.delete')} size="m" />
       </styled.Container>
     </Dialog>

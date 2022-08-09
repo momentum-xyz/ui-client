@@ -61,7 +61,7 @@ const Web3Challenge: FC<PropsInterface> = (props) => {
   );
 
   return (
-    <styled.Background background={background}>
+    <styled.Background background={background} data-testid="Web3Challenge-test">
       <PanelLayout isBodyExtendingToEdges>
         <LoginView
           logo={momentum}

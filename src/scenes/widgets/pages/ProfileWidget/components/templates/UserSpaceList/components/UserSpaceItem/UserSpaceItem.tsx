@@ -15,7 +15,11 @@ const UserSpaceItem: FC<PropsInterface> = (props) => {
   const {spaceName, spaceId, selectSpace, flyToSpace} = props;
 
   return (
-    <styled.Container key={spaceId} onClick={() => selectSpace(spaceId)}>
+    <styled.Container
+      key={spaceId}
+      onClick={() => selectSpace(spaceId)}
+      data-testid="UserSpaceItem-test"
+    >
       <SvgButton iconName="rocket" size="medium" onClick={() => flyToSpace(spaceId)} />
       <styled.NameText text={spaceName} size="xs" align="left" />
     </styled.Container>

@@ -21,7 +21,7 @@ const TokenDialog: FC<PropsInterface> = ({onClose}) => {
       approveInfo={{title: 'submit rule for approval', onClick: () => null}}
       closeOnBackgroundClick={true}
     >
-      <styled.Container>
+      <styled.Container data-testid="TokenDialog-test">
         <styled.Div>
           <styled.TextItem>
             <Text text="Define a new token rule for the list" size="s" align="left" />

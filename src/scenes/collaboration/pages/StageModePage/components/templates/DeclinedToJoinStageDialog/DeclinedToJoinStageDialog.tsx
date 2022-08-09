@@ -27,7 +27,7 @@ const DeclinedToJoinStagePopup: React.FC<PropsInterface> = ({onClose}) => {
         }
       }}
     >
-      <styled.Body>
+      <styled.Body data-testid="DeclinedToJoinStagePopup-test">
         <Text text={t('messages.pleaseTryAgainLater')} size="m" />
       </styled.Body>
     </Dialog>

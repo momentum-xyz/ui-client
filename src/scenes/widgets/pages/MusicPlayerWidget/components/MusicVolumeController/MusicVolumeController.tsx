@@ -12,7 +12,7 @@ const MusicVolumeController: FC = () => {
   const {musicPlayer} = musicPlayerStore;
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="MusicVolumeController-test">
       <styled.Title>{t('musicPlayer.playerVolume')}</styled.Title>
       <styled.VolumeContainer>
         <SvgButton iconName="player-mute" size="medium" onClick={musicPlayer.unmute} />

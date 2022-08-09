@@ -32,7 +32,13 @@ export const TOAST_NOT_AUTO_CLOSE_OPTIONS: ToastOptions = {
 const ToastMessage: FC<ToastMessageProps> = (props) => {
   const {position, theme} = props;
 
-  return <styled.ToastContainerStyled theme={theme} position={position} />;
+  return (
+    <styled.ToastContainerStyled
+      theme={theme}
+      position={position}
+      data-testid="ToastMessage-test"
+    />
+  );
 };
 
 export default memo(ToastMessage);

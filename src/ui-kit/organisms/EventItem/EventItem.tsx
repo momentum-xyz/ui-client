@@ -214,7 +214,7 @@ const EventItem: FC<PropsInterface> = ({
   );
 
   return (
-    <styled.Container style={{zIndex: zIndex}} id={event.id}>
+    <styled.Container style={{zIndex: zIndex}} id={event.id} data-testid="EventItem-test">
       <styled.Row className="header">{image()}</styled.Row>
       {info()}
     </styled.Container>

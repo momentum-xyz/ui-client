@@ -40,7 +40,7 @@ const MusicPlayerWidget: FC = () => {
       showCloseButton
       showBackground={false}
     >
-      <styled.Div>
+      <styled.Div data-testid="MusicPlayerWidget-test">
         <PlayerController />
         <SeekBarController />
         <MusicVolumeController />
