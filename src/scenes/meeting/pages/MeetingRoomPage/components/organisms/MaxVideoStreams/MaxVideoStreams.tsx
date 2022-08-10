@@ -18,7 +18,7 @@ const MaxVideoStreams: FC<PropsInterface> = ({isShown}) => {
   }
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="MaxVideoStreams-test">
       <styled.Message>
         <Text text={t('messages.videoLimitReached')} transform="uppercase" size="xxs" />
       </styled.Message>

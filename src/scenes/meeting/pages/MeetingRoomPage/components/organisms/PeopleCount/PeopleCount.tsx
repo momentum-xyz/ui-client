@@ -14,7 +14,7 @@ const PeopleCount: FC<PropsInterface> = ({count}) => {
   const {t} = useTranslation();
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="PeopleCount-test">
       <Text text={t('counts.people', {count})} transform="uppercase" size="s" />
     </styled.Container>
   );

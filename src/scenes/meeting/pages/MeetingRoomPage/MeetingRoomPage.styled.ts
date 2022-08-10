@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.ul`
-  margin: 12px 0 0 0;
+  margin: 0;
   height: 100%;
 `;
 

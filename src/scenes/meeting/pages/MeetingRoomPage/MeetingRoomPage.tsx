@@ -42,7 +42,7 @@ const MeetingRoomPage: FC = () => {
       leaveFrom="translate-x-0 "
       leaveTo="translate-x-5 "
     >
-      <styled.Container>
+      <styled.Container data-testid="MeetingRoomPage-test">
         <styled.ListItem>
           <JoinLeaveButtons isShown={!unityStore.isPaused} />
 
@@ -58,7 +58,7 @@ const MeetingRoomPage: FC = () => {
             <ul>
               {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
 
-              <MaxVideoStreams isShown={!agoraStore.maxVideoStreamsReached} />
+              <MaxVideoStreams isShown={agoraStore.maxVideoStreamsReached} />
 
               {(agoraStore.isStageMode
                 ? agoraStageModeStore.audienceMembers

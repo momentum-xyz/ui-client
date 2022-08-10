@@ -11,7 +11,7 @@ interface PropsInterface {
   onMuteAll: () => void;
 }
 
-const MAX_STREAMS_COUNT = 0;
+const MAX_STREAMS_COUNT = 2;
 
 const MuteAllButton: FC<PropsInterface> = ({isShown, peopleCount, onMuteAll}) => {
   const {t} = useTranslation();
@@ -21,7 +21,7 @@ const MuteAllButton: FC<PropsInterface> = ({isShown, peopleCount, onMuteAll}) =>
   }
 
   return (
-    <styled.MuteButtonContainer>
+    <styled.MuteButtonContainer data-testid="MuteAllButton-test">
       <styled.MuteButton>
         <SvgButton iconName="microphoneOff" size="extra-large" onClick={onMuteAll} />
       </styled.MuteButton>
