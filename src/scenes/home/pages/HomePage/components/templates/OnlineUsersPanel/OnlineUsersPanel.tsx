@@ -12,11 +12,10 @@ import * as styled from './OnlineUsersPanel.styled';
 const LAYOUT_WIDTH = '200px';
 
 const OnlineUsersPanel: FC = () => {
-  const {sessionStore, widgetStore, mainStore, defaultStore, collaborationStore} = useStore();
+  const {sessionStore, widgetStore, mainStore, homeStore, collaborationStore} = useStore();
   const {space} = collaborationStore;
   const {profileMenuStore} = widgetStore;
   const {worldStore, unityStore} = mainStore;
-  const {homeStore} = defaultStore;
   const {onlineUsersStore, onlineUsersList} = homeStore;
   const {profile} = sessionStore;
   const {profileDialog} = profileMenuStore;

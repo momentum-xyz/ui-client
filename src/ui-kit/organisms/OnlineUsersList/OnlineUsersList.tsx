@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {SearchInput, useDebouncedEffect} from 'ui-kit';
 import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
-import {OnlineUsersStoreInterface} from 'scenes/default/stores/HomeStore/models';
+import {OnlineUsersStoreInterface} from 'scenes/home/stores/HomeStore/models';
 
 import {UserItem} from './components';
 import * as styled from './OnlineUsersList.styled';

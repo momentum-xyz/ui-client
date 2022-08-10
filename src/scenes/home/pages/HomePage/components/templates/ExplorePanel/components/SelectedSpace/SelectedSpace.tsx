@@ -14,7 +14,7 @@ import * as styled from './SelectedSpace.styled';
 
 const SelectedSpace: React.FC = () => {
   const {
-    defaultStore: {homeStore},
+    homeStore,
     mainStore: {unityStore}
   } = useStore();
   const {exploreStore} = homeStore;

@@ -10,7 +10,7 @@ import * as styled from './ExplorePanel.styled';
 
 const ExplorePanel: FC = () => {
   const {
-    defaultStore: {homeStore},
+    homeStore,
     mainStore: {unityStore, worldStore}
   } = useStore();
   const {exploreStore} = homeStore;

@@ -32,7 +32,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
   const {
     widgetStore,
     sessionStore,
-    defaultStore: {homeStore},
+    homeStore,
     mainStore: {worldStore}
   } = useStore();
   const {profileStore} = widgetStore;

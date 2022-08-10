@@ -20,7 +20,7 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, last
   const history = useHistory();
   const {
     mainStore: {unityStore, favoriteStore},
-    defaultStore: {homeStore}
+    homeStore
   } = useStore();
 
   const {exploreStore} = homeStore;

@@ -11,9 +11,9 @@ import {Button, SvgButton} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import background from 'static/images/bg.png';
 
-import * as styled from './IntroPage.styled';
+import * as styled from './WelcomePage.styled';
 
-const IntroPage: FC = () => {
+const WelcomePage: FC = () => {
   const [messageShown, setMessageShown] = useState<boolean>(true);
 
   const history = useHistory();
@@ -21,8 +21,8 @@ const IntroPage: FC = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    if (!cookie.has(CookieKeyEnum.INTRO)) {
-      cookie.create(CookieKeyEnum.INTRO, '1');
+    if (!cookie.has(CookieKeyEnum.WELCOME)) {
+      cookie.create(CookieKeyEnum.WELCOME, '1');
     }
   }, []);
 
@@ -38,7 +38,7 @@ const IntroPage: FC = () => {
   };
 
   return (
-    <styled.Background background={background} data-testid="IntroPage-test">
+    <styled.Background background={background} data-testid="WelcomePage-test">
       <styled.Wrapper>
         <styled.MessageWrapper>
           <styled.Message>{t('messages.loginSuccessful')}</styled.Message>
@@ -55,7 +55,7 @@ const IntroPage: FC = () => {
         </styled.CloseButton>
 
         <YouTube
-          videoId={appVariables.YOUTUBE_INTRO_VIDEO_ID}
+          videoId={appVariables.YOUTUBE_WELCOME_VIDEO_ID}
           onPlay={() => setMessageShown(false)}
           onEnd={closeHandler}
           className="youtube"
@@ -78,4 +78,4 @@ const IntroPage: FC = () => {
   );
 };
 
-export default IntroPage;
+export default WelcomePage;

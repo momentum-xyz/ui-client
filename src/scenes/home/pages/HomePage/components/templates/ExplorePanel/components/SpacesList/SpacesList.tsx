@@ -10,7 +10,7 @@ import * as styled from './SpacesList.styled';
 const SpacesList: React.FC = () => {
   const {
     homeStore: {exploreStore}
-  } = useStore().defaultStore;
+  } = useStore();
   const {selectedSpace, searchQuery, searchedSpacesByCategory} = exploreStore;
 
   const renderList = () => {

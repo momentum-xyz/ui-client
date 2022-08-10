@@ -10,7 +10,7 @@ export const ROUTES = {
   callBack: '/oidc/callback',
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
-  intro: '/intro',
+  welcome: '/welcome',
   collaboration: {
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
