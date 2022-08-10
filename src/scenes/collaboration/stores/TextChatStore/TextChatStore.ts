@@ -28,14 +28,19 @@ const TextChatStore = types.compose(
     .volatile<{currentChannel: RtmChannel | null}>(() => ({
       currentChannel: null
     }))
+    .volatile<{messages2: Array<MessageInterface>}>(() => ({
+      messages2: []
+    }))
     .actions((self) => ({
       initClient(appId: string, userId: string) {
         self.client = AgoraRTM.createInstance(appId);
+
         self.client.on('ConnectionStateChanged', (newState, reason) => {
           console.info('[agora] on connection state changed to ' + newState + ' reason: ' + reason);
         });
 
         console.info('[agora] AgoraRTM logging in...');
+
         request
           .get(appVariables.BACKEND_ENDPOINT_URL + `/agora/token`)
           .then((response) => {
@@ -53,6 +58,15 @@ const TextChatStore = types.compose(
             console.error('[agora] AgoraRTM client login error', error);
           });
       },
+      fetchUser: flow(function* (userId: string) {
+        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
+          userId
+        });
+
+        if (response) {
+          self.name = response.name;
+        }
+      }),
       setLogin(login: boolean) {
         self.isLoggedOn = login;
       },
@@ -65,7 +79,6 @@ const TextChatStore = types.compose(
           .catch((error) => {
             console.error('[agora] AgoraRTM client logout error', error);
           });
-        self.client?.removeAllListeners();
       },
       sendMessage(message: RtmTextMessage) {
         if (self.currentChannel && self.currentUserId) {
@@ -80,7 +93,7 @@ const TextChatStore = types.compose(
             });
         }
       },
-      setMessages(message: any, userId: string) {
+      setMessages(message: RtmTextMessage, userId: string) {
         if (message) {
           self.messages = cast([
             ...self.messages,
@@ -93,8 +106,36 @@ const TextChatStore = types.compose(
           ]);
         }
       },
+      joinSystemMessages(message?: RtmTextMessage) {
+        self.messages = cast([
+          ...self.messages,
+          {
+            ...message,
+            messageType: 'SYSTEM',
+            text: `${self.name} has joined the collaboration space`,
+            author: 'SYSTEM',
+            name: self.name,
+            date: new Date()
+          }
+        ]);
+      },
+      leftSystemMessages(message?: RtmTextMessage) {
+        self.messages = cast([
+          ...self.messages,
+          {
+            ...message,
+            messageType: 'SYSTEM',
+            text: `${self.name} has left the collaboration space`,
+            author: 'SYSTEM',
+            name: self.name,
+            date: new Date()
+          }
+        ]);
+      },
       joinChannel(spaceId: string) {
         if (self.client) {
+          console.info('new client?');
+
           self.currentChannel = self.client.createChannel(spaceId);
           self.currentChannel
             .join()
@@ -113,8 +154,12 @@ const TextChatStore = types.compose(
         console.info('[agora] Leaving AgoraRTM channel');
         self.currentChannel?.leave().then(() => {
           this.disableCurrentChannel();
+          this.resetMessages();
           console.info('[agora] Left AgoraRTM channel successfully');
         });
+      },
+      resetMessages() {
+        self.messages.length = 0;
       },
       disableCurrentChannel() {
         self.currentChannel = null;
@@ -127,33 +172,6 @@ const TextChatStore = types.compose(
       },
       setCurrentUserId(currentUser: string) {
         self.currentUserId = currentUser;
-      },
-      fetchUser: flow(function* (userId: string) {
-        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-          userId
-        });
-
-        if (response) {
-          self.name = response.name;
-        }
-      }),
-      setUsers(ids: string[]) {
-        self.users = ids.reduce((ac, a) => ({...ac, [a]: null}), {});
-        const internalKeys = Object.keys(self.users);
-        const toAdd = ids.filter((x) => !internalKeys.includes(x));
-        const toRemove = internalKeys.filter((x) => !ids.includes(x));
-        const newUsers = {...self.users};
-        toRemove.map((x) => delete newUsers[x]);
-        toAdd.map((x) => (newUsers[x] = null));
-
-        Object.keys(newUsers).map(async (userId: string) => {
-          await self.request.send(api.userRepository.fetchProfile, {
-            userId
-          });
-        });
-      },
-      setIds(ids: string[]) {
-        self.ids = ids;
       }
     }))
 );

@@ -1,5 +1,5 @@
 import React, {Dispatch, SetStateAction, useCallback, useContext, useEffect, useState} from 'react';
-import AgoraRTM, {RtmChannel, RtmClient, RtmMessage} from 'agora-rtm-sdk';
+import AgoraRTM, {RtmChannel, RtmClient, RtmMessage, RtmTextMessage} from 'agora-rtm-sdk';
 import {observer} from 'mobx-react-lite';
 
 import {request} from 'api/request';
@@ -82,7 +82,7 @@ const TextChatProviderComponent: React.FC = ({children}) => {
       currentChannel
         .sendMessage(message)
         .then(() => {
-          textChatStore.setMessages(message, sessionStore.userId);
+          textChatStore.setMessages(message as RtmTextMessage, sessionStore.userId);
           // setMessages((messages) => [
           //   ...messages,
           //   {
@@ -217,7 +217,7 @@ const TextChatProviderComponent: React.FC = ({children}) => {
       return;
       currentChannel?.on('ChannelMessage', async (message, memberId) => {
         await textChatStore.fetchUser(memberId);
-        textChatStore.setMessages(message, memberId);
+        textChatStore.setMessages(message as RtmTextMessage, memberId);
       });
       currentChannel?.on('MemberJoined', async (memberId) => {
         await textChatStore.fetchUser(memberId);

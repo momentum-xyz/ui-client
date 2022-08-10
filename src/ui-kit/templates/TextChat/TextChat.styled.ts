@@ -55,17 +55,21 @@ export const StyledHeading = styled(Heading)`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  padding-right: 5px;
 `;
 
 export const Text = styled.div`
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
-  color: white;
+  color: ${(props) => props.theme.text && rgba(props.theme.text, 0.4)};
 `;
 
 export const Time = styled.time`
   font-weight: 400;
-  color: white;
+  font-size: 14px;
+  padding-left: 5px;
+
+  color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
 `;
 
 export const Author = styled.span`

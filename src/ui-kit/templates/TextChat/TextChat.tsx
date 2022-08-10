@@ -1,21 +1,13 @@
 import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+import {RtmTextMessage} from 'agora-rtm-sdk';
 
 import {Text, TextArea} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {dateToTime} from 'core/utils';
 
 import * as styled from './TextChat.styled';
 
-const dateToTimeString = (date: Date) => {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-
-  const stringHours = (hours < 10 ? '0' : '') + hours;
-  const stringMinutes = (minutes < 10 ? '0' : '') + minutes;
-
-  return `${stringHours}:${stringMinutes}`;
-};
-//test git change
 const TextChat: FC = () => {
   const {collaborationStore, sessionStore} = useStore();
   const {textChatStore} = collaborationStore;
@@ -25,9 +17,23 @@ const TextChat: FC = () => {
     if (textChatStore.currentChannel) {
       textChatStore.currentChannel.on('ChannelMessage', async (text, memberId) => {
         await textChatStore.fetchUser(memberId);
-        textChatStore.setMessages(text, memberId);
+        textChatStore.setMessages(text as RtmTextMessage, memberId);
+      });
+
+      textChatStore.currentChannel.on('MemberJoined', async (memberId) => {
+        await textChatStore.fetchUser(memberId);
+        textChatStore.joinSystemMessages();
+      });
+
+      textChatStore.currentChannel.on('MemberLeft', async (memberId) => {
+        await textChatStore.fetchUser(memberId);
+        textChatStore.leftSystemMessages();
       });
     }
+
+    return () => {
+      textChatStore.currentChannel?.removeAllListeners();
+    };
   }, [textChatStore.currentChannel]);
 
   const handleMessageChange = (value: string) => {
@@ -58,10 +64,10 @@ const TextChat: FC = () => {
         {textChatStore?.messages?.map((message, index) =>
           message.messageType === 'SYSTEM' ? (
             <styled.TextContainer key={index}>
-              <div className="font-bold text-base uppercase gap-1 flex justify-between">
+              <styled.InnerContainer>
                 <styled.Text>{message?.text || ''}</styled.Text>
-                <styled.Time>{dateToTimeString(message.date)}</styled.Time>
-              </div>
+                <styled.Time>{dateToTime(message.date)}</styled.Time>
+              </styled.InnerContainer>
             </styled.TextContainer>
           ) : (
             <styled.TextContainer key={index}>
@@ -74,7 +80,7 @@ const TextChat: FC = () => {
                   type="h2"
                   align="left"
                 />
-                <Text text={dateToTimeString(message.date)} size="m" />
+                <Text text={dateToTime(message.date)} size="m" />
               </styled.InnerContainer>
               <styled.Message>{message.text}</styled.Message>
             </styled.TextContainer>
