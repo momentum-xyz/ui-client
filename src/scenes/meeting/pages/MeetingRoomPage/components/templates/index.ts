@@ -1,2 +1,2 @@
-export * from './LocalParticipant';
+export * from './LocalUser';
 export * from './RemoteParticipant';

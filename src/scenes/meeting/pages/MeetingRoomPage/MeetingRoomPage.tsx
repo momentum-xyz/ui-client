@@ -9,18 +9,18 @@ import {
   PeopleCount,
   MuteAllButton,
   MaxVideoStreams,
-  LocalParticipant,
+  LocalUser,
   RemoteParticipant,
   JoinLeaveButtons
 } from './components';
 import * as styled from './MeetingRoomPage.styled';
 
 const MeetingRoomPage: FC = () => {
-  const {mainStore, meetingStore, collaborationStore} = useStore();
+  const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
   const {meetingRoomStore} = meetingStore;
   const {space, stageModeStore} = collaborationStore;
   const {agoraStore, unityStore} = mainStore;
-  const {agoraStageModeStore, meetingPeopleCount} = agoraStore;
+  const {agoraStageModeStore, userDevicesStore, meetingPeopleCount} = agoraStore;
 
   useEffect(() => {
     stageModeStore.removeAllPopups();
@@ -49,17 +49,28 @@ const MeetingRoomPage: FC = () => {
           <styled.ListItemContent className="noScrollIndicator">
             <PeopleCount count={meetingPeopleCount} />
 
-            <MuteAllButton
-              peopleCount={meetingPeopleCount}
-              isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
-              onMuteAll={() => meetingRoomStore.muteAllParticipants(space?.id)}
-            />
-
             <ul>
-              {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
+              {/* MUTE ALL */}
+              <MuteAllButton
+                isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
+                peopleCount={meetingPeopleCount}
+                onMuteAll={() => meetingRoomStore.muteAllParticipants(space?.id)}
+              />
+
+              {/* CURRENT USER */}
+              <LocalUser
+                isShown={!agoraStore.isStageMode || !agoraStageModeStore.isOnStage}
+                isStageMode={agoraStore.isStageMode}
+                avatarSrc={sessionStore.profile?.avatarSrc}
+                videoTrack={userDevicesStore.localVideoTrack}
+                microphoneOff={userDevicesStore.muted}
+                cameraOff={userDevicesStore.cameraOff}
+                soundLevel={agoraStore.localSoundLevel}
+              />
 
               <MaxVideoStreams isShown={agoraStore.maxVideoStreamsReached} />
 
+              {/* USER LIST */}
               {(agoraStore.isStageMode
                 ? agoraStageModeStore.audienceMembers
                 : agoraStore.remoteUsers
