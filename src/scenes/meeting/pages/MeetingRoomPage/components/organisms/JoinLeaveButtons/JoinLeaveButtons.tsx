@@ -5,19 +5,19 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
 
-import * as styled from './JoinToSpaceBack.styled';
+import * as styled from './JoinLeaveButtons.styled';
 
-const MeetingRoomPage: FC = () => {
-  const {mainStore} = useStore();
-  const {unityStore} = mainStore;
+interface PropsInterface {
+  isShown: boolean;
+}
 
+const JoinLeaveButtons: FC<PropsInterface> = ({isShown}) => {
   const history = useHistory();
 
   return (
     <Transition
-      show={!unityStore.isPaused}
+      show={isShown}
       unmount={false}
       enter="transition-all transform ease-out duration-300"
       enterFrom="-translate-y-8 pt-0"
@@ -48,4 +48,4 @@ const MeetingRoomPage: FC = () => {
   );
 };
 
-export default observer(MeetingRoomPage);
+export default observer(JoinLeaveButtons);

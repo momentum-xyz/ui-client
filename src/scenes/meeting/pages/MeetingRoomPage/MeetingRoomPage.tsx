@@ -1,20 +1,25 @@
 import React, {FC, useEffect} from 'react';
-import {Transition} from '@headlessui/react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
+import {Transition} from '@headlessui/react';
 
 import {useStore} from 'shared/hooks';
-import {SvgButton, Text} from 'ui-kit';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
-import {RemoteParticipant, LocalParticipant, JoinToSpaceBack} from './components';
+import {
+  RemoteParticipant,
+  LocalParticipant,
+  JoinLeaveButtons,
+  MuteAllButton,
+  MaxVideoStreams,
+  PeopleCount
+} from './components';
 import * as styled from './MeetingRoomPage.styled';
 
 const MeetingRoomPage: FC = () => {
   const {mainStore, meetingStore, collaborationStore} = useStore();
   const {meetingRoomStore} = meetingStore;
   const {space, stageModeStore} = collaborationStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore, meetingPeopleCount} = agoraStore;
 
   useEffect(() => {
@@ -37,41 +42,24 @@ const MeetingRoomPage: FC = () => {
       leaveFrom="translate-x-0 "
       leaveTo="translate-x-5 "
     >
-      <ul className="h-full mt-1">
+      <styled.Container>
         <styled.ListItem>
-          {/* Leave & Return */}
-          <JoinToSpaceBack />
+          <JoinLeaveButtons isShown={!unityStore.isPaused} />
 
           <styled.ListItemContent className="noScrollIndicator">
-            <p className="text-center whitespace-nowrap w-[92px]">
-              {t('counts.people', {count: meetingPeopleCount}).toUpperCase()}
-            </p>
-            {!agoraStore.isStageMode && meetingPeopleCount > 2 && collaborationStore.isModerator && (
-              <styled.MuteButtonContainer>
-                <styled.MuteButton>
-                  <SvgButton
-                    iconName="microphoneOff"
-                    size="extra-large"
-                    onClick={() => {
-                      meetingRoomStore.muteAllParticipants(space?.id);
-                    }}
-                  />
-                </styled.MuteButton>
-                <Text text="Mute All" transform="uppercase" size="s" />
-              </styled.MuteButtonContainer>
-            )}
+            <PeopleCount count={meetingPeopleCount} />
+
+            <MuteAllButton
+              peopleCount={meetingPeopleCount}
+              isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
+              onMuteAll={() => meetingRoomStore.muteAllParticipants(space?.id)}
+            />
+
             <ul>
               {(!agoraStore.isStageMode || !agoraStageModeStore.isOnStage) && <LocalParticipant />}
 
-              {agoraStore.maxVideoStreamsReached && (
-                <li className="mb-.5 p-.5 relative rounded-full border-1 border-transparant">
-                  <div className="h-8 w-8 flex items-center rounded-full bg-dark-blue-100 cursor-pointer">
-                    <span className="p-.5 text-xs text-prime-blue-100 text-center flex-grow-0">
-                      Video limit reached
-                    </span>
-                  </div>
-                </li>
-              )}
+              <MaxVideoStreams isShown={!agoraStore.maxVideoStreamsReached} />
+
               {(agoraStore.isStageMode
                 ? agoraStageModeStore.audienceMembers
                 : agoraStore.remoteUsers
@@ -104,7 +92,7 @@ const MeetingRoomPage: FC = () => {
             </ul>
           </styled.ListItemContent>
         </styled.ListItem>
-      </ul>
+      </styled.Container>
     </Transition>
   );
 };

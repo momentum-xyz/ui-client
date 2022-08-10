@@ -1,4 +1,4 @@
-export * from './JoinToSpaceBack';
 export * from './RemoteParticipant';
 export * from './LocalParticipant';
-export * from './ParticipantMenu';
+export * from './RemoteParticipant/components/ParticipantMenu';
+export * from './organisms';

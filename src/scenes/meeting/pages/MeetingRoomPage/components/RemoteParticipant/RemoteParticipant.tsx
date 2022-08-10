@@ -10,7 +10,7 @@ import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 import {appVariables} from 'api/constants';
 import {InviteOnStageDialog} from 'scenes/collaboration/pages/StageModePage/components';
 
-import {ParticipantMenu} from '../ParticipantMenu';
+import {ParticipantMenu} from './components';
 
 export interface RemoteParticipantProps {
   participant?: AgoraRemoteUserInterface;

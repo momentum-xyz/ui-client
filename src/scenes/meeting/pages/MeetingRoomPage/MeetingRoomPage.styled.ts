@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 
+export const Container = styled.ul`
+  margin: 12px 0 0 0;
+  height: 100%;
+`;
+
 export const ListItem = styled.li`
-  padding-right: 1px;
-  align-items: end;
+  padding: 0 1px 0 0;
   display: flex;
+  align-items: end;
   flex-direction: column;
   position: absolute;
   transform: translateX(-400px);
