@@ -15,7 +15,7 @@ const dateToTimeString = (date: Date) => {
 
   return `${stringHours}:${stringMinutes}`;
 };
-
+//test git
 const TextChat: FC = () => {
   const {collaborationStore, sessionStore} = useStore();
   const {textChatStore} = collaborationStore;
