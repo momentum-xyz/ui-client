@@ -6,12 +6,12 @@ import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
 import {
-  RemoteParticipant,
-  LocalParticipant,
-  JoinLeaveButtons,
+  PeopleCount,
   MuteAllButton,
   MaxVideoStreams,
-  PeopleCount
+  LocalParticipant,
+  RemoteParticipant,
+  JoinLeaveButtons
 } from './components';
 import * as styled from './MeetingRoomPage.styled';
 

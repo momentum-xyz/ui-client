@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {SvgButton, Text} from 'ui-kit';
@@ -30,4 +30,4 @@ const MuteAllButton: FC<PropsInterface> = ({isShown, peopleCount, onMuteAll}) =>
   );
 };
 
-export default MuteAllButton;
+export default memo(MuteAllButton);
