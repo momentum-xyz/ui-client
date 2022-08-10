@@ -11,7 +11,6 @@ import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
-import TextChatView from 'component/molucules/collaboration/TextChatView';
 
 import * as styled from './StageModeGuest.styled';
 
@@ -121,7 +120,7 @@ const StageModeGuest: React.FC = () => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        <TextChatView />
+        {/*<TextChatView />*/}
       </styled.Body>
     </styled.Container>
   );

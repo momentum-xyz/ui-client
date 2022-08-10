@@ -20,6 +20,7 @@ interface PropsInterface
   isResizable?: boolean;
   isError?: boolean;
   errorMessage?: string;
+  bottomBorder?: boolean;
 }
 
 const TextArea: FC<PropsInterface> = ({
@@ -35,6 +36,7 @@ const TextArea: FC<PropsInterface> = ({
   isCustom = false,
   isResizable = false,
   isError = false,
+  bottomBorder = false,
   errorMessage,
   ...restProps
 }) => {
@@ -43,7 +45,11 @@ const TextArea: FC<PropsInterface> = ({
       <Heading type="h4" align="left" theme={theme} label={name} transform="uppercase" isCustom />
       <styled.TextAreaContainer
         theme={theme}
-        className={cn(selected && 'highlighted', isResizable && 'resizable')}
+        className={cn(
+          selected && 'highlighted',
+          isResizable && 'resizable',
+          bottomBorder && 'bottomBorder'
+        )}
       >
         <textarea
           placeholder={placeholder}

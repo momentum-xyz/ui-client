@@ -7,8 +7,6 @@ import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
 import {SpaceTopBar, Button} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
-import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
-
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
 
@@ -96,7 +94,7 @@ const GoogleDrivePage: FC = () => {
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}
-        <TextChatView />
+        {/*<TextChatView />*/}
       </styled.Container>
     </styled.Inner>
   );

@@ -10,8 +10,6 @@ import {SpaceTopBar, Button} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 
 // TODO: Refactor
-import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
-
 import 'core/utils/boardsPicker.1.0.js';
 
 import {MiroBoard, MiroChoice} from './components/templates';
@@ -92,7 +90,7 @@ const MiroBoardPage: FC = () => {
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}
-        <TextChatView />
+        {/*<TextChatView />*/}
       </styled.Container>
     </styled.Inner>
   );

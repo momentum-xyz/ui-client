@@ -4,8 +4,7 @@ import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful
 
 import {COLUMNS} from 'core/constants';
 import {TileInterface} from 'core/models';
-
-import TextChatView from '../../../../../../../component/molucules/collaboration/TextChatView';
+import {TextChat} from 'ui-kit';
 
 import {TileItem} from './components/TileItem';
 import * as styled from './Dashboard.styled';
@@ -63,7 +62,7 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag}) => {
             </styled.ColumnContainer>
           ))}
       </styled.DashboardContainer>
-      <TextChatView />
+      <TextChat />
     </styled.Container>
   );
 };

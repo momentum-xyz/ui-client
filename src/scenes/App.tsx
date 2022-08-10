@@ -15,7 +15,6 @@ import {UnityPage} from 'scenes/unity';
 // TODO: To be refactored
 import {ConfirmationDialogProvider} from '../hooks/useConformationDialog';
 import AuthComponent from '../context/Auth/AuthContext';
-import {TextChatProvider} from '../context/TextChatContext';
 
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
 import AppLayers from './AppLayers';
@@ -24,9 +23,10 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, initApplication} = useStore();
-  const {themeStore} = mainStore;
+  const {configStore, sessionStore, mainStore, initApplication, collaborationStore} = useStore();
+  const {themeStore, agoraStore} = mainStore;
   const {isConfigReady} = configStore;
+  const {textChatStore} = collaborationStore;
 
   const {pathname} = useLocation();
   const {t} = useTranslation();
@@ -40,6 +40,13 @@ const App: FC = () => {
       mainStore.init();
     }
   }, [isConfigReady, mainStore]);
+
+  useEffect(() => {
+    if (!agoraStore.appId || !sessionStore.userId || textChatStore.isLoggedOn) {
+      return;
+    }
+    textChatStore.initClient(agoraStore.appId, sessionStore.userId);
+  }, [agoraStore.appId, sessionStore.userId]);
 
   if (!isConfigReady) {
     return <></>;
@@ -104,15 +111,15 @@ const App: FC = () => {
         <ConfirmationDialogProvider>
           <AuthProvider {...sessionStore.oidcConfig}>
             <AuthComponent>
-              <TextChatProvider>
-                <UnityPage />
-                <AppLayers>
-                  <Switch>
-                    {createRoutesByConfig(PRIVATE_ROUTES)}
-                    <Redirect to={ROUTES.base} />
-                  </Switch>
-                </AppLayers>
-              </TextChatProvider>
+              {/*<TextChatProvider>*/}
+              <UnityPage />
+              <AppLayers>
+                <Switch>
+                  {createRoutesByConfig(PRIVATE_ROUTES)}
+                  <Redirect to={ROUTES.base} />
+                </Switch>
+              </AppLayers>
+              {/*</TextChatProvider>*/}
             </AuthComponent>
           </AuthProvider>
         </ConfirmationDialogProvider>

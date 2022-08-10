@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import {useStore} from 'shared/hooks';
 
-import {Message, useTextChatContext} from '../../../context/TextChatContext';
+import {useTextChatContext} from '../../../context/TextChatContext';
 import {TextArea} from '../../atoms/input/Input';
 import Panel from '../../atoms/Panel';
 
@@ -20,8 +20,9 @@ const dateToTimeString = (date: Date) => {
 };
 
 const TextChatView: React.FC<TextChatViewProps> = () => {
-  const {mainStore, collaborationStore} = useStore();
+  const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
+  const {textChatStore} = collaborationStore;
 
   const open = agoraStore.isChatOpen && !!collaborationStore.space;
 
@@ -31,7 +32,6 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
     sendMessage,
     currentUserId,
     setNumberOfUnreadMessages,
-    users,
     numberOfReadMessages,
     setNumberOfReadMessages
   } = useTextChatContext();
@@ -101,7 +101,7 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
   return (
     <Panel className="w-1/3 ml-1" padding={false}>
       <ul className="p-2 flex-grow overflow-y-auto overflow-x-hidden" ref={messageListRef}>
-        {messages.map((message: Message, index) => {
+        {textChatStore?.messages?.map((message, index) => {
           // const direction: string = message.author === id ? 'out' : 'in';
           if (message.messageType === 'SYSTEM') {
             return (
@@ -118,10 +118,8 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
           return (
             <li key={index} className={` border-b-1 py-1 border-prime-blue-20`}>
               <div className="font-bold text-base uppercase gap-1 flex justify-between">
-                <span className="truncate" title={users[message.author]?.name || message.author}>
-                  {message.author === currentUserId
-                    ? 'you'
-                    : users[message.author]?.name || message.author}
+                <span className="truncate" title={message?.name || message.author}>
+                  {message.author === sessionStore.userId ? 'you' : message?.name || message.author}
                 </span>
                 <time className="font-normal text-white-50">{dateToTimeString(message.date)}</time>
               </div>

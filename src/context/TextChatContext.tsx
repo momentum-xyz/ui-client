@@ -6,7 +6,6 @@ import {request} from 'api/request';
 import {appVariables} from 'api/constants';
 import {useStore} from 'shared/hooks';
 
-import {promiseFetch} from '../hooks/api/useApi';
 import {useUserList} from '../hooks/api/useUser';
 
 import useContextAuth from './Auth/hooks/useContextAuth';
@@ -39,6 +38,7 @@ export type extendedMessage = RtmMessage | SystemMessage;
 export type Message = extendedMessage & {
   author: string;
   date: Date;
+  name: string;
 };
 
 const TextChatContext = React.createContext<TextChatContextInterface>({
@@ -67,9 +67,9 @@ const TextChatProviderComponent: React.FC = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [users, updateMembers] = useUserList(members);
 
-  const {mainStore} = useStore();
+  const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore} = mainStore;
-
+  const {textChatStore} = collaborationStore;
   const {authState} = useContextAuth();
 
   useEffect(() => {
@@ -82,10 +82,16 @@ const TextChatProviderComponent: React.FC = ({children}) => {
       currentChannel
         .sendMessage(message)
         .then(() => {
-          setMessages((messages) => [
-            ...messages,
-            {...message, author: currentUserId, date: new Date()}
-          ]);
+          textChatStore.setMessages(message, sessionStore.userId);
+          // setMessages((messages) => [
+          //   ...messages,
+          //   {
+          //     ...message,
+          //     author: sessionStore.userId,
+          //     name: sessionStore.profile?.name ?? '',
+          //     date: new Date()
+          //   }
+          // ]);
           console.info('[agora] Sent message successfully');
         })
         .catch((error) => {
@@ -96,6 +102,7 @@ const TextChatProviderComponent: React.FC = ({children}) => {
 
   // TODO: Refactor to AgoraStore
   const joinChannel = useCallback(() => {
+    console.info('chatClient,chatClien', chatClient);
     if (!agoraStore.spaceId || !chatClient) {
       return;
     }
@@ -123,19 +130,23 @@ const TextChatProviderComponent: React.FC = ({children}) => {
     if (!isLoggedIn) {
       return;
     }
+
     console.info('[agora] Leaving AgoraRTM channel');
     currentChannel?.leave().then(() => {
       setCurrentChannel(null);
+      textChatStore.resetModel();
+
       console.info('[agora] Left AgoraRTM channel successfully');
     });
   }, [currentChannel, isLoggedIn]);
 
   // TODO: Refactor to AgoraStore
   useEffect(() => {
+    console.info('when we are here?');
     if (!agoraStore.appId || !authState.user || chatClient) {
       return;
     }
-
+    console.info('APP ID AGORA', agoraStore.appId);
     const client = AgoraRTM.createInstance(agoraStore.appId);
     setChatClient(client);
 
@@ -154,7 +165,8 @@ const TextChatProviderComponent: React.FC = ({children}) => {
       })
       .then(() => {
         setChatClient(client);
-        setCurrentUserId(authState.subject);
+        setCurrentUserId(sessionStore.userId);
+        console.info();
         setIsLoggedIn(true);
         console.info('[agora] AgoraRTM client login success');
       })
@@ -176,19 +188,25 @@ const TextChatProviderComponent: React.FC = ({children}) => {
         .catch((error) => {
           console.error('[agora] AgoraRTM client logout error', error);
         });
+      console.info('logout agora here?');
+
       client?.removeAllListeners();
     };
   }, [agoraStore.appId, authState.subject, authState.user, chatClient, isLoggedIn]);
 
   // TODO: Refactor to AgoraStore
   useEffect(() => {
+    console.info('agora state???', agoraStore.hasJoined);
     if (!isLoggedIn || !chatClient) {
       return;
     }
-
+    return;
+    console.info(chatClient);
     if (agoraStore.hasJoined && !currentChannel) {
+      console.info('when to join');
       joinChannel();
     } else if (!agoraStore.hasJoined && currentChannel) {
+      console.info('when to leave');
       leaveChannel();
     }
   }, [agoraStore.hasJoined, chatClient, currentChannel, isLoggedIn, joinChannel, leaveChannel]);
@@ -196,46 +214,43 @@ const TextChatProviderComponent: React.FC = ({children}) => {
   // @ts-ignore: TODO: Refactor
   useEffect(() => {
     if (currentChannel) {
-      currentChannel.on('ChannelMessage', (message, memberId) => {
-        setMessages((messages) => [...messages, {...message, author: memberId, date: new Date()}]);
+      return;
+      currentChannel?.on('ChannelMessage', async (message, memberId) => {
+        await textChatStore.fetchUser(memberId);
+        textChatStore.setMessages(message, memberId);
       });
-      currentChannel.on('MemberJoined', (memberId) => {
-        setMembers((members) => [...members, memberId]);
-        promiseFetch<User>(appVariables.BACKEND_ENDPOINT_URL + `/users/profile/${memberId}`).then(
-          (user) => {
-            setMessages((messages) => [
-              ...messages,
-              {
-                messageType: 'SYSTEM',
-                text: `${user?.name || memberId} has joined the collaboration space`,
-                author: 'SYSTEM',
-                date: new Date()
-              }
-            ]);
+      currentChannel?.on('MemberJoined', async (memberId) => {
+        await textChatStore.fetchUser(memberId);
+        setMessages((messages) => [
+          ...messages,
+          {
+            messageType: 'SYSTEM',
+            text: `${textChatStore.name} has joined the collaboration space`,
+            author: 'SYSTEM',
+            name: textChatStore.name,
+            date: new Date()
           }
-        );
+        ]);
       });
-      currentChannel.on('MemberLeft', (memberId) => {
-        promiseFetch<User>(appVariables.BACKEND_ENDPOINT_URL + `/users/profile/${memberId}`).then(
-          (user) => {
-            setMessages((messages) => [
-              ...messages,
-              {
-                messageType: 'SYSTEM',
-                text: `${user.name} has left the collaboration space`,
-                author: 'SYSTEM',
-                date: new Date()
-              }
-            ]);
+      currentChannel?.on('MemberLeft', async (memberId) => {
+        await textChatStore.fetchUser(memberId);
+
+        setMessages((messages) => [
+          ...messages,
+          {
+            messageType: 'SYSTEM',
+            text: `${textChatStore.name} has left the collaboration space`,
+            author: 'SYSTEM',
+            name: textChatStore.name,
+            date: new Date()
           }
-        );
+        ]);
       });
       return () => {
-        currentChannel.removeAllListeners();
+        currentChannel?.removeAllListeners();
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentChannel]);
+  }, [currentChannel, textChatStore]);
 
   return (
     <TextChatContext.Provider

@@ -8,8 +8,6 @@ import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button} from 'ui-kit';
 
 // TODO: Refactor
-import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
-
 import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenSharePage.styled';
 
@@ -76,7 +74,7 @@ const ScreenSharePage: FC = () => {
         ) : (
           <ScreenVideo videoTrack={videoTrack} />
         )}
-        <TextChatView />
+        {/*<TextChatView />*/}
       </styled.Container>
     </styled.Inner>
   );
