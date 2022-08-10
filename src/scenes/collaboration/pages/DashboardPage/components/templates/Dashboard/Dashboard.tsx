@@ -13,9 +13,10 @@ interface PropsInterface {
   tilesList: TileInterface[][];
   onDragEnd: ({source, destination}: DropResult) => void;
   canDrag: boolean;
+  textChatIsOpen: boolean;
 }
 
-const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag}) => {
+const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatIsOpen}) => {
   return (
     <styled.Container data-testid="Dashboard-test">
       <styled.DashboardContainer>
@@ -62,7 +63,7 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag}) => {
             </styled.ColumnContainer>
           ))}
       </styled.DashboardContainer>
-      <TextChat />
+      {textChatIsOpen && <TextChat />}
     </styled.Container>
   );
 };

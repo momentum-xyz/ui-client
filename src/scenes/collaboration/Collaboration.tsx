@@ -3,6 +3,7 @@ import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {RtmTextMessage} from 'agora-rtm-sdk';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface} from 'core/interfaces';
@@ -38,7 +39,8 @@ const Collaboration: FC = () => {
     declinedToJoinStageDialog,
     invitedOnStageDialog,
     prepareOnStageDialog,
-    countdownDialog
+    countdownDialog,
+    textChatStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -47,6 +49,29 @@ const Collaboration: FC = () => {
 
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
   const [accepted, setAccepted] = useState<boolean>();
+
+  useEffect(() => {
+    if (textChatStore.currentChannel) {
+      textChatStore.currentChannel.on('ChannelMessage', async (text, memberId) => {
+        await textChatStore.fetchUser(memberId);
+        textChatStore.setMessages(text as RtmTextMessage, memberId);
+      });
+
+      textChatStore.currentChannel.on('MemberJoined', async (memberId) => {
+        await textChatStore.fetchUser(memberId);
+        textChatStore.joinSystemMessages();
+      });
+
+      textChatStore.currentChannel.on('MemberLeft', async (memberId) => {
+        await textChatStore.fetchUser(memberId);
+        textChatStore.leftSystemMessages();
+      });
+    }
+
+    return () => {
+      textChatStore.currentChannel?.removeAllListeners();
+    };
+  }, [textChatStore.currentChannel]);
 
   useEffect(() => {
     rootStore.joinMeetingSpace(spaceId).catch((e) => {

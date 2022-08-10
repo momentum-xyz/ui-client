@@ -50,7 +50,8 @@ const RootCollaborationStore = types
       inviteOnStageDialog: types.optional(DialogModel, {}),
       kickUserFromStageDialog: types.optional(DialogModel, {}),
       prepareOnStageDialog: types.optional(DialogModel, {}),
-      countdownDialog: types.optional(DialogModel, {})
+      countdownDialog: types.optional(DialogModel, {}),
+      textChatDialog: types.optional(DialogModel, {})
     })
   )
   .volatile(() => ({

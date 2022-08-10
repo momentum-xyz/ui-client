@@ -15,7 +15,7 @@ const DashboardPage: FC = () => {
   const {dashboardStore, space} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, onDragEnd, vibeStore, inviteToSpaceDialog} =
     dashboardStore;
-  const {agoraStore, favoriteStore} = mainStore;
+  const {favoriteStore} = mainStore;
 
   const history = useHistory();
 
@@ -38,6 +38,7 @@ const DashboardPage: FC = () => {
 
   const handleClose = () => {
     history.push(ROUTES.base);
+    collaborationStore.textChatDialog.close();
   };
 
   const handleToggleVibe = useCallback(async () => {
@@ -61,8 +62,8 @@ const DashboardPage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         spaceId={space.id}
         isAdmin={space.isAdmin}
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
+        isChatOpen={collaborationStore.textChatDialog.isOpen}
+        toggleChat={collaborationStore.textChatDialog.toggle}
       >
         <VibeButton
           onToggle={handleToggleVibe}
@@ -104,6 +105,7 @@ const DashboardPage: FC = () => {
         tilesList={tileList.tileMatrix}
         onDragEnd={onDragEnd}
         canDrag={space.isAdmin || space.isMember}
+        textChatIsOpen={collaborationStore.textChatDialog.isOpen}
       />
       {tileDialog.isOpen && <TileForm />}
       {tileRemoveDialog.isOpen && <RemoveTileDialog />}
