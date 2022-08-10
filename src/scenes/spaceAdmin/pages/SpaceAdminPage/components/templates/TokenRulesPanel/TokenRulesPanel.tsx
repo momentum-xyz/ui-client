@@ -93,7 +93,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
           onClose={editTokenRuleDialog.close}
         />
       )}
-      <styled.Container className="noScrollIndicator">
+      <styled.Container className="noScrollIndicator" data-testid="TokenRulesPanel-test">
         {tokenRules.map((tokenRule) => (
           <TokenRuleListItem
             key={tokenRule.id}

@@ -50,7 +50,7 @@ const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => 
         onClick: collaborationStore.unselectUserToRemoveAndCloseDialog
       }}
     >
-      <styled.Container>
+      <styled.Container data-testid="RemoveParticipantFromStageDialog-test">
         <Text
           text={t('messages.areYouSureYouWantToRemoveUserFromStage', {name: participant.name})}
           size="m"

@@ -15,7 +15,7 @@ const UnityVolumeController: FC = () => {
   }, []);
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="UnityVolumeController-test">
       <styled.Title>{t('musicPlayer.unityVolume')}</styled.Title>
       <styled.VolumeContainer>
         <SvgButton iconName="player-mute" size="medium" onClick={unityStore.mute} />

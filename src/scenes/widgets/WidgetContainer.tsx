@@ -127,7 +127,7 @@ const WidgetContainer: FC = () => {
         html5={true}
         ref={(ref) => musicPlayer.setPlayer(ref)}
       />
-      <styled.Footer>
+      <styled.Footer data-testid="WidgetContainer-test">
         <styled.MainLinks>
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
         </styled.MainLinks>

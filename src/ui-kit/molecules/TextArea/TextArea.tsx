@@ -41,7 +41,7 @@ const TextArea: FC<PropsInterface> = ({
   ...restProps
 }) => {
   return (
-    <styled.Container className={cn(isCustom && 'TextArea-custom')}>
+    <styled.Container className={cn(isCustom && 'TextArea-custom')} data-testid="TextArea-test">
       <Heading type="h4" align="left" theme={theme} label={name} transform="uppercase" isCustom />
       <styled.TextAreaContainer
         theme={theme}

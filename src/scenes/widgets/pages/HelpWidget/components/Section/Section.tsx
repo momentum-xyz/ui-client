@@ -24,7 +24,7 @@ const Section: React.FC<SectionPropsInterface> = ({
   children
 }) => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="Section-test">
       <styled.TopContainer onClick={onExpandToggle}>
         <styled.TopContanerChild>
           <IconSvg name={icon} size="large" />

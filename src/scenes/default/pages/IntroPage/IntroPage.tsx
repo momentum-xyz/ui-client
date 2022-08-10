@@ -38,7 +38,7 @@ const IntroPage: FC = () => {
   };
 
   return (
-    <styled.Background background={background}>
+    <styled.Background background={background} data-testid="IntroPage-test">
       <styled.Wrapper>
         <styled.MessageWrapper>
           <styled.Message>{t('messages.loginSuccessful')}</styled.Message>

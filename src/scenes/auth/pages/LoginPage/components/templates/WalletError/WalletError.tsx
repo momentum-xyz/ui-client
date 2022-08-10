@@ -10,7 +10,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 
 const WalletError: FC<PropsInterface> = ({error}) => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="WalletError-test">
       <styled.Error>{error}</styled.Error>
     </styled.Container>
   );

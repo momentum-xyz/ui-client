@@ -4,7 +4,7 @@ import * as styled from './Loader.styled';
 
 const Loader: FC = () => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="Loader-test">
       <span>.</span>
       <span>.</span>
       <span>.</span>

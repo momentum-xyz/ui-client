@@ -85,7 +85,7 @@ const PrepareOnStageDialog: React.FC<PropsInterface> = ({onClose, onReady}) => {
         }
       }}
     >
-      <styled.Body>
+      <styled.Body data-testid="PrepareOnStageDialog-test">
         <Text text={`${t('labels.webcamPreview')}:`} size="s" transform="uppercase" />
         <styled.VideoContainer>
           <styled.Video ref={videoRef} className={cn(videoRef.current?.paused && 'paused')} />

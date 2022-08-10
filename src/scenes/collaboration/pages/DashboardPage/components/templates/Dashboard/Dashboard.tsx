@@ -17,7 +17,7 @@ interface PropsInterface {
 
 const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag}) => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="Dashboard-test">
       <styled.DashboardContainer>
         {canDrag && (
           <DragDropContext onDragEnd={onDragEnd}>

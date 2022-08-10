@@ -11,7 +11,7 @@ interface PropsInterface {
 
 const Navigation: FC<PropsInterface> = ({tabs}) => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="Navigation-test">
       <NavigationBar>
         {tabs.map((tab) => (
           <NavigationBarItem

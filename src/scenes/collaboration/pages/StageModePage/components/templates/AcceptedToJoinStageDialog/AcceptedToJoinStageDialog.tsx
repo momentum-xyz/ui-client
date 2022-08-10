@@ -38,7 +38,7 @@ const AcceptedToJoinOnStageDialog: React.FC<PropsInterface> = ({onReady, onDecli
         }
       }}
     >
-      <styled.Body>
+      <styled.Body data-testid="AcceptedToJoinOnStageDialog-test">
         <Text text={t('messages.wouldYouLikeToGoOnStage')} size="m" align="left" />
         <Text text={t('messages.thisWillEnableYouToUseStage')} size="xs" align="left" />
       </styled.Body>

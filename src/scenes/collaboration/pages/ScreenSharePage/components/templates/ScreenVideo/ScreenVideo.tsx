@@ -18,7 +18,7 @@ const ScreenVideo: FC<PropsInterface> = ({videoTrack}) => {
   }, [videoTrack]);
 
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="ScreenVideo-test">
       <styled.VideoContainer ref={videoRef} />
     </styled.Wrapper>
   );

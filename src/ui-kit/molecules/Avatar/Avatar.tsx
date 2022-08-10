@@ -30,6 +30,7 @@ const Avatar: FC<AvatarProps> = ({
 
   return (
     <styled.Container
+      data-testid="Avatar-test"
       className={cn(size, showBorder && 'showBorder', showHover && 'showHover', className)}
       onClick={onClick}
     >

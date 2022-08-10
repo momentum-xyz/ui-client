@@ -11,7 +11,7 @@ interface PropsInterface {
 
 const Header: FC<PropsInterface> = ({event, isWorldCalendar}) => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="Header-test">
       {isWorldCalendar ? (
         <styled.Header>
           <styled.Header className="bold">{event.spaceName ?? ''}</styled.Header>

@@ -65,7 +65,7 @@ const StageModeGuest: React.FC = () => {
   }
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="StageModeGuest-test">
       <SpaceTopBar
         title={collaborationStore.space.name ?? ''}
         subtitle={t('labels.stageMode')}

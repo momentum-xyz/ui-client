@@ -64,7 +64,7 @@ const MiroBoardPage: FC = () => {
   }
 
   return (
-    <styled.Inner>
+    <styled.Inner data-testid="MiroBoardPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={miroBoardTitle}

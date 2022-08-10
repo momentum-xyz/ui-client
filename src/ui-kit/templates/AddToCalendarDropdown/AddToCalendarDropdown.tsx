@@ -13,7 +13,11 @@ const AddToCalendarDropdown: FC<PropsInterface> = (props) => {
 
   useClickOutside(ref, onRequestClose);
 
-  return <styled.AddEventContainer ref={ref}>{children}</styled.AddEventContainer>;
+  return (
+    <styled.AddEventContainer ref={ref} data-testid="AddToCalendarDropdown-test">
+      {children}
+    </styled.AddEventContainer>
+  );
 };
 
 export default AddToCalendarDropdown;

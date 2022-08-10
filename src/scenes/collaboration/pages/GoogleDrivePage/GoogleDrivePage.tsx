@@ -68,7 +68,7 @@ const GoogleDrivePage: FC = () => {
   }
 
   return (
-    <styled.Inner>
+    <styled.Inner data-testid="GoogleDrivePage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={documentTitle}

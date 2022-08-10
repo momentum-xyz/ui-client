@@ -123,7 +123,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
   }, []);
 
   return (
-    <styled.Container theme={theme}>
+    <styled.Container theme={theme} data-testid="Authorization-test">
       {transactionType === StakingTransactionType.Bond && <BondDetails />}
       {transactionType === StakingTransactionType.Unbond && <UnbondDetails />}
       {transactionType === StakingTransactionType.WithdrawUnbond && <WithdrawUnbondDetails />}

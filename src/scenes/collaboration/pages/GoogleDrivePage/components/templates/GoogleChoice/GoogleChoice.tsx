@@ -17,7 +17,7 @@ const GoogleChoice: FC<PropsInterface> = ({isAdmin, pickDocument}) => {
   const theme = useTheme();
 
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="GoogleChoice-test">
       {isAdmin ? (
         <styled.Actions>
           <Text text={t('messages.noTeamDocument')} theme={theme} size="s" />

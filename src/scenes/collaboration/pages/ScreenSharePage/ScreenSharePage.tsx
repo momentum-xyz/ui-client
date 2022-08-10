@@ -47,7 +47,7 @@ const ScreenSharePage: FC = () => {
   }
 
   return (
-    <styled.Inner>
+    <styled.Inner data-testid="ScreenSharePage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={screenShareTitle}
