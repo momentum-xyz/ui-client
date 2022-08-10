@@ -369,6 +369,7 @@ export const enGb = {
       goBack: 'Go back',
       back: 'Back',
       muteAll: 'Mute All',
+      rejoinMeeting: 'Rejoin meeting',
       chooseAvatar: 'Choose an image for your avatar',
       saveProfile: 'Save profile',
       selectAccount: 'Select account',

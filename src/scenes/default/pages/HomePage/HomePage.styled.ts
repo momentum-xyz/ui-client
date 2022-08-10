@@ -14,3 +14,8 @@ export const PanelWrapper = styled.div`
   pointer-events: all;
   height: 100%;
 `;
+
+export const Rejoin = styled.div`
+  position: absolute;
+  right: 245px;
+`;
