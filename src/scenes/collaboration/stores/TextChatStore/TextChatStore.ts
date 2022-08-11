@@ -19,6 +19,7 @@ const TextChatStore = types.compose(
       request: types.optional(RequestModel, {}),
       name: '',
       isLoggedOn: false,
+      messageSent: false,
       tokenRequest: types.optional(RequestModel, {})
     })
     .volatile<{client: RtmClient | null}>(() => ({
@@ -55,6 +56,7 @@ const TextChatStore = types.compose(
               name: userId === self.currentUserId ? 'you' : self.name
             }
           ]);
+          this.setMessageSent();
         }
       },
       joinSystemMessages(message?: RtmTextMessage) {
@@ -69,6 +71,7 @@ const TextChatStore = types.compose(
             date: new Date()
           }
         ]);
+        this.setMessageSent();
       },
       leftSystemMessages(message?: RtmTextMessage) {
         self.messages = cast([
@@ -82,6 +85,10 @@ const TextChatStore = types.compose(
             date: new Date()
           }
         ]);
+        this.setMessageSent();
+      },
+      setMessageSent() {
+        self.messageSent = !self.messageSent;
       },
       resetMessages() {
         self.messages.length = 0;
@@ -128,13 +135,13 @@ const TextChatStore = types.compose(
           }
         }
       }),
-      sendMessage(message: RtmTextMessage) {
+      sendMessage: flow(function* (message: RtmTextMessage) {
         if (self.currentChannel && self.currentUserId) {
-          self.currentChannel.sendMessage(message);
+          yield self.currentChannel.sendMessage(message);
           self.setMessages(message, self.currentUserId);
           console.info('[agora] Sent message successfully');
         }
-      },
+      }),
       joinChannel: flow(function* (spaceId: string) {
         if (self.client) {
           self.currentChannel = self.client.createChannel(spaceId);

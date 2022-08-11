@@ -127,6 +127,7 @@ const StageModeGuest: React.FC = () => {
             userId={sessionStore.userId}
             sendMessage={textChatStore.sendMessage}
             messages={textChatStore.messages}
+            messageSent={textChatStore.messageSent}
           />
         )}
       </styled.Body>

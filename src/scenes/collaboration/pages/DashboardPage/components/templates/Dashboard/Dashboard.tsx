@@ -72,6 +72,7 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatI
           userId={sessionStore.userId}
           sendMessage={textChatStore.sendMessage}
           messages={textChatStore.messages}
+          messageSent={textChatStore.messageSent}
         />
       )}
     </styled.Container>

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
 
@@ -13,10 +13,27 @@ interface PropsInterface {
   currentChannel: RtmChannel | null;
   messages: Array<MessageInterface>;
   userId: string;
+  messageSent: boolean;
 }
 
-const TextChat: FC<PropsInterface> = ({sendMessage, currentChannel, messages, userId}) => {
+const TextChat: FC<PropsInterface> = ({
+  sendMessage,
+  currentChannel,
+  messages,
+  userId,
+  messageSent
+}) => {
+  const messageListRef = useRef<HTMLUListElement>(null);
   const [message, setMessage] = useState<string>('');
+
+  useEffect(() => {
+    if (messageListRef) {
+      const list: HTMLUListElement | null = messageListRef.current;
+      if (list) {
+        list.scrollTop = list.scrollHeight;
+      }
+    }
+  }, [messageSent]);
 
   const handleMessageChange = (value: string) => {
     const text = value;
@@ -42,7 +59,7 @@ const TextChat: FC<PropsInterface> = ({sendMessage, currentChannel, messages, us
 
   return (
     <styled.Container>
-      <styled.ChatBox>
+      <styled.ChatBox ref={messageListRef}>
         {messages.map((message, index) =>
           message.messageType === 'SYSTEM' ? (
             <styled.TextContainer key={index}>

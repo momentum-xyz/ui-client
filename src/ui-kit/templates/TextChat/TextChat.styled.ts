@@ -33,7 +33,7 @@ export const ChatBox = styled.ul`
   flex-direction: column;
   flex-grow: 1;
 
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   padding: 10px 20px 20px;
 `;

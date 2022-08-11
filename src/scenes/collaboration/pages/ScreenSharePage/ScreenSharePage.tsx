@@ -80,6 +80,7 @@ const ScreenSharePage: FC = () => {
             userId={sessionStore.userId}
             sendMessage={textChatStore.sendMessage}
             messages={textChatStore.messages}
+            messageSent={textChatStore.messageSent}
           />
         )}
       </styled.Container>
