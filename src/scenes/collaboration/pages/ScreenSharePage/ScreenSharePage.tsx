@@ -58,6 +58,7 @@ const ScreenSharePage: FC = () => {
         editSpaceHidden
         isChatOpen={collaborationStore.textChatDialog.isOpen}
         toggleChat={collaborationStore.textChatDialog.toggle}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         onClose={() => history.push(ROUTES.base)}
       >
         {client && (

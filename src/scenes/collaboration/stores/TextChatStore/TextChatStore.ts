@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import AgoraRTM, {RtmChannel, RtmClient, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
 
-import {RequestModel, ResetModel, UserProfileModelInterface} from 'core/models';
+import {RequestModel, ResetModel} from 'core/models';
 import {MessageInterface} from 'core/interfaces';
 import {api, ProfileResponse} from 'api';
 import {TextMessageEnum} from 'core/enums';
@@ -12,12 +12,9 @@ const TextChatStore = types.compose(
   types
     .model('TextChatStore', {
       currentUserId: '',
-      users: types.maybeNull(types.frozen<{[key: string]: UserProfileModelInterface | null}>()),
-      ids: types.maybeNull(types.frozen(Array<string>())),
       messages: types.optional(types.array(types.frozen<MessageInterface>()), []),
-      numberOfUnreadMessages: types.maybe(types.number),
-      numberOfReadMessages: types.maybe(types.number),
-      members: types.maybeNull(types.frozen(Array<string>())),
+      numberOfUnreadMessages: 0,
+      numberOfReadMessages: 0,
       request: types.optional(RequestModel, {}),
       name: '',
       isLoggedOn: false,
@@ -29,9 +26,6 @@ const TextChatStore = types.compose(
     }))
     .volatile<{currentChannel: RtmChannel | null}>(() => ({
       currentChannel: null
-    }))
-    .volatile<{messages2: Array<MessageInterface>}>(() => ({
-      messages2: []
     }))
     .actions((self) => ({
       getAgoraToken: flow(function* () {

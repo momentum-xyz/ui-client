@@ -84,6 +84,7 @@ const StageModeModerator: React.FC = () => {
           onClose={() => history.push(ROUTES.base)}
           isChatOpen={collaborationStore.textChatDialog.isOpen}
           toggleChat={collaborationStore.textChatDialog.toggle}
+          numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
           editSpaceHidden
         >
           <styled.ActionsContainer>

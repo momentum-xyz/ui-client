@@ -18,6 +18,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   toggleChat?: () => void;
   toggleIsSpaceFavorite: (spaceId: string) => void;
   isChat?: boolean;
+  numberOfUnreadMessages?: number;
 }
 
 const SpaceTopBar: FC<PropsInterface> = ({
@@ -32,7 +33,8 @@ const SpaceTopBar: FC<PropsInterface> = ({
   toggleChat,
   children,
   onClose,
-  isChat
+  isChat,
+  numberOfUnreadMessages
 }) => {
   return (
     <PageTopBar
@@ -51,6 +53,7 @@ const SpaceTopBar: FC<PropsInterface> = ({
               isSpaceFavorite={isSpaceFavorite}
               toggleIsSpaceFavorite={toggleIsSpaceFavorite}
               isChat={isChat}
+              numberOfUnreadMessages={numberOfUnreadMessages}
             />
           )}
         </>

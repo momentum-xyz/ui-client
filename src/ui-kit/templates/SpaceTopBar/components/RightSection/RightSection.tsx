@@ -6,6 +6,8 @@ import {generatePath} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {Separator, ToolbarIcon} from 'ui-kit';
 
+import * as styled from './RightSection.styled';
+
 interface PropsInterface {
   isAdmin?: boolean;
   spaceId: string;
@@ -15,6 +17,7 @@ interface PropsInterface {
   toggleIsSpaceFavorite: (spaceId: string) => void;
   toggleChat?: () => void;
   isChat?: boolean;
+  numberOfUnreadMessages?: number;
 }
 
 const RightSection: FC<PropsInterface> = ({
@@ -25,7 +28,8 @@ const RightSection: FC<PropsInterface> = ({
   isChatOpen,
   toggleIsSpaceFavorite,
   isChat = true,
-  toggleChat
+  toggleChat,
+  numberOfUnreadMessages = 0
 }) => {
   return (
     <>
@@ -52,9 +56,9 @@ const RightSection: FC<PropsInterface> = ({
           onClick={toggleChat}
           isWhite={false}
         >
-          {/*{numberOfUnreadMessages > 0 && (*/}
-          {/*  <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>*/}
-          {/*)}*/}
+          {numberOfUnreadMessages > 0 && (
+            <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>
+          )}
         </ToolbarIcon>
       )}
       <ToolbarIcon

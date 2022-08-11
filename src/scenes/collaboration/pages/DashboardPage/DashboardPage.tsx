@@ -12,7 +12,7 @@ import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
-  const {dashboardStore, space} = collaborationStore;
+  const {dashboardStore, space, textChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, onDragEnd, vibeStore, inviteToSpaceDialog} =
     dashboardStore;
   const {favoriteStore} = mainStore;
@@ -64,6 +64,7 @@ const DashboardPage: FC = () => {
         isAdmin={space.isAdmin}
         isChatOpen={collaborationStore.textChatDialog.isOpen}
         toggleChat={collaborationStore.textChatDialog.toggle}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
       >
         <VibeButton
           onToggle={handleToggleVibe}

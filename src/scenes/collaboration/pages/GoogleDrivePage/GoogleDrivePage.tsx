@@ -78,6 +78,7 @@ const GoogleDrivePage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         isChatOpen={collaborationStore.textChatDialog.isOpen}
         toggleChat={collaborationStore.textChatDialog.toggle}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         editSpaceHidden
         onClose={() => history.push(ROUTES.base)}
       >

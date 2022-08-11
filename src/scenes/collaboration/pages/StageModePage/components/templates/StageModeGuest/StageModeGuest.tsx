@@ -74,6 +74,7 @@ const StageModeGuest: React.FC = () => {
         isChatOpen={collaborationStore.textChatDialog.isOpen}
         toggleChat={collaborationStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         onClose={() => history.push(ROUTES.base)}
       >
         <styled.Actions>
