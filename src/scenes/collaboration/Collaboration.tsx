@@ -114,6 +114,18 @@ const Collaboration: FC = () => {
   }, [rootStore, sessionStore.userId, spaceId, t]);
 
   useEffect(() => {
+    if (agoraStore.appId && !textChatStore.isLoggedOn) {
+      textChatStore.login(agoraStore.appId, sessionStore.userId).then(() => {
+        textChatStore.joinChannel(spaceId);
+      });
+    }
+
+    return () => {
+      textChatStore.leaveChannel();
+    };
+  }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
+
+  useEffect(() => {
     if (agoraScreenShareStore.videoTrack) {
       history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
     }

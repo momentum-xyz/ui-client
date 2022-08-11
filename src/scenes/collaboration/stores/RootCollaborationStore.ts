@@ -76,11 +76,6 @@ const RootCollaborationStore = types
 
       yield self.space.fetchSpaceInformation();
 
-      if (!isTable) {
-        yield self.dashboardStore.fetchDashboard(spaceId);
-        yield self.textChatStore.joinChannel(spaceId);
-      }
-
       const isModerator: boolean = yield self.moderationRequest.send(
         api.spaceIntegrationsRepository.checkSpaceModeration,
         {spaceId}
@@ -91,8 +86,6 @@ const RootCollaborationStore = types
     leaveMeetingSpace() {
       self.leftMeetingSpaceId = self.space?.id;
       self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
-
-      self.textChatStore.leaveChannel();
 
       if (!!self.space && self.space.isAdmin) {
         self.miroBoardStore.disableMiroBoard(self.space.id);

@@ -23,10 +23,9 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, initApplication, collaborationStore} = useStore();
-  const {themeStore, agoraStore} = mainStore;
+  const {configStore, sessionStore, mainStore, initApplication} = useStore();
+  const {themeStore} = mainStore;
   const {isConfigReady} = configStore;
-  const {textChatStore} = collaborationStore;
 
   const {pathname} = useLocation();
   const {t} = useTranslation();
@@ -40,13 +39,6 @@ const App: FC = () => {
       mainStore.init();
     }
   }, [isConfigReady, mainStore]);
-
-  useEffect(() => {
-    if (!agoraStore.appId || !sessionStore.userId || textChatStore.isLoggedOn) {
-      return;
-    }
-    textChatStore.login(agoraStore.appId, sessionStore.userId);
-  }, [agoraStore.appId, sessionStore.userId]);
 
   if (!isConfigReady) {
     return <></>;
