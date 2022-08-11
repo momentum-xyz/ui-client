@@ -3,7 +3,6 @@ import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {RtmTextMessage} from 'agora-rtm-sdk';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface} from 'core/interfaces';
@@ -51,29 +50,6 @@ const Collaboration: FC = () => {
   const [accepted, setAccepted] = useState<boolean>();
 
   useEffect(() => {
-    if (textChatStore.currentChannel) {
-      textChatStore.currentChannel.on('ChannelMessage', async (text, memberId) => {
-        await textChatStore.fetchUser(memberId);
-        textChatStore.setMessages(text as RtmTextMessage, memberId);
-      });
-
-      textChatStore.currentChannel.on('MemberJoined', async (memberId) => {
-        await textChatStore.fetchUser(memberId);
-        textChatStore.joinSystemMessages();
-      });
-
-      textChatStore.currentChannel.on('MemberLeft', async (memberId) => {
-        await textChatStore.fetchUser(memberId);
-        textChatStore.leftSystemMessages();
-      });
-    }
-
-    return () => {
-      textChatStore.currentChannel?.removeAllListeners();
-    };
-  }, [textChatStore.currentChannel]);
-
-  useEffect(() => {
     textChatStore.countUnreadMessages();
   }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen]);
 
@@ -99,9 +75,7 @@ const Collaboration: FC = () => {
 
   useEffect(() => {
     if (agoraStore.appId && !textChatStore.isLoggedOn) {
-      textChatStore.login(agoraStore.appId, sessionStore.userId).then(() => {
-        textChatStore.joinChannel(spaceId);
-      });
+      textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
     }
   }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
 

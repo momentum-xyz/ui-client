@@ -79,10 +79,10 @@ const TextChat: FC<PropsInterface> = ({
                       : message?.name || message.author
                   }
                   transform="uppercase"
-                  type="h2"
+                  type="h3"
                   align="left"
                 />
-                <Text text={dateToTime(message.date)} size="m" />
+                <Text text={dateToTime(message.date)} size="s" />
               </styled.InnerContainer>
               <styled.Message>{message.text}</styled.Message>
             </styled.TextContainer>

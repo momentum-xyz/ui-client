@@ -4,8 +4,6 @@ import {rgba} from 'polished';
 import {Heading} from 'ui-kit';
 
 export const Container = styled.div`
-  //w-1/3 ml-1
-
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
@@ -57,16 +55,13 @@ export const ChatBox = styled.ul`
 `;
 
 export const TextContainer = styled.li`
-  // border-b-1 py-1 border-prime-blue-20
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
-
-  //font-bold text-base uppercase gap-1 flex justify-between
 `;
 
 export const StyledHeading = styled(Heading)`
-  h2 {
+  h3 {
     display: block;
     width: 100%;
     white-space: nowrap;
@@ -77,15 +72,16 @@ export const StyledHeading = styled(Heading)`
 `;
 
 export const Text = styled.div`
-  font-size: 13px;
+  font-size: 12px;
   line-height: 20px;
+  font-weight: 400;
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.4)};
 `;
 
 export const Time = styled.time`
   font-weight: 400;
-  font-size: 14px;
-  padding-left: 5px;
+  font-size: 12px;
+  padding-left: 7px;
 
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
 `;

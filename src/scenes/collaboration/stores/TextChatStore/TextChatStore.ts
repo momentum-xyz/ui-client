@@ -1,5 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import AgoraRTM, {RtmChannel, RtmClient, RtmTextMessage} from 'agora-rtm-sdk';
+import AgoraRTM, {RtmChannel, RtmClient, RtmMessage, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
 
 import {DialogModel, RequestModel, ResetModel} from 'core/models';
@@ -105,6 +105,32 @@ const TextChatStore = types.compose(
       }
     }))
     .actions((self) => ({
+      fetchUser: flow(function* (userId: string) {
+        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
+          userId
+        });
+
+        if (response) {
+          self.name = response.name;
+        }
+      })
+    }))
+    .actions((self) => ({
+      init: flow(function* () {}),
+      handleUserSendMessage: flow(function* (text: RtmMessage, memberId: string) {
+        yield self.fetchUser(memberId);
+        self.setMessages(text as RtmTextMessage, memberId);
+      }),
+      handleUserJoin: flow(function* (memberId: string) {
+        yield self.fetchUser(memberId);
+        self.joinSystemMessages();
+      }),
+      handleUserLeave: flow(function* (memberId: string) {
+        yield self.fetchUser(memberId);
+        self.leftSystemMessages();
+      })
+    }))
+    .actions((self) => ({
       login: flow(function* (appId: string, userId: string) {
         self.client = AgoraRTM.createInstance(appId);
         self.client.on('ConnectionStateChanged', (newState, reason) => {
@@ -118,15 +144,6 @@ const TextChatStore = types.compose(
         });
         self.setCurrentUserId(userId);
         self.setLogin(true);
-      }),
-      fetchUser: flow(function* (userId: string) {
-        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-          userId
-        });
-
-        if (response) {
-          self.name = response.name;
-        }
       }),
       logOut: flow(function* () {
         if (self.client) {
@@ -144,6 +161,11 @@ const TextChatStore = types.compose(
       joinChannel: flow(function* (spaceId: string) {
         if (self.client) {
           self.currentChannel = self.client.createChannel(spaceId);
+
+          self.currentChannel.on('ChannelMessage', self.handleUserSendMessage);
+          self.currentChannel.on('MemberJoined', self.handleUserJoin);
+          self.currentChannel.on('MemberLeft', self.handleUserLeave);
+
           const response = yield self.currentChannel.join();
           if (response) {
             console.info('[agora] Joined AgoraRTM channel successfully');
@@ -154,6 +176,7 @@ const TextChatStore = types.compose(
         console.info('[agora] Leaving AgoraRTM channel');
         if (self.currentChannel) {
           yield self.currentChannel.leave();
+          self.currentChannel.removeAllListeners();
           self.setLogin(false);
           self.disableCurrentChannel();
           self.resetMessages();
@@ -172,6 +195,12 @@ const TextChatStore = types.compose(
           self.setNumberOfUnreadMessages(numberOfMessagesOfOtherUsers - self.numberOfReadMessages);
         }
       }
+    }))
+    .actions((self) => ({
+      init: flow(function* (appId: string, userId: string, spaceId: string) {
+        yield self.login(appId, userId);
+        yield self.joinChannel(spaceId);
+      })
     }))
 );
 
