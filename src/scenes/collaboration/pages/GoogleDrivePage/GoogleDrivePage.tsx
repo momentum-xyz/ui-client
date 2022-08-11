@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
 import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
-import {SpaceTopBar, Button} from 'ui-kit';
+import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
@@ -14,7 +14,7 @@ const GoogleDrivePage: FC = () => {
   const {collaborationStore, mainStore} = useStore();
   const {space, googleDriveStore} = collaborationStore;
   const {googleDocument, documentTitle} = googleDriveStore;
-  const {favoriteStore, agoraStore} = mainStore;
+  const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -76,8 +76,8 @@ const GoogleDrivePage: FC = () => {
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
+        isChatOpen={collaborationStore.textChatDialog.isOpen}
+        toggleChat={collaborationStore.textChatDialog.toggle}
         editSpaceHidden
         onClose={() => history.push(ROUTES.base)}
       >
@@ -94,7 +94,7 @@ const GoogleDrivePage: FC = () => {
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}
-        {/*<TextChatView />*/}
+        {collaborationStore.textChatDialog.isOpen && <TextChat />}
       </styled.Container>
     </styled.Inner>
   );

@@ -6,7 +6,7 @@ import {useHistory} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {SpaceTopBar, Button} from 'ui-kit';
+import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 
 // TODO: Refactor
@@ -19,7 +19,7 @@ const MiroBoardPage: FC = () => {
   const {collaborationStore, mainStore} = useStore();
   const {space, miroBoardStore} = collaborationStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
-  const {favoriteStore, agoraStore} = mainStore;
+  const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -73,8 +73,8 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
+        isChatOpen={collaborationStore.textChatDialog.isOpen}
+        toggleChat={collaborationStore.textChatDialog.toggle}
         onClose={() => history.push(ROUTES.base)}
       >
         {space && !!miroBoard?.data?.accessLink && (
@@ -90,7 +90,7 @@ const MiroBoardPage: FC = () => {
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}
-        {/*<TextChatView />*/}
+        {collaborationStore.textChatDialog.isOpen && <TextChat />}
       </styled.Container>
     </styled.Inner>
   );

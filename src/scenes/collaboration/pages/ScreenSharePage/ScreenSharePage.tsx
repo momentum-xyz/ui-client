@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, Button} from 'ui-kit';
+import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
 // TODO: Refactor
 import {ScreenChoice, ScreenVideo} from './components/templates';
@@ -56,8 +56,8 @@ const ScreenSharePage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
+        isChatOpen={collaborationStore.textChatDialog.isOpen}
+        toggleChat={collaborationStore.textChatDialog.toggle}
         onClose={() => history.push(ROUTES.base)}
       >
         {client && (
@@ -74,7 +74,7 @@ const ScreenSharePage: FC = () => {
         ) : (
           <ScreenVideo videoTrack={videoTrack} />
         )}
-        {/*<TextChatView />*/}
+        {collaborationStore.textChatDialog.isOpen && <TextChat />}
       </styled.Container>
     </styled.Inner>
   );

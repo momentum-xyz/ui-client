@@ -4,7 +4,16 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {useHistory} from 'react-router-dom';
 
-import {Toggle, Stage, Button, Text, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar} from 'ui-kit';
+import {
+  Toggle,
+  Stage,
+  Button,
+  Text,
+  ToastContent,
+  TOAST_GROUND_OPTIONS,
+  SpaceTopBar,
+  TextChat
+} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';
@@ -73,8 +82,8 @@ const StageModeModerator: React.FC = () => {
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
           onClose={() => history.push(ROUTES.base)}
-          isChatOpen={agoraStore.isChatOpen}
-          toggleChat={agoraStore.toggleChat}
+          isChatOpen={collaborationStore.textChatDialog.isOpen}
+          toggleChat={collaborationStore.textChatDialog.toggle}
           editSpaceHidden
         >
           <styled.ActionsContainer>
@@ -138,7 +147,7 @@ const StageModeModerator: React.FC = () => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          {/*<TextChatView />*/}
+          {collaborationStore.textChatDialog.isOpen && <TextChat />}
         </styled.Body>
       </styled.Container>
       {removeParticipantFromStageDialog.isOpen &&

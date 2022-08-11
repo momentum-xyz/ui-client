@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {ToastContent, Button, SpaceTopBar, Text, Stage} from 'ui-kit';
+import {ToastContent, Button, SpaceTopBar, Text, Stage, TextChat} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import {
   StageModePopupQueue,
@@ -70,8 +70,8 @@ const StageModeGuest: React.FC = () => {
         title={collaborationStore.space.name ?? ''}
         subtitle={t('labels.stageMode')}
         isSpaceFavorite={favoriteStore.isSpaceFavorite}
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
+        isChatOpen={collaborationStore.textChatDialog.isOpen}
+        toggleChat={collaborationStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         onClose={() => history.push(ROUTES.base)}
       >
@@ -120,7 +120,7 @@ const StageModeGuest: React.FC = () => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        {/*<TextChatView />*/}
+        {collaborationStore.textChatDialog.isOpen && <TextChat />}
       </styled.Body>
     </styled.Container>
   );

@@ -11,9 +11,10 @@ interface PropsInterface {
   spaceId: string;
   editSpaceHidden?: boolean;
   isSpaceFavorite: boolean;
-  isChatOpen: boolean;
+  isChatOpen?: boolean;
   toggleIsSpaceFavorite: (spaceId: string) => void;
-  toggleChat: () => void;
+  toggleChat?: () => void;
+  isChat?: boolean;
 }
 
 const RightSection: FC<PropsInterface> = ({
@@ -23,6 +24,7 @@ const RightSection: FC<PropsInterface> = ({
   isSpaceFavorite,
   isChatOpen,
   toggleIsSpaceFavorite,
+  isChat = true,
   toggleChat
 }) => {
   return (
@@ -43,16 +45,18 @@ const RightSection: FC<PropsInterface> = ({
           <Separator />
         </>
       )}
-      <ToolbarIcon
-        title={isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
-        icon="chat"
-        onClick={toggleChat}
-        isWhite={false}
-      >
-        {/*{numberOfUnreadMessages > 0 && (*/}
-        {/*  <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>*/}
-        {/*)}*/}
-      </ToolbarIcon>
+      {isChat && (
+        <ToolbarIcon
+          title={isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
+          icon="chat"
+          onClick={toggleChat}
+          isWhite={false}
+        >
+          {/*{numberOfUnreadMessages > 0 && (*/}
+          {/*  <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>*/}
+          {/*)}*/}
+        </ToolbarIcon>
+      )}
       <ToolbarIcon
         title={t('tooltipTitles.favorite')}
         icon={isSpaceFavorite ? 'starOn' : 'star'}
