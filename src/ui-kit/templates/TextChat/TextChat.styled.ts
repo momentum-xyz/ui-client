@@ -36,6 +36,24 @@ export const ChatBox = styled.ul`
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 10px 20px 20px;
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    border: 5px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.6)};
+  }
+
+  ::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  ::-webkit-scrollbar-track-piece:start {
+    margin-top: 5px;
+  }
 `;
 
 export const TextContainer = styled.li`
