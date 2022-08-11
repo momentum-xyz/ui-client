@@ -15,6 +15,7 @@ export const UserListItem = styled.li`
 `;
 
 export const Inner = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -26,6 +27,8 @@ export const Inner = styled.div`
 `;
 
 export const Video = styled.div`
+  position: absolute;
+  width: 100%;
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
@@ -60,6 +63,7 @@ export const MicrophoneOff = styled.div`
 export const Username = styled.div`
   position: absolute;
   display: flex;
+  width: 92px;
   justify-content: center;
   bottom: -18px;
   right: 0;

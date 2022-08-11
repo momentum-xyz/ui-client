@@ -15,6 +15,10 @@ const JoinLeaveButtons: FC<PropsInterface> = ({isShown}) => {
   const {t} = useTranslation();
   const history = useHistory();
 
+  if (!isShown) {
+    return <></>;
+  }
+
   return (
     <div data-testid="JoinLeaveButtons-test">
       <styled.ActionButton

@@ -82,7 +82,7 @@ const MeetingRoomPage: FC = () => {
                     <MeetingUser
                       key={user.uid}
                       spaceId={space?.id || ''}
-                      participant={user}
+                      user={user}
                       isModerator={collaborationStore.isModerator}
                       maxVideoStreams={agoraStore.maxVideoStreamsReached}
                     />
