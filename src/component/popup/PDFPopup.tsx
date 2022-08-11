@@ -19,7 +19,7 @@ const PDFPopup: React.FC<PDFPopupProps> = ({onClose}) => {
           onClick={onClose}
           className="float-left pr-1 pb-1"
         >
-          <img src="/icons/manual.png" alt="Odyssey Momentum logo" title="Odyssey Momentum" />
+          <img src="/icons/manual.png" alt="Momentum logo" title="Odyssey Momentum" />
         </a>
         <p>Our comprehensive tutorial on using Momentum.</p>
       </div>
@@ -31,7 +31,7 @@ const PDFPopup: React.FC<PDFPopupProps> = ({onClose}) => {
           onClick={onClose}
           className="float-left clear-left pr-1 pb-1"
         >
-          <img src="/icons/discord.png" alt="Odyssey Momentum logo" title="Odyssey Momentum" />
+          <img src="/icons/discord.png" alt="Momentum logo" title="Momentum" />
         </a>
         <p className=" mt-2">
           Need assistance? Visit our official Discord server and ask our support team to help!
