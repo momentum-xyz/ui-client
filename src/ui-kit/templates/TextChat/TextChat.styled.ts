@@ -72,7 +72,7 @@ export const StyledHeading = styled(Heading)`
 `;
 
 export const Text = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   line-height: 20px;
   font-weight: 400;
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.4)};
@@ -80,7 +80,7 @@ export const Text = styled.div`
 
 export const Time = styled.time`
   font-weight: 400;
-  font-size: 12px;
+  font-size: 13px;
   padding-left: 7px;
 
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
@@ -94,6 +94,7 @@ export const Author = styled.span`
 
 export const Message = styled.div`
   padding-top: 5px;
+  font-size: 14px;
   overflow-wrap: break-word;
 `;
 
