@@ -302,7 +302,8 @@ export const enGb = {
       wouldYouLikeToGoOnStage: 'Would you like to go on stage?',
       thisWillEnableYouToUseStage:
         '(This will enable you to talk, screenshare, and transmit video)',
-      pleaseTryAgainLater: 'Please try again later'
+      pleaseTryAgainLater: 'Please try again later',
+      videoLimitReached: 'Video limit reached'
     },
     titles: {
       alert: 'alert',
@@ -373,6 +374,8 @@ export const enGb = {
       emailLogin: 'Email Login',
       goBack: 'Go back',
       back: 'Back',
+      muteAll: 'Mute All',
+      rejoinMeeting: 'Rejoin meeting',
       chooseAvatar: 'Choose an image for your avatar',
       saveProfile: 'Save profile',
       selectAccount: 'Select account',

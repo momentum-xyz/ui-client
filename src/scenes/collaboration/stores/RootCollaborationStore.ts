@@ -103,25 +103,6 @@ const RootCollaborationStore = types
         self.resetLeftMeetingSpace();
       }, 15000);
     },
-    rejoinMeetingSpace: flow(function* () {
-      clearTimeout(self.leftMeetingTimer);
-
-      if (!self.leftMeetingSpaceId) {
-        return;
-      }
-
-      self.space = Space.create({
-        id: self.leftMeetingSpaceId,
-        isTable: self.leftMeetingSpaceWasAGrabbedTable
-      });
-      yield self.space.fetchSpaceInformation();
-
-      if (self.leftMeetingSpaceWasAGrabbedTable === false) {
-        yield self.dashboardStore.fetchDashboard(self.leftMeetingSpaceId);
-      }
-
-      self.resetLeftMeetingSpace();
-    }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
       self.participantToRemoveFromStage = remoteUser;
       self.removeParticipantFromStageDialog.open();

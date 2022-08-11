@@ -14,8 +14,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   isCloseButton?: boolean;
   approveInfo?: ToastButtonInfoInterface;
   declineInfo?: ToastButtonInfoInterface;
-  // @ts-ignore: refactoring
-  onClose?: (event) => void;
+  onClose?: () => void;
 }
 
 const ToastContent: FC<PropsInterface> = (props) => {

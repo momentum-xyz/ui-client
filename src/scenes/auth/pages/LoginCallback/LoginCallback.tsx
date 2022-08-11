@@ -26,8 +26,8 @@ const LoginCallback: FC = () => {
       // @ts-ignore: state has type unknown
       const origin = auth.user?.state?.from || ROUTES.base;
 
-      if (!cookie.has(CookieKeyEnum.INTRO)) {
-        history.push(ROUTES.intro, {from: origin});
+      if (!cookie.has(CookieKeyEnum.WELCOME)) {
+        history.push(ROUTES.welcome, {from: origin});
       } else {
         history.push(origin);
       }

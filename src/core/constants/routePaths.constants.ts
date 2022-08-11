@@ -10,7 +10,7 @@ export const ROUTES = {
   callBack: '/oidc/callback',
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
-  intro: '/intro',
+  welcome: '/welcome',
   collaboration: {
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
@@ -18,7 +18,7 @@ export const ROUTES = {
     dashboard: '/collaboration/:spaceId/dashboard',
     calendar: '/collaboration/:spaceId/calendar',
     calendarEvent: '/collaboration/:spaceId/calendar/:eventId',
-    screenShare: '/collaboration/:spaceId/screenshare',
+    screenShare: '/collaboration/:spaceId/screenShare',
     miro: '/collaboration/:spaceId/miro',
     googleDrive: '/collaboration/:spaceId/google-drive',
     table: `/collaboration/:spaceId/table`
@@ -27,7 +27,6 @@ export const ROUTES = {
     base: '/space/:spaceId/admin',
     broadcast: '/space/:spaceId/admin/broadcast'
   },
-  createSpace: '/profile?createspace=1',
   magic: '/magic/:id',
   video: '/video/:spaceId',
   worldCalendar: '/calendar',

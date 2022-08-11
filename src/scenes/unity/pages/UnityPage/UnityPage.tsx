@@ -7,9 +7,16 @@ import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
 
-import {ROUTES} from 'core/constants';
+import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
-import {HighFiveContent, Portal, TOAST_BASE_OPTIONS, ToastContent, UnityLoader} from 'ui-kit';
+import {
+  Portal,
+  UnityLoader,
+  ToastContent,
+  HighFiveContent,
+  TOAST_BASE_OPTIONS,
+  TOAST_NOT_AUTO_CLOSE_OPTIONS
+} from 'ui-kit';
 
 import * as styled from './UnityPage.styled';
 
@@ -67,6 +74,42 @@ const UnityPage: FC = () => {
     history.push({pathname: generatePath(ROUTES.video, {spaceId})});
   });
 
+  // TODO: Refactor GAT
+  usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
+    const handleJoinSpace = () => {
+      unityStore.teleportToSpace(spaceId);
+
+      // TODO: Refactoring
+      /*collaborationStore
+        .joinMeetingSpace(spaceId, uiTypeId === appVariables.GAT_UI_TYPE_ID)
+        .then(() => {
+          if (uiTypeId !== appVariables.GAT_UI_TYPE_ID) {
+            history.push({pathname: ROUTES.collaboration.base, state: {spaceId}});
+          } else {
+            history.push({pathname: ROUTES.collaboration.table, state: {spaceId}});
+          }
+        });*/
+    };
+
+    const Content: React.FC = () => {
+      //const [spaceInfo, , ,] = useGetSpace(spaceId);
+
+      return (
+        <ToastContent
+          headerIconName="alert"
+          text={t('messages.joinSpaceWelcome')}
+          title={t('messages.spaceInvitationNote', {
+            invitor: invitorName,
+            spaceName: '' //spaceInfo?.space.name
+          })}
+          approveInfo={{title: t('titles.joinSpace'), onClick: handleJoinSpace}}
+        />
+      );
+    };
+
+    toast.info(<Content />, TOAST_BASE_OPTIONS);
+  });
+
   usePosBusEvent('high-five', (senderId, message) => {
     toast.info(
       <HighFiveContent
@@ -83,12 +126,31 @@ const UnityPage: FC = () => {
     toast.info(
       <ToastContent
         headerIconName="check"
-        title={t('messages.highFiveSentTitle', {
-          name: message
-        })}
+        title={t('messages.highFiveSentTitle', {name: message})}
         text={t('messages.highFiveSentText')}
         isCloseButton
       />
+    );
+  });
+
+  usePosBusEvent('notify-gathering-start', (message) => {
+    const handleJoinSpace = () => {
+      const {spaceId} = message;
+      unityStore.teleportToSpace(spaceId);
+
+      setTimeout(() => {
+        history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+      }, TELEPORT_DELAY_MS);
+    };
+
+    toast.info(
+      <ToastContent
+        headerIconName="calendar"
+        title={t('titles.joinGathering')}
+        text={t('messages.joinGathering', {title: message.name})}
+        approveInfo={{title: 'Join', onClick: handleJoinSpace}}
+      />,
+      TOAST_NOT_AUTO_CLOSE_OPTIONS
     );
   });
 

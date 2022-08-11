@@ -33,12 +33,11 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
   showOverflow,
   showUserInteractions = true
 }) => {
-  const {widgetStore, sessionStore, mainStore, defaultStore, collaborationStore} = useStore();
+  const {widgetStore, sessionStore, mainStore, homeStore, collaborationStore} = useStore();
   const {profileStore, launchInitiativeStore} = widgetStore;
   const {unityStore, worldStore, agoraStore} = mainStore;
   const {profile: currentUser} = sessionStore;
   const {userProfile, userSpaceList} = profileStore;
-  const {homeStore} = defaultStore;
   const {exploreStore} = homeStore;
 
   const history = useHistory();
