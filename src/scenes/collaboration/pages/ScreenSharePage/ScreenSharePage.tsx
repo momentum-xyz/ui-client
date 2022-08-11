@@ -42,6 +42,11 @@ const ScreenSharePage: FC = () => {
     agoraScreenShareStore.stopScreenShare();
   }, [agoraScreenShareStore, screenShareStore]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    collaborationStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
@@ -59,7 +64,7 @@ const ScreenSharePage: FC = () => {
         isChatOpen={collaborationStore.textChatDialog.isOpen}
         toggleChat={collaborationStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onClose={() => history.push(ROUTES.base)}
+        onClose={handleClose}
       >
         {client && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />

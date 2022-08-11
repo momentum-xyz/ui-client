@@ -67,6 +67,11 @@ const StageModeModerator: React.FC = () => {
     agoraStageModeStore.leaveStage();
   }, [agoraStageModeStore]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    collaborationStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
@@ -81,7 +86,7 @@ const StageModeModerator: React.FC = () => {
           spaceId={space.id}
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-          onClose={() => history.push(ROUTES.base)}
+          onClose={handleClose}
           isChatOpen={collaborationStore.textChatDialog.isOpen}
           toggleChat={collaborationStore.textChatDialog.toggle}
           numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}

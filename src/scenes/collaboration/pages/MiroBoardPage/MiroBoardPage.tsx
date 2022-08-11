@@ -59,6 +59,11 @@ const MiroBoardPage: FC = () => {
     await miroBoardStore.fetchMiroBoard(space?.id || '');
   }, [miroBoardStore, space?.id]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    collaborationStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
@@ -76,7 +81,7 @@ const MiroBoardPage: FC = () => {
         isChatOpen={collaborationStore.textChatDialog.isOpen}
         toggleChat={collaborationStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onClose={() => history.push(ROUTES.base)}
+        onClose={handleClose}
       >
         {space && !!miroBoard?.data?.accessLink && (
           <>

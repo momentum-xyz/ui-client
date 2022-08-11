@@ -63,6 +63,11 @@ const GoogleDrivePage: FC = () => {
 
   const {pickDocument} = useGooglePicker(pickerCallBack);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    collaborationStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
@@ -80,7 +85,7 @@ const GoogleDrivePage: FC = () => {
         toggleChat={collaborationStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         editSpaceHidden
-        onClose={() => history.push(ROUTES.base)}
+        onClose={handleClose}
       >
         {space.isAdmin && !!googleDocument?.data?.url && (
           <>

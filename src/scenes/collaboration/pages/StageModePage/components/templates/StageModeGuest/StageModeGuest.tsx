@@ -61,6 +61,11 @@ const StageModeGuest: React.FC = () => {
     }
   }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    collaborationStore.textChatDialog.close();
+  };
+
   if (!collaborationStore.space) {
     return null;
   }
@@ -75,7 +80,7 @@ const StageModeGuest: React.FC = () => {
         toggleChat={collaborationStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onClose={() => history.push(ROUTES.base)}
+        onClose={handleClose}
       >
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}

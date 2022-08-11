@@ -111,7 +111,6 @@ const App: FC = () => {
         <ConfirmationDialogProvider>
           <AuthProvider {...sessionStore.oidcConfig}>
             <AuthComponent>
-              {/*<TextChatProvider>*/}
               <UnityPage />
               <AppLayers>
                 <Switch>
@@ -119,7 +118,6 @@ const App: FC = () => {
                   <Redirect to={ROUTES.base} />
                 </Switch>
               </AppLayers>
-              {/*</TextChatProvider>*/}
             </AuthComponent>
           </AuthProvider>
         </ConfirmationDialogProvider>
