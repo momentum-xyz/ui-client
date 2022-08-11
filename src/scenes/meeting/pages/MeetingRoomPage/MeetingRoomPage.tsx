@@ -25,7 +25,6 @@ const MeetingRoomPage: FC = () => {
   useEffect(() => {
     stageModeStore.removeAllPopups();
     meetingStore.setKicked(false);
-    meetingStore.selectParticipant(undefined);
   }, [stageModeStore, meetingStore]);
 
   return (
@@ -85,6 +84,8 @@ const MeetingRoomPage: FC = () => {
                       user={user}
                       isModerator={collaborationStore.isModerator}
                       maxVideoStreams={agoraStore.maxVideoStreamsReached}
+                      onMuteUser={meetingRoomStore.muteParticipant}
+                      onKickUser={meetingRoomStore.removeParticipant}
                     />
                   ))}
             </ul>

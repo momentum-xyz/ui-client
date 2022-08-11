@@ -1,1 +1,1 @@
-export * from './ParticipantMenu';
+export * from './UserMenu';

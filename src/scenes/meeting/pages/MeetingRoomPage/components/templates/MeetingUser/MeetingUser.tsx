@@ -1,12 +1,11 @@
-import React, {FC, useEffect, useMemo, useRef} from 'react';
+import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 
 import {IconSvg, Text} from 'ui-kit';
-import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'core/models';
 
-import {ParticipantMenu} from './components';
+import {UserMenu} from './components';
 import * as styled from './MeetingUser.styled';
 
 export interface PropsInterface {
@@ -14,15 +13,15 @@ export interface PropsInterface {
   user: AgoraRemoteUserInterface;
   isModerator: boolean;
   maxVideoStreams: boolean;
+  onMuteUser: (spaceId: string, userId: string | number) => void;
+  onKickUser: (spaceId: string, userId: string | number) => void;
 }
 
 const MeetingUser: FC<PropsInterface> = (props) => {
-  const {spaceId, user, isModerator, maxVideoStreams} = props;
+  const {spaceId, user, isModerator, maxVideoStreams, onKickUser, onMuteUser} = props;
 
+  const [isMenuShown, setIsMenuShown] = useState<boolean>(false);
   const videoRef = useRef<HTMLDivElement>(null);
-
-  const {meetingStore} = useStore();
-  const {meetingRoomStore} = meetingStore;
 
   useEffect(() => {
     user.fetchUser();
@@ -44,22 +43,8 @@ const MeetingUser: FC<PropsInterface> = (props) => {
 
   const handleOpenMenu = () => {
     if (isModerator) {
-      if (meetingStore.selectedParticipant === user.uid) {
-        meetingStore.selectParticipant(undefined);
-      } else {
-        meetingStore.selectParticipant(user.uid);
-      }
+      setIsMenuShown(true);
     }
-  };
-
-  const handleRemoveParticipant = () => {
-    meetingRoomStore.removeParticipant(spaceId, meetingStore.selectedParticipant);
-    meetingStore.selectParticipant(undefined);
-  };
-
-  const handleMuteParticipant = () => {
-    meetingRoomStore.muteParticipant(spaceId, meetingStore.selectedParticipant);
-    meetingStore.selectParticipant(undefined);
   };
 
   const isTalking: boolean = useMemo(() => {
@@ -68,7 +53,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
 
   return (
     <>
-      <styled.UserListItem data-testid="LocalUser-test" className={cn(isTalking && 'colored')}>
+      <styled.UserListItem data-testid="MeetingUser-test" className={cn(isTalking && 'colored')}>
         <styled.Inner onClick={handleOpenMenu} className={cn(isTalking && 'colored')}>
           <styled.Video ref={videoRef} />
           {user.cameraOff && user.avatarSrc && <styled.Avatar src={user.avatarSrc} />}
@@ -79,7 +64,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
           )}
         </styled.Inner>
 
-        {user?.isMuted && (
+        {user.isMuted && (
           <styled.MicrophoneOff>
             <IconSvg size="small" name="microphoneOff" isWhite />
           </styled.MicrophoneOff>
@@ -90,12 +75,12 @@ const MeetingUser: FC<PropsInterface> = (props) => {
         </styled.Username>
       </styled.UserListItem>
 
-      {meetingStore.selectedParticipant === user.uid && (
-        <ParticipantMenu
-          muteParticipant={handleMuteParticipant}
-          removeParticipant={handleRemoveParticipant}
-          participant={user}
-          onClose={() => meetingStore.selectParticipant(undefined)}
+      {isMenuShown && (
+        <UserMenu
+          user={user}
+          onMuteUser={() => onMuteUser(spaceId, user.uid)}
+          onKickUser={() => onKickUser(spaceId, user.uid)}
+          onClose={() => setIsMenuShown(false)}
         />
       )}
     </>
