@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
+import {ReactComponent as CloseIcon} from '../../icons/close.svg';
 
 interface PopupProps {
   className?: string;

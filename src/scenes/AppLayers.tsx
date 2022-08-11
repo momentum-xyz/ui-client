@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {WidgetContainer} from 'scenes/widgets';
 
-import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
+import LiveStreamLayer from '../_REFACTOR_/component/overlays/LiveStreamLayer';
 
 import {Meeting} from './meeting';
 

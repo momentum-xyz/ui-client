@@ -13,8 +13,8 @@ import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/util
 import {UnityPage} from 'scenes/unity';
 
 // TODO: To be refactored
-import {ConfirmationDialogProvider} from '../hooks/useConformationDialog';
-import AuthComponent from '../context/Auth/AuthContext';
+import {ConfirmationDialogProvider} from '../_REFACTOR_/hooks/useConformationDialog';
+import AuthComponent from '../_REFACTOR_/context/Auth/AuthContext';
 
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
 import AppLayers from './AppLayers';

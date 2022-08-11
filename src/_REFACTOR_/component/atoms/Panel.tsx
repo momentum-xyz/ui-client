@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
+import {ReactComponent as CloseIcon} from '../../icons/close.svg';
 
 import Button from './Button';
 

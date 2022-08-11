@@ -18,7 +18,7 @@ import {
   ToastContent
 } from 'ui-kit';
 import {UnityService} from 'shared/services';
-import {ChangeAvatarPopup} from 'modules/profile/popups/ChangeAvatarPopup';
+import {ChangeAvatarPopup} from '_REFACTOR_/modules/profile/popups/ChangeAvatarPopup';
 import {appVariables} from 'api/constants';
 
 import * as styled from './ProfileEditWidget.styled';

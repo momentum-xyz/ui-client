@@ -1,4 +1,3 @@
-import {AxiosRequestConfig} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
 
 import {request} from 'api/request';
@@ -119,29 +118,6 @@ export const useFetch = <T,>(url: string, options?: UseApiOptionsProps) => {
   return response;
 };
 
-export const promiseFetch = async <T,>(
-  url: string,
-  headers?: AxiosRequestConfig,
-  fetchPolicy: 'network-only' | 'cache-first' | 'cache-and-network' | 'cache-only' = 'cache-first'
-) => {
-  // eslint-disable-next-line no-prototype-builtins
-  const isInCache = apiCache.hasOwnProperty(url);
-  const useCache = fetchPolicy !== 'network-only';
-
-  if (useCache && isInCache) {
-    return apiCache[url].data as T;
-  }
-
-  const response = await request.get(url, headers);
-
-  apiCache[url] = {
-    data: response.data,
-    lastFetch: new Date()
-  };
-
-  return response.data as T;
-};
-
 interface UsePostOptionsProps<T = any> {
   lazy?: boolean;
   cacheKeyGenerator?: (data: T) => string;
@@ -194,114 +170,6 @@ export const usePost = <T, R = any>(url: string, options?: UsePostOptionsProps<T
 
   const response: [(data: R) => Promise<T>, T | undefined, boolean, Error | null] = [
     postRequest,
-    data,
-    loading,
-    error
-  ];
-
-  return response;
-};
-
-interface UsePutOptionsProps<T = any> {
-  lazy?: boolean;
-  cacheKeyGenerator?: (data: T) => string;
-}
-
-const PutDefaultOptions: UsePostOptionsProps = {
-  lazy: true
-};
-export const usePut = <T, R = any>(url: string, options?: UsePutOptionsProps<T>) => {
-  // eslint-disable-next-line no-param-reassign
-  options = {...PutDefaultOptions, ...options};
-  const {lazy, cacheKeyGenerator} = options;
-  const [data, setData] = useState<T | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const putRequest = useCallback(
-    (data) => {
-      setLoading(true);
-      if (!lazy) {
-        setData(undefined);
-      }
-      return new Promise<T>((resolve, reject) => {
-        request
-          .put(url, data)
-          .then((response) => {
-            setLoading(false);
-            setData(response.data);
-            if (cacheKeyGenerator) {
-              const cachKey = cacheKeyGenerator(response.data);
-              console.info('pull sucess updating cache by generator: ', cachKey);
-              apiCache[cachKey] = {
-                data: response.data,
-                lastFetch: new Date()
-              };
-            }
-            resolve(response.data);
-          })
-          .catch((error) => {
-            setLoading(false);
-            setError(error);
-            reject(error);
-          });
-      });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [lazy, url]
-  );
-
-  const response: [(data: R) => Promise<T>, T | undefined, boolean, Error | null] = [
-    putRequest,
-    data,
-    loading,
-    error
-  ];
-
-  return response;
-};
-
-// @ts-ignore: TODO: Refactor
-export const useDelete = <T, R = any>(url: string, options?) => {
-  // eslint-disable-next-line no-param-reassign
-  options = {...options};
-  const {lazy, cacheKeyGenerator} = options;
-  const [data, setData] = useState<T | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const deleteRequest = useCallback(
-    () => {
-      setLoading(true);
-      return new Promise<T>((resolve, reject) => {
-        request
-          .delete(url)
-          .then((response) => {
-            setLoading(false);
-            setData(response.data);
-            if (cacheKeyGenerator) {
-              const cachKey = cacheKeyGenerator(response.data);
-              console.info('pull sucess updating cache by generator: ', cachKey);
-              apiCache[cachKey] = {
-                data: response.data,
-                lastFetch: new Date()
-              };
-            }
-            resolve(response.data);
-          })
-          .catch((error) => {
-            setLoading(false);
-            setError(error);
-            reject(error);
-          });
-      });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [lazy, url]
-  );
-
-  const response: [(data: R) => Promise<T>, T | undefined, boolean, Error | null] = [
-    deleteRequest,
     data,
     loading,
     error

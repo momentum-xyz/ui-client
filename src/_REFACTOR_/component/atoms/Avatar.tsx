@@ -3,7 +3,7 @@ import {useState} from 'react';
 
 import {appVariables} from 'api/constants';
 
-import {ReactComponent as AstronautIcon} from '../../images/icons/professions-man-astronaut.svg';
+import {ReactComponent as AstronautIcon} from '../../icons/professions-man-astronaut.svg';
 
 export interface AvatarProps {
   className?: string | null;

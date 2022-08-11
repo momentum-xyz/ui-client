@@ -9,9 +9,9 @@ import {UnityService} from 'shared/services';
 
 import Button from '../atoms/Button';
 import useContextAuth from '../../context/Auth/hooks/useContextAuth';
-import {ReactComponent as CloseIcon} from '../../images/icons/close.svg';
-import {ReactComponent as FullScreenIcon} from '../../images/icons/expand-full.svg';
-import {ReactComponent as SpaceRocketIcon} from '../../images/icons/space-rocket-flying.svg';
+import {ReactComponent as CloseIcon} from '../../icons/close.svg';
+import {ReactComponent as FullScreenIcon} from '../../icons/expand-full.svg';
+import {ReactComponent as SpaceRocketIcon} from '../../icons/space-rocket-flying.svg';
 
 export interface LiveStream {
   broadcastStatus: BroadcastStatusEnum;
