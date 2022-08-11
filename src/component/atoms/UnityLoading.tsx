@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 
 import {appVariables} from 'api/constants';
 
-import {ReactComponent as Loader} from '../../images/flamingo.svg';
+import {ReactComponent as Flamingo} from '../../images/flamingo.svg';
+import {ReactComponent as Spinner} from '../../images/tail-sping.svg';
 
 const UnityLoading: React.FC = () => {
   const [showCacheClear, setShowCacheClear] = useState(false);
@@ -17,7 +18,8 @@ const UnityLoading: React.FC = () => {
 
   return (
     <div className="z-pop-over fixed inset-0 flex flex-col justify-center items-center bg-dark-blue-100">
-      <Loader className="w-6 h-6" />
+      <Flamingo className="w-6 h-6" />
+      <Spinner className="w-3 h-3 mt-2" />
       <div className="text-center mt-2">
         <h2>Loading Momentum</h2>
         <h3>Online Mass Collaboration Arena</h3>
