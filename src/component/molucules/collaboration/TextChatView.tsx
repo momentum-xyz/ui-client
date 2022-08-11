@@ -79,8 +79,8 @@ const TextChatView: React.FC<TextChatViewProps> = () => {
     }
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+  const handleKeyUp = (r: React.KeyboardEvent) => {
+    if (r.key === 'Enter') {
       if (message.trim().length !== 0) {
         if (currentChannel) {
           sendMessage({

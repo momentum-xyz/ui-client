@@ -18,6 +18,7 @@ const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
+  const {textChatStore} = collaborationStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     collaborationStore.stageModeStore;
 
@@ -120,7 +121,14 @@ const StageModeGuest: React.FC = () => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        {collaborationStore.textChatDialog.isOpen && <TextChat />}
+        {collaborationStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+          />
+        )}
       </styled.Body>
     </styled.Container>
   );

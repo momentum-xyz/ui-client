@@ -1,15 +1,21 @@
 import React, {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
 
 import {Text, TextArea} from 'ui-kit';
-import {useStore} from 'shared/hooks';
 import {dateToTime} from 'core/utils';
+import {MessageInterface} from 'core/interfaces';
 
 import * as styled from './TextChat.styled';
 
-const TextChat: FC = () => {
-  const {collaborationStore, sessionStore} = useStore();
-  const {textChatStore} = collaborationStore;
+interface PropsInterface {
+  sendMessage: (message: RtmTextMessage) => void;
+  currentChannel: RtmChannel | null;
+  messages: Array<MessageInterface>;
+  userId: string;
+}
+
+const TextChat: FC<PropsInterface> = ({sendMessage, currentChannel, messages, userId}) => {
   const [message, setMessage] = useState<string>('');
 
   const handleMessageChange = (value: string) => {
@@ -22,8 +28,8 @@ const TextChat: FC = () => {
   const handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (message.trim().length !== 0) {
-        if (textChatStore.currentChannel) {
-          textChatStore.sendMessage({
+        if (currentChannel) {
+          sendMessage({
             messageType: 'TEXT',
             text: message.trim()
           });
@@ -37,7 +43,7 @@ const TextChat: FC = () => {
   return (
     <styled.Container>
       <styled.ChatBox>
-        {textChatStore?.messages?.map((message, index) =>
+        {messages.map((message, index) =>
           message.messageType === 'SYSTEM' ? (
             <styled.TextContainer key={index}>
               <styled.InnerContainer>
@@ -49,9 +55,7 @@ const TextChat: FC = () => {
             <styled.TextContainer key={index}>
               <styled.InnerContainer>
                 <styled.StyledHeading
-                  label={
-                    message.author === sessionStore.userId ? 'you' : message?.name || message.author
-                  }
+                  label={message.author === userId ? 'you' : message?.name || message.author}
                   transform="uppercase"
                   type="h2"
                   align="left"

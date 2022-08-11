@@ -5,6 +5,7 @@ import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful
 import {COLUMNS} from 'core/constants';
 import {TileInterface} from 'core/models';
 import {TextChat} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
 import {TileItem} from './components/TileItem';
 import * as styled from './Dashboard.styled';
@@ -17,6 +18,8 @@ interface PropsInterface {
 }
 
 const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatIsOpen}) => {
+  const {collaborationStore, sessionStore} = useStore();
+  const {textChatStore} = collaborationStore;
   return (
     <styled.Container data-testid="Dashboard-test">
       <styled.DashboardContainer>
@@ -63,7 +66,14 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatI
             </styled.ColumnContainer>
           ))}
       </styled.DashboardContainer>
-      {textChatIsOpen && <TextChat />}
+      {textChatIsOpen && (
+        <TextChat
+          currentChannel={textChatStore.currentChannel}
+          userId={sessionStore.userId}
+          sendMessage={textChatStore.sendMessage}
+          messages={textChatStore.messages}
+        />
+      )}
     </styled.Container>
   );
 };

@@ -30,7 +30,7 @@ const StageModeModerator: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {space, removeParticipantFromStageDialog} = collaborationStore;
+  const {space, removeParticipantFromStageDialog, textChatStore} = collaborationStore;
 
   const history = useHistory();
 
@@ -147,7 +147,14 @@ const StageModeModerator: React.FC = () => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          {collaborationStore.textChatDialog.isOpen && <TextChat />}
+          {collaborationStore.textChatDialog.isOpen && (
+            <TextChat
+              currentChannel={textChatStore.currentChannel}
+              userId={sessionStore.userId}
+              sendMessage={textChatStore.sendMessage}
+              messages={textChatStore.messages}
+            />
+          )}
         </styled.Body>
       </styled.Container>
       {removeParticipantFromStageDialog.isOpen &&

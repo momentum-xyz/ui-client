@@ -11,8 +11,8 @@ import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
 
 const GoogleDrivePage: FC = () => {
-  const {collaborationStore, mainStore} = useStore();
-  const {space, googleDriveStore} = collaborationStore;
+  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {space, googleDriveStore, textChatStore} = collaborationStore;
   const {googleDocument, documentTitle} = googleDriveStore;
   const {favoriteStore} = mainStore;
 
@@ -94,7 +94,14 @@ const GoogleDrivePage: FC = () => {
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}
-        {collaborationStore.textChatDialog.isOpen && <TextChat />}
+        {collaborationStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+          />
+        )}
       </styled.Container>
     </styled.Inner>
   );

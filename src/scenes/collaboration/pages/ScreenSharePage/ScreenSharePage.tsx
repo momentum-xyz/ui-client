@@ -13,7 +13,7 @@ import * as styled from './ScreenSharePage.styled';
 
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
-  const {space, screenShareStore} = collaborationStore;
+  const {space, screenShareStore, textChatStore} = collaborationStore;
   const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
@@ -74,7 +74,14 @@ const ScreenSharePage: FC = () => {
         ) : (
           <ScreenVideo videoTrack={videoTrack} />
         )}
-        {collaborationStore.textChatDialog.isOpen && <TextChat />}
+        {collaborationStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+          />
+        )}
       </styled.Container>
     </styled.Inner>
   );

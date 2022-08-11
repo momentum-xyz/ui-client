@@ -16,8 +16,8 @@ import {MiroBoard, MiroChoice} from './components/templates';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
-  const {collaborationStore, mainStore} = useStore();
-  const {space, miroBoardStore} = collaborationStore;
+  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {space, miroBoardStore, textChatStore} = collaborationStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
   const {favoriteStore} = mainStore;
 
@@ -90,7 +90,14 @@ const MiroBoardPage: FC = () => {
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}
-        {collaborationStore.textChatDialog.isOpen && <TextChat />}
+        {collaborationStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+          />
+        )}
       </styled.Container>
     </styled.Inner>
   );
