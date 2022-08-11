@@ -86,3 +86,7 @@ export const formatDurationTime = (seconds: number) => {
   const targetDate = addMinutes(initialDate, initialDate.getTimezoneOffset());
   return format(targetDate, 'mm:ss');
 };
+
+export const dateToTime = (date: Date) => {
+  return format(date, `HH:mm`);
+};

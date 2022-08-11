@@ -17,6 +17,7 @@ import {DashboardStore} from './DashboardStore';
 import {GoogleDriveStore} from './GoogleDriveStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
+import {TextChatStore} from './TextChatStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -24,6 +25,7 @@ const RootCollaborationStore = types
     types.model('RootCollaborationStore', {
       space: types.maybe(Space),
       dashboardStore: types.optional(DashboardStore, {}),
+      textChatStore: types.optional(TextChatStore, {}),
       calendarStore: types.optional(CalendarStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
@@ -73,10 +75,6 @@ const RootCollaborationStore = types
 
       yield self.space.fetchSpaceInformation();
 
-      if (!isTable) {
-        yield self.dashboardStore.fetchDashboard(spaceId);
-      }
-
       const isModerator: boolean = yield self.moderationRequest.send(
         api.spaceIntegrationsRepository.checkSpaceModeration,
         {spaceId}
@@ -88,6 +86,11 @@ const RootCollaborationStore = types
       self.leftMeetingSpaceId = self.space?.id;
       self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
 
+      self.textChatStore.leaveChannel().then(() => {
+        self.textChatStore.logOut().then(() => {
+          self.textChatStore.resetModel();
+        });
+      });
       if (!!self.space && self.space.isAdmin) {
         self.miroBoardStore.disableMiroBoard(self.space.id);
         self.googleDriveStore.disableGoogleDocument(self.space.id);

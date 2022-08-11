@@ -5,7 +5,6 @@ import {generatePath} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {Separator, ToolbarIcon} from 'ui-kit';
-import {useTextChatContext} from 'context/TextChatContext';
 
 import * as styled from './RightSection.styled';
 
@@ -14,9 +13,11 @@ interface PropsInterface {
   spaceId: string;
   editSpaceHidden?: boolean;
   isSpaceFavorite: boolean;
-  isChatOpen: boolean;
+  isChatOpen?: boolean;
   toggleIsSpaceFavorite: (spaceId: string) => void;
-  toggleChat: () => void;
+  toggleChat?: () => void;
+  isChat?: boolean;
+  numberOfUnreadMessages?: number;
 }
 
 const RightSection: FC<PropsInterface> = ({
@@ -26,10 +27,10 @@ const RightSection: FC<PropsInterface> = ({
   isSpaceFavorite,
   isChatOpen,
   toggleIsSpaceFavorite,
-  toggleChat
+  isChat = true,
+  toggleChat,
+  numberOfUnreadMessages = 0
 }) => {
-  const {numberOfUnreadMessages} = useTextChatContext();
-
   return (
     <>
       {isAdmin && !editSpaceHidden && (
@@ -48,16 +49,18 @@ const RightSection: FC<PropsInterface> = ({
           <Separator />
         </>
       )}
-      <ToolbarIcon
-        title={isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
-        icon="chat"
-        onClick={toggleChat}
-        isWhite={false}
-      >
-        {numberOfUnreadMessages > 0 && (
-          <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>
-        )}
-      </ToolbarIcon>
+      {isChat && (
+        <ToolbarIcon
+          title={isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
+          icon="chat"
+          onClick={toggleChat}
+          isWhite={false}
+        >
+          {numberOfUnreadMessages > 0 && (
+            <styled.MessageCount>{numberOfUnreadMessages}</styled.MessageCount>
+          )}
+        </ToolbarIcon>
+      )}
       <ToolbarIcon
         title={t('tooltipTitles.favorite')}
         icon={isSpaceFavorite ? 'starOn' : 'star'}

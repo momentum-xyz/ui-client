@@ -35,9 +35,6 @@ const AgoraStore = types
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
 
-      // Chat
-      isChatOpen: false,
-
       // Requests
       spaceIntegrationsRequest: types.optional(RequestModel, {}),
       toggleStageModeRequest: types.optional(RequestModel, {})
@@ -191,15 +188,6 @@ const AgoraStore = types
       self.appId = appVariables.AGORA_APP_ID;
     }
   }))
-  // Chat visibility
-  .actions((self) => ({
-    showChat() {
-      self.isChatOpen = true;
-    },
-    hideChat() {
-      self.isChatOpen = false;
-    }
-  }))
   // Agora calls setups and chat toggle
   .actions((self) => ({
     // --- COMMON ---
@@ -231,16 +219,6 @@ const AgoraStore = types
         self.agoraStageModeStore.clanupListeners();
       } else {
         self.agoraVideoCallStore.clanupListeners();
-      }
-    },
-
-    // --- CHAT TOGGLING ---
-
-    toggleChat() {
-      if (self.isChatOpen) {
-        self.hideChat();
-      } else {
-        self.showChat();
       }
     }
   }))

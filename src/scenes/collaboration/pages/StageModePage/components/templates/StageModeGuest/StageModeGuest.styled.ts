@@ -15,6 +15,7 @@ export const Container = styled.div`
 export const Body = styled.div`
   display: flex;
   height: 100%;
+  min-height: 0;
 `;
 
 export const InnerBody = styled.div`
