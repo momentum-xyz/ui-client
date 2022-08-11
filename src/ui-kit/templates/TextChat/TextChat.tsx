@@ -1,10 +1,12 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
+import {t} from 'i18next';
 
 import {Text, TextArea} from 'ui-kit';
 import {dateToTime} from 'core/utils';
 import {MessageInterface} from 'core/interfaces';
+import {TextMessageEnum} from 'core/enums';
 
 import * as styled from './TextChat.styled';
 
@@ -47,10 +49,9 @@ const TextChat: FC<PropsInterface> = ({
       if (message.trim().length !== 0) {
         if (currentChannel) {
           sendMessage({
-            messageType: 'TEXT',
+            messageType: TextMessageEnum.TEXT,
             text: message.trim()
           });
-          console.info(`Message sent: "${message.trim()}"`);
         }
         setMessage('');
       }
@@ -61,7 +62,7 @@ const TextChat: FC<PropsInterface> = ({
     <styled.Container>
       <styled.ChatBox ref={messageListRef}>
         {messages.map((message, index) =>
-          message.messageType === 'SYSTEM' ? (
+          message.messageType === TextMessageEnum.SYSTEM ? (
             <styled.TextContainer key={index}>
               <styled.InnerContainer>
                 <styled.Text>{message?.text || ''}</styled.Text>
@@ -72,7 +73,11 @@ const TextChat: FC<PropsInterface> = ({
             <styled.TextContainer key={index}>
               <styled.InnerContainer>
                 <styled.StyledHeading
-                  label={message.author === userId ? 'you' : message?.name || message.author}
+                  label={
+                    message.author === userId
+                      ? t('textMessage.you')
+                      : message?.name || message.author
+                  }
                   transform="uppercase"
                   type="h2"
                   align="left"
@@ -88,7 +93,7 @@ const TextChat: FC<PropsInterface> = ({
         <TextArea
           name=""
           isResizable
-          placeholder="Message"
+          placeholder={t('textMessage.placeholder')}
           onChange={handleMessageChange}
           onKeyUp={handleKeyUp}
           value={message}

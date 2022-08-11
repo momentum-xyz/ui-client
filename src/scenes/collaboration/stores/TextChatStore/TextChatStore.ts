@@ -1,9 +1,11 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import AgoraRTM, {RtmChannel, RtmClient, RtmTextMessage} from 'agora-rtm-sdk';
+import {t} from 'i18next';
 
 import {RequestModel, ResetModel, UserProfileModelInterface} from 'core/models';
 import {MessageInterface} from 'core/interfaces';
 import {api, ProfileResponse} from 'api';
+import {TextMessageEnum} from 'core/enums';
 
 const TextChatStore = types.compose(
   ResetModel,
@@ -53,7 +55,7 @@ const TextChatStore = types.compose(
               ...message,
               author: userId,
               date: new Date(),
-              name: userId === self.currentUserId ? 'you' : self.name
+              name: userId === self.currentUserId ? t('textMessage.you') : self.name
             }
           ]);
           this.setMessageSent();
@@ -64,9 +66,11 @@ const TextChatStore = types.compose(
           ...self.messages,
           {
             ...message,
-            messageType: 'SYSTEM',
-            text: `${self.name} has joined the collaboration space`,
-            author: 'SYSTEM',
+            messageType: TextMessageEnum.SYSTEM,
+            text: t('textMessage.joinText', {
+              name: self.name
+            }),
+            author: TextMessageEnum.SYSTEM,
             name: self.name,
             date: new Date()
           }
@@ -78,9 +82,11 @@ const TextChatStore = types.compose(
           ...self.messages,
           {
             ...message,
-            messageType: 'SYSTEM',
-            text: `${self.name} has left the collaboration space`,
-            author: 'SYSTEM',
+            messageType: TextMessageEnum.SYSTEM,
+            text: t('textMessage.leftText', {
+              name: self.name
+            }),
+            author: TextMessageEnum.SYSTEM,
             name: self.name,
             date: new Date()
           }
