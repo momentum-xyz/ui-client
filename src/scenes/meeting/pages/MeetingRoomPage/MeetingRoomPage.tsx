@@ -3,13 +3,13 @@ import {observer} from 'mobx-react-lite';
 import {Transition} from '@headlessui/react';
 
 import {useStore} from 'shared/hooks';
-import {AgoraRemoteUserInterface, StageModeUserInterface} from 'core/models';
 
 import {
   PeopleCount,
   MuteAllButton,
   MaxVideoStreams,
   LocalUser,
+  MeetingUser,
   RemoteParticipant,
   JoinLeaveButtons
 } from './components';
@@ -24,11 +24,9 @@ const MeetingRoomPage: FC = () => {
 
   useEffect(() => {
     stageModeStore.removeAllPopups();
-    if (space) {
-      meetingStore.setKicked(false);
-      meetingStore.selectParticipant(undefined);
-    }
-  }, [stageModeStore, meetingRoomStore, space, meetingStore]);
+    meetingStore.setKicked(false);
+    meetingStore.selectParticipant(undefined);
+  }, [stageModeStore, meetingStore]);
 
   return (
     <Transition
@@ -70,23 +68,24 @@ const MeetingRoomPage: FC = () => {
 
               <MaxVideoStreams isShown={agoraStore.maxVideoStreamsReached} />
 
-              {/* USER LIST */}
-              {(agoraStore.isStageMode
-                ? agoraStageModeStore.audienceMembers
-                : agoraStore.remoteUsers
-              ).map((participant) => (
-                <RemoteParticipant
-                  key={`participant-${participant.uid as string}`}
-                  participant={
-                    !agoraStore.isStageMode ? (participant as AgoraRemoteUserInterface) : undefined
-                  }
-                  audienceParticipant={
-                    agoraStore.isStageMode ? (participant as StageModeUserInterface) : undefined
-                  }
-                  canEnterStage={agoraStageModeStore.canEnterStage}
-                  totalParticipants={agoraStore.remoteUsers.length}
-                />
-              ))}
+              {/* STAGE MODE USERS OR MEETING USERS */}
+              {agoraStore.isStageMode
+                ? agoraStageModeStore.audienceMembers.map((user) => (
+                    <RemoteParticipant
+                      key={user.uid}
+                      audienceParticipant={user}
+                      canEnterStage={agoraStageModeStore.canEnterStage}
+                      totalParticipants={agoraStore.remoteUsers.length}
+                    />
+                  ))
+                : agoraStore.remoteUsers.map((user) => (
+                    <MeetingUser
+                      key={user.uid}
+                      participant={user}
+                      canEnterStage={agoraStageModeStore.canEnterStage}
+                      totalParticipants={agoraStore.remoteUsers.length}
+                    />
+                  ))}
             </ul>
           </styled.ListItemContent>
         </styled.ListItem>
