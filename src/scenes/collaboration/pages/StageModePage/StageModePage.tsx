@@ -12,15 +12,15 @@ const StageModePage: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
   const {collaborationStore, mainStore} = useStore();
   const {agoraStore} = mainStore;
-  const {stageModeStore} = collaborationStore;
+  const {stageModeStore, textChatStore} = collaborationStore;
 
   useEffect(() => {
-    const chatWasOpen = agoraStore.isChatOpen;
-    agoraStore.showChat();
+    const chatWasOpen = textChatStore.textChatDialog.isOpen;
+    textChatStore.textChatDialog.open();
 
     return () => {
       if (!chatWasOpen) {
-        agoraStore.hideChat();
+        textChatStore.textChatDialog.close();
       }
     };
   }, [agoraStore]);

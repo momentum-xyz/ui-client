@@ -48,6 +48,29 @@ export const TextAreaContainer = styled.div`
       border: 1px solid ${(props) => props.theme.accentDanger};
     }
   }
+  &.bottomBorder {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    textarea {
+      &:hover,
+      &:active {
+        color: var(--white);
+        background: var(--hover-background);
+        opacity: 0.7;
+        border: 1px solid ${(props) => props.theme.accent};
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+      }
+      &:focus {
+        outline-style: none;
+        box-shadow: none;
+        border: 1px solid ${(props) => props.theme.accent};
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        opacity: 1;
+      }
+    }
+  }
   &.resizable {
     textarea {
       resize: none;

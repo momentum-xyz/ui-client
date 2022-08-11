@@ -15,7 +15,6 @@ import {UnityPage} from 'scenes/unity';
 // TODO: To be refactored
 import {ConfirmationDialogProvider} from '../hooks/useConformationDialog';
 import AuthComponent from '../context/Auth/AuthContext';
-import {TextChatProvider} from '../context/TextChatContext';
 
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
 import AppLayers from './AppLayers';
@@ -104,15 +103,13 @@ const App: FC = () => {
         <ConfirmationDialogProvider>
           <AuthProvider {...sessionStore.oidcConfig}>
             <AuthComponent>
-              <TextChatProvider>
-                <UnityPage />
-                <AppLayers>
-                  <Switch>
-                    {createRoutesByConfig(PRIVATE_ROUTES)}
-                    <Redirect to={ROUTES.base} />
-                  </Switch>
-                </AppLayers>
-              </TextChatProvider>
+              <UnityPage />
+              <AppLayers>
+                <Switch>
+                  {createRoutesByConfig(PRIVATE_ROUTES)}
+                  <Redirect to={ROUTES.base} />
+                </Switch>
+              </AppLayers>
             </AuthComponent>
           </AuthProvider>
         </ConfirmationDialogProvider>

@@ -38,7 +38,8 @@ const Collaboration: FC = () => {
     declinedToJoinStageDialog,
     invitedOnStageDialog,
     prepareOnStageDialog,
-    countdownDialog
+    countdownDialog,
+    textChatStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -47,6 +48,10 @@ const Collaboration: FC = () => {
 
   const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
   const [accepted, setAccepted] = useState<boolean>();
+
+  useEffect(() => {
+    textChatStore.countUnreadMessages();
+  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen]);
 
   useEffect(() => {
     rootStore.joinMeetingSpace(spaceId).catch((e) => {
@@ -67,6 +72,12 @@ const Collaboration: FC = () => {
       rootStore.leaveMeetingSpace();
     };
   }, [rootStore, sessionStore.userId, spaceId, t]);
+
+  useEffect(() => {
+    if (agoraStore.appId && !textChatStore.isLoggedOn) {
+      textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
+    }
+  }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
 
   useEffect(() => {
     if (agoraScreenShareStore.videoTrack) {

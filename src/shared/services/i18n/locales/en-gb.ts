@@ -330,6 +330,12 @@ export const enGb = {
       prepareToGoOnStage: 'Prepare to go on stage',
       broadcastManage: 'Manage Broadcast'
     },
+    textMessage: {
+      you: 'you',
+      placeholder: 'Message',
+      joinText: '{{name}} has joined the collaboration space',
+      leftText: '{{name}} has left the collaboration space'
+    },
     tooltipTitles: {
       openAdmin: 'Open Admin',
       closeChat: 'Close Chat',

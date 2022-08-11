@@ -6,22 +6,20 @@ import {useHistory} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {SpaceTopBar, Button} from 'ui-kit';
+import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 
 // TODO: Refactor
-import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
-
 import 'core/utils/boardsPicker.1.0.js';
 
 import {MiroBoard, MiroChoice} from './components/templates';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
-  const {collaborationStore, mainStore} = useStore();
-  const {space, miroBoardStore} = collaborationStore;
+  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {space, miroBoardStore, textChatStore} = collaborationStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
-  const {favoriteStore, agoraStore} = mainStore;
+  const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -61,6 +59,11 @@ const MiroBoardPage: FC = () => {
     await miroBoardStore.fetchMiroBoard(space?.id || '');
   }, [miroBoardStore, space?.id]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    textChatStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
@@ -75,9 +78,10 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
-        onClose={() => history.push(ROUTES.base)}
+        isChatOpen={textChatStore.textChatDialog.isOpen}
+        toggleChat={textChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onClose={handleClose}
       >
         {space && !!miroBoard?.data?.accessLink && (
           <>
@@ -92,7 +96,15 @@ const MiroBoardPage: FC = () => {
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}
-        <TextChatView />
+        {textChatStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+            messageSent={textChatStore.messageSent}
+          />
+        )}
       </styled.Container>
     </styled.Inner>
   );

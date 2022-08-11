@@ -5,13 +5,12 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {ToastContent, Button, SpaceTopBar, Text, Stage} from 'ui-kit';
+import {ToastContent, Button, SpaceTopBar, Text, Stage, TextChat} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
-import TextChatView from 'component/molucules/collaboration/TextChatView';
 
 import * as styled from './StageModeGuest.styled';
 
@@ -19,6 +18,7 @@ const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
+  const {textChatStore} = collaborationStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     collaborationStore.stageModeStore;
 
@@ -61,6 +61,11 @@ const StageModeGuest: React.FC = () => {
     }
   }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    textChatStore.textChatDialog.close();
+  };
+
   if (!collaborationStore.space) {
     return null;
   }
@@ -71,10 +76,11 @@ const StageModeGuest: React.FC = () => {
         title={collaborationStore.space.name ?? ''}
         subtitle={t('labels.stageMode')}
         isSpaceFavorite={favoriteStore.isSpaceFavorite}
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
+        isChatOpen={textChatStore.textChatDialog.isOpen}
+        toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        onClose={() => history.push(ROUTES.base)}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onClose={handleClose}
       >
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}
@@ -121,7 +127,15 @@ const StageModeGuest: React.FC = () => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        <TextChatView />
+        {textChatStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+            messageSent={textChatStore.messageSent}
+          />
+        )}
       </styled.Body>
     </styled.Container>
   );

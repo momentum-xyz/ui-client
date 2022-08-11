@@ -9,3 +9,4 @@ export * from './Integration.type';
 export * from './stageMode.type';
 export * from './metadataField.type';
 export * from './Tile.type';
+export * from './TextMessage.type';
