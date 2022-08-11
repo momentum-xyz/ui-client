@@ -45,7 +45,7 @@ const App: FC = () => {
     if (!agoraStore.appId || !sessionStore.userId || textChatStore.isLoggedOn) {
       return;
     }
-    textChatStore.initClient(agoraStore.appId, sessionStore.userId);
+    textChatStore.login(agoraStore.appId, sessionStore.userId);
   }, [agoraStore.appId, sessionStore.userId]);
 
   if (!isConfigReady) {

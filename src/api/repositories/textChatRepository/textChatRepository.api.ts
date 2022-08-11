@@ -1,14 +1,13 @@
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
-import {agoraRepositoryApiEndpoints} from '../agoraRepository/agoraRepository.api.endpoints';
-
 import {TextChatTokenRequest, TextChatTokenResponse} from './textChatRepository.api.types';
+import {textChatRepositoryApiEndpoints} from './textChatRepository.api.endpoints';
 
 export const getTextChatToken: RequestInterface<TextChatTokenRequest, TextChatTokenResponse> = (
   options
 ) => {
-  const url = agoraRepositoryApiEndpoints().token;
+  const url = textChatRepositoryApiEndpoints().token;
 
   return request.get(url, options);
 };

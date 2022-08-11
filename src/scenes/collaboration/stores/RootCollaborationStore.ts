@@ -78,7 +78,7 @@ const RootCollaborationStore = types
 
       if (!isTable) {
         yield self.dashboardStore.fetchDashboard(spaceId);
-        self.textChatStore.joinChannel(spaceId);
+        yield self.textChatStore.joinChannel(spaceId);
       }
 
       const isModerator: boolean = yield self.moderationRequest.send(

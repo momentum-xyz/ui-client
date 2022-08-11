@@ -3,9 +3,7 @@ import AgoraRTM, {RtmChannel, RtmClient, RtmTextMessage} from 'agora-rtm-sdk';
 
 import {RequestModel, ResetModel, UserProfileModelInterface} from 'core/models';
 import {MessageInterface} from 'core/interfaces';
-import {appVariables} from 'api/constants';
 import {api, ProfileResponse} from 'api';
-import {request} from 'api/request';
 
 const TextChatStore = types.compose(
   ResetModel,
@@ -20,7 +18,8 @@ const TextChatStore = types.compose(
       members: types.maybeNull(types.frozen(Array<string>())),
       request: types.optional(RequestModel, {}),
       name: '',
-      isLoggedOn: false
+      isLoggedOn: false,
+      tokenRequest: types.optional(RequestModel, {})
     })
     .volatile<{client: RtmClient | null}>(() => ({
       client: null
@@ -32,66 +31,18 @@ const TextChatStore = types.compose(
       messages2: []
     }))
     .actions((self) => ({
-      initClient(appId: string, userId: string) {
-        self.client = AgoraRTM.createInstance(appId);
+      getAgoraToken: flow(function* () {
+        const tokenResponse: string = yield self.tokenRequest.send(
+          api.textChatRepository.getTextChatToken
+        );
 
-        self.client.on('ConnectionStateChanged', (newState, reason) => {
-          console.info('[agora] on connection state changed to ' + newState + ' reason: ' + reason);
-        });
-
-        console.info('[agora] AgoraRTM logging in...');
-
-        request
-          .get(appVariables.BACKEND_ENDPOINT_URL + `/agora/token`)
-          .then((response) => {
-            return self.client?.login({
-              token: response.data,
-              uid: userId
-            });
-          })
-          .then(() => {
-            this.setCurrentUserId(userId);
-            this.setLogin(true);
-            console.info('[agora] AgoraRTM client login success');
-          })
-          .catch((error) => {
-            console.error('[agora] AgoraRTM client login error', error);
-          });
-      },
-      fetchUser: flow(function* (userId: string) {
-        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-          userId
-        });
-
-        if (response) {
-          self.name = response.name;
-        }
+        return tokenResponse;
       }),
       setLogin(login: boolean) {
         self.isLoggedOn = login;
       },
-      logOut() {
-        self.client
-          ?.logout()
-          .then(() => {
-            console.info('[agora] AgoraRTM client logout success');
-          })
-          .catch((error) => {
-            console.error('[agora] AgoraRTM client logout error', error);
-          });
-      },
-      sendMessage(message: RtmTextMessage) {
-        if (self.currentChannel && self.currentUserId) {
-          self.currentChannel
-            .sendMessage(message)
-            .then(() => {
-              this.setMessages(message, self.currentUserId);
-              console.info('[agora] Sent message successfully');
-            })
-            .catch((error) => {
-              console.error('[agora] There was an error in sending message', error);
-            });
-        }
+      setCurrentUserId(currentUser: string) {
+        self.currentUserId = currentUser;
       },
       setMessages(message: RtmTextMessage, userId: string) {
         if (message) {
@@ -132,32 +83,6 @@ const TextChatStore = types.compose(
           }
         ]);
       },
-      joinChannel(spaceId: string) {
-        if (self.client) {
-          console.info('new client?');
-
-          self.currentChannel = self.client.createChannel(spaceId);
-          self.currentChannel
-            .join()
-            .then(() => {
-              if (self.currentChannel) {
-                self.currentChannel.getMembers().then((members) => {});
-              }
-              console.info('[agora] Joined AgoraRTM channel successfully');
-            })
-            .catch((error) => {
-              console.error('[agora] AgoraRTM channel failed to connect to meeting channel', error);
-            });
-        }
-      },
-      leaveChannel() {
-        console.info('[agora] Leaving AgoraRTM channel');
-        self.currentChannel?.leave().then(() => {
-          this.disableCurrentChannel();
-          this.resetMessages();
-          console.info('[agora] Left AgoraRTM channel successfully');
-        });
-      },
       resetMessages() {
         self.messages.length = 0;
       },
@@ -169,10 +94,65 @@ const TextChatStore = types.compose(
       },
       setNumberOfReadMessages(readMessages: number) {
         self.numberOfReadMessages = readMessages;
-      },
-      setCurrentUserId(currentUser: string) {
-        self.currentUserId = currentUser;
       }
+    }))
+    .actions((self) => ({
+      login: flow(function* (appId: string, userId: string) {
+        self.client = AgoraRTM.createInstance(appId);
+        self.client.on('ConnectionStateChanged', (newState, reason) => {
+          console.info('[agora] on connection state changed to ' + newState + ' reason: ' + reason);
+        });
+        console.info('[agora] AgoraRTM logging in...');
+        const token = yield self.getAgoraToken();
+        yield self.client.login({
+          token: token,
+          uid: userId
+        });
+        self.setCurrentUserId(userId);
+        self.setLogin(true);
+      }),
+      fetchUser: flow(function* (userId: string) {
+        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
+          userId
+        });
+
+        if (response) {
+          self.name = response.name;
+        }
+      }),
+      logOut: flow(function* () {
+        if (self.client) {
+          const response = yield self.client.logout();
+          if (response) {
+            console.info('[agora] AgoraRTM client logout success');
+          }
+        }
+      }),
+      sendMessage(message: RtmTextMessage) {
+        if (self.currentChannel && self.currentUserId) {
+          self.currentChannel.sendMessage(message);
+          self.setMessages(message, self.currentUserId);
+          console.info('[agora] Sent message successfully');
+        }
+      },
+      joinChannel: flow(function* (spaceId: string) {
+        if (self.client) {
+          self.currentChannel = self.client.createChannel(spaceId);
+          const response = yield self.currentChannel.join();
+          if (response) {
+            console.info('[agora] Joined AgoraRTM channel successfully');
+          }
+        }
+      }),
+      leaveChannel: flow(function* () {
+        console.info('[agora] Leaving AgoraRTM channel');
+        if (self.currentChannel) {
+          yield self.currentChannel.leave();
+          self.disableCurrentChannel();
+          self.resetMessages();
+          console.info('[agora] Left AgoraRTM channel successfully');
+        }
+      })
     }))
 );
 
