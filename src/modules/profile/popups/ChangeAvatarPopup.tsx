@@ -8,7 +8,7 @@ import {ToastContent} from 'ui-kit';
 
 import Button from '../../../component/atoms/Button';
 import Popup, {PopupTitle} from '../../../component/atoms/Popup';
-import {ReactComponent as Loader} from '../../../images/tail-sping.svg';
+import {ReactComponent as Loader} from '../../../ui-kit/assets/images/common/tail-sping.svg';
 import {useCreateUserAvatar} from '../hooks/useUserAvatar';
 
 type props = {
