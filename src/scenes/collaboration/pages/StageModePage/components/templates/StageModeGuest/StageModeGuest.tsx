@@ -63,7 +63,7 @@ const StageModeGuest: React.FC = () => {
 
   const handleClose = () => {
     history.push(ROUTES.base);
-    collaborationStore.textChatDialog.close();
+    textChatStore.textChatDialog.close();
   };
 
   if (!collaborationStore.space) {
@@ -76,8 +76,8 @@ const StageModeGuest: React.FC = () => {
         title={collaborationStore.space.name ?? ''}
         subtitle={t('labels.stageMode')}
         isSpaceFavorite={favoriteStore.isSpaceFavorite}
-        isChatOpen={collaborationStore.textChatDialog.isOpen}
-        toggleChat={collaborationStore.textChatDialog.toggle}
+        isChatOpen={textChatStore.textChatDialog.isOpen}
+        toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         onClose={handleClose}
@@ -127,7 +127,7 @@ const StageModeGuest: React.FC = () => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        {collaborationStore.textChatDialog.isOpen && (
+        {textChatStore.textChatDialog.isOpen && (
           <TextChat
             currentChannel={textChatStore.currentChannel}
             userId={sessionStore.userId}

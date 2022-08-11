@@ -69,7 +69,7 @@ const StageModeModerator: React.FC = () => {
 
   const handleClose = () => {
     history.push(ROUTES.base);
-    collaborationStore.textChatDialog.close();
+    textChatStore.textChatDialog.close();
   };
 
   if (!space) {
@@ -87,8 +87,8 @@ const StageModeModerator: React.FC = () => {
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
           onClose={handleClose}
-          isChatOpen={collaborationStore.textChatDialog.isOpen}
-          toggleChat={collaborationStore.textChatDialog.toggle}
+          isChatOpen={textChatStore.textChatDialog.isOpen}
+          toggleChat={textChatStore.textChatDialog.toggle}
           numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
           editSpaceHidden
         >
@@ -153,7 +153,7 @@ const StageModeModerator: React.FC = () => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          {collaborationStore.textChatDialog.isOpen && (
+          {textChatStore.textChatDialog.isOpen && (
             <TextChat
               currentChannel={textChatStore.currentChannel}
               userId={sessionStore.userId}

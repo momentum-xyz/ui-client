@@ -15,12 +15,7 @@ import {
   CountdownDialog
 } from 'ui-kit';
 import {useStore, usePosBusEvent} from 'shared/hooks';
-import {
-  PosBusEventEnum,
-  StageModeRequestEnum,
-  StageModeStatusEnum,
-  TextMessageEnum
-} from 'core/enums';
+import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {createRoutesByConfig} from 'core/utils';
 import {PrivateSpaceError} from 'core/errors';
 
@@ -79,19 +74,8 @@ const Collaboration: FC = () => {
   }, [textChatStore.currentChannel]);
 
   useEffect(() => {
-    const numberOfMessagesOfOtherUsers = textChatStore.messages.filter(
-      (item) =>
-        item.messageType !== TextMessageEnum.SYSTEM && item.author !== textChatStore.currentUserId
-    ).length;
-    if (collaborationStore.textChatDialog.isOpen) {
-      textChatStore.setNumberOfReadMessages(numberOfMessagesOfOtherUsers);
-      textChatStore.setNumberOfUnreadMessages(0);
-    } else {
-      textChatStore.setNumberOfUnreadMessages(
-        numberOfMessagesOfOtherUsers - textChatStore.numberOfReadMessages
-      );
-    }
-  }, [textChatStore.messageSent, collaborationStore.textChatDialog.isOpen]);
+    textChatStore.countUnreadMessages();
+  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen]);
 
   useEffect(() => {
     rootStore.joinMeetingSpace(spaceId).catch((e) => {
@@ -119,10 +103,6 @@ const Collaboration: FC = () => {
         textChatStore.joinChannel(spaceId);
       });
     }
-
-    return () => {
-      textChatStore.leaveChannel();
-    };
   }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
 
   useEffect(() => {

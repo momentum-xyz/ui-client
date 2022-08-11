@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import AgoraRTM, {RtmChannel, RtmClient, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
 
-import {RequestModel, ResetModel} from 'core/models';
+import {DialogModel, RequestModel, ResetModel} from 'core/models';
 import {MessageInterface} from 'core/interfaces';
 import {api, ProfileResponse} from 'api';
 import {TextMessageEnum} from 'core/enums';
@@ -19,7 +19,8 @@ const TextChatStore = types.compose(
       name: '',
       isLoggedOn: false,
       messageSent: false,
-      tokenRequest: types.optional(RequestModel, {})
+      tokenRequest: types.optional(RequestModel, {}),
+      textChatDialog: types.optional(DialogModel, {})
     })
     .volatile<{client: RtmClient | null}>(() => ({
       client: null
@@ -129,10 +130,8 @@ const TextChatStore = types.compose(
       }),
       logOut: flow(function* () {
         if (self.client) {
-          const response = yield self.client.logout();
-          if (response) {
-            console.info('[agora] AgoraRTM client logout success');
-          }
+          yield self.client.logout();
+          console.info('[agora] AgoraRTM client logout success');
         }
       }),
       sendMessage: flow(function* (message: RtmTextMessage) {
@@ -155,11 +154,24 @@ const TextChatStore = types.compose(
         console.info('[agora] Leaving AgoraRTM channel');
         if (self.currentChannel) {
           yield self.currentChannel.leave();
+          self.setLogin(false);
           self.disableCurrentChannel();
           self.resetMessages();
           console.info('[agora] Left AgoraRTM channel successfully');
         }
-      })
+      }),
+      countUnreadMessages() {
+        const numberOfMessagesOfOtherUsers = self.messages.filter(
+          (item) =>
+            item.messageType !== TextMessageEnum.SYSTEM && item.author !== self.currentUserId
+        ).length;
+        if (self.textChatDialog.isOpen) {
+          self.setNumberOfReadMessages(numberOfMessagesOfOtherUsers);
+          self.setNumberOfUnreadMessages(0);
+        } else {
+          self.setNumberOfUnreadMessages(numberOfMessagesOfOtherUsers - self.numberOfReadMessages);
+        }
+      }
     }))
 );
 

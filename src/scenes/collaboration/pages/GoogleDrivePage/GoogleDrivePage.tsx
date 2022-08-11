@@ -65,7 +65,7 @@ const GoogleDrivePage: FC = () => {
 
   const handleClose = () => {
     history.push(ROUTES.base);
-    collaborationStore.textChatDialog.close();
+    textChatStore.textChatDialog.close();
   };
 
   if (!space) {
@@ -81,8 +81,8 @@ const GoogleDrivePage: FC = () => {
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        isChatOpen={collaborationStore.textChatDialog.isOpen}
-        toggleChat={collaborationStore.textChatDialog.toggle}
+        isChatOpen={textChatStore.textChatDialog.isOpen}
+        toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         editSpaceHidden
         onClose={handleClose}
@@ -100,7 +100,7 @@ const GoogleDrivePage: FC = () => {
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}
-        {collaborationStore.textChatDialog.isOpen && (
+        {textChatStore.textChatDialog.isOpen && (
           <TextChat
             currentChannel={textChatStore.currentChannel}
             userId={sessionStore.userId}

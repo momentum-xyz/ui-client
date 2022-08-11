@@ -61,7 +61,7 @@ const MiroBoardPage: FC = () => {
 
   const handleClose = () => {
     history.push(ROUTES.base);
-    collaborationStore.textChatDialog.close();
+    textChatStore.textChatDialog.close();
   };
 
   if (!space) {
@@ -78,8 +78,8 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={collaborationStore.textChatDialog.isOpen}
-        toggleChat={collaborationStore.textChatDialog.toggle}
+        isChatOpen={textChatStore.textChatDialog.isOpen}
+        toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         onClose={handleClose}
       >
@@ -96,7 +96,7 @@ const MiroBoardPage: FC = () => {
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}
-        {collaborationStore.textChatDialog.isOpen && (
+        {textChatStore.textChatDialog.isOpen && (
           <TextChat
             currentChannel={textChatStore.currentChannel}
             userId={sessionStore.userId}

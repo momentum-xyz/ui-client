@@ -50,8 +50,7 @@ const RootCollaborationStore = types
       inviteOnStageDialog: types.optional(DialogModel, {}),
       kickUserFromStageDialog: types.optional(DialogModel, {}),
       prepareOnStageDialog: types.optional(DialogModel, {}),
-      countdownDialog: types.optional(DialogModel, {}),
-      textChatDialog: types.optional(DialogModel, {})
+      countdownDialog: types.optional(DialogModel, {})
     })
   )
   .volatile(() => ({
@@ -87,6 +86,11 @@ const RootCollaborationStore = types
       self.leftMeetingSpaceId = self.space?.id;
       self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
 
+      self.textChatStore.leaveChannel().then(() => {
+        self.textChatStore.logOut().then(() => {
+          self.textChatStore.resetModel();
+        });
+      });
       if (!!self.space && self.space.isAdmin) {
         self.miroBoardStore.disableMiroBoard(self.space.id);
         self.googleDriveStore.disableGoogleDocument(self.space.id);
