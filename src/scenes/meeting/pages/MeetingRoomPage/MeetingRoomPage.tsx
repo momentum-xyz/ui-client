@@ -81,9 +81,10 @@ const MeetingRoomPage: FC = () => {
                 : agoraStore.remoteUsers.map((user) => (
                     <MeetingUser
                       key={user.uid}
+                      spaceId={space?.id || ''}
                       participant={user}
-                      canEnterStage={agoraStageModeStore.canEnterStage}
-                      totalParticipants={agoraStore.remoteUsers.length}
+                      isModerator={collaborationStore.isModerator}
+                      maxVideoStreams={agoraStore.maxVideoStreamsReached}
                     />
                   ))}
             </ul>

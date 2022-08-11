@@ -1,35 +1,31 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
 
+import {IconSvg, Text} from 'ui-kit';
 import {ReactComponent as MicOff} from 'images/icons/microphone-off.svg';
 import {ReactComponent as AstronautIcon} from 'images/icons/professions-man-astronaut.svg';
-import {ReactComponent as AddIcon} from 'images/icons/add.svg';
 import Avatar from 'component/atoms/Avatar';
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'core/models';
-import {appVariables} from 'api/constants';
 
 import {ParticipantMenu} from './components';
+import * as styled from './MeetingUser.styled';
 
 export interface PropsInterface {
+  spaceId: string;
   participant: AgoraRemoteUserInterface;
-  canEnterStage: boolean;
-  totalParticipants: number;
+  isModerator: boolean;
+  maxVideoStreams: boolean;
 }
 
 const MeetingUser: FC<PropsInterface> = (props) => {
-  const {participant, canEnterStage, totalParticipants} = props;
+  const {spaceId, participant, isModerator, maxVideoStreams} = props;
 
-  const [hovered, setIsHovered] = useState(false);
-
-  const {collaborationStore, meetingStore, mainStore} = useStore();
-  const {agoraStore} = mainStore;
-  const {meetingRoomStore} = meetingStore;
-  const {space} = collaborationStore;
   const videoRef = useRef<HTMLDivElement>(null);
-  const id = participant.uid;
 
-  const maximumParticipantsReached = totalParticipants > appVariables.PARTICIPANTS_VIDEO_LIMIT - 1;
+  const {meetingStore} = useStore();
+  const {meetingRoomStore} = meetingStore;
 
   useEffect(() => {
     participant.fetchUser();
@@ -39,29 +35,21 @@ const MeetingUser: FC<PropsInterface> = (props) => {
     if (
       !participant?.cameraOff &&
       videoRef.current &&
-      !maximumParticipantsReached &&
+      !maxVideoStreams &&
       participant?.videoTrack &&
       !participant.videoTrack.isPlaying
     ) {
       participant.videoTrack.play(videoRef.current);
     }
 
-    if (
-      (maximumParticipantsReached || participant?.cameraOff) &&
-      participant?.videoTrack?.isPlaying
-    ) {
+    if ((maxVideoStreams || participant?.cameraOff) && participant?.videoTrack?.isPlaying) {
       participant?.videoTrack?.stop();
     }
 
     return () => {
       participant?.videoTrack?.stop();
     };
-  }, [maximumParticipantsReached, participant]);
-
-  const handleStageModeUserClick = () => {
-    collaborationStore.inviteOnStageDialog.open();
-    console.info(`clicked on ${participant.name} with ${id}`);
-  };
+  }, [maxVideoStreams, participant]);
 
   const handleOpenMenu = () => {
     if (meetingStore.selectedParticipant === participant.uid) {
@@ -72,27 +60,51 @@ const MeetingUser: FC<PropsInterface> = (props) => {
   };
 
   const handleRemoveParticipant = () => {
-    meetingRoomStore.removeParticipant(space?.id, meetingStore.selectedParticipant);
+    meetingRoomStore.removeParticipant(spaceId, meetingStore.selectedParticipant);
     meetingStore.selectParticipant(undefined);
   };
 
   const handleMuteParticipant = () => {
-    meetingRoomStore.muteParticipant(space?.id, meetingStore.selectedParticipant);
+    meetingRoomStore.muteParticipant(spaceId, meetingStore.selectedParticipant);
     meetingStore.selectParticipant(undefined);
   };
 
+  const isTalking: boolean = useMemo(() => {
+    return (participant.soundLevel || 0) > 3;
+  }, [participant.soundLevel]);
+
   return (
     <>
+      <styled.UserListItem data-testid="LocalUser-test" className={cn(isTalking && 'colored')}>
+        <styled.Inner className={cn(isTalking && 'colored')}>
+          <styled.Video ref={videoRef} />
+          {participant.avatarSrc && <styled.Avatar src={participant.avatarSrc} />}
+          {!participant.avatarSrc && (
+            <styled.Placeholder>
+              <IconSvg size="large" name="profile" />
+            </styled.Placeholder>
+          )}
+        </styled.Inner>
+
+        {participant?.isMuted && (
+          <styled.MicrophoneOff>
+            <IconSvg size="small" name="microphoneOff" isWhite />
+          </styled.MicrophoneOff>
+        )}
+
+        <styled.Username>
+          <Text text={participant.name} transform="uppercase" size="xxs" />
+        </styled.Username>
+      </styled.UserListItem>
+
       <li
         className={` mb-.5 p-.5
         rounded-full 
         border-1
         ${(participant?.soundLevel ?? 0) > 3 ? ' border-prime-blue-70' : ' border-transparant'}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         title={participant?.name}
         onClick={
-          collaborationStore.isModerator
+          isModerator
             ? () => {
                 handleOpenMenu();
               }
@@ -110,33 +122,9 @@ const MeetingUser: FC<PropsInterface> = (props) => {
             ) : (
               <AstronautIcon className="w-4 h-4" title={participant?.name} />
             )}
-            {agoraStore.isStageMode && collaborationStore.isModerator && hovered && (
-              <div
-                className="flex flex-col bg-dark-blue-50 rounded-full absolute h-full w-full items-center justify-center space-y-.5"
-                onClick={
-                  canEnterStage
-                    ? () => {
-                        if (agoraStore.isStageMode && collaborationStore.isModerator) {
-                          console.log('I am a moderator');
-                          handleStageModeUserClick();
-                        }
-                      }
-                    : undefined
-                }
-              >
-                {canEnterStage && <AddIcon title="" className="h-2 w-2" />}
-                <p
-                  className={`w-min text-center capitalize ${
-                    !canEnterStage ? 'text-white-100' : ''
-                  }`}
-                >
-                  {canEnterStage ? 'Invite' : 'Stage full'}
-                </p>
-              </div>
-            )}
           </div>
         </div>
-        {participant?.isMuted && !agoraStore.isStageMode && (
+        {participant?.isMuted && (
           <MicOff
             className="absolute inset-x-0 w-full bottom-.5 block  text-center h-1.5"
             style={{top: '70px'}}
