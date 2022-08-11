@@ -55,7 +55,7 @@ export const MicrophoneOff = styled.div`
   position: absolute;
   display: flex;
   justify-content: center;
-  bottom: 12px;
+  bottom: 4px;
   right: 0;
   left: 0;
 `;

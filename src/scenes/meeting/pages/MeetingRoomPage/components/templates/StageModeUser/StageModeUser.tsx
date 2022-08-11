@@ -3,7 +3,6 @@ import {observer} from 'mobx-react-lite';
 
 import {IconSvg, Text} from 'ui-kit';
 import {StageModeUserInterface} from 'core/models';
-import {ReactComponent as AddIcon} from 'images/icons/add.svg';
 import {InviteOnStageDialog} from 'scenes/collaboration/pages/StageModePage/components';
 
 import * as styled from './StageModeUser.styled';
@@ -46,32 +45,20 @@ const StageModeUser: FC<PropsInterface> = ({
           )}
 
           {isModerator && hovered && (
-            <div
-              className="flex flex-col bg-dark-blue-50 rounded-full absolute h-full w-full items-center justify-center space-y-.5"
-              onClick={
-                canEnterStage
-                  ? () => {
-                      if (isModerator) {
-                        console.log('I am a moderator');
-                        openInviteDialog();
-                      }
-                    }
-                  : undefined
-              }
-            >
-              {canEnterStage && <AddIcon title="" className="h-2 w-2" />}
-              <p
-                className={`w-min text-center capitalize ${!canEnterStage ? 'text-white-100' : ''}`}
-              >
-                {canEnterStage ? 'Invite' : 'Stage full'}
-              </p>
-            </div>
+            <styled.InviteOnStage {...(canEnterStage && {onClick: openInviteDialog})}>
+              {canEnterStage && <IconSvg name="add" size="medium-large" />}
+              <Text
+                text={!canEnterStage ? 'Invite' : 'Stage full'}
+                transform="uppercase"
+                size="xxs"
+              />
+            </styled.InviteOnStage>
           )}
-        </styled.Inner>
 
-        <styled.MicrophoneOff>
-          <IconSvg size="small" name="microphoneOff" isWhite />
-        </styled.MicrophoneOff>
+          <styled.MicrophoneOff>
+            <IconSvg size="small" name="microphoneOff" isWhite />
+          </styled.MicrophoneOff>
+        </styled.Inner>
 
         <styled.Username title={user.name}>
           <Text text={user.name} transform="uppercase" size="xxs" isMultiline={false} />

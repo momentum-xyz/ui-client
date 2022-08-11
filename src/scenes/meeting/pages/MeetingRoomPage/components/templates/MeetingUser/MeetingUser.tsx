@@ -62,13 +62,13 @@ const MeetingUser: FC<PropsInterface> = (props) => {
               <IconSvg size="large" name="profile" />
             </styled.Placeholder>
           )}
-        </styled.Inner>
 
-        {user.isMuted && (
-          <styled.MicrophoneOff>
-            <IconSvg size="small" name="microphoneOff" isWhite />
-          </styled.MicrophoneOff>
-        )}
+          {user.isMuted && (
+            <styled.MicrophoneOff>
+              <IconSvg size="small" name="microphoneOff" isWhite />
+            </styled.MicrophoneOff>
+          )}
+        </styled.Inner>
 
         <styled.Username title={user.name}>
           <Text text={user.name} transform="uppercase" size="xxs" isMultiline={false} />
