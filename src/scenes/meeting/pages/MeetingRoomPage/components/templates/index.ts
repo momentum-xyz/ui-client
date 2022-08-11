@@ -1,3 +1,3 @@
 export * from './LocalUser';
 export * from './MeetingUser';
-export * from './RemoteParticipant';
+export * from './StageModeUser';

@@ -70,7 +70,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
           </styled.MicrophoneOff>
         )}
 
-        <styled.Username>
+        <styled.Username title={user.name}>
           <Text text={user.name} transform="uppercase" size="xxs" isMultiline={false} />
         </styled.Username>
       </styled.UserListItem>

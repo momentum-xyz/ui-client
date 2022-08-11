@@ -10,7 +10,7 @@ import {
   MaxVideoStreams,
   LocalUser,
   MeetingUser,
-  RemoteParticipant,
+  StageModeUser,
   JoinLeaveButtons
 } from './components';
 import * as styled from './MeetingRoomPage.styled';
@@ -70,11 +70,14 @@ const MeetingRoomPage: FC = () => {
               {/* STAGE MODE USERS OR MEETING USERS */}
               {agoraStore.isStageMode
                 ? agoraStageModeStore.audienceMembers.map((user) => (
-                    <RemoteParticipant
+                    <StageModeUser
                       key={user.uid}
-                      audienceParticipant={user}
+                      user={user}
+                      isModerator={collaborationStore.isModerator}
                       canEnterStage={agoraStageModeStore.canEnterStage}
-                      totalParticipants={agoraStore.remoteUsers.length}
+                      isInviteDialogShown={collaborationStore.inviteOnStageDialog.isOpen}
+                      openInviteDialog={collaborationStore.inviteOnStageDialog.open}
+                      closeInviteDialog={collaborationStore.inviteOnStageDialog.close}
                     />
                   ))
                 : agoraStore.remoteUsers.map((user) => (
