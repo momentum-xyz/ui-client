@@ -10,6 +10,7 @@ import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 
 import {MeetingRoomPage} from './pages';
+import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
   const {mainStore, sessionStore, meetingStore} = useStore();
@@ -73,10 +74,10 @@ const Meeting: FC = () => {
   }, [agoraMeetingStore.maxVideoStreamsReached, t]);
 
   return (
-    <>
+    <styled.Container>
       <MeetingRoomPage />
       {!history.location.pathname.includes('stage-mode') && <StageModePIPWidget />}
-    </>
+    </styled.Container>
   );
 };
 

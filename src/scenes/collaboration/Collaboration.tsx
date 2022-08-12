@@ -18,13 +18,14 @@ import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/e
 import {createRoutesByConfig} from 'core/utils';
 import {PrivateSpaceError} from 'core/errors';
 
-import {COLLABORATION_ROUTES} from './CollaborationRoutes';
+import {COLLABORATION_ROUTES} from './Collaboration.routes';
 import {
   AcceptedToJoinStageDialog,
   DeclinedToJoinStageDialog,
   InvitedOnStageDialog,
   PrepareOnStageDialog
 } from './pages/StageModePage/components';
+import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
@@ -329,7 +330,7 @@ const Collaboration: FC = () => {
   ];
 
   return (
-    <>
+    <styled.Container>
       <Navigation tabs={tabs} />
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
       {newDeviceDialog.isOpen && (
@@ -372,7 +373,7 @@ const Collaboration: FC = () => {
       {prepareOnStageDialog.isOpen && (
         <PrepareOnStageDialog onClose={prepareOnStageDialog.close} onReady={countdownDialog.open} />
       )}
-    </>
+    </styled.Container>
   );
 };
 

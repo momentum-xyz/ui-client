@@ -6,7 +6,7 @@
   }
 }
 
-.main-container {
+.main {
   display: flex;
   width:100%;
   pointer-events: auto;
@@ -26,7 +26,7 @@
     z-index: 0;
   }
 
-  .main-container {
+  .main {
     pointer-events: none;
   }
 
