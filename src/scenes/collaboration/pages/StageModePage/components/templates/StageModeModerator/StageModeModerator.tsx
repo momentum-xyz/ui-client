@@ -39,7 +39,7 @@ const StageModeModerator: React.FC = () => {
       if (event === StageModeModerationEventEnum.REMOVE) {
         collaborationStore.selectUserToRemoveAndOpenDialog(remoteUser);
       } else if (event === StageModeModerationEventEnum.MUTE) {
-        await agoraStore.muteRemoteUser(remoteUser.uid as string);
+        await agoraStore.agoraStageModeStore.muteRemoteUser(remoteUser.uid as string);
       }
     },
     [agoraStore, collaborationStore]

@@ -47,17 +47,6 @@ const AgoraStore = types
       );
 
       return status;
-    }),
-    muteRemoteUser: flow(function* (userId: string) {
-      if (!self.spaceId) {
-        return;
-      }
-
-      if (self.isStageMode) {
-        yield self.agoraStageModeStore.muteRemoteUser(userId);
-      } else {
-        yield self.agoraMeetingStore.muteRemoteUser(userId);
-      }
     })
   }))
   // Listeners for Agora Client

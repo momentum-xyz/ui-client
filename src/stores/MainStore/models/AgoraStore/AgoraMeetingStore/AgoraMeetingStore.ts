@@ -29,13 +29,13 @@ const AgoraMeetingStore = types
         return;
       }
 
-      yield self.muteRequest.send(api.communicationRepository.muteParticipant, {
+      yield self.muteRequest.send(api.meetingRepository.muteUser, {
         spaceId: self.spaceId,
         userId
       });
     }),
     muteAllRemoteUsers: flow(function* () {
-      yield self.muteAllRequest.send(api.communicationRepository.muteAllParticipants, {
+      yield self.muteAllRequest.send(api.meetingRepository.muteAllUsers, {
         spaceId: self.spaceId
       });
     })

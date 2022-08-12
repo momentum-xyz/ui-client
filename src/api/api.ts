@@ -17,7 +17,7 @@ import * as spaceInviteRepository from './repositories/spaceInviteRepository';
 import * as statsRepository from './repositories/statsRepository';
 import * as statusRepository from './repositories/statusRepository';
 import * as playlistRepository from './repositories/playlistRepository';
-import * as communicationRepository from './repositories/communicationRepository';
+import * as meetingRepository from './repositories/meetingRepository';
 import * as attendeesRepository from './repositories/attendeesRepository';
 import * as dashboardRepository from './repositories/dashboardRepository';
 import * as integrationRepository from './repositories/integrationRepository';
@@ -57,7 +57,7 @@ export const api = {
   statsRepository,
   statusRepository,
   playlistRepository,
-  communicationRepository,
+  meetingRepository,
   attendeesRepository,
   dashboardRepository,
   agoraRepository,
@@ -88,7 +88,7 @@ export * from './repositories/favoriteRepository/favoriteRepository.api.types';
 export * from './repositories/tokenRepository/tokenRepository.api.types';
 export * from './repositories/statsRepository/statsRepository.api.types';
 export * from './repositories/playlistRepository/playlistRepository.api.types';
-export * from './repositories/communicationRepository/communicationRepository.api.types';
+export * from './repositories/meetingRepository/meetingRepository.api.types';
 export * from './repositories/dashboardRepository/dashboardRepository.api.types';
 export * from './repositories/integrationRepository/integrationRepository.api.types';
 export * from './repositories/resourcesRepository/resourcesRepository.types';
