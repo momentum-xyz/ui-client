@@ -9,6 +9,18 @@ export const UserListItem = styled.li`
   height: 92px;
   border-radius: 50%;
   border: 1px solid transparent;
+
+  .invite {
+    display: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    .invite {
+      display: flex;
+    }
+  }
 `;
 
 export const Inner = styled.div`
@@ -50,10 +62,6 @@ export const InviteOnStage = styled.div`
   overflow: hidden;
   top: 0;
   z-index: 2;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 export const MicrophoneOff = styled.div`

@@ -75,6 +75,8 @@ const AgoraStageModeStore = types
         spaceId: self.spaceId,
         userId
       });
+
+      return self.stageModeInviteRequest.isDone;
     }),
     requestToGoOnStage: flow(function* () {
       if (!self.spaceId) {

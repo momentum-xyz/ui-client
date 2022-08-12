@@ -9,15 +9,11 @@ const RootMeetingStore = types.compose(
   types
     .model('RootMeetingStore', {
       isKicked: false,
-      selectedParticipant: types.maybe(types.union(types.string, types.number)),
       meetingRoomStore: types.optional(MeetingRoomStore, {})
     })
     .actions((self) => ({
-      setKicked(kick: boolean) {
+      setKicked(kick: boolean): void {
         self.isKicked = kick;
-      },
-      selectParticipant(uid?: string | number) {
-        self.selectedParticipant = uid;
       }
     }))
 );

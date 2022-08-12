@@ -12,6 +12,10 @@ export const UserListItem = styled.li`
   &.colored {
     border: 1px solid ${(props) => props.theme.accent};
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const Inner = styled.div`

@@ -11,18 +11,18 @@ const MeetingRoomStore = types
     })
   )
   .actions((self) => ({
-    muteParticipant: flow(function* (spaceId?: string, userId?: string | number) {
+    muteUser: flow(function* (spaceId?: string, userId?: string | number) {
       yield self.request.send(api.communicationRepository.muteParticipant, {
         spaceId,
         userId
       });
     }),
-    muteAllParticipants: flow(function* (spaceId?: string) {
+    muteAllUsers: flow(function* (spaceId?: string) {
       yield self.request.send(api.communicationRepository.muteAllParticipants, {
         spaceId
       });
     }),
-    removeParticipant: flow(function* (spaceId?: string, userId?: string | number) {
+    kickUser: flow(function* (spaceId?: string, userId?: string | number) {
       yield self.request.send(api.communicationRepository.removeParticipant, {
         spaceId,
         userId

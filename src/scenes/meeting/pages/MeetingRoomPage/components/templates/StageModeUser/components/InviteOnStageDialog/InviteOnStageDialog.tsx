@@ -1,49 +1,44 @@
 import React from 'react';
 import {toast} from 'react-toastify';
-import {t} from 'i18next';
-import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
 
 import {Dialog, ToastContent, Text} from 'ui-kit';
-import {useStore} from 'shared/hooks';
 import {StageModeUserInterface} from 'core/models';
 
 import * as styled from './InviteOnStageDialog.styled';
 
 interface PropsInterface {
-  user?: StageModeUserInterface;
-  onClose?: () => void;
+  user: StageModeUserInterface;
+  inviteToStage: (userId: string) => Promise<boolean>;
+  onClose: () => void;
 }
 
 const DIALOG_WIDTH = '360px';
 
-const InviteOnStageDialog: React.FC<PropsInterface> = ({user, onClose}) => {
-  const {agoraStore} = useStore().mainStore;
-  const {agoraStageModeStore} = agoraStore;
+const InviteOnStageDialog: React.FC<PropsInterface> = (props) => {
+  const {user, inviteToStage, onClose} = props;
+
+  const {t} = useTranslation();
 
   const handleInviteClick = async () => {
-    if (user) {
-      try {
-        await agoraStageModeStore.inviteToStage(user.uid);
-        onClose?.();
-      } catch {
-        toast.error(
-          <ToastContent
-            isDanger
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('messages.inviteToStageFailure', {
-              user: user.name
-            })}
-            isCloseButton
-          />
-        );
-      }
+    if (await inviteToStage(user.uid)) {
+      onClose();
+    } else {
+      toast.error(
+        <ToastContent
+          isDanger
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.inviteToStageFailure', {user: user.name})}
+          isCloseButton
+        />
+      );
     }
   };
 
   return (
     <Dialog
-      title={user?.name}
+      title={user.name}
       onClose={onClose}
       showCloseButton
       layoutSize={{width: DIALOG_WIDTH}}
@@ -53,9 +48,7 @@ const InviteOnStageDialog: React.FC<PropsInterface> = ({user, onClose}) => {
       }}
       declineInfo={{
         title: t('actions.cancel'),
-        onClick: () => {
-          onClose?.();
-        }
+        onClick: onClose
       }}
     >
       <styled.Body data-testid="InviteOnStageDialog-test">
@@ -66,4 +59,4 @@ const InviteOnStageDialog: React.FC<PropsInterface> = ({user, onClose}) => {
   );
 };
 
-export default observer(InviteOnStageDialog);
+export default InviteOnStageDialog;

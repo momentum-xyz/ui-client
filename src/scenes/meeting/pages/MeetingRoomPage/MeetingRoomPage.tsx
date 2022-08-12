@@ -51,7 +51,7 @@ const MeetingRoomPage: FC = () => {
               <MuteAllButton
                 isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
                 peopleCount={meetingPeopleCount}
-                onMuteAll={() => meetingRoomStore.muteAllParticipants(space?.id)}
+                onMuteAll={() => meetingRoomStore.muteAllUsers(space?.id)}
               />
 
               {/* CURRENT USER */}
@@ -75,6 +75,7 @@ const MeetingRoomPage: FC = () => {
                       user={user}
                       isModerator={collaborationStore.isModerator}
                       canEnterStage={agoraStageModeStore.canEnterStage}
+                      inviteToStage={agoraStageModeStore.inviteToStage}
                       isInviteDialogShown={collaborationStore.inviteOnStageDialog.isOpen}
                       openInviteDialog={collaborationStore.inviteOnStageDialog.open}
                       closeInviteDialog={collaborationStore.inviteOnStageDialog.close}
@@ -87,8 +88,8 @@ const MeetingRoomPage: FC = () => {
                       user={user}
                       isModerator={collaborationStore.isModerator}
                       maxVideoStreams={agoraStore.maxVideoStreamsReached}
-                      onMuteUser={meetingRoomStore.muteParticipant}
-                      onKickUser={meetingRoomStore.removeParticipant}
+                      onMuteUser={meetingRoomStore.muteUser}
+                      onKickUser={meetingRoomStore.kickUser}
                     />
                   ))}
             </ul>
