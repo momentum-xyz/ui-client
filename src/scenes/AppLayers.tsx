@@ -5,13 +5,12 @@ import {useTheme} from 'styled-components';
 
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
-import {WidgetContainer} from 'scenes/widgets';
+import {Widgets} from 'scenes/widgets';
 
 import LiveStreamLayer from '../_REFACTOR_/component/overlays/LiveStreamLayer';
 
 const AppLayers: FC = ({children}) => {
-  const {mainStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore} = useStore().mainStore;
 
   const theme = useTheme();
 
@@ -25,7 +24,7 @@ const AppLayers: FC = ({children}) => {
       <main id="main" style={{height: '100vh', display: 'flex', paddingBottom: '70px'}}>
         <div className="main">{children}</div>
       </main>
-      <WidgetContainer />
+      <Widgets />
       <LiveStreamLayer />
     </div>
   );

@@ -24,9 +24,9 @@ import {
   WorldStatsWidget
 } from 'scenes/widgets/pages';
 
-import * as styled from './WidgetContainer.styled';
+import * as styled from './Widgets.styled';
 
-const WidgetContainer: FC = () => {
+const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
@@ -127,7 +127,7 @@ const WidgetContainer: FC = () => {
         html5={true}
         ref={(ref) => musicPlayer.setPlayer(ref)}
       />
-      <styled.Footer data-testid="WidgetContainer-test">
+      <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
           <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
         </styled.MainLinks>
@@ -200,4 +200,4 @@ const WidgetContainer: FC = () => {
   );
 };
 
-export default observer(WidgetContainer);
+export default observer(Widgets);
