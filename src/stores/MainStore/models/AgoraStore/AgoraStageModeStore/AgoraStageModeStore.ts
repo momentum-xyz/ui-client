@@ -18,10 +18,9 @@ const AgoraStageModeStore = types
       toggledStageMode: false,
       isOnStage: false,
       isLowQualityModeEnabled: false,
-      users: types.optional(types.array(StageModeUser), []),
       requestWasMadeToGoOnStage: false,
+      users: types.optional(types.array(StageModeUser), []),
 
-      // Requests
       tokenRequest: types.optional(RequestModel, {}),
       joinStageModeRequest: types.optional(RequestModel, {}),
       leaveStageModeRequest: types.optional(RequestModel, {}),

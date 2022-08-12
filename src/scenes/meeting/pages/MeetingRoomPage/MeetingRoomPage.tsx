@@ -20,7 +20,7 @@ const MeetingRoomPage: FC = () => {
   const {meetingRoomStore} = meetingStore;
   const {space, stageModeStore} = collaborationStore;
   const {agoraStore, unityStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore, meetingPeopleCount} = agoraStore;
+  const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 
   useEffect(() => {
     stageModeStore.removeAllPopups();
@@ -44,13 +44,13 @@ const MeetingRoomPage: FC = () => {
           <JoinLeaveButtons isShown={!unityStore.isPaused} />
 
           <styled.ListItemContent className="noScrollIndicator">
-            <PeopleCount count={meetingPeopleCount} />
+            <PeopleCount count={agoraStore.meetingPeopleCount} />
 
             <ul>
               {/* MUTE ALL */}
               <MuteAllButton
                 isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
-                peopleCount={meetingPeopleCount}
+                peopleCount={agoraStore.meetingPeopleCount}
                 onMuteAll={() => meetingRoomStore.muteAllUsers(space?.id)}
               />
 
@@ -65,7 +65,7 @@ const MeetingRoomPage: FC = () => {
                 soundLevel={agoraStore.localSoundLevel}
               />
 
-              <MaxVideoStreams isShown={agoraStore.maxVideoStreamsReached} />
+              <MaxVideoStreams isShown={agoraMeetingStore.maxVideoStreamsReached} />
 
               {/* STAGE MODE USERS OR MEETING USERS */}
               {agoraStore.isStageMode
@@ -81,13 +81,13 @@ const MeetingRoomPage: FC = () => {
                       closeInviteDialog={collaborationStore.inviteOnStageDialog.close}
                     />
                   ))
-                : agoraStore.remoteUsers.map((user) => (
+                : agoraMeetingStore.users.map((user) => (
                     <MeetingUser
                       key={user.uid}
                       spaceId={space?.id || ''}
                       user={user}
                       isModerator={collaborationStore.isModerator}
-                      maxVideoStreams={agoraStore.maxVideoStreamsReached}
+                      maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
                       onMuteUser={meetingRoomStore.muteUser}
                       onKickUser={meetingRoomStore.kickUser}
                     />

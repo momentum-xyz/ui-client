@@ -14,7 +14,7 @@ import {MeetingRoomPage} from './pages';
 const Meeting: FC = () => {
   const {mainStore, sessionStore, meetingStore} = useStore();
   const {agoraStore} = mainStore;
-  const {userDevicesStore} = agoraStore;
+  const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -59,7 +59,7 @@ const Meeting: FC = () => {
   });
 
   useEffect(() => {
-    if (agoraStore.maxVideoStreamsReached) {
+    if (agoraMeetingStore.maxVideoStreamsReached) {
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -70,7 +70,7 @@ const Meeting: FC = () => {
         TOAST_GROUND_OPTIONS
       );
     }
-  }, [agoraStore.maxVideoStreamsReached, t]);
+  }, [agoraMeetingStore.maxVideoStreamsReached, t]);
 
   return (
     <>

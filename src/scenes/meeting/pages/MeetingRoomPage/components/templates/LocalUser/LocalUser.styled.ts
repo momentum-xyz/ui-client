@@ -61,7 +61,7 @@ export const Username = styled.div`
   position: absolute;
   display: flex;
   justify-content: center;
-  bottom: -18px;
+  bottom: -15px;
   right: 0;
   left: 0;
 `;
