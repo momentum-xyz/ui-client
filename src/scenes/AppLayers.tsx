@@ -21,8 +21,8 @@ const AppLayers: FC = ({children}) => {
   return (
     <div data-testid="AppLayers-test">
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
-      <main id="main" style={{height: '100vh', display: 'flex', paddingBottom: '70px'}}>
-        <div className="main">{children}</div>
+      <main id="main">
+        <div className="main-content">{children}</div>
       </main>
       <Widgets />
       <LiveStreamLayer />

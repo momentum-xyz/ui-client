@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const Container = styled.ul`
+export const Container = styled.div`
   margin: 0;
   height: 100%;
 `;
 
-export const ListItem = styled.li`
+export const Inner = styled.div`
   padding: 0 1px 0 0;
   display: flex;
   align-items: end;
@@ -18,7 +18,7 @@ export const ListItem = styled.li`
   gap: 10px;
 `;
 
-export const ListItemContent = styled.div`
+export const Content = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;

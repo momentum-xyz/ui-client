@@ -32,10 +32,10 @@ const MeetingRoomPage: FC = () => {
 
   return (
     <styled.Container data-testid="MeetingRoomPage-test">
-      <styled.ListItem>
+      <styled.Inner>
         <JoinLeaveButtons isShown={!unityStore.isPaused} />
 
-        <styled.ListItemContent className="noScrollIndicator">
+        <styled.Content className="noScrollIndicator">
           <PeopleCount count={agoraStore.meetingPeopleCount} />
 
           <ul>
@@ -85,8 +85,8 @@ const MeetingRoomPage: FC = () => {
                   />
                 ))}
           </ul>
-        </styled.ListItemContent>
-      </styled.ListItem>
+        </styled.Content>
+      </styled.Inner>
     </styled.Container>
   );
 };
