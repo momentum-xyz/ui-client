@@ -46,6 +46,11 @@ export const Placeholder = styled.div`
   align-items: center;
   border-radius: 50%;
   background: ${(props) => props.theme.bg};
+
+  svg {
+    width: 32px;
+    color: ${(props) => props.theme.accent};
+  }
 `;
 
 export const MicrophoneOff = styled.div`

@@ -4,6 +4,7 @@ import cn from 'classnames';
 
 import {IconSvg, Text} from 'ui-kit';
 import {AgoraRemoteUserInterface} from 'core/models';
+import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
 
 import {UserMenu} from './components';
 import * as styled from './MeetingUser.styled';
@@ -59,7 +60,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
           {user.cameraOff && user.avatarSrc && <styled.Avatar src={user.avatarSrc} />}
           {user.cameraOff && !user.avatarSrc && (
             <styled.Placeholder>
-              <IconSvg size="large" name="profile" />
+              <Astronaut />
             </styled.Placeholder>
           )}
 

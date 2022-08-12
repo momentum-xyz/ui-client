@@ -5,6 +5,7 @@ import {ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 import cn from 'classnames';
 
 import {IconSvg, Text} from 'ui-kit';
+import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
 
 import * as styled from './LocalUser.styled';
 
@@ -60,7 +61,7 @@ const LocalUser: FC<PropsInterface> = ({
         {cameraOff && avatarSrc && <styled.Avatar src={avatarSrc} />}
         {cameraOff && !avatarSrc && (
           <styled.Placeholder>
-            <IconSvg size="large" name="profile" />
+            <Astronaut />
           </styled.Placeholder>
         )}
       </styled.Inner>
