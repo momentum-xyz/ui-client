@@ -1,8 +1,8 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
+import {generatePath, Redirect} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
-import {RouteConfigInterface} from 'core/interfaces';
+import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
 
 import {
   DashboardPage,
@@ -51,3 +51,38 @@ export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
     main: () => <Redirect to={ROUTES.collaboration.dashboard} />
   }
 ];
+
+export const buildNavigationTabs = (
+  spaceId: string,
+  isStageMode: boolean,
+  isScreenSharing: boolean
+): NavigationTabInterface[] => {
+  return [
+    {
+      path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
+      iconName: 'tiles'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
+      iconName: 'calendar'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
+      iconName: 'stage',
+      isActive: isStageMode
+    },
+    {
+      path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
+      iconName: 'screenshare',
+      isActive: isScreenSharing
+    },
+    {
+      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
+      iconName: 'miro'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
+      iconName: 'drive'
+    }
+  ];
+};

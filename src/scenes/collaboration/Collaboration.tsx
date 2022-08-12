@@ -5,7 +5,10 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
-import {NavigationTabInterface} from 'core/interfaces';
+import {useStore, usePosBusEvent} from 'shared/hooks';
+import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
+import {createRoutesByConfig} from 'core/utils';
+import {PrivateSpaceError} from 'core/errors';
 import {
   Navigation,
   ToastContent,
@@ -13,18 +16,14 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
-import {useStore, usePosBusEvent} from 'shared/hooks';
-import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
-import {createRoutesByConfig} from 'core/utils';
-import {PrivateSpaceError} from 'core/errors';
 
-import {COLLABORATION_ROUTES} from './Collaboration.routes';
 import {
   AcceptedToJoinStageDialog,
   DeclinedToJoinStageDialog,
   InvitedOnStageDialog,
   PrepareOnStageDialog
 } from './pages/StageModePage/components';
+import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
@@ -300,39 +299,18 @@ const Collaboration: FC = () => {
     }
   };
 
-  const tabs: NavigationTabInterface[] = [
-    {
-      path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
-      iconName: 'tiles'
-    },
-    {
-      path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
-      iconName: 'calendar'
-    },
-    {
-      path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
-      iconName: 'stage',
-      isActive: agoraStore.isStageMode
-    },
-    {
-      path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
-      iconName: 'screenshare',
-      isActive: !!agoraScreenShareStore.videoTrack
-    },
-    {
-      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
-      iconName: 'miro'
-    },
-    {
-      path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
-      iconName: 'drive'
-    }
-  ];
-
   return (
     <styled.Container>
-      <Navigation tabs={tabs} />
+      <Navigation
+        tabs={buildNavigationTabs(
+          spaceId,
+          agoraStore.isStageMode,
+          !!agoraScreenShareStore.videoTrack
+        )}
+      />
+
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
+
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
           onClose={newDeviceDialog.close}
