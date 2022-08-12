@@ -1,16 +1,18 @@
 import {flow, types} from 'mobx-state-tree';
 import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
 
-import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
+import {appVariables} from 'api/constants';
+import {AgoraRemoteUser, RequestModel, ResetModel} from 'core/models';
 
-const AgoraVideoCallStore = types
+const AgoraMeetingStore = types
   .compose(
     ResetModel,
-    types.model('AgoraVideoCallStore', {
+    types.model('AgoraMeetingStore', {
       appId: '',
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
+      users: types.optional(types.array(AgoraRemoteUser), []),
 
       tokenRequest: types.optional(RequestModel, {}),
       muteRequest: types.optional(RequestModel, {}),
@@ -27,13 +29,13 @@ const AgoraVideoCallStore = types
         return;
       }
 
-      yield self.muteRequest.send(api.communicationRepository.muteParticipant, {
+      yield self.muteRequest.send(api.meetingRepository.muteUser, {
         spaceId: self.spaceId,
         userId
       });
     }),
     muteAllRemoteUsers: flow(function* () {
-      yield self.muteAllRequest.send(api.communicationRepository.muteAllParticipants, {
+      yield self.muteAllRequest.send(api.meetingRepository.muteAllUsers, {
         spaceId: self.spaceId
       });
     })
@@ -119,7 +121,10 @@ const AgoraVideoCallStore = types
   .views((self) => ({
     get joined(): boolean {
       return self.spaceId !== undefined;
+    },
+    get maxVideoStreamsReached(): boolean {
+      return self.users.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT;
     }
   }));
 
-export {AgoraVideoCallStore};
+export {AgoraMeetingStore};

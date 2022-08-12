@@ -10,11 +10,12 @@ import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
 
 import {MeetingRoomPage} from './pages';
+import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
   const {mainStore, sessionStore, meetingStore} = useStore();
   const {agoraStore} = mainStore;
-  const {userDevicesStore} = agoraStore;
+  const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -59,7 +60,7 @@ const Meeting: FC = () => {
   });
 
   useEffect(() => {
-    if (agoraStore.maxVideoStreamsReached) {
+    if (agoraMeetingStore.maxVideoStreamsReached) {
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -70,13 +71,13 @@ const Meeting: FC = () => {
         TOAST_GROUND_OPTIONS
       );
     }
-  }, [agoraStore.maxVideoStreamsReached, t]);
+  }, [agoraMeetingStore.maxVideoStreamsReached, t]);
 
   return (
-    <>
+    <styled.Container>
       <MeetingRoomPage />
       {!history.location.pathname.includes('stage-mode') && <StageModePIPWidget />}
-    </>
+    </styled.Container>
   );
 };
 

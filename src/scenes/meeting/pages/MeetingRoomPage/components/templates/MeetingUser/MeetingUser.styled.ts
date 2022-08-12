@@ -12,6 +12,10 @@ export const UserListItem = styled.li`
   &.colored {
     border: 1px solid ${(props) => props.theme.accent};
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const Inner = styled.div`
@@ -49,6 +53,11 @@ export const Placeholder = styled.div`
   align-items: center;
   border-radius: 50%;
   background: ${(props) => props.theme.bg};
+
+  svg {
+    width: 32px;
+    color: ${(props) => props.theme.accent};
+  }
 `;
 
 export const MicrophoneOff = styled.div`
@@ -65,7 +74,7 @@ export const Username = styled.div`
   display: flex;
   width: 92px;
   justify-content: center;
-  bottom: -18px;
+  bottom: -15px;
   right: 0;
   left: 0;
 `;

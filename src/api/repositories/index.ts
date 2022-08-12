@@ -14,7 +14,7 @@ export * from './spaceTypeRepository';
 export * from './spaceInviteRepository';
 export * from './statusRepository';
 export * from './playlistRepository';
-export * from './communicationRepository';
+export * from './meetingRepository';
 export * from './dashboardRepository';
 export * from './resourcesRepository';
 export * from './spaceIntegrationsRepository';

@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {appVariables} from 'api/constants';
 import {Text, PropsWithThemeInterface} from 'ui-kit/index';
 import flamingo from 'ui-kit/assets/images/common/flamingo.svg';
-import spinner from 'ui-kit/assets/images/common/tail-sping.svg';
+import spinner from 'ui-kit/assets/images/common/spinner.svg';
 
 import * as styled from './UnityLoader.styled';
 

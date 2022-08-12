@@ -303,7 +303,8 @@ export const enGb = {
       thisWillEnableYouToUseStage:
         '(This will enable you to talk, screenshare, and transmit video)',
       pleaseTryAgainLater: 'Please try again later',
-      videoLimitReached: 'Video limit reached'
+      videoLimitReached: 'Video limit reached',
+      stageFull: 'Stage full'
     },
     titles: {
       alert: 'alert',

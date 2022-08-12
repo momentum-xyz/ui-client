@@ -8,7 +8,7 @@ import {ROUTES} from 'core/constants';
 import {createRoutesByConfig} from 'core/utils';
 import {NavigationTabInterface} from 'core/interfaces';
 
-import {ADMIN_ROUTES} from './SpaceAdminRoutes';
+import {ADMIN_ROUTES} from './SpaceAdmin.routes';
 
 const SpaceAdmin: FC = () => {
   const {spaceAdminStore, mainStore} = useStore();

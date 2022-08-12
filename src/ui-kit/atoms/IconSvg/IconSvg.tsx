@@ -33,6 +33,7 @@ const IconSvg: FC<IconSvgPropsInterface> = (props) => {
   } = props;
   return (
     <styled.Wrapper
+      data-testid="IconSvg-test"
       {...rest}
       className={cn(
         size,
@@ -41,7 +42,6 @@ const IconSvg: FC<IconSvgPropsInterface> = (props) => {
         isDanger && 'danger',
         className
       )}
-      data-testid="IconSvg-test"
     >
       <styled.Svg>
         <use xlinkHref={`${svgSpritePath}#${name as string}`} />

@@ -1,6 +1,6 @@
 import {appVariables} from 'api/constants';
 
-export const communicationRepositoryEndpoints = () => {
+export const meetingRepositoryEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/meeting`;
 
   return {
