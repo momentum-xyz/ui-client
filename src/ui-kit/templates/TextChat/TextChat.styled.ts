@@ -18,6 +18,7 @@ export const Container = styled.div`
 
 export const InnerContainer = styled.div`
   display: flex;
+  width: 100%;
   justify-content: space-between;
   gap: 1;
   font-weight: 700;
@@ -30,6 +31,7 @@ export const ChatBox = styled.ul`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  width: 100%;
 
   overflow-y: scroll;
   overflow-x: hidden;
@@ -71,8 +73,18 @@ export const StyledHeading = styled(Heading)`
   padding-right: 5px;
 `;
 
+export const TextWrapper = styled.div`
+  width: calc(10 * (100% / 12));
+`;
+
 export const Text = styled.div`
-  font-size: 14px;
+  display: block;
+  width: 100%
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
   line-height: 20px;
   font-weight: 400;
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.4)};
@@ -80,9 +92,8 @@ export const Text = styled.div`
 
 export const Time = styled.time`
   font-weight: 400;
+  line-height: 20px;
   font-size: 13px;
-  padding-left: 7px;
-
   color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
 `;
 

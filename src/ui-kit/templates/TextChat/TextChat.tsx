@@ -65,7 +65,9 @@ const TextChat: FC<PropsInterface> = ({
           message.messageType === TextMessageEnum.SYSTEM ? (
             <styled.TextContainer key={index}>
               <styled.InnerContainer>
-                <styled.Text>{message?.text || ''}</styled.Text>
+                <styled.TextWrapper>
+                  <styled.Text>{message?.text || ''}</styled.Text>
+                </styled.TextWrapper>
                 <styled.Time>{dateToTime(message.date)}</styled.Time>
               </styled.InnerContainer>
             </styled.TextContainer>
