@@ -66,7 +66,7 @@ const WorldCalendarPage: FC = () => {
           onClose={magicDialog.close}
         />
       )}
-      <PageTopBar title="World Calendar" onClose={() => history.goBack()} />
+      <PageTopBar title="World Calendar" onClose={() => history.push(ROUTES.base)} />
       <EventList
         currentUserId={sessionStore.userId}
         events={eventListStore.events}

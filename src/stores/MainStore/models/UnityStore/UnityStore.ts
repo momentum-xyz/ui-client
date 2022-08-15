@@ -11,7 +11,6 @@ const UnityStore = types
   .model('UnityStore', {
     isInitialized: false,
     isTeleportReady: false,
-    isPaused: false,
     muted: false,
     volume: types.optional(types.number, 0.1)
   })
@@ -36,8 +35,6 @@ const UnityStore = types
       self.isInitialized = true;
     },
     teleportIsReady(): void {
-      UnityService.resume();
-      self.isPaused = false;
       self.isTeleportReady = true;
     },
     setAuthToken(token?: string): void {
@@ -60,9 +57,7 @@ const UnityStore = types
       UnityService.teleportToVector3(vector);
     },
     changeKeyboardControl(isActive: boolean): void {
-      if (!self.isPaused) {
-        UnityService.setKeyboardControl(isActive);
-      }
+      UnityService.setKeyboardControl(isActive);
     },
     sendHighFive(receiverId: string): void {
       UnityService.sendHighFive(receiverId);
@@ -72,16 +67,10 @@ const UnityStore = types
       UnityService.lookAtWisp(receiverId);
     },
     pause(): void {
-      if (!self.isPaused) {
-        self.isPaused = true;
-        UnityService.pause();
-      }
+      UnityService.pause();
     },
     resume(): void {
-      if (self.isPaused) {
-        self.isPaused = false;
-        UnityService.resume();
-      }
+      UnityService.resume();
     },
     setInitialVolume() {
       UnityService.setSoundEffectVolume('0.1');
