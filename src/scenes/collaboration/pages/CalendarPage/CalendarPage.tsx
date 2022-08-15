@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {useHistory, useParams} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
@@ -21,7 +21,6 @@ const CalendarPage: FC = () => {
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
-  const {eventId} = useParams<{eventId: string}>();
   const history = useHistory();
   const theme = useTheme();
 
@@ -103,7 +102,6 @@ const CalendarPage: FC = () => {
       <EventList
         currentUserId={sessionStore.userId}
         events={eventListStore.events}
-        selectedEventId={eventId}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={eventListStore.areEventsLoading}
         onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
