@@ -99,17 +99,18 @@ const CalendarPage: FC = () => {
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
         )}
       </SpaceTopBar>
-      <EventList
-        currentUserId={sessionStore.userId}
-        events={eventListStore.events}
-        onMagicLinkOpen={handleMagicLinkOpen}
-        isLoading={eventListStore.areEventsLoading}
-        onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
-        onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
-        onWeblinkClick={handleWeblink}
-        onShowAttendeesList={attendeesListStore.showAttendees}
-      />
-
+      <styled.InnerContainer>
+        <EventList
+          currentUserId={sessionStore.userId}
+          events={eventListStore.events}
+          onMagicLinkOpen={handleMagicLinkOpen}
+          isLoading={eventListStore.areEventsLoading}
+          onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
+          onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
+          onWeblinkClick={handleWeblink}
+          onShowAttendeesList={attendeesListStore.showAttendees}
+        />
+      </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
 
       {calendarStore.magicId && magicDialog.isOpen && (
