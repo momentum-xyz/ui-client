@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
-  transform: translateX(-164px) translateY(-107px);
   height: 95px;
   display: flex;
   align-items: center;
+  right: 70px;
+  top: 0;
 `;
 
 export const Content = styled.div`

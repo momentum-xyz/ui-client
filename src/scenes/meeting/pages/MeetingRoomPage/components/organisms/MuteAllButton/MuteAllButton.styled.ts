@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const MuteButtonContainer = styled.li`
-  padding: 5px 0;
+  padding: 8px 0;
   display: flex;
   flex-direction: column;
   gap: 9px;

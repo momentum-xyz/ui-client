@@ -6,14 +6,11 @@ export const Container = styled.div`
 `;
 
 export const Inner = styled.div`
-  padding: 0 1px 0 0;
+  padding: 0 6px 0 0;
   display: flex;
   align-items: end;
   flex-direction: column;
-  position: absolute;
-  transform: translateX(-400px);
-  width: 400px;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 60px);
   pointer-events: none;
   gap: 10px;
 `;

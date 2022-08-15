@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const UserListItem = styled.li`
   position: relative;
-  margin: 0 0 14px 0;
+  margin: 0 0 22px 0;
   padding: 5px;
   width: 92px;
   height: 92px;
@@ -24,9 +24,14 @@ export const Inner = styled.div`
   height: 100%;
   border-radius: 50%;
   border: 2px solid transparent;
+  transition: opacity var(--tr-150-ei);
 
   &.colored {
     border: 2px solid ${(props) => props.theme.accent};
+  }
+
+  &:hover {
+    opacity: 0.85;
   }
 `;
 
@@ -74,7 +79,7 @@ export const Username = styled.div`
   display: flex;
   width: 92px;
   justify-content: center;
-  bottom: -15px;
+  bottom: -18px;
   right: 0;
   left: 0;
 `;
