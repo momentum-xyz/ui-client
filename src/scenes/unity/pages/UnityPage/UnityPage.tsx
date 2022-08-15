@@ -1,8 +1,8 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
-import {generatePath, useHistory, useLocation} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
@@ -18,6 +18,7 @@ import {
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
 
+import {PathObserver} from './components';
 import * as styled from './UnityPage.styled';
 
 const UnityContextCSS = {
@@ -33,15 +34,6 @@ const UnityPage: FC = () => {
   const theme = useTheme();
   const history = useHistory();
   const {t} = useTranslation();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.pathname === ROUTES.base) {
-      unityStore.resume();
-    } else {
-      unityStore.pause();
-    }
-  }, [location, unityStore]);
 
   useUnityEvent('MomentumLoaded', () => {
     unityStore.setAuthToken(auth.user?.access_token);
@@ -169,6 +161,11 @@ const UnityPage: FC = () => {
       <styled.Inner data-testid="UnityPage-test">
         <Unity unityContext={unityStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
+      <PathObserver
+        isTeleportReady={unityStore.isTeleportReady}
+        resumeUnity={unityStore.resume}
+        pauseUnity={unityStore.pause}
+      />
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>
   );

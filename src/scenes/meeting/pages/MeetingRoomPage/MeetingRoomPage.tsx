@@ -18,7 +18,7 @@ const MeetingRoomPage: FC = () => {
   const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
   const {meetingRoomStore} = meetingStore;
   const {space, stageModeStore} = collaborationStore;
-  const {agoraStore, unityStore} = mainStore;
+  const {agoraStore} = mainStore;
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const MeetingRoomPage: FC = () => {
   return (
     <styled.Container data-testid="MeetingRoomPage-test">
       <styled.Inner>
-        <JoinLeaveButtons isShown={!unityStore.isPaused} />
+        <JoinLeaveButtons isShown={false} />
 
         <styled.Content className="noScrollIndicator">
           <PeopleCount count={agoraStore.meetingPeopleCount} />
