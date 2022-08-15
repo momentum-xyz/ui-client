@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 
 import {NavigationTabInterface} from 'core/interfaces';
-import {NavigationBar, NavigationBarItem} from 'ui-kit';
+import {NavigationBar, NavigationBarItem, Tooltip} from 'ui-kit';
 
 import * as styled from './Navigation.styled';
 
@@ -14,15 +14,16 @@ const Navigation: FC<PropsInterface> = ({tabs}) => {
     <styled.Container data-testid="Navigation-test">
       <NavigationBar>
         {tabs.map((tab) => (
-          <NavigationBarItem
-            key={tab.path}
-            exact={tab.exact}
-            iconName={tab.iconName}
-            path={tab.path}
-            isActive={tab.isActive}
-            replace={tab.replace}
-            state={{canGoBack: tab.canGoBack}}
-          />
+          <Tooltip key={tab.path} placement="right" label={tab.title}>
+            <NavigationBarItem
+              exact={tab.exact}
+              iconName={tab.iconName}
+              path={tab.path}
+              isActive={tab.isActive}
+              replace={tab.replace}
+              state={{canGoBack: tab.canGoBack}}
+            />
+          </Tooltip>
         ))}
       </NavigationBar>
     </styled.Container>

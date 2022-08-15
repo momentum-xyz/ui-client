@@ -1,6 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {generatePath, Switch, useParams, useRouteMatch} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {t} from 'i18next';
 
 import {Navigation} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -45,14 +46,16 @@ const SpaceAdmin: FC = () => {
       iconName: 'tiles',
       canGoBack: true,
       replace: true,
-      exact: true
+      exact: true,
+      title: t('labels.manageSpace')
     },
     {
       path: generatePath(ROUTES.spaceAdmin.broadcast, {spaceId}),
       iconName: 'airport-signal',
       canGoBack: true,
       replace: true,
-      exact: true
+      exact: true,
+      title: t('labels.manageBroadcast')
     }
   ];
 

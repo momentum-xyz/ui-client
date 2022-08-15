@@ -1,5 +1,6 @@
 import React from 'react';
 import {generatePath, Redirect} from 'react-router-dom';
+import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
@@ -60,29 +61,35 @@ export const buildNavigationTabs = (
   return [
     {
       path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
-      iconName: 'tiles'
+      iconName: 'tiles',
+      title: t('labels.dashboard')
     },
     {
       path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
-      iconName: 'calendar'
+      iconName: 'calendar',
+      title: t('labels.calendar')
     },
     {
       path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
       iconName: 'stage',
-      isActive: isStageMode
+      isActive: isStageMode,
+      title: t('labels.stageMode')
     },
     {
       path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
       iconName: 'screenshare',
-      isActive: isScreenSharing
+      isActive: isScreenSharing,
+      title: t('labels.screenShare')
     },
     {
       path: generatePath(ROUTES.collaboration.miro, {spaceId}),
-      iconName: 'miro'
+      iconName: 'miro',
+      title: t('labels.miro')
     },
     {
       path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
-      iconName: 'drive'
+      iconName: 'drive',
+      title: t('labels.googleDrive')
     }
   ];
 };
