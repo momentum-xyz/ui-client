@@ -53,28 +53,26 @@ const MeetingUser: FC<PropsInterface> = (props) => {
   }, [user.soundLevel]);
 
   return (
-    <>
-      <styled.UserListItem data-testid="MeetingUser-test" className={cn(isTalking && 'colored')}>
-        <styled.Inner onClick={handleOpenMenu} className={cn(isTalking && 'colored')}>
-          <styled.Video ref={videoRef} />
-          {user.cameraOff && user.avatarSrc && <styled.Avatar src={user.avatarSrc} />}
-          {user.cameraOff && !user.avatarSrc && (
-            <styled.Placeholder>
-              <Astronaut />
-            </styled.Placeholder>
-          )}
+    <styled.UserListItem data-testid="MeetingUser-test" className={cn(isTalking && 'colored')}>
+      <styled.Inner onClick={handleOpenMenu} className={cn(isTalking && 'colored')}>
+        <styled.Video ref={videoRef} />
+        {user.cameraOff && user.avatarSrc && <styled.Avatar src={user.avatarSrc} />}
+        {user.cameraOff && !user.avatarSrc && (
+          <styled.Placeholder>
+            <Astronaut />
+          </styled.Placeholder>
+        )}
 
-          {user.isMuted && (
-            <styled.MicrophoneOff>
-              <IconSvg size="small" name="microphoneOff" isWhite />
-            </styled.MicrophoneOff>
-          )}
-        </styled.Inner>
+        {user.isMuted && (
+          <styled.MicrophoneOff>
+            <IconSvg size="small" name="microphoneOff" isWhite />
+          </styled.MicrophoneOff>
+        )}
+      </styled.Inner>
 
-        <styled.Username title={user.name}>
-          <Text text={user.name} transform="uppercase" size="xxs" isMultiline={false} />
-        </styled.Username>
-      </styled.UserListItem>
+      <styled.Username title={user.name}>
+        <Text text={user.name} transform="uppercase" size="xxs" isMultiline={false} />
+      </styled.Username>
 
       {isMenuShown && (
         <UserMenu
@@ -84,7 +82,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
           onClose={() => setIsMenuShown(false)}
         />
       )}
-    </>
+    </styled.UserListItem>
   );
 };
 

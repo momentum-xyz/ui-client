@@ -3,7 +3,7 @@ import {rgba} from 'polished';
 
 export const UserListItem = styled.li`
   position: relative;
-  margin: 0 0 14px 0;
+  margin: 0 0 22px 0;
   padding: 5px;
   width: 92px;
   height: 92px;
@@ -84,7 +84,7 @@ export const Username = styled.div`
   display: flex;
   width: 92px;
   justify-content: center;
-  bottom: -15px;
+  bottom: -18px;
   right: 0;
   left: 0;
 `;

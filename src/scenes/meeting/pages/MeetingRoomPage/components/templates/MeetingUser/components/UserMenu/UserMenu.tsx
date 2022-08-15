@@ -31,14 +31,14 @@ const UserMenu: FC<PropsInterface> = (props) => {
             <styled.IconContainer>
               <IconSvg name="microphoneOff" />
             </styled.IconContainer>
-            <Text text={t('actions.muteName', {name: user.name})} size="xxs" />
+            <Text text={t('actions.muteName', {name: user.name})} size="xxs" isMultiline={false} />
           </styled.Option>
         )}
         <styled.Option onClick={onKickUser}>
           <styled.IconContainer>
             <IconSvg name="remove-user" />
           </styled.IconContainer>
-          <Text text={t('actions.kickName', {name: user.name})} size="xxs" />
+          <Text text={t('actions.kickName', {name: user.name})} size="xxs" isMultiline={false} />
         </styled.Option>
       </styled.Content>
       <styled.Triangle />
