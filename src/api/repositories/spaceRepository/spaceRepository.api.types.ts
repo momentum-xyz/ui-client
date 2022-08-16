@@ -174,7 +174,7 @@ export interface NewSpaceDetails {
 }
 
 export interface CreateSpaceRequest {
-  newSpace: NewSpaceDetails;
+  space: NewSpaceDetails;
 }
 
 export interface CreateSpaceResponse {

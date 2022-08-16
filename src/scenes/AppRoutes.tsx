@@ -105,6 +105,15 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     )
   },
   {
+    path: ROUTES.meeting.grabTable,
+    main: () => (
+      <>
+        <HomePage />
+        <Meeting />
+      </>
+    )
+  },
+  {
     path: ROUTES.magic,
     main: () => <MagicPage />
   },

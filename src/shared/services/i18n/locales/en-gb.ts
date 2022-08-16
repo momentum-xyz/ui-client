@@ -203,7 +203,8 @@ export const enGb = {
       microphoneOn: 'Microphone on',
       microphoneOff: 'Microphone off',
       webcamPreview: 'Webcam Preview',
-      audioVideoSettings: 'Audio/Video Settings'
+      audioVideoSettings: 'Audio/Video Settings',
+      grabTable: 'Grab a Table'
     },
     messages: {
       loading: 'Loading Momentum',

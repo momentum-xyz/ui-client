@@ -11,6 +11,9 @@ export const ROUTES = {
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
   welcome: '/welcome',
+  meeting: {
+    grabTable: '/meeting/:spaceId/grabTable'
+  },
   collaboration: {
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
