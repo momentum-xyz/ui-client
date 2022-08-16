@@ -2,7 +2,7 @@ import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 
-import {IconSvg, Text, useClickOutside, useResize, useScroll} from 'ui-kit';
+import {IconSvg, Text, useResize, useScroll} from 'ui-kit';
 import {AgoraRemoteUserInterface} from 'core/models';
 import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
 
@@ -72,9 +72,6 @@ const MeetingUser: FC<PropsInterface> = (props) => {
       setCoords({left: rect.x - 182, top: rect.y - 7, width: rect.width});
     }
   };
-  useClickOutside(menuRef, () => {
-    setIsMenuShown(false);
-  });
 
   useScroll(menuRef, updateTooltipCoordsOnScroll);
   useResize(menuRef, updateTooltipCoords);
@@ -106,6 +103,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
           user={user}
           onMuteUser={() => onMuteUser(spaceId, user.uid)}
           onKickUser={() => onKickUser(spaceId, user.uid)}
+          onClose={() => setIsMenuShown(false)}
           coords={coords}
         />
       )}
