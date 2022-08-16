@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
+import React, {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 
-import {IconSvg, Text, useResize, useScroll} from 'ui-kit';
+import {IconSvg, Text, useUpdateCoordinates} from 'ui-kit';
 import {AgoraRemoteUserInterface} from 'core/models';
 import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
 
@@ -23,18 +23,17 @@ const MeetingUser: FC<PropsInterface> = (props) => {
   const {spaceId, user, isModerator, maxVideoStreams, onKickUser, onMuteUser, usersListUpdated} =
     props;
 
-  const [isMenuShown, setIsMenuShown] = useState<boolean>(false);
-  const [coords, setCoords] = useState({left: 0, top: 0, width: 0});
-
   const videoRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const {coords, isMenuShown, updateCoords, setIsMenuShown} = useUpdateCoordinates(menuRef);
 
   useEffect(() => {
     user.fetchUser();
   }, [user]);
 
   useEffect(() => {
-    updateTooltipCoords();
+    updateCoords();
   }, [usersListUpdated]);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
 
   const handleOpenMenu = () => {
     if (isModerator) {
-      updateTooltipCoords();
+      updateCoords();
       setIsMenuShown(true);
     }
   };
@@ -61,20 +60,6 @@ const MeetingUser: FC<PropsInterface> = (props) => {
   const isTalking: boolean = useMemo(() => {
     return (user.soundLevel || 0) > 3;
   }, [user.soundLevel]);
-
-  const updateTooltipCoordsOnScroll = () => {
-    setIsMenuShown(false);
-  };
-
-  const updateTooltipCoords = () => {
-    const rect = menuRef?.current?.getBoundingClientRect();
-    if (rect) {
-      setCoords({left: rect.x - 182, top: rect.y - 7, width: rect.width});
-    }
-  };
-
-  useScroll(menuRef, updateTooltipCoordsOnScroll);
-  useResize(menuRef, updateTooltipCoords);
 
   return (
     <styled.UserListItem data-testid="MeetingUser-test" className={cn(isTalking && 'colored')}>
