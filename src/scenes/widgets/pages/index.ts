@@ -8,7 +8,6 @@ export * from './WorldStatsWidget';
 export * from './TokenRulesWidget';
 export * from './TokenRuleReviewWidget';
 export * from './LaunchInitiativeWidget';
-export * from './SettingsWidget';
 export * from './MusicPlayerWidget';
 export * from './AttendeesWidget';
 export * from './StageModePIPWidget';
