@@ -16,8 +16,7 @@ const Setting: FC = () => {
   const settingRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(settingRef, () => {
-    const event = new Event('backgroundClick');
-    profileMenuStore.closeSetting(event);
+    profileMenuStore.closeSetting();
     profileMenuStore.profileMenuDialog.close();
   });
 

@@ -14,7 +14,7 @@ const ProfileMenuStore = types.compose(
       openSetting() {
         self.isSetting = true;
       },
-      closeSetting(event?: Event) {
+      closeSetting() {
         self.isSetting = false;
       }
     }))

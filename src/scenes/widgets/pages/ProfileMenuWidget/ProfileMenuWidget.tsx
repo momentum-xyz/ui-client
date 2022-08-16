@@ -6,7 +6,6 @@ import {observer} from 'mobx-react-lite';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {Avatar, Dialog, IconSvg, Text, Toggle} from 'ui-kit';
-import {appVariables} from 'api/constants';
 import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './ProfileMenuWidget.styled';
@@ -79,13 +78,7 @@ const ProfileMenuWidget: FC = () => {
         <styled.Container data-testid="ProfileMenuWidget-test">
           <styled.Option onClick={handleProfileOpen}>
             <styled.IconContainer>
-              <Avatar
-                avatarSrc={`${appVariables.RENDER_SERVICE_URL}/get/${
-                  profile.profile.avatarHash as string
-                }`}
-                size="super-small"
-                showBorder
-              />
+              <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="super-small" showBorder />
             </styled.IconContainer>
             <Text text={profile.name} size="xxs" isMultiline={false} />
           </styled.Option>
