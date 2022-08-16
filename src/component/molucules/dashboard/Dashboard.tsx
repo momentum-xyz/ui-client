@@ -3,6 +3,7 @@ import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful
 
 import {request} from 'api/request';
 import {useDebouncedEffect} from 'ui-kit/hooks';
+import {ReactComponent as Loader} from 'images/tail-sping.svg';
 
 import {Dashboard, Tile} from '../../../hooks/api/useDashboardService';
 import {useConfirmationDialog} from '../../../hooks/useConformationDialog';
@@ -12,7 +13,6 @@ import {TilePopup} from '../../popup/dashboard/TilePopup';
 import Modal, {ModalRef} from '../../util/Modal';
 import {useDashboardManager} from '../../../hooks/dashboard/useDashboard';
 import {Space, SpaceType} from '../../../context/type/Space';
-import {ReactComponent as Loader} from '../../../images/flamingo.svg';
 import {appVariables} from '../../../api/constants';
 
 export interface DashboardProps {
@@ -148,7 +148,7 @@ const DashboardDynamicView = React.forwardRef<DashboardHandle, DashboardProps>(
         {isSavingTile && (
           <div className="z-pop-over">
             <div className="absolute inset-0 bg-dark-blue-50 z-pop-over" />
-            <Loader className="w-6 h-6 animate-spin fixed top-1/2 left-1/2" viewBox="0 0 180 180" />
+            <Loader className="w-3 h-3 fixed top-1/2 left-1/2" />
           </div>
         )}
         <div className="pb-10">
