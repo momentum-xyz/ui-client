@@ -3,10 +3,12 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router';
 
 import {useStore} from 'shared/hooks';
-import {PrivateSpaceError} from 'core/errors';
 import {ToastContent} from 'ui-kit';
+import {ROUTES} from 'core/constants';
+import {PrivateSpaceError} from 'core/errors';
 
 import {
   PeopleCount,
@@ -28,6 +30,7 @@ const MeetingRoomPage: FC = () => {
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
+  const history = useHistory();
   const {t} = useTranslation();
 
   useEffect(() => {
@@ -38,6 +41,7 @@ const MeetingRoomPage: FC = () => {
   useEffect(() => {
     rootStore.joinMeetingSpace(spaceId).catch((e) => {
       if (e instanceof PrivateSpaceError) {
+        history.push(ROUTES.base);
         toast.error(
           <ToastContent
             isDanger
@@ -53,7 +57,7 @@ const MeetingRoomPage: FC = () => {
     return () => {
       rootStore.leaveMeetingSpace();
     };
-  }, [rootStore, sessionStore.userId, spaceId, t]);
+  }, [history, rootStore, sessionStore.userId, spaceId, t]);
 
   if (!agoraStore.hasJoined) {
     return <></>;
