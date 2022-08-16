@@ -8,7 +8,6 @@ import {ROUTES} from 'core/constants';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {createRoutesByConfig} from 'core/utils';
-import {PrivateSpaceError} from 'core/errors';
 import {
   Navigation,
   ToastContent,
@@ -27,8 +26,7 @@ import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes'
 import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
-  const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore} = rootStore;
+  const {collaborationStore, mainStore, sessionStore} = useStore();
   const {unityStore, agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
@@ -52,26 +50,6 @@ const Collaboration: FC = () => {
   useEffect(() => {
     textChatStore.countUnreadMessages();
   }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen]);
-
-  useEffect(() => {
-    rootStore.joinMeetingSpace(spaceId).catch((e) => {
-      if (e instanceof PrivateSpaceError) {
-        toast.error(
-          <ToastContent
-            isDanger
-            isCloseButton
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('collaboration.spaceIsPrivate')}
-          />
-        );
-      }
-    });
-
-    return () => {
-      rootStore.leaveMeetingSpace();
-    };
-  }, [rootStore, sessionStore.userId, spaceId, t]);
 
   useEffect(() => {
     if (agoraStore.appId && !textChatStore.isLoggedOn) {

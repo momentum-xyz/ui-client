@@ -1,7 +1,12 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {toast} from 'react-toastify';
+import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
+import {PrivateSpaceError} from 'core/errors';
+import {ToastContent} from 'ui-kit';
 
 import {
   PeopleCount,
@@ -15,16 +20,40 @@ import {
 import * as styled from './MeetingRoomPage.styled';
 
 const MeetingRoomPage: FC = () => {
-  const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
+  const rootStore = useStore();
+  const {mainStore, sessionStore, meetingStore, collaborationStore} = rootStore;
   const {meetingRoomStore} = meetingStore;
   const {space, stageModeStore} = collaborationStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 
+  const {spaceId} = useParams<{spaceId: string}>();
+  const {t} = useTranslation();
+
   useEffect(() => {
     stageModeStore.removeAllPopups();
     meetingStore.setKicked(false);
   }, [stageModeStore, meetingStore]);
+
+  useEffect(() => {
+    rootStore.joinMeetingSpace(spaceId).catch((e) => {
+      if (e instanceof PrivateSpaceError) {
+        toast.error(
+          <ToastContent
+            isDanger
+            isCloseButton
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('collaboration.spaceIsPrivate')}
+          />
+        );
+      }
+    });
+
+    return () => {
+      rootStore.leaveMeetingSpace();
+    };
+  }, [rootStore, sessionStore.userId, spaceId, t]);
 
   if (!agoraStore.hasJoined) {
     return <></>;
