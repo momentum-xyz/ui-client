@@ -17,7 +17,6 @@ import {
   MagicLinkWidget,
   MusicPlayerWidget,
   ProfileMenuWidget,
-  SettingsWidget,
   StakingWidget,
   TokenRuleReviewWidget,
   TokenRulesWidget,
@@ -38,7 +37,6 @@ const Widgets: FC = () => {
     profileMenuStore,
     tokenRulesStore,
     launchInitiativeStore,
-    settingsStore,
     musicPlayerStore,
     attendeesListStore
   } = widgetStore;
@@ -111,7 +109,6 @@ const Widgets: FC = () => {
         />
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
-      {settingsStore.dialog.isOpen && <SettingsWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
