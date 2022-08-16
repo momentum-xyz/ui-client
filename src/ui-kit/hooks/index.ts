@@ -5,4 +5,4 @@ export * from './usePrevious';
 export * from './useSortableData';
 export * from './useResize';
 export * from './useScroll';
-export * from './useUpdateCoordinates';
+export * from './useCoordinates';

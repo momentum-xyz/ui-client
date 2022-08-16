@@ -3,6 +3,7 @@ import {useTranslation} from 'react-i18next';
 
 import {IconSvg, Portal, Text, useClickOutside} from 'ui-kit';
 import {AgoraRemoteUserInterface} from 'core/models';
+import {CoordinationInterface} from 'core/interfaces';
 
 import * as styled from './UserMenu.styled';
 
@@ -11,7 +12,7 @@ interface PropsInterface {
   onMuteUser?: () => void;
   onKickUser?: () => void;
   onClose?: () => void;
-  coords: {left: number; top: number; width: number};
+  coords?: CoordinationInterface;
 }
 
 const UserMenu: FC<PropsInterface> = (props) => {
