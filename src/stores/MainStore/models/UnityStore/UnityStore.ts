@@ -31,7 +31,6 @@ const UnityStore = types
       });
 
       UnityService.initialize(self.unityContext);
-
       self.isInitialized = true;
     },
     teleportIsReady(): void {
