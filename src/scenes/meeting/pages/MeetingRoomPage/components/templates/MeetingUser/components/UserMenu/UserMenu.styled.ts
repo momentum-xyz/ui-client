@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
+  z-index: var(--dialog-z-index);
+  width: 100vw;
   height: 95px;
   display: flex;
   align-items: center;
@@ -10,12 +12,13 @@ export const Container = styled.div`
   top: 0;
 `;
 
+export const Inner = styled.div``;
+
 export const Content = styled.div`
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
-  width: 164px;
+  width: 167px;
   border: 2px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
   border-radius: 5px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 `;

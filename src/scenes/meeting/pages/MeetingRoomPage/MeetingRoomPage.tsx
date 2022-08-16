@@ -82,6 +82,7 @@ const MeetingRoomPage: FC = () => {
                     maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
                     onMuteUser={meetingRoomStore.muteUser}
                     onKickUser={meetingRoomStore.kickUser}
+                    usersListUpdated={agoraMeetingStore.users.length}
                   />
                 ))}
           </ul>

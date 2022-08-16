@@ -6,7 +6,7 @@ export const Container = styled.div`
 `;
 
 export const Inner = styled.div`
-  padding: 0 6px 0 0;
+  padding: 0 6px;
   display: flex;
   align-items: end;
   flex-direction: column;

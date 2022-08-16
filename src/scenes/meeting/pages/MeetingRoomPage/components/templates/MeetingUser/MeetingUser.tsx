@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
+import React, {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 
-import {IconSvg, Text} from 'ui-kit';
+import {IconSvg, Text, useCoordinates} from 'ui-kit';
 import {AgoraRemoteUserInterface} from 'core/models';
 import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
 
@@ -16,17 +16,32 @@ export interface PropsInterface {
   maxVideoStreams: boolean;
   onMuteUser: (spaceId: string, userId: string | number) => void;
   onKickUser: (spaceId: string, userId: string | number) => void;
+  usersListUpdated: number;
 }
 
-const MeetingUser: FC<PropsInterface> = (props) => {
-  const {spaceId, user, isModerator, maxVideoStreams, onKickUser, onMuteUser} = props;
+const OFFSET_RIGHT = 182;
+const OFFSET_BOTTOM = 7;
 
-  const [isMenuShown, setIsMenuShown] = useState<boolean>(false);
+const MeetingUser: FC<PropsInterface> = (props) => {
+  const {spaceId, user, isModerator, maxVideoStreams, onKickUser, onMuteUser, usersListUpdated} =
+    props;
+
   const videoRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const {coords, isShown, updateCoords, setIsShown} = useCoordinates(
+    menuRef,
+    OFFSET_RIGHT,
+    OFFSET_BOTTOM
+  );
 
   useEffect(() => {
     user.fetchUser();
   }, [user]);
+
+  useEffect(() => {
+    updateCoords();
+  }, [usersListUpdated]);
 
   useEffect(() => {
     if (!user.cameraOff && !maxVideoStreams && videoRef.current) {
@@ -44,7 +59,8 @@ const MeetingUser: FC<PropsInterface> = (props) => {
 
   const handleOpenMenu = () => {
     if (isModerator) {
-      setIsMenuShown(true);
+      updateCoords();
+      setIsShown(true);
     }
   };
 
@@ -54,7 +70,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
 
   return (
     <styled.UserListItem data-testid="MeetingUser-test" className={cn(isTalking && 'colored')}>
-      <styled.Inner onClick={handleOpenMenu} className={cn(isTalking && 'colored')}>
+      <styled.Inner ref={menuRef} onClick={handleOpenMenu} className={cn(isTalking && 'colored')}>
         <styled.Video ref={videoRef} />
         {user.cameraOff && user.avatarSrc && <styled.Avatar src={user.avatarSrc} />}
         {user.cameraOff && !user.avatarSrc && (
@@ -74,12 +90,13 @@ const MeetingUser: FC<PropsInterface> = (props) => {
         <Text text={user.name} transform="uppercase" size="xxs" isMultiline={false} />
       </styled.Username>
 
-      {isMenuShown && (
+      {isShown && (
         <UserMenu
           user={user}
           onMuteUser={() => onMuteUser(spaceId, user.uid)}
           onKickUser={() => onKickUser(spaceId, user.uid)}
-          onClose={() => setIsMenuShown(false)}
+          onClose={() => setIsShown(false)}
+          coords={coords}
         />
       )}
     </styled.UserListItem>
