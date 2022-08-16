@@ -18,6 +18,10 @@ const SKIPPED_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.magic,
     main: () => <></>
+  },
+  {
+    path: ROUTES.meeting.grabTable,
+    main: () => <></>
   }
 ];
 

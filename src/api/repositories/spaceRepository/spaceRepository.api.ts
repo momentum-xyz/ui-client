@@ -74,9 +74,9 @@ export const addUser: RequestInterface<AddUserRequest, AddUserResponse> = (optio
 };
 
 export const create: RequestInterface<CreateSpaceRequest, CreateSpaceResponse> = (options) => {
-  const {newSpace, ...restOptions} = options;
+  const {space, ...restOptions} = options;
 
-  return request.post(spaceRepositoryEndpoints().create, newSpace, restOptions);
+  return request.post(spaceRepositoryEndpoints().create, space, restOptions);
 };
 
 export const fetchUserOwnedSpaces: RequestInterface<

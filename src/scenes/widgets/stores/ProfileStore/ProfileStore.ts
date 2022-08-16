@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import {t} from 'i18next';
 
 import {SpaceType} from 'core/enums';
-import {bytesToUuid} from 'core/utils';
 import {
   DialogModel,
   RequestModel,
@@ -12,7 +12,6 @@ import {
 import {
   api,
   UserProfileInterface,
-  CreateSpaceResponse,
   NewSpaceDetails,
   UserOwnedSpacesResponse,
   UserSpaceListItemResponse
@@ -24,10 +23,8 @@ const ProfileStore = types.compose(
     .model('ProfileStore', {
       userProfile: types.maybe(UserProfileModel),
       canCreateInitiative: types.maybe(types.boolean),
-      userTableId: types.maybe(types.string),
       userSpaceList: types.optional(types.array(UserSpaceDetails), []),
       profileFetchRequest: types.optional(RequestModel, {}),
-      findTablesRequest: types.optional(RequestModel, {}),
       createTableRequest: types.optional(RequestModel, {}),
       inviteToTableRequest: types.optional(RequestModel, {}),
       editProfileRequest: types.optional(RequestModel, {}),
@@ -43,15 +40,6 @@ const ProfileStore = types.compose(
           })
         );
       }),
-      fetchUserTable: flow(function* () {
-        if (!self.userProfile) {
-          return;
-        }
-
-        self.userTableId = yield self.findTablesRequest.send(api.tablesRepository.findTable, {
-          userId: self.userProfile.uuid
-        });
-      }),
       fetchUserSpaceList: flow(function* (userId: string) {
         const response: UserSpaceListItemResponse[] = yield self.userInitiativesRequest.send(
           api.spaceRepository.fetchUserSpaceList,
@@ -63,37 +51,25 @@ const ProfileStore = types.compose(
         }
       }),
       grabATable: flow(function* (worldId: string, userId: string) {
-        const newSpace: NewSpaceDetails = {
-          worldId: worldId,
-          description: 'Grab a Table',
-          root: false,
+        const space: NewSpaceDetails = {
+          name: t('labels.grabTable'),
+          description: t('labels.grabTable'),
+          spaceType: SpaceType.GRAB_A_TABLE,
           visibility: true,
-          name: 'Grab a Table',
-          spaceType: SpaceType.GRAB_A_TABLE
+          root: false,
+          worldId
         };
 
-        let tableId = '';
-        if (!self.userTableId) {
-          const postRs: CreateSpaceResponse = yield self.createTableRequest.send(
-            api.spaceRepository.create,
-            {
-              newSpace
-            }
+        const response = yield self.createTableRequest.send(api.spaceRepository.create, {space});
+        if (response?.id) {
+          const inviteData = {isTable: true, spaceId: response.id, userId};
+          yield self.inviteToTableRequest.send(
+            api.spaceInviteRepository.inviteToSpaceOrTable,
+            inviteData
           );
-          tableId = postRs.id;
-        } else {
-          tableId = self.userTableId;
+
+          return response?.id;
         }
-
-        yield self.inviteToTableRequest.send(api.spaceInviteRepository.inviteToSpaceOrTable, {
-          isTable: true,
-          spaceId: tableId,
-          userId
-        });
-
-        const {data: response} = yield api.spaceRepository.fetchSpace({spaceId: tableId});
-        const typeUuid = bytesToUuid(response.space.uiTypeId.data as Buffer);
-        return {tableId, typeUuid};
       }),
       fetchUserOwnedSpaces: flow(function* (worldId: string) {
         const response: UserOwnedSpacesResponse = yield self.userOwnedSpacesRequest.send(
