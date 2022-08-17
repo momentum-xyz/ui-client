@@ -13,7 +13,12 @@ import {StageModePIPWidget} from 'scenes/widgets/pages';
 import {MeetingRoomPage} from './pages';
 import * as styled from './Meeting.styled';
 
-const Meeting: FC = () => {
+interface PropsInterface {
+  isTable?: boolean;
+  isFlight?: boolean;
+}
+
+const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
   const rootStore = useStore();
   const {mainStore, sessionStore, meetingStore} = rootStore;
   const {agoraStore} = mainStore;
@@ -24,7 +29,7 @@ const Meeting: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    rootStore.joinMeetingSpace(spaceId).catch((e) => {
+    rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
       if (e instanceof PrivateSpaceError) {
         history.push(ROUTES.base);
         toast.error(
@@ -42,7 +47,7 @@ const Meeting: FC = () => {
     return () => {
       rootStore.leaveMeetingSpace();
     };
-  }, [history, rootStore, sessionStore.userId, spaceId, t]);
+  }, [history, isTable, rootStore, sessionStore.userId, spaceId, t]);
 
   usePosBusEvent('meeting-mute', () => {
     userDevicesStore.mute();
@@ -99,7 +104,7 @@ const Meeting: FC = () => {
 
   return (
     <styled.Container>
-      <MeetingRoomPage />
+      <MeetingRoomPage isTable={isTable} isFlight={isFlight} />
       {!history.location.pathname.includes('stage-mode') && <StageModePIPWidget />}
     </styled.Container>
   );

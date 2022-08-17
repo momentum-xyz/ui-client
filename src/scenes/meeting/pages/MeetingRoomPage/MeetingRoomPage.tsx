@@ -14,7 +14,12 @@ import {
 } from './components';
 import * as styled from './MeetingRoomPage.styled';
 
-const MeetingRoomPage: FC = () => {
+interface PropsInterface {
+  isTable: boolean;
+  isFlight: boolean;
+}
+
+const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
   const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
   const {meetingRoomStore} = meetingStore;
   const {space, stageModeStore} = collaborationStore;
@@ -33,7 +38,13 @@ const MeetingRoomPage: FC = () => {
   return (
     <styled.Container data-testid="MeetingRoomPage-test">
       <styled.Inner>
-        <JoinLeaveButtons isLeaveButtonShown={space?.isTable} />
+        {!!space?.id && (
+          <JoinLeaveButtons
+            spaceId={space.id}
+            isJoinButtonShown={isFlight}
+            isLeaveButtonShown={isTable || isFlight}
+          />
+        )}
 
         <styled.Content className="noScrollIndicator">
           <PeopleCount count={agoraStore.meetingPeopleCount} />

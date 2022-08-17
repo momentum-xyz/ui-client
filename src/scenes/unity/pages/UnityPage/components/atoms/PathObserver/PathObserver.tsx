@@ -22,6 +22,10 @@ const SKIPPED_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.meeting.grabTable,
     main: () => <></>
+  },
+  {
+    path: ROUTES.meeting.flyAround,
+    main: () => <></>
   }
 ];
 
