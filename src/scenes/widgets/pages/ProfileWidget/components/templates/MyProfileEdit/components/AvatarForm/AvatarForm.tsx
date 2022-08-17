@@ -38,11 +38,11 @@ const AvatarForm: FC = () => {
   return (
     <Dialog
       theme={theme}
-      title={t('dashboard.tileForm.title')}
+      title={t('editProfileWidget.changeAvatar')}
       showCloseButton
       onClose={profileStore.editAvatarDialog.close}
       approveInfo={{
-        title: 'update',
+        title: t('editProfileWidget.update'),
         onClick: handleSubmit
       }}
       hasBorder

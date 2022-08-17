@@ -93,7 +93,13 @@ const MyProfileEdit: React.FC<PropsInterface> = ({onClose, userId}) => {
           )}
         </styled.AvatarContainer>
         <div>
-          <Heading type="h3" label="Avatar" weight="bold" transform="uppercase" align="left" />
+          <Heading
+            type="h3"
+            label={t('editProfileWidget.avatar')}
+            weight="bold"
+            transform="uppercase"
+            align="left"
+          />
           <Text text={t('editProfileWidget.avatarInstructions')} size="s" align="left" />
         </div>
       </styled.AvatarSettings>
