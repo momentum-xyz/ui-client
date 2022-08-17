@@ -11,6 +11,8 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
+import {SystemWideError} from 'scenes/system/pages';
+import {setApiResponseHandlers} from 'api/request';
 
 // TODO: To be refactored
 import {ConfirmationDialogProvider} from '../_REFACTOR_/hooks/useConformationDialog';
@@ -22,15 +24,27 @@ import AppLayers from './AppLayers';
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
+const RETURN_CODE_MAINTENANCE = 503;
+
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, initApplication} = useStore();
+  const {configStore, sessionStore, mainStore, systemStore, initApplication} = useStore();
   const {themeStore} = mainStore;
   const {isConfigReady} = configStore;
+  const {systemWideErrorStore} = systemStore;
+  const {isDisconnected, isMaintenance} = systemWideErrorStore;
 
   const {pathname} = useLocation();
   const {t} = useTranslation();
 
   useEffect(() => {
+    setApiResponseHandlers({
+      onError: (error) => {
+        if (error.response?.status === RETURN_CODE_MAINTENANCE) {
+          systemWideErrorStore.setMaintenance();
+        }
+        throw error;
+      }
+    });
     initApplication();
   }, [initApplication]);
 
@@ -39,6 +53,21 @@ const App: FC = () => {
       mainStore.init();
     }
   }, [isConfigReady, mainStore]);
+
+  if (isMaintenance) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <SystemWideError isMaintenance />
+      </ThemeProvider>
+    );
+  }
+  if (isDisconnected) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <SystemWideError isDisconnected />
+      </ThemeProvider>
+    );
+  }
 
   if (!isConfigReady) {
     return <></>;

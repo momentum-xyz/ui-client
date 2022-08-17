@@ -7,10 +7,11 @@ export const enGb = {
       seconds: '{{seconds}} seconds'
     },
     somethingWentWrong: 'Something went wrong. Please try again later.',
-    disconnected: {
+    systemWideError: {
       loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
       switchToThatTab:
-        'To continue the experience, please switch to that window/tab and close this one'
+        'To continue the experience, please switch to that window/tab and close this one',
+      underMaintenance: 'The server is undergoing maintenance, please try again later'
     },
     staking: {
       rewardAccountError:

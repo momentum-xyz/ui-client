@@ -14,7 +14,7 @@ import {
 import {WelcomePage} from './welcome';
 import {HomePage} from './home';
 import {SignUpCompletePage} from './profile';
-import {DisconnectPage, StoryBookPage} from './system/pages';
+import {StoryBookPage} from './system/pages';
 import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
@@ -80,11 +80,6 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.welcome,
     exact: true,
     main: () => <WelcomePage />
-  },
-  {
-    path: ROUTES.disconnect,
-    exact: true,
-    main: () => <DisconnectPage />
   }
 ];
 
