@@ -34,7 +34,6 @@ const RootCollaborationStore = types
       isModerator: false,
 
       leftMeetingSpaceId: types.maybe(types.string),
-      leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean),
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
       // Requests
@@ -59,7 +58,6 @@ const RootCollaborationStore = types
   .actions((self) => ({
     resetLeftMeetingSpace() {
       self.leftMeetingSpaceId = undefined;
-      self.leftMeetingSpaceWasAGrabbedTable = undefined;
     }
   }))
   .actions((self) => ({
@@ -83,8 +81,9 @@ const RootCollaborationStore = types
       self.isModerator = isModerator;
     }),
     leaveMeetingSpace() {
-      self.leftMeetingSpaceId = self.space?.id;
-      self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
+      if (!self.space?.isTable) {
+        self.leftMeetingSpaceId = self.space?.id;
+      }
 
       self.textChatStore.leaveChannel().then(() => {
         self.textChatStore.logOut().then(() => {

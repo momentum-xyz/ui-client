@@ -92,4 +92,7 @@
 
   /* MUSIC PLAYER */
   --player-default-color: rgba(255, 255, 255, 0.5);
+
+  /* MEETING */
+  --meeting-size: 95px;
 }

@@ -6,7 +6,6 @@ import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {appVariables} from 'api/constants';
 import {switchFullscreen} from 'core/utils';
 import {UnityService} from 'shared/services';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from 'ui-kit';
@@ -169,12 +168,9 @@ const Widgets: FC = () => {
             {currentProfile?.profile && (
               <ToolbarIcon title="Profile" onClick={profileMenuDialog.open}>
                 <Avatar
-                  status={sessionStore.profile?.status}
                   size="extra-small"
-                  avatarSrc={
-                    currentProfile.profile.avatarHash &&
-                    `${appVariables.RENDER_SERVICE_URL}/get/${currentProfile.profile.avatarHash}`
-                  }
+                  status={sessionStore.profile?.status}
+                  avatarSrc={currentProfile.avatarSrc}
                   showBorder
                   showHover
                 />

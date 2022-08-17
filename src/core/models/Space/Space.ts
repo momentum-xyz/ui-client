@@ -70,10 +70,10 @@ const Space = types
         }
       );
 
+      // FIXME: Assign once
       if (response) {
         self.name = response.space.name;
-
-        // Here you can add any info about space needed
+        self.isTable = response.spaceType === SpaceType.GRAB_A_TABLE;
         self.isAdmin = response.admin;
         self.isMember = response.member ?? false;
         self.isOwner = response.owner ?? false;

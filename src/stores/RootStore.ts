@@ -62,7 +62,6 @@ const RootStore = types
 
       yield self.mainStore.agoraStore.leaveMeetingSpace();
       self.collaborationStore.leaveMeetingSpace();
-      self.mainStore.unityStore.resume();
 
       if (spaceId) {
         self.mainStore.unityStore.triggerInteractionMessage(

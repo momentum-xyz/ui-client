@@ -6,8 +6,12 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   margin: 0 20px;
-  padding-top: 40px;
+  padding-top: 20px;
   pointer-events: none;
+
+  &.hasJoined {
+    margin: 0 calc(var(--meeting-size) + 12px) 0 20px;
+  }
 `;
 
 export const PanelWrapper = styled.div`
