@@ -65,7 +65,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
 
   const handleFlyToUser = () => {
     if (userProfile?.uuid) {
-      unityStore.teleportToUser(userProfile.uuid, history.push as (path: string) => void);
+      unityStore.teleportToUser(userProfile.uuid, history.push);
     }
   };
 

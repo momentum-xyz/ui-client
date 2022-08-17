@@ -8,5 +8,6 @@ export * from './EventItem';
 export * from './SearchPanel';
 export * from './SearchDropdown';
 export * from './HighFiveContent';
+export * from './InviteToSpaceContent';
 export * from './Stage';
 export * from './OnlineUsersList';

@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
 
+import {appVariables} from 'api/constants';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
 import {
@@ -14,6 +15,7 @@ import {
   UnityLoader,
   ToastContent,
   HighFiveContent,
+  InviteToSpaceContent,
   TOAST_BASE_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
@@ -66,40 +68,30 @@ const UnityPage: FC = () => {
     history.push({pathname: generatePath(ROUTES.video, {spaceId})});
   });
 
-  // TODO: Refactor GAT
-  usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
+  usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
+    // FIXME: Temporary solution. To get space name from Unity
+    const spaceName = await unityStore.fetchSpaceName(spaceId);
+
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 
-      // TODO: Refactoring
-      /*collaborationStore
-        .joinMeetingSpace(spaceId, uiTypeId === appVariables.GAT_UI_TYPE_ID)
-        .then(() => {
-          if (uiTypeId !== appVariables.GAT_UI_TYPE_ID) {
-            history.push({pathname: ROUTES.collaboration.base, state: {spaceId}});
-          } else {
-            history.push({pathname: ROUTES.collaboration.table, state: {spaceId}});
-          }
-        });*/
+      setTimeout(() => {
+        history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
+      }, TELEPORT_DELAY_MS);
     };
 
-    const Content: React.FC = () => {
-      //const [spaceInfo, , ,] = useGetSpace(spaceId);
-
-      return (
-        <ToastContent
-          headerIconName="alert"
-          text={t('messages.joinSpaceWelcome')}
-          title={t('messages.spaceInvitationNote', {
-            invitor: invitorName,
-            spaceName: '' //spaceInfo?.space.name
-          })}
-          approveInfo={{title: t('titles.joinSpace'), onClick: handleJoinSpace}}
-        />
-      );
+    const handleJoinTable = () => {
+      history.push({pathname: generatePath(ROUTES.meeting.grabTable, {spaceId})});
     };
 
-    toast.info(<Content />, TOAST_BASE_OPTIONS);
+    toast.info(
+      <InviteToSpaceContent
+        invitorName={invitorName}
+        spaceName={spaceName}
+        joinToSpace={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
+      />,
+      TOAST_BASE_OPTIONS
+    );
   });
 
   usePosBusEvent('high-five', (senderId, message) => {
