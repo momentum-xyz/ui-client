@@ -1,1 +1,1 @@
-export * from './templates/UserSpaceList';
+export * from './organisms/UserSpaceList';

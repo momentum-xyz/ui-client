@@ -35,6 +35,11 @@ const OnlineUsersList = types
     setSearchQuery(query: string) {
       self.searchQuery = query;
     }
+  }))
+  .views((self) => ({
+    get isLoading() {
+      return self.usersRequest.isLoading;
+    }
   }));
 
 export interface OnlineUsersListInterface extends Instance<typeof OnlineUsersList> {}

@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
+import {observer} from 'mobx-react-lite';
 
 import {Heading} from 'ui-kit';
 import {UserSpaceDetailsInterface} from 'core/models';
@@ -44,4 +45,4 @@ const UserSpaceList: FC<PropsInterface> = (props) => {
   );
 };
 
-export default UserSpaceList;
+export default observer(UserSpaceList);

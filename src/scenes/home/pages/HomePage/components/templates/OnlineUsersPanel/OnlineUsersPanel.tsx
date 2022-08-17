@@ -5,7 +5,7 @@ import {t} from 'i18next';
 
 import {useStore, useUnityEvent} from 'shared/hooks';
 import {ExpandableLayout, OnlineUsersList} from 'ui-kit';
-import {ProfileEditWidget, ProfileWidget} from 'scenes/widgets/pages';
+import {ProfileWidget} from 'scenes/widgets/pages';
 
 import * as styled from './OnlineUsersPanel.styled';
 
@@ -54,21 +54,14 @@ const OnlineUsersPanel: FC = () => {
     <styled.Container data-testid="OnlineUsersPanel-test">
       {onlineUsersStore.selectedUserId && (
         <div>
-          {onlineUsersStore.editedUserId ? (
-            <ProfileEditWidget
-              userId={onlineUsersStore.editedUserId}
-              onClose={onlineUsersStore.endEditingUser}
-            />
-          ) : (
-            <ProfileWidget
-              userId={onlineUsersStore.selectedUserId}
-              onClose={() => {
-                onlineUsersStore.unselectUser();
-                profileDialog.close();
-              }}
-              onEditUser={handleUserEdit}
-            />
-          )}
+          <ProfileWidget
+            userId={onlineUsersStore.selectedUserId}
+            onClose={() => {
+              onlineUsersStore.unselectUser();
+              profileDialog.close();
+            }}
+            onEditUser={handleUserEdit}
+          />
         </div>
       )}
       <ExpandableLayout
