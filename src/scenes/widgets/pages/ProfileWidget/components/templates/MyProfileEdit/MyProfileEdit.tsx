@@ -13,10 +13,9 @@ import * as styled from './MyProfileEdit.styled';
 
 interface PropsInterface {
   userId: string;
-  onClose?: () => void;
 }
 
-const MyProfileEdit: React.FC<PropsInterface> = ({onClose, userId}) => {
+const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   const {widgetStore, sessionStore, homeStore, mainStore} = useStore();
   const {onlineUsersList} = homeStore;
   const {profileStore} = widgetStore;
