@@ -5,7 +5,7 @@ export const Container = styled.div`
   position: absolute;
   z-index: var(--dialog-z-index);
   width: 100vw;
-  height: 95px;
+  height: var(--meeting-size);
   display: flex;
   align-items: center;
   right: 70px;

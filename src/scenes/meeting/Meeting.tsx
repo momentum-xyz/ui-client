@@ -1,10 +1,11 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
+import {PrivateSpaceError} from 'core/errors';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {StageModePIPWidget} from 'scenes/widgets/pages';
@@ -13,12 +14,35 @@ import {MeetingRoomPage} from './pages';
 import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
-  const {mainStore, sessionStore, meetingStore} = useStore();
+  const rootStore = useStore();
+  const {mainStore, sessionStore, meetingStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
-  const {t} = useTranslation();
+  const {spaceId} = useParams<{spaceId: string}>();
   const history = useHistory();
+  const {t} = useTranslation();
+
+  useEffect(() => {
+    rootStore.joinMeetingSpace(spaceId).catch((e) => {
+      if (e instanceof PrivateSpaceError) {
+        history.push(ROUTES.base);
+        toast.error(
+          <ToastContent
+            isDanger
+            isCloseButton
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('collaboration.spaceIsPrivate')}
+          />
+        );
+      }
+    });
+
+    return () => {
+      rootStore.leaveMeetingSpace();
+    };
+  }, [history, rootStore, sessionStore.userId, spaceId, t]);
 
   usePosBusEvent('meeting-mute', () => {
     userDevicesStore.mute();
@@ -30,7 +54,7 @@ const Meeting: FC = () => {
     }
   });
 
-  usePosBusEvent('meeting-kick', async (spaceId) => {
+  usePosBusEvent('meeting-kick', () => {
     meetingStore.setKicked(true);
     history.push(ROUTES.base);
 

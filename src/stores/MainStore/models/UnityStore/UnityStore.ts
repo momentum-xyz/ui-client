@@ -1,7 +1,9 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {ChangeEvent} from 'react';
 
+import {api} from 'api';
+import {RequestModel} from 'core/models';
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
@@ -12,7 +14,8 @@ const UnityStore = types
     isInitialized: false,
     isTeleportReady: false,
     muted: false,
-    volume: types.optional(types.number, 0.1)
+    volume: types.optional(types.number, 0.1),
+    fetchRequest: types.optional(RequestModel, {})
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -118,7 +121,14 @@ const UnityStore = types
     },
     leaveSpace(spaceId: string) {
       UnityService.leaveSpace(spaceId);
-    }
+    },
+    // FIXME: Temporary solution. To get space name from Unity
+    fetchSpaceName: flow(function* (spaceId: string) {
+      const response = yield self.fetchRequest.send(api.spaceRepository.fetchSpace, {spaceId});
+      if (response) {
+        return response.space.name;
+      }
+    })
   }));
 
 export {UnityStore};

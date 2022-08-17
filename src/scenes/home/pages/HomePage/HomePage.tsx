@@ -2,6 +2,7 @@ import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import cn from 'classnames';
 
 import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -13,18 +14,24 @@ import * as styled from './HomePage.styled';
 const HomePage: FC = () => {
   const {collaborationStore, meetingStore, mainStore} = useStore();
   const {leftMeetingSpaceId} = collaborationStore;
-  const {unityStore} = mainStore;
+  const {agoraStore, unityStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
 
-  const rejoinMeeting = useCallback(() => {
-    unityStore.teleportToSpace(leftMeetingSpaceId || '');
-    history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: leftMeetingSpaceId}));
-  }, [unityStore, leftMeetingSpaceId, history]);
+  const rejoinMeeting = useCallback(
+    (spaceId) => {
+      unityStore.teleportToSpace(spaceId);
+      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+    },
+    [unityStore, history]
+  );
 
   return (
-    <styled.Container data-testid="HomePage-test">
+    <styled.Container
+      data-testid="HomePage-test"
+      className={cn(agoraStore.hasJoined && 'hasJoined')}
+    >
       <styled.PanelWrapper>
         <ExplorePanel />
       </styled.PanelWrapper>
@@ -32,7 +39,11 @@ const HomePage: FC = () => {
       <styled.PanelWrapper>
         {!!leftMeetingSpaceId && !meetingStore.isKicked && (
           <styled.Rejoin>
-            <Button variant="primary" onClick={rejoinMeeting} label={t('actions.rejoinMeeting')} />
+            <Button
+              variant="primary"
+              label={t('actions.rejoinMeeting')}
+              onClick={() => rejoinMeeting(leftMeetingSpaceId)}
+            />
           </styled.Rejoin>
         )}
 

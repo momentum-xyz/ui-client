@@ -12,7 +12,6 @@ export const Inner = styled.div`
   flex-direction: column;
   height: calc(100vh - 60px);
   pointer-events: none;
-  gap: 10px;
 `;
 
 export const Content = styled.div`

@@ -68,7 +68,10 @@ const UnityPage: FC = () => {
     history.push({pathname: generatePath(ROUTES.video, {spaceId})});
   });
 
-  usePosBusEvent('space-invite', (spaceId, invitorId, invitorName, uiTypeId) => {
+  usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
+    // FIXME: Temporary solution. To get space name from Unity
+    const spaceName = await unityStore.fetchSpaceName(spaceId);
+
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 
@@ -81,11 +84,10 @@ const UnityPage: FC = () => {
       history.push({pathname: generatePath(ROUTES.meeting.grabTable, {spaceId})});
     };
 
-    // TODO: ask Kamen
     toast.info(
       <InviteToSpaceContent
         invitorName={invitorName}
-        spaceName="TODO: space name"
+        spaceName={spaceName}
         joinToSpace={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
       />,
       TOAST_BASE_OPTIONS

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   padding: 12px 0 0 0;
   display: flex;
-  width: 92px;
+  width: var(--meeting-size);
   justify-content: center;
   align-items: center;
 `;
