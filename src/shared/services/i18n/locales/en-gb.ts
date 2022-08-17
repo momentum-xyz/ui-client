@@ -7,6 +7,11 @@ export const enGb = {
       seconds: '{{seconds}} seconds'
     },
     somethingWentWrong: 'Something went wrong. Please try again later.',
+    disconnected: {
+      loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
+      switchToThatTab:
+        'To continue the experience, please switch to that window/tab and close this one'
+    },
     staking: {
       rewardAccountError:
         'The selected destination account does not exist and cannot be used to receive rewards',
