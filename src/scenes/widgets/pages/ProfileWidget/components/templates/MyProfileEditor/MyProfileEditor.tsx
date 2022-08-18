@@ -9,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import {Avatar, Button, Heading, Input, Text, TextArea, ToastContent} from 'ui-kit';
 import {UnityService} from 'shared/services';
 
-import * as styled from './MyProfileEdit.styled';
+import * as styled from './MyProfileEditor.styled';
 
 interface PropsInterface {
   userId: string;

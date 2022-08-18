@@ -17,7 +17,7 @@ const AvatarForm: FC = () => {
   const theme = useTheme();
 
   const [image, setImage] = useState<File>();
-  const [imageError, setImageError] = useState<boolean>(false);
+  const [imageError, setImageError] = useState(false);
 
   const {t} = useTranslation();
 

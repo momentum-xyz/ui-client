@@ -49,6 +49,12 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
     history.push(ROUTES.base);
   };
 
+  const handleHighFive = () => {
+    if (userProfile?.uuid) {
+      unityStore.sendHighFive(userProfile.uuid);
+    }
+  };
+
   const handleSelectSpace = (spaceId: string) => {
     exploreStore.selectSpace(spaceId);
   };
@@ -74,22 +80,8 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
             <Button label={t('actions.flyTo')} onClick={handleFlyToUser} size="small" />
             {userProfile?.status !== UserStatusEnum.DO_NOT_DISTURB && (
               <>
-                <Button
-                  label={t('actions.grabTable')}
-                  onClick={() => {
-                    grabATable();
-                  }}
-                  size="small"
-                />
-                <Button
-                  label={t('actions.highFive')}
-                  onClick={() => {
-                    if (userProfile?.uuid) {
-                      unityStore.sendHighFive(userProfile.uuid);
-                    }
-                  }}
-                  size="small"
-                />
+                <Button label={t('actions.grabTable')} onClick={grabATable} size="small" />
+                <Button label={t('actions.highFive')} onClick={handleHighFive} size="small" />
               </>
             )}
           </>

@@ -33,7 +33,7 @@ const ProfileStore = types.compose(
       userOwnedSpacesRequest: types.optional(RequestModel, {}),
       editAvatarDialog: types.optional(DialogModel, {}),
       userInitiativesRequest: types.optional(RequestModel, {}),
-      isProfileEdit: false
+      isEditingProfile: false
     })
     .volatile<{selectedImage: File | undefined}>(() => ({
       selectedImage: undefined
@@ -114,14 +114,14 @@ const ProfileStore = types.compose(
             avatarHash: profile.image ? avatarHash : profile.avatarHash
           }
         });
-        self.isProfileEdit = false;
+        self.isEditingProfile = false;
         return self.editProfileRequest.isDone;
       }),
       setImage(image?: File) {
         self.selectedImage = image;
       },
       openEdit() {
-        self.isProfileEdit = true;
+        self.isEditingProfile = true;
       }
     }))
     .views((self) => ({

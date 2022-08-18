@@ -23,7 +23,7 @@ import {
 } from 'scenes/widgets/pages';
 
 import * as styled from './Widgets.styled';
-import AvatarForm from './pages/ProfileWidget/components/templates/MyProfileEdit/components/AvatarForm/AvatarForm';
+import {AvatarForm} from './pages/ProfileWidget/components/templates/MyProfileEditor/components';
 
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();

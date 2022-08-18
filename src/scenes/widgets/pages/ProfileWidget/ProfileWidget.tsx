@@ -6,7 +6,7 @@ import {useStore} from 'shared/hooks';
 import {SvgButton, PanelLayout} from 'ui-kit';
 
 import * as styled from './ProfileWidget.styled';
-import {MyProfileEdit, MyProfileView, UserProfileView} from './components/templates';
+import {MyProfileEditor, MyProfileView, UserProfileView} from './components';
 
 interface ProfileWidgetPropsInterface {
   userId: string;
@@ -78,10 +78,10 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
                 onClose={onClose}
                 showUserInteractions={showUserInteractions}
               />
-            ) : isItMe && !profileStore.isProfileEdit ? (
+            ) : isItMe && !profileStore.isEditingProfile ? (
               <MyProfileView />
             ) : (
-              isItMe && profileStore.isProfileEdit && <MyProfileEdit userId={userId} />
+              isItMe && profileStore.isEditingProfile && <MyProfileEditor userId={userId} />
             )}
           </>
         )}
