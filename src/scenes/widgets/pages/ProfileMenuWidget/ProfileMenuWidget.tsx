@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {useAuth} from 'react-oidc-context';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -18,13 +18,18 @@ const SETTING_OFFSET_RIGHT = 20;
 const SETTING_OFFSET_BOTTOM = 60;
 
 const ProfileMenuWidget: FC = () => {
-  const {widgetStore, sessionStore} = useStore();
+  const {widgetStore, sessionStore, mainStore} = useStore();
+  const {unityStore} = mainStore;
   const {profile} = sessionStore;
   const {profileMenuStore, tokenRulesStore} = widgetStore;
 
   const auth = useAuth();
 
   const {t} = useTranslation();
+
+  useEffect(() => {
+    return () => unityStore.changeKeyboardControl(false);
+  }, [unityStore]);
 
   const signOutUser = async () => {
     await sessionStore.logout(auth);
