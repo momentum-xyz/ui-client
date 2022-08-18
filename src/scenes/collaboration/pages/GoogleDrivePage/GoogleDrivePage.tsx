@@ -4,19 +4,17 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
 import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
-import {SpaceTopBar, Button} from 'ui-kit';
+import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 import {ROUTES} from 'core/constants';
-
-import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
 
 const GoogleDrivePage: FC = () => {
-  const {collaborationStore, mainStore} = useStore();
-  const {space, googleDriveStore} = collaborationStore;
+  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {space, googleDriveStore, textChatStore} = collaborationStore;
   const {googleDocument, documentTitle} = googleDriveStore;
-  const {favoriteStore, agoraStore} = mainStore;
+  const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -65,12 +63,17 @@ const GoogleDrivePage: FC = () => {
 
   const {pickDocument} = useGooglePicker(pickerCallBack);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    textChatStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
 
   return (
-    <styled.Inner>
+    <styled.Inner data-testid="GoogleDrivePage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={documentTitle}
@@ -78,10 +81,11 @@ const GoogleDrivePage: FC = () => {
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
+        isChatOpen={textChatStore.textChatDialog.isOpen}
+        toggleChat={textChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         editSpaceHidden
-        onClose={() => history.push(ROUTES.base)}
+        onClose={handleClose}
       >
         {space.isAdmin && !!googleDocument?.data?.url && (
           <>
@@ -96,7 +100,15 @@ const GoogleDrivePage: FC = () => {
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}
-        <TextChatView />
+        {textChatStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+            messageSent={textChatStore.messageSent}
+          />
+        )}
       </styled.Container>
     </styled.Inner>
   );

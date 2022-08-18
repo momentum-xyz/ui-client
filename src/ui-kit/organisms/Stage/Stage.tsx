@@ -45,7 +45,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
   }, [agoraStageModeStore.numberOfSpeakers]);
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="Stage-test">
       <styled.Grid className={cols}>
         {agoraStageModeStore.numberOfSpeakers === 0 && (
           <styled.MessageContainer>
@@ -72,7 +72,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
           </styled.MediaPlayerContainer>
         )}
 
-        {agoraStore.remoteUsers.map((user) => (
+        {agoraStore.agoraMeetingStore.users.map((user) => (
           <styled.MediaPlayerContainer
             className={cn('relative', onRemoteUserClick && 'showActionsOnHover')}
             key={`stageuser-${user.uid}`}

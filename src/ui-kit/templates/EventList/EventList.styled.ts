@@ -18,8 +18,9 @@ export const Container = styled.div`
   }
 
   .PanelLayout-custom {
-    width: 515px;
-    height: 123px;
+    padding: 15px 0 0 0;
+    width: 520px;
+    height: 120px;
     justify-content: center;
     align-items: center;
 

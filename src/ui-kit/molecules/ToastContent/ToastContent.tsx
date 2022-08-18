@@ -14,8 +14,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   isCloseButton?: boolean;
   approveInfo?: ToastButtonInfoInterface;
   declineInfo?: ToastButtonInfoInterface;
-  // @ts-ignore: refactoring
-  onClose?: (event) => void;
+  onClose?: () => void;
 }
 
 const ToastContent: FC<PropsInterface> = (props) => {
@@ -23,7 +22,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
     props;
 
   return (
-    <styled.ToastContainer>
+    <styled.ToastContainer data-testid="ToastContent-test">
       <PanelLayout
         isDanger={isDanger}
         title={title}

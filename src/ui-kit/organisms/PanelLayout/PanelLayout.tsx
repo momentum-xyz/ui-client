@@ -19,8 +19,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   title?: string;
   subtitle?: string;
   headerIconName?: IconName;
-  // @ts-ignore: refactoring
-  onClose?: (event) => void;
+  onClose?: () => void;
   headerStyle?: HeaderStyleType;
   isBodyExtendingToEdges?: boolean;
   isDanger?: boolean;
@@ -61,6 +60,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container
+      data-testid="PanelLayout-test"
       className={cn(
         isCustom && 'PanelLayout-custom',
         hasBorder && 'hasBorder',

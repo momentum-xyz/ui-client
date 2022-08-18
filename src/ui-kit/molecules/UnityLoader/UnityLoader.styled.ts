@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Inner = styled.div`
-  --spinner-size: 60px;
+  --flamingo-size: 60px;
+  --spinner-size: 32px;
   --message-padding: 15px;
   --message-margin: 80px;
   --message-height: 42px;
@@ -27,9 +28,14 @@ export const Wrapper = styled.div`
 
 export const Image = styled.img`
   margin: 0 0 20px 0;
+  width: var(--flamingo-size);
+  height: var(--flamingo-size);
+`;
+
+export const Spinner = styled.img`
+  margin: 0 0 20px 0;
   width: var(--spinner-size);
   height: var(--spinner-size);
-  animation: spin 1s linear infinite;
 `;
 
 export const Version = styled.div`

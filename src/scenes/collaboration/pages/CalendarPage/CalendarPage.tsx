@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {useHistory, useParams} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
@@ -17,11 +17,10 @@ const CalendarPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, sessionStore, widgetStore, mainStore} = rootStore;
   const {calendarStore, space} = collaborationStore;
-  const {agoraStore, favoriteStore} = mainStore;
+  const {favoriteStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
-  const {eventId} = useParams<{eventId: string}>();
   const history = useHistory();
   const theme = useTheme();
 
@@ -84,7 +83,7 @@ const CalendarPage: FC = () => {
   }
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="CalendarPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle="calendar"
@@ -93,26 +92,25 @@ const CalendarPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         onClose={handleClose}
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
         editSpaceHidden
+        isChat={false}
       >
         {space.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
         )}
       </SpaceTopBar>
-      <EventList
-        currentUserId={sessionStore.userId}
-        events={eventListStore.events}
-        selectedEventId={eventId}
-        onMagicLinkOpen={handleMagicLinkOpen}
-        isLoading={eventListStore.areEventsLoading}
-        onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
-        onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
-        onWeblinkClick={handleWeblink}
-        onShowAttendeesList={attendeesListStore.showAttendees}
-      />
-
+      <styled.InnerContainer>
+        <EventList
+          currentUserId={sessionStore.userId}
+          events={eventListStore.events}
+          onMagicLinkOpen={handleMagicLinkOpen}
+          isLoading={eventListStore.areEventsLoading}
+          onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
+          onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
+          onWeblinkClick={handleWeblink}
+          onShowAttendeesList={attendeesListStore.showAttendees}
+        />
+      </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
 
       {calendarStore.magicId && magicDialog.isOpen && (

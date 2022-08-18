@@ -11,7 +11,7 @@ const SeekBarController: FC = () => {
   const {musicPlayer} = musicPlayerStore;
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="SeekBarController-test">
       <styled.Elapsed>{`${formatDurationTime(musicPlayer.seek)}`}</styled.Elapsed>
       <styled.SeekBarContainer>
         <styled.BarThumbPosition width={musicPlayer.calculateDurationBarWidth} />

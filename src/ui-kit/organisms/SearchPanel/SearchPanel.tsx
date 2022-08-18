@@ -23,7 +23,7 @@ const SearchPanel: FC<PropsInterface> = ({setFocus, data, label, onClick}) => {
   };
 
   return (
-    <styled.Container ref={panelRef} className={cn('hasBorder')}>
+    <styled.Container ref={panelRef} className={cn('hasBorder')} data-testid="SearchPanel-test">
       <styled.Div className={cn(data.length >= 1 && 'hasBorder')}>
         <styled.TextItem>
           <Text text={label} size="s" />

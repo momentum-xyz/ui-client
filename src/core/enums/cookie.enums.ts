@@ -1,3 +1,3 @@
 export enum CookieKeyEnum {
-  INTRO = 'MOMENTUM_INTRO'
+  WELCOME = 'MOMENTUM_WELCOME'
 }

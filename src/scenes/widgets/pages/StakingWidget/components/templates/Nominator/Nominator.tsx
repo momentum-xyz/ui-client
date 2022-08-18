@@ -137,7 +137,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [setTransactionType]);
 
   return section === 'nominator' ? (
-    <styled.Container>
+    <styled.Container data-testid="Nominator-test">
       <AccountSection />
       <styled.Holder>
         <Heading type="h2" align="left" weight="bold" label={t('staking.stashBalance')} />

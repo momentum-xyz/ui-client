@@ -5,18 +5,12 @@ import {useTheme} from 'styled-components';
 
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
-import {WidgetContainer} from 'scenes/widgets';
+import {Widgets} from 'scenes/widgets';
 
-import InFlightControlLayer from '../component/overlays/InFlightControlLayer';
-import LiveStreamLayer from '../component/overlays/LiveStreamLayer';
-import VideoLayer from '../component/overlays/VideoLayer';
-
-import {Communication} from './communication';
+import LiveStreamLayer from '../_REFACTOR_/component/overlays/LiveStreamLayer';
 
 const AppLayers: FC = ({children}) => {
-  const {mainStore} = useStore();
-  const {unityStore} = mainStore;
-  const {agoraStore} = mainStore;
+  const {unityStore} = useStore().mainStore;
 
   const theme = useTheme();
 
@@ -25,26 +19,14 @@ const AppLayers: FC = ({children}) => {
   }
 
   return (
-    <>
-      <InFlightControlLayer />
-      <div className="bg-dark-blue-70">
-        <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
-        <main id="main" className="h-screen pb-7 flex">
-          <div
-            className="main-container"
-            style={{
-              marginRight: agoraStore.hasJoined ? '90px' : undefined
-            }}
-          >
-            {children}
-          </div>
-          <Communication />
-        </main>
-        <WidgetContainer />
-      </div>
-      <VideoLayer />
+    <div data-testid="AppLayers-test">
+      <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
+      <main id="main">
+        <div className="main-content">{children}</div>
+      </main>
+      <Widgets />
       <LiveStreamLayer />
-    </>
+    </div>
   );
 };
 

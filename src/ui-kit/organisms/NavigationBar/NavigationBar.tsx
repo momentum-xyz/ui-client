@@ -5,7 +5,11 @@ import {PropsWithThemeInterface} from '../../interfaces';
 import * as styled from './NavigationBar.styled';
 
 const NavigationBar: FC<PropsWithThemeInterface> = ({children, theme}) => {
-  return <styled.Container theme={theme}>{children}</styled.Container>;
+  return (
+    <styled.Container theme={theme} data-testid="NavigationBar-test">
+      {children}
+    </styled.Container>
+  );
 };
 
 export default NavigationBar;

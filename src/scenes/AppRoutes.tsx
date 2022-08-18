@@ -11,13 +11,16 @@ import {
   Web3ChallengePage,
   Web3ConsentPage
 } from './auth/pages';
-import {HomePage, IntroPage} from './default/pages';
+import {WelcomePage} from './welcome';
+import {HomePage} from './home';
 import {SignUpCompletePage} from './profile';
 import {StoryBookPage} from './system/pages';
 import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
 import {MagicPage} from './magic/pages';
+import {VideoPage} from './video/pages';
+import {Meeting} from './meeting';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -74,9 +77,9 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     main: () => <LoginCallback />
   },
   {
-    path: ROUTES.intro,
+    path: ROUTES.welcome,
     exact: true,
-    main: () => <IntroPage />
+    main: () => <WelcomePage />
   }
 ];
 
@@ -93,12 +96,30 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.collaboration.base,
-    main: () => <Collaboration />,
-    renderBackground: true
+    renderBackground: true,
+    main: () => (
+      <>
+        <Collaboration />
+        <Meeting />
+      </>
+    )
+  },
+  {
+    path: ROUTES.meeting.grabTable,
+    main: () => (
+      <>
+        <HomePage />
+        <Meeting />
+      </>
+    )
   },
   {
     path: ROUTES.magic,
     main: () => <MagicPage />
+  },
+  {
+    path: ROUTES.video,
+    main: () => <VideoPage />
   },
   {
     path: ROUTES.worldCalendar,

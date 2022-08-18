@@ -5,17 +5,15 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, Button} from 'ui-kit';
+import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
 // TODO: Refactor
-import TextChatView from '../../../../component/molucules/collaboration/TextChatView';
-
 import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenSharePage.styled';
 
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore} = useStore();
-  const {space, screenShareStore} = collaborationStore;
+  const {space, screenShareStore, textChatStore} = collaborationStore;
   const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
@@ -44,12 +42,17 @@ const ScreenSharePage: FC = () => {
     agoraScreenShareStore.stopScreenShare();
   }, [agoraScreenShareStore, screenShareStore]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    textChatStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
 
   return (
-    <styled.Inner>
+    <styled.Inner data-testid="ScreenSharePage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={screenShareTitle}
@@ -58,9 +61,10 @@ const ScreenSharePage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={agoraStore.isChatOpen}
-        toggleChat={agoraStore.toggleChat}
-        onClose={() => history.push(ROUTES.base)}
+        isChatOpen={textChatStore.textChatDialog.isOpen}
+        toggleChat={textChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onClose={handleClose}
       >
         {client && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
@@ -76,7 +80,15 @@ const ScreenSharePage: FC = () => {
         ) : (
           <ScreenVideo videoTrack={videoTrack} />
         )}
-        <TextChatView />
+        {textChatStore.textChatDialog.isOpen && (
+          <TextChat
+            currentChannel={textChatStore.currentChannel}
+            userId={sessionStore.userId}
+            sendMessage={textChatStore.sendMessage}
+            messages={textChatStore.messages}
+            messageSent={textChatStore.messageSent}
+          />
+        )}
       </styled.Container>
     </styled.Inner>
   );

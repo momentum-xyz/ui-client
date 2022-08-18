@@ -17,6 +17,7 @@ import {DashboardStore} from './DashboardStore';
 import {GoogleDriveStore} from './GoogleDriveStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
+import {TextChatStore} from './TextChatStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -24,6 +25,7 @@ const RootCollaborationStore = types
     types.model('RootCollaborationStore', {
       space: types.maybe(Space),
       dashboardStore: types.optional(DashboardStore, {}),
+      textChatStore: types.optional(TextChatStore, {}),
       calendarStore: types.optional(CalendarStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
@@ -32,7 +34,6 @@ const RootCollaborationStore = types
       isModerator: false,
 
       leftMeetingSpaceId: types.maybe(types.string),
-      leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean),
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
       // Requests
@@ -57,7 +58,6 @@ const RootCollaborationStore = types
   .actions((self) => ({
     resetLeftMeetingSpace() {
       self.leftMeetingSpaceId = undefined;
-      self.leftMeetingSpaceWasAGrabbedTable = undefined;
     }
   }))
   .actions((self) => ({
@@ -73,10 +73,6 @@ const RootCollaborationStore = types
 
       yield self.space.fetchSpaceInformation();
 
-      if (!isTable) {
-        yield self.dashboardStore.fetchDashboard(spaceId);
-      }
-
       const isModerator: boolean = yield self.moderationRequest.send(
         api.spaceIntegrationsRepository.checkSpaceModeration,
         {spaceId}
@@ -85,9 +81,15 @@ const RootCollaborationStore = types
       self.isModerator = isModerator;
     }),
     leaveMeetingSpace() {
-      self.leftMeetingSpaceId = self.space?.id;
-      self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
+      if (!self.space?.isTable) {
+        self.leftMeetingSpaceId = self.space?.id;
+      }
 
+      self.textChatStore.leaveChannel().then(() => {
+        self.textChatStore.logOut().then(() => {
+          self.textChatStore.resetModel();
+        });
+      });
       if (!!self.space && self.space.isAdmin) {
         self.miroBoardStore.disableMiroBoard(self.space.id);
         self.googleDriveStore.disableGoogleDocument(self.space.id);
@@ -100,25 +102,6 @@ const RootCollaborationStore = types
         self.resetLeftMeetingSpace();
       }, 15000);
     },
-    rejoinMeetingSpace: flow(function* () {
-      clearTimeout(self.leftMeetingTimer);
-
-      if (!self.leftMeetingSpaceId) {
-        return;
-      }
-
-      self.space = Space.create({
-        id: self.leftMeetingSpaceId,
-        isTable: self.leftMeetingSpaceWasAGrabbedTable
-      });
-      yield self.space.fetchSpaceInformation();
-
-      if (self.leftMeetingSpaceWasAGrabbedTable === false) {
-        yield self.dashboardStore.fetchDashboard(self.leftMeetingSpaceId);
-      }
-
-      self.resetLeftMeetingSpace();
-    }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
       self.participantToRemoveFromStage = remoteUser;
       self.removeParticipantFromStageDialog.open();

@@ -7,3 +7,5 @@ export * from './unityApi.interface';
 export * from './navigation.interface';
 export * from './stageModePopupInfo.interface';
 export * from './stageModePopupOptions.interface';
+export * from './message.interface';
+export * from './coordination.interface';

@@ -4,8 +4,8 @@ import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful
 
 import {COLUMNS} from 'core/constants';
 import {TileInterface} from 'core/models';
-
-import TextChatView from '../../../../../../../component/molucules/collaboration/TextChatView';
+import {TextChat} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
 import {TileItem} from './components/TileItem';
 import * as styled from './Dashboard.styled';
@@ -14,11 +14,14 @@ interface PropsInterface {
   tilesList: TileInterface[][];
   onDragEnd: ({source, destination}: DropResult) => void;
   canDrag: boolean;
+  textChatIsOpen: boolean;
 }
 
-const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag}) => {
+const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatIsOpen}) => {
+  const {collaborationStore, sessionStore} = useStore();
+  const {textChatStore} = collaborationStore;
   return (
-    <styled.Container>
+    <styled.Container data-testid="Dashboard-test">
       <styled.DashboardContainer>
         {canDrag && (
           <DragDropContext onDragEnd={onDragEnd}>
@@ -63,7 +66,15 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag}) => {
             </styled.ColumnContainer>
           ))}
       </styled.DashboardContainer>
-      <TextChatView />
+      {textChatIsOpen && (
+        <TextChat
+          currentChannel={textChatStore.currentChannel}
+          userId={sessionStore.userId}
+          sendMessage={textChatStore.sendMessage}
+          messages={textChatStore.messages}
+          messageSent={textChatStore.messageSent}
+        />
+      )}
     </styled.Container>
   );
 };

@@ -38,7 +38,7 @@ const LinkDialog: FC<PropsInterface> = ({link, title, copyLabel, onClose}) => {
       approveInfo={{title: copyLabel, onClick: copyLink}}
       closeOnBackgroundClick={false}
     >
-      <styled.Dialog>
+      <styled.Dialog data-testid="LinkDialog-test">
         <Input label="" value={link} />
       </styled.Dialog>
     </Dialog>

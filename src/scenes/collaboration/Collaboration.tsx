@@ -5,7 +5,9 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
-import {NavigationTabInterface} from 'core/interfaces';
+import {useStore, usePosBusEvent} from 'shared/hooks';
+import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
+import {createRoutesByConfig} from 'core/utils';
 import {
   Navigation,
   ToastContent,
@@ -13,22 +15,18 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
-import {useStore, usePosBusEvent} from 'shared/hooks';
-import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
-import {createRoutesByConfig} from 'core/utils';
-import {PrivateSpaceError} from 'core/errors';
 
-import {COLLABORATION_ROUTES} from './CollaborationRoutes';
 import {
   AcceptedToJoinStageDialog,
   DeclinedToJoinStageDialog,
   InvitedOnStageDialog,
   PrepareOnStageDialog
 } from './pages/StageModePage/components';
+import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
+import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
-  const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore} = rootStore;
+  const {collaborationStore, mainStore, sessionStore} = useStore();
   const {unityStore, agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
@@ -38,7 +36,8 @@ const Collaboration: FC = () => {
     declinedToJoinStageDialog,
     invitedOnStageDialog,
     prepareOnStageDialog,
-    countdownDialog
+    countdownDialog,
+    textChatStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -49,24 +48,14 @@ const Collaboration: FC = () => {
   const [accepted, setAccepted] = useState<boolean>();
 
   useEffect(() => {
-    rootStore.joinMeetingSpace(spaceId).catch((e) => {
-      if (e instanceof PrivateSpaceError) {
-        toast.error(
-          <ToastContent
-            isDanger
-            isCloseButton
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('collaboration.spaceIsPrivate')}
-          />
-        );
-      }
-    });
+    textChatStore.countUnreadMessages();
+  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen]);
 
-    return () => {
-      rootStore.leaveMeetingSpace();
-    };
-  }, [rootStore, sessionStore.userId, spaceId, t]);
+  useEffect(() => {
+    if (agoraStore.appId && !textChatStore.isLoggedOn) {
+      textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
+    }
+  }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
 
   useEffect(() => {
     if (agoraScreenShareStore.videoTrack) {
@@ -288,39 +277,18 @@ const Collaboration: FC = () => {
     }
   };
 
-  const tabs: NavigationTabInterface[] = [
-    {
-      path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
-      iconName: 'tiles'
-    },
-    {
-      path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
-      iconName: 'calendar'
-    },
-    {
-      path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
-      iconName: 'stage',
-      isActive: agoraStore.isStageMode
-    },
-    {
-      path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
-      iconName: 'screenshare',
-      isActive: !!agoraScreenShareStore.videoTrack
-    },
-    {
-      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
-      iconName: 'miro'
-    },
-    {
-      path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
-      iconName: 'drive'
-    }
-  ];
-
   return (
-    <>
-      <Navigation tabs={tabs} />
+    <styled.Container>
+      <Navigation
+        tabs={buildNavigationTabs(
+          spaceId,
+          agoraStore.isStageMode,
+          !!agoraScreenShareStore.videoTrack
+        )}
+      />
+
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
+
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
           onClose={newDeviceDialog.close}
@@ -361,7 +329,7 @@ const Collaboration: FC = () => {
       {prepareOnStageDialog.isOpen && (
         <PrepareOnStageDialog onClose={prepareOnStageDialog.close} onReady={countdownDialog.open} />
       )}
-    </>
+    </styled.Container>
   );
 };
 

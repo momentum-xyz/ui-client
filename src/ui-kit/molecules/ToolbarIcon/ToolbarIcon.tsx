@@ -46,6 +46,7 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
   return (
     // @ts-ignore: take a look
     <styled.StyledTransition
+      data-testid="ToolbarIcon-test"
       show={visible}
       enter={cn(animate && 'animate')}
       leave={cn(animate && 'animate')}

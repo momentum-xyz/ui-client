@@ -13,7 +13,7 @@ const StageModeStats: React.FC = () => {
   const {agoraStageModeStore} = agoraStore;
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="StageModeStats-test">
       <span>
         {t('labels.speakers')}: {agoraStageModeStore.numberOfSpeakers}/
         {appVariables.MAX_STAGE_USERS}

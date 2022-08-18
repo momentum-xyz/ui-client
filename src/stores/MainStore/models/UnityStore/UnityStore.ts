@@ -1,7 +1,9 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {ChangeEvent} from 'react';
 
+import {api} from 'api';
+import {RequestModel} from 'core/models';
 import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
@@ -11,9 +13,9 @@ const UnityStore = types
   .model('UnityStore', {
     isInitialized: false,
     isTeleportReady: false,
-    isPaused: false,
     muted: false,
-    volume: types.optional(types.number, 0.1)
+    volume: types.optional(types.number, 0.1),
+    fetchRequest: types.optional(RequestModel, {})
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -32,12 +34,9 @@ const UnityStore = types
       });
 
       UnityService.initialize(self.unityContext);
-
       self.isInitialized = true;
     },
     teleportIsReady(): void {
-      UnityService.resume();
-      self.isPaused = false;
       self.isTeleportReady = true;
     },
     setAuthToken(token?: string): void {
@@ -60,9 +59,7 @@ const UnityStore = types
       UnityService.teleportToVector3(vector);
     },
     changeKeyboardControl(isActive: boolean): void {
-      if (!self.isPaused) {
-        UnityService.setKeyboardControl(isActive);
-      }
+      UnityService.setKeyboardControl(isActive);
     },
     sendHighFive(receiverId: string): void {
       UnityService.sendHighFive(receiverId);
@@ -72,16 +69,10 @@ const UnityStore = types
       UnityService.lookAtWisp(receiverId);
     },
     pause(): void {
-      if (!self.isPaused) {
-        self.isPaused = true;
-        UnityService.pause();
-      }
+      UnityService.pause();
     },
     resume(): void {
-      if (self.isPaused) {
-        self.isPaused = false;
-        UnityService.resume();
-      }
+      UnityService.resume();
     },
     setInitialVolume() {
       UnityService.setSoundEffectVolume('0.1');
@@ -130,7 +121,14 @@ const UnityStore = types
     },
     leaveSpace(spaceId: string) {
       UnityService.leaveSpace(spaceId);
-    }
+    },
+    // FIXME: Temporary solution. To get space name from Unity
+    fetchSpaceName: flow(function* (spaceId: string) {
+      const response = yield self.fetchRequest.send(api.spaceRepository.fetchSpace, {spaceId});
+      if (response) {
+        return response.space.name;
+      }
+    })
   }));
 
 export {UnityStore};

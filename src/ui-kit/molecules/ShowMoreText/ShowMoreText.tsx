@@ -53,7 +53,10 @@ const ShowMoreText: FC<PropsInterface> = ({text, textProps, isCustom = false, li
   });
 
   return (
-    <styled.Container className={cn(isCustom && 'ShowMoreText-custom')}>
+    <styled.Container
+      className={cn(isCustom && 'ShowMoreText-custom')}
+      data-testid="ShowMoreText-test"
+    >
       <styled.Text className={cn(collapsed && 'collapsed')} ref={ref} lines={lines}>
         <Text text={text} {...textProps} />
       </styled.Text>

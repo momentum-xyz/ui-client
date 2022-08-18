@@ -39,6 +39,7 @@ const SearchInput: FC<SearchPropsInterface> = ({
 
   return (
     <styled.Container
+      data-testid="SearchInput-test"
       className={cn(
         isFocused && 'focused',
         `variant-${variantSize}`,

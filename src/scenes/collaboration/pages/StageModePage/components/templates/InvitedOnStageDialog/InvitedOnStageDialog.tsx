@@ -35,7 +35,7 @@ const InvitedOnStageDialog: React.FC<PropsInterface> = ({onDecline, onClose, onG
         }
       }}
     >
-      <styled.Body>
+      <styled.Body data-testid="InvitedOnStageDialog-test">
         <Text text={t('messages.wouldYouLikeToGoOnStage')} size="m" align="left" />
         <Text text={t('messages.thisWillEnableYouToUseStage')} size="xs" align="left" />
       </styled.Body>

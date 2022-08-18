@@ -9,3 +9,9 @@ export const Container = styled.div`
   overflow: hidden;
   pointer-events: auto;
 `;
+
+export const InnerContainer = styled.div`
+  display: flex;
+  height: 100%;
+  min-height: 0;
+`;

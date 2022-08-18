@@ -203,10 +203,11 @@ export const enGb = {
       microphoneOn: 'Microphone on',
       microphoneOff: 'Microphone off',
       webcamPreview: 'Webcam Preview',
-      audioVideoSettings: 'Audio/Video Settings'
+      audioVideoSettings: 'Audio/Video Settings',
+      grabTable: 'Grab a Table'
     },
     messages: {
-      loading: 'Loading Odyssey Momentum',
+      loading: 'Loading Momentum',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Momentum does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
@@ -302,7 +303,9 @@ export const enGb = {
       wouldYouLikeToGoOnStage: 'Would you like to go on stage?',
       thisWillEnableYouToUseStage:
         '(This will enable you to talk, screenshare, and transmit video)',
-      pleaseTryAgainLater: 'Please try again later'
+      pleaseTryAgainLater: 'Please try again later',
+      videoLimitReached: 'Video limit reached',
+      stageFull: 'Stage full'
     },
     titles: {
       alert: 'alert',
@@ -328,6 +331,12 @@ export const enGb = {
       youHaveBeenInvitedOnStage: 'You have been invited on stage',
       prepareToGoOnStage: 'Prepare to go on stage',
       broadcastManage: 'Manage Broadcast'
+    },
+    textMessage: {
+      you: 'you',
+      placeholder: 'Message',
+      joinText: '{{name}} has joined the collaboration space',
+      leftText: '{{name}} has left the collaboration space'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -367,6 +376,8 @@ export const enGb = {
       emailLogin: 'Email Login',
       goBack: 'Go back',
       back: 'Back',
+      muteAll: 'Mute All',
+      rejoinMeeting: 'Rejoin meeting',
       chooseAvatar: 'Choose an image for your avatar',
       saveProfile: 'Save profile',
       selectAccount: 'Select account',

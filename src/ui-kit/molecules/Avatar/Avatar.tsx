@@ -2,7 +2,7 @@ import React, {FC, memo, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
-import {ReactComponent as AstronautIcon} from 'ui-kit/assets/images/common/professions-man-astronaut.svg';
+import {ReactComponent as AstronautIcon} from 'ui-kit/assets/images/common/astronaut.svg';
 import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './Avatar.styled';
@@ -30,6 +30,7 @@ const Avatar: FC<AvatarProps> = ({
 
   return (
     <styled.Container
+      data-testid="Avatar-test"
       className={cn(size, showBorder && 'showBorder', showHover && 'showHover', className)}
       onClick={onClick}
     >

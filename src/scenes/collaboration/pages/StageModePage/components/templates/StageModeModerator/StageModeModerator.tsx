@@ -4,7 +4,16 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {useHistory} from 'react-router-dom';
 
-import {Toggle, Stage, Button, Text, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar} from 'ui-kit';
+import {
+  Toggle,
+  Stage,
+  Button,
+  Text,
+  ToastContent,
+  TOAST_GROUND_OPTIONS,
+  SpaceTopBar,
+  TextChat
+} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';
@@ -13,7 +22,6 @@ import {
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
 import {ROUTES} from 'core/constants';
-import TextChatView from 'component/molucules/collaboration/TextChatView';
 
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
@@ -22,7 +30,7 @@ const StageModeModerator: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {space, removeParticipantFromStageDialog} = collaborationStore;
+  const {space, removeParticipantFromStageDialog, textChatStore} = collaborationStore;
 
   const history = useHistory();
 
@@ -31,7 +39,7 @@ const StageModeModerator: React.FC = () => {
       if (event === StageModeModerationEventEnum.REMOVE) {
         collaborationStore.selectUserToRemoveAndOpenDialog(remoteUser);
       } else if (event === StageModeModerationEventEnum.MUTE) {
-        await agoraStore.muteRemoteUser(remoteUser.uid as string);
+        await agoraStore.agoraStageModeStore.muteRemoteUser(remoteUser.uid as string);
       }
     },
     [agoraStore, collaborationStore]
@@ -59,13 +67,18 @@ const StageModeModerator: React.FC = () => {
     agoraStageModeStore.leaveStage();
   }, [agoraStageModeStore]);
 
+  const handleClose = () => {
+    history.push(ROUTES.base);
+    textChatStore.textChatDialog.close();
+  };
+
   if (!space) {
     return null;
   }
 
   return (
     <>
-      <styled.Container>
+      <styled.Container data-testid="StageModeModerator-test">
         <SpaceTopBar
           title={space.name ?? ''}
           subtitle={t('labels.stageMode')}
@@ -73,9 +86,10 @@ const StageModeModerator: React.FC = () => {
           spaceId={space.id}
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-          onClose={() => history.push(ROUTES.base)}
-          isChatOpen={agoraStore.isChatOpen}
-          toggleChat={agoraStore.toggleChat}
+          onClose={handleClose}
+          isChatOpen={textChatStore.textChatDialog.isOpen}
+          toggleChat={textChatStore.textChatDialog.toggle}
+          numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
           editSpaceHidden
         >
           <styled.ActionsContainer>
@@ -139,7 +153,15 @@ const StageModeModerator: React.FC = () => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          <TextChatView />
+          {textChatStore.textChatDialog.isOpen && (
+            <TextChat
+              currentChannel={textChatStore.currentChannel}
+              userId={sessionStore.userId}
+              sendMessage={textChatStore.sendMessage}
+              messages={textChatStore.messages}
+              messageSent={textChatStore.messageSent}
+            />
+          )}
         </styled.Body>
       </styled.Container>
       {removeParticipantFromStageDialog.isOpen &&

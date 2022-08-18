@@ -6,3 +6,4 @@ export * from './TokenDialog';
 export * from './TokenRuleList';
 export * from './SpaceTopBar';
 export * from './CountdownDialog';
+export * from './TextChat';

@@ -2,6 +2,7 @@ import React, {useEffect, useMemo} from 'react';
 import {useHistory} from 'react-router';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {generatePath} from 'react-router-dom';
 import {capitalize} from 'lodash-es';
 
 import {useStore} from 'shared/hooks';
@@ -33,12 +34,11 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
   showOverflow,
   showUserInteractions = true
 }) => {
-  const {widgetStore, sessionStore, mainStore, defaultStore, collaborationStore} = useStore();
+  const {widgetStore, sessionStore, mainStore, homeStore} = useStore();
   const {profileStore, launchInitiativeStore} = widgetStore;
-  const {unityStore, worldStore, agoraStore} = mainStore;
+  const {unityStore, worldStore} = mainStore;
   const {profile: currentUser} = sessionStore;
   const {userProfile, userSpaceList} = profileStore;
-  const {homeStore} = defaultStore;
   const {exploreStore} = homeStore;
 
   const history = useHistory();
@@ -58,16 +58,14 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
   }, [worldStore.worldId, userId]);
 
   const grabATable = async () => {
-    const {tableId} = await profileStore.grabATable(worldStore.worldId, userId);
-
-    await collaborationStore.joinMeetingSpace(tableId, true);
-    await agoraStore.joinMeetingSpace(tableId, sessionStore.userId);
+    const spaceId = await profileStore.grabATable(worldStore.worldId, userId);
+    history.push({pathname: generatePath(ROUTES.meeting.grabTable, {spaceId})});
     onClose();
   };
 
   const handleFlyToUser = () => {
     if (userProfile?.uuid) {
-      unityStore.teleportToUser(userProfile.uuid, history.push as (path: string) => void);
+      unityStore.teleportToUser(userProfile.uuid, history.push);
     }
   };
 
@@ -113,7 +111,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
       hasBorder={hasBorder}
       showOverflow={showOverflow}
     >
-      <styled.Body>
+      <styled.Body data-testid="ProfileWidget-test">
         <styled.Actions>
           <Avatar
             avatarSrc={

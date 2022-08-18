@@ -57,7 +57,7 @@ const WorldCalendarPage: FC = () => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="WorldCalendarPage-test">
       {calendarStore.magicId && magicDialog.isOpen && (
         <LinkDialog
           title={t('eventList.eventItem.magicLinkDialog.title')}
@@ -66,7 +66,7 @@ const WorldCalendarPage: FC = () => {
           onClose={magicDialog.close}
         />
       )}
-      <PageTopBar title="World Calendar" onClose={() => history.goBack()} />
+      <PageTopBar title="World Calendar" onClose={() => history.push(ROUTES.base)} />
       <EventList
         currentUserId={sessionStore.userId}
         events={eventListStore.events}

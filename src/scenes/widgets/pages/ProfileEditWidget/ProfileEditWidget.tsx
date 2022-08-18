@@ -18,7 +18,7 @@ import {
   ToastContent
 } from 'ui-kit';
 import {UnityService} from 'shared/services';
-import {ChangeAvatarPopup} from 'modules/profile/popups/ChangeAvatarPopup';
+import {ChangeAvatarPopup} from '_REFACTOR_/modules/profile/popups/ChangeAvatarPopup';
 import {appVariables} from 'api/constants';
 
 import * as styled from './ProfileEditWidget.styled';
@@ -32,7 +32,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
   const {
     widgetStore,
     sessionStore,
-    defaultStore: {homeStore},
+    homeStore,
     mainStore: {worldStore}
   } = useStore();
   const {profileStore} = widgetStore;
@@ -120,7 +120,7 @@ const ProfileEditWidget: React.FC<ProfileEditWidgetPropsInterface> = ({onClose, 
         </Portal>
       )}
       <PanelLayout onClose={onClose} title={t('editProfileWidget.title')} captureAllPointerEvents>
-        <styled.Container>
+        <styled.Container data-testid="ProfileEditWidget-test">
           <styled.AvatarSettings>
             <styled.AvatarContainer>
               <Avatar

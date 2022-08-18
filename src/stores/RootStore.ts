@@ -1,16 +1,17 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
-import {RootCommunicationStore} from 'scenes/communication/stores';
+import {PosBusEventEnum} from 'core/enums';
 import {RootAuthStore} from 'scenes/auth/stores';
-import {RootDefaultStore} from 'scenes/default/stores';
 import {RootSystemStore} from 'scenes/system/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
+import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootWidgetStore} from 'scenes/widgets/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
+import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
-import {PosBusEventEnum} from 'core/enums';
+import {VideoStore} from 'scenes/video/stores';
 
 import {ConfigStore} from './ConfigStore';
 import {MainStore} from './MainStore';
@@ -24,15 +25,16 @@ const RootStore = types
     sessionStore: types.optional(SessionStore, {}),
     /* Connect independent stores */
     authStore: types.optional(RootAuthStore, {}),
-    defaultStore: types.optional(RootDefaultStore, {}),
+    homeStore: types.optional(HomeStore, {}),
     systemStore: types.optional(RootSystemStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
-    communicationStore: types.optional(RootCommunicationStore, {}),
+    meetingStore: types.optional(RootMeetingStore, {}),
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
-    magicStore: types.optional(MagicStore, {})
+    magicStore: types.optional(MagicStore, {}),
+    videoStore: types.optional(VideoStore, {})
   })
   .actions((self) => ({
     initApplication(): void {
@@ -60,7 +62,6 @@ const RootStore = types
 
       yield self.mainStore.agoraStore.leaveMeetingSpace();
       self.collaborationStore.leaveMeetingSpace();
-      self.mainStore.unityStore.resume();
 
       if (spaceId) {
         self.mainStore.unityStore.triggerInteractionMessage(

@@ -59,7 +59,7 @@ const SignUpCompleteForm: FC<PropsInterface> = (props) => {
   }, [fieldErrors, setError]);
 
   return (
-    <div>
+    <div data-testid="SignUpCompleteForm-test">
       {/* Avatar field */}
       <styled.Wrapper>
         <Controller

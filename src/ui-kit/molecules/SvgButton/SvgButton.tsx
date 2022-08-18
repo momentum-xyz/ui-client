@@ -10,7 +10,7 @@ interface PropsInterface
     Pick<HTMLProps<HTMLDivElement>, 'className'> {
   iconName: IconName;
   size: SizeType;
-  onClick?: (event?: Event) => void;
+  onClick?: () => void;
   isDanger?: boolean;
   isWhite?: boolean;
   disabled?: boolean;
@@ -29,8 +29,13 @@ const SvgButton: FC<PropsInterface> = ({
   ...rest
 }) => {
   return (
-    // @ts-ignore: div doesn't have onClick
-    <styled.Container {...rest} onClick={onClick} disabled={disabled}>
+    <styled.Container
+      {...rest}
+      name={iconName}
+      onClick={onClick}
+      disabled={disabled}
+      data-testid="SvgButton-test"
+    >
       <IconSvg
         name={iconName}
         theme={theme}

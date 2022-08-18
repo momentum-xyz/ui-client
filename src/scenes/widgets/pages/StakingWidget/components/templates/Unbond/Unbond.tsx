@@ -21,7 +21,7 @@ const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
     setTransactionType(StakingTransactionType.Unbond);
   }, [setTransactionType]);
   return (
-    <styled.Container>
+    <styled.Container data-testid="Unbond-test">
       <Heading type="h2" align="left" weight="bold" label={t('staking.accountPair')} />
       <styled.TextContainer>
         <Text text={t('staking.unbondingInfoAccounts')} size="s" align="left" />

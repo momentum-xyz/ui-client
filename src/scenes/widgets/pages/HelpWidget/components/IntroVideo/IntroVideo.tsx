@@ -31,8 +31,8 @@ const IntroVideo: FC = () => {
       onExpandToggle={handleExpand}
       withBorder={false}
     >
-      <styled.VideoWrapper>
-        <YouTube videoId={appVariables.YOUTUBE_INTRO_VIDEO_ID} opts={opts} />
+      <styled.VideoWrapper data-testid="IntroVideo-test">
+        <YouTube videoId={appVariables.YOUTUBE_WELCOME_VIDEO_ID} opts={opts} />
       </styled.VideoWrapper>
     </Section>
   );

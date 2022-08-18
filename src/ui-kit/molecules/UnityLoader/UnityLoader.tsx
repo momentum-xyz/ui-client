@@ -3,7 +3,8 @@ import {useTranslation} from 'react-i18next';
 
 import {appVariables} from 'api/constants';
 import {Text, PropsWithThemeInterface} from 'ui-kit/index';
-import image from 'ui-kit/assets/images/common/odyssey-stamp.svg';
+import flamingo from 'ui-kit/assets/images/common/flamingo.svg';
+import spinner from 'ui-kit/assets/images/common/spinner.svg';
 
 import * as styled from './UnityLoader.styled';
 
@@ -25,9 +26,10 @@ const UnityLoader: React.FC<PropsWithThemeInterface> = ({theme}) => {
   }, []);
 
   return (
-    <styled.Inner>
+    <styled.Inner data-testid="UnityLoader-test">
       <styled.Wrapper>
-        <styled.Image src={image} />
+        <styled.Image src={flamingo} />
+        <styled.Spinner src={spinner} />
         <Text theme={theme} text={t('messages.loading')} size="s" />
         <Text theme={theme} text={t('messages.onlineArena')} size="s" />
 
