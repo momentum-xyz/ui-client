@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
@@ -10,7 +10,8 @@ import {useStore} from 'shared/hooks';
 import * as styled from './AvatarForm.styled';
 
 const AvatarForm: FC = () => {
-  const {widgetStore} = useStore();
+  const {widgetStore, mainStore} = useStore();
+  const {unityStore} = mainStore;
   const {profileStore} = widgetStore;
   const {userProfile} = profileStore;
 
@@ -20,6 +21,10 @@ const AvatarForm: FC = () => {
   const [imageError, setImageError] = useState(false);
 
   const {t} = useTranslation();
+
+  useEffect(() => {
+    return () => unityStore.changeKeyboardControl(false);
+  }, [unityStore]);
 
   const handleImage = (file?: File) => {
     setImage(file);

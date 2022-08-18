@@ -22,7 +22,7 @@ interface PropsInterface {
 }
 
 const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, userId}) => {
-  const {widgetStore, sessionStore, mainStore, homeStore} = useStore();
+  const {widgetStore, mainStore, homeStore} = useStore();
   const {profileStore} = widgetStore;
   const {unityStore, worldStore} = mainStore;
   const {userSpaceList, userProfile} = profileStore;
@@ -70,11 +70,7 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
   return (
     <>
       <styled.Actions>
-        <Avatar
-          avatarSrc={sessionStore.profile?.avatarSrc}
-          size="large"
-          status={userProfile?.status}
-        />
+        <Avatar avatarSrc={userProfile?.avatarSrc} size="large" status={userProfile?.status} />
         {showUserInteractions && (
           <>
             <Button label={t('actions.flyTo')} onClick={handleFlyToUser} size="small" />

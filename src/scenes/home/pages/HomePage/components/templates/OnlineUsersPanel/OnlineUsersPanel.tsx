@@ -22,7 +22,6 @@ const OnlineUsersPanel: FC = () => {
 
   useUnityEvent('ProfileClickEvent', (id: string, position: Position) => {
     onlineUsersStore.selectUser(id);
-    console.info('position', position);
   });
 
   useEffect(() => {
