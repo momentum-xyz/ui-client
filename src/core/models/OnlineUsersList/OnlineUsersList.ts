@@ -37,7 +37,7 @@ const OnlineUsersList = types
     }
   }))
   .views((self) => ({
-    get isLoading() {
+    get isLoading(): boolean {
       return self.usersRequest.isLoading;
     }
   }));

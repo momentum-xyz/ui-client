@@ -125,13 +125,13 @@ const ProfileStore = types.compose(
       }
     }))
     .views((self) => ({
-      get fetchSpaceIsDone() {
+      get fetchSpaceIsDone(): boolean {
         return self.userInitiativesRequest.isDone;
       },
-      get fetchUserIsDone() {
+      get fetchUserIsDone(): boolean {
         return self.profileFetchRequest.isDone;
       },
-      get avatarIsLoading() {
+      get avatarIsLoading(): boolean {
         return self.avatarRequest.isLoading;
       }
     }))

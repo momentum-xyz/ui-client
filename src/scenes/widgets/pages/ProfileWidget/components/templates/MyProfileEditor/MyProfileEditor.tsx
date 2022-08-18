@@ -7,7 +7,6 @@ import {t} from 'i18next';
 import {UpdateUserRequest} from 'api';
 import {useStore} from 'shared/hooks';
 import {Avatar, Button, Heading, Input, Text, TextArea, ToastContent} from 'ui-kit';
-import {UnityService} from 'shared/services';
 
 import * as styled from './MyProfileEditor.styled';
 
@@ -20,7 +19,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   const {onlineUsersList} = homeStore;
   const {profileStore} = widgetStore;
   const {userProfile, editAvatarDialog} = profileStore;
-  const {worldStore} = mainStore;
+  const {worldStore, unityStore} = mainStore;
   const {
     control,
     setValue,
@@ -42,10 +41,10 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   }, [userProfile?.name, userProfile?.profile, setValue]);
 
   useEffect(() => {
-    UnityService.setKeyboardControl(false);
+    unityStore.changeKeyboardControl(false);
 
     return () => {
-      UnityService.setKeyboardControl(true);
+      unityStore.changeKeyboardControl(true);
       profileStore.setImage(undefined);
     };
   }, []);

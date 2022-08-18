@@ -21,8 +21,8 @@ export const AvatarContainer = styled.div`
 `;
 
 export const ImagePreview = styled.img`
-  width: 78.22px;
-  height: 78.22px;
+  width: 78px;
+  height: 78px;
   border-radius: 100%;
   object-fit: cover;
 `;
