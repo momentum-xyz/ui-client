@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
-import {useStore, usePosBusEvent} from 'shared/hooks';
+import {useStore, usePosBusEvent, useDeviceChange} from 'shared/hooks';
 import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {createRoutesByConfig} from 'core/utils';
 import {
@@ -251,17 +251,11 @@ const Collaboration: FC = () => {
   usePosBusEvent('stage-mode-user-left', agoraStageModeStore.removeStageModeUser);
   usePosBusEvent('stage-mode-kick', agoraStageModeStore.moveToAudience);
 
-  useEffect(() => {
-    navigator.mediaDevices.ondevicechange = () => {
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        setNewDevice(devices[1]);
-        newDeviceDialog.open();
-      });
-    };
-
-    return () => {
-      navigator.mediaDevices.ondevicechange = null;
-    };
+  useDeviceChange(() => {
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      setNewDevice(devices[1]);
+      newDeviceDialog.open();
+    });
   }, [newDeviceDialog]);
 
   return (
