@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {ComponentProps, FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 
@@ -6,6 +6,11 @@ import {IconSvg, PanelLayout, Text} from 'ui-kit';
 import background from 'static/images/bg.png';
 
 import * as styled from './SystemWideError.styled';
+
+const textStyleProps: ComponentProps<typeof Text> = {
+  size: 'm',
+  weight: 'light'
+};
 
 interface PropsInterface {
   isMaintenance?: boolean;
@@ -25,20 +30,22 @@ const SystemWideError: FC<PropsInterface> = ({isMaintenance, isDisconnected}) =>
           </styled.IconContainer>
           <styled.TextContainer>
             {isMaintenance && (
-              <Text theme={theme} size="l" text={t('systemWideError.underMaintenance')} />
+              <Text
+                text={t('systemWideError.underMaintenance')}
+                {...textStyleProps}
+                theme={theme}
+              />
             )}
             {isDisconnected && (
               <>
                 <Text
                   text={t('systemWideError.loadedInAnotherTab')}
-                  size="m"
-                  weight="light"
+                  {...textStyleProps}
                   theme={theme}
                 />
                 <Text
                   text={t('systemWideError.switchToThatTab')}
-                  size="m"
-                  weight="light"
+                  {...textStyleProps}
                   theme={theme}
                 />
               </>
