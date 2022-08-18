@@ -16,6 +16,7 @@ export const Body = styled.div`
   display: flex;
   height: 100%;
   min-height: 0;
+  padding-top: 10px;
 `;
 
 export const InnerBody = styled.div`
