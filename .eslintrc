@@ -82,7 +82,7 @@
       {
         "selector": "interface",
         "format": ["PascalCase"],
-        "suffix": ["Interface"]
+        "suffix": ["Interface", "Request", "Response"]
       },
       {
         "selector": "enum",
