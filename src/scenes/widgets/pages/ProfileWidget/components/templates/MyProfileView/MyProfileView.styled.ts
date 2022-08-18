@@ -5,41 +5,8 @@ import {Text} from 'ui-kit';
 export const Body = styled.div`
   display: flex;
   overflow: hidden;
-  min-height: 150px;
   max-height: calc(100% - 50px);
   margin-top: 10px;
-`;
-export const HeaderItem = styled.div`
-  display: flex;
-  overflow: hidden;
-  width: 100%;
-  justify-content: left;
-`;
-
-export const Spacer = styled.div`
-  flex-grow: 1;
-`;
-
-export const HeaderActions = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 15px;
-  width: 100%;
-  gap: 10px;
-
-  margin-bottom: 0;
-
-  ${HeaderItem} ~ ${HeaderItem} {
-    margin-left: 10px;
-  }
 `;
 
 export const Actions = styled.div`
@@ -80,4 +47,39 @@ export const Link = styled.a`
 
 export const LocationText = styled(Text)`
   max-width: 282px;
+`;
+
+export const Container = styled.div``;
+
+export const HeaderItem = styled.div`
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  justify-content: left;
+`;
+
+export const Spacer = styled.div`
+  flex-grow: 1;
+`;
+
+export const HeaderActions = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+  width: 100%;
+  gap: 10px;
+
+  margin-bottom: 0;
+
+  ${HeaderItem} ~ ${HeaderItem} {
+    margin-left: 10px;
+  }
 `;

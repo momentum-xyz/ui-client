@@ -14,7 +14,8 @@ import {
   UserProfileInterface,
   NewSpaceDetails,
   UserOwnedSpacesResponse,
-  UserSpaceListItemResponse
+  UserSpaceListItemResponse,
+  UploadAvatarResponse
 } from 'api';
 
 const ProfileStore = types.compose(
@@ -26,12 +27,17 @@ const ProfileStore = types.compose(
       userSpaceList: types.optional(types.array(UserSpaceDetails), []),
       profileFetchRequest: types.optional(RequestModel, {}),
       createTableRequest: types.optional(RequestModel, {}),
+      avatarRequest: types.optional(RequestModel, {}),
       inviteToTableRequest: types.optional(RequestModel, {}),
       editProfileRequest: types.optional(RequestModel, {}),
       userOwnedSpacesRequest: types.optional(RequestModel, {}),
       editAvatarDialog: types.optional(DialogModel, {}),
-      userInitiativesRequest: types.optional(RequestModel, {})
+      userInitiativesRequest: types.optional(RequestModel, {}),
+      isEditingProfile: false
     })
+    .volatile<{selectedImage: File | undefined}>(() => ({
+      selectedImage: undefined
+    }))
     .actions((self) => ({
       fetchProfile: flow(function* (userId: string) {
         self.userProfile = cast(
@@ -39,6 +45,8 @@ const ProfileStore = types.compose(
             userId
           })
         );
+
+        return self.profileFetchRequest.isDone;
       }),
       fetchUserSpaceList: flow(function* (userId: string) {
         const response: UserSpaceListItemResponse[] = yield self.userInitiativesRequest.send(
@@ -49,6 +57,8 @@ const ProfileStore = types.compose(
         if (response) {
           self.userSpaceList = cast(response);
         }
+
+        return self.userInitiativesRequest.isDone;
       }),
       grabATable: flow(function* (worldId: string, userId: string) {
         const space: NewSpaceDetails = {
@@ -83,13 +93,48 @@ const ProfileStore = types.compose(
         return response;
       }),
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {
+        // 1. Avatar uploading.
+        let avatarHash;
+        if (profile.image) {
+          const data = {avatar: profile.image};
+          const userResponse: UploadAvatarResponse = yield self.avatarRequest.send(
+            api.userRepository.uploadAvatar,
+            data
+          );
+          avatarHash = userResponse?.hash;
+        }
+        self.selectedImage = undefined;
+
+        // 2. Profile updating.
         yield self.editProfileRequest.send(api.profileRepository.update, {
           name,
-          profile
+          profile: {
+            bio: profile.bio,
+            profileLink: profile.profileLink,
+            location: profile.location,
+            avatarHash: profile.image ? avatarHash : profile.avatarHash
+          }
         });
-
+        self.isEditingProfile = false;
         return self.editProfileRequest.isDone;
-      })
+      }),
+      setImage(image?: File) {
+        self.selectedImage = image;
+      },
+      openEdit() {
+        self.isEditingProfile = true;
+      }
+    }))
+    .views((self) => ({
+      get fetchSpaceIsDone(): boolean {
+        return self.userInitiativesRequest.isDone;
+      },
+      get fetchUserIsDone(): boolean {
+        return self.profileFetchRequest.isDone;
+      },
+      get avatarIsLoading(): boolean {
+        return self.avatarRequest.isLoading;
+      }
     }))
 );
 

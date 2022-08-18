@@ -14,7 +14,7 @@ const useCoordinates = (ref: RefObject<HTMLElement>, rightOffset: number, bottom
     if (rect) {
       setCoords({left: rect.x - rightOffset, top: rect.y - bottomOffset, width: rect.width});
     }
-  }, [ref]);
+  }, [bottomOffset, ref, rightOffset]);
 
   useScroll(ref, () => setIsShown(false));
   useResize(ref, updateCoords);

@@ -9,6 +9,7 @@ export interface UserProfileInterface {
   avatarHash?: string;
   profileLink?: string;
   onBoarded?: boolean;
+  image?: File;
 }
 
 export interface UserInterface {
