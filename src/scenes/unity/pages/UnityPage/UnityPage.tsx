@@ -27,9 +27,8 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, systemStore, unityLoaded} = useStore();
+  const {mainStore, unityLoaded} = useStore();
   const {unityStore} = mainStore;
-  const {systemWideErrorStore} = systemStore;
 
   const auth = useAuth();
   const theme = useTheme();
@@ -52,7 +51,7 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ExterminateUnity', () => {
-    systemWideErrorStore.setDisconnected();
+    history.push({pathname: ROUTES.disconnected});
   });
 
   useUnityEvent('ClickEventDashboard', (spaceId: string) => {

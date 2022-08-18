@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Redirect, Switch, useLocation} from 'react-router-dom';
+import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
 import {AuthProvider} from 'react-oidc-context';
 import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
@@ -11,7 +11,6 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
-import {SystemWideError} from 'scenes/system/pages';
 import {setApiResponseHandlers} from 'api/request';
 import {httpErrorCodes} from 'api/constants';
 
@@ -26,47 +25,31 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, systemStore, initApplication} = useStore();
+  const {configStore, sessionStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
   const {isConfigReady} = configStore;
-  const {systemWideErrorStore} = systemStore;
-  const {isDisconnected, isMaintenance} = systemWideErrorStore;
 
   const {pathname} = useLocation();
+  const history = useHistory();
   const {t} = useTranslation();
 
   useEffect(() => {
     setApiResponseHandlers({
       onError: (error) => {
         if (error.response?.status === httpErrorCodes.MAINTENANCE) {
-          systemWideErrorStore.setMaintenance();
+          history.push({pathname: ROUTES.maintenance});
         }
         throw error;
       }
     });
     initApplication();
-  }, [initApplication]);
+  }, [initApplication, history]);
 
   useEffect(() => {
     if (isConfigReady) {
       mainStore.init();
     }
   }, [isConfigReady, mainStore]);
-
-  if (isMaintenance) {
-    return (
-      <ThemeProvider theme={themeStore.theme}>
-        <SystemWideError isMaintenance />
-      </ThemeProvider>
-    );
-  }
-  if (isDisconnected) {
-    return (
-      <ThemeProvider theme={themeStore.theme}>
-        <SystemWideError isDisconnected />
-      </ThemeProvider>
-    );
-  }
 
   if (!isConfigReady) {
     return <></>;

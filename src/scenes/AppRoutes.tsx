@@ -14,7 +14,7 @@ import {
 import {WelcomePage} from './welcome';
 import {HomePage} from './home';
 import {SignUpCompletePage} from './profile';
-import {StoryBookPage} from './system/pages';
+import {DisconnectedPage, MaintenancePage, StoryBookPage} from './system/pages';
 import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
@@ -80,6 +80,16 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.welcome,
     exact: true,
     main: () => <WelcomePage />
+  },
+  {
+    path: ROUTES.disconnected,
+    exact: true,
+    main: () => <DisconnectedPage />
+  },
+  {
+    path: ROUTES.maintenance,
+    exact: true,
+    main: () => <MaintenancePage />
   }
 ];
 
