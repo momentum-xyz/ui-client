@@ -1,4 +1,4 @@
-import {cast, flow, Instance, types} from 'mobx-state-tree';
+import {Instance, types} from 'mobx-state-tree';
 
 import {
   DialogModel,
@@ -10,7 +10,6 @@ import {
 } from 'core/models';
 import {TokenRuleReviewStore} from 'scenes/widgets/stores/TokenRuleReviewStore';
 import {TokenRulesListStore} from 'scenes/widgets/stores/TokenRulesListStore';
-import {api} from 'api';
 import {TokenTypeModel} from 'core/models/TokenType';
 import {NetworkTypeModel} from 'core/models/NetworkType';
 
@@ -32,24 +31,7 @@ const TokenRulesStore = types.compose(
       reviewTokenRule(tokenRule: TokenRuleItemModelInterface) {
         self.tokenRuleReviewStore.review(tokenRule);
         self.tokenRuleReviewDialog.open();
-      },
-      fetchOptions: flow(function* fetchOptions() {
-        const response = yield self.request.send(api.tokenRuleRepository.fetchOptions, {});
-        if (response) {
-          self.networks = cast(
-            response.networks.map((network: string) => ({
-              value: network,
-              label: network.toUpperCase()
-            }))
-          );
-          self.types = cast(
-            response.types.map((type: string) => ({
-              value: type,
-              label: type.toUpperCase()
-            }))
-          );
-        }
-      })
+      }
     }))
 );
 

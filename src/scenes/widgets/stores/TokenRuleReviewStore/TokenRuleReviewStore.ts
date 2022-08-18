@@ -60,13 +60,6 @@ const TokenRuleReviewStore = types.compose(
         });
 
         return self.declineTokenRuleRequest.isDone;
-      }),
-      deleteTokenRule: flow(function* (tokenRuleId: string) {
-        yield self.deleteTokeRuleRequest.send(api.tokenRuleRepository.deleteTokenRule, {
-          tokenRuleId: tokenRuleId
-        });
-
-        return self.deleteTokeRuleRequest.isDone;
       })
     }))
     .views((self) => ({

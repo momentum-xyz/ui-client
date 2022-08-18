@@ -10,6 +10,7 @@ import {HelpStore} from './HelpStore';
 import {LaunchInitiativeStore} from './LaunchInitiativeStore';
 import {MusicPlayerStore} from './MusicPlayerStore';
 import {AttendeesListStore} from './AttendeesListStore';
+import {TokenRulesListStore} from './TokenRulesListStore';
 
 const RootWidgetStore = types.model('RootWidgetStore', {
   magicLinkStore: types.optional(MagicLinkStore, {}),
@@ -18,6 +19,7 @@ const RootWidgetStore = types.model('RootWidgetStore', {
   helpStore: types.optional(HelpStore, {}),
   profileStore: types.optional(ProfileStore, {}),
   profileMenuStore: types.optional(ProfileMenuStore, {}),
+  tokenRulesListStore: types.optional(TokenRulesListStore, {}),
   tokenRulesStore: types.optional(TokenRulesStore, {}),
   launchInitiativeStore: types.optional(LaunchInitiativeStore, {}),
   musicPlayerStore: types.optional(MusicPlayerStore, {}),

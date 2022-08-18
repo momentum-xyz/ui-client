@@ -15,7 +15,8 @@ interface PropsInterface {}
 const TokenForm: FC<PropsInterface> = () => {
   const theme = useTheme();
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {space, tokenFormDialog, tokenRuleStore, tokenFormStore} = spaceManagerStore;
+  const {space, tokenFormDialog, tokenRulesStore} = spaceManagerStore;
+  const {tokenFormStore} = tokenRulesStore;
   const {
     control,
     setValue,
@@ -126,7 +127,7 @@ const TokenForm: FC<PropsInterface> = () => {
                   <Dropdown
                     placeholder={t('tokenRules.tokenForm.tokenTypePlaceholder')}
                     value={value}
-                    options={tokenRuleStore.types}
+                    options={tokenRulesStore.types}
                     onOptionSelect={(value) => {
                       setIsDisabledType(false);
                       onChange(value.value);
@@ -186,7 +187,7 @@ const TokenForm: FC<PropsInterface> = () => {
                   <Dropdown
                     placeholder={t('tokenRules.tokenForm.networkPlaceholder')}
                     value={value}
-                    options={tokenRuleStore.networks}
+                    options={tokenRulesStore.networks}
                     onOptionSelect={(value) => {
                       onChange(value.value);
                       handleSelectNetwork(value.value);

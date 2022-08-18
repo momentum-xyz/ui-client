@@ -1,21 +1,9 @@
 import {flow, types} from 'mobx-state-tree';
 
-import {
-  DialogModel,
-  RequestModel,
-  ResetModel,
-  TokenRuleItemModelInterface,
-  Space
-} from 'core/models';
+import {DialogModel, RequestModel, ResetModel, Space} from 'core/models';
 import {api} from 'api';
-import {TokenRulesListStore} from 'scenes/widgets/stores/TokenRulesListStore';
-import {TokenRuleReviewStore} from 'scenes/widgets/stores/TokenRuleReviewStore';
-import {TokenFormStore} from 'scenes/widgets/stores/TokenFormStore';
-import {TokenRuleFormStore} from 'scenes/widgets/stores/TokenRuleFormStore';
-import {TokenRulesStore} from 'scenes/widgets/stores/TokenRulesStore';
-import {ApplyTokenRuleStore} from 'scenes/widgets/stores/ApplyTokenRuleStore';
 
-import {SearchUsersStore, SpaceDetailsFormStore} from './models';
+import {SearchUsersStore, SpaceDetailsFormStore, TokenRulesStore} from './models';
 
 const SpaceManagerStore = types.compose(
   ResetModel,
@@ -26,11 +14,6 @@ const SpaceManagerStore = types.compose(
       tokenFormDialog: types.optional(DialogModel, {}),
       applyTokenRuleFormDialog: types.optional(DialogModel, {}),
       tokenRuleFormDialog: types.optional(DialogModel, {}),
-      tokenRuleReviewStore: types.optional(TokenRuleReviewStore, {isWorldList: false}),
-      tokenRulesListStore: types.optional(TokenRulesListStore, {}),
-      tokenRuleFormStore: types.optional(TokenRuleFormStore, {}),
-      tokenFormStore: types.optional(TokenFormStore, {}),
-      applyTokenRuleStore: types.optional(ApplyTokenRuleStore, {}),
       space: types.maybe(Space),
       spaceDetailsFormStore: types.optional(SpaceDetailsFormStore, {}),
       deleteSpaceConfirmationDialog: types.optional(DialogModel, {}),
@@ -43,19 +26,15 @@ const SpaceManagerStore = types.compose(
       removeSubSpaceConfirmationDialog: types.optional(DialogModel, {}),
       addSubSpaceDialog: types.optional(DialogModel, {}),
       removeSubSpaceRequest: types.optional(RequestModel, {}),
-      tokenRuleStore: types.optional(TokenRulesStore, {})
+      tokenRulesStore: types.optional(TokenRulesStore, {})
     })
     .actions((self) => ({
       init(spaceId: string) {
         self.space = Space.create({id: spaceId});
         self.space.fetchSpaceInformation();
         self.space.fetchAllowedSubSpaceTypes();
-        self.tokenRulesListStore.fetchTokenRules(spaceId);
-        self.tokenRuleStore.fetchOptions();
-      },
-      reviewTokenRule(tokenRule: TokenRuleItemModelInterface) {
-        self.tokenRuleReviewStore.review(tokenRule);
-        self.tokenRuleReviewDialog.open();
+        self.tokenRulesStore.fetchTokenRules(spaceId);
+        self.tokenRulesStore.fetchOptions();
       },
       deleteSubSpace: flow(function* (spaceId: string) {
         yield self.removeSubSpaceRequest.send(api.spaceRepository.deleteSpace, {spaceId});

@@ -25,13 +25,8 @@ interface PropsInterface {}
 const ApplyTokenRuleForm: FC<PropsInterface> = () => {
   const theme = useTheme();
   const {spaceManagerStore} = useStore().spaceAdminStore;
-  const {
-    applyTokenRuleFormDialog,
-    applyTokenRuleStore,
-    tokenRuleFormDialog,
-    space,
-    tokenRulesListStore
-  } = spaceManagerStore;
+  const {applyTokenRuleFormDialog, tokenRuleFormDialog, space, tokenRulesStore} = spaceManagerStore;
+  const {applyTokenRuleStore} = tokenRulesStore;
   const [isFocused, setIsFocused] = useState(false);
   const [tokenRule, setTokenRule] = useState<string>('');
   const [selectedTokenRule, setSelectedTokenRule] = useState<TokenRuleItemModelInterface>();
@@ -42,7 +37,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
 
   useEffect(() => {
     if (applyTokenRuleStore.tokenRuleApplied) {
-      tokenRulesListStore.fetchTokenRules(space?.id);
+      tokenRulesStore.fetchTokenRules(space?.id);
     }
   }, [applyTokenRuleStore.applyRequest.state]);
 

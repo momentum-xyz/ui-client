@@ -20,9 +20,11 @@ const TokenRuleReviewWidget: FC<PropsInterface> = ({onClose, tokenRuleReviewStor
   const theme = useTheme();
   const {
     spaceAdminStore: {spaceManagerStore},
-    sessionStore
+    sessionStore,
+    widgetStore
   } = useStore();
-  const {tokenRulesListStore, space} = spaceManagerStore;
+  const {space} = spaceManagerStore;
+  const {tokenRulesListStore} = widgetStore;
   const {currentTokenRule} = tokenRuleReviewStore;
   const {profile} = sessionStore;
 
