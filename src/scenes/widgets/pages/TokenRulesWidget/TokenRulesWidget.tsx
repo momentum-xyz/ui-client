@@ -42,7 +42,7 @@ const TokenRulesWidget: FC = () => {
       showCloseButton
       layoutSize={{height: '66vh'}}
       closeOnBackgroundClick={false}
-      controlUnityKeyboardControl
+      keyboardControl
     >
       <styled.Body data-testid="TokenRulesWidget-test">
         <SearchInput
