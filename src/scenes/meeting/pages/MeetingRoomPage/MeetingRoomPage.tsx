@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
+import {Loader} from 'ui-kit';
 
 import {
   PeopleCount,
@@ -32,7 +33,11 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
   }, [stageModeStore, meetingStore]);
 
   if (!agoraStore.hasJoined) {
-    return <></>;
+    return (
+      <styled.Loader>
+        <Loader />
+      </styled.Loader>
+    );
   }
 
   return (
