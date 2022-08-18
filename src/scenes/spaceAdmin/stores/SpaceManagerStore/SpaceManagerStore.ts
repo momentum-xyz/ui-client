@@ -15,8 +15,7 @@ import {TokenRuleFormStore} from 'scenes/widgets/stores/TokenRuleFormStore';
 import {TokenRulesStore} from 'scenes/widgets/stores/TokenRulesStore';
 import {ApplyTokenRuleStore} from 'scenes/widgets/stores/ApplyTokenRuleStore';
 
-import {SpaceDetailsFormStore} from './SpaceDetailsFormStore';
-import {SearchUsersStore} from './SearchUsersStore/SearchUsersStore';
+import {SearchUsersStore, SpaceDetailsFormStore} from './models';
 
 const SpaceManagerStore = types.compose(
   ResetModel,

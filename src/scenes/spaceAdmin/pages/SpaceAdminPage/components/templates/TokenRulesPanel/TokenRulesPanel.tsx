@@ -6,9 +6,7 @@ import {toast} from 'react-toastify';
 import {SectionPanel, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
-import {TokenRuleListItem} from '../../organisms/TokenRuleListItem';
-
-import {EditTokenRuleDialog, RemoveTokenRuleDialog} from './components';
+import {EditTokenRuleDialog, RemoveTokenRuleDialog, TokenRuleListItem} from './components';
 import * as styled from './TokenRulesPanel.styled';
 
 interface PropsInterface {}
