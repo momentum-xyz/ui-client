@@ -5,8 +5,9 @@ import {AuthProvider} from 'react-oidc-context';
 import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
+import {toast} from 'react-toastify';
 
-import {WrongBrowser} from 'ui-kit';
+import {SystemWideError, ToastContent, WrongBrowser} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
@@ -27,7 +28,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
-  const {isConfigReady} = configStore;
+  const {isConfigReady, isError: isErrorLoadingConfig} = configStore;
 
   const {pathname} = useLocation();
   const history = useHistory();
@@ -38,6 +39,15 @@ const App: FC = () => {
       onError: (error) => {
         if (error.response?.status === httpErrorCodes.MAINTENANCE) {
           history.push({pathname: ROUTES.maintenance});
+        } else {
+          toast.info(
+            <ToastContent
+              headerIconName="check"
+              title={String(error.response?.status || '')}
+              text={t('somethingWentWrong')}
+              isCloseButton
+            />
+          );
         }
         throw error;
       }
@@ -50,6 +60,14 @@ const App: FC = () => {
       mainStore.init();
     }
   }, [isConfigReady, mainStore]);
+
+  if (isErrorLoadingConfig && !isConfigReady) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <SystemWideError text="somethingWentWrong" />
+      </ThemeProvider>
+    );
+  }
 
   if (!isConfigReady) {
     return <></>;
