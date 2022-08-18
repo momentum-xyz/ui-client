@@ -1,13 +1,9 @@
 import {flow, types, cast} from 'mobx-state-tree';
-import AgoraRTC, {
-  ConnectionDisconnectedReason,
-  ConnectionState,
-  IAgoraRTCRemoteUser
-} from 'agora-rtc-sdk-ng';
+import AgoraRTC from 'agora-rtc-sdk-ng';
 
 import {api} from 'api';
 import {appVariables} from 'api/constants';
-import {ResetModel, RequestModel, AgoraRemoteUserInterface} from 'core/models';
+import {ResetModel, RequestModel} from 'core/models';
 import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
 
 import {UserDevicesStore} from './UserDevicesStore';
@@ -30,8 +26,6 @@ const AgoraStore = types
       spaceId: types.maybe(types.string),
       isStageMode: false,
       isTogglingStageMode: false,
-      localSoundLevel: 0,
-      connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
 
       // Requests
       spaceIntegrationsRequest: types.optional(RequestModel, {}),
@@ -49,132 +43,6 @@ const AgoraStore = types
       return status;
     })
   }))
-  // Listeners for Agora Client
-  .actions((self) => ({
-    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
-
-      if (!isScreenshare) {
-        if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
-          yield (
-            self.isStageMode ? self.agoraStageModeStore.client : self.agoraMeetingStore.client
-          ).subscribe(user, mediaType);
-        }
-
-        if (user.hasAudio && mediaType === 'audio') {
-          user.audioTrack?.play();
-        }
-
-        const updatedUser = self.agoraMeetingStore.users.find(
-          (remoteUser) => remoteUser.uid === user.uid
-        );
-
-        if (updatedUser) {
-          updatedUser.participantInfo = user;
-          if (mediaType === 'audio') {
-            updatedUser.isMuted = !user.hasAudio;
-            updatedUser.audioTrack = user.audioTrack;
-          } else {
-            updatedUser.cameraOff = !user.hasVideo;
-            updatedUser.videoTrack = user.videoTrack;
-          }
-
-          self.agoraMeetingStore.users = cast(
-            self.agoraMeetingStore.users.map((remoteUser) =>
-              remoteUser.uid === user.uid ? updatedUser : remoteUser
-            )
-          );
-        }
-      } else {
-        yield self.agoraMeetingStore.client.subscribe(user, mediaType);
-        if (user.videoTrack) {
-          self.agoraScreenShareStore.screenShareStarted(user.videoTrack);
-        }
-      }
-    }),
-    handleUserUnpublished: flow(function* (
-      user: IAgoraRTCRemoteUser,
-      mediaType: 'audio' | 'video'
-    ) {
-      const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
-
-      if (isScreenshare) {
-        self.agoraScreenShareStore.client = undefined;
-      } else {
-        const foundUser = self.agoraMeetingStore.users.find(
-          (remoteUser) => remoteUser.uid === user.uid
-        );
-
-        if (foundUser?.participantInfo) {
-          if (mediaType === 'audio' && foundUser.audioTrack?.isPlaying) {
-            foundUser.audioTrack?.stop();
-          }
-
-          yield (
-            self.isStageMode ? self.agoraStageModeStore.client : self.agoraMeetingStore.client
-          ).unsubscribe(foundUser.participantInfo, mediaType);
-
-          const updatedUser = self.agoraMeetingStore.users.find(
-            (remoteUser) => remoteUser.uid === user.uid
-          );
-
-          if (updatedUser) {
-            if (mediaType === 'audio') {
-              updatedUser.isMuted = true;
-            } else {
-              updatedUser.cameraOff = true;
-            }
-          }
-        }
-      }
-    }),
-    handleUserJoined(user: IAgoraRTCRemoteUser) {
-      const isScreenshare = (user?.uid as string).split('|')[0] === 'ss';
-      if (!isScreenshare) {
-        const foundUser = self.agoraMeetingStore.users.find(
-          (remoteUser) => remoteUser.uid === user.uid
-        );
-
-        const newUser: AgoraRemoteUserInterface = cast({
-          uid: user.uid,
-          participantInfo: user,
-          isMuted: true,
-          cameraOff: true
-        });
-
-        if (!foundUser) {
-          self.agoraMeetingStore.users = cast([...self.agoraMeetingStore.users, newUser]);
-        }
-      }
-    },
-    handleUserLeft(user: IAgoraRTCRemoteUser) {
-      const isScreenshare = (user.uid as string).split('|')[0] === 'ss';
-      if (isScreenshare) {
-        self.agoraScreenShareStore.screenShareStopped();
-      } else {
-        self.agoraMeetingStore.users = cast(
-          self.agoraMeetingStore.users.filter((remoteUser) => remoteUser.uid !== user.uid)
-        );
-      }
-    },
-    handleConnectionStateChange(
-      currentState: ConnectionState,
-      previousState: ConnectionState,
-      reason?: ConnectionDisconnectedReason
-    ) {
-      self.connectionState = currentState;
-    },
-    handleVolumeIndicator(users: {uid: string; level: number}[]) {
-      const currentUser = users.find((user) => user.uid === self.userId);
-
-      self.localSoundLevel = currentUser?.level ?? 0;
-
-      self.agoraMeetingStore.users.forEach((remoteUser) => {
-        const user = users.find((user) => remoteUser.uid === user.uid);
-        remoteUser.soundLevel = user?.level ?? 0;
-      });
-    }
-  }))
   // Initializer
   .actions((self) => ({
     init() {
@@ -188,26 +56,11 @@ const AgoraStore = types
     // --- COMMON ---
     setupAgoraListeners() {
       if (self.isStageMode) {
-        self.agoraStageModeStore.client.on('user-published', self.handleUserPublished);
-        self.agoraStageModeStore.client.on('user-unpublished', self.handleUserPublished);
-        self.agoraStageModeStore.client.on('user-joined', self.handleUserJoined);
-        self.agoraStageModeStore.client.on('user-left', self.handleUserLeft);
-        self.agoraStageModeStore.client.on(
-          'connection-state-change',
-          self.handleConnectionStateChange
-        );
-        self.agoraStageModeStore.client.on('volume-indicator', self.handleVolumeIndicator);
+        self.agoraStageModeStore.setupAgoraListeners();
       } else {
-        self.agoraMeetingStore.client.on('user-published', self.handleUserPublished);
-        self.agoraMeetingStore.client.on('user-unpublished', self.handleUserPublished);
-        self.agoraMeetingStore.client.on('user-joined', self.handleUserJoined);
-        self.agoraMeetingStore.client.on('user-left', self.handleUserLeft);
-        self.agoraMeetingStore.client.on(
-          'connection-state-change',
-          self.handleConnectionStateChange
-        );
-        self.agoraMeetingStore.client.on('volume-indicator', self.handleVolumeIndicator);
+        self.agoraMeetingStore.setupAgoraListeners();
       }
+      self.agoraScreenShareStore.setupAgoraListeners();
     },
     clanupAgoraListeners() {
       if (self.isStageMode) {
@@ -215,6 +68,7 @@ const AgoraStore = types
       } else {
         self.agoraMeetingStore.clanupListeners();
       }
+      self.agoraScreenShareStore.clanupListeners();
     }
   }))
   // Meeting space managment
@@ -339,6 +193,11 @@ const AgoraStore = types
       return self.isStageMode
         ? self.agoraStageModeStore.numberOfAudienceMembers
         : self.agoraMeetingStore.users.length + 1;
+    },
+    get localSoundLevel(): number {
+      return self.isStageMode
+        ? self.agoraStageModeStore.localSoundLevel
+        : self.agoraMeetingStore.localSoundLevel;
     }
   }));
 
