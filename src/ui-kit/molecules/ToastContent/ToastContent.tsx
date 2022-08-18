@@ -32,7 +32,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         iconSize="large"
         onClose={onClose}
         componentSize={{width: '100%'}}
-        titleWidth="450px"
+        titleWidth="370px"
         headerType="h4"
       >
         <styled.Container>
