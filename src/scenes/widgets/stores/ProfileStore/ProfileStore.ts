@@ -111,6 +111,7 @@ const ProfileStore = types.compose(
           profile: {
             bio: profile.bio,
             profileLink: profile.profileLink,
+            location: profile.location,
             avatarHash: profile.image ? avatarHash : profile.avatarHash
           }
         });

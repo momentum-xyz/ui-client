@@ -50,6 +50,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   }, []);
 
   const formSubmitHandler: SubmitHandler<UpdateUserRequest> = ({profile, name}) => {
+    console.info(profile);
     profileStore.editProfile(name, profile).then((isSuccess) => {
       if (isSuccess) {
         profileStore.fetchProfile(userId).then(() => {

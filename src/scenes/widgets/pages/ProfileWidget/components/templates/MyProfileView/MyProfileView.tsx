@@ -45,11 +45,7 @@ const MyProfileView: FC = () => {
   return (
     <>
       <styled.Actions>
-        <Avatar
-          avatarSrc={sessionStore.profile?.avatarSrc}
-          size="large"
-          status={currentUser?.status}
-        />
+        <Avatar avatarSrc={currentUser?.avatarSrc} size="large" status={currentUser?.status} />
         {profileStore.canCreateInitiative && (
           <Button
             label={t('actions.createInitiative')}
@@ -59,26 +55,26 @@ const MyProfileView: FC = () => {
         )}
       </styled.Actions>
       <styled.Details>
-        {userProfile?.profile?.bio && (
-          <Text text={userProfile.profile.bio} size="xs" align="left" />
+        {currentUser?.profile?.bio && (
+          <Text text={currentUser.profile.bio} size="xs" align="left" />
         )}
         <styled.Info>
-          {userProfile?.profile?.location && (
+          {currentUser?.profile?.location && (
             <styled.InfoItem>
               <IconSvg name="location" size="normal" />
               <styled.LocationText
-                text={userProfile.profile.location}
+                text={currentUser.profile.location}
                 size="xxs"
                 isMultiline={false}
               />
             </styled.InfoItem>
           )}
 
-          {userProfile?.profile?.profileLink && (
+          {currentUser?.profile?.profileLink && (
             <styled.InfoItem>
               <IconSvg name="link" size="normal" />
-              <styled.Link href={absoluteLink(userProfile.profile.profileLink)} target="_blank">
-                {withoutProtocol(userProfile.profile.profileLink)}
+              <styled.Link href={absoluteLink(currentUser.profile.profileLink)} target="_blank">
+                {withoutProtocol(currentUser.profile.profileLink)}
               </styled.Link>
             </styled.InfoItem>
           )}
