@@ -65,14 +65,14 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
               videoTrack={userDevicesStore.localVideoTrack}
               isCameraOff={userDevicesStore.cameraOff}
               isMuted={userDevicesStore.muted}
-              soundLevel={agoraStore.localSoundLevel}
+              soundLevel={agoraStageModeStore.localSoundLevel}
               currentUser={sessionStore.profile ?? undefined}
               loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
           </styled.MediaPlayerContainer>
         )}
 
-        {agoraStore.agoraMeetingStore.users.map((user) => (
+        {agoraStore.agoraStageModeStore.users.map((user) => (
           <styled.MediaPlayerContainer
             className={cn('relative', onRemoteUserClick && 'showActionsOnHover')}
             key={`stageuser-${user.uid}`}

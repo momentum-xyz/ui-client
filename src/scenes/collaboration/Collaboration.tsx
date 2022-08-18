@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
-import {useStore, usePosBusEvent} from 'shared/hooks';
+import {useStore, usePosBusEvent, useDeviceChange} from 'shared/hooks';
 import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {createRoutesByConfig} from 'core/utils';
 import {
@@ -43,8 +43,6 @@ const Collaboration: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
-
-  const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
   const [accepted, setAccepted] = useState<boolean>();
 
   useEffect(() => {
@@ -62,16 +60,6 @@ const Collaboration: FC = () => {
       history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
     }
   }, [agoraScreenShareStore.videoTrack, history, spaceId]);
-
-  const isHandlingInviteOrRequest = () => {
-    return (
-      acceptedToJoinStageDialog.isOpen ||
-      invitedOnStageDialog.isOpen ||
-      prepareOnStageDialog.isOpen ||
-      countdownDialog.isOpen ||
-      agoraStageModeStore.isOnStage
-    );
-  };
 
   const handleDecline = () => {
     acceptedToJoinStageDialog.close();
@@ -138,7 +126,7 @@ const Collaboration: FC = () => {
   }, [agoraStageModeStore, invitedOnStageDialog]);
 
   usePosBusEvent('stage-mode-invite', () => {
-    if (!isHandlingInviteOrRequest()) {
+    if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
       invitedOnStageDialog.open();
       setAccepted(false);
     }
@@ -146,7 +134,7 @@ const Collaboration: FC = () => {
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === sessionStore.userId) {
-      if (!isHandlingInviteOrRequest()) {
+      if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
         acceptedToJoinStageDialog.open();
         setAccepted(true);
       }
@@ -251,31 +239,7 @@ const Collaboration: FC = () => {
   usePosBusEvent('stage-mode-user-left', agoraStageModeStore.removeStageModeUser);
   usePosBusEvent('stage-mode-kick', agoraStageModeStore.moveToAudience);
 
-  useEffect(() => {
-    navigator.mediaDevices.ondevicechange = () => {
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        setNewDevice(devices[1]);
-        newDeviceDialog.open();
-      });
-    };
-
-    return () => {
-      navigator.mediaDevices.ondevicechange = null;
-    };
-  }, [newDeviceDialog]);
-
-  const newDeviceKindDescription = () => {
-    switch (newDevice?.kind) {
-      case 'videoinput':
-        return 'video input';
-      case 'audioinput':
-        return 'audio input';
-      case 'audiooutput':
-        return 'audio output';
-      default:
-        return '';
-    }
-  };
+  const {device} = useDeviceChange(newDeviceDialog.open);
 
   return (
     <styled.Container>
@@ -292,8 +256,8 @@ const Collaboration: FC = () => {
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
           onClose={newDeviceDialog.close}
-          deviceKindDescription={newDeviceKindDescription()}
-          deviceLabel={newDevice?.label}
+          deviceKindDescription={device && t(`labels.${device.kind}`).toLowerCase()}
+          deviceLabel={device?.label}
           currentAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
           currentVideoDeviceId={userDevicesStore.currentVideoInput?.deviceId}
           audioDevices={userDevicesStore.audioInputOptions}

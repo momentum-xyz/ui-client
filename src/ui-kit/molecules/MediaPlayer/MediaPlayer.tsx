@@ -44,12 +44,16 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
       return;
     }
 
-    videoTrack?.play(stagevideocontainer.current);
+    if (isCameraOff) {
+      videoTrack?.stop();
+    } else {
+      videoTrack?.play(stagevideocontainer.current);
+    }
 
     return () => {
       videoTrack?.stop();
     };
-  }, [stagevideocontainer, videoTrack]);
+  }, [isCameraOff, stagevideocontainer, videoTrack]);
 
   return (
     <styled.Container

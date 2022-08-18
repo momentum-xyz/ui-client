@@ -63,8 +63,8 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
               isStageMode={agoraStore.isStageMode}
               avatarSrc={sessionStore.profile?.avatarSrc}
               videoTrack={userDevicesStore.localVideoTrack}
-              microphoneOff={userDevicesStore.muted}
-              cameraOff={userDevicesStore.cameraOff}
+              microphoneOff={agoraStore.isStageMode || userDevicesStore.muted}
+              cameraOff={agoraStore.isStageMode || userDevicesStore.cameraOff}
               soundLevel={agoraStore.localSoundLevel}
             />
 

@@ -1,6 +1,9 @@
 import {flow, types} from 'mobx-state-tree';
 import AgoraRTC, {
+  ConnectionDisconnectedReason,
+  ConnectionState,
   IAgoraRTCClient,
+  IAgoraRTCRemoteUser,
   IRemoteVideoTrack,
   ScreenVideoTrackInitConfig
 } from 'agora-rtc-sdk-ng';
@@ -24,7 +27,8 @@ const AgoraScreenShareStore = types
       request: types.optional(RequestModel, {}),
       spaceId: types.maybe(types.string),
       appId: '',
-      isStageMode: false
+      isStageMode: false,
+      connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED')
     })
   )
   .volatile<{client?: IAgoraRTCClient; videoTrack?: IRemoteVideoTrack}>(() => ({
@@ -36,6 +40,11 @@ const AgoraScreenShareStore = types
       self.appId = appId;
       self.spaceId = spaceId;
       self.isStageMode = isStageMode;
+
+      self.client = AgoraRTC.createClient({
+        mode: isStageMode ? 'live' : 'rtc',
+        codec: 'h264'
+      });
     },
     stopScreenShare() {
       self.client?.localTracks.forEach((track) => {
@@ -44,12 +53,51 @@ const AgoraScreenShareStore = types
       self.client?.leave();
       self.client = undefined;
       self.videoTrack = undefined;
-    },
-    screenShareStopped() {
+    }
+  }))
+  // Listeners handlers
+  .actions((self) => ({
+    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+      if ((user?.uid as string).split('|')[0] !== 'ss' || !self.client) {
+        return;
+      }
+
+      yield self.client?.subscribe(user, mediaType);
+      if (user.videoTrack) {
+        self.videoTrack = user.videoTrack;
+      }
+    }),
+    handleUserUnpublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+      if ((user?.uid as string).split('|')[0] !== 'ss') {
+        return;
+      }
+
       self.videoTrack = undefined;
     },
-    screenShareStarted(screenShare: IRemoteVideoTrack) {
-      self.videoTrack = screenShare;
+    handleUserLeft(user: IAgoraRTCRemoteUser) {
+      if ((user.uid as string).split('|')[0] !== 'ss') {
+        return;
+      }
+      self.videoTrack = undefined;
+    },
+    handleConnectionStateChange(
+      currentState: ConnectionState,
+      previousState: ConnectionState,
+      reason?: ConnectionDisconnectedReason
+    ) {
+      self.connectionState = currentState;
+    }
+  }))
+  // Listeners registration
+  .actions((self) => ({
+    setupAgoraListeners() {
+      self.client?.on('user-published', self.handleUserPublished);
+      self.client?.on('user-unpublished', self.handleUserPublished);
+      self.client?.on('user-left', self.handleUserLeft);
+      self.client?.on('connection-state-change', self.handleConnectionStateChange);
+    },
+    cleanupListeners() {
+      self.client?.removeAllListeners();
     }
   }))
   .actions((self) => ({

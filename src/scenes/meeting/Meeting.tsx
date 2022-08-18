@@ -8,7 +8,6 @@ import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
-import {StageModePIPWidget} from 'scenes/widgets/pages';
 
 import {MeetingRoomPage} from './pages';
 import * as styled from './Meeting.styled';
@@ -105,7 +104,6 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
   return (
     <styled.Container>
       <MeetingRoomPage isTable={isTable} isFlight={isFlight} />
-      {!history.location.pathname.includes('stage-mode') && <StageModePIPWidget />}
     </styled.Container>
   );
 };

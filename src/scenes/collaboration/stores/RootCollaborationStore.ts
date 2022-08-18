@@ -113,6 +113,14 @@ const RootCollaborationStore = types
   .views((self) => ({
     get isSpaceLoaded(): boolean {
       return self.space?.didFetchSpaceInformation ?? false;
+    },
+    get isHandlingInviteOrRequest(): boolean {
+      return (
+        self.acceptedToJoinStageDialog.isOpen ||
+        self.invitedOnStageDialog.isOpen ||
+        self.prepareOnStageDialog.isOpen ||
+        self.countdownDialog.isOpen
+      );
     }
   }));
 
