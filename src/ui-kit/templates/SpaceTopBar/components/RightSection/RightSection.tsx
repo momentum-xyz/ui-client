@@ -68,7 +68,12 @@ const RightSection: FC<PropsInterface> = ({
         isWhite={false}
       />
       <Separator />
-      <ToolbarIcon title={t('tooltipTitles.flyAround')} icon="fly-to" link={ROUTES.base} />
+      <ToolbarIcon
+        icon="fly-to"
+        isWhite={false}
+        title={t('tooltipTitles.flyAround')}
+        link={generatePath(ROUTES.meeting.flyAround, {spaceId})}
+      />
     </>
   );
 };

@@ -80,19 +80,18 @@ const RootCollaborationStore = types
 
       self.isModerator = isModerator;
     }),
-    leaveMeetingSpace() {
+    async leaveMeetingSpace() {
       if (!self.space?.isTable) {
         self.leftMeetingSpaceId = self.space?.id;
       }
 
-      self.textChatStore.leaveChannel().then(() => {
-        self.textChatStore.logOut().then(() => {
-          self.textChatStore.resetModel();
-        });
-      });
+      await self.textChatStore.leaveChannel();
+      await self.textChatStore.logOut();
+      self.textChatStore.resetModel();
+
       if (!!self.space && self.space.isAdmin) {
-        self.miroBoardStore.disableMiroBoard(self.space.id);
-        self.googleDriveStore.disableGoogleDocument(self.space.id);
+        await self.miroBoardStore.disableMiroBoard(self.space.id);
+        await self.googleDriveStore.disableGoogleDocument(self.space.id);
       }
 
       self.space = undefined;
