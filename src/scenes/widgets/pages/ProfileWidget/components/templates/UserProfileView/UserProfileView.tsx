@@ -85,7 +85,7 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
       </styled.Actions>
       <styled.Details>
         {userProfile?.profile?.bio && (
-          <Text text={userProfile.profile.bio} size="xs" align="left" />
+          <Text text={userProfile.profile.bio} size="xs" align="left" breakLongWord />
         )}
         <styled.Info>
           {userProfile?.profile?.location && (

@@ -62,7 +62,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
         onEditUser && <SvgButton iconName="edit" size="normal" onClick={profileStore.openEdit} />
       }
       onClose={onClose}
-      componentSize={{width: '430px'}}
+      componentSize={{width: '390px'}}
       className={className}
       hasBorder={hasBorder}
       showOverflow={showOverflow}
