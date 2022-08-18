@@ -56,7 +56,7 @@ const MyProfileView: FC = () => {
       </styled.Actions>
       <styled.Details>
         {currentUser?.profile?.bio && (
-          <Text text={currentUser.profile.bio} size="xs" align="left" />
+          <Text text={currentUser.profile.bio} size="xs" align="left" breakLongWord />
         )}
         <styled.Info>
           {currentUser?.profile?.location && (

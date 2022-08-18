@@ -42,11 +42,11 @@ export const Link = styled.a`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 285px;
+  max-width: 250px;
 `;
 
 export const LocationText = styled(Text)`
-  max-width: 282px;
+  max-width: 250px;
 `;
 
 export const Container = styled.div`

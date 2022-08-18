@@ -54,6 +54,12 @@ export const Text = styled.div`
     white-space: nowrap;
   }
 
+  &.breakLongWord {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
   &.left {
     text-align: left;
   }
