@@ -28,22 +28,25 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
-      if (e instanceof PrivateSpaceError) {
-        history.push(ROUTES.base);
-        toast.error(
-          <ToastContent
-            isDanger
-            isCloseButton
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('collaboration.spaceIsPrivate')}
-          />
-        );
-      }
-    });
+    const timeout = setTimeout(() => {
+      rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
+        if (e instanceof PrivateSpaceError) {
+          history.push(ROUTES.base);
+          toast.error(
+            <ToastContent
+              isDanger
+              isCloseButton
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('collaboration.spaceIsPrivate')}
+            />
+          );
+        }
+      });
+    }, 250);
 
     return () => {
+      clearTimeout(timeout);
       rootStore.leaveMeetingSpace();
     };
   }, [history, isTable, rootStore, sessionStore.userId, spaceId, t]);

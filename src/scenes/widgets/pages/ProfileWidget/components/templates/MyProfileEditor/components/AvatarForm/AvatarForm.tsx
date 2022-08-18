@@ -4,7 +4,6 @@ import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {Dialog, FileUploader} from 'ui-kit';
-import {appVariables} from 'api/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './AvatarForm.styled';
@@ -53,9 +52,7 @@ const AvatarForm: FC = () => {
           <styled.AvatarImageUpload className={cn(imageError && 'error')}>
             {image && <styled.ImagePreview src={URL.createObjectURL(image)} />}
             {!image && !!userProfile?.profile?.avatarHash && (
-              <styled.ImagePreview
-                src={`${appVariables.RENDER_SERVICE_URL}/get/${userProfile?.profile?.avatarHash}`}
-              />
+              <styled.ImagePreview src={userProfile.avatarSrc} />
             )}
             <FileUploader
               theme={theme}

@@ -6,7 +6,6 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {Button, SvgButton, Avatar, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
-import {appVariables} from 'api/constants';
 import {usePosBusEvent} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
 
@@ -103,11 +102,8 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
     <styled.Container data-testid="UserItem-test">
       <styled.InfoContainer onClick={onClick} className={cn(invite && 'invite')}>
         <Avatar
-          avatarSrc={
-            user.profile?.avatarHash &&
-            `${appVariables.RENDER_SERVICE_URL}/get/${user.profile.avatarHash}`
-          }
           size="small"
+          avatarSrc={user.avatarSrc}
           status={isItMe ? profile?.status : user.status}
         />
         <styled.StyledText

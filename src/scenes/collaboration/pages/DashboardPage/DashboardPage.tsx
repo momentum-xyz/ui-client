@@ -1,10 +1,8 @@
 import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
 import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 
 import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} from './components';
@@ -13,11 +11,8 @@ import * as styled from './DashboardPage.styled';
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore} = useStore();
   const {dashboardStore, space, textChatStore} = collaborationStore;
-  const {tileDialog, tileRemoveDialog, tileList, onDragEnd, vibeStore, inviteToSpaceDialog} =
-    dashboardStore;
+  const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {favoriteStore} = mainStore;
-
-  const history = useHistory();
 
   const inviteRef = useRef<HTMLButtonElement>(null);
 
@@ -36,11 +31,6 @@ const DashboardPage: FC = () => {
     };
   }, [dashboardStore, favoriteStore, space, vibeStore]);
 
-  const handleClose = () => {
-    history.push(ROUTES.base);
-    textChatStore.textChatDialog.close();
-  };
-
   const handleToggleVibe = useCallback(async () => {
     const success = await vibeStore.toggle(space?.id ?? '');
     if (success) {
@@ -57,7 +47,6 @@ const DashboardPage: FC = () => {
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
-        onClose={handleClose}
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         spaceId={space.id}
@@ -104,7 +93,7 @@ const DashboardPage: FC = () => {
       )}
       <Dashboard
         tilesList={tileList.tileMatrix}
-        onDragEnd={onDragEnd}
+        onDragEnd={dashboardStore.onDragEnd}
         canDrag={space.isAdmin || space.isMember}
         textChatIsOpen={textChatStore.textChatDialog.isOpen}
       />

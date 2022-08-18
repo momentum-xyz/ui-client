@@ -1,13 +1,10 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
-// TODO: Refactor
 import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenSharePage.styled';
 
@@ -20,7 +17,6 @@ const ScreenSharePage: FC = () => {
   const {videoTrack, client} = agoraScreenShareStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
 
   useEffect(() => {
     if (videoTrack) {
@@ -42,11 +38,6 @@ const ScreenSharePage: FC = () => {
     agoraScreenShareStore.stopScreenShare();
   }, [agoraScreenShareStore, screenShareStore]);
 
-  const handleClose = () => {
-    history.push(ROUTES.base);
-    textChatStore.textChatDialog.close();
-  };
-
   if (!space) {
     return null;
   }
@@ -64,7 +55,6 @@ const ScreenSharePage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onClose={handleClose}
       >
         {client && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />

@@ -3,7 +3,7 @@ import {types, Instance, flow} from 'mobx-state-tree';
 import {UUIDModel} from 'core/models/UUID';
 import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';
-import {UserStatusEnum} from 'core/enums';
+import {AvatarSizeEnum, UserStatusEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {RequestModel} from 'core/models';
 
@@ -30,7 +30,7 @@ const UserProfileModel = types
     get avatarSrc(): string | undefined {
       return (
         self.profile?.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/get/${self.profile.avatarHash}`
+        `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S3}/${self.profile.avatarHash}`
       );
     }
   }))
