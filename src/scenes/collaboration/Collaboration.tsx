@@ -63,16 +63,6 @@ const Collaboration: FC = () => {
     }
   }, [agoraScreenShareStore.videoTrack, history, spaceId]);
 
-  const isHandlingInviteOrRequest = () => {
-    return (
-      acceptedToJoinStageDialog.isOpen ||
-      invitedOnStageDialog.isOpen ||
-      prepareOnStageDialog.isOpen ||
-      countdownDialog.isOpen ||
-      agoraStageModeStore.isOnStage
-    );
-  };
-
   const handleDecline = () => {
     acceptedToJoinStageDialog.close();
   };
@@ -138,7 +128,7 @@ const Collaboration: FC = () => {
   }, [agoraStageModeStore, invitedOnStageDialog]);
 
   usePosBusEvent('stage-mode-invite', () => {
-    if (!isHandlingInviteOrRequest()) {
+    if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
       invitedOnStageDialog.open();
       setAccepted(false);
     }
@@ -146,7 +136,7 @@ const Collaboration: FC = () => {
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === sessionStore.userId) {
-      if (!isHandlingInviteOrRequest()) {
+      if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
         acceptedToJoinStageDialog.open();
         setAccepted(true);
       }
