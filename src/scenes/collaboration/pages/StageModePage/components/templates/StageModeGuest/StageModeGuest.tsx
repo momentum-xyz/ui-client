@@ -18,7 +18,7 @@ const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
-  const {textChatStore} = collaborationStore;
+  const {textChatStore, space} = collaborationStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     collaborationStore.stageModeStore;
 
@@ -66,16 +66,18 @@ const StageModeGuest: React.FC = () => {
     textChatStore.textChatDialog.close();
   };
 
-  if (!collaborationStore.space) {
+  if (!space) {
     return null;
   }
 
   return (
     <styled.Container data-testid="StageModeGuest-test">
       <SpaceTopBar
-        title={collaborationStore.space.name ?? ''}
+        title={space.name ?? ''}
         subtitle={t('labels.stageMode')}
         isSpaceFavorite={favoriteStore.isSpaceFavorite}
+        isAdmin={space.isAdmin}
+        spaceId={space.id}
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}

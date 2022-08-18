@@ -19,7 +19,8 @@ import {
   StakingWidget,
   TokenRuleReviewWidget,
   TokenRulesWidget,
-  WorldStatsWidget
+  WorldStatsWidget,
+  StageModePIPWidget
 } from 'scenes/widgets/pages';
 
 import * as styled from './Widgets.styled';
@@ -112,6 +113,7 @@ const Widgets: FC = () => {
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
+      {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
