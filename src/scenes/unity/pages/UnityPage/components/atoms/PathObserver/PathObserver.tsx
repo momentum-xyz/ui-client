@@ -18,7 +18,10 @@ const SKIPPED_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.magic,
     main: () => <></>
-  },
+  }
+];
+
+const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.meeting.grabTable,
     main: () => <></>
@@ -34,7 +37,9 @@ const PathObserver: FC<PropsInterface> = ({isTeleportReady, resumeUnity, pauseUn
 
   const changeUnityState = useCallback(
     (pathname: string) => {
-      if (!isTargetRoute(pathname, SKIPPED_ROUTES)) {
+      if (isTargetRoute(pathname, UNITY_ACTIVE_ROUTES)) {
+        resumeUnity();
+      } else if (!isTargetRoute(pathname, SKIPPED_ROUTES)) {
         if (pathname === ROUTES.base) {
           resumeUnity();
         } else {
