@@ -96,7 +96,7 @@ const AgoraScreenShareStore = types
       self.client?.on('user-left', self.handleUserLeft);
       self.client?.on('connection-state-change', self.handleConnectionStateChange);
     },
-    clanupListeners() {
+    cleanupListeners() {
       self.client?.removeAllListeners();
     }
   }))

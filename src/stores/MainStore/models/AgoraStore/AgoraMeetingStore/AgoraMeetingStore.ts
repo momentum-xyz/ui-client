@@ -135,7 +135,7 @@ const AgoraMeetingStore = types
       self.client.on('connection-state-change', self.handleConnectionStateChange);
       self.client.on('volume-indicator', self.handleVolumeIndicator);
     },
-    clanupListeners() {
+    cleanupListeners() {
       self.client.removeAllListeners();
     }
   }))

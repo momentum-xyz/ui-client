@@ -62,13 +62,13 @@ const AgoraStore = types
       }
       self.agoraScreenShareStore.setupAgoraListeners();
     },
-    clanupAgoraListeners() {
+    cleanupAgoraListeners() {
       if (self.isStageMode) {
-        self.agoraStageModeStore.clanupListeners();
+        self.agoraStageModeStore.cleanupListeners();
       } else {
-        self.agoraMeetingStore.clanupListeners();
+        self.agoraMeetingStore.cleanupListeners();
       }
-      self.agoraScreenShareStore.clanupListeners();
+      self.agoraScreenShareStore.cleanupListeners();
     }
   }))
   // Meeting space managment
@@ -135,7 +135,7 @@ const AgoraStore = types
     }),
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
-      self.clanupAgoraListeners();
+      self.cleanupAgoraListeners();
 
       if (self.isStageMode) {
         yield self.agoraStageModeStore.leave();
