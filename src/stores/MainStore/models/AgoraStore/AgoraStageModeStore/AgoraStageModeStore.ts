@@ -3,8 +3,8 @@ import AgoraRTC, {
   ConnectionDisconnectedReason,
   ConnectionState,
   IAgoraRTCRemoteUser,
-  ILocalAudioTrack,
-  ILocalVideoTrack
+  ICameraVideoTrack,
+  IMicrophoneAudioTrack
 } from 'agora-rtc-sdk-ng';
 
 import {
@@ -267,7 +267,7 @@ const AgoraStageModeStore = types
         return undefined;
       }
 
-      const publishedCameraTrack = yield AgoraRTC.createCameraVideoTrack({
+      const publishedCameraTrack: ICameraVideoTrack = yield AgoraRTC.createCameraVideoTrack({
         cameraId: deviceId,
         facingMode: 'user',
         // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
@@ -284,7 +284,7 @@ const AgoraStageModeStore = types
         return undefined;
       }
 
-      const publishedAudioTrack = yield AgoraRTC.createMicrophoneAudioTrack({
+      const publishedAudioTrack: IMicrophoneAudioTrack = yield AgoraRTC.createMicrophoneAudioTrack({
         microphoneId: deviceId
       });
 
@@ -351,11 +351,11 @@ const AgoraStageModeStore = types
         createAudioTrack: (
           deviceId: string,
           isTrackEnabled: boolean
-        ) => Promise<ILocalAudioTrack | undefined>,
+        ) => Promise<IMicrophoneAudioTrack | undefined>,
         createVideoTrack: (
           deviceId: string,
           isTrackEnabled: boolean
-        ) => Promise<ILocalVideoTrack | undefined>
+        ) => Promise<ICameraVideoTrack | undefined>
       ) => void
     ) {
       yield self.client.setClientRole('host');

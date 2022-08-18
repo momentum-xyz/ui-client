@@ -1,5 +1,5 @@
 import {flow, Instance, types} from 'mobx-state-tree';
-import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
+import AgoraRTC, {ICameraVideoTrack, IMicrophoneAudioTrack} from 'agora-rtc-sdk-ng';
 
 import {storage} from 'shared/services';
 import {ResetModel, DialogModel} from 'core/models';
@@ -27,8 +27,8 @@ const UserDevicesStore = types
         videoInputs: MediaDeviceInfo[];
         currentVideoInput?: MediaDeviceInfo;
         currentAudioInput?: MediaDeviceInfo;
-        localVideoTrack?: ILocalVideoTrack;
-        localAudioTrack?: ILocalAudioTrack;
+        localVideoTrack?: ICameraVideoTrack;
+        localAudioTrack?: IMicrophoneAudioTrack;
       }>(() => ({
         audioInputs: [],
         videoInputs: []
@@ -188,11 +188,11 @@ const UserDevicesStore = types
       createAudioTrack: (
         deviceId: string,
         isTrackEnabled: boolean
-      ) => Promise<ILocalAudioTrack | undefined>,
+      ) => Promise<IMicrophoneAudioTrack | undefined>,
       createVideoTrack: (
         deviceId: string,
         isTrackEnabled: boolean
-      ) => Promise<ILocalVideoTrack | undefined>
+      ) => Promise<ICameraVideoTrack | undefined>
     ) {
       if (!self.microphoneConsent) {
         yield self.getMicrophoneConsent();

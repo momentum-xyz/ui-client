@@ -3,8 +3,8 @@ import AgoraRTC, {
   ConnectionDisconnectedReason,
   ConnectionState,
   IAgoraRTCRemoteUser,
-  ILocalAudioTrack,
-  ILocalVideoTrack
+  ICameraVideoTrack,
+  IMicrophoneAudioTrack
 } from 'agora-rtc-sdk-ng';
 
 import {api} from 'api';
@@ -215,11 +215,11 @@ const AgoraMeetingStore = types
         createAudioTrack: (
           deviceId: string,
           isTrackEnabled: boolean
-        ) => Promise<ILocalAudioTrack | undefined>,
+        ) => Promise<IMicrophoneAudioTrack | undefined>,
         createVideoTrack: (
           deviceId: string,
           isTrackEnabled: boolean
-        ) => Promise<ILocalVideoTrack | undefined>
+        ) => Promise<ICameraVideoTrack | undefined>
       ) => void
     ) {
       const tokenResponse = yield self.getAgoraToken(spaceId);
