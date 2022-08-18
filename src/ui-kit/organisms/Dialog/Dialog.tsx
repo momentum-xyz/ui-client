@@ -35,7 +35,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   isBodyExtendingToEdges?: boolean;
   showBackground?: boolean;
   layoutSize?: ComponentSizeInterface;
-  controlUnityKeyboardControll?: boolean;
+  controlUnityKeyboardControl?: boolean;
   headerActions?: React.ReactNode;
   hasBorder?: boolean;
   headerItem?: HeaderItem;
@@ -66,7 +66,7 @@ const Dialog: FC<DialogPropsInterface> = ({
   iconSize,
   isBodyExtendingToEdges,
   showBackground = true,
-  controlUnityKeyboardControll = false,
+  controlUnityKeyboardControl = false,
   layoutSize,
   headerActions,
   showOverflow
@@ -82,12 +82,12 @@ const Dialog: FC<DialogPropsInterface> = ({
   });
 
   useEffect(() => {
-    if (controlUnityKeyboardControll) {
+    if (controlUnityKeyboardControl) {
       unityStore.changeKeyboardControl(false);
     }
 
     return () => {
-      unityStore.changeKeyboardControl(true);
+      unityStore.changeKeyboardControl(controlUnityKeyboardControl);
     };
   }, []);
 

@@ -88,7 +88,7 @@ const LaunchInitiativeWidget: FC = () => {
         title: t('actions.cancel'),
         onClick: launchInitiativeStore.dialog.close
       }}
-      controlUnityKeyboardControll
+      controlUnityKeyboardControl
       showCloseButton
       closeOnBackgroundClick
     >
