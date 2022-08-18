@@ -13,6 +13,7 @@ import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/util
 import {UnityPage} from 'scenes/unity';
 import {SystemWideError} from 'scenes/system/pages';
 import {setApiResponseHandlers} from 'api/request';
+import {httpErrorCodes} from 'api/constants';
 
 // TODO: To be refactored
 import {ConfirmationDialogProvider} from '../_REFACTOR_/hooks/useConformationDialog';
@@ -23,8 +24,6 @@ import AppLayers from './AppLayers';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
-
-const RETURN_CODE_MAINTENANCE = 503;
 
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, systemStore, initApplication} = useStore();
@@ -39,7 +38,7 @@ const App: FC = () => {
   useEffect(() => {
     setApiResponseHandlers({
       onError: (error) => {
-        if (error.response?.status === RETURN_CODE_MAINTENANCE) {
+        if (error.response?.status === httpErrorCodes.MAINTENANCE) {
           systemWideErrorStore.setMaintenance();
         }
         throw error;
