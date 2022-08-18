@@ -2,7 +2,6 @@ export * from './MagicLinkWidget';
 export * from './StakingWidget';
 export * from './HelpWidget';
 export * from './ProfileWidget';
-export * from './ProfileEditWidget';
 export * from './ProfileMenuWidget';
 export * from './WorldStatsWidget';
 export * from './TokenRulesWidget';

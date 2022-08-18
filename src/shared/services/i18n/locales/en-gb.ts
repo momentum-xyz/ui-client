@@ -749,7 +749,10 @@ export const enGb = {
       title: 'Edit my bio',
       avatarInstructions: 'Choose an avatar that will be shown when your camera is disabled',
       saveSuccess: 'Saved profile',
-      saveFailure: 'Could not save Profile.'
+      saveFailure: 'Could not save Profile.',
+      changeAvatar: 'Change your avatar',
+      update: 'update',
+      avatar: 'avatar'
     },
     launchInitiativeWidget: {
       title: 'LAUNCH YOUR INITIATIVE (FREE)',

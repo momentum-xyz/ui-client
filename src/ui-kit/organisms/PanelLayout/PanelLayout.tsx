@@ -36,6 +36,8 @@ interface PropsInterface extends PropsWithThemeInterface {
   className?: string;
   showOverflow?: boolean;
   noPadding?: boolean;
+  headerPlaceholder?: boolean;
+  titleHeight?: boolean;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -53,6 +55,8 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     titleWidth = '100%',
     captureAllPointerEvents = false,
     showOverflow = false,
+    headerPlaceholder = false,
+    titleHeight = false,
     componentSize,
     className,
     ...restProps
@@ -70,9 +74,9 @@ const PanelLayout: FC<PropsInterface> = (props) => {
       )}
       {...componentSize}
     >
-      {(restProps.title || restProps.headerIconName) && (
+      {(headerPlaceholder || restProps.title || restProps.headerIconName) && (
         <styled.Header
-          className={cn(headerStyle, !restProps.title && 'noTitle')}
+          className={cn(headerStyle, !restProps.title && 'noTitle', titleHeight && 'titleHeight')}
           theme={restProps.theme}
         >
           {restProps.headerIconName && (
