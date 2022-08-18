@@ -1,12 +1,18 @@
-import {DependencyList, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
-export const useDeviceChange = (callback: () => void, deps: DependencyList = []) => {
+export const useDeviceChange = (callback: () => void) => {
+  const [device, setDevice] = useState<MediaDeviceInfo>();
   useEffect(() => {
-    navigator.mediaDevices.ondevicechange = callback;
+    navigator.mediaDevices.ondevicechange = () =>
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        setDevice(devices[1]);
+        callback();
+      });
 
     return () => {
       navigator.mediaDevices.ondevicechange = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [callback, ...deps]);
+  }, [callback]);
+
+  return {device};
 };

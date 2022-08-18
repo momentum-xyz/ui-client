@@ -43,8 +43,6 @@ const Collaboration: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
-
-  const [newDevice, setNewDevice] = useState<MediaDeviceInfo>();
   const [accepted, setAccepted] = useState<boolean>();
 
   useEffect(() => {
@@ -241,12 +239,7 @@ const Collaboration: FC = () => {
   usePosBusEvent('stage-mode-user-left', agoraStageModeStore.removeStageModeUser);
   usePosBusEvent('stage-mode-kick', agoraStageModeStore.moveToAudience);
 
-  useDeviceChange(() => {
-    navigator.mediaDevices.enumerateDevices().then((devices) => {
-      setNewDevice(devices[1]);
-      newDeviceDialog.open();
-    });
-  }, [newDeviceDialog]);
+  const {device} = useDeviceChange(newDeviceDialog.open);
 
   return (
     <styled.Container>
@@ -263,8 +256,8 @@ const Collaboration: FC = () => {
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
           onClose={newDeviceDialog.close}
-          deviceKindDescription={newDevice && t(`labels.${newDevice.kind}`).toLowerCase()}
-          deviceLabel={newDevice?.label}
+          deviceKindDescription={device && t(`labels.${device.kind}`).toLowerCase()}
+          deviceLabel={device?.label}
           currentAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
           currentVideoDeviceId={userDevicesStore.currentVideoInput?.deviceId}
           audioDevices={userDevicesStore.audioInputOptions}
