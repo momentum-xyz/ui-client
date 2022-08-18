@@ -264,19 +264,6 @@ const Collaboration: FC = () => {
     };
   }, [newDeviceDialog]);
 
-  const newDeviceKindDescription = () => {
-    switch (newDevice?.kind) {
-      case 'videoinput':
-        return 'video input';
-      case 'audioinput':
-        return 'audio input';
-      case 'audiooutput':
-        return 'audio output';
-      default:
-        return '';
-    }
-  };
-
   return (
     <styled.Container>
       <Navigation
@@ -292,7 +279,7 @@ const Collaboration: FC = () => {
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
           onClose={newDeviceDialog.close}
-          deviceKindDescription={newDeviceKindDescription()}
+          deviceKindDescription={newDevice && t(`labels.${newDevice.kind}`).toLowerCase()}
           deviceLabel={newDevice?.label}
           currentAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
           currentVideoDeviceId={userDevicesStore.currentVideoInput?.deviceId}
