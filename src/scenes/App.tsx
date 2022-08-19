@@ -75,7 +75,11 @@ const App: FC = () => {
   if (isErrorLoadingConfig && !isConfigReady) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <SystemWideError text="somethingWentWrongTryAgain" showRefreshButton />
+        <SystemWideError
+          text="somethingWentWrongTryAgain"
+          showRefreshButton
+          theme={themeStore.theme}
+        />
       </ThemeProvider>
     );
   }

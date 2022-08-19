@@ -1,19 +1,17 @@
 import {FC, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useTheme} from 'styled-components';
 
-import {Button, IconSvg, PanelLayout, Text} from 'ui-kit';
+import {Button, IconSvg, PanelLayout, PropsWithThemeInterface, Text} from 'ui-kit';
 import background from 'static/images/bg.png';
 
 import * as styled from './SystemWideError.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   text: string | string[];
   showRefreshButton?: boolean;
 }
 
-const SystemWideError: FC<PropsInterface> = ({text, showRefreshButton}) => {
-  const theme = useTheme();
+const SystemWideError: FC<PropsInterface> = ({theme, text, showRefreshButton}) => {
   const {t} = useTranslation();
 
   const texts = useMemo(() => (Array.isArray(text) ? text : [text]), [text]);
