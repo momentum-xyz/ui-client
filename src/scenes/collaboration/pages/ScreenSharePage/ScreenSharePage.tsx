@@ -25,7 +25,7 @@ const ScreenSharePage: FC = () => {
   useEffect(() => {
     if (videoTrack) {
       if ('getUserId' in videoTrack) {
-        const agoraUserId = videoTrack?.getUserId() as string;
+        const agoraUserId = videoTrack.getUserId() as string;
         screenShareStore.setScreenOwner(agoraUserId);
       } else {
         screenShareStore.setScreenOwner(sessionStore.userId);
