@@ -61,7 +61,7 @@ const ScreenSharePage: FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
       >
-        {videoTrack && (
+        {videoTrack && space.isAdmin && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
         )}
       </SpaceTopBar>

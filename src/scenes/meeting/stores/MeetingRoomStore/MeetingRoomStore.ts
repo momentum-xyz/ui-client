@@ -11,17 +11,6 @@ const MeetingRoomStore = types
     })
   )
   .actions((self) => ({
-    muteUser: flow(function* (spaceId?: string, userId?: string | number) {
-      yield self.request.send(api.meetingRepository.muteUser, {
-        spaceId,
-        userId
-      });
-    }),
-    muteAllUsers: flow(function* (spaceId?: string) {
-      yield self.request.send(api.meetingRepository.muteAllUsers, {
-        spaceId
-      });
-    }),
     kickUser: flow(function* (spaceId?: string, userId?: string | number) {
       yield self.request.send(api.meetingRepository.kickUser, {
         spaceId,

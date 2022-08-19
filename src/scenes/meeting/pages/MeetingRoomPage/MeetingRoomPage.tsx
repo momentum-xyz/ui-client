@@ -59,7 +59,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
             <MuteAllButton
               isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
               peopleCount={agoraStore.meetingPeopleCount}
-              onMuteAll={() => meetingRoomStore.muteAllUsers(space?.id)}
+              onMuteAll={agoraMeetingStore.muteAllRemoteUsers}
             />
 
             {/* CURRENT USER */}
@@ -96,7 +96,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
                     user={user}
                     isModerator={collaborationStore.isModerator}
                     maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
-                    onMuteUser={meetingRoomStore.muteUser}
+                    onMuteUser={agoraMeetingStore.muteRemoteUser}
                     onKickUser={meetingRoomStore.kickUser}
                     usersListUpdated={agoraMeetingStore.users.length}
                   />
