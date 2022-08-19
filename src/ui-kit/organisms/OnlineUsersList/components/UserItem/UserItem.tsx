@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {useHistory} from 'react-router';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -15,7 +14,7 @@ export interface UserItemPropsInterface {
   onClick: React.MouseEventHandler<HTMLDivElement>;
   invite: boolean;
   user: UserProfileModelInterface;
-  teleportToUser?: (userId: string, push: (path: string) => void) => void;
+  teleportToUser?: (userId: string) => void;
   spaceId: string;
   profile?: UserProfileModelInterface;
 }
@@ -30,9 +29,8 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
 }) => {
   const {t} = useTranslation();
 
-  const history = useHistory();
   const handleFlyToUser = () => {
-    teleportToUser?.(user.uuid, history.push as (path: string) => void);
+    teleportToUser?.(user.uuid);
   };
 
   const [inviteTimeout, setInviteTimeout] = useState<NodeJS.Timeout>();
