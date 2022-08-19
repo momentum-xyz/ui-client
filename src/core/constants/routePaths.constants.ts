@@ -12,7 +12,8 @@ export const ROUTES = {
   guestCallBack: '/oidc/guest/callback',
   welcome: '/welcome',
   meeting: {
-    grabTable: '/meeting/:spaceId/grabTable'
+    grabTable: '/meeting/:spaceId/table',
+    flyAround: '/meeting/:spaceId/fly'
   },
   collaboration: {
     base: '/collaboration/:spaceId',
