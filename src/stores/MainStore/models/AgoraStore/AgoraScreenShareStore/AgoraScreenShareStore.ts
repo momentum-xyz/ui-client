@@ -1,6 +1,5 @@
-import {flow, types} from 'mobx-state-tree';
+import {flow, Instance, types} from 'mobx-state-tree';
 import AgoraRTC, {
-  ConnectionDisconnectedReason,
   ConnectionState,
   IAgoraRTCClient,
   IAgoraRTCRemoteUser,
@@ -45,55 +44,18 @@ const AgoraScreenShareStore = types
     }
   }))
   .actions((self) => ({
+    handleUserPublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+      self.videoTrack = user.videoTrack;
+    },
+    handleUserUnpublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+      self.videoTrack = undefined;
+    }
+  }))
+  .actions((self) => ({
     init(appId: string, isStageMode: boolean, spaceId?: string) {
       self.appId = appId;
       self.spaceId = spaceId;
       self.isStageMode = isStageMode;
-    }
-  }))
-  // Listeners handlers
-  .actions((self) => ({
-    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      if ((user?.uid as string).split('|')[0] !== 'ss' || !self.client) {
-        return;
-      }
-
-      yield self.client?.subscribe(user, mediaType);
-      if (user.videoTrack) {
-        self.videoTrack = user.videoTrack;
-      }
-    }),
-    handleUserUnpublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      if ((user?.uid as string).split('|')[0] !== 'ss') {
-        return;
-      }
-
-      self.videoTrack = undefined;
-    },
-    handleUserLeft(user: IAgoraRTCRemoteUser) {
-      if ((user.uid as string).split('|')[0] !== 'ss') {
-        return;
-      }
-      self.videoTrack = undefined;
-    },
-    handleConnectionStateChange(
-      currentState: ConnectionState,
-      previousState: ConnectionState,
-      reason?: ConnectionDisconnectedReason
-    ) {
-      self.connectionState = currentState;
-    }
-  }))
-  // Listeners registration
-  .actions((self) => ({
-    setupAgoraListeners() {
-      self.client?.on('user-published', self.handleUserPublished);
-      self.client?.on('user-unpublished', self.handleUserPublished);
-      self.client?.on('user-left', self.handleUserLeft);
-      self.client?.on('connection-state-change', self.handleConnectionStateChange);
-    },
-    cleanupListeners() {
-      self.client?.removeAllListeners();
     }
   }))
   .actions((self) => ({
@@ -102,7 +64,6 @@ const AgoraScreenShareStore = types
         track.close();
       });
       self.client?.leave();
-      self.cleanupListeners();
       self.client = undefined;
       self.videoTrack = undefined;
     }
@@ -124,14 +85,12 @@ const AgoraScreenShareStore = types
     })
   }))
   .actions((self) => ({
-    join: flow(function* (authStateSubject: string) {
+    startScreenSharing: flow(function* (authStateSubject: string) {
       if (self.spaceId) {
         self.client = AgoraRTC.createClient({
           mode: self.isStageMode ? 'live' : 'rtc',
           codec: 'h264'
         });
-
-        self.setupAgoraListeners();
 
         if (self.isStageMode) {
           yield self.client.setClientRole('host');
@@ -147,13 +106,11 @@ const AgoraScreenShareStore = types
 
         const token = self.isStageMode ? `stage-${self.spaceId}` : self.spaceId;
         yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
-      }
-    }),
-    startScreenSharing: flow(function* () {
-      const screenTrack = yield self.createScreenTrackAndPublish();
+        const screenTrack = yield self.createScreenTrackAndPublish();
 
-      if (screenTrack) {
-        self.videoTrack = screenTrack;
+        if (screenTrack) {
+          self.videoTrack = screenTrack;
+        }
       }
     }),
     stopScreenSharing() {
@@ -171,5 +128,7 @@ const AgoraScreenShareStore = types
       self.videoTrack = undefined;
     }
   }));
+
+export interface AgoraScreenShareStoreInterface extends Instance<typeof AgoraScreenShareStore> {}
 
 export {AgoraScreenShareStore};

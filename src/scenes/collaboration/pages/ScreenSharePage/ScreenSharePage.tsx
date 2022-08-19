@@ -35,8 +35,8 @@ const ScreenSharePage: FC = () => {
 
   const startScreenSharing = useCallback(() => {
     screenShareStore.setIsSettingUp(true);
-    agoraScreenShareStore.startScreenSharing();
-  }, [agoraScreenShareStore, screenShareStore]);
+    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
+  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);
