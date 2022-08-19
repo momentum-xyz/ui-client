@@ -13,6 +13,7 @@ export const ROUTES = {
   welcome: '/welcome',
   disconnected: '/disconnected',
   maintenance: '/maintenance',
+  wrongBrowser: '/wrongBrowser',
   meeting: {
     grabTable: '/meeting/:spaceId/grabTable'
   },

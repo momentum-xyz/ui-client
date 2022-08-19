@@ -7,7 +7,7 @@ import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 
-import {SystemWideError, ToastContent, WrongBrowser} from 'ui-kit';
+import {SystemWideError, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
@@ -61,6 +61,13 @@ const App: FC = () => {
     }
   }, [isConfigReady, mainStore]);
 
+  const isBrowserUnsupported = !isBrowserSupported();
+  useEffect(() => {
+    if (isBrowserUnsupported) {
+      history.push({pathname: ROUTES.wrongBrowser});
+    }
+  }, [isBrowserUnsupported, history]);
+
   if (isErrorLoadingConfig && !isConfigReady) {
     return (
       <ThemeProvider theme={themeStore.theme}>
@@ -71,16 +78,6 @@ const App: FC = () => {
 
   if (!isConfigReady) {
     return <></>;
-  }
-
-  if (!isBrowserSupported()) {
-    return (
-      <WrongBrowser
-        title={t('wrongBrowser.title')}
-        message={t('wrongBrowser.message')}
-        browserList={t('wrongBrowser.browserList')}
-      />
-    );
   }
 
   // PUBLIC ROUTES
