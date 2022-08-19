@@ -2,8 +2,9 @@ import {IAgoraRTCRemoteUser, IRemoteAudioTrack, IRemoteVideoTrack} from 'agora-r
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, ProfileResponse, UserProfileInterface} from 'api';
-import {RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
+import {RequestModel} from 'core/models';
+import {AvatarSizeEnum} from 'core/enums';
 
 const AgoraRemoteUser = types
   .model('AgoraRemoteUser', {
@@ -56,7 +57,7 @@ const AgoraRemoteUser = types
     get avatarSrc(): string | undefined {
       return (
         self.profile?.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/get/${self.profile.avatarHash}`
+        `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S3}/${self.profile.avatarHash}`
       );
     }
   }));

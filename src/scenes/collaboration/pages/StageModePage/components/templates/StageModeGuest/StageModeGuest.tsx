@@ -2,11 +2,9 @@ import {observer} from 'mobx-react-lite';
 import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
 
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ToastContent, Button, SpaceTopBar, Text, Stage, TextChat} from 'ui-kit';
-import {ROUTES} from 'core/constants';
 import {
   StageModePopupQueue,
   StageModeStats
@@ -23,7 +21,6 @@ const StageModeGuest: React.FC = () => {
     collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === sessionStore.userId) {
@@ -61,11 +58,6 @@ const StageModeGuest: React.FC = () => {
     }
   }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
 
-  const handleClose = () => {
-    history.push(ROUTES.base);
-    textChatStore.textChatDialog.close();
-  };
-
   if (!space) {
     return null;
   }
@@ -82,7 +74,6 @@ const StageModeGuest: React.FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onClose={handleClose}
       >
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}

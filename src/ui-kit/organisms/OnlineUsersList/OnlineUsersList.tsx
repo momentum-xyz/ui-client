@@ -16,7 +16,7 @@ export interface OnlineUsersListProps {
   onlineUsersStore?: OnlineUsersStoreInterface;
   changeKeyboardControl: (active: boolean) => void;
   profile?: UserProfileModelInterface;
-  teleportToUser: (userId: string, push: (path: string) => void) => void;
+  teleportToUser: (userId: string) => void;
   spaceId: string;
   onlineUsersList: OnlineUsersListInterface;
 }
