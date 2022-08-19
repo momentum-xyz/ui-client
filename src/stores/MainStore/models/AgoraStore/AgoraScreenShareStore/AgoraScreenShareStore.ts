@@ -155,6 +155,7 @@ const AgoraScreenShareStore = types
 
       self.videoTrack.stop();
 
+      // ILocalVideoTrack doesn't have close method
       if ('close' in self.videoTrack) {
         self.videoTrack.close();
       }
