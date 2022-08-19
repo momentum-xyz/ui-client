@@ -32,9 +32,17 @@ const AgoraScreenShareStore = types
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED')
     })
   )
-  .volatile<{client?: IAgoraRTCClient; videoTrack?: IRemoteVideoTrack | ILocalVideoTrack}>(() => ({
+  .volatile<{client?: IAgoraRTCClient; _videoTrack?: IRemoteVideoTrack | ILocalVideoTrack}>(() => ({
     client: undefined,
-    videoTrack: undefined
+    _videoTrack: undefined
+  }))
+  .views((self) => ({
+    get videoTrack(): IRemoteVideoTrack | ILocalVideoTrack | undefined {
+      return self._videoTrack;
+    },
+    set videoTrack(track: IRemoteVideoTrack | ILocalVideoTrack | undefined) {
+      self._videoTrack = track;
+    }
   }))
   .actions((self) => ({
     init(appId: string, isStageMode: boolean, spaceId?: string) {
