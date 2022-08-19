@@ -60,7 +60,6 @@ const AgoraStore = types
       } else {
         self.agoraMeetingStore.setupAgoraListeners();
       }
-      self.agoraScreenShareStore.setupAgoraListeners();
     },
     cleanupAgoraListeners() {
       if (self.isStageMode) {
@@ -68,7 +67,6 @@ const AgoraStore = types
       } else {
         self.agoraMeetingStore.cleanupListeners();
       }
-      self.agoraScreenShareStore.cleanupListeners();
     }
   }))
   // Meeting space managment
@@ -85,7 +83,7 @@ const AgoraStore = types
       if (isStageMode) {
         if (self.agoraMeetingStore.joined) {
           self.userDevicesStore.cleanupLocalTracks();
-          self.agoraScreenShareStore.stopScreenShare();
+          self.agoraScreenShareStore.leave();
           yield self.agoraMeetingStore.leave();
           self.agoraMeetingStore.users = cast([]);
         }
@@ -132,6 +130,7 @@ const AgoraStore = types
       self.setupAgoraListeners();
       self.isStageMode = isStageMode;
       self.agoraScreenShareStore.init(self.appId, isStageMode, self.spaceId);
+      self.agoraScreenShareStore.join(authStateSubject);
     }),
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
@@ -140,12 +139,15 @@ const AgoraStore = types
       if (self.isStageMode) {
         yield self.agoraStageModeStore.leave();
       } else {
-        self.agoraScreenShareStore.stopScreenShare();
+        self.agoraScreenShareStore.leave();
         yield self.agoraMeetingStore.leave();
       }
 
+      self.agoraScreenShareStore.leave();
+
       self.agoraStageModeStore.resetModel();
       self.agoraMeetingStore.resetModel();
+      self.agoraScreenShareStore.resetModel();
       self.resetModel();
     })
   }))

@@ -14,28 +14,33 @@ const ScreenSharePage: FC = () => {
   const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
-  const {videoTrack, client} = agoraScreenShareStore;
+  const {videoTrack} = agoraScreenShareStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
     if (videoTrack) {
-      const agoraUserId = videoTrack?.getUserId() as string;
-      screenShareStore.setScreenOwner(agoraUserId);
+      // IRemoteVideoTrack doesn't have getUserId method
+      if ('getUserId' in videoTrack) {
+        const agoraUserId = videoTrack.getUserId() as string;
+        screenShareStore.setScreenOwner(agoraUserId);
+      } else {
+        screenShareStore.setScreenOwner(sessionStore.userId);
+      }
       screenShareStore.setIsSettingUp(false);
     } else {
       screenShareStore.setScreenOwner(null);
     }
-  }, [videoTrack, screenShareStore]);
+  }, [videoTrack, screenShareStore, sessionStore.userId]);
 
   const startScreenSharing = useCallback(() => {
     screenShareStore.setIsSettingUp(true);
-    agoraScreenShareStore.startScreenShare(sessionStore.userId);
-  }, [agoraScreenShareStore, sessionStore.userId, screenShareStore]);
+    agoraScreenShareStore.startScreenSharing();
+  }, [agoraScreenShareStore, screenShareStore]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);
-    agoraScreenShareStore.stopScreenShare();
+    agoraScreenShareStore.stopScreenSharing();
   }, [agoraScreenShareStore, screenShareStore]);
 
   if (!space) {
@@ -56,7 +61,7 @@ const ScreenSharePage: FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
       >
-        {client && (
+        {videoTrack && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
         )}
       </SpaceTopBar>
