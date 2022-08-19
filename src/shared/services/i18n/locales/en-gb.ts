@@ -6,7 +6,8 @@ export const enGb = {
       minutes: '{{minutes}} minutes',
       seconds: '{{seconds}} seconds'
     },
-    somethingWentWrong: 'Something went wrong. Please try again later.',
+    somethingWentWrong: 'Something went wrong',
+    somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
     systemWideError: {
       loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
       switchToThatTab:
