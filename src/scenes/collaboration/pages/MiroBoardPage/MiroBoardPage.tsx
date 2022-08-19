@@ -73,7 +73,7 @@ const MiroBoardPage: FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
       >
-        {space && !!miroBoard?.data?.accessLink && (
+        {space.isAdmin && !!miroBoard?.data?.accessLink && (
           <>
             <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
             <Button label={t('actions.cancel')} variant="danger" onClick={closeBoard} />
