@@ -24,11 +24,20 @@ export const IconContainer = styled.div`
   margin: 15px;
 `;
 
-export const TextContainer = styled.div`
+export const InnerContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: center;
   margin-right: 25px;
   margin-left: 5px;
+  padding: 10px;
+`;
+
+export const ActionsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  margin-top: 10px;
 `;
