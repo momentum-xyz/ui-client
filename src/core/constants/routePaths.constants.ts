@@ -11,9 +11,11 @@ export const ROUTES = {
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
   welcome: '/welcome',
-  disconnected: '/disconnected',
-  maintenance: '/maintenance',
-  wrongBrowser: '/wrongBrowser',
+  system: {
+    disconnected: '/system/disconnected',
+    maintenance: '/system/maintenance',
+    wrongBrowser: '/system/wrongBrowser'
+  },
   meeting: {
     grabTable: '/meeting/:spaceId/grabTable'
   },

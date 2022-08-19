@@ -82,17 +82,17 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     main: () => <WelcomePage />
   },
   {
-    path: ROUTES.disconnected,
+    path: ROUTES.system.disconnected,
     exact: true,
     main: () => <DisconnectedPage />
   },
   {
-    path: ROUTES.maintenance,
+    path: ROUTES.system.maintenance,
     exact: true,
     main: () => <MaintenancePage />
   },
   {
-    path: ROUTES.wrongBrowser,
+    path: ROUTES.system.wrongBrowser,
     exact: true,
     main: () => <WrongBrowserPage />
   }

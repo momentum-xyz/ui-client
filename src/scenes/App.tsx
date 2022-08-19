@@ -39,7 +39,7 @@ const App: FC = () => {
       onError: (error) => {
         const status = error.response?.status;
         if (status === httpErrorCodes.MAINTENANCE) {
-          history.push({pathname: ROUTES.maintenance});
+          history.push({pathname: ROUTES.system.maintenance});
         } else if (
           status === httpErrorCodes.FORBIDDEN ||
           status === httpErrorCodes.INTERNAL_SYSTEM_ERROR
@@ -68,7 +68,7 @@ const App: FC = () => {
   const isBrowserUnsupported = !isBrowserSupported();
   useEffect(() => {
     if (isBrowserUnsupported) {
-      history.push({pathname: ROUTES.wrongBrowser});
+      history.push({pathname: ROUTES.system.wrongBrowser});
     }
   }, [isBrowserUnsupported, history]);
 

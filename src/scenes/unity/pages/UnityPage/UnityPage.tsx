@@ -51,7 +51,7 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ExterminateUnity', () => {
-    history.push({pathname: ROUTES.disconnected});
+    history.push({pathname: ROUTES.system.disconnected});
   });
 
   useUnityEvent('ClickEventDashboard', (spaceId: string) => {
