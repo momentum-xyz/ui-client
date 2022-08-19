@@ -37,9 +37,13 @@ const App: FC = () => {
   useEffect(() => {
     setApiResponseHandlers({
       onError: (error) => {
-        if (error.response?.status === httpErrorCodes.MAINTENANCE) {
+        const status = error.response?.status;
+        if (status === httpErrorCodes.MAINTENANCE) {
           history.push({pathname: ROUTES.maintenance});
-        } else {
+        } else if (
+          status === httpErrorCodes.FORBIDDEN ||
+          status === httpErrorCodes.INTERNAL_SYSTEM_ERROR
+        ) {
           toast.info(
             <ToastContent
               headerIconName="check"
