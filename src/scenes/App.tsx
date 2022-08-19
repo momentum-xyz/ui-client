@@ -57,7 +57,7 @@ const App: FC = () => {
       }
     });
     initApplication();
-  }, [initApplication, history]);
+  }, [initApplication, history, t]);
 
   useEffect(() => {
     if (isConfigReady) {
