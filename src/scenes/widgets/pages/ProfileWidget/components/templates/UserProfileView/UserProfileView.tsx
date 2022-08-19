@@ -34,7 +34,7 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
 
   const handleFlyToUser = () => {
     if (userProfile?.uuid) {
-      unityStore.teleportToUser(userProfile.uuid, history.push as (path: string) => void);
+      unityStore.teleportToUser(userProfile.uuid);
     }
   };
 
@@ -46,7 +46,6 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
 
   const handleFlyToSpace = (spaceId: string) => {
     unityStore.teleportToSpace(spaceId);
-    history.push(ROUTES.base);
   };
 
   const handleHighFive = () => {

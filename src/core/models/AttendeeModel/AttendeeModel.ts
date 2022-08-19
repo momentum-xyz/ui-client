@@ -1,6 +1,7 @@
 import {types, Instance} from 'mobx-state-tree';
 
 import {appVariables} from 'api/constants';
+import {AvatarSizeEnum} from 'core/enums';
 import {UserProfileModel} from 'core/models/UserProfile';
 
 const AttendeeModel = types
@@ -14,9 +15,11 @@ const AttendeeModel = types
     get name() {
       return self.user.name;
     },
-    get avatarSrc() {
-      const avatarHash = self.user.profile?.avatarHash;
-      return avatarHash ? `${appVariables.RENDER_SERVICE_URL}/get/${avatarHash}` : undefined;
+    get avatarSrc(): string | undefined {
+      return (
+        self.user.profile?.avatarHash &&
+        `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S3}/${self.user.profile?.avatarHash}`
+      );
     }
   }));
 

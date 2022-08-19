@@ -2,7 +2,6 @@ import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {useHistory} from 'react-router-dom';
 
 import {
   Toggle,
@@ -21,7 +20,6 @@ import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
-import {ROUTES} from 'core/constants';
 
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
@@ -31,8 +29,6 @@ const StageModeModerator: React.FC = () => {
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
   const {space, removeParticipantFromStageDialog, textChatStore} = collaborationStore;
-
-  const history = useHistory();
 
   const remoteUserClicked = useCallback(
     async (remoteUser: AgoraRemoteUserInterface, event = StageModeModerationEventEnum.REMOVE) => {
@@ -67,11 +63,6 @@ const StageModeModerator: React.FC = () => {
     agoraStageModeStore.leaveStage();
   }, [agoraStageModeStore]);
 
-  const handleClose = () => {
-    history.push(ROUTES.base);
-    textChatStore.textChatDialog.close();
-  };
-
   if (!space) {
     return null;
   }
@@ -86,7 +77,6 @@ const StageModeModerator: React.FC = () => {
           spaceId={space.id}
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-          onClose={handleClose}
           isChatOpen={textChatStore.textChatDialog.isOpen}
           toggleChat={textChatStore.textChatDialog.toggle}
           numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}

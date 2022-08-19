@@ -47,6 +47,7 @@ const RootStore = types
       self.mainStore.worldStore.init(worldId);
     },
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
+      console.log(`-------JOINING------- ${self.collaborationStore.leftMeetingSpaceId}`);
       yield self.collaborationStore.joinMeetingSpace(spaceId, isTable);
       yield self.mainStore.agoraStore.joinMeetingSpace(self.sessionStore.userId, spaceId);
 
@@ -56,8 +57,12 @@ const RootStore = types
         0,
         ''
       );
+
+      console.log(`-------JOINED------- ${self.collaborationStore.leftMeetingSpaceId}`);
     }),
     leaveMeetingSpace: flow(function* () {
+      console.log(`-------LEAVING------- ${self.collaborationStore.leftMeetingSpaceId}`);
+
       const spaceId = self.collaborationStore.space?.id;
 
       yield self.mainStore.agoraStore.leaveMeetingSpace();
@@ -70,6 +75,8 @@ const RootStore = types
           0,
           ''
         );
+
+        console.log(`-------LEFT------- ${self.collaborationStore.leftMeetingSpaceId}`);
       }
     })
   }));

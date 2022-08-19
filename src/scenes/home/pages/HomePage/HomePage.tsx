@@ -11,10 +11,15 @@ import {ROUTES} from 'core/constants';
 import {ExplorePanel, OnlineUsersPanel} from './components';
 import * as styled from './HomePage.styled';
 
-const HomePage: FC = () => {
+interface PropsInterface {
+  isTable?: boolean;
+  isFlight?: boolean;
+}
+
+const HomePage: FC<PropsInterface> = ({isFlight, isTable}) => {
   const {collaborationStore, meetingStore, mainStore} = useStore();
   const {leftMeetingSpaceId} = collaborationStore;
-  const {agoraStore, unityStore} = mainStore;
+  const {unityStore} = mainStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -30,14 +35,14 @@ const HomePage: FC = () => {
   return (
     <styled.Container
       data-testid="HomePage-test"
-      className={cn(agoraStore.hasJoined && 'hasJoined')}
+      className={cn((isFlight || isTable) && 'hasJoined')}
     >
       <styled.PanelWrapper>
         <ExplorePanel />
       </styled.PanelWrapper>
 
       <styled.PanelWrapper>
-        {!!leftMeetingSpaceId && !meetingStore.isKicked && (
+        {!isFlight && leftMeetingSpaceId && !meetingStore.isKicked && (
           <styled.Rejoin>
             <Button
               variant="primary"

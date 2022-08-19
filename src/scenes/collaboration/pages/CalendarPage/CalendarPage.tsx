@@ -1,12 +1,10 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {useHistory} from 'react-router-dom';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
 import {absoluteLink} from 'core/utils';
 import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
 
@@ -21,12 +19,7 @@ const CalendarPage: FC = () => {
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
-  const history = useHistory();
   const theme = useTheme();
-
-  const handleClose = () => {
-    history.push(ROUTES.base);
-  };
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
@@ -91,7 +84,6 @@ const CalendarPage: FC = () => {
         spaceId={space.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        onClose={handleClose}
         editSpaceHidden
         isChat={false}
       >

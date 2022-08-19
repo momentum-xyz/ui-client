@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const Loader = styled.div`
+  padding: 0 6px;
+  width: var(--meeting-size);
+`;
+
 export const Container = styled.div`
   margin: 0;
   height: 100%;
