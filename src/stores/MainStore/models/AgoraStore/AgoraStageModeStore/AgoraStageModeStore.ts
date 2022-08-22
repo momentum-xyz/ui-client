@@ -20,6 +20,7 @@ import {api} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
+import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
 
 const AgoraStageModeStore = types
   .compose(
@@ -148,8 +149,14 @@ const AgoraStageModeStore = types
   }))
   // Listeners handlers
   .actions((self) => ({
-    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+    handleUserPublished: flow(function* (
+      screenShareStore: AgoraScreenShareStoreInterface,
+      user: IAgoraRTCRemoteUser,
+      mediaType: 'audio' | 'video'
+    ) {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        yield self.client.subscribe(user, mediaType);
+        screenShareStore.handleUserPublished(user, mediaType);
         return;
       }
 
@@ -175,10 +182,12 @@ const AgoraStageModeStore = types
       }
     }),
     handleUserUnpublished: flow(function* (
+      screenShareStore: AgoraScreenShareStoreInterface,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        screenShareStore.handleUserUnpublished(user, mediaType);
         return;
       }
 
@@ -199,7 +208,7 @@ const AgoraStageModeStore = types
       }
     }),
     handleUserJoined(user: IAgoraRTCRemoteUser) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         return;
       }
 
@@ -217,7 +226,7 @@ const AgoraStageModeStore = types
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         return;
       }
 
@@ -243,9 +252,13 @@ const AgoraStageModeStore = types
   }))
   // Listeners registration
   .actions((self) => ({
-    setupAgoraListeners() {
-      self.client.on('user-published', self.handleUserPublished);
-      self.client.on('user-unpublished', self.handleUserPublished);
+    setupAgoraListeners(screenShareStore: AgoraScreenShareStoreInterface) {
+      self.client.on('user-published', (user, mediaType) =>
+        self.handleUserPublished(screenShareStore, user, mediaType)
+      );
+      self.client.on('user-unpublished', (user, mediaType) =>
+        self.handleUserUnpublished(screenShareStore, user, mediaType)
+      );
       self.client.on('user-joined', self.handleUserJoined);
       self.client.on('user-left', self.handleUserLeft);
       self.client.on('connection-state-change', self.handleConnectionStateChange);

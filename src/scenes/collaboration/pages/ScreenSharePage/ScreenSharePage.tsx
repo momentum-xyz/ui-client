@@ -20,13 +20,8 @@ const ScreenSharePage: FC = () => {
 
   useEffect(() => {
     if (videoTrack) {
-      // IRemoteVideoTrack doesn't have getUserId method
-      if ('getUserId' in videoTrack) {
-        const agoraUserId = videoTrack.getUserId() as string;
-        screenShareStore.setScreenOwner(agoraUserId);
-      } else {
-        screenShareStore.setScreenOwner(sessionStore.userId);
-      }
+      const agoraUserId = videoTrack.getUserId() as string;
+      screenShareStore.setScreenOwner(agoraUserId);
       screenShareStore.setIsSettingUp(false);
     } else {
       screenShareStore.setScreenOwner(null);
@@ -35,8 +30,8 @@ const ScreenSharePage: FC = () => {
 
   const startScreenSharing = useCallback(() => {
     screenShareStore.setIsSettingUp(true);
-    agoraScreenShareStore.startScreenSharing();
-  }, [agoraScreenShareStore, screenShareStore]);
+    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
+  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);

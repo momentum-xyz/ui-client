@@ -56,9 +56,9 @@ const AgoraStore = types
     // --- COMMON ---
     setupAgoraListeners() {
       if (self.isStageMode) {
-        self.agoraStageModeStore.setupAgoraListeners();
+        self.agoraStageModeStore.setupAgoraListeners(self.agoraScreenShareStore);
       } else {
-        self.agoraMeetingStore.setupAgoraListeners();
+        self.agoraMeetingStore.setupAgoraListeners(self.agoraScreenShareStore);
       }
     },
     cleanupAgoraListeners() {
@@ -127,10 +127,9 @@ const AgoraStore = types
         self.spaceId = spaceId;
       }
 
-      self.setupAgoraListeners();
       self.isStageMode = isStageMode;
       self.agoraScreenShareStore.init(self.appId, isStageMode, self.spaceId);
-      self.agoraScreenShareStore.join(authStateSubject);
+      self.setupAgoraListeners();
     }),
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
