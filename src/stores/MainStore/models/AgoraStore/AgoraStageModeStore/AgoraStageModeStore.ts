@@ -34,7 +34,7 @@ const AgoraStageModeStore = types
       isLowQualityModeEnabled: false,
       requestWasMadeToGoOnStage: false,
       audience: types.optional(types.array(StageModeUser), []),
-      users: types.optional(types.array(AgoraRemoteUser), []),
+      _users: types.optional(types.array(AgoraRemoteUser), []),
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
 
@@ -62,6 +62,12 @@ const AgoraStageModeStore = types
       return self.audience.filter((user) => {
         return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== self.userId;
       });
+    },
+    get users(): AgoraRemoteUserInterface[] {
+      return self._users;
+    },
+    set users(users: AgoraRemoteUserInterface[]) {
+      self._users = cast(users);
     }
   }))
   .views((self) => ({
@@ -69,12 +75,10 @@ const AgoraStageModeStore = types
       return self.spaceId !== undefined;
     },
     get canEnterStage(): boolean {
-      return (
-        self.client.remoteUsers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS
-      );
+      return self.users.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS;
     },
     get numberOfSpeakers(): number {
-      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
+      return self.users.length + (self.isOnStage ? 1 : 0);
     },
     get numberOfAudienceMembers(): number {
       return self.audienceMembers.length + Number(!self.isOnStage);
@@ -222,7 +226,7 @@ const AgoraStageModeStore = types
       });
 
       if (!foundUser) {
-        self.users = cast([...self.users, newUser]);
+        self.users = [...self.users, newUser];
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
@@ -230,7 +234,7 @@ const AgoraStageModeStore = types
         return;
       }
 
-      self.users = cast(self.users.filter((remoteUser) => remoteUser.uid !== user.uid));
+      self.users = self.users.filter((remoteUser) => remoteUser.uid !== user.uid);
     },
     handleConnectionStateChange(
       currentState: ConnectionState,
