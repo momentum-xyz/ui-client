@@ -1,1 +1,3 @@
-export * from './UserSpaceList';
+export * from './MyProfileEditor';
+export * from './MyProfileView';
+export * from './UserProfileView';

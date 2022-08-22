@@ -123,8 +123,17 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.meeting.grabTable,
     main: () => (
       <>
-        <HomePage />
-        <Meeting />
+        <HomePage isTable />
+        <Meeting isTable />
+      </>
+    )
+  },
+  {
+    path: ROUTES.meeting.flyAround,
+    main: () => (
+      <>
+        <HomePage isFlight />
+        <Meeting isFlight />
       </>
     )
   },

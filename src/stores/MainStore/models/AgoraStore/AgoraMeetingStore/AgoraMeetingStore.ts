@@ -1,9 +1,16 @@
-import {flow, types} from 'mobx-state-tree';
-import AgoraRTC, {ILocalAudioTrack, ILocalVideoTrack} from 'agora-rtc-sdk-ng';
+import {cast, flow, types} from 'mobx-state-tree';
+import AgoraRTC, {
+  ConnectionDisconnectedReason,
+  ConnectionState,
+  IAgoraRTCRemoteUser,
+  ICameraVideoTrack,
+  IMicrophoneAudioTrack
+} from 'agora-rtc-sdk-ng';
 
 import {api} from 'api';
 import {appVariables} from 'api/constants';
-import {AgoraRemoteUser, RequestModel, ResetModel} from 'core/models';
+import {AgoraRemoteUser, AgoraRemoteUserInterface, RequestModel, ResetModel} from 'core/models';
+import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
 
 const AgoraMeetingStore = types
   .compose(
@@ -13,6 +20,8 @@ const AgoraMeetingStore = types
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
       users: types.optional(types.array(AgoraRemoteUser), []),
+      connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
+      localSoundLevel: 0,
 
       tokenRequest: types.optional(RequestModel, {}),
       muteRequest: types.optional(RequestModel, {}),
@@ -21,6 +30,127 @@ const AgoraMeetingStore = types
   )
   .volatile(() => ({
     client: AgoraRTC.createClient({mode: 'rtc', codec: 'h264'})
+  }))
+  // Listeners handlers
+  .actions((self) => ({
+    handleUserPublished: flow(function* (
+      screenShareStore: AgoraScreenShareStoreInterface,
+      user: IAgoraRTCRemoteUser,
+      mediaType: 'audio' | 'video'
+    ) {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        yield self.client.subscribe(user, mediaType);
+        screenShareStore.handleUserPublished(user, mediaType);
+        return;
+      }
+
+      if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
+        yield self.client.subscribe(user, mediaType);
+      }
+
+      if (user.hasAudio && mediaType === 'audio') {
+        user.audioTrack?.play();
+      }
+
+      const updatedUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
+
+      if (updatedUser) {
+        updatedUser.participantInfo = user;
+        if (mediaType === 'audio') {
+          updatedUser.isMuted = !user.hasAudio;
+          updatedUser.audioTrack = user.audioTrack;
+        } else {
+          updatedUser.cameraOff = !user.hasVideo;
+          updatedUser.videoTrack = user.videoTrack;
+        }
+      }
+    }),
+    handleUserUnpublished: flow(function* (
+      screenShareStore: AgoraScreenShareStoreInterface,
+      user: IAgoraRTCRemoteUser,
+      mediaType: 'audio' | 'video'
+    ) {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        screenShareStore.handleUserUnpublished(user, mediaType);
+        return;
+      }
+
+      const foundUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
+
+      if (foundUser?.participantInfo) {
+        if (mediaType === 'audio' && foundUser.audioTrack?.isPlaying) {
+          foundUser.audioTrack?.stop();
+        }
+
+        yield self.client.unsubscribe(foundUser.participantInfo, mediaType);
+
+        if (mediaType === 'audio') {
+          foundUser.isMuted = true;
+        } else {
+          foundUser.cameraOff = true;
+        }
+      }
+    }),
+    handleUserJoined(user: IAgoraRTCRemoteUser) {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        return;
+      }
+
+      const foundUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
+
+      const newUser: AgoraRemoteUserInterface = cast({
+        uid: user.uid,
+        participantInfo: user,
+        isMuted: true,
+        cameraOff: true
+      });
+
+      if (!foundUser) {
+        self.users = cast([...self.users, newUser]);
+      }
+    },
+    handleUserLeft(user: IAgoraRTCRemoteUser) {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        return;
+      }
+
+      self.users = cast(self.users.filter((remoteUser) => remoteUser.uid !== user.uid));
+    },
+    handleConnectionStateChange(
+      currentState: ConnectionState,
+      previousState: ConnectionState,
+      reason?: ConnectionDisconnectedReason
+    ) {
+      self.connectionState = currentState;
+    },
+    handleVolumeIndicator(users: {uid: string; level: number}[]) {
+      const currentUser = users.find((user) => user.uid === self.userId);
+
+      self.localSoundLevel = currentUser?.level ?? 0;
+
+      self.users.forEach((remoteUser) => {
+        const user = users.find((user) => remoteUser.uid === user.uid);
+        remoteUser.soundLevel = user?.level ?? 0;
+      });
+    }
+  }))
+  // Listeners registration
+  .actions((self) => ({
+    setupAgoraListeners(screenShareStore: AgoraScreenShareStoreInterface) {
+      self.client.on('user-published', (user, mediaType) =>
+        self.handleUserPublished(screenShareStore, user, mediaType)
+      );
+      self.client.on('user-unpublished', (user, mediaType) =>
+        self.handleUserUnpublished(screenShareStore, user, mediaType)
+      );
+      self.client.on('user-joined', self.handleUserJoined);
+      self.client.on('user-left', self.handleUserLeft);
+      self.client.on('connection-state-change', self.handleConnectionStateChange);
+      self.client.on('volume-indicator', self.handleVolumeIndicator);
+    },
+    cleanupListeners() {
+      self.client.removeAllListeners();
+    }
   }))
   // API Requests
   .actions((self) => ({
@@ -77,9 +207,6 @@ const AgoraMeetingStore = types
 
       return publishedAudioTrack;
     }),
-    clanupListeners() {
-      self.client.removeAllListeners();
-    },
     getAgoraToken: flow(function* (spaceId?: string) {
       const tokenResponse: string = yield self.tokenRequest.send(
         api.agoraRepository.getAgoraToken,
@@ -101,11 +228,11 @@ const AgoraMeetingStore = types
         createAudioTrack: (
           deviceId: string,
           isTrackEnabled: boolean
-        ) => Promise<ILocalAudioTrack | undefined>,
+        ) => Promise<IMicrophoneAudioTrack | undefined>,
         createVideoTrack: (
           deviceId: string,
           isTrackEnabled: boolean
-        ) => Promise<ILocalVideoTrack | undefined>
+        ) => Promise<ICameraVideoTrack | undefined>
       ) => void
     ) {
       const tokenResponse = yield self.getAgoraToken(spaceId);

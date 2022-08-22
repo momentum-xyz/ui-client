@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
-import {IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
+import {ILocalVideoTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 
 import * as styled from './ScreenVideo.styled';
 
 interface PropsInterface {
-  videoTrack?: IRemoteVideoTrack;
+  videoTrack?: IRemoteVideoTrack | ILocalVideoTrack;
 }
 
 const ScreenVideo: FC<PropsInterface> = ({videoTrack}) => {

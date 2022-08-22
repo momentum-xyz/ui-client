@@ -18,6 +18,7 @@ export interface TextPropsInterface extends PropsWithThemeInterface {
   firstBoldSentences?: number;
   className?: string;
   noWrap?: boolean;
+  breakLongWord?: boolean;
 }
 
 const Text: FC<TextPropsInterface> = ({
@@ -30,6 +31,7 @@ const Text: FC<TextPropsInterface> = ({
   isCustom = false,
   weight = 'normal',
   noWrap = false,
+  breakLongWord = false,
   firstBoldSentences,
   className
 }) => {
@@ -60,6 +62,7 @@ const Text: FC<TextPropsInterface> = ({
         !isMultiline && 'singleLine',
         align,
         noWrap && 'noWrap',
+        breakLongWord && 'breakLongWord',
         isCustom && 'Text-custom',
         `weight-${weight}`,
         className

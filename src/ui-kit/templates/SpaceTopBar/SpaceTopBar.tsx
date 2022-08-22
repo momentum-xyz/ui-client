@@ -1,7 +1,9 @@
-import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
+import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router';
 
 import {PageTopBar} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import {RightSection} from './components';
@@ -9,7 +11,6 @@ import {RightSection} from './components';
 interface PropsInterface extends PropsWithThemeInterface {
   title: string;
   subtitle?: string;
-  onClose?: () => void;
   isAdmin?: boolean;
   spaceId?: string;
   editSpaceHidden?: boolean;
@@ -32,15 +33,16 @@ const SpaceTopBar: FC<PropsInterface> = ({
   editSpaceHidden,
   toggleChat,
   children,
-  onClose,
   isChat,
   numberOfUnreadMessages
 }) => {
+  const history = useHistory();
+
   return (
     <PageTopBar
       title={title}
       subtitle={subtitle}
-      onClose={onClose}
+      onClose={() => history.push(ROUTES.base)}
       actions={
         <>
           {!!spaceId && (

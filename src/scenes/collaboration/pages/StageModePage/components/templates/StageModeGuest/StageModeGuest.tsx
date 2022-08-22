@@ -2,11 +2,9 @@ import {observer} from 'mobx-react-lite';
 import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
 
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ToastContent, Button, SpaceTopBar, Text, Stage, TextChat} from 'ui-kit';
-import {ROUTES} from 'core/constants';
 import {
   StageModePopupQueue,
   StageModeStats
@@ -18,12 +16,11 @@ const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
-  const {textChatStore} = collaborationStore;
+  const {textChatStore, space} = collaborationStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
 
   usePosBusEvent('stage-mode-accepted', (userId) => {
     if (userId === sessionStore.userId) {
@@ -61,26 +58,22 @@ const StageModeGuest: React.FC = () => {
     }
   }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
 
-  const handleClose = () => {
-    history.push(ROUTES.base);
-    textChatStore.textChatDialog.close();
-  };
-
-  if (!collaborationStore.space) {
+  if (!space) {
     return null;
   }
 
   return (
     <styled.Container data-testid="StageModeGuest-test">
       <SpaceTopBar
-        title={collaborationStore.space.name ?? ''}
+        title={space.name ?? ''}
         subtitle={t('labels.stageMode')}
         isSpaceFavorite={favoriteStore.isSpaceFavorite}
+        isAdmin={space.isAdmin}
+        spaceId={space.id}
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onClose={handleClose}
       >
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}

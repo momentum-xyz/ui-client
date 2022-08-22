@@ -4,8 +4,8 @@ export const UserListItem = styled.li`
   position: relative;
   margin: 0 0 22px 0;
   padding: 5px;
-  width: 92px;
-  height: 92px;
+  width: var(--meeting-size);
+  height: var(--meeting-size);
   border-radius: 50%;
   border: 1px solid transparent;
 

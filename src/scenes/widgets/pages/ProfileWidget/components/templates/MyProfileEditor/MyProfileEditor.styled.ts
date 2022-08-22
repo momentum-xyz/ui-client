@@ -20,6 +20,13 @@ export const AvatarContainer = styled.div`
   flex-shrink: 0;
 `;
 
+export const ImagePreview = styled.img`
+  width: 78px;
+  height: 78px;
+  border-radius: 100%;
+  object-fit: cover;
+`;
+
 export const InputsContainer = styled.div`
   display: flex;
   flex-direction: column;

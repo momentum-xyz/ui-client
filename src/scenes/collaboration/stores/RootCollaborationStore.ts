@@ -34,7 +34,6 @@ const RootCollaborationStore = types
       isModerator: false,
 
       leftMeetingSpaceId: types.maybe(types.string),
-      leftMeetingSpaceWasAGrabbedTable: types.maybe(types.boolean),
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
       // Requests
@@ -59,7 +58,6 @@ const RootCollaborationStore = types
   .actions((self) => ({
     resetLeftMeetingSpace() {
       self.leftMeetingSpaceId = undefined;
-      self.leftMeetingSpaceWasAGrabbedTable = undefined;
     }
   }))
   .actions((self) => ({
@@ -82,18 +80,18 @@ const RootCollaborationStore = types
 
       self.isModerator = isModerator;
     }),
-    leaveMeetingSpace() {
-      self.leftMeetingSpaceId = self.space?.id;
-      self.leftMeetingSpaceWasAGrabbedTable = self.space?.isTable;
+    async leaveMeetingSpace() {
+      if (!self.space?.isTable) {
+        self.leftMeetingSpaceId = self.space?.id;
+      }
 
-      self.textChatStore.leaveChannel().then(() => {
-        self.textChatStore.logOut().then(() => {
-          self.textChatStore.resetModel();
-        });
-      });
+      await self.textChatStore.leaveChannel();
+      await self.textChatStore.logOut();
+      self.textChatStore.resetModel();
+
       if (!!self.space && self.space.isAdmin) {
-        self.miroBoardStore.disableMiroBoard(self.space.id);
-        self.googleDriveStore.disableGoogleDocument(self.space.id);
+        await self.miroBoardStore.disableMiroBoard(self.space.id);
+        await self.googleDriveStore.disableGoogleDocument(self.space.id);
       }
 
       self.space = undefined;
@@ -115,6 +113,14 @@ const RootCollaborationStore = types
   .views((self) => ({
     get isSpaceLoaded(): boolean {
       return self.space?.didFetchSpaceInformation ?? false;
+    },
+    get isHandlingInviteOrRequest(): boolean {
+      return (
+        self.acceptedToJoinStageDialog.isOpen ||
+        self.invitedOnStageDialog.isOpen ||
+        self.prepareOnStageDialog.isOpen ||
+        self.countdownDialog.isOpen
+      );
     }
   }));
 

@@ -1,24 +1,55 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
+import {PrivateSpaceError} from 'core/errors';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
-import {StageModePIPWidget} from 'scenes/widgets/pages';
 
 import {MeetingRoomPage} from './pages';
 import * as styled from './Meeting.styled';
 
-const Meeting: FC = () => {
-  const {mainStore, sessionStore, meetingStore} = useStore();
+interface PropsInterface {
+  isTable?: boolean;
+  isFlight?: boolean;
+}
+
+const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
+  const rootStore = useStore();
+  const {mainStore, sessionStore, meetingStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
-  const {t} = useTranslation();
+  const {spaceId} = useParams<{spaceId: string}>();
   const history = useHistory();
+  const {t} = useTranslation();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
+        if (e instanceof PrivateSpaceError) {
+          history.push(ROUTES.base);
+          toast.error(
+            <ToastContent
+              isDanger
+              isCloseButton
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('collaboration.spaceIsPrivate')}
+            />
+          );
+        }
+      });
+    }, 250);
+
+    return () => {
+      clearTimeout(timeout);
+      rootStore.leaveMeetingSpace();
+    };
+  }, [history, isTable, rootStore, sessionStore.userId, spaceId, t]);
 
   usePosBusEvent('meeting-mute', () => {
     userDevicesStore.mute();
@@ -30,7 +61,7 @@ const Meeting: FC = () => {
     }
   });
 
-  usePosBusEvent('meeting-kick', async (spaceId) => {
+  usePosBusEvent('meeting-kick', () => {
     meetingStore.setKicked(true);
     history.push(ROUTES.base);
 
@@ -75,8 +106,7 @@ const Meeting: FC = () => {
 
   return (
     <styled.Container>
-      <MeetingRoomPage />
-      {!history.location.pathname.includes('stage-mode') && <StageModePIPWidget />}
+      <MeetingRoomPage isTable={isTable} isFlight={isFlight} />
     </styled.Container>
   );
 };

@@ -211,7 +211,10 @@ export const enGb = {
       microphoneOff: 'Microphone off',
       webcamPreview: 'Webcam Preview',
       audioVideoSettings: 'Audio/Video Settings',
-      grabTable: 'Grab a Table'
+      grabTable: 'Grab a Table',
+      videoinput: 'Video Input',
+      audioinput: 'Audio Input',
+      audiooutput: 'Audio Output'
     },
     messages: {
       loading: 'Loading Momentum',
@@ -756,7 +759,10 @@ export const enGb = {
       title: 'Edit my bio',
       avatarInstructions: 'Choose an avatar that will be shown when your camera is disabled',
       saveSuccess: 'Saved profile',
-      saveFailure: 'Could not save Profile.'
+      saveFailure: 'Could not save Profile.',
+      changeAvatar: 'Change your avatar',
+      update: 'update',
+      avatar: 'avatar'
     },
     launchInitiativeWidget: {
       title: 'LAUNCH YOUR INITIATIVE (FREE)',

@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const Loader = styled.div`
+  padding: 0 6px;
+  width: var(--meeting-size);
+`;
+
 export const Container = styled.div`
   margin: 0;
   height: 100%;
@@ -12,7 +17,6 @@ export const Inner = styled.div`
   flex-direction: column;
   height: calc(100vh - 60px);
   pointer-events: none;
-  gap: 10px;
 `;
 
 export const Content = styled.div`
@@ -30,14 +34,4 @@ export const MuteButtonContainer = styled.div`
   gap: 9px;
   align-items: center;
   padding: 9px 0 5px;
-`;
-
-export const MuteButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80px;
-  width: 80px;
-  border-radius: 100%;
-  background: ${(props) => props.theme.bg};
 `;

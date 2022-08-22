@@ -1,13 +1,10 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
-// TODO: Refactor
 import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenSharePage.styled';
 
@@ -17,35 +14,29 @@ const ScreenSharePage: FC = () => {
   const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
-  const {videoTrack, client} = agoraScreenShareStore;
+  const {videoTrack} = agoraScreenShareStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
 
   useEffect(() => {
     if (videoTrack) {
-      const agoraUserId = videoTrack?.getUserId() as string;
+      const agoraUserId = videoTrack.getUserId() as string;
       screenShareStore.setScreenOwner(agoraUserId);
       screenShareStore.setIsSettingUp(false);
     } else {
       screenShareStore.setScreenOwner(null);
     }
-  }, [videoTrack, screenShareStore]);
+  }, [videoTrack, screenShareStore, sessionStore.userId]);
 
   const startScreenSharing = useCallback(() => {
     screenShareStore.setIsSettingUp(true);
-    agoraScreenShareStore.startScreenShare(sessionStore.userId);
-  }, [agoraScreenShareStore, sessionStore.userId, screenShareStore]);
+    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
+  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);
-    agoraScreenShareStore.stopScreenShare();
+    agoraScreenShareStore.stopScreenSharing();
   }, [agoraScreenShareStore, screenShareStore]);
-
-  const handleClose = () => {
-    history.push(ROUTES.base);
-    textChatStore.textChatDialog.close();
-  };
 
   if (!space) {
     return null;
@@ -64,9 +55,8 @@ const ScreenSharePage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onClose={handleClose}
       >
-        {client && (
+        {videoTrack && space.isAdmin && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
         )}
       </SpaceTopBar>

@@ -17,7 +17,8 @@ export const ROUTES = {
     wrongBrowser: '/system/wrongBrowser'
   },
   meeting: {
-    grabTable: '/meeting/:spaceId/grabTable'
+    grabTable: '/meeting/:spaceId/table',
+    flyAround: '/meeting/:spaceId/fly'
   },
   collaboration: {
     base: '/collaboration/:spaceId',

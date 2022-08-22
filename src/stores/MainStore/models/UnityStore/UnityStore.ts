@@ -1,8 +1,9 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {ChangeEvent} from 'react';
 
-import {ROUTES} from 'core/constants';
+import {api} from 'api';
+import {RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
@@ -12,7 +13,8 @@ const UnityStore = types
     isInitialized: false,
     isTeleportReady: false,
     muted: false,
-    volume: types.optional(types.number, 0.1)
+    volume: types.optional(types.number, 0.1),
+    fetchRequest: types.optional(RequestModel, {})
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -31,7 +33,6 @@ const UnityStore = types
       });
 
       UnityService.initialize(self.unityContext);
-
       self.isInitialized = true;
     },
     teleportIsReady(): void {
@@ -46,9 +47,8 @@ const UnityStore = types
     getUserPosition() {
       return UnityService.getUserPosition?.();
     },
-    teleportToUser(userId: string, navigationCallback: (path: string) => void): void {
+    teleportToUser(userId: string): void {
       UnityService.teleportToUser(userId);
-      navigationCallback(ROUTES.base);
     },
     teleportToSpace(spaceId: string): void {
       UnityService.teleportToSpace(spaceId);
@@ -119,7 +119,14 @@ const UnityStore = types
     },
     leaveSpace(spaceId: string) {
       UnityService.leaveSpace(spaceId);
-    }
+    },
+    // FIXME: Temporary solution. To get space name from Unity
+    fetchSpaceName: flow(function* (spaceId: string) {
+      const response = yield self.fetchRequest.send(api.spaceRepository.fetchSpace, {spaceId});
+      if (response) {
+        return response.space.name;
+      }
+    })
   }));
 
 export {UnityStore};

@@ -1,11 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
 
 import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
-import {ROUTES} from 'core/constants';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
@@ -17,7 +15,6 @@ const GoogleDrivePage: FC = () => {
   const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
 
   usePosBusEvent('google-drive-file-change', (id) => {
     if (space?.id === id) {
@@ -63,11 +60,6 @@ const GoogleDrivePage: FC = () => {
 
   const {pickDocument} = useGooglePicker(pickerCallBack);
 
-  const handleClose = () => {
-    history.push(ROUTES.base);
-    textChatStore.textChatDialog.close();
-  };
-
   if (!space) {
     return null;
   }
@@ -85,7 +77,6 @@ const GoogleDrivePage: FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         editSpaceHidden
-        onClose={handleClose}
       >
         {space.isAdmin && !!googleDocument?.data?.url && (
           <>

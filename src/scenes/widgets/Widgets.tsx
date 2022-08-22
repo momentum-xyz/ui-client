@@ -6,7 +6,6 @@ import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {appVariables} from 'api/constants';
 import {switchFullscreen} from 'core/utils';
 import {UnityService} from 'shared/services';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from 'ui-kit';
@@ -20,10 +19,12 @@ import {
   StakingWidget,
   TokenRuleReviewWidget,
   TokenRulesWidget,
-  WorldStatsWidget
+  WorldStatsWidget,
+  StageModePIPWidget
 } from 'scenes/widgets/pages';
 
 import * as styled from './Widgets.styled';
+import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
@@ -38,7 +39,8 @@ const Widgets: FC = () => {
     tokenRulesStore,
     launchInitiativeStore,
     musicPlayerStore,
-    attendeesListStore
+    attendeesListStore,
+    profileStore
   } = widgetStore;
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
@@ -95,6 +97,7 @@ const Widgets: FC = () => {
 
   return (
     <>
+      {profileStore.editAvatarDialog.isOpen && <AvatarForm />}
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
@@ -110,6 +113,7 @@ const Widgets: FC = () => {
       )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
+      {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -166,12 +170,9 @@ const Widgets: FC = () => {
             {currentProfile?.profile && (
               <ToolbarIcon title="Profile" onClick={profileMenuDialog.open}>
                 <Avatar
-                  status={sessionStore.profile?.status}
                   size="extra-small"
-                  avatarSrc={
-                    currentProfile.profile.avatarHash &&
-                    `${appVariables.RENDER_SERVICE_URL}/get/${currentProfile.profile.avatarHash}`
-                  }
+                  status={sessionStore.profile?.status}
+                  avatarSrc={currentProfile.avatarSrc}
                   showBorder
                   showHover
                 />

@@ -58,6 +58,10 @@ export const Header = styled.div`
     margin-bottom: 0;
   }
 
+  &.titleHeight {
+    height: 30px;
+  }
+
   ${HeaderItem} ~ ${HeaderItem} {
     margin-left: 10px;
   }

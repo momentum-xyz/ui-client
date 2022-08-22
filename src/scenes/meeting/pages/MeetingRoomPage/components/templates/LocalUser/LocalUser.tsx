@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {ILocalVideoTrack} from 'agora-rtc-sdk-ng';
+import {ICameraVideoTrack} from 'agora-rtc-sdk-ng';
 import cn from 'classnames';
 
 import {IconSvg, Text} from 'ui-kit';
@@ -13,7 +13,7 @@ interface PropsInterface {
   isShown: boolean;
   isStageMode: boolean;
   avatarSrc?: string;
-  videoTrack?: ILocalVideoTrack;
+  videoTrack?: ICameraVideoTrack;
   microphoneOff: boolean;
   cameraOff: boolean;
   soundLevel: number;
@@ -39,7 +39,7 @@ const LocalUser: FC<PropsInterface> = ({
   }, [isStageMode, videoTrack]);
 
   useEffect(() => {
-    if (cameraOff) {
+    if (!videoTrack?.enabled) {
       videoTrack?.stop();
     } else if (videoRef.current) {
       videoTrack?.play(videoRef.current);
