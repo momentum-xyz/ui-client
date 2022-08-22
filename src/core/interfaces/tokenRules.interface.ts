@@ -1,4 +1,4 @@
-import {TokenRuleListHeaderType} from '../types';
+import {TokenRuleListHeaderType} from 'core/types';
 
 export interface ColumnHeaderInterface {
   key: TokenRuleListHeaderType;
