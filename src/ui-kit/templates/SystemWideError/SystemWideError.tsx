@@ -29,7 +29,7 @@ const SystemWideError: FC<PropsInterface> = ({theme, text, showRefreshButton}) =
           </styled.IconContainer>
           <styled.InnerContent>
             {texts.map((text) => (
-              <Text text={t(text)} key={text} size="m" weight="light" theme={theme} />
+              <Text text={text} key={text} size="m" weight="light" theme={theme} />
             ))}
             {showRefreshButton && (
               <styled.ActionsContainer>

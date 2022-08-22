@@ -76,7 +76,7 @@ const App: FC = () => {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <SystemWideError
-          text="somethingWentWrongTryAgain"
+          text={t('somethingWentWrongTryAgain')}
           showRefreshButton
           theme={themeStore.theme}
         />
