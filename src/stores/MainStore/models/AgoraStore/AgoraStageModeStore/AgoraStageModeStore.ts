@@ -58,11 +58,6 @@ const AgoraStageModeStore = types
     })()
   }))
   .views((self) => ({
-    get audienceMembers(): StageModeUserInterface[] {
-      return self.audience.filter((user) => {
-        return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== self.userId;
-      });
-    },
     get users(): AgoraRemoteUserInterface[] {
       return self._users;
     },
@@ -71,6 +66,15 @@ const AgoraStageModeStore = types
     }
   }))
   .views((self) => ({
+    get audienceMembers(): StageModeUserInterface[] {
+      return self.audience.filter((user) => {
+        return (
+          user.role === ParticipantRole.AUDIENCE_MEMBER &&
+          user.uid !== self.userId &&
+          !self.users.find((u) => u.uid === user.uid)
+        );
+      });
+    },
     get joined(): boolean {
       return self.spaceId !== undefined;
     },
@@ -79,7 +83,9 @@ const AgoraStageModeStore = types
     },
     get numberOfSpeakers(): number {
       return self.users.length + (self.isOnStage ? 1 : 0);
-    },
+    }
+  }))
+  .views((self) => ({
     get numberOfAudienceMembers(): number {
       return self.audienceMembers.length + Number(!self.isOnStage);
     }
