@@ -4,9 +4,10 @@ import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 
+import {appVariables} from 'api/constants';
 import {EventItemModelInterface} from 'core/models/EventItem';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
-import {appVariables} from 'api/constants';
+import placeholder from 'static/images/placeholder.png';
 
 import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
@@ -208,7 +209,7 @@ const EventItem: FC<PropsInterface> = ({
           src={`${appVariables.RENDER_SERVICE_URL}/get/${event.image_hash}`}
         />
       ) : (
-        <img alt="placeholder" src="/img/events/placeholder.png" />
+        <img alt="placeholder" src={placeholder} />
       )}
     </styled.ImageContainer>
   );
