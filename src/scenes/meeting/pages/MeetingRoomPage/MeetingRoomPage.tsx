@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
+import {Loader} from 'ui-kit';
 
 import {
   PeopleCount,
@@ -32,7 +33,11 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
   }, [stageModeStore, meetingStore]);
 
   if (!agoraStore.hasJoined) {
-    return <></>;
+    return (
+      <styled.Loader>
+        <Loader />
+      </styled.Loader>
+    );
   }
 
   return (
@@ -54,7 +59,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
             <MuteAllButton
               isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
               peopleCount={agoraStore.meetingPeopleCount}
-              onMuteAll={() => meetingRoomStore.muteAllUsers(space?.id)}
+              onMuteAll={agoraMeetingStore.muteAllRemoteUsers}
             />
 
             {/* CURRENT USER */}
@@ -91,7 +96,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
                     user={user}
                     isModerator={collaborationStore.isModerator}
                     maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
-                    onMuteUser={meetingRoomStore.muteUser}
+                    onMuteUser={agoraMeetingStore.muteRemoteUser}
                     onKickUser={meetingRoomStore.kickUser}
                     usersListUpdated={agoraMeetingStore.users.length}
                   />

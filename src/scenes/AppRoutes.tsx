@@ -14,7 +14,7 @@ import {
 import {WelcomePage} from './welcome';
 import {HomePage} from './home';
 import {SignUpCompletePage} from './profile';
-import {StoryBookPage} from './system/pages';
+import {DisconnectedPage, MaintenancePage, StoryBookPage, WrongBrowserPage} from './system/pages';
 import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
@@ -80,6 +80,21 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.welcome,
     exact: true,
     main: () => <WelcomePage />
+  },
+  {
+    path: ROUTES.system.disconnected,
+    exact: true,
+    main: () => <DisconnectedPage />
+  },
+  {
+    path: ROUTES.system.maintenance,
+    exact: true,
+    main: () => <MaintenancePage />
+  },
+  {
+    path: ROUTES.system.wrongBrowser,
+    exact: true,
+    main: () => <WrongBrowserPage />
   }
 ];
 
@@ -108,7 +123,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.meeting.grabTable,
     main: () => (
       <>
-        <HomePage />
+        <HomePage isTable />
         <Meeting isTable />
       </>
     )
@@ -117,7 +132,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.meeting.flyAround,
     main: () => (
       <>
-        <HomePage />
+        <HomePage isFlight />
         <Meeting isFlight />
       </>
     )

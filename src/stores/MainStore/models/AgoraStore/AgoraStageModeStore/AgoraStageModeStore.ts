@@ -20,6 +20,7 @@ import {api} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
+import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
 
 const AgoraStageModeStore = types
   .compose(
@@ -33,7 +34,7 @@ const AgoraStageModeStore = types
       isLowQualityModeEnabled: false,
       requestWasMadeToGoOnStage: false,
       audience: types.optional(types.array(StageModeUser), []),
-      users: types.optional(types.array(AgoraRemoteUser), []),
+      _users: types.optional(types.array(AgoraRemoteUser), []),
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
 
@@ -57,24 +58,34 @@ const AgoraStageModeStore = types
     })()
   }))
   .views((self) => ({
-    get audienceMembers(): StageModeUserInterface[] {
-      return self.audience.filter((user) => {
-        return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== self.userId;
-      });
+    get users(): AgoraRemoteUserInterface[] {
+      return self._users;
+    },
+    set users(users: AgoraRemoteUserInterface[]) {
+      self._users = cast(users);
     }
   }))
   .views((self) => ({
+    get audienceMembers(): StageModeUserInterface[] {
+      return self.audience.filter((user) => {
+        return (
+          user.role === ParticipantRole.AUDIENCE_MEMBER &&
+          user.uid !== self.userId &&
+          !self.users.find((u) => u.uid === user.uid)
+        );
+      });
+    },
     get joined(): boolean {
       return self.spaceId !== undefined;
     },
     get canEnterStage(): boolean {
-      return (
-        self.client.remoteUsers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS
-      );
+      return self.users.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS;
     },
     get numberOfSpeakers(): number {
-      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
-    },
+      return self.users.length + (self.isOnStage ? 1 : 0);
+    }
+  }))
+  .views((self) => ({
     get numberOfAudienceMembers(): number {
       return self.audienceMembers.length + Number(!self.isOnStage);
     }
@@ -148,8 +159,14 @@ const AgoraStageModeStore = types
   }))
   // Listeners handlers
   .actions((self) => ({
-    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+    handleUserPublished: flow(function* (
+      screenShareStore: AgoraScreenShareStoreInterface,
+      user: IAgoraRTCRemoteUser,
+      mediaType: 'audio' | 'video'
+    ) {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        yield self.client.subscribe(user, mediaType);
+        screenShareStore.handleUserPublished(user, mediaType);
         return;
       }
 
@@ -175,10 +192,12 @@ const AgoraStageModeStore = types
       }
     }),
     handleUserUnpublished: flow(function* (
+      screenShareStore: AgoraScreenShareStoreInterface,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
+        screenShareStore.handleUserUnpublished(user, mediaType);
         return;
       }
 
@@ -199,7 +218,7 @@ const AgoraStageModeStore = types
       }
     }),
     handleUserJoined(user: IAgoraRTCRemoteUser) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         return;
       }
 
@@ -213,15 +232,15 @@ const AgoraStageModeStore = types
       });
 
       if (!foundUser) {
-        self.users = cast([...self.users, newUser]);
+        self.users = [...self.users, newUser];
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         return;
       }
 
-      self.users = cast(self.users.filter((remoteUser) => remoteUser.uid !== user.uid));
+      self.users = self.users.filter((remoteUser) => remoteUser.uid !== user.uid);
     },
     handleConnectionStateChange(
       currentState: ConnectionState,
@@ -243,9 +262,13 @@ const AgoraStageModeStore = types
   }))
   // Listeners registration
   .actions((self) => ({
-    setupAgoraListeners() {
-      self.client.on('user-published', self.handleUserPublished);
-      self.client.on('user-unpublished', self.handleUserPublished);
+    setupAgoraListeners(screenShareStore: AgoraScreenShareStoreInterface) {
+      self.client.on('user-published', (user, mediaType) =>
+        self.handleUserPublished(screenShareStore, user, mediaType)
+      );
+      self.client.on('user-unpublished', (user, mediaType) =>
+        self.handleUserUnpublished(screenShareStore, user, mediaType)
+      );
       self.client.on('user-joined', self.handleUserJoined);
       self.client.on('user-left', self.handleUserLeft);
       self.client.on('connection-state-change', self.handleConnectionStateChange);

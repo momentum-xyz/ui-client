@@ -1,6 +1,6 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 
-import {ParticipantRole} from 'core/enums';
+import {AvatarSizeEnum, ParticipantRole} from 'core/enums';
 import {api, ProfileResponse, UserProfileInterface} from 'api';
 import {RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
@@ -28,7 +28,7 @@ const StageModeUser = types
     get avatarSrc(): string | undefined {
       return (
         self.profile?.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/get/${self.profile.avatarHash}`
+        `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S3}/${self.profile.avatarHash}`
       );
     }
   }));

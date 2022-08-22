@@ -1,12 +1,10 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router';
 import {capitalize} from 'lodash-es';
 
 import {Avatar, Button, IconSvg, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
 import {absoluteLink, monthAndYearString, withoutProtocol} from 'core/utils';
 
 import {UserSpaceList} from '../../organisms';
@@ -21,13 +19,10 @@ const MyProfileView: FC = () => {
   const {userProfile} = profileStore;
   const {exploreStore} = homeStore;
 
-  const history = useHistory();
-
   const {t} = useTranslation();
 
   const handleFlyToSpace = (spaceId: string) => {
     unityStore.teleportToSpace(spaceId);
-    history.push(ROUTES.base);
   };
 
   const handleSelectSpace = (spaceId: string) => {

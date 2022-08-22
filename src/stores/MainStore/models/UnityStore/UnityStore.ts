@@ -4,7 +4,6 @@ import {ChangeEvent} from 'react';
 
 import {api} from 'api';
 import {RequestModel} from 'core/models';
-import {ROUTES} from 'core/constants';
 import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
@@ -48,9 +47,8 @@ const UnityStore = types
     getUserPosition() {
       return UnityService.getUserPosition?.();
     },
-    teleportToUser(userId: string, navigationCallback: (path: string) => void): void {
+    teleportToUser(userId: string): void {
       UnityService.teleportToUser(userId);
-      navigationCallback(ROUTES.base);
     },
     teleportToSpace(spaceId: string): void {
       UnityService.teleportToSpace(spaceId);

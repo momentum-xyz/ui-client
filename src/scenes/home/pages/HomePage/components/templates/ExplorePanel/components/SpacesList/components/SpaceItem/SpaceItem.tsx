@@ -1,11 +1,9 @@
 import React from 'react';
-import {useHistory} from 'react-router';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 
 import {SvgButton} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
 import {SubSpaceModelInterface} from 'core/models';
 
 import * as styled from './SpaceItem.styled';
@@ -17,12 +15,8 @@ export interface SpaceItemPropsInterface {
 }
 
 const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, lastItem}) => {
-  const history = useHistory();
-  const {
-    mainStore: {unityStore, favoriteStore},
-    homeStore
-  } = useStore();
-
+  const {mainStore, homeStore} = useStore();
+  const {unityStore, favoriteStore} = mainStore;
   const {exploreStore} = homeStore;
 
   if (!space.id) {
@@ -32,7 +26,6 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, last
   const handleFlyToSpace = () => {
     if (space.id) {
       unityStore.teleportToSpace(space.id);
-      history.push(ROUTES.base);
     }
   };
 
