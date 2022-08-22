@@ -53,7 +53,9 @@ const getAccessToken = (): string => {
  */
 request.interceptors.request.use(requestHandler, errorHandler);
 
-request.interceptors.response.use(responseHandler, errorHandler);
+export const setApiResponseHandlers = ({onResponse = responseHandler, onError = errorHandler}) => {
+  request.interceptors.response.use(onResponse, onError);
+};
 
 export const refreshAxiosToken = (token: string) => {
   setAccessToken(token);

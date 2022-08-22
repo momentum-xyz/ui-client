@@ -53,7 +53,7 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ExterminateUnity', () => {
-    window.location.href = '/disconnect.html';
+    history.push({pathname: ROUTES.system.disconnected});
   });
 
   useUnityEvent('ClickEventDashboard', (spaceId: string) => {
