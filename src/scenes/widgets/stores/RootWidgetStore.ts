@@ -4,7 +4,6 @@ import StakingStore from './StakingStore/StakingStore';
 import {WorldStatsStore} from './WorldStatsStore';
 import {MagicLinkStore} from './MagicLinkStore';
 import {ProfileMenuStore} from './ProfileMenuStore';
-import {TokenRulesStore} from './TokenRulesStore';
 import {ProfileStore} from './ProfileStore';
 import {HelpStore} from './HelpStore';
 import {LaunchInitiativeStore} from './LaunchInitiativeStore';
@@ -18,7 +17,6 @@ const RootWidgetStore = types.model('RootWidgetStore', {
   helpStore: types.optional(HelpStore, {}),
   profileStore: types.optional(ProfileStore, {}),
   profileMenuStore: types.optional(ProfileMenuStore, {}),
-  tokenRulesStore: types.optional(TokenRulesStore, {}),
   launchInitiativeStore: types.optional(LaunchInitiativeStore, {}),
   musicPlayerStore: types.optional(MusicPlayerStore, {}),
   attendeesListStore: types.optional(AttendeesListStore, {})

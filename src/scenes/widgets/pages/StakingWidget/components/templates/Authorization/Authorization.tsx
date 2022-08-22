@@ -75,7 +75,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
             const {docs, name, section} = decoded;
             setErrorMessage(`${section}.${name} ${docs.join(' ')}`);
           } else {
-            setErrorMessage(t('somethingWentWrong'));
+            setErrorMessage(t('errors.somethingWentWrongTryAgain'));
           }
         } else {
           setErrorMessage(error.toString());

@@ -1,16 +1,19 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Redirect, Switch, useLocation} from 'react-router-dom';
+import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
 import {AuthProvider} from 'react-oidc-context';
 import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
+import {toast} from 'react-toastify';
 
-import {WrongBrowser} from 'ui-kit';
+import {SystemWideError, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
+import {setApiResponseHandlers} from 'api/request';
+import {httpErrorCodes} from 'api/constants';
 
 // TODO: To be refactored
 import {ConfirmationDialogProvider} from '../_REFACTOR_/hooks/useConformationDialog';
@@ -25,14 +28,36 @@ import 'react-toastify/dist/ReactToastify.css';
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
-  const {isConfigReady} = configStore;
+  const {isConfigReady, isError: isErrorLoadingConfig} = configStore;
 
   const {pathname} = useLocation();
+  const history = useHistory();
   const {t} = useTranslation();
 
   useEffect(() => {
+    setApiResponseHandlers({
+      onError: (error) => {
+        const status = error.response?.status;
+        if (status === httpErrorCodes.MAINTENANCE) {
+          history.push({pathname: ROUTES.system.maintenance});
+        } else if (
+          status === httpErrorCodes.FORBIDDEN ||
+          status === httpErrorCodes.INTERNAL_SYSTEM_ERROR
+        ) {
+          toast.info(
+            <ToastContent
+              headerIconName="check"
+              title={String(error.response?.status || '')}
+              text={t('errors.somethingWentWrong')}
+              isCloseButton
+            />
+          );
+        }
+        throw error;
+      }
+    });
     initApplication();
-  }, [initApplication]);
+  }, [initApplication, history, t]);
 
   useEffect(() => {
     if (isConfigReady) {
@@ -40,18 +65,27 @@ const App: FC = () => {
     }
   }, [isConfigReady, mainStore]);
 
-  if (!isConfigReady) {
-    return <></>;
+  const isBrowserUnsupported = !isBrowserSupported();
+  useEffect(() => {
+    if (isBrowserUnsupported) {
+      history.push({pathname: ROUTES.system.wrongBrowser});
+    }
+  }, [isBrowserUnsupported, history]);
+
+  if (isErrorLoadingConfig && !isConfigReady) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <SystemWideError
+          text={t('errors.somethingWentWrongTryAgain')}
+          showRefreshButton
+          theme={themeStore.theme}
+        />
+      </ThemeProvider>
+    );
   }
 
-  if (!isBrowserSupported()) {
-    return (
-      <WrongBrowser
-        title={t('wrongBrowser.title')}
-        message={t('wrongBrowser.message')}
-        browserList={t('wrongBrowser.browserList')}
-      />
-    );
+  if (!isConfigReady) {
+    return <></>;
   }
 
   // PUBLIC ROUTES

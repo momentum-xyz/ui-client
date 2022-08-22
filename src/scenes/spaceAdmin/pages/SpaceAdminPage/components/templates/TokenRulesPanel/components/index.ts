@@ -1,2 +1,2 @@
-export * from './EditTokenRuleDialog';
-export * from './RemoveTokenRuleDialog';
+export * from './templates';
+export * from './organisms';
