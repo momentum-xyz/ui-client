@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {generatePath} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
@@ -60,6 +62,10 @@ const ScreenSharePage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onFlyAround={() => {
+          collaborationStore.setIsFlightStarting(true);
+          generatePath(ROUTES.meeting.flyAround, {spaceId: space.id});
+        }}
       >
         {videoTrack && space.isAdmin && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />

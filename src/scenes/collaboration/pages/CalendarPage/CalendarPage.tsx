@@ -3,7 +3,10 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
+import {generatePath} from 'react-router-dom';
+import {useHistory} from 'react-router';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {absoluteLink} from 'core/utils';
 import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
@@ -20,6 +23,7 @@ const CalendarPage: FC = () => {
   const {attendeesListStore} = widgetStore;
 
   const theme = useTheme();
+  const history = useHistory();
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
@@ -28,14 +32,11 @@ const CalendarPage: FC = () => {
   const handleEventForm = () => {
     formDialog.open();
   };
-  // TODO , move to Calendar world page
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (!space) {
-      return;
+    if (space) {
+      calendarStore.showMagicLink(space.id, eventId);
     }
-
-    calendarStore.showMagicLink(space.id, eventId);
   };
 
   const handleEventDelete = async () => {
@@ -86,6 +87,10 @@ const CalendarPage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChat={false}
+        onFlyAround={() => {
+          collaborationStore.setIsFlightStarting(true);
+          history.push(generatePath(ROUTES.meeting.flyAround, {spaceId: space.id}));
+        }}
       >
         {space.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />

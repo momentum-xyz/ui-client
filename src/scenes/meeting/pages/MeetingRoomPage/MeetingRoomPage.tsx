@@ -16,14 +16,15 @@ import {
 import * as styled from './MeetingRoomPage.styled';
 
 interface PropsInterface {
+  spaceId: string;
   isTable: boolean;
   isFlight: boolean;
 }
 
-const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
+const MeetingRoomPage: FC<PropsInterface> = ({spaceId, isTable, isFlight}) => {
   const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
   const {meetingRoomStore} = meetingStore;
-  const {space, stageModeStore} = collaborationStore;
+  const {stageModeStore} = collaborationStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 
@@ -43,9 +44,9 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
   return (
     <styled.Container data-testid="MeetingRoomPage-test">
       <styled.Inner>
-        {!!space?.id && (
+        {(isFlight || isTable) && (
           <JoinLeaveButtons
-            spaceId={space.id}
+            spaceId={spaceId}
             isJoinButtonShown={isFlight}
             isLeaveButtonShown={isTable || isFlight}
           />
@@ -92,8 +93,8 @@ const MeetingRoomPage: FC<PropsInterface> = ({isTable, isFlight}) => {
               : agoraMeetingStore.users.map((user) => (
                   <MeetingUser
                     key={user.uid}
-                    spaceId={space?.id || ''}
                     user={user}
+                    spaceId={spaceId}
                     isModerator={collaborationStore.isModerator}
                     maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
                     onMuteUser={agoraMeetingStore.muteRemoteUser}

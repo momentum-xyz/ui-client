@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {generatePath} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
@@ -72,6 +74,10 @@ const MiroBoardPage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onFlyAround={() => {
+          collaborationStore.setIsFlightStarting(true);
+          generatePath(ROUTES.meeting.flyAround, {spaceId: space.id});
+        }}
       >
         {space.isAdmin && !!miroBoard?.data?.accessLink && (
           <>

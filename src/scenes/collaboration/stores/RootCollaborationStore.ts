@@ -33,6 +33,7 @@ const RootCollaborationStore = types
       stageModeStore: types.optional(StageModeStore, {}),
       isModerator: false,
 
+      isFlightStarting: false,
       leftMeetingSpaceId: types.maybe(types.string),
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
@@ -100,6 +101,9 @@ const RootCollaborationStore = types
       self.leftMeetingTimer = setTimeout(() => {
         self.resetLeftMeetingSpace();
       }, 15000);
+    },
+    setIsFlightStarting(isFlightStarting: boolean): void {
+      self.isFlightStarting = isFlightStarting;
     },
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
       self.participantToRemoveFromStage = remoteUser;

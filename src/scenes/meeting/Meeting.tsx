@@ -19,7 +19,7 @@ interface PropsInterface {
 
 const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
   const rootStore = useStore();
-  const {mainStore, sessionStore, meetingStore} = rootStore;
+  const {mainStore, sessionStore, meetingStore, collaborationStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
@@ -28,7 +28,15 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
   const {t} = useTranslation();
 
   useEffect(() => {
+    collaborationStore.setIsFlightStarting(false);
+  }, [collaborationStore]);
+
+  useEffect(() => {
     const timeout = setTimeout(() => {
+      if (agoraStore.hasJoined) {
+        return;
+      }
+
       rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
         if (e instanceof PrivateSpaceError) {
           history.push(ROUTES.base);
@@ -47,9 +55,20 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
 
     return () => {
       clearTimeout(timeout);
-      rootStore.leaveMeetingSpace();
+      if (!collaborationStore.isFlightStarting) {
+        rootStore.leaveMeetingSpace();
+      }
     };
-  }, [history, isTable, rootStore, sessionStore.userId, spaceId, t]);
+  }, [
+    agoraStore,
+    collaborationStore,
+    history,
+    isTable,
+    rootStore,
+    sessionStore.userId,
+    spaceId,
+    t
+  ]);
 
   usePosBusEvent('meeting-mute', () => {
     userDevicesStore.mute();
@@ -106,7 +125,7 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
 
   return (
     <styled.Container>
-      <MeetingRoomPage isTable={isTable} isFlight={isFlight} />
+      <MeetingRoomPage spaceId={spaceId} isTable={isTable} isFlight={isFlight} />
     </styled.Container>
   );
 };

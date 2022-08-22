@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {generatePath} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
@@ -77,6 +79,10 @@ const GoogleDrivePage: FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         editSpaceHidden
+        onFlyAround={() => {
+          collaborationStore.setIsFlightStarting(true);
+          generatePath(ROUTES.meeting.flyAround, {spaceId: space.id});
+        }}
       >
         {space.isAdmin && !!googleDocument?.data?.url && (
           <>

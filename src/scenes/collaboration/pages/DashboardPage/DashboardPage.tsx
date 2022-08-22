@@ -1,7 +1,10 @@
 import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {generatePath} from 'react-router-dom';
+import {useHistory} from 'react-router';
 
+import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 
@@ -15,6 +18,7 @@ const DashboardPage: FC = () => {
   const {favoriteStore} = mainStore;
 
   const inviteRef = useRef<HTMLButtonElement>(null);
+  const history = useHistory();
 
   usePosBusEvent('user-vibed', (type, count) => {
     vibeStore.setCount(count);
@@ -54,6 +58,10 @@ const DashboardPage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onFlyAround={() => {
+          collaborationStore.setIsFlightStarting(true);
+          history.push(generatePath(ROUTES.meeting.flyAround, {spaceId: space.id}));
+        }}
       >
         <VibeButton
           onToggle={handleToggleVibe}
