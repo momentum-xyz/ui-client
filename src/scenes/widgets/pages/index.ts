@@ -4,8 +4,6 @@ export * from './HelpWidget';
 export * from './ProfileWidget';
 export * from './ProfileMenuWidget';
 export * from './WorldStatsWidget';
-export * from './TokenRulesWidget';
-export * from './TokenRuleReviewWidget';
 export * from './LaunchInitiativeWidget';
 export * from './MusicPlayerWidget';
 export * from './AttendeesWidget';

@@ -5,7 +5,6 @@ import {observer} from 'mobx-react-lite';
 
 import {PanelLayout, Text, PageTopBar} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {TokenRuleReviewWidget} from 'scenes/widgets/pages';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './SpaceAdminPage.styled';
@@ -23,14 +22,7 @@ const SpaceAdminPage: FC = () => {
   const history = useHistory();
   const {spaceAdminStore} = useStore();
   const {spaceManagerStore} = spaceAdminStore;
-  const {
-    tokenRuleReviewDialog,
-    space,
-    tokenRuleFormDialog,
-    tokenFormDialog,
-    tokenRuleReviewStore,
-    applyTokenRuleFormDialog
-  } = spaceManagerStore;
+  const {space, tokenRuleFormDialog, tokenFormDialog, applyTokenRuleFormDialog} = spaceManagerStore;
 
   const handleClose = () => {
     if (history.location.state?.canGoBack) {
@@ -67,12 +59,6 @@ const SpaceAdminPage: FC = () => {
           </styled.NoAccess>
         )}
       </styled.Body>
-      {tokenRuleReviewDialog.isOpen && (
-        <TokenRuleReviewWidget
-          tokenRuleReviewStore={tokenRuleReviewStore}
-          onClose={tokenRuleReviewDialog.close}
-        />
-      )}
       {tokenRuleFormDialog.isOpen && <TokenRuleForm />}
       {tokenFormDialog.isOpen && <TokenForm />}
       {applyTokenRuleFormDialog.isOpen && <ApplyTokenRuleForm />}

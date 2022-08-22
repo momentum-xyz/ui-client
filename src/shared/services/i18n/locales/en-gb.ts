@@ -340,7 +340,8 @@ export const enGb = {
       yourRequestWasDeclined: 'Your request was declined',
       youHaveBeenInvitedOnStage: 'You have been invited on stage',
       prepareToGoOnStage: 'Prepare to go on stage',
-      broadcastManage: 'Manage Broadcast'
+      broadcastManage: 'Manage Broadcast',
+      profile: 'Profile'
     },
     textMessage: {
       you: 'you',
