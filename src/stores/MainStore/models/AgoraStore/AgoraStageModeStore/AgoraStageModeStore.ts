@@ -154,7 +154,7 @@ const AgoraStageModeStore = types
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         yield self.client.subscribe(user, mediaType);
         screenShareStore.handleUserPublished(user, mediaType);
         return;
@@ -186,7 +186,7 @@ const AgoraStageModeStore = types
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         screenShareStore.handleUserUnpublished(user, mediaType);
         return;
       }
@@ -208,7 +208,7 @@ const AgoraStageModeStore = types
       }
     }),
     handleUserJoined(user: IAgoraRTCRemoteUser) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         return;
       }
 
@@ -226,7 +226,7 @@ const AgoraStageModeStore = types
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
-      if ((user?.uid as string).split('|')[0] === 'ss') {
+      if (String(user?.uid).split('|')[0] === 'ss') {
         return;
       }
 

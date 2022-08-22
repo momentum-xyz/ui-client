@@ -31,15 +31,15 @@ const AgoraScreenShareStore = types
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED')
     })
   )
-  .volatile<{client?: IAgoraRTCClient; _videoTrack?: IRemoteVideoTrack | ILocalVideoTrack}>(() => ({
+  .volatile<{client?: IAgoraRTCClient; _videoTrack?: IRemoteVideoTrack}>(() => ({
     client: undefined,
     _videoTrack: undefined
   }))
   .views((self) => ({
-    get videoTrack(): IRemoteVideoTrack | ILocalVideoTrack | undefined {
+    get videoTrack(): IRemoteVideoTrack | undefined {
       return self._videoTrack;
     },
-    set videoTrack(track: IRemoteVideoTrack | ILocalVideoTrack | undefined) {
+    set videoTrack(track: IRemoteVideoTrack | undefined) {
       self._videoTrack = track;
     }
   }))
@@ -77,11 +77,7 @@ const AgoraScreenShareStore = types
         );
         yield self.client.publish(screenTrack);
         screenTrack.on('track-ended', self.leave);
-
-        return screenTrack;
       }
-
-      return undefined;
     })
   }))
   .actions((self) => ({
@@ -106,11 +102,7 @@ const AgoraScreenShareStore = types
 
         const token = self.isStageMode ? `stage-${self.spaceId}` : self.spaceId;
         yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
-        const screenTrack = yield self.createScreenTrackAndPublish();
-
-        if (screenTrack) {
-          self.videoTrack = screenTrack;
-        }
+        yield self.createScreenTrackAndPublish();
       }
     }),
     stopScreenSharing() {
@@ -119,13 +111,13 @@ const AgoraScreenShareStore = types
       }
 
       self.videoTrack.stop();
-
-      // ILocalVideoTrack doesn't have close method
-      if ('close' in self.videoTrack) {
-        self.videoTrack.close();
-      }
-
       self.videoTrack = undefined;
+
+      self.client?.localTracks.forEach((track) => {
+        track.close();
+      });
+      self.client?.leave();
+      self.client = undefined;
     }
   }));
 
