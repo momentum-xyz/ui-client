@@ -16,9 +16,7 @@ interface PropsInterface {
 
 const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
   const theme = useTheme();
-  const {spaceAdminStore, sessionStore, widgetStore} = useStore();
-  const {spaceManagerStore} = spaceAdminStore;
-  const {space} = spaceManagerStore;
+  const {sessionStore, widgetStore} = useStore();
   const {profileMenuStore} = widgetStore;
   const {tokenRulesStore} = profileMenuStore;
   const {tokenRuleReviewStore} = tokenRulesStore;
@@ -107,23 +105,6 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
       tokenRuleReviewStore.resetModel();
     };
   }, []);
-
-  useEffect(() => {
-    if (
-      tokenRuleReviewStore.acceptTokenRuleRequest.isDone ||
-      tokenRuleReviewStore.declineTokenRuleRequest.isDone ||
-      tokenRuleReviewStore.deleteTokeRuleRequest.isDone
-    ) {
-      tokenRulesStore.fetchTokenRules(space?.id);
-    }
-  }, [
-    space,
-    tokenRuleReviewStore.acceptTokenRuleRequest.isDone,
-    tokenRuleReviewStore.declineTokenRuleRequest.isDone,
-    tokenRuleReviewStore.deleteTokeRuleRequest.isDone,
-    tokenRuleReviewStore.deleteTokeRuleRequest.state,
-    tokenRulesStore
-  ]);
 
   return (
     <Dialog

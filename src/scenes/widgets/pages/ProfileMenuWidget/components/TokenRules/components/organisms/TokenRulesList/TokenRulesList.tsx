@@ -6,13 +6,13 @@ import {TokenRuleListHeader, TokenRuleStatus} from 'core/enums';
 import {IconSvg} from 'ui-kit';
 import {TokenRuleItemModelInterface} from 'core/models';
 import {TokenRuleListHeaderType} from 'core/types';
-import {ColumnHeaderInterface} from 'core/interfaces';
+import {TokenRulesColumnHeaderInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './TokenRulesList.styled';
 
 interface PropsInterface {
-  columnHeaders: ColumnHeaderInterface[];
+  columnHeaders: TokenRulesColumnHeaderInterface[];
   onEventClick?: (tokenRule: TokenRuleItemModelInterface) => void;
 }
 

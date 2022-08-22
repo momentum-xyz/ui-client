@@ -1,6 +1,6 @@
 import {TokenRuleListHeaderType} from 'core/types';
 
-export interface ColumnHeaderInterface {
+export interface TokenRulesColumnHeaderInterface {
   key: TokenRuleListHeaderType;
   sortable: boolean;
   label?: string;

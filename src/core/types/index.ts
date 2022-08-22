@@ -10,4 +10,4 @@ export * from './stageMode.type';
 export * from './metadataField.type';
 export * from './Tile.type';
 export * from './TextMessage.type';
-export * from './tokenRules.type';
+export * from './tokenRuleListHeader.type';

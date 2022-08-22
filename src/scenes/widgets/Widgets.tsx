@@ -42,7 +42,6 @@ const Widgets: FC = () => {
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
-  const {profileMenuDialog, menuDialog} = profileMenuStore;
   const {profile: currentProfile, isGuest} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
@@ -67,11 +66,6 @@ const Widgets: FC = () => {
     }
 
     userDevicesStore.toggleCamera();
-  };
-
-  const handleOpenProfileMenu = () => {
-    profileMenuDialog.open();
-    menuDialog.open();
   };
 
   const mainToolbarIcons: ToolbarIconInterface[] = [
@@ -158,7 +152,7 @@ const Widgets: FC = () => {
           {/* Main toolbar icons */}
           <ToolbarIconList>
             {currentProfile?.profile && (
-              <ToolbarIcon title="Profile" onClick={handleOpenProfileMenu}>
+              <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
                 <Avatar
                   size="extra-small"
                   status={sessionStore.profile?.status}

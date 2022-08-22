@@ -14,22 +14,12 @@ const ProfileMenuStore = types.compose(
       profileMenuDialog: types.optional(DialogModel, {}),
       tokenRulesDialog: types.optional(DialogModel, {}),
       tokenRuleReviewStore: types.optional(TokenRuleReviewStore, {isWorldList: true}),
-      tokenRulesStore: types.optional(TokenRulesStore, {}),
-      isSetting: false,
-      isTokenRulesOpen: false
+      tokenRulesStore: types.optional(TokenRulesStore, {})
     })
     .actions((self) => ({
-      openSetting() {
-        self.isSetting = true;
-      },
-      closeSetting() {
-        self.isSetting = false;
-      },
-      openTokenRulesPanel() {
-        self.isTokenRulesOpen = true;
-      },
-      closeTokenRulesPanel() {
-        self.isTokenRulesOpen = false;
+      openProfileMenu() {
+        self.profileMenuDialog.open();
+        self.menuDialog.open();
       }
     }))
 );

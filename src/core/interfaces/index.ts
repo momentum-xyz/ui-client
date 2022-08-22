@@ -9,4 +9,4 @@ export * from './stageModePopupInfo.interface';
 export * from './stageModePopupOptions.interface';
 export * from './message.interface';
 export * from './coordination.interface';
-export * from './tokenRules.interface';
+export * from './tokenRulesColumnHeader.interface';
