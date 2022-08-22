@@ -48,7 +48,7 @@ const App: FC = () => {
             <ToastContent
               headerIconName="check"
               title={String(error.response?.status || '')}
-              text={t('somethingWentWrong')}
+              text={t('errors.somethingWentWrong')}
               isCloseButton
             />
           );
@@ -76,7 +76,7 @@ const App: FC = () => {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <SystemWideError
-          text={t('somethingWentWrongTryAgain')}
+          text={t('errors.somethingWentWrongTryAgain')}
           showRefreshButton
           theme={themeStore.theme}
         />

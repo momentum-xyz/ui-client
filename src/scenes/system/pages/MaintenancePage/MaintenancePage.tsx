@@ -8,7 +8,7 @@ const MaintenancePage: FC = () => {
   const theme = useTheme();
   const {t} = useTranslation();
   return (
-    <SystemWideError text={t('systemWideError.underMaintenance')} showRefreshButton theme={theme} />
+    <SystemWideError text={t('systemMessages.underMaintenance')} showRefreshButton theme={theme} />
   );
 };
 

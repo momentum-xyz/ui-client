@@ -10,7 +10,7 @@ const DisconnectedPage: FC = () => {
 
   return (
     <SystemWideError
-      text={[t('systemWideError.loadedInAnotherTab'), t('systemWideError.switchToThatTab')]}
+      text={[t('systemMessages.loadedInAnotherTab'), t('systemMessages.switchToThatTab')]}
       theme={theme}
     />
   );

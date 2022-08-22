@@ -6,14 +6,6 @@ export const enGb = {
       minutes: '{{minutes}} minutes',
       seconds: '{{seconds}} seconds'
     },
-    somethingWentWrong: 'Something went wrong',
-    somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
-    systemWideError: {
-      loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
-      switchToThatTab:
-        'To continue the experience, please switch to that window/tab and close this one',
-      underMaintenance: 'The server is undergoing maintenance, please try again later'
-    },
     staking: {
       rewardAccountError:
         'The selected destination account does not exist and cannot be used to receive rewards',
@@ -162,7 +154,15 @@ export const enGb = {
         'No {{name}} extension detected, please install {{name}} to continue here.',
       couldNotRemoveEvent: 'Could not remove the event.',
       endDateGraterThanStartDate: 'End date has to be grater than start date',
-      nameConstraints: 'Please enter a name with 2-32 characters'
+      nameConstraints: 'Please enter a name with 2-32 characters',
+      somethingWentWrong: 'Something went wrong',
+      somethingWentWrongTryAgain: 'Something went wrong. Please try again later.'
+    },
+    systemMessages: {
+      loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
+      switchToThatTab:
+        'To continue the experience, please switch to that window/tab and close this one',
+      underMaintenance: 'The server is undergoing maintenance, please try again later'
     },
     counts: {
       people_one: '{{count}} Person',
