@@ -1,9 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router';
 
 import {PageTopBar} from 'ui-kit';
-import {ROUTES} from 'core/constants';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import {RightSection} from './components';
@@ -20,7 +18,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   toggleIsSpaceFavorite: (spaceId: string) => void;
   isChat?: boolean;
   numberOfUnreadMessages?: number;
-  onFlyAround: () => void;
+  onLeave: () => void;
 }
 
 const SpaceTopBar: FC<PropsInterface> = ({
@@ -36,15 +34,13 @@ const SpaceTopBar: FC<PropsInterface> = ({
   children,
   isChat,
   numberOfUnreadMessages,
-  onFlyAround
+  onLeave
 }) => {
-  const history = useHistory();
-
   return (
     <PageTopBar
       title={title}
       subtitle={subtitle}
-      onClose={() => history.push(ROUTES.base)}
+      onClose={onLeave}
       actions={
         <>
           {!!spaceId && (
@@ -58,7 +54,6 @@ const SpaceTopBar: FC<PropsInterface> = ({
               toggleIsSpaceFavorite={toggleIsSpaceFavorite}
               isChat={isChat}
               numberOfUnreadMessages={numberOfUnreadMessages}
-              onFlyAround={onFlyAround}
             />
           )}
         </>

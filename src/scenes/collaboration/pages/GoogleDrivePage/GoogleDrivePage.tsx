@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {generatePath} from 'react-router-dom';
+import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
@@ -11,12 +11,13 @@ import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
 
 const GoogleDrivePage: FC = () => {
-  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
   const {space, googleDriveStore, textChatStore} = collaborationStore;
   const {googleDocument, documentTitle} = googleDriveStore;
   const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
+  const history = useHistory();
 
   usePosBusEvent('google-drive-file-change', (id) => {
     if (space?.id === id) {
@@ -79,9 +80,9 @@ const GoogleDrivePage: FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         editSpaceHidden
-        onFlyAround={() => {
-          collaborationStore.setIsFlightStarting(true);
-          generatePath(ROUTES.meeting.flyAround, {spaceId: space.id});
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
         }}
       >
         {space.isAdmin && !!googleDocument?.data?.url && (

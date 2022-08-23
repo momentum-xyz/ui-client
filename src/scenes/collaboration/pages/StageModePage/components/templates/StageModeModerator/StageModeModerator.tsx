@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
-import {generatePath} from 'react-router-dom';
 import {t} from 'i18next';
 
 import {
@@ -14,7 +13,6 @@ import {
   SpaceTopBar,
   TextChat
 } from 'ui-kit';
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';
@@ -26,7 +24,11 @@ import {
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
 
-const StageModeModerator: React.FC = () => {
+interface PropsInterface {
+  onLeaveMeeting: () => void;
+}
+
+const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
@@ -83,10 +85,7 @@ const StageModeModerator: React.FC = () => {
           toggleChat={textChatStore.textChatDialog.toggle}
           numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
           editSpaceHidden
-          onFlyAround={() => {
-            collaborationStore.setIsFlightStarting(true);
-            generatePath(ROUTES.meeting.flyAround, {spaceId: space.id});
-          }}
+          onLeave={onLeaveMeeting}
         >
           <styled.ActionsContainer>
             <styled.ToggleContainer>

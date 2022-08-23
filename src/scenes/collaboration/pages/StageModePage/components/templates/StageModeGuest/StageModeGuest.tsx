@@ -2,9 +2,7 @@ import {observer} from 'mobx-react-lite';
 import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {generatePath} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
 import {useStore, usePosBusEvent} from 'shared/hooks';
 import {ToastContent, Button, SpaceTopBar, Text, Stage, TextChat} from 'ui-kit';
 import {
@@ -14,7 +12,11 @@ import {
 
 import * as styled from './StageModeGuest.styled';
 
-const StageModeGuest: React.FC = () => {
+interface PropsInterface {
+  onLeaveMeeting: () => void;
+}
+
+const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
@@ -76,10 +78,7 @@ const StageModeGuest: React.FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onFlyAround={() => {
-          collaborationStore.setIsFlightStarting(true);
-          generatePath(ROUTES.meeting.flyAround, {spaceId: space.id});
-        }}
+        onLeave={onLeaveMeeting}
       >
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}

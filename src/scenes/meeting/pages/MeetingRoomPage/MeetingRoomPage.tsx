@@ -19,9 +19,10 @@ interface PropsInterface {
   spaceId: string;
   isTable: boolean;
   isFlight: boolean;
+  onLeave: () => void;
 }
 
-const MeetingRoomPage: FC<PropsInterface> = ({spaceId, isTable, isFlight}) => {
+const MeetingRoomPage: FC<PropsInterface> = ({spaceId, isTable, isFlight, onLeave}) => {
   const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
   const {meetingRoomStore} = meetingStore;
   const {stageModeStore} = collaborationStore;
@@ -49,6 +50,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({spaceId, isTable, isFlight}) => {
             spaceId={spaceId}
             isJoinButtonShown={isFlight}
             isLeaveButtonShown={isTable || isFlight}
+            onLeave={onLeave}
           />
         )}
 

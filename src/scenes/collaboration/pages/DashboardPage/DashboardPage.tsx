@@ -1,7 +1,6 @@
 import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {generatePath} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
@@ -12,7 +11,7 @@ import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} fr
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
-  const {collaborationStore, sessionStore, mainStore} = useStore();
+  const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {dashboardStore, space, textChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {favoriteStore} = mainStore;
@@ -58,9 +57,9 @@ const DashboardPage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
-        onFlyAround={() => {
-          collaborationStore.setIsFlightStarting(true);
-          history.push(generatePath(ROUTES.meeting.flyAround, {spaceId: space.id}));
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
         }}
       >
         <VibeButton

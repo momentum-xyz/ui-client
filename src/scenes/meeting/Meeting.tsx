@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
@@ -19,7 +19,7 @@ interface PropsInterface {
 
 const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
   const rootStore = useStore();
-  const {mainStore, sessionStore, meetingStore, collaborationStore} = rootStore;
+  const {mainStore, sessionStore, meetingStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
@@ -27,48 +27,34 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
   const history = useHistory();
   const {t} = useTranslation();
 
-  useEffect(() => {
-    collaborationStore.setIsFlightStarting(false);
-  }, [collaborationStore]);
+  const reJoinMeeting = useCallback(async () => {
+    if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
+      return;
+    }
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (agoraStore.hasJoined) {
-        return;
+    if (agoraStore.hasJoined && agoraStore.spaceId !== spaceId) {
+      await rootStore.leaveMeetingSpace();
+    }
+
+    rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
+      if (e instanceof PrivateSpaceError) {
+        history.push(ROUTES.base);
+        toast.error(
+          <ToastContent
+            isDanger
+            isCloseButton
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('collaboration.spaceIsPrivate')}
+          />
+        );
       }
+    });
+  }, [agoraStore, history, isTable, rootStore, spaceId, t]);
 
-      rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
-        if (e instanceof PrivateSpaceError) {
-          history.push(ROUTES.base);
-          toast.error(
-            <ToastContent
-              isDanger
-              isCloseButton
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('collaboration.spaceIsPrivate')}
-            />
-          );
-        }
-      });
-    }, 250);
-
-    return () => {
-      clearTimeout(timeout);
-      if (!collaborationStore.isFlightStarting) {
-        rootStore.leaveMeetingSpace();
-      }
-    };
-  }, [
-    agoraStore,
-    collaborationStore,
-    history,
-    isTable,
-    rootStore,
-    sessionStore.userId,
-    spaceId,
-    t
-  ]);
+  useEffect(() => {
+    reJoinMeeting().then();
+  }, [reJoinMeeting, spaceId]);
 
   usePosBusEvent('meeting-mute', () => {
     userDevicesStore.mute();
@@ -125,7 +111,15 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
 
   return (
     <styled.Container>
-      <MeetingRoomPage spaceId={spaceId} isTable={isTable} isFlight={isFlight} />
+      <MeetingRoomPage
+        spaceId={spaceId}
+        isTable={isTable}
+        isFlight={isFlight}
+        onLeave={async () => {
+          await rootStore.leaveMeetingSpace();
+          history.push(ROUTES.base);
+        }}
+      />
     </styled.Container>
   );
 };

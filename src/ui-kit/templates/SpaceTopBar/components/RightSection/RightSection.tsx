@@ -18,7 +18,6 @@ interface PropsInterface {
   numberOfUnreadMessages?: number;
   toggleIsSpaceFavorite: (spaceId: string) => void;
   toggleChat?: () => void;
-  onFlyAround: () => void;
 }
 
 const RightSection: FC<PropsInterface> = ({
@@ -30,8 +29,7 @@ const RightSection: FC<PropsInterface> = ({
   isChat = true,
   numberOfUnreadMessages = 0,
   toggleIsSpaceFavorite,
-  toggleChat,
-  onFlyAround
+  toggleChat
 }) => {
   return (
     <>
@@ -74,7 +72,7 @@ const RightSection: FC<PropsInterface> = ({
         icon="fly-to"
         isWhite={false}
         title={t('tooltipTitles.flyAround')}
-        onClick={onFlyAround}
+        link={generatePath(ROUTES.meeting.flyAround, {spaceId})}
       />
     </>
   );

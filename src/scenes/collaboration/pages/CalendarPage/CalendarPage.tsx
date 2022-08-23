@@ -3,7 +3,6 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
-import {generatePath} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
@@ -15,8 +14,7 @@ import {DeleteEventConfirmationDialog, EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const rootStore = useStore();
-  const {collaborationStore, sessionStore, widgetStore, mainStore} = rootStore;
+  const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, space} = collaborationStore;
   const {favoriteStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
@@ -87,9 +85,9 @@ const CalendarPage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChat={false}
-        onFlyAround={() => {
-          collaborationStore.setIsFlightStarting(true);
-          history.push(generatePath(ROUTES.meeting.flyAround, {spaceId: space.id}));
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
         }}
       >
         {space.isAdmin && (

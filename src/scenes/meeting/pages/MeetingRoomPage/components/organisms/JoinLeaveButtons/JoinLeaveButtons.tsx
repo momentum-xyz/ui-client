@@ -11,10 +11,11 @@ interface PropsInterface {
   spaceId: string;
   isJoinButtonShown?: boolean;
   isLeaveButtonShown?: boolean;
+  onLeave: () => void;
 }
 
 const JoinLeaveButtons: FC<PropsInterface> = (props) => {
-  const {spaceId, isJoinButtonShown, isLeaveButtonShown} = props;
+  const {spaceId, isJoinButtonShown, isLeaveButtonShown, onLeave} = props;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -41,9 +42,7 @@ const JoinLeaveButtons: FC<PropsInterface> = (props) => {
           variant="danger-background"
           label={t('actions.leave')}
           icon="leave"
-          onClick={() => {
-            history.push(ROUTES.base);
-          }}
+          onClick={onLeave}
         />
       )}
     </styled.Container>

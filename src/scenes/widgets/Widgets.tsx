@@ -114,7 +114,7 @@ const Widgets: FC = () => {
       />
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
-          <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
+          {/*<ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />*/}
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>
