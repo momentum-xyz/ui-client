@@ -16,8 +16,8 @@ export const Footer = styled.footer`
   position: fixed;
   bottom: 0;
   z-index: var(--overlay-z-index);
-  width: calc(100% - 40px);
-  margin: 0 20px 10px;
+  width: 100%;
+  padding: 0 10px 10px 20px;
 `;
 
 export const EmojiBar = styled.div`

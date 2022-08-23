@@ -9,6 +9,8 @@ import {Widgets} from 'scenes/widgets';
 
 import LiveStreamLayer from '../_REFACTOR_/component/overlays/LiveStreamLayer';
 
+import {Meeting} from './meeting';
+
 const AppLayers: FC = ({children}) => {
   const {unityStore} = useStore().mainStore;
 
@@ -23,6 +25,7 @@ const AppLayers: FC = ({children}) => {
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
       <main id="main">
         <div className="main-content">{children}</div>
+        <Meeting />
       </main>
       <Widgets />
       <LiveStreamLayer />

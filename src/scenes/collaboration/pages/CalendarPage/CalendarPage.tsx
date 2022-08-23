@@ -3,7 +3,9 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
+import {useHistory} from 'react-router';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {absoluteLink} from 'core/utils';
 import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
@@ -12,14 +14,14 @@ import {DeleteEventConfirmationDialog, EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const rootStore = useStore();
-  const {collaborationStore, sessionStore, widgetStore, mainStore} = rootStore;
+  const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, space} = collaborationStore;
   const {favoriteStore} = mainStore;
   const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
   const theme = useTheme();
+  const history = useHistory();
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
@@ -28,14 +30,11 @@ const CalendarPage: FC = () => {
   const handleEventForm = () => {
     formDialog.open();
   };
-  // TODO , move to Calendar world page
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (!space) {
-      return;
+    if (space) {
+      calendarStore.showMagicLink(space.id, eventId);
     }
-
-    calendarStore.showMagicLink(space.id, eventId);
   };
 
   const handleEventDelete = async () => {
@@ -86,6 +85,10 @@ const CalendarPage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChat={false}
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
+        }}
       >
         {space.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />

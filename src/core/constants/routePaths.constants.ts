@@ -16,10 +16,7 @@ export const ROUTES = {
     maintenance: '/system/maintenance',
     wrongBrowser: '/system/wrongBrowser'
   },
-  meeting: {
-    grabTable: '/meeting/:spaceId/table',
-    flyAround: '/meeting/:spaceId/fly'
-  },
+  grabTable: '/:spaceId/table',
   collaboration: {
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,

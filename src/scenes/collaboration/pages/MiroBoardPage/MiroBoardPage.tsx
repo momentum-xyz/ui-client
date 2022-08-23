@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router';
 
+import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
@@ -13,12 +15,13 @@ import * as styled from './MiroBoardPage.styled';
 import 'core/utils/boardsPicker.1.0.js';
 
 const MiroBoardPage: FC = () => {
-  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
   const {space, miroBoardStore, textChatStore} = collaborationStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
   const {favoriteStore} = mainStore;
 
   const {t} = useTranslation();
+  const history = useHistory();
 
   usePosBusEvent('miro-board-change', (id) => {
     if (space?.id === id) {
@@ -72,6 +75,10 @@ const MiroBoardPage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
+        }}
       >
         {space.isAdmin && !!miroBoard?.data?.accessLink && (
           <>

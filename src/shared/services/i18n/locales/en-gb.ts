@@ -173,6 +173,7 @@ export const enGb = {
       vibes_other: '{{count}}  vibes'
     },
     labels: {
+      home: 'Home',
       miro: 'Miro',
       googleDrive: 'Google Drive',
       screenShare: 'Screenshare',

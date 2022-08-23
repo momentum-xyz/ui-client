@@ -80,18 +80,18 @@ const RootCollaborationStore = types
 
       self.isModerator = isModerator;
     }),
-    async leaveMeetingSpace() {
+    leaveMeetingSpace: flow(function* () {
       if (!self.space?.isTable) {
         self.leftMeetingSpaceId = self.space?.id;
       }
 
-      await self.textChatStore.leaveChannel();
-      await self.textChatStore.logOut();
+      yield self.textChatStore.leaveChannel();
+      yield self.textChatStore.logOut();
       self.textChatStore.resetModel();
 
       if (!!self.space && self.space.isAdmin) {
-        await self.miroBoardStore.disableMiroBoard(self.space.id);
-        await self.googleDriveStore.disableGoogleDocument(self.space.id);
+        yield self.miroBoardStore.disableMiroBoard(self.space.id);
+        yield self.googleDriveStore.disableGoogleDocument(self.space.id);
       }
 
       self.space = undefined;
@@ -100,7 +100,7 @@ const RootCollaborationStore = types
       self.leftMeetingTimer = setTimeout(() => {
         self.resetLeftMeetingSpace();
       }, 15000);
-    },
+    }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
       self.participantToRemoveFromStage = remoteUser;
       self.removeParticipantFromStageDialog.open();

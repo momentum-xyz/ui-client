@@ -20,7 +20,7 @@ import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
 import {MagicPage} from './magic/pages';
 import {VideoPage} from './video/pages';
-import {Meeting} from './meeting';
+import {GrabTablePage} from './grabTable';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -112,30 +112,11 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.collaboration.base,
     renderBackground: true,
-    main: () => (
-      <>
-        <Collaboration />
-        <Meeting />
-      </>
-    )
+    main: () => <Collaboration />
   },
   {
-    path: ROUTES.meeting.grabTable,
-    main: () => (
-      <>
-        <HomePage isTable />
-        <Meeting isTable />
-      </>
-    )
-  },
-  {
-    path: ROUTES.meeting.flyAround,
-    main: () => (
-      <>
-        <HomePage isFlight />
-        <Meeting isFlight />
-      </>
-    )
+    path: ROUTES.grabTable,
+    main: () => <GrabTablePage />
   },
   {
     path: ROUTES.magic,

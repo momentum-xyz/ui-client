@@ -1,8 +1,9 @@
 import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router';
+import {useTranslation} from 'react-i18next';
 import ReactHowler from 'react-howler';
-import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -26,7 +27,7 @@ import * as styled from './Widgets.styled';
 import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore} = useStore();
+  const {sessionStore, mainStore, widgetStore, leaveMeetingSpace} = useStore();
   const {worldStore, agoraStore} = mainStore;
   const {agoraStageModeStore, agoraMeetingStore} = agoraStore;
   const {
@@ -48,7 +49,9 @@ const Widgets: FC = () => {
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
+  const {t} = useTranslation();
   const location = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
@@ -121,7 +124,18 @@ const Widgets: FC = () => {
       />
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
-          <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
+          <ToolbarIcon
+            icon="home"
+            size="large"
+            title={t('labels.home')}
+            isWhite={false}
+            onClick={async () => {
+              if (agoraStore.hasJoined) {
+                await leaveMeetingSpace();
+              }
+              history.push(ROUTES.base);
+            }}
+          />
           <ToolbarIcon
             icon="smiley-face"
             title="React"

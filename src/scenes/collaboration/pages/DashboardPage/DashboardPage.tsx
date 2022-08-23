@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {useHistory} from 'react-router';
 
+import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
 
@@ -9,12 +11,13 @@ import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} fr
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
-  const {collaborationStore, sessionStore, mainStore} = useStore();
+  const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {dashboardStore, space, textChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {favoriteStore} = mainStore;
 
   const inviteRef = useRef<HTMLButtonElement>(null);
+  const history = useHistory();
 
   usePosBusEvent('user-vibed', (type, count) => {
     vibeStore.setCount(count);
@@ -54,6 +57,10 @@ const DashboardPage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
+        }}
       >
         <VibeButton
           onToggle={handleToggleVibe}
