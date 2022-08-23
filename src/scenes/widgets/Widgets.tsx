@@ -27,7 +27,7 @@ import {AvatarForm} from './pages/ProfileWidget/components';
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {agoraStageModeStore, agoraMeetingStore} = agoraStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -130,7 +130,9 @@ const Widgets: FC = () => {
               onClick={toggleCameraOn}
               disabled={
                 userDevicesStore.isTogglingCamera ||
-                (agoraStore.isStageMode && !agoraStageModeStore.isOnStage)
+                !(agoraStore.isStageMode
+                  ? agoraStageModeStore.isOnStage
+                  : !!agoraMeetingStore.spaceId)
               }
             />
             <ToolbarIcon
@@ -145,7 +147,9 @@ const Widgets: FC = () => {
               onClick={toggleMute}
               disabled={
                 userDevicesStore.isTogglingMicrophone ||
-                (agoraStore.isStageMode && !agoraStageModeStore.isOnStage)
+                !(agoraStore.isStageMode
+                  ? agoraStageModeStore.isOnStage
+                  : !!agoraMeetingStore.spaceId)
               }
             />
           </ToolbarIconList>
