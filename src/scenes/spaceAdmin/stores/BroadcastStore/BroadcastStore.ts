@@ -15,9 +15,9 @@ const BroadcastStore = types.compose(
       broadcast: types.maybe(Integration),
       isYoutubeHash: false,
       isBroadcast: false,
-      broadcastStatus: '',
-      youtubeHash: '',
-      youtubeUrl: ''
+      broadcastStatus: types.maybe(types.string),
+      youtubeHash: types.maybe(types.string),
+      youtubeUrl: types.maybe(types.string)
     })
     .actions((self) => ({
       fetchBroadcast: flow(function* (spaceId: string) {
@@ -66,6 +66,11 @@ const BroadcastStore = types.compose(
           self.youtubeHash = '';
           self.isYoutubeHash = false;
         }
+      },
+      setBroadcast(broadcast: BroadcastInterface) {
+        self.youtubeHash = broadcast.url;
+        self.broadcastStatus = broadcast.broadcastStatus;
+        self.youtubeUrl = broadcast.youtubeUrl;
       }
     }))
 );

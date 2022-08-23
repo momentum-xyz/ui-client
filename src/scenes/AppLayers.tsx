@@ -7,8 +7,6 @@ import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {Widgets} from 'scenes/widgets';
 
-import LiveStreamLayer from '../_REFACTOR_/component/overlays/LiveStreamLayer';
-
 const AppLayers: FC = ({children}) => {
   const {unityStore} = useStore().mainStore;
 
@@ -25,7 +23,6 @@ const AppLayers: FC = ({children}) => {
         <div className="main-content">{children}</div>
       </main>
       <Widgets />
-      <LiveStreamLayer />
     </div>
   );
 };

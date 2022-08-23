@@ -6,7 +6,12 @@ import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {useStore, usePosBusEvent, useDeviceChange} from 'shared/hooks';
-import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
+import {
+  BroadcastStatusEnum,
+  PosBusEventEnum,
+  StageModeRequestEnum,
+  StageModeStatusEnum
+} from 'core/enums';
 import {createRoutesByConfig} from 'core/utils';
 import {
   Navigation,
@@ -15,6 +20,7 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
+import {BroadcastInterface} from 'api';
 
 import {
   AcceptedToJoinStageDialog,
@@ -26,7 +32,7 @@ import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes'
 import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
-  const {collaborationStore, mainStore, sessionStore} = useStore();
+  const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = useStore();
   const {unityStore, agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
@@ -39,11 +45,16 @@ const Collaboration: FC = () => {
     countdownDialog,
     textChatStore
   } = collaborationStore;
+  const {broadcastStore} = spaceAdminStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
   const [accepted, setAccepted] = useState<boolean>();
+
+  useEffect(() => {
+    broadcastStore.fetchBroadcast(spaceId);
+  }, [broadcastStore]);
 
   useEffect(() => {
     textChatStore.countUnreadMessages();
@@ -191,6 +202,15 @@ const Collaboration: FC = () => {
     }
   });
 
+  usePosBusEvent('broadcast', (broadcast: BroadcastInterface) => {
+    broadcastStore.setBroadcast(broadcast);
+    if (broadcast.broadcastStatus === BroadcastStatusEnum.PLAY) {
+      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId}));
+    } else {
+      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+    }
+  });
+
   usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
     const showStageIsFull = await agoraStore.toggledStageMode(
       sessionStore.userId,
@@ -247,7 +267,8 @@ const Collaboration: FC = () => {
         tabs={buildNavigationTabs(
           spaceId,
           agoraStore.isStageMode,
-          !!agoraScreenShareStore.videoTrack
+          !!agoraScreenShareStore.videoTrack,
+          broadcastStore.broadcastStatus === BroadcastStatusEnum.PLAY
         )}
       />
 

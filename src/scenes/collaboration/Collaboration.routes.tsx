@@ -10,7 +10,8 @@ import {
   StageModePage,
   MiroBoardPage,
   ScreenSharePage,
-  GoogleDrivePage
+  GoogleDrivePage,
+  LiveStreamPage
 } from './pages';
 
 export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
@@ -46,6 +47,10 @@ export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
     main: () => <GoogleDrivePage />
   },
   {
+    path: ROUTES.collaboration.liveStream,
+    main: () => <LiveStreamPage />
+  },
+  {
     path: ROUTES.collaboration.base,
     exact: true,
     main: () => <Redirect to={ROUTES.collaboration.dashboard} />
@@ -55,7 +60,8 @@ export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
 export const buildNavigationTabs = (
   spaceId: string,
   isStageMode: boolean,
-  isScreenSharing: boolean
+  isScreenSharing: boolean,
+  isLiveStreaming?: boolean
 ): NavigationTabInterface[] => {
   return [
     {
@@ -83,6 +89,12 @@ export const buildNavigationTabs = (
     {
       path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
       iconName: 'drive'
+    },
+    {
+      path: generatePath(ROUTES.collaboration.liveStream, {spaceId}),
+      iconName: 'live',
+      isHide: !isLiveStreaming,
+      isActive: isLiveStreaming
     }
   ];
 };

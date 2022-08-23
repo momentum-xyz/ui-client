@@ -14,6 +14,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   replace?: boolean;
   state?: object;
   isActive?: boolean;
+  isHide?: boolean;
 }
 
 const NavigationBarItem: FC<PropsInterface> = ({
@@ -23,12 +24,14 @@ const NavigationBarItem: FC<PropsInterface> = ({
   exact = false,
   replace = false,
   isActive = false,
+  isHide = false,
   state
 }) => {
   const [hovered, setHovered] = useState(false);
 
   return (
     <styled.Item
+      className={cn(isHide && 'isHide')}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       theme={theme}
