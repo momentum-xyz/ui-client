@@ -66,6 +66,12 @@ export interface GoogleDocumentInterface {
   url: string;
 }
 
+export interface BroadcastInterface {
+  url?: string;
+  youtubeUrl?: string;
+  broadcastStatus?: BroadcastStatusEnum;
+}
+
 /** FETCH CURRENT INTEGRATION **/
 
 export interface FetchIntegrationRequest {
@@ -108,3 +114,20 @@ export interface DisableGoogleDriveIntegrationRequest {
 }
 
 export interface DisableGoogleDriveIntegrationResponse extends IntegrationInterface {}
+
+/** ENABLE BROADCAST INTEGRATION **/
+
+export interface EnableBroadcastIntegrationRequest {
+  spaceId: string;
+  data: BroadcastInterface;
+}
+
+export interface EnableBroadcastIntegrationResponse {}
+
+/** DISABLE BROADCAST INTEGRATION **/
+
+export interface DisableBroadcastIntegrationRequest {
+  spaceId: string;
+}
+
+export interface DisableBroadcastIntegrationResponse extends IntegrationInterface {}
