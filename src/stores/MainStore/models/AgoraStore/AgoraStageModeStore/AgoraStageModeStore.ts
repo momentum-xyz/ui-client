@@ -164,17 +164,14 @@ const AgoraStageModeStore = types
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
+      yield self.client.subscribe(user, mediaType);
+
       if (String(user?.uid).split('|')[0] === 'ss') {
-        yield self.client.subscribe(user, mediaType);
         screenShareStore.handleUserPublished(user, mediaType);
         return;
       }
 
-      if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
-        yield self.client.subscribe(user, mediaType);
-      }
-
-      if (user.hasAudio && mediaType === 'audio') {
+      if (mediaType === 'audio') {
         user.audioTrack?.play();
       }
 
@@ -191,7 +188,7 @@ const AgoraStageModeStore = types
         }
       }
     }),
-    handleUserUnpublished: flow(function* (
+    handleUserUnpublished(
       screenShareStore: AgoraScreenShareStoreInterface,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
@@ -208,15 +205,13 @@ const AgoraStageModeStore = types
           foundUser.audioTrack?.stop();
         }
 
-        yield self.client.unsubscribe(foundUser.participantInfo, mediaType);
-
         if (mediaType === 'audio') {
           foundUser.isMuted = true;
         } else {
           foundUser.cameraOff = true;
         }
       }
-    }),
+    },
     handleUserJoined(user: IAgoraRTCRemoteUser) {
       if (String(user?.uid).split('|')[0] === 'ss') {
         return;
