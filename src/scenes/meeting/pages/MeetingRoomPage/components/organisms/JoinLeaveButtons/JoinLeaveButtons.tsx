@@ -10,18 +10,14 @@ import * as styled from './JoinLeaveButtons.styled';
 interface PropsInterface {
   spaceId: string;
   isJoinButtonShown?: boolean;
-  isLeaveButtonShown?: boolean;
+  onLeave: () => void;
 }
 
 const JoinLeaveButtons: FC<PropsInterface> = (props) => {
-  const {spaceId, isJoinButtonShown, isLeaveButtonShown} = props;
+  const {spaceId, isJoinButtonShown, onLeave} = props;
 
   const {t} = useTranslation();
   const history = useHistory();
-
-  if (!isJoinButtonShown && !isLeaveButtonShown) {
-    return <></>;
-  }
 
   return (
     <styled.Container data-testid="JoinLeaveButtons-test">
@@ -36,16 +32,12 @@ const JoinLeaveButtons: FC<PropsInterface> = (props) => {
         />
       )}
 
-      {isLeaveButtonShown && (
-        <styled.ActionButton
-          variant="danger-background"
-          label={t('actions.leave')}
-          icon="leave"
-          onClick={() => {
-            history.push(ROUTES.base);
-          }}
-        />
-      )}
+      <styled.ActionButton
+        variant="danger-background"
+        label={t('actions.leave')}
+        icon="leave"
+        onClick={onLeave}
+      />
     </styled.Container>
   );
 };

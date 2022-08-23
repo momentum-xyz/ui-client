@@ -12,7 +12,11 @@ import {
 
 import * as styled from './StageModeGuest.styled';
 
-const StageModeGuest: React.FC = () => {
+interface PropsInterface {
+  onLeaveMeeting: () => void;
+}
+
+const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
@@ -74,6 +78,7 @@ const StageModeGuest: React.FC = () => {
         toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onLeave={onLeaveMeeting}
       >
         <styled.Actions>
           {agoraStore.isStageMode && <StageModeStats />}

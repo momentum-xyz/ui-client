@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
@@ -9,7 +11,7 @@ import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenSharePage.styled';
 
 const ScreenSharePage: FC = () => {
-  const {mainStore, sessionStore, collaborationStore} = useStore();
+  const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
   const {space, screenShareStore, textChatStore} = collaborationStore;
   const {isSettingUp, screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
@@ -17,6 +19,7 @@ const ScreenSharePage: FC = () => {
   const {videoTrack} = agoraScreenShareStore;
 
   const {t} = useTranslation();
+  const history = useHistory();
 
   useEffect(() => {
     if (videoTrack) {
@@ -55,6 +58,10 @@ const ScreenSharePage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
+        }}
       >
         {videoTrack && space.isAdmin && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />

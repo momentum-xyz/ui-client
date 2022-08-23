@@ -81,7 +81,7 @@ const UnityPage: FC = () => {
     };
 
     const handleJoinTable = () => {
-      history.push({pathname: generatePath(ROUTES.meeting.grabTable, {spaceId})});
+      history.push({pathname: generatePath(ROUTES.grabTable, {spaceId})});
     };
 
     toast.info(
