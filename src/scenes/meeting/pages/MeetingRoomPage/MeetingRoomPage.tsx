@@ -1,8 +1,9 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {matchPath, useLocation} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
-import {Loader} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 
 import {
   PeopleCount,
@@ -16,40 +17,28 @@ import {
 import * as styled from './MeetingRoomPage.styled';
 
 interface PropsInterface {
-  spaceId: string;
-  isTable: boolean;
-  isFlight: boolean;
   onLeave: () => void;
 }
 
-const MeetingRoomPage: FC<PropsInterface> = ({spaceId, isTable, isFlight, onLeave}) => {
+const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
   const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
   const {meetingRoomStore} = meetingStore;
-  const {stageModeStore} = collaborationStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 
-  useEffect(() => {
-    stageModeStore.removeAllPopups();
-    meetingStore.setKicked(false);
-  }, [stageModeStore, meetingStore]);
+  const location = useLocation();
 
   if (!agoraStore.hasJoined) {
-    return (
-      <styled.Loader>
-        <Loader />
-      </styled.Loader>
-    );
+    return <></>;
   }
 
   return (
     <styled.Container data-testid="MeetingRoomPage-test">
       <styled.Inner>
-        {(isFlight || isTable) && (
+        {!matchPath(location.pathname, {path: ROUTES.collaboration.base}) && (
           <JoinLeaveButtons
-            spaceId={spaceId}
-            isJoinButtonShown={isFlight}
-            isLeaveButtonShown={isTable || isFlight}
+            spaceId={agoraStore.spaceId || ''}
+            isJoinButtonShown={!collaborationStore.space?.isTable}
             onLeave={onLeave}
           />
         )}
@@ -96,7 +85,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({spaceId, isTable, isFlight, onLeav
                   <MeetingUser
                     key={user.uid}
                     user={user}
-                    spaceId={spaceId}
+                    spaceId={agoraStore.spaceId || ''}
                     isModerator={collaborationStore.isModerator}
                     maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
                     onMuteUser={agoraMeetingStore.muteRemoteUser}

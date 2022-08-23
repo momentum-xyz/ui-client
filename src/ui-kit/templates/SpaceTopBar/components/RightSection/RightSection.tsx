@@ -72,7 +72,7 @@ const RightSection: FC<PropsInterface> = ({
         icon="fly-to"
         isWhite={false}
         title={t('tooltipTitles.flyAround')}
-        link={generatePath(ROUTES.meeting.flyAround, {spaceId})}
+        link={generatePath(ROUTES.base, {spaceId})}
       />
     </>
   );
