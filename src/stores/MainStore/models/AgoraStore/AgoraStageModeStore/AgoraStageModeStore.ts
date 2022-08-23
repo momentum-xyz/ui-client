@@ -374,16 +374,18 @@ const AgoraStageModeStore = types
           deviceId: string,
           isTrackEnabled: boolean
         ) => Promise<ICameraVideoTrack | undefined>
-      ) => void
+      ) => Promise<void>
     ) {
       yield self.client.setClientRole('host');
-      createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
+      yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.isOnStage = true;
     }),
     leaveStage: flow(function* () {
+      // TODO: Disable camera and mic in the footer (dis)
       self.client.localTracks.forEach((localTrack) => {
         localTrack.setEnabled(false);
         localTrack.stop();
+        localTrack.close();
       });
 
       yield self.client.unpublish();

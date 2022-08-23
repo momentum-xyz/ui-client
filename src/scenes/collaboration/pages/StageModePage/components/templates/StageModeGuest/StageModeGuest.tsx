@@ -15,7 +15,7 @@ import * as styled from './StageModeGuest.styled';
 const StageModeGuest: React.FC = () => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore;
   const {textChatStore, space} = collaborationStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     collaborationStore.stageModeStore;
@@ -84,7 +84,12 @@ const StageModeGuest: React.FC = () => {
               <Button
                 label={t('actions.leaveStage')}
                 variant="danger"
-                onClick={agoraStageModeStore.leaveStage}
+                onClick={async () => {
+                  await userDevicesStore.mute();
+                  await userDevicesStore.turnOffCamera();
+
+                  await agoraStageModeStore.leaveStage();
+                }}
               />
             ) : (
               <Button
