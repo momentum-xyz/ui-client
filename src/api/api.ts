@@ -19,6 +19,15 @@ import * as statusRepository from './repositories/statusRepository';
 import * as playlistRepository from './repositories/playlistRepository';
 import * as communicationRepository from './repositories/communicationRepository';
 import * as attendeesRepository from './repositories/attendeesRepository';
+import * as emojiRepository from './repositories/emojiRepository';
+
+// import * as dashboardRepository from './repositories/dashboardRepository';
+// import * as integrationRepository from './repositories/integrationRepository';
+// import * as resourcesRepository from './repositories/resourcesRepository';
+// import * as agoraRepository from './repositories/agoraRepository';
+// import * as spaceIntegrationsRepository from './repositories/spaceIntegrationsRepository';
+// import * as vibeRepository from './repositories/vibeRepository';
+// import * as textChatRepository from './repositories/textChatRepository';
 
 /**
  * This layer is responsible for:
@@ -51,7 +60,18 @@ export const api = {
   statusRepository,
   playlistRepository,
   communicationRepository,
-  attendeesRepository
+  attendeesRepository,
+
+  // meetingRepository,
+  // attendeesRepository,
+  // dashboardRepository,
+  // agoraRepository,
+  // spaceIntegrationsRepository,
+  // integrationRepository,
+  // resourcesRepository,
+  // vibeRepository,
+  // textChatRepository,
+  emojiRepository
 };
 
 /**
@@ -74,4 +94,15 @@ export * from './repositories/favoriteRepository/favoriteRepository.api.types';
 export * from './repositories/tokenRepository/tokenRepository.api.types';
 export * from './repositories/statsRepository/statsRepository.api.types';
 export * from './repositories/playlistRepository/playlistRepository.api.types';
+// <<<<<<< HEAD
 export * from './repositories/communicationRepository/communicationRepository.api.types';
+// =======
+// export * from './repositories/meetingRepository/meetingRepository.api.types';
+// export * from './repositories/dashboardRepository/dashboardRepository.api.types';
+// export * from './repositories/integrationRepository/integrationRepository.api.types';
+// export * from './repositories/resourcesRepository/resourcesRepository.types';
+// export * from './repositories/spaceTypeRepository/spaceTypeRepository.api.types';
+// export * from './repositories/vibeRepository/vibeRepository.api.types';
+// export * from './repositories/textChatRepository/textChatRepository.api.types';
+export * from './repositories/emojiRepository/emojiRepository.api.types';
+// >>>>>>> 9a3adf5 (feature(emoji): squashed commit of all related changes)

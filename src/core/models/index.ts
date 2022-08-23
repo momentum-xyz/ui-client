@@ -17,3 +17,9 @@ export * from './UserModel';
 export * from './TrackModel';
 export * from './AttendeeModel';
 export * from './UserSpaceDetails';
+
+// export * from './Integration';
+// export * from './AgoraRemoteUser';
+// export * from './StageModeUser';
+// export * from './OnlineUsersList';
+export * from './EmojiDetails';

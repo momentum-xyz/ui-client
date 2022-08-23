@@ -1,9 +1,13 @@
 import {UnityContext} from 'react-unity-webgl';
 
 import {EventEmitter} from 'core/utils';
+import {UNITY_TARGET_TYPE} from 'core/constants/unity.constants';
+// import { PosBusEmojiMessageType } from 'core/types/posBusMessage.type';
 
 import {useUnityStore} from '../../store/unityStore';
 import {Position} from '../type/Position';
+
+import {PosBusEmojiMessageType} from './types';
 
 export type UnityEvents = {
   MomentumLoaded: () => void;
@@ -15,6 +19,8 @@ export type UnityEvents = {
   PlasmaClickEvent: (id: string) => void;
   ProfileClickEvent: (id: string, position: Position) => void;
   Error: (message: string) => void;
+  emoji: (message: PosBusEmojiMessageType) => void;
+  megamoji: (url: string) => void;
 };
 
 export enum PosBusInteractionType {
@@ -63,7 +69,15 @@ interface UnityAPI {
   getCurrentWorld(): string;
   getUserPosition(): string;
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
+  relayMessage(topic: string, json: string): any;
 }
+
+// import {getUnityPosition} from 'core/utils';
+// import {UnityEventEmitter, UNITY_TARGET_TYPE} from 'core/constants';
+// import {UnityApiInterface} from 'core/interfaces';
+// import {PosBusService} from 'shared/services';
+// import {PosBusEventEnum} from 'core/enums';
+// import {PosBusEmojiMessageType} from 'core/types';
 
 export class UnityService {
   unityApi?: UnityAPI;
@@ -164,6 +178,14 @@ export class UnityService {
     });
   }
 
+  handleIncomingEmoji(message: PosBusEmojiMessageType) {
+    UnityEventEmitter.emit('emoji', message);
+  }
+
+  handleIncomingMegamoji(message: PosBusEmojiMessageType) {
+    UnityEventEmitter.emit('megamoji', message.url);
+  }
+
   setAuthToken(token?: string) {
     this.unityApi?.setToken(token);
   }
@@ -193,6 +215,47 @@ export class UnityService {
     const muted = useUnityStore.getState().muted;
     this.unityApi?.controlSound(!muted);
     useUnityStore.setState({muted: !muted});
+  }
+
+  sendEmoji({
+    emojiUrl,
+    emojiId,
+    userUUID,
+    userAvatarSrc,
+    userName,
+    targetType = UNITY_TARGET_TYPE.USER
+  }: {
+    emojiId: string;
+    emojiUrl: string;
+    userUUID: string;
+    userAvatarSrc: string;
+    userName: string;
+    targetType?: UNITY_TARGET_TYPE;
+  }) {
+    try {
+      console.log('SEND EMOJI:', {
+        targetType,
+        userUUID,
+        userAvatarSrc,
+        userName,
+        emojiUrl,
+        emojiId
+      });
+      console.log('unityAPI', this.unityApi);
+      const topic = 'emoji';
+
+      const data: PosBusEmojiMessageType = {
+        targetType,
+        targetID: userUUID,
+        urlAvatar: userAvatarSrc,
+        nickname: userName,
+        url: emojiUrl,
+        emojiID: emojiId
+      };
+      this.unityApi?.relayMessage(topic, JSON.stringify(data));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   lookAtWisp(userId: string) {

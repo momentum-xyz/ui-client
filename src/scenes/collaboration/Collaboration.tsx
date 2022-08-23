@@ -22,6 +22,17 @@ import {ROUTES} from 'core/constants';
 import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
 import {PRIVATE_ROUTES} from './CollaborationRoutes';
+// =======
+// import {
+//   AcceptedToJoinStageDialog,
+//   DeclinedToJoinStageDialog,
+//   InvitedOnStageDialog,
+//   PrepareOnStageDialog
+// } from './pages/StageModePage/components';
+import {EmojiAnimationDock} from './components';
+// import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
+import * as styled from './Collaboration.styled';
+// >>>>>>> 9a3adf5 (feature(emoji): squashed commit of all related changes)
 
 interface Props {}
 
@@ -170,6 +181,10 @@ const Collaboration: React.FC<Props> = () => {
           deviceLabel={newDevice?.label}
         />
       </Modal>
+
+      <styled.BottomCenteredDock>
+        <EmojiAnimationDock />
+      </styled.BottomCenteredDock>
     </>
   );
 };
