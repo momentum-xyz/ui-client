@@ -178,6 +178,7 @@ export const enGb = {
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       calendar: 'World Calendar',
+      emoji: 'EMOJI',
       staking: 'Staking',
       minimap: 'Minimap',
       musicPlayer: 'Music Player',
