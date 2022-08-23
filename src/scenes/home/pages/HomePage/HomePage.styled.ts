@@ -5,13 +5,8 @@ export const Container = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  margin: 0 20px;
-  padding-top: 20px;
+  padding: 10px 10px 0 10px;
   pointer-events: none;
-
-  &.hasJoined {
-    margin: 0 calc(var(--meeting-size) + 12px) 0 20px;
-  }
 `;
 
 export const PanelWrapper = styled.div`
@@ -21,5 +16,6 @@ export const PanelWrapper = styled.div`
 
 export const Rejoin = styled.div`
   position: absolute;
-  right: 245px;
+  right: 222px;
+  top: 12px;
 `;
