@@ -60,7 +60,7 @@ const Setting: FC = () => {
               value={userDevicesStore.currentVideoInput?.deviceId}
               options={userDevicesStore.videoInputsOption}
               onOptionSelect={(option) => {
-                userDevicesStore.selectVideoInput(option.value);
+                agoraStore.selectVideoInput(option.value);
               }}
               dropdownSize="small"
             />
@@ -81,7 +81,7 @@ const Setting: FC = () => {
               value={userDevicesStore.currentAudioInput?.deviceId}
               options={userDevicesStore.audioInputOptions}
               onOptionSelect={(option) => {
-                userDevicesStore.selectAudioInput(option.value);
+                agoraStore.selectAudioInput(option.value);
               }}
               dropdownSize="small"
             />

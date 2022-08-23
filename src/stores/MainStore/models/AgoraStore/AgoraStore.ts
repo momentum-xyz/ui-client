@@ -79,9 +79,10 @@ const AgoraStore = types
 
       const status: SpaceIntegrationsStageModeResponse = yield self.getStageModeStatus(spaceId);
 
-      const isStageMode = status.data?.stageModeStatus === 'initiated';
+      self.isStageMode = status.data?.stageModeStatus === 'initiated';
+      self.setupAgoraListeners();
 
-      if (isStageMode) {
+      if (self.isStageMode) {
         if (self.agoraMeetingStore.joined) {
           self.userDevicesStore.cleanupLocalTracks();
           self.agoraScreenShareStore.leave();
@@ -128,9 +129,7 @@ const AgoraStore = types
         self.spaceId = spaceId;
       }
 
-      self.isStageMode = isStageMode;
-      self.agoraScreenShareStore.init(self.appId, isStageMode, self.spaceId);
-      self.setupAgoraListeners();
+      self.agoraScreenShareStore.init(self.appId, self.isStageMode, self.spaceId);
     }),
     leaveMeetingSpace: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
@@ -194,6 +193,36 @@ const AgoraStore = types
       self.currentUserToggledStageMode = false;
       return false;
     })
+  }))
+  .actions((self) => ({
+    selectAudioInput(deviceId: string) {
+      self.userDevicesStore.selectAudioInput(deviceId);
+
+      self.userDevicesStore.localAudioTrack?.stop();
+      self.userDevicesStore.localAudioTrack?.close();
+
+      const store = self.isStageMode ? self.agoraStageModeStore : self.agoraMeetingStore;
+
+      if (self.userDevicesStore.localAudioTrack) {
+        store.client.unpublish(self.userDevicesStore.localAudioTrack);
+      }
+
+      self.userDevicesStore.createLocalAudioTrack(store.createAudioTrackAndPublish);
+    },
+    selectVideoInput(deviceId: string) {
+      self.userDevicesStore.selectVideoInput(deviceId);
+
+      self.userDevicesStore.localVideoTrack?.stop();
+      self.userDevicesStore.localVideoTrack?.close();
+
+      const store = self.isStageMode ? self.agoraStageModeStore : self.agoraMeetingStore;
+
+      if (self.userDevicesStore.localVideoTrack) {
+        store.client.unpublish(self.userDevicesStore.localVideoTrack);
+      }
+
+      self.userDevicesStore.createLocalVideoTrack(store.createVideoTrackAndPublish);
+    }
   }))
   .views((self) => ({
     get hasJoined(): boolean {

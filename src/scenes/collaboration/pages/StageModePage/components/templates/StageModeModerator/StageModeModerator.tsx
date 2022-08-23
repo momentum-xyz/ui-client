@@ -63,9 +63,11 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
   }, [agoraStageModeStore, userDevicesStore.createLocalTracks]);
 
-  const handleLeaveStage = useCallback(() => {
-    agoraStageModeStore.leaveStage();
-  }, [agoraStageModeStore]);
+  const handleLeaveStage = useCallback(async () => {
+    await userDevicesStore.mute();
+    await userDevicesStore.turnOffCamera();
+    await agoraStageModeStore.leaveStage();
+  }, [agoraStageModeStore, userDevicesStore]);
 
   if (!space) {
     return null;

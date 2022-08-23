@@ -19,7 +19,7 @@ interface PropsInterface {
 const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore;
   const {textChatStore, space} = collaborationStore;
   const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
     collaborationStore.stageModeStore;
@@ -89,7 +89,12 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               <Button
                 label={t('actions.leaveStage')}
                 variant="danger"
-                onClick={agoraStageModeStore.leaveStage}
+                onClick={async () => {
+                  await userDevicesStore.mute();
+                  await userDevicesStore.turnOffCamera();
+
+                  await agoraStageModeStore.leaveStage();
+                }}
               />
             ) : (
               <Button

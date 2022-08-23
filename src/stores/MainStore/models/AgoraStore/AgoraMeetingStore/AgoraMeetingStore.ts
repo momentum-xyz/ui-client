@@ -228,11 +228,11 @@ const AgoraMeetingStore = types
           deviceId: string,
           isTrackEnabled: boolean
         ) => Promise<ICameraVideoTrack | undefined>
-      ) => void
+      ) => Promise<void>
     ) {
       const tokenResponse = yield self.getAgoraToken(spaceId);
       self.userId = yield self.client.join(self.appId, spaceId, tokenResponse, authStateSubject);
-      createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
+      yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.spaceId = spaceId;
     }),
     leave: flow(function* () {
