@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
-import {RequestModel, ResetModel} from 'core/models';
+import {DialogModel, RequestModel, ResetModel} from 'core/models';
 import {api, BroadcastInterface, LiveStreamInterface} from 'api';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
 import {youtubeVideoPath} from 'core/utils';
@@ -9,6 +9,8 @@ const BroadcastStore = types.compose(
   ResetModel,
   types
     .model('BroadcastStore', {
+      countdownDialog: types.optional(DialogModel, {}),
+      stopBroadcastingDialog: types.optional(DialogModel, {}),
       enableRequest: types.optional(RequestModel, {}),
       disableRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {}),
@@ -28,6 +30,8 @@ const BroadcastStore = types.compose(
 
         if (response) {
           self.broadcast = cast(response.data);
+          self.previewHash = response.data.url;
+          self.isYoutubeHash = true;
         }
       }),
       enableBroadcast: flow(function* (spaceId: string) {

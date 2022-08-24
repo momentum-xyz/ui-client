@@ -1,19 +1,16 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import YouTube from 'react-youtube';
-import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
-import {Button, SectionPanel, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {Button, SectionPanel} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {BroadcastStatusEnum} from 'core/enums';
 
 import * as styled from './BroadcastPreviewPanel.styled';
 
 const BroadcastPreviewPanel: FC = () => {
   const {spaceAdminStore} = useStore();
-  const {broadcastStore, spaceManagerStore} = spaceAdminStore;
-  const {space} = spaceManagerStore;
+  const {broadcastStore} = spaceAdminStore;
 
   const {t} = useTranslation();
 
@@ -21,58 +18,6 @@ const BroadcastPreviewPanel: FC = () => {
     playerVars: {
       autoplay: 1,
       mute: 0
-    }
-  };
-
-  const handleStartBroadcasting = async () => {
-    const success = await broadcastStore.enableBroadcast(space?.id ?? '');
-    if (success) {
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('broadcastAdmin.enableSuccess')}
-          isCloseButton
-        />,
-        TOAST_COMMON_OPTIONS
-      );
-    } else {
-      toast.error(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('broadcastAdmin.enableError')}
-          isDanger
-          isCloseButton
-        />,
-        TOAST_COMMON_OPTIONS
-      );
-    }
-  };
-
-  const handleStopBroadcasting = async () => {
-    const success = await broadcastStore.disableBroadcast(space?.id ?? '');
-    if (success) {
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('broadcastAdmin.disableSuccess')}
-          isCloseButton
-        />,
-        TOAST_COMMON_OPTIONS
-      );
-    } else {
-      toast.error(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('broadcastAdmin.disableError')}
-          isDanger
-          isCloseButton
-        />,
-        TOAST_COMMON_OPTIONS
-      );
     }
   };
 
@@ -93,13 +38,13 @@ const BroadcastPreviewPanel: FC = () => {
           {broadcastStore.isYoutubeHash && !broadcastStore.isStreaming ? (
             <Button
               label={t('broadcastAdmin.broadcastStart')}
-              onClick={handleStartBroadcasting}
+              onClick={broadcastStore.countdownDialog.open}
               variant="primary"
             />
-          ) : BroadcastStatusEnum.PLAY === broadcastStore.broadcast.broadcastStatus ? (
+          ) : broadcastStore.isStreaming ? (
             <Button
               label={t('broadcastAdmin.broadcastStop')}
-              onClick={handleStopBroadcasting}
+              onClick={broadcastStore.stopBroadcastingDialog.open}
               variant="danger"
             />
           ) : (
