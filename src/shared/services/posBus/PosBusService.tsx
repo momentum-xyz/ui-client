@@ -9,7 +9,9 @@ import {
   PosBusGatheringMessageType,
   PosBusStageModeMessageType,
   PosBusCollaborationMessageType,
-  PosBusCommunicationMessageType
+  PosBusCommunicationMessageType,
+  PosBusEmojiMessageType,
+  PosBusMegamojiMessageType
 } from 'core/types';
 
 class PosBusService {
@@ -94,6 +96,14 @@ class PosBusService {
     PosBusEventEmitter.emit('high-five', message.senderId, message.message);
   }
 
+  static handleIncomingEmoji(message: PosBusEmojiMessageType) {
+    PosBusEventEmitter.emit('emoji', message.url, message.targetID, message.emojiID);
+  }
+
+  static handleIncomingMegamoji(message: PosBusMegamojiMessageType) {
+    PosBusEventEmitter.emit('megamoji', message.url);
+  }
+
   static handleNotifyGathering(message: PosBusGatheringMessageType) {
     PosBusEventEmitter.emit('notify-gathering-start', message);
   }
@@ -137,6 +147,12 @@ class PosBusService {
         break;
       case 'high5':
         this.handleIncomingHigh5(message as PosBusHigh5MessageType);
+        break;
+      case 'emoji':
+        this.handleIncomingEmoji(message as PosBusEmojiMessageType);
+        break;
+      case 'megamoji':
+        this.handleIncomingMegamoji(message as PosBusMegamojiMessageType);
         break;
       case 'posbus':
         this.handlePosBusMessage(message as PosBusMessageStatusType);

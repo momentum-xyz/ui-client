@@ -57,6 +57,18 @@ export type PosBusHigh5MessageType = {
   message: string;
 };
 
+export type PosBusEmojiMessageType = {
+  targetType: number;
+  targetID: string;
+  url: string;
+  emojiID: string;
+};
+
+export type PosBusMegamojiMessageType = {
+  targetType: number;
+  url: string;
+};
+
 export type PosBusCommunicationKickType = {
   action: 'kick';
   spaceId: string;

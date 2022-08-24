@@ -26,6 +26,8 @@ export type PosBusEventType = {
   'user-vibed': (type: string, count: number) => void;
   'high-five': (senderId: string, message: string) => void;
   'high-five-sent': (message: string) => void;
+  emoji: (emojiUrl: string, userId: string, emojiId: string) => void;
+  megamoji: (emojiUrl: string) => void;
   'simple-notification': (message: string) => void;
   'space-invite': (
     spaceId: string,
