@@ -42,7 +42,7 @@ const LiveStreamPage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {broadcastStore.broadcastStatus === BroadcastStatusEnum.PLAY && space.isAdmin && (
+        {broadcastStore.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY && space.isAdmin && (
           <Button
             label={t('liveStream.stopStream')}
             variant="danger"

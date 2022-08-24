@@ -35,7 +35,7 @@ const BroadcastFormPanel: FC = () => {
     <SectionPanel title={t('broadcastAdmin.formTitle')} isCustom>
       <styled.Body data-testid="BroadcastFormPanel-test">
         <styled.DescriptionBox>
-          <Text text={t('broadcastAdmin.formTitle')} size="m" align="left" isMultiline />
+          <Text text={t('broadcastAdmin.formDescription')} size="m" align="left" isMultiline />
         </styled.DescriptionBox>
         <styled.InstructionBox>
           <Text text={t('broadcastAdmin.formInstruction')} size="m" align="left" />

@@ -2,9 +2,10 @@ import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import {useHistory} from 'react-router';
 
-import {useStore} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 import {PageTopBar, PanelLayout, Text} from 'ui-kit';
 import {ROUTES} from 'core/constants';
+import {LiveStreamInterface} from 'api';
 
 import * as styled from './BroadcastPage.styled';
 import {BroadcastFormPanel, BroadcastPreviewPanel} from './components';
@@ -32,6 +33,10 @@ const BroadcastPage: FC = () => {
       history.push(ROUTES.base);
     }
   };
+
+  usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
+    broadcastStore.setBroadcast(broadcast);
+  });
 
   if (!space) {
     return null;

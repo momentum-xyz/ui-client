@@ -83,6 +83,10 @@ const BroadcastStore = types.compose(
       },
       setBroadcast(broadcast: LiveStreamInterface) {
         self.broadcast = cast(broadcast);
+        if (broadcast.broadcastStatus === BroadcastStatusEnum.STOP) {
+          self.previewHash = '';
+          self.isYoutubeHash = false;
+        }
       }
     }))
 );
