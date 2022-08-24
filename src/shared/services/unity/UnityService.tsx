@@ -1,7 +1,7 @@
 import {UnityContext} from 'react-unity-webgl';
 
 import {getUnityPosition} from 'core/utils';
-import {UnityEventEmitter} from 'core/constants';
+import {UnityEventEmitter, UNITY_TARGET_TYPE} from 'core/constants';
 import {UnityApiInterface} from 'core/interfaces';
 import {PosBusService} from 'shared/services';
 import {PosBusEventEnum} from 'core/enums';
@@ -149,12 +149,12 @@ export class UnityService {
     emojiUrl,
     emojiId,
     userUUID,
-    targetType = 'user'
+    targetType = UNITY_TARGET_TYPE.USER
   }: {
     emojiId: string;
     emojiUrl: string;
     userUUID: string;
-    targetType?: string;
+    targetType?: UNITY_TARGET_TYPE;
   }) {
     try {
       console.log('SEND EMOJI:', {targetType, userUUID, emojiUrl, emojiId});
