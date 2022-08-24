@@ -90,6 +90,8 @@ const AgoraStore = types
 
       self.isStageMode = status.data?.stageModeStatus === 'initiated';
       self.setupAgoraListeners();
+      self.userDevicesStore.mute();
+      self.userDevicesStore.turnOffCamera();
 
       if (self.isStageMode) {
         if (self.agoraMeetingStore.joined) {
