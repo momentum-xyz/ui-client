@@ -24,8 +24,8 @@ const RootMeetingStore = types.compose(
         self.spaceId = spaceId;
         self.isTable = isTable;
         self.isKicked = false;
-        self.lastSpaceId = null;
 
+        this.cleanLastSpace();
         clearTimeout(self.lastSpaceTimer);
       },
       leave(isKicked = false): void {
@@ -33,13 +33,16 @@ const RootMeetingStore = types.compose(
           self.lastSpaceId = self.spaceId;
 
           self.lastSpaceTimer = setTimeout(() => {
-            self.lastSpaceId = null;
+            this.cleanLastSpace();
           }, LAST_SPACE_TIMER_MS);
         }
 
         self.spaceId = null;
         self.isTable = false;
         self.isKicked = false;
+      },
+      cleanLastSpace(): void {
+        self.lastSpaceId = null;
       }
     }))
     .views((self) => ({
