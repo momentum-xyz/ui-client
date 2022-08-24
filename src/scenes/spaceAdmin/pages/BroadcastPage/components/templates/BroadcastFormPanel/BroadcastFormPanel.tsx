@@ -52,8 +52,8 @@ const BroadcastFormPanel: FC = () => {
                   onChange={onChange}
                   label="youtube video url"
                   placeholder={YOUTUBE_URL_PLACEHOLDER}
-                  isError={!!errors.youtubeUrl}
-                  errorMessage={errors.youtubeUrl?.message}
+                  isError={!!errors.youtubeUrl || !broadcastStore.previewHash}
+                  errorMessage="Please enter a valid Youtube URL"
                 />
               )}
               rules={{

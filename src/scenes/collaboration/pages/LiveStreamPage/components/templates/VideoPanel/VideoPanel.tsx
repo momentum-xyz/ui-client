@@ -10,20 +10,13 @@ const VideoPanel: FC = () => {
   const {spaceAdminStore} = useStore();
   const {broadcastStore} = spaceAdminStore;
 
-  const opts = {
-    playerVars: {
-      autoplay: 1,
-      mute: 0
-    }
-  };
-
   return (
     <styled.Wrapper data-testid="VideoPanel-test">
       <YouTube
-        videoId={broadcastStore.youtubeHash}
+        videoId={broadcastStore.broadcast.url}
         className="youtube"
         iframeClassName="youtubeIframe"
-        opts={opts}
+        opts={broadcastStore.opts}
       />
     </styled.Wrapper>
   );

@@ -20,7 +20,7 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
-import {BroadcastInterface} from 'api';
+import {LiveStreamInterface} from 'api';
 
 import {
   AcceptedToJoinStageDialog,
@@ -54,7 +54,7 @@ const Collaboration: FC = () => {
 
   useEffect(() => {
     broadcastStore.fetchBroadcast(spaceId);
-  }, [broadcastStore]);
+  }, [broadcastStore, spaceId]);
 
   useEffect(() => {
     textChatStore.countUnreadMessages();
@@ -202,8 +202,9 @@ const Collaboration: FC = () => {
     }
   });
 
-  usePosBusEvent('broadcast', (broadcast: BroadcastInterface) => {
+  usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
     broadcastStore.setBroadcast(broadcast);
+
     if (broadcast.broadcastStatus === BroadcastStatusEnum.PLAY) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId}));
     } else {
@@ -268,7 +269,7 @@ const Collaboration: FC = () => {
           spaceId,
           agoraStore.isStageMode,
           !!agoraScreenShareStore.videoTrack,
-          broadcastStore.broadcastStatus === BroadcastStatusEnum.PLAY
+          broadcastStore.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY
         )}
       />
 

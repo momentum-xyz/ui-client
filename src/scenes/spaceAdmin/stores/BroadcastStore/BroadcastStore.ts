@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
-import {Integration, RequestModel, ResetModel} from 'core/models';
-import {api, BroadcastInterface} from 'api';
+import {RequestModel, ResetModel} from 'core/models';
+import {api, BroadcastInterface, LiveStreamInterface} from 'api';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
 import {youtubeVideoPath} from 'core/utils';
 
@@ -12,13 +12,21 @@ const BroadcastStore = types.compose(
       enableRequest: types.optional(RequestModel, {}),
       disableRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {}),
-      broadcast: types.maybe(Integration),
+      broadcast: types.optional(types.frozen<BroadcastInterface>(), {}),
       isYoutubeHash: false,
       isBroadcast: false,
       broadcastStatus: types.maybe(types.string),
-      youtubeHash: types.maybe(types.string),
+      previewHash: types.maybe(types.string),
       youtubeUrl: types.maybe(types.string)
     })
+    .volatile(() => ({
+      opts: {
+        playerVars: {
+          autoplay: 1,
+          mute: 0
+        }
+      }
+    }))
     .actions((self) => ({
       fetchBroadcast: flow(function* (spaceId: string) {
         const response = yield self.fetchRequest.send(api.integrationRepository.fetchIntegration, {
@@ -27,50 +35,54 @@ const BroadcastStore = types.compose(
         });
 
         if (response) {
-          self.broadcast = cast(response);
-
-          self.broadcastStatus = response.data.broadcastStatus;
-          self.youtubeHash = response.data.url;
-          self.youtubeUrl = response.data.youtubeUrl;
+          self.broadcast = cast(response.data);
         }
       }),
       enableBroadcast: flow(function* (spaceId: string) {
-        yield self.enableRequest.send(api.integrationRepository.enableBroadcastIntegration, {
-          spaceId: spaceId,
-          data: {
-            broadcastStatus: BroadcastStatusEnum.PLAY,
-            url: self.youtubeHash,
-            youtubeUrl: self.youtubeUrl
+        const response = yield self.enableRequest.send(
+          api.integrationRepository.enableBroadcastIntegration,
+          {
+            spaceId: spaceId,
+            data: {
+              broadcastStatus: BroadcastStatusEnum.PLAY,
+              url: self.previewHash,
+              youtubeUrl: self.youtubeUrl
+            }
           }
-        });
-        self.broadcastStatus = BroadcastStatusEnum.PLAY;
+        );
+        if (response) {
+          self.broadcast = cast(response.data);
+        }
         return self.enableRequest.isDone;
       }),
       disableBroadcast: flow(function* (spaceId: string) {
-        yield self.disableRequest.send(api.integrationRepository.disableBroadcastIntegration, {
-          spaceId: spaceId
-        });
-        self.broadcastStatus = BroadcastStatusEnum.STOP;
-        self.youtubeHash = '';
-        self.youtubeUrl = '';
-        self.isYoutubeHash = false;
+        const response = yield self.disableRequest.send(
+          api.integrationRepository.disableBroadcastIntegration,
+          {
+            spaceId: spaceId
+          }
+        );
+        if (response) {
+          self.broadcast = cast(response.data);
+          self.previewHash = '';
+          self.isYoutubeHash = false;
+        }
+
         return self.disableRequest.isDone;
       }),
       setBroadcastPreview(preview: BroadcastInterface) {
         const hash = youtubeVideoPath(preview?.youtubeUrl ?? '', undefined);
         if (hash && preview.youtubeUrl) {
-          self.youtubeHash = hash;
+          self.previewHash = hash;
           self.youtubeUrl = preview.youtubeUrl;
           self.isYoutubeHash = true;
         } else {
-          self.youtubeHash = '';
+          self.previewHash = '';
           self.isYoutubeHash = false;
         }
       },
-      setBroadcast(broadcast: BroadcastInterface) {
-        self.youtubeHash = broadcast.url;
-        self.broadcastStatus = broadcast.broadcastStatus;
-        self.youtubeUrl = broadcast.youtubeUrl;
+      setBroadcast(broadcast: LiveStreamInterface) {
+        self.broadcast = cast(broadcast);
       }
     }))
 );

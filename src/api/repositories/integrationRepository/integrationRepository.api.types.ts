@@ -72,6 +72,15 @@ export interface BroadcastInterface {
   broadcastStatus?: BroadcastStatusEnum;
 }
 
+export interface LiveStreamInterface {
+  broadcastStatus: BroadcastStatusEnum;
+  url: string;
+  users: string[];
+  youtubeUrl: string;
+  spaceId?: string;
+  spaceName?: string;
+}
+
 /** FETCH CURRENT INTEGRATION **/
 
 export interface FetchIntegrationRequest {
