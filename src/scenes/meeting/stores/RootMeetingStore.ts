@@ -20,7 +20,7 @@ const RootMeetingStore = types.compose(
       lastSpaceTimer: setTimeout(() => {}, 0)
     }))
     .actions((self) => ({
-      joinMeeting(spaceId: string, isTable: boolean): void {
+      join(spaceId: string, isTable: boolean): void {
         self.spaceId = spaceId;
         self.isTable = isTable;
         self.isKicked = false;
@@ -28,7 +28,7 @@ const RootMeetingStore = types.compose(
 
         clearTimeout(self.lastSpaceTimer);
       },
-      leaveMeeting(isKicked = false): void {
+      leave(isKicked = false): void {
         if (!isKicked && !self.isTable) {
           self.lastSpaceId = self.spaceId;
 

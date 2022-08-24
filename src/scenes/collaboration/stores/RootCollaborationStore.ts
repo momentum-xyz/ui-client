@@ -57,7 +57,7 @@ const RootCollaborationStore = types
     initBroadcast(spaceId: string): void {
       self.liveStreamStore.fetchBroadcast(spaceId);
     },
-    joinMeeting: flow(function* (spaceId: string, isTable = false) {
+    join: flow(function* (spaceId: string, isTable = false) {
       self.space = Space.create({id: spaceId, isTable});
 
       if (!(yield self.space?.canUserJoin(spaceId))) {
@@ -71,7 +71,7 @@ const RootCollaborationStore = types
         {spaceId}
       );
     }),
-    leaveMeeting: flow(function* () {
+    leave: flow(function* () {
       if (!self.space?.isTable) {
         yield self.textChatStore.leaveChannel();
         yield self.textChatStore.logOut();

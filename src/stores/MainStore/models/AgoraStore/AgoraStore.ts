@@ -75,7 +75,7 @@ const AgoraStore = types
   }))
   // Meeting space managment
   .actions((self) => ({
-    joinMeeting: flow(function* (authStateSubject: string, spaceId?: string, isToggling = false) {
+    join: flow(function* (authStateSubject: string, spaceId?: string, isToggling = false) {
       if (!isToggling) {
         self.init();
         self.agoraStageModeStore.init(self.appId);
@@ -137,7 +137,7 @@ const AgoraStore = types
 
       self.agoraScreenShareStore.init(self.appId, self.isStageMode, self.spaceId);
     }),
-    leaveMeeting: flow(function* () {
+    leave: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
       self.cleanupAgoraListeners();
 
@@ -179,7 +179,7 @@ const AgoraStore = types
       }
     }),
     toggledStageMode: flow(function* (user: string, isModerator = true) {
-      yield self.joinMeeting(user, undefined, true);
+      yield self.join(user, undefined, true);
 
       self.isTogglingStageMode = false;
 

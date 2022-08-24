@@ -49,9 +49,9 @@ const RootStore = types
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       console.log('---JOINING---');
 
-      yield self.collaborationStore.joinMeeting(spaceId, isTable);
-      yield self.mainStore.agoraStore.joinMeeting(self.sessionStore.userId, spaceId);
-      self.meetingStore.joinMeeting(spaceId, isTable);
+      yield self.collaborationStore.join(spaceId, isTable);
+      yield self.mainStore.agoraStore.join(self.sessionStore.userId, spaceId);
+      self.meetingStore.join(spaceId, isTable);
 
       self.mainStore.unityStore.triggerInteractionMessage(
         PosBusEventEnum.EnteredSpace,
@@ -67,9 +67,9 @@ const RootStore = types
 
       const spaceId = self.collaborationStore.space?.id || '';
 
-      yield self.mainStore.agoraStore.leaveMeeting();
-      yield self.collaborationStore.leaveMeeting();
-      self.meetingStore.leaveMeeting(isKicked);
+      yield self.mainStore.agoraStore.leave();
+      yield self.collaborationStore.leave();
+      self.meetingStore.leave(isKicked);
 
       self.mainStore.unityStore.triggerInteractionMessage(
         PosBusEventEnum.LeftSpace,
