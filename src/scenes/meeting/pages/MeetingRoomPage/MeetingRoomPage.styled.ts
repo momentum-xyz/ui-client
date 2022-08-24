@@ -1,17 +1,12 @@
 import styled from 'styled-components';
 
-export const Loader = styled.div`
-  padding: 0 6px;
-  width: var(--meeting-size);
-`;
-
 export const Container = styled.div`
   margin: 0;
   height: 100%;
 `;
 
 export const Inner = styled.div`
-  padding: 0 6px;
+  padding: 0 10px 0 0;
   display: flex;
   align-items: end;
   flex-direction: column;

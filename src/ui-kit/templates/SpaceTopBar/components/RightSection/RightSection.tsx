@@ -14,10 +14,10 @@ interface PropsInterface {
   editSpaceHidden?: boolean;
   isSpaceFavorite: boolean;
   isChatOpen?: boolean;
-  toggleIsSpaceFavorite: (spaceId: string) => void;
-  toggleChat?: () => void;
   isChat?: boolean;
   numberOfUnreadMessages?: number;
+  toggleIsSpaceFavorite: (spaceId: string) => void;
+  toggleChat?: () => void;
 }
 
 const RightSection: FC<PropsInterface> = ({
@@ -26,10 +26,10 @@ const RightSection: FC<PropsInterface> = ({
   isAdmin,
   isSpaceFavorite,
   isChatOpen,
-  toggleIsSpaceFavorite,
   isChat = true,
-  toggleChat,
-  numberOfUnreadMessages = 0
+  numberOfUnreadMessages = 0,
+  toggleIsSpaceFavorite,
+  toggleChat
 }) => {
   return (
     <>
@@ -72,7 +72,7 @@ const RightSection: FC<PropsInterface> = ({
         icon="fly-to"
         isWhite={false}
         title={t('tooltipTitles.flyAround')}
-        link={generatePath(ROUTES.meeting.flyAround, {spaceId})}
+        link={generatePath(ROUTES.base, {spaceId})}
       />
     </>
   );

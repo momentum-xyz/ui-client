@@ -23,11 +23,7 @@ const SKIPPED_ROUTES: RouteConfigInterface[] = [
 
 const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
   {
-    path: ROUTES.meeting.grabTable,
-    main: () => <></>
-  },
-  {
-    path: ROUTES.meeting.flyAround,
+    path: ROUTES.grabTable,
     main: () => <></>
   }
 ];

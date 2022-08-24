@@ -7,6 +7,8 @@ import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {Widgets} from 'scenes/widgets';
 
+import {Meeting} from './meeting';
+
 const AppLayers: FC = ({children}) => {
   const {unityStore} = useStore().mainStore;
 
@@ -21,6 +23,7 @@ const AppLayers: FC = ({children}) => {
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
       <main id="main">
         <div className="main-content">{children}</div>
+        <Meeting />
       </main>
       <Widgets />
     </div>

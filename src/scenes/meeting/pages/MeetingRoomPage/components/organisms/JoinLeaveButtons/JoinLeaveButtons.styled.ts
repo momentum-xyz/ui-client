@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Button} from 'ui-kit';
 
 export const Container = styled.div`
-  padding: 20px 0 0 0;
+  padding: 12px 0 0 0;
   display: flex;
   flex-direction: column;
   gap: 5px;

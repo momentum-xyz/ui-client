@@ -1,6 +1,7 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
@@ -9,10 +10,13 @@ import {StageModeGuest, StageModeModerator} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
-  const {spaceId} = useParams<{spaceId: string}>();
-  const {collaborationStore, mainStore} = useStore();
-  const {agoraStore} = mainStore;
+  const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {stageModeStore, textChatStore} = collaborationStore;
+  const {agoraStore} = mainStore;
+
+  const {spaceId} = useParams<{spaceId: string}>();
+
+  const history = useHistory();
 
   useEffect(() => {
     const chatWasOpen = textChatStore.textChatDialog.isOpen;
@@ -33,6 +37,11 @@ const StageModePage: FC = () => {
     stageModeStore.removeRequestPopup(userId);
   });
 
+  const onLeaveMeeting = useCallback(async () => {
+    await leaveMeetingSpace();
+    history.push(ROUTES.base);
+  }, [history, leaveMeetingSpace]);
+
   if (collaborationStore.moderationRequest.isPending) {
     return null;
   }
@@ -43,11 +52,11 @@ const StageModePage: FC = () => {
         {collaborationStore.isModerator ? (
           <Redirect to={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})} />
         ) : (
-          <StageModeGuest />
+          <StageModeGuest onLeaveMeeting={onLeaveMeeting} />
         )}
       </Route>
       <Route exact path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>
-        <StageModeModerator />
+        <StageModeModerator onLeaveMeeting={onLeaveMeeting} />
       </Route>
     </Switch>
   );

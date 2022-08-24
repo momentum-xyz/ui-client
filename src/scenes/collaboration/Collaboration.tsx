@@ -5,6 +5,8 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
+import {PrivateSpaceError} from 'core/errors';
+import {createRoutesByConfig} from 'core/utils';
 import {useStore, usePosBusEvent, useDeviceChange} from 'shared/hooks';
 import {
   BroadcastStatusEnum,
@@ -12,7 +14,6 @@ import {
   StageModeRequestEnum,
   StageModeStatusEnum
 } from 'core/enums';
-import {createRoutesByConfig} from 'core/utils';
 import {
   Navigation,
   ToastContent,
@@ -32,7 +33,8 @@ import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes'
 import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
-  const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = useStore();
+  const rootStore = useStore();
+  const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
@@ -51,6 +53,35 @@ const Collaboration: FC = () => {
   const {t} = useTranslation();
   const history = useHistory();
   const [accepted, setAccepted] = useState<boolean>();
+
+  const reJoinMeeting = useCallback(async () => {
+    if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
+      return;
+    }
+
+    if (agoraStore.hasJoined && agoraStore.spaceId !== spaceId) {
+      await rootStore.leaveMeetingSpace();
+    }
+
+    rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
+      if (e instanceof PrivateSpaceError) {
+        history.push(ROUTES.base);
+        toast.error(
+          <ToastContent
+            isDanger
+            isCloseButton
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('collaboration.spaceIsPrivate')}
+          />
+        );
+      }
+    });
+  }, [agoraStore, history, rootStore, spaceId, t]);
+
+  useEffect(() => {
+    reJoinMeeting().then();
+  }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
     broadcastStore.fetchBroadcast(spaceId);

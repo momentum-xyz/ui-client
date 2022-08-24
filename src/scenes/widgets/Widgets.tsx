@@ -1,8 +1,8 @@
 import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
 import ReactHowler from 'react-howler';
-import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -27,7 +27,7 @@ import {AvatarForm} from './pages/ProfileWidget/components';
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {agoraStageModeStore, agoraMeetingStore} = agoraStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -46,6 +46,7 @@ const Widgets: FC = () => {
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
+  const {t} = useTranslation();
   const location = useLocation();
 
   useEffect(() => {
@@ -114,7 +115,7 @@ const Widgets: FC = () => {
       />
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
-          <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
+          <ToolbarIcon icon="home" title={t('labels.home')} link={ROUTES.base} size="large" exact />
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>
@@ -130,7 +131,9 @@ const Widgets: FC = () => {
               onClick={toggleCameraOn}
               disabled={
                 userDevicesStore.isTogglingCamera ||
-                (agoraStore.isStageMode && !agoraStageModeStore.isOnStage)
+                !(agoraStore.isStageMode
+                  ? agoraStageModeStore.isOnStage
+                  : !!agoraMeetingStore.spaceId)
               }
             />
             <ToolbarIcon
@@ -145,7 +148,9 @@ const Widgets: FC = () => {
               onClick={toggleMute}
               disabled={
                 userDevicesStore.isTogglingMicrophone ||
-                (agoraStore.isStageMode && !agoraStageModeStore.isOnStage)
+                !(agoraStore.isStageMode
+                  ? agoraStageModeStore.isOnStage
+                  : !!agoraMeetingStore.spaceId)
               }
             />
           </ToolbarIconList>

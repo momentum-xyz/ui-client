@@ -164,17 +164,14 @@ const AgoraStageModeStore = types
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
+      yield self.client.subscribe(user, mediaType);
+
       if (String(user?.uid).split('|')[0] === 'ss') {
-        yield self.client.subscribe(user, mediaType);
         screenShareStore.handleUserPublished(user, mediaType);
         return;
       }
 
-      if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
-        yield self.client.subscribe(user, mediaType);
-      }
-
-      if (user.hasAudio && mediaType === 'audio') {
+      if (mediaType === 'audio') {
         user.audioTrack?.play();
       }
 
@@ -191,7 +188,7 @@ const AgoraStageModeStore = types
         }
       }
     }),
-    handleUserUnpublished: flow(function* (
+    handleUserUnpublished(
       screenShareStore: AgoraScreenShareStoreInterface,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
@@ -208,15 +205,13 @@ const AgoraStageModeStore = types
           foundUser.audioTrack?.stop();
         }
 
-        yield self.client.unsubscribe(foundUser.participantInfo, mediaType);
-
         if (mediaType === 'audio') {
           foundUser.isMuted = true;
         } else {
           foundUser.cameraOff = true;
         }
       }
-    }),
+    },
     handleUserJoined(user: IAgoraRTCRemoteUser) {
       if (String(user?.uid).split('|')[0] === 'ss') {
         return;
@@ -359,6 +354,15 @@ const AgoraStageModeStore = types
             role: ParticipantRole.AUDIENCE_MEMBER
           }))
       );
+
+      self.users = self.client.remoteUsers.map((user) =>
+        cast({
+          uid: user.uid,
+          participantInfo: user,
+          isMuted: true,
+          cameraOff: true
+        })
+      );
     }),
     leave: flow(function* () {
       yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
@@ -368,6 +372,8 @@ const AgoraStageModeStore = types
       yield self.client.leave();
       self.isOnStage = false;
       self.spaceId = undefined;
+      self.users = [];
+      self.audience = cast([]);
     }),
     enterStage: flow(function* (
       createLocalTracks: (
@@ -379,16 +385,17 @@ const AgoraStageModeStore = types
           deviceId: string,
           isTrackEnabled: boolean
         ) => Promise<ICameraVideoTrack | undefined>
-      ) => void
+      ) => Promise<void>
     ) {
       yield self.client.setClientRole('host');
-      createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
+      yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.isOnStage = true;
     }),
     leaveStage: flow(function* () {
       self.client.localTracks.forEach((localTrack) => {
         localTrack.setEnabled(false);
         localTrack.stop();
+        localTrack.close();
       });
 
       yield self.client.unpublish();
