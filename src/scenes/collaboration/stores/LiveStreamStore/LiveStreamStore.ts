@@ -36,12 +36,12 @@ const LiveStreamStore = types.compose(
 
         return self.disableRequest.isDone;
       }),
-      setBroadcast(broadcast: LiveStreamInterface) {
+      setBroadcast(broadcast: LiveStreamInterface): void {
         self.broadcast = cast(broadcast);
       }
     }))
     .views((self) => ({
-      get isStreaming() {
+      get isStreaming(): boolean {
         return self.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY;
       }
     }))

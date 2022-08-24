@@ -79,8 +79,8 @@ const Collaboration: FC = () => {
   }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
-    liveStreamStore.fetchBroadcast(spaceId);
-  }, [liveStreamStore, spaceId]);
+    collaborationStore.initBroadcast(spaceId);
+  }, [collaborationStore, spaceId]);
 
   useEffect(() => {
     textChatStore.countUnreadMessages();

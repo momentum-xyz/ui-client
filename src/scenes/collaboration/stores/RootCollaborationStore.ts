@@ -63,6 +63,9 @@ const RootCollaborationStore = types
     }
   }))
   .actions((self) => ({
+    initBroadcast(spaceId: string): void {
+      self.liveStreamStore.fetchBroadcast(spaceId);
+    },
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       self.resetLeftMeetingSpace();
       clearTimeout(self.leftMeetingTimer);

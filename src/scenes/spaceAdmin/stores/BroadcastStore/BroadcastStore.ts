@@ -66,7 +66,7 @@ const BroadcastStore = types.compose(
 
         return self.disableRequest.isDone;
       }),
-      setBroadcastPreview(preview: BroadcastInterface) {
+      setBroadcastPreview(preview: BroadcastInterface): void {
         const hash = youtubeVideoPath(preview?.youtubeUrl ?? '', undefined);
         if (hash && preview.youtubeUrl) {
           self.previewHash = hash;
@@ -77,7 +77,7 @@ const BroadcastStore = types.compose(
           self.isYoutubeHash = false;
         }
       },
-      setBroadcast(broadcast: LiveStreamInterface) {
+      setBroadcast(broadcast: LiveStreamInterface): void {
         self.broadcast = cast(broadcast);
         if (broadcast.broadcastStatus === BroadcastStatusEnum.STOP) {
           self.previewHash = '';
@@ -86,7 +86,7 @@ const BroadcastStore = types.compose(
       }
     }))
     .views((self) => ({
-      get isStreaming() {
+      get isStreaming(): boolean {
         return self.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY;
       }
     }))
