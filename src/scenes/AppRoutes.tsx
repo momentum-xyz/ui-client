@@ -14,13 +14,13 @@ import {
 import {WelcomePage} from './welcome';
 import {HomePage} from './home';
 import {SignUpCompletePage} from './profile';
-import {StoryBookPage} from './system/pages';
+import {DisconnectedPage, MaintenancePage, StoryBookPage, WrongBrowserPage} from './system/pages';
 import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
 import {MagicPage} from './magic/pages';
 import {VideoPage} from './video/pages';
-import {Meeting} from './meeting';
+import {GrabTablePage} from './grabTable';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -80,6 +80,21 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.welcome,
     exact: true,
     main: () => <WelcomePage />
+  },
+  {
+    path: ROUTES.system.disconnected,
+    exact: true,
+    main: () => <DisconnectedPage />
+  },
+  {
+    path: ROUTES.system.maintenance,
+    exact: true,
+    main: () => <MaintenancePage />
+  },
+  {
+    path: ROUTES.system.wrongBrowser,
+    exact: true,
+    main: () => <WrongBrowserPage />
   }
 ];
 
@@ -97,28 +112,14 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.collaboration.base,
     renderBackground: true,
-    main: () => (
-      <>
-        <Collaboration />
-        <Meeting />
-      </>
-    )
+    main: () => <Collaboration />
   },
   {
-    path: ROUTES.meeting.grabTable,
+    path: ROUTES.grabTable,
     main: () => (
       <>
-        <HomePage isTable />
-        <Meeting isTable />
-      </>
-    )
-  },
-  {
-    path: ROUTES.meeting.flyAround,
-    main: () => (
-      <>
-        <HomePage isFlight />
-        <Meeting isFlight />
+        <HomePage />
+        <GrabTablePage />
       </>
     )
   },

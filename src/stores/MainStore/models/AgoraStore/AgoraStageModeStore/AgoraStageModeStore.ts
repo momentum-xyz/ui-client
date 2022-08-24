@@ -34,7 +34,7 @@ const AgoraStageModeStore = types
       isLowQualityModeEnabled: false,
       requestWasMadeToGoOnStage: false,
       audience: types.optional(types.array(StageModeUser), []),
-      users: types.optional(types.array(AgoraRemoteUser), []),
+      _users: types.optional(types.array(AgoraRemoteUser), []),
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
 
@@ -58,24 +58,34 @@ const AgoraStageModeStore = types
     })()
   }))
   .views((self) => ({
-    get audienceMembers(): StageModeUserInterface[] {
-      return self.audience.filter((user) => {
-        return user.role === ParticipantRole.AUDIENCE_MEMBER && user.uid !== self.userId;
-      });
+    get users(): AgoraRemoteUserInterface[] {
+      return self._users;
+    },
+    set users(users: AgoraRemoteUserInterface[]) {
+      self._users = cast(users);
     }
   }))
   .views((self) => ({
+    get audienceMembers(): StageModeUserInterface[] {
+      return self.audience.filter((user) => {
+        return (
+          user.role === ParticipantRole.AUDIENCE_MEMBER &&
+          user.uid !== self.userId &&
+          !self.users.find((u) => u.uid === user.uid)
+        );
+      });
+    },
     get joined(): boolean {
       return self.spaceId !== undefined;
     },
     get canEnterStage(): boolean {
-      return (
-        self.client.remoteUsers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS
-      );
+      return self.users.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS;
     },
     get numberOfSpeakers(): number {
-      return self.client.remoteUsers.length + (self.isOnStage ? 1 : 0);
-    },
+      return self.users.length + (self.isOnStage ? 1 : 0);
+    }
+  }))
+  .views((self) => ({
     get numberOfAudienceMembers(): number {
       return self.audienceMembers.length + Number(!self.isOnStage);
     }
@@ -154,24 +164,24 @@ const AgoraStageModeStore = types
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
+      yield self.client.subscribe(user, mediaType);
+
       if (String(user?.uid).split('|')[0] === 'ss') {
-        yield self.client.subscribe(user, mediaType);
         screenShareStore.handleUserPublished(user, mediaType);
         return;
       }
 
-      if ((user.hasAudio && mediaType === 'audio') || (user.hasVideo && mediaType === 'video')) {
-        yield self.client.subscribe(user, mediaType);
-      }
-
-      if (user.hasAudio && mediaType === 'audio') {
+      if (mediaType === 'audio') {
         user.audioTrack?.play();
       }
 
       const updatedUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
 
       if (updatedUser) {
-        updatedUser.participantInfo = user;
+        if (!updatedUser.participantInfo) {
+          updatedUser.participantInfo = user;
+        }
+
         if (mediaType === 'audio') {
           updatedUser.isMuted = !user.hasAudio;
           updatedUser.audioTrack = user.audioTrack;
@@ -181,7 +191,7 @@ const AgoraStageModeStore = types
         }
       }
     }),
-    handleUserUnpublished: flow(function* (
+    handleUserUnpublished(
       screenShareStore: AgoraScreenShareStoreInterface,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
@@ -194,19 +204,17 @@ const AgoraStageModeStore = types
       const foundUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
 
       if (foundUser?.participantInfo) {
-        if (mediaType === 'audio' && foundUser.audioTrack?.isPlaying) {
-          foundUser.audioTrack?.stop();
-        }
-
-        yield self.client.unsubscribe(foundUser.participantInfo, mediaType);
-
         if (mediaType === 'audio') {
+          foundUser.audioTrack?.stop();
+          foundUser.audioTrack = undefined;
           foundUser.isMuted = true;
         } else {
           foundUser.cameraOff = true;
+          foundUser.videoTrack?.stop();
+          foundUser.videoTrack = undefined;
         }
       }
-    }),
+    },
     handleUserJoined(user: IAgoraRTCRemoteUser) {
       if (String(user?.uid).split('|')[0] === 'ss') {
         return;
@@ -222,7 +230,7 @@ const AgoraStageModeStore = types
       });
 
       if (!foundUser) {
-        self.users = cast([...self.users, newUser]);
+        self.users = [...self.users, newUser];
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
@@ -230,7 +238,7 @@ const AgoraStageModeStore = types
         return;
       }
 
-      self.users = cast(self.users.filter((remoteUser) => remoteUser.uid !== user.uid));
+      self.users = self.users.filter((remoteUser) => remoteUser.uid !== user.uid);
     },
     handleConnectionStateChange(
       currentState: ConnectionState,
@@ -349,6 +357,15 @@ const AgoraStageModeStore = types
             role: ParticipantRole.AUDIENCE_MEMBER
           }))
       );
+
+      self.users = self.client.remoteUsers.map((user) =>
+        cast({
+          uid: user.uid,
+          participantInfo: user,
+          isMuted: true,
+          cameraOff: true
+        })
+      );
     }),
     leave: flow(function* () {
       yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
@@ -358,6 +375,8 @@ const AgoraStageModeStore = types
       yield self.client.leave();
       self.isOnStage = false;
       self.spaceId = undefined;
+      self.users = [];
+      self.audience = cast([]);
     }),
     enterStage: flow(function* (
       createLocalTracks: (
@@ -369,16 +388,17 @@ const AgoraStageModeStore = types
           deviceId: string,
           isTrackEnabled: boolean
         ) => Promise<ICameraVideoTrack | undefined>
-      ) => void
+      ) => Promise<void>
     ) {
       yield self.client.setClientRole('host');
-      createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
+      yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.isOnStage = true;
     }),
     leaveStage: flow(function* () {
       self.client.localTracks.forEach((localTrack) => {
         localTrack.setEnabled(false);
         localTrack.stop();
+        localTrack.close();
       });
 
       yield self.client.unpublish();

@@ -1,55 +1,32 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory, useParams} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
-import {PrivateSpaceError} from 'core/errors';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
 import {MeetingRoomPage} from './pages';
 import * as styled from './Meeting.styled';
 
-interface PropsInterface {
-  isTable?: boolean;
-  isFlight?: boolean;
-}
-
-const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
+const Meeting: FC = () => {
   const rootStore = useStore();
-  const {mainStore, sessionStore, meetingStore} = rootStore;
+  const {mainStore, sessionStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
-  const {spaceId} = useParams<{spaceId: string}>();
   const history = useHistory();
   const {t} = useTranslation();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      rootStore.joinMeetingSpace(spaceId, isTable).catch((e) => {
-        if (e instanceof PrivateSpaceError) {
-          history.push(ROUTES.base);
-          toast.error(
-            <ToastContent
-              isDanger
-              isCloseButton
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('collaboration.spaceIsPrivate')}
-            />
-          );
-        }
-      });
-    }, 250);
-
-    return () => {
-      clearTimeout(timeout);
-      rootStore.leaveMeetingSpace();
-    };
-  }, [history, isTable, rootStore, sessionStore.userId, spaceId, t]);
+  const onLeaveMeeting = useCallback(
+    async (isKicked = false) => {
+      await rootStore.leaveMeetingSpace(isKicked);
+      history.push(ROUTES.base);
+    },
+    [history, rootStore]
+  );
 
   usePosBusEvent('meeting-mute', () => {
     userDevicesStore.mute();
@@ -59,21 +36,6 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
     if (sessionStore.userId !== moderatorId) {
       userDevicesStore.mute();
     }
-  });
-
-  usePosBusEvent('meeting-kick', () => {
-    meetingStore.setKicked(true);
-    history.push(ROUTES.base);
-
-    toast.info(
-      <ToastContent
-        headerIconName="logout"
-        title={t('titles.kickedFromMeeting')}
-        text={t('messages.kickedFromMeeting')}
-        isCloseButton
-      />,
-      TOAST_COMMON_OPTIONS
-    );
   });
 
   usePosBusEvent('stage-mode-mute', () => {
@@ -87,6 +49,21 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
         isCloseButton
       />,
       TOAST_GROUND_OPTIONS
+    );
+  });
+
+  usePosBusEvent('meeting-kick', async () => {
+    await onLeaveMeeting(true);
+    history.push(ROUTES.base);
+
+    toast.info(
+      <ToastContent
+        headerIconName="logout"
+        title={t('titles.kickedFromMeeting')}
+        text={t('messages.kickedFromMeeting')}
+        isCloseButton
+      />,
+      TOAST_COMMON_OPTIONS
     );
   });
 
@@ -106,7 +83,7 @@ const Meeting: FC<PropsInterface> = ({isTable = false, isFlight = false}) => {
 
   return (
     <styled.Container>
-      <MeetingRoomPage isTable={isTable} isFlight={isFlight} />
+      <MeetingRoomPage onLeave={onLeaveMeeting} />
     </styled.Container>
   );
 };

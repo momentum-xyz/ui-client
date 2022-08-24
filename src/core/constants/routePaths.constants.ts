@@ -11,10 +11,12 @@ export const ROUTES = {
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
   welcome: '/welcome',
-  meeting: {
-    grabTable: '/meeting/:spaceId/table',
-    flyAround: '/meeting/:spaceId/fly'
+  system: {
+    disconnected: '/system/disconnected',
+    maintenance: '/system/maintenance',
+    wrongBrowser: '/system/wrongBrowser'
   },
+  grabTable: '/:spaceId/table',
   collaboration: {
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
@@ -25,6 +27,7 @@ export const ROUTES = {
     screenShare: '/collaboration/:spaceId/screenShare',
     miro: '/collaboration/:spaceId/miro',
     googleDrive: '/collaboration/:spaceId/google-drive',
+    liveStream: '/collaboration/:spaceId/live-stream',
     table: `/collaboration/:spaceId/table`
   },
   spaceAdmin: {

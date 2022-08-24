@@ -1,8 +1,8 @@
 import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
 import ReactHowler from 'react-howler';
-import {t} from 'i18next';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -17,8 +17,6 @@ import {
   MusicPlayerWidget,
   ProfileMenuWidget,
   StakingWidget,
-  TokenRuleReviewWidget,
-  TokenRulesWidget,
   WorldStatsWidget,
   StageModePIPWidget
 } from 'scenes/widgets/pages';
@@ -29,14 +27,13 @@ import {AvatarForm} from './pages/ProfileWidget/components';
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {agoraStageModeStore, agoraMeetingStore} = agoraStore;
   const {
     stakingStore,
     magicLinkStore,
     worldStatsStore,
     helpStore,
     profileMenuStore,
-    tokenRulesStore,
     launchInitiativeStore,
     musicPlayerStore,
     attendeesListStore,
@@ -45,11 +42,11 @@ const Widgets: FC = () => {
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
-  const {profileMenuDialog} = profileMenuStore;
   const {profile: currentProfile, isGuest} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
+  const {t} = useTranslation();
   const location = useLocation();
 
   useEffect(() => {
@@ -70,11 +67,6 @@ const Widgets: FC = () => {
     }
 
     userDevicesStore.toggleCamera();
-  };
-
-  const handleRuleReviewClose = () => {
-    tokenRulesStore.tokenRuleReviewDialog.close();
-    tokenRulesStore.tokenRulesListStore.fetchTokenRules();
   };
 
   const mainToolbarIcons: ToolbarIconInterface[] = [
@@ -103,14 +95,7 @@ const Widgets: FC = () => {
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
-      {tokenRulesStore.widgetDialog.isOpen && <TokenRulesWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
-      {tokenRulesStore.tokenRuleReviewDialog.isOpen && (
-        <TokenRuleReviewWidget
-          onClose={handleRuleReviewClose}
-          tokenRuleReviewStore={tokenRulesStore.tokenRuleReviewStore}
-        />
-      )}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
@@ -130,7 +115,7 @@ const Widgets: FC = () => {
       />
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
-          <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
+          <ToolbarIcon icon="home" title={t('labels.home')} link={ROUTES.base} size="large" exact />
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>
@@ -146,7 +131,9 @@ const Widgets: FC = () => {
               onClick={toggleCameraOn}
               disabled={
                 userDevicesStore.isTogglingCamera ||
-                (agoraStore.isStageMode && !agoraStageModeStore.isOnStage)
+                !(agoraStore.isStageMode
+                  ? agoraStageModeStore.isOnStage
+                  : !!agoraMeetingStore.spaceId)
               }
             />
             <ToolbarIcon
@@ -161,14 +148,16 @@ const Widgets: FC = () => {
               onClick={toggleMute}
               disabled={
                 userDevicesStore.isTogglingMicrophone ||
-                (agoraStore.isStageMode && !agoraStageModeStore.isOnStage)
+                !(agoraStore.isStageMode
+                  ? agoraStageModeStore.isOnStage
+                  : !!agoraMeetingStore.spaceId)
               }
             />
           </ToolbarIconList>
           {/* Main toolbar icons */}
           <ToolbarIconList>
             {currentProfile?.profile && (
-              <ToolbarIcon title="Profile" onClick={profileMenuDialog.open}>
+              <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
                 <Avatar
                   size="extra-small"
                   status={sessionStore.profile?.status}

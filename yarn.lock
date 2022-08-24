@@ -4012,10 +4012,10 @@ agent-base@6:
   dependencies:
     debug "4"
 
-agora-rtc-sdk-ng@^4.11.0:
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/agora-rtc-sdk-ng/-/agora-rtc-sdk-ng-4.11.1.tgz#d63accd6a678ea4e17748f431919bc5aa9b1f7f1"
-  integrity sha512-BUr0DK4Uq13lzsULVldp15sJYDTeDfDao9T6thsSQkT2jSTTQvuC01vz2H8/eA32ZGhsAeTaL2UcsULDbCkplg==
+agora-rtc-sdk-ng@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/agora-rtc-sdk-ng/-/agora-rtc-sdk-ng-4.13.0.tgz#7707210dbd94906f204993f54c59f5f5fdabcf0a"
+  integrity sha512-+ZVVPgaSbAVjTREbOtyyfhVyJ24dgvTug68kFFRDxEhSuGHqReOwS8obwJiDmH9JvYhc8CzuWWwAebWEmbupsg==
   dependencies:
     agora-rte-extension "^1.0.22"
 
@@ -4024,10 +4024,10 @@ agora-rte-extension@^1.0.22:
   resolved "https://registry.yarnpkg.com/agora-rte-extension/-/agora-rte-extension-1.0.23.tgz#54a7215fd2cdcf2553d83570530950054f1e59a6"
   integrity sha512-X2cGBg+L5ZJIFU91qvMASvRsBfg1HXTktVG3YROw9wxHsILSI7jgF9R9XraLc3fNX/UjovaYAlUW+hiJe0v6Xw==
 
-agora-rtm-sdk@^1.4.2:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/agora-rtm-sdk/-/agora-rtm-sdk-1.4.4.tgz#48fd9a5638ec2caba9120d030939d9714c39c33e"
-  integrity sha512-Cks9kOJQ94HNle6s9mRqozf8VEwQD2WDrjJyA30rV3odBJ1UUDsASE5AItdr0znD8RDx0D7V+vpI9A9VQzmgvw==
+agora-rtm-sdk@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/agora-rtm-sdk/-/agora-rtm-sdk-1.5.0.tgz#bae7786a8379586bc6b115eee8788283ad53018d"
+  integrity sha512-YgwguYX/Y/Es2f1iqTcocP+ErmmpfslV8Ub5KyxrhTnjJBVqdwn08duUeHGMyGARAF/wnhODWq8qyadhlsEn6Q==
 
 ajv-formats@^2.1.1:
   version "2.1.1"

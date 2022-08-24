@@ -26,6 +26,11 @@ const ConfigStore = types
         self.isConfigReady = true;
       }
     })
+  }))
+  .views((self) => ({
+    get isError(): boolean {
+      return self.request.isError;
+    }
   }));
 
 export {ConfigStore};

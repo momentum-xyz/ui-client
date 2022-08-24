@@ -6,7 +6,6 @@ export const enGb = {
       minutes: '{{minutes}} minutes',
       seconds: '{{seconds}} seconds'
     },
-    somethingWentWrong: 'Something went wrong. Please try again later.',
     staking: {
       rewardAccountError:
         'The selected destination account does not exist and cannot be used to receive rewards',
@@ -155,7 +154,15 @@ export const enGb = {
         'No {{name}} extension detected, please install {{name}} to continue here.',
       couldNotRemoveEvent: 'Could not remove the event.',
       endDateGraterThanStartDate: 'End date has to be grater than start date',
-      nameConstraints: 'Please enter a name with 2-32 characters'
+      nameConstraints: 'Please enter a name with 2-32 characters',
+      somethingWentWrong: 'Something went wrong',
+      somethingWentWrongTryAgain: 'Something went wrong. Please try again later.'
+    },
+    systemMessages: {
+      loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
+      switchToThatTab:
+        'To continue the experience, please switch to that window/tab and close this one',
+      underMaintenance: 'The server is undergoing maintenance, please try again later'
     },
     counts: {
       people_one: '{{count}} Person',
@@ -166,6 +173,7 @@ export const enGb = {
       vibes_other: '{{count}}  vibes'
     },
     labels: {
+      home: 'Home',
       miro: 'Miro',
       googleDrive: 'Google Drive',
       screenShare: 'Screenshare',
@@ -333,7 +341,9 @@ export const enGb = {
       yourRequestWasDeclined: 'Your request was declined',
       youHaveBeenInvitedOnStage: 'You have been invited on stage',
       prepareToGoOnStage: 'Prepare to go on stage',
-      broadcastManage: 'Manage Broadcast'
+      broadcastManage: 'Manage Broadcast',
+      profile: 'Profile',
+      broadcast: 'Broadcast'
     },
     textMessage: {
       you: 'you',
@@ -565,7 +575,32 @@ export const enGb = {
       }
     },
     broadcastAdmin: {
-      subtitle: 'Manage Broadcast'
+      subtitle: 'Manage Broadcast',
+      formTitle: 'broadcast',
+      formDescription:
+        'Broadcasting allows you to send out a message to this space and the spaces below. Add a youtube url to start broadcasting. What would you like to broadcast?',
+      formInstruction: 'Add a youtube url which you would like to broadcast:',
+      formInputLabel: 'youtube video url',
+      formErrorMessage: 'Please enter a valid Youtube URL',
+      formButton: 'preview',
+      formInfo: 'The broadcast will be sent to the following spaces and their subspaces:',
+      previewTitle: 'preview',
+      broadcastStart: 'start broadcasting',
+      broadcastStartDialog: 'Starting Broadcast',
+      broadcastStartMessage: 'Streaming is about to start',
+      broadcastStop: 'stop broadcasting',
+      broadcastStopMessage: 'Are you sure you want to end the broadcast?',
+      broadcastStopTitle: 'End broadcast',
+      confirmStop: 'Yes, end broadcast',
+      cancelStop: 'No, cancel',
+      enableSuccess: 'The video has broadcast successfully',
+      enableError: 'There was a problem broadcasting this video',
+      disableSuccess: 'Broadcasting has disabled successfully',
+      disableError: 'There was a problem disabling the broadcast'
+    },
+    liveStream: {
+      subtitle: 'Live Stream',
+      stopStream: 'Stop streaming'
     },
     spaceAdmin: {
       subtitle: 'Manage Space',

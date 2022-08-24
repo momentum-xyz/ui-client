@@ -53,7 +53,7 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ExterminateUnity', () => {
-    window.location.href = '/disconnect.html';
+    history.push({pathname: ROUTES.system.disconnected});
   });
 
   useUnityEvent('ClickEventDashboard', (spaceId: string) => {
@@ -81,7 +81,7 @@ const UnityPage: FC = () => {
     };
 
     const handleJoinTable = () => {
-      history.push({pathname: generatePath(ROUTES.meeting.grabTable, {spaceId})});
+      history.push({pathname: generatePath(ROUTES.grabTable, {spaceId})});
     };
 
     toast.info(

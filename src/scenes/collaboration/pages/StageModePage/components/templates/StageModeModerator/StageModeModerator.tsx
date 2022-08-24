@@ -24,7 +24,11 @@ import {
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
 
-const StageModeModerator: React.FC = () => {
+interface PropsInterface {
+  onLeaveMeeting: () => void;
+}
+
+const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
@@ -59,9 +63,11 @@ const StageModeModerator: React.FC = () => {
     await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
   }, [agoraStageModeStore, userDevicesStore.createLocalTracks]);
 
-  const handleLeaveStage = useCallback(() => {
-    agoraStageModeStore.leaveStage();
-  }, [agoraStageModeStore]);
+  const handleLeaveStage = useCallback(async () => {
+    await userDevicesStore.mute();
+    await userDevicesStore.turnOffCamera();
+    await agoraStageModeStore.leaveStage();
+  }, [agoraStageModeStore, userDevicesStore]);
 
   if (!space) {
     return null;
@@ -81,6 +87,7 @@ const StageModeModerator: React.FC = () => {
           toggleChat={textChatStore.textChatDialog.toggle}
           numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
           editSpaceHidden
+          onLeave={onLeaveMeeting}
         >
           <styled.ActionsContainer>
             <styled.ToggleContainer>

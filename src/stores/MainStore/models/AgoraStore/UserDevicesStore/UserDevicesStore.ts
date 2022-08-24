@@ -25,10 +25,10 @@ const UserDevicesStore = types
       .volatile<{
         audioInputs: MediaDeviceInfo[];
         videoInputs: MediaDeviceInfo[];
-        currentVideoInput?: MediaDeviceInfo;
-        currentAudioInput?: MediaDeviceInfo;
-        localVideoTrack?: ICameraVideoTrack;
-        localAudioTrack?: IMicrophoneAudioTrack;
+        _currentVideoInput?: MediaDeviceInfo;
+        _currentAudioInput?: MediaDeviceInfo;
+        _localVideoTrack?: ICameraVideoTrack;
+        _localAudioTrack?: IMicrophoneAudioTrack;
       }>(() => ({
         audioInputs: [],
         videoInputs: []
@@ -46,6 +46,30 @@ const UserDevicesStore = types
         value: input.deviceId,
         label: input.label
       }));
+    },
+    get currentVideoInput(): MediaDeviceInfo | undefined {
+      return self._currentVideoInput;
+    },
+    get currentAudioInput(): MediaDeviceInfo | undefined {
+      return self._currentAudioInput;
+    },
+    get localAudioTrack(): IMicrophoneAudioTrack | undefined {
+      return self._localAudioTrack;
+    },
+    get localVideoTrack(): ICameraVideoTrack | undefined {
+      return self._localVideoTrack;
+    },
+    set currentVideoInput(info: MediaDeviceInfo | undefined) {
+      self._currentVideoInput = info;
+    },
+    set currentAudioInput(info: MediaDeviceInfo | undefined) {
+      self._currentAudioInput = info;
+    },
+    set localAudioTrack(microphoneTrack: IMicrophoneAudioTrack | undefined) {
+      self._localAudioTrack = microphoneTrack;
+    },
+    set localVideoTrack(cameraTrack: ICameraVideoTrack | undefined) {
+      self._localVideoTrack = cameraTrack;
     }
   }))
   .actions((self) => ({
@@ -134,6 +158,36 @@ const UserDevicesStore = types
     })
   }))
   .actions((self) => ({
+    createLocalAudioTrack: flow(function* (
+      createAudioTrack: (
+        deviceId: string,
+        isTrackEnabled: boolean
+      ) => Promise<IMicrophoneAudioTrack | undefined>
+    ) {
+      if (!self.microphoneConsent) {
+        yield self.getMicrophoneConsent();
+      }
+
+      self.localAudioTrack = self.currentAudioInput?.deviceId
+        ? yield createAudioTrack(self.currentAudioInput?.deviceId, !self.muted)
+        : undefined;
+    }),
+    createLocalVideoTrack: flow(function* (
+      createVideoTrack: (
+        deviceId: string,
+        isTrackEnabled: boolean
+      ) => Promise<ICameraVideoTrack | undefined>
+    ) {
+      if (!self.cameraConsent) {
+        yield self.getCameraConsent();
+      }
+
+      self.localVideoTrack = self.currentVideoInput?.deviceId
+        ? yield createVideoTrack(self.currentVideoInput?.deviceId, !self.cameraOff)
+        : undefined;
+    })
+  }))
+  .actions((self) => ({
     init: flow(function* () {
       yield self.getMicrophoneConsent();
       yield self.getCameraConsent();
@@ -194,21 +248,8 @@ const UserDevicesStore = types
         isTrackEnabled: boolean
       ) => Promise<ICameraVideoTrack | undefined>
     ) {
-      if (!self.microphoneConsent) {
-        yield self.getMicrophoneConsent();
-      }
-
-      self.localAudioTrack = self.currentAudioInput?.deviceId
-        ? yield createAudioTrack(self.currentAudioInput?.deviceId, !self.muted)
-        : undefined;
-
-      if (!self.cameraConsent) {
-        yield self.getCameraConsent();
-      }
-
-      self.localVideoTrack = self.currentVideoInput?.deviceId
-        ? yield createVideoTrack(self.currentVideoInput?.deviceId, !self.cameraOff)
-        : undefined;
+      yield self.createLocalAudioTrack(createAudioTrack);
+      yield self.createLocalVideoTrack(createVideoTrack);
     }),
     cleanupLocalTracks() {
       self.localAudioTrack?.setEnabled(false);

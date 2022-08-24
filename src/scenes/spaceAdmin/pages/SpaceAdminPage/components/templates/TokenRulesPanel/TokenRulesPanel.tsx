@@ -6,9 +6,7 @@ import {toast} from 'react-toastify';
 import {SectionPanel, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
-import {TokenRuleListItem} from '../../organisms/TokenRuleListItem';
-
-import {EditTokenRuleDialog, RemoveTokenRuleDialog} from './components';
+import {EditTokenRuleDialog, RemoveTokenRuleDialog, TokenRuleListItem} from './components';
 import * as styled from './TokenRulesPanel.styled';
 
 interface PropsInterface {}
@@ -17,13 +15,11 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {
     applyTokenRuleFormDialog,
-    tokenRuleReviewStore,
     editTokenRuleDialog,
     removeTokenRuleDialog,
-    tokenRulesListStore,
+    tokenRulesStore,
     space
   } = spaceManagerStore;
-  const {tokenRules, fetchTokenRules} = tokenRulesListStore;
 
   const [selectedTokenRule, setSelectedTokenRule] = useState<{
     id: string;
@@ -45,7 +41,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
   };
 
   const removeTokenRule = useCallback(async (tokenRuleId: string) => {
-    const isSuccess = await tokenRuleReviewStore.deleteTokenRule(tokenRuleId);
+    const isSuccess = await tokenRulesStore.deleteTokenRule(tokenRuleId);
     if (isSuccess) {
       toast.info(
         <ToastContent
@@ -56,7 +52,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
         />
       );
       removeTokenRuleDialog.close();
-      fetchTokenRules(space?.id);
+      await tokenRulesStore.fetchTokenRules(space?.id ?? '');
     } else {
       toast.error(
         <ToastContent
@@ -80,7 +76,6 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
       {removeTokenRuleDialog.isOpen && (
         <RemoveTokenRuleDialog
           userName={selectedTokenRule?.name ?? ''}
-          /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
           onConfirmation={removeTokenRule}
           tokenRuleId={selectedTokenRule?.id ?? ''}
           onClose={removeTokenRuleDialog.close}
@@ -94,7 +89,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
         />
       )}
       <styled.Container className="noScrollIndicator" data-testid="TokenRulesPanel-test">
-        {tokenRules.map((tokenRule) => (
+        {tokenRulesStore.tokenRules.map((tokenRule) => (
           <TokenRuleListItem
             key={tokenRule.id}
             name={tokenRule.name}

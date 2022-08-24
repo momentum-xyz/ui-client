@@ -40,7 +40,7 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
 
   const grabATable = async () => {
     const spaceId = await profileStore.grabATable(worldStore.worldId, userId);
-    history.push({pathname: generatePath(ROUTES.meeting.grabTable, {spaceId})});
+    history.push({pathname: generatePath(ROUTES.grabTable, {spaceId})});
     onClose();
   };
 

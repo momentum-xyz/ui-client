@@ -1,4 +1,4 @@
-import {flow, types, cast} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 
 import {api} from 'api';
@@ -26,6 +26,7 @@ const AgoraStore = types
       spaceId: types.maybe(types.string),
       isStageMode: false,
       isTogglingStageMode: false,
+      currentUserToggledStageMode: false,
 
       // Requests
       spaceIntegrationsRequest: types.optional(RequestModel, {}),
@@ -49,6 +50,9 @@ const AgoraStore = types
       AgoraRTC.setLogLevel(4);
       self.userDevicesStore.init();
       self.appId = appVariables.AGORA_APP_ID;
+
+      self.agoraStageModeStore.init(self.appId);
+      self.agoraMeetingStore.init(self.appId);
     }
   }))
   // Agora calls setups and chat toggle
@@ -71,21 +75,23 @@ const AgoraStore = types
   }))
   // Meeting space managment
   .actions((self) => ({
-    joinMeetingSpace: flow(function* (authStateSubject: string, spaceId?: string) {
-      self.init();
-      self.agoraStageModeStore.init(self.appId);
-      self.agoraMeetingStore.init(self.appId);
+    join: flow(function* (authStateSubject: string, spaceId?: string, isToggling = false) {
+      if (!isToggling) {
+        self.init();
+        self.agoraStageModeStore.init(self.appId);
+        self.agoraMeetingStore.init(self.appId);
+      }
 
       const status: SpaceIntegrationsStageModeResponse = yield self.getStageModeStatus(spaceId);
 
-      const isStageMode = status.data?.stageModeStatus === 'initiated';
+      self.isStageMode = status.data?.stageModeStatus === 'initiated';
+      self.setupAgoraListeners();
 
-      if (isStageMode) {
+      if (self.isStageMode) {
         if (self.agoraMeetingStore.joined) {
           self.userDevicesStore.cleanupLocalTracks();
           self.agoraScreenShareStore.leave();
           yield self.agoraMeetingStore.leave();
-          self.agoraMeetingStore.users = cast([]);
         }
 
         if (!self.spaceId && !spaceId) {
@@ -101,7 +107,6 @@ const AgoraStore = types
         if (self.agoraStageModeStore.joined) {
           self.userDevicesStore.cleanupLocalTracks();
           yield self.agoraStageModeStore.leave();
-          self.agoraMeetingStore.users = cast([]);
         }
 
         if (!self.spaceId && !spaceId) {
@@ -123,15 +128,16 @@ const AgoraStore = types
         }
       }
 
+      self.userDevicesStore.mute();
+      self.userDevicesStore.turnOffCamera();
+
       if (spaceId) {
         self.spaceId = spaceId;
       }
 
-      self.isStageMode = isStageMode;
-      self.agoraScreenShareStore.init(self.appId, isStageMode, self.spaceId);
-      self.setupAgoraListeners();
+      self.agoraScreenShareStore.init(self.appId, self.isStageMode, self.spaceId);
     }),
-    leaveMeetingSpace: flow(function* () {
+    leave: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
       self.cleanupAgoraListeners();
 
@@ -158,6 +164,7 @@ const AgoraStore = types
       }
 
       self.isTogglingStageMode = true;
+      self.currentUserToggledStageMode = true;
 
       if (self.isStageMode) {
         yield self.toggleStageModeRequest.send(api.spaceIntegrationsRepository.disableStageMode, {
@@ -172,19 +179,61 @@ const AgoraStore = types
       }
     }),
     toggledStageMode: flow(function* (user: string, isModerator = true) {
-      yield self.joinMeetingSpace(user);
+      yield self.join(user, undefined, true);
 
       self.isTogglingStageMode = false;
 
-      if (isModerator && self.agoraStageModeStore.canEnterStage) {
-        yield self.agoraStageModeStore.enterStage(self.userDevicesStore.createLocalTracks);
+      if (!self.isStageMode) {
+        self.currentUserToggledStageMode = false;
         return false;
-      } else if (isModerator) {
+      }
+
+      if (
+        isModerator &&
+        self.agoraStageModeStore.canEnterStage &&
+        self.currentUserToggledStageMode
+      ) {
+        yield self.agoraStageModeStore.enterStage(self.userDevicesStore.createLocalTracks);
+        self.currentUserToggledStageMode = false;
+        return false;
+      } else if (isModerator && self.currentUserToggledStageMode) {
+        self.currentUserToggledStageMode = false;
         return true;
       }
 
+      self.currentUserToggledStageMode = false;
       return false;
     })
+  }))
+  .actions((self) => ({
+    selectAudioInput(deviceId: string) {
+      self.userDevicesStore.selectAudioInput(deviceId);
+
+      self.userDevicesStore.localAudioTrack?.stop();
+      self.userDevicesStore.localAudioTrack?.close();
+
+      const store = self.isStageMode ? self.agoraStageModeStore : self.agoraMeetingStore;
+
+      if (self.userDevicesStore.localAudioTrack) {
+        store.client.unpublish(self.userDevicesStore.localAudioTrack);
+      }
+
+      self.userDevicesStore.createLocalAudioTrack(store.createAudioTrackAndPublish);
+    },
+    selectVideoInput(deviceId: string) {
+      self.userDevicesStore.selectVideoInput(deviceId);
+
+      self.userDevicesStore.localVideoTrack?.stop();
+      self.userDevicesStore.localVideoTrack?.close();
+
+      const store = self.isStageMode ? self.agoraStageModeStore : self.agoraMeetingStore;
+
+      if (self.userDevicesStore.localVideoTrack) {
+        store.client.unpublish(self.userDevicesStore.localVideoTrack);
+      }
+
+      self.userDevicesStore.createLocalVideoTrack(store.createVideoTrackAndPublish);
+    }
   }))
   .views((self) => ({
     get hasJoined(): boolean {
