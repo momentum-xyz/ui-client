@@ -16,6 +16,7 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
+import {LiveStreamInterface} from 'api';
 
 import {
   AcceptedToJoinStageDialog,
@@ -39,7 +40,8 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    textChatStore
+    textChatStore,
+    liveStreamStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -77,8 +79,12 @@ const Collaboration: FC = () => {
   }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
+    collaborationStore.initBroadcast(spaceId);
+  }, [collaborationStore, spaceId]);
+
+  useEffect(() => {
     textChatStore.countUnreadMessages();
-  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen]);
+  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
   useEffect(() => {
     if (agoraStore.appId && !textChatStore.isLoggedOn) {
@@ -222,6 +228,16 @@ const Collaboration: FC = () => {
     }
   });
 
+  usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
+    liveStreamStore.setBroadcast(broadcast);
+
+    if (liveStreamStore.isStreaming) {
+      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId}));
+    } else {
+      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+    }
+  });
+
   usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
     const showStageIsFull = await agoraStore.toggledStageMode(
       sessionStore.userId,
@@ -278,7 +294,8 @@ const Collaboration: FC = () => {
         tabs={buildNavigationTabs(
           spaceId,
           agoraStore.isStageMode,
-          !!agoraScreenShareStore.videoTrack
+          !!agoraScreenShareStore.videoTrack,
+          liveStreamStore.isStreaming
         )}
       />
 

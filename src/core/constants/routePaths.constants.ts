@@ -27,6 +27,7 @@ export const ROUTES = {
     screenShare: '/collaboration/:spaceId/screenShare',
     miro: '/collaboration/:spaceId/miro',
     googleDrive: '/collaboration/:spaceId/google-drive',
+    liveStream: '/collaboration/:spaceId/live-stream',
     table: `/collaboration/:spaceId/table`
   },
   spaceAdmin: {

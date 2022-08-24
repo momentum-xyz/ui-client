@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import {t} from 'i18next';
 
 import {Dialog, Text, Heading} from 'ui-kit';
 
@@ -9,14 +9,18 @@ interface PropsInterface {
   title: string;
   onSave: () => void;
   onClose: () => void;
+  message?: string;
 }
 
 const DIALOG_WIDTH = '480px';
 
-const CountdownDialog: FC<PropsInterface> = ({onSave, onClose, title}) => {
+const CountdownDialog: FC<PropsInterface> = ({
+  onSave,
+  onClose,
+  title,
+  message = t('titles.getReadyToGetLive')
+}) => {
   const [countdown, setCountdown] = useState<number>(3);
-
-  const {t} = useTranslation();
 
   useEffect(() => {
     if (countdown > 0) {
@@ -39,7 +43,7 @@ const CountdownDialog: FC<PropsInterface> = ({onSave, onClose, title}) => {
       }}
     >
       <styled.Body data-testid="CountdownDialog-test">
-        <Text text={t('titles.getReadyToGetLive')} size="m" />
+        <Text text={message} size="m" />
         <Heading label={`${countdown}`} type="h1" />
       </styled.Body>
     </Dialog>

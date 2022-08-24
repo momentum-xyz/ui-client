@@ -7,8 +7,6 @@ import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 import {Widgets} from 'scenes/widgets';
 
-import LiveStreamLayer from '../_REFACTOR_/component/overlays/LiveStreamLayer';
-
 import {Meeting} from './meeting';
 
 const AppLayers: FC = ({children}) => {
@@ -28,7 +26,6 @@ const AppLayers: FC = ({children}) => {
         <Meeting />
       </main>
       <Widgets />
-      <LiveStreamLayer />
     </div>
   );
 };

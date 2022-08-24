@@ -20,6 +20,7 @@ const Navigation: FC<PropsInterface> = ({tabs}) => {
             iconName={tab.iconName}
             path={tab.path}
             isActive={tab.isActive}
+            isHidden={tab.isHidden}
             replace={tab.replace}
             state={{canGoBack: tab.canGoBack}}
           />
