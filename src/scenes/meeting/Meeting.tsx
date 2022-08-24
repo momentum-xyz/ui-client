@@ -8,7 +8,7 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
-import {MeetingRoomPage} from './pages';
+import {MeetingRoomPage, PosBusEventsPage} from './pages';
 import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
@@ -45,6 +45,7 @@ const Meeting: FC = () => {
   return (
     <styled.Container>
       <MeetingRoomPage onLeave={onLeaveMeeting} />
+      <PosBusEventsPage />
     </styled.Container>
   );
 };

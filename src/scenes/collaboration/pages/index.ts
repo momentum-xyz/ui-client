@@ -5,4 +5,3 @@ export * from './MiroBoardPage';
 export * from './ScreenSharePage';
 export * from './GoogleDrivePage';
 export * from './LiveStreamPage';
-export * from './PosBusCommunicationPage';

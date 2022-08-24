@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -25,7 +25,6 @@ import {
 } from './pages/StageModePage/components';
 import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
-import {PosBusCommunicatonPage} from './pages';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
@@ -40,13 +39,13 @@ const Collaboration: FC = () => {
     prepareOnStageDialog,
     countdownDialog,
     textChatStore,
-    liveStreamStore
+    liveStreamStore,
+    stageModeStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
-  const [accepted, setAccepted] = useState<boolean>();
 
   const reJoinMeeting = useCallback(async () => {
     if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
@@ -116,7 +115,7 @@ const Collaboration: FC = () => {
       return;
     }
 
-    if (!accepted) {
+    if (!stageModeStore.acceptedRequestToJoinStage) {
       try {
         await agoraStageModeStore.invitationRespond(StageModeRequestEnum.ACCEPT);
         await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
@@ -133,7 +132,7 @@ const Collaboration: FC = () => {
       } finally {
         countdownDialog.close();
       }
-    } else if (accepted) {
+    } else if (stageModeStore.acceptedRequestToJoinStage) {
       try {
         await agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
         countdownDialog.close();
@@ -149,7 +148,13 @@ const Collaboration: FC = () => {
         );
       }
     }
-  }, [agoraStageModeStore, countdownDialog, accepted, t, userDevicesStore.createLocalTracks]);
+  }, [
+    agoraStageModeStore,
+    countdownDialog,
+    stageModeStore.acceptedRequestToJoinStage,
+    t,
+    userDevicesStore.createLocalTracks
+  ]);
 
   const handleCountdownCanceled = () => {
     countdownDialog.close();
@@ -174,7 +179,6 @@ const Collaboration: FC = () => {
         )}
       />
 
-      <PosBusCommunicatonPage spaceId={spaceId} setAccepted={setAccepted} />
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
 
       {newDeviceDialog.isOpen && (

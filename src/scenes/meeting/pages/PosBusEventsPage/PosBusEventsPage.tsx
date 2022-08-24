@@ -1,21 +1,16 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback} from 'react';
+import {FC} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
-import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
+import {PosBusEventEnum, StageModeRequestEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {LiveStreamInterface} from 'api';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {ToastContent, TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
 
-export interface PropsInterface {
-  spaceId?: string;
-  setAccepted: (accepted?: boolean) => void;
-}
-
-const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => {
+const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
   const {agoraStore, unityStore} = mainStore;
@@ -30,26 +25,19 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
     miroBoardStore
   } = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
+  const {space} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
 
-  const leaveMeeting = useCallback(
-    async (isKicked = false) => {
-      await rootStore.leaveMeetingSpace(isKicked);
-      history.push(ROUTES.base);
-    },
-    [history, rootStore]
-  );
-
   usePosBusEvent('google-drive-file-change', (id) => {
-    if (spaceId === id) {
+    if (space?.id === id) {
       googleDriveStore.fetchGoogleDocument(id);
     }
   });
 
   usePosBusEvent('miro-board-change', (id) => {
-    if (spaceId === id) {
+    if (space?.id === id) {
       miroBoardStore.fetchMiroBoard(id);
     }
   });
@@ -61,7 +49,7 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
   usePosBusEvent('stage-mode-invite', () => {
     if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
       invitedOnStageDialog.open();
-      setAccepted(false);
+      stageModeStore.setAcceptedRequestToJoinStage(false);
     }
   });
 
@@ -69,7 +57,7 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
     if (userId === sessionStore.userId) {
       if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
         acceptedToJoinStageDialog.open();
-        setAccepted(true);
+        stageModeStore.setAcceptedRequestToJoinStage(true);
       }
     }
   });
@@ -128,9 +116,9 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
     liveStreamStore.setBroadcast(broadcast);
 
     if (liveStreamStore.isStreaming) {
-      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId}));
+      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
     } else {
-      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
     }
   });
 
@@ -152,9 +140,7 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
       );
     }
 
-    const isStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
-
-    if (isStageMode) {
+    if (agoraStore.isStageMode) {
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -164,7 +150,7 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
         />,
         TOAST_GROUND_OPTIONS
       );
-      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId}));
+      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: space?.id}));
     } else {
       toast.info(
         <ToastContent
@@ -203,7 +189,7 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
   });
 
   usePosBusEvent('meeting-kick', async () => {
-    await leaveMeeting(true);
+    await rootStore.leaveMeetingSpace(true);
     history.push(ROUTES.base);
 
     toast.info(
@@ -240,4 +226,4 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
   return null;
 };
 
-export default observer(PosBusCommunicationPage);
+export default observer(PosBusEventsPage);
