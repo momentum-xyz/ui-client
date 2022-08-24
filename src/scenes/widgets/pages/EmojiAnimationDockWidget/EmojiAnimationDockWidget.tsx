@@ -4,8 +4,9 @@ import {observer} from 'mobx-react-lite';
 import {usePosBusEvent} from 'shared/hooks';
 
 import {EmojiWithAvatarAnimation} from './components';
+import * as styled from './EmojiAnimationDockWidget.styled';
 
-const ANIMATION_DURATION_SEC = 3_000;
+const ANIMATION_DURATION_SEC = 5_000;
 
 // TODO make it model
 interface EmojiItemInterface {
@@ -14,6 +15,7 @@ interface EmojiItemInterface {
   userId?: string;
   emojiId?: string;
   idx: number;
+  offset: number;
 }
 type EmojiItemInterfaceStoreType = Set<EmojiItemInterface>;
 
@@ -28,14 +30,27 @@ const EmojiAnimationDock: FC = () => {
         userId,
         emojiUrl,
         emojiId,
-        idx: refIndex.current++
+        idx: refIndex.current++,
+        offset: Math.ceil(Math.random() * 100)
       };
 
       setItems((items) => new Set(items).add(item));
-      console.log('MOUNT', {type: type.toUpperCase(), userId, emojiId, emojiUrl});
+      console.log('MOUNT', {
+        type: type.toUpperCase(),
+        userId,
+        emojiId,
+        emojiUrl,
+        offset: item.offset
+      });
 
       setTimeout(() => {
-        console.log('UMOUNT', {type: type.toUpperCase(), userId, emojiId, emojiUrl});
+        console.log('UMOUNT', {
+          type: type.toUpperCase(),
+          userId,
+          emojiId,
+          emojiUrl,
+          offset: item.offset
+        });
         setItems((items) => {
           const s = new Set(items);
           s.delete(item);
@@ -43,18 +58,20 @@ const EmojiAnimationDock: FC = () => {
         });
       }, ANIMATION_DURATION_SEC);
     };
+
   usePosBusEvent('emoji', newEmojiHandler('emoji'));
   usePosBusEvent('megamoji', newEmojiHandler('megamoji'));
 
   const renderItems = () => {
-    return Array.from(items).map((it) => (
-      <EmojiWithAvatarAnimation key={it.idx} emojiUrl={it.emojiUrl}></EmojiWithAvatarAnimation>
+    return Array.from(items).map(({idx, ...props}) => (
+      <EmojiWithAvatarAnimation key={idx} {...props}></EmojiWithAvatarAnimation>
     ));
   };
+
   return (
-    <div>
+    <styled.Container>
       <>{renderItems()}</>
-    </div>
+    </styled.Container>
   );
 };
 

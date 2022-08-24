@@ -10,4 +10,5 @@ export const BottomCenteredDock = styled.div`
   bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
+  width: 35%;
 `;
