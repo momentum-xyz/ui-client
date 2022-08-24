@@ -11,8 +11,7 @@ import {ExplorePanel, OnlineUsersPanel} from './components';
 import * as styled from './HomePage.styled';
 
 const HomePage: FC = () => {
-  const {collaborationStore, meetingStore, mainStore} = useStore();
-  const {leftMeetingSpaceId} = collaborationStore;
+  const {meetingStore, mainStore} = useStore();
   const {unityStore} = mainStore;
 
   const {t} = useTranslation();
@@ -33,12 +32,12 @@ const HomePage: FC = () => {
       </styled.PanelWrapper>
 
       <styled.PanelWrapper>
-        {leftMeetingSpaceId && !meetingStore.isKicked && (
+        {meetingStore.canRejoin && (
           <styled.Rejoin>
             <Button
               variant="primary"
               label={t('actions.rejoinMeeting')}
-              onClick={() => rejoinMeeting(leftMeetingSpaceId)}
+              onClick={() => rejoinMeeting(meetingStore.lastSpaceId)}
             />
           </styled.Rejoin>
         )}
