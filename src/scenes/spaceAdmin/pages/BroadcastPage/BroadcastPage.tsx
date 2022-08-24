@@ -8,7 +8,7 @@ import {ROUTES} from 'core/constants';
 
 import * as styled from './BroadcastPage.styled';
 import {BroadcastFormPanel, BroadcastPreviewPanel} from './components';
-// TODO translation
+
 const BroadcastPage: FC = () => {
   const history = useHistory();
   const {collaborationStore, spaceAdminStore} = useStore();

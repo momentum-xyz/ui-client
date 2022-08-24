@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 
 import {Button, Heading, Input, SectionPanel, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -8,11 +9,13 @@ import {YOUTUBE_URL_PLACEHOLDER} from 'core/constants';
 import {BroadcastInterface} from 'api';
 
 import * as styled from './BroadcastFormPanel.styled';
-// TODO translation
+
 const BroadcastFormPanel: FC = () => {
   const {spaceAdminStore} = useStore();
   const {spaceManagerStore, broadcastStore} = spaceAdminStore;
   const {space} = spaceManagerStore;
+
+  const {t} = useTranslation();
 
   const {
     control,
@@ -29,18 +32,13 @@ const BroadcastFormPanel: FC = () => {
   }
 
   return (
-    <SectionPanel title="Broadcast" isCustom>
+    <SectionPanel title={t('broadcastAdmin.formTitle')} isCustom>
       <styled.Body data-testid="BroadcastFormPanel-test">
         <styled.DescriptionBox>
-          <Text
-            text="Broadcasting allows you to send out a message to this space and the spaces below. Add a youtube url to start broadcasting. What would you like to broadcast?"
-            size="m"
-            align="left"
-            isMultiline
-          />
+          <Text text={t('broadcastAdmin.formTitle')} size="m" align="left" isMultiline />
         </styled.DescriptionBox>
         <styled.InstructionBox>
-          <Text text="Add a youtube url which you would like to broadcast:" size="m" align="left" />
+          <Text text={t('broadcastAdmin.formInstruction')} size="m" align="left" />
           <div>
             <Controller
               name="youtubeUrl"
@@ -50,10 +48,10 @@ const BroadcastFormPanel: FC = () => {
                 <Input
                   value={value}
                   onChange={onChange}
-                  label="youtube video url"
+                  label={t('broadcastAdmin.formInputLabel')}
                   placeholder={YOUTUBE_URL_PLACEHOLDER}
-                  isError={!!errors.youtubeUrl || !broadcastStore.previewHash}
-                  errorMessage="Please enter a valid Youtube URL"
+                  isError={!!errors.youtubeUrl}
+                  errorMessage={t('broadcastAdmin.formErrorMessage')}
                 />
               )}
               rules={{
@@ -61,21 +59,21 @@ const BroadcastFormPanel: FC = () => {
                 pattern: {
                   value:
                     /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/,
-                  message: 'Please enter a valid Youtube URL'
+                  message: t('broadcastAdmin.formErrorMessage')
                 }
               }}
             />
           </div>
           <styled.ButtonWrapper>
-            <Button label="preview" onClick={handleSubmit(formSubmitHandler)} variant="primary" />
+            <Button
+              label={t('broadcastAdmin.formButton')}
+              onClick={handleSubmit(formSubmitHandler)}
+              variant="primary"
+            />
           </styled.ButtonWrapper>
         </styled.InstructionBox>
         <styled.InfoBox>
-          <Text
-            text="The broadcast will be sent to the following spaces and their subspaces:"
-            size="m"
-            align="left"
-          />
+          <Text text={t('broadcastAdmin.formInfo')} size="m" align="left" />
           <Heading label={space?.name ?? ''} type="h2" align="left" />
         </styled.InfoBox>
       </styled.Body>

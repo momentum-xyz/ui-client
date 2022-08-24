@@ -9,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import {BroadcastStatusEnum} from 'core/enums';
 
 import * as styled from './BroadcastPreviewPanel.styled';
-// TODO translation
+
 const BroadcastPreviewPanel: FC = () => {
   const {spaceAdminStore} = useStore();
   const {broadcastStore, spaceManagerStore} = spaceAdminStore;
@@ -24,7 +24,7 @@ const BroadcastPreviewPanel: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="The video has broadcast successfully"
+          text={t('broadcastAdmin.enableSuccess')}
           isCloseButton
         />,
         TOAST_COMMON_OPTIONS
@@ -34,7 +34,7 @@ const BroadcastPreviewPanel: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="there was a problem broadcasting this video"
+          text={t('broadcastAdmin.enableError')}
           isDanger
           isCloseButton
         />,
@@ -50,7 +50,7 @@ const BroadcastPreviewPanel: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="Broadcasting has disabled successfully"
+          text={t('broadcastAdmin.disableSuccess')}
           isCloseButton
         />,
         TOAST_COMMON_OPTIONS
@@ -60,7 +60,7 @@ const BroadcastPreviewPanel: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="there was a problem disabling the broadcast"
+          text={t('broadcastAdmin.disableError')}
           isDanger
           isCloseButton
         />,
@@ -70,7 +70,7 @@ const BroadcastPreviewPanel: FC = () => {
   };
 
   return (
-    <SectionPanel title="Preview" isCustom>
+    <SectionPanel title={t('broadcastAdmin.previewTitle')} isCustom>
       <styled.Body data-testid="BroadcastPreviewPanel-test">
         <styled.VideoPanel>
           {broadcastStore.previewHash && (
@@ -86,14 +86,18 @@ const BroadcastPreviewPanel: FC = () => {
           {broadcastStore.isYoutubeHash &&
           broadcastStore.broadcast.broadcastStatus === BroadcastStatusEnum.STOP ? (
             <Button
-              label="start broadcasting"
+              label={t('broadcastAdmin.broadcastStart')}
               onClick={handleStartBroadcasting}
               variant="primary"
             />
           ) : BroadcastStatusEnum.PLAY === broadcastStore.broadcast.broadcastStatus ? (
-            <Button label="stop broadcasting" onClick={handleStopBroadcasting} variant="danger" />
+            <Button
+              label={t('broadcastAdmin.broadcastStop')}
+              onClick={handleStopBroadcasting}
+              variant="danger"
+            />
           ) : (
-            <Button label="start broadcasting" disabled />
+            <Button label={t('broadcastAdmin.broadcastStart')} disabled />
           )}
         </styled.ButtonWrapper>
       </styled.Body>

@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
@@ -22,7 +23,7 @@ const LiveStreamPage: FC = () => {
     <styled.Inner data-testid="LiveStreamPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
-        subtitle="sub title"
+        subtitle={t('liveStream.subtitle')}
         isAdmin={space.isAdmin}
         spaceId={space.id}
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
@@ -34,7 +35,7 @@ const LiveStreamPage: FC = () => {
       >
         {broadcastStore.broadcastStatus === BroadcastStatusEnum.PLAY && space.isAdmin && (
           <Button
-            label="stop streaming"
+            label={t('broadcastAdmin.stopStream')}
             variant="danger"
             onClick={() => broadcastStore.disableBroadcast(space?.id)}
           />
