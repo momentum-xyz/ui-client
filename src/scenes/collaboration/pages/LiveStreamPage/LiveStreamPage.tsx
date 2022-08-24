@@ -35,7 +35,7 @@ const LiveStreamPage: FC = () => {
       >
         {broadcastStore.broadcastStatus === BroadcastStatusEnum.PLAY && space.isAdmin && (
           <Button
-            label={t('broadcastAdmin.stopStream')}
+            label={t('liveStream.stopStream')}
             variant="danger"
             onClick={() => broadcastStore.disableBroadcast(space?.id)}
           />
