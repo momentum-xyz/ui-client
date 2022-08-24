@@ -1,19 +1,24 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {useHistory} from 'react-router';
 
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 import {BroadcastStatusEnum} from 'core/enums';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './LiveStreamPage.styled';
 import {VideoPanel} from './components';
 
 const LiveStreamPage: FC = () => {
-  const {mainStore, sessionStore, spaceAdminStore, collaborationStore} = useStore();
+  const {mainStore, sessionStore, spaceAdminStore, collaborationStore, leaveMeetingSpace} =
+    useStore();
   const {space, textChatStore} = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
   const {favoriteStore} = mainStore;
+
+  const history = useHistory();
 
   if (!space) {
     return null;
@@ -32,6 +37,10 @@ const LiveStreamPage: FC = () => {
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        onLeave={async () => {
+          await leaveMeetingSpace();
+          history.push(ROUTES.base);
+        }}
       >
         {broadcastStore.broadcastStatus === BroadcastStatusEnum.PLAY && space.isAdmin && (
           <Button
