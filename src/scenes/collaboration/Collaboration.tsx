@@ -16,6 +16,7 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
+import {EmojiAnimationDockWidget} from 'scenes/widgets/pages';
 
 import {
   AcceptedToJoinStageDialog,
@@ -324,6 +325,10 @@ const Collaboration: FC = () => {
       {prepareOnStageDialog.isOpen && (
         <PrepareOnStageDialog onClose={prepareOnStageDialog.close} onReady={countdownDialog.open} />
       )}
+
+      <styled.BottomCenteredDock>
+        <EmojiAnimationDockWidget />
+      </styled.BottomCenteredDock>
     </styled.Container>
   );
 };
