@@ -68,7 +68,7 @@ const BroadcastPage: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, []);
+  }, [broadcastStore, space?.id]);
 
   const handleStopBroadcasting = useCallback(async () => {
     broadcastStore.stopBroadcastingDialog.close();
@@ -95,7 +95,7 @@ const BroadcastPage: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, []);
+  }, [broadcastStore, space?.id]);
 
   usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
     broadcastStore.setBroadcast(broadcast);

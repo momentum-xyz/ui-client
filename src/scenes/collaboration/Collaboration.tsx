@@ -84,7 +84,7 @@ const Collaboration: FC = () => {
 
   useEffect(() => {
     textChatStore.countUnreadMessages();
-  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen]);
+  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
   useEffect(() => {
     if (agoraStore.appId && !textChatStore.isLoggedOn) {
