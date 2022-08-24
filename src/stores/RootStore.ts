@@ -66,7 +66,7 @@ const RootStore = types
       const spaceId = self.collaborationStore.space?.id;
 
       yield self.mainStore.agoraStore.leaveMeetingSpace();
-      self.collaborationStore.leaveMeetingSpace();
+      yield self.collaborationStore.leaveMeetingSpace();
 
       if (spaceId) {
         self.mainStore.unityStore.triggerInteractionMessage(
@@ -75,9 +75,9 @@ const RootStore = types
           0,
           ''
         );
-
-        console.log(`-------LEFT------- ${self.collaborationStore.leftMeetingSpaceId}`);
       }
+
+      console.log(`-------LEFT------- ${self.collaborationStore.leftMeetingSpaceId}`);
     })
   }));
 

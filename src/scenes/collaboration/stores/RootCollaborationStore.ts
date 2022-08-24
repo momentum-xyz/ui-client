@@ -83,23 +83,23 @@ const RootCollaborationStore = types
     leaveMeetingSpace: flow(function* () {
       if (!self.space?.isTable) {
         self.leftMeetingSpaceId = self.space?.id;
+
+        yield self.textChatStore.leaveChannel();
+        yield self.textChatStore.logOut();
+        self.textChatStore.resetModel();
+
+        if (!!self.space && self.space.isAdmin) {
+          yield self.miroBoardStore.disableMiroBoard(self.space.id);
+          yield self.googleDriveStore.disableGoogleDocument(self.space.id);
+        }
+
+        self.space = undefined;
+        self.isModerator = false;
+
+        self.leftMeetingTimer = setTimeout(() => {
+          self.resetLeftMeetingSpace();
+        }, 15000);
       }
-
-      yield self.textChatStore.leaveChannel();
-      yield self.textChatStore.logOut();
-      self.textChatStore.resetModel();
-
-      if (!!self.space && self.space.isAdmin) {
-        yield self.miroBoardStore.disableMiroBoard(self.space.id);
-        yield self.googleDriveStore.disableGoogleDocument(self.space.id);
-      }
-
-      self.space = undefined;
-      self.isModerator = false;
-
-      self.leftMeetingTimer = setTimeout(() => {
-        self.resetLeftMeetingSpace();
-      }, 15000);
     }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
       self.participantToRemoveFromStage = remoteUser;
