@@ -178,7 +178,10 @@ const AgoraStageModeStore = types
       const updatedUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
 
       if (updatedUser) {
-        updatedUser.participantInfo = user;
+        if (!updatedUser.participantInfo) {
+          updatedUser.participantInfo = user;
+        }
+
         if (mediaType === 'audio') {
           updatedUser.isMuted = !user.hasAudio;
           updatedUser.audioTrack = user.audioTrack;
@@ -201,14 +204,14 @@ const AgoraStageModeStore = types
       const foundUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
 
       if (foundUser?.participantInfo) {
-        if (mediaType === 'audio' && foundUser.audioTrack?.isPlaying) {
-          foundUser.audioTrack?.stop();
-        }
-
         if (mediaType === 'audio') {
+          foundUser.audioTrack?.stop();
+          foundUser.audioTrack = undefined;
           foundUser.isMuted = true;
         } else {
           foundUser.cameraOff = true;
+          foundUser.videoTrack?.stop();
+          foundUser.videoTrack = undefined;
         }
       }
     },

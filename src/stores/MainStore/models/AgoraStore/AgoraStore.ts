@@ -128,6 +128,9 @@ const AgoraStore = types
         }
       }
 
+      self.userDevicesStore.mute();
+      self.userDevicesStore.turnOffCamera();
+
       if (spaceId) {
         self.spaceId = spaceId;
       }
