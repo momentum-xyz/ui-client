@@ -354,6 +354,15 @@ const AgoraStageModeStore = types
             role: ParticipantRole.AUDIENCE_MEMBER
           }))
       );
+
+      self.users = self.client.remoteUsers.map((user) =>
+        cast({
+          uid: user.uid,
+          participantInfo: user,
+          isMuted: true,
+          cameraOff: true
+        })
+      );
     }),
     leave: flow(function* () {
       yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
@@ -363,6 +372,8 @@ const AgoraStageModeStore = types
       yield self.client.leave();
       self.isOnStage = false;
       self.spaceId = undefined;
+      self.users = [];
+      self.audience = cast([]);
     }),
     enterStage: flow(function* (
       createLocalTracks: (
@@ -381,7 +392,6 @@ const AgoraStageModeStore = types
       self.isOnStage = true;
     }),
     leaveStage: flow(function* () {
-      // TODO: Disable camera and mic in the footer (dis)
       self.client.localTracks.forEach((localTrack) => {
         localTrack.setEnabled(false);
         localTrack.stop();
