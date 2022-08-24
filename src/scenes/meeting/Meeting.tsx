@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
@@ -13,12 +13,20 @@ import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
   const rootStore = useStore();
-  const {mainStore, sessionStore, meetingStore} = rootStore;
+  const {mainStore, sessionStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, userDevicesStore} = agoraStore;
 
   const history = useHistory();
   const {t} = useTranslation();
+
+  const onLeaveMeeting = useCallback(
+    async (isKicked = false) => {
+      await rootStore.leaveMeetingSpace(isKicked);
+      history.push(ROUTES.base);
+    },
+    [history, rootStore]
+  );
 
   usePosBusEvent('meeting-mute', () => {
     userDevicesStore.mute();
@@ -28,21 +36,6 @@ const Meeting: FC = () => {
     if (sessionStore.userId !== moderatorId) {
       userDevicesStore.mute();
     }
-  });
-
-  usePosBusEvent('meeting-kick', () => {
-    meetingStore.setKicked(true);
-    history.push(ROUTES.base);
-
-    toast.info(
-      <ToastContent
-        headerIconName="logout"
-        title={t('titles.kickedFromMeeting')}
-        text={t('messages.kickedFromMeeting')}
-        isCloseButton
-      />,
-      TOAST_COMMON_OPTIONS
-    );
   });
 
   usePosBusEvent('stage-mode-mute', () => {
@@ -56,6 +49,21 @@ const Meeting: FC = () => {
         isCloseButton
       />,
       TOAST_GROUND_OPTIONS
+    );
+  });
+
+  usePosBusEvent('meeting-kick', async () => {
+    await onLeaveMeeting(true);
+    history.push(ROUTES.base);
+
+    toast.info(
+      <ToastContent
+        headerIconName="logout"
+        title={t('titles.kickedFromMeeting')}
+        text={t('messages.kickedFromMeeting')}
+        isCloseButton
+      />,
+      TOAST_COMMON_OPTIONS
     );
   });
 
@@ -75,12 +83,7 @@ const Meeting: FC = () => {
 
   return (
     <styled.Container>
-      <MeetingRoomPage
-        onLeave={async () => {
-          await rootStore.leaveMeetingSpace();
-          history.push(ROUTES.base);
-        }}
-      />
+      <MeetingRoomPage onLeave={onLeaveMeeting} />
     </styled.Container>
   );
 };

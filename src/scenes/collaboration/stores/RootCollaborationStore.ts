@@ -35,7 +35,6 @@ const RootCollaborationStore = types
       liveStreamStore: types.optional(LiveStreamStore, {}),
       isModerator: false,
 
-      leftMeetingSpaceId: types.maybe(types.string),
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
       // Requests
@@ -54,22 +53,11 @@ const RootCollaborationStore = types
       countdownDialog: types.optional(DialogModel, {})
     })
   )
-  .volatile(() => ({
-    leftMeetingTimer: setTimeout(() => {}, 0)
-  }))
-  .actions((self) => ({
-    resetLeftMeetingSpace() {
-      self.leftMeetingSpaceId = undefined;
-    }
-  }))
   .actions((self) => ({
     initBroadcast(spaceId: string): void {
       self.liveStreamStore.fetchBroadcast(spaceId);
     },
-    joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
-      self.resetLeftMeetingSpace();
-      clearTimeout(self.leftMeetingTimer);
-
+    join: flow(function* (spaceId: string, isTable = false) {
       self.space = Space.create({id: spaceId, isTable});
 
       if (!(yield self.space?.canUserJoin(spaceId))) {
@@ -78,17 +66,13 @@ const RootCollaborationStore = types
 
       yield self.space.fetchSpaceInformation();
 
-      const isModerator: boolean = yield self.moderationRequest.send(
+      self.isModerator = yield self.moderationRequest.send(
         api.spaceIntegrationsRepository.checkSpaceModeration,
         {spaceId}
       );
-
-      self.isModerator = isModerator;
     }),
-    leaveMeetingSpace: flow(function* () {
+    leave: flow(function* () {
       if (!self.space?.isTable) {
-        self.leftMeetingSpaceId = self.space?.id;
-
         yield self.textChatStore.leaveChannel();
         yield self.textChatStore.logOut();
         self.textChatStore.resetModel();
@@ -100,10 +84,6 @@ const RootCollaborationStore = types
 
         self.space = undefined;
         self.isModerator = false;
-
-        self.leftMeetingTimer = setTimeout(() => {
-          self.resetLeftMeetingSpace();
-        }, 15000);
       }
     }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
