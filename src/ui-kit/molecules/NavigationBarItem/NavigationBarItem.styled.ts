@@ -28,7 +28,7 @@ export const Item = styled.div`
     }
   }
 
-  &.isHide {
+  &.isHidden {
     display: none;
   }
 

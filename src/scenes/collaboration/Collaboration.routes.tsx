@@ -93,7 +93,7 @@ export const buildNavigationTabs = (
     {
       path: generatePath(ROUTES.collaboration.liveStream, {spaceId}),
       iconName: 'live',
-      isHide: !isLiveStreaming,
+      isHidden: !isLiveStreaming,
       isActive: isLiveStreaming
     }
   ];

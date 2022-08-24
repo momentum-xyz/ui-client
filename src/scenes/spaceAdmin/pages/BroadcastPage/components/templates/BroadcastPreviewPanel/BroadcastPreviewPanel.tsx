@@ -14,7 +14,7 @@ const BroadcastPreviewPanel: FC = () => {
 
   const {t} = useTranslation();
 
-  const opts = {
+  const youtubeOptions = {
     playerVars: {
       autoplay: 1,
       mute: 0
@@ -30,7 +30,7 @@ const BroadcastPreviewPanel: FC = () => {
               videoId={broadcastStore.previewHash}
               className="youtube"
               iframeClassName="youtubeIframe"
-              opts={opts}
+              opts={youtubeOptions}
             />
           )}
         </styled.VideoPanel>

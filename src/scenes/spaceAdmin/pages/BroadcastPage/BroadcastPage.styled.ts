@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {PanelLayout, Text} from 'ui-kit';
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,18 +30,18 @@ export const NoAccess = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
+`;
 
-  .PanelLayout-custom {
-    width: 515px;
-    height: 123px;
-    justify-content: center;
-    align-items: center;
+export const Panel = styled(PanelLayout)`
+  width: 515px;
+  height: 123px;
+  justify-content: center;
+  align-items: center;
+`;
 
-    .Text-custom {
-      height: 100%;
-      justify-content: center;
-      display: flex;
-      align-items: center;
-    }
-  }
+export const Message = styled(Text)`
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 `;

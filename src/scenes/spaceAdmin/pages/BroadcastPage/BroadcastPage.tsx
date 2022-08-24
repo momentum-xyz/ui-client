@@ -5,14 +5,7 @@ import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {
-  CountdownDialog,
-  PageTopBar,
-  PanelLayout,
-  Text,
-  TOAST_COMMON_OPTIONS,
-  ToastContent
-} from 'ui-kit';
+import {CountdownDialog, PageTopBar, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import {LiveStreamInterface} from 'api';
 
@@ -120,9 +113,9 @@ const BroadcastPage: FC = () => {
           </>
         ) : (
           <styled.NoAccess>
-            <PanelLayout isCustom>
-              <Text isCustom text={t('spaceAdmin.noAccess')} size="l" />
-            </PanelLayout>
+            <styled.Panel>
+              <styled.Message text={t('spaceAdmin.noAccess')} size="l" />
+            </styled.Panel>
           </styled.NoAccess>
         )}
       </styled.Body>

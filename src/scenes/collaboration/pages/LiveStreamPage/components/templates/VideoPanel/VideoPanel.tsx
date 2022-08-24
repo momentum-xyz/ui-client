@@ -9,7 +9,7 @@ interface PropsInterface {
 }
 
 const VideoPanel: FC<PropsInterface> = ({youtubeHash}) => {
-  const opts = {
+  const youtubeOptions = {
     playerVars: {
       autoplay: 1,
       mute: 0
@@ -21,7 +21,7 @@ const VideoPanel: FC<PropsInterface> = ({youtubeHash}) => {
         videoId={youtubeHash}
         className="youtube"
         iframeClassName="youtubeIframe"
-        opts={opts}
+        opts={youtubeOptions}
       />
     </styled.Wrapper>
   );
