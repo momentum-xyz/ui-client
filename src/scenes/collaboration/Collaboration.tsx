@@ -7,8 +7,8 @@ import {toast} from 'react-toastify';
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
 import {createRoutesByConfig} from 'core/utils';
-import {useStore, usePosBusEvent, useDeviceChange} from 'shared/hooks';
-import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
+import {useStore, useDeviceChange} from 'shared/hooks';
+import {StageModeRequestEnum} from 'core/enums';
 import {
   Navigation,
   ToastContent,
@@ -16,7 +16,6 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
-import {LiveStreamInterface} from 'api';
 
 import {
   AcceptedToJoinStageDialog,
@@ -26,15 +25,15 @@ import {
 } from './pages/StageModePage/components';
 import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
+import {PosBusCommunicatonPage} from './pages';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
-  const {unityStore, agoraStore} = mainStore;
+  const {agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
-    stageModeStore,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
     invitedOnStageDialog,
@@ -162,130 +161,6 @@ const Collaboration: FC = () => {
     invitedOnStageDialog.close();
   }, [agoraStageModeStore, invitedOnStageDialog]);
 
-  usePosBusEvent('stage-mode-invite', () => {
-    if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
-      invitedOnStageDialog.open();
-      setAccepted(false);
-    }
-  });
-
-  usePosBusEvent('stage-mode-accepted', (userId) => {
-    if (userId === sessionStore.userId) {
-      if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
-        acceptedToJoinStageDialog.open();
-        setAccepted(true);
-      }
-    }
-  });
-
-  usePosBusEvent('stage-mode-declined', (userId) => {
-    if (userId === sessionStore.userId) {
-      declinedToJoinStageDialog.open();
-    }
-  });
-
-  usePosBusEvent('posbus-connected', () => {
-    if (collaborationStore.space) {
-      unityStore.triggerInteractionMessage(
-        PosBusEventEnum.EnteredSpace,
-        collaborationStore.space.id,
-        0,
-        ''
-      );
-    }
-  });
-
-  usePosBusEvent('stage-mode-request', (userId) => {
-    if (collaborationStore.isModerator) {
-      stageModeStore.addRequestPopup(userId, {
-        user: userId,
-        onAccept: async () => {
-          try {
-            await agoraStageModeStore.requestRespond(userId, StageModeRequestEnum.ACCEPT);
-            return true;
-          } catch {
-            toast.error(
-              <ToastContent
-                isDanger
-                headerIconName="alert"
-                title={t('titles.alert')}
-                text={t('messages.userRequestDeny')}
-                isCloseButton
-              />
-            );
-            return false;
-          }
-        },
-        onDecline: async () => {
-          try {
-            await agoraStageModeStore.requestRespond(userId, StageModeRequestEnum.DECLINE);
-            return true;
-          } catch {
-            return false;
-          }
-        }
-      });
-    }
-  });
-
-  usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
-    liveStreamStore.setBroadcast(broadcast);
-
-    if (liveStreamStore.isStreaming) {
-      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId}));
-    } else {
-      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
-    }
-  });
-
-  usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
-    const showStageIsFull = await agoraStore.toggledStageMode(
-      sessionStore.userId,
-      collaborationStore.isModerator
-    );
-
-    if (showStageIsFull) {
-      toast.error(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('messages.stageIsFull')}
-          isCloseButton
-        />,
-        TOAST_GROUND_OPTIONS
-      );
-    }
-
-    const isStageMode = stageModeStatus === StageModeStatusEnum.INITIATED;
-
-    if (isStageMode) {
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.stage')}
-          text={t('messages.stageModeActivated')}
-          isCloseButton
-        />,
-        TOAST_GROUND_OPTIONS
-      );
-      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId}));
-    } else {
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.stage')}
-          text={t('messages.stageModeDeActivated')}
-          isCloseButton
-        />,
-        TOAST_GROUND_OPTIONS
-      );
-    }
-  });
-
-  usePosBusEvent('stage-mode-user-joined', agoraStageModeStore.addStageModeUser);
-  usePosBusEvent('stage-mode-user-left', agoraStageModeStore.removeStageModeUser);
-  usePosBusEvent('stage-mode-kick', agoraStageModeStore.moveToAudience);
-
   const {device} = useDeviceChange(newDeviceDialog.open);
 
   return (
@@ -299,6 +174,7 @@ const Collaboration: FC = () => {
         )}
       />
 
+      <PosBusCommunicatonPage spaceId={spaceId} setAccepted={setAccepted} />
       <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
 
       {newDeviceDialog.isOpen && (
