@@ -17,7 +17,7 @@ export interface PropsInterface {
 
 const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => {
   const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore} = rootStore;
+  const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
   const {agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
@@ -25,8 +25,11 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
     invitedOnStageDialog,
-    liveStreamStore
+    liveStreamStore,
+    googleDriveStore,
+    miroBoardStore
   } = collaborationStore;
+  const {broadcastStore} = spaceAdminStore;
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -38,6 +41,22 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
     },
     [history, rootStore]
   );
+
+  usePosBusEvent('google-drive-file-change', (id) => {
+    if (spaceId === id) {
+      googleDriveStore.fetchGoogleDocument(id);
+    }
+  });
+
+  usePosBusEvent('miro-board-change', (id) => {
+    if (spaceId === id) {
+      miroBoardStore.fetchMiroBoard(id);
+    }
+  });
+
+  usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
+    broadcastStore.setBroadcast(broadcast);
+  });
 
   usePosBusEvent('stage-mode-invite', () => {
     if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
@@ -196,6 +215,22 @@ const PosBusCommunicationPage: FC<PropsInterface> = ({spaceId, setAccepted}) => 
       />,
       TOAST_COMMON_OPTIONS
     );
+  });
+
+  usePosBusEvent('stage-mode-accepted', (userId) => {
+    stageModeStore.removeRequestPopup(userId);
+    if (userId === sessionStore.userId) {
+      stageModeStore.removeAwaitingPermissionPopup();
+      agoraStageModeStore.requestToGoOnstageWasHandled();
+    }
+  });
+
+  usePosBusEvent('stage-mode-declined', (userId) => {
+    stageModeStore.removeRequestPopup(userId);
+    if (userId === sessionStore.userId) {
+      stageModeStore.removeAwaitingPermissionPopup();
+      agoraStageModeStore.requestToGoOnstageWasHandled();
+    }
   });
 
   usePosBusEvent('stage-mode-user-joined', agoraStageModeStore.addStageModeUser);
