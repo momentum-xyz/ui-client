@@ -5,17 +5,14 @@ import {useHistory} from 'react-router';
 
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
-import {BroadcastStatusEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './LiveStreamPage.styled';
 import {VideoPanel} from './components';
 
 const LiveStreamPage: FC = () => {
-  const {mainStore, sessionStore, spaceAdminStore, collaborationStore, leaveMeetingSpace} =
-    useStore();
-  const {space, textChatStore} = collaborationStore;
-  const {broadcastStore} = spaceAdminStore;
+  const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
+  const {space, textChatStore, liveStreamStore} = collaborationStore;
   const {favoriteStore} = mainStore;
 
   const history = useHistory();
@@ -42,16 +39,16 @@ const LiveStreamPage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {broadcastStore.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY && space.isAdmin && (
+        {liveStreamStore.isStreaming && space.isAdmin && (
           <Button
             label={t('liveStream.stopStream')}
             variant="danger"
-            onClick={() => broadcastStore.disableBroadcast(space?.id)}
+            onClick={() => liveStreamStore.disableBroadcast(space?.id)}
           />
         )}
       </SpaceTopBar>
       <styled.Container>
-        <VideoPanel />
+        <VideoPanel youtubeHash={liveStreamStore.broadcast.url} />
         {textChatStore.textChatDialog.isOpen && (
           <TextChat
             currentChannel={textChatStore.currentChannel}

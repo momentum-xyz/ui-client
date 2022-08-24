@@ -17,6 +17,13 @@ const BroadcastPreviewPanel: FC = () => {
 
   const {t} = useTranslation();
 
+  const opts = {
+    playerVars: {
+      autoplay: 1,
+      mute: 0
+    }
+  };
+
   const handleStartBroadcasting = async () => {
     const success = await broadcastStore.enableBroadcast(space?.id ?? '');
     if (success) {
@@ -78,13 +85,12 @@ const BroadcastPreviewPanel: FC = () => {
               videoId={broadcastStore.previewHash}
               className="youtube"
               iframeClassName="youtubeIframe"
-              opts={broadcastStore.opts}
+              opts={opts}
             />
           )}
         </styled.VideoPanel>
         <styled.ButtonWrapper>
-          {broadcastStore.isYoutubeHash &&
-          broadcastStore.broadcast.broadcastStatus === BroadcastStatusEnum.STOP ? (
+          {broadcastStore.isYoutubeHash && !broadcastStore.isStreaming ? (
             <Button
               label={t('broadcastAdmin.broadcastStart')}
               onClick={handleStartBroadcasting}

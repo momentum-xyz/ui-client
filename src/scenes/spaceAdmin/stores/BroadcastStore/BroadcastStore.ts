@@ -19,14 +19,6 @@ const BroadcastStore = types.compose(
       previewHash: types.maybe(types.string),
       youtubeUrl: types.maybe(types.string)
     })
-    .volatile(() => ({
-      opts: {
-        playerVars: {
-          autoplay: 1,
-          mute: 0
-        }
-      }
-    }))
     .actions((self) => ({
       fetchBroadcast: flow(function* (spaceId: string) {
         const response = yield self.fetchRequest.send(api.integrationRepository.fetchIntegration, {
@@ -87,6 +79,11 @@ const BroadcastStore = types.compose(
           self.previewHash = '';
           self.isYoutubeHash = false;
         }
+      }
+    }))
+    .views((self) => ({
+      get isStreaming() {
+        return self.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY;
       }
     }))
 );

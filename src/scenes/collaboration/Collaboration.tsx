@@ -8,12 +8,7 @@ import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
 import {createRoutesByConfig} from 'core/utils';
 import {useStore, usePosBusEvent, useDeviceChange} from 'shared/hooks';
-import {
-  BroadcastStatusEnum,
-  PosBusEventEnum,
-  StageModeRequestEnum,
-  StageModeStatusEnum
-} from 'core/enums';
+import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {
   Navigation,
   ToastContent,
@@ -34,7 +29,7 @@ import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
+  const {collaborationStore, mainStore, sessionStore} = rootStore;
   const {unityStore, agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
@@ -45,9 +40,9 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    textChatStore
+    textChatStore,
+    liveStreamStore
   } = collaborationStore;
-  const {broadcastStore} = spaceAdminStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
@@ -84,8 +79,8 @@ const Collaboration: FC = () => {
   }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
-    broadcastStore.fetchBroadcast(spaceId);
-  }, [broadcastStore, spaceId]);
+    liveStreamStore.fetchBroadcast(spaceId);
+  }, [liveStreamStore, spaceId]);
 
   useEffect(() => {
     textChatStore.countUnreadMessages();
@@ -234,9 +229,9 @@ const Collaboration: FC = () => {
   });
 
   usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
-    broadcastStore.setBroadcast(broadcast);
+    liveStreamStore.setBroadcast(broadcast);
 
-    if (broadcast.broadcastStatus === BroadcastStatusEnum.PLAY) {
+    if (liveStreamStore.isStreaming) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId}));
     } else {
       history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
@@ -300,7 +295,7 @@ const Collaboration: FC = () => {
           spaceId,
           agoraStore.isStageMode,
           !!agoraScreenShareStore.videoTrack,
-          broadcastStore.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY
+          liveStreamStore.isStreaming
         )}
       />
 

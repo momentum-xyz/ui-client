@@ -2,21 +2,26 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import YouTube from 'react-youtube';
 
-import {useStore} from 'shared/hooks';
-
 import * as styled from './VideoPanel.styled';
 
-const VideoPanel: FC = () => {
-  const {spaceAdminStore} = useStore();
-  const {broadcastStore} = spaceAdminStore;
+interface PropsInterface {
+  youtubeHash?: string;
+}
 
+const VideoPanel: FC<PropsInterface> = ({youtubeHash}) => {
+  const opts = {
+    playerVars: {
+      autoplay: 1,
+      mute: 0
+    }
+  };
   return (
     <styled.Wrapper data-testid="VideoPanel-test">
       <YouTube
-        videoId={broadcastStore.broadcast.url}
+        videoId={youtubeHash}
         className="youtube"
         iframeClassName="youtubeIframe"
-        opts={broadcastStore.opts}
+        opts={opts}
       />
     </styled.Wrapper>
   );
