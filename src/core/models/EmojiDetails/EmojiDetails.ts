@@ -2,7 +2,8 @@ import {Instance, types} from 'mobx-state-tree';
 
 import {appVariables} from 'api/constants';
 
-const emojiSize = 's1';
+const emojiSizeUI = 's1';
+const emojiSizeUnit = 's5';
 
 const EmojiDetails = types
   .model('EmojiDetails', {
@@ -15,7 +16,10 @@ const EmojiDetails = types
   })
   .views((self) => ({
     get imgSrc(): string {
-      return `${appVariables.RENDER_SERVICE_URL}/texture/${emojiSize}/${self.hash}`;
+      return `${appVariables.RENDER_SERVICE_URL}/texture/${emojiSizeUI}/${self.hash}`;
+    },
+    get unityUrl(): string {
+      return `${appVariables.RENDER_SERVICE_URL}/texture/${emojiSizeUnit}/${self.hash}`;
     }
   }));
 

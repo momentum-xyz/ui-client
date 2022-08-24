@@ -1,8 +1,9 @@
-import {FC} from 'react';
+import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
+import {UnityService} from 'shared/services';
 import {PanelLayout} from 'ui-kit';
 
 import * as styled from './EmojiWidget.styled';
@@ -13,18 +14,41 @@ interface PropsInterface {
 }
 
 const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
-  const {widgetStore} = useStore();
-  const {emojiStore} = widgetStore;
-  const {emojiDetailsList} = emojiStore;
+  const {
+    widgetStore,
+    // mainStore,
+    sessionStore
+  } = useStore();
+  const {emojiDetailsList} = widgetStore.emojiStore;
+  // const {userProfile} = widgetStore.profileStore;
+  const {profile} = sessionStore;
+  // const {unityStore} = mainStore;
 
   const {t} = useTranslation();
+
+  const userUUID = profile?.uuid;
+  const handleEmojiClick = useCallback(
+    (emojiId: string, emojiUrl: string) => {
+      // console.log('user uuid', userProfile?.uuid, profile?.uuid);
+      if (userUUID) {
+        UnityService.sendEmoji({emojiId, emojiUrl, userUUID});
+      } else {
+        console.error('Unable to get user uuid');
+      }
+    },
+    [userUUID]
+  );
 
   return (
     <PanelLayout title={t('labels.emoji')} onClose={onClose}>
       <styled.Container>
         <styled.EmojiList>
           {emojiDetailsList.map((em) => (
-            <EmojiItem emoji={em} onClick={() => alert('Soon! ' + em.name)} key={em.id} />
+            <EmojiItem
+              emoji={em}
+              onClick={() => handleEmojiClick(em.id, em.unityUrl)}
+              key={em.id}
+            />
           ))}
         </styled.EmojiList>
       </styled.Container>

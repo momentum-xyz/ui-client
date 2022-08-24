@@ -145,6 +145,33 @@ export class UnityService {
     }
   }
 
+  sendEmoji({
+    emojiUrl,
+    emojiId,
+    userUUID,
+    targetType = 'user'
+  }: {
+    emojiId: string;
+    emojiUrl: string;
+    userUUID: string;
+    targetType?: string;
+  }) {
+    try {
+      console.log('SEND EMOJI:', {targetType, userUUID, emojiUrl, emojiId});
+      console.log('unityAPI', this.unityApi);
+      const topic = 'emoji';
+      const data = JSON.stringify({
+        targetType,
+        targetID: userUUID,
+        url: emojiUrl,
+        emojiID: emojiId
+      });
+      this.unityApi?.relayMessage(topic, data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   lookAtWisp(userId: string) {
     this.unityApi?.lookAtWisp(userId);
   }

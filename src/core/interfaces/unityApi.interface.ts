@@ -12,4 +12,5 @@ export interface UnityApiInterface {
   getCurrentWorld(): string;
   getUserPosition(): string;
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
+  relayMessage(topic: string, json: string): any;
 }
