@@ -28,6 +28,10 @@ export const Item = styled.div`
     }
   }
 
+  &.isHidden {
+    display: none;
+  }
+
   div.icon {
     height: 24px;
     width: 24px;

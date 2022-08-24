@@ -16,7 +16,6 @@ import {setApiResponseHandlers} from 'api/request';
 import {httpErrorCodes} from 'api/constants';
 
 // TODO: To be refactored
-import {ConfirmationDialogProvider} from '../_REFACTOR_/hooks/useConformationDialog';
 import AuthComponent from '../_REFACTOR_/context/Auth/AuthContext';
 
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
@@ -134,19 +133,17 @@ const App: FC = () => {
   return (
     <ThemeProvider theme={themeStore.theme}>
       <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-        <ConfirmationDialogProvider>
-          <AuthProvider {...sessionStore.oidcConfig}>
-            <AuthComponent>
-              <UnityPage />
-              <AppLayers>
-                <Switch>
-                  {createRoutesByConfig(PRIVATE_ROUTES)}
-                  <Redirect to={ROUTES.base} />
-                </Switch>
-              </AppLayers>
-            </AuthComponent>
-          </AuthProvider>
-        </ConfirmationDialogProvider>
+        <AuthProvider {...sessionStore.oidcConfig}>
+          <AuthComponent>
+            <UnityPage />
+            <AppLayers>
+              <Switch>
+                {createRoutesByConfig(PRIVATE_ROUTES)}
+                <Redirect to={ROUTES.base} />
+              </Switch>
+            </AppLayers>
+          </AuthComponent>
+        </AuthProvider>
       </Web3ReactProvider>
     </ThemeProvider>
   );
