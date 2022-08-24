@@ -35,7 +35,7 @@ const BroadcastPreviewPanel: FC = () => {
           )}
         </styled.VideoPanel>
         <styled.ButtonWrapper>
-          {broadcastStore.isYoutubeHash && !broadcastStore.isStreaming ? (
+          {broadcastStore.previewHash && !broadcastStore.isStreaming ? (
             <Button
               label={t('broadcastAdmin.broadcastStart')}
               onClick={broadcastStore.countdownDialog.open}
