@@ -37,5 +37,11 @@ export const ROUTES = {
   video: '/video/:spaceId',
   worldCalendar: '/calendar',
   help: '/help',
-  storyBook: '/storybook'
+  storyBook: {
+    base: '/storybook',
+    atoms: '/storybook/atoms',
+    molecules: '/storybook/molecules',
+    organisms: '/storybook/organisms',
+    templates: '/storybook/templates'
+  }
 };

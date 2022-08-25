@@ -50,8 +50,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     main: () => <Web3ConsentPage />
   },
   {
-    path: ROUTES.storyBook,
-    exact: true,
+    path: ROUTES.storyBook.base,
     main: () => <StoryBook />
   }
 ];

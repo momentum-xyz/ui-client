@@ -1,10 +1,16 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
+import {Redirect, Switch} from 'react-router-dom';
 
-import {VisualSettingsPanel} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
+import {createRoutesByConfig} from 'core/utils';
+import {Navigation, VisualSettingsPanel} from 'ui-kit';
+import {NavigationTabInterface} from 'core/interfaces';
+import background from 'static/images/bg.png';
 
+import {STORYBOOK_ROUTES} from './StoryBook.routes';
 import * as styled from './StoryBook.styled';
 
 const StoryBook: FC = () => {
@@ -12,8 +18,31 @@ const StoryBook: FC = () => {
 
   const theme = useTheme();
 
+  const tabs: NavigationTabInterface[] = [
+    {
+      path: ROUTES.storyBook.atoms,
+      iconName: 'tiles',
+      exact: true
+    },
+    {
+      path: ROUTES.storyBook.molecules,
+      iconName: 'tiles',
+      exact: true
+    },
+    {
+      path: ROUTES.storyBook.organisms,
+      iconName: 'tiles',
+      exact: true
+    },
+    {
+      path: ROUTES.storyBook.templates,
+      iconName: 'tiles',
+      exact: true
+    }
+  ];
+
   return (
-    <styled.StoryBook className="main" data-testid="StoryBook-test">
+    <styled.StoryBook data-testid="StoryBook-test" background={background}>
       <styled.SettingsContainer>
         <styled.Settings>
           <VisualSettingsPanel
@@ -24,48 +53,15 @@ const StoryBook: FC = () => {
         </styled.Settings>
       </styled.SettingsContainer>
 
-      <styled.Content>
-        <div>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-          been the industry's standard dummy text ever since the 1500s, when an unknown printer took
-          a galley of type and scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting, remaining essentially
-          unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-          Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
-          PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the
-          printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-          make a type specimen book. It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s
-          with the release of Letraset sheets containing Lorem Ipsum passages, and more recently
-          with desktop publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-          Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-          printer took a galley of type and scrambled it to make a type specimen book. It has
-          survived not only five centuries, but also the leap into electronic typesetting, remaining
-          essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop publishing software like
-          Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the
-          printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-          make a type specimen book. It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s
-          with the release of Letraset sheets containing Lorem Ipsum passages, and more recently
-          with desktop publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-          Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-          printer took a galley of type and scrambled it to make a type specimen book. It has
-          survived not only five centuries, but also the leap into electronic typesetting, remaining
-          essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop publishing software like
-          Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the
-          printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-          make a type specimen book. It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s
-          with the release of Letraset sheets containing Lorem Ipsum passages, and more recently
-          with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        </div>
+      <styled.Content className="scene-bg">
+        <Navigation tabs={tabs} />
+
+        <styled.Components>
+          <Switch>
+            {createRoutesByConfig(STORYBOOK_ROUTES)}
+            <Redirect to={ROUTES.storyBook.atoms} />
+          </Switch>
+        </styled.Components>
       </styled.Content>
     </styled.StoryBook>
   );
