@@ -2,7 +2,6 @@ import {Instance, types, flow} from 'mobx-state-tree';
 
 import {PosBusEventEnum} from 'core/enums';
 import {RootAuthStore} from 'scenes/auth/stores';
-import {RootSystemStore} from 'scenes/system/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
@@ -26,7 +25,6 @@ const RootStore = types
     /* Connect independent stores */
     authStore: types.optional(RootAuthStore, {}),
     homeStore: types.optional(HomeStore, {}),
-    systemStore: types.optional(RootSystemStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
     meetingStore: types.optional(RootMeetingStore, {}),

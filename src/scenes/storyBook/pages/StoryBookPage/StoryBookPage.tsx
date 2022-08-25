@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
@@ -47,11 +47,14 @@ interface TabInterface {
 }
 
 const StoryBookPage: FC = () => {
-  // FIXME: Temp stuff. Remove it later
-  const {mainStore, systemStore} = useStore();
-  const {themeStore} = mainStore;
+  const {themeStore} = useStore().mainStore;
   const {changeAccentColor, changeBackgroundColor} = themeStore;
-  const {dialogOne, dialogTwo, dialogThree, dialogFour, dialogFive} = systemStore.storyBookStore;
+
+  const [dialog1Shown, setDialog1Shown] = useState<boolean>(false);
+  const [dialog2Shown, setDialog2Shown] = useState<boolean>(false);
+  const [dialog3Shown, setDialog3Shown] = useState<boolean>(false);
+  const [dialog4Shown, setDialog4Shown] = useState<boolean>(false);
+  const [dialog5Shown, setDialog5Shown] = useState<boolean>(false);
 
   const avatarExampleSrc =
     appVariables.RENDER_SERVICE_URL + '/get/2c192ae7cf19a1a782258d07278af61b';
@@ -915,15 +918,15 @@ const StoryBookPage: FC = () => {
             <styled.ItemName>Dialog with approve and accept buttons</styled.ItemName>
             <Button
               variant="primary"
-              onClick={() => dialogOne.open()}
+              onClick={() => setDialog1Shown(true)}
               theme={theme}
               label="Click to open"
             />
-            {dialogOne.isOpen && (
+            {dialog1Shown && (
               <Dialog
                 title="Some title"
-                approveInfo={{title: 'Approve', onClick: dialogOne.close}}
-                declineInfo={{title: 'Decline', onClick: dialogOne.close}}
+                approveInfo={{title: 'Approve', onClick: () => setDialog1Shown(false)}}
+                declineInfo={{title: 'Decline', onClick: () => setDialog1Shown(false)}}
                 closeOnBackgroundClick={false}
               />
             )}
@@ -932,14 +935,14 @@ const StoryBookPage: FC = () => {
             <styled.ItemName>Dialog with accept button</styled.ItemName>
             <Button
               variant="primary"
-              onClick={() => dialogTwo.open()}
+              onClick={() => setDialog2Shown(true)}
               theme={theme}
               label="Click to open"
             />
-            {dialogTwo.isOpen && (
+            {dialog2Shown && (
               <Dialog
                 title="Some title"
-                approveInfo={{title: 'Approve', onClick: dialogTwo.close}}
+                approveInfo={{title: 'Approve', onClick: () => setDialog2Shown(false)}}
                 closeOnBackgroundClick={false}
               />
             )}
@@ -948,14 +951,14 @@ const StoryBookPage: FC = () => {
             <styled.ItemName>Dialog with decline button</styled.ItemName>
             <Button
               variant="primary"
-              onClick={() => dialogThree.open()}
+              onClick={() => setDialog3Shown(true)}
               theme={theme}
               label="Click to open"
             />
-            {dialogThree.isOpen && (
+            {dialog3Shown && (
               <Dialog
                 title="Some title"
-                declineInfo={{title: 'Decline', onClick: dialogThree.close}}
+                declineInfo={{title: 'Decline', onClick: () => setDialog3Shown(false)}}
                 closeOnBackgroundClick={false}
               />
             )}
@@ -964,12 +967,12 @@ const StoryBookPage: FC = () => {
             <styled.ItemName>Dialog with no buttons and background close</styled.ItemName>
             <Button
               variant="primary"
-              onClick={() => dialogFour.open()}
+              onClick={() => setDialog4Shown(true)}
               theme={theme}
               label="Click to open"
             />
-            {dialogFour.isOpen && (
-              <Dialog title="Some title" onClose={dialogFour.close}>
+            {dialog4Shown && (
+              <Dialog title="Some title" onClose={() => setDialog4Shown(false)}>
                 <Text theme={theme} text="Click outside of the dialog to close" size="m" />
               </Dialog>
             )}
@@ -978,14 +981,14 @@ const StoryBookPage: FC = () => {
             <styled.ItemName>Dialog with close button</styled.ItemName>
             <Button
               variant="primary"
-              onClick={() => dialogFive.open()}
+              onClick={() => setDialog5Shown(true)}
               theme={theme}
               label="Click to open"
             />
-            {dialogFive.isOpen && (
+            {dialog5Shown && (
               <Dialog
                 title="Some title"
-                onClose={dialogFive.close}
+                onClose={() => setDialog5Shown(false)}
                 closeOnBackgroundClick={false}
                 showCloseButton
               />
