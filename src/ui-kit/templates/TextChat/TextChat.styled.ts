@@ -42,6 +42,7 @@ export const TextContainer = styled.li`
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  color: ${(props) => props.theme.text};
 `;
 
 export const StyledHeading = styled(Heading)`
