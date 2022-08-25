@@ -123,5 +123,12 @@ use `git lfs install` to initialize the git hooks
     ├── LICENSE.txt
     ├── README.md       
     └── ... 
+### Local config
 
+It's possible to override some of App Config variables received from the dev server.
 
+Create file `env.development.local` with `REACT_APP_OVERRIDE_CONFIG_VARIABLES` variable having JSON encoded variables that need to be overwritten. Sample:
+
+```
+REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT_URL": "https://dev.odyssey.ninja/api/v3/backend"}'
+```
