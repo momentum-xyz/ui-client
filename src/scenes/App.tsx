@@ -15,11 +15,9 @@ import {UnityPage} from 'scenes/unity';
 import {setApiResponseHandlers} from 'api/request';
 import {httpErrorCodes} from 'api/constants';
 
-// TODO: To be refactored
-import AuthComponent from '../_REFACTOR_/context/Auth/AuthContext';
-
-import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
+import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
+import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -134,7 +132,7 @@ const App: FC = () => {
     <ThemeProvider theme={themeStore.theme}>
       <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
         <AuthProvider {...sessionStore.oidcConfig}>
-          <AuthComponent>
+          <AppAuth>
             <UnityPage />
             <AppLayers>
               <Switch>
@@ -142,7 +140,7 @@ const App: FC = () => {
                 <Redirect to={ROUTES.base} />
               </Switch>
             </AppLayers>
-          </AuthComponent>
+          </AppAuth>
         </AuthProvider>
       </Web3ReactProvider>
     </ThemeProvider>
