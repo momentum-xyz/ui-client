@@ -4,7 +4,6 @@ import {observer} from 'mobx-react-lite';
 import {usePosBusEvent} from 'shared/hooks';
 
 import {EmojiWithAvatarAnimation} from './components';
-import * as styled from './EmojiAnimationDockWidget.styled';
 
 const ANIMATION_DURATION_SEC = 5_000;
 
@@ -68,11 +67,7 @@ const EmojiAnimationDock: FC = () => {
     ));
   };
 
-  return (
-    <styled.Container>
-      <>{renderItems()}</>
-    </styled.Container>
-  );
+  return <>{renderItems()}</>;
 };
 
 export default observer(EmojiAnimationDock);
