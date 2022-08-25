@@ -31,6 +31,7 @@ const AgoraStageModeStore = types
       userId: types.maybe(types.string),
       toggledStageMode: false,
       isOnStage: false,
+      isTogglingIsOnStage: false,
       isLowQualityModeEnabled: false,
       requestWasMadeToGoOnStage: false,
       audience: types.optional(types.array(StageModeUser), []),
@@ -390,22 +391,26 @@ const AgoraStageModeStore = types
         ) => Promise<ICameraVideoTrack | undefined>
       ) => Promise<void>
     ) {
+      self.isTogglingIsOnStage = true;
       yield self.client.setClientRole('host');
       yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.isOnStage = true;
+      self.isTogglingIsOnStage = false;
     }),
     leaveStage: flow(function* () {
+      self.isTogglingIsOnStage = true;
       self.client.localTracks.forEach((localTrack) => {
-        localTrack.setEnabled(false);
         localTrack.stop();
         localTrack.close();
       });
 
       yield self.client.unpublish();
-      self.isOnStage = false;
       yield self.client.setClientRole('audience', {
         level: 1
       });
+
+      self.isOnStage = false;
+      self.isTogglingIsOnStage = false;
     })
   }))
   // Audience action

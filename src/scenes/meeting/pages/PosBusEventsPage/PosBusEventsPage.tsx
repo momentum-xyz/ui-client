@@ -59,8 +59,8 @@ const PosBusEventsPage: FC = () => {
   usePosBusEvent('stage-mode-invite', () => {
     console.info('[POSBUS EVENT] stage-mode-invite');
     if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
-      invitedOnStageDialog.open();
       stageModeStore.setAcceptedRequestToJoinStage(false);
+      invitedOnStageDialog.open();
     }
   });
 
@@ -68,8 +68,8 @@ const PosBusEventsPage: FC = () => {
     console.info('[POSBUS EVENT] stage-mode-accepted', userId);
     if (userId === sessionStore.userId) {
       if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
-        acceptedToJoinStageDialog.open();
         stageModeStore.setAcceptedRequestToJoinStage(true);
+        acceptedToJoinStageDialog.open();
       }
     }
   });
