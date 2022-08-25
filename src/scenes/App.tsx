@@ -134,9 +134,9 @@ const App: FC = () => {
       <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
         <AuthProvider {...sessionStore.oidcConfig}>
           <AppAuth>
+            <GlobalStyles />
             <UnityPage />
             <AppLayers>
-              <GlobalStyles />
               <Switch>
                 {createRoutesByConfig(PRIVATE_ROUTES)}
                 <Redirect to={ROUTES.base} />
