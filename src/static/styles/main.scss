@@ -8,6 +8,7 @@
 body {
   font-family: IBM Plex Sans, sans-serif;
   font-size: var(--font-size-xs);
+  overflow: hidden;
 }
 
 #main {
@@ -31,4 +32,13 @@ body {
   left: 0;
   bottom: 0;
   background-color: rgba(32, 42, 68, .7);
+}
+
+.noScrollIndicator {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.noScrollIndicator::-webkit-scrollbar {
+  display: none;
 }
