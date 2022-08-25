@@ -27,6 +27,10 @@ export const GlobalStyles = createGlobalStyle`
   }
   
   a {
+    color: ${(props) => props.theme.text};
+    
+    &:hover {
     color: ${(props) => props.theme.accent};
+    }
   }
 `;

@@ -31,7 +31,7 @@ const TextArea: FC<PropsInterface> = ({
   onChange,
   value,
   selected = false,
-  lines = 3,
+  lines = 4,
   lineLength,
   isCustom = false,
   isResizable = false,
