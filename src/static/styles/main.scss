@@ -14,15 +14,6 @@
   z-index: inherit;
 }
 
-.noScrollIndicator {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.noScrollIndicator::-webkit-scrollbar {
-  display: none;
-}
-
 .scene-bg {
   position: fixed;
   top: 0;
