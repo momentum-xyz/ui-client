@@ -25,4 +25,8 @@ export const GlobalStyles = createGlobalStyle`
   ::-webkit-scrollbar-track-piece:end {
     margin-bottom: 2px;
   }
+  
+  a {
+    color: ${(props) => props.theme.accent};
+  }
 `;
