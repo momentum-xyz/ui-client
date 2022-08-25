@@ -103,7 +103,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
                   )}
                   <styled.RemoteUserActionButton
                     onClick={() => {
-                      onRemoteUserClick?.(user, StageModeModerationEventEnum.MUTE);
+                      onRemoteUserClick?.(user, StageModeModerationEventEnum.REMOVE);
                     }}
                   >
                     <styled.RemoteUserAction>

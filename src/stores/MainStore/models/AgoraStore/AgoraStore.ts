@@ -248,6 +248,18 @@ const AgoraStore = types
       return self.isStageMode
         ? self.agoraStageModeStore.localSoundLevel
         : self.agoraMeetingStore.localSoundLevel;
+    },
+    get canToggleMicrophone(): boolean {
+      return (
+        !self.userDevicesStore.isTogglingMicrophone &&
+        (self.isStageMode ? self.agoraStageModeStore.isOnStage : !!self.agoraMeetingStore.spaceId)
+      );
+    },
+    get canToggleCamera(): boolean {
+      return (
+        !self.userDevicesStore.isTogglingCamera &&
+        (self.isStageMode ? self.agoraStageModeStore.isOnStage : !!self.agoraMeetingStore.spaceId)
+      );
     }
   }));
 

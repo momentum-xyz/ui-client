@@ -117,12 +117,14 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                       label={`${t('actions.leaveStage')}?`}
                       variant="danger"
                       onClick={handleLeaveStage}
+                      disabled={agoraStageModeStore.isTogglingIsOnStage}
                     />
                   ) : (
                     <Button
                       label={`${t('actions.goOnStage')}?`}
                       variant="primary"
                       onClick={handleEnterStage}
+                      disabled={agoraStageModeStore.isTogglingIsOnStage}
                     />
                   )}
                 </>
