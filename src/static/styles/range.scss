@@ -1,0 +1,22 @@
+[type='range'] {
+  -webkit-appearance: none;
+  height: 1px;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+[type='range']::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}

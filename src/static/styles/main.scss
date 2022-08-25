@@ -3,6 +3,7 @@
 @import './variables.css';
 @import './unity';
 @import './google';
+@import './range';
 
 body {
   font-family: IBM Plex Sans, sans-serif;
@@ -16,6 +17,13 @@ body {
   z-index: 30;
 }
 
+.main-content {
+  display: flex;
+  width:100%;
+  pointer-events: auto;
+  z-index: 1;
+}
+
 .scene-bg {
   position: fixed;
   top: 0;
@@ -23,28 +31,4 @@ body {
   left: 0;
   bottom: 0;
   background-color: rgba(32, 42, 68, .7);
-}
-
-
-[type='range'] {
-  -webkit-appearance: none;
-  height: 1px;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
-}
-
-[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-[type='range']::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  cursor: pointer;
 }
