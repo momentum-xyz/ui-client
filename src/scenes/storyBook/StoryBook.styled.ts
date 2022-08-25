@@ -7,10 +7,9 @@ export const StoryBook = styled.div<{background: string}>`
   width: 100vw;
   background-size: cover;
   background-image: url(${(props) => props.background});
-
-  flex-direction: column;
+  flex-direction: row;
   flex-grow: 1;
-  gap: 20px;
+  gap: 10px;
 `;
 
 export const SettingsContainer = styled.div`
@@ -19,13 +18,14 @@ export const SettingsContainer = styled.div`
 `;
 
 export const Settings = styled.div`
-  width: 370px;
+  width: 320px;
 `;
 
 export const Content = styled.div`
   position: initial;
   padding: 0 0 10px 0;
   display: flex;
+  width: 100%;
   border-radius: 10px;
   flex-direction: row;
   gap: 10px;

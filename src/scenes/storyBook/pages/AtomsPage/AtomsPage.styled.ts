@@ -7,7 +7,7 @@ export const Div = styled.div`
 `;
 
 export const Components = styled.div`
-  height: calc(100vh - 270px);
+  height: calc(100vh - 140px);
   overflow: auto;
 `;
 
