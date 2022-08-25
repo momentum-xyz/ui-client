@@ -18,6 +18,7 @@ import {httpErrorCodes} from 'api/constants';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
+import {GlobalStyles} from './App.styled';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -135,6 +136,7 @@ const App: FC = () => {
           <AppAuth>
             <UnityPage />
             <AppLayers>
+              <GlobalStyles />
               <Switch>
                 {createRoutesByConfig(PRIVATE_ROUTES)}
                 <Redirect to={ROUTES.base} />

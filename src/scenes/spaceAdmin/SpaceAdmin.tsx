@@ -19,22 +19,12 @@ const SpaceAdmin: FC = () => {
   const {path} = useRouteMatch();
 
   useEffect(() => {
-    unityStore.changeKeyboardControl(false);
-
-    return () => {
-      unityStore.changeKeyboardControl(true);
-    };
-  }, [unityStore]);
-
-  useEffect(() => {
     if (spaceId) {
-      unityStore.changeKeyboardControl(false);
       spaceManagerStore.resetModel();
       spaceManagerStore.init(spaceId);
     }
 
     return () => {
-      unityStore.changeKeyboardControl(true);
       spaceManagerStore.resetModel();
     };
   }, [spaceId, spaceManagerStore, unityStore]);
