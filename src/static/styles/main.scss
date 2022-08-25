@@ -16,15 +16,6 @@ body {
   z-index: 30;
 }
 
-.noScrollIndicator {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.noScrollIndicator::-webkit-scrollbar {
-  display: none;
-}
-
 .scene-bg {
   position: fixed;
   top: 0;
@@ -33,6 +24,7 @@ body {
   bottom: 0;
   background-color: rgba(32, 42, 68, .7);
 }
+
 
 [type='range'] {
   -webkit-appearance: none;

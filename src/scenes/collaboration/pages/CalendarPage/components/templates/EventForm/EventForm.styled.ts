@@ -1,6 +1,5 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 // TODO move colors and sizes to variables
 export const Container = styled.div`
@@ -140,29 +139,6 @@ export const DateInput = styled.div`
   }
   .react-datepicker__time-container .react-datepicker__time {
     background: ${(props) => props.theme.bg} !important;
-  }
-  .react-datepicker__time-list {
-    ::-webkit-scrollbar {
-      width: 4px;
-      height: 40px;
-      margin-top: 10px;
-    }
-    ::-webkit-scrollbar-track {
-      display: none;
-    }
-    ::-webkit-scrollbar-thumb {
-      border-radius: 6px;
-      border: 3px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
-      background-clip: content-box;
-      max-height: 40px;
-    }
-    ::-webkit-scrollbar-track-piece:end {
-      margin-bottom: 3px;
-    }
-
-    ::-webkit-scrollbar-track-piece:start {
-      margin-top: 5px;
-    }
   }
   flex: 50%;
   z-index: calc(var(--dialog-z-index) + 2);

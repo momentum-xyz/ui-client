@@ -27,7 +27,7 @@ import {AvatarForm} from './pages/ProfileWidget/components';
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
-  const {agoraStageModeStore, agoraMeetingStore} = agoraStore;
+  const {agoraStageModeStore} = agoraStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -54,7 +54,7 @@ const Widgets: FC = () => {
   }, [musicPlayerStore, worldStore.worldId]);
 
   const toggleMute = () => {
-    if (userDevicesStore.isTogglingMicrophone) {
+    if (!agoraStore.canToggleMicrophone) {
       return;
     }
 
@@ -62,7 +62,7 @@ const Widgets: FC = () => {
   };
 
   const toggleCameraOn = () => {
-    if (userDevicesStore.isTogglingCamera) {
+    if (!agoraStore.canToggleCamera) {
       return;
     }
 
@@ -129,12 +129,7 @@ const Widgets: FC = () => {
               }
               icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
               onClick={toggleCameraOn}
-              disabled={
-                userDevicesStore.isTogglingCamera ||
-                !(agoraStore.isStageMode
-                  ? agoraStageModeStore.isOnStage
-                  : !!agoraMeetingStore.spaceId)
-              }
+              disabled={!agoraStore.canToggleCamera}
             />
             <ToolbarIcon
               title={
@@ -146,12 +141,7 @@ const Widgets: FC = () => {
               }
               icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
               onClick={toggleMute}
-              disabled={
-                userDevicesStore.isTogglingMicrophone ||
-                !(agoraStore.isStageMode
-                  ? agoraStageModeStore.isOnStage
-                  : !!agoraMeetingStore.spaceId)
-              }
+              disabled={!agoraStore.canToggleMicrophone}
             />
           </ToolbarIconList>
           {/* Main toolbar icons */}

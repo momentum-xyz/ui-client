@@ -1,6 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 
+import {useStore} from 'shared/hooks';
 import {Dialog, Text} from 'ui-kit';
 
 import * as styled from './InvitedOnStageDialog.styled';
@@ -12,6 +13,10 @@ interface PropsInterface {
 }
 
 const InvitedOnStageDialog: React.FC<PropsInterface> = ({onDecline, onClose, onGetReady}) => {
+  const {collaborationStore, mainStore} = useStore();
+  const {agoraStore} = mainStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore;
+
   const {t} = useTranslation();
 
   return (
@@ -19,15 +24,25 @@ const InvitedOnStageDialog: React.FC<PropsInterface> = ({onDecline, onClose, onG
       title={t('titles.youHaveBeenInvitedOnStage')}
       onClose={onClose}
       showCloseButton
-      approveInfo={{
-        title: t('actions.getReady'),
-        onClick: () => {
-          if (onGetReady) {
-            onGetReady();
-            onClose?.();
-          }
-        }
-      }}
+      approveInfo={
+        collaborationStore.isModerator
+          ? {
+              title: t('actions.goOnStage'),
+              onClick: () => {
+                agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
+                onClose?.();
+              }
+            }
+          : {
+              title: t('actions.getReady'),
+              onClick: () => {
+                if (onGetReady) {
+                  onGetReady();
+                  onClose?.();
+                }
+              }
+            }
+      }
       declineInfo={{
         title: t('actions.decline'),
         onClick: () => {

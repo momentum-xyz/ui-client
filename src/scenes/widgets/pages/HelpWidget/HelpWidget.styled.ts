@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 export const Container = styled.div`
   width: 522px;
@@ -7,23 +6,6 @@ export const Container = styled.div`
   border: none;
   color: ${(props) => props.theme.text};
   overflow-y: scroll;
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 40px;
-    margin-top: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    display: none;
-  }
-  ::-webkit-scrollbar-thumb {
-    border-radius: 6px;
-    border: 3px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
-    background-clip: content-box;
-    max-height: 40px;
-  }
-  ::-webkit-scrollbar-track-piece:end {
-  }
-
   ::-webkit-scrollbar-track-piece:start {
     margin-top: 20px;
   }
