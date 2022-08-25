@@ -13,9 +13,10 @@ import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
   const rootStore = useStore();
-  const {mainStore} = rootStore;
+  const {mainStore, collaborationStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore} = agoraStore;
+  const {space} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -45,7 +46,7 @@ const Meeting: FC = () => {
   return (
     <styled.Container>
       <MeetingRoomPage onLeave={onLeaveMeeting} />
-      <PosBusEventsPage />
+      {space && !space.isTable && <PosBusEventsPage />}
     </styled.Container>
   );
 };
