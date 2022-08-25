@@ -20,6 +20,7 @@ const DashboardPage: FC = () => {
   const history = useHistory();
 
   usePosBusEvent('user-vibed', (type, count) => {
+    console.info('[POSBUS EVENT] user-vibed', type, count);
     vibeStore.setCount(count);
   });
 

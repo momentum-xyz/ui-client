@@ -4,7 +4,7 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
-import {PosBusEventEnum, StageModeRequestEnum} from 'core/enums';
+import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {LiveStreamInterface} from 'api';
 import {usePosBusEvent, useStore} from 'shared/hooks';
@@ -30,30 +30,42 @@ const PosBusEventsPage: FC = () => {
   const history = useHistory();
   const {t} = useTranslation();
 
-  usePosBusEvent('google-drive-file-change', (id) => {
+  usePosBusEvent('google-drive-file-change', (id: string) => {
+    console.info('[POSBUS EVENT] google-drive-file-change', id);
     if (space?.id === id) {
       googleDriveStore.fetchGoogleDocument(id);
     }
   });
 
-  usePosBusEvent('miro-board-change', (id) => {
+  usePosBusEvent('miro-board-change', (id: string) => {
+    console.info('[POSBUS EVENT] miro-board-change', id);
     if (space?.id === id) {
       miroBoardStore.fetchMiroBoard(id);
     }
   });
 
   usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
+    console.info('[POSBUS EVENT] broadcast', broadcast);
     broadcastStore.setBroadcast(broadcast);
+    liveStreamStore.setBroadcast(broadcast);
+
+    if (liveStreamStore.isStreaming) {
+      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
+    } else {
+      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
+    }
   });
 
   usePosBusEvent('stage-mode-invite', () => {
+    console.info('[POSBUS EVENT] stage-mode-invite');
     if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
       invitedOnStageDialog.open();
       stageModeStore.setAcceptedRequestToJoinStage(false);
     }
   });
 
-  usePosBusEvent('stage-mode-accepted', (userId) => {
+  usePosBusEvent('stage-mode-accepted', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-accepted', userId);
     if (userId === sessionStore.userId) {
       if (!(collaborationStore.isHandlingInviteOrRequest || agoraStageModeStore.isOnStage)) {
         acceptedToJoinStageDialog.open();
@@ -62,13 +74,15 @@ const PosBusEventsPage: FC = () => {
     }
   });
 
-  usePosBusEvent('stage-mode-declined', (userId) => {
+  usePosBusEvent('stage-mode-declined', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-declined', userId);
     if (userId === sessionStore.userId) {
       declinedToJoinStageDialog.open();
     }
   });
 
   usePosBusEvent('posbus-connected', () => {
+    console.info('[POSBUS EVENT] posbus-connected');
     if (collaborationStore.space) {
       unityStore.triggerInteractionMessage(
         PosBusEventEnum.EnteredSpace,
@@ -79,7 +93,8 @@ const PosBusEventsPage: FC = () => {
     }
   });
 
-  usePosBusEvent('stage-mode-request', (userId) => {
+  usePosBusEvent('stage-mode-request', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-request', userId);
     if (collaborationStore.isModerator) {
       stageModeStore.addRequestPopup(userId, {
         user: userId,
@@ -112,17 +127,8 @@ const PosBusEventsPage: FC = () => {
     }
   });
 
-  usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
-    liveStreamStore.setBroadcast(broadcast);
-
-    if (liveStreamStore.isStreaming) {
-      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
-    } else {
-      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
-    }
-  });
-
-  usePosBusEvent('stage-mode-toggled', async (stageModeStatus) => {
+  usePosBusEvent('stage-mode-toggled', async (stageModeStatus: StageModeStatusEnum) => {
+    console.info('[POSBUS EVENT] stage-mode-toggled', stageModeStatus);
     const showStageIsFull = await agoraStore.toggledStageMode(
       sessionStore.userId,
       collaborationStore.isModerator
@@ -165,16 +171,19 @@ const PosBusEventsPage: FC = () => {
   });
 
   usePosBusEvent('meeting-mute', () => {
+    console.info('[POSBUS EVENT] meeting-mute');
     userDevicesStore.mute();
   });
 
-  usePosBusEvent('meeting-mute-all', (moderatorId) => {
+  usePosBusEvent('meeting-mute-all', (moderatorId: string) => {
+    console.info('[POSBUS EVENT] meeting-mute-all', moderatorId);
     if (sessionStore.userId !== moderatorId) {
       userDevicesStore.mute();
     }
   });
 
   usePosBusEvent('stage-mode-mute', () => {
+    console.info('[POSBUS EVENT] stage-mode-mute');
     userDevicesStore.mute();
 
     toast.info(
@@ -189,6 +198,7 @@ const PosBusEventsPage: FC = () => {
   });
 
   usePosBusEvent('meeting-kick', async () => {
+    console.info('[POSBUS EVENT] meeting-kick');
     await rootStore.leaveMeetingSpace(true);
     history.push(ROUTES.base);
 
@@ -203,7 +213,8 @@ const PosBusEventsPage: FC = () => {
     );
   });
 
-  usePosBusEvent('stage-mode-accepted', (userId) => {
+  usePosBusEvent('stage-mode-accepted', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-accepted', userId);
     stageModeStore.removeRequestPopup(userId);
     if (userId === sessionStore.userId) {
       stageModeStore.removeAwaitingPermissionPopup();
@@ -211,7 +222,8 @@ const PosBusEventsPage: FC = () => {
     }
   });
 
-  usePosBusEvent('stage-mode-declined', (userId) => {
+  usePosBusEvent('stage-mode-declined', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-declined', userId);
     stageModeStore.removeRequestPopup(userId);
     if (userId === sessionStore.userId) {
       stageModeStore.removeAwaitingPermissionPopup();
@@ -219,9 +231,20 @@ const PosBusEventsPage: FC = () => {
     }
   });
 
-  usePosBusEvent('stage-mode-user-joined', agoraStageModeStore.addStageModeUser);
-  usePosBusEvent('stage-mode-user-left', agoraStageModeStore.removeStageModeUser);
-  usePosBusEvent('stage-mode-kick', agoraStageModeStore.moveToAudience);
+  usePosBusEvent('stage-mode-user-joined', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-user-joined', userId);
+    agoraStageModeStore.addStageModeUser(userId);
+  });
+
+  usePosBusEvent('stage-mode-user-left', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-user-left', userId);
+    agoraStageModeStore.removeStageModeUser(userId);
+  });
+
+  usePosBusEvent('stage-mode-kick', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-kick', userId);
+    agoraStageModeStore.moveToAudience(userId);
+  });
 
   return null;
 };
