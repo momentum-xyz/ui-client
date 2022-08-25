@@ -21,7 +21,6 @@ import {
   SizeType,
   ToastContent,
   Dialog,
-  VisualSettingsPanel,
   TextArea,
   Input,
   SearchInput,
@@ -33,9 +32,7 @@ import {
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
-import {useStore} from 'shared/hooks';
 import {appVariables} from 'api/constants';
-import {StakingWidget} from 'scenes/widgets/pages';
 import {ValidatorList} from 'scenes/widgets/pages/StakingWidget/components/templates/Validators/components/ValidatorList';
 import {UserStatusEnum} from 'core/enums';
 
@@ -47,9 +44,6 @@ interface TabInterface {
 }
 
 const StoryBookPage: FC = () => {
-  const {themeStore} = useStore().mainStore;
-  const {changeAccentColor, changeBackgroundColor} = themeStore;
-
   const [dialog1Shown, setDialog1Shown] = useState<boolean>(false);
   const [dialog2Shown, setDialog2Shown] = useState<boolean>(false);
   const [dialog3Shown, setDialog3Shown] = useState<boolean>(false);
@@ -62,10 +56,6 @@ const StoryBookPage: FC = () => {
 
   const {t} = useTranslation();
   const theme = useTheme();
-
-  const {widgetStore} = useStore();
-  const {stakingStore} = widgetStore;
-  const {stakingDialog} = stakingStore;
 
   const svgSize: SizeType = 'large';
 
@@ -158,29 +148,7 @@ const StoryBookPage: FC = () => {
   return (
     <styled.Div className="main">
       <styled.Section>
-        <styled.SectionTitle>Theme Control</styled.SectionTitle>
-        <styled.Row>
-          <styled.Item>
-            <VisualSettingsPanel
-              theme={theme}
-              onAccentColorSelect={changeAccentColor}
-              onBackgroundColorSelect={changeBackgroundColor}
-            />
-          </styled.Item>
-        </styled.Row>
-      </styled.Section>
-      <styled.Section>
         <styled.SectionTitle>Components</styled.SectionTitle>
-        <styled.Row>
-          <styled.Item style={{width: '100%'}}>
-            <Button
-              variant="primary"
-              onClick={() => stakingDialog.open()}
-              theme={theme}
-              label="Open Staking"
-            />
-          </styled.Item>
-        </styled.Row>
         <styled.Row>
           <styled.Item style={{width: '100%'}}>
             <PanelLayout
@@ -675,40 +643,6 @@ const StoryBookPage: FC = () => {
         </styled.Row>
         <styled.Row>
           <styled.Item>
-            <SvgButton
-              theme={theme}
-              iconName="close"
-              size="small"
-              onClick={() => console.info('clicked')}
-            />
-          </styled.Item>
-          <styled.Item>
-            <SvgButton
-              theme={theme}
-              iconName="close"
-              size="normal"
-              onClick={() => console.info('clicked')}
-            />
-          </styled.Item>
-          <styled.Item>
-            <SvgButton
-              theme={theme}
-              iconName="close"
-              size="large"
-              onClick={() => console.info('clicked')}
-            />
-          </styled.Item>
-          <styled.Item>
-            <SvgButton
-              theme={theme}
-              iconName="close"
-              size="extra-large"
-              onClick={() => console.info('clicked')}
-            />
-          </styled.Item>
-        </styled.Row>
-        <styled.Row>
-          <styled.Item>
             <SearchInput
               placeholder="Search for..."
               onChange={(value) => console.info(`Searching for '${value}'`)}
@@ -1109,7 +1043,6 @@ const StoryBookPage: FC = () => {
           </styled.Item>
         </styled.Row>
       </styled.Section>
-      {stakingDialog.isOpen && <StakingWidget />}
     </styled.Div>
   );
 };
