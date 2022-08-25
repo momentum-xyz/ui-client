@@ -6,6 +6,7 @@ export const ActiveStake = styled.div`
   justify-content: space-between;
   padding: 0 0 10px 3px;
   border-bottom: 1px solid rgba(1, 255, 179, 0.2);
+  color: ${(props) => props.theme.text};
 `;
 
 export const StakeColumn = styled.div`

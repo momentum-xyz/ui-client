@@ -15,6 +15,7 @@ export const TextAreaContainer = styled.div`
     border-radius: var(--textarea-radius);
     background-color: var(--black-100);
     font-size: var(--font-size-xs);
+    color: ${(props) => props.theme.text};
     font-weight: 700;
     outline: none;
 

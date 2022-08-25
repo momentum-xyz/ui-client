@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.p`
   font-size: 40px;
   text-align: center;
+  color: ${(props) => props.theme.text};
 
   @keyframes blink {
     0% {
