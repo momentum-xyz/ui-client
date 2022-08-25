@@ -14,15 +14,6 @@
   z-index: inherit;
 }
 
-.noScrollIndicator {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.noScrollIndicator::-webkit-scrollbar {
-  display: none;
-}
-
 .scene-bg {
   position: fixed;
   top: 0;
@@ -30,4 +21,13 @@
   left: 0;
   bottom: 0;
   background-color: rgba(32, 42, 68, .7);
+}
+
+.noScrollIndicator {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.noScrollIndicator::-webkit-scrollbar {
+  display: none;
 }
