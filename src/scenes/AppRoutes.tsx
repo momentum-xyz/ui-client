@@ -20,7 +20,7 @@ import {WorldCalendar} from './worldCalendar';
 import {MagicPage} from './magic/pages';
 import {VideoPage} from './video/pages';
 import {GrabTablePage} from './grabTable';
-import {StoryBookPage} from './storyBook';
+import {StoryBook} from './storyBook';
 import {DisconnectedPage, MaintenancePage, WrongBrowserPage} from './system';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
@@ -52,7 +52,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.storyBook,
     exact: true,
-    main: () => <StoryBookPage />
+    main: () => <StoryBook />
   }
 ];
 
