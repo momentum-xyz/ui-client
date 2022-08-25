@@ -11,8 +11,6 @@ import {App} from './scenes';
 import {RootStore} from './stores';
 
 import './static/styles/main.scss';
-import './_REFACTOR_/styles/App.scss';
-import './_REFACTOR_/styles/tailwind.css';
 
 /**
  * init rootStore and pass dependencies

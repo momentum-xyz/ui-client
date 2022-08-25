@@ -20,6 +20,8 @@ export const TextAreaContainer = styled.div`
     background: transparent;
     padding: var(--input-padding);
     border: 1px solid transparent;
+    color: ${(props) => props.theme.text};
+
     &:hover,
     &:active {
       color: var(--white);

@@ -7,7 +7,6 @@ export const InputContainer = styled.div`
   --input-height: 37px;
 
   background: ${rgba(0, 1, 1, 0.2)};
-  color: ${(props) => props.theme.text};
   border-radius: var(--input-radius);
 
   position: relative;
@@ -22,6 +21,7 @@ export const InputContainer = styled.div`
     font-size: var(--font-size-s);
     background: transparent;
     padding: var(--input-padding);
+    color: ${(props) => props.theme.text};
 
     &:hover,
     &:active {

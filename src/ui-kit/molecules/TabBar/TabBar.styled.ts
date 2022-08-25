@@ -27,6 +27,7 @@ export const Tab = styled.button`
   align-items: center;
   justify-content: center;
   border-right: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
   overflow: hidden;
   padding: 0px 8px;
   transition: background var(--tr-100-ei), color var(--tr-100-ei);

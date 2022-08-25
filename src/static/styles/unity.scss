@@ -6,13 +6,6 @@
   }
 }
 
-.main-content {
-  display: flex;
-  width:100%;
-  pointer-events: auto;
-  z-index: 1;
-}
-
 .unity-active {
   #unity-container {
     z-index: 10;
@@ -28,9 +21,5 @@
 
   .main-content {
     pointer-events: none;
-  }
-
-  .z-main-u {
-      z-index: 32;
   }
 }

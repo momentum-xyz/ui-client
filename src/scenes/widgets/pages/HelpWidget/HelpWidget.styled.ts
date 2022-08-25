@@ -4,6 +4,7 @@ export const Container = styled.div`
   width: 522px;
   height: 75vh;
   border: none;
+  color: ${(props) => props.theme.text};
   overflow-y: scroll;
   ::-webkit-scrollbar-track-piece:start {
     margin-top: 20px;

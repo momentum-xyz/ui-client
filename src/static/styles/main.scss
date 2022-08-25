@@ -1,7 +1,15 @@
 @import './fonts';
+@import './reset';
 @import './variables.css';
 @import './unity';
 @import './google';
+@import './range';
+
+body {
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: var(--font-size-xs);
+  overflow: hidden;
+}
 
 #main {
   padding: 0 0 70px 0;
@@ -10,8 +18,11 @@
   z-index: 30;
 }
 
-* {
-  z-index: inherit;
+.main-content {
+  display: flex;
+  width:100%;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 .scene-bg {
