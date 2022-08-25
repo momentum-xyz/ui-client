@@ -4,14 +4,14 @@ import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
-import {usePosBusEvent, useStore} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 
 import {StageModeGuest, StageModeModerator} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
-  const {stageModeStore, textChatStore} = collaborationStore;
+  const {textChatStore} = collaborationStore;
   const {agoraStore} = mainStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -28,14 +28,6 @@ const StageModePage: FC = () => {
       }
     };
   }, [agoraStore]);
-
-  usePosBusEvent('stage-mode-accepted', (userId) => {
-    stageModeStore.removeRequestPopup(userId);
-  });
-
-  usePosBusEvent('stage-mode-declined', (userId) => {
-    stageModeStore.removeRequestPopup(userId);
-  });
 
   const onLeaveMeeting = useCallback(async () => {
     await leaveMeetingSpace();

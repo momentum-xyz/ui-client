@@ -4,10 +4,9 @@ import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 
-import {usePosBusEvent, useStore} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 import {CountdownDialog, PageTopBar, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {ROUTES} from 'core/constants';
-import {LiveStreamInterface} from 'api';
 
 import * as styled from './BroadcastPage.styled';
 import {BroadcastFormPanel, BroadcastPreviewPanel, StopBroadcastingDialog} from './components';
@@ -89,10 +88,6 @@ const BroadcastPage: FC = () => {
       );
     }
   }, [broadcastStore, space?.id]);
-
-  usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
-    broadcastStore.setBroadcast(broadcast);
-  });
 
   if (!space) {
     return null;

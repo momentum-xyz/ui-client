@@ -5,17 +5,18 @@ import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
-import {usePosBusEvent, useStore} from 'shared/hooks';
-import {TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
+import {useStore} from 'shared/hooks';
+import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
-import {MeetingRoomPage} from './pages';
+import {MeetingRoomPage, PosBusEventsPage} from './pages';
 import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
   const rootStore = useStore();
-  const {mainStore, sessionStore} = rootStore;
+  const {mainStore, collaborationStore} = rootStore;
   const {agoraStore} = mainStore;
-  const {agoraMeetingStore, userDevicesStore} = agoraStore;
+  const {agoraMeetingStore} = agoraStore;
+  const {space} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -27,45 +28,6 @@ const Meeting: FC = () => {
     },
     [history, rootStore]
   );
-
-  usePosBusEvent('meeting-mute', () => {
-    userDevicesStore.mute();
-  });
-
-  usePosBusEvent('meeting-mute-all', (moderatorId) => {
-    if (sessionStore.userId !== moderatorId) {
-      userDevicesStore.mute();
-    }
-  });
-
-  usePosBusEvent('stage-mode-mute', () => {
-    userDevicesStore.mute();
-
-    toast.info(
-      <ToastContent
-        headerIconName="alert"
-        title={t('titles.alert')}
-        text={t('messages.stageModeMuted')}
-        isCloseButton
-      />,
-      TOAST_GROUND_OPTIONS
-    );
-  });
-
-  usePosBusEvent('meeting-kick', async () => {
-    await onLeaveMeeting(true);
-    history.push(ROUTES.base);
-
-    toast.info(
-      <ToastContent
-        headerIconName="logout"
-        title={t('titles.kickedFromMeeting')}
-        text={t('messages.kickedFromMeeting')}
-        isCloseButton
-      />,
-      TOAST_COMMON_OPTIONS
-    );
-  });
 
   useEffect(() => {
     if (agoraMeetingStore.maxVideoStreamsReached) {
@@ -84,6 +46,7 @@ const Meeting: FC = () => {
   return (
     <styled.Container>
       <MeetingRoomPage onLeave={onLeaveMeeting} />
+      {space && !space.isTable && <PosBusEventsPage />}
     </styled.Container>
   );
 };

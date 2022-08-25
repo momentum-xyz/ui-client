@@ -3,7 +3,7 @@ import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
-import {useStore, usePosBusEvent} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 import {ToastContent, Button, SpaceTopBar, Text, Stage, TextChat} from 'ui-kit';
 import {
   StageModePopupQueue,
@@ -21,24 +21,9 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
   const {textChatStore, space} = collaborationStore;
-  const {addAwaitingPermissionPopup, removeAwaitingPermissionPopup} =
-    collaborationStore.stageModeStore;
+  const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
-
-  usePosBusEvent('stage-mode-accepted', (userId) => {
-    if (userId === sessionStore.userId) {
-      removeAwaitingPermissionPopup();
-      agoraStageModeStore.requestToGoOnstageWasHandled();
-    }
-  });
-
-  usePosBusEvent('stage-mode-declined', (userId) => {
-    if (userId === sessionStore.userId) {
-      removeAwaitingPermissionPopup();
-      agoraStageModeStore.requestToGoOnstageWasHandled();
-    }
-  });
 
   const showSuccessStageModeRequestSubmissionToast = useCallback(() => {
     addAwaitingPermissionPopup();
