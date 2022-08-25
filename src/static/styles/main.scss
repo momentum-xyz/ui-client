@@ -1,17 +1,19 @@
 @import './fonts';
+@import './reset';
 @import './variables.css';
 @import './unity';
 @import './google';
+
+body {
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: var(--font-size-xs);
+}
 
 #main {
   padding: 0 0 70px 0;
   display: flex;
   height: 100vh;
   z-index: 30;
-}
-
-* {
-  z-index: inherit;
 }
 
 .noScrollIndicator {
