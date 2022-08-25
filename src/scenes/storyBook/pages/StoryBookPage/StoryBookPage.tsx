@@ -379,26 +379,6 @@ const StoryBookPage: FC = () => {
         </styled.Row>
         <styled.Row>
           <styled.Item>
-            <Button variant="primary" size="normal" label={t('actions.joinStage')} theme={theme} />
-          </styled.Item>
-          <styled.Item>
-            <Button
-              variant="primary"
-              size="normal"
-              label={t('actions.joinStage')}
-              theme={theme}
-              disabled
-            />
-          </styled.Item>
-          <styled.Item>
-            <Button variant="danger" size="normal" label={t('actions.decline')} />
-          </styled.Item>
-          <styled.Item>
-            <Button variant="danger" size="normal" label={t('actions.decline')} disabled />
-          </styled.Item>
-        </styled.Row>
-        <styled.Row>
-          <styled.Item>
             <Avatar size="small" avatarSrc={avatarExampleSrc} />
           </styled.Item>
           <styled.Item>

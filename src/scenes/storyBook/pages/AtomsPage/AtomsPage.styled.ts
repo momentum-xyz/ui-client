@@ -13,7 +13,6 @@ export const Components = styled.div`
 
 export const Name = styled.div`
   padding: 10px 20px;
-  width: 50%;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.6)};
   border-radius: 10px;
 `;
@@ -23,5 +22,5 @@ export const Section = styled.div`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 `;

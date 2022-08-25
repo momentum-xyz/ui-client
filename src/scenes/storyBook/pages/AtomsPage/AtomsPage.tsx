@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {useTheme} from 'styled-components';
 
-import {Heading, IconSvg, PageTopBar, SvgButton} from 'ui-kit';
+import {Button, Heading, IconSvg, PageTopBar, SvgButton} from 'ui-kit';
 
 import * as styled from './AtomsPage.styled';
 
@@ -126,6 +126,37 @@ const AtomsPage: FC = () => {
           <SvgButton theme={theme} iconName="close" size="large" onClick={() => {}} />
           <SvgButton theme={theme} iconName="close" size="normal" onClick={() => {}} />
           <SvgButton theme={theme} iconName="close" size="small" onClick={() => {}} />
+        </styled.Section>
+
+        <styled.Name>
+          <Heading theme={theme} label="Component «Button»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <Button variant="primary" size="normal" label="Join Stage" />
+          <Button variant="primary-background" size="normal" label="Join Stage" />
+          <Button variant="danger" size="normal" label="Join Stage" />
+          <Button variant="danger-background" size="normal" label="Join Stage" />
+          <Button variant="inverted" size="normal" label="Join Stage" />
+          <Button variant="secondary" size="normal" label="Join Stage" />
+        </styled.Section>
+        <styled.Section>
+          <Button variant="primary" size="normal" label="Join Stage" disabled />
+          <Button variant="primary-background" size="normal" label="Join Stage" disabled />
+          <Button variant="danger" size="normal" label="Join Stage" disabled />
+          <Button variant="danger-background" size="normal" label="Join Stage" disabled />
+          <Button variant="inverted" size="normal" label="Join Stage" disabled />
+          <Button variant="secondary" size="normal" label="Join Stage" disabled />
+        </styled.Section>
+        <styled.Section>
+          <Button variant="primary" size="normal" label="Join Stage" icon="wallet" />
+          <Button variant="danger" size="normal" label="Join Stage" icon="wallet" />
+          <Button variant="inverted" size="normal" label="Join Stage" icon="wallet" />
+          <Button variant="secondary" size="normal" label="Join Stage" icon="wallet" />
+        </styled.Section>
+        <styled.Section>
+          <Button variant="primary" size="normal" label="Join Stage (normal)" />
+          <Button variant="primary" size="medium" label="Join Stage (medium)" />
+          <Button variant="primary" size="normal" label="Join Stage" transform="normal" />
         </styled.Section>
       </styled.Components>
     </styled.Div>
