@@ -148,13 +148,9 @@ const Collaboration: FC = () => {
         );
       }
     }
-  }, [
-    agoraStageModeStore,
-    countdownDialog,
-    stageModeStore.acceptedRequestToJoinStage,
-    t,
-    userDevicesStore.createLocalTracks
-  ]);
+
+    stageModeStore.setAcceptedRequestToJoinStage(undefined);
+  }, [agoraStageModeStore, countdownDialog, stageModeStore, t, userDevicesStore.createLocalTracks]);
 
   const handleCountdownCanceled = () => {
     countdownDialog.close();
