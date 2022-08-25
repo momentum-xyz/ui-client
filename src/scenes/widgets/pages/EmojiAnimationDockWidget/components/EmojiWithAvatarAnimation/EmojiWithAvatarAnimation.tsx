@@ -18,7 +18,6 @@ export const EmojiWithAvatarAnimation: FC<PropsInterface> = ({
   emojiId
 }) => {
   const style = {left: `${offset}%`};
-  // const style = {};
   return type === 'emoji' ? (
     <styled.EmojiContainer style={style}>
       <styled.EmojiImg src={emojiUrl} alt="emoji" />

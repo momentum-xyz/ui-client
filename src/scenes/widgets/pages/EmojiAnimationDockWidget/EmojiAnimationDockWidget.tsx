@@ -5,7 +5,7 @@ import {usePosBusEvent} from 'shared/hooks';
 
 import {EmojiWithAvatarAnimation} from './components';
 
-const ANIMATION_DURATION_SEC = 5_000;
+const ANIMATION_DURATION_SEC = 5;
 
 // TODO make it model
 interface EmojiItemInterface {
@@ -34,28 +34,16 @@ const EmojiAnimationDock: FC = () => {
       };
 
       setItems((items) => new Set(items).add(item));
-      console.log('MOUNT', {
-        type: type.toUpperCase(),
-        userId,
-        emojiId,
-        emojiUrl,
-        offset: item.offset
-      });
+      console.log('MOUNT', item);
 
       setTimeout(() => {
-        console.log('UMOUNT', {
-          type: type.toUpperCase(),
-          userId,
-          emojiId,
-          emojiUrl,
-          offset: item.offset
-        });
+        console.log('UNMOUNT', item);
         setItems((items) => {
           const s = new Set(items);
           s.delete(item);
           return s;
         });
-      }, ANIMATION_DURATION_SEC);
+      }, ANIMATION_DURATION_SEC * 1000);
     };
 
   usePosBusEvent('emoji', newEmojiHandler('emoji'));
