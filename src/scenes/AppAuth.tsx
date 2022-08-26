@@ -14,7 +14,9 @@ const AppAuth: FC = ({children}) => {
   const history = useHistory();
 
   const onSuccess = (token?: string) => unityStore.setAuthToken(token);
-  const onError = () => history.push(ROUTES.login, {from: history.location.pathname});
+  const onError = () => {
+    document.location.href = ROUTES.login;
+  };
 
   const {isReady, idToken} = useSession(onSuccess, onError);
 
