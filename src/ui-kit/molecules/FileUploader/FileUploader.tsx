@@ -1,8 +1,8 @@
 import React, {FC, useCallback} from 'react';
 import {useDropzone} from 'react-dropzone';
 
-import {FileType, PropsWithThemeInterface} from 'ui-kit';
-import {Button} from 'ui-kit';
+import {FileType, PropsWithThemeInterface} from 'ui-kit/index';
+import {Button} from 'ui-kit/index';
 
 import * as styled from './FileUploader.styled';
 

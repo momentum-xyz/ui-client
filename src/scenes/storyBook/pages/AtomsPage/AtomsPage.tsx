@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 
 import {
   Button,
-  FileUploader,
   Heading,
   IconSvg,
   Input,
@@ -174,32 +173,6 @@ const AtomsPage: FC = () => {
           <Button variant="primary" size="normal" label="Join Stage" transform="normal" />
           <Button variant="primary" size="medium" label="Join Stage (medium)" />
           <Button variant="primary" size="medium" label="Join Stage" transform="normal" />
-        </styled.Section>
-
-        <styled.Name>
-          <Heading label="Component «FileUploader»" type="h2" align="left" />
-        </styled.Name>
-        <styled.Section>
-          <styled.AvatarImageUpload>
-            <FileUploader
-              label="Upload Image"
-              dragActiveLabel="Drop the files here..."
-              fileType="image"
-              onFilesUpload={console.info}
-              maxSize={10 * Math.pow(2, 20)}
-              onError={(error) => console.error(error)}
-            />
-          </styled.AvatarImageUpload>
-          <styled.TileImageUpload>
-            <FileUploader
-              label="Upload Image"
-              dragActiveLabel="Drop the files here..."
-              fileType="image"
-              onFilesUpload={console.info}
-              maxSize={10 * Math.pow(2, 20)}
-              onError={(error) => console.error(error)}
-            />
-          </styled.TileImageUpload>
         </styled.Section>
 
         <styled.Name>

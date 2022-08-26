@@ -26,7 +26,8 @@ import {
   Button,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
-  ToastMessage
+  ToastMessage,
+  FileUploader
 } from 'ui-kit';
 import walletConnect from 'static/images/walletConnect.svg';
 import polkadot from 'static/images/polkadot.svg';
@@ -129,6 +130,34 @@ const MoleculesPage: FC = () => {
             has been the industry's standard dummy text ever since the 1500s, when an unknown
             printer took a galley of type and scrambled it to make a type specimen book.
           </ExpandableLayout>
+        </styled.Section>
+
+        <styled.Name>
+          <Heading label="Component «FileUploader»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <styled.AvatarImageUpload>
+            <FileUploader
+              label="Upload Image"
+              dragActiveLabel="Drop the files here..."
+              fileType="image"
+              onFilesUpload={(file) => console.log(file)}
+              maxSize={10 * Math.pow(2, 20)}
+              onError={(error) => console.error(error)}
+              enableDragAndDrop={false}
+            />
+          </styled.AvatarImageUpload>
+          <styled.TileImageUpload>
+            <FileUploader
+              label="Upload Image"
+              dragActiveLabel="Drop the files here..."
+              fileType="image"
+              onFilesUpload={console.info}
+              maxSize={10 * Math.pow(2, 20)}
+              onError={(error) => console.error(error)}
+              enableDragAndDrop={false}
+            />
+          </styled.TileImageUpload>
         </styled.Section>
 
         <styled.Name>
