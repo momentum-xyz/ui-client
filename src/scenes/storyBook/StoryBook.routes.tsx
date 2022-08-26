@@ -3,7 +3,7 @@ import React from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-import {AtomsPage, MoleculesPage, OrganismsPage, TemplatesPage} from './pages';
+import {AtomsPage, MoleculesPage, OrganismsPage} from './pages';
 
 export const STORYBOOK_ROUTES: RouteConfigInterface[] = [
   {
@@ -20,10 +20,5 @@ export const STORYBOOK_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.storyBook.organisms,
     exact: true,
     main: () => <OrganismsPage />
-  },
-  {
-    path: ROUTES.storyBook.templates,
-    exact: true,
-    main: () => <TemplatesPage />
   }
 ];

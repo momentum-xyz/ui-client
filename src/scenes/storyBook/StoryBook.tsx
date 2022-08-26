@@ -33,11 +33,6 @@ const StoryBook: FC = () => {
       path: ROUTES.storyBook.organisms,
       iconName: 'tiles',
       exact: true
-    },
-    {
-      path: ROUTES.storyBook.templates,
-      iconName: 'tiles',
-      exact: true
     }
   ];
 

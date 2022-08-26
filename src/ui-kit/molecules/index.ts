@@ -18,3 +18,4 @@ export * from './UnityLoader';
 export * from './TileMenu';
 export * from './MediaPlayer';
 export * from './NewDeviceDialog';
+export * from './FileUploader';
