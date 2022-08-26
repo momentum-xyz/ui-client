@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react';
 import {useTheme} from 'styled-components';
+import {toast} from 'react-toastify';
 
-import {appVariables} from 'api/constants';
 import {UserStatusEnum} from 'core/enums';
 import {
   AccentColorList,
@@ -22,7 +22,11 @@ import {
   TileMenu,
   ToastContent,
   Toggle,
-  ToolbarIcon
+  ToolbarIcon,
+  Button,
+  TOAST_COMMON_OPTIONS,
+  TOAST_NOT_AUTO_CLOSE_OPTIONS,
+  ToastMessage
 } from 'ui-kit';
 import walletConnect from 'static/images/walletConnect.svg';
 import polkadot from 'static/images/polkadot.svg';
@@ -30,7 +34,7 @@ import metamask from 'static/images/metamask.svg';
 
 import * as styled from './MoleculesPage.styled';
 
-const avatarSrc = `${appVariables.RENDER_SERVICE_URL}/get/2c192ae7cf19a1a782258d07278af61b`;
+const avatarSrc = 'https://picsum.photos/100';
 
 const MoleculesPage: FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -229,6 +233,7 @@ const MoleculesPage: FC = () => {
 
         <styled.Name>
           <Heading label="Component «ToastContent»" type="h2" align="left" />
+          <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} />
         </styled.Name>
         <styled.SectionGrid2>
           <ToastContent
@@ -277,6 +282,59 @@ const MoleculesPage: FC = () => {
             declineInfo={{title: 'cancel', onClick: () => {}}}
           />
         </styled.SectionGrid2>
+        <styled.Section>
+          <Button
+            variant="primary"
+            size="normal"
+            label="Info toast"
+            onClick={() => {
+              toast.info(
+                <ToastContent
+                  headerIconName="alert"
+                  title="Alert"
+                  text="some text here not more"
+                  isCloseButton
+                />,
+                TOAST_COMMON_OPTIONS
+              );
+            }}
+          />
+          <Button
+            variant="primary"
+            size="normal"
+            label="Info toast with buttons"
+            onClick={() => {
+              toast.info(
+                <ToastContent
+                  headerIconName="alert"
+                  text="Explicabo vero nisi deserunt."
+                  theme={theme}
+                  title="Alert Title"
+                  approveInfo={{title: 'ok', onClick: () => console.info('ok')}}
+                  declineInfo={{title: 'cancel', onClick: () => console.info('cancel')}}
+                />,
+                TOAST_NOT_AUTO_CLOSE_OPTIONS
+              );
+            }}
+          />
+          <Button
+            variant="danger"
+            size="normal"
+            label="Error toast"
+            onClick={() => {
+              toast.error(
+                <ToastContent
+                  isDanger
+                  headerIconName="calendar"
+                  title="Alert"
+                  text="some text"
+                  isCloseButton
+                />,
+                TOAST_COMMON_OPTIONS
+              );
+            }}
+          />
+        </styled.Section>
 
         <styled.Name>
           <Heading label="Component «Toggle»" type="h2" align="left" />

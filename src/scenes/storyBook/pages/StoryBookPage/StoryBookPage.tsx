@@ -1,31 +1,10 @@
 import React, {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {toast} from 'react-toastify';
 
-import {
-  Button,
-  Text,
-  NavigationBar,
-  NavigationBarItem,
-  ToastMessage,
-  SvgButton,
-  PanelLayout,
-  ToastContent,
-  Dialog,
-  TextArea,
-  Input,
-  PageTopBar,
-  TOAST_COMMON_OPTIONS,
-  TOAST_NOT_AUTO_CLOSE_OPTIONS
-} from 'ui-kit';
+import {Button, Text, SvgButton, PanelLayout, Dialog, TextArea, Input, PageTopBar} from 'ui-kit';
 
 import * as styled from './StoryBookPage.styled';
-
-interface TabInterface {
-  path: string;
-  iconName: IconName;
-}
 
 const StoryBookPage: FC = () => {
   const [dialog1Shown, setDialog1Shown] = useState<boolean>(false);
@@ -36,96 +15,12 @@ const StoryBookPage: FC = () => {
 
   const theme = useTheme();
 
-  const successtoast = () => {
-    toast.success('Explicabo vero nisi deserunt ratione voluptate', {
-      closeOnClick: true,
-      autoClose: 5000
-    });
-  };
-
-  const warningtoast = () => {
-    toast.warning('Request has not been made at the moment, try again later');
-  };
-
-  const customtoasterror = () => {
-    toast.error(
-      <ToastContent
-        isDanger
-        headerIconName="calendar"
-        title="Alert"
-        text="some text"
-        isCloseButton
-      />,
-      TOAST_COMMON_OPTIONS
-    );
-  };
-
-  const customtoastinfo = () => {
-    toast.info(
-      <ToastContent
-        headerIconName="alert"
-        title="Alert"
-        text="some text here not more"
-        isCloseButton
-      />,
-      TOAST_COMMON_OPTIONS
-    );
-  };
-
-  const customtoastinfoButton = () => {
-    toast.info(
-      <ToastContent
-        headerIconName="alert"
-        text="Explicabo vero nisi deserunt."
-        theme={theme}
-        title="Alert Title"
-        approveInfo={{title: 'ok', onClick: () => console.info('ok')}}
-        declineInfo={{title: 'cancel', onClick: () => console.info('cancel')}}
-      />,
-      TOAST_NOT_AUTO_CLOSE_OPTIONS
-    );
-  };
-
-  const tabs: TabInterface[] = [
-    {
-      path: 'dashboard',
-      iconName: 'tiles'
-    },
-    {
-      path: 'stage-mode',
-      iconName: 'stage'
-    },
-    {
-      path: 'screenshare',
-      iconName: 'screenshare'
-    },
-    {
-      path: 'miro',
-      iconName: 'miro'
-    },
-    {
-      path: 'google-drive',
-      iconName: 'drive'
-    }
-  ];
-
   return (
     <styled.Div className="main">
       <styled.Section>
         <styled.SectionTitle>Components</styled.SectionTitle>
 
         <styled.Row>
-          <styled.Item>
-            <NavigationBar>
-              {tabs.map((tab) => (
-                <NavigationBarItem
-                  key={tab.path}
-                  iconName={tab.iconName}
-                  path={`/system/storybook/${tab.path}`}
-                />
-              ))}
-            </NavigationBar>
-          </styled.Item>
           <styled.Item style={{width: '100%'}}>
             <PageTopBar
               title="spacename"
@@ -451,46 +346,6 @@ const StoryBookPage: FC = () => {
                 <TextArea name="Label" placeholder="Type Here Token Description" isCustom />
               </styled.InputPanelLayout>
             </PanelLayout>
-          </styled.Item>
-        </styled.Row>
-      </styled.Section>
-      <styled.Section>
-        <styled.Row>
-          <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} />
-        </styled.Row>
-      </styled.Section>
-      <styled.Section>
-        <styled.SectionTitle>Toast Messages</styled.SectionTitle>
-        <styled.Row>
-          <styled.Item>
-            <Button variant="primary" size="normal" label="success toast" onClick={successtoast} />
-          </styled.Item>
-          <styled.Item>
-            <Button variant="danger" size="normal" label="warning toast" onClick={warningtoast} />
-          </styled.Item>
-          <styled.Item>
-            <Button
-              variant="danger"
-              size="normal"
-              label="custom error toast"
-              onClick={customtoasterror}
-            />
-          </styled.Item>
-          <styled.Item>
-            <Button
-              variant="primary"
-              size="normal"
-              label="custom info toast"
-              onClick={customtoastinfo}
-            />
-          </styled.Item>
-          <styled.Item>
-            <Button
-              variant="primary"
-              size="normal"
-              label="custom info toast"
-              onClick={customtoastinfoButton}
-            />
           </styled.Item>
         </styled.Row>
       </styled.Section>
