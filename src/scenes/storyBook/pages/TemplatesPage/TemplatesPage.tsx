@@ -7,7 +7,7 @@ import * as styled from './TemplatesPage.styled';
 const TemplatesPage: FC = () => {
   return (
     <styled.Div>
-      <PageTopBar title="Momentum «ui-kit»" subtitle="Templates" />
+      <PageTopBar title="«ui-kit»" subtitle="Templates" />
       <styled.Components>Templates</styled.Components>
     </styled.Div>
   );

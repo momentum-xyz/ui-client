@@ -25,7 +25,7 @@ import * as styled from './AtomsPage.styled';
 const AtomsPage: FC = () => {
   return (
     <styled.Div>
-      <PageTopBar title="Momentum «ui-kit»" subtitle="Atoms" />
+      <PageTopBar title="«ui-kit»" subtitle="Atoms" />
       <styled.Components>
         <styled.Name>
           <Heading label="Component «IconSvg»" type="h2" align="left" />

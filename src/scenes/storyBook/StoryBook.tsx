@@ -6,7 +6,7 @@ import {Redirect, Switch} from 'react-router-dom';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createRoutesByConfig} from 'core/utils';
-import {Navigation, VisualSettingsPanel} from 'ui-kit';
+import {Navigation, PageTopBar, VisualSettingsPanel} from 'ui-kit';
 import {NavigationTabInterface} from 'core/interfaces';
 import background from 'static/images/bg.png';
 
@@ -45,6 +45,7 @@ const StoryBook: FC = () => {
     <styled.StoryBook data-testid="StoryBook-test" background={background}>
       <styled.SettingsContainer>
         <styled.Settings>
+          <PageTopBar title="Momentum «storybook»" />
           <VisualSettingsPanel
             theme={theme}
             onAccentColorSelect={themeStore.changeAccentColor}

@@ -44,7 +44,7 @@ const MoleculesPage: FC = () => {
 
   return (
     <styled.Div>
-      <PageTopBar title="Momentum «ui-kit»" subtitle="Molecules" />
+      <PageTopBar title="«ui-kit»" subtitle="Molecules" />
       <styled.Components>
         <styled.Name>
           <Heading label="Component «Avatar»" type="h2" align="left" />
