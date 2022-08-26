@@ -1,7 +1,7 @@
 import React, {FC, HTMLProps} from 'react';
 import cn from 'classnames';
 
-import {Heading, PropsWithThemeInterface} from 'ui-kit';
+import {Heading, PropsWithThemeInterface} from 'ui-kit/index';
 
 import * as styled from './TextArea.styled';
 

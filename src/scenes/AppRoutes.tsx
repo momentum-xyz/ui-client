@@ -11,16 +11,17 @@ import {
   Web3ChallengePage,
   Web3ConsentPage
 } from './auth/pages';
-import {WelcomePage} from './welcome';
 import {HomePage} from './home';
+import {WelcomePage} from './welcome';
 import {SignUpCompletePage} from './profile';
-import {DisconnectedPage, MaintenancePage, StoryBookPage, WrongBrowserPage} from './system/pages';
 import {Collaboration} from './collaboration';
 import {SpaceAdmin} from './spaceAdmin';
 import {WorldCalendar} from './worldCalendar';
 import {MagicPage} from './magic/pages';
 import {VideoPage} from './video/pages';
 import {GrabTablePage} from './grabTable';
+import {StoryBook} from './storyBook';
+import {DisconnectedPage, MaintenancePage, WrongBrowserPage} from './system';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -49,9 +50,8 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     main: () => <Web3ConsentPage />
   },
   {
-    path: ROUTES.storyBook,
-    exact: true,
-    main: () => <StoryBookPage />
+    path: ROUTES.storyBook.base,
+    main: () => <StoryBook />
   }
 ];
 

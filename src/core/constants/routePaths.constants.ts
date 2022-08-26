@@ -5,12 +5,11 @@ export const ROUTES = {
   loginWeb3: '/web3/login',
   web3: '/web3',
   consentWeb3: '/web3/consent',
-  storyBook: '/system/storybook',
-  signUpComplete: '/profile/signUpComplete',
   callBack: '/oidc/callback',
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
   welcome: '/welcome',
+  signUpComplete: '/profile/signUpComplete',
   system: {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',
@@ -37,5 +36,12 @@ export const ROUTES = {
   magic: '/magic/:id',
   video: '/video/:spaceId',
   worldCalendar: '/calendar',
-  help: '/help'
+  help: '/help',
+  storyBook: {
+    base: '/storybook',
+    atoms: '/storybook/atoms',
+    molecules: '/storybook/molecules',
+    organisms: '/storybook/organisms',
+    templates: '/storybook/templates'
+  }
 };
