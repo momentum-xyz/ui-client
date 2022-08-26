@@ -18,7 +18,8 @@ import {
   ProfileMenuWidget,
   StakingWidget,
   WorldStatsWidget,
-  StageModePIPWidget
+  StageModePIPWidget,
+  EmojiWidget
 } from 'scenes/widgets/pages';
 
 import * as styled from './Widgets.styled';
@@ -37,7 +38,8 @@ const Widgets: FC = () => {
     launchInitiativeStore,
     musicPlayerStore,
     attendeesListStore,
-    profileStore
+    profileStore,
+    emojiStore
   } = widgetStore;
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
@@ -51,7 +53,8 @@ const Widgets: FC = () => {
 
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
-  }, [musicPlayerStore, worldStore.worldId]);
+    emojiStore.init(worldStore.worldId);
+  }, [musicPlayerStore, emojiStore, worldStore.worldId]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -99,6 +102,11 @@ const Widgets: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
+      {emojiStore.selectionDialog.isOpen && (
+        <styled.EmojiBar>
+          <EmojiWidget onClose={emojiStore.selectionDialog.close} />
+        </styled.EmojiBar>
+      )}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -116,6 +124,13 @@ const Widgets: FC = () => {
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
           <ToolbarIcon icon="home" title={t('labels.home')} link={ROUTES.base} size="large" exact />
+          <ToolbarIcon
+            icon="smiley-face"
+            title="React"
+            onClick={emojiStore.selectionDialog.toggle}
+            size="large"
+            exact
+          />
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>

@@ -9,6 +9,7 @@ import {HelpStore} from './HelpStore';
 import {LaunchInitiativeStore} from './LaunchInitiativeStore';
 import {MusicPlayerStore} from './MusicPlayerStore';
 import {AttendeesListStore} from './AttendeesListStore';
+import {EmojiStore} from './EmojiStore';
 
 const RootWidgetStore = types.model('RootWidgetStore', {
   magicLinkStore: types.optional(MagicLinkStore, {}),
@@ -19,9 +20,9 @@ const RootWidgetStore = types.model('RootWidgetStore', {
   profileMenuStore: types.optional(ProfileMenuStore, {}),
   launchInitiativeStore: types.optional(LaunchInitiativeStore, {}),
   musicPlayerStore: types.optional(MusicPlayerStore, {}),
-  attendeesListStore: types.optional(AttendeesListStore, {})
+  attendeesListStore: types.optional(AttendeesListStore, {}),
+  emojiStore: types.optional(EmojiStore, {})
 });
-
 export interface RootMeetingSpaceStoreInterface extends Instance<typeof RootWidgetStore> {}
 
 export {RootWidgetStore};

@@ -23,6 +23,7 @@ import {
   InvitedOnStageDialog,
   PrepareOnStageDialog
 } from './pages/StageModePage/components';
+import {EmojiAnimationDock} from './components';
 import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
 
@@ -217,6 +218,10 @@ const Collaboration: FC = () => {
       {prepareOnStageDialog.isOpen && (
         <PrepareOnStageDialog onClose={prepareOnStageDialog.close} onReady={countdownDialog.open} />
       )}
+
+      <styled.BottomCenteredDock>
+        <EmojiAnimationDock />
+      </styled.BottomCenteredDock>
     </styled.Container>
   );
 };
