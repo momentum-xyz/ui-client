@@ -5,6 +5,7 @@ import {UnityEventEmitter, UNITY_TARGET_TYPE} from 'core/constants';
 import {UnityApiInterface} from 'core/interfaces';
 import {PosBusService} from 'shared/services';
 import {PosBusEventEnum} from 'core/enums';
+import {PosBusEmojiMessageType} from 'core/types';
 
 export class UnityService {
   unityApi?: UnityApiInterface;
@@ -149,24 +150,38 @@ export class UnityService {
     emojiUrl,
     emojiId,
     userUUID,
+    userAvatarSrc,
+    userName,
     targetType = UNITY_TARGET_TYPE.USER
   }: {
     emojiId: string;
     emojiUrl: string;
     userUUID: string;
+    userAvatarSrc: string;
+    userName: string;
     targetType?: UNITY_TARGET_TYPE;
   }) {
     try {
-      console.log('SEND EMOJI:', {targetType, userUUID, emojiUrl, emojiId});
+      console.log('SEND EMOJI:', {
+        targetType,
+        userUUID,
+        userAvatarSrc,
+        userName,
+        emojiUrl,
+        emojiId
+      });
       console.log('unityAPI', this.unityApi);
       const topic = 'emoji';
-      const data = JSON.stringify({
+
+      const data: PosBusEmojiMessageType = {
         targetType,
         targetID: userUUID,
+        urlAvatar: userAvatarSrc,
+        nickname: userName,
         url: emojiUrl,
         emojiID: emojiId
-      });
-      this.unityApi?.relayMessage(topic, data);
+      };
+      this.unityApi?.relayMessage(topic, JSON.stringify(data));
     } catch (error) {
       console.error(error);
     }

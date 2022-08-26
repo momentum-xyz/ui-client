@@ -27,16 +27,18 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
   const {t} = useTranslation();
 
   const userUUID = profile?.uuid;
+  const userAvatarSrc = profile?.avatarSrc || '';
+  const userName = profile?.name || '';
   const handleEmojiClick = useCallback(
     (emojiId: string, emojiUrl: string) => {
       // console.log('user uuid', userProfile?.uuid, profile?.uuid);
       if (userUUID) {
-        UnityService.sendEmoji({emojiId, emojiUrl, userUUID});
+        UnityService.sendEmoji({emojiId, emojiUrl, userUUID, userAvatarSrc, userName});
       } else {
         console.error('Unable to get user uuid');
       }
     },
-    [userUUID]
+    [userUUID, userAvatarSrc, userName]
   );
 
   return (

@@ -1,30 +1,21 @@
 import {FC} from 'react';
 
+import {PosBusEmojiMessageType} from 'core/types';
+
 import * as styled from './EmojiWithAvatarAnimation.styled';
 
 interface PropsInterface {
-  type: 'emoji' | 'megamoji';
-  emojiUrl: string;
-  userId?: string;
-  emojiId?: string;
+  emojiMsg: PosBusEmojiMessageType;
   offset: number;
 }
 
-export const EmojiWithAvatarAnimation: FC<PropsInterface> = ({
-  type,
-  emojiUrl,
-  offset,
-  userId,
-  emojiId
-}) => {
+export const EmojiWithAvatarAnimation: FC<PropsInterface> = ({offset, emojiMsg}) => {
   const style = {left: `${offset}%`};
-  return type === 'emoji' ? (
+  const {url, urlAvatar, userName} = emojiMsg;
+  return (
     <styled.EmojiContainer style={style}>
-      <styled.EmojiImg src={emojiUrl} alt="emoji" />
+      {!!urlAvatar && <styled.Avatar src={urlAvatar} alt={userName} />}
+      <styled.EmojiImg src={url} alt="emoji" />
     </styled.EmojiContainer>
-  ) : (
-    <styled.MegamojiContainer style={style}>
-      <styled.MegamojiImg src={emojiUrl} alt="megamoji" />
-    </styled.MegamojiContainer>
   );
 };

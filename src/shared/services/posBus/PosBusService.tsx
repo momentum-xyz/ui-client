@@ -97,7 +97,7 @@ class PosBusService {
   }
 
   static handleIncomingEmoji(message: PosBusEmojiMessageType) {
-    PosBusEventEmitter.emit('emoji', message.url, message.targetID, message.emojiID);
+    PosBusEventEmitter.emit('emoji', message);
   }
 
   static handleIncomingMegamoji(message: PosBusMegamojiMessageType) {

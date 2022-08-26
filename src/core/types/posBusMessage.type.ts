@@ -60,6 +60,8 @@ export type PosBusHigh5MessageType = {
 export type PosBusEmojiMessageType = {
   targetType: number;
   targetID: string;
+  urlAvatar: string;
+  nickname: string;
   url: string;
   emojiID: string;
 };
