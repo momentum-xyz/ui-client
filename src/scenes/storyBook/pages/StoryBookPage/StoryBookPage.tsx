@@ -4,12 +4,10 @@ import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 
 import {
-  Avatar,
   Button,
   Text,
   NavigationBar,
   NavigationBarItem,
-  Dropdown,
   ToastMessage,
   SvgButton,
   PanelLayout,
@@ -24,8 +22,6 @@ import {
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
-import {appVariables} from 'api/constants';
-import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './StoryBookPage.styled';
 
@@ -40,9 +36,6 @@ const StoryBookPage: FC = () => {
   const [dialog3Shown, setDialog3Shown] = useState<boolean>(false);
   const [dialog4Shown, setDialog4Shown] = useState<boolean>(false);
   const [dialog5Shown, setDialog5Shown] = useState<boolean>(false);
-
-  const avatarExampleSrc =
-    appVariables.RENDER_SERVICE_URL + '/get/2c192ae7cf19a1a782258d07278af61b';
 
   const theme = useTheme();
 
@@ -194,34 +187,6 @@ const StoryBookPage: FC = () => {
             />
           </styled.Item>
         </styled.Row>
-        <styled.Row>
-          <styled.Item>
-            <Avatar size="small" avatarSrc={avatarExampleSrc} />
-          </styled.Item>
-          <styled.Item>
-            <Avatar size="small" status={UserStatusEnum.ONLINE} avatarSrc={avatarExampleSrc} />
-          </styled.Item>
-          <styled.Item>
-            <Avatar size="normal" status={UserStatusEnum.ONLINE} avatarSrc={avatarExampleSrc} />
-          </styled.Item>
-          <styled.Item>
-            <Avatar
-              size="normal"
-              status={UserStatusEnum.DO_NOT_DISTURB}
-              avatarSrc={avatarExampleSrc}
-            />
-          </styled.Item>
-          <styled.Item>
-            <Avatar size="large" avatarSrc={avatarExampleSrc} />
-          </styled.Item>
-          <styled.Item>
-            <Avatar size="large" status={UserStatusEnum.ONLINE} avatarSrc={avatarExampleSrc} />
-          </styled.Item>
-          <styled.Item>
-            <Avatar size="large" />
-          </styled.Item>
-        </styled.Row>
-
         <styled.Row>
           <styled.Item>
             <SearchInput
@@ -524,39 +489,7 @@ const StoryBookPage: FC = () => {
         </styled.Row>
       </styled.Section>
       <styled.Section>
-        <styled.SectionTitle>Dropdown</styled.SectionTitle>
         <styled.Row>
-          <styled.Item>
-            <Dropdown
-              placeholder="Select an option"
-              value="option-6"
-              onOptionSelect={(option) => {
-                console.info('selection option', option);
-              }}
-              options={[
-                {label: 'option 1', value: 'option-1'},
-                {label: 'option 2', value: 'option-2'},
-                {label: 'option 3', value: 'option-3'},
-                {label: 'option 4', value: 'option-4'}
-              ]}
-            />
-          </styled.Item>
-          <styled.Item>
-            <Dropdown
-              placeholder="Select an option"
-              value="option-6"
-              variant="secondary"
-              onOptionSelect={(option) => {
-                console.info('selection option', option);
-              }}
-              options={[
-                {label: 'option 1', value: 'option-1', icon: 'wallet'},
-                {label: 'option 2', value: 'option-2', icon: 'wallet'},
-                {label: 'option 3', value: 'option-3', icon: 'wallet'},
-                {label: 'option 4', value: 'option-4', icon: 'wallet'}
-              ]}
-            />
-          </styled.Item>
           <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} />
         </styled.Row>
       </styled.Section>
