@@ -33,10 +33,8 @@ const EmojiAnimationDock: FC = () => {
       };
 
       setItems((items) => new Set(items).add(item));
-      // console.log('MOUNT', item);
 
       setTimeout(() => {
-        // console.log('UNMOUNT', item);
         setItems((items) => {
           const s = new Set(items);
           s.delete(item);

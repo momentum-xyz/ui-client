@@ -14,5 +14,4 @@ export const BottomCenteredDock = styled.div`
   width: 20%;
   z-index: calc(var(--overlay-z-index) + 1);
   pointer-events: none;
-  // background: #ff000070;
 `;

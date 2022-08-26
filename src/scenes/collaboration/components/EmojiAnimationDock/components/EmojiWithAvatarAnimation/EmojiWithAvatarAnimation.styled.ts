@@ -2,15 +2,12 @@ import styled from 'styled-components';
 
 export const EmojiContainer = styled.div`
   position: absolute;
-  // position: fixed;
   top: 100%;
-  // left: 45%;
   width: 48px;
   height: 48px;
   transform-origin: 50% 50%;
   animation-name: emojicontainer;
   animation-duration: 3s;
-  // animation-iteration-count: infinite;
   animation-timing-function: linear;
 
   @keyframes emojicontainer {
@@ -42,9 +39,6 @@ export const EmojiImg = styled.img`
   animation-duration: 3s;
   opacity: 0;
   animation-timing-function: linear;
-  // animation-iteration-count: infinite;
-  // left: 0px;
-  // right: 0px;
   width: 48px;
   height: 48px;
 
@@ -86,9 +80,6 @@ export const Avatar = styled.div`
   animation-duration: 3s;
   animation-timing-function: linear;
   opacity: 0;
-  // animation-iteration-count: infinite;
-  // left: 0px;
-  // right: 0px;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -124,7 +115,6 @@ export const AvatarText = styled.div`
   background: #b348b3cf;
   color: white;
   border-radius: 50%;
-  // border: 2px solid white;
   font-size: 18px;
   font-weight: 500;
   width: 100%;

@@ -14,15 +14,9 @@ interface PropsInterface {
 }
 
 const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
-  const {
-    widgetStore,
-    // mainStore,
-    sessionStore
-  } = useStore();
+  const {widgetStore, sessionStore} = useStore();
   const {emojiDetailsList} = widgetStore.emojiStore;
-  // const {userProfile} = widgetStore.profileStore;
   const {profile} = sessionStore;
-  // const {unityStore} = mainStore;
 
   const {t} = useTranslation();
 
@@ -31,7 +25,6 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
   const userName = profile?.name || '';
   const handleEmojiClick = useCallback(
     (emojiId: string, emojiUrl: string) => {
-      // console.log('user uuid', userProfile?.uuid, profile?.uuid);
       if (userUUID) {
         UnityService.sendEmoji({emojiId, emojiUrl, userUUID, userAvatarSrc, userName});
       } else {

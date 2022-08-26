@@ -2,9 +2,7 @@ import styled from 'styled-components';
 
 export const MegamojiContainer = styled.div`
   position: absolute;
-  // position: fixed;
   top: 100%;
-  // left: 50%;
   opacity: 0;
   width: 150px;
   height: 150px;
@@ -12,7 +10,6 @@ export const MegamojiContainer = styled.div`
   animation-name: megamoji;
   animation-duration: 2s;
   animation-timing-function: linear;
-  // animation-iteration-count: infinite;
 
   @keyframes megamoji {
     0% {
@@ -52,6 +49,4 @@ export const MegamojiImg = styled.img`
   width: 150px;
   height: 150px;
   position: absolute;
-  // top: 0px;
-  // left: 0px;
 `;
