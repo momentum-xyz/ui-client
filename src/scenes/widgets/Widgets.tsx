@@ -53,7 +53,8 @@ const Widgets: FC = () => {
 
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
-  }, [musicPlayerStore, worldStore.worldId]);
+    emojiStore.init(worldStore.worldId);
+  }, [musicPlayerStore, emojiStore, worldStore.worldId]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {

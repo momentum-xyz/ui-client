@@ -45,7 +45,6 @@ const RootStore = types
       self.mainStore.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
-      self.widgetStore.emojiStore.init(worldId);
     },
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       console.log('---JOINING---');
