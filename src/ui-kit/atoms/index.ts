@@ -8,6 +8,7 @@ export * from './Portal';
 export * from './Input';
 export * from './InputDark';
 export * from './Loader';
+export * from './TextArea';
 export * from './TextAreaDark';
 export * from './Message';
 export * from './Message';

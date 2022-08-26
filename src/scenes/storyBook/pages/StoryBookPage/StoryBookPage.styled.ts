@@ -75,28 +75,6 @@ export const Space = styled.div`
   margin-top: 200px;
 `;
 
-export const AvatarImageUpload = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 298px;
-  height: 298px;
-  border-radius: 100%;
-  background: var(--black-100);
-  position: relative;
-`;
-
-export const TileImageUpload = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 363px;
-  height: 265px;
-  border-radius: 10px;
-  background: var(--black-100);
-  position: relative;
-`;
-
 export const RequestButtonsExample = styled.div`
   display: flex;
   justify-content: space-between;

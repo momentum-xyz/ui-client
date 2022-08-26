@@ -5,7 +5,6 @@ export * from './WrongBrowser';
 export * from './NavigationBarItem';
 export * from './SvgButton';
 export * from './ColorPicker';
-export * from './TextArea';
 export * from './SearchInput';
 export * from './Dropdown';
 export * from './TabBar';
