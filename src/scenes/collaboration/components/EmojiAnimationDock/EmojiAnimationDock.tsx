@@ -8,7 +8,6 @@ import {EmojiWithAvatarAnimation, MegamojiAnimation} from './components';
 
 const ANIMATION_DURATION_SEC = 5;
 
-// TODO make it model
 interface EmojiItemInterface {
   type: 'emoji' | 'megamoji';
   emojiUrl: string | null;
@@ -34,10 +33,10 @@ const EmojiAnimationDock: FC = () => {
       };
 
       setItems((items) => new Set(items).add(item));
-      console.log('MOUNT', item);
+      // console.log('MOUNT', item);
 
       setTimeout(() => {
-        console.log('UNMOUNT', item);
+        // console.log('UNMOUNT', item);
         setItems((items) => {
           const s = new Set(items);
           s.delete(item);
@@ -49,15 +48,17 @@ const EmojiAnimationDock: FC = () => {
   usePosBusEvent('emoji', newEmojiHandler('emoji'));
   usePosBusEvent('megamoji', newEmojiHandler('megamoji'));
 
-  const renderItems = () => {
-    return Array.from(items).map(
-      ({idx, emojiMsg, emojiUrl, offset}) =>
-        (emojiMsg && <EmojiWithAvatarAnimation key={idx} emojiMsg={emojiMsg} offset={offset} />) ||
-        (emojiUrl && <MegamojiAnimation key={idx} emojiUrl={emojiUrl} offset={offset} />) || <></>
-    );
-  };
-
-  return <>{renderItems()}</>;
+  return (
+    <>
+      {Array.from(items).map(
+        ({idx, emojiMsg, emojiUrl, offset}) =>
+          (emojiMsg && (
+            <EmojiWithAvatarAnimation key={idx} emojiMsg={emojiMsg} offset={offset} />
+          )) ||
+          (emojiUrl && <MegamojiAnimation key={idx} emojiUrl={emojiUrl} offset={offset} />) || <></>
+      )}
+    </>
+  );
 };
 
 export default observer(EmojiAnimationDock);

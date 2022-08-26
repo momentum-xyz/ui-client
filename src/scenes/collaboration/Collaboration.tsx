@@ -16,7 +16,6 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
-import {EmojiAnimationDockWidget} from 'scenes/widgets/pages';
 
 import {
   AcceptedToJoinStageDialog,
@@ -24,6 +23,7 @@ import {
   InvitedOnStageDialog,
   PrepareOnStageDialog
 } from './pages/StageModePage/components';
+import {EmojiAnimationDock} from './components';
 import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
 
@@ -220,7 +220,7 @@ const Collaboration: FC = () => {
       )}
 
       <styled.BottomCenteredDock>
-        <EmojiAnimationDockWidget />
+        <EmojiAnimationDock />
       </styled.BottomCenteredDock>
     </styled.Container>
   );
