@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   border-radius: 100%;
-  background: var(--black-100);
-  color: var(--prime-blue-100);
+  background: ${(props) => props.theme.bg};
+  color: ${(props) => props.theme.accent};
   display: flex;
   align-items: center;
   justify-content: center;

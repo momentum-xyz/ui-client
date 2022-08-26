@@ -59,6 +59,8 @@ const MoleculesPage: FC = () => {
           <Avatar size="normal" status={UserStatusEnum.ONLINE} avatarSrc={avatarSrc} />
           <Avatar size="normal" status={UserStatusEnum.DO_NOT_DISTURB} avatarSrc={avatarSrc} />
           <Avatar size="small" />
+          <Avatar size="small" status={UserStatusEnum.ONLINE} />
+          <Avatar size="small" status={UserStatusEnum.DO_NOT_DISTURB} />
           <Avatar size="small" avatarSrc={avatarSrc} />
           <Avatar size="small" status={UserStatusEnum.ONLINE} avatarSrc={avatarSrc} />
           <Avatar size="small" status={UserStatusEnum.DO_NOT_DISTURB} avatarSrc={avatarSrc} />
