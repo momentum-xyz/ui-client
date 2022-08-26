@@ -18,7 +18,10 @@ export const SettingsContainer = styled.div`
 `;
 
 export const Settings = styled.div`
+  display: flex;
   width: 320px;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 export const Content = styled.div`

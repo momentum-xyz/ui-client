@@ -12,7 +12,6 @@ import {
   PageTopBar,
   ProgressBar,
   Separator,
-  SvgButton,
   Text,
   TextArea,
   TextAreaDark,
@@ -26,7 +25,7 @@ import * as styled from './AtomsPage.styled';
 const AtomsPage: FC = () => {
   return (
     <styled.Div>
-      <PageTopBar title="Momentum «ui-kit»" subtitle="Atoms" />
+      <PageTopBar title="«ui-kit»" subtitle="Atoms" />
       <styled.Components>
         <styled.Name>
           <Heading label="Component «IconSvg»" type="h2" align="left" />
@@ -138,10 +137,11 @@ const AtomsPage: FC = () => {
           <Heading label="Component «SvgButton»" type="h2" align="left" />
         </styled.Name>
         <styled.Section>
-          <SvgButton iconName="close" size="extra-large" onClick={() => {}} />
-          <SvgButton iconName="close" size="large" onClick={() => {}} />
-          <SvgButton iconName="close" size="normal" onClick={() => {}} />
-          <SvgButton iconName="close" size="small" onClick={() => {}} />
+          <IconSvg name="close" size="extra-large" onClick={() => {}} />
+          <IconSvg name="close" size="large" onClick={() => {}} />
+          <IconSvg name="close" size="medium-large" onClick={() => {}} />
+          <IconSvg name="close" size="normal" onClick={() => {}} />
+          <IconSvg name="close" size="small" onClick={() => {}} />
         </styled.Section>
 
         <styled.Name>

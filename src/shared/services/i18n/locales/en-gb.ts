@@ -134,9 +134,8 @@ export const enGb = {
       }
     },
     wrongBrowser: {
-      title: "You're using an unsupported browser",
-      message: 'Browsers that are currently supported',
-      browserList: 'Google Chrome, Mozilla Firefox'
+      title: "You're using an unsupported browser. Browsers that are currently supported:",
+      browserList: 'Google Chrome, Mozilla Firefox.'
     },
     login: {
       welcome: 'Welcome to',
