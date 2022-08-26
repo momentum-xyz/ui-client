@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter} from 'react-router-dom';
 
 import {render, within} from 'ui-kit/utils/test.utils';
-import {NavigationBarItem} from 'ui-kit';
+import {NavigationBarItem} from 'ui-kit/index';
 
 import NavigationBar from './NavigationBar';
 

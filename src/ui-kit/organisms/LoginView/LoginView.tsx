@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import cn from 'classnames';
 
 import {Text, Button, PropsWithThemeInterface, ButtonInfoInterface} from 'ui-kit';
 
@@ -23,7 +22,7 @@ const LoginView: FC<PropsInterface> = (props) => {
 
       <styled.Web3>{children}</styled.Web3>
 
-      <styled.Actions className={cn()}>
+      <styled.Actions>
         {backBtn && (
           <styled.Action>
             <Button
