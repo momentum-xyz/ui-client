@@ -11,8 +11,22 @@ import {
   ExpandableLayout,
   Heading,
   Location,
-  PageTopBar
+  NetworkButton,
+  PageTopBar,
+  NavigationBarItem,
+  SearchInput,
+  SectionPanel,
+  ShowMoreText,
+  SvgButton,
+  TabBar,
+  TileMenu,
+  ToastContent,
+  Toggle,
+  ToolbarIcon
 } from 'ui-kit';
+import walletConnect from 'static/images/walletConnect.svg';
+import polkadot from 'static/images/polkadot.svg';
+import metamask from 'static/images/metamask.svg';
 
 import * as styled from './MoleculesPage.styled';
 
@@ -20,6 +34,7 @@ const avatarSrc = `${appVariables.RENDER_SERVICE_URL}/get/2c192ae7cf19a1a782258d
 
 const MoleculesPage: FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(false);
 
   const theme = useTheme();
 
@@ -116,6 +131,180 @@ const MoleculesPage: FC = () => {
         <styled.SectionGrid3>
           <Location icon="locate" value={avatarSrc} />
         </styled.SectionGrid3>
+
+        <styled.Name>
+          <Heading label="Component «NavigationBarItem»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <NavigationBarItem iconName="tiles" path="" />
+          <NavigationBarItem iconName="miro" path="" />
+          <NavigationBarItem iconName="drive" path="" />
+        </styled.Section>
+
+        <styled.Name>
+          <Heading label="Component «NetworkButton»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <NetworkButton imageSrc={metamask} label="Metamask" onClick={() => {}} />
+          <NetworkButton imageSrc={polkadot} label="Polkadot" onClick={() => {}} />
+          <NetworkButton imageSrc={walletConnect} label="Wallet" onClick={() => {}} />
+          <NetworkButton iconName="profile" label="Guest" onClick={() => {}} />
+        </styled.Section>
+
+        <styled.Name>
+          <Heading label="Component «SearchInput»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <SearchInput placeholder="Search for..." onChange={(value) => {}} delay={300} />
+        </styled.Section>
+
+        <styled.Name>
+          <Heading label="Component «SectionPanel»" type="h2" align="left" />
+        </styled.Name>
+        <styled.SectionGrid3>
+          <SectionPanel title="Section panel">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industry's standard dummy text ever since the 1500s, when an unknown
+            printer took a galley of type and scrambled it to make a type specimen book.
+          </SectionPanel>
+        </styled.SectionGrid3>
+
+        <styled.Name>
+          <Heading label="Component «ShowMoreText»" type="h2" align="left" />
+        </styled.Name>
+        <styled.SectionGrid3>
+          <ShowMoreText
+            text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industry's standard dummy text ever since the 1500s, when an unknown
+            printer took a galley of type and scrambled it to make a type specimen book."
+            textProps={{size: 's', align: 'left', firstBoldSentences: 1}}
+          />
+        </styled.SectionGrid3>
+
+        <styled.Name>
+          <Heading label="Component «SvgButton»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <SvgButton iconName="gear" size="extra-large" onClick={() => {}} />
+          <SvgButton iconName="gear" size="large" onClick={() => {}} />
+          <SvgButton iconName="gear" size="medium-large" onClick={() => {}} />
+          <SvgButton iconName="gear" size="normal" onClick={() => {}} />
+          <SvgButton iconName="gear" size="small" onClick={() => {}} />
+        </styled.Section>
+
+        <styled.Name>
+          <Heading label="Component «TabBar»" type="h2" align="left" />
+        </styled.Name>
+        <styled.SectionGrid2>
+          <TabBar
+            tabs={[
+              {id: '1', title: '1', label: 'Tab 1', icon: 'wallet'},
+              {id: '2', title: '2', label: 'Tab 2', icon: 'star'},
+              {id: '3', title: '3', label: 'Tab 3', icon: 'starOn'},
+              {id: '4', title: '4', label: 'Tab 4', icon: 'music'},
+              {id: '5', title: '5', label: 'Tab 5', icon: 'gear'}
+            ]}
+            selectedTab={{id: '1', title: '1', label: 'test 1', icon: 'wallet'}}
+            onTabSelect={() => {}}
+          />
+          <TabBar
+            tabs={[
+              {id: '1', title: '1', label: 'Tab 1'},
+              {id: '2', title: '2', label: 'Tab 2'},
+              {id: '3', title: '3', label: 'Tab 3'},
+              {id: '4', title: '4', label: 'Tab 4'},
+              {id: '5', title: '5', label: 'Tab 5'}
+            ]}
+            selectedTab={{id: '1', title: '1', label: 'test 1'}}
+            onTabSelect={() => {}}
+          />
+        </styled.SectionGrid2>
+
+        <styled.Name>
+          <Heading label="Component «TileMenu»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <TileMenu onEdit={() => {}} onDelete={() => {}} isDelete />
+        </styled.Section>
+
+        <styled.Name>
+          <Heading label="Component «ToastContent»" type="h2" align="left" />
+        </styled.Name>
+        <styled.SectionGrid2>
+          <ToastContent
+            isDanger
+            headerIconName="calendar"
+            title="Alert"
+            text="Some text"
+            isCloseButton
+          />
+          <ToastContent
+            headerIconName="alert"
+            title="Alert"
+            text="Some text here not more"
+            isCloseButton
+          />
+        </styled.SectionGrid2>
+        <styled.SectionGrid2>
+          <ToastContent
+            headerIconName="alert"
+            text="Some text here not more"
+            title="Alert Title"
+            approveInfo={{title: 'ok', onClick: () => {}}}
+            declineInfo={{title: 'cancel', onClick: () => {}}}
+          />
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            text="Some text here not more"
+            title="Alert Title"
+            approveInfo={{title: 'ok', onClick: () => {}}}
+            declineInfo={{title: 'cancel', onClick: () => {}}}
+          />
+        </styled.SectionGrid2>
+        <styled.SectionGrid2>
+          <ToastContent
+            headerIconName="alert"
+            text="Some text here not more"
+            title="Alert Title"
+            approveInfo={{title: 'ok', onClick: () => {}}}
+          />
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            text="Some text here not more"
+            title="Alert Title"
+            declineInfo={{title: 'cancel', onClick: () => {}}}
+          />
+        </styled.SectionGrid2>
+
+        <styled.Name>
+          <Heading label="Component «Toggle»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <Toggle size="normal" variant="normal" checked={checked} onChange={setChecked} />
+          <Toggle size="normal" variant="availability" checked={checked} onChange={setChecked} />
+          <Toggle size="normal" variant="availability" checked disabled onChange={() => {}} />
+          <Toggle size="small" variant="normal" checked={checked} onChange={setChecked} />
+          <Toggle size="small" variant="availability" checked={checked} onChange={setChecked} />
+          <Toggle
+            size="small"
+            variant="availability"
+            checked={false}
+            disabled
+            onChange={() => {}}
+          />
+        </styled.Section>
+
+        <styled.Name>
+          <Heading label="Component «ToolbarIcon»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <ToolbarIcon title="StarOn" icon="starOn" onClick={() => {}} isWhite={false} />
+          <ToolbarIcon title="Chat" icon="chat" onClick={() => {}} isWhite={false} />
+          <ToolbarIcon title="StarOn" icon="starOn" onClick={() => {}} />
+          <ToolbarIcon title="Chat" icon="chat" onClick={() => {}} />
+        </styled.Section>
       </styled.Components>
     </styled.Div>
   );

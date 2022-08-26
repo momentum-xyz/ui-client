@@ -15,10 +15,7 @@ import {
   Dialog,
   TextArea,
   Input,
-  SearchInput,
   PageTopBar,
-  TabBar,
-  TabBarTabInterface,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
@@ -112,19 +109,6 @@ const StoryBookPage: FC = () => {
     }
   ];
 
-  const tabBarTabs: TabBarTabInterface[] = [
-    {
-      id: '1',
-      title: 'Test this please 1',
-      label: '1. My wallet longer text even longer',
-      icon: 'wallet'
-    },
-    {id: '2', title: 'Test this please 1', label: 'test 2'},
-    {id: '3', title: 'Test this please 1', label: 'test 3'},
-    {id: '4', title: 'Test this please 1', label: 'test 4'},
-    {id: '5', title: 'Test this please 1', label: 'test 5'}
-  ];
-
   return (
     <styled.Div className="main">
       <styled.Section>
@@ -177,24 +161,6 @@ const StoryBookPage: FC = () => {
             <Button variant="danger" label="154 Wows" theme={theme} />
             <Button variant="primary" label="Add Gathering" theme={theme} />
           </PageTopBar>
-        </styled.Row>
-        <styled.Row>
-          <styled.Item style={{width: '100%'}}>
-            <TabBar
-              tabs={tabBarTabs}
-              selectedTab={tabBarTabs[0]}
-              onTabSelect={(tab) => console.info(tab)}
-            />
-          </styled.Item>
-        </styled.Row>
-        <styled.Row>
-          <styled.Item>
-            <SearchInput
-              placeholder="Search for..."
-              onChange={(value) => console.info(`Searching for '${value}'`)}
-              delay={300}
-            />
-          </styled.Item>
         </styled.Row>
       </styled.Section>
       <styled.Section>

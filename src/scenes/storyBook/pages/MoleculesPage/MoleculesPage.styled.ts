@@ -18,6 +18,7 @@ export const Name = styled.div`
 `;
 
 export const Section = styled.div`
+  position: relative;
   margin: 15px 0;
   width: 100%;
   display: flex;
@@ -37,7 +38,7 @@ export const SectionGrid3 = styled.div`
 export const SectionGrid2 = styled.div`
   margin: 15px 0;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   display: grid;
   flex-wrap: wrap;
   gap: 12px;
