@@ -11,3 +11,8 @@ export const Emoji = styled.div`
     background: rgba(255, 255, 255, 10%);
   }
 `;
+
+export const EmojiImg = styled.img`
+  width: 100%;
+  height: 100%;
+`;

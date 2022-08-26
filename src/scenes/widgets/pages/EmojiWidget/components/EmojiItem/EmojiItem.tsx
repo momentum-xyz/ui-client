@@ -13,7 +13,7 @@ export const EmojiItem: FC<PropsInterface> = ({emoji, onClick}) => {
   const {imgSrc, name} = emoji;
   return (
     <styled.Emoji onClick={onClick}>
-      <img src={imgSrc} alt={name} title={name} />
+      <styled.EmojiImg src={imgSrc} alt={name} title={name} />
     </styled.Emoji>
   );
 };
