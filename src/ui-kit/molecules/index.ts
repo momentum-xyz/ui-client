@@ -1,7 +1,6 @@
 export * from './Avatar';
 export * from './ToastMessage';
 export * from './ToastContent';
-export * from './WrongBrowser';
 export * from './NavigationBarItem';
 export * from './SvgButton';
 export * from './ColorPicker';

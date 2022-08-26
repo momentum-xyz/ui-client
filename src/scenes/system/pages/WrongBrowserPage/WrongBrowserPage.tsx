@@ -1,14 +1,16 @@
+import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useTheme} from 'styled-components';
 
-import {WrongBrowser} from 'ui-kit';
+import {SystemWideError} from 'ui-kit';
 
-const WrongBrowserPage = () => {
+const WrongBrowserPage: FC = () => {
   const {t} = useTranslation();
+  const theme = useTheme();
   return (
-    <WrongBrowser
-      title={t('wrongBrowser.title')}
-      message={t('wrongBrowser.message')}
-      browserList={t('wrongBrowser.browserList')}
+    <SystemWideError
+      text={[t('wrongBrowser.title'), t('wrongBrowser.browserList')]}
+      theme={theme}
     />
   );
 };
