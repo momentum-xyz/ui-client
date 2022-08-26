@@ -80,7 +80,7 @@ export const EmojiImg = styled.img`
   }
 `;
 
-export const Avatar = styled.img`
+export const Avatar = styled.div`
   position: absolute;
   animation-name: avatar;
   animation-duration: 3s;
@@ -112,4 +112,24 @@ export const Avatar = styled.img`
       transform: rotateZ(360deg);
     }
   }
+`;
+
+export const AvatarImg = styled.img`
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+`;
+
+export const AvatarText = styled.div`
+  background: #b348b3cf;
+  color: white;
+  border-radius: 50%;
+  // border: 2px solid white;
+  font-size: 18px;
+  font-weight: 500;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
