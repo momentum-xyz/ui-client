@@ -1,7 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
 import ReactHowler from 'react-howler';
 
@@ -27,9 +26,9 @@ import * as styled from './Widgets.styled';
 import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore, leaveMeetingSpace} = useStore();
+  const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
-  const {agoraStageModeStore, agoraMeetingStore} = agoraStore;
+  const {agoraStageModeStore} = agoraStore;
   const {
     stakingStore,
     magicLinkStore,
@@ -51,14 +50,13 @@ const Widgets: FC = () => {
 
   const {t} = useTranslation();
   const location = useLocation();
-  const history = useHistory();
 
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
   }, [musicPlayerStore, worldStore.worldId]);
 
   const toggleMute = () => {
-    if (userDevicesStore.isTogglingMicrophone) {
+    if (!agoraStore.canToggleMicrophone) {
       return;
     }
 
@@ -66,7 +64,7 @@ const Widgets: FC = () => {
   };
 
   const toggleCameraOn = () => {
-    if (userDevicesStore.isTogglingCamera) {
+    if (!agoraStore.canToggleCamera) {
       return;
     }
 
@@ -124,18 +122,7 @@ const Widgets: FC = () => {
       />
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
-          <ToolbarIcon
-            icon="home"
-            size="large"
-            title={t('labels.home')}
-            isWhite={false}
-            onClick={async () => {
-              if (agoraStore.hasJoined) {
-                await leaveMeetingSpace();
-              }
-              history.push(ROUTES.base);
-            }}
-          />
+          <ToolbarIcon icon="home" title={t('labels.home')} link={ROUTES.base} size="large" exact />
           <ToolbarIcon
             icon="smiley-face"
             title="React"
@@ -156,12 +143,7 @@ const Widgets: FC = () => {
               }
               icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
               onClick={toggleCameraOn}
-              disabled={
-                userDevicesStore.isTogglingCamera ||
-                !(agoraStore.isStageMode
-                  ? agoraStageModeStore.isOnStage
-                  : !!agoraMeetingStore.spaceId)
-              }
+              disabled={!agoraStore.canToggleCamera}
             />
             <ToolbarIcon
               title={
@@ -173,12 +155,7 @@ const Widgets: FC = () => {
               }
               icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
               onClick={toggleMute}
-              disabled={
-                userDevicesStore.isTogglingMicrophone ||
-                !(agoraStore.isStageMode
-                  ? agoraStageModeStore.isOnStage
-                  : !!agoraMeetingStore.spaceId)
-              }
+              disabled={!agoraStore.canToggleMicrophone}
             />
           </ToolbarIconList>
           {/* Main toolbar icons */}

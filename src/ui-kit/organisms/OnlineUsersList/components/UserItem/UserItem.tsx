@@ -37,6 +37,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   const [invited, setInvited] = useState(false);
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
+    console.info('[POSBUS EVENT] stage-mode-user-joined', userId);
     if (userId === user.uuid) {
       user.setInvited(false);
     }

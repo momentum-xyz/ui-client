@@ -15,12 +15,10 @@ import {UnityPage} from 'scenes/unity';
 import {setApiResponseHandlers} from 'api/request';
 import {httpErrorCodes} from 'api/constants';
 
-// TODO: To be refactored
-import {ConfirmationDialogProvider} from '../_REFACTOR_/hooks/useConformationDialog';
-import AuthComponent from '../_REFACTOR_/context/Auth/AuthContext';
-
-import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
+import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
+import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
+import {GlobalStyles} from './App.styled';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -134,19 +132,18 @@ const App: FC = () => {
   return (
     <ThemeProvider theme={themeStore.theme}>
       <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-        <ConfirmationDialogProvider>
-          <AuthProvider {...sessionStore.oidcConfig}>
-            <AuthComponent>
-              <UnityPage />
-              <AppLayers>
-                <Switch>
-                  {createRoutesByConfig(PRIVATE_ROUTES)}
-                  <Redirect to={ROUTES.base} />
-                </Switch>
-              </AppLayers>
-            </AuthComponent>
-          </AuthProvider>
-        </ConfirmationDialogProvider>
+        <AuthProvider {...sessionStore.oidcConfig}>
+          <AppAuth>
+            <GlobalStyles />
+            <UnityPage />
+            <AppLayers>
+              <Switch>
+                {createRoutesByConfig(PRIVATE_ROUTES)}
+                <Redirect to={ROUTES.base} />
+              </Switch>
+            </AppLayers>
+          </AppAuth>
+        </AuthProvider>
       </Web3ReactProvider>
     </ThemeProvider>
   );

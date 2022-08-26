@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
-import {usePosBusEvent, useStore, useGooglePicker} from 'shared/hooks';
+import {useStore, useGooglePicker} from 'shared/hooks';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
@@ -18,12 +18,6 @@ const GoogleDrivePage: FC = () => {
 
   const {t} = useTranslation();
   const history = useHistory();
-
-  usePosBusEvent('google-drive-file-change', (id) => {
-    if (space?.id === id) {
-      googleDriveStore.fetchGoogleDocument(id);
-    }
-  });
 
   useEffect(() => {
     if (space) {

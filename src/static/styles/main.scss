@@ -1,7 +1,15 @@
 @import './fonts';
+@import './reset';
 @import './variables.css';
 @import './unity';
 @import './google';
+@import './range';
+
+body {
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: var(--font-size-xs);
+  overflow: hidden;
+}
 
 #main {
   padding: 0 0 70px 0;
@@ -10,17 +18,11 @@
   z-index: 30;
 }
 
-* {
-  z-index: inherit;
-}
-
-.noScrollIndicator {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.noScrollIndicator::-webkit-scrollbar {
-  display: none;
+.main-content {
+  display: flex;
+  width:100%;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 .scene-bg {
@@ -30,4 +32,13 @@
   left: 0;
   bottom: 0;
   background-color: rgba(32, 42, 68, .7);
+}
+
+.noScrollIndicator {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.noScrollIndicator::-webkit-scrollbar {
+  display: none;
 }

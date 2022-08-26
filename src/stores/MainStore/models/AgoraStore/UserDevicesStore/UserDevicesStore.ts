@@ -252,9 +252,6 @@ const UserDevicesStore = types
       yield self.createLocalVideoTrack(createVideoTrack);
     }),
     cleanupLocalTracks() {
-      self.localAudioTrack?.setEnabled(false);
-      self.localVideoTrack?.setEnabled(false);
-
       self.localAudioTrack?.stop();
       self.localVideoTrack?.stop();
 

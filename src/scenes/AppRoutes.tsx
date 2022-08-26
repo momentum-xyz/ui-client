@@ -116,7 +116,12 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.grabTable,
-    main: () => <GrabTablePage />
+    main: () => (
+      <>
+        <HomePage />
+        <GrabTablePage />
+      </>
+    )
   },
   {
     path: ROUTES.magic,

@@ -13,8 +13,8 @@ import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 
-import {ConfigStore} from './ConfigStore';
 import {MainStore} from './MainStore';
+import {ConfigStore} from './ConfigStore';
 import {SessionStore} from './SessionStore';
 
 const RootStore = types
@@ -48,9 +48,11 @@ const RootStore = types
       self.widgetStore.emojiStore.init(worldId);
     },
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
-      console.log(`-------JOINING------- ${self.collaborationStore.leftMeetingSpaceId}`);
-      yield self.collaborationStore.joinMeetingSpace(spaceId, isTable);
-      yield self.mainStore.agoraStore.joinMeetingSpace(self.sessionStore.userId, spaceId);
+      console.log('---JOINING---');
+
+      yield self.collaborationStore.join(spaceId, isTable);
+      yield self.mainStore.agoraStore.join(self.sessionStore.userId, spaceId);
+      self.meetingStore.join(spaceId, isTable);
 
       self.mainStore.unityStore.triggerInteractionMessage(
         PosBusEventEnum.EnteredSpace,
@@ -59,26 +61,25 @@ const RootStore = types
         ''
       );
 
-      console.log(`-------JOINED------- ${self.collaborationStore.leftMeetingSpaceId}`);
+      console.log('---JOINED---');
     }),
-    leaveMeetingSpace: flow(function* () {
-      console.log(`-------LEAVING------- ${self.collaborationStore.leftMeetingSpaceId}`);
+    leaveMeetingSpace: flow(function* (isKicked = false) {
+      console.log('---LEAVING---');
 
-      const spaceId = self.collaborationStore.space?.id;
+      const spaceId = self.collaborationStore.space?.id || '';
 
-      yield self.mainStore.agoraStore.leaveMeetingSpace();
-      self.collaborationStore.leaveMeetingSpace();
+      yield self.mainStore.agoraStore.leave();
+      yield self.collaborationStore.leave();
+      self.meetingStore.leave(isKicked);
 
-      if (spaceId) {
-        self.mainStore.unityStore.triggerInteractionMessage(
-          PosBusEventEnum.LeftSpace,
-          spaceId,
-          0,
-          ''
-        );
+      self.mainStore.unityStore.triggerInteractionMessage(
+        PosBusEventEnum.LeftSpace,
+        spaceId,
+        0,
+        ''
+      );
 
-        console.log(`-------LEFT------- ${self.collaborationStore.leftMeetingSpaceId}`);
-      }
+      console.log('---LEFT---');
     })
   }));
 

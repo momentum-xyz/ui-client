@@ -19,7 +19,7 @@ const AgoraMeetingStore = types
       appId: '',
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
-      users: types.optional(types.array(AgoraRemoteUser), []),
+      _users: types.optional(types.array(AgoraRemoteUser), []),
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       localSoundLevel: 0,
 
@@ -30,6 +30,14 @@ const AgoraMeetingStore = types
   )
   .volatile(() => ({
     client: AgoraRTC.createClient({mode: 'rtc', codec: 'h264'})
+  }))
+  .views((self) => ({
+    get users(): AgoraRemoteUserInterface[] {
+      return self._users;
+    },
+    set users(users: AgoraRemoteUserInterface[]) {
+      self._users = cast(users);
+    }
   }))
   // Listeners handlers
   .actions((self) => ({
@@ -101,7 +109,7 @@ const AgoraMeetingStore = types
       });
 
       if (!foundUser) {
-        self.users = cast([...self.users, newUser]);
+        self.users = [...self.users, newUser];
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
@@ -109,7 +117,7 @@ const AgoraMeetingStore = types
         return;
       }
 
-      self.users = cast(self.users.filter((remoteUser) => remoteUser.uid !== user.uid));
+      self.users = self.users.filter((remoteUser) => remoteUser.uid !== user.uid);
     },
     handleConnectionStateChange(
       currentState: ConnectionState,
@@ -193,7 +201,7 @@ const AgoraMeetingStore = types
         return undefined;
       }
 
-      const publishedAudioTrack = yield AgoraRTC.createMicrophoneAudioTrack({
+      const publishedAudioTrack: IMicrophoneAudioTrack = yield AgoraRTC.createMicrophoneAudioTrack({
         microphoneId: deviceId
       });
 
@@ -234,10 +242,19 @@ const AgoraMeetingStore = types
       self.userId = yield self.client.join(self.appId, spaceId, tokenResponse, authStateSubject);
       yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.spaceId = spaceId;
+      self.users = self.client.remoteUsers.map((user) =>
+        cast({
+          uid: user.uid,
+          participantInfo: user,
+          isMuted: true,
+          cameraOff: true
+        })
+      );
     }),
     leave: flow(function* () {
       yield self.client.leave();
       self.spaceId = undefined;
+      self.users = [];
     })
   }))
   .views((self) => ({

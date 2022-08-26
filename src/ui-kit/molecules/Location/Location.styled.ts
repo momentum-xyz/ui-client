@@ -16,6 +16,7 @@ export const Container = styled.div`
   background: ${(props) => props.theme.bg && rgba(props.theme.accent, 0.1)};
   font-size: var(--font-size-xxs);
   text-transform: uppercase;
+  color: ${(props) => props.theme.text};
 
   span:last-child {
     overflow: hidden;

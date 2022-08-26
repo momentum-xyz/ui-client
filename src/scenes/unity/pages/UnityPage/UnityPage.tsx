@@ -69,6 +69,7 @@ const UnityPage: FC = () => {
   });
 
   usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
+    console.info('[POSBUS EVENT] space-invite', spaceId, invitorId, invitorName, uiTypeId);
     // FIXME: Temporary solution. To get space name from Unity
     const spaceName = await unityStore.fetchSpaceName(spaceId);
 
@@ -95,6 +96,7 @@ const UnityPage: FC = () => {
   });
 
   usePosBusEvent('high-five', (senderId, message) => {
+    console.info('[POSBUS EVENT] high-five', senderId, message);
     toast.info(
       <HighFiveContent
         message={message}
@@ -107,6 +109,7 @@ const UnityPage: FC = () => {
   });
 
   usePosBusEvent('high-five-sent', (message) => {
+    console.info('[POSBUS EVENT] high-five-sent', message);
     toast.info(
       <ToastContent
         headerIconName="check"
@@ -118,6 +121,7 @@ const UnityPage: FC = () => {
   });
 
   usePosBusEvent('notify-gathering-start', (message) => {
+    console.info('[POSBUS EVENT] notify-gathering-start', message);
     const handleJoinSpace = () => {
       const {spaceId} = message;
       unityStore.teleportToSpace(spaceId);
@@ -139,6 +143,7 @@ const UnityPage: FC = () => {
   });
 
   usePosBusEvent('simple-notification', (message) => {
+    console.info('[POSBUS EVENT] simple-notification', message);
     toast.info(
       <ToastContent headerIconName="check" title={t('titles.alert')} text={message} isCloseButton />
     );

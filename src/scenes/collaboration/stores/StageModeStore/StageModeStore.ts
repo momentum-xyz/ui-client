@@ -8,6 +8,7 @@ import {api, ProfileResponse} from 'api';
 const StageModeStore = types
   .model('StageModeStore', {
     popups: types.array(types.frozen<StageModePopupInfoInterface>()),
+    acceptedRequestToJoinStage: types.maybe(types.boolean),
 
     request: types.optional(RequestModel, {})
   })
@@ -46,6 +47,9 @@ const StageModeStore = types
     },
     removeAllPopups() {
       self.popups = cast([]);
+    },
+    setAcceptedRequestToJoinStage(acceptedRequestToJoinStage: boolean | undefined) {
+      self.acceptedRequestToJoinStage = acceptedRequestToJoinStage;
     }
   }));
 

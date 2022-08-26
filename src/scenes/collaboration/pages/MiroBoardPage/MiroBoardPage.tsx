@@ -7,7 +7,7 @@ import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
 import {SpaceTopBar, Button, TextChat} from 'ui-kit';
-import {usePosBusEvent, useStore} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 
 import {MiroBoard, MiroChoice} from './components/templates';
 import * as styled from './MiroBoardPage.styled';
@@ -22,12 +22,6 @@ const MiroBoardPage: FC = () => {
 
   const {t} = useTranslation();
   const history = useHistory();
-
-  usePosBusEvent('miro-board-change', (id) => {
-    if (space?.id === id) {
-      miroBoardStore.fetchMiroBoard(id);
-    }
-  });
 
   useEffect(() => {
     if (space) {

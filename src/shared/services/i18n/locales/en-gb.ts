@@ -343,7 +343,8 @@ export const enGb = {
       youHaveBeenInvitedOnStage: 'You have been invited on stage',
       prepareToGoOnStage: 'Prepare to go on stage',
       broadcastManage: 'Manage Broadcast',
-      profile: 'Profile'
+      profile: 'Profile',
+      broadcast: 'Broadcast'
     },
     textMessage: {
       you: 'you',
@@ -575,7 +576,32 @@ export const enGb = {
       }
     },
     broadcastAdmin: {
-      subtitle: 'Manage Broadcast'
+      subtitle: 'Manage Broadcast',
+      formTitle: 'broadcast',
+      formDescription:
+        'Broadcasting allows you to send out a message to this space and the spaces below. Add a youtube url to start broadcasting. What would you like to broadcast?',
+      formInstruction: 'Add a youtube url which you would like to broadcast:',
+      formInputLabel: 'youtube video url',
+      formErrorMessage: 'Please enter a valid Youtube URL',
+      formButton: 'preview',
+      formInfo: 'The broadcast will be sent to the following spaces and their subspaces:',
+      previewTitle: 'preview',
+      broadcastStart: 'start broadcasting',
+      broadcastStartDialog: 'Starting Broadcast',
+      broadcastStartMessage: 'Streaming is about to start',
+      broadcastStop: 'stop broadcasting',
+      broadcastStopMessage: 'Are you sure you want to end the broadcast?',
+      broadcastStopTitle: 'End broadcast',
+      confirmStop: 'Yes, end broadcast',
+      cancelStop: 'No, cancel',
+      enableSuccess: 'The video has broadcast successfully',
+      enableError: 'There was a problem broadcasting this video',
+      disableSuccess: 'Broadcasting has disabled successfully',
+      disableError: 'There was a problem disabling the broadcast'
+    },
+    liveStream: {
+      subtitle: 'Live Stream',
+      stopStream: 'Stop streaming'
     },
     spaceAdmin: {
       subtitle: 'Manage Space',

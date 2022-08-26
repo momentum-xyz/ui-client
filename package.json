@@ -4,7 +4,7 @@
   "private": false,
   "scripts": {
     "postinstall": "husky install",
-    "start": "TAILWIND_MODE=watch craco start",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test",
     "analyze": "source-map-explorer 'build/static/js/*.js' --no-border-checks",
@@ -32,7 +32,6 @@
     "@polkadot/util-crypto": "9.6.2",
     "@sentry/react": "^5.30.0",
     "@sentry/tracing": "^5.30.0",
-    "@tailwindcss/forms": "^0.3.2",
     "@types/animejs": "^3.1.5",
     "@types/raf": "^3.4.0",
     "@types/react-howler": "^5.2.0",
@@ -41,8 +40,8 @@
     "@web3-react/metamask": "^8.0.0-beta.0",
     "@web3-react/network": "^8.0.0-beta.0",
     "@web3-react/walletconnect-connector": "^6.2.8",
-    "agora-rtc-sdk-ng": "^4.11.0",
-    "agora-rtm-sdk": "^1.4.2",
+    "agora-rtc-sdk-ng": "4.13.0",
+    "agora-rtm-sdk": "1.5.0",
     "animejs": "^3.2.1",
     "axios": "^0.21.4",
     "axios-auth-refresh": "^3.2.2",
@@ -86,14 +85,11 @@
     "require-context.macro": "^1.2.2",
     "styled-components": "^5.3.3",
     "svg-sprite": "^1.5.4",
-    "tailwindcss-border-gradients": "^2.0.3",
     "uuid": "^8.3.2",
-    "web-vitals": "^2.1.0",
-    "zustand": "^3.5.1"
+    "web-vitals": "^2.1.0"
   },
   "devDependencies": {
     "@craco/craco": "^6.1.1",
-    "@tailwindcss/postcss7-compat": "^2.1.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -121,7 +117,6 @@
     "postcss": "^7",
     "sass": "^1.49.9",
     "source-map-explorer": "^2.5.2",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "4.6.4"
   },
   "resolutions": {

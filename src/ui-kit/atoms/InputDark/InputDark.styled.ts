@@ -16,6 +16,7 @@ export const InputContainer = styled.div`
     border-radius: var(--input-radius);
     background-color: var(--black-100);
     font-size: var(--font-size-xs);
+    color: ${(props) => props.theme.text};
     font-weight: 700;
     outline: none;
 

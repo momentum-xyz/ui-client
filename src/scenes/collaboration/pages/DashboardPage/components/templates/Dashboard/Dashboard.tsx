@@ -22,7 +22,7 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatI
   const {textChatStore} = collaborationStore;
   return (
     <styled.Container data-testid="Dashboard-test">
-      <styled.DashboardContainer>
+      <styled.DashboardContainer className="noScrollIndicator">
         {canDrag && (
           <DragDropContext onDragEnd={onDragEnd}>
             {COLUMNS.map((column, index) => (
