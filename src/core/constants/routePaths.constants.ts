@@ -41,7 +41,6 @@ export const ROUTES = {
     base: '/storybook',
     atoms: '/storybook/atoms',
     molecules: '/storybook/molecules',
-    organisms: '/storybook/organisms',
-    templates: '/storybook/templates'
+    organisms: '/storybook/organisms'
   }
 };
