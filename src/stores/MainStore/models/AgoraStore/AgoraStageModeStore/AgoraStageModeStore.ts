@@ -15,12 +15,12 @@ import {
   StageModeUserInterface,
   AgoraRemoteUser
 } from 'core/models';
-import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 import {api} from 'api';
-import {bytesToUuid} from 'core/utils';
 import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
+import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
+import {bytesToUuid} from 'core/utils';
 
 const AgoraStageModeStore = types
   .compose(
@@ -38,6 +38,7 @@ const AgoraStageModeStore = types
       _users: types.optional(types.array(AgoraRemoteUser), []),
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
+      isJoining: false,
 
       tokenRequest: types.optional(RequestModel, {}),
       joinStageModeRequest: types.optional(RequestModel, {}),
@@ -327,9 +328,33 @@ const AgoraStageModeStore = types
       return tokenResponse;
     })
   }))
+  // users manipulations
+  .actions((self) => ({
+    addStageModeUser(userId: string) {
+      if (self.audience.find((user) => user.uid === userId)) {
+        return;
+      }
+
+      self.audience.push({
+        uid: userId,
+        role: ParticipantRole.AUDIENCE_MEMBER
+      });
+    },
+    removeStageModeUser(userId: string) {
+      if (self.isJoining) {
+        setTimeout(() => {
+          this.removeStageModeUser(userId);
+        }, 100);
+        return;
+      }
+
+      self.audience = cast(self.audience.filter((user) => user.uid !== userId));
+    }
+  }))
   // State actions
   .actions((self) => ({
     join: flow(function* (spaceId: string, authStateSubject: string) {
+      self.isJoining = true;
       const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
         api.stageModeRepository.joinStageMode,
         {
@@ -350,14 +375,9 @@ const AgoraStageModeStore = types
 
       self.spaceId = spaceId;
 
-      self.audience = cast(
-        stageModeResponse.spaceIntegrationUsers
-          ?.filter((user) => user.data.role !== 'speaker')
-          .map((user) => ({
-            uid: bytesToUuid(user.userId.data),
-            role: ParticipantRole.AUDIENCE_MEMBER
-          }))
-      );
+      stageModeResponse.spaceIntegrationUsers
+        ?.filter((user) => user.data.role !== 'speaker')
+        .forEach((user) => self.addStageModeUser(bytesToUuid(user.userId.data)));
 
       self.users = self.client.remoteUsers.map((user) =>
         cast({
@@ -367,6 +387,8 @@ const AgoraStageModeStore = types
           cameraOff: true
         })
       );
+
+      self.isJoining = false;
     }),
     leave: flow(function* () {
       yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
@@ -452,19 +474,6 @@ const AgoraStageModeStore = types
 
       return true;
     }),
-    addStageModeUser(userId: string) {
-      if (self.audience.filter((user) => user.uid === userId).length !== 0) {
-        return;
-      }
-
-      self.audience.push({
-        uid: userId,
-        role: ParticipantRole.AUDIENCE_MEMBER
-      });
-    },
-    removeStageModeUser(userId: string) {
-      self.audience = cast(self.audience.filter((user) => user.uid !== userId));
-    },
     requestToGoOnstageWasHandled() {
       self.requestWasMadeToGoOnStage = false;
     }
