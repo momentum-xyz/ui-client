@@ -331,7 +331,7 @@ const AgoraStageModeStore = types
   // users manipulations
   .actions((self) => ({
     addStageModeUser(userId: string) {
-      if (self.audience.find((user) => user.uid === userId)) {
+      if (self.audience.find((user) => user.uid === userId) || userId === self.userId) {
         return;
       }
 
@@ -341,6 +341,10 @@ const AgoraStageModeStore = types
       });
     },
     removeStageModeUser(userId: string) {
+      if (userId === self.userId) {
+        return;
+      }
+
       if (self.isJoining) {
         setTimeout(() => {
           this.removeStageModeUser(userId);
