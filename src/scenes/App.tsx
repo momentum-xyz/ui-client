@@ -37,7 +37,7 @@ const App: FC = () => {
       onError: (error) => {
         const status = error.response?.status;
         if (status === httpErrorCodes.MAINTENANCE) {
-          history.push({pathname: ROUTES.system.maintenance});
+          document.location.href = ROUTES.system.maintenance;
         } else if (
           status === httpErrorCodes.FORBIDDEN ||
           status === httpErrorCodes.INTERNAL_SYSTEM_ERROR
