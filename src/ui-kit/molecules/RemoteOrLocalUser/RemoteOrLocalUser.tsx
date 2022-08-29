@@ -69,7 +69,7 @@ const RemoteOrLocalUser: React.FC<PropsInterface> = ({
           {!remoteUser && currentUser?.avatarSrc && (
             <styled.Avatar src={currentUser.avatarSrc} alt={currentUser?.name} />
           )}
-          {((remoteUser && !remoteUser?.avatarSrc) || !currentUser?.avatarSrc) && (
+          {((remoteUser && !remoteUser?.avatarSrc) || (!remoteUser && !currentUser?.avatarSrc)) && (
             <IconSvg name="astro" size="huge" />
           )}
         </styled.AvatarContainer>
