@@ -63,12 +63,13 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
       <styled.VideoContainer ref={stagevideocontainer} />
       {isCameraOff && (
         <styled.AvatarContainer>
-          {remoteUser?.avatarSrc || currentUser?.avatarSrc ? (
-            <styled.Avatar
-              src={remoteUser ? remoteUser?.avatarSrc : currentUser?.avatarSrc}
-              alt={remoteUser ? remoteUser?.name : currentUser?.name}
-            />
-          ) : (
+          {remoteUser?.avatarSrc && (
+            <styled.Avatar src={remoteUser.avatarSrc} alt={remoteUser?.name} />
+          )}
+          {!remoteUser && currentUser?.avatarSrc && (
+            <styled.Avatar src={currentUser.avatarSrc} alt={currentUser?.name} />
+          )}
+          {((remoteUser && !remoteUser?.avatarSrc) || !currentUser?.avatarSrc) && (
             <IconSvg name="astro" size="huge" />
           )}
         </styled.AvatarContainer>
