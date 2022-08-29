@@ -21,13 +21,13 @@ export const EmojiContainer = styled.div`
       transform-origin: 50% 50%;
     }
     35% {
-      transform: rotateY(180deg);
+      transform: rotateY(0deg);
       transform-origin: 50% 50%;
     }
     100% {
       top: 50%;
-      transform: rotateY(180deg);
-      opacity: 0;
+      transform: rotateY(0deg);
+      opacity: 1;
       transform-origin: 50% 50%;
     }
   }
@@ -41,34 +41,36 @@ export const EmojiImg = styled.img`
   animation-timing-function: linear;
   width: 48px;
   height: 48px;
+  transform: rotateY(180deg)
+  transform-origin: 50% 50%;
 
   @keyframes emoji {
     0% {
       opacity: 0;
-      transform: rotateZ(0deg) scale(0.5);
+      transform: rotateY(180deg) scale(0.5);
       transform-origin: 50% 50%;
     }
     20% {
       opacity: 0;
-      transform: rotateZ(0deg) scale(1);
+      transform: rotateY(180deg) scale(1);
       transform-origin: 50% 50%;
     }
     25% {
       opacity: 1;
-      transform: rotateZ(0deg) scale(1);
+      transform: rotateY(0deg) scale(1.3);
       transform-origin: 50% 50%;
     }
     35% {
       opacity: 1;
-      transform: scale(1.6);
+      transform: rotateY(0deg) scale(1.6);
     }
     90% {
-      opacity: 1;
-      transform: scale(1.3);
+      opacity: 0.5;
+      transform: scale(0.5);
     }
     100% {
       opacity: 0;
-      transform: rotateZ(360deg) scale(0.5);
+      transform: rotateY(180deg) scale(0.5);
       transform-origin: 50% 50%;
     }
   }
@@ -100,7 +102,7 @@ export const Avatar = styled.div`
     }
     100% {
       opacity: 0;
-      transform: rotateZ(360deg);
+      transform: rotateZ(0deg);
     }
   }
 `;
