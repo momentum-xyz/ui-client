@@ -2,6 +2,7 @@ import React, {FC, FormEvent, InputHTMLAttributes, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
+// import {useDebouncedCallback} from 'ui-kit/hooks';
 import {Heading, IconSvg} from 'ui-kit';
 
 import * as styled from './SearchInput.styled';

@@ -53,16 +53,6 @@ export const api = {
   playlistRepository,
   communicationRepository,
   attendeesRepository,
-
-  // meetingRepository,
-  // attendeesRepository,
-  // dashboardRepository,
-  // agoraRepository,
-  // spaceIntegrationsRepository,
-  // integrationRepository,
-  // resourcesRepository,
-  // vibeRepository,
-  // textChatRepository,
   emojiRepository
 };
 
@@ -86,15 +76,5 @@ export * from './repositories/favoriteRepository/favoriteRepository.api.types';
 export * from './repositories/tokenRepository/tokenRepository.api.types';
 export * from './repositories/statsRepository/statsRepository.api.types';
 export * from './repositories/playlistRepository/playlistRepository.api.types';
-// <<<<<<< HEAD
 export * from './repositories/communicationRepository/communicationRepository.api.types';
-// =======
-// export * from './repositories/meetingRepository/meetingRepository.api.types';
-// export * from './repositories/dashboardRepository/dashboardRepository.api.types';
-// export * from './repositories/integrationRepository/integrationRepository.api.types';
-// export * from './repositories/resourcesRepository/resourcesRepository.types';
-// export * from './repositories/spaceTypeRepository/spaceTypeRepository.api.types';
-// export * from './repositories/vibeRepository/vibeRepository.api.types';
-// export * from './repositories/textChatRepository/textChatRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
-// >>>>>>> 9a3adf5 (feature(emoji): squashed commit of all related changes)

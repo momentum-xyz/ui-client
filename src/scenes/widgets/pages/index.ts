@@ -11,5 +11,4 @@ export * from './LaunchInitiativeWidget';
 export * from './SettingsWidget';
 export * from './MusicPlayerWidget';
 export * from './AttendeesWidget';
-// export * from './StageModePIPWidget';
 export * from './EmojiWidget';

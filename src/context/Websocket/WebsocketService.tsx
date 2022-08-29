@@ -58,8 +58,6 @@ export type WebsocketEvents = {
     uiTypeId: string,
     uiTypeName: string
   ) => void;
-  // emoji: (message: PosBusEmojiMessageType) => void;
-  // megamoji: (emojiUrl: string) => void;
 };
 
 export const WebsocketEventEmitter = new EventEmitter<WebsocketEvents>();
