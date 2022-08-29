@@ -21,14 +21,6 @@ import * as communicationRepository from './repositories/communicationRepository
 import * as attendeesRepository from './repositories/attendeesRepository';
 import * as emojiRepository from './repositories/emojiRepository';
 
-// import * as dashboardRepository from './repositories/dashboardRepository';
-// import * as integrationRepository from './repositories/integrationRepository';
-// import * as resourcesRepository from './repositories/resourcesRepository';
-// import * as agoraRepository from './repositories/agoraRepository';
-// import * as spaceIntegrationsRepository from './repositories/spaceIntegrationsRepository';
-// import * as vibeRepository from './repositories/vibeRepository';
-// import * as textChatRepository from './repositories/textChatRepository';
-
 /**
  * This layer is responsible for:
  * - communicating with backend

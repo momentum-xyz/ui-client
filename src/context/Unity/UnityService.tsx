@@ -2,7 +2,6 @@ import {UnityContext} from 'react-unity-webgl';
 
 import {EventEmitter} from 'core/utils';
 import {UNITY_TARGET_TYPE} from 'core/constants/unity.constants';
-// import { PosBusEmojiMessageType } from 'core/types/posBusMessage.type';
 
 import {useUnityStore} from '../../store/unityStore';
 import {Position} from '../type/Position';
@@ -71,13 +70,6 @@ interface UnityAPI {
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
   relayMessage(topic: string, json: string): any;
 }
-
-// import {getUnityPosition} from 'core/utils';
-// import {UnityEventEmitter, UNITY_TARGET_TYPE} from 'core/constants';
-// import {UnityApiInterface} from 'core/interfaces';
-// import {PosBusService} from 'shared/services';
-// import {PosBusEventEnum} from 'core/enums';
-// import {PosBusEmojiMessageType} from 'core/types';
 
 export class UnityService {
   unityApi?: UnityAPI;

@@ -1,8 +1,6 @@
 import {FC} from 'react';
 
 import {PosBusEmojiMessageType} from 'context/Unity/types';
-// import {PosBusEmojiMessageType} from 'core/types/posBusMessage.type';
-// import {PosBusEmojiMessageType} from 'core/types';
 
 import * as styled from './EmojiWithAvatarAnimation.styled';
 

@@ -1,8 +1,6 @@
 import {FC, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 
-// import {usePosBusEvent} from 'shared/hooks';
-// import {PosBusEmojiMessageType} from 'core/types';
 import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import {PosBusEmojiMessageType} from 'context/Unity/types';
 

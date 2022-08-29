@@ -3,7 +3,6 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-// import {UnityService} from 'shared/services';
 import {PanelLayout} from 'ui-kit';
 import UnityService from 'context/Unity/UnityService';
 
