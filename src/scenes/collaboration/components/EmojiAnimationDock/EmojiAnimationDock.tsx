@@ -29,7 +29,7 @@ const EmojiAnimationDock: FC = () => {
         emojiMsg:
           typeof emojiUrlOrMsg === 'object' ? (emojiUrlOrMsg as PosBusEmojiMessageType) : null,
         idx: refIndex.current++,
-        offset: Math.ceil(Math.random() * 100)
+        offset: Math.ceil(Math.random() * 50)
       };
 
       setItems((items) => new Set(items).add(item));
