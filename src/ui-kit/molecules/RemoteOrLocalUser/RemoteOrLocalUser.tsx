@@ -7,9 +7,9 @@ import {observer} from 'mobx-react-lite';
 import {IconSvg, Text} from 'ui-kit';
 import {UserProfileModelInterface, AgoraRemoteUserInterface} from 'core/models';
 
-import * as styled from './MediaPlayer.styled';
+import * as styled from './RemoteOrLocalUser.styled';
 
-export interface VideoPlayerPropsInterface {
+interface PropsInterface {
   remoteUser?: AgoraRemoteUserInterface;
   videoTrack: ILocalVideoTrack | IRemoteVideoTrack | undefined;
   isCameraOff?: boolean;
@@ -19,7 +19,7 @@ export interface VideoPlayerPropsInterface {
   loadCurrentUserProfile: () => void;
 }
 
-const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
+const RemoteOrLocalUser: React.FC<PropsInterface> = ({
   remoteUser,
   videoTrack,
   isCameraOff,
@@ -89,4 +89,4 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
   );
 };
 
-export default observer(MediaPlayer);
+export default observer(RemoteOrLocalUser);
