@@ -83,8 +83,6 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
               isCameraOff={user.cameraOff}
               isMuted={user.isMuted}
               soundLevel={user.soundLevel}
-              currentUser={sessionStore.profile ?? undefined}
-              loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
             <styled.RemoteUserActionsContainer>
               <styled.RemoteUserActions>

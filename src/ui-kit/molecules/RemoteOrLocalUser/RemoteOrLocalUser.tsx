@@ -16,7 +16,7 @@ interface PropsInterface {
   isMuted?: boolean;
   soundLevel?: number;
   currentUser?: UserProfileModelInterface;
-  loadCurrentUserProfile: () => void;
+  loadCurrentUserProfile?: () => void;
 }
 
 const RemoteOrLocalUser: React.FC<PropsInterface> = ({
@@ -35,7 +35,7 @@ const RemoteOrLocalUser: React.FC<PropsInterface> = ({
     if (remoteUser) {
       remoteUser.fetchUser();
     } else {
-      loadCurrentUserProfile();
+      loadCurrentUserProfile?.();
     }
   }, [remoteUser, loadCurrentUserProfile]);
 
@@ -69,7 +69,7 @@ const RemoteOrLocalUser: React.FC<PropsInterface> = ({
           {!remoteUser && currentUser?.avatarSrc && (
             <styled.Avatar src={currentUser.avatarSrc} alt={currentUser?.name} />
           )}
-          {((remoteUser && !remoteUser?.avatarSrc) || (!remoteUser && !currentUser?.avatarSrc)) && (
+          {((remoteUser && !remoteUser?.avatarSrc) || (currentUser && !currentUser?.avatarSrc)) && (
             <IconSvg name="astro" size="huge" />
           )}
         </styled.AvatarContainer>
