@@ -242,14 +242,16 @@ const AgoraMeetingStore = types
       self.userId = yield self.client.join(self.appId, spaceId, tokenResponse, authStateSubject);
       yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.spaceId = spaceId;
-      self.users = self.client.remoteUsers.map((user) =>
-        cast({
-          uid: user.uid,
-          participantInfo: user,
-          isMuted: true,
-          cameraOff: true
-        })
-      );
+      self.users = self.client.remoteUsers
+        .filter((user) => String(user.uid).split('|')[0] !== 'ss')
+        .map((user) =>
+          cast({
+            uid: user.uid,
+            participantInfo: user,
+            isMuted: !user.hasAudio,
+            cameraOff: !user.hasVideo
+          })
+        );
     }),
     leave: flow(function* () {
       yield self.client.leave();
