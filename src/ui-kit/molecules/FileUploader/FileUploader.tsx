@@ -15,6 +15,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   buttonIsCustom?: boolean;
   maxSize?: number;
   enableDragAndDrop?: boolean;
+  className?: string;
 }
 
 /*
@@ -32,7 +33,8 @@ const FileUploader: FC<PropsInterface> = ({
   fileType,
   maxSize = 3 * Math.pow(1024, 2),
   buttonIsCustom = false,
-  enableDragAndDrop = true
+  enableDragAndDrop = true,
+  className
 }) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 1) {
@@ -62,13 +64,7 @@ const FileUploader: FC<PropsInterface> = ({
       {isDragActive ? (
         <styled.Text>{dragActiveLabel}</styled.Text>
       ) : (
-        <Button
-          theme={theme}
-          label={label}
-          size="normal"
-          onClick={onClick}
-          isCustom={buttonIsCustom}
-        />
+        <Button theme={theme} label={label} size="normal" onClick={onClick} className={className} />
       )}
     </styled.Container>
   );
