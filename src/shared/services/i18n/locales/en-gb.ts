@@ -160,6 +160,7 @@ export const enGb = {
     },
     labels: {
       calendar: 'World Calendar',
+      emoji: 'EMOJI',
       staking: 'Staking',
       minimap: 'Minimap',
       musicPlayer: 'Music Player',

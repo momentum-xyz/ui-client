@@ -22,6 +22,8 @@ import {ROUTES} from 'core/constants';
 import useWebsocketEvent from 'context/Websocket/hooks/useWebsocketEvent';
 
 import {PRIVATE_ROUTES} from './CollaborationRoutes';
+import {EmojiAnimationDock} from './components';
+import * as styled from './Collaboration.styled';
 
 interface Props {}
 
@@ -170,6 +172,10 @@ const Collaboration: React.FC<Props> = () => {
           deviceLabel={newDevice?.label}
         />
       </Modal>
+
+      <styled.BottomCenteredDock>
+        <EmojiAnimationDock />
+      </styled.BottomCenteredDock>
     </>
   );
 };

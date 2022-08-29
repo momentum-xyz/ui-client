@@ -15,7 +15,9 @@ const Events: {[key in keyof UnityEvents]: string[]} = {
   ClickEventDashboard: ['id'],
   PlasmaClickEvent: ['id'],
   ProfileClickEvent: ['id', 'position'],
-  Error: ['message']
+  Error: ['message'],
+  emoji: [],
+  megamoji: []
 };
 
 export type UnityDevPopupProps = {onClose?: () => void};

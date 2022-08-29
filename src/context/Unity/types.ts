@@ -129,6 +129,15 @@ export type High5Message = {
   message: string;
 };
 
+export type PosBusEmojiMessageType = {
+  targetType: number;
+  targetID: string;
+  urlAvatar: string;
+  nickname: string;
+  url: string;
+  emojiID: string;
+};
+
 export type NotifyMessage = {
   spaceId: string;
   name: string;

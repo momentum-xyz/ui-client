@@ -81,6 +81,7 @@ declare type IconName =
   | 'search'
   | 'shieldCheck'
   | 'shift-button'
+  | 'smiley-face'
   | 'sort'
   | 'sortOnAsc'
   | 'sortOnDesc'
