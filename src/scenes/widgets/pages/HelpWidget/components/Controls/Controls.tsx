@@ -5,7 +5,7 @@ import {t} from 'i18next';
 import {IconSvg} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Controls.styled';
 
@@ -15,7 +15,7 @@ const Controls: React.FC = () => {
   } = useStore();
 
   const handleExpand = () => {
-    helpStore.toggleSection(HelpSectionType.Controls);
+    helpStore.toggleSection(HelpSectionEnum.Controls);
   };
 
   return (

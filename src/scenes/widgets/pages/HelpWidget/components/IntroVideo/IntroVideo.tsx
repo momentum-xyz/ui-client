@@ -5,7 +5,7 @@ import YouTube from 'react-youtube';
 import {appVariables} from 'api/constants';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components';
 import {useStore} from 'shared/hooks';
-import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './IntroVideo.styled';
 
@@ -20,7 +20,7 @@ const IntroVideo: FC = () => {
   };
 
   const handleExpand = () => {
-    helpStore.toggleSection(HelpSectionType.IntroVideo);
+    helpStore.toggleSection(HelpSectionEnum.IntroVideo);
   };
 
   return (

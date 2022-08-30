@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {useStore} from 'shared/hooks';
 import {Heading, IconSvg} from 'ui-kit';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Emoji.styled';
 
@@ -16,7 +16,7 @@ const Emoji: React.FC = () => {
   const {t} = useTranslation();
 
   const handleExpand = () => {
-    helpStore.toggleSection(HelpSectionType.Emoji);
+    helpStore.toggleSection(HelpSectionEnum.Emoji);
   };
 
   return (

@@ -1,10 +1,11 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
+import {AvatarSizeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {api, EmojiConfigResponse} from 'api';
 import {DialogModel, RequestModel, ResetModel} from 'core/models';
 
-export enum HelpSectionType {
+export enum HelpSectionEnum {
   Discord = 'Discord',
   Momentum = 'Momentum',
   Controls = 'Controls',
@@ -32,7 +33,7 @@ const HelpStore = types
     init(worldId: string) {
       this.initEmoji(worldId);
     },
-    toggleSection(section: HelpSectionType, show?: boolean) {
+    toggleSection(section: HelpSectionEnum, show?: boolean) {
       if (show) {
         self[`show${section}Section`] = show;
         return;
@@ -46,7 +47,7 @@ const HelpStore = types
       );
 
       const data = response.map(
-        ({emoji}) => `${appVariables.RENDER_SERVICE_URL}/texture/s1/${emoji.hash}`
+        ({emoji}) => `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S1}/${emoji.hash}`
       );
 
       self.emojiUrls = cast(data.slice(0, 18));
