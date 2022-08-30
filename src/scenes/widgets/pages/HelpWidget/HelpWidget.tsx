@@ -8,19 +8,24 @@ import momentum from 'static/images/momentum.svg';
 import flamingo from 'static/images/flamingo.svg';
 import {useStore} from 'shared/hooks';
 
-import {Discord, Controls, Momentum, Wiki} from './components';
+import {Discord, Controls, Momentum, Wiki, Emoji} from './components';
 import * as styled from './HelpWidget.styled';
 import {IntroVideo} from './components/IntroVideo';
 
 const HelpWidget: React.FC = () => {
-  const {widgetStore} = useStore();
+  const {widgetStore, mainStore} = useStore();
   const {helpStore} = widgetStore;
+  const {worldStore} = mainStore;
 
   const theme = useTheme();
 
   useEffect(() => {
-    return helpStore.resetModel;
-  }, [helpStore]);
+    helpStore.init(worldStore.worldId);
+
+    return () => {
+      helpStore.resetModel();
+    };
+  }, [helpStore, worldStore.worldId]);
 
   return (
     <Dialog
@@ -53,6 +58,9 @@ const HelpWidget: React.FC = () => {
           </styled.Item>
           <styled.Item>
             <Controls />
+          </styled.Item>
+          <styled.Item>
+            <Emoji />
           </styled.Item>
           <styled.Item>
             <Wiki />
