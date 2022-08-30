@@ -258,12 +258,11 @@ const WidgetContainer: FC = () => {
       />
       <styled.Footer>
         <styled.MainLinks>
-          <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
           <ToolbarIcon
             icon="smiley-face"
             title="React"
             onClick={emojiStore.selectionDialog.toggle}
-            size="large"
+            size="normal-large"
             exact
           />
         </styled.MainLinks>
