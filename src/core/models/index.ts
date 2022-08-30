@@ -17,3 +17,4 @@ export * from './UserModel';
 export * from './TrackModel';
 export * from './AttendeeModel';
 export * from './UserSpaceDetails';
+export * from './EmojiDetails';

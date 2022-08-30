@@ -19,6 +19,7 @@ import * as statusRepository from './repositories/statusRepository';
 import * as playlistRepository from './repositories/playlistRepository';
 import * as communicationRepository from './repositories/communicationRepository';
 import * as attendeesRepository from './repositories/attendeesRepository';
+import * as emojiRepository from './repositories/emojiRepository';
 
 /**
  * This layer is responsible for:
@@ -51,7 +52,8 @@ export const api = {
   statusRepository,
   playlistRepository,
   communicationRepository,
-  attendeesRepository
+  attendeesRepository,
+  emojiRepository
 };
 
 /**
@@ -75,3 +77,4 @@ export * from './repositories/tokenRepository/tokenRepository.api.types';
 export * from './repositories/statsRepository/statsRepository.api.types';
 export * from './repositories/playlistRepository/playlistRepository.api.types';
 export * from './repositories/communicationRepository/communicationRepository.api.types';
+export * from './repositories/emojiRepository/emojiRepository.api.types';

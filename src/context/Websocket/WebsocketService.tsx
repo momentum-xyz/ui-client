@@ -12,7 +12,8 @@ import {
   NotifyMessage,
   StageModeMessage,
   VibeMessage,
-  PosBusMessage
+  PosBusMessage,
+  PosBusEmojiMessageType
 } from 'context/Unity/types';
 import {ToastContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
@@ -267,6 +268,12 @@ class WebsocketService {
         break;
       case 'high5':
         this.handleIncomingHigh5(message as High5Message);
+        break;
+      case 'emoji':
+        UnityService.handleIncomingEmoji(message as PosBusEmojiMessageType);
+        break;
+      case 'megamoji':
+        UnityService.handleIncomingMegamoji(message as PosBusEmojiMessageType);
         break;
       case 'event':
         this.handleNotifyGathering(message as NotifyMessage);

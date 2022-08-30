@@ -34,6 +34,7 @@ import useUnityEvent from 'context/Unity/hooks/useUnityEvent';
 import FooterDevTools from 'component/molucules/footer/FooterDevTools';
 import {
   AttendeesWidget,
+  EmojiWidget,
   HelpWidget,
   LaunchInitiativeWidget,
   MagicLinkWidget,
@@ -66,7 +67,8 @@ const WidgetContainer: FC = () => {
     launchInitiativeStore,
     settingsStore,
     musicPlayerStore,
-    attendeesListStore
+    attendeesListStore,
+    emojiStore
   } = widgetStore;
 
   const {magicLinkDialog} = magicLinkStore;
@@ -136,7 +138,8 @@ const WidgetContainer: FC = () => {
 
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
-  }, [worldStore.worldId]);
+    emojiStore.init(worldStore.worldId);
+  }, [worldStore.worldId, musicPlayerStore, emojiStore]);
 
   useEffect(() => {
     // @ts-ignore: What is it for?
@@ -234,6 +237,11 @@ const WidgetContainer: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {settingsStore.dialog.isOpen && <SettingsWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
+      {emojiStore.selectionDialog.isOpen && (
+        <styled.EmojiBar>
+          <EmojiWidget onClose={emojiStore.selectionDialog.close} />
+        </styled.EmojiBar>
+      )}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -250,7 +258,13 @@ const WidgetContainer: FC = () => {
       />
       <styled.Footer>
         <styled.MainLinks>
-          <ToolbarIcon icon="home" title="Home" link={ROUTES.base} size="large" exact />
+          <ToolbarIcon
+            icon="smiley-face"
+            title="React"
+            onClick={emojiStore.selectionDialog.toggle}
+            size="normal-large"
+            exact
+          />
         </styled.MainLinks>
         <styled.Toolbars>
           {process.env.NODE_ENV === 'development' && <FooterDevTools />}
