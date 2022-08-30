@@ -123,13 +123,11 @@ const Widgets: FC = () => {
       />
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
-          <ToolbarIcon icon="home" title={t('labels.home')} link={ROUTES.base} size="large" exact />
           <ToolbarIcon
             icon="smiley-face"
-            title="React"
+            title={t('actions.react')}
             onClick={emojiStore.selectionDialog.toggle}
-            size="large"
-            exact
+            size="normal-large"
           />
         </styled.MainLinks>
         <styled.Toolbars>

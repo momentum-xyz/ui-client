@@ -5,7 +5,7 @@ import {t} from 'i18next';
 import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Wiki.styled';
 
@@ -17,7 +17,7 @@ const Wiki: React.FC = () => {
   } = useStore();
 
   const handleExpand = () => {
-    helpStore.toggleSection(HelpSectionType.Wiki);
+    helpStore.toggleSection(HelpSectionEnum.Wiki);
   };
 
   const handleLinkClick = () => {

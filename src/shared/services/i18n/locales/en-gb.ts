@@ -388,11 +388,13 @@ export const enGb = {
       joinStage: 'Join Stage',
       decline: 'Decline',
       cancel: 'Cancel',
+      react: 'React',
       emailLogin: 'Email Login',
       goBack: 'Go back',
       back: 'Back',
       muteAll: 'Mute All',
       rejoinMeeting: 'Rejoin meeting',
+      clickHere: 'Click here',
       chooseAvatar: 'Choose an image for your avatar',
       saveProfile: 'Save profile',
       selectAccount: 'Select account',
@@ -755,6 +757,36 @@ export const enGb = {
         spaceBarBoldText: ' space',
         spaceBarTextSecond: ' while not moving: Look around',
         spaceBarIconLabel: 'space-bar'
+      },
+      emoji: {
+        title: "Emoji and Megamoji's",
+        paragraphs: {
+          one: {
+            partOne:
+              'Want to let people know how you are feeling, or if you agree or disagree with something behind said? Let everyone know your opinion by expressing yourself using ',
+            highlightedPart: 'Emojis',
+            partTwo: '.'
+          },
+          two: {
+            partOne: 'The ',
+            highlightedPart: 'EMOJI BUTTON',
+            partTwo:
+              ', is located at the bottom left hand corner of the UI, click on it to bring up a selection of emojis.'
+          },
+          three: {
+            partOne:
+              'Selecting one of the emojis from this palette will cause the emoji of your choice to appear near you inside the metaverse - visible to everyone around you! This not only works while flying in the ',
+            highlightedPartOne: '3D SPACE',
+            partTwo: ', using it while inside a ',
+            highlightedPartTwo: 'DASHBOARD',
+            partThree: ' will cause your emoji to appear to everyone inside that dashboard!'
+          },
+          four: {
+            partOne: 'When a group of people all feel the same way, something ',
+            highlightedPart: 'AWESOME',
+            partTwo: ' may happen!'
+          }
+        }
       },
       momentum: {
         title: 'Momentum Space',

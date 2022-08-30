@@ -6,7 +6,7 @@ import {t} from 'i18next';
 import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Discord.styled';
 
@@ -21,7 +21,7 @@ const Discord: React.FC = () => {
   const techSupportDiscord = 'https://discord.gg/VfTmyeguDC';
 
   const handleExpand = () => {
-    helpStore.toggleSection(HelpSectionType.Discord);
+    helpStore.toggleSection(HelpSectionEnum.Discord);
   };
 
   const handleSupportChannelClick = () => {

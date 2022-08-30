@@ -6,6 +6,7 @@ export type SizeType =
   | 'medium'
   | 'medium-large'
   | 'large'
+  | 'normal-large'
   | 'extra-large'
   | 'super-large'
   | 'huge';
