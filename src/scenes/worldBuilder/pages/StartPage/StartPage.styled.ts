@@ -7,8 +7,9 @@ export const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  padding: 20px;
 `;
 
 export const Information = styled.div`
@@ -33,3 +34,12 @@ export const LogoContainer = styled.div`
 export const Logo = styled.img`
   transform: translateY(-140px);
 `;
+
+export const ButtonAndSteps = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  align-items: center;
+`;
+
+export const Spacer = styled.div``;
