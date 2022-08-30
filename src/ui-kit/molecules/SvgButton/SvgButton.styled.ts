@@ -6,13 +6,13 @@ export const Container = styled.button`
   cursor: pointer;
 
   :disabled {
-    .IconSvg-custom {
+    .svg-icon {
       opacity: 0.2;
     }
   }
 
   :not(:disabled) {
-    .IconSvg-custom {
+    .svg-icon {
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.7)};
 
       &.danger {

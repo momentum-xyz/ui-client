@@ -5,7 +5,7 @@ export const ItemRowContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-right: 10px;
-  .IconSvg-custom {
+  .space-bar-dimension {
     width: 140px;
     height: 87px;
   }

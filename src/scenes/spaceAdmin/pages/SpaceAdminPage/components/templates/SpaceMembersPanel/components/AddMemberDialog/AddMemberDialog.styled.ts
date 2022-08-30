@@ -18,7 +18,7 @@ export const InputContainer = styled.div`
   flex-direction: column;
   gap: 5px;
 
-  .Heading-custom {
+  .dropdown-header {
     padding-left: 10px;
   }
 `;

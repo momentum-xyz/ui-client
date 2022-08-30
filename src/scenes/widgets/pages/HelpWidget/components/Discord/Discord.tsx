@@ -57,14 +57,12 @@ const Discord: React.FC = () => {
           label={t('helpSection.discord.serverButtonLabel')}
           icon={t('helpSection.discord.iconLabel')}
           onClick={handleServerClick}
-          isCustom
         />
         <Button
           theme={theme}
           label={t('helpSection.discord.supportButtonLabel')}
           icon={t('helpSection.discord.iconLabel')}
           onClick={handleSupportChannelClick}
-          isCustom
         />
       </styled.Buttons>
     </Section>

@@ -92,18 +92,7 @@ export const TokenRuleListTable = styled.table`
       &.small-column {
         width: 30px;
       }
-      .IconSvg-custom {
-        &.approved {
-          color: ${(props) => props.theme.accent};
-        }
 
-        &.declined {
-          color: ${(props) => props.theme.accentDanger};
-        }
-        &.requested {
-          color: white;
-        }
-      }
       &.clickable {
         cursor: pointer;
       }

@@ -57,7 +57,7 @@ const TokenRules: FC = () => {
           onChange={setQuery}
           placeholder={t('placeholders.search')}
           withBackground
-          isCustom
+          className="token-rule-search"
         />
         <TokenRulesList
           columnHeaders={[

@@ -11,7 +11,7 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  .Text-custom {
+  .token-rule-type {
     opacity: 0.5;
   }
 `;

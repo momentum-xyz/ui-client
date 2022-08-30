@@ -15,33 +15,18 @@ interface IconSvgPropsInterface extends PropsWithThemeInterface {
   name: IconName;
   size?: SizeType;
   isWhite?: boolean;
-  isCustom?: boolean;
   onClick?: () => void;
   isDanger?: boolean;
   className?: string;
 }
 
 const IconSvg: FC<IconSvgPropsInterface> = (props) => {
-  const {
-    name,
-    size = 'normal',
-    isWhite = false,
-    isCustom = false,
-    isDanger = false,
-    className,
-    ...rest
-  } = props;
+  const {name, size = 'normal', isWhite = false, isDanger = false, className, ...rest} = props;
   return (
     <styled.Wrapper
       data-testid="IconSvg-test"
       {...rest}
-      className={cn(
-        size,
-        isWhite && 'white',
-        isCustom && 'IconSvg-custom',
-        isDanger && 'danger',
-        className
-      )}
+      className={cn(size, isWhite && 'white', isDanger && 'danger', className)}
     >
       <styled.Svg>
         <use xlinkHref={`${svgSpritePath}#${name as string}`} />

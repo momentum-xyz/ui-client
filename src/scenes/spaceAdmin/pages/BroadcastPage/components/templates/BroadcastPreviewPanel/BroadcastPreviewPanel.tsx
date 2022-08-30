@@ -22,7 +22,7 @@ const BroadcastPreviewPanel: FC = () => {
   };
 
   return (
-    <SectionPanel title={t('broadcastAdmin.previewTitle')} isCustom>
+    <SectionPanel title={t('broadcastAdmin.previewTitle')}>
       <styled.Body data-testid="BroadcastPreviewPanel-test">
         <styled.VideoPanel>
           {broadcastStore.previewHash && (

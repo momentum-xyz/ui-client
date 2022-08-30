@@ -68,11 +68,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
   }, []);
 
   return (
-    <SectionPanel
-      title={t('spaceAdmin.sectionPanel.tokenRulesPanel')}
-      isCustom
-      onAdd={handleAddTokenRule}
-    >
+    <SectionPanel title={t('spaceAdmin.sectionPanel.tokenRulesPanel')} onAdd={handleAddTokenRule}>
       {removeTokenRuleDialog.isOpen && (
         <RemoveTokenRuleDialog
           userName={selectedTokenRule?.name ?? ''}

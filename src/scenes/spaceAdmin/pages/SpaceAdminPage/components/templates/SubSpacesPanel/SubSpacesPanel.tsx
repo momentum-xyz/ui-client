@@ -48,7 +48,7 @@ const SubSpacesPanel: FC = () => {
   };
 
   return (
-    <SectionPanel title={t('spaceAdmin.subSpaces.title')} isCustom onAdd={handleAddSubSpace}>
+    <SectionPanel title={t('spaceAdmin.subSpaces.title')} onAdd={handleAddSubSpace}>
       <styled.List className="noScrollIndicator" data-testid="SubSpacesPanel-test">
         {removeSubSpaceConfirmationDialog.isOpen && (
           <DeleteSpaceConfirmationDialog

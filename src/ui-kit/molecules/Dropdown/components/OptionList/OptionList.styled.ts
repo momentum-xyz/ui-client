@@ -54,7 +54,7 @@ export const DropdownOption = styled.div`
   opacity: 0.7;
   cursor: pointer;
 
-  .IconSvg-custom {
+  .option-list-svg {
     margin-right: 5px;
   }
 

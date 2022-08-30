@@ -128,7 +128,6 @@ const ImageTileForm: FC<PropsInterface> = ({
                 theme={theme}
                 onFilesUpload={handleImage}
                 className="uploadButton"
-                buttonIsCustom
               />
             </styled.TileImageUpload>
           </styled.FileUploaderItem>

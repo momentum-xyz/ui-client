@@ -34,7 +34,7 @@ const TabBar: FC<PropsInterface> = ({tabs = [], selectedTab, onTabSelect, theme}
           title={tab.label}
           style={{flexBasis: 100 / tabs.length + '%'}}
         >
-          {tab.icon && <IconSvg name={tab.icon} size="medium" isCustom />}{' '}
+          {tab.icon && <IconSvg name={tab.icon} size="medium" className="tab-bar-svg" />}{' '}
           <span className="tab-label">{tab.label}</span>
         </styled.Tab>
       ))}

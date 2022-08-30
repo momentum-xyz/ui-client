@@ -12,7 +12,6 @@ interface PropsInterface extends PropsWithThemeInterface {
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
   fileType: FileType;
-  buttonIsCustom?: boolean;
   maxSize?: number;
   enableDragAndDrop?: boolean;
   className?: string;
@@ -32,23 +31,25 @@ const FileUploader: FC<PropsInterface> = ({
   theme,
   fileType,
   maxSize = 3 * Math.pow(1024, 2),
-  buttonIsCustom = false,
   enableDragAndDrop = true,
   className
 }) => {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length === 1) {
-      const file = acceptedFiles[0];
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 1) {
+        const file = acceptedFiles[0];
 
-      if (file.size > maxSize) {
-        onError?.(new Error('FileSizeTooLarge'));
+        if (file.size > maxSize) {
+          onError?.(new Error('FileSizeTooLarge'));
+        } else {
+          onFilesUpload(acceptedFiles[0]);
+        }
       } else {
-        onFilesUpload(acceptedFiles[0]);
+        onFilesUpload(undefined);
       }
-    } else {
-      onFilesUpload(undefined);
-    }
-  }, []);
+    },
+    [maxSize, onError, onFilesUpload]
+  );
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,

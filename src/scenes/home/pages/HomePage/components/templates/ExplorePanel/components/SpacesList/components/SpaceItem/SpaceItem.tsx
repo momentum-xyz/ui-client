@@ -40,7 +40,7 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, last
         <styled.SpaceNameText text={space.name} size="xs" align="left" isMultiline={false} />
         <div className="flex-grow" />
         {space.id && favoriteStore.isFavorite(space.id) && (
-          <styled.FavouriteIcon name="starOn" size="normal" isCustom />
+          <styled.FavouriteIcon name="starOn" size="normal" />
         )}
         {hasSubspaces && <styled.NextButton iconName="chevron" size="medium" />}
       </styled.ClickableItem>

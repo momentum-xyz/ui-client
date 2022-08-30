@@ -137,7 +137,13 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
               onButtonClick={handleClickOnButton}
             />
             <styled.DropDownContainer>
-              <Heading type="h4" align="left" label="member role" transform="uppercase" isCustom />
+              <Heading
+                type="h4"
+                align="left"
+                label="member role"
+                transform="uppercase"
+                className="dropdown-label"
+              />
               <Controller
                 name="role"
                 control={control}
@@ -174,7 +180,6 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                     align="left"
                     label={selectedTokenRule?.name}
                     transform="capitalized"
-                    isCustom
                   />
                 </styled.HeadingItem>
                 <styled.TokenDetailGrid>
@@ -183,7 +188,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenTypeLabel')}
                       weight="bold"
-                      isCustom
+                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
@@ -192,7 +197,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                         text={selectedTokenRule?.tokenType ?? ''}
                         size="s"
                         transform="uppercase"
-                        isCustom
+                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>
@@ -202,7 +207,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenNetworkLabel')}
                       weight="bold"
-                      isCustom
+                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
@@ -211,7 +216,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                         text={selectedTokenRule?.network ?? ''}
                         size="s"
                         transform="uppercase"
-                        isCustom
+                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>
@@ -221,7 +226,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenAddressLabel')}
                       weight="bold"
-                      isCustom
+                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
@@ -230,7 +235,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                         text={selectedTokenRule?.contractAddress ?? ''}
                         size="s"
                         transform="uppercase"
-                        isCustom
+                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>
@@ -240,7 +245,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenMinBalanceLabel')}
                       weight="bold"
-                      isCustom
+                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
@@ -249,7 +254,7 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                         text={selectedTokenRule?.minBalance?.toString() ?? ''}
                         size="s"
                         transform="uppercase"
-                        isCustom
+                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>
