@@ -345,7 +345,10 @@ export const enGb = {
       prepareToGoOnStage: 'Prepare to go on stage',
       broadcastManage: 'Manage Broadcast',
       profile: 'Profile',
-      broadcast: 'Broadcast'
+      broadcast: 'Broadcast',
+      name: 'Name',
+      template: 'Template',
+      generate: 'Generate'
     },
     textMessage: {
       you: 'you',

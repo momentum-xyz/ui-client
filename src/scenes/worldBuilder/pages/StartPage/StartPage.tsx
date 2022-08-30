@@ -35,7 +35,7 @@ const StartPage: FC = () => {
             size="large"
           />
         )}
-        <Steps steps={['Name', 'Template', 'Generate']} />
+        <Steps steps={[t('titles.name'), t('titles.template'), t('titles.generate')]} />
       </styled.ButtonAndSteps>
     </styled.Container>
   );
