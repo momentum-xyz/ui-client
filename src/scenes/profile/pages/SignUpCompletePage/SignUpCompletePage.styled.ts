@@ -12,8 +12,14 @@ export const Background = styled.div<{background: string}>`
   z-index: 1;
 `;
 
+export const LogoContainer = styled.div`
+  padding: 8px 0 32px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const Logo = styled.img`
-  margin: 8px auto 32px auto;
   height: 48px;
   width: 300px;
 `;

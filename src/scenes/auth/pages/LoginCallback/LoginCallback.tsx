@@ -4,8 +4,6 @@ import {useAuth} from 'react-oidc-context';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {cookie} from 'shared/services';
-import {CookieKeyEnum} from 'core/enums';
 
 const LoginCallback: FC = () => {
   const {loginStore} = useStore().authStore;
@@ -25,12 +23,7 @@ const LoginCallback: FC = () => {
     if (!auth.isLoading && auth.isAuthenticated) {
       // @ts-ignore: state has type unknown
       const origin = auth.user?.state?.from || ROUTES.base;
-
-      if (!cookie.has(CookieKeyEnum.WELCOME)) {
-        history.push(ROUTES.welcome, {from: origin});
-      } else {
-        history.push(origin);
-      }
+      history.push(origin);
     }
   }, [auth.isAuthenticated, auth.isLoading, auth.user, history]);
 

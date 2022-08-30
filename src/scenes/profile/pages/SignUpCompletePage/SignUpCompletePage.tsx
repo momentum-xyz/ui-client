@@ -32,7 +32,7 @@ const SignUpCompletePage: FC = () => {
       const result = await signUpCompleteStore.updateProfile(form);
       if (result?.userOnboarded) {
         await sessionStore.reload();
-        history.push(window.history.state?.state?.from || ROUTES.base);
+        history.push(ROUTES.welcome, {from: window.history.state?.state?.from || ROUTES.base});
       }
     },
     [signUpCompleteStore, sessionStore, history]
@@ -46,7 +46,10 @@ const SignUpCompletePage: FC = () => {
     <styled.Background background={background} data-testid="SignUpCompletePage-test">
       <PanelLayout isBodyExtendingToEdges>
         <styled.Wrapper>
-          <styled.Logo src={momentum} />
+          <styled.LogoContainer>
+            <styled.Logo src={momentum} />
+          </styled.LogoContainer>
+
           {!!profile && (
             <SignUpCompleteForm
               user={{
