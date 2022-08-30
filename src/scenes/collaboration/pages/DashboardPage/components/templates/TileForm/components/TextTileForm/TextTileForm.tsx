@@ -113,7 +113,6 @@ const TextTileForm: FC<PropsInterface> = ({
                   onChange={onChange}
                   isError={!!errors.text_title}
                   placeholder={t('dashboard.tileForm.textPlaceholder')}
-                  isCustom
                 />
               )}
             />

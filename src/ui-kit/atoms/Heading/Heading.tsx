@@ -11,20 +11,20 @@ interface HeadingProps
     Pick<HTMLProps<HTMLDivElement>, 'className'> {
   type: HeadingType;
   label: string;
-  isCustom?: boolean;
   transform?: TextTransform;
   isDanger?: boolean;
   align?: TextAlignType;
   weight?: TextWeightType;
+  className?: string;
 }
 
 const Heading: FC<HeadingProps> = (props) => {
   const {
     transform = 'normal',
     align = 'center',
-    isCustom = false,
     weight = 'bold',
     isDanger = false,
+    className,
     ...restProps
   } = props;
 
@@ -66,13 +66,7 @@ const Heading: FC<HeadingProps> = (props) => {
   return (
     <styled.Heading
       theme={restProps.theme}
-      className={cn(
-        align,
-        weight,
-        isCustom && 'Heading-custom',
-        isDanger && 'danger',
-        restProps.className
-      )}
+      className={cn(align, weight, isDanger && 'danger', className)}
     >
       {content()}
     </styled.Heading>

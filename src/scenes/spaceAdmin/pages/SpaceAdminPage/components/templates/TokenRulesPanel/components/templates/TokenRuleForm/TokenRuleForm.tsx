@@ -141,7 +141,6 @@ const TokenRuleForm: FC<PropsInterface> = () => {
                     }}
                     label={t('tokenRules.tokenRuleForm.tokenRuleNameLabel')}
                     placeholder={t('tokenRules.tokenRuleForm.tokenRuleNamePlaceholder')}
-                    isCustom
                     isError={!!errors.name}
                   />
                 )}
@@ -178,7 +177,6 @@ const TokenRuleForm: FC<PropsInterface> = () => {
                     }}
                     label={t('tokenRules.tokenRuleForm.minimumBalanceLabel')}
                     placeholder={t('tokenRules.tokenRuleForm.minimumBalancePlaceholder')}
-                    isCustom
                     type="number"
                     isError={!!errors.minBalance}
                   />

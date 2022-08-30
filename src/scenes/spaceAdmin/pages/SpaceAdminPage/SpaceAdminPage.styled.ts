@@ -16,10 +16,7 @@ export const Body = styled.div`
   height: 100%;
   overflow: hidden;
   margin-top: 10px;
-
-  .SectionPanel-custom ~ .SectionPanel-custom {
-    margin-left: 10px;
-  }
+  gap: 10px;
 `;
 
 export const NoAccess = styled.div`
@@ -29,17 +26,17 @@ export const NoAccess = styled.div`
   justify-content: center;
   align-items: center;
 
-  .PanelLayout-custom {
+  .no-access-panel {
     width: 515px;
     height: 123px;
     justify-content: center;
     align-items: center;
+  }
 
-    .Text-custom {
-      height: 100%;
-      justify-content: center;
-      display: flex;
-      align-items: center;
-    }
+  .no-access-text {
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
   }
 `;

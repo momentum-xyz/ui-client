@@ -61,7 +61,7 @@ const EventItem: FC<PropsInterface> = ({
             label={`${t('eventList.eventItem.flyToSpace')} ${
               event.spaceName && event.spaceName.slice(0, 12)
             } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
-            isCustom
+            className="event-buttons"
             transform="capitalized"
             onClick={() => {
               onFlyToSpace?.(event?.spaceId ?? '');
@@ -80,14 +80,14 @@ const EventItem: FC<PropsInterface> = ({
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
           transform="capitalized"
-          isCustom
+          className="event-buttons"
         />
         {!!event.web_link && (
           <Button
             label={t('eventList.eventItem.websiteLink')}
             icon="link"
             transform="capitalized"
-            isCustom
+            className="event-buttons"
             onClick={() => {
               if (event?.web_link) {
                 onWeblinkClick(event.web_link);
@@ -125,7 +125,7 @@ const EventItem: FC<PropsInterface> = ({
             buttonProps={{
               label: t('eventList.eventItem.addToCalendar'),
               icon: 'calendar',
-              isCustom: true,
+              className: 'add-calendar-button',
               transform: 'capitalized',
               noWhitespaceWrap: true
             }}
@@ -175,10 +175,8 @@ const EventItem: FC<PropsInterface> = ({
               textProps={{
                 size: 's',
                 align: 'left',
-                firstBoldSentences: 1,
-                isCustom: true
+                firstBoldSentences: 1
               }}
-              isCustom
             />
           </styled.TextRow>
           <styled.AttendeesContainer>

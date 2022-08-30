@@ -40,7 +40,6 @@ const Section: React.FC<SectionPropsInterface> = ({
           <styled.DropDownIcon
             name="chevron"
             size="normal"
-            isCustom
             onClick={onExpandToggle}
             className={cn({expanded})}
           />

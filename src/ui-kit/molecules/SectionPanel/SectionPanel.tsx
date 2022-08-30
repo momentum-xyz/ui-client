@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import cn from 'classnames';
 
 import {PanelLayout, Heading, SvgButton} from 'ui-kit';
 
@@ -7,17 +6,14 @@ import * as styled from './SectionPanel.styled';
 
 interface PropsInterface {
   title?: string;
-  isCustom?: boolean;
   onAdd?: () => void;
+  className?: string;
 }
 
-const SectionPanel: FC<PropsInterface> = ({title, children, isCustom = false, onAdd}) => {
+const SectionPanel: FC<PropsInterface> = ({title, children, className, onAdd}) => {
   return (
-    <styled.Container
-      className={cn(isCustom && 'SectionPanel-custom')}
-      data-testid="SectionPanel-test"
-    >
-      <PanelLayout isCustom>
+    <styled.Container className={className} data-testid="SectionPanel-test">
+      <PanelLayout className="section-panel">
         <styled.Header>
           {title && <Heading label={title} type="h1" align="left" transform="uppercase" />}
           {onAdd && <SvgButton iconName="add" size="medium-large" onClick={onAdd} />}

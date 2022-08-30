@@ -7,6 +7,7 @@ export const TextAreaContainer = styled.div`
 
   background: ${rgba(0, 1, 1, 0.2)};
   border-radius: var(--input-radius);
+  margin-top: 5px;
 
   color: ${(props) => props.theme.text};
 
@@ -88,12 +89,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  .Heading-custom {
+  .heading-label {
     margin-left: 10px;
-  }
-
-  .Heading-custom ~ ${TextAreaContainer} {
-    margin-top: 5px;
   }
 `;
 

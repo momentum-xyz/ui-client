@@ -17,7 +17,6 @@ interface PropsInterface extends PropsWithThemeInterface {
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   submit?: boolean;
-  isCustom?: boolean;
   noWhitespaceWrap?: boolean;
   className?: string;
   preserveSpaces?: boolean;
@@ -35,7 +34,6 @@ const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
     disabled,
     onClick,
     icon,
-    isCustom = false,
     noWhitespaceWrap = false,
     preserveSpaces = false,
     className
@@ -53,14 +51,15 @@ const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
         size,
         `transform-${transform}`,
         wide && 'wide',
-        isCustom && 'Button-custom',
         noWhitespaceWrap && 'noWhitespaceWrap',
         preserveSpaces && 'preservesSpaces',
         className
       )}
       type={submit ? 'submit' : 'button'}
     >
-      {icon && <IconSvg name={icon} size="normal" isCustom isDanger={variant === 'danger'} />}
+      {icon && (
+        <IconSvg name={icon} size="normal" className="svg-icon" isDanger={variant === 'danger'} />
+      )}
       {label}
     </styled.Button>
   );

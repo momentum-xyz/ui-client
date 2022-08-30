@@ -15,18 +15,16 @@ interface TextPropsInterface {
   isMultiline?: boolean;
   align?: TextAlignType;
   weight?: TextWeightType;
-  isCustom?: boolean;
   firstBoldSentences?: number;
 }
 
 interface PropsInterface {
   text: string;
-  isCustom?: boolean;
   textProps: TextPropsInterface;
   lines?: number;
 }
 
-const ShowMoreText: FC<PropsInterface> = ({text, textProps, isCustom = false, lines = 4}) => {
+const ShowMoreText: FC<PropsInterface> = ({text, textProps, lines = 4}) => {
   const [showExpand, setShowExpand] = useState(true);
   const [collapsed, setCollapsed] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
@@ -53,10 +51,7 @@ const ShowMoreText: FC<PropsInterface> = ({text, textProps, isCustom = false, li
   });
 
   return (
-    <styled.Container
-      className={cn(isCustom && 'ShowMoreText-custom')}
-      data-testid="ShowMoreText-test"
-    >
+    <styled.Container data-testid="ShowMoreText-test">
       <styled.Text className={cn(collapsed && 'collapsed')} ref={ref} lines={lines}>
         <Text text={text} {...textProps} />
       </styled.Text>
@@ -70,7 +65,7 @@ const ShowMoreText: FC<PropsInterface> = ({text, textProps, isCustom = false, li
             align="left"
             size="xs"
           />
-          <SvgButton iconName="chevron" size="small" />
+          <SvgButton iconName="chevron" size="small" className="more-text-transform" />
         </styled.More>
       )}
     </styled.Container>

@@ -15,10 +15,6 @@ export const AddEventContainer = styled.div`
   top: 0;
   z-index: -1;
 
-  .Button-custom {
-    white-space: nowrap;
-  }
-
   a {
     padding: 10px;
 

@@ -21,7 +21,7 @@ export const StyledTransition = styled(Transition)`
   }
 
   .active {
-    .IconSvg-custom {
+    .active-svg {
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)} !important;
     }
   }

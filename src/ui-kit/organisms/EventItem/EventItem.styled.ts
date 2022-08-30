@@ -13,7 +13,7 @@ export const Buttons = styled.div`
     width: 100%;
   }
 
-  .Button-custom {
+  .event-buttons {
     max-width: 200px;
     min-width: 150px;
   }
@@ -103,6 +103,10 @@ export const Container = styled.div`
     animation: cssAnimation 1000ms ease-in-out;
   }
 
+  .add-calendar-button {
+    white-space: nowrap;
+  }
+
   .AddToCalendarContainer {
     position: relative;
   }
@@ -161,7 +165,7 @@ export const AttendeesButton = styled(Button)`
     border-color: #8febff !important;
     color: #8febff !important;
 
-    .IconSvg-custom {
+    .svg-icon {
       color: #8febff !important;
     }
   }

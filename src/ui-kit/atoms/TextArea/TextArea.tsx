@@ -16,11 +16,11 @@ interface PropsInterface
   value?: string;
   lines?: number;
   lineLength?: number;
-  isCustom?: boolean;
   isResizable?: boolean;
   isError?: boolean;
   errorMessage?: string;
   bottomBorder?: boolean;
+  className?: string;
 }
 
 const TextArea: FC<PropsInterface> = ({
@@ -33,16 +33,23 @@ const TextArea: FC<PropsInterface> = ({
   selected = false,
   lines = 4,
   lineLength,
-  isCustom = false,
   isResizable = false,
   isError = false,
   bottomBorder = false,
   errorMessage,
+  className,
   ...restProps
 }) => {
   return (
-    <styled.Container className={cn(isCustom && 'TextArea-custom')} data-testid="TextArea-test">
-      <Heading type="h4" align="left" theme={theme} label={name} transform="uppercase" isCustom />
+    <styled.Container className={className} data-testid="TextArea-test">
+      <Heading
+        className="heading-label"
+        type="h4"
+        align="left"
+        theme={theme}
+        label={name}
+        transform="uppercase"
+      />
       <styled.TextAreaContainer
         theme={theme}
         className={cn(

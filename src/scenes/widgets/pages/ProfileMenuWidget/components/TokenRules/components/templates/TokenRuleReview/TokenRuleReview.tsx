@@ -144,7 +144,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
       }
       closeOnBackgroundClick={true}
     >
-      <styled.Container data-testid="TokenRuleReviewWidget-test">
+      <styled.Container data-testid="TokenRuleReview-test">
         <styled.Div>
           <styled.TextItem>
             <Text text={t('tokenRules.tokenRuleReview.dialogDescription')} size="s" align="left" />
@@ -156,7 +156,6 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
               align="left"
               label={currentTokenRule?.name ? currentTokenRule.name : ''}
               transform="capitalized"
-              isCustom
             />
           </styled.HeadingItem>
           <styled.TokenDetailGrid>
@@ -165,7 +164,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.tokenLabel')}
                 weight="bold"
-                isCustom
+                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
@@ -173,7 +172,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                 text={currentTokenRule?.tokenType ? currentTokenRule.tokenType : ''}
                 size="s"
                 transform="uppercase"
-                isCustom
+                className="token-rule-detail"
                 align="left"
               />
             </styled.GridItem>
@@ -183,14 +182,14 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                   type="h5"
                   label={t('tokenRules.tokenRuleReview.tokenIdLabel')}
                   weight="bold"
-                  isCustom
+                  className="token-rule-title"
                   align="right"
                   transform="uppercase"
                 />
                 <Text
                   text={currentTokenRule?.id}
                   size="s"
-                  isCustom
+                  className="token-rule-detail"
                   align="left"
                   transform="normal"
                 />
@@ -201,14 +200,14 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.networkLabel')}
                 weight="bold"
-                isCustom
+                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
               <Text
                 text={currentTokenRule?.network ? currentTokenRule.network : ''}
                 size="s"
-                isCustom
+                className="token-rule-detail"
                 transform="capitalized"
                 align="left"
               />
@@ -218,14 +217,14 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.addressLabel')}
                 weight="bold"
-                isCustom
+                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
               <Text
                 text={currentTokenRule?.contractAddress ? currentTokenRule.contractAddress : ''}
                 size="s"
-                isCustom
+                className="token-rule-detail"
                 transform="normal"
                 align="left"
               />
@@ -235,14 +234,14 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.minimumAmountLabel')}
                 weight="bold"
-                isCustom
+                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
               <Text
                 text={currentTokenRule?.minBalance ? currentTokenRule.minBalance.toString() : ''}
                 size="s"
-                isCustom
+                className="token-rule-detail"
                 align="left"
                 transform="normal"
               />
@@ -253,14 +252,14 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                   type="h5"
                   label={t('tokenRules.tokenRuleReview.spaceRequestedLabel')}
                   weight="bold"
-                  isCustom
+                  className="token-rule-title"
                   align="right"
                   transform="uppercase"
                 />
                 <Text
                   text={currentTokenRule.spaceName}
                   size="s"
-                  isCustom
+                  className="token-rule-detail"
                   align="left"
                   transform="normal"
                 />
@@ -272,14 +271,14 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                   type="h5"
                   label={t('tokenRules.tokenRuleReview.userRequestedLabel')}
                   weight="bold"
-                  isCustom
+                  className="token-rule-title"
                   align="right"
                   transform="uppercase"
                 />
                 <Text
                   text={currentTokenRule.userName}
                   size="s"
-                  isCustom
+                  className="token-rule-detail"
                   align="left"
                   transform="normal"
                 />

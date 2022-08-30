@@ -7,7 +7,7 @@ export const Body = styled.div`
   width: 400px;
   gap: 10px;
 
-  .Text-custom {
+  .initiative-description {
     padding: 0 10px;
   }
 `;

@@ -17,18 +17,17 @@ export const Container = styled.div`
     height: 100%;
   }
 
-  .PanelLayout-custom {
-    padding: 15px 0 0 0;
-    width: 520px;
-    height: 120px;
+  .no-gatherings-panel {
+    width: 515px;
+    height: 123px;
     justify-content: center;
     align-items: center;
+  }
 
-    .Text-custom {
-      height: 100%;
-      justify-content: center;
-      display: flex;
-      align-items: center;
-    }
+  .no-gatherings-text {
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
   }
 `;

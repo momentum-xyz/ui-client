@@ -88,7 +88,7 @@ const EventForm: FC = () => {
 
   useEffect(() => {
     return () => eventFormStore.resetModel();
-  }, []);
+  }, [eventFormStore]);
 
   useEffect(() => {
     if (startDate >= endDate) {
@@ -99,7 +99,7 @@ const EventForm: FC = () => {
     }
     setValue('start', startDate);
     setValue('end', endDate);
-  }, [startDate, endDate]);
+  }, [clearErrors, endDate, setError, setValue, startDate]);
 
   return (
     <Dialog
@@ -222,7 +222,6 @@ const EventForm: FC = () => {
                 onChange={onChange}
                 name={t('eventForm.descriptionLabel')}
                 placeholder={t('eventForm.descriptionPlaceholder')}
-                isCustom
                 isResizable
                 isError={!!errors.description}
                 errorMessage={t('eventForm.errorMessage')}
@@ -249,7 +248,7 @@ const EventForm: FC = () => {
               fileType="image"
               theme={theme}
               onFilesUpload={handleImage}
-              buttonIsCustom
+              className="upload-button"
             />
           </styled.TileImageUpload>
         </styled.FileUploaderItem>

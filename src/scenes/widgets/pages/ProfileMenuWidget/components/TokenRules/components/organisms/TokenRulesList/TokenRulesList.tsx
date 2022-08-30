@@ -28,7 +28,15 @@ const TokenRulesList: FC<PropsInterface> = ({columnHeaders, onEventClick}) => {
   const getCell = (key: TokenRuleListHeaderType, item: TokenRuleItemModelInterface) => {
     const status = TokenRuleListHeader.STATUS;
     if (key === TokenRuleListHeader.INFO) {
-      return <IconSvg name="info" size="medium" isCustom onClick={() => onEventClick?.(item)} />;
+      return (
+        <IconSvg
+          name="info"
+          size="medium"
+          onClick={() => onEventClick?.(item)}
+          isWhite={item[status] === TokenRuleStatus.REQUESTED}
+          isDanger={item[status] === TokenRuleStatus.DECLINED}
+        />
+      );
     } else if (key === TokenRuleListHeader.ICON) {
       return (
         <IconSvg
@@ -61,7 +69,7 @@ const TokenRulesList: FC<PropsInterface> = ({columnHeaders, onEventClick}) => {
   };
 
   return (
-    <styled.TokenRuleListContainer className="noScrollIndicator" data-testid="TokenRuleList-test">
+    <styled.TokenRuleListContainer data-testid="TokenRuleList-test">
       <styled.TokenRuleListTable>
         <thead>
           <tr>

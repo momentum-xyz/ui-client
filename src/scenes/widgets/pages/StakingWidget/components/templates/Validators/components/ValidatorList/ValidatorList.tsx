@@ -38,13 +38,13 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
 
   const getCell = (key: keyof ValidatorItemModelInterface, item: ValidatorItemModelInterface) => {
     if (key === 'isBookmarked') {
-      return <IconSvg name={item[key] ? 'starOn' : 'star'} size="medium" isCustom />;
+      return <IconSvg name={item[key] ? 'starOn' : 'star'} size="medium" />;
     } else if (key === 'selected') {
-      return <IconSvg name={item[key] ? 'checkmark' : 'check'} size="medium" isCustom />;
+      return <IconSvg name={item[key] ? 'checkmark' : 'check'} size="medium" />;
     } else if (key === 'info' && item[key]) {
-      return <IconSvg name="info" size="medium" isCustom />;
+      return <IconSvg name="info" size="medium" />;
     } else if (key === 'hasLink' && item[key]) {
-      return <IconSvg name="rocket" size="medium" isCustom />;
+      return <IconSvg name="rocket" size="medium" />;
     } else {
       const value = item[key] ? item[key] : '';
       return <span title={value}>{value}</span>;
@@ -76,11 +76,7 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
                   <div>{header.label}</div>
                   {header.sortable && (
                     <button>
-                      <IconSvg
-                        name={getSortIconNameFor(header.key) as IconName}
-                        size="medium"
-                        isCustom
-                      />
+                      <IconSvg name={getSortIconNameFor(header.key) as IconName} size="medium" />
                     </button>
                   )}
                 </div>
