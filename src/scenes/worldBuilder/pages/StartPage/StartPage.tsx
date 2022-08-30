@@ -32,6 +32,7 @@ const StartPage: FC = () => {
           <styled.StyledButton
             label={t('actions.logIn')}
             onClick={() => history.push(ROUTES.login, {from: ROUTES.worldBuilder.start})}
+            size="large"
           />
         )}
         <Steps steps={['Name', 'Template', 'Generate']} />
