@@ -4,6 +4,7 @@ export type SizeType =
   | 'small'
   | 'normal'
   | 'medium'
+  | 'normal-large'
   | 'medium-large'
   | 'large'
   | 'extra-large'

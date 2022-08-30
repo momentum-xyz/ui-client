@@ -6,6 +6,7 @@ export const Wrapper = styled.span`
   --icon-size-medium: 16px;
   --icon-size-medium-large: 20px;
   --icon-size-large: 24px;
+  --icon-size-normal-large: 32px;
   --icon-size-extra-large: 40px;
   --icon-size-super-large: 87px;
   --icon-size-huge: 140px;
@@ -49,6 +50,11 @@ export const Wrapper = styled.span`
   &.medium {
     width: var(--icon-size-medium);
     height: var(--icon-size-medium);
+  }
+
+  &.normal-large {
+    width: var(--icon-size-normal-large);
+    height: var(--icon-size-normal-large);
   }
 
   &.medium-large {
