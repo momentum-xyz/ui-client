@@ -1,11 +1,9 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import YouTube from 'react-youtube';
 
-import {cookie} from 'shared/services';
-import {CookieKeyEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {Button, SvgButton} from 'ui-kit';
 import {ROUTES} from 'core/constants';
@@ -19,12 +17,6 @@ const WelcomePage: FC = () => {
   const history = useHistory();
   const {t} = useTranslation();
   const theme = useTheme();
-
-  useEffect(() => {
-    if (!cookie.has(CookieKeyEnum.WELCOME)) {
-      cookie.create(CookieKeyEnum.WELCOME, '1');
-    }
-  }, []);
 
   const closeHandler = useCallback(() => {
     history.push(window.history.state?.state?.from || ROUTES.base);
