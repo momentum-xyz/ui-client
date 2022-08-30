@@ -46,7 +46,7 @@ export const LegendItem = styled.div`
   font-size: var(--font-size-xs);
   color: ${(props) => props.theme.text};
 
-  .IconSvg-custom {
+  .header-svg-item {
     margin-right: 5px;
   }
 

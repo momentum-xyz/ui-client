@@ -88,7 +88,7 @@ const SpaceDetailsPanel: FC = () => {
   }
 
   return (
-    <SectionPanel title={t('spaceAdmin.spaceDetails.title')} isCustom>
+    <SectionPanel title={t('spaceAdmin.spaceDetails.title')}>
       {deleteSpaceConfirmationDialog.isOpen && (
         <DeleteSpaceConfirmationDialog
           onConfirmation={handleDelete}

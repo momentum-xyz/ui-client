@@ -53,8 +53,8 @@ const SpaceAdminPage: FC = () => {
           </>
         ) : (
           <styled.NoAccess>
-            <PanelLayout isCustom>
-              <Text isCustom text={t('spaceAdmin.noAccess')} size="l" />
+            <PanelLayout className="no-access-panel">
+              <Text className="no-access-text" text={t('spaceAdmin.noAccess')} size="l" />
             </PanelLayout>
           </styled.NoAccess>
         )}

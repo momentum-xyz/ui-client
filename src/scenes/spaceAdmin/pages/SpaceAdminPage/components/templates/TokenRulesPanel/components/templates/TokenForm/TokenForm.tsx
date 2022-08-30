@@ -118,7 +118,7 @@ const TokenForm: FC<PropsInterface> = () => {
                 align="left"
                 label={t('tokenRules.tokenForm.tokenTypeLabel')}
                 transform="uppercase"
-                isCustom
+                className="dropdown-label"
               />
               <Controller
                 name="tokenType"
@@ -164,7 +164,6 @@ const TokenForm: FC<PropsInterface> = () => {
                     }}
                     label={t('tokenRules.tokenForm.tokenIDLabel')}
                     placeholder={t('tokenRules.tokenForm.tokenIDPlaceholder')}
-                    isCustom
                     disabled={isTokenId}
                     isError={!!errors.tokenID}
                   />
@@ -178,7 +177,7 @@ const TokenForm: FC<PropsInterface> = () => {
                 align="left"
                 label={t('tokenRules.tokenForm.networkLabel')}
                 transform="uppercase"
-                isCustom
+                className="dropdown-label"
               />
               <Controller
                 name="network"
@@ -215,7 +214,6 @@ const TokenForm: FC<PropsInterface> = () => {
                     }}
                     label={t('tokenRules.tokenForm.contractAddressLabel')}
                     placeholder={t('tokenRules.tokenForm.contractAddressPlaceholder')}
-                    isCustom
                     isError={!!errors.contractAddress}
                   />
                 )}
@@ -229,7 +227,7 @@ const TokenForm: FC<PropsInterface> = () => {
               render={({field: {value}}) => (
                 <div>
                   <styled.HeadingItem>
-                    <Heading type="h4" align="left" label={value} transform="uppercase" isCustom />
+                    <Heading type="h4" align="left" label={value} transform="uppercase" />
                   </styled.HeadingItem>
                   {value && (
                     <styled.Item>

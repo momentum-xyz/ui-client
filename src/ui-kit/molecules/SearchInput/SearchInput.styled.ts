@@ -5,7 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 6px;
-  .Heading-custom {
+  .input-header {
     margin-left: 10px;
     margin-bottom: 5px;
   }
@@ -31,12 +31,12 @@ export const InputContainer = styled.div`
   &.focused,
   :hover {
     background: ${(props) => props.theme.text && rgba(props.theme.text, 0.05)};
-    .IconSvg-custom {
+    .input-icon {
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
       stroke: currentColor;
     }
   }
-  .IconSvg-custom {
+  .input-icon {
     color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
   }
 `;

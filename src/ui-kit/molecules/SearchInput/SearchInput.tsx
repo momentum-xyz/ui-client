@@ -2,7 +2,6 @@ import React, {FC, FormEvent, InputHTMLAttributes, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
-// import {useDebouncedCallback} from 'ui-kit/hooks';
 import {Heading, IconSvg} from 'ui-kit';
 
 import * as styled from './SearchInput.styled';
@@ -14,8 +13,8 @@ interface SearchPropsInterface extends Omit<InputHTMLAttributes<any>, 'onChange'
   label?: string;
   withBackground?: boolean;
   focused?: boolean;
-  isCustom?: boolean;
   placeholder?: string;
+  className?: string;
 }
 
 const SearchInput: FC<SearchPropsInterface> = ({
@@ -27,8 +26,8 @@ const SearchInput: FC<SearchPropsInterface> = ({
   onChange,
   onFocus,
   onBlur,
-  isCustom = false,
   placeholder,
+  className,
   ...restProps
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -40,13 +39,17 @@ const SearchInput: FC<SearchPropsInterface> = ({
   return (
     <styled.Container
       data-testid="SearchInput-test"
-      className={cn(
-        isFocused && 'focused',
-        `variant-${variantSize}`,
-        isCustom && 'SearchInput-custom'
-      )}
+      className={cn(isFocused && 'focused', `variant-${variantSize}`, className)}
     >
-      {label && <Heading type="h4" align="left" label={label} transform="uppercase" isCustom />}
+      {label && (
+        <Heading
+          type="h4"
+          align="left"
+          label={label}
+          transform="uppercase"
+          className="input-header"
+        />
+      )}
       <styled.InputContainer
         className={cn(withBackground && 'withBackground', focused && 'noBorder')}
       >
@@ -64,7 +67,7 @@ const SearchInput: FC<SearchPropsInterface> = ({
           }}
           {...restProps}
         />
-        <IconSvg name="search" size="medium" isCustom />
+        <IconSvg name="search" size="medium" className="input-icon" />
       </styled.InputContainer>
     </styled.Container>
   );

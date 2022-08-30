@@ -36,7 +36,7 @@ export const AvatarImageUpload = styled.div`
   &.error {
     border: 1px solid ${(props) => props.theme.accentDanger};
   }
-  .Button-custom {
+  .upload-button {
     width: 110px;
     padding: 0;
   }

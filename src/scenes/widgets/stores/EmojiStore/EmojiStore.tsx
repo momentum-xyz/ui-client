@@ -7,7 +7,7 @@ import {bytesToUuid} from 'core/utils';
 const EmojiStore = types
   .compose(
     ResetModel,
-    types.model('WorldStatsStore', {
+    types.model('EmojiStore', {
       selectionDialog: types.optional(DialogModel, {}),
       emojiDetailsList: types.optional(types.array(EmojiDetails), []),
       fetchSpaceEmojisRequest: types.optional(RequestModel, {})
@@ -19,7 +19,6 @@ const EmojiStore = types
         api.emojiRepository.fetchSpaceEmojiConfig,
         {worldId}
       );
-      console.log('EMOJIS response:', response);
 
       const data = response
         .map(({emoji, emojiId, order, spaceId}) => ({

@@ -19,7 +19,7 @@ export const TileImageUpload = styled.div`
   backdrop-filter: blur(10px);
   gap: 10px;
 
-  .Button-custom {
+  .upload-button {
     width: 110px;
     padding: 0;
   }

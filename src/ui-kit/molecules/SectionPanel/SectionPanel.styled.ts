@@ -5,7 +5,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
 
-  .PanelLayout-custom {
+  .section-panel {
     width: 100%;
     height: 100%;
   }

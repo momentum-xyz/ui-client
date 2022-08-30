@@ -66,7 +66,7 @@ export const StyledSearchContainer = styled.div`
   padding-top: 20px;
   width: 100%;
   height: 100%;
-  .Heading-custom {
+  .search-input-label {
     margin-left: 10px;
     margin-bottom: 5px;
   }

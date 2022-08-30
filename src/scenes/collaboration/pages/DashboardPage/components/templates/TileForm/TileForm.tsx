@@ -51,7 +51,7 @@ const TileForm: FC = () => {
             align="left"
             label={t('dashboard.tileForm.tileType')}
             transform="uppercase"
-            isCustom
+            className="dropdown-header"
           />
           <Dropdown
             placeholder={t('dashboard.tileForm.typePlaceholder')}

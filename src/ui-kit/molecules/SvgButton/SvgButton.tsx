@@ -1,4 +1,5 @@
 import React, {FC, HTMLProps} from 'react';
+import cn from 'classnames';
 
 import {IconSvg, SizeType} from 'ui-kit';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
@@ -40,10 +41,9 @@ const SvgButton: FC<PropsInterface> = ({
         name={iconName}
         theme={theme}
         size={size}
-        isCustom
         isDanger={isDanger}
         isWhite={isWhite}
-        className={className}
+        className={cn('svg-icon', className)}
       />
       {children}
     </styled.Container>

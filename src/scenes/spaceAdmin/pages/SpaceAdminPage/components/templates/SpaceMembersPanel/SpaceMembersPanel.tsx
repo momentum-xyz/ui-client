@@ -65,7 +65,7 @@ const SpaceMembersPanel: FC = () => {
   };
 
   return (
-    <SectionPanel title={t('spaceAdmin.users.title')} isCustom onAdd={addUserDialog.open}>
+    <SectionPanel title={t('spaceAdmin.users.title')} onAdd={addUserDialog.open}>
       {removeUserConfirmationDialog.isOpen && (
         <RemoveUserConfirmationDialog
           userName={selectedUser?.name ?? ''}

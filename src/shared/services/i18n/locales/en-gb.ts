@@ -821,7 +821,7 @@ export const enGb = {
       saveSuccess: 'Saved profile',
       saveFailure: 'Could not save Profile.',
       changeAvatar: 'Change your avatar',
-      update: 'update',
+      upload: 'upload',
       avatar: 'avatar'
     },
     launchInitiativeWidget: {

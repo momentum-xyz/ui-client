@@ -9,7 +9,7 @@ export const Body = styled.div`
   height: 100%;
   padding-bottom: 80px;
 
-  .SearchInput-custom {
+  .token-rule-search {
     margin: 0 20px;
   }
 `;
