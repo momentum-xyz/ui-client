@@ -6,6 +6,7 @@ export const Wrapper = styled.span`
   --icon-size-medium: 16px;
   --icon-size-medium-large: 20px;
   --icon-size-large: 24px;
+  --icon-size-normal-large: 32px;
   --icon-size-extra-large: 40px;
   --icon-size-super-large: 87px;
   --icon-size-huge: 140px;
@@ -55,10 +56,17 @@ export const Wrapper = styled.span`
     width: var(--icon-size-medium-large);
     height: var(--icon-size-medium-large);
   }
+
+  &.normal-large {
+    width: var(--icon-size-normal-large);
+    height: var(--icon-size-normal-large);
+  }
+
   &.super-large {
     width: var(--icon-size-super-large);
     height: var(--icon-size-super-large);
   }
+
   &.huge {
     width: var(--icon-size-huge);
   }
