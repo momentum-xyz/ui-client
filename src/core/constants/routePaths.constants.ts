@@ -42,5 +42,9 @@ export const ROUTES = {
     atoms: '/storybook/atoms',
     molecules: '/storybook/molecules',
     organisms: '/storybook/organisms'
+  },
+  worldBuilder: {
+    base: '/create-world',
+    start: '/create-world/start'
   }
 };

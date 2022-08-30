@@ -22,6 +22,7 @@ import {VideoPage} from './video/pages';
 import {GrabTablePage} from './grabTable';
 import {StoryBook} from './storyBook';
 import {DisconnectedPage, MaintenancePage, WrongBrowserPage} from './system';
+import {WorldBuilder} from './worldBuilder';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -52,6 +53,10 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.storyBook.base,
     main: () => <StoryBook />
+  },
+  {
+    path: ROUTES.worldBuilder.base,
+    main: () => <WorldBuilder />
   }
 ];
 

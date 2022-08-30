@@ -32,6 +32,10 @@ export const Text = styled.div`
     font-size: var(--font-size-xxl);
   }
 
+  &.xxxl {
+    font-size: var(--font-size-xxxl);
+  }
+
   &.transform-normal {
     text-transform: none;
   }

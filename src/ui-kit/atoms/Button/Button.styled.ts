@@ -153,6 +153,13 @@ export const Button = styled.button`
     font-weight: 500;
   }
 
+  &.large {
+    padding: 20px;
+    font-size: var(--font-size-xxl);
+    border-width: 3px;
+    font-weight: 600;
+  }
+
   &.wide {
     width: 100%;
   }
