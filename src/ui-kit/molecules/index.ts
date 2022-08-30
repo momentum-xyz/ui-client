@@ -16,6 +16,6 @@ export * from './ToolbarIcon';
 export * from './ExpandableLayout';
 export * from './UnityLoader';
 export * from './TileMenu';
-export * from './MediaPlayer';
+export * from './RemoteOrLocalUser';
 export * from './NewDeviceDialog';
 export * from './FileUploader';

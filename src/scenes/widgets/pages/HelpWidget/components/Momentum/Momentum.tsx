@@ -7,7 +7,7 @@ import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
-import {HelpSectionType} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Momentum.styled';
 
@@ -20,7 +20,7 @@ const Momentum: React.FC = () => {
   const history = useHistory();
 
   const handleExpand = () => {
-    helpStore.toggleSection(HelpSectionType.Momentum);
+    helpStore.toggleSection(HelpSectionEnum.Momentum);
   };
 
   const handleFlyToSpace = (openCalendar = false) => {

@@ -7,19 +7,19 @@ import {observer} from 'mobx-react-lite';
 import {IconSvg, Text} from 'ui-kit';
 import {UserProfileModelInterface, AgoraRemoteUserInterface} from 'core/models';
 
-import * as styled from './MediaPlayer.styled';
+import * as styled from './RemoteOrLocalUser.styled';
 
-export interface VideoPlayerPropsInterface {
+interface PropsInterface {
   remoteUser?: AgoraRemoteUserInterface;
   videoTrack: ILocalVideoTrack | IRemoteVideoTrack | undefined;
   isCameraOff?: boolean;
   isMuted?: boolean;
   soundLevel?: number;
   currentUser?: UserProfileModelInterface;
-  loadCurrentUserProfile: () => void;
+  loadCurrentUserProfile?: () => void;
 }
 
-const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
+const RemoteOrLocalUser: React.FC<PropsInterface> = ({
   remoteUser,
   videoTrack,
   isCameraOff,
@@ -35,7 +35,7 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
     if (remoteUser) {
       remoteUser.fetchUser();
     } else {
-      loadCurrentUserProfile();
+      loadCurrentUserProfile?.();
     }
   }, [remoteUser, loadCurrentUserProfile]);
 
@@ -69,7 +69,7 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
           {!remoteUser && currentUser?.avatarSrc && (
             <styled.Avatar src={currentUser.avatarSrc} alt={currentUser?.name} />
           )}
-          {((remoteUser && !remoteUser?.avatarSrc) || !currentUser?.avatarSrc) && (
+          {((remoteUser && !remoteUser?.avatarSrc) || (currentUser && !currentUser?.avatarSrc)) && (
             <IconSvg name="astro" size="huge" />
           )}
         </styled.AvatarContainer>
@@ -89,4 +89,4 @@ const MediaPlayer: React.FC<VideoPlayerPropsInterface> = ({
   );
 };
 
-export default observer(MediaPlayer);
+export default observer(RemoteOrLocalUser);

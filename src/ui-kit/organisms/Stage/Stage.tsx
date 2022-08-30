@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'core/models';
-import {IconSvg, Text, MediaPlayer} from 'ui-kit';
+import {IconSvg, Text, RemoteOrLocalUser} from 'ui-kit';
 import {StageModeModerationEventEnum} from 'core/enums';
 
 import * as styled from './Stage.styled';
@@ -61,7 +61,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
 
         {agoraStageModeStore.isOnStage && (
           <styled.MediaPlayerContainer>
-            <MediaPlayer
+            <RemoteOrLocalUser
               videoTrack={userDevicesStore.localVideoTrack}
               isCameraOff={userDevicesStore.cameraOff}
               isMuted={userDevicesStore.muted}
@@ -77,14 +77,12 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
             className={cn('relative', onRemoteUserClick && 'showActionsOnHover')}
             key={`stageuser-${user.uid}`}
           >
-            <MediaPlayer
+            <RemoteOrLocalUser
               remoteUser={user}
               videoTrack={user.videoTrack}
               isCameraOff={user.cameraOff}
               isMuted={user.isMuted}
               soundLevel={user.soundLevel}
-              currentUser={sessionStore.profile ?? undefined}
-              loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
             <styled.RemoteUserActionsContainer>
               <styled.RemoteUserActions>
