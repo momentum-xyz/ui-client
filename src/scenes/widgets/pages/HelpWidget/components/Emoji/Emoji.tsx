@@ -59,7 +59,7 @@ const Emoji: React.FC = () => {
           </styled.SmileContainer>
           <styled.ArrowContainer>
             <IconSvg name="arrowLeftBig" size="large" />
-            <Heading label="Click here" type="h3" align="left" transform="uppercase" />
+            <Heading label={t('actions.clickHere')} type="h3" align="left" transform="uppercase" />
           </styled.ArrowContainer>
         </styled.EmojiButtonContainer>
       </styled.Block>

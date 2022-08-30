@@ -284,6 +284,7 @@ export const enGb = {
       emailLogin: 'Email Login',
       goBack: 'Go back',
       back: 'Back',
+      clickHere: 'Click here',
       chooseAvatar: 'Choose an image for your avatar',
       saveProfile: 'Save profile',
       selectAccount: 'Select account',
