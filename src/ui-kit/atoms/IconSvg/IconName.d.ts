@@ -6,6 +6,7 @@ declare type IconName =
   | 'approved'
   | 'arrow-keys'
   | 'arrow'
+  | 'arrowLeftBig'
   | 'astro'
   | 'bell'
   | 'bellRed'
