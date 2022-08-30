@@ -35,6 +35,7 @@ const AtomsPage: FC = () => {
           <IconSvg size="large" name="airport-signal" />
           <IconSvg size="large" name="alert" />
           <IconSvg size="large" name="approved" />
+          <IconSvg size="large" name="arrowLeftBig" />
           <IconSvg size="large" name="arrow-keys" />
           <IconSvg size="large" name="arrow" />
           <IconSvg size="large" name="astro" />
