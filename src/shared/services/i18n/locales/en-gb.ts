@@ -386,6 +386,7 @@ export const enGb = {
       joinStage: 'Join Stage',
       decline: 'Decline',
       cancel: 'Cancel',
+      react: 'React',
       emailLogin: 'Email Login',
       goBack: 'Go back',
       back: 'Back',
