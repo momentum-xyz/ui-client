@@ -19,7 +19,6 @@ const EmojiStore = types
         api.emojiRepository.fetchSpaceEmojiConfig,
         {worldId}
       );
-      console.log('EMOJIS response:', response);
 
       const data = response
         .map(({emoji, emojiId, order, spaceId}) => ({

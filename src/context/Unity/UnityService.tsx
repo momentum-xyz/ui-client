@@ -225,15 +225,6 @@ export class UnityService {
     targetType?: UNITY_TARGET_TYPE;
   }) {
     try {
-      console.log('SEND EMOJI:', {
-        targetType,
-        userUUID,
-        userAvatarSrc,
-        userName,
-        emojiUrl,
-        emojiId
-      });
-      console.log('unityAPI', this.unityApi);
       const topic = 'emoji';
 
       const data: PosBusEmojiMessageType = {
