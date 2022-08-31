@@ -44,7 +44,7 @@ export const ROUTES = {
     organisms: '/storybook/organisms'
   },
   worldBuilder: {
-    base: '/create-world',
-    start: '/create-world/start'
+    base: '/createWorld',
+    start: '/createWorld/start'
   }
 };
