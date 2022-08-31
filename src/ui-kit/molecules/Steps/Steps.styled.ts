@@ -43,7 +43,7 @@ export const SelectedFill = styled.div`
   height: 10px;
 `;
 
-export const LikingLine = styled.div`
+export const LinkingLine = styled.div`
   background: ${(props) => props.theme.text};
   height: 2px;
   width: 80px;

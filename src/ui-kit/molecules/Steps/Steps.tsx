@@ -21,7 +21,7 @@ const Steps: FC<PropsInterface> = ({currentStep, steps}) => {
             <styled.Label label={step} type="h3" />
           </styled.StepContainer>
           {index < steps.length - 1 && (
-            <styled.LikingLine className={cn(currentStep && index < currentStep && 'completed')} />
+            <styled.LinkingLine className={cn(currentStep && index < currentStep && 'completed')} />
           )}
         </styled.StepContainerWrapper>
       ))}
