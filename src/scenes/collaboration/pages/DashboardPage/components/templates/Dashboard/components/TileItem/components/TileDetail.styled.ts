@@ -7,9 +7,9 @@ export const MenuWrapper = styled.div`
     position: absolute;
     right: 0;
     bottom: 0;
-    padding: 0 6px 6px 0;
+    padding: 0 8px 10px 0;
   }
-  opacity: 0.2;
+  opacity: 0;
 `;
 
 export const Container = styled.div`
