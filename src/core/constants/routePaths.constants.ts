@@ -45,6 +45,7 @@ export const ROUTES = {
   },
   worldBuilder: {
     base: '/createWorld',
-    start: '/createWorld/start'
+    start: '/createWorld/start',
+    name: '/createWorld/name'
   }
 };

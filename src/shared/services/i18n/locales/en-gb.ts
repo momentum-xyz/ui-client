@@ -451,7 +451,8 @@ export const enGb = {
       ready: 'Ready',
       inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
-      getStarted: 'Get Started'
+      getStarted: 'Get Started',
+      selectTemplate: 'Select Template'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
