@@ -45,22 +45,28 @@ const TileDetail: FC<PropsInterface> = ({
       title={tile.content?.title ?? ''}
       noPadding={!tile.content?.text}
       headerStyle="uppercase"
+      headerClassName="header-eclipse"
     >
-      {imageUrl && <styled.ImageWrapper src={imageUrl} alt="" />}
-      {tile.content?.text && <styled.TextItem text={tile.content.text} size="xs" align="left" />}
-      {videoUrl && (
-        <styled.VideoWrapper>
-          <iframe title={`video-${tile.id}`} src={videoUrl} allowFullScreen />
-        </styled.VideoWrapper>
-      )}
-      {(isAdmin || isMember) && (
-        <TileMenu
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          provided={provided}
-          isDelete={tile.permanentType === null}
-        />
-      )}
+      <styled.Container>
+        {imageUrl && <styled.ImageWrapper src={imageUrl} alt="" />}
+        {tile.content?.text && <styled.TextItem text={tile.content.text} size="xs" align="left" />}
+        {videoUrl && (
+          <styled.VideoWrapper>
+            <iframe title={`video-${tile.id}`} src={videoUrl} allowFullScreen />
+          </styled.VideoWrapper>
+        )}
+        {(isAdmin || isMember) && (
+          <styled.MenuWrapper>
+            <TileMenu
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              provided={provided}
+              isDelete={tile.permanentType === null}
+              className="menu-position"
+            />
+          </styled.MenuWrapper>
+        )}
+      </styled.Container>
     </PanelLayout>
   );
 };

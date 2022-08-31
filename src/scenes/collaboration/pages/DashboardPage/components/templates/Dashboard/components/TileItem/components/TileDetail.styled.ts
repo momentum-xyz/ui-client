@@ -2,9 +2,25 @@ import styled from 'styled-components';
 
 import {Text} from 'ui-kit';
 
+export const MenuWrapper = styled.div`
+  .menu-position {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0 6px 6px 0;
+  }
+  opacity: 0.2;
+`;
+
 export const Container = styled.div`
   width: 100%;
   height: 100%;
+
+  :hover {
+    ${MenuWrapper} {
+      opacity: 1;
+    }
+  }
 `;
 
 export const ImageWrapper = styled.img`
@@ -33,4 +49,9 @@ export const VideoWrapper = styled.div`
 
 export const TextItem = styled(Text)`
   padding-top: 5px;
+  :after {
+    content: '';
+    display: inline-block;
+    padding-right: 18px;
+  }
 `;

@@ -37,6 +37,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   noPadding?: boolean;
   headerPlaceholder?: boolean;
   titleHeight?: boolean;
+  headerClassName?: string;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -57,6 +58,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     titleHeight = false,
     componentSize,
     className,
+    headerClassName,
     ...restProps
   } = props;
 
@@ -94,6 +96,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 label={restProps.title}
                 transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                 isDanger={isDanger}
+                className={headerClassName}
               />
             )}
             {restProps.subtitle && (

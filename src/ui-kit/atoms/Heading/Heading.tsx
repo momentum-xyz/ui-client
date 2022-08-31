@@ -32,31 +32,31 @@ const Heading: FC<HeadingProps> = (props) => {
     switch (props.type) {
       case 'h1':
         return (
-          <styled.H1 data-testid="Heading-H1-test" className={cn(transform)}>
+          <styled.H1 data-testid="Heading-H1-test" className={cn(transform, className)}>
             {restProps.label}
           </styled.H1>
         );
       case 'h2':
         return (
-          <styled.H2 data-testid="Heading-H2-test" className={cn(transform)}>
+          <styled.H2 data-testid="Heading-H2-test" className={cn(transform, className)}>
             {restProps.label}
           </styled.H2>
         );
       case 'h3':
         return (
-          <styled.H3 data-testid="Heading-H3-test" className={cn(transform)}>
+          <styled.H3 data-testid="Heading-H3-test" className={cn(transform, className)}>
             {restProps.label}
           </styled.H3>
         );
       case 'h4':
         return (
-          <styled.H4 data-testid="Heading-H4-test" className={cn(transform)}>
+          <styled.H4 data-testid="Heading-H4-test" className={cn(transform, className)}>
             {restProps.label}
           </styled.H4>
         );
       case 'h5':
         return (
-          <styled.H5 data-testid="Heading-H5-test" className={cn(transform)}>
+          <styled.H5 data-testid="Heading-H5-test" className={cn(transform, className)}>
             {restProps.label}
           </styled.H5>
         );
@@ -64,10 +64,7 @@ const Heading: FC<HeadingProps> = (props) => {
   };
 
   return (
-    <styled.Heading
-      theme={restProps.theme}
-      className={cn(align, weight, isDanger && 'danger', className)}
-    >
+    <styled.Heading theme={restProps.theme} className={cn(align, weight, isDanger && 'danger')}>
       {content()}
     </styled.Heading>
   );
