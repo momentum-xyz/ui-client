@@ -22,7 +22,7 @@ const StartPage: FC = () => {
       <styled.Information>
         <styled.LogoContainer>
           <styled.Logo src={logo} />
-          <styled.Title label="World Builder" transform="uppercase" type="h1" />
+          <styled.Title label={t('titles.worldBuilder')} transform="uppercase" type="h1" />
         </styled.LogoContainer>
         <styled.Description text={t('messages.worldBuilderDescription')} size="xxl" />
       </styled.Information>

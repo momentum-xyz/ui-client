@@ -348,7 +348,8 @@ export const enGb = {
       broadcast: 'Broadcast',
       name: 'Name',
       template: 'Template',
-      generate: 'Generate'
+      generate: 'Generate',
+      worldBuilder: 'World Builder'
     },
     textMessage: {
       you: 'you',
