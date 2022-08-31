@@ -128,6 +128,7 @@ const Widgets: FC = () => {
             title={t('actions.react')}
             onClick={emojiStore.selectionDialog.toggle}
             size="normal-large"
+            isWhite={false}
           />
         </styled.MainLinks>
         <styled.Toolbars>

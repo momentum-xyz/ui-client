@@ -127,7 +127,6 @@ const AtomsPage: FC = () => {
           <IconSvg size="large" name="stop" />
           <IconSvg size="large" name="tiles" />
           <IconSvg size="large" name="trash" />
-          <IconSvg size="large" name="unity" />
           <IconSvg size="large" name="vibe" />
           <IconSvg size="large" name="wallet" />
           <IconSvg size="large" name="warning" />
