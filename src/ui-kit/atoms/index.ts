@@ -15,3 +15,4 @@ export * from './ProgressBar';
 export * from './ToolbarIconList';
 export * from './Separator';
 export * from './NavigationBar';
+export * from './Page';
