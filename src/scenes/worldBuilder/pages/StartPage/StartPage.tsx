@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import logo from 'static/images/world-builder-logo.png';
+import logo from 'static/images/momentum.svg';
 import {Steps} from 'ui-kit';
 
 import * as styled from './StartPage.styled';
@@ -22,6 +22,7 @@ const StartPage: FC = () => {
       <styled.Information>
         <styled.LogoContainer>
           <styled.Logo src={logo} />
+          <styled.Title label="World Builder" transform="uppercase" type="h1" />
         </styled.LogoContainer>
         <styled.Description text={t('messages.worldBuilderDescription')} size="xxl" />
       </styled.Information>

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import {Button, Text} from 'ui-kit';
+import {Button, Heading, Text} from 'ui-kit';
+import blueBloc from 'static/images/blue-bloc.png';
 
 export const Container = styled.div`
   display: flex;
@@ -10,16 +11,25 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  gap: 20px;
+  overflow-y: scroll;
+`;
+
+export const Title = styled(Heading)`
+  h1 {
+    font-size: 60px;
+  }
 `;
 
 export const Information = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
 `;
 
 export const Description = styled(Text)`
-  max-width: 951px;
+  max-width: 950px;
 `;
 
 export const StyledButton = styled(Button)`
@@ -27,18 +37,24 @@ export const StyledButton = styled(Button)`
 `;
 
 export const LogoContainer = styled.div`
-  overflow: hidden;
-  height: 440px;
+  background: url(${blueBloc});
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 730px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
 `;
 
 export const Logo = styled.img`
-  transform: translateY(-140px);
+  width: 525px;
 `;
 
 export const ButtonAndSteps = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 55px;
   align-items: center;
 `;
 
