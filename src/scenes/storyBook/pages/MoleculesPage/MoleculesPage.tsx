@@ -27,7 +27,8 @@ import {
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
   ToastMessage,
-  FileUploader
+  FileUploader,
+  Steps
 } from 'ui-kit';
 import walletConnect from 'static/images/walletConnect.svg';
 import polkadot from 'static/images/polkadot.svg';
@@ -393,6 +394,23 @@ const MoleculesPage: FC = () => {
           <ToolbarIcon title="Chat" icon="chat" onClick={() => {}} isWhite={false} />
           <ToolbarIcon title="StarOn" icon="starOn" onClick={() => {}} />
           <ToolbarIcon title="Chat" icon="chat" onClick={() => {}} />
+        </styled.Section>
+        <styled.Name>
+          <Heading label="Component «Steps»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <styled.CenteredItem>
+            <Steps steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
+          <styled.CenteredItem>
+            <Steps currentStep={0} steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
+          <styled.CenteredItem>
+            <Steps currentStep={1} steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
+          <styled.CenteredItem>
+            <Steps currentStep={4} steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
         </styled.Section>
       </styled.Components>
     </styled.Div>

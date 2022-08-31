@@ -19,3 +19,4 @@ export * from './TileMenu';
 export * from './RemoteOrLocalUser';
 export * from './NewDeviceDialog';
 export * from './FileUploader';
+export * from './Steps';
