@@ -41,7 +41,6 @@ const avatarSrc = 'https://picsum.photos/100';
 const MoleculesPage: FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
-  const [step, setStep] = useState<number>();
 
   const theme = useTheme();
 
@@ -400,25 +399,17 @@ const MoleculesPage: FC = () => {
           <Heading label="Component «Steps»" type="h2" align="left" />
         </styled.Name>
         <styled.Section>
-          <TabBar
-            tabs={[
-              {id: 'undefined', title: 'undefined', label: 'Step undefined'},
-              {id: '0', title: '1', label: 'Step 1'},
-              {id: '1', title: '2', label: 'Step 2'},
-              {id: '2', title: '3', label: 'Step 3'},
-              {id: '3', title: '4', label: 'Complete'}
-            ]}
-            selectedTab={{
-              id: step?.toString() ?? 'undefined',
-              title: step?.toString() ?? 'undefined',
-              label: `Step ${step?.toString() ?? 'undefined'}`
-            }}
-            onTabSelect={(tab) => {
-              setStep(tab.id === 'undefined' ? undefined : Number(tab.id));
-            }}
-          />
           <styled.CenteredItem>
-            <Steps currentStep={step} steps={['Step 1', 'Step 2', 'Step 3']} />
+            <Steps steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
+          <styled.CenteredItem>
+            <Steps currentStep={0} steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
+          <styled.CenteredItem>
+            <Steps currentStep={1} steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
+          <styled.CenteredItem>
+            <Steps currentStep={4} steps={['Step 1', 'Step 2', 'Step 3']} />
           </styled.CenteredItem>
         </styled.Section>
       </styled.Components>
