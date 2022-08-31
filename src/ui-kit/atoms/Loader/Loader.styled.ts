@@ -1,34 +1,41 @@
 import styled from 'styled-components';
 
-export const Container = styled.p`
-  font-size: 40px;
-  text-align: center;
-  color: ${(props) => props.theme.text};
+export const Container = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 
   @keyframes blink {
     0% {
       opacity: 0.2;
     }
     20% {
-      opacity: 1;
+      opacity: 0.8;
     }
     100% {
       opacity: 0.2;
     }
   }
+`;
 
-  span {
-    animation-name: blink;
-    animation-duration: 1.4s;
-    animation-iteration-count: infinite;
-    animation-fill-mode: both;
-  }
+export const Item = styled.div`
+  margin: 4px;
+  width: 6px;
+  height: 6px;
+  background: ${(props) => props.theme.accent};
+  border-radius: 50%;
 
-  span:nth-child(2) {
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+
+  &:nth-child(2) {
     animation-delay: 0.2s;
   }
 
-  span:nth-child(3) {
+  &:nth-child(3) {
     animation-delay: 0.4s;
   }
 `;
