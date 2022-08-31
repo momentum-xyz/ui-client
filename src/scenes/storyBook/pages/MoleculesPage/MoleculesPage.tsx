@@ -27,7 +27,8 @@ import {
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
   ToastMessage,
-  FileUploader
+  FileUploader,
+  Steps
 } from 'ui-kit';
 import walletConnect from 'static/images/walletConnect.svg';
 import polkadot from 'static/images/polkadot.svg';
@@ -40,6 +41,7 @@ const avatarSrc = 'https://picsum.photos/100';
 const MoleculesPage: FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
+  const [step, setStep] = useState<number>();
 
   const theme = useTheme();
 
@@ -393,6 +395,31 @@ const MoleculesPage: FC = () => {
           <ToolbarIcon title="Chat" icon="chat" onClick={() => {}} isWhite={false} />
           <ToolbarIcon title="StarOn" icon="starOn" onClick={() => {}} />
           <ToolbarIcon title="Chat" icon="chat" onClick={() => {}} />
+        </styled.Section>
+        <styled.Name>
+          <Heading label="Component «Steps»" type="h2" align="left" />
+        </styled.Name>
+        <styled.Section>
+          <TabBar
+            tabs={[
+              {id: 'undefined', title: 'undefined', label: 'Step undefined'},
+              {id: '0', title: '1', label: 'Step 1'},
+              {id: '1', title: '2', label: 'Step 2'},
+              {id: '2', title: '3', label: 'Step 3'},
+              {id: '3', title: '4', label: 'Complete'}
+            ]}
+            selectedTab={{
+              id: step?.toString() ?? 'undefined',
+              title: step?.toString() ?? 'undefined',
+              label: `Step ${step?.toString() ?? 'undefined'}`
+            }}
+            onTabSelect={(tab) => {
+              setStep(tab.id === 'undefined' ? undefined : Number(tab.id));
+            }}
+          />
+          <styled.CenteredItem>
+            <Steps currentStep={step} steps={['Step 1', 'Step 2', 'Step 3']} />
+          </styled.CenteredItem>
         </styled.Section>
       </styled.Components>
     </styled.Div>

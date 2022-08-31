@@ -12,13 +12,13 @@ import * as styled from './WorldBuilder.styled';
 const WorldBuilder: FC = () => {
   return (
     <styled.Container>
-      <styled.Background src={background} alt="background" />
+      <styled.Background src={background} />
       <styled.BackgroundFilter />
 
       <styled.PageContainer>
         <Switch>
           {createRoutesByConfig(WORLD_BUILDER_ROUTES)}
-          <Redirect from={ROUTES.worldBuilder.base} to={ROUTES.worldBuilder.start} />
+          <Redirect to={ROUTES.worldBuilder.start} />
         </Switch>
       </styled.PageContainer>
     </styled.Container>

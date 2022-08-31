@@ -10,7 +10,7 @@ interface PropsInterface {
 
 const Steps: FC<PropsInterface> = ({currentStep, steps}) => {
   return (
-    <styled.Container>
+    <styled.Container data-testid="Steps-test">
       {steps.map((step, index) => (
         <styled.StepContainerWrapper key={step}>
           <styled.StepContainer>

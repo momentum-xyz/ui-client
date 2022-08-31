@@ -66,3 +66,9 @@ export const TileImageUpload = styled.div`
   background: var(--black-100);
   position: relative;
 `;
+
+export const CenteredItem = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
