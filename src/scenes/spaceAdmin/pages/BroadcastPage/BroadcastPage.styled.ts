@@ -18,10 +18,7 @@ export const Body = styled.div`
   height: 100%;
   overflow: hidden;
   margin-top: 10px;
-
-  .SectionPanel-custom ~ .SectionPanel-custom {
-    margin-left: 10px;
-  }
+  gap: 10px;
 `;
 
 export const NoAccess = styled.div`

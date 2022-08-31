@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 export const Container = styled.div`
   z-index: var(--dialog-z-index);
@@ -9,14 +8,11 @@ export const Container = styled.div`
   margin: 10px;
   width: 522px;
   height: 60vh;
-  .SearchInput-custom {
-    background: ${rgba(0, 1, 1, 0.2)};
-  }
   position: relative;
 `;
 
 export const DropDownContainer = styled.div`
-  .Heading-custom {
+  .dropdown-label {
     margin-left: 10px;
     margin-bottom: 5px;
   }
@@ -57,16 +53,17 @@ export const HeadingItem = styled.div`
 export const TokenDetailGrid = styled.div`
   padding-top: 30px;
   width: 100%;
-  .Heading-custom {
+  .token-rule-title {
     color: var(--white);
     width: 30%;
     padding: 0 0 0 0;
   }
 
-  .Text-custom {
+  .token-rule-detail {
     color: ${(props) => props.theme.accent};
     width: 30%;
     margin-bottom: 1px;
+    white-space: nowrap;
   }
 `;
 
@@ -74,10 +71,6 @@ export const GridItem = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0 10px 20px;
-
-  .Text-custom {
-    white-space: nowrap;
-  }
 `;
 
 export const TextWrapper = styled.div`

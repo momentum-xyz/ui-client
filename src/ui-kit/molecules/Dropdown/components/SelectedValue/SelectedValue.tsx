@@ -26,7 +26,7 @@ const SelectedValue: FC<PropsInterface> = (props) => {
       {!!selected && valueType === 'wallet' && (
         <styled.WalletValue>
           <styled.WalletIcon>
-            {selected.icon && <IconSvg name={selected.icon} size="normal" isCustom />}
+            {selected.icon && <IconSvg name={selected.icon} size="normal" />}
             <span>{selected.label}</span>
           </styled.WalletIcon>
           <styled.Wallet>{formatWalletValue(selected.value)}</styled.Wallet>

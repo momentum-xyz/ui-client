@@ -32,7 +32,7 @@ export const Tab = styled.button`
   padding: 0px 8px;
   transition: background var(--tr-100-ei), color var(--tr-100-ei);
 
-  .IconSvg-custom {
+  .tab-bar-svg {
     margin-right: 5px;
   }
 
@@ -53,7 +53,7 @@ export const Tab = styled.button`
     color: var(--black);
     background: ${(props) => props.theme.accent};
 
-    .IconSvg-custom {
+    .tab-bar-svg {
       color: var(--black);
     }
   }

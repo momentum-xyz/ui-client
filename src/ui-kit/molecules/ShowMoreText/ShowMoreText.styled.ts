@@ -29,12 +29,12 @@ export const More = styled.div`
   gap: 10px;
   cursor: pointer;
 
-  .IconSvg-custom {
+  .more-text-transform {
     transform: rotate(180deg);
   }
 
   &.collapsed {
-    .IconSvg-custom {
+    .more-text-transform {
       transform: none;
     }
   }

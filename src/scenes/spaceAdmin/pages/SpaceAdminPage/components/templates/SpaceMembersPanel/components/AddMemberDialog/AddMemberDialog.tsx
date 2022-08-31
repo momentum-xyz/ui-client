@@ -120,7 +120,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
         type="h4"
         align="left"
         transform="uppercase"
-        isCustom
+        className="dropdown-header"
       />
       <Dropdown
         value={value ?? ''}

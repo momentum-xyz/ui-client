@@ -40,8 +40,8 @@ const EventList: FC<PropsInterface> = ({
         {isLoading ? (
           <Loader />
         ) : (
-          <PanelLayout isCustom>
-            <Text isCustom text={t('eventList.noGatherings')} size="l" />
+          <PanelLayout className="no-gatherings-panel">
+            <Text className="no-gatherings-text" text={t('eventList.noGatherings')} size="l" />
           </PanelLayout>
         )}
       </styled.Container>

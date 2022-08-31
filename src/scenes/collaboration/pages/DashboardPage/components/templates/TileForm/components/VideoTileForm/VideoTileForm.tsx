@@ -114,7 +114,6 @@ const VideoTileForm: FC<PropsInterface> = ({
                   onChange={onChange}
                   placeholder={YOUTUBE_URL_PLACEHOLDER}
                   isError={!!errors.youtube_url}
-                  isCustom
                 />
               )}
             />

@@ -87,7 +87,7 @@ const Validators: FC<PropsInterface> = ({
         <styled.Legend>
           <Tooltip darkBackground placement="bottom" label={t('staking.stakingTab.selectTooltip')}>
             <styled.LegendItem>
-              <IconSvg name="checkmark" size="medium" isCustom />
+              <IconSvg name="checkmark" size="medium" className="header-svg-item" />
               {t('staking.validators.legendSelect')}
             </styled.LegendItem>
           </Tooltip>
@@ -97,7 +97,7 @@ const Validators: FC<PropsInterface> = ({
             label={t('staking.stakingTab.favouriteTooltip')}
           >
             <styled.LegendItem>
-              <IconSvg name="starOn" size="medium" isCustom />
+              <IconSvg name="starOn" size="medium" className="header-svg-item" />
               {t('staking.validators.legendBookmark')}
             </styled.LegendItem>
           </Tooltip>
@@ -116,15 +116,15 @@ const Validators: FC<PropsInterface> = ({
             size={{width: '200px'}}
           >
             <styled.LegendItem className="tooltip">
-              <IconSvg name="question" size="medium" isCustom />
+              <IconSvg name="question" size="medium" className="header-svg-item" />
               {t(`staking.stakingTab.sortingInfo.label`)}
             </styled.LegendItem>
           </Tooltip>
           {/*<styled.LegendItem>*/}
-          {/*  <IconSvg name="info" size="medium" isCustom />  {t('staking.validators.legendInfo')}*/}
+          {/*  <IconSvg name="info" size="medium" />  {t('staking.validators.legendInfo')}*/}
           {/*</styled.LegendItem>*/}
           <styled.LegendItem>
-            <IconSvg name="rocket" size="medium" isCustom />
+            <IconSvg name="rocket" size="medium" className="header-svg-item" />
             {t('staking.validators.legendFlyTo')}
           </styled.LegendItem>
         </styled.Legend>

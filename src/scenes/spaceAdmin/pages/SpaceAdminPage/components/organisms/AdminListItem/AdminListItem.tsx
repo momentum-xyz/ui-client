@@ -19,7 +19,7 @@ const AdminListItem: FC<PropsInterface> = (props) => {
     <styled.Container>
       <styled.InfoContainer>
         <Text text={name} size="s" align="left" transform="uppercase" weight="bold" />
-        {type && <Text text={type} size="m" align="left" isCustom />}
+        {type && <Text text={type} size="m" align="left" className="admin-role-type" />}
       </styled.InfoContainer>
       <styled.Buttons>
         <SvgButton

@@ -150,18 +150,12 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
       <styled.ResponseMessageContainer>
         {successMessage && (
           <Message type="success">
-            <Text
-              text={t('staking.signedSuccess')}
-              isCustom={true}
-              weight="normal"
-              align="center"
-              size="xs"
-            />
+            <Text text={t('staking.signedSuccess')} weight="normal" align="center" size="xs" />
           </Message>
         )}
         {errorMessage && (
           <Message type="danger">
-            <Text text={errorMessage} isCustom={true} weight="normal" align="center" size="xs" />
+            <Text text={errorMessage} weight="normal" align="center" size="xs" />
           </Message>
         )}
       </styled.ResponseMessageContainer>

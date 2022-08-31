@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 export const Container = styled.div`
   z-index: var(--dialog-z-index);
@@ -9,9 +8,6 @@ export const Container = styled.div`
   margin: 10px;
   width: 522px;
   height: 60vh;
-  .SearchInput-custom {
-    background: ${rgba(0, 1, 1, 0.2)};
-  }
   position: relative;
 `;
 
@@ -32,7 +28,7 @@ export const TextItem = styled.div`
   padding-bottom: 20px;
 `;
 export const DropDownContainer = styled.div`
-  .Heading-custom {
+  .dropdown-label {
     margin-left: 10px;
     margin-bottom: 5px;
   }

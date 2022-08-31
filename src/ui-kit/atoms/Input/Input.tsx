@@ -14,10 +14,10 @@ interface PropsInterface
   placeholder?: string;
   selected?: boolean;
   disabled?: boolean;
-  isCustom?: boolean;
   onChange?: (text: string) => void;
   isError?: boolean;
   errorMessage?: string;
+  className?: string;
 }
 
 const Input: FC<PropsInterface> = (props) => {
@@ -28,16 +28,16 @@ const Input: FC<PropsInterface> = (props) => {
     name,
     selected = false,
     disabled = false,
-    isCustom = false,
     onChange,
     isError = false,
     errorMessage,
     required,
+    className,
     ...restProps
   } = props;
 
   return (
-    <styled.Container className={cn(isCustom && 'Input-custom')}>
+    <styled.Container className={className}>
       <styled.Label>
         {!!label && (
           <Heading
@@ -46,7 +46,7 @@ const Input: FC<PropsInterface> = (props) => {
             theme={theme}
             label={label}
             transform="uppercase"
-            isCustom
+            className="heading-label"
           />
         )}
         {required && <styled.RequiredIndicator>*</styled.RequiredIndicator>}

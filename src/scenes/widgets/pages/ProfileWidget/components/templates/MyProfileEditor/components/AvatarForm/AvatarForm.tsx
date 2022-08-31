@@ -41,7 +41,7 @@ const AvatarForm: FC = () => {
       showCloseButton
       onClose={profileStore.editAvatarDialog.close}
       approveInfo={{
-        title: t('editProfileWidget.update'),
+        title: t('editProfileWidget.upload'),
         onClick: handleSubmit
       }}
       hasBorder
@@ -60,7 +60,7 @@ const AvatarForm: FC = () => {
               fileType="image"
               dragActiveLabel={t('fileUploader.dragActiveLabel')}
               onFilesUpload={handleImage}
-              buttonIsCustom
+              className="upload-button"
             />
           </styled.AvatarImageUpload>
         </styled.FileUploaderItem>

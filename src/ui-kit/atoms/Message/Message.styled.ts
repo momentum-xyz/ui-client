@@ -30,8 +30,4 @@ export const NeutralMessage = styled(Message)`
 export const SuccessMessage = styled(Message)`
   background-color: ${(props) => props.theme.accent};
   border-color: rgba(255, 255, 255, 0.5);
-
-  .Text-custom {
-    color: ${(props) => props.theme.bg};
-  }
 `;

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 import {SearchInput} from 'ui-kit/index';
 
@@ -9,10 +8,6 @@ export const Container = styled.div`
   margin: 10px;
   width: 522px;
   height: 65vh;
-
-  .SearchInput-custom {
-    background: ${rgba(0, 1, 1, 0.2)};
-  }
 `;
 
 export const HeadingItem = styled.div`
@@ -27,13 +22,15 @@ export const Div = styled.div``;
 export const TokenDetailGrid = styled.div`
   padding-top: 30px;
   width: 100%;
-  .Heading-custom {
+
+  .token-rule-title {
     color: var(--white);
     width: 25%;
     padding: 0 0 0 0;
   }
 
-  .Text-custom {
+  .token-rule-detail {
+    white-space: nowrap;
     color: ${(props) => props.theme.accent};
     width: 30%;
     padding: 0 0 0 20px;
@@ -44,10 +41,6 @@ export const GridItem = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0 34px 20px;
-
-  .Text-custom {
-    white-space: nowrap;
-  }
 `;
 export const TextItem = styled.div``;
 

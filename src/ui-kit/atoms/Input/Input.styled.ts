@@ -61,13 +61,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 5px;
 
-  .Heading-custom {
+  .heading-label {
     margin-left: 10px;
-  }
-
-  .Heading-custom ~ ${InputContainer} {
-    margin-top: 5px;
   }
 `;
 
