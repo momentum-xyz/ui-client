@@ -316,7 +316,9 @@ export const enGb = {
         '(This will enable you to talk, screenshare, and transmit video)',
       pleaseTryAgainLater: 'Please try again later',
       videoLimitReached: 'Video limit reached',
-      stageFull: 'Stage full'
+      stageFull: 'Stage full',
+      worldBuilderDescription:
+        'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.'
     },
     titles: {
       alert: 'alert',
@@ -343,7 +345,11 @@ export const enGb = {
       prepareToGoOnStage: 'Prepare to go on stage',
       broadcastManage: 'Manage Broadcast',
       profile: 'Profile',
-      broadcast: 'Broadcast'
+      broadcast: 'Broadcast',
+      name: 'Name',
+      template: 'Template',
+      generate: 'Generate',
+      worldBuilder: 'World Builder'
     },
     textMessage: {
       you: 'you',
@@ -443,7 +449,9 @@ export const enGb = {
       close: 'Close',
       inviteToStage: 'Invite to stage',
       ready: 'Ready',
-      inviteThisPersonToTheStage: 'Invite this person to the stage?'
+      inviteThisPersonToTheStage: 'Invite this person to the stage?',
+      logIn: 'Log In',
+      getStarted: 'Get Started'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

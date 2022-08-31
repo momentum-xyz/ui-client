@@ -265,6 +265,7 @@ const AtomsPage: FC = () => {
           <Heading label="Component «Text»" type="h2" align="left" />
         </styled.Name>
         <styled.Section>
+          <Text text="xxxl text" size="xxxl" />
           <Text text="xxl text" size="xxl" />
           <Text text="xl text" size="xl" />
           <Text text="l text" size="l" />
