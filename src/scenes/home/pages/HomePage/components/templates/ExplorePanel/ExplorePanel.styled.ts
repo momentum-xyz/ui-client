@@ -7,6 +7,10 @@ export const WorldNameContainer = styled.div`
   gap: 5px;
 `;
 
+export const Loader = styled.div`
+  height: 160px;
+`;
+
 export const Body = styled.div`
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import {t} from 'i18next';
 
-import {api, GoogleDocumentInterface} from 'api';
+import {api, FetchIntegrationResponse, GoogleDocumentInterface} from 'api';
 import {IntegrationTypeEnum} from 'core/enums';
 import {Integration, RequestModel, ResetModel} from 'core/models';
 
@@ -14,12 +14,15 @@ const GoogleDriveStore = types.compose(
     })
     .actions((self) => ({
       fetchGoogleDocument: flow(function* (spaceId: string) {
-        const response = yield self.request.send(api.integrationRepository.fetchIntegration, {
-          integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
-          spaceId: spaceId
-        });
+        const response: FetchIntegrationResponse = yield self.request.send(
+          api.integrationRepository.fetchIntegration,
+          {
+            integrationType: IntegrationTypeEnum.GOOGLE_DRIVE,
+            spaceId: spaceId
+          }
+        );
 
-        if (response) {
+        if (response && self.request.isDone) {
           self.googleDocument = cast(response);
         }
       }),

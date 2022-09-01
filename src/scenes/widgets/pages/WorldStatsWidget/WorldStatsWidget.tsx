@@ -8,7 +8,7 @@ import {useStore} from 'shared/hooks';
 import {StatisticsBlockList} from './components';
 import * as styled from './WorldStatsWidget.styled';
 
-const DIALOG_OFFSET_RIGHT = 20;
+const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const WorldStatsWidget: FC = () => {
@@ -43,7 +43,11 @@ const WorldStatsWidget: FC = () => {
       showCloseButton
     >
       <styled.Container data-testid="WorldStatsWidget-test">
-        {isLoading && <Loader />}
+        {isLoading && (
+          <styled.Loader>
+            <Loader />
+          </styled.Loader>
+        )}
         {!!statistics.length && <StatisticsBlockList theme={theme} blockList={statistics} />}
       </styled.Container>
     </Dialog>

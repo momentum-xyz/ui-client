@@ -11,23 +11,19 @@ import {NavigationTabInterface} from 'core/interfaces';
 import {ADMIN_ROUTES} from './SpaceAdmin.routes';
 
 const SpaceAdmin: FC = () => {
-  const {spaceAdminStore, mainStore} = useStore();
+  const {spaceAdminStore} = useStore();
   const {spaceManagerStore} = spaceAdminStore;
-  const {unityStore} = mainStore;
 
-  const {spaceId} = useParams<{spaceId?: string}>();
+  const {spaceId} = useParams<{spaceId: string}>();
   const {path} = useRouteMatch();
 
   useEffect(() => {
-    if (spaceId) {
-      spaceManagerStore.resetModel();
-      spaceManagerStore.init(spaceId);
-    }
+    spaceManagerStore.init(spaceId);
 
     return () => {
       spaceManagerStore.resetModel();
     };
-  }, [spaceId, spaceManagerStore, unityStore]);
+  }, [spaceId, spaceManagerStore]);
 
   const tabs: NavigationTabInterface[] = [
     {

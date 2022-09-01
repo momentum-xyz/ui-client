@@ -11,7 +11,7 @@ import {Button, Dialog, Location, Text, ToastContent, TOAST_COMMON_OPTIONS} from
 
 import * as styled from './MagicLinkWidget.styled';
 
-const DIALOG_OFFSET_RIGHT = 20;
+const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {

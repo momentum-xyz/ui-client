@@ -25,8 +25,14 @@ export interface IntegrationInterface {
 }
 
 export interface IntegrationUserInterface {
-  spaceId: Buffer;
-  integrationTypeId: Buffer;
+  spaceId: {
+    type: string;
+    data: Buffer;
+  };
+  integrationTypeId: {
+    type: string;
+    data: Buffer;
+  };
   userId: {
     type: string;
     data: Buffer;

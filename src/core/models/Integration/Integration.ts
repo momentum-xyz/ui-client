@@ -10,7 +10,7 @@ const Integration = types.compose(
   types.model('Integration', {
     spaceId: UUIDModel,
     integrationTypeId: UUIDModel,
-    stageModeRequestType: types.maybeNull(types.enumeration(Object.values(StageModeRequestEnum))),
+    stageModeRequestType: types.maybe(types.enumeration(Object.values(StageModeRequestEnum))),
     modType: types.maybeNull(types.enumeration(Object.values(ModerationEnum))),
     spaceIntegrationUsers: types.maybe(types.array(IntegrationUser)),
     data: types.maybeNull(IntegrationData)
