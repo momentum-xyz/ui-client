@@ -34,6 +34,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         componentSize={{width: '100%'}}
         titleWidth="370px"
         headerType="h4"
+        headerClassName="header-eclipse"
       >
         <styled.Container>
           <styled.TextItem>
