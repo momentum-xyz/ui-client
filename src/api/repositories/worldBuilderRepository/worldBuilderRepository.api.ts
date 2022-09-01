@@ -11,9 +11,7 @@ import {
 export const validateName: RequestInterface<ValidationRequest, ValidationResponse> = (options) => {
   const {name, ...restOptions} = options;
 
-  restOptions.data = {name};
-
-  return request.get(worldBuilderEndpoints().validateName, restOptions);
+  return request.post(worldBuilderEndpoints().validateName, {name}, restOptions);
 };
 
 export const valiedateDomain: RequestInterface<ValidationRequest, ValidateDomainNameResponse> = (
@@ -23,5 +21,5 @@ export const valiedateDomain: RequestInterface<ValidationRequest, ValidateDomain
 
   restOptions.data = {name};
 
-  return request.get(worldBuilderEndpoints().valiedateDomain, restOptions);
+  return request.post(worldBuilderEndpoints().valiedateDomain, {name}, restOptions);
 };

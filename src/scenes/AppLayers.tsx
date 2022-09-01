@@ -9,12 +9,25 @@ import {Widgets} from 'scenes/widgets';
 
 import {Meeting} from './meeting';
 
-const AppLayers: FC = ({children}) => {
+interface PropsInterface {
+  withUnity?: boolean;
+  withMeeting?: boolean;
+  withWidgets?: boolean;
+  isWorldBuilder?: boolean;
+}
+
+const AppLayers: FC<PropsInterface> = ({
+  children,
+  withUnity = true,
+  withMeeting = true,
+  withWidgets = true,
+  isWorldBuilder = false
+}) => {
   const {unityStore} = useStore().mainStore;
 
   const theme = useTheme();
 
-  if (!unityStore.isTeleportReady) {
+  if (withUnity && !unityStore.isTeleportReady) {
     return <></>;
   }
 
@@ -23,9 +36,9 @@ const AppLayers: FC = ({children}) => {
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
       <main id="main">
         <div className="main-content">{children}</div>
-        <Meeting />
+        {withMeeting && <Meeting />}
       </main>
-      <Widgets />
+      {withWidgets && <Widgets isWorldBuilder={isWorldBuilder} />}
     </div>
   );
 };

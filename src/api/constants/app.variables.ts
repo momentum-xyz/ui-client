@@ -13,6 +13,7 @@ const BASE_URL =
 export const appVariables: AppConfigExtendedInterface = {
   APP_VERSION: 'v0.14.2',
   BACKEND_ENDPOINT_URL: '',
+  BACKEND_V4_ENDPOINT_URL: 'https://dev.odyssey.ninja/api/v4',
   UNITY_CLIENT_URL: '',
   UNITY_CLIENT_LOADER_URL: '',
   UNITY_CLIENT_DATA_URL: '',

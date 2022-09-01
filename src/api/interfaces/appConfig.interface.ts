@@ -4,6 +4,7 @@
 
 export interface AppConfigInterface {
   BACKEND_ENDPOINT_URL: string;
+  BACKEND_V4_ENDPOINT_URL: string;
   UNITY_CLIENT_URL: string;
   UNITY_CLIENT_LOADER_URL: string;
   UNITY_CLIENT_DATA_URL: string;

@@ -17,7 +17,7 @@ import {httpErrorCodes} from 'api/constants';
 
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
-import {CORE_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from './AppRoutes';
+import {CORE_ROUTES, PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, PUBLIC_ROUTES} from './AppRoutes';
 import {GlobalStyles} from './App.styled';
 
 import 'react-notifications/lib/notifications.css';
@@ -101,7 +101,13 @@ const App: FC = () => {
   if (!sessionStore.oidcConfig) {
     return (
       <Switch>
-        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
+        <Redirect
+          to={{
+            pathname:
+              pathname === ROUTES.worldBuilder.base ? ROUTES.worldBuilder.login : ROUTES.login,
+            state: {from: pathname}
+          }}
+        />
       </Switch>
     );
   }
@@ -123,12 +129,43 @@ const App: FC = () => {
   if (!sessionStore.isSessionExists) {
     return (
       <Switch>
-        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
+        <Redirect
+          to={{
+            pathname:
+              pathname === ROUTES.worldBuilder.base ? ROUTES.worldBuilder.login : ROUTES.login,
+            state: {from: pathname}
+          }}
+        />
       </Switch>
     );
   }
 
   // PRIVATE ROUTES
+  if (isTargetRoute(pathname as string, PRIVATE_ROUTES)) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
+          <AuthProvider {...sessionStore.oidcConfig}>
+            <AppAuth>
+              <GlobalStyles />
+              <AppLayers
+                withUnity={false}
+                withMeeting={false}
+                isWorldBuilder={pathname.includes(ROUTES.worldBuilder.base)}
+              >
+                <Switch>
+                  {createRoutesByConfig(PRIVATE_ROUTES)}
+                  <Redirect to={ROUTES.base} />
+                </Switch>
+              </AppLayers>
+            </AppAuth>
+          </AuthProvider>
+        </Web3ReactProvider>
+      </ThemeProvider>
+    );
+  }
+
+  // PRIVATE ROUTES WITH UNITY
   return (
     <ThemeProvider theme={themeStore.theme}>
       <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
@@ -138,7 +175,7 @@ const App: FC = () => {
             <UnityPage />
             <AppLayers>
               <Switch>
-                {createRoutesByConfig(PRIVATE_ROUTES)}
+                {createRoutesByConfig(PRIVATE_ROUTES_WITH_UNITY)}
                 <Redirect to={ROUTES.base} />
               </Switch>
             </AppLayers>

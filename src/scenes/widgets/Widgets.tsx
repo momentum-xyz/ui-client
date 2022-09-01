@@ -25,7 +25,11 @@ import {
 import * as styled from './Widgets.styled';
 import {AvatarForm} from './pages/ProfileWidget/components';
 
-const Widgets: FC = () => {
+interface PropsInterface {
+  isWorldBuilder?: boolean;
+}
+
+const Widgets: FC<PropsInterface> = ({isWorldBuilder = false}) => {
   const {sessionStore, mainStore, widgetStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
@@ -97,7 +101,9 @@ const Widgets: FC = () => {
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
-      {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
+      {profileMenuStore.profileMenuDialog.isOpen && (
+        <ProfileMenuWidget isWorldBuilder={isWorldBuilder} />
+      )}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
@@ -123,41 +129,45 @@ const Widgets: FC = () => {
       />
       <styled.Footer data-testid="Widgets-test">
         <styled.MainLinks>
-          <ToolbarIcon
-            icon="smiley-face"
-            title={t('actions.react')}
-            onClick={emojiStore.selectionDialog.toggle}
-            size="normal-large"
-            isWhite={false}
-          />
+          {!isWorldBuilder && (
+            <ToolbarIcon
+              icon="smiley-face"
+              title={t('actions.react')}
+              onClick={emojiStore.selectionDialog.toggle}
+              size="normal-large"
+              isWhite={false}
+            />
+          )}
         </styled.MainLinks>
         <styled.Toolbars>
-          <ToolbarIconList>
-            <ToolbarIcon
-              title={
-                agoraStore.isStageMode && !agoraStageModeStore.isOnStage
-                  ? t('messages.youAreInAudience')
-                  : userDevicesStore.cameraOff
-                  ? t('labels.cameraOn')
-                  : t('labels.cameraOff')
-              }
-              icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
-              onClick={toggleCameraOn}
-              disabled={!agoraStore.canToggleCamera}
-            />
-            <ToolbarIcon
-              title={
-                agoraStore.isStageMode && !agoraStageModeStore.isOnStage
-                  ? t('messages.youAreInAudience')
-                  : userDevicesStore.muted
-                  ? t('actions.unmute')
-                  : t('actions.mute')
-              }
-              icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
-              onClick={toggleMute}
-              disabled={!agoraStore.canToggleMicrophone}
-            />
-          </ToolbarIconList>
+          {!isWorldBuilder && (
+            <ToolbarIconList>
+              <ToolbarIcon
+                title={
+                  agoraStore.isStageMode && !agoraStageModeStore.isOnStage
+                    ? t('messages.youAreInAudience')
+                    : userDevicesStore.cameraOff
+                    ? t('labels.cameraOn')
+                    : t('labels.cameraOff')
+                }
+                icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
+                onClick={toggleCameraOn}
+                disabled={!agoraStore.canToggleCamera}
+              />
+              <ToolbarIcon
+                title={
+                  agoraStore.isStageMode && !agoraStageModeStore.isOnStage
+                    ? t('messages.youAreInAudience')
+                    : userDevicesStore.muted
+                    ? t('actions.unmute')
+                    : t('actions.mute')
+                }
+                icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
+                onClick={toggleMute}
+                disabled={!agoraStore.canToggleMicrophone}
+              />
+            </ToolbarIconList>
+          )}
           {/* Main toolbar icons */}
           <ToolbarIconList>
             {currentProfile?.profile && (
@@ -171,7 +181,7 @@ const Widgets: FC = () => {
                 />
               </ToolbarIcon>
             )}
-            {!isGuest && (
+            {!isGuest && !isWorldBuilder && (
               <ToolbarIcon
                 title={t('labels.staking')}
                 icon="wallet"
@@ -181,9 +191,8 @@ const Widgets: FC = () => {
                 }}
               />
             )}
-            {mainToolbarIcons.map((item) => (
-              <ToolbarIcon key={item.title} {...item} />
-            ))}
+            {!isWorldBuilder &&
+              mainToolbarIcons.map((item) => <ToolbarIcon key={item.title} {...item} />)}
           </ToolbarIconList>
         </styled.Toolbars>
       </styled.Footer>

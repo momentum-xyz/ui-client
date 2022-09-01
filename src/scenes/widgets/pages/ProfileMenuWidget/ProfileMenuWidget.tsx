@@ -5,7 +5,11 @@ import {useStore} from 'shared/hooks';
 
 import {Menu, Setting, TokenRuleReview, TokenRules} from './components';
 
-const ProfileMenuWidget: FC = () => {
+interface PropsInterface {
+  isWorldBuilder?: boolean;
+}
+
+const ProfileMenuWidget: FC<PropsInterface> = ({isWorldBuilder = false}) => {
   const {widgetStore} = useStore();
   const {profileMenuStore} = widgetStore;
   const {tokenRulesStore} = profileMenuStore;
@@ -17,7 +21,7 @@ const ProfileMenuWidget: FC = () => {
 
   return (
     <>
-      {profileMenuStore.menuDialog.isOpen && <Menu />}
+      {profileMenuStore.menuDialog.isOpen && <Menu isWorldBuilder={isWorldBuilder} />}
       {profileMenuStore.settingDialog.isOpen && <Setting />}
       {profileMenuStore.tokenRulesDialog.isOpen && <TokenRules />}
       {tokenRulesStore.tokenRuleReviewDialog.isOpen && (
