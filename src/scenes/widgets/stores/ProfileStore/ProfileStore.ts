@@ -17,6 +17,7 @@ import {
   UserSpaceListItemResponse,
   UploadAvatarResponse
 } from 'api';
+import {FieldErrorInterface} from 'api/interfaces';
 
 const ProfileStore = types.compose(
   ResetModel,
@@ -33,7 +34,9 @@ const ProfileStore = types.compose(
       userOwnedSpacesRequest: types.optional(RequestModel, {}),
       editAvatarDialog: types.optional(DialogModel, {}),
       userInitiativesRequest: types.optional(RequestModel, {}),
-      isEditingProfile: false
+      fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
+      isEditingProfile: false,
+      isSavingProfile: false
     })
     .volatile<{selectedImage: File | undefined}>(() => ({
       selectedImage: undefined
@@ -93,6 +96,7 @@ const ProfileStore = types.compose(
         return response;
       }),
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {
+        self.isSavingProfile = true;
         // 1. Avatar uploading.
         let avatarHash;
         if (profile.image) {
@@ -103,10 +107,9 @@ const ProfileStore = types.compose(
           );
           avatarHash = userResponse?.hash;
         }
-        self.selectedImage = undefined;
 
         // 2. Profile updating.
-        yield self.editProfileRequest.send(api.profileRepository.update, {
+        const response = yield self.editProfileRequest.send(api.profileRepository.update, {
           name,
           profile: {
             bio: profile.bio,
@@ -115,6 +118,18 @@ const ProfileStore = types.compose(
             avatarHash: profile.image ? avatarHash : profile.avatarHash
           }
         });
+        self.isSavingProfile = false;
+        if (self.editProfileRequest.isError && response?.errors) {
+          self.fieldErrors = cast(
+            Object.keys(response.errors).map((key) => ({
+              fieldName: key,
+              errorMessage: response.errors[key]
+            }))
+          );
+
+          return self.editProfileRequest.isDone;
+        }
+        self.selectedImage = undefined;
         self.isEditingProfile = false;
         return self.editProfileRequest.isDone;
       }),
@@ -126,14 +141,8 @@ const ProfileStore = types.compose(
       }
     }))
     .views((self) => ({
-      get fetchSpaceIsDone(): boolean {
-        return self.userInitiativesRequest.isDone;
-      },
-      get fetchUserIsDone(): boolean {
-        return self.profileFetchRequest.isDone;
-      },
-      get avatarIsLoading(): boolean {
-        return self.avatarRequest.isLoading;
+      get formErrors(): FieldErrorInterface[] {
+        return [...self.fieldErrors];
       }
     }))
 );

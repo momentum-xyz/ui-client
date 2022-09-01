@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div``;
+
+export const InnerContainer = styled.div`
   display: flex;
-  gap: 10px;
-  height: 18px;
+  gap: 6px;
   justify-content: center;
   align-items: center;
-  padding-right: 4px;
-  padding-left: 4px;
-  border-radius: 20px;
+  padding: 4px 5px;
+  border-radius: 6px;
+  background: var(--toolbar-bg);
 
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);

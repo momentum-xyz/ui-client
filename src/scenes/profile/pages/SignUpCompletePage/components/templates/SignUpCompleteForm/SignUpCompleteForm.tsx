@@ -54,7 +54,7 @@ const SignUpCompleteForm: FC<PropsInterface> = (props) => {
 
   useEffect(() => {
     fieldErrors.forEach(({fieldName, errorMessage}) => {
-      setError(fieldName as keyof SignUpFormInterface, {type: 'custom', message: errorMessage});
+      setError(fieldName as keyof SignUpFormInterface, {type: 'duplicate', message: errorMessage});
     });
   }, [fieldErrors, setError]);
 
@@ -106,7 +106,11 @@ const SignUpCompleteForm: FC<PropsInterface> = (props) => {
               theme={theme}
               value={value || ''}
               isError={!!errors.name}
-              errorMessage={t('errors.nameConstraints')}
+              errorMessage={
+                errors?.name?.type !== 'duplicate'
+                  ? t('errors.nameConstraints')
+                  : errors.name.message
+              }
               onChange={onChange}
             />
           )}

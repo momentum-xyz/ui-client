@@ -46,6 +46,8 @@ const TileDetail: FC<PropsInterface> = ({
       noPadding={!tile.content?.text}
       headerStyle="uppercase"
       headerClassName="header-eclipse"
+      headerIconName="questions"
+      showIcon={!!tile.content?.text}
     >
       <styled.Container>
         {imageUrl && <styled.ImageWrapper src={imageUrl} alt="" />}

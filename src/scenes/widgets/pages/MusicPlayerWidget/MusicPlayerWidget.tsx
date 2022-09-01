@@ -39,6 +39,7 @@ const MusicPlayerWidget: FC = () => {
       onClose={musicPlayerWidget.close}
       showCloseButton
       showBackground={false}
+      headerClassName="header-eclipse"
     >
       <styled.Div data-testid="MusicPlayerWidget-test">
         <PlayerController />
