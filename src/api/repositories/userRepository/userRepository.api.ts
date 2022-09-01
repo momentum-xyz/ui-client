@@ -17,8 +17,6 @@ import {
   OnlineUsersResponse,
   ProfileRequest,
   ProfileResponse,
-  UploadAvatarRequest,
-  UploadAvatarResponse,
   UserSearchRequest,
   UserSearchResponse
 } from './userRepository.api.types';
@@ -37,26 +35,6 @@ export const check: RequestInterface<CheckUserRequest, CheckUserResponse> = (opt
 
 export const fetchMe: RequestInterface<FetchUserRequest, FetchUserResponse> = (options) => {
   return request.get(userRepositoryEndpoints().me, options);
-};
-
-export const uploadAvatar: RequestInterface<UploadAvatarRequest, UploadAvatarResponse> = (
-  options
-) => {
-  const {avatar, headers, ...restOptions} = options;
-
-  const formData: FormData = new FormData();
-  formData.append('avatar', avatar);
-
-  const requestParams = {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      ...headers
-    },
-    ...restOptions
-  };
-
-  const URL = `${userRepositoryEndpoints().avatarUpload}`;
-  return request.post(URL, formData, requestParams);
 };
 
 export const inviteToSpace: RequestInterface<InviteToSpaceRequest, InviteToSpaceResponse> = (

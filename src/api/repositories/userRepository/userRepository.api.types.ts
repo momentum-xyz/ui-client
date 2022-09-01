@@ -61,16 +61,6 @@ export interface FetchUserRequest {}
 
 export interface FetchUserResponse extends UserInterface {}
 
-/** UPLOAD AVATAR **/
-
-export interface UploadAvatarRequest {
-  avatar: File;
-}
-
-export interface UploadAvatarResponse {
-  hash: string;
-}
-
 /** Invite user to space **/
 
 export interface InvitedUserInterface {
