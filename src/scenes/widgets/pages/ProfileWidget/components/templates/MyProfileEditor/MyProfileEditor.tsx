@@ -4,7 +4,7 @@ import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {UpdateUserRequest} from 'api';
+import {UpdateProfileInterface} from 'api';
 import {useStore} from 'shared/hooks';
 import {Avatar, Button, Heading, Input, Text, TextArea, ToastContent} from 'ui-kit';
 
@@ -18,14 +18,25 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   const {widgetStore, sessionStore, homeStore, mainStore} = useStore();
   const {onlineUsersList} = homeStore;
   const {profileStore} = widgetStore;
-  const {userProfile, editAvatarDialog} = profileStore;
+  const {userProfile, editAvatarDialog, formErrors} = profileStore;
   const {worldStore, unityStore} = mainStore;
   const {
     control,
     setValue,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: {errors, isDirty}
-  } = useForm<UpdateUserRequest>();
+  } = useForm<UpdateProfileInterface>();
+
+  useEffect(() => {
+    formErrors.forEach(({fieldName, errorMessage}) => {
+      setError(fieldName as keyof UpdateProfileInterface, {
+        type: 'duplicate',
+        message: errorMessage
+      });
+    });
+  }, [formErrors, setError]);
 
   useEffect(() => {
     setValue('profile.image', profileStore.selectedImage);
@@ -46,38 +57,39 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
     return () => {
       unityStore.changeKeyboardControl(true);
       profileStore.setImage(undefined);
+      profileStore.resetModel();
     };
-  }, []);
+  }, [profileStore, unityStore]);
 
-  const formSubmitHandler: SubmitHandler<UpdateUserRequest> = ({profile, name}) => {
-    profileStore.editProfile(name, profile).then((isSuccess) => {
-      if (isSuccess) {
-        profileStore.fetchProfile(userId).then(() => {
-          sessionStore.reload();
-          profileStore.fetchUserSpaceList(userId);
-          onlineUsersList.fetchUsers(worldStore.worldId);
-        });
-        toast.info(
-          <ToastContent
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveSuccess')}
-            isCloseButton
-          />
-        );
-        sessionStore.updateName(name);
-      } else {
-        toast.error(
-          <ToastContent
-            isDanger
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveFailure')}
-            isCloseButton
-          />
-        );
-      }
-    });
+  const formSubmitHandler: SubmitHandler<UpdateProfileInterface> = async ({profile, name}) => {
+    const response = await profileStore.editProfile(name, profile);
+    if (response) {
+      profileStore.fetchProfile(userId).then(() => {
+        sessionStore.reload();
+        profileStore.fetchUserSpaceList(userId);
+        onlineUsersList.fetchUsers(worldStore.worldId);
+      });
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('editProfileWidget.saveSuccess')}
+          isCloseButton
+        />
+      );
+      sessionStore.updateName(name);
+      clearErrors();
+    } else {
+      toast.error(
+        <ToastContent
+          isDanger
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('editProfileWidget.saveFailure')}
+          isCloseButton
+        />
+      );
+    }
   };
 
   return (
@@ -111,7 +123,11 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
               label={t('fields.name')}
               value={value}
               onChange={onChange}
-              errorMessage={t('errors.nameConstraints')}
+              errorMessage={
+                errors?.name?.type !== 'duplicate'
+                  ? t('errors.nameConstraints')
+                  : errors.name.message
+              }
               isError={!!errors.name}
               required
             />
@@ -144,11 +160,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
         onClick={(e) => {
           handleSubmit(formSubmitHandler)(e);
         }}
-        disabled={
-          (!isDirty && !profileStore.selectedImage) ||
-          onlineUsersList.isLoading ||
-          profileStore.avatarIsLoading
-        }
+        disabled={(!isDirty && !profileStore.selectedImage) || profileStore.isSavingProfile}
         wide
       />
     </styled.Container>

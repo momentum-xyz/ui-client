@@ -7,7 +7,7 @@ export const InnerContainer = styled.div`
   gap: 6px;
   justify-content: center;
   align-items: center;
-  padding: 5px 6px;
+  padding: 4px 5px;
   border-radius: 6px;
   background: var(--toolbar-bg);
 
