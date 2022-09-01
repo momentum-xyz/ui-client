@@ -23,9 +23,7 @@ const AgoraMeetingStore = types
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       localSoundLevel: 0,
 
-      tokenRequest: types.optional(RequestModel, {}),
-      muteRequest: types.optional(RequestModel, {}),
-      muteAllRequest: types.optional(RequestModel, {})
+      tokenRequest: types.optional(RequestModel, {})
     })
   )
   .volatile(() => ({
