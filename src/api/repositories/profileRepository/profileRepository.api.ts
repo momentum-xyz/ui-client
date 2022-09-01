@@ -3,7 +3,12 @@ import {Method} from 'axios';
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
-import {UpdateUserRequest, UpdateUserResponse} from './profileRepository.api.types';
+import {
+  UpdateUserRequest,
+  UpdateUserResponse,
+  UploadAvatarRequest,
+  UploadAvatarResponse
+} from './profileRepository.api.types';
 import {userRepositoryEndpoints} from './profileRepository.api.endpoints';
 
 export const update: RequestInterface<UpdateUserRequest, UpdateUserResponse> = (options) => {
@@ -15,4 +20,24 @@ export const update: RequestInterface<UpdateUserRequest, UpdateUserResponse> = (
   };
 
   return request(userRepositoryEndpoints().edit, requestParams);
+};
+
+export const uploadAvatar: RequestInterface<UploadAvatarRequest, UploadAvatarResponse> = (
+  options
+) => {
+  const {avatar, headers, ...restOptions} = options;
+
+  const formData: FormData = new FormData();
+  formData.append('avatar', avatar);
+
+  const requestParams = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      ...headers
+    },
+    ...restOptions
+  };
+
+  const URL = `${userRepositoryEndpoints().avatarUpload}`;
+  return request.post(URL, formData, requestParams);
 };

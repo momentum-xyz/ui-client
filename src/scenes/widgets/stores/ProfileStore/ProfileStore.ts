@@ -102,7 +102,7 @@ const ProfileStore = types.compose(
         if (profile.image) {
           const data = {avatar: profile.image};
           const userResponse: UploadAvatarResponse = yield self.avatarRequest.send(
-            api.userRepository.uploadAvatar,
+            api.profileRepository.uploadAvatar,
             data
           );
           avatarHash = userResponse?.hash;

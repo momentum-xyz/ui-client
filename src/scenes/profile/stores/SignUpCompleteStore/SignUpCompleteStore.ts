@@ -27,7 +27,7 @@ const SignUpCompleteStore = types.compose(
         if (form.avatar) {
           const data = {avatar: form.avatar};
           const userResponse: UploadAvatarResponse = yield self.avatarRequest.send(
-            api.userRepository.uploadAvatar,
+            api.profileRepository.uploadAvatar,
             data
           );
           avatarHash = userResponse?.hash;
