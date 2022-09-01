@@ -14,8 +14,8 @@ export interface PropsInterface {
   user: AgoraRemoteUserInterface;
   isModerator: boolean;
   maxVideoStreams: boolean;
-  onMuteUser: (spaceId: string, userId: string | number) => void;
-  onKickUser: (spaceId: string, userId: string | number) => void;
+  onMuteUser: (spaceId: string, userId: string) => void;
+  onKickUser: (spaceId: string, userId: string) => void;
   usersListUpdated: number;
 }
 
@@ -93,8 +93,8 @@ const MeetingUser: FC<PropsInterface> = (props) => {
       {isShown && (
         <UserMenu
           user={user}
-          onMuteUser={() => onMuteUser(spaceId, user.uid)}
-          onKickUser={() => onKickUser(spaceId, user.uid)}
+          onMuteUser={() => onMuteUser(spaceId, user.uid.toString())}
+          onKickUser={() => onKickUser(spaceId, user.uid.toString())}
           onClose={() => setIsShown(false)}
           coords={coords}
         />

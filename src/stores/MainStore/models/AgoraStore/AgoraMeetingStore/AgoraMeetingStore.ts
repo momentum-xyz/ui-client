@@ -23,9 +23,7 @@ const AgoraMeetingStore = types
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       localSoundLevel: 0,
 
-      tokenRequest: types.optional(RequestModel, {}),
-      muteRequest: types.optional(RequestModel, {}),
-      muteAllRequest: types.optional(RequestModel, {})
+      tokenRequest: types.optional(RequestModel, {})
     })
   )
   .volatile(() => ({
@@ -154,24 +152,6 @@ const AgoraMeetingStore = types
     cleanupListeners() {
       self.client.removeAllListeners();
     }
-  }))
-  // API Requests
-  .actions((self) => ({
-    muteRemoteUser: flow(function* (userId: string) {
-      if (!self.spaceId) {
-        return;
-      }
-
-      yield self.muteRequest.send(api.meetingRepository.muteUser, {
-        spaceId: self.spaceId,
-        userId
-      });
-    }),
-    muteAllRemoteUsers: flow(function* () {
-      yield self.muteAllRequest.send(api.meetingRepository.muteAllUsers, {
-        spaceId: self.spaceId
-      });
-    })
   }))
   // Common actions
   .actions((self) => ({
