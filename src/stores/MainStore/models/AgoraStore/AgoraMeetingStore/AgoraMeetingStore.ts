@@ -155,24 +155,6 @@ const AgoraMeetingStore = types
       self.client.removeAllListeners();
     }
   }))
-  // API Requests
-  .actions((self) => ({
-    muteRemoteUser: flow(function* (userId: string) {
-      if (!self.spaceId) {
-        return;
-      }
-
-      yield self.muteRequest.send(api.meetingRepository.muteUser, {
-        spaceId: self.spaceId,
-        userId
-      });
-    }),
-    muteAllRemoteUsers: flow(function* () {
-      yield self.muteAllRequest.send(api.meetingRepository.muteAllUsers, {
-        spaceId: self.spaceId
-      });
-    })
-  }))
   // Common actions
   .actions((self) => ({
     init(appId: string) {
