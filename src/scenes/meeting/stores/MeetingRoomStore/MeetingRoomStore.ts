@@ -7,15 +7,20 @@ const MeetingRoomStore = types
   .compose(
     ResetModel,
     types.model('MeetingRoomStore', {
-      request: types.optional(RequestModel, {})
+      kickRequest: types.optional(RequestModel, {}),
+      muteRequest: types.optional(RequestModel, {}),
+      muteAllRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    kickUser: flow(function* (spaceId?: string, userId?: string | number) {
-      yield self.request.send(api.meetingRepository.kickUser, {
-        spaceId,
-        userId
-      });
+    muteUser: flow(function* (spaceId: string, userId: string) {
+      yield self.muteRequest.send(api.meetingRepository.muteUser, {spaceId, userId});
+    }),
+    muteAllUsers: flow(function* (spaceId: string) {
+      yield self.muteAllRequest.send(api.meetingRepository.muteAllUsers, {spaceId});
+    }),
+    kickUser: flow(function* (spaceId: string, userId: string) {
+      yield self.kickRequest.send(api.meetingRepository.kickUser, {spaceId, userId});
     })
   }));
 
