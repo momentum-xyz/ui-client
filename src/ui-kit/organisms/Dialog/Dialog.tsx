@@ -42,6 +42,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   titleWidth?: string;
   headerType?: HeaderType;
   showOverflow?: boolean;
+  headerClassName?: string;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -69,7 +70,8 @@ const Dialog: FC<DialogPropsInterface> = ({
   keyboardControl = false,
   layoutSize,
   headerActions,
-  showOverflow
+  showOverflow,
+  headerClassName
 }) => {
   const ref = useRef(null);
   const {unityStore} = useStore().mainStore;
@@ -114,6 +116,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             hasBorder={hasBorder}
             headerType={headerType}
             showOverflow={showOverflow}
+            headerClassName={headerClassName}
           >
             {children}
             <styled.Buttons>

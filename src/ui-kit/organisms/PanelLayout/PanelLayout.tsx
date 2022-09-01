@@ -38,6 +38,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerPlaceholder?: boolean;
   titleHeight?: boolean;
   headerClassName?: string;
+  showIcon?: boolean;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -59,6 +60,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     componentSize,
     className,
     headerClassName,
+    showIcon = true,
     ...restProps
   } = props;
 
@@ -73,12 +75,12 @@ const PanelLayout: FC<PropsInterface> = (props) => {
       )}
       {...componentSize}
     >
-      {(headerPlaceholder || restProps.title || restProps.headerIconName) && (
+      {(headerPlaceholder || restProps.title || (restProps.headerIconName && showIcon)) && (
         <styled.Header
           className={cn(headerStyle, !restProps.title && 'noTitle', titleHeight && 'titleHeight')}
           theme={restProps.theme}
         >
-          {restProps.headerIconName && (
+          {restProps.headerIconName && showIcon && (
             <styled.HeaderIconItem>
               <IconSvg
                 theme={restProps.theme}
