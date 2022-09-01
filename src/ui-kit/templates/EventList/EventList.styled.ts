@@ -29,5 +29,6 @@ export const Container = styled.div`
     justify-content: center;
     display: flex;
     align-items: center;
+    padding-top: 15px;
   }
 `;
