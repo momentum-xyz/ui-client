@@ -9,14 +9,12 @@ import {SpacesList, SelectedSpace} from './components';
 import * as styled from './ExplorePanel.styled';
 
 const ExplorePanel: FC = () => {
-  const {
-    homeStore,
-    mainStore: {unityStore, worldStore}
-  } = useStore();
+  const {homeStore, mainStore} = useStore();
+  const {unityStore, worldStore} = mainStore;
   const {exploreStore} = homeStore;
-  const {t} = useTranslation();
-
   const {selectedSpace} = exploreStore;
+
+  const {t} = useTranslation();
 
   const handleSearchFocus = (isFocused: boolean) => {
     unityStore.changeKeyboardControl(!isFocused);
@@ -61,7 +59,13 @@ const ExplorePanel: FC = () => {
               transform="uppercase"
             />
           </styled.WorldNameContainer>
-          {exploreStore.searchRequest.isPending ? <Loader /> : <SpacesList />}
+          {exploreStore.searchRequest.isPending ? (
+            <styled.Loader>
+              <Loader />
+            </styled.Loader>
+          ) : (
+            <SpacesList />
+          )}
         </>
       )}
       {!exploreStore.isSearching &&
@@ -84,7 +88,9 @@ const ExplorePanel: FC = () => {
             )}
           </styled.Body>
         ) : (
-          <Loader />
+          <styled.Loader>
+            <Loader />
+          </styled.Loader>
         ))}
     </ExpandableLayout>
   );
