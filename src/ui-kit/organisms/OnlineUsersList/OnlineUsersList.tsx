@@ -10,7 +10,7 @@ import {OnlineUsersStoreInterface} from 'scenes/home/stores/HomeStore/models';
 import {UserItem} from './components';
 import * as styled from './OnlineUsersList.styled';
 
-export interface OnlineUsersListProps {
+export interface PropsInterface {
   invite?: boolean;
   worldId: string;
   onlineUsersStore?: OnlineUsersStoreInterface;
@@ -21,7 +21,7 @@ export interface OnlineUsersListProps {
   onlineUsersList: OnlineUsersListInterface;
 }
 
-const OnlineUsersList: React.FC<OnlineUsersListProps> = ({
+const OnlineUsersList: React.FC<PropsInterface> = ({
   invite = false,
   worldId,
   onlineUsersList,
