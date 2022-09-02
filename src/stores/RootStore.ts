@@ -78,6 +78,7 @@ const RootStore = types
       } catch (ex) {
         console.error('agoraStore.leave', ex);
       }
+
       try {
         yield self.collaborationStore.leave();
       } catch (ex) {
