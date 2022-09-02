@@ -75,9 +75,13 @@ const RootStore = types
 
       try {
         yield self.mainStore.agoraStore.leave();
+      } catch (ex) {
+        console.error('agoraStore.leave', ex);
+      }
+      try {
         yield self.collaborationStore.leave();
       } catch (ex) {
-        console.error(ex);
+        console.error('collaborationStore.leave', ex);
       }
 
       self.mainStore.unityStore.triggerInteractionMessage(
