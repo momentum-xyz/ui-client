@@ -21,11 +21,10 @@ export const Modal = styled.div`
   width: 100vw;
   height: 100vh;
   z-index: var(--dialog-z-index);
-  pointer-events: none;
+  pointer-events: all;
 
   &.showBackground {
     background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.3)};
-    pointer-events: all;
   }
 
   &.opacity {

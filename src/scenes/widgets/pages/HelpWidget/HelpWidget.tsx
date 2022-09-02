@@ -36,7 +36,6 @@ const HelpWidget: React.FC = () => {
       iconSize="medium-large"
       showCloseButton
       onClose={helpStore.helpDialog.close}
-      keyboardControl
     >
       <styled.Container data-testid="HelpWidget-test">
         <styled.TopContainer>

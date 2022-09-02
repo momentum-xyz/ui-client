@@ -17,8 +17,10 @@ const TokenRules: FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    return tokenRulesStore.resetModel;
-  }, []);
+    return () => {
+      tokenRulesStore.resetModel();
+    };
+  }, [tokenRulesStore]);
 
   useDebouncedEffect(
     () => {
@@ -47,7 +49,6 @@ const TokenRules: FC = () => {
       closeOnBackgroundClick={false}
       layoutSize={{height: '66vh'}}
       isBodyExtendingToEdges
-      keyboardControl
       showBackground={false}
       showCloseButton
     >
