@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+import {ExpandableLayout} from 'ui-kit';
+
+export const CustomExpandableLayout = styled(ExpandableLayout)`
+  pointer-events: all;
+`;
+
 export const WorldNameContainer = styled.div`
   display: flex;
   align-items: center;

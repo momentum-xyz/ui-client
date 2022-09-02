@@ -3,7 +3,7 @@ import React, {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-import {ExpandableLayout, Heading, Loader, SearchInput, useDebouncedEffect} from 'ui-kit';
+import {Heading, Loader, SearchInput, useDebouncedEffect} from 'ui-kit';
 
 import {SpacesList, SelectedSpace} from './components';
 import * as styled from './ExplorePanel.styled';
@@ -35,7 +35,7 @@ const ExplorePanel: FC = () => {
   );
 
   return (
-    <ExpandableLayout
+    <styled.CustomExpandableLayout
       iconName="explore"
       name={t('labels.explore')}
       isExpanded={exploreStore.isExpanded}
@@ -92,7 +92,7 @@ const ExplorePanel: FC = () => {
             <Loader />
           </styled.Loader>
         ))}
-    </ExpandableLayout>
+    </styled.CustomExpandableLayout>
   );
 };
 
