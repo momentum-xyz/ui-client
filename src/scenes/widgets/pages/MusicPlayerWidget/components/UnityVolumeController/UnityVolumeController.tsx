@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
@@ -9,10 +9,6 @@ import * as styled from './UnityVolumeController.styled';
 
 const UnityVolumeController: FC = () => {
   const {unityStore} = useStore().mainStore;
-
-  useEffect(() => {
-    unityStore.setInitialVolume();
-  }, []);
 
   return (
     <styled.Container data-testid="UnityVolumeController-test">

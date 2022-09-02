@@ -13,7 +13,7 @@ const UnityStore = types
     isInitialized: false,
     isTeleportReady: false,
     muted: false,
-    volume: types.optional(types.number, 0.1),
+    volume: types.optional(types.number, 0.75),
     fetchRequest: types.optional(RequestModel, {})
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
@@ -73,7 +73,7 @@ const UnityStore = types
       UnityService.resume();
     },
     setInitialVolume() {
-      UnityService.setSoundEffectVolume('0.1');
+      UnityService.setSoundEffectVolume(self.volume.toString());
     },
     setVolume(volume: number) {
       self.volume = volume;
