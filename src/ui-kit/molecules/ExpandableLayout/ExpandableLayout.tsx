@@ -7,7 +7,7 @@ import {ComponentSizeInterface} from 'ui-kit/interfaces';
 import * as styled from './ExpandableLayout.styled';
 
 interface ExpandableLayoutPropsInterface {
-  iconName: IconName;
+  iconName: IconNameType;
   name: string;
   fullHeight?: boolean;
   isExpanded: boolean;

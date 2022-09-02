@@ -14,7 +14,7 @@ import {PolkadotAddress, PolkadotUnlockingDuration, ResetModel} from 'core/model
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
 import {KeyringAddressType} from 'core/types';
-import {Payee, StakingTransactionType} from 'core/enums';
+import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
 const PolkadotProviderStore = types
@@ -37,7 +37,7 @@ const PolkadotProviderStore = types
       unbondAmount: '',
       bondedAddress: types.maybeNull(types.string),
       usedStashAddress: types.maybeNull(types.string),
-      transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionType))),
+      transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionEnum))),
       transactionFee: '',
       isLoading: false
     })
@@ -71,7 +71,7 @@ const PolkadotProviderStore = types
             ? `${account.meta?.name} - ${account.address}`
             : account.address,
           value: account.address,
-          icon: 'wallet' as IconName
+          icon: 'wallet' as IconNameType
         }));
       },
       get stashStakingBalance() {
@@ -153,7 +153,7 @@ const PolkadotProviderStore = types
         );
       },
       get hasCustomRewardValidation() {
-        return self.paymentDestination === Payee.Account
+        return self.paymentDestination === PayeeEnum.Account
           ? this.customRewardDestinationValidation
           : false;
       },
@@ -206,7 +206,7 @@ const PolkadotProviderStore = types
       },
       get transactionSigner() {
         const signerAddress =
-          self.transactionType === StakingTransactionType.Bond
+          self.transactionType === StakingTransactionEnum.Bond
             ? self.stashAccount?.address
             : this.bondedControllerAddress;
         return self.addresses.find((account) => account.address === signerAddress);
@@ -246,10 +246,10 @@ const PolkadotProviderStore = types
       const result = self.addresses.find((account) => account.address === address);
       self.controllerAccount = cast(cloneDeep(result));
     },
-    setTransactionType(transactionType: StakingTransactionType) {
+    setTransactionType(transactionType: StakingTransactionEnum) {
       self.transactionType = cast(transactionType);
     },
-    setPaymentDestination(payee: Payee) {
+    setPaymentDestination(payee: PayeeEnum) {
       self.paymentDestination = cast(payee);
     },
     setCustomPaymentDestination(address: string) {
@@ -265,7 +265,7 @@ const PolkadotProviderStore = types
       self.transactionFee = cast(amount);
     },
     derivePaymentDestination() {
-      return self.paymentDestination === Payee.Account
+      return self.paymentDestination === PayeeEnum.Account
         ? {
             Account: self.customPaymentDestination
           }

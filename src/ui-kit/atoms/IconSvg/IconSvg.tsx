@@ -12,7 +12,7 @@ const svgModules = requireContext('../../../ui-kit/assets/svg-sprite', false, /\
 const svgSpritePath: string = svgModules(svgModules.keys()[0]);
 
 interface IconSvgPropsInterface extends PropsWithThemeInterface {
-  name: IconName;
+  name: IconNameType;
   size?: SizeType;
   isWhite?: boolean;
   onClick?: () => void;

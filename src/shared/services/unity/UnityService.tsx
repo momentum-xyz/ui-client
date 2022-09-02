@@ -1,7 +1,7 @@
 import {UnityContext} from 'react-unity-webgl';
 
 import {getUnityPosition} from 'core/utils';
-import {UnityEventEmitter, UNITY_TARGET_TYPE} from 'core/constants';
+import {UnityEventEmitter, UnityTargetTypeEnum} from 'core/constants';
 import {UnityApiInterface} from 'core/interfaces';
 import {PosBusService} from 'shared/services';
 import {PosBusEventEnum} from 'core/enums';
@@ -152,14 +152,14 @@ export class UnityService {
     userUUID,
     userAvatarSrc,
     userName,
-    targetType = UNITY_TARGET_TYPE.USER
+    targetType = UnityTargetTypeEnum.USER
   }: {
     emojiId: string;
     emojiUrl: string;
     userUUID: string;
     userAvatarSrc: string;
     userName: string;
-    targetType?: UNITY_TARGET_TYPE;
+    targetType?: UnityTargetTypeEnum;
   }) {
     try {
       const topic = 'emoji';

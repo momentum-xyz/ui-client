@@ -1,17 +1,17 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {useTheme} from 'styled-components';
 
 import {Heading, Text} from 'ui-kit';
 
 import * as styled from './BalanceItem.styled';
 
-type BalanceItemProps = {
+interface PropsInterface {
   label: string;
   value: string;
   usd?: string;
-};
+}
 
-export const BalanceItem = ({label, value, usd = ''}: BalanceItemProps) => {
+export const BalanceItem: FC<PropsInterface> = ({label, value, usd = ''}) => {
   const theme = useTheme();
   return (
     <styled.BalanceItem theme={theme}>

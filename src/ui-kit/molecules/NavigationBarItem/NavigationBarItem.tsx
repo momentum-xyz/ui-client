@@ -7,7 +7,7 @@ import {IconSvg} from 'ui-kit/index';
 import * as styled from './NavigationBarItem.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  iconName: IconName;
+  iconName: IconNameType;
   path: string;
   exact?: boolean;
   replace?: boolean;

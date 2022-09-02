@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 
 import {Button, Heading, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks/useStore';
-import {StakingTransactionType} from 'core/enums';
+import {StakingTransactionEnum} from 'core/enums';
 
 import * as styled from './Unbond.styled';
 import {UnbondDetails, UnbondAmountSection, UnbondAmountValidation} from './components';
@@ -18,7 +18,7 @@ const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
   const {unbondAmountValidation, setTransactionType} =
     useStore().widgetStore.stakingStore.polkadotProviderStore;
   useEffect(() => {
-    setTransactionType(StakingTransactionType.Unbond);
+    setTransactionType(StakingTransactionEnum.Unbond);
   }, [setTransactionType]);
   return (
     <styled.Container data-testid="Unbond-test">

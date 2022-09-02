@@ -6,7 +6,7 @@ import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 import * as styled from './Location.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  icon: IconName;
+  icon: IconNameType;
   value?: string | null;
 }
 

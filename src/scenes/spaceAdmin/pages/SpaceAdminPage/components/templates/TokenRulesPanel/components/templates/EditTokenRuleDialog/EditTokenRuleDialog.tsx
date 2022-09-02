@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 
 import {Dialog, Dropdown, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {TokenRuleRoles} from 'core/enums';
+import {TokenRuleRolesEnum} from 'core/enums';
 
 import * as styled from './EditTokenRuleDialog.styled';
 
@@ -22,16 +22,18 @@ const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {space} = spaceManagerStore;
 
-  const {control, handleSubmit} = useForm<{role: TokenRuleRoles.MEMBER | TokenRuleRoles.ADMIN}>({
+  const {control, handleSubmit} = useForm<{
+    role: TokenRuleRolesEnum.MEMBER | TokenRuleRolesEnum.ADMIN;
+  }>({
     defaultValues: {
-      role: isAdmin ? TokenRuleRoles.MEMBER : TokenRuleRoles.ADMIN
+      role: isAdmin ? TokenRuleRolesEnum.MEMBER : TokenRuleRolesEnum.ADMIN
     }
   });
 
   const formSubmitHandler: SubmitHandler<{
-    role: TokenRuleRoles.MEMBER | TokenRuleRoles.ADMIN;
+    role: TokenRuleRolesEnum.MEMBER | TokenRuleRolesEnum.ADMIN;
   }> = async ({role}) => {
-    space?.editUser(tokenGroupUserId, role === TokenRuleRoles.ADMIN).then(() => {
+    space?.editUser(tokenGroupUserId, role === TokenRuleRolesEnum.ADMIN).then(() => {
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -54,11 +56,11 @@ const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
       options={[
         {
           label: t('tokenRules.memberLabel'),
-          value: TokenRuleRoles.MEMBER
+          value: TokenRuleRolesEnum.MEMBER
         },
         {
           label: t('tokenRules.adminLabel'),
-          value: TokenRuleRoles.ADMIN
+          value: TokenRuleRolesEnum.ADMIN
         }
       ]}
       onOptionSelect={(option) => {

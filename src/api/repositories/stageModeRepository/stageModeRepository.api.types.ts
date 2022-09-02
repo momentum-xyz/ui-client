@@ -1,4 +1,9 @@
-import {ParticipantStatus, ParticipantRole, ModerationEnum, StageModeRequestEnum} from 'core/enums';
+import {
+  ParticipantStatusEnum,
+  ParticipantRoleEnum,
+  ModerationEnum,
+  StageModeRequestEnum
+} from 'core/enums';
 
 import {SpaceIntegrationsStageModeResponse} from '../spaceIntegrationsRepository/spaceIntegrations.api.types';
 
@@ -18,8 +23,8 @@ interface ParticipantInterface {
   };
   is_owner: boolean;
   user_id: string;
-  status: ParticipantStatus;
-  role: ParticipantRole;
+  status: ParticipantStatusEnum;
+  role: ParticipantRoleEnum;
   channel?: ChannelInterface;
   created_at: Date;
   updated_at: Date;

@@ -4,6 +4,6 @@ export interface TokenRulesColumnHeaderInterface {
   key: TokenRuleListHeaderType;
   sortable: boolean;
   label?: string;
-  icon?: IconName;
+  icon?: IconNameType;
   isSmall?: boolean;
 }

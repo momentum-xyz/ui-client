@@ -10,7 +10,7 @@ import {
   SizeType,
   ComponentSizeInterface,
   HeaderType,
-  HeaderItem,
+  HeaderItemType,
   TextAlignType
 } from 'ui-kit';
 
@@ -19,7 +19,7 @@ import * as styled from './PanelLayout.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   title?: string;
   subtitle?: string;
-  headerIconName?: IconName;
+  headerIconName?: IconNameType;
   onClose?: () => void;
   headerStyle?: HeaderStyleType;
   isBodyExtendingToEdges?: boolean;
@@ -30,7 +30,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerActions?: ReactNode;
   captureAllPointerEvents?: boolean;
   componentSize?: ComponentSizeInterface;
-  headerItem?: HeaderItem;
+  headerItem?: HeaderItemType;
   titleWidth?: string;
   headerType?: HeaderType;
   className?: string;

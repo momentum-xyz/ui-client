@@ -7,7 +7,7 @@ import {DispatchError, EventRecord} from '@polkadot/types/interfaces';
 
 import {Message, PropsWithThemeInterface, Text, Button, Loader} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {StakingTransactionType} from 'core/enums';
+import {StakingTransactionEnum} from 'core/enums';
 
 import * as styled from './Authorization.styled';
 import {BondDetails, UnbondDetails, WithdrawUnbondDetails} from './components';
@@ -38,13 +38,13 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
   const [loader, setLoader] = useState<boolean>(false);
 
   const deriveExtrinsics = useCallback(async () => {
-    if (transactionType === StakingTransactionType.Bond) {
+    if (transactionType === StakingTransactionEnum.Bond) {
       return bondExtrinsics(selectedValidators);
-    } else if (transactionType === StakingTransactionType.Unbond) {
+    } else if (transactionType === StakingTransactionEnum.Unbond) {
       return unbondExtrinsics();
-    } else if (transactionType === StakingTransactionType.WithdrawUnbond) {
+    } else if (transactionType === StakingTransactionEnum.WithdrawUnbond) {
       return await withdrawUnbondedExtrinsics();
-    } else if (transactionType === StakingTransactionType.Chill) {
+    } else if (transactionType === StakingTransactionEnum.Chill) {
       return chillExtrinsics();
     } else {
       return null;
@@ -59,7 +59,7 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
 
   const goBackHandler = () => {
     clearTransactionState();
-    transactionType === StakingTransactionType.Bond ? goToValidators() : goToNominator();
+    transactionType === StakingTransactionEnum.Bond ? goToValidators() : goToNominator();
   };
 
   const formatErrorHandler = (failedExtrinsicData: EventRecord[]) => {
@@ -124,10 +124,10 @@ const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator
 
   return (
     <styled.Container theme={theme} data-testid="Authorization-test">
-      {transactionType === StakingTransactionType.Bond && <BondDetails />}
-      {transactionType === StakingTransactionType.Unbond && <UnbondDetails />}
-      {transactionType === StakingTransactionType.WithdrawUnbond && <WithdrawUnbondDetails />}
-      {transactionType === StakingTransactionType.Chill && <ChillDetails />}
+      {transactionType === StakingTransactionEnum.Bond && <BondDetails />}
+      {transactionType === StakingTransactionEnum.Unbond && <UnbondDetails />}
+      {transactionType === StakingTransactionEnum.WithdrawUnbond && <WithdrawUnbondDetails />}
+      {transactionType === StakingTransactionEnum.Chill && <ChillDetails />}
       <styled.AuthorizationRow>
         <Text text={t('staking.fee')} size="xs" weight="bold" transform="uppercase" />
         <styled.CurrentAddress>

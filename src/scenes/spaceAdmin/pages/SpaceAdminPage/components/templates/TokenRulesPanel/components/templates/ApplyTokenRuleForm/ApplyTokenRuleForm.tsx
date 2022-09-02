@@ -16,7 +16,7 @@ import {
   useDebouncedCallback
 } from 'ui-kit';
 import {TokenRuleItemModelInterface} from 'core/models';
-import {TokenRuleRoles} from 'core/enums';
+import {TokenRuleRolesEnum} from 'core/enums';
 
 import * as styled from './ApplyTokenRuleForm.styled';
 
@@ -43,7 +43,11 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
 
   const formSubmitHandler: SubmitHandler<ApplyTokenRuleInterface> = ({role, tokenGroupUserId}) => {
     if (space) {
-      applyTokenRuleStore.applyTokenRule(tokenGroupUserId, role === TokenRuleRoles.ADMIN, space.id);
+      applyTokenRuleStore.applyTokenRule(
+        tokenGroupUserId,
+        role === TokenRuleRolesEnum.ADMIN,
+        space.id
+      );
     }
   };
 
@@ -153,11 +157,11 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                     options={[
                       {
                         label: t('tokenRules.memberLabel'),
-                        value: TokenRuleRoles.MEMBER
+                        value: TokenRuleRolesEnum.MEMBER
                       },
                       {
                         label: t('tokenRules.adminLabel'),
-                        value: TokenRuleRoles.ADMIN
+                        value: TokenRuleRolesEnum.ADMIN
                       }
                     ]}
                     onOptionSelect={(option) => {

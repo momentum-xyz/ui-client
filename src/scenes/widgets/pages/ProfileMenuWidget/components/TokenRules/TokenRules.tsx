@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {Dialog, useDebouncedEffect} from 'ui-kit';
-import {TokenRuleListHeader} from 'core/enums';
+import {TokenRuleListHeaderEnum} from 'core/enums';
 import {TokenRuleItemModelInterface} from 'core/models';
 
 import * as styled from './TokenRules.styled';
@@ -61,10 +61,10 @@ const TokenRules: FC = () => {
         />
         <TokenRulesList
           columnHeaders={[
-            {key: TokenRuleListHeader.ICON, sortable: false, isSmall: true},
-            {key: TokenRuleListHeader.NAME, label: t('tokenRules.ruleName'), sortable: true},
-            {key: TokenRuleListHeader.STATUS, label: t('tokenRules.status'), sortable: true},
-            {key: TokenRuleListHeader.INFO, sortable: false, isSmall: true}
+            {key: TokenRuleListHeaderEnum.ICON, sortable: false, isSmall: true},
+            {key: TokenRuleListHeaderEnum.NAME, label: t('tokenRules.ruleName'), sortable: true},
+            {key: TokenRuleListHeaderEnum.STATUS, label: t('tokenRules.status'), sortable: true},
+            {key: TokenRuleListHeaderEnum.INFO, sortable: false, isSmall: true}
           ]}
           onEventClick={handleTokenRuleReview}
         />

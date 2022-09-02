@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
 
-import {SpaceType} from 'core/enums';
+import {SpaceTypeEnum} from 'core/enums';
 import {
   DialogModel,
   RequestModel,
@@ -12,7 +12,7 @@ import {
 import {
   api,
   UserProfileInterface,
-  NewSpaceDetails,
+  NewSpaceDetailsInterface,
   UserOwnedSpacesResponse,
   UserSpaceListItemResponse,
   UploadAvatarResponse
@@ -64,10 +64,10 @@ const ProfileStore = types.compose(
         return self.userInitiativesRequest.isDone;
       }),
       grabATable: flow(function* (worldId: string, userId: string) {
-        const space: NewSpaceDetails = {
+        const space: NewSpaceDetailsInterface = {
           name: t('labels.grabTable'),
           description: t('labels.grabTable'),
-          spaceType: SpaceType.GRAB_A_TABLE,
+          spaceType: SpaceTypeEnum.GRAB_A_TABLE,
           visibility: true,
           root: false,
           worldId
