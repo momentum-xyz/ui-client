@@ -457,7 +457,8 @@ export const enGb = {
       inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
       getStarted: 'Get Started',
-      selectTemplate: 'Select Template'
+      selectTemplate: 'Select Template',
+      generateWorld: 'Generate World'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',

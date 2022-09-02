@@ -2,6 +2,7 @@ import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
 import {WorldBuilderFooter, WorldBuilderHeader} from 'scenes/worldBuilder/components';
 import {useStore} from 'shared/hooks';
@@ -9,6 +10,7 @@ import {Text, Page} from 'ui-kit';
 import {slugify} from 'core/utils';
 import {appVariables} from 'api/constants';
 import background from 'static/images/worldBuilder.png';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './WorldBuilderNamePage.styled';
 
@@ -20,6 +22,7 @@ interface WorldNameFormInterface {
 const WorldBuilderNamePage: FC = () => {
   const {worldNameStore} = useStore().worldBuilderStore;
   const {t} = useTranslation();
+  const history = useHistory();
 
   const {
     control,
@@ -43,8 +46,7 @@ const WorldBuilderNamePage: FC = () => {
       await worldNameStore.validateSubdomainName(data.subdomainName);
 
     if (nameIsValid && subdomainIsValid) {
-      // TODO: redirect to next step
-      console.info('Redirecting to template...');
+      history.push(ROUTES.worldBuilder.template);
       return;
     }
 

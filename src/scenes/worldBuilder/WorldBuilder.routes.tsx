@@ -1,7 +1,7 @@
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-import {WorldBuilderStartPage, WorldBuilderNamePage} from './pages';
+import {WorldBuilderStartPage, WorldBuilderNamePage, WorldBuilderTemplatePage} from './pages';
 
 export const WORLD_BUILDER_ROUTES: RouteConfigInterface[] = [
   {
@@ -13,5 +13,10 @@ export const WORLD_BUILDER_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.worldBuilder.name,
     exact: true,
     main: () => <WorldBuilderNamePage />
+  },
+  {
+    path: ROUTES.worldBuilder.template,
+    exact: true,
+    main: () => <WorldBuilderTemplatePage />
   }
 ];
