@@ -31,9 +31,7 @@ const OptionList: FC<PropsInterface> = (props) => {
             onClick={() => onOptionSelect(option)}
             className={cn(SKIP_OUTSIDE_CLICK_CLASS, {selected: isSelected})}
           >
-            {option.icon && (
-              <IconSvg name={option.icon} size="normal" className="option-list-svg" />
-            )}{' '}
+            {option.icon && <styled.OptionListIcon name={option.icon} size="normal" />}{' '}
             {option.label}
           </styled.DropdownOption>
         );

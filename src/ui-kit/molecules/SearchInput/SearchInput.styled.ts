@@ -1,15 +1,20 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {Heading, IconSvg} from 'ui-kit';
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 6px;
-  .input-header {
-    margin-left: 10px;
-    margin-bottom: 5px;
-  }
 `;
+
+export const InputHeading = styled(Heading)`
+  margin-left: 10px;
+  margin-bottom: 5px;
+`;
+
+export const InputIcon = styled(IconSvg)``;
 
 export const InputContainer = styled.div`
   --input-height: 37px;
@@ -31,12 +36,12 @@ export const InputContainer = styled.div`
   &.focused,
   :hover {
     background: ${(props) => props.theme.text && rgba(props.theme.text, 0.05)};
-    .input-icon {
+    ${InputIcon} {
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
       stroke: currentColor;
     }
   }
-  .input-icon {
+  ${InputIcon} {
     color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
   }
 `;

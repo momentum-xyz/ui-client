@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {PanelLayout, Text} from 'ui-kit';
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,19 +18,19 @@ export const Container = styled.div`
     align-items: center;
     height: 100%;
   }
+`;
 
-  .no-gatherings-panel {
-    width: 515px;
-    height: 123px;
-    justify-content: center;
-    align-items: center;
-  }
+export const NoGatheringsPanel = styled(PanelLayout)`
+  width: 515px;
+  height: 123px;
+  justify-content: center;
+  align-items: center;
+`;
 
-  .no-gatherings-text {
-    height: 100%;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    padding-top: 15px;
-  }
+export const NoGatheringsText = styled(Text)`
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  padding-top: 15px;
 `;

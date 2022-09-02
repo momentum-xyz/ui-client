@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {DraggableProvided} from 'react-beautiful-dnd';
 
-import {PanelLayout, TileMenu} from 'ui-kit';
+import {PanelLayout} from 'ui-kit';
 import {TileInterface} from 'core/models';
 import {useStore} from 'shared/hooks';
 
@@ -47,6 +47,7 @@ const TileDetail: FC<PropsInterface> = ({
       headerStyle="uppercase"
       headerClassName="header-eclipse"
       headerIconName="questions"
+      headerHeadingAlign="left"
       showIcon={!!tile.content?.text}
     >
       <styled.Container>
@@ -59,12 +60,11 @@ const TileDetail: FC<PropsInterface> = ({
         )}
         {(isAdmin || isMember) && (
           <styled.MenuWrapper>
-            <TileMenu
+            <styled.PositionedTileMenu
               onEdit={handleEdit}
               onDelete={handleDelete}
               provided={provided}
               isDelete={tile.permanentType === null}
-              className="menu-position"
             />
           </styled.MenuWrapper>
         )}

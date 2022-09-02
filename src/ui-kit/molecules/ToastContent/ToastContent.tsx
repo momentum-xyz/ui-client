@@ -35,6 +35,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         titleWidth="370px"
         headerType="h4"
         headerClassName="header-eclipse"
+        headerHeadingAlign="left"
       >
         <styled.Container>
           <styled.TextItem>

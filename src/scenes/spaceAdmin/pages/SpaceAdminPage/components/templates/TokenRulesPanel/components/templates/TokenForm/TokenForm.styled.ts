@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {Heading} from 'ui-kit';
+
 export const Container = styled.div`
   z-index: var(--dialog-z-index);
   overflow: auto;
@@ -27,12 +29,14 @@ export const Div = styled.div`
 export const TextItem = styled.div`
   padding-bottom: 20px;
 `;
+
 export const DropDownContainer = styled.div`
-  .dropdown-label {
-    margin-left: 10px;
-    margin-bottom: 5px;
-  }
   padding-bottom: 20px;
+`;
+
+export const DropdownLabel = styled(Heading)`
+  margin-left: 10px;
+  margin-bottom: 5px;
 `;
 
 export const Item = styled.div`

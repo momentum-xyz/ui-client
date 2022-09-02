@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 import {Transition} from '@headlessui/react';
 
+import {SvgButton} from 'ui-kit/molecules';
+
+export const ActiveSvgButton = styled(SvgButton)``;
+
 export const StyledTransition = styled(Transition)`
   cursor: pointer;
 
@@ -21,7 +25,7 @@ export const StyledTransition = styled(Transition)`
   }
 
   .active {
-    .active-svg {
+    ${ActiveSvgButton} {
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)} !important;
     }
   }

@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import cn from 'classnames';
 
 import {useStore} from 'shared/hooks';
-import {Input, Dialog, FileUploader, TextArea} from 'ui-kit';
+import {Input, Dialog, TextArea} from 'ui-kit';
 import {DATE_TIME_FORMAT} from 'core/constants';
 import {EventFormInterface} from 'api';
 import {timeFromNow} from 'core/utils';
@@ -242,13 +242,13 @@ const EventForm: FC = () => {
                 }
               />
             )}
-            <FileUploader
+            <styled.CustomFileUploader
               label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}
               dragActiveLabel={t('fileUploader.dragActiveLabel')}
               fileType="image"
               theme={theme}
               onFilesUpload={handleImage}
-              className="upload-button"
+              buttonClassName="upload-button"
             />
           </styled.TileImageUpload>
         </styled.FileUploaderItem>

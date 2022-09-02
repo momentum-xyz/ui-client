@@ -38,7 +38,7 @@ const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, last
       <SvgButton iconName="rocket" size="medium" onClick={() => handleFlyToSpace()} />
       <styled.ClickableItem onClick={handleSelect}>
         <styled.SpaceNameText text={space.name} size="xs" align="left" isMultiline={false} />
-        <div className="flex-grow" />
+        <styled.Spacer />
         {space.id && favoriteStore.isFavorite(space.id) && (
           <styled.FavouriteIcon name="starOn" size="normal" />
         )}

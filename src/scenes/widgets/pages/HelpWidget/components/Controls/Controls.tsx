@@ -84,11 +84,7 @@ const Controls: React.FC = () => {
           <styled.ServerSpan>{t('helpSection.controls.spaceBarBoldText')}</styled.ServerSpan>
           {t('helpSection.controls.spaceBarTextSecond')}
         </styled.TextItem>
-        <IconSvg
-          name={t('helpSection.controls.spaceBarIconLabel')}
-          size="huge"
-          className="space-bar-dimension"
-        />
+        <styled.SpaceBarIcon name={t('helpSection.controls.spaceBarIconLabel')} size="huge" />
       </styled.ItemRowContainer>
     </Section>
   );

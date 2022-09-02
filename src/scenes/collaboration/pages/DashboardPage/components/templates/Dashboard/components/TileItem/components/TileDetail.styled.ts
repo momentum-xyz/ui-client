@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
-import {Text} from 'ui-kit';
+import {Text, TileMenu} from 'ui-kit';
 
 export const MenuWrapper = styled.div`
-  .menu-position {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    padding: 0 6px 6px 0;
-  }
-
   opacity: 0;
+`;
+
+export const PositionedTileMenu = styled(TileMenu)`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0 6px 6px 0;
 `;
 
 export const Container = styled.div`

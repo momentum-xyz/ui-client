@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {IconSvg} from '../IconSvg';
+
 // FIXME: using css-constants in the rgba
 const DANGER_COLOR = '#ffae63';
+
+export const Icon = styled(IconSvg)``;
 
 export const Button = styled.button`
   display: flex;
@@ -71,7 +75,7 @@ export const Button = styled.button`
     border-color: ${rgba(DANGER_COLOR, 0.9)};
     border-radius: 5px;
 
-    .svg-icon {
+    ${Icon} {
       color: ${(props) => props.theme.accent && rgba(DANGER_COLOR, 0.9)};
     }
 
@@ -103,7 +107,7 @@ export const Button = styled.button`
     border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
     border-radius: 5px;
 
-    .svg-icon {
+    ${Icon} {
       color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
     }
 
@@ -113,7 +117,7 @@ export const Button = styled.button`
       border-color: ${(props) => props.theme.accent};
       background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
 
-      .svg-icon {
+      ${Icon} {
         color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
       }
     }

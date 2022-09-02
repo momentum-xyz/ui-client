@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {IconSvg} from 'ui-kit';
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -46,10 +48,6 @@ export const LegendItem = styled.div`
   font-size: var(--font-size-xs);
   color: ${(props) => props.theme.text};
 
-  .header-svg-item {
-    margin-right: 5px;
-  }
-
   :not(&.tooltip) {
     z-index: 1;
   }
@@ -57,6 +55,10 @@ export const LegendItem = styled.div`
   &.tooltip {
     z-index: 2;
   }
+`;
+
+export const HeaderSvg = styled(IconSvg)`
+  margin-right: 5px;
 `;
 
 export const ButtonContainer = styled.div`

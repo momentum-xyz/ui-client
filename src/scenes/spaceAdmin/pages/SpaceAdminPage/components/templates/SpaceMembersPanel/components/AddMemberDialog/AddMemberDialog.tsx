@@ -4,15 +4,7 @@ import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
-import {
-  Dialog,
-  Dropdown,
-  Heading,
-  Text,
-  ToastContent,
-  TOAST_COMMON_OPTIONS,
-  SearchDropdown
-} from 'ui-kit';
+import {Dialog, Dropdown, Text, ToastContent, TOAST_COMMON_OPTIONS, SearchDropdown} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {useDebouncedCallback} from 'ui-kit/hooks';
 import {validateEmail} from 'core/utils';
@@ -115,12 +107,11 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
   // @ts-ignore: refactoring
   const renderRoleInput = ({field: {onChange, value}}) => (
     <styled.InputContainer>
-      <Heading
+      <styled.DropdownHeading
         label={t('spaceAdmin.users.addMemberDialog.dropdown.label')}
         type="h4"
         align="left"
         transform="uppercase"
-        className="dropdown-header"
       />
       <Dropdown
         value={value ?? ''}

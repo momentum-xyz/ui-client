@@ -4,7 +4,7 @@ import {t} from 'i18next';
 import debounce from 'lodash/debounce';
 
 import {TextAlignType, TextSize, TextTransform, TextWeightType} from 'ui-kit/types';
-import {Text, SvgButton} from 'ui-kit';
+import {Text} from 'ui-kit';
 import {useResize} from 'ui-kit/hooks';
 
 import * as styled from './ShowMoreText.styled';
@@ -65,7 +65,7 @@ const ShowMoreText: FC<PropsInterface> = ({text, textProps, lines = 4}) => {
             align="left"
             size="xs"
           />
-          <SvgButton iconName="chevron" size="small" className="more-text-transform" />
+          <styled.MoreTextButton iconName="chevron" size="small" />
         </styled.More>
       )}
     </styled.Container>

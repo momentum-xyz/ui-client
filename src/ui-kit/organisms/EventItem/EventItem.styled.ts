@@ -13,14 +13,14 @@ export const Buttons = styled.div`
     width: 100%;
   }
 
-  .event-buttons {
-    max-width: 200px;
-    min-width: 150px;
-  }
-
   :not(.base) {
     gap: 10px;
   }
+`;
+
+export const EventButton = styled(Button)`
+  max-width: 200px;
+  min-width: 150px;
 `;
 
 export const ImageContainer = styled.div`

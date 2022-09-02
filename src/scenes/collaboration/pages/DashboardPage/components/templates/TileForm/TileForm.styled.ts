@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 
+import {Heading} from 'ui-kit';
+
 export const DropDownContainer = styled.div`
-  .dropdown-header {
-    margin-left: 10px;
-    margin-bottom: 5px;
-  }
   width: 100%;
   z-index: calc(var(--dialog-z-index) + 1);
+`;
+
+export const DropdownHeading = styled(Heading)`
+  margin-left: 10px;
+  margin-bottom: 5px;
 `;
 
 export const Container = styled.div`

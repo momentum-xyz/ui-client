@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 
 import {PropsWithThemeInterface, TabBarTabInterface} from 'ui-kit/interfaces';
-import {IconSvg} from 'ui-kit/atoms';
 
 import * as styled from './TabBar.styled';
 
@@ -34,8 +33,8 @@ const TabBar: FC<PropsInterface> = ({tabs = [], selectedTab, onTabSelect, theme}
           title={tab.label}
           style={{flexBasis: 100 / tabs.length + '%'}}
         >
-          {tab.icon && <IconSvg name={tab.icon} size="medium" className="tab-bar-svg" />}{' '}
-          <span className="tab-label">{tab.label}</span>
+          {tab.icon && <styled.TabBarSvg name={tab.icon} size="medium" />}{' '}
+          <styled.TabSpan>{tab.label}</styled.TabSpan>
         </styled.Tab>
       ))}
     </styled.TabBar>

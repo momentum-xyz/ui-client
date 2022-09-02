@@ -57,11 +57,10 @@ const EventItem: FC<PropsInterface> = ({
     <styled.Buttons className="base">
       <styled.Buttons>
         {isWorldCalendar && event.spaceId && (
-          <Button
+          <styled.EventButton
             label={`${t('eventList.eventItem.flyToSpace')} ${
               event.spaceName && event.spaceName.slice(0, 12)
             } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
-            className="event-buttons"
             transform="capitalized"
             onClick={() => {
               onFlyToSpace?.(event?.spaceId ?? '');
@@ -71,7 +70,7 @@ const EventItem: FC<PropsInterface> = ({
           />
         )}
 
-        <Button
+        <styled.EventButton
           onClick={() => {
             if (event) {
               onMagicLinkOpen(event.id, event.spaceId ?? undefined);
@@ -80,14 +79,12 @@ const EventItem: FC<PropsInterface> = ({
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
           transform="capitalized"
-          className="event-buttons"
         />
         {!!event.web_link && (
-          <Button
+          <styled.EventButton
             label={t('eventList.eventItem.websiteLink')}
             icon="link"
             transform="capitalized"
-            className="event-buttons"
             onClick={() => {
               if (event?.web_link) {
                 onWeblinkClick(event.web_link);

@@ -15,6 +15,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   maxSize?: number;
   enableDragAndDrop?: boolean;
   className?: string;
+  buttonClassName?: string;
 }
 
 /*
@@ -32,7 +33,8 @@ const FileUploader: FC<PropsInterface> = ({
   fileType,
   maxSize = 3 * Math.pow(1024, 2),
   enableDragAndDrop = true,
-  className
+  className,
+  buttonClassName
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -59,13 +61,19 @@ const FileUploader: FC<PropsInterface> = ({
   const {onClick, ...restRootProps} = getRootProps();
 
   return (
-    <styled.Container data-testid="FileUploader-test">
+    <styled.Container data-testid="FileUploader-test" className={className}>
       {enableDragAndDrop && <styled.DropZone {...restRootProps} />}
       <input {...getInputProps()} data-testid="FileUploader-input-test" />
       {isDragActive ? (
         <styled.Text>{dragActiveLabel}</styled.Text>
       ) : (
-        <Button theme={theme} label={label} size="normal" onClick={onClick} className={className} />
+        <Button
+          theme={theme}
+          label={label}
+          size="normal"
+          onClick={onClick}
+          className={buttonClassName}
+        />
       )}
     </styled.Container>
   );

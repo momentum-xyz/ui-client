@@ -1,7 +1,7 @@
 import React, {FC, HTMLProps} from 'react';
 import cn from 'classnames';
 
-import {Heading, PropsWithThemeInterface} from 'ui-kit/index';
+import {PropsWithThemeInterface} from 'ui-kit';
 
 import * as styled from './TextArea.styled';
 
@@ -42,14 +42,7 @@ const TextArea: FC<PropsInterface> = ({
 }) => {
   return (
     <styled.Container className={className} data-testid="TextArea-test">
-      <Heading
-        className="heading-label"
-        type="h4"
-        align="left"
-        theme={theme}
-        label={name}
-        transform="uppercase"
-      />
+      <styled.Label type="h4" align="left" theme={theme} label={name} transform="uppercase" />
       <styled.TextAreaContainer
         theme={theme}
         className={cn(

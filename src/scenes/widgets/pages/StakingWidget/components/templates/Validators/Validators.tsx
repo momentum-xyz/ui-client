@@ -2,16 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {
-  Button,
-  IconSvg,
-  Loader,
-  PropsWithThemeInterface,
-  SearchInput,
-  Text,
-  Toggle,
-  Tooltip
-} from 'ui-kit';
+import {Button, Loader, PropsWithThemeInterface, SearchInput, Text, Toggle, Tooltip} from 'ui-kit';
 import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';
@@ -87,7 +78,7 @@ const Validators: FC<PropsInterface> = ({
         <styled.Legend>
           <Tooltip darkBackground placement="bottom" label={t('staking.stakingTab.selectTooltip')}>
             <styled.LegendItem>
-              <IconSvg name="checkmark" size="medium" className="header-svg-item" />
+              <styled.HeaderSvg name="checkmark" size="medium" />
               {t('staking.validators.legendSelect')}
             </styled.LegendItem>
           </Tooltip>
@@ -97,7 +88,7 @@ const Validators: FC<PropsInterface> = ({
             label={t('staking.stakingTab.favouriteTooltip')}
           >
             <styled.LegendItem>
-              <IconSvg name="starOn" size="medium" className="header-svg-item" />
+              <styled.HeaderSvg name="starOn" size="medium" />
               {t('staking.validators.legendBookmark')}
             </styled.LegendItem>
           </Tooltip>
@@ -116,7 +107,7 @@ const Validators: FC<PropsInterface> = ({
             size={{width: '200px'}}
           >
             <styled.LegendItem className="tooltip">
-              <IconSvg name="question" size="medium" className="header-svg-item" />
+              <styled.HeaderSvg name="question" size="medium" />
               {t(`staking.stakingTab.sortingInfo.label`)}
             </styled.LegendItem>
           </Tooltip>
@@ -124,7 +115,7 @@ const Validators: FC<PropsInterface> = ({
           {/*  <IconSvg name="info" size="medium" />  {t('staking.validators.legendInfo')}*/}
           {/*</styled.LegendItem>*/}
           <styled.LegendItem>
-            <IconSvg name="rocket" size="medium" className="header-svg-item" />
+            <styled.HeaderSvg name="rocket" size="medium" />
             {t('staking.validators.legendFlyTo')}
           </styled.LegendItem>
         </styled.Legend>

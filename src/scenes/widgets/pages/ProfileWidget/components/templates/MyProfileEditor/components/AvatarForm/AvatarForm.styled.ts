@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {FileUploader} from 'ui-kit';
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,6 +38,9 @@ export const AvatarImageUpload = styled.div`
   &.error {
     border: 1px solid ${(props) => props.theme.accentDanger};
   }
+`;
+
+export const CustomFileUploader = styled(FileUploader)`
   .upload-button {
     width: 110px;
     padding: 0;

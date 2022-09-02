@@ -45,3 +45,7 @@ export const FavouriteIcon = styled(IconSvg)`
   margin-right: 10px;
   flex-shrink: 0;
 `;
+
+export const Spacer = styled.div`
+  flex-grow: 1;
+`;

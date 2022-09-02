@@ -160,106 +160,94 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           </styled.HeadingItem>
           <styled.TokenDetailGrid>
             <styled.GridItem>
-              <Heading
+              <styled.TokenRuleTitle
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.tokenLabel')}
                 weight="bold"
-                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
-              <Text
+              <styled.TokenRuleDetail
                 text={currentTokenRule?.tokenType ? currentTokenRule.tokenType : ''}
                 size="s"
                 transform="uppercase"
-                className="token-rule-detail"
                 align="left"
               />
             </styled.GridItem>
             {tokenRuleReviewStore.isWorldList && (
               <styled.GridItem>
-                <Heading
+                <styled.TokenRuleTitle
                   type="h5"
                   label={t('tokenRules.tokenRuleReview.tokenIdLabel')}
                   weight="bold"
-                  className="token-rule-title"
                   align="right"
                   transform="uppercase"
                 />
-                <Text
+                <styled.TokenRuleDetail
                   text={currentTokenRule?.id}
                   size="s"
-                  className="token-rule-detail"
                   align="left"
                   transform="normal"
                 />
               </styled.GridItem>
             )}
             <styled.GridItem>
-              <Heading
+              <styled.TokenRuleTitle
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.networkLabel')}
                 weight="bold"
-                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
-              <Text
+              <styled.TokenRuleDetail
                 text={currentTokenRule?.network ? currentTokenRule.network : ''}
                 size="s"
-                className="token-rule-detail"
                 transform="capitalized"
                 align="left"
               />
             </styled.GridItem>
             <styled.GridItem>
-              <Heading
+              <styled.TokenRuleTitle
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.addressLabel')}
                 weight="bold"
-                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
-              <Text
+              <styled.TokenRuleDetail
                 text={currentTokenRule?.contractAddress ? currentTokenRule.contractAddress : ''}
                 size="s"
-                className="token-rule-detail"
                 transform="normal"
                 align="left"
               />
             </styled.GridItem>
             <styled.GridItem>
-              <Heading
+              <styled.TokenRuleTitle
                 type="h5"
                 label={t('tokenRules.tokenRuleReview.minimumAmountLabel')}
                 weight="bold"
-                className="token-rule-title"
                 align="right"
                 transform="uppercase"
               />
-              <Text
+              <styled.TokenRuleDetail
                 text={currentTokenRule?.minBalance ? currentTokenRule.minBalance.toString() : ''}
                 size="s"
-                className="token-rule-detail"
                 align="left"
                 transform="normal"
               />
             </styled.GridItem>
             {tokenRuleReviewStore.isWorldList && currentTokenRule?.spaceName && (
               <styled.GridItem>
-                <Heading
+                <styled.TokenRuleTitle
                   type="h5"
                   label={t('tokenRules.tokenRuleReview.spaceRequestedLabel')}
                   weight="bold"
-                  className="token-rule-title"
                   align="right"
                   transform="uppercase"
                 />
-                <Text
+                <styled.TokenRuleDetail
                   text={currentTokenRule.spaceName}
                   size="s"
-                  className="token-rule-detail"
                   align="left"
                   transform="normal"
                 />
@@ -267,18 +255,16 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
             )}
             {tokenRuleReviewStore.isWorldList && currentTokenRule?.userName && (
               <styled.GridItem>
-                <Heading
+                <styled.TokenRuleTitle
                   type="h5"
                   label={t('tokenRules.tokenRuleReview.userRequestedLabel')}
                   weight="bold"
-                  className="token-rule-title"
                   align="right"
                   transform="uppercase"
                 />
-                <Text
+                <styled.TokenRuleDetail
                   text={currentTokenRule.userName}
                   size="s"
-                  className="token-rule-detail"
                   align="left"
                   transform="normal"
                 />

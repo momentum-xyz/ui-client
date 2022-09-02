@@ -1,14 +1,16 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {PanelLayout} from 'ui-kit/organisms';
+
 export const Container = styled.div`
   width: 100%;
   height: 100%;
+`;
 
-  .section-panel {
-    width: 100%;
-    height: 100%;
-  }
+export const Section = styled(PanelLayout)`
+  width: 100%;
+  height: 100%;
 `;
 
 export const Header = styled.div`
