@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {Loader, PanelLayout, Text, EventItem} from 'ui-kit';
+import {Loader, EventItem} from 'ui-kit';
 import {EventItemModelInterface} from 'core/models';
 
 import * as styled from './EventList.styled';
@@ -40,9 +40,9 @@ const EventList: FC<PropsInterface> = ({
         {isLoading ? (
           <Loader />
         ) : (
-          <PanelLayout className="no-gatherings-panel">
-            <Text className="no-gatherings-text" text={t('eventList.noGatherings')} size="l" />
-          </PanelLayout>
+          <styled.NoGatheringsPanel>
+            <styled.NoGatheringsText text={t('eventList.noGatherings')} size="l" />
+          </styled.NoGatheringsPanel>
         )}
       </styled.Container>
     );

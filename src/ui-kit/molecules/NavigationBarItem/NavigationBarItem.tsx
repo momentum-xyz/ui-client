@@ -1,5 +1,4 @@
 import React, {FC, useState} from 'react';
-import {NavLink} from 'react-router-dom';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
@@ -37,18 +36,17 @@ const NavigationBarItem: FC<PropsInterface> = ({
       theme={theme}
       data-testid="NavigationBarItem-test"
     >
-      <NavLink
+      <styled.StyledNavLink
         exact={exact}
         to={{pathname: path, state}}
         key={path}
         activeClassName="active"
-        className="NavLink"
         replace={replace}
       >
         <div className={cn('icon', isActive && 'isActive', hovered && 'hovered')}>
           <IconSvg name={iconName} size="large" theme={theme} />
         </div>
-      </NavLink>
+      </styled.StyledNavLink>
     </styled.Item>
   );
 };

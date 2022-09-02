@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, Dropdown, Heading} from 'ui-kit';
+import {Dialog, Dropdown} from 'ui-kit';
 import {TileTypeEnum} from 'core/enums';
 import {TILES_DROPDOWN_OPTIONS} from 'core/constants';
 
@@ -46,12 +46,11 @@ const TileForm: FC = () => {
     >
       <styled.Container>
         <styled.DropDownContainer>
-          <Heading
+          <styled.DropdownHeading
             type="h4"
             align="left"
             label={t('dashboard.tileForm.tileType')}
             transform="uppercase"
-            className="dropdown-header"
           />
           <Dropdown
             placeholder={t('dashboard.tileForm.typePlaceholder')}

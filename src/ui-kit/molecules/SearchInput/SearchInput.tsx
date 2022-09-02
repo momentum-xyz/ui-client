@@ -2,7 +2,6 @@ import React, {FC, FormEvent, InputHTMLAttributes, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
-import {Heading, IconSvg} from 'ui-kit';
 
 import * as styled from './SearchInput.styled';
 
@@ -41,15 +40,7 @@ const SearchInput: FC<SearchPropsInterface> = ({
       data-testid="SearchInput-test"
       className={cn(isFocused && 'focused', `variant-${variantSize}`, className)}
     >
-      {label && (
-        <Heading
-          type="h4"
-          align="left"
-          label={label}
-          transform="uppercase"
-          className="input-header"
-        />
-      )}
+      {label && <styled.InputHeading type="h4" align="left" label={label} transform="uppercase" />}
       <styled.InputContainer
         className={cn(withBackground && 'withBackground', focused && 'noBorder')}
       >
@@ -67,7 +58,7 @@ const SearchInput: FC<SearchPropsInterface> = ({
           }}
           {...restProps}
         />
-        <IconSvg name="search" size="medium" className="input-icon" />
+        <styled.InputIcon name="search" size="medium" />
       </styled.InputContainer>
     </styled.Container>
   );

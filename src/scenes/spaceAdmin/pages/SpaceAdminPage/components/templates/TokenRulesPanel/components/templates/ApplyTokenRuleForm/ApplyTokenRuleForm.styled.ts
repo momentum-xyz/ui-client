@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {Heading, Text} from 'ui-kit';
+
 export const Container = styled.div`
   z-index: var(--dialog-z-index);
   overflow: auto;
@@ -12,16 +14,17 @@ export const Container = styled.div`
 `;
 
 export const DropDownContainer = styled.div`
-  .dropdown-label {
-    margin-left: 10px;
-    margin-bottom: 5px;
-  }
   padding-top: 120px;
   padding-right: 20px;
   width: 100%;
   position: absolute;
   padding-bottom: 20px;
   z-index: calc(var(--dialog-z-index) + 1);
+`;
+
+export const DropdownLabel = styled(Heading)`
+  margin-left: 10px;
+  margin-bottom: 5px;
 `;
 
 export const LoaderContainer = styled.div`
@@ -53,18 +56,19 @@ export const HeadingItem = styled.div`
 export const TokenDetailGrid = styled.div`
   padding-top: 30px;
   width: 100%;
-  .token-rule-title {
-    color: var(--white);
-    width: 30%;
-    padding: 0 0 0 0;
-  }
+`;
 
-  .token-rule-detail {
-    color: ${(props) => props.theme.accent};
-    width: 30%;
-    margin-bottom: 1px;
-    white-space: nowrap;
-  }
+export const TokenRuleTitle = styled(Heading)`
+  color: var(--white);
+  width: 30%;
+  padding: 0 0 0 0;
+`;
+
+export const TokenRuleDetail = styled(Text)`
+  color: ${(props) => props.theme.accent};
+  width: 30%;
+  margin-bottom: 1px;
+  white-space: nowrap;
 `;
 
 export const GridItem = styled.div`

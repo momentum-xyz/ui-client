@@ -35,11 +35,6 @@ export const ValidatorListTable = styled.table`
       &.clickable {
         cursor: pointer;
       }
-
-      .th-container {
-        display: flex;
-        align-items: center;
-      }
     }
   }
 
@@ -83,4 +78,9 @@ export const ValidatorListTable = styled.table`
       }
     }
   }
+`;
+
+export const THContainter = styled.div`
+  display: flex;
+  align-items: center;
 `;

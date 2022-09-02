@@ -2,7 +2,6 @@ import React, {FC, memo, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
-import {ReactComponent as AstronautIcon} from 'ui-kit/assets/images/common/astronaut.svg';
 import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './Avatar.styled';
@@ -39,7 +38,7 @@ const Avatar: FC<AvatarProps> = ({
           <styled.Image src={avatarSrc} alt={avatarSrc} onError={() => setError(true)} />
         </styled.ImageWrapper>
       ) : (
-        <AstronautIcon className="avatar" data-testid="Avatar-placeholder-test" />
+        <styled.AvatarPlaceholder data-testid="Avatar-placeholder-test" />
       )}
       <styled.IndicatorWrapper className={size}>
         <styled.Indicator className={`${status} ${size}`} />

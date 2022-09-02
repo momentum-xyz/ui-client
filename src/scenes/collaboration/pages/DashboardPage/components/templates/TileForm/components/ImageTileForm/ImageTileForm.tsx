@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
 import {appVariables} from 'api/constants';
-import {Button, FileUploader, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {Button, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
 
 import * as styled from './ImageTileForm.styled';
@@ -121,13 +121,13 @@ const ImageTileForm: FC<PropsInterface> = ({
                   }
                 />
               )}
-              <FileUploader
+              <styled.CustomFileUploader
                 label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}
                 dragActiveLabel={t('fileUploader.dragActiveLabel')}
                 fileType="image"
                 theme={theme}
                 onFilesUpload={handleImage}
-                className="upload-button"
+                buttonClassName="uplaod-button"
               />
             </styled.TileImageUpload>
           </styled.FileUploaderItem>

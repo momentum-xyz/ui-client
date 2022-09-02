@@ -113,12 +113,11 @@ const TokenForm: FC<PropsInterface> = () => {
               <Text text={t('tokenRules.tokenForm.description')} size="s" align="left" />
             </styled.TextItem>
             <styled.DropDownContainer>
-              <Heading
+              <styled.DropdownLabel
                 type="h4"
                 align="left"
                 label={t('tokenRules.tokenForm.tokenTypeLabel')}
                 transform="uppercase"
-                className="dropdown-label"
               />
               <Controller
                 name="tokenType"
@@ -172,12 +171,11 @@ const TokenForm: FC<PropsInterface> = () => {
               />
             </styled.Item>
             <styled.DropDownContainer>
-              <Heading
+              <styled.DropdownLabel
                 type="h4"
                 align="left"
                 label={t('tokenRules.tokenForm.networkLabel')}
                 transform="uppercase"
-                className="dropdown-label"
               />
               <Controller
                 name="network"

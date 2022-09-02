@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-import {ComponentSizeInterface} from 'ui-kit';
+import {ComponentSizeInterface, IconSvg} from 'ui-kit';
 
 export const DropdownOptionsList = styled.div<{size?: ComponentSizeInterface}>`
   --borderRadius: initial;
@@ -54,10 +54,6 @@ export const DropdownOption = styled.div`
   opacity: 0.7;
   cursor: pointer;
 
-  .option-list-svg {
-    margin-right: 5px;
-  }
-
   &:last-child {
     margin-bottom: 0px;
   }
@@ -70,4 +66,8 @@ export const DropdownOption = styled.div`
   &.selected {
     opacity: 1;
   }
+`;
+
+export const OptionListIcon = styled(IconSvg)`
+  margin-right: 5px;
 `;

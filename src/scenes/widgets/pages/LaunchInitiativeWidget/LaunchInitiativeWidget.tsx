@@ -4,7 +4,7 @@ import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, Input, Text, TextArea, ToastContent} from 'ui-kit';
+import {Dialog, Input, TextArea, ToastContent} from 'ui-kit';
 import {SpaceType} from 'core/enums';
 
 import * as styled from './LaunchInitiativeWidget.styled';
@@ -92,11 +92,10 @@ const LaunchInitiativeWidget: FC = () => {
       closeOnBackgroundClick
     >
       <styled.Body data-testid="LaunchInitiativeWidget-test">
-        <Text
+        <styled.InitiativeDescription
           text={t('launchInitiativeWidget.description')}
           size="s"
           align="left"
-          className="initiative-description"
         />
         <Controller
           control={control}

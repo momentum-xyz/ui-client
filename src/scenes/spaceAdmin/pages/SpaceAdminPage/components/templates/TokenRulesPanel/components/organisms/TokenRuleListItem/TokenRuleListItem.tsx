@@ -20,7 +20,7 @@ const TokenRuleListItem: FC<PropsInterface> = (props) => {
     <styled.Container>
       <styled.InfoContainer>
         <Text text={name} size="s" align="left" transform="uppercase" weight="bold" />
-        {type && <Text text={type} size="m" align="left" className="token-rule-type" />}
+        {type && <styled.TokenRuleTypeText text={type} size="m" align="left" />}
       </styled.InfoContainer>
       <styled.Buttons>
         <SvgButton

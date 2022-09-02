@@ -1,6 +1,8 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
+import {ReactComponent as AstronautIcon} from 'ui-kit/assets/images/common/astronaut.svg';
+
 export const Container = styled.div`
   border-radius: 100%;
   background: ${(props) => props.theme.bg};
@@ -50,11 +52,11 @@ export const Container = styled.div`
     width: 200px;
     height: 200px;
   }
+`;
 
-  .avatar {
-    width: 50%;
-    height: 50%;
-  }
+export const AvatarPlaceholder = styled(AstronautIcon)`
+  width: 50%;
+  height: 50%;
 `;
 
 export const Image = styled.img`

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {PanelLayout, Text} from 'ui-kit';
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,18 +27,18 @@ export const NoAccess = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
+`;
 
-  .no-access-panel {
-    width: 515px;
-    height: 123px;
-    justify-content: center;
-    align-items: center;
-  }
+export const NoAccessPanel = styled(PanelLayout)`
+  width: 515px;
+  height: 123px;
+  justify-content: center;
+  align-items: center;
+`;
 
-  .no-access-text {
-    height: 100%;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-  }
+export const NoAccessPanelText = styled(Text)`
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 `;

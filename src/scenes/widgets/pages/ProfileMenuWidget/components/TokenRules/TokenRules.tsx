@@ -3,7 +3,7 @@ import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, SearchInput, useDebouncedEffect} from 'ui-kit';
+import {Dialog, useDebouncedEffect} from 'ui-kit';
 import {TokenRuleListHeader} from 'core/enums';
 import {TokenRuleItemModelInterface} from 'core/models';
 
@@ -53,12 +53,11 @@ const TokenRules: FC = () => {
       showCloseButton
     >
       <styled.Body data-testid="TokenRules-test">
-        <SearchInput
+        <styled.TokenRuleSearch
           value={query}
           onChange={setQuery}
           placeholder={t('placeholders.search')}
           withBackground
-          className="token-rule-search"
         />
         <TokenRulesList
           columnHeaders={[

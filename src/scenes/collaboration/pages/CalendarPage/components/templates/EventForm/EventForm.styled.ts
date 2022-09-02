@@ -1,6 +1,8 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 
+import {FileUploader} from 'ui-kit';
+
 // TODO move colors and sizes to variables
 export const Container = styled.div`
   padding: 10px;
@@ -18,7 +20,9 @@ export const TileImageUpload = styled.div`
   background: var(--uploader-bg);
   backdrop-filter: blur(10px);
   gap: 10px;
+`;
 
+export const CustomFileUploader = styled(FileUploader)`
   .upload-button {
     width: 110px;
     padding: 0;

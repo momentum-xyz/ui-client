@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {SvgButton} from '../SvgButton';
+
 interface TextProps {
   lines: number;
 }
@@ -23,18 +25,18 @@ export const Text = styled.div`
   }
 `;
 
+export const MoreTextButton = styled(SvgButton)`
+  transform: rotate(180deg);
+`;
+
 export const More = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
 
-  .more-text-transform {
-    transform: rotate(180deg);
-  }
-
   &.collapsed {
-    .more-text-transform {
+    ${MoreTextButton} {
       transform: none;
     }
   }

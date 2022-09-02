@@ -2,7 +2,6 @@ import React, {FC, HTMLProps, memo} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
-import {Heading} from 'ui-kit';
 
 import * as styled from './Input.styled';
 
@@ -38,19 +37,12 @@ const Input: FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container className={className}>
-      <styled.Label>
+      <styled.LabelContainer>
         {!!label && (
-          <Heading
-            type="h4"
-            align="left"
-            theme={theme}
-            label={label}
-            transform="uppercase"
-            className="heading-label"
-          />
+          <styled.Label type="h4" align="left" theme={theme} label={label} transform="uppercase" />
         )}
         {required && <styled.RequiredIndicator>*</styled.RequiredIndicator>}
-      </styled.Label>
+      </styled.LabelContainer>
       <styled.InputContainer theme={theme} className={cn(selected && 'highlighted')}>
         <input
           data-testid="Input-test"

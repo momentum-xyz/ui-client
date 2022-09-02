@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {SearchInput} from 'ui-kit';
+
 export const Body = styled.div`
   overflow: hidden;
   display: flex;
@@ -8,10 +10,10 @@ export const Body = styled.div`
   gap: 40px;
   height: 100%;
   padding-bottom: 80px;
+`;
 
-  .token-rule-search {
-    margin: 0 20px;
-  }
+export const TokenRuleSearch = styled(SearchInput)`
+  margin: 0 20px;
 `;
 
 export const Container = styled.div`

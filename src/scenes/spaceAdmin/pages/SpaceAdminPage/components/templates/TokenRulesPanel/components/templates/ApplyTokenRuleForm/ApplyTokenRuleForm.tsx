@@ -137,12 +137,11 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
               onButtonClick={handleClickOnButton}
             />
             <styled.DropDownContainer>
-              <Heading
+              <styled.DropdownLabel
                 type="h4"
                 align="left"
                 label="member role"
                 transform="uppercase"
-                className="dropdown-label"
               />
               <Controller
                 name="role"
@@ -184,77 +183,69 @@ const ApplyTokenRuleForm: FC<PropsInterface> = () => {
                 </styled.HeadingItem>
                 <styled.TokenDetailGrid>
                   <styled.GridItem>
-                    <Heading
+                    <styled.TokenRuleTitle
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenTypeLabel')}
                       weight="bold"
-                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
                     <styled.TextWrapper>
-                      <Text
+                      <styled.TokenRuleDetail
                         text={selectedTokenRule?.tokenType ?? ''}
                         size="s"
                         transform="uppercase"
-                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>
                   </styled.GridItem>
                   <styled.GridItem>
-                    <Heading
+                    <styled.TokenRuleTitle
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenNetworkLabel')}
                       weight="bold"
-                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
                     <styled.TextWrapper>
-                      <Text
+                      <styled.TokenRuleDetail
                         text={selectedTokenRule?.network ?? ''}
                         size="s"
                         transform="uppercase"
-                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>
                   </styled.GridItem>
                   <styled.GridItem>
-                    <Heading
+                    <styled.TokenRuleTitle
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenAddressLabel')}
                       weight="bold"
-                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
                     <styled.TextWrapper>
-                      <Text
+                      <styled.TokenRuleDetail
                         text={selectedTokenRule?.contractAddress ?? ''}
                         size="s"
                         transform="uppercase"
-                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>
                   </styled.GridItem>
                   <styled.GridItem>
-                    <Heading
+                    <styled.TokenRuleTitle
                       type="h5"
                       label={t('tokenRules.applyTokenRuleForm.selectedTokenMinBalanceLabel')}
                       weight="bold"
-                      className="token-rule-title"
                       align="right"
                       transform="uppercase"
                     />
                     <styled.TextWrapper>
-                      <Text
+                      <styled.TokenRuleDetail
                         text={selectedTokenRule?.minBalance?.toString() ?? ''}
                         size="s"
                         transform="uppercase"
-                        className="token-rule-detail"
                         align="left"
                       />
                     </styled.TextWrapper>

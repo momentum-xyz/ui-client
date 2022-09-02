@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {Heading} from 'ui-kit';
+
 export const Body = styled.div`
   position: relative;
   display: flex;
@@ -17,10 +19,10 @@ export const InputContainer = styled.div`
   width: 100%;
   flex-direction: column;
   gap: 5px;
+`;
 
-  .dropdown-header {
-    padding-left: 10px;
-  }
+export const DropdownHeading = styled(Heading)`
+  padding-left: 10px;
 `;
 
 export const QueryContainer = styled.div`

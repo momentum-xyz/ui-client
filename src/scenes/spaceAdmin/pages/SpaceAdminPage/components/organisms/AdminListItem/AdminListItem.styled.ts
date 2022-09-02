@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {Text} from 'ui-kit';
+
 export const Container = styled.div`
   width: 100%;
   display: flex;
@@ -10,10 +12,10 @@ export const Container = styled.div`
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
 
-  .admin-role-type {
-    opacity: 0.5;
-  }
+export const AdminRoleTypeText = styled(Text)`
+  opacity: 0.5;
 `;
 
 export const Buttons = styled.div`

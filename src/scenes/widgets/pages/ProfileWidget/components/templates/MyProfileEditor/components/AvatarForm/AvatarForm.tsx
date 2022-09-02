@@ -3,7 +3,7 @@ import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
-import {Dialog, FileUploader} from 'ui-kit';
+import {Dialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './AvatarForm.styled';
@@ -54,13 +54,13 @@ const AvatarForm: FC = () => {
             {!image && !!userProfile?.profile?.avatarHash && (
               <styled.ImagePreview src={userProfile.avatarSrc} />
             )}
-            <FileUploader
+            <styled.CustomFileUploader
               theme={theme}
               label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}
               fileType="image"
               dragActiveLabel={t('fileUploader.dragActiveLabel')}
               onFilesUpload={handleImage}
-              className="upload-button"
+              buttonClassName="upload-button"
             />
           </styled.AvatarImageUpload>
         </styled.FileUploaderItem>

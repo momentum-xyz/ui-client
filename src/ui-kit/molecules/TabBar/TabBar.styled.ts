@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {IconSvg} from 'ui-kit';
+
 export const TabBar = styled.div`
   display: flex;
   width: 100%;
@@ -20,6 +22,16 @@ export const TabBar = styled.div`
   overflow: hidden;
 `;
 
+export const TabBarSvg = styled(IconSvg)`
+  margin-right: 5px;
+`;
+
+export const TabSpan = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 export const Tab = styled.button`
   height: 100%;
   display: flex;
@@ -32,16 +44,6 @@ export const Tab = styled.button`
   padding: 0px 8px;
   transition: background var(--tr-100-ei), color var(--tr-100-ei);
 
-  .tab-bar-svg {
-    margin-right: 5px;
-  }
-
-  .tab-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   &:last-child {
     border-right: none;
   }
@@ -53,11 +55,12 @@ export const Tab = styled.button`
     color: var(--black);
     background: ${(props) => props.theme.accent};
 
-    .tab-bar-svg {
+    ${TabBarSvg} {
       color: var(--black);
     }
   }
 `;
+
 export const DropdownIcon = styled.div`
   position: absolute;
   z-index: 3;

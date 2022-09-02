@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {Heading} from 'ui-kit/atoms';
+
 export const TextAreaContainer = styled.div`
   --input-padding: 5px 10px;
   --input-radius: 6px;
@@ -88,10 +90,10 @@ export const TextAreaContainer = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+`;
 
-  .heading-label {
-    margin-left: 10px;
-  }
+export const Label = styled(Heading)`
+  margin-left: 10px;
 `;
 
 export const ErrorMessage = styled.div`

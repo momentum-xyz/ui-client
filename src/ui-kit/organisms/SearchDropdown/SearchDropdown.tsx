@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useRef} from 'react';
 import cn from 'classnames';
 
-import {Heading, IconSvg, Text, SearchInput, useClickOutside} from 'ui-kit';
+import {IconSvg, Text, SearchInput, useClickOutside} from 'ui-kit';
 
 import * as styled from './SearchDropdown.styled';
 
@@ -50,12 +50,11 @@ const SearchDropdown: FC<PropsInterface> = ({
 
   return (
     <styled.StyledSearchContainer data-testid="SearchDropdown-test">
-      <Heading
+      <styled.SearchInputLabel
         type="h4"
         align="left"
         label={searchInputLabel}
         transform="uppercase"
-        className="search-input-label"
       />
       <styled.StyledSearchDiv className={cn(isFocused && 'focus')}>
         <SearchInput

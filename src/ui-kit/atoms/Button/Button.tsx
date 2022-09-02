@@ -3,7 +3,6 @@ import cn from 'classnames';
 
 import {SizeType, TextTransform, VariantType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
-import {IconSvg} from 'ui-kit';
 
 import * as styled from './Button.styled';
 
@@ -57,9 +56,7 @@ const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
       )}
       type={submit ? 'submit' : 'button'}
     >
-      {icon && (
-        <IconSvg name={icon} size="normal" className="svg-icon" isDanger={variant === 'danger'} />
-      )}
+      {icon && <styled.Icon name={icon} size="normal" isDanger={variant === 'danger'} />}
       {label}
     </styled.Button>
   );

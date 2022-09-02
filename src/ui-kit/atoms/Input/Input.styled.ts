@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import {Heading} from 'ui-kit/atoms';
+
 export const InputContainer = styled.div`
   --input-padding: 0 10px;
   --input-radius: 6px;
@@ -62,10 +64,10 @@ export const Container = styled.div`
   flex-direction: column;
   width: 100%;
   margin-top: 5px;
+`;
 
-  .heading-label {
-    margin-left: 10px;
-  }
+export const Label = styled(Heading)`
+  margin-left: 10px;
 `;
 
 export const ErrorMessage = styled.div`
@@ -85,7 +87,7 @@ export const RequiredIndicator = styled.div`
   color: ${(props) => props.theme.accentDanger};
 `;
 
-export const Label = styled.div`
+export const LabelContainer = styled.div`
   display: flex;
   gap: 1px;
   padding-bottom: 5px;

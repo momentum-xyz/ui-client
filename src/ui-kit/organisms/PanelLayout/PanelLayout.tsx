@@ -10,7 +10,8 @@ import {
   SizeType,
   ComponentSizeInterface,
   HeaderType,
-  HeaderItem
+  HeaderItem,
+  TextAlignType
 } from 'ui-kit';
 
 import * as styled from './PanelLayout.styled';
@@ -39,6 +40,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   titleHeight?: boolean;
   headerClassName?: string;
   showIcon?: boolean;
+  headerHeadingAlign?: TextAlignType;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -61,6 +63,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     className,
     headerClassName,
     showIcon = true,
+    headerHeadingAlign,
     ...restProps
   } = props;
 
@@ -99,6 +102,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                 isDanger={isDanger}
                 className={headerClassName}
+                align={headerHeadingAlign}
               />
             )}
             {restProps.subtitle && (
@@ -110,6 +114,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                   label="/"
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   isDanger={isDanger}
+                  align={headerHeadingAlign}
                 />
                 <styled.Whitespace />
                 <Heading
@@ -119,6 +124,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                   transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                   weight="normal"
                   isDanger={isDanger}
+                  align={headerHeadingAlign}
                 />
               </>
             )}

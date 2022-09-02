@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 
-import {PanelLayout, Text, PageTopBar} from 'ui-kit';
+import {PageTopBar} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
@@ -53,9 +53,9 @@ const SpaceAdminPage: FC = () => {
           </>
         ) : (
           <styled.NoAccess>
-            <PanelLayout className="no-access-panel">
-              <Text className="no-access-text" text={t('spaceAdmin.noAccess')} size="l" />
-            </PanelLayout>
+            <styled.NoAccessPanel>
+              <styled.NoAccessPanelText text={t('spaceAdmin.noAccess')} size="l" />
+            </styled.NoAccessPanel>
           </styled.NoAccess>
         )}
       </styled.Body>
