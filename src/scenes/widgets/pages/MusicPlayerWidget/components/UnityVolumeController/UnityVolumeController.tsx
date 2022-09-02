@@ -23,7 +23,9 @@ const UnityVolumeController: FC = () => {
             max="1"
             step=".01"
             value={unityStore.volume}
-            onChange={unityStore.volumeChange}
+            onChange={(e) => {
+              unityStore.volumeChange(parseFloat(e.target.value));
+            }}
           />
         </styled.VolumeBarContainer>
         <SvgButton iconName="player-unmute" size="medium" onClick={unityStore.unmute} />
