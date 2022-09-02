@@ -1,6 +1,7 @@
-import React, {FC, HTMLProps, useRef, useEffect} from 'react';
+import React, {FC, HTMLProps, useRef} from 'react';
 import cn from 'classnames';
 
+import {useClickOutside} from 'ui-kit/hooks';
 import {ButtonInfoInterface, OffsetInterface, PropsWithThemeInterface} from 'ui-kit/interfaces';
 import {
   PanelLayout,
@@ -13,8 +14,6 @@ import {
   HeaderType,
   HeaderItem
 } from 'ui-kit';
-import {useClickOutside} from 'ui-kit/hooks';
-import {useStore} from 'shared/hooks';
 
 import * as styled from './Dialog.styled';
 
@@ -35,7 +34,6 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   isBodyExtendingToEdges?: boolean;
   showBackground?: boolean;
   layoutSize?: ComponentSizeInterface;
-  keyboardControl?: boolean;
   headerActions?: React.ReactNode;
   hasBorder?: boolean;
   headerItem?: HeaderItem;
@@ -67,14 +65,12 @@ const Dialog: FC<DialogPropsInterface> = ({
   iconSize,
   isBodyExtendingToEdges,
   showBackground = true,
-  keyboardControl = false,
   layoutSize,
   headerActions,
   showOverflow,
   headerClassName
 }) => {
   const ref = useRef(null);
-  const {unityStore} = useStore().mainStore;
 
   useClickOutside(ref, () => {
     if (closeOnBackgroundClick) {
@@ -82,16 +78,6 @@ const Dialog: FC<DialogPropsInterface> = ({
       onClose?.(event);
     }
   });
-
-  useEffect(() => {
-    if (keyboardControl) {
-      unityStore.changeKeyboardControl(false);
-    }
-
-    return () => {
-      unityStore.changeKeyboardControl(keyboardControl);
-    };
-  }, []);
 
   return (
     <Portal>
