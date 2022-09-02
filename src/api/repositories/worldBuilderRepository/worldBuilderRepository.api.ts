@@ -19,7 +19,5 @@ export const valiedateDomain: RequestInterface<ValidationRequest, ValidateDomain
 ) => {
   const {name, ...restOptions} = options;
 
-  restOptions.data = {name};
-
   return request.post(worldBuilderEndpoints().valiedateDomain, {name}, restOptions);
 };

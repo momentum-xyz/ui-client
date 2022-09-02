@@ -28,11 +28,17 @@ export const splitIntoFirstNSentencesAndRest = (
   return [firstSentences, rest];
 };
 
+/**
+ * Transforms text into slugified text, meaning text that contains only [a-z], [0-9] or '-' characters.
+ * Replaces whitespace with '-' character.
+ *
+ * @param text Text that needs to be slugified
+ * @returns Slugified text that contains only [a-z], [0-9] or '-' characters.
+ */
 export const slugify = (text: string) => {
   return text
     .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '')
-    .replace(/^-+|-+$/g, '');
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/[_]+/g, '');
 };
