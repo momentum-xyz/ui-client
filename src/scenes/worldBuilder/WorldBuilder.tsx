@@ -9,10 +9,12 @@ import {WORLD_BUILDER_ROUTES} from './WorldBuilder.routes';
 
 const WorldBuilder: FC = () => {
   return (
-    <Switch>
-      {createRoutesByConfig(WORLD_BUILDER_ROUTES)}
-      <Redirect to={ROUTES.worldBuilder.start} />
-    </Switch>
+    <>
+      <Switch>
+        {createRoutesByConfig(WORLD_BUILDER_ROUTES)}
+        <Redirect to={ROUTES.worldBuilder.start} />
+      </Switch>
+    </>
   );
 };
 

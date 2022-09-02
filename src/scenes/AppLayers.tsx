@@ -13,15 +13,13 @@ interface PropsInterface {
   withUnity?: boolean;
   withMeeting?: boolean;
   withWidgets?: boolean;
-  isWorldBuilder?: boolean;
 }
 
 const AppLayers: FC<PropsInterface> = ({
   children,
   withUnity = true,
   withMeeting = true,
-  withWidgets = true,
-  isWorldBuilder = false
+  withWidgets = true
 }) => {
   const {unityStore} = useStore().mainStore;
 
@@ -38,7 +36,7 @@ const AppLayers: FC<PropsInterface> = ({
         <div className="main-content">{children}</div>
         {withMeeting && <Meeting />}
       </main>
-      {withWidgets && <Widgets isWorldBuilder={isWorldBuilder} />}
+      {withWidgets && <Widgets />}
     </div>
   );
 };

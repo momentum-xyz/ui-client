@@ -18,7 +18,7 @@ const WorldBuilderStartPage: FC = () => {
   const history = useHistory();
 
   return (
-    <Page backgroundSrc={background}>
+    <Page backgroundSrc={background} showSimpleProfileMenu={sessionStore.isSessionExists}>
       <styled.Container>
         <styled.Spacer />
         <styled.Information>

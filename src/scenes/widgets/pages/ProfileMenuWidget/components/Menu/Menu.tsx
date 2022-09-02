@@ -13,11 +13,7 @@ import * as styled from './Menu.styled';
 const MENU_OFFSET_RIGHT = 175;
 const MENU_OFFSET_BOTTOM = 60;
 
-interface PropsInterface {
-  isWorldBuilder?: boolean;
-}
-
-const ProfileMenuWidget: FC<PropsInterface> = ({isWorldBuilder = false}) => {
+const Menu: FC = () => {
   const {widgetStore, sessionStore} = useStore();
   const {profile} = sessionStore;
   const {profileMenuStore} = widgetStore;
@@ -30,7 +26,7 @@ const ProfileMenuWidget: FC<PropsInterface> = ({isWorldBuilder = false}) => {
 
   const signOutUser = async () => {
     await sessionStore.logout(auth);
-    document.location.href = isWorldBuilder ? ROUTES.worldBuilder.base : ROUTES.base;
+    document.location.href = ROUTES.base;
   };
 
   useClickOutside(MenuRef, () => {
@@ -69,47 +65,45 @@ const ProfileMenuWidget: FC<PropsInterface> = ({isWorldBuilder = false}) => {
     <Dialog
       position="rightBottom"
       title=""
-      offset={{right: isWorldBuilder ? 0 : MENU_OFFSET_RIGHT, bottom: MENU_OFFSET_BOTTOM}}
+      offset={{right: MENU_OFFSET_RIGHT, bottom: MENU_OFFSET_BOTTOM}}
       onClose={handleCloseMenu}
       isBodyExtendingToEdges
       showBackground={false}
     >
       <styled.Container ref={MenuRef} data-testid="Menu-test">
-        {!isWorldBuilder && (
-          <>
-            <styled.Option onClick={handleProfileOpen}>
+        <>
+          <styled.Option onClick={handleProfileOpen}>
+            <styled.IconContainer>
+              <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="super-small" showBorder />
+            </styled.IconContainer>
+            <Text text={profile.name} size="xxs" isMultiline={false} />
+          </styled.Option>
+          <styled.Option
+            onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}
+          >
+            <Toggle
+              size="small"
+              variant="availability"
+              checked={profile.status === UserStatusEnum.ONLINE}
+              onChange={handleChangeStatus}
+            />
+            <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
+          </styled.Option>
+          {profile.isNodeAdmin && (
+            <styled.Option onClick={handleTokenRulesOpen}>
               <styled.IconContainer>
-                <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="super-small" showBorder />
+                <IconSvg name="whitelist" size="medium-large" isWhite />
               </styled.IconContainer>
-              <Text text={profile.name} size="xxs" isMultiline={false} />
+              <Text text={t('labels.tokenRules')} size="xxs" />
             </styled.Option>
-            <styled.Option
-              onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}
-            >
-              <Toggle
-                size="small"
-                variant="availability"
-                checked={profile.status === UserStatusEnum.ONLINE}
-                onChange={handleChangeStatus}
-              />
-              <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
-            </styled.Option>
-            {profile.isNodeAdmin && (
-              <styled.Option onClick={handleTokenRulesOpen}>
-                <styled.IconContainer>
-                  <IconSvg name="whitelist" size="medium-large" isWhite />
-                </styled.IconContainer>
-                <Text text={t('labels.tokenRules')} size="xxs" />
-              </styled.Option>
-            )}
-            <styled.Option onClick={handleOpenSettings}>
-              <styled.IconContainer>
-                <IconSvg name="gear" size="medium-large" isWhite />
-              </styled.IconContainer>
-              <Text text={t('labels.settings')} size="xxs" />
-            </styled.Option>
-          </>
-        )}
+          )}
+          <styled.Option onClick={handleOpenSettings}>
+            <styled.IconContainer>
+              <IconSvg name="gear" size="medium-large" isWhite />
+            </styled.IconContainer>
+            <Text text={t('labels.settings')} size="xxs" />
+          </styled.Option>
+        </>
         <styled.Option onClick={signOutUser}>
           <styled.IconContainer>
             <IconSvg name="logout" size="medium-large" isWhite />
@@ -121,4 +115,4 @@ const ProfileMenuWidget: FC<PropsInterface> = ({isWorldBuilder = false}) => {
   );
 };
 
-export default observer(ProfileMenuWidget);
+export default observer(Menu);

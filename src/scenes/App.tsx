@@ -148,11 +148,7 @@ const App: FC = () => {
           <AuthProvider {...sessionStore.oidcConfig}>
             <AppAuth>
               <GlobalStyles />
-              <AppLayers
-                withUnity={false}
-                withMeeting={false}
-                isWorldBuilder={pathname.includes(ROUTES.worldBuilder.base)}
-              >
+              <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
                 <Switch>
                   {createRoutesByConfig(PRIVATE_ROUTES)}
                   <Redirect to={ROUTES.base} />

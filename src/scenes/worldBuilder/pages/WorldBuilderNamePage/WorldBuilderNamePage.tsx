@@ -80,7 +80,7 @@ const WorldBuilderNamePage: FC = () => {
   const domain = appVariables.IS_DEV_ENVIRONMENT ? 'odyssey.ninja' : 'momentum.xyz';
 
   return (
-    <Page backgroundSrc={background}>
+    <Page backgroundSrc={background} showSimpleProfileMenu>
       <styled.Container>
         <styled.Spacer />
         <WorldBuilderHeader />
