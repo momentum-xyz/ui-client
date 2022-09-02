@@ -66,10 +66,19 @@ const RootStore = types
       console.log('---LEAVING---');
 
       const spaceId = self.collaborationStore.space?.id || '';
-
-      yield self.mainStore.agoraStore.leave();
-      yield self.collaborationStore.leave();
       self.meetingStore.leave(isKicked);
+
+      /*
+         FIXME: Sometimes Agora loses connection.
+         Non-reproducible issue. Leave this for now. We will remove Agora later.
+      */
+
+      try {
+        yield self.mainStore.agoraStore.leave();
+        yield self.collaborationStore.leave();
+      } catch (ex) {
+        console.error(ex);
+      }
 
       self.mainStore.unityStore.triggerInteractionMessage(
         PosBusEventEnum.LeftSpace,
