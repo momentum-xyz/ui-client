@@ -23,6 +23,7 @@ import {GrabTablePage} from './grabTable';
 import {StoryBook} from './storyBook';
 import {DisconnectedPage, MaintenancePage, WrongBrowserPage} from './system';
 import {WorldBuilder} from './worldBuilder';
+import {WorldBuilderStartPage} from './worldBuilder/pages';
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -55,8 +56,8 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     main: () => <StoryBook />
   },
   {
-    path: ROUTES.worldBuilder.base,
-    main: () => <WorldBuilder />
+    path: ROUTES.worldBuilder.login,
+    main: () => <WorldBuilderStartPage />
   }
 ];
 
@@ -103,7 +104,7 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
   }
 ];
 
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
+export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
     path: ROUTES.base,
     exact: true,
@@ -140,5 +141,16 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.worldCalendar,
     main: () => <WorldCalendar />,
     renderBackground: true
+  },
+  {
+    path: ROUTES.base,
+    main: () => <WorldBuilder />
+  }
+];
+
+export const PRIVATE_ROUTES: RouteConfigInterface[] = [
+  {
+    path: ROUTES.worldBuilder.base,
+    main: () => <WorldBuilder />
   }
 ];

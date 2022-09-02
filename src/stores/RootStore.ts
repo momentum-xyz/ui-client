@@ -11,6 +11,7 @@ import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
 import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
+import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
@@ -31,6 +32,7 @@ const RootStore = types
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
+    worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
     magicStore: types.optional(MagicStore, {}),
     videoStore: types.optional(VideoStore, {})
   })

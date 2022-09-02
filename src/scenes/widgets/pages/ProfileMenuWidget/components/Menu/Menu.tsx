@@ -13,7 +13,7 @@ import * as styled from './Menu.styled';
 const MENU_OFFSET_RIGHT = 175;
 const MENU_OFFSET_BOTTOM = 60;
 
-const ProfileMenuWidget: FC = () => {
+const Menu: FC = () => {
   const {widgetStore, sessionStore} = useStore();
   const {profile} = sessionStore;
   const {profileMenuStore} = widgetStore;
@@ -71,35 +71,39 @@ const ProfileMenuWidget: FC = () => {
       showBackground={false}
     >
       <styled.Container ref={MenuRef} data-testid="Menu-test">
-        <styled.Option onClick={handleProfileOpen}>
-          <styled.IconContainer>
-            <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="super-small" showBorder />
-          </styled.IconContainer>
-          <Text text={profile.name} size="xxs" isMultiline={false} />
-        </styled.Option>
-        <styled.Option onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}>
-          <Toggle
-            size="small"
-            variant="availability"
-            checked={profile.status === UserStatusEnum.ONLINE}
-            onChange={handleChangeStatus}
-          />
-          <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
-        </styled.Option>
-        {profile.isNodeAdmin && (
-          <styled.Option onClick={handleTokenRulesOpen}>
+        <>
+          <styled.Option onClick={handleProfileOpen}>
             <styled.IconContainer>
-              <IconSvg name="whitelist" size="medium-large" isWhite />
+              <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="super-small" showBorder />
             </styled.IconContainer>
-            <Text text={t('labels.tokenRules')} size="xxs" />
+            <Text text={profile.name} size="xxs" isMultiline={false} />
           </styled.Option>
-        )}
-        <styled.Option onClick={handleOpenSettings}>
-          <styled.IconContainer>
-            <IconSvg name="gear" size="medium-large" isWhite />
-          </styled.IconContainer>
-          <Text text={t('labels.settings')} size="xxs" />
-        </styled.Option>
+          <styled.Option
+            onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}
+          >
+            <Toggle
+              size="small"
+              variant="availability"
+              checked={profile.status === UserStatusEnum.ONLINE}
+              onChange={handleChangeStatus}
+            />
+            <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
+          </styled.Option>
+          {profile.isNodeAdmin && (
+            <styled.Option onClick={handleTokenRulesOpen}>
+              <styled.IconContainer>
+                <IconSvg name="whitelist" size="medium-large" isWhite />
+              </styled.IconContainer>
+              <Text text={t('labels.tokenRules')} size="xxs" />
+            </styled.Option>
+          )}
+          <styled.Option onClick={handleOpenSettings}>
+            <styled.IconContainer>
+              <IconSvg name="gear" size="medium-large" isWhite />
+            </styled.IconContainer>
+            <Text text={t('labels.settings')} size="xxs" />
+          </styled.Option>
+        </>
         <styled.Option onClick={signOutUser}>
           <styled.IconContainer>
             <IconSvg name="logout" size="medium-large" isWhite />
@@ -111,4 +115,4 @@ const ProfileMenuWidget: FC = () => {
   );
 };
 
-export default observer(ProfileMenuWidget);
+export default observer(Menu);

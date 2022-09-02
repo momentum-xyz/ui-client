@@ -19,3 +19,4 @@ export * from './dashboardRepository';
 export * from './resourcesRepository';
 export * from './spaceIntegrationsRepository';
 export * from './textChatRepository';
+export * from './worldBuilderRepository';

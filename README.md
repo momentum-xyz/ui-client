@@ -13,10 +13,11 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.<br /> 
+It correctly bundles React in production mode and optimizes the build for the best performance.<br />
 Your app is ready to be deployed!
 
 ## Code quality
+
 1. Enable `prettier` using IDE preferences. Apple rules in `.prettierrc`.
 2. Enable `eslint` using IDE preferences.
 3. Enable `husky` using `yarn run postinstall`.
@@ -24,11 +25,13 @@ Your app is ready to be deployed!
 ## Local development
 
 #### GIT lfs
+
 To develop locally there are a few steps that need to be taken.<br />
 Firstly the project uses `git-lfs` to load large files.<br />
 use `git lfs install` to initialize the git hooks
 
 #### How to add a new icon to the svg-sprite?
+
 1. Copy a new svg-icon to the `ui-kit/assets/icons` folder<br />
 2. Change value of `fill` tag to `currentColor`<br />
 3. Run `$ yarn run svg-sprite:build`<br />
@@ -36,14 +39,15 @@ use `git lfs install` to initialize the git hooks
 5. Add the icon to the StoryBook page
 
 ## Project structure
+
     .
     ├── public                      # Static public content
     │   └── ...
-    │   
+    │
     ├── scripts                     # Scripts for development
     │   ├── buildSvgSprite.js       # Svg-sprite builder
     │   └── generateIconsType.js.   # The IconName type builder. Type is based on svg-sprite
-    │   
+    │
     ├── src
     │   ├── api                     # BackEnd integration
     │   │   ├── constants           # Api constants
@@ -95,15 +99,15 @@ use `git lfs install` to initialize the git hooks
     │   │   ├── default             # Default pages. Just for sample.
     │   │   │   ├── pages           # General pages connected only to own stores
     │   │   │   ├── stores          # Own MST-stores
-    │   │   │   └── index.ts        # 
-    │   │   ├── auth      
+    │   │   │   └── index.ts        #
+    │   │   ├── auth
     │   │   │   └── ...             # Structure like "default"
-    │   │   ├── collaboration      
+    │   │   ├── collaboration
     │   │   │   └── ...             # Structure like "default"
-    │   │   ├── communication      
+    │   │   ├── communication
     │   │   │   └── ...             # Structure like "default"
     │   │   ├── ...                 # Another scenes (e.g. userProfile, dashboard, ...)
-    │   │   ├── App.tsx             
+    │   │   ├── App.tsx
     │   │   └── AppRoutes.tsx       # List of routes
     │   │
     │   ├── stores                  # General store & links to substores
@@ -117,17 +121,18 @@ use `git lfs install` to initialize the git hooks
     │   │   │   └── ...             #
     │   │   ├── RootStore.ts        # Connecting all stores of application
     │   │   └── ...
-    │   ├── index.tsx               # Entry point of react        
+    │   ├── index.tsx               # Entry point of react
     │   └── ...
-    │   
+    │
     ├── LICENSE.txt
-    ├── README.md       
-    └── ... 
+    ├── README.md
+    └── ...
+
 ### Local config
 
 It's possible to override some of App Config variables received from the dev server.
 
-Create file `env.development.local` with `REACT_APP_OVERRIDE_CONFIG_VARIABLES` variable having JSON encoded variables that need to be overwritten. Sample:
+Create file `.env.development.local` with `REACT_APP_OVERRIDE_CONFIG_VARIABLES` variable having JSON encoded variables that need to be overwritten and place it in root directory of the project. Sample:
 
 ```
 REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT_URL": "https://dev.odyssey.ninja/api/v3/backend"}'

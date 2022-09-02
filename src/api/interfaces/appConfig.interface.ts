@@ -4,6 +4,8 @@
 
 export interface AppConfigInterface {
   BACKEND_ENDPOINT_URL: string;
+  // TEMPORARY: remove it when all other BE EP will be migrated to V4 and we fully switch to V4
+  BACKEND_V4_ENDPOINT_URL: string;
   UNITY_CLIENT_URL: string;
   UNITY_CLIENT_LOADER_URL: string;
   UNITY_CLIENT_DATA_URL: string;

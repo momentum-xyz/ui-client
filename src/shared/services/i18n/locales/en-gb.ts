@@ -215,7 +215,10 @@ export const enGb = {
       grabTable: 'Grab a Table',
       videoinput: 'Video Input',
       audioinput: 'Audio Input',
-      audiooutput: 'Audio Output'
+      audiooutput: 'Audio Output',
+      nameWorld: 'Name World',
+      worldURL: 'World URL',
+      subdomain: 'Subdomain'
     },
     messages: {
       loading: 'Loading Momentum',
@@ -369,7 +372,9 @@ export const enGb = {
       search: 'Search',
       searchForPeople: 'Search for people...',
       searchForSpaces: 'Search for spaces...',
-      searchForAttendees: 'Search for attendees...'
+      searchForAttendees: 'Search for attendees...',
+      nameYourWorld: 'Name your world',
+      worldname: 'worldname'
     },
     fields: {
       nickname: 'Nickname',
@@ -451,7 +456,15 @@ export const enGb = {
       ready: 'Ready',
       inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
-      getStarted: 'Get Started'
+      getStarted: 'Get Started',
+      selectTemplate: 'Select Template'
+    },
+    descriptions: {
+      worldName: 'This is the name of the metaverse you will be creating',
+      worldSubdomain:
+        'This is the subdomain of the publicly facing URL that people will visit when then visiting your metaverse',
+      worldURL:
+        'This is the publicly facing URL that people will visit when then visiting your metaverse'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

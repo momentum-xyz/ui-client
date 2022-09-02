@@ -1,1 +1,2 @@
-export * from './StartPage';
+export * from './WorldBuilderStartPage';
+export * from './WorldBuilderNamePage';
