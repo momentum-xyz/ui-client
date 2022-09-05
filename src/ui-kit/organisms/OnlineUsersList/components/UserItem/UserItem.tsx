@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -33,7 +33,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
     teleportToUser?.(user.uuid);
   };
 
-  const [inviteTimeout, setInviteTimeout] = useState<NodeJS.Timeout>();
+  const inviteTimeoutRef = useRef<NodeJS.Timeout>();
   const [invited, setInvited] = useState(false);
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
@@ -44,28 +44,22 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   });
 
   useEffect(() => {
-    if (invited) {
-      if (inviteTimeout) {
-        clearTimeout(inviteTimeout);
+    return () => {
+      if (inviteTimeoutRef.current) {
+        clearTimeout(inviteTimeoutRef.current);
       }
-
-      setInviteTimeout(
-        setTimeout(() => {
-          setInvited(false);
-        }, 30000)
-      );
-    } else {
-      if (inviteTimeout) {
-        clearTimeout(inviteTimeout);
-      }
-      setInviteTimeout(undefined);
-    }
-  }, [invited]);
+    };
+  }, [inviteTimeoutRef]);
 
   const handleInvite = useCallback(async () => {
     const success = await user.invite(spaceId);
     if (success) {
       setInvited(true);
+      inviteTimeoutRef.current = setTimeout(() => {
+        setInvited(false);
+        inviteTimeoutRef.current = undefined;
+      }, 30000);
+
       toast.info(
         <ToastContent
           headerIconName="alert"
