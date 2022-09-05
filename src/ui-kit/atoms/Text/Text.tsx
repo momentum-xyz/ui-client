@@ -1,7 +1,7 @@
 import React, {FC, memo} from 'react';
 import cn from 'classnames';
 
-import {TextAlignType, TextSize, TextTransform, TextWeightType} from 'ui-kit/types';
+import {TextAlignType, TextSizeType, TextTransformType, TextWeightType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 import {splitIntoFirstNSentencesAndRest} from 'core/utils';
 
@@ -9,8 +9,8 @@ import * as styled from './Text.styled';
 
 export interface TextPropsInterface extends PropsWithThemeInterface {
   text?: string;
-  size: TextSize;
-  transform?: TextTransform;
+  size: TextSizeType;
+  transform?: TextTransformType;
   isMultiline?: boolean;
   align?: TextAlignType;
   weight?: TextWeightType;

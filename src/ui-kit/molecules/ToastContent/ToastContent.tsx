@@ -8,7 +8,7 @@ import * as styled from './ToastContent.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   title?: string;
-  headerIconName?: IconName;
+  headerIconName?: IconNameType;
   text?: string;
   isDanger?: boolean;
   isCloseButton?: boolean;

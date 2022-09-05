@@ -1,6 +1,6 @@
 export interface NavigationTabInterface {
   path: string;
-  iconName: IconName;
+  iconName: IconNameType;
   isActive?: boolean;
   isHidden?: boolean;
   replace?: boolean;

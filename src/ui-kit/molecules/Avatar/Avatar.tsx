@@ -6,7 +6,7 @@ import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './Avatar.styled';
 
-interface AvatarProps {
+interface PropsInterface {
   avatarSrc?: string;
   size: SizeType;
   status?: UserStatusEnum;
@@ -16,7 +16,7 @@ interface AvatarProps {
   className?: string;
 }
 
-const Avatar: FC<AvatarProps> = ({
+const Avatar: FC<PropsInterface> = ({
   avatarSrc,
   size,
   className,

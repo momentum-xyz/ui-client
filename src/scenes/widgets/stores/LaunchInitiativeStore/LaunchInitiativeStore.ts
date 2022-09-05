@@ -1,6 +1,6 @@
 import {flow, types, Instance} from 'mobx-state-tree';
 
-import {api, CreateInitiativeResponse, NewSpaceDetails} from 'api';
+import {api, CreateInitiativeResponse, NewSpaceDetailsInterface} from 'api';
 import {DialogModel, RequestModel, ResetModel} from 'core/models';
 
 const LaunchInitiativeStore = types
@@ -12,7 +12,7 @@ const LaunchInitiativeStore = types
     })
   )
   .actions((self) => ({
-    create: flow(function* (space: NewSpaceDetails) {
+    create: flow(function* (space: NewSpaceDetailsInterface) {
       const response: CreateInitiativeResponse = yield self.request.send(
         api.spaceRepository.createInitiative,
         {

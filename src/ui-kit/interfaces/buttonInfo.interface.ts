@@ -4,7 +4,7 @@ export interface ButtonInfoInterface {
   title: string;
   onClick: () => void;
   disabled?: boolean;
-  icon?: IconName;
+  icon?: IconNameType;
   variant?: VariantType;
 }
 

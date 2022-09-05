@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
 import {Dialog, Input, TextArea, ToastContent} from 'ui-kit';
-import {SpaceType} from 'core/enums';
+import {SpaceTypeEnum} from 'core/enums';
 
 import * as styled from './LaunchInitiativeWidget.styled';
 
@@ -37,7 +37,7 @@ const LaunchInitiativeWidget: FC = () => {
         name,
         description,
         currentWorldId: worldStore.worldId,
-        spaceType: SpaceType.CHALLENGE
+        spaceType: SpaceTypeEnum.CHALLENGE
       })
       .then(({isSuccess, spaceId}) => {
         if (isSuccess) {

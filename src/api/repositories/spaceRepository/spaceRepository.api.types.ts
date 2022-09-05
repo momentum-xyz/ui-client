@@ -1,4 +1,4 @@
-import {SpaceType} from 'core/enums';
+import {SpaceTypeEnum} from 'core/enums';
 import {MetadataFieldType} from 'core/types';
 
 interface AuxProjectInterface {
@@ -30,7 +30,7 @@ export interface UserSpaceInterface {
   space?: SpaceInterface;
 }
 
-export interface SpaceMetadata {
+export interface SpaceMetadataInterface {
   kusama_metadata?: {
     operator_id?: string;
   };
@@ -62,8 +62,8 @@ export interface SpaceInterface {
     type: string;
     data: Buffer;
   };
-  spaceType: SpaceType | any;
-  metadata?: SpaceMetadata;
+  spaceType: SpaceTypeEnum | any;
+  metadata?: SpaceMetadataInterface;
 }
 
 /** Get Space **/
@@ -79,7 +79,7 @@ export interface SpaceResponse {
   owner?: boolean;
   status: number;
   message: string;
-  spaceType: SpaceType;
+  spaceType: SpaceTypeEnum;
   children: SpaceInterface[];
   ancestors?: SpaceInterface[];
   ownerName?: string;
@@ -162,10 +162,10 @@ export interface AddUserRequest {
 export interface AddUserResponse {}
 
 /** Create space **/
-export interface NewSpaceDetails {
+export interface NewSpaceDetailsInterface {
   parentId?: string;
   name: string;
-  spaceType?: SpaceType;
+  spaceType?: SpaceTypeEnum;
   worldId?: string;
   currentWorldId?: string;
   root?: boolean;
@@ -174,7 +174,7 @@ export interface NewSpaceDetails {
 }
 
 export interface CreateSpaceRequest {
-  space: NewSpaceDetails;
+  space: NewSpaceDetailsInterface;
 }
 
 export interface CreateSpaceResponse {
@@ -196,7 +196,7 @@ export interface UserOwnedSpacesResponse {
 /** Create initiative **/
 
 export interface CreateInitiativeRequest {
-  initiative: Omit<NewSpaceDetails, 'worldId'>;
+  initiative: Omit<NewSpaceDetailsInterface, 'worldId'>;
 }
 
 export interface CreateInitiativeResponse {
@@ -225,8 +225,8 @@ export interface WorldConfigRequest {
   worldId: string;
 }
 
-export type WorldConfig = {
+export type WorldConfigType = {
   [field in MetadataFieldType]: string;
 };
 
-export interface WorldConfigResponse extends WorldConfig {}
+export interface WorldConfigResponse extends WorldConfigType {}

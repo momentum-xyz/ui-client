@@ -2,6 +2,6 @@ export interface TabBarTabInterface {
   id: string;
   title: string;
   label: string;
-  icon?: IconName;
+  icon?: IconNameType;
   disabled?: boolean;
 }

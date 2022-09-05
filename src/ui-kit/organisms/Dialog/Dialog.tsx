@@ -12,7 +12,7 @@ import {
   SizeType,
   ComponentSizeInterface,
   HeaderType,
-  HeaderItem
+  HeaderItemType
 } from 'ui-kit';
 
 import * as styled from './Dialog.styled';
@@ -29,14 +29,14 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   showCloseButton?: boolean;
   withOpacity?: boolean;
   headerStyle?: HeaderStyleType;
-  icon?: IconName;
+  icon?: IconNameType;
   iconSize?: SizeType;
   isBodyExtendingToEdges?: boolean;
   showBackground?: boolean;
   layoutSize?: ComponentSizeInterface;
   headerActions?: React.ReactNode;
   hasBorder?: boolean;
-  headerItem?: HeaderItem;
+  headerItem?: HeaderItemType;
   titleWidth?: string;
   headerType?: HeaderType;
   showOverflow?: boolean;

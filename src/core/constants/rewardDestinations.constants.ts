@@ -1,26 +1,26 @@
-import {Payee} from 'core/enums';
+import {PayeeEnum} from 'core/enums';
 
 import {i18n} from '../../shared/services/index';
 
 export const REWARD_DESTINATION_TYPES = [
   {
     label: i18n.t('staking.stashIncreaseAmount'),
-    value: Payee.Staked,
-    icon: 'wallet' as IconName
+    value: PayeeEnum.Staked,
+    icon: 'wallet' as IconNameType
   },
   {
     label: i18n.t('staking.stashNoIncreaseAmount'),
-    value: Payee.Stash,
-    icon: 'wallet' as IconName
+    value: PayeeEnum.Stash,
+    icon: 'wallet' as IconNameType
   },
   {
     label: i18n.t('staking.controllerAccount'),
-    value: Payee.Controller,
-    icon: 'wallet' as IconName
+    value: PayeeEnum.Controller,
+    icon: 'wallet' as IconNameType
   },
   {
     label: i18n.t('staking.specifiedPaymentAccount'),
-    value: Payee.Account,
-    icon: 'wallet' as IconName
+    value: PayeeEnum.Account,
+    icon: 'wallet' as IconNameType
   }
 ];

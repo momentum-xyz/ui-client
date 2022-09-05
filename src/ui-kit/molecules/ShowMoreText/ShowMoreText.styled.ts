@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import {SvgButton} from '../SvgButton';
 
-interface TextProps {
+interface TextPropsInterface {
   lines: number;
 }
 
@@ -17,7 +17,7 @@ export const Text = styled.div`
   width: 100%;
   overflow-wrap: break-word;
   &.collapsed {
-    -webkit-line-clamp: ${(props: TextProps) => props.lines};
+    -webkit-line-clamp: ${(props: TextPropsInterface) => props.lines};
     -webkit-box-orient: vertical;
     display: -webkit-box;
     overflow: hidden;

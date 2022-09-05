@@ -8,25 +8,25 @@ export enum TokenTypeEnum {
   ERC1155 = 'ERC1155'
 }
 
-export enum TokenRuleStatus {
+export enum TokenRuleStatusEnum {
   APPROVED = 'approved',
   DECLINED = 'denied',
   REQUESTED = 'requested'
 }
 
-export enum TokenRuleReviewStatus {
+export enum TokenRuleReviewStatusEnum {
   APPROVED = 'approved',
   DENIED = 'denied'
 }
 
-export enum TokenRuleListHeader {
+export enum TokenRuleListHeaderEnum {
   ICON = 'icon',
   NAME = 'name',
   STATUS = 'status',
   INFO = 'info'
 }
 
-export enum TokenRuleRoles {
+export enum TokenRuleRolesEnum {
   ADMIN = 'admin',
   MEMBER = 'member'
 }

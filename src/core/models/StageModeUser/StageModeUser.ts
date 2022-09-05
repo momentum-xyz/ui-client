@@ -1,6 +1,6 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 
-import {AvatarSizeEnum, ParticipantRole} from 'core/enums';
+import {AvatarSizeEnum, ParticipantRoleEnum} from 'core/enums';
 import {api, ProfileResponse, UserProfileInterface} from 'api';
 import {RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
@@ -8,7 +8,7 @@ import {appVariables} from 'api/constants';
 const StageModeUser = types
   .model('StageModeUser', {
     uid: types.string,
-    role: types.enumeration(Object.values(ParticipantRole)),
+    role: types.enumeration(Object.values(ParticipantRoleEnum)),
     name: types.maybe(types.string),
     profile: types.maybe(types.frozen<UserProfileInterface>()),
     request: types.optional(RequestModel, {})

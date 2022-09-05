@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {TokenRuleListHeader, TokenRuleStatus} from 'core/enums';
+import {TokenRuleListHeaderEnum, TokenRuleStatusEnum} from 'core/enums';
 import {IconSvg} from 'ui-kit';
 import {TokenRuleItemModelInterface} from 'core/models';
 import {TokenRuleListHeaderType} from 'core/types';
@@ -22,42 +22,42 @@ const TokenRulesList: FC<PropsInterface> = ({columnHeaders, onEventClick}) => {
   const {tokenRulesStore} = profileMenuStore;
 
   useEffect(() => {
-    tokenRulesStore.sortTokens(TokenRuleListHeader.NAME);
+    tokenRulesStore.sortTokens(TokenRuleListHeaderEnum.NAME);
   }, []);
 
   const getCell = (key: TokenRuleListHeaderType, item: TokenRuleItemModelInterface) => {
-    const status = TokenRuleListHeader.STATUS;
-    if (key === TokenRuleListHeader.INFO) {
+    const status = TokenRuleListHeaderEnum.STATUS;
+    if (key === TokenRuleListHeaderEnum.INFO) {
       return (
         <IconSvg
           name="info"
           size="medium"
           onClick={() => onEventClick?.(item)}
-          isWhite={item[status] === TokenRuleStatus.REQUESTED}
-          isDanger={item[status] === TokenRuleStatus.DECLINED}
+          isWhite={item[status] === TokenRuleStatusEnum.REQUESTED}
+          isDanger={item[status] === TokenRuleStatusEnum.DECLINED}
         />
       );
-    } else if (key === TokenRuleListHeader.ICON) {
+    } else if (key === TokenRuleListHeaderEnum.ICON) {
       return (
         <IconSvg
           name={
-            item[status] === TokenRuleStatus.APPROVED
+            item[status] === TokenRuleStatusEnum.APPROVED
               ? 'approved'
-              : item[status] === TokenRuleStatus.DECLINED
+              : item[status] === TokenRuleStatusEnum.DECLINED
               ? 'denied'
               : 'requested'
           }
           size="medium"
-          isWhite={item[status] === TokenRuleStatus.REQUESTED}
-          isDanger={item[status] === TokenRuleStatus.DECLINED}
+          isWhite={item[status] === TokenRuleStatusEnum.REQUESTED}
+          isDanger={item[status] === TokenRuleStatusEnum.DECLINED}
         />
       );
-    } else if (key === TokenRuleListHeader.STATUS) {
+    } else if (key === TokenRuleListHeaderEnum.STATUS) {
       return (
         <styled.Span
-          className={`${item[status] === TokenRuleStatus.APPROVED ? 'approved' : ''}
-          ${item[status] === TokenRuleStatus.DECLINED ? 'declined' : ''}
-          ${item[status] === TokenRuleStatus.REQUESTED ? 'requested' : ''}
+          className={`${item[status] === TokenRuleStatusEnum.APPROVED ? 'approved' : ''}
+          ${item[status] === TokenRuleStatusEnum.DECLINED ? 'declined' : ''}
+          ${item[status] === TokenRuleStatusEnum.REQUESTED ? 'requested' : ''}
                 `}
         >
           {item[key]}
@@ -96,9 +96,9 @@ const TokenRulesList: FC<PropsInterface> = ({columnHeaders, onEventClick}) => {
                 <td
                   className={`
                   ${header.isSmall ? 'small-column' : ''}
-                  ${header.key === TokenRuleListHeader.INFO ? 'clickable' : ''}
-                  ${header.key === TokenRuleListHeader.STATUS ? 'approved' : ''}
-                  ${header.key === TokenRuleListHeader.STATUS ? 'declined' : ''}`}
+                  ${header.key === TokenRuleListHeaderEnum.INFO ? 'clickable' : ''}
+                  ${header.key === TokenRuleListHeaderEnum.STATUS ? 'approved' : ''}
+                  ${header.key === TokenRuleListHeaderEnum.STATUS ? 'declined' : ''}`}
                   key={item.id + '-' + header.key}
                 >
                   {getCell(header.key, item as TokenRuleItemModelInterface)}
