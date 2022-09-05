@@ -19,6 +19,7 @@ export interface PropsInterface {
   teleportToUser: (userId: string) => void;
   spaceId: string;
   onlineUsersList: OnlineUsersListInterface;
+  usersInMeeting?: string[];
 }
 
 const OnlineUsersList: React.FC<PropsInterface> = ({
@@ -29,7 +30,8 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
   profile,
   teleportToUser,
   changeKeyboardControl,
-  spaceId
+  spaceId,
+  usersInMeeting
 }) => {
   const {t} = useTranslation();
 
@@ -77,6 +79,7 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
     if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
       return onlineUsersList.searchedUsers
         .filter((user) => (invite ? user.uuid !== profile?.uuid : true))
+        .filter((user) => (invite ? !usersInMeeting?.includes(user.uuid) : true))
         .map((user) => (
           <UserItem
             user={user}
@@ -94,17 +97,19 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
       ...onlineUsersList.users.filter((user) => user.uuid !== profile.uuid)
     ];
 
-    return sortedUsers.map((user) => (
-      <UserItem
-        key={user.uuid}
-        user={user}
-        onClick={() => handleClick(user.uuid)}
-        invite={invite}
-        profile={profile}
-        teleportToUser={teleportToUser}
-        spaceId={spaceId}
-      />
-    ));
+    return sortedUsers
+      .filter((user) => (invite ? !usersInMeeting?.includes(user.uuid) : true))
+      .map((user) => (
+        <UserItem
+          key={user.uuid}
+          user={user}
+          onClick={() => handleClick(user.uuid)}
+          invite={invite}
+          profile={profile}
+          teleportToUser={teleportToUser}
+          spaceId={spaceId}
+        />
+      ));
   };
 
   return (

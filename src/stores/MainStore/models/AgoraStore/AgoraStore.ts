@@ -244,6 +244,11 @@ const AgoraStore = types
         ? self.agoraStageModeStore.numberOfAudienceMembers
         : self.agoraMeetingStore.users.length + 1;
     },
+    get meetingPeopleIds(): string[] {
+      return self.isStageMode
+        ? self.agoraStageModeStore.audience.map((user) => user.uid.toString())
+        : self.agoraMeetingStore.users.map((user) => user.uid.toString());
+    },
     get localSoundLevel(): number {
       return self.isStageMode
         ? self.agoraStageModeStore.localSoundLevel
