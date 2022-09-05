@@ -56,51 +56,21 @@ export const Heading = styled.div`
 `;
 
 export const H1 = styled.h1`
-  &.header-eclipse {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
   font-size: var(--font-size-xl);
 `;
 
 export const H2 = styled.h2`
-  &.header-eclipse {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
   font-size: var(--font-size-l);
 `;
 
 export const H3 = styled.h3`
-  &.header-eclipse {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
   font-size: var(--font-size-s);
 `;
 
 export const H4 = styled.h4`
-  &.header-eclipse {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
   font-size: var(--font-size-xs);
 `;
 
 export const H5 = styled.h5`
-  &.header-eclipse {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
   font-size: var(--font-size-xxs);
 `;

@@ -40,7 +40,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   titleWidth?: string;
   headerType?: HeaderType;
   showOverflow?: boolean;
-  isCuttingHeader?: boolean;
+  isTruncateHeader?: boolean;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -68,7 +68,7 @@ const Dialog: FC<DialogPropsInterface> = ({
   layoutSize,
   headerActions,
   showOverflow,
-  isCuttingHeader = false
+  isTruncateHeader = false
 }) => {
   const ref = useRef(null);
 
@@ -102,7 +102,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             hasBorder={hasBorder}
             headerType={headerType}
             showOverflow={showOverflow}
-            isCuttingHeader={isCuttingHeader}
+            isTruncateHeader={isTruncateHeader}
           >
             {children}
             <styled.Buttons>

@@ -14,7 +14,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   align?: TextAlignType;
   weight?: TextWeightType;
   className?: string;
-  isCutting?: boolean;
+  isTruncate?: boolean;
 }
 
 const Heading: FC<PropsInterface> = (props) => {
@@ -24,7 +24,7 @@ const Heading: FC<PropsInterface> = (props) => {
     weight = 'bold',
     isDanger = false,
     className,
-    isCutting = false,
+    isTruncate = false,
     ...restProps
   } = props;
 
@@ -34,7 +34,7 @@ const Heading: FC<PropsInterface> = (props) => {
         return (
           <styled.H1
             data-testid="Heading-H1-test"
-            className={cn(transform, isCutting && 'header-eclipse')}
+            className={cn(transform, isTruncate && 'text-truncate')}
           >
             {restProps.label}
           </styled.H1>
@@ -43,7 +43,7 @@ const Heading: FC<PropsInterface> = (props) => {
         return (
           <styled.H2
             data-testid="Heading-H2-test"
-            className={cn(transform, isCutting && 'header-eclipse')}
+            className={cn(transform, isTruncate && 'text-truncate')}
           >
             {restProps.label}
           </styled.H2>
@@ -52,7 +52,7 @@ const Heading: FC<PropsInterface> = (props) => {
         return (
           <styled.H3
             data-testid="Heading-H3-test"
-            className={cn(transform, isCutting && 'header-eclipse')}
+            className={cn(transform, isTruncate && 'text-truncate')}
           >
             {restProps.label}
           </styled.H3>
@@ -61,7 +61,7 @@ const Heading: FC<PropsInterface> = (props) => {
         return (
           <styled.H4
             data-testid="Heading-H4-test"
-            className={cn(transform, isCutting && 'header-eclipse')}
+            className={cn(transform, isTruncate && 'text-truncate')}
           >
             {restProps.label}
           </styled.H4>
@@ -70,7 +70,7 @@ const Heading: FC<PropsInterface> = (props) => {
         return (
           <styled.H5
             data-testid="Heading-H5-test"
-            className={cn(transform, isCutting && 'header-eclipse')}
+            className={cn(transform, isTruncate && 'text-truncate')}
           >
             {restProps.label}
           </styled.H5>
