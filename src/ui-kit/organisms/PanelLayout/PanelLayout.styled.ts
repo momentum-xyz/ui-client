@@ -18,21 +18,9 @@ export const HeaderItem = styled.div`
   &.center {
     justify-content: center;
   }
-
-  .header-eclipse {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 `;
 
-export const TitleHeading = styled(Heading)`
-  h4 {
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-`;
+export const TitleHeading = styled(Heading)``;
 
 export const HeaderIconItem = styled.div`
   display: flex;
