@@ -1,7 +1,7 @@
 import React, {FC, memo} from 'react';
 import cn from 'classnames';
 
-import {HeadingType, TextAlignType, TextTransform, TextWeightType} from 'ui-kit/types';
+import {HeadingType, TextAlignType, TextTransformType, TextWeightType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Heading.styled';
@@ -9,7 +9,7 @@ import * as styled from './Heading.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   type: HeadingType;
   label: string;
-  transform?: TextTransform;
+  transform?: TextTransformType;
   isDanger?: boolean;
   align?: TextAlignType;
   weight?: TextWeightType;

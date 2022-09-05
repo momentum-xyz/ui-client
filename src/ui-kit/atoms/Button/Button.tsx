@@ -1,17 +1,17 @@
 import React, {memo, MouseEventHandler, forwardRef} from 'react';
 import cn from 'classnames';
 
-import {SizeType, TextTransform, VariantType} from 'ui-kit/types';
+import {SizeType, TextTransformType, VariantType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Button.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   label: string;
-  icon?: IconName;
+  icon?: IconNameType;
   size?: SizeType;
   variant?: VariantType;
-  transform?: TextTransform;
+  transform?: TextTransformType;
   wide?: boolean;
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;

@@ -8,7 +8,7 @@ import {Heading, IconSvg, Text} from 'ui-kit';
 import * as styled from './Section.styled';
 
 export interface SectionPropsInterface {
-  icon: IconName;
+  icon: IconNameType;
   name: string;
   expanded: boolean;
   onExpandToggle: () => void;

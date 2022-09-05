@@ -3,22 +3,22 @@ export interface BaseRequestInterface {
 }
 
 export interface BaseResponseInterface {}
-export interface PlaylistResponse extends Array<Track> {}
+export interface PlaylistResponse extends Array<TrackInterface> {}
 
-export interface Track {
+export interface TrackInterface {
   order: number;
   spaceId: {
     type: string;
     data: Buffer;
   };
-  track: TrackDetail;
+  track: TrackDetailInterface;
   trackId: {
     type: string;
     data: Buffer;
   };
 }
 
-export interface TrackDetail {
+export interface TrackDetailInterface {
   file_hash: string;
   id: {
     type: string;

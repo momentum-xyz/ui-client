@@ -6,14 +6,14 @@ import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './PageTopBar.styled';
 
-interface Props extends PropsWithThemeInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   title: string;
   subtitle?: string;
   onClose?: () => void;
   actions?: React.ReactElement;
 }
 
-const PageTopBar: FC<Props> = (props) => {
+const PageTopBar: FC<PropsInterface> = (props) => {
   return (
     <styled.Container data-testid="PageTopBar-test">
       <styled.Titles>

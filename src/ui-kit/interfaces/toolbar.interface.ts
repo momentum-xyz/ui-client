@@ -1,7 +1,7 @@
 export interface ToolbarIconInterface {
   title: string;
   link?: string;
-  icon?: IconName;
+  icon?: IconNameType;
   // @ts-ignore: add types
   isActive?: (match, location) => boolean;
   onClick?: () => void;

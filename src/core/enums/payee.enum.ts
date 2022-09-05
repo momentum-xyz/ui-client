@@ -4,7 +4,7 @@
  * @enum {string}
  */
 
-export enum Payee {
+export enum PayeeEnum {
   Staked = 'Staked',
   Stash = 'Stash',
   Controller = 'Controller',

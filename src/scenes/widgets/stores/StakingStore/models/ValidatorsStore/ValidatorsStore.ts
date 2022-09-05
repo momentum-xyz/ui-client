@@ -97,7 +97,7 @@ const ValidatorsStore = types.compose(
           return {
             label: address,
             value: address,
-            icon: 'wallet' as IconName
+            icon: 'wallet' as IconNameType
           };
         });
       },

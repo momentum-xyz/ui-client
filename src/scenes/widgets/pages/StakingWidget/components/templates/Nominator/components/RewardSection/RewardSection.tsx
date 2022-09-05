@@ -6,7 +6,7 @@ import {observer} from 'mobx-react-lite';
 import {Dropdown, OptionInterface, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {REWARD_DESTINATION_TYPES} from 'core/constants';
-import {Payee} from 'core/enums';
+import {PayeeEnum} from 'core/enums';
 
 import {RewardValidator} from '../index';
 
@@ -27,7 +27,7 @@ const RewardSection = () => {
     stashAccount && controllerAccount ? REWARD_DESTINATION_TYPES : [];
 
   const selectPaymentDestinationHandler = (option: OptionInterface) =>
-    setPaymentDestination(option.value as Payee);
+    setPaymentDestination(option.value as PayeeEnum);
 
   const selectCustomPaymentDestinationHandler = (option: OptionInterface) =>
     setCustomPaymentDestination(option.value);
@@ -59,7 +59,7 @@ const RewardSection = () => {
           variant="secondary"
         />
       </styled.FormField>
-      {paymentDestination === Payee.Account && (
+      {paymentDestination === PayeeEnum.Account && (
         <>
           <styled.FormField>
             <styled.LabelContainer>

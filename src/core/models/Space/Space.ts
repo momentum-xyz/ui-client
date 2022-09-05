@@ -8,7 +8,7 @@ import {SubSpaceModel} from 'core/models/SubSpace';
 import {RequestModel} from 'core/models/Request';
 import {ResetModel} from 'core/models/ResetModel';
 import {api, SpaceResponse} from 'api';
-import {SpaceType} from 'core/enums';
+import {SpaceTypeEnum} from 'core/enums';
 import {GetAllowedSpaceTypesResponse} from 'api';
 
 const Space = types
@@ -73,7 +73,7 @@ const Space = types
       // FIXME: Assign once
       if (response) {
         self.name = response.space.name;
-        self.isTable = response.spaceType === SpaceType.GRAB_A_TABLE;
+        self.isTable = response.spaceType === SpaceTypeEnum.GRAB_A_TABLE;
         self.isAdmin = response.admin;
         self.isMember = response.member ?? false;
         self.isOwner = response.owner ?? false;
@@ -167,7 +167,7 @@ const Space = types
       const newSpace = {
         parentId: parentId,
         name: name,
-        spaceType: type as SpaceType
+        spaceType: type as SpaceTypeEnum
       };
 
       yield self.addSubSpaceRequest.send(api.spaceRepository.create, {

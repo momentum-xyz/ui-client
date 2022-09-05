@@ -6,7 +6,7 @@ import {DeriveBalancesAll, DeriveStakingAccount} from '@polkadot/api-derive/type
 import {UnsubscribeType} from 'core/types';
 import {Button, Heading} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {StakingTransactionType} from 'core/enums';
+import {StakingTransactionEnum} from 'core/enums';
 
 import {Unbond} from '../index';
 
@@ -133,7 +133,7 @@ const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
   }, [sessionProgressSubscription]);
 
   useEffect(() => {
-    setTransactionType(StakingTransactionType.Bond);
+    setTransactionType(StakingTransactionEnum.Bond);
   }, [setTransactionType]);
 
   return section === 'nominator' ? (
