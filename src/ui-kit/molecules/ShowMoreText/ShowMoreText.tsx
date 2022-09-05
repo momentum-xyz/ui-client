@@ -44,7 +44,7 @@ const ShowMoreText: FC<PropsInterface> = ({text, textProps, lines = 4}) => {
 
   useEffect(() => {
     checkButtonAvailability();
-  }, [ref]);
+  }, [checkButtonAvailability]);
 
   useResize(ref, () => {
     debouncedCheck();
