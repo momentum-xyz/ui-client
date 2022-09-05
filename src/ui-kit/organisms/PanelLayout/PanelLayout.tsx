@@ -38,7 +38,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   noPadding?: boolean;
   headerPlaceholder?: boolean;
   titleHeight?: boolean;
-  headerClassName?: string;
+  isTruncateHeader?: boolean;
   showIcon?: boolean;
   headerHeadingAlign?: TextAlignType;
 }
@@ -61,7 +61,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     titleHeight = false,
     componentSize,
     className,
-    headerClassName,
+    isTruncateHeader = false,
     showIcon = true,
     headerHeadingAlign,
     ...restProps
@@ -101,7 +101,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 label={restProps.title}
                 transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                 isDanger={isDanger}
-                className={headerClassName}
+                isTruncate={isTruncateHeader}
                 align={headerHeadingAlign}
               />
             )}
