@@ -35,7 +35,7 @@ const MusicPlayerWidget: FC = () => {
       titleWidth="145px"
       headerItem="center"
       headerType="h4"
-      isCuttingHeader={true}
+      isCuttingHeader
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       onClose={musicPlayerWidget.close}
       showCloseButton

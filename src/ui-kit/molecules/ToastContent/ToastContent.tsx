@@ -34,7 +34,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         componentSize={{width: '100%'}}
         titleWidth="370px"
         headerType="h4"
-        isCuttingHeader={true}
+        isCuttingHeader
         headerHeadingAlign="left"
       >
         <styled.Container>

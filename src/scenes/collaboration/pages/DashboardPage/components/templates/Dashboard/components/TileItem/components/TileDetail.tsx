@@ -45,7 +45,7 @@ const TileDetail: FC<PropsInterface> = ({
       title={tile.content?.title ?? ''}
       noPadding={!tile.content?.text}
       headerStyle="uppercase"
-      isCuttingHeader={true}
+      isCuttingHeader
       headerIconName="questions"
       headerHeadingAlign="left"
       showIcon={!!tile.content?.text}
