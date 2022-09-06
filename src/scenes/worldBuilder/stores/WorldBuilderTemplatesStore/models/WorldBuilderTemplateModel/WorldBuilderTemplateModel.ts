@@ -1,16 +1,17 @@
 import {Instance, types} from 'mobx-state-tree';
 
+import {appVariables} from 'api/constants';
+
 const WorldBuilderTemplateModel = types
   .model('WorldBuilderTemplateModel', {
     id: types.identifier,
     name: types.string,
     description: types.string,
-    image: types.string,
-    showMore: false
+    image: types.string
   })
-  .actions((self) => ({
-    toggleShowMore() {
-      self.showMore = !self.showMore;
+  .views((self) => ({
+    get imageSrc(): string {
+      return `${appVariables.RENDER_SERVICE_URL}/get/${self.image}`;
     }
   }));
 

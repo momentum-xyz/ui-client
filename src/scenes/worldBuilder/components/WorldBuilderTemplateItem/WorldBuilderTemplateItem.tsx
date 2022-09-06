@@ -4,7 +4,6 @@ import {useTranslation} from 'react-i18next';
 
 import {WorldBuilderTemplateModelInterface} from 'scenes/worldBuilder/stores/WorldBuilderTemplatesStore/models';
 import {Heading, SvgButton} from 'ui-kit';
-import {appVariables} from 'api/constants';
 
 import * as styled from './WorldBuilderTemplateItem.styled';
 
@@ -44,10 +43,7 @@ const WorldBuilderTemplateItem: FC<PropsInterface> = ({template, onClick, select
           className={cn(selected && 'selected')}
         />
       </styled.InfoContainer>
-      <styled.Image
-        src={`${appVariables.RENDER_SERVICE_URL}/get/${template.image}`}
-        className={cn(selected && 'selected')}
-      />
+      <styled.Image src={template.imageSrc} className={cn(selected && 'selected')} />
     </styled.Container>
   );
 };
