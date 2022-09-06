@@ -30,7 +30,7 @@ const GrabTablePage: FC = () => {
         toast.error(
           <ToastContent
             isDanger
-            isCloseButton
+            showCloseButton
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('collaboration.spaceIsPrivate')}

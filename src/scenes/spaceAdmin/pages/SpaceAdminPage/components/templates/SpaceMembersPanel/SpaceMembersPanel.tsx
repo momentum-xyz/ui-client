@@ -44,7 +44,7 @@ const SpaceMembersPanel: FC = () => {
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('spaceAdmin.users.removeConfirmation.failure')}
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );
@@ -56,7 +56,7 @@ const SpaceMembersPanel: FC = () => {
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('spaceAdmin.users.removeConfirmation.success')}
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );

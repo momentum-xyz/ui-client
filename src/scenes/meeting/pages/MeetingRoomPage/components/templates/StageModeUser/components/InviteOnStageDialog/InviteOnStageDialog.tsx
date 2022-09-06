@@ -30,7 +30,7 @@ const InviteOnStageDialog: React.FC<PropsInterface> = (props) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.inviteToStageFailure', {user: user.name})}
-          isCloseButton
+          showCloseButton
         />
       );
     }

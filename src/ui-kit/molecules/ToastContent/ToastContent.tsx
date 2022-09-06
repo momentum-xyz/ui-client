@@ -12,15 +12,23 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerIconName?: IconNameType;
   text?: string;
   isDanger?: boolean;
-  isCloseButton?: boolean;
+  showCloseButton?: boolean;
   approveInfo?: ToastButtonInfoInterface;
   declineInfo?: ToastButtonInfoInterface;
   onClose?: () => void;
 }
 
 const ToastContent: FC<PropsInterface> = (props) => {
-  const {title, headerIconName, text, isDanger, isCloseButton, approveInfo, declineInfo, onClose} =
-    props;
+  const {
+    title,
+    headerIconName,
+    text,
+    isDanger,
+    showCloseButton,
+    approveInfo,
+    declineInfo,
+    onClose
+  } = props;
 
   return (
     <styled.ToastContainer data-testid="ToastContent-test">
@@ -29,7 +37,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         title={title}
         headerIconName={headerIconName}
         headerStyle="uppercase"
-        isCloseButton={isCloseButton}
+        isCloseButton={showCloseButton}
         iconSize="large"
         onClose={onClose}
         componentSize={{width: '100%'}}
@@ -39,7 +47,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         headerHeadingAlign="left"
       >
         <styled.Container
-          className={cn(isCloseButton && (declineInfo || approveInfo) && 'isButton')}
+          className={cn(showCloseButton && (declineInfo || approveInfo) && 'isButton')}
         >
           <styled.TextItem>
             <Text text={text} size="xs" align="left" />
