@@ -39,7 +39,7 @@ const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('spaceAdmin.users.editMemberDialog.success')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );

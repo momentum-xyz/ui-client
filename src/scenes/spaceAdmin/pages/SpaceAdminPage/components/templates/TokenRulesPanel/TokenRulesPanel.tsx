@@ -48,7 +48,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleSuccess', {action: t('actions.deleting')})}
-          isCloseButton
+          showCloseButton
         />
       );
       removeTokenRuleDialog.close();
@@ -60,7 +60,7 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleFailure', {action: t('actions.deleting')})}
-          isCloseButton
+          showCloseButton
         />
       );
       removeTokenRuleDialog.close();

@@ -36,7 +36,7 @@ const Meeting: FC = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.maximumParticipants')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );

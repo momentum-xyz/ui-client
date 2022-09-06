@@ -47,7 +47,7 @@ const MagicLinkWidget: FC = () => {
         headerIconName="alert"
         title={t('titles.alert')}
         text={t('messages.linkCopied')}
-        isCloseButton
+        showCloseButton
       />,
       TOAST_COMMON_OPTIONS
     );

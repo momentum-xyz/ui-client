@@ -37,7 +37,7 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('spaceAdmin.subSpaces.addSubSpaceDialog.success')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );

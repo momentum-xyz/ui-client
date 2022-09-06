@@ -55,7 +55,7 @@ const LaunchInitiativeWidget: FC = () => {
               headerIconName="alert"
               title={t('titles.alert')}
               text={t('messages.requestFailure', {action: t('actions.lunchingInitiative')})}
-              isCloseButton
+              showCloseButton
             />
           );
         }

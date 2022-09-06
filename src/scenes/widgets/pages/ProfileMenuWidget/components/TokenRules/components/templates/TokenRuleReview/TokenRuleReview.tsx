@@ -31,7 +31,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleSuccess', {action: t('actions.removed')})}
-          isCloseButton
+          showCloseButton
         />
       );
       onClose();
@@ -42,7 +42,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleFailure', {action: t('actions.removing')})}
-          isCloseButton
+          showCloseButton
         />
       );
     }
@@ -57,7 +57,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleSuccess', {action: t('actions.approved')})}
-          isCloseButton
+          showCloseButton
         />
       );
       onClose();
@@ -68,7 +68,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleFailure', {action: t('actions.approving')})}
-          isCloseButton
+          showCloseButton
         />
       );
     }
@@ -83,7 +83,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleSuccess', {action: t('actions.declined')})}
-          isCloseButton
+          showCloseButton
         />
       );
       onClose();
@@ -94,7 +94,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tokenRuleFailure', {action: t('actions.declining')})}
-          isCloseButton
+          showCloseButton
         />
       );
     }

@@ -273,13 +273,13 @@ const MoleculesPage: FC = () => {
             headerIconName="calendar"
             title="Alert"
             text="Some text"
-            isCloseButton
+            showCloseButton
           />
           <ToastContent
             headerIconName="alert"
             title="Alert"
             text="Some text here not more"
-            isCloseButton
+            showCloseButton
           />
         </styled.SectionGrid2>
         <styled.SectionGrid2>
@@ -325,7 +325,7 @@ const MoleculesPage: FC = () => {
                   headerIconName="alert"
                   title="Alert"
                   text="some text here not more"
-                  isCloseButton
+                  showCloseButton
                 />,
                 TOAST_COMMON_OPTIONS
               );
@@ -360,7 +360,7 @@ const MoleculesPage: FC = () => {
                   headerIconName="calendar"
                   title="Alert"
                   text="some text"
-                  isCloseButton
+                  showCloseButton
                 />,
                 TOAST_COMMON_OPTIONS
               );

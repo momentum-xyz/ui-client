@@ -45,7 +45,7 @@ const CalendarPage: FC = () => {
             headerIconName="calendar"
             title={t('titles.alert')}
             text={t('messages.removeEventSuccess')}
-            isCloseButton
+            showCloseButton
           />
         );
       } else {
@@ -55,7 +55,7 @@ const CalendarPage: FC = () => {
             headerIconName="calendar"
             title={t('titles.alert')}
             text={t('errors.couldNotRemoveEvent')}
-            isCloseButton
+            showCloseButton
           />
         );
       }

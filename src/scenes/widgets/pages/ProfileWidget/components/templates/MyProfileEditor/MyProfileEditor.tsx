@@ -74,7 +74,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('editProfileWidget.saveSuccess')}
-          isCloseButton
+          showCloseButton
         />
       );
       sessionStore.updateName(name);
@@ -86,7 +86,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('editProfileWidget.saveFailure')}
-          isCloseButton
+          showCloseButton
         />
       );
     }
