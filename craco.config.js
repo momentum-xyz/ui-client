@@ -1,3 +1,5 @@
+const CompressionPlugin = require('compression-webpack-plugin');
+
 module.exports = {
   style: {
     postcssOptions: {
@@ -17,5 +19,15 @@ module.exports = {
         }
       ]
     }
+  },
+  configureWebpack: {
+    plugins: [
+      new CompressionPlugin({
+        filename: '[path].gz[query]',
+        algorithm: 'gzip',
+        test: /\.(js|css)$/,
+        deleteOriginalAssets: false
+      })
+    ]
   }
 };
