@@ -1,11 +1,11 @@
 import React, {FC, useEffect} from 'react';
-import {generatePath, Switch, useParams, useRouteMatch} from 'react-router-dom';
+import {generatePath, useParams, useRouteMatch} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
 import {Navigation} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {createRoutesByConfig} from 'core/utils';
+import {createSwitchByConfig} from 'core/utils';
 import {NavigationTabInterface} from 'core/interfaces';
 
 import {ADMIN_ROUTES} from './SpaceAdmin.routes';
@@ -45,7 +45,7 @@ const SpaceAdmin: FC = () => {
   return (
     <>
       <Navigation tabs={tabs} />
-      <Switch>{createRoutesByConfig(ADMIN_ROUTES(path))}</Switch>
+      {createSwitchByConfig(ADMIN_ROUTES(path))}
     </>
   );
 };

@@ -12,7 +12,7 @@ import {useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
 import {setApiResponseHandlers} from 'api/request';
 import {SystemWideError, ToastContent} from 'ui-kit';
-import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
+import {createSwitchByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
 
 import AppAuth from './AppAuth';
@@ -28,7 +28,7 @@ const App: FC = () => {
   const {themeStore} = mainStore;
   const {isConfigReady, isError: isErrorLoadingConfig} = configStore;
 
-  const {pathname} = useLocation();
+  const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
   const {t} = useTranslation();
 
@@ -87,13 +87,11 @@ const App: FC = () => {
   }
 
   // PUBLIC ROUTES
-  if (isTargetRoute(pathname as string, PUBLIC_ROUTES)) {
+  if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-          <Suspense fallback={() => <div />}>
-            <Switch>{createRoutesByConfig(PUBLIC_ROUTES)}</Switch>
-          </Suspense>
+          <Suspense fallback={() => <div />}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
         </Web3ReactProvider>
       </ThemeProvider>
     );
@@ -118,14 +116,12 @@ const App: FC = () => {
   }
 
   // CORE ROUTES
-  if (isTargetRoute(pathname as string, CORE_ROUTES)) {
+  if (isTargetRoute(pathname, CORE_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
-            <Suspense fallback={() => <div />}>
-              <Switch>{createRoutesByConfig(CORE_ROUTES)}</Switch>
-            </Suspense>
+            <Suspense fallback={() => <div />}>{createSwitchByConfig(CORE_ROUTES)}</Suspense>
           </AuthProvider>
         </Web3ReactProvider>
       </ThemeProvider>
@@ -151,7 +147,7 @@ const App: FC = () => {
   }
 
   // PRIVATE ROUTES
-  if (isTargetRoute(pathname as string, PRIVATE_ROUTES)) {
+  if (isTargetRoute(pathname, PRIVATE_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
@@ -160,10 +156,7 @@ const App: FC = () => {
               <AppAuth>
                 <GlobalStyles />
                 <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
-                  <Switch>
-                    {createRoutesByConfig(PRIVATE_ROUTES)}
-                    <Redirect to={ROUTES.base} />
-                  </Switch>
+                  {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.base)}
                 </AppLayers>
               </AppAuth>
             </Suspense>
@@ -182,12 +175,7 @@ const App: FC = () => {
             <GlobalStyles />
             <UnityPage />
             <Suspense fallback={() => <div />}>
-              <AppLayers>
-                <Switch>
-                  {createRoutesByConfig(PRIVATE_ROUTES_WITH_UNITY)}
-                  <Redirect to={ROUTES.base} />
-                </Switch>
-              </AppLayers>
+              <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}</AppLayers>
             </Suspense>
           </AppAuth>
         </AuthProvider>
