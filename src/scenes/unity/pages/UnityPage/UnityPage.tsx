@@ -104,6 +104,7 @@ const UnityPage: FC = () => {
         sendBack={() => {
           unityStore.sendHighFiveBack(senderId);
         }}
+        showCloseButton
       />,
       TOAST_BASE_OPTIONS
     );
@@ -116,7 +117,7 @@ const UnityPage: FC = () => {
         headerIconName="check"
         title={t('messages.highFiveSentTitle', {name: message})}
         text={t('messages.highFiveSentText')}
-        isCloseButton
+        showCloseButton
       />
     );
   });
@@ -138,6 +139,7 @@ const UnityPage: FC = () => {
         title={t('titles.joinGathering')}
         text={t('messages.joinGathering', {title: message.name})}
         approveInfo={{title: 'Join', onClick: handleJoinSpace}}
+        showCloseButton
       />,
       TOAST_NOT_AUTO_CLOSE_OPTIONS
     );
@@ -146,7 +148,12 @@ const UnityPage: FC = () => {
   usePosBusEvent('simple-notification', (message) => {
     console.info('[POSBUS EVENT] simple-notification', message);
     toast.info(
-      <ToastContent headerIconName="check" title={t('titles.alert')} text={message} isCloseButton />
+      <ToastContent
+        headerIconName="check"
+        title={t('titles.alert')}
+        text={message}
+        showCloseButton
+      />
     );
   });
 

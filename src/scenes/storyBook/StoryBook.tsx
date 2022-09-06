@@ -1,11 +1,10 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {Redirect, Switch} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {createRoutesByConfig} from 'core/utils';
+import {createSwitchByConfig} from 'core/utils';
 import {Navigation, PageTopBar, VisualSettingsPanel} from 'ui-kit';
 import {NavigationTabInterface} from 'core/interfaces';
 import background from 'static/images/bg.png';
@@ -53,10 +52,7 @@ const StoryBook: FC = () => {
         <Navigation tabs={tabs} />
 
         <styled.Components>
-          <Switch>
-            {createRoutesByConfig(STORYBOOK_ROUTES)}
-            <Redirect to={ROUTES.storyBook.atoms} />
-          </Switch>
+          {createSwitchByConfig(STORYBOOK_ROUTES, ROUTES.storyBook.atoms)}
         </styled.Components>
       </styled.Content>
     </styled.StoryBook>

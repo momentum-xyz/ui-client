@@ -38,7 +38,7 @@ const RemoveTileDialog: FC = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.tileRemoveError')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );

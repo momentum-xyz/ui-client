@@ -24,7 +24,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerStyle?: HeaderStyleType;
   isBodyExtendingToEdges?: boolean;
   isDanger?: boolean;
-  isCloseButton?: boolean;
+  showCloseButton?: boolean;
   iconSize?: SizeType;
   hasBorder?: boolean;
   headerActions?: ReactNode;
@@ -132,7 +132,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           <styled.Spacer />
           <styled.HeaderActions>
             {props.headerActions}
-            {(restProps.isCloseButton || restProps.onClose) && (
+            {(restProps.showCloseButton || restProps.onClose) && (
               <SvgButton
                 theme={restProps.theme}
                 iconName="close"

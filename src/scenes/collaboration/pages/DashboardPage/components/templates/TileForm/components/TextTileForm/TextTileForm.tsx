@@ -47,7 +47,7 @@ const TextTileForm: FC<PropsInterface> = ({
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('messages.tileCreateSuccess')}
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );
@@ -58,7 +58,7 @@ const TextTileForm: FC<PropsInterface> = ({
             title={t('titles.alert')}
             text={t('messages.tileCreateError')}
             isDanger
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );
@@ -71,7 +71,7 @@ const TextTileForm: FC<PropsInterface> = ({
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('messages.tileUpdateSuccess')}
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );
@@ -82,7 +82,7 @@ const TextTileForm: FC<PropsInterface> = ({
             title={t('titles.alert')}
             text={t('messages.tileUpdateError')}
             isDanger
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );

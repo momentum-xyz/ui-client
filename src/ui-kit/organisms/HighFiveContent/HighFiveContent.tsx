@@ -6,9 +6,10 @@ import {ToastContent} from 'ui-kit/molecules';
 interface PropsInterface {
   message: string;
   sendBack: () => void;
+  showCloseButton?: boolean;
 }
 
-const HighFiveContent: FC<PropsInterface> = ({message, sendBack}) => {
+const HighFiveContent: FC<PropsInterface> = ({message, sendBack, showCloseButton}) => {
   const [clicked, setClicked] = useState(false);
 
   const {t} = useTranslation();
@@ -28,6 +29,7 @@ const HighFiveContent: FC<PropsInterface> = ({message, sendBack}) => {
         name: message
       })}
       approveInfo={{title: t('titles.returnHighFive'), onClick: handleClick}}
+      showCloseButton={showCloseButton}
     />
   );
 };

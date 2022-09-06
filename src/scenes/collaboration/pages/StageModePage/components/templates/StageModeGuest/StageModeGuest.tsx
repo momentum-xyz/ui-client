@@ -41,7 +41,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.joinStageRequestFailure')}
-          isCloseButton
+          showCloseButton
         />
       );
     }
