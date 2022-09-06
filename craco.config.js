@@ -7,6 +7,7 @@ module.exports = {
     }
   },
   webpack: {
+    plugins: [new CompressionPlugin()],
     configure: {
       ignoreWarnings: [
         function ignoreSourcemapsloaderWarnings(warning) {
@@ -19,15 +20,5 @@ module.exports = {
         }
       ]
     }
-  },
-  configureWebpack: {
-    plugins: [
-      new CompressionPlugin({
-        filename: '[path].gz[query]',
-        algorithm: 'gzip',
-        test: /\.(js|css)$/,
-        deleteOriginalAssets: false
-      })
-    ]
   }
 };
