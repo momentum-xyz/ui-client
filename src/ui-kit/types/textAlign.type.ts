@@ -1,1 +1,1 @@
-export type TextAlignType = 'left' | 'right' | 'center';
+export type TextAlignType = 'left' | 'right' | 'center' | 'justify';

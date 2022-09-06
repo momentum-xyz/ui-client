@@ -76,6 +76,10 @@ export const Text = styled.div`
     text-align: center;
   }
 
+  &.justify {
+    text-align: justify;
+  }
+
   &.weight-light {
     font-weight: 300;
   }

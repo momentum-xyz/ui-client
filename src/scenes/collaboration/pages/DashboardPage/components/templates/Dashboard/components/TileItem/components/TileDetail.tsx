@@ -46,13 +46,16 @@ const TileDetail: FC<PropsInterface> = ({
       noPadding={!tile.content?.text}
       headerStyle="uppercase"
       isTruncateHeader
+      headerType="h3"
       headerIconName="questions"
       headerHeadingAlign="left"
       showIcon={!!tile.content?.text}
     >
       <styled.Container>
         {imageUrl && <styled.ImageWrapper src={imageUrl} alt="" />}
-        {tile.content?.text && <styled.TextItem text={tile.content.text} size="xs" align="left" />}
+        {tile.content?.text && (
+          <styled.TextItem text={tile.content.text} size="m" align="justify" breakLongWord />
+        )}
         {videoUrl && (
           <styled.VideoWrapper>
             <iframe title={`video-${tile.id}`} src={videoUrl} allowFullScreen />

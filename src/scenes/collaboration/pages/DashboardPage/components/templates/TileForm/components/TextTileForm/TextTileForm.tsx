@@ -127,6 +127,7 @@ const TextTileForm: FC<PropsInterface> = ({
                 <TextArea
                   name={t('dashboard.tileForm.descriptionLabel')}
                   value={value}
+                  lines={10}
                   onChange={onChange}
                   placeholder={t('dashboard.tileForm.descriptionPlaceholder')}
                   isError={!!errors.text_description}
