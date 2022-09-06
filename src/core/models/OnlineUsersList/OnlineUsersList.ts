@@ -40,11 +40,9 @@ const OnlineUsersList = types
     get isLoading(): boolean {
       return self.usersRequest.isLoading;
     },
-    filteredPeople(excludedPeopleIds: string[], currentUser: string): UserProfileModelInterface[] {
+    filteredPeople(excludedPeopleIds: string[]): UserProfileModelInterface[] {
       const users = self.searchQuery ? self.searchedUsers : self.users;
-      return users
-        .filter((user) => !excludedPeopleIds?.includes(user.uuid))
-        .filter((user) => user.uuid !== currentUser);
+      return users.filter((user) => !excludedPeopleIds?.includes(user.uuid));
     }
   }));
 

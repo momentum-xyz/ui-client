@@ -80,7 +80,7 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
       ...(invite || onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT
         ? []
         : [profile]),
-      ...onlineUsersList.filteredPeople(excludedPeople, profile.uuid)
+      ...onlineUsersList.filteredPeople([...excludedPeople, profile.uuid])
     ];
 
     return sortedUsers.map((user) => (
