@@ -91,7 +91,7 @@ const App: FC = () => {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-          <Suspense fallback={() => <div />}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
+          <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
         </Web3ReactProvider>
       </ThemeProvider>
     );
@@ -121,7 +121,7 @@ const App: FC = () => {
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
-            <Suspense fallback={() => <div />}>{createSwitchByConfig(CORE_ROUTES)}</Suspense>
+            <Suspense fallback={false}>{createSwitchByConfig(CORE_ROUTES)}</Suspense>
           </AuthProvider>
         </Web3ReactProvider>
       </ThemeProvider>
@@ -152,7 +152,7 @@ const App: FC = () => {
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
-            <Suspense fallback={() => <div />}>
+            <Suspense fallback={false}>
               <AppAuth>
                 <GlobalStyles />
                 <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
@@ -174,7 +174,7 @@ const App: FC = () => {
           <AppAuth>
             <GlobalStyles />
             <UnityPage />
-            <Suspense fallback={() => <div />}>
+            <Suspense fallback={false}>
               <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}</AppLayers>
             </Suspense>
           </AppAuth>
