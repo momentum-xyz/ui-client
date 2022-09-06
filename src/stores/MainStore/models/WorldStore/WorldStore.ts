@@ -1,7 +1,7 @@
 import {flow, Instance, types, cast} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel} from 'core/models';
-import {api, WorldConfig, WorldConfigResponse} from 'api';
+import {api, WorldConfigType, WorldConfigResponse} from 'api';
 
 const WorldStore = types.compose(
   ResetModel,
@@ -9,7 +9,7 @@ const WorldStore = types.compose(
     .model('WorldStore', {
       worldId: types.optional(types.string, ''),
       worldConfigRequest: types.optional(RequestModel, {}),
-      worldConfig: types.maybe(types.frozen<WorldConfig>())
+      worldConfig: types.maybe(types.frozen<WorldConfigType>())
     })
     .actions((self) => ({
       fetchWorldConfig: flow(function* (worldId: string) {

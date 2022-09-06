@@ -5,7 +5,7 @@ import {t} from 'i18next';
 import {toast} from 'react-toastify';
 
 import {Dialog, Heading, Text, ToastContent} from 'ui-kit';
-import {TokenRuleStatus} from 'core/enums';
+import {TokenRuleStatusEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './TokenRuleReview.styled';
@@ -116,7 +116,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
       showCloseButton
       onClose={onClose}
       approveInfo={
-        tokenRuleReviewStore.currentTokenRule?.status === TokenRuleStatus.REQUESTED
+        tokenRuleReviewStore.currentTokenRule?.status === TokenRuleStatusEnum.REQUESTED
           ? {
               title: t('actions.approve'),
               onClick: () => {
@@ -133,7 +133,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
           : undefined
       }
       declineInfo={
-        tokenRuleReviewStore.currentTokenRule?.status === TokenRuleStatus.REQUESTED
+        tokenRuleReviewStore.currentTokenRule?.status === TokenRuleStatusEnum.REQUESTED
           ? {
               title: t('actions.decline'),
               onClick: () => {

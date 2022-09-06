@@ -10,12 +10,12 @@ export const Container = styled.div`
 `;
 
 export const PanelWrapper = styled.div`
-  pointer-events: all;
   height: 100%;
 `;
 
 export const Rejoin = styled.div`
   position: absolute;
+  pointer-events: all;
   right: 222px;
   top: 12px;
 `;

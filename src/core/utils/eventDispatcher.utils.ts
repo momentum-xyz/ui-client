@@ -1,7 +1,7 @@
-export type Listener = (...args: any[]) => Promise<any> | void;
-export type DefaultEventMap = {[event in string | symbol]: Listener};
+export type ListenerType = (...args: any[]) => Promise<any> | void;
+export type DefaultEventMapType = {[event in string | symbol]: ListenerType};
 
-export interface IEventEmitter<EventMap extends DefaultEventMap = DefaultEventMap> {
+export interface EventEmitterInterface<EventMap extends DefaultEventMapType = DefaultEventMapType> {
   emit<EventKey extends keyof EventMap>(
     event: EventKey,
     ...args: Parameters<EventMap[EventKey]>
@@ -53,20 +53,20 @@ export interface IEventEmitter<EventMap extends DefaultEventMap = DefaultEventMa
 
 /** cast type of any event emitter to typed event emitter */
 export function asTypedEventEmitter<
-  EventMap extends DefaultEventMap,
+  EventMap extends DefaultEventMapType,
   X extends NodeJS.EventEmitter
->(x: X): IEventEmitter<EventMap> {
+>(x: X): EventEmitterInterface<EventMap> {
   return x as any;
 }
 
 /** Implemented event emitter */
-export class EventEmitter<EventMap extends DefaultEventMap = DefaultEventMap>
-  implements IEventEmitter<EventMap>
+export class EventEmitter<EventMap extends DefaultEventMapType = DefaultEventMapType>
+  implements EventEmitterInterface<EventMap>
 {
   events: {
-    [eventName in keyof EventMap]: Listener[];
+    [eventName in keyof EventMap]: ListenerType[];
   } = {} as {
-    [eventName in keyof EventMap]: Listener[];
+    [eventName in keyof EventMap]: ListenerType[];
   };
 
   maxListeners = Infinity;

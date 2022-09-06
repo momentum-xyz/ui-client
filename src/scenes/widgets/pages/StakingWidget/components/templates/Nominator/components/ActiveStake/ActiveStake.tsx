@@ -4,7 +4,7 @@ import {t} from 'i18next';
 
 import {Heading, IconSvg, PropsWithThemeInterface, Text, Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {StakingTransactionType} from 'core/enums';
+import {StakingTransactionEnum} from 'core/enums';
 
 import {UnbondingIndicator} from '../index';
 
@@ -30,13 +30,13 @@ const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond})
   const unbondHandler = () => isUnbondingPermitted && goToUnbond();
   const withdrawUnbonded = () => {
     if (isWithdrawUnbondedPermitted) {
-      setTransactionType(StakingTransactionType.WithdrawUnbond);
+      setTransactionType(StakingTransactionEnum.WithdrawUnbond);
       goToAuthorization();
     }
   };
   const stopStaking = () => {
     if (!isStakingAccountUnlocking) {
-      setTransactionType(StakingTransactionType.Chill);
+      setTransactionType(StakingTransactionEnum.Chill);
       goToAuthorization();
     }
   };

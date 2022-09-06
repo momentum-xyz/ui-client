@@ -101,12 +101,7 @@ const App: FC = () => {
   if (!sessionStore.oidcConfig && pathname === ROUTES.worldBuilder.base) {
     return (
       <Switch>
-        <Redirect
-          to={{
-            pathname: ROUTES.worldBuilder.login,
-            state: {from: pathname}
-          }}
-        />
+        <Redirect to={{pathname: ROUTES.worldBuilder.login, state: {from: pathname}}} />
       </Switch>
     );
   }
@@ -115,12 +110,7 @@ const App: FC = () => {
   if (!sessionStore.oidcConfig) {
     return (
       <Switch>
-        <Redirect
-          to={{
-            pathname: ROUTES.login,
-            state: {from: pathname}
-          }}
-        />
+        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
       </Switch>
     );
   }
@@ -138,16 +128,11 @@ const App: FC = () => {
     );
   }
 
-  // NO OIDC USER AND WORLD BUILDER. To await white screen
-  if (!sessionStore.isSessionExists) {
+  // NO OIDC CONFIG AND WORLD BUILDER
+  if (!sessionStore.isSessionExists && pathname === ROUTES.worldBuilder.base) {
     return (
       <Switch>
-        <Redirect
-          to={{
-            pathname: ROUTES.worldBuilder.login,
-            state: {from: pathname}
-          }}
-        />
+        <Redirect to={{pathname: ROUTES.worldBuilder.login, state: {from: pathname}}} />
       </Switch>
     );
   }
@@ -156,12 +141,7 @@ const App: FC = () => {
   if (!sessionStore.isSessionExists) {
     return (
       <Switch>
-        <Redirect
-          to={{
-            pathname: ROUTES.login,
-            state: {from: pathname}
-          }}
-        />
+        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
       </Switch>
     );
   }

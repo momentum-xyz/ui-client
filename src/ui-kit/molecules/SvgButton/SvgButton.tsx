@@ -9,7 +9,7 @@ import * as styled from './SvgButton.styled';
 interface PropsInterface
   extends PropsWithThemeInterface,
     Pick<HTMLProps<HTMLDivElement>, 'className'> {
-  iconName: IconName;
+  iconName: IconNameType;
   size: SizeType;
   onClick?: () => void;
   isDanger?: boolean;

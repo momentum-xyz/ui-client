@@ -8,7 +8,7 @@ import * as styled from './ToastContent.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   title?: string;
-  headerIconName?: IconName;
+  headerIconName?: IconNameType;
   text?: string;
   isDanger?: boolean;
   isCloseButton?: boolean;
@@ -34,7 +34,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         componentSize={{width: '100%'}}
         titleWidth="370px"
         headerType="h4"
-        headerClassName="header-eclipse"
+        isTruncateHeader
         headerHeadingAlign="left"
       >
         <styled.Container>

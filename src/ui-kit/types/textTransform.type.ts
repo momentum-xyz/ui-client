@@ -1,1 +1,1 @@
-export type TextTransform = 'normal' | 'uppercase' | 'lowercase' | 'capitalized';
+export type TextTransformType = 'normal' | 'uppercase' | 'lowercase' | 'capitalized';

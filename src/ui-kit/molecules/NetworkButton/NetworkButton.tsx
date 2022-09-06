@@ -4,15 +4,15 @@ import {IconSvg, PropsWithThemeInterface} from 'ui-kit/index';
 
 import * as styled from './NetworkButton.styled';
 
-interface NetworkButtonProps extends PropsWithThemeInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   label: string;
   imageSrc?: string;
-  iconName?: IconName;
+  iconName?: IconNameType;
   disabled?: boolean;
   onClick: () => void;
 }
 
-const NetworkButton: FC<NetworkButtonProps> = (props) => {
+const NetworkButton: FC<PropsInterface> = (props) => {
   const {theme, label, imageSrc, iconName, disabled = false, onClick} = props;
 
   return (

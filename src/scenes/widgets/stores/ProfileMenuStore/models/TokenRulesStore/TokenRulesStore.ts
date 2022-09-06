@@ -12,7 +12,7 @@ import {
 import {TokenTypeModel} from 'core/models/TokenType';
 import {NetworkTypeModel} from 'core/models/NetworkType';
 import {api, FetchTokenRulesResponse} from 'api';
-import {SortDirection} from 'core/enums';
+import {SortDirectionEnum} from 'core/enums';
 
 import {TokenRuleReviewStore} from './models';
 
@@ -49,17 +49,17 @@ const TokenRulesStore = types.compose(
       }),
       sortTokens(field: string) {
         if (!self.sortedField || self.sortedField.key !== field) {
-          self.sortedField = {key: field, direction: SortDirection.DESCENDING};
+          self.sortedField = {key: field, direction: SortDirectionEnum.DESCENDING};
         } else if (
           self.sortedField.key === field &&
-          self.sortedField.direction === SortDirection.ASCENDING
+          self.sortedField.direction === SortDirectionEnum.ASCENDING
         ) {
-          self.sortedField = {key: field, direction: SortDirection.DESCENDING};
+          self.sortedField = {key: field, direction: SortDirectionEnum.DESCENDING};
         } else if (
           self.sortedField.key === field &&
-          self.sortedField.direction === SortDirection.DESCENDING
+          self.sortedField.direction === SortDirectionEnum.DESCENDING
         ) {
-          self.sortedField = {key: field, direction: SortDirection.ASCENDING};
+          self.sortedField = {key: field, direction: SortDirectionEnum.ASCENDING};
         }
 
         self.tokenRules = cast(

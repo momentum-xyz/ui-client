@@ -8,18 +8,18 @@ import {ValidatorItemModelInterface} from 'core/models';
 
 import * as styled from './ValidatorList.styled';
 
-export interface ColumnHeader {
+export interface ColumnHeaderInterface {
   key: string;
   sortable: boolean;
   label?: string;
-  icon?: IconName;
+  icon?: IconNameType;
   eventName?: string;
   isSmall?: boolean;
   truncate?: boolean;
 }
 
 interface PropsInterface extends PropsWithThemeInterface {
-  columnHeaders: ColumnHeader[];
+  columnHeaders: ColumnHeaderInterface[];
   data: ValidatorItemModelInterface[];
   onEventClick: (eventName: string, item: ValidatorItemModelInterface) => void;
 }
@@ -51,7 +51,7 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
     }
   };
 
-  const handleCellClick = (header: ColumnHeader, item: ValidatorItemModelInterface) => {
+  const handleCellClick = (header: ColumnHeaderInterface, item: ValidatorItemModelInterface) => {
     if (header.eventName) {
       onEventClick(header.eventName, item);
     }
@@ -76,7 +76,10 @@ const ValidatorList: FC<PropsInterface> = ({columnHeaders, data, onEventClick, t
                   <div>{header.label}</div>
                   {header.sortable && (
                     <button>
-                      <IconSvg name={getSortIconNameFor(header.key) as IconName} size="medium" />
+                      <IconSvg
+                        name={getSortIconNameFor(header.key) as IconNameType}
+                        size="medium"
+                      />
                     </button>
                   )}
                 </styled.THContainter>

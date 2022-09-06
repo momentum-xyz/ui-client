@@ -7,7 +7,7 @@ import {
   TokenRuleItemModelInterface
 } from 'core/models';
 import {api} from 'api';
-import {TokenRuleReviewStatus} from 'core/enums';
+import {TokenRuleReviewStatusEnum} from 'core/enums';
 
 const TokenRuleReviewStore = types.compose(
   ResetModel,
@@ -44,7 +44,7 @@ const TokenRuleReviewStore = types.compose(
 
         yield self.acceptTokenRuleRequest.send(api.tokenRuleRepository.processTokenRule, {
           tokenRuleId: self.currentTokenRule.id,
-          status: TokenRuleReviewStatus.APPROVED
+          status: TokenRuleReviewStatusEnum.APPROVED
         });
 
         return self.acceptTokenRuleRequest.isDone;
@@ -56,7 +56,7 @@ const TokenRuleReviewStore = types.compose(
 
         yield self.declineTokenRuleRequest.send(api.tokenRuleRepository.processTokenRule, {
           tokenRuleId: self.currentTokenRule.id,
-          status: TokenRuleReviewStatus.DENIED
+          status: TokenRuleReviewStatusEnum.DENIED
         });
 
         return self.declineTokenRuleRequest.isDone;

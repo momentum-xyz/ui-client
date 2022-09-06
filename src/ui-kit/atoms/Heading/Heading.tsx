@@ -1,7 +1,7 @@
 import React, {FC, memo} from 'react';
 import cn from 'classnames';
 
-import {HeadingType, TextAlignType, TextTransform, TextWeightType} from 'ui-kit/types';
+import {HeadingType, TextAlignType, TextTransformType, TextWeightType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Heading.styled';
@@ -9,11 +9,12 @@ import * as styled from './Heading.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   type: HeadingType;
   label: string;
-  transform?: TextTransform;
+  transform?: TextTransformType;
   isDanger?: boolean;
   align?: TextAlignType;
   weight?: TextWeightType;
   className?: string;
+  isTruncate?: boolean;
 }
 
 const Heading: FC<PropsInterface> = (props) => {
@@ -23,6 +24,7 @@ const Heading: FC<PropsInterface> = (props) => {
     weight = 'bold',
     isDanger = false,
     className,
+    isTruncate = false,
     ...restProps
   } = props;
 
@@ -30,31 +32,46 @@ const Heading: FC<PropsInterface> = (props) => {
     switch (props.type) {
       case 'h1':
         return (
-          <styled.H1 data-testid="Heading-H1-test" className={cn(transform)}>
+          <styled.H1
+            data-testid="Heading-H1-test"
+            className={cn(transform, isTruncate && 'text-truncate')}
+          >
             {restProps.label}
           </styled.H1>
         );
       case 'h2':
         return (
-          <styled.H2 data-testid="Heading-H2-test" className={cn(transform)}>
+          <styled.H2
+            data-testid="Heading-H2-test"
+            className={cn(transform, isTruncate && 'text-truncate')}
+          >
             {restProps.label}
           </styled.H2>
         );
       case 'h3':
         return (
-          <styled.H3 data-testid="Heading-H3-test" className={cn(transform)}>
+          <styled.H3
+            data-testid="Heading-H3-test"
+            className={cn(transform, isTruncate && 'text-truncate')}
+          >
             {restProps.label}
           </styled.H3>
         );
       case 'h4':
         return (
-          <styled.H4 data-testid="Heading-H4-test" className={cn(transform)}>
+          <styled.H4
+            data-testid="Heading-H4-test"
+            className={cn(transform, isTruncate && 'text-truncate')}
+          >
             {restProps.label}
           </styled.H4>
         );
       case 'h5':
         return (
-          <styled.H5 data-testid="Heading-H5-test" className={cn(transform)}>
+          <styled.H5
+            data-testid="Heading-H5-test"
+            className={cn(transform, isTruncate && 'text-truncate')}
+          >
             {restProps.label}
           </styled.H5>
         );

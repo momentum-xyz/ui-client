@@ -1,7 +1,7 @@
 import {types, flow} from 'mobx-state-tree';
 import axios, {AxiosRequestConfig, CancelTokenSource, AxiosError, AxiosResponse} from 'axios';
 
-import {RequestState} from 'core/enums';
+import {RequestStateEnum} from 'core/enums';
 
 const UNAUTHORIZED_STATUS = 401;
 const BAD_FIELD_STATUS = 400;
@@ -19,7 +19,7 @@ const RequestModel = types
   .model('Request', {
     showError: false,
     isCancellable: true,
-    state: types.maybeNull(types.enumeration(Object.values(RequestState)))
+    state: types.maybeNull(types.enumeration(Object.values(RequestStateEnum)))
   })
   .actions((self) => {
     let cancel: CancelTokenSource | null = null;
@@ -30,7 +30,7 @@ const RequestModel = types
         options: T
       ) {
         try {
-          self.state = RequestState.Pending;
+          self.state = RequestStateEnum.Pending;
 
           if (self.isCancellable) {
             if (cancel) {
@@ -50,12 +50,12 @@ const RequestModel = types
           });
 
           console.assert(!!response, 'Got empty response');
-          self.state = RequestState.Done;
+          self.state = RequestStateEnum.Done;
 
           return response.data;
         } catch (error) {
           console.error(error instanceof Error ? error.message : error);
-          self.state = RequestState.Error;
+          self.state = RequestStateEnum.Error;
 
           /** handle errors */
           if (axios.isAxiosError(error)) {
@@ -93,19 +93,19 @@ const RequestModel = types
   })
   .views((self) => ({
     get isPending() {
-      return self.state === RequestState.Pending;
+      return self.state === RequestStateEnum.Pending;
     },
     get isDone() {
-      return self.state === RequestState.Done;
+      return self.state === RequestStateEnum.Done;
     },
     get isError() {
-      return self.state === RequestState.Error;
+      return self.state === RequestStateEnum.Error;
     },
     get isNotSend() {
       return self.state === null;
     },
     get isNotComplete() {
-      return [RequestState.Pending, null].includes(self.state);
+      return [RequestStateEnum.Pending, null].includes(self.state);
     }
   }));
 

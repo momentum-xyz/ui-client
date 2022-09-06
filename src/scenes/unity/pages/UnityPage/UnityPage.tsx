@@ -39,6 +39,7 @@ const UnityPage: FC = () => {
 
   useUnityEvent('MomentumLoaded', () => {
     unityStore.setAuthToken(auth.user?.access_token);
+    unityStore.setInitialVolume();
   });
 
   useUnityEvent('TeleportReady', () => {

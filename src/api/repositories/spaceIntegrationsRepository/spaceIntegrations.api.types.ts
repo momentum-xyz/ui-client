@@ -15,7 +15,7 @@ export interface SpaceIntegrationUserInterface {
     data: Buffer;
   };
   flag: number;
-  data: SpaceIntegrationUserData;
+  data: SpaceIntegrationUserDataInterface;
 }
 
 export interface IntegrationDataInterface {
@@ -33,7 +33,7 @@ export interface IntegrationDataInterface {
   channelId?: string;
 }
 
-export interface SpaceIntegrationUserData {
+export interface SpaceIntegrationUserDataInterface {
   role?: StageModeUserRoleEnum;
 }
 

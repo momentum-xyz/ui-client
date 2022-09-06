@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
@@ -9,10 +9,6 @@ import * as styled from './UnityVolumeController.styled';
 
 const UnityVolumeController: FC = () => {
   const {unityStore} = useStore().mainStore;
-
-  useEffect(() => {
-    unityStore.setInitialVolume();
-  }, []);
 
   return (
     <styled.Container data-testid="UnityVolumeController-test">
@@ -27,7 +23,9 @@ const UnityVolumeController: FC = () => {
             max="1"
             step=".01"
             value={unityStore.volume}
-            onChange={unityStore.volumeChange}
+            onChange={(e) => {
+              unityStore.volumeChange(parseFloat(e.target.value));
+            }}
           />
         </styled.VolumeBarContainer>
         <SvgButton iconName="player-unmute" size="medium" onClick={unityStore.unmute} />

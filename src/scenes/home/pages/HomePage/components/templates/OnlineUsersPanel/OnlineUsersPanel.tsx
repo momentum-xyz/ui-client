@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {useStore, useUnityEvent} from 'shared/hooks';
-import {ExpandableLayout, OnlineUsersList} from 'ui-kit';
+import {OnlineUsersList} from 'ui-kit';
 import {ProfileWidget} from 'scenes/widgets/pages';
 
 import * as styled from './OnlineUsersPanel.styled';
@@ -63,7 +63,7 @@ const OnlineUsersPanel: FC = () => {
           />
         </div>
       )}
-      <ExpandableLayout
+      <styled.CustomExpandableLayout
         name={t('labels.people')}
         iconName="people"
         isExpanded={onlineUsersStore.expanded}
@@ -79,7 +79,7 @@ const OnlineUsersPanel: FC = () => {
           teleportToUser={unityStore.teleportToUser}
           spaceId={space?.id ?? ''}
         />
-      </ExpandableLayout>
+      </styled.CustomExpandableLayout>
     </styled.Container>
   );
 };

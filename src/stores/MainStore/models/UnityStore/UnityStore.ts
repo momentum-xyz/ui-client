@@ -1,6 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
-import {ChangeEvent} from 'react';
 
 import {api} from 'api';
 import {RequestModel} from 'core/models';
@@ -8,12 +7,15 @@ import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 
+const DEFAULT_UNITY_VOLUME = 0.75;
+const UNITY_VOLUME_STEP = 0.1;
+
 const UnityStore = types
   .model('UnityStore', {
     isInitialized: false,
     isTeleportReady: false,
     muted: false,
-    volume: types.optional(types.number, 0.1),
+    volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
     fetchRequest: types.optional(RequestModel, {})
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
@@ -73,41 +75,32 @@ const UnityStore = types
       UnityService.resume();
     },
     setInitialVolume() {
-      UnityService.setSoundEffectVolume('0.1');
-    },
-    setVolume(volume: number) {
-      self.volume = volume;
+      UnityService.setSoundEffectVolume(self.volume.toString());
     },
     mute() {
       if (!self.muted) {
         self.volume = 0;
         self.muted = true;
         UnityService.toggleAllSound(self.muted);
-        UnityService.setSoundEffectVolume('0');
+        UnityService.setSoundEffectVolume(self.volume.toString());
       }
     },
     unmute() {
-      if (self.volume === 1) {
+      self.volume = self.volume <= 1 - UNITY_VOLUME_STEP ? self.volume + UNITY_VOLUME_STEP : 1;
+      self.muted = false;
+      UnityService.toggleAllSound(self.muted);
+      UnityService.setSoundEffectVolume(self.volume.toString());
+    },
+    volumeChange(newVolume: number) {
+      if (newVolume === 0) {
+        this.mute();
         return;
       }
-      const newVolume = Math.min((self.muted ? 0 : self.volume) + 0.1, 1.0);
+
       self.volume = newVolume;
-      UnityService.setSoundEffectVolume(newVolume.toString());
-      if (self.muted) {
-        UnityService.toggleAllSound(self.muted);
-        self.muted = false;
-      }
-    },
-    volumeChange(slider: ChangeEvent<HTMLInputElement>) {
-      const newVolume = parseFloat(slider.target.value);
-      if (!self.muted && newVolume === 0) {
-        UnityService.toggleAllSound(self.muted);
-      }
-      if (self.muted && newVolume > 0) {
-        UnityService.toggleAllSound(self.muted);
-      }
-      self.volume = newVolume;
-      UnityService.setSoundEffectVolume(newVolume.toString());
+      self.muted = false;
+      UnityService.toggleAllSound(self.muted);
+      UnityService.setSoundEffectVolume(self.volume.toString());
     },
     triggerInteractionMessage(
       interaction: PosBusEventEnum,

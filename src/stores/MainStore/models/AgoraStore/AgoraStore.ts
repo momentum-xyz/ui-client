@@ -144,7 +144,6 @@ const AgoraStore = types
       if (self.isStageMode) {
         yield self.agoraStageModeStore.leave();
       } else {
-        self.agoraScreenShareStore.leave();
         yield self.agoraMeetingStore.leave();
       }
 

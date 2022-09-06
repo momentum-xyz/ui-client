@@ -1,4 +1,4 @@
-export enum SpaceType {
+export enum SpaceTypeEnum {
   WORLD = 'world',
   PROGRAM = 'program',
   CHALLENGE = 'challenge',

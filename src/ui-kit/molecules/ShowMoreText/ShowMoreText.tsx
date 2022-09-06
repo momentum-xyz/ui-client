@@ -3,15 +3,15 @@ import cn from 'classnames';
 import {t} from 'i18next';
 import debounce from 'lodash/debounce';
 
-import {TextAlignType, TextSize, TextTransform, TextWeightType} from 'ui-kit/types';
+import {TextAlignType, TextSizeType, TextTransformType, TextWeightType} from 'ui-kit/types';
 import {Text} from 'ui-kit';
 import {useResize} from 'ui-kit/hooks';
 
 import * as styled from './ShowMoreText.styled';
 
 interface TextPropsInterface {
-  size: TextSize;
-  transform?: TextTransform;
+  size: TextSizeType;
+  transform?: TextTransformType;
   isMultiline?: boolean;
   align?: TextAlignType;
   weight?: TextWeightType;

@@ -5,7 +5,7 @@ import {PropsWithThemeInterface} from 'ui-kit';
 
 import * as styled from './ToastMessage.styled';
 
-interface ToastMessageProps extends PropsWithThemeInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   position?: ToastPosition;
 }
 
@@ -29,7 +29,7 @@ export const TOAST_NOT_AUTO_CLOSE_OPTIONS: ToastOptions = {
   draggable: false
 };
 
-const ToastMessage: FC<ToastMessageProps> = (props) => {
+const ToastMessage: FC<PropsInterface> = (props) => {
   const {position, theme} = props;
 
   return (

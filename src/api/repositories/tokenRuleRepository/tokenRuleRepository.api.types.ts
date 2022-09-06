@@ -1,5 +1,5 @@
 /** Base **/
-import {NetworkTypeEnum, TokenRuleReviewStatus} from 'core/enums';
+import {NetworkTypeEnum, TokenRuleReviewStatusEnum} from 'core/enums';
 import {TokenInterface} from 'api';
 import {TokenRuleItemModelInterface} from 'core/models';
 
@@ -104,7 +104,7 @@ export interface DeleteTokenRuleResponse {}
 
 export interface ProcessTokenRuleRequest {
   tokenRuleId: string;
-  status: TokenRuleReviewStatus;
+  status: TokenRuleReviewStatusEnum;
 }
 
 export interface ProcessTokenRuleResponse {}

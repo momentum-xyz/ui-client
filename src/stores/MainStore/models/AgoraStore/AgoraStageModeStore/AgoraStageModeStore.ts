@@ -16,7 +16,7 @@ import {
   AgoraRemoteUser
 } from 'core/models';
 import {api} from 'api';
-import {ModerationEnum, ParticipantRole, StageModeRequestEnum} from 'core/enums';
+import {ModerationEnum, ParticipantRoleEnum, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
 import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
@@ -71,7 +71,7 @@ const AgoraStageModeStore = types
     get audienceMembers(): StageModeUserInterface[] {
       return self.audience.filter((user) => {
         return (
-          user.role === ParticipantRole.AUDIENCE_MEMBER &&
+          user.role === ParticipantRoleEnum.AUDIENCE_MEMBER &&
           user.uid !== self.userId &&
           !self.users.find((u) => u.uid === user.uid)
         );
@@ -337,7 +337,7 @@ const AgoraStageModeStore = types
 
       self.audience.push({
         uid: userId,
-        role: ParticipantRole.AUDIENCE_MEMBER
+        role: ParticipantRoleEnum.AUDIENCE_MEMBER
       });
     },
     removeStageModeUser(userId: string) {
@@ -444,7 +444,7 @@ const AgoraStageModeStore = types
     moveToAudience(userId: string) {
       self.audience = cast([
         ...self.audience,
-        {uid: userId, role: ParticipantRole.AUDIENCE_MEMBER}
+        {uid: userId, role: ParticipantRoleEnum.AUDIENCE_MEMBER}
       ]);
 
       if (userId === self.userId) {
