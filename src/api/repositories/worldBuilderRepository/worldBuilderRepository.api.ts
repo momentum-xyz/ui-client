@@ -3,6 +3,8 @@ import {request} from 'api/request';
 
 import {worldBuilderEndpoints} from './worldBuilderRepository.api.endpoints';
 import {
+  TemplatesRequest,
+  TemplatesResponse,
   ValidateDomainNameResponse,
   ValidationRequest,
   ValidationResponse
@@ -20,4 +22,8 @@ export const valiedateDomain: RequestInterface<ValidationRequest, ValidateDomain
   const {name, ...restOptions} = options;
 
   return request.post(worldBuilderEndpoints().valiedateDomain, {name}, restOptions);
+};
+
+export const getTemplates: RequestInterface<TemplatesRequest, TemplatesResponse> = (options) => {
+  return request.get(worldBuilderEndpoints().templates, options);
 };

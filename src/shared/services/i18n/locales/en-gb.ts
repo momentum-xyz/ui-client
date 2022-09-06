@@ -352,7 +352,8 @@ export const enGb = {
       name: 'Name',
       template: 'Template',
       generate: 'Generate',
-      worldBuilder: 'World Builder'
+      worldBuilder: 'World Builder',
+      templateNameWrapper: '{{name}} Template'
     },
     textMessage: {
       you: 'you',
@@ -457,7 +458,8 @@ export const enGb = {
       inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
       getStarted: 'Get Started',
-      selectTemplate: 'Select Template'
+      selectTemplate: 'Select Template',
+      generateWorld: 'Generate World'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',
