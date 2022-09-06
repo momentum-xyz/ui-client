@@ -47,7 +47,7 @@ const App: FC = () => {
               headerIconName="check"
               title={String(error.response?.status || '')}
               text={t('errors.somethingWentWrong')}
-              isCloseButton
+              showCloseButton
             />
           );
         }

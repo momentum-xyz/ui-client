@@ -4,7 +4,6 @@ export const ButtonsDiv = styled.div`
   display: flex;
   right: 0;
   top: 0;
-  margin-right: 5px;
   margin-left: 15px;
   gap: 10px;
 `;
@@ -14,6 +13,10 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100% !important;
+
+  &.isButton {
+    padding-top: 10px;
+  }
 `;
 
 export const TextItem = styled.span`

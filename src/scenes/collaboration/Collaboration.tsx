@@ -63,7 +63,7 @@ const Collaboration: FC = () => {
         toast.error(
           <ToastContent
             isDanger
-            isCloseButton
+            showCloseButton
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('collaboration.spaceIsPrivate')}
@@ -108,7 +108,7 @@ const Collaboration: FC = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.stageModeFull')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );
@@ -127,7 +127,7 @@ const Collaboration: FC = () => {
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('messages.joinStageRefused')}
-            isCloseButton
+            showCloseButton
           />
         );
       } finally {
@@ -144,7 +144,7 @@ const Collaboration: FC = () => {
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('messages.joinStageRefused')}
-            isCloseButton
+            showCloseButton
           />
         );
       }

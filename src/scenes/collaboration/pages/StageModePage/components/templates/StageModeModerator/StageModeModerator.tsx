@@ -52,7 +52,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.stageIsFull')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );

@@ -44,7 +44,7 @@ const BroadcastPage: FC = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('broadcastAdmin.enableSuccess')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );
@@ -55,7 +55,7 @@ const BroadcastPage: FC = () => {
           title={t('titles.alert')}
           text={t('broadcastAdmin.enableError')}
           isDanger
-          isCloseButton
+          showCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );
@@ -71,7 +71,7 @@ const BroadcastPage: FC = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('broadcastAdmin.disableSuccess')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );
@@ -82,7 +82,7 @@ const BroadcastPage: FC = () => {
           title={t('titles.alert')}
           text={t('broadcastAdmin.disableError')}
           isDanger
-          isCloseButton
+          showCloseButton
         />,
         TOAST_COMMON_OPTIONS
       );
