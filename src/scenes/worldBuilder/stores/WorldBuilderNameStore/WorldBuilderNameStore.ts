@@ -35,7 +35,6 @@ const WorldBuilderNameStore = types
       return response;
     }),
     submit(name: string, subdomain: string) {
-      self.resetModel();
       self.name = name;
       self.subdomain = subdomain;
     }

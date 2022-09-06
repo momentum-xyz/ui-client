@@ -2,8 +2,8 @@ import {Instance, types} from 'mobx-state-tree';
 
 import {appVariables} from 'api/constants';
 
-const WorldBuilderTemplateModel = types
-  .model('WorldBuilderTemplateModel', {
+const WorldBuilderTemplate = types
+  .model('WorldBuilderTemplate', {
     id: types.identifier,
     name: types.string,
     description: types.string,
@@ -15,7 +15,6 @@ const WorldBuilderTemplateModel = types
     }
   }));
 
-export interface WorldBuilderTemplateModelInterface
-  extends Instance<typeof WorldBuilderTemplateModel> {}
+export interface WorldBuilderTemplateModelInterface extends Instance<typeof WorldBuilderTemplate> {}
 
-export {WorldBuilderTemplateModel};
+export {WorldBuilderTemplate};

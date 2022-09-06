@@ -14,6 +14,8 @@ import {ROUTES} from 'core/constants';
 
 import * as styled from './WorldBuilderNamePage.styled';
 
+const CURRENT_STEP = 0;
+
 interface WorldNameFormInterface {
   name: string;
   subdomainName: string;
@@ -48,6 +50,7 @@ const WorldBuilderNamePage: FC = () => {
       await worldBuilderNameStore.validateSubdomainName(data.subdomainName);
 
     if (nameIsValid && subdomainIsValid) {
+      worldBuilderNameStore.resetModel();
       worldBuilderNameStore.submit(data.name, data.subdomainName);
       history.push(ROUTES.worldBuilder.template);
       return;
@@ -159,7 +162,7 @@ const WorldBuilderNamePage: FC = () => {
           </styled.FormFieldContainer>
         </styled.FormContainer>
         <WorldBuilderFooter
-          currentStep={0}
+          currentStep={CURRENT_STEP}
           buttonLabel={t('actions.selectTemplate')}
           onNext={handleSubmit(formSubmitHandler)}
         />

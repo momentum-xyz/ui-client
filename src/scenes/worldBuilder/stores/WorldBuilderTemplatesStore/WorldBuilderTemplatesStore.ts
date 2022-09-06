@@ -1,10 +1,9 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
-import {api} from 'api';
-import {TemplatesResponse} from 'api/repositories/worldBuilderRepository/worldBuilderRepository.api.types';
+import {api, TemplatesResponse} from 'api';
 import {RequestModel, ResetModel} from 'core/models';
 
-import {WorldBuilderTemplateModel, WorldBuilderTemplateModelInterface} from './models';
+import {WorldBuilderTemplate, WorldBuilderTemplateModelInterface} from './models';
 
 const WorldBuilderTemplatesStore = types
   .compose(
@@ -12,8 +11,8 @@ const WorldBuilderTemplatesStore = types
     types.model('WorldBuilderTemplatesStore', {
       request: types.optional(RequestModel, {}),
 
-      templates: types.optional(types.array(WorldBuilderTemplateModel), []),
-      selectedTemplate: types.maybe(types.reference(WorldBuilderTemplateModel))
+      templates: types.optional(types.array(WorldBuilderTemplate), []),
+      selectedTemplate: types.maybe(types.reference(WorldBuilderTemplate))
     })
   )
   .actions((self) => ({

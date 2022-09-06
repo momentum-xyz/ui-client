@@ -15,6 +15,8 @@ import {Page} from 'ui-kit';
 
 import * as styled from './WorldBuilderTemplatePage.styled';
 
+const CURRENT_STEP = 1;
+
 const WorldBuilderTemplatePage: FC = () => {
   const {worldBuilderTemplatesStore} = useStore().worldBuilderStore;
 
@@ -45,7 +47,7 @@ const WorldBuilderTemplatePage: FC = () => {
           )}
         </styled.TemplatesList>
         <WorldBuilderFooter
-          currentStep={1}
+          currentStep={CURRENT_STEP}
           showButton={false}
           onNext={() => {
             // TODO: Go to url for building world in unity that will be retrieved from API

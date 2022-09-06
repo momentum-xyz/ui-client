@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import cn from 'classnames';
 
 import logo from 'static/images/momentum.svg';
 
@@ -14,13 +13,13 @@ const WorldBuilderHeader: FC<PropsInterface> = ({size = 'normal'}) => {
   const {t} = useTranslation();
 
   return (
-    <styled.LogoContainer className={cn(size)}>
-      <styled.Logo src={logo} className={cn(size)} />
+    <styled.LogoContainer className={size}>
+      <styled.Logo src={logo} className={size} />
       <styled.Title
         label={t('titles.worldBuilder')}
         transform="uppercase"
         type="h1"
-        className={cn(size)}
+        className={size}
       />
     </styled.LogoContainer>
   );

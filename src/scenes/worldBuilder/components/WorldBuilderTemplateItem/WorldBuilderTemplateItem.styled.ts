@@ -8,7 +8,7 @@ export const Container = styled.div`
   position: relative;
   border: 1px solid transparent;
 
-  :not(&.selected) {
+  &:not(&.selected) {
     width: 100%;
     aspect-ratio: 1;
 
@@ -26,7 +26,7 @@ export const Container = styled.div`
 export const Image = styled.img`
   object-fit: cover;
 
-  :not(&.selected) {
+  &:not(&.selected) {
     height: 100%;
     width: 100%;
   }
@@ -60,7 +60,7 @@ export const InfoHeader = styled.div`
 export const Description = styled(Text)`
   overflow: hidden;
 
-  :not(&.selected) {
+  &:not(&.selected) {
     max-width: 250px;
   }
 `;

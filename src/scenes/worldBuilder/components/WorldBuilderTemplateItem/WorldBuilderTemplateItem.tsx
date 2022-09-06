@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react';
+import React, {FC} from 'react';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
@@ -14,16 +14,10 @@ interface PropsInterface {
 }
 
 const WorldBuilderTemplateItem: FC<PropsInterface> = ({template, onClick, selected = false}) => {
-  const ref = useRef(null);
-
   const {t} = useTranslation();
 
   return (
-    <styled.Container
-      ref={ref}
-      onClick={() => onClick?.(template)}
-      className={cn(selected && 'selected')}
-    >
+    <styled.Container onClick={() => onClick?.(template)} className={cn(selected && 'selected')}>
       <styled.InfoContainer className={cn(selected && 'selected')}>
         <styled.InfoHeader className={cn(selected && 'selected')}>
           <Heading

@@ -9,6 +9,8 @@ import {WorldBuilderFooter, WorldBuilderTemplateItem} from 'scenes/worldBuilder/
 
 import * as styled from './WorldBuilderGeneratePage.styled';
 
+const CURRENT_STEP = 2;
+
 const WorldBuilderGeneratePage: FC = () => {
   const {worldBuilderTemplatesStore} = useStore().worldBuilderStore;
 
@@ -28,7 +30,7 @@ const WorldBuilderGeneratePage: FC = () => {
             selected
           />
         </styled.TemplateContainer>
-        <WorldBuilderFooter currentStep={2} buttonLabel={t('actions.generateWorld')} />
+        <WorldBuilderFooter currentStep={CURRENT_STEP} buttonLabel={t('actions.generateWorld')} />
       </styled.Container>
     </Page>
   );

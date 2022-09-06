@@ -3,7 +3,6 @@ export interface TemplateInterface {
   name: string;
   description: string;
   image: string;
-  content: object;
 }
 
 //  VALIDATION
