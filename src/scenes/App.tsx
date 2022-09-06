@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
 import {AuthProvider} from 'react-oidc-context';
@@ -7,18 +7,18 @@ import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 
-import {SystemWideError, ToastContent} from 'ui-kit';
-import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
-import {UnityPage} from 'scenes/unity';
-import {setApiResponseHandlers} from 'api/request';
+import {useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
+import {setApiResponseHandlers} from 'api/request';
+import {SystemWideError, ToastContent} from 'ui-kit';
+import {createSwitchByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
+import {UnityPage} from 'scenes/unity';
 
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
-import {CORE_ROUTES, PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, PUBLIC_ROUTES} from './AppRoutes';
 import {GlobalStyles} from './App.styled';
+import {CORE_ROUTES, PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, PUBLIC_ROUTES} from './App.routes';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,7 +28,7 @@ const App: FC = () => {
   const {themeStore} = mainStore;
   const {isConfigReady, isError: isErrorLoadingConfig} = configStore;
 
-  const {pathname} = useLocation();
+  const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
   const {t} = useTranslation();
 
@@ -87,11 +87,11 @@ const App: FC = () => {
   }
 
   // PUBLIC ROUTES
-  if (isTargetRoute(pathname as string, PUBLIC_ROUTES)) {
+  if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-          <Switch>{createRoutesByConfig(PUBLIC_ROUTES)}</Switch>
+          <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
         </Web3ReactProvider>
       </ThemeProvider>
     );
@@ -116,12 +116,12 @@ const App: FC = () => {
   }
 
   // CORE ROUTES
-  if (isTargetRoute(pathname as string, CORE_ROUTES)) {
+  if (isTargetRoute(pathname, CORE_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
-            <Switch>{createRoutesByConfig(CORE_ROUTES)}</Switch>
+            <Suspense fallback={false}>{createSwitchByConfig(CORE_ROUTES)}</Suspense>
           </AuthProvider>
         </Web3ReactProvider>
       </ThemeProvider>
@@ -147,20 +147,19 @@ const App: FC = () => {
   }
 
   // PRIVATE ROUTES
-  if (isTargetRoute(pathname as string, PRIVATE_ROUTES)) {
+  if (isTargetRoute(pathname, PRIVATE_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
-            <AppAuth>
-              <GlobalStyles />
-              <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
-                <Switch>
-                  {createRoutesByConfig(PRIVATE_ROUTES)}
-                  <Redirect to={ROUTES.base} />
-                </Switch>
-              </AppLayers>
-            </AppAuth>
+            <Suspense fallback={false}>
+              <AppAuth>
+                <GlobalStyles />
+                <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
+                  {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.base)}
+                </AppLayers>
+              </AppAuth>
+            </Suspense>
           </AuthProvider>
         </Web3ReactProvider>
       </ThemeProvider>
@@ -175,12 +174,9 @@ const App: FC = () => {
           <AppAuth>
             <GlobalStyles />
             <UnityPage />
-            <AppLayers>
-              <Switch>
-                {createRoutesByConfig(PRIVATE_ROUTES_WITH_UNITY)}
-                <Redirect to={ROUTES.base} />
-              </Switch>
-            </AppLayers>
+            <Suspense fallback={false}>
+              <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}</AppLayers>
+            </Suspense>
           </AppAuth>
         </AuthProvider>
       </Web3ReactProvider>

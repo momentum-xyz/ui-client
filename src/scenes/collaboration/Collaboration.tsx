@@ -1,12 +1,12 @@
 import React, {FC, useCallback, useEffect} from 'react';
-import {generatePath, Switch, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
-import {createRoutesByConfig} from 'core/utils';
+import {createSwitchByConfig} from 'core/utils';
 import {useStore, useDeviceChange} from 'shared/hooks';
 import {StageModeRequestEnum} from 'core/enums';
 import {
@@ -176,7 +176,7 @@ const Collaboration: FC = () => {
         )}
       />
 
-      <Switch>{createRoutesByConfig(COLLABORATION_ROUTES)}</Switch>
+      {createSwitchByConfig(COLLABORATION_ROUTES)}
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog

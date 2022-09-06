@@ -1,5 +1,6 @@
 import React, {ReactElement} from 'react';
-import {matchPath, Route} from 'react-router-dom';
+import {matchPath, Redirect, Route, Switch} from 'react-router-dom';
+import {SwitchProps} from 'react-router';
 
 import {RouteConfigInterface} from 'core/interfaces';
 
@@ -19,3 +20,13 @@ export const createRoutesByConfig = (
     </Route>
   ));
 };
+
+export const createSwitchByConfig = (
+  routes: RouteConfigInterface[],
+  defaultRedirect?: string
+): ReactElement<SwitchProps, any> => (
+  <Switch>
+    {createRoutesByConfig(routes)}
+    {defaultRedirect && <Redirect to={defaultRedirect} />}
+  </Switch>
+);
