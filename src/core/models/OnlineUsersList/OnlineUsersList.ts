@@ -1,6 +1,6 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 
-import {RequestModel, UserProfileModel} from 'core/models';
+import {RequestModel, UserProfileModel, UserProfileModelInterface} from 'core/models';
 import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
 
 const OnlineUsersList = types
@@ -39,6 +39,12 @@ const OnlineUsersList = types
   .views((self) => ({
     get isLoading(): boolean {
       return self.usersRequest.isLoading;
+    },
+    filteredPeople(excludedPeopleIds: string[], currentUser: string): UserProfileModelInterface[] {
+      const users = self.searchQuery ? self.searchedUsers : self.users;
+      return users
+        .filter((user) => !excludedPeopleIds?.includes(user.uuid))
+        .filter((user) => user.uuid !== currentUser);
     }
   }));
 
