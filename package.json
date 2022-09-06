@@ -109,6 +109,7 @@
     "@types/webpack-env": "^1.16.3",
     "@types/youtube": "^0.0.42",
     "autoprefixer": "^9",
+    "compression-webpack-plugin": "^10.0.0",
     "eslint": "^8.15.0",
     "eslint-plugin-import": "^2.26.0",
     "husky": "^8.0.1",
