@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
 import {AuthProvider} from 'react-oidc-context';
@@ -7,18 +7,18 @@ import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 
-import {SystemWideError, ToastContent} from 'ui-kit';
-import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
+import {httpErrorCodes} from 'api/constants';
+import {setApiResponseHandlers} from 'api/request';
+import {SystemWideError, ToastContent} from 'ui-kit';
 import {createRoutesByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
-import {setApiResponseHandlers} from 'api/request';
-import {httpErrorCodes} from 'api/constants';
 
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
-import {CORE_ROUTES, PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, PUBLIC_ROUTES} from './AppRoutes';
 import {GlobalStyles} from './App.styled';
+import {CORE_ROUTES, PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, PUBLIC_ROUTES} from './App.routes';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -91,7 +91,9 @@ const App: FC = () => {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-          <Switch>{createRoutesByConfig(PUBLIC_ROUTES)}</Switch>
+          <Suspense fallback={() => <div />}>
+            <Switch>{createRoutesByConfig(PUBLIC_ROUTES)}</Switch>
+          </Suspense>
         </Web3ReactProvider>
       </ThemeProvider>
     );
@@ -121,7 +123,9 @@ const App: FC = () => {
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
-            <Switch>{createRoutesByConfig(CORE_ROUTES)}</Switch>
+            <Suspense fallback={() => <div />}>
+              <Switch>{createRoutesByConfig(CORE_ROUTES)}</Switch>
+            </Suspense>
           </AuthProvider>
         </Web3ReactProvider>
       </ThemeProvider>
@@ -152,15 +156,17 @@ const App: FC = () => {
       <ThemeProvider theme={themeStore.theme}>
         <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
           <AuthProvider {...sessionStore.oidcConfig}>
-            <AppAuth>
-              <GlobalStyles />
-              <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
-                <Switch>
-                  {createRoutesByConfig(PRIVATE_ROUTES)}
-                  <Redirect to={ROUTES.base} />
-                </Switch>
-              </AppLayers>
-            </AppAuth>
+            <Suspense fallback={() => <div />}>
+              <AppAuth>
+                <GlobalStyles />
+                <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
+                  <Switch>
+                    {createRoutesByConfig(PRIVATE_ROUTES)}
+                    <Redirect to={ROUTES.base} />
+                  </Switch>
+                </AppLayers>
+              </AppAuth>
+            </Suspense>
           </AuthProvider>
         </Web3ReactProvider>
       </ThemeProvider>
@@ -175,12 +181,14 @@ const App: FC = () => {
           <AppAuth>
             <GlobalStyles />
             <UnityPage />
-            <AppLayers>
-              <Switch>
-                {createRoutesByConfig(PRIVATE_ROUTES_WITH_UNITY)}
-                <Redirect to={ROUTES.base} />
-              </Switch>
-            </AppLayers>
+            <Suspense fallback={() => <div />}>
+              <AppLayers>
+                <Switch>
+                  {createRoutesByConfig(PRIVATE_ROUTES_WITH_UNITY)}
+                  <Redirect to={ROUTES.base} />
+                </Switch>
+              </AppLayers>
+            </Suspense>
           </AppAuth>
         </AuthProvider>
       </Web3ReactProvider>
