@@ -3,10 +3,10 @@ import {flow, types} from 'mobx-state-tree';
 import {api, ValidationResponse} from 'api';
 import {RequestModel, ResetModel} from 'core/models';
 
-const WorldNameStore = types
+const WorldBuilderNameStore = types
   .compose(
     ResetModel,
-    types.model('WorldNameStore', {
+    types.model('WorldBuilderNameStore', {
       validateNameRequest: types.optional(RequestModel, {}),
       validateSubdomainNameRequest: types.optional(RequestModel, {})
     })
@@ -34,4 +34,4 @@ const WorldNameStore = types
     })
   }));
 
-export {WorldNameStore};
+export {WorldBuilderNameStore};

@@ -15,5 +15,11 @@ export const Container = styled.div`
 export const Spacer = styled.div``;
 
 export const TemplatesList = styled.div`
-  height: 1000px;
+  display: grid;
+  height: 100%;
+  max-height: 70vh;
+  grid-template-columns: repeat(5, calc(100% / 5));
+  grid-column-gap: 20px;
+  width: 100%;
+  padding: 0 80px;
 `;

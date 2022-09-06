@@ -352,7 +352,8 @@ export const enGb = {
       name: 'Name',
       template: 'Template',
       generate: 'Generate',
-      worldBuilder: 'World Builder'
+      worldBuilder: 'World Builder',
+      templateNameWrapper: '{{name}} Template'
     },
     textMessage: {
       you: 'you',

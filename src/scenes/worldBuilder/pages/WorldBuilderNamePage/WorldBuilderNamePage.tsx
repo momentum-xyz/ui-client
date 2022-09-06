@@ -20,7 +20,7 @@ interface WorldNameFormInterface {
 }
 
 const WorldBuilderNamePage: FC = () => {
-  const {worldNameStore} = useStore().worldBuilderStore;
+  const {worldBuilderNameStore} = useStore().worldBuilderStore;
   const {t} = useTranslation();
   const history = useHistory();
 
@@ -41,9 +41,11 @@ const WorldBuilderNamePage: FC = () => {
   const formSubmitHandler: SubmitHandler<WorldNameFormInterface> = async (
     data: WorldNameFormInterface
   ) => {
-    const {valid: nameIsValid, error: nameError} = await worldNameStore.validateName(data.name);
+    const {valid: nameIsValid, error: nameError} = await worldBuilderNameStore.validateName(
+      data.name
+    );
     const {valid: subdomainIsValid, error: subdomainError} =
-      await worldNameStore.validateSubdomainName(data.subdomainName);
+      await worldBuilderNameStore.validateSubdomainName(data.subdomainName);
 
     if (nameIsValid && subdomainIsValid) {
       history.push(ROUTES.worldBuilder.template);
