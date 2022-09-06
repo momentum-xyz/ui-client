@@ -141,10 +141,6 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     path: ROUTES.worldCalendar,
     main: () => <WorldCalendar />,
     renderBackground: true
-  },
-  {
-    path: ROUTES.base,
-    main: () => <WorldBuilder />
   }
 ];
 
