@@ -19,6 +19,7 @@ export interface PropsInterface {
   teleportToUser: (userId: string) => void;
   spaceId: string;
   onlineUsersList: OnlineUsersListInterface;
+  excludedPeople?: string[];
 }
 
 const OnlineUsersList: React.FC<PropsInterface> = ({
@@ -29,7 +30,8 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
   profile,
   teleportToUser,
   changeKeyboardControl,
-  spaceId
+  spaceId,
+  excludedPeople = []
 }) => {
   const {t} = useTranslation();
 
@@ -74,24 +76,11 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
       return;
     }
 
-    if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-      return onlineUsersList.searchedUsers
-        .filter((user) => (invite ? user.uuid !== profile?.uuid : true))
-        .map((user) => (
-          <UserItem
-            user={user}
-            key={user.uuid}
-            onClick={() => handleClick(user.uuid)}
-            invite={invite}
-            profile={profile}
-            spaceId={spaceId}
-          />
-        ));
-    }
-
     const sortedUsers: UserProfileModelInterface[] = [
-      ...(invite ? [] : onlineUsersList.users.filter((user) => user.uuid === profile.uuid)),
-      ...onlineUsersList.users.filter((user) => user.uuid !== profile.uuid)
+      ...(invite || onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT
+        ? []
+        : [profile]),
+      ...onlineUsersList.filteredPeople([...excludedPeople, profile.uuid])
     ];
 
     return sortedUsers.map((user) => (
