@@ -7,7 +7,12 @@ module.exports = {
     }
   },
   webpack: {
-    plugins: [new CompressionPlugin()],
+    plugins: [
+      new CompressionPlugin({
+        test: /\.(js|css|svg)$/,
+        algorithm: 'gzip'
+      })
+    ],
     configure: {
       ignoreWarnings: [
         function ignoreSourcemapsloaderWarnings(warning) {
