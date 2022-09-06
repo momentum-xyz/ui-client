@@ -2,15 +2,15 @@ import React, {FC} from 'react';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
-import {WorldBuilderTemplateModelInterface} from 'scenes/worldBuilder/stores/WorldBuilderTemplatesStore/models';
+import {WorldBuilderTemplateInterface} from 'scenes/worldBuilder/stores/WorldBuilderTemplatesStore/models';
 import {Heading, SvgButton} from 'ui-kit';
 
 import * as styled from './WorldBuilderTemplateItem.styled';
 
 interface PropsInterface {
-  template: WorldBuilderTemplateModelInterface;
+  template: WorldBuilderTemplateInterface;
   selected?: boolean;
-  onClick?: (template: WorldBuilderTemplateModelInterface) => void;
+  onClick?: (template: WorldBuilderTemplateInterface) => void;
 }
 
 const WorldBuilderTemplateItem: FC<PropsInterface> = ({template, onClick, selected = false}) => {

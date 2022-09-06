@@ -15,6 +15,6 @@ const WorldBuilderTemplate = types
     }
   }));
 
-export interface WorldBuilderTemplateModelInterface extends Instance<typeof WorldBuilderTemplate> {}
+export interface WorldBuilderTemplateInterface extends Instance<typeof WorldBuilderTemplate> {}
 
 export {WorldBuilderTemplate};

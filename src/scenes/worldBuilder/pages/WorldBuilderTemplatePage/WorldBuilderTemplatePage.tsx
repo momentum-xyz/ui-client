@@ -8,7 +8,6 @@ import {
   WorldBuilderHeader,
   WorldBuilderTemplateItem
 } from 'scenes/worldBuilder/components';
-import {WorldBuilderTemplateModelInterface} from 'scenes/worldBuilder/stores/WorldBuilderTemplatesStore/models';
 import {useStore} from 'shared/hooks';
 import background from 'static/images/worldBuilder.png';
 import {Page} from 'ui-kit';
@@ -33,18 +32,16 @@ const WorldBuilderTemplatePage: FC = () => {
         <styled.Spacer />
         <WorldBuilderHeader size="small" />
         <styled.TemplatesList>
-          {worldBuilderTemplatesStore.templates.map(
-            (template: WorldBuilderTemplateModelInterface) => (
-              <WorldBuilderTemplateItem
-                key={template.id}
-                template={template}
-                onClick={() => {
-                  worldBuilderTemplatesStore.selectTemplate(template);
-                  history.push(ROUTES.worldBuilder.generate);
-                }}
-              />
-            )
-          )}
+          {worldBuilderTemplatesStore.templates.map((template) => (
+            <WorldBuilderTemplateItem
+              key={template.id}
+              template={template}
+              onClick={() => {
+                worldBuilderTemplatesStore.selectTemplate(template);
+                history.push(ROUTES.worldBuilder.generate);
+              }}
+            />
+          ))}
         </styled.TemplatesList>
         <WorldBuilderFooter
           currentStep={CURRENT_STEP}

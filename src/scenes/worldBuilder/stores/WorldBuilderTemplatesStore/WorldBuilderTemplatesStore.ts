@@ -3,7 +3,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {api, TemplatesResponse} from 'api';
 import {RequestModel, ResetModel} from 'core/models';
 
-import {WorldBuilderTemplate, WorldBuilderTemplateModelInterface} from './models';
+import {WorldBuilderTemplate, WorldBuilderTemplateInterface} from './models';
 
 const WorldBuilderTemplatesStore = types
   .compose(
@@ -26,7 +26,7 @@ const WorldBuilderTemplatesStore = types
         self.templates = cast(response);
       }
     }),
-    selectTemplate(template: WorldBuilderTemplateModelInterface) {
+    selectTemplate(template: WorldBuilderTemplateInterface) {
       self.selectedTemplate = template;
     },
     unselectTemplate() {
