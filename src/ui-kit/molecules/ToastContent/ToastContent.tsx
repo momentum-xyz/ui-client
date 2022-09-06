@@ -37,7 +37,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
         title={title}
         headerIconName={headerIconName}
         headerStyle="uppercase"
-        isCloseButton={showCloseButton}
+        showCloseButton={showCloseButton}
         iconSize="large"
         onClose={onClose}
         componentSize={{width: '100%'}}
