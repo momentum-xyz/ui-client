@@ -2,6 +2,7 @@ import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
 import {WorldBuilderFooter, WorldBuilderHeader} from 'scenes/worldBuilder/components';
 import {useStore} from 'shared/hooks';
@@ -9,8 +10,11 @@ import {Text, Page} from 'ui-kit';
 import {slugify} from 'core/utils';
 import {appVariables} from 'api/constants';
 import background from 'static/images/worldBuilder.png';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './WorldBuilderNamePage.styled';
+
+const CURRENT_STEP = 0;
 
 interface WorldNameFormInterface {
   name: string;
@@ -18,8 +22,9 @@ interface WorldNameFormInterface {
 }
 
 const WorldBuilderNamePage: FC = () => {
-  const {worldNameStore} = useStore().worldBuilderStore;
+  const {worldBuilderNameStore} = useStore().worldBuilderStore;
   const {t} = useTranslation();
+  const history = useHistory();
 
   const {
     control,
@@ -30,21 +35,24 @@ const WorldBuilderNamePage: FC = () => {
     clearErrors
   } = useForm<WorldNameFormInterface>({
     defaultValues: {
-      name: '',
-      subdomainName: ''
+      name: worldBuilderNameStore.name ?? '',
+      subdomainName: worldBuilderNameStore.subdomain ?? ''
     }
   });
 
   const formSubmitHandler: SubmitHandler<WorldNameFormInterface> = async (
     data: WorldNameFormInterface
   ) => {
-    const {valid: nameIsValid, error: nameError} = await worldNameStore.validateName(data.name);
+    const {valid: nameIsValid, error: nameError} = await worldBuilderNameStore.validateName(
+      data.name
+    );
     const {valid: subdomainIsValid, error: subdomainError} =
-      await worldNameStore.validateSubdomainName(data.subdomainName);
+      await worldBuilderNameStore.validateSubdomainName(data.subdomainName);
 
     if (nameIsValid && subdomainIsValid) {
-      // TODO: redirect to next step
-      console.info('Redirecting to template...');
+      worldBuilderNameStore.resetModel();
+      worldBuilderNameStore.submit(data.name, data.subdomainName);
+      history.push(ROUTES.worldBuilder.template);
       return;
     }
 
@@ -154,7 +162,7 @@ const WorldBuilderNamePage: FC = () => {
           </styled.FormFieldContainer>
         </styled.FormContainer>
         <WorldBuilderFooter
-          currentStep={0}
+          currentStep={CURRENT_STEP}
           buttonLabel={t('actions.selectTemplate')}
           onNext={handleSubmit(formSubmitHandler)}
         />
