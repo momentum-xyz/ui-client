@@ -4,7 +4,7 @@ import {api} from 'api';
 import {TemplatesResponse} from 'api/repositories/worldBuilderRepository/worldBuilderRepository.api.types';
 import {RequestModel, ResetModel} from 'core/models';
 
-import {WorldBuilderTemplateModel} from './models';
+import {WorldBuilderTemplateModel, WorldBuilderTemplateModelInterface} from './models';
 
 const WorldBuilderTemplatesStore = types
   .compose(
@@ -12,7 +12,8 @@ const WorldBuilderTemplatesStore = types
     types.model('WorldBuilderTemplatesStore', {
       request: types.optional(RequestModel, {}),
 
-      templates: types.optional(types.array(WorldBuilderTemplateModel), [])
+      templates: types.optional(types.array(WorldBuilderTemplateModel), []),
+      selectedTemplate: types.maybe(types.reference(WorldBuilderTemplateModel))
     })
   )
   .actions((self) => ({
@@ -25,7 +26,13 @@ const WorldBuilderTemplatesStore = types
       if (response) {
         self.templates = cast(response);
       }
-    })
+    }),
+    selectTemplate(template: WorldBuilderTemplateModelInterface) {
+      self.selectedTemplate = template;
+    },
+    unselectTemplate() {
+      self.selectedTemplate = undefined;
+    }
   }));
 
 export {WorldBuilderTemplatesStore};

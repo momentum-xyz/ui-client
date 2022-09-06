@@ -48,6 +48,7 @@ export const ROUTES = {
     login: '/createWorld/login',
     start: '/createWorld/start',
     name: '/createWorld/name',
-    template: '/createWorld/template'
+    template: '/createWorld/template',
+    generate: '/createWorld/generate'
   }
 };

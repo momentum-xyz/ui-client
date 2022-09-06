@@ -7,18 +7,33 @@ export const Container = styled.div`
   overflow: hidden;
   position: relative;
   border: 1px solid transparent;
-  width: 100%;
-  aspect-ratio: 1;
 
-  :hover {
-    border: 1px solid ${(props) => props.theme.accent};
+  :not(&.selected) {
+    width: 100%;
+    aspect-ratio: 1;
+
+    :hover {
+      border: 1px solid ${(props) => props.theme.accent};
+    }
+  }
+
+  &.selected {
+    display: flex;
+    width: 100%;
   }
 `;
 
 export const Image = styled.img`
   object-fit: cover;
-  height: 100%;
-  width: 100%;
+
+  :not(&.selected) {
+    height: 100%;
+    width: 100%;
+  }
+
+  &.selected {
+    width: 70%;
+  }
 `;
 
 export const InfoContainer = styled.div`
@@ -29,6 +44,12 @@ export const InfoContainer = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
+
+  &.selected {
+    position: unset;
+    gap: 20px;
+    width: 30%;
+  }
 `;
 
 export const InfoHeader = styled.div`
@@ -38,5 +59,8 @@ export const InfoHeader = styled.div`
 
 export const Description = styled(Text)`
   overflow: hidden;
-  max-width: 250px;
+
+  :not(&.selected) {
+    max-width: 250px;
+  }
 `;

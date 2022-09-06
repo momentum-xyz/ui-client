@@ -33,8 +33,8 @@ const WorldBuilderNamePage: FC = () => {
     clearErrors
   } = useForm<WorldNameFormInterface>({
     defaultValues: {
-      name: '',
-      subdomainName: ''
+      name: worldBuilderNameStore.name ?? '',
+      subdomainName: worldBuilderNameStore.subdomain ?? ''
     }
   });
 
@@ -48,6 +48,7 @@ const WorldBuilderNamePage: FC = () => {
       await worldBuilderNameStore.validateSubdomainName(data.subdomainName);
 
     if (nameIsValid && subdomainIsValid) {
+      worldBuilderNameStore.submit(data.name, data.subdomainName);
       history.push(ROUTES.worldBuilder.template);
       return;
     }
