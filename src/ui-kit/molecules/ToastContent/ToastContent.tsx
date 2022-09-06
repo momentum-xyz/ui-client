@@ -1,4 +1,5 @@
 import React, {FC, memo} from 'react';
+import cn from 'classnames';
 
 import {PropsWithThemeInterface, ToastButtonInfoInterface} from 'ui-kit/interfaces';
 import {PanelLayout} from 'ui-kit/organisms';
@@ -37,7 +38,9 @@ const ToastContent: FC<PropsInterface> = (props) => {
         isTruncateHeader
         headerHeadingAlign="left"
       >
-        <styled.Container>
+        <styled.Container
+          className={cn(isCloseButton && (declineInfo || approveInfo) && 'isButton')}
+        >
           <styled.TextItem>
             <Text text={text} size="xs" align="left" />
           </styled.TextItem>

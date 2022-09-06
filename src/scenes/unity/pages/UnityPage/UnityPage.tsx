@@ -104,6 +104,7 @@ const UnityPage: FC = () => {
         sendBack={() => {
           unityStore.sendHighFiveBack(senderId);
         }}
+        isCloseButton
       />,
       TOAST_BASE_OPTIONS
     );
@@ -138,6 +139,7 @@ const UnityPage: FC = () => {
         title={t('titles.joinGathering')}
         text={t('messages.joinGathering', {title: message.name})}
         approveInfo={{title: 'Join', onClick: handleJoinSpace}}
+        isCloseButton
       />,
       TOAST_NOT_AUTO_CLOSE_OPTIONS
     );
