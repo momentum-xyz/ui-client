@@ -1,6 +1,5 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import AgoraRTC, {
-  ConnectionState,
   IAgoraRTCClient,
   IAgoraRTCRemoteUser,
   ILocalVideoTrack,
@@ -28,7 +27,6 @@ const AgoraScreenShareStore = types
       spaceId: types.maybe(types.string),
       appId: '',
       isStageMode: false,
-      connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       isSettingUp: false
     })
   )
