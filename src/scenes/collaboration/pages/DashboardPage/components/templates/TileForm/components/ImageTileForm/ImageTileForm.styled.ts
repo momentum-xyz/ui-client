@@ -21,7 +21,7 @@ export const TextItem = styled.div`
 export const FileUploaderItem = styled.div`
   flex: 50%;
   padding: 15px 0 10px;
-  width: 460px;
+  width: 100%;
   height: 100%;
 `;
 
@@ -56,6 +56,6 @@ export const ImagePreview = styled.img`
 `;
 
 export const LoaderContainer = styled.div`
-  width: 460px;
+  width: 100%;
   height: 100%;
 `;

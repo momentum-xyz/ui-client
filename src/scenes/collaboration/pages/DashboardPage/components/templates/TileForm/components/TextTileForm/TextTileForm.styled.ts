@@ -14,10 +14,10 @@ export const ButtonWrapper = styled.div`
 
 export const TextItem = styled.div`
   padding-bottom: 10px;
-  width: 460px;
+  width: 100%;
   height: 100%;
 `;
 export const LoaderContainer = styled.div`
-  width: 460px;
+  width: 100%;
   height: 100%;
 `;

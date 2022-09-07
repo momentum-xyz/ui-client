@@ -4,9 +4,8 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
-import {WorldBuilderFooter, WorldBuilderHeader} from 'scenes/worldBuilder/components';
 import {useStore} from 'shared/hooks';
-import {Text, Page} from 'ui-kit';
+import {Text, Page, WorldBuilderFooter, WorldBuilderHeader} from 'ui-kit';
 import {slugify} from 'core/utils';
 import {appVariables} from 'api/constants';
 import background from 'static/images/worldBuilder.png';
@@ -90,7 +89,6 @@ const WorldBuilderNamePage: FC = () => {
   return (
     <Page backgroundSrc={background} showSimpleProfileMenu>
       <styled.Container>
-        <styled.Spacer />
         <WorldBuilderHeader />
         <styled.FormContainer>
           <styled.FormFieldContainer>

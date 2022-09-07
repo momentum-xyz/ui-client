@@ -10,6 +10,8 @@ import {TextTileFormInterface} from 'api';
 
 import * as styled from './TextTileForm.styled';
 
+const TEXTAREA_LINES = 10;
+
 interface PropsInterface {
   currentTile?: TileInterface;
   spaceId: string;
@@ -127,6 +129,7 @@ const TextTileForm: FC<PropsInterface> = ({
                 <TextArea
                   name={t('dashboard.tileForm.descriptionLabel')}
                   value={value}
+                  lines={TEXTAREA_LINES}
                   onChange={onChange}
                   placeholder={t('dashboard.tileForm.descriptionPlaceholder')}
                   isError={!!errors.text_description}

@@ -10,11 +10,10 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  padding-top: 40px;
   gap: 20px;
   overflow-y: scroll;
 `;
-
-export const Spacer = styled.div``;
 
 export const FormContainer = styled.div`
   display: flex;

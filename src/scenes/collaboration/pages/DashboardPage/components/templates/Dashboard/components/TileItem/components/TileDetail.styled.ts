@@ -50,9 +50,10 @@ export const VideoWrapper = styled.div`
 
 export const TextItem = styled(Text)`
   padding-top: 5px;
+
   :after {
     content: '';
     display: inline-block;
-    width: 35px; /* the value of padding */
+    width: 55px; /* the value of padding */
   }
 `;

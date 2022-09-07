@@ -2,7 +2,6 @@ import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
-import cn from 'classnames';
 
 import {appVariables} from 'api/constants';
 import {EventItemModelInterface} from 'core/models/EventItem';
@@ -106,14 +105,13 @@ const EventItem: FC<PropsInterface> = ({
             <p>{t('eventList.eventItem.live')}</p>
           </styled.LiveIndicator>
         ) : (
-          <styled.AttendeesButton
-            variant="primary"
+          <Button
+            variant={event.isAttending(currentUserId) ? 'inverted' : 'primary'}
             icon={event.isAttending(currentUserId) ? 'check' : 'add'}
             disabled={event.attendRequest.isPending}
             label={t('eventList.eventItem.interested')}
             transform="capitalized"
             onClick={handleAttendingButtonClick}
-            className={cn(event.isAttending(currentUserId) && 'interested')}
           />
         )}
         {!event.isLive() && (

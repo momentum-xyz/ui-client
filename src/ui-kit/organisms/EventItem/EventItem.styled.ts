@@ -159,14 +159,3 @@ export const AttendeeContrainer = styled.div`
   gap: 10px;
   transform: rotateY(180deg);
 `;
-
-export const AttendeesButton = styled(Button)`
-  &.interested {
-    border-color: #8febff !important;
-    color: #8febff !important;
-
-    .svg-icon {
-      color: #8febff !important;
-    }
-  }
-`;

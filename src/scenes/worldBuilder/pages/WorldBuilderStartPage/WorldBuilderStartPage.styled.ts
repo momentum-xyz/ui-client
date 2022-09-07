@@ -10,6 +10,7 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  padding-top: 10%;
   gap: 20px;
   overflow-y: scroll;
 `;
@@ -24,5 +25,3 @@ export const Information = styled.div`
 export const Description = styled(Text)`
   max-width: 950px;
 `;
-
-export const Spacer = styled.div``;

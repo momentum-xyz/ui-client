@@ -1,20 +1,23 @@
-import {RefObject, useCallback, useEffect} from 'react';
+import {RefObject, useCallback, useEffect, useRef} from 'react';
 
 const useScroll = (ref: RefObject<HTMLElement>, onScroll: () => void) => {
+  const refCallback = useRef(onScroll);
+  refCallback.current = onScroll;
+
   const handleOnScroll = useCallback(() => {
     if (ref.current) {
-      onScroll();
+      refCallback.current();
     }
-  }, [ref, onScroll]);
+  }, [ref, refCallback]);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleOnScroll, true);
+    window.addEventListener('scroll', refCallback.current, true);
 
     return () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       window.removeEventListener('scroll', handleOnScroll, true);
     };
-  }, [ref]);
+  }, [handleOnScroll]);
 };
 
 export {useScroll};

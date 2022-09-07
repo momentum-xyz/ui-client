@@ -21,6 +21,7 @@ const InviteToSpaceContent: FC<PropsInterface> = ({invitorName, spaceName, joinT
         spaceName: spaceName
       })}
       approveInfo={{title: t('titles.joinSpace'), onClick: joinToSpace}}
+      showCloseButton
     />
   );
 };

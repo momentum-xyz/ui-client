@@ -7,9 +7,10 @@ const Portal: FC = ({children}) => {
   domContainer.current.setAttribute('data-testid', 'Portal-test');
 
   useEffect(() => {
-    domBody.appendChild(domContainer.current);
+    const element = domContainer.current;
+    domBody.appendChild(element);
     return () => {
-      domBody.removeChild(domContainer.current);
+      domBody.removeChild(element);
     };
   }, [domContainer, domBody]);
 
