@@ -20,3 +20,5 @@ export * from './RemoteOrLocalUser';
 export * from './NewDeviceDialog';
 export * from './FileUploader';
 export * from './Steps';
+export * from './WorldBuilderHeader';
+export * from './WorldBuilderTemplateItem';

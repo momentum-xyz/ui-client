@@ -31,6 +31,11 @@ const RootWorldBuilderStore = types
 
       self.haveAccess = false;
     })
+  }))
+  .views((self) => ({
+    get canAccessPages(): boolean {
+      return self.permissionsRequest.isPending || self.haveAccess === false;
+    }
   }));
 
 export {RootWorldBuilderStore};

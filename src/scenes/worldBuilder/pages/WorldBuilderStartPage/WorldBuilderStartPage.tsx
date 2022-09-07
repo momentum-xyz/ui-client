@@ -5,8 +5,7 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {WorldBuilderFooter, WorldBuilderHeader} from 'scenes/worldBuilder/components';
-import {Page} from 'ui-kit';
+import {Page, WorldBuilderFooter, WorldBuilderHeader} from 'ui-kit';
 import background from 'static/images/worldBuilder.png';
 
 import * as styled from './WorldBuilderStartPage.styled';
@@ -25,20 +24,19 @@ const WorldBuilderStartPage: FC = () => {
 
   useEffect(() => {
     if (worldBuilderStore.haveAccess === false) {
-      history.push(`${ROUTES.worldBuilderLogin}?noWorldBuilderPermissions=true`, {
+      history.push(`${ROUTES.worldBuilderLogin}?noPermissions=true`, {
         from: history.location.pathname
       });
     }
   }, [history, worldBuilderStore.haveAccess]);
 
-  if (worldBuilderStore.permissionsRequest.isPending || worldBuilderStore.haveAccess === false) {
+  if (worldBuilderStore.canAccessPages) {
     return null;
   }
 
   return (
     <Page backgroundSrc={background} showSimpleProfileMenu={sessionStore.isSessionExists}>
       <styled.Container>
-        <styled.Spacer />
         <styled.Information>
           <WorldBuilderHeader />
           <styled.Description text={t('messages.worldBuilderDescription')} size="xxl" />

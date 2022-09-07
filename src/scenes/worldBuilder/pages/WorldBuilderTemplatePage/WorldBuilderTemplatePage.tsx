@@ -3,14 +3,9 @@ import React, {FC, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
-import {
-  WorldBuilderFooter,
-  WorldBuilderHeader,
-  WorldBuilderTemplateItem
-} from 'scenes/worldBuilder/components';
 import {useStore} from 'shared/hooks';
 import background from 'static/images/worldBuilder.png';
-import {Page} from 'ui-kit';
+import {Page, WorldBuilderFooter, WorldBuilderHeader, WorldBuilderTemplateItem} from 'ui-kit';
 
 import * as styled from './WorldBuilderTemplatePage.styled';
 
@@ -29,13 +24,14 @@ const WorldBuilderTemplatePage: FC = () => {
   return (
     <Page backgroundSrc={background} showSimpleProfileMenu>
       <styled.Container>
-        <styled.Spacer />
         <WorldBuilderHeader size="small" />
         <styled.TemplatesList>
           {worldBuilderTemplatesStore.templates.map((template) => (
             <WorldBuilderTemplateItem
               key={template.id}
-              template={template}
+              name={template.name}
+              description={template.description}
+              imageSrc={template.imageSrc}
               onClick={() => {
                 worldBuilderTemplatesStore.selectTemplate(template);
                 history.push(ROUTES.worldBuilder.generate);

@@ -21,7 +21,7 @@ const WorldBuilderLoginPage: FC = () => {
   const theme = useTheme();
   const {t} = useTranslation();
   const queryParams = new URLSearchParams(window.location.search);
-  const noWorldBuilderPermissions = queryParams.get('noWorldBuilderPermissions') === 'true';
+  const noWorldBuilderPermissions = queryParams.get('noPermissions') === 'true';
 
   useEffect(() => {
     localStorage.clear();
