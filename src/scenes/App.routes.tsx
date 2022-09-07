@@ -4,6 +4,9 @@ import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
 const LoginPage = lazy(() => import('./auth/pages/LoginPage/LoginPage'));
+const WorldBuilderLoginPage = lazy(
+  () => import('./auth/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
+);
 const LoginCallback = lazy(() => import('./auth/pages/LoginCallback/LoginCallback'));
 const LoginEmailPage = lazy(() => import('./auth/pages/LoginEmailPage/LoginEmailPage'));
 const Web3ChoicePage = lazy(() => import('./auth/pages/Web3ChoicePage/Web3ChoicePage'));
@@ -32,6 +35,11 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.login,
     exact: true,
     main: () => <LoginPage />
+  },
+  {
+    path: ROUTES.worldBuilderLogin,
+    exact: true,
+    main: () => <WorldBuilderLoginPage />
   },
   {
     path: ROUTES.loginEmail,
