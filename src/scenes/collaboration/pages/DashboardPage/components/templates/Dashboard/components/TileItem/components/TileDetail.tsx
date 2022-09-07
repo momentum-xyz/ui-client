@@ -54,7 +54,7 @@ const TileDetail: FC<PropsInterface> = ({
       <styled.Container>
         {imageUrl && <styled.ImageWrapper src={imageUrl} alt="" />}
         {tile.content?.text && (
-          <styled.TextItem text={tile.content.text} size="m" align="justify" breakLongWord />
+          <styled.TextItem text={tile.content.text} size="s" align="justify" breakLongWord />
         )}
         {videoUrl && (
           <styled.VideoWrapper>
