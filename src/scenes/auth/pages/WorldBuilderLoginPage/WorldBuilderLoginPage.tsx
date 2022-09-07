@@ -21,7 +21,7 @@ const WorldBuilderLoginPage: FC = () => {
   const theme = useTheme();
   const {t} = useTranslation();
   const queryParams = new URLSearchParams(window.location.search);
-  const noWorldBuilderPermissions = queryParams.get('noWorldBuilderPermissions');
+  const noWorldBuilderPermissions = queryParams.get('noWorldBuilderPermissions') === 'true';
 
   useEffect(() => {
     localStorage.clear();
@@ -65,19 +65,25 @@ const WorldBuilderLoginPage: FC = () => {
                     })
                   }
                 />
-                <styled.RemarksContainer>
-                  <Text theme={theme} size="l" text={t('messages.startBuilding')} weight="light" />
-                </styled.RemarksContainer>
+                {noWorldBuilderPermissions ? (
+                  <styled.WorldBuilderError>
+                    {t('errors.noWorldBuilderPermissions')}
+                  </styled.WorldBuilderError>
+                ) : (
+                  <styled.RemarksContainer>
+                    <Text
+                      theme={theme}
+                      size="l"
+                      text={t('messages.startBuilding')}
+                      weight="light"
+                    />
+                  </styled.RemarksContainer>
+                )}
               </styled.Networks>
             )}
           </LoginView>
           {isSessionExpired && (
             <styled.WorldBuilderError>{t('errors.sessionExpired')}</styled.WorldBuilderError>
-          )}
-          {noWorldBuilderPermissions === 'true' && (
-            <styled.WorldBuilderError>
-              {t('errors.noWorldBuilderPermissions')}
-            </styled.WorldBuilderError>
           )}
         </PanelLayout>
       </styled.Background>

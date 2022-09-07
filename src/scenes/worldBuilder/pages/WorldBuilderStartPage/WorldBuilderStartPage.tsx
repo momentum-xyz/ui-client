@@ -12,15 +12,24 @@ import background from 'static/images/worldBuilder.png';
 import * as styled from './WorldBuilderStartPage.styled';
 
 const WorldBuilderStartPage: FC = () => {
-  const {sessionStore} = useStore();
+  const {sessionStore, worldBuilderStore} = useStore();
 
   const {t} = useTranslation();
   const history = useHistory();
 
   useEffect(() => {
-    // TODO: Call API to check wether you have permission to create world, if not, redirect to login page with
-    // parameter noWorldBuilderPermissions=true
-  }, []);
+    if (sessionStore.isSessionExists) {
+      (async () => {
+        const hasAccess = await worldBuilderStore.haveAccessPermissions();
+
+        if (!hasAccess) {
+          history.push(`${ROUTES.worldBuilderLogin}?noWorldBuilderPermissions=true`, {
+            from: history.location.pathname
+          });
+        }
+      })();
+    }
+  }, [history, sessionStore.isSessionExists, worldBuilderStore]);
 
   return (
     <Page backgroundSrc={background} showSimpleProfileMenu={sessionStore.isSessionExists}>
