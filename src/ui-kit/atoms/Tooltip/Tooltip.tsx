@@ -27,9 +27,10 @@ const Tooltip: FC<PropsInterface> = ({
   darkBackground = false,
   size
 }) => {
-  const divRef = React.createRef<any>();
+  const divRef = React.createRef<HTMLDivElement>();
 
-  const getTooltipContainer = () => divRef.current;
+  const getTooltipContainer = (node: HTMLElement) => divRef.current || node;
+
   return (
     <>
       {visible ? (
