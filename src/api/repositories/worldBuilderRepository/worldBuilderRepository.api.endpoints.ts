@@ -6,6 +6,7 @@ export const worldBuilderEndpoints = () => {
   return {
     validateName: `${BASE_URL}/validate-name`,
     valiedateDomain: `${BASE_URL}/validate-domain`,
-    templates: `${BASE_URL}/templates`
+    templates: `${BASE_URL}/templates`,
+    checkPermissions: `${BASE_URL}/check-permissions`
   };
 };

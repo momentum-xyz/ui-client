@@ -157,7 +157,7 @@ export const enGb = {
       somethingWentWrong: 'Something went wrong',
       somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
       noWorldBuilderPermissions:
-        'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot'
+        'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account'
     },
     systemMessages: {
       loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
@@ -232,6 +232,7 @@ export const enGb = {
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
       signIn: 'Sign In Or Create An Account',
+      worldBuilderSignIn: 'Sign In to your Momentum Account',
       linkCopied: 'The link is copied to your clipboard.',
       fullyEnjoy: 'Connect your wallet to fully enjoy Momentum!',
       flyAround: 'Fly around and start experiencing Momentum!',
