@@ -92,7 +92,7 @@ const UnityPage: FC = () => {
         spaceName={spaceName}
         joinToSpace={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
       />,
-      TOAST_BASE_OPTIONS
+      TOAST_NOT_AUTO_CLOSE_OPTIONS
     );
   });
 
