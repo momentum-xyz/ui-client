@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect} from 'react';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
@@ -33,7 +33,6 @@ const Collaboration: FC = () => {
   const {agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
-    isUserEditing,
     newDeviceDialog,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
@@ -91,12 +90,6 @@ const Collaboration: FC = () => {
       textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
     }
   }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
-
-  useEffect(() => {
-    if (agoraScreenShareStore.videoTrack && !isUserEditing) {
-      history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
-    }
-  }, [agoraScreenShareStore.videoTrack, history, spaceId, isUserEditing]);
 
   const handleCountdownEnded = useCallback(async () => {
     if (!agoraStageModeStore.canEnterStage) {
