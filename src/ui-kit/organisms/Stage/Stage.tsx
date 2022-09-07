@@ -72,7 +72,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
           </styled.MediaPlayerContainer>
         )}
 
-        {agoraStore.agoraStageModeStore.users.map((user) => (
+        {agoraStore.agoraStageModeStore.speakers.map((user) => (
           <styled.MediaPlayerContainer
             className={cn('relative', onRemoteUserClick && 'showActionsOnHover')}
             key={`stageuser-${user.uid}`}

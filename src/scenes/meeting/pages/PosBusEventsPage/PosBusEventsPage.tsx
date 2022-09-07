@@ -233,17 +233,20 @@ const PosBusEventsPage: FC = () => {
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-user-joined', userId);
-    agoraStageModeStore.addStageModeUser(userId);
+    agoraStageModeStore.addAudienceMember(userId);
   });
 
   usePosBusEvent('stage-mode-user-left', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-user-left', userId);
-    agoraStageModeStore.removeStageModeUser(userId);
+    agoraStageModeStore.removeAudienceMember(userId);
   });
 
   usePosBusEvent('stage-mode-kick', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-kick', userId);
-    agoraStageModeStore.moveToAudience(userId);
+
+    if (userId === sessionStore.userId) {
+      agoraStageModeStore.leaveStage();
+    }
   });
 
   return null;
