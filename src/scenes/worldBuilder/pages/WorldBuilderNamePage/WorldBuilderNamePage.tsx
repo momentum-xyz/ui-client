@@ -28,7 +28,7 @@ const WorldBuilderNamePage: FC = () => {
 
   const {
     control,
-    formState: {errors},
+    formState: {errors, isValid},
     handleSubmit,
     setValue,
     setError,
@@ -114,7 +114,7 @@ const WorldBuilderNamePage: FC = () => {
                 />
               )}
             />
-            <Text text={t('descriptions.worldName')} size="xl" align="left" />
+            <Text text={t('descriptions.worldName')} size="l" align="left" />
           </styled.FormFieldContainer>
           <styled.FormFieldContainer>
             <styled.InputLabel
@@ -137,7 +137,7 @@ const WorldBuilderNamePage: FC = () => {
                 />
               )}
             />
-            <Text text={t('descriptions.worldSubdomain')} size="xl" align="left" />
+            <Text text={t('descriptions.worldSubdomain')} size="l" align="left" />
           </styled.FormFieldContainer>
           <styled.FormFieldContainer>
             <styled.InputLabel
@@ -158,13 +158,14 @@ const WorldBuilderNamePage: FC = () => {
                 />
               )}
             />
-            <Text text={t('descriptions.worldURL')} size="xl" align="left" />
+            <Text text={t('descriptions.worldURL')} size="l" align="left" />
           </styled.FormFieldContainer>
         </styled.FormContainer>
         <WorldBuilderFooter
           currentStep={CURRENT_STEP}
           buttonLabel={t('actions.selectTemplate')}
           onNext={handleSubmit(formSubmitHandler)}
+          isButtonDisabled={!isValid}
         />
       </styled.Container>
     </Page>

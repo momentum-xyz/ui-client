@@ -19,8 +19,9 @@ export const Spacer = styled.div``;
 export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 90px;
-  width: 70%;
+  gap: 50px;
+  padding: 0 100px;
+  padding-bottom: 40px;
 `;
 
 export const FormFieldContainer = styled.div`
