@@ -12,22 +12,24 @@ const RootWorldBuilderStore = types
     types.model('RootWorldBuilderStore', {
       worldBuilderNameStore: types.optional(WorldBuilderNameStore, {}),
       worldBuilderTemplatesStore: types.optional(WorldBuilderTemplatesStore, {}),
+      haveAccess: types.maybe(types.boolean),
 
       permissionsRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    haveAccessPermissions: flow(function* () {
+    fetchPermissions: flow(function* () {
       const response = yield self.permissionsRequest.send(
         api.worldBuilderRepository.checkPermissions,
         {}
       );
 
       if (response) {
-        return response.permission;
+        self.haveAccess = response.permission;
+        return;
       }
 
-      return false;
+      self.haveAccess = false;
     })
   }));
 

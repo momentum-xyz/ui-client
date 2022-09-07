@@ -19,17 +19,21 @@ const WorldBuilderStartPage: FC = () => {
 
   useEffect(() => {
     if (sessionStore.isSessionExists) {
-      (async () => {
-        const hasAccess = await worldBuilderStore.haveAccessPermissions();
-
-        if (!hasAccess) {
-          history.push(`${ROUTES.worldBuilderLogin}?noWorldBuilderPermissions=true`, {
-            from: history.location.pathname
-          });
-        }
-      })();
+      worldBuilderStore.fetchPermissions();
     }
-  }, [history, sessionStore.isSessionExists, worldBuilderStore]);
+  }, [sessionStore.isSessionExists, worldBuilderStore]);
+
+  useEffect(() => {
+    if (worldBuilderStore.haveAccess === false) {
+      history.push(`${ROUTES.worldBuilderLogin}?noWorldBuilderPermissions=true`, {
+        from: history.location.pathname
+      });
+    }
+  }, [history, worldBuilderStore.haveAccess]);
+
+  if (worldBuilderStore.permissionsRequest.isPending || worldBuilderStore.haveAccess === false) {
+    return null;
+  }
 
   return (
     <Page backgroundSrc={background} showSimpleProfileMenu={sessionStore.isSessionExists}>
