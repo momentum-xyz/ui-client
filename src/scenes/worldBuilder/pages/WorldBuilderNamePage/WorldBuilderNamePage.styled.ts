@@ -10,7 +10,7 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  padding-top: 40px;
+  padding-top: 60px;
   gap: 20px;
   overflow-y: scroll;
 `;
@@ -18,8 +18,9 @@ export const Container = styled.div`
 export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 90px;
-  width: 70%;
+  gap: 50px;
+  padding: 0 100px;
+  padding-bottom: 40px;
 `;
 
 export const FormFieldContainer = styled.div`

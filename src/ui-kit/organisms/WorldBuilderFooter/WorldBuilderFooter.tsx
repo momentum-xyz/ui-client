@@ -10,20 +10,27 @@ interface PropsInterface {
   onNext?: () => void;
   buttonLabel?: string;
   showButton?: boolean;
+  isButtonDisabled?: boolean;
 }
 
 const WorldBuilderFooter: FC<PropsInterface> = ({
   currentStep,
   onNext,
   buttonLabel,
-  showButton = true
+  showButton = true,
+  isButtonDisabled = false
 }) => {
   const {t} = useTranslation();
 
   return (
     <styled.ButtonAndSteps>
       {showButton && (
-        <styled.StyledButton label={buttonLabel ?? ''} size="large" onClick={onNext} />
+        <styled.StyledButton
+          label={buttonLabel ?? ''}
+          size="large"
+          onClick={onNext}
+          disabled={isButtonDisabled}
+        />
       )}
       <Steps
         currentStep={currentStep}
