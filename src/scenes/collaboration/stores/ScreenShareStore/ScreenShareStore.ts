@@ -10,13 +10,9 @@ const ScreenShareStore = types.compose(
     .model('ScreenShareStore', {
       ownerRequest: types.optional(RequestModel, {}),
       screenOwnerId: types.maybeNull(types.string),
-      screenOwnerName: types.maybeNull(types.string),
-      isSettingUp: false
+      screenOwnerName: types.maybeNull(types.string)
     })
     .actions((self) => ({
-      setIsSettingUp(isSettingUp: boolean): void {
-        self.isSettingUp = isSettingUp;
-      },
       setScreenOwner: flow(function* (agoraUserId: string | null) {
         if (!agoraUserId) {
           self.screenOwnerId = null;

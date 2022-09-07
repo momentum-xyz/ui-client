@@ -13,7 +13,7 @@ import * as styled from './ScreenSharePage.styled';
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
   const {space, screenShareStore, textChatStore} = collaborationStore;
-  const {isSettingUp, screenShareTitle} = screenShareStore;
+  const {screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
   const {videoTrack} = agoraScreenShareStore;
@@ -25,16 +25,14 @@ const ScreenSharePage: FC = () => {
     if (videoTrack) {
       const agoraUserId = videoTrack.getUserId() as string;
       screenShareStore.setScreenOwner(agoraUserId);
-      screenShareStore.setIsSettingUp(false);
     } else {
       screenShareStore.setScreenOwner(null);
     }
   }, [videoTrack, screenShareStore, sessionStore.userId]);
 
   const startScreenSharing = useCallback(() => {
-    screenShareStore.setIsSettingUp(true);
     agoraScreenShareStore.startScreenSharing(sessionStore.userId);
-  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId]);
+  }, [agoraScreenShareStore, sessionStore.userId]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);
@@ -70,7 +68,7 @@ const ScreenSharePage: FC = () => {
       <styled.Container>
         {!videoTrack ? (
           <ScreenChoice
-            isSettingUp={isSettingUp}
+            isSettingUp={agoraScreenShareStore.isSettingUp}
             canShare={space.isAdmin || agoraStageModeStore.isOnStage}
             startScreenShare={startScreenSharing}
           />
