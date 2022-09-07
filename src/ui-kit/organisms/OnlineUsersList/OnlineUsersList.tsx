@@ -53,7 +53,7 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
     }, 30000);
 
     return () => clearInterval(timeInterval);
-  }, []);
+  }, [onlineUsersList, worldId]);
 
   const handleClick = (id: string) => {
     if (onlineUsersStore?.selectedUserId !== id) {

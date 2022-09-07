@@ -1,13 +1,16 @@
-import {RefObject, useCallback, useEffect} from 'react';
+import {RefObject, useCallback, useEffect, useRef} from 'react';
 
 const useResize = (ref: RefObject<HTMLElement>, onResize: (event: UIEvent) => void) => {
+  const refCallback = useRef(onResize);
+  refCallback.current = onResize;
+
   const handleOnResize = useCallback(
     (event: UIEvent) => {
       if (ref.current) {
-        onResize(event);
+        refCallback.current(event);
       }
     },
-    [ref, onResize]
+    [ref, refCallback]
   );
 
   useEffect(() => {
@@ -17,7 +20,7 @@ const useResize = (ref: RefObject<HTMLElement>, onResize: (event: UIEvent) => vo
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       window.removeEventListener('resize', handleOnResize);
     };
-  }, [ref]);
+  }, [handleOnResize]);
 };
 
 export {useResize};
