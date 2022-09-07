@@ -39,7 +39,7 @@ const WorldBuilderLoginPage: FC = () => {
         <PanelLayout isBodyExtendingToEdges>
           <LoginView
             logo={momentum}
-            title={t('messages.signIn')}
+            title={t('messages.worldBuilderSignIn')}
             {...(isRefreshButtonShown && {
               backBtn: {
                 variant: 'primary',
