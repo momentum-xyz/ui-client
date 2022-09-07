@@ -121,7 +121,7 @@ class PosBusService {
     }
   }
 
-  static handleRelayMessage(target: string, message: any): void {
+  static handleRelayMessage(target: string, message: unknown): void {
     console.log('[unity message]:', target, message);
     switch (target) {
       case 'collaboration':

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface UnityApiInterface {
   toggleMinimap(): any;
   teleportToUser(userGuid: string): any;

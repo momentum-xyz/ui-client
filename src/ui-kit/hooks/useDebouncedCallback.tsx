@@ -7,6 +7,7 @@ import {useCallback} from 'react';
  * always provide outer function description and type cast,
  * type cast alone will cause runtime errors!
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useDebouncedCallback = <T extends (...args: any[]) => unknown>(
   callback: T,
   delay = 0,

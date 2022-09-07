@@ -5,7 +5,7 @@ import {SizeType} from 'ui-kit/types';
 
 import * as styled from './SearchInput.styled';
 
-interface SearchPropsInterface extends Omit<InputHTMLAttributes<any>, 'onChange'> {
+interface SearchPropsInterface extends Omit<InputHTMLAttributes<unknown>, 'onChange'> {
   variantSize?: SizeType;
   delay?: number;
   onChange?: (value: string) => void;
