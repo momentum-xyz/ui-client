@@ -2,6 +2,7 @@ import {cast, flow, Instance, types} from 'mobx-state-tree';
 
 import {RequestModel, UserProfileModel, UserProfileModelInterface} from 'core/models';
 import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
+import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 
 const OnlineUsersList = types
   .model('OnlineUsersList', {
@@ -41,7 +42,8 @@ const OnlineUsersList = types
       return self.usersRequest.isLoading;
     },
     filteredPeople(excludedPeopleIds: string[]): UserProfileModelInterface[] {
-      const users = self.searchQuery ? self.searchedUsers : self.users;
+      const users =
+        self.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT ? self.searchedUsers : self.users;
       return users.filter((user) => !excludedPeopleIds?.includes(user.uuid));
     }
   }));

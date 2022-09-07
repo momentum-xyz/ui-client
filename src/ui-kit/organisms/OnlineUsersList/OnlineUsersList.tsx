@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {observer} from 'mobx-react-lite';
+import {observer, useObserver} from 'mobx-react-lite';
 
 import {SearchInput, useDebouncedEffect} from 'ui-kit';
 import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
@@ -71,17 +71,26 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
     }
   };
 
-  const renderList = () => {
+  const renderList = useObserver(() => {
     if (!onlineUsersList.users || !profile) {
       return;
     }
 
-    const sortedUsers: UserProfileModelInterface[] = [
-      ...(invite || onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT
-        ? []
-        : [profile]),
-      ...onlineUsersList.filteredPeople([...excludedPeople, profile.uuid])
-    ];
+    const sortedUsers: UserProfileModelInterface[] = [];
+
+    if (!invite && onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT) {
+      sortedUsers.push(profile);
+    }
+
+    if (invite) {
+      sortedUsers.push(...onlineUsersList.filteredPeople([...excludedPeople, profile.uuid]));
+    } else {
+      sortedUsers.push(
+        ...onlineUsersList.filteredPeople(
+          onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT ? [profile.uuid] : []
+        )
+      );
+    }
 
     return sortedUsers.map((user) => (
       <UserItem
@@ -94,7 +103,7 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
         spaceId={spaceId}
       />
     ));
-  };
+  });
 
   return (
     <styled.Container data-testid="OnlineUsersList-test">
@@ -105,7 +114,7 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
         onFocus={() => handleSearchFocus(true)}
         onBlur={() => handleSearchFocus(false)}
       />
-      <styled.List>{renderList()}</styled.List>
+      <styled.List>{renderList}</styled.List>
     </styled.Container>
   );
 };
