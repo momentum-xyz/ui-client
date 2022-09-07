@@ -1,6 +1,7 @@
 export const ROUTES = {
   base: '/',
   login: '/login',
+  worldBuilderLogin: '/wbLogin',
   loginEmail: '/loginEmail',
   loginWeb3: '/web3/login',
   web3: '/web3',
