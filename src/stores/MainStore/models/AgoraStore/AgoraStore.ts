@@ -144,7 +144,6 @@ const AgoraStore = types
       if (self.isStageMode) {
         yield self.agoraStageModeStore.leave();
       } else {
-        self.agoraScreenShareStore.leave();
         yield self.agoraMeetingStore.leave();
       }
 
@@ -243,6 +242,14 @@ const AgoraStore = types
       return self.isStageMode
         ? self.agoraStageModeStore.numberOfAudienceMembers
         : self.agoraMeetingStore.users.length + 1;
+    },
+    get meetingPeopleIds(): string[] {
+      return self.isStageMode
+        ? [
+            ...self.agoraStageModeStore.users.map((user) => user.uid.toString()),
+            ...self.agoraStageModeStore.audience.map((user) => user.uid.toString())
+          ]
+        : self.agoraMeetingStore.users.map((user) => user.uid.toString());
     },
     get localSoundLevel(): number {
       return self.isStageMode

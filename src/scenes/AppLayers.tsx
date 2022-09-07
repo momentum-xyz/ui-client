@@ -1,13 +1,13 @@
-import React, {FC} from 'react';
+import React, {FC, lazy} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
 
 import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
-import {Widgets} from 'scenes/widgets';
 
-import {Meeting} from './meeting';
+const Widgets = lazy(() => import('./widgets/Widgets'));
+const Meeting = lazy(() => import('./meeting/Meeting'));
 
 interface PropsInterface {
   withUnity?: boolean;

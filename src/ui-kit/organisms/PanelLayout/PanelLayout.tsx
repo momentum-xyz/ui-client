@@ -24,7 +24,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerStyle?: HeaderStyleType;
   isBodyExtendingToEdges?: boolean;
   isDanger?: boolean;
-  isCloseButton?: boolean;
+  showCloseButton?: boolean;
   iconSize?: SizeType;
   hasBorder?: boolean;
   headerActions?: ReactNode;
@@ -38,7 +38,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   noPadding?: boolean;
   headerPlaceholder?: boolean;
   titleHeight?: boolean;
-  headerClassName?: string;
+  isTruncateHeader?: boolean;
   showIcon?: boolean;
   headerHeadingAlign?: TextAlignType;
 }
@@ -61,7 +61,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     titleHeight = false,
     componentSize,
     className,
-    headerClassName,
+    isTruncateHeader = false,
     showIcon = true,
     headerHeadingAlign,
     ...restProps
@@ -101,7 +101,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
                 label={restProps.title}
                 transform={headerStyle !== 'divider-uppercase' ? headerStyle : 'uppercase'}
                 isDanger={isDanger}
-                className={headerClassName}
+                isTruncate={isTruncateHeader}
                 align={headerHeadingAlign}
               />
             )}
@@ -132,7 +132,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           <styled.Spacer />
           <styled.HeaderActions>
             {props.headerActions}
-            {(restProps.isCloseButton || restProps.onClose) && (
+            {(restProps.showCloseButton || restProps.onClose) && (
               <SvgButton
                 theme={restProps.theme}
                 iconName="close"

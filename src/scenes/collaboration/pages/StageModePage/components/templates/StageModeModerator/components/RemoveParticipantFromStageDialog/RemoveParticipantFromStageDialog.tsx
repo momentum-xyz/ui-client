@@ -32,7 +32,7 @@ const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => 
           text={t('messages.offStageFailure', {
             user: participant.name
           })}
-          isCloseButton
+          showCloseButton
         />
       );
     }

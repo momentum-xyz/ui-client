@@ -52,7 +52,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('spaceAdmin.users.addMemberDialog.successAdd')}
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );
@@ -67,7 +67,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
             headerIconName="alert"
             title={t('titles.alert')}
             text={t('spaceAdmin.users.addMemberDialog.successInvite')}
-            isCloseButton
+            showCloseButton
           />,
           TOAST_COMMON_OPTIONS
         );

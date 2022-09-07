@@ -1,4 +1,5 @@
 import React, {FC, memo} from 'react';
+import cn from 'classnames';
 
 import {PropsWithThemeInterface, ToastButtonInfoInterface} from 'ui-kit/interfaces';
 import {PanelLayout} from 'ui-kit/organisms';
@@ -11,15 +12,23 @@ interface PropsInterface extends PropsWithThemeInterface {
   headerIconName?: IconNameType;
   text?: string;
   isDanger?: boolean;
-  isCloseButton?: boolean;
+  showCloseButton?: boolean;
   approveInfo?: ToastButtonInfoInterface;
   declineInfo?: ToastButtonInfoInterface;
   onClose?: () => void;
 }
 
 const ToastContent: FC<PropsInterface> = (props) => {
-  const {title, headerIconName, text, isDanger, isCloseButton, approveInfo, declineInfo, onClose} =
-    props;
+  const {
+    title,
+    headerIconName,
+    text,
+    isDanger,
+    showCloseButton,
+    approveInfo,
+    declineInfo,
+    onClose
+  } = props;
 
   return (
     <styled.ToastContainer data-testid="ToastContent-test">
@@ -28,16 +37,18 @@ const ToastContent: FC<PropsInterface> = (props) => {
         title={title}
         headerIconName={headerIconName}
         headerStyle="uppercase"
-        isCloseButton={isCloseButton}
+        showCloseButton={showCloseButton}
         iconSize="large"
         onClose={onClose}
         componentSize={{width: '100%'}}
         titleWidth="370px"
         headerType="h4"
-        headerClassName="header-eclipse"
+        isTruncateHeader
         headerHeadingAlign="left"
       >
-        <styled.Container>
+        <styled.Container
+          className={cn(showCloseButton && (declineInfo || approveInfo) && 'isButton')}
+        >
           <styled.TextItem>
             <Text text={text} size="xs" align="left" />
           </styled.TextItem>

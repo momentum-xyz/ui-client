@@ -109,7 +109,7 @@ const PosBusEventsPage: FC = () => {
                 headerIconName="alert"
                 title={t('titles.alert')}
                 text={t('messages.userRequestDeny')}
-                isCloseButton
+                showCloseButton
               />
             );
             return false;
@@ -140,7 +140,7 @@ const PosBusEventsPage: FC = () => {
           headerIconName="alert"
           title={t('titles.alert')}
           text={t('messages.stageIsFull')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );
@@ -152,7 +152,7 @@ const PosBusEventsPage: FC = () => {
           headerIconName="alert"
           title={t('titles.stage')}
           text={t('messages.stageModeActivated')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );
@@ -163,7 +163,7 @@ const PosBusEventsPage: FC = () => {
           headerIconName="alert"
           title={t('titles.stage')}
           text={t('messages.stageModeDeActivated')}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );
@@ -191,7 +191,7 @@ const PosBusEventsPage: FC = () => {
         headerIconName="alert"
         title={t('titles.alert')}
         text={t('messages.stageModeMuted')}
-        isCloseButton
+        showCloseButton
       />,
       TOAST_GROUND_OPTIONS
     );
@@ -207,7 +207,7 @@ const PosBusEventsPage: FC = () => {
         headerIconName="logout"
         title={t('titles.kickedFromMeeting')}
         text={t('messages.kickedFromMeeting')}
-        isCloseButton
+        showCloseButton
       />,
       TOAST_COMMON_OPTIONS
     );

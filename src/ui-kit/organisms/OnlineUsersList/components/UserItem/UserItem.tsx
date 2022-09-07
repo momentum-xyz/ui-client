@@ -67,7 +67,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
           text={t('messages.inviteSuccess', {
             user: user.name
           })}
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );
@@ -80,7 +80,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
             user: user.name
           })}
           isDanger
-          isCloseButton
+          showCloseButton
         />,
         TOAST_GROUND_OPTIONS
       );

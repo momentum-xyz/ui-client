@@ -1,35 +1,45 @@
-import React from 'react';
+import React, {lazy} from 'react';
 
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-import {
-  LoginPage,
-  LoginCallback,
-  LoginEmailPage,
-  Web3ChoicePage,
-  Web3ChallengePage,
-  Web3ConsentPage
-} from './auth/pages';
-import {HomePage} from './home';
-import {WelcomePage} from './welcome';
-import {SignUpCompletePage} from './profile';
-import {Collaboration} from './collaboration';
-import {SpaceAdmin} from './spaceAdmin';
-import {WorldCalendar} from './worldCalendar';
-import {MagicPage} from './magic/pages';
-import {VideoPage} from './video/pages';
-import {GrabTablePage} from './grabTable';
-import {StoryBook} from './storyBook';
-import {DisconnectedPage, MaintenancePage, WrongBrowserPage} from './system';
-import {WorldBuilder} from './worldBuilder';
-import {WorldBuilderStartPage} from './worldBuilder/pages';
+const LoginPage = lazy(() => import('./auth/pages/LoginPage/LoginPage'));
+const WorldBuilderLoginPage = lazy(
+  () => import('./auth/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
+);
+const LoginCallback = lazy(() => import('./auth/pages/LoginCallback/LoginCallback'));
+const LoginEmailPage = lazy(() => import('./auth/pages/LoginEmailPage/LoginEmailPage'));
+const Web3ChoicePage = lazy(() => import('./auth/pages/Web3ChoicePage/Web3ChoicePage'));
+const Web3ChallengePage = lazy(() => import('./auth/pages/Web3ChallengePage/Web3ChallengePage'));
+const Web3ConsentPage = lazy(() => import('./auth/pages/Web3ConsentPage/Web3ConsentPage'));
+const HomePage = lazy(() => import('./home/pages/HomePage/HomePage'));
+const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpCompletePage'));
+const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));
+const Collaboration = lazy(() => import('./collaboration/Collaboration'));
+const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
+const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
+const WorldCalendar = lazy(() => import('./worldCalendar/WorldCalendar'));
+const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
+const VideoPage = lazy(() => import('./video/pages/VideoPage/VideoPage'));
+const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
+const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
+const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
+const StoryBook = lazy(() => import('./storyBook/StoryBook'));
+const WorldBuilder = lazy(() => import('./worldBuilder/WorldBuilder'));
+const WorldBuilderStartPage = lazy(
+  () => import('./worldBuilder/pages/WorldBuilderStartPage/WorldBuilderStartPage')
+);
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.login,
     exact: true,
     main: () => <LoginPage />
+  },
+  {
+    path: ROUTES.worldBuilderLogin,
+    exact: true,
+    main: () => <WorldBuilderLoginPage />
   },
   {
     path: ROUTES.loginEmail,
@@ -65,7 +75,7 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.signUpComplete,
     exact: true,
-    main: () => <SignUpCompletePage />
+    main: () => <SignUpPage />
   },
   {
     path: ROUTES.web3CallBack,
@@ -141,10 +151,6 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     path: ROUTES.worldCalendar,
     main: () => <WorldCalendar />,
     renderBackground: true
-  },
-  {
-    path: ROUTES.base,
-    main: () => <WorldBuilder />
   }
 ];
 

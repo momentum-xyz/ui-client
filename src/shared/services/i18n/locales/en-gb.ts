@@ -155,7 +155,9 @@ export const enGb = {
       endDateGraterThanStartDate: 'End date has to be grater than start date',
       nameConstraints: 'Please enter a name with 2-32 characters',
       somethingWentWrong: 'Something went wrong',
-      somethingWentWrongTryAgain: 'Something went wrong. Please try again later.'
+      somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
+      noWorldBuilderPermissions:
+        'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot'
     },
     systemMessages: {
       loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
@@ -321,7 +323,8 @@ export const enGb = {
       videoLimitReached: 'Video limit reached',
       stageFull: 'Stage full',
       worldBuilderDescription:
-        'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.'
+        'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
+      startBuilding: 'Connect your wallet\n To start Building'
     },
     titles: {
       alert: 'alert',
@@ -352,7 +355,8 @@ export const enGb = {
       name: 'Name',
       template: 'Template',
       generate: 'Generate',
-      worldBuilder: 'World Builder'
+      worldBuilder: 'World Builder',
+      templateNameWrapper: '{{name}} Template'
     },
     textMessage: {
       you: 'you',
@@ -457,7 +461,8 @@ export const enGb = {
       inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
       getStarted: 'Get Started',
-      selectTemplate: 'Select Template'
+      selectTemplate: 'Select Template',
+      generateWorld: 'Generate World'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',

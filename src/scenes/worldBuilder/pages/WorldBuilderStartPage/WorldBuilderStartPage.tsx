@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
@@ -17,6 +17,11 @@ const WorldBuilderStartPage: FC = () => {
   const {t} = useTranslation();
   const history = useHistory();
 
+  useEffect(() => {
+    // TODO: Call API to check wether you have permission to create world, if not, redirect to login page with
+    // parameter noWorldBuilderPermissions=true
+  }, []);
+
   return (
     <Page backgroundSrc={background} showSimpleProfileMenu={sessionStore.isSessionExists}>
       <styled.Container>
@@ -31,7 +36,7 @@ const WorldBuilderStartPage: FC = () => {
             if (sessionStore.isSessionExists) {
               history.push(ROUTES.worldBuilder.name);
             } else {
-              history.push(ROUTES.login, {from: ROUTES.worldBuilder.start});
+              history.push(ROUTES.worldBuilderLogin, {from: ROUTES.worldBuilder.start});
             }
           }}
         />
