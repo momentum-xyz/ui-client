@@ -33,6 +33,7 @@ const Collaboration: FC = () => {
   const {agoraStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
+    isUserEditing,
     newDeviceDialog,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
@@ -92,14 +93,10 @@ const Collaboration: FC = () => {
   }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
 
   useEffect(() => {
-    if (agoraScreenShareStore.videoTrack) {
+    if (agoraScreenShareStore.videoTrack && !isUserEditing) {
       history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
     }
-  }, [agoraScreenShareStore.videoTrack, history, spaceId]);
-
-  const handleDecline = () => {
-    acceptedToJoinStageDialog.close();
-  };
+  }, [agoraScreenShareStore.videoTrack, history, spaceId, isUserEditing]);
 
   const handleCountdownEnded = useCallback(async () => {
     if (!agoraStageModeStore.canEnterStage) {
@@ -194,7 +191,7 @@ const Collaboration: FC = () => {
       {acceptedToJoinStageDialog.isOpen && (
         <AcceptedToJoinStageDialog
           onReady={prepareOnStageDialog.open}
-          onDecline={handleDecline}
+          onDecline={acceptedToJoinStageDialog.close}
           onClose={acceptedToJoinStageDialog.close}
         />
       )}

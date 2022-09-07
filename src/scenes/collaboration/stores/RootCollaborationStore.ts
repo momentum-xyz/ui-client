@@ -106,6 +106,14 @@ const RootCollaborationStore = types
         self.prepareOnStageDialog.isOpen ||
         self.countdownDialog.isOpen
       );
+    },
+    get isUserEditing(): boolean {
+      return (
+        self.dashboardStore.tileDialog.isOpen ||
+        self.dashboardStore.tileRemoveDialog.isOpen ||
+        self.calendarStore.formDialog.isOpen ||
+        self.calendarStore.deleteConfirmationDialog.isOpen
+      );
     }
   }));
 
