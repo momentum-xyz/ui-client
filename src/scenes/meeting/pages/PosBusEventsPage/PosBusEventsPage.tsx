@@ -243,10 +243,13 @@ const PosBusEventsPage: FC = () => {
 
   usePosBusEvent('stage-mode-kick', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-kick', userId);
+    // TODO: Remove when whole Stage Mode infostructure is stable
+    agoraStageModeStore.moveToAudience(userId);
 
-    if (userId === sessionStore.userId) {
-      agoraStageModeStore.leaveStage();
-    }
+    // TODO: Uncomment the code below when whole Stage Mode infostructure is stable
+    // if (userId === sessionStore.userId) {
+    //   agoraStageModeStore.leaveStage();
+    // }
   });
 
   return null;

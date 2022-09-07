@@ -247,7 +247,7 @@ const AgoraStore = types
       return self.isStageMode
         ? [
             ...self.agoraStageModeStore.speakers.map((user) => user.uid.toString()),
-            ...self.agoraStageModeStore.audience.map((user) => user.uid.toString())
+            ...self.agoraStageModeStore.backendUsers.map((user) => user.uid.toString())
           ]
         : self.agoraMeetingStore.users.map((user) => user.uid.toString());
     },
