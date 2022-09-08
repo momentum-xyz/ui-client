@@ -1,19 +1,19 @@
-import React, {Dispatch, FC, SetStateAction, useRef} from 'react';
+import React, {Dispatch, SetStateAction, useRef} from 'react';
 import cn from 'classnames';
 
 import {IconSvg, Text, SearchInput, useClickOutside} from 'ui-kit';
 
 import * as styled from './SearchDropdown.styled';
 
-interface DataInterface {
+interface SearchDropdownItemInterface {
   name: string;
   id: string;
 }
 
-interface PropsInterface {
-  data?: DataInterface[];
+interface PropsInterface<T extends SearchDropdownItemInterface> {
+  data?: T[];
   ButtonLabel?: string;
-  onClick?: (item: any) => void;
+  onClick?: (item: T) => void;
   value: string;
   isFocused: boolean;
   setIsFocused: Dispatch<SetStateAction<boolean>>;
@@ -25,7 +25,7 @@ interface PropsInterface {
   height?: string;
 }
 
-const SearchDropdown: FC<PropsInterface> = ({
+const SearchDropdown = <T extends SearchDropdownItemInterface = SearchDropdownItemInterface>({
   data,
   ButtonLabel,
   onClick,
@@ -38,7 +38,7 @@ const SearchDropdown: FC<PropsInterface> = ({
   searchInputLabel,
   searchInputPlaceholder,
   onButtonClick
-}) => {
+}: PropsInterface<T>) => {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(panelRef, () => setIsFocused(false));

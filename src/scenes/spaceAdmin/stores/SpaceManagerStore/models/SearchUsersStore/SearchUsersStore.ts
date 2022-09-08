@@ -42,7 +42,8 @@ const SearchUsersStore = types.compose(
       get resultsList() {
         return self.results.map((user) => ({
           id: bytesToUuid(user.id.data),
-          name: user.name
+          name: user.name,
+          isAdmin: user.isAdmin
         }));
       }
     }))
