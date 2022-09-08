@@ -383,8 +383,9 @@ const AgoraStageModeStore = types
         self.spaceId = spaceId;
 
         stageModeResponse.spaceIntegrationUsers
-          ?.filter((user) => user.data.role !== 'speaker')
-          .forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
+          // TODO: Decide on whether BE or Agora is the source of truth and remove or uncomment
+          // ?.filter((user) => user.data.role !== 'speaker')
+          ?.forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
 
         self.speakers = cast(
           self.client.remoteUsers.map((user) => ({
