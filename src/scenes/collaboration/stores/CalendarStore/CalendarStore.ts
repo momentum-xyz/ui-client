@@ -20,8 +20,8 @@ const CalendarStore = types.compose(
       formDialog: types.optional(DialogModel, {}),
       magicDialog: types.optional(DialogModel, {}),
       deleteConfirmationDialog: types.optional(DialogModel, {}),
-      eventListStore: types.optional(EventList, {}),
-      eventFormStore: types.optional(EventForm, {}),
+      eventList: types.optional(EventList, {}),
+      eventForm: types.optional(EventForm, {}),
       magicId: types.maybe(types.string),
       magicLinkRequest: types.optional(RequestModel, {}),
       removeEventRequest: types.optional(RequestModel, {}),
@@ -32,7 +32,7 @@ const CalendarStore = types.compose(
     })
     .actions((self) => ({
       editEvent(event: EventItemInterface) {
-        self.eventFormStore.editEvent(event);
+        self.eventForm.editEvent(event);
         self.formDialog.open();
       },
       selectEventToRemove(event: EventItemInterface) {
@@ -52,7 +52,7 @@ const CalendarStore = types.compose(
         if (self.removeEventRequest.isDone) {
           self.eventIdToRemove = undefined;
           self.deleteConfirmationDialog.close();
-          self.eventListStore.fetchEvents(spaceId);
+          self.eventList.fetchEvents(spaceId);
         }
 
         return self.removeEventRequest.isDone;

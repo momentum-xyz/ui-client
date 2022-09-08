@@ -3,10 +3,10 @@ import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
 
-import {appVariables} from 'api/constants';
 import {EventItemInterface} from 'core/models';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
 import placeholder from 'static/images/placeholder.png';
+import {truncateText} from 'core/utils';
 
 import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
@@ -14,17 +14,16 @@ import * as styled from './EventItem.styled';
 interface PropsInterface {
   event: EventItemInterface;
   currentUserId: string;
-  onEdit?: (event: EventItemInterface) => void;
-  onRemove?: (event: EventItemInterface) => void;
+  onEdit: (event: EventItemInterface) => void;
+  onRemove: (event: EventItemInterface) => void;
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   zIndex?: number;
-  isWorldCalendar?: boolean;
+  showOnWorldCalendar?: boolean;
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
   onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
-  isSpace?: boolean;
-  isWorld?: boolean;
+  canManageEvent?: boolean;
 }
 
 const EventItem: FC<PropsInterface> = ({
@@ -33,13 +32,13 @@ const EventItem: FC<PropsInterface> = ({
   onEdit,
   onRemove,
   zIndex,
-  isWorldCalendar = false,
+  showOnWorldCalendar = false,
   onMagicLinkOpen,
   onFlyToGathering,
   onFlyToSpace,
   onWeblinkClick,
   onShowAttendeesList,
-  isSpace = false
+  canManageEvent = false
 }) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
@@ -58,11 +57,9 @@ const EventItem: FC<PropsInterface> = ({
   const buttons = () => (
     <styled.Buttons className="base">
       <styled.Buttons>
-        {isWorldCalendar && event.data?.spaceId && (
+        {showOnWorldCalendar && event.data?.spaceId && (
           <styled.EventButton
-            label={`${t('eventList.eventItem.flyToSpace')} ${
-              event.data?.spaceName && event.data?.spaceName.slice(0, 12)
-            } ${event.data?.spaceName && (event.data?.spaceName.length > 12 ? '...' : '')}`}
+            label={`${t('eventList.eventItem.flyToSpace')} ${truncateText(event.data?.spaceName)}`}
             transform="capitalized"
             onClick={() => {
               onFlyToSpace?.(event.data?.spaceId ?? '');
@@ -87,11 +84,7 @@ const EventItem: FC<PropsInterface> = ({
             label={t('eventList.eventItem.websiteLink')}
             icon="link"
             transform="capitalized"
-            onClick={() => {
-              if (event.data?.web_link) {
-                onWeblinkClick(event.data?.web_link);
-              }
-            }}
+            onClick={() => onWeblinkClick(event.data?.web_link ?? '')}
           />
         )}
       </styled.Buttons>
@@ -137,7 +130,7 @@ const EventItem: FC<PropsInterface> = ({
             className="AddToCalendarContainer"
           />
         )}
-        {event.isLive() && isWorldCalendar && event.data?.id && (
+        {event.isLive() && showOnWorldCalendar && event.data?.id && (
           <Button
             variant="inverted"
             icon="fly-to"
@@ -172,7 +165,7 @@ const EventItem: FC<PropsInterface> = ({
       <styled.Info>
         <styled.ContentRow>
           <styled.TextRow>
-            <Header event={event} isWorldCalendar={isWorldCalendar} />
+            <Header event={event} isWorldCalendar={showOnWorldCalendar} />
             {date()}
             <ShowMoreText
               text={event.data?.description ?? ''}
@@ -198,8 +191,7 @@ const EventItem: FC<PropsInterface> = ({
           </styled.AttendeesContainer>
         </styled.ContentRow>
         {buttons()}
-        {/* TODO: add || isWorldCalendar && event.spaceAdmin*/}
-        {isSpace && <Actions event={event} onEdit={onEdit} onRemove={onRemove} />}
+        {canManageEvent && <Actions event={event} onEdit={onEdit} onRemove={onRemove} />}
       </styled.Info>
     </styled.Div>
   );
@@ -207,10 +199,7 @@ const EventItem: FC<PropsInterface> = ({
   const image = () => (
     <styled.ImageContainer>
       {event.data?.image_hash ? (
-        <img
-          alt={event.data?.image_hash}
-          src={`${appVariables.RENDER_SERVICE_URL}/get/${event.data?.image_hash}`}
-        />
+        <img alt={event.data?.image_hash} src={event.imageSrc} />
       ) : (
         <img alt="placeholder" src={placeholder} />
       )}

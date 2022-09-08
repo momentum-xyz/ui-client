@@ -16,7 +16,7 @@ import {EventForm} from './components';
 const WorldCalendarPage: FC = () => {
   const {worldCalendarStore, mainStore, sessionStore, widgetStore} = useStore();
   const {calendarStore} = worldCalendarStore;
-  const {magicDialog, eventListStore, deleteConfirmationDialog, spaceId} = calendarStore;
+  const {magicDialog, eventList, deleteConfirmationDialog, spaceId} = calendarStore;
   const {worldStore, unityStore} = mainStore;
   const {attendeesListStore} = widgetStore;
 
@@ -32,10 +32,10 @@ const WorldCalendarPage: FC = () => {
   );
 
   useEffect(() => {
-    eventListStore.fetchEvents(worldStore.worldId, true);
+    eventList.fetchEvents(worldStore.worldId, true);
 
-    return () => eventListStore.resetModel();
-  }, [eventListStore, worldStore.worldId]);
+    return () => eventList.resetModel();
+  }, [eventList, worldStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
@@ -103,7 +103,7 @@ const WorldCalendarPage: FC = () => {
       <PageTopBar title="World Calendar" onClose={() => history.push(ROUTES.base)} />
       <EventList
         currentUserId={sessionStore.userId}
-        events={eventListStore.events}
+        events={eventList.events}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={false}
         onEventEdit={calendarStore.editEvent}
@@ -112,7 +112,7 @@ const WorldCalendarPage: FC = () => {
         onFlyToSpace={handleFlyToSpace}
         onFlyToGathering={handleFlyToGathering}
         onShowAttendeesList={attendeesListStore.showAttendees}
-        isWorld
+        showOnWorldCalendar
       />
     </styled.Container>
   );

@@ -12,6 +12,7 @@ import {
 import {api, MagicLinkResponse, AttendeesResponseInterface} from 'api';
 import {RequestModel} from 'core/models';
 import {AttendeeModel} from 'core/models/AttendeeModel';
+import {appVariables} from 'api/constants';
 
 import {EventItemData} from './models';
 
@@ -62,7 +63,7 @@ const EventItem = types
     isLive(): boolean {
       const nowDate = new Date();
       if (self.data) {
-        return nowDate >= self.data?.start && nowDate <= self.data?.end;
+        return nowDate >= self.data.start && nowDate <= self.data.end;
       }
       return false;
     },
@@ -102,15 +103,21 @@ const EventItem = types
     get endDateAndTime() {
       return formatEndDate(new Date(self.data?.end ?? new Date()), true);
     },
-    get asCalendarEvent(): EventCalendarInterface {
+    get asCalendarEvent(): EventCalendarInterface | null {
+      if (!self.data) {
+        return null;
+      }
       return {
-        description: self.data?.description ?? '',
-        duration: durationInHours(self.data?.start ?? new Date(), self.data?.end ?? new Date()),
-        endDatetime: formattedStringFromDate(self.data?.end ?? new Date()),
-        startDatetime: formattedStringFromDate(self.data?.start ?? new Date()),
-        title: self.data?.title ?? '',
+        description: self.data.description,
+        duration: durationInHours(self.data.start, self.data.end),
+        endDatetime: formattedStringFromDate(self.data.end),
+        startDatetime: formattedStringFromDate(self.data.start),
+        title: self.data?.title,
         location: self.magicLink
       };
+    },
+    get imageSrc(): string {
+      return `${appVariables.RENDER_SERVICE_URL}/get/${self.data?.image_hash}`;
     },
     isAttending(userId: string) {
       return self.attendees.some((attendee) => attendee.id === userId);

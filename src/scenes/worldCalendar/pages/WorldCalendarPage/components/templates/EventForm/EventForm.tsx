@@ -17,9 +17,9 @@ import * as styled from './EventForm.styled';
 const EventForm: FC = () => {
   const theme = useTheme();
   const {worldCalendarStore, mainStore} = useStore();
-  const {eventFormStore, formDialog, eventListStore} = worldCalendarStore.calendarStore;
+  const {eventForm, formDialog, eventList} = worldCalendarStore.calendarStore;
   const {worldStore} = mainStore;
-  const {eventFormRequest, currentEvent} = eventFormStore;
+  const {eventFormRequest, currentEvent} = eventForm;
 
   const {
     control,
@@ -43,16 +43,11 @@ const EventForm: FC = () => {
       let isSuccess = false;
 
       if (currentEvent?.id) {
-        isSuccess = await eventFormStore.updateEvent(
-          data,
-          currentEvent.spaceId,
-          currentEvent.id,
-          image
-        );
+        isSuccess = await eventForm.updateEvent(data, currentEvent.spaceId, currentEvent.id, image);
       }
 
       if (isSuccess) {
-        eventListStore.fetchEvents(worldStore.worldId, true);
+        eventList.fetchEvents(worldStore.worldId, true);
         formDialog.close();
       }
     }
@@ -78,8 +73,8 @@ const EventForm: FC = () => {
   };
 
   useEffect(() => {
-    return () => eventFormStore.resetModel();
-  }, [eventFormStore]);
+    return () => eventForm.resetModel();
+  }, [eventForm]);
 
   useEffect(() => {
     if (startDate >= endDate) {

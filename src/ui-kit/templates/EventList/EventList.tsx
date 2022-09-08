@@ -12,10 +12,10 @@ interface PropsInterface {
   events: EventItemInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   isLoading: boolean;
-  isWorld?: boolean;
-  isSpace?: boolean;
-  onEventEdit?: (event: EventItemInterface) => void;
-  onEventRemove?: (event: EventItemInterface) => void;
+  showOnWorldCalendar?: boolean;
+  canManageInSpace?: boolean;
+  onEventEdit: (event: EventItemInterface) => void;
+  onEventRemove: (event: EventItemInterface) => void;
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
@@ -29,8 +29,8 @@ const EventList: FC<PropsInterface> = ({
   onEventRemove,
   onMagicLinkOpen,
   isLoading,
-  isWorld = false,
-  isSpace = false,
+  showOnWorldCalendar = false,
+  canManageInSpace = false,
   onFlyToGathering,
   onFlyToSpace,
   onWeblinkClick,
@@ -52,6 +52,7 @@ const EventList: FC<PropsInterface> = ({
 
   return (
     <styled.Container className="noScrollIndicator" data-testid="EventList-test">
+      {/* TODO: should replace event.spaceAdmin with showOnWorldCalendar in canManageSpace*/}
       {events.map((event, index) => (
         <EventItem
           currentUserId={currentUserId}
@@ -61,12 +62,12 @@ const EventList: FC<PropsInterface> = ({
           onEdit={onEventEdit}
           onRemove={onEventRemove}
           onMagicLinkOpen={onMagicLinkOpen}
-          isWorldCalendar={isWorld}
+          showOnWorldCalendar={showOnWorldCalendar}
           onFlyToGathering={onFlyToGathering}
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
           onShowAttendeesList={onShowAttendeesList}
-          isSpace={isSpace}
+          canManageEvent={canManageInSpace || showOnWorldCalendar}
         />
       ))}
     </styled.Container>

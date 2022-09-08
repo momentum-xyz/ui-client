@@ -18,8 +18,8 @@ import * as styled from './EventForm.styled';
 const EventForm: FC = () => {
   const theme = useTheme();
   const {calendarStore, space} = useStore().collaborationStore;
-  const {eventFormStore, formDialog, eventListStore} = calendarStore;
-  const {eventFormRequest, currentEvent} = eventFormStore;
+  const {eventForm, formDialog, eventList} = calendarStore;
+  const {eventFormRequest, currentEvent} = eventForm;
 
   const {
     control,
@@ -55,13 +55,13 @@ const EventForm: FC = () => {
       let isSuccess = false;
 
       if (currentEvent?.id) {
-        isSuccess = await eventFormStore.updateEvent(data, space.id, currentEvent.id, image);
+        isSuccess = await eventForm.updateEvent(data, space.id, currentEvent.id, image);
       } else {
-        isSuccess = await eventFormStore.createEvent(data, space.id, image);
+        isSuccess = await eventForm.createEvent(data, space.id, image);
       }
 
       if (isSuccess) {
-        eventListStore.fetchEvents(space.id);
+        eventList.fetchEvents(space.id);
         formDialog.close();
       }
     }
@@ -87,8 +87,8 @@ const EventForm: FC = () => {
   };
 
   useEffect(() => {
-    return () => eventFormStore.resetModel();
-  }, [eventFormStore]);
+    return () => eventForm.resetModel();
+  }, [eventForm]);
 
   useEffect(() => {
     if (startDate >= endDate) {
@@ -104,7 +104,7 @@ const EventForm: FC = () => {
   return (
     <Dialog
       theme={theme}
-      title={eventFormStore.currentEvent?.id ? t('eventForm.editTitle') : t('eventForm.addTitle')}
+      title={eventForm.currentEvent?.id ? t('eventForm.editTitle') : t('eventForm.addTitle')}
       headerStyle="uppercase"
       showCloseButton
       onClose={formDialog.close}

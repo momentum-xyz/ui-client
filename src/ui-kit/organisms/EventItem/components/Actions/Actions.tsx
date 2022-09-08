@@ -7,8 +7,8 @@ import * as styled from './Actions.styled';
 
 interface PropsInterface {
   event: EventItemInterface;
-  onEdit?: (event: EventItemInterface) => void;
-  onRemove?: (event: EventItemInterface) => void;
+  onEdit: (event: EventItemInterface) => void;
+  onRemove: (event: EventItemInterface) => void;
 }
 
 const Actions: FC<PropsInterface> = ({event, onRemove, onEdit}) => {
@@ -18,14 +18,14 @@ const Actions: FC<PropsInterface> = ({event, onRemove, onEdit}) => {
         iconName="bin"
         size="medium"
         onClick={() => {
-          onRemove?.(event);
+          onRemove(event);
         }}
       />
       <SvgButton
         iconName="edit"
         size="medium"
         onClick={() => {
-          onEdit?.(event);
+          onEdit(event);
         }}
       />
     </styled.Actions>

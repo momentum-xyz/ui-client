@@ -17,7 +17,7 @@ const CalendarPage: FC = () => {
   const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, space} = collaborationStore;
   const {favoriteStore} = mainStore;
-  const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
+  const {eventList, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
   const theme = useTheme();
@@ -64,11 +64,11 @@ const CalendarPage: FC = () => {
 
   useEffect(() => {
     if (space) {
-      eventListStore.fetchEvents(space.id);
+      eventList.fetchEvents(space.id);
     }
 
-    return () => eventListStore.resetModel();
-  }, [eventListStore, space]);
+    return () => eventList.resetModel();
+  }, [eventList, space]);
 
   if (!space) {
     return null;
@@ -97,14 +97,14 @@ const CalendarPage: FC = () => {
       <styled.InnerContainer>
         <EventList
           currentUserId={sessionStore.userId}
-          events={eventListStore.events}
+          events={eventList.events}
           onMagicLinkOpen={handleMagicLinkOpen}
-          isLoading={eventListStore.areEventsLoading}
+          isLoading={eventList.areEventsLoading}
           onEventEdit={calendarStore.editEvent}
           onEventRemove={calendarStore.selectEventToRemove}
           onWeblinkClick={handleWeblink}
           onShowAttendeesList={attendeesListStore.showAttendees}
-          isSpace={space.isAdmin}
+          canManageInSpace={space.isAdmin}
         />
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}

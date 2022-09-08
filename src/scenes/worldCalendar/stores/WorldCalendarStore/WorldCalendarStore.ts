@@ -21,15 +21,15 @@ const WorldCalendarStore = types.compose(
       eventIdToRemove: types.maybe(types.string),
       weblinkDialog: types.optional(DialogModel, {}),
       magicDialog: types.optional(DialogModel, {}),
-      eventListStore: types.optional(EventList, {}),
+      eventList: types.optional(EventList, {}),
       spaceId: types.maybe(types.string),
-      eventFormStore: types.optional(EventForm, {}),
+      eventForm: types.optional(EventForm, {}),
       magicId: types.maybe(types.string),
       magicLinkRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       editEvent(event: EventItemInterface) {
-        self.eventFormStore.editEvent(event);
+        self.eventForm.editEvent(event);
         self.formDialog.open();
       },
       selectEventToRemove(event: EventItemInterface) {
@@ -50,7 +50,7 @@ const WorldCalendarStore = types.compose(
         if (self.removeEventRequest.isDone) {
           self.eventIdToRemove = undefined;
           self.deleteConfirmationDialog.close();
-          self.eventListStore.fetchEvents(worldId, true);
+          self.eventList.fetchEvents(worldId, true);
         }
 
         return self.removeEventRequest.isDone;
