@@ -34,7 +34,7 @@ const EventForm: FC = () => {
   const [endDate, setEndDate] = useState<Date>(currentEvent?.end ?? new Date());
 
   const formSubmitHandler: SubmitHandler<EventFormInterface> = async (data: EventFormInterface) => {
-    if (data.web_link?.length === 0) {
+    if (!data.web_link?.length) {
       data.web_link = null;
     }
 

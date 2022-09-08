@@ -43,6 +43,6 @@ export const slugify = (text: string) => {
     .replace(/[_]+/g, '');
 };
 
-export const truncateText = (text: string) => {
-  return `${text.slice(0, 12)} ${text.length > 12 ? '...' : ''}`;
+export const truncateText = (text: string, textLength: number) => {
+  return `${text.slice(0, textLength)} ${text.length > textLength ? '...' : ''}`;
 };

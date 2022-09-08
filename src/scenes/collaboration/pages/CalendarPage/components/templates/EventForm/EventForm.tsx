@@ -46,7 +46,7 @@ const EventForm: FC = () => {
   });
 
   const formSubmitHandler: SubmitHandler<EventFormInterface> = async (data: EventFormInterface) => {
-    if (data.web_link?.length === 0) {
+    if (!data.web_link?.length) {
       data.web_link = null;
     }
 

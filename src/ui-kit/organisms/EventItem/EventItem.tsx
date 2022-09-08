@@ -11,6 +11,8 @@ import {truncateText} from 'core/utils';
 import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
 
+const TEXT_LENGTH = 12;
+
 interface PropsInterface {
   event: EventItemInterface;
   currentUserId: string;
@@ -59,7 +61,10 @@ const EventItem: FC<PropsInterface> = ({
       <styled.Buttons>
         {showOnWorldCalendar && event.data?.spaceId && (
           <styled.EventButton
-            label={`${t('eventList.eventItem.flyToSpace')} ${truncateText(event.data?.spaceName)}`}
+            label={`${t('eventList.eventItem.flyToSpace')} ${truncateText(
+              event.data?.spaceName,
+              TEXT_LENGTH
+            )}`}
             transform="capitalized"
             onClick={() => {
               onFlyToSpace?.(event.data?.spaceId ?? '');
