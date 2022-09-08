@@ -25,3 +25,12 @@ export interface ValidateDomainNameResponse extends ValidationRequest {
 export interface TemplatesRequest {}
 
 export interface TemplatesResponse extends Array<TemplateInterface> {}
+
+// PERMISSIONS
+
+export interface PermissionsRequest {}
+
+export interface PermissionsResponse {
+  permission: boolean;
+  error?: string;
+}

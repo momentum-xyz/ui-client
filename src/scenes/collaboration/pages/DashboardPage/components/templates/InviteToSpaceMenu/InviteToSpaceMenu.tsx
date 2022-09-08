@@ -41,7 +41,7 @@ const InviteToSpaceMenu: FC<PropsInterface> = ({onClose, leftOffSet}) => {
           onlineUsersList={onlineUsersList}
           worldId={worldStore.worldId}
           changeKeyboardControl={unityStore.changeKeyboardControl}
-          excludedPeople={agoraStore.meetingPeopleIds}
+          excludedPeople={agoraStore.userIds}
           invite
         />
       </styled.Container>

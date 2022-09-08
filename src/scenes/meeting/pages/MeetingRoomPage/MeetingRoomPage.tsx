@@ -70,16 +70,13 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
 
             {/* STAGE MODE USERS OR MEETING USERS */}
             {agoraStore.isStageMode
-              ? agoraStageModeStore.audienceMembers.map((user) => (
+              ? agoraStageModeStore.audience.map((user) => (
                   <StageModeUser
                     key={user.uid}
                     user={user}
                     isModerator={collaborationStore.isModerator}
                     canEnterStage={agoraStageModeStore.canEnterStage}
                     inviteToStage={agoraStageModeStore.inviteToStage}
-                    isInviteDialogShown={collaborationStore.inviteOnStageDialog.isOpen}
-                    openInviteDialog={collaborationStore.inviteOnStageDialog.open}
-                    closeInviteDialog={collaborationStore.inviteOnStageDialog.close}
                   />
                 ))
               : agoraMeetingStore.users.map((user) => (

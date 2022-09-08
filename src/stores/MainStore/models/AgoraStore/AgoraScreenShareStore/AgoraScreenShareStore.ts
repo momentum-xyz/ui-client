@@ -1,6 +1,5 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import AgoraRTC, {
-  ConnectionState,
   IAgoraRTCClient,
   IAgoraRTCRemoteUser,
   ILocalVideoTrack,
@@ -28,7 +27,7 @@ const AgoraScreenShareStore = types
       spaceId: types.maybe(types.string),
       appId: '',
       isStageMode: false,
-      connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED')
+      isSettingUp: false
     })
   )
   .volatile<{client?: IAgoraRTCClient; _videoTrack?: IRemoteVideoTrack}>(() => ({
@@ -83,6 +82,8 @@ const AgoraScreenShareStore = types
   .actions((self) => ({
     startScreenSharing: flow(function* (authStateSubject: string) {
       if (self.spaceId) {
+        self.isSettingUp = true;
+
         self.client = AgoraRTC.createClient({
           mode: self.isStageMode ? 'live' : 'rtc',
           codec: 'h264'
@@ -101,8 +102,15 @@ const AgoraScreenShareStore = types
         );
 
         const token = self.isStageMode ? `stage-${self.spaceId}` : self.spaceId;
-        yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
-        yield self.createScreenTrackAndPublish();
+
+        try {
+          yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
+          yield self.createScreenTrackAndPublish();
+        } catch {
+          self.client.leave();
+        } finally {
+          self.isSettingUp = false;
+        }
       }
     }),
     stopScreenSharing() {

@@ -8,6 +8,7 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  padding-top: 40px;
   gap: 20px;
   overflow-y: scroll;
 `;
@@ -19,5 +20,3 @@ export const TemplateContainer = styled.div`
   width: 100%;
   padding: 0 80px;
 `;
-
-export const Spacer = styled.div``;

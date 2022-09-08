@@ -4,9 +4,8 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
-import {WorldBuilderFooter, WorldBuilderHeader} from 'scenes/worldBuilder/components';
 import {useStore} from 'shared/hooks';
-import {Text, Page} from 'ui-kit';
+import {Text, Page, WorldBuilderFooter, WorldBuilderHeader} from 'ui-kit';
 import {slugify} from 'core/utils';
 import {appVariables} from 'api/constants';
 import background from 'static/images/worldBuilder.png';
@@ -28,7 +27,7 @@ const WorldBuilderNamePage: FC = () => {
 
   const {
     control,
-    formState: {errors},
+    formState: {errors, isValid},
     handleSubmit,
     setValue,
     setError,
@@ -90,7 +89,6 @@ const WorldBuilderNamePage: FC = () => {
   return (
     <Page backgroundSrc={background} showSimpleProfileMenu>
       <styled.Container>
-        <styled.Spacer />
         <WorldBuilderHeader />
         <styled.FormContainer>
           <styled.FormFieldContainer>
@@ -114,7 +112,7 @@ const WorldBuilderNamePage: FC = () => {
                 />
               )}
             />
-            <Text text={t('descriptions.worldName')} size="xl" align="left" />
+            <Text text={t('descriptions.worldName')} size="l" align="left" />
           </styled.FormFieldContainer>
           <styled.FormFieldContainer>
             <styled.InputLabel
@@ -137,7 +135,7 @@ const WorldBuilderNamePage: FC = () => {
                 />
               )}
             />
-            <Text text={t('descriptions.worldSubdomain')} size="xl" align="left" />
+            <Text text={t('descriptions.worldSubdomain')} size="l" align="left" />
           </styled.FormFieldContainer>
           <styled.FormFieldContainer>
             <styled.InputLabel
@@ -158,13 +156,14 @@ const WorldBuilderNamePage: FC = () => {
                 />
               )}
             />
-            <Text text={t('descriptions.worldURL')} size="xl" align="left" />
+            <Text text={t('descriptions.worldURL')} size="l" align="left" />
           </styled.FormFieldContainer>
         </styled.FormContainer>
         <WorldBuilderFooter
           currentStep={CURRENT_STEP}
           buttonLabel={t('actions.selectTemplate')}
           onNext={handleSubmit(formSubmitHandler)}
+          isButtonDisabled={!isValid}
         />
       </styled.Container>
     </Page>

@@ -20,12 +20,13 @@ export const Networks = styled.div`
 
 export const WorldBuilderError = styled.div`
   position: absolute;
-  bottom: 20px;
+  bottom: -70px;
   left: 0;
   right: 0;
   text-align: center;
   font-weight: 500;
   color: ${(props) => props.theme.accentDanger};
+  white-space: pre-line;
 `;
 
 export const RemarksContainer = styled.div`
