@@ -1,14 +1,14 @@
 import {cast, flow, types} from 'mobx-state-tree';
 
-import {EventItemModel, RequestModel, ResetModel} from 'core/models';
+import {EventItem, RequestModel, ResetModel} from 'core/models';
 import {api, FetchEventsResponse} from 'api';
 
-const EventListStore = types.compose(
+const EventList = types.compose(
   ResetModel,
   types
-    .model('EventListStore', {
+    .model('EventList', {
       request: types.optional(RequestModel, {}),
-      events: types.optional(types.array(EventItemModel), [])
+      events: types.optional(types.array(EventItem), [])
     })
     .actions((self) => ({
       fetchEvents: flow(function* fetchEvents(spaceId: string, children?: boolean) {
@@ -23,16 +23,11 @@ const EventListStore = types.compose(
         if (response) {
           self.events = cast(
             response.map((event) => ({
-              id: event.id,
-              title: event.title,
-              description: event.description,
-              hosted_by: event.hosted_by,
-              image_hash: event.image_hash ?? null,
-              web_link: event.web_link,
-              start: new Date(event.start),
-              end: new Date(event.end),
-              spaceId: event.spaceId,
-              spaceName: event.spaceName
+              data: {
+                ...event,
+                start: new Date(event.start),
+                end: new Date(event.end)
+              }
             }))
           );
         }
@@ -45,4 +40,4 @@ const EventListStore = types.compose(
     }))
 );
 
-export {EventListStore};
+export {EventList};

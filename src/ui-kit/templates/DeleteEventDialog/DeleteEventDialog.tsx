@@ -3,14 +3,14 @@ import {t} from 'i18next';
 
 import {Dialog, Text} from 'ui-kit';
 
-import * as styled from './DeleteEventConfirmationDialog.styled';
+import * as styled from './DeleteEventDialog.styled';
 
 interface PropsInterface {
   onConfirmation: () => void;
   onClose: () => void;
 }
 
-const DeleteEventConfirmationDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
+const DeleteEventDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
   return (
     <Dialog
       title={t('messages.pleaseConfirm')}
@@ -32,4 +32,4 @@ const DeleteEventConfirmationDialog: FC<PropsInterface> = ({onConfirmation, onCl
   );
 };
 
-export default DeleteEventConfirmationDialog;
+export default DeleteEventDialog;
