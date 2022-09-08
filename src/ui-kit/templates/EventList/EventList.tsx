@@ -52,7 +52,6 @@ const EventList: FC<PropsInterface> = ({
 
   return (
     <styled.Container className="noScrollIndicator" data-testid="EventList-test">
-      {/* TODO: should replace event.spaceAdmin with showOnWorldCalendar in canManageSpace*/}
       {events.map((event, index) => (
         <EventItem
           currentUserId={currentUserId}
@@ -67,7 +66,7 @@ const EventList: FC<PropsInterface> = ({
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
           onShowAttendeesList={onShowAttendeesList}
-          canManageEvent={canManageInSpace || showOnWorldCalendar}
+          canManageEvent={canManageInSpace || event.data?.is_admin}
         />
       ))}
     </styled.Container>

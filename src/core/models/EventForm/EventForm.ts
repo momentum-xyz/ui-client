@@ -8,12 +8,14 @@ const EventForm = types.compose(
   types
     .model('EventForm', {
       currentEvent: types.maybe(types.frozen<EventItemDataInterface>()),
+      imageSrc: types.maybeNull(types.string),
       eventFormRequest: types.optional(RequestModel, {}),
       uploadImageRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       editEvent(event: EventItemInterface) {
         self.currentEvent = cast({...event.data});
+        self.imageSrc = event.imageSrc;
       },
       createEvent: flow(function* (data: EventFormInterface, spaceId: string, file?: File) {
         const response: CreateEventResponse = yield self.eventFormRequest.send(

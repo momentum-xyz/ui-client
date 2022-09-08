@@ -10,7 +10,6 @@ import {useStore} from 'shared/hooks';
 import {Input, Dialog, TextArea} from 'ui-kit';
 import {DATE_TIME_FORMAT} from 'core/constants';
 import {EventFormInterface} from 'api';
-import {appVariables} from 'api/constants';
 
 import * as styled from './EventForm.styled';
 
@@ -19,7 +18,7 @@ const EventForm: FC = () => {
   const {worldCalendarStore, mainStore} = useStore();
   const {eventForm, formDialog, eventList} = worldCalendarStore.calendarStore;
   const {worldStore} = mainStore;
-  const {eventFormRequest, currentEvent} = eventForm;
+  const {eventFormRequest, currentEvent, imageSrc} = eventForm;
 
   const {
     control,
@@ -220,12 +219,7 @@ const EventForm: FC = () => {
           <styled.TileImageUpload>
             {(image || currentEvent?.image_hash) && (
               <styled.ImagePreview
-                src={
-                  (image && URL.createObjectURL(image)) ||
-                  (currentEvent?.image_hash &&
-                    `${appVariables.RENDER_SERVICE_URL}/get/${currentEvent?.image_hash}`) ||
-                  undefined
-                }
+                src={(image && URL.createObjectURL(image)) || imageSrc || undefined}
               />
             )}
             <styled.CustomFileUploader

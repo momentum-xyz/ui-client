@@ -7,6 +7,7 @@ const EventItemData = types.model('EventItemData', {
   hosted_by: types.string,
   image_hash: types.maybeNull(types.string),
   web_link: types.maybeNull(types.string),
+  is_admin: types.maybe(types.boolean),
   spaceName: types.string,
   spaceId: types.string,
   start: types.Date,
