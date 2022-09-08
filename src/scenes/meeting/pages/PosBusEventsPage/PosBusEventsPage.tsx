@@ -129,6 +129,16 @@ const PosBusEventsPage: FC = () => {
 
   usePosBusEvent('stage-mode-toggled', async (stageModeStatus: StageModeStatusEnum) => {
     console.info('[POSBUS EVENT] stage-mode-toggled', stageModeStatus);
+
+    // NOTE: This message should not be recieved at all when accepting invite! BE issue
+    if (
+      (agoraStore.isStageMode && stageModeStatus === StageModeStatusEnum.INITIATED) ||
+      (!agoraStore.isStageMode && stageModeStatus === StageModeStatusEnum.STOPPED)
+    ) {
+      console.info('[POSBUS EVENT] Ignoring stage-mode-toggled...');
+      return;
+    }
+
     const showStageIsFull = await agoraStore.toggledStageMode(
       sessionStore.userId,
       collaborationStore.isModerator
