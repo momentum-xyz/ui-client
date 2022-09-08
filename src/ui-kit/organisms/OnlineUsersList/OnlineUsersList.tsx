@@ -37,8 +37,14 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
 
   useDebouncedEffect(
     () => {
-      if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT && profile) {
+      if (!profile) {
+        return;
+      }
+
+      if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
         onlineUsersList.searchUsers(worldId, true, profile?.uuid, !invite);
+      } else {
+        onlineUsersList.fetchUsers(worldId, profile?.uuid, !invite);
       }
     },
     200,
@@ -52,8 +58,11 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
 
     onlineUsersList.setSearchQuery('');
     onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+
     const timeInterval = setInterval(() => {
-      onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+      if (onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT) {
+        onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+      }
     }, 30000);
 
     return () => clearInterval(timeInterval);

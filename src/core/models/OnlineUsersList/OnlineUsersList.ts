@@ -2,15 +2,13 @@ import {cast, flow, Instance, types} from 'mobx-state-tree';
 
 import {RequestModel, UserProfileModel, UserProfileModelInterface} from 'core/models';
 import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
-import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {bytesToUuid} from 'core/utils';
 
 const OnlineUsersList = types
   .model('OnlineUsersList', {
     usersRequest: types.optional(RequestModel, {}),
     users: types.optional(types.array(UserProfileModel), []),
-    searchQuery: '',
-    searchedUsers: types.optional(types.array(UserProfileModel), [])
+    searchQuery: ''
   })
   .actions((self) => ({
     fetchUsers: flow(function* (
@@ -45,7 +43,7 @@ const OnlineUsersList = types
       });
 
       if (response) {
-        self.searchedUsers = cast([
+        self.users = cast([
           ...response.results.filter(
             (user) => includeCurrentUser && bytesToUuid(user.id.data) === currentUserId
           ),
@@ -62,9 +60,7 @@ const OnlineUsersList = types
       return self.usersRequest.isLoading;
     },
     filteredPeople(excludedPeopleIds: string[]): UserProfileModelInterface[] {
-      const users =
-        self.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT ? self.searchedUsers : self.users;
-      return users.filter((user) => !excludedPeopleIds?.includes(user.uuid));
+      return self.users.filter((user) => !excludedPeopleIds?.includes(user.uuid));
     }
   }));
 
