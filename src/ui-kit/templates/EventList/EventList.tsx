@@ -66,7 +66,6 @@ const EventList: FC<PropsInterface> = ({
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
           onShowAttendeesList={onShowAttendeesList}
-          isWorld={isWorld}
           isSpace={isSpace}
         />
       ))}

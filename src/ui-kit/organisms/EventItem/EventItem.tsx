@@ -39,8 +39,7 @@ const EventItem: FC<PropsInterface> = ({
   onFlyToSpace,
   onWeblinkClick,
   onShowAttendeesList,
-  isSpace,
-  isWorld
+  isSpace = false
 }) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
@@ -199,11 +198,12 @@ const EventItem: FC<PropsInterface> = ({
           </styled.AttendeesContainer>
         </styled.ContentRow>
         {buttons()}
-        {(isSpace || isWorld) && <Actions event={event} onEdit={onEdit} onRemove={onRemove} />}
+        {/* TODO: add || isWorldCalendar && event.spaceAdmin*/}
+        {isSpace && <Actions event={event} onEdit={onEdit} onRemove={onRemove} />}
       </styled.Info>
     </styled.Div>
   );
-  //&& isWorld && spaceAdmin
+
   const image = () => (
     <styled.ImageContainer>
       {event.data?.image_hash ? (
