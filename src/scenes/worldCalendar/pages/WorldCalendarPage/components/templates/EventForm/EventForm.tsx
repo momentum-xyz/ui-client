@@ -10,15 +10,15 @@ import {useStore} from 'shared/hooks';
 import {Input, Dialog, TextArea} from 'ui-kit';
 import {DATE_TIME_FORMAT} from 'core/constants';
 import {EventFormInterface} from 'api';
-import {timeFromNow} from 'core/utils';
 import {appVariables} from 'api/constants';
 
 import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {calendarStore, space} = useStore().collaborationStore;
-  const {eventFormStore, formDialog, eventListStore} = calendarStore;
+  const {worldCalendarStore, mainStore} = useStore();
+  const {eventFormStore, formDialog, eventListStore} = worldCalendarStore.calendarStore;
+  const {worldStore} = mainStore;
   const {eventFormRequest, currentEvent} = eventFormStore;
 
   const {
@@ -30,38 +30,29 @@ const EventForm: FC = () => {
     clearErrors
   } = useForm<EventFormInterface>();
   const [image, setImage] = useState<File>();
-  const [startDate, setStartDate] = useState<Date>(() => {
-    if (currentEvent?.id) {
-      return currentEvent.start;
-    } else {
-      return new Date();
-    }
-  });
+  const [startDate, setStartDate] = useState<Date>(currentEvent?.start ?? new Date());
 
-  const [endDate, setEndDate] = useState<Date>(() => {
-    if (currentEvent?.id) {
-      return currentEvent.end;
-    } else {
-      return timeFromNow(1);
-    }
-  });
+  const [endDate, setEndDate] = useState<Date>(currentEvent?.end ?? new Date());
 
   const formSubmitHandler: SubmitHandler<EventFormInterface> = async (data: EventFormInterface) => {
     if (data.web_link?.length === 0) {
       data.web_link = null;
     }
 
-    if (space) {
+    if (currentEvent?.spaceId) {
       let isSuccess = false;
 
       if (currentEvent?.id) {
-        isSuccess = await eventFormStore.updateEvent(data, space.id, currentEvent.id, image);
-      } else {
-        isSuccess = await eventFormStore.createEvent(data, space.id, image);
+        isSuccess = await eventFormStore.updateEvent(
+          data,
+          currentEvent.spaceId,
+          currentEvent.id,
+          image
+        );
       }
 
       if (isSuccess) {
-        eventListStore.fetchEvents(space.id);
+        eventListStore.fetchEvents(worldStore.worldId, true);
         formDialog.close();
       }
     }
@@ -104,12 +95,12 @@ const EventForm: FC = () => {
   return (
     <Dialog
       theme={theme}
-      title={eventFormStore.currentEvent?.id ? t('eventForm.editTitle') : t('eventForm.addTitle')}
+      title={t('eventForm.editTitle')}
       headerStyle="uppercase"
       showCloseButton
       onClose={formDialog.close}
       approveInfo={{
-        title: currentEvent?.id ? 'update' : 'submit',
+        title: 'update',
         onClick: handleSubmit(formSubmitHandler),
         disabled: eventFormRequest.isPending
       }}
@@ -120,7 +111,7 @@ const EventForm: FC = () => {
           <Controller
             name="title"
             control={control}
-            defaultValue={currentEvent?.title ? currentEvent?.title : ''}
+            defaultValue={currentEvent?.title}
             render={({field: {onChange, value}}) => (
               <Input
                 value={value}
@@ -179,7 +170,7 @@ const EventForm: FC = () => {
             <Controller
               name="hosted_by"
               control={control}
-              defaultValue={currentEvent?.hosted_by ? currentEvent?.hosted_by : ''}
+              defaultValue={currentEvent?.hosted_by}
               render={({field: {onChange, value}}) => (
                 <Input
                   value={value}
@@ -215,7 +206,7 @@ const EventForm: FC = () => {
           <Controller
             name="description"
             control={control}
-            defaultValue={currentEvent?.description ? currentEvent?.description : ''}
+            defaultValue={currentEvent?.description}
             render={({field: {onChange, value}}) => (
               <TextArea
                 value={value}
@@ -237,7 +228,7 @@ const EventForm: FC = () => {
                 src={
                   (image && URL.createObjectURL(image)) ||
                   (currentEvent?.image_hash &&
-                    `${appVariables.RENDER_SERVICE_URL}/get/${currentEvent.image_hash}`) ||
+                    `${appVariables.RENDER_SERVICE_URL}/get/${currentEvent?.image_hash}`) ||
                   undefined
                 }
               />

@@ -1,27 +1,19 @@
-import {flow, types, cast} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 
-import {EventItemModel, EventItemModelInterface, RequestModel, ResetModel} from 'core/models';
+import {EventItemDataInterface, EventItemInterface, RequestModel, ResetModel} from 'core/models';
 import {api, CreateEventResponse, EventFormInterface} from 'api';
 
-const EventFormStore = types.compose(
+const EventForm = types.compose(
   ResetModel,
   types
-    .model('EventFormStore', {
-      currentEvent: types.maybeNull(EventItemModel),
+    .model('EventForm', {
+      currentEvent: types.maybe(types.frozen<EventItemDataInterface>()),
       eventFormRequest: types.optional(RequestModel, {}),
       uploadImageRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      editEvent(event: EventItemModelInterface) {
-        const item = {...event};
-        item.magicRequest = {...event.magicRequest};
-        item.fetchAttendeesRequest = {...event.fetchAttendeesRequest};
-        item.attendRequest = {...event.attendRequest};
-        item.attendees = cast([]);
-
-        self.currentEvent = {
-          ...item
-        };
+      editEvent(event: EventItemInterface) {
+        self.currentEvent = cast({...event.data});
       },
       createEvent: flow(function* (data: EventFormInterface, spaceId: string, file?: File) {
         const response: CreateEventResponse = yield self.eventFormRequest.send(
@@ -71,4 +63,4 @@ const EventFormStore = types.compose(
     }))
 );
 
-export {EventFormStore};
+export {EventForm};

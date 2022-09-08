@@ -8,9 +8,9 @@ import {useHistory} from 'react-router';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {absoluteLink} from 'core/utils';
-import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
+import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar, DeleteEventDialog} from 'ui-kit';
 
-import {DeleteEventConfirmationDialog, EventForm} from './components';
+import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
@@ -100,10 +100,11 @@ const CalendarPage: FC = () => {
           events={eventListStore.events}
           onMagicLinkOpen={handleMagicLinkOpen}
           isLoading={eventListStore.areEventsLoading}
-          onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
-          onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
+          onEventEdit={calendarStore.editEvent}
+          onEventRemove={calendarStore.selectEventToRemove}
           onWeblinkClick={handleWeblink}
           onShowAttendeesList={attendeesListStore.showAttendees}
+          isSpace={space.isAdmin}
         />
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
@@ -118,7 +119,7 @@ const CalendarPage: FC = () => {
       )}
 
       {deleteConfirmationDialog.isOpen && (
-        <DeleteEventConfirmationDialog
+        <DeleteEventDialog
           onConfirmation={handleEventDelete}
           onClose={deleteConfirmationDialog.close}
         />

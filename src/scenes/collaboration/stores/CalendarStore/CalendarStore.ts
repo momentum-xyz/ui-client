@@ -3,15 +3,15 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {
   AttendeeModel,
   DialogModel,
-  EventItemModelInterface,
+  EventForm,
+  EventItemInterface,
+  EventList,
   RequestModel,
   ResetModel
 } from 'core/models';
 import {api} from 'api';
 import {MagicTypeEnum} from 'core/enums';
 import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
-
-import {EventFormStore, EventListStore} from './models';
 
 const CalendarStore = types.compose(
   ResetModel,
@@ -20,8 +20,8 @@ const CalendarStore = types.compose(
       formDialog: types.optional(DialogModel, {}),
       magicDialog: types.optional(DialogModel, {}),
       deleteConfirmationDialog: types.optional(DialogModel, {}),
-      eventListStore: types.optional(EventListStore, {}),
-      eventFormStore: types.optional(EventFormStore, {}),
+      eventListStore: types.optional(EventList, {}),
+      eventFormStore: types.optional(EventForm, {}),
       magicId: types.maybe(types.string),
       magicLinkRequest: types.optional(RequestModel, {}),
       removeEventRequest: types.optional(RequestModel, {}),
@@ -31,12 +31,12 @@ const CalendarStore = types.compose(
       attendeesRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      editEvent(event: EventItemModelInterface) {
+      editEvent(event: EventItemInterface) {
         self.eventFormStore.editEvent(event);
         self.formDialog.open();
       },
-      selectEventToRemove(eventId: string) {
-        self.eventIdToRemove = eventId;
+      selectEventToRemove(event: EventItemInterface) {
+        self.eventIdToRemove = event.data?.id;
         self.deleteConfirmationDialog.open();
       },
       removeEvent: flow(function* (spaceId: string) {

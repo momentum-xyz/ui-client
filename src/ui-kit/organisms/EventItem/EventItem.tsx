@@ -4,7 +4,7 @@ import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
 
 import {appVariables} from 'api/constants';
-import {EventItemModelInterface} from 'core/models/EventItem';
+import {EventItemInterface} from 'core/models';
 import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
 import placeholder from 'static/images/placeholder.png';
 
@@ -12,10 +12,10 @@ import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
 
 interface PropsInterface {
-  event: EventItemModelInterface;
+  event: EventItemInterface;
   currentUserId: string;
-  onEdit?: (event: EventItemModelInterface) => void;
-  onRemove?: (eventId: string) => void;
+  onEdit?: (event: EventItemInterface) => void;
+  onRemove?: (event: EventItemInterface) => void;
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   zIndex?: number;
   isWorldCalendar?: boolean;
@@ -23,6 +23,8 @@ interface PropsInterface {
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
   onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
+  isSpace?: boolean;
+  isWorld?: boolean;
 }
 
 const EventItem: FC<PropsInterface> = ({
@@ -36,7 +38,9 @@ const EventItem: FC<PropsInterface> = ({
   onFlyToGathering,
   onFlyToSpace,
   onWeblinkClick,
-  onShowAttendeesList
+  onShowAttendeesList,
+  isSpace,
+  isWorld
 }) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
@@ -55,14 +59,14 @@ const EventItem: FC<PropsInterface> = ({
   const buttons = () => (
     <styled.Buttons className="base">
       <styled.Buttons>
-        {isWorldCalendar && event.spaceId && (
+        {isWorldCalendar && event.data?.spaceId && (
           <styled.EventButton
             label={`${t('eventList.eventItem.flyToSpace')} ${
-              event.spaceName && event.spaceName.slice(0, 12)
-            } ${event.spaceName && (event.spaceName.length > 12 ? '...' : '')}`}
+              event.data?.spaceName && event.data?.spaceName.slice(0, 12)
+            } ${event.data?.spaceName && (event.data?.spaceName.length > 12 ? '...' : '')}`}
             transform="capitalized"
             onClick={() => {
-              onFlyToSpace?.(event?.spaceId ?? '');
+              onFlyToSpace?.(event.data?.spaceId ?? '');
             }}
             icon="fly-to"
             noWhitespaceWrap
@@ -72,21 +76,21 @@ const EventItem: FC<PropsInterface> = ({
         <styled.EventButton
           onClick={() => {
             if (event) {
-              onMagicLinkOpen(event.id, event.spaceId ?? undefined);
+              onMagicLinkOpen(event.data?.id ?? '', event.data?.spaceId ?? undefined);
             }
           }}
           label={t('eventList.eventItem.gatheringLink')}
           icon="location"
           transform="capitalized"
         />
-        {!!event.web_link && (
+        {!!event.data?.web_link && (
           <styled.EventButton
             label={t('eventList.eventItem.websiteLink')}
             icon="link"
             transform="capitalized"
             onClick={() => {
-              if (event?.web_link) {
-                onWeblinkClick(event.web_link);
+              if (event.data?.web_link) {
+                onWeblinkClick(event.data?.web_link);
               }
             }}
           />
@@ -97,7 +101,13 @@ const EventItem: FC<PropsInterface> = ({
           variant="primary"
           label={t('counts.attendees', {count: event.numberOfAllAttendees})}
           transform="capitalized"
-          onClick={() => onShowAttendeesList(event.title, event.id, event.spaceId ?? '')}
+          onClick={() =>
+            onShowAttendeesList(
+              event.data?.title ?? '',
+              event.data?.id ?? '',
+              event.data?.spaceId ?? ''
+            )
+          }
         />
         {event.isLive() ? (
           <styled.LiveIndicator>
@@ -128,15 +138,15 @@ const EventItem: FC<PropsInterface> = ({
             className="AddToCalendarContainer"
           />
         )}
-        {event.isLive() && isWorldCalendar && event.id && (
+        {event.isLive() && isWorldCalendar && event.data?.id && (
           <Button
             variant="inverted"
             icon="fly-to"
             label={t('eventList.eventItem.joinGathering')}
             transform="capitalized"
             onClick={() => {
-              if (event?.spaceId) {
-                onFlyToGathering?.(event.spaceId);
+              if (event.data?.spaceId) {
+                onFlyToGathering?.(event.data?.spaceId);
               }
             }}
           />
@@ -166,7 +176,7 @@ const EventItem: FC<PropsInterface> = ({
             <Header event={event} isWorldCalendar={isWorldCalendar} />
             {date()}
             <ShowMoreText
-              text={event.description}
+              text={event.data?.description ?? ''}
               textProps={{
                 size: 's',
                 align: 'left',
@@ -189,17 +199,17 @@ const EventItem: FC<PropsInterface> = ({
           </styled.AttendeesContainer>
         </styled.ContentRow>
         {buttons()}
-        <Actions event={event} onEdit={onEdit} onRemove={onRemove} />
+        {(isSpace || isWorld) && <Actions event={event} onEdit={onEdit} onRemove={onRemove} />}
       </styled.Info>
     </styled.Div>
   );
-
+  //&& isWorld && spaceAdmin
   const image = () => (
     <styled.ImageContainer>
-      {event.image_hash ? (
+      {event.data?.image_hash ? (
         <img
-          alt={event.image_hash}
-          src={`${appVariables.RENDER_SERVICE_URL}/get/${event.image_hash}`}
+          alt={event.data?.image_hash}
+          src={`${appVariables.RENDER_SERVICE_URL}/get/${event.data?.image_hash}`}
         />
       ) : (
         <img alt="placeholder" src={placeholder} />
@@ -208,7 +218,7 @@ const EventItem: FC<PropsInterface> = ({
   );
 
   return (
-    <styled.Container style={{zIndex: zIndex}} id={event.id} data-testid="EventItem-test">
+    <styled.Container style={{zIndex: zIndex}} id={event.data?.id} data-testid="EventItem-test">
       <styled.Row className="header">{image()}</styled.Row>
       {info()}
     </styled.Container>

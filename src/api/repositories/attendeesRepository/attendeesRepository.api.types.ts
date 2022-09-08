@@ -1,4 +1,4 @@
-import {UserInterface} from 'api/repositories/userRepository/userRepository.api.types';
+import {UserInterface} from 'api';
 
 export interface AttendeesRequestInterface {
   eventId: string;
