@@ -47,7 +47,6 @@ const RootCollaborationStore = types
       acceptedToJoinStageDialog: types.optional(DialogModel, {}),
       declinedToJoinStageDialog: types.optional(DialogModel, {}),
       invitedOnStageDialog: types.optional(DialogModel, {}),
-      inviteOnStageDialog: types.optional(DialogModel, {}),
       kickUserFromStageDialog: types.optional(DialogModel, {}),
       prepareOnStageDialog: types.optional(DialogModel, {}),
       countdownDialog: types.optional(DialogModel, {})
