@@ -360,42 +360,43 @@ const AgoraStageModeStore = types
   .actions((self) => ({
     join: flow(function* (spaceId: string, authStateSubject: string) {
       self.isJoining = true;
-      // TODO: Wrap the whole thing in try catch and on finally set self.isJoining = false;
-      // when the whole infortructure is stable
-      const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
-        api.stageModeRepository.joinStageMode,
-        {
-          spaceId: spaceId
-        }
-      );
 
-      yield self.client.setClientRole('audience');
+      try {
+        const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
+          api.stageModeRepository.joinStageMode,
+          {
+            spaceId: spaceId
+          }
+        );
 
-      const tokenResponse = yield self.getAgoraToken(spaceId);
+        yield self.client.setClientRole('audience');
 
-      self.userId = (yield self.client.join(
-        self.appId,
-        `stage-${spaceId}`,
-        tokenResponse,
-        authStateSubject
-      )) as string;
+        const tokenResponse = yield self.getAgoraToken(spaceId);
 
-      self.spaceId = spaceId;
+        self.userId = (yield self.client.join(
+          self.appId,
+          `stage-${spaceId}`,
+          tokenResponse,
+          authStateSubject
+        )) as string;
 
-      stageModeResponse.spaceIntegrationUsers
-        ?.filter((user) => user.data.role !== 'speaker')
-        .forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
+        self.spaceId = spaceId;
 
-      self.speakers = cast(
-        self.client.remoteUsers.map((user) => ({
-          uid: user.uid,
-          participantInfo: user,
-          isMuted: true,
-          cameraOff: true
-        }))
-      );
+        stageModeResponse.spaceIntegrationUsers
+          ?.filter((user) => user.data.role !== 'speaker')
+          .forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
 
-      self.isJoining = false;
+        self.speakers = cast(
+          self.client.remoteUsers.map((user) => ({
+            uid: user.uid,
+            participantInfo: user,
+            isMuted: true,
+            cameraOff: true
+          }))
+        );
+      } finally {
+        self.isJoining = false;
+      }
     }),
     leave: flow(function* () {
       yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
