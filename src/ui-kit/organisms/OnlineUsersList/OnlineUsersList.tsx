@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {observer, useObserver} from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 
 import {SearchInput, useDebouncedEffect} from 'ui-kit';
 import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
@@ -37,8 +37,8 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
 
   useDebouncedEffect(
     () => {
-      if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-        onlineUsersList.searchUsers(worldId, true);
+      if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT && profile) {
+        onlineUsersList.searchUsers(worldId, true, profile?.uuid, !invite);
       }
     },
     200,
@@ -46,14 +46,18 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
   );
 
   useEffect(() => {
+    if (!profile) {
+      return;
+    }
+
     onlineUsersList.setSearchQuery('');
-    onlineUsersList.fetchUsers(worldId);
+    onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
     const timeInterval = setInterval(() => {
-      onlineUsersList.fetchUsers(worldId);
+      onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
     }, 30000);
 
     return () => clearInterval(timeInterval);
-  }, [onlineUsersList, worldId]);
+  }, [invite, onlineUsersList, profile, worldId]);
 
   const handleClick = (id: string) => {
     if (onlineUsersStore?.selectedUserId !== id) {
@@ -71,40 +75,6 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
     }
   };
 
-  const renderList = useObserver(() => {
-    if (!onlineUsersList.users || !profile) {
-      return;
-    }
-
-    const sortedUsers: UserProfileModelInterface[] = [];
-
-    if (!invite && onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT) {
-      sortedUsers.push(profile);
-    }
-
-    if (invite) {
-      sortedUsers.push(...onlineUsersList.filteredPeople([...excludedPeople, profile.uuid]));
-    } else {
-      sortedUsers.push(
-        ...onlineUsersList.filteredPeople(
-          onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT ? [profile.uuid] : []
-        )
-      );
-    }
-
-    return sortedUsers.map((user) => (
-      <UserItem
-        key={user.uuid}
-        user={user}
-        onClick={() => handleClick(user.uuid)}
-        invite={invite}
-        profile={profile}
-        teleportToUser={teleportToUser}
-        spaceId={spaceId}
-      />
-    ));
-  });
-
   return (
     <styled.Container data-testid="OnlineUsersList-test">
       <SearchInput
@@ -114,7 +84,19 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
         onFocus={() => handleSearchFocus(true)}
         onBlur={() => handleSearchFocus(false)}
       />
-      <styled.List>{renderList}</styled.List>
+      <styled.List>
+        {onlineUsersList.filteredPeople(excludedPeople).map((user) => (
+          <UserItem
+            key={user.uuid}
+            user={user}
+            onClick={() => handleClick(user.uuid)}
+            invite={invite}
+            profile={profile}
+            teleportToUser={teleportToUser}
+            spaceId={spaceId}
+          />
+        ))}
+      </styled.List>
     </styled.Container>
   );
 };
