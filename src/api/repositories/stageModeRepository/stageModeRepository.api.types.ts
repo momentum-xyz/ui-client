@@ -67,3 +67,14 @@ export interface StageModeRequestRequest extends StageModeRequest {
 export interface StageModeInviteRequest extends StageModeRequest {
   userId: string;
 }
+
+// Get users
+
+export interface StageModeUserInterface {
+  spaceId: string;
+  integrationTypeId: string;
+  userId: string;
+  flag: number;
+}
+
+export interface StageModeGetUsersResponse extends Array<StageModeUserInterface> {}

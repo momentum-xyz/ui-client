@@ -19,8 +19,7 @@ import {api} from 'api';
 import {ModerationEnum, ParticipantRoleEnum, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
-import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
-import {bytesToUuid} from 'core/utils';
+import {StageModeGetUsersResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 
 const AgoraStageModeStore = types
   .compose(
@@ -51,7 +50,8 @@ const AgoraStageModeStore = types
       stageModeMuteRequest: types.optional(RequestModel, {}),
       stageModeKickRequest: types.optional(RequestModel, {}),
       invitationRespondRequest: types.optional(RequestModel, {}),
-      requestRespondRequest: types.optional(RequestModel, {})
+      requestRespondRequest: types.optional(RequestModel, {}),
+      getUsersRequest: types.optional(RequestModel, {})
     })
   )
   .volatile(() => ({
@@ -366,12 +366,9 @@ const AgoraStageModeStore = types
       self.isJoining = true;
 
       try {
-        const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
-          api.stageModeRepository.joinStageMode,
-          {
-            spaceId: spaceId
-          }
-        );
+        yield self.joinStageModeRequest.send(api.stageModeRepository.joinStageMode, {
+          spaceId: spaceId
+        });
 
         yield self.client.setClientRole('audience');
 
@@ -386,16 +383,6 @@ const AgoraStageModeStore = types
 
         self.spaceId = spaceId;
 
-        stageModeResponse.spaceIntegrationUsers
-          // TODO: Decide on whether BE or Agora is the source of truth and remove or uncomment
-          // ?.filter((user) => user.data.role !== 'speaker')
-          ?.forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
-
-        console.info(
-          '[STAGE MODE] joinStageMode:',
-          stageModeResponse.spaceIntegrationUsers?.map((user) => bytesToUuid(user.userId.data))
-        );
-
         self.speakers = cast(
           self.client.remoteUsers.map((user) => ({
             uid: user.uid,
@@ -404,6 +391,20 @@ const AgoraStageModeStore = types
             cameraOff: true
           }))
         );
+
+        const getUsersReponse: StageModeGetUsersResponse = yield self.getUsersRequest.send(
+          api.stageModeRepository.fetchUsers,
+          {spaceId: self.spaceId}
+        );
+
+        if (getUsersReponse) {
+          console.info(
+            '[STAGE MODE] getUsers:',
+            getUsersReponse.map((user) => user.userId)
+          );
+
+          getUsersReponse.forEach((user) => self.addBackendUser(user.userId));
+        }
       } finally {
         self.isJoining = false;
       }
