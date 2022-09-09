@@ -67,7 +67,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
       profileStore.fetchProfile(userId).then(() => {
         sessionStore.reload();
         profileStore.fetchUserSpaceList(userId);
-        onlineUsersList.fetchUsers(worldStore.worldId);
+        onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
       });
       toast.info(
         <ToastContent

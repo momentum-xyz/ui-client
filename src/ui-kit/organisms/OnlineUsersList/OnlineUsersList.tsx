@@ -37,8 +37,14 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
 
   useDebouncedEffect(
     () => {
+      if (!profile) {
+        return;
+      }
+
       if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-        onlineUsersList.searchUsers(worldId, true);
+        onlineUsersList.searchUsers(worldId, true, profile?.uuid, !invite);
+      } else {
+        onlineUsersList.fetchUsers(worldId, profile?.uuid, !invite);
       }
     },
     200,
@@ -46,14 +52,21 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
   );
 
   useEffect(() => {
+    if (!profile) {
+      return;
+    }
+
     onlineUsersList.setSearchQuery('');
-    onlineUsersList.fetchUsers(worldId);
+    onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+
     const timeInterval = setInterval(() => {
-      onlineUsersList.fetchUsers(worldId);
+      if (onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT) {
+        onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+      }
     }, 30000);
 
     return () => clearInterval(timeInterval);
-  }, [onlineUsersList, worldId]);
+  }, [invite, onlineUsersList, profile, worldId]);
 
   const handleClick = (id: string) => {
     if (onlineUsersStore?.selectedUserId !== id) {
@@ -71,31 +84,6 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
     }
   };
 
-  const renderList = () => {
-    if (!onlineUsersList.users || !profile) {
-      return;
-    }
-
-    const sortedUsers: UserProfileModelInterface[] = [
-      ...(invite || onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT
-        ? []
-        : [profile]),
-      ...onlineUsersList.filteredPeople([...excludedPeople, profile.uuid])
-    ];
-
-    return sortedUsers.map((user) => (
-      <UserItem
-        key={user.uuid}
-        user={user}
-        onClick={() => handleClick(user.uuid)}
-        invite={invite}
-        profile={profile}
-        teleportToUser={teleportToUser}
-        spaceId={spaceId}
-      />
-    ));
-  };
-
   return (
     <styled.Container data-testid="OnlineUsersList-test">
       <SearchInput
@@ -105,7 +93,19 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
         onFocus={() => handleSearchFocus(true)}
         onBlur={() => handleSearchFocus(false)}
       />
-      <styled.List>{renderList()}</styled.List>
+      <styled.List>
+        {onlineUsersList.filteredPeople(excludedPeople).map((user) => (
+          <UserItem
+            key={user.uuid}
+            user={user}
+            onClick={() => handleClick(user.uuid)}
+            invite={invite}
+            profile={profile}
+            teleportToUser={teleportToUser}
+            spaceId={spaceId}
+          />
+        ))}
+      </styled.List>
     </styled.Container>
   );
 };
