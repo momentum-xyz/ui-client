@@ -35,7 +35,7 @@ const StageModeStore = types
       self.popups = cast(
         self.popups.filter(
           (popup) =>
-            popup.type !== StageModePopupTypeEnum.RECEIVED_PERMISSION_REQUEST &&
+            popup.type === StageModePopupTypeEnum.RECEIVED_PERMISSION_REQUEST &&
             popup.userId !== userId
         )
       );
