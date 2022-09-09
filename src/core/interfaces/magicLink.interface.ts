@@ -6,7 +6,7 @@ export interface MagicLinkInterface {
   data: {
     id: string;
     eventId?: string;
-    position?: any;
+    position?: string;
   };
   type: MagicTypeEnum;
   expired: string;

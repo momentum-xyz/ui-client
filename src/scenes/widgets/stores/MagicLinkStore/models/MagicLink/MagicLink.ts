@@ -11,7 +11,7 @@ const MagicLink = types
     address: types.maybeNull(types.string)
   })
   .actions((self) => ({
-    generate: flow(function* (type: MagicTypeEnum, id: string | null, position: any) {
+    generate: flow(function* (type: MagicTypeEnum, id: string | null, position: string | null) {
       const payload = id ? {type, data: {id}} : {type, data: {position}};
       const response: MagicLinkResponse = yield self.request.send(
         api.magicRepository.generateLink,

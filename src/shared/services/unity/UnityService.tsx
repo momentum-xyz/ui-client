@@ -187,7 +187,7 @@ export class UnityService {
     this.unityApi?.teleportToSpace(id);
   }
 
-  teleportToVector3(vector: any) {
+  teleportToVector3(vector: string) {
     this.resume();
     this.unityApi?.teleportToVector3(vector);
   }

@@ -29,8 +29,10 @@ const MagicPage: FC = () => {
 
     switch (magicStore.magic.type) {
       case MagicTypeEnum.FLY: {
-        unityStore.teleportToVector3(magicStore.magic.data.position);
-        history.replace({pathname: ROUTES.base});
+        if (magicStore.magic?.data?.position) {
+          unityStore.teleportToVector3(magicStore.magic.data.position);
+          history.replace({pathname: ROUTES.base});
+        }
         break;
       }
 

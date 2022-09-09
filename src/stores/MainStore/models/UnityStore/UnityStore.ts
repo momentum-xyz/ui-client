@@ -46,8 +46,8 @@ const UnityStore = types
     getCurrentWorld(): string | null {
       return UnityService.getCurrentWorld?.() || null;
     },
-    getUserPosition() {
-      return UnityService.getUserPosition?.();
+    getUserPosition(): string | null {
+      return UnityService.getUserPosition?.() || null;
     },
     teleportToUser(userId: string): void {
       UnityService.teleportToUser(userId);
@@ -55,7 +55,7 @@ const UnityStore = types
     teleportToSpace(spaceId: string): void {
       UnityService.teleportToSpace(spaceId);
     },
-    teleportToVector3(vector: any): void {
+    teleportToVector3(vector: string): void {
       UnityService.teleportToVector3(vector);
     },
     changeKeyboardControl(isActive: boolean): void {
