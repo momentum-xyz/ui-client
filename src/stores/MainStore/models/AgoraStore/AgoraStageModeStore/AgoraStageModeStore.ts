@@ -391,6 +391,11 @@ const AgoraStageModeStore = types
           // ?.filter((user) => user.data.role !== 'speaker')
           ?.forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
 
+        console.info(
+          '[STAGE MODE] joinStageMode:',
+          stageModeResponse.spaceIntegrationUsers?.map((user) => bytesToUuid(user.userId.data))
+        );
+
         self.speakers = cast(
           self.client.remoteUsers.map((user) => ({
             uid: user.uid,
