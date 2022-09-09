@@ -31,8 +31,9 @@ interface PropsInterface {
 const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {space, removeParticipantFromStageDialog, textChatStore} = collaborationStore;
+  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
+  const {space, removeParticipantFromStageDialog, textChatStore, screenShareStore} =
+    collaborationStore;
 
   const remoteUserClicked = useCallback(
     async (remoteUser: AgoraRemoteUserInterface, event = StageModeModerationEventEnum.REMOVE) => {
@@ -67,7 +68,17 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
     await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
-  }, [agoraStageModeStore, userDevicesStore]);
+
+    if (sessionStore.userId === screenShareStore.screenOwnerId) {
+      agoraScreenShareStore.stopScreenSharing();
+    }
+  }, [
+    agoraScreenShareStore,
+    agoraStageModeStore,
+    screenShareStore.screenOwnerId,
+    sessionStore.userId,
+    userDevicesStore
+  ]);
 
   if (!space) {
     return null;

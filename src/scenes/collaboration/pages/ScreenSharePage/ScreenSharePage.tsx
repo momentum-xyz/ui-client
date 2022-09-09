@@ -61,7 +61,8 @@ const ScreenSharePage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {videoTrack && space.isAdmin && (
+        {((videoTrack && space.isAdmin) ||
+          screenShareStore.screenOwnerId === sessionStore.userId) && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
         )}
       </SpaceTopBar>

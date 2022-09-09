@@ -163,10 +163,13 @@ const AgoraStageModeStore = types
         return;
       }
 
-      self.backendUsers.push({
-        uid: userId,
-        role: ParticipantRoleEnum.AUDIENCE_MEMBER
-      });
+      self.backendUsers = cast([
+        ...self.backendUsers,
+        {
+          uid: userId,
+          role: ParticipantRoleEnum.AUDIENCE_MEMBER
+        }
+      ]);
     },
     removeBackendUser(userId: string) {
       if (userId === self.userId) {
