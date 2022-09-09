@@ -1,4 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
+import {cloneDeep} from 'lodash-es';
 
 import {
   Space,
@@ -86,7 +87,7 @@ const RootCollaborationStore = types
       }
     }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
-      self.participantToRemoveFromStage = remoteUser;
+      self.participantToRemoveFromStage = cloneDeep(remoteUser);
       self.removeParticipantFromStageDialog.open();
     },
     unselectUserToRemoveAndCloseDialog() {

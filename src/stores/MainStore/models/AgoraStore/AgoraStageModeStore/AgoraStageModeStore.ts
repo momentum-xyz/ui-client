@@ -41,6 +41,7 @@ const AgoraStageModeStore = types
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       isJoining: false,
+      isKickingUser: false,
 
       tokenRequest: types.optional(RequestModel, {}),
       joinStageModeRequest: types.optional(RequestModel, {}),
@@ -463,29 +464,25 @@ const AgoraStageModeStore = types
     kickUserOffStage: flow(function* (userId: string) {
       // TODO: Replace with `if (!self.spaceId || userId === self.userId)` when whole infostructure
       // is stable for Stage Mode
-      if (!self.spaceId) {
-        return;
-      }
-
-      const isSuccess = yield self.stageModeKickRequest.send(api.stageModeRepository.admitOrKick, {
-        spaceId: self.spaceId,
-        userId,
-        modType: ModerationEnum.KICK
-      });
-
-      if (!isSuccess) {
+      if (!self.spaceId && self.audience.find((user) => user.uid === userId)) {
         return false;
       }
 
-      // TODO: The whole if else block to be removed when whole infostructure is stable for Stage Mode
-      if (userId === self.userId) {
-        self.moveToAudience(userId);
-      } else {
-        yield self.leaveStage();
-        self.moveToAudience(userId);
+      self.isKickingUser = true;
+
+      try {
+        yield self.stageModeKickRequest.send(api.stageModeRepository.admitOrKick, {
+          spaceId: self.spaceId,
+          userId,
+          modType: ModerationEnum.KICK
+        });
+      } catch {
+        self.isKickingUser = false;
+        return false;
       }
 
-      return true;
+      self.isKickingUser = false;
+      return self.stageModeKickRequest.isDone;
     }),
     requestToGoOnstageWasHandled() {
       self.requestWasMadeToGoOnStage = false;

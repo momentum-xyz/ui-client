@@ -21,6 +21,7 @@ const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => 
   const {t} = useTranslation();
 
   const handleUserKick = useCallback(async () => {
+    collaborationStore.removeParticipantFromStageDialog.close();
     const success = await agoraStageModeStore.kickUserOffStage(participant.uid.toString());
 
     if (!success) {
@@ -36,14 +37,21 @@ const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => 
         />
       );
     }
-  }, [agoraStageModeStore, participant.name, participant.uid, t]);
+  }, [
+    agoraStageModeStore,
+    collaborationStore.removeParticipantFromStageDialog,
+    participant.name,
+    participant.uid,
+    t
+  ]);
 
   return (
     <Dialog
       title={t('titles.removeParticipantFromStage')}
       approveInfo={{
         title: t('actions.confirmRemove'),
-        onClick: handleUserKick
+        onClick: handleUserKick,
+        disabled: agoraStageModeStore.isKickingUser
       }}
       declineInfo={{
         title: t('actions.noCancel'),
