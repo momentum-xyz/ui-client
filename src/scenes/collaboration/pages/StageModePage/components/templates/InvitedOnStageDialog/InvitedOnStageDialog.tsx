@@ -1,6 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 
+import {StageModeRequestEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 import {Dialog, Text} from 'ui-kit';
 
@@ -30,6 +31,7 @@ const InvitedOnStageDialog: React.FC<PropsInterface> = ({onDecline, onClose, onG
               title: t('actions.goOnStage'),
               onClick: () => {
                 agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
+                agoraStageModeStore.invitationRespond(StageModeRequestEnum.ACCEPT);
                 onClose?.();
               }
             }

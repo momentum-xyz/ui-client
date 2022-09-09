@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
 
-import {EventItemModelInterface} from 'core/models';
+import {EventItemInterface} from 'core/models';
 
 import * as styled from './Header.styled';
 
 interface PropsInterface {
-  event: EventItemModelInterface;
+  event: EventItemInterface;
   isWorldCalendar?: boolean;
 }
 
@@ -14,17 +14,17 @@ const Header: FC<PropsInterface> = ({event, isWorldCalendar}) => {
     <styled.Container data-testid="Header-test">
       {isWorldCalendar ? (
         <styled.Header>
-          <styled.Header className="bold">{event.spaceName ?? ''}</styled.Header>
+          <styled.Header className="bold">{event.data?.spaceName ?? ''}</styled.Header>
           <styled.Header className="bold"> / </styled.Header>
-          <styled.Header className="notBold">{event.title}</styled.Header>
+          <styled.Header className="notBold">{event.data?.title}</styled.Header>
           <styled.TextHeader> / </styled.TextHeader>
-          <styled.TextHeader>{event.hosted_by}</styled.TextHeader>
+          <styled.TextHeader>{event.data?.hosted_by}</styled.TextHeader>
         </styled.Header>
       ) : (
         <styled.Header>
-          <styled.Header className="bold">{event.title}</styled.Header>
+          <styled.Header className="bold">{event.data?.title}</styled.Header>
           <styled.Header className="bold"> / </styled.Header>
-          <styled.TextHeader>{event.hosted_by}</styled.TextHeader>
+          <styled.TextHeader>{event.data?.hosted_by}</styled.TextHeader>
         </styled.Header>
       )}
     </styled.Container>

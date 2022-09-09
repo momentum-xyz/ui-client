@@ -129,6 +129,16 @@ const PosBusEventsPage: FC = () => {
 
   usePosBusEvent('stage-mode-toggled', async (stageModeStatus: StageModeStatusEnum) => {
     console.info('[POSBUS EVENT] stage-mode-toggled', stageModeStatus);
+
+    // NOTE: This message should not be recieved at all when accepting invite! BE issue
+    if (
+      (agoraStore.isStageMode && stageModeStatus === StageModeStatusEnum.INITIATED) ||
+      (!agoraStore.isStageMode && stageModeStatus === StageModeStatusEnum.STOPPED)
+    ) {
+      console.info('[POSBUS EVENT] Ignoring stage-mode-toggled...');
+      return;
+    }
+
     const showStageIsFull = await agoraStore.toggledStageMode(
       sessionStore.userId,
       collaborationStore.isModerator
@@ -233,23 +243,21 @@ const PosBusEventsPage: FC = () => {
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-user-joined', userId);
-    agoraStageModeStore.addAudienceMember(userId);
+    agoraStageModeStore.addBackendUser(userId);
   });
 
   usePosBusEvent('stage-mode-user-left', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-user-left', userId);
-    agoraStageModeStore.removeAudienceMember(userId);
+    agoraStageModeStore.removeBackendUser(userId);
   });
 
-  usePosBusEvent('stage-mode-kick', (userId: string) => {
+  usePosBusEvent('stage-mode-kick', async (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-kick', userId);
-    // TODO: Remove when whole Stage Mode infostructure is stable
-    agoraStageModeStore.moveToAudience(userId);
+    if (userId === sessionStore.userId) {
+      await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
-    // TODO: Uncomment the code below when whole Stage Mode infostructure is stable
-    // if (userId === sessionStore.userId) {
-    //   agoraStageModeStore.leaveStage();
-    // }
+      await agoraStageModeStore.leaveStage();
+    }
   });
 
   return null;

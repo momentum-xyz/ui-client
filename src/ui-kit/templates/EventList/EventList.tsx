@@ -3,18 +3,19 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
 import {Loader, EventItem} from 'ui-kit';
-import {EventItemModelInterface} from 'core/models';
+import {EventItemInterface} from 'core/models';
 
 import * as styled from './EventList.styled';
 
 interface PropsInterface {
   currentUserId: string;
-  events: EventItemModelInterface[];
+  events: EventItemInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   isLoading: boolean;
-  isWorld?: boolean;
-  onEventEdit?: (event: EventItemModelInterface) => void;
-  onEventRemove?: (eventId: string) => void;
+  showOnWorldCalendar?: boolean;
+  canManageInSpace?: boolean;
+  onEventEdit: (event: EventItemInterface) => void;
+  onEventRemove: (event: EventItemInterface) => void;
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
@@ -28,7 +29,8 @@ const EventList: FC<PropsInterface> = ({
   onEventRemove,
   onMagicLinkOpen,
   isLoading,
-  isWorld = false,
+  showOnWorldCalendar = false,
+  canManageInSpace = false,
   onFlyToGathering,
   onFlyToSpace,
   onWeblinkClick,
@@ -54,16 +56,17 @@ const EventList: FC<PropsInterface> = ({
         <EventItem
           currentUserId={currentUserId}
           zIndex={events.length - index}
-          key={event?.id}
+          key={event?.data?.id}
           event={event}
           onEdit={onEventEdit}
           onRemove={onEventRemove}
           onMagicLinkOpen={onMagicLinkOpen}
-          isWorldCalendar={isWorld}
+          showOnWorldCalendar={showOnWorldCalendar}
           onFlyToGathering={onFlyToGathering}
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
           onShowAttendeesList={onShowAttendeesList}
+          canManageEvent={canManageInSpace || event.data?.is_admin}
         />
       ))}
     </styled.Container>

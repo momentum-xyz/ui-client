@@ -5,9 +5,9 @@ export interface EventInterface {
   description: string;
   hosted_by: string;
   image_hash?: string;
-  web_link: string | null;
-  spaceId?: string;
-  spaceName?: string;
+  web_link?: string;
+  spaceId: string;
+  spaceName: string;
   start: string;
   end: string;
   created: string;

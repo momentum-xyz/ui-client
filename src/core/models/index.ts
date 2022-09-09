@@ -25,3 +25,5 @@ export * from './AgoraRemoteUser';
 export * from './StageModeUser';
 export * from './OnlineUsersList';
 export * from './EmojiDetails';
+export * from './EventForm';
+export * from './EventList';

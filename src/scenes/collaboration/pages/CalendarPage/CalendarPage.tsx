@@ -8,16 +8,16 @@ import {useHistory} from 'react-router';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {absoluteLink} from 'core/utils';
-import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar} from 'ui-kit';
+import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar, DeleteEventDialog} from 'ui-kit';
 
-import {DeleteEventConfirmationDialog, EventForm} from './components';
+import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
   const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, space} = collaborationStore;
   const {favoriteStore} = mainStore;
-  const {eventListStore, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
+  const {eventList, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
   const theme = useTheme();
@@ -64,11 +64,11 @@ const CalendarPage: FC = () => {
 
   useEffect(() => {
     if (space) {
-      eventListStore.fetchEvents(space.id);
+      eventList.fetchEvents(space.id);
     }
 
-    return () => eventListStore.resetModel();
-  }, [eventListStore, space]);
+    return () => eventList.resetModel();
+  }, [eventList, space]);
 
   if (!space) {
     return null;
@@ -97,13 +97,14 @@ const CalendarPage: FC = () => {
       <styled.InnerContainer>
         <EventList
           currentUserId={sessionStore.userId}
-          events={eventListStore.events}
+          events={eventList.events}
           onMagicLinkOpen={handleMagicLinkOpen}
-          isLoading={eventListStore.areEventsLoading}
-          onEventEdit={space.isAdmin ? calendarStore.editEvent : undefined}
-          onEventRemove={space.isAdmin ? calendarStore.selectEventToRemove : undefined}
+          isLoading={eventList.areEventsLoading}
+          onEventEdit={calendarStore.editEvent}
+          onEventRemove={calendarStore.selectEventToRemove}
           onWeblinkClick={handleWeblink}
           onShowAttendeesList={attendeesListStore.showAttendees}
+          canManageInSpace={space.isAdmin}
         />
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
@@ -118,7 +119,7 @@ const CalendarPage: FC = () => {
       )}
 
       {deleteConfirmationDialog.isOpen && (
-        <DeleteEventConfirmationDialog
+        <DeleteEventDialog
           onConfirmation={handleEventDelete}
           onClose={deleteConfirmationDialog.close}
         />
