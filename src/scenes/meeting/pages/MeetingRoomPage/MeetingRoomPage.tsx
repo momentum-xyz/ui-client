@@ -77,9 +77,6 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
                     isModerator={collaborationStore.isModerator}
                     canEnterStage={agoraStageModeStore.canEnterStage}
                     inviteToStage={agoraStageModeStore.inviteToStage}
-                    isInviteDialogShown={collaborationStore.inviteOnStageDialog.isOpen}
-                    openInviteDialog={collaborationStore.inviteOnStageDialog.open}
-                    closeInviteDialog={collaborationStore.inviteOnStageDialog.close}
                   />
                 ))
               : agoraMeetingStore.users.map((user) => (

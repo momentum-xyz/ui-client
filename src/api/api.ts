@@ -101,3 +101,4 @@ export * from './repositories/vibeRepository/vibeRepository.api.types';
 export * from './repositories/textChatRepository/textChatRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/worldBuilderRepository/worldBuilderRepository.api.types';
+export * from './repositories/attendeesRepository/attendeesRepository.api.types';

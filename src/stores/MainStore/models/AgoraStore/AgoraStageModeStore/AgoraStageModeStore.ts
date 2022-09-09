@@ -12,8 +12,8 @@ import {
   RequestModel,
   ResetModel,
   StageModeUser,
-  AgoraRemoteUser,
-  StageModeUserInterface
+  StageModeUserInterface,
+  AgoraRemoteUser
 } from 'core/models';
 import {api} from 'api';
 import {ModerationEnum, ParticipantRoleEnum, StageModeRequestEnum} from 'core/enums';
@@ -37,7 +37,7 @@ const AgoraStageModeStore = types
       // Users coming from backend and PosBus, in future to be replaced with audience when the whole Stage
       // Mode infrustructure will be working well
       backendUsers: types.optional(types.array(StageModeUser), []),
-      _speakers: types.optional(types.array(AgoraRemoteUser), []),
+      speakers: types.optional(types.array(AgoraRemoteUser), []),
       localSoundLevel: 0,
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       isJoining: false,
@@ -62,21 +62,13 @@ const AgoraStageModeStore = types
     })()
   }))
   .views((self) => ({
-    get speakers(): AgoraRemoteUserInterface[] {
-      return self._speakers;
-    },
-    set speakers(users: AgoraRemoteUserInterface[]) {
-      self._speakers = cast(users);
-    }
-  }))
-  .views((self) => ({
     // TODO: Remove when whole infostructure is stable for Stage Mode
     get audience(): StageModeUserInterface[] {
       return self.backendUsers.filter((user) => {
         return (
           user.role === ParticipantRoleEnum.AUDIENCE_MEMBER &&
           user.uid !== self.userId &&
-          !self.backendUsers.find((u) => u.uid === user.uid)
+          !self.speakers.find((u) => u.uid === user.uid)
         );
       });
     },
@@ -165,7 +157,7 @@ const AgoraStageModeStore = types
   // users manipulations
   // TODO: Refactor all actions in this block to use self.audience when whole infortructure is stable
   .actions((self) => ({
-    addAudienceMember(userId: string) {
+    addBackendUser(userId: string) {
       if (self.backendUsers.find((user) => user.uid === userId) || userId === self.userId) {
         return;
       }
@@ -175,19 +167,19 @@ const AgoraStageModeStore = types
         role: ParticipantRoleEnum.AUDIENCE_MEMBER
       });
     },
-    removeAudienceMember(userId: string) {
+    removeBackendUser(userId: string) {
       if (userId === self.userId) {
         return;
       }
 
       if (self.isJoining) {
         setTimeout(() => {
-          this.removeAudienceMember(userId);
+          this.removeBackendUser(userId);
         }, 100);
         return;
       }
 
-      self.backendUsers = cast(self.audience.filter((user) => user.uid !== userId));
+      self.backendUsers = cast(self.backendUsers.filter((user) => user.uid !== userId));
     }
   }))
   // Listeners handlers
@@ -263,7 +255,7 @@ const AgoraStageModeStore = types
       });
 
       if (!foundUser) {
-        self.speakers = [...self.speakers, newUser];
+        self.speakers = cast([...self.speakers, newUser]);
       }
 
       // TODO: Uncomment when whole infostructure is stable for Stage Mode
@@ -274,8 +266,7 @@ const AgoraStageModeStore = types
         return;
       }
 
-      self.speakers = self.speakers.filter((remoteUser) => remoteUser.uid !== user.uid);
-
+      self.speakers = cast(self.speakers.filter((remoteUser) => remoteUser.uid !== user.uid));
       // TODO: Uncomment when whole infostructure is stable for Stage Mode
       // self.addAudienceMember(String(user.uid));
     },
@@ -369,6 +360,7 @@ const AgoraStageModeStore = types
   .actions((self) => ({
     join: flow(function* (spaceId: string, authStateSubject: string) {
       self.isJoining = true;
+
       try {
         const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
           api.stageModeRepository.joinStageMode,
@@ -391,16 +383,17 @@ const AgoraStageModeStore = types
         self.spaceId = spaceId;
 
         stageModeResponse.spaceIntegrationUsers
-          ?.filter((user) => user.data.role !== 'speaker')
-          .forEach((user) => self.addAudienceMember(bytesToUuid(user.userId.data)));
+          // TODO: Decide on whether BE or Agora is the source of truth and remove or uncomment
+          // ?.filter((user) => user.data.role !== 'speaker')
+          ?.forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
 
-        self.speakers = self.client.remoteUsers.map((user) =>
-          cast({
+        self.speakers = cast(
+          self.client.remoteUsers.map((user) => ({
             uid: user.uid,
             participantInfo: user,
             isMuted: true,
             cameraOff: true
-          })
+          }))
         );
       } finally {
         self.isJoining = false;
@@ -414,7 +407,7 @@ const AgoraStageModeStore = types
       yield self.client.leave();
       self.isOnStage = false;
       self.spaceId = undefined;
-      self.speakers = [];
+      self.speakers = cast([]);
       self.backendUsers = cast([]);
     }),
     enterStage: flow(function* (
@@ -456,7 +449,7 @@ const AgoraStageModeStore = types
     // TODO: To be removed when whole infostructure is stable for Stage Mode
     moveToAudience(userId: string) {
       self.backendUsers = cast([
-        ...self.audience,
+        ...self.backendUsers,
         {uid: userId, role: ParticipantRoleEnum.AUDIENCE_MEMBER}
       ]);
 

@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
@@ -13,21 +13,12 @@ export interface PropsInterface {
   user: StageModeUserInterface;
   isModerator: boolean;
   canEnterStage: boolean;
-  isInviteDialogShown: boolean;
   inviteToStage: (userId: string) => Promise<boolean>;
-  openInviteDialog: () => void;
-  closeInviteDialog: () => void;
 }
 
-const StageModeUser: FC<PropsInterface> = ({
-  user,
-  isModerator,
-  canEnterStage,
-  isInviteDialogShown,
-  inviteToStage,
-  openInviteDialog,
-  closeInviteDialog
-}) => {
+const StageModeUser: FC<PropsInterface> = ({user, isModerator, canEnterStage, inviteToStage}) => {
+  const [isInviteDialogShown, setIsInviteDialogShown] = useState<boolean>(false);
+
   const {t} = useTranslation();
 
   useEffect(() => {
@@ -47,7 +38,7 @@ const StageModeUser: FC<PropsInterface> = ({
 
           {isModerator && (
             <styled.InviteOnStage
-              {...(canEnterStage && {onClick: openInviteDialog})}
+              {...(canEnterStage && {onClick: () => setIsInviteDialogShown(true)})}
               className="invite"
             >
               {canEnterStage && <IconSvg name="add" size="medium-large" />}
@@ -73,7 +64,7 @@ const StageModeUser: FC<PropsInterface> = ({
         <InviteOnStageDialog
           user={user}
           inviteToStage={inviteToStage}
-          onClose={closeInviteDialog}
+          onClose={() => setIsInviteDialogShown(false)}
         />
       )}
     </>

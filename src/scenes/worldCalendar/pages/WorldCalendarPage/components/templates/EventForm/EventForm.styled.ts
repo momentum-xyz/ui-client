@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import {FileUploader} from 'ui-kit';
 
-// TODO move colors and sizes to variables
 export const Container = styled.div`
   padding: 10px;
   margin: 10px;
