@@ -75,10 +75,9 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 label={t('actions.leaveStage')}
                 variant="danger"
                 onClick={async () => {
-                  await userDevicesStore.mute();
-                  await userDevicesStore.turnOffCamera();
+                  await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
-                  await agoraStageModeStore.leaveStage();
+                  await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
                 }}
               />
             ) : (

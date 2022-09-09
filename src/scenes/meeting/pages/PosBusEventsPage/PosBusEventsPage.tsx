@@ -256,7 +256,7 @@ const PosBusEventsPage: FC = () => {
     if (userId === sessionStore.userId) {
       await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
-      await agoraStageModeStore.leaveStage();
+      await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
     }
   });
 

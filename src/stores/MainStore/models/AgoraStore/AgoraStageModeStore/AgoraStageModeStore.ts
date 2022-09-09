@@ -429,12 +429,14 @@ const AgoraStageModeStore = types
       self.isOnStage = true;
       self.isTogglingIsOnStage = false;
     }),
-    leaveStage: flow(function* () {
+    leaveStage: flow(function* (cleanupLocalTracks: () => void) {
       self.isTogglingIsOnStage = true;
       self.client.localTracks.forEach((localTrack) => {
         localTrack.stop();
         localTrack.close();
       });
+
+      cleanupLocalTracks();
 
       yield self.client.unpublish();
       yield self.client.setClientRole('audience', {
