@@ -67,6 +67,7 @@ const RootStore = types
 
       const spaceId = self.collaborationStore.space?.id || '';
       self.meetingStore.leave(isKicked);
+      self.collaborationStore.stageModeStore.removeAllPopups();
 
       /*
          FIXME: Sometimes Agora loses connection.
