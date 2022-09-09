@@ -251,15 +251,13 @@ const PosBusEventsPage: FC = () => {
     agoraStageModeStore.removeBackendUser(userId);
   });
 
-  usePosBusEvent('stage-mode-kick', (userId: string) => {
+  usePosBusEvent('stage-mode-kick', async (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-kick', userId);
-    // TODO: Remove when whole Stage Mode infostructure is stable
-    agoraStageModeStore.moveToAudience(userId);
+    if (userId === sessionStore.userId) {
+      await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
-    // TODO: Uncomment the code below when whole Stage Mode infostructure is stable
-    // if (userId === sessionStore.userId) {
-    //   agoraStageModeStore.leaveStage();
-    // }
+      await agoraStageModeStore.leaveStage();
+    }
   });
 
   return null;

@@ -445,20 +445,6 @@ const AgoraStageModeStore = types
       self.isTogglingIsOnStage = false;
     })
   }))
-  // Audience action
-  .actions((self) => ({
-    // TODO: To be removed when whole infostructure is stable for Stage Mode
-    moveToAudience(userId: string) {
-      self.backendUsers = cast([
-        ...self.backendUsers,
-        {uid: userId, role: ParticipantRoleEnum.AUDIENCE_MEMBER}
-      ]);
-
-      if (userId === self.userId) {
-        self.leaveStage();
-      }
-    }
-  }))
   // User actions
   .actions((self) => ({
     kickUserOffStage: flow(function* (userId: string) {
