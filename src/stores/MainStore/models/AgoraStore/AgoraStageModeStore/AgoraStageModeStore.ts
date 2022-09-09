@@ -400,10 +400,12 @@ const AgoraStageModeStore = types
         if (getUsersReponse) {
           console.info(
             '[STAGE MODE] getUsers:',
-            getUsersReponse.map((user) => user.userId)
+            getUsersReponse.filter((user) => user.flag === 1).map((user) => user.userId)
           );
 
-          getUsersReponse.forEach((user) => self.addBackendUser(user.userId));
+          getUsersReponse
+            .filter((user) => user.flag === 1)
+            .forEach((user) => self.addBackendUser(user.userId));
         }
       } finally {
         self.isJoining = false;
