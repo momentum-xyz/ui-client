@@ -35,7 +35,6 @@ const RootCollaborationStore = types
       stageModeStore: types.optional(StageModeStore, {}),
       liveStreamStore: types.optional(LiveStreamStore, {}),
       isModerator: false,
-      isPrivateStore: false,
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
@@ -65,7 +64,6 @@ const RootCollaborationStore = types
         throw new PrivateSpaceError();
       }
 
-      self.isPrivateStore = true;
       yield self.space.fetchSpaceInformation();
 
       self.isModerator = yield self.moderationRequest.send(
