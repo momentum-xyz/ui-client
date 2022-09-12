@@ -86,10 +86,16 @@ const Collaboration: FC = () => {
   }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
   useEffect(() => {
-    if (agoraStore.appId && !textChatStore.isLoggedOn) {
+    if (agoraStore.appId && !textChatStore.isLoggedOn && collaborationStore.isPrivateStore) {
       textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
     }
-  }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
+  }, [
+    agoraStore.appId,
+    collaborationStore.isPrivateStore,
+    sessionStore.userId,
+    spaceId,
+    textChatStore
+  ]);
 
   const handleCountdownEnded = useCallback(async () => {
     if (!agoraStageModeStore.canEnterStage) {
