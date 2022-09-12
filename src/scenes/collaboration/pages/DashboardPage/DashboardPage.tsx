@@ -71,14 +71,15 @@ const DashboardPage: FC = () => {
         {(space.isAdmin || space.isMember) && (
           <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
-        <Button
-          ref={inviteRef}
-          label={t('dashboard.invitePeople')}
-          icon="invite-user"
-          variant="primary"
-          onClick={inviteToSpaceDialog.open}
-        />
-
+        {(space.isAdmin || space.isMember) && (
+          <Button
+            ref={inviteRef}
+            label={t('dashboard.invitePeople')}
+            icon="invite-user"
+            variant="primary"
+            onClick={inviteToSpaceDialog.open}
+          />
+        )}
         {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
