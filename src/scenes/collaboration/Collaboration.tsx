@@ -78,7 +78,17 @@ const Collaboration: FC = () => {
           );
         }
       });
-  }, [agoraStore, history, rootStore, spaceId, t]);
+  }, [
+    agoraStore.appId,
+    agoraStore.hasJoined,
+    agoraStore.spaceId,
+    history,
+    rootStore,
+    sessionStore.userId,
+    spaceId,
+    t,
+    textChatStore
+  ]);
 
   useEffect(() => {
     reJoinMeeting().then();
