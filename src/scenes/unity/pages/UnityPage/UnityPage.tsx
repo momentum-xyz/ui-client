@@ -126,10 +126,9 @@ const UnityPage: FC = () => {
   usePosBusEvent('notify-gathering-start', (message) => {
     console.info('[POSBUS EVENT] notify-gathering-start', message);
     const {spaceId} = message;
-
-    if (location.pathname.includes(generatePath(ROUTES.collaboration.base, {spaceId}))) {
-      return;
-    }
+    const alreadyInSpace: boolean = location.pathname.includes(
+      generatePath(ROUTES.collaboration.base, {spaceId})
+    );
 
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
@@ -144,7 +143,10 @@ const UnityPage: FC = () => {
         headerIconName="calendar"
         title={t('titles.joinGathering')}
         text={t('messages.joinGathering', {title: message.name})}
-        approveInfo={{title: 'Join', onClick: handleJoinSpace}}
+        approveInfo={{
+          title: alreadyInSpace ? t('titles.dismiss') : t('titles.join'),
+          onClick: alreadyInSpace ? undefined : handleJoinSpace
+        }}
         showCloseButton
       />,
       TOAST_NOT_AUTO_CLOSE_OPTIONS

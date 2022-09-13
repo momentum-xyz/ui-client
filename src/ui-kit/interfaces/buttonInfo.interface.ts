@@ -10,5 +10,5 @@ export interface ButtonInfoInterface {
 
 export interface ToastButtonInfoInterface {
   title: string;
-  onClick: () => void;
+  onClick: (() => void) | undefined;
 }
