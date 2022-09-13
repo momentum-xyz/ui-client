@@ -2,7 +2,7 @@ export interface EmojiConfigRequest {
   worldId: string;
 }
 
-interface EmojiConfigItemInterface {
+interface EmojiConfigItemLegacyInterface {
   emoji: {
     id: {
       type: string;
@@ -24,5 +24,16 @@ interface EmojiConfigItemInterface {
   };
   order: number;
 }
+export interface EmojiConfigLegacyResponse extends Array<EmojiConfigItemLegacyInterface> {}
 
+interface EmojiConfigItemInterface {
+  id: string;
+  code: string;
+  hash: string;
+  name: string;
+  createdAt: string | null;
+  updatedAt: string | null;
+  spaceId: string;
+  order: number;
+}
 export interface EmojiConfigResponse extends Array<EmojiConfigItemInterface> {}
