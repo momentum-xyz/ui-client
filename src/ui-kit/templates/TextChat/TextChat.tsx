@@ -26,6 +26,7 @@ const TextChat: FC<PropsInterface> = ({
   messageSent
 }) => {
   const messageListRef = useRef<HTMLUListElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
@@ -36,6 +37,12 @@ const TextChat: FC<PropsInterface> = ({
       }
     }
   }, [messageSent]);
+
+  useEffect(() => {
+    if (textAreaRef.current && currentChannel) {
+      textAreaRef.current.focus();
+    }
+  }, [textAreaRef, currentChannel]);
 
   const handleMessageChange = (value: string) => {
     const text = value;
@@ -98,6 +105,7 @@ const TextChat: FC<PropsInterface> = ({
       <styled.TextBox>
         <TextArea
           name=""
+          ref={textAreaRef}
           isResizable
           placeholder={t('textMessage.placeholder')}
           onChange={handleMessageChange}
