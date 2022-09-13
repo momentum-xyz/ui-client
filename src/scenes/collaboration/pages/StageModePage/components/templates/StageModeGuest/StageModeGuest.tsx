@@ -56,7 +56,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('labels.stageMode')}
-        isSpaceFavorite={favoriteStore.isSpaceFavorite}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
         isAdmin={space.isAdmin}
         spaceId={space.id}
         isChatOpen={textChatStore.textChatDialog.isOpen}
