@@ -125,11 +125,13 @@ const UnityPage: FC = () => {
 
   usePosBusEvent('notify-gathering-start', (message) => {
     console.info('[POSBUS EVENT] notify-gathering-start', message);
+    const {spaceId} = message;
+
+    if (location.pathname.includes(generatePath(ROUTES.collaboration.base, {spaceId}))) {
+      return;
+    }
+
     const handleJoinSpace = () => {
-      const {spaceId} = message;
-      if (location.pathname === generatePath(ROUTES.collaboration.dashboard, {spaceId})) {
-        return;
-      }
       unityStore.teleportToSpace(spaceId);
 
       setTimeout(() => {
