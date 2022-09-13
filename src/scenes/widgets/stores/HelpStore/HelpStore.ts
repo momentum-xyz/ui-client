@@ -47,7 +47,7 @@ const HelpStore = types
       );
 
       const data = response.map(
-        ({emoji}) => `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S1}/${emoji.hash}`
+        (emoji) => `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S1}/${emoji.hash}`
       );
 
       self.emojiUrls = cast(data.slice(0, 18));
