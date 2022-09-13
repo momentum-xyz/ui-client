@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useHistory, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
@@ -35,6 +35,7 @@ const UnityPage: FC = () => {
   const auth = useAuth();
   const theme = useTheme();
   const history = useHistory();
+  const location = useLocation();
   const {t} = useTranslation();
 
   useUnityEvent('MomentumLoaded', () => {
@@ -126,6 +127,9 @@ const UnityPage: FC = () => {
     console.info('[POSBUS EVENT] notify-gathering-start', message);
     const handleJoinSpace = () => {
       const {spaceId} = message;
+      if (location.pathname === generatePath(ROUTES.collaboration.dashboard, {spaceId})) {
+        return;
+      }
       unityStore.teleportToSpace(spaceId);
 
       setTimeout(() => {
