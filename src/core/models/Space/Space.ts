@@ -171,7 +171,7 @@ const Space = types
       };
 
       yield self.addSubSpaceRequest.send(api.spaceRepository.create, {
-        newSpace
+        space: newSpace
       });
     }),
     fetchAllowedSubSpaceTypes: flow(function* () {

@@ -275,6 +275,7 @@ export const enGb = {
       inviteToStageFailure: 'Cannot invite {{user}} to stage',
       subSpaceDeleteFailure: 'There was an error deleting the subspace',
       subSpaceCreateFailure: 'There was an error creating the subspace',
+      subSpaceCreateSuccess: 'The subspace was created successully!',
       stageModeActivated:
         'The stage has been enabled right now. Want to participate? Ask to go on stage.',
       stageModeNotActiveGuest: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
