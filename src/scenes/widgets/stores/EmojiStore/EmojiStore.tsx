@@ -2,7 +2,6 @@ import {types, cast, flow} from 'mobx-state-tree';
 
 import {DialogModel, RequestModel, ResetModel, EmojiDetails} from 'core/models';
 import {api, EmojiConfigResponse} from 'api';
-import {bytesToUuid} from 'core/utils';
 
 const EmojiStore = types
   .compose(
@@ -20,14 +19,7 @@ const EmojiStore = types
         {worldId}
       );
 
-      const data = response
-        .map(({emoji, emojiId, order, spaceId}) => ({
-          ...emoji,
-          id: bytesToUuid(emojiId.data),
-          order,
-          spaceId: bytesToUuid(spaceId.data)
-        }))
-        .sort((l, r) => l.order - r.order);
+      const data = response.sort((l, r) => l.order - r.order);
 
       self.emojiDetailsList = cast(data);
     })
