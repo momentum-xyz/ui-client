@@ -70,7 +70,6 @@ const GoogleDrivePage: FC = () => {
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        isChat={!!textChatStore.currentChannel}
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}

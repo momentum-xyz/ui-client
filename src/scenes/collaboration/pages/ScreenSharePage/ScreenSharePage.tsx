@@ -54,7 +54,6 @@ const ScreenSharePage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChatOpen={textChatStore.textChatDialog.isOpen}
-        isChat={!!textChatStore.currentChannel}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         onLeave={async () => {

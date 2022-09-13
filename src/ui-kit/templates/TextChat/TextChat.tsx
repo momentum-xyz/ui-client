@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
 
-import {Text, TextArea} from 'ui-kit';
+import {Loader, Text, TextArea} from 'ui-kit';
 import {dateToTime} from 'core/utils';
 import {MessageInterface} from 'core/interfaces';
 import {TextMessageEnum} from 'core/enums';
@@ -26,7 +26,6 @@ const TextChat: FC<PropsInterface> = ({
   messageSent
 }) => {
   const messageListRef = useRef<HTMLUListElement>(null);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
@@ -37,12 +36,6 @@ const TextChat: FC<PropsInterface> = ({
       }
     }
   }, [messageSent]);
-
-  useEffect(() => {
-    if (textAreaRef.current && currentChannel) {
-      textAreaRef.current.focus();
-    }
-  }, [textAreaRef, currentChannel]);
 
   const handleMessageChange = (value: string) => {
     const text = value;
@@ -66,7 +59,11 @@ const TextChat: FC<PropsInterface> = ({
   };
 
   if (!currentChannel) {
-    return null;
+    return (
+      <styled.Container>
+        <Loader />
+      </styled.Container>
+    );
   }
 
   return (
@@ -105,7 +102,7 @@ const TextChat: FC<PropsInterface> = ({
       <styled.TextBox>
         <TextArea
           name=""
-          ref={textAreaRef}
+          autoFocus
           isResizable
           placeholder={t('textMessage.placeholder')}
           onChange={handleMessageChange}

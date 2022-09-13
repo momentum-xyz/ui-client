@@ -1,4 +1,4 @@
-import React, {forwardRef, HTMLProps} from 'react';
+import React, {FC, HTMLProps} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from 'ui-kit';
@@ -23,25 +23,23 @@ interface PropsInterface
   className?: string;
 }
 
-const TextArea = forwardRef<HTMLTextAreaElement, PropsInterface>((props, ref) => {
-  const {
-    theme,
-    name,
-    placeholder,
-    disabled = false,
-    onChange,
-    value,
-    selected = false,
-    lines = 4,
-    lineLength,
-    isResizable = false,
-    isError = false,
-    bottomBorder = false,
-    errorMessage,
-    className,
-    ...restProps
-  } = props;
-
+const TextArea: FC<PropsInterface> = ({
+  theme,
+  name,
+  placeholder,
+  disabled = false,
+  onChange,
+  value,
+  selected = false,
+  lines = 4,
+  lineLength,
+  isResizable = false,
+  isError = false,
+  bottomBorder = false,
+  errorMessage,
+  className,
+  ...restProps
+}) => {
   return (
     <styled.Container className={className} data-testid="TextArea-test">
       <styled.Label type="h4" align="left" theme={theme} label={name} transform="uppercase" />
@@ -54,7 +52,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsInterface>((props, ref) =>
         )}
       >
         <textarea
-          {...restProps}
           placeholder={placeholder}
           name={name}
           disabled={disabled}
@@ -63,12 +60,12 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsInterface>((props, ref) =>
           cols={lineLength}
           rows={lines}
           className={cn(isError && 'error')}
-          ref={ref}
+          {...restProps}
         />
         <styled.ErrorMessage className={cn(!isError && 'none')}>{errorMessage}</styled.ErrorMessage>
       </styled.TextAreaContainer>
     </styled.Container>
   );
-});
+};
 
 export default TextArea;

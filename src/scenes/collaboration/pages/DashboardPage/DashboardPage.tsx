@@ -56,7 +56,6 @@ const DashboardPage: FC = () => {
         spaceId={space.id}
         isAdmin={space.isAdmin}
         isChatOpen={textChatStore.textChatDialog.isOpen}
-        isChat={!!textChatStore.currentChannel}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
         onLeave={async () => {

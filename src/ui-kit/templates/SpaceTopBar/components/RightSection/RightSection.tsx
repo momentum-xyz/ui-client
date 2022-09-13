@@ -14,7 +14,7 @@ interface PropsInterface {
   editSpaceHidden?: boolean;
   isSpaceFavorite: boolean;
   isChatOpen?: boolean;
-  isChat?: boolean;
+  showChatButton?: boolean;
   numberOfUnreadMessages?: number;
   toggleIsSpaceFavorite: (spaceId: string) => void;
   toggleChat?: () => void;
@@ -26,7 +26,7 @@ const RightSection: FC<PropsInterface> = ({
   isAdmin,
   isSpaceFavorite,
   isChatOpen,
-  isChat = true,
+  showChatButton: isChat = true,
   numberOfUnreadMessages = 0,
   toggleIsSpaceFavorite,
   toggleChat
