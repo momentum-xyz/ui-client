@@ -144,7 +144,7 @@ const UnityPage: FC = () => {
         title={t('titles.joinGathering')}
         text={t('messages.joinGathering', {title: message.name})}
         approveInfo={{
-          title: alreadyInSpace ? t('titles.dismiss') : t('titles.join'),
+          title: alreadyInSpace ? t('actions.dismiss') : t('actions.join'),
           onClick: alreadyInSpace ? undefined : handleJoinSpace
         }}
         showCloseButton
