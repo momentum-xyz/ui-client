@@ -84,7 +84,7 @@ const CalendarPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChat={false}
+        showChatButton={false}
         onLeave={async () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);

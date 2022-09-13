@@ -45,7 +45,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         />
       );
     }
-  }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
+  }, [agoraStageModeStore, showSuccessStageModeRequestSubmissionToast, t]);
 
   if (!space) {
     return null;
