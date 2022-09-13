@@ -18,7 +18,7 @@ const WorldBuilderGeneratePage: FC = () => {
   const {t} = useTranslation();
 
   const handleGenerateWorld = useCallback(async () => {
-    const url = await worldBuilderStore.genaretWorld();
+    const url = await worldBuilderStore.generateWorld();
 
     if (url) {
       window.location.href = url;

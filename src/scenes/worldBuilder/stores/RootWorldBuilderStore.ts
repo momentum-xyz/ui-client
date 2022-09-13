@@ -32,7 +32,7 @@ const RootWorldBuilderStore = types
 
       self.haveAccess = false;
     }),
-    genaretWorld: flow(function* () {
+    generateWorld: flow(function* () {
       if (
         !self.worldBuilderTemplatesStore.selectedTemplate ||
         !self.worldBuilderNameStore.name ||
