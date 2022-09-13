@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 
@@ -11,10 +11,19 @@ import * as styled from './WorldBuilderGeneratePage.styled';
 const CURRENT_STEP = 2;
 
 const WorldBuilderGeneratePage: FC = () => {
-  const {worldBuilderTemplatesStore} = useStore().worldBuilderStore;
+  const {worldBuilderStore} = useStore();
+  const {worldBuilderTemplatesStore} = worldBuilderStore;
   const {selectedTemplate} = worldBuilderTemplatesStore;
 
   const {t} = useTranslation();
+
+  const handleGenerateWorld = useCallback(async () => {
+    const url = await worldBuilderStore.generateWorld();
+
+    if (url) {
+      window.location.href = url;
+    }
+  }, [worldBuilderStore]);
 
   if (!selectedTemplate) {
     return null;
@@ -31,7 +40,12 @@ const WorldBuilderGeneratePage: FC = () => {
             selected
           />
         </styled.TemplateContainer>
-        <WorldBuilderFooter currentStep={CURRENT_STEP} buttonLabel={t('actions.generateWorld')} />
+        <WorldBuilderFooter
+          currentStep={CURRENT_STEP}
+          buttonLabel={t('actions.generateWorld')}
+          onNext={handleGenerateWorld}
+          isButtonDisabled={!worldBuilderStore.canGenerateWorld}
+        />
       </styled.Container>
     </Page>
   );

@@ -3,6 +3,8 @@ import {request} from 'api/request';
 
 import {worldBuilderEndpoints} from './worldBuilderRepository.api.endpoints';
 import {
+  CreateWorldRequest,
+  CreateWorldResponse,
   PermissionsRequest,
   PermissionsResponse,
   TemplatesRequest,
@@ -34,4 +36,18 @@ export const checkPermissions: RequestInterface<PermissionsRequest, PermissionsR
   options
 ) => {
   return request.post(worldBuilderEndpoints().checkPermissions, {}, options);
+};
+
+export const createWorld: RequestInterface<CreateWorldRequest, CreateWorldResponse> = (options) => {
+  const {templateId, domain, worldName, ...restOptions} = options;
+
+  return request.post(
+    worldBuilderEndpoints().create,
+    {
+      template_id: templateId,
+      domain,
+      world_name: worldName
+    },
+    restOptions
+  );
 };
