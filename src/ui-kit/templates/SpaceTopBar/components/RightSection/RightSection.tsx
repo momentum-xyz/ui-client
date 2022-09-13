@@ -26,7 +26,7 @@ const RightSection: FC<PropsInterface> = ({
   isAdmin,
   isSpaceFavorite,
   isChatOpen,
-  showChatButton: isChat = true,
+  showChatButton = true,
   numberOfUnreadMessages = 0,
   toggleIsSpaceFavorite,
   toggleChat
@@ -49,7 +49,7 @@ const RightSection: FC<PropsInterface> = ({
           <Separator />
         </>
       )}
-      {isChat && (
+      {showChatButton && (
         <ToolbarIcon
           title={isChatOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')}
           icon="chat"
