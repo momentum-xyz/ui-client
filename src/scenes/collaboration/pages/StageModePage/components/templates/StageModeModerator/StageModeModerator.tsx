@@ -95,6 +95,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
           isChatOpen={textChatStore.textChatDialog.isOpen}
+          isChat={!!textChatStore.currentChannel}
           toggleChat={textChatStore.textChatDialog.toggle}
           numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
           editSpaceHidden

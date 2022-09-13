@@ -58,6 +58,10 @@ const TextChat: FC<PropsInterface> = ({
     }
   };
 
+  if (!currentChannel) {
+    return null;
+  }
+
   return (
     <styled.Container>
       <styled.ChatBox ref={messageListRef}>

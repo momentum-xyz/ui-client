@@ -66,6 +66,7 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
+        isChat={!!textChatStore.currentChannel}
         isChatOpen={textChatStore.textChatDialog.isOpen}
         toggleChat={textChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}

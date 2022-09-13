@@ -45,7 +45,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         />
       );
     }
-  }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
+  }, [agoraStageModeStore, showSuccessStageModeRequestSubmissionToast, t]);
 
   if (!space) {
     return null;
@@ -60,6 +60,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         isAdmin={space.isAdmin}
         spaceId={space.id}
         isChatOpen={textChatStore.textChatDialog.isOpen}
+        isChat={!!textChatStore.currentChannel}
         toggleChat={textChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
