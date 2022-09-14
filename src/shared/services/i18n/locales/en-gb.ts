@@ -157,7 +157,8 @@ export const enGb = {
       somethingWentWrong: 'Something went wrong',
       somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
       noWorldBuilderPermissions:
-        'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account'
+        'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account',
+      savingSpaceDetailsError: 'An error has occurred while saving space.'
     },
     systemMessages: {
       loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
@@ -327,6 +328,7 @@ export const enGb = {
       worldBuilderDescription:
         'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
       startBuilding: 'Connect your wallet\n To start Building',
+      savingSpaceDetailsSuceess: 'Space details saved succesfully!',
       stageIsFullTryAgain: 'Stage is full, please try again later...'
     },
     titles: {
@@ -360,7 +362,8 @@ export const enGb = {
       generate: 'Generate',
       worldBuilder: 'World Builder',
       templateNameWrapper: '{{name}} Template',
-      stageIsFull: 'Stage is full'
+      stageIsFull: 'Stage is full',
+      success: 'Success'
     },
     textMessage: {
       you: 'you',
