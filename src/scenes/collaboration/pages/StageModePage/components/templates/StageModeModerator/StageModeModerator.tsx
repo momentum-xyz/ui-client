@@ -47,7 +47,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   );
 
   const handleEnterStage = useCallback(async () => {
-    if (!agoraStageModeStore.canEnterStage) {
+    if (agoraStageModeStore.isStageFull) {
       toast.error(
         <ToastContent
           headerIconName="alert"
@@ -119,28 +119,24 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 isMultiline={false}
               />
             </styled.ToggleContainer>
-            {agoraStore.isStageMode &&
-              (agoraStageModeStore.canEnterStage || agoraStageModeStore.isOnStage) && (
-                <>
-                  <StageModeStats />
-                  {agoraStageModeStore.isOnStage ? (
-                    <Button
-                      label={`${t('actions.leaveStage')}?`}
-                      variant="danger"
-                      onClick={handleLeaveStage}
-                      disabled={agoraStageModeStore.isTogglingIsOnStage}
-                    />
-                  ) : (
-                    <Button
-                      label={`${t('actions.goOnStage')}?`}
-                      variant="primary"
-                      onClick={handleEnterStage}
-                      disabled={agoraStageModeStore.isTogglingIsOnStage}
-                    />
-                  )}
-                </>
-              )}
-            {agoraStore.isStageMode && !agoraStageModeStore.canEnterStage && (
+            {agoraStore.isStageMode && <StageModeStats />}
+            {agoraStore.isStageMode && agoraStageModeStore.canEnterStage && (
+              <Button
+                label={`${t('actions.goOnStage')}?`}
+                variant="primary"
+                onClick={handleEnterStage}
+                disabled={agoraStageModeStore.isTogglingIsOnStage}
+              />
+            )}
+            {agoraStore.isStageMode && agoraStageModeStore.isOnStage && (
+              <Button
+                label={`${t('actions.leaveStage')}?`}
+                variant="danger"
+                onClick={handleLeaveStage}
+                disabled={agoraStageModeStore.isTogglingIsOnStage}
+              />
+            )}
+            {agoraStore.isStageMode && agoraStageModeStore.isStageFull && (
               <Text text={t('messages.stageIsFull')} size="s" isMultiline={false} />
             )}
           </styled.ActionsContainer>

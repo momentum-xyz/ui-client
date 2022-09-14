@@ -93,7 +93,7 @@ const Collaboration: FC = () => {
   }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
   const handleCountdownEnded = useCallback(async () => {
-    if (!agoraStageModeStore.canEnterStage) {
+    if (!agoraStageModeStore.isStageFull) {
       toast.error(
         <ToastContent
           headerIconName="alert"
