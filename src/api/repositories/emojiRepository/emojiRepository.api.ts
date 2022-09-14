@@ -19,7 +19,7 @@ export const fetchSpaceEmojiConfig: RequestInterface<
 
   const url = generatePath(emojiRepositoryEndpoints().spaceEmojiConfig, {worldId});
 
-  const resp = await request.get(url, restOptions);
+  const resp = await request.get(url, {...restOptions, params: {children: true}});
 
   // temp support for legacy format
   // FIXME remove after October 2022
