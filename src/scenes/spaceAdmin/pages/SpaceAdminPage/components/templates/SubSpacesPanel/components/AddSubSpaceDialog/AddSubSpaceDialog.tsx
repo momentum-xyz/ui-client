@@ -36,7 +36,7 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text={t('spaceAdmin.subSpaces.addSubSpaceDialog.success')}
+          text={t('messages.subSpaceCreateSuccess')}
           showCloseButton
         />,
         TOAST_COMMON_OPTIONS
@@ -50,42 +50,7 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
     if (allowedSubSpaceTypes.length > 0) {
       setValue('type', allowedSubSpaceTypes[0]);
     }
-  }, [allowedSubSpaceTypes]);
-
-  // @ts-ignore
-  const renderNameInput = ({field: {onChange, value}}) => (
-    <Input
-      defaultValue={value}
-      onChange={onChange}
-      label={t('spaceAdmin.subSpaces.addSubSpaceDialog.name.label')}
-      placeholder={t('spaceAdmin.subSpaces.addSubSpaceDialog.name.placeholder')}
-      errorMessage={t('spaceAdmin.subSpaces.addSubSpaceDialog.name.errors.required')}
-      isError={!!errors.name}
-    />
-  );
-
-  // @ts-ignore
-  const renderTypeInput = ({field: {onChange, value}}) => (
-    <>
-      <Dropdown
-        placeholder={t('spaceAdmin.subSpaces.addSubSpaceDialog.dropdown.placeholder')}
-        value={value ?? ''}
-        variant="secondary"
-        options={allowedSubSpaceTypes.map((type) => ({
-          label: type.toUpperCase(),
-          value: type
-        }))}
-        onOptionSelect={(option) => {
-          onChange(option.value);
-        }}
-      />
-      {errors.type && (
-        <styled.ErrorMessage>
-          {t('spaceAdmin.subSpaces.addSubSpaceDialog.dropdown.errors.required')}
-        </styled.ErrorMessage>
-      )}
-    </>
-  );
+  }, [allowedSubSpaceTypes, setValue]);
 
   return (
     <Dialog
@@ -105,7 +70,16 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
         <Controller
           control={control}
           name="name"
-          render={renderNameInput}
+          render={({field: {onChange, value}}) => (
+            <Input
+              defaultValue={value}
+              onChange={onChange}
+              label={t('spaceAdmin.subSpaces.addSubSpaceDialog.name.label')}
+              placeholder={t('spaceAdmin.subSpaces.addSubSpaceDialog.name.placeholder')}
+              errorMessage={t('spaceAdmin.subSpaces.addSubSpaceDialog.name.errors.required')}
+              isError={!!errors.name}
+            />
+          )}
           rules={{
             required: true
           }}
@@ -113,7 +87,27 @@ const AddSubSpaceDialog: FC<PropsInterface> = (props) => {
         <Controller
           control={control}
           name="type"
-          render={renderTypeInput}
+          render={({field: {onChange, value}}) => (
+            <>
+              <Dropdown
+                placeholder={t('spaceAdmin.subSpaces.addSubSpaceDialog.dropdown.placeholder')}
+                value={value ?? ''}
+                variant="secondary"
+                options={allowedSubSpaceTypes.map((type) => ({
+                  label: type.toUpperCase(),
+                  value: type
+                }))}
+                onOptionSelect={(option) => {
+                  onChange(option.value);
+                }}
+              />
+              {errors.type && (
+                <styled.ErrorMessage>
+                  {t('spaceAdmin.subSpaces.addSubSpaceDialog.dropdown.errors.required')}
+                </styled.ErrorMessage>
+              )}
+            </>
+          )}
           rules={{required: true}}
         />
       </styled.Body>

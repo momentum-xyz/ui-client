@@ -75,7 +75,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
                     key={user.uid}
                     user={user}
                     isModerator={collaborationStore.isModerator}
-                    canEnterStage={agoraStageModeStore.canEnterStage}
+                    isStageFull={agoraStageModeStore.isStageFull}
                     inviteToStage={agoraStageModeStore.inviteToStage}
                   />
                 ))

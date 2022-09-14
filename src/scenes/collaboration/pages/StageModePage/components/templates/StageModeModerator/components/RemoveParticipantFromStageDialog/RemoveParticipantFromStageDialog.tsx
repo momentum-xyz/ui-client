@@ -9,6 +9,8 @@ import {Dialog, Text, ToastContent} from 'ui-kit';
 
 import * as styled from './RemoveParticipantFromStageDialog.styled';
 
+const DIALOG_WIDTH = '360px';
+
 interface PropsInterface {
   participant: AgoraRemoteUserInterface;
 }
@@ -48,6 +50,7 @@ const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => 
   return (
     <Dialog
       title={t('titles.removeParticipantFromStage')}
+      layoutSize={{width: DIALOG_WIDTH}}
       approveInfo={{
         title: t('actions.confirmRemove'),
         onClick: handleUserKick,
@@ -62,6 +65,7 @@ const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => 
         <Text
           text={t('messages.areYouSureYouWantToRemoveUserFromStage', {name: participant.name})}
           size="m"
+          align="left"
         />
       </styled.Container>
     </Dialog>
