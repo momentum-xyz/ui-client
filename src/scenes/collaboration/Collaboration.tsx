@@ -78,17 +78,7 @@ const Collaboration: FC = () => {
           );
         }
       });
-  }, [
-    agoraStore.appId,
-    agoraStore.hasJoined,
-    agoraStore.spaceId,
-    history,
-    rootStore,
-    sessionStore.userId,
-    spaceId,
-    t,
-    textChatStore
-  ]);
+  }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -103,7 +93,7 @@ const Collaboration: FC = () => {
   }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
   const handleCountdownEnded = useCallback(async () => {
-    if (!agoraStageModeStore.canEnterStage) {
+    if (!agoraStageModeStore.isStageFull) {
       toast.error(
         <ToastContent
           headerIconName="alert"

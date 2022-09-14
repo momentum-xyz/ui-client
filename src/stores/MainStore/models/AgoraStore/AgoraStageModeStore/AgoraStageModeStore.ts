@@ -63,6 +63,11 @@ const AgoraStageModeStore = types
     })()
   }))
   .views((self) => ({
+    get isStageFull(): boolean {
+      return self.speakers.length + (self.isOnStage ? 1 : 0) >= appVariables.MAX_STAGE_USERS;
+    }
+  }))
+  .views((self) => ({
     // TODO: Remove when whole infostructure is stable for Stage Mode
     get audience(): StageModeUserInterface[] {
       return self.backendUsers.filter((user) => {
@@ -77,7 +82,7 @@ const AgoraStageModeStore = types
       return self.spaceId !== undefined;
     },
     get canEnterStage(): boolean {
-      return self.speakers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS;
+      return !self.isOnStage && !self.isStageFull;
     },
     get numberOfSpeakers(): number {
       return self.speakers.length + (self.isOnStage ? 1 : 0);
