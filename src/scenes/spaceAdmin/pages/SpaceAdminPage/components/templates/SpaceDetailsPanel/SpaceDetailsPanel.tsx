@@ -52,6 +52,8 @@ const SpaceDetailsPanel: FC = () => {
             text={t('errors.savingSpaceDetailsError')}
           />
         );
+
+        return;
       }
 
       reset(settings);
