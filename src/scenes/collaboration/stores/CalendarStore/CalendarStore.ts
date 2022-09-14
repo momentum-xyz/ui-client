@@ -26,6 +26,7 @@ const CalendarStore = types.compose(
       magicLinkRequest: types.optional(RequestModel, {}),
       removeEventRequest: types.optional(RequestModel, {}),
       eventIdToRemove: types.maybe(types.string),
+      eventDeleted: false,
       fullAttendeesListDialog: types.optional(DialogModel, {}),
       attendeesList: types.optional(types.array(AttendeeModel), []),
       attendeesRequest: types.optional(RequestModel, {})
@@ -50,6 +51,7 @@ const CalendarStore = types.compose(
         });
 
         if (self.removeEventRequest.isDone) {
+          self.eventDeleted = true;
           self.eventIdToRemove = undefined;
           self.deleteConfirmationDialog.close();
           self.eventList.fetchEvents(spaceId);

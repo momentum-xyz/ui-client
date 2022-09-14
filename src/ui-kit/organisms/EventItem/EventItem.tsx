@@ -26,6 +26,7 @@ interface PropsInterface {
   onWeblinkClick: (weblink: string) => void;
   onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
   canManageEvent?: boolean;
+  eventDeleted?: boolean;
 }
 
 const EventItem: FC<PropsInterface> = ({
@@ -40,11 +41,15 @@ const EventItem: FC<PropsInterface> = ({
   onFlyToSpace,
   onWeblinkClick,
   onShowAttendeesList,
-  canManageEvent = false
+  canManageEvent = false,
+  eventDeleted = false
 }) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
   useEffect(() => {
+    if (eventDeleted) {
+      return;
+    }
     event.init();
   }, [event]);
 

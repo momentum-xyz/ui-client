@@ -20,6 +20,7 @@ interface PropsInterface {
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
   onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
+  eventDeleted?: boolean;
 }
 
 const EventList: FC<PropsInterface> = ({
@@ -34,7 +35,8 @@ const EventList: FC<PropsInterface> = ({
   onFlyToGathering,
   onFlyToSpace,
   onWeblinkClick,
-  onShowAttendeesList
+  onShowAttendeesList,
+  eventDeleted
 }) => {
   if (isLoading || events.length === 0) {
     return (
@@ -67,6 +69,7 @@ const EventList: FC<PropsInterface> = ({
           onWeblinkClick={onWeblinkClick}
           onShowAttendeesList={onShowAttendeesList}
           canManageEvent={canManageInSpace || event.data?.is_admin}
+          eventDeleted={eventDeleted}
         />
       ))}
     </styled.Container>
