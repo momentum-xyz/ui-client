@@ -36,20 +36,6 @@ const SpaceDetailsPanel: FC = () => {
     }
   });
 
-  useEffect(() => {
-    if (spaceDetailsFormStore.editSpaceRequest.isError) {
-      toast.error(
-        <ToastContent
-          isDanger
-          showCloseButton
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('errors.savingSpaceDetailsError')}
-        />
-      );
-    }
-  }, [spaceDetailsFormStore.editSpaceRequest.isError]);
-
   const formSubmitHandler: SubmitHandler<SpaceSettingsInterface> = async (
     settings: SpaceSettingsInterface
   ) => {
@@ -69,6 +55,16 @@ const SpaceDetailsPanel: FC = () => {
         );
 
         space.fetchSpaceInformation();
+      } else {
+        toast.error(
+          <ToastContent
+            isDanger
+            showCloseButton
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('errors.savingSpaceDetailsError')}
+          />
+        );
       }
     }
   };
