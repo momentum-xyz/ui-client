@@ -20,7 +20,6 @@ interface PropsInterface {
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
   onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
-  eventDeleted?: boolean;
 }
 
 const EventList: FC<PropsInterface> = ({
@@ -35,10 +34,9 @@ const EventList: FC<PropsInterface> = ({
   onFlyToGathering,
   onFlyToSpace,
   onWeblinkClick,
-  onShowAttendeesList,
-  eventDeleted
+  onShowAttendeesList
 }) => {
-  if (isLoading || events.length === 0) {
+  if (events.length === 0) {
     return (
       <styled.Container className="empty noScrollIndicator">
         {isLoading ? (
@@ -69,7 +67,6 @@ const EventList: FC<PropsInterface> = ({
           onWeblinkClick={onWeblinkClick}
           onShowAttendeesList={onShowAttendeesList}
           canManageEvent={canManageInSpace || event.data?.is_admin}
-          eventDeleted={eventDeleted}
         />
       ))}
     </styled.Container>

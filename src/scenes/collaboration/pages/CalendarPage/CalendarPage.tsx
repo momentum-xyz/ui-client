@@ -67,10 +67,7 @@ const CalendarPage: FC = () => {
       eventList.fetchEvents(space.id);
     }
 
-    return () => {
-      eventList.resetModel();
-      calendarStore.resetModel();
-    };
+    return () => eventList.resetModel();
   }, [eventList, space]);
 
   if (!space) {
@@ -108,7 +105,6 @@ const CalendarPage: FC = () => {
           onWeblinkClick={handleWeblink}
           onShowAttendeesList={attendeesListStore.showAttendees}
           canManageInSpace={space.isAdmin}
-          eventDeleted={calendarStore.removeEventRequest.isDone}
         />
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
