@@ -12,10 +12,10 @@ const STAGEMODE_POPUP_WIDTH = '242px';
 
 export interface StageModePopupPropsInterface {
   info: StageModePopupInfoInterface;
-  canEnterStage: boolean;
+  isStageFull: boolean;
 }
 
-const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterStage}) => {
+const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, isStageFull}) => {
   const {collaborationStore} = useStore();
   const {stageModeStore} = collaborationStore;
   const {removeRequestPopup, removeAwaitingPermissionPopup} = stageModeStore;
@@ -69,7 +69,7 @@ const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterS
             <Text text={t('messages.thisPersonWantsToComeOnStage')} size="m" align="left" />
             <Text
               text={
-                canEnterStage
+                isStageFull
                   ? t('messages.thisWillEnablePersonToUseStage')
                   : t('messages.stageIsCurrentlyFull')
               }
@@ -80,7 +80,7 @@ const StageModePopup: React.FC<StageModePopupPropsInterface> = ({info, canEnterS
               <Button
                 label={t('actions.accept')}
                 variant="primary"
-                disabled={!canEnterStage}
+                disabled={isStageFull}
                 size="small"
                 onClick={() => handleAccept(info)}
               />
