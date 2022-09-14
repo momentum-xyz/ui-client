@@ -119,27 +119,24 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 isMultiline={false}
               />
             </styled.ToggleContainer>
+            {agoraStore.isStageMode && <StageModeStats />}
             {agoraStore.isStageMode &&
-              (agoraStageModeStore.canEnterStage || agoraStageModeStore.isOnStage) && (
-                <>
-                  <StageModeStats />
-                  {agoraStageModeStore.isOnStage ? (
-                    <Button
-                      label={`${t('actions.leaveStage')}?`}
-                      variant="danger"
-                      onClick={handleLeaveStage}
-                      disabled={agoraStageModeStore.isTogglingIsOnStage}
-                    />
-                  ) : (
-                    <Button
-                      label={`${t('actions.goOnStage')}?`}
-                      variant="primary"
-                      onClick={handleEnterStage}
-                      disabled={agoraStageModeStore.isTogglingIsOnStage}
-                    />
-                  )}
-                </>
-              )}
+              (agoraStageModeStore.canEnterStage || agoraStageModeStore.isOnStage) &&
+              (agoraStageModeStore.isOnStage ? (
+                <Button
+                  label={`${t('actions.leaveStage')}?`}
+                  variant="danger"
+                  onClick={handleLeaveStage}
+                  disabled={agoraStageModeStore.isTogglingIsOnStage}
+                />
+              ) : (
+                <Button
+                  label={`${t('actions.goOnStage')}?`}
+                  variant="primary"
+                  onClick={handleEnterStage}
+                  disabled={agoraStageModeStore.isTogglingIsOnStage}
+                />
+              ))}
             {agoraStore.isStageMode && !agoraStageModeStore.canEnterStage && (
               <Text text={t('messages.stageIsFull')} size="s" isMultiline={false} />
             )}

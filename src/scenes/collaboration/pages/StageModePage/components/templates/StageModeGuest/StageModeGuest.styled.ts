@@ -52,3 +52,13 @@ export const StageModeContainer = styled.div`
   flex-direction: column;
   justify-content: space-around;
 `;
+
+export const StatsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+export const StageControlCntainer = styled.div`
+  flex-shrink: 0;
+`;
