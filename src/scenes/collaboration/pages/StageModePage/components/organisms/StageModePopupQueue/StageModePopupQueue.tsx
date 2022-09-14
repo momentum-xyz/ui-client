@@ -17,7 +17,7 @@ const StageModePopupQueue: React.FC = () => {
         <StageModePopup
           info={info}
           key={info.userId}
-          canEnterStage={agoraStageModeStore.canEnterStage}
+          isStageFull={agoraStageModeStore.isStageFull}
         />
       ))}
     </styled.Container>

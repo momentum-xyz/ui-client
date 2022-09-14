@@ -1,9 +1,10 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
+import {toast} from 'react-toastify';
 
 import {StageModeRequestEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
-import {Dialog, Text} from 'ui-kit';
+import {Dialog, Text, ToastContent} from 'ui-kit';
 
 import * as styled from './InvitedOnStageDialog.styled';
 
@@ -20,6 +21,26 @@ const InvitedOnStageDialog: React.FC<PropsInterface> = ({onDecline, onClose, onG
 
   const {t} = useTranslation();
 
+  const handleEnterStage = async () => {
+    await agoraStageModeStore.invitationRespond(StageModeRequestEnum.ACCEPT);
+
+    if (agoraStageModeStore.isStageFull) {
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.stageIsFull')}
+          text={t('messages.stageIsFullTryAgain')}
+          showCloseButton
+        />
+      );
+
+      return;
+    }
+
+    agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
+    onClose?.();
+  };
+
   return (
     <Dialog
       title={t('titles.youHaveBeenInvitedOnStage')}
@@ -29,11 +50,7 @@ const InvitedOnStageDialog: React.FC<PropsInterface> = ({onDecline, onClose, onG
         collaborationStore.isModerator
           ? {
               title: t('actions.goOnStage'),
-              onClick: () => {
-                agoraStageModeStore.enterStage(userDevicesStore.createLocalTracks);
-                agoraStageModeStore.invitationRespond(StageModeRequestEnum.ACCEPT);
-                onClose?.();
-              }
+              onClick: handleEnterStage
             }
           : {
               title: t('actions.getReady'),

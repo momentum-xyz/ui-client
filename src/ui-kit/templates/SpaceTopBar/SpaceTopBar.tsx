@@ -16,7 +16,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   isChatOpen?: boolean;
   toggleChat?: () => void;
   toggleIsSpaceFavorite: (spaceId: string) => void;
-  isChat?: boolean;
+  showChatButton?: boolean;
   numberOfUnreadMessages?: number;
   onLeave: () => void;
 }
@@ -32,7 +32,7 @@ const SpaceTopBar: FC<PropsInterface> = ({
   editSpaceHidden,
   toggleChat,
   children,
-  isChat,
+  showChatButton,
   numberOfUnreadMessages,
   onLeave
 }) => {
@@ -52,7 +52,7 @@ const SpaceTopBar: FC<PropsInterface> = ({
               editSpaceHidden={editSpaceHidden}
               isSpaceFavorite={isSpaceFavorite}
               toggleIsSpaceFavorite={toggleIsSpaceFavorite}
-              isChat={isChat}
+              showChatButton={showChatButton}
               numberOfUnreadMessages={numberOfUnreadMessages}
             />
           )}

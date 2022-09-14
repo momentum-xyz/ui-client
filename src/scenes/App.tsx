@@ -38,10 +38,7 @@ const App: FC = () => {
         const status = error.response?.status;
         if (status === httpErrorCodes.MAINTENANCE) {
           document.location.href = ROUTES.system.maintenance;
-        } else if (
-          status === httpErrorCodes.FORBIDDEN ||
-          status === httpErrorCodes.INTERNAL_SYSTEM_ERROR
-        ) {
+        } else if (status === httpErrorCodes.INTERNAL_SYSTEM_ERROR) {
           toast.info(
             <ToastContent
               headerIconName="check"

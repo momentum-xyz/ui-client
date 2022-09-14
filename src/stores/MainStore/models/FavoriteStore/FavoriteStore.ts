@@ -15,8 +15,7 @@ const FavoriteStore = types.compose(
       request: types.optional(RequestModel, {}),
       addFavoriteRequest: types.optional(RequestModel, {}),
       removeFavoriteRequest: types.optional(RequestModel, {}),
-      favorites: types.array(FavoriteModel),
-      spaceId: types.optional(types.string, '')
+      favorites: types.array(FavoriteModel)
     })
     .actions((self) => ({
       init(): void {
@@ -70,15 +69,9 @@ const FavoriteStore = types.compose(
             1
           );
         }
-      }),
-      setSpaceId(spaceId: string) {
-        self.spaceId = spaceId;
-      }
+      })
     }))
     .views((self) => ({
-      get isSpaceFavorite() {
-        return !!self.favorites.find((favorite) => favorite.spaceId === self.spaceId);
-      },
       isFavorite(spaceId: string) {
         return !!self.favorites.find((favorite) => favorite.spaceId === spaceId);
       }
