@@ -17,6 +17,8 @@ const SpaceDetailsFormStore = types.compose(
           spaceId,
           settings
         });
+
+        return self.editSpaceRequest.isDone;
       }),
       deleteSpace: flow(function* (spaceId: string) {
         yield self.deleteSpaceRequest.send(api.spaceRepository.deleteSpace, {spaceId});

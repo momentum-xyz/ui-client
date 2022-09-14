@@ -36,38 +36,40 @@ const SpaceDetailsPanel: FC = () => {
     }
   });
 
+  useEffect(() => {
+    if (spaceDetailsFormStore.editSpaceRequest.isError) {
+      toast.error(
+        <ToastContent
+          isDanger
+          showCloseButton
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('errors.savingSpaceDetailsError')}
+        />
+      );
+    }
+  }, [spaceDetailsFormStore.editSpaceRequest.isError]);
+
   const formSubmitHandler: SubmitHandler<SpaceSettingsInterface> = async (
     settings: SpaceSettingsInterface
   ) => {
     if (space) {
-      try {
-        await spaceDetailsFormStore.saveDetails(settings, space.id);
-      } catch {
-        toast.error(
+      const isSuccess = await spaceDetailsFormStore.saveDetails(settings, space.id);
+
+      if (isSuccess) {
+        reset(settings);
+
+        toast.info(
           <ToastContent
-            isDanger
+            headerIconName="checkmark"
+            title={t('titles.success')}
+            text={t('messages.savingSpaceDetailsSuceess')}
             showCloseButton
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('errors.savingSpaceDetailsError')}
           />
         );
 
-        return;
+        space.fetchSpaceInformation();
       }
-
-      reset(settings);
-
-      toast.info(
-        <ToastContent
-          headerIconName="checkmark"
-          title={t('titles.success')}
-          text={t('messages.savingSpaceDetailsSuceess')}
-          showCloseButton
-        />
-      );
-
-      space.fetchSpaceInformation();
     }
   };
 
