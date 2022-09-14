@@ -13,12 +13,10 @@ const SpaceDetailsFormStore = types.compose(
     })
     .actions((self) => ({
       saveDetails: flow(function* (settings: SpaceSettingsInterface, spaceId: string) {
-        const response = yield self.editSpaceRequest.send(api.spaceRepository.editSpace, {
+        yield self.editSpaceRequest.send(api.spaceRepository.editSpace, {
           spaceId,
           settings
         });
-
-        console.info('response', response);
       }),
       deleteSpace: flow(function* (spaceId: string) {
         yield self.deleteSpaceRequest.send(api.spaceRepository.deleteSpace, {spaceId});
