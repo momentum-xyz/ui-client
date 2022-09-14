@@ -37,3 +37,28 @@ interface EmojiConfigItemInterface {
   order: number;
 }
 export interface EmojiConfigResponse extends Array<EmojiConfigItemInterface> {}
+
+export interface UploadEmojiRequest {
+  spaceId: string;
+  file: File;
+  name: string;
+}
+export interface UploadEmojiResponse {
+  hash: string;
+  emojiId: string;
+  message: string;
+}
+
+export interface AssignEmojiToSpaceRequest {
+  emojiId: string;
+  spaceId: string;
+}
+
+export interface AssignEmojiToSpaceResponse extends Array<EmojiConfigItemInterface> {}
+
+export interface DeleteEmojiRequest {
+  emojiId: string;
+  spaceId: string;
+  order: number;
+}
+export interface DeleteEmojiResponse {}

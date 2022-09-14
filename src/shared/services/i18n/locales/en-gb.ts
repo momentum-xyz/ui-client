@@ -656,6 +656,15 @@ export const enGb = {
           declineLabel: 'No, cancel'
         }
       },
+      manageEmoji: {
+        title: 'Emoji',
+        text1:
+          'Add a new emoji to the emoji’s list. Visitors to your space can use this emoji while they are here.',
+        text2: 'An emoji must be at least 520 x 520 pixels; and should be uploaded in a PNG format',
+        yourUploadedEmoji: 'Your uploaded Emoji:',
+        deleteEmoji: 'Delete Emoji',
+        uploadEmoji: 'Upload EMoji'
+      },
       users: {
         title: 'Space Members',
         removeConfirmation: {
