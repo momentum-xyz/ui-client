@@ -72,33 +72,33 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
 
           <styled.StageControlCntainer>
             {agoraStore.isStageMode &&
-              !agoraStageModeStore.requestWasMadeToGoOnStage &&
-              (agoraStageModeStore.canEnterStage || agoraStageModeStore.isOnStage) &&
-              (agoraStageModeStore.isOnStage ? (
-                <Button
-                  label={t('actions.leaveStage')}
-                  variant="danger"
-                  onClick={async () => {
-                    await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
-
-                    await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
-
-                    if (sessionStore.userId === screenShareStore.screenOwnerId) {
-                      agoraScreenShareStore.stopScreenSharing();
-                    }
-                  }}
-                />
-              ) : (
+              agoraStageModeStore.canEnterStage &&
+              !agoraStageModeStore.requestWasMadeToGoOnStage && (
                 <Button
                   label={t('actions.goOnStage')}
                   variant="primary"
                   onClick={handleUserRequest}
                 />
-              ))}
+              )}
+            {agoraStore.isStageMode && agoraStageModeStore.isOnStage && (
+              <Button
+                label={t('actions.leaveStage')}
+                variant="danger"
+                onClick={async () => {
+                  await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
+
+                  await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
+
+                  if (sessionStore.userId === screenShareStore.screenOwnerId) {
+                    agoraScreenShareStore.stopScreenSharing();
+                  }
+                }}
+              />
+            )}
             {agoraStore.isStageMode && agoraStageModeStore.requestWasMadeToGoOnStage && (
               <Text text={t('messages.pendingRequestToGoOnStage')} size="m" />
             )}
-            {agoraStore.isStageMode && !agoraStageModeStore.canEnterStage && (
+            {agoraStore.isStageMode && agoraStageModeStore.isStageFull && (
               <Text text={t('messages.stageIsFull')} size="m" />
             )}
           </styled.StageControlCntainer>

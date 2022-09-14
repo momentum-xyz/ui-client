@@ -326,7 +326,8 @@ export const enGb = {
       stageFull: 'Stage full',
       worldBuilderDescription:
         'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
-      startBuilding: 'Connect your wallet\n To start Building'
+      startBuilding: 'Connect your wallet\n To start Building',
+      stageIsFullTryAgain: 'Stage is full, please try again later...'
     },
     titles: {
       alert: 'alert',
@@ -358,7 +359,8 @@ export const enGb = {
       template: 'Template',
       generate: 'Generate',
       worldBuilder: 'World Builder',
-      templateNameWrapper: '{{name}} Template'
+      templateNameWrapper: '{{name}} Template',
+      stageIsFull: 'Stage is full'
     },
     textMessage: {
       you: 'you',
