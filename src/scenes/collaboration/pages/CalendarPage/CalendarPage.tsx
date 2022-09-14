@@ -108,7 +108,7 @@ const CalendarPage: FC = () => {
           onWeblinkClick={handleWeblink}
           onShowAttendeesList={attendeesListStore.showAttendees}
           canManageInSpace={space.isAdmin}
-          eventDeleted={calendarStore.eventDeleted}
+          eventDeleted={calendarStore.removeEventRequest.isDone}
         />
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
