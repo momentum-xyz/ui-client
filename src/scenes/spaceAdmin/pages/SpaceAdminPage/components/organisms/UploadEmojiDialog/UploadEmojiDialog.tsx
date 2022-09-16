@@ -93,7 +93,6 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
             }
             dragActiveLabel={t('fileUploader.dragActiveLabel')}
             onFilesUpload={(file) => {
-              console.log('On upload', file, typeof file);
               setImageError(false);
               setImage(file || null);
             }}

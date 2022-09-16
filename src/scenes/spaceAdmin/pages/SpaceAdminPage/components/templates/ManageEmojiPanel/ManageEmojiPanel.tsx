@@ -24,7 +24,6 @@ const ManageEmojiPanel: FC = () => {
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  console.log('EMOJIS', emojiDetailsList);
   if (!space?.id) {
     return null;
   }
