@@ -1,7 +1,8 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {generatePath, useHistory} from 'react-router-dom';
 
 import {
   Toggle,
@@ -20,6 +21,7 @@ import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
+import {ROUTES} from 'core/constants';
 
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
@@ -34,6 +36,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {space, removeParticipantFromStageDialog, textChatStore, screenShareStore} =
     collaborationStore;
+  const history = useHistory();
 
   const remoteUserClicked = useCallback(
     async (remoteUser: AgoraRemoteUserInterface, event = StageModeModerationEventEnum.REMOVE) => {
@@ -80,7 +83,13 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     userDevicesStore
   ]);
 
-  if (!space) {
+  useEffect(() => {
+    if (!collaborationStore.isModerator && space?.id) {
+      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: space.id}));
+    }
+  }, [collaborationStore.isModerator, history, space?.id]);
+
+  if (!space || !collaborationStore.isModerator) {
     return null;
   }
 
