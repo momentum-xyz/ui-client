@@ -35,7 +35,7 @@ const ManageEmojiPanel: FC = () => {
 
   const handleConfirmUpload = async (image: File, name: string) => {
     if (spaceEmoji) {
-      await deleteEmoji(space.id, spaceEmoji.id, spaceEmoji.order);
+      await deleteEmoji(space.id, spaceEmoji.id);
     }
     await uploadEmojiToSpace(space.id, image, name);
     setShowUploadDialog(false);
@@ -48,7 +48,7 @@ const ManageEmojiPanel: FC = () => {
     // TODO add are-you-sure dialog
     if (spaceEmoji) {
       try {
-        await deleteEmoji(space.id, spaceEmoji.id, spaceEmoji.order);
+        await deleteEmoji(space.id, spaceEmoji.id);
         // TODO add toast success
       } catch (err) {
         // TODO add error toast

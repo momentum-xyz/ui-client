@@ -52,11 +52,10 @@ const EmojiStore = types
 
       return assignedSpaceEmojiResponse;
     }),
-    deleteEmoji: flow(function* (spaceId: string, emojiId: string, order: number) {
+    deleteEmoji: flow(function* (spaceId: string, emojiId: string) {
       yield self.deleteEmojiRequest.send(api.emojiRepository.deleteEmoji, {
         emojiId,
-        spaceId,
-        order
+        spaceId
       });
 
       yield self.fetchAll();

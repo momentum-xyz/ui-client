@@ -8,6 +8,6 @@ export const emojiRepositoryEndpoints = () => {
     spaceEmojiConfig: `${BASE_URL}/:worldId`,
     emojiUpload: `${BASE_URL_EMOJI}/upload/:spaceId`,
     emojiAddToSpace: `${BASE_URL}/add`,
-    emojiDelete: BASE_URL
+    emojiDelete: BASE_URL_EMOJI
   };
 };

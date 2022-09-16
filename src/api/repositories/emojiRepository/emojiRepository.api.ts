@@ -77,7 +77,7 @@ export const assignEmojiToSpace: RequestInterface<
 };
 
 export const deleteEmoji: RequestInterface<DeleteEmojiRequest, DeleteEmojiResponse> = (options) => {
-  const {emojiId, spaceId, order, ...restOptions} = options;
+  const {emojiId, spaceId, ...restOptions} = options;
 
   const url = emojiRepositoryEndpoints().emojiDelete;
 
@@ -85,8 +85,7 @@ export const deleteEmoji: RequestInterface<DeleteEmojiRequest, DeleteEmojiRespon
     ...restOptions,
     data: {
       emojiId,
-      spaceId,
-      order
+      worldId: spaceId
     }
   };
   return request.delete(url, requestOptions);

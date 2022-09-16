@@ -60,6 +60,5 @@ export interface AssignEmojiToSpaceResponse extends Array<EmojiConfigItemInterfa
 export interface DeleteEmojiRequest {
   emojiId: string;
   spaceId: string;
-  order: number;
 }
 export interface DeleteEmojiResponse {}
