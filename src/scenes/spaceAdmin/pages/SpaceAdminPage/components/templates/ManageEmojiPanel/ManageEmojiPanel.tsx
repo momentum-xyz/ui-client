@@ -6,7 +6,7 @@ import {Button, SectionPanel, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {EmojiItem} from 'scenes/widgets/pages/EmojiWidget/components';
 
-import {UploadEmojiDialog} from '../../organisms';
+import {UploadEmojiDialog, DeleteEmojiDialog} from '../../organisms';
 
 import * as styled from './ManageEmojiPanel.styled';
 
@@ -22,6 +22,7 @@ const ManageEmojiPanel: FC = () => {
   const {t} = useTranslation();
 
   const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   console.log('EMOJIS', emojiDetailsList);
   if (!space?.id) {
@@ -29,9 +30,8 @@ const ManageEmojiPanel: FC = () => {
   }
   const spaceEmoji = emojiDetailsList.find((emoji) => emoji.spaceId === space.id);
 
-  const handleClickUpload = () => {
-    setShowUploadDialog(true);
-  };
+  const handleClickUpload = () => setShowUploadDialog(true);
+  const handleCancelUpload = () => setShowUploadDialog(false);
 
   const handleConfirmUpload = async (image: File, name: string) => {
     if (spaceEmoji) {
@@ -40,20 +40,14 @@ const ManageEmojiPanel: FC = () => {
     await uploadEmojiToSpace(space.id, image, name);
     setShowUploadDialog(false);
   };
-  const handleCancelUpload = () => {
-    setShowUploadDialog(false);
-  };
 
-  const handleDelete = async () => {
-    // TODO add are-you-sure dialog
+  const handleClickDelete = () => setShowDeleteDialog(true);
+  const handleCancelDelete = () => setShowDeleteDialog(false);
+
+  const handleConfirmDelete = async () => {
     if (spaceEmoji) {
-      try {
-        await deleteEmoji(space.id, spaceEmoji.id);
-        // TODO add toast success
-      } catch (err) {
-        // TODO add error toast
-        console.log('Error deleting emoji', err);
-      }
+      await deleteEmoji(space.id, spaceEmoji.id);
+      setShowDeleteDialog(false);
     }
   };
 
@@ -61,6 +55,9 @@ const ManageEmojiPanel: FC = () => {
     <>
       {showUploadDialog && (
         <UploadEmojiDialog onSave={handleConfirmUpload} onClose={handleCancelUpload} />
+      )}
+      {showDeleteDialog && (
+        <DeleteEmojiDialog onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
       )}
       <SectionPanel title={t('spaceAdmin.manageEmoji.title')}>
         <styled.Body>
@@ -76,9 +73,6 @@ const ManageEmojiPanel: FC = () => {
                 }}
               />
               <Text text={`(${spaceEmoji.name})`} size="s" />
-              {/* <styled.EmojiPreviewHolder>
-                <styled.EmojiPreview src={}
-              </styled.EmojiPreviewHolder> */}
             </styled.UploadedWidgetPreview>
           )}
           <styled.ActionBar>
@@ -86,7 +80,7 @@ const ManageEmojiPanel: FC = () => {
               <Button
                 label={t('spaceAdmin.manageEmoji.deleteEmoji')}
                 variant="danger"
-                onClick={handleDelete}
+                onClick={handleClickDelete}
               />
             )}
             <Button label={t('spaceAdmin.manageEmoji.uploadEmoji')} onClick={handleClickUpload} />

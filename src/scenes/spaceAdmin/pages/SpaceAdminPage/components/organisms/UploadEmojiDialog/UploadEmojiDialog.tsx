@@ -49,8 +49,7 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
           isDanger
           showCloseButton
           headerIconName="alert"
-          // title={t('titles.alert')}
-          text={t('spaceAdmin.manageEmoji.uploadDialog.title')}
+          text={t('spaceAdmin.manageEmoji.uploadDialog.errorSave')}
         />
       );
     } finally {
