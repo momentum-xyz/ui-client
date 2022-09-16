@@ -34,6 +34,7 @@ interface EmojiConfigItemInterface {
   createdAt: string | null;
   updatedAt: string | null;
   spaceId: string;
+  spaceName?: string;
   order: number;
 }
 export interface EmojiConfigResponse extends Array<EmojiConfigItemInterface> {}
