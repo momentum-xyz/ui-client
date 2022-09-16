@@ -40,6 +40,10 @@ export const Actions = styled.div`
   flex-grow: 1;
 `;
 
+export const Spacer = styled.div`
+  display: flex;
+`;
+
 export const StageModeMessageText = styled(Text)`
   white-space: pre-line;
   opacity: 50%;
@@ -51,14 +55,4 @@ export const StageModeContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-`;
-
-export const StatsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-export const StageControlCntainer = styled.div`
-  flex-shrink: 0;
 `;
