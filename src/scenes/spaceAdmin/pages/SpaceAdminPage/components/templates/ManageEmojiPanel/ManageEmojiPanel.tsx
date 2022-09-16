@@ -19,35 +19,26 @@ const ManageEmojiPanel: FC = () => {
       spaceManagerStore: {space}
     }
   } = useStore();
+  const {t} = useTranslation();
 
   const [showUploadDialog, setShowUploadDialog] = useState(false);
 
   console.log('EMOJIS', emojiDetailsList);
-  const spaceEmoji = space?.id
-    ? emojiDetailsList.find((emoji) => emoji.spaceId === space.id)
-    : null;
-
-  const {t} = useTranslation();
+  if (!space?.id) {
+    return null;
+  }
+  const spaceEmoji = emojiDetailsList.find((emoji) => emoji.spaceId === space.id);
 
   const handleClickUpload = () => {
     setShowUploadDialog(true);
   };
 
   const handleConfirmUpload = async (image: File, name: string) => {
-    try {
-      if (!space?.id) {
-        // WTF
-        return;
-      }
-      if (spaceEmoji) {
-        await deleteEmoji(space.id, spaceEmoji.id, spaceEmoji.order);
-      }
-      await uploadEmojiToSpace(space.id, image, name);
-      setShowUploadDialog(false);
-      // TODO toast confirmation
-    } catch (err) {
-      // todo err toast
+    if (spaceEmoji) {
+      await deleteEmoji(space.id, spaceEmoji.id, spaceEmoji.order);
     }
+    await uploadEmojiToSpace(space.id, image, name);
+    setShowUploadDialog(false);
   };
   const handleCancelUpload = () => {
     setShowUploadDialog(false);
@@ -55,7 +46,7 @@ const ManageEmojiPanel: FC = () => {
 
   const handleDelete = async () => {
     // TODO add are-you-sure dialog
-    if (spaceEmoji && space?.id) {
+    if (spaceEmoji) {
       try {
         await deleteEmoji(space.id, spaceEmoji.id, spaceEmoji.order);
         // TODO add toast success

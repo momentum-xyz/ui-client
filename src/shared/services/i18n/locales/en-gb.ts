@@ -671,7 +671,16 @@ export const enGb = {
         text2: 'An emoji must be at least 520 x 520 pixels; and should be uploaded in a PNG format',
         yourUploadedEmoji: 'Your uploaded Emoji:',
         deleteEmoji: 'Delete Emoji',
-        uploadEmoji: 'Upload EMoji'
+        uploadEmoji: 'Upload EMoji',
+        uploadDialog: {
+          title: 'Upload your emoji',
+          emojiName: 'Name',
+          errorMissingName: 'Please enter a name for your emoji',
+          selectImage: 'Select Image',
+          changeImage: 'Change Image',
+          confirmButton: 'Save',
+          errorSave: 'Could not save emoji. Please try again later'
+        }
       },
       users: {
         title: 'Space Members',
