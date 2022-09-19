@@ -18,12 +18,10 @@ const EmojiStore = types
   )
   .actions((self) => ({
     fetchAll: flow(function* () {
-      const response: EmojiConfigResponse = yield self.fetchSpaceEmojisRequest.send(
+      const data: EmojiConfigResponse = yield self.fetchSpaceEmojisRequest.send(
         api.emojiRepository.fetchSpaceEmojiConfig,
         {worldId: self.worldId}
       );
-
-      const data = response.sort((l, r) => l.order - r.order);
 
       self.emojiDetailsList = cast(data);
     })
