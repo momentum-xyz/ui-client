@@ -1,7 +1,7 @@
 import {types, cast, flow} from 'mobx-state-tree';
 
 import {DialogModel, RequestModel, ResetModel, EmojiDetails} from 'core/models';
-import {api, AssignEmojiToSpaceResponse, EmojiConfigResponse, UploadEmojiResponse} from 'api';
+import {api, WorldEmojiesResponse} from 'api';
 
 const EmojiStore = types
   .compose(
@@ -10,16 +10,13 @@ const EmojiStore = types
       worldId: types.optional(types.string, ''),
       selectionDialog: types.optional(DialogModel, {}),
       emojiDetailsList: types.optional(types.array(EmojiDetails), []),
-      fetchSpaceEmojisRequest: types.optional(RequestModel, {}),
-      uploadEmojisRequest: types.optional(RequestModel, {}),
-      assignEmojisToSpaceRequest: types.optional(RequestModel, {}),
-      deleteEmojiRequest: types.optional(RequestModel, {})
+      fetchSpaceEmojisRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
     fetchAll: flow(function* () {
-      const data: EmojiConfigResponse = yield self.fetchSpaceEmojisRequest.send(
-        api.emojiRepository.fetchSpaceEmojiConfig,
+      const data: WorldEmojiesResponse = yield self.fetchSpaceEmojisRequest.send(
+        api.emojiRepository.fetchWorldEmojies,
         {worldId: self.worldId}
       );
 
@@ -29,32 +26,6 @@ const EmojiStore = types
   .actions((self) => ({
     init: flow(function* (worldId) {
       self.worldId = worldId;
-
-      yield self.fetchAll();
-    }),
-    uploadEmojiToSpace: flow(function* (spaceId: string, file: File, name: string) {
-      const addEmojiResponse: UploadEmojiResponse = yield self.uploadEmojisRequest.send(
-        api.emojiRepository.uploadEmojiConfig,
-        {spaceId, file, name}
-      );
-
-      const {emojiId} = addEmojiResponse;
-
-      const assignedSpaceEmojiResponse: AssignEmojiToSpaceResponse =
-        yield self.assignEmojisToSpaceRequest.send(api.emojiRepository.assignEmojiToSpace, {
-          spaceId,
-          emojiId
-        });
-
-      yield self.fetchAll();
-
-      return assignedSpaceEmojiResponse;
-    }),
-    deleteEmoji: flow(function* (spaceId: string, emojiId: string) {
-      yield self.deleteEmojiRequest.send(api.emojiRepository.deleteEmoji, {
-        emojiId,
-        spaceId
-      });
 
       yield self.fetchAll();
     })

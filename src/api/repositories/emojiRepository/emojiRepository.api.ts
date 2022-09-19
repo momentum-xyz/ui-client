@@ -10,28 +10,30 @@ import {
   AssignEmojiToSpaceResponse,
   DeleteEmojiRequest,
   DeleteEmojiResponse,
-  EmojiConfigLegacyResponse,
-  EmojiConfigRequest,
-  EmojiConfigResponse,
+  WorldEmojiesLegacyResponse,
+  WorldEmojiesRequest,
+  WorldEmojiesResponse,
   UploadEmojiRequest,
-  UploadEmojiResponse
+  UploadEmojiResponse,
+  SpaceEmojiesRequest,
+  SpaceEmojiesResponse
 } from './emojiRepository.api.types';
 
-export const fetchSpaceEmojiConfig: RequestInterface<
-  EmojiConfigRequest,
-  EmojiConfigResponse
+export const fetchWorldEmojies: RequestInterface<
+  WorldEmojiesRequest,
+  WorldEmojiesResponse
 > = async (options) => {
   const {worldId, ...restOptions} = options;
 
-  const url = generatePath(emojiRepositoryEndpoints().spaceEmojiConfig, {worldId});
+  const url = generatePath(emojiRepositoryEndpoints().worldEmojiList, {worldId});
 
   const resp = await request.get(url, {...restOptions, params: {children: true}});
 
   // temp support for legacy format
   // FIXME remove after October 2022
-  const testSample = (resp.data as EmojiConfigLegacyResponse)[0];
+  const testSample = (resp.data as WorldEmojiesLegacyResponse)[0];
   if (typeof testSample?.emoji === 'object') {
-    resp.data = (resp.data as EmojiConfigLegacyResponse).map(
+    resp.data = (resp.data as WorldEmojiesLegacyResponse).map(
       ({emoji, emojiId, order, spaceId}) => ({
         ...emoji,
         id: bytesToUuid(emojiId.data),
@@ -44,9 +46,33 @@ export const fetchSpaceEmojiConfig: RequestInterface<
   return resp;
 };
 
-export const uploadEmojiConfig: RequestInterface<UploadEmojiRequest, UploadEmojiResponse> = (
+export const fetchSpaceEmoji: RequestInterface<SpaceEmojiesRequest, SpaceEmojiesResponse> = async (
   options
 ) => {
+  const {spaceId, ...restOptions} = options;
+
+  const url = generatePath(emojiRepositoryEndpoints().spaceEmojiList, {spaceId});
+
+  const resp = await request.get(url, {...restOptions, params: {children: true}});
+
+  // temp support for legacy format
+  // FIXME remove after October 2022
+  const testSample = (resp.data as WorldEmojiesLegacyResponse)[0];
+  if (typeof testSample?.emoji === 'object') {
+    resp.data = (resp.data as WorldEmojiesLegacyResponse).map(
+      ({emoji, emojiId, order, spaceId}) => ({
+        ...emoji,
+        id: bytesToUuid(emojiId.data),
+        order,
+        spaceId: bytesToUuid(spaceId.data)
+      })
+    );
+  }
+
+  return resp;
+};
+
+export const uploadEmoji: RequestInterface<UploadEmojiRequest, UploadEmojiResponse> = (options) => {
   const {spaceId, file, name, headers, ...restOptions} = options;
   const url = generatePath(emojiRepositoryEndpoints().emojiUpload, {spaceId});
 

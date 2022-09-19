@@ -3,18 +3,22 @@ import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
+import {observer} from 'mobx-react-lite';
 
 import {Dialog, FileUploader, Input, ToastContent} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './UploadEmojiDialog.styled';
 
 interface PropsInterface {
-  fileType?: string;
-  onSave: (file: File, name: string) => Promise<void>;
-  onClose: () => void;
+  spaceId: string;
+  existingEmojiId: string | undefined;
 }
 
-const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClose}) => {
+const UploadEmojiDialog: FC<PropsInterface> = ({spaceId, existingEmojiId}) => {
+  const {uploadDialog, isUploadPending, uploadEmojiToSpace, deleteEmoji} =
+    useStore().spaceAdminStore.manageEmojiStore;
+
   const theme = useTheme();
   const {t} = useTranslation();
 
@@ -23,8 +27,6 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
 
   const [image, setImage] = useState<File | null>(null);
   const [imageError, setImageError] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (!image) {
@@ -39,9 +41,12 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
     try {
       setImageError(false);
       setNameError(false);
-      setIsLoading(true);
 
-      await onSave(image, name);
+      if (existingEmojiId) {
+        await deleteEmoji(spaceId, existingEmojiId);
+      }
+      await uploadEmojiToSpace(spaceId, image, name);
+      uploadDialog.close();
     } catch (err) {
       console.error(err);
       toast.error(
@@ -52,8 +57,6 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
           text={t('spaceAdmin.manageEmoji.uploadDialog.errorSave')}
         />
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -62,11 +65,11 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
       title={t('spaceAdmin.manageEmoji.uploadDialog.title')}
       hasBorder
       showCloseButton
-      onClose={onClose}
+      onClose={uploadDialog.close}
       approveInfo={{
         title: t('spaceAdmin.manageEmoji.uploadDialog.confirmButton'),
         onClick: handleSubmit,
-        disabled: isLoading
+        disabled: isUploadPending
       }}
     >
       <styled.DialogContainer>
@@ -76,7 +79,7 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
           onChange={setName}
           errorMessage={t('spaceAdmin.manageEmoji.uploadDialog.errorMissingName')}
           isError={nameError}
-          disabled={isLoading}
+          disabled={isUploadPending}
         />
         <styled.ImageUploadContainer className={cn(imageError && 'error')}>
           {!!image && (
@@ -108,4 +111,4 @@ const UploadEmojiDialog: FC<PropsInterface> = ({fileType = '.png', onSave, onClo
   );
 };
 
-export default UploadEmojiDialog;
+export default observer(UploadEmojiDialog);

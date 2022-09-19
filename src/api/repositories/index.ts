@@ -21,3 +21,4 @@ export * from './spaceIntegrationsRepository';
 export * from './textChatRepository';
 export * from './worldBuilderRepository';
 export * from './attendeesRepository';
+export * from './emojiRepository';

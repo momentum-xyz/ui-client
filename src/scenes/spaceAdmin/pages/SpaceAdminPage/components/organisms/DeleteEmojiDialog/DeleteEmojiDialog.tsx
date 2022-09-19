@@ -1,25 +1,26 @@
-import {FC, useState} from 'react';
+import {FC} from 'react';
+import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
-import {useTheme} from 'styled-components';
 
+import {useStore} from 'shared/hooks';
 import {Dialog, Text, ToastContent} from 'ui-kit';
 
 interface PropsInterface {
-  onConfirm: () => Promise<void>;
-  onCancel: () => void;
+  spaceId: string;
+  emojiId: string;
 }
 
-const DeleteEmojiDialog: FC<PropsInterface> = ({onConfirm, onCancel}) => {
+const DeleteEmojiDialog: FC<PropsInterface> = ({spaceId, emojiId}) => {
+  const {deleteDialog, isDeletePending, deleteEmoji} = useStore().spaceAdminStore.manageEmojiStore;
+
   const theme = useTheme();
   const {t} = useTranslation();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleConfirm = async () => {
     try {
-      setIsLoading(true);
-      await onConfirm();
+      await deleteEmoji(spaceId, emojiId);
+      deleteDialog.close();
     } catch (err) {
       console.error(err);
       toast.error(
@@ -30,8 +31,6 @@ const DeleteEmojiDialog: FC<PropsInterface> = ({onConfirm, onCancel}) => {
           text={t('spaceAdmin.manageEmoji.deleteDialog.errorDelete')}
         />
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -45,13 +44,13 @@ const DeleteEmojiDialog: FC<PropsInterface> = ({onConfirm, onCancel}) => {
         onClick: handleConfirm,
         variant: 'danger',
         icon: 'bin',
-        disabled: isLoading
+        disabled: isDeletePending
       }}
       declineInfo={{
         title: t('spaceAdmin.manageEmoji.deleteDialog.no'),
-        onClick: onCancel,
+        onClick: deleteDialog.close,
         variant: 'primary',
-        disabled: isLoading
+        disabled: isDeletePending
       }}
     >
       <Text text={t('spaceAdmin.manageEmoji.deleteDialog.text')} size="s" />

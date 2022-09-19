@@ -1,4 +1,4 @@
-import {FC, useCallback} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
@@ -14,10 +14,14 @@ interface PropsInterface {
 
 const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
   const {widgetStore, sessionStore} = useStore();
-  const {emojiDetailsList} = widgetStore.emojiStore;
+  const {emojiDetailsList, fetchAll} = widgetStore.emojiStore;
   const {profile} = sessionStore;
 
   const {t} = useTranslation();
+
+  useEffect(() => {
+    fetchAll();
+  }, [fetchAll]);
 
   const userUUID = profile?.uuid;
   const userAvatarSrc = profile?.avatarSrc || '';

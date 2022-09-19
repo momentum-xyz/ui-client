@@ -1,4 +1,4 @@
-export interface EmojiConfigRequest {
+export interface WorldEmojiesRequest {
   worldId: string;
 }
 
@@ -24,7 +24,7 @@ interface EmojiConfigItemLegacyInterface {
   };
   order: number;
 }
-export interface EmojiConfigLegacyResponse extends Array<EmojiConfigItemLegacyInterface> {}
+export interface WorldEmojiesLegacyResponse extends Array<EmojiConfigItemLegacyInterface> {}
 
 interface EmojiConfigItemInterface {
   id: string;
@@ -37,13 +37,22 @@ interface EmojiConfigItemInterface {
   spaceName?: string;
   order: number;
 }
-export interface EmojiConfigResponse extends Array<EmojiConfigItemInterface> {}
+export interface WorldEmojiesResponse extends Array<EmojiConfigItemInterface> {}
+
+export interface SpaceEmojiesRequest {
+  spaceId: string;
+}
+
+export interface SpaceEmojiesLegacyResponse extends Array<EmojiConfigItemLegacyInterface> {}
+
+export interface SpaceEmojiesResponse extends Array<EmojiConfigItemInterface> {}
 
 export interface UploadEmojiRequest {
   spaceId: string;
   file: File;
   name: string;
 }
+
 export interface UploadEmojiResponse {
   hash: string;
   emojiId: string;
@@ -61,4 +70,5 @@ export interface DeleteEmojiRequest {
   emojiId: string;
   spaceId: string;
 }
+
 export interface DeleteEmojiResponse {}

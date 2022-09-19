@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useState} from 'react';
+import {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {Button, Emoji, SectionPanel, Text} from 'ui-kit';
@@ -11,51 +11,61 @@ import * as styled from './ManageEmojiPanel.styled';
 
 const ManageEmojiPanel: FC = () => {
   const {
-    widgetStore: {
-      emojiStore: {emojiDetailsList, uploadEmojiToSpace, deleteEmoji}
-    },
     spaceAdminStore: {
-      spaceManagerStore: {space}
+      spaceManagerStore: {space},
+      manageEmojiStore: {emojiDetailsList, fetchSpaceEmojies, uploadDialog, deleteDialog}
     }
   } = useStore();
+
   const {t} = useTranslation();
 
-  const [showUploadDialog, setShowUploadDialog] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  useEffect(() => {
+    if (space?.id) {
+      fetchSpaceEmojies(space.id);
+    }
+  }, [space?.id, fetchSpaceEmojies]);
 
   if (!space?.id) {
     return null;
   }
   const spaceEmoji = emojiDetailsList.find((emoji) => emoji.spaceId === space.id);
 
-  const handleClickUpload = () => setShowUploadDialog(true);
-  const handleCancelUpload = () => setShowUploadDialog(false);
+  // const handleClickUpload = () => setShowUploadDialog(true);
+  // const handleCancelUpload = () => setShowUploadDialog(false);
 
-  const handleConfirmUpload = async (image: File, name: string) => {
-    if (spaceEmoji) {
-      await deleteEmoji(space.id, spaceEmoji.id);
-    }
-    await uploadEmojiToSpace(space.id, image, name);
-    setShowUploadDialog(false);
-  };
+  // const handleConfirmUpload = async (image: File, name: string) => {
+  //   if (spaceEmoji) {
+  //     await deleteEmoji(space.id, spaceEmoji.id);
+  //   }
+  //   await uploadEmojiToSpace(space.id, image, name);
+  //   setShowUploadDialog(false);
+  // };
 
-  const handleClickDelete = () => setShowDeleteDialog(true);
-  const handleCancelDelete = () => setShowDeleteDialog(false);
+  // const handleClickDelete = () => setShowDeleteDialog(true);
+  // const handleCancelDelete = () => setShowDeleteDialog(false);
 
-  const handleConfirmDelete = async () => {
-    if (spaceEmoji) {
-      await deleteEmoji(space.id, spaceEmoji.id);
-      setShowDeleteDialog(false);
-    }
-  };
+  // const handleConfirmDelete = async () => {
+  //   if (spaceEmoji) {
+  //     await deleteEmoji(space.id, spaceEmoji.id);
+  //     setShowDeleteDialog(false);
+  //   }
+  // };
 
   return (
     <>
-      {showUploadDialog && (
-        <UploadEmojiDialog onSave={handleConfirmUpload} onClose={handleCancelUpload} />
+      {uploadDialog.isOpen && (
+        <UploadEmojiDialog
+          spaceId={space.id}
+          existingEmojiId={spaceEmoji?.id}
+          // onSave={handleConfirmUpload} onClose={uploadDialog.close}
+        />
       )}
-      {showDeleteDialog && (
-        <DeleteEmojiDialog onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
+      {deleteDialog.isOpen && !!spaceEmoji && (
+        <DeleteEmojiDialog
+          spaceId={space.id}
+          emojiId={spaceEmoji.id}
+          // onConfirm={handleConfirmDelete} onCancel={handleCancelDelete}
+        />
       )}
       <SectionPanel title={t('spaceAdmin.manageEmoji.title')}>
         <styled.Body>
@@ -80,10 +90,10 @@ const ManageEmojiPanel: FC = () => {
               <Button
                 label={t('spaceAdmin.manageEmoji.deleteEmoji')}
                 variant="danger"
-                onClick={handleClickDelete}
+                onClick={deleteDialog.open}
               />
             )}
-            <Button label={t('spaceAdmin.manageEmoji.uploadEmoji')} onClick={handleClickUpload} />
+            <Button label={t('spaceAdmin.manageEmoji.uploadEmoji')} onClick={uploadDialog.open} />
           </styled.ActionBar>
         </styled.Body>
       </SectionPanel>
