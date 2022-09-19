@@ -60,7 +60,9 @@ const ManageEmojiPanel: FC = () => {
       <SectionPanel title={t('spaceAdmin.manageEmoji.title')}>
         <styled.Body>
           <Text text={t('spaceAdmin.manageEmoji.text1')} size="s" align="left" />
-          <Text text={t('spaceAdmin.manageEmoji.text2')} size="s" align="left" />
+          {!spaceEmoji && (
+            <Text text={t('spaceAdmin.manageEmoji.noEmojiUploaded')} size="s" align="left" />
+          )}
           {!!spaceEmoji && (
             <styled.UploadedWidgetPreview>
               <Text text={t('spaceAdmin.manageEmoji.yourUploadedEmoji')} size="s" align="left" />

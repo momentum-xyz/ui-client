@@ -667,8 +667,8 @@ export const enGb = {
       manageEmoji: {
         title: 'Emoji',
         text1:
-          'Add a new emoji to the emoji’s list. Visitors to your space can use this emoji while they are here.',
-        text2: 'An emoji must be at least 520 x 520 pixels; and should be uploaded in a PNG format',
+          'To upload an emoji to the Emoji Palette, upload a static PNG file which is 512 x 512 pixels in size or greater. Transparency is supported. Once uploaded this emoji will be usable all over the metaverse by anyone.',
+        noEmojiUploaded: 'This space has no emoji uploaded yet.',
         yourUploadedEmoji: 'Your uploaded Emoji:',
         deleteEmoji: 'Delete Emoji',
         uploadEmoji: 'Upload EMoji',
