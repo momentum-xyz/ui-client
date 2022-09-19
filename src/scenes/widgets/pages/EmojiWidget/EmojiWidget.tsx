@@ -4,10 +4,9 @@ import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';
-import {PanelLayout} from 'ui-kit';
+import {PanelLayout, Emoji} from 'ui-kit';
 
 import * as styled from './EmojiWidget.styled';
-import {EmojiItem} from './components/';
 
 interface PropsInterface {
   onClose: () => void;
@@ -39,11 +38,7 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
       <styled.Container>
         <styled.EmojiList>
           {emojiDetailsList.map((em) => (
-            <EmojiItem
-              emoji={em}
-              onClick={() => handleEmojiClick(em.id, em.unityUrl)}
-              key={em.id}
-            />
+            <Emoji emoji={em} onClick={() => handleEmojiClick(em.id, em.unityUrl)} key={em.id} />
           ))}
         </styled.EmojiList>
       </styled.Container>

@@ -2,9 +2,8 @@ import {observer} from 'mobx-react-lite';
 import {FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {Button, SectionPanel, Text} from 'ui-kit';
+import {Button, Emoji, SectionPanel, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {EmojiItem} from 'scenes/widgets/pages/EmojiWidget/components';
 
 import {UploadEmojiDialog, DeleteEmojiDialog} from '../../organisms';
 
@@ -65,7 +64,7 @@ const ManageEmojiPanel: FC = () => {
           {!!spaceEmoji && (
             <styled.UploadedWidgetPreview>
               <Text text={t('spaceAdmin.manageEmoji.yourUploadedEmoji')} size="s" align="left" />
-              <EmojiItem
+              <Emoji
                 emoji={spaceEmoji}
                 onClick={() => {
                   // TODO send it to animations panel?
