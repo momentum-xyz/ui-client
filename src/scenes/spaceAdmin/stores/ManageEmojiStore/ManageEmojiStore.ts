@@ -19,7 +19,7 @@ const ManageEmojiStore = types
   .actions((self) => ({
     fetchSpaceEmojies: flow(function* (spaceId: string) {
       const data: WorldEmojiesResponse = yield self.fetchSpaceEmojisRequest.send(
-        api.emojiRepository.fetchSpaceEmoji,
+        api.spaceEmojiRepository.fetchSpaceEmoji,
         {spaceId}
       );
 
@@ -36,7 +36,7 @@ const ManageEmojiStore = types
       const {emojiId} = addEmojiResponse;
 
       const assignedSpaceEmojiResponse: AssignEmojiToSpaceResponse =
-        yield self.assignEmojisToSpaceRequest.send(api.emojiRepository.assignEmojiToSpace, {
+        yield self.assignEmojisToSpaceRequest.send(api.spaceEmojiRepository.assignEmojiToSpace, {
           spaceId,
           emojiId
         });
