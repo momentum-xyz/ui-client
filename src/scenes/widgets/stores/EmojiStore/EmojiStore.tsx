@@ -16,7 +16,7 @@ const EmojiStore = types
   .actions((self) => ({
     fetchAll: flow(function* () {
       const data: WorldEmojiesResponse = yield self.fetchSpaceEmojisRequest.send(
-        api.emojiRepository.fetchWorldEmojies,
+        api.spaceEmojiRepository.fetchWorldEmojies,
         {worldId: self.worldId}
       );
 

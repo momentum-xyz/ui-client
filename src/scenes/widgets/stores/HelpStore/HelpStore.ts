@@ -42,7 +42,7 @@ const HelpStore = types
     },
     initEmoji: flow(function* (worldId: string) {
       const response: WorldEmojiesResponse = yield self.emojiRequest.send(
-        api.emojiRepository.fetchWorldEmojies,
+        api.spaceEmojiRepository.fetchWorldEmojies,
         {worldId}
       );
 
