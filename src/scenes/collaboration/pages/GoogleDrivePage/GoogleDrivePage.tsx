@@ -82,7 +82,7 @@ const GoogleDrivePage: FC = () => {
         {space.isAdmin && !!googleDocument?.data?.url && (
           <>
             <Button label={t('actions.changeDocument')} variant="primary" onClick={pickDocument} />
-            <Button label={t('actions.cancel')} variant="danger" onClick={closeDocument} />
+            <Button label={t('actions.close')} variant="danger" onClick={closeDocument} />
           </>
         )}
       </SpaceTopBar>
