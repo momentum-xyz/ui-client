@@ -19,8 +19,8 @@ interface PropsInterface {
 const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {textChatStore, space} = collaborationStore;
+  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
+  const {textChatStore, space, screenShareStore} = collaborationStore;
   const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
@@ -45,7 +45,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         />
       );
     }
-  }, [agoraStore, showSuccessStageModeRequestSubmissionToast, t]);
+  }, [agoraStageModeStore, showSuccessStageModeRequestSubmissionToast, t]);
 
   if (!space) {
     return null;
@@ -56,7 +56,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('labels.stageMode')}
-        isSpaceFavorite={favoriteStore.isSpaceFavorite}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
         isAdmin={space.isAdmin}
         spaceId={space.id}
         isChatOpen={textChatStore.textChatDialog.isOpen}
@@ -66,32 +66,36 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         onLeave={onLeaveMeeting}
       >
         <styled.Actions>
+          <styled.Spacer />
           {agoraStore.isStageMode && <StageModeStats />}
-
           {agoraStore.isStageMode &&
-            !agoraStageModeStore.requestWasMadeToGoOnStage &&
-            (agoraStageModeStore.isOnStage ? (
-              <Button
-                label={t('actions.leaveStage')}
-                variant="danger"
-                onClick={async () => {
-                  await userDevicesStore.mute();
-                  await userDevicesStore.turnOffCamera();
-
-                  await agoraStageModeStore.leaveStage();
-                }}
-              />
-            ) : (
+            agoraStageModeStore.canEnterStage &&
+            !agoraStageModeStore.requestWasMadeToGoOnStage && (
               <Button
                 label={t('actions.goOnStage')}
                 variant="primary"
                 onClick={handleUserRequest}
               />
-            ))}
+            )}
+          {agoraStore.isStageMode && agoraStageModeStore.isOnStage && (
+            <Button
+              label={t('actions.leaveStage')}
+              variant="danger"
+              onClick={async () => {
+                await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
+
+                await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
+
+                if (sessionStore.userId === screenShareStore.screenOwnerId) {
+                  agoraScreenShareStore.stopScreenSharing();
+                }
+              }}
+            />
+          )}
           {agoraStore.isStageMode && agoraStageModeStore.requestWasMadeToGoOnStage && (
             <Text text={t('messages.pendingRequestToGoOnStage')} size="m" />
           )}
-          {agoraStore.isStageMode && !agoraStageModeStore.canEnterStage && (
+          {agoraStore.isStageMode && agoraStageModeStore.isStageFull && (
             <Text text={t('messages.stageIsFull')} size="m" />
           )}
         </styled.Actions>

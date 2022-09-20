@@ -12,6 +12,7 @@ export const stageModeRepositoryEndpoints = () => {
     request: `${BASE_URL}/:spaceId/request`,
     requestResponse: `${BASE_URL}/:spaceId/request/response`,
     admitOrKick: `${BASE_URL}/:spaceId/admit-or-kick`,
-    mute: `${BASE_URL}/:spaceId/mute`
+    mute: `${BASE_URL}/:spaceId/mute`,
+    getUsers: `${BASE_URL}/:spaceId/get-users`
   };
 };

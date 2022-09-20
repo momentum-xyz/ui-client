@@ -40,6 +40,10 @@ export const Actions = styled.div`
   flex-grow: 1;
 `;
 
+export const Spacer = styled.div`
+  display: flex;
+`;
+
 export const StageModeMessageText = styled(Text)`
   white-space: pre-line;
   opacity: 50%;

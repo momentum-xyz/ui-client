@@ -77,7 +77,7 @@ const MiroBoardPage: FC = () => {
         {space.isAdmin && !!miroBoard?.data?.accessLink && (
           <>
             <Button label={t('actions.changeBoard')} variant="primary" onClick={pickBoard} />
-            <Button label={t('actions.cancel')} variant="danger" onClick={closeBoard} />
+            <Button label={t('actions.close')} variant="danger" onClick={closeBoard} />
           </>
         )}
       </SpaceTopBar>

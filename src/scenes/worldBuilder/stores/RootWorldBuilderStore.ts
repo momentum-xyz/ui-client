@@ -1,7 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
 
 import {RequestModel, ResetModel} from 'core/models';
-import {api} from 'api';
+import {api, CreateWorldResponse} from 'api';
 
 import {WorldBuilderNameStore} from './WorldBuilderNameStore';
 import {WorldBuilderTemplatesStore} from './WorldBuilderTemplatesStore';
@@ -14,7 +14,8 @@ const RootWorldBuilderStore = types
       worldBuilderTemplatesStore: types.optional(WorldBuilderTemplatesStore, {}),
       haveAccess: types.maybe(types.boolean),
 
-      permissionsRequest: types.optional(RequestModel, {})
+      permissionsRequest: types.optional(RequestModel, {}),
+      createWorldRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -30,11 +31,42 @@ const RootWorldBuilderStore = types
       }
 
       self.haveAccess = false;
+    }),
+    generateWorld: flow(function* () {
+      if (
+        !self.worldBuilderTemplatesStore.selectedTemplate ||
+        !self.worldBuilderNameStore.name ||
+        !self.worldBuilderNameStore.subdomain
+      ) {
+        return;
+      }
+
+      const response: CreateWorldResponse = yield self.createWorldRequest.send(
+        api.worldBuilderRepository.createWorld,
+        {
+          templateId: self.worldBuilderTemplatesStore.selectedTemplate.id,
+          domain: self.worldBuilderNameStore.subdomain,
+          worldName: self.worldBuilderNameStore.name
+        }
+      );
+
+      return response?.builder_url;
     })
   }))
   .views((self) => ({
     get canAccessPages(): boolean {
       return self.permissionsRequest.isPending || self.haveAccess === false;
+    },
+    get canGenerateWorld(): boolean {
+      if (
+        !self.worldBuilderTemplatesStore.selectedTemplate ||
+        !self.worldBuilderNameStore.name ||
+        !self.worldBuilderNameStore.subdomain
+      ) {
+        return false;
+      }
+
+      return !(self.createWorldRequest.isPending || self.createWorldRequest.isDone);
     }
   }));
 

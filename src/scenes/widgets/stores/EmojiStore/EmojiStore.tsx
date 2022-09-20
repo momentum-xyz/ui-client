@@ -1,36 +1,35 @@
 import {types, cast, flow} from 'mobx-state-tree';
 
 import {DialogModel, RequestModel, ResetModel, EmojiDetails} from 'core/models';
-import {api, EmojiConfigResponse} from 'api';
-import {bytesToUuid} from 'core/utils';
+import {api, WorldEmojiesResponse} from 'api';
 
 const EmojiStore = types
   .compose(
     ResetModel,
     types.model('EmojiStore', {
+      worldId: types.optional(types.string, ''),
       selectionDialog: types.optional(DialogModel, {}),
       emojiDetailsList: types.optional(types.array(EmojiDetails), []),
       fetchSpaceEmojisRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    init: flow(function* (worldId: string) {
-      const response: EmojiConfigResponse = yield self.fetchSpaceEmojisRequest.send(
-        api.emojiRepository.fetchSpaceEmojiConfig,
-        {worldId}
+    fetchAll: flow(function* () {
+      const data: WorldEmojiesResponse = yield self.fetchSpaceEmojisRequest.send(
+        api.spaceEmojiRepository.fetchWorldEmojies,
+        {worldId: self.worldId}
       );
 
-      const data = response
-        .map(({emoji, emojiId, order, spaceId}) => ({
-          ...emoji,
-          id: bytesToUuid(emojiId.data),
-          order,
-          spaceId: bytesToUuid(spaceId.data)
-        }))
-        .sort((l, r) => l.order - r.order);
+      if (data) {
+        self.emojiDetailsList = cast(data);
+      }
+    })
+  }))
+  .actions((self) => ({
+    init: flow(function* (worldId) {
+      self.worldId = worldId;
 
-      self.emojiDetailsList = cast(data);
+      yield self.fetchAll();
     })
   }));
-
 export {EmojiStore};

@@ -36,7 +36,7 @@ const EventList: FC<PropsInterface> = ({
   onWeblinkClick,
   onShowAttendeesList
 }) => {
-  if (isLoading || events.length === 0) {
+  if (events.length === 0) {
     return (
       <styled.Container className="empty noScrollIndicator">
         {isLoading ? (

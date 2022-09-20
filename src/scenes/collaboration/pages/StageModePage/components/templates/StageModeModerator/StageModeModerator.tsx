@@ -1,7 +1,8 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {generatePath, useHistory} from 'react-router-dom';
 
 import {
   Toggle,
@@ -20,6 +21,7 @@ import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
+import {ROUTES} from 'core/constants';
 
 import {RemoveParticipantFromStageDialog} from './components';
 import * as styled from './StageModeModetator.styled';
@@ -31,8 +33,10 @@ interface PropsInterface {
 const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {space, removeParticipantFromStageDialog, textChatStore} = collaborationStore;
+  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
+  const {space, removeParticipantFromStageDialog, textChatStore, screenShareStore} =
+    collaborationStore;
+  const history = useHistory();
 
   const remoteUserClicked = useCallback(
     async (remoteUser: AgoraRemoteUserInterface, event = StageModeModerationEventEnum.REMOVE) => {
@@ -46,7 +50,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   );
 
   const handleEnterStage = useCallback(async () => {
-    if (!agoraStageModeStore.canEnterStage) {
+    if (agoraStageModeStore.isStageFull) {
       toast.error(
         <ToastContent
           headerIconName="alert"
@@ -64,12 +68,28 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   }, [agoraStageModeStore, userDevicesStore.createLocalTracks]);
 
   const handleLeaveStage = useCallback(async () => {
-    await userDevicesStore.mute();
-    await userDevicesStore.turnOffCamera();
-    await agoraStageModeStore.leaveStage();
-  }, [agoraStageModeStore, userDevicesStore]);
+    await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
-  if (!space) {
+    await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
+
+    if (sessionStore.userId === screenShareStore.screenOwnerId) {
+      agoraScreenShareStore.stopScreenSharing();
+    }
+  }, [
+    agoraScreenShareStore,
+    agoraStageModeStore,
+    screenShareStore.screenOwnerId,
+    sessionStore.userId,
+    userDevicesStore
+  ]);
+
+  useEffect(() => {
+    if (!collaborationStore.isModerator && space?.id) {
+      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: space.id}));
+    }
+  }, [collaborationStore.isModerator, history, space?.id]);
+
+  if (!space || !collaborationStore.isModerator) {
     return null;
   }
 
@@ -108,28 +128,24 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 isMultiline={false}
               />
             </styled.ToggleContainer>
-            {agoraStore.isStageMode &&
-              (agoraStageModeStore.canEnterStage || agoraStageModeStore.isOnStage) && (
-                <>
-                  <StageModeStats />
-                  {agoraStageModeStore.isOnStage ? (
-                    <Button
-                      label={`${t('actions.leaveStage')}?`}
-                      variant="danger"
-                      onClick={handleLeaveStage}
-                      disabled={agoraStageModeStore.isTogglingIsOnStage}
-                    />
-                  ) : (
-                    <Button
-                      label={`${t('actions.goOnStage')}?`}
-                      variant="primary"
-                      onClick={handleEnterStage}
-                      disabled={agoraStageModeStore.isTogglingIsOnStage}
-                    />
-                  )}
-                </>
-              )}
-            {agoraStore.isStageMode && !agoraStageModeStore.canEnterStage && (
+            {agoraStore.isStageMode && <StageModeStats />}
+            {agoraStore.isStageMode && agoraStageModeStore.canEnterStage && (
+              <Button
+                label={`${t('actions.goOnStage')}?`}
+                variant="primary"
+                onClick={handleEnterStage}
+                disabled={agoraStageModeStore.isTogglingIsOnStage}
+              />
+            )}
+            {agoraStore.isStageMode && agoraStageModeStore.isOnStage && (
+              <Button
+                label={`${t('actions.leaveStage')}?`}
+                variant="danger"
+                onClick={handleLeaveStage}
+                disabled={agoraStageModeStore.isTogglingIsOnStage}
+              />
+            )}
+            {agoraStore.isStageMode && agoraStageModeStore.isStageFull && (
               <Text text={t('messages.stageIsFull')} size="s" isMultiline={false} />
             )}
           </styled.ActionsContainer>

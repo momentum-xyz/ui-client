@@ -12,11 +12,11 @@ import * as styled from './StageModeUser.styled';
 export interface PropsInterface {
   user: StageModeUserInterface;
   isModerator: boolean;
-  canEnterStage: boolean;
+  isStageFull: boolean;
   inviteToStage: (userId: string) => Promise<boolean>;
 }
 
-const StageModeUser: FC<PropsInterface> = ({user, isModerator, canEnterStage, inviteToStage}) => {
+const StageModeUser: FC<PropsInterface> = ({user, isModerator, isStageFull, inviteToStage}) => {
   const [isInviteDialogShown, setIsInviteDialogShown] = useState<boolean>(false);
 
   const {t} = useTranslation();
@@ -38,12 +38,12 @@ const StageModeUser: FC<PropsInterface> = ({user, isModerator, canEnterStage, in
 
           {isModerator && (
             <styled.InviteOnStage
-              {...(canEnterStage && {onClick: () => setIsInviteDialogShown(true)})}
+              {...(!isStageFull && {onClick: () => setIsInviteDialogShown(true)})}
               className="invite"
             >
-              {canEnterStage && <IconSvg name="add" size="medium-large" />}
+              {!isStageFull && <IconSvg name="add" size="medium-large" />}
               <Text
-                text={canEnterStage ? t('actions.invite') : t('messages.stageFull')}
+                text={!isStageFull ? t('actions.invite') : t('messages.stageFull')}
                 transform="uppercase"
                 size="xxs"
               />

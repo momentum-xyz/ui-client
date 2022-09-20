@@ -19,8 +19,7 @@ import {api} from 'api';
 import {ModerationEnum, ParticipantRoleEnum, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
-import {StageModeJoinResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
-import {bytesToUuid} from 'core/utils';
+import {StageModeGetUsersResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 
 const AgoraStageModeStore = types
   .compose(
@@ -51,7 +50,8 @@ const AgoraStageModeStore = types
       stageModeMuteRequest: types.optional(RequestModel, {}),
       stageModeKickRequest: types.optional(RequestModel, {}),
       invitationRespondRequest: types.optional(RequestModel, {}),
-      requestRespondRequest: types.optional(RequestModel, {})
+      requestRespondRequest: types.optional(RequestModel, {}),
+      getUsersRequest: types.optional(RequestModel, {})
     })
   )
   .volatile(() => ({
@@ -61,6 +61,11 @@ const AgoraStageModeStore = types
 
       return client;
     })()
+  }))
+  .views((self) => ({
+    get isStageFull(): boolean {
+      return self.speakers.length + (self.isOnStage ? 1 : 0) >= appVariables.MAX_STAGE_USERS;
+    }
   }))
   .views((self) => ({
     // TODO: Remove when whole infostructure is stable for Stage Mode
@@ -77,7 +82,7 @@ const AgoraStageModeStore = types
       return self.spaceId !== undefined;
     },
     get canEnterStage(): boolean {
-      return self.speakers.length + (self.isOnStage ? 1 : 0) < appVariables.MAX_STAGE_USERS;
+      return !self.isOnStage && !self.isStageFull;
     },
     get numberOfSpeakers(): number {
       return self.speakers.length + (self.isOnStage ? 1 : 0);
@@ -163,10 +168,13 @@ const AgoraStageModeStore = types
         return;
       }
 
-      self.backendUsers.push({
-        uid: userId,
-        role: ParticipantRoleEnum.AUDIENCE_MEMBER
-      });
+      self.backendUsers = cast([
+        ...self.backendUsers,
+        {
+          uid: userId,
+          role: ParticipantRoleEnum.AUDIENCE_MEMBER
+        }
+      ]);
     },
     removeBackendUser(userId: string) {
       if (userId === self.userId) {
@@ -363,12 +371,9 @@ const AgoraStageModeStore = types
       self.isJoining = true;
 
       try {
-        const stageModeResponse: StageModeJoinResponse = yield self.joinStageModeRequest.send(
-          api.stageModeRepository.joinStageMode,
-          {
-            spaceId: spaceId
-          }
-        );
+        yield self.joinStageModeRequest.send(api.stageModeRepository.joinStageMode, {
+          spaceId: spaceId
+        });
 
         yield self.client.setClientRole('audience');
 
@@ -383,11 +388,6 @@ const AgoraStageModeStore = types
 
         self.spaceId = spaceId;
 
-        stageModeResponse.spaceIntegrationUsers
-          // TODO: Decide on whether BE or Agora is the source of truth and remove or uncomment
-          // ?.filter((user) => user.data.role !== 'speaker')
-          ?.forEach((user) => self.addBackendUser(bytesToUuid(user.userId.data)));
-
         self.speakers = cast(
           self.client.remoteUsers.map((user) => ({
             uid: user.uid,
@@ -396,6 +396,22 @@ const AgoraStageModeStore = types
             cameraOff: true
           }))
         );
+
+        const getUsersReponse: StageModeGetUsersResponse = yield self.getUsersRequest.send(
+          api.stageModeRepository.fetchUsers,
+          {spaceId: self.spaceId}
+        );
+
+        if (getUsersReponse) {
+          console.info(
+            '[STAGE MODE] getUsers:',
+            getUsersReponse.filter((user) => user.flag === 1).map((user) => user.userId)
+          );
+
+          getUsersReponse
+            .filter((user) => user.flag === 1)
+            .forEach((user) => self.addBackendUser(user.userId));
+        }
       } finally {
         self.isJoining = false;
       }
@@ -429,12 +445,14 @@ const AgoraStageModeStore = types
       self.isOnStage = true;
       self.isTogglingIsOnStage = false;
     }),
-    leaveStage: flow(function* () {
+    leaveStage: flow(function* (cleanupLocalTracks: () => void) {
       self.isTogglingIsOnStage = true;
       self.client.localTracks.forEach((localTrack) => {
         localTrack.stop();
         localTrack.close();
       });
+
+      cleanupLocalTracks();
 
       yield self.client.unpublish();
       yield self.client.setClientRole('audience', {

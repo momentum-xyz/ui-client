@@ -57,21 +57,28 @@ const Collaboration: FC = () => {
       await rootStore.leaveMeetingSpace();
     }
 
-    rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
-      if (e instanceof PrivateSpaceError) {
-        history.push(ROUTES.base);
-        toast.error(
-          <ToastContent
-            isDanger
-            showCloseButton
-            headerIconName="alert"
-            title={t('titles.alert')}
-            text={t('collaboration.spaceIsPrivate')}
-          />
-        );
-      }
-    });
-  }, [agoraStore, history, rootStore, spaceId, t]);
+    rootStore
+      .joinMeetingSpace(spaceId, false)
+      .then(() => {
+        if (!textChatStore.isLoggedOn) {
+          textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
+        }
+      })
+      .catch((e) => {
+        if (e instanceof PrivateSpaceError) {
+          history.push(ROUTES.base);
+          toast.error(
+            <ToastContent
+              isDanger
+              showCloseButton
+              headerIconName="alert"
+              title={t('titles.alert')}
+              text={t('collaboration.spaceIsPrivate')}
+            />
+          );
+        }
+      });
+  }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -85,14 +92,8 @@ const Collaboration: FC = () => {
     textChatStore.countUnreadMessages();
   }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
-  useEffect(() => {
-    if (agoraStore.appId && !textChatStore.isLoggedOn) {
-      textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
-    }
-  }, [agoraStore.appId, sessionStore.userId, spaceId, textChatStore]);
-
   const handleCountdownEnded = useCallback(async () => {
-    if (!agoraStageModeStore.canEnterStage) {
+    if (agoraStageModeStore.isStageFull) {
       toast.error(
         <ToastContent
           headerIconName="alert"

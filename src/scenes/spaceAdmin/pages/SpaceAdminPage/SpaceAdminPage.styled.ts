@@ -21,6 +21,18 @@ export const Body = styled.div`
   gap: 10px;
 `;
 
+export const VerticalSplit = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+`;
+
+export const SmallPanel = styled.div`
+  height: 270px;
+`;
+
 export const NoAccess = styled.div`
   display: flex;
   width: 100%;

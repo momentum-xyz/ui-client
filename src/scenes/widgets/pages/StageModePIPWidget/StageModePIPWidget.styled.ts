@@ -17,6 +17,8 @@ export const Container = styled.div`
   }
 
   z-index: 100;
+  right: 420px;
+  bottom: 60px;
 `;
 
 export const HeaderElement = styled.div`

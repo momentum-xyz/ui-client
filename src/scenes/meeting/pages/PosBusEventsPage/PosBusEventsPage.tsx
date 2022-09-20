@@ -14,7 +14,7 @@ const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
   const {agoraStore, unityStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore} = agoraStore;
+  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
@@ -25,7 +25,7 @@ const PosBusEventsPage: FC = () => {
     miroBoardStore
   } = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
-  const {space} = collaborationStore;
+  const {space, screenShareStore} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -256,7 +256,11 @@ const PosBusEventsPage: FC = () => {
     if (userId === sessionStore.userId) {
       await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
-      await agoraStageModeStore.leaveStage();
+      await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
+
+      if (sessionStore.userId === screenShareStore.screenOwnerId) {
+        agoraScreenShareStore.stopScreenSharing();
+      }
     }
   });
 

@@ -6,6 +6,7 @@ import {StageModeRequestEnum} from 'core/enums';
 
 import {
   StageModeAdmitOrKickRequest,
+  StageModeGetUsersResponse,
   StageModeInviteRequest,
   StageModeJoinResponse,
   StageModeRequest,
@@ -75,4 +76,13 @@ export const mute: RequestInterface<StageModeRequestRequest, void> = (options) =
   const url = generatePath(stageModeRepositoryEndpoints().mute, {spaceId});
 
   return request.post(url, {userId}, restOptions);
+};
+
+export const fetchUsers: RequestInterface<StageModeRequest, StageModeGetUsersResponse> = (
+  options
+) => {
+  const {spaceId, ...restOptions} = options;
+  const url = generatePath(stageModeRepositoryEndpoints().getUsers, {spaceId});
+
+  return request.get(url, restOptions);
 };
