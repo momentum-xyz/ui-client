@@ -15,14 +15,14 @@ import {
   LiveStreamPage
 } from './pages';
 
-interface PluginIterface extends Omit<RouteConfigInterface, 'main'> {
+interface PluginInterface extends Omit<RouteConfigInterface, 'main'> {
   name: string;
   module: string;
   url: string;
 }
 
 // This list later could be passed as parameters from API
-const PLUGINS: PluginIterface[] = [
+const PLUGINS: PluginInterface[] = [
   {
     name: 'miro',
     module: './App',
