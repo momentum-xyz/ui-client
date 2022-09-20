@@ -1,9 +1,10 @@
 import {appVariables} from 'api/constants';
 
 export const emojiRepositoryEndpoints = () => {
-  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/space-emoji`;
+  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/emoji`;
 
   return {
-    spaceEmojiConfig: `${BASE_URL}/:worldId`
+    emojiUpload: `${BASE_URL}/upload/:spaceId`,
+    emojiDelete: BASE_URL
   };
 };

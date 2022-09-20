@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 
 import {AvatarSizeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {api, EmojiConfigResponse} from 'api';
+import {api, WorldEmojiesResponse} from 'api';
 import {DialogModel, RequestModel, ResetModel} from 'core/models';
 
 export enum HelpSectionEnum {
@@ -41,8 +41,8 @@ const HelpStore = types
       self[`show${section}Section`] = !self[`show${section}Section`];
     },
     initEmoji: flow(function* (worldId: string) {
-      const response: EmojiConfigResponse = yield self.emojiRequest.send(
-        api.emojiRepository.fetchSpaceEmojiConfig,
+      const response: WorldEmojiesResponse = yield self.emojiRequest.send(
+        api.spaceEmojiRepository.fetchWorldEmojies,
         {worldId}
       );
 
