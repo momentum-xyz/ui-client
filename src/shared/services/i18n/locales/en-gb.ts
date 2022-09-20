@@ -679,7 +679,8 @@ export const enGb = {
           selectImage: 'Select Image',
           changeImage: 'Change Image',
           confirmButton: 'Save',
-          errorSave: 'Could not save emoji. Please try again later'
+          errorSave: 'Could not save emoji. Please try again later',
+          errorDeleteOld: 'Could not delete old emoji. Please try again later'
         },
         deleteDialog: {
           title: 'Delete emoji',

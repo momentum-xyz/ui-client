@@ -41,7 +41,8 @@ const ManageEmojiStore = types
         {spaceId, file, name}
       );
       if (!addEmojiResponse) {
-        throw new Error('Failed to upload emoji');
+        console.log('Failed to upload emoji');
+        return false;
       }
 
       const {emojiId} = addEmojiResponse;
@@ -52,12 +53,13 @@ const ManageEmojiStore = types
           emojiId
         });
       if (!assignedSpaceEmojiResponse) {
-        throw new Error('Failed to assign emoji to space');
+        console.log('Failed to assign emoji to space');
+        return false;
       }
 
       yield self.fetchSpaceEmojies(spaceId);
 
-      return assignedSpaceEmojiResponse;
+      return true;
     }),
     deleteEmoji: flow(function* (spaceId: string, emojiId: string) {
       const response: DeleteEmojiResponse = yield self.deleteEmojiRequest.send(
@@ -68,10 +70,12 @@ const ManageEmojiStore = types
         }
       );
       if (!response) {
-        throw new Error('Failed to delete emoji');
+        console.log('Failed to delete emoji');
+        return false;
       }
 
       yield self.fetchSpaceEmojies(spaceId);
+      return true;
     })
   }))
   .views((self) => ({

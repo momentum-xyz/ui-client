@@ -38,16 +38,26 @@ const UploadEmojiDialog: FC<PropsInterface> = ({spaceId, existingEmojiId}) => {
   });
 
   const formSubmitHandler: SubmitHandler<FormType> = async ({file, name}) => {
-    try {
-      if (existingEmojiId) {
-        await deleteEmoji(spaceId, existingEmojiId);
+    if (existingEmojiId) {
+      const isDeleteOK = await deleteEmoji(spaceId, existingEmojiId);
+      if (!isDeleteOK) {
+        setError('file', {
+          type: 'delete'
+        });
+        toast.error(
+          <ToastContent
+            isDanger
+            showCloseButton
+            headerIconName="alert"
+            text={t('spaceAdmin.manageEmoji.uploadDialog.errorDeleteOld')}
+          />
+        );
+        return;
       }
+    }
 
-      await uploadEmojiToSpace(spaceId, file, name);
-
-      uploadDialog.close();
-    } catch (err) {
-      console.error(err);
+    const isUploadOK = await uploadEmojiToSpace(spaceId, file, name);
+    if (!isUploadOK) {
       setError('file', {
         type: 'submit'
       });
@@ -59,7 +69,10 @@ const UploadEmojiDialog: FC<PropsInterface> = ({spaceId, existingEmojiId}) => {
           text={t('spaceAdmin.manageEmoji.uploadDialog.errorSave')}
         />
       );
+      return;
     }
+
+    uploadDialog.close();
   };
 
   return (

@@ -18,11 +18,8 @@ const DeleteEmojiDialog: FC<PropsInterface> = ({spaceId, emojiId}) => {
   const {t} = useTranslation();
 
   const handleConfirm = async () => {
-    try {
-      await deleteEmoji(spaceId, emojiId);
-      deleteDialog.close();
-    } catch (err) {
-      console.error(err);
+    const isOk = await deleteEmoji(spaceId, emojiId);
+    if (!isOk) {
       toast.error(
         <ToastContent
           isDanger
@@ -31,7 +28,9 @@ const DeleteEmojiDialog: FC<PropsInterface> = ({spaceId, emojiId}) => {
           text={t('spaceAdmin.manageEmoji.deleteDialog.errorDelete')}
         />
       );
+      return;
     }
+    deleteDialog.close();
   };
 
   return (
