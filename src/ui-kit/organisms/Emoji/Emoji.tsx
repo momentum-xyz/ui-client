@@ -2,14 +2,14 @@ import {FC} from 'react';
 
 import {EmojiDetailsInterface} from 'core/models';
 
-import * as styled from './EmojiItem.styled';
+import * as styled from './Emoji.styled';
 
 interface PropsInterface {
   emoji: EmojiDetailsInterface;
   onClick: () => void;
 }
 
-export const EmojiItem: FC<PropsInterface> = ({emoji, onClick}) => {
+const Emoji: FC<PropsInterface> = ({emoji, onClick}) => {
   const {imgSrc, name} = emoji;
   return (
     <styled.Emoji onClick={onClick}>
@@ -17,3 +17,5 @@ export const EmojiItem: FC<PropsInterface> = ({emoji, onClick}) => {
     </styled.Emoji>
   );
 };
+
+export default Emoji;

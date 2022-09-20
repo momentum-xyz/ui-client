@@ -2,38 +2,45 @@ import {generatePath} from 'react-router-dom';
 
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
-import {bytesToUuid} from 'core/utils';
 
 import {emojiRepositoryEndpoints} from './emojiRepository.api.endpoints';
 import {
-  EmojiConfigLegacyResponse,
-  EmojiConfigRequest,
-  EmojiConfigResponse
+  DeleteEmojiRequest,
+  DeleteEmojiResponse,
+  UploadEmojiRequest,
+  UploadEmojiResponse
 } from './emojiRepository.api.types';
 
-export const fetchSpaceEmojiConfig: RequestInterface<
-  EmojiConfigRequest,
-  EmojiConfigResponse
-> = async (options) => {
-  const {worldId, ...restOptions} = options;
+export const uploadEmoji: RequestInterface<UploadEmojiRequest, UploadEmojiResponse> = (options) => {
+  const {spaceId, file, name, headers, ...restOptions} = options;
+  const url = generatePath(emojiRepositoryEndpoints().emojiUpload, {spaceId});
 
-  const url = generatePath(emojiRepositoryEndpoints().spaceEmojiConfig, {worldId});
+  const formData: FormData = new FormData();
+  formData.append('file', file);
+  formData.append('name', name);
 
-  const resp = await request.get(url, restOptions);
+  const requestOptions = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      ...headers
+    },
+    ...restOptions
+  };
 
-  // temp support for legacy format
-  // FIXME remove after October 2022
-  const testSample = (resp.data as EmojiConfigLegacyResponse)[0];
-  if (typeof testSample?.emoji === 'object') {
-    resp.data = (resp.data as EmojiConfigLegacyResponse).map(
-      ({emoji, emojiId, order, spaceId}) => ({
-        ...emoji,
-        id: bytesToUuid(emojiId.data),
-        order,
-        spaceId: bytesToUuid(spaceId.data)
-      })
-    );
-  }
+  return request.post(url, formData, requestOptions);
+};
 
-  return resp;
+export const deleteEmoji: RequestInterface<DeleteEmojiRequest, DeleteEmojiResponse> = (options) => {
+  const {emojiId, spaceId, ...restOptions} = options;
+
+  const url = emojiRepositoryEndpoints().emojiDelete;
+
+  const requestOptions = {
+    ...restOptions,
+    data: {
+      emojiId,
+      worldId: spaceId
+    }
+  };
+  return request.delete(url, requestOptions);
 };
