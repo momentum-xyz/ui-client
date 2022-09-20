@@ -10,6 +10,7 @@ import {ROUTES} from 'core/constants';
 import * as styled from './SpaceAdminPage.styled';
 import {
   SpaceDetailsPanel,
+  ManageEmojiPanel,
   TokenRuleForm,
   SpaceMembersPanel,
   SubSpacesPanel,
@@ -46,7 +47,12 @@ const SpaceAdminPage: FC = () => {
       <styled.Body>
         {space.isAdmin ? (
           <>
-            <SpaceDetailsPanel />
+            <styled.VerticalSplit>
+              <SpaceDetailsPanel />
+              <styled.SmallPanel>
+                <ManageEmojiPanel />
+              </styled.SmallPanel>
+            </styled.VerticalSplit>
             <TokenRulesPanel />
             <SpaceMembersPanel />
             {space.allowedSpaceTypes.length > 0 && <SubSpacesPanel />}

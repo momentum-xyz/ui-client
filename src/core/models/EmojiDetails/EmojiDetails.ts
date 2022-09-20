@@ -12,7 +12,8 @@ const EmojiDetails = types
     hash: types.string,
     name: types.string,
     order: types.number,
-    spaceId: types.string
+    spaceId: types.string,
+    spaceName: types.maybe(types.string)
   })
   .views((self) => ({
     get imgSrc(): string {
