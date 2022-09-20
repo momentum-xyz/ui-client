@@ -3,6 +3,7 @@ import {useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {useTheme} from 'styled-components';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
@@ -47,6 +48,7 @@ const Collaboration: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
+  const theme = useTheme();
 
   const reJoinMeeting = useCallback(async () => {
     if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
@@ -167,7 +169,7 @@ const Collaboration: FC = () => {
         )}
       />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES)}
+      {createSwitchByConfig(COLLABORATION_ROUTES(theme))}
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog

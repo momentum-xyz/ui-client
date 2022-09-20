@@ -41,3 +41,17 @@ module 'react-add-to-calendar-hoc' {
 
   export default AddToCalendarHOC;
 }
+
+module '*/App' {
+  import React from 'react';
+
+  import {PropsWithThemeInterface} from 'ui-kit';
+
+  interface PluginPropsInterface extends PropsWithThemeInterface {
+    onClose?: () => void;
+  }
+
+  const App: React.ComponentType<PluginPropsInterface>;
+
+  export default App;
+}

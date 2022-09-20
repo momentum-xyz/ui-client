@@ -1,4 +1,5 @@
 const CompressionPlugin = require('compression-webpack-plugin');
+const {ModuleFederationPlugin} = require("webpack").container;
 
 module.exports = {
   style: {
@@ -11,6 +12,19 @@ module.exports = {
       new CompressionPlugin({
         test: /\.(js|css|svg)$/,
         algorithm: 'gzip'
+      }),
+      new ModuleFederationPlugin({
+        name: "core",
+        remotes: {
+          miro: "miro@http://localhost:3001/remoteEntry.js",
+        },
+        shared: {
+          react: {singleton: true, eager: true},
+          "react-dom": {singleton: true, eager: true},
+          mobx: { eager: true },
+          "mobx-react-lite": { eager: true },
+          "mobx-state-tree": { eager: true },
+        }
       })
     ],
     configure: {
