@@ -1,39 +1,18 @@
-export interface EmojiConfigRequest {
-  worldId: string;
-}
-
-interface EmojiConfigItemLegacyInterface {
-  emoji: {
-    id: {
-      type: string;
-      data: Buffer;
-    };
-    code: string;
-    hash: string;
-    name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-  };
-  emojiId: {
-    type: string;
-    data: Buffer;
-  };
-  spaceId: {
-    type: string;
-    data: Buffer;
-  };
-  order: number;
-}
-export interface EmojiConfigLegacyResponse extends Array<EmojiConfigItemLegacyInterface> {}
-
-interface EmojiConfigItemInterface {
-  id: string;
-  code: string;
-  hash: string;
-  name: string;
-  createdAt: string | null;
-  updatedAt: string | null;
+export interface UploadEmojiRequest {
   spaceId: string;
-  order: number;
+  file: File;
+  name: string;
 }
-export interface EmojiConfigResponse extends Array<EmojiConfigItemInterface> {}
+
+export interface UploadEmojiResponse {
+  hash: string;
+  emojiId: string;
+  message: string;
+}
+
+export interface DeleteEmojiRequest {
+  emojiId: string;
+  spaceId: string;
+}
+
+export interface DeleteEmojiResponse {}

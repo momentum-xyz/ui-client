@@ -664,6 +664,32 @@ export const enGb = {
           declineLabel: 'No, cancel'
         }
       },
+      manageEmoji: {
+        title: 'Emoji',
+        text1:
+          'To upload an emoji to the Emoji Palette, upload a static PNG file which is 512 x 512 pixels in size or greater. Transparency is supported. Once uploaded this emoji will be usable all over the metaverse by anyone.',
+        noEmojiUploaded: 'This space has no emoji uploaded yet.',
+        yourUploadedEmoji: 'Your uploaded Emoji:',
+        deleteEmoji: 'Delete Emoji',
+        uploadEmoji: 'Upload EMoji',
+        uploadDialog: {
+          title: 'Upload your emoji',
+          emojiName: 'Name',
+          errorMissingName: 'Please enter a name for your emoji',
+          selectImage: 'Select Image',
+          changeImage: 'Change Image',
+          confirmButton: 'Save',
+          errorSave: 'Could not save emoji. Please try again later',
+          errorDeleteOld: 'Could not delete old emoji. Please try again later'
+        },
+        deleteDialog: {
+          title: 'Delete emoji',
+          text: 'Are you sure you want to delete the emoji?',
+          yes: 'Yes, delete',
+          no: 'No, cancel',
+          errorDelete: 'Could not delete emoji. Please try again later'
+        }
+      },
       users: {
         title: 'Space Members',
         removeConfirmation: {

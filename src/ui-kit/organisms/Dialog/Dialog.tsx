@@ -111,7 +111,8 @@ const Dialog: FC<DialogPropsInterface> = ({
                   <Button
                     label={declineInfo.title}
                     theme={theme}
-                    variant="danger"
+                    variant={declineInfo.variant || 'danger'}
+                    icon={declineInfo.icon}
                     onClick={declineInfo.onClick}
                     disabled={declineInfo.disabled}
                   />
@@ -122,7 +123,8 @@ const Dialog: FC<DialogPropsInterface> = ({
                   <Button
                     label={approveInfo.title}
                     theme={theme}
-                    variant="primary"
+                    variant={approveInfo.variant || 'primary'}
+                    icon={approveInfo.icon}
                     onClick={approveInfo.onClick}
                     disabled={approveInfo.disabled}
                   />
