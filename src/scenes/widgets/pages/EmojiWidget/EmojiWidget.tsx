@@ -41,8 +41,12 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
     <PanelLayout title={t('labels.emoji')} onClose={onClose}>
       <styled.Container>
         <styled.EmojiList>
-          {emojiDetailsList.map((em) => (
-            <Emoji emoji={em} onClick={() => handleEmojiClick(em.id, em.unityUrl)} key={em.id} />
+          {emojiDetailsList.map((emoji) => (
+            <Emoji
+              emoji={emoji}
+              onClick={() => handleEmojiClick(emoji.id, emoji.unityUrl)}
+              key={emoji.id}
+            />
           ))}
         </styled.EmojiList>
       </styled.Container>
