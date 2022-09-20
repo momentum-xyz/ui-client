@@ -1,7 +1,13 @@
 import {types, cast, flow} from 'mobx-state-tree';
 
 import {DialogModel, RequestModel, ResetModel, EmojiDetails} from 'core/models';
-import {api, AssignEmojiToSpaceResponse, WorldEmojiesResponse, UploadEmojiResponse} from 'api';
+import {
+  api,
+  AssignEmojiToSpaceResponse,
+  WorldEmojiesResponse,
+  UploadEmojiResponse,
+  DeleteEmojiResponse
+} from 'api';
 
 const ManageEmojiStore = types
   .compose(
@@ -23,7 +29,9 @@ const ManageEmojiStore = types
         {spaceId}
       );
 
-      self.emojiDetailsList = cast(data);
+      if (data) {
+        self.emojiDetailsList = cast(data);
+      }
     })
   }))
   .actions((self) => ({
@@ -32,6 +40,9 @@ const ManageEmojiStore = types
         api.emojiRepository.uploadEmoji,
         {spaceId, file, name}
       );
+      if (!addEmojiResponse) {
+        throw new Error('Failed to upload emoji');
+      }
 
       const {emojiId} = addEmojiResponse;
 
@@ -40,16 +51,25 @@ const ManageEmojiStore = types
           spaceId,
           emojiId
         });
+      if (!assignedSpaceEmojiResponse) {
+        throw new Error('Failed to assign emoji to space');
+      }
 
       yield self.fetchSpaceEmojies(spaceId);
 
       return assignedSpaceEmojiResponse;
     }),
     deleteEmoji: flow(function* (spaceId: string, emojiId: string) {
-      yield self.deleteEmojiRequest.send(api.emojiRepository.deleteEmoji, {
-        emojiId,
-        spaceId
-      });
+      const response: DeleteEmojiResponse = yield self.deleteEmojiRequest.send(
+        api.emojiRepository.deleteEmoji,
+        {
+          emojiId,
+          spaceId
+        }
+      );
+      if (!response) {
+        throw new Error('Failed to delete emoji');
+      }
 
       yield self.fetchSpaceEmojies(spaceId);
     })

@@ -20,7 +20,9 @@ const EmojiStore = types
         {worldId: self.worldId}
       );
 
-      self.emojiDetailsList = cast(data);
+      if (data) {
+        self.emojiDetailsList = cast(data);
+      }
     })
   }))
   .actions((self) => ({
