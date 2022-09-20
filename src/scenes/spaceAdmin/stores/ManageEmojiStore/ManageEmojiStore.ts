@@ -75,14 +75,14 @@ const ManageEmojiStore = types
     })
   }))
   .views((self) => ({
-    get isUploadPending() {
+    get isUploadPending(): boolean {
       return (
         self.uploadEmojisRequest.isPending ||
         self.assignEmojisToSpaceRequest.isPending ||
         self.fetchSpaceEmojisRequest.isPending
       );
     },
-    get isDeletePending() {
+    get isDeletePending(): boolean {
       return self.deleteEmojiRequest.isPending || self.fetchSpaceEmojisRequest.isPending;
     }
   }));
