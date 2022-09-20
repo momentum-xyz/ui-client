@@ -77,11 +77,6 @@ const RootCollaborationStore = types
         yield self.textChatStore.logOut();
         self.textChatStore.resetModel();
 
-        if (!!self.space && self.space.isAdmin) {
-          yield self.miroBoardStore.disableMiroBoard(self.space.id);
-          yield self.googleDriveStore.disableGoogleDocument(self.space.id);
-        }
-
         self.space = undefined;
         self.isModerator = false;
       }
