@@ -1,9 +1,10 @@
-import React, {lazy} from 'react';
+import React from 'react';
 import {generatePath, Redirect} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
 import {ThemeInterface} from 'ui-kit';
+import ModuleLoader from 'core/utils/dynamicModule.utils';
 
 import {
   DashboardPage,
@@ -14,19 +15,25 @@ import {
   LiveStreamPage
 } from './pages';
 
-const MiroPlugin = lazy(async () => {
-  try {
-    const module = await import('miro/App');
-    return module;
-  } catch {
-    return {
-      default: () => null
-    };
-  }
-});
+interface PluginIterface extends Omit<RouteConfigInterface, 'main'> {
+  name: string;
+  module: string;
+  url: string;
+}
 
-export const COLLABORATION_ROUTES = (theme: ThemeInterface) =>
-  [
+// This list later could be passed as parameters from API
+const PLUGINS: PluginIterface[] = [
+  {
+    name: 'miro',
+    module: './App',
+    url: 'http://localhost:3001/remoteEntry.js',
+    path: ROUTES.collaboration.miro,
+    exact: true
+  }
+];
+
+export const COLLABORATION_ROUTES = (theme: ThemeInterface) => {
+  const baseRoutes: RouteConfigInterface[] = [
     {
       path: ROUTES.collaboration.dashboard,
       exact: true,
@@ -46,11 +53,6 @@ export const COLLABORATION_ROUTES = (theme: ThemeInterface) =>
       main: () => <StageModePage />
     },
     {
-      path: ROUTES.collaboration.miro,
-      exact: true,
-      main: () => <MiroPlugin theme={theme} />
-    },
-    {
       path: ROUTES.collaboration.screenShare,
       main: () => <ScreenSharePage />
     },
@@ -67,7 +69,17 @@ export const COLLABORATION_ROUTES = (theme: ThemeInterface) =>
       exact: true,
       main: () => <Redirect to={ROUTES.collaboration.dashboard} />
     }
-  ] as RouteConfigInterface[];
+  ];
+
+  PLUGINS.forEach((plugin) => {
+    baseRoutes.push({
+      ...plugin,
+      main: () => <ModuleLoader url={plugin.url} module={plugin.module} scope={plugin.name} />
+    });
+  });
+
+  return baseRoutes;
+};
 
 export const buildNavigationTabs = (
   spaceId: string,

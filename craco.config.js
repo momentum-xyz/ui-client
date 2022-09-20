@@ -15,9 +15,7 @@ module.exports = {
       }),
       new ModuleFederationPlugin({
         name: "core",
-        remotes: {
-          miro: "miro@http://localhost:3001/remoteEntry.js",
-        },
+        remotes: {},
         shared: {
           react: {singleton: true, eager: true},
           "react-dom": {singleton: true, eager: true},
