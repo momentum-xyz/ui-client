@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, Suspense, useCallback, useEffect} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
@@ -169,7 +169,7 @@ const Collaboration: FC = () => {
         )}
       />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES(theme))}
+      <Suspense fallback={false}>{createSwitchByConfig(COLLABORATION_ROUTES(theme))}</Suspense>
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog

@@ -14,7 +14,16 @@ import {
   LiveStreamPage
 } from './pages';
 
-const MiroPlugin = lazy(() => import('miro/App'));
+const MiroPlugin = lazy(async () => {
+  try {
+    const module = await import('miro/App');
+    return module;
+  } catch {
+    return {
+      default: () => null
+    };
+  }
+});
 
 export const COLLABORATION_ROUTES = (theme: ThemeInterface) =>
   [
