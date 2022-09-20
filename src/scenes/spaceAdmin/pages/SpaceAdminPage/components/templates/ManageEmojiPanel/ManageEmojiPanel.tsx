@@ -11,11 +11,10 @@ import * as styled from './ManageEmojiPanel.styled';
 
 const ManageEmojiPanel: FC = () => {
   const {
-    spaceAdminStore: {
-      spaceManagerStore: {space},
-      manageEmojiStore: {emojiDetailsList, fetchSpaceEmojies, uploadDialog, deleteDialog}
-    }
+    spaceAdminStore: {spaceManagerStore, manageEmojiStore}
   } = useStore();
+  const {space} = spaceManagerStore;
+  const {emojiDetailsList, fetchSpaceEmojies, uploadDialog, deleteDialog} = manageEmojiStore;
 
   const {t} = useTranslation();
 
@@ -30,42 +29,13 @@ const ManageEmojiPanel: FC = () => {
   }
   const spaceEmoji = emojiDetailsList.find((emoji) => emoji.spaceId === space.id);
 
-  // const handleClickUpload = () => setShowUploadDialog(true);
-  // const handleCancelUpload = () => setShowUploadDialog(false);
-
-  // const handleConfirmUpload = async (image: File, name: string) => {
-  //   if (spaceEmoji) {
-  //     await deleteEmoji(space.id, spaceEmoji.id);
-  //   }
-  //   await uploadEmojiToSpace(space.id, image, name);
-  //   setShowUploadDialog(false);
-  // };
-
-  // const handleClickDelete = () => setShowDeleteDialog(true);
-  // const handleCancelDelete = () => setShowDeleteDialog(false);
-
-  // const handleConfirmDelete = async () => {
-  //   if (spaceEmoji) {
-  //     await deleteEmoji(space.id, spaceEmoji.id);
-  //     setShowDeleteDialog(false);
-  //   }
-  // };
-
   return (
     <>
       {uploadDialog.isOpen && (
-        <UploadEmojiDialog
-          spaceId={space.id}
-          existingEmojiId={spaceEmoji?.id}
-          // onSave={handleConfirmUpload} onClose={uploadDialog.close}
-        />
+        <UploadEmojiDialog spaceId={space.id} existingEmojiId={spaceEmoji?.id} />
       )}
       {deleteDialog.isOpen && !!spaceEmoji && (
-        <DeleteEmojiDialog
-          spaceId={space.id}
-          emojiId={spaceEmoji.id}
-          // onConfirm={handleConfirmDelete} onCancel={handleCancelDelete}
-        />
+        <DeleteEmojiDialog spaceId={space.id} emojiId={spaceEmoji.id} />
       )}
       <SectionPanel title={t('spaceAdmin.manageEmoji.title')}>
         <styled.Body>
@@ -76,12 +46,7 @@ const ManageEmojiPanel: FC = () => {
           {!!spaceEmoji && (
             <styled.UploadedWidgetPreview>
               <Text text={t('spaceAdmin.manageEmoji.yourUploadedEmoji')} size="s" align="left" />
-              <Emoji
-                emoji={spaceEmoji}
-                onClick={() => {
-                  // TODO send it to animations panel?
-                }}
-              />
+              <Emoji emoji={spaceEmoji} onClick={() => {}} />
               <Text text={`(${spaceEmoji.name})`} size="s" />
             </styled.UploadedWidgetPreview>
           )}
