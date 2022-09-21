@@ -1,3 +1,5 @@
+import {UnityTargetTypeEnum} from 'core/constants/unity.constants';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface UnityApiInterface {
   toggleMinimap(): any;
@@ -14,4 +16,13 @@ export interface UnityApiInterface {
   getUserPosition(): string;
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
   relayMessage(topic: string, json: string): any;
+}
+
+export interface EmojiMessageInterface {
+  emojiId: string;
+  emojiUrl: string;
+  userUUID: string;
+  userAvatarSrc: string;
+  userName: string;
+  targetType?: UnityTargetTypeEnum;
 }

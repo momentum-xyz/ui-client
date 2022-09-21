@@ -2,7 +2,7 @@ import {UnityContext} from 'react-unity-webgl';
 
 import {getUnityPosition} from 'core/utils';
 import {UnityEventEmitter, UnityTargetTypeEnum} from 'core/constants';
-import {UnityApiInterface} from 'core/interfaces';
+import {EmojiMessageInterface, UnityApiInterface} from 'core/interfaces';
 import {PosBusService} from 'shared/services';
 import {PosBusEventEnum} from 'core/enums';
 import {PosBusEmojiMessageType} from 'core/types';
@@ -153,14 +153,7 @@ export class UnityService {
     userAvatarSrc,
     userName,
     targetType = UnityTargetTypeEnum.USER
-  }: {
-    emojiId: string;
-    emojiUrl: string;
-    userUUID: string;
-    userAvatarSrc: string;
-    userName: string;
-    targetType?: UnityTargetTypeEnum;
-  }) {
+  }: EmojiMessageInterface) {
     try {
       const topic = 'emoji';
 
