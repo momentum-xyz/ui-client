@@ -4,7 +4,7 @@ import React, {FC, ReactNode} from 'react';
 import cn from 'classnames';
 
 import {ComponentSizeInterface} from 'ui-kit/interfaces';
-import {PlacementType} from 'ui-kit/types/placement.type';
+import {PlacementType} from 'ui-kit/types';
 
 import * as styled from './Tooltip.styled';
 
