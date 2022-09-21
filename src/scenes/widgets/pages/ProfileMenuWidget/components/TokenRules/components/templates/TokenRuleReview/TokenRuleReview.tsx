@@ -46,7 +46,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
         />
       );
     }
-  }, []);
+  }, [tokenRuleReviewStore, onClose]);
 
   const handleApprove = useCallback(async () => {
     const isSuccess = await tokenRuleReviewStore.approve();
@@ -72,7 +72,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
         />
       );
     }
-  }, []);
+  }, [tokenRuleReviewStore, onClose]);
 
   const handleDecline = useCallback(async () => {
     const isSuccess = await tokenRuleReviewStore.decline();
@@ -98,13 +98,13 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
         />
       );
     }
-  }, []);
+  }, [tokenRuleReviewStore, onClose]);
 
   useEffect(() => {
     return () => {
       tokenRuleReviewStore.resetModel();
     };
-  }, []);
+  }, [tokenRuleReviewStore]);
 
   return (
     <Dialog

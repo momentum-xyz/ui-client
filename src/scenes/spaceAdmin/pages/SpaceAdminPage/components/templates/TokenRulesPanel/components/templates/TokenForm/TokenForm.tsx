@@ -36,7 +36,7 @@ const TokenForm: FC<PropsInterface> = () => {
       tokenFormStore.resetModel();
       tokenFormStore.fetchTokens();
     };
-  }, []);
+  }, [tokenFormStore]);
 
   useEffect(() => {
     if (tokenFormStore.fetchTokenNameDone) {

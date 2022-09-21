@@ -28,7 +28,7 @@ const TileForm: FC = () => {
 
   useEffect(() => {
     return () => tileFormStore.resetModel();
-  }, []);
+  }, [tileFormStore]);
 
   const onComplete = useCallback(() => {
     dashboardStore.fetchDashboard(space?.id ?? '');
