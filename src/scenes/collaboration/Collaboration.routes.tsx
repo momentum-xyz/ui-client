@@ -4,7 +4,7 @@ import {generatePath, Redirect} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
 import {ThemeInterface} from 'ui-kit';
-import ModuleLoader from 'core/utils/dynamicModule.utils';
+import PluginLoader, {PluginInterface} from 'core/utils/dynamicModule.utils';
 
 import {
   DashboardPage,
@@ -15,24 +15,20 @@ import {
   LiveStreamPage
 } from './pages';
 
-interface PluginInterface extends Omit<RouteConfigInterface, 'main'> {
-  name: string;
-  module: string;
-  url: string;
-}
-
 // This list later could be passed as parameters from API
-const PLUGINS: PluginInterface[] = [
+const PLUGINS: (onClose: () => void) => (PluginInterface & {path: string})[] = (onClose) => [
   {
     name: 'miro',
-    module: './App',
     url: 'http://localhost:3001/remoteEntry.js',
     path: ROUTES.collaboration.miro,
-    exact: true
+    exact: true,
+    config: {
+      onClose
+    }
   }
 ];
 
-export const COLLABORATION_ROUTES = (theme: ThemeInterface) => {
+export const COLLABORATION_ROUTES = (theme: ThemeInterface, onClose: () => void) => {
   const baseRoutes: RouteConfigInterface[] = [
     {
       path: ROUTES.collaboration.dashboard,
@@ -71,10 +67,10 @@ export const COLLABORATION_ROUTES = (theme: ThemeInterface) => {
     }
   ];
 
-  PLUGINS.forEach((plugin) => {
+  PLUGINS(onClose).forEach((plugin) => {
     baseRoutes.push({
       ...plugin,
-      main: () => <ModuleLoader url={plugin.url} module={plugin.module} scope={plugin.name} />
+      main: () => <PluginLoader url={plugin.url} name={plugin.name} config={{...plugin.config}} />
     });
   });
 

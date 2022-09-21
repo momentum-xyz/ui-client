@@ -169,7 +169,7 @@ const Collaboration: FC = () => {
         )}
       />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES(theme))}
+      {createSwitchByConfig(COLLABORATION_ROUTES(theme, () => history.push(ROUTES.base)))}
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
