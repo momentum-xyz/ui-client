@@ -9,7 +9,7 @@ export const PLUGIN_LIST: (onClose: () => void, theme: ThemeInterface) => Plugin
   theme
 ) => [
   {
-    name: 'miro',
+    name: 'miro-plugin',
     iconName: 'miro',
     // TODO: Later change to remote url
     url: 'http://localhost:3001/remoteEntry.js',
