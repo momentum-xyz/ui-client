@@ -20,6 +20,7 @@ import {
 import {PluginInterface} from 'core/interfaces/plugin.interface';
 import {PLUGIN_LIST} from 'core/constants/pluginList.constant';
 import {appVariables} from 'api/constants';
+import {request} from 'api/request';
 
 import {
   AcceptedToJoinStageDialog,
@@ -91,12 +92,13 @@ const Collaboration: FC = () => {
   useEffect(() => {
     // Later change it to API call that returns this list
     setTimeout(() => {
-      const plugins = PLUGIN_LIST(
+      const plugins = PLUGIN_LIST({
         theme,
-        appVariables.MIRO_APP_ID,
-        space?.isAdmin ?? false,
+        appId: appVariables.MIRO_APP_ID,
+        isSpaceAdmin: space?.isAdmin ?? false,
+        request,
         spaceId
-      );
+      });
 
       setPlugins(plugins);
     }, 300);

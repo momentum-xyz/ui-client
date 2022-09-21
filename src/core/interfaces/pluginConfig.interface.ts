@@ -1,3 +1,5 @@
+import {AxiosInstance} from 'axios';
+
 import {ThemeInterface} from 'ui-kit';
 
 export interface PluginConfigInterface {
@@ -5,4 +7,5 @@ export interface PluginConfigInterface {
   appId: string;
   spaceId?: string;
   isSpaceAdmin: boolean;
+  request: AxiosInstance;
 }

@@ -33,6 +33,8 @@ const useDynamicScript = (url?: string) => {
 
     return () => {
       console.log(`Dynamic Script Removed: ${url}`);
+      element.onerror = () => {};
+      element.onload = () => {};
       document.head.removeChild(element);
     };
   }, [url]);
