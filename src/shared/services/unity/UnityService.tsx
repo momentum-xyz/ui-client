@@ -12,7 +12,7 @@ export class UnityService {
   unityContext?: UnityContext;
 
   getCurrentWorld?: () => void;
-  getUserPosition?: () => void;
+  getUserPosition?: () => string | undefined;
   getIntState?: (spaceId: string, key: string) => number;
   setIntState?: (spaceId: string, key: string, value: number) => void;
   getStrState?: (spaceId: string, key: string) => string;
