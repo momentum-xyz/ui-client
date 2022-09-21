@@ -1,18 +1,7 @@
 import React, {Suspense, FC} from 'react';
 
+import {PluginLoaderInterface} from 'core/interfaces';
 import {useDynamicScript} from 'shared/hooks';
-
-export interface PluginConfigInterface {
-  onClose?: () => void;
-}
-
-export interface PluginInterface {
-  name: string;
-  url: string;
-  exact?: boolean;
-  config: PluginConfigInterface;
-  module?: string;
-}
 
 const loadComponent = (scope: string, module: string) => async (): Promise<any> => {
   // @ts-ignore: Required to load list based plugins, no ts declaration
@@ -26,7 +15,7 @@ const loadComponent = (scope: string, module: string) => async (): Promise<any> 
   return factory();
 };
 
-const PluginLoader: FC<PluginInterface> = ({name, url, config, module = './App'}) => {
+const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, module = './App'}) => {
   const {ready, failed} = useDynamicScript(module && url);
 
   if (!module) {

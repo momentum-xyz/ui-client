@@ -3,8 +3,8 @@ import {generatePath, Redirect} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
-import {ThemeInterface} from 'ui-kit';
-import PluginLoader, {PluginInterface} from 'core/utils/dynamicModule.utils';
+import PluginLoader from 'core/utils/dynamicModule.utils';
+import {PluginInterface} from 'core/interfaces/plugin.interface';
 
 import {
   DashboardPage,
@@ -15,20 +15,7 @@ import {
   LiveStreamPage
 } from './pages';
 
-// This list later could be passed as parameters from API
-const PLUGINS: (onClose: () => void) => (PluginInterface & {path: string})[] = (onClose) => [
-  {
-    name: 'miro',
-    url: 'http://localhost:3001/remoteEntry.js',
-    path: ROUTES.collaboration.miro,
-    exact: true,
-    config: {
-      onClose
-    }
-  }
-];
-
-export const COLLABORATION_ROUTES = (theme: ThemeInterface, onClose: () => void) => {
+export const COLLABORATION_ROUTES = (plugins: PluginInterface[]) => {
   const baseRoutes: RouteConfigInterface[] = [
     {
       path: ROUTES.collaboration.dashboard,
@@ -67,7 +54,7 @@ export const COLLABORATION_ROUTES = (theme: ThemeInterface, onClose: () => void)
     }
   ];
 
-  PLUGINS(onClose).forEach((plugin) => {
+  plugins.forEach((plugin) => {
     baseRoutes.push({
       ...plugin,
       main: () => <PluginLoader url={plugin.url} name={plugin.name} config={{...plugin.config}} />
@@ -81,9 +68,15 @@ export const buildNavigationTabs = (
   spaceId: string,
   isStageMode: boolean,
   isScreenSharing: boolean,
+  plugins: PluginInterface[],
   isLiveStreaming?: boolean
 ): NavigationTabInterface[] => {
-  return [
+  const pluginTabs: NavigationTabInterface[] = plugins.map((plugin) => ({
+    path: generatePath(plugin.path, {spaceId}),
+    iconName: plugin.iconName
+  }));
+
+  const tabs: NavigationTabInterface[] = [
     {
       path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
       iconName: 'tiles'
@@ -103,10 +96,6 @@ export const buildNavigationTabs = (
       isActive: isScreenSharing
     },
     {
-      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
-      iconName: 'miro'
-    },
-    {
       path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
       iconName: 'drive'
     },
@@ -117,4 +106,8 @@ export const buildNavigationTabs = (
       isActive: isLiveStreaming
     }
   ];
+
+  tabs.push(...pluginTabs);
+
+  return tabs;
 };
