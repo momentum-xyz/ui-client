@@ -22,6 +22,7 @@ module.exports = {
           mobx: { eager: true },
           "mobx-react-lite": { eager: true },
           "mobx-state-tree": { eager: true },
+          "styled-components": { eager: true }
         }
       })
     ],

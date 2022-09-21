@@ -2,5 +2,7 @@ import {ThemeInterface} from 'ui-kit';
 
 export interface PluginConfigInterface {
   theme: ThemeInterface;
-  onClose?: () => void;
+  appId: string;
+  spaceId?: string;
+  isSpaceAdmin: boolean;
 }

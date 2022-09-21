@@ -12,7 +12,8 @@ import {
   StageModePage,
   ScreenSharePage,
   GoogleDrivePage,
-  LiveStreamPage
+  LiveStreamPage,
+  CollaborationPluginPage
 } from './pages';
 
 export const COLLABORATION_ROUTES = (plugins: PluginInterface[]) => {
@@ -57,7 +58,11 @@ export const COLLABORATION_ROUTES = (plugins: PluginInterface[]) => {
   plugins.forEach((plugin) => {
     baseRoutes.push({
       ...plugin,
-      main: () => <PluginLoader url={plugin.url} name={plugin.name} config={{...plugin.config}} />
+      main: () => (
+        <CollaborationPluginPage>
+          <PluginLoader url={plugin.url} name={plugin.name} config={{...plugin.config}} />
+        </CollaborationPluginPage>
+      )
     });
   });
 

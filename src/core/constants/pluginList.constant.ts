@@ -4,12 +4,14 @@ import {ThemeInterface} from 'ui-kit';
 import {ROUTES} from './routePaths.constants';
 
 // This list later could be passed as parameters from API
-export const PLUGIN_LIST: (onClose: () => void, theme: ThemeInterface) => PluginInterface[] = (
-  onClose,
-  theme
-) => [
+export const PLUGIN_LIST: (
+  theme: ThemeInterface,
+  appId: string,
+  isSpaceAdmin: boolean,
+  spaceId?: string
+) => PluginInterface[] = (theme, appId, isSpaceAdmin, spaceId) => [
   {
-    name: 'miro-plugin',
+    name: 'miro_plugin',
     iconName: 'miro',
     // TODO: Later change to remote url
     url: 'http://localhost:3001/remoteEntry.js',
@@ -17,7 +19,9 @@ export const PLUGIN_LIST: (onClose: () => void, theme: ThemeInterface) => Plugin
     exact: true,
     config: {
       theme,
-      onClose
+      appId,
+      isSpaceAdmin,
+      spaceId
     }
   }
 ];

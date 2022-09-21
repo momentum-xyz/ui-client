@@ -19,6 +19,7 @@ import {
 } from 'ui-kit';
 import {PluginInterface} from 'core/interfaces/plugin.interface';
 import {PLUGIN_LIST} from 'core/constants/pluginList.constant';
+import {appVariables} from 'api/constants';
 
 import {
   AcceptedToJoinStageDialog,
@@ -44,7 +45,8 @@ const Collaboration: FC = () => {
     countdownDialog,
     textChatStore,
     liveStreamStore,
-    stageModeStore
+    stageModeStore,
+    space
   } = collaborationStore;
 
   const [plugins, setPlugins] = useState<PluginInterface[]>([]);
@@ -89,11 +91,16 @@ const Collaboration: FC = () => {
   useEffect(() => {
     // Later change it to API call that returns this list
     setTimeout(() => {
-      const plugins = PLUGIN_LIST(() => history.push(ROUTES.base), theme);
+      const plugins = PLUGIN_LIST(
+        theme,
+        appVariables.MIRO_APP_ID,
+        space?.isAdmin ?? false,
+        spaceId
+      );
 
       setPlugins(plugins);
     }, 300);
-  }, [history, theme]);
+  }, [history, space?.isAdmin, spaceId, theme]);
 
   useEffect(() => {
     reJoinMeeting().then();

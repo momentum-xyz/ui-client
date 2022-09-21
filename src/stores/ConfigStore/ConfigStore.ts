@@ -28,6 +28,9 @@ const ConfigStore = types
           appVariables[key as keyof AppConfigInterface] = value as any;
         });
 
+        //@ts-ignore
+        window['env'] = appVariables;
+
         self.isConfigReady = true;
       }
     })
