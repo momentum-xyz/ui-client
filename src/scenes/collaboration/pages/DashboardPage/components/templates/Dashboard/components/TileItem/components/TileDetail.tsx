@@ -2,8 +2,8 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {DraggableProvided} from 'react-beautiful-dnd';
+import ReactLinkify from 'react-linkify';
 
-import {linkify} from 'core/utils';
 import {PanelLayout} from 'ui-kit';
 import {TileInterface} from 'core/models';
 import {useStore} from 'shared/hooks';
@@ -55,7 +55,15 @@ const TileDetail: FC<PropsInterface> = ({
       <styled.Container>
         {imageUrl && <styled.ImageWrapper src={imageUrl} alt="" />}
         {tile.content?.text && (
-          <styled.TextTile dangerouslySetInnerHTML={{__html: linkify(tile.content.text)}} />
+          <ReactLinkify
+            componentDecorator={(decoratedHref: string, decoratedText: string, key: number) => (
+              <a href={decoratedHref} key={key} target="_blank">
+                {decoratedText}
+              </a>
+            )}
+          >
+            <styled.TextTile>{tile.content.text}</styled.TextTile>
+          </ReactLinkify>
         )}
         {videoUrl && (
           <styled.VideoWrapper>
