@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {DraggableProvided} from 'react-beautiful-dnd';
 
+import {linkify} from 'core/utils';
 import {PanelLayout} from 'ui-kit';
 import {TileInterface} from 'core/models';
 import {useStore} from 'shared/hooks';
@@ -54,7 +55,7 @@ const TileDetail: FC<PropsInterface> = ({
       <styled.Container>
         {imageUrl && <styled.ImageWrapper src={imageUrl} alt="" />}
         {tile.content?.text && (
-          <styled.TextItem text={tile.content.text} size="s" align="justify" breakLongWord />
+          <styled.TextTile dangerouslySetInnerHTML={{__html: linkify(tile.content.text)}} />
         )}
         {videoUrl && (
           <styled.VideoWrapper>

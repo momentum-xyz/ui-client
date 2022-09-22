@@ -73,7 +73,6 @@
     "react-hook-form": "^7.28.1",
     "react-howler": "^5.2.0",
     "react-i18next": "^11.15.5",
-    "react-linkify": "^1.0.0-alpha",
     "react-notifications": "^1.7.2",
     "react-oidc-context": "^2.1.0",
     "react-router-dom": "^5.2.0",
