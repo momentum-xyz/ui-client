@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {matchPath, useLocation} from 'react-router-dom';
 
@@ -21,12 +21,19 @@ interface PropsInterface {
 }
 
 const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
-  const {mainStore, sessionStore, meetingStore, collaborationStore} = useStore();
+  const {mainStore, sessionStore, meetingStore, collaborationStore, widgetStore} = useStore();
   const {meetingRoomStore} = meetingStore;
+  const {musicPlayerStore} = widgetStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 
   const location = useLocation();
+
+  useEffect(() => {
+    if (musicPlayerStore.musicPlayer.isPlaying) {
+      musicPlayerStore.togglePlayback();
+    }
+  }, [agoraStore.hasJoined, musicPlayerStore]);
 
   if (!agoraStore.hasJoined) {
     return <></>;
