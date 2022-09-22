@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {PropsWithThemeInterface} from '../../interfaces';
+import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './NavigationBar.styled';
 

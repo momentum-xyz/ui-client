@@ -4,12 +4,12 @@ import {t} from 'i18next';
 import debounce from 'lodash/debounce';
 
 import {TextAlignType, TextSizeType, TextTransformType, TextWeightType} from 'ui-kit/types';
-import {Text} from 'ui-kit';
+import {PropsWithThemeInterface, Text} from 'ui-kit';
 import {useResize} from 'ui-kit/hooks';
 
 import * as styled from './ShowMoreText.styled';
 
-interface TextPropsInterface {
+interface TextPropsInterface extends PropsWithThemeInterface {
   size: TextSizeType;
   transform?: TextTransformType;
   isMultiline?: boolean;

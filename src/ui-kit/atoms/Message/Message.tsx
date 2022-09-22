@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {MessageType} from 'core/types';
+import {MessageType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Message.styled';

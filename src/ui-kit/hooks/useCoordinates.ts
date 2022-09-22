@@ -1,6 +1,6 @@
 import {RefObject, useCallback, useState} from 'react';
 
-import {CoordinationInterface} from 'core/interfaces';
+import {CoordinationInterface} from 'ui-kit/interfaces';
 
 import {useScroll} from './useScroll';
 import {useResize} from './useResize';
