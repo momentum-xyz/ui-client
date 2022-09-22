@@ -29,7 +29,10 @@ const ConfigStore = types
         });
 
         //@ts-ignore
-        window['env'] = appVariables;
+        window['env'] = {
+          BACKEND_ENDPOINT_URL: appVariables.BACKEND_ENDPOINT_URL,
+          APP_ID: appVariables.MIRO_APP_ID
+        };
 
         self.isConfigReady = true;
       }

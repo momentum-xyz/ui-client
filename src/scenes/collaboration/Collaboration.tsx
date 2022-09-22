@@ -19,7 +19,6 @@ import {
 } from 'ui-kit';
 import {PluginInterface} from 'core/interfaces/plugin.interface';
 import {PLUGIN_LIST} from 'core/constants/pluginList.constant';
-import {appVariables} from 'api/constants';
 import {request} from 'api/request';
 
 import {
@@ -94,7 +93,6 @@ const Collaboration: FC = () => {
     setTimeout(() => {
       const plugins = PLUGIN_LIST({
         theme,
-        appId: appVariables.MIRO_APP_ID,
         isSpaceAdmin: space?.isAdmin ?? false,
         request,
         spaceId
