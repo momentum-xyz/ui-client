@@ -3,12 +3,12 @@ import 'rc-tooltip/assets/bootstrap.css';
 import React, {FC, ReactNode} from 'react';
 import cn from 'classnames';
 
-import {ComponentSizeInterface} from 'ui-kit/interfaces';
-import {PlacementType} from 'ui-kit/types/placement.type';
+import {ComponentSizeInterface, PropsWithThemeInterface} from 'ui-kit/interfaces';
+import {PlacementType} from 'ui-kit/types';
 
 import * as styled from './Tooltip.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   label: string | ReactNode;
   placement?: PlacementType;
   visible?: boolean;

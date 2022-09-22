@@ -1,9 +1,11 @@
 import React, {FC} from 'react';
 import cn from 'classnames';
 
+import {PropsWithThemeInterface} from 'ui-kit/interfaces';
+
 import * as styled from './Steps.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   currentStep?: number;
   steps: string[];
 }

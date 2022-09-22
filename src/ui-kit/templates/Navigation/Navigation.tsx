@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
 
-import {NavigationTabInterface} from 'core/interfaces';
+import {NavigationTabInterface, PropsWithThemeInterface} from 'ui-kit/interfaces';
 import {NavigationBar, NavigationBarItem} from 'ui-kit';
 
 import * as styled from './Navigation.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   tabs: NavigationTabInterface[];
 }
 

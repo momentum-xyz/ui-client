@@ -43,7 +43,8 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
         <styled.EmojiList>
           {emojiDetailsList.map((emoji) => (
             <Emoji
-              emoji={emoji}
+              emoji={emoji.imgSrc}
+              name={emoji.name}
               onClick={() => handleEmojiClick(emoji.id, emoji.unityUrl)}
               key={emoji.id}
             />

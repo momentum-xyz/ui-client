@@ -2,11 +2,11 @@ import React, {FC} from 'react';
 import cn from 'classnames';
 
 import {Heading, IconSvg} from 'ui-kit/atoms';
-import {ComponentSizeInterface} from 'ui-kit/interfaces';
+import {ComponentSizeInterface, PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './ExpandableLayout.styled';
 
-interface ExpandableLayoutPropsInterface {
+interface ExpandableLayoutPropsInterface extends PropsWithThemeInterface {
   iconName: IconNameType;
   name: string;
   fullHeight?: boolean;

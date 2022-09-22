@@ -46,7 +46,7 @@ const ManageEmojiPanel: FC = () => {
           {!!spaceEmoji && (
             <styled.UploadedWidgetPreview>
               <Text text={t('spaceAdmin.manageEmoji.yourUploadedEmoji')} size="s" align="left" />
-              <Emoji emoji={spaceEmoji} onClick={() => {}} />
+              <Emoji emoji={spaceEmoji.imgSrc} name={spaceEmoji.name} onClick={() => {}} />
               <Text text={`(${spaceEmoji.name})`} size="s" />
             </styled.UploadedWidgetPreview>
           )}

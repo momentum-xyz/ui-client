@@ -2,10 +2,13 @@ import React, {FC, InputHTMLAttributes} from 'react';
 import cn from 'classnames';
 
 import {SizeType, ToggleVariantType} from 'ui-kit/types';
+import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Toggle.styled';
 
-interface PropsInterface extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
+interface PropsInterface
+  extends PropsWithThemeInterface,
+    Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
   checked: boolean;
   size?: SizeType;
   onChange: (checked: boolean) => void;
