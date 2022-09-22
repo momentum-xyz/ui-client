@@ -29,8 +29,9 @@ import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore} = rootStore;
+  const {collaborationStore, mainStore, widgetStore, sessionStore} = rootStore;
   const {agoraStore} = mainStore;
+  const {musicPlayerStore} = widgetStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -62,6 +63,9 @@ const Collaboration: FC = () => {
       .then(() => {
         if (!textChatStore.isLoggedOn) {
           textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
+        }
+        if (musicPlayerStore.musicPlayer.isPlaying) {
+          musicPlayerStore.togglePlayback();
         }
       })
       .catch((e) => {

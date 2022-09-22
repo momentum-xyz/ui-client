@@ -51,7 +51,7 @@ export const VideoWrapper = styled.div`
 export const TextTile = styled.div`
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-s);
-  text-align: left;
+  text-align: justify;
   white-space: pre-line;
 
   word-wrap: break-word;
