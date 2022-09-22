@@ -38,7 +38,7 @@ const CollaborationPluginPage: FC = ({children}) => {
           history.push(ROUTES.base);
         }}
       >
-        {/* TODO: Implement */}
+        {/* TODO: Implement using some backend config and commiunicate somehow to the plugin */}
         {/* {space.isAdmin && !!googleDocument?.data?.url && (
           <>
             <Button label={t('actions.changeDocument')} variant="primary" onClick={pickDocument} />
