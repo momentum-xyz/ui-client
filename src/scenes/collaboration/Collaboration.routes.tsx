@@ -3,7 +3,7 @@ import {generatePath, Redirect} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
-import {PluginLoader} from 'core/utils';
+import {PluginLoader} from 'shared/hooks';
 import {PluginInterface} from 'core/interfaces/plugin.interface';
 
 import {
@@ -74,14 +74,8 @@ export const buildNavigationTabs = (
   spaceId: string,
   isStageMode: boolean,
   isScreenSharing: boolean,
-  plugins: PluginInterface[],
   isLiveStreaming?: boolean
 ): NavigationTabInterface[] => {
-  const pluginTabs: NavigationTabInterface[] = plugins.map((plugin) => ({
-    path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
-    iconName: plugin.iconName
-  }));
-
   const tabs: NavigationTabInterface[] = [
     {
       path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
@@ -112,8 +106,6 @@ export const buildNavigationTabs = (
       isActive: isLiveStreaming
     }
   ];
-
-  tabs.push(...pluginTabs);
 
   return tabs;
 };

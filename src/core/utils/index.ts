@@ -15,4 +15,3 @@ export * from './formatExistential.utils';
 export * from './promise.utils';
 export * from './text.utils';
 export * from './unity.utils';
-export * from './pluginLoader.utils';

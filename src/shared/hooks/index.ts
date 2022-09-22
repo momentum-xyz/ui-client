@@ -6,3 +6,4 @@ export * from './usePosBusEvent';
 export * from './useGooglePicker';
 export * from './useDeviceChange';
 export * from './useDynamicScript';
+export * from './pluginLoader';

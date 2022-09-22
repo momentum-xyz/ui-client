@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {observer} from 'mobx-react-lite';
+import {observer, useObserver} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
 
@@ -20,6 +20,7 @@ import {
 import {PluginInterface} from 'core/interfaces/plugin.interface';
 import {PLUGIN_LIST} from 'core/constants/pluginList.constant';
 import {request} from 'api/request';
+import {NavigationTabInterface} from 'core/interfaces';
 
 import {
   AcceptedToJoinStageDialog,
@@ -178,17 +179,26 @@ const Collaboration: FC = () => {
 
   const {device} = useDeviceChange(newDeviceDialog.open);
 
+  const tabs = useObserver(() => {
+    const pluginTabs: NavigationTabInterface[] = plugins.map((plugin) => ({
+      path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
+      iconName: plugin.iconName
+    }));
+
+    return [
+      ...buildNavigationTabs(
+        spaceId,
+        agoraStore.isStageMode,
+        !!agoraScreenShareStore.videoTrack,
+        liveStreamStore.isStreaming
+      ),
+      ...pluginTabs
+    ];
+  });
+
   return (
     <styled.Container>
-      <Navigation
-        tabs={buildNavigationTabs(
-          spaceId,
-          agoraStore.isStageMode,
-          !!agoraScreenShareStore.videoTrack,
-          plugins,
-          liveStreamStore.isStreaming
-        )}
-      />
+      <Navigation tabs={tabs} />
 
       {createSwitchByConfig(COLLABORATION_ROUTES(spaceId, plugins))}
 
