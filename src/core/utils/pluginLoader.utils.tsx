@@ -15,7 +15,7 @@ const loadComponent = (scope: string, module: string) => async (): Promise<any> 
   return factory();
 };
 
-const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, module = './App'}) => {
+export const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, module = './App'}) => {
   const {ready, failed} = useDynamicScript(module && url);
 
   if (!module) {
@@ -38,5 +38,3 @@ const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, module = '.
     </Suspense>
   );
 };
-
-export default PluginLoader;

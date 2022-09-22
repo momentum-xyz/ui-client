@@ -3,7 +3,7 @@ import {generatePath, Redirect} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
-import PluginLoader from 'core/utils/dynamicModule.utils';
+import {PluginLoader} from 'core/utils';
 import {PluginInterface} from 'core/interfaces/plugin.interface';
 
 import {

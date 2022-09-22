@@ -37,7 +37,7 @@ const RootStore = types
     videoStore: types.optional(VideoStore, {})
   })
   .actions((self) => ({
-    initApplication() {
+    initApplication(): void {
       self.configStore.init();
       self.mainStore.themeStore.init();
     },
