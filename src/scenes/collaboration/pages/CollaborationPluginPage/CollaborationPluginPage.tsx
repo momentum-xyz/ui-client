@@ -8,7 +8,11 @@ import {SpaceTopBar, TextChat} from 'ui-kit';
 
 import * as styled from './CollaborationPluginPage.styled';
 
-const CollaborationPluginPage: FC = ({children}) => {
+interface PropsInterface {
+  subtitle?: string;
+}
+
+const CollaborationPluginPage: FC<PropsInterface> = ({children, subtitle}) => {
   const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
   const {space, textChatStore} = collaborationStore;
   const {favoriteStore} = mainStore;
@@ -23,8 +27,7 @@ const CollaborationPluginPage: FC = ({children}) => {
     <styled.Inner>
       <SpaceTopBar
         title={space.name ?? ''}
-        // TODO: Take that from API
-        subtitle="Miro document"
+        subtitle={subtitle}
         isAdmin={space.isAdmin}
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}

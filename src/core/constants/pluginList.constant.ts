@@ -8,6 +8,7 @@ import {ROUTES} from './routePaths.constants';
 export const PLUGIN_LIST: (config: PluginConfigInterface) => PluginInterface[] = (config) => [
   {
     name: 'miro_plugin',
+    subtitle: 'Miro document',
     iconName: 'miro',
     // TODO: Later change to remote url
     url: appVariables.IS_DEV_ENVIRONMENT

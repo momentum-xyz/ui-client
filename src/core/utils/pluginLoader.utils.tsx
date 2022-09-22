@@ -1,4 +1,5 @@
 import React, {Suspense, FC} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {PluginLoaderInterface} from 'core/interfaces';
 import {useDynamicScript} from 'shared/hooks';
@@ -17,23 +18,24 @@ const loadComponent = (scope: string, module: string) => async (): Promise<any> 
 
 export const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, module = './App'}) => {
   const {ready, failed} = useDynamicScript(module && url);
+  const {t} = useTranslation();
 
   if (!module) {
-    return <h2>Not system specified</h2>;
+    return <h2>{t('errors.noModuleSpecified')}</h2>;
   }
 
   if (!ready) {
-    return <h2>Loading dynamic script: {url}</h2>;
+    return <h2>{t('messages.loadingDynamicScript', {url})}</h2>;
   }
 
   if (failed) {
-    return <h2>Failed to load dynamic script: {url}</h2>;
+    return <h2>{t('errors.failedToLoadDynamicScript', {url})}</h2>;
   }
 
   const Component = React.lazy(loadComponent(name, module));
 
   return (
-    <Suspense fallback="Loading Plugin">
+    <Suspense fallback={t('messages.loadingPlugin')}>
       <Component {...config} />
     </Suspense>
   );
