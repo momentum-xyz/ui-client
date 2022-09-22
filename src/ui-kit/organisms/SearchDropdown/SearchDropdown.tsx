@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useRef} from 'react';
 import cn from 'classnames';
 
-import {IconSvg, Text, SearchInput, useClickOutside} from 'ui-kit';
+import {IconSvg, Text, SearchInput, useClickOutside, PropsWithThemeInterface} from 'ui-kit';
 
 import * as styled from './SearchDropdown.styled';
 
@@ -10,7 +10,7 @@ interface DataInterface {
   id: string;
 }
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   data?: DataInterface[];
   ButtonLabel?: string;
   onClick?: (item: any) => void;

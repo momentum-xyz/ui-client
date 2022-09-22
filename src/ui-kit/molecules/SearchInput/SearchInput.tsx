@@ -2,10 +2,13 @@ import React, {FC, FormEvent, InputHTMLAttributes, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
+import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './SearchInput.styled';
 
-interface SearchPropsInterface extends Omit<InputHTMLAttributes<any>, 'onChange'> {
+interface SearchPropsInterface
+  extends PropsWithThemeInterface,
+    Omit<InputHTMLAttributes<any>, 'onChange'> {
   variantSize?: SizeType;
   delay?: number;
   onChange?: (value: string) => void;

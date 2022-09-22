@@ -111,6 +111,7 @@ const CalendarPage: FC = () => {
 
       {calendarStore.magicId && magicDialog.isOpen && (
         <LinkDialog
+          theme={theme}
           title={t('eventList.eventItem.magicLinkDialog.title')}
           copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
           link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}

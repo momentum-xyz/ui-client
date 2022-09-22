@@ -13,9 +13,11 @@ import {
   Text,
   VisualSettingsPanel
 } from 'ui-kit';
-import {EmojiDetails} from 'core/models';
+import {appVariables} from 'api/constants';
 
 import * as styled from './OrganismsPage.styled';
+
+const emojiSizeUI = 's1';
 
 const OrganismsPage: FC = () => {
   const {themeStore} = useStore().mainStore;
@@ -171,51 +173,23 @@ const OrganismsPage: FC = () => {
         </styled.Name>
         <styled.Section>
           <Emoji
-            emoji={EmojiDetails.create({
-              id: '61e0bbf7-f445-46f5-bf54-6c3512dd8201',
-              code: 'thumbs_up',
-              hash: '252878348593caa0f3389bf0c2fc40bd',
-              name: 'Thumbs Up',
-              order: 0,
-              spaceId: 'a91c9235-b545-43cf-8a3a-26b0fd70fe73',
-              spaceName: 'Kusama'
-            })}
+            emoji={`${appVariables.RENDER_SERVICE_URL}/texture/${emojiSizeUI}/252878348593caa0f3389bf0c2fc40bd`}
+            name="Thumbs Up"
             onClick={() => {}}
           />
           <Emoji
-            emoji={EmojiDetails.create({
-              id: 'e4518ad7-ea62-408e-b17f-fadfd1613c74',
-              code: 'wave',
-              hash: '350c3860dd6534ae6a5949f9ad724b4d',
-              name: 'Wave',
-              order: 9,
-              spaceId: 'a91c9235-b545-43cf-8a3a-26b0fd70fe73',
-              spaceName: 'Kusama'
-            })}
+            emoji={`${appVariables.RENDER_SERVICE_URL}/texture/${emojiSizeUI}/350c3860dd6534ae6a5949f9ad724b4d`}
+            name="Wave"
             onClick={() => {}}
           />
           <Emoji
-            emoji={EmojiDetails.create({
-              id: 'd5348736-b482-4f25-a74e-42b9b436cbf3',
-              code: 'celebration',
-              hash: 'a9bf62a8d9a82dda112f11bd3ee5ff62',
-              name: 'Celebration',
-              order: 7,
-              spaceId: 'a91c9235-b545-43cf-8a3a-26b0fd70fe73',
-              spaceName: 'Kusama'
-            })}
+            emoji={`${appVariables.RENDER_SERVICE_URL}/texture/${emojiSizeUI}/a9bf62a8d9a82dda112f11bd3ee5ff62`}
+            name="Celebration"
             onClick={() => {}}
           />
           <Emoji
-            emoji={EmojiDetails.create({
-              id: 'a198cf64-7fad-4e8a-87fa-8f33d80b0c3a',
-              code: 'cheers',
-              hash: '241ff23317b993dea75ee3642468f1f9',
-              name: 'Cheers',
-              order: 16,
-              spaceId: 'a91c9235-b545-43cf-8a3a-26b0fd70fe73',
-              spaceName: 'Kusama'
-            })}
+            emoji={`${appVariables.RENDER_SERVICE_URL}/texture/${emojiSizeUI}/241ff23317b993dea75ee3642468f1f9`}
+            name="Cheers"
             onClick={() => {}}
           />
         </styled.Section>

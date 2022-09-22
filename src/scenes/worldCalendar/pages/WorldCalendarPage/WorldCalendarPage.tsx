@@ -4,6 +4,7 @@ import {generatePath} from 'react-router-dom';
 import {useHistory} from 'react-router';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
+import {useTheme} from 'styled-components';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
@@ -21,6 +22,7 @@ const WorldCalendarPage: FC = () => {
   const {attendeesListStore} = widgetStore;
 
   const history = useHistory();
+  const theme = useTheme();
 
   const handleMagicLinkOpen = useCallback(
     (eventId: string, spaceId?: string) => {
@@ -87,6 +89,7 @@ const WorldCalendarPage: FC = () => {
     <styled.Container data-testid="WorldCalendarPage-test">
       {calendarStore.magicId && magicDialog.isOpen && (
         <LinkDialog
+          theme={theme}
           title={t('eventList.eventItem.magicLinkDialog.title')}
           copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
           link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}

@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
 
-import {SimpleProfileMenu} from 'ui-kit';
+import {PropsWithThemeInterface, SimpleProfileMenu} from 'ui-kit';
 
 import * as styled from './Page.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   backgroundSrc?: string;
   showSimpleProfileMenu?: boolean;
 }
