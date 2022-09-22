@@ -160,7 +160,8 @@ export const enGb = {
         'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account',
       savingSpaceDetailsError: 'An error has occurred while saving space.',
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
-      noModuleSpecified: 'No module specyfied'
+      noModuleSpecified: 'No module specyfied',
+      errorWhileLoadingPlugin: 'An error has occured while loading plugin'
     },
     systemMessages: {
       loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
