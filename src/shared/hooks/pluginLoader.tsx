@@ -1,5 +1,6 @@
 import React, {Suspense, FC} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useErrorBoundary, withErrorBoundary} from 'react-use-error-boundary';
 
 import {PluginLoaderInterface} from 'core/interfaces';
 import {useDynamicScript} from 'shared/hooks';
@@ -16,27 +17,30 @@ const loadComponent = (scope: string, module: string) => async (): Promise<any> 
   return factory();
 };
 
-export const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, module = './App'}) => {
-  const {ready, failed} = useDynamicScript(module && url);
-  const {t} = useTranslation();
+export const PluginLoader: FC<PluginLoaderInterface> = withErrorBoundary(
+  ({name, url, config, module = './App'}) => {
+    const {ready, failed} = useDynamicScript(module && url);
+    const {t} = useTranslation();
+    const [error] = useErrorBoundary();
 
-  if (!module) {
-    return <h2>{t('errors.noModuleSpecified')}</h2>;
+    if (!module) {
+      return <h2>{t('errors.noModuleSpecified')}</h2>;
+    }
+
+    if (!ready) {
+      return <h2>{t('messages.loadingDynamicScript', {url})}</h2>;
+    }
+
+    if (failed || error) {
+      return <h2>{t('errors.failedToLoadDynamicScript', {url})}</h2>;
+    }
+
+    const Component = React.lazy(loadComponent(name, module));
+
+    return (
+      <Suspense fallback={t('messages.loadingPlugin')}>
+        <Component {...config} />
+      </Suspense>
+    );
   }
-
-  if (!ready) {
-    return <h2>{t('messages.loadingDynamicScript', {url})}</h2>;
-  }
-
-  if (failed) {
-    return <h2>{t('errors.failedToLoadDynamicScript', {url})}</h2>;
-  }
-
-  const Component = React.lazy(loadComponent(name, module));
-
-  return (
-    <Suspense fallback={t('messages.loadingPlugin')}>
-      <Component {...config} />
-    </Suspense>
-  );
-};
+);
