@@ -25,7 +25,7 @@ export const ROUTES = {
     calendar: '/collaboration/:spaceId/calendar',
     calendarEvent: '/collaboration/:spaceId/calendar/:eventId',
     screenShare: '/collaboration/:spaceId/screenShare',
-    miro: '/collaboration/:spaceId/miro',
+    plugin: '/collaboration/:spaceId/:subPath',
     googleDrive: '/collaboration/:spaceId/google-drive',
     liveStream: '/collaboration/:spaceId/live-stream',
     table: `/collaboration/:spaceId/table`

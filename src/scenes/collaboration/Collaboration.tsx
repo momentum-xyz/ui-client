@@ -190,7 +190,7 @@ const Collaboration: FC = () => {
         )}
       />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES(plugins))}
+      {createSwitchByConfig(COLLABORATION_ROUTES(spaceId, plugins))}
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog

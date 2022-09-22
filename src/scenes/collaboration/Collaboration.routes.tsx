@@ -16,7 +16,7 @@ import {
   CollaborationPluginPage
 } from './pages';
 
-export const COLLABORATION_ROUTES = (plugins: PluginInterface[]) => {
+export const COLLABORATION_ROUTES = (spaceId: string, plugins: PluginInterface[]) => {
   const baseRoutes: RouteConfigInterface[] = [
     {
       path: ROUTES.collaboration.dashboard,
@@ -58,8 +58,9 @@ export const COLLABORATION_ROUTES = (plugins: PluginInterface[]) => {
   plugins.forEach((plugin) => {
     baseRoutes.push({
       ...plugin,
+      path: generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId}),
       main: () => (
-        <CollaborationPluginPage>
+        <CollaborationPluginPage subtitle={plugin.subtitle}>
           <PluginLoader url={plugin.url} name={plugin.name} config={{...plugin.config}} />
         </CollaborationPluginPage>
       )
@@ -77,7 +78,7 @@ export const buildNavigationTabs = (
   isLiveStreaming?: boolean
 ): NavigationTabInterface[] => {
   const pluginTabs: NavigationTabInterface[] = plugins.map((plugin) => ({
-    path: generatePath(plugin.path, {spaceId}),
+    path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
     iconName: plugin.iconName
   }));
 
