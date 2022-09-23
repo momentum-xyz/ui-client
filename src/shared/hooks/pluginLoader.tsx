@@ -38,6 +38,10 @@ const PluginLoaderComponent: FC<PluginLoaderPropsInterface> = ({
     console.info('Mounting PluginLoaderComponent');
   }, []);
 
+  useEffect(() => {
+    console.info('Rerendering PluginLoaderComponent');
+  });
+
   if (!module) {
     return <h2>{t('errors.noModuleSpecified')}</h2>;
   }
