@@ -6,7 +6,7 @@ interface PropsInterface {
 }
 
 const ErrorBoundary: FC<PropsInterface> = withErrorBoundary(({children, errorMessage}) => {
-  const [error] = useErrorBoundary();
+  const [error] = useErrorBoundary(console.error);
 
   if (error) {
     return <h2>{errorMessage}</h2>;

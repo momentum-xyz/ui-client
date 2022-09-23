@@ -1,5 +1,5 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import React, {FC, useCallback, useEffect, useMemo} from 'react';
+import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer, useObserver} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
@@ -7,7 +7,7 @@ import {useTheme} from 'styled-components';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
-import {createSwitchByConfig} from 'core/utils';
+import {createRoutesByConfig} from 'core/utils';
 import {useStore, useDeviceChange} from 'shared/hooks';
 import {StageModeRequestEnum} from 'core/enums';
 import {
@@ -17,8 +17,6 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
-import {PluginInterface} from 'core/interfaces/plugin.interface';
-import {PLUGIN_LIST} from 'core/constants/pluginList.constant';
 import {request} from 'api/request';
 import {NavigationTabInterface} from 'core/interfaces';
 
@@ -31,6 +29,7 @@ import {
 import {EmojiAnimationDock} from './components';
 import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
+import {CollaborationPluginPage} from './pages';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
@@ -47,10 +46,9 @@ const Collaboration: FC = () => {
     textChatStore,
     liveStreamStore,
     stageModeStore,
-    space
+    space,
+    pluginsStore
   } = collaborationStore;
-
-  const [plugins, setPlugins] = useState<PluginInterface[]>([]);
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
@@ -90,18 +88,9 @@ const Collaboration: FC = () => {
   }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
 
   useEffect(() => {
-    // Later change it to API call that returns this list
-    setTimeout(() => {
-      const plugins = PLUGIN_LIST({
-        theme,
-        isSpaceAdmin: space?.isAdmin ?? false,
-        request,
-        spaceId
-      });
-
-      setPlugins(plugins);
-    }, 300);
-  }, [history, space?.isAdmin, spaceId, theme]);
+    pluginsStore.init(theme, space?.isAdmin ?? false, spaceId);
+    console.info('fetched plugin list', pluginsStore.plugins.length);
+  }, [history, pluginsStore, space?.isAdmin, spaceId, theme]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -179,8 +168,10 @@ const Collaboration: FC = () => {
 
   const {device} = useDeviceChange(newDeviceDialog.open);
 
+  const pluginRequest = useMemo(() => request, []);
+
   const tabs = useObserver(() => {
-    const pluginTabs: NavigationTabInterface[] = plugins.map((plugin) => ({
+    const pluginTabs: NavigationTabInterface[] = pluginsStore.plugins.map((plugin) => ({
       path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
       iconName: plugin.iconName
     }));
@@ -200,7 +191,20 @@ const Collaboration: FC = () => {
     <styled.Container>
       <Navigation tabs={tabs} />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES(spaceId, plugins))}
+      <Switch>
+        {createRoutesByConfig(COLLABORATION_ROUTES)}
+        {pluginsStore.plugins.map((plugin) => {
+          return (
+            <Route
+              key={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
+              path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
+              exact={plugin.exact}
+            >
+              <CollaborationPluginPage plugin={plugin} request={pluginRequest} />
+            </Route>
+          );
+        })}
+      </Switch>
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
