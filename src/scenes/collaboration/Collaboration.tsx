@@ -1,8 +1,9 @@
-import React, {FC, useCallback, useEffect} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {observer} from 'mobx-react-lite';
+import {observer, useObserver} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {useTheme} from 'styled-components';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
@@ -16,6 +17,10 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
+import {PluginInterface} from 'core/interfaces/plugin.interface';
+import {PLUGIN_LIST} from 'core/constants/pluginList.constant';
+import {request} from 'api/request';
+import {NavigationTabInterface} from 'core/interfaces';
 
 import {
   AcceptedToJoinStageDialog,
@@ -41,12 +46,16 @@ const Collaboration: FC = () => {
     countdownDialog,
     textChatStore,
     liveStreamStore,
-    stageModeStore
+    stageModeStore,
+    space
   } = collaborationStore;
+
+  const [plugins, setPlugins] = useState<PluginInterface[]>([]);
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
+  const theme = useTheme();
 
   const reJoinMeeting = useCallback(async () => {
     if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
@@ -79,6 +88,20 @@ const Collaboration: FC = () => {
         }
       });
   }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
+
+  useEffect(() => {
+    // Later change it to API call that returns this list
+    setTimeout(() => {
+      const plugins = PLUGIN_LIST({
+        theme,
+        isSpaceAdmin: space?.isAdmin ?? false,
+        request,
+        spaceId
+      });
+
+      setPlugins(plugins);
+    }, 300);
+  }, [history, space?.isAdmin, spaceId, theme]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -156,18 +179,28 @@ const Collaboration: FC = () => {
 
   const {device} = useDeviceChange(newDeviceDialog.open);
 
+  const tabs = useObserver(() => {
+    const pluginTabs: NavigationTabInterface[] = plugins.map((plugin) => ({
+      path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
+      iconName: plugin.iconName
+    }));
+
+    return [
+      ...buildNavigationTabs(
+        spaceId,
+        agoraStore.isStageMode,
+        !!agoraScreenShareStore.videoTrack,
+        liveStreamStore.isStreaming
+      ),
+      ...pluginTabs
+    ];
+  });
+
   return (
     <styled.Container>
-      <Navigation
-        tabs={buildNavigationTabs(
-          spaceId,
-          agoraStore.isStageMode,
-          !!agoraScreenShareStore.videoTrack,
-          liveStreamStore.isStreaming
-        )}
-      />
+      <Navigation tabs={tabs} />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES)}
+      {createSwitchByConfig(COLLABORATION_ROUTES(spaceId, plugins))}
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
