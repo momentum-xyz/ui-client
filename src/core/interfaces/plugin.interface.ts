@@ -1,4 +1,4 @@
-import {PluginConfigInterface} from './pluginConfig.interface';
+import {PluginPropsInterface} from './pluginProps.interface';
 
 export interface PluginInterface {
   name: string;
@@ -6,7 +6,7 @@ export interface PluginInterface {
   subtitle?: string;
   url: string;
   exact?: boolean;
-  config: PluginConfigInterface;
+  props?: PluginPropsInterface;
   module?: string;
   iconName: IconNameType;
 }

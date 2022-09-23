@@ -20,6 +20,7 @@ import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
 import {TextChatStore} from './TextChatStore';
 import {LiveStreamStore} from './LiveStreamStore';
+import {CollaboarationPluginStore} from './CollaborationPluginsStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -34,6 +35,7 @@ const RootCollaborationStore = types
       googleDriveStore: types.optional(GoogleDriveStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
       liveStreamStore: types.optional(LiveStreamStore, {}),
+      pluginsStore: types.optional(CollaboarationPluginStore, {}),
       isModerator: false,
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),

@@ -1,9 +1,11 @@
 import {appVariables} from 'api/constants';
-import {PluginConfigInterface} from 'core/interfaces';
 import {PluginInterface} from 'core/interfaces/plugin.interface';
+import {CollaboarationPluginPropsInterface} from 'core/interfaces/pluginProps.interface';
 
 // This list later could be passed as parameters from API
-export const PLUGIN_LIST: (config: PluginConfigInterface) => PluginInterface[] = (config) => [
+export const COLLABORATION_PLUGIN_LIST: (
+  config: CollaboarationPluginPropsInterface
+) => PluginInterface[] = (config) => [
   {
     name: 'miro_plugin',
     subPath: 'miro',
