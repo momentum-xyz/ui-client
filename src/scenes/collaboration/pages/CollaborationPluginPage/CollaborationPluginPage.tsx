@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useCallback, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {AxiosInstance} from 'axios';
@@ -26,6 +26,11 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin, request}) => {
   const history = useHistory();
   const theme = useTheme();
   const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
+
+  const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
+    console.info('Recieved actions', actions);
+    setActions(actions);
+  }, []);
 
   if (!space) {
     return null;
@@ -58,7 +63,9 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin, request}) => {
           props={{
             theme,
             isSpaceAdmin: space.isAdmin,
-            renderTopBarActions: setActions
+            spaceId: space.id,
+            request,
+            renderTopBarActions
           }}
         />
         {textChatStore.textChatDialog.isOpen && (

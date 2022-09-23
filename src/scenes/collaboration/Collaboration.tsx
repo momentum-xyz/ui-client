@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useMemo} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer, useObserver} from 'mobx-react-lite';
@@ -168,8 +168,6 @@ const Collaboration: FC = () => {
 
   const {device} = useDeviceChange(newDeviceDialog.open);
 
-  const pluginRequest = useMemo(() => request, []);
-
   const tabs = useObserver(() => {
     const pluginTabs: NavigationTabInterface[] = pluginsStore.plugins.map((plugin) => ({
       path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
@@ -200,7 +198,7 @@ const Collaboration: FC = () => {
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >
-              <CollaborationPluginPage plugin={plugin} request={pluginRequest} />
+              <CollaborationPluginPage plugin={plugin} request={request} />
             </Route>
           );
         })}
