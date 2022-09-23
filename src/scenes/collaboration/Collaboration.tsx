@@ -196,11 +196,13 @@ const Collaboration: FC = () => {
     ];
   });
 
+  const routes = React.useMemo(() => COLLABORATION_ROUTES(spaceId, plugins), [plugins, spaceId]);
+
   return (
     <styled.Container>
       <Navigation tabs={tabs} />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES(spaceId, plugins))}
+      {createSwitchByConfig(routes)}
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog
