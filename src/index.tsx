@@ -5,6 +5,7 @@ import {BrowserRouter} from 'react-router-dom';
 
 import {appVariables} from 'api/constants';
 import {StoreProvider} from 'shared/hooks';
+import 'shared/services/i18n';
 
 import {App} from './scenes';
 import {RootStore} from './stores';

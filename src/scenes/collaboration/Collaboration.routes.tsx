@@ -3,72 +3,59 @@ import {generatePath, Redirect} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {NavigationTabInterface, RouteConfigInterface} from 'core/interfaces';
-import {PluginLoader} from 'shared/hooks';
-import {PluginInterface} from 'core/interfaces/plugin.interface';
 
 import {
   DashboardPage,
   CalendarPage,
   StageModePage,
+  MiroBoardPage,
   ScreenSharePage,
   GoogleDrivePage,
-  LiveStreamPage,
-  CollaborationPluginPage
+  LiveStreamPage
 } from './pages';
 
-export const COLLABORATION_ROUTES = (spaceId: string, plugins: PluginInterface[]) => {
-  const baseRoutes: RouteConfigInterface[] = [
-    {
-      path: ROUTES.collaboration.dashboard,
-      exact: true,
-      main: () => <DashboardPage />
-    },
-    {
-      path: ROUTES.collaboration.calendarEvent,
-      main: () => <CalendarPage />
-    },
-    {
-      path: ROUTES.collaboration.calendar,
-      main: () => <CalendarPage />,
-      exact: true
-    },
-    {
-      path: ROUTES.collaboration.stageMode,
-      main: () => <StageModePage />
-    },
-    {
-      path: ROUTES.collaboration.screenShare,
-      main: () => <ScreenSharePage />
-    },
-    {
-      path: ROUTES.collaboration.googleDrive,
-      main: () => <GoogleDrivePage />
-    },
-    {
-      path: ROUTES.collaboration.liveStream,
-      main: () => <LiveStreamPage />
-    },
-    {
-      path: ROUTES.collaboration.base,
-      exact: true,
-      main: () => <Redirect to={ROUTES.collaboration.dashboard} />
-    }
-  ];
-
-  plugins.forEach((plugin) => {
-    baseRoutes.push({
-      ...plugin,
-      path: generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId}),
-      main: () => (
-        <CollaborationPluginPage subtitle={plugin.subtitle}>
-          <PluginLoader url={plugin.url} name={plugin.name} config={{...plugin.config}} />
-        </CollaborationPluginPage>
-      )
-    });
-  });
-
-  return baseRoutes;
-};
+export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
+  {
+    path: ROUTES.collaboration.dashboard,
+    exact: true,
+    main: () => <DashboardPage />
+  },
+  {
+    path: ROUTES.collaboration.calendarEvent,
+    main: () => <CalendarPage />
+  },
+  {
+    path: ROUTES.collaboration.calendar,
+    main: () => <CalendarPage />,
+    exact: true
+  },
+  {
+    path: ROUTES.collaboration.stageMode,
+    main: () => <StageModePage />
+  },
+  {
+    path: ROUTES.collaboration.miro,
+    exact: true,
+    main: () => <MiroBoardPage />
+  },
+  {
+    path: ROUTES.collaboration.screenShare,
+    main: () => <ScreenSharePage />
+  },
+  {
+    path: ROUTES.collaboration.googleDrive,
+    main: () => <GoogleDrivePage />
+  },
+  {
+    path: ROUTES.collaboration.liveStream,
+    main: () => <LiveStreamPage />
+  },
+  {
+    path: ROUTES.collaboration.base,
+    exact: true,
+    main: () => <Redirect to={ROUTES.collaboration.dashboard} />
+  }
+];
 
 export const buildNavigationTabs = (
   spaceId: string,
@@ -76,7 +63,7 @@ export const buildNavigationTabs = (
   isScreenSharing: boolean,
   isLiveStreaming?: boolean
 ): NavigationTabInterface[] => {
-  const tabs: NavigationTabInterface[] = [
+  return [
     {
       path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
       iconName: 'tiles'
@@ -96,6 +83,10 @@ export const buildNavigationTabs = (
       isActive: isScreenSharing
     },
     {
+      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
+      iconName: 'miro'
+    },
+    {
       path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
       iconName: 'drive'
     },
@@ -106,6 +97,4 @@ export const buildNavigationTabs = (
       isActive: isLiveStreaming
     }
   ];
-
-  return tabs;
 };
