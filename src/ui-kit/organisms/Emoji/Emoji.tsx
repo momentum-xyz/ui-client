@@ -1,19 +1,19 @@
 import {FC} from 'react';
 
-import {EmojiDetailsInterface} from 'core/models';
+import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Emoji.styled';
 
-interface PropsInterface {
-  emoji: EmojiDetailsInterface;
+interface PropsInterface extends PropsWithThemeInterface {
+  name: string;
+  emoji: string;
   onClick: () => void;
 }
 
-const Emoji: FC<PropsInterface> = ({emoji, onClick}) => {
-  const {imgSrc, name} = emoji;
+const Emoji: FC<PropsInterface> = ({emoji, name, onClick}) => {
   return (
     <styled.Emoji onClick={onClick}>
-      <styled.EmojiImg src={imgSrc} alt={name} title={name} />
+      <styled.EmojiImg src={emoji} alt={name} title={name} />
     </styled.Emoji>
   );
 };

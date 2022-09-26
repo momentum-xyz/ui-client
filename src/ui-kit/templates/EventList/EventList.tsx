@@ -2,12 +2,12 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 
-import {Loader, EventItem} from 'ui-kit';
+import {Loader, EventItem, PropsWithThemeInterface} from 'ui-kit';
 import {EventItemInterface} from 'core/models';
 
 import * as styled from './EventList.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   currentUserId: string;
   events: EventItemInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;

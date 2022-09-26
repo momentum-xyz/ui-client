@@ -1,4 +1,4 @@
-FROM node:16-alpine AS build
+FROM node:18-alpine AS build
 
 WORKDIR /usr/src/app
 
@@ -10,7 +10,7 @@ COPY . .
 RUN yarn build
 
 
-FROM nginx:1.20.2-alpine as production-build
+FROM nginx:1.22.0-alpine as production-build
 WORKDIR /opt/srv
 
 ADD ./docker_assets/nginx.conf /etc/nginx/nginx.conf

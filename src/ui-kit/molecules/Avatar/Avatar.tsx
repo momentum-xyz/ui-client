@@ -2,11 +2,12 @@ import React, {FC, memo, useState} from 'react';
 import cn from 'classnames';
 
 import {SizeType} from 'ui-kit/types';
-import {UserStatusEnum} from 'core/enums';
+import {UserStatusEnum} from 'ui-kit/enums';
+import {PropsWithThemeInterface} from 'ui-kit/interfaces';
 
 import * as styled from './Avatar.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   avatarSrc?: string;
   size: SizeType;
   status?: UserStatusEnum;

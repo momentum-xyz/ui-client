@@ -1,13 +1,12 @@
 import React, {FC} from 'react';
 import {toast} from 'react-toastify';
-import {useTheme} from 'styled-components';
 
 import {copyToClipboard} from 'core/utils';
-import {Dialog, Input} from 'ui-kit';
+import {Dialog, Input, PropsWithThemeInterface} from 'ui-kit';
 
 import * as styled from './LinkDialog.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   title: string;
   link?: string;
   copyLabel: string;
@@ -15,8 +14,6 @@ interface PropsInterface {
 }
 
 const LinkDialog: FC<PropsInterface> = ({link, title, copyLabel, onClose}) => {
-  const theme = useTheme();
-
   const copyLink = () => {
     if (link) {
       copyToClipboard(link).then(() => {
@@ -30,7 +27,6 @@ const LinkDialog: FC<PropsInterface> = ({link, title, copyLabel, onClose}) => {
 
   return (
     <Dialog
-      theme={theme}
       title={title}
       headerStyle="uppercase"
       showCloseButton
