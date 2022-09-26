@@ -1,4 +1,4 @@
-import React, {Suspense, FC, useEffect, useMemo} from 'react';
+import React, {Suspense, FC, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {ErrorBoundary} from 'shared/components';
@@ -29,17 +29,9 @@ const PluginLoader: FC<PluginLoaderPropsInterface> = ({name, url, props, module 
   const {ready, failed} = useDynamicScript(module && url);
   const {t} = useTranslation();
 
-  useEffect(() => {
-    console.info('Mounting PluginLoaderComponent', props);
-  }, [props]);
-
   const Component = useMemo(() => {
     return React.lazy(loadComponent(name, module));
   }, [module, name]);
-
-  useEffect(() => {
-    console.info('Rerendering PluginLoaderComponent');
-  });
 
   if (!ready) {
     return <h2>{t('messages.loadingDynamicScript', {url})}</h2>;

@@ -3,7 +3,6 @@ import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-d
 import {useTranslation} from 'react-i18next';
 import {observer, useObserver} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {useTheme} from 'styled-components';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
@@ -17,7 +16,6 @@ import {
   NewDeviceDialog,
   CountdownDialog
 } from 'ui-kit';
-import {request} from 'api/request';
 import {NavigationTabInterface} from 'core/interfaces';
 
 import {
@@ -46,14 +44,12 @@ const Collaboration: FC = () => {
     textChatStore,
     liveStreamStore,
     stageModeStore,
-    space,
     pluginsStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
   const history = useHistory();
-  const theme = useTheme();
 
   const reJoinMeeting = useCallback(async () => {
     if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
@@ -88,9 +84,9 @@ const Collaboration: FC = () => {
   }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
 
   useEffect(() => {
-    pluginsStore.init(theme, space?.isAdmin ?? false, spaceId);
+    pluginsStore.init();
     console.info('fetched plugin list', pluginsStore.plugins.length);
-  }, [history, pluginsStore, space?.isAdmin, spaceId, theme]);
+  }, [pluginsStore]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -194,11 +190,11 @@ const Collaboration: FC = () => {
         {pluginsStore.plugins.map((plugin) => {
           return (
             <Route
-              key={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
+              key={plugin.name}
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >
-              <CollaborationPluginPage plugin={plugin} request={request} />
+              <CollaborationPluginPage plugin={plugin} />
             </Route>
           );
         })}
