@@ -3,7 +3,7 @@ import {AxiosInstance} from 'axios';
 import {ThemeInterface} from 'ui-kit';
 
 // TODO: Export it to a shared package so that plugins can use it.
-export interface PluginPropsInterface {
+export interface CorePluginPropsInterface {
   theme: ThemeInterface;
   spaceId?: string;
   isSpaceAdmin: boolean;
@@ -14,8 +14,8 @@ export interface PluginTopBarActionInterface {
   main: () => JSX.Element | null;
 }
 
-export interface CollaboarationPluginPropsInterface extends PluginPropsInterface {
+export interface SpacePluginPropsInterface extends CorePluginPropsInterface {
   renderTopBarActions?: (actions: PluginTopBarActionInterface) => void;
 }
 
-export type PluginPropsType = PluginPropsInterface | CollaboarationPluginPropsInterface;
+export type PluginPropsType = CorePluginPropsInterface | SpacePluginPropsInterface;

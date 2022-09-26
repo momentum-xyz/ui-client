@@ -1,7 +1,6 @@
 import {FC, useCallback, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {AxiosInstance} from 'axios';
 import {useTheme} from 'styled-components';
 
 import {ROUTES} from 'core/constants';
@@ -10,15 +9,15 @@ import {SpaceTopBar, TextChat} from 'ui-kit';
 import {PluginLoader} from 'shared/hooks/pluginLoader';
 import {CollaborationPluginInterface} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
 import {PluginTopBarActionInterface} from 'core/interfaces';
+import {request} from 'api/request';
 
 import * as styled from './CollaborationPluginPage.styled';
 
 interface PropsInterface {
   plugin: CollaborationPluginInterface;
-  request?: AxiosInstance;
 }
 
-const CollaborationPluginPage: FC<PropsInterface> = ({plugin, request}) => {
+const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
   const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
   const {space, textChatStore} = collaborationStore;
   const {favoriteStore} = mainStore;
@@ -64,7 +63,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin, request}) => {
             theme,
             isSpaceAdmin: space.isAdmin,
             spaceId: space.id,
-            request,
+            request: request,
             renderTopBarActions
           }}
         />
