@@ -11,5 +11,3 @@ export * from './message.interface';
 export * from './coordination.interface';
 export * from './tokenRulesColumnHeader.interface';
 export * from './emoji.interface';
-export * from './pluginConfig.interface';
-export * from './pluginLoader.interface';

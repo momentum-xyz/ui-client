@@ -158,10 +158,7 @@ export const enGb = {
       somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
       noWorldBuilderPermissions:
         'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account',
-      savingSpaceDetailsError: 'An error has occurred while saving space.',
-      failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
-      noModuleSpecified: 'No module specyfied',
-      errorWhileLoadingPlugin: 'An error has occured while loading plugin'
+      savingSpaceDetailsError: 'An error has occurred while saving space.'
     },
     systemMessages: {
       loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
@@ -228,8 +225,6 @@ export const enGb = {
     },
     messages: {
       loading: 'Loading Momentum',
-      loadingPlugin: 'Loading Plugin...',
-      loadingDynamicScript: 'Loading dynamic script: {{url}}',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Momentum does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
