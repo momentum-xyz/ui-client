@@ -16,7 +16,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": ["packages/*/tsconfig.json"]
   },
   "rules": {
     "curly": 2,
@@ -115,7 +115,7 @@
         "extensions": [".js", ".jsx", ".ts", ".tsx"],
         "moduleDirectory": [
           "node_modules",
-          "src/"
+          "packages/*/src"
         ]
       }
     },
