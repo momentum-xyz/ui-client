@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "postinstall": "husky install",
+    "build": "yarn --cwd=packages/app build",
     "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",
