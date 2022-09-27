@@ -12,7 +12,7 @@ import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
-  const {dashboardStore, space, textChatStore} = collaborationStore;
+  const {dashboardStore, space, streamChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {favoriteStore} = mainStore;
 
@@ -55,9 +55,9 @@ const DashboardPage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         spaceId={space.id}
         isAdmin={space.isAdmin}
-        isChatOpen={textChatStore.textChatDialog.isOpen}
-        toggleChat={textChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        isChatOpen={streamChatStore.textChatDialog.isOpen}
+        toggleChat={streamChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={async () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
@@ -104,7 +104,7 @@ const DashboardPage: FC = () => {
         tilesList={tileList.tileMatrix}
         onDragEnd={dashboardStore.onDragEnd}
         canDrag={space.isAdmin || space.isMember}
-        textChatIsOpen={textChatStore.textChatDialog.isOpen}
+        textChatIsOpen={streamChatStore.textChatDialog.isOpen}
       />
       {tileDialog.isOpen && <TileForm />}
       {tileRemoveDialog.isOpen && <RemoveTileDialog />}
