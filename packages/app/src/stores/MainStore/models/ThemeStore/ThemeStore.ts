@@ -3,12 +3,7 @@ import {ThemeInterface} from '@momentum/ui-kit';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
-import {
-  AccentColorList,
-  BackgroundColorList,
-  DefaultThemeConfig,
-  TextColorList
-} from 'ui-kit';
+import {AccentColorList, BackgroundColorList, DefaultThemeConfig, TextColorList} from 'ui-kit';
 
 const ThemeStore = types
   .model('ThemeStore', {

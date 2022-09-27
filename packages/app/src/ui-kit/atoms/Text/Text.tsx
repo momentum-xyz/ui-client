@@ -1,6 +1,11 @@
 import React, {FC, memo} from 'react';
 import cn from 'classnames';
-import {TextAlignType,TextTransformType, TextWeightType,PropsWithThemeInterface} from '@momentum/ui-kit';
+import {
+  TextAlignType,
+  TextTransformType,
+  TextWeightType,
+  PropsWithThemeInterface
+} from '@momentum/ui-kit';
 
 import {TextSizeType} from 'ui-kit/types';
 import {splitIntoFirstNSentencesAndRest} from 'ui-kit/utils';

@@ -1,6 +1,6 @@
 import React, {FC, ReactNode} from 'react';
 import cn from 'classnames';
-import {Heading,TextAlignType,PropsWithThemeInterface} from '@momentum/ui-kit';
+import {Heading, TextAlignType, PropsWithThemeInterface} from '@momentum/ui-kit';
 
 import {
   SvgButton,
@@ -9,7 +9,7 @@ import {
   SizeType,
   ComponentSizeInterface,
   HeaderType,
-  HeaderItemType,
+  HeaderItemType
 } from 'ui-kit';
 
 import * as styled from './PanelLayout.styled';

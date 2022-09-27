@@ -5,12 +5,7 @@ import * as H from 'history';
 import {match} from 'react-router';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
 
-import {
-  Tooltip,
-  ToolbarIconInterface,
-  SvgButton,
-  PlacementType
-} from 'ui-kit';
+import {Tooltip, ToolbarIconInterface, SvgButton, PlacementType} from 'ui-kit';
 import {SizeType} from 'ui-kit/types';
 
 import * as styled from './ToolbarIcon.styled';

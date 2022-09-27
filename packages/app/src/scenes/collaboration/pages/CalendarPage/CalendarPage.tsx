@@ -96,7 +96,7 @@ const CalendarPage: FC = () => {
         )}
       </SpaceTopBar>
       <styled.InnerContainer>
-        <Heading label='test' type='h3' />
+        <Heading label="test" type="h3" />
         <EventList
           currentUserId={sessionStore.userId}
           events={eventList.events}

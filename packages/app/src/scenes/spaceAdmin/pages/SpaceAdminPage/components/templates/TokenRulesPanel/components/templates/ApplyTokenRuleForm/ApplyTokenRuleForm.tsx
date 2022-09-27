@@ -7,14 +7,7 @@ import {Heading} from '@momentum/ui-kit';
 
 import {ApplyTokenRuleInterface} from 'api';
 import {useStore} from 'shared/hooks';
-import {
-  Dialog,
-  Dropdown,
-  Loader,
-  SearchDropdown,
-  Text,
-  useDebouncedCallback
-} from 'ui-kit';
+import {Dialog, Dropdown, Loader, SearchDropdown, Text, useDebouncedCallback} from 'ui-kit';
 import {TokenRuleItemModelInterface} from 'core/models';
 import {TokenRuleRolesEnum} from 'core/enums';
 
