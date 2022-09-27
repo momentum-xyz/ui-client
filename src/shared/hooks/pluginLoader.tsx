@@ -1,9 +1,10 @@
-import React, {Suspense, FC} from 'react';
+import React, {Suspense, FC, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {PluginLoaderInterface} from 'core/interfaces';
-import {useDynamicScript} from 'shared/hooks';
 import {ErrorBoundary} from 'shared/components';
+import {PluginPropsType} from 'core/interfaces';
+
+import {useDynamicScript} from './useDynamicScript';
 
 const loadComponent = (scope: string, module: string) => async (): Promise<any> => {
   // @ts-ignore: Required to load list based plugins, no ts declaration
@@ -17,13 +18,20 @@ const loadComponent = (scope: string, module: string) => async (): Promise<any> 
   return factory();
 };
 
-export const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, module = './App'}) => {
+interface PluginLoaderPropsInterface {
+  name: string;
+  url: string;
+  props?: PluginPropsType;
+  module?: string;
+}
+
+const PluginLoader: FC<PluginLoaderPropsInterface> = ({name, url, props, module = './App'}) => {
   const {ready, failed} = useDynamicScript(module && url);
   const {t} = useTranslation();
 
-  if (!module) {
-    return <h2>{t('errors.noModuleSpecified')}</h2>;
-  }
+  const Component = useMemo(() => {
+    return React.lazy(loadComponent(name, module));
+  }, [module, name]);
 
   if (!ready) {
     return <h2>{t('messages.loadingDynamicScript', {url})}</h2>;
@@ -33,13 +41,13 @@ export const PluginLoader: FC<PluginLoaderInterface> = ({name, url, config, modu
     return <h2>{t('errors.failedToLoadDynamicScript', {url})}</h2>;
   }
 
-  const Component = React.lazy(loadComponent(name, module));
-
   return (
     <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
       <Suspense fallback={t('messages.loadingPlugin')}>
-        <Component {...config} />
+        <Component {...props} />
       </Suspense>
     </ErrorBoundary>
   );
 };
+
+export {PluginLoader};

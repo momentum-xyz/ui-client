@@ -1,23 +1,35 @@
-import {FC} from 'react';
+import {FC, useCallback, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {useTheme} from 'styled-components';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, TextChat} from 'ui-kit';
+import {PluginLoader} from 'shared/hooks/pluginLoader';
+import {CollaborationPluginInterface} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
+import {PluginTopBarActionInterface} from 'core/interfaces';
+import {request} from 'api/request';
 
 import * as styled from './CollaborationPluginPage.styled';
 
 interface PropsInterface {
-  subtitle?: string;
+  plugin: CollaborationPluginInterface;
 }
 
-const CollaborationPluginPage: FC<PropsInterface> = ({children, subtitle}) => {
+const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
   const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
   const {space, textChatStore} = collaborationStore;
   const {favoriteStore} = mainStore;
 
   const history = useHistory();
+  const theme = useTheme();
+  const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
+
+  const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
+    console.info('Recieved actions', actions);
+    setActions(actions);
+  }, []);
 
   if (!space) {
     return null;
@@ -27,7 +39,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({children, subtitle}) => {
     <styled.Inner>
       <SpaceTopBar
         title={space.name ?? ''}
-        subtitle={subtitle}
+        subtitle={plugin.subtitle}
         isAdmin={space.isAdmin}
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
@@ -41,16 +53,20 @@ const CollaborationPluginPage: FC<PropsInterface> = ({children, subtitle}) => {
           history.push(ROUTES.base);
         }}
       >
-        {/* TODO: Implement using some backend config and commiunicate somehow to the plugin */}
-        {/* {space.isAdmin && !!googleDocument?.data?.url && (
-          <>
-            <Button label={t('actions.changeDocument')} variant="primary" onClick={pickDocument} />
-            <Button label={t('actions.close')} variant="danger" onClick={closeDocument} />
-          </>
-        )} */}
+        <actions.main />
       </SpaceTopBar>
       <styled.Container>
-        {children}
+        <PluginLoader
+          url={plugin.url}
+          name={plugin.name}
+          props={{
+            theme,
+            isSpaceAdmin: space.isAdmin,
+            spaceId: space.id,
+            request: request,
+            renderTopBarActions
+          }}
+        />
         {textChatStore.textChatDialog.isOpen && (
           <TextChat
             currentChannel={textChatStore.currentChannel}
