@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {Text, Input} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {stakingInputRegex} from 'core/utils';

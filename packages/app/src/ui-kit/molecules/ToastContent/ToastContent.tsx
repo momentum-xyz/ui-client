@@ -1,6 +1,7 @@
 import React, {FC, memo} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {ToastButtonInfoInterface} from 'ui-kit/interfaces';
 import {PanelLayout} from 'ui-kit/organisms';
 import {Button, Text} from 'ui-kit/atoms';

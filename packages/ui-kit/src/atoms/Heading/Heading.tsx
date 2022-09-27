@@ -1,5 +1,6 @@
 import React, {FC, memo} from 'react';
 import cn from 'classnames';
+
 import {HeadingType, TextAlignType, TextTransformType, TextWeightType} from '../../types';
 import {PropsWithThemeInterface} from '../../interfaces';
 

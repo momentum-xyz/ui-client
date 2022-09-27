@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {t} from 'i18next';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {SvgButton, Text, Tooltip} from 'ui-kit';
 
 import * as styled from './PageTopBar.styled';

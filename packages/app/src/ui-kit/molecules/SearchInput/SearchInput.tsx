@@ -1,6 +1,7 @@
 import React, {FC, FormEvent, InputHTMLAttributes, useState} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {SizeType} from 'ui-kit/types';
 
 import * as styled from './SearchInput.styled';

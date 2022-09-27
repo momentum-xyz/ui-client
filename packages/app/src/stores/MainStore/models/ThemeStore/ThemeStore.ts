@@ -1,5 +1,6 @@
 import {cast, types} from 'mobx-state-tree';
 import {ThemeInterface} from '@momentum/ui-kit';
+
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import {

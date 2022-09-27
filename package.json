@@ -4,7 +4,17 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
+    "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
+    "prettier:list": "npm run prettier -- --list-different",
+    "prettier:fix": "npm run prettier -- --write",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx packages/**/src",
+    "lint:errors": "yarn lint --quiet",
+    "lint:fix": "yarn lint --fix",
+    "nibble": "eslint-nibble --ext .js,.jsx,.ts,.tsx packages/**/src",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "workspaces": {
     "packages": [

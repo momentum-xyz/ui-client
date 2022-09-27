@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import {NetworkButton} from 'ui-kit';

@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {Button, Loader, SearchInput, Text, Toggle, Tooltip} from 'ui-kit';
 import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';

@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {Heading} from '@momentum/ui-kit';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {
   ColorPicker,
   PanelLayout,

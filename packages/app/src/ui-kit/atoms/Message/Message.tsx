@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {MessageType} from 'ui-kit/types';
 
 import * as styled from './Message.styled';

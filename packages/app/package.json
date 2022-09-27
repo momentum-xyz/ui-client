@@ -8,18 +8,8 @@
     "build": "craco build",
     "test": "craco test",
     "analyze": "source-map-explorer 'build/static/js/*.js' --no-border-checks",
-    "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
-    "prettier": "prettier \"src/**/*.{ts,tsx}\" --parser typescript",
-    "prettier:list": "npm run prettier -- --list-different",
-    "prettier:fix": "npm run prettier -- --write",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "lint:errors": "eslint --ext .js,.jsx,.ts,.tsx src --quiet",
-    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
-    "nibble": "eslint-nibble --ext .js,.jsx,.ts,.tsx src",
     "svg-sprite:build": "node scripts/buildSvgSprite.js",
-    "svg-sprite:type": "node scripts/generateIconsType.js",
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "svg-sprite:type": "node scripts/generateIconsType.js"
   },
   "dependencies": {
     "@momentum/ui-kit": "^0.1.0",

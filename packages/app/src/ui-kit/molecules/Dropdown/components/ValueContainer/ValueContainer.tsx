@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {VariantType} from 'ui-kit';
 
 import * as styled from './ValueContainer.styled';

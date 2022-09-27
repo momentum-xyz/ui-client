@@ -1,6 +1,7 @@
 import React, {FC, HTMLProps} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {IconSvg, SizeType} from 'ui-kit';
 
 import * as styled from './SvgButton.styled';

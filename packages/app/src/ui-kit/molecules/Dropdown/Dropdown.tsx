@@ -1,6 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {IconSvg, Portal, ValueType, VariantType, DropdownSizeType} from 'ui-kit';
 import {useClickOutside, useResize, useScroll} from 'ui-kit/hooks';
 import {OptionInterface} from 'ui-kit/interfaces';

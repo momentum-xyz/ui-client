@@ -1,6 +1,7 @@
 import React, {FC, InputHTMLAttributes} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {SizeType, ToggleVariantType} from 'ui-kit/types';
 
 import * as styled from './Toggle.styled';

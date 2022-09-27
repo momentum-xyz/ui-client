@@ -1,6 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useRef} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {IconSvg, Text, SearchInput, useClickOutside} from 'ui-kit';
 
 import * as styled from './SearchDropdown.styled';

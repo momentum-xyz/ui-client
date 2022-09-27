@@ -1,6 +1,7 @@
 import React, {FC, useState} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {IconSvg} from 'ui-kit/index';
 
 import * as styled from './NavigationBarItem.styled';

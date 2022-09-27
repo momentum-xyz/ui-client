@@ -1,5 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {TabBarTabInterface} from 'ui-kit/interfaces';
 
 import * as styled from './TabBar.styled';

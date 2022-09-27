@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {NavigationTabInterface} from 'ui-kit/interfaces';
 import {NavigationBar, NavigationBarItem} from 'ui-kit';
 

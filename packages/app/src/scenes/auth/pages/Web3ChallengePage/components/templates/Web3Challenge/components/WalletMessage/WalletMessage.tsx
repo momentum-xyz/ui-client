@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {LoginTypeEnum} from 'core/enums';
 
 import * as styled from './WalletMessage.styled';

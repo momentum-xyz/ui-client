@@ -3,6 +3,7 @@ import 'rc-tooltip/assets/bootstrap.css';
 import React, {FC, ReactNode} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {ComponentSizeInterface} from 'ui-kit/interfaces';
 import {PlacementType} from 'ui-kit/types';
 

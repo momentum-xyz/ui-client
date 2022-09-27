@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {toast} from 'react-toastify';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {copyToClipboard} from 'core/utils';
 import {Dialog, Input} from 'ui-kit';
 

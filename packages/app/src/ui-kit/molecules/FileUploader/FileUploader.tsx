@@ -1,6 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {useDropzone} from 'react-dropzone';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {FileType} from 'ui-kit/index';
 import {Button} from 'ui-kit/index';
 

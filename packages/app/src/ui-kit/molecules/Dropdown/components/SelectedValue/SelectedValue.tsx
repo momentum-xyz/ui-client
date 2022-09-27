@@ -1,5 +1,6 @@
 import React, {FC, useCallback} from 'react';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {IconSvg} from 'ui-kit';
 import {ValueType} from 'ui-kit/types';
 import {OptionInterface} from 'ui-kit/interfaces';

@@ -2,6 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {Message, IconSvg, Text} from 'ui-kit';
 import {MessageType} from 'core/types';
 import {useStore} from 'shared/hooks/useStore';

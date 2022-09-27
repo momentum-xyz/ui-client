@@ -1,6 +1,7 @@
 import React, {FC, memo, useState} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {SizeType} from 'ui-kit/types';
 import {UserStatusEnum} from 'ui-kit/enums';
 

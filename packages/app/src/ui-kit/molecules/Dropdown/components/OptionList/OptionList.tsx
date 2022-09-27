@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import cn from 'classnames';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {IconSvg, VariantType, DropdownSizeType} from 'ui-kit';
 import {SKIP_OUTSIDE_CLICK_CLASS} from 'ui-kit/hooks';
 import {OptionInterface} from 'ui-kit/interfaces';

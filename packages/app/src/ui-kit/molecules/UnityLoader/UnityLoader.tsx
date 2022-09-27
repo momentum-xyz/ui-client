@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {PropsWithThemeInterface} from '@momentum/ui-kit';
+
 import {appVariables} from 'api/constants';
 import {Text} from 'ui-kit/index';
 import flamingo from 'ui-kit/assets/images/common/flamingo.svg';
