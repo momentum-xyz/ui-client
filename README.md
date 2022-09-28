@@ -5,6 +5,19 @@
 
 In the project directory, you can run:
 
+### `yarn build:deps`
+
+If it's the first time you run the project, you will need to run `yarn build:deps` first.
+
+If you're working on UI-KIT then:
+
+```
+cd packages/ui-kit
+yarn start
+```
+
+It will build it and watch for changes.
+
 ### `yarn start`
 
 Runs the app in the development mode.<br />
