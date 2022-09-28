@@ -1,6 +1,6 @@
 {
   "name": "ui-client",
-  "version": "1.0.0",
+  "version": "0.20.0",
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
