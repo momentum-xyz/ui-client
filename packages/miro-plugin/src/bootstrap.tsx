@@ -4,7 +4,7 @@ import 'static/styles/index.css';
 import styled from 'styled-components';
 import axios, {AxiosInstance} from 'axios';
 
-import {DefaultThemeConfig} from 'ui-kit/themes';
+import {DefaultThemeConfig} from '@momentum/ui-kit';
 
 import App from './App';
 

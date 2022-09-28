@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
 import * as styled from './MiroChoice.styled';
+import {Heading} from '@momentum/ui-kit';
 
 interface PropsInterface {
   isAdmin: boolean;
@@ -16,12 +17,15 @@ const MiroChoice: FC<PropsInterface> = ({isAdmin, pickBoard}) => {
     <styled.Wrapper data-testid="MiroChoice-test">
       {isAdmin ? (
         <styled.Actions>
-          <styled.Text>{t('messages.noTeamMiroBoard')}</styled.Text>
+          {/* TODO: Change to Text when added to ui-kit */}
+          <Heading label={t('messages.noTeamMiroBoard')} type="h1" />
+          {/* TODO: Change to Button from @momentum/ui-kit */}
           <styled.Button onClick={pickBoard}>{t('actions.chooseBoard')}</styled.Button>
         </styled.Actions>
       ) : (
         <styled.Actions>
-          <styled.Text>{t('messages.noMiroBoard')}</styled.Text>
+          {/* TODO: Change to Text when added to ui-kit */}
+          <Heading type="h1" label={t('messages.noMiroBoard')} />
         </styled.Actions>
       )}
     </styled.Wrapper>

@@ -3,7 +3,7 @@ import {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {AxiosInstance} from 'axios';
 
-import {PropsWithThemeInterface} from 'ui-kit/interfaces';
+import {PropsWithThemeInterface} from '@momentum/ui-kit';
 import {MiroBoardStoreInterface} from 'stores/MiroBoardStore';
 
 import * as styled from './MiroActions.styled';

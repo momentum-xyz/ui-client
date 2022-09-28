@@ -1,4 +1,4 @@
-import {ThemeInterface} from 'ui-kit/interfaces';
+import {ThemeInterface} from '../interfaces';
 
 // extends the global DefaultTheme with our ThemeInterface
 declare module 'styled-components' {

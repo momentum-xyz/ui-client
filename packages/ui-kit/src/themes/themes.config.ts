@@ -1,4 +1,4 @@
-import {ThemeInterface} from 'ui-kit/interfaces';
+import {ThemeInterface} from '../interfaces';
 
 /*
     IMPORTANT: Do NOT change the order, it will break things!

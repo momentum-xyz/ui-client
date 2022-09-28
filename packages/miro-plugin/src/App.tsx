@@ -10,6 +10,8 @@ import {AppConfigExtendedInterface, AppConfigInterface} from 'api/interfaces';
 import {StoreProvider} from 'shared/hooks';
 import {MiroBoardPage} from 'pages';
 
+import '@momentum/ui-kit/dist/themes/themes';
+
 import 'shared/services/i18n';
 import 'core/utils/boardsPicker.1.0.js';
 
