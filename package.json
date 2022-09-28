@@ -19,6 +19,11 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
   },
+  "resolutions": {
+    "styled-components": "^5",
+    "@types/react": "^16.0.0",
+    "@types/react-dom": "^16.0.0"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
