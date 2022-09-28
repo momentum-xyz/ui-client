@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --listEmittedFiles",
-    "watch": "tsc -w"
+    "start": "tsc -w"
   },
   "dependencies": {
     "react": "^16.14.0",
