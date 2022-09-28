@@ -7,7 +7,9 @@
     "postinstall": "husky install",
     "build": "yarn --cwd=packages/ui-kit build && yarn --cwd=packages/app build",
     "build:deps": "yarn --cwd=packages/ui-kit build",
-    "start": "yarn --cwd=packages/app start",
+    "start:app": "yarn --cwd=packages/app start",
+    "start:miro": "yarn --cwd=packages/miro-plugin start",
+    "start": "concurrently \"yarn start:app\" \"yarn start:miro\"",
     "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",
@@ -28,5 +30,8 @@
     "packages": [
       "packages/*"
     ]
+  },
+  "dependencies": {
+    "concurrently": "^7.4.0"
   }
 }
