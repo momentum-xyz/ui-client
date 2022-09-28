@@ -4,7 +4,6 @@ import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router';
-import {Heading} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -96,7 +95,6 @@ const CalendarPage: FC = () => {
         )}
       </SpaceTopBar>
       <styled.InnerContainer>
-        <Heading label="test" type="h3" />
         <EventList
           currentUserId={sessionStore.userId}
           events={eventList.events}
