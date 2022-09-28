@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "outDir": "dist/",
+    "sourceMap": true,
+    "declaration": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "src",
@@ -7,12 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "lib": [
-      "dom",
-      "es2020"
-    ],
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
-    "noEmit": true,
     "noImplicitReturns": true,
     "noUnusedLocals": false,
     "resolveJsonModule": true,
@@ -22,11 +21,6 @@
     "noFallthroughCasesInSwitch": true,
     "module": "esnext"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

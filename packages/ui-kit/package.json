@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "license": "GPL-3.0",
   "private": true,
-  "main": "./src/index.tsx",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p ."
+    "build": "tsc --listEmittedFiles",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "react": "^16.14.0",
