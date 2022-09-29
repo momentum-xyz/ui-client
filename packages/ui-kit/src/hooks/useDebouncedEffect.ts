@@ -1,0 +1,30 @@
+import {useCallback, useEffect, useRef} from 'react';
+
+export const useDebouncedEffect = (effect: () => void, delay: number, deps: any[]) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const callback = useCallback(effect, deps);
+
+  const callbackRef = useRef(callback);
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      callback();
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [callback, delay]);
+
+  useEffect(() => {
+    return () => {
+      if (callbackRef.current) {
+        callbackRef.current();
+      }
+    };
+  }, []);
+};
