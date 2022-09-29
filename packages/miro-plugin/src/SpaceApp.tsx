@@ -15,7 +15,7 @@ import '@momentum/ui-kit/dist/themes/themes';
 import 'shared/services/i18n';
 import 'core/utils/boardsPicker.1.0.js';
 
-const App: FC<SpacePluginPropsInterface> = (props) => {
+const SpaceApp: FC<SpacePluginPropsInterface> = (props) => {
   const {theme} = props;
   const store = RootStore.create({});
 
@@ -42,4 +42,4 @@ const App: FC<SpacePluginPropsInterface> = (props) => {
   );
 };
 
-export default observer(App);
+export default observer(SpaceApp);

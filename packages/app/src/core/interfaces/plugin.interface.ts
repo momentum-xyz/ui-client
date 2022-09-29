@@ -4,6 +4,5 @@ export interface PluginInterface {
   subtitle?: string;
   url: string;
   exact?: boolean;
-  module?: string;
   iconName: IconNameType;
 }

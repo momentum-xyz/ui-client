@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import axios, {AxiosInstance} from 'axios';
 import {DefaultThemeConfig} from '@momentum/ui-kit';
 
-import App from './App';
+import SpaceApp from './SpaceApp';
 
 const REQUEST_TIMEOUT_MS = 10_000;
 const root = document.getElementById('root') as HTMLElement;
@@ -29,7 +29,7 @@ const request: AxiosInstance = axios.create({
 ReactDOM.render(
   <React.StrictMode>
     <Container>
-      <App
+      <SpaceApp
         theme={DefaultThemeConfig}
         // TODO: Make decision how to set default spaceId value (optionally, depening on the env)
         spaceId="b860dc5a-578a-4d05-b526-2a92e866d975"

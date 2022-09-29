@@ -24,7 +24,10 @@ module.exports = {
         name: 'miro_plugin',
         filename: 'remoteEntry.js',
         exposes: {
-            './App': './src/App'
+            './SpaceApp': './src/SpaceApp',
+            // Uncomment when needed and change [app file name]
+            // './HomeApp': './src/[app file name]',
+            // './WidgetApp': './src/[app file name]'
         },
         shared: { 
           react: {

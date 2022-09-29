@@ -10,6 +10,7 @@ import {PluginLoader} from 'shared/hooks/pluginLoader';
 import {CollaborationPluginInterface} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
 import {PluginTopBarActionInterface} from 'core/interfaces';
 import {request} from 'api/request';
+import {PluginTypeEnum} from 'core/enums';
 
 import * as styled from './CollaborationPluginPage.styled';
 
@@ -59,6 +60,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
         <PluginLoader
           url={plugin.url}
           name={plugin.name}
+          pluginType={PluginTypeEnum.SPACE}
           props={{
             theme,
             isSpaceAdmin: space.isAdmin,
