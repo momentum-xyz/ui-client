@@ -12,7 +12,6 @@ import 'stream-chat-react/dist/css/v2/index.css';
 
 import * as styled from './Chat.styled';
 import {CustomMessageInput} from './CustomMessageInput';
-import {CustomReactionSelector} from './CustomReactionSelector';
 
 interface PropsInterface {
   client: StreamChat;
@@ -24,15 +23,11 @@ const SChat: FC<PropsInterface> = ({client, channel}) => {
     client && (
       <styled.Container>
         <Chat client={client} theme="str-chat__theme-dark">
-          <ChannelComponent
-            channel={channel}
-            Input={CustomMessageInput}
-            ReactionSelector={CustomReactionSelector}
-          >
+          <ChannelComponent channel={channel} Input={CustomMessageInput}>
             <Window>
               {/* <ChannelHeader /> */}
               <VirtualizedMessageList disableDateSeparator={true} shouldGroupByUser={true} />
-              <MessageInput disableMentions={true} />
+              <MessageInput disableMentions={true} grow={true} maxRows={5} />
             </Window>
           </ChannelComponent>
         </Chat>

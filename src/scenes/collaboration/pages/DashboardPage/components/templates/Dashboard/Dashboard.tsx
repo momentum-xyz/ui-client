@@ -20,7 +20,7 @@ interface PropsInterface {
 }
 
 const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatIsOpen}) => {
-  const {collaborationStore } = useStore();
+  const {collaborationStore} = useStore();
   const {streamChatStore} = collaborationStore;
   return (
     <styled.Container data-testid="Dashboard-test">
@@ -69,10 +69,7 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatI
           ))}
       </styled.DashboardContainer>
       {textChatIsOpen && streamChatStore.client && streamChatStore.currentChannel && (
-        <Chat
-          client={streamChatStore.client}
-          channel={streamChatStore.currentChannel}
-        />
+        <Chat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
       )}
     </styled.Container>
   );

@@ -1,6 +1,5 @@
-import {cast, flow, types} from 'mobx-state-tree';
-import { StreamChat, Channel } from 'stream-chat';
-import {t} from 'i18next';
+import {flow, types} from 'mobx-state-tree';
+import {StreamChat, Channel} from 'stream-chat';
 
 import {appVariables} from 'api/constants';
 import {DialogModel, RequestModel, ResetModel, UserProfileModelInterface} from 'core/models';
@@ -32,7 +31,7 @@ const StreamChatStore = types.compose(
       getChannelToken: flow(function* (spaceId: string) {
         const tokenResponse = yield self.tokenRequest.send(
           api.streamChatRepository.getStreamChatToken,
-          { spaceId }
+          {spaceId}
         );
         return tokenResponse;
       }),
@@ -56,28 +55,30 @@ const StreamChatStore = types.compose(
       },
       setNumberOfReadMessages(readMessages: number) {
         self.numberOfReadMessages = readMessages;
-      },
+      }
     }))
-    .actions((self) => ({
-    }))
+    .actions((self) => ({}))
     .actions((self) => ({
       init: flow(function* (userId: string, spaceId: string, profile?: UserProfileModelInterface) {
-        self.client = new StreamChat(appVariables.STREAMCHAT_KEY);
+        self.client = StreamChat.getInstance(appVariables.STREAMCHAT_KEY);
         const response = yield self.getChannelToken(spaceId);
-        yield self.client.connectUser({
-          id: userId,
-          name: profile?.name,
-          image: profile?.avatarSrc,
-        }, response.token);
+        yield self.client.connectUser(
+          {
+            id: userId,
+            name: profile?.name,
+            image: profile?.avatarSrc
+          },
+          response.token
+        );
         self.setCurrentUserId(userId);
         self.setLogin(true);
-        self.currentChannel = self.client.channel(response.channel_type, response.channel)
+        self.currentChannel = self.client.channel(response.channel_type, response.channel);
       }),
       deinit: flow(function* () {
-        if(self.client) {
+        if (self.client) {
           yield self.client.disconnectUser();
         }
-      }),
+      })
     }))
 );
 
