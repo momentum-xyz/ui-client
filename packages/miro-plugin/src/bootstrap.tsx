@@ -31,6 +31,7 @@ ReactDOM.render(
     <Container>
       <App
         theme={DefaultThemeConfig}
+        // TODO: Make decision how to set default spaceId value (optionally, depening on the env)
         spaceId="b860dc5a-578a-4d05-b526-2a92e866d975"
         isSpaceAdmin={false}
         request={request}
