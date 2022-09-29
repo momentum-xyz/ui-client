@@ -4,3 +4,6 @@ export * from './textAlign.type';
 export * from './textWeight.type';
 export * from './size.type';
 export * from './variant.type';
+export * from './message.type';
+export * from './textSize.type';
+export * from './placement.type';

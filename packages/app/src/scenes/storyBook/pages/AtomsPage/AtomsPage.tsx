@@ -1,21 +1,22 @@
 import React, {FC} from 'react';
-import {Heading, Button, IconSvg} from '@momentum/ui-kit';
-
 import {
+  Heading,
+  Button,
+  IconSvg,
   Input,
-  InputDark,
-  Loader,
   Message,
-  PageTopBar,
+  Loader,
+  InputDark,
   ProgressBar,
   Separator,
   Text,
   TextArea,
   TextAreaDark,
-  ToolbarIcon,
   ToolbarIconList,
   Tooltip
-} from 'ui-kit';
+} from '@momentum/ui-kit';
+
+import {PageTopBar, ToolbarIcon} from 'ui-kit';
 
 import * as styled from './AtomsPage.styled';
 

@@ -6,7 +6,7 @@ import {PropsWithThemeInterface} from '../../interfaces';
 
 import * as styled from './Heading.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+export interface PropsInterface extends PropsWithThemeInterface {
   type: HeadingType;
   label: string;
   transform?: TextTransformType;
