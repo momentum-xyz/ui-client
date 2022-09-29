@@ -6,8 +6,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --listEmittedFiles",
-    "start": "tsc -w",
+    "clean": "rimraf dist/",
+    "build": "yarn clean && tsc --listEmittedFiles && yarn copy-files",
+    "start": "yarn clean && yarn copy-files && tsc -w",
+    "copy-files": "copyfiles -u 1 src/**/*.svg dist/",
     "svg-sprite:build": "node scripts/buildSvgSprite.js",
     "svg-sprite:type": "node scripts/generateIconsType.js"
   },
@@ -15,5 +17,10 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "styled-components": "^5.3.3"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "require-context": "^1.1.0",
+    "rimraf": "^3.0.2"
   }
 }
