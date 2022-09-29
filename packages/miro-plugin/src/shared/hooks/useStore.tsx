@@ -1,5 +1,4 @@
 import {createContext, useContext} from 'react';
-
 import {RootStoreInterface} from 'stores';
 
 const StoreContext = createContext<RootStoreInterface>({} as RootStoreInterface);

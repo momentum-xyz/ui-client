@@ -1,5 +1,6 @@
 import {generatePath} from 'react-router-dom';
 import {RequestInterface} from 'api/interfaces';
+
 import {integrationRepositoryEndpoints} from './integrationRepository.api.endpoints';
 import {
   FetchIntegrationRequest,

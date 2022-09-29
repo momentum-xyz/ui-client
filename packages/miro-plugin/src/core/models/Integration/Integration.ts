@@ -1,5 +1,4 @@
 import {types} from 'mobx-state-tree';
-
 import {ResetModel} from 'core/models';
 import {UUIDModel} from 'core/models/UUID';
 

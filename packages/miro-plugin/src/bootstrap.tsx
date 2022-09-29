@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import 'static/styles/index.css';
 import styled from 'styled-components';
 import axios, {AxiosInstance} from 'axios';
-
 import {DefaultThemeConfig} from '@momentum/ui-kit';
 
 import App from './App';

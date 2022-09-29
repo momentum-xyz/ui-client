@@ -2,12 +2,12 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {SpacePluginPropsInterface} from 'core/interfaces/pluginProps.interface.js';
 import {ThemeProvider} from 'styled-components';
-
 import {RootStore} from 'stores';
-import {GlobalPropsContextProvider} from 'core/contexts/GloabalPropsContext';
 import {appVariables} from 'api/constants';
 import {AppConfigExtendedInterface, AppConfigInterface} from 'api/interfaces';
 import {StoreProvider} from 'shared/hooks';
+
+import {GlobalPropsContextProvider} from 'core/contexts/GloabalPropsContext';
 import {MiroBoardPage} from 'pages';
 
 import '@momentum/ui-kit/dist/themes/themes';

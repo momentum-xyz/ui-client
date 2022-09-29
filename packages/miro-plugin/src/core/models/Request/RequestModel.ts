@@ -6,7 +6,6 @@ import axios, {
   AxiosResponse,
   AxiosInstance
 } from 'axios';
-
 import {RequestStateEnum} from 'core/enums';
 
 const UNAUTHORIZED_STATUS = 401;
