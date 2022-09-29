@@ -1,7 +1,5 @@
 import {generatePath} from 'react-router-dom';
-
 import {RequestInterface} from 'api/interfaces';
-
 import {integrationRepositoryEndpoints} from './integrationRepository.api.endpoints';
 import {
   FetchIntegrationRequest,
@@ -19,7 +17,7 @@ export const fetchIntegration: RequestInterface<
   const {spaceId, ...rest} = options;
 
   const fetchUrl = integrationRepositoryEndpoints().fetch;
-  const URL: string = generatePath(fetchUrl, {spaceId, integrationType: 'miro'});
+  const URL: string = generatePath(fetchUrl, {spaceId});
   return request.get(URL, rest);
 };
 
@@ -29,8 +27,10 @@ export const enableMiroIntegration: RequestInterface<
 > = (request, options) => {
   const {spaceId, data, ...rest} = options;
 
+  const body: EnableMiroIntegrationRequest = {spaceId, integrationType: 'miro', data};
+
   const URL: string = integrationRepositoryEndpoints().enable;
-  return request.post(URL, {spaceId, integrationType: 'miro', data}, rest);
+  return request.post(URL, body, rest);
 };
 
 export const disableMiroIntegration: RequestInterface<
@@ -39,7 +39,7 @@ export const disableMiroIntegration: RequestInterface<
 > = (request, options) => {
   const {spaceId, ...rest} = options;
 
-  const data = {
+  const data: DisableMiroIntegrationRequest = {
     spaceId,
     integrationType: 'miro',
     data: {id: '', name: '', description: '', viewLink: '', accessLink: '', embedHtml: ''}
