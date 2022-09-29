@@ -1,42 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'static/styles/index.css';
-import styled from 'styled-components';
-import axios, {AxiosInstance} from 'axios';
+import styled, {ThemeProvider} from 'styled-components';
 import {DefaultThemeConfig} from '@momentum/ui-kit';
 
-import SpaceApp from './SpaceApp';
+import {MomentumRequiredPage} from 'pages/MomentumRequiredPage';
 
-const REQUEST_TIMEOUT_MS = 10_000;
+import '@momentum/ui-kit/dist/themes/themes';
+import 'shared/services/i18n';
+
 const root = document.getElementById('root') as HTMLElement;
-
-const defaultHeaders: Record<string, string> = {
-  'Content-Type': 'application/json'
-};
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
 `;
 
-const request: AxiosInstance = axios.create({
-  baseURL: '',
-  responseType: 'json',
-  headers: defaultHeaders,
-  timeout: REQUEST_TIMEOUT_MS
-});
-
 ReactDOM.render(
   <React.StrictMode>
-    <Container>
-      <SpaceApp
-        theme={DefaultThemeConfig}
-        // TODO: Make decision how to set default spaceId value (optionally, depening on the env)
-        spaceId="b860dc5a-578a-4d05-b526-2a92e866d975"
-        isSpaceAdmin={false}
-        request={request}
-      />
-    </Container>
+    <ThemeProvider theme={DefaultThemeConfig}>
+      <Container>
+        <MomentumRequiredPage />
+      </Container>
+    </ThemeProvider>
   </React.StrictMode>,
   root
 );

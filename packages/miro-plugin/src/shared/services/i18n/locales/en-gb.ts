@@ -9,7 +9,9 @@ export const enGb = {
     },
     messages: {
       noTeamMiroBoard: 'Your team does not have a Miro board yet',
-      noMiroBoard: 'This team does not have a Miro board yet'
+      noMiroBoard: 'This team does not have a Miro board yet',
+      momentumRequired:
+        'Momentum is required to run this plugin, please use momentum to access this plugin.'
     },
     actions: {
       changeBoard: 'Change board',
