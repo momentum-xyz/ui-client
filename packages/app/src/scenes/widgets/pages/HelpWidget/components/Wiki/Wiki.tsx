@@ -9,7 +9,7 @@ import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 
 import * as styled from './Wiki.styled';
 
-const WIKI_URL = 'https://momentumxyz.gitbook.io/momentumxyz-wiki/';
+const WIKI_URL = 'https://momentum-xyz.github.io/docs/category/learn/';
 
 const Wiki: React.FC = () => {
   const {
