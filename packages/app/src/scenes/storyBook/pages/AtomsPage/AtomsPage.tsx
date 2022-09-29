@@ -1,9 +1,7 @@
 import React, {FC} from 'react';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Button, IconSvg} from '@momentum/ui-kit';
 
 import {
-  Button,
-  IconSvg,
   Input,
   InputDark,
   Loader,

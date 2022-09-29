@@ -10,7 +10,7 @@ import * as styled from './IconSvg.styled';
 const svgModules = require.context('../../assets/svg-sprite', false, /\.svg$/);
 const svgSpritePath: string = svgModules(svgModules.keys()[0]);
 
-interface IconSvgPropsInterface extends PropsWithThemeInterface {
+export interface IconSvgPropsInterface extends PropsWithThemeInterface {
   name: IconNameType;
   size?: SizeType;
   isWhite?: boolean;
