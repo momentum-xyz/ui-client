@@ -7,7 +7,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --listEmittedFiles",
-    "start": "tsc -w"
+    "start": "tsc -w",
+    "svg-sprite:build": "node scripts/buildSvgSprite.js",
+    "svg-sprite:type": "node scripts/generateIconsType.js"
   },
   "dependencies": {
     "react": "^16.14.0",
