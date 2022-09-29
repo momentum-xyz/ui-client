@@ -6,6 +6,7 @@ import axios, {
   AxiosResponse,
   AxiosInstance
 } from 'axios';
+// TODO: Get from future package @momentum/core
 import {RequestStateEnum} from 'core/enums';
 
 const UNAUTHORIZED_STATUS = 401;
