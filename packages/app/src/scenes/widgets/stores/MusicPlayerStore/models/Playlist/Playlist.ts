@@ -1,8 +1,9 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
+import {RequestModel} from '@momentum/core';
 
 import {api, PlaylistResponse} from 'api';
-import {TrackModel, RequestModel} from 'core/models';
+import {TrackModel} from 'core/models';
 import {appVariables} from 'api/constants';
 
 const Playlist = types

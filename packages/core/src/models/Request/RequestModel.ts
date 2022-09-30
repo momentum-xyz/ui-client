@@ -1,7 +1,7 @@
 import {types, flow} from 'mobx-state-tree';
 import axios, {AxiosRequestConfig, CancelTokenSource, AxiosError, AxiosResponse} from 'axios';
 
-import {RequestStateEnum} from 'core/enums';
+import {RequestStateEnum} from '../../enums';
 
 const UNAUTHORIZED_STATUS = 401;
 const BAD_FIELD_STATUS = 400;

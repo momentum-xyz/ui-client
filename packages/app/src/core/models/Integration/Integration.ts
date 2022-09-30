@@ -1,6 +1,6 @@
 import {types} from 'mobx-state-tree';
+import {UUIDModel, ResetModel} from '@momentum/core';
 
-import {ResetModel, UUIDModel} from 'core/models';
 import {ModerationEnum, StageModeRequestEnum} from 'core/enums';
 
 import {IntegrationData, IntegrationUser} from './models';

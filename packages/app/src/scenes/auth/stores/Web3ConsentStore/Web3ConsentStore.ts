@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
+import {RequestModel} from '@momentum/core';
 
-import {RequestModel} from 'core/models';
 import {LoginTypeEnum, LoginTypeEnumList} from 'core/enums';
 import {
   api,

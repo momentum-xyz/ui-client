@@ -1,6 +1,6 @@
 import {flow, Instance, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {RequestModel, ResetModel} from 'core/models';
 import {api} from 'api';
 
 const InviteUsersStore = types

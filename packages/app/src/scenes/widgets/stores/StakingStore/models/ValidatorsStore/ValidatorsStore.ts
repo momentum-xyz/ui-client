@@ -1,8 +1,9 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {values} from 'mobx';
 import {BN, formatBalance} from '@polkadot/util';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {ValidatorItemModel, ResetModel, RequestModel} from 'core/models';
+import {ValidatorItemModel} from 'core/models';
 import {api, FetchValidatorsResponseInterface} from 'api';
 
 const ValidatorsStore = types.compose(

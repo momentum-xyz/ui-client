@@ -1,7 +1,7 @@
 import {flow, types, cast} from 'mobx-state-tree';
+import {RequestModel} from '@momentum/core';
 
 import {api, WorldStatInterface} from 'api';
-import {RequestModel} from 'core/models';
 
 const WorldStats = types
   .model('WorldStats', {
