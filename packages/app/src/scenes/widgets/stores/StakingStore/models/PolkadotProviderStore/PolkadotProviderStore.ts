@@ -9,8 +9,9 @@ import {
 } from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
+import {ResetModel} from '@momentum/core';
 
-import {PolkadotAddress, PolkadotUnlockingDuration, ResetModel} from 'core/models';
+import {PolkadotAddress, PolkadotUnlockingDuration} from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {calcUnbondingAmount, formatExistential} from 'core/utils';
 import {KeyringAddressType} from 'core/types';

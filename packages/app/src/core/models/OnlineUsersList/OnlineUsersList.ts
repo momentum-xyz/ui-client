@@ -1,6 +1,7 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
+import {RequestModel} from '@momentum/core';
 
-import {RequestModel, UserProfileModel, UserProfileModelInterface} from 'core/models';
+import {UserProfileModel, UserProfileModelInterface} from 'core/models';
 import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
 

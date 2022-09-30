@@ -6,11 +6,10 @@ import AgoraRTC, {
   ICameraVideoTrack,
   IMicrophoneAudioTrack
 } from 'agora-rtc-sdk-ng';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {
   AgoraRemoteUserInterface,
-  RequestModel,
-  ResetModel,
   StageModeUser,
   StageModeUserInterface,
   AgoraRemoteUser

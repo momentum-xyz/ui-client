@@ -1,6 +1,6 @@
 import {types, flow, cast, Instance} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {RequestModel, ResetModel} from 'core/models';
 import {api, BaseFavoritesResponse, FetchFavoritesResponse, PostFavoriteResponse} from 'api';
 
 const FavoriteModel = types.model({

@@ -57,7 +57,7 @@ const TileDetail: FC<PropsInterface> = ({
         {tile.content?.text && (
           <ReactLinkify
             componentDecorator={(decoratedHref: string, decoratedText: string, key: number) => (
-              <a href={decoratedHref} key={key} target="_blank">
+              <a href={decoratedHref} key={key} target="_blank" rel="noreferrer">
                 {decoratedText}
               </a>
             )}

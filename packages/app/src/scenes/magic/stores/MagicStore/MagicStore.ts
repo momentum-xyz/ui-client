@@ -1,7 +1,7 @@
 import {types, flow, cast} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, MagicLinkResponse} from 'api';
-import {RequestModel, ResetModel} from 'core/models';
 import {MagicLinkInterface} from 'core/interfaces';
 
 const MagicStore = types

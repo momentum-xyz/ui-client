@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {EventItemDataInterface, EventItemInterface, RequestModel, ResetModel} from 'core/models';
+import {EventItemDataInterface, EventItemInterface} from 'core/models';
 import {api, CreateEventResponse, EventFormInterface} from 'api';
 
 const EventForm = types.compose(
