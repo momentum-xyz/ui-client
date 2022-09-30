@@ -3,6 +3,7 @@ import {useTranslation} from 'react-i18next';
 
 import {ErrorBoundary} from 'shared/components';
 import {PluginPropsType} from 'core/interfaces';
+import {PluginTypeEnum} from 'core/enums';
 
 import {useDynamicScript} from './useDynamicScript';
 
@@ -22,16 +23,16 @@ interface PluginLoaderPropsInterface {
   name: string;
   url: string;
   props?: PluginPropsType;
-  module?: string;
+  pluginType: PluginTypeEnum;
 }
 
-const PluginLoader: FC<PluginLoaderPropsInterface> = ({name, url, props, module = './App'}) => {
+const PluginLoader: FC<PluginLoaderPropsInterface> = ({name, url, props, pluginType}) => {
   const {ready, failed} = useDynamicScript(module && url);
   const {t} = useTranslation();
 
   const Component = useMemo(() => {
-    return React.lazy(loadComponent(name, module));
-  }, [module, name]);
+    return React.lazy(loadComponent(name, `./${pluginType}App`));
+  }, [pluginType, name]);
 
   if (!ready) {
     return <h2>{t('messages.loadingDynamicScript', {url})}</h2>;
