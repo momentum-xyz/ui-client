@@ -31,7 +31,7 @@ const PluginLoader: FC<PluginLoaderPropsInterface> = ({name, url, props, pluginT
   const {t} = useTranslation();
 
   const Component = useMemo(() => {
-    return React.lazy(loadComponent(name, pluginType));
+    return React.lazy(loadComponent(name, `./${pluginType}App`));
   }, [pluginType, name]);
 
   if (!ready) {

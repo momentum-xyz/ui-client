@@ -1,5 +1,5 @@
 export enum PluginTypeEnum {
-  SPACE = './SpaceApp',
-  WIDGET = './WidgetApp',
-  HOME = './HomeApp'
+  SPACE = 'Space',
+  WIDGET = 'Widget',
+  HOME = 'Home'
 }
