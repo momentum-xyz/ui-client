@@ -105,7 +105,7 @@
           "node_modules",
           "packages/app/src",
           "packages/ui-kit/src",
-          "packages/miro-plugin/src"
+          "packages/plugin-miro/src",
         ]
       }
     },

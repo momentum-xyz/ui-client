@@ -1,5 +1,6 @@
 import {types, getSnapshot, applySnapshot} from 'mobx-state-tree';
 
+// TODO: Move to sdk
 const ResetModel = types
   .model('ResetModel', {})
   .actions((self) => {

@@ -4,6 +4,7 @@ import {createContext} from 'react';
 import {SpacePluginPropsInterface} from 'core/interfaces';
 import {DefaultThemeConfig} from '@momentum/ui-kit';
 
+// Move to sdk package
 export const GlobalPropsContext = createContext<SpacePluginPropsInterface>({
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,
