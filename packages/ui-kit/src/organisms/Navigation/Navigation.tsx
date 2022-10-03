@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
-import {PropsWithThemeInterface, NavigationBar, NavigationBarItem} from '@momentum/ui-kit';
 
-import {NavigationTabInterface} from 'ui-kit/interfaces';
+import {NavigationBar} from '../../atoms';
+import {NavigationBarItem} from '../../molecules';
+import {NavigationTabInterface, PropsWithThemeInterface} from '../../interfaces';
 
 import * as styled from './Navigation.styled';
 

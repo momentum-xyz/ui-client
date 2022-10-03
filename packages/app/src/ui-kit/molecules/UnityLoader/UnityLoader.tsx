@@ -3,8 +3,8 @@ import {useTranslation} from 'react-i18next';
 import {PropsWithThemeInterface, Text} from '@momentum/ui-kit';
 
 import {appVariables} from 'api/constants';
-import flamingo from 'ui-kit/assets/images/common/flamingo.svg';
-import spinner from 'ui-kit/assets/images/common/spinner.svg';
+import flamingo from 'static/images/flamingo.svg';
+import spinner from 'static/images/spinner.svg';
 
 import * as styled from './UnityLoader.styled';
 

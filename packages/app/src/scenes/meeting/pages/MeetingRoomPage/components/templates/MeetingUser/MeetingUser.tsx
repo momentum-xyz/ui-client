@@ -4,7 +4,7 @@ import cn from 'classnames';
 import {IconSvg, Text, useCoordinates} from '@momentum/ui-kit';
 
 import {AgoraRemoteUserInterface} from 'core/models';
-import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
+import {ReactComponent as Astronaut} from 'static/images/astronaut.svg';
 
 import {UserMenu} from './components';
 import * as styled from './MeetingUser.styled';

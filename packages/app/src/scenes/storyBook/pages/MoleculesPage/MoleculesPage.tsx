@@ -8,16 +8,13 @@ import {
   Dropdown,
   ExpandableLayout,
   FileUploader,
-  Location,
   NavigationBarItem,
-  NetworkButton,
   SearchInput,
   SectionPanel,
   ShowMoreText,
   Steps,
   SvgButton,
   TabBar,
-  TileMenu,
   Toggle,
   ToolbarIcon,
   Button,
@@ -26,6 +23,9 @@ import {
 
 import {UserStatusEnum} from 'core/enums';
 import {
+  TileMenu,
+  NetworkButton,
+  Location,
   AccentColorList,
   ToastContent,
   TOAST_COMMON_OPTIONS,

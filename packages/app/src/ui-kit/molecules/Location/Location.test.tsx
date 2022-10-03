@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {render, within} from 'utils/test.utils';
+import {render, within} from 'ui-kit/utils/test.utils';
 
 import {Location} from '../Location';
 

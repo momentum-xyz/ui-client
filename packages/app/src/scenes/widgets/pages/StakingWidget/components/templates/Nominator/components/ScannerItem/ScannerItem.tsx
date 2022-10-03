@@ -2,9 +2,9 @@ import React, {FC} from 'react';
 
 import {ScannerEnum} from 'core/enums';
 import {ScannerInterface} from 'core/interfaces';
-import dotscan from 'ui-kit/assets/images/scanners/dotscan.svg';
-import subid from 'ui-kit/assets/images/scanners/subid.svg';
-import subscan from 'ui-kit/assets/images/scanners/subscan.svg';
+import dotscan from 'static/images/scanners/dotscan.svg';
+import subid from 'static/images/scanners/subid.svg';
+import subscan from 'static/images/scanners/subscan.svg';
 
 import * as styled from './ScannerItem.styled';
 

@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {PropsWithThemeInterface, NetworkButton} from '@momentum/ui-kit';
+import {PropsWithThemeInterface} from '@momentum/ui-kit';
 
+import {NetworkButton} from 'ui-kit';
 import {LoginTypeEnum} from 'core/enums';
 import {Web3ConnectorInterface} from 'core/interfaces';
 import walletConnect from 'static/images/walletConnect.svg';

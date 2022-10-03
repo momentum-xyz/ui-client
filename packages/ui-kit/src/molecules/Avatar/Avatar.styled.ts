@@ -1,7 +1,6 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-// @ts-ignore
 import {ReactComponent as AstronautIcon} from '../../assets/images/common/astronaut.svg';
 
 export const Container = styled.div`
