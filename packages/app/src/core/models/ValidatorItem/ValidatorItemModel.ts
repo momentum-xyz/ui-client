@@ -1,7 +1,7 @@
 import {types, Instance, flow} from 'mobx-state-tree';
+import {RequestModel} from '@momentum/core';
 
 import {api, BaseFavoritesResponse} from 'api';
-import {RequestModel} from 'core/models';
 
 const ValidatorItemModel = types
   .model('ValidatorItemModel', {

@@ -1,8 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
+import {RequestModel} from '@momentum/core';
 
 import {api, MagicLinkResponse} from 'api';
 import {MagicTypeEnum} from 'core/enums';
-import {RequestModel} from 'core/models';
 
 const MagicLink = types
   .model('MagicLink', {

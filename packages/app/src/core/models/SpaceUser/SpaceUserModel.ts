@@ -1,7 +1,7 @@
 import {Instance, types} from 'mobx-state-tree';
+import {UUIDModel} from '@momentum/core';
 
 import {bytesToUuid} from 'core/utils';
-import {UUIDModel} from 'core/models/UUID';
 
 const SpaceUserModel = types
   .model('SpaceUser', {

@@ -6,10 +6,11 @@ import AgoraRTC, {
   ICameraVideoTrack,
   IMicrophoneAudioTrack
 } from 'agora-rtc-sdk-ng';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api} from 'api';
 import {appVariables} from 'api/constants';
-import {AgoraRemoteUser, AgoraRemoteUserInterface, RequestModel, ResetModel} from 'core/models';
+import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
 
 const AgoraMeetingStore = types

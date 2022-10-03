@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {DialogModel, RequestModel, ResetModel} from 'core/models';
+import {DialogModel} from 'core/models';
 import {api, BroadcastInterface, LiveStreamInterface} from 'api';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
 import {youtubeVideoPath} from 'core/utils';

@@ -1,7 +1,8 @@
 import {Instance, types} from 'mobx-state-tree';
+import {UUIDModel} from '@momentum/core';
 
 import {PermanentTypeEnum, TileTypeEnum} from 'core/enums';
-import {ContentInterface, UUIDModel} from 'core/models';
+import {ContentInterface} from 'core/models';
 
 const Tile = types.model('Tile', {
   id: types.maybe(types.string),

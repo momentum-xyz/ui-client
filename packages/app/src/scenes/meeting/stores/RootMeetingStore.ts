@@ -1,6 +1,5 @@
 import {types} from 'mobx-state-tree';
-
-import {ResetModel} from 'core/models';
+import {ResetModel} from '@momentum/core';
 
 import {MeetingRoomStore} from './MeetingRoomStore';
 

@@ -1,14 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import {cloneDeep} from 'lodash-es';
+import {ResetModel, RequestModel} from '@momentum/core';
 
-import {
-  Space,
-  ResetModel,
-  RequestModel,
-  DialogModel,
-  AgoraRemoteUser,
-  AgoraRemoteUserInterface
-} from 'core/models';
+import {Space, DialogModel, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
 import {api} from 'api';
 

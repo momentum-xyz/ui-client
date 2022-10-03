@@ -7,8 +7,8 @@ import {
   UserRejectedRequestError as UserRejectedRequestErrorInjected
 } from '@web3-react/injected-connector';
 import {t} from 'i18next';
+import {RequestModel} from '@momentum/core';
 
-import {RequestModel} from 'core/models';
 import {PolkadotExtensionException, SessionException} from 'core/exceptions';
 import {api, Web3ChallengeRequest, Web3LoginAcceptRequest} from 'api';
 

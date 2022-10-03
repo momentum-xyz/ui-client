@@ -1,10 +1,9 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {orderBy} from 'lodash';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {
   DialogModel,
-  RequestModel,
-  ResetModel,
   SortedFieldModel,
   TokenRuleItemModel,
   TokenRuleItemModelInterface

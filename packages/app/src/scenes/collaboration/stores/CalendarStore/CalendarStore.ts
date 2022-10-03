@@ -1,14 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {
-  AttendeeModel,
-  DialogModel,
-  EventForm,
-  EventItemInterface,
-  EventList,
-  RequestModel,
-  ResetModel
-} from 'core/models';
+import {AttendeeModel, DialogModel, EventForm, EventItemInterface, EventList} from 'core/models';
 import {api} from 'api';
 import {MagicTypeEnum} from 'core/enums';
 import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';

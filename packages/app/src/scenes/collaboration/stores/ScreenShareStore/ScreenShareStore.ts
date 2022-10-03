@@ -1,8 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api} from 'api';
-import {RequestModel, ResetModel} from 'core/models';
 
 const ScreenShareStore = types.compose(
   ResetModel,

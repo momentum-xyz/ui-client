@@ -1,9 +1,9 @@
+import {RequestModel} from '@momentum/core';
 import {IAgoraRTCRemoteUser, IRemoteAudioTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, ProfileResponse, UserProfileInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {RequestModel} from 'core/models';
 import {AvatarSizeEnum} from 'core/enums';
 
 const AgoraRemoteUser = types

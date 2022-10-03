@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "husky install",
     "build": "yarn --cwd=packages/ui-kit build && yarn --cwd=packages/app build",
-    "build:deps": "yarn --cwd=packages/ui-kit build",
+    "build:deps": "concurrently \"yarn --cwd=packages/ui-kit build\" \"yarn --cwd=packages/core build\"",
     "start": "yarn --cwd=packages/app start",
     "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
@@ -23,5 +23,8 @@
     "packages": [
       "packages/*"
     ]
+  },
+  "dependencies": {
+    "concurrently": "^7.4.0"
   }
 }

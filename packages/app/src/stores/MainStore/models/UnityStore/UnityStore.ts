@@ -1,8 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
+import {RequestModel} from '@momentum/core';
 
 import {api} from 'api';
-import {RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
