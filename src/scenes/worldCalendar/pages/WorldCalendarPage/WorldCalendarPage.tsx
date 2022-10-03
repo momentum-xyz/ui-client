@@ -1,17 +1,18 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
-import {t} from 'i18next';
 import {toast} from 'react-toastify';
+import {useTheme} from 'styled-components';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {PageTopBar, EventList, LinkDialog, DeleteEventDialog, ToastContent} from 'ui-kit';
 import {absoluteLink} from 'core/utils';
 
-import * as styled from './WorldCalendarPage.styled';
 import {EventForm} from './components';
+import * as styled from './WorldCalendarPage.styled';
 
 const WorldCalendarPage: FC = () => {
   const {worldCalendarStore, mainStore, sessionStore, widgetStore} = useStore();
@@ -20,7 +21,9 @@ const WorldCalendarPage: FC = () => {
   const {worldStore, unityStore} = mainStore;
   const {attendeesListStore} = widgetStore;
 
+  const {t} = useTranslation();
   const history = useHistory();
+  const theme = useTheme();
 
   const handleMagicLinkOpen = useCallback(
     (eventId: string, spaceId?: string) => {
@@ -34,7 +37,9 @@ const WorldCalendarPage: FC = () => {
   useEffect(() => {
     eventList.fetchEvents(worldStore.worldId, true);
 
-    return () => eventList.resetModel();
+    return () => {
+      eventList.resetModel();
+    };
   }, [eventList, worldStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
@@ -83,24 +88,17 @@ const WorldCalendarPage: FC = () => {
     }
   };
 
+  const handleClose = () => {
+    if (history.location.state?.canGoBack) {
+      history.goBack();
+    } else {
+      history.push(ROUTES.base);
+    }
+  };
+
   return (
     <styled.Container data-testid="WorldCalendarPage-test">
-      {calendarStore.magicId && magicDialog.isOpen && (
-        <LinkDialog
-          title={t('eventList.eventItem.magicLinkDialog.title')}
-          copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
-          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
-          onClose={magicDialog.close}
-        />
-      )}
-      {calendarStore.formDialog.isOpen && <EventForm />}
-      {deleteConfirmationDialog.isOpen && (
-        <DeleteEventDialog
-          onConfirmation={handleEventDelete}
-          onClose={deleteConfirmationDialog.close}
-        />
-      )}
-      <PageTopBar title="World Calendar" onClose={() => history.push(ROUTES.base)} />
+      <PageTopBar title={t('labels.calendar')} onClose={handleClose} />
       <EventList
         currentUserId={sessionStore.userId}
         events={eventList.events}
@@ -114,6 +112,25 @@ const WorldCalendarPage: FC = () => {
         onShowAttendeesList={attendeesListStore.showAttendees}
         showOnWorldCalendar
       />
+
+      {calendarStore.magicId && magicDialog.isOpen && (
+        <LinkDialog
+          theme={theme}
+          title={t('eventList.eventItem.magicLinkDialog.title')}
+          copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
+          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
+          onClose={magicDialog.close}
+        />
+      )}
+
+      {calendarStore.formDialog.isOpen && <EventForm />}
+
+      {deleteConfirmationDialog.isOpen && (
+        <DeleteEventDialog
+          onConfirmation={handleEventDelete}
+          onClose={deleteConfirmationDialog.close}
+        />
+      )}
     </styled.Container>
   );
 };

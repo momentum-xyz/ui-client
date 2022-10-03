@@ -3,14 +3,14 @@ import {observer} from 'mobx-react-lite';
 import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
 
-import {Loader, Text, TextArea} from 'ui-kit';
+import {Loader, PropsWithThemeInterface, Text, TextArea} from 'ui-kit';
 import {dateToTime} from 'core/utils';
 import {MessageInterface} from 'core/interfaces';
 import {TextMessageEnum} from 'core/enums';
 
 import * as styled from './TextChat.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   sendMessage: (message: RtmTextMessage) => void;
   currentChannel: RtmChannel | null;
   messages: Array<MessageInterface>;

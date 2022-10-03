@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
 import {DraggableProvided} from 'react-beautiful-dnd';
 
-import {SvgButton} from 'ui-kit';
+import {PropsWithThemeInterface, SvgButton} from 'ui-kit';
 
 import * as styled from './TileMenu.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   onEdit: () => void;
   onDelete: () => void;
   provided?: DraggableProvided;

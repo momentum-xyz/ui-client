@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import {Text, TileMenu} from 'ui-kit';
+import {TileMenu} from 'ui-kit';
 
 export const MenuWrapper = styled.div`
   opacity: 0;
@@ -48,7 +48,16 @@ export const VideoWrapper = styled.div`
   }
 `;
 
-export const TextItem = styled(Text)`
+export const TextTile = styled.div`
+  color: ${(props) => props.theme.text};
+  font-size: var(--font-size-s);
+  text-align: justify;
+  white-space: pre-line;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
   padding-top: 5px;
 
   :after {

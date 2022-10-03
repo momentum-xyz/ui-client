@@ -4,7 +4,7 @@ import raf from 'raf';
 
 const MusicPlayer = types
   .model('MusicPlayer', {
-    isPlaying: types.optional(types.boolean, false),
+    isPlaying: types.optional(types.boolean, true),
     firstLoadNextShouldBePlaying: types.optional(types.boolean, false),
     nextSongShouldBePlaying: types.optional(types.boolean, true),
     loaded: types.optional(types.boolean, false),

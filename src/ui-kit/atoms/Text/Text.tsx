@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import {TextAlignType, TextSizeType, TextTransformType, TextWeightType} from 'ui-kit/types';
 import {PropsWithThemeInterface} from 'ui-kit/interfaces';
-import {splitIntoFirstNSentencesAndRest} from 'core/utils';
+import {splitIntoFirstNSentencesAndRest} from 'ui-kit/utils';
 
 import * as styled from './Text.styled';
 

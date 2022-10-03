@@ -182,7 +182,7 @@ const Widgets: FC = () => {
               />
             )}
             {mainToolbarIcons.map((item) => (
-              <ToolbarIcon key={item.title} {...item} />
+              <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />
             ))}
           </ToolbarIconList>
         </styled.Toolbars>

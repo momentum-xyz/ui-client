@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
 
-import {Heading, SvgButton} from 'ui-kit';
+import {Heading, PropsWithThemeInterface, SvgButton} from 'ui-kit';
 
 import * as styled from './SectionPanel.styled';
 
-interface PropsInterface {
+interface PropsInterface extends PropsWithThemeInterface {
   title?: string;
   onAdd?: () => void;
   className?: string;
