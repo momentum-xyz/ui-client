@@ -1,7 +1,7 @@
 import {Instance, types, flow, cast} from 'mobx-state-tree';
-import {UUIDModel} from '@momentum/core/dist/models/UUID';
-import {RequestModel} from '@momentum/core/dist/models/Request';
-import {ResetModel} from '@momentum/core/dist/models/ResetModel';
+import {UUIDModel} from '@momentum/core';
+import {RequestModel} from '@momentum/core';
+import {ResetModel} from '@momentum/core';
 
 import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';

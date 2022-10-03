@@ -1,6 +1,5 @@
 import {types, Instance, flow} from 'mobx-state-tree';
-import {UUIDModel} from '@momentum/core/dist/models/UUID';
-import {RequestModel} from '@momentum/core';
+import {RequestModel, UUIDModel} from '@momentum/core';
 
 import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';
