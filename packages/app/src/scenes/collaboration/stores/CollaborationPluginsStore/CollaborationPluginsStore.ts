@@ -1,6 +1,6 @@
 import {types, cast} from 'mobx-state-tree';
+import {ResetModel} from '@momentum/core';
 
-import {ResetModel} from 'core/models';
 import {appVariables} from 'api/constants';
 import {PluginInterface} from 'core/interfaces';
 
