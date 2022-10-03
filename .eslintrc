@@ -106,7 +106,7 @@
           "packages/app/src",
           "packages/ui-kit/src",
           "packages/core/src",
-          "packages/miro-plugin/src"
+          "packages/plugin-miro/src",
         ]
       }
     },

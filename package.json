@@ -8,7 +8,7 @@
     "build": "yarn --cwd=packages/ui-kit build && yarn --cwd=packages/app build",
     "build:deps": "concurrently \"yarn --cwd=packages/ui-kit build\" \"yarn --cwd=packages/core build\"",
     "start:app": "yarn --cwd=packages/app start",
-    "start:miro": "yarn --cwd=packages/miro-plugin start",
+    "start:miro": "yarn --cwd=packages/plugin-miro start",
     "start": "concurrently \"yarn start:app\" \"yarn start:miro\"",
     "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
