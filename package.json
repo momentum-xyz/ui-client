@@ -5,18 +5,11 @@
   "private": true,
   "scripts": {
     "postinstall": "husky install",
+
     "build:deps": "concurrently -n ui-ki,core \"yarn --cwd=packages/ui-kit build\" \"yarn --cwd=packages/core build\"",
-    "build:app": "yarn --cwd=packages/app build",
-    "build:miro": "yarn --cwd=packages/plugin-miro build",
-    "build:depsAndApp": "yarn build:deps && yarn build:app",
-    "build:depsAndMiro": "yarn build:deps && yarn build:miro",
-    "build": "yarn build:deps && concurrently -n miro, app \"yarn build:miro\" \"yarn build:app\"",
-    "start:app": "yarn --cwd=packages/app start",
-    "start:miro": "yarn --cwd=packages/plugin-miro start",
-    "start": "concurrently -n app,miro \"yarn start:app\" \"yarn start:miro\"",
-    "buildDepsAndStart:app": "yarn build:deps && yarn start:app",
-    "buildDepsAndStart:miro": "yarn build:deps && yarn start:miro",
-    "buildDepsAndStart": "yarn build:deps && yarn start",
+    "build": "yarn build:deps && yarn --cwd=packages/app build",
+    "start": "yarn build:deps && yarn --cwd=packages/app start",
+
     "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",
