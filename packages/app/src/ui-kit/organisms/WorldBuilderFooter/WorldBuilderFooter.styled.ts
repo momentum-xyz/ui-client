@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import {Button} from 'ui-kit';
+import {Button} from '@momentum/ui-kit';
 
 export const StyledButton = styled(Button)`
   width: fit-content;

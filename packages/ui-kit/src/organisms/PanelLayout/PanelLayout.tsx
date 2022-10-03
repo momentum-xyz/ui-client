@@ -4,7 +4,14 @@ import cn from 'classnames';
 import {PropsWithThemeInterface, ComponentSizeInterface} from '../../interfaces';
 import {IconSvg, Heading} from '../../atoms';
 import {SvgButton} from '../../molecules';
-import {HeaderStyleType, SizeType, HeaderType, HeaderItemType, TextAlignType} from '../../types';
+import {
+  HeaderStyleType,
+  SizeType,
+  HeaderType,
+  HeaderItemType,
+  TextAlignType,
+  IconNameType
+} from '../../types';
 
 import * as styled from './PanelLayout.styled';
 
@@ -33,7 +40,6 @@ export interface PropsInterface extends PropsWithThemeInterface {
   isTruncateHeader?: boolean;
   showIcon?: boolean;
   headerHeadingAlign?: TextAlignType;
-  children?: ReactNode;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {

@@ -10,7 +10,14 @@ import {
 } from '../../interfaces';
 import {Button, Portal} from '../../atoms';
 import {PanelLayout} from '../../organisms';
-import {HeaderStyleType, PlacementType, SizeType, HeaderType, HeaderItemType} from '../../types';
+import {
+  HeaderStyleType,
+  PlacementType,
+  SizeType,
+  HeaderType,
+  HeaderItemType,
+  IconNameType
+} from '../../types';
 
 import * as styled from './Dialog.styled';
 

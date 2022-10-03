@@ -1,8 +1,6 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
-
-import {Text} from 'ui-kit';
+import {PropsWithThemeInterface, Text} from '@momentum/ui-kit';
 
 import * as styled from './NetworkRemarks.styled';
 

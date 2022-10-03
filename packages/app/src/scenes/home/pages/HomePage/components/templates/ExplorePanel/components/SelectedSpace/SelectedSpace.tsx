@@ -3,11 +3,10 @@ import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Text, Button} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {Text, Button} from 'ui-kit';
 
 import {SpacesList} from '../SpacesList';
 

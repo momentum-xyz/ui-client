@@ -1,10 +1,11 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
+import {Dialog, Text} from '@momentum/ui-kit';
 
 import {StageModeRequestEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
-import {Dialog, Text, ToastContent} from 'ui-kit';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './InvitedOnStageDialog.styled';
 

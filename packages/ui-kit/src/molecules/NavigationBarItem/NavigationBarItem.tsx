@@ -2,7 +2,8 @@ import React, {FC, useState} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
-import {IconSvg} from '../../atoms/IconSvg';
+import {IconNameType} from '../../types';
+import {IconSvg} from '../../atoms';
 
 import * as styled from './NavigationBarItem.styled';
 

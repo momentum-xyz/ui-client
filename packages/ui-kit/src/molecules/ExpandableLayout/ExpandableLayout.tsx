@@ -1,8 +1,9 @@
-import React, {FC, ReactNode} from 'react';
+import React, {FC} from 'react';
 import cn from 'classnames';
 
 import {IconSvg, Heading} from '../../atoms';
 import {ComponentSizeInterface, PropsWithThemeInterface} from '../../interfaces';
+import {IconNameType} from '../../types';
 
 import * as styled from './ExpandableLayout.styled';
 
@@ -13,7 +14,6 @@ interface ExpandableLayoutPropsInterface extends PropsWithThemeInterface {
   isExpanded: boolean;
   setExpand: (isExpanded: boolean) => void;
   size?: ComponentSizeInterface;
-  children?: ReactNode;
 }
 
 const ExpandableLayout: FC<ExpandableLayoutPropsInterface> = ({

@@ -1,7 +1,5 @@
 import styled from 'styled-components';
-import {Heading} from '@momentum/ui-kit';
-
-import {Text} from 'ui-kit';
+import {Heading, Text} from '@momentum/ui-kit';
 
 export const Container = styled.div`
   z-index: var(--dialog-z-index);

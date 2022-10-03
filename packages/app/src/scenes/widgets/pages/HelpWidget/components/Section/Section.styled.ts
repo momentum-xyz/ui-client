@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
-
-import {IconSvg} from 'ui-kit';
+import {IconSvg} from '@momentum/ui-kit';
 
 export const Container = styled.div`
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.3)};

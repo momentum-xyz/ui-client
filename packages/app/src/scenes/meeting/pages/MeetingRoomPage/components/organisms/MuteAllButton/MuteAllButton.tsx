@@ -1,7 +1,6 @@
 import React, {FC, memo} from 'react';
 import {useTranslation} from 'react-i18next';
-
-import {SvgButton, Text} from 'ui-kit';
+import {SvgButton, Text} from '@momentum/ui-kit';
 
 import * as styled from './MuteAllButton.styled';
 

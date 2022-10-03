@@ -14,7 +14,6 @@ interface PropsInterface extends PropsWithThemeInterface {
   visible?: boolean;
   darkBackground?: boolean;
   size?: ComponentSizeInterface;
-  children?: ReactNode;
 }
 
 const ENTER_DELAY_DEFAULT = 0.1;

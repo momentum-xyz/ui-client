@@ -2,11 +2,12 @@ import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
+import {Button} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {SpaceTopBar, Button, TextChat} from 'ui-kit';
+import {SpaceTopBar, TextChat} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import {MiroBoard, MiroChoice} from './components/templates';

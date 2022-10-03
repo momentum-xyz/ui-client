@@ -1,11 +1,7 @@
-import {FC, useRef, useEffect, ReactNode} from 'react';
+import {FC, useRef, useEffect} from 'react';
 import {createPortal} from 'react-dom';
 
-interface PropsInterface {
-  children?: ReactNode;
-}
-
-const Portal: FC<PropsInterface> = (props) => {
+const Portal: FC = ({children}) => {
   const domBody: HTMLElement = document.body;
   const domContainer = useRef<HTMLDivElement>(document.createElement('div'));
   domContainer.current.setAttribute('data-testid', 'Portal-test');
@@ -18,7 +14,7 @@ const Portal: FC<PropsInterface> = (props) => {
     };
   }, [domContainer, domBody]);
 
-  return createPortal(props.children, domContainer.current);
+  return createPortal(children, domContainer.current);
 };
 
 export default Portal;

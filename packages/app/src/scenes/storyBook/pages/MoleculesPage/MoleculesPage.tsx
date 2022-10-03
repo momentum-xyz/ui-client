@@ -20,13 +20,13 @@ import {
   TileMenu,
   Toggle,
   ToolbarIcon,
-  Button
+  Button,
+  PageTopBar
 } from '@momentum/ui-kit';
 
 import {UserStatusEnum} from 'core/enums';
 import {
   AccentColorList,
-  PageTopBar,
   ToastContent,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,

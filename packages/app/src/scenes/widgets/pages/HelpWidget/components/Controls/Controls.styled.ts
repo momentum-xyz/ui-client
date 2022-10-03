@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import {IconSvg} from 'ui-kit';
+import {IconSvg} from '@momentum/ui-kit';
 
 export const ItemRowContainer = styled.div`
   display: flex;

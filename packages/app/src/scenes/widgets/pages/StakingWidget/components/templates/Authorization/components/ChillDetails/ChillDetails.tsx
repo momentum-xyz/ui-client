@@ -1,10 +1,9 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Text} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Text} from 'ui-kit';
 
 import * as styled from './ChillDetails.styled';
 

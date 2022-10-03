@@ -1,9 +1,9 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
+import {IconSvg} from '@momentum/ui-kit';
 
 import {TokenRuleListHeaderEnum, TokenRuleStatusEnum} from 'core/enums';
-import {IconSvg} from 'ui-kit';
 import {TokenRuleItemModelInterface} from 'core/models';
 import {TokenRuleListHeaderType} from 'core/types';
 import {TokenRulesColumnHeaderInterface} from 'core/interfaces';

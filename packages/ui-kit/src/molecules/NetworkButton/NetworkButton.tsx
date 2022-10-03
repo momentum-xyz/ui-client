@@ -2,6 +2,7 @@ import React, {FC, memo} from 'react';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 import {IconSvg} from '../../atoms';
+import {IconNameType} from '../../types';
 
 import * as styled from './NetworkButton.styled';
 

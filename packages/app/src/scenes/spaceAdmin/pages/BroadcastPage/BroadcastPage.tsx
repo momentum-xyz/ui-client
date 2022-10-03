@@ -3,9 +3,10 @@ import {t} from 'i18next';
 import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
+import {PageTopBar} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {CountdownDialog, PageTopBar, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {CountdownDialog, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './BroadcastPage.styled';

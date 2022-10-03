@@ -1,8 +1,9 @@
 import React from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
+import {Dialog, Text} from '@momentum/ui-kit';
 
-import {Dialog, ToastContent, Text} from 'ui-kit';
+import {ToastContent} from 'ui-kit';
 import {StageModeUserInterface} from 'core/models';
 
 import * as styled from './InviteOnStageDialog.styled';

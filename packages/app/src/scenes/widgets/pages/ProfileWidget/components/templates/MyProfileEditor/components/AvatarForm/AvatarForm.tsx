@@ -2,8 +2,8 @@ import React, {FC, useState} from 'react';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
+import {Dialog} from '@momentum/ui-kit';
 
-import {Dialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './AvatarForm.styled';

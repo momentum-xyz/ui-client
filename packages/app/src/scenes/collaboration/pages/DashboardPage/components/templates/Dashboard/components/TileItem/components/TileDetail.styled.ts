@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import {TileMenu} from 'ui-kit';
+import {TileMenu} from '@momentum/ui-kit';
 
 export const MenuWrapper = styled.div`
   opacity: 0;

@@ -1,18 +1,18 @@
 import React, {FC, useState} from 'react';
 import {useTheme} from 'styled-components';
-import {Heading} from '@momentum/ui-kit';
-
-import {useStore} from 'shared/hooks';
 import {
+  Heading,
   Button,
   Dialog,
   Emoji,
   PageTopBar,
   PanelLayout,
   SearchDropdown,
-  Text,
-  VisualSettingsPanel
-} from 'ui-kit';
+  Text
+} from '@momentum/ui-kit';
+
+import {useStore} from 'shared/hooks';
+import {VisualSettingsPanel} from 'ui-kit';
 import {appVariables} from 'api/constants';
 
 import * as styled from './OrganismsPage.styled';

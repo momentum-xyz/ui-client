@@ -1,11 +1,9 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Text, Dropdown} from '@momentum/ui-kit';
 
-import {Text} from 'ui-kit';
 import {useStore} from 'shared/hooks/useStore';
-import {Dropdown} from 'ui-kit';
 
 import * as styled from './BondDetails.styled';
 

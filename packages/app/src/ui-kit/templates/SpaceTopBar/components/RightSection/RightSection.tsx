@@ -2,9 +2,9 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {generatePath} from 'react-router-dom';
+import {Separator, ToolbarIcon} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
-import {Separator, ToolbarIcon} from 'ui-kit';
 
 import * as styled from './RightSection.styled';
 

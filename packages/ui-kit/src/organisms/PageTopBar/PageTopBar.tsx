@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from 'react';
+import React, {FC} from 'react';
 import {t} from 'i18next';
 
 import {PropsWithThemeInterface} from '../../interfaces';
@@ -12,7 +12,6 @@ interface PropsInterface extends PropsWithThemeInterface {
   subtitle?: string;
   onClose?: () => void;
   actions?: React.ReactElement;
-  children?: ReactNode;
 }
 
 const PageTopBar: FC<PropsInterface> = (props) => {

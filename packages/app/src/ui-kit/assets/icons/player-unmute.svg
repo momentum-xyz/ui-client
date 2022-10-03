@@ -1,7 +1,0 @@
-<svg class="cursor-pointer" width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g opacity="0.5">
-        <path d="M6.66095 2.21716C7.04704 1.94138 7.58334 2.21737 7.58334 2.69184V12.0915C7.58334 12.5659 7.04704 12.8419 6.66095 12.5661L3.50001 10.3083H1.75001C1.10568 10.3083 0.583344 9.78598 0.583344 9.14164V5.64165C0.583344 4.99731 1.10568 4.47498 1.75001 4.47498H3.50001L6.66095 2.21716Z" fill="currentColor"/>
-        <path d="M9.3297 10.2531C10.0535 9.51626 10.5 8.50608 10.5 7.39162C10.5 6.27248 10.0498 5.25849 9.32056 4.5209" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10.9539 2.85437C12.1151 4.01556 12.8333 5.61973 12.8333 7.39164C12.8333 9.16355 12.1151 10.7677 10.9539 11.9289" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-</svg>

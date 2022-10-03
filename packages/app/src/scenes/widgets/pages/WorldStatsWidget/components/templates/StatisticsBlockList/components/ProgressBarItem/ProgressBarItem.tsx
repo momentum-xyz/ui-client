@@ -1,8 +1,7 @@
 import React, {FC} from 'react';
-import {Heading, PropsWithThemeInterface} from '@momentum/ui-kit';
+import {Heading, Text, ProgressBar, PropsWithThemeInterface} from '@momentum/ui-kit';
 
 import {WorldStatItemInterface} from 'api';
-import {Text, ProgressBar} from 'ui-kit';
 
 import * as styled from './ProgressBarItem.styled';
 

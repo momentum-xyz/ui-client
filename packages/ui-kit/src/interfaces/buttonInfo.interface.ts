@@ -1,4 +1,4 @@
-import {VariantType} from '../types';
+import {VariantType, IconNameType} from '../types';
 
 export interface ButtonInfoInterface {
   title: string;

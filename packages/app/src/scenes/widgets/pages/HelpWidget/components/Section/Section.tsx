@@ -2,9 +2,7 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {t} from 'i18next';
-import {Heading} from '@momentum/ui-kit';
-
-import {IconSvg, Text} from 'ui-kit';
+import {Heading, IconSvg, Text, IconNameType} from '@momentum/ui-kit';
 
 import * as styled from './Section.styled';
 

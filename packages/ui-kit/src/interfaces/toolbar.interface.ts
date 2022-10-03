@@ -1,3 +1,5 @@
+import {IconNameType} from '../types';
+
 export interface ToolbarIconInterface {
   title: string;
   link?: string;

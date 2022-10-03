@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from 'react';
+import React, {FC} from 'react';
 
 import {Heading} from '../../atoms';
 import {SvgButton} from '../../molecules';
@@ -10,7 +10,6 @@ interface PropsInterface extends PropsWithThemeInterface {
   title?: string;
   onAdd?: () => void;
   className?: string;
-  children?: ReactNode;
 }
 
 const SectionPanel: FC<PropsInterface> = ({title, children, className, onAdd}) => {

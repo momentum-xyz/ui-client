@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from 'react';
+import React, {FC} from 'react';
 import {NavLink} from 'react-router-dom';
 import cn from 'classnames';
 import * as H from 'history';
@@ -20,7 +20,6 @@ interface ToolbarIconPropsInterface extends PropsWithThemeInterface, ToolbarIcon
   state?: object;
   isWhite?: boolean;
   toolTipPlacement?: PlacementType;
-  children?: ReactNode;
 }
 
 const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({

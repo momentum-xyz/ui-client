@@ -1,8 +1,8 @@
-import React, {FC, HTMLProps, ReactNode} from 'react';
+import React, {FC, HTMLProps} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType} from '../../types';
+import {SizeType, IconNameType} from '../../types';
 import {IconSvg} from '../../atoms';
 
 import * as styled from './SvgButton.styled';
@@ -16,7 +16,6 @@ export interface PropsInterface
   isDanger?: boolean;
   isWhite?: boolean;
   disabled?: boolean;
-  children?: ReactNode;
 }
 
 const SvgButton: FC<PropsInterface> = ({

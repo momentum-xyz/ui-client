@@ -1,3 +1,5 @@
+import {IconNameType} from '../types';
+
 export interface TabBarTabInterface {
   id: string;
   title: string;

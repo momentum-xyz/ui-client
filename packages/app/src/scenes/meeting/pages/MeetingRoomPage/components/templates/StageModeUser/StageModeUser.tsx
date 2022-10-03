@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {IconSvg, Text} from '@momentum/ui-kit';
 
-import {IconSvg, Text} from 'ui-kit';
 import {StageModeUserInterface} from 'core/models';
 import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
 

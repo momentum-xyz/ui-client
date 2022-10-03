@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import {SearchInput} from 'ui-kit';
+import {SearchInput} from '@momentum/ui-kit';
 
 export const Body = styled.div`
   overflow: hidden;

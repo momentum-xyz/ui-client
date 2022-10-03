@@ -3,8 +3,9 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
+import {Button, Input, Loader, TextArea} from '@momentum/ui-kit';
 
-import {Button, Input, Loader, TextArea, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
 import {TextTileFormInterface} from 'api';
 

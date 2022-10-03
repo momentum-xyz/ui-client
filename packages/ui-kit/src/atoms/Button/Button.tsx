@@ -2,7 +2,7 @@ import React, {memo, MouseEventHandler, forwardRef} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType, VariantType, TextTransformType} from '../../types';
+import {SizeType, VariantType, TextTransformType, IconNameType} from '../../types';
 
 import * as styled from './Button.styled';
 

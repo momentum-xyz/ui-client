@@ -2,7 +2,7 @@ import React, {FC, memo} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType} from '../../types';
+import {SizeType, IconNameType} from '../../types';
 
 import * as styled from './IconSvg.styled';
 

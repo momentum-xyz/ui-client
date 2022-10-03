@@ -4,3 +4,4 @@ export * from './hooks';
 export * from './interfaces';
 export * from './molecules';
 export * from './types';
+export * from './organisms';

@@ -7,7 +7,7 @@ import {splitIntoFirstNSentencesAndRest} from '../../utils';
 
 import * as styled from './Text.styled';
 
-export interface TextPropsInterface extends PropsWithThemeInterface {
+interface TextPropsInterface extends PropsWithThemeInterface {
   text?: string;
   size: TextSizeType;
   transform?: TextTransformType;

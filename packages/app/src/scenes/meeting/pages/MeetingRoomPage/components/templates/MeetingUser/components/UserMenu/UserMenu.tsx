@@ -1,7 +1,7 @@
 import React, {FC, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
+import {IconSvg, Portal, Text, useClickOutside} from '@momentum/ui-kit';
 
-import {IconSvg, Portal, Text, useClickOutside} from 'ui-kit';
 import {AgoraRemoteUserInterface} from 'core/models';
 import {CoordinationInterface} from 'core/interfaces';
 

@@ -2,8 +2,8 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
+import {Button} from '@momentum/ui-kit';
 
-import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
 import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';

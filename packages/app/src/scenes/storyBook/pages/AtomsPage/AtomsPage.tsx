@@ -13,10 +13,10 @@ import {
   TextArea,
   TextAreaDark,
   ToolbarIconList,
-  Tooltip
+  Tooltip,
+  PageTopBar,
+  ToolbarIcon
 } from '@momentum/ui-kit';
-
-import {PageTopBar, ToolbarIcon} from 'ui-kit';
 
 import * as styled from './AtomsPage.styled';
 
@@ -130,6 +130,7 @@ const AtomsPage: FC = () => {
           <IconSvg size="large" name="wallet" />
           <IconSvg size="large" name="warning" />
           <IconSvg size="large" name="whitelist" />
+          <IconSvg size="large" name="fly-with-me" />
         </styled.Section>
 
         <styled.Name>
