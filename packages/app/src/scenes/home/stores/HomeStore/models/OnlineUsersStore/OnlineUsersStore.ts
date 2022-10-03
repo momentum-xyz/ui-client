@@ -1,6 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
-
-import {RequestModel, ResetModel} from 'core/models';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 const OnlineUsersStore = types
   .compose(

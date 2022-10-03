@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 COPY packages/app/package.json ./packages/app/
 COPY packages/ui-kit/package.json ./packages/ui-kit/
+COPY packages/core/package.json ./packages/core/
 RUN yarn install --immutable --immutable-cache --check-cache
 
 COPY . .

@@ -1,12 +1,12 @@
 import {Instance, types, flow, cast} from 'mobx-state-tree';
+import {UUIDModel} from '@momentum/core';
+import {RequestModel} from '@momentum/core';
+import {ResetModel} from '@momentum/core';
 
-import {UUIDModel} from 'core/models/UUID';
 import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';
 import {SpaceUserModel} from 'core/models/SpaceUser';
 import {SubSpaceModel} from 'core/models/SubSpace';
-import {RequestModel} from 'core/models/Request';
-import {ResetModel} from 'core/models/ResetModel';
 import {api, SpaceResponse} from 'api';
 import {SpaceTypeEnum} from 'core/enums';
 import {GetAllowedSpaceTypesResponse} from 'api';

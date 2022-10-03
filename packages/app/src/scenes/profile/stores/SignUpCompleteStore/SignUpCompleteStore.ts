@@ -1,8 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, UploadAvatarResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
-import {RequestModel, ResetModel} from 'core/models';
 
 export interface SignUpFormInterface {
   avatar?: File;

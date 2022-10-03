@@ -1,6 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {DialogModel, RequestModel, ResetModel, Space} from 'core/models';
+import {DialogModel, Space} from 'core/models';
 import {api} from 'api';
 
 import {SearchUsersStore, SpaceDetailsFormStore, TokenRulesStore} from './models';

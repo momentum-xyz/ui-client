@@ -1,6 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {RequestModel, ResetModel, TileInterface} from 'core/models';
+import {TileInterface} from 'core/models';
 import {api, TextTileFormInterface, UploadTileImageResponse, VideoTileFormInterface} from 'api';
 import {TileTypeEnum} from 'core/enums';
 

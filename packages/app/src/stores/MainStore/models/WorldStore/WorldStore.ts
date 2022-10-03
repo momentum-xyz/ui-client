@@ -1,6 +1,6 @@
 import {flow, Instance, types, cast} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {RequestModel, ResetModel} from 'core/models';
 import {api, WorldConfigType, WorldConfigResponse} from 'api';
 
 const WorldStore = types.compose(
