@@ -1,9 +1,13 @@
 import React, {FC, HTMLProps, useRef} from 'react';
 import cn from 'classnames';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
 
 import {useClickOutside} from '../../hooks';
-import {ButtonInfoInterface, OffsetInterface, ComponentSizeInterface} from '../../interfaces';
+import {
+  ButtonInfoInterface,
+  OffsetInterface,
+  ComponentSizeInterface,
+  PropsWithThemeInterface
+} from '../../interfaces';
 import {Button, Portal} from '../../atoms';
 import {PanelLayout} from '../../organisms';
 import {HeaderStyleType, PlacementType, SizeType, HeaderType, HeaderItemType} from '../../types';
