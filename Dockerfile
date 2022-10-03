@@ -10,7 +10,7 @@ COPY packages/core/package.json ./packages/core/
 RUN yarn install --immutable --immutable-cache --check-cache
 
 COPY . .
-RUN yarn build:depsAndApp
+RUN yarn build
 
 
 FROM nginx:1.22.0-alpine as production-build
