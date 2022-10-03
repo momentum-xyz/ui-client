@@ -5,3 +5,5 @@ export * from './coordination.interface';
 export * from './dropdownOption.interface';
 export * from './tabBarTab.interface';
 export * from './toolbar.interface';
+export * from './offset.interface';
+export * from './buttonInfo.interface';
