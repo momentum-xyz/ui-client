@@ -1,7 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, ValidationResponse} from 'api';
-import {RequestModel, ResetModel} from 'core/models';
 
 const WorldBuilderNameStore = types
   .compose(

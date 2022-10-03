@@ -1,11 +1,10 @@
 import {types, Instance, flow} from 'mobx-state-tree';
+import {RequestModel, UUIDModel} from '@momentum/core';
 
-import {UUIDModel} from 'core/models/UUID';
 import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';
 import {AvatarSizeEnum, UserStatusEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {RequestModel} from 'core/models';
 
 const UserProfileModel = types
   .model('UserProfile', {

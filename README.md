@@ -21,11 +21,13 @@ It will build it and watch for changes.
 ### `yarn start`
 
 Runs the app in the development mode.<br />
+It also runs `yarn build:deps` before starting the app. <br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />
+It also runs `yarn build:deps` before starting the app.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.<br />
 Your app is ready to be deployed!
 
@@ -150,3 +152,25 @@ Create file `.env.development.local` with `REACT_APP_OVERRIDE_CONFIG_VARIABLES` 
 ```
 REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT_URL": "https://dev.odyssey.ninja/api/v3/backend"}'
 ```
+
+### How to run a plugin
+
+In order to run a plugin you can use the follwoing command (from `packages/plugin-[name]` directory):
+
+```
+yarn start
+```
+
+or
+
+```
+yarn --cwd=packages/plugin-[name] start
+```
+
+from root directory.
+
+NOTE: You have to build dependencies first by using `yarn build:deps` from root directory.
+
+### How to build a plugin
+
+Same procedure as with run, but instead of `start` use `build`.

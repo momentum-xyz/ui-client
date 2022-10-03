@@ -1,13 +1,7 @@
 import {types, flow} from 'mobx-state-tree';
-import axios, {
-  AxiosRequestConfig,
-  CancelTokenSource,
-  AxiosError,
-  AxiosResponse,
-  AxiosInstance
-} from 'axios';
-// TODO: Get from future package @momentum/core
-import {RequestStateEnum} from 'core/enums';
+import axios, {AxiosRequestConfig, CancelTokenSource, AxiosError, AxiosResponse} from 'axios';
+
+import {RequestStateEnum} from '../../enums';
 
 const UNAUTHORIZED_STATUS = 401;
 const BAD_FIELD_STATUS = 400;
@@ -32,8 +26,7 @@ const RequestModel = types
     // @ts-ignore: MST-actions
     const actions = {
       send: flow(function* send<T, R extends {data: unknown; config: AxiosRequestConfig}>(
-        action: (request: AxiosInstance, options: T) => Promise<R>,
-        request: AxiosInstance,
+        action: (options: T) => Promise<R>,
         options: T
       ) {
         try {
@@ -48,7 +41,7 @@ const RequestModel = types
             cancel = axios.CancelToken.source();
           }
 
-          const response: AxiosResponse<R> = yield action(request, {
+          const response: AxiosResponse<R> = yield action({
             ...options,
             ...(self.isCancellable ? {cancelToken: cancel?.token} : {}),
             headers: {

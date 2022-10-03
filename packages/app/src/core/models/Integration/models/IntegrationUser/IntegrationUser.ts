@@ -1,6 +1,5 @@
 import {types} from 'mobx-state-tree';
-
-import {UUIDModel} from 'core/models';
+import {UUIDModel} from '@momentum/core';
 
 import {IntegrationUserData} from './models';
 

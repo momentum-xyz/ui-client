@@ -1,8 +1,8 @@
 import {flow, Instance, types} from 'mobx-state-tree';
+import {RequestModel} from '@momentum/core';
 
 import {AvatarSizeEnum, ParticipantRoleEnum} from 'core/enums';
 import {api, ProfileResponse, UserProfileInterface} from 'api';
-import {RequestModel} from 'core/models';
 import {appVariables} from 'api/constants';
 
 const StageModeUser = types

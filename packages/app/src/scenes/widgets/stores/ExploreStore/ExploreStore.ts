@@ -1,6 +1,6 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {RequestModel, ResetModel} from 'core/models';
 import {Space} from 'core/models';
 import {api} from 'api';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';

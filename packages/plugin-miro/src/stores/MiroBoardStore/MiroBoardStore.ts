@@ -2,8 +2,9 @@ import {flow, types, cast, Instance} from 'mobx-state-tree';
 import {t} from 'i18next';
 import {AxiosInstance} from 'axios';
 import {api, FetchIntegrationResponse, MiroBoardInterface} from 'api';
-import {Integration, RequestModel, ResetModel} from 'core/models';
+import {Integration} from 'core/models';
 import {appVariables} from 'api/constants';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 const MiroBoardStore = types.compose(
   ResetModel,

@@ -1,8 +1,8 @@
 import {types, cast, flow} from 'mobx-state-tree';
+import {RequestModel} from '@momentum/core';
 
 import {StageModePopupInfoInterface, StageModePopupOptionsInterface} from 'core/interfaces';
 import {StageModePopupTypeEnum} from 'core/enums';
-import {RequestModel} from 'core/models';
 import {api, ProfileResponse} from 'api';
 
 const StageModeStore = types

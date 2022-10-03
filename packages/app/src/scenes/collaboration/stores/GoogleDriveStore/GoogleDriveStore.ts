@@ -1,9 +1,10 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import {t} from 'i18next';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, FetchIntegrationResponse, GoogleDocumentInterface} from 'api';
 import {IntegrationTypeEnum} from 'core/enums';
-import {Integration, RequestModel, ResetModel} from 'core/models';
+import {Integration} from 'core/models';
 
 const GoogleDriveStore = types.compose(
   ResetModel,

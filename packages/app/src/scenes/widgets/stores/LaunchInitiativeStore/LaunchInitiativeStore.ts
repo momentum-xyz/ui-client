@@ -1,7 +1,8 @@
 import {flow, types, Instance} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, CreateInitiativeResponse, NewSpaceDetailsInterface} from 'api';
-import {DialogModel, RequestModel, ResetModel} from 'core/models';
+import {DialogModel} from 'core/models';
 
 const LaunchInitiativeStore = types
   .compose(

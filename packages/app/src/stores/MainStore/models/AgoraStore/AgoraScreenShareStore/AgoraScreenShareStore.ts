@@ -6,9 +6,9 @@ import AgoraRTC, {
   IRemoteVideoTrack,
   ScreenVideoTrackInitConfig
 } from 'agora-rtc-sdk-ng';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api} from 'api';
-import {RequestModel, ResetModel} from 'core/models';
 
 const TRACK_CONFIG: ScreenVideoTrackInitConfig = {
   encoderConfig: {

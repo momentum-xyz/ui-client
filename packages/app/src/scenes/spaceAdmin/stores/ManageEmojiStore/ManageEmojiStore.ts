@@ -1,6 +1,7 @@
 import {types, cast, flow} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum/core';
 
-import {DialogModel, RequestModel, ResetModel, EmojiDetails} from 'core/models';
+import {DialogModel, EmojiDetails} from 'core/models';
 import {
   api,
   AssignEmojiToSpaceResponse,
