@@ -39,7 +39,7 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    textChatStore,
+    // textChatStore,
     streamChatStore,
     liveStreamStore,
     stageModeStore
@@ -61,9 +61,9 @@ const Collaboration: FC = () => {
     rootStore
       .joinMeetingSpace(spaceId, false)
       .then(() => {
-        if (!textChatStore.isLoggedOn) {
-          textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
-        }
+        // if (!textChatStore.isLoggedOn) {
+        //   textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
+        // }
         if (!streamChatStore.isLoggedOn) {
           streamChatStore.init(sessionStore.userId, spaceId, sessionStore.profile ?? undefined);
         }
@@ -82,7 +82,7 @@ const Collaboration: FC = () => {
           );
         }
       });
-  }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore, streamChatStore]);
+  }, [agoraStore, history, rootStore, sessionStore, spaceId, t, streamChatStore]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -92,9 +92,9 @@ const Collaboration: FC = () => {
     collaborationStore.initBroadcast(spaceId);
   }, [collaborationStore, spaceId]);
 
-  useEffect(() => {
-    textChatStore.countUnreadMessages();
-  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
+  // useEffect(() => {
+  //   textChatStore.countUnreadMessages();
+  // }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
   const handleCountdownEnded = useCallback(async () => {
     if (agoraStageModeStore.isStageFull) {

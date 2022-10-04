@@ -24,9 +24,11 @@ export const Container = styled.div`
 
   .str-chat {
     --str-chat__font-family: IBM Plex Sans, sans-serif;
+    font-size: 13px;
 
     --str-chat__primary-color: ${(props) => props.theme.accent};
     --str-chat__background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
+    --str-chat__virtual-list-background-color: rgb(26 44 85);
     --str-chat__secondary-background-color: var(--str-chat__background-color);
 
     --str-chat__primary-surface-color: rgba(1, 255, 179, 0.4);
@@ -49,9 +51,24 @@ export const Container = styled.div`
     --str-chat__message-textarea-border-inline-end: none;
   }
 
+  .str-chat__virtual-list .str-chat__message-list-scroll > div {
+    padding-top: 10px;
+  }
   .str-chat__message-simple__actions {
+    display: none !important;
+  }
+
+  .str-chat__message-simple-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 88px;
+    overflow: hidden;
+  }
+
+  .str-chat__list-notifications {
     display: none;
   }
+
   .str-chat__message-input {
     border-block: solid var(--str-chat__background-color);
     border-inline: solid var(--str-chat__background-color);

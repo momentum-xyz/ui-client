@@ -4,15 +4,16 @@ import {t} from 'i18next';
 import {useHistory} from 'react-router';
 
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, Button, TextChat} from 'ui-kit';
+import {SpaceTopBar, Button} from 'ui-kit';
+import {StreamChat} from 'scenes/collaboration/components/StreamChat';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './LiveStreamPage.styled';
 import {VideoPanel} from './components';
 
 const LiveStreamPage: FC = () => {
-  const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
-  const {space, textChatStore, liveStreamStore} = collaborationStore;
+  const {mainStore, collaborationStore, leaveMeetingSpace} = useStore();
+  const {space, streamChatStore, liveStreamStore} = collaborationStore;
   const {favoriteStore} = mainStore;
 
   const history = useHistory();
@@ -31,9 +32,9 @@ const LiveStreamPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={textChatStore.textChatDialog.isOpen}
-        toggleChat={textChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        isChatOpen={streamChatStore.textChatDialog.isOpen}
+        toggleChat={streamChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={async () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
@@ -49,15 +50,11 @@ const LiveStreamPage: FC = () => {
       </SpaceTopBar>
       <styled.Container>
         <VideoPanel youtubeHash={liveStreamStore.broadcast.url} />
-        {textChatStore.textChatDialog.isOpen && (
-          <TextChat
-            currentChannel={textChatStore.currentChannel}
-            userId={sessionStore.userId}
-            sendMessage={textChatStore.sendMessage}
-            messages={textChatStore.messages}
-            messageSent={textChatStore.messageSent}
-          />
-        )}
+        {streamChatStore.textChatDialog.isOpen &&
+          streamChatStore.client &&
+          streamChatStore.currentChannel && (
+            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
+          )}
       </styled.Container>
     </styled.Inner>
   );
