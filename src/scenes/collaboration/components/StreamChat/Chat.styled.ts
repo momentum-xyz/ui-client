@@ -51,6 +51,9 @@ export const Container = styled.div`
     --str-chat__message-textarea-border-inline-end: none;
   }
 
+  .str-chat__virtual-list .str-chat__message-list-scroll > div {
+    padding-top: 10px;
+  }
   .str-chat__message-simple__actions {
     display: none !important;
   }
