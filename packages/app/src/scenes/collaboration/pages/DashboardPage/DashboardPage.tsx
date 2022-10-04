@@ -1,7 +1,8 @@
 import React, {FC, useCallback, useEffect, useRef} from 'react';
+import {generatePath} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {useHistory} from 'react-router';
+import {useTranslation} from 'react-i18next';
 import {IconSvg, Text, Button} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -15,9 +16,10 @@ const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {dashboardStore, space, textChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
-  const {favoriteStore} = mainStore;
+  const {agoraStore, favoriteStore} = mainStore;
 
   const inviteRef = useRef<HTMLButtonElement>(null);
+  const {t} = useTranslation();
   const history = useHistory();
 
   usePosBusEvent('user-vibed', (type, count) => {
@@ -83,6 +85,15 @@ const DashboardPage: FC = () => {
         )}
         {!sessionStore.isGuest && space.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
+        )}
+        {space.isAdmin && (
+          <Button
+            variant="primary"
+            icon="fly-with-me"
+            label={t('labels.flyWithMe')}
+            disabled={agoraStore.isStageMode || collaborationStore.isFlightWithMe}
+            onClick={() => history.push(generatePath(ROUTES.flyWithMe, {spaceId: space.id}))}
+          />
         )}
       </SpaceTopBar>
 

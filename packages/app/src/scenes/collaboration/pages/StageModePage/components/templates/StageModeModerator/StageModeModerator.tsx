@@ -105,10 +105,10 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
             <styled.ToggleContainer>
               <Toggle
                 checked={agoraStore.isStageMode}
+                disabled={agoraStore.isTogglingStageMode || collaborationStore.isFlightWithMe}
                 onChange={() => {
                   agoraStore.toggleStageMode(sessionStore.userId);
                 }}
-                disabled={agoraStore.isTogglingStageMode}
               />
               <Text
                 text={
