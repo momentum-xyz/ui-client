@@ -9,7 +9,7 @@ import {api, ProfileResponse} from 'api';
 const StreamChatStore = types.compose(
   ResetModel,
   types
-    .model('TextChatStore', {
+    .model('StreamChatStore', {
       currentUserId: '',
       messages: types.optional(types.array(types.frozen<MessageInterface>()), []),
       numberOfUnreadMessages: 0,
@@ -57,7 +57,6 @@ const StreamChatStore = types.compose(
         self.numberOfReadMessages = readMessages;
       }
     }))
-    .actions((self) => ({}))
     .actions((self) => ({
       init: flow(function* (userId: string, spaceId: string, profile?: UserProfileModelInterface) {
         self.client = StreamChat.getInstance(appVariables.STREAMCHAT_KEY);
