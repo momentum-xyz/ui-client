@@ -33,6 +33,9 @@ export const Container = styled.div`
     --str-chat__secondary-surface-color: rgba(1, 255, 179, 0.1);
     --str-chat__tertiary-surface-color: rgba(0, 0, 0, 0);
 
+    --str-chat__own-message-bubble-background-color: rgba(1, 255, 179, 0.4);
+    --str-chat__message-bubble-color: #fff2f1;
+
     --str-chat__border-radius-circle: 5px;
 
     --str-chat__avatar-background-color: ${(props) => props.theme.bg};
@@ -46,6 +49,9 @@ export const Container = styled.div`
     --str-chat__message-textarea-border-inline-end: none;
   }
 
+  .str-chat__message-simple__actions {
+    display: none;
+  }
   .str-chat__message-input {
     border-block: solid var(--str-chat__background-color);
     border-inline: solid var(--str-chat__background-color);
@@ -63,6 +69,10 @@ export const Container = styled.div`
       .str-chat__message-textarea-container {
         .str-chat__message-textarea-with-emoji-picker {
           padding: var(--str-chat__spacing-2) 0;
+
+          .str-chat__message-textarea {
+            font-size: 13px;
+          }
         }
       }
     }
@@ -73,6 +83,14 @@ export const Container = styled.div`
   }
   .str-chat__message-simple-name {
     color: var(--str-chat__primary-color);
+  }
+  .str-chat__empty-channel {
+    svg {
+      height: 55px;
+    }
+    .str-chat__empty-channel-text {
+      font-size: 13px;
+    }
   }
 `;
 
