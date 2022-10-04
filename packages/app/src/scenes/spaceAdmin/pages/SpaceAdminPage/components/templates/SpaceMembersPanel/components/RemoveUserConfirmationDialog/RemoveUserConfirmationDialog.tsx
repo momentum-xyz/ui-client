@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {t} from 'i18next';
-
-import {Dialog, Text} from 'ui-kit';
+import {Dialog, Text} from '@momentum/ui-kit';
 
 import * as styled from './RemoveUserConfirmationDialog.styled';
 

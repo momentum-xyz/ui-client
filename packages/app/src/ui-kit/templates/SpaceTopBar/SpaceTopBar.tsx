@@ -1,8 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
-
-import {PageTopBar} from 'ui-kit';
+import {PropsWithThemeInterface, PageTopBar} from '@momentum/ui-kit';
 
 import {RightSection} from './components';
 

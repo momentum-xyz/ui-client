@@ -1,8 +1,6 @@
 import React, {FC} from 'react';
 import {DraggableProvided} from 'react-beautiful-dnd';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
-
-import {SvgButton} from 'ui-kit';
+import {PropsWithThemeInterface, SvgButton} from '@momentum/ui-kit';
 
 import * as styled from './TileMenu.styled';
 

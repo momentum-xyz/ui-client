@@ -1,11 +1,11 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import AgoraRTC, {ICameraVideoTrack, IMicrophoneAudioTrack} from 'agora-rtc-sdk-ng';
 import {ResetModel} from '@momentum/core';
+import {OptionInterface} from '@momentum/ui-kit';
 
 import {storage} from 'shared/services';
 import {DialogModel} from 'core/models';
 import {StorageKeyEnum} from 'core/enums';
-import {OptionInterface} from 'ui-kit';
 
 const UserDevicesStore = types
   .compose(

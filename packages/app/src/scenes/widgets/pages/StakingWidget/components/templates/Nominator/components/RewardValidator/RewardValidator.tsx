@@ -1,9 +1,8 @@
 import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, IconSvg, Text, Message} from '@momentum/ui-kit';
 
-import {IconSvg, Text, Message} from 'ui-kit';
 import {StakeValidatorErrorType, MessageType} from 'core/types';
 import {useStore} from 'shared/hooks';
 

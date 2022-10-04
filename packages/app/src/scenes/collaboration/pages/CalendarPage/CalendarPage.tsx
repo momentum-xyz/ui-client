@@ -4,11 +4,12 @@ import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router';
+import {Button} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {absoluteLink} from 'core/utils';
-import {Button, EventList, LinkDialog, ToastContent, SpaceTopBar, DeleteEventDialog} from 'ui-kit';
+import {EventList, LinkDialog, ToastContent, SpaceTopBar, DeleteEventDialog} from 'ui-kit';
 
 import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';

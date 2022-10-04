@@ -3,9 +3,9 @@ import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import YouTube from 'react-youtube';
+import {Button, SvgButton} from '@momentum/ui-kit';
 
 import {appVariables} from 'api/constants';
-import {Button, SvgButton} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import background from 'static/images/bg.png';
 

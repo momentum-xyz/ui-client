@@ -3,9 +3,9 @@ import {useTheme} from 'styled-components';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Dialog, Text} from '@momentum/ui-kit';
 
-import {Dialog, Text, ToastContent} from 'ui-kit';
+import {ToastContent} from 'ui-kit';
 import {TokenRuleStatusEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 

@@ -2,9 +2,10 @@ import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
+import {Button, IconSvg, ShowMoreText, Text} from '@momentum/ui-kit';
 
 import {EventItemInterface} from 'core/models';
-import {AddToCalendarDropdown, Button, IconSvg, ShowMoreText, Text} from 'ui-kit';
+import {AddToCalendarDropdown} from 'ui-kit';
 import placeholder from 'static/images/placeholder.png';
 import {truncateText} from 'core/utils';
 

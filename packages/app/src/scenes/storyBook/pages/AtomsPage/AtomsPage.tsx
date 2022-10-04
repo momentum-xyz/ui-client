@@ -1,23 +1,22 @@
 import React, {FC} from 'react';
-import {Heading} from '@momentum/ui-kit';
-
 import {
+  Heading,
   Button,
   IconSvg,
   Input,
-  InputDark,
-  Loader,
   Message,
-  PageTopBar,
+  Loader,
+  InputDark,
   ProgressBar,
   Separator,
   Text,
   TextArea,
   TextAreaDark,
-  ToolbarIcon,
   ToolbarIconList,
-  Tooltip
-} from 'ui-kit';
+  Tooltip,
+  PageTopBar,
+  ToolbarIcon
+} from '@momentum/ui-kit';
 
 import * as styled from './AtomsPage.styled';
 
@@ -131,6 +130,7 @@ const AtomsPage: FC = () => {
           <IconSvg size="large" name="wallet" />
           <IconSvg size="large" name="warning" />
           <IconSvg size="large" name="whitelist" />
+          <IconSvg size="large" name="fly-with-me" />
         </styled.Section>
 
         <styled.Name>

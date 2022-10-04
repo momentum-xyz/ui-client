@@ -1,7 +1,8 @@
 import React from 'react';
 
 import {render, within} from 'ui-kit/utils/test.utils';
-import {Location} from 'ui-kit';
+
+import {Location} from '../Location';
 
 describe('Location', () => {
   test('is rendered', () => {

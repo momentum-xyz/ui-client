@@ -3,11 +3,11 @@ import {toast} from 'react-toastify';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Avatar, Button, Input, Text, TextArea} from '@momentum/ui-kit';
 
 import {UpdateProfileInterface} from 'api';
 import {useStore} from 'shared/hooks';
-import {Avatar, Button, Input, Text, TextArea, ToastContent} from 'ui-kit';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './MyProfileEditor.styled';
 

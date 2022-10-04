@@ -3,8 +3,8 @@ import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router';
 import {generatePath} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import {SectionPanel} from '@momentum/ui-kit';
 
-import {SectionPanel} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {

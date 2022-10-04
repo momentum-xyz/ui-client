@@ -3,17 +3,9 @@ import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {generatePath, useHistory} from 'react-router-dom';
+import {Toggle, Button, Text} from '@momentum/ui-kit';
 
-import {
-  Toggle,
-  Stage,
-  Button,
-  Text,
-  ToastContent,
-  TOAST_GROUND_OPTIONS,
-  SpaceTopBar,
-  TextChat
-} from 'ui-kit';
+import {Stage, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar, TextChat} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';

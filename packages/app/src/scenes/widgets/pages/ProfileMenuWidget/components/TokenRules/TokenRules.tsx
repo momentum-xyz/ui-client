@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useState} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
+import {Dialog, useDebouncedEffect} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, useDebouncedEffect} from 'ui-kit';
 import {TokenRuleListHeaderEnum} from 'core/enums';
 import {TokenRuleItemModelInterface} from 'core/models';
 

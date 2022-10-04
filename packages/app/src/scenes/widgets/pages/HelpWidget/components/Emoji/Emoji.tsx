@@ -1,10 +1,9 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, IconSvg} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {IconSvg} from 'ui-kit';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
 import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 

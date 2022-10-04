@@ -2,8 +2,8 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {capitalize} from 'lodash-es';
+import {Avatar, Button, IconSvg, Text} from '@momentum/ui-kit';
 
-import {Avatar, Button, IconSvg, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {absoluteLink, monthAndYearString, withoutProtocol} from 'core/utils';
 

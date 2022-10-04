@@ -4,9 +4,10 @@ import {useTheme} from 'styled-components';
 import cn from 'classnames';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
+import {Button, Loader} from '@momentum/ui-kit';
 
 import {appVariables} from 'api/constants';
-import {Button, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
 
 import * as styled from './ImageTileForm.styled';

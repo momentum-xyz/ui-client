@@ -2,9 +2,10 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
+import {PanelLayout, Text} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {LoginView, NetworkButton, Page, PanelLayout, Text} from 'ui-kit';
+import {NetworkButton, LoginView, Page} from 'ui-kit';
 import background from 'static/images/worldBuilder.png';
 import momentum from 'static/images/momentum.svg';
 import polkadot from 'static/images/polkadot.svg';

@@ -1,10 +1,10 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {PanelLayout, Emoji} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';
-import {PanelLayout, Emoji} from 'ui-kit';
 
 import * as styled from './EmojiWidget.styled';
 

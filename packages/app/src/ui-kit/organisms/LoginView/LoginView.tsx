@@ -1,7 +1,5 @@
 import React, {FC} from 'react';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
-
-import {Text, Button, ButtonInfoInterface} from 'ui-kit';
+import {PropsWithThemeInterface, Text, Button, ButtonInfoInterface} from '@momentum/ui-kit';
 
 import * as styled from './LoginView.styled';
 

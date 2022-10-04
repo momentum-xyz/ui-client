@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Dialog} from '@momentum/ui-kit';
 
-import {Dialog} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './MusicPlayerWidget.styled';

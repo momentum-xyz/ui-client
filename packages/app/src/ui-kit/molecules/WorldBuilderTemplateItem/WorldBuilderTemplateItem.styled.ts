@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import {Text} from 'ui-kit';
+import {Text} from '@momentum/ui-kit';
 
 export const Container = styled.div`
   border-radius: 10px;

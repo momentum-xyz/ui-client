@@ -2,8 +2,8 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import YouTube from 'react-youtube';
 import {useTranslation} from 'react-i18next';
+import {Button, SectionPanel} from '@momentum/ui-kit';
 
-import {Button, SectionPanel} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './BroadcastPreviewPanel.styled';
