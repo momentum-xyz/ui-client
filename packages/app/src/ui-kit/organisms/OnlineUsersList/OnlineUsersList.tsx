@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
+import {SearchInput, useDebouncedEffect} from '@momentum/ui-kit';
 
-import {SearchInput, useDebouncedEffect} from 'ui-kit';
 import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {OnlineUsersStoreInterface} from 'scenes/home/stores/HomeStore/models';

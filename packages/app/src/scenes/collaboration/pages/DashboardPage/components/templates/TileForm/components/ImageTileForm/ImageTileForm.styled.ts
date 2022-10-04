@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import {FileUploader} from 'ui-kit';
+import {FileUploader} from '@momentum/ui-kit';
 
 export const Container = styled.div`
   display: flex;

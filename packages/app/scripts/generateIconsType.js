@@ -11,7 +11,7 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 const ICONS_PATH = 'src/ui-kit/assets/icons';
-const DEFINITION_PATH = 'src/ui-kit/atoms/IconSvg/IconName.type.d.ts';
+const DEFINITION_PATH = 'src/ui-kit/atoms/IconSvg/iconName.type.ts';
 const ICONS_PATH_RESOLVED = resolveApp(ICONS_PATH);
 const DEFINITION_PATH_RESOLVED = resolveApp(DEFINITION_PATH);
 

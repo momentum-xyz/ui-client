@@ -1,3 +1,5 @@
+import {IconNameType} from '@momentum/ui-kit';
+
 export interface NavigationTabInterface {
   path: string;
   iconName: IconNameType;

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import {ExpandableLayout} from 'ui-kit';
+import {ExpandableLayout} from '@momentum/ui-kit';
 
 export const CustomExpandableLayout = styled(ExpandableLayout)`
   pointer-events: all;

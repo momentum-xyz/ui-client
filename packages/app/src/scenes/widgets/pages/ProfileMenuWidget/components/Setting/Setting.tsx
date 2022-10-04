@@ -1,9 +1,8 @@
 import React, {FC, useRef} from 'react';
 import {capitalize} from 'lodash';
 import {t} from 'i18next';
-import {Heading} from '@momentum/ui-kit';
+import {Dialog, Heading, Dropdown, Text, useClickOutside} from '@momentum/ui-kit';
 
-import {Dialog, Dropdown, Text, useClickOutside} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './Setting.styled';

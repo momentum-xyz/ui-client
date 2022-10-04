@@ -1,10 +1,10 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
+import {Button, PanelLayout, Text} from '@momentum/ui-kit';
 
 import {StageModePopupInfoInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 import {StageModePopupTypeEnum} from 'core/enums';
-import {Button, PanelLayout, Text} from 'ui-kit';
 
 import * as styled from './StageModePopup.styled';
 

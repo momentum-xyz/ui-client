@@ -1,9 +1,8 @@
 import React, {FC, useEffect} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Button, Text} from '@momentum/ui-kit';
 
-import {Button, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks/useStore';
 import {StakingTransactionEnum} from 'core/enums';
 

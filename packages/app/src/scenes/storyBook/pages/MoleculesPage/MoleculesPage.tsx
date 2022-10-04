@@ -1,34 +1,36 @@
 import React, {FC, useState} from 'react';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
-import {Heading} from '@momentum/ui-kit';
-
-import {UserStatusEnum} from 'core/enums';
 import {
-  AccentColorList,
+  Heading,
   Avatar,
   ColorPicker,
   Dropdown,
   ExpandableLayout,
-  Location,
-  NetworkButton,
-  PageTopBar,
+  FileUploader,
   NavigationBarItem,
   SearchInput,
   SectionPanel,
   ShowMoreText,
+  Steps,
   SvgButton,
   TabBar,
-  TileMenu,
-  ToastContent,
   Toggle,
   ToolbarIcon,
   Button,
+  PageTopBar
+} from '@momentum/ui-kit';
+
+import {UserStatusEnum} from 'core/enums';
+import {
+  TileMenu,
+  NetworkButton,
+  Location,
+  AccentColorList,
+  ToastContent,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
-  ToastMessage,
-  FileUploader,
-  Steps
+  ToastMessage
 } from 'ui-kit';
 import walletConnect from 'static/images/walletConnect.svg';
 import polkadot from 'static/images/polkadot.svg';

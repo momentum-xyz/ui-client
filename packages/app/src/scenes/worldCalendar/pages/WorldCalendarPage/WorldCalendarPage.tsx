@@ -5,10 +5,11 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
+import {PageTopBar} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
-import {PageTopBar, EventList, LinkDialog, DeleteEventDialog, ToastContent} from 'ui-kit';
+import {EventList, LinkDialog, DeleteEventDialog, ToastContent} from 'ui-kit';
 import {absoluteLink} from 'core/utils';
 
 import {EventForm} from './components';

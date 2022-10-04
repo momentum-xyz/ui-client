@@ -1,7 +1,7 @@
 import React from 'react';
 import {t} from 'i18next';
+import {Text} from '@momentum/ui-kit';
 
-import {Text} from 'ui-kit';
 import {useStore} from 'shared/hooks/useStore';
 
 import * as styled from './UbondDetails.styled';

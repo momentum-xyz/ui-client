@@ -2,9 +2,10 @@ import {FC} from 'react';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
+import {Dialog, Text} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, Text, ToastContent} from 'ui-kit';
+import {ToastContent} from 'ui-kit';
 
 interface PropsInterface {
   spaceId: string;

@@ -1,4 +1,3 @@
-export * from './Navigation';
 export * from './EventList';
 export * from './AddToCalendarDropdown';
 export * from './LinkDialog';

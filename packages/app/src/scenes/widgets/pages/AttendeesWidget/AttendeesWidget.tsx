@@ -1,9 +1,9 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
+import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from 'ui-kit';
 
 import * as styled from './AttendeesWidget.styled';
 

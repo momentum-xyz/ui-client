@@ -1,3 +1,5 @@
+import {IconNameType} from '@momentum/ui-kit';
+
 import {TokenRuleListHeaderType} from 'core/types';
 
 export interface TokenRulesColumnHeaderInterface {

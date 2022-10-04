@@ -3,11 +3,12 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {useHistory, useLocation} from 'react-router-dom';
+import {PanelLayout} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {LoginTypeEnum} from 'core/enums';
-import {LoginView, PanelLayout} from 'ui-kit';
+import {LoginView} from 'ui-kit';
 import background from 'static/images/bg.png';
 import momentum from 'static/images/momentum.svg';
 

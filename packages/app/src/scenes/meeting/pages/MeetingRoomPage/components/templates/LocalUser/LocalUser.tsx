@@ -3,9 +3,9 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {ICameraVideoTrack} from 'agora-rtc-sdk-ng';
 import cn from 'classnames';
+import {IconSvg, Text} from '@momentum/ui-kit';
 
-import {IconSvg, Text} from 'ui-kit';
-import {ReactComponent as Astronaut} from 'ui-kit/assets/images/common/astronaut.svg';
+import {ReactComponent as Astronaut} from 'static/images/astronaut.svg';
 
 import * as styled from './LocalUser.styled';
 

@@ -2,8 +2,8 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
 import {t} from 'i18next';
+import {Button} from '@momentum/ui-kit';
 
-import {Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';

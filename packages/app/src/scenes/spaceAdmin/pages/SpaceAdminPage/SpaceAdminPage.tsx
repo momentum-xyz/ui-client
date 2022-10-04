@@ -2,8 +2,8 @@ import React, {FC} from 'react';
 import {useHistory} from 'react-router';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
+import {PageTopBar} from '@momentum/ui-kit';
 
-import {PageTopBar} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 

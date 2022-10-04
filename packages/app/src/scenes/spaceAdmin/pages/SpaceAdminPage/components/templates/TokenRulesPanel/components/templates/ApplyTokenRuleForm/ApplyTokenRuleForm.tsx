@@ -3,11 +3,18 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading} from '@momentum/ui-kit';
+import {
+  Heading,
+  Dialog,
+  Dropdown,
+  Loader,
+  SearchDropdown,
+  Text,
+  useDebouncedCallback
+} from '@momentum/ui-kit';
 
 import {ApplyTokenRuleInterface} from 'api';
 import {useStore} from 'shared/hooks';
-import {Dialog, Dropdown, Loader, SearchDropdown, Text, useDebouncedCallback} from 'ui-kit';
 import {TokenRuleItemModelInterface} from 'core/models';
 import {TokenRuleRolesEnum} from 'core/enums';
 

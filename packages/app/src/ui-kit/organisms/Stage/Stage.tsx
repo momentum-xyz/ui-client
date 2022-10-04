@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
+import {IconSvg, Text} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {AgoraRemoteUserInterface} from 'core/models';
-import {IconSvg, Text, RemoteOrLocalUser} from 'ui-kit';
+import {RemoteOrLocalUser} from 'ui-kit';
 import {StageModeModerationEventEnum} from 'core/enums';
 
 import * as styled from './Stage.styled';

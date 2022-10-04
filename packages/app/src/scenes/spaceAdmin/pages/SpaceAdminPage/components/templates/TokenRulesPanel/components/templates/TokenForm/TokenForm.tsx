@@ -3,9 +3,8 @@ import React, {FC, useEffect, useState} from 'react';
 import {t} from 'i18next';
 import {useTheme} from 'styled-components';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Dialog, Dropdown, Input, Loader, Text} from '@momentum/ui-kit';
 
-import {Dialog, Dropdown, Input, Loader, Text} from 'ui-kit';
 import {TokenFormInterface} from 'api';
 import {useStore} from 'shared/hooks';
 

@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
+import {Dialog, IconSvg, Text} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Dialog, IconSvg, Text} from 'ui-kit';
 
 import * as styled from './PrepareOnStageDialog.styled';
 

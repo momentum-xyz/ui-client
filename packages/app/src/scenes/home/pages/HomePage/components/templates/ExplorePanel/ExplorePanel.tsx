@@ -1,10 +1,9 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Heading} from '@momentum/ui-kit';
+import {Heading, Loader, SearchInput, useDebouncedEffect} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Loader, SearchInput, useDebouncedEffect} from 'ui-kit';
 
 import {SpacesList, SelectedSpace} from './components';
 import * as styled from './ExplorePanel.styled';
