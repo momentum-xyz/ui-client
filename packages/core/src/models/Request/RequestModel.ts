@@ -1,10 +1,31 @@
-import {types, flow} from 'mobx-state-tree';
-import axios, {AxiosRequestConfig, CancelTokenSource, AxiosError, AxiosResponse} from 'axios';
+import {types, flow, ModelActions} from 'mobx-state-tree';
+import axios, {
+  AxiosRequestConfig,
+  CancelTokenSource,
+  AxiosError,
+  AxiosResponse,
+  AxiosInstance
+} from 'axios';
 
 import {RequestStateEnum} from '../../enums';
+import {RequestInterface} from '../../interfaces';
 
 const UNAUTHORIZED_STATUS = 401;
 const BAD_FIELD_STATUS = 400;
+
+interface ActionsInterface extends ModelActions {
+  send<T, R>(action: RequestInterface<T, R>, options: T, request?: AxiosInstance): Promise<R>;
+  cancel: (message?: string) => void;
+  handleApiError: (error: AxiosError) => void;
+}
+
+interface ViewsInterface {
+  get isPending(): boolean;
+  get isDone(): boolean;
+  get isError(): boolean;
+  get isNotSend(): boolean;
+  get isNotComplete(): boolean;
+}
 
 /**
  * This is utility model that responsible for:
@@ -19,18 +40,19 @@ const RequestModel = types
   .model('Request', {
     showError: false,
     isCancellable: true,
-    state: types.maybeNull(types.enumeration(Object.values(RequestStateEnum)))
+    requestState: types.maybeNull(types.enumeration(Object.values(RequestStateEnum)))
   })
-  .actions((self) => {
+  .actions<ActionsInterface>((self) => {
     let cancel: CancelTokenSource | null = null;
     // @ts-ignore: MST-actions
     const actions = {
       send: flow(function* send<T, R extends {data: unknown; config: AxiosRequestConfig}>(
-        action: (options: T) => Promise<R>,
-        options: T
+        action: (options: T, request?: AxiosInstance) => Promise<R>,
+        options: T,
+        request?: AxiosInstance
       ) {
         try {
-          self.state = RequestStateEnum.Pending;
+          self.requestState = RequestStateEnum.Pending;
 
           if (self.isCancellable) {
             if (cancel) {
@@ -41,21 +63,24 @@ const RequestModel = types
             cancel = axios.CancelToken.source();
           }
 
-          const response: AxiosResponse<R> = yield action({
-            ...options,
-            ...(self.isCancellable ? {cancelToken: cancel?.token} : {}),
-            headers: {
-              // additional headers if it needs
-            }
-          });
+          const response: AxiosResponse<R> = yield action(
+            {
+              ...options,
+              ...(self.isCancellable ? {cancelToken: cancel?.token} : {}),
+              headers: {
+                // additional headers if it needs
+              }
+            },
+            request
+          );
 
           console.assert(!!response, 'Got empty response');
-          self.state = RequestStateEnum.Done;
+          self.requestState = RequestStateEnum.Done;
 
           return response.data;
         } catch (error) {
           console.error(error instanceof Error ? error.message : error);
-          self.state = RequestStateEnum.Error;
+          self.requestState = RequestStateEnum.Error;
 
           /** handle errors */
           if (axios.isAxiosError(error)) {
@@ -91,21 +116,21 @@ const RequestModel = types
     };
     return actions;
   })
-  .views((self) => ({
+  .views<ViewsInterface>((self) => ({
     get isPending() {
-      return self.state === RequestStateEnum.Pending;
+      return self.requestState === RequestStateEnum.Pending;
     },
     get isDone() {
-      return self.state === RequestStateEnum.Done;
+      return self.requestState === RequestStateEnum.Done;
     },
     get isError() {
-      return self.state === RequestStateEnum.Error;
+      return self.requestState === RequestStateEnum.Error;
     },
     get isNotSend() {
-      return self.state === null;
+      return self.requestState === null;
     },
     get isNotComplete() {
-      return [RequestStateEnum.Pending, null].includes(self.state);
+      return [RequestStateEnum.Pending, null].includes(self.requestState);
     }
   }));
 

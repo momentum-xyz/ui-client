@@ -23,6 +23,6 @@ const RootWidgetStore = types.model('RootWidgetStore', {
   attendeesListStore: types.optional(AttendeesListStore, {}),
   emojiStore: types.optional(EmojiStore, {})
 });
-export interface RootMeetingSpaceStoreInterface extends Instance<typeof RootWidgetStore> {}
+export type RootMeetingSpaceStoreType = Instance<typeof RootWidgetStore>;
 
 export {RootWidgetStore};

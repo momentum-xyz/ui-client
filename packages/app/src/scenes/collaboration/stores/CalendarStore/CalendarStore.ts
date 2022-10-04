@@ -4,7 +4,6 @@ import {RequestModel, ResetModel} from '@momentum/core';
 import {AttendeeModel, DialogModel, EventForm, EventItemInterface, EventList} from 'core/models';
 import {api} from 'api';
 import {MagicTypeEnum} from 'core/enums';
-import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 
 const CalendarStore = types.compose(
   ResetModel,
@@ -62,19 +61,6 @@ const CalendarStore = types.compose(
         if (response) {
           self.magicId = response.id;
           self.magicDialog.open();
-        }
-      }),
-      showFullAttendeesList: flow(function* (spaceId: string, eventId: string) {
-        const response: AttendeesResponseInterface = yield self.attendeesRequest.send(
-          api.attendeesRepository.fetchAttendees,
-          {
-            spaceId
-          }
-        );
-
-        if (response) {
-          self.attendeesList = cast(response.attendees);
-          self.fullAttendeesListDialog.open();
         }
       }),
       hideFullAttendeesList() {

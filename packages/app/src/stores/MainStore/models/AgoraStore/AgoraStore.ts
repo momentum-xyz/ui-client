@@ -36,12 +36,14 @@ const AgoraStore = types
   // API Requests
   .actions((self) => ({
     getStageModeStatus: flow(function* (spaceId?: string) {
-      const status: SpaceIntegrationsStageModeResponse = yield self.spaceIntegrationsRequest.send(
-        api.spaceIntegrationsRepository.fetchStageModeStatus,
-        {spaceId: spaceId ?? self.spaceId}
-      );
+      if (spaceId) {
+        return yield self.spaceIntegrationsRequest.send(
+          api.spaceIntegrationsRepository.fetchStageModeStatus,
+          {spaceId: spaceId ?? self.spaceId}
+        );
+      }
 
-      return status;
+      return undefined;
     })
   }))
   // Initializer
@@ -82,9 +84,11 @@ const AgoraStore = types
         self.agoraMeetingStore.init(self.appId);
       }
 
-      const status: SpaceIntegrationsStageModeResponse = yield self.getStageModeStatus(spaceId);
+      const status: SpaceIntegrationsStageModeResponse | undefined = yield self.getStageModeStatus(
+        spaceId
+      );
 
-      self.isStageMode = status.data?.stageModeStatus === 'initiated';
+      self.isStageMode = status?.data?.stageModeStatus === 'initiated';
       self.setupAgoraListeners();
 
       if (self.isStageMode) {

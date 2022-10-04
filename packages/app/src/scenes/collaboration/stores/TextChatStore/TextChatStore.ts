@@ -32,7 +32,8 @@ const TextChatStore = types.compose(
     .actions((self) => ({
       getAgoraToken: flow(function* () {
         const tokenResponse: string = yield self.tokenRequest.send(
-          api.textChatRepository.getTextChatToken
+          api.textChatRepository.getTextChatToken,
+          {}
         );
         return tokenResponse;
       }),

@@ -288,6 +288,6 @@ const UserDevicesStore = types
     }
   }));
 
-export interface UserDevicesStoreInterface extends Instance<typeof UserDevicesStore> {}
+export type UserDevicesStoreType = Instance<typeof UserDevicesStore>;
 
 export {UserDevicesStore};

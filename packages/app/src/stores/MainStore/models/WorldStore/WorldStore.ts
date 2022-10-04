@@ -31,6 +31,6 @@ const WorldStore = types.compose(
     }))
 );
 
-export interface WorldStoreInterface extends Instance<typeof WorldStore> {}
+export type WorldStoreType = Instance<typeof WorldStore>;
 
 export {WorldStore};

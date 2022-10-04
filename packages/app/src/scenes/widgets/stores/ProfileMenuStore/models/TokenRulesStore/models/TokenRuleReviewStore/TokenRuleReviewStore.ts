@@ -65,6 +65,6 @@ const TokenRuleReviewStore = types.compose(
     }))
 );
 
-export interface TokenRuleReviewStoreInterface extends Instance<typeof TokenRuleReviewStore> {}
+export type TokenRuleReviewStoreType = Instance<typeof TokenRuleReviewStore>;
 
 export {TokenRuleReviewStore};

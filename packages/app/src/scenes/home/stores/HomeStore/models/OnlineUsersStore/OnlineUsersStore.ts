@@ -34,6 +34,6 @@ const OnlineUsersStore = types
     }
   }));
 
-export interface OnlineUsersStoreInterface extends Instance<typeof OnlineUsersStore> {}
+export type OnlineUsersStoreType = Instance<typeof OnlineUsersStore>;
 
 export {OnlineUsersStore};

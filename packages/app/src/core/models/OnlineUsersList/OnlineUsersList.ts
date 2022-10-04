@@ -58,7 +58,7 @@ const OnlineUsersList = types
   }))
   .views((self) => ({
     get isLoading(): boolean {
-      return self.usersRequest.isLoading;
+      return self.usersRequest.isPending;
     },
     filteredPeople(excludedPeopleIds: string[]): UserProfileModelInterface[] {
       return self.users.filter((user) => !excludedPeopleIds?.includes(user.uuid));

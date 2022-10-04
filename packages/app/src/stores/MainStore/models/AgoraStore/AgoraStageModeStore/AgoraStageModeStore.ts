@@ -17,7 +17,7 @@ import {
 import {api} from 'api';
 import {ModerationEnum, ParticipantRoleEnum, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
+import {AgoraScreenShareStoreType} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
 import {StageModeGetUsersResponse} from 'api/repositories/stageModeRepository/stageModeRepository.api.types';
 
 const AgoraStageModeStore = types
@@ -96,7 +96,7 @@ const AgoraStageModeStore = types
   .actions((self) => ({
     inviteToStage: flow(function* (userId: string) {
       if (!self.spaceId) {
-        return;
+        return false;
       }
 
       yield self.stageModeInviteRequest.send(api.stageModeRepository.inviteToStage, {
@@ -193,7 +193,7 @@ const AgoraStageModeStore = types
   // Listeners handlers
   .actions((self) => ({
     handleUserPublished: flow(function* (
-      screenShareStore: AgoraScreenShareStoreInterface,
+      screenShareStore: AgoraScreenShareStoreType,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
@@ -225,7 +225,7 @@ const AgoraStageModeStore = types
       }
     }),
     handleUserUnpublished(
-      screenShareStore: AgoraScreenShareStoreInterface,
+      screenShareStore: AgoraScreenShareStoreType,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
@@ -298,7 +298,7 @@ const AgoraStageModeStore = types
   }))
   // Listeners registration
   .actions((self) => ({
-    setupAgoraListeners(screenShareStore: AgoraScreenShareStoreInterface) {
+    setupAgoraListeners(screenShareStore: AgoraScreenShareStoreType) {
       self.client.on('user-published', (user, mediaType) =>
         self.handleUserPublished(screenShareStore, user, mediaType)
       );
@@ -353,6 +353,10 @@ const AgoraStageModeStore = types
       return publishedAudioTrack;
     }),
     getAgoraToken: flow(function* (spaceId?: string) {
+      if (!spaceId) {
+        return undefined;
+      }
+
       const tokenResponse: string = yield self.tokenRequest.send(
         api.agoraRepository.getAgoraToken,
         {
@@ -376,7 +380,11 @@ const AgoraStageModeStore = types
 
         yield self.client.setClientRole('audience');
 
-        const tokenResponse = yield self.getAgoraToken(spaceId);
+        const tokenResponse: string | undefined = yield self.getAgoraToken(spaceId);
+
+        if (!tokenResponse) {
+          return;
+        }
 
         self.userId = (yield self.client.join(
           self.appId,
@@ -416,6 +424,10 @@ const AgoraStageModeStore = types
       }
     }),
     leave: flow(function* () {
+      if (!self.spaceId) {
+        return;
+      }
+
       yield self.leaveStageModeRequest.send(api.stageModeRepository.leaveStageMode, {
         spaceId: self.spaceId
       });
@@ -467,7 +479,12 @@ const AgoraStageModeStore = types
     kickUserOffStage: flow(function* (userId: string) {
       // TODO: Replace with `if (!self.spaceId || userId === self.userId)` when whole infostructure
       // is stable for Stage Mode
-      if (!self.spaceId && self.audience.find((user) => user.uid === userId)) {
+
+      if (!self.spaceId) {
+        return false;
+      }
+
+      if (self.audience.find((user) => user.uid === userId)) {
         return false;
       }
 

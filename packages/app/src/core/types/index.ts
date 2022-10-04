@@ -8,6 +8,5 @@ export * from './posBusEvent.type';
 export * from './Integration.type';
 export * from './stageMode.type';
 export * from './metadataField.type';
-export * from './Tile.type';
 export * from './TextMessage.type';
 export * from './tokenRuleListHeader.type';
