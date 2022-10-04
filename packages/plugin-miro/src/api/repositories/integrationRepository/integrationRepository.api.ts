@@ -1,5 +1,5 @@
 import {generatePath} from 'react-router-dom';
-import {RequestInterface} from 'api/interfaces';
+import {RequestInterface} from '@momentum/core';
 
 import {integrationRepositoryEndpoints} from './integrationRepository.api.endpoints';
 import {
@@ -14,7 +14,7 @@ import {
 export const fetchIntegration: RequestInterface<
   FetchIntegrationRequest,
   FetchIntegrationResponse
-> = (request, options) => {
+> = (options, request) => {
   const {spaceId, ...rest} = options;
 
   const fetchUrl = integrationRepositoryEndpoints().fetch;
@@ -23,9 +23,9 @@ export const fetchIntegration: RequestInterface<
 };
 
 export const enableMiroIntegration: RequestInterface<
-  EnableMiroIntegrationRequest,
+  Omit<EnableMiroIntegrationRequest, 'integrationType'>,
   EnableMiroIntegrationResponse
-> = (request, options) => {
+> = (options, request) => {
   const {spaceId, data, ...rest} = options;
 
   const body: EnableMiroIntegrationRequest = {spaceId, integrationType: 'miro', data};
@@ -35,17 +35,17 @@ export const enableMiroIntegration: RequestInterface<
 };
 
 export const disableMiroIntegration: RequestInterface<
-  DisableMiroIntegrationRequest,
+  Omit<DisableMiroIntegrationRequest, 'integrationType'>,
   DisableMiroIntegrationResponse
-> = (request, options) => {
-  const {spaceId, ...rest} = options;
+> = (options, request) => {
+  const {spaceId, data, ...rest} = options;
 
-  const data: DisableMiroIntegrationRequest = {
+  const body: DisableMiroIntegrationRequest = {
     spaceId,
     integrationType: 'miro',
-    data: {id: '', name: '', description: '', viewLink: '', accessLink: '', embedHtml: ''}
+    data
   };
 
   const URL: string = integrationRepositoryEndpoints().disable;
-  return request.post(URL, data, rest);
+  return request.post(URL, body, rest);
 };

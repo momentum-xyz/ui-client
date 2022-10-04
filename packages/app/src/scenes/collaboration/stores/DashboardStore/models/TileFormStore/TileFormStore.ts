@@ -17,7 +17,7 @@ const TileFormStore = types.compose(
     })
     .actions((self) => ({
       createImageTile: flow(function* (spaceId: string, file: File) {
-        const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
+        const response: string = yield self.imageUploadRequest.send(
           api.resourcesRepository.uploadTileImage,
           {
             file
@@ -29,6 +29,7 @@ const TileFormStore = types.compose(
             spaceId,
             data: {
               hash: hash,
+              // @ts-ignore TODO: Fix ts errors
               column: 0,
               row: 0,
               permanentType: null,
@@ -39,6 +40,8 @@ const TileFormStore = types.compose(
           });
           return self.tileCreateRequest.isDone;
         }
+
+        return false;
       }),
       createTextTile: flow(function* (spaceId: string, data: TextTileFormInterface) {
         yield self.tileCreateRequest.send(api.dashboardRepository.createTile, {
@@ -46,6 +49,7 @@ const TileFormStore = types.compose(
           data: {
             column: 0,
             row: 0,
+            // @ts-ignore TODO: Fix ts errors
             content: {
               type: 'normal',
               title: data.text_title,
@@ -64,6 +68,7 @@ const TileFormStore = types.compose(
           tileId,
           data: {
             ...self.currentTile,
+            // @ts-ignore TODO: Fix ts errors
             content: {
               title: data.text_title,
               text: data.text_description
@@ -78,6 +83,7 @@ const TileFormStore = types.compose(
           data: {
             column: 0,
             row: 0,
+            // @ts-ignore TODO: Fix ts errors
             content: {
               type: 'normal',
               url: data.youtube_url
@@ -95,6 +101,7 @@ const TileFormStore = types.compose(
           tileId,
           data: {
             ...self.currentTile,
+            // @ts-ignore TODO: Fix ts errors
             content: {
               url: data.youtube_url
             }
@@ -115,6 +122,7 @@ const TileFormStore = types.compose(
             tileId,
             data: {
               ...self.currentTile,
+              // @ts-ignore TODO: Fix ts errors
               hash: hash
             }
           });
@@ -122,12 +130,14 @@ const TileFormStore = types.compose(
         return self.tileUpdateRequest.isDone;
       }),
       deleteTile: flow(function* () {
-        if (self.currentTile) {
+        if (self.currentTile?.id) {
           yield self.tileDeleteRequest.send(api.dashboardRepository.deleteTile, {
             tileId: self.currentTile.id
           });
           return self.tileDeleteRequest.isDone;
         }
+
+        return false;
       }),
       setTile(tile: TileInterface) {
         self.currentTile = tile;

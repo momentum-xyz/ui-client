@@ -1,5 +1,5 @@
+import {TileTypeEnum} from 'core/enums';
 import {ContentInterface, TileListInterface} from 'core/models';
-import {TileType} from 'core/types';
 
 export interface DashboardRequestInterface {
   spaceId: string;
@@ -23,7 +23,7 @@ export interface VideoTileFormInterface {
 }
 
 export interface CreateTileDataRequest {
-  type: TileType;
+  type: TileTypeEnum;
   content?: ContentInterface;
   hash?: string;
   permanentType?: null;

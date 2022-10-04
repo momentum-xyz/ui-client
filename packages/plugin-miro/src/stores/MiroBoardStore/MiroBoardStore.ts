@@ -14,14 +14,11 @@ const MiroBoardStore = types.compose(
       miroBoard: types.maybe(Integration)
     })
     .actions((self) => ({
-      fetchMiroBoard: flow(function* (spaceId: string, request?: AxiosInstance) {
+      fetchMiroBoard: flow(function* (spaceId: string, request: AxiosInstance) {
         const response: FetchIntegrationResponse = yield self.request.send(
           api.integrationRepository.fetchIntegration,
-          request,
-          {
-            integrationType: 'miro',
-            spaceId: spaceId
-          }
+          {spaceId},
+          request
         );
 
         if (response && self.request.isDone) {
@@ -33,27 +30,34 @@ const MiroBoardStore = types.compose(
         data: MiroBoardInterface,
         request?: AxiosInstance
       ) {
-        yield self.request.send(api.integrationRepository.enableMiroIntegration, request, {
-          spaceId: spaceId,
-          data: data
-        });
+        yield self.request.send(
+          api.integrationRepository.enableMiroIntegration,
+          {
+            spaceId: spaceId,
+            data: data
+          },
+          request
+        );
       }),
-      disableMiroBoard: flow(function* (spaceId: string, request?: AxiosInstance) {
-        yield self.request.send(api.integrationRepository.disableMiroIntegration, request, {
-          spaceId: spaceId
-        });
+      disableMiroBoard: flow(function* (spaceId: string, request: AxiosInstance) {
+        yield self.request.send(
+          api.integrationRepository.disableMiroIntegration,
+          {
+            spaceId: spaceId,
+            data: {id: '', name: '', description: '', viewLink: '', accessLink: '', embedHtml: ''}
+          },
+          request
+        );
       })
     }))
     .actions((self) => ({
-      pickBoard(spaceId?: string, request?: AxiosInstance) {
+      pickBoard(spaceId: string, request: AxiosInstance) {
         miroBoardsPicker.open({
           action: 'access-link',
           clientId: appVariables.APP_ID,
           success: async (data: MiroBoardInterface) => {
-            if (spaceId) {
-              await self.enableMiroBoard(spaceId, data);
-              await self.fetchMiroBoard(spaceId, request);
-            }
+            await self.enableMiroBoard(spaceId, data, request);
+            await self.fetchMiroBoard(spaceId, request);
           }
         });
       }
@@ -67,6 +71,6 @@ const MiroBoardStore = types.compose(
     }))
 );
 
-export interface MiroBoardStoreInterface extends Instance<typeof MiroBoardStore> {}
+export type MiroBoardStoreType = Instance<typeof MiroBoardStore>;
 
 export {MiroBoardStore};

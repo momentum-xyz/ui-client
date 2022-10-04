@@ -6,7 +6,7 @@ export interface CorePluginPropsInterface {
   theme: ThemeInterface;
   spaceId?: string;
   isSpaceAdmin: boolean;
-  request?: AxiosInstance;
+  request: AxiosInstance;
 }
 
 export interface PluginTopBarActionInterface {

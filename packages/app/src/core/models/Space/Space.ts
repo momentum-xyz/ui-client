@@ -200,6 +200,6 @@ const Space = types
     }
   }));
 
-export interface SpaceInterface extends Instance<typeof Space> {}
+export type SpaceType = Instance<typeof Space>;
 
 export {Space};

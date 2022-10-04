@@ -20,14 +20,3 @@ export const Actions = styled.div`
   flex-direction: column;
   gap: 12px;
 `;
-
-export const Button = styled.button`
-  background: ${(props) => props.theme.accent};
-  color: ${(props) => props.theme.text};
-  padding: 5px 10px;
-  border-radius: 10px;
-`;
-
-export const Text = styled.p`
-  color: ${(props) => props.theme.text};
-`;

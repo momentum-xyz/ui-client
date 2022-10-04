@@ -11,7 +11,7 @@ import {RequestModel, ResetModel} from '@momentum/core';
 import {api} from 'api';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
-import {AgoraScreenShareStoreInterface} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
+import {AgoraScreenShareStoreType} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
 
 const AgoraMeetingStore = types
   .compose(
@@ -41,7 +41,7 @@ const AgoraMeetingStore = types
   // Listeners handlers
   .actions((self) => ({
     handleUserPublished: flow(function* (
-      screenShareStore: AgoraScreenShareStoreInterface,
+      screenShareStore: AgoraScreenShareStoreType,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
@@ -70,7 +70,7 @@ const AgoraMeetingStore = types
       }
     }),
     handleUserUnpublished(
-      screenShareStore: AgoraScreenShareStoreInterface,
+      screenShareStore: AgoraScreenShareStoreType,
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
@@ -138,7 +138,7 @@ const AgoraMeetingStore = types
   }))
   // Listeners registration
   .actions((self) => ({
-    setupAgoraListeners(screenShareStore: AgoraScreenShareStoreInterface) {
+    setupAgoraListeners(screenShareStore: AgoraScreenShareStoreType) {
       self.client.on('user-published', (user, mediaType) =>
         self.handleUserPublished(screenShareStore, user, mediaType)
       );
@@ -192,6 +192,10 @@ const AgoraMeetingStore = types
       return publishedAudioTrack;
     }),
     getAgoraToken: flow(function* (spaceId?: string) {
+      if (!spaceId) {
+        return undefined;
+      }
+
       const tokenResponse: string = yield self.tokenRequest.send(
         api.agoraRepository.getAgoraToken,
         {
@@ -219,7 +223,12 @@ const AgoraMeetingStore = types
         ) => Promise<ICameraVideoTrack | undefined>
       ) => Promise<void>
     ) {
-      const tokenResponse = yield self.getAgoraToken(spaceId);
+      const tokenResponse: string | undefined = yield self.getAgoraToken(spaceId);
+
+      if (!tokenResponse) {
+        return;
+      }
+
       self.userId = yield self.client.join(self.appId, spaceId, tokenResponse, authStateSubject);
       yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.spaceId = spaceId;
