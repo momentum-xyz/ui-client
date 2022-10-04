@@ -1,8 +1,7 @@
 import {FC, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, Button, IconSvg, PanelLayout, Text} from '@momentum/ui-kit';
 
-import {Button, IconSvg, PanelLayout, Text} from 'ui-kit';
 import background from 'static/images/bg.png';
 
 import * as styled from './SystemWideError.styled';

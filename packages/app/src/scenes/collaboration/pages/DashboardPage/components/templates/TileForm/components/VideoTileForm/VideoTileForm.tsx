@@ -3,9 +3,10 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
+import {Button, Input, Loader} from '@momentum/ui-kit';
 
 import {VideoTileFormInterface} from 'api';
-import {Button, Input, Loader, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
+import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {YOUTUBE_URL_PLACEHOLDER} from 'core/constants';
 import {TileInterface} from 'core/models';
 

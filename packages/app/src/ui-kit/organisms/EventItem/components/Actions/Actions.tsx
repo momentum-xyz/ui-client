@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
+import {SvgButton} from '@momentum/ui-kit';
 
 import {EventItemInterface} from 'core/models';
-import {SvgButton} from 'ui-kit';
 
 import * as styled from './Actions.styled';
 

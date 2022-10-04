@@ -2,9 +2,10 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
+import {PanelLayout} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {LoginView, PanelLayout} from 'ui-kit';
+import {LoginView} from 'ui-kit';
 import background from 'static/images/bg.png';
 import momentum from 'static/images/momentum.svg';
 

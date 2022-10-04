@@ -1,11 +1,12 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
+import {PageTopBar, Navigation} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createSwitchByConfig} from 'core/utils';
-import {Navigation, PageTopBar, VisualSettingsPanel} from 'ui-kit';
+import {VisualSettingsPanel} from 'ui-kit';
 import {NavigationTabInterface} from 'core/interfaces';
 import background from 'static/images/bg.png';
 

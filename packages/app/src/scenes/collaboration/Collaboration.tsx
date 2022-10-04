@@ -3,19 +3,14 @@ import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-d
 import {useTranslation} from 'react-i18next';
 import {observer, useObserver} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {Navigation} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
 import {createRoutesByConfig} from 'core/utils';
 import {useStore, useDeviceChange} from 'shared/hooks';
 import {StageModeRequestEnum} from 'core/enums';
-import {
-  Navigation,
-  ToastContent,
-  TOAST_GROUND_OPTIONS,
-  NewDeviceDialog,
-  CountdownDialog
-} from 'ui-kit';
+import {ToastContent, TOAST_GROUND_OPTIONS, NewDeviceDialog, CountdownDialog} from 'ui-kit';
 import {NavigationTabInterface} from 'core/interfaces';
 
 import {

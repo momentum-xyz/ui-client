@@ -1,3 +1,5 @@
+import {IconNameType} from '@momentum/ui-kit';
+
 import {PayeeEnum} from 'core/enums';
 
 import {i18n} from '../../shared/services/index';

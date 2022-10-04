@@ -2,10 +2,11 @@ import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {useHistory} from 'react-router';
+import {IconSvg, Text, Button} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {IconSvg, Text, Button, SpaceTopBar} from 'ui-kit';
+import {SpaceTopBar} from 'ui-kit';
 
 import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} from './components';
 import * as styled from './DashboardPage.styled';

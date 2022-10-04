@@ -2,9 +2,8 @@ import React, {FC} from 'react';
 import {t} from 'i18next';
 import {formatBalance, formatNumber} from '@polkadot/util';
 import {observer} from 'mobx-react-lite';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, IconSvg, Text, Tooltip} from '@momentum/ui-kit';
 
-import {IconSvg, Text, Tooltip} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 
 import {BlockTime} from '../BlockTime';

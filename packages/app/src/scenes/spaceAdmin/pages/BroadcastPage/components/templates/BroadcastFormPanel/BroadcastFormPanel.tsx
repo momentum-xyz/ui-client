@@ -2,9 +2,8 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {Heading} from '@momentum/ui-kit';
+import {Button, Heading, Input, SectionPanel, Text} from '@momentum/ui-kit';
 
-import {Button, Input, SectionPanel, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {YOUTUBE_URL_PLACEHOLDER} from 'core/constants';
 import {BroadcastInterface} from 'api';

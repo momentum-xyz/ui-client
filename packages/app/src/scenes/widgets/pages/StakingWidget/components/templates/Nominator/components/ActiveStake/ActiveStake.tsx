@@ -1,10 +1,8 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading} from '@momentum/ui-kit';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, IconSvg, Text, Button, Heading} from '@momentum/ui-kit';
 
-import {IconSvg, Text, Button} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionEnum} from 'core/enums';
 

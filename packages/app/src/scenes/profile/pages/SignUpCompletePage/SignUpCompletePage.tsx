@@ -1,8 +1,8 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
+import {PanelLayout} from '@momentum/ui-kit';
 
-import {PanelLayout} from 'ui-kit';
 import {useStore, useSession} from 'shared/hooks';
 import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
 import background from 'static/images/bg.png';

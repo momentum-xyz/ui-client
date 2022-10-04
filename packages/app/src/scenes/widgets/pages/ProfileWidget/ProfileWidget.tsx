@@ -1,9 +1,9 @@
 import React, {useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {SvgButton, PanelLayout} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {SvgButton, PanelLayout} from 'ui-kit';
 
 import * as styled from './ProfileWidget.styled';
 import {MyProfileEditor, MyProfileView, UserProfileView} from './components';

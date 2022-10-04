@@ -1,7 +1,5 @@
 import React, {FC, memo} from 'react';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
-
-import {IconSvg} from 'ui-kit/atoms';
+import {PropsWithThemeInterface, IconSvg, IconNameType} from '@momentum/ui-kit';
 
 import * as styled from './Location.styled';
 

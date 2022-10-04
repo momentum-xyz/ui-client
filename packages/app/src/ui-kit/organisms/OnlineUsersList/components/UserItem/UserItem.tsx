@@ -3,8 +3,9 @@ import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {Button, SvgButton, Avatar} from '@momentum/ui-kit';
 
-import {Button, SvgButton, Avatar, TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
+import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {usePosBusEvent} from 'shared/hooks';
 import {UserProfileModelInterface} from 'core/models';
 

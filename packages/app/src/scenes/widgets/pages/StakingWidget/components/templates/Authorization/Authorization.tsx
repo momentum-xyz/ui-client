@@ -4,9 +4,8 @@ import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {SubmittableResultValue} from '@polkadot/api-base/types/submittable';
 import {DispatchError, EventRecord} from '@polkadot/types/interfaces';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, Message, Text, Button, Loader} from '@momentum/ui-kit';
 
-import {Message, Text, Button, Loader} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {StakingTransactionEnum} from 'core/enums';
 

@@ -1,4 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
+import {IconNameType} from '@momentum/ui-kit';
 
 const CollaborationPlugin = types.model('CollaborationPlugin', {
   name: types.string,

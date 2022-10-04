@@ -1,7 +1,6 @@
 import React, {FC, useRef} from 'react';
 import {AddToCalendarPropsInterface} from 'react-add-to-calendar-hoc';
-
-import {useClickOutside} from 'ui-kit';
+import {useClickOutside} from '@momentum/ui-kit';
 
 import * as styled from './AddToCalendarDropdown.styled';
 

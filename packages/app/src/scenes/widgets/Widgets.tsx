@@ -3,12 +3,12 @@ import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import ReactHowler from 'react-howler';
+import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {switchFullscreen} from 'core/utils';
 import {UnityService} from 'shared/services';
-import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from 'ui-kit';
 import {
   AttendeesWidget,
   HelpWidget,

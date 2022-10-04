@@ -2,10 +2,11 @@ import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
+import {Button} from '@momentum/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore, useGooglePicker} from 'shared/hooks';
-import {SpaceTopBar, Button, TextChat} from 'ui-kit';
+import {SpaceTopBar, TextChat} from 'ui-kit';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';

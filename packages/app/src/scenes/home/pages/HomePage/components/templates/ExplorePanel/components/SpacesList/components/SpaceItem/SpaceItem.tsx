@@ -1,8 +1,8 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
+import {SvgButton} from '@momentum/ui-kit';
 
-import {SvgButton} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {SubSpaceModelInterface} from 'core/models';
 

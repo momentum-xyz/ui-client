@@ -2,8 +2,8 @@ import React, {useEffect} from 'react';
 import {t} from 'i18next';
 import {useTheme} from 'styled-components';
 import {observer} from 'mobx-react-lite';
+import {Dropdown, OptionInterface, Text} from '@momentum/ui-kit';
 
-import {Dropdown, OptionInterface, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {REWARD_DESTINATION_TYPES} from 'core/constants';
 import {PayeeEnum} from 'core/enums';

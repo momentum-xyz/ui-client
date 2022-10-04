@@ -3,8 +3,9 @@ import {t} from 'i18next';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {Dialog, Dropdown} from '@momentum/ui-kit';
 
-import {Dialog, Dropdown, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
+import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {TokenRuleRolesEnum} from 'core/enums';
 

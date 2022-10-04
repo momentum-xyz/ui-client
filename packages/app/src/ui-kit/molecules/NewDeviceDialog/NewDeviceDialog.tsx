@@ -1,9 +1,7 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Heading} from '@momentum/ui-kit';
-
-import {Dialog, Dropdown, Text, OptionInterface} from 'ui-kit';
+import {Heading, Dialog, Dropdown, Text, OptionInterface} from '@momentum/ui-kit';
 
 import * as styled from './NewDeviceDialog.styled';
 

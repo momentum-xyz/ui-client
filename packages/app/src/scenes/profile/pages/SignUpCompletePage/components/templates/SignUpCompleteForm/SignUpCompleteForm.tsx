@@ -2,10 +2,6 @@ import React, {FC, useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
-
-import {appVariables} from 'api/constants';
-import {FieldErrorInterface} from 'api/interfaces';
-import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
 import {
   Button,
   FileUploader,
@@ -13,12 +9,16 @@ import {
   InputDark,
   Text,
   TextAreaDark,
-  TextPropsInterface
-} from 'ui-kit';
+  TextInterface
+} from '@momentum/ui-kit';
+
+import {appVariables} from 'api/constants';
+import {FieldErrorInterface} from 'api/interfaces';
+import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
 
 import * as styled from './SignUpCompleteForm.styled';
 
-const TEXT_PROPS: TextPropsInterface = {
+const TEXT_PROPS: TextInterface = {
   size: 'xxs',
   align: 'left',
   weight: 'bold',

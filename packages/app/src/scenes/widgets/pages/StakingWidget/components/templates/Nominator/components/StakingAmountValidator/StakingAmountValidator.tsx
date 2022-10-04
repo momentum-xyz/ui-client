@@ -3,9 +3,8 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {BN} from '@polkadot/util';
+import {IconSvg, Text, Message} from '@momentum/ui-kit';
 
-import Message from 'ui-kit/atoms/Message/Message';
-import {IconSvg, Text} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {MessageType} from 'core/types';
 import {StakeValidatorErrorType} from 'core/types';

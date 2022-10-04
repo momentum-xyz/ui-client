@@ -5,9 +5,9 @@ import {t} from 'i18next';
 import {SubmitHandler, Controller, useForm} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import cn from 'classnames';
+import {Input, Dialog, TextArea} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Input, Dialog, TextArea} from 'ui-kit';
 import {DATE_TIME_FORMAT} from 'core/constants';
 import {EventFormInterface} from 'api';
 
