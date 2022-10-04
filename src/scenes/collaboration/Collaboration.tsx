@@ -40,6 +40,7 @@ const Collaboration: FC = () => {
     prepareOnStageDialog,
     countdownDialog,
     textChatStore,
+    streamChatStore,
     liveStreamStore,
     stageModeStore
   } = collaborationStore;
@@ -63,6 +64,9 @@ const Collaboration: FC = () => {
         if (!textChatStore.isLoggedOn) {
           textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
         }
+        if (!streamChatStore.isLoggedOn) {
+          streamChatStore.init(sessionStore.userId, spaceId, sessionStore.profile ?? undefined);
+        }
       })
       .catch((e) => {
         if (e instanceof PrivateSpaceError) {
@@ -78,7 +82,7 @@ const Collaboration: FC = () => {
           );
         }
       });
-  }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
+  }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore, streamChatStore]);
 
   useEffect(() => {
     reJoinMeeting().then();
