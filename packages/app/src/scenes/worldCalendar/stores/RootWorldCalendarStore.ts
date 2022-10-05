@@ -9,6 +9,6 @@ const RootWorldCalendarStore = types
   .actions(() => ({}))
   .views(() => ({}));
 
-export interface RootWorldCalendarStoreInterface extends Instance<typeof RootWorldCalendarStore> {}
+export type RootWorldCalendarStoreType = Instance<typeof RootWorldCalendarStore>;
 
 export {RootWorldCalendarStore};

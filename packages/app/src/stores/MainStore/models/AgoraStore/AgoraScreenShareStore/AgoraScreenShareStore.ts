@@ -129,6 +129,6 @@ const AgoraScreenShareStore = types
     }
   }));
 
-export interface AgoraScreenShareStoreInterface extends Instance<typeof AgoraScreenShareStore> {}
+export type AgoraScreenShareStoreType = Instance<typeof AgoraScreenShareStore>;
 
 export {AgoraScreenShareStore};

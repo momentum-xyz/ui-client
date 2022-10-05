@@ -59,6 +59,6 @@ const AttendeesListStore = types
     }
   }));
 
-export interface AttendeesListStoreInterface extends Instance<typeof AttendeesListStore> {}
+export type AttendeesListStoreType = Instance<typeof AttendeesListStore>;
 
 export {AttendeesListStore};

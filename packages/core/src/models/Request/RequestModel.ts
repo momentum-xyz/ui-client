@@ -1,10 +1,29 @@
-import {types, flow} from 'mobx-state-tree';
-import axios, {AxiosRequestConfig, CancelTokenSource, AxiosError, AxiosResponse} from 'axios';
+import {types, flow, ModelActions} from 'mobx-state-tree';
+import axios, {
+  AxiosRequestConfig,
+  CancelTokenSource,
+  AxiosError,
+  AxiosResponse,
+  AxiosInstance
+} from 'axios';
 
 import {RequestStateEnum} from '../../enums';
+import {RequestInterface} from '../../interfaces';
 
 const UNAUTHORIZED_STATUS = 401;
 const BAD_FIELD_STATUS = 400;
+
+interface ActionsInterface extends ModelActions {
+  send<T, R>(action: RequestInterface<T, R>, options: T, request?: AxiosInstance): Promise<R>;
+}
+
+interface ViewsInterface {
+  get isPending(): boolean;
+  get isDone(): boolean;
+  get isError(): boolean;
+  get isNotSend(): boolean;
+  get isNotComplete(): boolean;
+}
 
 /**
  * This is utility model that responsible for:
@@ -21,13 +40,14 @@ const RequestModel = types
     isCancellable: true,
     state: types.maybeNull(types.enumeration(Object.values(RequestStateEnum)))
   })
-  .actions((self) => {
+  .actions<ActionsInterface>((self) => {
     let cancel: CancelTokenSource | null = null;
     // @ts-ignore: MST-actions
     const actions = {
       send: flow(function* send<T, R extends {data: unknown; config: AxiosRequestConfig}>(
-        action: (options: T) => Promise<R>,
-        options: T
+        action: (options: T, request?: AxiosInstance) => Promise<R>,
+        options: T,
+        request?: AxiosInstance
       ) {
         try {
           self.state = RequestStateEnum.Pending;
@@ -41,13 +61,16 @@ const RequestModel = types
             cancel = axios.CancelToken.source();
           }
 
-          const response: AxiosResponse<R> = yield action({
-            ...options,
-            ...(self.isCancellable ? {cancelToken: cancel?.token} : {}),
-            headers: {
-              // additional headers if it needs
-            }
-          });
+          const response: AxiosResponse<R> = yield action(
+            {
+              ...options,
+              ...(self.isCancellable ? {cancelToken: cancel?.token} : {}),
+              headers: {
+                // additional headers if it needs
+              }
+            },
+            request
+          );
 
           console.assert(!!response, 'Got empty response');
           self.state = RequestStateEnum.Done;
@@ -91,7 +114,7 @@ const RequestModel = types
     };
     return actions;
   })
-  .views((self) => ({
+  .views<ViewsInterface>((self) => ({
     get isPending() {
       return self.state === RequestStateEnum.Pending;
     },

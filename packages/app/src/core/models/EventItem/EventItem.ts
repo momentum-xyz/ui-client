@@ -13,6 +13,7 @@ import {
 import {api, MagicLinkResponse, AttendeesResponseInterface} from 'api';
 import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';
+import {MagicTypeEnum} from 'core/enums';
 
 import {EventItemData} from './models';
 
@@ -28,6 +29,10 @@ const EventItem = types
   })
   .actions((self) => ({
     fetchAttendees: flow(function* (limit?: boolean) {
+      if (!self.data) {
+        return;
+      }
+
       const response: AttendeesResponseInterface = yield self.fetchAttendeesRequest.send(
         api.attendeesRepository.fetchAttendees,
         {eventId: self.data?.id, spaceId: self.data?.spaceId, limit}
@@ -42,7 +47,7 @@ const EventItem = types
       const response: MagicLinkResponse = yield self.magicRequest.send(
         api.magicRepository.generateLink,
         {
-          type: 'event',
+          type: MagicTypeEnum.EVENT,
           data: {
             id: self.data?.spaceId,
             eventId: self.data?.id
@@ -68,6 +73,10 @@ const EventItem = types
       return false;
     },
     attend: flow(function* () {
+      if (!self.data) {
+        return;
+      }
+
       yield self.attendRequest.send(api.attendeesRepository.addAttendee, {
         eventId: self.data?.id,
         spaceId: self.data?.spaceId
@@ -76,6 +85,10 @@ const EventItem = types
       self.fetchAttendees(true);
     }),
     stopAttending: flow(function* () {
+      if (!self.data) {
+        return;
+      }
+
       yield self.attendRequest.send(api.attendeesRepository.removeAttendee, {
         eventId: self.data?.id,
         spaceId: self.data?.spaceId

@@ -44,7 +44,7 @@ const DashboardStore = types.compose(
         );
         if (response) {
           self.tileList = cast(response);
-          response.tiles.map((tile) => {
+          response.tiles.forEach((tile) => {
             if (
               !tile.edited &&
               (tile.permanentType === PermanentTypeEnum.POSTER ||
@@ -59,6 +59,7 @@ const DashboardStore = types.compose(
       }),
       updatePositions: flow(function* (tiles: TileInterface[]) {
         yield self.updateRequest.send(api.dashboardRepository.updateDashboardPositions, {
+          // @ts-ignore TODO: Fix ts errors
           data: {...self.tileList, tiles: tiles}
         });
       }),

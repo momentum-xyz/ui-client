@@ -10,6 +10,6 @@ const RootSpaceAdminStore = types.model('RootSpaceAdminStore', {
   manageEmojiStore: types.optional(ManageEmojiStore, {})
 });
 
-export interface RootMeetingSpaceStoreInterface extends Instance<typeof RootSpaceAdminStore> {}
+export type RootMeetingSpaceStoreType = Instance<typeof RootSpaceAdminStore>;
 
 export {RootSpaceAdminStore};

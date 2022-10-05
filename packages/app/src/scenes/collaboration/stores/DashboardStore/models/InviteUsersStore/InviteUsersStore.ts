@@ -22,6 +22,6 @@ const InviteUsersStore = types
     })
   }));
 
-export interface InviteUsersStoreInterface extends Instance<typeof InviteUsersStore> {}
+export type InviteUsersStoreType = Instance<typeof InviteUsersStore>;
 
 export {InviteUsersStore};

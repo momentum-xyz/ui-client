@@ -28,6 +28,6 @@ const LaunchInitiativeStore = types
     })
   }));
 
-export interface LaunchInitiativeStoreInterface extends Instance<typeof LaunchInitiativeStore> {}
+export type LaunchInitiativeStoreType = Instance<typeof LaunchInitiativeStore>;
 
 export {LaunchInitiativeStore};
