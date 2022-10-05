@@ -27,7 +27,7 @@ export interface CreateTileDataRequest {
   content?: ContentInterface;
   hash?: string;
   permanentType?: PermanentTypeEnum | null;
-  render?: number;
+  render?: boolean;
   internal?: boolean;
   column?: number;
   row?: number;

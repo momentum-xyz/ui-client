@@ -34,7 +34,7 @@ const TileFormStore = types.compose(
               permanentType: null,
               type: TileTypeEnum.TILE_TYPE_MEDIA,
               internal: true,
-              render: 1
+              render: true
             }
           });
           return self.tileCreateRequest.isDone;
@@ -57,7 +57,7 @@ const TileFormStore = types.compose(
             permanentType: null,
             type: TileTypeEnum.TILE_TYPE_TEXT,
             internal: true,
-            render: 0
+            render: false
           }
         });
         return self.tileCreateRequest.isDone;
@@ -92,7 +92,7 @@ const TileFormStore = types.compose(
             permanentType: null,
             type: TileTypeEnum.TILE_TYPE_VIDEO,
             internal: true,
-            render: 1
+            render: true
           }
         });
         return self.tileCreateRequest.isDone;

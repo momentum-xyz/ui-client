@@ -38,13 +38,13 @@ export const updateDashboardPositions: RequestInterface<
 export const createTile: RequestInterface<CreateTileRequest, CreateTileResponse> = (options) => {
   const {data, spaceId, ...restOptions} = options;
   const url = generatePath(dashboardRepositoryApiEndpoints().create, {spaceId});
-  return request.post(url, data, restOptions);
+  return request.post(url, {...data, render: data.render ? 1 : 0}, restOptions);
 };
 
 export const updateTile: RequestInterface<UpdateTileRequest, UpdateTileResponse> = (options) => {
   const {data, tileId, ...restOptions} = options;
   const url = generatePath(dashboardRepositoryApiEndpoints().update, {tileId});
-  return request.post(url, data, restOptions);
+  return request.post(url, {...data, render: data.render ? 1 : 0}, restOptions);
 };
 
 export const deleteTile: RequestInterface<DeleteTileRequest, DeleteTileResponse> = (options) => {
