@@ -15,8 +15,6 @@ const BAD_FIELD_STATUS = 400;
 
 interface ActionsInterface extends ModelActions {
   send<T, R>(action: RequestInterface<T, R>, options: T, request?: AxiosInstance): Promise<R>;
-  cancel: (message?: string) => void;
-  handleApiError: (error: AxiosError) => void;
 }
 
 interface ViewsInterface {

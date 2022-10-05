@@ -1,4 +1,4 @@
-import {Instance, types, flow, cast} from 'mobx-state-tree';
+import {types, flow, cast} from 'mobx-state-tree';
 import {UUIDModel} from '@momentum/core';
 import {RequestModel} from '@momentum/core';
 import {ResetModel} from '@momentum/core';
@@ -199,7 +199,5 @@ const Space = types
       return self.secret === 1;
     }
   }));
-
-export type SpaceType = Instance<typeof Space>;
 
 export {Space};
