@@ -38,7 +38,7 @@ const RequestModel = types
   .model('Request', {
     showError: false,
     isCancellable: true,
-    requestState: types.maybeNull(types.enumeration(Object.values(RequestStateEnum)))
+    state: types.maybeNull(types.enumeration(Object.values(RequestStateEnum)))
   })
   .actions<ActionsInterface>((self) => {
     let cancel: CancelTokenSource | null = null;
@@ -50,7 +50,7 @@ const RequestModel = types
         request?: AxiosInstance
       ) {
         try {
-          self.requestState = RequestStateEnum.Pending;
+          self.state = RequestStateEnum.Pending;
 
           if (self.isCancellable) {
             if (cancel) {
@@ -73,12 +73,12 @@ const RequestModel = types
           );
 
           console.assert(!!response, 'Got empty response');
-          self.requestState = RequestStateEnum.Done;
+          self.state = RequestStateEnum.Done;
 
           return response.data;
         } catch (error) {
           console.error(error instanceof Error ? error.message : error);
-          self.requestState = RequestStateEnum.Error;
+          self.state = RequestStateEnum.Error;
 
           /** handle errors */
           if (axios.isAxiosError(error)) {
@@ -116,19 +116,19 @@ const RequestModel = types
   })
   .views<ViewsInterface>((self) => ({
     get isPending() {
-      return self.requestState === RequestStateEnum.Pending;
+      return self.state === RequestStateEnum.Pending;
     },
     get isDone() {
-      return self.requestState === RequestStateEnum.Done;
+      return self.state === RequestStateEnum.Done;
     },
     get isError() {
-      return self.requestState === RequestStateEnum.Error;
+      return self.state === RequestStateEnum.Error;
     },
     get isNotSend() {
-      return self.requestState === null;
+      return self.state === null;
     },
     get isNotComplete() {
-      return [RequestStateEnum.Pending, null].includes(self.requestState);
+      return [RequestStateEnum.Pending, null].includes(self.state);
     }
   }));
 
