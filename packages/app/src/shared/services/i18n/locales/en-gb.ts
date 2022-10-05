@@ -221,7 +221,8 @@ export const enGb = {
       audiooutput: 'Audio Output',
       nameWorld: 'Name World',
       worldURL: 'World URL',
-      subdomain: 'Subdomain'
+      subdomain: 'Subdomain',
+      flyWithMe: 'Fly with me'
     },
     messages: {
       loading: 'Loading Momentum',

@@ -25,6 +25,10 @@ const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.grabTable,
     main: () => <></>
+  },
+  {
+    path: ROUTES.flyWithMe,
+    main: () => <></>
   }
 ];
 

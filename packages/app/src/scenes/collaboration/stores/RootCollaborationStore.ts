@@ -30,6 +30,7 @@ const RootCollaborationStore = types
       liveStreamStore: types.optional(LiveStreamStore, {}),
       isModerator: false,
 
+      isFlightWithMe: false,
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
       // Requests
@@ -82,6 +83,9 @@ const RootCollaborationStore = types
     unselectUserToRemoveAndCloseDialog() {
       self.participantToRemoveFromStage = undefined;
       self.removeParticipantFromStageDialog.close();
+    },
+    setIsFlightWithMe(isFlightWithMe: boolean): void {
+      self.isFlightWithMe = isFlightWithMe;
     }
   }))
   .views((self) => ({
