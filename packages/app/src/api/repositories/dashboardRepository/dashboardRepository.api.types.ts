@@ -1,4 +1,4 @@
-import {TileTypeEnum} from 'core/enums';
+import {PermanentTypeEnum, TileTypeEnum} from 'core/enums';
 import {ContentInterface, TileListInterface} from 'core/models';
 
 export interface DashboardRequestInterface {
@@ -23,12 +23,14 @@ export interface VideoTileFormInterface {
 }
 
 export interface CreateTileDataRequest {
-  type: TileTypeEnum;
+  type?: TileTypeEnum;
   content?: ContentInterface;
   hash?: string;
-  permanentType?: null;
-  render: 0 | 1;
-  internal: boolean;
+  permanentType?: PermanentTypeEnum | null;
+  render?: number;
+  internal?: boolean;
+  column?: number;
+  row?: number;
 }
 
 export interface CreateTileResponse {}
