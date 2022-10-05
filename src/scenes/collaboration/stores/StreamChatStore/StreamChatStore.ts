@@ -76,7 +76,10 @@ const StreamChatStore = types.compose(
       }),
       deinit: flow(function* (spaceId?: string) {
         if (self.client) {
-          yield self.client.disconnectUser();
+          // it breaks the app when we try to init in another space or world chat
+          // this whole logic needs to be refactored and moved into Service
+          // yield self.client.disconnectUser();
+
           if (spaceId) {
             yield self.leaveChannel(spaceId);
           }
