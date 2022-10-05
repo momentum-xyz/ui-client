@@ -16,7 +16,6 @@ const StreamChatStore = types.compose(
       numberOfReadMessages: 0,
       request: types.optional(RequestModel, {}),
       name: '',
-      isLoggedOn: false,
       messageSent: false,
       tokenRequest: types.optional(RequestModel, {}),
       textChatDialog: types.optional(DialogModel, {})
@@ -50,9 +49,6 @@ const StreamChatStore = types.compose(
           self.name = response.name;
         }
       }),
-      setLogin(login: boolean) {
-        self.isLoggedOn = login;
-      },
       setCurrentUserId(currentUser: string) {
         self.currentUserId = currentUser;
       },
@@ -76,7 +72,6 @@ const StreamChatStore = types.compose(
           response.token
         );
         self.setCurrentUserId(userId);
-        self.setLogin(true);
         self.currentChannel = self.client.channel(response.channel_type, response.channel);
       }),
       deinit: flow(function* (spaceId?: string) {
@@ -85,8 +80,15 @@ const StreamChatStore = types.compose(
           if (spaceId) {
             yield self.leaveChannel(spaceId);
           }
+          self.client = null;
+          self.currentChannel = null;
         }
       })
+    }))
+    .views((self) => ({
+      get isLoggedOn(): boolean {
+        return !!self.client && !!self.currentChannel;
+      }
     }))
 );
 
