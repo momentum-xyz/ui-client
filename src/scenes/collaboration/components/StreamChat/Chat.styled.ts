@@ -61,7 +61,12 @@ export const Container = styled.div`
   .str-chat__message-simple__actions {
     display: none !important;
   }
-
+  .str-chat__message--other .str-chat__message-inner {
+    margin-inline-end: 0; // since we don't show message options button
+  }
+  .str-chat__message--me .str-chat__message-inner {
+    margin-inline-start: 0;
+  }
 
   .str-chat__list-notifications {
     display: none;
@@ -99,6 +104,10 @@ export const Container = styled.div`
   .str-chat__message-metadata {
     // display: flex;
     // width: 100%;
+
+    // to make the message groups visually separated
+    margin-bottom: 12px;
+
     .str-chat__message-simple-name {
       color: var(--str-chat__primary-color);
 
