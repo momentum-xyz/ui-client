@@ -35,6 +35,12 @@ const StreamChatStore = types.compose(
         );
         return tokenResponse;
       }),
+      leaveChannel: flow(function* (spaceId: string) {
+        const leaveResponse = yield self.tokenRequest.send(api.streamChatRepository.leave, {
+          spaceId
+        });
+        return leaveResponse;
+      }),
       fetchUser: flow(function* (userId: string) {
         const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
           userId
@@ -73,9 +79,12 @@ const StreamChatStore = types.compose(
         self.setLogin(true);
         self.currentChannel = self.client.channel(response.channel_type, response.channel);
       }),
-      deinit: flow(function* () {
+      deinit: flow(function* (spaceId?: string) {
         if (self.client) {
           yield self.client.disconnectUser();
+          if (spaceId) {
+            yield self.leaveChannel(spaceId);
+          }
         }
       })
     }))
