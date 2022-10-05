@@ -5,7 +5,7 @@ import {SearchInput, useDebouncedEffect} from '@momentum/ui-kit';
 
 import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
-import {OnlineUsersStoreInterface} from 'scenes/home/stores/HomeStore/models';
+import {OnlineUsersStoreType} from 'scenes/home/stores/HomeStore/models';
 
 import {UserItem} from './components';
 import * as styled from './OnlineUsersList.styled';
@@ -13,7 +13,7 @@ import * as styled from './OnlineUsersList.styled';
 export interface PropsInterface {
   invite?: boolean;
   worldId: string;
-  onlineUsersStore?: OnlineUsersStoreInterface;
+  onlineUsersStore?: OnlineUsersStoreType;
   changeKeyboardControl: (active: boolean) => void;
   profile?: UserProfileModelInterface;
   teleportToUser: (userId: string) => void;

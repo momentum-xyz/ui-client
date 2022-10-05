@@ -1,21 +1,23 @@
-import {types, getSnapshot, applySnapshot} from 'mobx-state-tree';
+import {types, getSnapshot, applySnapshot, ModelActions} from 'mobx-state-tree';
 
-const ResetModel = types
-  .model('ResetModel', {})
-  .actions((self) => {
-    let initialState = {};
+interface ActionsInterface extends ModelActions {
+  resetModel: () => void;
+}
 
-    return {
-      afterCreate() {
-        /** save a snapshot after the first initialising */
-        initialState = getSnapshot(self);
-      },
-      resetModel() {
-        /** back the initial state */
-        applySnapshot(self, initialState);
-      }
-    };
-  })
-  .views(() => ({}));
+// TODO: Move to sdk
+const ResetModel = types.model('ResetModel', {}).actions<ActionsInterface>((self) => {
+  let initialState = {};
+
+  return {
+    afterCreate() {
+      /** save a snapshot after the first initialising */
+      initialState = getSnapshot(self);
+    },
+    resetModel() {
+      /** back the initial state */
+      applySnapshot(self, initialState);
+    }
+  };
+});
 
 export {ResetModel};

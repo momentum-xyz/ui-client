@@ -74,7 +74,6 @@
     "react-unity-webgl": "8.8.0",
     "react-youtube": "^9.0.1",
     "styled-components": "^5.3.3",
-    "svg-sprite": "^1.5.4",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.0"
   },

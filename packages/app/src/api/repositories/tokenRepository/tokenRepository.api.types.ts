@@ -37,11 +37,7 @@ export interface FetchTokenNameResponse {
 }
 
 export interface CreateTokenRequest {
-  tokenType: TokenTypeEnum;
-  tokenID?: string;
-  network: string;
-  contractAddress: string;
-  tokenName: string;
+  data: TokenFormInterface;
 }
 export interface CreateTokenResponse {
   message: TokenInterface;

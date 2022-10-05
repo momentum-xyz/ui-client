@@ -78,6 +78,6 @@ const FavoriteStore = types.compose(
     }))
 );
 
-export interface FavoriteStoreInterface extends Instance<typeof FavoriteStore> {}
+export type FavoriteStoreType = Instance<typeof FavoriteStore>;
 
 export {FavoriteStore};

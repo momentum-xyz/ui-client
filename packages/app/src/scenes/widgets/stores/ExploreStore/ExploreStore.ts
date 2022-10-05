@@ -95,6 +95,6 @@ const ExploreStore = types
     }
   }));
 
-export interface ExploreStoreInterface extends Instance<typeof ExploreStore> {}
+export type ExploreStoreType = Instance<typeof ExploreStore>;
 
 export {ExploreStore};

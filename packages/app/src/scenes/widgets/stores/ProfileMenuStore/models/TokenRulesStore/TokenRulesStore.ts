@@ -68,6 +68,6 @@ const TokenRulesStore = types.compose(
     }))
 );
 
-export interface TokenRulesStoreInterface extends Instance<typeof TokenRulesStore> {}
+export type TokenRulesStoreType = Instance<typeof TokenRulesStore>;
 
 export {TokenRulesStore};

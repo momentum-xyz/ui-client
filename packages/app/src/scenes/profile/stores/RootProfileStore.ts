@@ -6,6 +6,6 @@ const RootProfileStore = types.model('RootProfileStore', {
   signUpCompleteStore: types.optional(SignUpCompleteStore, {})
 });
 
-export interface RootRootProfileStoreInterface extends Instance<typeof RootProfileStore> {}
+export type RootRootProfileStoreType = Instance<typeof RootProfileStore>;
 
 export {RootProfileStore};

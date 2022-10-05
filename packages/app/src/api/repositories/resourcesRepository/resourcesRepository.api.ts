@@ -2,11 +2,9 @@ import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
 
 import {resourcesRepositoryApiEndpoints} from './resourcesRepository.api.endpoints';
-import {ImageUploadRequest, ImageUploadResponse} from './resourcesRepository.types';
+import {ImageUploadRequest} from './resourcesRepository.types';
 
-export const uploadTileImage: RequestInterface<ImageUploadRequest, ImageUploadResponse> = (
-  options
-) => {
+export const uploadTileImage: RequestInterface<ImageUploadRequest, string> = (options) => {
   const {file, ...restOptions} = options;
   const formData: FormData = new FormData();
   formData.append('file', file);
