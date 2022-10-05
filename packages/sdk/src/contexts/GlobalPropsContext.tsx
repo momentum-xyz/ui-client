@@ -1,10 +1,10 @@
 import React, {FC, useContext} from 'react';
 import axios from 'axios';
 import {createContext} from 'react';
-import {SpacePluginPropsInterface} from 'core/interfaces';
 import {DefaultThemeConfig} from '@momentum/ui-kit';
 
-// Move to sdk package
+import {SpacePluginPropsInterface} from '../interfaces';
+
 export const GlobalPropsContext = createContext<SpacePluginPropsInterface>({
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,

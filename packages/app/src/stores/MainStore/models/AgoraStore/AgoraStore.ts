@@ -1,6 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
 import AgoraRTC from 'agora-rtc-sdk-ng';
-import {ResetModel, RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum/core';
+import {ResetModel} from '@momentum/sdk';
 
 import {api} from 'api';
 import {appVariables} from 'api/constants';

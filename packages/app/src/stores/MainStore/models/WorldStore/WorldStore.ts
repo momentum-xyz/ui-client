@@ -1,5 +1,6 @@
 import {flow, Instance, types, cast} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel} from '@momentum/core';
+import {ResetModel} from '@momentum/sdk';
 
 import {api, WorldConfigType, WorldConfigResponse} from 'api';
 

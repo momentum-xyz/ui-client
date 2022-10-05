@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel} from '@momentum/core';
+import {ResetModel} from '@momentum/sdk';
 
 import {DELAY_DEFAULT, wait} from 'core/utils';
 import {LoginTypeEnum, LoginTypeEnumList} from 'core/enums';

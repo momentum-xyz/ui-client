@@ -1,6 +1,6 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import AgoraRTC, {ICameraVideoTrack, IMicrophoneAudioTrack} from 'agora-rtc-sdk-ng';
-import {ResetModel} from '@momentum/core';
+import {ResetModel} from '@momentum/sdk';
 import {OptionInterface} from '@momentum/ui-kit';
 
 import {storage} from 'shared/services';

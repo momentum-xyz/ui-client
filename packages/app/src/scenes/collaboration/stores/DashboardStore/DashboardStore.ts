@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {DropResult} from 'react-beautiful-dnd';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel} from '@momentum/core';
+import {ResetModel} from '@momentum/sdk';
 
 import {
   DialogModel,

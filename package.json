@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "husky install",
 
-    "build:deps": "concurrently -n ui-ki,core \"yarn --cwd=packages/ui-kit build\" \"yarn --cwd=packages/core build\"",
+    "build:deps": "yarn --cwd=packages/sdk build && concurrently -n ui-ki,core \"yarn --cwd=packages/ui-kit build\" \"yarn --cwd=packages/core build\"",
     "build": "yarn build:deps && yarn --cwd=packages/app build",
     "start": "yarn build:deps && yarn --cwd=packages/app start",
 

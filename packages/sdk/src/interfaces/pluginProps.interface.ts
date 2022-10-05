@@ -1,12 +1,11 @@
 import {AxiosInstance} from 'axios';
 import {ThemeInterface} from '@momentum/ui-kit';
 
-// TODO: Export it to a shared package so that plugins can use it.
 export interface CorePluginPropsInterface {
   theme: ThemeInterface;
   spaceId?: string;
   isSpaceAdmin: boolean;
-  request?: AxiosInstance;
+  request: AxiosInstance;
 }
 
 export interface PluginTopBarActionInterface {
