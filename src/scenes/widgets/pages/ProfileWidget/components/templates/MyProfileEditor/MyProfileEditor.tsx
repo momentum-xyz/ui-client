@@ -15,7 +15,7 @@ interface PropsInterface {
 }
 
 const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
-  const {widgetStore, sessionStore, homeStore, mainStore} = useStore();
+  const {widgetStore, sessionStore, worldChatStore, homeStore, mainStore} = useStore();
   const {onlineUsersList} = homeStore;
   const {profileStore} = widgetStore;
   const {userProfile, editAvatarDialog, formErrors} = profileStore;
@@ -64,11 +64,22 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   const formSubmitHandler: SubmitHandler<UpdateProfileInterface> = async ({profile, name}) => {
     const response = await profileStore.editProfile(name, profile);
     if (response) {
-      profileStore.fetchProfile(userId).then(() => {
-        sessionStore.reload();
-        profileStore.fetchUserSpaceList(userId);
-        onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
-      });
+      // no await here! is it needed?
+      profileStore
+        .fetchProfile(userId)
+        .then(() => {
+          sessionStore.reload();
+          profileStore.fetchUserSpaceList(userId);
+          onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
+        })
+        .then(() => {
+          if (profileStore.userProfile) {
+            return worldChatStore.updateUser(userId, profileStore.userProfile);
+          } else {
+            console.log('WTF. No user profile');
+            return null;
+          }
+        });
       toast.info(
         <ToastContent
           headerIconName="alert"

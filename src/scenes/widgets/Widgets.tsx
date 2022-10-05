@@ -45,7 +45,7 @@ const Widgets: FC = () => {
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
-  const {profile: currentProfile, isGuest} = sessionStore;
+  const {profile: currentProfile, isGuest, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
@@ -55,7 +55,8 @@ const Widgets: FC = () => {
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
-  }, [musicPlayerStore, emojiStore, worldStore.worldId]);
+    worldChatStore.init(userId, worldStore.worldId, currentProfile ?? undefined);
+  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, currentProfile, worldChatStore]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -134,17 +135,23 @@ const Widgets: FC = () => {
             size="normal-large"
             isWhite={false}
           />
-          <ToolbarIcon
-            icon="chat"
-            title={
-              worldChatStore.textChatDialog.isOpen
-                ? t('tooltipTitles.closeChat')
-                : t('tooltipTitles.openChat')
-            }
-            onClick={worldChatStore.textChatDialog.toggle}
-            size="normal-large"
-            isWhite={false}
-          />
+          <styled.ChatIconWrapper>
+            <ToolbarIcon
+              icon="chat"
+              title={
+                worldChatStore.textChatDialog.isOpen
+                  ? t('tooltipTitles.closeChat')
+                  : t('tooltipTitles.openChat')
+              }
+              onClick={worldChatStore.textChatDialog.toggle}
+              size="normal-large"
+              isWhite={false}
+            >
+              {worldChatStore.numberOfUnreadMessages > 0 && (
+                <styled.MessageCount>{worldChatStore.numberOfUnreadMessages}</styled.MessageCount>
+              )}
+            </ToolbarIcon>
+          </styled.ChatIconWrapper>
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>
