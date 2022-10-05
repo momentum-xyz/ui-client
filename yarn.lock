@@ -2679,10 +2679,10 @@
   resolved "https://registry.yarnpkg.com/@stream-io/escape-string-regexp/-/escape-string-regexp-5.0.1.tgz#362505c92799fea6afe4e369993fbbda8690cc37"
   integrity sha512-qIaSrzJXieZqo2fZSYTdzwSbZgHHsT3tkd646vvZhh4fr+9nO4NlvqGmPF43Y+OfZiWf+zYDFgNiPGG5+iZulQ==
 
-"@stream-io/stream-chat-css@3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@stream-io/stream-chat-css/-/stream-chat-css-3.1.1.tgz#c19271b12cfb5a1f62bd5e2547d7be1ab7fc49b1"
-  integrity sha512-/K8QJGeIqluDpTvCmimenZRnET/LMMmqo5a/8Wam+gupHPTOBWB5+noB3x3FlKzg0w1CuKEufdRK1BZxhQK7wA==
+"@stream-io/stream-chat-css@^3.5.4":
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/@stream-io/stream-chat-css/-/stream-chat-css-3.5.4.tgz#0a6ed50e0f671c61684d325fb3f10712ea674590"
+  integrity sha512-g2MviK1mTWyTm+sLtbltuoabbx6d7orC0bUxuRAR0snJgOXBsjwMjCBbkow/rlo6KlqjfCjBhaHE7Ht9NBKHjw==
 
 "@stream-io/transliterate@^1.5.5":
   version "1.5.5"
@@ -12749,14 +12749,14 @@ store@^2.0.12:
   resolved "https://registry.yarnpkg.com/store/-/store-2.0.12.tgz#8c534e2a0b831f72b75fc5f1119857c44ef5d593"
   integrity sha512-eO9xlzDpXLiMr9W1nQ3Nfp9EzZieIQc10zPPMP5jsVV7bLOziSFFBP0XoDXACEIFtdI+rIz0NwWVA/QVJ8zJtw==
 
-stream-chat-react@^10.1.1:
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/stream-chat-react/-/stream-chat-react-10.1.1.tgz#9d01ca883a68f827ca194be4c7fe3e830ff524d6"
-  integrity sha512-gYMsneft6bM9fjD3U3+bIV+sjYnxnWuiKklukTKqGApM3Orr3j2uba9sI6/qpg5nXFX6vdHAsWZc8IP0LJ30Pw==
+stream-chat-react@^10.2.0:
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/stream-chat-react/-/stream-chat-react-10.2.0.tgz#431fb12686a664ec863758896e70d065065df2b7"
+  integrity sha512-nd4DJB10mb9FE6XExK76uZmpotIMomqD0KZzlxetup7TlMWPHoQ2O3Q3B1Dw99EGMO5lqQ5Rtklg0IJavdxxVg==
   dependencies:
     "@braintree/sanitize-url" "6.0.0"
     "@popperjs/core" "^2.11.5"
-    "@stream-io/stream-chat-css" "3.1.1"
+    "@stream-io/stream-chat-css" "^3.5.4"
     clsx "^1.1.1"
     dayjs "^1.10.4"
     emoji-mart "3.0.1"
