@@ -11,7 +11,7 @@ import {StageModeGuest, StageModeModerator} from './components';
 // TODO: Refactor
 const StageModePage: FC = () => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
-  const {textChatStore} = collaborationStore;
+  const {streamChatStore} = collaborationStore;
   const {agoraStore} = mainStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -19,12 +19,12 @@ const StageModePage: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const chatWasOpen = textChatStore.textChatDialog.isOpen;
-    textChatStore.textChatDialog.open();
+    const chatWasOpen = streamChatStore.textChatDialog.isOpen;
+    streamChatStore.textChatDialog.open();
 
     return () => {
       if (!chatWasOpen) {
-        textChatStore.textChatDialog.close();
+        streamChatStore.textChatDialog.close();
       }
     };
   }, [agoraStore]);

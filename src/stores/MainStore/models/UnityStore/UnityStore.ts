@@ -120,6 +120,11 @@ const UnityStore = types
         return response.space.name;
       }
     })
+  }))
+  .views((self) => ({
+    get isPaused(): boolean {
+      return UnityService.isPaused;
+    }
   }));
 
 export {UnityStore};

@@ -54,7 +54,8 @@ export const appVariables: AppConfigExtendedInterface = {
   WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support',
   PARTICIPANTS_VIDEO_LIMIT: 17,
   MAX_STAGE_USERS: 12,
-  GAT_UI_TYPE_ID: '285ba49f-fee3-40d2-ab55-256b5804c20c'
+  GAT_UI_TYPE_ID: '285ba49f-fee3-40d2-ab55-256b5804c20c',
+  STREAMCHAT_KEY: ''
 };
 
 const {REACT_APP_OVERRIDE_CONFIG_VARIABLES = '{}'} = process.env;

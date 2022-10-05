@@ -20,6 +20,7 @@ import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
 import {TextChatStore} from './TextChatStore';
 import {LiveStreamStore} from './LiveStreamStore';
+import {StreamChatStore} from './StreamChatStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -28,6 +29,7 @@ const RootCollaborationStore = types
       space: types.maybe(Space),
       dashboardStore: types.optional(DashboardStore, {}),
       textChatStore: types.optional(TextChatStore, {}),
+      streamChatStore: types.optional(StreamChatStore, {}),
       calendarStore: types.optional(CalendarStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
       miroBoardStore: types.optional(MiroBoardStore, {}),
@@ -76,6 +78,9 @@ const RootCollaborationStore = types
         yield self.textChatStore.leaveChannel();
         yield self.textChatStore.logOut();
         self.textChatStore.resetModel();
+
+        yield self.streamChatStore.deinit(self.space?.id);
+        self.streamChatStore.resetModel();
 
         self.space = undefined;
         self.isModerator = false;

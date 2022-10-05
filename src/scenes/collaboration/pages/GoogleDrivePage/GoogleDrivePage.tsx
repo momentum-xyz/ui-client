@@ -5,14 +5,15 @@ import {useHistory} from 'react-router';
 
 import {ROUTES} from 'core/constants';
 import {useStore, useGooglePicker} from 'shared/hooks';
-import {SpaceTopBar, Button, TextChat} from 'ui-kit';
+import {SpaceTopBar, Button} from 'ui-kit';
+import {StreamChat} from 'scenes/collaboration/components/StreamChat';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
 
 const GoogleDrivePage: FC = () => {
-  const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
-  const {space, googleDriveStore, textChatStore} = collaborationStore;
+  const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
+  const {space, googleDriveStore, streamChatStore} = collaborationStore;
   const {googleDocument, documentTitle} = googleDriveStore;
   const {favoriteStore} = mainStore;
 
@@ -70,9 +71,9 @@ const GoogleDrivePage: FC = () => {
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        isChatOpen={textChatStore.textChatDialog.isOpen}
-        toggleChat={textChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        isChatOpen={streamChatStore.textChatDialog.isOpen}
+        toggleChat={streamChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         editSpaceHidden
         onLeave={async () => {
           await leaveMeetingSpace();
@@ -92,15 +93,11 @@ const GoogleDrivePage: FC = () => {
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}
-        {textChatStore.textChatDialog.isOpen && (
-          <TextChat
-            currentChannel={textChatStore.currentChannel}
-            userId={sessionStore.userId}
-            sendMessage={textChatStore.sendMessage}
-            messages={textChatStore.messages}
-            messageSent={textChatStore.messageSent}
-          />
-        )}
+        {streamChatStore.textChatDialog.isOpen &&
+          streamChatStore.client &&
+          streamChatStore.currentChannel && (
+            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
+          )}
       </styled.Container>
     </styled.Inner>
   );
