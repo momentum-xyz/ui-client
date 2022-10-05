@@ -1,7 +1,6 @@
 import {types, getSnapshot, applySnapshot, ModelActions} from 'mobx-state-tree';
 
 interface ActionsInterface extends ModelActions {
-  afterCreate: () => void;
   resetModel: () => void;
 }
 
