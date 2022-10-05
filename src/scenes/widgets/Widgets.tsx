@@ -24,9 +24,10 @@ import {
 
 import * as styled from './Widgets.styled';
 import {AvatarForm} from './pages/ProfileWidget/components';
+import WorldChatWidget from './pages/WorldChatWidget/WorldChatWidget';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore} = useStore();
+  const {sessionStore, mainStore, widgetStore, worldChatStore} = useStore();
   const {worldStore, agoraStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
@@ -107,6 +108,9 @@ const Widgets: FC = () => {
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
         </styled.EmojiBar>
       )}
+      {worldChatStore.textChatDialog.isOpen && (
+        <WorldChatWidget onClose={worldChatStore.textChatDialog.close} />
+      )}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -127,6 +131,17 @@ const Widgets: FC = () => {
             icon="smiley-face"
             title={t('actions.react')}
             onClick={emojiStore.selectionDialog.toggle}
+            size="normal-large"
+            isWhite={false}
+          />
+          <ToolbarIcon
+            icon="chat"
+            title={
+              worldChatStore.textChatDialog.isOpen
+                ? t('tooltipTitles.closeChat')
+                : t('tooltipTitles.openChat')
+            }
+            onClick={worldChatStore.textChatDialog.toggle}
             size="normal-large"
             isWhite={false}
           />

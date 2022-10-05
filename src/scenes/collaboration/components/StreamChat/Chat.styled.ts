@@ -21,6 +21,10 @@ export const Container = styled.div`
 
   margin-left: 10px;
   width: 30%;
+  &.full-width {
+    width: 100%;
+    margin: 0;
+  }
 
   .str-chat {
     --str-chat__font-family: IBM Plex Sans, sans-serif;
@@ -58,12 +62,6 @@ export const Container = styled.div`
     display: none !important;
   }
 
-  .str-chat__message-simple-name {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 88px;
-    overflow: hidden;
-  }
 
   .str-chat__list-notifications {
     display: none;
@@ -98,8 +96,20 @@ export const Container = styled.div`
     border-block: 1px solid var(--str-chat__primary-color);
     border-inline: 1px solid var(--str-chat__primary-color);
   }
-  .str-chat__message-simple-name {
-    color: var(--str-chat__primary-color);
+  .str-chat__message-metadata {
+    // display: flex;
+    // width: 100%;
+    .str-chat__message-simple-name {
+      color: var(--str-chat__primary-color);
+
+      // flex: 1;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
+    }
+    // .str-chat__message-simple-timestamp {
+    //   flex: 1 0 auto;
+    // }
   }
   .str-chat__empty-channel {
     svg {
