@@ -62,6 +62,7 @@ const StreamChatStore = types.compose(
     }))
     .actions((self) => {
       let token: string | null = null;
+      const timeNow = new Date();
       return {
         init: flow(function* (
           userId: string,
@@ -81,23 +82,31 @@ const StreamChatStore = types.compose(
           );
           self.setCurrentUserId(userId);
           self.currentChannel = self.client.channel(response.channel_type, response.channel);
-          self.setNumberOfUnreadMessages(self.currentChannel?.countUnread() || 0);
+
+          const refreshUnreadCount = (timeNow?: Date) => {
+            self.setNumberOfUnreadMessages(self.currentChannel?.countUnread(timeNow) || 0);
+          };
+          refreshUnreadCount(timeNow);
 
           self.currentChannel.watch();
           const handleMsgEvent = (event: Event) => {
             console.log('StreamChatStore MSG event', event);
             console.log(
-              'StreamChatStore currentChannel unread',
-              self.currentChannel?.countUnread()
+              'StreamChatStore currentChannel countUnread:',
+              self.currentChannel?.countUnread(),
+              'countUnread(timeNow):',
+              self.currentChannel?.countUnread(timeNow)
             );
-            if (event.total_unread_count !== undefined) {
-              self.setNumberOfUnreadMessages(event.total_unread_count);
-            }
+            // if (event.total_unread_count !== undefined) {
+            //   self.setNumberOfUnreadMessages(event.total_unread_count);
+            // }
+            refreshUnreadCount();
           };
           self.currentChannel.on('message.new', handleMsgEvent);
           self.currentChannel.on('notification.mark_read', handleMsgEvent);
           self.currentChannel.on((event) => {
             console.log('StreamChatStore event', event);
+            refreshUnreadCount();
           });
         }),
         deinit: flow(function* (spaceId?: string) {
