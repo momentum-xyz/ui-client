@@ -14,7 +14,7 @@ const Tile = types.model('Tile', {
   content: types.maybe(types.frozen<ContentInterface>()),
   edited: types.maybe(types.number),
   internal: types.maybe(types.boolean),
-  render: types.maybe(types.number),
+  render: types.maybe(types.boolean),
   updatedAt: types.maybeNull(types.string),
   uiTypeId: UUIDModel,
   spaceId: UUIDModel
