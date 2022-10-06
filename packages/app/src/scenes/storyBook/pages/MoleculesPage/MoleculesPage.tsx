@@ -20,8 +20,8 @@ import {
   Button,
   PageTopBar
 } from '@momentum/ui-kit';
+import {UserStatusEnum} from '@momentum/core';
 
-import {UserStatusEnum} from 'core/enums';
 import {
   TileMenu,
   NetworkButton,

@@ -1,7 +1,6 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import {t} from 'i18next';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, FetchIntegrationResponse, GoogleDocumentInterface} from 'api';
 import {IntegrationTypeEnum} from 'core/enums';

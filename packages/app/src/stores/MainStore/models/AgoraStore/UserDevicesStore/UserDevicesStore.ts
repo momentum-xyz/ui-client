@@ -1,10 +1,9 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import AgoraRTC, {ICameraVideoTrack, IMicrophoneAudioTrack} from 'agora-rtc-sdk-ng';
-import {ResetModel} from '@momentum/sdk';
+import {ResetModel, Dialog} from '@momentum/core';
 import {OptionInterface} from '@momentum/ui-kit';
 
 import {storage} from 'shared/services';
-import {DialogModel} from 'core/models';
 import {StorageKeyEnum} from 'core/enums';
 
 const UserDevicesStore = types
@@ -14,10 +13,10 @@ const UserDevicesStore = types
       .model('UserDevicesStore', {
         microphoneConsent: false,
         cameraConsent: false,
-        microphoneAccessDialog: types.optional(DialogModel, {}),
-        cameraAccessDialog: types.optional(DialogModel, {}),
-        microphoneRequirementDialog: types.optional(DialogModel, {}),
-        cameraRequirementDialog: types.optional(DialogModel, {}),
+        microphoneAccessDialog: types.optional(Dialog, {}),
+        cameraAccessDialog: types.optional(Dialog, {}),
+        microphoneRequirementDialog: types.optional(Dialog, {}),
+        cameraRequirementDialog: types.optional(Dialog, {}),
         muted: true,
         cameraOff: true,
         isTogglingMicrophone: false,

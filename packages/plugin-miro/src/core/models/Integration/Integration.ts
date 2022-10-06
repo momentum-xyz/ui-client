@@ -1,6 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/sdk';
-import {UUIDModel} from '@momentum/core';
+import {UUIDModel, ResetModel} from '@momentum/core';
 
 import {IntegrationData} from './models';
 

@@ -1,5 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/sdk';
+import {ResetModel} from '@momentum/core';
 
 import {MiroBoardStore} from './MiroBoardStore';
 

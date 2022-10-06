@@ -1,5 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/sdk';
+import {ResetModel} from '@momentum/core';
 
 import {ThemeStore, SentryStore, UnityStore, WorldStore, FavoriteStore, AgoraStore} from './models';
 

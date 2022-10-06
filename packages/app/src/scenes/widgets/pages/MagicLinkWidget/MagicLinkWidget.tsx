@@ -4,10 +4,10 @@ import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 import {Button, Dialog, Text} from '@momentum/ui-kit';
+import {copyToClipboard} from '@momentum/core';
 
 import {useStore} from 'shared/hooks';
 import {MagicTypeEnum} from 'core/enums';
-import {copyToClipboard} from 'core/utils';
 import {Location, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 
 import * as styled from './MagicLinkWidget.styled';

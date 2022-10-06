@@ -1,10 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import AgoraRTM, {RtmChannel, RtmClient, RtmMessage, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {DialogModel} from 'core/models';
 import {MessageInterface} from 'core/interfaces';
 import {api, ProfileResponse} from 'api';
 import {TextMessageEnum} from 'core/enums';
@@ -22,7 +20,7 @@ const TextChatStore = types.compose(
       isLoggedOn: false,
       messageSent: false,
       tokenRequest: types.optional(RequestModel, {}),
-      textChatDialog: types.optional(DialogModel, {})
+      textChatDialog: types.optional(Dialog, {})
     })
     .volatile<{client: RtmClient | null}>(() => ({
       client: null

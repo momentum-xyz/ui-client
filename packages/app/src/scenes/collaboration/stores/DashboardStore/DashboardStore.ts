@@ -1,15 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {DropResult} from 'react-beautiful-dnd';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {
-  DialogModel,
-  OnlineUsersList,
-  TileInterface,
-  TileList,
-  TileListInterface
-} from 'core/models';
+import {OnlineUsersList, TileInterface, TileList, TileListInterface} from 'core/models';
 import {api} from 'api';
 import {PermanentTypeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
@@ -21,11 +14,11 @@ const DashboardStore = types.compose(
   ResetModel,
   types
     .model('DashboardStore', {
-      tileDialog: types.optional(DialogModel, {}),
+      tileDialog: types.optional(Dialog, {}),
       onlineUsersList: types.optional(OnlineUsersList, {}),
-      inviteToSpaceDialog: types.optional(DialogModel, {}),
+      inviteToSpaceDialog: types.optional(Dialog, {}),
       inviteUsersStore: types.optional(InviteUsersStore, {}),
-      tileRemoveDialog: types.optional(DialogModel, {}),
+      tileRemoveDialog: types.optional(Dialog, {}),
       tileFormStore: types.optional(TileFormStore, {}),
       vibeStore: types.optional(VibeStore, {}),
       updateRequest: types.optional(RequestModel, {}),

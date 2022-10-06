@@ -1,7 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/sdk';
-
-import {DialogModel} from 'core/models';
+import {Dialog, ResetModel} from '@momentum/core';
 
 import {TokenRuleReviewStore, TokenRulesStore} from './models';
 
@@ -9,11 +7,11 @@ const ProfileMenuStore = types.compose(
   ResetModel,
   types
     .model('ProfileMenuStore', {
-      profileDialog: types.optional(DialogModel, {}),
-      menuDialog: types.optional(DialogModel, {}),
-      settingDialog: types.optional(DialogModel, {}),
-      profileMenuDialog: types.optional(DialogModel, {}),
-      tokenRulesDialog: types.optional(DialogModel, {}),
+      profileDialog: types.optional(Dialog, {}),
+      menuDialog: types.optional(Dialog, {}),
+      settingDialog: types.optional(Dialog, {}),
+      profileMenuDialog: types.optional(Dialog, {}),
+      tokenRulesDialog: types.optional(Dialog, {}),
       tokenRuleReviewStore: types.optional(TokenRuleReviewStore, {isWorldList: true}),
       tokenRulesStore: types.optional(TokenRulesStore, {})
     })

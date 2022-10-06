@@ -1,6 +1,5 @@
 import {types, flow, cast, Instance} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, BaseFavoritesResponse, FetchFavoritesResponse, PostFavoriteResponse} from 'api';
 

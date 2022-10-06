@@ -1,6 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, BroadcastInterface, LiveStreamInterface} from 'api';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';

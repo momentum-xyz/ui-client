@@ -5,7 +5,7 @@ export enum BrowserEnum {
   EdgeChromium = 'edge-chromium'
 }
 
-export const BrowserEnumList: BrowserEnum[] = [
+export const AllowedBrowserEnumList: BrowserEnum[] = [
   BrowserEnum.Chrome,
   BrowserEnum.Safari,
   BrowserEnum.Firefox,

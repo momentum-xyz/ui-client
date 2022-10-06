@@ -1,11 +1,9 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
 import {AvatarSizeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {api, WorldEmojiesResponse} from 'api';
-import {DialogModel} from 'core/models';
 
 export enum HelpSectionEnum {
   Discord = 'Discord',
@@ -20,7 +18,7 @@ const HelpStore = types
   .compose(
     ResetModel,
     types.model('HelpStore', {
-      helpDialog: types.optional(DialogModel, {}),
+      helpDialog: types.optional(Dialog, {}),
       emojiRequest: types.optional(RequestModel, {}),
       emojiUrls: types.optional(types.array(types.string), []),
       showDiscordSection: false,

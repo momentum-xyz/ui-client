@@ -1,7 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/sdk';
-
-import {DialogModel} from 'core/models';
+import {ResetModel, Dialog} from '@momentum/core';
 
 import {WorldStats} from './models';
 
@@ -9,7 +7,7 @@ const WorldStatsStore = types.compose(
   ResetModel,
   types
     .model('WorldStatsStore', {
-      statsDialog: types.optional(DialogModel, {}),
+      statsDialog: types.optional(Dialog, {}),
       worldStats: types.optional(WorldStats, {})
     })
     .actions((self) => ({

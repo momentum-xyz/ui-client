@@ -1,6 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api} from 'api';
 import {SpaceSettingsInterface} from 'api/repositories/spaceRepository/spaceRepository.api.types';

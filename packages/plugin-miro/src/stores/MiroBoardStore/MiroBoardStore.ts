@@ -4,8 +4,7 @@ import {AxiosInstance} from 'axios';
 import {api, FetchIntegrationResponse, MiroBoardInterface} from 'api';
 import {Integration} from 'core/models';
 import {appVariables} from 'api/constants';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 const MiroBoardStore = types.compose(
   ResetModel,

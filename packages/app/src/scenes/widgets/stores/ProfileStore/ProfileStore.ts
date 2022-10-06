@@ -1,10 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel, Dialog, SpaceTypeEnum} from '@momentum/core';
 
-import {SpaceTypeEnum} from 'core/enums';
-import {DialogModel, UserProfileModel, UserSpaceDetails} from 'core/models';
+import {UserProfileModel, UserSpaceDetails} from 'core/models';
 import {
   api,
   UserProfileInterface,
@@ -28,7 +26,7 @@ const ProfileStore = types.compose(
       inviteToTableRequest: types.optional(RequestModel, {}),
       editProfileRequest: types.optional(RequestModel, {}),
       userOwnedSpacesRequest: types.optional(RequestModel, {}),
-      editAvatarDialog: types.optional(DialogModel, {}),
+      editAvatarDialog: types.optional(Dialog, {}),
       userInitiativesRequest: types.optional(RequestModel, {}),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
       isEditingProfile: false,

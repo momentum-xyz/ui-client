@@ -1,8 +1,7 @@
 import {types, cast, flow} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {DialogModel, EmojiDetails} from 'core/models';
+import {EmojiDetails} from 'core/models';
 import {api, WorldEmojiesResponse} from 'api';
 
 const EmojiStore = types
@@ -10,7 +9,7 @@ const EmojiStore = types
     ResetModel,
     types.model('EmojiStore', {
       worldId: types.optional(types.string, ''),
-      selectionDialog: types.optional(DialogModel, {}),
+      selectionDialog: types.optional(Dialog, {}),
       emojiDetailsList: types.optional(types.array(EmojiDetails), []),
       fetchSpaceEmojisRequest: types.optional(RequestModel, {})
     })

@@ -1,6 +1,5 @@
 import {flow, Instance, types} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {TokenRuleItemModel, TokenRuleItemModelInterface} from 'core/models';
 import {api} from 'api';

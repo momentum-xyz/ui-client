@@ -1,6 +1,5 @@
 import {flow, types, cast} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel} from '@momentum/core';
 
 import {api, UserSearchResponse} from 'api';
 import {SpaceUserModel, UserModel} from 'core/models';

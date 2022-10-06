@@ -1,15 +1,15 @@
 import {types, Instance, flow, cast} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
-import {RequestModel} from '@momentum/core';
-
 import {
+  RequestModel,
   durationInHours,
   formatEndDate,
   formatStartDate,
   formatStartTime,
   formattedStringFromDate,
   isOtherYearThanToday
-} from 'core/utils';
+} from '@momentum/core';
+
 import {api, MagicLinkResponse, AttendeesResponseInterface} from 'api';
 import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';

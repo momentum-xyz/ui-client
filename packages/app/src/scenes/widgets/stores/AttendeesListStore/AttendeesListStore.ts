@@ -1,8 +1,7 @@
 import {types, flow, cast, Instance} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/sdk';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {AttendeeModel, AttendeeModelInterface, DialogModel} from 'core/models';
+import {AttendeeModel, AttendeeModelInterface} from 'core/models';
 import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 import {api} from 'api';
 
@@ -10,7 +9,7 @@ const AttendeesListStore = types
   .compose(
     ResetModel,
     types.model('AttendeesListStore', {
-      dialog: types.optional(DialogModel, {}),
+      dialog: types.optional(Dialog, {}),
       query: types.optional(types.string, ''),
       attendees: types.optional(types.array(AttendeeModel), []),
       numberOfAttendees: types.optional(types.number, 0),
@@ -19,7 +18,7 @@ const AttendeesListStore = types
       eventId: types.maybe(types.string),
       eventName: types.maybe(types.string),
       selectedAttendeeId: types.maybe(types.string),
-      attendeeDialog: types.optional(DialogModel, {})
+      attendeeDialog: types.optional(Dialog, {})
     })
   )
   .actions((self) => ({

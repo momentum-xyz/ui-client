@@ -1,7 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/sdk';
-
-import {DialogModel} from 'core/models';
+import {ResetModel, Dialog} from '@momentum/core';
 
 import {ValidatorsStore, PolkadotProviderStore} from './models';
 
@@ -11,7 +9,7 @@ const StakingStore = types.compose(
     .model('StakingStore', {
       polkadotProviderStore: types.optional(PolkadotProviderStore, {}),
       validatorsStore: types.optional(ValidatorsStore, {}),
-      stakingDialog: types.optional(DialogModel, {}),
+      stakingDialog: types.optional(Dialog, {}),
       operatorSpaceId: types.optional(types.string, '')
     })
     .actions((self) => ({

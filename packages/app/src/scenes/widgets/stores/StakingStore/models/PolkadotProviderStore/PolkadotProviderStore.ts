@@ -9,7 +9,7 @@ import {
 } from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
-import {ResetModel} from '@momentum/sdk';
+import {ResetModel} from '@momentum/core';
 import {IconNameType} from '@momentum/ui-kit';
 
 import {PolkadotAddress, PolkadotUnlockingDuration} from 'core/models';

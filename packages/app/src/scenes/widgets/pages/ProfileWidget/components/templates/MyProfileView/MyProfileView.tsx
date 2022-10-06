@@ -3,9 +3,9 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {capitalize} from 'lodash-es';
 import {Avatar, Button, IconSvg, Text} from '@momentum/ui-kit';
+import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum/core';
 
 import {useStore} from 'shared/hooks';
-import {absoluteLink, monthAndYearString, withoutProtocol} from 'core/utils';
 
 import {UserSpaceList} from '../../organisms';
 

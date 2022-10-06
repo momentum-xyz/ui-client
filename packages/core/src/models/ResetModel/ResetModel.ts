@@ -4,6 +4,7 @@ interface ActionsInterface extends ModelActions {
   resetModel: () => void;
 }
 
+// TODO: Move back to core
 const ResetModel = types.model('ResetModel', {}).actions<ActionsInterface>((self) => {
   let initialState = {};
 
