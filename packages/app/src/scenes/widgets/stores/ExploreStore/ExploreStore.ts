@@ -1,9 +1,9 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum/core';
+import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum/ui-kit';
 
 import {Space} from 'core/models';
 import {api} from 'api';
-import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {ExploreResponse} from 'api/repositories/spaceTypeRepository/spaceTypeRepository.api.types';
 import {bytesToUuid} from 'core/utils';
 

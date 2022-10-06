@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum/core';
+import {ImageSizeEnum} from '@momentum/ui-kit';
 
-import {AvatarSizeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {api, WorldEmojiesResponse} from 'api';
 
@@ -47,7 +47,7 @@ const HelpStore = types
       );
 
       const data = response.map(
-        (emoji) => `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S1}/${emoji.hash}`
+        (emoji) => `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S1}/${emoji.hash}`
       );
 
       self.emojiUrls = cast(data.slice(0, 18));

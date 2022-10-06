@@ -1,7 +1,7 @@
 import {types, Instance} from 'mobx-state-tree';
+import {ImageSizeEnum} from '@momentum/ui-kit';
 
 import {appVariables} from 'api/constants';
-import {AvatarSizeEnum} from 'core/enums';
 import {UserProfileModel} from 'core/models/UserProfile';
 
 const AttendeeModel = types
@@ -18,7 +18,7 @@ const AttendeeModel = types
     get avatarSrc(): string | undefined {
       return (
         self.user.profile?.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S3}/${self.user.profile?.avatarHash}`
+        `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.user.profile?.avatarHash}`
       );
     }
   }));

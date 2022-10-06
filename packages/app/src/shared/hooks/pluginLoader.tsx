@@ -1,8 +1,7 @@
 import React, {Suspense, FC, useMemo, ComponentType} from 'react';
 import {useTranslation} from 'react-i18next';
 import {PluginPropsType, PluginTypeEnum} from '@momentum/sdk';
-
-import {ErrorBoundary} from 'shared/components';
+import {ErrorBoundary} from '@momentum/ui-kit';
 
 import {useDynamicScript} from './useDynamicScript';
 
