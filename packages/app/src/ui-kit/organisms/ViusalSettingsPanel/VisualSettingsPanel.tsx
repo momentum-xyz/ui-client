@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {Heading} from '@momentum/ui-kit';
-import {PropsWithThemeInterface, ColorPicker, PanelLayout} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, ColorPicker, PanelLayout, AccentColorList} from '@momentum/ui-kit';
 
-import {AccentColorList, getBackgroundColorByAccent} from 'ui-kit';
+import {getBackgroundColorByAccent} from 'ui-kit';
 
 import * as styled from './VisualSettingsPanel.styled';
 
