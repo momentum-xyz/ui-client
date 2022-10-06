@@ -223,6 +223,21 @@ const PosBusEventsPage: FC = () => {
     );
   });
 
+  usePosBusEvent('start-fly-with-me', (spaceId, pilotId) => {
+    console.info('[POSBUS EVENT] start-fly-with-me');
+
+    // TODO: alert for passenger
+    unityStore.startFlyWithMe(pilotId);
+    history.push(generatePath(ROUTES.flyWithMe, {spaceId, pilotId}));
+  });
+
+  usePosBusEvent('stop-fly-with-me', (spaceId) => {
+    console.info('[POSBUS EVENT] stop-fly-with-me');
+
+    unityStore.disengageFlyWithMe();
+    history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+  });
+
   usePosBusEvent('stage-mode-accepted', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-accepted', userId);
     stageModeStore.removeRequestPopup(userId);

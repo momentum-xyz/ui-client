@@ -13,12 +13,12 @@ const FlyWithMePage: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    flyWithMeStore.start();
-    unityStore.toggleMiniMap();
+    flyWithMeStore.init();
+    unityStore.hideMinimap();
 
     return () => {
-      flyWithMeStore.stop();
-      unityStore.toggleMiniMap();
+      flyWithMeStore.resetModel();
+      unityStore.showMinimap();
     };
   }, [unityStore, flyWithMeStore]);
 

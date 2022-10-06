@@ -34,7 +34,7 @@ export const ROUTES = {
     base: '/space/:spaceId/admin',
     broadcast: '/space/:spaceId/admin/broadcast'
   },
-  flyWithMe: '/flyWithMe/:spaceId',
+  flyWithMe: '/flyWithMe/:spaceId/:pilotId',
   magic: '/magic/:id',
   video: '/video/:spaceId',
   worldCalendar: '/calendar',

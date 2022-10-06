@@ -10,11 +10,14 @@ const FlyWithMeStore = types
     })
   )
   .actions((self) => ({
-    start(): void {
+    init(): void {
       self.isActive = true;
     },
-    stop(): void {
-      self.isActive = false;
+    start(spaceId: string, pilotId: string): void {
+      // TODO: BE call
+    },
+    stop(spaceId: string): void {
+      // TODO: BE call
     }
   }));
 

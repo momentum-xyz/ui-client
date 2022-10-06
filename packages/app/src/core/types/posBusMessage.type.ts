@@ -100,3 +100,8 @@ export type PosBusStageModeMessageType =
   | StageModeLeftType
   | StageModeKickType
   | StageModeMuteType;
+
+export type PosBusFlyWithMeType = {
+  pilotId: string;
+  spaceId: string;
+};
