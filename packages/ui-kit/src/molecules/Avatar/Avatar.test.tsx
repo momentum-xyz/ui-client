@@ -1,8 +1,7 @@
 import React from 'react';
+import {UserStatusEnum} from '@momentum/core';
 
 import {render, within} from 'utils/test.utils';
-
-import {UserStatusEnum} from '../../enums';
 
 import Avatar from './Avatar';
 

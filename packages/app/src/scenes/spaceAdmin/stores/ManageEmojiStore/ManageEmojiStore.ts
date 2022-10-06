@@ -1,7 +1,7 @@
 import {types, cast, flow} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {DialogModel, EmojiDetails} from 'core/models';
+import {EmojiDetails} from 'core/models';
 import {
   api,
   AssignEmojiToSpaceResponse,
@@ -14,8 +14,8 @@ const ManageEmojiStore = types
   .compose(
     ResetModel,
     types.model('ManageEmojiStore', {
-      uploadDialog: types.optional(DialogModel, {}),
-      deleteDialog: types.optional(DialogModel, {}),
+      uploadDialog: types.optional(Dialog, {}),
+      deleteDialog: types.optional(Dialog, {}),
       emojiDetailsList: types.optional(types.array(EmojiDetails), []),
       fetchSpaceEmojisRequest: types.optional(RequestModel, {}),
       uploadEmojisRequest: types.optional(RequestModel, {}),

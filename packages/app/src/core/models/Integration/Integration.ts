@@ -5,6 +5,7 @@ import {ModerationEnum, StageModeRequestEnum} from 'core/enums';
 
 import {IntegrationData, IntegrationUser} from './models';
 
+// TODO: Remove when all plugins will be extracted and move to each plugin
 const Integration = types.compose(
   ResetModel,
   types.model('Integration', {

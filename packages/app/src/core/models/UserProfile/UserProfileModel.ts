@@ -1,9 +1,9 @@
 import {types, Instance, flow} from 'mobx-state-tree';
-import {RequestModel, UUIDModel} from '@momentum/core';
+import {RequestModel, UUIDModel, UserStatusEnum} from '@momentum/core';
+import {ImageSizeEnum} from '@momentum/ui-kit';
 
 import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';
-import {AvatarSizeEnum, UserStatusEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 
 const UserProfileModel = types
@@ -29,7 +29,7 @@ const UserProfileModel = types
     get avatarSrc(): string | undefined {
       return (
         self.profile?.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S3}/${self.profile.avatarHash}`
+        `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.profile.avatarHash}`
       );
     }
   }))

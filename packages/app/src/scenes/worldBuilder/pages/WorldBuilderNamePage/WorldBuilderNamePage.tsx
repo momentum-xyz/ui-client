@@ -3,11 +3,10 @@ import React, {FC} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {Text} from '@momentum/ui-kit';
+import {Text, slugify} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {Page, WorldBuilderFooter, WorldBuilderHeader} from 'ui-kit';
-import {slugify} from 'core/utils';
 import {appVariables} from 'api/constants';
 import background from 'static/images/worldBuilder.png';
 import {ROUTES} from 'core/constants';

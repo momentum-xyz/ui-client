@@ -6,11 +6,11 @@ import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
 import {PageTopBar} from '@momentum/ui-kit';
+import {absoluteLink} from '@momentum/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {EventList, LinkDialog, DeleteEventDialog, ToastContent} from 'ui-kit';
-import {absoluteLink} from 'core/utils';
 
 import {EventForm} from './components';
 import * as styled from './WorldCalendarPage.styled';

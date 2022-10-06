@@ -1,7 +1,8 @@
 import {detect} from 'detect-browser';
 
-import {BrowserEnum, BrowserEnumList} from 'core/enums';
+import {BrowserEnum, AllowedBrowserEnumList} from '../enums';
 
+// TODO: Move to core package
 export const isBrowserSupported = (): boolean => {
   const browser = detect();
   if (!browser?.name) {
@@ -9,7 +10,7 @@ export const isBrowserSupported = (): boolean => {
   }
 
   try {
-    return BrowserEnumList.includes(browser.name as BrowserEnum);
+    return AllowedBrowserEnumList.includes(browser.name as BrowserEnum);
   } catch {
     return false;
   }

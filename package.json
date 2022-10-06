@@ -5,9 +5,10 @@
   "private": true,
   "scripts": {
     "postinstall": "husky install",
-    "build": "concurrently \"yarn --cwd=packages/ui-kit build\" \"yarn --cwd=packages/core build\" && yarn --cwd=packages/app build",
-    "build:deps": "concurrently \"yarn --cwd=packages/ui-kit build\" \"yarn --cwd=packages/core build\"",
-    "start": "yarn --cwd=packages/app start",
+
+    "build:deps": "yarn --cwd=packages/core build && yarn --cwd=packages/ui-kit build",
+    "build": "yarn build:deps && yarn --cwd=packages/app build",
+    "start": "yarn build:deps && yarn --cwd=packages/app start",
     "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",

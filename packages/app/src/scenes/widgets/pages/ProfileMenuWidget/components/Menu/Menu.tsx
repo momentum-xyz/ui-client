@@ -3,10 +3,10 @@ import {useAuth} from 'react-oidc-context';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {Avatar, Dialog, IconSvg, Text, Toggle, useClickOutside} from '@momentum/ui-kit';
+import {UserStatusEnum} from '@momentum/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {UserStatusEnum} from 'core/enums';
 
 import * as styled from './Menu.styled';
 

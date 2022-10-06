@@ -1,10 +1,10 @@
 import {RequestModel} from '@momentum/core';
 import {IAgoraRTCRemoteUser, IRemoteAudioTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 import {flow, Instance, types} from 'mobx-state-tree';
+import {ImageSizeEnum} from '@momentum/ui-kit';
 
 import {api, ProfileResponse, UserProfileInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {AvatarSizeEnum} from 'core/enums';
 
 const AgoraRemoteUser = types
   .model('AgoraRemoteUser', {
@@ -57,7 +57,7 @@ const AgoraRemoteUser = types
     get avatarSrc(): string | undefined {
       return (
         self.profile?.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S3}/${self.profile.avatarHash}`
+        `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.profile.avatarHash}`
       );
     }
   }));

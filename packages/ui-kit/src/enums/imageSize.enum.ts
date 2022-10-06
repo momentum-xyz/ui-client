@@ -1,4 +1,4 @@
-export enum AvatarSizeEnum {
+export enum ImageSizeEnum {
   S0 = 's0', // 1024 pixels
   S1 = 's1', // 4096 pixels
   S2 = 's2', // 9216 pixels

@@ -1,6 +1,4 @@
-import {ThemeInterface} from '@momentum/ui-kit';
-
-import {AccentColorList, BackgroundColorList} from './themes.config';
+import {ThemeInterface, AccentColorList, BackgroundColorList} from '@momentum/ui-kit';
 
 export const getBackgroundColorByAccent = (theme: ThemeInterface) => {
   if (theme.accent === AccentColorList[0]) {

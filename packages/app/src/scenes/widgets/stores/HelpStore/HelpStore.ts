@@ -1,10 +1,9 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
+import {ImageSizeEnum} from '@momentum/ui-kit';
 
-import {AvatarSizeEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {api, WorldEmojiesResponse} from 'api';
-import {DialogModel} from 'core/models';
 
 export enum HelpSectionEnum {
   Discord = 'Discord',
@@ -19,7 +18,7 @@ const HelpStore = types
   .compose(
     ResetModel,
     types.model('HelpStore', {
-      helpDialog: types.optional(DialogModel, {}),
+      helpDialog: types.optional(Dialog, {}),
       emojiRequest: types.optional(RequestModel, {}),
       emojiUrls: types.optional(types.array(types.string), []),
       showDiscordSection: false,
@@ -48,7 +47,7 @@ const HelpStore = types
       );
 
       const data = response.map(
-        (emoji) => `${appVariables.RENDER_SERVICE_URL}/texture/${AvatarSizeEnum.S1}/${emoji.hash}`
+        (emoji) => `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S1}/${emoji.hash}`
       );
 
       self.emojiUrls = cast(data.slice(0, 18));
