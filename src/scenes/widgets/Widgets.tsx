@@ -19,7 +19,8 @@ import {
   StakingWidget,
   WorldStatsWidget,
   StageModePIPWidget,
-  EmojiWidget
+  EmojiWidget,
+  LiveStreamPIPWidget
 } from 'scenes/widgets/pages';
 
 import * as styled from './Widgets.styled';
@@ -28,7 +29,7 @@ import WorldChatWidget from './pages/WorldChatWidget/WorldChatWidget';
 
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore, worldChatStore} = useStore();
-  const {worldStore, agoraStore} = mainStore;
+  const {worldStore, liveStreamStore, agoraStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
     stakingStore,
@@ -104,6 +105,9 @@ const Widgets: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
+      {!location.pathname.includes('live-stream') && (
+        <LiveStreamPIPWidget youtubeHash={liveStreamStore.broadcast.url} />
+      )}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />

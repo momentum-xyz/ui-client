@@ -19,7 +19,6 @@ import {GoogleDriveStore} from './GoogleDriveStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
 import {TextChatStore} from './TextChatStore';
-import {LiveStreamStore} from './LiveStreamStore';
 import {StreamChatStore} from './StreamChatStore';
 
 const RootCollaborationStore = types
@@ -35,7 +34,6 @@ const RootCollaborationStore = types
       miroBoardStore: types.optional(MiroBoardStore, {}),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
-      liveStreamStore: types.optional(LiveStreamStore, {}),
       isModerator: false,
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
@@ -56,9 +54,6 @@ const RootCollaborationStore = types
     })
   )
   .actions((self) => ({
-    initBroadcast(spaceId: string): void {
-      self.liveStreamStore.fetchBroadcast(spaceId);
-    },
     join: flow(function* (spaceId: string, isTable = false) {
       self.space = Space.create({id: spaceId, isTable});
 

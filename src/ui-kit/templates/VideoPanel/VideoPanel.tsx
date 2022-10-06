@@ -15,6 +15,9 @@ const VideoPanel: FC<PropsInterface> = ({youtubeHash}) => {
       mute: 0
     }
   };
+  const handleState = (event: any) => {
+    console.info(event);
+  };
   return (
     <styled.Wrapper data-testid="VideoPanel-test">
       <YouTube
@@ -22,6 +25,7 @@ const VideoPanel: FC<PropsInterface> = ({youtubeHash}) => {
         className="youtube"
         iframeClassName="youtubeIframe"
         opts={youtubeOptions}
+        onStateChange={handleState}
       />
     </styled.Wrapper>
   );

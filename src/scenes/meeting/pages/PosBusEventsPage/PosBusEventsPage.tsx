@@ -13,14 +13,13 @@ import {ToastContent, TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
-  const {agoraStore, unityStore} = mainStore;
+  const {agoraStore, liveStreamStore, unityStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
     invitedOnStageDialog,
-    liveStreamStore,
     googleDriveStore,
     miroBoardStore
   } = collaborationStore;

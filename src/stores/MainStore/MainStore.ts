@@ -2,7 +2,15 @@ import {types} from 'mobx-state-tree';
 
 import {ResetModel} from 'core/models';
 
-import {ThemeStore, SentryStore, UnityStore, WorldStore, FavoriteStore, AgoraStore} from './models';
+import {
+  ThemeStore,
+  SentryStore,
+  UnityStore,
+  WorldStore,
+  FavoriteStore,
+  AgoraStore,
+  LiveStreamStore
+} from './models';
 
 const MainStore = types.compose(
   ResetModel,
@@ -13,6 +21,7 @@ const MainStore = types.compose(
       unityStore: types.optional(UnityStore, {}),
       worldStore: types.optional(WorldStore, {}),
       favoriteStore: types.optional(FavoriteStore, {}),
+      liveStreamStore: types.optional(LiveStreamStore, {}),
       agoraStore: types.optional(AgoraStore, {})
     })
     .actions((self) => ({
@@ -20,6 +29,9 @@ const MainStore = types.compose(
         self.sentryStore.init();
         self.unityStore.init();
         self.agoraStore.init();
+      },
+      initBroadcast(spaceId: string): void {
+        self.liveStreamStore.fetchBroadcast(spaceId);
       }
     }))
 );
