@@ -1,9 +1,9 @@
 import React, {FC, memo, useState} from 'react';
 import cn from 'classnames';
+import {UserStatusEnum} from '@momentum/core';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 import {SizeType} from '../../types';
-import {UserStatusEnum} from '../../enums';
 
 import * as styled from './Avatar.styled';
 

@@ -1,4 +1,5 @@
-import {SpaceTypeEnum} from 'core/enums';
+import {SpaceTypeEnum} from '@momentum/core';
+
 import {MetadataFieldType} from 'core/types';
 
 interface AuxProjectInterface {

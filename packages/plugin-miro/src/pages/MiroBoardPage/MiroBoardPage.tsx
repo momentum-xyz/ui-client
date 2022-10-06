@@ -2,8 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useStore} from 'shared/hooks';
-
-import {useGlobalProps} from 'core/contexts';
+import {useGlobalProps} from '@momentum/sdk';
 
 import {MiroBoard, MiroChoice, MiroActions} from './components';
 import * as styled from './MiroBoardPage.styled';

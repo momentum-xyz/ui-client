@@ -15,4 +15,4 @@ const ErrorBoundary: FC<PropsInterface> = withErrorBoundary(({children, errorMes
   return <>{children}</>;
 });
 
-export {ErrorBoundary};
+export default ErrorBoundary;

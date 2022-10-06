@@ -1,8 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import {cloneDeep} from 'lodash-es';
-import {ResetModel, RequestModel} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {Space, DialogModel, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
+import {Space, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
 import {api} from 'api';
 
@@ -39,14 +39,14 @@ const RootCollaborationStore = types
       moderationRequest: types.optional(RequestModel, {}),
 
       // Dialogs
-      newDeviceDialog: types.optional(DialogModel, {}),
-      removeParticipantFromStageDialog: types.optional(DialogModel, {}),
-      acceptedToJoinStageDialog: types.optional(DialogModel, {}),
-      declinedToJoinStageDialog: types.optional(DialogModel, {}),
-      invitedOnStageDialog: types.optional(DialogModel, {}),
-      kickUserFromStageDialog: types.optional(DialogModel, {}),
-      prepareOnStageDialog: types.optional(DialogModel, {}),
-      countdownDialog: types.optional(DialogModel, {})
+      newDeviceDialog: types.optional(Dialog, {}),
+      removeParticipantFromStageDialog: types.optional(Dialog, {}),
+      acceptedToJoinStageDialog: types.optional(Dialog, {}),
+      declinedToJoinStageDialog: types.optional(Dialog, {}),
+      invitedOnStageDialog: types.optional(Dialog, {}),
+      kickUserFromStageDialog: types.optional(Dialog, {}),
+      prepareOnStageDialog: types.optional(Dialog, {}),
+      countdownDialog: types.optional(Dialog, {})
     })
   )
   .actions((self) => ({

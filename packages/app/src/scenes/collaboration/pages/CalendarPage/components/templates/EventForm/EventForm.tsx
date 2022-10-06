@@ -6,11 +6,10 @@ import {SubmitHandler, Controller, useForm} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import cn from 'classnames';
 import {Input, Dialog, TextArea} from '@momentum/ui-kit';
+import {timeFromNow, DATE_TIME_FORMAT} from '@momentum/core';
 
 import {useStore} from 'shared/hooks';
-import {DATE_TIME_FORMAT} from 'core/constants';
 import {EventFormInterface} from 'api';
-import {timeFromNow} from 'core/utils';
 
 import * as styled from './EventForm.styled';
 

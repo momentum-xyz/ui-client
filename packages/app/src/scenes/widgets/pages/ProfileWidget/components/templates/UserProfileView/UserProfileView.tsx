@@ -5,11 +5,10 @@ import {useHistory} from 'react-router';
 import {capitalize} from 'lodash-es';
 import {generatePath} from 'react-router-dom';
 import {Avatar, Button, IconSvg, Text} from '@momentum/ui-kit';
+import {UserStatusEnum, absoluteLink, monthAndYearString, withoutProtocol} from '@momentum/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {absoluteLink, monthAndYearString, withoutProtocol} from 'core/utils';
-import {UserStatusEnum} from 'core/enums';
 
 import {UserSpaceList} from '../../organisms';
 

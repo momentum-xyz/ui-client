@@ -1,9 +1,14 @@
 import {cast, types} from 'mobx-state-tree';
-import {ThemeInterface} from '@momentum/ui-kit';
+import {
+  ThemeInterface,
+  AccentColorList,
+  BackgroundColorList,
+  DefaultThemeConfig,
+  TextColorList
+} from '@momentum/ui-kit';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
-import {AccentColorList, BackgroundColorList, DefaultThemeConfig, TextColorList} from 'ui-kit';
 
 const ThemeStore = types
   .model('ThemeStore', {

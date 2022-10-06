@@ -1,7 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {DialogModel} from 'core/models';
 import {api, BroadcastInterface, LiveStreamInterface} from 'api';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
 import {youtubeVideoPath} from 'core/utils';
@@ -10,8 +9,8 @@ const BroadcastStore = types.compose(
   ResetModel,
   types
     .model('BroadcastStore', {
-      countdownDialog: types.optional(DialogModel, {}),
-      stopBroadcastingDialog: types.optional(DialogModel, {}),
+      countdownDialog: types.optional(Dialog, {}),
+      stopBroadcastingDialog: types.optional(Dialog, {}),
       enableRequest: types.optional(RequestModel, {}),
       disableRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {}),

@@ -1,7 +1,7 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
+import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum/ui-kit';
 
-import {SEARCH_MINIMAL_CHARACTER_COUNT} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import {SpaceItem} from './components';

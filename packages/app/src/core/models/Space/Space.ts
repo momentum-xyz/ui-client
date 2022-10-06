@@ -1,14 +1,12 @@
 import {types, flow, cast} from 'mobx-state-tree';
 import {UUIDModel} from '@momentum/core';
-import {RequestModel} from '@momentum/core';
-import {ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel, SpaceTypeEnum} from '@momentum/core';
 
 import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';
 import {SpaceUserModel} from 'core/models/SpaceUser';
 import {SubSpaceModel} from 'core/models/SubSpace';
 import {api, SpaceResponse} from 'api';
-import {SpaceTypeEnum} from 'core/enums';
 import {GetAllowedSpaceTypesResponse} from 'api';
 
 const Space = types

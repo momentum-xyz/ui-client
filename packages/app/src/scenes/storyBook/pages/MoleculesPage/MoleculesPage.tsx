@@ -18,15 +18,15 @@ import {
   Toggle,
   ToolbarIcon,
   Button,
-  PageTopBar
+  PageTopBar,
+  AccentColorList
 } from '@momentum/ui-kit';
+import {UserStatusEnum} from '@momentum/core';
 
-import {UserStatusEnum} from 'core/enums';
 import {
   TileMenu,
   NetworkButton,
   Location,
-  AccentColorList,
   ToastContent,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
