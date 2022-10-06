@@ -2,7 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum/core';
 
 import {TileInterface} from 'core/models';
-import {api, TextTileFormInterface, UploadTileImageResponse, VideoTileFormInterface} from 'api';
+import {api, TextTileFormInterface, VideoTileFormInterface} from 'api';
 import {TileTypeEnum} from 'core/enums';
 
 const TileFormStore = types.compose(
@@ -29,13 +29,12 @@ const TileFormStore = types.compose(
             spaceId,
             data: {
               hash: hash,
-              // @ts-ignore TODO: Fix ts errors
               column: 0,
               row: 0,
               permanentType: null,
               type: TileTypeEnum.TILE_TYPE_MEDIA,
               internal: true,
-              render: 1
+              render: true
             }
           });
           return self.tileCreateRequest.isDone;
@@ -49,16 +48,16 @@ const TileFormStore = types.compose(
           data: {
             column: 0,
             row: 0,
-            // @ts-ignore TODO: Fix ts errors
             content: {
               type: 'normal',
               title: data.text_title,
-              text: data.text_description
+              text: data.text_description,
+              url: undefined
             },
             permanentType: null,
             type: TileTypeEnum.TILE_TYPE_TEXT,
             internal: true,
-            render: 0
+            render: false
           }
         });
         return self.tileCreateRequest.isDone;
@@ -68,10 +67,11 @@ const TileFormStore = types.compose(
           tileId,
           data: {
             ...self.currentTile,
-            // @ts-ignore TODO: Fix ts errors
             content: {
               title: data.text_title,
-              text: data.text_description
+              text: data.text_description,
+              type: undefined,
+              url: undefined
             }
           }
         });
@@ -83,15 +83,16 @@ const TileFormStore = types.compose(
           data: {
             column: 0,
             row: 0,
-            // @ts-ignore TODO: Fix ts errors
             content: {
               type: 'normal',
-              url: data.youtube_url
+              url: data.youtube_url,
+              text: undefined,
+              title: undefined
             },
             permanentType: null,
             type: TileTypeEnum.TILE_TYPE_VIDEO,
             internal: true,
-            render: 1
+            render: true
           }
         });
         return self.tileCreateRequest.isDone;
@@ -101,16 +102,18 @@ const TileFormStore = types.compose(
           tileId,
           data: {
             ...self.currentTile,
-            // @ts-ignore TODO: Fix ts errors
             content: {
-              url: data.youtube_url
+              url: data.youtube_url,
+              text: undefined,
+              title: undefined,
+              type: undefined
             }
           }
         });
         return self.tileUpdateRequest.isDone;
       }),
       updateImageTile: flow(function* (tileId: string, file: File) {
-        const response: UploadTileImageResponse = yield self.imageUploadRequest.send(
+        const response: string = yield self.imageUploadRequest.send(
           api.resourcesRepository.uploadTileImage,
           {
             file
@@ -122,7 +125,6 @@ const TileFormStore = types.compose(
             tileId,
             data: {
               ...self.currentTile,
-              // @ts-ignore TODO: Fix ts errors
               hash: hash
             }
           });
