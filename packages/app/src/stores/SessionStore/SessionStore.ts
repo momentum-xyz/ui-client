@@ -2,13 +2,13 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
 import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
-import {RequestModel} from '@momentum/core';
+import {RequestModel, UserStatusEnum} from '@momentum/core';
 
 import {storage} from 'shared/services';
 import {api, FetchUserResponse} from 'api';
 import {UserProfileModel} from 'core/models';
 import {bytesToUuid} from 'core/utils';
-import {LoginTypeEnum, StorageKeyEnum, UserStatusEnum} from 'core/enums';
+import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
 import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 'shared/auth';
 
 const SessionStore = types

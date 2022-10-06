@@ -1,3 +1,5 @@
+// TODO: Check and Remove
+
 // @ts-ignore
 const createImage = (url): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {

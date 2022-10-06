@@ -3,8 +3,8 @@ import {observer} from 'mobx-react-lite';
 import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
 import {PropsWithThemeInterface, Loader, Text, TextArea} from '@momentum/ui-kit';
+import {dateToTime} from '@momentum/core';
 
-import {dateToTime} from 'core/utils';
 import {MessageInterface} from 'core/interfaces';
 import {TextMessageEnum} from 'core/enums';
 

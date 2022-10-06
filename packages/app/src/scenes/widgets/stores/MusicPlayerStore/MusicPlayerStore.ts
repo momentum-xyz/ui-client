@@ -1,7 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/core';
-
-import {DialogModel} from 'core/models';
+import {Dialog, ResetModel} from '@momentum/core';
 
 import {MusicPlayer, Playlist} from './models';
 
@@ -9,7 +7,7 @@ const MusicPlayerStore = types.compose(
   ResetModel,
   types
     .model('MusicPlayerStore', {
-      musicPlayerWidget: types.optional(DialogModel, {}),
+      musicPlayerWidget: types.optional(Dialog, {}),
       playlist: types.optional(Playlist, {}),
       musicPlayer: types.optional(MusicPlayer, {})
     })

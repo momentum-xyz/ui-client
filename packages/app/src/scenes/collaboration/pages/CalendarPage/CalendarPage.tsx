@@ -5,10 +5,10 @@ import {t} from 'i18next';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router';
 import {Button} from '@momentum/ui-kit';
+import {absoluteLink} from '@momentum/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {absoluteLink} from 'core/utils';
 import {EventList, LinkDialog, ToastContent, SpaceTopBar, DeleteEventDialog} from 'ui-kit';
 
 import {EventForm} from './components';

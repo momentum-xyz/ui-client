@@ -1,7 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
-import {DialogModel, EventForm, EventItemInterface, EventList} from 'core/models';
+import {EventForm, EventItemInterface, EventList} from 'core/models';
 import {api} from 'api';
 import {MagicTypeEnum} from 'core/enums';
 
@@ -9,12 +9,12 @@ const WorldCalendarStore = types.compose(
   ResetModel,
   types
     .model('WorldCalendarStore', {
-      formDialog: types.optional(DialogModel, {}),
-      deleteConfirmationDialog: types.optional(DialogModel, {}),
+      formDialog: types.optional(Dialog, {}),
+      deleteConfirmationDialog: types.optional(Dialog, {}),
       removeEventRequest: types.optional(RequestModel, {}),
       eventIdToRemove: types.maybe(types.string),
-      weblinkDialog: types.optional(DialogModel, {}),
-      magicDialog: types.optional(DialogModel, {}),
+      weblinkDialog: types.optional(Dialog, {}),
+      magicDialog: types.optional(Dialog, {}),
       eventList: types.optional(EventList, {}),
       spaceId: types.maybe(types.string),
       eventForm: types.optional(EventForm, {}),

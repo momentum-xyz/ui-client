@@ -1,6 +1,7 @@
 import {types} from 'mobx-state-tree';
 
-const DialogModel = types
+// TODO: Move to core package and remove 'Model' prefix
+const Dialog = types
   .model('Dialog', {
     isOpen: false
   })
@@ -16,4 +17,4 @@ const DialogModel = types
     }
   }));
 
-export {DialogModel};
+export {Dialog};

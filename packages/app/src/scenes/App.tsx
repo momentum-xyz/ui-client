@@ -6,13 +6,14 @@ import {Web3ReactProvider} from '@web3-react/core';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
+import {isBrowserSupported} from '@momentum/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
 import {setApiResponseHandlers} from 'api/request';
 import {SystemWideError, ToastContent} from 'ui-kit';
-import {createSwitchByConfig, isBrowserSupported, isTargetRoute} from 'core/utils';
+import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
 
 import AppAuth from './AppAuth';

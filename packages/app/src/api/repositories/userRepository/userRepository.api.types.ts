@@ -1,7 +1,8 @@
 /** COMMON **/
 
+import {UserStatusEnum} from '@momentum/core';
+
 import {UserSpaceInterface} from 'api/repositories/spaceRepository/spaceRepository.api.types';
-import {UserStatusEnum} from 'core/enums';
 
 export interface UserProfileInterface {
   bio?: string;

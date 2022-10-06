@@ -1,17 +1,11 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {orderBy} from 'lodash';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel, SortedField, SortDirectionEnum, Dialog} from '@momentum/core';
 
-import {
-  DialogModel,
-  SortedFieldModel,
-  TokenRuleItemModel,
-  TokenRuleItemModelInterface
-} from 'core/models';
+import {TokenRuleItemModel, TokenRuleItemModelInterface} from 'core/models';
 import {TokenTypeModel} from 'core/models/TokenType';
 import {NetworkTypeModel} from 'core/models/NetworkType';
 import {api, FetchTokenRulesResponse} from 'api';
-import {SortDirectionEnum} from 'core/enums';
 
 import {TokenRuleReviewStore} from './models';
 
@@ -19,11 +13,11 @@ const TokenRulesStore = types.compose(
   ResetModel,
   types
     .model('TokenRulesStore', {
-      sortedField: types.maybe(SortedFieldModel),
+      sortedField: types.maybe(SortedField),
       tokenRules: types.optional(types.array(TokenRuleItemModel), []),
-      tokenRuleReviewDialog: types.optional(DialogModel, {}),
+      tokenRuleReviewDialog: types.optional(Dialog, {}),
       tokenRuleReviewStore: types.optional(TokenRuleReviewStore, {isWorldList: true}),
-      widgetDialog: types.optional(DialogModel, {}),
+      widgetDialog: types.optional(Dialog, {}),
       request: types.optional(RequestModel, {}),
       networks: types.optional(types.array(TokenTypeModel), []),
       types: types.optional(types.array(NetworkTypeModel), [])

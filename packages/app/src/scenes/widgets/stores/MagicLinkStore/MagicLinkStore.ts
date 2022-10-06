@@ -1,14 +1,12 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/core';
-
-import {DialogModel} from 'core/models';
+import {Dialog, ResetModel} from '@momentum/core';
 
 import {MagicLink} from './models';
 
 const MagicLinkStore = types.compose(
   ResetModel,
   types.model('MagicLinkStore', {
-    magicLinkDialog: types.optional(DialogModel, {}),
+    magicLinkDialog: types.optional(Dialog, {}),
     magicLink: types.optional(MagicLink, {})
   })
 );
