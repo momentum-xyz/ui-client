@@ -5,6 +5,7 @@ import {RootAuthStore} from 'scenes/auth/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
+import {RootFlightStore} from 'scenes/flight/stores';
 import {RootWidgetStore} from 'scenes/widgets/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
@@ -29,6 +30,7 @@ const RootStore = types
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
     meetingStore: types.optional(RootMeetingStore, {}),
+    flightStore: types.optional(RootFlightStore, {}),
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),

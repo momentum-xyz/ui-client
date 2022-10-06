@@ -17,7 +17,7 @@ const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpC
 const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));
 const Collaboration = lazy(() => import('./collaboration/Collaboration'));
 const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
-const FlyWithMePage = lazy(() => import('./flyWithMe/pages/FlyWithMePage/FlyWithMePage'));
+const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
 const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
 const WorldCalendar = lazy(() => import('./worldCalendar/WorldCalendar'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));

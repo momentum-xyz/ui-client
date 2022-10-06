@@ -77,6 +77,9 @@ const UnityStore = types
     setInitialVolume() {
       UnityService.setSoundEffectVolume(self.volume.toString());
     },
+    toggleMiniMap(): void {
+      UnityService.toggleMiniMap();
+    },
     mute() {
       if (!self.muted) {
         self.volume = 0;

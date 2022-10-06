@@ -6,14 +6,21 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
 const FlyWithMePage: FC = () => {
-  const {mainStore, collaborationStore} = useStore();
-  const {agoraStore} = mainStore;
+  const {mainStore, flightStore} = useStore();
+  const {flyWithMeStore} = flightStore;
+  const {agoraStore, unityStore} = mainStore;
 
   const history = useHistory();
 
   useEffect(() => {
-    collaborationStore.setIsFlightWithMe(true);
-  }, [collaborationStore]);
+    flyWithMeStore.start();
+    unityStore.toggleMiniMap();
+
+    return () => {
+      flyWithMeStore.stop();
+      unityStore.toggleMiniMap();
+    };
+  }, [unityStore, flyWithMeStore]);
 
   useEffect(() => {
     if (!agoraStore.hasJoined) {
