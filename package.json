@@ -10,7 +10,7 @@
     "build": "yarn build:deps && yarn --cwd=packages/app build",
     "start": "yarn build:deps && yarn --cwd=packages/app start",
 
-  "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
+    "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",
     "prettier:fix": "npm run prettier -- --write",
