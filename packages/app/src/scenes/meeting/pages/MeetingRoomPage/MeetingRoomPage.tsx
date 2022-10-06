@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {matchPath, useLocation} from 'react-router-dom';
 
@@ -35,6 +35,13 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
     }
   }, [agoraStore.hasJoined, musicPlayerStore]);
 
+  const isButtonsAvailable = useMemo(() => {
+    return (
+      !matchPath(location.pathname, {path: ROUTES.collaboration.base}) &&
+      !matchPath(location.pathname, {path: ROUTES.flyWithMe})
+    );
+  }, [location.pathname]);
+
   if (!agoraStore.hasJoined) {
     return <></>;
   }
@@ -42,7 +49,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
   return (
     <styled.Container data-testid="MeetingRoomPage-test">
       <styled.Inner>
-        {!matchPath(location.pathname, {path: ROUTES.collaboration.base}) && (
+        {isButtonsAvailable && (
           <JoinLeaveButtons
             spaceId={agoraStore.spaceId || ''}
             isJoinButtonShown={!collaborationStore.space?.isTable}

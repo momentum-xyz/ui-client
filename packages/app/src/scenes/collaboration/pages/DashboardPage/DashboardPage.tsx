@@ -13,7 +13,7 @@ import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} fr
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
-  const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
+  const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace, flightStore} = useStore();
   const {dashboardStore, space, textChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {agoraStore, favoriteStore} = mainStore;
@@ -91,7 +91,7 @@ const DashboardPage: FC = () => {
             variant="primary"
             icon="fly-with-me"
             label={t('labels.flyWithMe')}
-            disabled={agoraStore.isStageMode || collaborationStore.isFlightWithMe}
+            disabled={agoraStore.isStageMode || flightStore.isFlightWithMe}
             onClick={() => history.push(generatePath(ROUTES.flyWithMe, {spaceId: space.id}))}
           />
         )}

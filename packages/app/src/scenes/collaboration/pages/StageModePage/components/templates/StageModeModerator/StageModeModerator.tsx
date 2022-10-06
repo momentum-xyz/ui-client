@@ -23,11 +23,12 @@ interface PropsInterface {
 }
 
 const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
-  const {mainStore, collaborationStore, sessionStore} = useStore();
+  const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {space, removeParticipantFromStageDialog, textChatStore, screenShareStore} =
     collaborationStore;
+
   const history = useHistory();
 
   const remoteUserClicked = useCallback(
@@ -105,7 +106,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
             <styled.ToggleContainer>
               <Toggle
                 checked={agoraStore.isStageMode}
-                disabled={agoraStore.isTogglingStageMode || collaborationStore.isFlightWithMe}
+                disabled={agoraStore.isTogglingStageMode || flightStore.isFlightWithMe}
                 onChange={() => {
                   agoraStore.toggleStageMode(sessionStore.userId);
                 }}
