@@ -2,7 +2,7 @@ import {FC, useCallback, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginTopBarActionInterface} from '@momentum/sdk';
+import {PluginTopBarActionInterface, PluginTypeEnum} from '@momentum/sdk';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -10,7 +10,6 @@ import {SpaceTopBar, TextChat} from 'ui-kit';
 import {PluginLoader} from 'shared/hooks/pluginLoader';
 import {CollaborationPluginInterface} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
 import {request} from 'api/request';
-import {PluginTypeEnum} from 'core/enums';
 
 import * as styled from './CollaborationPluginPage.styled';
 

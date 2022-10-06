@@ -8,6 +8,7 @@ import {SpacePluginPropsInterface} from '../interfaces';
 export const GlobalPropsContext = createContext<SpacePluginPropsInterface>({
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,
+  // TODO: Discuss further
   request: axios.create({
     baseURL: '',
     responseType: 'json',
