@@ -21,7 +21,7 @@ module.exports = {
     },
     plugins: [
       new ModuleFederationPlugin({
-        name: 'miro_plugin',
+        name: 'plugin',
         filename: 'remoteEntry.js',
         exposes: {
             './Plugin': './src/Plugin'

@@ -58,7 +58,6 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
       <styled.Container>
         <PluginLoader
           url={plugin.url}
-          name={plugin.name}
           pluginType={PluginTypeEnum.SPACE}
           props={{
             theme,
