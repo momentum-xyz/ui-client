@@ -27,7 +27,11 @@ const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
     main: () => <></>
   },
   {
-    path: ROUTES.flyWithMe,
+    path: ROUTES.flyWithMe.pilot,
+    main: () => <></>
+  },
+  {
+    path: ROUTES.flyWithMe.passenger,
     main: () => <></>
   }
 ];

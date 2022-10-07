@@ -102,6 +102,6 @@ export type PosBusStageModeMessageType =
   | StageModeMuteType;
 
 export type PosBusFlyWithMeType = {
-  pilotId: string;
+  pilot: string;
   spaceId: string;
 };

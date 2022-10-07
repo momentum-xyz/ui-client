@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
@@ -8,7 +8,12 @@ import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/e
 import {ROUTES} from 'core/constants';
 import {LiveStreamInterface} from 'api';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {ToastContent, TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {
+  ToastContent,
+  TOAST_COMMON_OPTIONS,
+  TOAST_GROUND_OPTIONS,
+  TOAST_NOT_AUTO_CLOSE_OPTIONS
+} from 'ui-kit';
 
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
@@ -226,9 +231,28 @@ const PosBusEventsPage: FC = () => {
   usePosBusEvent('start-fly-with-me', (spaceId, pilotId) => {
     console.info('[POSBUS EVENT] start-fly-with-me');
 
-    // TODO: alert for passenger
-    unityStore.startFlyWithMe(pilotId);
-    history.push(generatePath(ROUTES.flyWithMe, {spaceId, pilotId}));
+    if (sessionStore.userId === pilotId) {
+      unityStore.startFlyWithMe(pilotId);
+      history.push(generatePath(ROUTES.flyWithMe.pilot, {spaceId, pilotId}));
+    } else {
+      toast.info(
+        <ToastContent
+          headerIconName="fly-with-me"
+          title={t('messages.flyWithActivated')}
+          // TODO: Username
+          text={t('textMessage.flyWithMeInvite', {name: 'USERNAME'})}
+          declineInfo={{title: t('actions.decline')}}
+          approveInfo={{
+            title: t('actions.join'),
+            onClick: () => {
+              unityStore.startFlyWithMe(pilotId);
+              history.push(generatePath(ROUTES.flyWithMe.passenger, {spaceId, pilotId}));
+            }
+          }}
+        />,
+        TOAST_NOT_AUTO_CLOSE_OPTIONS
+      );
+    }
   });
 
   usePosBusEvent('stop-fly-with-me', (spaceId) => {

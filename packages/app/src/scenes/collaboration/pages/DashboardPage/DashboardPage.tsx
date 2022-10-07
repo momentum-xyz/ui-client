@@ -92,7 +92,7 @@ const DashboardPage: FC = () => {
             icon="fly-with-me"
             label={t('labels.flyWithMe')}
             disabled={!agoraStore.hasJoined || agoraStore.isStageMode || flightStore.isFlightWithMe}
-            onClick={() => flyWithMeStore.start(space.id, sessionStore.userId)}
+            onClick={() => flyWithMeStore.start(space.id)}
           />
         )}
       </SpaceTopBar>

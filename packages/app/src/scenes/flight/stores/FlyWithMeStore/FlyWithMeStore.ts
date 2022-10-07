@@ -1,24 +1,41 @@
-import {types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum/core';
+
+import {api, ProfileResponse} from 'api';
+import {UserProfileModel} from 'core/models';
 
 const FlyWithMeStore = types
   .compose(
     ResetModel,
     types.model('FlyWithMeStore', {
       isActive: false,
-      kickRequest: types.optional(RequestModel, {})
+      pilot: types.maybeNull(UserProfileModel),
+      pilotRequest: types.optional(RequestModel, {}),
+      startRequest: types.optional(RequestModel, {}),
+      stopRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    init(): void {
+    init(pilotId: string): void {
       self.isActive = true;
+      this.fetchPilot(pilotId);
     },
-    start(spaceId: string, pilotId: string): void {
-      // TODO: BE call
-    },
-    stop(spaceId: string): void {
-      // TODO: BE call
-    }
+    fetchPilot: flow(function* (pilotId: string) {
+      const response: ProfileResponse = yield self.pilotRequest.send(
+        api.userRepository.fetchProfile,
+        {userId: pilotId}
+      );
+
+      if (response) {
+        self.pilot = cast(response);
+      }
+    }),
+    start: flow(function* (spaceId: string) {
+      yield self.startRequest.send(api.flyWithMeRepository.start, {spaceId});
+    }),
+    stop: flow(function* (spaceId: string) {
+      yield self.stopRequest.send(api.flyWithMeRepository.stop, {spaceId});
+    })
   }));
 
 export {FlyWithMeStore};

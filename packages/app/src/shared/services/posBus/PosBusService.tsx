@@ -123,11 +123,11 @@ class PosBusService {
   }
 
   static handleStartFlyWithMeMessage(message: PosBusFlyWithMeType) {
-    PosBusEventEmitter.emit('start-fly-with-me', message.spaceId, message.pilotId);
+    PosBusEventEmitter.emit('start-fly-with-me', message.spaceId, message.pilot);
   }
 
   static handleStopFlyWithMeMessage(message: PosBusFlyWithMeType) {
-    PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilotId);
+    PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilot);
   }
 
   static handleRelayMessage(target: string, message: any): void {
