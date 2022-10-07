@@ -12,7 +12,8 @@
     "start": "tsc -w"
   },
   "dependencies": {
-    "@momentum/ui-kit": "^0.1.0"
+    "@momentum/ui-kit": "^0.1.0",
+    "@craco/craco": "^6.1.1"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1"
@@ -20,10 +21,9 @@
   "peerDependencies": {
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "axios": "^0.21.4", 
-    "@craco/craco": "^6.1.1"
+    "axios": "^0.21.4"
   },
   "bin": {
-    "momentum-sdk": "./bin/momentum-sdk.js"
+    "momentum-plugin": "./bin/momentum-plugin.js"
   }
 }

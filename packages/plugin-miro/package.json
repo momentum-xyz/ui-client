@@ -57,10 +57,9 @@
     "prettier": "^2.3.0"
   },
   "scripts": {
-    "start": "momentum-sdk start",
-    "build": "momentum-sdk build",
-    "test": "momentum-sdk test",
-    "eject": "momentum-sdk eject" 
+    "start": "momentum-plugin start",
+    "build": "momentum-plugin build",
+    "test": "momentum-plugin test"
   },
   "browserslist": {
     "production": [
