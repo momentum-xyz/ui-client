@@ -6,7 +6,7 @@ import {ErrorBoundary} from '@momentum/ui-kit';
 import {useDynamicScript} from './useDynamicScript';
 
 const loadComponent =
-  (scope: string, module: string) =>
+  (scope: string, pluginType: PluginTypeEnum) =>
   async (): Promise<{default: ComponentType<PluginPropsType>}> => {
     // @ts-ignore: Required to load list based plugins, no ts declaration
     await __webpack_init_sharing__('default');
@@ -15,8 +15,10 @@ const loadComponent =
     // @ts-ignore: Required to load list based plugins, cause window[scope] does not produce a type
     await container.init(__webpack_share_scopes__.default);
     // @ts-ignore: Required to load list based plugins, cause of previous problems
-    const factory = await window[scope].get(module);
-    return factory();
+    const factory = await window[scope].get('./Plugin');
+    // @ts-ignore: Required to load list based plugins, cause of previous problems
+    const plugin = factory().default;
+    return {default: plugin[`${pluginType}Extension`]};
   };
 
 interface PluginLoaderPropsInterface {
@@ -31,7 +33,7 @@ const PluginLoader: FC<PluginLoaderPropsInterface> = ({name, url, props, pluginT
   const {t} = useTranslation();
 
   const Component = useMemo(() => {
-    return React.lazy(loadComponent(name, `./${pluginType}App`));
+    return React.lazy(loadComponent(name, pluginType));
   }, [pluginType, name]);
 
   if (!ready) {
