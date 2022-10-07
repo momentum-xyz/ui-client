@@ -18,7 +18,7 @@ const loadComponent =
     const factory = await window[scope].get('./Plugin');
     // @ts-ignore: Required to load list based plugins, cause of previous problems
     const plugin = factory().default;
-    return {default: plugin[`${pluginType}App`]};
+    return {default: plugin[`${pluginType}Extension`]};
   };
 
 interface PluginLoaderPropsInterface {

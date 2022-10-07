@@ -16,11 +16,4 @@ export interface SpacePluginPropsInterface extends CorePluginPropsInterface {
   renderTopBarActions?: (actions: PluginTopBarActionInterface) => void;
 }
 
-export interface WidgetPluginPropsInterface extends CorePluginPropsInterface {}
-
-export interface HomePluginPropsInterface extends CorePluginPropsInterface {}
-
-export type PluginPropsType =
-  | SpacePluginPropsInterface
-  | WidgetPluginPropsInterface
-  | HomePluginPropsInterface;
+export type PluginPropsType = SpacePluginPropsInterface;

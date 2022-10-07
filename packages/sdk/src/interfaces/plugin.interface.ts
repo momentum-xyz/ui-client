@@ -1,11 +1,5 @@
-import {
-  SpacePluginPropsInterface,
-  WidgetPluginPropsInterface,
-  HomePluginPropsInterface
-} from './pluginProps.interface';
+import {SpacePluginPropsInterface} from './pluginProps.interface';
 
 export interface PluginInterface {
-  SpaceApp?: React.FC<SpacePluginPropsInterface>;
-  WidgetApp?: React.FC<WidgetPluginPropsInterface>;
-  HomeApp?: React.FC<HomePluginPropsInterface>;
+  SpaceExtension?: React.FC<SpacePluginPropsInterface>;
 }
