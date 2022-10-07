@@ -22,7 +22,6 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@craco/craco": "^6.1.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -58,10 +57,10 @@
     "prettier": "^2.3.0"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "craco eject" 
+    "start": "momentum-sdk start",
+    "build": "momentum-sdk build",
+    "test": "momentum-sdk test",
+    "eject": "momentum-sdk eject" 
   },
   "browserslist": {
     "production": [
