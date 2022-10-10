@@ -16,27 +16,24 @@ switch (script) {
         const processArgs = nodeArgs.concat(script).concat("--config").concat(configPath);
         const packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
+        if (!packageJSON?.name) {
+            console.log('[momentum-plugin] ERROR: "name" field in package.json was not found.\nPlease make sure that package.json exists or define "name" field in package.json.');
+            process.exit(1);
+        }
+
         const child = spawn.sync("craco", processArgs, { 
             stdio: "inherit", 
             env: {
                 ...process.env,
-                PLUGIN_ID: packageJSON?.id ?? 'plugin'
+                PLUGIN_NAME: packageJSON.name
             }
         });
 
         if (child.signal) {
             if (child.signal === "SIGKILL") {
-                console.log(`
-                    The build failed because the process exited too early.
-                    This probably means the system ran out of memory or someone called
-                    \`kill -9\` on the process.
-                `);
+                console.log('[momentum-plugin] ERROR: The build failed because the process exited too early.\nThis probably means the system ran out of memory or someone called `kill -9` on the process.');
             } else if (child.signal === "SIGTERM") {
-                console.log(`
-                    The build failed because the process exited too early.
-                    Someone might have called  \`kill\` or \`killall\`, or the system could
-                    be shutting down.
-                `);
+                console.log('[momentum-plugin] ERROR: The build failed because the process exited too early.\nSomeone might have called  `kill` or `killall`, or the system could be shutting down.');
             }
 
             process.exit(1);
@@ -47,6 +44,6 @@ switch (script) {
     }
     default:
         console.log(`Unknown script "${script}".`);
-        console.log("Perhaps you need to update momentum-sdk?");
+        console.log("Perhaps you need to update @momentum/sdk?");
         break;
 }

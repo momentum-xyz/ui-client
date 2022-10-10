@@ -57,7 +57,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
       </SpaceTopBar>
       <styled.Container>
         <PluginLoader
-          id={plugin.id}
+          name={plugin.name}
           url={plugin.url}
           pluginType={PluginTypeEnum.SPACE}
           props={{
