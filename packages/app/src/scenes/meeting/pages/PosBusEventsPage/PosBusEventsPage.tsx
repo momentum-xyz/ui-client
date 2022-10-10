@@ -228,7 +228,7 @@ const PosBusEventsPage: FC = () => {
     );
   });
 
-  usePosBusEvent('start-fly-with-me', (spaceId, pilotId) => {
+  usePosBusEvent('start-fly-with-me', (spaceId, pilotId, pilotName) => {
     console.info('[POSBUS EVENT] start-fly-with-me');
 
     if (sessionStore.userId === pilotId) {
@@ -239,8 +239,7 @@ const PosBusEventsPage: FC = () => {
         <ToastContent
           headerIconName="fly-with-me"
           title={t('messages.flyWithActivated')}
-          // TODO: Username
-          text={t('textMessage.flyWithMeInvite', {name: 'USERNAME'})}
+          text={t('textMessage.flyWithMeInvite', {name: pilotName})}
           declineInfo={{title: t('actions.decline')}}
           approveInfo={{
             title: t('actions.join'),

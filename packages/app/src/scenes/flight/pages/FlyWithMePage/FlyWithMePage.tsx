@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {TOAST_NOT_AUTO_CLOSE_OPTIONS, ToastContent} from 'ui-kit';
+import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
 import {FlightPilot, PassengerAlert} from './components';
 import * as styled from './FlyWithMePage.styled';
@@ -59,9 +59,9 @@ const FlyWithMePage: FC = () => {
           headerIconName="alert"
           title={t('messages.flyWithActivated')}
           text={t('messages.flyWithBlocked')}
-          approveInfo={{title: 'Got it'}}
+          showCloseButton
         />,
-        TOAST_NOT_AUTO_CLOSE_OPTIONS
+        TOAST_GROUND_OPTIONS
       );
     }
   }, [isPilot, t]);

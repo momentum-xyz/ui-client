@@ -103,5 +103,6 @@ export type PosBusStageModeMessageType =
 
 export type PosBusFlyWithMeType = {
   pilot: string;
+  pilotName: string;
   spaceId: string;
 };
