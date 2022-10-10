@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -31,26 +31,20 @@ const FlyWithMePage: FC = () => {
     return sessionStore.userId === pilotId;
   }, [pilotId, sessionStore.userId]);
 
-  const closeOrDisengage = useCallback(() => {
-    unityStore.showMinimap();
-    unityStore.disengageFlyWithMe();
-    flyWithMeStore.resetModel();
-
-    if (isPilot) {
-      flyWithMeStore.stop(spaceId);
-    } else {
-      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
-    }
-  }, [flyWithMeStore, history, isPilot, spaceId, unityStore]);
-
   useEffect(() => {
     flyWithMeStore.init(pilotId);
     unityStore.hideMinimap();
 
     return () => {
-      closeOrDisengage();
+      unityStore.showMinimap();
+      unityStore.disengageFlyWithMe();
+      flyWithMeStore.resetModel();
+
+      if (isPilot) {
+        flyWithMeStore.stop(spaceId);
+      }
     };
-  }, [pilotId, unityStore, flyWithMeStore, closeOrDisengage]);
+  }, [pilotId, unityStore, flyWithMeStore, isPilot, spaceId]);
 
   useEffect(() => {
     if (!isPilot) {
@@ -74,7 +68,9 @@ const FlyWithMePage: FC = () => {
             pilotName={pilot.name}
             pilotStatus={pilot.status}
             pilotAvatarSrc={pilot.avatarSrc}
-            onCloseOrDisengage={closeOrDisengage}
+            onCloseOrDisengage={() => {
+              history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+            }}
           />
           {!isPilot && <PassengerAlert />}
         </styled.Inner>

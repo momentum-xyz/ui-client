@@ -254,11 +254,21 @@ const PosBusEventsPage: FC = () => {
     }
   });
 
-  usePosBusEvent('stop-fly-with-me', (spaceId) => {
+  usePosBusEvent('stop-fly-with-me', (spaceId, pilotId, pilotName) => {
     console.info('[POSBUS EVENT] stop-fly-with-me');
 
     unityStore.disengageFlyWithMe();
     history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+
+    toast.info(
+      <ToastContent
+        headerIconName="fly-with-me"
+        title={t('messages.flyWithDisabled')}
+        text={t('textMessage.flyWithMeDisabled', {name: pilotName})}
+        showCloseButton
+      />,
+      TOAST_GROUND_OPTIONS
+    );
   });
 
   usePosBusEvent('stage-mode-accepted', (userId: string) => {

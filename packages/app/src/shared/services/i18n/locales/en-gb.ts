@@ -334,6 +334,7 @@ export const enGb = {
       stageIsFullTryAgain: 'Stage is full, please try again later...',
       flyWithEnabled: 'Fly with me enabled',
       flyWithActivated: 'Fly with me has been activated',
+      flyWithDisabled: 'Fly with me has been disabled',
       flyWithBlocked: 'While in fly with me mode this functionality is blocked.'
     },
     titles: {
@@ -375,7 +376,8 @@ export const enGb = {
       placeholder: 'Message',
       joinText: '{{name}} has joined the collaboration space',
       leftText: '{{name}} has left the collaboration space',
-      flyWithMeInvite: '{{name}} has invited you to join them in fly with me'
+      flyWithMeInvite: '{{name}} has invited you to join them in fly with me',
+      flyWithMeDisabled: '{{name}} has disabled fly with me'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
