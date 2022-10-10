@@ -1,6 +1,5 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import {IconNameType} from '@momentum/ui-kit';
-import {RequestModel} from '@momentum/core';
 import {ComponentType} from 'react';
 import {PluginPropsType, PluginTypeEnum} from '@momentum/sdk';
 
@@ -15,9 +14,7 @@ const CollaborationPlugin = types
     iconName: types.frozen<IconNameType>(),
 
     isErrorWhileLoadingComponent: false,
-    Component: types.maybe(types.frozen<ComponentType<PluginPropsType>>()),
-
-    request: types.optional(RequestModel, {})
+    Component: types.maybe(types.frozen<ComponentType<PluginPropsType>>())
   })
   .actions((self) => ({
     init: flow(function* () {
