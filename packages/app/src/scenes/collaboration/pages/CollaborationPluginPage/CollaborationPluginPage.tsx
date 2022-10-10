@@ -66,7 +66,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
         <actions.main />
       </SpaceTopBar>
       <styled.Container>
-        {!failed ? (
+        {!failed && !plugin.isErrorWhileLoadingComponent ? (
           ready && plugin.Component ? (
             <plugin.Component
               theme={theme}
@@ -79,7 +79,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
             <Text text={t('messages.loadingPlugin')} size="l" />
           )
         ) : (
-          <Text text={t('errors.failedToLoadDynamicScript', {url: plugin.url})} size="l" />
+          <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
         )}
         {textChatStore.textChatDialog.isOpen && (
           <TextChat
