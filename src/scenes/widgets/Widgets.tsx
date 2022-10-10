@@ -106,7 +106,12 @@ const Widgets: FC = () => {
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       {!location.pathname.includes('live-stream') && (
-        <LiveStreamPIPWidget youtubeHash={liveStreamStore.broadcast.url} />
+        <LiveStreamPIPWidget
+          youtubeHash={liveStreamStore.broadcast.url}
+          showWidget={liveStreamStore.showLiveStream}
+          hideWidget={liveStreamStore.hideWidget}
+          flyAround={!location.pathname.includes('collaboration')}
+        />
       )}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>

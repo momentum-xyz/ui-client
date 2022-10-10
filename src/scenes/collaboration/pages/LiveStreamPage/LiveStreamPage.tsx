@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {useHistory} from 'react-router';
@@ -16,6 +16,10 @@ const LiveStreamPage: FC = () => {
   const {favoriteStore, liveStreamStore} = mainStore;
 
   const history = useHistory();
+
+  useEffect(() => {
+    liveStreamStore.showWidget();
+  }, [liveStreamStore]);
 
   if (!space) {
     return null;
