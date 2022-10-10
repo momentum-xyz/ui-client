@@ -5,4 +5,4 @@ export * from './useUnityEvent';
 export * from './usePosBusEvent';
 export * from './useGooglePicker';
 export * from './useDeviceChange';
-export * from './pluginLoader';
+export * from './useDynamicScript';

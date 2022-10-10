@@ -1,15 +1,17 @@
-import {FC, useCallback, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginTopBarActionInterface, PluginTypeEnum} from '@momentum/sdk';
+import {PluginTopBarActionInterface} from '@momentum/sdk';
+import {Text} from '@momentum/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, TextChat} from 'ui-kit';
-import {PluginLoader} from 'shared/hooks/pluginLoader';
 import {CollaborationPluginInterface} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
 import {request} from 'api/request';
+import {useDynamicScript} from 'shared/hooks';
 
 import * as styled from './CollaborationPluginPage.styled';
 
@@ -21,15 +23,23 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
   const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
   const {space, textChatStore} = collaborationStore;
   const {favoriteStore} = mainStore;
+  const {ready, failed} = useDynamicScript(module && plugin.url);
 
   const history = useHistory();
   const theme = useTheme();
   const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
+  const {t} = useTranslation();
 
   const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
     console.info('Recieved actions', actions);
     setActions(actions);
   }, []);
+
+  useEffect(() => {
+    if (ready && !failed) {
+      plugin.init();
+    }
+  }, [plugin, ready, failed]);
 
   if (!space) {
     return null;
@@ -56,17 +66,21 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
         <actions.main />
       </SpaceTopBar>
       <styled.Container>
-        <PluginLoader
-          url={plugin.url}
-          pluginType={PluginTypeEnum.SPACE}
-          props={{
-            theme,
-            isSpaceAdmin: space.isAdmin,
-            spaceId: space.id,
-            request: request,
-            renderTopBarActions
-          }}
-        />
+        {!failed ? (
+          ready && plugin.Component ? (
+            <plugin.Component
+              theme={theme}
+              isSpaceAdmin={space.isAdmin}
+              spaceId={space.id}
+              request={request}
+              renderTopBarActions={renderTopBarActions}
+            />
+          ) : (
+            <Text text={t('messages.loadingPlugin')} size="l" />
+          )
+        ) : (
+          <Text text={t('errors.failedToLoadDynamicScript', {url: plugin.url})} size="l" />
+        )}
         {textChatStore.textChatDialog.isOpen && (
           <TextChat
             currentChannel={textChatStore.currentChannel}
