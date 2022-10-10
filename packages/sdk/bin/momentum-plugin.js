@@ -14,14 +14,13 @@ switch (script) {
         const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
         const configPath = require.resolve(`../craco.config.js`);
         const processArgs = nodeArgs.concat(script).concat("--config").concat(configPath);
-        const manifest = JSON.parse(fs.readFileSync('public/manifest.json', 'utf8'));
-        console.log(manifest);
+        const packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
         const child = spawn.sync("craco", processArgs, { 
             stdio: "inherit", 
             env: {
                 ...process.env,
-                PLUGIN_ID: manifest?.plugin_id ?? 'plugin'
+                PLUGIN_ID: packageJSON?.id ?? 'plugin'
             }
         });
 
