@@ -3,10 +3,11 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import DraggableContent from 'react-draggable';
 import {useTranslation} from 'react-i18next';
+import cn from 'classnames';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {Portal, SvgButton, Text} from 'ui-kit';
+import {Portal, SvgButton, Text, VideoPanel} from 'ui-kit';
 
 import * as styled from './LiveStreamPIPWidget.styled';
 
@@ -14,6 +15,7 @@ const Draggable: any = DraggableContent;
 
 interface PropsInterface {
   youtubeHash?: string;
+  spaceName?: string;
   hideWidget?: () => void;
   showWidget?: boolean;
   flyAround?: boolean;
@@ -21,6 +23,7 @@ interface PropsInterface {
 
 const LiveStreamPIPWidget: React.FC<PropsInterface> = ({
   youtubeHash,
+  spaceName,
   hideWidget,
   showWidget,
   flyAround
@@ -37,12 +40,31 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({
   return (
     <Portal>
       <Draggable>
-        <styled.Container title="" data-testid="LiveStreamPIPWidget-test">
+        <styled.Container
+          data-testid="LiveStreamPIPWidget-test"
+          className={cn(!flyAround && 'notFlyAround')}
+        >
           <styled.VideoWrapper>
-            <styled.VideoPanelStyled youtubeHash={youtubeHash} onWidget />
+            <VideoPanel youtubeHash={youtubeHash} onWidget />
           </styled.VideoWrapper>
           <styled.HeaderElement className="left">
-            <Text text={t('liveStream.subtitle')} size="l" weight="bold" />
+            <styled.Title>
+              <Text
+                text={spaceName}
+                transform="uppercase"
+                weight="bold"
+                size="l"
+                isMultiline={false}
+              />
+            </styled.Title>
+            <styled.SubTitle>
+              <Text
+                text={`/ ${t('liveStream.subtitle')}`}
+                transform="uppercase"
+                size="l"
+                isMultiline={false}
+              />
+            </styled.SubTitle>
           </styled.HeaderElement>
           <styled.HeaderElement className="right">
             <SvgButton
@@ -57,7 +79,7 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({
             />
             {flyAround && (
               <SvgButton
-                iconName="fly-to"
+                iconName="collaboration"
                 size="medium-large"
                 onClick={() => {
                   history.push(

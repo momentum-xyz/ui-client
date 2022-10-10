@@ -108,6 +108,7 @@ const Widgets: FC = () => {
       {!location.pathname.includes('live-stream') && (
         <LiveStreamPIPWidget
           youtubeHash={liveStreamStore.broadcast.url}
+          spaceName={liveStreamStore.spaceName}
           showWidget={liveStreamStore.showLiveStream}
           hideWidget={liveStreamStore.hideWidget}
           flyAround={!location.pathname.includes('collaboration')}
