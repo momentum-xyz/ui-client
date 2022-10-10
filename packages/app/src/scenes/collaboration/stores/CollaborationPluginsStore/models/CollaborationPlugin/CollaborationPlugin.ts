@@ -28,11 +28,11 @@ const CollaborationPlugin = types
           // @ts-ignore: Required to load list based plugins, no ts declaration
           await __webpack_init_sharing__('default');
           // @ts-ignore: Required to load list based plugins, window has no dict based declaration
-          const container = window['plugin'];
+          const container = window[self.name];
           // @ts-ignore: Required to load list based plugins, cause window[scope] does not produce a type
           await container.init(__webpack_share_scopes__.default);
           // @ts-ignore: Required to load list based plugins, cause of previous problems
-          const plugin = (await window['plugin'].get('./Plugin'))().default;
+          const plugin = (await window[self.name].get('./Plugin'))().default;
           // @ts-ignore: Required to load list based plugins, cause of previous problems
           return plugin[`${PluginTypeEnum.SPACE}Extension`];
         })();

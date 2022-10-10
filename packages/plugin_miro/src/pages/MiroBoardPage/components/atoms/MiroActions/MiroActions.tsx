@@ -3,7 +3,6 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {AxiosInstance} from 'axios';
 import {Button, PropsWithThemeInterface} from '@momentum/ui-kit';
-
 import {MiroBoardStoreType} from 'stores/MiroBoardStore';
 
 import * as styled from './MiroActions.styled';

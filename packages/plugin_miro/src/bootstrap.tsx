@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import 'static/styles/index.css';
 import styled, {ThemeProvider} from 'styled-components';
 import {DefaultThemeConfig} from '@momentum/ui-kit';
-
 import {MomentumRequiredPage} from 'pages/MomentumRequiredPage';
 
 import '@momentum/ui-kit/dist/themes/themes';
