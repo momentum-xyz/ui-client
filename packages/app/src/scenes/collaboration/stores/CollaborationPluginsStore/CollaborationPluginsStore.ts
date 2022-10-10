@@ -8,7 +8,7 @@ import {CollaborationPlugin} from './models/CollaborationPlugin/CollaborationPlu
 
 const COLLABORATION_PLUGIN_LIST: PluginInterface[] = [
   {
-    name: 'miro_plugin',
+    id: 'plugin_miro',
     subPath: 'miro',
     subtitle: 'Miro document',
     iconName: 'miro',

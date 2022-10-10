@@ -1,5 +1,5 @@
 {
-  "name": "plugin-miro",
+  "name": "plugin_miro",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

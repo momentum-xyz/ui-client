@@ -1,5 +1,6 @@
 {
   "short_name": "React App",
+  "plugin_id": "plugin_miro",
   "name": "Create React App Sample",
   "icons": [
     {

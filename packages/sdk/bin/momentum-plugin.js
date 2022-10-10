@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const spawn = require("cross-spawn");
+const fs = require('fs');
 
 const args = process.argv.slice(2);
 const scriptIndex = args.findIndex(x => x === "build" || x === "start" || x === "test");
@@ -13,8 +14,16 @@ switch (script) {
         const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
         const configPath = require.resolve(`../craco.config.js`);
         const processArgs = nodeArgs.concat(script).concat("--config").concat(configPath);
+        const manifest = JSON.parse(fs.readFileSync('public/manifest.json', 'utf8'));
+        console.log(manifest);
 
-        const child = spawn.sync("craco", processArgs, { stdio: "inherit" });
+        const child = spawn.sync("craco", processArgs, { 
+            stdio: "inherit", 
+            env: {
+                ...process.env,
+                PLUGIN_ID: manifest?.plugin_id ?? 'plugin'
+            }
+        });
 
         if (child.signal) {
             if (child.signal === "SIGKILL") {

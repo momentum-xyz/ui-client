@@ -184,7 +184,7 @@ const Collaboration: FC = () => {
         {pluginsStore.plugins.map((plugin) => {
           return (
             <Route
-              key={plugin.name}
+              key={plugin.id}
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >

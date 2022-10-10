@@ -1,7 +1,7 @@
 import {IconNameType} from '@momentum/ui-kit';
 
 export interface PluginInterface {
-  name: string;
+  id: string;
   subPath: string;
   subtitle?: string;
   url: string;

@@ -7,7 +7,6 @@ import {appVariables} from 'api/constants';
 import {AppConfigExtendedInterface, AppConfigInterface} from 'api/interfaces';
 import {StoreProvider} from 'shared/hooks';
 import {GlobalPropsContextProvider} from '@momentum/sdk';
-
 import {MiroBoardPage} from 'pages';
 
 import '@momentum/ui-kit/dist/themes/themes';
