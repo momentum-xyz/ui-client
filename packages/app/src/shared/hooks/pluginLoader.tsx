@@ -22,18 +22,19 @@ const loadComponent =
   };
 
 interface PluginLoaderPropsInterface {
+  name: string;
   url: string;
   props: PluginPropsType;
   pluginType: PluginTypeEnum;
 }
 
-const PluginLoader: FC<PluginLoaderPropsInterface> = ({url, props, pluginType}) => {
+const PluginLoader: FC<PluginLoaderPropsInterface> = ({name, url, props, pluginType}) => {
   const {ready, failed} = useDynamicScript(module && url);
   const {t} = useTranslation();
 
   const Component = useMemo(() => {
-    return React.lazy(loadComponent('plugin', pluginType));
-  }, [pluginType]);
+    return React.lazy(loadComponent(name, pluginType));
+  }, [name, pluginType]);
 
   if (!ready) {
     return <h2>{t('messages.loadingDynamicScript', {url})}</h2>;
