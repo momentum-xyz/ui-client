@@ -18,7 +18,8 @@ import {
   StakingWidget,
   WorldStatsWidget,
   StageModePIPWidget,
-  EmojiWidget
+  EmojiWidget,
+  LiveStreamPIPWidget
 } from 'scenes/widgets/pages';
 
 import * as styled from './Widgets.styled';
@@ -26,7 +27,7 @@ import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore, flightStore} = useStore();
-  const {worldStore, agoraStore, unityStore} = mainStore;
+  const {worldStore, agoraStore, liveStreamStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
     stakingStore,
@@ -107,6 +108,15 @@ const Widgets: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
+      {!location.pathname.includes('live-stream') && (
+        <LiveStreamPIPWidget
+          youtubeHash={liveStreamStore.broadcast.url}
+          spaceName={liveStreamStore.spaceName}
+          showWidget={liveStreamStore.showLiveStream}
+          hideWidget={liveStreamStore.hideWidget}
+          flyAround={!location.pathname.includes('collaboration')}
+        />
+      )}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
