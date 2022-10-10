@@ -10,7 +10,9 @@ const LiveStreamStore = types.compose(
     .model('LiveStreamStore', {
       disableRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {}),
-      broadcast: types.optional(types.frozen<BroadcastInterface>(), {})
+      broadcast: types.optional(types.frozen<BroadcastInterface>(), {}),
+      spaceName: types.maybe(types.string),
+      showLiveStream: true
     })
     .actions((self) => ({
       fetchBroadcast: flow(function* (spaceId: string) {
@@ -21,6 +23,7 @@ const LiveStreamStore = types.compose(
 
         if (response) {
           self.broadcast = cast(response.data);
+          self.spaceName = response.space.name;
         }
       }),
       disableBroadcast: flow(function* (spaceId: string) {
@@ -38,6 +41,12 @@ const LiveStreamStore = types.compose(
       }),
       setBroadcast(broadcast: LiveStreamInterface): void {
         self.broadcast = cast(broadcast);
+      },
+      showWidget() {
+        self.showLiveStream = true;
+      },
+      hideWidget() {
+        self.showLiveStream = false;
       }
     }))
     .views((self) => ({

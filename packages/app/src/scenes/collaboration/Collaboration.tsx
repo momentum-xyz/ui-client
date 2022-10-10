@@ -25,7 +25,7 @@ import * as styled from './Collaboration.styled';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore, liveStreamStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -35,7 +35,6 @@ const Collaboration: FC = () => {
     prepareOnStageDialog,
     countdownDialog,
     textChatStore,
-    liveStreamStore,
     stageModeStore
   } = collaborationStore;
 
@@ -80,7 +79,7 @@ const Collaboration: FC = () => {
   }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
-    collaborationStore.initBroadcast(spaceId);
+    mainStore.initBroadcast(spaceId);
   }, [collaborationStore, spaceId]);
 
   useEffect(() => {
