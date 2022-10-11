@@ -79,7 +79,7 @@ const Collaboration: FC = () => {
 
   useEffect(() => {
     pluginsStore.init();
-    console.info('fetched plugin list', pluginsStore.plugins.length);
+    console.info('fetched plugin list', pluginsStore.pluginLoaders.length);
   }, [pluginsStore]);
 
   useEffect(() => {
@@ -159,7 +159,7 @@ const Collaboration: FC = () => {
   const {device} = useDeviceChange(newDeviceDialog.open);
 
   const tabs = useObserver(() => {
-    const pluginTabs: NavigationTabInterface[] = pluginsStore.plugins.map((plugin) => ({
+    const pluginTabs: NavigationTabInterface[] = pluginsStore.pluginLoaders.map((plugin) => ({
       path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
       iconName: plugin.iconName
     }));
@@ -181,14 +181,14 @@ const Collaboration: FC = () => {
 
       <Switch>
         {createRoutesByConfig(COLLABORATION_ROUTES)}
-        {pluginsStore.plugins.map((plugin) => {
+        {pluginsStore.pluginLoaders.map((plugin) => {
           return (
             <Route
               key={plugin.name}
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >
-              <CollaborationPluginPage plugin={plugin} />
+              <CollaborationPluginPage pluginLoader={plugin} />
             </Route>
           );
         })}

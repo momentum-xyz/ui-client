@@ -5,25 +5,25 @@ import {useTheme} from 'styled-components';
 import {PluginTopBarActionInterface} from '@momentum/sdk';
 import {Text} from '@momentum/ui-kit';
 import {useTranslation} from 'react-i18next';
+import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, TextChat} from 'ui-kit';
-import {CollaborationPluginInterface} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
+import {SpaceTopBar, TextChat, ToastContent} from 'ui-kit';
+import {PluginLoaderModelType} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
 import {request} from 'api/request';
-import {useDynamicScript} from 'shared/hooks';
 
 import * as styled from './CollaborationPluginPage.styled';
 
 interface PropsInterface {
-  plugin: CollaborationPluginInterface;
+  pluginLoader: PluginLoaderModelType;
 }
 
-const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
+const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
   const {space, textChatStore} = collaborationStore;
   const {favoriteStore} = mainStore;
-  const {ready, failed} = useDynamicScript(module && plugin.url);
+  const {plugin} = pluginLoader;
 
   const history = useHistory();
   const theme = useTheme();
@@ -36,10 +36,26 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
   }, []);
 
   useEffect(() => {
-    if (ready && !failed) {
-      plugin.init();
+    pluginLoader.init();
+
+    return () => {
+      pluginLoader.deinit();
+    };
+  }, [pluginLoader]);
+
+  useEffect(() => {
+    if (pluginLoader.isErrorWhileLoadingDynamicScript) {
+      toast.error(
+        <ToastContent
+          isDanger
+          showCloseButton
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.url})}
+        />
+      );
     }
-  }, [plugin, ready, failed]);
+  }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.url, t]);
 
   if (!space) {
     return null;
@@ -49,7 +65,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
     <styled.Inner>
       <SpaceTopBar
         title={space.name ?? ''}
-        subtitle={plugin.subtitle}
+        subtitle={pluginLoader.subtitle}
         isAdmin={space.isAdmin}
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
@@ -66,9 +82,9 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin}) => {
         <actions.main />
       </SpaceTopBar>
       <styled.Container>
-        {!failed && !plugin.isErrorWhileLoadingComponent ? (
-          ready && plugin.Component ? (
-            <plugin.Component
+        {!pluginLoader.isErrorWhileLoadingComponent ? (
+          plugin?.SpaceExtension ? (
+            <plugin.SpaceExtension
               theme={theme}
               isSpaceAdmin={space.isAdmin}
               spaceId={space.id}
