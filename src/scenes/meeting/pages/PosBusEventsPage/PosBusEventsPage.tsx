@@ -9,6 +9,7 @@ import {ROUTES} from 'core/constants';
 import {LiveStreamInterface} from 'api';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {ToastContent, TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {PosBusScreenShareMessageType} from 'core/types';
 
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
@@ -229,6 +230,13 @@ const PosBusEventsPage: FC = () => {
       stageModeStore.removeAwaitingPermissionPopup();
       agoraStageModeStore.requestToGoOnstageWasHandled();
     }
+  });
+
+  usePosBusEvent('screen-share', (message: PosBusScreenShareMessageType) => {
+    console.info('[POSBUS EVENT] screen-share', message);
+    const {spaceId} = message;
+
+    history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
   });
 
   usePosBusEvent('stage-mode-declined', (userId: string) => {

@@ -11,7 +11,8 @@ import {
   PosBusCollaborationMessageType,
   PosBusCommunicationMessageType,
   PosBusEmojiMessageType,
-  PosBusMegamojiMessageType
+  PosBusMegamojiMessageType,
+  PosBusScreenShareMessageType
 } from 'core/types';
 
 class PosBusService {
@@ -108,6 +109,10 @@ class PosBusService {
     PosBusEventEmitter.emit('notify-gathering-start', message);
   }
 
+  static handleScreenShareStart(message: PosBusScreenShareMessageType) {
+    PosBusEventEmitter.emit('screen-share', message);
+  }
+
   static handlePosBusMessage(message: PosBusMessageStatusType) {
     switch (message.status) {
       case 'connected':
@@ -156,6 +161,9 @@ class PosBusService {
         break;
       case 'posbus':
         this.handlePosBusMessage(message as PosBusMessageStatusType);
+        break;
+      case 'screen-share':
+        this.handleScreenShareStart(message as PosBusScreenShareMessageType);
         break;
       default:
         console.debug('Unknown relay message type', target);

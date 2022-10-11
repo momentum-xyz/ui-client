@@ -27,7 +27,8 @@ const AgoraScreenShareStore = types
       spaceId: types.maybe(types.string),
       appId: '',
       isStageMode: false,
-      isSettingUp: false
+      isSettingUp: false,
+      isScreenSharing: false
     })
   )
   .volatile<{client?: IAgoraRTCClient; _videoTrack?: IRemoteVideoTrack}>(() => ({
@@ -40,6 +41,12 @@ const AgoraScreenShareStore = types
     },
     set videoTrack(track: IRemoteVideoTrack | undefined) {
       self._videoTrack = track;
+
+      if (self.isScreenSharing) {
+        self.request.send(api.agoraRepository.relayScreenShare, {
+          spaceId: self.spaceId
+        });
+      }
     }
   }))
   .actions((self) => ({
@@ -106,6 +113,8 @@ const AgoraScreenShareStore = types
         try {
           yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
           yield self.createScreenTrackAndPublish();
+
+          self.isScreenSharing = true;
         } catch {
           self.client.leave();
         } finally {
@@ -117,6 +126,7 @@ const AgoraScreenShareStore = types
       if (!self.videoTrack) {
         return;
       }
+      self.isScreenSharing = false;
 
       self.videoTrack.stop();
       self.videoTrack = undefined;
