@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {PanelLayout, Text} from '@momentum/ui-kit';
+import {PanelLayout, Text} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   display: flex;

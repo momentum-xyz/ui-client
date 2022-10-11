@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
-import {Dialog, Text} from '@momentum/ui-kit';
+import {Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';

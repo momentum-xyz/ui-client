@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Button, PanelLayout, Text} from '@momentum/ui-kit';
+import {Button, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 
 import {StageModePopupInfoInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';

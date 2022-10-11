@@ -44,6 +44,6 @@ switch (script) {
     }
     default:
         console.log(`Unknown script "${script}".`);
-        console.log("Perhaps you need to update @momentum/sdk?");
+        console.log("Perhaps you need to update @momentum-xyz/sdk?");
         break;
 }

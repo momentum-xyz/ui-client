@@ -1,5 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, UploadAvatarResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';

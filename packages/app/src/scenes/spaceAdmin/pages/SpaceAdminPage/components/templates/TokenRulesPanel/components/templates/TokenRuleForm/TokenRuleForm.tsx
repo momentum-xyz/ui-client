@@ -3,7 +3,14 @@ import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {Dialog, Input, Text, SearchDropdown, Loader, useDebouncedCallback} from '@momentum/ui-kit';
+import {
+  Dialog,
+  Input,
+  Text,
+  SearchDropdown,
+  Loader,
+  useDebouncedCallback
+} from '@momentum-xyz/ui-kit';
 
 import {TokenRuleFormInterface} from 'api';
 import {useStore} from 'shared/hooks';

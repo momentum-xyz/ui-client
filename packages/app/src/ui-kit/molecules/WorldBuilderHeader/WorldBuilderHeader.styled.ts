@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Heading} from '@momentum/ui-kit';
+import {Heading} from '@momentum-xyz/ui-kit';
 
 import blueBloc from 'static/images/blue-bloc.png';
 

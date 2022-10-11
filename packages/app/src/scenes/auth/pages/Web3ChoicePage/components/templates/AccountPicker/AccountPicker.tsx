@@ -2,7 +2,7 @@ import React, {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-import {PropsWithThemeInterface, Dropdown, OptionInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, Dropdown, OptionInterface} from '@momentum-xyz/ui-kit';
 
 import * as styled from './AccountPicker.styled';
 

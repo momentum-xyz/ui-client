@@ -1,4 +1,4 @@
-import {PluginInterface} from '@momentum/sdk';
+import {PluginInterface} from '@momentum-xyz/sdk';
 
 import SpaceApp from './SpaceApp';
 

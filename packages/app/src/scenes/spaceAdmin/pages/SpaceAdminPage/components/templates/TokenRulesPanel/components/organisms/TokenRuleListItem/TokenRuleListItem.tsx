@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {SvgButton, Text} from '@momentum/ui-kit';
+import {SvgButton, Text} from '@momentum-xyz/ui-kit';
 
 import * as styled from './TokenRuleListItem.styled';
 

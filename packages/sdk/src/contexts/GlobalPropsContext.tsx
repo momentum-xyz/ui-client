@@ -1,7 +1,7 @@
 import React, {FC, useContext} from 'react';
 import axios from 'axios';
 import {createContext} from 'react';
-import {DefaultThemeConfig} from '@momentum/ui-kit';
+import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
 import {SpacePluginPropsInterface} from '../interfaces';
 

@@ -1,5 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum/core';
+import {ResetModel} from '@momentum-xyz/core';
 
 import {OnlineUsersList} from 'core/models';
 import {ExploreStore} from 'scenes/widgets/stores/ExploreStore';

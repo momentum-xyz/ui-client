@@ -9,7 +9,7 @@ import {
   PanelLayout,
   SearchDropdown,
   Text
-} from '@momentum/ui-kit';
+} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {VisualSettingsPanel} from 'ui-kit';

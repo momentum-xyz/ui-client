@@ -1,7 +1,7 @@
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 import {IAgoraRTCRemoteUser, IRemoteAudioTrack, IRemoteVideoTrack} from 'agora-rtc-sdk-ng';
 import {flow, Instance, types} from 'mobx-state-tree';
-import {ImageSizeEnum} from '@momentum/ui-kit';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {api, ProfileResponse, UserProfileInterface} from 'api';
 import {appVariables} from 'api/constants';

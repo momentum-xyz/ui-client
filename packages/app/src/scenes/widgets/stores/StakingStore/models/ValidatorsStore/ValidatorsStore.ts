@@ -1,8 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {values} from 'mobx';
 import {BN, formatBalance} from '@polkadot/util';
-import {RequestModel, ResetModel} from '@momentum/core';
-import {IconNameType} from '@momentum/ui-kit';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {IconNameType} from '@momentum-xyz/ui-kit';
 
 import {ValidatorItemModel} from 'core/models';
 import {api, FetchValidatorsResponseInterface} from 'api';

@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from '@momentum/ui-kit';
+import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

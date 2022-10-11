@@ -1,5 +1,5 @@
 import {types, flow} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {api, AppConfigResponse} from 'api';
 import {appVariables, appVariablesOverrides} from 'api/constants';

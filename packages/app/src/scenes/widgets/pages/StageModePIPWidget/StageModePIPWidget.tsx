@@ -3,7 +3,7 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import DraggableContent from 'react-draggable';
-import {IconSvg, Portal, Text} from '@momentum/ui-kit';
+import {IconSvg, Portal, Text} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';

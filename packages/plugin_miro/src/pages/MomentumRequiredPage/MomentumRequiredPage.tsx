@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {PropsWithThemeInterface, Text} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, Text} from '@momentum-xyz/ui-kit';
 
 import * as styled from './MomentumRequiredPage.styled';
 

@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 

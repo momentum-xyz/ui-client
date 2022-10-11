@@ -14,7 +14,7 @@ module.exports = {
         algorithm: 'gzip'
       }),
       new ModuleFederationPlugin({
-        name: "core",
+        name: "app",
         remotes: {},
         shared: {
           react: {

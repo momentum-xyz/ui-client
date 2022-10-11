@@ -1,5 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {api, MagicLinkResponse} from 'api';
 import {MagicTypeEnum} from 'core/enums';

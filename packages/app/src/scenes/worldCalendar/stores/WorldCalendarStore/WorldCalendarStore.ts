@@ -1,5 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel, Dialog} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {EventForm, EventItemInterface, EventList} from 'core/models';
 import {api} from 'api';

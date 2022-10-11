@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import AgoraRTM, {RtmChannel, RtmClient, RtmMessage, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
-import {RequestModel, ResetModel, Dialog} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {MessageInterface} from 'core/interfaces';
 import {api, ProfileResponse} from 'api';

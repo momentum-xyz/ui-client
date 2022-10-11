@@ -2,8 +2,8 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginTopBarActionInterface} from '@momentum/sdk';
-import {Text} from '@momentum/ui-kit';
+import {PluginTopBarActionInterface} from '@momentum-xyz/sdk';
+import {Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 

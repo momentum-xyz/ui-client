@@ -1,6 +1,6 @@
 import React from 'react';
 import {generatePath, Redirect} from 'react-router-dom';
-import {NavigationTabInterface} from '@momentum/ui-kit';
+import {NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 

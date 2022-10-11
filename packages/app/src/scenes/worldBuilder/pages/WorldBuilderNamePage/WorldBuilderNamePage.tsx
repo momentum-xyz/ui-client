@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {Text, slugify} from '@momentum/ui-kit';
+import {Text, slugify} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {Page, WorldBuilderFooter, WorldBuilderHeader} from 'ui-kit';

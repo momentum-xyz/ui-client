@@ -1,7 +1,7 @@
 import {flow, Instance, types} from 'mobx-state-tree';
-import {IconNameType} from '@momentum/ui-kit';
-import {PluginInterface} from '@momentum/sdk';
-import {ResetModel} from '@momentum/core';
+import {IconNameType} from '@momentum-xyz/ui-kit';
+import {PluginInterface} from '@momentum-xyz/sdk';
+import {ResetModel} from '@momentum-xyz/core';
 
 const PluginLoader = types
   .compose(

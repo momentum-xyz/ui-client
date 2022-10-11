@@ -3,7 +3,7 @@ import {t} from 'i18next';
 import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
-import {PageTopBar} from '@momentum/ui-kit';
+import {PageTopBar} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {CountdownDialog, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';

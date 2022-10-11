@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Steps} from '@momentum/ui-kit';
+import {Steps} from '@momentum-xyz/ui-kit';
 
 import * as styled from './WorldBuilderFooter.styled';
 

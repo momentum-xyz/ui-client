@@ -1,5 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {TileInterface, TileListInterface} from 'core/models';
 import {VideoTypeEnum} from 'core/enums';

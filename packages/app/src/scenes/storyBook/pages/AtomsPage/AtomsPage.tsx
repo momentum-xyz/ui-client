@@ -16,7 +16,7 @@ import {
   Tooltip,
   PageTopBar,
   ToolbarIcon
-} from '@momentum/ui-kit';
+} from '@momentum-xyz/ui-kit';
 
 import * as styled from './AtomsPage.styled';
 

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {PropsWithThemeInterface, Loader} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, Loader} from '@momentum-xyz/ui-kit';
 
 import {EventItem} from 'ui-kit';
 import {EventItemInterface} from 'core/models';

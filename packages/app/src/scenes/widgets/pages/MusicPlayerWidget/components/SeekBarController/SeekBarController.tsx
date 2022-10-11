@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {formatDurationTime} from '@momentum/core';
+import {formatDurationTime} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 

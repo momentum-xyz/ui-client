@@ -3,7 +3,7 @@ import {toast} from 'react-toastify';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading, Avatar, Button, Input, Text, TextArea} from '@momentum/ui-kit';
+import {Heading, Avatar, Button, Input, Text, TextArea} from '@momentum-xyz/ui-kit';
 
 import {UpdateProfileInterface} from 'api';
 import {useStore} from 'shared/hooks';

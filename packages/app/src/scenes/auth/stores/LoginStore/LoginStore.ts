@@ -1,7 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
 import {UserManager} from 'oidc-client-ts';
 import {t} from 'i18next';
-import {ResetModel} from '@momentum/core';
+import {ResetModel} from '@momentum-xyz/core';
 
 import {storage} from 'shared/services';
 import {ROUTES} from 'core/constants';

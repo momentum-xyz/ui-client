@@ -2,7 +2,7 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
-import {Heading, Text, Button} from '@momentum/ui-kit';
+import {Heading, Text, Button} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

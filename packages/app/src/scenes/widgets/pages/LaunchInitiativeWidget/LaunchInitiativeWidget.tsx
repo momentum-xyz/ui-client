@@ -2,8 +2,8 @@ import React, {FC} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
-import {Dialog, Input, TextArea} from '@momentum/ui-kit';
-import {SpaceTypeEnum} from '@momentum/core';
+import {Dialog, Input, TextArea} from '@momentum-xyz/ui-kit';
+import {SpaceTypeEnum} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';

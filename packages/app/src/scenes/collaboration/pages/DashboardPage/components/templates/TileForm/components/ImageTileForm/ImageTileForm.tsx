@@ -4,7 +4,7 @@ import {useTheme} from 'styled-components';
 import cn from 'classnames';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {Button, Loader} from '@momentum/ui-kit';
+import {Button, Loader} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';

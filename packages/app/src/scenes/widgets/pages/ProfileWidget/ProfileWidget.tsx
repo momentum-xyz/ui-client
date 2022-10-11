@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {SvgButton, PanelLayout} from '@momentum/ui-kit';
+import {SvgButton, PanelLayout} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

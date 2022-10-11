@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Heading, SearchInput, Text} from '@momentum/ui-kit';
+import {Heading, SearchInput, Text} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   padding-right: 10px;

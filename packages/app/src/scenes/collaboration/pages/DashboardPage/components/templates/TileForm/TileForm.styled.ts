@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Heading} from '@momentum/ui-kit';
+import {Heading} from '@momentum-xyz/ui-kit';
 
 export const DropDownContainer = styled.div`
   width: 100%;

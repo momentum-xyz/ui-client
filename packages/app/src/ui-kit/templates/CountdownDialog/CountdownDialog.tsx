@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {t} from 'i18next';
-import {Heading, Dialog, Text} from '@momentum/ui-kit';
+import {Heading, Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import * as styled from './CountdownDialog.styled';
 

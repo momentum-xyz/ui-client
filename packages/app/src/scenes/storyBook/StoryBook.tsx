@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PageTopBar, Navigation, NavigationTabInterface} from '@momentum/ui-kit';
+import {PageTopBar, Navigation, NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';

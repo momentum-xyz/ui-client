@@ -1,7 +1,7 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {PanelLayout, Emoji} from '@momentum/ui-kit';
+import {PanelLayout, Emoji} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';

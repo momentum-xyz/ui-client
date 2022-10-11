@@ -1,5 +1,5 @@
 import {generatePath} from 'react-router-dom';
-import {RequestInterface} from '@momentum/core';
+import {RequestInterface} from '@momentum-xyz/core';
 
 import {integrationRepositoryEndpoints} from './integrationRepository.api.endpoints';
 import {

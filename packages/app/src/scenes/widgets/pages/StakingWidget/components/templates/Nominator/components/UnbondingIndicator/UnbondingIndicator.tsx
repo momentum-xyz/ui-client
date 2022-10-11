@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {t} from 'i18next';
 import {formatBalance, formatNumber} from '@polkadot/util';
 import {observer} from 'mobx-react-lite';
-import {PropsWithThemeInterface, IconSvg, Text, Tooltip} from '@momentum/ui-kit';
+import {PropsWithThemeInterface, IconSvg, Text, Tooltip} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

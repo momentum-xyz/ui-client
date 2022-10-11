@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {toast} from 'react-toastify';
-import {PropsWithThemeInterface, Dialog, Input} from '@momentum/ui-kit';
-import {copyToClipboard} from '@momentum/core';
+import {PropsWithThemeInterface, Dialog, Input} from '@momentum-xyz/ui-kit';
+import {copyToClipboard} from '@momentum-xyz/core';
 
 import * as styled from './LinkDialog.styled';
 

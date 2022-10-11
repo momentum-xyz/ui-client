@@ -1,5 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {Dialog, ResetModel} from '@momentum/core';
+import {Dialog, ResetModel} from '@momentum-xyz/core';
 
 import {MusicPlayer, Playlist} from './models';
 

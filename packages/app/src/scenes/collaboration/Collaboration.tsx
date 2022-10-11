@@ -3,7 +3,7 @@ import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-d
 import {useTranslation} from 'react-i18next';
 import {observer, useObserver} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Navigation, NavigationTabInterface} from '@momentum/ui-kit';
+import {Navigation, NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';

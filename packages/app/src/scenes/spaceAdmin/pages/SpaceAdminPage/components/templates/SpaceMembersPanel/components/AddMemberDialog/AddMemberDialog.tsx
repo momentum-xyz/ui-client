@@ -3,8 +3,8 @@ import {t} from 'i18next';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Dialog, Dropdown, Text, SearchDropdown, useDebouncedCallback} from '@momentum/ui-kit';
-import {validateEmail} from '@momentum/core';
+import {Dialog, Dropdown, Text, SearchDropdown, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {validateEmail} from '@momentum-xyz/core';
 
 import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
-import {Button, Text, Avatar} from '@momentum/ui-kit';
+import {Button, Text, Avatar} from '@momentum-xyz/ui-kit';
 
 export const Buttons = styled.div`
   display: flex;

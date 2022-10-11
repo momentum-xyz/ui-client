@@ -1,5 +1,5 @@
 import {AxiosInstance} from 'axios';
-import {ThemeInterface} from '@momentum/ui-kit';
+import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
 export interface CorePluginPropsInterface {
   theme: ThemeInterface;
