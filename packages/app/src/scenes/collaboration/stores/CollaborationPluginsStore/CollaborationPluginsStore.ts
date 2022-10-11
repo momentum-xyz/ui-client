@@ -3,8 +3,7 @@ import {ResetModel} from '@momentum/core';
 
 import {appVariables} from 'api/constants';
 import {PluginInterface} from 'core/interfaces';
-
-import {PluginLoader} from './models/PluginLoader';
+import {PluginLoader} from 'core/models';
 
 const COLLABORATION_PLUGIN_LIST: PluginInterface[] = [
   {

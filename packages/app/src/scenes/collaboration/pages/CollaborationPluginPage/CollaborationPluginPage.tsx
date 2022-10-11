@@ -10,7 +10,7 @@ import {toast} from 'react-toastify';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar, TextChat, ToastContent} from 'ui-kit';
-import {PluginLoaderModelType} from 'scenes/collaboration/stores/CollaborationPluginsStore/models';
+import {PluginLoaderModelType} from 'core/models';
 import {request} from 'api/request';
 
 import * as styled from './CollaborationPluginPage.styled';

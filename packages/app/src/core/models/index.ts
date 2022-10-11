@@ -22,3 +22,4 @@ export * from './OnlineUsersList';
 export * from './EmojiDetails';
 export * from './EventForm';
 export * from './EventList';
+export * from './PluginLoader';
