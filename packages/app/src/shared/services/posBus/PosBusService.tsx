@@ -11,7 +11,8 @@ import {
   PosBusCollaborationMessageType,
   PosBusCommunicationMessageType,
   PosBusEmojiMessageType,
-  PosBusMegamojiMessageType
+  PosBusMegamojiMessageType,
+  PosBusFlyWithMeType
 } from 'core/types';
 
 class PosBusService {
@@ -118,6 +119,14 @@ class PosBusService {
     }
   }
 
+  static handleStartFlyWithMeMessage(message: PosBusFlyWithMeType) {
+    PosBusEventEmitter.emit('start-fly-with-me', message.spaceId, message.pilot, message.pilotName);
+  }
+
+  static handleStopFlyWithMeMessage(message: PosBusFlyWithMeType) {
+    PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilot, message.pilotName);
+  }
+
   static handleRelayMessage(target: string, message: any): void {
     console.log('[unity message]:', target, message);
     switch (target) {
@@ -153,6 +162,12 @@ class PosBusService {
         break;
       case 'posbus':
         this.handlePosBusMessage(message as PosBusMessageStatusType);
+        break;
+      case 'start-fly-with-me':
+        this.handleStartFlyWithMeMessage(message as PosBusFlyWithMeType);
+        break;
+      case 'stop-fly-with-me':
+        this.handleStopFlyWithMeMessage(message as PosBusFlyWithMeType);
         break;
       default:
         console.debug('Unknown relay message type', target);

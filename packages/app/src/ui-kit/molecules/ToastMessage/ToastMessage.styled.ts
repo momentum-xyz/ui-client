@@ -7,7 +7,8 @@ export const Div = styled.div``;
 export const ToastContainerStyled = styled(ToastContainer)`
   &&&.Toastify__toast-container {
     text-align: center;
-    margin: 40px 10px;
+    margin: 40px 0px;
+    padding: 0px;
     width: 490px;
     color: ${(props) => props.theme.text} !important;
   }
