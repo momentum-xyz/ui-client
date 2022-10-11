@@ -4,7 +4,7 @@ import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful
 
 import {COLUMNS} from 'core/constants';
 import {TileInterface} from 'core/models';
-import {StreamChat} from 'scenes/collaboration/components/StreamChat';
+import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 
 import {TileItem} from './components/TileItem';

@@ -7,7 +7,7 @@ import {Button} from '@momentum/ui-kit';
 import {ROUTES} from 'core/constants';
 import {useStore, useGooglePicker} from 'shared/hooks';
 import {SpaceTopBar} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components/StreamChat';
+import {StreamChat} from 'scenes/collaboration/components';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';

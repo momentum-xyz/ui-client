@@ -8,7 +8,7 @@ import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
 import {SpaceTopBar} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components/StreamChat';
+import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 
 import {MiroBoard, MiroChoice} from './components/templates';

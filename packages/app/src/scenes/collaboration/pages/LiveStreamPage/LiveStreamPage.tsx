@@ -6,7 +6,7 @@ import {Button} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {SpaceTopBar} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components/StreamChat';
+import {StreamChat} from 'scenes/collaboration/components';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './LiveStreamPage.styled';

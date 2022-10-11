@@ -12,7 +12,7 @@ import {
 import 'stream-chat-react/dist/css/v2/index.css';
 
 import * as styled from './StreamChat.styled';
-import {CustomMessageInput} from './components/CustomMessageInput';
+import {CustomMessageInput} from './components/';
 
 interface PropsInterface {
   client: StreamChat;

@@ -6,7 +6,7 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {Toggle, Button, Text} from '@momentum/ui-kit';
 
 import {Stage, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components/StreamChat';
+import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';

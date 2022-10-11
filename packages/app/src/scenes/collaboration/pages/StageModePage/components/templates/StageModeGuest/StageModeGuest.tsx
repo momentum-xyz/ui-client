@@ -6,7 +6,7 @@ import {Button, Text} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent, SpaceTopBar, Stage} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components/StreamChat';
+import {StreamChat} from 'scenes/collaboration/components';
 import {
   StageModePopupQueue,
   StageModeStats

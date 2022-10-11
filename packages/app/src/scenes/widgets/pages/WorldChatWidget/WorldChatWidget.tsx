@@ -5,7 +5,7 @@ import {useTheme} from 'styled-components';
 import {Dialog, Loader} from '@momentum/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {StreamChat} from 'scenes/collaboration/components/StreamChat';
+import {StreamChat} from 'scenes/collaboration/components';
 
 import * as styled from './WorldChatWidget.styled';
 
