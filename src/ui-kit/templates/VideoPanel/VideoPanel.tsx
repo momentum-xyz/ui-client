@@ -7,10 +7,10 @@ import * as styled from './VideoPanel.styled';
 
 interface PropsInterface {
   youtubeHash?: string;
-  onWidget?: boolean;
+  widgetMode?: boolean;
 }
 
-const VideoPanel: FC<PropsInterface> = ({youtubeHash, onWidget}) => {
+const VideoPanel: FC<PropsInterface> = ({youtubeHash, widgetMode}) => {
   const youtubeOptions = {
     playerVars: {
       autoplay: 1,
@@ -19,7 +19,7 @@ const VideoPanel: FC<PropsInterface> = ({youtubeHash, onWidget}) => {
   };
 
   return (
-    <styled.Container data-testid="VideoPanel-test" className={cn(onWidget && 'onWidget')}>
+    <styled.Container data-testid="VideoPanel-test" className={cn(widgetMode && 'widgetMode')}>
       <YouTube
         videoId={youtubeHash}
         className="youtube"

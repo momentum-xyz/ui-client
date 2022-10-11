@@ -24,7 +24,7 @@ export const Container = styled.div`
     height: 100%;
   }
 
-  &.onWidget {
+  &.widgetMode {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }

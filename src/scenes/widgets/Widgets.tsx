@@ -29,7 +29,7 @@ import WorldChatWidget from './pages/WorldChatWidget/WorldChatWidget';
 
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore, worldChatStore} = useStore();
-  const {worldStore, liveStreamStore, agoraStore} = mainStore;
+  const {worldStore, agoraStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
     stakingStore,
@@ -106,13 +106,7 @@ const Widgets: FC = () => {
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       {!location.pathname.includes('live-stream') && (
-        <LiveStreamPIPWidget
-          youtubeHash={liveStreamStore.broadcast.url}
-          spaceName={liveStreamStore.spaceName}
-          showWidget={liveStreamStore.showLiveStream}
-          hideWidget={liveStreamStore.hideWidget}
-          flyAround={!location.pathname.includes('collaboration')}
-        />
+        <LiveStreamPIPWidget flyAround={!location.pathname.includes('collaboration')} />
       )}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>

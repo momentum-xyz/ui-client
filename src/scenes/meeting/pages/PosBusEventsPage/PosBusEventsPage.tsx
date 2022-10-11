@@ -50,7 +50,7 @@ const PosBusEventsPage: FC = () => {
 
     if (liveStreamStore.isStreaming) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
-    } else if (liveStreamStore.liveStreamTab) {
+    } else if (liveStreamStore.isLiveStreamTab) {
       history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
     }
   });
