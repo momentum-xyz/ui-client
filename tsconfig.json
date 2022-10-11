@@ -2,15 +2,12 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "lib": [
-      "dom",
-      "es2020"
-    ],
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
     "noEmit": true,
     "noImplicitReturns": true,
@@ -22,11 +19,5 @@
     "noFallthroughCasesInSwitch": true,
     "module": "esnext"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+  "exclude": ["node_modules"]
 }

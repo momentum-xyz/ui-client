@@ -1,0 +1,19 @@
+{
+  "name": "@momentum/core",
+  "version": "0.1.0",
+  "license": "GPL-3.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist/",
+    "build": "yarn clean && tsc --listEmittedFiles",
+    "start": "tsc -w"
+  },
+  "dependencies": {
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "styled-components": "^5.3.3",
+    "mobx-state-tree": "^5.1.3"
+  }
+}
