@@ -61,7 +61,6 @@ const StreamChatStore = types.compose(
       }
     }))
     .actions((self) => {
-      let token: string | null = null;
       const timeNow = new Date();
       return {
         init: flow(function* (
@@ -71,15 +70,14 @@ const StreamChatStore = types.compose(
         ) {
           self.client = StreamChat.getInstance(appVariables.STREAMCHAT_KEY);
           const response = yield self.getChannelToken(spaceId);
-          token = response.token;
-          yield self.client.connectUser(
-            {
-              id: userId,
-              name: profile?.name,
-              image: profile?.avatarSrc
-            },
-            token
-          );
+
+          const userData = {
+            id: userId,
+            name: profile?.name,
+            image: profile?.avatarSrc
+          };
+          console.log('StreamChatStore: connectUser: ', {userId, userProfile: profile, userData});
+          yield self.client.connectUser(userData, response.token);
           self.setCurrentUserId(userId);
           self.currentChannel = self.client.channel(response.channel_type, response.channel);
 
@@ -124,8 +122,8 @@ const StreamChatStore = types.compose(
           }
         }),
         updateUser: flow(function* (userId: string, profile: UserProfileModelInterface) {
-          if (!token || !self.client) {
-            console.log('StreamChatStore: updateUser: client is not initialized', {token});
+          if (!self.client) {
+            console.log('StreamChatStore: updateUser: client is not initialized');
             return;
           }
           const userData = {
@@ -135,7 +133,10 @@ const StreamChatStore = types.compose(
           };
           console.log('StreamChatStore: updateUser: ', {userId, userProfile: profile, userData});
           try {
-            yield self.client.connectUser(userData, token);
+            // it updates the user in the stream chat system but it doesn't immediately propagates to all active users in the chat
+            // they support sending custom_events that need to be enabled in the server for our channel type
+            // that would perhaps broadcast the change to all users
+            yield self.client.upsertUser(userData);
           } catch (err) {
             console.log('StreamChatStore: updateUser: error:', err);
           }
