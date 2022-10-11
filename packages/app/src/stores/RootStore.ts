@@ -64,6 +64,11 @@ const RootStore = types
         ''
       );
 
+      if (!self.collaborationStore.streamChatStore.isLoggedOn) {
+        const {userId, profile} = self.sessionStore;
+        yield self.collaborationStore.streamChatStore.init(userId, spaceId, profile ?? undefined);
+      }
+
       console.log('---JOINED---');
     }),
     leaveMeetingSpace: flow(function* (isKicked = false) {
