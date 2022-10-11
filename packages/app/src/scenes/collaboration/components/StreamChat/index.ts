@@ -1,1 +1,1 @@
-export {default as StreamChat} from './Chat';
+export {default as StreamChat} from './StreamChat';

@@ -11,8 +11,8 @@ import {
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
 
-import * as styled from './Chat.styled';
-import {CustomMessageInput} from './CustomMessageInput';
+import * as styled from './StreamChat.styled';
+import {CustomMessageInput} from './components/CustomMessageInput';
 
 interface PropsInterface {
   client: StreamChat;
