@@ -4,20 +4,13 @@ import {RequestModel, ResetModel, Dialog} from '@momentum/core';
 
 import {appVariables} from 'api/constants';
 import {UserProfileModelInterface} from 'core/models';
-import {MessageInterface} from 'core/interfaces';
-import {api, ProfileResponse} from 'api';
+import {api} from 'api';
 
 const StreamChatStore = types.compose(
   ResetModel,
   types
     .model('StreamChatStore', {
-      currentUserId: '',
-      messages: types.optional(types.array(types.frozen<MessageInterface>()), []),
       numberOfUnreadMessages: 0,
-      numberOfReadMessages: 0,
-      request: types.optional(RequestModel, {}),
-      name: '',
-      messageSent: false,
       tokenRequest: types.optional(RequestModel, {}),
       textChatDialog: types.optional(Dialog, {})
     })
@@ -41,24 +34,8 @@ const StreamChatStore = types.compose(
         });
         return leaveResponse;
       }),
-      fetchUser: flow(function* (userId: string) {
-        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-          userId
-        });
-
-        if (response) {
-          self.name = response.name;
-        }
-        return response;
-      }),
-      setCurrentUserId(currentUser: string) {
-        self.currentUserId = currentUser;
-      },
       setNumberOfUnreadMessages(unreadMessages: number) {
         self.numberOfUnreadMessages = unreadMessages;
-      },
-      setNumberOfReadMessages(readMessages: number) {
-        self.numberOfReadMessages = readMessages;
       }
     }))
     .actions((self) => {
@@ -79,7 +56,6 @@ const StreamChatStore = types.compose(
           };
           console.log('StreamChatStore: connectUser: ', {userId, userProfile: profile, userData});
           yield self.client.connectUser(userData, response.token);
-          self.setCurrentUserId(userId);
           self.currentChannel = self.client.channel(response.channel_type, response.channel);
 
           const refreshUnreadCount = (timeNow?: Date) => {
