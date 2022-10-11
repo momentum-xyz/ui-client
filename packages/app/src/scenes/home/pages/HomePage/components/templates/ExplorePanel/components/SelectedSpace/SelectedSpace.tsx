@@ -1,11 +1,9 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 import {Heading, Text, Button} from '@momentum/ui-kit';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import {SpacesList} from '../SpacesList';
@@ -13,16 +11,12 @@ import {SpacesList} from '../SpacesList';
 import * as styled from './SelectedSpace.styled';
 
 const SelectedSpace: React.FC = () => {
-  const {
-    homeStore,
-    mainStore: {unityStore}
-  } = useStore();
+  const {homeStore, mainStore} = useStore();
+  const {unityStore} = mainStore;
   const {exploreStore} = homeStore;
-  const history = useHistory();
+  const {selectedSpace} = exploreStore;
 
   const {t} = useTranslation();
-
-  const {selectedSpace} = exploreStore;
 
   const handleFlyToSpace = () => {
     if (!selectedSpace?.id) {
@@ -30,7 +24,6 @@ const SelectedSpace: React.FC = () => {
     }
 
     unityStore.teleportToSpace(selectedSpace.id);
-    history.push(ROUTES.base);
   };
 
   const handleGoBack = () => {
