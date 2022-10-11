@@ -1,0 +1,63 @@
+name: Build and publish core package
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - core@[0-9]+.[0-9]+.[0-9]+*
+    paths:
+      - packages/core/**
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: packages/core
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: package-tag
+        name: Determine tag for package
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            VERSION="nightly"
+          elif [[ $GITHUB_REF == refs/heads/develop ]]; then
+            VERSION="latest"
+          elif [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          elif [[ $GITHUB_REF == refs/heads/release/* ]]; then
+            VERSION="release"
+          elif [[ $GITHUB_REF == refs/heads/* ]]; then
+            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
+          elif [[ $GITHUB_REF == refs/pull/* ]]; then
+            VERSION=pr-${{ github.event.number }}
+          fi
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "::set-output name=version::$(echo $VERSION)"
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@momentum-xyz'
+          cache: 'yarn'
+      - id: yarn-deps
+        name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - id: build
+        name: Yarn build
+        run: yarn run build
+      - id: publish
+        name: Publish NPM package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn publish --non-interactive --no-git-tag-version --tag $VERSION
