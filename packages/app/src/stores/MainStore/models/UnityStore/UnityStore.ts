@@ -77,6 +77,15 @@ const UnityStore = types
     setInitialVolume() {
       UnityService.setSoundEffectVolume(self.volume.toString());
     },
+    toggleMiniMap(): void {
+      UnityService.toggleMiniMap();
+    },
+    showMinimap(): void {
+      UnityService.showMinimap();
+    },
+    hideMinimap(): void {
+      UnityService.hideMinimap();
+    },
     mute() {
       if (!self.muted) {
         self.volume = 0;
@@ -109,6 +118,12 @@ const UnityStore = types
       message: string
     ) {
       UnityService.triggerInteractionMsg?.(interaction, targetId, flag, message);
+    },
+    startFlyWithMe(pilotId: string) {
+      UnityService.startFlyWithMe(pilotId);
+    },
+    disengageFlyWithMe() {
+      UnityService.disengageFlyWithMe();
     },
     leaveSpace(spaceId: string) {
       UnityService.leaveSpace(spaceId);

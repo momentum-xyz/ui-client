@@ -52,7 +52,7 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
       leaveTo="not-visible"
     >
       <Tooltip label={title} placement={toolTipPlacement}>
-        {link ? (
+        {link && !disabled ? (
           <NavLink
             to={{pathname: link, state}}
             activeClassName="active"

@@ -56,7 +56,14 @@ const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
       )}
       type={submit ? 'submit' : 'button'}
     >
-      {icon && <styled.Icon name={icon} size="normal" isDanger={variant === 'danger'} />}
+      {icon && (
+        <styled.Icon
+          name={icon}
+          size="normal"
+          isDanger={variant === 'danger'}
+          isDisabled={disabled}
+        />
+      )}
       {label}
     </styled.Button>
   );

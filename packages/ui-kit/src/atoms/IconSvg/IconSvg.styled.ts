@@ -70,6 +70,12 @@ export const Wrapper = styled.span`
   &.huge {
     width: var(--icon-size-huge);
   }
+
+  /* STATES */
+
+  &.disabled {
+    opacity: 0.2;
+  }
 `;
 
 export const Svg = styled.svg`

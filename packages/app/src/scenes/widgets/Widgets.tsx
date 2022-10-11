@@ -8,7 +8,6 @@ import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momen
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {switchFullscreen} from 'core/utils';
-import {UnityService} from 'shared/services';
 import {
   AttendeesWidget,
   HelpWidget,
@@ -26,8 +25,8 @@ import * as styled from './Widgets.styled';
 import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore} = useStore();
-  const {worldStore, agoraStore} = mainStore;
+  const {sessionStore, mainStore, widgetStore, flightStore} = useStore();
+  const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
     stakingStore,
@@ -77,9 +76,15 @@ const Widgets: FC = () => {
     {
       title: t('labels.calendar'),
       icon: 'calendar',
-      link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.worldCalendar
+      link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.worldCalendar,
+      disabled: flightStore.isFlightWithMe
     },
-    {title: t('labels.minimap'), icon: 'minimap', onClick: () => UnityService.toggleMiniMap()},
+    {
+      title: t('labels.minimap'),
+      icon: 'minimap',
+      onClick: () => unityStore.toggleMiniMap(),
+      disabled: flightStore.isFlightWithMe
+    },
     {
       title: t('labels.musicPlayer'),
       icon: 'music',
@@ -175,6 +180,7 @@ const Widgets: FC = () => {
               <ToolbarIcon
                 title={t('labels.staking')}
                 icon="wallet"
+                disabled={flightStore.isFlightWithMe}
                 onClick={() => {
                   stakingStore.setOperatorSpaceId('');
                   stakingDialog.open();
