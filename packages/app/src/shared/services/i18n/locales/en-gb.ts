@@ -335,7 +335,8 @@ export const enGb = {
       flyWithMeEnabled: 'Fly with me enabled',
       flyWithMeActivated: 'Fly with me has been activated',
       flyWithMeDisabled: 'Fly with me has been disabled',
-      flyWithMeBlocked: 'While in fly with me mode this functionality is blocked.'
+      flyWithMeBlocked: 'Some functionality, like entering spaces, has been disabled',
+      flyWithMeEnjoy: 'Sit back, relax and enjoy the ride.'
     },
     titles: {
       alert: 'alert',
