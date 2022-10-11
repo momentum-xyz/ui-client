@@ -96,9 +96,6 @@ const StreamChatStore = types.compose(
               'countUnread(timeNow):',
               self.currentChannel?.countUnread(timeNow)
             );
-            // if (event.total_unread_count !== undefined) {
-            //   self.setNumberOfUnreadMessages(event.total_unread_count);
-            // }
             refreshUnreadCount();
           };
           self.currentChannel.on('message.new', handleMsgEvent);

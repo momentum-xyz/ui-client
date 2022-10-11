@@ -14,12 +14,7 @@ interface PropsInterface {
 }
 
 const WorldChatWidget: FC<PropsInterface> = ({onClose}) => {
-  const {
-    worldChatStore,
-    mainStore
-    // sessionStore
-  } = useStore();
-  // const {worldId} = mainStore.worldStore;
+  const {worldChatStore, mainStore} = useStore();
   const {unityStore} = mainStore;
 
   const {t} = useTranslation();
@@ -41,13 +36,6 @@ const WorldChatWidget: FC<PropsInterface> = ({onClose}) => {
       }
     };
   }, [unityStore]);
-
-  // useEffect(() => {
-  //   if (!worldChatStore.isLoggedOn) {
-  //     console.log('WorldChatWidget - init store');
-  //     worldChatStore.init(sessionStore.userId, worldId, sessionStore.profile ?? undefined);
-  //   }
-  // }, [worldChatStore, sessionStore, worldId]);
 
   return (
     <Dialog

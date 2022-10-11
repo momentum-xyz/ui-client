@@ -6,8 +6,6 @@ import {ChatAutoComplete, SendButton, useMessageInputContext} from 'stream-chat-
  * Dropping upload and emoji features (for now).
  */
 export const CustomMessageInput = () => {
-  //const { t } = useTranslationContext();
-
   const {text, handleSubmit} = useMessageInputContext();
 
   return (

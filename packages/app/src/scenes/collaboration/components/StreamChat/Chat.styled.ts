@@ -102,23 +102,12 @@ export const Container = styled.div`
     border-inline: 1px solid var(--str-chat__primary-color);
   }
   .str-chat__message-metadata {
-    // display: flex;
-    // width: 100%;
-
     // to make the message groups visually separated
     margin-bottom: 12px;
 
     .str-chat__message-simple-name {
       color: var(--str-chat__primary-color);
-
-      // flex: 1;
-      // white-space: nowrap;
-      // text-overflow: ellipsis;
-      // overflow: hidden;
     }
-    // .str-chat__message-simple-timestamp {
-    //   flex: 1 0 auto;
-    // }
   }
   .str-chat__empty-channel {
     svg {
