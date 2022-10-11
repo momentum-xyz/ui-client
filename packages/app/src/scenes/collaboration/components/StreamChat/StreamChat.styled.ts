@@ -28,7 +28,7 @@ export const Container = styled.div`
 
   .str-chat {
     --str-chat__font-family: IBM Plex Sans, sans-serif;
-    font-size: 13px;
+    font-size: var(--font-size-s);
 
     --str-chat__primary-color: ${(props) => props.theme.accent};
     --str-chat__background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
@@ -91,7 +91,7 @@ export const Container = styled.div`
           padding: var(--str-chat__spacing-2) 0;
 
           .str-chat__message-textarea {
-            font-size: 13px;
+            font-size: var(--font-size-s);
           }
         }
       }
@@ -114,7 +114,7 @@ export const Container = styled.div`
       height: 55px;
     }
     .str-chat__empty-channel-text {
-      font-size: 13px;
+      font-size: var(--font-size-s);
     }
   }
 `;
