@@ -332,10 +332,10 @@ export const enGb = {
       startBuilding: 'Connect your wallet\n To start Building',
       savingSpaceDetailsSuceess: 'Space details saved succesfully!',
       stageIsFullTryAgain: 'Stage is full, please try again later...',
-      flyWithEnabled: 'Fly with me enabled',
-      flyWithActivated: 'Fly with me has been activated',
-      flyWithDisabled: 'Fly with me has been disabled',
-      flyWithBlocked: 'While in fly with me mode this functionality is blocked.'
+      flyWithMeEnabled: 'Fly with me enabled',
+      flyWithMeActivated: 'Fly with me has been activated',
+      flyWithMeDisabled: 'Fly with me has been disabled',
+      flyWithMeBlocked: 'While in fly with me mode this functionality is blocked.'
     },
     titles: {
       alert: 'alert',

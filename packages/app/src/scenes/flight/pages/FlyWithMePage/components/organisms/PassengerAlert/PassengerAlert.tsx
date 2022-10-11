@@ -9,7 +9,7 @@ const PassengerAlert: FC = () => {
 
   return (
     <styled.Content>
-      <Text size="s" text={t('messages.flyWithBlocked')} align="left" />
+      <Text size="s" text={t('messages.flyWithMeBlocked')} align="left" />
     </styled.Content>
   );
 };

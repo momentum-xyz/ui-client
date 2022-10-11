@@ -238,7 +238,7 @@ const PosBusEventsPage: FC = () => {
       toast.info(
         <ToastContent
           headerIconName="fly-with-me"
-          title={t('messages.flyWithActivated')}
+          title={t('messages.flyWithMeActivated')}
           text={t('textMessage.flyWithMeInvite', {name: pilotName})}
           declineInfo={{title: t('actions.decline')}}
           approveInfo={{
@@ -263,7 +263,7 @@ const PosBusEventsPage: FC = () => {
     toast.info(
       <ToastContent
         headerIconName="fly-with-me"
-        title={t('messages.flyWithDisabled')}
+        title={t('messages.flyWithMeDisabled')}
         text={t('textMessage.flyWithMeDisabled', {name: pilotName})}
         showCloseButton
       />,

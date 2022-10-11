@@ -22,7 +22,7 @@ const FlightPilot: FC<PropsInterface> = (props) => {
       <styled.UserContainer>
         <Text
           size="xs"
-          text={t('messages.flyWithEnabled')}
+          text={t('messages.flyWithMeEnabled')}
           weight="bold"
           transform="uppercase"
           isMultiline={false}

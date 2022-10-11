@@ -51,8 +51,8 @@ const FlyWithMePage: FC = () => {
       toast.info(
         <ToastContent
           headerIconName="alert"
-          title={t('messages.flyWithActivated')}
-          text={t('messages.flyWithBlocked')}
+          title={t('messages.flyWithMeActivated')}
+          text={t('messages.flyWithMeBlocked')}
           showCloseButton
         />,
         TOAST_GROUND_OPTIONS
