@@ -6,7 +6,8 @@ import {
   Channel as ChannelComponent,
   Window,
   VirtualizedMessageList,
-  MessageInput
+  MessageInput,
+  Streami18n
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
 
@@ -43,13 +44,19 @@ class ErrorBoundaries extends Component<unknown, StateInterface> {
   }
 }
 
+const i18nInstance = new Streami18n({
+  language: 'en'
+  // there's also this, but probably it's not needed with set language
+  // disableDateTimeTranslations: true
+});
+
 const SChat: FC<PropsInterface> = ({client, channel, fullWidth}) => {
   return (
     client &&
     channel && (
       <ErrorBoundaries>
         <styled.Container className={fullWidth ? 'full-width' : undefined}>
-          <Chat client={client} theme="str-chat__theme-dark">
+          <Chat client={client} theme="str-chat__theme-dark" i18nInstance={i18nInstance}>
             <ChannelComponent channel={channel} Input={CustomMessageInput}>
               <Window>
                 {/* <ChannelHeader /> */}
