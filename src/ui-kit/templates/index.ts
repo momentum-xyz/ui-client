@@ -8,3 +8,4 @@ export * from './TextChat';
 export * from './SystemWideError';
 export * from './SimpleProfileMenu';
 export * from './DeleteEventDialog';
+export * from './VideoPanel';

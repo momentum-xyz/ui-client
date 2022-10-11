@@ -49,7 +49,7 @@ const SpaceDetailsPanel: FC = () => {
           <ToastContent
             headerIconName="checkmark"
             title={t('titles.success')}
-            text={t('messages.savingSpaceDetailsSuceess')}
+            text={t('messages.savingSpaceDetailsSuccess')}
             showCloseButton
           />
         );
