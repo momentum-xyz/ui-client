@@ -84,6 +84,11 @@ const PluginLoader = types
 
       self.resetModel();
     }
+  }))
+  .views((self) => ({
+    get isError(): boolean {
+      return self.isErrorWhileLoadingComponent || self.isErrorWhileLoadingDynamicScript;
+    }
   }));
 
 export type PluginLoaderModelType = Instance<typeof PluginLoader>;

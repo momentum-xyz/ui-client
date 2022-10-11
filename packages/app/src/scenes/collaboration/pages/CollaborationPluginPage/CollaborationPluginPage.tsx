@@ -82,7 +82,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
         <actions.main />
       </SpaceTopBar>
       <styled.Container>
-        {!pluginLoader.isErrorWhileLoadingComponent ? (
+        {!pluginLoader.isError ? (
           plugin?.SpaceExtension ? (
             <plugin.SpaceExtension
               theme={theme}
