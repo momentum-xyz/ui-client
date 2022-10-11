@@ -3,8 +3,7 @@ import {ResetModel} from '@momentum/core';
 
 import {appVariables} from 'api/constants';
 import {PluginInterface} from 'core/interfaces';
-
-import {CollaborationPlugin} from './models/CollaborationPlugin/CollaborationPlugin';
+import {PluginLoader} from 'core/models';
 
 const COLLABORATION_PLUGIN_LIST: PluginInterface[] = [
   {
@@ -24,13 +23,13 @@ const CollaboarationPluginStore = types
   .compose(
     ResetModel,
     types.model('CollaboarationPluginStore', {
-      plugins: types.array(CollaborationPlugin)
+      pluginLoaders: types.array(PluginLoader)
     })
   )
   .actions((self) => ({
     init() {
       // TODO: Later change it to API call that returns this list
-      self.plugins = cast(COLLABORATION_PLUGIN_LIST);
+      self.pluginLoaders = cast(COLLABORATION_PLUGIN_LIST);
     }
   }));
 
