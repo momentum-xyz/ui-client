@@ -24,6 +24,8 @@ const ScreenSharePage: FC = () => {
 
   useEffect(() => {
     if (videoTrack) {
+      screenShareStore.relayScreenShare(space?.id ?? '');
+
       const agoraUserId = videoTrack.getUserId() as string;
       screenShareStore.setScreenOwner(agoraUserId);
     } else {
