@@ -41,7 +41,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
 
   useEffect(() => {
     setValue('profile.image', profileStore.selectedImage);
-  }, [profileStore.selectedImage]);
+  }, [profileStore.selectedImage, setValue]);
 
   useEffect(() => {
     if (!userProfile?.profile) {
