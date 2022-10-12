@@ -5,6 +5,7 @@ export const agoraRepositoryApiEndpoints = () => {
 
   return {
     token: `${BASE_URL}/token/:channelId`,
-    tokenScreenshare: `${BASE_URL}/token/:channelId/screenshare`
+    tokenScreenshare: `${BASE_URL}/token/:channelId/screenshare`,
+    relayScreenShare: `${BASE_URL}/screen-share/:spaceId`
   };
 };
