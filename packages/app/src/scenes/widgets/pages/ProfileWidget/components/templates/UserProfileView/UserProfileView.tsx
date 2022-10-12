@@ -21,7 +21,7 @@ interface PropsInterface {
 }
 
 const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, userId}) => {
-  const {widgetStore, mainStore, homeStore} = useStore();
+  const {widgetStore, mainStore, homeStore, flightStore} = useStore();
   const {profileStore} = widgetStore;
   const {unityStore, worldStore} = mainStore;
   const {userSpaceList, userProfile} = profileStore;
@@ -74,7 +74,12 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
             <Button label={t('actions.flyTo')} onClick={handleFlyToUser} size="small" />
             {userProfile?.status !== UserStatusEnum.DO_NOT_DISTURB && (
               <>
-                <Button label={t('actions.grabTable')} onClick={grabATable} size="small" />
+                <Button
+                  label={t('actions.grabTable')}
+                  onClick={grabATable}
+                  size="small"
+                  disabled={flightStore.isFlightWithMe}
+                />
                 <Button label={t('actions.highFive')} onClick={handleHighFive} size="small" />
               </>
             )}
