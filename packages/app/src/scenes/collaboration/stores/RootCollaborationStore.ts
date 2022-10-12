@@ -74,7 +74,6 @@ const RootCollaborationStore = types
         self.textChatStore.resetModel();
 
         yield self.streamChatStore.deinit(self.space?.id);
-        self.streamChatStore.resetModel();
 
         self.space = undefined;
         self.isModerator = false;
