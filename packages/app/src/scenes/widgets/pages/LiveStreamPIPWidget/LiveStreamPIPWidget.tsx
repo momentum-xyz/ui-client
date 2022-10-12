@@ -3,7 +3,7 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import DraggableContent from 'react-draggable';
 import {useTranslation} from 'react-i18next';
-import {Portal, SvgButton, Text} from '@momentum/ui-kit';
+import {Portal, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 
 import {ROUTES} from 'core/constants';
@@ -11,8 +11,6 @@ import {useStore} from 'shared/hooks';
 import {VideoPanel} from 'ui-kit';
 
 import * as styled from './LiveStreamPIPWidget.styled';
-
-const Draggable: any = DraggableContent;
 
 interface PropsInterface {
   flyAround?: boolean;
@@ -30,7 +28,7 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
 
   return (
     <Portal>
-      <Draggable>
+      <DraggableContent>
         <styled.Container
           data-testid="LiveStreamPIPWidget-test"
           className={cn(!flyAround && 'notFlyAround')}
@@ -88,7 +86,7 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
             />
           </styled.HeaderElement>
         </styled.Container>
-      </Draggable>
+      </DraggableContent>
     </Portal>
   );
 };
