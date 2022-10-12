@@ -1,6 +1,6 @@
 {
   "name": "@momentum-xyz/ui-kit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "GPL-3.0",
   "private": true,
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
     "@headlessui/react": "^1.2.0",
     "react-router-dom": "^5.2.0",
     "svg-sprite": "^1.5.4",
-    "@momentum-xyz/core": "^0.1.0"
+    "@momentum-xyz/core": "^0.1.1"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",
