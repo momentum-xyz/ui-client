@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {PluginTopBarActionInterface} from '@momentum-xyz/sdk';
-import {Text} from '@momentum-xyz/ui-kit';
+import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 
@@ -84,13 +84,15 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
       <styled.Container>
         {!pluginLoader.isError ? (
           plugin?.SpaceExtension ? (
-            <plugin.SpaceExtension
-              theme={theme}
-              isSpaceAdmin={space.isAdmin}
-              spaceId={space.id}
-              request={request}
-              renderTopBarActions={renderTopBarActions}
-            />
+            <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
+              <plugin.SpaceExtension
+                theme={theme}
+                isSpaceAdmin={space.isAdmin}
+                spaceId={space.id}
+                request={request}
+                renderTopBarActions={renderTopBarActions}
+              />
+            </ErrorBoundary>
           ) : (
             <Text text={t('messages.loadingPlugin')} size="l" />
           )

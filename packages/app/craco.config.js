@@ -30,32 +30,32 @@ module.exports = {
           mobx: { 
             singleton: true, 
             eager: true,
-            requiredVersion: ">=6.4.2"
+            requiredVersion: "^6.4.2"
           },
           "mobx-react-lite": { 
             singleton: true, 
             eager: true,
-            requiredVersion: ">=3.3.0"
+            requiredVersion: "^3.3.0"
           },
           "mobx-state-tree": { 
             singleton: true, 
             eager: true,
-            requiredVersion: ">=5.1.3"
+            requiredVersion: "^5.1.3"
           },
           "styled-components": { 
             singleton: true, 
             eager: true,
-            requiredVersion: ">=5.3.5"
+            requiredVersion: "^5.3.5"
           },
           "axios": {
             singleton: true,
             eager: true,
-            requiredVersion: ">=0.21.4"
+            requiredVersion: "^0.21.4"
           },
           "axios-auth-refresh": {
             singleton: true,
             eager: true,
-            requiredVersion: ">=3.2.2"
+            requiredVersion: "^3.2.2"
           }
         }
       })
