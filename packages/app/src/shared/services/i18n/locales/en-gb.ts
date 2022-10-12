@@ -873,7 +873,8 @@ export const enGb = {
           },
           four: 'Wanna chat, or have any more questions, crazy ideas or suggestions to us? Check out our momentum space. LFG!'
         },
-        visitSpace: 'Visit the Momentum Space'
+        visitSpace: 'Visit the Momentum Space',
+        visitSpaceDisabled: 'Disabled during Fly with me'
       },
       wiki: {
         title: 'Wiki',
