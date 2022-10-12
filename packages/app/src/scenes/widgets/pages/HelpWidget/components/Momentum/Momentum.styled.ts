@@ -19,3 +19,10 @@ export const Buttons = styled.div`
   align-items: center;
   padding: 20px 0;
 `;
+
+export const FlightWithMeTextItem = styled.div`
+  margin: -15px 0 0 0;
+  padding: 0 0 20px 0px;
+  font-size: var(--font-size-xs);
+  opacity: 0.5;
+`;
