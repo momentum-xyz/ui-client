@@ -114,9 +114,7 @@ const Widgets: FC = () => {
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
         </styled.EmojiBar>
       )}
-      {worldChatStore.textChatDialog.isOpen && (
-        <WorldChatWidget onClose={worldChatStore.textChatDialog.close} />
-      )}
+      {worldChatStore.isOpen && <WorldChatWidget onClose={worldChatStore.textChatDialog.close} />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -144,9 +142,7 @@ const Widgets: FC = () => {
             <ToolbarIcon
               icon="chat"
               title={
-                worldChatStore.textChatDialog.isOpen
-                  ? t('tooltipTitles.closeChat')
-                  : t('tooltipTitles.openChat')
+                worldChatStore.isOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')
               }
               onClick={worldChatStore.textChatDialog.toggle}
               size="normal-large"

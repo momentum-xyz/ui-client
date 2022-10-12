@@ -120,6 +120,9 @@ const StreamChatStore = types.compose(
     .views((self) => ({
       get isLoggedOn(): boolean {
         return !!self.client && !!self.currentChannel;
+      },
+      get isOpen(): boolean {
+        return self.textChatDialog.isOpen;
       }
     }))
 );

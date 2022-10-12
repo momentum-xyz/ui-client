@@ -33,7 +33,7 @@ const LiveStreamPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={streamChatStore.textChatDialog.isOpen}
+        isChatOpen={streamChatStore.isOpen}
         toggleChat={streamChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={async () => {
@@ -51,11 +51,9 @@ const LiveStreamPage: FC = () => {
       </SpaceTopBar>
       <styled.Container>
         <VideoPanel youtubeHash={liveStreamStore.broadcast.url} />
-        {streamChatStore.textChatDialog.isOpen &&
-          streamChatStore.client &&
-          streamChatStore.currentChannel && (
-            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
-          )}
+        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
+          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
+        )}
       </styled.Container>
     </styled.Inner>
   );

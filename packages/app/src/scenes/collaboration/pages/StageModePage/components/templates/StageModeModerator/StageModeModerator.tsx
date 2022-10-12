@@ -97,7 +97,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           spaceId={space.id}
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-          isChatOpen={streamChatStore.textChatDialog.isOpen}
+          isChatOpen={streamChatStore.isOpen}
           toggleChat={streamChatStore.textChatDialog.toggle}
           numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
           editSpaceHidden
@@ -162,14 +162,9 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          {streamChatStore.textChatDialog.isOpen &&
-            streamChatStore.client &&
-            streamChatStore.currentChannel && (
-              <StreamChat
-                client={streamChatStore.client}
-                channel={streamChatStore.currentChannel}
-              />
-            )}
+          {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
+            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
+          )}
         </styled.Body>
       </styled.Container>
       {removeParticipantFromStageDialog.isOpen &&

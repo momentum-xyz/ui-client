@@ -19,7 +19,7 @@ const StageModePage: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const chatWasOpen = streamChatStore.textChatDialog.isOpen;
+    const chatWasOpen = streamChatStore.isOpen;
     streamChatStore.textChatDialog.open();
 
     return () => {

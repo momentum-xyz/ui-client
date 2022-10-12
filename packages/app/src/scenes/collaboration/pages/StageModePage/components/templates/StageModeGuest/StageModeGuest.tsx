@@ -61,7 +61,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
         isAdmin={space.isAdmin}
         spaceId={space.id}
-        isChatOpen={streamChatStore.textChatDialog.isOpen}
+        isChatOpen={streamChatStore.isOpen}
         toggleChat={streamChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
@@ -121,11 +121,9 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        {streamChatStore.textChatDialog.isOpen &&
-          streamChatStore.client &&
-          streamChatStore.currentChannel && (
-            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
-          )}
+        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
+          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
+        )}
       </styled.Body>
     </styled.Container>
   );
