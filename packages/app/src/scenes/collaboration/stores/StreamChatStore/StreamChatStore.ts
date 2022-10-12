@@ -21,25 +21,25 @@ const StreamChatStore = types
       .volatile<{currentChannel: Channel | null}>(() => ({
         currentChannel: null
       }))
-      .actions((self) => ({
-        getChannelToken: flow(function* (spaceId: string) {
-          const tokenResponse = yield self.tokenRequest.send(
-            api.streamChatRepository.getStreamChatToken,
-            {spaceId}
-          );
-          return tokenResponse;
-        }),
-        leaveChannel: flow(function* (spaceId: string) {
-          const leaveResponse = yield self.tokenRequest.send(api.streamChatRepository.leave, {
-            spaceId
-          });
-          return leaveResponse;
-        }),
-        setNumberOfUnreadMessages(unreadMessages: number) {
-          self.numberOfUnreadMessages = unreadMessages;
-        }
-      }))
   )
+  .actions((self) => ({
+    getChannelToken: flow(function* (spaceId: string) {
+      const tokenResponse = yield self.tokenRequest.send(
+        api.streamChatRepository.getStreamChatToken,
+        {spaceId}
+      );
+      return tokenResponse;
+    }),
+    leaveChannel: flow(function* (spaceId: string) {
+      const leaveResponse = yield self.tokenRequest.send(api.streamChatRepository.leave, {
+        spaceId
+      });
+      return leaveResponse;
+    }),
+    setNumberOfUnreadMessages(unreadMessages: number) {
+      self.numberOfUnreadMessages = unreadMessages;
+    }
+  }))
   .actions((self) => {
     const timeNow = new Date();
     return {
