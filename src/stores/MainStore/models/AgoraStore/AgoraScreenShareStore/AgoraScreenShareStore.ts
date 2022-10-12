@@ -117,7 +117,6 @@ const AgoraScreenShareStore = types
       if (!self.videoTrack) {
         return;
       }
-
       self.videoTrack.stop();
       self.videoTrack = undefined;
 
