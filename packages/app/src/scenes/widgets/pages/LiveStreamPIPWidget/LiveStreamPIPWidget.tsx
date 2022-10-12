@@ -15,26 +15,16 @@ import * as styled from './LiveStreamPIPWidget.styled';
 const Draggable: any = DraggableContent;
 
 interface PropsInterface {
-  youtubeHash?: string;
-  spaceName?: string;
-  hideWidget?: () => void;
-  showWidget?: boolean;
   flyAround?: boolean;
 }
 
-const LiveStreamPIPWidget: React.FC<PropsInterface> = ({
-  youtubeHash,
-  spaceName,
-  hideWidget,
-  showWidget,
-  flyAround
-}) => {
+const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
   const {mainStore} = useStore();
-  const {agoraStore} = mainStore;
+  const {agoraStore, liveStreamStore} = mainStore;
   const history = useHistory();
   const {t} = useTranslation();
 
-  if (!youtubeHash || !agoraStore.spaceId || !showWidget) {
+  if (!liveStreamStore.isLiveStreamShown || !agoraStore.spaceId) {
     return null;
   }
 
@@ -46,12 +36,12 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({
           className={cn(!flyAround && 'notFlyAround')}
         >
           <styled.VideoWrapper>
-            <VideoPanel youtubeHash={youtubeHash} onWidget />
+            <VideoPanel youtubeHash={liveStreamStore.broadcast.url} widgetMode />
           </styled.VideoWrapper>
           <styled.HeaderElement className="left">
             <styled.Title>
               <Text
-                text={spaceName}
+                text={liveStreamStore.spaceName}
                 transform="uppercase"
                 weight="bold"
                 size="l"
@@ -90,7 +80,12 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({
                 isWhite
               />
             )}
-            <SvgButton iconName="close" size="medium" isWhite onClick={hideWidget} />
+            <SvgButton
+              iconName="close"
+              size="medium"
+              isWhite
+              onClick={liveStreamStore.hideWidget}
+            />
           </styled.HeaderElement>
         </styled.Container>
       </Draggable>

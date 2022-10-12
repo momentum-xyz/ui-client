@@ -19,6 +19,9 @@ const LiveStreamPage: FC = () => {
 
   useEffect(() => {
     liveStreamStore.showWidget();
+    liveStreamStore.enteredLiveStreamTab();
+
+    return () => liveStreamStore.leftLiveStreamTab();
   }, [liveStreamStore]);
 
   if (!space) {
