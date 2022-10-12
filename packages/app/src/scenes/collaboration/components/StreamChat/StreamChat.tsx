@@ -1,6 +1,6 @@
 import React, {Component, FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {StreamChat, Channel} from 'stream-chat';
+import {StreamChat as StreamChatClient, Channel} from 'stream-chat';
 import {
   Chat,
   Channel as ChannelComponent,
@@ -15,7 +15,7 @@ import * as styled from './StreamChat.styled';
 import {CustomMessageInput} from './components/';
 
 interface PropsInterface {
-  client: StreamChat;
+  client: StreamChatClient;
   channel: Channel;
   fullWidth?: boolean;
 }
@@ -49,7 +49,7 @@ const i18nInstance = new Streami18n({
   // disableDateTimeTranslations: true
 });
 
-const SChat: FC<PropsInterface> = ({client, channel, fullWidth}) => {
+const StreamChat: FC<PropsInterface> = ({client, channel, fullWidth}) => {
   return (
     client &&
     channel && (
@@ -69,4 +69,4 @@ const SChat: FC<PropsInterface> = ({client, channel, fullWidth}) => {
   );
 };
 
-export default observer(SChat);
+export default observer(StreamChat);
