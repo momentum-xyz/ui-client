@@ -59,7 +59,7 @@ const SChat: FC<PropsInterface> = ({client, channel, fullWidth}) => {
             <ChannelComponent channel={channel} Input={CustomMessageInput}>
               <Window>
                 <VirtualizedMessageList disableDateSeparator shouldGroupByUser />
-                <MessageInput disableMentions={true} grow={true} maxRows={5} />
+                <MessageInput disableMentions grow maxRows={5} />
               </Window>
             </ChannelComponent>
           </Chat>
