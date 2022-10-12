@@ -10,9 +10,8 @@ import {StageModeGuest, StageModeModerator} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
-  const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
+  const {collaborationStore, leaveMeetingSpace} = useStore();
   const {streamChatStore} = collaborationStore;
-  const {agoraStore} = mainStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
 
@@ -27,7 +26,7 @@ const StageModePage: FC = () => {
         streamChatStore.textChatDialog.close();
       }
     };
-  }, [agoraStore]);
+  }, [streamChatStore]);
 
   const onLeaveMeeting = useCallback(async () => {
     await leaveMeetingSpace();
