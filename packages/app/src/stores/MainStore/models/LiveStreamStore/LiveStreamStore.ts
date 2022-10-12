@@ -12,7 +12,8 @@ const LiveStreamStore = types.compose(
       fetchRequest: types.optional(RequestModel, {}),
       broadcast: types.optional(types.frozen<BroadcastInterface>(), {}),
       spaceName: types.maybe(types.string),
-      showLiveStream: true
+      showLiveStream: true,
+      isLiveStreamTab: false
     })
     .actions((self) => ({
       fetchBroadcast: flow(function* (spaceId: string) {
@@ -42,16 +43,25 @@ const LiveStreamStore = types.compose(
       setBroadcast(broadcast: LiveStreamInterface): void {
         self.broadcast = cast(broadcast);
       },
-      showWidget() {
+      showWidget(): void {
         self.showLiveStream = true;
       },
-      hideWidget() {
+      hideWidget(): void {
         self.showLiveStream = false;
+      },
+      enteredLiveStreamTab(): void {
+        self.isLiveStreamTab = true;
+      },
+      leftLiveStreamTab(): void {
+        self.isLiveStreamTab = false;
       }
     }))
     .views((self) => ({
       get isStreaming(): boolean {
         return self.broadcast.broadcastStatus === BroadcastStatusEnum.PLAY;
+      },
+      get isLiveStreamShown(): boolean {
+        return !!self.broadcast.url && self.showLiveStream;
       }
     }))
 );

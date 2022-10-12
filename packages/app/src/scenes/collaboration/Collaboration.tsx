@@ -87,7 +87,7 @@ const Collaboration: FC = () => {
 
   useEffect(() => {
     mainStore.initBroadcast(spaceId);
-  }, [collaborationStore, spaceId]);
+  }, [mainStore, spaceId]);
 
   useEffect(() => {
     textChatStore.countUnreadMessages();
