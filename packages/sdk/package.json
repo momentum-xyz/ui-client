@@ -13,15 +13,15 @@
   },
   "dependencies": {
     "@momentum-xyz/ui-kit": "^0.1.1",
-    "@craco/craco": "^6.1.1"
+    "@craco/craco": "^6.1.1",
+    "axios": "^0.21.4"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1"
   },
   "peerDependencies": {
     "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "axios": "^0.21.4"
+    "react-dom": "^16.14.0"
   },
   "bin": {
     "momentum-plugin": "./bin/momentum-plugin.js"
