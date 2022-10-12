@@ -4,7 +4,12 @@ import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
 
 import {agoraRepositoryApiEndpoints} from './agoraRepository.api.endpoints';
-import {AgoraTokenRequest, AgoraTokenResponse} from './agoraRepository.api.types';
+import {
+  AgoraTokenRequest,
+  AgoraTokenResponse,
+  RelayScreenShareRequest,
+  RelayScreenShareResponse
+} from './agoraRepository.api.types';
 
 export const getAgoraToken: RequestInterface<AgoraTokenRequest, AgoraTokenResponse> = (options) => {
   const {isStageMode, spaceId, ...restOptions} = options;
@@ -26,4 +31,15 @@ export const getAgoraScreenShareToken: RequestInterface<AgoraTokenRequest, Agora
   });
 
   return request.get(url, restOptions);
+};
+
+export const relayScreenShare: RequestInterface<
+  RelayScreenShareRequest,
+  RelayScreenShareResponse
+> = (options) => {
+  const {spaceId, ...restOptions} = options;
+
+  const url = generatePath(agoraRepositoryApiEndpoints().relayScreenShare, {spaceId});
+
+  return request.post(url, restOptions);
 };

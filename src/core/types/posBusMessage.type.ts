@@ -27,6 +27,10 @@ export type PosBusGatheringMessageType = {
   start: Date;
 };
 
+export type PosBusScreenShareMessageType = {
+  spaceId: string;
+};
+
 export type PosBusVibeMessageType = {
   count: number;
   type: '-1' | '+1';

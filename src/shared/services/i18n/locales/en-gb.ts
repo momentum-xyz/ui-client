@@ -328,7 +328,7 @@ export const enGb = {
       worldBuilderDescription:
         'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
       startBuilding: 'Connect your wallet\n To start Building',
-      savingSpaceDetailsSuceess: 'Space details saved succesfully!',
+      savingSpaceDetailsSuccess: 'Space details saved successfully!',
       stageIsFullTryAgain: 'Stage is full, please try again later...'
     },
     titles: {

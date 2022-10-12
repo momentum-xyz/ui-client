@@ -9,18 +9,18 @@ import {ROUTES} from 'core/constants';
 import {LiveStreamInterface} from 'api';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {ToastContent, TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {PosBusScreenShareMessageType} from 'core/types';
 
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
-  const {agoraStore, unityStore} = mainStore;
+  const {agoraStore, liveStreamStore, unityStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
     invitedOnStageDialog,
-    liveStreamStore,
     googleDriveStore,
     miroBoardStore
   } = collaborationStore;
@@ -51,7 +51,7 @@ const PosBusEventsPage: FC = () => {
 
     if (liveStreamStore.isStreaming) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
-    } else {
+    } else if (liveStreamStore.isLiveStreamTab) {
       history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
     }
   });
@@ -230,6 +230,13 @@ const PosBusEventsPage: FC = () => {
       stageModeStore.removeAwaitingPermissionPopup();
       agoraStageModeStore.requestToGoOnstageWasHandled();
     }
+  });
+
+  usePosBusEvent('screen-share', (message: PosBusScreenShareMessageType) => {
+    console.info('[POSBUS EVENT] screen-share', message);
+    const {spaceId} = message;
+
+    history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
   });
 
   usePosBusEvent('stage-mode-declined', (userId: string) => {

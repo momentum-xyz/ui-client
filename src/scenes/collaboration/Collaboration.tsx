@@ -30,7 +30,7 @@ import * as styled from './Collaboration.styled';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore, liveStreamStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -41,7 +41,6 @@ const Collaboration: FC = () => {
     countdownDialog,
     // textChatStore,
     streamChatStore,
-    liveStreamStore,
     stageModeStore
   } = collaborationStore;
 
@@ -89,8 +88,8 @@ const Collaboration: FC = () => {
   }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
-    collaborationStore.initBroadcast(spaceId);
-  }, [collaborationStore, spaceId]);
+    mainStore.initBroadcast(spaceId);
+  }, [mainStore, spaceId]);
 
   // useEffect(() => {
   //   textChatStore.countUnreadMessages();
@@ -213,7 +212,6 @@ const Collaboration: FC = () => {
       {prepareOnStageDialog.isOpen && (
         <PrepareOnStageDialog onClose={prepareOnStageDialog.close} onReady={countdownDialog.open} />
       )}
-
       <styled.BottomCenteredDock>
         <EmojiAnimationDock />
       </styled.BottomCenteredDock>
