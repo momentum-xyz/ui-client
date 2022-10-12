@@ -66,21 +66,14 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
     const response = await profileStore.editProfile(name, profile);
     if (response) {
       // no await here! is it needed?
-      profileStore
-        .fetchProfile(userId)
-        .then(() => {
-          sessionStore.reload();
-          profileStore.fetchUserSpaceList(userId);
-          onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
-        })
-        .then(() => {
-          if (profileStore.userProfile) {
-            return worldChatStore.updateUser(userId, profileStore.userProfile);
-          } else {
-            console.log('WTF. No user profile');
-            return null;
-          }
-        });
+      profileStore.fetchProfile(userId).then(() => {
+        sessionStore.reload();
+        profileStore.fetchUserSpaceList(userId);
+        onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
+        if (profileStore.userProfile) {
+          worldChatStore.updateUser(userId, profileStore.userProfile);
+        }
+      });
       toast.info(
         <ToastContent
           headerIconName="alert"
