@@ -14,6 +14,7 @@ import {
   TOAST_GROUND_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
+import {PosBusScreenShareMessageType} from 'core/types';
 
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
@@ -268,6 +269,13 @@ const PosBusEventsPage: FC = () => {
       />,
       TOAST_GROUND_OPTIONS
     );
+  });
+
+  usePosBusEvent('screen-share', (message: PosBusScreenShareMessageType) => {
+    console.info('[POSBUS EVENT] screen-share', message);
+    const {spaceId} = message;
+
+    history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
   });
 
   usePosBusEvent('stage-mode-accepted', (userId: string) => {

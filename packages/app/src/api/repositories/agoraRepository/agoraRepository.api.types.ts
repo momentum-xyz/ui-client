@@ -4,3 +4,9 @@ export interface AgoraTokenRequest {
 }
 
 export interface AgoraTokenResponse extends String {}
+
+export interface RelayScreenShareRequest {
+  spaceId: string;
+}
+
+export interface RelayScreenShareResponse {}

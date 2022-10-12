@@ -9,6 +9,7 @@ const ScreenShareStore = types.compose(
   types
     .model('ScreenShareStore', {
       ownerRequest: types.optional(RequestModel, {}),
+      request: types.optional(RequestModel, {}),
       screenOwnerId: types.maybeNull(types.string),
       screenOwnerName: types.maybeNull(types.string)
     })
@@ -27,6 +28,11 @@ const ScreenShareStore = types.compose(
           self.screenOwnerId = userId;
           self.screenOwnerName = response.name;
         }
+      }),
+      relayScreenShare: flow(function* (spaceId: string) {
+        yield self.request.send(api.agoraRepository.relayScreenShare, {
+          spaceId
+        });
       })
     }))
     .views((self) => ({
