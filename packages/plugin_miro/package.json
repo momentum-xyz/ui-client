@@ -2,6 +2,7 @@
   "name": "plugin_miro",
   "version": "0.1.0",
   "private": true,
+  "port": 3001,
   "dependencies": {
     "@momentum-xyz/ui-kit": "^0.1.1",
     "@momentum-xyz/core": "^0.1.1",

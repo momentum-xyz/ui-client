@@ -11,7 +11,7 @@ module.exports = {
   entry: './src/index',
   devServer: {
     static: path.join(__dirname, 'dist'),
-    port: 3001,
+    port: process.env.PLUGIN_PORT
   },
   webpack: {
     configure: {

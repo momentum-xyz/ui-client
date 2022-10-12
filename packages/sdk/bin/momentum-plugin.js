@@ -25,7 +25,8 @@ switch (script) {
             stdio: "inherit", 
             env: {
                 ...process.env,
-                PLUGIN_NAME: packageJSON.name
+                PLUGIN_NAME: packageJSON.name,
+                PLUGIN_PORT: packageJSON.port ?? 3000
             }
         });
 
