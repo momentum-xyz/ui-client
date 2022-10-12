@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
@@ -20,22 +20,9 @@ const WorldChatWidget: FC<PropsInterface> = ({onClose}) => {
   const {t} = useTranslation();
   const theme = useTheme();
 
-  useEffect(() => {
-    const isAlreadyPaused = unityStore.isPaused;
-    console.log('WorldChatWidget - check', isAlreadyPaused);
-    if (!isAlreadyPaused) {
-      console.log('WorldChatWidget - pause');
-      unityStore.pause();
-    }
-
-    return () => {
-      // if it was paused before opening the chat, perhaps we want it to stay paused
-      if (!isAlreadyPaused) {
-        console.log('WorldChatWidget - resume');
-        unityStore.resume();
-      }
-    };
-  }, [unityStore]);
+  const handleSearchFocus = (isFocused: boolean) => {
+    unityStore.changeKeyboardControl(!isFocused);
+  };
 
   return (
     <Dialog
@@ -55,6 +42,8 @@ const WorldChatWidget: FC<PropsInterface> = ({onClose}) => {
             fullWidth
             client={worldChatStore.client}
             channel={worldChatStore.currentChannel}
+            onFocus={() => handleSearchFocus(true)}
+            onBlur={() => handleSearchFocus(false)}
           />
         )}
       </styled.Container>

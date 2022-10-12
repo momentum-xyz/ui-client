@@ -18,6 +18,8 @@ interface PropsInterface {
   client: StreamChatClient;
   channel: Channel;
   fullWidth?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 interface StateInterface {
@@ -49,12 +51,16 @@ const i18nInstance = new Streami18n({
   // disableDateTimeTranslations: true
 });
 
-const StreamChat: FC<PropsInterface> = ({client, channel, fullWidth}) => {
+const StreamChat: FC<PropsInterface> = ({client, channel, fullWidth, onFocus, onBlur}) => {
   return (
     client &&
     channel && (
       <ErrorBoundaries>
-        <styled.Container className={fullWidth ? 'full-width' : undefined}>
+        <styled.Container
+          className={fullWidth ? 'full-width' : undefined}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        >
           <Chat client={client} theme="str-chat__theme-dark" i18nInstance={i18nInstance}>
             <ChannelComponent channel={channel} Input={CustomMessageInput}>
               <Window>
