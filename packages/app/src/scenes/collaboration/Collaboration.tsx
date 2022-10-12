@@ -26,7 +26,7 @@ import {CollaborationPluginPage} from './pages';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore} = rootStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore, liveStreamStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -36,7 +36,6 @@ const Collaboration: FC = () => {
     prepareOnStageDialog,
     countdownDialog,
     textChatStore,
-    liveStreamStore,
     stageModeStore,
     pluginsStore
   } = collaborationStore;
@@ -87,8 +86,8 @@ const Collaboration: FC = () => {
   }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
-    collaborationStore.initBroadcast(spaceId);
-  }, [collaborationStore, spaceId]);
+    mainStore.initBroadcast(spaceId);
+  }, [mainStore, spaceId]);
 
   useEffect(() => {
     textChatStore.countUnreadMessages();

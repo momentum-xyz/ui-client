@@ -1,22 +1,28 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {useHistory} from 'react-router';
 import {Button} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, TextChat} from 'ui-kit';
+import {SpaceTopBar, TextChat, VideoPanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './LiveStreamPage.styled';
-import {VideoPanel} from './components';
 
 const LiveStreamPage: FC = () => {
   const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
-  const {space, textChatStore, liveStreamStore} = collaborationStore;
-  const {favoriteStore} = mainStore;
+  const {space, textChatStore} = collaborationStore;
+  const {favoriteStore, liveStreamStore} = mainStore;
 
   const history = useHistory();
+
+  useEffect(() => {
+    liveStreamStore.showWidget();
+    liveStreamStore.enteredLiveStreamTab();
+
+    return () => liveStreamStore.leftLiveStreamTab();
+  }, [liveStreamStore]);
 
   if (!space) {
     return null;
