@@ -18,14 +18,13 @@ import {
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
-  const {agoraStore, unityStore} = mainStore;
+  const {agoraStore, liveStreamStore, unityStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
     invitedOnStageDialog,
-    liveStreamStore,
     googleDriveStore,
     miroBoardStore
   } = collaborationStore;
@@ -56,7 +55,7 @@ const PosBusEventsPage: FC = () => {
 
     if (liveStreamStore.isStreaming) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
-    } else {
+    } else if (liveStreamStore.isLiveStreamTab) {
       history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
     }
   });
