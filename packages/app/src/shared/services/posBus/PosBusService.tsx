@@ -12,7 +12,8 @@ import {
   PosBusCommunicationMessageType,
   PosBusEmojiMessageType,
   PosBusMegamojiMessageType,
-  PosBusFlyWithMeType
+  PosBusFlyWithMeType,
+  PosBusScreenShareMessageType
 } from 'core/types';
 
 class PosBusService {
@@ -41,6 +42,10 @@ class PosBusService {
 
   static handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
     PosBusEventEmitter.emit('broadcast', message);
+  }
+
+  static handleScreenShareStart(message: PosBusScreenShareMessageType) {
+    PosBusEventEmitter.emit('screen-share', message);
   }
 
   static handleIncomingCommunication(message: PosBusCommunicationMessageType) {
@@ -171,6 +176,9 @@ class PosBusService {
         break;
       case 'stop-fly-with-me':
         this.handleStopFlyWithMeMessage(message as PosBusFlyWithMeType);
+        break;
+      case 'screen-share':
+        this.handleScreenShareStart(message as PosBusScreenShareMessageType);
         break;
       default:
         console.debug('Unknown relay message type', target);
