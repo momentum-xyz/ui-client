@@ -33,6 +33,7 @@ const GoogleDrivePage: FC = () => {
 
   const pickerCallBack = useCallback(
     async (data) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const {picker} = (window as any).google;
 
       if (data[picker.Response.ACTION] === picker.Action.PICKED) {
