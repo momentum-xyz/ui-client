@@ -11,7 +11,9 @@ import {
   PosBusCollaborationMessageType,
   PosBusCommunicationMessageType,
   PosBusEmojiMessageType,
-  PosBusMegamojiMessageType
+  PosBusMegamojiMessageType,
+  PosBusFlyWithMeType,
+  PosBusScreenShareMessageType
 } from 'core/types';
 
 class PosBusService {
@@ -40,6 +42,10 @@ class PosBusService {
 
   static handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
     PosBusEventEmitter.emit('broadcast', message);
+  }
+
+  static handleScreenShareStart(message: PosBusScreenShareMessageType) {
+    PosBusEventEmitter.emit('screen-share', message);
   }
 
   static handleIncomingCommunication(message: PosBusCommunicationMessageType) {
@@ -121,6 +127,14 @@ class PosBusService {
     }
   }
 
+  static handleStartFlyWithMeMessage(message: PosBusFlyWithMeType) {
+    PosBusEventEmitter.emit('start-fly-with-me', message.spaceId, message.pilot, message.pilotName);
+  }
+
+  static handleStopFlyWithMeMessage(message: PosBusFlyWithMeType) {
+    PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilot, message.pilotName);
+  }
+
   static handleRelayMessage(target: string, message: any): void {
     console.log('[unity message]:', target, message);
     switch (target) {
@@ -156,6 +170,15 @@ class PosBusService {
         break;
       case 'posbus':
         this.handlePosBusMessage(message as PosBusMessageStatusType);
+        break;
+      case 'start-fly-with-me':
+        this.handleStartFlyWithMeMessage(message as PosBusFlyWithMeType);
+        break;
+      case 'stop-fly-with-me':
+        this.handleStopFlyWithMeMessage(message as PosBusFlyWithMeType);
+        break;
+      case 'screen-share':
+        this.handleScreenShareStart(message as PosBusScreenShareMessageType);
         break;
       default:
         console.debug('Unknown relay message type', target);

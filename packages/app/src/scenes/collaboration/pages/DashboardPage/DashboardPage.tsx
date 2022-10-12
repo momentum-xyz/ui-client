@@ -1,5 +1,4 @@
 import React, {FC, useCallback, useEffect, useRef} from 'react';
-import {generatePath} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
@@ -16,6 +15,7 @@ const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace, flightStore} = useStore();
   const {dashboardStore, space, streamChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
+  const {flyWithMeStore} = flightStore;
   const {agoraStore, favoriteStore} = mainStore;
 
   const inviteRef = useRef<HTMLButtonElement>(null);
@@ -91,8 +91,8 @@ const DashboardPage: FC = () => {
             variant="primary"
             icon="fly-with-me"
             label={t('labels.flyWithMe')}
-            disabled={agoraStore.isStageMode || flightStore.isFlightWithMe}
-            onClick={() => history.push(generatePath(ROUTES.flyWithMe, {spaceId: space.id}))}
+            disabled={!agoraStore.hasJoined || agoraStore.isStageMode || flightStore.isFlightWithMe}
+            onClick={() => flyWithMeStore.start(space.id)}
           />
         )}
       </SpaceTopBar>

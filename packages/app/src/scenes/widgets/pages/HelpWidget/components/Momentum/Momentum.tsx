@@ -12,7 +12,7 @@ import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
 import * as styled from './Momentum.styled';
 
 const Momentum: React.FC = () => {
-  const {widgetStore, mainStore} = useStore();
+  const {widgetStore, mainStore, flightStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {worldConfig} = worldStore;
   const {helpStore} = widgetStore;
@@ -48,14 +48,18 @@ const Momentum: React.FC = () => {
       <styled.TextItem>{t('helpSection.momentum.paragraphs.one')}</styled.TextItem>
       <styled.TextItem>
         {t('helpSection.momentum.paragraphs.two.partOne')}
-        <styled.HighlightedSpan onClick={() => handleFlyToSpace()}>
+        <styled.HighlightedSpan
+          {...(!flightStore.isFlightWithMe && {onClick: () => handleFlyToSpace()})}
+        >
           {t('helpSection.momentum.paragraphs.two.highlightedPart')}
         </styled.HighlightedSpan>
         {t('helpSection.momentum.paragraphs.two.partTwo')}
       </styled.TextItem>
       <styled.TextItem>
         {t('helpSection.momentum.paragraphs.three.partOne')}
-        <styled.HighlightedSpan onClick={() => handleFlyToSpace(true)}>
+        <styled.HighlightedSpan
+          {...(!flightStore.isFlightWithMe && {onClick: () => handleFlyToSpace(true)})}
+        >
           {t('helpSection.momentum.paragraphs.three.highlightedPart')}
         </styled.HighlightedSpan>
         {t('helpSection.momentum.paragraphs.three.partTwo')}
@@ -63,11 +67,17 @@ const Momentum: React.FC = () => {
       <styled.TextItem>{t('helpSection.momentum.paragraphs.four')}</styled.TextItem>
       <styled.Buttons>
         <Button
-          label={t('helpSection.momentum.visitSpace')}
           icon="fly-to"
+          label={t('helpSection.momentum.visitSpace')}
+          disabled={flightStore.isFlightWithMe}
           onClick={() => handleFlyToSpace()}
         />
       </styled.Buttons>
+      {flightStore.isFlightWithMe && (
+        <styled.FlightWithMeTextItem>
+          {t('helpSection.momentum.visitSpaceDisabled')}
+        </styled.FlightWithMeTextItem>
+      )}
     </Section>
   );
 };

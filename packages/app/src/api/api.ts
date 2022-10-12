@@ -5,6 +5,7 @@ import * as userRepository from './repositories/userRepository';
 import * as profileRepository from './repositories/profileRepository';
 import * as eventsRepository from './repositories/eventsRepository';
 import * as spaceRepository from './repositories/spaceRepository';
+import * as flyWithMeRepository from './repositories/flyWithMeRepository';
 import * as stageModeRepository from './repositories/stageModeRepository';
 import * as magicRepository from './repositories/magicRepository';
 import * as tokenRuleRepository from './repositories/tokenRuleRepository';
@@ -49,6 +50,7 @@ export const api = {
   profileRepository,
   eventsRepository,
   spaceRepository,
+  flyWithMeRepository,
   stageModeRepository,
   magicRepository,
   tokenRuleRepository,
@@ -86,6 +88,7 @@ export * from './repositories/configRepository/configRepository.api.types';
 export * from './repositories/webRepository/webRepository.api.types';
 export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
+export * from './repositories/flyWithMeRepository/flyWithMeRepository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/profileRepository/profileRepository.api.types';
 export * from './repositories/eventsRepository/eventsRepository.api.types';

@@ -18,7 +18,8 @@ import {
   StakingWidget,
   WorldStatsWidget,
   StageModePIPWidget,
-  EmojiWidget
+  EmojiWidget,
+  LiveStreamPIPWidget
 } from 'scenes/widgets/pages';
 
 import * as styled from './Widgets.styled';
@@ -109,6 +110,9 @@ const Widgets: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
+      {!location.pathname.includes('live-stream') && (
+        <LiveStreamPIPWidget flyAround={!location.pathname.includes('collaboration')} />
+      )}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />

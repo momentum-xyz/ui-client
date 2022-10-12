@@ -25,7 +25,7 @@ import * as styled from './Collaboration.styled';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore, liveStreamStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -34,7 +34,6 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    liveStreamStore,
     stageModeStore
   } = collaborationStore;
 
@@ -72,8 +71,8 @@ const Collaboration: FC = () => {
   }, [reJoinMeeting, spaceId]);
 
   useEffect(() => {
-    collaborationStore.initBroadcast(spaceId);
-  }, [collaborationStore, spaceId]);
+    mainStore.initBroadcast(spaceId);
+  }, [mainStore, spaceId]);
 
   const handleCountdownEnded = useCallback(async () => {
     if (agoraStageModeStore.isStageFull) {

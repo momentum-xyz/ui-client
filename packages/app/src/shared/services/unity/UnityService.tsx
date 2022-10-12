@@ -204,12 +204,28 @@ export class UnityService {
     this.unityApi?.toggleMinimap();
   }
 
+  showMinimap() {
+    this.unityApi?.showMinimap();
+  }
+
+  hideMinimap() {
+    this.unityApi?.hideMinimap();
+  }
+
   setKeyboardControl(value: boolean) {
     this.unityApi?.controlKeyboard(value);
   }
 
   setSoundEffectVolume(value: string) {
     this.unityApi?.controlVolume(value);
+  }
+
+  startFlyWithMe(pilotId: string) {
+    this.unityApi?.startFlyWithMe(pilotId);
+  }
+
+  disengageFlyWithMe() {
+    this.unityApi?.disengageFlyWithMe();
   }
 
   leaveSpace(id: string) {

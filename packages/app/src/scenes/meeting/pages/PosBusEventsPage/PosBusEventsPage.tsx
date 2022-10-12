@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
@@ -8,19 +8,24 @@ import {PosBusEventEnum, StageModeRequestEnum, StageModeStatusEnum} from 'core/e
 import {ROUTES} from 'core/constants';
 import {LiveStreamInterface} from 'api';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {ToastContent, TOAST_COMMON_OPTIONS, TOAST_GROUND_OPTIONS} from 'ui-kit';
+import {
+  ToastContent,
+  TOAST_COMMON_OPTIONS,
+  TOAST_GROUND_OPTIONS,
+  TOAST_NOT_AUTO_CLOSE_OPTIONS
+} from 'ui-kit';
+import {PosBusScreenShareMessageType} from 'core/types';
 
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
-  const {agoraStore, unityStore} = mainStore;
+  const {agoraStore, liveStreamStore, unityStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
     invitedOnStageDialog,
-    liveStreamStore,
     googleDriveStore,
     miroBoardStore
   } = collaborationStore;
@@ -51,7 +56,7 @@ const PosBusEventsPage: FC = () => {
 
     if (liveStreamStore.isStreaming) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
-    } else {
+    } else if (liveStreamStore.isLiveStreamTab) {
       history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
     }
   });
@@ -221,6 +226,56 @@ const PosBusEventsPage: FC = () => {
       />,
       TOAST_COMMON_OPTIONS
     );
+  });
+
+  usePosBusEvent('start-fly-with-me', (spaceId, pilotId, pilotName) => {
+    console.info('[POSBUS EVENT] start-fly-with-me');
+
+    if (sessionStore.userId === pilotId) {
+      unityStore.startFlyWithMe(pilotId);
+      history.push(generatePath(ROUTES.flyWithMe.pilot, {spaceId, pilotId}));
+    } else {
+      toast.info(
+        <ToastContent
+          headerIconName="fly-with-me"
+          title={t('messages.flyWithMeActivated')}
+          text={t('textMessage.flyWithMeInvite', {name: pilotName})}
+          declineInfo={{title: t('actions.decline')}}
+          approveInfo={{
+            title: t('actions.join'),
+            onClick: () => {
+              unityStore.startFlyWithMe(pilotId);
+              history.push(generatePath(ROUTES.flyWithMe.passenger, {spaceId, pilotId}));
+            }
+          }}
+        />,
+        TOAST_NOT_AUTO_CLOSE_OPTIONS
+      );
+    }
+  });
+
+  usePosBusEvent('stop-fly-with-me', (spaceId, pilotId, pilotName) => {
+    console.info('[POSBUS EVENT] stop-fly-with-me');
+
+    unityStore.disengageFlyWithMe();
+    history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+
+    toast.info(
+      <ToastContent
+        headerIconName="fly-with-me"
+        title={t('messages.flyWithMeDisabled')}
+        text={t('textMessage.flyWithMeDisabled', {name: pilotName})}
+        showCloseButton
+      />,
+      TOAST_GROUND_OPTIONS
+    );
+  });
+
+  usePosBusEvent('screen-share', (message: PosBusScreenShareMessageType) => {
+    console.info('[POSBUS EVENT] screen-share', message);
+    const {spaceId} = message;
+
+    history.push(generatePath(ROUTES.collaboration.screenShare, {spaceId}));
   });
 
   usePosBusEvent('stage-mode-accepted', (userId: string) => {

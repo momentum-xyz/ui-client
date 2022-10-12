@@ -222,6 +222,7 @@ export const enGb = {
       nameWorld: 'Name World',
       worldURL: 'World URL',
       subdomain: 'Subdomain',
+      pilot: 'Pilot',
       flyWithMe: 'Fly with me'
     },
     messages: {
@@ -330,7 +331,12 @@ export const enGb = {
         'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
       startBuilding: 'Connect your wallet\n To start Building',
       savingSpaceDetailsSuceess: 'Space details saved succesfully!',
-      stageIsFullTryAgain: 'Stage is full, please try again later...'
+      stageIsFullTryAgain: 'Stage is full, please try again later...',
+      flyWithMeEnabled: 'Fly with me enabled',
+      flyWithMeActivated: 'Fly with me has been activated',
+      flyWithMeDisabled: 'Fly with me has been disabled',
+      flyWithMeBlocked: 'During fly with me mode, some functionality has been disabled',
+      flyWithMeEnjoy: 'Sit back, relax and enjoy the ride.'
     },
     titles: {
       alert: 'alert',
@@ -371,7 +377,9 @@ export const enGb = {
       you: 'you',
       placeholder: 'Message',
       joinText: '{{name}} has joined the collaboration space',
-      leftText: '{{name}} has left the collaboration space'
+      leftText: '{{name}} has left the collaboration space',
+      flyWithMeInvite: '{{name}} has invited you to join them in fly with me',
+      flyWithMeDisabled: '{{name}} has disabled fly with me'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -472,6 +480,7 @@ export const enGb = {
       getStarted: 'Get Started',
       selectTemplate: 'Select Template',
       generateWorld: 'Generate World',
+      disengageReturn: 'Disengage And Return',
       join: 'join',
       dismiss: 'dismiss'
     },
@@ -865,7 +874,8 @@ export const enGb = {
           },
           four: 'Wanna chat, or have any more questions, crazy ideas or suggestions to us? Check out our momentum space. LFG!'
         },
-        visitSpace: 'Visit the Momentum Space'
+        visitSpace: 'Visit the Momentum Space',
+        visitSpaceDisabled: 'Disabled during Fly with me'
       },
       wiki: {
         title: 'Wiki',

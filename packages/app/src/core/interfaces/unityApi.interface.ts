@@ -1,5 +1,7 @@
 export interface UnityApiInterface {
   toggleMinimap(): any;
+  showMinimap(): void;
+  hideMinimap(): void;
   teleportToUser(userGuid: string): any;
   teleportToSpace(spaceGuid: string): any;
   teleportToVector3(position: string): any;
@@ -13,4 +15,6 @@ export interface UnityApiInterface {
   getUserPosition(): string;
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
   relayMessage(topic: string, json: string): any;
+  startFlyWithMe(pilotId: string): void;
+  disengageFlyWithMe(): void;
 }

@@ -17,8 +17,8 @@ const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpC
 const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));
 const Collaboration = lazy(() => import('./collaboration/Collaboration'));
 const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
-const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
 const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
+const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
 const WorldCalendar = lazy(() => import('./worldCalendar/WorldCalendar'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const VideoPage = lazy(() => import('./video/pages/VideoPage/VideoPage'));
@@ -135,19 +135,24 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     path: ROUTES.grabTable,
     main: () => (
       <>
-        <HomePage />
         <GrabTablePage />
+        <HomePage />
       </>
     )
   },
   {
-    path: ROUTES.flyWithMe,
+    path: ROUTES.flyWithMe.pilot,
     main: () => (
       <>
-        <HomePage />
         <FlyWithMePage />
+        <HomePage />
       </>
     ),
+    exact: true
+  },
+  {
+    path: ROUTES.flyWithMe.passenger,
+    main: () => <FlyWithMePage />,
     exact: true
   },
   {

@@ -1,4 +1,8 @@
-import {PosBusEmojiMessageType, PosBusGatheringMessageType} from 'core/types';
+import {
+  PosBusEmojiMessageType,
+  PosBusGatheringMessageType,
+  PosBusScreenShareMessageType
+} from 'core/types';
 import {PosBusCollaborationEnum, PosBusMessageStatusEnum, StageModeStatusEnum} from 'core/enums';
 
 export type PosBusEventType = {
@@ -28,7 +32,10 @@ export type PosBusEventType = {
   'high-five-sent': (message: string) => void;
   emoji: (message: PosBusEmojiMessageType) => void;
   megamoji: (emojiUrl: string) => void;
+  'start-fly-with-me': (spaceId: string, pilotId: string, pilotName: string) => void;
+  'stop-fly-with-me': (spaceId: string, pilotId: string, pilotName: string) => void;
   'simple-notification': (message: string) => void;
+  'screen-share': (message: PosBusScreenShareMessageType) => void;
   'space-invite': (
     spaceId: string,
     invitorId: string,
