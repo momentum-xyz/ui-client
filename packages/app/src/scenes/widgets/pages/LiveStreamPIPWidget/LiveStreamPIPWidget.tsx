@@ -12,8 +12,6 @@ import {VideoPanel} from 'ui-kit';
 
 import * as styled from './LiveStreamPIPWidget.styled';
 
-const Draggable: any = DraggableContent;
-
 interface PropsInterface {
   flyAround?: boolean;
 }
@@ -30,7 +28,7 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
 
   return (
     <Portal>
-      <Draggable>
+      <DraggableContent>
         <styled.Container
           data-testid="LiveStreamPIPWidget-test"
           className={cn(!flyAround && 'notFlyAround')}
@@ -88,7 +86,7 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
             />
           </styled.HeaderElement>
         </styled.Container>
-      </Draggable>
+      </DraggableContent>
     </Portal>
   );
 };
