@@ -14,7 +14,12 @@ const UnityVolumeController: FC = () => {
     <styled.Container data-testid="UnityVolumeController-test">
       <styled.Title>{t('musicPlayer.unityVolume')}</styled.Title>
       <styled.VolumeContainer>
-        <SvgButton iconName="player-mute" size="medium" onClick={unityStore.mute} />
+        <SvgButton
+          iconName="player-mute"
+          size="medium"
+          onClick={unityStore.mute}
+          disabled={unityStore.volume === 0}
+        />
         <styled.VolumeBarContainer>
           <styled.BarThumbPosition width={unityStore.volume * 100 + '%'} />
           <styled.VolumeBar
@@ -28,7 +33,12 @@ const UnityVolumeController: FC = () => {
             }}
           />
         </styled.VolumeBarContainer>
-        <SvgButton iconName="player-unmute" size="medium" onClick={unityStore.unmute} />
+        <SvgButton
+          iconName="player-unmute"
+          size="medium"
+          onClick={unityStore.unmute}
+          disabled={unityStore.volume === 1}
+        />
       </styled.VolumeContainer>
     </styled.Container>
   );
