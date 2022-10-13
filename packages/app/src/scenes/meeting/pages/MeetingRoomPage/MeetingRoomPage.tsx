@@ -30,14 +30,18 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
   const location = useLocation();
 
   useEffect(() => {
-    const wasPlaying: boolean = musicPlayerStore.musicPlayer.isPlaying;
-    if (wasPlaying && agoraStore.hasJoined) {
-      musicPlayerStore.togglePlayback();
+    const wasPlayingBeforeJoining: boolean = musicPlayerStore.musicPlayer.isPlaying;
+    if (wasPlayingBeforeJoining && agoraStore.hasJoined) {
+      musicPlayerStore.pause();
     }
 
     return () => {
-      if (!musicPlayerStore.musicPlayer.isPlaying && wasPlaying) {
-        musicPlayerStore.togglePlayback();
+      if (
+        !musicPlayerStore.musicPlayer.isPlaying &&
+        wasPlayingBeforeJoining &&
+        !agoraStore.hasJoined
+      ) {
+        musicPlayerStore.play();
       }
     };
   }, [agoraStore.hasJoined, musicPlayerStore]);

@@ -8,16 +8,16 @@ import * as styled from './PlayerController.styled';
 
 const PlayerController: FC = () => {
   const {musicPlayerStore} = useStore().widgetStore;
-  const {musicPlayer, togglePlayback, nextSong, previousSong} = musicPlayerStore;
+  const {musicPlayer, play, pause, nextSong, previousSong} = musicPlayerStore;
 
   return (
     <styled.Container data-testid="PlayerController-test">
       <styled.Div>
         <SvgButton iconName="player-backward" size="normal" onClick={previousSong} />
         {musicPlayer.isPlaying ? (
-          <SvgButton iconName="player-pause" size="medium-large" onClick={togglePlayback} />
+          <SvgButton iconName="player-pause" size="medium-large" onClick={pause} />
         ) : (
-          <SvgButton iconName="play-button" size="medium-large" onClick={togglePlayback} />
+          <SvgButton iconName="play-button" size="medium-large" onClick={play} />
         )}
         <SvgButton iconName="player-forward" size="normal" onClick={nextSong} />
       </styled.Div>
