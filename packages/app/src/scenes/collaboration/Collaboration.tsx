@@ -25,7 +25,7 @@ import {CollaborationPluginPage} from './pages';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore} = rootStore;
+  const {collaborationStore, mainStore} = rootStore;
   const {agoraStore, liveStreamStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
@@ -35,7 +35,6 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    textChatStore,
     stageModeStore,
     pluginsStore
   } = collaborationStore;
@@ -53,28 +52,21 @@ const Collaboration: FC = () => {
       await rootStore.leaveMeetingSpace();
     }
 
-    rootStore
-      .joinMeetingSpace(spaceId, false)
-      .then(() => {
-        if (!textChatStore.isLoggedOn) {
-          textChatStore.init(agoraStore.appId, sessionStore.userId, spaceId);
-        }
-      })
-      .catch((e) => {
-        if (e instanceof PrivateSpaceError) {
-          history.push(ROUTES.base);
-          toast.error(
-            <ToastContent
-              isDanger
-              showCloseButton
-              headerIconName="alert"
-              title={t('titles.alert')}
-              text={t('collaboration.spaceIsPrivate')}
-            />
-          );
-        }
-      });
-  }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
+    rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
+      if (e instanceof PrivateSpaceError) {
+        history.push(ROUTES.base);
+        toast.error(
+          <ToastContent
+            isDanger
+            showCloseButton
+            headerIconName="alert"
+            title={t('titles.alert')}
+            text={t('collaboration.spaceIsPrivate')}
+          />
+        );
+      }
+    });
+  }, [agoraStore, history, rootStore, spaceId, t]);
 
   useEffect(() => {
     pluginsStore.init();
@@ -88,10 +80,6 @@ const Collaboration: FC = () => {
   useEffect(() => {
     mainStore.initBroadcast(spaceId);
   }, [mainStore, spaceId]);
-
-  useEffect(() => {
-    textChatStore.countUnreadMessages();
-  }, [textChatStore.messageSent, textChatStore.textChatDialog.isOpen, textChatStore]);
 
   const handleCountdownEnded = useCallback(async () => {
     if (agoraStageModeStore.isStageFull) {

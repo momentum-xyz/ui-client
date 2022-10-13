@@ -75,6 +75,8 @@
     "react-unity-webgl": "8.8.0",
     "react-use-error-boundary": "^3.0.0",
     "react-youtube": "^9.0.1",
+    "stream-chat": "^7.1.0",
+    "stream-chat-react": "^10.2.0",
     "styled-components": "^5.3.3",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.0"

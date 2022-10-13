@@ -9,4 +9,5 @@ export * from './MusicPlayerWidget';
 export * from './AttendeesWidget';
 export * from './StageModePIPWidget';
 export * from './EmojiWidget';
+export * from './WorldChatWidget';
 export * from './LiveStreamPIPWidget';

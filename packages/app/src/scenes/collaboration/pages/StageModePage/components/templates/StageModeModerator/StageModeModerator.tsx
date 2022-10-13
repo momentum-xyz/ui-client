@@ -5,7 +5,8 @@ import {t} from 'i18next';
 import {generatePath, useHistory} from 'react-router-dom';
 import {Toggle, Button, Text} from '@momentum-xyz/ui-kit';
 
-import {Stage, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar, TextChat} from 'ui-kit';
+import {Stage, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar} from 'ui-kit';
+import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';
@@ -26,7 +27,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
-  const {space, removeParticipantFromStageDialog, textChatStore, screenShareStore} =
+  const {space, removeParticipantFromStageDialog, streamChatStore, screenShareStore} =
     collaborationStore;
 
   const history = useHistory();
@@ -96,9 +97,9 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           spaceId={space.id}
           isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-          isChatOpen={textChatStore.textChatDialog.isOpen}
-          toggleChat={textChatStore.textChatDialog.toggle}
-          numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+          isChatOpen={streamChatStore.isOpen}
+          toggleChat={streamChatStore.textChatDialog.toggle}
+          numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
           editSpaceHidden
           onLeave={onLeaveMeeting}
         >
@@ -161,14 +162,8 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          {textChatStore.textChatDialog.isOpen && (
-            <TextChat
-              currentChannel={textChatStore.currentChannel}
-              userId={sessionStore.userId}
-              sendMessage={textChatStore.sendMessage}
-              messages={textChatStore.messages}
-              messageSent={textChatStore.messageSent}
-            />
+          {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
+            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
           )}
         </styled.Body>
       </styled.Container>

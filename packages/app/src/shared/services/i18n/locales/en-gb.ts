@@ -373,6 +373,7 @@ export const enGb = {
       template: 'Template',
       generate: 'Generate',
       worldBuilder: 'World Builder',
+      worldChat: 'World Chat',
       templateNameWrapper: '{{name}} Template',
       stageIsFull: 'Stage is full',
       success: 'Success'

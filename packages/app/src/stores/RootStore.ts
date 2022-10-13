@@ -13,6 +13,7 @@ import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
+import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
@@ -35,6 +36,7 @@ const RootStore = types
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
     worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
+    worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),
     videoStore: types.optional(VideoStore, {})
   })
@@ -61,6 +63,11 @@ const RootStore = types
         0,
         ''
       );
+
+      if (!self.collaborationStore.streamChatStore.isLoggedOn) {
+        const {userId, profile} = self.sessionStore;
+        yield self.collaborationStore.streamChatStore.init(userId, spaceId, profile ?? undefined);
+      }
 
       console.log('---JOINED---');
     }),

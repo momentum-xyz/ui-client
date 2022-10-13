@@ -27,6 +27,7 @@ import * as agoraRepository from './repositories/agoraRepository';
 import * as spaceIntegrationsRepository from './repositories/spaceIntegrationsRepository';
 import * as vibeRepository from './repositories/vibeRepository';
 import * as textChatRepository from './repositories/textChatRepository';
+import * as streamChatRepository from './repositories/streamChatRepository';
 import * as emojiRepository from './repositories/emojiRepository';
 import * as spaceEmojiRepository from './repositories/spaceEmojiRepository';
 import * as worldBuilderRepository from './repositories/worldBuilderRepository';
@@ -71,6 +72,7 @@ export const api = {
   resourcesRepository,
   vibeRepository,
   textChatRepository,
+  streamChatRepository,
   emojiRepository,
   spaceEmojiRepository,
   worldBuilderRepository
@@ -104,6 +106,7 @@ export * from './repositories/resourcesRepository/resourcesRepository.types';
 export * from './repositories/spaceTypeRepository/spaceTypeRepository.api.types';
 export * from './repositories/vibeRepository/vibeRepository.api.types';
 export * from './repositories/textChatRepository/textChatRepository.api.types';
+export * from './repositories/streamChatRepository/streamChatRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/spaceEmojiRepository/spaceEmojiRepository.api.types';
 export * from './repositories/worldBuilderRepository/worldBuilderRepository.api.types';

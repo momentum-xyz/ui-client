@@ -10,24 +10,23 @@ import {StageModeGuest, StageModeModerator} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
-  const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
-  const {textChatStore} = collaborationStore;
-  const {agoraStore} = mainStore;
+  const {collaborationStore, leaveMeetingSpace} = useStore();
+  const {streamChatStore} = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
 
   const history = useHistory();
 
   useEffect(() => {
-    const chatWasOpen = textChatStore.textChatDialog.isOpen;
-    textChatStore.textChatDialog.open();
+    const chatWasOpen = streamChatStore.isOpen;
+    streamChatStore.textChatDialog.open();
 
     return () => {
       if (!chatWasOpen) {
-        textChatStore.textChatDialog.close();
+        streamChatStore.textChatDialog.close();
       }
     };
-  }, [agoraStore]);
+  }, [streamChatStore]);
 
   const onLeaveMeeting = useCallback(async () => {
     await leaveMeetingSpace();

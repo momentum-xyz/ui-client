@@ -31,6 +31,7 @@ export interface AppConfigInterface {
   GOOGLE_API_DEVELOPER_KEY: string;
   MIRO_APP_ID: string;
   YOUTUBE_KEY: string;
+  STREAMCHAT_KEY: string;
 }
 
 /**
