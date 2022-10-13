@@ -30,9 +30,20 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
   const location = useLocation();
 
   useEffect(() => {
-    if (musicPlayerStore.musicPlayer.isPlaying) {
-      musicPlayerStore.togglePlayback();
+    const wasPlayingBeforeJoining: boolean = musicPlayerStore.musicPlayer.isPlaying;
+    if (wasPlayingBeforeJoining && agoraStore.hasJoined) {
+      musicPlayerStore.pause();
     }
+
+    return () => {
+      if (
+        !musicPlayerStore.musicPlayer.isPlaying &&
+        wasPlayingBeforeJoining &&
+        !agoraStore.hasJoined
+      ) {
+        musicPlayerStore.play();
+      }
+    };
   }, [agoraStore.hasJoined, musicPlayerStore]);
 
   const isButtonsAvailable = useMemo(() => {
