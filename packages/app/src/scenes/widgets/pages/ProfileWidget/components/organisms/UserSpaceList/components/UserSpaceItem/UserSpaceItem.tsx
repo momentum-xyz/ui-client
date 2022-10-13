@@ -20,7 +20,7 @@ const UserSpaceItem: FC<PropsInterface> = (props) => {
       data-testid="UserSpaceItem-test"
     >
       <SvgButton iconName="rocket" size="medium" onClick={() => flyToSpace(spaceId)} />
-      <styled.NameText text={spaceName} size="xs" align="left" />
+      <styled.NameText text={spaceName} size="xs" align="left" isMultiline={false} />
     </styled.Container>
   );
 };
