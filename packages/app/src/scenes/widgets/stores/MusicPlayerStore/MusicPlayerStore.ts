@@ -9,9 +9,7 @@ const MusicPlayerStore = types.compose(
     .model('MusicPlayerStore', {
       musicPlayerWidget: types.optional(Dialog, {}),
       playlist: types.optional(Playlist, {}),
-      musicPlayer: types.optional(MusicPlayer, {}),
-      isPausedInSpace: types.optional(types.boolean, false),
-      isInSpace: false
+      musicPlayer: types.optional(MusicPlayer, {})
     })
     .actions((self) => ({
       init(worldId: string): void {
@@ -21,9 +19,7 @@ const MusicPlayerStore = types.compose(
         if (self.playlist.tracks.length < 1) {
           return;
         }
-        if (self.isInSpace && self.musicPlayer.isPlaying && !self.isPausedInSpace) {
-          self.isPausedInSpace = true;
-        }
+
         self.musicPlayer.isPlaying = !self.musicPlayer.isPlaying;
         if (!self.musicPlayer.isPlaying) {
           self.musicPlayer.nextSongShouldBePlaying = false;
@@ -81,24 +77,6 @@ const MusicPlayerStore = types.compose(
           self.playlist.first();
           self.musicPlayer.stoppedPlaying();
         }
-      },
-      togglePlaybackInSpace(joined: boolean) {
-        if (self.musicPlayer.isPlaying && joined) {
-          this.togglePlayback();
-          this.enteredSpace();
-        } else if (!self.musicPlayer.isPlaying && self.isInSpace && !self.isPausedInSpace) {
-          this.togglePlayback();
-          this.leftSpace();
-        } else if (!joined) {
-          this.leftSpace();
-        }
-      },
-      enteredSpace() {
-        self.isInSpace = true;
-      },
-      leftSpace() {
-        self.isInSpace = false;
-        self.isPausedInSpace = false;
       }
     }))
 );
