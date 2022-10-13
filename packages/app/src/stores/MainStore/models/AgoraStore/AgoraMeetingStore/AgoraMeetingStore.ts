@@ -20,7 +20,7 @@ const AgoraMeetingStore = types
       appId: '',
       userId: types.maybe(types.string),
       spaceId: types.maybe(types.string),
-      _users: types.optional(types.array(AgoraRemoteUser), []),
+      users: types.optional(types.array(AgoraRemoteUser), []),
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       localSoundLevel: 0,
 
@@ -29,14 +29,6 @@ const AgoraMeetingStore = types
   )
   .volatile(() => ({
     client: AgoraRTC.createClient({mode: 'rtc', codec: 'h264'})
-  }))
-  .views((self) => ({
-    get users(): AgoraRemoteUserInterface[] {
-      return self._users;
-    },
-    set users(users: AgoraRemoteUserInterface[]) {
-      self._users = cast(users);
-    }
   }))
   // Listeners handlers
   .actions((self) => ({
@@ -108,7 +100,7 @@ const AgoraMeetingStore = types
       });
 
       if (!foundUser) {
-        self.users = [...self.users, newUser];
+        self.users = cast([...self.users, newUser]);
       }
     },
     handleUserLeft(user: IAgoraRTCRemoteUser) {
@@ -116,7 +108,7 @@ const AgoraMeetingStore = types
         return;
       }
 
-      self.users = self.users.filter((remoteUser) => remoteUser.uid !== user.uid);
+      self.users = cast(self.users.filter((remoteUser) => remoteUser.uid !== user.uid));
     },
     handleConnectionStateChange(
       currentState: ConnectionState,
@@ -232,21 +224,22 @@ const AgoraMeetingStore = types
       self.userId = yield self.client.join(self.appId, spaceId, tokenResponse, authStateSubject);
       yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
       self.spaceId = spaceId;
-      self.users = self.client.remoteUsers
-        .filter((user) => String(user.uid).split('|')[0] !== 'ss')
-        .map((user) =>
-          cast({
+
+      self.users = cast(
+        self.client.remoteUsers
+          .filter((user) => String(user.uid).split('|')[0] !== 'ss')
+          .map((user) => ({
             uid: user.uid,
             participantInfo: user,
-            isMuted: !user.hasAudio,
-            cameraOff: !user.hasVideo
-          })
-        );
+            isMuted: !user.audioTrack?.isPlaying ?? true,
+            cameraOff: !user.videoTrack?.isPlaying ?? true
+          }))
+      );
     }),
     leave: flow(function* () {
       yield self.client.leave();
       self.spaceId = undefined;
-      self.users = [];
+      self.users = cast([]);
     })
   }))
   .views((self) => ({

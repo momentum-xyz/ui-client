@@ -269,7 +269,9 @@ const AgoraStore = types
     get canToggleCamera(): boolean {
       return (
         !self.userDevicesStore.isTogglingCamera &&
-        (self.isStageMode ? self.agoraStageModeStore.isOnStage : !!self.agoraMeetingStore.spaceId)
+        (self.isStageMode
+          ? self.agoraStageModeStore.isOnStage
+          : !!self.agoraMeetingStore.spaceId && self.agoraMeetingStore.maxVideoStreamsReached)
       );
     }
   }));

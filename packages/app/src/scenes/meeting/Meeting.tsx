@@ -15,7 +15,7 @@ const Meeting: FC = () => {
   const rootStore = useStore();
   const {mainStore, collaborationStore} = rootStore;
   const {agoraStore} = mainStore;
-  const {agoraMeetingStore} = agoraStore;
+  const {agoraMeetingStore, userDevicesStore} = agoraStore;
   const {space} = collaborationStore;
 
   const history = useHistory();
@@ -31,6 +31,10 @@ const Meeting: FC = () => {
 
   useEffect(() => {
     if (agoraMeetingStore.maxVideoStreamsReached) {
+      if (!userDevicesStore.cameraOff) {
+        userDevicesStore.turnOffCamera();
+      }
+
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -41,7 +45,7 @@ const Meeting: FC = () => {
         TOAST_GROUND_OPTIONS
       );
     }
-  }, [agoraMeetingStore.maxVideoStreamsReached, t]);
+  }, [agoraMeetingStore.maxVideoStreamsReached, t, userDevicesStore]);
 
   return (
     <styled.Container>
