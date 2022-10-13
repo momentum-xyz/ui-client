@@ -38,10 +38,6 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
 
   useEffect(() => {
     pluginLoader.init();
-
-    return () => {
-      pluginLoader.deinit();
-    };
   }, [pluginLoader]);
 
   useEffect(() => {
