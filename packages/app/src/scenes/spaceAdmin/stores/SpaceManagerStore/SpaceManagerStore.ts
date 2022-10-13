@@ -18,6 +18,8 @@ const SpaceManagerStore = types.compose(
       space: types.maybe(Space),
       spaceDetailsFormStore: types.optional(SpaceDetailsFormStore, {}),
       deleteSpaceConfirmationDialog: types.optional(Dialog, {}),
+      addPluginDialog: types.optional(Dialog, {}),
+      deletePluginConfirmationDialog: types.optional(Dialog, {}),
       removeUserConfirmationDialog: types.optional(Dialog, {}),
       removeTokenRuleDialog: types.optional(Dialog, {}),
       editUserDialog: types.optional(Dialog, {}),

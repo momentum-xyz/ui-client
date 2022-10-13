@@ -16,7 +16,8 @@ import {
   SubSpacesPanel,
   TokenRulesPanel,
   TokenForm,
-  ApplyTokenRuleForm
+  ApplyTokenRuleForm,
+  ManagePluginPanel
 } from './components';
 
 const SpaceAdminPage: FC = () => {
@@ -57,6 +58,7 @@ const SpaceAdminPage: FC = () => {
             <TokenRulesPanel />
             <SpaceMembersPanel />
             {space.allowedSpaceTypes.length > 0 && <SubSpacesPanel />}
+            <ManagePluginPanel />
           </>
         ) : (
           <styled.NoAccess>

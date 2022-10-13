@@ -375,7 +375,8 @@ export const enGb = {
       worldBuilder: 'World Builder',
       templateNameWrapper: '{{name}} Template',
       stageIsFull: 'Stage is full',
-      success: 'Success'
+      success: 'Success',
+      plugins: 'Plugins'
     },
     textMessage: {
       you: 'you',
@@ -418,6 +419,7 @@ export const enGb = {
     },
     actions: {
       ok: 'OK',
+      add: 'Add',
       approve: 'Approve',
       joinStage: 'Join Stage',
       decline: 'Decline',

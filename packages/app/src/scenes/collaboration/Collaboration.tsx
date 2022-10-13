@@ -77,8 +77,11 @@ const Collaboration: FC = () => {
   }, [agoraStore, history, rootStore, sessionStore, spaceId, t, textChatStore]);
 
   useEffect(() => {
-    pluginsStore.init();
-    console.info('fetched plugin list', pluginsStore.pluginLoaders.length);
+    // TODO: check is for demonstration purposes
+    if (pluginsStore.pluginLoaders.length === 0) {
+      pluginsStore.init();
+      console.info('fetched plugin list', pluginsStore.pluginLoaders.length);
+    }
   }, [pluginsStore]);
 
   useEffect(() => {

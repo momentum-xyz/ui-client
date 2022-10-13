@@ -30,6 +30,14 @@ const CollaboarationPluginStore = types
     init() {
       // TODO: Later change it to API call that returns this list
       self.pluginLoaders = cast(COLLABORATION_PLUGIN_LIST);
+    },
+    addPlugin(plugin: PluginInterface) {
+      // TODO: Later change it to API call adds plugin
+      const newPlugins = [...self.pluginLoaders, plugin];
+      self.pluginLoaders = cast(newPlugins);
+    },
+    removePlugin(name: string) {
+      self.pluginLoaders = cast(self.pluginLoaders.filter((loader) => loader.name !== name));
     }
   }));
 
