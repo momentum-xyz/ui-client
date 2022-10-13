@@ -16,7 +16,7 @@ interface PropsInterface {
 }
 
 const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
-  const {widgetStore, sessionStore, homeStore, mainStore} = useStore();
+  const {widgetStore, sessionStore, worldChatStore, homeStore, mainStore} = useStore();
   const {onlineUsersList} = homeStore;
   const {profileStore} = widgetStore;
   const {userProfile, editAvatarDialog, formErrors} = profileStore;
@@ -41,7 +41,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
 
   useEffect(() => {
     setValue('profile.image', profileStore.selectedImage);
-  }, [profileStore.selectedImage]);
+  }, [profileStore.selectedImage, setValue]);
 
   useEffect(() => {
     if (!userProfile?.profile) {
@@ -65,10 +65,14 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   const formSubmitHandler: SubmitHandler<UpdateProfileInterface> = async ({profile, name}) => {
     const response = await profileStore.editProfile(name, profile);
     if (response) {
+      // no await here! is it needed?
       profileStore.fetchProfile(userId).then(() => {
         sessionStore.reload();
         profileStore.fetchUserSpaceList(userId);
         onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
+        if (profileStore.userProfile) {
+          worldChatStore.updateUser(userId, profileStore.userProfile);
+        }
       });
       toast.info(
         <ToastContent

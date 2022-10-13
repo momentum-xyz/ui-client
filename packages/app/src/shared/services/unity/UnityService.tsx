@@ -10,6 +10,7 @@ import {PosBusEmojiMessageType} from 'core/types';
 export class UnityService {
   unityApi?: UnityApiInterface;
   unityContext?: UnityContext;
+  isPaused = false;
 
   getCurrentWorld?: () => void;
   getUserPosition?: () => void;
@@ -119,11 +120,13 @@ export class UnityService {
   pause() {
     document.body.classList.remove('unity-active');
     this.unityApi?.pauseUnity(true);
+    this.isPaused = true;
   }
 
   resume() {
     document.body.classList.add('unity-active');
     this.unityApi?.pauseUnity(false);
+    this.isPaused = false;
   }
 
   pauseSound() {

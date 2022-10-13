@@ -7,7 +7,8 @@ import {Button} from '@momentum/ui-kit';
 import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {SpaceTopBar, TextChat} from 'ui-kit';
+import {SpaceTopBar} from 'ui-kit';
+import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 
 import {MiroBoard, MiroChoice} from './components/templates';
@@ -16,8 +17,8 @@ import * as styled from './MiroBoardPage.styled';
 import 'core/utils/boardsPicker.1.0.js';
 
 const MiroBoardPage: FC = () => {
-  const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
-  const {space, miroBoardStore, textChatStore} = collaborationStore;
+  const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
+  const {space, miroBoardStore, streamChatStore} = collaborationStore;
   const {miroBoard, miroBoardTitle} = miroBoardStore;
   const {favoriteStore} = mainStore;
 
@@ -67,9 +68,9 @@ const MiroBoardPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={textChatStore.textChatDialog.isOpen}
-        toggleChat={textChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        isChatOpen={streamChatStore.isOpen}
+        toggleChat={streamChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={async () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
@@ -88,14 +89,8 @@ const MiroBoardPage: FC = () => {
         ) : (
           <MiroBoard miroUrl={miroBoard.data.accessLink} />
         )}
-        {textChatStore.textChatDialog.isOpen && (
-          <TextChat
-            currentChannel={textChatStore.currentChannel}
-            userId={sessionStore.userId}
-            sendMessage={textChatStore.sendMessage}
-            messages={textChatStore.messages}
-            messageSent={textChatStore.messageSent}
-          />
+        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
+          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
     </styled.Inner>
