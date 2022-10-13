@@ -15,7 +15,12 @@ const MusicVolumeController: FC = () => {
     <styled.Container data-testid="MusicVolumeController-test">
       <styled.Title>{t('musicPlayer.playerVolume')}</styled.Title>
       <styled.VolumeContainer>
-        <SvgButton iconName="player-mute" size="medium" onClick={musicPlayer.unmute} />
+        <SvgButton
+          iconName="player-mute"
+          size="medium"
+          onClick={musicPlayer.unmute}
+          disabled={musicPlayer.volume === 0}
+        />
         <styled.VolumeBarContainer>
           <styled.BarThumbPosition width={musicPlayer.volume * 100 + '%'} />
           <styled.VolumeBar
@@ -32,7 +37,12 @@ const MusicVolumeController: FC = () => {
             }}
           />
         </styled.VolumeBarContainer>
-        <SvgButton iconName="player-unmute" size="medium" onClick={musicPlayer.mute} />
+        <SvgButton
+          iconName="player-unmute"
+          size="medium"
+          onClick={musicPlayer.mute}
+          disabled={musicPlayer.volume === 1}
+        />
       </styled.VolumeContainer>
     </styled.Container>
   );
