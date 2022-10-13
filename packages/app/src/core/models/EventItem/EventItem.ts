@@ -8,7 +8,7 @@ import {
   formatStartTime,
   formattedStringFromDate,
   isOtherYearThanToday
-} from '@momentum/core';
+} from '@momentum-xyz/core';
 
 import {api, MagicLinkResponse, AttendeesResponseInterface} from 'api';
 import {AttendeeModel} from 'core/models/AttendeeModel';

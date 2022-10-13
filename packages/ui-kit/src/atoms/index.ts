@@ -14,3 +14,4 @@ export * from './TextArea';
 export * from './TextAreaDark';
 export * from './ToolbarIconList';
 export * from './Tooltip';
+export * from './ErrorBoundary';

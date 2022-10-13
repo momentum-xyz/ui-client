@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Button, Emoji, SectionPanel, Text} from '@momentum/ui-kit';
+import {Button, Emoji, SectionPanel, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

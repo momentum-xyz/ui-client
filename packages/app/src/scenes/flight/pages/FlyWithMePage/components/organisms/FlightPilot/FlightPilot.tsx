@@ -1,5 +1,5 @@
 import React, {FC, memo} from 'react';
-import {Avatar, Button, IconSvg, Text, UserStatusEnum} from '@momentum/ui-kit';
+import {Avatar, Button, IconSvg, Text, UserStatusEnum} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import * as styled from './FlightPilot.styled';

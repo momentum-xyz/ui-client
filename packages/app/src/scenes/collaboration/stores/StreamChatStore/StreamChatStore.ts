@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 import {StreamChat, Channel, Event} from 'stream-chat';
-import {RequestModel, ResetModel, Dialog} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {appVariables} from 'api/constants';
 import {UserProfileModelInterface} from 'core/models';

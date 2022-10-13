@@ -1,6 +1,11 @@
 import React, {FC} from 'react';
-import {Heading} from '@momentum/ui-kit';
-import {PropsWithThemeInterface, ColorPicker, PanelLayout, AccentColorList} from '@momentum/ui-kit';
+import {Heading} from '@momentum-xyz/ui-kit';
+import {
+  PropsWithThemeInterface,
+  ColorPicker,
+  PanelLayout,
+  AccentColorList
+} from '@momentum-xyz/ui-kit';
 
 import {getBackgroundColorByAccent} from 'ui-kit';
 

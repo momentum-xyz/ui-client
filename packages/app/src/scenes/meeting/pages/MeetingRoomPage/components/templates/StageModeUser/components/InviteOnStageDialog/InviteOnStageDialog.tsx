@@ -1,7 +1,7 @@
 import React from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {Dialog, Text} from '@momentum/ui-kit';
+import {Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import {ToastContent} from 'ui-kit';
 import {StageModeUserInterface} from 'core/models';

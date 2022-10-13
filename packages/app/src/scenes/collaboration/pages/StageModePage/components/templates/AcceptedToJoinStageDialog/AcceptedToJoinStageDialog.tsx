@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Dialog, Text} from '@momentum/ui-kit';
+import {Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import * as styled from './AcceptedToJoinStageDialog.styled';
 

@@ -7,6 +7,7 @@ COPY package.json yarn.lock ./
 COPY packages/app/package.json ./packages/app/
 COPY packages/ui-kit/package.json ./packages/ui-kit/
 COPY packages/core/package.json ./packages/core/
+COPY packages/sdk/package.json ./packages/sdk/
 RUN yarn install --immutable --immutable-cache --check-cache
 
 COPY . .

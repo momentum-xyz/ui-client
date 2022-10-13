@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
 
 import * as styled from './WalletError.styled';
 

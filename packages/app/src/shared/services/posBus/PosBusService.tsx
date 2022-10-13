@@ -30,9 +30,6 @@ class PosBusService {
   static handleIncomingCollaboration(message: PosBusCollaborationMessageType) {
     const {integrationType, spaceId} = message;
     switch (integrationType) {
-      case 'miro':
-        PosBusEventEmitter.emit('miro-board-change', spaceId);
-        break;
       case 'google_drive':
         PosBusEventEmitter.emit('google-drive-file-change', spaceId);
         break;

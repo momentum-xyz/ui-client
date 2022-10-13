@@ -2,7 +2,7 @@ import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {Button} from '@momentum/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';

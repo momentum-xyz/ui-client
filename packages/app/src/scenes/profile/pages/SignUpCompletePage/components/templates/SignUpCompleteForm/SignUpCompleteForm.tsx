@@ -10,7 +10,7 @@ import {
   Text,
   TextAreaDark,
   TextInterface
-} from '@momentum/ui-kit';
+} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
 import {FieldErrorInterface} from 'api/interfaces';

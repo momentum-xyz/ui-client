@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
-import {PanelLayout, Text} from '@momentum/ui-kit';
+import {PanelLayout, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {NetworkButton, LoginView, Page} from 'ui-kit';

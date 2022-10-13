@@ -2,7 +2,7 @@ import React, {FC, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
-import {Dialog, Text} from '@momentum/ui-kit';
+import {Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import {AgoraRemoteUserInterface} from 'core/models';
 import {useStore} from 'shared/hooks';

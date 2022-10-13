@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
 import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
-import {RequestModel, UserStatusEnum} from '@momentum/core';
+import {RequestModel, UserStatusEnum} from '@momentum-xyz/core';
 
 import {storage} from 'shared/services';
 import {api, FetchUserResponse} from 'api';

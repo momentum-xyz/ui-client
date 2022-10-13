@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {useHistory, useLocation} from 'react-router-dom';
-import {PanelLayout} from '@momentum/ui-kit';
+import {PanelLayout} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';

@@ -1,5 +1,5 @@
 import {types, cast, flow} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {StageModePopupInfoInterface, StageModePopupOptionsInterface} from 'core/interfaces';
 import {StageModePopupTypeEnum} from 'core/enums';

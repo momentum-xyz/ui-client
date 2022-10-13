@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import YouTube from 'react-youtube';
 import {useTheme} from 'styled-components';
 import {observer} from 'mobx-react-lite';
-import {SvgButton} from '@momentum/ui-kit';
+import {SvgButton} from '@momentum-xyz/ui-kit';
 
 import * as styled from './DashboardVideo.styled';
 

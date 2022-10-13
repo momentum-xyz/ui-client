@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Avatar} from '@momentum/ui-kit';
+import {Avatar} from '@momentum-xyz/ui-kit';
 
 export const Body = styled.div`
   display: flex;

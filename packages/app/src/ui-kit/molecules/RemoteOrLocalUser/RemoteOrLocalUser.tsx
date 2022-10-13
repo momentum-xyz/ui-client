@@ -3,7 +3,7 @@ import React, {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 import {observer} from 'mobx-react-lite';
-import {IconSvg, Text} from '@momentum/ui-kit';
+import {IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {UserProfileModelInterface, AgoraRemoteUserInterface} from 'core/models';
 

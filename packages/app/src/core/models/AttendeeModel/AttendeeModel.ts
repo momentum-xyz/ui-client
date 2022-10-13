@@ -1,5 +1,5 @@
 import {types, Instance} from 'mobx-state-tree';
-import {ImageSizeEnum} from '@momentum/ui-kit';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
 import {UserProfileModel} from 'core/models/UserProfile';

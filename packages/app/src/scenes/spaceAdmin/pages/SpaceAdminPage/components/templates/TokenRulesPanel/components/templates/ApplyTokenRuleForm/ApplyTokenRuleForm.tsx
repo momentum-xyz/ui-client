@@ -11,7 +11,7 @@ import {
   SearchDropdown,
   Text,
   useDebouncedCallback
-} from '@momentum/ui-kit';
+} from '@momentum-xyz/ui-kit';
 
 import {ApplyTokenRuleInterface} from 'api';
 import {useStore} from 'shared/hooks';

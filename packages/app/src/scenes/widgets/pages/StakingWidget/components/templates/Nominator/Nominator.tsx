@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useState} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {DeriveBalancesAll, DeriveStakingAccount} from '@polkadot/api-derive/types';
-import {Heading, Button} from '@momentum/ui-kit';
+import {Heading, Button} from '@momentum-xyz/ui-kit';
 
 import {UnsubscribeType} from 'core/types';
 import {useStore} from 'shared/hooks';

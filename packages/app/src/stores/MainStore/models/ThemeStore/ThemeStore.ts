@@ -5,7 +5,7 @@ import {
   BackgroundColorList,
   DefaultThemeConfig,
   TextColorList
-} from '@momentum/ui-kit';
+} from '@momentum-xyz/ui-kit';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';

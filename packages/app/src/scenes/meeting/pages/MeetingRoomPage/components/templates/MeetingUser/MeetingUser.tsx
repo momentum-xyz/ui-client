@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
-import {IconSvg, Text, useCoordinates} from '@momentum/ui-kit';
+import {IconSvg, Text, useCoordinates} from '@momentum-xyz/ui-kit';
 
 import {AgoraRemoteUserInterface} from 'core/models';
 import {ReactComponent as Astronaut} from 'static/images/astronaut.svg';

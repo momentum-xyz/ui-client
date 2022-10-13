@@ -1,4 +1,4 @@
-import {SpaceTypeEnum} from '@momentum/core';
+import {SpaceTypeEnum} from '@momentum-xyz/core';
 
 import {MetadataFieldType} from 'core/types';
 

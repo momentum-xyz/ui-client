@@ -3,7 +3,7 @@ import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Button, SvgButton, Avatar} from '@momentum/ui-kit';
+import {Button, SvgButton, Avatar} from '@momentum-xyz/ui-kit';
 
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {usePosBusEvent} from 'shared/hooks';

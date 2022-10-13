@@ -1,5 +1,5 @@
 import React from 'react';
-import {UserStatusEnum} from '@momentum/core';
+import {UserStatusEnum} from '@momentum-xyz/core';
 
 import {render, within} from 'utils/test.utils';
 

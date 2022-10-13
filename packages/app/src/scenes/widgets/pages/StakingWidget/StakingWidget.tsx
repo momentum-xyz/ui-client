@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
-import {Dialog, Loader, TabBar, TabBarTabInterface} from '@momentum/ui-kit';
+import {Dialog, Loader, TabBar, TabBarTabInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

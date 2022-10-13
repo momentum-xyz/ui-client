@@ -3,8 +3,8 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
-import {Button, Dialog, Text} from '@momentum/ui-kit';
-import {copyToClipboard} from '@momentum/core';
+import {Button, Dialog, Text} from '@momentum-xyz/ui-kit';
+import {copyToClipboard} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {MagicTypeEnum} from 'core/enums';

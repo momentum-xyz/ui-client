@@ -1,21 +1,19 @@
 import React from 'react';
 import {generatePath, Redirect} from 'react-router-dom';
-import {NavigationTabInterface} from '@momentum/ui-kit';
+import {NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
-import {RouteConfigInterface} from 'core/interfaces';
 
 import {
   DashboardPage,
   CalendarPage,
   StageModePage,
-  MiroBoardPage,
   ScreenSharePage,
   GoogleDrivePage,
   LiveStreamPage
 } from './pages';
 
-export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
+export const COLLABORATION_ROUTES = [
   {
     path: ROUTES.collaboration.dashboard,
     exact: true,
@@ -33,11 +31,6 @@ export const COLLABORATION_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.collaboration.stageMode,
     main: () => <StageModePage />
-  },
-  {
-    path: ROUTES.collaboration.miro,
-    exact: true,
-    main: () => <MiroBoardPage />
   },
   {
     path: ROUTES.collaboration.screenShare,
@@ -64,7 +57,7 @@ export const buildNavigationTabs = (
   isScreenSharing: boolean,
   isLiveStreaming?: boolean
 ): NavigationTabInterface[] => {
-  return [
+  const tabs: NavigationTabInterface[] = [
     {
       path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
       iconName: 'tiles'
@@ -84,10 +77,6 @@ export const buildNavigationTabs = (
       isActive: isScreenSharing
     },
     {
-      path: generatePath(ROUTES.collaboration.miro, {spaceId}),
-      iconName: 'miro'
-    },
-    {
       path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
       iconName: 'drive'
     },
@@ -98,4 +87,6 @@ export const buildNavigationTabs = (
       isActive: isLiveStreaming
     }
   ];
+
+  return tabs;
 };

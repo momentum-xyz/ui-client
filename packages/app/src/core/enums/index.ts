@@ -1,5 +1,4 @@
 export * from './storage.enum';
-export * from './cookie.enums';
 export * from './loginType.enum';
 export * from './participantStatus.enum';
 export * from './participantRole.enum';

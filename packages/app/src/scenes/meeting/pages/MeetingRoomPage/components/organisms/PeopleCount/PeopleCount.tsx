@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Text} from '@momentum/ui-kit';
+import {Text} from '@momentum-xyz/ui-kit';
 
 import * as styled from './PeopleCount.styled';
 

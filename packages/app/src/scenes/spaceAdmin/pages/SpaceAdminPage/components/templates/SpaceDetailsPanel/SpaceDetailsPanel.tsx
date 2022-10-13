@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
-import {Heading, Button, Input, SectionPanel, Text, Toggle} from '@momentum/ui-kit';
+import {Heading, Button, Input, SectionPanel, Text, Toggle} from '@momentum-xyz/ui-kit';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';

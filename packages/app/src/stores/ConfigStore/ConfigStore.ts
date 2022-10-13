@@ -1,5 +1,5 @@
 import {types, flow} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {api, AppConfigResponse} from 'api';
 import {appVariables, appVariablesOverrides} from 'api/constants';
@@ -27,6 +27,13 @@ const ConfigStore = types
           const [key, value] = entry;
           appVariables[key as keyof AppConfigInterface] = value as any;
         });
+
+        // TODO: FIgure out how to share those below and remove ts-ignore
+        //@ts-ignore window['env'] does not resolve typing
+        window['env'] = {
+          BACKEND_ENDPOINT_URL: appVariables.BACKEND_ENDPOINT_URL,
+          APP_ID: appVariables.MIRO_APP_ID
+        };
 
         self.isConfigReady = true;
       }

@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useState} from 'react';
 import {useTheme} from 'styled-components';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Dialog, Dropdown} from '@momentum/ui-kit';
+import {Dialog, Dropdown} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {TileTypeEnum} from 'core/enums';

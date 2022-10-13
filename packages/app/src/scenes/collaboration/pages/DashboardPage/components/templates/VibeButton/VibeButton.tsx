@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Button} from '@momentum/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit';
 
 import * as styled from './VibeButton.styled';
 

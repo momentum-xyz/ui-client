@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 import {cloneDeep} from 'lodash-es';
-import {RequestModel, ResetModel, Dialog} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {Space, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
@@ -14,6 +14,7 @@ import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
 import {TextChatStore} from './TextChatStore';
 import {StreamChatStore} from './StreamChatStore';
+import {CollaboarationPluginStore} from './CollaborationPluginsStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -28,6 +29,7 @@ const RootCollaborationStore = types
       miroBoardStore: types.optional(MiroBoardStore, {}),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
+      pluginsStore: types.optional(CollaboarationPluginStore, {}),
       isModerator: false,
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),

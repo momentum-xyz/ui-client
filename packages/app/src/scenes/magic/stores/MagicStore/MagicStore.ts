@@ -1,5 +1,5 @@
 import {types, flow, cast} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, MagicLinkResponse} from 'api';
 import {MagicLinkInterface} from 'core/interfaces';

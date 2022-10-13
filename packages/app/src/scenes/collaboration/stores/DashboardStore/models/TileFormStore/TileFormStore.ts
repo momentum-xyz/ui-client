@@ -1,5 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {TileInterface} from 'core/models';
 import {api, TextTileFormInterface, VideoTileFormInterface} from 'api';
@@ -70,8 +70,8 @@ const TileFormStore = types.compose(
             content: {
               title: data.text_title,
               text: data.text_description,
-              type: undefined,
-              url: undefined
+              url: undefined,
+              type: undefined
             }
           }
         });
@@ -86,8 +86,8 @@ const TileFormStore = types.compose(
             content: {
               type: 'normal',
               url: data.youtube_url,
-              text: undefined,
-              title: undefined
+              title: undefined,
+              text: undefined
             },
             permanentType: null,
             type: TileTypeEnum.TILE_TYPE_VIDEO,
@@ -104,8 +104,8 @@ const TileFormStore = types.compose(
             ...self.currentTile,
             content: {
               url: data.youtube_url,
-              text: undefined,
               title: undefined,
+              text: undefined,
               type: undefined
             }
           }

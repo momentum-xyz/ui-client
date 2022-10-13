@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {Dialog, Loader} from '@momentum/ui-kit';
+import {Dialog, Loader} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

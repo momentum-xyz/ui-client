@@ -1,0 +1,29 @@
+{
+  "name": "@momentum-xyz/sdk",
+  "version": "0.1.1",
+  "license": "GPL-3.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "copy-files": "copyfiles -u 1 bin/*.js dist/bin && copyfiles craco.config.js dist/",
+    "clean": "rimraf dist/",
+    "build": "yarn clean && yarn copy-files && tsc --listEmittedFiles",
+    "start": "tsc -w"
+  },
+  "dependencies": {
+    "@momentum-xyz/ui-kit": "^0.1.1",
+    "@craco/craco": "^6.1.1",
+    "axios": "^0.21.4"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1"
+  },
+  "peerDependencies": {
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
+  },
+  "bin": {
+    "momentum-plugin": "./bin/momentum-plugin.js"
+  }
+}

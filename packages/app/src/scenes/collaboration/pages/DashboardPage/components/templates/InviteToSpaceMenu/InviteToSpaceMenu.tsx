@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Dialog} from '@momentum/ui-kit';
+import {Dialog} from '@momentum-xyz/ui-kit';
 
 import {OnlineUsersList} from 'ui-kit';
 import {useStore} from 'shared/hooks';

@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
-import {RequestModel, ResetModel, Dialog, SpaceTypeEnum} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog, SpaceTypeEnum} from '@momentum-xyz/core';
 
 import {UserProfileModel, UserSpaceDetails} from 'core/models';
 import {

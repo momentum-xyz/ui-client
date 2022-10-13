@@ -1,13 +1,13 @@
 import React, {FC, useCallback, useEffect} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {observer} from 'mobx-react-lite';
+import {observer, useObserver} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Navigation} from '@momentum/ui-kit';
+import {Navigation, NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
-import {createSwitchByConfig} from 'core/utils';
+import {createRoutesByConfig} from 'core/utils';
 import {useStore, useDeviceChange} from 'shared/hooks';
 import {StageModeRequestEnum} from 'core/enums';
 import {ToastContent, TOAST_GROUND_OPTIONS, NewDeviceDialog, CountdownDialog} from 'ui-kit';
@@ -21,6 +21,7 @@ import {
 import {EmojiAnimationDock} from './components';
 import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
+import {CollaborationPluginPage} from './pages';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
@@ -34,7 +35,8 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    stageModeStore
+    stageModeStore,
+    pluginsStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -65,6 +67,11 @@ const Collaboration: FC = () => {
       }
     });
   }, [agoraStore, history, rootStore, spaceId, t]);
+
+  useEffect(() => {
+    pluginsStore.init();
+    console.info('fetched plugin list', pluginsStore.pluginLoaders.length);
+  }, [pluginsStore]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -138,18 +145,41 @@ const Collaboration: FC = () => {
 
   const {device} = useDeviceChange(newDeviceDialog.open);
 
+  const tabs = useObserver(() => {
+    const pluginTabs: NavigationTabInterface[] = pluginsStore.pluginLoaders.map((plugin) => ({
+      path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
+      iconName: plugin.iconName
+    }));
+
+    return [
+      ...buildNavigationTabs(
+        spaceId,
+        agoraStore.isStageMode,
+        !!agoraScreenShareStore.videoTrack,
+        liveStreamStore.isStreaming
+      ),
+      ...pluginTabs
+    ];
+  });
+
   return (
     <styled.Container>
-      <Navigation
-        tabs={buildNavigationTabs(
-          spaceId,
-          agoraStore.isStageMode,
-          !!agoraScreenShareStore.videoTrack,
-          liveStreamStore.isStreaming
-        )}
-      />
+      <Navigation tabs={tabs} />
 
-      {createSwitchByConfig(COLLABORATION_ROUTES)}
+      <Switch>
+        {createRoutesByConfig(COLLABORATION_ROUTES)}
+        {pluginsStore.pluginLoaders.map((plugin) => {
+          return (
+            <Route
+              key={plugin.name}
+              path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
+              exact={plugin.exact}
+            >
+              <CollaborationPluginPage pluginLoader={plugin} />
+            </Route>
+          );
+        })}
+      </Switch>
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog

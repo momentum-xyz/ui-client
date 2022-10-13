@@ -3,7 +3,7 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import DraggableContent from 'react-draggable';
 import {useTranslation} from 'react-i18next';
-import {Portal, SvgButton, Text} from '@momentum/ui-kit';
+import {Portal, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 
 import {ROUTES} from 'core/constants';

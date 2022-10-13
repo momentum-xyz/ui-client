@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {FileUploader} from '@momentum/ui-kit';
+import {FileUploader} from '@momentum-xyz/ui-kit';
 
 export const Wrapper = styled.div`
   display: flex;
