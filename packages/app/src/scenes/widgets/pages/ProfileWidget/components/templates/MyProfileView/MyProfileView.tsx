@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {capitalize} from 'lodash-es';
-import {Avatar, Button, IconSvg, Text} from '@momentum/ui-kit';
+import {Avatar, Button, Heading, IconSvg, Text} from '@momentum/ui-kit';
 import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum/core';
 
 import {useStore} from 'shared/hooks';
@@ -83,6 +83,11 @@ const MyProfileView: FC = () => {
             />
           </styled.InfoItem>
         </styled.Info>
+
+        <styled.Initiatives>
+          <Heading type="h4" label={`${t('labels.initiatives')}:`} align="left" />
+        </styled.Initiatives>
+
         <UserSpaceList
           spaceList={profileStore.userSpaceList}
           flyToSpace={handleFlyToSpace}

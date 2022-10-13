@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
 import {capitalize} from 'lodash-es';
 import {generatePath} from 'react-router-dom';
-import {Avatar, Button, IconSvg, Text} from '@momentum/ui-kit';
+import {Avatar, Button, Heading, IconSvg, Text} from '@momentum/ui-kit';
 import {UserStatusEnum, absoluteLink, monthAndYearString, withoutProtocol} from '@momentum/core';
 
 import {useStore} from 'shared/hooks';
@@ -120,6 +120,11 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
             />
           </styled.InfoItem>
         </styled.Info>
+
+        <styled.Initiatives>
+          <Heading type="h4" label={`${t('labels.initiatives')}:`} align="left" />
+        </styled.Initiatives>
+
         <UserSpaceList
           spaceList={userSpaceList}
           flyToSpace={handleFlyToSpace}

@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './Setting.styled';
 
-const SETTING_OFFSET_RIGHT = 20;
+const SETTING_OFFSET_RIGHT = 10;
 const SETTING_OFFSET_BOTTOM = 60;
 
 const Setting: FC = () => {
