@@ -1,7 +1,5 @@
 import React, {FC} from 'react';
-import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
-import {Heading} from '@momentum/ui-kit';
 
 import {UserSpaceDetailsInterface} from 'core/models';
 
@@ -16,11 +14,9 @@ interface PropsInterface {
 
 const UserSpaceList: FC<PropsInterface> = (props) => {
   const {spaceList, selectSpace, flyToSpace} = props;
-  const {t} = useTranslation();
 
   return (
     <styled.Container data-testid="UserSpaceList-test">
-      <Heading type="h4" label={`${t('labels.initiatives')}:`} align="left" />
       <styled.Body>
         {spaceList.length === 0 ? (
           <styled.Placeholder text="-" size="s" align="left" />

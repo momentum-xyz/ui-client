@@ -53,3 +53,7 @@ export const Container = styled.div`
   width: 1px;
   height: 20px;
 `;
+
+export const Initiatives = styled.div`
+  padding: 8px 0 10px 0;
+`;

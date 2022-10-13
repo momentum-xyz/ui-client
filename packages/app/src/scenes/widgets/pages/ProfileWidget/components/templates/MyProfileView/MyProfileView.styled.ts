@@ -82,3 +82,7 @@ export const Header = styled.div`
     margin-left: 10px;
   }
 `;
+
+export const Initiatives = styled.div`
+  padding: 8px 0 10px 0;
+`;

@@ -2,7 +2,9 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 import {Text} from '@momentum/ui-kit';
 
-export const NameText = styled(Text)``;
+export const NameText = styled(Text)`
+  width: 240px;
+`;
 
 export const Container = styled.div`
   display: flex;
