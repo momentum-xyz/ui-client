@@ -1,6 +1,6 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
-import {Text} from '@momentum/ui-kit';
+import {Text} from '@momentum-xyz/ui-kit';
 
 export const StyledText = styled(Text)``;
 

@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
-import {Button} from '@momentum/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore, useGooglePicker} from 'shared/hooks';

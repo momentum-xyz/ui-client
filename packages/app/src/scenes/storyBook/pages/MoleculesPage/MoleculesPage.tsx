@@ -20,8 +20,8 @@ import {
   Button,
   PageTopBar,
   AccentColorList
-} from '@momentum/ui-kit';
-import {UserStatusEnum} from '@momentum/core';
+} from '@momentum-xyz/ui-kit';
+import {UserStatusEnum} from '@momentum-xyz/core';
 
 import {
   TileMenu,

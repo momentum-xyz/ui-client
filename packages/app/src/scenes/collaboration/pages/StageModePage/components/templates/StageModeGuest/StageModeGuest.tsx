@@ -2,7 +2,7 @@ import {observer} from 'mobx-react-lite';
 import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {Button, Text} from '@momentum/ui-kit';
+import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent, SpaceTopBar, Stage} from 'ui-kit';

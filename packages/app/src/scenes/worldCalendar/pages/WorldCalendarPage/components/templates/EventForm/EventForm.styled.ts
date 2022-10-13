@@ -1,6 +1,6 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-import {FileUploader} from '@momentum/ui-kit';
+import {FileUploader} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   padding: 10px;

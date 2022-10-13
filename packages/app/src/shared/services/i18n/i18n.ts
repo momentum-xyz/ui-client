@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import {initReactI18next} from 'react-i18next';
-import {LanguageEnum} from '@momentum/core';
+import {LanguageEnum} from '@momentum-xyz/core';
 
 import {enGb} from './locales/en-gb';
 

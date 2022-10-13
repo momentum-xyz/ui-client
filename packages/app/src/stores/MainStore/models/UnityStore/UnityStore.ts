@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {appVariables} from 'api/constants';

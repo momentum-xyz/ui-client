@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
-import {Dialog, Text} from '@momentum/ui-kit';
+import {Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import momentum from 'static/images/momentum.svg';
 import flamingo from 'static/images/pink-flamingo.svg';

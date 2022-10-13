@@ -1,7 +1,7 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {IconSvg} from '@momentum/ui-kit';
+import {IconSvg} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';

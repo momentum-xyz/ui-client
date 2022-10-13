@@ -1,7 +1,7 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading, Text, Dropdown} from '@momentum/ui-kit';
+import {Heading, Text, Dropdown} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks/useStore';
 

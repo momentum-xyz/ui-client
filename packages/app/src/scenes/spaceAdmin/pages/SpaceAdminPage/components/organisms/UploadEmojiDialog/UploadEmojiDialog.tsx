@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {observer} from 'mobx-react-lite';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {Dialog, FileUploader, Input} from '@momentum/ui-kit';
+import {Dialog, FileUploader, Input} from '@momentum-xyz/ui-kit';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';

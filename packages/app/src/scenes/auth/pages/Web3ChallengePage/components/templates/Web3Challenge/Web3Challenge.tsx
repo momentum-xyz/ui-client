@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {WalletConnectConnector} from '@web3-react/walletconnect-connector';
-import {PanelLayout} from '@momentum/ui-kit';
+import {PanelLayout} from '@momentum-xyz/ui-kit';
 
 import {LoginView} from 'ui-kit';
 import {Web3ConnectorInterface} from 'core/interfaces';

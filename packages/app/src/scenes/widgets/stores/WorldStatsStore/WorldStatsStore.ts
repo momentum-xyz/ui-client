@@ -1,5 +1,5 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel, Dialog} from '@momentum/core';
+import {ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {WorldStats} from './models';
 

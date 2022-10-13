@@ -1,5 +1,5 @@
 import React, {FC, memo} from 'react';
-import {Text} from '@momentum/ui-kit';
+import {Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import * as styled from './PassengerAlert.styled';

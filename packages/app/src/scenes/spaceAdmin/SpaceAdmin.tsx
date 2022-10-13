@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {Navigation} from '@momentum/ui-kit';
+import {Navigation} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {createSwitchByConfig} from 'core/utils';

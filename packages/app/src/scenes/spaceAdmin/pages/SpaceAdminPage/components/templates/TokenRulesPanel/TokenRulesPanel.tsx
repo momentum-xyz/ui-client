@@ -2,7 +2,7 @@ import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
-import {SectionPanel} from '@momentum/ui-kit';
+import {SectionPanel} from '@momentum-xyz/ui-kit';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';

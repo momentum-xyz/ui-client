@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {SvgButton} from '@momentum/ui-kit';
+import {SvgButton} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

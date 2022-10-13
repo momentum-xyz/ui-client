@@ -1,4 +1,4 @@
-import {IconNameType} from '@momentum/ui-kit';
+import {IconNameType} from '@momentum-xyz/ui-kit';
 
 import {TokenRuleListHeaderType} from 'core/types';
 

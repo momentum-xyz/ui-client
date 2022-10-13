@@ -12,8 +12,8 @@
     "svg-sprite:type": "node scripts/generateIconsType.js"
   },
   "dependencies": {
-    "@momentum/ui-kit": "^0.1.0",
-    "@momentum/core": "^0.1.0",
+    "@momentum-xyz/ui-kit": "^0.1.0",
+    "@momentum-xyz/core": "^0.1.0",
     "@headlessui/react": "^1.2.0",
     "@polkadot/api": "8.10.1",
     "@polkadot/extension-dapp": "0.44.1",

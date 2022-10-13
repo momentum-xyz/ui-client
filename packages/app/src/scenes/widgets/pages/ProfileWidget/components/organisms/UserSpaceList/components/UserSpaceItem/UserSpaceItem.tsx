@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {SvgButton} from '@momentum/ui-kit';
+import {SvgButton} from '@momentum-xyz/ui-kit';
 
 import * as styled from './UserSpaceItem.styled';
 

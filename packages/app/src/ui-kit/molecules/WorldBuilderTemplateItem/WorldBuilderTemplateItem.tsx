@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
-import {Heading, SvgButton} from '@momentum/ui-kit';
+import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
 
 import * as styled from './WorldBuilderTemplateItem.styled';
 

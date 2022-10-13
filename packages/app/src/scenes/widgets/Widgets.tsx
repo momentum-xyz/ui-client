@@ -3,7 +3,7 @@ import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import ReactHowler from 'react-howler';
-import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum/ui-kit';
+import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';

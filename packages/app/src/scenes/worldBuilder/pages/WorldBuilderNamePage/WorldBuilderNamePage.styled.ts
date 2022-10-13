@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Heading, Input} from '@momentum/ui-kit';
+import {Heading, Input} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   display: flex;

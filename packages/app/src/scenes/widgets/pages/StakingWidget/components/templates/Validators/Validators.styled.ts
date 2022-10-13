@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {IconSvg} from '@momentum/ui-kit';
+import {IconSvg} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   display: flex;

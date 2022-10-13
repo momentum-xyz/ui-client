@@ -1,6 +1,6 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
-import {IconSvg, SvgButton, Text} from '@momentum/ui-kit';
+import {IconSvg, SvgButton, Text} from '@momentum-xyz/ui-kit';
 
 export const NextButton = styled(SvgButton)`
   transform: rotate(-90deg);

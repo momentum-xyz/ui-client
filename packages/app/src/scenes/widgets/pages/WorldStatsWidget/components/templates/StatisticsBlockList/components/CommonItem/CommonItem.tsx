@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Heading, Text, PropsWithThemeInterface} from '@momentum/ui-kit';
+import {Heading, Text, PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {WorldStatItemInterface} from 'api';
 

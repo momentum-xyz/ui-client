@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import YouTube from 'react-youtube';
-import {Button, SvgButton} from '@momentum/ui-kit';
+import {Button, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
 import {ROUTES} from 'core/constants';

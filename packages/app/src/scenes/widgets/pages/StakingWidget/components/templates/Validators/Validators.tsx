@@ -9,7 +9,7 @@ import {
   Text,
   Toggle,
   Tooltip
-} from '@momentum/ui-kit';
+} from '@momentum-xyz/ui-kit';
 
 import {PosBusEventEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';

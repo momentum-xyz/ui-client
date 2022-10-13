@@ -2,7 +2,7 @@ import React from 'react';
 import {t} from 'i18next';
 import {useTheme} from 'styled-components';
 import {observer} from 'mobx-react-lite';
-import {Dropdown, OptionInterface, Text} from '@momentum/ui-kit';
+import {Dropdown, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

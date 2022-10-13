@@ -2,7 +2,7 @@ import {observer} from 'mobx-react-lite';
 import {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAuth} from 'react-oidc-context';
-import {Avatar, ToolbarIcon, IconSvg, ToolbarIconList, Text, Dialog} from '@momentum/ui-kit';
+import {Avatar, ToolbarIcon, IconSvg, ToolbarIconList, Text, Dialog} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';

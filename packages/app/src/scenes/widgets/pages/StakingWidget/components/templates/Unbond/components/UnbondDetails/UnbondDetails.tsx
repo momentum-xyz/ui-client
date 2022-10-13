@@ -1,6 +1,6 @@
 import React from 'react';
 import {t} from 'i18next';
-import {Text} from '@momentum/ui-kit';
+import {Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks/useStore';
 

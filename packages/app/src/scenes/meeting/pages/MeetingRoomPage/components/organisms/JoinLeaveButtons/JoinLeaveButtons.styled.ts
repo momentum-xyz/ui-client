@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Button} from '@momentum/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   padding: 12px 0 0 0;

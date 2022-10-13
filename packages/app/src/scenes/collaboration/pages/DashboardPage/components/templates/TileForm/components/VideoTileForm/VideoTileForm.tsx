@@ -3,7 +3,7 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {Button, Input, Loader} from '@momentum/ui-kit';
+import {Button, Input, Loader} from '@momentum-xyz/ui-kit';
 
 import {VideoTileFormInterface} from 'api';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';

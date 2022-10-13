@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Heading, Loader, SearchInput, useDebouncedEffect} from '@momentum/ui-kit';
+import {Heading, Loader, SearchInput, useDebouncedEffect} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

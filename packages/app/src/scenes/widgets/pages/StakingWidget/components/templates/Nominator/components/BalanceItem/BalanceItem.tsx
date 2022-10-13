@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {useTheme} from 'styled-components';
-import {Heading, Text} from '@momentum/ui-kit';
+import {Heading, Text} from '@momentum-xyz/ui-kit';
 
 import * as styled from './BalanceItem.styled';
 

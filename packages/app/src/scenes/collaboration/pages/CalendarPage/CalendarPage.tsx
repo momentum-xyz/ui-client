@@ -4,8 +4,8 @@ import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router';
-import {Button} from '@momentum/ui-kit';
-import {absoluteLink} from '@momentum/core';
+import {Button} from '@momentum-xyz/ui-kit';
+import {absoluteLink} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';

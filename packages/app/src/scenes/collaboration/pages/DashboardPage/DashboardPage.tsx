@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
-import {IconSvg, Text, Button} from '@momentum/ui-kit';
+import {IconSvg, Text, Button} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';

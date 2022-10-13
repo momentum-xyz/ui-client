@@ -1,6 +1,6 @@
 import React, {FC, memo} from 'react';
 import {ToastOptions, ToastPosition} from 'react-toastify/dist/types';
-import {PropsWithThemeInterface} from '@momentum/ui-kit';
+import {PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
 
 import * as styled from './ToastMessage.styled';
 

@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {DraggableProvided} from 'react-beautiful-dnd';
 import ReactLinkify from 'react-linkify';
-import {PanelLayout} from '@momentum/ui-kit';
+import {PanelLayout} from '@momentum-xyz/ui-kit';
 
 import {TileInterface} from 'core/models';
 import {useStore} from 'shared/hooks';

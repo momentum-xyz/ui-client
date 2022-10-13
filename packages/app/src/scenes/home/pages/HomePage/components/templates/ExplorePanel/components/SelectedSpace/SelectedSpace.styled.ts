@@ -1,6 +1,6 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
-import {Heading, IconSvg} from '@momentum/ui-kit';
+import {Heading, IconSvg} from '@momentum-xyz/ui-kit';
 
 export const BackIconSvg = styled(IconSvg)`
   transform: rotate(90deg);

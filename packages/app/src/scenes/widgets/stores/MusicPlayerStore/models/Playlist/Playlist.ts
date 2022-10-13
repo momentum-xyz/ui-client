@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {api, PlaylistResponse} from 'api';
 import {TrackModel} from 'core/models';

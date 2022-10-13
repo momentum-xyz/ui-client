@@ -2,8 +2,8 @@ import React, {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
 import {t} from 'i18next';
-import {PropsWithThemeInterface, Loader, Text, TextArea} from '@momentum/ui-kit';
-import {dateToTime} from '@momentum/core';
+import {PropsWithThemeInterface, Loader, Text, TextArea} from '@momentum-xyz/ui-kit';
+import {dateToTime} from '@momentum-xyz/core';
 
 import {MessageInterface} from 'core/interfaces';
 import {TextMessageEnum} from 'core/enums';

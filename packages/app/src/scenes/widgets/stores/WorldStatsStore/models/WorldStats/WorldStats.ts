@@ -1,5 +1,5 @@
 import {flow, types, cast} from 'mobx-state-tree';
-import {RequestModel} from '@momentum/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {api, WorldStatInterface} from 'api';
 

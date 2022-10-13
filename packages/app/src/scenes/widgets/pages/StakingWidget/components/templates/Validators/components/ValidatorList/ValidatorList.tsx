@@ -1,6 +1,11 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {PropsWithThemeInterface, IconSvg, useSortableData, IconNameType} from '@momentum/ui-kit';
+import {
+  PropsWithThemeInterface,
+  IconSvg,
+  useSortableData,
+  IconNameType
+} from '@momentum-xyz/ui-kit';
 
 import {ValidatorItemModelInterface} from 'core/models';
 

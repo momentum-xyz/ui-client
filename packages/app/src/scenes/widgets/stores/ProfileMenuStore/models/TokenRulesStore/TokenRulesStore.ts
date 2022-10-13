@@ -1,6 +1,6 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {orderBy} from 'lodash';
-import {RequestModel, ResetModel, SortedField, SortDirectionEnum, Dialog} from '@momentum/core';
+import {RequestModel, ResetModel, SortedField, SortDirectionEnum, Dialog} from '@momentum-xyz/core';
 
 import {TokenRuleItemModel, TokenRuleItemModelInterface} from 'core/models';
 import {TokenTypeModel} from 'core/models/TokenType';

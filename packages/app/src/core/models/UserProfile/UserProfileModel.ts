@@ -1,6 +1,6 @@
 import {types, Instance, flow} from 'mobx-state-tree';
-import {RequestModel, UUIDModel, UserStatusEnum} from '@momentum/core';
-import {ImageSizeEnum} from '@momentum/ui-kit';
+import {RequestModel, UUIDModel, UserStatusEnum} from '@momentum-xyz/core';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {api, UserProfileInterface} from 'api';
 import {bytesToUuid} from 'core/utils';

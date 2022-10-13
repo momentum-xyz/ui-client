@@ -3,7 +3,7 @@ import {useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Navigation} from '@momentum/ui-kit';
+import {Navigation} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';

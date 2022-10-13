@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {DropResult} from 'react-beautiful-dnd';
-import {RequestModel, ResetModel, Dialog} from '@momentum/core';
+import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {OnlineUsersList, TileInterface, TileList, TileListInterface} from 'core/models';
 import {api} from 'api';
