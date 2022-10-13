@@ -78,6 +78,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
   return (
     <styled.UserListItem data-testid="MeetingUser-test" className={cn(isTalking && 'colored')}>
       <styled.Inner ref={menuRef} onClick={handleOpenMenu} className={cn(isTalking && 'colored')}>
+        {!user.cameraOff && !user.videoTrack && <styled.Background />}
         <styled.Video ref={videoRef} />
         {user.cameraOff && user.avatarSrc && <styled.Avatar src={user.avatarSrc} />}
         {user.cameraOff && !user.avatarSrc && (

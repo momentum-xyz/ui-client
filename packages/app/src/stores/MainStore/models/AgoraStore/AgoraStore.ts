@@ -271,7 +271,7 @@ const AgoraStore = types
         !self.userDevicesStore.isTogglingCamera &&
         (self.isStageMode
           ? self.agoraStageModeStore.isOnStage
-          : !!self.agoraMeetingStore.spaceId && self.agoraMeetingStore.maxVideoStreamsReached)
+          : !!self.agoraMeetingStore.spaceId && !self.agoraMeetingStore.maxVideoStreamsReached)
       );
     }
   }));

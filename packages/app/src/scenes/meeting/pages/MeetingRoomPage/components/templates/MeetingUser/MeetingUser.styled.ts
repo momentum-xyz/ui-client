@@ -35,6 +35,15 @@ export const Inner = styled.div`
   }
 `;
 
+export const Background = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: black;
+`;
+
 export const Video = styled.div`
   position: absolute;
   width: 100%;
