@@ -5027,6 +5027,11 @@ classnames@2.x, classnames@^2.1.1, classnames@^2.2.1, classnames@^2.2.6:
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
   integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
 
+classnames@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
+  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
+
 clean-css@^5.2.2:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-5.3.0.tgz#ad3d8238d5f3549e83d5f87205189494bc7cbb59"
@@ -11787,6 +11792,11 @@ react-unity-webgl@8.8.0:
   version "8.8.0"
   resolved "https://registry.yarnpkg.com/react-unity-webgl/-/react-unity-webgl-8.8.0.tgz#605fcfe65e47d2645dd66ac28f13b350fb9a2828"
   integrity sha512-4PHTEwUQd70IJAy+jdVvHM+A6No9GMTmA/PCFOWkgpy2g0SlKJF3LREt92TfhttnMJ+CLL9iF8X03wMBvNvsjA==
+
+react-use-error-boundary@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-use-error-boundary/-/react-use-error-boundary-3.0.0.tgz#c5b44acf9ab376f59a219d740ac372b05aba6240"
+  integrity sha512-5urkfyU3ZzInEMSHe1gxtDzlQAHs0krTt0V6h8H2L5nXhDKq3OYXnCs9lGHDkEkYvLmsphw8ap5g8uYfvrkJng==
 
 react-virtuoso@^2.10.2, react-virtuoso@^2.16.5:
   version "2.19.1"
