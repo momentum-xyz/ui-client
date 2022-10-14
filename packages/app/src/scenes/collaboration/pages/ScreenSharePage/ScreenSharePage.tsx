@@ -6,7 +6,7 @@ import {Button} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar} from 'ui-kit';
+import {SpacePage, SpaceTopBar} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 
 import {ScreenChoice, ScreenVideo} from './components/templates';
@@ -48,7 +48,7 @@ const ScreenSharePage: FC = () => {
   }
 
   return (
-    <styled.Inner data-testid="ScreenSharePage-test">
+    <SpacePage dataTestId="ScreenSharePage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={screenShareTitle}
@@ -84,7 +84,7 @@ const ScreenSharePage: FC = () => {
           <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
-    </styled.Inner>
+    </SpacePage>
   );
 };
 

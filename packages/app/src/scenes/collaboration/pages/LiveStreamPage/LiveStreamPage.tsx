@@ -5,7 +5,7 @@ import {useHistory} from 'react-router';
 import {Button} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, VideoPanel} from 'ui-kit';
+import {SpacePage, SpaceTopBar, VideoPanel} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {ROUTES} from 'core/constants';
 
@@ -30,7 +30,7 @@ const LiveStreamPage: FC = () => {
   }
 
   return (
-    <styled.Inner data-testid="LiveStreamPage-test">
+    <SpacePage dataTestId="LiveStreamPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('liveStream.subtitle')}
@@ -61,7 +61,7 @@ const LiveStreamPage: FC = () => {
           <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
-    </styled.Inner>
+    </SpacePage>
   );
 };
 
