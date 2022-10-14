@@ -39,7 +39,7 @@ const ManagePluginsPanel: FC = () => {
               key={loader.name}
               name={loader.name}
               userId={loader.name}
-              type="plugin"
+              type={loader.subtitle}
               onRemove={pluginsStore.removePlugin}
             />
           ))}
