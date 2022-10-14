@@ -25,6 +25,10 @@ const PluginLoader = types
   }))
   .actions((self) => ({
     loadPlugin: flow(function* () {
+      if (self.plugin) {
+        return;
+      }
+
       self.isErrorWhileLoadingComponent = false;
 
       try {
@@ -57,6 +61,10 @@ const PluginLoader = types
   }))
   .actions((self) => ({
     init() {
+      if (self.scriptElement) {
+        return;
+      }
+
       const element = document.createElement('script');
 
       element.src = self.url;
@@ -70,19 +78,6 @@ const PluginLoader = types
 
       self.scriptElement = element;
       document.head.appendChild(element);
-    },
-    deinit() {
-      if (!self.scriptElement) {
-        self.resetModel();
-        return;
-      }
-
-      console.log(`Dynamic Script Removed: ${self.url}`);
-      self.scriptElement.onerror = () => {};
-      self.scriptElement.onload = () => {};
-      document.head.removeChild(self.scriptElement);
-
-      self.resetModel();
     }
   }))
   .views((self) => ({

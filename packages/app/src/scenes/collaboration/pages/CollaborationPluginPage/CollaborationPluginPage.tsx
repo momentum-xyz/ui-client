@@ -9,7 +9,8 @@ import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, TextChat, ToastContent} from 'ui-kit';
+import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
+import {StreamChat} from 'scenes/collaboration/components';
 import {PluginLoaderModelType} from 'core/models';
 import {request} from 'api/request';
 
@@ -20,8 +21,8 @@ interface PropsInterface {
 }
 
 const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
-  const {collaborationStore, mainStore, sessionStore, leaveMeetingSpace} = useStore();
-  const {space, textChatStore} = collaborationStore;
+  const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
+  const {space, streamChatStore} = collaborationStore;
   const {favoriteStore} = mainStore;
   const {plugin} = pluginLoader;
 
@@ -37,10 +38,6 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
 
   useEffect(() => {
     pluginLoader.init();
-
-    return () => {
-      pluginLoader.deinit();
-    };
   }, [pluginLoader]);
 
   useEffect(() => {
@@ -62,7 +59,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   }
 
   return (
-    <styled.Inner>
+    <SpacePage dataTestId="SpacePlugin-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={pluginLoader.subtitle}
@@ -70,9 +67,9 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
         spaceId={space?.id}
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        isChatOpen={textChatStore.textChatDialog.isOpen}
-        toggleChat={textChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        isChatOpen={streamChatStore.isOpen}
+        toggleChat={streamChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         editSpaceHidden
         onLeave={async () => {
           await leaveMeetingSpace();
@@ -99,17 +96,11 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
         ) : (
           <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
         )}
-        {textChatStore.textChatDialog.isOpen && (
-          <TextChat
-            currentChannel={textChatStore.currentChannel}
-            userId={sessionStore.userId}
-            sendMessage={textChatStore.sendMessage}
-            messages={textChatStore.messages}
-            messageSent={textChatStore.messageSent}
-          />
+        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
+          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
-    </styled.Inner>
+    </SpacePage>
   );
 };
 

@@ -2,7 +2,11 @@
   "name": "@momentum-xyz/core",
   "version": "0.1.1",
   "license": "GPL-3.0",
-  "private": true,
+  "homepage": "https://momentum.xyz",
+  "repository": "https://github.com/momentum-xyz/ui-client",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

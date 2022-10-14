@@ -6,14 +6,15 @@ import {Button} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, TextChat} from 'ui-kit';
+import {SpacePage, SpaceTopBar} from 'ui-kit';
+import {StreamChat} from 'scenes/collaboration/components';
 
 import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenSharePage.styled';
 
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
-  const {space, screenShareStore, textChatStore} = collaborationStore;
+  const {space, screenShareStore, streamChatStore} = collaborationStore;
   const {screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
@@ -47,7 +48,7 @@ const ScreenSharePage: FC = () => {
   }
 
   return (
-    <styled.Inner data-testid="ScreenSharePage-test">
+    <SpacePage dataTestId="ScreenSharePage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={screenShareTitle}
@@ -56,9 +57,9 @@ const ScreenSharePage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={textChatStore.textChatDialog.isOpen}
-        toggleChat={textChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        isChatOpen={streamChatStore.isOpen}
+        toggleChat={streamChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={async () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
@@ -79,17 +80,11 @@ const ScreenSharePage: FC = () => {
         ) : (
           <ScreenVideo videoTrack={videoTrack} />
         )}
-        {textChatStore.textChatDialog.isOpen && (
-          <TextChat
-            currentChannel={textChatStore.currentChannel}
-            userId={sessionStore.userId}
-            sendMessage={textChatStore.sendMessage}
-            messages={textChatStore.messages}
-            messageSent={textChatStore.messageSent}
-          />
+        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
+          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
-    </styled.Inner>
+    </SpacePage>
   );
 };
 

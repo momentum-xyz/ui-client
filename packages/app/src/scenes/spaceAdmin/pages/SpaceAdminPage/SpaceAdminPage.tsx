@@ -49,7 +49,7 @@ const SpaceAdminPage: FC = () => {
       <styled.Body>
         {space.isAdmin ? (
           <>
-            <styled.VerticalSplit>
+            <styled.VerticalSplit className="noScrollIndicator">
               <SpaceDetailsPanel />
               <styled.SmallPanel>
                 <ManageEmojiPanel />

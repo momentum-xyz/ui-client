@@ -15,17 +15,19 @@ const MusicPlayerStore = types.compose(
       init(worldId: string): void {
         self.playlist.fetchPlaylist(worldId);
       },
-      togglePlayback(): void {
+      play(): void {
         if (self.playlist.tracks.length < 1) {
           return;
         }
-        self.musicPlayer.isPlaying = !self.musicPlayer.isPlaying;
-        if (!self.musicPlayer.isPlaying) {
-          self.musicPlayer.nextSongShouldBePlaying = false;
-        } else {
-          self.musicPlayer.firstLoadNextShouldBePlaying = true;
-          self.musicPlayer.nextSongShouldBePlaying = true;
-        }
+        self.musicPlayer.isPlaying = true;
+
+        self.musicPlayer.firstLoadNextShouldBePlaying = true;
+        self.musicPlayer.nextSongShouldBePlaying = true;
+      },
+      pause(): void {
+        self.musicPlayer.isPlaying = false;
+
+        self.musicPlayer.nextSongShouldBePlaying = false;
       },
       nextSong(): void {
         if (self.playlist.tracks.length < 1) {
@@ -40,7 +42,7 @@ const MusicPlayerStore = types.compose(
             self.musicPlayer.nextSongShouldBePlaying &&
             self.musicPlayer.firstLoadNextShouldBePlaying
           ) {
-            this.togglePlayback();
+            this.play();
           }
         } else if (
           self.playlist.tracks.length - 1 === self.playlist.currentSrcIndex &&
@@ -51,7 +53,7 @@ const MusicPlayerStore = types.compose(
             self.musicPlayer.nextSongShouldBePlaying &&
             self.musicPlayer.firstLoadNextShouldBePlaying
           ) {
-            this.togglePlayback();
+            this.play();
           }
         } else if (
           self.playlist.tracks.length - 1 === self.playlist.currentSrcIndex &&

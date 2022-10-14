@@ -16,13 +16,14 @@ export const Body = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  margin-top: 10px;
+  margin: 10px 0 0 0;
   gap: 10px;
 `;
 
 export const VerticalSplit = styled.div`
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
   gap: 10px;
   width: 100%;
   height: 100%;

@@ -6,14 +6,14 @@ import {IconSvg, Text, Button} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {SpaceTopBar} from 'ui-kit';
+import {SpacePage, SpaceTopBar} from 'ui-kit';
 
 import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} from './components';
 import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace, flightStore} = useStore();
-  const {dashboardStore, space, textChatStore} = collaborationStore;
+  const {dashboardStore, space, streamChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {flyWithMeStore} = flightStore;
   const {agoraStore, favoriteStore} = mainStore;
@@ -50,7 +50,7 @@ const DashboardPage: FC = () => {
   }
 
   return (
-    <styled.Container data-testid="DashboardPage-test">
+    <SpacePage dataTestId="DashboardPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
@@ -58,9 +58,9 @@ const DashboardPage: FC = () => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         spaceId={space.id}
         isAdmin={space.isAdmin}
-        isChatOpen={textChatStore.textChatDialog.isOpen}
-        toggleChat={textChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={textChatStore.numberOfUnreadMessages}
+        isChatOpen={streamChatStore.isOpen}
+        toggleChat={streamChatStore.textChatDialog.toggle}
+        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={async () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
@@ -116,7 +116,7 @@ const DashboardPage: FC = () => {
         tilesList={tileList.tileMatrix}
         onDragEnd={dashboardStore.onDragEnd}
         canDrag={space.isAdmin || space.isMember}
-        textChatIsOpen={textChatStore.textChatDialog.isOpen}
+        textChatIsOpen={streamChatStore.isOpen}
       />
       {tileDialog.isOpen && <TileForm />}
       {tileRemoveDialog.isOpen && <RemoveTileDialog />}
@@ -129,7 +129,7 @@ const DashboardPage: FC = () => {
           }
         />
       )}
-    </styled.Container>
+    </SpacePage>
   );
 };
 

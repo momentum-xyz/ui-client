@@ -4,7 +4,7 @@ import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful
 
 import {COLUMNS} from 'core/constants';
 import {TileInterface} from 'core/models';
-import {TextChat} from 'ui-kit';
+import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 
 import {TileItem} from './components/TileItem';
@@ -18,8 +18,8 @@ interface PropsInterface {
 }
 
 const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatIsOpen}) => {
-  const {collaborationStore, sessionStore} = useStore();
-  const {textChatStore} = collaborationStore;
+  const {collaborationStore} = useStore();
+  const {streamChatStore} = collaborationStore;
   return (
     <styled.Container data-testid="Dashboard-test">
       <styled.DashboardContainer className="noScrollIndicator">
@@ -66,14 +66,8 @@ const Dashboard: FC<PropsInterface> = ({tilesList, onDragEnd, canDrag, textChatI
             </styled.ColumnContainer>
           ))}
       </styled.DashboardContainer>
-      {textChatIsOpen && (
-        <TextChat
-          currentChannel={textChatStore.currentChannel}
-          userId={sessionStore.userId}
-          sendMessage={textChatStore.sendMessage}
-          messages={textChatStore.messages}
-          messageSent={textChatStore.messageSent}
-        />
+      {textChatIsOpen && streamChatStore.client && streamChatStore.currentChannel && (
+        <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
       )}
     </styled.Container>
   );

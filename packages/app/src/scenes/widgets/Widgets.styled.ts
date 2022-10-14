@@ -26,3 +26,19 @@ export const EmojiBar = styled.div`
   left: 10px;
   z-index: calc(var(--overlay-z-index) + 1);
 `;
+
+export const ChatIconWrapper = styled.div`
+  position: relative;
+`;
+export const MessageCount = styled.span`
+  position: absolute;
+  color: ${(props) => props.theme.accent};
+  top: -5px;
+  right: -7px;
+
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  background-color: rgba(255, 174, 99, 0.9);
+  color: transparent;
+`;

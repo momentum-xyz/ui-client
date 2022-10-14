@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
-export const Container = styled.ul`
+export const Container = styled.div`
   display: flex;
   width: 100%;
+  gap: 10px;
 `;
 
 export const BottomCenteredDock = styled.div`
