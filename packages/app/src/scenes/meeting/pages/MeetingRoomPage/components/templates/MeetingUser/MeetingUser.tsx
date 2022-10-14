@@ -13,7 +13,7 @@ export interface PropsInterface {
   spaceId: string;
   user: AgoraRemoteUserInterface;
   isModerator: boolean;
-  maxVideoStreams: boolean;
+  maxVideoStreamsReached: boolean;
   onMuteUser: (spaceId: string, userId: string) => void;
   onKickUser: (spaceId: string, userId: string) => void;
   usersListUpdated: number;
@@ -23,8 +23,15 @@ const OFFSET_RIGHT = 182;
 const OFFSET_BOTTOM = 7;
 
 const MeetingUser: FC<PropsInterface> = (props) => {
-  const {spaceId, user, isModerator, maxVideoStreams, onKickUser, onMuteUser, usersListUpdated} =
-    props;
+  const {
+    spaceId,
+    user,
+    isModerator,
+    maxVideoStreamsReached,
+    onKickUser,
+    onMuteUser,
+    usersListUpdated
+  } = props;
 
   const videoRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -44,18 +51,18 @@ const MeetingUser: FC<PropsInterface> = (props) => {
   }, [usersListUpdated]);
 
   useEffect(() => {
-    if (!user.cameraOff && !maxVideoStreams && videoRef.current) {
+    if (!user.cameraOff && !maxVideoStreamsReached && videoRef.current) {
       user.videoTrack?.play(videoRef.current);
     }
 
-    if (maxVideoStreams && user.videoTrack?.isPlaying) {
+    if (maxVideoStreamsReached) {
       user.videoTrack?.stop();
     }
 
     return () => {
       user.videoTrack?.stop();
     };
-  }, [maxVideoStreams, user, user.cameraOff]);
+  }, [maxVideoStreamsReached, user, user.cameraOff]);
 
   const handleOpenMenu = () => {
     if (isModerator) {
@@ -71,6 +78,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
   return (
     <styled.UserListItem data-testid="MeetingUser-test" className={cn(isTalking && 'colored')}>
       <styled.Inner ref={menuRef} onClick={handleOpenMenu} className={cn(isTalking && 'colored')}>
+        {!user.cameraOff && !user.videoTrack && <styled.Background />}
         <styled.Video ref={videoRef} />
         {user.cameraOff && user.avatarSrc && <styled.Avatar src={user.avatarSrc} />}
         {user.cameraOff && !user.avatarSrc && (

@@ -111,7 +111,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
                     user={user}
                     spaceId={agoraStore.spaceId || ''}
                     isModerator={collaborationStore.isModerator}
-                    maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
+                    maxVideoStreamsReached={agoraMeetingStore.maxVideoStreamsReached}
                     onMuteUser={meetingRoomStore.muteUser}
                     onKickUser={meetingRoomStore.kickUser}
                     usersListUpdated={agoraMeetingStore.users.length}
