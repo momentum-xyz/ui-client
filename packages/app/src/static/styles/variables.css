@@ -96,4 +96,5 @@
 
   /* MEETING */
   --meeting-size: 95px;
+  --space-page-width: calc(100vw - 195px);
 }

@@ -4,7 +4,7 @@ export const Inner = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px;
-  width: 100%;
+  width: var(--space-page-width);
   height: 100%;
   overflow: hidden;
   pointer-events: auto;
