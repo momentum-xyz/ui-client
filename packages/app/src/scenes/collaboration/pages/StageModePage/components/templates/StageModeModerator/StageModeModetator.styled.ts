@@ -1,16 +1,6 @@
 import styled from 'styled-components';
 import {Text} from '@momentum-xyz/ui-kit';
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 10px;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: auto;
-`;
-
 export const Body = styled.div`
   display: flex;
   height: 100%;

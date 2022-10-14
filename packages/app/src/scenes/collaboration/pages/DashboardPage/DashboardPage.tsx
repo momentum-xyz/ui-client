@@ -6,7 +6,7 @@ import {IconSvg, Text, Button} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {SpaceTopBar} from 'ui-kit';
+import {SpacePage, SpaceTopBar} from 'ui-kit';
 
 import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} from './components';
 import * as styled from './DashboardPage.styled';
@@ -50,7 +50,7 @@ const DashboardPage: FC = () => {
   }
 
   return (
-    <styled.Container data-testid="DashboardPage-test">
+    <SpacePage dataTestId="DashboardPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('dashboard.subtitle')}
@@ -129,7 +129,7 @@ const DashboardPage: FC = () => {
           }
         />
       )}
-    </styled.Container>
+    </SpacePage>
   );
 };
 

@@ -9,7 +9,14 @@ import {absoluteLink} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {EventList, LinkDialog, ToastContent, SpaceTopBar, DeleteEventDialog} from 'ui-kit';
+import {
+  EventList,
+  LinkDialog,
+  ToastContent,
+  SpaceTopBar,
+  DeleteEventDialog,
+  SpacePage
+} from 'ui-kit';
 
 import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';
@@ -76,7 +83,7 @@ const CalendarPage: FC = () => {
   }
 
   return (
-    <styled.Container data-testid="CalendarPage-test">
+    <SpacePage dataTestId="CalendarPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle="calendar"
@@ -126,7 +133,7 @@ const CalendarPage: FC = () => {
           onClose={deleteConfirmationDialog.close}
         />
       )}
-    </styled.Container>
+    </SpacePage>
   );
 };
 

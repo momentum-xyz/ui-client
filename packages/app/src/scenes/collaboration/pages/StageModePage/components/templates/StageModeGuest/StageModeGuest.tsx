@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {ToastContent, SpaceTopBar, Stage} from 'ui-kit';
+import {ToastContent, SpaceTopBar, Stage, SpacePage} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {
   StageModePopupQueue,
@@ -54,7 +54,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   }
 
   return (
-    <styled.Container data-testid="StageModeGuest-test">
+    <SpacePage dataTestId="StageModeGuest-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={t('labels.stageMode')}
@@ -125,7 +125,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Body>
-    </styled.Container>
+    </SpacePage>
   );
 };
 
