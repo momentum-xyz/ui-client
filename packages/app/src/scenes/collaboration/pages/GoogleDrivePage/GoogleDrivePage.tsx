@@ -6,7 +6,7 @@ import {Button} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore, useGooglePicker} from 'shared/hooks';
-import {SpaceTopBar} from 'ui-kit';
+import {SpacePage, SpaceTopBar} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
@@ -65,7 +65,7 @@ const GoogleDrivePage: FC = () => {
   }
 
   return (
-    <styled.Inner data-testid="GoogleDrivePage-test">
+    <SpacePage dataTestId="GoogleDrivePage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={documentTitle}
@@ -99,7 +99,7 @@ const GoogleDrivePage: FC = () => {
           <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
-    </styled.Inner>
+    </SpacePage>
   );
 };
 
