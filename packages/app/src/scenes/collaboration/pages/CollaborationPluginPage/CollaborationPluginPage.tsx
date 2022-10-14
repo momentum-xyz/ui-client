@@ -9,7 +9,7 @@ import {toast} from 'react-toastify';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpaceTopBar, ToastContent} from 'ui-kit';
+import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {PluginLoaderModelType} from 'core/models';
 import {request} from 'api/request';
@@ -59,7 +59,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   }
 
   return (
-    <styled.Inner>
+    <SpacePage dataTestId="SpacePlugin-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={pluginLoader.subtitle}
@@ -100,7 +100,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
           <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
-    </styled.Inner>
+    </SpacePage>
   );
 };
 
