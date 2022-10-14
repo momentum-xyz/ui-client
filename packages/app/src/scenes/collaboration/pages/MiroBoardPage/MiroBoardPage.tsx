@@ -7,7 +7,7 @@ import {Button} from '@momentum-xyz/ui-kit';
 import {ROUTES} from 'core/constants';
 import {MiroBoardInterface} from 'api';
 import {appVariables} from 'api/constants';
-import {SpaceTopBar} from 'ui-kit';
+import {SpacePage, SpaceTopBar} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 
@@ -59,7 +59,7 @@ const MiroBoardPage: FC = () => {
   }
 
   return (
-    <styled.Inner data-testid="MiroBoardPage-test">
+    <SpacePage dataTestId="MiroBoardPage-test">
       <SpaceTopBar
         title={space.name ?? ''}
         subtitle={miroBoardTitle}
@@ -93,7 +93,7 @@ const MiroBoardPage: FC = () => {
           <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
         )}
       </styled.Container>
-    </styled.Inner>
+    </SpacePage>
   );
 };
 

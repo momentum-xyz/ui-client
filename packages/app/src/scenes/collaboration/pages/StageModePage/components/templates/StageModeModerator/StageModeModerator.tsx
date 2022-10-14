@@ -5,7 +5,7 @@ import {t} from 'i18next';
 import {generatePath, useHistory} from 'react-router-dom';
 import {Toggle, Button, Text} from '@momentum-xyz/ui-kit';
 
-import {Stage, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar} from 'ui-kit';
+import {Stage, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar, SpacePage} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
@@ -89,7 +89,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
 
   return (
     <>
-      <styled.Container data-testid="StageModeModerator-test">
+      <SpacePage dataTestId="StageModeModerator-test">
         <SpaceTopBar
           title={space.name ?? ''}
           subtitle={t('labels.stageMode')}
@@ -166,7 +166,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
             <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
           )}
         </styled.Body>
-      </styled.Container>
+      </SpacePage>
       {removeParticipantFromStageDialog.isOpen &&
         collaborationStore.participantToRemoveFromStage && (
           <RemoveParticipantFromStageDialog
