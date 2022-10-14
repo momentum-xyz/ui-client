@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {t} from 'i18next';
-import {Dialog, Input} from '@momentum-xyz/ui-kit';
+import {Dialog, IconNameType, Input, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from 'core/interfaces';
 
@@ -29,18 +29,19 @@ const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
   const [url, setUrl] = useState('');
   const [subPath, setSubPath] = useState('');
   const [subtitle, setSubtitle] = useState('');
+  const [selectedIcon, setSelectedIcon] = useState<IconNameType>('gear');
 
   const plugin = useMemo(
     () => ({
       name: name,
       subPath: subPath,
       subtitle: subtitle,
-      iconName: mockPlugin.iconName,
+      iconName: selectedIcon,
       // TODO: Later change to remote url
       url: url,
       exact: mockPlugin.exact
     }),
-    [mockPlugin.exact, mockPlugin.iconName, name, subPath, subtitle, url]
+    [mockPlugin.exact, name, selectedIcon, subPath, subtitle, url]
   );
 
   useEffect(() => {
@@ -51,6 +52,22 @@ const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
       setSubtitle(mockPlugin.subtitle ?? '');
     }
   }, [mockPlugin.name, mockPlugin.subPath, mockPlugin.subtitle, mockPlugin.url, name]);
+
+  const iconsToSelect = useMemo<IconNameType[]>(
+    () => [
+      'gear',
+      'warning',
+      'approved',
+      'stage',
+      'stats',
+      'trash',
+      'wallet',
+      'astro',
+      'vibe',
+      'tiles'
+    ],
+    []
+  );
 
   return (
     <Dialog
@@ -71,6 +88,14 @@ const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
         <Input label="Script URL" value={url} onChange={setUrl} />
         <Input label="Sub Path" value={subPath} onChange={setSubPath} />
         <Input label="Subtitle" value={subtitle} onChange={setSubtitle} />
+        <styled.IconHeading type="h3" label="Select Icon:" align="left" />
+        <styled.IconSelector>
+          {iconsToSelect.map((icon) => (
+            <styled.IconItem key={icon} className={selectedIcon === icon ? 'selected' : undefined}>
+              <SvgButton iconName={icon} onClick={() => setSelectedIcon(icon)} size="medium" />
+            </styled.IconItem>
+          ))}
+        </styled.IconSelector>
       </styled.Container>
     </Dialog>
   );
