@@ -20,4 +20,4 @@ export * from './vibeAction.enum';
 export * from './stageModePopupType.enum';
 export * from './stageModeModerationEvent.enum';
 export * from './textMessage.enum';
-export * from './dynamicScriptLoaderStatus.enum';
+export * from './loaderStatus.enum';

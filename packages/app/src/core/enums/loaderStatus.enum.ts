@@ -1,4 +1,4 @@
-export enum DynamicScriptLoaderStatusEnum {
+export enum LoaderStatusEnum {
   READY = 'READY',
   LOADED = 'LOADED',
   LOADING = 'LOADING',

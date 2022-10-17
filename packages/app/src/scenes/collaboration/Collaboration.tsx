@@ -70,7 +70,7 @@ const Collaboration: FC = () => {
   useEffect(() => {
     // TODO: check is for demonstration purposes
     if (pluginsStore.spacePlugins.length === 0) {
-      pluginsStore.getSpacePlugins();
+      pluginsStore.fetchSpacePlugins();
     }
   }, [pluginsStore]);
 

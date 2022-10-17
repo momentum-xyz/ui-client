@@ -29,7 +29,7 @@ const PluginsStore = types
     })
   )
   .actions((self) => ({
-    getSpacePlugins() {
+    fetchSpacePlugins() {
       // TODO: Later change it to API call that returns this list
 
       COLLABORATION_PLUGIN_LIST.forEach((plugin) => {
@@ -42,10 +42,16 @@ const PluginsStore = types
 
       self.spacePluginLoaders = cast(COLLABORATION_PLUGIN_LIST);
     },
-    canLoadPlugin(name: string) {
-      const dynamicScript = self.dynamicScriptsStore.getScript(name);
+    loadPluginIfNeeded(pluginLoader: PluginLoaderModelType) {
+      if (pluginLoader.isLoaded || pluginLoader.isLoading) {
+        return;
+      }
 
-      return dynamicScript?.isLoaded;
+      const dynamicScript = self.dynamicScriptsStore.getScript(pluginLoader.name);
+
+      if (dynamicScript?.isLoaded && pluginLoader.isReady) {
+        pluginLoader.loadPlugin();
+      }
     },
     addPlugin(plugin: PluginInterface) {
       // TODO: Later change it to API call adds plugin

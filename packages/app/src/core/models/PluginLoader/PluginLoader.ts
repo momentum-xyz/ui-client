@@ -3,6 +3,8 @@ import {IconNameType} from '@momentum-xyz/ui-kit';
 import {PluginInterface} from '@momentum-xyz/sdk';
 import {ResetModel} from '@momentum-xyz/core';
 
+import {LoaderStatusEnum} from 'core/enums';
+
 const PluginLoader = types
   .compose(
     ResetModel,
@@ -14,8 +16,10 @@ const PluginLoader = types
       exact: types.maybe(types.boolean),
       module: types.maybe(types.string),
       iconName: types.frozen<IconNameType>(),
-
-      isError: false,
+      status: types.optional(
+        types.enumeration(Object.values(LoaderStatusEnum)),
+        LoaderStatusEnum.READY
+      ),
       plugin: types.maybe(types.frozen<PluginInterface>())
     })
   )
@@ -25,7 +29,7 @@ const PluginLoader = types
         return;
       }
 
-      self.isError = false;
+      self.status = LoaderStatusEnum.LOADING;
 
       try {
         self.plugin = yield (async (): Promise<PluginInterface> => {
@@ -40,11 +44,27 @@ const PluginLoader = types
           // @ts-ignore: Required to load list based plugins, cause of previous problems
           return plugin;
         })();
-      } catch {
-        console.error('[PluginLoader] Error while loading plugin!');
-        self.isError = true;
+
+        self.status = LoaderStatusEnum.LOADED;
+      } catch (error) {
+        console.error('[PluginLoader] An error has occured while loading plugin!', error);
+        self.status = LoaderStatusEnum.ERROR;
       }
     })
+  }))
+  .views((self) => ({
+    get isLoaded(): boolean {
+      return self.status === LoaderStatusEnum.LOADED && !!self.plugin;
+    },
+    get isError(): boolean {
+      return self.status === LoaderStatusEnum.ERROR;
+    },
+    get isLoading(): boolean {
+      return self.status === LoaderStatusEnum.LOADING;
+    },
+    get isReady(): boolean {
+      return self.status === LoaderStatusEnum.READY;
+    }
   }));
 
 export type PluginLoaderModelType = Instance<typeof PluginLoader>;
