@@ -56,9 +56,9 @@ const PluginsStore = types
       const newPlugins = [...self.spacePluginLoaders, plugin];
       self.spacePluginLoaders = cast(newPlugins);
     },
-    removePlugin(name: string) {
+    removePlugin(subpath: string) {
       self.spacePluginLoaders = cast(
-        self.spacePluginLoaders.filter((loader) => loader.name !== name)
+        self.spacePluginLoaders.filter((loader) => loader.subPath !== subpath)
       );
     }
   }))

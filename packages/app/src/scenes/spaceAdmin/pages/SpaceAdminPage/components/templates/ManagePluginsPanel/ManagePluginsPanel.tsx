@@ -38,9 +38,9 @@ const ManagePluginsPanel: FC = () => {
             <AdminListItem
               key={plugin.subPath}
               name={plugin.name}
-              userId={plugin.name}
+              userId={plugin.subPath}
               type={plugin.subtitle}
-              onRemove={(_, name) => pluginsStore.removePlugin(name)}
+              onRemove={(id, _) => pluginsStore.removePlugin(id)}
             />
           ))}
         </styled.List>
