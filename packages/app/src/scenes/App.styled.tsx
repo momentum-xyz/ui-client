@@ -131,4 +131,16 @@ export const GlobalStyles = createGlobalStyle`
   .react-datepicker__time-container .react-datepicker__time {
     background: ${(props) => props.theme.bg} !important;
   }
+  
+  a {
+  color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
+  background-color: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  
+    :hover {
+      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
+    }
+  }
+
 `;
