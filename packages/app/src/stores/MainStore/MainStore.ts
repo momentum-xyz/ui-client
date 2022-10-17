@@ -8,7 +8,8 @@ import {
   WorldStore,
   FavoriteStore,
   AgoraStore,
-  LiveStreamStore
+  LiveStreamStore,
+  DynamicScriptsStore
 } from './models';
 
 const MainStore = types.compose(
@@ -21,7 +22,8 @@ const MainStore = types.compose(
       worldStore: types.optional(WorldStore, {}),
       favoriteStore: types.optional(FavoriteStore, {}),
       liveStreamStore: types.optional(LiveStreamStore, {}),
-      agoraStore: types.optional(AgoraStore, {})
+      agoraStore: types.optional(AgoraStore, {}),
+      dynamicScriptsStore: types.optional(DynamicScriptsStore, {})
     })
     .actions((self) => ({
       init(): void {

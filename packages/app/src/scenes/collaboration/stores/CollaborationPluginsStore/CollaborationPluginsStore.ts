@@ -4,6 +4,7 @@ import {ResetModel} from '@momentum-xyz/core';
 import {appVariables} from 'api/constants';
 import {PluginInterface} from 'core/interfaces';
 import {PluginLoader} from 'core/models';
+import {DynamicScriptsStoreType} from 'stores/MainStore/models';
 
 const COLLABORATION_PLUGIN_LIST: PluginInterface[] = [
   {
@@ -27,8 +28,17 @@ const CollaboarationPluginStore = types
     })
   )
   .actions((self) => ({
-    init() {
+    init(dynamicScriptsStore: DynamicScriptsStoreType) {
       // TODO: Later change it to API call that returns this list
+
+      COLLABORATION_PLUGIN_LIST.forEach((plugin) => {
+        if (dynamicScriptsStore.containsLoaderWithName(plugin.name)) {
+          return;
+        }
+
+        dynamicScriptsStore.addScript(plugin.name, plugin.url);
+      });
+
       self.pluginLoaders = cast(COLLABORATION_PLUGIN_LIST);
     }
   }));

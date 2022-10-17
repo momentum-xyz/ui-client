@@ -23,3 +23,4 @@ export * from './EmojiDetails';
 export * from './EventForm';
 export * from './EventList';
 export * from './PluginLoader';
+export * from './DynamicScriptLoader';

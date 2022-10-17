@@ -11,16 +11,17 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
-import {PluginLoaderModelType} from 'core/models';
+import {DynamicScriptLoaderType, PluginLoaderModelType} from 'core/models';
 import {request} from 'api/request';
 
 import * as styled from './CollaborationPluginPage.styled';
 
 interface PropsInterface {
   pluginLoader: PluginLoaderModelType;
+  dynamicScriptLoader: DynamicScriptLoaderType;
 }
 
-const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
+const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, dynamicScriptLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
   const {favoriteStore} = mainStore;
@@ -37,8 +38,10 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   }, []);
 
   useEffect(() => {
-    pluginLoader.init();
-  }, [pluginLoader]);
+    if (dynamicScriptLoader.isLoaded) {
+      pluginLoader.loadPlugin();
+    }
+  }, [dynamicScriptLoader.isLoaded, pluginLoader]);
 
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {
