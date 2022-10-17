@@ -18,6 +18,9 @@ const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage')
 const Collaboration = lazy(() => import('./collaboration/Collaboration'));
 const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
 const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
+const WorldBuilderCustomizePanel = lazy(
+  () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
+);
 const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
 const WorldCalendar = lazy(() => import('./worldCalendar/WorldCalendar'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
@@ -124,6 +127,16 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
     path: ROUTES.spaceAdmin.base,
     main: () => <SpaceAdmin />,
+    renderBackground: true
+  },
+  {
+    path: ROUTES.worldBuilder.builder,
+    main: () => (
+      <>
+        <WorldBuilderCustomizePanel />
+        <HomePage />
+      </>
+    ),
     renderBackground: true
   },
   {

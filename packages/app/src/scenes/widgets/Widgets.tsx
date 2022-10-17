@@ -157,6 +157,13 @@ const Widgets: FC = () => {
               )}
             </ToolbarIcon>
           </styled.ChatIconWrapper>
+          <ToolbarIcon
+            icon="planet"
+            title={t('titles.worldBuilder')}
+            link={ROUTES.worldBuilder.builder}
+            size="normal-large"
+            isWhite={false}
+          />
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>
