@@ -1,6 +1,8 @@
 import {types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
+import {PluginsStore} from 'stores/MainStore/models/PluginsStore';
+
 import {
   ThemeStore,
   SentryStore,
@@ -8,8 +10,7 @@ import {
   WorldStore,
   FavoriteStore,
   AgoraStore,
-  LiveStreamStore,
-  DynamicScriptsStore
+  LiveStreamStore
 } from './models';
 
 const MainStore = types.compose(
@@ -23,7 +24,7 @@ const MainStore = types.compose(
       favoriteStore: types.optional(FavoriteStore, {}),
       liveStreamStore: types.optional(LiveStreamStore, {}),
       agoraStore: types.optional(AgoraStore, {}),
-      dynamicScriptsStore: types.optional(DynamicScriptsStore, {})
+      pluginsStore: types.optional(PluginsStore, {})
     })
     .actions((self) => ({
       init(): void {

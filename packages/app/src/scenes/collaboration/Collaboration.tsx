@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useMemo} from 'react';
 import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {observer, useObserver} from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Navigation, NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
@@ -26,7 +26,7 @@ import {CollaborationPluginPage} from './pages';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore, liveStreamStore, dynamicScriptsStore} = mainStore;
+  const {agoraStore, liveStreamStore, pluginsStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -35,8 +35,7 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    stageModeStore,
-    pluginsStore
+    stageModeStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -69,17 +68,8 @@ const Collaboration: FC = () => {
   }, [agoraStore, history, rootStore, spaceId, t]);
 
   useEffect(() => {
-    pluginsStore.init(dynamicScriptsStore);
-    console.info('fetched plugin list', pluginsStore.pluginLoaders.length);
-  }, [dynamicScriptsStore, pluginsStore]);
-
-  const plugins = useObserver(() => {
-    const plugins = pluginsStore.pluginLoaders.filter((pluginLoader) =>
-      dynamicScriptsStore.containsLoaderWithName(pluginLoader.name)
-    );
-
-    return plugins;
-  });
+    pluginsStore.getSpacePlugins();
+  }, [pluginsStore]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -154,7 +144,7 @@ const Collaboration: FC = () => {
   const {device} = useDeviceChange(newDeviceDialog.open);
 
   const tabs = useMemo(() => {
-    const pluginTabs: NavigationTabInterface[] = plugins.map((plugin) => ({
+    const pluginTabs: NavigationTabInterface[] = pluginsStore.spacePlugins.map((plugin) => ({
       path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
       iconName: plugin.iconName
     }));
@@ -172,7 +162,7 @@ const Collaboration: FC = () => {
     agoraScreenShareStore.videoTrack,
     agoraStore.isStageMode,
     liveStreamStore.isStreaming,
-    plugins,
+    pluginsStore.spacePlugins,
     spaceId
   ]);
 
@@ -182,23 +172,14 @@ const Collaboration: FC = () => {
 
       <Switch>
         {createRoutesByConfig(COLLABORATION_ROUTES)}
-        {plugins.map((plugin) => {
-          const dynamicScriptLoader = dynamicScriptsStore.getScript(plugin.name);
-
-          if (!dynamicScriptLoader) {
-            return null;
-          }
-
+        {pluginsStore.spacePlugins.map((plugin) => {
           return (
             <Route
               key={plugin.name}
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >
-              <CollaborationPluginPage
-                pluginLoader={plugin}
-                dynamicScriptLoader={dynamicScriptLoader}
-              />
+              <CollaborationPluginPage pluginLoader={plugin} />
             </Route>
           );
         })}
