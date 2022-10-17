@@ -23,7 +23,7 @@ interface PropsInterface {
 const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
-  const {favoriteStore} = mainStore;
+  const {favoriteStore, pluginsStore} = mainStore;
   const {plugin} = pluginLoader;
 
   const history = useHistory();
@@ -37,8 +37,10 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   }, []);
 
   useEffect(() => {
-    pluginLoader.init();
-  }, [pluginLoader]);
+    if (pluginsStore.canLoadPlugin(pluginLoader.name)) {
+      pluginLoader.loadPlugin();
+    }
+  }, [pluginLoader, pluginsStore]);
 
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {

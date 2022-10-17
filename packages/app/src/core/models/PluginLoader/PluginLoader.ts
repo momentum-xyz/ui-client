@@ -15,21 +15,17 @@ const PluginLoader = types
       module: types.maybe(types.string),
       iconName: types.frozen<IconNameType>(),
 
-      isErrorWhileLoadingComponent: false,
-      isErrorWhileLoadingDynamicScript: false,
+      isError: false,
       plugin: types.maybe(types.frozen<PluginInterface>())
     })
   )
-  .volatile<{scriptElement?: HTMLScriptElement}>((self) => ({
-    scriptElement: undefined
-  }))
   .actions((self) => ({
     loadPlugin: flow(function* () {
       if (self.plugin) {
         return;
       }
 
-      self.isErrorWhileLoadingComponent = false;
+      self.isError = false;
 
       try {
         self.plugin = yield (async (): Promise<PluginInterface> => {
@@ -45,45 +41,10 @@ const PluginLoader = types
           return plugin;
         })();
       } catch {
-        self.isErrorWhileLoadingComponent = true;
+        console.error('[PluginLoader] Error while loading plugin!');
+        self.isError = true;
       }
     })
-  }))
-  .actions((self) => ({
-    onDynamicScriptLoaded() {
-      console.log(`Dynamic Script Loaded: ${self.url}`);
-      self.loadPlugin();
-    },
-    onDynamicScriptError() {
-      console.error(`Dynamic Script Error: ${self.url}`);
-      self.isErrorWhileLoadingDynamicScript = true;
-    }
-  }))
-  .actions((self) => ({
-    init() {
-      if (self.scriptElement) {
-        return;
-      }
-
-      const element = document.createElement('script');
-
-      element.src = self.url;
-      element.type = 'text/javascript';
-      element.async = true;
-
-      self.isErrorWhileLoadingDynamicScript = false;
-
-      element.onload = self.onDynamicScriptLoaded;
-      element.onerror = self.onDynamicScriptError;
-
-      self.scriptElement = element;
-      document.head.appendChild(element);
-    }
-  }))
-  .views((self) => ({
-    get isError(): boolean {
-      return self.isErrorWhileLoadingComponent || self.isErrorWhileLoadingDynamicScript;
-    }
   }));
 
 export type PluginLoaderModelType = Instance<typeof PluginLoader>;

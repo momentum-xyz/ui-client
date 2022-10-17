@@ -1,7 +1,7 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect, useMemo} from 'react';
 import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {observer, useObserver} from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Navigation, NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
@@ -26,7 +26,7 @@ import {CollaborationPluginPage} from './pages';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore, liveStreamStore} = mainStore;
+  const {agoraStore, liveStreamStore, pluginsStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -35,8 +35,7 @@ const Collaboration: FC = () => {
     invitedOnStageDialog,
     prepareOnStageDialog,
     countdownDialog,
-    stageModeStore,
-    pluginsStore
+    stageModeStore
   } = collaborationStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
@@ -70,9 +69,8 @@ const Collaboration: FC = () => {
 
   useEffect(() => {
     // TODO: check is for demonstration purposes
-    if (pluginsStore.pluginLoaders.length === 0) {
-      pluginsStore.init();
-      console.info('fetched plugin list', pluginsStore.pluginLoaders.length);
+    if (pluginsStore.spacePlugins.length === 0) {
+      pluginsStore.getSpacePlugins();
     }
   }, [pluginsStore]);
 
@@ -148,8 +146,8 @@ const Collaboration: FC = () => {
 
   const {device} = useDeviceChange(newDeviceDialog.open);
 
-  const tabs = useObserver(() => {
-    const pluginTabs: NavigationTabInterface[] = pluginsStore.pluginLoaders.map((plugin) => ({
+  const tabs = useMemo(() => {
+    const pluginTabs: NavigationTabInterface[] = pluginsStore.spacePlugins.map((plugin) => ({
       path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
       iconName: plugin.iconName
     }));
@@ -163,7 +161,13 @@ const Collaboration: FC = () => {
       ),
       ...pluginTabs
     ];
-  });
+  }, [
+    agoraScreenShareStore.videoTrack,
+    agoraStore.isStageMode,
+    liveStreamStore.isStreaming,
+    pluginsStore.spacePlugins,
+    spaceId
+  ]);
 
   return (
     <styled.Container>
@@ -171,7 +175,7 @@ const Collaboration: FC = () => {
 
       <Switch>
         {createRoutesByConfig(COLLABORATION_ROUTES)}
-        {pluginsStore.pluginLoaders.map((plugin) => {
+        {pluginsStore.spacePlugins.map((plugin) => {
           return (
             <Route
               key={plugin.name}

@@ -12,10 +12,10 @@ import {
 import * as styled from './ManagePluginsPanel.styled';
 
 const ManagePluginsPanel: FC = () => {
-  const {spaceAdminStore, collaborationStore} = useStore();
+  const {spaceAdminStore, mainStore} = useStore();
   const {spaceManagerStore} = spaceAdminStore;
   const {space, addPluginDialog} = spaceManagerStore;
-  const {pluginsStore} = collaborationStore;
+  const {pluginsStore} = mainStore;
 
   if (!space) {
     return null;
@@ -34,13 +34,13 @@ const ManagePluginsPanel: FC = () => {
           />
         )}
         <styled.List className="noScrollIndicator">
-          {pluginsStore.pluginLoaders.map((loader) => (
+          {pluginsStore.spacePlugins.map((plugin) => (
             <AdminListItem
-              key={loader.name}
-              name={loader.name}
-              userId={loader.name}
-              type={loader.subtitle}
-              onRemove={pluginsStore.removePlugin}
+              key={plugin.name}
+              name={plugin.name}
+              userId={plugin.name}
+              type={plugin.subtitle}
+              onRemove={(_, name) => pluginsStore.removePlugin(name)}
             />
           ))}
         </styled.List>
