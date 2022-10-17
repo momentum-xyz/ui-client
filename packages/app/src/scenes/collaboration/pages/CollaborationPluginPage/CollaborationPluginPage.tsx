@@ -31,16 +31,12 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
   const {t} = useTranslation();
 
+  pluginsStore.loadPluginIfNeeded(pluginLoader);
+
   const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
     console.info('Recieved actions', actions);
     setActions(actions);
   }, []);
-
-  useEffect(() => {
-    if (pluginsStore.canLoadPlugin(pluginLoader.name)) {
-      pluginLoader.loadPlugin();
-    }
-  }, [pluginLoader, pluginsStore]);
 
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {

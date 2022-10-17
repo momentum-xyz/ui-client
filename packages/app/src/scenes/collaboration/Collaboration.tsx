@@ -68,7 +68,7 @@ const Collaboration: FC = () => {
   }, [agoraStore, history, rootStore, spaceId, t]);
 
   useEffect(() => {
-    pluginsStore.getSpacePlugins();
+    pluginsStore.fetchSpacePlugins();
   }, [pluginsStore]);
 
   useEffect(() => {
