@@ -14,6 +14,7 @@ interface PropsInterface {
 const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
   const mockPlugin: PluginInterface = useMemo(
     () => ({
+      id: crypto.randomUUID(),
       name: 'momentum_plugin_template',
       subPath: 'template',
       subtitle: 'Template',

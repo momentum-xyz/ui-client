@@ -49,11 +49,10 @@ const PluginsStore = types
     },
     addPlugin(plugin: PluginInterface) {
       // TODO: Later change it to API call adds plugin
-      if (self.dynamicScriptsStore.containsLoaderWithName(plugin.name)) {
-        return;
+      if (!self.dynamicScriptsStore.containsLoaderWithName(plugin.name)) {
+        self.dynamicScriptsStore.addScript(plugin.name, plugin.url);
       }
 
-      self.dynamicScriptsStore.addScript(plugin.name, plugin.url);
       const newPlugins = [...self.spacePluginLoaders, plugin];
       self.spacePluginLoaders = cast(newPlugins);
     },
