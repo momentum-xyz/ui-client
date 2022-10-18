@@ -14,15 +14,15 @@ import {
   Web3LoginAcceptResponse,
   Web3LoginHintConsentRequest,
   Web3LoginHintConsentResponse
-} from './webRepository.api.types';
-import {web3RepositoryEndpoints} from './webRepository.api.endpoints';
+} from './web3Repository.api.types';
+import {web3RepositoryEndpoints} from './web3Repository.api.endpoints';
 
 export const getLoginHintByLogin: RequestInterface<Web3LoginHintRequest, Web3LoginHintResponse> = (
   options
 ) => {
   const {login_challenge, ...rest} = options;
   const requestParams = {
-    params: {login_challenge},
+    params: {challenge: login_challenge},
     ...rest
   };
   const URL: string = web3RepositoryEndpoints().login;
@@ -35,7 +35,7 @@ export const getLoginHintByConsent: RequestInterface<
 > = (options) => {
   const {consent_challenge, ...rest} = options;
   const requestParams = {
-    params: {consent_challenge},
+    params: {challenge: consent_challenge},
     ...rest
   };
   const URL: string = web3RepositoryEndpoints().consent;

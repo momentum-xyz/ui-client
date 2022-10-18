@@ -12,6 +12,7 @@ const BASE_URL =
 
 export const appVariables: AppConfigExtendedInterface = {
   APP_VERSION: 'v0.21.0',
+  BACKEND_API_URL: '',
   BACKEND_ENDPOINT_URL: '',
   BACKEND_V4_ENDPOINT_URL: `${BASE_URL}/api/v4`,
   UNITY_CLIENT_URL: '',

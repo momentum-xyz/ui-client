@@ -1,15 +1,9 @@
 import {appVariables} from 'api/constants';
 
-/**
- * Domain for loading whole app config.
- * 1. localhost: to use env.development file
- * 2. otherwise: to use current origin
- */
-
 export const configRepositoryEndpoints = () => {
-  const BASE_URL = appVariables.BE_URL;
+  const BASE_URL = `${appVariables.BACKEND_API_URL}/config`;
 
   return {
-    config: `${BASE_URL}/config/ui-client`
+    config: `${BASE_URL}/ui-client`
   };
 };
