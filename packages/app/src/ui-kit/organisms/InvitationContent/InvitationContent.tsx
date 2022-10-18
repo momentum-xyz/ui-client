@@ -6,18 +6,11 @@ import {ToastContent} from 'ui-kit/molecules';
 interface PropsInterface {
   spaceName?: string;
   invitorName: string;
-  joinSpace?: () => void;
-  joinTable?: () => void;
+  join: () => void;
   isTable?: boolean;
 }
 
-const InvitationContent: FC<PropsInterface> = ({
-  invitorName,
-  spaceName,
-  joinSpace,
-  joinTable,
-  isTable
-}) => {
+const InvitationContent: FC<PropsInterface> = ({invitorName, spaceName, join, isTable}) => {
   const {t} = useTranslation();
 
   return (
@@ -36,7 +29,7 @@ const InvitationContent: FC<PropsInterface> = ({
       }
       approveInfo={{
         title: isTable ? t('titles.joinTable') : t('titles.joinSpace'),
-        onClick: isTable ? joinTable : joinSpace
+        onClick: join
       }}
       showCloseButton
     />

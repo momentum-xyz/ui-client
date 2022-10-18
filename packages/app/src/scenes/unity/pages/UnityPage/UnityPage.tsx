@@ -91,8 +91,7 @@ const UnityPage: FC = () => {
       <InvitationContent
         invitorName={invitorName}
         spaceName={spaceName}
-        joinSpace={handleJoinSpace}
-        joinTable={handleJoinTable}
+        join={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
         isTable={uiTypeId === appVariables.GAT_UI_TYPE_ID}
       />,
       TOAST_NOT_AUTO_CLOSE_OPTIONS
