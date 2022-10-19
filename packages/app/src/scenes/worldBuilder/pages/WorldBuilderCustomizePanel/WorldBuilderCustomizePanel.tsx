@@ -3,46 +3,28 @@ import {observer} from 'mobx-react-lite';
 // import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {
-  Dialog,
-  Navigation,
-  NavigationTabInterface
+  Dialog
+  // Navigation,
+  // NavigationTabInterface
   // Loader
 } from '@momentum-xyz/ui-kit';
 import {useHistory} from 'react-router-dom';
 
-import {useStore} from 'shared/hooks';
+// import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createSwitchByConfig} from 'core/utils';
-// import background from 'static/images/bg.png';
 
-import * as styled from './WorldBuilderCustomizePanel.styled';
+// import * as styled from './WorldBuilderCustomizePanel.styled';
+import {WORLD_BUILDER_ROUTES} from './WorldBuilderCustomizePanel.routes';
 
-const tabs: NavigationTabInterface[] = [
-  {
-    path: ROUTES.worldBuilder.builderSkybox,
-    iconName: 'planet'
-  }
-];
-
-const SkyboxSelector: FC = () => {
-  return <div>hello</div>;
-};
-
-const WORLD_BUILDER_ROUTES = [
-  {
-    path: ROUTES.worldBuilder.builderSkybox,
-    main: () => <SkyboxSelector />,
-    exact: true
-  }
-];
+// const tabs: NavigationTabInterface[] = [
+//   {
+//     path: ROUTES.worldBuilder.builderSkybox,
+//     iconName: 'planet'
+//   }
+// ];
 
 const WorldBuilderCustomizePanel: FC = () => {
-  const {worldBuilderStore} = useStore();
-  console.log('worldBuilderStore', worldBuilderStore);
-  // const {worldBuilderTemplatesStore} = worldBuilderStore;
-  // const {selectedTemplate} = worldBuilderTemplatesStore;
-  // const {unityStore} = mainStore;
-
   const history = useHistory();
 
   // const {t} = useTranslation();
@@ -55,7 +37,7 @@ const WorldBuilderCustomizePanel: FC = () => {
   return (
     <Dialog
       theme={theme}
-      title="World Builder Menu"
+      // title="World Builder Menu"
       // headerStyle="uppercase"
       showCloseButton
       // showOverflow
@@ -63,10 +45,10 @@ const WorldBuilderCustomizePanel: FC = () => {
       isBodyExtendingToEdges
       onClose={() => history.push(ROUTES.base)}
     >
-      <styled.Container>
+      {/* <styled.Container>
         <Navigation tabs={tabs} />
-      </styled.Container>
-      {createSwitchByConfig(WORLD_BUILDER_ROUTES)}
+      </styled.Container> */}
+      {createSwitchByConfig(WORLD_BUILDER_ROUTES, WORLD_BUILDER_ROUTES[0].path)}
     </Dialog>
   );
 };
