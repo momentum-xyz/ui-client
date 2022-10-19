@@ -17,9 +17,12 @@ const StageModeUser = types
   .actions((self) => ({
     fetchUser: flow(function* () {
       const userId = self.uid;
-      const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-        userId
-      });
+      const response: ProfileResponse = yield self.request.send(
+        api.userRepository_OLD.fetchProfile,
+        {
+          userId
+        }
+      );
 
       self.profile = response.profile;
       self.name = response.name;

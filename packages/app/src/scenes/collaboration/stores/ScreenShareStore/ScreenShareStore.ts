@@ -22,7 +22,9 @@ const ScreenShareStore = types.compose(
         }
 
         const userId = agoraUserId.replace('ss|', '');
-        const response = yield self.ownerRequest.send(api.userRepository.fetchProfile, {userId});
+        const response = yield self.ownerRequest.send(api.userRepository_OLD.fetchProfile, {
+          userId
+        });
 
         if (response?.name) {
           self.screenOwnerId = userId;

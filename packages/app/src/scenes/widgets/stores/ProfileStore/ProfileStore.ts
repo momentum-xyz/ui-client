@@ -38,7 +38,7 @@ const ProfileStore = types.compose(
     .actions((self) => ({
       fetchProfile: flow(function* (userId: string) {
         self.userProfile = cast(
-          yield self.profileFetchRequest.send(api.userRepository.fetchProfile, {
+          yield self.profileFetchRequest.send(api.userRepository_OLD.fetchProfile, {
             userId
           })
         );
@@ -103,7 +103,7 @@ const ProfileStore = types.compose(
         }
 
         // 2. Profile updating.
-        const response = yield self.editProfileRequest.send(api.profileRepository.update, {
+        const response = yield self.editProfileRequest.send(api.userProfileRepository.update, {
           name,
           profile: {
             bio: profile.bio,

@@ -1,30 +1,32 @@
 import {types, Instance, flow} from 'mobx-state-tree';
-import {RequestModel, UUIDModel, UserStatusEnum} from '@momentum-xyz/core';
+import {RequestModel, UserStatusEnum} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {api, UserProfileInterface} from 'api';
-import {bytesToUuid} from 'core/utils';
 import {appVariables} from 'api/constants';
 
 const UserProfileModel = types
   .model('UserProfile', {
-    id: UUIDModel,
-    userTypeId: types.maybe(UUIDModel),
+    id: types.string,
     name: types.string,
-    email: types.maybe(types.string),
-    wallet: types.maybeNull(UUIDModel),
     description: types.maybeNull(types.string),
-    createdAt: types.maybe(types.string),
+    userTypeId: types.string,
+    createdAt: types.string,
     updatedAt: types.maybeNull(types.string),
-    profile: types.maybeNull(types.frozen<UserProfileInterface>()),
-    isNodeAdmin: types.optional(types.boolean, false),
+    wallet: types.maybeNull(types.string),
+    isNodeAdmin: false,
+    status: types.maybeNull(types.enumeration(Object.values(UserStatusEnum))),
+
+    // TODO: Make model
+    profile: types.frozen<UserProfileInterface>(),
+
+    // TODO: Make separate model
     inviteRequest: types.optional(RequestModel, {}),
-    invited: false,
-    status: types.maybe(types.enumeration(Object.values(UserStatusEnum)))
+    invited: false
   })
   .views((self) => ({
     get uuid(): string {
-      return bytesToUuid(self.id.data);
+      return self.id;
     },
     get avatarSrc(): string | undefined {
       return (
@@ -33,6 +35,7 @@ const UserProfileModel = types
       );
     }
   }))
+  // TODO: Move all to another model
   .actions((self) => ({
     invite: flow(function* (spaceId: string) {
       yield self.inviteRequest.send(api.spaceInviteRepository.inviteToSpaceOrTable, {

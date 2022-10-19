@@ -128,7 +128,7 @@ const Space = types
         return;
       }
 
-      yield self.inviteUserRequest.send(api.userRepository.inviteToSpace, {
+      yield self.inviteUserRequest.send(api.userRepository_OLD.inviteToSpace, {
         invitedUser: {
           email,
           spaceId: self.id,

@@ -37,9 +37,12 @@ const TextChatStore = types.compose(
         return tokenResponse;
       }),
       fetchUser: flow(function* (userId: string) {
-        const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-          userId
-        });
+        const response: ProfileResponse = yield self.request.send(
+          api.userRepository_OLD.fetchProfile,
+          {
+            userId
+          }
+        );
 
         if (response) {
           self.name = response.name;

@@ -3,7 +3,6 @@ import {RequestModel} from '@momentum-xyz/core';
 
 import {UserProfileModel, UserProfileModelInterface} from 'core/models';
 import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
-import {bytesToUuid} from 'core/utils';
 
 const OnlineUsersList = types
   .model('OnlineUsersList', {
@@ -18,16 +17,14 @@ const OnlineUsersList = types
       includeCurrentUser: boolean
     ) {
       const response: OnlineUsersResponse = yield self.usersRequest.send(
-        api.userRepository.fetchOnlineUsers,
+        api.userRepository_OLD.fetchOnlineUsers,
         {worldId}
       );
 
       if (response) {
         self.users = cast([
-          ...response.filter(
-            (user) => includeCurrentUser && bytesToUuid(user.id.data) === currentUserId
-          ),
-          ...response.filter((user) => bytesToUuid(user.id.data) !== currentUserId)
+          ...response.filter((user) => includeCurrentUser && user.id === currentUserId),
+          ...response.filter((user) => user.id !== currentUserId)
         ]);
       }
     }),
@@ -37,18 +34,19 @@ const OnlineUsersList = types
       currentUserId: string,
       includeCurrentUser: boolean
     ) {
-      const response: UserSearchResponse = yield self.usersRequest.send(api.userRepository.search, {
-        q: self.searchQuery,
-        worldId,
-        online
-      });
+      const response: UserSearchResponse = yield self.usersRequest.send(
+        api.userRepository_OLD.search,
+        {
+          q: self.searchQuery,
+          worldId,
+          online
+        }
+      );
 
       if (response) {
         self.users = cast([
-          ...response.results.filter(
-            (user) => includeCurrentUser && bytesToUuid(user.id.data) === currentUserId
-          ),
-          ...response.results.filter((user) => bytesToUuid(user.id.data) !== currentUserId)
+          ...response.results.filter((user) => includeCurrentUser && user.id === currentUserId),
+          ...response.results.filter((user) => user.id !== currentUserId)
         ]);
       }
     }),

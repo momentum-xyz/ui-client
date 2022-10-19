@@ -2,65 +2,14 @@
 
 import {UserStatusEnum} from '@momentum-xyz/core';
 
-import {UserSpaceInterface} from 'api/repositories_OLD/spaceRepository/spaceRepository.api.types';
-
-export interface UserProfileInterface {
-  bio?: string;
-  location?: string;
-  avatarHash?: string;
-  profileLink?: string;
-  onBoarded?: boolean;
-  image?: File;
-}
-
-export interface UserInterface {
-  id: {
-    type: string;
-    data: Buffer;
-  };
-  userTypeId: {
-    type: string;
-    data: Buffer;
-  };
-  wallet: {
-    type: string;
-    data: Buffer;
-  } | null;
-  name: string;
-  email?: string;
-  description: string | null;
-  createdAt: string;
-  updatedAt: string | null;
-  profile: UserProfileInterface;
-  isNodeAdmin: boolean;
-  status: UserStatusEnum;
-}
+import {UserInterface, UserProfileInterface, UserSpaceInterface} from 'api';
 
 export interface OnlineUserInterface {
-  id: {
-    type: string;
-    data: Buffer;
-  };
+  id: string;
   name: string;
   profile: UserProfileInterface;
-  status: UserStatusEnum;
+  status?: UserStatusEnum;
 }
-
-/** CHECK USER **/
-
-export interface CheckUserRequest {
-  idToken?: string;
-}
-
-export interface CheckUserResponse {
-  userOnboarded: boolean;
-}
-
-/** FETCH USER **/
-
-export interface FetchUserRequest {}
-
-export interface FetchUserResponse extends UserInterface {}
 
 /** Invite user to space **/
 
@@ -107,7 +56,7 @@ export interface OnlineUsersRequest {
   worldId: string;
 }
 
-export interface OnlineUsersResponse extends Array<OnlineUserInterface> {}
+export interface OnlineUsersResponse extends Array<UserInterface> {}
 
 export interface FetchUserInitiativesRequest {
   userId: string;

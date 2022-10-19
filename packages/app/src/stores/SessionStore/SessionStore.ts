@@ -7,7 +7,6 @@ import {RequestModel, UserStatusEnum} from '@momentum-xyz/core';
 import {storage} from 'shared/services';
 import {api, FetchUserResponse} from 'api';
 import {UserProfileModel} from 'core/models';
-import {bytesToUuid} from 'core/utils';
 import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
 import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 'shared/auth';
 
@@ -27,7 +26,6 @@ const SessionStore = types
       await this.loadUserProfile();
     },
     async reload() {
-      await this.checkUserProfile();
       await this.loadUserProfile();
     },
     checkUserProfile: flow(function* () {
@@ -40,7 +38,7 @@ const SessionStore = types
       );
       if (response) {
         self.profile = cast(response);
-        self.userId = bytesToUuid(response.id?.data);
+        self.userId = response.id;
       }
     }),
     getLibrary(provider: ExternalProvider): Web3Provider {

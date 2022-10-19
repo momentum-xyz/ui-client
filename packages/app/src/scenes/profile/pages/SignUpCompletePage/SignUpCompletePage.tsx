@@ -30,7 +30,7 @@ const SignUpCompletePage: FC = () => {
   const onSubmitHandle = useCallback(
     async (form: SignUpFormInterface) => {
       const result = await signUpCompleteStore.updateProfile(form);
-      if (result?.userOnboarded) {
+      if (result?.onBoarded) {
         await sessionStore.reload();
         history.push(ROUTES.welcome, {from: window.history.state?.state?.from || ROUTES.base});
       }

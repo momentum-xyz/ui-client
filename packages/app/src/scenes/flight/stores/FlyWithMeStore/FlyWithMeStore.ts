@@ -22,7 +22,7 @@ const FlyWithMeStore = types
     },
     fetchPilot: flow(function* (pilotId: string) {
       const response: ProfileResponse = yield self.pilotRequest.send(
-        api.userRepository.fetchProfile,
+        api.userRepository_OLD.fetchProfile,
         {userId: pilotId}
       );
 
