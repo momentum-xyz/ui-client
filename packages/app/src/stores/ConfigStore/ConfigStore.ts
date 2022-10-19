@@ -1,7 +1,7 @@
 import {types, flow} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 
-import {api, AppConfigResponse, BEVersionResponse} from 'api';
+import {api, AppConfigResponse, BackendVersionResponse} from 'api';
 import {appVariables, appVariablesOverrides} from 'api/constants';
 import {AppConfigInterface} from 'api/interfaces';
 
@@ -13,7 +13,7 @@ const ConfigStore = types
   })
   .actions((self) => ({
     init: flow(function* () {
-      const versionResponse: BEVersionResponse = yield self.versionRequest.send(
+      const versionResponse: BackendVersionResponse = yield self.versionRequest.send(
         api.versionRepository.fetchVersion,
         {}
       );

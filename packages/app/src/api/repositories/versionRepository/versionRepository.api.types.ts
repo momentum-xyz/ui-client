@@ -9,9 +9,9 @@ export interface VersionInterface {
 
 /** FETCH BE VERSION **/
 
-export interface BEVersionRequest {}
+export interface BackendVersionRequest {}
 
-export interface BEVersionResponse {
+export interface BackendVersionResponse {
   api: VersionInterface;
   controller: VersionInterface;
 }
