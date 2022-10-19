@@ -3,6 +3,8 @@ import {IconNameType} from '@momentum-xyz/ui-kit';
 import {PluginInterface} from '@momentum-xyz/sdk';
 import {ResetModel} from '@momentum-xyz/core';
 
+import {LoaderStatusEnum} from 'core/enums';
+
 const PluginLoader = types
   .compose(
     ResetModel,
@@ -14,22 +16,20 @@ const PluginLoader = types
       exact: types.maybe(types.boolean),
       module: types.maybe(types.string),
       iconName: types.frozen<IconNameType>(),
-
-      isErrorWhileLoadingComponent: false,
-      isErrorWhileLoadingDynamicScript: false,
+      status: types.optional(
+        types.enumeration(Object.values(LoaderStatusEnum)),
+        LoaderStatusEnum.READY
+      ),
       plugin: types.maybe(types.frozen<PluginInterface>())
     })
   )
-  .volatile<{scriptElement?: HTMLScriptElement}>((self) => ({
-    scriptElement: undefined
-  }))
   .actions((self) => ({
     loadPlugin: flow(function* () {
       if (self.plugin) {
         return;
       }
 
-      self.isErrorWhileLoadingComponent = false;
+      self.status = LoaderStatusEnum.LOADING;
 
       try {
         self.plugin = yield (async (): Promise<PluginInterface> => {
@@ -44,45 +44,26 @@ const PluginLoader = types
           // @ts-ignore: Required to load list based plugins, cause of previous problems
           return plugin;
         })();
-      } catch {
-        self.isErrorWhileLoadingComponent = true;
+
+        self.status = LoaderStatusEnum.LOADED;
+      } catch (error) {
+        console.error('[PluginLoader] An error has occured while loading plugin!', error);
+        self.status = LoaderStatusEnum.ERROR;
       }
     })
   }))
-  .actions((self) => ({
-    onDynamicScriptLoaded() {
-      console.log(`Dynamic Script Loaded: ${self.url}`);
-      self.loadPlugin();
-    },
-    onDynamicScriptError() {
-      console.error(`Dynamic Script Error: ${self.url}`);
-      self.isErrorWhileLoadingDynamicScript = true;
-    }
-  }))
-  .actions((self) => ({
-    init() {
-      if (self.scriptElement) {
-        return;
-      }
-
-      const element = document.createElement('script');
-
-      element.src = self.url;
-      element.type = 'text/javascript';
-      element.async = true;
-
-      self.isErrorWhileLoadingDynamicScript = false;
-
-      element.onload = self.onDynamicScriptLoaded;
-      element.onerror = self.onDynamicScriptError;
-
-      self.scriptElement = element;
-      document.head.appendChild(element);
-    }
-  }))
   .views((self) => ({
+    get isLoaded(): boolean {
+      return self.status === LoaderStatusEnum.LOADED && !!self.plugin;
+    },
     get isError(): boolean {
-      return self.isErrorWhileLoadingComponent || self.isErrorWhileLoadingDynamicScript;
+      return self.status === LoaderStatusEnum.ERROR;
+    },
+    get isLoading(): boolean {
+      return self.status === LoaderStatusEnum.LOADING;
+    },
+    get isReady(): boolean {
+      return self.status === LoaderStatusEnum.READY;
     }
   }));
 

@@ -15,7 +15,7 @@ import {
   UnityLoader,
   ToastContent,
   HighFiveContent,
-  InviteToSpaceContent,
+  InvitationContent,
   TOAST_BASE_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
@@ -88,10 +88,11 @@ const UnityPage: FC = () => {
     };
 
     toast.info(
-      <InviteToSpaceContent
+      <InvitationContent
         invitorName={invitorName}
         spaceName={spaceName}
-        joinToSpace={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
+        join={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
+        isTable={uiTypeId === appVariables.GAT_UI_TYPE_ID}
       />,
       TOAST_NOT_AUTO_CLOSE_OPTIONS
     );
