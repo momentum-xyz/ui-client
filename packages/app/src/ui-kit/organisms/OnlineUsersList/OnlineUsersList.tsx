@@ -7,7 +7,7 @@ import {
   SEARCH_MINIMAL_CHARACTER_COUNT
 } from '@momentum-xyz/ui-kit';
 
-import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
+import {OnlineUsersListInterface, UserModelInterface} from 'core/models';
 import {OnlineUsersStoreType} from 'scenes/home/stores/HomeStore/models';
 
 import {UserItem} from './components';
@@ -18,7 +18,7 @@ export interface PropsInterface {
   worldId: string;
   onlineUsersStore?: OnlineUsersStoreType;
   changeKeyboardControl: (active: boolean) => void;
-  profile?: UserProfileModelInterface;
+  profile?: UserModelInterface;
   teleportToUser: (userId: string) => void;
   spaceId: string;
   onlineUsersList: OnlineUsersListInterface;

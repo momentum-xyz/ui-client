@@ -2,11 +2,12 @@ import {types, Instance} from 'mobx-state-tree';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
-import {UserProfileModel} from 'core/models/UserProfile';
+import {User} from 'core/models';
 
+// TODO: Removal
 const AttendeeModel = types
   .model('AttendeeModel', {
-    user: UserProfileModel
+    user: User
   })
   .views((self) => ({
     get id() {

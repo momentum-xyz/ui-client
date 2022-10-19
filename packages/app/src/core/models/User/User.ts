@@ -5,8 +5,8 @@ import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {api, UserProfileInterface} from 'api';
 import {appVariables} from 'api/constants';
 
-const UserProfileModel = types
-  .model('UserProfile', {
+const User = types
+  .model('User', {
     id: types.string,
     name: types.string,
     description: types.maybeNull(types.string),
@@ -50,6 +50,6 @@ const UserProfileModel = types
     }
   }));
 
-export interface UserProfileModelInterface extends Instance<typeof UserProfileModel> {}
+export interface UserModelInterface extends Instance<typeof User> {}
 
-export {UserProfileModel};
+export {User};

@@ -7,17 +7,17 @@ import {Button, SvgButton, Avatar} from '@momentum-xyz/ui-kit';
 
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {usePosBusEvent} from 'shared/hooks';
-import {UserProfileModelInterface} from 'core/models';
+import {UserModelInterface} from 'core/models';
 
 import * as styled from './UserItem.styled';
 
 export interface UserItemPropsInterface {
   onClick: React.MouseEventHandler<HTMLDivElement>;
   invite: boolean;
-  user: UserProfileModelInterface;
+  user: UserModelInterface;
   teleportToUser?: (userId: string) => void;
   spaceId: string;
-  profile?: UserProfileModelInterface;
+  profile?: UserModelInterface;
 }
 
 const UserItem: React.FC<UserItemPropsInterface> = ({

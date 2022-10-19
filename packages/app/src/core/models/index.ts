@@ -1,4 +1,4 @@
-export * from './UserProfile';
+export * from './User';
 export * from './EventItem';
 export * from './Polkadot';
 export * from './ValidatorItem';
