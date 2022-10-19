@@ -39,13 +39,11 @@ const UnityPage: FC = () => {
   const {t} = useTranslation();
 
   useUnityEvent('MomentumLoaded', () => {
-    alert('MomentumLoaded');
     unityStore.setAuthToken(auth.user?.access_token);
     unityStore.setInitialVolume();
   });
 
   useUnityEvent('TeleportReady', () => {
-    alert('TeleportReady');
     const worldId = unityStore.getCurrentWorld();
     if (worldId) {
       unityLoaded(worldId);
