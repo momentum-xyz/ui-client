@@ -8,7 +8,7 @@ import {validateEmail} from '@momentum-xyz/core';
 
 import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {UserModelInterface} from 'core/models/UserModel';
+import {UserInfoModelInterface} from 'core/models/UserInfo';
 
 import * as styled from './AddMemberDialog.styled';
 
@@ -81,7 +81,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
     }
   };
 
-  const handleSelectUser = (user: UserModelInterface) => {
+  const handleSelectUser = (user: UserInfoModelInterface) => {
     setIsFocused(false);
     setIsFocused(false);
     setValue('user', user.id);
