@@ -17,6 +17,7 @@ export interface PropsInterface {
   onMuteUser: (spaceId: string, userId: string) => void;
   onKickUser: (spaceId: string, userId: string) => void;
   usersListUpdated: number;
+  isAdmin?: boolean;
 }
 
 const OFFSET_RIGHT = 182;
@@ -30,7 +31,8 @@ const MeetingUser: FC<PropsInterface> = (props) => {
     maxVideoStreamsReached,
     onKickUser,
     onMuteUser,
-    usersListUpdated
+    usersListUpdated,
+    isAdmin
   } = props;
 
   const videoRef = useRef<HTMLDivElement>(null);
@@ -98,7 +100,7 @@ const MeetingUser: FC<PropsInterface> = (props) => {
         <Text text={user.name} transform="uppercase" size="xxs" isMultiline={false} />
       </styled.Username>
 
-      {isShown && (
+      {isShown && isAdmin && (
         <UserMenu
           user={user}
           onMuteUser={() => onMuteUser(spaceId, user.uid.toString())}

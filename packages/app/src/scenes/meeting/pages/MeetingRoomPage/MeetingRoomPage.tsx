@@ -115,6 +115,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
                     onMuteUser={meetingRoomStore.muteUser}
                     onKickUser={meetingRoomStore.kickUser}
                     usersListUpdated={agoraMeetingStore.users.length}
+                    isAdmin={collaborationStore.space?.isAdmin}
                   />
                 ))}
           </ul>
