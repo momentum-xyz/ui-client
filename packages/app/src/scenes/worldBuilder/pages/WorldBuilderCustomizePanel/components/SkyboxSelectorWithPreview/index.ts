@@ -1,1 +1,1 @@
-export * from './SkyboxSelectorWithPreview';
+export {default as SkyboxSelectorWithPreview} from './SkyboxSelectorWithPreview';
