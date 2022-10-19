@@ -124,7 +124,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                 handleApprove();
               }
             }
-          : currentTokenRule?.canRemove(profile?.uuid)
+          : currentTokenRule?.canRemove(profile?.id)
           ? {
               title: t('actions.removeRule'),
               onClick: () => {

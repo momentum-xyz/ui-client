@@ -10,7 +10,7 @@ const AttendeeModel = types
   })
   .views((self) => ({
     get id() {
-      return self.user.uuid;
+      return self.user.id;
     },
     get name() {
       return self.user.name;

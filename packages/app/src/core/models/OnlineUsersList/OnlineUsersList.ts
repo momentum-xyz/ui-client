@@ -59,7 +59,7 @@ const OnlineUsersList = types
       return self.usersRequest.isPending;
     },
     filteredPeople(excludedPeopleIds: string[]): UserProfileModelInterface[] {
-      return self.users.filter((user) => !excludedPeopleIds?.includes(user.uuid));
+      return self.users.filter((user) => !excludedPeopleIds?.includes(user.id));
     }
   }));
 

@@ -25,9 +25,6 @@ const UserProfileModel = types
     invited: false
   })
   .views((self) => ({
-    get uuid(): string {
-      return self.id;
-    },
     get avatarSrc(): string | undefined {
       return (
         self.profile?.avatarHash &&
@@ -40,7 +37,7 @@ const UserProfileModel = types
     invite: flow(function* (spaceId: string) {
       yield self.inviteRequest.send(api.spaceInviteRepository.inviteToSpaceOrTable, {
         spaceId,
-        userId: self.uuid,
+        userId: self.id,
         isTable: false
       });
 

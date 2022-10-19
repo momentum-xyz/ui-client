@@ -31,7 +31,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   const {t} = useTranslation();
 
   const handleFlyToUser = () => {
-    teleportToUser?.(user.uuid);
+    teleportToUser?.(user.id);
   };
 
   const inviteTimeoutRef = useRef<NodeJS.Timeout>();
@@ -39,7 +39,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-user-joined', userId);
-    if (userId === user.uuid) {
+    if (userId === user.id) {
       user.setInvited(false);
     }
   });
@@ -89,8 +89,8 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   }, [spaceId, t, user]);
 
   const isItMe = useMemo(() => {
-    return profile?.uuid === user.uuid;
-  }, [profile?.uuid, user.uuid]);
+    return profile?.id === user.id;
+  }, [profile?.id, user.id]);
 
   return (
     <styled.Container data-testid="UserItem-test">

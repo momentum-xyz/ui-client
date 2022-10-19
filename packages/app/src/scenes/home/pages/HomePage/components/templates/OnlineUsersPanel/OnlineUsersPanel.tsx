@@ -28,18 +28,18 @@ const OnlineUsersPanel: FC = () => {
     if (
       onlineUsersStore.selectedUserId &&
       profile &&
-      onlineUsersStore.selectedUserId === profile.uuid
+      onlineUsersStore.selectedUserId === profile.id
     ) {
       return;
     }
 
     if (profileDialog.isOpen && profile) {
-      onlineUsersStore.selectUser(profile.uuid);
+      onlineUsersStore.selectUser(profile.id);
     }
   }, [profileDialog.isOpen]);
 
   useEffect(() => {
-    if (onlineUsersStore.selectedUserId !== profile?.uuid) {
+    if (onlineUsersStore.selectedUserId !== profile?.id) {
       onlineUsersStore.endEditingUser();
       profileDialog.close();
     }

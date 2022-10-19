@@ -23,7 +23,7 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
     fetchAll();
   }, [fetchAll]);
 
-  const userUUID = profile?.uuid;
+  const userUUID = profile?.id;
   const userAvatarSrc = profile?.avatarSrc || '';
   const userName = profile?.name || '';
   const handleEmojiClick = useCallback(

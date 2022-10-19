@@ -45,9 +45,9 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
       }
 
       if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-        onlineUsersList.searchUsers(worldId, true, profile?.uuid, !invite);
+        onlineUsersList.searchUsers(worldId, true, profile.id, !invite);
       } else {
-        onlineUsersList.fetchUsers(worldId, profile?.uuid, !invite);
+        onlineUsersList.fetchUsers(worldId, profile.id, !invite);
       }
     },
     200,
@@ -60,11 +60,11 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
     }
 
     onlineUsersList.setSearchQuery('');
-    onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+    onlineUsersList.fetchUsers(worldId, profile.id, !invite);
 
     const timeInterval = setInterval(() => {
       if (onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT) {
-        onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+        onlineUsersList.fetchUsers(worldId, profile.id, !invite);
       }
     }, 30000);
 
