@@ -22,9 +22,7 @@ export const getLoginHintByLogin: RequestInterface<Web3LoginHintRequest, Web3Log
 ) => {
   const {login_challenge, ...rest} = options;
   const requestParams = {
-    // FIXME: Revert back
-    // params: {login_challenge},
-    params: {challenge: login_challenge},
+    params: {login_challenge},
     ...rest
   };
   const URL: string = web3RepositoryEndpoints().login;
@@ -37,9 +35,7 @@ export const getLoginHintByConsent: RequestInterface<
 > = (options) => {
   const {consent_challenge, ...rest} = options;
   const requestParams = {
-    // FIXME: Revert back
-    // params: {consent_challenge},
-    params: {challenge: consent_challenge},
+    params: {consent_challenge},
     ...rest
   };
   const URL: string = web3RepositoryEndpoints().consent;
