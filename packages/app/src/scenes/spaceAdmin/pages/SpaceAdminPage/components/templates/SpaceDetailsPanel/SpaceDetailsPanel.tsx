@@ -8,7 +8,7 @@ import {Heading, Button, Input, SectionPanel, Text, Toggle} from '@momentum-xyz/
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {SpaceSettingsInterface} from 'api/repositories/spaceRepository/spaceRepository.api.types';
+import {SpaceSettingsInterface} from 'api';
 import {DeleteSpaceConfirmationDialog} from 'scenes/spaceAdmin/pages/SpaceAdminPage/components/organisms';
 import {ROUTES} from 'core/constants';
 

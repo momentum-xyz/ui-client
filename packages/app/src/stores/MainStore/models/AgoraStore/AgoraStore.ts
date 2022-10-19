@@ -4,7 +4,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {appVariables} from 'api/constants';
-import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
+import {SpaceIntegrationsStageModeResponse} from 'api/repositories_OLD/spaceIntegrationsRepository/spaceIntegrations.api.types';
 
 import {UserDevicesStore} from './UserDevicesStore';
 import {AgoraMeetingStore} from './AgoraMeetingStore';

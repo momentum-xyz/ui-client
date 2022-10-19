@@ -3,8 +3,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum-xyz/ui-kit';
 
 import {Space} from 'core/models';
-import {api} from 'api';
-import {ExploreResponse} from 'api/repositories/spaceTypeRepository/spaceTypeRepository.api.types';
+import {api, ExploreResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
 
 import {ExploreCategoryModel, SpaceHistoryItemModel} from './models';

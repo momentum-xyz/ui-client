@@ -2,7 +2,7 @@ import {types, flow, cast, Instance} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {AttendeeModel, AttendeeModelInterface} from 'core/models';
-import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
+import {AttendeesResponseInterface} from 'api/repositories_OLD/attendeesRepository/attendeesRepository.api.types';
 import {api} from 'api';
 
 const AttendeesListStore = types

@@ -14,8 +14,8 @@ import {
   Web3LoginAcceptResponse,
   Web3LoginHintConsentRequest,
   Web3LoginHintConsentResponse
-} from './webRepository.api.types';
-import {web3RepositoryEndpoints} from './webRepository.api.endpoints';
+} from './web3Repository.api.types';
+import {web3RepositoryEndpoints} from './web3Repository.api.endpoints';
 
 export const getLoginHintByLogin: RequestInterface<Web3LoginHintRequest, Web3LoginHintResponse> = (
   options

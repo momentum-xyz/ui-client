@@ -1,8 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
-import {SpaceSettingsInterface} from 'api/repositories/spaceRepository/spaceRepository.api.types';
+import {api, SpaceSettingsInterface} from 'api';
 
 const SpaceDetailsFormStore = types.compose(
   ResetModel,

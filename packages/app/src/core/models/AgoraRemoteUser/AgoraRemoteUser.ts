@@ -21,9 +21,12 @@ const AgoraRemoteUser = types
     fetchUser: flow(function* () {
       const userId = self.uid.toString();
 
-      const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-        userId
-      });
+      const response: ProfileResponse = yield self.request.send(
+        api.userRepository_OLD.fetchProfile,
+        {
+          userId
+        }
+      );
 
       if (response) {
         self.profile = response.profile;

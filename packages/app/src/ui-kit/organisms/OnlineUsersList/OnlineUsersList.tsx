@@ -99,9 +99,9 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
       <styled.List>
         {onlineUsersList.filteredPeople(excludedPeople).map((user) => (
           <UserItem
-            key={user.uuid}
+            key={user.id}
             user={user}
-            onClick={() => handleClick(user.uuid)}
+            onClick={() => handleClick(user.id)}
             invite={invite}
             profile={profile}
             teleportToUser={teleportToUser}

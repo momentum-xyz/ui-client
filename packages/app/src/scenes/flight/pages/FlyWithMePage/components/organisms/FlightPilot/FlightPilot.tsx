@@ -6,7 +6,7 @@ import * as styled from './FlightPilot.styled';
 
 interface PropsInterface {
   pilotName: string;
-  pilotStatus?: UserStatusEnum;
+  pilotStatus: UserStatusEnum | null;
   pilotAvatarSrc?: string;
   onCloseOrDisengage: () => void;
 }
