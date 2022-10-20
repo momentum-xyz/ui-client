@@ -89,7 +89,7 @@ const PrepareOnStageDialog: React.FC<PropsInterface> = ({onClose, onReady}) => {
         <styled.VideoContainer>
           <styled.Video ref={videoRef} className={cn(videoRef.current?.paused && 'paused')} />
           {!webcamEnabled && (
-            <styled.AvatarStyled avatarSrc={sessionStore.profile?.avatarSrc} size="extra-large" />
+            <styled.AvatarStyled avatarSrc={sessionStore.user?.avatarSrc} size="extra-large" />
           )}
         </styled.VideoContainer>
         <styled.AudioVideoSettingsContainer>

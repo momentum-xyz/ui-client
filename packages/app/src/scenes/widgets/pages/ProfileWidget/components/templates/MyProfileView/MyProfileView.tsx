@@ -15,7 +15,7 @@ const MyProfileView: FC = () => {
   const {widgetStore, sessionStore, mainStore, homeStore} = useStore();
   const {profileStore, launchInitiativeStore} = widgetStore;
   const {unityStore} = mainStore;
-  const {profile: currentUser} = sessionStore;
+  const {user} = sessionStore;
   const {userProfile} = profileStore;
   const {exploreStore} = homeStore;
 
@@ -40,7 +40,7 @@ const MyProfileView: FC = () => {
   return (
     <>
       <styled.Actions>
-        <Avatar avatarSrc={currentUser?.avatarSrc} size="large" status={currentUser?.status} />
+        <Avatar avatarSrc={user?.avatarSrc} size="large" status={user?.status} />
         {profileStore.canCreateInitiative && (
           <Button
             label={t('actions.createInitiative')}
@@ -50,26 +50,22 @@ const MyProfileView: FC = () => {
         )}
       </styled.Actions>
       <styled.Details>
-        {currentUser?.profile?.bio && (
-          <Text text={currentUser.profile.bio} size="xs" align="left" breakLongWord />
+        {user?.profile?.bio && (
+          <Text text={user.profile.bio} size="xs" align="left" breakLongWord />
         )}
         <styled.Info>
-          {currentUser?.profile?.location && (
+          {user?.profile?.location && (
             <styled.InfoItem>
               <IconSvg name="location" size="normal" />
-              <styled.LocationText
-                text={currentUser.profile.location}
-                size="xxs"
-                isMultiline={false}
-              />
+              <styled.LocationText text={user.profile.location} size="xxs" isMultiline={false} />
             </styled.InfoItem>
           )}
 
-          {currentUser?.profile?.profileLink && (
+          {user?.profile?.profileLink && (
             <styled.InfoItem>
               <IconSvg name="link" size="normal" />
-              <styled.Link href={absoluteLink(currentUser.profile.profileLink)} target="_blank">
-                {withoutProtocol(currentUser.profile.profileLink)}
+              <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
+                {withoutProtocol(user.profile.profileLink)}
               </styled.Link>
             </styled.InfoItem>
           )}

@@ -37,8 +37,8 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
   const {t} = useTranslation();
 
   const handleFlyToUser = () => {
-    if (userProfile?.uuid) {
-      unityStore.teleportToUser(userProfile.uuid);
+    if (userProfile?.id) {
+      unityStore.teleportToUser(userProfile.id);
     }
   };
 
@@ -53,8 +53,8 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
   };
 
   const handleHighFive = () => {
-    if (userProfile?.uuid) {
-      unityStore.sendHighFive(userProfile.uuid);
+    if (userProfile?.id) {
+      unityStore.sendHighFive(userProfile.id);
     }
   };
 

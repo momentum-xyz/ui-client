@@ -7,7 +7,7 @@ import {
   SEARCH_MINIMAL_CHARACTER_COUNT
 } from '@momentum-xyz/ui-kit';
 
-import {OnlineUsersListInterface, UserProfileModelInterface} from 'core/models';
+import {OnlineUsersListInterface, UserModelInterface} from 'core/models';
 import {OnlineUsersStoreType} from 'scenes/home/stores/HomeStore/models';
 
 import {UserItem} from './components';
@@ -18,7 +18,7 @@ export interface PropsInterface {
   worldId: string;
   onlineUsersStore?: OnlineUsersStoreType;
   changeKeyboardControl: (active: boolean) => void;
-  profile?: UserProfileModelInterface;
+  user?: UserModelInterface;
   teleportToUser: (userId: string) => void;
   spaceId: string;
   onlineUsersList: OnlineUsersListInterface;
@@ -30,7 +30,7 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
   worldId,
   onlineUsersList,
   onlineUsersStore,
-  profile,
+  user,
   teleportToUser,
   changeKeyboardControl,
   spaceId,
@@ -40,14 +40,14 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
 
   useDebouncedEffect(
     () => {
-      if (!profile) {
+      if (!user) {
         return;
       }
 
       if (onlineUsersList.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-        onlineUsersList.searchUsers(worldId, true, profile?.uuid, !invite);
+        onlineUsersList.searchUsers(worldId, true, user.id, !invite);
       } else {
-        onlineUsersList.fetchUsers(worldId, profile?.uuid, !invite);
+        onlineUsersList.fetchUsers(worldId, user.id, !invite);
       }
     },
     200,
@@ -55,21 +55,21 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
   );
 
   useEffect(() => {
-    if (!profile) {
+    if (!user) {
       return;
     }
 
     onlineUsersList.setSearchQuery('');
-    onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+    onlineUsersList.fetchUsers(worldId, user.id, !invite);
 
     const timeInterval = setInterval(() => {
       if (onlineUsersList.searchQuery.length < SEARCH_MINIMAL_CHARACTER_COUNT) {
-        onlineUsersList.fetchUsers(worldId, profile.uuid, !invite);
+        onlineUsersList.fetchUsers(worldId, user.id, !invite);
       }
     }, 30000);
 
     return () => clearInterval(timeInterval);
-  }, [invite, onlineUsersList, profile, worldId]);
+  }, [invite, onlineUsersList, user, worldId]);
 
   const handleClick = (id: string) => {
     if (onlineUsersStore?.selectedUserId !== id) {
@@ -97,13 +97,13 @@ const OnlineUsersList: React.FC<PropsInterface> = ({
         onBlur={() => handleSearchFocus(false)}
       />
       <styled.List>
-        {onlineUsersList.filteredPeople(excludedPeople).map((user) => (
+        {onlineUsersList.filteredPeople(excludedPeople).map((onlineUser) => (
           <UserItem
-            key={user.id}
-            user={user}
-            onClick={() => handleClick(user.id)}
+            key={onlineUser.id}
+            user={onlineUser}
+            onClick={() => handleClick(onlineUser.id)}
             invite={invite}
-            profile={profile}
+            currentUser={user}
             teleportToUser={teleportToUser}
             spaceId={spaceId}
           />

@@ -67,7 +67,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
     if (response) {
       // no await here! is it needed?
       profileStore.fetchProfile(userId).then(() => {
-        sessionStore.reload();
+        sessionStore.loadUserProfile();
         profileStore.fetchUserSpaceList(userId);
         onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
         if (profileStore.userProfile) {
@@ -104,7 +104,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
           {profileStore.selectedImage ? (
             <styled.ImagePreview src={URL.createObjectURL(profileStore.selectedImage)} />
           ) : (
-            <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="large" />
+            <Avatar avatarSrc={sessionStore.user?.avatarSrc} size="large" />
           )}
         </styled.AvatarContainer>
         <div>

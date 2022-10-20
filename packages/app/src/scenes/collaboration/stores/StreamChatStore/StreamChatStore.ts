@@ -3,7 +3,7 @@ import {StreamChat, Channel, Event} from 'stream-chat';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {appVariables} from 'api/constants';
-import {UserProfileModelInterface} from 'core/models';
+import {UserModelInterface} from 'core/models';
 import {api} from 'api';
 
 const StreamChatStore = types
@@ -43,7 +43,7 @@ const StreamChatStore = types
   .actions((self) => {
     const timeNow = new Date();
     return {
-      init: flow(function* (userId: string, spaceId: string, profile?: UserProfileModelInterface) {
+      init: flow(function* (userId: string, spaceId: string, profile?: UserModelInterface) {
         self.client = StreamChat.getInstance(appVariables.STREAMCHAT_KEY);
         const response = yield self.getChannelToken(spaceId);
 
@@ -94,7 +94,7 @@ const StreamChatStore = types
         }
         self.resetModel();
       }),
-      updateUser: flow(function* (userId: string, profile: UserProfileModelInterface) {
+      updateUser: flow(function* (userId: string, profile: UserModelInterface) {
         if (!self.client) {
           console.log('StreamChatStore: updateUser: client is not initialized');
           return;
