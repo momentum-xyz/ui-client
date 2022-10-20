@@ -12,7 +12,6 @@ import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 's
 
 const SessionStore = types
   .model('SessionStore', {
-    userId: '',
     user: types.maybeNull(User),
     request: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
@@ -32,7 +31,6 @@ const SessionStore = types
         {}
       );
       if (response) {
-        self.userId = response.id;
         self.user = cast(response);
       }
     }),
@@ -47,6 +45,7 @@ const SessionStore = types
     })
   }))
   .actions((self) => ({
+    // TODO: Move
     changeStatus: flow(function* (status: UserStatusEnum) {
       yield self.statusChangeRequest.send(api.statusRepository.changeStatus, {status});
 
@@ -54,6 +53,7 @@ const SessionStore = types
         self.user.status = status;
       }
     }),
+    // TODO: Move
     updateName(name: string) {
       if (self.user) {
         self.user.name = name;
@@ -61,6 +61,9 @@ const SessionStore = types
     }
   }))
   .views((self) => ({
+    get userId(): string {
+      return self.user?.id || '';
+    },
     get isUserReady(): boolean {
       return !self.request.isPending && !self.profileRequest.isPending && !!self.user;
     },
