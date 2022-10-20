@@ -82,7 +82,6 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
           showCloseButton
         />
       );
-      sessionStore.updateName(name);
       clearErrors();
     } else {
       toast.error(
