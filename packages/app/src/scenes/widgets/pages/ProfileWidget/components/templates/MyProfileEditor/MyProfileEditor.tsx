@@ -67,7 +67,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
     if (response) {
       // no await here! is it needed?
       profileStore.fetchProfile(userId).then(() => {
-        sessionStore.reload();
+        sessionStore.loadUserProfile();
         profileStore.fetchUserSpaceList(userId);
         onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
         if (profileStore.userProfile) {

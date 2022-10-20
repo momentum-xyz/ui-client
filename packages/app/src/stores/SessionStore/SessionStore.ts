@@ -16,20 +16,15 @@ const SessionStore = types
     profileRequest: types.optional(RequestModel, {}),
     profile: types.maybeNull(User),
     statusChangeRequest: types.optional(RequestModel, {}),
-    idToken: types.maybe(types.string),
     userId: ''
   })
   .actions((self) => ({
     async init(idToken: string) {
-      self.idToken = idToken;
-      await this.checkUserProfile();
+      await this.checkUserProfile(idToken);
       await this.loadUserProfile();
     },
-    async reload() {
-      await this.loadUserProfile();
-    },
-    checkUserProfile: flow(function* () {
-      yield self.request.send(api.userRepository.check, {idToken: self.idToken});
+    checkUserProfile: flow(function* (idToken: string) {
+      yield self.request.send(api.userRepository.check, {idToken});
     }),
     loadUserProfile: flow(function* () {
       const response: FetchUserResponse = yield self.profileRequest.send(

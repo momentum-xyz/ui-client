@@ -31,7 +31,7 @@ const SignUpCompletePage: FC = () => {
     async (form: SignUpFormInterface) => {
       const result = await signUpCompleteStore.updateProfile(form);
       if (result?.onBoarded) {
-        await sessionStore.reload();
+        await sessionStore.loadUserProfile();
         history.push(ROUTES.welcome, {from: window.history.state?.state?.from || ROUTES.base});
       }
     },

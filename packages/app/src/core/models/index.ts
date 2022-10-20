@@ -1,6 +1,6 @@
+export * from './UserProfile';
 export * from './User';
 export * from './UserInfo';
-export * from './UserProfile';
 export * from './EventItem';
 export * from './Polkadot';
 export * from './ValidatorItem';
