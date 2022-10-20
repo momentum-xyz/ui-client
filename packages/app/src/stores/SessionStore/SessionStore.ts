@@ -2,34 +2,27 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
 import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
-import {RequestModel, UserStatusEnum} from '@momentum-xyz/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {storage} from 'shared/services';
 import {api, FetchUserResponse} from 'api';
-import {UserProfileModel} from 'core/models';
+import {User} from 'core/models';
 import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
 import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 'shared/auth';
 
 const SessionStore = types
   .model('SessionStore', {
+    user: types.maybeNull(User),
     request: types.optional(RequestModel, {}),
-    profileRequest: types.optional(RequestModel, {}),
-    profile: types.maybeNull(UserProfileModel),
-    statusChangeRequest: types.optional(RequestModel, {}),
-    idToken: types.maybe(types.string),
-    userId: ''
+    profileRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     async init(idToken: string) {
-      self.idToken = idToken;
-      await this.checkUserProfile();
+      await this.checkUserProfile(idToken);
       await this.loadUserProfile();
     },
-    async reload() {
-      await this.loadUserProfile();
-    },
-    checkUserProfile: flow(function* () {
-      yield self.request.send(api.userRepository.check, {idToken: self.idToken});
+    checkUserProfile: flow(function* (idToken: string) {
+      yield self.request.send(api.userRepository.check, {idToken});
     }),
     loadUserProfile: flow(function* () {
       const response: FetchUserResponse = yield self.profileRequest.send(
@@ -37,8 +30,7 @@ const SessionStore = types
         {}
       );
       if (response) {
-        self.profile = cast(response);
-        self.userId = response.id;
+        self.user = cast(response);
       }
     }),
     getLibrary(provider: ExternalProvider): Web3Provider {
@@ -51,23 +43,12 @@ const SessionStore = types
       yield auth.removeUser();
     })
   }))
-  .actions((self) => ({
-    changeStatus: flow(function* (status: UserStatusEnum) {
-      yield self.statusChangeRequest.send(api.statusRepository.changeStatus, {status});
-
-      if (self.profile && self.statusChangeRequest.isDone) {
-        self.profile.status = status;
-      }
-    }),
-    updateName(name: string) {
-      if (self.profile) {
-        self.profile.name = name;
-      }
-    }
-  }))
   .views((self) => ({
+    get userId(): string {
+      return self.user?.id || '';
+    },
     get isUserReady(): boolean {
-      return !self.request.isPending && !self.profileRequest.isPending && !!self.profile;
+      return !self.request.isPending && !self.profileRequest.isPending && !!self.user;
     },
     get loginType(): LoginTypeEnum | null {
       const loginType = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);

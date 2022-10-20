@@ -65,8 +65,8 @@ const RootStore = types
       );
 
       if (!self.collaborationStore.streamChatStore.isLoggedOn) {
-        const {userId, profile} = self.sessionStore;
-        yield self.collaborationStore.streamChatStore.init(userId, spaceId, profile ?? undefined);
+        const {userId, user} = self.sessionStore;
+        yield self.collaborationStore.streamChatStore.init(userId, spaceId, user ?? undefined);
       }
 
       console.log('---JOINED---');

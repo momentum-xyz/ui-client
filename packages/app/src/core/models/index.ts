@@ -1,4 +1,6 @@
 export * from './UserProfile';
+export * from './User';
+export * from './UserInfo';
 export * from './EventItem';
 export * from './Polkadot';
 export * from './ValidatorItem';
@@ -8,7 +10,6 @@ export * from './SpaceAncestor';
 export * from './SpaceUser';
 export * from './SubSpace';
 export * from './TokenItem';
-export * from './UserModel';
 export * from './TrackModel';
 export * from './AttendeeModel';
 export * from './TileList';

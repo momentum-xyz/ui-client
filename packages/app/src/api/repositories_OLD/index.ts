@@ -1,4 +1,3 @@
-export * from './guestRepository';
 export * from './userRepository';
 export * from './profileRepository';
 export * from './eventsRepository';

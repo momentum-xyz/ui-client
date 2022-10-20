@@ -1,1 +1,1 @@
-export * from './UserProfileModel';
+export * from './UserProfile';

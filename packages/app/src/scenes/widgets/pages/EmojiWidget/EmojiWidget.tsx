@@ -15,7 +15,7 @@ interface PropsInterface {
 const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
   const {widgetStore, sessionStore} = useStore();
   const {emojiDetailsList, fetchAll} = widgetStore.emojiStore;
-  const {profile} = sessionStore;
+  const {user} = sessionStore;
 
   const {t} = useTranslation();
 
@@ -23,9 +23,9 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
     fetchAll();
   }, [fetchAll]);
 
-  const userUUID = profile?.uuid;
-  const userAvatarSrc = profile?.avatarSrc || '';
-  const userName = profile?.name || '';
+  const userUUID = user?.id;
+  const userAvatarSrc = user?.avatarSrc || '';
+  const userName = user?.name || '';
   const handleEmojiClick = useCallback(
     (emojiId: string, emojiUrl: string) => {
       if (userUUID) {

@@ -1,9 +1,9 @@
 import * as versionRepository from './repositories/versionRepository';
 import * as configRepository from './repositories/configRepository';
 import * as webRepository from './repositories/web3Repository';
+import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
-import * as guestRepository from './repositories_OLD/guestRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
 import * as eventsRepository from './repositories_OLD/eventsRepository';
@@ -101,6 +101,7 @@ export const api = {
 export * from './repositories/versionRepository/versionRepository.api.types';
 export * from './repositories/configRepository/configRepository.api.types';
 export * from './repositories/web3Repository/web3Repository.api.types';
+export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
@@ -108,7 +109,6 @@ export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types'
 export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 
-export * from './repositories_OLD/guestRepository/guestRepository.api.types';
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
 export * from './repositories_OLD/flyWithMeRepository/flyWithMeRepository.api.types';
 export * from './repositories_OLD/userRepository/userRepository.api.types';

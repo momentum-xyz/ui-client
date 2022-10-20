@@ -14,7 +14,7 @@ const MENU_OFFSET_BOTTOM = 60;
 const SimpleProfileMenu: FC = () => {
   const {widgetStore, sessionStore} = useStore();
   const {profileMenuStore} = widgetStore;
-  const {profile} = sessionStore;
+  const {user} = sessionStore;
 
   const auth = useAuth();
 
@@ -48,12 +48,12 @@ const SimpleProfileMenu: FC = () => {
       )}
       <styled.Footer>
         <ToolbarIconList>
-          {profile?.profile && (
+          {user?.profile && (
             <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
               <Avatar
                 size="extra-small"
-                status={sessionStore.profile?.status}
-                avatarSrc={profile.avatarSrc}
+                status={user?.status}
+                avatarSrc={user.avatarSrc}
                 showBorder
                 showHover
               />

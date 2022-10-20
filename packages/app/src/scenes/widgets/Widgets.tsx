@@ -45,7 +45,7 @@ const Widgets: FC = () => {
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
-  const {profile: currentProfile, isGuest, userId} = sessionStore;
+  const {user, isGuest, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
@@ -55,8 +55,8 @@ const Widgets: FC = () => {
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
-    worldChatStore.init(userId, worldStore.worldId, currentProfile ?? undefined);
-  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, currentProfile, worldChatStore]);
+    worldChatStore.init(userId, worldStore.worldId, user ?? undefined);
+  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, user, worldChatStore]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -187,12 +187,12 @@ const Widgets: FC = () => {
           </ToolbarIconList>
           {/* Main toolbar icons */}
           <ToolbarIconList>
-            {currentProfile?.profile && (
+            {user?.profile && (
               <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
                 <Avatar
                   size="extra-small"
-                  status={sessionStore.profile?.status}
-                  avatarSrc={currentProfile.avatarSrc}
+                  status={user.status}
+                  avatarSrc={user.avatarSrc}
                   showBorder
                   showHover
                 />
