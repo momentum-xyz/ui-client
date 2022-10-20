@@ -34,12 +34,17 @@ const WorldBuilderSkyboxesStore = types
   )
   .actions((self) => ({
     fetchItems: flow(function* () {
+      // TODO
       self.items = cast(skyboxes);
       self.selectedItemId = self.items[0].id;
       yield Promise.resolve(skyboxes);
     }),
     selectItem(item: WorldBuilderSkyboxInterface) {
       self.selectedItemId = item.id;
+    },
+    updateItem() {
+      // TODO
+      return Promise.resolve();
     }
   }))
   .views((self) => ({

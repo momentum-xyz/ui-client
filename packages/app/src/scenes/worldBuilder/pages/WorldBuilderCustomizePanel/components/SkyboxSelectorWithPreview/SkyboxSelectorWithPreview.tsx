@@ -1,6 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
+import {toast} from 'react-toastify';
 import cn from 'classnames';
 
 import {useStore} from 'shared/hooks';
@@ -10,7 +11,7 @@ import * as styled from './SkyboxSelectorWithPreview.styled';
 const SkyboxSelectorWithPreview: FC = () => {
   const {worldBuilderStore} = useStore();
   const {worldBuilderSkyboxesStore} = worldBuilderStore;
-  const {items, selectedItem, selectItem} = worldBuilderSkyboxesStore;
+  const {items, selectedItem, selectItem, updateItem} = worldBuilderSkyboxesStore;
 
   useEffect(() => {
     worldBuilderSkyboxesStore.fetchItems();
@@ -57,7 +58,9 @@ const SkyboxSelectorWithPreview: FC = () => {
                 transform="normal"
                 size="medium"
                 onClick={() => {
-                  // TODO
+                  updateItem().catch((err) => {
+                    toast.error(err.message);
+                  });
                 }}
               />
             </styled.ActionButtonHolder>
