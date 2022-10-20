@@ -15,21 +15,19 @@ const MENU_OFFSET_BOTTOM = 60;
 
 const Menu: FC = () => {
   const {widgetStore, sessionStore} = useStore();
-  const {user} = sessionStore;
   const {profileMenuStore} = widgetStore;
-
-  const MenuRef = useRef<HTMLDivElement>(null);
+  const {user} = sessionStore;
 
   const auth = useAuth();
-
   const {t} = useTranslation();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const signOutUser = async () => {
     await sessionStore.logout(auth);
     document.location.href = ROUTES.base;
   };
 
-  useClickOutside(MenuRef, () => {
+  useClickOutside(menuRef, () => {
     handleCloseMenu();
   });
 
@@ -48,8 +46,10 @@ const Menu: FC = () => {
     profileMenuStore.tokenRulesDialog.open();
   };
 
-  const handleChangeStatus = (checked: boolean) => {
-    sessionStore.changeStatus(checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB);
+  const handleChangeStatus = async (checked: boolean) => {
+    const status = checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB;
+    await profileMenuStore.changeStatus(status);
+    await sessionStore.loadUserProfile();
   };
 
   const handleCloseMenu = () => {
@@ -70,7 +70,7 @@ const Menu: FC = () => {
       isBodyExtendingToEdges
       showBackground={false}
     >
-      <styled.Container ref={MenuRef} data-testid="Menu-test">
+      <styled.Container ref={menuRef} data-testid="Menu-test">
         <>
           <styled.Option onClick={handleProfileOpen}>
             <styled.IconContainer>

@@ -26,7 +26,7 @@ const User = types
   .views((self) => ({
     get avatarSrc(): string | undefined {
       return (
-        self.profile?.avatarHash &&
+        self.profile.avatarHash &&
         `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.profile.avatarHash}`
       );
     }
