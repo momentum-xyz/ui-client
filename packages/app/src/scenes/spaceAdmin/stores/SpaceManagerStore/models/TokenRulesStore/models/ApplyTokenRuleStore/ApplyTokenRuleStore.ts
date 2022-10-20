@@ -32,7 +32,7 @@ const ApplyTokenRuleStore = types.compose(
         }
       }),
       applyTokenRule: flow(function* (userId: string, isAdmin: boolean, spaceId: string) {
-        yield self.applyRequest.send(api.spaceRepository.addUser, {
+        yield self.applyRequest.send(api.spaceRepositoryOld.addUser, {
           user: {
             userId,
             spaceId,

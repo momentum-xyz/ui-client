@@ -47,7 +47,7 @@ const ProfileStore = types.compose(
       }),
       fetchUserSpaceList: flow(function* (userId: string) {
         const response: UserSpaceListItemResponse[] = yield self.userInitiativesRequest.send(
-          api.spaceRepository.fetchUserSpaceList,
+          api.spaceRepositoryOld.fetchUserSpaceList,
           {userId}
         );
 
@@ -67,7 +67,7 @@ const ProfileStore = types.compose(
           worldId
         };
 
-        const response = yield self.createTableRequest.send(api.spaceRepository.create, {space});
+        const response = yield self.createTableRequest.send(api.spaceRepositoryOld.create, {space});
         if (response?.id) {
           const inviteData = {isTable: true, spaceId: response.id, userId};
           yield self.inviteToTableRequest.send(
@@ -80,7 +80,7 @@ const ProfileStore = types.compose(
       }),
       fetchUserOwnedSpaces: flow(function* (worldId: string) {
         const response: UserOwnedSpacesResponse = yield self.userOwnedSpacesRequest.send(
-          api.spaceRepository.fetchUserOwnedSpaces,
+          api.spaceRepositoryOld.fetchUserOwnedSpaces,
           {
             worldId
           }

@@ -1,10 +1,10 @@
 /** Fetch allowed space types **/
 
-import {SpaceInterface} from '../spaceRepository/spaceRepository.api.types';
+import {OldSpaceInterface} from '../spaceRepository/spaceRepository.api.types';
 
 export interface CategoryInterface {
   name: string;
-  spaces: SpaceInterface[];
+  spaces: OldSpaceInterface[];
 }
 
 export interface GetAllowedSpaceTypesRequest {

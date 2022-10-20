@@ -3,3 +3,7 @@ export * from './configRepository';
 export * from './web3Repository';
 export * from './userRepository';
 export * from './userProfileRepository';
+export * from './pluginsRepository';
+export * from './spaceAttributeRepository';
+export * from './spaceRepository';
+export * from './userAttributeRepository';

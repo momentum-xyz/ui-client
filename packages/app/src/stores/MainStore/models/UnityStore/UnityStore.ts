@@ -130,7 +130,7 @@ const UnityStore = types
     },
     // FIXME: Temporary solution. To get space name from Unity
     fetchSpaceName: flow(function* (spaceId: string) {
-      const response = yield self.fetchRequest.send(api.spaceRepository.fetchSpace, {spaceId});
+      const response = yield self.fetchRequest.send(api.spaceRepositoryOld.fetchSpace, {spaceId});
       if (response) {
         return response.space.name;
       }

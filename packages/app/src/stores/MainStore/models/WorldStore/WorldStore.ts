@@ -14,7 +14,7 @@ const WorldStore = types.compose(
     .actions((self) => ({
       fetchWorldConfig: flow(function* (worldId: string) {
         const response: WorldConfigResponse = yield self.worldConfigRequest.send(
-          api.spaceRepository.fetchWorldConfig,
+          api.spaceRepositoryOld.fetchWorldConfig,
           {worldId}
         );
 
