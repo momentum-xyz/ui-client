@@ -85,7 +85,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
             <LocalUser
               isShown={!agoraStore.isStageMode || !agoraStageModeStore.isOnStage}
               isStageMode={agoraStore.isStageMode}
-              avatarSrc={sessionStore.profile?.avatarSrc}
+              avatarSrc={sessionStore.user?.avatarSrc}
               videoTrack={userDevicesStore.localVideoTrack}
               microphoneOff={agoraStore.isStageMode || userDevicesStore.muted}
               cameraOff={agoraStore.isStageMode || userDevicesStore.cameraOff}

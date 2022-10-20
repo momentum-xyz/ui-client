@@ -15,7 +15,7 @@ const MENU_OFFSET_BOTTOM = 60;
 
 const Menu: FC = () => {
   const {widgetStore, sessionStore} = useStore();
-  const {profile} = sessionStore;
+  const {user} = sessionStore;
   const {profileMenuStore} = widgetStore;
 
   const MenuRef = useRef<HTMLDivElement>(null);
@@ -57,7 +57,7 @@ const Menu: FC = () => {
     profileMenuStore.profileMenuDialog.close();
   };
 
-  if (!profile?.profile) {
+  if (!user?.profile) {
     return null;
   }
 
@@ -74,22 +74,20 @@ const Menu: FC = () => {
         <>
           <styled.Option onClick={handleProfileOpen}>
             <styled.IconContainer>
-              <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="super-small" showBorder />
+              <Avatar avatarSrc={user?.avatarSrc} size="super-small" showBorder />
             </styled.IconContainer>
-            <Text text={profile.name} size="xxs" isMultiline={false} />
+            <Text text={user.name} size="xxs" isMultiline={false} />
           </styled.Option>
-          <styled.Option
-            onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}
-          >
+          <styled.Option onClick={() => handleChangeStatus(user.status !== UserStatusEnum.ONLINE)}>
             <Toggle
               size="small"
               variant="availability"
-              checked={profile.status === UserStatusEnum.ONLINE}
+              checked={user.status === UserStatusEnum.ONLINE}
               onChange={handleChangeStatus}
             />
-            <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
+            <Text text={user.status ? t(`labels.${user.status}`) : ''} size="xxs" />
           </styled.Option>
-          {profile.isNodeAdmin && (
+          {user.isNodeAdmin && (
             <styled.Option onClick={handleTokenRulesOpen}>
               <styled.IconContainer>
                 <IconSvg name="whitelist" size="medium-large" isWhite />

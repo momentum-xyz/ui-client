@@ -12,11 +12,11 @@ import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 's
 
 const SessionStore = types
   .model('SessionStore', {
+    userId: '',
+    user: types.maybeNull(User),
     request: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
-    profile: types.maybeNull(User),
-    statusChangeRequest: types.optional(RequestModel, {}),
-    userId: ''
+    statusChangeRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     async init(idToken: string) {
@@ -32,8 +32,8 @@ const SessionStore = types
         {}
       );
       if (response) {
-        self.profile = cast(response);
         self.userId = response.id;
+        self.user = cast(response);
       }
     }),
     getLibrary(provider: ExternalProvider): Web3Provider {
@@ -50,19 +50,19 @@ const SessionStore = types
     changeStatus: flow(function* (status: UserStatusEnum) {
       yield self.statusChangeRequest.send(api.statusRepository.changeStatus, {status});
 
-      if (self.profile && self.statusChangeRequest.isDone) {
-        self.profile.status = status;
+      if (self.user && self.statusChangeRequest.isDone) {
+        self.user.status = status;
       }
     }),
     updateName(name: string) {
-      if (self.profile) {
-        self.profile.name = name;
+      if (self.user) {
+        self.user.name = name;
       }
     }
   }))
   .views((self) => ({
     get isUserReady(): boolean {
-      return !self.request.isPending && !self.profileRequest.isPending && !!self.profile;
+      return !self.request.isPending && !self.profileRequest.isPending && !!self.user;
     },
     get loginType(): LoginTypeEnum | null {
       const loginType = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);

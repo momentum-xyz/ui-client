@@ -17,7 +17,7 @@ const OnlineUsersPanel: FC = () => {
   const {profileMenuStore} = widgetStore;
   const {worldStore, unityStore} = mainStore;
   const {onlineUsersStore, onlineUsersList} = homeStore;
-  const {profile} = sessionStore;
+  const {user} = sessionStore;
   const {profileDialog} = profileMenuStore;
 
   useUnityEvent('ProfileClickEvent', (id: string, position: Position) => {
@@ -25,21 +25,17 @@ const OnlineUsersPanel: FC = () => {
   });
 
   useEffect(() => {
-    if (
-      onlineUsersStore.selectedUserId &&
-      profile &&
-      onlineUsersStore.selectedUserId === profile.id
-    ) {
+    if (onlineUsersStore.selectedUserId && user && onlineUsersStore.selectedUserId === user.id) {
       return;
     }
 
-    if (profileDialog.isOpen && profile) {
-      onlineUsersStore.selectUser(profile.id);
+    if (profileDialog.isOpen && user) {
+      onlineUsersStore.selectUser(user.id);
     }
   }, [profileDialog.isOpen]);
 
   useEffect(() => {
-    if (onlineUsersStore.selectedUserId !== profile?.id) {
+    if (onlineUsersStore.selectedUserId !== user?.id) {
       onlineUsersStore.endEditingUser();
       profileDialog.close();
     }
@@ -75,7 +71,7 @@ const OnlineUsersPanel: FC = () => {
           onlineUsersList={onlineUsersList}
           changeKeyboardControl={unityStore.changeKeyboardControl}
           worldId={worldStore.worldId}
-          profile={profile ?? undefined}
+          user={user ?? undefined}
           teleportToUser={unityStore.teleportToUser}
           spaceId={space?.id ?? ''}
         />

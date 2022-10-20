@@ -104,7 +104,7 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
           {profileStore.selectedImage ? (
             <styled.ImagePreview src={URL.createObjectURL(profileStore.selectedImage)} />
           ) : (
-            <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="large" />
+            <Avatar avatarSrc={sessionStore.user?.avatarSrc} size="large" />
           )}
         </styled.AvatarContainer>
         <div>

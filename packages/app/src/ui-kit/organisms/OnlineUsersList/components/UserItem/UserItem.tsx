@@ -17,7 +17,7 @@ export interface UserItemPropsInterface {
   user: UserModelInterface;
   teleportToUser?: (userId: string) => void;
   spaceId: string;
-  profile?: UserModelInterface;
+  currentUser?: UserModelInterface;
 }
 
 const UserItem: React.FC<UserItemPropsInterface> = ({
@@ -26,7 +26,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   user,
   teleportToUser,
   spaceId,
-  profile
+  currentUser
 }) => {
   const {t} = useTranslation();
 
@@ -89,8 +89,8 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   }, [spaceId, t, user]);
 
   const isItMe = useMemo(() => {
-    return profile?.id === user.id;
-  }, [profile?.id, user.id]);
+    return currentUser?.id === user.id;
+  }, [currentUser?.id, user.id]);
 
   return (
     <styled.Container data-testid="UserItem-test">
@@ -98,10 +98,10 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
         <Avatar
           size="small"
           avatarSrc={user.avatarSrc}
-          status={isItMe ? profile?.status : user.status}
+          status={isItMe ? currentUser?.status : user.status}
         />
         <styled.StyledText
-          text={(isItMe ? profile?.name ?? '' : user.name).trim()}
+          text={(isItMe ? currentUser?.name ?? '' : user.name).trim()}
           size="s"
           align="left"
           isMultiline={false}
