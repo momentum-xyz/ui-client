@@ -27,7 +27,8 @@ import {WorldChatWidget} from './pages';
 import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore} = useStore();
+  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore, worldBuilderStore} =
+    useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
@@ -56,7 +57,16 @@ const Widgets: FC = () => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
     worldChatStore.init(userId, worldStore.worldId, currentProfile ?? undefined);
-  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, currentProfile, worldChatStore]);
+    worldBuilderStore.fetchPermissions();
+  }, [
+    userId,
+    currentProfile,
+    worldStore.worldId,
+    musicPlayerStore,
+    emojiStore,
+    worldChatStore,
+    worldBuilderStore
+  ]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -157,13 +167,15 @@ const Widgets: FC = () => {
               )}
             </ToolbarIcon>
           </styled.ChatIconWrapper>
-          <ToolbarIcon
-            icon="planet"
-            title={t('titles.worldBuilder')}
-            link={ROUTES.worldBuilder.builder}
-            size="normal-large"
-            isWhite={false}
-          />
+          {(worldBuilderStore.haveAccess || true) && ( // TODO: remove this line when we have permissions
+            <ToolbarIcon
+              icon="planet"
+              title={t('titles.worldBuilder')}
+              link={ROUTES.worldBuilder.builder}
+              size="normal-large"
+              isWhite={false}
+            />
+          )}
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>
