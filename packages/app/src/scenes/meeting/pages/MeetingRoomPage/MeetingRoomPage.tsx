@@ -76,7 +76,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
             {/* MUTE ALL */}
             <MuteAllButton
               spaceId={agoraStore.spaceId || ''}
-              isShown={!agoraStore.isStageMode && collaborationStore.isModerator}
+              isShown={!agoraStore.isStageMode && collaborationStore.space?.isAdmin}
               peopleCount={agoraStore.meetingPeopleCount}
               onMuteAll={meetingRoomStore.muteAllUsers}
             />
