@@ -42,7 +42,7 @@ const WorldBuilderSkyboxesStore = types
     selectItem(item: WorldBuilderSkyboxInterface) {
       self.selectedItemId = item.id;
     },
-    updateItem() {
+    saveSelectedItem() {
       // TODO
       return Promise.resolve();
     }

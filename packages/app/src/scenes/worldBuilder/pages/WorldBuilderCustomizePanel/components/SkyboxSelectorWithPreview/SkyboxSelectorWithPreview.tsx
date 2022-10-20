@@ -11,7 +11,7 @@ import * as styled from './SkyboxSelectorWithPreview.styled';
 const SkyboxSelectorWithPreview: FC = () => {
   const {worldBuilderStore} = useStore();
   const {worldBuilderSkyboxesStore} = worldBuilderStore;
-  const {items, selectedItem, selectItem, updateItem} = worldBuilderSkyboxesStore;
+  const {items, selectedItem, selectItem, saveSelectedItem} = worldBuilderSkyboxesStore;
 
   useEffect(() => {
     worldBuilderSkyboxesStore.fetchItems();
@@ -58,7 +58,7 @@ const SkyboxSelectorWithPreview: FC = () => {
                 transform="normal"
                 size="medium"
                 onClick={() => {
-                  updateItem().catch((err) => {
+                  saveSelectedItem().catch((err) => {
                     toast.error(err.message);
                   });
                 }}
