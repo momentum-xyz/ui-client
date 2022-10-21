@@ -1,5 +1,5 @@
-import React from 'react';
-import {generatePath, useHistory} from 'react-router-dom';
+import React, {useMemo} from 'react';
+import {generatePath, useHistory, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import DraggableContent from 'react-draggable';
 import {useTranslation} from 'react-i18next';
@@ -12,15 +12,17 @@ import {VideoPanel} from 'ui-kit';
 
 import * as styled from './LiveStreamPIPWidget.styled';
 
-interface PropsInterface {
-  flyAround?: boolean;
-}
-
-const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
-  const {mainStore} = useStore();
+const LiveStreamPIPWidget: React.FC = () => {
+  const {mainStore, flightStore} = useStore();
   const {agoraStore, liveStreamStore} = mainStore;
+
   const history = useHistory();
   const {t} = useTranslation();
+  const location = useLocation();
+
+  const isFlightAround = useMemo(() => {
+    return !location.pathname.includes(ROUTES.collaboration.prefix);
+  }, [location.pathname]);
 
   if (!liveStreamStore.isLiveStreamShown || !agoraStore.spaceId) {
     return null;
@@ -31,7 +33,7 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
       <DraggableContent>
         <styled.Container
           data-testid="LiveStreamPIPWidget-test"
-          className={cn(!flyAround && 'notFlyAround')}
+          className={cn(!isFlightAround && 'notFlyAround')}
         >
           <styled.VideoWrapper>
             <VideoPanel youtubeHash={liveStreamStore.broadcast.url} widgetMode />
@@ -59,6 +61,7 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
             <SvgButton
               iconName="fullscreen"
               size="medium"
+              disabled={flightStore.isFlightWithMe}
               onClick={() => {
                 history.push(
                   generatePath(ROUTES.collaboration.liveStream, {spaceId: agoraStore.spaceId})
@@ -66,10 +69,11 @@ const LiveStreamPIPWidget: React.FC<PropsInterface> = ({flyAround}) => {
               }}
               isWhite
             />
-            {flyAround && (
+            {isFlightAround && (
               <SvgButton
                 iconName="collaboration"
                 size="medium-large"
+                disabled={flightStore.isFlightWithMe}
                 onClick={() => {
                   history.push(
                     generatePath(ROUTES.collaboration.dashboard, {spaceId: agoraStore.spaceId})
