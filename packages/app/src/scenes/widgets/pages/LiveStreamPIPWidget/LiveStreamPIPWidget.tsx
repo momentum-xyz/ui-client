@@ -21,7 +21,7 @@ const LiveStreamPIPWidget: React.FC = () => {
   const location = useLocation();
 
   const isFlightAround = useMemo(() => {
-    return !location.pathname.includes(ROUTES.collaboration.prefix);
+    return !location.pathname.includes(ROUTES.collaboration.root);
   }, [location.pathname]);
 
   if (!liveStreamStore.isLiveStreamShown || !agoraStore.spaceId) {

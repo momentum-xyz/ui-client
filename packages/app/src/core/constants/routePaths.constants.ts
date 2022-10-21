@@ -18,7 +18,7 @@ export const ROUTES = {
   },
   grabTable: '/:spaceId/table',
   collaboration: {
-    prefix: '/collaboration',
+    root: '/collaboration',
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
     stageModeControl: `/collaboration/:spaceId/stage-mode/control`,
