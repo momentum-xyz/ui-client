@@ -48,7 +48,7 @@ const Menu: FC = () => {
 
   const handleChangeStatus = async (checked: boolean) => {
     const status = checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB;
-    await profileMenuStore.changeStatus(status);
+    await sessionStore.changeStatus(status);
     await sessionStore.loadUserProfile();
   };
 
