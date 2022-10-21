@@ -48,7 +48,7 @@ const FlyWithMePage: FC = () => {
   }, [pilotId, unityStore, flyWithMeStore, isPilot, spaceId]);
 
   useEffect(() => {
-    const previousStatus = sessionStore.profile?.status || UserStatusEnum.ONLINE;
+    const previousStatus = sessionStore.user?.status || UserStatusEnum.ONLINE;
     sessionStore.changeStatus(UserStatusEnum.DO_NOT_DISTURB);
 
     return () => {

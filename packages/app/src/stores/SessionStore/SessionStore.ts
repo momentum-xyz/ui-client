@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {AuthContextProps} from 'react-oidc-context';
 import {OidcClientSettings} from 'oidc-client-ts';
 import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
-import {RequestModel} from '@momentum-xyz/core';
+import {RequestModel, UserStatusEnum} from '@momentum-xyz/core';
 
 import {storage} from 'shared/services';
 import {api, FetchUserResponse} from 'api';
@@ -14,7 +14,8 @@ const SessionStore = types
   .model('SessionStore', {
     user: types.maybeNull(User),
     request: types.optional(RequestModel, {}),
-    profileRequest: types.optional(RequestModel, {})
+    profileRequest: types.optional(RequestModel, {}),
+    statusRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     async init(idToken: string) {
@@ -41,6 +42,9 @@ const SessionStore = types
     logout: flow(function* (auth: AuthContextProps) {
       yield auth.revokeTokens();
       yield auth.removeUser();
+    }),
+    changeStatus: flow(function* (status: UserStatusEnum) {
+      yield self.statusRequest.send(api.statusRepository.changeStatus, {status});
     })
   }))
   .views((self) => ({

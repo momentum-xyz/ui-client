@@ -78,7 +78,7 @@ const UnityPage: FC = () => {
 
     // TODO: Remove this after UserController will send profile changes
     const isTable = uiTypeId === appVariables.GAT_UI_TYPE_ID;
-    if (isTable && sessionStore.profile?.status === UserStatusEnum.DO_NOT_DISTURB) {
+    if (isTable && sessionStore.user?.status === UserStatusEnum.DO_NOT_DISTURB) {
       return;
     }
 
