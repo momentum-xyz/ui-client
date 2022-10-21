@@ -29,7 +29,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded} = useStore();
+  const {mainStore, unityLoaded, flightStore} = useStore();
   const {unityStore} = mainStore;
 
   const auth = useAuth();
@@ -75,6 +75,12 @@ const UnityPage: FC = () => {
     // FIXME: Temporary solution. To get space name from Unity
     const spaceName = await unityStore.fetchSpaceName(spaceId);
 
+    // TODO: Remove this after UserController will send profile changes
+    const isTable = uiTypeId === appVariables.GAT_UI_TYPE_ID;
+    if (isTable && flightStore.isFlightWithMe) {
+      return;
+    }
+
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 
@@ -91,8 +97,8 @@ const UnityPage: FC = () => {
       <InvitationContent
         invitorName={invitorName}
         spaceName={spaceName}
-        join={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
-        isTable={uiTypeId === appVariables.GAT_UI_TYPE_ID}
+        join={isTable ? handleJoinTable : handleJoinSpace}
+        isTable={isTable}
       />,
       TOAST_NOT_AUTO_CLOSE_OPTIONS
     );
