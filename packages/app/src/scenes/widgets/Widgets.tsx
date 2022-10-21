@@ -110,9 +110,7 @@ const Widgets: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
-      {!location.pathname.includes('live-stream') && (
-        <LiveStreamPIPWidget flyAround={!location.pathname.includes('collaboration')} />
-      )}
+      {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
