@@ -75,7 +75,7 @@ const UnityPage: FC = () => {
     // FIXME: Temporary solution. To get space name from Unity
     const spaceName = await unityStore.fetchSpaceName(spaceId);
 
-    // TODO: It should be implemented on the controller (DnD status of user)
+    // TODO: Remove this after UserController will send profile changes
     const isTable = uiTypeId === appVariables.GAT_UI_TYPE_ID;
     if (isTable && flightStore.isFlightWithMe) {
       return;
