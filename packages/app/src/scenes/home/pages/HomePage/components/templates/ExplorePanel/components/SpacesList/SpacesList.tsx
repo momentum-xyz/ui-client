@@ -11,7 +11,7 @@ const SpacesList: React.FC = () => {
   const {
     homeStore: {exploreStore}
   } = useStore();
-  const {selectedSpace, searchQuery, searchedSpacesByCategory} = exploreStore;
+  const {selectedSpace, searchQuery, spaceList} = exploreStore;
 
   const renderList = () => {
     if (!selectedSpace?.subSpaces) {
@@ -19,7 +19,7 @@ const SpacesList: React.FC = () => {
     }
 
     if (searchQuery && searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
-      return searchedSpacesByCategory?.map((category) => (
+      return spaceList?.map((category) => (
         <styled.Category key={category.name}>
           <styled.CategoryName label={category.name} type="h4" align="left" />
           {category.spaces.map((space, index) => (

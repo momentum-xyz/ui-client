@@ -1,18 +1,17 @@
-import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
+import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Heading, Loader, SearchInput, useDebouncedEffect} from '@momentum-xyz/ui-kit';
+import {Loader, SearchInput, useDebouncedEffect} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
-import {SpacesList, SelectedSpace} from './components';
+import {SpacesList, SelectedSpace, Header} from './components';
 import * as styled from './ExplorePanel.styled';
 
 const ExplorePanel: FC = () => {
   const {homeStore, mainStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {exploreStore} = homeStore;
-  const {selectedSpace} = exploreStore;
 
   const {t} = useTranslation();
 
@@ -26,7 +25,7 @@ const ExplorePanel: FC = () => {
 
   useDebouncedEffect(
     () => {
-      if (exploreStore.isSearching) {
+      if (exploreStore.isSearch) {
         exploreStore.search(exploreStore.searchQuery, worldStore.worldId);
       }
     },
@@ -39,7 +38,7 @@ const ExplorePanel: FC = () => {
       iconName="explore"
       name={t('labels.explore')}
       isExpanded={exploreStore.isExpanded}
-      setExpand={exploreStore.toggleExpand}
+      setExpand={exploreStore.setExpand}
       size={{width: '200px'}}
     >
       <SearchInput
@@ -49,49 +48,23 @@ const ExplorePanel: FC = () => {
         onFocus={() => handleSearchFocus(true)}
         onBlur={() => handleSearchFocus(false)}
       />
-      {exploreStore.isSearching && (
+
+      {!exploreStore.isSearch ? (
+        <styled.Body>
+          <SelectedSpace isWorld={exploreStore.selectedSpace?.id === worldStore.worldId} />
+        </styled.Body>
+      ) : (
         <>
-          <styled.WorldNameContainer>
-            <Heading
-              label={t('labels.searchResults')}
-              type="h1"
-              align="left"
-              transform="uppercase"
-            />
-          </styled.WorldNameContainer>
-          {exploreStore.searchRequest.isPending ? (
-            <styled.Loader>
-              <Loader />
-            </styled.Loader>
-          ) : (
-            <SpacesList />
-          )}
+          <Header title={t('labels.searchResults')} />
+          <SpacesList />
         </>
       )}
-      {!exploreStore.isSearching &&
-        (exploreStore.selectedSpace?.didFetchSpaceInformation ? (
-          <styled.Body>
-            {exploreStore.previousItem && exploreStore.selectedSpace?.id !== worldStore.worldId ? (
-              <SelectedSpace />
-            ) : (
-              <>
-                <styled.WorldNameContainer>
-                  <Heading
-                    label={selectedSpace?.name ?? ''}
-                    type="h1"
-                    align="left"
-                    transform="uppercase"
-                  />
-                </styled.WorldNameContainer>
-                <SpacesList />
-              </>
-            )}
-          </styled.Body>
-        ) : (
-          <styled.Loader>
-            <Loader />
-          </styled.Loader>
-        ))}
+
+      {exploreStore.isLoading && (
+        <styled.Loader>
+          <Loader />
+        </styled.Loader>
+      )}
     </styled.CustomExpandableLayout>
   );
 };

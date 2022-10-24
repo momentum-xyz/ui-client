@@ -17,16 +17,16 @@ const ExploreStore = types
       isExpanded: true,
       searchRequest: types.optional(RequestModel, {}),
       searchQuery: '',
-      searchedSpacesByCategory: types.optional(types.array(SpaceListByCategory), []),
+      spaceList: types.optional(types.array(SpaceListByCategory), []),
       spaceHistory: types.optional(types.array(SpaceInfo), []),
       previousItem: types.maybe(SpaceInfo)
     })
   )
   .actions((self) => ({
-    toggleExpand(isExpanded: boolean) {
+    setExpand(isExpanded: boolean): void {
       self.isExpanded = isExpanded;
     },
-    selectSpace(spaceId: string) {
+    selectSpace(spaceId: string): void {
       self.searchQuery = '';
 
       if (self.previousItem) {
@@ -43,7 +43,7 @@ const ExploreStore = types
       self.selectedSpace = Space.create({id: spaceId});
       self.selectedSpace.fetchSpaceInformation();
     },
-    goBack() {
+    goBack(): void {
       const previousItem = self.spaceHistory.pop();
       const previousItemId = self.previousItem?.id;
 
@@ -60,11 +60,9 @@ const ExploreStore = types
       self.selectedSpace = Space.create({id: previousItemId});
       self.selectedSpace.fetchSpaceInformation();
     },
-    unselectSpace() {
-      self.selectedSpace = undefined;
-    },
-    setSearchQuery(query: string) {
+    setSearchQuery(query: string): void {
       self.searchQuery = query;
+      self.spaceList = cast([]);
     },
     search: flow(function* (query: string, worldId: string) {
       const response: ExploreResponse = yield self.searchRequest.send(
@@ -76,7 +74,7 @@ const ExploreStore = types
       );
 
       if (response) {
-        self.searchedSpacesByCategory = cast(
+        self.spaceList = cast(
           response.map((category) => ({
             name: category.name,
             spaces: category.spaces.map((space) => ({
@@ -90,8 +88,11 @@ const ExploreStore = types
     })
   }))
   .views((self) => ({
-    get isSearching() {
+    get isSearch(): boolean {
       return self.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT;
+    },
+    get isLoading(): boolean {
+      return self.searchRequest.isPending || !!self.selectedSpace?.isPending;
     }
   }));
 
