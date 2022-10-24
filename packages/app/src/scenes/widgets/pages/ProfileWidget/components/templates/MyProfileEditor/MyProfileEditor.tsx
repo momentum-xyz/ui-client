@@ -17,7 +17,8 @@ interface PropsInterface {
 
 const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   const {widgetStore, sessionStore, worldChatStore, homeStore, mainStore} = useStore();
-  const {onlineUsersList} = homeStore;
+  const {onlineUsersStore} = homeStore;
+  const {onlineUsersList} = onlineUsersStore;
   const {profileStore} = widgetStore;
   const {userProfile, editAvatarDialog, formErrors} = profileStore;
   const {worldStore, unityStore} = mainStore;

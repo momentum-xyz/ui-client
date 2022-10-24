@@ -195,6 +195,9 @@ const Space = types
     },
     get isPrivate() {
       return self.secret === 1;
+    },
+    get isPending(): boolean {
+      return self.fetchSpaceInformationRequest.isPending;
     }
   }));
 

@@ -5,13 +5,6 @@ export const CustomExpandableLayout = styled(ExpandableLayout)`
   pointer-events: all;
 `;
 
-export const WorldNameContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 7px 10px;
-  gap: 5px;
-`;
-
 export const Loader = styled.div`
   height: 160px;
 `;
