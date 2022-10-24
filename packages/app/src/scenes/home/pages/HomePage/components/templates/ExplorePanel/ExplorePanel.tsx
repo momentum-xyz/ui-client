@@ -14,6 +14,7 @@ const ExplorePanel: FC = () => {
   const {homeStore, mainStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {exploreStore} = homeStore;
+  const {searchQuery} = exploreStore;
 
   const {t} = useTranslation();
 
@@ -34,17 +35,17 @@ const ExplorePanel: FC = () => {
       size={{width: '200px'}}
     >
       <SearchInput
-        value={exploreStore.searchQuery}
+        value={searchQuery.query}
         placeholder={t(`placeholders.searchForSpaces`)}
         onFocus={() => unityStore.changeKeyboardControl(false)}
         onBlur={() => unityStore.changeKeyboardControl(true)}
         onChange={(query) => {
-          exploreStore.setSearchQuery(query);
+          searchQuery.setQuery(query);
           debouncedSearch();
         }}
       />
 
-      {!exploreStore.isSearch ? (
+      {!searchQuery.isQuery ? (
         <styled.Body>
           <SelectedSpace isWorld={exploreStore.selectedSpace?.id === worldStore.worldId} />
         </styled.Body>

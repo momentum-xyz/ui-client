@@ -1,9 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum-xyz/ui-kit';
+import {ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
-import {SpaceInfo, Space} from 'core/models';
+import {SpaceInfo, Space, SearchQuery} from 'core/models';
 import {ExploreResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
 
@@ -13,11 +12,10 @@ const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
-      selectedSpace: types.maybe(Space),
       isExpanded: true,
-      searchRequest: types.optional(RequestModel, {}),
-      searchQuery: '',
+      selectedSpace: types.maybe(Space),
       spaceList: types.optional(types.array(SpaceListByCategory), []),
+      searchQuery: types.optional(SearchQuery, {}),
       spaceHistory: types.optional(types.array(SpaceInfo), []),
       previousItem: types.maybe(SpaceInfo)
     })
@@ -27,7 +25,7 @@ const ExploreStore = types
       self.isExpanded = isExpanded;
     },
     selectSpace(spaceId: string): void {
-      self.searchQuery = '';
+      self.searchQuery.setQuery('');
 
       if (self.previousItem) {
         self.spaceHistory.push({...self.previousItem});
@@ -60,15 +58,12 @@ const ExploreStore = types
       self.selectedSpace = Space.create({id: previousItemId});
       self.selectedSpace.fetchSpaceInformation();
     },
-    setSearchQuery(query: string): void {
-      self.searchQuery = query;
-    },
     search: flow(function* (worldId: string) {
       self.spaceList = cast([]);
-      const response: ExploreResponse = yield self.searchRequest.send(
+      const response: ExploreResponse = yield self.searchQuery.request.send(
         api.spaceTypeRepository.searchExplore,
         {
-          searchQuery: self.searchQuery,
+          searchQuery: self.searchQuery.query,
           worldId
         }
       );
@@ -88,11 +83,8 @@ const ExploreStore = types
     })
   }))
   .views((self) => ({
-    get isSearch(): boolean {
-      return self.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT;
-    },
     get isLoading(): boolean {
-      return self.searchRequest.isPending || !!self.selectedSpace?.isPending;
+      return self.searchQuery.isPending || !!self.selectedSpace?.isPending;
     }
   }));
 
