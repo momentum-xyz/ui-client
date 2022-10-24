@@ -13,7 +13,7 @@ export interface PluginTopBarActionInterface {
 }
 
 export interface SpacePluginPropsInterface extends CorePluginPropsInterface {
-  init: (keys: string[]) => Promise<void>;
+  init: (fields: string[]) => Promise<void>;
   spacePluginState: PluginStateInterface;
   setPluginSpaceStateSubField: <V>(
     field: string,
