@@ -1,38 +1,30 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {AxiosInstance} from 'axios';
 import {Button, PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
-import {MiroBoardStoreType} from 'stores/MiroBoardStore';
+import {MiroBoardInterface} from 'core/interfaces';
 
 import * as styled from './MiroActions.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   spaceId?: string;
-  request: AxiosInstance;
   isAdmin: boolean;
-  miroBoardStore: MiroBoardStoreType;
+  board?: MiroBoardInterface;
+  pick: () => void;
+  disable: () => void;
 }
 
-const MiroActions: FC<PropsInterface> = ({theme, spaceId, request, isAdmin, miroBoardStore}) => {
+const MiroActions: FC<PropsInterface> = ({theme, spaceId, isAdmin, board, disable, pick}) => {
   const {t} = useTranslation();
 
-  const closeBoard = useCallback(async () => {
-    await miroBoardStore.disableMiroBoard(spaceId || '', request);
-    await miroBoardStore.fetchMiroBoard(spaceId || '', request);
-  }, [miroBoardStore, spaceId, request]);
-
-  if (!spaceId || !isAdmin || !miroBoardStore.miroBoard?.data?.accessLink) {
+  if (!spaceId || !isAdmin || !board?.accessLink) {
     return null;
   }
 
   return (
     <styled.Container theme={theme}>
-      <Button
-        label={t('actions.changeBoard')}
-        onClick={() => miroBoardStore.pickBoard(spaceId, request)}
-      />
-      <Button label={t('actions.closeBoard')} variant="danger" onClick={closeBoard} />
+      <Button label={t('actions.changeBoard')} onClick={pick} />
+      <Button label={t('actions.closeBoard')} variant="danger" onClick={disable} />
     </styled.Container>
   );
 };

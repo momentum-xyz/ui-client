@@ -1,27 +1,24 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {useStore} from 'shared/hooks';
 import {useSpaceGlobalProps} from '@momentum-xyz/sdk';
 import {appVariables} from 'api/constants';
-import {MiroBoardInterface} from 'api';
-import {MiroStateInterface} from 'core/interfaces';
+import {MiroBoardInterface, MiroStateInterface} from 'core/interfaces';
 
 import {MiroBoard, MiroChoice, MiroActions} from './components';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
-  const {miroBoardStore} = useStore();
   const {renderTopBarActions} = useSpaceGlobalProps();
 
   const theme = useTheme();
 
-  const {spaceId, request, isSpaceAdmin, init, setPluginSpaceStateSubField, spacePluginState} =
+  const {spaceId, isSpaceAdmin, init, setPluginSpaceStateSubField, spacePluginState} =
     useSpaceGlobalProps();
 
   const miroPluginState: MiroStateInterface = spacePluginState;
 
-  const pickBoard = () => {
+  const pickBoard = useCallback(() => {
     miroBoardsPicker.open({
       action: 'access-link',
       clientId: appVariables.APP_ID,
@@ -31,7 +28,7 @@ const MiroBoardPage: FC = () => {
         }
       }
     });
-  };
+  }, [setPluginSpaceStateSubField]);
 
   useEffect(() => {
     init(['board']);
@@ -43,13 +40,22 @@ const MiroBoardPage: FC = () => {
         <MiroActions
           theme={theme}
           spaceId={spaceId}
-          request={request}
           isAdmin={isSpaceAdmin}
-          miroBoardStore={miroBoardStore}
+          board={miroPluginState.board}
+          pick={pickBoard}
+          disable={() => setPluginSpaceStateSubField('board', 'accessLink', null)}
         />
       )
     });
-  }, [isSpaceAdmin, renderTopBarActions, request, spaceId, miroBoardStore, theme]);
+  }, [
+    isSpaceAdmin,
+    renderTopBarActions,
+    spaceId,
+    theme,
+    miroPluginState.board,
+    pickBoard,
+    setPluginSpaceStateSubField
+  ]);
 
   if (!spaceId) {
     return null;

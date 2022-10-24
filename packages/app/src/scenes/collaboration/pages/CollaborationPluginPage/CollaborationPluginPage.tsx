@@ -12,7 +12,6 @@ import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {PluginLoaderModelType} from 'core/models';
-import {request} from 'api/request';
 
 import * as styled from './CollaborationPluginPage.styled';
 
@@ -114,7 +113,6 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 theme={theme}
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
-                request={request}
                 init={init}
                 spacePluginState={pluginState}
                 setPluginSpaceStateSubField={setPluginStateSubField}
