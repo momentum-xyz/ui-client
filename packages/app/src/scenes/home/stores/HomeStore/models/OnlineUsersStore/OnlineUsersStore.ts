@@ -1,10 +1,13 @@
 import {Instance, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
+import {OnlineUsersList} from 'core/models';
+
 const OnlineUsersStore = types
   .compose(
     ResetModel,
     types.model('OnlineUsersStore', {
+      onlineUsersList: types.optional(OnlineUsersList, {}),
       expanded: true,
       selectedUserId: types.maybe(types.string),
       editedUserId: types.maybe(types.string),

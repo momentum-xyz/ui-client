@@ -1,10 +1,10 @@
-import {cast, flow, Instance, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum-xyz/ui-kit';
 
-import {Space} from 'core/models';
 import {api} from 'api';
-import {ExploreResponse} from 'api/repositories/spaceTypeRepository/spaceTypeRepository.api.types';
+import {Space} from 'core/models';
+import {ExploreResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
 
 import {ExploreCategoryModel, SpaceHistoryItemModel} from './models';
@@ -94,7 +94,5 @@ const ExploreStore = types
       return self.searchQuery.length >= SEARCH_MINIMAL_CHARACTER_COUNT;
     }
   }));
-
-export type ExploreStoreType = Instance<typeof ExploreStore>;
 
 export {ExploreStore};

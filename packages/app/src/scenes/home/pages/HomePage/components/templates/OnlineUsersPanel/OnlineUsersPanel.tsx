@@ -16,7 +16,7 @@ const OnlineUsersPanel: FC = () => {
   const {space} = collaborationStore;
   const {profileMenuStore} = widgetStore;
   const {worldStore, unityStore} = mainStore;
-  const {onlineUsersStore, onlineUsersList} = homeStore;
+  const {onlineUsersStore} = homeStore;
   const {profile} = sessionStore;
   const {profileDialog} = profileMenuStore;
 
@@ -72,7 +72,7 @@ const OnlineUsersPanel: FC = () => {
       >
         <OnlineUsersList
           onlineUsersStore={onlineUsersStore}
-          onlineUsersList={onlineUsersList}
+          onlineUsersList={onlineUsersStore.onlineUsersList}
           changeKeyboardControl={unityStore.changeKeyboardControl}
           worldId={worldStore.worldId}
           profile={profile ?? undefined}
