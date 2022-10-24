@@ -53,7 +53,7 @@ const EmojiAnimationDock: FC = () => {
           (emojiMsg && (
             <EmojiWithAvatarAnimation key={idx} emojiMsg={emojiMsg} offset={offset} />
           )) ||
-          (emojiUrl && <MegamojiAnimation key={idx} emojiUrl={emojiUrl} offset={offset} />) || <></>
+          (emojiUrl && <MegamojiAnimation key={idx} emojiUrl={emojiUrl} />) || <></>
       )}
     </>
   );
