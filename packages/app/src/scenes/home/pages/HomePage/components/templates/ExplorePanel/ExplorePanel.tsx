@@ -1,97 +1,66 @@
-import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
+import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Heading, Loader, SearchInput, useDebouncedEffect} from '@momentum-xyz/ui-kit';
+import {Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
-import {SpacesList, SelectedSpace} from './components';
+import {SpacesList, SelectedSpace, Header} from './components';
 import * as styled from './ExplorePanel.styled';
+
+const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
   const {homeStore, mainStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {exploreStore} = homeStore;
-  const {selectedSpace} = exploreStore;
+  const {searchQuery} = exploreStore;
 
   const {t} = useTranslation();
-
-  const handleSearchFocus = (isFocused: boolean) => {
-    unityStore.changeKeyboardControl(!isFocused);
-  };
 
   useEffect(() => {
     exploreStore.selectSpace(worldStore.worldId);
   }, [exploreStore, worldStore.worldId]);
 
-  useDebouncedEffect(
-    () => {
-      if (exploreStore.isSearching) {
-        exploreStore.search(exploreStore.searchQuery, worldStore.worldId);
-      }
-    },
-    200,
-    [exploreStore.searchQuery, worldStore.worldId]
-  );
+  const debouncedSearch = useDebouncedCallback(() => {
+    exploreStore.search(worldStore.worldId);
+  }, SEARCH_DELAY_MS);
 
   return (
     <styled.CustomExpandableLayout
       iconName="explore"
       name={t('labels.explore')}
       isExpanded={exploreStore.isExpanded}
-      setExpand={exploreStore.toggleExpand}
+      setExpand={exploreStore.setExpand}
       size={{width: '200px'}}
     >
       <SearchInput
-        value={exploreStore.searchQuery}
-        onChange={exploreStore.setSearchQuery}
+        value={searchQuery.query}
         placeholder={t(`placeholders.searchForSpaces`)}
-        onFocus={() => handleSearchFocus(true)}
-        onBlur={() => handleSearchFocus(false)}
+        onFocus={() => unityStore.changeKeyboardControl(false)}
+        onBlur={() => unityStore.changeKeyboardControl(true)}
+        onChange={(query) => {
+          searchQuery.setQuery(query);
+          debouncedSearch();
+        }}
       />
-      {exploreStore.isSearching && (
+
+      {!searchQuery.isQueryValid ? (
+        <styled.Body>
+          <SelectedSpace isWorld={exploreStore.selectedSpace?.id === worldStore.worldId} />
+        </styled.Body>
+      ) : (
         <>
-          <styled.WorldNameContainer>
-            <Heading
-              label={t('labels.searchResults')}
-              type="h1"
-              align="left"
-              transform="uppercase"
-            />
-          </styled.WorldNameContainer>
-          {exploreStore.searchRequest.isPending ? (
-            <styled.Loader>
-              <Loader />
-            </styled.Loader>
-          ) : (
-            <SpacesList />
-          )}
+          <Header title={t('labels.searchResults')} />
+          <SpacesList />
         </>
       )}
-      {!exploreStore.isSearching &&
-        (exploreStore.selectedSpace?.didFetchSpaceInformation ? (
-          <styled.Body>
-            {exploreStore.previousItem && exploreStore.selectedSpace?.id !== worldStore.worldId ? (
-              <SelectedSpace />
-            ) : (
-              <>
-                <styled.WorldNameContainer>
-                  <Heading
-                    label={selectedSpace?.name ?? ''}
-                    type="h1"
-                    align="left"
-                    transform="uppercase"
-                  />
-                </styled.WorldNameContainer>
-                <SpacesList />
-              </>
-            )}
-          </styled.Body>
-        ) : (
-          <styled.Loader>
-            <Loader />
-          </styled.Loader>
-        ))}
+
+      {exploreStore.isLoading && (
+        <styled.Loader>
+          <Loader />
+        </styled.Loader>
+      )}
     </styled.CustomExpandableLayout>
   );
 };
