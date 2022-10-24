@@ -2,10 +2,11 @@ import styled from 'styled-components';
 
 export const MegamojiContainer = styled.div`
   position: absolute;
-  height: 220px;
-  width: 220px;
+  height: 180px;
+  width: 180px;
   opacity: 0;
   top: 30%;
+  left: 14%;
 
   z-index: calc(var(--overlay-z-index) + 2);
   transform-origin: 50% 50%;
@@ -49,7 +50,7 @@ export const MegamojiContainer = styled.div`
 `;
 
 export const MegamojiImg = styled.img`
-  width: 220px;
-  height: 220px;
+  width: 180px;
+  height: 180px;
   position: absolute;
 `;
