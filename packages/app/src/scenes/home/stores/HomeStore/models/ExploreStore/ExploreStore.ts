@@ -3,11 +3,11 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum-xyz/ui-kit';
 
 import {api} from 'api';
-import {Space} from 'core/models';
+import {SpaceInfo, Space} from 'core/models';
 import {ExploreResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
 
-import {ExploreCategoryModel, SpaceHistoryItemModel} from './models';
+import {SpaceListByCategory} from './models';
 
 const ExploreStore = types
   .compose(
@@ -17,9 +17,9 @@ const ExploreStore = types
       isExpanded: true,
       searchRequest: types.optional(RequestModel, {}),
       searchQuery: '',
-      searchedSpacesByCategory: types.optional(types.array(ExploreCategoryModel), []),
-      spaceHistory: types.optional(types.array(SpaceHistoryItemModel), []),
-      previousItem: types.maybe(SpaceHistoryItemModel)
+      searchedSpacesByCategory: types.optional(types.array(SpaceListByCategory), []),
+      spaceHistory: types.optional(types.array(SpaceInfo), []),
+      previousItem: types.maybe(SpaceInfo)
     })
   )
   .actions((self) => ({
@@ -35,8 +35,8 @@ const ExploreStore = types
 
       if (self.selectedSpace && self.selectedSpace.name) {
         self.previousItem = cast({
-          spaceName: self.selectedSpace.name,
-          spaceId: self.selectedSpace.id
+          id: self.selectedSpace.id,
+          name: self.selectedSpace.name
         });
       }
 
@@ -45,7 +45,7 @@ const ExploreStore = types
     },
     goBack() {
       const previousItem = self.spaceHistory.pop();
-      const previousItemId = self.previousItem?.spaceId;
+      const previousItemId = self.previousItem?.id;
 
       if (!previousItemId) {
         return;
@@ -78,11 +78,11 @@ const ExploreStore = types
       if (response) {
         self.searchedSpacesByCategory = cast(
           response.map((category) => ({
-            ...category,
+            name: category.name,
             spaces: category.spaces.map((space) => ({
-              ...space,
               id: bytesToUuid(space.id.data),
-              isAdmin: space.isAdmin === '1'
+              name: space.name,
+              hasSubspaces: !!space.children?.length
             }))
           }))
         );

@@ -27,11 +27,11 @@ const SpacesList: React.FC = () => {
               space={{
                 id: space.id ?? '',
                 name: space.name ?? '',
-                hasSubspaces: space.subSpaces.length > 0
+                hasSubspaces: space.hasSubspaces
               }}
-              hasSubspaces={space.subSpaces.length > 0}
+              hasSubspaces={space.hasSubspaces}
               key={space.id}
-              lastItem={category.spaces.length - 1 === index}
+              lastItem={false}
             />
           ))}
         </styled.Category>

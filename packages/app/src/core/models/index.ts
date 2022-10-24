@@ -3,6 +3,7 @@ export * from './EventItem';
 export * from './Polkadot';
 export * from './ValidatorItem';
 export * from './Space';
+export * from './SpaceInfo';
 export * from './TokenRuleItem';
 export * from './SpaceAncestor';
 export * from './SpaceUser';

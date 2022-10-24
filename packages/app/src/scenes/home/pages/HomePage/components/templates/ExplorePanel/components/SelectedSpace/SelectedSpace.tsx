@@ -40,7 +40,7 @@ const SelectedSpace: React.FC = () => {
         <styled.BackIconSvg name="chevron" />
         <styled.ParentHeading
           type="h3"
-          label={exploreStore.previousItem?.spaceName ?? ''}
+          label={exploreStore.previousItem?.name ?? ''}
           align="left"
         />
       </styled.Header>
