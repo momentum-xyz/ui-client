@@ -16,7 +16,7 @@ const SearchQuery = types
     }
   }))
   .views((self) => ({
-    get isQuery(): boolean {
+    get isQueryValid(): boolean {
       return self.query.length >= SEARCH_MINIMAL_CHARACTER_COUNT;
     },
     get isPending(): boolean {

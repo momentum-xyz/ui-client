@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
@@ -11,14 +10,14 @@ const SpacesList: FC = () => {
   const {homeStore} = useStore();
   const {exploreStore} = homeStore;
   const {selectedSpace, searchQuery, spaceList} = exploreStore;
-  const {query} = searchQuery;
+  const {isQueryValid} = searchQuery;
 
   const renderList = () => {
     if (!selectedSpace?.subSpaces) {
       return;
     }
 
-    if (query && query.length >= SEARCH_MINIMAL_CHARACTER_COUNT) {
+    if (isQueryValid) {
       return spaceList?.map((category) => (
         <styled.Category key={category.name}>
           <styled.CategoryName label={category.name} type="h4" align="left" />

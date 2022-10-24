@@ -45,7 +45,7 @@ const ExplorePanel: FC = () => {
         }}
       />
 
-      {!searchQuery.isQuery ? (
+      {!searchQuery.isQueryValid ? (
         <styled.Body>
           <SelectedSpace isWorld={exploreStore.selectedSpace?.id === worldStore.worldId} />
         </styled.Body>
