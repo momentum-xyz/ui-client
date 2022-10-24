@@ -6,9 +6,9 @@ import {toast} from 'react-toastify';
 import {Dialog, Dropdown, Text, SearchDropdown, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 import {validateEmail} from '@momentum-xyz/core';
 
-import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {UserModelInterface} from 'core/models/UserModel';
+import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
+import {UserInfoModelInterface} from 'core/models';
 
 import * as styled from './AddMemberDialog.styled';
 
@@ -22,12 +22,11 @@ interface AddMemberFormInterface {
 }
 
 const AddMemberDialog: FC<PropsInterface> = (props) => {
-  const {
-    mainStore: {worldStore},
-    spaceAdminStore
-  } = useStore();
+  const {mainStore, spaceAdminStore} = useStore();
+  const {worldStore} = mainStore;
   const {spaceManagerStore} = spaceAdminStore;
   const {space, searchUsersStore} = spaceManagerStore;
+
   const [isFocused, setIsFocused] = useState(false);
   const [userSelected, setUserSelected] = useState<string>('');
 
@@ -81,7 +80,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
     }
   };
 
-  const handleSelectUser = (user: UserModelInterface) => {
+  const handleSelectUser = (user: UserInfoModelInterface) => {
     setIsFocused(false);
     setIsFocused(false);
     setValue('user', user.id);

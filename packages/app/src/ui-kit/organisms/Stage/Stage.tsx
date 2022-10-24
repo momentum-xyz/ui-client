@@ -67,7 +67,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
               isCameraOff={userDevicesStore.cameraOff}
               isMuted={userDevicesStore.muted}
               soundLevel={agoraStageModeStore.localSoundLevel}
-              currentUser={sessionStore.profile ?? undefined}
+              currentUser={sessionStore.user ?? undefined}
               loadCurrentUserProfile={sessionStore.loadUserProfile}
             />
           </styled.MediaPlayerContainer>

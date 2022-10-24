@@ -15,21 +15,19 @@ const MENU_OFFSET_BOTTOM = 60;
 
 const Menu: FC = () => {
   const {widgetStore, sessionStore} = useStore();
-  const {profile} = sessionStore;
   const {profileMenuStore} = widgetStore;
-
-  const MenuRef = useRef<HTMLDivElement>(null);
+  const {user} = sessionStore;
 
   const auth = useAuth();
-
   const {t} = useTranslation();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const signOutUser = async () => {
     await sessionStore.logout(auth);
     document.location.href = ROUTES.base;
   };
 
-  useClickOutside(MenuRef, () => {
+  useClickOutside(menuRef, () => {
     handleCloseMenu();
   });
 
@@ -48,8 +46,10 @@ const Menu: FC = () => {
     profileMenuStore.tokenRulesDialog.open();
   };
 
-  const handleChangeStatus = (checked: boolean) => {
-    sessionStore.changeStatus(checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB);
+  const handleChangeStatus = async (checked: boolean) => {
+    const status = checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB;
+    await sessionStore.changeStatus(status);
+    await sessionStore.loadUserProfile();
   };
 
   const handleCloseMenu = () => {
@@ -57,7 +57,7 @@ const Menu: FC = () => {
     profileMenuStore.profileMenuDialog.close();
   };
 
-  if (!profile?.profile) {
+  if (!user?.profile) {
     return null;
   }
 
@@ -70,26 +70,24 @@ const Menu: FC = () => {
       isBodyExtendingToEdges
       showBackground={false}
     >
-      <styled.Container ref={MenuRef} data-testid="Menu-test">
+      <styled.Container ref={menuRef} data-testid="Menu-test">
         <>
           <styled.Option onClick={handleProfileOpen}>
             <styled.IconContainer>
-              <Avatar avatarSrc={sessionStore.profile?.avatarSrc} size="super-small" showBorder />
+              <Avatar avatarSrc={user?.avatarSrc} size="super-small" showBorder />
             </styled.IconContainer>
-            <Text text={profile.name} size="xxs" isMultiline={false} />
+            <Text text={user.name} size="xxs" isMultiline={false} />
           </styled.Option>
-          <styled.Option
-            onClick={() => handleChangeStatus(profile.status !== UserStatusEnum.ONLINE)}
-          >
+          <styled.Option onClick={() => handleChangeStatus(user.status !== UserStatusEnum.ONLINE)}>
             <Toggle
               size="small"
               variant="availability"
-              checked={profile.status === UserStatusEnum.ONLINE}
+              checked={user.status === UserStatusEnum.ONLINE}
               onChange={handleChangeStatus}
             />
-            <Text text={profile.status ? t(`labels.${profile.status}`) : ''} size="xxs" />
+            <Text text={user.status ? t(`labels.${user.status}`) : ''} size="xxs" />
           </styled.Option>
-          {profile.isNodeAdmin && (
+          {user.isNodeAdmin && (
             <styled.Option onClick={handleTokenRulesOpen}>
               <styled.IconContainer>
                 <IconSvg name="whitelist" size="medium-large" isWhite />

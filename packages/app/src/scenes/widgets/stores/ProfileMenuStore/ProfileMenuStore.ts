@@ -16,7 +16,7 @@ const ProfileMenuStore = types.compose(
       tokenRulesStore: types.optional(TokenRulesStore, {})
     })
     .actions((self) => ({
-      openProfileMenu() {
+      openProfileMenu(): void {
         self.profileMenuDialog.open();
         self.menuDialog.open();
       }

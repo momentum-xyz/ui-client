@@ -5,7 +5,7 @@ import cn from 'classnames';
 import {observer} from 'mobx-react-lite';
 import {IconSvg, Text} from '@momentum-xyz/ui-kit';
 
-import {UserProfileModelInterface, AgoraRemoteUserInterface} from 'core/models';
+import {UserModelInterface, AgoraRemoteUserInterface} from 'core/models';
 
 import * as styled from './RemoteOrLocalUser.styled';
 
@@ -15,7 +15,7 @@ interface PropsInterface {
   isCameraOff?: boolean;
   isMuted?: boolean;
   soundLevel?: number;
-  currentUser?: UserProfileModelInterface;
+  currentUser?: UserModelInterface;
   loadCurrentUserProfile?: () => void;
 }
 

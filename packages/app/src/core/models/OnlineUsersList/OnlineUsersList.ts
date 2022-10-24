@@ -1,13 +1,13 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 
-import {UserProfileModel, UserProfileModelInterface} from 'core/models';
+import {User, UserModelInterface} from 'core/models';
 import {api, OnlineUsersResponse, UserSearchResponse} from 'api';
 
 const OnlineUsersList = types
   .model('OnlineUsersList', {
     usersRequest: types.optional(RequestModel, {}),
-    users: types.optional(types.array(UserProfileModel), []),
+    users: types.optional(types.array(User), []),
     searchQuery: ''
   })
   .actions((self) => ({
@@ -58,8 +58,8 @@ const OnlineUsersList = types
     get isLoading(): boolean {
       return self.usersRequest.isPending;
     },
-    filteredPeople(excludedPeopleIds: string[]): UserProfileModelInterface[] {
-      return self.users.filter((user) => !excludedPeopleIds?.includes(user.uuid));
+    filteredPeople(excludedPeopleIds: string[]): UserModelInterface[] {
+      return self.users.filter((user) => !excludedPeopleIds?.includes(user.id));
     }
   }));
 

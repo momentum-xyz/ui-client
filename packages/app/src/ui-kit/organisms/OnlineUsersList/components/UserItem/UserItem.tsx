@@ -7,17 +7,17 @@ import {Button, SvgButton, Avatar} from '@momentum-xyz/ui-kit';
 
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {usePosBusEvent} from 'shared/hooks';
-import {UserProfileModelInterface} from 'core/models';
+import {UserModelInterface} from 'core/models';
 
 import * as styled from './UserItem.styled';
 
 export interface UserItemPropsInterface {
   onClick: React.MouseEventHandler<HTMLDivElement>;
   invite: boolean;
-  user: UserProfileModelInterface;
+  user: UserModelInterface;
   teleportToUser?: (userId: string) => void;
   spaceId: string;
-  profile?: UserProfileModelInterface;
+  currentUser?: UserModelInterface;
 }
 
 const UserItem: React.FC<UserItemPropsInterface> = ({
@@ -26,12 +26,12 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   user,
   teleportToUser,
   spaceId,
-  profile
+  currentUser
 }) => {
   const {t} = useTranslation();
 
   const handleFlyToUser = () => {
-    teleportToUser?.(user.uuid);
+    teleportToUser?.(user.id);
   };
 
   const inviteTimeoutRef = useRef<NodeJS.Timeout>();
@@ -39,7 +39,7 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
 
   usePosBusEvent('stage-mode-user-joined', (userId: string) => {
     console.info('[POSBUS EVENT] stage-mode-user-joined', userId);
-    if (userId === user.uuid) {
+    if (userId === user.id) {
       user.setInvited(false);
     }
   });
@@ -89,8 +89,8 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
   }, [spaceId, t, user]);
 
   const isItMe = useMemo(() => {
-    return profile?.uuid === user.uuid;
-  }, [profile?.uuid, user.uuid]);
+    return currentUser?.id === user.id;
+  }, [currentUser?.id, user.id]);
 
   return (
     <styled.Container data-testid="UserItem-test">
@@ -98,10 +98,10 @@ const UserItem: React.FC<UserItemPropsInterface> = ({
         <Avatar
           size="small"
           avatarSrc={user.avatarSrc}
-          status={isItMe ? profile?.status : user.status}
+          status={isItMe ? currentUser?.status : user.status}
         />
         <styled.StyledText
-          text={(isItMe ? profile?.name ?? '' : user.name).trim()}
+          text={(isItMe ? currentUser?.name ?? '' : user.name).trim()}
           size="s"
           align="left"
           isMultiline={false}

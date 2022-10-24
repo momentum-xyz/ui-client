@@ -22,7 +22,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
   const {tokenRulesStore} = profileMenuStore;
   const {tokenRuleReviewStore} = tokenRulesStore;
   const {currentTokenRule} = tokenRuleReviewStore;
-  const {profile} = sessionStore;
+  const {user} = sessionStore;
 
   const handleDelete = useCallback(async () => {
     const isSuccess = await tokenRuleReviewStore.delete();
@@ -124,7 +124,7 @@ const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
                 handleApprove();
               }
             }
-          : currentTokenRule?.canRemove(profile?.uuid)
+          : currentTokenRule?.canRemove(user?.id)
           ? {
               title: t('actions.removeRule'),
               onClick: () => {

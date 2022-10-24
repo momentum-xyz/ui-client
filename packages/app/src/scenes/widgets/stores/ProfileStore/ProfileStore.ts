@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
 import {RequestModel, ResetModel, Dialog, SpaceTypeEnum} from '@momentum-xyz/core';
 
-import {UserProfileModel, UserSpaceDetails} from 'core/models';
+import {User, UserSpaceDetails} from 'core/models';
 import {
   api,
   UserProfileInterface,
@@ -17,7 +17,7 @@ const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
-      userProfile: types.maybe(UserProfileModel),
+      userProfile: types.maybe(User),
       canCreateInitiative: types.maybe(types.boolean),
       userSpaceList: types.optional(types.array(UserSpaceDetails), []),
       profileFetchRequest: types.optional(RequestModel, {}),

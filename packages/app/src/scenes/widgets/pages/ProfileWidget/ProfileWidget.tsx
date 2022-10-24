@@ -46,7 +46,7 @@ const ProfileWidget: React.FC<ProfileWidgetPropsInterface> = ({
     if (!sessionStore.userId || !userProfile) {
       return false;
     }
-    return sessionStore.userId === userProfile.uuid;
+    return sessionStore.userId === userProfile?.id;
   }, [sessionStore.userId, userProfile]);
 
   return (
