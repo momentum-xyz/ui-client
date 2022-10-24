@@ -1,12 +1,14 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Loader, SearchInput, useDebouncedEffect} from '@momentum-xyz/ui-kit';
+import {Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
 import {SpacesList, SelectedSpace, Header} from './components';
 import * as styled from './ExplorePanel.styled';
+
+const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
   const {homeStore, mainStore} = useStore();
@@ -15,23 +17,13 @@ const ExplorePanel: FC = () => {
 
   const {t} = useTranslation();
 
-  const handleSearchFocus = (isFocused: boolean) => {
-    unityStore.changeKeyboardControl(!isFocused);
-  };
-
   useEffect(() => {
     exploreStore.selectSpace(worldStore.worldId);
   }, [exploreStore, worldStore.worldId]);
 
-  useDebouncedEffect(
-    () => {
-      if (exploreStore.isSearch) {
-        exploreStore.search(exploreStore.searchQuery, worldStore.worldId);
-      }
-    },
-    200,
-    [exploreStore.searchQuery, worldStore.worldId]
-  );
+  const debouncedSearch = useDebouncedCallback(() => {
+    exploreStore.search(worldStore.worldId);
+  }, SEARCH_DELAY_MS);
 
   return (
     <styled.CustomExpandableLayout
@@ -43,10 +35,13 @@ const ExplorePanel: FC = () => {
     >
       <SearchInput
         value={exploreStore.searchQuery}
-        onChange={exploreStore.setSearchQuery}
         placeholder={t(`placeholders.searchForSpaces`)}
-        onFocus={() => handleSearchFocus(true)}
-        onBlur={() => handleSearchFocus(false)}
+        onFocus={() => unityStore.changeKeyboardControl(false)}
+        onBlur={() => unityStore.changeKeyboardControl(true)}
+        onChange={(query) => {
+          exploreStore.setSearchQuery(query);
+          debouncedSearch();
+        }}
       />
 
       {!exploreStore.isSearch ? (

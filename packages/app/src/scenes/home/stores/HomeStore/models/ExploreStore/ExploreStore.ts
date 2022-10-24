@@ -62,13 +62,13 @@ const ExploreStore = types
     },
     setSearchQuery(query: string): void {
       self.searchQuery = query;
-      self.spaceList = cast([]);
     },
-    search: flow(function* (query: string, worldId: string) {
+    search: flow(function* (worldId: string) {
+      self.spaceList = cast([]);
       const response: ExploreResponse = yield self.searchRequest.send(
         api.spaceTypeRepository.searchExplore,
         {
-          searchQuery: query,
+          searchQuery: self.searchQuery,
           worldId
         }
       );
