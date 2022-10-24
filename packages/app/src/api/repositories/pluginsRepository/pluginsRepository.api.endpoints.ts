@@ -4,7 +4,8 @@ export const pluginsRepositoryEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_API_URL}/plugins`;
 
   return {
-    metadata: `${BASE_URL}/metadata`,
+    list: `${BASE_URL}`,
+    metadata: `${BASE_URL}/meta`,
     options: `${BASE_URL}/options`
   };
 };

@@ -1,6 +1,8 @@
 import {AxiosInstance} from 'axios';
 import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
+import {PluginStateInterface} from './pluginState.interface';
+
 export interface CorePluginPropsInterface {
   theme: ThemeInterface;
   spaceId?: string;
@@ -13,7 +15,12 @@ export interface PluginTopBarActionInterface {
 }
 
 export interface SpacePluginPropsInterface extends CorePluginPropsInterface {
+  init: (keys: string[]) => Promise<void>;
+  spacePluginState: PluginStateInterface;
+  setPluginSpaceStateSubField: <V>(
+    field: string,
+    subField: string,
+    subFieldValue: V
+  ) => Promise<void>;
   renderTopBarActions?: (actions: PluginTopBarActionInterface) => void;
 }
-
-export type PluginPropsType = SpacePluginPropsInterface;

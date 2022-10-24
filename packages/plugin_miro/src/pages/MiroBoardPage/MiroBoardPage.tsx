@@ -2,31 +2,40 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {useStore} from 'shared/hooks';
-import {useGlobalProps} from '@momentum-xyz/sdk';
+import {useSpaceGlobalProps} from '@momentum-xyz/sdk';
+import {appVariables} from 'api/constants';
+import {MiroBoardInterface} from 'api';
+import {MiroStateInterface} from 'core/interfaces';
 
 import {MiroBoard, MiroChoice, MiroActions} from './components';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
   const {miroBoardStore} = useStore();
-  const {renderTopBarActions} = useGlobalProps();
-  const {miroBoard} = miroBoardStore;
+  const {renderTopBarActions} = useSpaceGlobalProps();
 
   const theme = useTheme();
 
-  const props = useGlobalProps();
+  const {spaceId, request, isSpaceAdmin, init, setPluginSpaceStateSubField, spacePluginState} =
+    useSpaceGlobalProps();
 
-  const {spaceId, request, isSpaceAdmin} = props;
+  const miroPluginState: MiroStateInterface = spacePluginState;
+
+  const pickBoard = () => {
+    miroBoardsPicker.open({
+      action: 'access-link',
+      clientId: appVariables.APP_ID,
+      success: async (data: MiroBoardInterface) => {
+        for (const [key, value] of Object.entries(data)) {
+          await setPluginSpaceStateSubField('board', key, value);
+        }
+      }
+    });
+  };
 
   useEffect(() => {
-    if (spaceId) {
-      miroBoardStore.fetchMiroBoard(spaceId, request);
-    }
-
-    return () => {
-      miroBoardStore.resetModel();
-    };
-  }, [miroBoardStore, request, spaceId]);
+    init(['board']);
+  }, [init]);
 
   useEffect(() => {
     renderTopBarActions?.({
@@ -40,7 +49,7 @@ const MiroBoardPage: FC = () => {
         />
       )
     });
-  }, [isSpaceAdmin, props, renderTopBarActions, request, spaceId, miroBoardStore, theme]);
+  }, [isSpaceAdmin, renderTopBarActions, request, spaceId, miroBoardStore, theme]);
 
   if (!spaceId) {
     return null;
@@ -48,13 +57,10 @@ const MiroBoardPage: FC = () => {
 
   return (
     <styled.Container>
-      {!miroBoard?.data?.accessLink ? (
-        <MiroChoice
-          isAdmin={isSpaceAdmin}
-          pickBoard={() => miroBoardStore.pickBoard(spaceId, request)}
-        />
+      {!miroPluginState.board?.accessLink ? (
+        <MiroChoice isAdmin={isSpaceAdmin} pickBoard={pickBoard} />
       ) : (
-        <MiroBoard miroUrl={miroBoard.data.accessLink} />
+        <MiroBoard miroUrl={miroPluginState.board.accessLink} />
       )}
     </styled.Container>
   );

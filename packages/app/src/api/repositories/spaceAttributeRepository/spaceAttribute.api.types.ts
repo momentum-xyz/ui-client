@@ -1,42 +1,33 @@
-import {AttributeInterface, AttributeValueInterface} from 'api/interfaces';
+import {AttributeSubValueInterface, AttributeValueInterface} from 'api/interfaces';
 
 export interface SpaceAttributesRequest {
   worldId: string;
   spaceId: string;
 }
 
-export interface PluginAttributesRequest extends SpaceAttributesRequest {
-  pluginId: string;
+// GET SPACE ATTRIBUTE
+export interface GetSpaceAttributeRequest extends SpaceAttributesRequest {
+  plugin_id: string;
+  attribute_name: string;
 }
 
-export interface PluginAttributeValueRequest extends PluginAttributesRequest {
-  attributeName: string;
+export interface GetSpaceAttributeResponse extends AttributeValueInterface {}
+
+// GET SPACE SUB ATTRIBUTE
+export interface GetSpaceSubAttributeRequest extends SpaceAttributesRequest {
+  plugin_id: string;
+  attribute_name: string;
+  sub_attribute_key: string;
 }
 
-// GET PLUGIN ATTRIBUTES
+export interface GetSpaceSubAttributeResponse extends AttributeSubValueInterface {}
 
-export interface GetPluginAttributesRequest extends PluginAttributesRequest {
-  attributeNames?: string[];
+// SET SPACE SUB ATTRIBUTE
+export interface SetSpaceSubAttributeRequest extends SpaceAttributesRequest {
+  plugin_id: string;
+  attribute_name: string;
+  sub_attribute_key: string;
+  value: unknown;
 }
 
-export interface GetPluginAttributesResponse extends Array<AttributeInterface> {}
-
-// GET PLUGIN ATTRIBUTE VALUE
-
-export interface GetPluginAttributeValueRequest extends PluginAttributeValueRequest {}
-
-export interface GetPluginAttributeValueResponse extends AttributeValueInterface {}
-
-// CREATE OR UPDATE PLUGIN ATTRIBUTES
-
-export interface CreateOrUpdatePluginAttributeValueRequest extends PluginAttributeValueRequest {
-  value: AttributeValueInterface;
-}
-
-export interface CreateOrUpdatePluginAttributeValueResponse extends AttributeValueInterface {}
-
-// DELETE PLUGIN ATTRIBUTES
-
-export interface DeletePluginAttributeValueRequest extends PluginAttributeValueRequest {}
-
-export interface DeletePluginAttributeValueResponse extends AttributeValueInterface {}
+export interface SetSpaceSubAttributeResponse extends AttributeSubValueInterface {}

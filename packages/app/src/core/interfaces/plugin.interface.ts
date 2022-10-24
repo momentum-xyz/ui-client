@@ -1,10 +1,11 @@
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
 export interface PluginInterface {
-  name: string;
+  id: string;
+  scopeName: string;
   subPath: string;
   subtitle?: string;
-  url: string;
+  scriptUrl: string;
   exact?: boolean;
   iconName: IconNameType;
 }

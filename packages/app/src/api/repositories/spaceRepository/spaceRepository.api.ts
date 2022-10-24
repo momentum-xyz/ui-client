@@ -5,66 +5,27 @@ import {request} from 'api/request';
 
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 import {
-  GetSpaceAncestorsRequest,
-  GetSpaceAncestorsResponse,
-  GetSpacePluginListRequest,
-  GetSpacePluginListResponse,
-  GetSpaceRequest,
-  GetSpaceResponse,
-  InviteUserRequest,
-  InviteUserResponse,
-  SearchSpacesRequest,
-  SearchSpacesResponse
+  GetSpaceOptionsRequest,
+  GetSpaceOptionsResponse,
+  GetSpaceSubOptionRequest
 } from './spaceRepository.api.types';
 
-export const getSpace: RequestInterface<GetSpaceRequest, GetSpaceResponse> = (options) => {
-  const {worldId, spaceId, ...restOptions} = options;
-
-  const url = generatePath(spaceRepositoryEndpoints().base, {worldId, spaceId});
-
-  return request.get(url, restOptions);
-};
-
-export const getSpaceAncestors: RequestInterface<
-  GetSpaceAncestorsRequest,
-  GetSpaceAncestorsResponse
-> = (options) => {
-  const {worldId, spaceId, ...restOptions} = options;
-
-  const url = generatePath(spaceRepositoryEndpoints().ancestors, {worldId, spaceId});
-
-  return request.get(url, restOptions);
-};
-
-export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesResponse> = (
+export const getSpaceOptions: RequestInterface<GetSpaceOptionsRequest, GetSpaceOptionsResponse> = (
   options
 ) => {
-  const {worldId, spaceId, q, ...restOptions} = options;
-
-  const url = generatePath(spaceRepositoryEndpoints().base, {worldId, spaceId});
-
-  restOptions.params = {
-    q
-  };
-
-  return request.get(url, restOptions);
-};
-
-export const inviteUser: RequestInterface<InviteUserRequest, InviteUserResponse> = (options) => {
-  const {worldId, spaceId, userId, ...restOptions} = options;
-
-  const url = generatePath(spaceRepositoryEndpoints().base, {worldId, spaceId, userId});
-
-  return request.get(url, restOptions);
-};
-
-export const getSpacePluginList: RequestInterface<
-  GetSpacePluginListRequest,
-  GetSpacePluginListResponse
-> = (options) => {
   const {worldId, spaceId, ...restOptions} = options;
 
-  const url = generatePath(spaceRepositoryEndpoints().plugins, {worldId, spaceId});
+  const url = generatePath(spaceRepositoryEndpoints().options, {worldId, spaceId});
 
   return request.get(url, restOptions);
+};
+
+export const getSpaceSubOption: RequestInterface<GetSpaceSubOptionRequest, unknown> = (options) => {
+  const {worldId, spaceId, sub_option_key, ...restOptions} = options;
+
+  restOptions.params = {
+    sub_option_key
+  };
+
+  return request.get(spaceRepositoryEndpoints().subOption, restOptions);
 };

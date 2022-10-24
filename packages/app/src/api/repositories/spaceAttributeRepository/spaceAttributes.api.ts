@@ -5,83 +5,61 @@ import {request} from 'api/request';
 
 import {spaceAttributesRepositoryEndpoints} from './spaceAttribute.api.endpoints';
 import {
-  CreateOrUpdatePluginAttributeValueRequest,
-  CreateOrUpdatePluginAttributeValueResponse,
-  DeletePluginAttributeValueRequest,
-  DeletePluginAttributeValueResponse,
-  GetPluginAttributesRequest,
-  GetPluginAttributesResponse,
-  GetPluginAttributeValueRequest,
-  GetPluginAttributeValueResponse
+  GetSpaceAttributeRequest,
+  GetSpaceAttributeResponse,
+  GetSpaceSubAttributeRequest,
+  GetSpaceSubAttributeResponse,
+  SetSpaceSubAttributeRequest,
+  SetSpaceSubAttributeResponse
 } from './spaceAttribute.api.types';
 
-export const getPluginAttributes: RequestInterface<
-  GetPluginAttributesRequest,
-  GetPluginAttributesResponse
+export const getSpaceAttribute: RequestInterface<
+  GetSpaceAttributeRequest,
+  GetSpaceAttributeResponse
 > = (options) => {
-  const {worldId, spaceId, pluginId, attributeNames, ...restOptions} = options;
+  const {worldId, spaceId, plugin_id, attribute_name, ...restOptions} = options;
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().pluginAttributes, {
-    worldId,
-    spaceId,
-    pluginId
-  });
+  restOptions.params = {
+    plugin_id,
+    attribute_name
+  };
 
-  if (attributeNames) {
-    restOptions.data = {
-      attributeNames
-    };
-  }
+  const url = generatePath(spaceAttributesRepositoryEndpoints().attributes, {worldId, spaceId});
 
   return request.get(url, restOptions);
 };
 
-export const getPluginAttributeValue: RequestInterface<
-  GetPluginAttributeValueRequest,
-  GetPluginAttributeValueResponse
+export const getSpaceSubAttribute: RequestInterface<
+  GetSpaceSubAttributeRequest,
+  GetSpaceSubAttributeResponse
 > = (options) => {
-  const {worldId, spaceId, pluginId, attributeName, ...restOptions} = options;
+  const {worldId, spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().pluginAttributeValue, {
-    worldId,
-    spaceId,
-    pluginId,
-    attributeName
-  });
+  restOptions.params = {
+    plugin_id,
+    attribute_name,
+    sub_attribute_key
+  };
+
+  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {worldId, spaceId});
 
   return request.get(url, restOptions);
 };
 
-export const createOrUpdatePluginAttribute: RequestInterface<
-  CreateOrUpdatePluginAttributeValueRequest,
-  CreateOrUpdatePluginAttributeValueResponse
+export const setSpaceSubAttribute: RequestInterface<
+  SetSpaceSubAttributeRequest,
+  SetSpaceSubAttributeResponse
 > = (options) => {
-  const {worldId, spaceId, pluginId, attributeName, value, ...restOptions} = options;
+  const {worldId, spaceId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} =
+    options;
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().pluginAttributeValue, {
-    worldId,
-    spaceId,
-    pluginId,
-    attributeName
-  });
+  restOptions.params = {
+    plugin_id,
+    attribute_name,
+    sub_attribute_key
+  };
 
-  restOptions.data = value;
+  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {worldId, spaceId});
 
-  return request.get(url, restOptions);
-};
-
-export const deletePluginAttribute: RequestInterface<
-  DeletePluginAttributeValueRequest,
-  DeletePluginAttributeValueResponse
-> = (options) => {
-  const {worldId, spaceId, pluginId, attributeName, ...restOptions} = options;
-
-  const url = generatePath(spaceAttributesRepositoryEndpoints().pluginAttributeValue, {
-    worldId,
-    spaceId,
-    pluginId,
-    attributeName
-  });
-
-  return request.delete(url, restOptions);
+  return request.post(url, value, restOptions);
 };

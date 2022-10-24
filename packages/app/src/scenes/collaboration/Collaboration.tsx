@@ -26,7 +26,7 @@ import {CollaborationPluginPage} from './pages';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore, liveStreamStore, pluginsStore} = mainStore;
+  const {agoraStore, liveStreamStore, pluginsStore, worldStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -68,8 +68,8 @@ const Collaboration: FC = () => {
   }, [agoraStore, history, rootStore, spaceId, t]);
 
   useEffect(() => {
-    pluginsStore.fetchSpacePlugins();
-  }, [pluginsStore]);
+    pluginsStore.fetchSpacePlugins(worldStore.worldId, spaceId);
+  }, [pluginsStore, spaceId, worldStore.worldId]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -175,7 +175,7 @@ const Collaboration: FC = () => {
         {pluginsStore.spacePlugins.map((plugin) => {
           return (
             <Route
-              key={plugin.name}
+              key={plugin.id}
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >

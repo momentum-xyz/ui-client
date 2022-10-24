@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginTopBarActionInterface} from '@momentum-xyz/sdk';
+import {PluginStateInterface, PluginTopBarActionInterface} from '@momentum-xyz/sdk';
 import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
@@ -23,8 +23,10 @@ interface PropsInterface {
 const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
-  const {favoriteStore, pluginsStore} = mainStore;
+  const {favoriteStore, pluginsStore, worldStore} = mainStore;
   const {plugin} = pluginLoader;
+
+  const [pluginState, setPluginState] = useState<PluginStateInterface>({});
 
   const history = useHistory();
   const theme = useTheme();
@@ -38,6 +40,34 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     setActions(actions);
   }, []);
 
+  const setPluginStateSubField = async (
+    field: string,
+    subField: string,
+    subFieldValue: unknown
+  ) => {
+    if (!space?.id) {
+      return;
+    }
+
+    await pluginLoader.setPluginStateValue(
+      worldStore.worldId,
+      space.id,
+      field,
+      subField,
+      subFieldValue
+    );
+  };
+
+  const init = async (fields: string[]) => {
+    if (!space?.id) {
+      return;
+    }
+
+    const state = await pluginLoader.getPluginState(worldStore.worldId, space.id, fields);
+
+    setPluginState(state);
+  };
+
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {
       toast.error(
@@ -46,11 +76,11 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
           showCloseButton
           headerIconName="alert"
           title={t('titles.alert')}
-          text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.url})}
+          text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.scriptUrl})}
         />
       );
     }
-  }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.url, t]);
+  }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
   if (!space) {
     return null;
@@ -85,6 +115,9 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
                 request={request}
+                init={init}
+                spacePluginState={pluginState}
+                setPluginSpaceStateSubField={setPluginStateSubField}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

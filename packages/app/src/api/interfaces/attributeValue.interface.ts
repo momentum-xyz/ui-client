@@ -1,6 +1,4 @@
 /**
  * Attribute returned by the backend
  */
-export interface AttributeValueInterface {
-  [key: string]: any;
-}
+export interface AttributeValueInterface extends Record<string, unknown> {}

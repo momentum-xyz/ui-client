@@ -1,18 +1,20 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import {IconNameType} from '@momentum-xyz/ui-kit';
-import {PluginInterface} from '@momentum-xyz/sdk';
-import {ResetModel} from '@momentum-xyz/core';
+import {PluginInterface, PluginStateInterface} from '@momentum-xyz/sdk';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {LoaderStatusEnum} from 'core/enums';
+import {api} from 'api';
 
 const PluginLoader = types
   .compose(
     ResetModel,
     types.model('PluginLoader', {
-      name: types.string,
+      id: types.string,
+      scopeName: types.string,
       subPath: types.string,
       subtitle: types.maybe(types.string),
-      url: types.string,
+      scriptUrl: types.string,
       exact: types.maybe(types.boolean),
       module: types.maybe(types.string),
       iconName: types.frozen<IconNameType>(),
@@ -20,7 +22,10 @@ const PluginLoader = types
         types.enumeration(Object.values(LoaderStatusEnum)),
         LoaderStatusEnum.READY
       ),
-      plugin: types.maybe(types.frozen<PluginInterface>())
+      plugin: types.maybe(types.frozen<PluginInterface>()),
+
+      pluginStateRequest: types.optional(RequestModel, {}),
+      pluginSetStateRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -36,11 +41,11 @@ const PluginLoader = types
           // @ts-ignore: Required to load list based plugins, no ts declaration
           await __webpack_init_sharing__('default');
           // @ts-ignore: Required to load list based plugins, window has no dict based declaration
-          const container = window[self.name];
+          const container = window[self.scopeName];
           // @ts-ignore: Required to load list based plugins, cause window[scope] does not produce a type
           await container.init(__webpack_share_scopes__.default);
           // @ts-ignore: Required to load list based plugins, cause of previous problems
-          const plugin = (await window[self.name].get('./Plugin'))().default;
+          const plugin = (await window[self.scopeName].get('./Plugin'))().default;
           // @ts-ignore: Required to load list based plugins, cause of previous problems
           return plugin;
         })();
@@ -50,6 +55,41 @@ const PluginLoader = types
         console.error('[PluginLoader] An error has occured while loading plugin!', error);
         self.status = LoaderStatusEnum.ERROR;
       }
+    }),
+    getPluginState: flow(function* (worldId: string, spaceId: string, fields: string[]) {
+      const state: PluginStateInterface = {};
+
+      for (const field of fields) {
+        const attributeValue = yield self.pluginStateRequest.send(
+          api.spaceAttributeRepository.getSpaceAttribute,
+          {
+            worldId,
+            spaceId,
+            plugin_id: self.id,
+            attribute_name: field
+          }
+        );
+
+        state[field] = attributeValue;
+      }
+
+      return state;
+    }),
+    setPluginStateValue: flow(function* (
+      worldId: string,
+      spaceId: string,
+      field: string,
+      subField: string,
+      subFieldValue: unknown
+    ) {
+      yield self.pluginSetStateRequest.send(api.spaceAttributeRepository.setSpaceSubAttribute, {
+        worldId,
+        spaceId,
+        plugin_id: self.id,
+        attribute_name: field,
+        sub_attribute_key: subField,
+        value: subFieldValue
+      });
     })
   }))
   .views((self) => ({

@@ -6,7 +6,7 @@ import {RootStore} from 'stores';
 import {appVariables} from 'api/constants';
 import {AppConfigExtendedInterface, AppConfigInterface} from 'api/interfaces';
 import {StoreProvider} from 'shared/hooks';
-import {GlobalPropsContextProvider} from '@momentum-xyz/sdk';
+import {SpaceGlobalPropsContextProvider} from '@momentum-xyz/sdk';
 import {MiroBoardPage} from 'pages';
 
 import '@momentum-xyz/ui-kit/dist/themes/themes';
@@ -31,13 +31,13 @@ const SpaceApp: FC<SpacePluginPropsInterface> = (props) => {
   }, []);
 
   return (
-    <GlobalPropsContextProvider props={props}>
+    <SpaceGlobalPropsContextProvider props={props}>
       <StoreProvider value={store}>
         <ThemeProvider theme={theme}>
           <MiroBoardPage />
         </ThemeProvider>
       </StoreProvider>
-    </GlobalPropsContextProvider>
+    </SpaceGlobalPropsContextProvider>
   );
 };
 
