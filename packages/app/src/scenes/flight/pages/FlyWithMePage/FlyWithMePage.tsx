@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
+import {UserStatusEnum} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -45,6 +46,17 @@ const FlyWithMePage: FC = () => {
       }
     };
   }, [pilotId, unityStore, flyWithMeStore, isPilot, spaceId]);
+
+  useEffect(() => {
+    const previousStatus = sessionStore.profile?.status || UserStatusEnum.ONLINE;
+    sessionStore.changeStatus(UserStatusEnum.DO_NOT_DISTURB);
+
+    return () => {
+      if (previousStatus !== UserStatusEnum.DO_NOT_DISTURB) {
+        sessionStore.changeStatus(previousStatus);
+      }
+    };
+  }, [sessionStore]);
 
   useEffect(() => {
     if (!isPilot) {
