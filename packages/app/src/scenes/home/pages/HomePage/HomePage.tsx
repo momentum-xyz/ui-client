@@ -48,7 +48,6 @@ const HomePage: FC = () => {
             <div>
               <UserProfilePanel
                 userId={onlineUsersStore.selectedUserId}
-                editingAvailable
                 onClose={() => {
                   onlineUsersStore.unselectUser();
                   userProfileDialog.close();

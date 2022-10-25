@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {FC, useCallback, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {SvgButton, PanelLayout} from '@momentum-xyz/ui-kit';
@@ -12,11 +12,13 @@ interface PropsInterface {
   userId: string;
   onClose: () => void;
   hasBorder?: boolean;
-  editingAvailable?: boolean;
+  showUserInteractions?: boolean;
 }
 
-// TODO: Remove props
-const UserProfilePanel: FC<PropsInterface> = ({userId, hasBorder, editingAvailable, onClose}) => {
+// TODO: Remove props (after refactoring AttendeesWidget)
+const UserProfilePanel: FC<PropsInterface> = (props) => {
+  const {userId, hasBorder, showUserInteractions = true, onClose} = props;
+
   const {homeStore, sessionStore} = useStore();
   const {userProfileStore} = homeStore;
   const {userProfile} = userProfileStore;
@@ -36,41 +38,55 @@ const UserProfilePanel: FC<PropsInterface> = ({userId, hasBorder, editingAvailab
     return sessionStore.userId === userProfile?.uuid;
   }, [sessionStore.userId, userProfile]);
 
+  const handleEditProfile = useCallback(() => {
+    userProfileStore.openEdit();
+  }, [userProfileStore]);
+
+  if (!userProfile) {
+    return <></>;
+  }
+
   return (
-    <PanelLayout
-      title={
-        isItMe
-          ? t('labels.myBio')
-          : userProfile && t('labels.someonesBio', {name: userProfile.name})
-      }
-      captureAllPointerEvents
-      headerActions={
-        isItMe &&
-        editingAvailable && (
-          <SvgButton iconName="edit" size="normal" onClick={userProfileStore.openEdit} />
-        )
-      }
-      onClose={onClose}
-      componentSize={{width: '390px'}}
-      headerPlaceholder
-      titleHeight
-      hasBorder={hasBorder}
-    >
-      <styled.Body data-testid="ProfileWidget-test">
-        {sessionStore.userId && userProfile && (
-          <>
-            {!isItMe ? (
-              <UserProfileView userId={userId} onClose={onClose} showUserInteractions={false} />
-            ) : isItMe && !userProfileStore.isEditingProfile ? (
+    <div data-testid="UserProfilePanel-test">
+      {isItMe ? (
+        <PanelLayout
+          title={t('labels.myBio')}
+          headerActions={<SvgButton iconName="edit" size="normal" onClick={handleEditProfile} />}
+          componentSize={{width: '390px'}}
+          hasBorder={hasBorder}
+          onClose={onClose}
+          captureAllPointerEvents
+          headerPlaceholder
+          titleHeight
+        >
+          <styled.Body>
+            {!userProfileStore.isEditingProfile ? (
               <MyProfileView />
             ) : (
-              isItMe &&
-              userProfileStore.isEditingProfile && <MyProfileEditor userId={userId || ''} />
+              <MyProfileEditor userId={userId} />
             )}
-          </>
-        )}
-      </styled.Body>
-    </PanelLayout>
+          </styled.Body>
+        </PanelLayout>
+      ) : (
+        <PanelLayout
+          title={t('labels.someonesBio', {name: userProfile?.name || ''})}
+          componentSize={{width: '390px'}}
+          hasBorder={hasBorder}
+          onClose={onClose}
+          captureAllPointerEvents
+          headerPlaceholder
+          titleHeight
+        >
+          <styled.Body>
+            <UserProfileView
+              userId={userId}
+              showUserInteractions={showUserInteractions}
+              onClose={onClose}
+            />
+          </styled.Body>
+        </PanelLayout>
+      )}
+    </div>
   );
 };
 

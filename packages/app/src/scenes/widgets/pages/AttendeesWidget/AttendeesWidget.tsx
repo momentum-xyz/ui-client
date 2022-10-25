@@ -7,6 +7,7 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './AttendeesWidget.styled';
 
+// FIXME: It is not a widget !!! Refactor this
 const AttendeesWidget: FC = () => {
   const {
     widgetStore: {attendeesListStore}
@@ -43,6 +44,7 @@ const AttendeesWidget: FC = () => {
           <styled.AttendeeWidget
             userId={attendeesListStore.selectedAttendeeId}
             onClose={attendeesListStore.hideAttendee}
+            showUserInteractions={false}
             hasBorder
           />
         )}
