@@ -6,12 +6,11 @@ import {Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
-import * as styled from './AvatarForm.styled';
+import * as styled from './MyAvatarForm.styled';
 
-const AvatarForm: FC = () => {
-  const {widgetStore} = useStore();
-  const {profileStore} = widgetStore;
-  const {userProfile} = profileStore;
+const MyAvatarForm: FC = () => {
+  const {userProfileStore} = useStore().homeStore;
+  const {userProfile} = userProfileStore;
 
   const theme = useTheme();
 
@@ -27,8 +26,8 @@ const AvatarForm: FC = () => {
 
   const handleSubmit = () => {
     if (image) {
-      profileStore.setImage(image);
-      profileStore.editAvatarDialog.close();
+      userProfileStore.setImage(image);
+      userProfileStore.editAvatarDialog.close();
     } else {
       setImageError(true);
     }
@@ -39,7 +38,7 @@ const AvatarForm: FC = () => {
       theme={theme}
       title={t('editProfileWidget.changeAvatar')}
       showCloseButton
-      onClose={profileStore.editAvatarDialog.close}
+      onClose={userProfileStore.editAvatarDialog.close}
       approveInfo={{
         title: t('editProfileWidget.upload'),
         onClick: handleSubmit
@@ -69,4 +68,4 @@ const AvatarForm: FC = () => {
   );
 };
 
-export default AvatarForm;
+export default MyAvatarForm;

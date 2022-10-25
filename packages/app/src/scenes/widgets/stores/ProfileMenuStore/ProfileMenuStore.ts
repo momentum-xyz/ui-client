@@ -7,7 +7,6 @@ const ProfileMenuStore = types.compose(
   ResetModel,
   types
     .model('ProfileMenuStore', {
-      profileDialog: types.optional(Dialog, {}),
       menuDialog: types.optional(Dialog, {}),
       settingDialog: types.optional(Dialog, {}),
       profileMenuDialog: types.optional(Dialog, {}),

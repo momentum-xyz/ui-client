@@ -7,8 +7,8 @@ const OnlineUsersStore = types
   .compose(
     ResetModel,
     types.model('OnlineUsersStore', {
-      onlineUsersList: types.optional(OnlineUsersList, {}),
       expanded: true,
+      onlineUsersList: types.optional(OnlineUsersList, {}),
       selectedUserId: types.maybe(types.string),
       editedUserId: types.maybe(types.string),
       usersRequest: types.optional(RequestModel, {}),

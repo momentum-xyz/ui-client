@@ -14,8 +14,7 @@ import {
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-
-import {UserSpaceList} from '../../organisms';
+import {UserSpaceList} from 'ui-kit';
 
 import * as styled from './UserProfileView.styled';
 
@@ -26,11 +25,10 @@ interface PropsInterface {
 }
 
 const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, userId}) => {
-  const {widgetStore, mainStore, homeStore, flightStore} = useStore();
-  const {profileStore} = widgetStore;
+  const {mainStore, homeStore, flightStore} = useStore();
+  const {exploreStore, userProfileStore} = homeStore;
   const {unityStore, worldStore} = mainStore;
-  const {userSpaceList, userProfile} = profileStore;
-  const {exploreStore} = homeStore;
+  const {userSpaceList, userProfile} = userProfileStore;
 
   const history = useHistory();
 
@@ -43,7 +41,7 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
   };
 
   const grabATable = async () => {
-    const spaceId = await profileStore.grabATable(worldStore.worldId, userId);
+    const spaceId = await userProfileStore.grabATable(worldStore.worldId, userId);
     history.push({pathname: generatePath(ROUTES.grabTable, {spaceId})});
     onClose();
   };
