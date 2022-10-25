@@ -35,7 +35,7 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
   }, [userProfileStore, userId]);
 
   const isItMe = useMemo(() => {
-    return sessionStore.userId === userProfile?.uuid;
+    return sessionStore.userId === userProfile?.id;
   }, [sessionStore.userId, userProfile]);
 
   const handleEditProfile = useCallback(() => {
