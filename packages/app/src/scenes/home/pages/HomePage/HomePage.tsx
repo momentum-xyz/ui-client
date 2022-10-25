@@ -7,11 +7,12 @@ import {Button} from '@momentum-xyz/ui-kit';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
-import {ExplorePanel, OnlineUsersPanel} from './components';
+import {ExplorePanel, OnlineUsersPanel, UserProfilePanel} from './components';
 import * as styled from './HomePage.styled';
 
 const HomePage: FC = () => {
-  const {meetingStore, mainStore} = useStore();
+  const {meetingStore, mainStore, homeStore} = useStore();
+  const {onlineUsersStore, userProfileDialog} = homeStore;
   const {unityStore} = mainStore;
 
   const {t} = useTranslation();
@@ -42,7 +43,21 @@ const HomePage: FC = () => {
           </styled.Rejoin>
         )}
 
-        <OnlineUsersPanel />
+        <styled.UsersContainer>
+          {onlineUsersStore.selectedUserId && (
+            <div>
+              <UserProfilePanel
+                userId={onlineUsersStore.selectedUserId}
+                editingAvailable
+                onClose={() => {
+                  onlineUsersStore.unselectUser();
+                  userProfileDialog.close();
+                }}
+              />
+            </div>
+          )}
+          <OnlineUsersPanel />
+        </styled.UsersContainer>
       </styled.PanelWrapper>
     </styled.Container>
   );

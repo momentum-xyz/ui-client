@@ -38,11 +38,11 @@ const AttendeesWidget: FC = () => {
         showOverflow
         layoutSize={{width: '519px;'}}
       >
+        {/* TODO: Refactoring !!! */}
         {attendeesListStore.attendeeDialog.isOpen && attendeesListStore.selectedAttendeeId && (
           <styled.AttendeeWidget
             userId={attendeesListStore.selectedAttendeeId}
             onClose={attendeesListStore.hideAttendee}
-            showUserInteractions={false}
             hasBorder
           />
         )}

@@ -24,7 +24,6 @@ import {
 
 import * as styled from './Widgets.styled';
 import {WorldChatWidget} from './pages';
-import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore} = useStore();
@@ -39,7 +38,6 @@ const Widgets: FC = () => {
     launchInitiativeStore,
     musicPlayerStore,
     attendeesListStore,
-    profileStore,
     emojiStore
   } = widgetStore;
   const {magicLinkDialog} = magicLinkStore;
@@ -100,7 +98,6 @@ const Widgets: FC = () => {
 
   return (
     <>
-      {profileStore.editAvatarDialog.isOpen && <AvatarForm />}
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
