@@ -2,20 +2,8 @@ import {FC, useCallback, useState} from 'react';
 import {CorePluginPropsInterface, PluginInterface} from 'interfaces';
 import {useTheme} from 'styled-components';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
-import axios, {AxiosInstance} from 'axios';
 
 import * as styled from './HostEmulator.styled';
-
-const REQUEST_TIMEOUT_MS = 10_000;
-const defaultHeaders: Record<string, string> = {
-  'Content-Type': 'application/json'
-};
-const request: AxiosInstance = axios.create({
-  baseURL: '',
-  responseType: 'json',
-  headers: defaultHeaders,
-  timeout: REQUEST_TIMEOUT_MS
-});
 
 interface PropsInterface {
   plugin: PluginInterface;
@@ -27,8 +15,7 @@ const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
   const coreProps: CorePluginPropsInterface = {
     theme: theme as ThemeInterface,
     isSpaceAdmin: false,
-    spaceId: '123',
-    request
+    spaceId: '123'
   };
 
   const [topBar, setTopBar] = useState(<span />);
@@ -40,6 +27,20 @@ const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
     [setTopBar]
   );
 
+  const init = useCallback(async (fields: string[]) => {
+    // noop
+  }, []);
+  const [state, setState] = useState<any>({});
+  const setStateField = useCallback(async (field: string, subField: string, subFieldValue: any) => {
+    setState((state: any) => ({
+      ...state,
+      [field]: {
+        ...(state[field] || {}),
+        [subField]: subFieldValue
+      }
+    }));
+  }, []);
+
   return (
     <div>
       <styled.SpaceTopBar>
@@ -48,7 +49,13 @@ const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
       </styled.SpaceTopBar>
       {!!plugin.SpaceExtension && (
         <ErrorBoundary errorMessage="Error while rendering plugin">
-          <plugin.SpaceExtension renderTopBarActions={renderTopBarActions} {...coreProps} />
+          <plugin.SpaceExtension
+            init={init}
+            spacePluginState={state}
+            setPluginSpaceStateSubField={setStateField}
+            renderTopBarActions={renderTopBarActions}
+            {...coreProps}
+          />
         </ErrorBoundary>
       )}
     </div>
