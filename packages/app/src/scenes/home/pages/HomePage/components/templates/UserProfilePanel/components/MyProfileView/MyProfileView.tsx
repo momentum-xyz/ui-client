@@ -6,18 +6,17 @@ import {Avatar, Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
 import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
-
-import {UserSpaceList} from '../../organisms';
+import {UserSpaceList} from 'ui-kit';
 
 import * as styled from './MyProfileView.styled';
 
 const MyProfileView: FC = () => {
   const {widgetStore, sessionStore, mainStore, homeStore} = useStore();
-  const {profileStore, launchInitiativeStore} = widgetStore;
+  const {launchInitiativeStore} = widgetStore;
   const {unityStore} = mainStore;
   const {user} = sessionStore;
-  const {userProfile} = profileStore;
-  const {exploreStore} = homeStore;
+  const {exploreStore, userProfileStore} = homeStore;
+  const {userProfile} = userProfileStore;
 
   const {t} = useTranslation();
 
@@ -41,7 +40,7 @@ const MyProfileView: FC = () => {
     <>
       <styled.Actions>
         <Avatar avatarSrc={user?.avatarSrc} size="large" status={user?.status} />
-        {profileStore.canCreateInitiative && (
+        {userProfileStore.canCreateInitiative && (
           <Button
             label={t('actions.createInitiative')}
             onClick={launchInitiativeStore.dialog.open}
@@ -85,7 +84,7 @@ const MyProfileView: FC = () => {
         </styled.Initiatives>
 
         <UserSpaceList
-          spaceList={profileStore.userSpaceList}
+          spaceList={userProfileStore.userSpaceList}
           flyToSpace={handleFlyToSpace}
           selectSpace={handleSelectSpace}
         />

@@ -1,7 +1,8 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-import {ProfileWidget} from 'scenes/widgets/pages/ProfileWidget';
+// TODO: Why ??? Remove this dependency at all
+import {UserProfilePanel} from 'scenes/home/pages/HomePage/components';
 
 const PROFILE_WIDGET_X_POSITION = 549;
 
@@ -35,7 +36,7 @@ export const Item = styled.div`
 `;
 
 // TODO: - Split Profile Widget to Widget and Popup for calendar
-export const AttendeeWidget = styled(ProfileWidget)`
+export const AttendeeWidget = styled(UserProfilePanel)`
   position: absolute;
   left: ${PROFILE_WIDGET_X_POSITION}px;
   top: 0;

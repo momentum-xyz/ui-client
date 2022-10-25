@@ -9,6 +9,12 @@ export const Container = styled.div`
   pointer-events: none;
 `;
 
+export const UsersContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  height: 100%;
+`;
+
 export const PanelWrapper = styled.div`
   height: 100%;
 `;

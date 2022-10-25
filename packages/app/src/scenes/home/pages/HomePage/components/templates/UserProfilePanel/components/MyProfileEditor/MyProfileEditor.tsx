@@ -10,17 +10,17 @@ import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
 import * as styled from './MyProfileEditor.styled';
+import {MyAvatarForm} from './components';
 
 interface PropsInterface {
   userId: string;
 }
 
 const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
-  const {widgetStore, sessionStore, worldChatStore, homeStore, mainStore} = useStore();
-  const {onlineUsersStore} = homeStore;
+  const {sessionStore, worldChatStore, homeStore, mainStore} = useStore();
+  const {onlineUsersStore, userProfileStore} = homeStore;
   const {onlineUsersList} = onlineUsersStore;
-  const {profileStore} = widgetStore;
-  const {userProfile, editAvatarDialog, formErrors} = profileStore;
+  const {userProfile, editAvatarDialog, formErrors} = userProfileStore;
   const {worldStore, unityStore} = mainStore;
   const {
     control,
@@ -41,8 +41,8 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   }, [formErrors, setError]);
 
   useEffect(() => {
-    setValue('profile.image', profileStore.selectedImage);
-  }, [profileStore.selectedImage, setValue]);
+    setValue('profile.image', userProfileStore.selectedImage);
+  }, [userProfileStore.selectedImage, setValue]);
 
   useEffect(() => {
     if (!userProfile?.profile) {
@@ -58,21 +58,21 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
 
     return () => {
       unityStore.changeKeyboardControl(true);
-      profileStore.setImage(undefined);
-      profileStore.resetModel();
+      userProfileStore.setImage(undefined);
+      userProfileStore.resetModel();
     };
-  }, [profileStore, unityStore]);
+  }, [userProfileStore, unityStore]);
 
   const formSubmitHandler: SubmitHandler<UpdateProfileInterface> = async ({profile, name}) => {
-    const response = await profileStore.editProfile(name, profile);
+    const response = await userProfileStore.editProfile(name, profile);
     if (response) {
       // no await here! is it needed?
-      profileStore.fetchProfile(userId).then(() => {
+      userProfileStore.fetchProfile(userId).then(() => {
         sessionStore.loadUserProfile();
-        profileStore.fetchUserSpaceList(userId);
+        userProfileStore.fetchUserSpaceList(userId);
         onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
-        if (profileStore.userProfile) {
-          worldChatStore.updateUser(userId, profileStore.userProfile);
+        if (userProfileStore.userProfile) {
+          worldChatStore.updateUser(userId, userProfileStore.userProfile);
         }
       });
       toast.info(
@@ -101,8 +101,8 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
     <styled.Container data-testid="MyProfileEdit-test">
       <styled.AvatarSettings>
         <styled.AvatarContainer onClick={editAvatarDialog.open}>
-          {profileStore.selectedImage ? (
-            <styled.ImagePreview src={URL.createObjectURL(profileStore.selectedImage)} />
+          {userProfileStore.selectedImage ? (
+            <styled.ImagePreview src={URL.createObjectURL(userProfileStore.selectedImage)} />
           ) : (
             <Avatar avatarSrc={sessionStore.user?.avatarSrc} size="large" />
           )}
@@ -165,9 +165,11 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
         onClick={(e) => {
           handleSubmit(formSubmitHandler)(e);
         }}
-        disabled={(!isDirty && !profileStore.selectedImage) || profileStore.isSavingProfile}
+        disabled={(!isDirty && !userProfileStore.selectedImage) || userProfileStore.isSavingProfile}
         wide
       />
+
+      {userProfileStore.editAvatarDialog.isOpen && <MyAvatarForm />}
     </styled.Container>
   );
 };
