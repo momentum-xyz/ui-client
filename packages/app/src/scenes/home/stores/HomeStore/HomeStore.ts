@@ -1,13 +1,15 @@
 import {types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum-xyz/core';
+import {Dialog, ResetModel} from '@momentum-xyz/core';
 
-import {ExploreStore, OnlineUsersStore} from './models';
+import {ExploreStore, OnlineUsersStore, UserProfileStore} from './models';
 
 const HomeStore = types.compose(
   ResetModel,
   types.model('HomeStore', {
     onlineUsersStore: types.optional(OnlineUsersStore, {}),
-    exploreStore: types.optional(ExploreStore, {})
+    exploreStore: types.optional(ExploreStore, {}),
+    userProfileStore: types.optional(UserProfileStore, {}),
+    userProfileDialog: types.optional(Dialog, {})
   })
 );
 

@@ -13,10 +13,10 @@ import {
 } from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 
-const ProfileStore = types.compose(
+const UserProfileStore = types.compose(
   ResetModel,
   types
-    .model('ProfileStore', {
+    .model('UserProfileStore', {
       userProfile: types.maybe(UserProfileModel),
       canCreateInitiative: types.maybe(types.boolean),
       userSpaceList: types.optional(types.array(UserSpaceDetails), []),
@@ -141,4 +141,4 @@ const ProfileStore = types.compose(
     }))
 );
 
-export {ProfileStore};
+export {UserProfileStore};
