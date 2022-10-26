@@ -27,7 +27,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
-  const {isConfigReady, isError: isErrorLoadingConfig} = configStore;
 
   const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
@@ -56,10 +55,10 @@ const App: FC = () => {
   }, [initApplication, history, t]);
 
   useEffect(() => {
-    if (isConfigReady) {
+    if (configStore.isConfigReady) {
       mainStore.init();
     }
-  }, [isConfigReady, mainStore]);
+  }, [configStore.isConfigReady, mainStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
   useEffect(() => {
@@ -68,7 +67,7 @@ const App: FC = () => {
     }
   }, [isBrowserUnsupported, history]);
 
-  if (isErrorLoadingConfig && !isConfigReady) {
+  if (configStore.isError && !configStore.isConfigReady) {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <SystemWideError
@@ -80,7 +79,7 @@ const App: FC = () => {
     );
   }
 
-  if (!isConfigReady) {
+  if (!configStore.isConfigReady) {
     return <></>;
   }
 

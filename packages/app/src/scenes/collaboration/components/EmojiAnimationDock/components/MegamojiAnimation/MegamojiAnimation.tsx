@@ -4,13 +4,11 @@ import * as styled from './MegamojiAnimation.styled';
 
 interface PropsInterface {
   emojiUrl: string;
-  offset: number;
 }
 
-export const MegamojiAnimation: FC<PropsInterface> = ({emojiUrl, offset}) => {
-  const style = {left: `${offset}%`};
+export const MegamojiAnimation: FC<PropsInterface> = ({emojiUrl}) => {
   return (
-    <styled.MegamojiContainer style={style}>
+    <styled.MegamojiContainer>
       <styled.MegamojiImg src={emojiUrl} alt="megamoji" />
     </styled.MegamojiContainer>
   );

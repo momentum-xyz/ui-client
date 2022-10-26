@@ -2,9 +2,12 @@ import {types} from 'mobx-state-tree';
 import ReactHowler from 'react-howler';
 import raf from 'raf';
 
+import {appVariables} from 'api/constants';
+
 const MusicPlayer = types
   .model('MusicPlayer', {
-    isPlaying: types.optional(types.boolean, true),
+    // TODO: Store state somewhere in profile
+    isPlaying: !appVariables.IS_DEV_ENVIRONMENT,
     firstLoadNextShouldBePlaying: types.optional(types.boolean, false),
     nextSongShouldBePlaying: types.optional(types.boolean, true),
     loaded: types.optional(types.boolean, false),

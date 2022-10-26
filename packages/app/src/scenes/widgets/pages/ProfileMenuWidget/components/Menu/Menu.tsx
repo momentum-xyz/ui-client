@@ -14,7 +14,7 @@ const MENU_OFFSET_RIGHT = 175;
 const MENU_OFFSET_BOTTOM = 60;
 
 const Menu: FC = () => {
-  const {widgetStore, sessionStore} = useStore();
+  const {widgetStore, sessionStore, homeStore} = useStore();
   const {profileMenuStore} = widgetStore;
   const {user} = sessionStore;
 
@@ -32,7 +32,7 @@ const Menu: FC = () => {
   });
 
   const handleProfileOpen = () => {
-    profileMenuStore.profileDialog.open();
+    homeStore.userProfileDialog.open();
     handleCloseMenu();
   };
 
@@ -48,7 +48,7 @@ const Menu: FC = () => {
 
   const handleChangeStatus = async (checked: boolean) => {
     const status = checked ? UserStatusEnum.ONLINE : UserStatusEnum.DO_NOT_DISTURB;
-    await profileMenuStore.changeStatus(status);
+    await sessionStore.changeStatus(status);
     await sessionStore.loadUserProfile();
   };
 
