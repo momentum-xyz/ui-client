@@ -36,14 +36,10 @@ const AgoraStore = types
   // API Requests
   .actions((self) => ({
     getStageModeStatus: flow(function* (spaceId?: string) {
-      if (spaceId) {
-        return yield self.spaceIntegrationsRequest.send(
-          api.spaceIntegrationsRepository.fetchStageModeStatus,
-          {spaceId: spaceId ?? self.spaceId}
-        );
-      }
-
-      return undefined;
+      return yield self.spaceIntegrationsRequest.send(
+        api.spaceIntegrationsRepository.fetchStageModeStatus,
+        {spaceId: spaceId || self.spaceId || ''}
+      );
     })
   }))
   // Initializer
