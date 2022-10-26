@@ -6,18 +6,18 @@ import {WorldBuilderSkybox, WorldBuilderSkyboxInterface} from './models';
 
 const skyboxes: WorldBuilderSkyboxInterface[] = [
   {
-    id: '1',
-    name: 'Skybox 1',
+    id: '658611b8-a86a-4bf0-a956-12129b06dbfd',
+    name: 'Alpha',
     image: 'https://dev.odyssey.ninja/api/v3/render/get/765f5151d69276d61044a24a2867b398'
   },
   {
-    id: '2',
-    name: 'Skybox 2',
+    id: '103dc7a9-08be-4d8e-a5a7-0df9b7eff35b',
+    name: 'SNI',
     image: 'https://dev.odyssey.ninja/api/v3/render/get/8af43f9895d7a50683818feef7bc34ab'
   },
   {
-    id: '3',
-    name: 'Skybox 3',
+    id: '221d418e-4a5f-4910-acf4-861970f2175e',
+    name: 'Kusama',
     image: 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
   }
 ];

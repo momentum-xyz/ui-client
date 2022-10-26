@@ -9,8 +9,9 @@ import {useStore} from 'shared/hooks';
 import * as styled from './SkyboxSelectorWithPreview.styled';
 
 const SkyboxSelectorWithPreview: FC = () => {
-  const {worldBuilderStore} = useStore();
+  const {worldBuilderStore, mainStore} = useStore();
   const {worldBuilderSkyboxesStore} = worldBuilderStore;
+  const {unityStore} = mainStore;
   const {items, selectedItem, selectItem, saveSelectedItem} = worldBuilderSkyboxesStore;
 
   useEffect(() => {
@@ -33,7 +34,10 @@ const SkyboxSelectorWithPreview: FC = () => {
               <styled.SideNavItem
                 className={cn({active})}
                 key={skybox.id}
-                onClick={() => selectItem(skybox)}
+                onClick={() => {
+                  selectItem(skybox);
+                  unityStore.changeSkybox(skybox.id);
+                }}
               >
                 <Text text={skybox.name} size="xl" align="left" />
                 <styled.SideNavItemIcons>
