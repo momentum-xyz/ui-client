@@ -63,7 +63,7 @@ const PluginState = types
       self.requestInterface = undefined;
       self.requestData = undefined;
     },
-    setPluginStateValue: flow(function* <
+    setPluginState: flow(function* <
       ValueType,
       PluginDataType extends Record<string, unknown>,
       RequestType extends SetSubAttributeForPluginType<ValueType> & PluginDataType,

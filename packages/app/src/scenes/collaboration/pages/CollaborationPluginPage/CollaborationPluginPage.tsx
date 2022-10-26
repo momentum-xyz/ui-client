@@ -44,7 +44,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}
       return;
     }
 
-    await pluginState?.setPluginStateValue(
+    await pluginState?.setPluginState(
       api.spaceAttributeRepository.setSpaceSubAttribute,
       {
         worldId: worldStore.worldId,
