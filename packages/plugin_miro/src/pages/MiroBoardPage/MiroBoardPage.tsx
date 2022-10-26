@@ -11,7 +11,7 @@ import * as styled from './MiroBoardPage.styled';
 const MiroBoardPage: FC = () => {
   const theme = useTheme();
 
-  const {spaceId, isSpaceAdmin, init, setPluginStateSubField, pluginState, renderTopBarActions} =
+  const {spaceId, isSpaceAdmin, init, setPluginState, pluginState, renderTopBarActions} =
     useSpaceGlobalProps();
 
   const miroPluginState: MiroStateInterface = pluginState;
@@ -21,12 +21,10 @@ const MiroBoardPage: FC = () => {
       action: 'access-link',
       clientId: appVariables.APP_ID,
       success: async (data: MiroBoardInterface) => {
-        for (const [key, value] of Object.entries(data)) {
-          await setPluginStateSubField('board', key, value);
-        }
+        await setPluginState('board', data);
       }
     });
-  }, [setPluginStateSubField]);
+  }, [setPluginState]);
 
   useEffect(() => {
     init({fields: ['board']});
@@ -41,11 +39,19 @@ const MiroBoardPage: FC = () => {
           isAdmin={isSpaceAdmin}
           board={miroPluginState.board}
           pick={pickBoard}
-          disable={() => setPluginStateSubField('board', 'accessLink', null)}
+          disable={() => setPluginState('board', undefined)}
         />
       )
     });
-  }, []);
+  }, [
+    isSpaceAdmin,
+    miroPluginState.board,
+    pickBoard,
+    renderTopBarActions,
+    setPluginState,
+    spaceId,
+    theme
+  ]);
 
   if (!spaceId) {
     return null;

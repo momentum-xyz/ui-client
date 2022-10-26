@@ -47,7 +47,8 @@ const PluginState = types
           {
             ...self.requestData,
             plugin_id: self.pluginId,
-            attribute_name: field
+            attribute_name: 'state',
+            sub_attribute_key: field
           } as RequestType
         );
 
@@ -63,16 +64,15 @@ const PluginState = types
       self.requestData = undefined;
     },
     setPluginStateValue: flow(function* <
-      SubFieldValueType,
+      ValueType,
       PluginDataType extends Record<string, unknown>,
-      RequestType extends SetSubAttributeForPluginType<SubFieldValueType> & PluginDataType,
+      RequestType extends SetSubAttributeForPluginType<ValueType> & PluginDataType,
       ResponseType
     >(
       request: RequestInterface<RequestType, ResponseType>,
       pluginData: PluginDataType,
       field: string,
-      subField: string,
-      subFieldValue: SubFieldValueType
+      value: ValueType
     ) {
       if (!self.pluginId) {
         return;
@@ -80,9 +80,9 @@ const PluginState = types
 
       yield self.setStateRequest.send<RequestType, ResponseType>(request, {
         plugin_id: self.pluginId,
-        attribute_name: field,
-        sub_attribute_key: subField,
-        value: subFieldValue,
+        attribute_name: 'state',
+        sub_attribute_key: field,
+        value: value,
         ...pluginData
       } as RequestType);
     })

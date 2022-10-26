@@ -10,7 +10,7 @@ export const SpaceGlobalPropsContext = createContext<SpacePluginPropsInterface>(
   init: () => Promise.resolve(),
   reload: () => Promise.resolve(),
   pluginState: {},
-  setPluginStateSubField: () => Promise.resolve()
+  setPluginState: () => Promise.resolve()
 });
 
 export const SpaceGlobalPropsContextProvider: FC<{props: SpacePluginPropsInterface}> = ({

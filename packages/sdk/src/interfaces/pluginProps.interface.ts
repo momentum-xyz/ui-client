@@ -10,7 +10,7 @@ export interface CorePluginPropsInterface {
   pluginState: PluginStateInterface;
   init: (options: {fields: string[]}) => Promise<void>;
   reload: () => Promise<void>;
-  setPluginStateSubField: <V>(field: string, subField: string, subFieldValue: V) => Promise<void>;
+  setPluginState: <V>(key: string, value: V) => Promise<void>;
 }
 
 export interface PluginTopBarActionInterface {

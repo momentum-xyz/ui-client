@@ -39,11 +39,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}
     setActions(actions);
   }, []);
 
-  const setPluginStateSubField = async (
-    field: string,
-    subField: string,
-    subFieldValue: unknown
-  ) => {
+  const setPluginState = async (field: string, value: unknown) => {
     if (!space?.id) {
       return;
     }
@@ -55,8 +51,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}
         spaceId: space.id
       },
       field,
-      subField,
-      subFieldValue
+      value
     );
   };
 
@@ -127,7 +122,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}
                   await pluginState?.reload();
                 }}
                 pluginState={pluginState?.data ?? {}}
-                setPluginStateSubField={setPluginStateSubField}
+                setPluginState={setPluginState}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>
