@@ -6,4 +6,5 @@ export const List = styled.div`
   max-height: 100%;
   overflow-y: scroll;
   gap: 10px;
+  padding-bottom: 40px;
 `;
