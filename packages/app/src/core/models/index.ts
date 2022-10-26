@@ -25,3 +25,4 @@ export * from './EventForm';
 export * from './EventList';
 export * from './PluginLoader';
 export * from './DynamicScriptLoader';
+export * from './PluginState';

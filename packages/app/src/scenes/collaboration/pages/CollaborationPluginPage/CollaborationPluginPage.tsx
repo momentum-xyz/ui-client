@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginStateInterface, PluginTopBarActionInterface} from '@momentum-xyz/sdk';
+import {PluginTopBarActionInterface} from '@momentum-xyz/sdk';
 import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
@@ -11,21 +11,21 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
-import {PluginLoaderModelType} from 'core/models';
+import {PluginLoaderModelType, PluginStateType} from 'core/models';
+import {api} from 'api';
 
 import * as styled from './CollaborationPluginPage.styled';
 
 interface PropsInterface {
   pluginLoader: PluginLoaderModelType;
+  pluginState?: PluginStateType;
 }
 
-const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
+const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
   const {favoriteStore, pluginsStore, worldStore} = mainStore;
   const {plugin} = pluginLoader;
-
-  const [pluginState, setPluginState] = useState<PluginStateInterface>({});
 
   const history = useHistory();
   const theme = useTheme();
@@ -48,23 +48,32 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
       return;
     }
 
-    await pluginLoader.setPluginStateValue(
-      worldStore.worldId,
-      space.id,
+    await pluginState?.setPluginStateValue(
+      api.spaceAttributeRepository.setSpaceSubAttribute,
+      {
+        worldId: worldStore.worldId,
+        spaceId: space.id
+      },
       field,
       subField,
       subFieldValue
     );
   };
 
-  const init = async (fields: string[]) => {
+  const init = async (options: {fields: string[]}) => {
     if (!space?.id) {
       return;
     }
 
-    const state = await pluginLoader.getPluginState(worldStore.worldId, space.id, fields);
-
-    setPluginState(state);
+    await pluginState?.init(
+      api.spaceAttributeRepository.getSpaceSubAttribute,
+      {
+        worldId: worldStore.worldId,
+        spaceId: space.id
+      },
+      pluginLoader.id,
+      options.fields
+    );
   };
 
   useEffect(() => {
@@ -114,8 +123,11 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
                 init={init}
-                spacePluginState={pluginState}
-                setPluginSpaceStateSubField={setPluginStateSubField}
+                reload={async () => {
+                  await pluginState?.reload();
+                }}
+                pluginState={pluginState?.data ?? {}}
+                setPluginStateSubField={setPluginStateSubField}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

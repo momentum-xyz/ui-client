@@ -173,13 +173,16 @@ const Collaboration: FC = () => {
       <Switch>
         {createRoutesByConfig(COLLABORATION_ROUTES)}
         {pluginsStore.spacePlugins.map((plugin) => {
+          const pluginState = pluginsStore.spacePluginStateList.find(
+            (pluginState) => pluginState.pluginId === plugin.id
+          );
           return (
             <Route
               key={plugin.id}
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >
-              <CollaborationPluginPage pluginLoader={plugin} />
+              <CollaborationPluginPage pluginLoader={plugin} pluginState={pluginState} />
             </Route>
           );
         })}

@@ -6,6 +6,11 @@ export interface CorePluginPropsInterface {
   theme: ThemeInterface;
   spaceId?: string;
   isSpaceAdmin: boolean;
+
+  pluginState: PluginStateInterface;
+  init: (options: {fields: string[]}) => Promise<void>;
+  reload: () => Promise<void>;
+  setPluginStateSubField: <V>(field: string, subField: string, subFieldValue: V) => Promise<void>;
 }
 
 export interface PluginTopBarActionInterface {
@@ -13,12 +18,5 @@ export interface PluginTopBarActionInterface {
 }
 
 export interface SpacePluginPropsInterface extends CorePluginPropsInterface {
-  init: (fields: string[]) => Promise<void>;
-  spacePluginState: PluginStateInterface;
-  setPluginSpaceStateSubField: <V>(
-    field: string,
-    subField: string,
-    subFieldValue: V
-  ) => Promise<void>;
   renderTopBarActions?: (actions: PluginTopBarActionInterface) => void;
 }

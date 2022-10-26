@@ -2,7 +2,13 @@ import {types, cast, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginInterface} from 'core/interfaces';
-import {DynamicScriptLoaderType, PluginLoader, PluginLoaderModelType} from 'core/models';
+import {
+  DynamicScriptLoaderType,
+  PluginLoader,
+  PluginLoaderModelType,
+  PluginState,
+  PluginStateType
+} from 'core/models';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {
   api,
@@ -16,6 +22,8 @@ const PluginsStore = types
     ResetModel,
     types.model('PluginsStore', {
       spacePluginLoaders: types.array(PluginLoader),
+      spacePluginStateList: types.array(PluginState),
+
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
 
       pluginsListRequest: types.optional(RequestModel, {}),
@@ -35,37 +43,37 @@ const PluginsStore = types
 
       const plugin_uuids = spaceOptions['plugins'] as string[];
 
-      const pluginsMetadata: GetPluginsMetadataResponse = yield self.pluginMetadataRequest.send(
-        api.pluginsRepository.getPluginsMetadata,
-        {plugin_uuids}
-      );
+      const [pluginsMetadata, pluginsOptions] = yield Promise.all([
+        self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {plugin_uuids}),
+        self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {plugin_uuids})
+      ]);
 
-      const pluginsOptions: GetPluginsOptionsResponse = yield self.pluginOptionsRequest.send(
-        api.pluginsRepository.getPluginsOptions,
-        {plugin_uuids}
-      );
+      const plugins = Object.entries(
+        pluginsMetadata as GetPluginsMetadataResponse
+      ).map<PluginInterface>(([plugin_uuid, metadata]) => {
+        const options = (pluginsOptions as GetPluginsOptionsResponse)[plugin_uuid];
 
-      const plugins = Object.entries(pluginsMetadata).map<PluginInterface>(
-        ([plugin_uuid, metadata]) => {
-          const options = pluginsOptions[plugin_uuid];
+        return {
+          id: plugin_uuid,
+          ...options,
+          ...metadata
+        };
+      });
 
-          return {
-            id: plugin_uuid,
-            ...options,
-            ...metadata
-          };
-        }
-      );
-
+      const spacePluginStateList: PluginStateType[] = [];
       plugins.forEach((plugin) => {
         if (self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {
           return;
         }
 
         self.dynamicScriptsStore.addScript(plugin.scopeName, plugin.scriptUrl);
+
+        const pluginState = PluginState.create({});
+        spacePluginStateList.push(pluginState);
       });
 
       self.spacePluginLoaders = cast(plugins);
+      self.spacePluginStateList = cast(spacePluginStateList);
     }),
     loadPluginIfNeeded(pluginLoader: PluginLoaderModelType) {
       if (pluginLoader.isLoaded || pluginLoader.isLoading) {
