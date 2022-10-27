@@ -51,7 +51,7 @@ const Space = types
   .actions((self) => ({
     canUserJoin: flow(function* (spaceId: string) {
       const response = yield self.fetchSpaceInformationRequest.send(
-        api.spaceRepository.fetchSpace,
+        api.spaceRepositoryOld.fetchSpace,
         {spaceId}
       );
       return response && !(response.space.secret === 1 && !(response.admin || response.member));
@@ -62,7 +62,7 @@ const Space = types
       }
 
       const response: SpaceResponse = yield self.fetchSpaceInformationRequest.send(
-        api.spaceRepository.fetchSpace,
+        api.spaceRepositoryOld.fetchSpace,
         {
           spaceId: self.id
         }
@@ -115,7 +115,7 @@ const Space = types
         return;
       }
 
-      yield self.addUserRequest.send(api.spaceRepository.addUser, {
+      yield self.addUserRequest.send(api.spaceRepositoryOld.addUser, {
         user: {
           userId,
           spaceId: self.id,
@@ -141,7 +141,7 @@ const Space = types
         return;
       }
 
-      yield self.removeUserRequest.send(api.spaceRepository.removeUser, {
+      yield self.removeUserRequest.send(api.spaceRepositoryOld.removeUser, {
         user: {
           userId,
           spaceId: self.id
@@ -153,7 +153,7 @@ const Space = types
         return;
       }
 
-      yield self.editUserRequest.send(api.spaceRepository.editUser, {
+      yield self.editUserRequest.send(api.spaceRepositoryOld.editUser, {
         user: {
           userId,
           spaceId: self.id,
@@ -168,7 +168,7 @@ const Space = types
         spaceType: type as SpaceTypeEnum
       };
 
-      yield self.addSubSpaceRequest.send(api.spaceRepository.create, {
+      yield self.addSubSpaceRequest.send(api.spaceRepositoryOld.create, {
         space: newSpace
       });
     }),

@@ -28,7 +28,7 @@ export interface UserSpaceInterface {
     type: string;
     data: Buffer;
   };
-  space?: SpaceInterface;
+  space?: OldSpaceInterface;
 }
 
 export interface SpaceMetadataInterface {
@@ -37,7 +37,7 @@ export interface SpaceMetadataInterface {
   };
 }
 
-export interface SpaceInterface {
+export interface OldSpaceInterface {
   id: {
     type: string;
     data: Buffer;
@@ -50,7 +50,7 @@ export interface SpaceInterface {
     data: Buffer;
   };
   userSpaces?: UserSpaceInterface[] | any[];
-  children?: SpaceInterface[];
+  children?: OldSpaceInterface[];
   createdAt?: Date;
   updatedAt?: Date;
   auxProject?: AuxProjectInterface;
@@ -69,20 +69,20 @@ export interface SpaceInterface {
 
 /** Get Space **/
 
-export interface SpaceRequest {
+export interface OldSpaceRequest {
   spaceId: string;
 }
 
 export interface SpaceResponse {
-  space: SpaceInterface;
+  space: OldSpaceInterface;
   admin: boolean;
   member?: boolean;
   owner?: boolean;
   status: number;
   message: string;
   spaceType: SpaceTypeEnum;
-  children: SpaceInterface[];
-  ancestors?: SpaceInterface[];
+  children: OldSpaceInterface[];
+  ancestors?: OldSpaceInterface[];
   ownerName?: string;
 }
 
@@ -206,13 +206,13 @@ export interface CreateInitiativeResponse {
 
 /** Serach **/
 
-export interface SearchSpacesRequest {
+export interface OldSearchSpacesRequest {
   q: string;
   worldId: string;
 }
 
-export interface SearchSpacesResponse {
-  results: SpaceInterface[];
+export interface OldSearchSpacesResponse {
+  results: OldSpaceInterface[];
   itemCount: number;
   totalItems: number;
   itemsPerPage: number;

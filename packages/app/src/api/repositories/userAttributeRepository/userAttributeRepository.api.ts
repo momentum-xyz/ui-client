@@ -1,0 +1,87 @@
+import {RequestInterface} from '@momentum-xyz/core';
+import {generatePath} from 'react-router-dom';
+
+import {request} from 'api/request';
+
+import {spaceUserAttributesRepositoryEndpoints} from './userAttributeRepository.api.endpoints';
+import {
+  CreateOrUpdatePluginUserAttributeValueRequest,
+  CreateOrUpdatePluginUserAttributeValueResponse,
+  DeletePluginUserAttributeValueRequest,
+  DeletePluginUserAttributeValueResponse,
+  GetPluginUserAttributesRequest,
+  GetPluginUserAttributesResponse,
+  GetPluginUserAttributeValueRequest,
+  GetPluginUserAttributeValueResponse
+} from './userAttributeRepository.api.types';
+
+export const getPluginUserAttributes: RequestInterface<
+  GetPluginUserAttributesRequest,
+  GetPluginUserAttributesResponse
+> = (options) => {
+  const {worldId, userId, pluginId, attributeNames, ...restOptions} = options;
+
+  const url = generatePath(spaceUserAttributesRepositoryEndpoints().pluginAttributes, {
+    worldId,
+    userId,
+    pluginId
+  });
+
+  if (attributeNames) {
+    restOptions.data = {
+      attributeNames
+    };
+  }
+
+  return request.get(url, restOptions);
+};
+
+export const getPluginUserAttributeValue: RequestInterface<
+  GetPluginUserAttributeValueRequest,
+  GetPluginUserAttributeValueResponse
+> = (options) => {
+  const {worldId, userId, pluginId, attributeName, ...restOptions} = options;
+
+  const url = generatePath(spaceUserAttributesRepositoryEndpoints().pluginAttributeValue, {
+    worldId,
+    userId,
+    pluginId,
+    attributeName
+  });
+
+  return request.get(url, restOptions);
+};
+
+export const createOrUpdatePluginUserAttribute: RequestInterface<
+  CreateOrUpdatePluginUserAttributeValueRequest,
+  CreateOrUpdatePluginUserAttributeValueResponse
+> = (options) => {
+  const {worldId, userId, pluginId, attributeName, value, ...restOptions} = options;
+
+  const url = generatePath(spaceUserAttributesRepositoryEndpoints().pluginAttributeValue, {
+    worldId,
+    userId,
+    pluginId,
+    attributeName
+  });
+
+  restOptions.data = value;
+
+  return request.get(url, restOptions);
+};
+
+export const deletePluginUserAttribute: RequestInterface<
+  DeletePluginUserAttributeValueRequest,
+  DeletePluginUserAttributeValueResponse
+> = (options) => {
+  const {worldId, userId, pluginId, attributeName, ...restOptions} = options;
+
+  const url = generatePath(spaceUserAttributesRepositoryEndpoints().pluginAttributeValue, {
+    worldId,
+    userId,
+    pluginId,
+    attributeName
+  });
+
+  return request.delete(url, restOptions);
+};

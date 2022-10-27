@@ -1,1 +1,1 @@
-export * from './GlobalPropsContext';
+export * from './SpaceGlobalPropsContext';

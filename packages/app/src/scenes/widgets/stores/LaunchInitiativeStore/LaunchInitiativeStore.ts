@@ -14,7 +14,7 @@ const LaunchInitiativeStore = types
   .actions((self) => ({
     create: flow(function* (space: NewSpaceDetailsInterface) {
       const response: CreateInitiativeResponse = yield self.request.send(
-        api.spaceRepository.createInitiative,
+        api.spaceRepositoryOld.createInitiative,
         {
           initiative: space
         }

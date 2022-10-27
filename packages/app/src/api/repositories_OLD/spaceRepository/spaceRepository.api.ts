@@ -20,9 +20,9 @@ import {
   EditUserResponse,
   RemoveUserRequest,
   RemoveUserResponse,
-  SearchSpacesRequest,
-  SearchSpacesResponse,
-  SpaceRequest,
+  OldSearchSpacesRequest,
+  OldSearchSpacesResponse,
+  OldSpaceRequest,
   SpaceResponse,
   UserOwnedSpacesRequest,
   UserOwnedSpacesResponse,
@@ -32,7 +32,7 @@ import {
   WorldConfigResponse
 } from './spaceRepository.api.types';
 
-export const fetchSpace: RequestInterface<SpaceRequest, SpaceResponse> = (options) => {
+export const fetchSpace: RequestInterface<OldSpaceRequest, SpaceResponse> = (options) => {
   const {spaceId, ...restOptions} = options;
   const url = `${spaceRepositoryEndpoints().user}/${spaceId}`;
 
@@ -112,7 +112,7 @@ export const createInitiative: RequestInterface<
   return request.post(spaceRepositoryEndpoints().createInitiative, initiative, restOptions);
 };
 
-export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesResponse> = (
+export const searchSpaces: RequestInterface<OldSearchSpacesRequest, OldSearchSpacesResponse> = (
   options
 ) => {
   const {q, worldId, ...restOptions} = options;

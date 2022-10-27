@@ -1,32 +1,34 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {useStore} from 'shared/hooks';
-import {useGlobalProps} from '@momentum-xyz/sdk';
+import {useSpaceGlobalProps} from '@momentum-xyz/sdk';
+import {appVariables} from 'api/constants';
+import {MiroBoardInterface, MiroStateInterface} from 'core/interfaces';
 
 import {MiroBoard, MiroChoice, MiroActions} from './components';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
-  const {miroBoardStore} = useStore();
-  const {renderTopBarActions} = useGlobalProps();
-  const {miroBoard} = miroBoardStore;
-
   const theme = useTheme();
 
-  const props = useGlobalProps();
+  const {spaceId, isSpaceAdmin, init, setPluginState, pluginState, renderTopBarActions} =
+    useSpaceGlobalProps();
 
-  const {spaceId, request, isSpaceAdmin} = props;
+  const miroPluginState: MiroStateInterface = pluginState;
+
+  const pickBoard = useCallback(() => {
+    miroBoardsPicker.open({
+      action: 'access-link',
+      clientId: appVariables.APP_ID,
+      success: async (data: MiroBoardInterface) => {
+        await setPluginState('board', data);
+      }
+    });
+  }, [setPluginState]);
 
   useEffect(() => {
-    if (spaceId) {
-      miroBoardStore.fetchMiroBoard(spaceId, request);
-    }
-
-    return () => {
-      miroBoardStore.resetModel();
-    };
-  }, [miroBoardStore, request, spaceId]);
+    init({fields: ['board']});
+  }, [init]);
 
   useEffect(() => {
     renderTopBarActions?.({
@@ -34,13 +36,22 @@ const MiroBoardPage: FC = () => {
         <MiroActions
           theme={theme}
           spaceId={spaceId}
-          request={request}
           isAdmin={isSpaceAdmin}
-          miroBoardStore={miroBoardStore}
+          board={miroPluginState.board}
+          pick={pickBoard}
+          disable={() => setPluginState('board', undefined)}
         />
       )
     });
-  }, [isSpaceAdmin, props, renderTopBarActions, request, spaceId, miroBoardStore, theme]);
+  }, [
+    isSpaceAdmin,
+    miroPluginState.board,
+    pickBoard,
+    renderTopBarActions,
+    setPluginState,
+    spaceId,
+    theme
+  ]);
 
   if (!spaceId) {
     return null;
@@ -48,13 +59,10 @@ const MiroBoardPage: FC = () => {
 
   return (
     <styled.Container>
-      {!miroBoard?.data?.accessLink ? (
-        <MiroChoice
-          isAdmin={isSpaceAdmin}
-          pickBoard={() => miroBoardStore.pickBoard(spaceId, request)}
-        />
+      {!miroPluginState.board?.accessLink ? (
+        <MiroChoice isAdmin={isSpaceAdmin} pickBoard={pickBoard} />
       ) : (
-        <MiroBoard miroUrl={miroBoard.data.accessLink} />
+        <MiroBoard miroUrl={miroPluginState.board.accessLink} />
       )}
     </styled.Container>
   );

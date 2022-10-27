@@ -12,7 +12,7 @@ import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {PluginLoaderModelType} from 'core/models';
-import {request} from 'api/request';
+import {api} from 'api';
 
 import * as styled from './CollaborationPluginPage.styled';
 
@@ -23,7 +23,7 @@ interface PropsInterface {
 const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
-  const {favoriteStore, pluginsStore} = mainStore;
+  const {favoriteStore, pluginsStore, worldStore} = mainStore;
   const {plugin} = pluginLoader;
 
   const history = useHistory();
@@ -38,6 +38,38 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     setActions(actions);
   }, []);
 
+  const setSharedState = async (field: string, value: unknown) => {
+    if (!space?.id) {
+      return;
+    }
+
+    await pluginLoader.sharedState.set(
+      api.spaceAttributeRepository.setSpaceSubAttribute,
+      {
+        worldId: worldStore.worldId,
+        spaceId: space.id
+      },
+      field,
+      value
+    );
+  };
+
+  const init = async (options: {fields: string[]}) => {
+    if (!space?.id) {
+      return;
+    }
+
+    await pluginLoader.sharedState.init(
+      api.spaceAttributeRepository.getSpaceSubAttribute,
+      {
+        worldId: worldStore.worldId,
+        spaceId: space.id
+      },
+      pluginLoader.id,
+      options.fields
+    );
+  };
+
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {
       toast.error(
@@ -46,11 +78,11 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
           showCloseButton
           headerIconName="alert"
           title={t('titles.alert')}
-          text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.url})}
+          text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.scriptUrl})}
         />
       );
     }
-  }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.url, t]);
+  }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
   if (!space) {
     return null;
@@ -84,7 +116,12 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 theme={theme}
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
-                request={request}
+                init={init}
+                reload={async () => {
+                  await pluginLoader.sharedState.reload();
+                }}
+                sharedState={pluginLoader.sharedState.data}
+                setSharedState={setSharedState}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

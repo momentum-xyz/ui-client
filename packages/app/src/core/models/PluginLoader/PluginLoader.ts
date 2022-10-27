@@ -4,15 +4,17 @@ import {PluginInterface} from '@momentum-xyz/sdk';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {LoaderStatusEnum} from 'core/enums';
+import {PluginState} from 'core/models';
 
 const PluginLoader = types
   .compose(
     ResetModel,
     types.model('PluginLoader', {
-      name: types.string,
+      id: types.string,
+      scopeName: types.string,
       subPath: types.string,
       subtitle: types.maybe(types.string),
-      url: types.string,
+      scriptUrl: types.string,
       exact: types.maybe(types.boolean),
       module: types.maybe(types.string),
       iconName: types.frozen<IconNameType>(),
@@ -20,7 +22,8 @@ const PluginLoader = types
         types.enumeration(Object.values(LoaderStatusEnum)),
         LoaderStatusEnum.READY
       ),
-      plugin: types.maybe(types.frozen<PluginInterface>())
+      plugin: types.maybe(types.frozen<PluginInterface>()),
+      sharedState: types.optional(PluginState, {})
     })
   )
   .actions((self) => ({
@@ -36,11 +39,11 @@ const PluginLoader = types
           // @ts-ignore: Required to load list based plugins, no ts declaration
           await __webpack_init_sharing__('default');
           // @ts-ignore: Required to load list based plugins, window has no dict based declaration
-          const container = window[self.name];
+          const container = window[self.scopeName];
           // @ts-ignore: Required to load list based plugins, cause window[scope] does not produce a type
           await container.init(__webpack_share_scopes__.default);
           // @ts-ignore: Required to load list based plugins, cause of previous problems
-          const plugin = (await window[self.name].get('./Plugin'))().default;
+          const plugin = (await window[self.scopeName].get('./Plugin'))().default;
           // @ts-ignore: Required to load list based plugins, cause of previous problems
           return plugin;
         })();
