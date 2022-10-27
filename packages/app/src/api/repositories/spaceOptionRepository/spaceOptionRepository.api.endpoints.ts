@@ -1,6 +1,6 @@
 import {appVariables} from 'api/constants';
 
-export const spaceRepositoryEndpoints = () => {
+export const spaceOptionRepositoryEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_API_URL}/worlds/:worldId/spaces/:spaceId`;
 
   return {

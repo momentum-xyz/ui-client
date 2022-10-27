@@ -1,31 +1,21 @@
 import {RequestInterface} from '@momentum-xyz/core';
-import {generatePath} from 'react-router-dom';
+//import {generatePath} from 'react-router-dom';
 
 import {request} from 'api/request';
+//import {getSpaceSubAttribute} from 'api/repositories/spaceAttributeRepository';
 
-import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
-import {
-  GetSpaceOptionsRequest,
-  GetSpaceOptionsResponse,
-  GetSpaceSubOptionRequest
-} from './spaceRepository.api.types';
+import {FetchSpaceRequest, FetchSpaceResponse} from './spaceRepository.api.types';
 
-export const getSpaceOptions: RequestInterface<GetSpaceOptionsRequest, GetSpaceOptionsResponse> = (
-  options
-) => {
-  const {worldId, spaceId, ...restOptions} = options;
+export const fetchSpace: RequestInterface<FetchSpaceRequest, FetchSpaceResponse> = (options) => {
+  const {spaceId, ...restOptions} = options;
 
-  const url = generatePath(spaceRepositoryEndpoints().options, {worldId, spaceId});
+  // TRANSFORM DATA
 
-  return request.get(url, restOptions);
-};
+  // CALL ANOTHER REPO
+  //const x = getSpaceSubAttribute(options, options);
 
-export const getSpaceSubOption: RequestInterface<GetSpaceSubOptionRequest, unknown> = (options) => {
-  const {worldId, spaceId, sub_option_key, ...restOptions} = options;
+  // TRANSFORM DATA
+  //const url = generatePath(spaceOptionRepositoryEndpoints().options, {worldId, spaceId});
 
-  restOptions.params = {
-    sub_option_key
-  };
-
-  return request.get(spaceRepositoryEndpoints().subOption, restOptions);
+  return request.get('', restOptions);
 };

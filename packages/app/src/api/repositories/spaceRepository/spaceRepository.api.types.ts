@@ -1,16 +1,9 @@
-import {OptionsInterface} from 'api/interfaces';
+export interface SpaceInterface {
+  name: string;
+}
 
-export interface SpaceRequest {
-  worldId: string;
+export interface FetchSpaceRequest {
   spaceId: string;
 }
 
-// GET SPACE OPTIONS
-export interface GetSpaceOptionsRequest extends SpaceRequest {}
-
-export interface GetSpaceOptionsResponse extends OptionsInterface {}
-
-// GET SPACE SUBOPTION
-export interface GetSpaceSubOptionRequest extends SpaceRequest {
-  sub_option_key: string;
-}
+export interface FetchSpaceResponse extends SpaceInterface {}

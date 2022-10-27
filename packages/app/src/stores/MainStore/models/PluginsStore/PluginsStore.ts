@@ -27,7 +27,7 @@ const PluginsStore = types
   .actions((self) => ({
     fetchSpacePlugins: flow(function* (worldId: string, spaceId: string) {
       const spaceOptions: GetSpaceOptionsResponse = yield self.pluginsListRequest.send(
-        api.spaceRepository.getSpaceOptions,
+        api.spaceOptionRepository.getSpaceOptions,
         {
           worldId,
           spaceId
