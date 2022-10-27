@@ -1,16 +1,13 @@
 import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
-import {PluginStateInterface} from './pluginState.interface';
+import {APIInterface} from './api.interface';
 
 export interface CorePluginPropsInterface {
   theme: ThemeInterface;
   spaceId?: string;
   isSpaceAdmin: boolean;
 
-  sharedState: PluginStateInterface;
-  init: (options: {fields: string[]}) => Promise<void>;
-  reload: () => Promise<void>;
-  setSharedState: <V>(key: string, value: V) => Promise<void>;
+  api: APIInterface;
 }
 
 export interface PluginTopBarActionInterface {

@@ -7,10 +7,10 @@ import {SpacePluginPropsInterface} from '../interfaces';
 export const SpaceGlobalPropsContext = createContext<SpacePluginPropsInterface>({
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,
-  init: () => Promise.resolve(),
-  reload: () => Promise.resolve(),
-  sharedState: {},
-  setSharedState: () => Promise.resolve()
+  api: {
+    get: () => Promise.reject(),
+    set: () => Promise.reject()
+  }
 });
 
 export const SpaceGlobalPropsContextProvider: FC<{props: SpacePluginPropsInterface}> = ({

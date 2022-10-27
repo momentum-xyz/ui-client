@@ -1,6 +1,6 @@
 {
   "name": "@momentum-xyz/sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "GPL-3.0",
   "homepage": "https://momentum.xyz",
   "repository":"https://github.com/momentum-xyz/ui-client",
@@ -16,7 +16,7 @@
     "start": "tsc -w"
   },
   "dependencies": {
-    "@momentum-xyz/ui-kit": "^0.1.1",
+    "@momentum-xyz/ui-kit": "^0.1.w",
     "@craco/craco": "^6.1.1",
     "axios": "^0.21.4"
   },

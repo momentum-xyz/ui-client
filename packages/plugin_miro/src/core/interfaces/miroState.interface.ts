@@ -1,5 +1,3 @@
-import {PluginStateInterface} from '@momentum-xyz/sdk';
-
 export interface MiroBoardInterface {
   id: string;
   name: string;
@@ -7,8 +5,4 @@ export interface MiroBoardInterface {
   viewLink: string;
   accessLink: string | null;
   embedHtml: string;
-}
-
-export interface MiroStateInterface extends PluginStateInterface {
-  board?: MiroBoardInterface;
 }
