@@ -23,7 +23,7 @@ const PluginLoader = types
         LoaderStatusEnum.READY
       ),
       plugin: types.maybe(types.frozen<PluginInterface>()),
-      state: types.optional(PluginState, {})
+      sharedState: types.optional(PluginState, {})
     })
   )
   .actions((self) => ({

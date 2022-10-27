@@ -7,10 +7,10 @@ export interface CorePluginPropsInterface {
   spaceId?: string;
   isSpaceAdmin: boolean;
 
-  pluginState: PluginStateInterface;
+  sharedState: PluginStateInterface;
   init: (options: {fields: string[]}) => Promise<void>;
   reload: () => Promise<void>;
-  setPluginState: <V>(key: string, value: V) => Promise<void>;
+  setSharedState: <V>(key: string, value: V) => Promise<void>;
 }
 
 export interface PluginTopBarActionInterface {

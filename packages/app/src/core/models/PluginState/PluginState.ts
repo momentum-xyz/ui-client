@@ -18,7 +18,7 @@ const PluginState = types
     requestData: types.maybe(types.frozen<Record<string, unknown>>()),
     data: types.optional(types.frozen<PluginStateInterface>(), {}),
     fields: types.optional(types.array(types.string), []),
-    requestInterface: types.maybe(types.frozen<RequestInterface<unknown, unknown>>()),
+    getRequestInterface: types.maybe(types.frozen<RequestInterface<unknown, unknown>>()),
 
     getStateRequest: types.optional(RequestModel, {}),
     setStateRequest: types.optional(RequestModel, {})
@@ -29,21 +29,21 @@ const PluginState = types
       RequestType extends SubAttributeForPluginType,
       ResponseType
     >(
-      requestInterface: RequestInterface<RequestType, ResponseType>,
+      getRequestInterface: RequestInterface<RequestType, ResponseType>,
       requestData: PluginDataType,
       pluginId: string,
       fields: string[]
     ) {
       self.pluginId = pluginId;
-      self.fields = cast(fields);
-      self.requestInterface = requestInterface as RequestInterface<unknown, unknown>;
       self.requestData = requestData;
+      self.fields = cast(fields);
+      self.getRequestInterface = getRequestInterface as RequestInterface<unknown, unknown>;
 
       const state: PluginStateInterface = {};
 
       for (const field of fields) {
         const attributeValue = yield self.getStateRequest.send<RequestType, ResponseType>(
-          requestInterface,
+          getRequestInterface,
           {
             ...self.requestData,
             plugin_id: self.pluginId,
@@ -59,17 +59,18 @@ const PluginState = types
     }),
     deinit() {
       self.pluginId = undefined;
-      self.fields = cast([]);
-      self.requestInterface = undefined;
       self.requestData = undefined;
+      self.data = {};
+      self.fields = cast([]);
+      self.getRequestInterface = undefined;
     },
-    setPluginState: flow(function* <
+    set: flow(function* <
       ValueType,
       PluginDataType extends Record<string, unknown>,
       RequestType extends SetSubAttributeForPluginType<ValueType> & PluginDataType,
       ResponseType
     >(
-      request: RequestInterface<RequestType, ResponseType>,
+      requestInterface: RequestInterface<RequestType, ResponseType>,
       pluginData: PluginDataType,
       field: string,
       value: ValueType
@@ -78,7 +79,7 @@ const PluginState = types
         return;
       }
 
-      yield self.setStateRequest.send<RequestType, ResponseType>(request, {
+      yield self.setStateRequest.send<RequestType, ResponseType>(requestInterface, {
         plugin_id: self.pluginId,
         attribute_name: 'state',
         sub_attribute_key: field,
@@ -89,11 +90,11 @@ const PluginState = types
   }))
   .actions((self) => ({
     reload: flow(function* () {
-      if (!self.fields || !self.pluginId || !self.requestInterface || !self.requestData) {
+      if (!self.fields || !self.pluginId || !self.getRequestInterface || !self.requestData) {
         return;
       }
 
-      yield self.init(self.requestInterface, self.requestData, self.pluginId, self.fields);
+      yield self.init(self.getRequestInterface, self.requestData, self.pluginId, self.fields);
     })
   }))
   .views((self) => ({

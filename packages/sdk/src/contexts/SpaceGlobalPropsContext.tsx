@@ -9,8 +9,8 @@ export const SpaceGlobalPropsContext = createContext<SpacePluginPropsInterface>(
   isSpaceAdmin: false,
   init: () => Promise.resolve(),
   reload: () => Promise.resolve(),
-  pluginState: {},
-  setPluginState: () => Promise.resolve()
+  sharedState: {},
+  setSharedState: () => Promise.resolve()
 });
 
 export const SpaceGlobalPropsContextProvider: FC<{props: SpacePluginPropsInterface}> = ({

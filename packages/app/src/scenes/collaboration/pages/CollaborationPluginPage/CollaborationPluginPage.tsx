@@ -38,12 +38,12 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     setActions(actions);
   }, []);
 
-  const setPluginState = async (field: string, value: unknown) => {
+  const setSharedState = async (field: string, value: unknown) => {
     if (!space?.id) {
       return;
     }
 
-    await pluginLoader.state.setPluginState(
+    await pluginLoader.sharedState.set(
       api.spaceAttributeRepository.setSpaceSubAttribute,
       {
         worldId: worldStore.worldId,
@@ -59,7 +59,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
       return;
     }
 
-    await pluginLoader.state.init(
+    await pluginLoader.sharedState.init(
       api.spaceAttributeRepository.getSpaceSubAttribute,
       {
         worldId: worldStore.worldId,
@@ -118,10 +118,10 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 spaceId={space.id}
                 init={init}
                 reload={async () => {
-                  await pluginLoader.state.reload();
+                  await pluginLoader.sharedState.reload();
                 }}
-                pluginState={pluginLoader.state.data}
-                setPluginState={setPluginState}
+                sharedState={pluginLoader.sharedState.data}
+                setSharedState={setSharedState}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>
