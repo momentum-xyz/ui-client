@@ -12,7 +12,6 @@ import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {PluginLoaderModelType} from 'core/models';
-import {api} from 'api';
 
 import * as styled from './CollaborationPluginPage.styled';
 
@@ -24,7 +23,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
   const {favoriteStore, pluginsStore, worldStore} = mainStore;
-  const {plugin} = pluginLoader;
+  const {plugin, attributesManager} = pluginLoader;
 
   const history = useHistory();
   const theme = useTheme();
@@ -37,37 +36,6 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     console.info('Recieved actions', actions);
     setActions(actions);
   }, []);
-
-  const set = async (key: string, value: unknown) => {
-    if (!space?.id) {
-      return;
-    }
-
-    await pluginLoader.attributesManager.set(
-      api.spaceAttributeRepository.setSpaceSubAttribute,
-      {
-        worldId: worldStore.worldId,
-        spaceId: space.id
-      },
-      key,
-      value
-    );
-  };
-
-  const get = async (key: string) => {
-    if (!space?.id) {
-      return undefined;
-    }
-
-    return await pluginLoader.attributesManager.get(
-      api.spaceAttributeRepository.getSpaceSubAttribute,
-      {
-        worldId: worldStore.worldId,
-        spaceId: space.id
-      },
-      key
-    );
-  };
 
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {
@@ -115,10 +83,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 theme={theme}
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
-                api={{
-                  get,
-                  set
-                }}
+                api={attributesManager.getAPI(worldStore.worldId, space.id)}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

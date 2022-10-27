@@ -1,15 +1,8 @@
-import {RequestInterface, RequestModel} from '@momentum-xyz/core';
+import {RequestModel} from '@momentum-xyz/core';
+import {APIInterface} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
-type SubAttributeForPluginType = {
-  plugin_id: string;
-  attribute_name: string;
-  sub_attribute_key: string;
-};
-
-type SetSubAttributeForPluginType<Value> = SubAttributeForPluginType & {
-  value: Value;
-};
+import {api} from 'api';
 
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
@@ -19,50 +12,40 @@ const PluginAttributesManager = types
     setStateRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    get: flow(function* <
-      PluginDataType extends Record<string, unknown>,
-      RequestType extends SubAttributeForPluginType & PluginDataType,
-      ResponseType
-    >(
-      getRequestInterface: RequestInterface<RequestType, ResponseType>,
-      requestData: PluginDataType,
-      key: string
-    ) {
-      const value = yield self.getStateRequest.send<RequestType, ResponseType>(
-        getRequestInterface,
+    get: flow(function* (worldId: string, spaceId: string, key: string) {
+      const value = yield self.getStateRequest.send(
+        api.spaceAttributeRepository.getSpaceSubAttribute,
         {
+          worldId,
+          spaceId,
           plugin_id: self.pluginId,
           attribute_name: 'state',
-          sub_attribute_key: key,
-          ...requestData
-        } as RequestType
+          sub_attribute_key: key
+        }
       );
 
       return value;
     }),
-    set: flow(function* <
-      ValueType,
-      PluginDataType extends Record<string, unknown>,
-      RequestType extends SetSubAttributeForPluginType<ValueType> & PluginDataType,
-      ResponseType
-    >(
-      requestInterface: RequestInterface<RequestType, ResponseType>,
-      pluginData: PluginDataType,
-      field: string,
-      value: ValueType
-    ) {
+    set: flow(function* <T>(worldId: string, spaceId: string, key: string, value: T) {
       if (!self.pluginId) {
         return;
       }
 
-      yield self.setStateRequest.send<RequestType, ResponseType>(requestInterface, {
+      yield self.setStateRequest.send(api.spaceAttributeRepository.setSpaceSubAttribute, {
+        worldId,
+        spaceId,
         plugin_id: self.pluginId,
         attribute_name: 'state',
-        sub_attribute_key: field,
-        value: value,
-        ...pluginData
-      } as RequestType);
-    })
+        sub_attribute_key: key,
+        value: value
+      });
+    }),
+    getAPI(worldId: string, spaceId: string): APIInterface {
+      return {
+        get: (key) => this.get(worldId, spaceId, key),
+        set: (key, value) => this.set(worldId, spaceId, key, value)
+      };
+    }
   }));
 
 export type PluginAttributesManagerType = Instance<typeof PluginAttributesManager>;

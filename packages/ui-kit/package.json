@@ -1,6 +1,6 @@
 {
   "name": "@momentum-xyz/ui-kit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "GPL-3.0",
   "repository":"https://github.com/momentum-xyz/ui-client",
   "publishConfig": {
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.2.0",
-    "@momentum-xyz/core": "^0.1.1",
+    "@momentum-xyz/core": "^0.1.2",
     "react-use-error-boundary": "^3.0.0",
     "classnames": "^2.3.2",
     "i18next": "^21.6.12",
