@@ -27,4 +27,4 @@ export * from './EventList';
 export * from './PluginLoader';
 export * from './DynamicScriptLoader';
 export * from './SearchQuery';
-export * from './PluginState';
+export * from './PluginAttributesManager';

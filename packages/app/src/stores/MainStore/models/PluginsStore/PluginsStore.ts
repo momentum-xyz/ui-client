@@ -2,7 +2,12 @@ import {types, cast, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginInterface} from 'core/interfaces';
-import {DynamicScriptLoaderType, PluginLoader, PluginLoaderModelType} from 'core/models';
+import {
+  DynamicScriptLoaderType,
+  PluginAttributesManager,
+  PluginLoader,
+  PluginLoaderModelType
+} from 'core/models';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {
   api,
@@ -41,17 +46,22 @@ const PluginsStore = types
         self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {plugin_uuids})
       ]);
 
-      const plugins = Object.entries(
-        pluginsMetadata as GetPluginsMetadataResponse
-      ).map<PluginInterface>(([plugin_uuid, metadata]) => {
-        const options = (pluginsOptions as GetPluginsOptionsResponse)[plugin_uuid];
+      const plugins = Object.entries(pluginsMetadata as GetPluginsMetadataResponse)
+        .map<PluginInterface>(([plugin_uuid, metadata]) => {
+          const options = (pluginsOptions as GetPluginsOptionsResponse)[plugin_uuid];
 
-        return {
-          id: plugin_uuid,
-          ...options,
-          ...metadata
-        };
-      });
+          return {
+            id: plugin_uuid,
+            ...options,
+            ...metadata
+          };
+        })
+        .map((plugin) =>
+          PluginLoader.create({
+            ...plugin,
+            attributesManager: PluginAttributesManager.create({pluginId: plugin.id})
+          })
+        );
 
       self.spacePluginLoaders = cast(plugins);
     }),
