@@ -4,6 +4,7 @@ import {PluginInterface} from '@momentum-xyz/sdk';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {LoaderStatusEnum} from 'core/enums';
+import {PluginState} from 'core/models';
 
 const PluginLoader = types
   .compose(
@@ -21,7 +22,8 @@ const PluginLoader = types
         types.enumeration(Object.values(LoaderStatusEnum)),
         LoaderStatusEnum.READY
       ),
-      plugin: types.maybe(types.frozen<PluginInterface>())
+      plugin: types.maybe(types.frozen<PluginInterface>()),
+      state: types.optional(PluginState, {})
     })
   )
   .actions((self) => ({

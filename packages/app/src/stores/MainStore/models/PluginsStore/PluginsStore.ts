@@ -2,13 +2,7 @@ import {types, cast, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginInterface} from 'core/interfaces';
-import {
-  DynamicScriptLoaderType,
-  PluginLoader,
-  PluginLoaderModelType,
-  PluginState,
-  PluginStateType
-} from 'core/models';
+import {DynamicScriptLoaderType, PluginLoader, PluginLoaderModelType} from 'core/models';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {
   api,
@@ -22,7 +16,6 @@ const PluginsStore = types
     ResetModel,
     types.model('PluginsStore', {
       spacePluginLoaders: types.array(PluginLoader),
-      spacePluginStateList: types.array(PluginState),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
 
@@ -60,20 +53,7 @@ const PluginsStore = types
         };
       });
 
-      const spacePluginStateList: PluginStateType[] = [];
-      plugins.forEach((plugin) => {
-        if (self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {
-          return;
-        }
-
-        self.dynamicScriptsStore.addScript(plugin.scopeName, plugin.scriptUrl);
-
-        const pluginState = PluginState.create({});
-        spacePluginStateList.push(pluginState);
-      });
-
       self.spacePluginLoaders = cast(plugins);
-      self.spacePluginStateList = cast(spacePluginStateList);
     }),
     loadPluginIfNeeded(pluginLoader: PluginLoaderModelType) {
       if (pluginLoader.isLoaded || pluginLoader.isLoading) {

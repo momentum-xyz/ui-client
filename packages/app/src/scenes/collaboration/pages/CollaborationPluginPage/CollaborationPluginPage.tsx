@@ -11,17 +11,16 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
-import {PluginLoaderModelType, PluginStateType} from 'core/models';
+import {PluginLoaderModelType} from 'core/models';
 import {api} from 'api';
 
 import * as styled from './CollaborationPluginPage.styled';
 
 interface PropsInterface {
   pluginLoader: PluginLoaderModelType;
-  pluginState?: PluginStateType;
 }
 
-const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}) => {
+const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
   const {favoriteStore, pluginsStore, worldStore} = mainStore;
@@ -44,7 +43,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}
       return;
     }
 
-    await pluginState?.setPluginState(
+    await pluginLoader.state.setPluginState(
       api.spaceAttributeRepository.setSpaceSubAttribute,
       {
         worldId: worldStore.worldId,
@@ -60,7 +59,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}
       return;
     }
 
-    await pluginState?.init(
+    await pluginLoader.state.init(
       api.spaceAttributeRepository.getSpaceSubAttribute,
       {
         worldId: worldStore.worldId,
@@ -119,9 +118,9 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader, pluginState}
                 spaceId={space.id}
                 init={init}
                 reload={async () => {
-                  await pluginState?.reload();
+                  await pluginLoader.state.reload();
                 }}
-                pluginState={pluginState?.data ?? {}}
+                pluginState={pluginLoader.state.data}
                 setPluginState={setPluginState}
                 renderTopBarActions={renderTopBarActions}
               />
