@@ -44,21 +44,16 @@ const PluginAttributesManager = types
         sub_attribute_key: key,
         value: value
       });
-    }),
-    getAPI(worldId: string, spaceId?: string): APIInterface {
-      if (!spaceId) {
-        return {
-          get: () => Promise.reject('[PluginAttributesManager] Get function is not defined'),
-          set: () => Promise.reject('[PluginAttributesManager] Set function is not defined')
-        };
-      }
-
+    })
+  }))
+  .views((self) => ({
+    getAPI(worldId: string, spaceId: string): APIInterface {
       return {
         get: async <T>(key: string) => {
-          const result = await this.get(worldId, spaceId, key);
+          const result = await self.get(worldId, spaceId, key);
           return result as T;
         },
-        set: (key, value) => this.set(worldId, spaceId, key, value)
+        set: (key, value) => self.set(worldId, spaceId, key, value)
       };
     }
   }));
