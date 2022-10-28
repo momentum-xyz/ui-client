@@ -68,6 +68,11 @@ export const Container = styled.div`
     margin-inline-start: 0;
   }
 
+  .str-chat__message-inner ul {
+    list-style-type: inherit;
+    margin-left: 15px;
+  }
+
   .str-chat__list-notifications {
     display: none;
   }
