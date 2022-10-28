@@ -17,4 +17,5 @@ export interface UnityApiInterface {
   relayMessage(topic: string, json: string): any;
   startFlyWithMe(pilotId: string): void;
   disengageFlyWithMe(): void;
+  changeSkybox(skyboxId: string): void;
 }

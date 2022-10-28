@@ -24,10 +24,10 @@ import {
 
 import * as styled from './Widgets.styled';
 import {WorldChatWidget} from './pages';
-import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore} = useStore();
+  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore, worldBuilderStore} =
+    useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
@@ -39,7 +39,6 @@ const Widgets: FC = () => {
     launchInitiativeStore,
     musicPlayerStore,
     attendeesListStore,
-    profileStore,
     emojiStore
   } = widgetStore;
   const {magicLinkDialog} = magicLinkStore;
@@ -56,7 +55,16 @@ const Widgets: FC = () => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
     worldChatStore.init(userId, worldStore.worldId, user ?? undefined);
-  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, user, worldChatStore]);
+    worldBuilderStore.fetchPermissions();
+  }, [
+    userId,
+    user,
+    worldStore.worldId,
+    musicPlayerStore,
+    emojiStore,
+    worldChatStore,
+    worldBuilderStore
+  ]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -100,7 +108,6 @@ const Widgets: FC = () => {
 
   return (
     <>
-      {profileStore.editAvatarDialog.isOpen && <AvatarForm />}
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
@@ -110,9 +117,7 @@ const Widgets: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
-      {!location.pathname.includes('live-stream') && (
-        <LiveStreamPIPWidget flyAround={!location.pathname.includes('collaboration')} />
-      )}
+      {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
@@ -157,6 +162,15 @@ const Widgets: FC = () => {
               )}
             </ToolbarIcon>
           </styled.ChatIconWrapper>
+          {(worldBuilderStore.haveAccess || true) && ( // TODO: remove this line when we have permissions
+            <ToolbarIcon
+              icon="planet"
+              title={t('titles.worldBuilder')}
+              link={ROUTES.worldBuilder.builder}
+              size="normal-large"
+              isWhite={false}
+            />
+          )}
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>

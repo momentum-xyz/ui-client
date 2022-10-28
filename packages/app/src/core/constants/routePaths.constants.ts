@@ -18,6 +18,7 @@ export const ROUTES = {
   },
   grabTable: '/:spaceId/table',
   collaboration: {
+    root: '/collaboration',
     base: '/collaboration/:spaceId',
     stageMode: `/collaboration/:spaceId/stage-mode`,
     stageModeControl: `/collaboration/:spaceId/stage-mode/control`,
@@ -54,6 +55,8 @@ export const ROUTES = {
     start: '/createWorld/start',
     name: '/createWorld/name',
     template: '/createWorld/template',
-    generate: '/createWorld/generate'
+    generate: '/createWorld/generate',
+    builder: '/worldBuilder',
+    builderSkybox: '/worldBuilder/skybox'
   }
 };

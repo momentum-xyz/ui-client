@@ -228,6 +228,10 @@ export class UnityService {
     this.unityApi?.disengageFlyWithMe();
   }
 
+  changeSkybox(skyboxId: string) {
+    this.unityApi?.changeSkybox(skyboxId);
+  }
+
   leaveSpace(id: string) {
     try {
       this.unityApi?.triggerInteractionMsg?.(PosBusEventEnum.LeftSpace, id, 0, '');

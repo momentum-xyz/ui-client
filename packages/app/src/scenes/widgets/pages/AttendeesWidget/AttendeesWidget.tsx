@@ -7,6 +7,7 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './AttendeesWidget.styled';
 
+// FIXME: It is not a widget !!! Refactor this
 const AttendeesWidget: FC = () => {
   const {
     widgetStore: {attendeesListStore}
@@ -38,6 +39,7 @@ const AttendeesWidget: FC = () => {
         showOverflow
         layoutSize={{width: '519px;'}}
       >
+        {/* TODO: Refactoring !!! */}
         {attendeesListStore.attendeeDialog.isOpen && attendeesListStore.selectedAttendeeId && (
           <styled.AttendeeWidget
             userId={attendeesListStore.selectedAttendeeId}

@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginStateInterface, PluginTopBarActionInterface} from '@momentum-xyz/sdk';
+import {PluginTopBarActionInterface} from '@momentum-xyz/sdk';
 import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
@@ -23,9 +23,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
   const {favoriteStore, pluginsStore, worldStore} = mainStore;
-  const {plugin} = pluginLoader;
-
-  const [pluginState, setPluginState] = useState<PluginStateInterface>({});
+  const {plugin, attributesManager} = pluginLoader;
 
   const history = useHistory();
   const theme = useTheme();
@@ -38,34 +36,6 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     console.info('Recieved actions', actions);
     setActions(actions);
   }, []);
-
-  const setPluginStateSubField = async (
-    field: string,
-    subField: string,
-    subFieldValue: unknown
-  ) => {
-    if (!space?.id) {
-      return;
-    }
-
-    await pluginLoader.setPluginStateValue(
-      worldStore.worldId,
-      space.id,
-      field,
-      subField,
-      subFieldValue
-    );
-  };
-
-  const init = async (fields: string[]) => {
-    if (!space?.id) {
-      return;
-    }
-
-    const state = await pluginLoader.getPluginState(worldStore.worldId, space.id, fields);
-
-    setPluginState(state);
-  };
 
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {
@@ -113,9 +83,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 theme={theme}
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
-                init={init}
-                spacePluginState={pluginState}
-                setPluginSpaceStateSubField={setPluginStateSubField}
+                api={attributesManager.getAPI(worldStore.worldId, space.id)}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

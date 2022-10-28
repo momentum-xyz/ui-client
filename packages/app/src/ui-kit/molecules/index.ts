@@ -8,3 +8,4 @@ export * from './WorldBuilderTemplateItem';
 export * from './Location';
 export * from './TileMenu';
 export * from './NetworkButton';
+export * from './UserSpaceList';

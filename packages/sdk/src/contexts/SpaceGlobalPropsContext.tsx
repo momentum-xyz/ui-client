@@ -7,12 +7,9 @@ import {SpacePluginPropsInterface} from '../interfaces';
 export const SpaceGlobalPropsContext = createContext<SpacePluginPropsInterface>({
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,
-  init: () => {
-    return Promise.resolve();
-  },
-  spacePluginState: {},
-  setPluginSpaceStateSubField: () => {
-    return Promise.resolve();
+  api: {
+    get: () => Promise.reject(),
+    set: () => Promise.reject()
   }
 });
 

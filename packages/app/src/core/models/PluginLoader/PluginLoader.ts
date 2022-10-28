@@ -1,10 +1,10 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import {IconNameType} from '@momentum-xyz/ui-kit';
-import {PluginInterface, PluginStateInterface} from '@momentum-xyz/sdk';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {PluginInterface} from '@momentum-xyz/sdk';
+import {ResetModel} from '@momentum-xyz/core';
 
 import {LoaderStatusEnum} from 'core/enums';
-import {api} from 'api';
+import {PluginAttributesManager} from 'core/models/PluginAttributesManager';
 
 const PluginLoader = types
   .compose(
@@ -23,9 +23,7 @@ const PluginLoader = types
         LoaderStatusEnum.READY
       ),
       plugin: types.maybe(types.frozen<PluginInterface>()),
-
-      pluginStateRequest: types.optional(RequestModel, {}),
-      pluginSetStateRequest: types.optional(RequestModel, {})
+      attributesManager: PluginAttributesManager
     })
   )
   .actions((self) => ({
@@ -55,41 +53,6 @@ const PluginLoader = types
         console.error('[PluginLoader] An error has occured while loading plugin!', error);
         self.status = LoaderStatusEnum.ERROR;
       }
-    }),
-    getPluginState: flow(function* (worldId: string, spaceId: string, fields: string[]) {
-      const state: PluginStateInterface = {};
-
-      for (const field of fields) {
-        const attributeValue = yield self.pluginStateRequest.send(
-          api.spaceAttributeRepository.getSpaceAttribute,
-          {
-            worldId,
-            spaceId,
-            plugin_id: self.id,
-            attribute_name: field
-          }
-        );
-
-        state[field] = attributeValue;
-      }
-
-      return state;
-    }),
-    setPluginStateValue: flow(function* (
-      worldId: string,
-      spaceId: string,
-      field: string,
-      subField: string,
-      subFieldValue: unknown
-    ) {
-      yield self.pluginSetStateRequest.send(api.spaceAttributeRepository.setSpaceSubAttribute, {
-        worldId,
-        spaceId,
-        plugin_id: self.id,
-        attribute_name: field,
-        sub_attribute_key: subField,
-        value: subFieldValue
-      });
     })
   }))
   .views((self) => ({
