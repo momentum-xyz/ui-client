@@ -33,6 +33,10 @@ const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.flyWithMe.passenger,
     main: () => <></>
+  },
+  {
+    path: ROUTES.worldBuilder.builder,
+    main: () => <></>
   }
 ];
 
