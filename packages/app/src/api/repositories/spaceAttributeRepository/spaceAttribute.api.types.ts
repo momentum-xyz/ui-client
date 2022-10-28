@@ -20,7 +20,7 @@ export interface GetSpaceSubAttributeRequest extends SpaceAttributesRequest {
   sub_attribute_key: string;
 }
 
-export interface GetSpaceSubAttributeResponse extends AttributeSubValueInterface {}
+export type GetSpaceSubAttributeResponseType = unknown;
 
 // SET SPACE SUB ATTRIBUTE
 export interface SetSpaceSubAttributeRequest extends SpaceAttributesRequest {

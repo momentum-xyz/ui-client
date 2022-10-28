@@ -14,13 +14,13 @@ interface PropsInterface {
 const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
   const mockPlugin: PluginInterface = useMemo(
     () => ({
-      id: crypto.randomUUID(),
-      name: 'momentum_plugin_template',
+      id: 'ceb9ebad-283c-4b65-9c7e-1b87391e9f49',
+      scopeName: 'momentum_plugin_template',
       subPath: 'template',
       subtitle: 'Template',
       iconName: 'gear',
       // TODO: Later change to remote url
-      url: 'http://localhost:3002/remoteEntry.js',
+      scriptUrl: 'http://localhost:3002/remoteEntry.js',
       exact: true
     }),
     []
@@ -34,25 +34,26 @@ const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
 
   const plugin = useMemo(
     () => ({
-      name: name,
+      id: mockPlugin.id,
+      scopeName: name,
       subPath: subPath,
       subtitle: subtitle,
       iconName: selectedIcon,
       // TODO: Later change to remote url
-      url: url,
+      scriptUrl: url,
       exact: mockPlugin.exact
     }),
-    [mockPlugin.exact, name, selectedIcon, subPath, subtitle, url]
+    [mockPlugin.exact, mockPlugin.id, name, selectedIcon, subPath, subtitle, url]
   );
 
   useEffect(() => {
     if (name === 'momentum') {
-      setName(mockPlugin.name);
-      setUrl(mockPlugin.url);
+      setName(mockPlugin.scopeName);
+      setUrl(mockPlugin.scriptUrl);
       setSubPath(mockPlugin.subPath);
       setSubtitle(mockPlugin.subtitle ?? '');
     }
-  }, [mockPlugin.name, mockPlugin.subPath, mockPlugin.subtitle, mockPlugin.url, name]);
+  }, [mockPlugin.scopeName, mockPlugin.scriptUrl, mockPlugin.subPath, mockPlugin.subtitle, name]);
 
   const iconsToSelect = useMemo<IconNameType[]>(
     () => [

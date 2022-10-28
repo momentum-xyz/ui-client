@@ -1,5 +1,6 @@
 import {RequestInterface} from '@momentum-xyz/core';
 import {generatePath} from 'react-router-dom';
+import {AxiosResponse} from 'axios';
 
 import {request} from 'api/request';
 
@@ -8,7 +9,7 @@ import {
   GetSpaceAttributeRequest,
   GetSpaceAttributeResponse,
   GetSpaceSubAttributeRequest,
-  GetSpaceSubAttributeResponse,
+  GetSpaceSubAttributeResponseType,
   SetSpaceSubAttributeRequest,
   SetSpaceSubAttributeResponse
 } from './spaceAttribute.api.types';
@@ -31,19 +32,29 @@ export const getSpaceAttribute: RequestInterface<
 
 export const getSpaceSubAttribute: RequestInterface<
   GetSpaceSubAttributeRequest,
-  GetSpaceSubAttributeResponse
+  GetSpaceSubAttributeResponseType
 > = (options) => {
-  const {worldId, spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
+  // const {worldId, spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
-  restOptions.params = {
-    plugin_id,
-    attribute_name,
-    sub_attribute_key
+  // restOptions.params = {
+  //   plugin_id,
+  //   attribute_name,
+  //   sub_attribute_key
+  // };
+
+  // const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {worldId, spaceId});
+
+  // return request.get(url, restOptions);
+
+  const mockResponse: AxiosResponse<GetSpaceSubAttributeResponseType> = {
+    data: null,
+    status: 200,
+    statusText: 'OK',
+    headers: undefined,
+    config: options
   };
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {worldId, spaceId});
-
-  return request.get(url, restOptions);
+  return Promise.resolve(mockResponse);
 };
 
 export const setSpaceSubAttribute: RequestInterface<

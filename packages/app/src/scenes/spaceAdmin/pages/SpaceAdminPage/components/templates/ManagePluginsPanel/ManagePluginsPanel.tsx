@@ -37,7 +37,7 @@ const ManagePluginsPanel: FC = () => {
           {pluginsStore.spacePlugins.map((plugin) => (
             <AdminListItem
               key={plugin.subPath}
-              name={plugin.name}
+              name={plugin.scopeName}
               userId={plugin.subPath}
               type={plugin.subtitle}
               onRemove={(id, _) => pluginsStore.removePlugin(id)}
