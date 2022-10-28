@@ -8,6 +8,27 @@ interface PropsInterface {
   plugin: PluginInterface;
 }
 
+/**
+ * Emulates the host environment for your plugin for local development.
+ * 
+ * Example of usage:
+```tsx
+import plugin from './Plugin';
+
+const isDevEnv = process.env.NODE_ENV === 'development';
+
+const root = document.getElementById('root') as HTMLElement;
+
+ReactDOM.render(
+  <React.StrictMode>
+    <ThemeProvider theme={DefaultThemeConfig}>
+      {isDevEnv ? <HostEmulator plugin={plugin} /> : <MomentumRequiredPage />}
+    </ThemeProvider>
+  </React.StrictMode>,
+  root
+);
+```
+ */
 export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
   const [tab, setTab] = useState('dash');
