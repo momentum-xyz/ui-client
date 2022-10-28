@@ -1,4 +1,4 @@
-import {FC, useCallback, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
@@ -31,6 +31,10 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {t} = useTranslation();
 
   pluginsStore.loadPluginIfNeeded(pluginLoader);
+
+  const api = useMemo(() => {
+    return attributesManager.getAPI(worldStore.worldId, space?.id);
+  }, [attributesManager, space, worldStore.worldId]);
 
   const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
     console.info('Recieved actions', actions);
@@ -83,7 +87,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 theme={theme}
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
-                api={attributesManager.getAPI(worldStore.worldId, space.id)}
+                api={api}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

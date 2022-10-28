@@ -40,7 +40,14 @@ const PluginAttributesManager = types
         value: value
       });
     }),
-    getAPI(worldId: string, spaceId: string): APIInterface {
+    getAPI(worldId: string, spaceId?: string): APIInterface {
+      if (!spaceId) {
+        return {
+          get: () => Promise.reject('[PluginAttributesManager] Get function is not defined'),
+          set: () => Promise.reject('[PluginAttributesManager] Set function is not defined')
+        };
+      }
+
       return {
         get: (key) => this.get(worldId, spaceId, key),
         set: (key, value) => this.set(worldId, spaceId, key, value)
