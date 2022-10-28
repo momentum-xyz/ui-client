@@ -1,8 +1,9 @@
 import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {Space} from 'core/models';
 import {api} from 'api';
+// TODO: Make a SpaceStore under spaceAdmin scene. Move specific stuff from Space_OLD
+import {SpaceStore_OLD} from 'scenes/collaboration/stores/SpaceStore_OLD';
 
 import {SearchUsersStore, SpaceDetailsFormStore, TokenRulesStore} from './models';
 
@@ -15,7 +16,8 @@ const SpaceManagerStore = types.compose(
       tokenFormDialog: types.optional(Dialog, {}),
       applyTokenRuleFormDialog: types.optional(Dialog, {}),
       tokenRuleFormDialog: types.optional(Dialog, {}),
-      space: types.maybe(Space),
+      // TODO: Use SpaceAdminStore. Rename to spaceStore.
+      space: types.maybe(SpaceStore_OLD),
       spaceDetailsFormStore: types.optional(SpaceDetailsFormStore, {}),
       deleteSpaceConfirmationDialog: types.optional(Dialog, {}),
       removeUserConfirmationDialog: types.optional(Dialog, {}),
@@ -31,7 +33,7 @@ const SpaceManagerStore = types.compose(
     })
     .actions((self) => ({
       init(spaceId: string) {
-        self.space = Space.create({id: spaceId});
+        self.space = SpaceStore_OLD.create({id: spaceId});
         self.space.fetchSpaceInformation();
         self.space.fetchAllowedSubSpaceTypes();
         self.tokenRulesStore.fetchTokenRules(spaceId);

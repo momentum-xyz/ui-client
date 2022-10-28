@@ -2,10 +2,11 @@ import {flow, types} from 'mobx-state-tree';
 import {cloneDeep} from 'lodash-es';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {Space, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
+import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {PrivateSpaceError} from 'core/errors';
 import {api} from 'api';
 
+import {SpaceStore_OLD} from './SpaceStore_OLD';
 import {CalendarStore} from './CalendarStore';
 import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
@@ -19,7 +20,8 @@ const RootCollaborationStore = types
   .compose(
     ResetModel,
     types.model('RootCollaborationStore', {
-      space: types.maybe(Space),
+      // TODO: Refactor the SpaceStore_OLD. Rename to SpaceStore
+      space: types.maybe(SpaceStore_OLD),
       dashboardStore: types.optional(DashboardStore, {}),
       textChatStore: types.optional(TextChatStore, {}),
       streamChatStore: types.optional(StreamChatStore, {}),
@@ -49,7 +51,7 @@ const RootCollaborationStore = types
   )
   .actions((self) => ({
     join: flow(function* (spaceId: string, isTable = false) {
-      self.space = Space.create({id: spaceId, isTable});
+      self.space = SpaceStore_OLD.create({id: spaceId, isTable});
 
       if (!(yield self.space?.canUserJoin(spaceId))) {
         throw new PrivateSpaceError();

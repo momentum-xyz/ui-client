@@ -2,9 +2,11 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
-import {SpaceInfo, Space, SearchQuery} from 'core/models';
+import {SpaceInfo, SearchQuery} from 'core/models';
 import {ExploreResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
+// FIXME: Removal
+import {SpaceStore_OLD} from 'scenes/collaboration/stores/SpaceStore_OLD';
 
 import {SpaceListByCategory} from './models';
 
@@ -13,7 +15,8 @@ const ExploreStore = types
     ResetModel,
     types.model('ExploreStore', {
       isExpanded: true,
-      selectedSpace: types.maybe(Space),
+      // TODO: Use SpaceInfo model
+      selectedSpace: types.maybe(SpaceStore_OLD),
       spaceList: types.optional(types.array(SpaceListByCategory), []),
       searchQuery: types.optional(SearchQuery, {}),
       spaceHistory: types.optional(types.array(SpaceInfo), []),
@@ -38,7 +41,7 @@ const ExploreStore = types
         });
       }
 
-      self.selectedSpace = Space.create({id: spaceId});
+      self.selectedSpace = SpaceStore_OLD.create({id: spaceId});
       self.selectedSpace.fetchSpaceInformation();
     },
     goBack(): void {
@@ -55,7 +58,7 @@ const ExploreStore = types
         self.previousItem = undefined;
       }
 
-      self.selectedSpace = Space.create({id: previousItemId});
+      self.selectedSpace = SpaceStore_OLD.create({id: previousItemId});
       self.selectedSpace.fetchSpaceInformation();
     },
     search: flow(function* (worldId: string) {
