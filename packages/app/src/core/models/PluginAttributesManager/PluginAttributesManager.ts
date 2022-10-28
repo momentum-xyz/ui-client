@@ -13,7 +13,7 @@ const PluginAttributesManager = types
   })
   .actions((self) => ({
     get: flow(function* <T>(worldId: string, spaceId: string, key: string) {
-      const value: T = yield self.getStateRequest.send(
+      const value: T | undefined = yield self.getStateRequest.send(
         api.spaceAttributeRepository.getSpaceSubAttribute,
         {
           worldId,
@@ -23,6 +23,10 @@ const PluginAttributesManager = types
           sub_attribute_key: key
         }
       );
+
+      if (value === undefined) {
+        return null;
+      }
 
       return value;
     }),

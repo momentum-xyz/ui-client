@@ -13,7 +13,7 @@ const MiroBoardPage: FC = () => {
 
   const {spaceId, isSpaceAdmin, api, renderTopBarActions} = useSpaceGlobalProps();
 
-  const [board, setBoard] = useState<MiroBoardInterface>();
+  const [board, setBoard] = useState<MiroBoardInterface | null>(null);
 
   const pickBoard = useCallback(() => {
     miroBoardsPicker.open({
@@ -26,7 +26,7 @@ const MiroBoardPage: FC = () => {
   }, [api]);
 
   useEffect(() => {
-    api.get<MiroBoardInterface>('board').then(setBoard);
+    api.get<MiroBoardInterface | null>('board').then(setBoard);
   }, [api]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const MiroBoardPage: FC = () => {
           board={board}
           pick={pickBoard}
           disable={() => {
-            api.set('board', null).then(() => () => setBoard(undefined));
+            api.set<MiroBoardInterface | null>('board', null).then(() => () => setBoard(null));
           }}
         />
       )
