@@ -9,7 +9,7 @@ import * as styled from './MiroActions.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   spaceId?: string;
   isAdmin: boolean;
-  board?: MiroBoardInterface;
+  board: MiroBoardInterface | null;
   pick: () => void;
   disable: () => void;
 }
