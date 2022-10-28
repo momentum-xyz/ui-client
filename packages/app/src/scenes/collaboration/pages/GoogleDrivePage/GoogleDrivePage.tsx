@@ -14,7 +14,7 @@ import * as styled from './GoogleDrivePage.styled';
 
 const GoogleDrivePage: FC = () => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
-  const {space, googleDriveStore, streamChatStore} = collaborationStore;
+  const {spaceStore, googleDriveStore, streamChatStore} = collaborationStore;
   const {googleDocument, documentTitle} = googleDriveStore;
   const {favoriteStore} = mainStore;
 
@@ -22,14 +22,14 @@ const GoogleDrivePage: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (space) {
-      googleDriveStore.fetchGoogleDocument(space.id);
+    if (spaceStore) {
+      googleDriveStore.fetchGoogleDocument(spaceStore.id);
     }
 
     return () => {
       googleDriveStore.resetModel();
     };
-  }, [googleDriveStore, space]);
+  }, [googleDriveStore, spaceStore]);
 
   const pickerCallBack = useCallback(
     async (data) => {
@@ -44,34 +44,34 @@ const GoogleDrivePage: FC = () => {
           url: content[picker.Document.URL]
         };
 
-        if (space) {
-          await googleDriveStore.enableGoogleDocument(space.id, document);
-          await googleDriveStore.fetchGoogleDocument(space.id);
+        if (spaceStore) {
+          await googleDriveStore.enableGoogleDocument(spaceStore.id, document);
+          await googleDriveStore.fetchGoogleDocument(spaceStore.id);
         }
       }
     },
-    [googleDriveStore, space]
+    [googleDriveStore, spaceStore]
   );
 
   const closeDocument = useCallback(async () => {
-    await googleDriveStore.disableGoogleDocument(space?.id || '');
-    await googleDriveStore.fetchGoogleDocument(space?.id || '');
-  }, [googleDriveStore, space?.id]);
+    await googleDriveStore.disableGoogleDocument(spaceStore?.id || '');
+    await googleDriveStore.fetchGoogleDocument(spaceStore?.id || '');
+  }, [googleDriveStore, spaceStore?.id]);
 
   const {pickDocument} = useGooglePicker(pickerCallBack);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="GoogleDrivePage-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.name ?? ''}
         subtitle={documentTitle}
-        isAdmin={space.isAdmin}
-        spaceId={space?.id}
-        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         isChatOpen={streamChatStore.isOpen}
         toggleChat={streamChatStore.textChatDialog.toggle}
@@ -82,7 +82,7 @@ const GoogleDrivePage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {space.isAdmin && !!googleDocument?.data?.url && (
+        {spaceStore.isAdmin && !!googleDocument?.data?.url && (
           <>
             <Button label={t('actions.changeDocument')} variant="primary" onClick={pickDocument} />
             <Button label={t('actions.close')} variant="danger" onClick={closeDocument} />
@@ -91,7 +91,7 @@ const GoogleDrivePage: FC = () => {
       </SpaceTopBar>
       <styled.Container>
         {!googleDocument?.data?.url ? (
-          <GoogleChoice isAdmin={space.isAdmin} pickDocument={pickDocument} />
+          <GoogleChoice isAdmin={spaceStore.isAdmin} pickDocument={pickDocument} />
         ) : (
           <GoogleDocument documentUrl={googleDocument.data.url} />
         )}

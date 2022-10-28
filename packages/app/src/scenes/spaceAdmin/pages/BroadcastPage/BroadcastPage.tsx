@@ -15,18 +15,18 @@ import {BroadcastFormPanel, BroadcastPreviewPanel, StopBroadcastingDialog} from 
 const BroadcastPage: FC = () => {
   const history = useHistory();
   const {collaborationStore, spaceAdminStore} = useStore();
-  const {space} = collaborationStore;
+  const {spaceStore} = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
 
   useEffect(() => {
-    if (space) {
-      broadcastStore.fetchBroadcast(space.id);
+    if (spaceStore) {
+      broadcastStore.fetchBroadcast(spaceStore.id);
     }
 
     return () => {
       broadcastStore.resetModel();
     };
-  }, [broadcastStore, space]);
+  }, [broadcastStore, spaceStore]);
 
   const handleClose = () => {
     // @ts-ignore
@@ -39,7 +39,7 @@ const BroadcastPage: FC = () => {
 
   const handleStartBroadcasting = useCallback(async () => {
     broadcastStore.countdownDialog.close();
-    const success = await broadcastStore.enableBroadcast(space?.id ?? '');
+    const success = await broadcastStore.enableBroadcast(spaceStore?.id ?? '');
     if (success) {
       toast.info(
         <ToastContent
@@ -62,11 +62,11 @@ const BroadcastPage: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, [broadcastStore, space?.id]);
+  }, [broadcastStore, spaceStore?.id]);
 
   const handleStopBroadcasting = useCallback(async () => {
     broadcastStore.stopBroadcastingDialog.close();
-    const success = await broadcastStore.disableBroadcast(space?.id ?? '');
+    const success = await broadcastStore.disableBroadcast(spaceStore?.id ?? '');
     if (success) {
       toast.info(
         <ToastContent
@@ -89,21 +89,21 @@ const BroadcastPage: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, [broadcastStore, space?.id]);
+  }, [broadcastStore, spaceStore?.id]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <styled.Container data-testid="BroadcastPage-test">
       <PageTopBar
-        title={space?.name ?? ''}
+        title={spaceStore.name ?? ''}
         subtitle={t('broadcastAdmin.subtitle')}
         onClose={handleClose}
       />
       <styled.Body>
-        {space.isAdmin ? (
+        {spaceStore.isAdmin ? (
           <>
             <BroadcastFormPanel />
             <BroadcastPreviewPanel />

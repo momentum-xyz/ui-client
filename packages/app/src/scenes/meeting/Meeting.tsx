@@ -16,7 +16,7 @@ const Meeting: FC = () => {
   const {mainStore, collaborationStore} = rootStore;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore} = agoraStore;
-  const {space} = collaborationStore;
+  const {spaceStore} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -46,7 +46,7 @@ const Meeting: FC = () => {
   return (
     <styled.Container>
       <MeetingRoomPage onLeave={onLeaveMeeting} />
-      {space && !space.isTable && <PosBusEventsPage />}
+      {spaceStore && !spaceStore.isTable && <PosBusEventsPage />}
     </styled.Container>
   );
 };

@@ -13,7 +13,7 @@ import * as styled from './LiveStreamPage.styled';
 
 const LiveStreamPage: FC = () => {
   const {mainStore, collaborationStore, leaveMeetingSpace} = useStore();
-  const {space, streamChatStore} = collaborationStore;
+  const {spaceStore, streamChatStore} = collaborationStore;
   const {favoriteStore, liveStreamStore} = mainStore;
 
   const history = useHistory();
@@ -25,18 +25,18 @@ const LiveStreamPage: FC = () => {
     return () => liveStreamStore.leftLiveStreamTab();
   }, [liveStreamStore]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="LiveStreamPage-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.name ?? ''}
         subtitle={t('liveStream.subtitle')}
-        isAdmin={space.isAdmin}
-        spaceId={space.id}
-        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChatOpen={streamChatStore.isOpen}
@@ -47,11 +47,11 @@ const LiveStreamPage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {liveStreamStore.isStreaming && space.isAdmin && (
+        {liveStreamStore.isStreaming && spaceStore.isAdmin && (
           <Button
             label={t('liveStream.stopStream')}
             variant="danger"
-            onClick={() => liveStreamStore.disableBroadcast(space?.id)}
+            onClick={() => liveStreamStore.disableBroadcast(spaceStore.id)}
           />
         )}
       </SpaceTopBar>

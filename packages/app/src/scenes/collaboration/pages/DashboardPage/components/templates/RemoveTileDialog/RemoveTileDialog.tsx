@@ -10,7 +10,7 @@ import * as styled from './RemoveTileDialog.styled';
 
 const RemoveTileDialog: FC = () => {
   const {collaborationStore} = useStore();
-  const {dashboardStore, space} = collaborationStore;
+  const {dashboardStore, spaceStore} = collaborationStore;
   const {tileRemoveDialog, tileFormStore} = dashboardStore;
 
   useEffect(() => {
@@ -18,13 +18,13 @@ const RemoveTileDialog: FC = () => {
   }, []);
 
   const confirm = useCallback(async () => {
-    if (!space) {
+    if (!spaceStore) {
       return;
     }
     const succeed = await tileFormStore.deleteTile();
     tileRemoveDialog.close();
     if (succeed) {
-      await dashboardStore.fetchDashboard(space.id);
+      await dashboardStore.fetchDashboard(spaceStore.id);
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -44,7 +44,7 @@ const RemoveTileDialog: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, [dashboardStore, space, tileFormStore, tileRemoveDialog]);
+  }, [dashboardStore, spaceStore, tileFormStore, tileRemoveDialog]);
 
   return (
     <Dialog

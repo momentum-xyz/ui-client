@@ -13,7 +13,7 @@ import * as styled from './DashboardPage.styled';
 
 const DashboardPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace, flightStore} = useStore();
-  const {dashboardStore, space, streamChatStore} = collaborationStore;
+  const {dashboardStore, spaceStore, streamChatStore} = collaborationStore;
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {flyWithMeStore} = flightStore;
   const {agoraStore, favoriteStore} = mainStore;
@@ -28,36 +28,36 @@ const DashboardPage: FC = () => {
   });
 
   useEffect(() => {
-    if (space) {
-      dashboardStore.fetchDashboard(space.id);
-      vibeStore.check(space.id);
-      vibeStore.count(space.id);
+    if (spaceStore) {
+      dashboardStore.fetchDashboard(spaceStore.id);
+      vibeStore.check(spaceStore.id);
+      vibeStore.count(spaceStore.id);
     }
     return () => {
       dashboardStore.resetModel();
     };
-  }, [dashboardStore, favoriteStore, space, vibeStore]);
+  }, [dashboardStore, favoriteStore, spaceStore, vibeStore]);
 
   const handleToggleVibe = useCallback(async () => {
-    const success = await vibeStore.toggle(space?.id ?? '');
+    const success = await vibeStore.toggle(spaceStore?.id ?? '');
     if (success) {
       vibeStore.toggleVibe();
     }
-  }, [space?.id, vibeStore]);
+  }, [spaceStore?.id, vibeStore]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="DashboardPage-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.name ?? ''}
         subtitle={t('dashboard.subtitle')}
-        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        spaceId={space.id}
-        isAdmin={space.isAdmin}
+        spaceId={spaceStore.id}
+        isAdmin={spaceStore.isAdmin}
         isChatOpen={streamChatStore.isOpen}
         toggleChat={streamChatStore.textChatDialog.toggle}
         numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
@@ -71,10 +71,10 @@ const DashboardPage: FC = () => {
           canVibe={vibeStore.canVibe}
           vibeCount={vibeStore.vibeCount}
         />
-        {(space.isAdmin || space.isMember) && (
+        {(spaceStore.isAdmin || spaceStore.isMember) && (
           <Button label={t('dashboard.addTile')} variant="primary" onClick={tileDialog.open} />
         )}
-        {(space.isAdmin || space.isMember) && (
+        {(spaceStore.isAdmin || spaceStore.isMember) && (
           <Button
             ref={inviteRef}
             label={t('dashboard.invitePeople')}
@@ -83,21 +83,21 @@ const DashboardPage: FC = () => {
             onClick={inviteToSpaceDialog.open}
           />
         )}
-        {!sessionStore.isGuest && space.isStakeShown && (
+        {!sessionStore.isGuest && spaceStore.isStakeShown && (
           <Button label={t('dashboard.stake')} variant="primary" />
         )}
-        {space.isAdmin && (
+        {spaceStore.isAdmin && (
           <Button
             variant="primary"
             icon="fly-with-me"
             label={t('labels.flyWithMe')}
             disabled={!agoraStore.hasJoined || agoraStore.isStageMode || flightStore.isFlightWithMe}
-            onClick={() => flyWithMeStore.start(space.id)}
+            onClick={() => flyWithMeStore.start(spaceStore.id)}
           />
         )}
       </SpaceTopBar>
 
-      {!dashboardStore.dashboardIsEdited && space.isOwner && (
+      {!dashboardStore.dashboardIsEdited && spaceStore.isOwner && (
         <styled.AlertContainer>
           <IconSvg name="alert" size="large" isWhite />
           <styled.AlertContent>
@@ -115,7 +115,7 @@ const DashboardPage: FC = () => {
       <Dashboard
         tilesList={tileList.tileMatrix}
         onDragEnd={dashboardStore.onDragEnd}
-        canDrag={space.isAdmin || space.isMember}
+        canDrag={spaceStore.isAdmin || spaceStore.isMember}
         textChatIsOpen={streamChatStore.isOpen}
       />
       {tileDialog.isOpen && <TileForm />}

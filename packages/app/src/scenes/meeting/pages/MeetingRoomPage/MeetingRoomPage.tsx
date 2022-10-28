@@ -64,7 +64,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
         {isButtonsAvailable && (
           <JoinLeaveButtons
             spaceId={agoraStore.spaceId || ''}
-            isJoinButtonShown={!collaborationStore.space?.isTable}
+            isJoinButtonShown={!collaborationStore.spaceStore?.isTable}
             onLeave={onLeave}
           />
         )}
@@ -76,7 +76,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
             {/* MUTE ALL */}
             <MuteAllButton
               spaceId={agoraStore.spaceId || ''}
-              isShown={!agoraStore.isStageMode && collaborationStore.space?.isAdmin}
+              isShown={!agoraStore.isStageMode && collaborationStore.spaceStore?.isAdmin}
               peopleCount={agoraStore.meetingPeopleCount}
               onMuteAll={meetingRoomStore.muteAllUsers}
             />
@@ -115,7 +115,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
                     onMuteUser={meetingRoomStore.muteUser}
                     onKickUser={meetingRoomStore.kickUser}
                     usersListUpdated={agoraMeetingStore.users.length}
-                    isAdmin={collaborationStore.space?.isAdmin}
+                    isAdmin={collaborationStore.spaceStore?.isAdmin}
                   />
                 ))}
           </ul>

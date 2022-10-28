@@ -32,14 +32,14 @@ const MagicLinkWidget: FC = () => {
   }, [magicLinkStore]);
 
   useEffect(() => {
-    if (collaborationStore.space && !collaborationStore.space.isTable) {
-      generate(MagicTypeEnum.OPEN_SPACE, collaborationStore.space.id, null);
-    } else if (collaborationStore.space) {
-      generate(MagicTypeEnum.JOIN_MEETING, collaborationStore.space.id, null);
+    if (collaborationStore.spaceStore && !collaborationStore.spaceStore.isTable) {
+      generate(MagicTypeEnum.OPEN_SPACE, collaborationStore.spaceStore.id, null);
+    } else if (collaborationStore.spaceStore) {
+      generate(MagicTypeEnum.JOIN_MEETING, collaborationStore.spaceStore.id, null);
     } else {
       generate(MagicTypeEnum.FLY, null, unityStore.getUserPosition());
     }
-  }, [collaborationStore.space, generate, unityStore]);
+  }, [collaborationStore.spaceStore, generate, unityStore]);
 
   const copyHandle = useCallback(async () => {
     await copyToClipboard(address || '');

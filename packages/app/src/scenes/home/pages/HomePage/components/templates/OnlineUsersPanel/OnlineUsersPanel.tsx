@@ -12,7 +12,7 @@ const LAYOUT_WIDTH = '200px';
 
 const OnlineUsersPanel: FC = () => {
   const {sessionStore, mainStore, homeStore, collaborationStore} = useStore();
-  const {space} = collaborationStore;
+  const {spaceStore} = collaborationStore;
   const {worldStore, unityStore} = mainStore;
   const {onlineUsersStore, userProfileDialog} = homeStore;
   const {user} = sessionStore;
@@ -53,7 +53,7 @@ const OnlineUsersPanel: FC = () => {
         worldId={worldStore.worldId}
         user={user ?? undefined}
         teleportToUser={unityStore.teleportToUser}
-        spaceId={space?.id ?? ''}
+        spaceId={spaceStore?.id ?? ''}
       />
     </styled.CustomExpandableLayout>
   );

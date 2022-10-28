@@ -74,7 +74,7 @@ const RootStore = types
     leaveMeetingSpace: flow(function* (isKicked = false) {
       console.log('---LEAVING---');
 
-      const spaceId = self.collaborationStore.space?.id || '';
+      const spaceId = self.collaborationStore.spaceStore?.id || '';
       self.meetingStore.leave(isKicked);
       self.collaborationStore.stageModeStore.removeAllPopups();
 

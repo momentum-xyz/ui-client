@@ -15,7 +15,7 @@ import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {calendarStore, space} = useStore().collaborationStore;
+  const {calendarStore, spaceStore} = useStore().collaborationStore;
   const {eventForm, formDialog, eventList} = calendarStore;
   const {eventFormRequest, currentEvent, imageSrc} = eventForm;
 
@@ -49,17 +49,17 @@ const EventForm: FC = () => {
       data.web_link = null;
     }
 
-    if (space) {
+    if (spaceStore) {
       let isSuccess = false;
 
       if (currentEvent?.id) {
-        isSuccess = await eventForm.updateEvent(data, space.id, currentEvent.id, image);
+        isSuccess = await eventForm.updateEvent(data, spaceStore.id, currentEvent.id, image);
       } else {
-        isSuccess = await eventForm.createEvent(data, space.id, image);
+        isSuccess = await eventForm.createEvent(data, spaceStore.id, image);
       }
 
       if (isSuccess) {
-        eventList.fetchEvents(space.id);
+        eventList.fetchEvents(spaceStore.id);
         formDialog.close();
       }
     }

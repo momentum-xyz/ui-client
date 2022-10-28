@@ -2,6 +2,7 @@ import {types, flow, cast} from 'mobx-state-tree';
 import {UUIDModel} from '@momentum-xyz/core';
 import {RequestModel, ResetModel, SpaceTypeEnum} from '@momentum-xyz/core';
 
+import {Space} from 'core/models';
 import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';
 import {SpaceUserModel} from 'core/models/SpaceUser';
@@ -10,13 +11,14 @@ import {api, SpaceResponse} from 'api';
 import {GetAllowedSpaceTypesResponse} from 'api';
 
 // TODO: Leave only stuff related to collaboration
-// TODO: Remove all stuff related to space administration
-// TODO: Use the Space model instead of fields (id, name, description)
-const SpaceStore_OLD = types
+// TODO: Refactor all stuff related to space administration
+const SpaceStore = types
   .compose(
     ResetModel,
-    types.model('SpaceStore_OLD', {
-      // TODO: It is Space model
+    types.model('SpaceStore', {
+      space: types.maybeNull(Space),
+
+      // TODO: Removal. It is Space model
       id: types.string,
       name: types.maybe(types.string),
       description: types.maybe(types.string),
@@ -28,6 +30,7 @@ const SpaceStore_OLD = types
       // TODO: Remove
       didFetchSpaceInformation: false,
 
+      // TODO: Separate model
       // User - space information
       isAdmin: false,
       isMember: false,
@@ -63,6 +66,7 @@ const SpaceStore_OLD = types
       );
       return response && !(response.space.secret === 1 && !(response.admin || response.member));
     }),
+    // TODO: Remove
     fetchSpaceInformation: flow(function* () {
       if (!self.id) {
         return;
@@ -208,4 +212,4 @@ const SpaceStore_OLD = types
     }
   }));
 
-export {SpaceStore_OLD};
+export {SpaceStore};

@@ -22,7 +22,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
-  const {streamChatStore, space, screenShareStore} = collaborationStore;
+  const {streamChatStore, spaceStore, screenShareStore} = collaborationStore;
   const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
@@ -49,18 +49,18 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     }
   }, [agoraStageModeStore, showSuccessStageModeRequestSubmissionToast, t]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="StageModeGuest-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.name ?? ''}
         subtitle={t('labels.stageMode')}
-        isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
-        isAdmin={space.isAdmin}
-        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.id}
         isChatOpen={streamChatStore.isOpen}
         toggleChat={streamChatStore.textChatDialog.toggle}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
