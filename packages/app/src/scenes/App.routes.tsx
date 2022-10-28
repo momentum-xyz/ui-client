@@ -137,7 +137,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
         <HomePage />
       </>
     ),
-    renderBackground: true
+    renderBackground: false
   },
   {
     path: ROUTES.collaboration.base,

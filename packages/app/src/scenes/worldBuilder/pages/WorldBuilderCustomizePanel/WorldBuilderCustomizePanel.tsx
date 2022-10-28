@@ -39,6 +39,7 @@ const WorldBuilderCustomizePanel: FC = () => {
       theme={theme}
       // title="World Builder Menu"
       // headerStyle="uppercase"
+      showBackground={false}
       showCloseButton
       // showOverflow
       // withOpacity
