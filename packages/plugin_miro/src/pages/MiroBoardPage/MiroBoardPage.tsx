@@ -39,7 +39,7 @@ const MiroBoardPage: FC = () => {
           board={board}
           pick={pickBoard}
           disable={() => {
-            api.set('board', undefined).then(() => () => setBoard(undefined));
+            api.set('board', null).then(() => () => setBoard(undefined));
           }}
         />
       )

@@ -12,8 +12,8 @@ const PluginAttributesManager = types
     setStateRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    get: flow(function* (worldId: string, spaceId: string, key: string) {
-      const value = yield self.getStateRequest.send(
+    get: flow(function* <T>(worldId: string, spaceId: string, key: string) {
+      const value: T = yield self.getStateRequest.send(
         api.spaceAttributeRepository.getSpaceSubAttribute,
         {
           worldId,
@@ -26,7 +26,12 @@ const PluginAttributesManager = types
 
       return value;
     }),
-    set: flow(function* <T>(worldId: string, spaceId: string, key: string, value: T) {
+    set: flow(function* <T>(
+      worldId: string,
+      spaceId: string,
+      key: string,
+      value: T extends undefined ? never : T
+    ) {
       if (!self.pluginId) {
         return;
       }
@@ -49,7 +54,10 @@ const PluginAttributesManager = types
       }
 
       return {
-        get: (key) => this.get(worldId, spaceId, key),
+        get: async <T>(key: string) => {
+          const result = await this.get(worldId, spaceId, key);
+          return result as T;
+        },
         set: (key, value) => this.set(worldId, spaceId, key, value)
       };
     }
