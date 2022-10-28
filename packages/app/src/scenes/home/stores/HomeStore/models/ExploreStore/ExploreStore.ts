@@ -5,7 +5,7 @@ import {api} from 'api';
 import {SpaceInfo, SearchQuery} from 'core/models';
 import {ExploreResponse} from 'api';
 import {bytesToUuid} from 'core/utils';
-// FIXME: Removal
+// FIXME: Removal. Use SpaceInfo.
 import {SpaceStore} from 'scenes/collaboration/stores/SpaceStore';
 
 import {SpaceListByCategory} from './models';
@@ -16,7 +16,7 @@ const ExploreStore = types
     types.model('ExploreStore', {
       isExpanded: true,
       // TODO: Use SpaceInfo model
-      selectedSpace: types.maybe(SpaceStore),
+      selectedSpace: types.optional(SpaceStore, {}),
       spaceList: types.optional(types.array(SpaceListByCategory), []),
       searchQuery: types.optional(SearchQuery, {}),
       spaceHistory: types.optional(types.array(SpaceInfo), []),
@@ -41,7 +41,8 @@ const ExploreStore = types
         });
       }
 
-      self.selectedSpace = SpaceStore.create({id: spaceId});
+      self.selectedSpace.resetModel();
+      self.selectedSpace.init(spaceId, false);
       self.selectedSpace.fetchSpaceInformation();
     },
     goBack(): void {
@@ -58,7 +59,8 @@ const ExploreStore = types
         self.previousItem = undefined;
       }
 
-      self.selectedSpace = SpaceStore.create({id: previousItemId});
+      self.selectedSpace.resetModel();
+      self.selectedSpace.init(previousItemId, false);
       self.selectedSpace.fetchSpaceInformation();
     },
     search: flow(function* (worldId: string) {

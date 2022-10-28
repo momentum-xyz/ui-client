@@ -95,12 +95,16 @@ const RootStore = types
         console.error('collaborationStore.leave', ex);
       }
 
-      self.mainStore.unityStore.triggerInteractionMessage(
-        PosBusEventEnum.LeftSpace,
-        spaceId,
-        0,
-        ''
-      );
+      try {
+        self.mainStore.unityStore.triggerInteractionMessage(
+          PosBusEventEnum.LeftSpace,
+          spaceId,
+          0,
+          ''
+        );
+      } catch (ex) {
+        console.error('collaborationStore.leave', ex);
+      }
 
       console.log('---LEFT---');
     })

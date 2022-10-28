@@ -1,10 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import {cloneDeep} from 'lodash-es';
-import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
+import {ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
-import {PrivateSpaceError} from 'core/errors';
-import {api} from 'api';
 
 import {SpaceStore} from './SpaceStore';
 import {CalendarStore} from './CalendarStore';
@@ -21,12 +19,10 @@ const RootCollaborationStore = types
     ResetModel,
     types.model('RootCollaborationStore', {
       // TODO: Refactor Store
-      spaceStore: types.maybe(SpaceStore),
-
-      // TODO: Move to SpaceStore
-      isModerator: false,
+      spaceStore: types.optional(SpaceStore, {}),
 
       dashboardStore: types.optional(DashboardStore, {}),
+      // TODO: Removal
       textChatStore: types.optional(TextChatStore, {}),
       streamChatStore: types.optional(StreamChatStore, {}),
       calendarStore: types.optional(CalendarStore, {}),
@@ -37,10 +33,7 @@ const RootCollaborationStore = types
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
-      // Requests
-      moderationRequest: types.optional(RequestModel, {}),
-
-      // Dialogs
+      // TODO: Make DialogsStore
       newDeviceDialog: types.optional(Dialog, {}),
       removeParticipantFromStageDialog: types.optional(Dialog, {}),
       acceptedToJoinStageDialog: types.optional(Dialog, {}),
@@ -53,32 +46,17 @@ const RootCollaborationStore = types
   )
   .actions((self) => ({
     join: flow(function* (spaceId: string, isTable = false) {
-      self.spaceStore = SpaceStore.create({id: spaceId, isTable});
-
-      // TODO: Move to SpaceStore
-      if (!(yield self.spaceStore?.canUserJoin(spaceId))) {
-        throw new PrivateSpaceError();
-      }
-
-      // TODO: Removal
-      yield self.spaceStore.fetchSpaceInformation();
-
-      // TODO: Move to SpaceStore
-      self.isModerator = yield self.moderationRequest.send(
-        api.spaceIntegrationsRepository.checkSpaceModeration,
-        {spaceId}
-      );
+      yield self.spaceStore.init(spaceId, isTable);
     }),
     leave: flow(function* () {
+      self.spaceStore.resetModel();
       if (!self.spaceStore?.isTable) {
+        // TODO: Removal textChatStore
         yield self.textChatStore.leaveChannel();
         yield self.textChatStore.logOut();
         self.textChatStore.resetModel();
 
         yield self.streamChatStore.deinit(self.spaceStore?.id);
-
-        self.spaceStore = undefined;
-        self.isModerator = false;
       }
     }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
@@ -91,9 +69,14 @@ const RootCollaborationStore = types
     }
   }))
   .views((self) => ({
+    // FIXME: Make a view under SpaceStore related to state of requests
     get isSpaceLoaded(): boolean {
       return self.spaceStore?.didFetchSpaceInformation ?? false;
     },
+    get isModerator(): boolean {
+      return self.spaceStore.isModerator;
+    },
+    // TODO: Move to DialogsStore
     get isHandlingInviteOrRequest(): boolean {
       return (
         self.acceptedToJoinStageDialog.isOpen ||

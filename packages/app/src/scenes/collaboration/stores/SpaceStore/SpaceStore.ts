@@ -2,6 +2,8 @@ import {types, flow, cast} from 'mobx-state-tree';
 import {UUIDModel} from '@momentum-xyz/core';
 import {RequestModel, ResetModel, SpaceTypeEnum} from '@momentum-xyz/core';
 
+// FIXME: Uncomment later
+//import {PrivateSpaceError} from 'core/errors';
 import {Space} from 'core/models';
 import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';
@@ -18,8 +20,10 @@ const SpaceStore = types
     types.model('SpaceStore', {
       space: types.maybeNull(Space),
 
+      // FIXME: It is a part SpaceModel or not ???
+      isTable: false,
+
       // TODO: Removal. It is Space model
-      id: types.string,
       name: types.maybe(types.string),
       description: types.maybe(types.string),
       users: types.optional(types.array(SpaceUserModel), []),
@@ -30,14 +34,14 @@ const SpaceStore = types
       // TODO: Remove
       didFetchSpaceInformation: false,
 
-      // TODO: Separate model
-      // User - space information
+      // TODO: Make SpaceRights model under core
+      isModerator: false,
       isAdmin: false,
       isMember: false,
       isOwner: false,
-      isTable: false,
 
       // Requests
+      moderationRequest: types.optional(RequestModel, {}),
       fetchSpaceInformationRequest: types.optional(RequestModel, {}),
       inviteUserRequest: types.optional(RequestModel, {}),
 
@@ -58,6 +62,34 @@ const SpaceStore = types
       kusamaOperatorId: types.maybe(types.string)
     })
   )
+  .actions((self) => {
+    return {
+      async init(spaceId: string, isTable: boolean): Promise<void> {
+        // FIXME: It is a part SpaceModel
+        self.isTable = isTable;
+
+        await this.checkAccess(spaceId);
+        await this.loadRights(spaceId);
+        await this.loadSpace(spaceId);
+      },
+      checkAccess: flow(function* (spaceId: string) {
+        if (!(yield self.canUserJoin(spaceId))) {
+          // throw new PrivateSpaceError();
+        }
+      }),
+      loadSpace: flow(function* (spaceId: string) {
+        // TODO: Implementation
+      }),
+      loadRights: flow(function* (spaceId: string) {
+        // TODO: Refactor. Use one request to get all rights
+        self.isModerator = yield self.moderationRequest.send(
+          api.spaceIntegrationsRepository.checkSpaceModeration,
+          {spaceId}
+        );
+      })
+    };
+  })
+  // TODO: Refactoring and movement
   .actions((self) => ({
     canUserJoin: flow(function* (spaceId: string) {
       const response = yield self.fetchSpaceInformationRequest.send(
@@ -75,7 +107,7 @@ const SpaceStore = types
       const response: SpaceResponse = yield self.fetchSpaceInformationRequest.send(
         api.spaceRepositoryOld.fetchSpace,
         {
-          spaceId: self.id
+          spaceId: self.space?.id || ''
         }
       );
 
@@ -98,7 +130,7 @@ const SpaceStore = types
             .map((ancestor) => ({
               id: bytesToUuid(ancestor.id.data),
               name: ancestor.name,
-              isSelected: bytesToUuid(ancestor.id.data) === self.id
+              isSelected: bytesToUuid(ancestor.id.data) === self.space?.id
             }))
         );
 
@@ -121,6 +153,7 @@ const SpaceStore = types
         self.didFetchSpaceInformation = true;
       }
     }),
+    // TODO: Move to SpaceAdminStore Model
     addUser: flow(function* (userId: string, isAdmin: boolean) {
       if (!self.id) {
         return;
@@ -129,7 +162,7 @@ const SpaceStore = types
       yield self.addUserRequest.send(api.spaceRepositoryOld.addUser, {
         user: {
           userId,
-          spaceId: self.id,
+          spaceId: self.space?.id || '',
           isAdmin
         }
       });
@@ -142,11 +175,12 @@ const SpaceStore = types
       yield self.inviteUserRequest.send(api.userRepository_OLD.inviteToSpace, {
         invitedUser: {
           email,
-          spaceId: self.id,
+          spaceId: self.space?.id || '',
           isAdmin
         }
       });
     }),
+    // TODO: Move to SpaceAdminStore Model
     removeUser: flow(function* (userId: string) {
       if (!self.id) {
         return;
@@ -155,10 +189,11 @@ const SpaceStore = types
       yield self.removeUserRequest.send(api.spaceRepositoryOld.removeUser, {
         user: {
           userId,
-          spaceId: self.id
+          spaceId: self.space?.id || ''
         }
       });
     }),
+    // TODO: Move to SpaceAdminStore Model
     editUser: flow(function* (userId: string, isAdmin: boolean) {
       if (!self.id) {
         return;
@@ -167,11 +202,12 @@ const SpaceStore = types
       yield self.editUserRequest.send(api.spaceRepositoryOld.editUser, {
         user: {
           userId,
-          spaceId: self.id,
+          spaceId: self.space?.id || '',
           isAdmin
         }
       });
     }),
+    // TODO: Move to SpaceAdminStore Model
     addSubSpace: flow(function* (parentId: string, name: string, type: string) {
       const newSpace = {
         parentId: parentId,
@@ -183,6 +219,7 @@ const SpaceStore = types
         space: newSpace
       });
     }),
+    // TODO: Move to SpaceAdminStore Model
     fetchAllowedSubSpaceTypes: flow(function* () {
       if (!self.id) {
         return;
@@ -191,7 +228,7 @@ const SpaceStore = types
       const response: GetAllowedSpaceTypesResponse = yield self.allowedSpaceTypesRequest.send(
         api.spaceTypeRepository.fetchAllowedSpaceTypes,
         {
-          spaceId: self.id
+          spaceId: self.space?.id || ''
         }
       );
 
@@ -201,9 +238,14 @@ const SpaceStore = types
     })
   }))
   .views((self) => ({
+    get id(): string {
+      return self.space?.id || '';
+    },
+    // TODO: Removal
     get parentUUID() {
       return self.parentId ? bytesToUuid(self.parentId.data) : undefined;
     },
+    // TODO: Removal
     get isPrivate() {
       return self.secret === 1;
     },

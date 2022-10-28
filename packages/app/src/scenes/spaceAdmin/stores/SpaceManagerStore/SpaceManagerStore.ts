@@ -17,7 +17,7 @@ const SpaceManagerStore = types.compose(
       applyTokenRuleFormDialog: types.optional(Dialog, {}),
       tokenRuleFormDialog: types.optional(Dialog, {}),
       // TODO: Make and use SpaceAdminStore
-      space: types.maybe(SpaceStore),
+      space: types.optional(SpaceStore, {}),
       spaceDetailsFormStore: types.optional(SpaceDetailsFormStore, {}),
       deleteSpaceConfirmationDialog: types.optional(Dialog, {}),
       removeUserConfirmationDialog: types.optional(Dialog, {}),
@@ -33,7 +33,7 @@ const SpaceManagerStore = types.compose(
     })
     .actions((self) => ({
       init(spaceId: string) {
-        self.space = SpaceStore.create({id: spaceId});
+        self.space.init(spaceId, false);
         self.space.fetchSpaceInformation();
         self.space.fetchAllowedSubSpaceTypes();
         self.tokenRulesStore.fetchTokenRules(spaceId);

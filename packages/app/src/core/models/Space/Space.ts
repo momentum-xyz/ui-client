@@ -6,6 +6,7 @@ const Space = types.model('Space', {
   description: types.maybeNull(types.string),
   type: types.maybeNull(types.string),
   parentId: types.maybeNull(types.string),
+  isTable: false,
   isPrivate: false
 });
 
