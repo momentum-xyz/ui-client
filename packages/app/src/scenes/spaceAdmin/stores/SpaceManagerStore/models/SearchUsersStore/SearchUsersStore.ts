@@ -2,8 +2,7 @@ import {flow, types, cast} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, UserSearchResponse} from 'api';
-import {SpaceUserModel, UserModel} from 'core/models';
-import {bytesToUuid} from 'core/utils';
+import {SpaceUserModel, UserInfo} from 'core/models';
 
 const SearchUsersStore = types.compose(
   ResetModel,
@@ -12,13 +11,13 @@ const SearchUsersStore = types.compose(
       selectedUserId: types.maybe(types.string),
       showResults: false,
       results: types.optional(types.array(SpaceUserModel), []),
-      userSearchResults: types.optional(types.array(UserModel), []),
+      userSearchResults: types.optional(types.array(UserInfo), []),
       searchRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       search: flow(function* (query: string, worldId: string) {
         const response: UserSearchResponse = yield self.searchRequest.send(
-          api.userRepository.search,
+          api.userRepository_OLD.search,
           {
             q: query,
             worldId
@@ -41,7 +40,7 @@ const SearchUsersStore = types.compose(
     .views((self) => ({
       get resultsList() {
         return self.results.map((user) => ({
-          id: bytesToUuid(user.id.data),
+          id: user.id,
           name: user.name
         }));
       }

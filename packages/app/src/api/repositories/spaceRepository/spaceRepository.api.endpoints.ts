@@ -1,19 +1,10 @@
 import {appVariables} from 'api/constants';
 
 export const spaceRepositoryEndpoints = () => {
-  const BASE_URL = `${appVariables.BACKEND_ENDPOINT_URL}/space`;
+  const BASE_URL = `${appVariables.BACKEND_API_URL}/worlds/:worldId/spaces/:spaceId`;
 
   return {
-    user: `${BASE_URL}/user`,
-    edit: `${BASE_URL}/edit`,
-    delete: `${BASE_URL}/delete`,
-    create: `${BASE_URL}/create`,
-    unassignUser: `${BASE_URL}/unassign-user`,
-    assignUser: `${BASE_URL}/assign-user`,
-    ownedSpaces: `${BASE_URL}/owned-spaces`,
-    createInitiative: `${BASE_URL}/create-initiative`,
-    search: `${BASE_URL}/search`,
-    userSpaceList: `${BASE_URL}/user-spaces/:userId`,
-    worldConfig: `${BASE_URL}/:worldId/world-config`
+    options: `${BASE_URL}/options`,
+    subOption: `${BASE_URL}/options/sub`
   };
 };

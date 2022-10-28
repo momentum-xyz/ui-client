@@ -6,7 +6,7 @@ import * as styled from './MuteAllButton.styled';
 
 interface PropsInterface {
   spaceId: string;
-  isShown: boolean;
+  isShown?: boolean;
   peopleCount: number;
   onMuteAll: (spaceId: string) => void;
 }

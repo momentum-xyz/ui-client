@@ -4,7 +4,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {appVariables} from 'api/constants';
-import {SpaceIntegrationsStageModeResponse} from 'api/repositories/spaceIntegrationsRepository/spaceIntegrations.api.types';
+import {SpaceIntegrationsStageModeResponse} from 'api/repositories_OLD/spaceIntegrationsRepository/spaceIntegrations.api.types';
 
 import {UserDevicesStore} from './UserDevicesStore';
 import {AgoraMeetingStore} from './AgoraMeetingStore';
@@ -36,14 +36,10 @@ const AgoraStore = types
   // API Requests
   .actions((self) => ({
     getStageModeStatus: flow(function* (spaceId?: string) {
-      if (spaceId) {
-        return yield self.spaceIntegrationsRequest.send(
-          api.spaceIntegrationsRepository.fetchStageModeStatus,
-          {spaceId: spaceId ?? self.spaceId}
-        );
-      }
-
-      return undefined;
+      return yield self.spaceIntegrationsRequest.send(
+        api.spaceIntegrationsRepository.fetchStageModeStatus,
+        {spaceId: spaceId || self.spaceId || ''}
+      );
     })
   }))
   // Initializer

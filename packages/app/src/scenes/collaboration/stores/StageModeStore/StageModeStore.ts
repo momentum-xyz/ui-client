@@ -14,9 +14,12 @@ const StageModeStore = types
   })
   .actions((self) => ({
     addRequestPopup: flow(function* (userId: string, options?: StageModePopupOptionsInterface) {
-      const response: ProfileResponse = yield self.request.send(api.userRepository.fetchProfile, {
-        userId
-      });
+      const response: ProfileResponse = yield self.request.send(
+        api.userRepository_OLD.fetchProfile,
+        {
+          userId
+        }
+      );
 
       self.popups.push({
         userId,

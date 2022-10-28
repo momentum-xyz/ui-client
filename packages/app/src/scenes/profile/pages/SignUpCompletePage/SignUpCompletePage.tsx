@@ -14,7 +14,7 @@ import * as styled from './SignUpCompletePage.styled';
 
 const SignUpCompletePage: FC = () => {
   const {sessionStore, profileStore} = useStore();
-  const {profile} = sessionStore;
+  const {user} = sessionStore;
   const {signUpCompleteStore} = profileStore;
   const {isUpdating, errors} = signUpCompleteStore;
 
@@ -30,8 +30,8 @@ const SignUpCompletePage: FC = () => {
   const onSubmitHandle = useCallback(
     async (form: SignUpFormInterface) => {
       const result = await signUpCompleteStore.updateProfile(form);
-      if (result?.userOnboarded) {
-        await sessionStore.reload();
+      if (result?.onBoarded) {
+        await sessionStore.loadUserProfile();
         history.push(ROUTES.welcome, {from: window.history.state?.state?.from || ROUTES.base});
       }
     },
@@ -50,13 +50,13 @@ const SignUpCompletePage: FC = () => {
             <styled.Logo src={momentum} />
           </styled.LogoContainer>
 
-          {!!profile && (
+          {!!user && (
             <SignUpCompleteForm
               user={{
-                name: profile.name,
-                bio: profile.profile?.bio,
-                profileLink: profile.profile?.profileLink,
-                avatarHash: profile.profile?.avatarHash
+                name: user.name,
+                bio: user.profile?.bio,
+                profileLink: user.profile?.profileLink,
+                avatarHash: user.profile?.avatarHash
               }}
               fieldErrors={errors}
               isSubmitDisabled={isUpdating}

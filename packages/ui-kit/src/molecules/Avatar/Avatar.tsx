@@ -10,7 +10,7 @@ import * as styled from './Avatar.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   avatarSrc?: string;
   size: SizeType;
-  status?: UserStatusEnum;
+  status?: UserStatusEnum | null;
   onClick?: () => void;
   showBorder?: boolean;
   showHover?: boolean;

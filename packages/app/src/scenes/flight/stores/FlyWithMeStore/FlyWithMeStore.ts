@@ -2,14 +2,14 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, ProfileResponse} from 'api';
-import {UserProfileModel} from 'core/models';
+import {User} from 'core/models';
 
 const FlyWithMeStore = types
   .compose(
     ResetModel,
     types.model('FlyWithMeStore', {
       isActive: false,
-      pilot: types.maybeNull(UserProfileModel),
+      pilot: types.maybeNull(User),
       pilotRequest: types.optional(RequestModel, {}),
       startRequest: types.optional(RequestModel, {}),
       stopRequest: types.optional(RequestModel, {})
@@ -22,7 +22,7 @@ const FlyWithMeStore = types
     },
     fetchPilot: flow(function* (pilotId: string) {
       const response: ProfileResponse = yield self.pilotRequest.send(
-        api.userRepository.fetchProfile,
+        api.userRepository_OLD.fetchProfile,
         {userId: pilotId}
       );
 

@@ -40,7 +40,7 @@ const SpaceManagerStore = types.compose(
         self.tokenRulesStore.fetchOptions();
       },
       deleteSubSpace: flow(function* (spaceId: string) {
-        yield self.removeSubSpaceRequest.send(api.spaceRepository.deleteSpace, {spaceId});
+        yield self.removeSubSpaceRequest.send(api.spaceRepositoryOld.deleteSpace, {spaceId});
       })
     }))
 );

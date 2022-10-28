@@ -34,7 +34,7 @@ const SignUpCompleteStore = types.compose(
         }
 
         // 2. Profile updating.
-        const response = yield self.request.send(api.profileRepository.update, {
+        const response = yield self.request.send(api.userProfileRepository.update, {
           name: form.name || '',
           profile: {
             bio: form.bio,
@@ -53,7 +53,7 @@ const SignUpCompleteStore = types.compose(
           );
         }
 
-        return {success: true, userOnboarded: response?.userOnboarded || false};
+        return {success: true, onBoarded: response?.profile?.onBoarded || false};
       })
     }))
     .views((self) => ({

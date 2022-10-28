@@ -7,7 +7,7 @@ import {useStore, useSession} from 'shared/hooks';
 
 const AppAuth: FC = ({children}) => {
   const {sessionStore, widgetStore, mainStore} = useStore();
-  const {profile} = sessionStore;
+  const {user} = sessionStore;
   const {helpStore} = widgetStore;
   const {unityStore} = mainStore;
 
@@ -22,20 +22,20 @@ const AppAuth: FC = ({children}) => {
 
   /* 1. Load user profile */
   useEffect(() => {
-    if (isReady && !profile) {
+    if (isReady && !user) {
       sessionStore.init(idToken);
     }
-  }, [idToken, isReady, profile, sessionStore]);
+  }, [idToken, isReady, user, sessionStore]);
 
   /* 2. Open Complete Registration form */
   useEffect(() => {
-    if (isReady && !!profile && !profile.profile?.onBoarded) {
+    if (isReady && !!user && !user.profile?.onBoarded) {
       history.push(ROUTES.signUpComplete, {from: history.location.pathname});
       helpStore.helpDialog.open();
     }
-  }, [helpStore, history, isReady, profile]);
+  }, [helpStore, history, isReady, user]);
 
-  return <>{profile?.profile?.onBoarded && children}</>;
+  return <>{user?.profile?.onBoarded && children}</>;
 };
 
 export default observer(AppAuth);

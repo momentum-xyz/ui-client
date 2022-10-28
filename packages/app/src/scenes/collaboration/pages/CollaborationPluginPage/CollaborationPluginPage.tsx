@@ -12,7 +12,6 @@ import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {PluginLoaderModelType} from 'core/models';
-import {request} from 'api/request';
 
 import * as styled from './CollaborationPluginPage.styled';
 
@@ -23,8 +22,8 @@ interface PropsInterface {
 const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {space, streamChatStore} = collaborationStore;
-  const {favoriteStore, pluginsStore} = mainStore;
-  const {plugin} = pluginLoader;
+  const {favoriteStore, pluginsStore, worldStore} = mainStore;
+  const {plugin, attributesManager} = pluginLoader;
 
   const history = useHistory();
   const theme = useTheme();
@@ -46,11 +45,11 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
           showCloseButton
           headerIconName="alert"
           title={t('titles.alert')}
-          text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.url})}
+          text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.scriptUrl})}
         />
       );
     }
-  }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.url, t]);
+  }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
   if (!space) {
     return null;
@@ -84,7 +83,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 theme={theme}
                 isSpaceAdmin={space.isAdmin}
                 spaceId={space.id}
-                request={request}
+                api={attributesManager.getAPI(worldStore.worldId, space.id)}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

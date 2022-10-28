@@ -24,7 +24,6 @@ import {
 
 import * as styled from './Widgets.styled';
 import {WorldChatWidget} from './pages';
-import {AvatarForm} from './pages/ProfileWidget/components';
 
 const Widgets: FC = () => {
   const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore} = useStore();
@@ -39,13 +38,12 @@ const Widgets: FC = () => {
     launchInitiativeStore,
     musicPlayerStore,
     attendeesListStore,
-    profileStore,
     emojiStore
   } = widgetStore;
   const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
-  const {profile: currentProfile, isGuest, userId} = sessionStore;
+  const {user, isGuest, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
@@ -55,8 +53,8 @@ const Widgets: FC = () => {
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
-    worldChatStore.init(userId, worldStore.worldId, currentProfile ?? undefined);
-  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, currentProfile, worldChatStore]);
+    worldChatStore.init(userId, worldStore.worldId, user ?? undefined);
+  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, user, worldChatStore]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -100,7 +98,6 @@ const Widgets: FC = () => {
 
   return (
     <>
-      {profileStore.editAvatarDialog.isOpen && <AvatarForm />}
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
@@ -110,9 +107,7 @@ const Widgets: FC = () => {
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
-      {!location.pathname.includes('live-stream') && (
-        <LiveStreamPIPWidget flyAround={!location.pathname.includes('collaboration')} />
-      )}
+      {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
@@ -187,12 +182,12 @@ const Widgets: FC = () => {
           </ToolbarIconList>
           {/* Main toolbar icons */}
           <ToolbarIconList>
-            {currentProfile?.profile && (
+            {user?.profile && (
               <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
                 <Avatar
                   size="extra-small"
-                  status={sessionStore.profile?.status}
-                  avatarSrc={currentProfile.avatarSrc}
+                  status={user.status}
+                  avatarSrc={user.avatarSrc}
                   showBorder
                   showHover
                 />

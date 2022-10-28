@@ -7,7 +7,6 @@ const ProfileMenuStore = types.compose(
   ResetModel,
   types
     .model('ProfileMenuStore', {
-      profileDialog: types.optional(Dialog, {}),
       menuDialog: types.optional(Dialog, {}),
       settingDialog: types.optional(Dialog, {}),
       profileMenuDialog: types.optional(Dialog, {}),
@@ -16,7 +15,7 @@ const ProfileMenuStore = types.compose(
       tokenRulesStore: types.optional(TokenRulesStore, {})
     })
     .actions((self) => ({
-      openProfileMenu() {
+      openProfileMenu(): void {
         self.profileMenuDialog.open();
         self.menuDialog.open();
       }

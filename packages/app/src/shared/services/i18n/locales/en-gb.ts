@@ -263,6 +263,8 @@ export const enGb = {
       spaceDeleteFailure: 'There was an error deleting the space',
       joinSpaceWelcome: 'Click on the button to join the space!',
       spaceInvitationNote: '{{invitor}} has invited you to {{spaceName}}',
+      joinTableWelcome: 'Click on the button to join the table!',
+      grabTableInvitationNote: '{{invitor}} has invited you to join a table',
       highFiveSentTitle: 'High five sent to {{name}}',
       highFiveSentText: 'You sent a high five',
       highFiveReceivedTitle: '{{name}} has sent you a high five',
@@ -346,6 +348,7 @@ export const enGb = {
     titles: {
       alert: 'alert',
       joinSpace: 'join the space',
+      joinTable: 'join the table',
       returnHighFive: 'Return the favour',
       createSpace: 'YOU CAN CREATE A SPACE FROM YOUR PROFILE',
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',

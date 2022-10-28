@@ -2,10 +2,13 @@ import styled from 'styled-components';
 
 export const MegamojiContainer = styled.div`
   position: absolute;
-  top: 100%;
+  height: 180px;
+  width: 180px;
   opacity: 0;
-  width: 150px;
-  height: 150px;
+  top: 30%;
+  left: 14%;
+  z-index: calc(var(--overlay-z-index) + 2);
+
   transform-origin: 50% 50%;
   animation-name: megamoji;
   animation-duration: 2s;
@@ -13,31 +16,31 @@ export const MegamojiContainer = styled.div`
 
   @keyframes megamoji {
     0% {
+      top: 30%;
       transform: scale(0.2);
       transform-origin: 50% 50%;
       opacity: 0;
-      top: 100%;
     }
     30% {
-      top: 70%;
+      top: 30%;
       transform: rotate(0deg) scale(0.5);
       transform-origin: 50% 50%;
       opacity: 1;
     }
     60% {
-      top: 70%;
-      transform: rotate(-360deg) scale(1);
+      top: 35%;
+      transform: rotate(-360deg) scale(1.1);
       transform-origin: 50% 50%;
       opacity: 1;
     }
     90% {
-      top: 70%;
-      transform: rotate(-360deg) scale(1.3);
+      top: 40%;
+      transform: rotate(-360deg) scale(1.5);
       transform-origin: 50% 50%;
       opacity: 1;
     }
     100% {
-      top: 70%;
+      top: 40%;
       transform: rotate(-360deg);
       transform-origin: 50% 50%;
       opacity: 0;
@@ -46,7 +49,7 @@ export const MegamojiContainer = styled.div`
 `;
 
 export const MegamojiImg = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   position: absolute;
 `;

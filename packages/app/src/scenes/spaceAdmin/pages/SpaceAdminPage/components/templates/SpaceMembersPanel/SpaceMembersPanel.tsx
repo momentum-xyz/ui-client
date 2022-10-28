@@ -85,9 +85,9 @@ const SpaceMembersPanel: FC = () => {
       <styled.List className="noScrollIndicator">
         {space?.users.map((user) => (
           <AdminListItem
-            key={user.uuid}
+            key={user.id}
             name={user.name}
-            userId={user.uuid}
+            userId={user.id}
             type={user.isAdmin ? 'admin' : 'member'}
             onEdit={handleUserEdit}
             onRemove={handleUserRemove}

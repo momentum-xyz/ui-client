@@ -6,6 +6,7 @@ import {generatePath, useHistory, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
+import {UserStatusEnum} from '@momentum-xyz/core';
 import {Portal} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
@@ -15,7 +16,7 @@ import {
   UnityLoader,
   ToastContent,
   HighFiveContent,
-  InviteToSpaceContent,
+  InvitationContent,
   TOAST_BASE_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
@@ -29,7 +30,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded} = useStore();
+  const {mainStore, unityLoaded, sessionStore} = useStore();
   const {unityStore} = mainStore;
 
   const auth = useAuth();
@@ -75,6 +76,12 @@ const UnityPage: FC = () => {
     // FIXME: Temporary solution. To get space name from Unity
     const spaceName = await unityStore.fetchSpaceName(spaceId);
 
+    // TODO: Remove this after UserController will send profile changes
+    const isTable = uiTypeId === appVariables.GAT_UI_TYPE_ID;
+    if (isTable && sessionStore.user?.status === UserStatusEnum.DO_NOT_DISTURB) {
+      return;
+    }
+
     const handleJoinSpace = () => {
       unityStore.teleportToSpace(spaceId);
 
@@ -88,10 +95,11 @@ const UnityPage: FC = () => {
     };
 
     toast.info(
-      <InviteToSpaceContent
+      <InvitationContent
         invitorName={invitorName}
         spaceName={spaceName}
-        joinToSpace={uiTypeId === appVariables.GAT_UI_TYPE_ID ? handleJoinTable : handleJoinSpace}
+        join={isTable ? handleJoinTable : handleJoinSpace}
+        isTable={isTable}
       />,
       TOAST_NOT_AUTO_CLOSE_OPTIONS
     );

@@ -2,11 +2,9 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {SpacePluginPropsInterface} from '@momentum-xyz/sdk';
 import {ThemeProvider} from 'styled-components';
-import {RootStore} from 'stores';
 import {appVariables} from 'api/constants';
 import {AppConfigExtendedInterface, AppConfigInterface} from 'api/interfaces';
-import {StoreProvider} from 'shared/hooks';
-import {GlobalPropsContextProvider} from '@momentum-xyz/sdk';
+import {SpaceGlobalPropsContextProvider} from '@momentum-xyz/sdk';
 import {MiroBoardPage} from 'pages';
 
 import '@momentum-xyz/ui-kit/dist/themes/themes';
@@ -16,7 +14,6 @@ import 'core/utils/boardsPicker.1.0.js';
 
 const SpaceApp: FC<SpacePluginPropsInterface> = (props) => {
   const {theme} = props;
-  const store = RootStore.create({});
 
   useEffect(() => {
     // @ts-ignore: window['env']
@@ -31,13 +28,11 @@ const SpaceApp: FC<SpacePluginPropsInterface> = (props) => {
   }, []);
 
   return (
-    <GlobalPropsContextProvider props={props}>
-      <StoreProvider value={store}>
-        <ThemeProvider theme={theme}>
-          <MiroBoardPage />
-        </ThemeProvider>
-      </StoreProvider>
-    </GlobalPropsContextProvider>
+    <SpaceGlobalPropsContextProvider props={props}>
+      <ThemeProvider theme={theme}>
+        <MiroBoardPage />
+      </ThemeProvider>
+    </SpaceGlobalPropsContextProvider>
   );
 };
 
