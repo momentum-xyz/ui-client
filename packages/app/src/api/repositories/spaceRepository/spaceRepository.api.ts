@@ -6,6 +6,7 @@ import {getSpaceSubAttribute} from 'api/repositories/spaceAttributeRepository';
 
 import {FetchSpaceRequest} from './spaceRepository.api.types';
 
+// TODO: This functionality is still in progress
 export const fetchSpace: RequestInterface<FetchSpaceRequest, GetSpaceSubAttributeResponse> = (
   options
 ) => {
