@@ -7,25 +7,54 @@ import {spaceOptionRepositoryEndpoints} from './spaceOptionRepository.api.endpoi
 import {
   GetSpaceOptionsRequest,
   GetSpaceOptionsResponse,
-  GetSpaceSubOptionRequest
+  GetSpaceSubOptionRequest,
+  SetSpaceSubOptionRequest,
+  SpaceSubOptionResponse
 } from './spaceOptionRepository.api.types';
 
 export const getSpaceOptions: RequestInterface<GetSpaceOptionsRequest, GetSpaceOptionsResponse> = (
   options
 ) => {
-  const {worldId, spaceId, ...restOptions} = options;
+  const {spaceId, ...restOptions} = options;
 
-  const url = generatePath(spaceOptionRepositoryEndpoints().options, {worldId, spaceId});
+  const url = generatePath(spaceOptionRepositoryEndpoints().effectiveOptions, {spaceId});
 
   return request.get(url, restOptions);
 };
 
-export const getSpaceSubOption: RequestInterface<GetSpaceSubOptionRequest, unknown> = (options) => {
-  const {worldId, spaceId, sub_option_key, ...restOptions} = options;
+export const getSpaceSubOption: RequestInterface<
+  GetSpaceSubOptionRequest,
+  SpaceSubOptionResponse
+> = (options) => {
+  const {spaceId, sub_option_key, ...restOptions} = options;
 
   restOptions.params = {
     sub_option_key
   };
 
-  return request.get(spaceOptionRepositoryEndpoints().subOption, restOptions);
+  const url = generatePath(spaceOptionRepositoryEndpoints().effectiveSubOption, {spaceId});
+
+  return request.get(url, restOptions);
+};
+
+export const setSpaceSubOption: RequestInterface<
+  SetSpaceSubOptionRequest,
+  SpaceSubOptionResponse
+> = (options) => {
+  const {spaceId, sub_option_key, value, ...restOptions} = options;
+
+  restOptions.params = {
+    sub_option_key
+  };
+
+  const url = generatePath(spaceOptionRepositoryEndpoints().effectiveSubOption, {spaceId});
+
+  return request.post(
+    url,
+    {
+      sub_option_key,
+      sub_option_value: value
+    },
+    restOptions
+  );
 };
