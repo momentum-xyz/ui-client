@@ -69,10 +69,6 @@ const RootCollaborationStore = types
     }
   }))
   .views((self) => ({
-    // FIXME: Make a view under SpaceStore related to state of requests
-    get isSpaceLoaded(): boolean {
-      return self.spaceStore?.didFetchSpaceInformation ?? false;
-    },
     get isModerator(): boolean {
       return self.spaceStore.isModerator;
     },

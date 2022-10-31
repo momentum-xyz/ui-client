@@ -31,9 +31,6 @@ const SpaceStore = types
       type: types.maybe(types.string),
       parentId: types.maybe(UUIDModel),
 
-      // TODO: Remove
-      didFetchSpaceInformation: false,
-
       // TODO: Make SpaceRights model under core
       isModerator: false,
       isAdmin: false,
@@ -74,11 +71,12 @@ const SpaceStore = types
       },
       checkAccess: flow(function* (spaceId: string) {
         if (!(yield self.canUserJoin(spaceId))) {
+          // FIXME: Uncomment later
           // throw new PrivateSpaceError();
         }
       }),
       loadSpace: flow(function* (spaceId: string) {
-        // TODO: Implementation
+        // TODO: Implementation. Next PR
       }),
       loadRights: flow(function* (spaceId: string) {
         // TODO: Refactor. Use one request to get all rights
@@ -149,8 +147,6 @@ const SpaceStore = types
             hasSubspaces: (subSpace.children?.length ?? 0) > 0
           }))
         );
-
-        self.didFetchSpaceInformation = true;
       }
     }),
     // TODO: Move to SpaceAdminStore Model
