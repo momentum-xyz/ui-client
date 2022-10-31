@@ -19,7 +19,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
     () => ({
       theme: theme as ThemeInterface,
       isSpaceAdmin: false,
-      spaceId: '123',
+      spaceId: '42424242-4242-4242-4242-424242424242',
       api: {
         get: (field: string) => Promise.resolve(stateAttribute.current[field]),
         set: (field: string, value: unknown) => {
