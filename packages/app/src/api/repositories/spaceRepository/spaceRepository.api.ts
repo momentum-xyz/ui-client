@@ -13,7 +13,6 @@ export const fetchSpace: RequestInterface<FetchSpaceRequest, GetSpaceSubAttribut
   const {spaceId, ...restOptions} = options;
 
   const attributeOptions: GetSpaceSubAttributeRequest = {
-    worldId: '',
     spaceId: '',
     plugin_id: '',
     attribute_name: '',
