@@ -4,7 +4,6 @@ import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 import {Button, Dialog, Text} from '@momentum-xyz/ui-kit';
-import {copyToClipboard} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {MagicTypeEnum} from 'core/enums';
@@ -17,10 +16,11 @@ const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {
   const {widgetStore, mainStore, collaborationStore} = useStore();
+  const {spaceStore} = collaborationStore;
   const {magicLinkStore} = widgetStore;
-  const {magicLinkDialog, magicLink} = magicLinkStore;
-  const {generate, address} = magicLink;
-  const {unityStore} = mainStore;
+  const {magicLink} = magicLinkStore;
+  const {generate, address, request} = magicLink;
+  const {unityStore, worldStore} = mainStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
@@ -31,29 +31,38 @@ const MagicLinkWidget: FC = () => {
     };
   }, [magicLinkStore]);
 
-  useEffect(() => {
-    if (collaborationStore.spaceStore && !collaborationStore.spaceStore.isTable) {
-      generate(MagicTypeEnum.OPEN_SPACE, collaborationStore.spaceStore.id, null);
-    } else if (collaborationStore.spaceStore) {
-      generate(MagicTypeEnum.JOIN_MEETING, collaborationStore.spaceStore.id, null);
+  const handleGenerateLink = useCallback(async () => {
+    if (spaceStore.space && !spaceStore.isTable) {
+      await generate(MagicTypeEnum.OPEN_SPACE, spaceStore.id, undefined);
+    } else if (spaceStore.space && spaceStore.isTable) {
+      await generate(MagicTypeEnum.JOIN_MEETING, spaceStore.id, undefined);
     } else {
-      generate(MagicTypeEnum.FLY, null, unityStore.getUserPosition());
+      await generate(MagicTypeEnum.FLY, worldStore.worldId, unityStore.getUserPosition());
     }
-  }, [collaborationStore.spaceStore, generate, unityStore]);
 
-  const copyHandle = useCallback(async () => {
-    await copyToClipboard(address || '');
-    toast.info(
-      <ToastContent
-        headerIconName="alert"
-        title={t('titles.alert')}
-        text={t('messages.linkCopied')}
-        showCloseButton
-      />,
-      TOAST_COMMON_OPTIONS
-    );
-    magicLinkDialog.close();
-  }, [address, t, magicLinkDialog]);
+    if (request.isDone) {
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text={t('messages.linkCopied')}
+          showCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    }
+    magicLinkStore.magicLinkDialog.close();
+  }, [
+    generate,
+    request.isDone,
+    magicLinkStore.magicLinkDialog,
+    spaceStore.id,
+    spaceStore.isTable,
+    spaceStore.space,
+    t,
+    unityStore,
+    worldStore.worldId
+  ]);
 
   return (
     <Dialog
@@ -62,7 +71,7 @@ const MagicLinkWidget: FC = () => {
       headerStyle="uppercase"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       title={t('labels.shareLocation')}
-      onClose={magicLinkDialog.close}
+      onClose={magicLinkStore.magicLinkDialog.close}
       showBackground={false}
       showCloseButton
     >
@@ -77,7 +86,7 @@ const MagicLinkWidget: FC = () => {
             size="medium"
             variant="secondary"
             label={t('actions.copyLink')}
-            onClick={copyHandle}
+            onClick={handleGenerateLink}
           />
         </styled.Actions>
       </styled.Container>

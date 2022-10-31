@@ -32,6 +32,7 @@ export interface AppConfigInterface {
   MIRO_APP_ID: string;
   YOUTUBE_KEY: string;
   STREAMCHAT_KEY: string;
+  NODE_ID: string;
 }
 
 /**

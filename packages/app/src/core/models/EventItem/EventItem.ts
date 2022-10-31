@@ -9,8 +9,9 @@ import {
   formattedStringFromDate,
   isOtherYearThanToday
 } from '@momentum-xyz/core';
+import {v4 as uuidv4} from 'uuid';
 
-import {api, MagicLinkResponse, AttendeesResponseInterface} from 'api';
+import {api, AttendeesResponseInterface} from 'api';
 import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';
 import {MagicTypeEnum} from 'core/enums';
@@ -20,12 +21,12 @@ import {EventItemData} from './models';
 const EventItem = types
   .model('EventItem', {
     data: types.maybe(EventItemData),
-    magicLink: types.maybe(types.string),
     magicRequest: types.optional(RequestModel, {}),
     fetchAttendeesRequest: types.optional(RequestModel, {}),
     attendees: types.optional(types.array(AttendeeModel), []),
     numberOfAllAttendees: types.optional(types.number, 0),
-    attendRequest: types.optional(RequestModel, {})
+    attendRequest: types.optional(RequestModel, {}),
+    key: ''
   })
   .actions((self) => ({
     fetchAttendees: flow(function* (limit?: boolean) {
@@ -44,20 +45,13 @@ const EventItem = types
       }
     }),
     fetchMagicLink: flow(function* () {
-      const response: MagicLinkResponse = yield self.magicRequest.send(
-        api.magicRepository.generateLink,
-        {
-          type: MagicTypeEnum.EVENT,
-          data: {
-            id: self.data?.spaceId,
-            eventId: self.data?.id
-          }
-        }
-      );
-
-      if (response) {
-        self.magicLink = `${window.location.origin}/magic/${response.id}`;
-      }
+      self.key = uuidv4();
+      yield self.magicRequest.send(api.magicLinkRepository.generateLink, {
+        type: MagicTypeEnum.EVENT,
+        key: self.key,
+        spaceId: self.data?.spaceId ?? '',
+        eventId: self.data?.id
+      });
     })
   }))
   .actions((self) => ({
@@ -126,7 +120,7 @@ const EventItem = types
         endDatetime: formattedStringFromDate(self.data.end),
         startDatetime: formattedStringFromDate(self.data.start),
         title: self.data?.title,
-        location: self.magicLink
+        location: this.magicLink
       };
     },
     get imageSrc(): string {
@@ -134,6 +128,9 @@ const EventItem = types
     },
     isAttending(userId: string) {
       return self.attendees.some((attendee) => attendee.id === userId);
+    },
+    get magicLink(): string {
+      return `${window.location.origin}/magic/${self.key}`;
     }
   }));
 

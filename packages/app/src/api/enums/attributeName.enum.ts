@@ -1,3 +1,4 @@
 export enum AttributeNameEnum {
-  NAME = 'name'
+  NAME = 'name',
+  MAGIC_LINK = 'magic_links'
 }

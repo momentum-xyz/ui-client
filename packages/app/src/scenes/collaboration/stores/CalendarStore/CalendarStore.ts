@@ -1,5 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
+import {v4 as uuidv4} from 'uuid';
 
 import {AttendeeModel, EventForm, EventItemInterface, EventList} from 'core/models';
 import {api} from 'api';
@@ -50,12 +51,13 @@ const CalendarStore = types.compose(
         return self.removeEventRequest.isDone;
       }),
       showMagicLink: flow(function* (spaceId: string, eventId: string) {
-        const response = yield self.magicLinkRequest.send(api.magicRepository.generateLink, {
+        const key = uuidv4();
+
+        const response = yield self.magicLinkRequest.send(api.magicLinkRepository.generateLink, {
           type: MagicTypeEnum.EVENT,
-          data: {
-            id: spaceId,
-            eventId: eventId
-          }
+          spaceId,
+          key,
+          eventId
         });
 
         if (response) {

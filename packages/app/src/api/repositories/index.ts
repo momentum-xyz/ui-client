@@ -8,3 +8,4 @@ export * from './pluginsRepository';
 export * from './spaceAttributeRepository';
 export * from './spaceOptionRepository';
 export * from './userAttributeRepository';
+export * from './magicLinkRepository';

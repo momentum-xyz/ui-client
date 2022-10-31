@@ -1,8 +1,9 @@
 import {types, flow, cast} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, MagicLinkResponse} from 'api';
+import {api, GetSpaceAttributeResponse} from 'api';
 import {MagicLinkInterface} from 'core/interfaces';
+import {mapper} from 'api/mapper';
 
 const MagicStore = types
   .compose(
@@ -13,13 +14,19 @@ const MagicStore = types
     })
   )
   .actions((self) => ({
-    getMagicLink: flow(function* (id: string) {
-      const response: MagicLinkResponse = yield self.request.send(
-        api.magicRepository.fetchMagicLink,
-        {id}
+    getMagicLink: flow(function* (key: string, worldId: string) {
+      const response: GetSpaceAttributeResponse = yield self.request.send(
+        api.magicLinkRepository.fetchMagicLink,
+        {
+          key,
+          worldId
+        }
       );
-
-      self.magic = cast(response);
+      if (response) {
+        self.magic = cast({
+          ...mapper.mapSubAttributeValue<MagicLinkInterface>(response)
+        });
+      }
     })
   }));
 

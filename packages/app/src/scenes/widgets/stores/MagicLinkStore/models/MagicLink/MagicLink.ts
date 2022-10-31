@@ -1,5 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel} from '@momentum-xyz/core';
+import {copyToClipboard, RequestModel} from '@momentum-xyz/core';
+import {v4 as uuidv4} from 'uuid';
 
 import {api, MagicLinkResponse} from 'api';
 import {MagicTypeEnum} from 'core/enums';
@@ -7,20 +8,27 @@ import {MagicTypeEnum} from 'core/enums';
 const MagicLink = types
   .model('MagicLink', {
     request: types.optional(RequestModel, {}),
-    id: types.maybeNull(types.string),
-    address: types.maybeNull(types.string)
+    key: 'current-position'
   })
+  .views((self) => ({
+    get address(): string {
+      return `${document.location.origin}/magic/${self.key}`;
+    }
+  }))
   .actions((self) => ({
-    generate: flow(function* (type: MagicTypeEnum, id: string | null, position: any) {
-      const payload = id ? {type, data: {id}} : {type, data: {position}};
+    generate: flow(function* (type: MagicTypeEnum, spaceId: string, position: any) {
+      self.key = uuidv4();
       const response: MagicLinkResponse = yield self.request.send(
-        api.magicRepository.generateLink,
-        payload
+        api.magicLinkRepository.generateLink,
+        {
+          type,
+          spaceId,
+          key: self.key,
+          position
+        }
       );
-
-      if (response?.id) {
-        self.id = response.id;
-        self.address = `${document.location.origin}/magic/${response.id}`;
+      if (response) {
+        yield copyToClipboard(self.address);
       }
     })
   }));
