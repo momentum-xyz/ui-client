@@ -23,7 +23,7 @@ import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
   const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
-  const {calendarStore, space} = collaborationStore;
+  const {calendarStore, spaceStore} = collaborationStore;
   const {favoriteStore} = mainStore;
   const {eventList, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
   const {attendeesListStore} = widgetStore;
@@ -40,14 +40,14 @@ const CalendarPage: FC = () => {
   };
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (space) {
-      calendarStore.showMagicLink(space.id, eventId);
+    if (spaceStore) {
+      calendarStore.showMagicLink(spaceStore.id, eventId);
     }
   };
 
   const handleEventDelete = async () => {
-    if (space) {
-      if (await calendarStore.removeEvent(space.id)) {
+    if (spaceStore) {
+      if (await calendarStore.removeEvent(spaceStore.id)) {
         toast.info(
           <ToastContent
             headerIconName="calendar"
@@ -71,25 +71,25 @@ const CalendarPage: FC = () => {
   };
 
   useEffect(() => {
-    if (space) {
-      eventList.fetchEvents(space.id);
+    if (spaceStore) {
+      eventList.fetchEvents(spaceStore.id);
     }
 
     return () => eventList.resetModel();
-  }, [eventList, space]);
+  }, [eventList, spaceStore]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="CalendarPage-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.name ?? ''}
         subtitle="calendar"
-        isAdmin={space.isAdmin}
-        spaceId={space.id}
-        isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         showChatButton={false}
@@ -98,7 +98,7 @@ const CalendarPage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {space.isAdmin && (
+        {spaceStore.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
         )}
       </SpaceTopBar>
@@ -112,7 +112,7 @@ const CalendarPage: FC = () => {
           onEventRemove={calendarStore.selectEventToRemove}
           onWeblinkClick={handleWeblink}
           onShowAttendeesList={attendeesListStore.showAttendees}
-          canManageInSpace={space.isAdmin}
+          canManageInSpace={spaceStore.isAdmin}
         />
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}

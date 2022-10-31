@@ -14,7 +14,7 @@ import * as styled from './ScreenSharePage.styled';
 
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
-  const {space, screenShareStore, streamChatStore} = collaborationStore;
+  const {spaceStore, screenShareStore, streamChatStore} = collaborationStore;
   const {screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
@@ -25,7 +25,7 @@ const ScreenSharePage: FC = () => {
 
   useEffect(() => {
     if (videoTrack) {
-      screenShareStore.relayScreenShare(space?.id ?? '');
+      screenShareStore.relayScreenShare(spaceStore?.id ?? '');
 
       const agoraUserId = videoTrack.getUserId() as string;
       screenShareStore.setScreenOwner(agoraUserId);
@@ -43,18 +43,18 @@ const ScreenSharePage: FC = () => {
     agoraScreenShareStore.stopScreenSharing();
   }, [agoraScreenShareStore, screenShareStore]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="ScreenSharePage-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.name ?? ''}
         subtitle={screenShareTitle}
-        isAdmin={space.isAdmin}
-        spaceId={space.id}
-        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChatOpen={streamChatStore.isOpen}
@@ -65,7 +65,7 @@ const ScreenSharePage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {((videoTrack && space.isAdmin) ||
+        {((videoTrack && spaceStore.isAdmin) ||
           screenShareStore.screenOwnerId === sessionStore.userId) && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
         )}
@@ -74,7 +74,7 @@ const ScreenSharePage: FC = () => {
         {!videoTrack ? (
           <ScreenChoice
             isSettingUp={agoraScreenShareStore.isSettingUp}
-            canShare={space.isAdmin || agoraStageModeStore.isOnStage}
+            canShare={spaceStore.isAdmin || agoraStageModeStore.isOnStage}
             startScreenShare={startScreenSharing}
           />
         ) : (

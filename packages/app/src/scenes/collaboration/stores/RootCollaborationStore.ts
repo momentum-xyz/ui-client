@@ -1,11 +1,10 @@
 import {flow, types} from 'mobx-state-tree';
 import {cloneDeep} from 'lodash-es';
-import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
+import {ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {Space, AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
-import {PrivateSpaceError} from 'core/errors';
-import {api} from 'api';
+import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 
+import {SpaceStore} from './SpaceStore';
 import {CalendarStore} from './CalendarStore';
 import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
@@ -19,8 +18,11 @@ const RootCollaborationStore = types
   .compose(
     ResetModel,
     types.model('RootCollaborationStore', {
-      space: types.maybe(Space),
+      // TODO: Refactor Store
+      spaceStore: types.optional(SpaceStore, {}),
+
       dashboardStore: types.optional(DashboardStore, {}),
+      // TODO: Removal
       textChatStore: types.optional(TextChatStore, {}),
       streamChatStore: types.optional(StreamChatStore, {}),
       calendarStore: types.optional(CalendarStore, {}),
@@ -28,15 +30,10 @@ const RootCollaborationStore = types
       miroBoardStore: types.optional(MiroBoardStore, {}),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
-      isModerator: false,
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
 
-      // Requests
-      joinMeetingSpaceRequest: types.optional(RequestModel, {}),
-      moderationRequest: types.optional(RequestModel, {}),
-
-      // Dialogs
+      // TODO: Make DialogsStore
       newDeviceDialog: types.optional(Dialog, {}),
       removeParticipantFromStageDialog: types.optional(Dialog, {}),
       acceptedToJoinStageDialog: types.optional(Dialog, {}),
@@ -49,29 +46,17 @@ const RootCollaborationStore = types
   )
   .actions((self) => ({
     join: flow(function* (spaceId: string, isTable = false) {
-      self.space = Space.create({id: spaceId, isTable});
-
-      if (!(yield self.space?.canUserJoin(spaceId))) {
-        throw new PrivateSpaceError();
-      }
-
-      yield self.space.fetchSpaceInformation();
-
-      self.isModerator = yield self.moderationRequest.send(
-        api.spaceIntegrationsRepository.checkSpaceModeration,
-        {spaceId}
-      );
+      yield self.spaceStore.init(spaceId, isTable);
     }),
     leave: flow(function* () {
-      if (!self.space?.isTable) {
+      self.spaceStore.resetModel();
+      if (!self.spaceStore?.isTable) {
+        // TODO: Removal textChatStore
         yield self.textChatStore.leaveChannel();
         yield self.textChatStore.logOut();
         self.textChatStore.resetModel();
 
-        yield self.streamChatStore.deinit(self.space?.id);
-
-        self.space = undefined;
-        self.isModerator = false;
+        yield self.streamChatStore.deinit(self.spaceStore?.id);
       }
     }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
@@ -84,9 +69,10 @@ const RootCollaborationStore = types
     }
   }))
   .views((self) => ({
-    get isSpaceLoaded(): boolean {
-      return self.space?.didFetchSpaceInformation ?? false;
+    get isModerator(): boolean {
+      return self.spaceStore.isModerator;
     },
+    // TODO: Move to DialogsStore
     get isHandlingInviteOrRequest(): boolean {
       return (
         self.acceptedToJoinStageDialog.isOpen ||

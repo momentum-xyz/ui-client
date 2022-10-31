@@ -7,6 +7,7 @@ import {MessageInterface} from 'core/interfaces';
 import {api, ProfileResponse} from 'api';
 import {TextMessageEnum} from 'core/enums';
 
+// TODO: Removal
 const TextChatStore = types.compose(
   ResetModel,
   types

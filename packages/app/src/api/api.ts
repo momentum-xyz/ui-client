@@ -4,6 +4,11 @@ import * as webRepository from './repositories/web3Repository';
 import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
+import * as pluginsRepository from './repositories/pluginsRepository';
+import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
+import * as spaceOptionRepository from './repositories/spaceOptionRepository';
+import * as spaceRepository from './repositories/spaceRepository';
+import * as userAttributeRepository from './repositories/userAttributeRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
 import * as eventsRepository from './repositories_OLD/eventsRepository';
@@ -34,10 +39,6 @@ import * as streamChatRepository from './repositories_OLD/streamChatRepository';
 import * as emojiRepository from './repositories_OLD/emojiRepository';
 import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 import * as worldBuilderRepository from './repositories_OLD/worldBuilderRepository';
-import * as pluginsRepository from './repositories/pluginsRepository';
-import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
-import * as spaceRepository from './repositories/spaceRepository';
-import * as userAttributeRepository from './repositories/userAttributeRepository';
 
 /**
  * This layer is responsible for:
@@ -56,6 +57,7 @@ export const api = {
   userRepository,
   userProfileRepository,
   guestRepository,
+  spaceRepository,
   userRepository_OLD,
   profileRepository,
   eventsRepository,
@@ -88,7 +90,7 @@ export const api = {
   worldBuilderRepository,
   pluginsRepository,
   spaceAttributeRepository,
-  spaceRepository,
+  spaceOptionRepository,
   userAttributeRepository
 };
 
@@ -106,6 +108,7 @@ export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
+export * from './repositories/spaceOptionRepository/spaceOptionRepository.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 

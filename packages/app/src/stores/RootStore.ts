@@ -74,7 +74,7 @@ const RootStore = types
     leaveMeetingSpace: flow(function* (isKicked = false) {
       console.log('---LEAVING---');
 
-      const spaceId = self.collaborationStore.space?.id || '';
+      const spaceId = self.collaborationStore.spaceStore?.id || '';
       self.meetingStore.leave(isKicked);
       self.collaborationStore.stageModeStore.removeAllPopups();
 
@@ -95,12 +95,16 @@ const RootStore = types
         console.error('collaborationStore.leave', ex);
       }
 
-      self.mainStore.unityStore.triggerInteractionMessage(
-        PosBusEventEnum.LeftSpace,
-        spaceId,
-        0,
-        ''
-      );
+      try {
+        self.mainStore.unityStore.triggerInteractionMessage(
+          PosBusEventEnum.LeftSpace,
+          spaceId,
+          0,
+          ''
+        );
+      } catch (ex) {
+        console.error('collaborationStore.leave', ex);
+      }
 
       console.log('---LEFT---');
     })

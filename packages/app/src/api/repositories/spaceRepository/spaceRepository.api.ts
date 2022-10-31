@@ -1,31 +1,25 @@
 import {RequestInterface} from '@momentum-xyz/core';
-import {generatePath} from 'react-router-dom';
 
 import {request} from 'api/request';
+import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
+import {GetSpaceSubAttributeRequest, GetSpaceSubAttributeResponse} from 'api';
+import {getSpaceSubAttribute} from 'api/repositories/spaceAttributeRepository';
 
-import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
-import {
-  GetSpaceOptionsRequest,
-  GetSpaceOptionsResponse,
-  GetSpaceSubOptionRequest
-} from './spaceRepository.api.types';
+import {FetchSpaceRequest} from './spaceRepository.api.types';
 
-export const getSpaceOptions: RequestInterface<GetSpaceOptionsRequest, GetSpaceOptionsResponse> = (
+// TODO: This functionality is still in progress
+export const fetchSpace: RequestInterface<FetchSpaceRequest, GetSpaceSubAttributeResponse> = (
   options
 ) => {
-  const {worldId, spaceId, ...restOptions} = options;
+  const {spaceId, ...restOptions} = options;
 
-  const url = generatePath(spaceRepositoryEndpoints().options, {worldId, spaceId});
-
-  return request.get(url, restOptions);
-};
-
-export const getSpaceSubOption: RequestInterface<GetSpaceSubOptionRequest, unknown> = (options) => {
-  const {worldId, spaceId, sub_option_key, ...restOptions} = options;
-
-  restOptions.params = {
-    sub_option_key
+  const attributeOptions: GetSpaceSubAttributeRequest = {
+    spaceId,
+    plugin_id: PluginIdEnum.CORE,
+    attribute_name: AttributeNameEnum.NAME,
+    sub_attribute_key: AttributeNameEnum.NAME,
+    ...restOptions
   };
 
-  return request.get(spaceRepositoryEndpoints().subOption, restOptions);
+  return getSpaceSubAttribute(attributeOptions, request);
 };
