@@ -1,16 +1,15 @@
-import {FC, useCallback, useMemo, useRef, useState} from 'react';
+import {FC, useCallback, useMemo, useRef} from 'react';
 import {CorePluginPropsInterface, PluginInterface} from 'interfaces';
 import {useTheme} from 'styled-components';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
-import * as styled from './SpaceTabEmulator.styled';
-
 interface PropsInterface {
   plugin: PluginInterface;
+  setTopBar: (topBar: JSX.Element) => void;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
-  console.log('RENDER SpaceEmulator', {plugin});
+export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, setTopBar}) => {
+  console.log('RENDER SpaceTabEmulator', {plugin});
   const theme = useTheme();
 
   const stateAttribute = useRef<Record<string, any>>({});
@@ -31,8 +30,6 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
     [theme]
   );
 
-  const [topBar, setTopBar] = useState(<span />);
-
   const renderTopBarActions = useCallback(
     ({main}) => {
       setTopBar(main());
@@ -41,16 +38,12 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
   );
 
   return (
-    <div>
-      <styled.SpaceTopBar>
-        <strong>Space / Plugin</strong>
-        {topBar}
-      </styled.SpaceTopBar>
+    <>
       {!!plugin.SpaceExtension && (
         <ErrorBoundary errorMessage="Error while rendering plugin">
           <plugin.SpaceExtension renderTopBarActions={renderTopBarActions} {...coreProps} />
         </ErrorBoundary>
       )}
-    </div>
+    </>
   );
 };

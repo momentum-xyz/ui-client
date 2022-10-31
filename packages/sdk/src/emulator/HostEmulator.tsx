@@ -1,8 +1,10 @@
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {PluginInterface} from 'interfaces';
 
 import * as styled from './HostEmulator.styled';
-import {SpaceTabEmulator} from './components/';
+import {MomentumRequiredPage, WorldEmulator} from './components/';
+
+const isDevEnv = process.env.NODE_ENV === 'development';
 
 interface PropsInterface {
   plugin: PluginInterface;
@@ -10,19 +12,18 @@ interface PropsInterface {
 
 /**
  * Emulates the host environment for your plugin for local development.
+ * Show Momentum required page if not in dev environment.
  * 
  * Example of usage:
 ```tsx
 import plugin from './Plugin';
-
-const isDevEnv = process.env.NODE_ENV === 'development';
 
 const root = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={DefaultThemeConfig}>
-      {isDevEnv ? <HostEmulator plugin={plugin} /> : <MomentumRequiredPage />}
+      <HostEmulator plugin={plugin} />
     </ThemeProvider>
   </React.StrictMode>,
   root
@@ -31,19 +32,9 @@ ReactDOM.render(
  */
 export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
-  const [tab, setTab] = useState('dash');
   return (
     <styled.FullScreenContainer>
-      <styled.SpaceLayout>
-        <styled.SpaceNav>
-          <styled.SpaceTab onClick={() => setTab('dash')}>Dashboard</styled.SpaceTab>
-          <styled.SpaceTab onClick={() => setTab('plugin')}>Plugin</styled.SpaceTab>
-        </styled.SpaceNav>
-        <styled.SpaceContent>
-          {tab === 'dash' && <div>Dashboard Content</div>}
-          {tab === 'plugin' && <SpaceTabEmulator plugin={plugin} />}
-        </styled.SpaceContent>
-      </styled.SpaceLayout>
+      {isDevEnv ? <WorldEmulator plugin={plugin} /> : <MomentumRequiredPage />}
     </styled.FullScreenContainer>
   );
 };
