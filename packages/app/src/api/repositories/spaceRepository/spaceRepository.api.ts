@@ -2,15 +2,13 @@ import {RequestInterface} from '@momentum-xyz/core';
 
 import {request} from 'api/request';
 import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
-import {GetSpaceSubAttributeRequest, GetSpaceSubAttributeResponse} from 'api';
+import {GetSpaceSubAttributeRequest} from 'api';
 import {getSpaceSubAttribute} from 'api/repositories/spaceAttributeRepository';
 
 import {FetchSpaceRequest} from './spaceRepository.api.types';
 
 // TODO: This functionality is still in progress
-export const fetchSpace: RequestInterface<FetchSpaceRequest, GetSpaceSubAttributeResponse> = (
-  options
-) => {
+export const fetchSpace: RequestInterface<FetchSpaceRequest, unknown> = (options) => {
   const {spaceId, ...restOptions} = options;
 
   const attributeOptions: GetSpaceSubAttributeRequest = {
