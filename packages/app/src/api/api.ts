@@ -7,6 +7,7 @@ import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
 import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
 import * as spaceOptionRepository from './repositories/spaceOptionRepository';
+import * as spaceRepository from './repositories/spaceRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
@@ -56,6 +57,7 @@ export const api = {
   userRepository,
   userProfileRepository,
   guestRepository,
+  spaceRepository,
   userRepository_OLD,
   profileRepository,
   eventsRepository,
@@ -107,6 +109,7 @@ export * from './repositories/userProfileRepository/userProfileRepository.api.ty
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
 export * from './repositories/spaceOptionRepository/spaceOptionRepository.api.types';
+export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';

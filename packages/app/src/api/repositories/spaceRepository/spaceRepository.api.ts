@@ -1,6 +1,7 @@
 import {RequestInterface} from '@momentum-xyz/core';
 
 import {request} from 'api/request';
+import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
 import {GetSpaceSubAttributeRequest, GetSpaceSubAttributeResponse} from 'api';
 import {getSpaceSubAttribute} from 'api/repositories/spaceAttributeRepository';
 
@@ -13,10 +14,10 @@ export const fetchSpace: RequestInterface<FetchSpaceRequest, GetSpaceSubAttribut
   const {spaceId, ...restOptions} = options;
 
   const attributeOptions: GetSpaceSubAttributeRequest = {
-    spaceId: '',
-    plugin_id: '',
-    attribute_name: '',
-    sub_attribute_key: '',
+    spaceId,
+    plugin_id: PluginIdEnum.CORE,
+    attribute_name: AttributeNameEnum.NAME,
+    sub_attribute_key: AttributeNameEnum.NAME,
     ...restOptions
   };
 

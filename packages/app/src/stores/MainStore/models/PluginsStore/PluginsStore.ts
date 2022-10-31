@@ -39,6 +39,10 @@ const PluginsStore = types
         }
       );
 
+      if (!spaceOptions) {
+        return;
+      }
+
       const plugin_uuids = spaceOptions['plugins'] as string[];
 
       const [pluginsMetadata, pluginsOptions] = yield Promise.all([

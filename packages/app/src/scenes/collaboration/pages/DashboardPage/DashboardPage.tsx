@@ -52,7 +52,7 @@ const DashboardPage: FC = () => {
   return (
     <SpacePage dataTestId="DashboardPage-test">
       <SpaceTopBar
-        title={spaceStore.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={t('dashboard.subtitle')}
         isSpaceFavorite={favoriteStore.isFavorite(spaceStore?.id || '')}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}

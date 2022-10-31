@@ -38,8 +38,8 @@ const SpaceStore = types
       isOwner: false,
 
       // Requests
+      spaceRequest: types.optional(RequestModel, {}),
       moderationRequest: types.optional(RequestModel, {}),
-      fetchSpaceInformationRequest: types.optional(RequestModel, {}),
       inviteUserRequest: types.optional(RequestModel, {}),
 
       // TODO: Move to SpaceAdminStore Model
@@ -65,8 +65,9 @@ const SpaceStore = types
         // FIXME: It is a part SpaceModel
         self.isTable = isTable;
 
-        await this.checkAccess(spaceId);
-        await this.loadRights(spaceId);
+        // FIXME: Uncomment later
+        // await this.checkAccess(spaceId);
+        // await this.loadRights(spaceId);
         await this.loadSpace(spaceId);
       },
       checkAccess: flow(function* (spaceId: string) {
@@ -77,6 +78,15 @@ const SpaceStore = types
       }),
       loadSpace: flow(function* (spaceId: string) {
         // TODO: Implementation. Next PR
+        const response = yield self.spaceRequest.send(api.spaceRepository.fetchSpace, {spaceId});
+
+        // TODO: Casting
+        self.space = cast({
+          id: spaceId,
+          name: response || 'BlaBla'
+        });
+
+        console.log(response);
       }),
       loadRights: flow(function* (spaceId: string) {
         // TODO: Refactor. Use one request to get all rights
@@ -90,10 +100,7 @@ const SpaceStore = types
   // TODO: Refactoring and movement
   .actions((self) => ({
     canUserJoin: flow(function* (spaceId: string) {
-      const response = yield self.fetchSpaceInformationRequest.send(
-        api.spaceRepositoryOld.fetchSpace,
-        {spaceId}
-      );
+      const response = yield self.spaceRequest.send(api.spaceRepository.fetchSpace, {spaceId});
       return response && !(response.space.secret === 1 && !(response.admin || response.member));
     }),
     // TODO: Remove
@@ -102,7 +109,7 @@ const SpaceStore = types
         return;
       }
 
-      const response: SpaceResponse = yield self.fetchSpaceInformationRequest.send(
+      const response: SpaceResponse = yield self.spaceRequest.send(
         api.spaceRepositoryOld.fetchSpace,
         {
           spaceId: self.space?.id || ''
@@ -246,7 +253,7 @@ const SpaceStore = types
       return self.secret === 1;
     },
     get isPending(): boolean {
-      return self.fetchSpaceInformationRequest.isPending;
+      return self.spaceRequest.isPending;
     }
   }));
 
