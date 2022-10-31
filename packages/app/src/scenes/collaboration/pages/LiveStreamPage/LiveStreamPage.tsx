@@ -32,7 +32,7 @@ const LiveStreamPage: FC = () => {
   return (
     <SpacePage dataTestId="LiveStreamPage-test">
       <SpaceTopBar
-        title={spaceStore.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={t('liveStream.subtitle')}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}

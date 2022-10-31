@@ -58,7 +58,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   return (
     <SpacePage dataTestId="SpacePlugin-test">
       <SpaceTopBar
-        title={spaceStore.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={pluginLoader.subtitle}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
