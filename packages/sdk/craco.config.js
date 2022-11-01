@@ -28,35 +28,27 @@ module.exports = {
         },
         shared: { 
           react: {
-            eager: true,
             requiredVersion: "^16.14.0"
           }, 
           'react-dom': {
-            eager: true,
             requiredVersion: "^16.14.0"
           },
           "mobx": {
-            eager: true,
             requiredVersion: "^6.4.2"
           },
           "mobx-react-lite": {
-            eager: true,
             requiredVersion: "^3.3.0"
           },
           "mobx-state-tree": {
-            eager: true,
             requiredVersion: "^5.1.3"
           },
           "styled-components": {
-            eager: true,
             requiredVersion: "^5.3.5"
           },
            "axios": {
-            eager: true,
             requiredVersion: "^0.21.4"
           },
           "axios-auth-refresh": {
-            eager: true,
             requiredVersion: "^3.2.2"
           }
         },
