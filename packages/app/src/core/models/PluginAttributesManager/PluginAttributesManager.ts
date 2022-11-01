@@ -13,7 +13,7 @@ const PluginAttributesManager = types
   })
   .actions((self) => ({
     get: flow(function* <T>(worldId: string, spaceId: string, key: string) {
-      const value: T | undefined = yield self.getStateRequest.send(
+      const response = yield self.getStateRequest.send(
         api.spaceAttributeRepository.getSpaceSubAttribute,
         {
           worldId,
@@ -24,9 +24,15 @@ const PluginAttributesManager = types
         }
       );
 
-      if (value === undefined) {
+      if (!response) {
         return null;
       }
+
+      if (!(key in response)) {
+        return null;
+      }
+
+      const value: T extends undefined ? never : T = response[key];
 
       return value;
     }),
