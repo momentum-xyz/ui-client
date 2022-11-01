@@ -86,7 +86,7 @@ const SpaceStore = types
         if (response) {
           self.space = cast({
             id: spaceId,
-            ...mapper.mapSubAttributes<SpaceInterface>(response)
+            ...mapper.mapSpaceSubAttributes<SpaceInterface>(response)
           });
         }
       }),

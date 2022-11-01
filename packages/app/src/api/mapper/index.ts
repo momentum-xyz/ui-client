@@ -1,5 +1,5 @@
-import {mapSubAttributes} from './spaceAttribute.mapper';
+import {mapSpaceSubAttributes} from './spaceAttribute.mapper';
 
 export const mapper = {
-  mapSubAttributes
+  mapSpaceSubAttributes
 };
