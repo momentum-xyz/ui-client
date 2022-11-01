@@ -36,7 +36,7 @@ const PluginsStore = types
         api.spaceOptionRepository.getSpaceSubOption,
         {
           spaceId,
-          sub_option_key: SpaceSubOptionKeyEnum.Asset2D
+          sub_option_key: SpaceSubOptionKeyEnum.Asset2DPlugins
         }
       );
 
@@ -44,7 +44,7 @@ const PluginsStore = types
         return;
       }
 
-      const plugin_uuids = spaceOptions[SpaceSubOptionKeyEnum.Asset2D] as string[];
+      const plugin_uuids = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
 
       const [pluginsMetadata, pluginsOptions] = yield Promise.all([
         self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {plugin_uuids}),

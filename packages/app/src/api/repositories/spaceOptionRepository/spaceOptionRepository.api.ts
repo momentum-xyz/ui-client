@@ -47,7 +47,7 @@ export const setSpaceSubOption: RequestInterface<
     sub_option_key
   };
 
-  const url = generatePath(spaceOptionRepositoryEndpoints().effectiveSubOption, {spaceId});
+  const url = generatePath(spaceOptionRepositoryEndpoints().subOption, {spaceId});
 
   return request.post(
     url,
