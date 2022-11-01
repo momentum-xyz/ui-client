@@ -1,5 +1,7 @@
 import {FC} from 'react';
-import {PluginInterface} from 'interfaces';
+import {BrowserRouter} from 'react-router-dom';
+
+import {PluginInterface} from '../interfaces';
 
 import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
@@ -34,7 +36,13 @@ export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
   return (
     <styled.FullScreenContainer>
-      {isDevEnv ? <WorldEmulator plugin={plugin} /> : <MomentumRequiredPage />}
+      {isDevEnv ? (
+        <BrowserRouter>
+          <WorldEmulator plugin={plugin} />
+        </BrowserRouter>
+      ) : (
+        <MomentumRequiredPage />
+      )}
     </styled.FullScreenContainer>
   );
 };

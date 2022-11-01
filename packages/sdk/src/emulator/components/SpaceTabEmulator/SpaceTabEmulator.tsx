@@ -5,10 +5,11 @@ import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 interface PropsInterface {
   plugin: PluginInterface;
+  spaceId: string;
   setTopBar: (topBar: JSX.Element) => void;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, setTopBar}) => {
+export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar}) => {
   console.log('RENDER SpaceTabEmulator', {plugin});
   const theme = useTheme();
 
@@ -18,7 +19,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, setTopBar}) => {
     () => ({
       theme: theme as ThemeInterface,
       isSpaceAdmin: false,
-      spaceId: '42424242-4242-4242-4242-424242424242',
+      spaceId,
       api: {
         get: (field: string) => Promise.resolve(stateAttribute.current[field]),
         set: (field: string, value: unknown) => {
@@ -27,7 +28,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, setTopBar}) => {
         }
       }
     }),
-    [theme]
+    [theme, spaceId]
   );
 
   const renderTopBarActions = useCallback(
