@@ -56,7 +56,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   return (
     <SpacePage dataTestId="StageModeGuest-test">
       <SpaceTopBar
-        title={spaceStore.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={t('labels.stageMode')}
         isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
         isAdmin={spaceStore.isAdmin}

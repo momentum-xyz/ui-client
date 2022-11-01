@@ -85,7 +85,7 @@ const CalendarPage: FC = () => {
   return (
     <SpacePage dataTestId="CalendarPage-test">
       <SpaceTopBar
-        title={spaceStore.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle="calendar"
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
