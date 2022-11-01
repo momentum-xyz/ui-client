@@ -1,4 +1,4 @@
-import {AttributeSubValueInterface, AttributeValueInterface} from 'api/interfaces';
+import {AttributeValueInterface} from 'api/interfaces';
 
 // GET SPACE ATTRIBUTE
 export interface GetSpaceAttributeRequest {
@@ -17,8 +17,6 @@ export interface GetSpaceSubAttributeRequest {
   sub_attribute_key: string;
 }
 
-export interface GetSpaceSubAttributeResponse extends AttributeSubValueInterface {}
-
 // SET SPACE SUB ATTRIBUTE
 export interface SetSpaceSubAttributeRequest {
   spaceId: string;
@@ -28,4 +26,6 @@ export interface SetSpaceSubAttributeRequest {
   value: unknown;
 }
 
-export interface SetSpaceSubAttributeResponse extends AttributeSubValueInterface {}
+export interface SpaceSubAttributeResponse {
+  [sub_attribute_key: string]: unknown;
+}

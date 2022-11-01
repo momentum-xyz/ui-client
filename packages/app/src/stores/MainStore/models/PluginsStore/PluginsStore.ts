@@ -13,8 +13,9 @@ import {
   api,
   GetPluginsMetadataResponse,
   GetPluginsOptionsResponse,
-  GetSpaceOptionsResponse
+  SpaceSubOptionResponse
 } from 'api';
+import {SpaceSubOptionKeyEnum} from 'api/enums';
 
 const PluginsStore = types
   .compose(
@@ -30,12 +31,12 @@ const PluginsStore = types
     })
   )
   .actions((self) => ({
-    fetchSpacePlugins: flow(function* (worldId: string, spaceId: string) {
-      const spaceOptions: GetSpaceOptionsResponse = yield self.pluginsListRequest.send(
-        api.spaceOptionRepository.getSpaceOptions,
+    fetchSpacePlugins: flow(function* (spaceId: string) {
+      const spaceOptions: SpaceSubOptionResponse = yield self.pluginsListRequest.send(
+        api.spaceOptionRepository.getSpaceSubOption,
         {
-          worldId,
-          spaceId
+          spaceId,
+          sub_option_key: SpaceSubOptionKeyEnum.Asset2D
         }
       );
 
@@ -43,7 +44,7 @@ const PluginsStore = types
         return;
       }
 
-      const plugin_uuids = spaceOptions['plugins'] as string[];
+      const plugin_uuids = spaceOptions[SpaceSubOptionKeyEnum.Asset2D] as string[];
 
       const [pluginsMetadata, pluginsOptions] = yield Promise.all([
         self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {plugin_uuids}),
@@ -74,12 +75,32 @@ const PluginsStore = types
         return;
       }
 
-      console.log('Loading plugin');
       const dynamicScript = self.dynamicScriptsStore.getScript(pluginLoader.scopeName);
 
       if (dynamicScript?.isLoaded && pluginLoader.isReady) {
         pluginLoader.loadPlugin();
       }
+    },
+    addPlugin(plugin: PluginInterface) {
+      // TODO: Later change it to API call adds plugin
+      if (!self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {
+        self.dynamicScriptsStore.addScript(plugin.scopeName, plugin.scriptUrl);
+      }
+
+      const newPlugins = [
+        ...self.spacePluginLoaders,
+        {
+          ...plugin,
+          attributesManager: PluginAttributesManager.create({pluginId: plugin.id})
+        }
+      ];
+
+      self.spacePluginLoaders = cast(newPlugins);
+    },
+    removePlugin(subpath: string) {
+      self.spacePluginLoaders = cast(
+        self.spacePluginLoaders.filter((loader) => loader.subPath !== subpath)
+      );
     }
   }))
   .views((self) => ({
