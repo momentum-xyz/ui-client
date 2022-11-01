@@ -28,9 +28,11 @@ module.exports = {
         },
         shared: { 
           react: {
+            singleton: true,
             requiredVersion: "^16.14.0"
           }, 
           'react-dom': {
+            singleton: true,
             requiredVersion: "^16.14.0"
           },
           "mobx": {
