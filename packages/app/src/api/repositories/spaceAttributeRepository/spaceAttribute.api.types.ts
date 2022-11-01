@@ -10,19 +10,12 @@ export interface GetSpaceAttributeRequest {
 export interface GetSpaceAttributeResponse extends AttributeValueInterface {}
 
 // GET SPACE SUB ATTRIBUTE
-export interface GetSpaceSubAttributeRequest {
-  spaceId: string;
-  plugin_id: string;
-  attribute_name: string;
+export interface GetSpaceSubAttributeRequest extends GetSpaceAttributeRequest {
   sub_attribute_key: string;
 }
 
 // SET SPACE SUB ATTRIBUTE
-export interface SetSpaceSubAttributeRequest {
-  spaceId: string;
-  plugin_id: string;
-  attribute_name: string;
-  sub_attribute_key: string;
+export interface SetSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest {
   value: unknown;
 }
 
