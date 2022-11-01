@@ -1,5 +1,5 @@
 {
-  "name": "plugin_miro",
+  "name": "@momentum-xyz/plugin_miro",
   "version": "0.1.0",
   "private": true,
   "port": 3001,
@@ -58,8 +58,8 @@
     "prettier": "^2.3.0"
   },
   "scripts": {
-    "start": "momentum-plugin start",
-    "build": "momentum-plugin build",
+    "start": "craco start",
+    "build": "craco build",
     "test": "momentum-plugin test"
   },
   "browserslist": {
