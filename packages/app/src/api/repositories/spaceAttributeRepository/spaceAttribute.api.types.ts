@@ -22,3 +22,8 @@ export interface SetSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest
 export interface SpaceSubAttributeResponse {
   [sub_attribute_key: string]: unknown;
 }
+
+// DELETE SPACE SUB ATTRIBUTE
+export interface DeleteSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest {}
+
+export interface DeleteSpaceSubAttributeResponse {}

@@ -40,14 +40,24 @@ const PluginAttributesManager = types
         return;
       }
 
-      yield self.setStateRequest.send(api.spaceAttributeRepository.setSpaceSubAttribute, {
-        worldId,
-        spaceId,
-        plugin_id: self.pluginId,
-        attribute_name: 'state',
-        sub_attribute_key: key,
-        value: value
-      });
+      if (value === null) {
+        yield self.setStateRequest.send(api.spaceAttributeRepository.deleteSpaceSubAttribute, {
+          worldId,
+          spaceId,
+          plugin_id: self.pluginId,
+          attribute_name: 'state',
+          sub_attribute_key: key
+        });
+      } else {
+        yield self.setStateRequest.send(api.spaceAttributeRepository.setSpaceSubAttribute, {
+          worldId,
+          spaceId,
+          plugin_id: self.pluginId,
+          attribute_name: 'state',
+          sub_attribute_key: key,
+          value: value
+        });
+      }
     })
   }))
   .views((self) => ({
