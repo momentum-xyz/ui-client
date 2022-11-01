@@ -11,6 +11,7 @@ import {
 import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {
   api,
+  GetPluginsListResponse,
   GetPluginsMetadataResponse,
   GetPluginsOptionsResponse,
   SpaceSubOptionResponse
@@ -22,12 +23,16 @@ const PluginsStore = types
     ResetModel,
     types.model('PluginsStore', {
       spacePluginLoaders: types.array(PluginLoader),
+      allPlugins: types.optional(types.frozen<GetPluginsListResponse>(), {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
 
       pluginsListRequest: types.optional(RequestModel, {}),
       pluginMetadataRequest: types.optional(RequestModel, {}),
-      pluginOptionsRequest: types.optional(RequestModel, {})
+      pluginOptionsRequest: types.optional(RequestModel, {}),
+      addPluginRequest: types.optional(RequestModel, {}),
+      removePluginRequest: types.optional(RequestModel, {}),
+      getAllPluginsRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -68,6 +73,12 @@ const PluginsStore = types
           })
         );
 
+      plugins.forEach((plugin) => {
+        if (!self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {
+          self.dynamicScriptsStore.addScript(plugin.scopeName, plugin.scriptUrl);
+        }
+      });
+
       self.spacePluginLoaders = cast(plugins);
     }),
     loadPluginIfNeeded(pluginLoader: PluginLoaderModelType) {
@@ -81,27 +92,35 @@ const PluginsStore = types
         pluginLoader.loadPlugin();
       }
     },
-    addPlugin(plugin: PluginInterface) {
-      // TODO: Later change it to API call adds plugin
-      if (!self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {
-        self.dynamicScriptsStore.addScript(plugin.scopeName, plugin.scriptUrl);
-      }
-
-      const newPlugins = [
-        ...self.spacePluginLoaders,
-        {
-          ...plugin,
-          attributesManager: PluginAttributesManager.create({pluginId: plugin.id})
-        }
-      ];
-
-      self.spacePluginLoaders = cast(newPlugins);
-    },
-    removePlugin(subpath: string) {
-      self.spacePluginLoaders = cast(
-        self.spacePluginLoaders.filter((loader) => loader.subPath !== subpath)
+    fetchAllPlugins: flow(function* () {
+      self.allPlugins = yield self.getAllPluginsRequest.send(
+        api.pluginsRepository.getPluginsList,
+        {}
       );
+    }),
+    resetAllPlugins() {
+      self.allPlugins = {};
     }
+  }))
+  .actions((self) => ({
+    addPluginToSpace: flow(function* (spaceId: string, pluginId: string) {
+      yield self.addPluginRequest.send(api.spaceOptionRepository.setSpaceSubOption, {
+        spaceId,
+        sub_option_key: SpaceSubOptionKeyEnum.Asset2DPlugins,
+        value: [...self.spacePluginLoaders.map((loader) => loader.id), pluginId]
+      });
+
+      yield self.fetchSpacePlugins(spaceId);
+    }),
+    removePluginFromSpace: flow(function* (spaceId: string, pluginId: string) {
+      yield self.removePluginRequest.send(api.spaceOptionRepository.setSpaceSubOption, {
+        spaceId,
+        sub_option_key: SpaceSubOptionKeyEnum.Asset2DPlugins,
+        value: self.spacePluginLoaders.map((loader) => loader.id).filter((id) => id !== pluginId)
+      });
+
+      yield self.fetchSpacePlugins(spaceId);
+    })
   }))
   .views((self) => ({
     get spacePlugins(): PluginLoaderModelType[] {

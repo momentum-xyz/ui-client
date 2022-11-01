@@ -17,7 +17,7 @@ export interface GetSpaceSubOptionRequest {
   sub_option_key: string;
 }
 
-// GET SPACE SUBOPTION
+// SET SPACE SUBOPTION
 export interface SetSpaceSubOptionRequest extends GetSpaceSubOptionRequest {
-  value: string;
+  value: unknown;
 }
