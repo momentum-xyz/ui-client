@@ -3,9 +3,9 @@
   "version": "0.1.2",
   "license": "GPL-3.0",
   "homepage": "https://momentum.xyz",
-  "repository":"https://github.com/momentum-xyz/ui-client",
+  "repository": "https://github.com/momentum-xyz/ui-client",
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
