@@ -5,14 +5,18 @@ import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from '@momentum-x
 
 import {EventAttendeesModelType} from 'core/models';
 
+import {UserProfileView} from './components';
 import * as styled from './Attendees.styled';
 
 interface PropsInterface {
+  currentUserId: string;
   attendees: EventAttendeesModelType;
 }
 
+const DIALOG_WIDTH_PX = 520;
+
 const Attendees: FC<PropsInterface> = (props) => {
-  const {attendees} = props;
+  const {attendees, currentUserId} = props;
 
   const {t} = useTranslation();
 
@@ -38,17 +42,8 @@ const Attendees: FC<PropsInterface> = (props) => {
         hasBorder
         showCloseButton
         showOverflow
-        layoutSize={{width: '519px;'}}
+        layoutSize={{width: `${DIALOG_WIDTH_PX}px;`}}
       >
-        {/* TODO: Refactoring !!! */}
-        {attendees.attendeeDialog.isOpen && attendees.selectedAttendeeId && (
-          <styled.AttendeeWidget
-            userId={attendees.selectedAttendeeId}
-            onClose={attendees.hideAttendee}
-            showUserInteractions={false}
-            hasBorder
-          />
-        )}
         <styled.Container data-testid="AttendeesWidget-test">
           <SearchInput
             placeholder={t('placeholders.searchForAttendees')}
@@ -69,6 +64,17 @@ const Attendees: FC<PropsInterface> = (props) => {
             ))}
           </styled.List>
         </styled.Container>
+
+        {attendees.attendeeDialog.isOpen && attendees.selectedAttendee && (
+          <styled.AttendeeContainer>
+            <UserProfileView
+              isItMe={attendees.selectedAttendeeId === currentUserId}
+              user={attendees.selectedAttendee}
+              spaceList={[]}
+              onClose={attendees.hideAttendee}
+            />
+          </styled.AttendeeContainer>
+        )}
       </Dialog>
     </>
   );

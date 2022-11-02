@@ -218,7 +218,9 @@ const EventItem: FC<PropsInterface> = ({
         {info()}
       </styled.Container>
 
-      {event.attendeesDetails.dialog.isOpen && <Attendees attendees={event.attendeesDetails} />}
+      {event.attendeesDetails.dialog.isOpen && (
+        <Attendees attendees={event.attendeesDetails} currentUserId={currentUserId} />
+      )}
     </>
   );
 };

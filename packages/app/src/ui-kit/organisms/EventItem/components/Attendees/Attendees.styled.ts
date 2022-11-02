@@ -1,11 +1,6 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-// TODO: Why ??? Remove this dependency at all
-import {UserProfilePanel} from 'scenes/home/pages/HomePage/components';
-
-const PROFILE_WIDGET_X_POSITION = 549;
-
 export const Container = styled.div`
   margin-top: 20px;
   display: flex;
@@ -28,20 +23,18 @@ export const Item = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  padding: 5px 0;
+  border-radius: 5px;
+  padding: 5px;
 
   :hover {
-    background: rgba(255, 255, 255, 10%);
+    background: rgba(255, 255, 255, 5%);
+    cursor: pointer;
   }
 `;
 
-// TODO: - Split Profile Widget to Widget and Popup for calendar
-export const AttendeeWidget = styled(UserProfilePanel)`
+export const AttendeeContainer = styled.div`
   position: absolute;
-  left: ${PROFILE_WIDGET_X_POSITION}px;
-  top: 0;
-
-  margin-left: 20px;
-
   background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
+  left: 530px;
+  top: 0;
 `;

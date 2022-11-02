@@ -1,7 +1,7 @@
 import {types, flow, cast, Instance} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {AttendeeModel, AttendeeModelInterface} from 'core/models';
+import {AttendeeModel, AttendeeModelInterface, UserProfileModelInterface} from 'core/models';
 import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 import {api} from 'api';
 
@@ -56,6 +56,13 @@ const EventAttendees = types
     hideAttendee() {
       self.selectedAttendeeId = undefined;
       self.attendeeDialog.close();
+    }
+  }))
+  .views((self) => ({
+    get selectedAttendee(): UserProfileModelInterface | undefined {
+      return self.selectedAttendeeId
+        ? self.attendees.find((attendee) => attendee.user.uuid === self.selectedAttendeeId)?.user
+        : undefined;
     }
   }));
 
