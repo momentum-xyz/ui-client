@@ -5,7 +5,7 @@ import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from '@momentum-x
 
 import {EventAttendeesModelType} from 'core/models';
 
-import {UserProfileView} from './components';
+import {ProfileView} from './components';
 import * as styled from './Attendees.styled';
 
 interface PropsInterface {
@@ -67,7 +67,7 @@ const Attendees: FC<PropsInterface> = (props) => {
 
         {attendees.attendeeDialog.isOpen && attendees.selectedAttendee && (
           <styled.AttendeeContainer>
-            <UserProfileView
+            <ProfileView
               isItMe={attendees.selectedAttendeeId === currentUserId}
               user={attendees.selectedAttendee}
               spaceList={[]}

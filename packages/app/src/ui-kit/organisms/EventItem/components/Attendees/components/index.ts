@@ -1,1 +1,1 @@
-export * from './UserProfileView';
+export * from './ProfileView';
