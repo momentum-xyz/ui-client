@@ -65,5 +65,14 @@ const Playlist = types
         self.setCurrentTrackName();
       }
     })
+  }))
+  .views((self) => ({
+    get previousSongExists(): boolean {
+      return self.currentSrcIndex > 0;
+    },
+    get nextSongExists(): boolean {
+      return self.currentSrcIndex < self.tracks.length - 1;
+    }
   }));
+
 export {Playlist};

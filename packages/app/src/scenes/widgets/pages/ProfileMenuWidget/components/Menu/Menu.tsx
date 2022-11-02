@@ -2,8 +2,15 @@ import React, {FC, useRef} from 'react';
 import {useAuth} from 'react-oidc-context';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
-import {Avatar, Dialog, IconSvg, Text, Toggle, useClickOutside} from '@momentum-xyz/ui-kit';
-import {UserStatusEnum} from '@momentum-xyz/core';
+import {
+  Avatar,
+  Dialog,
+  IconSvg,
+  Text,
+  Toggle,
+  useClickOutside,
+  UserStatusEnum
+} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';

@@ -74,7 +74,9 @@ const ScreenSharePage: FC = () => {
         {!videoTrack ? (
           <ScreenChoice
             isSettingUp={agoraScreenShareStore.isSettingUp}
-            canShare={spaceStore.isAdmin || agoraStageModeStore.isOnStage}
+            canShare={
+              (agoraStore.isStageMode && agoraStageModeStore.isOnStage) || !agoraStore.isStageMode
+            }
             startScreenShare={startScreenSharing}
           />
         ) : (

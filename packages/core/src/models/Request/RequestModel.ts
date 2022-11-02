@@ -110,6 +110,8 @@ const RequestModel = types
         if (error?.response?.status === UNAUTHORIZED_STATUS) {
           /* keycloak.login(); */
         }
+
+        return undefined;
       }
     };
     return actions;

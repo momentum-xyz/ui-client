@@ -5,12 +5,13 @@
   "private": true,
   "scripts": {
     "postinstall": "husky install",
-
-    "build:deps": "yarn --cwd=packages/core build && yarn --cwd=packages/ui-kit build && yarn --cwd=packages/sdk build",
-    "build": "yarn build:deps && yarn --cwd=packages/app build",
+    "build": "yarn build:app",
+    "build:deps": "yarn workspace @momentum-xyz/core build && yarn workspace @momentum-xyz/sdk build",
+    "build:app": "yarn build:deps && yarn workspace @momentum-xyz/ui-client build",
+    "build:plugin_miro": "yarn build:deps && yarn workspace plugin_miro build",
     "start": "yarn build:deps && yarn --cwd=packages/app start",
-
-    "docker:build": "DOCKER_BUILDKIT=1 docker build -t ui-client:latest .",
+    "docker:build": "DOCKER_BUILDKIT=1 docker build --target=app-runtime -t ui-client:latest .",
+    "docker:build_plugin_miro": "DOCKER_BUILDKIT=1 docker build --target=plugin-runtime  --build-arg PLUGIN=miro -t plugin-miro:latest .",
     "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",
     "prettier:fix": "npm run prettier -- --write",
@@ -19,7 +20,8 @@
     "lint:fix": "yarn lint --fix",
     "nibble": "eslint-nibble --ext .js,.jsx,.ts,.tsx packages/**/src",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+    "clean": "rimraf packages/**/build packages/**/dist packages/**/node_modules node_modules"
   },
   "resolutions": {
     "styled-components": "^5",
