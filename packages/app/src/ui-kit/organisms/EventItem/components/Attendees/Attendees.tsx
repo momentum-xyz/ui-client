@@ -3,14 +3,14 @@ import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from '@momentum-xyz/ui-kit';
 
-import {EventAttendeesModelType} from 'core/models';
+import {EventAttendeesListModelType} from 'core/models';
 
 import {ProfileView} from './components';
 import * as styled from './Attendees.styled';
 
 interface PropsInterface {
   currentUserId: string;
-  attendees: EventAttendeesModelType;
+  attendees: EventAttendeesListModelType;
   onFlyToSpace?: (spaceId: string) => void;
 }
 
