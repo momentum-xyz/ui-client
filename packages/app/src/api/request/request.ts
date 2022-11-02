@@ -22,7 +22,7 @@ const request: AxiosInstance = axios.create({
  * Create request, response & error handlers
  */
 const requestHandler = (requestConfig: AxiosRequestConfig & {authToken?: string}) => {
-  if (requestConfig.authToken) {
+  if (requestConfig.authToken && requestConfig.headers) {
     /** set authToken provided by the app */
     requestConfig.headers.Authorization = `${TOKEN_TYPE} ${requestConfig.authToken}`;
   }
@@ -60,7 +60,9 @@ export const setApiResponseHandlers = ({onResponse = responseHandler, onError = 
 export const refreshAxiosToken = (token: string) => {
   setAccessToken(token);
   request.interceptors.request.use((config) => {
-    config.headers.Authorization = `${TOKEN_TYPE} ${getAccessToken()}`;
+    if (config.headers) {
+      config.headers.Authorization = `${TOKEN_TYPE} ${getAccessToken()}`;
+    }
     return config;
   });
 };

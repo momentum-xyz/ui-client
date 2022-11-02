@@ -48,7 +48,7 @@ module.exports = {
             requiredVersion: "^5.3.5"
           },
            "axios": {
-            requiredVersion: "^0.21.4"
+            requiredVersion: "^0.22.0"
           },
           "axios-auth-refresh": {
             requiredVersion: "^3.2.2"
