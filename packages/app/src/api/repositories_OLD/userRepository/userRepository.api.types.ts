@@ -1,6 +1,6 @@
 /** COMMON **/
 
-import {UserStatusEnum} from '@momentum-xyz/core';
+import {UserStatusEnum} from '@momentum-xyz/ui-kit';
 
 import {UserInterface, UserProfileInterface, UserSpaceInterface} from 'api';
 
