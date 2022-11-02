@@ -5,10 +5,10 @@ import {AttendeeModel, AttendeeModelInterface} from 'core/models';
 import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
 import {api} from 'api';
 
-const AttendeesListStore = types
+const EventAttendees = types
   .compose(
     ResetModel,
-    types.model('AttendeesListStore', {
+    types.model('EventAttendees', {
       dialog: types.optional(Dialog, {}),
       query: types.optional(types.string, ''),
       attendees: types.optional(types.array(AttendeeModel), []),
@@ -59,6 +59,6 @@ const AttendeesListStore = types
     }
   }));
 
-export type AttendeesListStoreType = Instance<typeof AttendeesListStore>;
+export type EventAttendeesModelType = Instance<typeof EventAttendees>;
 
-export {AttendeesListStore};
+export {EventAttendees};

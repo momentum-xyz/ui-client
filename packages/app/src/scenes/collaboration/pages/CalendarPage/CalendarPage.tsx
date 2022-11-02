@@ -22,11 +22,10 @@ import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
+  const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, space} = collaborationStore;
   const {favoriteStore} = mainStore;
   const {eventList, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
-  const {attendeesListStore} = widgetStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -111,7 +110,6 @@ const CalendarPage: FC = () => {
           onEventEdit={calendarStore.editEvent}
           onEventRemove={calendarStore.selectEventToRemove}
           onWeblinkClick={handleWeblink}
-          onShowAttendeesList={attendeesListStore.showAttendees}
           canManageInSpace={space.isAdmin}
         />
       </styled.InnerContainer>

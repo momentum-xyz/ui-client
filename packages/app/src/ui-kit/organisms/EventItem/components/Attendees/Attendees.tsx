@@ -3,34 +3,35 @@ import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Avatar, Dialog, SearchInput, Text, useDebouncedEffect} from '@momentum-xyz/ui-kit';
 
-import {useStore} from 'shared/hooks';
+import {EventAttendeesModelType} from 'core/models';
 
-import * as styled from './AttendeesWidget.styled';
+import * as styled from './Attendees.styled';
 
-// FIXME: It is not a widget !!! Refactor this
-const AttendeesWidget: FC = () => {
-  const {
-    widgetStore: {attendeesListStore}
-  } = useStore();
+interface PropsInterface {
+  attendees: EventAttendeesModelType;
+}
+
+const Attendees: FC<PropsInterface> = (props) => {
+  const {attendees} = props;
 
   const {t} = useTranslation();
 
   useDebouncedEffect(
     () => {
-      attendeesListStore.fetchAttendees();
+      attendees.fetchAttendees();
     },
     500,
-    [attendeesListStore.query]
+    [attendees.query]
   );
 
   return (
     <>
       <Dialog
-        title={attendeesListStore.eventName}
+        title={attendees.eventName}
         subtitle={`${t('labels.attendeeList')} / ${t('counts.attendees', {
-          count: attendeesListStore.numberOfAttendees
+          count: attendees.numberOfAttendees
         })}`}
-        onClose={attendeesListStore.resetModel}
+        onClose={attendees.resetModel}
         headerStyle="uppercase"
         icon="profile"
         iconSize="large"
@@ -40,10 +41,10 @@ const AttendeesWidget: FC = () => {
         layoutSize={{width: '519px;'}}
       >
         {/* TODO: Refactoring !!! */}
-        {attendeesListStore.attendeeDialog.isOpen && attendeesListStore.selectedAttendeeId && (
+        {attendees.attendeeDialog.isOpen && attendees.selectedAttendeeId && (
           <styled.AttendeeWidget
-            userId={attendeesListStore.selectedAttendeeId}
-            onClose={attendeesListStore.hideAttendee}
+            userId={attendees.selectedAttendeeId}
+            onClose={attendees.hideAttendee}
             showUserInteractions={false}
             hasBorder
           />
@@ -51,15 +52,15 @@ const AttendeesWidget: FC = () => {
         <styled.Container data-testid="AttendeesWidget-test">
           <SearchInput
             placeholder={t('placeholders.searchForAttendees')}
-            onChange={(query) => attendeesListStore.changeQuery(query)}
+            onChange={(query) => attendees.changeQuery(query)}
             withBackground
           />
           <styled.List className="noScrollIndicator">
-            {attendeesListStore.attendees.map((attendee) => (
+            {attendees.attendees.map((attendee) => (
               <styled.Item
                 key={attendee.id}
                 onClick={() => {
-                  attendeesListStore.selectAttendee(attendee);
+                  attendees.selectAttendee(attendee);
                 }}
               >
                 <Avatar avatarSrc={attendee.avatarSrc} size="small" />
@@ -73,4 +74,4 @@ const AttendeesWidget: FC = () => {
   );
 };
 
-export default observer(AttendeesWidget);
+export default observer(Attendees);

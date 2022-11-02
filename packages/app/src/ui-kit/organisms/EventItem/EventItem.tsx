@@ -8,7 +8,7 @@ import {EventItemInterface} from 'core/models';
 import {AddToCalendarDropdown} from 'ui-kit';
 import placeholder from 'static/images/placeholder.png';
 
-import {Header, Actions} from './components';
+import {Header, Actions, Attendees} from './components';
 import * as styled from './EventItem.styled';
 
 const TEXT_LENGTH = 12;
@@ -212,10 +212,14 @@ const EventItem: FC<PropsInterface> = ({
   );
 
   return (
-    <styled.Container style={{zIndex: zIndex}} id={event.data?.id} data-testid="EventItem-test">
-      <styled.Row className="header">{image()}</styled.Row>
-      {info()}
-    </styled.Container>
+    <>
+      <styled.Container style={{zIndex: zIndex}} id={event.data?.id} data-testid="EventItem-test">
+        <styled.Row className="header">{image()}</styled.Row>
+        {info()}
+      </styled.Container>
+
+      {event.attendeesDetails.dialog.isOpen && <Attendees attendees={event.attendeesDetails} />}
+    </>
   );
 };
 

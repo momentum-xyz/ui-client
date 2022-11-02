@@ -5,7 +5,6 @@ export * from './ProfileMenuWidget';
 export * from './WorldStatsWidget';
 export * from './LaunchInitiativeWidget';
 export * from './MusicPlayerWidget';
-export * from './AttendeesWidget';
 export * from './StageModePIPWidget';
 export * from './EmojiWidget';
 export * from './WorldChatWidget';

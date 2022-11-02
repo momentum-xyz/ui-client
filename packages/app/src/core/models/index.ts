@@ -1,5 +1,4 @@
 export * from './UserProfile';
-export * from './EventItem';
 export * from './Polkadot';
 export * from './ValidatorItem';
 export * from './Space';
@@ -12,6 +11,7 @@ export * from './TokenItem';
 export * from './UserModel';
 export * from './TrackModel';
 export * from './AttendeeModel';
+export * from './EventItem';
 export * from './TileList';
 export * from './Tile';
 export * from './Content';
