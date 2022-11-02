@@ -84,6 +84,7 @@ jobs:
           registry-user: ${{ secrets.REGISTRY_USERNAME }}
           registry-pass: ${{ secrets.REGISTRY_PASSWORD }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          image-name: plugin-miro
           multistage-target: plugin-runtime
           extra-args: --build-arg PLUGIN=miro
     outputs:
