@@ -75,9 +75,9 @@ jobs:
           client-payload: '{"name": "${{ env.PROJECT_NAME }}", "version": "${{ env.VERSION }}", "actor": "${{ github.event.actor.login }}"}'
   build-miro:
     runs-on: self-hosted  # ubuntu-latest
+    needs: build-app
     steps:
       - id: build-miro
-        needs: build-app
         uses: momentum-xyz/docker-build-action@v6.1.0
         with:
           registry-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
