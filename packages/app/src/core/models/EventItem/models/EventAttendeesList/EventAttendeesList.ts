@@ -23,6 +23,7 @@ const EventAttendeesList = types
       eventName: types.maybe(types.string),
       selectedAttendeeId: types.maybe(types.string),
       attendeeDialog: types.optional(Dialog, {}),
+      // TODO: Make proper model for selected user
       userSpaceList: types.optional(types.array(UserSpaceDetails), []),
       spaceListRequest: types.optional(RequestModel, {})
     })
