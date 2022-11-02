@@ -7,7 +7,6 @@ import {ProfileMenuStore} from './ProfileMenuStore';
 import {HelpStore} from './HelpStore';
 import {LaunchInitiativeStore} from './LaunchInitiativeStore';
 import {MusicPlayerStore} from './MusicPlayerStore';
-import {AttendeesListStore} from './AttendeesListStore';
 import {EmojiStore} from './EmojiStore';
 
 const RootWidgetStore = types.model('RootWidgetStore', {
@@ -18,7 +17,6 @@ const RootWidgetStore = types.model('RootWidgetStore', {
   profileMenuStore: types.optional(ProfileMenuStore, {}),
   launchInitiativeStore: types.optional(LaunchInitiativeStore, {}),
   musicPlayerStore: types.optional(MusicPlayerStore, {}),
-  attendeesListStore: types.optional(AttendeesListStore, {}),
   emojiStore: types.optional(EmojiStore, {})
 });
 export type RootMeetingSpaceStoreType = Instance<typeof RootWidgetStore>;

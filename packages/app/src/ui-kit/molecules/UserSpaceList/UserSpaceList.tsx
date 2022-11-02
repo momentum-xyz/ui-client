@@ -9,7 +9,7 @@ import * as styled from './UserSpaceList.styled';
 interface PropsInterface {
   spaceList: UserSpaceDetailsInterface[];
   selectSpace: (spaceId: string) => void;
-  flyToSpace: (spaceId: string) => void;
+  flyToSpace?: (spaceId: string) => void;
 }
 
 const UserSpaceList: FC<PropsInterface> = (props) => {

@@ -6,7 +6,7 @@ import * as styled from './UserSpaceItem.styled';
 interface PropsInterface {
   spaceId: string;
   spaceName: string;
-  flyToSpace: (spaceId: string) => void;
+  flyToSpace?: (spaceId: string) => void;
   selectSpace: (spaceId: string) => void;
 }
 
@@ -19,7 +19,7 @@ const UserSpaceItem: FC<PropsInterface> = (props) => {
       onClick={() => selectSpace(spaceId)}
       data-testid="UserSpaceItem-test"
     >
-      <SvgButton iconName="rocket" size="medium" onClick={() => flyToSpace(spaceId)} />
+      <SvgButton iconName="rocket" size="medium" onClick={() => flyToSpace?.(spaceId)} />
       <styled.NameText text={spaceName} size="xs" align="left" isMultiline={false} />
     </styled.Container>
   );
