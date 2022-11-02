@@ -1,9 +1,13 @@
 import {types, flow, cast, Instance} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {AttendeeModel, AttendeeModelInterface, UserProfileModelInterface} from 'core/models';
-import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
-import {api} from 'api';
+import {
+  AttendeeModel,
+  AttendeeModelInterface,
+  UserProfileModelInterface,
+  UserSpaceDetails
+} from 'core/models';
+import {api, UserSpaceListItemResponse, AttendeesResponseInterface} from 'api';
 
 const EventAttendees = types
   .compose(
@@ -18,7 +22,9 @@ const EventAttendees = types
       eventId: types.maybe(types.string),
       eventName: types.maybe(types.string),
       selectedAttendeeId: types.maybe(types.string),
-      attendeeDialog: types.optional(Dialog, {})
+      attendeeDialog: types.optional(Dialog, {}),
+      userSpaceList: types.optional(types.array(UserSpaceDetails), []),
+      spaceListRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -37,6 +43,18 @@ const EventAttendees = types
         self.numberOfAttendees = response.count;
       }
     }),
+    fetchUserSpaceList: flow(function* () {
+      if (self.selectedAttendeeId) {
+        const response: UserSpaceListItemResponse[] = yield self.spaceListRequest.send(
+          api.spaceRepository.fetchUserSpaceList,
+          {userId: self.selectedAttendeeId}
+        );
+
+        if (response) {
+          self.userSpaceList = cast(response);
+        }
+      }
+    }),
     changeQuery(query: string) {
       self.query = query;
     }
@@ -49,12 +67,15 @@ const EventAttendees = types
       self.dialog.open();
       yield self.fetchAttendees();
     }),
-    selectAttendee(attendee: AttendeeModelInterface) {
+    selectAttendee: flow(function* (attendee: AttendeeModelInterface) {
       self.selectedAttendeeId = attendee.id;
+      self.userSpaceList = cast([]);
       self.attendeeDialog.open();
-    },
+      yield self.fetchUserSpaceList();
+    }),
     hideAttendee() {
       self.selectedAttendeeId = undefined;
+      self.userSpaceList = cast([]);
       self.attendeeDialog.close();
     }
   }))

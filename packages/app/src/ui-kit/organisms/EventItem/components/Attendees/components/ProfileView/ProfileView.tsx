@@ -14,13 +14,14 @@ interface PropsInterface {
   isItMe: boolean;
   user: UserProfileModelInterface;
   spaceList: UserSpaceDetailsInterface[];
+  onFlyToSpace?: (spaceId: string) => void;
   onClose: () => void;
 }
 
 const DIALOG_WIDTH_PX = 390;
 
 const ProfileView: FC<PropsInterface> = (props) => {
-  const {user, spaceList, isItMe, onClose} = props;
+  const {user, spaceList, isItMe, onFlyToSpace, onClose} = props;
   const {t} = useTranslation();
 
   const createdAtAsString = useMemo(() => {
@@ -81,7 +82,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
               <Heading type="h4" label={`${t('labels.initiatives')}:`} align="left" />
             </styled.Initiatives>
 
-            <UserSpaceList spaceList={spaceList} flyToSpace={() => {}} selectSpace={() => {}} />
+            <UserSpaceList spaceList={spaceList} flyToSpace={onFlyToSpace} selectSpace={() => {}} />
           </styled.Details>
         </styled.Body>
       </PanelLayout>

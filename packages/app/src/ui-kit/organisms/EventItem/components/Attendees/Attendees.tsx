@@ -11,12 +11,13 @@ import * as styled from './Attendees.styled';
 interface PropsInterface {
   currentUserId: string;
   attendees: EventAttendeesModelType;
+  onFlyToSpace?: (spaceId: string) => void;
 }
 
 const DIALOG_WIDTH_PX = 520;
 
 const Attendees: FC<PropsInterface> = (props) => {
-  const {attendees, currentUserId} = props;
+  const {attendees, currentUserId, onFlyToSpace} = props;
 
   const {t} = useTranslation();
 
@@ -70,7 +71,8 @@ const Attendees: FC<PropsInterface> = (props) => {
             <ProfileView
               isItMe={attendees.selectedAttendeeId === currentUserId}
               user={attendees.selectedAttendee}
-              spaceList={[]}
+              spaceList={attendees.userSpaceList}
+              onFlyToSpace={onFlyToSpace}
               onClose={attendees.hideAttendee}
             />
           </styled.AttendeeContainer>

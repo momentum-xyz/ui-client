@@ -219,7 +219,11 @@ const EventItem: FC<PropsInterface> = ({
       </styled.Container>
 
       {event.attendeesDetails.dialog.isOpen && (
-        <Attendees attendees={event.attendeesDetails} currentUserId={currentUserId} />
+        <Attendees
+          attendees={event.attendeesDetails}
+          currentUserId={currentUserId}
+          onFlyToSpace={onFlyToSpace}
+        />
       )}
     </>
   );
