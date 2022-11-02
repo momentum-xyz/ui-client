@@ -24,7 +24,7 @@ import * as styled from './CalendarPage.styled';
 const CalendarPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, space} = collaborationStore;
-  const {favoriteStore} = mainStore;
+  const {favoriteStore, unityStore} = mainStore;
   const {eventList, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
 
   const theme = useTheme();
@@ -77,6 +77,11 @@ const CalendarPage: FC = () => {
     return () => eventList.resetModel();
   }, [eventList, space]);
 
+  const handleFlyToSpace = (spaceId: string) => {
+    unityStore.teleportToSpace(spaceId);
+    history.push(ROUTES.base);
+  };
+
   if (!space) {
     return null;
   }
@@ -110,6 +115,7 @@ const CalendarPage: FC = () => {
           onEventEdit={calendarStore.editEvent}
           onEventRemove={calendarStore.selectEventToRemove}
           onWeblinkClick={handleWeblink}
+          onFlyToSpace={handleFlyToSpace}
           canManageInSpace={space.isAdmin}
         />
       </styled.InnerContainer>

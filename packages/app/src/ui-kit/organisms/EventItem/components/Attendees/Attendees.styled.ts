@@ -36,5 +36,5 @@ export const AttendeeContainer = styled.div`
   position: absolute;
   background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
   left: 530px;
-  top: 0;
+  top: -1px;
 `;
