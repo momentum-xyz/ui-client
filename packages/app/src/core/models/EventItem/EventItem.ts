@@ -15,7 +15,7 @@ import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';
 import {MagicTypeEnum} from 'core/enums';
 
-import {EventItemData, EventAttendees} from './models';
+import {EventItemData, EventAttendeesList} from './models';
 
 const EventItem = types
   .model('EventItem', {
@@ -24,7 +24,7 @@ const EventItem = types
     magicRequest: types.optional(RequestModel, {}),
     fetchAttendeesRequest: types.optional(RequestModel, {}),
     attendees: types.optional(types.array(AttendeeModel), []),
-    attendeesDetails: types.optional(EventAttendees, {}),
+    attendeesDetails: types.optional(EventAttendeesList, {}),
     numberOfAllAttendees: types.optional(types.number, 0),
     attendRequest: types.optional(RequestModel, {})
   })

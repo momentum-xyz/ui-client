@@ -9,10 +9,10 @@ import {
 } from 'core/models';
 import {api, UserSpaceListItemResponse, AttendeesResponseInterface} from 'api';
 
-const EventAttendees = types
+const EventAttendeesList = types
   .compose(
     ResetModel,
-    types.model('EventAttendees', {
+    types.model('EventAttendeesList', {
       dialog: types.optional(Dialog, {}),
       query: types.optional(types.string, ''),
       attendees: types.optional(types.array(AttendeeModel), []),
@@ -87,6 +87,6 @@ const EventAttendees = types
     }
   }));
 
-export type EventAttendeesModelType = Instance<typeof EventAttendees>;
+export type EventAttendeesListModelType = Instance<typeof EventAttendeesList>;
 
-export {EventAttendees};
+export {EventAttendeesList};
