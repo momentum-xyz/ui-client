@@ -3,6 +3,7 @@ import {APIInterface} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api} from 'api';
+import {AttributeNameEnum} from 'api/enums';
 
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
@@ -19,16 +20,12 @@ const PluginAttributesManager = types
           worldId,
           spaceId,
           plugin_id: self.pluginId,
-          attribute_name: 'state',
+          attribute_name: AttributeNameEnum.STATE,
           sub_attribute_key: key
         }
       );
 
-      if (!response) {
-        return null;
-      }
-
-      if (!(key in response)) {
+      if (!response || !(key in response)) {
         return null;
       }
 
@@ -46,24 +43,19 @@ const PluginAttributesManager = types
         return;
       }
 
-      if (value === null) {
-        yield self.setStateRequest.send(api.spaceAttributeRepository.deleteSpaceSubAttribute, {
+      const repiository = api.spaceAttributeRepository;
+
+      yield self.setStateRequest.send(
+        value === null ? repiository.deleteSpaceSubAttribute : repiository.setSpaceSubAttribute,
+        {
           worldId,
           spaceId,
           plugin_id: self.pluginId,
-          attribute_name: 'state',
-          sub_attribute_key: key
-        });
-      } else {
-        yield self.setStateRequest.send(api.spaceAttributeRepository.setSpaceSubAttribute, {
-          worldId,
-          spaceId,
-          plugin_id: self.pluginId,
-          attribute_name: 'state',
+          attribute_name: AttributeNameEnum.STATE,
           sub_attribute_key: key,
-          value: value
-        });
-      }
+          value
+        }
+      );
     })
   }))
   .views((self) => ({

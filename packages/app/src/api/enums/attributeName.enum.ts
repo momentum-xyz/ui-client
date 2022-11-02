@@ -1,3 +1,4 @@
 export enum AttributeNameEnum {
-  NAME = 'name'
+  NAME = 'name',
+  STATE = 'state'
 }
