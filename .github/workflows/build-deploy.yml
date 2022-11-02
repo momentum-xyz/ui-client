@@ -16,7 +16,7 @@ jobs:
     runs-on: self-hosted  # ubuntu-latest
     steps:
       - id: build
-        uses: momentum-xyz/docker-build-action@v6
+        uses: momentum-xyz/docker-build-action@v6.1.0
         with:
           registry-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           registry-user: ${{ secrets.REGISTRY_USERNAME }}
@@ -77,7 +77,8 @@ jobs:
     runs-on: self-hosted  # ubuntu-latest
     steps:
       - id: build-miro
-        uses: momentum-xyz/docker-build-action@v6
+        needs: build-app
+        uses: momentum-xyz/docker-build-action@v6.1.0
         with:
           registry-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           registry-user: ${{ secrets.REGISTRY_USERNAME }}
