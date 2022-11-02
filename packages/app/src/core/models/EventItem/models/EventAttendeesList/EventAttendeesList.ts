@@ -1,14 +1,18 @@
 import {types, flow, cast, Instance} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {AttendeeModel, AttendeeModelInterface} from 'core/models';
-import {AttendeesResponseInterface} from 'api/repositories/attendeesRepository/attendeesRepository.api.types';
-import {api} from 'api';
+import {
+  AttendeeModel,
+  AttendeeModelInterface,
+  UserProfileModelInterface,
+  UserSpaceDetails
+} from 'core/models';
+import {api, UserSpaceListItemResponse, AttendeesResponseInterface} from 'api';
 
-const AttendeesListStore = types
+const EventAttendeesList = types
   .compose(
     ResetModel,
-    types.model('AttendeesListStore', {
+    types.model('EventAttendeesList', {
       dialog: types.optional(Dialog, {}),
       query: types.optional(types.string, ''),
       attendees: types.optional(types.array(AttendeeModel), []),
@@ -18,7 +22,10 @@ const AttendeesListStore = types
       eventId: types.maybe(types.string),
       eventName: types.maybe(types.string),
       selectedAttendeeId: types.maybe(types.string),
-      attendeeDialog: types.optional(Dialog, {})
+      attendeeDialog: types.optional(Dialog, {}),
+      // TODO: Make proper model for selected user
+      userSpaceList: types.optional(types.array(UserSpaceDetails), []),
+      spaceListRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -37,6 +44,18 @@ const AttendeesListStore = types
         self.numberOfAttendees = response.count;
       }
     }),
+    fetchUserSpaceList: flow(function* () {
+      if (self.selectedAttendeeId) {
+        const response: UserSpaceListItemResponse[] = yield self.spaceListRequest.send(
+          api.spaceRepository.fetchUserSpaceList,
+          {userId: self.selectedAttendeeId}
+        );
+
+        if (response) {
+          self.userSpaceList = cast(response);
+        }
+      }
+    }),
     changeQuery(query: string) {
       self.query = query;
     }
@@ -49,16 +68,26 @@ const AttendeesListStore = types
       self.dialog.open();
       yield self.fetchAttendees();
     }),
-    selectAttendee(attendee: AttendeeModelInterface) {
+    selectAttendee: flow(function* (attendee: AttendeeModelInterface) {
       self.selectedAttendeeId = attendee.id;
+      self.userSpaceList = cast([]);
       self.attendeeDialog.open();
-    },
+      yield self.fetchUserSpaceList();
+    }),
     hideAttendee() {
       self.selectedAttendeeId = undefined;
+      self.userSpaceList = cast([]);
       self.attendeeDialog.close();
+    }
+  }))
+  .views((self) => ({
+    get selectedAttendee(): UserProfileModelInterface | undefined {
+      return self.selectedAttendeeId
+        ? self.attendees.find((attendee) => attendee.user.uuid === self.selectedAttendeeId)?.user
+        : undefined;
     }
   }));
 
-export type AttendeesListStoreType = Instance<typeof AttendeesListStore>;
+export type EventAttendeesListModelType = Instance<typeof EventAttendeesList>;
 
-export {AttendeesListStore};
+export {EventAttendeesList};
