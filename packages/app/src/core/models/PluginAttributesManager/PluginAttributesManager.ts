@@ -3,6 +3,7 @@ import {APIInterface} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api} from 'api';
+import {AttributeNameEnum} from 'api/enums';
 
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
@@ -13,20 +14,22 @@ const PluginAttributesManager = types
   })
   .actions((self) => ({
     get: flow(function* <T>(worldId: string, spaceId: string, key: string) {
-      const value: T | undefined = yield self.getStateRequest.send(
+      const response = yield self.getStateRequest.send(
         api.spaceAttributeRepository.getSpaceSubAttribute,
         {
           worldId,
           spaceId,
           plugin_id: self.pluginId,
-          attribute_name: 'state',
+          attribute_name: AttributeNameEnum.STATE,
           sub_attribute_key: key
         }
       );
 
-      if (value === undefined) {
+      if (!response || !(key in response)) {
         return null;
       }
+
+      const value: T extends undefined ? never : T = response[key];
 
       return value;
     }),
@@ -40,14 +43,19 @@ const PluginAttributesManager = types
         return;
       }
 
-      yield self.setStateRequest.send(api.spaceAttributeRepository.setSpaceSubAttribute, {
-        worldId,
-        spaceId,
-        plugin_id: self.pluginId,
-        attribute_name: 'state',
-        sub_attribute_key: key,
-        value: value
-      });
+      const repiository = api.spaceAttributeRepository;
+
+      yield self.setStateRequest.send(
+        value === null ? repiository.deleteSpaceSubAttribute : repiository.setSpaceSubAttribute,
+        {
+          worldId,
+          spaceId,
+          plugin_id: self.pluginId,
+          attribute_name: AttributeNameEnum.STATE,
+          sub_attribute_key: key,
+          value
+        }
+      );
     })
   }))
   .views((self) => ({

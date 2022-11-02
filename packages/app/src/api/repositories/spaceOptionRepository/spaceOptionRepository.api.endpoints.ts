@@ -5,6 +5,7 @@ export const spaceOptionRepositoryEndpoints = () => {
 
   return {
     effectiveOptions: `${BASE_URL}/effective-options`,
-    effectiveSubOption: `${BASE_URL}/effective-options/sub`
+    effectiveSubOption: `${BASE_URL}/effective-options/sub`,
+    subOption: `${BASE_URL}/options/sub`
   };
 };

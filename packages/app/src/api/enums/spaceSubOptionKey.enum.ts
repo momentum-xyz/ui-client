@@ -1,4 +1,4 @@
 export enum SpaceSubOptionKeyEnum {
-  Asset2D = 'asset2D-plugins',
-  Asset3D = 'asset3D-plugins'
+  Asset2DPlugins = 'asset2d_plugins',
+  Asset3DPlugins = 'asset3d_plugins'
 }
