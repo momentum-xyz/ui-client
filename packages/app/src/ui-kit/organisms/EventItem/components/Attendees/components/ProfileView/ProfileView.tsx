@@ -5,7 +5,7 @@ import {capitalize} from 'lodash-es';
 import {PanelLayout, Avatar, Text, IconSvg, Heading} from '@momentum-xyz/ui-kit';
 import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum-xyz/core';
 
-import {UserSpaceList} from 'ui-kit/molecules';
+import {UserSpaceList} from 'ui-kit';
 import {UserProfileModelInterface, UserSpaceDetailsInterface} from 'core/models';
 
 import * as styled from './ProfileView.styled';
