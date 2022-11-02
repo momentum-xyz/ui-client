@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "husky install",
     "build": "yarn build:app",
-    "build:deps": "yarn workspace @momentum-xyz/core build && yarn workspace @momentum-xyz/ui-kit build && yarn workspace @momentum-xyz/sdk build",
+    "build:deps": "yarn workspace @momentum-xyz/core build && yarn workspace @momentum-xyz/sdk build",
     "build:app": "yarn build:deps && yarn workspace @momentum-xyz/ui-client build",
     "build:plugin_miro": "yarn build:deps && yarn workspace plugin_miro build",
     "start": "yarn build:deps && yarn --cwd=packages/app start",
