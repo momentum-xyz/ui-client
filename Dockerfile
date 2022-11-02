@@ -33,7 +33,7 @@ RUN yarn workspace @momentum-xyz/ui-client build
 ARG PLUGIN=miro
 FROM base-build as plugin-build
 ARG PLUGIN
-RUN yarn workspace @momentum-xyz/plugin_${PLUGIN} build
+RUN yarn workspace plugin_${PLUGIN} build
 
 
 # Base runtime
