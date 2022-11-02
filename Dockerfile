@@ -27,7 +27,7 @@ RUN yarn build:deps
 
 # App builder
 FROM base-build as app-build
-RUN yarn workspace @momentum-xyz/ui-client install
+RUN yarn workspace @momentum-xyz/ui-client install --check-files
 RUN yarn workspace @momentum-xyz/ui-client build
 
 
@@ -35,7 +35,7 @@ RUN yarn workspace @momentum-xyz/ui-client build
 ARG PLUGIN=miro
 FROM base-build as plugin-build
 ARG PLUGIN
-RUN yarn workspace plugin_${PLUGIN} install
+RUN yarn workspace plugin_${PLUGIN} install --check-files
 RUN yarn workspace plugin_${PLUGIN} build
 
 
