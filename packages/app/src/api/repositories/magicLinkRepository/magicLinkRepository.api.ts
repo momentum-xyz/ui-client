@@ -15,7 +15,7 @@ import {FetchMagicLinkRequest, MagicLinkGenerateRequest} from './magicLinkReposi
 export const generateLink: RequestInterface<MagicLinkGenerateRequest, SpaceSubAttributeResponse> = (
   options
 ) => {
-  const {data, spaceId, type, position, eventId, key, ...restOptions} = options;
+  const {spaceId, type, position, eventId, key, ...restOptions} = options;
 
   const attributeOptions: SetSpaceSubAttributeRequest = {
     spaceId: spaceId,
