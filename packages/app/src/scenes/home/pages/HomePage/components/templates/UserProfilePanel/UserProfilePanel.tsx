@@ -11,13 +11,10 @@ import * as styled from './UserProfilePanel.styled';
 interface PropsInterface {
   userId: string;
   onClose: () => void;
-  hasBorder?: boolean;
-  showUserInteractions?: boolean;
 }
 
-// TODO: Remove props (after refactoring AttendeesWidget)
 const UserProfilePanel: FC<PropsInterface> = (props) => {
-  const {userId, hasBorder, showUserInteractions = true, onClose} = props;
+  const {userId, onClose} = props;
 
   const {homeStore, sessionStore} = useStore();
   const {userProfileStore} = homeStore;
@@ -53,7 +50,6 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
           title={t('labels.myBio')}
           headerActions={<SvgButton iconName="edit" size="normal" onClick={handleEditProfile} />}
           componentSize={{width: '390px'}}
-          hasBorder={hasBorder}
           onClose={onClose}
           captureAllPointerEvents
           headerPlaceholder
@@ -71,18 +67,13 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
         <PanelLayout
           title={t('labels.someonesBio', {name: userProfile?.name || ''})}
           componentSize={{width: '390px'}}
-          hasBorder={hasBorder}
           onClose={onClose}
           captureAllPointerEvents
           headerPlaceholder
           titleHeight
         >
           <styled.Body>
-            <UserProfileView
-              userId={userId}
-              showUserInteractions={showUserInteractions}
-              onClose={onClose}
-            />
+            <UserProfileView userId={userId} showUserInteractions onClose={onClose} />
           </styled.Body>
         </PanelLayout>
       )}
