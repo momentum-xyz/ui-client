@@ -21,7 +21,7 @@
     "nibble": "eslint-nibble --ext .js,.jsx,.ts,.tsx packages/**/src",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "clean": "rimraf packages/**/build packages/**/dist"
+    "clean": "rimraf packages/**/build packages/**/dist packages/**/node_modules node_modules"
   },
   "resolutions": {
     "styled-components": "^5",
