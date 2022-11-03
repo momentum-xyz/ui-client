@@ -1,5 +1,5 @@
 import {RequestModel} from '@momentum-xyz/core';
-import {APIInterface} from '@momentum-xyz/sdk';
+import {APIInterface, PluginConfigInterface} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, GetSpaceAttributeResponse} from 'api';
@@ -70,7 +70,7 @@ const PluginAttributesManager = types
     })
   }))
   .views((self) => ({
-    get api(): APIInterface<Record<string, unknown>> {
+    get api(): APIInterface<PluginConfigInterface> {
       return {
         get: async <T>(key: string) => {
           const result = await self.get(self.spaceId, key);
