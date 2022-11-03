@@ -4,11 +4,14 @@ import {APIInterface} from '@momentum-xyz/sdk';
 import {AppConfigInterface} from 'core/interfaces';
 import {appVariables} from 'api/constants';
 
+import {MiroBoardStore} from './MiroBoardStore.ts';
+
 const RootMiroStore = types
   .compose(
     ResetModel,
     types.model('RootMiroStore', {
-      api: types.frozen<APIInterface<AppConfigInterface>>()
+      api: types.frozen<APIInterface<AppConfigInterface>>(),
+      miroBoardStore: types.optional(MiroBoardStore, {})
     })
   )
   .actions((self) => ({
