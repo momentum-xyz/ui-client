@@ -4,6 +4,7 @@ import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, GetSpaceAttributeResponse} from 'api';
 import {AttributeNameEnum} from 'api/enums';
+import {appVariables} from 'api/constants';
 
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
@@ -52,11 +53,11 @@ const PluginAttributesManager = types
         }
       );
     }),
-    getConfig: flow(function* <C extends GetSpaceAttributeResponse>(spaceId: string) {
+    getConfig: flow(function* <C extends GetSpaceAttributeResponse>() {
       const response: GetSpaceAttributeResponse | undefined = yield self.getConfigRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
-          spaceId,
+          spaceId: appVariables.NODE_ID,
           plugin_id: self.pluginId,
           attribute_name: AttributeNameEnum.CONFIG
         }
@@ -77,7 +78,7 @@ const PluginAttributesManager = types
           return result as T;
         },
         set: (key, value) => self.set(self.spaceId, key, value),
-        getConfig: () => self.getConfig(self.spaceId)
+        getConfig: () => self.getConfig()
       };
     }
   }));
