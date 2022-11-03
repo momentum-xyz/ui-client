@@ -18,7 +18,7 @@ import * as styled from './WorldCalendarPage.styled';
 const WorldCalendarPage: FC = () => {
   const {worldCalendarStore, mainStore, sessionStore} = useStore();
   const {calendarStore} = worldCalendarStore;
-  const {magicDialog, eventList, deleteConfirmationDialog, spaceId} = calendarStore;
+  const {magicDialog, eventList, deleteConfirmationDialog, spaceId, magicLink} = calendarStore;
   const {worldStore, unityStore} = mainStore;
 
   const {t} = useTranslation();
@@ -113,12 +113,12 @@ const WorldCalendarPage: FC = () => {
         showOnWorldCalendar
       />
 
-      {calendarStore.magicId && magicDialog.isOpen && (
+      {magicDialog.isOpen && (
         <LinkDialog
           theme={theme}
           title={t('eventList.eventItem.magicLinkDialog.title')}
           copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
-          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
+          link={magicLink}
           onClose={magicDialog.close}
         />
       )}
