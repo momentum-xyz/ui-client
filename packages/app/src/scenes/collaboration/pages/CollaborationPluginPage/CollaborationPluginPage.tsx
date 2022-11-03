@@ -22,7 +22,7 @@ interface PropsInterface {
 const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {spaceStore, streamChatStore} = collaborationStore;
-  const {favoriteStore, pluginsStore, worldStore} = mainStore;
+  const {favoriteStore, pluginsStore} = mainStore;
   const {plugin, attributesManager} = pluginLoader;
 
   const history = useHistory();
@@ -30,7 +30,10 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
   const {t} = useTranslation();
 
-  pluginsStore.loadPluginIfNeeded(pluginLoader);
+  const isDynamicScriptLoaded =
+    pluginsStore.dynamicScriptsStore.getScript(pluginLoader.scopeName)?.isLoaded ?? false;
+
+  pluginsStore.loadPluginIfNeeded(pluginLoader, isDynamicScriptLoaded);
 
   const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
     console.info('Recieved actions', actions);
@@ -83,7 +86,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                 theme={theme}
                 isSpaceAdmin={spaceStore.isAdmin}
                 spaceId={spaceStore.id}
-                api={attributesManager.getAPI(worldStore.worldId, spaceStore.id)}
+                api={attributesManager.api}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>
