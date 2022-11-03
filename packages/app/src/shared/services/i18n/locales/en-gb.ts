@@ -499,6 +499,15 @@ export const enGb = {
       changeLabel: 'Change Image',
       dragActiveLabel: 'Drop the files here...'
     },
+    assetsUploader: {
+      title: 'Create space with Asset',
+      uploadLabel: 'Upload .glb/.gltf file',
+      dragActiveLabel: 'Drop the files here...',
+      confirmButton: 'Create Space',
+      spaceName: 'Space Name',
+      errorMissingName: 'Please enter a name for the space',
+      errorSave: 'Error saving space'
+    },
     eventList: {
       noGatherings: 'There are no gatherings scheduled for this space.',
       eventItem: {

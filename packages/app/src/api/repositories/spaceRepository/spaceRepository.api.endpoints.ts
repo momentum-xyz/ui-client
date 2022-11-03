@@ -8,6 +8,7 @@ export const spaceRepositoryEndpoints = () => {
     edit: `${BASE_URL}/edit`,
     delete: `${BASE_URL}/delete`,
     create: `${BASE_URL}/create`,
+    createWithAsset: `${BASE_URL}/create-with-asset`,
     unassignUser: `${BASE_URL}/unassign-user`,
     assignUser: `${BASE_URL}/assign-user`,
     ownedSpaces: `${BASE_URL}/owned-spaces`,
