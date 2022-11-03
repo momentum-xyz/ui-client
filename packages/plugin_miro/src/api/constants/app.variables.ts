@@ -1,4 +1,4 @@
-import {AppConfigExtendedInterface} from 'api/interfaces';
+import {AppConfigExtendedInterface} from 'core/interfaces';
 
 // @ts-ignore window['env']
 export const appVariables: AppConfigExtendedInterface = window['env'] ?? {

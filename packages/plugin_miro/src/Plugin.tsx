@@ -1,9 +1,9 @@
-import {MiroPluginInterface} from 'api/interfaces';
+import {MiroPluginInterface} from 'core/interfaces';
 
-import SpaceApp from './SpaceApp';
+import MiroApp from './MiroApp';
 
 const Plugin: MiroPluginInterface = {
-  SpaceExtension: SpaceApp
+  SpaceExtension: MiroApp
 };
 
 export default Plugin;
