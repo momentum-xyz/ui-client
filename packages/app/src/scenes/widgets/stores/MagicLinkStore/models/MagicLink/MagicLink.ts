@@ -10,23 +10,28 @@ import {ROUTES} from 'core/constants';
 const MagicLink = types
   .model('MagicLink', {
     request: types.optional(RequestModel, {}),
-    key: 'current-position'
+    magicLinkId: ''
   })
   .views((self) => ({
-    get address(): string {
-      return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.key})}`;
+    get address(): string | null {
+      if (self.magicLinkId) {
+        return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.magicLinkId})}`;
+      }
+      return null;
     },
     get wasCreated(): boolean {
       return self.request.isDone;
     }
   }))
   .actions((self) => ({
+    init() {
+      self.magicLinkId = uuidv4();
+    },
     generate: flow(function* (type: MagicTypeEnum, spaceId?: string, position?: any) {
-      self.key = uuidv4();
       const response: MagicLinkResponse = yield self.request.send(
         api.magicLinkRepository.createLink,
         {
-          key: self.key,
+          key: self.magicLinkId,
           data: {
             type,
             spaceId,
@@ -34,7 +39,7 @@ const MagicLink = types
           }
         }
       );
-      if (response) {
+      if (response && self.address) {
         yield copyToClipboard(self.address);
       }
     })

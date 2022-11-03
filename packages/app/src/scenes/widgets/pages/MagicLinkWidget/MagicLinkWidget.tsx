@@ -19,13 +19,14 @@ const MagicLinkWidget: FC = () => {
   const {spaceStore} = collaborationStore;
   const {magicLinkStore} = widgetStore;
   const {magicLink} = magicLinkStore;
-  const {generate, address, request, wasCreated} = magicLink;
+  const {generate, address, wasCreated, init} = magicLink;
   const {unityStore} = mainStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
 
   useEffect(() => {
+    init();
     return () => {
       magicLinkStore.resetModel();
     };
@@ -53,16 +54,7 @@ const MagicLinkWidget: FC = () => {
     } else {
       await generate(MagicTypeEnum.FLY, undefined, unityStore.getUserPosition());
     }
-  }, [
-    generate,
-    magicLinkStore.magicLinkDialog,
-    request.isDone,
-    spaceStore.id,
-    spaceStore.isTable,
-    spaceStore.space,
-    t,
-    unityStore
-  ]);
+  }, [generate, spaceStore, unityStore]);
 
   return (
     <Dialog

@@ -22,7 +22,7 @@ const WorldCalendarStore = types
         eventList: types.optional(EventList, {}),
         spaceId: types.maybe(types.string),
         eventForm: types.optional(EventForm, {}),
-        key: 'current-position',
+        magicLinkId: '',
         magicLinkRequest: types.optional(RequestModel, {})
       })
       .actions((self) => ({
@@ -54,9 +54,9 @@ const WorldCalendarStore = types
           return self.removeEventRequest.isDone;
         }),
         showMagicLink: flow(function* (spaceId: string, eventId: string) {
-          self.key = uuidv4();
+          self.magicLinkId = uuidv4();
           const response = yield self.magicLinkRequest.send(api.magicLinkRepository.createLink, {
-            key: self.key,
+            key: self.magicLinkId,
             data: {
               type: MagicTypeEnum.EVENT,
               eventId,
@@ -72,8 +72,8 @@ const WorldCalendarStore = types
   )
   .views((self) => ({
     get address(): string {
-      return `${window.location.protocol}//${window.location.host}${generatePath(ROUTES.magic, {
-        id: self.key
+      return `${window.location.origin}${generatePath(ROUTES.magic, {
+        id: self.magicLinkId
       })}`;
     }
   }));

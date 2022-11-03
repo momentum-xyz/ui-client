@@ -10,11 +10,13 @@ import {
   isOtherYearThanToday
 } from '@momentum-xyz/core';
 import {generatePath} from 'react-router-dom';
+import {v4 as uuidv4} from 'uuid';
 
 import {api, AttendeesResponseInterface} from 'api';
 import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';
 import {ROUTES} from 'core/constants';
+import {MagicTypeEnum} from 'core/enums';
 
 import {EventItemData, EventAttendeesList} from './models';
 
@@ -27,7 +29,7 @@ const EventItem = types
     attendeesDetails: types.optional(EventAttendeesList, {}),
     numberOfAllAttendees: types.optional(types.number, 0),
     attendRequest: types.optional(RequestModel, {}),
-    key: ''
+    magicLinkId: ''
   })
   .actions((self) => ({
     fetchAttendees: flow(function* (limit?: boolean) {
@@ -44,10 +46,22 @@ const EventItem = types
         self.attendees = cast(response.attendees);
         self.numberOfAllAttendees = response.count;
       }
+    }),
+    fetchMagicLink: flow(function* () {
+      self.magicLinkId = uuidv4();
+      yield self.magicRequest.send(api.magicLinkRepository.createLink, {
+        key: self.magicLinkId,
+        data: {
+          type: MagicTypeEnum.EVENT,
+          spaceId: self.data?.spaceId,
+          eventId: self.data?.id
+        }
+      });
     })
   }))
   .actions((self) => ({
     init() {
+      self.fetchMagicLink();
       self.fetchAttendees(true);
     },
     isLive(): boolean {
@@ -121,7 +135,7 @@ const EventItem = types
       return self.attendees.some((attendee) => attendee.id === userId);
     },
     get magicLink(): string {
-      return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.key})}`;
+      return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.magicLinkId})}`;
     }
   }));
 
