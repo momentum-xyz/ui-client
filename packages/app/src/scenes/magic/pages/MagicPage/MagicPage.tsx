@@ -21,7 +21,7 @@ const MagicPage: FC = () => {
 
     const spaceId = magicStore.magicLink.data.spaceId;
 
-    switch (magicStore.magicLink.data.type) {
+    switch (magicStore.magicLink.type) {
       case MagicTypeEnum.FLY:
         unityStore.teleportToVector3(magicStore.magicLink.data.position);
         history.replace({pathname: ROUTES.base});
@@ -53,7 +53,7 @@ const MagicPage: FC = () => {
   }, [history, magicStore.magicLink, unityStore]);
 
   useEffect(() => {
-    magicStore.getMagicLink(id);
+    magicStore.fetchMagicLink(id);
   }, [id, magicStore]);
 
   useEffect(() => {

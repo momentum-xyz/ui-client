@@ -14,7 +14,7 @@ const MagicStore = types
     })
   )
   .actions((self) => ({
-    getMagicLink: flow(function* (key: string) {
+    fetchMagicLink: flow(function* (key: string) {
       const response: GetSpaceAttributeResponse = yield self.request.send(
         api.magicLinkRepository.fetchMagicLink,
         {

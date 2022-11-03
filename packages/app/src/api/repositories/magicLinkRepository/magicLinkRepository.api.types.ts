@@ -3,8 +3,8 @@ import {MagicLinkInterface} from 'core/interfaces';
 
 export interface MagicLinkGenerateRequest {
   key: string;
+  type: MagicTypeEnum;
   data: {
-    type: MagicTypeEnum;
     spaceId?: string;
     eventId?: string;
     position?: any;

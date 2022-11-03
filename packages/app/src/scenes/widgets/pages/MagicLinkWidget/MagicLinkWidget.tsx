@@ -19,7 +19,7 @@ const MagicLinkWidget: FC = () => {
   const {spaceStore} = collaborationStore;
   const {magicLinkStore} = widgetStore;
   const {magicLink} = magicLinkStore;
-  const {generate, address, wasCreated, init} = magicLink;
+  const {copyToClipBoard, address, wasCreated, init} = magicLink;
   const {unityStore} = mainStore;
 
   const theme = useTheme();
@@ -48,13 +48,13 @@ const MagicLinkWidget: FC = () => {
 
   const handleGenerateLink = useCallback(async () => {
     if (spaceStore.space && !spaceStore.isTable) {
-      await generate(MagicTypeEnum.OPEN_SPACE, spaceStore.id);
+      await copyToClipBoard(MagicTypeEnum.OPEN_SPACE, spaceStore.id);
     } else if (spaceStore.space && spaceStore.isTable) {
-      await generate(MagicTypeEnum.JOIN_MEETING, spaceStore.id);
+      await copyToClipBoard(MagicTypeEnum.JOIN_MEETING, spaceStore.id);
     } else {
-      await generate(MagicTypeEnum.FLY, undefined, unityStore.getUserPosition());
+      await copyToClipBoard(MagicTypeEnum.FLY, undefined, unityStore.getUserPosition());
     }
-  }, [generate, spaceStore, unityStore]);
+  }, [copyToClipBoard, spaceStore, unityStore]);
 
   return (
     <Dialog

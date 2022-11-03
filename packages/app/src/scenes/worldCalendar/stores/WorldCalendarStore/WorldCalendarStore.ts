@@ -57,8 +57,8 @@ const WorldCalendarStore = types
           self.magicLinkId = uuidv4();
           const response = yield self.magicLinkRequest.send(api.magicLinkRepository.createLink, {
             key: self.magicLinkId,
+            type: MagicTypeEnum.EVENT,
             data: {
-              type: MagicTypeEnum.EVENT,
               eventId,
               spaceId
             }
@@ -71,7 +71,7 @@ const WorldCalendarStore = types
       }))
   )
   .views((self) => ({
-    get address(): string {
+    get magicLink(): string {
       return `${window.location.origin}${generatePath(ROUTES.magic, {
         id: self.magicLinkId
       })}`;

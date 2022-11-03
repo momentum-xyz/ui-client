@@ -27,13 +27,13 @@ const MagicLink = types
     init() {
       self.magicLinkId = uuidv4();
     },
-    generate: flow(function* (type: MagicTypeEnum, spaceId?: string, position?: any) {
+    copyToClipBoard: flow(function* (type: MagicTypeEnum, spaceId?: string, position?: any) {
       const response: MagicLinkResponse = yield self.request.send(
         api.magicLinkRepository.createLink,
         {
           key: self.magicLinkId,
+          type,
           data: {
-            type,
             spaceId,
             position: position ? position : undefined
           }

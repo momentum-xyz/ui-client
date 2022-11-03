@@ -47,12 +47,12 @@ const EventItem = types
         self.numberOfAllAttendees = response.count;
       }
     }),
-    fetchMagicLink: flow(function* () {
+    createMagicLink: flow(function* () {
       self.magicLinkId = uuidv4();
       yield self.magicRequest.send(api.magicLinkRepository.createLink, {
         key: self.magicLinkId,
+        type: MagicTypeEnum.EVENT,
         data: {
-          type: MagicTypeEnum.EVENT,
           spaceId: self.data?.spaceId,
           eventId: self.data?.id
         }
@@ -61,7 +61,7 @@ const EventItem = types
   }))
   .actions((self) => ({
     init() {
-      self.fetchMagicLink();
+      self.createMagicLink();
       self.fetchAttendees(true);
     },
     isLive(): boolean {

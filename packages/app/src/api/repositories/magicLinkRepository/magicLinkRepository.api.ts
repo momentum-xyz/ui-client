@@ -16,14 +16,14 @@ import {FetchMagicLinkRequest, MagicLinkGenerateRequest} from './magicLinkReposi
 export const createLink: RequestInterface<MagicLinkGenerateRequest, SpaceSubAttributeResponse> = (
   options
 ) => {
-  const {key, data, ...restOptions} = options;
+  const {key, type, data, ...restOptions} = options;
 
   const attributeOptions: SetSpaceSubAttributeRequest = {
     spaceId: appVariables.NODE_ID,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.MAGIC_LINKS,
     sub_attribute_key: key,
-    value: {data},
+    value: {type, data},
     ...restOptions
   };
 
