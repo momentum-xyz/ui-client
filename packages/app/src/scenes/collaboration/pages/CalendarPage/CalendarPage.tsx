@@ -25,7 +25,7 @@ const CalendarPage: FC = () => {
   const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, spaceStore} = collaborationStore;
   const {favoriteStore} = mainStore;
-  const {eventList, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
+  const {eventList, formDialog, magicDialog, deleteConfirmationDialog, address} = calendarStore;
   const {attendeesListStore} = widgetStore;
 
   const theme = useTheme();
@@ -117,12 +117,12 @@ const CalendarPage: FC = () => {
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
 
-      {calendarStore.magicId && magicDialog.isOpen && (
+      {magicDialog.isOpen && (
         <LinkDialog
           theme={theme}
           title={t('eventList.eventItem.magicLinkDialog.title')}
           copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
-          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
+          link={address}
           onClose={magicDialog.close}
         />
       )}

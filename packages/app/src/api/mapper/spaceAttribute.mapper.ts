@@ -9,8 +9,3 @@ export const mapSpaceSubAttributes = <T>(subAttributes: SpaceSubAttributeRespons
   // TODO: add edge cases if it needs
   return subAttributes as never as T;
 };
-
-export const mapSubAttributeValue = <T>(subAttribute: SpaceSubAttributeResponse): T => {
-  // TODO: add edge cases if it needs
-  return Object.values(subAttribute)[0] as never as T;
-};

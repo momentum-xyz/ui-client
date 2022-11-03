@@ -19,8 +19,8 @@ const MagicLinkWidget: FC = () => {
   const {spaceStore} = collaborationStore;
   const {magicLinkStore} = widgetStore;
   const {magicLink} = magicLinkStore;
-  const {generate, address, request} = magicLink;
-  const {unityStore, worldStore} = mainStore;
+  const {generate, address, request, wasCreated} = magicLink;
+  const {unityStore} = mainStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
@@ -30,17 +30,8 @@ const MagicLinkWidget: FC = () => {
       magicLinkStore.resetModel();
     };
   }, [magicLinkStore]);
-
-  const handleGenerateLink = useCallback(async () => {
-    if (spaceStore.space && !spaceStore.isTable) {
-      await generate(MagicTypeEnum.OPEN_SPACE, spaceStore.id, undefined);
-    } else if (spaceStore.space && spaceStore.isTable) {
-      await generate(MagicTypeEnum.JOIN_MEETING, spaceStore.id, undefined);
-    } else {
-      await generate(MagicTypeEnum.FLY, worldStore.worldId, unityStore.getUserPosition());
-    }
-
-    if (request.isDone) {
+  useEffect(() => {
+    if (wasCreated) {
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -50,18 +41,27 @@ const MagicLinkWidget: FC = () => {
         />,
         TOAST_COMMON_OPTIONS
       );
+      magicLinkStore.magicLinkDialog.close();
     }
-    magicLinkStore.magicLinkDialog.close();
+  }, [wasCreated]);
+
+  const handleGenerateLink = useCallback(async () => {
+    if (spaceStore.space && !spaceStore.isTable) {
+      await generate(MagicTypeEnum.OPEN_SPACE, spaceStore.id);
+    } else if (spaceStore.space && spaceStore.isTable) {
+      await generate(MagicTypeEnum.JOIN_MEETING, spaceStore.id);
+    } else {
+      await generate(MagicTypeEnum.FLY, undefined, unityStore.getUserPosition());
+    }
   }, [
     generate,
-    request.isDone,
     magicLinkStore.magicLinkDialog,
+    request.isDone,
     spaceStore.id,
     spaceStore.isTable,
     spaceStore.space,
     t,
-    unityStore,
-    worldStore.worldId
+    unityStore
   ]);
 
   return (

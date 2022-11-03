@@ -9,23 +9,25 @@ const MagicStore = types
   .compose(
     ResetModel,
     types.model('MagicStore', {
-      magic: types.maybe(types.frozen<MagicLinkInterface>()),
+      magicLink: types.maybe(types.frozen<MagicLinkInterface>()),
       request: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    getMagicLink: flow(function* (key: string, worldId: string) {
+    getMagicLink: flow(function* (key: string) {
       const response: GetSpaceAttributeResponse = yield self.request.send(
         api.magicLinkRepository.fetchMagicLink,
         {
-          key,
-          worldId
+          key
         }
       );
       if (response) {
-        self.magic = cast({
-          ...mapper.mapSubAttributeValue<MagicLinkInterface>(response)
-        });
+        const magicLinkData = mapper.mapSubAttributeValue<MagicLinkInterface>(response);
+        if (magicLinkData) {
+          self.magicLink = cast({
+            ...magicLinkData
+          });
+        }
       }
     })
   }));

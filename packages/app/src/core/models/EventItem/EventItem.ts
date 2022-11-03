@@ -9,12 +9,12 @@ import {
   formattedStringFromDate,
   isOtherYearThanToday
 } from '@momentum-xyz/core';
-import {v4 as uuidv4} from 'uuid';
+import {generatePath} from 'react-router-dom';
 
 import {api, AttendeesResponseInterface} from 'api';
 import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';
-import {MagicTypeEnum} from 'core/enums';
+import {ROUTES} from 'core/constants';
 
 import {EventItemData} from './models';
 
@@ -43,20 +43,10 @@ const EventItem = types
         self.attendees = cast(response.attendees);
         self.numberOfAllAttendees = response.count;
       }
-    }),
-    fetchMagicLink: flow(function* () {
-      self.key = uuidv4();
-      yield self.magicRequest.send(api.magicLinkRepository.generateLink, {
-        type: MagicTypeEnum.EVENT,
-        key: self.key,
-        spaceId: self.data?.spaceId ?? '',
-        eventId: self.data?.id
-      });
     })
   }))
   .actions((self) => ({
     init() {
-      self.fetchMagicLink();
       self.fetchAttendees(true);
     },
     isLive(): boolean {
@@ -130,7 +120,7 @@ const EventItem = types
       return self.attendees.some((attendee) => attendee.id === userId);
     },
     get magicLink(): string {
-      return `${window.location.origin}/magic/${self.key}`;
+      return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.key})}`;
     }
   }));
 

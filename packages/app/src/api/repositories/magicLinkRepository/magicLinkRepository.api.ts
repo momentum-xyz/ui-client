@@ -1,5 +1,7 @@
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
+import {appVariables} from 'api/constants';
+import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
 
 import {
   GetSpaceSubAttributeRequest,
@@ -7,22 +9,21 @@ import {
   SetSpaceSubAttributeRequest,
   SpaceSubAttributeResponse
 } from '../spaceAttributeRepository/spaceAttribute.api.types';
-import {AttributeNameEnum, PluginIdEnum} from '../../enums';
 import {getSpaceSubAttribute, setSpaceSubAttribute} from '../spaceAttributeRepository';
 
 import {FetchMagicLinkRequest, MagicLinkGenerateRequest} from './magicLinkRepository.api.types';
 
-export const generateLink: RequestInterface<MagicLinkGenerateRequest, SpaceSubAttributeResponse> = (
+export const createLink: RequestInterface<MagicLinkGenerateRequest, SpaceSubAttributeResponse> = (
   options
 ) => {
-  const {spaceId, type, position, eventId, key, ...restOptions} = options;
+  const {key, data, ...restOptions} = options;
 
   const attributeOptions: SetSpaceSubAttributeRequest = {
-    spaceId: spaceId,
+    spaceId: appVariables.NODE_ID,
     plugin_id: PluginIdEnum.CORE,
-    attribute_name: AttributeNameEnum.MAGIC_LINK,
+    attribute_name: AttributeNameEnum.MAGIC_LINKS,
     sub_attribute_key: key,
-    value: {position, type, eventId, spaceId},
+    value: {data},
     ...restOptions
   };
 
@@ -32,12 +33,12 @@ export const generateLink: RequestInterface<MagicLinkGenerateRequest, SpaceSubAt
 export const fetchMagicLink: RequestInterface<FetchMagicLinkRequest, GetSpaceAttributeResponse> = (
   options
 ) => {
-  const {key, worldId, ...restOptions} = options;
+  const {key, ...restOptions} = options;
 
   const attributeOptions: GetSpaceSubAttributeRequest = {
-    spaceId: worldId,
+    spaceId: appVariables.NODE_ID,
     plugin_id: PluginIdEnum.CORE,
-    attribute_name: AttributeNameEnum.MAGIC_LINK,
+    attribute_name: AttributeNameEnum.MAGIC_LINKS,
     sub_attribute_key: key,
     ...restOptions
   };

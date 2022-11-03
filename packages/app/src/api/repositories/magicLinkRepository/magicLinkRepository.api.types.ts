@@ -2,11 +2,13 @@ import {MagicTypeEnum} from 'core/enums';
 import {MagicLinkInterface} from 'core/interfaces';
 
 export interface MagicLinkGenerateRequest {
-  position?: any;
-  eventId?: string;
-  spaceId: string;
   key: string;
-  type: MagicTypeEnum;
+  data: {
+    type: MagicTypeEnum;
+    spaceId?: string;
+    eventId?: string;
+    position?: any;
+  };
 }
 
 export interface MagicLinkGetRequest {
@@ -17,5 +19,4 @@ export interface MagicLinkResponse extends MagicLinkInterface {}
 
 export interface FetchMagicLinkRequest {
   key: string;
-  worldId: string;
 }

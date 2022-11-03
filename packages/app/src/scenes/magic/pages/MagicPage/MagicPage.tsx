@@ -9,21 +9,21 @@ import {MagicTypeEnum} from 'core/enums';
 
 const MagicPage: FC = () => {
   const {mainStore, magicStore} = useStore();
-  const {unityStore, worldStore} = mainStore;
+  const {unityStore} = mainStore;
 
   const {id} = useParams<{id: string}>();
   const history = useHistory();
 
   const handleMagic = useCallback(() => {
-    if (!magicStore.magic) {
+    if (!magicStore.magicLink) {
       return;
     }
 
-    const spaceId = magicStore.magic.spaceId;
+    const spaceId = magicStore.magicLink.data.spaceId;
 
-    switch (magicStore.magic.type) {
+    switch (magicStore.magicLink.data.type) {
       case MagicTypeEnum.FLY:
-        unityStore.teleportToVector3(magicStore.magic.position);
+        unityStore.teleportToVector3(magicStore.magicLink.data.position);
         history.replace({pathname: ROUTES.base});
         break;
       case MagicTypeEnum.OPEN_SPACE:
@@ -41,7 +41,7 @@ const MagicPage: FC = () => {
       case MagicTypeEnum.EVENT: {
         unityStore.teleportToSpace(spaceId);
         setTimeout(() => {
-          const params = {spaceId: spaceId, eventId: magicStore.magic?.eventId ?? ''};
+          const params = {spaceId: spaceId, eventId: magicStore.magicLink?.data.eventId ?? ''};
           history.push(generatePath(ROUTES.collaboration.calendarEvent, params));
         }, TELEPORT_DELAY_MS);
         break;
@@ -50,17 +50,17 @@ const MagicPage: FC = () => {
         history.replace({pathname: ROUTES.base});
         break;
     }
-  }, [history, magicStore.magic, unityStore]);
+  }, [history, magicStore.magicLink, unityStore]);
 
   useEffect(() => {
-    magicStore.getMagicLink(id, worldStore.worldId);
-  }, [id, magicStore, worldStore.worldId]);
+    magicStore.getMagicLink(id);
+  }, [id, magicStore]);
 
   useEffect(() => {
-    if (unityStore.isTeleportReady && magicStore.magic) {
+    if (unityStore.isTeleportReady && magicStore.magicLink) {
       handleMagic();
     }
-  }, [handleMagic, magicStore.magic, unityStore.isTeleportReady]);
+  }, [handleMagic, magicStore.magicLink, unityStore.isTeleportReady]);
 
   return <></>;
 };
