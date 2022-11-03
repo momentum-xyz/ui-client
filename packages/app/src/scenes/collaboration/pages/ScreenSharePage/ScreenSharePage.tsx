@@ -25,18 +25,21 @@ const ScreenSharePage: FC = () => {
 
   useEffect(() => {
     if (videoTrack) {
-      screenShareStore.relayScreenShare(space?.id ?? '');
-
-      const agoraUserId = videoTrack.getUserId() as string;
-      screenShareStore.setScreenOwner(agoraUserId);
+      const agoraUserId = videoTrack.getUserId()?.toString();
+      if (screenShareStore.screenOwnerId !== agoraUserId) {
+        screenShareStore.setScreenOwner(agoraUserId);
+      }
     } else {
       screenShareStore.setScreenOwner(null);
     }
   }, [videoTrack, screenShareStore, sessionStore.userId]);
 
-  const startScreenSharing = useCallback(() => {
-    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
-  }, [agoraScreenShareStore, sessionStore.userId]);
+  const startScreenSharing = useCallback(async () => {
+    const wasStarted: boolean = await agoraScreenShareStore.startScreenSharing(sessionStore.userId);
+    if (wasStarted) {
+      screenShareStore.relayScreenShare(space?.id ?? '');
+    }
+  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId, space?.id]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);
