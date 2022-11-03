@@ -9,7 +9,6 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {switchFullscreen} from 'core/utils';
 import {
-  AttendeesWidget,
   HelpWidget,
   LaunchInitiativeWidget,
   MagicLinkWidget,
@@ -38,7 +37,6 @@ const Widgets: FC = () => {
     profileMenuStore,
     launchInitiativeStore,
     musicPlayerStore,
-    attendeesListStore,
     emojiStore
   } = widgetStore;
   const {stakingDialog} = stakingStore;
@@ -118,7 +116,6 @@ const Widgets: FC = () => {
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
-      {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (

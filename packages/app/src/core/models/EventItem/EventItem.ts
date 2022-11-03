@@ -16,7 +16,7 @@ import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';
 import {ROUTES} from 'core/constants';
 
-import {EventItemData} from './models';
+import {EventItemData, EventAttendeesList} from './models';
 
 const EventItem = types
   .model('EventItem', {
@@ -24,6 +24,7 @@ const EventItem = types
     magicRequest: types.optional(RequestModel, {}),
     fetchAttendeesRequest: types.optional(RequestModel, {}),
     attendees: types.optional(types.array(AttendeeModel), []),
+    attendeesDetails: types.optional(EventAttendeesList, {}),
     numberOfAllAttendees: types.optional(types.number, 0),
     attendRequest: types.optional(RequestModel, {}),
     key: ''

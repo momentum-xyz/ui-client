@@ -16,11 +16,10 @@ import {EventForm} from './components';
 import * as styled from './WorldCalendarPage.styled';
 
 const WorldCalendarPage: FC = () => {
-  const {worldCalendarStore, mainStore, sessionStore, widgetStore} = useStore();
+  const {worldCalendarStore, mainStore, sessionStore} = useStore();
   const {calendarStore} = worldCalendarStore;
   const {magicDialog, eventList, deleteConfirmationDialog, spaceId, address} = calendarStore;
   const {worldStore, unityStore} = mainStore;
-  const {attendeesListStore} = widgetStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -111,7 +110,6 @@ const WorldCalendarPage: FC = () => {
         onWeblinkClick={handleWeblink}
         onFlyToSpace={handleFlyToSpace}
         onFlyToGathering={handleFlyToGathering}
-        onShowAttendeesList={attendeesListStore.showAttendees}
         showOnWorldCalendar
       />
 

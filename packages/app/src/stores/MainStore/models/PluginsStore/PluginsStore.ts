@@ -69,7 +69,10 @@ const PluginsStore = types
         .map((plugin) =>
           PluginLoader.create({
             ...plugin,
-            attributesManager: PluginAttributesManager.create({pluginId: plugin.id})
+            attributesManager: PluginAttributesManager.create({
+              pluginId: plugin.id,
+              spaceId
+            })
           })
         );
 
@@ -81,14 +84,12 @@ const PluginsStore = types
 
       self.spacePluginLoaders = cast(plugins);
     }),
-    loadPluginIfNeeded(pluginLoader: PluginLoaderModelType) {
+    loadPluginIfNeeded(pluginLoader: PluginLoaderModelType, isDynamicScriptLoaded: boolean) {
       if (pluginLoader.isLoaded || pluginLoader.isLoading) {
         return;
       }
 
-      const dynamicScript = self.dynamicScriptsStore.getScript(pluginLoader.scopeName);
-
-      if (dynamicScript?.isLoaded && pluginLoader.isReady) {
+      if (isDynamicScriptLoaded && pluginLoader.isReady) {
         pluginLoader.loadPlugin();
       }
     },

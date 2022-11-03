@@ -8,16 +8,16 @@ import {AttributeNameEnum} from 'api/enums';
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
     pluginId: types.string,
+    spaceId: types.string,
 
     getStateRequest: types.optional(RequestModel, {}),
     setStateRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    get: flow(function* <T>(worldId: string, spaceId: string, key: string) {
+    get: flow(function* <T>(spaceId: string, key: string) {
       const response = yield self.getStateRequest.send(
         api.spaceAttributeRepository.getSpaceSubAttribute,
         {
-          worldId,
           spaceId,
           plugin_id: self.pluginId,
           attribute_name: AttributeNameEnum.STATE,
@@ -33,12 +33,7 @@ const PluginAttributesManager = types
 
       return value;
     }),
-    set: flow(function* <T>(
-      worldId: string,
-      spaceId: string,
-      key: string,
-      value: T extends undefined ? never : T
-    ) {
+    set: flow(function* <T>(spaceId: string, key: string, value: T extends undefined ? never : T) {
       if (!self.pluginId) {
         return;
       }
@@ -48,7 +43,6 @@ const PluginAttributesManager = types
       yield self.setStateRequest.send(
         value === null ? repiository.deleteSpaceSubAttribute : repiository.setSpaceSubAttribute,
         {
-          worldId,
           spaceId,
           plugin_id: self.pluginId,
           attribute_name: AttributeNameEnum.STATE,
@@ -59,13 +53,13 @@ const PluginAttributesManager = types
     })
   }))
   .views((self) => ({
-    getAPI(worldId: string, spaceId: string): APIInterface {
+    get api(): APIInterface {
       return {
         get: async <T>(key: string) => {
-          const result = await self.get(worldId, spaceId, key);
+          const result = await self.get(self.spaceId, key);
           return result as T;
         },
-        set: (key, value) => self.set(worldId, spaceId, key, value)
+        set: (key, value) => self.set(self.spaceId, key, value)
       };
     }
   }));

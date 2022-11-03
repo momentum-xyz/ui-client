@@ -20,7 +20,6 @@ interface PropsInterface extends PropsWithThemeInterface {
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
-  onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
 }
 
 const EventList: FC<PropsInterface> = ({
@@ -34,8 +33,7 @@ const EventList: FC<PropsInterface> = ({
   canManageInSpace = false,
   onFlyToGathering,
   onFlyToSpace,
-  onWeblinkClick,
-  onShowAttendeesList
+  onWeblinkClick
 }) => {
   if (events.length === 0) {
     return (
@@ -66,7 +64,7 @@ const EventList: FC<PropsInterface> = ({
           onFlyToGathering={onFlyToGathering}
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
-          onShowAttendeesList={onShowAttendeesList}
+          onShowAttendeesList={event.attendeesDetails.showAttendees}
           canManageEvent={canManageInSpace || event.data?.is_admin}
         />
       ))}

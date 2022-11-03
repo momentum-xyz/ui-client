@@ -84,7 +84,20 @@ jobs:
           registry-user: ${{ secrets.REGISTRY_USERNAME }}
           registry-pass: ${{ secrets.REGISTRY_PASSWORD }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          image-name: plugin-miro
           multistage-target: plugin-runtime
           extra-args: --build-arg PLUGIN=miro
     outputs:
       version: ${{ steps.build.outputs.version }}
+  dev2-deploy-miro:
+    runs-on: self-hosted
+    needs: build-miro
+    if: github.ref == 'refs/heads/develop-plugins'
+    concurrency: dev-deploy-${{ github.ref }}
+    steps:
+      - id: deploy-dev
+        uses: momentum-xyz/deploy-action@v1
+        with:
+          project: plugin-miro
+          version: ${{ env.VERSION }}
+          k8s-credentials: ${{ secrets[secrets.REF_K8S_DEV2] }}

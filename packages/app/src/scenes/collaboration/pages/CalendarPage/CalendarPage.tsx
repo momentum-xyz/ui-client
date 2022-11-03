@@ -22,11 +22,10 @@ import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
-  const {collaborationStore, sessionStore, widgetStore, mainStore, leaveMeetingSpace} = useStore();
+  const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, spaceStore} = collaborationStore;
-  const {favoriteStore} = mainStore;
   const {eventList, formDialog, magicDialog, deleteConfirmationDialog, address} = calendarStore;
-  const {attendeesListStore} = widgetStore;
+  const {favoriteStore, unityStore} = mainStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -78,6 +77,11 @@ const CalendarPage: FC = () => {
     return () => eventList.resetModel();
   }, [eventList, spaceStore]);
 
+  const handleFlyToSpace = (spaceId: string) => {
+    unityStore.teleportToSpace(spaceId);
+    history.push(ROUTES.base);
+  };
+
   if (!spaceStore) {
     return null;
   }
@@ -111,7 +115,7 @@ const CalendarPage: FC = () => {
           onEventEdit={calendarStore.editEvent}
           onEventRemove={calendarStore.selectEventToRemove}
           onWeblinkClick={handleWeblink}
-          onShowAttendeesList={attendeesListStore.showAttendees}
+          onFlyToSpace={handleFlyToSpace}
           canManageInSpace={spaceStore.isAdmin}
         />
       </styled.InnerContainer>
