@@ -25,18 +25,21 @@ const ScreenSharePage: FC = () => {
 
   useEffect(() => {
     if (videoTrack) {
-      screenShareStore.relayScreenShare(spaceStore?.id ?? '');
-
-      const agoraUserId = videoTrack.getUserId() as string;
-      screenShareStore.setScreenOwner(agoraUserId);
+      const agoraUserId = videoTrack.getUserId()?.toString();
+      if (screenShareStore.screenOwnerId !== agoraUserId) {
+        screenShareStore.setScreenOwner(agoraUserId);
+      }
     } else {
       screenShareStore.setScreenOwner(null);
     }
   }, [videoTrack, screenShareStore, sessionStore.userId]);
 
-  const startScreenSharing = useCallback(() => {
-    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
-  }, [agoraScreenShareStore, sessionStore.userId]);
+  const startScreenSharing = useCallback(async () => {
+    const wasStarted: boolean = await agoraScreenShareStore.startScreenSharing(sessionStore.userId);
+    if (wasStarted && spaceStore.id) {
+      screenShareStore.relayScreenShare(spaceStore.id);
+    }
+  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId, spaceStore.id]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);
@@ -50,7 +53,7 @@ const ScreenSharePage: FC = () => {
   return (
     <SpacePage dataTestId="ScreenSharePage-test">
       <SpaceTopBar
-        title={spaceStore.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={screenShareTitle}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
@@ -74,7 +77,9 @@ const ScreenSharePage: FC = () => {
         {!videoTrack ? (
           <ScreenChoice
             isSettingUp={agoraScreenShareStore.isSettingUp}
-            canShare={spaceStore.isAdmin || agoraStageModeStore.isOnStage}
+            canShare={
+              (agoraStore.isStageMode && agoraStageModeStore.isOnStage) || !agoraStore.isStageMode
+            }
             startScreenShare={startScreenSharing}
           />
         ) : (

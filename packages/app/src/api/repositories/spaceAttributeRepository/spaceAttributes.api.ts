@@ -5,12 +5,13 @@ import {request} from 'api/request';
 
 import {spaceAttributesRepositoryEndpoints} from './spaceAttribute.api.endpoints';
 import {
+  DeleteSpaceSubAttributeRequest,
+  DeleteSpaceSubAttributeResponse,
   GetSpaceAttributeRequest,
   GetSpaceAttributeResponse,
   GetSpaceSubAttributeRequest,
-  GetSpaceSubAttributeResponse,
   SetSpaceSubAttributeRequest,
-  SetSpaceSubAttributeResponse
+  SpaceSubAttributeResponse
 } from './spaceAttribute.api.types';
 
 export const getSpaceAttribute: RequestInterface<
@@ -31,7 +32,7 @@ export const getSpaceAttribute: RequestInterface<
 
 export const getSpaceSubAttribute: RequestInterface<
   GetSpaceSubAttributeRequest,
-  GetSpaceSubAttributeResponse
+  SpaceSubAttributeResponse
 > = (options) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
@@ -48,17 +49,37 @@ export const getSpaceSubAttribute: RequestInterface<
 
 export const setSpaceSubAttribute: RequestInterface<
   SetSpaceSubAttributeRequest,
-  SetSpaceSubAttributeResponse
+  SpaceSubAttributeResponse
 > = (options) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} = options;
 
-  restOptions.params = {
+  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
+
+  return request.post(
+    url,
+    {
+      plugin_id,
+      attribute_name,
+      sub_attribute_key,
+      sub_attribute_value: value
+    },
+    restOptions
+  );
+};
+
+export const deleteSpaceSubAttribute: RequestInterface<
+  DeleteSpaceSubAttributeRequest,
+  DeleteSpaceSubAttributeResponse
+> = (options) => {
+  const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
+
+  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
+
+  restOptions.data = {
     plugin_id,
     attribute_name,
     sub_attribute_key
   };
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
-
-  return request.post(url, value, restOptions);
+  return request.delete(url, restOptions);
 };

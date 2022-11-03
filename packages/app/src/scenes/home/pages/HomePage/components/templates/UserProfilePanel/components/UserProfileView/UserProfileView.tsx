@@ -4,13 +4,8 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
 import {capitalize} from 'lodash-es';
 import {generatePath} from 'react-router-dom';
-import {Avatar, Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
-import {
-  UserStatusEnum,
-  absoluteLink,
-  monthAndYearString,
-  withoutProtocol
-} from '@momentum-xyz/core';
+import {Avatar, Button, Heading, IconSvg, Text, UserStatusEnum} from '@momentum-xyz/ui-kit';
+import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';

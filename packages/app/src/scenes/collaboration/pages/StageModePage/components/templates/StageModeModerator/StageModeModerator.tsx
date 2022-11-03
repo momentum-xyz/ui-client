@@ -91,7 +91,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     <>
       <SpacePage dataTestId="StageModeModerator-test">
         <SpaceTopBar
-          title={spaceStore.name ?? ''}
+          title={spaceStore.space?.name ?? ''}
           subtitle={t('labels.stageMode')}
           isAdmin={spaceStore.isAdmin}
           spaceId={spaceStore.id}

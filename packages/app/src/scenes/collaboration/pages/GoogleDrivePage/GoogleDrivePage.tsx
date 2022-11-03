@@ -67,7 +67,7 @@ const GoogleDrivePage: FC = () => {
   return (
     <SpacePage dataTestId="GoogleDrivePage-test">
       <SpaceTopBar
-        title={spaceStore.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={documentTitle}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}

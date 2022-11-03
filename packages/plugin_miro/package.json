@@ -42,7 +42,7 @@
     "@types/webpack-env": "^1.16.3",
     "@types/youtube": "^0.0.42",
     "autoprefixer": "^9",
-    "axios": "^0.21.4",
+    "axios": "^0.22.0",
     "axios-auth-refresh": "^3.2.2",
     "compression-webpack-plugin": "^10.0.0",
     "eslint": "^8.15.0",

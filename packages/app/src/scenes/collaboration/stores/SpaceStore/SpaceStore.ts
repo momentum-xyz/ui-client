@@ -9,8 +9,9 @@ import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';
 import {SpaceUserModel} from 'core/models/SpaceUser';
 import {SubSpaceModel} from 'core/models/SubSpace';
-import {api, SpaceResponse} from 'api';
+import {api, SpaceInterface, SpaceResponse, SpaceSubAttributeResponse} from 'api';
 import {GetAllowedSpaceTypesResponse} from 'api';
+import {mapper} from 'api/mapper';
 
 // TODO: Leave only stuff related to collaboration
 // TODO: Refactor all stuff related to space administration
@@ -77,16 +78,17 @@ const SpaceStore = types
         }
       }),
       loadSpace: flow(function* (spaceId: string) {
-        // TODO: Implementation. Next PR
-        const response = yield self.spaceRequest.send(api.spaceRepository.fetchSpace, {spaceId});
+        const response: SpaceSubAttributeResponse = yield self.spaceRequest.send(
+          api.spaceRepository.fetchSpace,
+          {spaceId}
+        );
 
-        // TODO: Casting
-        self.space = cast({
-          id: spaceId,
-          name: response || 'BlaBla'
-        });
-
-        console.log(response);
+        if (response) {
+          self.space = cast({
+            id: spaceId,
+            ...mapper.mapSpaceSubAttributes<SpaceInterface>(response)
+          });
+        }
       }),
       loadRights: flow(function* (spaceId: string) {
         // TODO: Refactor. Use one request to get all rights

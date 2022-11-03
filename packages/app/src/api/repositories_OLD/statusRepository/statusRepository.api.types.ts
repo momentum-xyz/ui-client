@@ -1,4 +1,4 @@
-import {UserStatusEnum} from '@momentum-xyz/core';
+import {UserStatusEnum} from '@momentum-xyz/ui-kit';
 
 export interface StatusRequestInterface {
   status: UserStatusEnum;
