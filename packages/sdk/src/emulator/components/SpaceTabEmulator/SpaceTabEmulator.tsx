@@ -1,12 +1,12 @@
 import {FC, useCallback, useMemo, useRef, useState} from 'react';
-import {CorePluginPropsInterface, PluginInterface} from 'interfaces';
+import {CorePluginPropsInterface, PluginConfigInterface, PluginInterface} from 'interfaces';
 import {useTheme} from 'styled-components';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import * as styled from './SpaceTabEmulator.styled';
 
 interface PropsInterface {
-  plugin: PluginInterface;
+  plugin: PluginInterface<PluginConfigInterface>;
 }
 
 export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
@@ -15,7 +15,14 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
 
   const stateAttribute = useRef<Record<string, any>>({});
 
-  const coreProps: CorePluginPropsInterface = useMemo(
+  const config = useMemo(
+    () => ({
+      APP_ID: ''
+    }),
+    []
+  );
+
+  const coreProps: CorePluginPropsInterface<PluginConfigInterface> = useMemo(
     () => ({
       theme: theme as ThemeInterface,
       isSpaceAdmin: false,
@@ -25,10 +32,11 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
         set: (field: string, value: unknown) => {
           stateAttribute.current[field] = value;
           return Promise.resolve();
-        }
+        },
+        getConfig: () => Promise.resolve(config)
       }
     }),
-    [theme]
+    [theme, config]
   );
 
   const [topBar, setTopBar] = useState(<span />);

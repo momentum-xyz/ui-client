@@ -2,7 +2,7 @@ import {RequestModel} from '@momentum-xyz/core';
 import {APIInterface} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
-import {api} from 'api';
+import {api, GetSpaceAttributeResponse} from 'api';
 import {AttributeNameEnum} from 'api/enums';
 
 const PluginAttributesManager = types
@@ -11,7 +11,8 @@ const PluginAttributesManager = types
     spaceId: types.string,
 
     getStateRequest: types.optional(RequestModel, {}),
-    setStateRequest: types.optional(RequestModel, {})
+    setStateRequest: types.optional(RequestModel, {}),
+    getConfigRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     get: flow(function* <T>(spaceId: string, key: string) {
@@ -50,16 +51,33 @@ const PluginAttributesManager = types
           value
         }
       );
+    }),
+    getConfig: flow(function* <C extends GetSpaceAttributeResponse>(spaceId: string) {
+      const response: GetSpaceAttributeResponse | undefined = yield self.getConfigRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId,
+          plugin_id: self.pluginId,
+          attribute_name: AttributeNameEnum.CONFIG
+        }
+      );
+
+      if (!response) {
+        return {};
+      }
+
+      return response as C;
     })
   }))
   .views((self) => ({
-    get api(): APIInterface {
+    get api(): APIInterface<Record<string, unknown>> {
       return {
         get: async <T>(key: string) => {
           const result = await self.get(self.spaceId, key);
           return result as T;
         },
-        set: (key, value) => self.set(self.spaceId, key, value)
+        set: (key, value) => self.set(self.spaceId, key, value),
+        getConfig: () => self.getConfig(self.spaceId)
       };
     }
   }));

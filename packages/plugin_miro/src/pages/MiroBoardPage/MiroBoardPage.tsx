@@ -18,7 +18,7 @@ const MiroBoardPage: FC = () => {
   const pickBoard = useCallback(() => {
     miroBoardsPicker.open({
       action: 'access-link',
-      clientId: appVariables.APP_ID,
+      clientId: appVariables.MIRO_APP_ID,
       success: async (data: MiroBoardInterface) => {
         await api.set('board', data);
       }
