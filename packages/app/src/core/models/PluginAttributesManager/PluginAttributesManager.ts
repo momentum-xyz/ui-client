@@ -8,6 +8,8 @@ import {AttributeNameEnum} from 'api/enums';
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
     pluginId: types.string,
+    worldId: types.string,
+    spaceId: types.string,
 
     getStateRequest: types.optional(RequestModel, {}),
     setStateRequest: types.optional(RequestModel, {})
@@ -59,13 +61,13 @@ const PluginAttributesManager = types
     })
   }))
   .views((self) => ({
-    getAPI(worldId: string, spaceId: string): APIInterface {
+    get api(): APIInterface {
       return {
         get: async <T>(key: string) => {
-          const result = await self.get(worldId, spaceId, key);
+          const result = await self.get(self.worldId, self.spaceId, key);
           return result as T;
         },
-        set: (key, value) => self.set(worldId, spaceId, key, value)
+        set: (key, value) => self.set(self.worldId, self.spaceId, key, value)
       };
     }
   }));
