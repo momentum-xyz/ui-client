@@ -39,7 +39,6 @@ const Widgets: FC = () => {
     musicPlayerStore,
     emojiStore
   } = widgetStore;
-  const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
   const {user, isGuest, userId} = sessionStore;
@@ -99,7 +98,11 @@ const Widgets: FC = () => {
       icon: 'music',
       onClick: musicPlayerWidget.toggle
     },
-    {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
+    {
+      title: t('labels.shareLocation'),
+      icon: 'location',
+      onClick: magicLinkStore.magicLinkDialog.open
+    },
     {title: t('labels.help'), icon: 'question', onClick: helpStore.helpDialog.open},
     {title: t('labels.fullscreen'), icon: 'fullscreen', onClick: switchFullscreen}
   ];

@@ -3,7 +3,6 @@ export * from './profileRepository';
 export * from './eventsRepository';
 export * from './spaceRepository';
 export * from './stageModeRepository';
-export * from './magicRepository';
 export * from './tokenRuleRepository';
 export * from './favoriteRepository';
 export * from './tokenRepository';
