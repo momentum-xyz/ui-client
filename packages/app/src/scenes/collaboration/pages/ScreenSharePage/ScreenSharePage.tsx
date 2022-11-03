@@ -36,8 +36,8 @@ const ScreenSharePage: FC = () => {
 
   const startScreenSharing = useCallback(async () => {
     const wasStarted: boolean = await agoraScreenShareStore.startScreenSharing(sessionStore.userId);
-    if (wasStarted) {
-      screenShareStore.relayScreenShare(space?.id ?? '');
+    if (wasStarted && space?.id) {
+      screenShareStore.relayScreenShare(space.id);
     }
   }, [agoraScreenShareStore, screenShareStore, sessionStore.userId, space?.id]);
 
