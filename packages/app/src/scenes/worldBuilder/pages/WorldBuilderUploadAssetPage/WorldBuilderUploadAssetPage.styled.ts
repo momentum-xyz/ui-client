@@ -23,3 +23,7 @@ export const AssetUploadContainer = styled.div`
 export const FilePreview = styled.div`
   padding: 10px;
 `;
+
+export const UploadingError = styled.div`
+  margin-bottom: 10px;
+`;

@@ -506,6 +506,8 @@ export const enGb = {
       confirmButton: 'Create Space',
       spaceName: 'Space Name',
       errorMissingName: 'Please enter a name for the space',
+      errorUnsupportedFile: 'Only .glb and .gltf files are supported',
+      errorTooLargeFile: 'Max file size is 50.1MB',
       errorSave: 'Error saving space'
     },
     eventList: {

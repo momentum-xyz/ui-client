@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-// import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {
   Dialog,
@@ -43,12 +42,14 @@ const WorldBuilderUploadAssetPage: FC = () => {
     control,
     formState: {errors},
     handleSubmit,
-    setError
+    setError,
+    clearErrors
   } = useForm<FormType>({
     defaultValues: {
       name: ''
     }
   });
+  console.log('errors', errors);
 
   const formSubmitHandler: SubmitHandler<FormType> = async ({name, asset}) => {
     const isUploadOK = await uploadAsset(name, asset);
@@ -110,6 +111,11 @@ const WorldBuilderUploadAssetPage: FC = () => {
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <styled.AssetUploadContainer className={cn(!!errors.asset && 'error')}>
+              {!!errors.asset?.message && (
+                <styled.UploadingError>
+                  <Text className="error" text={errors.asset.message} size="m" />
+                </styled.UploadingError>
+              )}
               {!!value && (
                 <styled.FilePreview>
                   <Text text={value.name} size="m" />
@@ -121,11 +127,23 @@ const WorldBuilderUploadAssetPage: FC = () => {
                 dragActiveLabel={t('assetsUploader.dragActiveLabel')}
                 onFilesUpload={(file) => {
                   console.log('FILE:', file);
-                  onChange(file || null);
+                  if (!file || !/\.(glb|gltf)$/i.test(file.name)) {
+                    setError('asset', {
+                      message: t('assetsUploader.errorUnsupportedFile')
+                    });
+                    return;
+                  }
+                  onChange(file);
+                  clearErrors('asset');
                 }}
-                onError={(err) => {
+                onError={(err: Error) => {
                   console.log('File upload error:', err);
-                  setError('asset', {message: 'upload'});
+                  setError('asset', {
+                    message:
+                      err.message === 'FileSizeTooLarge'
+                        ? t('assetsUploader.errorTooLargeFile')
+                        : err.message
+                  });
                 }}
                 fileType={'' as FileType} // TODO find out proper type
                 maxSize={MAX_ASSET_SIZE}
