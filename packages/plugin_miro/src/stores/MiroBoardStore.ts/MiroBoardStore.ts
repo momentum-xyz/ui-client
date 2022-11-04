@@ -44,6 +44,7 @@ const MiroBoardStore = types
       }
 
       yield self.api.set<MiroBoardInterface | null>('board', null);
+      self.board = null;
     })
   }));
 
