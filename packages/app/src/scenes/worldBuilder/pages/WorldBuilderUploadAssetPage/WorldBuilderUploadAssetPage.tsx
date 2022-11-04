@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Dialog, FileType, FileUploader, Input, Text, ProgressBar} from '@momentum-xyz/ui-kit';
@@ -21,6 +21,10 @@ const WorldBuilderUploadAssetPage: FC = () => {
   const {worldBuilderStore, mainStore} = useStore();
   const {worldBuilderAssetsStore} = worldBuilderStore;
   const {uploadAsset, isUploadPending, uploadProgress, uploadAssetDialog} = worldBuilderAssetsStore;
+
+  useEffect(() => {
+    return () => worldBuilderAssetsStore.resetModel();
+  }, [worldBuilderAssetsStore]);
 
   const {unityStore} = mainStore;
   const handleSearchFocus = (isFocused: boolean) => {
