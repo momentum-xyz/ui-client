@@ -1,4 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios';
+import axiosRetry from 'axios-retry';
 
 const TOKEN_TYPE = 'Bearer';
 const TOKEN_KEY = 'token.momentum';
@@ -55,6 +56,36 @@ request.interceptors.request.use(requestHandler, errorHandler);
 
 export const setApiResponseHandlers = ({onResponse = responseHandler, onError = errorHandler}) => {
   request.interceptors.response.use(onResponse, onError);
+};
+
+export const setAxiosRetry = ({
+  retryCount = 3,
+  retryDelayBase = 2000,
+  httpsErrorCodes = [503]
+}: {
+  retryCount: number;
+  retryDelayBase: number;
+  httpsErrorCodes?: number[];
+}) => {
+  axiosRetry(request, {
+    retries: retryCount,
+    retryDelay: (retryCount) => {
+      console.log(`Retrying HTTP request for ${retryCount} time...`);
+      return retryDelayBase * retryCount;
+    },
+    retryCondition: (error) => {
+      console.log(
+        'Retrying HTTP request - retryCondition',
+        error,
+        error.response?.status,
+        httpsErrorCodes
+      );
+      if (error.response && httpsErrorCodes?.includes(error.response?.status)) {
+        return true;
+      }
+      return false;
+    }
+  });
 };
 
 export const refreshAxiosToken = (token: string) => {

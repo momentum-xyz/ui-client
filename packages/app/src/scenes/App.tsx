@@ -11,7 +11,7 @@ import {isBrowserSupported} from '@momentum-xyz/core';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
-import {setApiResponseHandlers} from 'api/request';
+import {setApiResponseHandlers, setAxiosRetry} from 'api/request';
 import {SystemWideError, ToastContent} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
@@ -34,10 +34,20 @@ const App: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
+    setAxiosRetry({
+      retryCount: 5,
+      retryDelayBase: 2000,
+      // can be tested locally with httpsErrorCodes: [404, 503] and
+      // changing some endpoint like api/repositories/spaceTypeRepository/spaceTypeRepository.api.endpoints.ts
+      httpsErrorCodes: [503]
+    });
+
     setApiResponseHandlers({
       onError: (error) => {
         const status = error.response?.status;
-        if (status === httpErrorCodes.MAINTENANCE) {
+
+        console.error('API Error:', error, status, error.request);
+        if (status === httpErrorCodes.MAINTENANCE || status === 404) {
           document.location.href = ROUTES.system.maintenance;
         } else if (status === httpErrorCodes.INTERNAL_SYSTEM_ERROR) {
           toast.info(
