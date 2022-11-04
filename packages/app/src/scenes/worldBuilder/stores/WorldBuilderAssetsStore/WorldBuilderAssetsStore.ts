@@ -22,10 +22,7 @@ const WorldBuilderAssetsStore = types
     }
   }))
   .actions((self) => ({
-    uploadAsset: flow(function* (
-      spaceName: string,
-      asset: File
-    ) {
+    uploadAsset: flow(function* (spaceName: string, asset: File) {
       console.log('uploadAsset', spaceName, asset);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
