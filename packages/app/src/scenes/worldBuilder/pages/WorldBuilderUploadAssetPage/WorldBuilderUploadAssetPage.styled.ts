@@ -27,3 +27,8 @@ export const FilePreview = styled.div`
 export const UploadingError = styled.div`
   margin-bottom: 10px;
 `;
+
+export const UploadProgress = styled.div`
+  margin-top: 30px;
+  width: 100%;
+`;

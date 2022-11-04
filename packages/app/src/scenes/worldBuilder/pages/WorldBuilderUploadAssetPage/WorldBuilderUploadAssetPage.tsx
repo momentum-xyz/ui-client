@@ -1,20 +1,13 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {
-  Dialog,
-  FileType,
-  FileUploader,
-  Input,
-  Text
-  // Loader
-} from '@momentum-xyz/ui-kit';
+import {Dialog, FileType, FileUploader, Input, Text, ProgressBar} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
-import {ToastContent} from 'ui-kit';
+import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {CreateSpaceWithAssetRequest} from 'api';
 
@@ -27,7 +20,7 @@ const MAX_ASSET_SIZE = 50_100_000;
 const WorldBuilderUploadAssetPage: FC = () => {
   const {worldBuilderStore, mainStore} = useStore();
   const {worldBuilderAssetsStore} = worldBuilderStore;
-  const {uploadAsset, isUploadPending, uploadAssetDialog} = worldBuilderAssetsStore;
+  const {uploadAsset, isUploadPending, uploadProgress, uploadAssetDialog} = worldBuilderAssetsStore;
 
   const {unityStore} = mainStore;
   const handleSearchFocus = (isFocused: boolean) => {
@@ -157,6 +150,11 @@ const WorldBuilderUploadAssetPage: FC = () => {
                 fileType={'' as FileType} // TODO find out proper type
                 maxSize={MAX_ASSET_SIZE}
               />
+              {uploadProgress !== null && (
+                <styled.UploadProgress>
+                  <ProgressBar percent={uploadProgress} />
+                </styled.UploadProgress>
+              )}
             </styled.AssetUploadContainer>
           )}
         />

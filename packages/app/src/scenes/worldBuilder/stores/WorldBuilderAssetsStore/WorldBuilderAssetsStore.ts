@@ -9,23 +9,41 @@ const WorldBuilderAssetsStore = types
     types.model('WorldBuilderAssetsStore', {
       worldId: types.optional(types.string, ''),
       uploadAssetRequest: types.optional(RequestModel, {}),
-      uploadAssetDialog: types.optional(Dialog, {})
+      uploadAssetDialog: types.optional(Dialog, {}),
+      uploadProgress: types.maybeNull(types.number)
     })
   )
   .actions((self) => ({
     init: (worldId: string) => {
       self.worldId = worldId;
+    },
+    setUploadProgress: (progress: number) => {
+      self.uploadProgress = progress;
     }
   }))
   .actions((self) => ({
-    uploadAsset: flow(function* (spaceName: string, asset: File) {
+    uploadAsset: flow(function* (
+      spaceName: string,
+      asset: File
+    ) {
       console.log('uploadAsset', spaceName, asset);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const onUploadProgress = (progressEvent: any) => {
+        console.log(progressEvent);
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        self.setUploadProgress(percentCompleted);
+      };
+
+      self.setUploadProgress(0);
+
       const response: CreateSpaceWithAssetResponse = yield self.uploadAssetRequest.send(
         api.spaceRepository.createWithAsset,
         {
           name: spaceName,
           worldId: self.worldId,
-          asset
+          asset,
+          onUploadProgress
         }
       );
       console.log('uploadAsset response', response);
