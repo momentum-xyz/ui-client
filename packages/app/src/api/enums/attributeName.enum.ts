@@ -1,5 +1,6 @@
 export enum AttributeNameEnum {
   NAME = 'name',
-  MAGIC_LINKS = 'magic_links',
-  STATE = 'state'
+  STATE = 'state',
+  CONFIG = 'config',
+  MAGIC_LINKS = 'magic_links'
 }
