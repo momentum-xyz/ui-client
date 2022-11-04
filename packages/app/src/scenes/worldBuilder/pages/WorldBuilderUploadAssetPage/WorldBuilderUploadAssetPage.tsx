@@ -136,7 +136,7 @@ const WorldBuilderUploadAssetPage: FC = () => {
                 dragActiveLabel={t('assetsUploader.dragActiveLabel')}
                 onFilesUpload={(file) => {
                   console.log('FILE:', file);
-                  if (!file || !/\.(glb|gltf)$/i.test(file.name)) {
+                  if (!file || !/\.glb$/i.test(file.name)) {
                     setError('asset', {
                       message: t('assetsUploader.errorUnsupportedFile')
                     });
