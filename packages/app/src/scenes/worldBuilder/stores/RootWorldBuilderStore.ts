@@ -5,6 +5,7 @@ import {api, CreateWorldResponse} from 'api';
 
 import {WorldBuilderNameStore} from './WorldBuilderNameStore';
 import {WorldBuilderTemplatesStore} from './WorldBuilderTemplatesStore';
+import {WorldBuilderSkyboxesStore} from './WorldBuilderSkyboxesStore';
 
 const RootWorldBuilderStore = types
   .compose(
@@ -12,6 +13,7 @@ const RootWorldBuilderStore = types
     types.model('RootWorldBuilderStore', {
       worldBuilderNameStore: types.optional(WorldBuilderNameStore, {}),
       worldBuilderTemplatesStore: types.optional(WorldBuilderTemplatesStore, {}),
+      worldBuilderSkyboxesStore: types.optional(WorldBuilderSkyboxesStore, {}),
       haveAccess: types.maybe(types.boolean),
 
       permissionsRequest: types.optional(RequestModel, {}),

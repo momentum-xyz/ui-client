@@ -1,68 +1,40 @@
 import {RequestInterface} from '@momentum-xyz/core';
 import {generatePath} from 'react-router-dom';
-import {AxiosResponse} from 'axios';
 
 import {request} from 'api/request';
 
 import {spaceAttributesRepositoryEndpoints} from './spaceAttribute.api.endpoints';
 import {
+  DeleteSpaceSubAttributeRequest,
+  DeleteSpaceSubAttributeResponse,
   GetSpaceAttributeRequest,
   GetSpaceAttributeResponse,
   GetSpaceSubAttributeRequest,
-  GetSpaceSubAttributeResponseType,
   SetSpaceSubAttributeRequest,
-  SetSpaceSubAttributeResponse
+  SpaceSubAttributeResponse
 } from './spaceAttribute.api.types';
 
 export const getSpaceAttribute: RequestInterface<
   GetSpaceAttributeRequest,
   GetSpaceAttributeResponse
 > = (options) => {
-  const {worldId, spaceId, plugin_id, attribute_name, ...restOptions} = options;
+  const {spaceId, plugin_id, attribute_name, ...restOptions} = options;
 
   restOptions.params = {
     plugin_id,
     attribute_name
   };
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().attributes, {worldId, spaceId});
+  const url = generatePath(spaceAttributesRepositoryEndpoints().attributes, {spaceId});
 
   return request.get(url, restOptions);
 };
 
 export const getSpaceSubAttribute: RequestInterface<
   GetSpaceSubAttributeRequest,
-  GetSpaceSubAttributeResponseType
+  SpaceSubAttributeResponse
 > = (options) => {
-  // const {worldId, spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
-
-  // restOptions.params = {
-  //   plugin_id,
-  //   attribute_name,
-  //   sub_attribute_key
-  // };
-
-  // const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {worldId, spaceId});
-
-  // return request.get(url, restOptions);
-
-  const mockResponse: AxiosResponse<GetSpaceSubAttributeResponseType> = {
-    data: null,
-    status: 200,
-    statusText: 'OK',
-    headers: undefined,
-    config: options
-  };
-
-  return Promise.resolve(mockResponse);
-};
-
-export const setSpaceSubAttribute: RequestInterface<
-  SetSpaceSubAttributeRequest,
-  SetSpaceSubAttributeResponse
-> = (options) => {
-  const {worldId, spaceId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} =
-    options;
+  const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
   restOptions.params = {
     plugin_id,
@@ -70,7 +42,44 @@ export const setSpaceSubAttribute: RequestInterface<
     sub_attribute_key
   };
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {worldId, spaceId});
+  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
 
-  return request.post(url, value, restOptions);
+  return request.get(url, restOptions);
+};
+
+export const setSpaceSubAttribute: RequestInterface<
+  SetSpaceSubAttributeRequest,
+  SpaceSubAttributeResponse
+> = (options) => {
+  const {spaceId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} = options;
+
+  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
+
+  return request.post(
+    url,
+    {
+      plugin_id,
+      attribute_name,
+      sub_attribute_key,
+      sub_attribute_value: value
+    },
+    restOptions
+  );
+};
+
+export const deleteSpaceSubAttribute: RequestInterface<
+  DeleteSpaceSubAttributeRequest,
+  DeleteSpaceSubAttributeResponse
+> = (options) => {
+  const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
+
+  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
+
+  restOptions.data = {
+    plugin_id,
+    attribute_name,
+    sub_attribute_key
+  };
+
+  return request.delete(url, restOptions);
 };

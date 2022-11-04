@@ -125,6 +125,9 @@ const UnityStore = types
     disengageFlyWithMe() {
       UnityService.disengageFlyWithMe();
     },
+    changeSkybox(skyboxId: string) {
+      UnityService.changeSkybox(skyboxId);
+    },
     leaveSpace(spaceId: string) {
       UnityService.leaveSpace(spaceId);
     },

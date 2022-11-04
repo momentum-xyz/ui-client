@@ -9,7 +9,6 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {switchFullscreen} from 'core/utils';
 import {
-  AttendeesWidget,
   HelpWidget,
   LaunchInitiativeWidget,
   MagicLinkWidget,
@@ -26,7 +25,8 @@ import * as styled from './Widgets.styled';
 import {WorldChatWidget} from './pages';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore} = useStore();
+  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore, worldBuilderStore} =
+    useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
@@ -37,10 +37,8 @@ const Widgets: FC = () => {
     profileMenuStore,
     launchInitiativeStore,
     musicPlayerStore,
-    attendeesListStore,
     emojiStore
   } = widgetStore;
-  const {magicLinkDialog} = magicLinkStore;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
   const {user, isGuest, userId} = sessionStore;
@@ -54,7 +52,16 @@ const Widgets: FC = () => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
     worldChatStore.init(userId, worldStore.worldId, user ?? undefined);
-  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, user, worldChatStore]);
+    worldBuilderStore.fetchPermissions();
+  }, [
+    userId,
+    user,
+    worldStore.worldId,
+    musicPlayerStore,
+    emojiStore,
+    worldChatStore,
+    worldBuilderStore
+  ]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -91,7 +98,11 @@ const Widgets: FC = () => {
       icon: 'music',
       onClick: musicPlayerWidget.toggle
     },
-    {title: t('labels.shareLocation'), icon: 'location', onClick: magicLinkDialog.open},
+    {
+      title: t('labels.shareLocation'),
+      icon: 'location',
+      onClick: magicLinkStore.magicLinkDialog.open
+    },
     {title: t('labels.help'), icon: 'question', onClick: helpStore.helpDialog.open},
     {title: t('labels.fullscreen'), icon: 'fullscreen', onClick: switchFullscreen}
   ];
@@ -105,7 +116,6 @@ const Widgets: FC = () => {
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
-      {attendeesListStore.dialog.isOpen && <AttendeesWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (
@@ -152,6 +162,15 @@ const Widgets: FC = () => {
               )}
             </ToolbarIcon>
           </styled.ChatIconWrapper>
+          {(worldBuilderStore.haveAccess || true) && ( // TODO: remove this line when we have permissions
+            <ToolbarIcon
+              icon="planet"
+              title={t('titles.worldBuilder')}
+              link={ROUTES.worldBuilder.builder}
+              size="normal-large"
+              isWhite={false}
+            />
+          )}
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>

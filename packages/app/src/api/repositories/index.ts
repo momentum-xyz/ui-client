@@ -6,5 +6,6 @@ export * from './userRepository';
 export * from './userProfileRepository';
 export * from './pluginsRepository';
 export * from './spaceAttributeRepository';
-export * from './spaceRepository';
+export * from './spaceOptionRepository';
 export * from './userAttributeRepository';
+export * from './magicLinkRepository';

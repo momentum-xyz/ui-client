@@ -14,7 +14,7 @@ import * as styled from './TileForm.styled';
 const TileForm: FC = () => {
   const theme = useTheme();
   const {collaborationStore} = useStore();
-  const {dashboardStore, space} = collaborationStore;
+  const {dashboardStore, spaceStore} = collaborationStore;
   const {tileDialog, tileFormStore} = dashboardStore;
   const {currentTile, tileCreateRequest} = tileFormStore;
 
@@ -31,9 +31,9 @@ const TileForm: FC = () => {
   }, []);
 
   const onComplete = useCallback(() => {
-    dashboardStore.fetchDashboard(space?.id ?? '');
+    dashboardStore.fetchDashboard(spaceStore?.id ?? '');
     tileDialog.close();
-  }, [dashboardStore, space?.id, tileDialog]);
+  }, [dashboardStore, spaceStore?.id, tileDialog]);
 
   return (
     <Dialog
@@ -66,7 +66,7 @@ const TileForm: FC = () => {
         {selectedType === TileTypeEnum.TILE_TYPE_VIDEO && (
           <VideoTileForm
             currentTile={currentTile ?? undefined}
-            spaceId={space?.id ?? ''}
+            spaceId={spaceStore?.id ?? ''}
             createTile={tileFormStore.createVideoTile}
             updateTile={tileFormStore.updateVideoTile}
             onComplete={onComplete}
@@ -76,7 +76,7 @@ const TileForm: FC = () => {
         {selectedType === TileTypeEnum.TILE_TYPE_TEXT && (
           <TextTileForm
             currentTile={currentTile ?? undefined}
-            spaceId={space?.id ?? ''}
+            spaceId={spaceStore?.id ?? ''}
             createTile={tileFormStore.createTextTile}
             updateTile={tileFormStore.updateTextTile}
             onComplete={onComplete}
@@ -86,7 +86,7 @@ const TileForm: FC = () => {
         {selectedType === TileTypeEnum.TILE_TYPE_MEDIA && (
           <ImageTileForm
             currentTile={currentTile ?? undefined}
-            spaceId={space?.id ?? ''}
+            spaceId={spaceStore?.id ?? ''}
             createTile={tileFormStore.createImageTile}
             updateTile={tileFormStore.updateImageTile}
             onComplete={onComplete}

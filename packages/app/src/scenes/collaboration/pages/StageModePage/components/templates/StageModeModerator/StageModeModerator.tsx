@@ -27,7 +27,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
-  const {space, removeParticipantFromStageDialog, streamChatStore, screenShareStore} =
+  const {spaceStore, removeParticipantFromStageDialog, streamChatStore, screenShareStore} =
     collaborationStore;
 
   const history = useHistory();
@@ -78,12 +78,12 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   ]);
 
   useEffect(() => {
-    if (!collaborationStore.isModerator && space?.id) {
-      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: space.id}));
+    if (!collaborationStore.isModerator && spaceStore?.id) {
+      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: spaceStore.id}));
     }
-  }, [collaborationStore.isModerator, history, space?.id]);
+  }, [collaborationStore.isModerator, history, spaceStore?.id]);
 
-  if (!space || !collaborationStore.isModerator) {
+  if (!spaceStore || !collaborationStore.isModerator) {
     return null;
   }
 
@@ -91,11 +91,11 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     <>
       <SpacePage dataTestId="StageModeModerator-test">
         <SpaceTopBar
-          title={space.name ?? ''}
+          title={spaceStore.space?.name ?? ''}
           subtitle={t('labels.stageMode')}
-          isAdmin={space.isAdmin}
-          spaceId={space.id}
-          isSpaceFavorite={favoriteStore.isFavorite(space.id || '')}
+          isAdmin={spaceStore.isAdmin}
+          spaceId={spaceStore.id}
+          isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
           isChatOpen={streamChatStore.isOpen}
           toggleChat={streamChatStore.textChatDialog.toggle}

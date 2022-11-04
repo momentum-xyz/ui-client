@@ -1,12 +1,8 @@
-import {AttributeSubValueInterface, AttributeValueInterface} from 'api/interfaces';
-
-export interface SpaceAttributesRequest {
-  worldId: string;
-  spaceId: string;
-}
+import {AttributeValueInterface} from 'api/interfaces';
 
 // GET SPACE ATTRIBUTE
-export interface GetSpaceAttributeRequest extends SpaceAttributesRequest {
+export interface GetSpaceAttributeRequest {
+  spaceId: string;
   plugin_id: string;
   attribute_name: string;
 }
@@ -14,20 +10,20 @@ export interface GetSpaceAttributeRequest extends SpaceAttributesRequest {
 export interface GetSpaceAttributeResponse extends AttributeValueInterface {}
 
 // GET SPACE SUB ATTRIBUTE
-export interface GetSpaceSubAttributeRequest extends SpaceAttributesRequest {
-  plugin_id: string;
-  attribute_name: string;
+export interface GetSpaceSubAttributeRequest extends GetSpaceAttributeRequest {
   sub_attribute_key: string;
 }
 
-export type GetSpaceSubAttributeResponseType = unknown;
-
 // SET SPACE SUB ATTRIBUTE
-export interface SetSpaceSubAttributeRequest extends SpaceAttributesRequest {
-  plugin_id: string;
-  attribute_name: string;
-  sub_attribute_key: string;
+export interface SetSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest {
   value: unknown;
 }
 
-export interface SetSpaceSubAttributeResponse extends AttributeSubValueInterface {}
+export interface SpaceSubAttributeResponse {
+  [sub_attribute_key: string]: unknown;
+}
+
+// DELETE SPACE SUB ATTRIBUTE
+export interface DeleteSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest {}
+
+export interface DeleteSpaceSubAttributeResponse {}

@@ -6,8 +6,7 @@ import {generatePath, useHistory, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
-import {UserStatusEnum} from '@momentum-xyz/core';
-import {Portal} from '@momentum-xyz/ui-kit';
+import {Portal, UserStatusEnum} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';

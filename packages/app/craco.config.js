@@ -50,7 +50,7 @@ module.exports = {
           "axios": {
             singleton: true,
             eager: true,
-            requiredVersion: "^0.21.4"
+            requiredVersion: "^0.22.0"
           },
           "axios-auth-refresh": {
             singleton: true,

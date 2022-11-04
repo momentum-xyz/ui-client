@@ -33,7 +33,8 @@ const StageModePage: FC = () => {
     history.push(ROUTES.base);
   }, [history, leaveMeetingSpace]);
 
-  if (collaborationStore.moderationRequest.isPending) {
+  // FIXME: Make view "rightLoaded" under "collaborationStore"
+  if (collaborationStore.spaceStore.moderationRequest.isPending) {
     return null;
   }
 

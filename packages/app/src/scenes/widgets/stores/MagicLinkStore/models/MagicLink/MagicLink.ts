@@ -1,26 +1,46 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel} from '@momentum-xyz/core';
+import {copyToClipboard, RequestModel} from '@momentum-xyz/core';
+import {v4 as uuidv4} from 'uuid';
+import {generatePath} from 'react-router-dom';
 
 import {api, MagicLinkResponse} from 'api';
 import {MagicTypeEnum} from 'core/enums';
+import {ROUTES} from 'core/constants';
 
 const MagicLink = types
   .model('MagicLink', {
     request: types.optional(RequestModel, {}),
-    id: types.maybeNull(types.string),
-    address: types.maybeNull(types.string)
+    magicLinkId: ''
   })
+  .views((self) => ({
+    get address(): string | null {
+      if (self.magicLinkId) {
+        return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.magicLinkId})}`;
+      }
+      return null;
+    },
+    get wasCreated(): boolean {
+      return self.request.isDone;
+    }
+  }))
   .actions((self) => ({
-    generate: flow(function* (type: MagicTypeEnum, id: string | null, position: any) {
-      const payload = id ? {type, data: {id}} : {type, data: {position}};
+    init() {
+      self.magicLinkId = uuidv4();
+    },
+    copyToClipBoard: flow(function* (type: MagicTypeEnum, spaceId?: string, position?: any) {
       const response: MagicLinkResponse = yield self.request.send(
-        api.magicRepository.generateLink,
-        payload
+        api.magicLinkRepository.createLink,
+        {
+          key: self.magicLinkId,
+          type,
+          data: {
+            spaceId,
+            position: position ? position : undefined
+          }
+        }
       );
-
-      if (response?.id) {
-        self.id = response.id;
-        self.address = `${document.location.origin}/magic/${response.id}`;
+      if (response && self.address) {
+        yield copyToClipboard(self.address);
       }
     })
   }));

@@ -30,21 +30,21 @@ const PosBusEventsPage: FC = () => {
     miroBoardStore
   } = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
-  const {space, screenShareStore} = collaborationStore;
+  const {spaceStore, screenShareStore} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
 
   usePosBusEvent('google-drive-file-change', (id: string) => {
     console.info('[POSBUS EVENT] google-drive-file-change', id);
-    if (space?.id === id) {
+    if (spaceStore?.id === id) {
       googleDriveStore.fetchGoogleDocument(id);
     }
   });
 
   usePosBusEvent('miro-board-change', (id: string) => {
     console.info('[POSBUS EVENT] miro-board-change', id);
-    if (space?.id === id) {
+    if (spaceStore?.id === id) {
       miroBoardStore.fetchMiroBoard(id);
     }
   });
@@ -55,9 +55,9 @@ const PosBusEventsPage: FC = () => {
     liveStreamStore.setBroadcast(broadcast);
 
     if (liveStreamStore.isStreaming) {
-      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: space?.id}));
+      history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: spaceStore?.id}));
     } else if (liveStreamStore.isLiveStreamTab) {
-      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: space?.id}));
+      history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: spaceStore?.id}));
     }
   });
 
@@ -88,10 +88,10 @@ const PosBusEventsPage: FC = () => {
 
   usePosBusEvent('posbus-connected', () => {
     console.info('[POSBUS EVENT] posbus-connected');
-    if (collaborationStore.space) {
+    if (collaborationStore.spaceStore) {
       unityStore.triggerInteractionMessage(
         PosBusEventEnum.EnteredSpace,
-        collaborationStore.space.id,
+        collaborationStore.spaceStore.id,
         0,
         ''
       );
@@ -171,7 +171,7 @@ const PosBusEventsPage: FC = () => {
         />,
         TOAST_GROUND_OPTIONS
       );
-      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: space?.id}));
+      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: spaceStore?.id}));
     } else {
       toast.info(
         <ToastContent

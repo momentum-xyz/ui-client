@@ -19,9 +19,9 @@ import {
   ToolbarIcon,
   Button,
   PageTopBar,
-  AccentColorList
+  AccentColorList,
+  UserStatusEnum
 } from '@momentum-xyz/ui-kit';
-import {UserStatusEnum} from '@momentum-xyz/core';
 
 import {
   TileMenu,

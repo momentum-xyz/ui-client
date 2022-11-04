@@ -26,7 +26,7 @@ import {CollaborationPluginPage} from './pages';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore, liveStreamStore, pluginsStore, worldStore} = mainStore;
+  const {agoraStore, liveStreamStore, pluginsStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -68,11 +68,8 @@ const Collaboration: FC = () => {
   }, [agoraStore, history, rootStore, spaceId, t]);
 
   useEffect(() => {
-    // TODO: check is for demonstration purposes
-    if (pluginsStore.spacePlugins.length === 0) {
-      pluginsStore.fetchSpacePlugins(worldStore.worldId, spaceId);
-    }
-  }, [pluginsStore, spaceId, worldStore.worldId]);
+    pluginsStore.fetchSpacePlugins(spaceId);
+  }, [pluginsStore, spaceId]);
 
   useEffect(() => {
     reJoinMeeting().then();

@@ -14,7 +14,7 @@ import * as styled from './ScreenSharePage.styled';
 
 const ScreenSharePage: FC = () => {
   const {mainStore, sessionStore, collaborationStore, leaveMeetingSpace} = useStore();
-  const {space, screenShareStore, streamChatStore} = collaborationStore;
+  const {spaceStore, screenShareStore, streamChatStore} = collaborationStore;
   const {screenShareTitle} = screenShareStore;
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
@@ -25,36 +25,39 @@ const ScreenSharePage: FC = () => {
 
   useEffect(() => {
     if (videoTrack) {
-      screenShareStore.relayScreenShare(space?.id ?? '');
-
-      const agoraUserId = videoTrack.getUserId() as string;
-      screenShareStore.setScreenOwner(agoraUserId);
+      const agoraUserId = videoTrack.getUserId()?.toString();
+      if (screenShareStore.screenOwnerId !== agoraUserId) {
+        screenShareStore.setScreenOwner(agoraUserId);
+      }
     } else {
       screenShareStore.setScreenOwner(null);
     }
   }, [videoTrack, screenShareStore, sessionStore.userId]);
 
-  const startScreenSharing = useCallback(() => {
-    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
-  }, [agoraScreenShareStore, sessionStore.userId]);
+  const startScreenSharing = useCallback(async () => {
+    const wasStarted: boolean = await agoraScreenShareStore.startScreenSharing(sessionStore.userId);
+    if (wasStarted && spaceStore.id) {
+      screenShareStore.relayScreenShare(spaceStore.id);
+    }
+  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId, spaceStore.id]);
 
   const stopScreenSharing = useCallback(() => {
     screenShareStore.setScreenOwner(null);
     agoraScreenShareStore.stopScreenSharing();
   }, [agoraScreenShareStore, screenShareStore]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="ScreenSharePage-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={screenShareTitle}
-        isAdmin={space.isAdmin}
-        spaceId={space.id}
-        isSpaceFavorite={favoriteStore.isFavorite(space?.id || '')}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChatOpen={streamChatStore.isOpen}
@@ -65,7 +68,7 @@ const ScreenSharePage: FC = () => {
           history.push(ROUTES.base);
         }}
       >
-        {((videoTrack && space.isAdmin) ||
+        {((videoTrack && spaceStore.isAdmin) ||
           screenShareStore.screenOwnerId === sessionStore.userId) && (
           <Button label={t('actions.cancel')} variant="danger" onClick={stopScreenSharing} />
         )}
@@ -74,7 +77,9 @@ const ScreenSharePage: FC = () => {
         {!videoTrack ? (
           <ScreenChoice
             isSettingUp={agoraScreenShareStore.isSettingUp}
-            canShare={space.isAdmin || agoraStageModeStore.isOnStage}
+            canShare={
+              (agoraStore.isStageMode && agoraStageModeStore.isOnStage) || !agoraStore.isStageMode
+            }
             startScreenShare={startScreenSharing}
           />
         ) : (

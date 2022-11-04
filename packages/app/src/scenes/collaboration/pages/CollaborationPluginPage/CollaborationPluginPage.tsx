@@ -21,8 +21,8 @@ interface PropsInterface {
 
 const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
-  const {space, streamChatStore} = collaborationStore;
-  const {favoriteStore, pluginsStore, worldStore} = mainStore;
+  const {spaceStore, streamChatStore} = collaborationStore;
+  const {favoriteStore, pluginsStore} = mainStore;
   const {plugin, attributesManager} = pluginLoader;
 
   const history = useHistory();
@@ -30,7 +30,10 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
   const {t} = useTranslation();
 
-  pluginsStore.loadPluginIfNeeded(pluginLoader);
+  const isDynamicScriptLoaded =
+    pluginsStore.dynamicScriptsStore.getScript(pluginLoader.scopeName)?.isLoaded ?? false;
+
+  pluginsStore.loadPluginIfNeeded(pluginLoader, isDynamicScriptLoaded);
 
   const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
     console.info('Recieved actions', actions);
@@ -51,18 +54,18 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     }
   }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
-  if (!space) {
+  if (!spaceStore) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="SpacePlugin-test">
       <SpaceTopBar
-        title={space.name ?? ''}
+        title={spaceStore.space?.name ?? ''}
         subtitle={pluginLoader.subtitle}
-        isAdmin={space.isAdmin}
-        spaceId={space?.id}
-        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
+        isAdmin={spaceStore.isAdmin}
+        spaceId={spaceStore.id}
+        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         isChatOpen={streamChatStore.isOpen}
         toggleChat={streamChatStore.textChatDialog.toggle}
@@ -81,9 +84,9 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
             <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
               <plugin.SpaceExtension
                 theme={theme}
-                isSpaceAdmin={space.isAdmin}
-                spaceId={space.id}
-                api={attributesManager.getAPI(worldStore.worldId, space.id)}
+                isSpaceAdmin={true}
+                spaceId={spaceStore.id}
+                api={attributesManager.api}
                 renderTopBarActions={renderTopBarActions}
               />
             </ErrorBoundary>

@@ -16,11 +16,10 @@ import {EventForm} from './components';
 import * as styled from './WorldCalendarPage.styled';
 
 const WorldCalendarPage: FC = () => {
-  const {worldCalendarStore, mainStore, sessionStore, widgetStore} = useStore();
+  const {worldCalendarStore, mainStore, sessionStore} = useStore();
   const {calendarStore} = worldCalendarStore;
-  const {magicDialog, eventList, deleteConfirmationDialog, spaceId} = calendarStore;
+  const {magicDialog, eventList, deleteConfirmationDialog, spaceId, magicLink} = calendarStore;
   const {worldStore, unityStore} = mainStore;
-  const {attendeesListStore} = widgetStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -111,16 +110,15 @@ const WorldCalendarPage: FC = () => {
         onWeblinkClick={handleWeblink}
         onFlyToSpace={handleFlyToSpace}
         onFlyToGathering={handleFlyToGathering}
-        onShowAttendeesList={attendeesListStore.showAttendees}
         showOnWorldCalendar
       />
 
-      {calendarStore.magicId && magicDialog.isOpen && (
+      {magicDialog.isOpen && (
         <LinkDialog
           theme={theme}
           title={t('eventList.eventItem.magicLinkDialog.title')}
           copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
-          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
+          link={magicLink}
           onClose={magicDialog.close}
         />
       )}
