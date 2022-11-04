@@ -12,7 +12,7 @@
     "start": "yarn build:deps && yarn --cwd=packages/app start",
     "docker:build": "DOCKER_BUILDKIT=1 docker build --target=app-runtime -t ui-client:latest .",
     "docker:build_plugin_miro": "DOCKER_BUILDKIT=1 docker build --target=plugin-runtime  --build-arg PLUGIN=miro -t plugin-miro:latest .",
-    "prettier": "prettier \"packages/**/*.{ts,tsx}\" --parser typescript",
+    "prettier": "prettier \"packages/*/src/**/*.{ts,tsx}\" --parser typescript",
     "prettier:list": "npm run prettier -- --list-different",
     "prettier:fix": "npm run prettier -- --write",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx packages/**/src",
@@ -35,5 +35,8 @@
   },
   "dependencies": {
     "concurrently": "^7.4.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
   }
 }
