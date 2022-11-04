@@ -20,12 +20,14 @@ import {
   EmojiWidget,
   LiveStreamPIPWidget
 } from 'scenes/widgets/pages';
+import {WorldBuilderUploadAssetPage} from 'scenes/worldBuilder/pages';
 
 import * as styled from './Widgets.styled';
 import {WorldChatWidget} from './pages';
 
 const Widgets: FC = () => {
-  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore} = useStore();
+  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore, worldBuilderStore} =
+    useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
@@ -44,6 +46,8 @@ const Widgets: FC = () => {
   const {profile: currentProfile, isGuest, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
+  const {worldBuilderAssetsStore} = worldBuilderStore;
+  const {uploadAssetDialog} = worldBuilderAssetsStore;
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -52,7 +56,17 @@ const Widgets: FC = () => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
     worldChatStore.init(userId, worldStore.worldId, currentProfile ?? undefined);
-  }, [musicPlayerStore, emojiStore, worldStore.worldId, userId, currentProfile, worldChatStore]);
+    worldBuilderAssetsStore.init(worldStore.worldId);
+    // worldBuilderAssetsStore.init('ba3a8817-af7d-44ce-aff8-59ee842f3e4f'); // TODO remove this
+  }, [
+    musicPlayerStore,
+    emojiStore,
+    worldStore.worldId,
+    userId,
+    currentProfile,
+    worldChatStore,
+    worldBuilderAssetsStore
+  ]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -111,6 +125,7 @@ const Widgets: FC = () => {
         </styled.EmojiBar>
       )}
       {worldChatStore.isOpen && <WorldChatWidget onClose={worldChatStore.textChatDialog.close} />}
+      {uploadAssetDialog.isOpen && <WorldBuilderUploadAssetPage />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -149,6 +164,16 @@ const Widgets: FC = () => {
               )}
             </ToolbarIcon>
           </styled.ChatIconWrapper>
+
+          {!!worldStore.worldConfig?.BYA_enabled && (
+            <ToolbarIcon
+              icon="planet"
+              title={t('titles.worldBuilder')}
+              onClick={uploadAssetDialog.open}
+              size="normal-large"
+              isWhite={false}
+            />
+          )}
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>

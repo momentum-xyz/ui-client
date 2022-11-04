@@ -12,6 +12,8 @@ import {
   CreateInitiativeResponse,
   CreateSpaceRequest,
   CreateSpaceResponse,
+  CreateSpaceWithAssetRequest,
+  CreateSpaceWithAssetResponse,
   DeleteSpaceRequest,
   DeleteSpaceResponse,
   EditSpaceRequest,
@@ -77,6 +79,28 @@ export const create: RequestInterface<CreateSpaceRequest, CreateSpaceResponse> =
   const {space, ...restOptions} = options;
 
   return request.post(spaceRepositoryEndpoints().create, space, restOptions);
+};
+
+export const createWithAsset: RequestInterface<
+  CreateSpaceWithAssetRequest,
+  CreateSpaceWithAssetResponse
+> = (options) => {
+  const {name, worldId, asset, headers, ...restOptions} = options;
+
+  const formData: FormData = new FormData();
+  formData.append('asset', asset);
+  formData.append('name', name);
+  formData.append('worldId', worldId);
+
+  const requestOptions = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      ...headers
+    },
+    ...restOptions
+  };
+
+  return request.post(spaceRepositoryEndpoints().createWithAsset, formData, requestOptions);
 };
 
 export const fetchUserOwnedSpaces: RequestInterface<

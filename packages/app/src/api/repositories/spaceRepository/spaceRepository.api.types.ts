@@ -184,6 +184,18 @@ export interface CreateSpaceResponse {
   message: string;
 }
 
+export interface CreateSpaceWithAssetRequest {
+  name: string;
+  worldId: string;
+  asset: File;
+}
+
+export interface CreateSpaceWithAssetResponse {
+  id: string;
+  status: any;
+  message: string;
+}
+
 /** User owned spaces **/
 
 export interface UserOwnedSpacesRequest {
