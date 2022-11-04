@@ -171,7 +171,7 @@ const Widgets: FC = () => {
             </ToolbarIcon>
           </styled.ChatIconWrapper>
 
-          {true && ( // TODO: get it from config
+          {!!worldStore.worldConfig?.BYA_enabled && (
             <ToolbarIcon
               icon="planet"
               title={t('titles.worldBuilder')}
