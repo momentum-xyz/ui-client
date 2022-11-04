@@ -25,22 +25,16 @@ const ManagePluginsPanel: FC = () => {
     <SectionPanel title={t('titles.plugins')} onAdd={addPluginDialog.open}>
       <styled.Body>
         {addPluginDialog.isOpen && (
-          <AddPluginDialog
-            onClose={addPluginDialog.close}
-            onConfirmation={(plugin) => {
-              pluginsStore.addPlugin(plugin);
-              addPluginDialog.close();
-            }}
-          />
+          <AddPluginDialog onClose={addPluginDialog.close} spaceId={space.id} />
         )}
         <styled.List className="noScrollIndicator">
           {pluginsStore.spacePlugins.map((plugin) => (
             <AdminListItem
               key={plugin.subPath}
-              name={plugin.scopeName}
-              userId={plugin.subPath}
-              type={plugin.subtitle}
-              onRemove={(id, _) => pluginsStore.removePlugin(id)}
+              name={plugin.name}
+              userId={plugin.id}
+              type={`/${plugin.subPath}`}
+              onRemove={(id, _) => pluginsStore.removePluginFromSpace(space.id, id)}
             />
           ))}
         </styled.List>

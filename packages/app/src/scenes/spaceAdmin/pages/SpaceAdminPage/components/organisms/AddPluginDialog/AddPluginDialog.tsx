@@ -1,74 +1,41 @@
-import React, {FC, useEffect, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {t} from 'i18next';
-import {Dialog, IconNameType, Input, SvgButton} from '@momentum-xyz/ui-kit';
+import {Dialog, Dropdown, Input, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {observer} from 'mobx-react-lite';
 
-import {PluginInterface} from 'core/interfaces';
+import {useStore} from 'shared/hooks';
+import {PluginQueryResultType} from 'stores/MainStore/models/PluginsStore';
 
 import * as styled from './AddPluginDialog.styled';
 
 interface PropsInterface {
-  onConfirmation: (plugin: PluginInterface) => void;
+  spaceId: string;
   onClose: () => void;
 }
 
-const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
-  const mockPlugin: PluginInterface = useMemo(
-    () => ({
-      id: 'ceb9ebad-283c-4b65-9c7e-1b87391e9f49',
-      scopeName: 'momentum_plugin_template',
-      subPath: 'template',
-      subtitle: 'Template',
-      iconName: 'gear',
-      // TODO: Later change to remote url
-      scriptUrl: 'http://localhost:3002/remoteEntry.js',
-      exact: true
-    }),
-    []
-  );
+const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
+  const {mainStore} = useStore();
+  const {pluginsStore} = mainStore;
+  const {searchedPlugins} = pluginsStore;
 
-  const [name, setName] = useState('');
-  const [url, setUrl] = useState('');
-  const [subPath, setSubPath] = useState('');
-  const [subtitle, setSubtitle] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState<IconNameType>('gear');
+  const [selectedPlugin, setSelectedPlugin] = useState<PluginQueryResultType>();
 
-  const plugin = useMemo(
-    () => ({
-      id: mockPlugin.id,
-      scopeName: name,
-      subPath: subPath,
-      subtitle: subtitle,
-      iconName: selectedIcon,
-      // TODO: Later change to remote url
-      scriptUrl: url,
-      exact: mockPlugin.exact
-    }),
-    [mockPlugin.exact, mockPlugin.id, name, selectedIcon, subPath, subtitle, url]
-  );
+  const search = useDebouncedCallback(pluginsStore.searchPlugins, 500, []);
 
   useEffect(() => {
-    if (name === 'momentum') {
-      setName(mockPlugin.scopeName);
-      setUrl(mockPlugin.scriptUrl);
-      setSubPath(mockPlugin.subPath);
-      setSubtitle(mockPlugin.subtitle ?? '');
-    }
-  }, [mockPlugin.scopeName, mockPlugin.scriptUrl, mockPlugin.subPath, mockPlugin.subtitle, name]);
+    return () => {
+      pluginsStore.setQuery('');
+      search();
+    };
+  }, [pluginsStore, search]);
 
-  const iconsToSelect = useMemo<IconNameType[]>(
-    () => [
-      'gear',
-      'warning',
-      'approved',
-      'stage',
-      'stats',
-      'trash',
-      'wallet',
-      'astro',
-      'vibe',
-      'tiles'
-    ],
-    []
+  const onInputChange = useCallback(
+    (value: string) => {
+      setSelectedPlugin(undefined);
+      pluginsStore.setQuery(value);
+      search();
+    },
+    [pluginsStore, search]
   );
 
   return (
@@ -76,7 +43,15 @@ const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
       title="Add plugin"
       approveInfo={{
         title: t('actions.add'),
-        onClick: () => onConfirmation(plugin)
+        disabled: !selectedPlugin,
+        onClick: async () => {
+          if (!selectedPlugin) {
+            return;
+          }
+
+          await pluginsStore.addPluginToSpace(spaceId, selectedPlugin.plugin_uuid);
+          onClose();
+        }
       }}
       declineInfo={{
         title: t('actions.cancel'),
@@ -86,21 +61,31 @@ const AddPluginDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
       showCloseButton
     >
       <styled.Container>
-        <Input label="Name" value={name} onChange={setName} />
-        <Input label="Script URL" value={url} onChange={setUrl} />
-        <Input label="Sub Path" value={subPath} onChange={setSubPath} />
-        <Input label="Subtitle" value={subtitle} onChange={setSubtitle} />
-        <styled.IconHeading type="h3" label="Select Icon:" align="left" />
-        <styled.IconSelector>
-          {iconsToSelect.map((icon) => (
-            <styled.IconItem key={icon} className={selectedIcon === icon ? 'selected' : undefined}>
-              <SvgButton iconName={icon} onClick={() => setSelectedIcon(icon)} size="medium" />
-            </styled.IconItem>
-          ))}
-        </styled.IconSelector>
+        <Input
+          label="Search"
+          defaultValue={pluginsStore.searchQuery}
+          onChange={onInputChange}
+          autoFocus
+        />
+        {pluginsStore.searchedPlugins.length > 0 && (
+          <Dropdown
+            placeholder="Select Plugin"
+            variant="secondary"
+            value={selectedPlugin?.plugin_uuid ?? ''}
+            options={searchedPlugins.map((plugin) => {
+              return {
+                label: plugin.plugin_name,
+                value: plugin.plugin_uuid
+              };
+            })}
+            onOptionSelect={(option) =>
+              setSelectedPlugin({plugin_name: option.label, plugin_uuid: option.value})
+            }
+          />
+        )}
       </styled.Container>
     </Dialog>
   );
 };
 
-export default AddPluginDialog;
+export default observer(AddPluginDialog);
