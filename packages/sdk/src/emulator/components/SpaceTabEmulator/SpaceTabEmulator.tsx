@@ -1,12 +1,12 @@
 import {FC, useCallback, useMemo, useRef, useState} from 'react';
-import {CorePluginPropsInterface, PluginConfigInterface, PluginInterface} from 'interfaces';
+import {CorePluginPropsInterface, PluginInterface} from 'interfaces';
 import {useTheme} from 'styled-components';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import * as styled from './SpaceTabEmulator.styled';
 
 interface PropsInterface {
-  plugin: PluginInterface<PluginConfigInterface>;
+  plugin: PluginInterface;
 }
 
 export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
@@ -22,7 +22,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
     []
   );
 
-  const coreProps: CorePluginPropsInterface<PluginConfigInterface> = useMemo(
+  const coreProps: CorePluginPropsInterface = useMemo(
     () => ({
       theme: theme as ThemeInterface,
       isSpaceAdmin: false,

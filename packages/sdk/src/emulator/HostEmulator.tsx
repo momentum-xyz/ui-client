@@ -1,11 +1,11 @@
 import {FC, useState} from 'react';
-import {PluginConfigInterface, PluginInterface} from 'interfaces';
+import {PluginInterface} from 'interfaces';
 
 import * as styled from './HostEmulator.styled';
 import {SpaceTabEmulator} from './components/';
 
-interface PropsInterface<C extends PluginConfigInterface> {
-  plugin: PluginInterface<C>;
+interface PropsInterface {
+  plugin: PluginInterface;
 }
 
 /**
@@ -29,7 +29,7 @@ ReactDOM.render(
 );
 ```
  */
-export const HostEmulator: FC<PropsInterface<PluginConfigInterface>> = ({plugin}) => {
+export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
   const [tab, setTab] = useState('dash');
   return (

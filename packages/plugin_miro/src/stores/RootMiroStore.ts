@@ -16,11 +16,11 @@ const RootMiroStore = types
   )
   .actions((self) => ({
     init: flow(function* () {
-      const config = yield self.api.getConfig();
+      const config: AppConfigInterface = yield self.api.getConfig();
 
       Object.entries(config).forEach((entry) => {
         const [key, value] = entry;
-        appVariables[key as keyof AppConfigInterface] = value as string;
+        appVariables[key as keyof AppConfigInterface] = value;
       });
     })
   }));
