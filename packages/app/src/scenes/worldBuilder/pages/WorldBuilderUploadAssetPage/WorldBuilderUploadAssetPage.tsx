@@ -68,6 +68,15 @@ const WorldBuilderUploadAssetPage: FC = () => {
       return;
     }
 
+    toast.info(
+      <ToastContent
+        headerIconName="alert"
+        text={t('assetsUploader.successMessage')}
+        showCloseButton
+      />,
+      TOAST_COMMON_OPTIONS
+    );
+
     uploadAssetDialog.close();
   };
 

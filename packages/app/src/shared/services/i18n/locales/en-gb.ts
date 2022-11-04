@@ -505,6 +505,7 @@ export const enGb = {
       dragActiveLabel: 'Drop the files here...',
       confirmButton: 'Create Space',
       spaceName: 'Space Name',
+      successMessage: 'Successfully created space with asset',
       errorMissingName: 'Please enter a name for the space',
       errorUnsupportedFile: 'Only .glb and .gltf files are supported',
       errorTooLargeFile: 'Max file size is 50.1MB',
