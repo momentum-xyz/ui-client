@@ -31,7 +31,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
         get: (field: string) => Promise.resolve(stateAttribute.current[field]),
         set: (field: string, value: unknown) => {
           stateAttribute.current[field] = value;
-          return Promise.resolve();
+          return Promise.resolve(stateAttribute.current[field]);
         },
         getConfig: () => Promise.resolve(config)
       }

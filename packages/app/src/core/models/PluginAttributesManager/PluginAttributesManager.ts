@@ -37,21 +37,24 @@ const PluginAttributesManager = types
     }),
     set: flow(function* <T>(spaceId: string, key: string, value: T extends undefined ? never : T) {
       if (!self.pluginId) {
-        return;
+        return null;
       }
 
       const repiository = api.spaceAttributeRepository;
 
-      yield self.setStateRequest.send(
-        value === null ? repiository.deleteSpaceSubAttribute : repiository.setSpaceSubAttribute,
-        {
-          spaceId,
-          plugin_id: self.pluginId,
-          attribute_name: AttributeNameEnum.STATE,
-          sub_attribute_key: key,
-          value
-        }
-      );
+      const body = {
+        spaceId,
+        plugin_id: self.pluginId,
+        attribute_name: AttributeNameEnum.STATE,
+        sub_attribute_key: key,
+        value
+      };
+
+      if (value === null) {
+        return yield self.setStateRequest.send(repiository.deleteSpaceSubAttribute, body);
+      } else {
+        return (yield self.setStateRequest.send(repiository.setSpaceSubAttribute, body))[key];
+      }
     }),
     getConfig: flow(function* <C extends GetSpaceAttributeResponse>() {
       const response: GetSpaceAttributeResponse | undefined = yield self.getConfigRequest.send(
