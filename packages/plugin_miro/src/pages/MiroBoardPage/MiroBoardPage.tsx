@@ -17,7 +17,7 @@ const MiroBoardPage: FC = () => {
   }, [api, miroBoardStore]);
 
   useEffect(() => {
-    renderTopBarActions?.({
+    renderTopBarActions({
       main: () => (
         <MiroActions
           spaceId={spaceId}

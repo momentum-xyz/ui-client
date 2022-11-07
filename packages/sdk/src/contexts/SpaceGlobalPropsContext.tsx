@@ -15,7 +15,8 @@ export const SpaceGlobalPropsContext = createContext<
     get: () => Promise.reject(),
     set: () => Promise.reject(),
     getConfig: () => Promise.reject()
-  }
+  },
+  renderTopBarActions() {}
 });
 
 export const SpaceGlobalPropsContextProvider: FC<{
