@@ -1,34 +1,36 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ThemeProvider} from 'styled-components';
-import {MiroPluginPropsInterface} from 'core/interfaces';
-import {SpaceGlobalPropsContextProvider} from '@momentum-xyz/sdk';
+import {AppConfigInterface} from 'core/interfaces';
 import {MiroBoardPage} from 'pages';
 import {RootMiroStore} from 'stores';
 import {StoreProvider} from 'shared/hooks/useStore';
+import {useSpace, useTheme, APIInterface} from '@momentum-xyz/sdk';
 
 import '@momentum-xyz/ui-kit/dist/themes/themes';
 
 import 'shared/services/i18n';
 import 'core/utils/boardsPicker.1.0.js';
 
-const MiroApp: FC<MiroPluginPropsInterface> = (props) => {
-  const {theme} = props;
+const MiroApp: FC = () => {
+  const theme = useTheme();
+  const {api} = useSpace();
 
-  const store = useMemo(() => RootMiroStore.create({api: props.api}), [props.api]);
+  const store = useMemo(
+    () => RootMiroStore.create({api: api as APIInterface<AppConfigInterface>}),
+    [api]
+  );
 
   useEffect(() => {
     store.init();
   }, [store]);
 
   return (
-    <SpaceGlobalPropsContextProvider props={props}>
-      <StoreProvider value={store}>
-        <ThemeProvider theme={theme}>
-          <MiroBoardPage />
-        </ThemeProvider>
-      </StoreProvider>
-    </SpaceGlobalPropsContextProvider>
+    <StoreProvider value={store}>
+      <ThemeProvider theme={theme}>
+        <MiroBoardPage />
+      </ThemeProvider>
+    </StoreProvider>
   );
 };
 

@@ -1,1 +1,2 @@
-export * from './SpaceGlobalPropsContext';
+export {SpaceGlobalPropsContextProvider} from './SpaceGlobalPropsContext';
+export * from './ThemeContext';
