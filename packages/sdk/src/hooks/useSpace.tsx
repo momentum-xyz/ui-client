@@ -1,4 +1,4 @@
-import {useSpaceGlobalProps} from '../contexts';
+import {useSpaceGlobalProps} from '../contexts/SpaceGlobalPropsContext';
 
 export const useSpace = () => {
   const {isSpaceAdmin, spaceId, renderTopBarActions, api} = useSpaceGlobalProps();
