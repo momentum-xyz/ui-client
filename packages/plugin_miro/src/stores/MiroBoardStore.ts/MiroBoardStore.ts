@@ -29,7 +29,7 @@ const MiroBoardStore = types
         return;
       }
       yield self.api.set('board', data);
-      self.setBoard(data);
+      self.board = data;
     }),
     pickBoard() {
       miroBoardsPicker.open({
