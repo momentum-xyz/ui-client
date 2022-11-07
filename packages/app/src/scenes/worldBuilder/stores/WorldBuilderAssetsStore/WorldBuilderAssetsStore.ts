@@ -22,6 +22,9 @@ const WorldBuilderAssetsStore = types
     },
     setUploadProgress: (progress: number) => {
       self.uploadProgress = progress;
+    },
+    resetUploadProgress: () => {
+      self.uploadProgress = null;
     }
   }))
   .actions((self) => ({
