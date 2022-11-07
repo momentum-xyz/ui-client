@@ -81,6 +81,8 @@ const AgoraScreenShareStore = types
   }))
   .actions((self) => ({
     startScreenSharing: flow(function* (authStateSubject: string) {
+      let wasStarted = false;
+
       if (self.spaceId) {
         self.isSettingUp = true;
 
@@ -106,12 +108,15 @@ const AgoraScreenShareStore = types
         try {
           yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
           yield self.createScreenTrackAndPublish();
+          wasStarted = true;
         } catch {
           self.client.leave();
         } finally {
           self.isSettingUp = false;
         }
       }
+
+      return wasStarted;
     }),
     stopScreenSharing() {
       if (!self.videoTrack) {

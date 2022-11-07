@@ -15,6 +15,13 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
 
   const stateAttribute = useRef<Record<string, any>>({});
 
+  const config = useMemo(
+    () => ({
+      APP_ID: ''
+    }),
+    []
+  );
+
   const coreProps: CorePluginPropsInterface = useMemo(
     () => ({
       theme: theme as ThemeInterface,
@@ -25,10 +32,11 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
         set: (field: string, value: unknown) => {
           stateAttribute.current[field] = value;
           return Promise.resolve();
-        }
+        },
+        getConfig: () => Promise.resolve(config)
       }
     }),
-    [theme]
+    [theme, config]
   );
 
   const [topBar, setTopBar] = useState(<span />);

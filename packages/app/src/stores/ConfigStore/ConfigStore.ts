@@ -35,13 +35,6 @@ const ConfigStore = types
             appVariables[key as keyof AppConfigInterface] = value as any;
           });
 
-          // TODO: Figure out how to share those below and remove ts-ignore
-          // @ts-ignore window['env'] does not resolve typing
-          window['env'] = {
-            BACKEND_ENDPOINT_URL: appVariables.BACKEND_ENDPOINT_URL,
-            APP_ID: appVariables.MIRO_APP_ID
-          };
-
           self.isConfigReady = true;
         }
       }

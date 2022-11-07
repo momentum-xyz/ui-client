@@ -84,7 +84,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
             <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
               <plugin.SpaceExtension
                 theme={theme}
-                isSpaceAdmin={spaceStore.isAdmin}
+                isSpaceAdmin={true}
                 spaceId={spaceStore.id}
                 api={attributesManager.api}
                 renderTopBarActions={renderTopBarActions}

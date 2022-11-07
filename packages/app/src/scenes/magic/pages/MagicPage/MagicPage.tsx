@@ -10,62 +10,57 @@ import {MagicTypeEnum} from 'core/enums';
 const MagicPage: FC = () => {
   const {mainStore, magicStore} = useStore();
   const {unityStore} = mainStore;
-  const {magic} = magicStore;
 
   const {id} = useParams<{id: string}>();
   const history = useHistory();
 
   const handleMagic = useCallback(() => {
-    if (!magicStore.magic) {
+    if (!magicStore.magicLink) {
       return;
     }
 
-    if (magicStore.magic.expired) {
-      history.replace({pathname: ROUTES.base});
-      return;
-    }
+    const spaceId = magicStore.magicLink.data.spaceId;
 
-    const id = magicStore.magic.data.id;
-
-    switch (magicStore.magic.type) {
-      case MagicTypeEnum.FLY: {
-        unityStore.teleportToVector3(magicStore.magic.data.position);
+    switch (magicStore.magicLink.type) {
+      case MagicTypeEnum.FLY:
+        unityStore.teleportToVector3(magicStore.magicLink.data.position);
         history.replace({pathname: ROUTES.base});
         break;
-      }
-
       case MagicTypeEnum.OPEN_SPACE:
-        unityStore.teleportToSpace(id);
+        unityStore.teleportToSpace(spaceId);
         setTimeout(() => {
-          const params = {spaceId: id};
-          history.push(generatePath(ROUTES.collaboration.dashboard, params));
+          history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
         }, TELEPORT_DELAY_MS);
         break;
-
-      case MagicTypeEnum.EVENT: {
-        unityStore.teleportToSpace(id);
+      case MagicTypeEnum.JOIN_MEETING:
+        unityStore.teleportToSpace(spaceId);
         setTimeout(() => {
-          const params = {spaceId: id, eventId: magicStore.magic?.data.eventId ?? ''};
+          history.push({pathname: generatePath(ROUTES.grabTable, {spaceId})});
+        }, TELEPORT_DELAY_MS);
+        break;
+      case MagicTypeEnum.EVENT: {
+        unityStore.teleportToSpace(spaceId);
+        setTimeout(() => {
+          const params = {spaceId: spaceId, eventId: magicStore.magicLink?.data.eventId ?? ''};
           history.push(generatePath(ROUTES.collaboration.calendarEvent, params));
         }, TELEPORT_DELAY_MS);
         break;
       }
-
       default:
         history.replace({pathname: ROUTES.base});
         break;
     }
-  }, [history, magicStore.magic, unityStore]);
+  }, [history, magicStore.magicLink, unityStore]);
 
   useEffect(() => {
-    magicStore.getMagicLink(id);
+    magicStore.fetchMagicLink(id);
   }, [id, magicStore]);
 
   useEffect(() => {
-    if (unityStore.isTeleportReady && magic?.id) {
+    if (unityStore.isTeleportReady && magicStore.magicLink) {
       handleMagic();
     }
-  }, [handleMagic, magic?.id, unityStore.isTeleportReady]);
+  }, [handleMagic, magicStore.magicLink, unityStore.isTeleportReady]);
 
   return <></>;
 };

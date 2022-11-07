@@ -2,9 +2,10 @@
  * Main constants come from backend.
  */
 
-export interface AppConfigInterface {
-  BACKEND_ENDPOINT_URL: string;
-  APP_ID: string;
+import {PluginConfigInterface} from '@momentum-xyz/sdk';
+
+export interface AppConfigInterface extends PluginConfigInterface {
+  MIRO_APP_ID: string;
 }
 
 /**

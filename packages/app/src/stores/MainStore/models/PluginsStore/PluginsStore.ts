@@ -36,7 +36,7 @@ const PluginsStore = types
     })
   )
   .actions((self) => ({
-    fetchSpacePlugins: flow(function* (worldId: string, spaceId: string) {
+    fetchSpacePlugins: flow(function* (spaceId: string) {
       const spaceOptions: SpaceSubOptionResponse = yield self.pluginsListRequest.send(
         api.spaceOptionRepository.getSpaceSubOption,
         {
@@ -71,7 +71,6 @@ const PluginsStore = types
             ...plugin,
             attributesManager: PluginAttributesManager.create({
               pluginId: plugin.id,
-              worldId,
               spaceId
             })
           })
@@ -105,23 +104,23 @@ const PluginsStore = types
     }
   }))
   .actions((self) => ({
-    addPluginToSpace: flow(function* (worldId: string, spaceId: string, pluginId: string) {
+    addPluginToSpace: flow(function* (spaceId: string, pluginId: string) {
       yield self.addPluginRequest.send(api.spaceOptionRepository.setSpaceSubOption, {
         spaceId,
         sub_option_key: SpaceSubOptionKeyEnum.Asset2DPlugins,
         value: [...self.spacePluginLoaders.map((loader) => loader.id), pluginId]
       });
 
-      yield self.fetchSpacePlugins(worldId, spaceId);
+      yield self.fetchSpacePlugins(spaceId);
     }),
-    removePluginFromSpace: flow(function* (worldId: string, spaceId: string, pluginId: string) {
+    removePluginFromSpace: flow(function* (spaceId: string, pluginId: string) {
       yield self.removePluginRequest.send(api.spaceOptionRepository.setSpaceSubOption, {
         spaceId,
         sub_option_key: SpaceSubOptionKeyEnum.Asset2DPlugins,
         value: self.spacePluginLoaders.map((loader) => loader.id).filter((id) => id !== pluginId)
       });
 
-      yield self.fetchSpacePlugins(worldId, spaceId);
+      yield self.fetchSpacePlugins(spaceId);
     })
   }))
   .views((self) => ({

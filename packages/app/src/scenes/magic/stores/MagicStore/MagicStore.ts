@@ -1,25 +1,34 @@
 import {types, flow, cast} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, MagicLinkResponse} from 'api';
+import {api, GetSpaceAttributeResponse} from 'api';
 import {MagicLinkInterface} from 'core/interfaces';
+import {mapper} from 'api/mapper';
 
 const MagicStore = types
   .compose(
     ResetModel,
     types.model('MagicStore', {
-      magic: types.maybe(types.frozen<MagicLinkInterface>()),
+      magicLink: types.maybe(types.frozen<MagicLinkInterface>()),
       request: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    getMagicLink: flow(function* (id: string) {
-      const response: MagicLinkResponse = yield self.request.send(
-        api.magicRepository.fetchMagicLink,
-        {id}
+    fetchMagicLink: flow(function* (key: string) {
+      const response: GetSpaceAttributeResponse = yield self.request.send(
+        api.magicLinkRepository.fetchMagicLink,
+        {
+          key
+        }
       );
-
-      self.magic = cast(response);
+      if (response) {
+        const magicLinkData = mapper.mapSubAttributeValue<MagicLinkInterface>(response);
+        if (magicLinkData) {
+          self.magicLink = cast({
+            ...magicLinkData
+          });
+        }
+      }
     })
   }));
 

@@ -24,8 +24,8 @@ import * as styled from './CalendarPage.styled';
 const CalendarPage: FC = () => {
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, spaceStore} = collaborationStore;
+  const {eventList, formDialog, magicDialog, deleteConfirmationDialog, magicLink} = calendarStore;
   const {favoriteStore, unityStore} = mainStore;
-  const {eventList, formDialog, magicDialog, deleteConfirmationDialog} = calendarStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -121,12 +121,12 @@ const CalendarPage: FC = () => {
       </styled.InnerContainer>
       {calendarStore.formDialog.isOpen && <EventForm />}
 
-      {calendarStore.magicId && magicDialog.isOpen && (
+      {magicDialog.isOpen && (
         <LinkDialog
           theme={theme}
           title={t('eventList.eventItem.magicLinkDialog.title')}
           copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
-          link={`${window.location.protocol}//${window.location.host}/magic/${calendarStore.magicId}`}
+          link={magicLink}
           onClose={magicDialog.close}
         />
       )}
