@@ -8,6 +8,7 @@ import {useStore} from 'shared/hooks';
 import {SpacesList, SelectedSpace, Header} from './components';
 import * as styled from './ExplorePanel.styled';
 
+const PANEL_WIDTH_PX = 200;
 const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
@@ -19,7 +20,7 @@ const ExplorePanel: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    exploreStore.selectSpace(worldStore.worldId);
+    exploreStore.init(worldStore.worldId);
   }, [exploreStore, worldStore.worldId]);
 
   const debouncedSearch = useDebouncedCallback(() => {
@@ -32,7 +33,7 @@ const ExplorePanel: FC = () => {
       name={t('labels.explore')}
       isExpanded={exploreStore.isExpanded}
       setExpand={exploreStore.setExpand}
-      size={{width: '200px'}}
+      size={{width: `${PANEL_WIDTH_PX}px`}}
     >
       <SearchInput
         value={searchQuery.query}

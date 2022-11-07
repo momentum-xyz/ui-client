@@ -1,34 +1,35 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
-import {SpaceInfo, SearchQuery} from 'core/models';
-import {ExploreResponse} from 'api';
+import {api, GetSpaceWithSubSpacesResponse, ExploreResponse} from 'api';
+import {SearchQuery} from 'core/models';
 import {bytesToUuid} from 'core/utils';
-// FIXME: Removal. Use SpaceInfo.
-import {SpaceStore} from 'scenes/collaboration/stores/SpaceStore';
 
-import {SpaceListByCategory} from './models';
+import {SpaceDetails, SpaceListByCategory} from './models';
 
 const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
+      worldId: '',
       isExpanded: true,
-      // TODO: Use SpaceInfo model
-      selectedSpace: types.optional(SpaceStore, {}),
+      selectedSpace: types.maybeNull(SpaceDetails),
       spaceList: types.optional(types.array(SpaceListByCategory), []),
       searchQuery: types.optional(SearchQuery, {}),
-      spaceHistory: types.optional(types.array(SpaceInfo), []),
-      previousItem: types.maybe(SpaceInfo)
+      spaceHistory: types.optional(types.array(SpaceDetails), []),
+      previousItem: types.maybe(SpaceDetails)
     })
   )
   .actions((self) => ({
+    init(worldId: string): void {
+      self.worldId = worldId;
+      this.selectSpace(worldId);
+    },
     setExpand(isExpanded: boolean): void {
       self.isExpanded = isExpanded;
     },
-    selectSpace(spaceId: string): void {
-      self.searchQuery.setQuery('');
+    selectSpace: flow(function* (spaceId: string) {
+      self.searchQuery.resetModel();
 
       if (self.previousItem) {
         self.spaceHistory.push({...self.previousItem});
@@ -41,10 +42,18 @@ const ExploreStore = types
         });
       }
 
-      self.selectedSpace.resetModel();
-      self.selectedSpace.init(spaceId, false);
-      self.selectedSpace.fetchSpaceInformation();
-    },
+      const response: GetSpaceWithSubSpacesResponse = yield self.searchQuery.request.send(
+        api.worldRepository.fetchSpaceWithSubSpaces,
+        {
+          worldId: self.worldId,
+          spaceId: spaceId
+        }
+      );
+
+      if (response) {
+        self.selectedSpace = cast(response);
+      }
+    }),
     goBack(): void {
       const previousItem = self.spaceHistory.pop();
       const previousItemId = self.previousItem?.id;
@@ -59,9 +68,9 @@ const ExploreStore = types
         self.previousItem = undefined;
       }
 
-      self.selectedSpace.resetModel();
-      self.selectedSpace.init(previousItemId, false);
-      self.selectedSpace.fetchSpaceInformation();
+      //self.selectedSpace.resetModel();
+      //self.selectedSpace.init(previousItemId, false);
+      //self.selectedSpace.fetchSpaceInformation();
     },
     search: flow(function* (worldId: string) {
       self.spaceList = cast([]);
@@ -89,7 +98,7 @@ const ExploreStore = types
   }))
   .views((self) => ({
     get isLoading(): boolean {
-      return self.searchQuery.isPending || !!self.selectedSpace?.isPending;
+      return self.searchQuery.isPending;
     }
   }));
 
