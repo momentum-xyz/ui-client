@@ -226,7 +226,8 @@ export const enGb = {
       worldURL: 'World URL',
       subdomain: 'Subdomain',
       pilot: 'Pilot',
-      flyWithMe: 'Fly with me'
+      flyWithMe: 'Fly with me',
+      search: 'Search'
     },
     messages: {
       loading: 'Loading Momentum',
@@ -380,7 +381,8 @@ export const enGb = {
       templateNameWrapper: '{{name}} Template',
       stageIsFull: 'Stage is full',
       success: 'Success',
-      plugins: 'Plugins'
+      plugins: 'Plugins',
+      addPlugin: 'Add Plugin'
     },
     textMessage: {
       you: 'you',
@@ -404,7 +406,8 @@ export const enGb = {
       searchForSpaces: 'Search for spaces...',
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
-      worldname: 'worldname'
+      worldname: 'worldname',
+      selectPlugin: 'Select Plugin'
     },
     fields: {
       nickname: 'Nickname',

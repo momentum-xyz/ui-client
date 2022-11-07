@@ -1,10 +1,10 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {t} from 'i18next';
 import {Dialog, Dropdown, Input, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-import {PluginQueryResultType} from 'stores/MainStore/models/PluginsStore';
+import {PluginQueryResultType} from 'stores/MainStore/models';
 
 import * as styled from './AddPluginDialog.styled';
 
@@ -18,13 +18,15 @@ const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
   const {pluginsStore} = mainStore;
   const {searchedPlugins} = pluginsStore;
 
+  const {t} = useTranslation();
+
   const [selectedPlugin, setSelectedPlugin] = useState<PluginQueryResultType>();
 
   const search = useDebouncedCallback(pluginsStore.searchPlugins, 500, []);
 
   useEffect(() => {
     return () => {
-      pluginsStore.setQuery('');
+      pluginsStore.searchQuery.resetModel();
       search();
     };
   }, [pluginsStore, search]);
@@ -32,7 +34,7 @@ const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
   const onInputChange = useCallback(
     (value: string) => {
       setSelectedPlugin(undefined);
-      pluginsStore.setQuery(value);
+      pluginsStore.searchQuery.setQuery(value);
       search();
     },
     [pluginsStore, search]
@@ -40,7 +42,7 @@ const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
 
   return (
     <Dialog
-      title="Add plugin"
+      title={t('titles.addPlugin')}
       approveInfo={{
         title: t('actions.add'),
         disabled: !selectedPlugin,
@@ -62,14 +64,14 @@ const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
     >
       <styled.Container>
         <Input
-          label="Search"
-          defaultValue={pluginsStore.searchQuery}
+          label={t('labels.search')}
+          defaultValue={pluginsStore.searchQuery.query}
           onChange={onInputChange}
           autoFocus
         />
         {pluginsStore.searchedPlugins.length > 0 && (
           <Dropdown
-            placeholder="Select Plugin"
+            placeholder={t('placeholders.selectPlugin')}
             variant="secondary"
             value={selectedPlugin?.plugin_uuid ?? ''}
             options={searchedPlugins.map((plugin) => {
