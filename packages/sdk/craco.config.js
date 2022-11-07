@@ -38,6 +38,10 @@ module.exports = {
           "mobx": {
             requiredVersion: "^6.4.2"
           },
+          "@momentum-xyz/sdk": {
+            singleton: true,
+            requiredVersion: "^0.1.3"
+          },
           "mobx-react-lite": {
             requiredVersion: "^3.3.0"
           },
