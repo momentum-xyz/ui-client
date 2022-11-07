@@ -40,7 +40,7 @@ const PluginAttributesManager = types
         return null;
       }
 
-      const repiository = api.spaceAttributeRepository;
+      const repository = api.spaceAttributeRepository;
 
       const body = {
         spaceId,
@@ -51,9 +51,9 @@ const PluginAttributesManager = types
       };
 
       if (value === null) {
-        return yield self.setStateRequest.send(repiository.deleteSpaceSubAttribute, body);
+        return yield self.setStateRequest.send(repository.deleteSpaceSubAttribute, body);
       } else {
-        return (yield self.setStateRequest.send(repiository.setSpaceSubAttribute, body))[key];
+        return (yield self.setStateRequest.send(repository.setSpaceSubAttribute, body))[key];
       }
     }),
     getConfig: flow(function* <C extends GetSpaceAttributeResponse>() {
