@@ -34,7 +34,8 @@ const SpaceStore = types
 
       // TODO: Make SpaceRights model under core
       isModerator: false,
-      isAdmin: false,
+      // TODO: Change to false when BE will be implemented
+      isAdmin: true,
       isMember: false,
       isOwner: false,
 

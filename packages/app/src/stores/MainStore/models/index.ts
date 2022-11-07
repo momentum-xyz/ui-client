@@ -6,3 +6,4 @@ export * from './FavoriteStore';
 export * from './AgoraStore';
 export * from './LiveStreamStore';
 export * from './DynamicScriptsStore';
+export * from './PluginQueryResult';
