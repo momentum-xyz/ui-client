@@ -3,6 +3,9 @@ import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, CreateSpaceWithAssetResponse} from 'api';
 
+const {REACT_APP_ASSET_UPLOAD_TIMEOUT_SEC = '120'} = process.env;
+const REQUEST_TIMEOUT_ASSET_UPLOAD_MS = JSON.parse(REACT_APP_ASSET_UPLOAD_TIMEOUT_SEC) * 1000;
+
 const WorldBuilderAssetsStore = types
   .compose(
     ResetModel,
@@ -19,6 +22,9 @@ const WorldBuilderAssetsStore = types
     },
     setUploadProgress: (progress: number) => {
       self.uploadProgress = progress;
+    },
+    resetUploadProgress: () => {
+      self.uploadProgress = null;
     }
   }))
   .actions((self) => ({
@@ -40,6 +46,7 @@ const WorldBuilderAssetsStore = types
           name: spaceName,
           worldId: self.worldId,
           asset,
+          timeout: REQUEST_TIMEOUT_ASSET_UPLOAD_MS,
           onUploadProgress
         }
       );
