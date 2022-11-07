@@ -6,7 +6,6 @@ import {request} from 'api/request';
 import {spaceAttributesRepositoryEndpoints} from './spaceAttribute.api.endpoints';
 import {
   DeleteSpaceSubAttributeRequest,
-  DeleteSpaceSubAttributeResponse,
   GetSpaceAttributeRequest,
   GetSpaceAttributeResponse,
   GetSpaceSubAttributeRequest,
@@ -67,10 +66,9 @@ export const setSpaceSubAttribute: RequestInterface<
   );
 };
 
-export const deleteSpaceSubAttribute: RequestInterface<
-  DeleteSpaceSubAttributeRequest,
-  DeleteSpaceSubAttributeResponse
-> = (options) => {
+export const deleteSpaceSubAttribute: RequestInterface<DeleteSpaceSubAttributeRequest, null> = (
+  options
+) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
   const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});

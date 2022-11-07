@@ -6,9 +6,10 @@ import {
   DynamicScriptLoaderType,
   PluginAttributesManager,
   PluginLoader,
-  PluginLoaderModelType
+  PluginLoaderModelType,
+  SearchQuery
 } from 'core/models';
-import {DynamicScriptsStore} from 'stores/MainStore/models';
+import {DynamicScriptsStore, PluginQueryResult} from 'stores/MainStore/models';
 import {
   api,
   GetPluginsListResponse,
@@ -23,7 +24,8 @@ const PluginsStore = types
     ResetModel,
     types.model('PluginsStore', {
       spacePluginLoaders: types.array(PluginLoader),
-      allPlugins: types.optional(types.frozen<GetPluginsListResponse>(), {}),
+      searchedPlugins: types.array(PluginQueryResult),
+      searchQuery: types.optional(SearchQuery, {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
 
@@ -50,6 +52,11 @@ const PluginsStore = types
       }
 
       const plugin_uuids = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
+
+      if (plugin_uuids.length === 0) {
+        self.spacePluginLoaders = cast([]);
+        return;
+      }
 
       const [pluginsMetadata, pluginsOptions] = yield Promise.all([
         self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {plugin_uuids}),
@@ -93,15 +100,32 @@ const PluginsStore = types
         pluginLoader.loadPlugin();
       }
     },
-    fetchAllPlugins: flow(function* () {
-      self.allPlugins = yield self.getAllPluginsRequest.send(
+    searchPlugins: flow(function* () {
+      const {query} = self.searchQuery;
+
+      if (query.length === 0) {
+        self.searchedPlugins = cast([]);
+        return;
+      }
+
+      // TODO: Use actual query in the request
+      const response: GetPluginsListResponse | undefined = yield self.getAllPluginsRequest.send(
         api.pluginsRepository.getPluginsList,
         {}
       );
-    }),
-    resetAllPlugins() {
-      self.allPlugins = {};
-    }
+
+      if (response) {
+        const plugins = Object.entries(response)
+          .map(([plugin_uuid, plugin_name]) => ({plugin_uuid, plugin_name}))
+          .filter(
+            ({plugin_name, plugin_uuid}) =>
+              plugin_name.toLowerCase().includes(query.toLowerCase()) ||
+              plugin_uuid.toLowerCase().includes(query.toLowerCase())
+          );
+
+        self.searchedPlugins = cast(plugins);
+      }
+    })
   }))
   .actions((self) => ({
     addPluginToSpace: flow(function* (spaceId: string, pluginId: string) {

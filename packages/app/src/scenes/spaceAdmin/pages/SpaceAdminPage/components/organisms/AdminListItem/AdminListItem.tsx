@@ -7,7 +7,7 @@ interface PropsInterface {
   name: string;
   userId: string;
   type?: string;
-  onEdit: (id: string, type?: string) => void;
+  onEdit?: (id: string, type?: string) => void;
   onRemove: (id: string, name: string) => void;
 }
 
@@ -21,13 +21,15 @@ const AdminListItem: FC<PropsInterface> = (props) => {
         {type && <styled.AdminRoleTypeText text={type} size="m" align="left" />}
       </styled.InfoContainer>
       <styled.Buttons>
-        <SvgButton
-          iconName="edit"
-          size="normal"
-          onClick={() => {
-            props.onEdit(userId, type);
-          }}
-        />
+        {props.onEdit && (
+          <SvgButton
+            iconName="edit"
+            size="normal"
+            onClick={() => {
+              props.onEdit?.(userId, type);
+            }}
+          />
+        )}
         <SvgButton
           iconName="bin"
           size="normal"
