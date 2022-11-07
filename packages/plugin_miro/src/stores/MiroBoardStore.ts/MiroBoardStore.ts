@@ -28,8 +28,8 @@ const MiroBoardStore = types
       if (!self.api) {
         return;
       }
-      yield self.api.set('board', data);
-      self.board = data;
+
+      self.board = yield self.api.set('board', data);
     }),
     pickBoard() {
       miroBoardsPicker.open({
@@ -43,8 +43,7 @@ const MiroBoardStore = types
         return;
       }
 
-      yield self.api.set<MiroBoardInterface | null>('board', null);
-      self.board = null;
+      self.board = yield self.api.set('board', null);
     })
   }));
 

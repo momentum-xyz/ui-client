@@ -25,5 +25,3 @@ export interface SpaceSubAttributeResponse {
 
 // DELETE SPACE SUB ATTRIBUTE
 export interface DeleteSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest {}
-
-export interface DeleteSpaceSubAttributeResponse {}
