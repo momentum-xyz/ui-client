@@ -6,6 +6,7 @@ import {useStore} from 'shared/hooks';
 import {SpaceItem} from './components';
 import * as styled from './SpacesList.styled';
 
+// TODO: To be refactored next PR.
 const SpacesList: FC = () => {
   const {homeStore} = useStore();
   const {exploreStore} = homeStore;

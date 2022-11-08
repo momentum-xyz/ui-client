@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import cn from 'classnames';
 import {Heading, Text, Button} from '@momentum-xyz/ui-kit';
 
 import {SpaceListItem} from 'ui-kit';
@@ -21,15 +20,16 @@ interface PropsInterface {
 
 const SpaceDetails: FC<PropsInterface> = (props) => {
   const {isWorld, space, previousSpace, selectSpace, teleportToSpace, goBack} = props;
+  const {id, name, description, subSpaces} = space;
 
   const {t} = useTranslation();
 
   const handleFlyToSpace = () => {
-    teleportToSpace(space.id);
+    teleportToSpace(id);
   };
 
   return (
-    <styled.Container data-testid="SelectedSpace-test">
+    <styled.Container data-testid="SpaceDetails-test">
       {!!previousSpace && (
         <styled.Header onClick={goBack}>
           <styled.BackIconSvg name="chevron" />
@@ -37,9 +37,9 @@ const SpaceDetails: FC<PropsInterface> = (props) => {
         </styled.Header>
       )}
 
-      <styled.Details className={cn({empty: space.subSpaces.length === 0})}>
-        <Heading label={space.name ?? ''} type="h2" align="left" transform="uppercase" />
-        <Text text={space.description} size="s" />
+      <styled.Details>
+        <Heading label={name} type="h2" align="left" transform="uppercase" />
+        <Text text={description} size="s" />
 
         {!isWorld && (
           <styled.FlyToButtonContainer>
@@ -48,22 +48,23 @@ const SpaceDetails: FC<PropsInterface> = (props) => {
         )}
       </styled.Details>
 
-      {space.subSpaces.length !== 0 && (
+      {subSpaces.length !== 0 && (
         <styled.SubspacesContainer>
           {!isWorld && (
             <styled.SubSpacesHeading type="h4" label={`${t('labels.subspaces')}:`} align="left" />
           )}
-          {space.subSpaces.map((spaceInfo) => (
-            <SpaceListItem
-              key={space.id}
-              spaceInfo={spaceInfo}
-              // TODO: Not implemented yet
-              isFavorite={false}
-              teleportToSpace={teleportToSpace}
-              selectSpace={selectSpace}
-            />
-          ))}
-          ;
+          <styled.SubspaceList>
+            {subSpaces.map((spaceInfo) => (
+              <SpaceListItem
+                key={spaceInfo.id}
+                spaceInfo={spaceInfo}
+                // TODO: Not implemented yet
+                isFavorite={false}
+                teleportToSpace={teleportToSpace}
+                selectSpace={selectSpace}
+              />
+            ))}
+          </styled.SubspaceList>
         </styled.SubspacesContainer>
       )}
     </styled.Container>

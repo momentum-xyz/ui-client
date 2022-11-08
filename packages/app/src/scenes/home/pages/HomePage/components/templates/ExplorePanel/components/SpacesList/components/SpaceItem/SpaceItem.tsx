@@ -14,6 +14,7 @@ export interface SpaceItemPropsInterface {
   lastItem: boolean;
 }
 
+// TODO: Removal next PR
 const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, lastItem}) => {
   const {mainStore, homeStore} = useStore();
   const {unityStore, favoriteStore} = mainStore;

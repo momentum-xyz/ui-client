@@ -25,14 +25,14 @@ const SpaceListItem: React.FC<SpaceItemPropsInterface> = (props) => {
   };
 
   return (
-    <styled.Container data-testid="SpaceItem-test">
+    <styled.Container data-testid="SpaceListItem-test">
       <SvgButton iconName="rocket" size="medium" onClick={handleFlyToSpace} />
-      <styled.ClickableItem onClick={handleSelect}>
+      <styled.Wrapper onClick={handleSelect}>
         <styled.SpaceNameText text={spaceInfo.name} size="xs" align="left" isMultiline={false} />
         <styled.Spacer />
         {isFavorite && <styled.FavouriteIcon name="starOn" size="normal" />}
         {spaceInfo.hasSubspaces && <styled.NextButton iconName="chevron" size="medium" />}
-      </styled.ClickableItem>
+      </styled.Wrapper>
     </styled.Container>
   );
 };

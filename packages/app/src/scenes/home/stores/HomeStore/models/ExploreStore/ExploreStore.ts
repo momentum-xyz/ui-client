@@ -60,6 +60,7 @@ const ExploreStore = types
         });
       }
     }),
+    // TODO: To be refactored next PR
     search: flow(function* () {
       self.searchResults = cast([]);
       const response: ExploreResponse = yield self.searchQuery.request.send(
