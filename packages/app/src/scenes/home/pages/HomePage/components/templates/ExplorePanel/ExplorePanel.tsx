@@ -5,7 +5,7 @@ import {Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
-import {SpacesList, SelectedSpace, Header} from './components';
+import {SpaceHeader, SpacesList, SpaceDetails} from './components';
 import * as styled from './ExplorePanel.styled';
 
 const PANEL_WIDTH_PX = 200;
@@ -15,7 +15,7 @@ const ExplorePanel: FC = () => {
   const {homeStore, mainStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {exploreStore} = homeStore;
-  const {searchQuery} = exploreStore;
+  const {searchQuery, spaceDetails, previousSpace} = exploreStore;
 
   const {t} = useTranslation();
 
@@ -23,9 +23,7 @@ const ExplorePanel: FC = () => {
     exploreStore.init(worldStore.worldId);
   }, [exploreStore, worldStore.worldId]);
 
-  const debouncedSearch = useDebouncedCallback(() => {
-    exploreStore.search(worldStore.worldId);
-  }, SEARCH_DELAY_MS);
+  const debouncedSearch = useDebouncedCallback(exploreStore.search, SEARCH_DELAY_MS);
 
   return (
     <styled.CustomExpandableLayout
@@ -46,21 +44,30 @@ const ExplorePanel: FC = () => {
         }}
       />
 
-      {!searchQuery.isQueryValid ? (
-        <styled.Body>
-          <SelectedSpace isWorld={exploreStore.selectedSpace?.id === worldStore.worldId} />
-        </styled.Body>
-      ) : (
-        <>
-          <Header title={t('labels.searchResults')} />
-          <SpacesList />
-        </>
-      )}
-
       {exploreStore.isLoading && (
         <styled.Loader>
           <Loader />
         </styled.Loader>
+      )}
+
+      {!searchQuery.isQueryValid && !!spaceDetails && (
+        <styled.Body>
+          <SpaceDetails
+            space={spaceDetails}
+            previousSpace={previousSpace}
+            isWorld={spaceDetails.id === worldStore.worldId}
+            teleportToSpace={unityStore.teleportToSpace}
+            selectSpace={exploreStore.selectSpace}
+            goBack={exploreStore.goBack}
+          />
+        </styled.Body>
+      )}
+
+      {searchQuery.isQueryValid && (
+        <>
+          <SpaceHeader title={t('labels.searchResults')} />
+          <SpacesList />
+        </>
       )}
     </styled.CustomExpandableLayout>
   );

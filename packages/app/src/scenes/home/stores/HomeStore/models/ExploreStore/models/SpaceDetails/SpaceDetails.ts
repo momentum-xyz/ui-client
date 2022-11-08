@@ -1,4 +1,4 @@
-import {types} from 'mobx-state-tree';
+import {Instance, types} from 'mobx-state-tree';
 
 import {SpaceInfo} from 'core/models';
 
@@ -8,5 +8,7 @@ const SpaceDetails = types.model('SpaceDetails', {
   description: types.maybeNull(types.string),
   subSpaces: types.optional(types.array(SpaceInfo), [])
 });
+
+export interface SpaceDetailsModelInterface extends Instance<typeof SpaceDetails> {}
 
 export {SpaceDetails};

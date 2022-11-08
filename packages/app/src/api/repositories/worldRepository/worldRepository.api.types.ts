@@ -8,7 +8,7 @@ export interface SpaceWithSubspacesInterface {
 export interface SubSpaceInterface {
   id: string;
   name: string;
-  hasSubSpaces: boolean;
+  subSpaces: Array<SubSpaceInterface>;
 }
 
 /** Get space with subspaces (1 level of subspaces **/

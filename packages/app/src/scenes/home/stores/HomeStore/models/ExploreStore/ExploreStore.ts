@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {api, GetSpaceWithSubSpacesResponse, ExploreResponse} from 'api';
-import {SearchQuery} from 'core/models';
+import {SearchQuery, SpaceInfo} from 'core/models';
 import {bytesToUuid} from 'core/utils';
 
 import {SpaceDetails, SpaceListByCategory} from './models';
@@ -13,11 +13,11 @@ const ExploreStore = types
     types.model('ExploreStore', {
       worldId: '',
       isExpanded: true,
-      selectedSpace: types.maybeNull(SpaceDetails),
-      spaceList: types.optional(types.array(SpaceListByCategory), []),
+      spaceDetails: types.maybeNull(SpaceDetails),
+      searchResults: types.optional(types.array(SpaceListByCategory), []),
       searchQuery: types.optional(SearchQuery, {}),
-      spaceHistory: types.optional(types.array(SpaceDetails), []),
-      previousItem: types.maybe(SpaceDetails)
+      spaceHistory: types.optional(types.array(SpaceInfo), []),
+      previousSpace: types.maybeNull(SpaceInfo)
     })
   )
   .actions((self) => ({
@@ -29,18 +29,19 @@ const ExploreStore = types
       self.isExpanded = isExpanded;
     },
     selectSpace: flow(function* (spaceId: string) {
-      self.searchQuery.resetModel();
-
-      if (self.previousItem) {
-        self.spaceHistory.push({...self.previousItem});
+      if (self.previousSpace) {
+        self.spaceHistory.push({...self.previousSpace});
       }
 
-      if (self.selectedSpace && self.selectedSpace.name) {
-        self.previousItem = cast({
-          id: self.selectedSpace.id,
-          name: self.selectedSpace.name
+      if (self.spaceDetails && self.spaceDetails.name) {
+        self.previousSpace = cast({
+          id: self.spaceDetails.id,
+          name: self.spaceDetails.name
         });
       }
+
+      self.searchQuery.resetModel();
+      self.spaceDetails = null;
 
       const response: GetSpaceWithSubSpacesResponse = yield self.searchQuery.request.send(
         api.worldRepository.fetchSpaceWithSubSpaces,
@@ -51,39 +52,41 @@ const ExploreStore = types
       );
 
       if (response) {
-        self.selectedSpace = cast(response);
+        self.spaceDetails = cast({
+          ...response,
+          subSpaces: response.subSpaces.map((subSpace) => ({
+            ...subSpace,
+            hasSubspaces: !!subSpace.subSpaces.length
+          }))
+        });
       }
     }),
     goBack(): void {
       const previousItem = self.spaceHistory.pop();
-      const previousItemId = self.previousItem?.id;
+      const previousItemId = self.previousSpace?.id;
 
       if (!previousItemId) {
         return;
       }
 
       if (previousItem) {
-        self.previousItem = {...previousItem};
+        self.previousSpace = {...previousItem};
       } else {
-        self.previousItem = undefined;
+        self.previousSpace = null;
       }
-
-      //self.selectedSpace.resetModel();
-      //self.selectedSpace.init(previousItemId, false);
-      //self.selectedSpace.fetchSpaceInformation();
     },
-    search: flow(function* (worldId: string) {
-      self.spaceList = cast([]);
+    search: flow(function* () {
+      self.searchResults = cast([]);
       const response: ExploreResponse = yield self.searchQuery.request.send(
         api.spaceTypeRepository.searchExplore,
         {
           searchQuery: self.searchQuery.query,
-          worldId
+          worldId: self.worldId
         }
       );
 
       if (response) {
-        self.spaceList = cast(
+        self.searchResults = cast(
           response.map((category) => ({
             name: category.name,
             spaces: category.spaces.map((space) => ({
