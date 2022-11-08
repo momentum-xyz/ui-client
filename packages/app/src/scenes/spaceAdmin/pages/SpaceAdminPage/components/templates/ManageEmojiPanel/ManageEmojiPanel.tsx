@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, Emoji, SectionPanel, Text} from '@momentum-xyz/ui-kit';
 
@@ -14,44 +14,45 @@ const ManageEmojiPanel: FC = () => {
     spaceAdminStore: {spaceManagerStore, manageEmojiStore}
   } = useStore();
   const {space} = spaceManagerStore;
-  const {emojiDetailsList, fetchSpaceEmojies, uploadDialog, deleteDialog} = manageEmojiStore;
+  const {fetchSpaceEmoji, emojiDetail, uploadDialog, deleteDialog} = manageEmojiStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
     if (space?.id) {
-      fetchSpaceEmojies(space.id);
+      fetchSpaceEmoji(space.id);
     }
-  }, [space?.id, fetchSpaceEmojies]);
+
+    return () => manageEmojiStore.resetModel();
+  }, [space?.id, fetchSpaceEmoji]);
 
   if (!space?.id) {
     return null;
   }
-  const spaceEmoji = emojiDetailsList.find((emoji) => emoji.spaceId === space.id);
 
   return (
     <>
       {uploadDialog.isOpen && (
-        <UploadEmojiDialog spaceId={space.id} existingEmojiId={spaceEmoji?.id} />
+        <UploadEmojiDialog spaceId={space.id} existingEmojiId={emojiDetail?.emojiId} />
       )}
-      {deleteDialog.isOpen && !!spaceEmoji && (
-        <DeleteEmojiDialog spaceId={space.id} emojiId={spaceEmoji.id} />
+      {deleteDialog.isOpen && emojiDetail && (
+        <DeleteEmojiDialog spaceId={space.id} emojiId={emojiDetail?.emojiId} />
       )}
       <SectionPanel title={t('spaceAdmin.manageEmoji.title')}>
         <styled.Body>
           <Text text={t('spaceAdmin.manageEmoji.text1')} size="s" align="left" />
-          {!spaceEmoji && (
+          {!emojiDetail && (
             <Text text={t('spaceAdmin.manageEmoji.noEmojiUploaded')} size="s" align="left" />
           )}
-          {!!spaceEmoji && (
+          {!!emojiDetail && (
             <styled.UploadedWidgetPreview>
               <Text text={t('spaceAdmin.manageEmoji.yourUploadedEmoji')} size="s" align="left" />
-              <Emoji emoji={spaceEmoji.imgSrc} name={spaceEmoji.name} onClick={() => {}} />
-              <Text text={`(${spaceEmoji.name})`} size="s" />
+              <Emoji emoji={emojiDetail.imgSrc} name={emojiDetail.name} onClick={() => {}} />
+              <Text text={`(${emojiDetail.name})`} size="s" />
             </styled.UploadedWidgetPreview>
           )}
           <styled.ActionBar>
-            {!!spaceEmoji && (
+            {!!emojiDetail && (
               <Button
                 label={t('spaceAdmin.manageEmoji.deleteEmoji')}
                 variant="danger"

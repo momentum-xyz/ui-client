@@ -75,4 +75,4 @@ export interface UploadFileRequest extends BaseEventsRequest {
   eventId: string;
 }
 
-export interface UploadImageResponse {}
+export interface UploadFileResponse {}

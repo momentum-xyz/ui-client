@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
@@ -9,7 +9,7 @@ import {Dialog, FileUploader, Input} from '@momentum-xyz/ui-kit';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {UploadEmojiRequest} from 'api';
+import {EmojiFormInterface} from 'core/interfaces';
 
 import * as styled from './UploadEmojiDialog.styled';
 
@@ -17,8 +17,6 @@ interface PropsInterface {
   spaceId: string;
   existingEmojiId: string | undefined;
 }
-
-type FormType = Omit<UploadEmojiRequest, 'spaceId'>;
 
 const UploadEmojiDialog: FC<PropsInterface> = ({spaceId, existingEmojiId}) => {
   const {uploadDialog, isUploadPending, uploadEmojiToSpace, deleteEmoji} =
@@ -32,13 +30,13 @@ const UploadEmojiDialog: FC<PropsInterface> = ({spaceId, existingEmojiId}) => {
     formState: {errors},
     handleSubmit,
     setError
-  } = useForm<FormType>({
+  } = useForm<EmojiFormInterface>({
     defaultValues: {
       name: ''
     }
   });
 
-  const formSubmitHandler: SubmitHandler<FormType> = async ({file, name}) => {
+  const formSubmitHandler: SubmitHandler<EmojiFormInterface> = async ({file, name}) => {
     if (existingEmojiId) {
       const isDeleteOK = await deleteEmoji(spaceId, existingEmojiId);
       if (!isDeleteOK) {
@@ -71,6 +69,14 @@ const UploadEmojiDialog: FC<PropsInterface> = ({spaceId, existingEmojiId}) => {
         />
       );
       return;
+    } else {
+      toast.info(
+        <ToastContent
+          showCloseButton
+          headerIconName="alert"
+          text={t('spaceAdmin.manageEmoji.uploadDialog.successSave')}
+        />
+      );
     }
 
     uploadDialog.close();

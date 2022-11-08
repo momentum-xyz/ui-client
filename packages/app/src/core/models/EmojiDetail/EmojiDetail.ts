@@ -5,15 +5,11 @@ import {appVariables} from 'api/constants';
 const emojiSizeUI = 's1';
 const emojiSizeUnit = 's5';
 
-const EmojiDetails = types
-  .model('EmojiDetails', {
-    id: types.string,
-    code: types.string,
+const EmojiDetail = types
+  .model('EmojiDetail', {
+    emojiId: types.string,
     hash: types.string,
-    name: types.string,
-    order: types.number,
-    spaceId: types.string,
-    spaceName: types.maybe(types.string)
+    name: types.string
   })
   .views((self) => ({
     get imgSrc(): string {
@@ -24,6 +20,6 @@ const EmojiDetails = types
     }
   }));
 
-export interface EmojiDetailsInterface extends Instance<typeof EmojiDetails> {}
+export interface EmojiDetailInterface extends Instance<typeof EmojiDetail> {}
 
-export {EmojiDetails};
+export {EmojiDetail};
