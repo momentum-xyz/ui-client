@@ -1,6 +1,5 @@
-import {PluginConfigInterface} from './pluginConfig.interface';
-import {SpacePluginPropsInterface} from './pluginProps.interface';
+import React from 'react';
 
-export interface PluginInterface<C extends PluginConfigInterface = PluginConfigInterface> {
-  SpaceExtension?: React.FC<SpacePluginPropsInterface<C>>;
+export interface PluginInterface {
+  SpaceExtension?: React.FC;
 }
