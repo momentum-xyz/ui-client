@@ -2,10 +2,10 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {api, GetSpaceWithSubSpacesResponse, ExploreResponse} from 'api';
-import {SearchQuery, SpaceInfo} from 'core/models';
+import {SearchQuery} from 'core/models';
 import {bytesToUuid} from 'core/utils';
 
-import {SpaceDetails, SpaceListByCategory} from './models';
+import {SpaceDetails, SpaceListByCategory, NavigationHistory} from './models';
 
 const ExploreStore = types
   .compose(
@@ -16,8 +16,7 @@ const ExploreStore = types
       spaceDetails: types.maybeNull(SpaceDetails),
       searchResults: types.optional(types.array(SpaceListByCategory), []),
       searchQuery: types.optional(SearchQuery, {}),
-      spaceHistory: types.optional(types.array(SpaceInfo), []),
-      previousSpace: types.maybeNull(SpaceInfo)
+      history: types.optional(NavigationHistory, {})
     })
   )
   .actions((self) => ({
@@ -28,18 +27,18 @@ const ExploreStore = types
     setExpand(isExpanded: boolean): void {
       self.isExpanded = isExpanded;
     },
-    selectSpace: flow(function* (spaceId: string) {
-      if (self.previousSpace) {
-        self.spaceHistory.push({...self.previousSpace});
-      }
+    selectSpace(spaceId: string): void {
+      self.history.addSpaceToHistory(self.spaceDetails);
+      this.loadSpace(spaceId);
+    },
 
-      if (self.spaceDetails && self.spaceDetails.name) {
-        self.previousSpace = cast({
-          id: self.spaceDetails.id,
-          name: self.spaceDetails.name
-        });
+    goBackToPreviousSpace(): void {
+      const spaceId = self.history.goBackToPreviousSpace();
+      if (spaceId) {
+        this.loadSpace(spaceId);
       }
-
+    },
+    loadSpace: flow(function* (spaceId: string) {
       self.searchQuery.resetModel();
       self.spaceDetails = null;
 
@@ -61,20 +60,6 @@ const ExploreStore = types
         });
       }
     }),
-    goBack(): void {
-      const previousItem = self.spaceHistory.pop();
-      const previousItemId = self.previousSpace?.id;
-
-      if (!previousItemId) {
-        return;
-      }
-
-      if (previousItem) {
-        self.previousSpace = {...previousItem};
-      } else {
-        self.previousSpace = null;
-      }
-    },
     search: flow(function* () {
       self.searchResults = cast([]);
       const response: ExploreResponse = yield self.searchQuery.request.send(

@@ -53,7 +53,7 @@ const SpaceDetails: FC<PropsInterface> = (props) => {
           {!isWorld && (
             <styled.SubSpacesHeading type="h4" label={`${t('labels.subspaces')}:`} align="left" />
           )}
-          {space.subSpaces.map((spaceInfo, index) => (
+          {space.subSpaces.map((spaceInfo) => (
             <SpaceListItem
               key={space.id}
               spaceInfo={spaceInfo}

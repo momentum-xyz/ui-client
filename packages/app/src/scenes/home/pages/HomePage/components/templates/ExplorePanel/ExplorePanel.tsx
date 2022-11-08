@@ -15,7 +15,7 @@ const ExplorePanel: FC = () => {
   const {homeStore, mainStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {exploreStore} = homeStore;
-  const {searchQuery, spaceDetails, previousSpace} = exploreStore;
+  const {searchQuery, spaceDetails, history} = exploreStore;
 
   const {t} = useTranslation();
 
@@ -54,11 +54,11 @@ const ExplorePanel: FC = () => {
         <styled.Body>
           <SpaceDetails
             space={spaceDetails}
-            previousSpace={previousSpace}
+            previousSpace={history.previousSpace}
             isWorld={spaceDetails.id === worldStore.worldId}
             teleportToSpace={unityStore.teleportToSpace}
             selectSpace={exploreStore.selectSpace}
-            goBack={exploreStore.goBack}
+            goBack={exploreStore.goBackToPreviousSpace}
           />
         </styled.Body>
       )}
