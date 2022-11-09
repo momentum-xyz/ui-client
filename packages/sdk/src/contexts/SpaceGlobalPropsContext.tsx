@@ -16,9 +16,9 @@ export const SpaceGlobalPropsContext = createContext<
     setSpaceAttributeValue: () => Promise.reject(),
     deleteSpaceAttribute: () => Promise.reject(),
 
-    getSpaceAttributeValueSubValue: () => Promise.reject(),
-    setSpaceAttributeValueSubValue: () => Promise.reject(),
-    deleteSpaceAttributeValueSubValue: () => Promise.reject(),
+    getSpaceAttributeItem: () => Promise.reject(),
+    setSpaceAttributeItem: () => Promise.reject(),
+    deleteSpaceAttributeItem: () => Promise.reject(),
 
     subscribeToTopic: () => Promise.reject(),
     onAttributeChange: () => Promise.reject(),

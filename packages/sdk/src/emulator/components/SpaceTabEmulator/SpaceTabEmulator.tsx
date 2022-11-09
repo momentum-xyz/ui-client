@@ -145,11 +145,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
           return Promise.resolve(null);
         },
 
-        getSpaceAttributeValueSubValue: <T,>(
-          spaceId: string,
-          attributeName: string,
-          key: string
-        ) => {
+        getSpaceAttributeItem: <T,>(spaceId: string, attributeName: string, key: string) => {
           const attributeValue = spaceAttributes.current.find(
             (attribute) => attribute.attributeName === attributeName
           )?.attributeValue;
@@ -160,7 +156,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
 
           return Promise.resolve(attributeValue[key] as T);
         },
-        setSpaceAttributeValueSubValue: <T,>(
+        setSpaceAttributeItem: <T,>(
           spaceId: string,
           attributeName: string,
           key: string,
@@ -178,7 +174,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
           setAttributeSubValueChanged({attributeName, key, value});
           return Promise.resolve(attributeValue[key] as T);
         },
-        deleteSpaceAttributeValueSubValue: (spaceId: string, attributeName, key) => {
+        deleteSpaceAttributeItem: (spaceId: string, attributeName, key) => {
           const attributeValue = spaceAttributes.current.find(
             (attribute) => attribute.attributeName === attributeName
           )?.attributeValue;

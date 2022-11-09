@@ -81,11 +81,7 @@ const PluginAttributesManager = types
       return response;
     }),
 
-    getSpaceAttributeValueSubValue: flow(function* <T>(
-      spaceId: string,
-      attributeName: string,
-      key: string
-    ) {
+    getSpaceAttributeItem: flow(function* <T>(spaceId: string, attributeName: string, key: string) {
       const response = yield self.getAttributeRequest.send(
         api.spaceAttributeRepository.getSpaceSubAttribute,
         {
@@ -104,7 +100,7 @@ const PluginAttributesManager = types
 
       return value;
     }),
-    setSpaceAttributeValueSubValue: flow(function* <T>(
+    setSpaceAttributeItem: flow(function* <T>(
       spaceId: string,
       attributeName: string,
       key: string,
@@ -133,11 +129,7 @@ const PluginAttributesManager = types
 
       return finalValue;
     }),
-    deleteSpaceAttributeValueSubValue: flow(function* (
-      spaceId: string,
-      attributeName: string,
-      key: string
-    ) {
+    deleteSpaceAttributeItem: flow(function* (spaceId: string, attributeName: string, key: string) {
       const response = yield self.deleteSubAttributeRequest.send(
         api.spaceAttributeRepository.deleteSpaceAttribute,
         {
@@ -161,18 +153,13 @@ const PluginAttributesManager = types
   }))
   .actions((self) => ({
     get: flow(function* <T extends AttributeValueInterface>(spaceId: string, key: string) {
-      return yield self.getSpaceAttributeValueSubValue<T>(spaceId, AttributeNameEnum.STATE, key);
+      return yield self.getSpaceAttributeItem<T>(spaceId, AttributeNameEnum.STATE, key);
     }),
     set: flow(function* <T>(spaceId: string, key: string, value: T extends undefined ? never : T) {
-      return yield self.setSpaceAttributeValueSubValue(
-        spaceId,
-        AttributeNameEnum.STATE,
-        key,
-        value
-      );
+      return yield self.setSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key, value);
     }),
     delete: flow(function* (spaceId: string, key: string) {
-      return yield self.deleteSpaceAttributeValueSubValue(spaceId, AttributeNameEnum.STATE, key);
+      return yield self.deleteSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key);
     }),
     getConfig: flow(function* <C extends GetSpaceAttributeResponse>() {
       return yield self.getSpaceAttributeValue<C>(appVariables.NODE_ID, AttributeNameEnum.CONFIG);
@@ -202,23 +189,16 @@ const PluginAttributesManager = types
           value: T
         ) => self.setSpaceAttributeValue<T>(spaceId, attributeName, value) as Promise<T>,
         deleteSpaceAttribute: self.deleteSpaceAttribute,
-        getSpaceAttributeValueSubValue: async <T>(
-          spaceId: string,
-          attributeName: string,
-          key: string
-        ) => self.getSpaceAttributeValueSubValue<T>(spaceId, attributeName, key) as Promise<T>,
-        setSpaceAttributeValueSubValue: async <T>(
+        getSpaceAttributeItem: async <T>(spaceId: string, attributeName: string, key: string) =>
+          self.getSpaceAttributeItem<T>(spaceId, attributeName, key) as Promise<T>,
+        setSpaceAttributeItem: async <T>(
           spaceId: string,
           attributeName: string,
           key: string,
           value: T
-        ) =>
-          self.setSpaceAttributeValueSubValue<T>(spaceId, attributeName, key, value) as Promise<T>,
-        deleteSpaceAttributeValueSubValue: async (
-          spaceId: string,
-          attributeName: string,
-          key: string
-        ) => self.deleteSpaceAttributeValueSubValue(spaceId, attributeName, key),
+        ) => self.setSpaceAttributeItem<T>(spaceId, attributeName, key, value) as Promise<T>,
+        deleteSpaceAttributeItem: async (spaceId: string, attributeName: string, key: string) =>
+          self.deleteSpaceAttributeItem(spaceId, attributeName, key),
         subscribeToTopic(topic) {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');

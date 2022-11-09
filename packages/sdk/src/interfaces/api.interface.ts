@@ -12,22 +12,14 @@ export interface APIInterface {
   ) => Promise<T>;
   deleteSpaceAttribute: (spaceId: string, attributeName: string) => Promise<null>;
 
-  getSpaceAttributeValueSubValue: <T>(
-    spaceId: string,
-    attributeName: string,
-    key: string
-  ) => Promise<T>;
-  setSpaceAttributeValueSubValue: <T>(
+  getSpaceAttributeItem: <T>(spaceId: string, attributeName: string, key: string) => Promise<T>;
+  setSpaceAttributeItem: <T>(
     spaceId: string,
     attributeName: string,
     key: string,
     value: T
   ) => Promise<T>;
-  deleteSpaceAttributeValueSubValue: (
-    spaceId: string,
-    attributeName: string,
-    key: string
-  ) => Promise<null>;
+  deleteSpaceAttributeItem: (spaceId: string, attributeName: string, key: string) => Promise<null>;
 
   subscribeToTopic: (topic: string) => Promise<void>;
 
