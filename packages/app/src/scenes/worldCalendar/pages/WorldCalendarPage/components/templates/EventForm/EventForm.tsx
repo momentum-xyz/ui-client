@@ -9,7 +9,7 @@ import {Input, Dialog, TextArea} from '@momentum-xyz/ui-kit';
 import {DATE_TIME_FORMAT} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
-import {EventFormInterface} from 'api';
+import {EventFormInterface} from 'core/interfaces';
 
 import * as styled from './EventForm.styled';
 

@@ -3,14 +3,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, UploadAvatarResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
-
-export interface SignUpFormInterface {
-  avatar?: File;
-  avatarHash?: string;
-  name?: string;
-  profileLink?: string;
-  bio?: string;
-}
+import {SignUpFormInterface} from 'core/interfaces';
 
 const SignUpCompleteStore = types.compose(
   ResetModel,

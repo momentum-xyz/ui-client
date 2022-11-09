@@ -32,8 +32,3 @@ export interface EmojiConfigItemInterface {
   spaceName?: string;
   order: number;
 }
-
-export interface EmojiFormInterface {
-  file: File;
-  name: string;
-}

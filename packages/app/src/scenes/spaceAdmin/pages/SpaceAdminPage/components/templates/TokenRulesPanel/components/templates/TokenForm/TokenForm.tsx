@@ -5,7 +5,7 @@ import {useTheme} from 'styled-components';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Heading, Dialog, Dropdown, Input, Loader, Text} from '@momentum-xyz/ui-kit';
 
-import {TokenFormInterface} from 'api';
+import {TokenFormInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './TokenForm.styled';

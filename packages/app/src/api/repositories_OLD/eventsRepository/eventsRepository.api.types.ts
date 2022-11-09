@@ -1,3 +1,5 @@
+import {EventFormInterface} from 'core/interfaces';
+
 /** Base **/
 export interface EventInterface {
   id: string;
@@ -16,16 +18,6 @@ export interface EventInterface {
     type: string;
     data: Buffer;
   };
-}
-
-export interface EventFormInterface {
-  start: Date;
-  end: Date;
-  title: string;
-  hosted_by: string;
-  web_link: string | null;
-  description: string;
-  image?: File;
 }
 
 export interface BaseEventsRequest {
