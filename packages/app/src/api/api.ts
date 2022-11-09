@@ -8,6 +8,7 @@ import * as pluginsRepository from './repositories/pluginsRepository';
 import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
 import * as spaceOptionRepository from './repositories/spaceOptionRepository';
 import * as spaceRepository from './repositories/spaceRepository';
+import * as assets3DRepository from './repositories/assets3DRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
 import * as magicLinkRepository from './repositories/magicLinkRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
@@ -91,6 +92,7 @@ export const api = {
   pluginsRepository,
   spaceAttributeRepository,
   spaceOptionRepository,
+  assets3DRepository,
   userAttributeRepository
 };
 
@@ -110,6 +112,7 @@ export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
 export * from './repositories/spaceOptionRepository/spaceOptionRepository.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
+export * from './repositories/assets3DRepository/assets3DRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 export * from './repositories/magicLinkRepository/magicLinkRepository.api.types';
 

@@ -9,3 +9,4 @@ export * from './spaceAttributeRepository';
 export * from './spaceOptionRepository';
 export * from './userAttributeRepository';
 export * from './magicLinkRepository';
+export * from './assets3DRepository';

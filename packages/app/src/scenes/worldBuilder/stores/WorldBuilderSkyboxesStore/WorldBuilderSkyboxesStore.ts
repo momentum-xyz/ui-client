@@ -1,7 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-// import {api, ValidationResponse} from 'api';
+import {api, GetAssets3DResponse} from 'api';
+
 import {WorldBuilderSkybox, WorldBuilderSkyboxInterface} from './models';
 
 const skyboxes: WorldBuilderSkyboxInterface[] = [
@@ -34,7 +35,12 @@ const WorldBuilderSkyboxesStore = types
   )
   .actions((self) => ({
     fetchItems: flow(function* () {
-      // TODO
+      const response: GetAssets3DResponse = yield self.request.send(
+        api.assets3DRepository.getAssets3DList,
+        {}
+      );
+      console.log('ASSETS resp:', response);
+      // TODO remove
       self.items = cast(skyboxes);
       self.selectedItemId = self.items[0].id;
       yield Promise.resolve(skyboxes);
