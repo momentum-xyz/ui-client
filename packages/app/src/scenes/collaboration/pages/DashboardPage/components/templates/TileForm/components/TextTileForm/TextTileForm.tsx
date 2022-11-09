@@ -7,7 +7,7 @@ import {Button, Input, Loader, TextArea} from '@momentum-xyz/ui-kit';
 
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import {TileInterface} from 'core/models';
-import {TextTileFormInterface} from 'api';
+import {TextTileFormInterface} from 'core/interfaces';
 
 import * as styled from './TextTileForm.styled';
 

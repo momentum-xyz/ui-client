@@ -12,7 +12,7 @@ import {
   useDebouncedCallback
 } from '@momentum-xyz/ui-kit';
 
-import {TokenRuleFormInterface} from 'api';
+import {TokenRuleFormInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 import {TokenItemModelInterface} from 'core/models';
 

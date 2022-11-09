@@ -20,7 +20,7 @@ export * from './Integration';
 export * from './AgoraRemoteUser';
 export * from './StageModeUser';
 export * from './OnlineUsersList';
-export * from './EmojiDetails';
+export * from './EmojiDetail';
 export * from './EventForm';
 export * from './EventList';
 export * from './PluginLoader';

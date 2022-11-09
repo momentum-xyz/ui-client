@@ -1,14 +1,10 @@
 import {types, cast, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
+import {v4 as uuidv4} from 'uuid';
 
-import {EmojiDetails} from 'core/models';
-import {
-  api,
-  AssignEmojiToSpaceResponse,
-  WorldEmojiesResponse,
-  UploadEmojiResponse,
-  DeleteEmojiResponse
-} from 'api';
+import {EmojiDetail, EmojiDetailModelInterface} from 'core/models';
+import {api, UploadImageResponse, GetSpaceAttributeResponse} from 'api';
+import {mapper} from 'api/mapper';
 
 const ManageEmojiStore = types
   .compose(
@@ -16,79 +12,86 @@ const ManageEmojiStore = types
     types.model('ManageEmojiStore', {
       uploadDialog: types.optional(Dialog, {}),
       deleteDialog: types.optional(Dialog, {}),
-      emojiDetailsList: types.optional(types.array(EmojiDetails), []),
-      fetchSpaceEmojisRequest: types.optional(RequestModel, {}),
-      uploadEmojisRequest: types.optional(RequestModel, {}),
-      assignEmojisToSpaceRequest: types.optional(RequestModel, {}),
+      emojiDetail: types.maybe(EmojiDetail),
+      fetchSpaceEmojiRequest: types.optional(RequestModel, {}),
+      uploadEmojiRequest: types.optional(RequestModel, {}),
+      createEmojiRequest: types.optional(RequestModel, {}),
       deleteEmojiRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
-    fetchSpaceEmojies: flow(function* (spaceId: string) {
-      const data: WorldEmojiesResponse = yield self.fetchSpaceEmojisRequest.send(
-        api.spaceEmojiRepository.fetchSpaceEmoji,
-        {spaceId}
+    fetchSpaceEmoji: flow(function* (spaceId: string) {
+      const response: GetSpaceAttributeResponse = yield self.fetchSpaceEmojiRequest.send(
+        api.emojiRepository.fetchEmojis,
+        {
+          spaceId
+        }
       );
 
-      if (data) {
-        self.emojiDetailsList = cast(data);
+      if (Object.keys(response).length) {
+        const emojiData = mapper.mapSubAttributeValue<EmojiDetailModelInterface>(response);
+        if (emojiData) {
+          self.emojiDetail = cast({
+            ...emojiData
+          });
+        }
+      } else {
+        self.emojiDetail = undefined;
       }
+
+      return self.fetchSpaceEmojiRequest.isDone;
     })
   }))
   .actions((self) => ({
     uploadEmojiToSpace: flow(function* (spaceId: string, file: File, name: string) {
-      const addEmojiResponse: UploadEmojiResponse = yield self.uploadEmojisRequest.send(
-        api.emojiRepository.uploadEmoji,
-        {spaceId, file, name}
+      const uploadImageResponse: UploadImageResponse = yield self.uploadEmojiRequest.send(
+        api.mediaRepository.uploadImage,
+        {file}
       );
-      if (!addEmojiResponse) {
+
+      if (!uploadImageResponse) {
         console.log('Failed to upload emoji');
         return false;
       }
 
-      const {emojiId} = addEmojiResponse;
+      const {hash} = uploadImageResponse;
+      const emojiId = uuidv4();
 
-      const assignedSpaceEmojiResponse: AssignEmojiToSpaceResponse =
-        yield self.assignEmojisToSpaceRequest.send(api.spaceEmojiRepository.assignEmojiToSpace, {
-          spaceId,
-          emojiId
-        });
-      if (!assignedSpaceEmojiResponse) {
-        console.log('Failed to assign emoji to space');
-        return false;
+      const response: GetSpaceAttributeResponse = yield self.createEmojiRequest.send(
+        api.emojiRepository.createEmoji,
+        {spaceId, key: emojiId, hash, emojiId, name}
+      );
+
+      if (response) {
+        const emojiData = mapper.mapSubAttributeValue<EmojiDetailModelInterface>(response);
+        if (emojiData) {
+          self.emojiDetail = cast({
+            ...emojiData
+          });
+        }
       }
 
-      yield self.fetchSpaceEmojies(spaceId);
-
-      return true;
+      return self.createEmojiRequest.isDone;
     }),
     deleteEmoji: flow(function* (spaceId: string, emojiId: string) {
-      const response: DeleteEmojiResponse = yield self.deleteEmojiRequest.send(
-        api.emojiRepository.deleteEmoji,
-        {
-          emojiId,
-          spaceId
-        }
-      );
-      if (!response) {
-        console.log('Failed to delete emoji');
-        return false;
-      }
+      yield self.deleteEmojiRequest.send(api.emojiRepository.deleteEmoji, {
+        key: emojiId,
+        spaceId
+      });
 
-      yield self.fetchSpaceEmojies(spaceId);
-      return true;
+      return self.deleteEmojiRequest.isDone;
     })
   }))
   .views((self) => ({
     get isUploadPending(): boolean {
       return (
-        self.uploadEmojisRequest.isPending ||
-        self.assignEmojisToSpaceRequest.isPending ||
-        self.fetchSpaceEmojisRequest.isPending
+        self.uploadEmojiRequest.isPending ||
+        self.createEmojiRequest.isPending ||
+        self.fetchSpaceEmojiRequest.isPending
       );
     },
     get isDeletePending(): boolean {
-      return self.deleteEmojiRequest.isPending || self.fetchSpaceEmojisRequest.isPending;
+      return self.deleteEmojiRequest.isPending || self.fetchSpaceEmojiRequest.isPending;
     }
   }));
 

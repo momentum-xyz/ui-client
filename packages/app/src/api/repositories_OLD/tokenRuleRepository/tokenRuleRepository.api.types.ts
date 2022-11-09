@@ -2,6 +2,7 @@
 import {NetworkTypeEnum, TokenRuleReviewStatusEnum} from 'core/enums';
 import {TokenInterface} from 'api';
 import {TokenRuleItemModelInterface} from 'core/models';
+import {TokenRuleFormInterface} from 'core/interfaces';
 
 export interface TokenRuleInterface {
   status: string;
@@ -32,12 +33,6 @@ export interface TokenRuleResponseInterface {
 }
 
 export interface RuleInterface {
-  minBalance: number;
-}
-
-export interface TokenRuleFormInterface {
-  tokenId: string;
-  name: string;
   minBalance: number;
 }
 

@@ -704,6 +704,7 @@ export const enGb = {
           changeImage: 'Change Image',
           confirmButton: 'Save',
           errorSave: 'Could not save emoji. Please try again later',
+          successSave: 'Emoji uploaded successfully',
           errorDeleteOld: 'Could not delete old emoji. Please try again later'
         },
         deleteDialog: {
@@ -711,7 +712,8 @@ export const enGb = {
           text: 'Are you sure you want to delete the emoji?',
           yes: 'Yes, delete',
           no: 'No, cancel',
-          errorDelete: 'Could not delete emoji. Please try again later'
+          errorDelete: 'Could not delete emoji. Please try again later',
+          successDelete: 'Emoji deleted successfully.'
         }
       },
       users: {
