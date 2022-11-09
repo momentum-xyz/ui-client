@@ -9,3 +9,4 @@ export * from './Location';
 export * from './TileMenu';
 export * from './NetworkButton';
 export * from './UserSpaceList';
+export * from './SpaceListItem';
