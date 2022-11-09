@@ -53,10 +53,11 @@ const ExploreStore = types
       if (response) {
         self.spaceDetails = cast({
           ...response,
-          subSpaces: response.subSpaces.map((subSpace) => ({
-            ...subSpace,
-            hasSubspaces: !!subSpace.subSpaces.length
-          }))
+          subSpaces:
+            response.subSpaces?.map((subSpace) => ({
+              ...subSpace,
+              hasSubspaces: !!subSpace.subSpaces?.length
+            })) || []
         });
       }
     }),

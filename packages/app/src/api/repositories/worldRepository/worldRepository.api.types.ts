@@ -2,13 +2,13 @@ export interface SpaceWithSubspacesInterface {
   id: string;
   name: string;
   description: string | null;
-  subSpaces: Array<SubSpaceInterface>;
+  subSpaces?: Array<SubSpaceInterface>;
 }
 
 export interface SubSpaceInterface {
   id: string;
   name: string;
-  subSpaces: Array<SubSpaceInterface>;
+  subSpaces?: Array<SubSpaceInterface>;
 }
 
 /** Get space with subspaces (1 level of subspaces **/
