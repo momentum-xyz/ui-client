@@ -6,19 +6,20 @@ import {useStore} from 'shared/hooks';
 import {SpaceItem} from './components';
 import * as styled from './SpacesList.styled';
 
+// TODO: To be refactored next PR.
 const SpacesList: FC = () => {
   const {homeStore} = useStore();
   const {exploreStore} = homeStore;
-  const {selectedSpace, searchQuery, spaceList} = exploreStore;
+  const {spaceDetails, searchQuery, searchResults} = exploreStore;
   const {isQueryValid} = searchQuery;
 
   const renderList = () => {
-    if (!selectedSpace?.subSpaces) {
+    if (!spaceDetails?.subSpaces) {
       return;
     }
 
     if (isQueryValid) {
-      return spaceList?.map((category) => (
+      return searchResults?.map((category) => (
         <styled.Category key={category.name}>
           <styled.CategoryName label={category.name} type="h4" align="left" />
           {category.spaces.map((space, index) => (
@@ -37,16 +38,16 @@ const SpacesList: FC = () => {
       ));
     }
 
-    if (selectedSpace.subSpaces.length === 0) {
+    if (spaceDetails.subSpaces.length === 0) {
       return null;
     }
 
-    return selectedSpace.subSpaces.map((space, index) => (
+    return spaceDetails.subSpaces.map((space, index) => (
       <SpaceItem
         space={space}
         hasSubspaces={space.hasSubspaces}
         key={space.id}
-        lastItem={selectedSpace.subSpaces.length - 1 === index}
+        lastItem={spaceDetails.subSpaces.length - 1 === index}
       />
     ));
   };

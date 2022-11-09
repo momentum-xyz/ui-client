@@ -14,7 +14,7 @@ import {
 
 import {appVariables} from 'api/constants';
 import {FieldErrorInterface} from 'api/interfaces';
-import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
+import {SignUpFormInterface} from 'core/interfaces';
 
 import * as styled from './SignUpCompleteForm.styled';
 

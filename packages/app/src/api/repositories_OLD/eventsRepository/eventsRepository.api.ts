@@ -16,7 +16,7 @@ import {
   DeleteEventRequest,
   DeleteEventResponse,
   UploadFileRequest,
-  UploadImageResponse
+  UploadFileResponse
 } from './eventsRepository.api.types';
 
 export const fetchEvents: RequestInterface<BaseEventsRequest, FetchEventsResponse> = (options) => {
@@ -59,7 +59,7 @@ export const deleteEvent: RequestInterface<DeleteEventRequest, DeleteEventRespon
   return request.delete(url, restOptions);
 };
 
-export const uploadImage: RequestInterface<UploadFileRequest, UploadImageResponse> = (options) => {
+export const uploadImage: RequestInterface<UploadFileRequest, UploadFileResponse> = (options) => {
   const {file, spaceId, eventId, ...restOptions} = options;
 
   const formData: FormData = new FormData();

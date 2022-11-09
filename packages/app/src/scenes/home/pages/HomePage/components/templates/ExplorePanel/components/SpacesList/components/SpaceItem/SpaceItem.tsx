@@ -4,16 +4,17 @@ import cn from 'classnames';
 import {SvgButton} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {SubSpaceModelInterface} from 'core/models';
+import {SpaceInfoModelInterface} from 'core/models';
 
 import * as styled from './SpaceItem.styled';
 
 export interface SpaceItemPropsInterface {
-  space: SubSpaceModelInterface;
+  space: SpaceInfoModelInterface;
   hasSubspaces: boolean;
   lastItem: boolean;
 }
 
+// TODO: Removal next PR
 const SpaceItem: React.FC<SpaceItemPropsInterface> = ({space, hasSubspaces, lastItem}) => {
   const {mainStore, homeStore} = useStore();
   const {unityStore, favoriteStore} = mainStore;

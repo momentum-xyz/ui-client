@@ -1,80 +1,79 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
-import {SpaceInfo, SearchQuery} from 'core/models';
-import {ExploreResponse} from 'api';
+import {api, GetSpaceWithSubSpacesResponse, ExploreResponse} from 'api';
+import {SearchQuery} from 'core/models';
 import {bytesToUuid} from 'core/utils';
-// FIXME: Removal. Use SpaceInfo.
-import {SpaceStore} from 'scenes/collaboration/stores/SpaceStore';
 
-import {SpaceListByCategory} from './models';
+import {SpaceDetails, SpaceListByCategory, NavigationHistory} from './models';
 
 const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
+      worldId: '',
       isExpanded: true,
-      // TODO: Use SpaceInfo model
-      selectedSpace: types.optional(SpaceStore, {}),
-      spaceList: types.optional(types.array(SpaceListByCategory), []),
+      spaceDetails: types.maybeNull(SpaceDetails),
+      searchResults: types.optional(types.array(SpaceListByCategory), []),
       searchQuery: types.optional(SearchQuery, {}),
-      spaceHistory: types.optional(types.array(SpaceInfo), []),
-      previousItem: types.maybe(SpaceInfo)
+      history: types.optional(NavigationHistory, {})
     })
   )
   .actions((self) => ({
+    init(worldId: string): void {
+      self.worldId = worldId;
+      this.selectSpace(worldId);
+    },
     setExpand(isExpanded: boolean): void {
       self.isExpanded = isExpanded;
     },
     selectSpace(spaceId: string): void {
-      self.searchQuery.setQuery('');
-
-      if (self.previousItem) {
-        self.spaceHistory.push({...self.previousItem});
-      }
-
-      if (self.selectedSpace && self.selectedSpace.name) {
-        self.previousItem = cast({
-          id: self.selectedSpace.id,
-          name: self.selectedSpace.name
-        });
-      }
-
-      self.selectedSpace.resetModel();
-      self.selectedSpace.init(spaceId, false);
-      self.selectedSpace.fetchSpaceInformation();
+      self.history.addSpaceToHistory(self.spaceDetails);
+      this.loadSpace(spaceId);
     },
-    goBack(): void {
-      const previousItem = self.spaceHistory.pop();
-      const previousItemId = self.previousItem?.id;
 
-      if (!previousItemId) {
-        return;
+    goBackToPreviousSpace(): void {
+      const spaceId = self.history.goBackToPreviousSpace();
+      if (spaceId) {
+        this.loadSpace(spaceId);
       }
-
-      if (previousItem) {
-        self.previousItem = {...previousItem};
-      } else {
-        self.previousItem = undefined;
-      }
-
-      self.selectedSpace.resetModel();
-      self.selectedSpace.init(previousItemId, false);
-      self.selectedSpace.fetchSpaceInformation();
     },
-    search: flow(function* (worldId: string) {
-      self.spaceList = cast([]);
-      const response: ExploreResponse = yield self.searchQuery.request.send(
-        api.spaceTypeRepository.searchExplore,
+    loadSpace: flow(function* (spaceId: string) {
+      self.searchQuery.resetModel();
+      self.spaceDetails = null;
+
+      const response: GetSpaceWithSubSpacesResponse = yield self.searchQuery.request.send(
+        api.worldRepository.fetchSpaceWithSubSpaces,
         {
-          searchQuery: self.searchQuery.query,
-          worldId
+          worldId: self.worldId,
+          spaceId: spaceId
         }
       );
 
       if (response) {
-        self.spaceList = cast(
+        self.spaceDetails = cast({
+          ...response,
+          subSpaces:
+            response.subSpaces?.map((subSpace) => ({
+              ...subSpace,
+              hasSubspaces: !!subSpace.subSpaces?.length
+            })) || []
+        });
+      }
+    }),
+    // TODO: To be refactored next PR
+    search: flow(function* () {
+      self.searchResults = cast([]);
+      const response: ExploreResponse = yield self.searchQuery.request.send(
+        api.spaceTypeRepository.searchExplore,
+        {
+          searchQuery: self.searchQuery.query,
+          worldId: self.worldId
+        }
+      );
+
+      if (response) {
+        self.searchResults = cast(
           response.map((category) => ({
             name: category.name,
             spaces: category.spaces.map((space) => ({
@@ -89,7 +88,7 @@ const ExploreStore = types
   }))
   .views((self) => ({
     get isLoading(): boolean {
-      return self.searchQuery.isPending || !!self.selectedSpace?.isPending;
+      return self.searchQuery.isPending;
     }
   }));
 

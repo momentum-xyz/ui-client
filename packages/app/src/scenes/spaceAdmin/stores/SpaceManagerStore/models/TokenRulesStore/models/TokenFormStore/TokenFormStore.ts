@@ -2,12 +2,12 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {TokenItemModel} from 'core/models';
+import {TokenFormInterface} from 'core/interfaces';
 import {
   api,
   CreateTokenResponse,
   FetchTokenNameResponse,
   FetchTokensResponse,
-  TokenFormInterface,
   TokenSearchResponse
 } from 'api';
 

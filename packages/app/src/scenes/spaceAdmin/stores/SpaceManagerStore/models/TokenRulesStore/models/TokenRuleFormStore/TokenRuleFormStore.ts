@@ -1,7 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, TokenRuleFormInterface} from 'api';
+import {api} from 'api';
+import {TokenRuleFormInterface} from 'core/interfaces';
 
 const TokenRuleFormStore = types.compose(
   ResetModel,

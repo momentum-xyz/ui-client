@@ -2,9 +2,24 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 import {Heading, IconSvg} from '@momentum-xyz/ui-kit';
 
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+`;
+
 export const BackIconSvg = styled(IconSvg)`
   transform: rotate(90deg);
   color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.7)};
+`;
+
+export const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  padding: 10px 10px 5px 10px;
 `;
 
 export const FlyToButtonContainer = styled.div`
@@ -14,18 +29,14 @@ export const FlyToButtonContainer = styled.div`
 
 export const SubSpacesHeading = styled(Heading)`
   padding: 10px;
+  display: flex;
+  align-items: center;
+  flex-basis: 0;
   opacity: 90%;
 `;
 
 export const ParentHeading = styled(Heading)`
   opacity: 0.7;
-`;
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
 `;
 
 export const Header = styled.div`
@@ -54,14 +65,6 @@ export const SubspacesContainer = styled.div`
   overflow: hidden;
 `;
 
-export const Details = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-  padding: 10px;
-
-  :not(&.empty) {
-    padding-bottom: 0;
-  }
+export const SubspaceList = styled.div`
+  overflow-y: auto;
 `;
