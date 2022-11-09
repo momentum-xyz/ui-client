@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {Heading, Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
@@ -67,6 +67,14 @@ const ExplorePanel: FC = () => {
 
       {searchQuery.isQueryValid && (
         <styled.Body>
+          <styled.Wrapper>
+            <Heading
+              label={t('labels.searchResults')}
+              type="h1"
+              align="left"
+              transform="uppercase"
+            />
+          </styled.Wrapper>
           <SpaceList
             spaceListByCategory={exploreStore.searchResults}
             onTeleportToSpace={unityStore.teleportToSpace}

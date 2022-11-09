@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 import {Heading} from '@momentum-xyz/ui-kit';
 
-export const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 7px 10px;
-  gap: 5px;
-`;
-
 export const Container = styled.div`
   height: 100%;
   overflow-y: scroll;
