@@ -9,7 +9,7 @@ import {
   SetSpaceSubAttributeRequest,
   SpaceSubAttributeResponse
 } from '../spaceAttributeRepository/spaceAttribute.api.types';
-import {getSpaceSubAttribute, setSpaceSubAttribute} from '../spaceAttributeRepository';
+import {getSpaceAttributeItem, setSpaceAttributeItem} from '../spaceAttributeRepository';
 
 import {FetchMagicLinkRequest, MagicLinkGenerateRequest} from './magicLinkRepository.api.types';
 
@@ -27,7 +27,7 @@ export const createLink: RequestInterface<MagicLinkGenerateRequest, SpaceSubAttr
     ...restOptions
   };
 
-  return setSpaceSubAttribute(attributeOptions, request);
+  return setSpaceAttributeItem(attributeOptions, request);
 };
 
 export const fetchMagicLink: RequestInterface<FetchMagicLinkRequest, GetSpaceAttributeResponse> = (
@@ -43,5 +43,5 @@ export const fetchMagicLink: RequestInterface<FetchMagicLinkRequest, GetSpaceAtt
     ...restOptions
   };
 
-  return getSpaceSubAttribute(attributeOptions, request);
+  return getSpaceAttributeItem(attributeOptions, request);
 };

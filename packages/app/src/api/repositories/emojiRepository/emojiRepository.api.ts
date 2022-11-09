@@ -8,9 +8,9 @@ import {
   SetSpaceSubAttributeRequest
 } from 'api';
 import {
-  deleteSpaceSubAttribute,
+  deleteSpaceAttributeItem,
   getSpaceAttribute,
-  setSpaceSubAttribute
+  setSpaceAttributeItem
 } from 'api/repositories/spaceAttributeRepository';
 
 import {
@@ -40,7 +40,7 @@ export const createEmoji: RequestInterface<EmojiUploadRequest, GetSpaceAttribute
     ...restOptions
   };
 
-  return setSpaceSubAttribute(attributeOptions, request);
+  return setSpaceAttributeItem(attributeOptions, request);
 };
 
 export const deleteEmoji: RequestInterface<EmojiDeleteRequest, null> = (options) => {
@@ -53,10 +53,10 @@ export const deleteEmoji: RequestInterface<EmojiDeleteRequest, null> = (options)
     sub_attribute_key: key,
     ...restOptions
   };
-  return deleteSpaceSubAttribute(attributeOptions, request);
+  return deleteSpaceAttributeItem(attributeOptions, request);
 };
 
-export const fetchEmojis: RequestInterface<FetchEmojiRequest, GetSpaceAttributeResponse> = (
+export const fetchEmojis: RequestInterface<FetchEmojiRequest, GetSpaceAttributeResponse | null> = (
   options
 ) => {
   const {spaceId, ...restOptions} = options;

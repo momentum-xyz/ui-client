@@ -83,7 +83,7 @@ const PluginAttributesManager = types
 
     getSpaceAttributeItem: flow(function* <T>(spaceId: string, attributeName: string, key: string) {
       const response = yield self.getAttributeRequest.send(
-        api.spaceAttributeRepository.getSpaceSubAttribute,
+        api.spaceAttributeRepository.getSpaceAttributeItem,
         {
           spaceId,
           plugin_id: self.pluginId,
@@ -107,7 +107,7 @@ const PluginAttributesManager = types
       value: T
     ) {
       const response = yield self.setSubAttributeRequest.send(
-        api.spaceAttributeRepository.setSpaceSubAttribute,
+        api.spaceAttributeRepository.setSpaceAttributeItem,
         {
           spaceId,
           plugin_id: self.spaceId,

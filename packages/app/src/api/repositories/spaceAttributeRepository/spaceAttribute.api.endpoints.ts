@@ -5,6 +5,6 @@ export const spaceAttributesRepositoryEndpoints = () => {
 
   return {
     attributes: `${BASE_URL}`,
-    subAttribute: `${BASE_URL}/sub`
+    attributeItem: `${BASE_URL}/sub`
   };
 };

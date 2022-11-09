@@ -71,7 +71,7 @@ export const deleteSpaceAttribute: RequestInterface<DeleteSpaceAttributeRequest,
   return request.delete(url, restOptions);
 };
 
-export const getSpaceSubAttribute: RequestInterface<
+export const getSpaceAttributeItem: RequestInterface<
   GetSpaceSubAttributeRequest,
   SpaceSubAttributeResponse
 > = (options) => {
@@ -83,18 +83,18 @@ export const getSpaceSubAttribute: RequestInterface<
     sub_attribute_key
   };
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
+  const url = generatePath(spaceAttributesRepositoryEndpoints().attributeItem, {spaceId});
 
   return request.get(url, restOptions);
 };
 
-export const setSpaceSubAttribute: RequestInterface<
+export const setSpaceAttributeItem: RequestInterface<
   SetSpaceSubAttributeRequest,
   SpaceSubAttributeResponse
 > = (options) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} = options;
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
+  const url = generatePath(spaceAttributesRepositoryEndpoints().attributeItem, {spaceId});
 
   return request.post(
     url,
@@ -108,12 +108,12 @@ export const setSpaceSubAttribute: RequestInterface<
   );
 };
 
-export const deleteSpaceSubAttribute: RequestInterface<DeleteSpaceSubAttributeRequest, null> = (
+export const deleteSpaceAttributeItem: RequestInterface<DeleteSpaceSubAttributeRequest, null> = (
   options
 ) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
-  const url = generatePath(spaceAttributesRepositoryEndpoints().subAttribute, {spaceId});
+  const url = generatePath(spaceAttributesRepositoryEndpoints().attributeItem, {spaceId});
 
   restOptions.data = {
     plugin_id,
