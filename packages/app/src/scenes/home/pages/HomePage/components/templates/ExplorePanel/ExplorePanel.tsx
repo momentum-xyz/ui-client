@@ -76,7 +76,7 @@ const ExplorePanel: FC = () => {
           />
           {exploreStore.searchResults.length === 0 && !exploreStore.isLoading && (
             <styled.EmptyResult>
-              <Text text="No results found" size="xs" />
+              <Text text={t('messages.noResultsFound')} size="xs" />
             </styled.EmptyResult>
           )}
         </styled.Body>
