@@ -3,7 +3,7 @@ import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 import {v4 as uuidv4} from 'uuid';
 
 import {EmojiDetail, EmojiDetailModelInterface} from 'core/models';
-import {api, UploadImageResponse, SpaceSubAttributeResponse} from 'api';
+import {api, UploadImageResponse, GetSpaceAttributeResponse} from 'api';
 import {mapper} from 'api/mapper';
 
 const ManageEmojiStore = types
@@ -21,8 +21,8 @@ const ManageEmojiStore = types
   )
   .actions((self) => ({
     fetchSpaceEmoji: flow(function* (spaceId: string) {
-      const response: SpaceSubAttributeResponse = yield self.fetchSpaceEmojiRequest.send(
-        api.emojiRepository.fetchEmoji,
+      const response: GetSpaceAttributeResponse = yield self.fetchSpaceEmojiRequest.send(
+        api.emojiRepository.fetchEmojis,
         {
           spaceId
         }
@@ -57,7 +57,7 @@ const ManageEmojiStore = types
       const {hash} = uploadImageResponse;
       const emojiId = uuidv4();
 
-      const response: SpaceSubAttributeResponse = yield self.createEmojiRequest.send(
+      const response: GetSpaceAttributeResponse = yield self.createEmojiRequest.send(
         api.emojiRepository.createEmoji,
         {spaceId, key: emojiId, hash, emojiId, name}
       );

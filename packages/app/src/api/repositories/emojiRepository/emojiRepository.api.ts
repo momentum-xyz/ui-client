@@ -3,11 +3,9 @@ import {request} from 'api/request';
 import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
 import {
   DeleteSpaceSubAttributeRequest,
-  DeleteSpaceSubAttributeResponse,
   GetSpaceAttributeRequest,
   GetSpaceAttributeResponse,
-  SetSpaceSubAttributeRequest,
-  SpaceSubAttributeResponse
+  SetSpaceSubAttributeRequest
 } from 'api';
 import {
   deleteSpaceSubAttribute,
@@ -22,7 +20,7 @@ import {
   EmojiItemInterface
 } from './emojiRepository.api.types';
 
-export const createEmoji: RequestInterface<EmojiUploadRequest, SpaceSubAttributeResponse> = (
+export const createEmoji: RequestInterface<EmojiUploadRequest, GetSpaceAttributeResponse> = (
   options
 ) => {
   const {key, spaceId, hash, emojiId, name, ...restOptions} = options;
@@ -45,9 +43,7 @@ export const createEmoji: RequestInterface<EmojiUploadRequest, SpaceSubAttribute
   return setSpaceSubAttribute(attributeOptions, request);
 };
 
-export const deleteEmoji: RequestInterface<EmojiDeleteRequest, DeleteSpaceSubAttributeResponse> = (
-  options
-) => {
+export const deleteEmoji: RequestInterface<EmojiDeleteRequest, null> = (options) => {
   const {key, spaceId, ...restOptions} = options;
 
   const attributeOptions: DeleteSpaceSubAttributeRequest = {
@@ -60,7 +56,7 @@ export const deleteEmoji: RequestInterface<EmojiDeleteRequest, DeleteSpaceSubAtt
   return deleteSpaceSubAttribute(attributeOptions, request);
 };
 
-export const fetchEmoji: RequestInterface<FetchEmojiRequest, GetSpaceAttributeResponse> = (
+export const fetchEmojis: RequestInterface<FetchEmojiRequest, GetSpaceAttributeResponse> = (
   options
 ) => {
   const {spaceId, ...restOptions} = options;
