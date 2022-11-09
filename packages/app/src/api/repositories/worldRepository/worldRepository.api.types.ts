@@ -11,7 +11,7 @@ export interface SubSpaceInterface {
   subSpaces?: Array<SubSpaceInterface>;
 }
 
-/** Get space with subspaces (1 level of subspaces **/
+/** Get space with subspaces (1 level of subspaces) **/
 
 export interface GetSpaceWithSubSpacesRequest {
   spaceId: string;
@@ -19,3 +19,14 @@ export interface GetSpaceWithSubSpacesRequest {
 }
 
 export interface GetSpaceWithSubSpacesResponse extends SpaceWithSubspacesInterface {}
+
+/** Search spaces **/
+
+export interface SearchSpacesRequest {
+  worldId: string;
+  query: string;
+}
+
+export interface SearchSpacesResponse {
+  [categoryName: string]: SpaceWithSubspacesInterface[];
+}

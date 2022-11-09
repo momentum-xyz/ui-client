@@ -5,7 +5,7 @@ import {Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
-import {SpaceHeader, SpacesList, SpaceDetails} from './components';
+import {SpaceList, SpaceDetails} from './components';
 import * as styled from './ExplorePanel.styled';
 
 const PANEL_WIDTH_PX = 200;
@@ -20,7 +20,9 @@ const ExplorePanel: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    exploreStore.init(worldStore.worldId);
+    if (!exploreStore.worldId) {
+      exploreStore.init(worldStore.worldId);
+    }
   }, [exploreStore, worldStore.worldId]);
 
   const debouncedSearch = useDebouncedCallback(exploreStore.search, SEARCH_DELAY_MS);
@@ -64,10 +66,13 @@ const ExplorePanel: FC = () => {
       )}
 
       {searchQuery.isQueryValid && (
-        <>
-          <SpaceHeader title={t('labels.searchResults')} />
-          <SpacesList />
-        </>
+        <styled.Body>
+          <SpaceList
+            spaceListByCategory={exploreStore.searchResults}
+            onTeleportToSpace={unityStore.teleportToSpace}
+            onSelectSpace={exploreStore.selectSpace}
+          />
+        </styled.Body>
       )}
     </styled.CustomExpandableLayout>
   );

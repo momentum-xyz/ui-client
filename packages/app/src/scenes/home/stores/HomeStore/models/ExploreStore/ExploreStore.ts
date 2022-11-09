@@ -1,9 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {api, GetSpaceWithSubSpacesResponse, ExploreResponse} from 'api';
 import {SearchQuery} from 'core/models';
-import {bytesToUuid} from 'core/utils';
+import {api, GetSpaceWithSubSpacesResponse, SearchSpacesResponse} from 'api';
 
 import {SpaceDetails, SpaceListByCategory, NavigationHistory} from './models';
 
@@ -61,25 +60,25 @@ const ExploreStore = types
         });
       }
     }),
-    // TODO: To be refactored next PR
     search: flow(function* () {
       self.searchResults = cast([]);
-      const response: ExploreResponse = yield self.searchQuery.request.send(
-        api.spaceTypeRepository.searchExplore,
+
+      const response: SearchSpacesResponse = yield self.searchQuery.request.send(
+        api.worldRepository.searchSpaces,
         {
-          searchQuery: self.searchQuery.query,
+          query: self.searchQuery.query,
           worldId: self.worldId
         }
       );
 
       if (response) {
         self.searchResults = cast(
-          response.map((category) => ({
-            name: category.name,
-            spaces: category.spaces.map((space) => ({
-              id: bytesToUuid(space.id.data),
+          Object.entries(response).map(([name, spaceList]) => ({
+            name: name,
+            spaceList: spaceList.map((space) => ({
+              id: space.id,
               name: space.name,
-              hasSubspaces: !!space.children?.length
+              hasSubspaces: false
             }))
           }))
         );
