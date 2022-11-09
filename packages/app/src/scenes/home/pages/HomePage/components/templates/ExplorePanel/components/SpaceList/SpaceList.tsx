@@ -17,8 +17,8 @@ const SpaceList: FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container data-testid="SpaceList-test">
-      {spaceListByCategory?.map(({name, spaceList}) => (
-        <styled.Category key={name}>
+      {spaceListByCategory.map(({name, spaceList}) => (
+        <div key={name}>
           <styled.CategoryName label={name} type="h4" align="left" />
           {spaceList.map((spaceInfo) => (
             <SpaceListItem
@@ -30,7 +30,7 @@ const SpaceList: FC<PropsInterface> = (props) => {
               onSelectSpace={onSelectSpace}
             />
           ))}
-        </styled.Category>
+        </div>
       ))}
     </styled.Container>
   );

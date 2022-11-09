@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Heading, Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {Heading, Loader, SearchInput, Text, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
@@ -46,13 +46,7 @@ const ExplorePanel: FC = () => {
         }}
       />
 
-      {exploreStore.isLoading && (
-        <styled.Loader>
-          <Loader />
-        </styled.Loader>
-      )}
-
-      {!searchQuery.isQueryValid && !!spaceDetails && (
+      {!searchQuery.isQueryValid && !!spaceDetails && !exploreStore.isLoading && (
         <styled.Body>
           <SpaceDetails
             space={spaceDetails}
@@ -67,20 +61,31 @@ const ExplorePanel: FC = () => {
 
       {searchQuery.isQueryValid && (
         <styled.Body>
-          <styled.Wrapper>
+          <styled.Heading>
             <Heading
               label={t('labels.searchResults')}
               type="h1"
               align="left"
               transform="uppercase"
             />
-          </styled.Wrapper>
+          </styled.Heading>
           <SpaceList
             spaceListByCategory={exploreStore.searchResults}
             onTeleportToSpace={unityStore.teleportToSpace}
             onSelectSpace={exploreStore.selectSpace}
           />
+          {exploreStore.searchResults.length === 0 && !exploreStore.isLoading && (
+            <styled.EmptyResult>
+              <Text text="No results found" size="xs" />
+            </styled.EmptyResult>
+          )}
         </styled.Body>
+      )}
+
+      {exploreStore.isLoading && (
+        <styled.Loader>
+          <Loader />
+        </styled.Loader>
       )}
     </styled.CustomExpandableLayout>
   );
