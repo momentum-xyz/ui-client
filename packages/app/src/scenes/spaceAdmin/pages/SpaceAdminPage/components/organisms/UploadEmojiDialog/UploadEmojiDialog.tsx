@@ -19,8 +19,9 @@ interface PropsInterface {
 }
 
 const UploadEmojiDialog: FC<PropsInterface> = ({spaceId, existingEmojiId}) => {
-  const {uploadDialog, isUploadPending, uploadEmojiToSpace, deleteEmoji} =
-    useStore().spaceAdminStore.manageEmojiStore;
+  const {spaceAdminStore} = useStore();
+  const {manageEmojiStore} = spaceAdminStore;
+  const {uploadDialog, isUploadPending, uploadEmojiToSpace, deleteEmoji} = manageEmojiStore;
 
   const theme = useTheme();
   const {t} = useTranslation();

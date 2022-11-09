@@ -20,6 +20,6 @@ const EmojiDetail = types
     }
   }));
 
-export interface EmojiDetailInterface extends Instance<typeof EmojiDetail> {}
+export interface EmojiDetailModelInterface extends Instance<typeof EmojiDetail> {}
 
 export {EmojiDetail};

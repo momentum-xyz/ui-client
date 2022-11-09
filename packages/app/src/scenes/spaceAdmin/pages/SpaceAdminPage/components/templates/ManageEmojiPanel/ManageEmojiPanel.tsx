@@ -10,9 +10,8 @@ import {UploadEmojiDialog, DeleteEmojiDialog} from '../../organisms';
 import * as styled from './ManageEmojiPanel.styled';
 
 const ManageEmojiPanel: FC = () => {
-  const {
-    spaceAdminStore: {spaceManagerStore, manageEmojiStore}
-  } = useStore();
+  const {spaceAdminStore} = useStore();
+  const {manageEmojiStore, spaceManagerStore} = spaceAdminStore;
   const {space} = spaceManagerStore;
   const {fetchSpaceEmoji, emojiDetail, uploadDialog, deleteDialog} = manageEmojiStore;
 

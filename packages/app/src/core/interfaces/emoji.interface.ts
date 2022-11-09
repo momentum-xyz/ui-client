@@ -33,12 +33,6 @@ export interface EmojiConfigItemInterface {
   order: number;
 }
 
-export interface EmojiItemInterface {
-  hash: string;
-  name: string;
-  emojiId: string;
-}
-
 export interface EmojiFormInterface {
   file: File;
   name: string;

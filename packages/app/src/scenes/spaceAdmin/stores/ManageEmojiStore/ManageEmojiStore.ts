@@ -2,10 +2,9 @@ import {types, cast, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 import {v4 as uuidv4} from 'uuid';
 
-import {EmojiDetail} from 'core/models';
-import {api, UploadImageResponse, GetSpaceAttributeResponse, SpaceSubAttributeResponse} from 'api';
+import {EmojiDetail, EmojiDetailModelInterface} from 'core/models';
+import {api, UploadImageResponse, SpaceSubAttributeResponse} from 'api';
 import {mapper} from 'api/mapper';
-import {EmojiItemInterface} from 'core/interfaces';
 
 const ManageEmojiStore = types
   .compose(
@@ -30,7 +29,7 @@ const ManageEmojiStore = types
       );
 
       if (Object.keys(response).length) {
-        const emojiData = mapper.mapSubAttributeValue<EmojiItemInterface>(response);
+        const emojiData = mapper.mapSubAttributeValue<EmojiDetailModelInterface>(response);
         if (emojiData) {
           self.emojiDetail = cast({
             ...emojiData
@@ -58,13 +57,13 @@ const ManageEmojiStore = types
       const {hash} = uploadImageResponse;
       const emojiId = uuidv4();
 
-      const response: GetSpaceAttributeResponse = yield self.createEmojiRequest.send(
+      const response: SpaceSubAttributeResponse = yield self.createEmojiRequest.send(
         api.emojiRepository.createEmoji,
         {spaceId, key: emojiId, hash, emojiId, name}
       );
 
       if (response) {
-        const emojiData = mapper.mapSubAttributeValue<EmojiItemInterface>(response);
+        const emojiData = mapper.mapSubAttributeValue<EmojiDetailModelInterface>(response);
         if (emojiData) {
           self.emojiDetail = cast({
             ...emojiData

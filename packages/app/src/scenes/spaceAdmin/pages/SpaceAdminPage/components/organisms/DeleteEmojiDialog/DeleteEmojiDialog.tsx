@@ -14,8 +14,9 @@ interface PropsInterface {
 }
 
 const DeleteEmojiDialog: FC<PropsInterface> = ({spaceId, emojiId}) => {
-  const {deleteDialog, isDeletePending, deleteEmoji, fetchSpaceEmoji} =
-    useStore().spaceAdminStore.manageEmojiStore;
+  const {spaceAdminStore} = useStore();
+  const {manageEmojiStore} = spaceAdminStore;
+  const {deleteDialog, isDeletePending, deleteEmoji, fetchSpaceEmoji} = manageEmojiStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
