@@ -4,7 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {PanelLayout} from '@momentum-xyz/ui-kit';
 
 import {useStore, useSession} from 'shared/hooks';
-import {SignUpFormInterface} from 'scenes/profile/stores/SignUpCompleteStore';
+import {SignUpFormInterface} from 'core/interfaces';
 import background from 'static/images/bg.png';
 import momentum from 'static/images/momentum.svg';
 import {ROUTES} from 'core/constants';
