@@ -1,7 +1,9 @@
 import {FC, useCallback, useMemo, useRef, useState} from 'react';
-import {CorePluginPropsInterface, PluginInterface} from 'interfaces';
-import {useTheme} from 'styled-components';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
+
+import {useTheme} from '../../../contexts/ThemeContext';
+import {CorePluginPropsInterface, PluginInterface} from '../../../interfaces';
+import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 
 import * as styled from './SpaceTabEmulator.styled';
 
@@ -31,7 +33,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
         get: (field: string) => Promise.resolve(stateAttribute.current[field]),
         set: (field: string, value: unknown) => {
           stateAttribute.current[field] = value;
-          return Promise.resolve();
+          return Promise.resolve(stateAttribute.current[field]);
         },
         getConfig: () => Promise.resolve(config)
       }
@@ -56,7 +58,14 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
       </styled.SpaceTopBar>
       {!!plugin.SpaceExtension && (
         <ErrorBoundary errorMessage="Error while rendering plugin">
-          <plugin.SpaceExtension renderTopBarActions={renderTopBarActions} {...coreProps} />
+          <SpaceGlobalPropsContextProvider
+            props={{
+              ...coreProps,
+              renderTopBarActions
+            }}
+          >
+            <plugin.SpaceExtension />
+          </SpaceGlobalPropsContextProvider>
         </ErrorBoundary>
       )}
     </div>

@@ -3,6 +3,7 @@ import * as configRepository from './repositories/configRepository';
 import * as webRepository from './repositories/web3Repository';
 import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
+import * as worldRepository from './repositories/worldRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
 import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
@@ -55,6 +56,7 @@ export const api = {
   versionRepository,
   configRepository,
   webRepository,
+  worldRepository,
   userRepository,
   userProfileRepository,
   guestRepository,
@@ -108,6 +110,7 @@ export * from './repositories/web3Repository/web3Repository.api.types';
 export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
+export * from './repositories/worldRepository/worldRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
 export * from './repositories/spaceOptionRepository/spaceOptionRepository.api.types';

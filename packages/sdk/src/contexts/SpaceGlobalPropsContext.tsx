@@ -4,6 +4,8 @@ import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
 import {PluginConfigInterface, SpacePluginPropsInterface} from '../interfaces';
 
+import {ThemeContextProvider} from './ThemeContext';
+
 export const SpaceGlobalPropsContext = createContext<
   SpacePluginPropsInterface<PluginConfigInterface>
 >({
@@ -13,13 +15,16 @@ export const SpaceGlobalPropsContext = createContext<
     get: () => Promise.reject(),
     set: () => Promise.reject(),
     getConfig: () => Promise.reject()
-  }
+  },
+  renderTopBarActions() {}
 });
 
 export const SpaceGlobalPropsContextProvider: FC<{
   props: SpacePluginPropsInterface<PluginConfigInterface>;
 }> = ({props, children}) => (
-  <SpaceGlobalPropsContext.Provider value={props}>{children}</SpaceGlobalPropsContext.Provider>
+  <SpaceGlobalPropsContext.Provider value={props}>
+    <ThemeContextProvider theme={props.theme}>{children}</ThemeContextProvider>
+  </SpaceGlobalPropsContext.Provider>
 );
 
 export const useSpaceGlobalProps = () => useContext(SpaceGlobalPropsContext);

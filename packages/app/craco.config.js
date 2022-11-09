@@ -56,6 +56,11 @@ module.exports = {
             singleton: true,
             eager: true,
             requiredVersion: "^3.2.2"
+          },
+          "@momentum-xyz/sdk": {
+            singleton: true,
+            eager: true,
+            requiredVersion: "latest"
           }
         }
       })

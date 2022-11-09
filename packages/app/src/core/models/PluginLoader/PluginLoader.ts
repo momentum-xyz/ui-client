@@ -1,6 +1,6 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import {IconNameType} from '@momentum-xyz/ui-kit';
-import {PluginConfigInterface, PluginInterface} from '@momentum-xyz/sdk';
+import {PluginInterface} from '@momentum-xyz/sdk';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {LoaderStatusEnum} from 'core/enums';
@@ -11,6 +11,7 @@ const PluginLoader = types
     ResetModel,
     types.model('PluginLoader', {
       id: types.string,
+      name: types.string,
       scopeName: types.string,
       subPath: types.string,
       subtitle: types.maybe(types.string),
@@ -22,7 +23,7 @@ const PluginLoader = types
         types.enumeration(Object.values(LoaderStatusEnum)),
         LoaderStatusEnum.READY
       ),
-      plugin: types.maybe(types.frozen<PluginInterface<PluginConfigInterface>>()),
+      plugin: types.maybe(types.frozen<PluginInterface>()),
       attributesManager: PluginAttributesManager
     })
   )
@@ -35,7 +36,7 @@ const PluginLoader = types
       self.status = LoaderStatusEnum.LOADING;
 
       try {
-        self.plugin = yield (async (): Promise<PluginInterface<PluginConfigInterface>> => {
+        self.plugin = yield (async (): Promise<PluginInterface> => {
           // @ts-ignore: Required to load list based plugins, no ts declaration
           await __webpack_init_sharing__('default');
           // @ts-ignore: Required to load list based plugins, window has no dict based declaration

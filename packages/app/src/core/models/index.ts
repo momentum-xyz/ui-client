@@ -8,7 +8,6 @@ export * from './SpaceInfo';
 export * from './TokenRuleItem';
 export * from './SpaceAncestor';
 export * from './SpaceUser';
-export * from './SubSpace';
 export * from './TokenItem';
 export * from './TrackModel';
 export * from './UserSpaceDetails';

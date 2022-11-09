@@ -17,5 +17,5 @@ export interface PluginTopBarActionInterface {
 
 export interface SpacePluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface>
   extends CorePluginPropsInterface<C> {
-  renderTopBarActions?: (actions: PluginTopBarActionInterface) => void;
+  renderTopBarActions: (actions: PluginTopBarActionInterface) => void;
 }
