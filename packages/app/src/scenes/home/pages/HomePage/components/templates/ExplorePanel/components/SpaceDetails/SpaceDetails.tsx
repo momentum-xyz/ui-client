@@ -13,25 +13,25 @@ interface PropsInterface {
   isWorld: boolean;
   space: SpaceDetailsModelInterface;
   previousSpace: SpaceInfoModelInterface | null;
-  teleportToSpace: (spaceId: string) => void;
-  selectSpace: (spaceId: string) => void;
-  goBack: () => void;
+  onTeleportToSpace: (spaceId: string) => void;
+  onSelectSpace: (spaceId: string) => void;
+  onGoBack: () => void;
 }
 
 const SpaceDetails: FC<PropsInterface> = (props) => {
-  const {isWorld, space, previousSpace, selectSpace, teleportToSpace, goBack} = props;
+  const {isWorld, space, previousSpace, onSelectSpace, onTeleportToSpace, onGoBack} = props;
   const {id, name, description, subSpaces} = space;
 
   const {t} = useTranslation();
 
   const handleFlyToSpace = () => {
-    teleportToSpace(id);
+    onTeleportToSpace(id);
   };
 
   return (
     <styled.Container data-testid="SpaceDetails-test">
       {!!previousSpace && (
-        <styled.Header onClick={goBack}>
+        <styled.Header onClick={onGoBack}>
           <styled.BackIconSvg name="chevron" />
           <styled.ParentHeading type="h3" label={previousSpace.name} align="left" />
         </styled.Header>
@@ -60,8 +60,8 @@ const SpaceDetails: FC<PropsInterface> = (props) => {
                 spaceInfo={spaceInfo}
                 // TODO: Not implemented yet
                 isFavorite={false}
-                teleportToSpace={teleportToSpace}
-                selectSpace={selectSpace}
+                onTeleportToSpace={onTeleportToSpace}
+                onSelectSpace={onSelectSpace}
               />
             ))}
           </styled.SubspaceList>

@@ -56,9 +56,9 @@ const ExplorePanel: FC = () => {
             space={spaceDetails}
             previousSpace={history.previousSpace}
             isWorld={spaceDetails.id === worldStore.worldId}
-            teleportToSpace={unityStore.teleportToSpace}
-            selectSpace={exploreStore.selectSpace}
-            goBack={exploreStore.goBackToPreviousSpace}
+            onTeleportToSpace={unityStore.teleportToSpace}
+            onSelectSpace={exploreStore.selectSpace}
+            onGoBack={exploreStore.goBackToPreviousSpace}
           />
         </styled.Body>
       )}

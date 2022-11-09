@@ -9,19 +9,19 @@ import * as styled from './SpaceListItem.styled';
 export interface SpaceItemPropsInterface {
   spaceInfo: SpaceInfoModelInterface;
   isFavorite: boolean;
-  teleportToSpace: (spaceId: string) => void;
-  selectSpace: (spaceId: string) => void;
+  onTeleportToSpace: (spaceId: string) => void;
+  onSelectSpace: (spaceId: string) => void;
 }
 
 const SpaceListItem: React.FC<SpaceItemPropsInterface> = (props) => {
-  const {spaceInfo, isFavorite, selectSpace, teleportToSpace} = props;
+  const {spaceInfo, isFavorite, onSelectSpace, onTeleportToSpace} = props;
 
   const handleFlyToSpace = () => {
-    teleportToSpace(spaceInfo.id);
+    onTeleportToSpace(spaceInfo.id);
   };
 
   const handleSelect = () => {
-    selectSpace(spaceInfo.id);
+    onSelectSpace(spaceInfo.id);
   };
 
   return (
