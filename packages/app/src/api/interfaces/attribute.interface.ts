@@ -1,4 +1,4 @@
-import {AttributeValueInterface} from './attributeValue.interface';
+import {AttributeValueInterface} from '@momentum-xyz/sdk';
 
 export interface AttributeInterface {
   attributeName: string;

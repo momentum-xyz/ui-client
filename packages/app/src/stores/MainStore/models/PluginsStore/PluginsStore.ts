@@ -51,16 +51,16 @@ const PluginsStore = types
         return;
       }
 
-      const plugin_uuids = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
+      const pluginIds = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
 
-      if (plugin_uuids.length === 0) {
+      if (pluginIds.length === 0) {
         self.spacePluginLoaders = cast([]);
         return;
       }
 
       const [pluginsMetadata, pluginsOptions] = yield Promise.all([
-        self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {plugin_uuids}),
-        self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {plugin_uuids})
+        self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {ids: pluginIds}),
+        self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {ids: pluginIds})
       ]);
 
       const plugins = Object.entries(pluginsMetadata as GetPluginsMetadataResponse)

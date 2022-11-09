@@ -22,10 +22,10 @@ export const getPluginsMetadata: RequestInterface<
   GetPluginsMetadataRequest,
   GetPluginsMetadataResponse
 > = (options) => {
-  const {plugin_uuids, ...restOptions} = options;
+  const {ids, ...restOptions} = options;
 
   restOptions.params = {
-    plugin_uuids
+    ids
   };
 
   return request.get(pluginsRepositoryEndpoints().metadata, restOptions);
@@ -35,10 +35,10 @@ export const getPluginsOptions: RequestInterface<
   GetPluginsOptionsRequest,
   GetPluginsOptionsResponse
 > = (options) => {
-  const {plugin_uuids, ...restOptions} = options;
+  const {ids, ...restOptions} = options;
 
   restOptions.params = {
-    plugin_uuids
+    ids
   };
 
   return request.get(pluginsRepositoryEndpoints().options, restOptions);

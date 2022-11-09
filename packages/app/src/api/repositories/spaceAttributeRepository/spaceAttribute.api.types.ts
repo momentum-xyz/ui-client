@@ -1,4 +1,4 @@
-import {AttributeValueInterface} from 'api/interfaces';
+import {AttributeValueInterface} from '@momentum-xyz/sdk';
 
 // GET SPACE ATTRIBUTE
 export interface GetSpaceAttributeRequest {
@@ -8,6 +8,19 @@ export interface GetSpaceAttributeRequest {
 }
 
 export interface GetSpaceAttributeResponse extends AttributeValueInterface {}
+
+// SET SPACE ATTRIBUTE
+export interface SetSpaceAttributeRequest {
+  spaceId: string;
+  plugin_id: string;
+  attribute_name: string;
+  value: AttributeValueInterface;
+}
+
+export interface SetSpaceAttributeResponse extends AttributeValueInterface {}
+
+// DELETE SPACE ATTRIBUTE
+export interface DeleteSpaceAttributeRequest extends GetSpaceAttributeRequest {}
 
 // GET SPACE SUB ATTRIBUTE
 export interface GetSpaceSubAttributeRequest extends GetSpaceAttributeRequest {

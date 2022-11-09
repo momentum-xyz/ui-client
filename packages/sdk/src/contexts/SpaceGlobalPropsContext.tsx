@@ -12,9 +12,26 @@ export const SpaceGlobalPropsContext = createContext<
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,
   api: {
+    getSpaceAttributeValue: () => Promise.reject(),
+    setSpaceAttributeValue: () => Promise.reject(),
+    deleteSpaceAttribute: () => Promise.reject(),
+
+    getSpaceAttributeValueSubValue: () => Promise.reject(),
+    setSpaceAttributeValueSubValue: () => Promise.reject(),
+    deleteSpaceAttributeValueSubValue: () => Promise.reject(),
+
+    subscribeToTopic: () => Promise.reject(),
+    onAttributeChange: () => Promise.reject(),
+    onAttributeRemove: () => Promise.reject(),
+
+    onAttributeValueSubValueChange: () => Promise.reject(),
+    onAttributeValueSubValueRemove: () => Promise.reject()
+  },
+  pluginStateAPI: {
     get: () => Promise.reject(),
     set: () => Promise.reject(),
-    getConfig: () => Promise.reject()
+    getConfig: () => Promise.reject(),
+    delete: () => Promise.reject()
   },
   renderTopBarActions() {}
 });

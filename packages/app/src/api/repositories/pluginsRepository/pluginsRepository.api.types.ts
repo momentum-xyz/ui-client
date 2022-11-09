@@ -20,7 +20,7 @@ export interface PluginOptionsInterface extends OptionsInterface {
 }
 
 export interface PluginUUIDsInterface {
-  plugin_uuids: string[];
+  ids: string[];
 }
 
 // GET PLUGINS LIST
