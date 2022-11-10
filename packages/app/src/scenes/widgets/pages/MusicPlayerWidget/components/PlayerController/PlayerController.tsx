@@ -22,12 +22,7 @@ const PlayerController: FC = () => {
         {musicPlayer.isPlaying ? (
           <SvgButton iconName="player-pause" size="medium-large" onClick={pause} />
         ) : (
-          <SvgButton
-            iconName="play-button"
-            size="medium-large"
-            disabled={!playlist.songsExist}
-            onClick={play}
-          />
+          <SvgButton iconName="play-button" size="medium-large" onClick={play} />
         )}
         <SvgButton
           iconName="player-forward"
