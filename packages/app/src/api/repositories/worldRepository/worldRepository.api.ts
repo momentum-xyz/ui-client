@@ -33,7 +33,7 @@ export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesRes
 
   restOptions.params = {
     ...restOptions.params,
-    query: query
+    query
   };
 
   const url = generatePath(worldRepositoryEndpoints().searchSpaces, {worldId});
