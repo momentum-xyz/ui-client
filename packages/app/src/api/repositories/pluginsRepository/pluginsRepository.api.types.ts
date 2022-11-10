@@ -1,5 +1,6 @@
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
+import {PluginTypeEnum} from 'api/enums';
 import {OptionsInterface} from 'api/interfaces';
 import {MetadataInterface} from 'api/interfaces/metadata.interface';
 
@@ -25,13 +26,16 @@ export interface PluginUUIDsInterface {
 
 // GET PLUGINS LIST
 
-export interface GetPluginsListRequest {}
+export interface GetPluginsListRequest {
+  ids?: string[];
+  type?: PluginTypeEnum;
+}
 
 /**
- * [plugin_uuid: string]: [plugin_name: string]
+ * [pluginId: string]: [plugin_name: string]
  */
 export interface GetPluginsListResponse {
-  [plugin_uuid: string]: string;
+  [pluginIds: string]: string;
 }
 
 // GET METADATA OF PLUGINS
@@ -39,7 +43,7 @@ export interface GetPluginsListResponse {
 export interface GetPluginsMetadataRequest extends PluginUUIDsInterface {}
 
 /**
- * [plugin_uuid: string]: [metadata: MetadataInterface]
+ * [pluginId: string]: [metadata: MetadataInterface]
  */
 export interface GetPluginsMetadataResponse extends Record<string, PluginMetadataInterface> {}
 
@@ -48,6 +52,6 @@ export interface GetPluginsMetadataResponse extends Record<string, PluginMetadat
 export interface GetPluginsOptionsRequest extends PluginUUIDsInterface {}
 
 /**
- * [plugin_uuid: string]: [options: OptionsInterface]
+ * [pluginId: string]: [options: OptionsInterface]
  */
 export interface GetPluginsOptionsResponse extends Record<string, PluginOptionsInterface> {}
