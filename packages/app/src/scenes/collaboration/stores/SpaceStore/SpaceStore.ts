@@ -9,7 +9,7 @@ import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';
 import {SpaceUserModel} from 'core/models/SpaceUser';
 import {SpaceInfo} from 'core/models/SpaceInfo';
-import {api, SpaceInterface, SpaceResponse, SpaceSubAttributeResponse} from 'api';
+import {api, SpaceInterface, SpaceResponse, SpaceAttributeItemResponse} from 'api';
 import {GetAllowedSpaceTypesResponse} from 'api';
 import {mapper} from 'api/mapper';
 
@@ -79,7 +79,7 @@ const SpaceStore = types
         }
       }),
       loadSpace: flow(function* (spaceId: string) {
-        const response: SpaceSubAttributeResponse = yield self.spaceRequest.send(
+        const response: SpaceAttributeItemResponse = yield self.spaceRequest.send(
           api.spaceRepository.fetchSpace,
           {spaceId}
         );

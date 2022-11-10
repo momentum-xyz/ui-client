@@ -1,18 +1,18 @@
 import {ResetModel} from '@momentum-xyz/core';
 import {appVariables} from 'api/constants';
-import {MiroAPIInterface, MiroBoardInterface} from 'core/interfaces';
+import {MiroApiInterface, MiroBoardInterface} from 'core/interfaces';
 import {flow, types} from 'mobx-state-tree';
 
 const MiroBoardStore = types
   .compose(
     ResetModel,
     types.model('MiroBoardStore', {
-      api: types.maybe(types.frozen<MiroAPIInterface>()),
+      api: types.maybe(types.frozen<MiroApiInterface>()),
       board: types.maybeNull(types.frozen<MiroBoardInterface>())
     })
   )
   .actions((self) => ({
-    init(api: MiroAPIInterface) {
+    init(api: MiroApiInterface) {
       self.api = api;
     },
     fetchBoard: flow(function* () {
@@ -20,7 +20,7 @@ const MiroBoardStore = types
         return;
       }
 
-      self.board = yield self.api.get<MiroBoardInterface | null>('board');
+      self.board = yield self.api.getItem<MiroBoardInterface | null>('board');
     })
   }))
   .actions((self) => ({
@@ -29,7 +29,7 @@ const MiroBoardStore = types
         return;
       }
 
-      self.board = yield self.api.set('board', data);
+      self.board = yield self.api.setItem('board', data);
     }),
     pickBoard() {
       miroBoardsPicker.open({
@@ -43,7 +43,7 @@ const MiroBoardStore = types
         return;
       }
 
-      self.board = yield self.api.set('board', null);
+      self.board = yield self.api.setItem('board', null);
     })
   }));
 
