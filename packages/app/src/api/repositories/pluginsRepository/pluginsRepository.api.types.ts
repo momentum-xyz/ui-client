@@ -38,6 +38,14 @@ export interface GetPluginsListResponse {
   [pluginIds: string]: string;
 }
 
+// SEARCH PLUGINS
+
+export interface SearchPluginsRequest {
+  name?: string;
+  description?: string;
+  type?: PluginTypeEnum;
+}
+
 // GET METADATA OF PLUGINS
 
 export interface GetPluginsMetadataRequest extends PluginUUIDsInterface {}

@@ -9,7 +9,8 @@ import {
   GetPluginsMetadataRequest,
   GetPluginsMetadataResponse,
   GetPluginsOptionsRequest,
-  GetPluginsOptionsResponse
+  GetPluginsOptionsResponse,
+  SearchPluginsRequest
 } from './pluginsRepository.api.types';
 
 export const getPluginsList: RequestInterface<GetPluginsListRequest, GetPluginsListResponse> = (
@@ -23,6 +24,20 @@ export const getPluginsList: RequestInterface<GetPluginsListRequest, GetPluginsL
   };
 
   return request.get(pluginsRepositoryEndpoints().list, restOptions);
+};
+
+export const searchPlugins: RequestInterface<SearchPluginsRequest, GetPluginsListResponse> = (
+  options
+) => {
+  const {name, description, type, ...restOptions} = options;
+
+  restOptions.params = {
+    name,
+    description,
+    type
+  };
+
+  return request.get(pluginsRepositoryEndpoints().search, restOptions);
 };
 
 export const getPluginsMetadata: RequestInterface<
