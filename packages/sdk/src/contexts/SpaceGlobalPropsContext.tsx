@@ -24,8 +24,8 @@ export const SpaceGlobalPropsContext = createContext<
     onAttributeChange: () => Promise.reject(),
     onAttributeRemove: () => Promise.reject(),
 
-    onAttributeValueSubValueChange: () => Promise.reject(),
-    onAttributeValueSubValueRemove: () => Promise.reject()
+    onAttributeItemChange: () => Promise.reject(),
+    onAttributeItemRemove: () => Promise.reject()
   },
   stateApi: {
     getItem: () => Promise.reject(),

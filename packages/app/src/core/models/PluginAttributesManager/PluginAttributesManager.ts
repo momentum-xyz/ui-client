@@ -15,9 +15,9 @@ const PluginAttributesManager = types
     setAttributeRequest: types.optional(RequestModel, {}),
     deleteAttributeRequest: types.optional(RequestModel, {}),
 
-    getSubAttributeRequest: types.optional(RequestModel, {}),
-    setSubAttributeRequest: types.optional(RequestModel, {}),
-    deleteSubAttributeRequest: types.optional(RequestModel, {}),
+    getAttributeItemRequest: types.optional(RequestModel, {}),
+    setAttributeItemRequest: types.optional(RequestModel, {}),
+    deleteAttributeItemRequest: types.optional(RequestModel, {}),
 
     setStateRequest: types.optional(RequestModel, {}),
     deleteStateRequest: types.optional(RequestModel, {}),
@@ -48,7 +48,7 @@ const PluginAttributesManager = types
       attributeName: string,
       value: T
     ) {
-      const response = yield self.getAttributeRequest.send(
+      const response = yield self.setAttributeRequest.send(
         api.spaceAttributeRepository.setSpaceAttribute,
         {
           spaceId,
@@ -82,7 +82,7 @@ const PluginAttributesManager = types
     }),
 
     getSpaceAttributeItem: flow(function* <T>(spaceId: string, attributeName: string, key: string) {
-      const response = yield self.getAttributeRequest.send(
+      const response = yield self.getAttributeItemRequest.send(
         api.spaceAttributeRepository.getSpaceAttributeItem,
         {
           spaceId,
@@ -106,7 +106,7 @@ const PluginAttributesManager = types
       key: string,
       value: T
     ) {
-      const response = yield self.setSubAttributeRequest.send(
+      const response = yield self.setAttributeItemRequest.send(
         api.spaceAttributeRepository.setSpaceAttributeItem,
         {
           spaceId,
@@ -130,7 +130,7 @@ const PluginAttributesManager = types
       return finalValue;
     }),
     deleteSpaceAttributeItem: flow(function* (spaceId: string, attributeName: string, key: string) {
-      const response = yield self.deleteSubAttributeRequest.send(
+      const response = yield self.deleteAttributeItemRequest.send(
         api.spaceAttributeRepository.deleteSpaceAttribute,
         {
           spaceId,
@@ -213,11 +213,11 @@ const PluginAttributesManager = types
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         },
-        onAttributeValueSubValueChange() {
+        onAttributeItemChange() {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         },
-        onAttributeValueSubValueRemove() {
+        onAttributeItemRemove() {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         }

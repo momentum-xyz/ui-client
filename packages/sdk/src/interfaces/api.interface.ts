@@ -31,12 +31,12 @@ export interface ApiInterface {
   ) => void;
   onAttributeRemove: (callback: (attributeName: string) => void) => void;
 
-  onAttributeValueSubValueChange: (
+  onAttributeItemChange: (
     callback: <T extends AttributeValueInterface>(
       attributeName: string,
       key: string,
       value: T
     ) => void
   ) => void;
-  onAttributeValueSubValueRemove: (callback: (attributeName: string, key: string) => void) => void;
+  onAttributeItemRemove: (callback: (attributeName: string, key: string) => void) => void;
 }

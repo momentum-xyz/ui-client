@@ -1,6 +1,7 @@
-import {FC, useCallback, useMemo, useRef, useState} from 'react';
+import {FC, useCallback, useMemo, useState} from 'react';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
+import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
 import {
   AttributeValueInterface,
@@ -18,84 +19,24 @@ interface PropsInterface {
 export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER SpaceEmulator', {plugin});
   const theme = useTheme();
-  const spaceAttributes = useRef<
-    Array<{attributeName: string; attributeValue: AttributeValueInterface}>
-  >([{attributeName: 'state', attributeValue: {}}]);
-
-  const [subscribed, setSubscribed] = useState(false);
-  const [attributeChanged, setAttributeChanged] = useState<{
-    attributeName: string;
-    value: AttributeValueInterface;
-  }>();
-  const [attributeRemoved, setAttributeRemoved] = useState<{attributeName: string}>();
-
-  const [attributeSubValueChanged, setAttributeSubValueChanged] = useState<{
-    attributeName: string;
-    key: string;
-    value: unknown;
-  }>();
-  const [attributeSubValueRemoved, setAttributeSubValueRemoved] = useState<{
-    attributeName: string;
-    key: string;
-  }>();
+  const {
+    spaceAttributes,
+    onAttributeChange,
+    onAttributeRemove,
+    onAttributeItemChange,
+    onAttributeItemRemove,
+    changedAttribute,
+    removedAttribute,
+    changedAttributeItem,
+    removedAttributeItem,
+    subscribeToTopic
+  } = useAttributesEmulator();
 
   const config = useMemo(
     () => ({
       APP_ID: ''
     }),
     []
-  );
-
-  const onAttributeChange = useCallback(
-    (callback) => {
-      setInterval(() => {
-        if (attributeChanged && subscribed) {
-          callback(attributeChanged.attributeName, attributeChanged.value);
-          setAttributeChanged(undefined);
-        }
-      }, 500);
-    },
-    [attributeChanged, subscribed]
-  );
-
-  const onAttributeRemove = useCallback(
-    (callback) => {
-      setInterval(() => {
-        if (attributeRemoved && subscribed) {
-          callback(attributeRemoved.attributeName);
-          setAttributeRemoved(undefined);
-        }
-      }, 500);
-    },
-    [attributeRemoved, subscribed]
-  );
-
-  const onAttributeValueSubValueChange = useCallback(
-    (callback) => {
-      setInterval(() => {
-        if (attributeSubValueChanged && subscribed) {
-          callback(
-            attributeSubValueChanged.attributeName,
-            attributeSubValueChanged.key,
-            attributeSubValueChanged.value
-          );
-          setAttributeSubValueChanged(undefined);
-        }
-      }, 500);
-    },
-    [attributeSubValueChanged, subscribed]
-  );
-
-  const onAttributeValueSubValueRemove = useCallback(
-    (callback) => {
-      setInterval(() => {
-        if (attributeSubValueRemoved && subscribed) {
-          callback(attributeSubValueRemoved.attributeName, attributeSubValueRemoved.key);
-          setAttributeSubValueChanged(undefined);
-        }
-      }, 500);
-    },
-    [attributeSubValueRemoved, subscribed]
   );
 
   const coreProps: CorePluginPropsInterface = useMemo(
@@ -132,7 +73,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
           }
 
           attribute.attributeValue = value;
-          setAttributeChanged({attributeName, value});
+          changedAttribute({attributeName, value});
           return Promise.resolve(attribute.attributeValue as T);
         },
         deleteSpaceAttribute: (spaceId: string, attributeName) => {
@@ -141,7 +82,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
           );
 
           spaceAttributes.current = attributes;
-          setAttributeRemoved({attributeName});
+          removedAttribute({attributeName});
           return Promise.resolve(null);
         },
 
@@ -171,7 +112,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
           }
 
           attributeValue[key] = value;
-          setAttributeSubValueChanged({attributeName, key, value});
+          changedAttributeItem({attributeName, key, value});
           return Promise.resolve(attributeValue[key] as T);
         },
         deleteSpaceAttributeItem: (spaceId: string, attributeName, key) => {
@@ -184,19 +125,16 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
           }
 
           delete attributeValue[key];
-          setAttributeSubValueRemoved({attributeName, key});
+          removedAttributeItem({attributeName, key});
           return Promise.resolve(null);
         },
 
-        subscribeToTopic: (topic) => {
-          setSubscribed(topic === 'plugin');
-          return Promise.resolve();
-        },
+        subscribeToTopic,
         onAttributeChange,
         onAttributeRemove,
 
-        onAttributeValueSubValueChange,
-        onAttributeValueSubValueRemove
+        onAttributeItemChange,
+        onAttributeItemRemove
       },
       stateApi: {
         getItem: <T,>(key: string) => {
@@ -237,12 +175,18 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
       }
     }),
     [
-      theme,
+      changedAttribute,
+      changedAttributeItem,
+      config,
       onAttributeChange,
+      onAttributeItemChange,
+      onAttributeItemRemove,
       onAttributeRemove,
-      onAttributeValueSubValueChange,
-      onAttributeValueSubValueRemove,
-      config
+      removedAttribute,
+      removedAttributeItem,
+      spaceAttributes,
+      subscribeToTopic,
+      theme
     ]
   );
 
