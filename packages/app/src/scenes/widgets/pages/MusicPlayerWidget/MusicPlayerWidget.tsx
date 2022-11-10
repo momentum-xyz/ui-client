@@ -25,13 +25,13 @@ const MusicPlayerWidget: FC = () => {
 
   useEffect(() => {
     playlist.fetchPlaylist(worldStore.worldId);
-  }, [musicPlayerWidget.isOpen]);
+  }, [playlist, worldStore.worldId]);
 
   return (
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
-      title={playlist.currentTrackName}
+      title={playlist.currentTrackName || ' '}
       titleWidth="150px"
       headerItem="left"
       headerType="h4"
@@ -42,9 +42,13 @@ const MusicPlayerWidget: FC = () => {
       showBackground={false}
     >
       <styled.Div data-testid="MusicPlayerWidget-test">
-        <PlayerController />
-        <SeekBarController />
-        <MusicVolumeController />
+        {!playlist.songsExist && (
+          <>
+            <PlayerController />
+            <SeekBarController />
+            <MusicVolumeController />
+          </>
+        )}
         <UnityVolumeController />
       </styled.Div>
     </Dialog>

@@ -1,5 +1,4 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {t} from 'i18next';
 import {RequestModel} from '@momentum-xyz/core';
 
 import {api, PlaylistResponse} from 'api';
@@ -12,7 +11,7 @@ const Playlist = types
     tracks: types.optional(types.array(TrackModel), []),
     currentSrcIndex: types.optional(types.number, 0),
     currentTrackHash: types.optional(types.string, ''),
-    currentTrackName: types.optional(types.string, t('musicPlayer.noTrackTitle'))
+    currentTrackName: ''
   })
   .actions((self) => ({
     setCurrentTrackHash(): void {
@@ -25,7 +24,7 @@ const Playlist = types
     },
     setCurrentTrackName(): void {
       if (self.tracks.length < 1) {
-        self.currentTrackName = t('musicPlayer.noTrackTitle');
+        self.currentTrackName = '';
         return;
       }
       self.currentTrackName = self.tracks[self.currentSrcIndex].name;
