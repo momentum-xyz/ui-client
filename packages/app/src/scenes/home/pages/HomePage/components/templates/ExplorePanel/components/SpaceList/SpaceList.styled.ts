@@ -3,13 +3,8 @@ import {Heading} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   height: 100%;
-  overflow-y: scroll;
-  ::-webkit-scrollbar-track-piece:end {
-    margin-bottom: 7px;
-  }
+  overflow-y: auto;
 `;
-
-export const Category = styled.div``;
 
 export const CategoryName = styled(Heading)`
   padding-left: 10px;

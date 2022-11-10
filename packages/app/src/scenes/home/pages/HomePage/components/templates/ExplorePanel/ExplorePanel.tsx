@@ -1,11 +1,11 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {Heading, Loader, SearchInput, Text, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
-import {SpaceHeader, SpacesList, SpaceDetails} from './components';
+import {SpaceList, SpaceDetails} from './components';
 import * as styled from './ExplorePanel.styled';
 
 const PANEL_WIDTH_PX = 200;
@@ -20,7 +20,9 @@ const ExplorePanel: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    exploreStore.init(worldStore.worldId);
+    if (!exploreStore.worldId) {
+      exploreStore.init(worldStore.worldId);
+    }
   }, [exploreStore, worldStore.worldId]);
 
   const debouncedSearch = useDebouncedCallback(exploreStore.search, SEARCH_DELAY_MS);
@@ -44,13 +46,7 @@ const ExplorePanel: FC = () => {
         }}
       />
 
-      {exploreStore.isLoading && (
-        <styled.Loader>
-          <Loader />
-        </styled.Loader>
-      )}
-
-      {!searchQuery.isQueryValid && !!spaceDetails && (
+      {!searchQuery.isQueryValid && !!spaceDetails && !exploreStore.isLoading && (
         <styled.Body>
           <SpaceDetails
             space={spaceDetails}
@@ -64,10 +60,32 @@ const ExplorePanel: FC = () => {
       )}
 
       {searchQuery.isQueryValid && (
-        <>
-          <SpaceHeader title={t('labels.searchResults')} />
-          <SpacesList />
-        </>
+        <styled.Body>
+          <styled.Heading>
+            <Heading
+              label={t('labels.searchResults')}
+              type="h1"
+              align="left"
+              transform="uppercase"
+            />
+          </styled.Heading>
+          <SpaceList
+            spaceListByCategory={exploreStore.searchResults}
+            onTeleportToSpace={unityStore.teleportToSpace}
+            onSelectSpace={exploreStore.selectSpace}
+          />
+          {exploreStore.searchResults.length === 0 && !exploreStore.isLoading && (
+            <styled.EmptyResult>
+              <Text text={t('messages.noResultsFound')} size="xs" />
+            </styled.EmptyResult>
+          )}
+        </styled.Body>
+      )}
+
+      {exploreStore.isLoading && (
+        <styled.Loader>
+          <Loader />
+        </styled.Loader>
       )}
     </styled.CustomExpandableLayout>
   );

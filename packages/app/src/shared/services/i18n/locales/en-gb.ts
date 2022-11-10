@@ -241,6 +241,7 @@ export const enGb = {
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
       signIn: 'Sign In Or Create An Account',
+      noResultsFound: 'No results found',
       worldBuilderSignIn: 'Sign In to your Momentum Account',
       linkCopied: 'The link is copied to your clipboard.',
       fullyEnjoy: 'Connect your wallet to fully enjoy Momentum!',

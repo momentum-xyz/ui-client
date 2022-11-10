@@ -1,3 +1,2 @@
-export * from './SpaceHeader';
 export * from './SpaceDetails';
-export * from './SpacesList';
+export * from './SpaceList';
