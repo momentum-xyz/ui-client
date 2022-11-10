@@ -16,16 +16,14 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
-  const {
-    mainStore: {worldStore},
-    widgetStore
-  } = useStore();
+  const {mainStore, widgetStore} = useStore();
+  const {worldStore} = mainStore;
   const {musicPlayerStore} = widgetStore;
   const {musicPlayerWidget, playlist} = musicPlayerStore;
 
   useEffect(() => {
     playlist.fetchPlaylist(worldStore.worldId);
-  }, [playlist, worldStore.worldId]);
+  }, [musicPlayerWidget.isOpen, playlist, worldStore.worldId]);
 
   return (
     <Dialog
@@ -42,7 +40,7 @@ const MusicPlayerWidget: FC = () => {
       showBackground={false}
     >
       <styled.Div data-testid="MusicPlayerWidget-test">
-        {!playlist.songsExist && (
+        {playlist.songsExist && (
           <>
             <PlayerController />
             <SeekBarController />
