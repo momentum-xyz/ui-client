@@ -6,14 +6,14 @@ import {request} from 'api/request';
 import {spaceAttributesRepositoryEndpoints} from './spaceAttribute.api.endpoints';
 import {
   DeleteSpaceAttributeRequest,
-  DeleteSpaceSubAttributeRequest,
+  DeleteSpaceAttributeItemRequest,
   GetSpaceAttributeRequest,
   GetSpaceAttributeResponse,
-  GetSpaceSubAttributeRequest,
+  GetSpaceAttributeItemRequest,
   SetSpaceAttributeRequest,
   SetSpaceAttributeResponse,
-  SetSpaceSubAttributeRequest,
-  SpaceSubAttributeResponse
+  SetSpaceAttributeItemRequest,
+  SpaceAttributeItemResponse
 } from './spaceAttribute.api.types';
 
 export const getSpaceAttribute: RequestInterface<
@@ -72,8 +72,8 @@ export const deleteSpaceAttribute: RequestInterface<DeleteSpaceAttributeRequest,
 };
 
 export const getSpaceAttributeItem: RequestInterface<
-  GetSpaceSubAttributeRequest,
-  SpaceSubAttributeResponse
+  GetSpaceAttributeItemRequest,
+  SpaceAttributeItemResponse
 > = (options) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
@@ -89,8 +89,8 @@ export const getSpaceAttributeItem: RequestInterface<
 };
 
 export const setSpaceAttributeItem: RequestInterface<
-  SetSpaceSubAttributeRequest,
-  SpaceSubAttributeResponse
+  SetSpaceAttributeItemRequest,
+  SpaceAttributeItemResponse
 > = (options) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} = options;
 
@@ -108,7 +108,7 @@ export const setSpaceAttributeItem: RequestInterface<
   );
 };
 
-export const deleteSpaceAttributeItem: RequestInterface<DeleteSpaceSubAttributeRequest, null> = (
+export const deleteSpaceAttributeItem: RequestInterface<DeleteSpaceAttributeItemRequest, null> = (
   options
 ) => {
   const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;

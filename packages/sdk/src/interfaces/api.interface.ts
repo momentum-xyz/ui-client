@@ -1,11 +1,11 @@
 import {AttributeValueInterface} from './attributeValue.interface';
 
-export interface APIInterface {
-  getSpaceAttributeValue: <T extends AttributeValueInterface = AttributeValueInterface>(
+export interface ApiInterface {
+  getSpaceAttributeValue: <T extends AttributeValueInterface>(
     spaceId: string,
     attributeName: string
   ) => Promise<T>;
-  setSpaceAttributeValue: <T extends AttributeValueInterface = AttributeValueInterface>(
+  setSpaceAttributeValue: <T extends AttributeValueInterface>(
     spaceId: string,
     attributeName: string,
     value: T
@@ -32,7 +32,7 @@ export interface APIInterface {
   onAttributeRemove: (callback: (attributeName: string) => void) => void;
 
   onAttributeValueSubValueChange: (
-    callback: <T extends AttributeValueInterface = AttributeValueInterface>(
+    callback: <T extends AttributeValueInterface>(
       attributeName: string,
       key: string,
       value: T

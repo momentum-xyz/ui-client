@@ -87,7 +87,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                   theme,
                   isSpaceAdmin: spaceStore.isAdmin,
                   spaceId: spaceStore.id,
-                  pluginStateAPI: attributesManager.pluginStateApi,
+                  stateApi: attributesManager.stateApi,
                   api: attributesManager.api,
                   renderTopBarActions
                 }}

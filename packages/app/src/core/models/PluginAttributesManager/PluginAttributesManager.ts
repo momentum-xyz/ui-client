@@ -1,5 +1,5 @@
 import {RequestModel} from '@momentum-xyz/core';
-import {PluginStateAPIInterface, AttributeValueInterface, APIInterface} from '@momentum-xyz/sdk';
+import {PluginStateApiInterface, AttributeValueInterface, ApiInterface} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, GetSpaceAttributeResponse} from 'api';
@@ -152,13 +152,13 @@ const PluginAttributesManager = types
     })
   }))
   .actions((self) => ({
-    get: flow(function* <T extends AttributeValueInterface>(spaceId: string, key: string) {
+    getItem: flow(function* <T extends AttributeValueInterface>(spaceId: string, key: string) {
       return yield self.getSpaceAttributeItem<T>(spaceId, AttributeNameEnum.STATE, key);
     }),
     set: flow(function* <T>(spaceId: string, key: string, value: T extends undefined ? never : T) {
       return yield self.setSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key, value);
     }),
-    delete: flow(function* (spaceId: string, key: string) {
+    deleteItem: flow(function* (spaceId: string, key: string) {
       return yield self.deleteSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key);
     }),
     getConfig: flow(function* <C extends GetSpaceAttributeResponse>() {
@@ -166,18 +166,20 @@ const PluginAttributesManager = types
     })
   }))
   .views((self) => ({
-    get pluginStateApi(): PluginStateAPIInterface {
+    get stateApi(): PluginStateApiInterface {
       return {
-        get: async <T>(key: string) => {
-          const result = await self.get(self.spaceId, key);
+        getItem: async <T>(key: string) => {
+          const result = await self.getItem(self.spaceId, key);
           return result as T;
         },
-        set: (key, value) => self.set(self.spaceId, key, value),
-        delete: (key) => self.delete(self.spaceId, key),
+        setItem: async <T>(key: string, value: T extends undefined ? never : T) => {
+          return await self.set(self.spaceId, key, value);
+        },
+        deleteItem: (key: string) => self.deleteItem(self.spaceId, key),
         getConfig: self.getConfig
       };
     },
-    get api(): APIInterface {
+    get api(): ApiInterface {
       return {
         getSpaceAttributeValue: async <T extends AttributeValueInterface>(
           spaceId: string,
@@ -199,23 +201,23 @@ const PluginAttributesManager = types
         ) => self.setSpaceAttributeItem<T>(spaceId, attributeName, key, value) as Promise<T>,
         deleteSpaceAttributeItem: async (spaceId: string, attributeName: string, key: string) =>
           self.deleteSpaceAttributeItem(spaceId, attributeName, key),
-        subscribeToTopic(topic) {
+        subscribeToTopic() {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         },
-        onAttributeChange(callback) {
+        onAttributeChange() {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         },
-        onAttributeRemove(callback) {
+        onAttributeRemove() {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         },
-        onAttributeValueSubValueChange(callback) {
+        onAttributeValueSubValueChange() {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         },
-        onAttributeValueSubValueRemove(callback) {
+        onAttributeValueSubValueRemove() {
           // TODO: Implement when PosBus ready
           return Promise.reject('Not yet implemented');
         }

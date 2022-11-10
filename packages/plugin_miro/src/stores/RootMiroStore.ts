@@ -1,6 +1,6 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
-import {AppConfigInterface, MiroAPIInterface} from 'core/interfaces';
+import {AppConfigInterface, MiroApiInterface} from 'core/interfaces';
 import {appVariables} from 'api/constants';
 
 import {MiroBoardStore} from './MiroBoardStore.ts';
@@ -9,7 +9,7 @@ const RootMiroStore = types
   .compose(
     ResetModel,
     types.model('RootMiroStore', {
-      api: types.frozen<MiroAPIInterface>(),
+      api: types.frozen<MiroApiInterface>(),
       miroBoardStore: types.optional(MiroBoardStore, {})
     })
   )

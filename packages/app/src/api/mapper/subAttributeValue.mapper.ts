@@ -1,11 +1,11 @@
-import {SpaceSubAttributeResponse} from 'api';
+import {SpaceAttributeItemResponse} from 'api';
 
 /**
  * Convert key-value pairs to generic type.
  * @param subAttributes key-value pairs.
  * @return {type} Generic type.
  */
-export const mapSubAttributeValue = <T>(subAttribute: SpaceSubAttributeResponse): T | null => {
+export const mapSubAttributeValue = <T>(subAttribute: SpaceAttributeItemResponse): T | null => {
   // TODO: add edge cases if it needs
   if (subAttribute) {
     const values = Object.values(subAttribute);

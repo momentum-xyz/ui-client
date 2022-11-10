@@ -27,11 +27,11 @@ export const SpaceGlobalPropsContext = createContext<
     onAttributeValueSubValueChange: () => Promise.reject(),
     onAttributeValueSubValueRemove: () => Promise.reject()
   },
-  pluginStateAPI: {
-    get: () => Promise.reject(),
-    set: () => Promise.reject(),
+  stateApi: {
+    getItem: () => Promise.reject(),
+    setItem: () => Promise.reject(),
     getConfig: () => Promise.reject(),
-    delete: () => Promise.reject()
+    deleteItem: () => Promise.reject()
   },
   renderTopBarActions() {}
 });

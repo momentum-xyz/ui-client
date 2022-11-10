@@ -23,18 +23,18 @@ export interface SetSpaceAttributeResponse extends AttributeValueInterface {}
 export interface DeleteSpaceAttributeRequest extends GetSpaceAttributeRequest {}
 
 // GET SPACE SUB ATTRIBUTE
-export interface GetSpaceSubAttributeRequest extends GetSpaceAttributeRequest {
+export interface GetSpaceAttributeItemRequest extends GetSpaceAttributeRequest {
   sub_attribute_key: string;
 }
 
 // SET SPACE SUB ATTRIBUTE
-export interface SetSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest {
+export interface SetSpaceAttributeItemRequest extends GetSpaceAttributeItemRequest {
   value: unknown;
 }
 
-export interface SpaceSubAttributeResponse {
+export interface SpaceAttributeItemResponse {
   [sub_attribute_key: string]: unknown;
 }
 
 // DELETE SPACE SUB ATTRIBUTE
-export interface DeleteSpaceSubAttributeRequest extends GetSpaceSubAttributeRequest {}
+export interface DeleteSpaceAttributeItemRequest extends GetSpaceAttributeItemRequest {}

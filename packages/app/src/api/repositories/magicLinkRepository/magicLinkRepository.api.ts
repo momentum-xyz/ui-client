@@ -4,21 +4,21 @@ import {appVariables} from 'api/constants';
 import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
 
 import {
-  GetSpaceSubAttributeRequest,
+  GetSpaceAttributeItemRequest,
   GetSpaceAttributeResponse,
-  SetSpaceSubAttributeRequest,
-  SpaceSubAttributeResponse
+  SetSpaceAttributeItemRequest,
+  SpaceAttributeItemResponse
 } from '../spaceAttributeRepository/spaceAttribute.api.types';
 import {getSpaceAttributeItem, setSpaceAttributeItem} from '../spaceAttributeRepository';
 
 import {FetchMagicLinkRequest, MagicLinkGenerateRequest} from './magicLinkRepository.api.types';
 
-export const createLink: RequestInterface<MagicLinkGenerateRequest, SpaceSubAttributeResponse> = (
+export const createLink: RequestInterface<MagicLinkGenerateRequest, SpaceAttributeItemResponse> = (
   options
 ) => {
   const {key, type, data, ...restOptions} = options;
 
-  const attributeOptions: SetSpaceSubAttributeRequest = {
+  const attributeOptions: SetSpaceAttributeItemRequest = {
     spaceId: appVariables.NODE_ID,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.MAGIC_LINKS,
@@ -35,7 +35,7 @@ export const fetchMagicLink: RequestInterface<FetchMagicLinkRequest, GetSpaceAtt
 ) => {
   const {key, ...restOptions} = options;
 
-  const attributeOptions: GetSpaceSubAttributeRequest = {
+  const attributeOptions: GetSpaceAttributeItemRequest = {
     spaceId: appVariables.NODE_ID,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.MAGIC_LINKS,
