@@ -67,6 +67,9 @@ const Playlist = types
     })
   }))
   .views((self) => ({
+    get songsExist(): boolean {
+      return self.tracks.length > 0;
+    },
     get previousSongExists(): boolean {
       return self.currentSrcIndex > 0;
     },

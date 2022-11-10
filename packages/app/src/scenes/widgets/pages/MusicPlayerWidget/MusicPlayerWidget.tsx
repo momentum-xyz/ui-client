@@ -32,8 +32,8 @@ const MusicPlayerWidget: FC = () => {
       position="rightBottom"
       headerStyle="uppercase"
       title={playlist.currentTrackName}
-      titleWidth="145px"
-      headerItem="center"
+      titleWidth="150px"
+      headerItem="left"
       headerType="h4"
       isTruncateHeader
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
