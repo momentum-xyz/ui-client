@@ -1,30 +1,31 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Loader, SearchInput, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {Heading, Loader, SearchInput, Text, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
-import {SpacesList, SelectedSpace, Header} from './components';
+import {SpaceList, SpaceDetails} from './components';
 import * as styled from './ExplorePanel.styled';
 
+const PANEL_WIDTH_PX = 200;
 const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
   const {homeStore, mainStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {exploreStore} = homeStore;
-  const {searchQuery} = exploreStore;
+  const {searchQuery, spaceDetails, history} = exploreStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    exploreStore.selectSpace(worldStore.worldId);
+    if (!exploreStore.worldId) {
+      exploreStore.init(worldStore.worldId);
+    }
   }, [exploreStore, worldStore.worldId]);
 
-  const debouncedSearch = useDebouncedCallback(() => {
-    exploreStore.search(worldStore.worldId);
-  }, SEARCH_DELAY_MS);
+  const debouncedSearch = useDebouncedCallback(exploreStore.search, SEARCH_DELAY_MS);
 
   return (
     <styled.CustomExpandableLayout
@@ -32,7 +33,7 @@ const ExplorePanel: FC = () => {
       name={t('labels.explore')}
       isExpanded={exploreStore.isExpanded}
       setExpand={exploreStore.setExpand}
-      size={{width: '200px'}}
+      size={{width: `${PANEL_WIDTH_PX}px`}}
     >
       <SearchInput
         value={searchQuery.query}
@@ -45,15 +46,40 @@ const ExplorePanel: FC = () => {
         }}
       />
 
-      {!searchQuery.isQueryValid ? (
+      {!searchQuery.isQueryValid && !!spaceDetails && !exploreStore.isLoading && (
         <styled.Body>
-          <SelectedSpace isWorld={exploreStore.selectedSpace?.id === worldStore.worldId} />
+          <SpaceDetails
+            space={spaceDetails}
+            previousSpace={history.previousSpace}
+            isWorld={spaceDetails.id === worldStore.worldId}
+            onTeleportToSpace={unityStore.teleportToSpace}
+            onSelectSpace={exploreStore.selectSpace}
+            onGoBack={exploreStore.goBackToPreviousSpace}
+          />
         </styled.Body>
-      ) : (
-        <>
-          <Header title={t('labels.searchResults')} />
-          <SpacesList />
-        </>
+      )}
+
+      {searchQuery.isQueryValid && (
+        <styled.Body>
+          <styled.Heading>
+            <Heading
+              label={t('labels.searchResults')}
+              type="h1"
+              align="left"
+              transform="uppercase"
+            />
+          </styled.Heading>
+          <SpaceList
+            spaceListByCategory={exploreStore.searchResults}
+            onTeleportToSpace={unityStore.teleportToSpace}
+            onSelectSpace={exploreStore.selectSpace}
+          />
+          {exploreStore.searchResults.length === 0 && !exploreStore.isLoading && (
+            <styled.EmptyResult>
+              <Text text={t('messages.noResultsFound')} size="xs" />
+            </styled.EmptyResult>
+          )}
+        </styled.Body>
       )}
 
       {exploreStore.isLoading && (

@@ -10,3 +10,5 @@ export * from './spaceOptionRepository';
 export * from './userAttributeRepository';
 export * from './magicLinkRepository';
 export * from './assets3DRepository';
+export * from './mediaRepository';
+export * from './emojiRepository';

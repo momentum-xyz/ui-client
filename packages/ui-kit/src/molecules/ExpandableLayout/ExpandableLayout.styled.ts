@@ -42,6 +42,7 @@ export const ToggleHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-basis: 0;
   height: 40px;
   padding: 10px;
   cursor: pointer;

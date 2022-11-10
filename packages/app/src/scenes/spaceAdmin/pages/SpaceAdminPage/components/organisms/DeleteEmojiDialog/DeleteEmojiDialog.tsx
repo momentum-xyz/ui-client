@@ -1,8 +1,9 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {useTheme} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {Dialog, Text} from '@momentum-xyz/ui-kit';
+import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
@@ -13,7 +14,9 @@ interface PropsInterface {
 }
 
 const DeleteEmojiDialog: FC<PropsInterface> = ({spaceId, emojiId}) => {
-  const {deleteDialog, isDeletePending, deleteEmoji} = useStore().spaceAdminStore.manageEmojiStore;
+  const {spaceAdminStore} = useStore();
+  const {manageEmojiStore} = spaceAdminStore;
+  const {deleteDialog, isDeletePending, deleteEmoji, fetchSpaceEmoji} = manageEmojiStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
@@ -30,7 +33,16 @@ const DeleteEmojiDialog: FC<PropsInterface> = ({spaceId, emojiId}) => {
         />
       );
       return;
+    } else {
+      toast.info(
+        <ToastContent
+          showCloseButton
+          headerIconName="alert"
+          text={t('spaceAdmin.manageEmoji.deleteDialog.successDelete')}
+        />
+      );
     }
+    fetchSpaceEmoji(spaceId);
     deleteDialog.close();
   };
 
@@ -59,4 +71,4 @@ const DeleteEmojiDialog: FC<PropsInterface> = ({spaceId, emojiId}) => {
   );
 };
 
-export default DeleteEmojiDialog;
+export default observer(DeleteEmojiDialog);

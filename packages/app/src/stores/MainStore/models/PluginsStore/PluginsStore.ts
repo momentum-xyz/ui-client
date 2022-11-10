@@ -51,37 +51,44 @@ const PluginsStore = types
         return;
       }
 
-      const plugin_uuids = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
+      const pluginIds = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
 
-      if (plugin_uuids.length === 0) {
+      if (pluginIds.length === 0) {
         self.spacePluginLoaders = cast([]);
         return;
       }
 
       const [pluginsMetadata, pluginsOptions] = yield Promise.all([
-        self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {plugin_uuids}),
-        self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {plugin_uuids})
+        self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {ids: pluginIds}),
+        self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {ids: pluginIds})
       ]);
 
-      const plugins = Object.entries(pluginsMetadata as GetPluginsMetadataResponse)
-        .map<PluginInterface>(([plugin_uuid, metadata]) => {
-          const options = (pluginsOptions as GetPluginsOptionsResponse)[plugin_uuid];
+      const pluginsDetailsList = Object.entries(
+        pluginsMetadata as GetPluginsMetadataResponse
+      ).map<PluginInterface>(([plugin_uuid, metadata]) => {
+        const options = (pluginsOptions as GetPluginsOptionsResponse)[plugin_uuid];
 
-          return {
-            id: plugin_uuid,
-            ...options,
-            ...metadata
-          };
-        })
-        .map((plugin) =>
+        return {
+          id: plugin_uuid,
+          ...options,
+          ...metadata
+        };
+      });
+
+      const plugins: PluginLoaderModelType[] = [];
+      for (const plugin of pluginsDetailsList) {
+        try {
           PluginLoader.create({
             ...plugin,
             attributesManager: PluginAttributesManager.create({
               pluginId: plugin.id,
               spaceId
             })
-          })
-        );
+          });
+        } catch (err) {
+          console.log('Error parsing plugin', plugin, ' - ignore it. Error:', err);
+        }
+      }
 
       plugins.forEach((plugin) => {
         if (!self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {

@@ -1,5 +1,6 @@
 import {TokenTypeEnum} from 'core/enums';
 import {TokenItemModelInterface} from 'core/models';
+import {TokenFormInterface} from 'core/interfaces';
 
 export interface TokenInterface {
   name: string;
@@ -11,14 +12,6 @@ export interface TokenInterface {
   worldId?: string;
   spaceId?: string;
   id: string;
-}
-
-export interface TokenFormInterface {
-  tokenType: TokenTypeEnum;
-  tokenID?: string;
-  network: string;
-  contractAddress: string;
-  tokenName: string;
 }
 
 export interface FetchTokensResponse {

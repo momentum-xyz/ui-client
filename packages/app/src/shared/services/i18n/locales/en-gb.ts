@@ -241,6 +241,7 @@ export const enGb = {
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
       signIn: 'Sign In Or Create An Account',
+      noResultsFound: 'No results found',
       worldBuilderSignIn: 'Sign In to your Momentum Account',
       linkCopied: 'The link is copied to your clipboard.',
       fullyEnjoy: 'Connect your wallet to fully enjoy Momentum!',
@@ -704,6 +705,7 @@ export const enGb = {
           changeImage: 'Change Image',
           confirmButton: 'Save',
           errorSave: 'Could not save emoji. Please try again later',
+          successSave: 'Emoji uploaded successfully',
           errorDeleteOld: 'Could not delete old emoji. Please try again later'
         },
         deleteDialog: {
@@ -711,7 +713,8 @@ export const enGb = {
           text: 'Are you sure you want to delete the emoji?',
           yes: 'Yes, delete',
           no: 'No, cancel',
-          errorDelete: 'Could not delete emoji. Please try again later'
+          errorDelete: 'Could not delete emoji. Please try again later',
+          successDelete: 'Emoji deleted successfully.'
         }
       },
       users: {
@@ -926,8 +929,7 @@ export const enGb = {
     },
     musicPlayer: {
       playerVolume: 'Music Volume',
-      unityVolume: 'Sound Effects Volume',
-      noTrackTitle: 'No Track'
+      unityVolume: 'Sound Effects Volume'
     },
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'

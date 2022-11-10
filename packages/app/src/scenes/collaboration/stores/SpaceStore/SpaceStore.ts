@@ -8,8 +8,8 @@ import {Space} from 'core/models';
 import {SpaceAncestorModel} from 'core/models/SpaceAncestor';
 import {bytesToUuid} from 'core/utils';
 import {SpaceUserModel} from 'core/models/SpaceUser';
-import {SubSpaceModel} from 'core/models/SubSpace';
-import {api, SpaceInterface, SpaceResponse, SpaceSubAttributeResponse} from 'api';
+import {SpaceInfo} from 'core/models/SpaceInfo';
+import {api, SpaceInterface, SpaceResponse, SpaceAttributeItemResponse} from 'api';
 import {GetAllowedSpaceTypesResponse} from 'api';
 import {mapper} from 'api/mapper';
 
@@ -53,7 +53,7 @@ const SpaceStore = types
 
       // TODO: Move to SpaceAdminStore Model
       adminAncestors: types.optional(types.array(SpaceAncestorModel), []),
-      subSpaces: types.optional(types.array(SubSpaceModel), []),
+      subSpaces: types.optional(types.array(SpaceInfo), []),
       isStakeShown: false,
       allowedSpaceTypes: types.optional(types.array(types.string), []),
 
@@ -79,7 +79,7 @@ const SpaceStore = types
         }
       }),
       loadSpace: flow(function* (spaceId: string) {
-        const response: SpaceSubAttributeResponse = yield self.spaceRequest.send(
+        const response: SpaceAttributeItemResponse = yield self.spaceRequest.send(
           api.spaceRepository.fetchSpace,
           {spaceId}
         );
