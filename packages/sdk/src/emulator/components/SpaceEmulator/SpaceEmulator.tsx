@@ -1,6 +1,7 @@
 import {FC, useState} from 'react';
-import {useRouteMatch, Switch, Route, useHistory, useParams, Redirect} from 'react-router-dom';
+import {Switch, Route, useHistory, useParams, Redirect, generatePath} from 'react-router-dom';
 
+import {ROUTES} from '../../constants';
 import {PluginInterface} from '../../../interfaces';
 import {SpaceTabEmulator} from '../SpaceTabEmulator';
 
@@ -12,9 +13,8 @@ interface PropsInterface {
 }
 
 export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
-  console.log('RENDER SpaceEmulator', {plugin});
-  const {path, url} = useRouteMatch();
   const {spaceId} = useParams<{spaceId: string}>();
+  console.log('RENDER SpaceEmulator', {plugin, spaceId});
   const history = useHistory();
 
   const [topBar = <span />, setTopBar] = useState<JSX.Element | null>(null);
@@ -24,13 +24,17 @@ export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
       <styled.SpaceNav>
         <styled.SpaceTab
           onClick={() => {
-            history.push(`${url}/dashboard`);
+            history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
             setTopBar(null);
           }}
         >
           Dashboard
         </styled.SpaceTab>
-        <styled.SpaceTab onClick={() => history.push(`${url}/plugin`)}>Plugin</styled.SpaceTab>
+        <styled.SpaceTab
+          onClick={() => history.push(generatePath(ROUTES.collaboration.plugin, {spaceId}))}
+        >
+          Plugin
+        </styled.SpaceTab>
       </styled.SpaceNav>
       <styled.SpaceTabContainer>
         <styled.SpaceTopBar>
@@ -40,13 +44,13 @@ export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
         </styled.SpaceTopBar>
         <styled.SpaceContent>
           <Switch>
-            <Route path={`${path}/dashboard`}>
+            <Route exact path={generatePath(ROUTES.collaboration.dashboard, {spaceId})}>
               <div>Dashboard Content</div>
             </Route>
-            <Route path={`${path}/plugin`}>
+            <Route exact path={generatePath(ROUTES.collaboration.plugin, {spaceId})}>
               <SpaceTabEmulator plugin={plugin} setTopBar={setTopBar} spaceId={spaceId} />
             </Route>
-            <Redirect to={`${path}/dashboard`} />
+            <Redirect to={generatePath(ROUTES.collaboration.dashboard, {spaceId})} />
           </Switch>
         </styled.SpaceContent>
       </styled.SpaceTabContainer>
