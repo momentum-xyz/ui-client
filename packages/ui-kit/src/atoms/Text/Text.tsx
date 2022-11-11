@@ -8,7 +8,7 @@ import {splitIntoFirstNSentencesAndRest} from '../../utils';
 import * as styled from './Text.styled';
 
 interface TextPropsInterface extends PropsWithThemeInterface {
-  text?: string;
+  text?: string | null;
   size: TextSizeType;
   transform?: TextTransformType;
   isMultiline?: boolean;

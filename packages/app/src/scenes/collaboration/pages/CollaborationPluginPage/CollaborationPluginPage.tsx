@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginTopBarActionInterface} from '@momentum-xyz/sdk';
+import {PluginTopBarActionInterface, SpaceGlobalPropsContextProvider} from '@momentum-xyz/sdk';
 import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
@@ -82,13 +82,18 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
         {!pluginLoader.isError ? (
           plugin?.SpaceExtension ? (
             <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
-              <plugin.SpaceExtension
-                theme={theme}
-                isSpaceAdmin={true}
-                spaceId={spaceStore.id}
-                api={attributesManager.api}
-                renderTopBarActions={renderTopBarActions}
-              />
+              <SpaceGlobalPropsContextProvider
+                props={{
+                  theme,
+                  isSpaceAdmin: spaceStore.isAdmin,
+                  spaceId: spaceStore.id,
+                  stateApi: attributesManager.stateApi,
+                  api: attributesManager.api,
+                  renderTopBarActions
+                }}
+              >
+                <plugin.SpaceExtension />
+              </SpaceGlobalPropsContextProvider>
             </ErrorBoundary>
           ) : (
             <Text text={t('messages.loadingPlugin')} size="l" />

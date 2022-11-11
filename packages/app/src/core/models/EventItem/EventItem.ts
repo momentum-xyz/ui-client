@@ -9,10 +9,13 @@ import {
   formattedStringFromDate,
   isOtherYearThanToday
 } from '@momentum-xyz/core';
+import {generatePath} from 'react-router-dom';
+import {v4 as uuidv4} from 'uuid';
 
-import {api, MagicLinkResponse, AttendeesResponseInterface} from 'api';
+import {api, AttendeesResponseInterface} from 'api';
 import {AttendeeModel} from 'core/models/AttendeeModel';
 import {appVariables} from 'api/constants';
+import {ROUTES} from 'core/constants';
 import {MagicTypeEnum} from 'core/enums';
 
 import {EventItemData, EventAttendeesList} from './models';
@@ -20,13 +23,13 @@ import {EventItemData, EventAttendeesList} from './models';
 const EventItem = types
   .model('EventItem', {
     data: types.maybe(EventItemData),
-    magicLink: types.maybe(types.string),
     magicRequest: types.optional(RequestModel, {}),
     fetchAttendeesRequest: types.optional(RequestModel, {}),
     attendees: types.optional(types.array(AttendeeModel), []),
     attendeesDetails: types.optional(EventAttendeesList, {}),
     numberOfAllAttendees: types.optional(types.number, 0),
-    attendRequest: types.optional(RequestModel, {})
+    attendRequest: types.optional(RequestModel, {}),
+    magicLinkId: ''
   })
   .actions((self) => ({
     fetchAttendees: flow(function* (limit?: boolean) {
@@ -44,26 +47,21 @@ const EventItem = types
         self.numberOfAllAttendees = response.count;
       }
     }),
-    fetchMagicLink: flow(function* () {
-      const response: MagicLinkResponse = yield self.magicRequest.send(
-        api.magicRepository.generateLink,
-        {
-          type: MagicTypeEnum.EVENT,
-          data: {
-            id: self.data?.spaceId,
-            eventId: self.data?.id
-          }
+    createMagicLink: flow(function* () {
+      self.magicLinkId = uuidv4();
+      yield self.magicRequest.send(api.magicLinkRepository.createLink, {
+        key: self.magicLinkId,
+        type: MagicTypeEnum.EVENT,
+        data: {
+          spaceId: self.data?.spaceId,
+          eventId: self.data?.id
         }
-      );
-
-      if (response) {
-        self.magicLink = `${window.location.origin}/magic/${response.id}`;
-      }
+      });
     })
   }))
   .actions((self) => ({
     init() {
-      self.fetchMagicLink();
+      self.createMagicLink();
       self.fetchAttendees(true);
     },
     isLive(): boolean {
@@ -127,7 +125,7 @@ const EventItem = types
         endDatetime: formattedStringFromDate(self.data.end),
         startDatetime: formattedStringFromDate(self.data.start),
         title: self.data?.title,
-        location: self.magicLink
+        location: this.magicLink
       };
     },
     get imageSrc(): string {
@@ -135,6 +133,9 @@ const EventItem = types
     },
     isAttending(userId: string) {
       return self.attendees.some((attendee) => attendee.id === userId);
+    },
+    get magicLink(): string {
+      return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.magicLinkId})}`;
     }
   }));
 

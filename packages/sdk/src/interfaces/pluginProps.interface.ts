@@ -1,19 +1,23 @@
 import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
-import {APIInterface} from './api.interface';
+import {PluginStateApiInterface} from './pluginStateApi.interface';
+import {PluginConfigInterface} from './pluginConfig.interface';
+import {ApiInterface} from './api.interface';
 
-export interface CorePluginPropsInterface {
+export interface CorePluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface> {
   theme: ThemeInterface;
   spaceId?: string;
   isSpaceAdmin: boolean;
 
-  api: APIInterface;
+  stateApi: PluginStateApiInterface<C>;
+  api: ApiInterface;
 }
 
 export interface PluginTopBarActionInterface {
   main: () => JSX.Element | null;
 }
 
-export interface SpacePluginPropsInterface extends CorePluginPropsInterface {
-  renderTopBarActions?: (actions: PluginTopBarActionInterface) => void;
+export interface SpacePluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface>
+  extends CorePluginPropsInterface<C> {
+  renderTopBarActions: (actions: PluginTopBarActionInterface) => void;
 }

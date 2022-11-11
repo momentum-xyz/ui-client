@@ -3,19 +3,22 @@ import * as configRepository from './repositories/configRepository';
 import * as webRepository from './repositories/web3Repository';
 import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
+import * as worldRepository from './repositories/worldRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
 import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
 import * as spaceOptionRepository from './repositories/spaceOptionRepository';
 import * as spaceRepository from './repositories/spaceRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
+import * as magicLinkRepository from './repositories/magicLinkRepository';
+import * as mediaRepository from './repositories/mediaRepository';
+import * as emojiRepository from './repositories/emojiRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
 import * as eventsRepository from './repositories_OLD/eventsRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
 import * as flyWithMeRepository from './repositories_OLD/flyWithMeRepository';
 import * as stageModeRepository from './repositories_OLD/stageModeRepository';
-import * as magicRepository from './repositories_OLD/magicRepository';
 import * as tokenRuleRepository from './repositories_OLD/tokenRuleRepository';
 import * as validatorsRepository from './repositories_OLD/validatorsRepository';
 import * as tokenRepository from './repositories_OLD/tokenRepository';
@@ -36,7 +39,6 @@ import * as spaceIntegrationsRepository from './repositories_OLD/spaceIntegratio
 import * as vibeRepository from './repositories_OLD/vibeRepository';
 import * as textChatRepository from './repositories_OLD/textChatRepository';
 import * as streamChatRepository from './repositories_OLD/streamChatRepository';
-import * as emojiRepository from './repositories_OLD/emojiRepository';
 import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 import * as worldBuilderRepository from './repositories_OLD/worldBuilderRepository';
 
@@ -54,6 +56,7 @@ export const api = {
   versionRepository,
   configRepository,
   webRepository,
+  worldRepository,
   userRepository,
   userProfileRepository,
   guestRepository,
@@ -64,7 +67,7 @@ export const api = {
   spaceRepositoryOld,
   flyWithMeRepository,
   stageModeRepository,
-  magicRepository,
+  magicLinkRepository,
   tokenRuleRepository,
   tokenRepository,
   favoriteRepository,
@@ -85,13 +88,14 @@ export const api = {
   vibeRepository,
   textChatRepository,
   streamChatRepository,
-  emojiRepository,
   spaceEmojiRepository,
   worldBuilderRepository,
   pluginsRepository,
   spaceAttributeRepository,
   spaceOptionRepository,
-  userAttributeRepository
+  userAttributeRepository,
+  mediaRepository,
+  emojiRepository
 };
 
 /**
@@ -106,11 +110,15 @@ export * from './repositories/web3Repository/web3Repository.api.types';
 export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
+export * from './repositories/worldRepository/worldRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
 export * from './repositories/spaceOptionRepository/spaceOptionRepository.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
+export * from './repositories/magicLinkRepository/magicLinkRepository.api.types';
+export * from './repositories/mediaRepository/mediaRepository.api.types';
+export * from './repositories/emojiRepository/emojiRepository.api.types';
 
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
 export * from './repositories_OLD/flyWithMeRepository/flyWithMeRepository.api.types';
@@ -119,7 +127,6 @@ export * from './repositories_OLD/profileRepository/profileRepository.api.types'
 export * from './repositories_OLD/eventsRepository/eventsRepository.api.types';
 export * from './repositories_OLD/validatorsRepository/validatorsRepository.api.types';
 export * from './repositories_OLD/tokenRuleRepository/tokenRuleRepository.api.types';
-export * from './repositories_OLD/magicRepository/magicRepository.api.types';
 export * from './repositories_OLD/favoriteRepository/favoriteRepository.api.types';
 export * from './repositories_OLD/tokenRepository/tokenRepository.api.types';
 export * from './repositories_OLD/statsRepository/statsRepository.api.types';
@@ -132,7 +139,6 @@ export * from './repositories_OLD/spaceTypeRepository/spaceTypeRepository.api.ty
 export * from './repositories_OLD/vibeRepository/vibeRepository.api.types';
 export * from './repositories_OLD/textChatRepository/textChatRepository.api.types';
 export * from './repositories_OLD/streamChatRepository/streamChatRepository.api.types';
-export * from './repositories_OLD/emojiRepository/emojiRepository.api.types';
 export * from './repositories_OLD/spaceEmojiRepository/spaceEmojiRepository.api.types';
 export * from './repositories_OLD/stageModeRepository/stageModeRepository.api.types';
 export * from './repositories_OLD/worldBuilderRepository/worldBuilderRepository.api.types';

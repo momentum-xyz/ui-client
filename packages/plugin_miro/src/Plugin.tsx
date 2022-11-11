@@ -1,9 +1,9 @@
-import {PluginInterface} from '@momentum-xyz/sdk';
+import {MiroPluginInterface} from 'core/interfaces';
 
-import SpaceApp from './SpaceApp';
+import MiroApp from './MiroApp';
 
-const Plugin: PluginInterface = {
-  SpaceExtension: SpaceApp
+const Plugin: MiroPluginInterface = {
+  SpaceExtension: MiroApp
 };
 
 export default Plugin;

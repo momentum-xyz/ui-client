@@ -1,3 +1,2 @@
-export * from './Header';
-export * from './SpacesList';
-export * from './SelectedSpace';
+export * from './SpaceDetails';
+export * from './SpaceList';

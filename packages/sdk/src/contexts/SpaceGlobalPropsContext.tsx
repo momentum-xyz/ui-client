@@ -2,20 +2,46 @@ import React, {FC, useContext} from 'react';
 import {createContext} from 'react';
 import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
-import {SpacePluginPropsInterface} from '../interfaces';
+import {PluginConfigInterface, SpacePluginPropsInterface} from '../interfaces';
 
-export const SpaceGlobalPropsContext = createContext<SpacePluginPropsInterface>({
+import {ThemeContextProvider} from './ThemeContext';
+
+export const SpaceGlobalPropsContext = createContext<
+  SpacePluginPropsInterface<PluginConfigInterface>
+>({
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,
   api: {
-    get: () => Promise.reject(),
-    set: () => Promise.reject()
-  }
+    getSpaceAttributeValue: () => Promise.reject(),
+    setSpaceAttributeValue: () => Promise.reject(),
+    deleteSpaceAttribute: () => Promise.reject(),
+
+    getSpaceAttributeItem: () => Promise.reject(),
+    setSpaceAttributeItem: () => Promise.reject(),
+    deleteSpaceAttributeItem: () => Promise.reject(),
+
+    subscribeToTopic: () => Promise.reject(),
+    onAttributeChange: () => Promise.reject(),
+    onAttributeRemove: () => Promise.reject(),
+
+    onAttributeItemChange: () => Promise.reject(),
+    onAttributeItemRemove: () => Promise.reject()
+  },
+  stateApi: {
+    getItem: () => Promise.reject(),
+    setItem: () => Promise.reject(),
+    getConfig: () => Promise.reject(),
+    deleteItem: () => Promise.reject()
+  },
+  renderTopBarActions() {}
 });
 
-export const SpaceGlobalPropsContextProvider: FC<{props: SpacePluginPropsInterface}> = ({
-  props,
-  children
-}) => <SpaceGlobalPropsContext.Provider value={props}>{children}</SpaceGlobalPropsContext.Provider>;
+export const SpaceGlobalPropsContextProvider: FC<{
+  props: SpacePluginPropsInterface<PluginConfigInterface>;
+}> = ({props, children}) => (
+  <SpaceGlobalPropsContext.Provider value={props}>
+    <ThemeContextProvider theme={props.theme}>{children}</ThemeContextProvider>
+  </SpaceGlobalPropsContext.Provider>
+);
 
 export const useSpaceGlobalProps = () => useContext(SpaceGlobalPropsContext);

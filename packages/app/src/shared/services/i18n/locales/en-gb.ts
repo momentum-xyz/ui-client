@@ -226,7 +226,8 @@ export const enGb = {
       worldURL: 'World URL',
       subdomain: 'Subdomain',
       pilot: 'Pilot',
-      flyWithMe: 'Fly with me'
+      flyWithMe: 'Fly with me',
+      search: 'Search'
     },
     messages: {
       loading: 'Loading Momentum',
@@ -240,6 +241,7 @@ export const enGb = {
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
       signIn: 'Sign In Or Create An Account',
+      noResultsFound: 'No results found',
       worldBuilderSignIn: 'Sign In to your Momentum Account',
       linkCopied: 'The link is copied to your clipboard.',
       fullyEnjoy: 'Connect your wallet to fully enjoy Momentum!',
@@ -379,7 +381,9 @@ export const enGb = {
       worldChat: 'World Chat',
       templateNameWrapper: '{{name}} Template',
       stageIsFull: 'Stage is full',
-      success: 'Success'
+      success: 'Success',
+      plugins: 'Plugins',
+      addPlugin: 'Add Plugin'
     },
     textMessage: {
       you: 'you',
@@ -403,7 +407,8 @@ export const enGb = {
       searchForSpaces: 'Search for spaces...',
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
-      worldname: 'worldname'
+      worldname: 'worldname',
+      selectPlugin: 'Select Plugin'
     },
     fields: {
       nickname: 'Nickname',
@@ -422,6 +427,7 @@ export const enGb = {
     },
     actions: {
       ok: 'OK',
+      add: 'Add',
       approve: 'Approve',
       joinStage: 'Join Stage',
       decline: 'Decline',
@@ -699,6 +705,7 @@ export const enGb = {
           changeImage: 'Change Image',
           confirmButton: 'Save',
           errorSave: 'Could not save emoji. Please try again later',
+          successSave: 'Emoji uploaded successfully',
           errorDeleteOld: 'Could not delete old emoji. Please try again later'
         },
         deleteDialog: {
@@ -706,7 +713,8 @@ export const enGb = {
           text: 'Are you sure you want to delete the emoji?',
           yes: 'Yes, delete',
           no: 'No, cancel',
-          errorDelete: 'Could not delete emoji. Please try again later'
+          errorDelete: 'Could not delete emoji. Please try again later',
+          successDelete: 'Emoji deleted successfully.'
         }
       },
       users: {
@@ -921,8 +929,7 @@ export const enGb = {
     },
     musicPlayer: {
       playerVolume: 'Music Volume',
-      unityVolume: 'Sound Effects Volume',
-      noTrackTitle: 'No Track'
+      unityVolume: 'Sound Effects Volume'
     },
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'

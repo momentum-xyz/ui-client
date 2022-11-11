@@ -1,50 +1,34 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
-import {useSpaceGlobalProps} from '@momentum-xyz/sdk';
-import {appVariables} from 'api/constants';
-import {MiroBoardInterface} from 'core/interfaces';
+import {useStore} from 'shared/hooks/useStore';
+import {useSpace} from '@momentum-xyz/sdk';
 
 import {MiroBoard, MiroChoice, MiroActions} from './components';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
-  const theme = useTheme();
-
-  const {spaceId, isSpaceAdmin, api, renderTopBarActions} = useSpaceGlobalProps();
-
-  const [board, setBoard] = useState<MiroBoardInterface | null>(null);
-
-  const pickBoard = useCallback(() => {
-    miroBoardsPicker.open({
-      action: 'access-link',
-      clientId: appVariables.APP_ID,
-      success: async (data: MiroBoardInterface) => {
-        await api.set('board', data);
-      }
-    });
-  }, [api]);
+  const {api, miroBoardStore} = useStore();
+  const {board} = miroBoardStore;
+  const {isAdmin, spaceId, renderTopBarActions} = useSpace();
 
   useEffect(() => {
-    api.get<MiroBoardInterface | null>('board').then(setBoard);
-  }, [api]);
+    miroBoardStore.init(api);
+    miroBoardStore.fetchBoard();
+  }, [api, miroBoardStore]);
 
   useEffect(() => {
-    renderTopBarActions?.({
+    renderTopBarActions({
       main: () => (
         <MiroActions
-          theme={theme}
           spaceId={spaceId}
-          isAdmin={isSpaceAdmin}
+          isAdmin={isAdmin}
           board={board}
-          pick={pickBoard}
-          disable={() => {
-            api.set<MiroBoardInterface | null>('board', null).then(() => () => setBoard(null));
-          }}
+          pick={miroBoardStore.pickBoard}
+          disable={miroBoardStore.disableBoard}
         />
       )
     });
-  }, [api, board, isSpaceAdmin, pickBoard, renderTopBarActions, spaceId, theme]);
+  }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
 
   if (!spaceId) {
     return null;
@@ -53,7 +37,7 @@ const MiroBoardPage: FC = () => {
   return (
     <styled.Container>
       {!board?.accessLink ? (
-        <MiroChoice isAdmin={isSpaceAdmin} pickBoard={pickBoard} />
+        <MiroChoice isAdmin={isAdmin} pickBoard={miroBoardStore.pickBoard} />
       ) : (
         <MiroBoard miroUrl={board.accessLink} />
       )}

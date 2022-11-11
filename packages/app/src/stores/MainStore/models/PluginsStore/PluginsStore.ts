@@ -6,9 +6,10 @@ import {
   DynamicScriptLoaderType,
   PluginAttributesManager,
   PluginLoader,
-  PluginLoaderModelType
+  PluginLoaderModelType,
+  SearchQuery
 } from 'core/models';
-import {DynamicScriptsStore} from 'stores/MainStore/models';
+import {DynamicScriptsStore, PluginQueryResult} from 'stores/MainStore/models';
 import {
   api,
   GetPluginsListResponse,
@@ -23,7 +24,8 @@ const PluginsStore = types
     ResetModel,
     types.model('PluginsStore', {
       spacePluginLoaders: types.array(PluginLoader),
-      allPlugins: types.optional(types.frozen<GetPluginsListResponse>(), {}),
+      searchedPlugins: types.array(PluginQueryResult),
+      searchQuery: types.optional(SearchQuery, {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
 
@@ -32,7 +34,7 @@ const PluginsStore = types
       pluginOptionsRequest: types.optional(RequestModel, {}),
       addPluginRequest: types.optional(RequestModel, {}),
       removePluginRequest: types.optional(RequestModel, {}),
-      getAllPluginsRequest: types.optional(RequestModel, {})
+      searchPluginsRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -49,32 +51,46 @@ const PluginsStore = types
         return;
       }
 
-      const plugin_uuids = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
+      const pluginIds = spaceOptions[SpaceSubOptionKeyEnum.Asset2DPlugins] as string[];
+
+      if (pluginIds.length === 0) {
+        self.spacePluginLoaders = cast([]);
+        return;
+      }
 
       const [pluginsMetadata, pluginsOptions] = yield Promise.all([
-        self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {plugin_uuids}),
-        self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {plugin_uuids})
+        self.pluginMetadataRequest.send(api.pluginsRepository.getPluginsMetadata, {ids: pluginIds}),
+        self.pluginOptionsRequest.send(api.pluginsRepository.getPluginsOptions, {ids: pluginIds})
       ]);
 
-      const plugins = Object.entries(pluginsMetadata as GetPluginsMetadataResponse)
-        .map<PluginInterface>(([plugin_uuid, metadata]) => {
-          const options = (pluginsOptions as GetPluginsOptionsResponse)[plugin_uuid];
+      const pluginsDetailsList = Object.entries(
+        pluginsMetadata as GetPluginsMetadataResponse
+      ).map<PluginInterface>(([plugin_uuid, metadata]) => {
+        const options = (pluginsOptions as GetPluginsOptionsResponse)[plugin_uuid];
 
-          return {
-            id: plugin_uuid,
-            ...options,
-            ...metadata
-          };
-        })
-        .map((plugin) =>
-          PluginLoader.create({
+        return {
+          id: plugin_uuid,
+          ...options,
+          ...metadata
+        };
+      });
+
+      const plugins: PluginLoaderModelType[] = [];
+      for (const plugin of pluginsDetailsList) {
+        try {
+          const pluginLoader = PluginLoader.create({
             ...plugin,
             attributesManager: PluginAttributesManager.create({
               pluginId: plugin.id,
               spaceId
             })
-          })
-        );
+          });
+
+          plugins.push(pluginLoader);
+        } catch (err) {
+          console.log('Error parsing plugin', plugin, ' - ignore it. Error:', err);
+        }
+      }
 
       plugins.forEach((plugin) => {
         if (!self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {
@@ -93,15 +109,29 @@ const PluginsStore = types
         pluginLoader.loadPlugin();
       }
     },
-    fetchAllPlugins: flow(function* () {
-      self.allPlugins = yield self.getAllPluginsRequest.send(
-        api.pluginsRepository.getPluginsList,
-        {}
+    searchPlugins: flow(function* () {
+      const {query} = self.searchQuery;
+
+      if (query.length === 0) {
+        self.searchedPlugins = cast([]);
+        return;
+      }
+
+      // TODO: Uncomment type when ready on BE
+      const response: GetPluginsListResponse | undefined = yield self.searchPluginsRequest.send(
+        api.pluginsRepository.searchPlugins,
+        {name: query, description: query /*, type: PluginTypeEnum.PLUGIN_2D */}
       );
-    }),
-    resetAllPlugins() {
-      self.allPlugins = {};
-    }
+
+      if (response) {
+        const plugins = Object.entries(response).map(([plugin_uuid, plugin_name]) => ({
+          plugin_uuid,
+          plugin_name
+        }));
+
+        self.searchedPlugins = cast(plugins);
+      }
+    })
   }))
   .actions((self) => ({
     addPluginToSpace: flow(function* (spaceId: string, pluginId: string) {

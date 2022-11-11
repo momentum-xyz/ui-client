@@ -2,7 +2,8 @@ import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {TileInterface} from 'core/models';
-import {api, TextTileFormInterface, VideoTileFormInterface} from 'api';
+import {TextTileFormInterface, VideoTileFormInterface} from 'core/interfaces';
+import {api} from 'api';
 import {TileTypeEnum} from 'core/enums';
 
 const TileFormStore = types.compose(

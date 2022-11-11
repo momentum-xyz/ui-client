@@ -1,9 +1,7 @@
-import {AppConfigExtendedInterface} from 'api/interfaces';
+import {AppConfigExtendedInterface} from 'core/interfaces';
 
-// @ts-ignore window['env']
-export const appVariables: AppConfigExtendedInterface = window['env'] ?? {
-  BACKEND_ENDPOINT_URL: '',
-  APP_ID: ''
+export const appVariables: AppConfigExtendedInterface = {
+  MIRO_APP_ID: ''
 };
 
 const {REACT_APP_OVERRIDE_CONFIG_VARIABLES = '{}'} = process.env;
