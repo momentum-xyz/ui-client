@@ -77,7 +77,10 @@ const ManagePluginsPanel: FC = () => {
             pluginName={pluginToRemove.name}
             isPluginRemovalPending={pluginsStore.isRemovePluginPeding}
             onConfirm={handleRemovePlugin}
-            onCancel={deletePluginConfirmationDialog.close}
+            onCancel={() => {
+              deletePluginConfirmationDialog.close();
+              setPluginIdToRemove(undefined);
+            }}
           />
         )}
         <styled.List className="noScrollIndicator">
