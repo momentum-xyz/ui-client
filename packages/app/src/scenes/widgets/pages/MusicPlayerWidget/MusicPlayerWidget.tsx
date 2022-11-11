@@ -16,24 +16,22 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
-  const {
-    mainStore: {worldStore},
-    widgetStore
-  } = useStore();
+  const {mainStore, widgetStore} = useStore();
+  const {worldStore} = mainStore;
   const {musicPlayerStore} = widgetStore;
   const {musicPlayerWidget, playlist} = musicPlayerStore;
 
   useEffect(() => {
     playlist.fetchPlaylist(worldStore.worldId);
-  }, [musicPlayerWidget.isOpen]);
+  }, [musicPlayerWidget.isOpen, playlist, worldStore.worldId]);
 
   return (
     <Dialog
       position="rightBottom"
       headerStyle="uppercase"
-      title={playlist.currentTrackName}
-      titleWidth="145px"
-      headerItem="center"
+      title={playlist.currentTrackName || ' '}
+      titleWidth="150px"
+      headerItem="left"
       headerType="h4"
       isTruncateHeader
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
@@ -42,9 +40,13 @@ const MusicPlayerWidget: FC = () => {
       showBackground={false}
     >
       <styled.Div data-testid="MusicPlayerWidget-test">
-        <PlayerController />
-        <SeekBarController />
-        <MusicVolumeController />
+        {playlist.songsExist && (
+          <>
+            <PlayerController />
+            <SeekBarController />
+            <MusicVolumeController />
+          </>
+        )}
         <UnityVolumeController />
       </styled.Div>
     </Dialog>

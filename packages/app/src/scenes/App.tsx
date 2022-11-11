@@ -19,7 +19,13 @@ import {UnityPage} from 'scenes/unity';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {GlobalStyles} from './App.styled';
-import {CORE_ROUTES, PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, PUBLIC_ROUTES} from './App.routes';
+import {
+  CORE_ROUTES,
+  PRIVATE_ROUTES,
+  PRIVATE_ROUTES_WITH_UNITY,
+  PUBLIC_ROUTES,
+  SYSTEM_ROUTES
+} from './App.routes';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -62,6 +68,12 @@ const App: FC = () => {
         throw error;
       }
     });
+
+    // TODO: Retry request
+    if (ROUTES.system.maintenance === pathname) {
+      return;
+    }
+
     initApplication();
   }, [initApplication, history, t]);
 
@@ -72,6 +84,7 @@ const App: FC = () => {
   }, [isConfigReady, mainStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
+
   useEffect(() => {
     if (isBrowserUnsupported) {
       history.push({pathname: ROUTES.system.wrongBrowser});
@@ -86,6 +99,15 @@ const App: FC = () => {
           showRefreshButton
           theme={themeStore.theme}
         />
+      </ThemeProvider>
+    );
+  }
+
+  // SYSTEM ROUTES
+  if (isTargetRoute(pathname, SYSTEM_ROUTES)) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <Suspense fallback={false}>{createSwitchByConfig(SYSTEM_ROUTES)}</Suspense>
       </ThemeProvider>
     );
   }

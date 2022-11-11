@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Dialog, FileType, FileUploader, Input, Text, ProgressBar} from '@momentum-xyz/ui-kit';
@@ -20,11 +20,8 @@ const MAX_ASSET_SIZE = 50_100_000;
 const WorldBuilderUploadAssetPage: FC = () => {
   const {worldBuilderStore, mainStore} = useStore();
   const {worldBuilderAssetsStore} = worldBuilderStore;
-  const {uploadAsset, isUploadPending, uploadProgress, uploadAssetDialog} = worldBuilderAssetsStore;
-
-  useEffect(() => {
-    return () => worldBuilderAssetsStore.resetModel();
-  }, [worldBuilderAssetsStore]);
+  const {uploadAsset, resetUploadProgress, isUploadPending, uploadProgress, uploadAssetDialog} =
+    worldBuilderAssetsStore;
 
   const {unityStore} = mainStore;
   const handleSearchFocus = (isFocused: boolean) => {
@@ -74,6 +71,7 @@ const WorldBuilderUploadAssetPage: FC = () => {
       TOAST_COMMON_OPTIONS
     );
 
+    resetUploadProgress();
     uploadAssetDialog.close();
   };
 
