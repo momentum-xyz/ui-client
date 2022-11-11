@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useCallback, useMemo, useState} from 'react';
 import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {SectionPanel} from '@momentum-xyz/ui-kit';
@@ -21,6 +21,12 @@ const ManagePluginsPanel: FC = () => {
   const {pluginsStore} = mainStore;
 
   const [pluginIdToRemove, setPluginIdToRemove] = useState<string>();
+
+  const pluginToRemove = useMemo(() => {
+    const plugin = pluginsStore.spacePlugins.find((plugin) => plugin.id === pluginIdToRemove);
+
+    return plugin;
+  }, [pluginsStore.spacePlugins, pluginIdToRemove]);
 
   const handleRemovePlugin = useCallback(
     async (spaceId: string, pluginId: string, pluginName: string) => {
@@ -64,29 +70,28 @@ const ManagePluginsPanel: FC = () => {
         {addPluginDialog.isOpen && (
           <AddPluginDialog onClose={addPluginDialog.close} spaceId={space.id} />
         )}
+        {deletePluginConfirmationDialog.isOpen && pluginToRemove && (
+          <RemovePluginConfirmationDialog
+            spaceId={space.id}
+            pluginId={pluginToRemove.id}
+            pluginName={pluginToRemove.name}
+            isPluginRemovalPending={pluginsStore.isRemovePluginPeding}
+            onConfirm={handleRemovePlugin}
+            onCancel={deletePluginConfirmationDialog.close}
+          />
+        )}
         <styled.List className="noScrollIndicator">
           {pluginsStore.spacePlugins.map((plugin) => (
-            <div key={plugin.subPath}>
-              <AdminListItem
-                name={plugin.name}
-                userId={plugin.id}
-                type={`/${plugin.subPath}`}
-                onRemove={(id) => {
-                  setPluginIdToRemove(id);
-                  deletePluginConfirmationDialog.open();
-                }}
-              />
-              {deletePluginConfirmationDialog.isOpen && plugin.id === pluginIdToRemove && (
-                <RemovePluginConfirmationDialog
-                  spaceId={space.id}
-                  pluginId={plugin.id}
-                  pluginName={plugin.name}
-                  isPluginRemovalPending={pluginsStore.isRemovePluginPeding}
-                  onConfirm={handleRemovePlugin}
-                  onCancel={deletePluginConfirmationDialog.close}
-                />
-              )}
-            </div>
+            <AdminListItem
+              key={plugin.subPath}
+              name={plugin.name}
+              userId={plugin.id}
+              type={`/${plugin.subPath}`}
+              onRemove={(id) => {
+                setPluginIdToRemove(id);
+                deletePluginConfirmationDialog.open();
+              }}
+            />
           ))}
         </styled.List>
       </styled.Body>
