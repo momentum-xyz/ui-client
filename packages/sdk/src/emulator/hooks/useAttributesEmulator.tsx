@@ -75,10 +75,10 @@ export const useAttributesEmulator = () => {
     [attributeItemRemoved, subscribed]
   );
 
-  const subscribeToTopic = (topic: string) => {
+  const subscribeToTopic = useCallback((topic: string) => {
     setSubscribed(topic === 'plugin');
     return Promise.resolve();
-  };
+  }, []);
 
   return {
     spaceAttributes,
