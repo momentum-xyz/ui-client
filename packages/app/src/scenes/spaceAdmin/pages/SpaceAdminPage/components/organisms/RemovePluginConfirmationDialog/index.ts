@@ -1,1 +1,1 @@
-export {default as RemovePlugiDeletePluginConfirmationDialognDialog} from './RemovePluginConfirmationDialog';
+export {default as RemovePluginConfirmationDialog} from './RemovePluginConfirmationDialog';

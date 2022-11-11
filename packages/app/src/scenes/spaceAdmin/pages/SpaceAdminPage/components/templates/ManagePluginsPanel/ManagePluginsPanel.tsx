@@ -7,11 +7,10 @@ import {toast} from 'react-toastify';
 import {useStore} from 'shared/hooks';
 import {
   AddPluginDialog,
-  AdminListItem
-} from 'scenes/spaceAdmin/pages/SpaceAdminPage/components/organisms';
+  AdminListItem,
+  RemovePluginConfirmationDialog
+} from 'scenes/spaceAdmin/pages/SpaceAdminPage/components';
 import {ToastContent} from 'ui-kit';
-
-import RemovePluginConfirmationDialog from '../../organisms/RemovePluginConfirmationDialog/RemovePluginConfirmationDialog';
 
 import * as styled from './ManagePluginsPanel.styled';
 
