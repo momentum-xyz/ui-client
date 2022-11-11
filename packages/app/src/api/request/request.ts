@@ -1,5 +1,4 @@
 import axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios';
-import axiosRetry from 'axios-retry';
 
 const TOKEN_TYPE = 'Bearer';
 const TOKEN_KEY = 'token.momentum';
@@ -35,7 +34,7 @@ const responseHandler = (response: AxiosResponse) => {
 };
 
 const errorHandler = (error: AxiosError) => {
-  throw error;
+  return Promise.reject(error) as unknown;
 };
 
 /**
@@ -54,37 +53,47 @@ const getAccessToken = (): string => {
  */
 request.interceptors.request.use(requestHandler, errorHandler);
 
-export const setApiResponseHandlers = ({onResponse = responseHandler, onError = errorHandler}) => {
-  request.interceptors.response.use(onResponse, onError);
-};
+type AxiosRequestConfigWithRetryType = AxiosRequestConfig & {momentumRetryCount?: number};
 
-export const setAxiosRetry = ({
-  retryCount = 3,
-  retryDelayBase = 2000,
-  httpsErrorCodes = [503]
-}: {
-  retryCount: number;
-  retryDelayBase: number;
-  httpsErrorCodes?: number[];
+export const setApiResponseHandlers = ({
+  onResponse = responseHandler,
+  onError = errorHandler,
+  maxRetries = 3,
+  retryDelayBase = 1000,
+  retryCodes = [503]
 }) => {
-  axiosRetry(request, {
-    retries: retryCount,
-    retryDelay: (retryCount) => {
-      console.log(`Retrying HTTP request for ${retryCount} time...`);
-      return retryDelayBase * retryCount;
-    },
-    retryCondition: (error) => {
-      console.log(
-        'Retrying HTTP request - retryCondition',
-        error,
-        error.response?.status,
-        httpsErrorCodes
-      );
-      if (error.response && httpsErrorCodes?.includes(error.response?.status)) {
-        return true;
+  console.log('setApiResponseHandlers', {
+    onResponse,
+    onError,
+    maxRetries,
+    retryDelayBase,
+    retryCodes
+  });
+
+  request.interceptors.response.use(onResponse, (error) => {
+    const status = error.response?.status;
+
+    const config = error.config as AxiosRequestConfigWithRetryType;
+
+    console.error('API Error:', {error, status, request: error.request, config});
+    if (status && retryCodes.includes(status)) {
+      // retry
+      const {momentumRetryCount: count = 0} = config || {momentumRetryCount: maxRetries};
+      if (count < maxRetries) {
+        return new Promise((resolve) => {
+          console.log('Retrying request', {count, error});
+          const newConfig: AxiosRequestConfigWithRetryType = {
+            ...config,
+            momentumRetryCount: count + 1
+          };
+          setTimeout(() => {
+            resolve(request(newConfig));
+          }, retryDelayBase * count);
+        });
       }
-      return false;
     }
+
+    return onError(error);
   });
 };
 

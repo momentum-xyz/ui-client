@@ -23,6 +23,7 @@ interface ViewsInterface {
   get isError(): boolean;
   get isNotSend(): boolean;
   get isNotComplete(): boolean;
+  get errorCode(): number | null;
 }
 
 /**
@@ -37,6 +38,7 @@ interface ViewsInterface {
 const RequestModel = types
   .model('Request', {
     showError: false,
+    axiosErrorCode: types.maybeNull(types.number),
     isCancellable: true,
     state: types.maybeNull(types.enumeration(Object.values(RequestStateEnum)))
   })
@@ -99,6 +101,7 @@ const RequestModel = types
         }
       },
       handleApiError(error: AxiosError) {
+        self.axiosErrorCode = error.response?.status || null;
         if (self.showError) {
           /** show api error */
         }
@@ -129,6 +132,9 @@ const RequestModel = types
     },
     get isNotComplete() {
       return [RequestStateEnum.Pending, null].includes(self.state);
+    },
+    get errorCode() {
+      return self.axiosErrorCode;
     }
   }));
 

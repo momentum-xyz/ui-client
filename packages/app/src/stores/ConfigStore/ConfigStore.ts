@@ -35,6 +35,9 @@ const ConfigStore = types
   .views((self) => ({
     get isError(): boolean {
       return self.request.isError;
+    },
+    get errorCode(): number | null {
+      return self.request.errorCode;
     }
   }));
 
