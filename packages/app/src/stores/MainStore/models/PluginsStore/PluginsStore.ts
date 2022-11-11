@@ -151,6 +151,8 @@ const PluginsStore = types
       });
 
       yield self.fetchSpacePlugins(spaceId);
+
+      return self.removePluginRequest.isDone;
     })
   }))
   .views((self) => ({
@@ -163,6 +165,9 @@ const PluginsStore = types
     },
     get scripts(): DynamicScriptLoaderType[] {
       return self.dynamicScriptsStore.loaders;
+    },
+    get isRemovePluginPeding(): boolean {
+      return self.removePluginRequest.isPending;
     }
   }));
 
