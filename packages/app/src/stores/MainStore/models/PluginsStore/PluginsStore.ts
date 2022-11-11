@@ -27,8 +27,6 @@ const PluginsStore = types
       searchedPlugins: types.array(PluginQueryResult),
       searchQuery: types.optional(SearchQuery, {}),
 
-      pluginToRemove: types.maybe(types.reference(PluginLoader)),
-
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
 
       pluginsListRequest: types.optional(RequestModel, {}),
@@ -133,17 +131,7 @@ const PluginsStore = types
 
         self.searchedPlugins = cast(plugins);
       }
-    }),
-    choosePluginToRemove(pluginId: string | undefined) {
-      if (!pluginId) {
-        self.pluginToRemove = undefined;
-        return;
-      }
-
-      self.pluginToRemove = self.spacePluginLoaders.find(
-        (pluginLoader) => pluginLoader.id === pluginId
-      );
-    }
+    })
   }))
   .actions((self) => ({
     addPluginToSpace: flow(function* (spaceId: string, pluginId: string) {
@@ -155,22 +143,16 @@ const PluginsStore = types
 
       yield self.fetchSpacePlugins(spaceId);
     }),
-    removePluginFromSpace: flow(function* (spaceId: string) {
-      const pluginId = self.pluginToRemove?.id;
-
-      if (!pluginId) {
-        return;
-      }
-
+    removePluginFromSpace: flow(function* (spaceId: string, pluginId: string) {
       yield self.removePluginRequest.send(api.spaceOptionRepository.setSpaceSubOption, {
         spaceId,
         sub_option_key: SpaceSubOptionKeyEnum.Asset2DPlugins,
         value: self.spacePluginLoaders.map((loader) => loader.id).filter((id) => id !== pluginId)
       });
 
-      self.pluginToRemove = undefined;
-
       yield self.fetchSpacePlugins(spaceId);
+
+      return self.removePluginRequest.isDone;
     })
   }))
   .views((self) => ({
