@@ -59,6 +59,7 @@
   },
   "scripts": {
     "start": "momentum-plugin start",
+    "start:plugin": "momentum-plugin start:plugin",
     "build": "momentum-plugin build",
     "test": "momentum-plugin test"
   },
