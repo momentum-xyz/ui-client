@@ -62,14 +62,6 @@ export const setApiResponseHandlers = ({
   retryDelayBase = 1000,
   retryCodes = [503]
 }) => {
-  console.log('setApiResponseHandlers', {
-    onResponse,
-    onError,
-    maxRetries,
-    retryDelayBase,
-    retryCodes
-  });
-
   request.interceptors.response.use(onResponse, (error) => {
     const status = error.response?.status;
 
