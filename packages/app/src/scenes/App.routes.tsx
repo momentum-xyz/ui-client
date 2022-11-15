@@ -33,6 +33,9 @@ const WorldBuilder = lazy(() => import('./worldBuilder/WorldBuilder'));
 const WorldBuilderStartPage = lazy(
   () => import('./worldBuilder/pages/WorldBuilderStartPage/WorldBuilderStartPage')
 );
+const WorldExplorerPage = lazy(
+  () => import('./worldExplorer/pages/WorldExplorerPage/WorldExplorerPage')
+);
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
@@ -86,6 +89,10 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.storyBook.base,
     main: () => <StoryBook />
+  },
+  {
+    path: ROUTES.worldExplorer,
+    main: () => <WorldExplorerPage />
   },
   {
     path: ROUTES.worldBuilder.login,
