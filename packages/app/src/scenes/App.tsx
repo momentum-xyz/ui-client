@@ -11,7 +11,7 @@ import {isBrowserSupported} from '@momentum-xyz/core';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
-import {setApiResponseHandlers} from 'api/request';
+import {REQUEST_MAX_RETRIES, REQUEST_RETRY_DELAY_BASE, setApiResponseHandlers} from 'api/request';
 import {SystemWideError, ToastContent} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
@@ -33,7 +33,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
-  const {isConfigReady, isError: isErrorLoadingConfig} = configStore;
+  const {
+    isConfigReady,
+    isError: isErrorLoadingConfig,
+    errorCode: configLoadingErrorCode
+  } = configStore;
 
   const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
@@ -41,16 +45,27 @@ const App: FC = () => {
 
   useEffect(() => {
     setApiResponseHandlers({
+      maxRetries: REQUEST_MAX_RETRIES,
+      retryDelayBase: REQUEST_RETRY_DELAY_BASE,
+      retryCodes: [httpErrorCodes.MAINTENANCE],
+      // this is called after retrying failed request if the error code matches retryCodes or if it doesn't match
       onError: (error) => {
         const status = error.response?.status;
-        if (status === httpErrorCodes.MAINTENANCE) {
-          document.location.href = ROUTES.system.maintenance;
-        } else if (status === httpErrorCodes.INTERNAL_SYSTEM_ERROR) {
+
+        console.error('API Error:', {error, status, config: error.config});
+        if (
+          status &&
+          [httpErrorCodes.INTERNAL_SYSTEM_ERROR, httpErrorCodes.MAINTENANCE].includes(status)
+        ) {
           toast.info(
             <ToastContent
               headerIconName="check"
               title={String(error.response?.status || '')}
-              text={t('errors.somethingWentWrong')}
+              text={
+                status === httpErrorCodes.MAINTENANCE
+                  ? t('systemMessages.underMaintenance')
+                  : t('errors.somethingWentWrong')
+              }
               showCloseButton
             />
           );
@@ -58,11 +73,6 @@ const App: FC = () => {
         throw error;
       }
     });
-
-    // TODO: Retry request
-    if (ROUTES.system.maintenance === pathname) {
-      return;
-    }
 
     initApplication();
   }, [initApplication, history, t]);
@@ -85,7 +95,11 @@ const App: FC = () => {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <SystemWideError
-          text={t('errors.somethingWentWrongTryAgain')}
+          text={
+            configLoadingErrorCode === httpErrorCodes.MAINTENANCE
+              ? t('systemMessages.underMaintenance')
+              : t('errors.somethingWentWrongTryAgain')
+          }
           showRefreshButton
           theme={themeStore.theme}
         />

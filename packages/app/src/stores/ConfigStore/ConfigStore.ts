@@ -25,7 +25,7 @@ const ConfigStore = types
 
         Object.entries(appVariablesOverrides).forEach((entry) => {
           const [key, value] = entry;
-          appVariables[key as keyof AppConfigInterface] = value as any;
+          appVariables[key as keyof AppConfigInterface] = value as string;
         });
 
         self.isConfigReady = true;
@@ -35,6 +35,9 @@ const ConfigStore = types
   .views((self) => ({
     get isError(): boolean {
       return self.request.isError;
+    },
+    get errorCode(): number | null {
+      return self.request.errorCode;
     }
   }));
 
