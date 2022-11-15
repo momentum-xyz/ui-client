@@ -11,7 +11,7 @@ import {isBrowserSupported} from '@momentum-xyz/core';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
-import {setApiResponseHandlers} from 'api/request';
+import {REQUEST_MAX_RETRIES, REQUEST_RETRY_DELAY_BASE, setApiResponseHandlers} from 'api/request';
 import {SystemWideError, ToastContent} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
@@ -45,8 +45,8 @@ const App: FC = () => {
 
   useEffect(() => {
     setApiResponseHandlers({
-      maxRetries: 3,
-      retryDelayBase: 1000,
+      maxRetries: REQUEST_MAX_RETRIES,
+      retryDelayBase: REQUEST_RETRY_DELAY_BASE,
       retryCodes: [httpErrorCodes.MAINTENANCE],
       // this is called after retrying failed request if the error code matches retryCodes or if it doesn't match
       onError: (error) => {

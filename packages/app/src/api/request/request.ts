@@ -1,8 +1,12 @@
 import axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios';
 
+import {httpErrorCodes} from 'api/constants';
+
 const TOKEN_TYPE = 'Bearer';
 const TOKEN_KEY = 'token.momentum';
 const REQUEST_TIMEOUT_MS = 10_000;
+export const REQUEST_MAX_RETRIES = 3;
+export const REQUEST_RETRY_DELAY_BASE = 1000;
 
 const defaultHeaders: Record<string, string> = {
   'Content-Type': 'application/json'
@@ -34,7 +38,7 @@ const responseHandler = (response: AxiosResponse) => {
 };
 
 const errorHandler = (error: AxiosError) => {
-  return Promise.reject(error) as unknown;
+  throw error;
 };
 
 /**
@@ -58,9 +62,9 @@ type AxiosRequestConfigWithRetryType = AxiosRequestConfig & {momentumRetryCount?
 export const setApiResponseHandlers = ({
   onResponse = responseHandler,
   onError = errorHandler,
-  maxRetries = 3,
-  retryDelayBase = 1000,
-  retryCodes = [503]
+  maxRetries = REQUEST_MAX_RETRIES,
+  retryDelayBase = REQUEST_RETRY_DELAY_BASE,
+  retryCodes = [httpErrorCodes.MAINTENANCE]
 }) => {
   request.interceptors.response.use(onResponse, (error) => {
     const status = error.response?.status;
