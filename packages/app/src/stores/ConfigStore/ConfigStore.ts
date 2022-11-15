@@ -32,7 +32,7 @@ const ConfigStore = types
           });
 
           Object.entries(appVariablesOverrides).forEach(([key, value]) => {
-            appVariables[key as keyof AppConfigInterface] = value as any;
+            appVariables[key as keyof AppConfigInterface] = value as string;
           });
 
           self.isConfigReady = true;
@@ -43,6 +43,9 @@ const ConfigStore = types
   .views((self) => ({
     get isError(): boolean {
       return self.versionRequest.isError || self.configRequest.isError;
+    },
+    get errorCode(): number | null {
+      return self.versionRequest.errorCode || self.configRequest.errorCode;
     }
   }));
 
