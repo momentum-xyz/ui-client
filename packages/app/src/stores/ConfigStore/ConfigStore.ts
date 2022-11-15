@@ -45,7 +45,7 @@ const ConfigStore = types
       return self.versionRequest.isError || self.configRequest.isError;
     },
     get errorCode(): number | null {
-      return self.request.errorCode;
+      return self.versionRequest.errorCode || self.configRequest.errorCode;
     }
   }));
 
