@@ -11,12 +11,18 @@ const MiroBoardPage: FC = () => {
   const {api, miroBoardStore} = useStore();
   const {board} = miroBoardStore;
   const {isAdmin, spaceId, renderTopBarActions} = useSpace();
-  const {useAttributeChange} = useSpaceAttributesApi();
+  const {useAttributeItemChange, useAttributeItemRemove, subscribeToTopic, unsubscribeFromTopic} =
+    useSpaceAttributesApi();
 
   useEffect(() => {
     miroBoardStore.init(api);
     miroBoardStore.fetchBoard();
-  }, [api, miroBoardStore]);
+    subscribeToTopic('miro-state');
+
+    return () => {
+      unsubscribeFromTopic('miro-state');
+    };
+  }, [api, miroBoardStore, subscribeToTopic, unsubscribeFromTopic]);
 
   useEffect(() => {
     renderTopBarActions({
@@ -32,8 +38,12 @@ const MiroBoardPage: FC = () => {
     });
   }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
 
-  useAttributeChange('miro-state', 'state', (value) => {
-    miroBoardStore.handleBoardChange(value.board as MiroBoardInterface);
+  useAttributeItemChange('miro-state', 'state', 'board', (value) => {
+    miroBoardStore.handleBoardChange(value as unknown as MiroBoardInterface);
+  });
+
+  useAttributeItemRemove('miro-state', 'state', 'board', () => {
+    miroBoardStore.handleBoardRemove();
   });
 
   if (!spaceId) {

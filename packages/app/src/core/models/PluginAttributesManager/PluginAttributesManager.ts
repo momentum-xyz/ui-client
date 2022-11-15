@@ -136,7 +136,7 @@ const PluginAttributesManager = types
         api.spaceAttributeRepository.deleteSpaceAttribute,
         {
           spaceId,
-          plugin_id: self.spaceId,
+          plugin_id: self.pluginId,
           attribute_name: attributeName,
           sub_attribute_key: key
         }
@@ -203,17 +203,17 @@ const PluginAttributesManager = types
         ) => self.setSpaceAttributeItem<T>(spaceId, attributeName, key, value) as Promise<T>,
         deleteSpaceAttributeItem: async (spaceId: string, attributeName: string, key: string) =>
           self.deleteSpaceAttributeItem(spaceId, attributeName, key),
-        subscribeToTopic: PosBusService.main.subcribe,
-        unsubscribeFromTopic: PosBusService.main.unsubscribe,
+        subscribeToTopic: (topic) => {
+          PosBusService.main.subcribe(topic);
+        },
+        unsubscribeFromTopic: (topic) => {
+          PosBusService.main.unsubscribe(topic);
+        },
 
         useAttributeChange(topic, attributeName, callback) {
           return usePosBusEvent(
             'space-attribute-changed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
-              if (posBusAttributItemName) {
-                return;
-              }
-
+            (posBusTopic, posBusAttributeName, value) => {
               if (posBusTopic === topic && posBusAttributeName === attributeName) {
                 callback(value as AttributeValueInterface);
               }
@@ -221,22 +221,15 @@ const PluginAttributesManager = types
           );
         },
         useAttributeRemove(topic, attributeName, callback) {
-          return usePosBusEvent(
-            'space-attribute-changed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
-              if (posBusAttributItemName) {
-                return;
-              }
-
-              if (posBusTopic === topic && posBusAttributeName === attributeName) {
-                callback();
-              }
+          return usePosBusEvent('space-attribute-removed', (posBusTopic, posBusAttributeName) => {
+            if (posBusTopic === topic && posBusAttributeName === attributeName) {
+              callback();
             }
-          );
+          });
         },
         useAttributeItemChange(topic, attributeName, attributeItemName, callback) {
           return usePosBusEvent(
-            'space-attribute-changed',
+            'space-attribute-item-changed',
             (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
               if (
                 posBusTopic === topic &&
@@ -250,7 +243,7 @@ const PluginAttributesManager = types
         },
         useAttributeItemRemove(topic, attributeName, attributeItemName, callback) {
           return usePosBusEvent(
-            'space-attribute-removed',
+            'space-attribute-item-removed',
             (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
               if (
                 posBusTopic === topic &&

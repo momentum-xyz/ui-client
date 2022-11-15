@@ -156,13 +156,30 @@ class PosBusService {
           'space-attribute-changed',
           target,
           message.data.attribute_name,
-          message.data.sub_name,
           message.data.value
         );
         break;
       case PosBusMessageTypeEnum.ATTRIBUTE_REMOVED:
+        PosBusEventEmitter.emit('space-attribute-removed', target, message.data.attribute_name);
+        break;
+      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_CHANGED:
+        if (!message.data.sub_name) {
+          return;
+        }
         PosBusEventEmitter.emit(
-          'space-attribute-removed',
+          'space-attribute-item-changed',
+          target,
+          message.data.attribute_name,
+          message.data.sub_name,
+          message.data.value
+        );
+        break;
+      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_REMOVED:
+        if (!message.data.sub_name) {
+          return;
+        }
+        PosBusEventEmitter.emit(
+          'space-attribute-item-removed',
           target,
           message.data.attribute_name,
           message.data.sub_name

@@ -43,15 +43,17 @@ export type PosBusEventType = {
     uiTypeId: string,
     uiTypeName: string
   ) => void;
-  'space-attribute-changed': (
+  'space-attribute-changed': (topic: string, attributeName: string, value: unknown) => void;
+  'space-attribute-removed': (topic: string, attributeName: string) => void;
+  'space-attribute-item-changed': (
     topic: string,
     attributeName: string,
-    attributeItemName: string | undefined,
+    attributeItemName: string,
     value: unknown
   ) => void;
-  'space-attribute-removed': (
+  'space-attribute-item-removed': (
     topic: string,
     attributeName: string,
-    attributeItemName: string | undefined
+    attributeItemName: string
   ) => void;
 };
