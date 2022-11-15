@@ -21,22 +21,26 @@ export interface ApiInterface {
   ) => Promise<T>;
   deleteSpaceAttributeItem: (spaceId: string, attributeName: string, key: string) => Promise<null>;
 
-  subscribeToTopic: (topic: string) => Promise<void>;
+  subscribeToTopic: (topic: string) => void;
+  unsubscribeFromTopic: (topic: string) => void;
 
-  onAttributeChange: (
-    callback: <T extends AttributeValueInterface = AttributeValueInterface>(
-      attributeName: string,
-      value: T
-    ) => void
+  useAttributeChange: (
+    topic: string,
+    attributeName: string,
+    callback: <T extends AttributeValueInterface = AttributeValueInterface>(value: T) => void
   ) => void;
-  onAttributeRemove: (callback: (attributeName: string) => void) => void;
+  useAttributeRemove: (topic: string, attributeName: string, callback: () => void) => void;
 
-  onAttributeItemChange: (
-    callback: <T extends AttributeValueInterface>(
-      attributeName: string,
-      key: string,
-      value: T
-    ) => void
+  useAttributeItemChange: (
+    topic: string,
+    attributeName: string,
+    key: string,
+    callback: <T>(value: T) => void
   ) => void;
-  onAttributeItemRemove: (callback: (attributeName: string, key: string) => void) => void;
+  useAttributeItemRemove: (
+    topic: string,
+    attributeName: string,
+    key: string,
+    callback: () => void
+  ) => void;
 }

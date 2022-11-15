@@ -21,15 +21,16 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
   const theme = useTheme();
   const {
     spaceAttributes,
-    onAttributeChange,
-    onAttributeRemove,
-    onAttributeItemChange,
-    onAttributeItemRemove,
+    useAttributeChange,
+    useAttributeRemove,
+    useAttributeItemChange,
+    useAttributeItemRemove,
     changedAttribute,
     removedAttribute,
     changedAttributeItem,
     removedAttributeItem,
-    subscribeToTopic
+    subscribeToTopic,
+    unsubscribeFromTopic
   } = useAttributesEmulator();
 
   const config = useMemo(
@@ -130,11 +131,13 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
         },
 
         subscribeToTopic,
-        onAttributeChange,
-        onAttributeRemove,
+        unsubscribeFromTopic,
 
-        onAttributeItemChange,
-        onAttributeItemRemove
+        useAttributeChange,
+        useAttributeRemove,
+
+        useAttributeItemChange,
+        useAttributeItemRemove
       },
       stateApi: {
         getItem: <T,>(key: string) => {
@@ -178,10 +181,10 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
       changedAttribute,
       changedAttributeItem,
       config,
-      onAttributeChange,
-      onAttributeItemChange,
-      onAttributeItemRemove,
-      onAttributeRemove,
+      useAttributeChange,
+      useAttributeItemChange,
+      useAttributeItemRemove,
+      useAttributeRemove,
       removedAttribute,
       removedAttributeItem,
       spaceAttributes,

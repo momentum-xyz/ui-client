@@ -5,6 +5,8 @@ import {flow, Instance, types} from 'mobx-state-tree';
 import {api, GetSpaceAttributeResponse} from 'api';
 import {AttributeNameEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
+import {PosBusService} from 'shared/services';
+import {usePosBusEvent} from 'shared/hooks';
 
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
@@ -110,7 +112,7 @@ const PluginAttributesManager = types
         api.spaceAttributeRepository.setSpaceAttributeItem,
         {
           spaceId,
-          plugin_id: self.spaceId,
+          plugin_id: self.pluginId,
           attribute_name: attributeName,
           sub_attribute_key: key,
           value
@@ -201,25 +203,64 @@ const PluginAttributesManager = types
         ) => self.setSpaceAttributeItem<T>(spaceId, attributeName, key, value) as Promise<T>,
         deleteSpaceAttributeItem: async (spaceId: string, attributeName: string, key: string) =>
           self.deleteSpaceAttributeItem(spaceId, attributeName, key),
-        subscribeToTopic() {
-          // TODO: Implement when PosBus ready
-          return Promise.reject('Not yet implemented');
+        subscribeToTopic: PosBusService.main.subcribe,
+        unsubscribeFromTopic: PosBusService.main.unsubscribe,
+
+        useAttributeChange(topic, attributeName, callback) {
+          return usePosBusEvent(
+            'space-attribute-changed',
+            (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
+              if (posBusAttributItemName) {
+                return;
+              }
+
+              if (posBusTopic === topic && posBusAttributeName === attributeName) {
+                callback(value as AttributeValueInterface);
+              }
+            }
+          );
         },
-        onAttributeChange() {
-          // TODO: Implement when PosBus ready
-          return Promise.reject('Not yet implemented');
+        useAttributeRemove(topic, attributeName, callback) {
+          return usePosBusEvent(
+            'space-attribute-changed',
+            (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
+              if (posBusAttributItemName) {
+                return;
+              }
+
+              if (posBusTopic === topic && posBusAttributeName === attributeName) {
+                callback();
+              }
+            }
+          );
         },
-        onAttributeRemove() {
-          // TODO: Implement when PosBus ready
-          return Promise.reject('Not yet implemented');
+        useAttributeItemChange(topic, attributeName, attributeItemName, callback) {
+          return usePosBusEvent(
+            'space-attribute-changed',
+            (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
+              if (
+                posBusTopic === topic &&
+                posBusAttributeName === attributeName &&
+                posBusAttributItemName === attributeItemName
+              ) {
+                callback(value);
+              }
+            }
+          );
         },
-        onAttributeItemChange() {
-          // TODO: Implement when PosBus ready
-          return Promise.reject('Not yet implemented');
-        },
-        onAttributeItemRemove() {
-          // TODO: Implement when PosBus ready
-          return Promise.reject('Not yet implemented');
+        useAttributeItemRemove(topic, attributeName, attributeItemName, callback) {
+          return usePosBusEvent(
+            'space-attribute-removed',
+            (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
+              if (
+                posBusTopic === topic &&
+                posBusAttributeName === attributeName &&
+                posBusAttributItemName === attributeItemName
+              ) {
+                callback();
+              }
+            }
+          );
         }
       };
     }

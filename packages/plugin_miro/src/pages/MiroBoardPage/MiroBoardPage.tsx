@@ -1,7 +1,8 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useStore} from 'shared/hooks/useStore';
-import {useSpace} from '@momentum-xyz/sdk';
+import {useSpace, useSpaceAttributesApi} from '@momentum-xyz/sdk';
+import {MiroBoardInterface} from 'core/interfaces';
 
 import {MiroBoard, MiroChoice, MiroActions} from './components';
 import * as styled from './MiroBoardPage.styled';
@@ -10,6 +11,7 @@ const MiroBoardPage: FC = () => {
   const {api, miroBoardStore} = useStore();
   const {board} = miroBoardStore;
   const {isAdmin, spaceId, renderTopBarActions} = useSpace();
+  const {useAttributeChange} = useSpaceAttributesApi();
 
   useEffect(() => {
     miroBoardStore.init(api);
@@ -29,6 +31,10 @@ const MiroBoardPage: FC = () => {
       )
     });
   }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
+
+  useAttributeChange('miro-state', 'state', (value) => {
+    miroBoardStore.handleBoardChange(value.board as MiroBoardInterface);
+  });
 
   if (!spaceId) {
     return null;
