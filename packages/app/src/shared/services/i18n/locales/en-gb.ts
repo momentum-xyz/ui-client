@@ -345,7 +345,11 @@ export const enGb = {
       flyWithMeActivated: 'Fly with me has been activated',
       flyWithMeDisabled: 'Fly with me has been disabled',
       flyWithMeBlocked: 'During fly with me mode, some functionality has been disabled',
-      flyWithMeEnjoy: 'Sit back, relax and enjoy the ride.'
+      flyWithMeEnjoy: 'Sit back, relax and enjoy the ride.',
+      deletePluginConfirmation: 'Are you sure you want to remove {{pluginName}}?',
+      pluginRemovedSuccessfully: '{{pluginName}} removed succesfully!',
+      errorWhileRemovingPlugin:
+        'Error has occured when removing {{pluginName}} removed succesfully!'
     },
     titles: {
       alert: 'alert',
@@ -383,7 +387,9 @@ export const enGb = {
       stageIsFull: 'Stage is full',
       success: 'Success',
       plugins: 'Plugins',
-      addPlugin: 'Add Plugin'
+      addPlugin: 'Add Plugin',
+      deletePluginFromSpace: 'Delete plugin from space',
+      error: 'Error'
     },
     textMessage: {
       you: 'you',

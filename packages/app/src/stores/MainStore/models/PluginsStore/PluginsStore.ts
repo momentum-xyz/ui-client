@@ -34,7 +34,7 @@ const PluginsStore = types
       pluginOptionsRequest: types.optional(RequestModel, {}),
       addPluginRequest: types.optional(RequestModel, {}),
       removePluginRequest: types.optional(RequestModel, {}),
-      getAllPluginsRequest: types.optional(RequestModel, {})
+      searchPluginsRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -78,13 +78,15 @@ const PluginsStore = types
       const plugins: PluginLoaderModelType[] = [];
       for (const plugin of pluginsDetailsList) {
         try {
-          PluginLoader.create({
+          const pluginLoader = PluginLoader.create({
             ...plugin,
             attributesManager: PluginAttributesManager.create({
               pluginId: plugin.id,
               spaceId
             })
           });
+
+          plugins.push(pluginLoader);
         } catch (err) {
           console.log('Error parsing plugin', plugin, ' - ignore it. Error:', err);
         }
@@ -115,20 +117,17 @@ const PluginsStore = types
         return;
       }
 
-      // TODO: Use actual query in the request
-      const response: GetPluginsListResponse | undefined = yield self.getAllPluginsRequest.send(
-        api.pluginsRepository.getPluginsList,
-        {}
+      // TODO: Uncomment type when ready on BE
+      const response: GetPluginsListResponse | undefined = yield self.searchPluginsRequest.send(
+        api.pluginsRepository.searchPlugins,
+        {name: query, description: query /*, type: PluginTypeEnum.PLUGIN_2D */}
       );
 
       if (response) {
-        const plugins = Object.entries(response)
-          .map(([plugin_uuid, plugin_name]) => ({plugin_uuid, plugin_name}))
-          .filter(
-            ({plugin_name, plugin_uuid}) =>
-              plugin_name.toLowerCase().includes(query.toLowerCase()) ||
-              plugin_uuid.toLowerCase().includes(query.toLowerCase())
-          );
+        const plugins = Object.entries(response).map(([plugin_uuid, plugin_name]) => ({
+          plugin_uuid,
+          plugin_name
+        }));
 
         self.searchedPlugins = cast(plugins);
       }
@@ -152,6 +151,8 @@ const PluginsStore = types
       });
 
       yield self.fetchSpacePlugins(spaceId);
+
+      return self.removePluginRequest.isDone;
     })
   }))
   .views((self) => ({
@@ -164,6 +165,9 @@ const PluginsStore = types
     },
     get scripts(): DynamicScriptLoaderType[] {
       return self.dynamicScriptsStore.loaders;
+    },
+    get isRemovePluginPeding(): boolean {
+      return self.removePluginRequest.isPending;
     }
   }));
 

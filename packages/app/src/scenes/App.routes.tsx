@@ -34,6 +34,24 @@ const WorldBuilderStartPage = lazy(
   () => import('./worldBuilder/pages/WorldBuilderStartPage/WorldBuilderStartPage')
 );
 
+export const SYSTEM_ROUTES: RouteConfigInterface[] = [
+  {
+    path: ROUTES.system.disconnected,
+    exact: true,
+    main: () => <DisconnectedPage />
+  },
+  {
+    path: ROUTES.system.maintenance,
+    exact: true,
+    main: () => <MaintenancePage />
+  },
+  {
+    path: ROUTES.system.wrongBrowser,
+    exact: true,
+    main: () => <WrongBrowserPage />
+  }
+];
+
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.login,
@@ -100,21 +118,6 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.welcome,
     exact: true,
     main: () => <WelcomePage />
-  },
-  {
-    path: ROUTES.system.disconnected,
-    exact: true,
-    main: () => <DisconnectedPage />
-  },
-  {
-    path: ROUTES.system.maintenance,
-    exact: true,
-    main: () => <MaintenancePage />
-  },
-  {
-    path: ROUTES.system.wrongBrowser,
-    exact: true,
-    main: () => <WrongBrowserPage />
   }
 ];
 

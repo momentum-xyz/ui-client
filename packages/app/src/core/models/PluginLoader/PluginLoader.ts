@@ -10,7 +10,7 @@ const PluginLoader = types
   .compose(
     ResetModel,
     types.model('PluginLoader', {
-      id: types.string,
+      id: types.identifier,
       name: types.string,
       scopeName: types.string,
       subPath: types.string,
