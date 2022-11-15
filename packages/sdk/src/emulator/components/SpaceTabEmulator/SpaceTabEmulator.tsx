@@ -1,4 +1,4 @@
-import {FC, useCallback, useMemo, useState} from 'react';
+import {FC, useCallback, useMemo} from 'react';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
@@ -10,14 +10,14 @@ import {
 } from '../../../interfaces';
 import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 
-import * as styled from './SpaceTabEmulator.styled';
-
 interface PropsInterface {
   plugin: PluginInterface;
+  spaceId: string;
+  setTopBar: (topBar: JSX.Element) => void;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
-  console.log('RENDER SpaceEmulator', {plugin});
+export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar}) => {
+  console.log('RENDER SpaceTabEmulator', {plugin});
   const theme = useTheme();
   const {
     spaceAttributes,
@@ -43,7 +43,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
     () => ({
       theme: theme as ThemeInterface,
       isSpaceAdmin: false,
-      spaceId: '42424242-4242-4242-4242-424242424242',
+      spaceId,
       api: {
         getSpaceAttributeValue: <T extends AttributeValueInterface>(
           spaceId: string,
@@ -186,11 +186,10 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
       removedAttributeItem,
       spaceAttributes,
       subscribeToTopic,
-      theme
+      theme,
+      spaceId
     ]
   );
-
-  const [topBar, setTopBar] = useState(<span />);
 
   const renderTopBarActions = useCallback(
     ({main}) => {
@@ -200,11 +199,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
   );
 
   return (
-    <div>
-      <styled.SpaceTopBar>
-        <strong>Space / Plugin</strong>
-        {topBar}
-      </styled.SpaceTopBar>
+    <>
       {!!plugin.SpaceExtension && (
         <ErrorBoundary errorMessage="Error while rendering plugin">
           <SpaceGlobalPropsContextProvider
@@ -217,6 +212,6 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin}) => {
           </SpaceGlobalPropsContextProvider>
         </ErrorBoundary>
       )}
-    </div>
+    </>
   );
 };
