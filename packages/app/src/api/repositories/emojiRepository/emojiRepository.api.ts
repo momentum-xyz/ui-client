@@ -10,6 +10,7 @@ import {
 import {
   deleteSpaceAttributeItem,
   getSpaceAttribute,
+  getSpaceAttributeWithChildren,
   setSpaceAttributeItem
 } from 'api/repositories/spaceAttributeRepository';
 
@@ -68,4 +69,19 @@ export const fetchEmojis: RequestInterface<FetchEmojiRequest, GetSpaceAttributeR
     ...restOptions
   };
   return getSpaceAttribute(attributeOptions, request);
+};
+
+export const fetchWorldEmojis: RequestInterface<
+  FetchEmojiRequest,
+  GetSpaceAttributeResponse | null
+> = (options) => {
+  const {spaceId, ...restOptions} = options;
+
+  const attributeOptions: GetSpaceAttributeRequest = {
+    spaceId: spaceId,
+    plugin_id: PluginIdEnum.CORE,
+    attribute_name: AttributeNameEnum.EMOJIS,
+    ...restOptions
+  };
+  return getSpaceAttributeWithChildren(attributeOptions, request);
 };

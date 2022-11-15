@@ -32,6 +32,22 @@ export const getSpaceAttribute: RequestInterface<
   return request.get(url, restOptions);
 };
 
+export const getSpaceAttributeWithChildren: RequestInterface<
+  GetSpaceAttributeRequest,
+  GetSpaceAttributeResponse | null
+> = (options) => {
+  const {spaceId, plugin_id, attribute_name, ...restOptions} = options;
+
+  restOptions.params = {
+    plugin_id,
+    attribute_name
+  };
+
+  const url = generatePath(spaceAttributesRepositoryEndpoints().attributeWithChildren, {spaceId});
+
+  return request.get(url, restOptions);
+};
+
 export const setSpaceAttribute: RequestInterface<
   SetSpaceAttributeRequest,
   SetSpaceAttributeResponse | null

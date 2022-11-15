@@ -14,14 +14,14 @@ interface PropsInterface {
 
 const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
   const {widgetStore, sessionStore} = useStore();
-  const {emojiDetailsList, fetchAll} = widgetStore.emojiStore;
+  const {emojiDetailsList, fetchWorldEmojis} = widgetStore.emojiStore;
   const {user} = sessionStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+    fetchWorldEmojis();
+  }, [fetchWorldEmojis]);
 
   const userUUID = user?.id;
   const userAvatarSrc = user?.avatarSrc || '';
