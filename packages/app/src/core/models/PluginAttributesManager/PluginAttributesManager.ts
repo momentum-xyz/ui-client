@@ -191,10 +191,10 @@ const PluginAttributesManager = types
         getConfig: self.getConfig,
 
         subscribeToStateUsingTopic: (topic) => {
-          PosBusService.main.subscribe(topic);
+          PosBusService.subscribe(topic);
         },
         unsubscribeFromStateUsingTopic: (topic) => {
-          PosBusService.main.unsubscribe(topic);
+          PosBusService.unsubscribe(topic);
         },
 
         // TODO: Temporary, change to below after PosBus supports attribute items
@@ -299,10 +299,10 @@ const PluginAttributesManager = types
           attributeItemName: string
         ) => self.deleteSpaceAttribute(spaceId, attributeName),
         subscribeToTopic: (topic) => {
-          PosBusService.main.subscribe(topic);
+          PosBusService.subscribe(topic);
         },
         unsubscribeFromTopic: (topic) => {
-          PosBusService.main.unsubscribe(topic);
+          PosBusService.unsubscribe(topic);
         },
 
         useAttributeChange: <T extends AttributeValueInterface>(

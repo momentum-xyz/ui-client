@@ -20,33 +20,37 @@ import {
 } from 'core/types';
 
 class PosBusService {
-  static main = new PosBusService();
+  private static main = new PosBusService();
 
-  public subscribedSpacePluginTopics: Set<string>;
+  private _subscribedSpacePluginTopics: Set<string>;
+
+  public get subscribedSpacePluginTopics(): Set<string> {
+    return this._subscribedSpacePluginTopics;
+  }
 
   private constructor() {
-    this.subscribedSpacePluginTopics = new Set();
+    this._subscribedSpacePluginTopics = new Set();
   }
 
-  subscribe(topic: string) {
-    this.subscribedSpacePluginTopics.add(topic);
+  static subscribe(topic: string) {
+    this.main._subscribedSpacePluginTopics.add(topic);
   }
 
-  unsubscribe(topic: string) {
-    this.subscribedSpacePluginTopics.delete(topic);
+  static unsubscribe(topic: string) {
+    this.main._subscribedSpacePluginTopics.delete(topic);
   }
 
-  handleIncomingVibe(message: PosBusVibeMessageType) {
+  static handleIncomingVibe(message: PosBusVibeMessageType) {
     const {count, type} = message;
     PosBusEventEmitter.emit('user-vibed', type, count);
   }
 
-  handleIncomingInvite(message: PosBusInviteMessageType) {
+  static handleIncomingInvite(message: PosBusInviteMessageType) {
     const {spaceId, sender, uiTypeId, uiTypeName} = message;
     PosBusEventEmitter.emit('space-invite', spaceId, sender.id, sender.name, uiTypeId, uiTypeName);
   }
 
-  handleIncomingCollaboration(message: PosBusCollaborationMessageType) {
+  static handleIncomingCollaboration(message: PosBusCollaborationMessageType) {
     const {integrationType, spaceId} = message;
     switch (integrationType) {
       case 'google_drive':
@@ -56,15 +60,15 @@ class PosBusService {
     }
   }
 
-  handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
+  static handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
     PosBusEventEmitter.emit('broadcast', message);
   }
 
-  handleScreenShareStart(message: PosBusScreenShareMessageType) {
+  static handleScreenShareStart(message: PosBusScreenShareMessageType) {
     PosBusEventEmitter.emit('screen-share', message);
   }
 
-  handleIncomingCommunication(message: PosBusCommunicationMessageType) {
+  static handleIncomingCommunication(message: PosBusCommunicationMessageType) {
     switch (message.action) {
       case 'kick':
         PosBusEventEmitter.emit('meeting-kick', message.spaceId);
@@ -79,7 +83,7 @@ class PosBusService {
     }
   }
 
-  handleIncomingStageMode(message: PosBusStageModeMessageType) {
+  static handleIncomingStageMode(message: PosBusStageModeMessageType) {
     switch (message.action) {
       case 'state':
         PosBusEventEmitter.emit(
@@ -114,23 +118,23 @@ class PosBusService {
     }
   }
 
-  handleIncomingHigh5(message: PosBusHigh5MessageType) {
+  static handleIncomingHigh5(message: PosBusHigh5MessageType) {
     PosBusEventEmitter.emit('high-five', message.senderId, message.message);
   }
 
-  handleIncomingEmoji(message: PosBusEmojiMessageType) {
+  static handleIncomingEmoji(message: PosBusEmojiMessageType) {
     PosBusEventEmitter.emit('emoji', message);
   }
 
-  handleIncomingMegamoji(message: PosBusMegamojiMessageType) {
+  static handleIncomingMegamoji(message: PosBusMegamojiMessageType) {
     PosBusEventEmitter.emit('megamoji', message.url);
   }
 
-  handleNotifyGathering(message: PosBusGatheringMessageType) {
+  static handleNotifyGathering(message: PosBusGatheringMessageType) {
     PosBusEventEmitter.emit('notify-gathering-start', message);
   }
 
-  handlePosBusMessage(message: PosBusMessageStatusType) {
+  static handlePosBusMessage(message: PosBusMessageStatusType) {
     switch (message.status) {
       case 'connected':
         PosBusEventEmitter.emit('posbus-connected');
@@ -143,15 +147,15 @@ class PosBusService {
     }
   }
 
-  handleStartFlyWithMeMessage(message: PosBusFlyWithMeType) {
+  static handleStartFlyWithMeMessage(message: PosBusFlyWithMeType) {
     PosBusEventEmitter.emit('start-fly-with-me', message.spaceId, message.pilot, message.pilotName);
   }
 
-  handleStopFlyWithMeMessage(message: PosBusFlyWithMeType) {
+  static handleStopFlyWithMeMessage(message: PosBusFlyWithMeType) {
     PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilot, message.pilotName);
   }
 
-  handleSpaceAttributeMessaage(target: string, message: PosBusAttributeMessageType) {
+  static handleSpaceAttributeMessaage(target: string, message: PosBusAttributeMessageType) {
     switch (message.type) {
       case PosBusMessageTypeEnum.ATTRIBUTE_CHANGED:
         PosBusEventEmitter.emit(
@@ -190,10 +194,10 @@ class PosBusService {
     }
   }
 
-  handleRelayMessage(target: string, message: unknown): void {
+  static handleRelayMessage(target: string, message: unknown): void {
     console.log('[unity message]:', target, message);
 
-    if (this.subscribedSpacePluginTopics.has(target)) {
+    if (this.main.subscribedSpacePluginTopics.has(target)) {
       this.handleSpaceAttributeMessaage(target, message as PosBusAttributeMessageType);
       return;
     }
@@ -247,7 +251,7 @@ class PosBusService {
     }
   }
 
-  handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
+  static handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
     console.log('[unity simple message]:', kind, flag, message);
     if (kind === PosBusNotificationEnum.TextMessage) {
       PosBusEventEmitter.emit('simple-notification', message);

@@ -102,14 +102,14 @@ export class UnityService {
         msgJSON = '';
       }
       try {
-        PosBusService.main.handleRelayMessage(target, msgJSON);
+        PosBusService.handleRelayMessage(target, msgJSON);
       } catch (e) {
         console.error('Error in RelayMessage handler.', e);
       }
     });
 
     this.unityContext?.on('SimpleNotification', (kind: number, flag: number, message: string) => {
-      PosBusService.main.handleSimpleNotification(kind, flag, message);
+      PosBusService.handleSimpleNotification(kind, flag, message);
     });
   }
 
