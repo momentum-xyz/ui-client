@@ -9,7 +9,8 @@ import * as styled from './MiroBoardPage.styled';
 const MiroBoardPage: FC = () => {
   const {api, miroBoardStore} = useStore();
   const {board} = miroBoardStore;
-  const {isAdmin, spaceId, renderTopBarActions} = useSpace();
+  const {isAdmin, spaceId, renderTopBarActions, pluginApi} = useSpace();
+  const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useEffect(() => {
     miroBoardStore.init(api);
@@ -29,6 +30,10 @@ const MiroBoardPage: FC = () => {
       )
     });
   }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
+
+  useStateItemChange('board', miroBoardStore.handleBoardChange);
+
+  useStateItemRemove('board', miroBoardStore.handleBoardRemove);
 
   if (!spaceId) {
     return null;

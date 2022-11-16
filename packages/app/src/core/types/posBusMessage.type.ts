@@ -1,4 +1,4 @@
-import {BroadcastStatusEnum, PosBusStatusEnum} from 'core/enums';
+import {BroadcastStatusEnum, PosBusMessageTypeEnum, PosBusStatusEnum} from 'core/enums';
 import {
   IntegrationType,
   StageModeKickType,
@@ -9,7 +9,8 @@ import {
   StageModeJoinedType,
   StageModeRequestType,
   StageModeStateMessageType,
-  StageModeDeclineInviteType
+  StageModeDeclineInviteType,
+  PosBusAttributeMessageDataType
 } from 'core/types';
 
 export type PosBusMessageStatusType = {
@@ -109,4 +110,11 @@ export type PosBusFlyWithMeType = {
 
 export type PosBusScreenShareMessageType = {
   spaceId: string;
+};
+
+// NEW CONTROLLER MESSAGES
+
+export type PosBusMiroStateMessageType = {
+  type: PosBusMessageTypeEnum;
+  data: PosBusAttributeMessageDataType<unknown>;
 };

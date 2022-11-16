@@ -15,18 +15,18 @@ export const useAttributesEmulator = () => {
 
   const [attributeItemChanged, setAttributeItemChanged] = useState<{
     attributeName: string;
-    key: string;
+    attributeItemName: string;
     value: unknown;
   }>();
   const [attributeItemRemoved, setAttributeItemRemoved] = useState<{
     attributeName: string;
-    key: string;
+    attributeItemName: string;
   }>();
 
-  const onAttributeChange = useCallback(
-    (callback) => {
+  const useAttributeChange = useCallback(
+    (topic, attributeName: string, callback) => {
       setInterval(() => {
-        if (attributeChanged && subscribed) {
+        if (attributeChanged?.attributeName === attributeName && subscribed) {
           callback(attributeChanged.attributeName, attributeChanged.value);
           setAttributeChanged(undefined);
         }
@@ -35,11 +35,11 @@ export const useAttributesEmulator = () => {
     [attributeChanged, subscribed]
   );
 
-  const onAttributeRemove = useCallback(
-    (callback) => {
+  const useAttributeRemove = useCallback(
+    (topic, attributeName: string, callback) => {
       setInterval(() => {
-        if (attributeRemoved && subscribed) {
-          callback(attributeRemoved.attributeName);
+        if (attributeRemoved?.attributeName === attributeName && subscribed) {
+          callback();
           setAttributeRemoved(undefined);
         }
       }, 500);
@@ -47,15 +47,15 @@ export const useAttributesEmulator = () => {
     [attributeRemoved, subscribed]
   );
 
-  const onAttributeItemChange = useCallback(
-    (callback) => {
+  const useAttributeItemChange = useCallback(
+    (topic, attributeName: string, attributeItemName: string, callback) => {
       setInterval(() => {
-        if (attributeItemChanged && subscribed) {
-          callback(
-            attributeItemChanged.attributeName,
-            attributeItemChanged.key,
-            attributeItemChanged.value
-          );
+        if (
+          attributeItemChanged?.attributeName === attributeName &&
+          attributeItemChanged.attributeItemName === attributeItemName &&
+          subscribed
+        ) {
+          callback(attributeItemChanged.value);
           setAttributeItemChanged(undefined);
         }
       }, 500);
@@ -63,11 +63,15 @@ export const useAttributesEmulator = () => {
     [attributeItemChanged, subscribed]
   );
 
-  const onAttributeItemRemove = useCallback(
-    (callback) => {
+  const useAttributeItemRemove = useCallback(
+    (topic, attributeName: string, attributeItemName: string, callback) => {
       setInterval(() => {
-        if (attributeItemRemoved && subscribed) {
-          callback(attributeItemRemoved.attributeName, attributeItemRemoved.key);
+        if (
+          attributeItemRemoved?.attributeName === attributeName &&
+          attributeItemRemoved.attributeItemName === attributeItemName &&
+          subscribed
+        ) {
+          callback();
           setAttributeItemChanged(undefined);
         }
       }, 500);
@@ -80,16 +84,24 @@ export const useAttributesEmulator = () => {
     return Promise.resolve();
   }, []);
 
+  const unsubscribeFromTopic = useCallback((topic: string) => {
+    if (topic === 'plugin') {
+      setSubscribed(false);
+    }
+    return Promise.resolve();
+  }, []);
+
   return {
     spaceAttributes,
-    onAttributeChange,
-    onAttributeRemove,
-    onAttributeItemChange,
-    onAttributeItemRemove,
+    useAttributeChange,
+    useAttributeRemove,
+    useAttributeItemChange,
+    useAttributeItemRemove,
     changedAttribute: setAttributeChanged,
     removedAttribute: setAttributeRemoved,
     changedAttributeItem: setAttributeItemChanged,
     removedAttributeItem: setAttributeItemRemoved,
-    subscribeToTopic
+    subscribeToTopic,
+    unsubscribeFromTopic
   };
 };

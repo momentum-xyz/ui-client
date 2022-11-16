@@ -1,5 +1,5 @@
-import {PluginStateApiInterface} from '@momentum-xyz/sdk';
+import {PluginApiInterface} from '@momentum-xyz/sdk';
 
 import {AppConfigInterface} from './appConfig.interface';
 
-export interface MiroApiInterface extends PluginStateApiInterface<AppConfigInterface> {}
+export interface MiroApiInterface extends PluginApiInterface<AppConfigInterface> {}

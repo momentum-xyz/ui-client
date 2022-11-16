@@ -12,6 +12,7 @@ import {useStore} from 'shared/hooks';
 import {SpacePage, SpaceTopBar, ToastContent} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {PluginLoaderModelType} from 'core/models';
+import {PosBusService} from 'shared/services';
 
 import * as styled from './CollaborationPluginPage.styled';
 
@@ -39,6 +40,14 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     console.info('Recieved actions', actions);
     setActions(actions);
   }, []);
+
+  useEffect(() => {
+    PosBusService.subscribe(pluginLoader.id);
+
+    return () => {
+      PosBusService.unsubscribe(pluginLoader.id);
+    };
+  }, [pluginLoader.id]);
 
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {
@@ -87,7 +96,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                   theme,
                   isSpaceAdmin: spaceStore.isAdmin,
                   spaceId: spaceStore.id,
-                  stateApi: attributesManager.stateApi,
+                  pluginApi: attributesManager.pluginApi,
                   api: attributesManager.api,
                   renderTopBarActions
                 }}

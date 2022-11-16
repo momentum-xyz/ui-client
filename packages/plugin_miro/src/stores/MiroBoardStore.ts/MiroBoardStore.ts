@@ -20,7 +20,7 @@ const MiroBoardStore = types
         return;
       }
 
-      self.board = yield self.api.getItem<MiroBoardInterface | null>('board');
+      self.board = yield self.api.getStateItem<MiroBoardInterface | null>('board');
     })
   }))
   .actions((self) => ({
@@ -29,7 +29,7 @@ const MiroBoardStore = types
         return;
       }
 
-      self.board = yield self.api.setItem('board', data);
+      yield self.api.setStateItem('board', data);
     }),
     pickBoard() {
       miroBoardsPicker.open({
@@ -43,8 +43,14 @@ const MiroBoardStore = types
         return;
       }
 
-      self.board = yield self.api.setItem('board', null);
-    })
+      yield self.api.deleteStateItem('board');
+    }),
+    handleBoardChange(board: MiroBoardInterface) {
+      self.board = board;
+    },
+    handleBoardRemove() {
+      self.board = null;
+    }
   }));
 
 export {MiroBoardStore};

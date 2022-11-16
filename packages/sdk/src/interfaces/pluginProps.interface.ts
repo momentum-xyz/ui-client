@@ -1,6 +1,6 @@
 import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
-import {PluginStateApiInterface} from './pluginStateApi.interface';
+import {PluginApiInterface} from './pluginApi.interface';
 import {PluginConfigInterface} from './pluginConfig.interface';
 import {ApiInterface} from './api.interface';
 
@@ -9,7 +9,7 @@ export interface CorePluginPropsInterface<C extends PluginConfigInterface = Plug
   spaceId?: string;
   isSpaceAdmin: boolean;
 
-  stateApi: PluginStateApiInterface<C>;
+  pluginApi: PluginApiInterface<C>;
   api: ApiInterface;
 }
 

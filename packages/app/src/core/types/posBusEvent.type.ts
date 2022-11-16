@@ -1,3 +1,5 @@
+import {AttributeValueInterface} from '@momentum-xyz/sdk';
+
 import {
   PosBusEmojiMessageType,
   PosBusGatheringMessageType,
@@ -42,5 +44,22 @@ export type PosBusEventType = {
     invitorName: string,
     uiTypeId: string,
     uiTypeName: string
+  ) => void;
+  'space-attribute-changed': <T extends AttributeValueInterface>(
+    topic: string,
+    attributeName: string,
+    value: T
+  ) => void;
+  'space-attribute-removed': (topic: string, attributeName: string) => void;
+  'space-attribute-item-changed': (
+    topic: string,
+    attributeName: string,
+    attributeItemName: string,
+    value: unknown
+  ) => void;
+  'space-attribute-item-removed': (
+    topic: string,
+    attributeName: string,
+    attributeItemName: string
   ) => void;
 };
