@@ -1,11 +1,10 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import background from 'static/images/dummy-universe-map.png';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './WorldExplorerPage.styled';
-import {ExplorePanel} from './components';
+import {ExplorePanel, UniverseMap} from './components';
 
 const WorldExplorerPage: FC = () => {
   const {worldExplorerStore} = useStore();
@@ -18,12 +17,20 @@ const WorldExplorerPage: FC = () => {
     isWeb3Injected,
     controllerAccount
   });
+  const {items} = worldExplorerStore;
+
   useEffect(() => {
     worldExplorerStore.init();
   }, [worldExplorerStore]);
+
   return (
-    <styled.WorldExplorerPageContainer background={background}>
-      <ExplorePanel />
+    <styled.WorldExplorerPageContainer>
+      <styled.UniverseContainer>
+        <UniverseMap items={items} />
+      </styled.UniverseContainer>
+      <styled.InnerContainer>
+        <ExplorePanel />
+      </styled.InnerContainer>
     </styled.WorldExplorerPageContainer>
   );
 };
