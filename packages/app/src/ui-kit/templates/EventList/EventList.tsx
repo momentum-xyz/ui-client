@@ -4,19 +4,19 @@ import {t} from 'i18next';
 import {PropsWithThemeInterface, Loader} from '@momentum-xyz/ui-kit';
 
 import {EventItem} from 'ui-kit';
-import {EventItemInterface} from 'core/models';
+import {EventItemModelInterface} from 'core/models';
 
 import * as styled from './EventList.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   currentUserId: string;
-  events: EventItemInterface[];
+  events: EventItemModelInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   isLoading: boolean;
   showOnWorldCalendar?: boolean;
   canManageInSpace?: boolean;
-  onEventEdit: (event: EventItemInterface) => void;
-  onEventRemove: (event: EventItemInterface) => void;
+  onEventEdit: (event: EventItemModelInterface) => void;
+  onEventRemove: (event: EventItemModelInterface) => void;
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
@@ -55,7 +55,7 @@ const EventList: FC<PropsInterface> = ({
         <EventItem
           currentUserId={currentUserId}
           zIndex={events.length - index}
-          key={event?.data?.id}
+          key={event.data?.eventId}
           event={event}
           onEdit={onEventEdit}
           onRemove={onEventRemove}
@@ -64,8 +64,8 @@ const EventList: FC<PropsInterface> = ({
           onFlyToGathering={onFlyToGathering}
           onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
-          onShowAttendeesList={event.attendeesDetails.showAttendees}
-          canManageEvent={canManageInSpace || event.data?.is_admin}
+          // onShowAttendeesList={event.attendeesDetails.showAttendees}
+          canManageEvent={canManageInSpace}
         />
       ))}
     </styled.Container>

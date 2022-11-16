@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
-import {PageTopBar} from '@momentum-xyz/ui-kit';
+import {Button, PageTopBar} from '@momentum-xyz/ui-kit';
 import {absoluteLink} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -97,9 +97,15 @@ const WorldCalendarPage: FC = () => {
     }
   };
 
+  const handleEventForm = () => {
+    calendarStore.formDialog.open();
+  };
+
   return (
     <styled.Container data-testid="WorldCalendarPage-test">
-      <PageTopBar title={t('labels.calendar')} onClose={handleClose} />
+      <PageTopBar title={t('labels.calendar')} onClose={handleClose}>
+        <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
+      </PageTopBar>
       <EventList
         currentUserId={sessionStore.userId}
         events={eventList.events}

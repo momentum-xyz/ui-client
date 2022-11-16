@@ -7,9 +7,11 @@ import DatePicker from 'react-datepicker';
 import cn from 'classnames';
 import {Input, Dialog, TextArea} from '@momentum-xyz/ui-kit';
 import {timeFromNow, DATE_TIME_FORMAT} from '@momentum-xyz/core';
+import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
 import {EventFormInterface} from 'core/interfaces';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './EventForm.styled';
 
@@ -17,7 +19,7 @@ const EventForm: FC = () => {
   const theme = useTheme();
   const {calendarStore, spaceStore} = useStore().collaborationStore;
   const {eventForm, formDialog, eventList} = calendarStore;
-  const {eventFormRequest, currentEvent, imageSrc} = eventForm;
+  const {currentEvent, imageSrc} = eventForm;
 
   const {
     control,
@@ -29,7 +31,7 @@ const EventForm: FC = () => {
   } = useForm<EventFormInterface>();
   const [image, setImage] = useState<File>();
   const [startDate, setStartDate] = useState<Date>(() => {
-    if (currentEvent?.id) {
+    if (currentEvent?.eventId) {
       return currentEvent.start;
     } else {
       return new Date();
@@ -37,7 +39,7 @@ const EventForm: FC = () => {
   });
 
   const [endDate, setEndDate] = useState<Date>(() => {
-    if (currentEvent?.id) {
+    if (currentEvent?.eventId) {
       return currentEvent.end;
     } else {
       return timeFromNow(1);
@@ -49,19 +51,34 @@ const EventForm: FC = () => {
       data.web_link = null;
     }
 
-    if (spaceStore) {
-      let isSuccess = false;
+    const isSuccess = await eventForm.createEventAttribute(
+      data,
+      spaceStore.id,
+      spaceStore.space?.name,
+      image
+    );
 
-      if (currentEvent?.id) {
-        isSuccess = await eventForm.updateEvent(data, spaceStore.id, currentEvent.id, image);
-      } else {
-        isSuccess = await eventForm.createEvent(data, spaceStore.id, image);
-      }
-
-      if (isSuccess) {
-        eventList.fetchEvents(spaceStore.id);
-        formDialog.close();
-      }
+    if (isSuccess) {
+      formDialog.close();
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="Event created successfully"
+          showCloseButton
+        />
+      );
+      await eventList.fetchSpaceEvents(spaceStore.id);
+    } else {
+      toast.error(
+        <ToastContent
+          isDanger
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="There was a problem creating the event"
+          showCloseButton
+        />
+      );
     }
   };
 
@@ -102,14 +119,14 @@ const EventForm: FC = () => {
   return (
     <Dialog
       theme={theme}
-      title={eventForm.currentEvent?.id ? t('eventForm.editTitle') : t('eventForm.addTitle')}
+      title={eventForm.currentEvent?.eventId ? t('eventForm.editTitle') : t('eventForm.addTitle')}
       headerStyle="uppercase"
       showCloseButton
       onClose={formDialog.close}
       approveInfo={{
-        title: currentEvent?.id ? 'update' : 'submit',
+        title: currentEvent?.eventId ? 'update' : 'submit',
         onClick: handleSubmit(formSubmitHandler),
-        disabled: eventFormRequest.isPending
+        disabled: eventForm.isPending
       }}
       hasBorder
     >
@@ -230,7 +247,7 @@ const EventForm: FC = () => {
         </styled.Item>
         <styled.FileUploaderItem>
           <styled.TileImageUpload>
-            {(image || currentEvent?.image_hash) && (
+            {(image || currentEvent?.image) && (
               <styled.ImagePreview
                 src={(image && URL.createObjectURL(image)) || imageSrc || undefined}
               />

@@ -13,6 +13,7 @@ export * from './TrackModel';
 export * from './UserSpaceDetails';
 export * from './AttendeeModel';
 export * from './EventItem';
+export * from './EventItemModel';
 export * from './TileList';
 export * from './Tile';
 export * from './Content';

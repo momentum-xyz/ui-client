@@ -71,7 +71,7 @@ const CalendarPage: FC = () => {
 
   useEffect(() => {
     if (spaceStore) {
-      eventList.fetchEvents(spaceStore.id);
+      eventList.fetchSpaceEvents(spaceStore.id);
     }
 
     return () => eventList.resetModel();

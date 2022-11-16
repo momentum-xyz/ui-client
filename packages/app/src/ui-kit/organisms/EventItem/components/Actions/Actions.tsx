@@ -1,14 +1,14 @@
 import React, {FC} from 'react';
 import {SvgButton} from '@momentum-xyz/ui-kit';
 
-import {EventItemInterface} from 'core/models';
+import {EventItemModelInterface} from 'core/models';
 
 import * as styled from './Actions.styled';
 
 interface PropsInterface {
-  event: EventItemInterface;
-  onEdit: (event: EventItemInterface) => void;
-  onRemove: (event: EventItemInterface) => void;
+  event: EventItemModelInterface;
+  onEdit: (event: EventItemModelInterface) => void;
+  onRemove: (event: EventItemModelInterface) => void;
 }
 
 const Actions: FC<PropsInterface> = ({event, onRemove, onEdit}) => {

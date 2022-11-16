@@ -4,27 +4,27 @@ import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
 import {Button, IconSvg, ShowMoreText, Text, truncateText} from '@momentum-xyz/ui-kit';
 
-import {EventItemInterface} from 'core/models';
+import {EventItemModelInterface} from 'core/models';
 import {AddToCalendarDropdown} from 'ui-kit';
 import placeholder from 'static/images/placeholder.png';
 
-import {Header, Actions, Attendees} from './components';
+import {Header, Actions} from './components';
 import * as styled from './EventItem.styled';
 
 const TEXT_LENGTH = 12;
 
 interface PropsInterface {
-  event: EventItemInterface;
+  event: EventItemModelInterface;
   currentUserId: string;
-  onEdit: (event: EventItemInterface) => void;
-  onRemove: (event: EventItemInterface) => void;
+  onEdit: (event: EventItemModelInterface) => void;
+  onRemove: (event: EventItemModelInterface) => void;
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   zIndex?: number;
   showOnWorldCalendar?: boolean;
   onFlyToGathering?: (spaceId: string) => void;
   onFlyToSpace?: (spaceId: string) => void;
   onWeblinkClick: (weblink: string) => void;
-  onShowAttendeesList: (eventName: string, eventId: string, spaceId: string) => void;
+  onShowAttendeesList?: (eventName: string, eventId: string, spaceId: string) => void;
   canManageEvent?: boolean;
 }
 
@@ -45,24 +45,24 @@ const EventItem: FC<PropsInterface> = ({
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
   useEffect(() => {
-    event.init();
+    // event.init();
   }, [event]);
 
   const handleAttendingButtonClick = () => {
-    if (event.isAttending(currentUserId)) {
-      event.stopAttending();
-    } else {
-      event.attend();
-    }
+    // if (event.isAttending(currentUserId)) {
+    //   event.stopAttending();
+    // } else {
+    //   event.attend();
+    // }
   };
 
   const buttons = () => (
     <styled.Buttons className="base">
       <styled.Buttons>
-        {showOnWorldCalendar && event.data?.spaceId && (
+        {showOnWorldCalendar && event.data && (
           <styled.EventButton
             label={`${t('eventList.eventItem.flyToSpace')} ${truncateText(
-              event.data?.spaceName,
+              event.data?.spaceName ?? '',
               TEXT_LENGTH
             )}`}
             transform="capitalized"
@@ -77,7 +77,7 @@ const EventItem: FC<PropsInterface> = ({
         <styled.EventButton
           onClick={() => {
             if (event) {
-              onMagicLinkOpen(event.data?.id ?? '', event.data?.spaceId ?? undefined);
+              onMagicLinkOpen(event.data?.eventId ?? '', event.data?.spaceId);
             }
           }}
           label={t('eventList.eventItem.gatheringLink')}
@@ -96,32 +96,32 @@ const EventItem: FC<PropsInterface> = ({
       <styled.Buttons>
         <Button
           variant="primary"
-          label={t('counts.attendees', {count: event.numberOfAllAttendees})}
+          label={t('counts.attendees', {count: 0})} //count: event.numberOfAllAttendees
           transform="capitalized"
           onClick={() =>
-            onShowAttendeesList(
+            onShowAttendeesList?.(
               event.data?.title ?? '',
-              event.data?.id ?? '',
+              event.data?.eventId ?? '',
               event.data?.spaceId ?? ''
             )
           }
         />
-        {event.isLive() ? (
+        {event.isLive ? (
           <styled.LiveIndicator>
             <IconSvg name="live" size="medium-large" isWhite />
             <p>{t('eventList.eventItem.live')}</p>
           </styled.LiveIndicator>
         ) : (
           <Button
-            variant={event.isAttending(currentUserId) ? 'inverted' : 'primary'}
-            icon={event.isAttending(currentUserId) ? 'check' : 'add'}
-            disabled={event.attendRequest.isPending}
+            // variant={event.isAttending(currentUserId) ? 'inverted' : 'primary'}
+            // icon={event.isAttending(currentUserId) ? 'check' : 'add'}
+            // disabled={event.attendRequest.isPending}
             label={t('eventList.eventItem.interested')}
             transform="capitalized"
             onClick={handleAttendingButtonClick}
           />
         )}
-        {!event.isLive() && (
+        {!event.isLive && (
           <AddToCalendarComponent
             event={event.asCalendarEvent}
             buttonProps={{
@@ -135,7 +135,7 @@ const EventItem: FC<PropsInterface> = ({
             className="AddToCalendarContainer"
           />
         )}
-        {event.isLive() && showOnWorldCalendar && event.data?.id && (
+        {event.isLive && showOnWorldCalendar && event.data?.eventId && (
           <Button
             variant="inverted"
             icon="fly-to"
@@ -181,19 +181,19 @@ const EventItem: FC<PropsInterface> = ({
               }}
             />
           </styled.TextRow>
-          <styled.AttendeesContainer>
-            {event.attendees.map((attendee) => (
-              <styled.AttendeeContrainer key={attendee.id}>
-                <styled.AttendeeAvatar size="normal" avatarSrc={attendee.avatarSrc} />
-                <styled.AttendeeNameText
-                  text={attendee.name}
-                  size="s"
-                  align="center"
-                  isMultiline={false}
-                />
-              </styled.AttendeeContrainer>
-            ))}
-          </styled.AttendeesContainer>
+          {/*<styled.AttendeesContainer>*/}
+          {/*  {event.attendees.map((attendee) => (*/}
+          {/*    <styled.AttendeeContrainer key={attendee.id}>*/}
+          {/*      <styled.AttendeeAvatar size="normal" avatarSrc={attendee.avatarSrc} />*/}
+          {/*      <styled.AttendeeNameText*/}
+          {/*        text={attendee.name}*/}
+          {/*        size="s"*/}
+          {/*        align="center"*/}
+          {/*        isMultiline={false}*/}
+          {/*      />*/}
+          {/*    </styled.AttendeeContrainer>*/}
+          {/*  ))}*/}
+          {/*</styled.AttendeesContainer>*/}
         </styled.ContentRow>
         {buttons()}
         {canManageEvent && <Actions event={event} onEdit={onEdit} onRemove={onRemove} />}
@@ -203,8 +203,8 @@ const EventItem: FC<PropsInterface> = ({
 
   const image = () => (
     <styled.ImageContainer>
-      {event.data?.image_hash ? (
-        <img alt={event.data?.image_hash} src={event.imageSrc} />
+      {event.data ? (
+        <img alt={event.data.image ?? ''} src={event.imageSrc} />
       ) : (
         <img alt="placeholder" src={placeholder} />
       )}
@@ -213,18 +213,22 @@ const EventItem: FC<PropsInterface> = ({
 
   return (
     <>
-      <styled.Container style={{zIndex: zIndex}} id={event.data?.id} data-testid="EventItem-test">
+      <styled.Container
+        style={{zIndex: zIndex}}
+        id={event.data?.eventId}
+        data-testid="EventItem-test"
+      >
         <styled.Row className="header">{image()}</styled.Row>
         {info()}
       </styled.Container>
 
-      {event.attendeesDetails.dialog.isOpen && (
-        <Attendees
-          attendees={event.attendeesDetails}
-          currentUserId={currentUserId}
-          onFlyToSpace={onFlyToSpace}
-        />
-      )}
+      {/*{event.attendeesDetails.dialog.isOpen && (*/}
+      {/*  <Attendees*/}
+      {/*    attendees={event.attendeesDetails}*/}
+      {/*    currentUserId={currentUserId}*/}
+      {/*    onFlyToSpace={onFlyToSpace}*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };

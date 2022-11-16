@@ -3,7 +3,7 @@ import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 import {v4 as uuidv4} from 'uuid';
 import {generatePath} from 'react-router-dom';
 
-import {EventForm, EventItemInterface, EventList} from 'core/models';
+import {EventForm, EventItemModelInterface, EventList} from 'core/models';
 import {api} from 'api';
 import {MagicTypeEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
@@ -22,16 +22,16 @@ const WorldCalendarStore = types
         eventList: types.optional(EventList, {}),
         spaceId: types.maybe(types.string),
         eventForm: types.optional(EventForm, {}),
-        magicLinkId: '',
+        magicLinkId: types.maybe(types.string),
         magicLinkRequest: types.optional(RequestModel, {})
       })
       .actions((self) => ({
-        editEvent(event: EventItemInterface) {
+        editEvent(event: EventItemModelInterface) {
           self.eventForm.editEvent(event);
           self.formDialog.open();
         },
-        selectEventToRemove(event: EventItemInterface) {
-          self.eventIdToRemove = event.data?.id;
+        selectEventToRemove(event: EventItemModelInterface) {
+          self.eventIdToRemove = event.data?.eventId;
           self.spaceId = event.data?.spaceId;
           self.deleteConfirmationDialog.open();
         },
@@ -40,7 +40,7 @@ const WorldCalendarStore = types
             return;
           }
 
-          yield self.removeEventRequest.send(api.eventsRepository.deleteEvent, {
+          yield self.removeEventRequest.send(api.old_eventsRepository.deleteEvent, {
             spaceId,
             eventId: self.eventIdToRemove
           });
@@ -72,6 +72,9 @@ const WorldCalendarStore = types
   )
   .views((self) => ({
     get magicLink(): string {
+      if (!self.magicLinkId) {
+        return '';
+      }
       return `${window.location.origin}${generatePath(ROUTES.magic, {
         id: self.magicLinkId
       })}`;

@@ -3,7 +3,7 @@ import {Method} from 'axios';
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
-import {eventsRepositoryEndpoints} from './eventsRepository.api.endpoints';
+import {eventsRepositoryEndpoints} from './old_eventsRepository.api.endpoints';
 import {
   FetchEventRequest,
   FetchEventsResponse,
@@ -17,7 +17,7 @@ import {
   DeleteEventResponse,
   UploadFileRequest,
   UploadFileResponse
-} from './eventsRepository.api.types';
+} from './old_eventsRepository.api.types';
 
 export const fetchEvents: RequestInterface<BaseEventsRequest, FetchEventsResponse> = (options) => {
   const {spaceId, children, ...restOptions} = options;

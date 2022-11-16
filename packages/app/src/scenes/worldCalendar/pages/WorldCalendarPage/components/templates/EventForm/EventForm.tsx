@@ -29,9 +29,11 @@ const EventForm: FC = () => {
     clearErrors
   } = useForm<EventFormInterface>();
   const [image, setImage] = useState<File>();
-  const [startDate, setStartDate] = useState<Date>(currentEvent?.start ?? new Date());
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(currentEvent?.start ?? '') ?? new Date()
+  );
 
-  const [endDate, setEndDate] = useState<Date>(currentEvent?.end ?? new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date(currentEvent?.end ?? '') ?? new Date());
 
   const formSubmitHandler: SubmitHandler<EventFormInterface> = async (data: EventFormInterface) => {
     if (!data.web_link?.length) {
@@ -41,8 +43,13 @@ const EventForm: FC = () => {
     if (currentEvent?.spaceId) {
       let isSuccess = false;
 
-      if (currentEvent?.id) {
-        isSuccess = await eventForm.updateEvent(data, currentEvent.spaceId, currentEvent.id, image);
+      if (currentEvent?.eventId) {
+        isSuccess = await eventForm.updateEvent(
+          data,
+          currentEvent.spaceId,
+          currentEvent.eventId,
+          image
+        );
       }
 
       if (isSuccess) {
@@ -217,7 +224,7 @@ const EventForm: FC = () => {
         </styled.Item>
         <styled.FileUploaderItem>
           <styled.TileImageUpload>
-            {(image || currentEvent?.image_hash) && (
+            {(image || currentEvent?.image) && (
               <styled.ImagePreview
                 src={(image && URL.createObjectURL(image)) || imageSrc || undefined}
               />
