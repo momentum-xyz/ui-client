@@ -190,13 +190,6 @@ const PluginAttributesManager = types
         deleteStateItem: (key: string) => self.deleteItem(self.spaceId, key),
         getConfig: self.getConfig,
 
-        subscribeToStateUsingTopic: (topic) => {
-          PosBusService.subscribe(topic);
-        },
-        unsubscribeFromStateUsingTopic: (topic) => {
-          PosBusService.unsubscribe(topic);
-        },
-
         // TODO: Temporary, change to below after PosBus supports attribute items
         // useStateItemChange: <T>(topic: string, key: string, callback: (value: T) => void) => {
         //   return usePosBusEvent(
@@ -214,12 +207,12 @@ const PluginAttributesManager = types
         // },
 
         // TODO: Temporary, change to above after PosBus supports attribute items
-        useStateItemChange: <T>(topic: string, key: string, callback: (value: T) => void) => {
+        useStateItemChange: <T>(key: string, callback: (value: T) => void) => {
           return usePosBusEvent(
             'space-attribute-changed',
             (posBusTopic, posBusAttributeName, value) => {
               if (
-                posBusTopic === topic &&
+                posBusTopic === self.pluginId &&
                 posBusAttributeName === AttributeNameEnum.STATE &&
                 key in value
               ) {
@@ -246,9 +239,9 @@ const PluginAttributesManager = types
         // },
 
         // TODO: Temporary, change to above after PosBus supports attribute items
-        useStateItemRemove(topic, key, callback) {
+        useStateItemRemove(key, callback) {
           return usePosBusEvent('space-attribute-removed', (posBusTopic, posBusAttributeName) => {
-            if (posBusTopic === topic && posBusAttributeName === AttributeNameEnum.STATE) {
+            if (posBusTopic === self.pluginId && posBusAttributeName === AttributeNameEnum.STATE) {
               callback();
             }
           });

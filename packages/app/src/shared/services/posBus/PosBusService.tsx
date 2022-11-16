@@ -22,22 +22,22 @@ import {
 class PosBusService {
   private static main = new PosBusService();
 
-  private _subscribedSpacePluginTopics: Set<string>;
+  private _subscribedAttributeTypeTopics: Set<string>;
 
-  public get subscribedSpacePluginTopics(): Set<string> {
-    return this._subscribedSpacePluginTopics;
+  public get subscribedAttributeTypeTopics(): Set<string> {
+    return this._subscribedAttributeTypeTopics;
   }
 
   private constructor() {
-    this._subscribedSpacePluginTopics = new Set();
+    this._subscribedAttributeTypeTopics = new Set();
   }
 
   static subscribe(topic: string) {
-    this.main._subscribedSpacePluginTopics.add(topic);
+    this.main._subscribedAttributeTypeTopics.add(topic);
   }
 
   static unsubscribe(topic: string) {
-    this.main._subscribedSpacePluginTopics.delete(topic);
+    this.main._subscribedAttributeTypeTopics.delete(topic);
   }
 
   static handleIncomingVibe(message: PosBusVibeMessageType) {
@@ -197,11 +197,12 @@ class PosBusService {
   static handleRelayMessage(target: string, message: unknown): void {
     console.log('[unity message]:', target, message);
 
-    if (this.main.subscribedSpacePluginTopics.has(target)) {
+    if (this.main.subscribedAttributeTypeTopics.has(target)) {
       this.handleSpaceAttributeMessaage(target, message as PosBusAttributeMessageType);
       return;
     }
 
+    // TODO: Old stuff, refactor to new controller attributes system
     switch (target) {
       case 'collaboration':
         this.handleIncomingCollaboration(message as PosBusCollaborationMessageType);

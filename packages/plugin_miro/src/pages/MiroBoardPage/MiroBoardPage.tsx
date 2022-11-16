@@ -10,22 +10,12 @@ const MiroBoardPage: FC = () => {
   const {api, miroBoardStore} = useStore();
   const {board} = miroBoardStore;
   const {isAdmin, spaceId, renderTopBarActions, pluginApi} = useSpace();
-  const {
-    useStateItemChange,
-    useStateItemRemove,
-    subscribeToStateUsingTopic,
-    unsubscribeFromStateUsingTopic
-  } = pluginApi;
+  const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useEffect(() => {
     miroBoardStore.init(api);
     miroBoardStore.fetchBoard();
-    subscribeToStateUsingTopic('miro-state');
-
-    return () => {
-      unsubscribeFromStateUsingTopic('miro-state');
-    };
-  }, [api, miroBoardStore, subscribeToStateUsingTopic, unsubscribeFromStateUsingTopic]);
+  }, [api, miroBoardStore]);
 
   useEffect(() => {
     renderTopBarActions({
@@ -41,9 +31,9 @@ const MiroBoardPage: FC = () => {
     });
   }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
 
-  useStateItemChange('miro-state', 'board', miroBoardStore.handleBoardChange);
+  useStateItemChange('board', miroBoardStore.handleBoardChange);
 
-  useStateItemRemove('miro-state', 'board', miroBoardStore.handleBoardRemove);
+  useStateItemRemove('board', miroBoardStore.handleBoardRemove);
 
   if (!spaceId) {
     return null;

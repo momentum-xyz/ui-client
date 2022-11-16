@@ -34,9 +34,6 @@ export const SpaceGlobalPropsContext = createContext<
     getConfig: () => Promise.reject(),
     deleteStateItem: () => Promise.reject(),
 
-    subscribeToStateUsingTopic: () => Promise.reject(),
-    unsubscribeFromStateUsingTopic: () => Promise.reject(),
-
     useStateItemChange: () => Promise.reject(),
     useStateItemRemove: () => Promise.reject()
   },

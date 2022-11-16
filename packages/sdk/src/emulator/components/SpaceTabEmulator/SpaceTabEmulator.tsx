@@ -183,10 +183,8 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
         subscribeToStateUsingTopic: subscribeToTopic,
         unsubscribeFromStateUsingTopic: unsubscribeFromTopic,
 
-        useStateItemChange: (topic, key, callback) =>
-          useAttributeItemChange(topic, 'state', key, callback),
-        useStateItemRemove: (topic, key, callback) =>
-          useAttributeItemRemove(topic, 'state', key, callback)
+        useStateItemChange: (key, callback) => useAttributeItemChange('', 'state', key, callback),
+        useStateItemRemove: (key, callback) => useAttributeItemRemove('', 'state', key, callback)
       }
     }),
     [
