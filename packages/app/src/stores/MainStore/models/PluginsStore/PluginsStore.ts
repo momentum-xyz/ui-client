@@ -83,8 +83,7 @@ const PluginsStore = types
             attributesManager: PluginAttributesManager.create({
               pluginId: plugin.id,
               spaceId
-            }),
-            scriptUrl: 'http://localhost:3001/remoteEntry.js'
+            })
           });
 
           plugins.push(pluginLoader);
