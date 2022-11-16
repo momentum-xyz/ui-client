@@ -1,5 +1,7 @@
+import {AttributeValueInterface} from '@momentum-xyz/sdk';
+
 import {PosBusEventEmitter} from 'core/constants';
-import {PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
+import {PosBusMessageTypeEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
   PosBusVibeMessageType,
   PosBusHigh5MessageType,
@@ -13,10 +15,31 @@ import {
   PosBusEmojiMessageType,
   PosBusMegamojiMessageType,
   PosBusFlyWithMeType,
-  PosBusScreenShareMessageType
+  PosBusScreenShareMessageType,
+  PosBusMiroStateMessageType as PosBusAttributeMessageType
 } from 'core/types';
 
 class PosBusService {
+  private static main = new PosBusService();
+
+  private _subscribedAttributeTypeTopics: Set<string>;
+
+  public get subscribedAttributeTypeTopics(): Set<string> {
+    return this._subscribedAttributeTypeTopics;
+  }
+
+  private constructor() {
+    this._subscribedAttributeTypeTopics = new Set();
+  }
+
+  static subscribe(topic: string) {
+    this.main._subscribedAttributeTypeTopics.add(topic);
+  }
+
+  static unsubscribe(topic: string) {
+    this.main._subscribedAttributeTypeTopics.delete(topic);
+  }
+
   static handleIncomingVibe(message: PosBusVibeMessageType) {
     const {count, type} = message;
     PosBusEventEmitter.emit('user-vibed', type, count);
@@ -132,8 +155,54 @@ class PosBusService {
     PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilot, message.pilotName);
   }
 
-  static handleRelayMessage(target: string, message: any): void {
+  static handleSpaceAttributeMessaage(target: string, message: PosBusAttributeMessageType) {
+    switch (message.type) {
+      case PosBusMessageTypeEnum.ATTRIBUTE_CHANGED:
+        PosBusEventEmitter.emit(
+          'space-attribute-changed',
+          target,
+          message.data.attribute_name,
+          message.data.value as AttributeValueInterface
+        );
+        break;
+      case PosBusMessageTypeEnum.ATTRIBUTE_REMOVED:
+        PosBusEventEmitter.emit('space-attribute-removed', target, message.data.attribute_name);
+        break;
+      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_CHANGED:
+        if (!message.data.sub_name) {
+          return;
+        }
+        PosBusEventEmitter.emit(
+          'space-attribute-item-changed',
+          target,
+          message.data.attribute_name,
+          message.data.sub_name,
+          message.data.value
+        );
+        break;
+      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_REMOVED:
+        if (!message.data.sub_name) {
+          return;
+        }
+        PosBusEventEmitter.emit(
+          'space-attribute-item-removed',
+          target,
+          message.data.attribute_name,
+          message.data.sub_name
+        );
+        break;
+    }
+  }
+
+  static handleRelayMessage(target: string, message: unknown): void {
     console.log('[unity message]:', target, message);
+
+    if (this.main.subscribedAttributeTypeTopics.has(target)) {
+      this.handleSpaceAttributeMessaage(target, message as PosBusAttributeMessageType);
+      return;
+    }
+
+    // TODO: Old stuff, refactor to new controller attributes system
     switch (target) {
       case 'collaboration':
         this.handleIncomingCollaboration(message as PosBusCollaborationMessageType);
@@ -177,6 +246,7 @@ class PosBusService {
       case 'screen-share':
         this.handleScreenShareStart(message as PosBusScreenShareMessageType);
         break;
+
       default:
         console.debug('Unknown relay message type', target);
     }

@@ -10,3 +10,4 @@ export * from './stageMode.type';
 export * from './metadataField.type';
 export * from './TextMessage.type';
 export * from './tokenRuleListHeader.type';
+export * from './posBusMessageData.type';
