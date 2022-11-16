@@ -1,6 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
+import {PolkadotNftStore} from '../PolkadotNftStore';
+
 // import {api, ValidationResponse} from 'api';
 import {WorldInfo, WorldInfoInterface} from './models';
 
@@ -27,6 +29,7 @@ const WorldExplorerStore = types
     ResetModel,
     types.model('WorldExplorerStore', {
       request: types.optional(RequestModel, {}),
+      polkadotNftStore: types.optional(PolkadotNftStore, {}),
 
       items: types.optional(types.array(WorldInfo), []),
       selectedItemId: types.maybe(types.string),
@@ -72,6 +75,12 @@ const WorldExplorerStore = types
     get isLoading(): boolean {
       return self.request.isPending;
     }
+  }))
+  .actions((self) => ({
+    init: flow(function* () {
+      yield self.polkadotNftStore.init();
+      yield self.fetchItems();
+    })
   }));
 
 export {WorldExplorerStore};

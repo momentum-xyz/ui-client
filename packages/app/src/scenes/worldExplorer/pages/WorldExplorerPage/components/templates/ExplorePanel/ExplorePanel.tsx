@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {Heading, Loader, SearchInput, Text} from '@momentum-xyz/ui-kit';
@@ -39,10 +39,6 @@ const ExplorePanel: FC = () => {
   });
 
   const {t} = useTranslation();
-
-  useEffect(() => {
-    worldExplorerStore.fetchItems();
-  }, [worldExplorerStore]);
 
   // const debouncedSearch = useDebouncedCallback(exploreStore.search, SEARCH_DELAY_MS);
 
