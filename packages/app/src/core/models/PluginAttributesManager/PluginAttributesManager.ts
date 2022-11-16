@@ -195,33 +195,61 @@ const PluginAttributesManager = types
           PosBusService.main.unsubscribe(topic);
         },
 
+        // TODO: Change to commented code when sub attributes change will be working on PosBus
+        // useStateItemChange: <T>(topic: string, key: string, callback: (value: T) => void) => {
+        //   return usePosBusEvent(
+        //     'space-attribute-item-changed',
+        //     (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
+        //       if (
+        //         posBusTopic === topic &&
+        //         posBusAttributeName === AttributeNameEnum.STATE &&
+        //         posBusAttributItemName === key
+        //       ) {
+        //         callback(value as T);
+        //       }
+        //     }
+        //   );
+        // },
+
+        // TODO: Temporary workaround, change to above uncommented code when PosBus will support sub attributes
         useStateItemChange: <T>(topic: string, key: string, callback: (value: T) => void) => {
           return usePosBusEvent(
-            'space-attribute-item-changed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
+            'space-attribute-changed',
+            (posBusTopic, posBusAttributeName, value) => {
               if (
                 posBusTopic === topic &&
                 posBusAttributeName === AttributeNameEnum.STATE &&
-                posBusAttributItemName === key
+                key in value
               ) {
-                callback(value as T);
+                callback(value[key] as T);
               }
             }
           );
         },
+
+        // TODO: Change to commented code when sub attributes change will be working on PosBus
+        // useStateItemRemove(topic, key, callback) {
+        //   return usePosBusEvent(
+        //     'space-attribute-item-removed',
+        //     (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
+        //       if (
+        //         posBusTopic === topic &&
+        //         posBusAttributeName === AttributeNameEnum.STATE &&
+        //         posBusAttributItemName === key
+        //       ) {
+        //         callback();
+        //       }
+        //     }
+        //   );
+        // },
+
+        // TODO: Temporary workaround, change to above uncommented code when PosBus will support sub attributes
         useStateItemRemove(topic, key, callback) {
-          return usePosBusEvent(
-            'space-attribute-item-removed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
-              if (
-                posBusTopic === topic &&
-                posBusAttributeName === AttributeNameEnum.STATE &&
-                posBusAttributItemName === key
-              ) {
-                callback();
-              }
+          return usePosBusEvent('space-attribute-removed', (posBusTopic, posBusAttributeName) => {
+            if (posBusTopic === topic && posBusAttributeName === AttributeNameEnum.STATE) {
+              callback();
             }
-          );
+          });
         }
       };
     },

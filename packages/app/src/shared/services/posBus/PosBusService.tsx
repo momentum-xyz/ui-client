@@ -1,3 +1,5 @@
+import {AttributeValueInterface} from '@momentum-xyz/sdk';
+
 import {PosBusEventEmitter} from 'core/constants';
 import {PosBusMessageTypeEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
@@ -156,7 +158,7 @@ class PosBusService {
           'space-attribute-changed',
           target,
           message.data.attribute_name,
-          message.data.value
+          message.data.value as AttributeValueInterface
         );
         break;
       case PosBusMessageTypeEnum.ATTRIBUTE_REMOVED:
