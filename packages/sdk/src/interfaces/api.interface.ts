@@ -12,35 +12,43 @@ export interface ApiInterface {
   ) => Promise<T>;
   deleteSpaceAttribute: (spaceId: string, attributeName: string) => Promise<null>;
 
-  getSpaceAttributeItem: <T>(spaceId: string, attributeName: string, key: string) => Promise<T>;
+  getSpaceAttributeItem: <T>(
+    spaceId: string,
+    attributeName: string,
+    attributeItemName: string
+  ) => Promise<T>;
   setSpaceAttributeItem: <T>(
     spaceId: string,
     attributeName: string,
-    key: string,
+    attributeItemName: string,
     value: T
   ) => Promise<T>;
-  deleteSpaceAttributeItem: (spaceId: string, attributeName: string, key: string) => Promise<null>;
+  deleteSpaceAttributeItem: (
+    spaceId: string,
+    attributeName: string,
+    attributeItemName: string
+  ) => Promise<null>;
 
   subscribeToTopic: (topic: string) => void;
   unsubscribeFromTopic: (topic: string) => void;
 
-  useAttributeChange: (
+  useAttributeChange: <T extends AttributeValueInterface = AttributeValueInterface>(
     topic: string,
     attributeName: string,
-    callback: <T extends AttributeValueInterface = AttributeValueInterface>(value: T) => void
+    callback: (value: T) => void
   ) => void;
   useAttributeRemove: (topic: string, attributeName: string, callback: () => void) => void;
 
-  useAttributeItemChange: (
+  useAttributeItemChange: <T = unknown>(
     topic: string,
     attributeName: string,
-    key: string,
-    callback: <T>(value: T) => void
+    attributeItemName: string,
+    callback: (value: T) => void
   ) => void;
   useAttributeItemRemove: (
     topic: string,
     attributeName: string,
-    key: string,
+    attributeItemName: string,
     callback: () => void
   ) => void;
 }

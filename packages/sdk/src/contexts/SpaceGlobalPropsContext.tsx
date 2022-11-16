@@ -28,11 +28,17 @@ export const SpaceGlobalPropsContext = createContext<
     useAttributeItemChange: () => Promise.reject(),
     useAttributeItemRemove: () => Promise.reject()
   },
-  stateApi: {
-    getItem: () => Promise.reject(),
-    setItem: () => Promise.reject(),
+  pluginApi: {
+    getStateItem: () => Promise.reject(),
+    setStateItem: () => Promise.reject(),
     getConfig: () => Promise.reject(),
-    deleteItem: () => Promise.reject()
+    deleteStateItem: () => Promise.reject(),
+
+    subscribeToStateUsingTopic: () => Promise.reject(),
+    unsubscribeFromStateUsingTopic: () => Promise.reject(),
+
+    useStateItemChange: () => Promise.reject(),
+    useStateItemRemove: () => Promise.reject()
   },
   renderTopBarActions() {}
 });

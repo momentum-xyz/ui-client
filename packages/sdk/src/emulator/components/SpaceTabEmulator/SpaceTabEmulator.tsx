@@ -87,7 +87,11 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
           return Promise.resolve(null);
         },
 
-        getSpaceAttributeItem: <T,>(spaceId: string, attributeName: string, key: string) => {
+        getSpaceAttributeItem: <T,>(
+          spaceId: string,
+          attributeName: string,
+          attributeItemName: string
+        ) => {
           const attributeValue = spaceAttributes.current.find(
             (attribute) => attribute.attributeName === attributeName
           )?.attributeValue;
@@ -96,12 +100,12 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
             return Promise.reject();
           }
 
-          return Promise.resolve(attributeValue[key] as T);
+          return Promise.resolve(attributeValue[attributeItemName] as T);
         },
         setSpaceAttributeItem: <T,>(
           spaceId: string,
           attributeName: string,
-          key: string,
+          attributeItemName: string,
           value: T
         ) => {
           const attributeValue = spaceAttributes.current.find(
@@ -112,11 +116,11 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
             return Promise.reject();
           }
 
-          attributeValue[key] = value;
-          changedAttributeItem({attributeName, key, value});
-          return Promise.resolve(attributeValue[key] as T);
+          attributeValue[attributeItemName] = value;
+          changedAttributeItem({attributeName, attributeItemName, value});
+          return Promise.resolve(attributeValue[attributeItemName] as T);
         },
-        deleteSpaceAttributeItem: (spaceId: string, attributeName, key) => {
+        deleteSpaceAttributeItem: (spaceId: string, attributeName, attributeItemName) => {
           const attributeValue = spaceAttributes.current.find(
             (attribute) => attribute.attributeName === attributeName
           )?.attributeValue;
@@ -125,8 +129,8 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
             return Promise.reject();
           }
 
-          delete attributeValue[key];
-          removedAttributeItem({attributeName, key});
+          delete attributeValue[attributeItemName];
+          removedAttributeItem({attributeName, attributeItemName});
           return Promise.resolve(null);
         },
 
@@ -139,8 +143,8 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
         useAttributeItemChange,
         useAttributeItemRemove
       },
-      stateApi: {
-        getItem: <T,>(key: string) => {
+      pluginApi: {
+        getStateItem: <T,>(key: string) => {
           const state = spaceAttributes.current.find(
             ({attributeName}) => attributeName === 'state'
           )?.attributeValue;
@@ -151,7 +155,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
 
           return Promise.resolve(state[key] as T);
         },
-        setItem: <T,>(key: string, value: T) => {
+        setStateItem: <T,>(key: string, value: T) => {
           const state = spaceAttributes.current.find(
             ({attributeName}) => attributeName === 'state'
           )?.attributeValue;
@@ -163,7 +167,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
           return Promise.resolve(state[key] as T);
         },
         getConfig: () => Promise.resolve(config),
-        deleteItem: (key) => {
+        deleteStateItem: (key) => {
           const state = spaceAttributes.current.find(
             ({attributeName}) => attributeName === 'state'
           )?.attributeValue;
@@ -174,23 +178,32 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
 
           delete state[key];
           return Promise.resolve(null);
-        }
+        },
+
+        subscribeToStateUsingTopic: subscribeToTopic,
+        unsubscribeFromStateUsingTopic: unsubscribeFromTopic,
+
+        useStateItemChange: (topic, key, callback) =>
+          useAttributeItemChange(topic, 'state', key, callback),
+        useStateItemRemove: (topic, key, callback) =>
+          useAttributeItemRemove(topic, 'state', key, callback)
       }
     }),
     [
-      changedAttribute,
-      changedAttributeItem,
-      config,
+      theme,
+      spaceId,
+      subscribeToTopic,
+      unsubscribeFromTopic,
       useAttributeChange,
+      useAttributeRemove,
       useAttributeItemChange,
       useAttributeItemRemove,
-      useAttributeRemove,
-      removedAttribute,
-      removedAttributeItem,
       spaceAttributes,
-      subscribeToTopic,
-      theme,
-      spaceId
+      changedAttribute,
+      removedAttribute,
+      changedAttributeItem,
+      removedAttributeItem,
+      config
     ]
   );
 

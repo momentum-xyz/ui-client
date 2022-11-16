@@ -5,7 +5,7 @@ import {AppConfigInterface} from 'core/interfaces';
 import {MiroBoardPage} from 'pages';
 import {RootMiroStore} from 'stores';
 import {StoreProvider} from 'shared/hooks/useStore';
-import {useSpace, useTheme, PluginStateApiInterface} from '@momentum-xyz/sdk';
+import {useSpace, useTheme, PluginApiInterface} from '@momentum-xyz/sdk';
 
 import '@momentum-xyz/ui-kit/dist/themes/themes';
 
@@ -14,11 +14,14 @@ import 'core/utils/boardsPicker.1.0.js';
 
 const MiroApp: FC = () => {
   const theme = useTheme();
-  const {stateApi} = useSpace();
+  const {pluginApi} = useSpace();
 
   const store = useMemo(
-    () => RootMiroStore.create({api: stateApi as PluginStateApiInterface<AppConfigInterface>}),
-    [stateApi]
+    () =>
+      RootMiroStore.create({
+        api: pluginApi as PluginApiInterface<AppConfigInterface>
+      }),
+    [pluginApi]
   );
 
   useEffect(() => {

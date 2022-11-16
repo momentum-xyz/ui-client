@@ -20,18 +20,18 @@ import {
 class PosBusService {
   static main = new PosBusService();
 
-  public subscibedSpacePluginTopics: Set<string>;
+  public subscribedSpacePluginTopics: Set<string>;
 
   private constructor() {
-    this.subscibedSpacePluginTopics = new Set();
+    this.subscribedSpacePluginTopics = new Set();
   }
 
-  subcribe(topic: string) {
-    this.subscibedSpacePluginTopics.add(topic);
+  subscribe(topic: string) {
+    this.subscribedSpacePluginTopics.add(topic);
   }
 
   unsubscribe(topic: string) {
-    this.subscibedSpacePluginTopics.delete(topic);
+    this.subscribedSpacePluginTopics.delete(topic);
   }
 
   handleIncomingVibe(message: PosBusVibeMessageType) {
@@ -191,7 +191,7 @@ class PosBusService {
   handleRelayMessage(target: string, message: unknown): void {
     console.log('[unity message]:', target, message);
 
-    if (this.subscibedSpacePluginTopics.has(target)) {
+    if (this.subscribedSpacePluginTopics.has(target)) {
       this.handleSpaceAttributeMessaage(target, message as PosBusAttributeMessageType);
       return;
     }

@@ -15,16 +15,16 @@ export const useAttributesEmulator = () => {
 
   const [attributeItemChanged, setAttributeItemChanged] = useState<{
     attributeName: string;
-    key: string;
+    attributeItemName: string;
     value: unknown;
   }>();
   const [attributeItemRemoved, setAttributeItemRemoved] = useState<{
     attributeName: string;
-    key: string;
+    attributeItemName: string;
   }>();
 
   const useAttributeChange = useCallback(
-    (attributeName: string, callback) => {
+    (topic, attributeName: string, callback) => {
       setInterval(() => {
         if (attributeChanged?.attributeName === attributeName && subscribed) {
           callback(attributeChanged.attributeName, attributeChanged.value);
@@ -36,7 +36,7 @@ export const useAttributesEmulator = () => {
   );
 
   const useAttributeRemove = useCallback(
-    (attributeName: string, callback) => {
+    (topic, attributeName: string, callback) => {
       setInterval(() => {
         if (attributeRemoved?.attributeName === attributeName && subscribed) {
           callback();
@@ -48,11 +48,11 @@ export const useAttributesEmulator = () => {
   );
 
   const useAttributeItemChange = useCallback(
-    (attributeName: string, key: string, callback) => {
+    (topic, attributeName: string, attributeItemName: string, callback) => {
       setInterval(() => {
         if (
           attributeItemChanged?.attributeName === attributeName &&
-          attributeItemChanged.key === key &&
+          attributeItemChanged.attributeItemName === attributeItemName &&
           subscribed
         ) {
           callback(attributeItemChanged.value);
@@ -64,11 +64,11 @@ export const useAttributesEmulator = () => {
   );
 
   const useAttributeItemRemove = useCallback(
-    (attributeName: string, key: string, callback) => {
+    (topic, attributeName: string, attributeItemName: string, callback) => {
       setInterval(() => {
         if (
           attributeItemRemoved?.attributeName === attributeName &&
-          attributeItemRemoved.key === key &&
+          attributeItemRemoved.attributeItemName === attributeItemName &&
           subscribed
         ) {
           callback();

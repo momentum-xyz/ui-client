@@ -1,5 +1,5 @@
 import {RequestModel} from '@momentum-xyz/core';
-import {PluginStateApiInterface, AttributeValueInterface, ApiInterface} from '@momentum-xyz/sdk';
+import {PluginApiInterface, AttributeValueInterface, ApiInterface} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, GetSpaceAttributeResponse} from 'api';
@@ -83,29 +83,33 @@ const PluginAttributesManager = types
       return response;
     }),
 
-    getSpaceAttributeItem: flow(function* <T>(spaceId: string, attributeName: string, key: string) {
+    getSpaceAttributeItem: flow(function* <T>(
+      spaceId: string,
+      attributeName: string,
+      attributeItemName: string
+    ) {
       const response = yield self.getAttributeItemRequest.send(
         api.spaceAttributeRepository.getSpaceAttributeItem,
         {
           spaceId,
           plugin_id: self.pluginId,
           attribute_name: attributeName,
-          sub_attribute_key: key
+          sub_attribute_key: attributeItemName
         }
       );
 
-      if (response === undefined || !(key in response)) {
+      if (response === undefined || !(attributeItemName in response)) {
         return null;
       }
 
-      const value: T extends undefined ? never : T = response[key];
+      const value: T extends undefined ? never : T = response[attributeItemName];
 
       return value;
     }),
     setSpaceAttributeItem: flow(function* <T>(
       spaceId: string,
       attributeName: string,
-      key: string,
+      attributeItemName: string,
       value: T
     ) {
       const response = yield self.setAttributeItemRequest.send(
@@ -114,7 +118,7 @@ const PluginAttributesManager = types
           spaceId,
           plugin_id: self.pluginId,
           attribute_name: attributeName,
-          sub_attribute_key: key,
+          sub_attribute_key: attributeItemName,
           value
         }
       );
@@ -123,22 +127,26 @@ const PluginAttributesManager = types
         throw Error('Empty response');
       }
 
-      if (!(key in response)) {
+      if (!(attributeItemName in response)) {
         return null;
       }
 
-      const finalValue: T extends undefined ? never : T = response[key];
+      const finalValue: T extends undefined ? never : T = response[attributeItemName];
 
       return finalValue;
     }),
-    deleteSpaceAttributeItem: flow(function* (spaceId: string, attributeName: string, key: string) {
+    deleteSpaceAttributeItem: flow(function* (
+      spaceId: string,
+      attributeName: string,
+      attributeItemName: string
+    ) {
       const response = yield self.deleteAttributeItemRequest.send(
         api.spaceAttributeRepository.deleteSpaceAttribute,
         {
           spaceId,
           plugin_id: self.pluginId,
           attribute_name: attributeName,
-          sub_attribute_key: key
+          sub_attribute_key: attributeItemName
         }
       );
 
@@ -146,11 +154,11 @@ const PluginAttributesManager = types
         throw Error('Empty response');
       }
 
-      if (!(key in response)) {
+      if (!(attributeItemName in response)) {
         return null;
       }
 
-      return response[key];
+      return response[attributeItemName];
     })
   }))
   .actions((self) => ({
@@ -168,17 +176,53 @@ const PluginAttributesManager = types
     })
   }))
   .views((self) => ({
-    get stateApi(): PluginStateApiInterface {
+    get pluginApi(): PluginApiInterface {
       return {
-        getItem: async <T>(key: string) => {
+        getStateItem: async <T>(key: string) => {
           const result = await self.getItem(self.spaceId, key);
           return result as T;
         },
-        setItem: async <T>(key: string, value: T extends undefined ? never : T) => {
+        setStateItem: async <T>(key: string, value: T extends undefined ? never : T) => {
           return await self.set(self.spaceId, key, value);
         },
-        deleteItem: (key: string) => self.deleteItem(self.spaceId, key),
-        getConfig: self.getConfig
+        deleteStateItem: (key: string) => self.deleteItem(self.spaceId, key),
+        getConfig: self.getConfig,
+
+        subscribeToStateUsingTopic: (topic) => {
+          PosBusService.main.subscribe(topic);
+        },
+        unsubscribeFromStateUsingTopic: (topic) => {
+          PosBusService.main.unsubscribe(topic);
+        },
+
+        useStateItemChange: <T>(topic: string, key: string, callback: (value: T) => void) => {
+          return usePosBusEvent(
+            'space-attribute-item-changed',
+            (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
+              if (
+                posBusTopic === topic &&
+                posBusAttributeName === AttributeNameEnum.STATE &&
+                posBusAttributItemName === key
+              ) {
+                callback(value as T);
+              }
+            }
+          );
+        },
+        useStateItemRemove(topic, key, callback) {
+          return usePosBusEvent(
+            'space-attribute-item-removed',
+            (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
+              if (
+                posBusTopic === topic &&
+                posBusAttributeName === AttributeNameEnum.STATE &&
+                posBusAttributItemName === key
+              ) {
+                callback();
+              }
+            }
+          );
+        }
       };
     },
     get api(): ApiInterface {
@@ -193,29 +237,46 @@ const PluginAttributesManager = types
           value: T
         ) => self.setSpaceAttributeValue<T>(spaceId, attributeName, value) as Promise<T>,
         deleteSpaceAttribute: self.deleteSpaceAttribute,
-        getSpaceAttributeItem: async <T>(spaceId: string, attributeName: string, key: string) =>
-          self.getSpaceAttributeItem<T>(spaceId, attributeName, key) as Promise<T>,
+
+        getSpaceAttributeItem: async <T>(
+          spaceId: string,
+          attributeName: string,
+          attributeItemName: string
+        ) => self.getSpaceAttributeItem<T>(spaceId, attributeName, attributeItemName) as Promise<T>,
         setSpaceAttributeItem: async <T>(
           spaceId: string,
           attributeName: string,
-          key: string,
+          attributeItemName: string,
           value: T
-        ) => self.setSpaceAttributeItem<T>(spaceId, attributeName, key, value) as Promise<T>,
-        deleteSpaceAttributeItem: async (spaceId: string, attributeName: string, key: string) =>
-          self.deleteSpaceAttributeItem(spaceId, attributeName, key),
+        ) =>
+          self.setSpaceAttributeItem<T>(
+            spaceId,
+            attributeName,
+            attributeItemName,
+            value
+          ) as Promise<T>,
+        deleteSpaceAttributeItem: async (
+          spaceId: string,
+          attributeName: string,
+          attributeItemName: string
+        ) => self.deleteSpaceAttributeItem(spaceId, attributeName, attributeItemName),
         subscribeToTopic: (topic) => {
-          PosBusService.main.subcribe(topic);
+          PosBusService.main.subscribe(topic);
         },
         unsubscribeFromTopic: (topic) => {
           PosBusService.main.unsubscribe(topic);
         },
 
-        useAttributeChange(topic, attributeName, callback) {
+        useAttributeChange: <T extends AttributeValueInterface>(
+          topic: string,
+          attributeName: string,
+          callback: (value: T) => void
+        ) => {
           return usePosBusEvent(
             'space-attribute-changed',
             (posBusTopic, posBusAttributeName, value) => {
               if (posBusTopic === topic && posBusAttributeName === attributeName) {
-                callback(value as AttributeValueInterface);
+                callback(value as T);
               }
             }
           );
@@ -227,7 +288,12 @@ const PluginAttributesManager = types
             }
           });
         },
-        useAttributeItemChange(topic, attributeName, attributeItemName, callback) {
+        useAttributeItemChange: <T>(
+          topic: string,
+          attributeName: string,
+          attributeItemName: string,
+          callback: (value: T) => void
+        ) => {
           return usePosBusEvent(
             'space-attribute-item-changed',
             (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
@@ -236,7 +302,7 @@ const PluginAttributesManager = types
                 posBusAttributeName === attributeName &&
                 posBusAttributItemName === attributeItemName
               ) {
-                callback(value);
+                callback(value as T);
               }
             }
           );

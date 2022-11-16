@@ -1,8 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useStore} from 'shared/hooks/useStore';
-import {useSpace, useSpaceAttributesApi} from '@momentum-xyz/sdk';
-import {MiroBoardInterface} from 'core/interfaces';
+import {useSpace} from '@momentum-xyz/sdk';
 
 import {MiroBoard, MiroChoice, MiroActions} from './components';
 import * as styled from './MiroBoardPage.styled';
@@ -10,19 +9,23 @@ import * as styled from './MiroBoardPage.styled';
 const MiroBoardPage: FC = () => {
   const {api, miroBoardStore} = useStore();
   const {board} = miroBoardStore;
-  const {isAdmin, spaceId, renderTopBarActions} = useSpace();
-  const {useAttributeItemChange, useAttributeItemRemove, subscribeToTopic, unsubscribeFromTopic} =
-    useSpaceAttributesApi();
+  const {isAdmin, spaceId, renderTopBarActions, pluginApi} = useSpace();
+  const {
+    useStateItemChange,
+    useStateItemRemove,
+    subscribeToStateUsingTopic,
+    unsubscribeFromStateUsingTopic
+  } = pluginApi;
 
   useEffect(() => {
     miroBoardStore.init(api);
     miroBoardStore.fetchBoard();
-    subscribeToTopic('miro-state');
+    subscribeToStateUsingTopic('miro-state');
 
     return () => {
-      unsubscribeFromTopic('miro-state');
+      unsubscribeFromStateUsingTopic('miro-state');
     };
-  }, [api, miroBoardStore, subscribeToTopic, unsubscribeFromTopic]);
+  }, [api, miroBoardStore, subscribeToStateUsingTopic, unsubscribeFromStateUsingTopic]);
 
   useEffect(() => {
     renderTopBarActions({
@@ -38,13 +41,9 @@ const MiroBoardPage: FC = () => {
     });
   }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
 
-  useAttributeItemChange('miro-state', 'state', 'board', (value) => {
-    miroBoardStore.handleBoardChange(value as unknown as MiroBoardInterface);
-  });
+  useStateItemChange('miro-state', 'board', miroBoardStore.handleBoardChange);
 
-  useAttributeItemRemove('miro-state', 'state', 'board', () => {
-    miroBoardStore.handleBoardRemove();
-  });
+  useStateItemRemove('miro-state', 'board', miroBoardStore.handleBoardRemove);
 
   if (!spaceId) {
     return null;
