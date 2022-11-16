@@ -169,7 +169,9 @@ const PluginAttributesManager = types
       return yield self.setSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key, value);
     }),
     deleteItem: flow(function* (spaceId: string, key: string) {
-      return yield self.deleteSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key);
+      // TODO: Replace after attribute item is implemented on PosBus
+      // return yield self.deleteSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key);
+      return yield self.deleteSpaceAttribute(spaceId, AttributeNameEnum.STATE);
     }),
     getConfig: flow(function* <C extends GetSpaceAttributeResponse>() {
       return yield self.getSpaceAttributeValue<C>(appVariables.NODE_ID, AttributeNameEnum.CONFIG);
@@ -195,7 +197,7 @@ const PluginAttributesManager = types
           PosBusService.main.unsubscribe(topic);
         },
 
-        // TODO: Change to commented code when sub attributes change will be working on PosBus
+        // TODO: Temporary, change to below after PosBus supports attribute items
         // useStateItemChange: <T>(topic: string, key: string, callback: (value: T) => void) => {
         //   return usePosBusEvent(
         //     'space-attribute-item-changed',
@@ -211,7 +213,7 @@ const PluginAttributesManager = types
         //   );
         // },
 
-        // TODO: Temporary workaround, change to above uncommented code when PosBus will support sub attributes
+        // TODO: Temporary, change to above after PosBus supports attribute items
         useStateItemChange: <T>(topic: string, key: string, callback: (value: T) => void) => {
           return usePosBusEvent(
             'space-attribute-changed',
@@ -227,7 +229,7 @@ const PluginAttributesManager = types
           );
         },
 
-        // TODO: Change to commented code when sub attributes change will be working on PosBus
+        // TODO: Temporary, change to below after PosBus supports attribute items
         // useStateItemRemove(topic, key, callback) {
         //   return usePosBusEvent(
         //     'space-attribute-item-removed',
@@ -243,7 +245,7 @@ const PluginAttributesManager = types
         //   );
         // },
 
-        // TODO: Temporary workaround, change to above uncommented code when PosBus will support sub attributes
+        // TODO: Temporary, change to above after PosBus supports attribute items
         useStateItemRemove(topic, key, callback) {
           return usePosBusEvent('space-attribute-removed', (posBusTopic, posBusAttributeName) => {
             if (posBusTopic === topic && posBusAttributeName === AttributeNameEnum.STATE) {
@@ -283,11 +285,19 @@ const PluginAttributesManager = types
             attributeItemName,
             value
           ) as Promise<T>,
+        // TODO: Change bellow to this after PosBus supports attribute items
+        // deleteSpaceAttributeItem: async (
+        //   spaceId: string,
+        //   attributeName: string,
+        //   attributeItemName: string
+        // ) => self.deleteSpaceAttributeItem(spaceId, attributeName, attributeItemName),
+
+        // TODO: Change above to this after PosBus supports attribute items
         deleteSpaceAttributeItem: async (
           spaceId: string,
           attributeName: string,
           attributeItemName: string
-        ) => self.deleteSpaceAttributeItem(spaceId, attributeName, attributeItemName),
+        ) => self.deleteSpaceAttribute(spaceId, attributeName),
         subscribeToTopic: (topic) => {
           PosBusService.main.subscribe(topic);
         },
@@ -304,7 +314,7 @@ const PluginAttributesManager = types
             'space-attribute-changed',
             (posBusTopic, posBusAttributeName, value) => {
               if (posBusTopic === topic && posBusAttributeName === attributeName) {
-                callback(value as T);
+                callback(value as unknown as T);
               }
             }
           );
