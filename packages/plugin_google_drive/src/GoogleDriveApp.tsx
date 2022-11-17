@@ -3,10 +3,12 @@ import {ThemeProvider} from 'styled-components';
 import {PluginApiInterface, useSpace, useTheme} from '@momentum-xyz/sdk';
 import {RootGoogleDriveStore} from 'stores';
 import {AppConfigInterface} from 'core/interfaces';
-import '@momentum-xyz/ui-kit/dist/themes/themes';
 import {StoreProvider} from 'shared/hooks/useStore';
 import {GoogleDrivePage} from 'pages';
 import {GoogleDriveStore} from 'stores/GoogleDriveStore';
+
+import '@momentum-xyz/ui-kit/dist/themes/themes';
+import 'shared/services/i18n';
 
 const GoogleDriveApp: FC = () => {
   const theme = useTheme();

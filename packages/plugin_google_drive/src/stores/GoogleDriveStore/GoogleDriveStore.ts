@@ -36,7 +36,13 @@ const GoogleDriveStore = types.compose(
         }
 
         yield self.api.deleteStateItem('document');
-      })
+      }),
+      setGoogleDocument(document: GoogleDocumentInterface) {
+        self.googleDocument = document;
+      },
+      removeGoogleDocument() {
+        self.googleDocument = null;
+      }
     }))
     .actions((self) => ({
       pickGoogleDocument: flow(function* (data) {

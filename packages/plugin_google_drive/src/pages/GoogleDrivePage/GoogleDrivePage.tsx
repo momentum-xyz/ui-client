@@ -14,8 +14,8 @@ const GoogleDrivePage: FC = () => {
   const {renderTopBarActions, spaceId, isAdmin, pluginApi} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
-  useStateItemChange('document', googleDriveStore.enableGoogleDocument);
-  useStateItemRemove('document', googleDriveStore.disableGoogleDocument);
+  useStateItemChange('document', googleDriveStore.setGoogleDocument);
+  useStateItemRemove('document', googleDriveStore.removeGoogleDocument);
 
   useEffect(() => {
     if (spaceId) {
