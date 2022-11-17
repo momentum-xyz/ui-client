@@ -1,6 +1,5 @@
 import {BroadcastStatusEnum, PosBusMessageTypeEnum, PosBusStatusEnum} from 'core/enums';
 import {
-  IntegrationType,
   StageModeKickType,
   StageModeLeftType,
   StageModeMuteType,
@@ -15,11 +14,6 @@ import {
 
 export type PosBusMessageStatusType = {
   status: PosBusStatusEnum;
-};
-
-export type PosBusCollaborationMessageType = {
-  integrationType: IntegrationType;
-  spaceId: string;
 };
 
 export type PosBusGatheringMessageType = {
