@@ -9,7 +9,7 @@ import * as styled from './MiroBoardPage.styled';
 const MiroBoardPage: FC = () => {
   const {api, miroBoardStore} = useStore();
   const {board} = miroBoardStore;
-  const {isAdmin, spaceId, renderTopBarActions, pluginApi} = useSpace();
+  const {isAdmin, spaceId, renderTopBarActions, setSubtitle, pluginApi} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useEffect(() => {
@@ -30,6 +30,10 @@ const MiroBoardPage: FC = () => {
       )
     });
   }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
+
+  useEffect(() => {
+    setSubtitle(board?.name);
+  }, [board, setSubtitle]);
 
   useStateItemChange('board', miroBoardStore.handleBoardChange);
 

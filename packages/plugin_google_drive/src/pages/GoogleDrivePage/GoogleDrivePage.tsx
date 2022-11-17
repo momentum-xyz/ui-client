@@ -11,7 +11,7 @@ const GoogleDrivePage: FC = () => {
   const {api, googleDriveStore} = useStore();
   const {googleDocument} = googleDriveStore;
 
-  const {renderTopBarActions, spaceId, isAdmin, pluginApi} = useSpace();
+  const {renderTopBarActions, setSubtitle, spaceId, isAdmin, pluginApi} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useStateItemChange('document', googleDriveStore.setGoogleDocument);
@@ -27,6 +27,10 @@ const GoogleDrivePage: FC = () => {
       googleDriveStore.resetModel();
     };
   }, [api, googleDriveStore, spaceId]);
+
+  useEffect(() => {
+    setSubtitle(googleDocument?.name);
+  }, [googleDocument?.name, setSubtitle]);
 
   const {pickDocument} = useGooglePicker(googleDriveStore.pickGoogleDocument);
 

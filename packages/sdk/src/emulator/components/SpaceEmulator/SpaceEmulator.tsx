@@ -18,6 +18,7 @@ export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
   const history = useHistory();
 
   const [topBar = <span />, setTopBar] = useState<JSX.Element | null>(null);
+  const [subtitle, setSubtitle] = useState<string>();
 
   return (
     <styled.SpaceLayout>
@@ -38,7 +39,7 @@ export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
       </styled.SpaceNav>
       <styled.SpaceTabContainer>
         <styled.SpaceTopBar>
-          <strong>Space / Plugin</strong>
+          <strong>Space / Plugin {subtitle && `/ ${subtitle}`}</strong>
           {topBar}
           <button onClick={() => onClose()}>X</button>
         </styled.SpaceTopBar>
@@ -48,7 +49,12 @@ export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
               <div>Dashboard Content</div>
             </Route>
             <Route exact path={generatePath(ROUTES.collaboration.plugin, {spaceId})}>
-              <SpaceTabEmulator plugin={plugin} setTopBar={setTopBar} spaceId={spaceId} />
+              <SpaceTabEmulator
+                plugin={plugin}
+                setTopBar={setTopBar}
+                setSubtitle={setSubtitle}
+                spaceId={spaceId}
+              />
             </Route>
             <Redirect to={generatePath(ROUTES.collaboration.dashboard, {spaceId})} />
           </Switch>

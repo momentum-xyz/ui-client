@@ -29,6 +29,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
   const history = useHistory();
   const theme = useTheme();
   const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
+  const [subtitle, setSubtitle] = useState<string>();
   const {t} = useTranslation();
 
   const isDynamicScriptLoaded =
@@ -71,7 +72,7 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     <SpacePage dataTestId="SpacePlugin-test">
       <SpaceTopBar
         title={spaceStore.space?.name ?? ''}
-        subtitle={pluginLoader.subtitle}
+        subtitle={subtitle}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
         isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
@@ -98,7 +99,8 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
                   spaceId: spaceStore.id,
                   pluginApi: attributesManager.pluginApi,
                   api: attributesManager.api,
-                  renderTopBarActions
+                  renderTopBarActions,
+                  setSubtitle
                 }}
               >
                 <plugin.SpaceExtension />
