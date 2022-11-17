@@ -25,29 +25,13 @@ const PosBusEventsPage: FC = () => {
     stageModeStore,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
-    invitedOnStageDialog,
-    googleDriveStore,
-    miroBoardStore
+    invitedOnStageDialog
   } = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
   const {spaceStore, screenShareStore} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
-
-  usePosBusEvent('google-drive-file-change', (id: string) => {
-    console.info('[POSBUS EVENT] google-drive-file-change', id);
-    if (spaceStore?.id === id) {
-      googleDriveStore.fetchGoogleDocument(id);
-    }
-  });
-
-  usePosBusEvent('miro-board-change', (id: string) => {
-    console.info('[POSBUS EVENT] miro-board-change', id);
-    if (spaceStore?.id === id) {
-      miroBoardStore.fetchMiroBoard(id);
-    }
-  });
 
   usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
     console.info('[POSBUS EVENT] broadcast', broadcast);

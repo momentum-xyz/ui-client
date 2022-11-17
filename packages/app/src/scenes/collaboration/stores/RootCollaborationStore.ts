@@ -6,9 +6,7 @@ import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 
 import {SpaceStore} from './SpaceStore';
 import {CalendarStore} from './CalendarStore';
-import {MiroBoardStore} from './MiroBoardStore';
 import {DashboardStore} from './DashboardStore';
-import {GoogleDriveStore} from './GoogleDriveStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
 import {TextChatStore} from './TextChatStore';
@@ -27,8 +25,6 @@ const RootCollaborationStore = types
       streamChatStore: types.optional(StreamChatStore, {}),
       calendarStore: types.optional(CalendarStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
-      miroBoardStore: types.optional(MiroBoardStore, {}),
-      googleDriveStore: types.optional(GoogleDriveStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),

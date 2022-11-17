@@ -10,7 +10,6 @@ import {
   PosBusBroadcastMessageType,
   PosBusGatheringMessageType,
   PosBusStageModeMessageType,
-  PosBusCollaborationMessageType,
   PosBusCommunicationMessageType,
   PosBusEmojiMessageType,
   PosBusMegamojiMessageType,
@@ -48,16 +47,6 @@ class PosBusService {
   static handleIncomingInvite(message: PosBusInviteMessageType) {
     const {spaceId, sender, uiTypeId, uiTypeName} = message;
     PosBusEventEmitter.emit('space-invite', spaceId, sender.id, sender.name, uiTypeId, uiTypeName);
-  }
-
-  static handleIncomingCollaboration(message: PosBusCollaborationMessageType) {
-    const {integrationType, spaceId} = message;
-    switch (integrationType) {
-      case 'google_drive':
-        PosBusEventEmitter.emit('google-drive-file-change', spaceId);
-        break;
-      default:
-    }
   }
 
   static handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
@@ -204,9 +193,6 @@ class PosBusService {
 
     // TODO: Old stuff, refactor to new controller attributes system
     switch (target) {
-      case 'collaboration':
-        this.handleIncomingCollaboration(message as PosBusCollaborationMessageType);
-        break;
       case 'event':
         this.handleNotifyGathering(message as PosBusGatheringMessageType);
         break;
