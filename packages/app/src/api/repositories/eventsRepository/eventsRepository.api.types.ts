@@ -1,3 +1,5 @@
+import {UserModelInterface} from 'core/models';
+
 export interface EventCreateRequest {
   data: EventItemInterface;
   spaceId: string;
@@ -14,21 +16,19 @@ export interface FetchEventsRequest {
 }
 
 export interface EventItemInterface {
-  eventId: string;
-  spaceId: string;
+  eventId?: string;
+  spaceId?: string;
   spaceName?: string;
-  start: Date;
-  end: Date;
-  title: string;
+  start?: Date;
+  end?: Date;
+  title?: string;
   hosted_by?: string;
   web_link?: string | null;
-  description: string;
+  description?: string;
   image?: string;
-  attendees?: Array<UserAttributeInterface>;
+  attendees?: UserAttributeInterface;
 }
 
 export interface UserAttributeInterface {
-  [userId: string]: {
-    name: string;
-  };
+  [userId: string]: UserModelInterface;
 }

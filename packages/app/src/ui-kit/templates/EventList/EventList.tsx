@@ -4,12 +4,12 @@ import {t} from 'i18next';
 import {PropsWithThemeInterface, Loader} from '@momentum-xyz/ui-kit';
 
 import {EventItem} from 'ui-kit';
-import {EventItemModelInterface} from 'core/models';
+import {EventItemModelInterface, UserModelInterface} from 'core/models';
 
 import * as styled from './EventList.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  currentUserId: string;
+  user?: UserModelInterface;
   events: EventItemModelInterface[];
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
   isLoading: boolean;
@@ -23,7 +23,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 }
 
 const EventList: FC<PropsInterface> = ({
-  currentUserId,
+  user,
   events,
   onEventEdit,
   onEventRemove,
@@ -53,7 +53,7 @@ const EventList: FC<PropsInterface> = ({
     <styled.Container className="noScrollIndicator" data-testid="EventList-test">
       {events.map((event, index) => (
         <EventItem
-          currentUserId={currentUserId}
+          user={user}
           zIndex={events.length - index}
           key={event.data?.eventId}
           event={event}

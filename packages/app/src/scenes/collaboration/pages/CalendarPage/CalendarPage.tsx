@@ -6,6 +6,7 @@ import {toast} from 'react-toastify';
 import {useHistory} from 'react-router';
 import {Button} from '@momentum-xyz/ui-kit';
 import {absoluteLink} from '@momentum-xyz/core';
+import {useParams} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -22,6 +23,7 @@ import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';
 
 const CalendarPage: FC = () => {
+  const {spaceId} = useParams<{spaceId: string}>();
   const {collaborationStore, sessionStore, mainStore, leaveMeetingSpace} = useStore();
   const {calendarStore, spaceStore} = collaborationStore;
   const {eventList, formDialog, magicDialog, deleteConfirmationDialog, magicLink} = calendarStore;
@@ -70,12 +72,12 @@ const CalendarPage: FC = () => {
   };
 
   useEffect(() => {
-    if (spaceStore) {
-      eventList.fetchSpaceEvents(spaceStore.id);
+    if (spaceId) {
+      eventList.fetchSpaceEvents(spaceId);
     }
 
     return () => eventList.resetModel();
-  }, [eventList, spaceStore]);
+  }, [eventList, spaceId]);
 
   const handleFlyToSpace = (spaceId: string) => {
     unityStore.teleportToSpace(spaceId);
@@ -108,7 +110,7 @@ const CalendarPage: FC = () => {
       </SpaceTopBar>
       <styled.InnerContainer>
         <EventList
-          currentUserId={sessionStore.userId}
+          user={sessionStore.user ?? undefined}
           events={eventList.events}
           onMagicLinkOpen={handleMagicLinkOpen}
           isLoading={eventList.areEventsLoading}

@@ -107,7 +107,7 @@ const WorldCalendarPage: FC = () => {
         <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
       </PageTopBar>
       <EventList
-        currentUserId={sessionStore.userId}
+        user={sessionStore.user ?? undefined}
         events={eventList.events}
         onMagicLinkOpen={handleMagicLinkOpen}
         isLoading={false}

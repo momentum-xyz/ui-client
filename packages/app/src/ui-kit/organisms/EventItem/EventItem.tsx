@@ -4,7 +4,7 @@ import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 import {observer} from 'mobx-react-lite';
 import {Button, IconSvg, ShowMoreText, Text, truncateText} from '@momentum-xyz/ui-kit';
 
-import {EventItemModelInterface} from 'core/models';
+import {EventItemModelInterface, UserModelInterface} from 'core/models';
 import {AddToCalendarDropdown} from 'ui-kit';
 import placeholder from 'static/images/placeholder.png';
 
@@ -15,7 +15,7 @@ const TEXT_LENGTH = 12;
 
 interface PropsInterface {
   event: EventItemModelInterface;
-  currentUserId: string;
+  user?: UserModelInterface;
   onEdit: (event: EventItemModelInterface) => void;
   onRemove: (event: EventItemModelInterface) => void;
   onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
@@ -30,7 +30,7 @@ interface PropsInterface {
 
 const EventItem: FC<PropsInterface> = ({
   event,
-  currentUserId,
+  user,
   onEdit,
   onRemove,
   zIndex,
@@ -48,12 +48,17 @@ const EventItem: FC<PropsInterface> = ({
     // event.init();
   }, [event]);
 
-  const handleAttendingButtonClick = () => {
-    // if (event.isAttending(currentUserId)) {
-    //   event.stopAttending();
-    // } else {
-    //   event.attend();
-    // }
+  const handleAttending = () => {
+    if (!user) {
+      return;
+    }
+    event.attending(event?.data?.spaceId ?? '', user, event.data);
+  };
+  const handleWithdrawAttending = () => {
+    if (!user) {
+      return;
+    }
+    event.withdrawAttending(event?.data?.spaceId ?? '', user.id, event.data);
   };
 
   const buttons = () => (
@@ -96,7 +101,7 @@ const EventItem: FC<PropsInterface> = ({
       <styled.Buttons>
         <Button
           variant="primary"
-          label={t('counts.attendees', {count: 0})} //count: event.numberOfAllAttendees
+          label={t('counts.attendees', {count: event.attendees.length})}
           transform="capitalized"
           onClick={() =>
             onShowAttendeesList?.(
@@ -113,12 +118,12 @@ const EventItem: FC<PropsInterface> = ({
           </styled.LiveIndicator>
         ) : (
           <Button
-            // variant={event.isAttending(currentUserId) ? 'inverted' : 'primary'}
-            // icon={event.isAttending(currentUserId) ? 'check' : 'add'}
-            // disabled={event.attendRequest.isPending}
+            variant={event.isAttending(user?.id ?? '') ? 'inverted' : 'primary'}
+            icon={event.isAttending(user?.id ?? '') ? 'check' : 'add'}
+            disabled={event.isLoading}
             label={t('eventList.eventItem.interested')}
             transform="capitalized"
-            onClick={handleAttendingButtonClick}
+            onClick={event.isAttending(user?.id ?? '') ? handleWithdrawAttending : handleAttending}
           />
         )}
         {!event.isLive && (
@@ -181,19 +186,20 @@ const EventItem: FC<PropsInterface> = ({
               }}
             />
           </styled.TextRow>
-          {/*<styled.AttendeesContainer>*/}
-          {/*  {event.attendees.map((attendee) => (*/}
-          {/*    <styled.AttendeeContrainer key={attendee.id}>*/}
-          {/*      <styled.AttendeeAvatar size="normal" avatarSrc={attendee.avatarSrc} />*/}
-          {/*      <styled.AttendeeNameText*/}
-          {/*        text={attendee.name}*/}
-          {/*        size="s"*/}
-          {/*        align="center"*/}
-          {/*        isMultiline={false}*/}
-          {/*      />*/}
-          {/*    </styled.AttendeeContrainer>*/}
-          {/*  ))}*/}
-          {/*</styled.AttendeesContainer>*/}
+          <styled.AttendeesContainer>
+            {event.attendees.map((attendee, index) => (
+              <styled.AttendeeContrainer key={index}>
+                <styled.AttendeeAvatar size="normal" avatarSrc={attendee.avatarSrc} />
+                <styled.AttendeeNameText
+                  text={attendee.name}
+                  size="s"
+                  align="center"
+                  isMultiline={false}
+                  transform="capitalized"
+                />
+              </styled.AttendeeContrainer>
+            ))}
+          </styled.AttendeesContainer>
         </styled.ContentRow>
         {buttons()}
         {canManageEvent && <Actions event={event} onEdit={onEdit} onRemove={onRemove} />}

@@ -6,19 +6,23 @@ import {SubmitHandler, Controller, useForm} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import cn from 'classnames';
 import {Input, Dialog, TextArea} from '@momentum-xyz/ui-kit';
-import {DATE_TIME_FORMAT} from '@momentum-xyz/core';
+import {DATE_TIME_FORMAT, timeFromNow} from '@momentum-xyz/core';
+import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
 import {EventFormInterface} from 'core/interfaces';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {worldCalendarStore, mainStore} = useStore();
+  const {worldCalendarStore, mainStore, homeStore} = useStore();
   const {eventForm, formDialog, eventList} = worldCalendarStore.calendarStore;
   const {worldStore} = mainStore;
-  const {eventFormRequest, currentEvent, imageSrc} = eventForm;
+  const {exploreStore} = homeStore;
+  const {spaceDetails} = exploreStore;
+  const {currentEvent, imageSrc} = eventForm;
 
   const {
     control,
@@ -29,33 +33,55 @@ const EventForm: FC = () => {
     clearErrors
   } = useForm<EventFormInterface>();
   const [image, setImage] = useState<File>();
-  const [startDate, setStartDate] = useState<Date>(
-    new Date(currentEvent?.start ?? '') ?? new Date()
-  );
+  const [startDate, setStartDate] = useState<Date>(() => {
+    if (currentEvent?.eventId) {
+      return currentEvent.start;
+    } else {
+      return new Date();
+    }
+  });
 
-  const [endDate, setEndDate] = useState<Date>(new Date(currentEvent?.end ?? '') ?? new Date());
+  const [endDate, setEndDate] = useState<Date>(() => {
+    if (currentEvent?.eventId) {
+      return currentEvent.end;
+    } else {
+      return timeFromNow(1);
+    }
+  });
 
   const formSubmitHandler: SubmitHandler<EventFormInterface> = async (data: EventFormInterface) => {
     if (!data.web_link?.length) {
       data.web_link = null;
     }
 
-    if (currentEvent?.spaceId) {
-      let isSuccess = false;
+    const isSuccess = await eventForm.createEventAttribute(
+      data,
+      worldStore.worldId,
+      spaceDetails?.name,
+      image
+    );
 
-      if (currentEvent?.eventId) {
-        isSuccess = await eventForm.updateEvent(
-          data,
-          currentEvent.spaceId,
-          currentEvent.eventId,
-          image
-        );
-      }
-
-      if (isSuccess) {
-        eventList.fetchEvents(worldStore.worldId, true);
-        formDialog.close();
-      }
+    if (isSuccess) {
+      formDialog.close();
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="Event created successfully"
+          showCloseButton
+        />
+      );
+      await eventList.fetchSpaceEvents(worldStore.worldId);
+    } else {
+      toast.error(
+        <ToastContent
+          isDanger
+          headerIconName="alert"
+          title={t('titles.alert')}
+          text="There was a problem creating the event"
+          showCloseButton
+        />
+      );
     }
   };
 
@@ -96,14 +122,14 @@ const EventForm: FC = () => {
   return (
     <Dialog
       theme={theme}
-      title={t('eventForm.editTitle')}
+      title={currentEvent?.eventId ? t('eventForm.editTitle') : t('eventForm.addTitle')}
       headerStyle="uppercase"
       showCloseButton
       onClose={formDialog.close}
       approveInfo={{
-        title: 'update',
+        title: currentEvent?.eventId ? 'update' : 'submit',
         onClick: handleSubmit(formSubmitHandler),
-        disabled: eventFormRequest.isPending
+        disabled: eventForm.isPending
       }}
       hasBorder
     >
@@ -112,7 +138,7 @@ const EventForm: FC = () => {
           <Controller
             name="title"
             control={control}
-            defaultValue={currentEvent?.title}
+            defaultValue={currentEvent?.title ? currentEvent?.title : ''}
             render={({field: {onChange, value}}) => (
               <Input
                 value={value}
@@ -171,7 +197,7 @@ const EventForm: FC = () => {
             <Controller
               name="hosted_by"
               control={control}
-              defaultValue={currentEvent?.hosted_by}
+              defaultValue={currentEvent?.hosted_by ? currentEvent?.hosted_by : ''}
               render={({field: {onChange, value}}) => (
                 <Input
                   value={value}
@@ -207,7 +233,7 @@ const EventForm: FC = () => {
           <Controller
             name="description"
             control={control}
-            defaultValue={currentEvent?.description}
+            defaultValue={currentEvent?.description ? currentEvent?.description : ''}
             render={({field: {onChange, value}}) => (
               <TextArea
                 value={value}

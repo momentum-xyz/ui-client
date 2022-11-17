@@ -1,4 +1,4 @@
-import {types, Instance} from 'mobx-state-tree';
+import {types, Instance, flow, cast} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 import {
   durationInHours,
@@ -6,17 +6,83 @@ import {
   formatStartDate,
   formatStartTime,
   formattedStringFromDate,
-  isOtherYearThanToday
+  isOtherYearThanToday,
+  RequestModel
 } from '@momentum-xyz/core';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
+import {mapper} from 'api/mapper';
 import {appVariables} from 'api/constants';
+import {api, EventItemInterface, UserAttributeInterface} from 'api';
+import {UserModelInterface} from 'core/models';
 
-import {EventData} from './models/EventData';
+import {EventData, EventDataInterface} from './models/EventData';
 
 const EventItemModel = types
   .model('EventItemModel', {
-    data: types.maybe(EventData)
+    data: types.maybe(EventData),
+    attendees: types.array(types.frozen<UserModelInterface>()),
+    attendeesRequest: types.optional(RequestModel, {})
   })
+  .actions((self) => ({
+    attending: flow(function* (
+      spaceId: string,
+      user: UserModelInterface,
+      data?: EventDataInterface
+    ) {
+      const event: EventItemInterface = {
+        ...data,
+        attendees: {
+          ...data?.attendees,
+          [user.id]: user
+        }
+      };
+
+      const response = yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
+        spaceId,
+        data: event,
+        eventId: data?.eventId ?? ''
+      });
+
+      if (response) {
+        const event = mapper.mapSubAttributeValue<EventDataInterface>(response);
+        if (event?.attendees) {
+          self.attendees = cast(Object.values(event?.attendees));
+        }
+      }
+
+      return self.attendeesRequest.isDone;
+    }),
+    withdrawAttending: flow(function* (spaceId: string, userId: string, data?: EventDataInterface) {
+      const attendees: UserAttributeInterface = {
+        ...data?.attendees
+      };
+
+      delete attendees?.[userId];
+
+      const event: EventItemInterface = {
+        ...data,
+        attendees: {
+          ...attendees
+        }
+      };
+
+      const response = yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
+        spaceId,
+        data: event,
+        eventId: data?.eventId ?? ''
+      });
+
+      if (response) {
+        const event = mapper.mapSubAttributeValue<EventDataInterface>(response);
+        if (event?.attendees) {
+          self.attendees = cast(Object.values(event?.attendees));
+        }
+      }
+
+      return self.attendeesRequest.isDone;
+    })
+  }))
   .views((self) => ({
     get isLive(): boolean {
       if (self.data) {
@@ -57,6 +123,15 @@ const EventItemModel = types
     },
     get imageSrc(): string {
       return `${appVariables.RENDER_SERVICE_URL}/get/${self.data?.image}`;
+    },
+    isAttending(userId: string) {
+      return self.attendees.some((attendee) => attendee.id === userId);
+    },
+    avatarSrc(avatar_hash: string): string | undefined {
+      return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${avatar_hash}`;
+    },
+    get isLoading(): boolean {
+      return self.attendeesRequest.isPending;
     }
   }));
 export interface EventItemModelInterface extends Instance<typeof EventItemModel> {}
