@@ -4,14 +4,7 @@ import {NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 
-import {
-  DashboardPage,
-  CalendarPage,
-  StageModePage,
-  ScreenSharePage,
-  GoogleDrivePage,
-  LiveStreamPage
-} from './pages';
+import {DashboardPage, CalendarPage, StageModePage, ScreenSharePage, LiveStreamPage} from './pages';
 
 export const COLLABORATION_ROUTES = [
   {
@@ -35,10 +28,6 @@ export const COLLABORATION_ROUTES = [
   {
     path: ROUTES.collaboration.screenShare,
     main: () => <ScreenSharePage />
-  },
-  {
-    path: ROUTES.collaboration.googleDrive,
-    main: () => <GoogleDrivePage />
   },
   {
     path: ROUTES.collaboration.liveStream,
@@ -75,10 +64,6 @@ export const buildNavigationTabs = (
       path: generatePath(ROUTES.collaboration.screenShare, {spaceId}),
       iconName: 'screenshare',
       isActive: isScreenSharing
-    },
-    {
-      path: generatePath(ROUTES.collaboration.googleDrive, {spaceId}),
-      iconName: 'drive'
     },
     {
       path: generatePath(ROUTES.collaboration.liveStream, {spaceId}),
