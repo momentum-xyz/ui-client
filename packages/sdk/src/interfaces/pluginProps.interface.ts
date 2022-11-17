@@ -20,4 +20,5 @@ export interface PluginTopBarActionInterface {
 export interface SpacePluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface>
   extends CorePluginPropsInterface<C> {
   renderTopBarActions: (actions: PluginTopBarActionInterface) => void;
+  setSubtitle: (subtitle?: string) => void;
 }
