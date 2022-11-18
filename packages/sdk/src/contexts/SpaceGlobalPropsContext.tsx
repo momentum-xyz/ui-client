@@ -36,9 +36,7 @@ export const SpaceGlobalPropsContext = createContext<
 
     useStateItemChange: () => Promise.reject(),
     useStateItemRemove: () => Promise.reject()
-  },
-  renderTopBarActions() {},
-  setSubtitle() {}
+  }
 });
 
 export const SpaceGlobalPropsContextProvider: FC<{

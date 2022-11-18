@@ -71,7 +71,8 @@ const PluginsStore = types
         return {
           id: plugin_uuid,
           ...options,
-          ...metadata
+          ...metadata,
+          scriptUrl: 'http://localhost:3001/remoteEntry.js'
         };
       });
 

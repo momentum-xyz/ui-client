@@ -2,19 +2,19 @@ import {FC, useState} from 'react';
 import {Switch, Route, useHistory, useParams, Redirect, generatePath} from 'react-router-dom';
 
 import {ROUTES} from '../../constants';
-import {PluginInterface} from '../../../interfaces';
+import {PluginConfigInterface, UsePluginHookType} from '../../../interfaces';
 import {SpaceTabEmulator} from '../SpaceTabEmulator';
 
 import * as styled from './SpaceEmulator.styled';
 
 interface PropsInterface {
-  plugin: PluginInterface;
+  usePlugin: UsePluginHookType<PluginConfigInterface>;
   onClose: () => void;
 }
 
-export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
+export const SpaceEmulator: FC<PropsInterface> = ({usePlugin, onClose}) => {
   const {spaceId} = useParams<{spaceId: string}>();
-  console.log('RENDER SpaceEmulator', {plugin, spaceId});
+  console.log('RENDER SpaceEmulator', {usePlugin, spaceId});
   const history = useHistory();
 
   const [topBar = <span />, setTopBar] = useState<JSX.Element | null>(null);
@@ -50,7 +50,7 @@ export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
             </Route>
             <Route exact path={generatePath(ROUTES.collaboration.plugin, {spaceId})}>
               <SpaceTabEmulator
-                plugin={plugin}
+                usePlugin={usePlugin}
                 setTopBar={setTopBar}
                 setSubtitle={setSubtitle}
                 spaceId={spaceId}

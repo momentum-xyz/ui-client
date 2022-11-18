@@ -1,4 +1,4 @@
-import {FC, useCallback, useMemo} from 'react';
+import {FC, useMemo} from 'react';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
@@ -6,19 +6,25 @@ import {useTheme} from '../../../contexts/ThemeContext';
 import {
   AttributeValueInterface,
   CorePluginPropsInterface,
-  PluginInterface
+  PluginConfigInterface,
+  UsePluginHookType
 } from '../../../interfaces';
 import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 
 interface PropsInterface {
-  plugin: PluginInterface;
+  usePlugin: UsePluginHookType<PluginConfigInterface>;
   spaceId: string;
   setTopBar: (topBar: JSX.Element) => void;
   setSubtitle: (subtitle?: string) => void;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar, setSubtitle}) => {
-  console.log('RENDER SpaceTabEmulator', {plugin});
+export const SpaceTabEmulator: FC<PropsInterface> = ({
+  usePlugin,
+  spaceId,
+  setTopBar,
+  setSubtitle
+}) => {
+  console.log('RENDER SpaceTabEmulator', {usePlugin});
   const theme = useTheme();
   const {
     spaceAttributes,
@@ -206,25 +212,18 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar
     ]
   );
 
-  const renderTopBarActions = useCallback(
-    ({main}) => {
-      setTopBar(main());
-    },
-    [setTopBar]
-  );
+  const {content} = usePlugin(coreProps);
 
   return (
     <>
-      {!!plugin.SpaceExtension && (
+      {!!content && (
         <ErrorBoundary errorMessage="Error while rendering plugin">
           <SpaceGlobalPropsContextProvider
             props={{
-              ...coreProps,
-              renderTopBarActions,
-              setSubtitle
+              ...coreProps
             }}
           >
-            <plugin.SpaceExtension />
+            {content}
           </SpaceGlobalPropsContextProvider>
         </ErrorBoundary>
       )}

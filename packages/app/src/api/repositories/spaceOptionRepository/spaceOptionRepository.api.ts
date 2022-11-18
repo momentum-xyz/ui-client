@@ -17,7 +17,7 @@ export const getSpaceOptions: RequestInterface<GetSpaceOptionsRequest, GetSpaceO
 ) => {
   const {spaceId, ...restOptions} = options;
 
-  const url = generatePath(spaceOptionRepositoryEndpoints().effectiveOptions, {spaceId});
+  const url = generatePath(spaceOptionRepositoryEndpoints().options, {spaceId});
 
   return request.get(url, restOptions);
 };
@@ -32,7 +32,7 @@ export const getSpaceSubOption: RequestInterface<
     sub_option_key
   };
 
-  const url = generatePath(spaceOptionRepositoryEndpoints().effectiveSubOption, {spaceId});
+  const url = generatePath(spaceOptionRepositoryEndpoints().subOption, {spaceId});
 
   return request.get(url, restOptions);
 };
@@ -44,7 +44,7 @@ export const setSpaceSubOption: RequestInterface<
   const {spaceId, sub_option_key, value, ...restOptions} = options;
 
   restOptions.params = {
-    sub_option_key
+    effective: false
   };
 
   const url = generatePath(spaceOptionRepositoryEndpoints().subOption, {spaceId});

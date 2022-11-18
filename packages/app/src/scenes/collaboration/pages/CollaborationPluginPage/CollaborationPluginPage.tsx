@@ -1,11 +1,11 @@
-import {FC, useCallback, useEffect, useState} from 'react';
+import {FC, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {PluginTopBarActionInterface, SpaceGlobalPropsContextProvider} from '@momentum-xyz/sdk';
 import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
+import {PluginInterface} from '@momentum-xyz/sdk';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -17,30 +17,19 @@ import {PosBusService} from 'shared/services';
 import * as styled from './CollaborationPluginPage.styled';
 
 interface PropsInterface {
+  plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
 }
 
-const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
+const CollaborationPluginPage: FC<PropsInterface> = ({plugin, pluginLoader}) => {
   const {collaborationStore, mainStore, leaveMeetingSpace} = useStore();
   const {spaceStore, streamChatStore} = collaborationStore;
-  const {favoriteStore, pluginsStore} = mainStore;
-  const {plugin, attributesManager} = pluginLoader;
+  const {favoriteStore} = mainStore;
+  const {attributesManager} = pluginLoader;
 
   const history = useHistory();
   const theme = useTheme();
-  const [actions, setActions] = useState<PluginTopBarActionInterface>({main: () => null});
-  const [subtitle, setSubtitle] = useState<string>();
   const {t} = useTranslation();
-
-  const isDynamicScriptLoaded =
-    pluginsStore.dynamicScriptsStore.getScript(pluginLoader.scopeName)?.isLoaded ?? false;
-
-  pluginsStore.loadPluginIfNeeded(pluginLoader, isDynamicScriptLoaded);
-
-  const renderTopBarActions = useCallback((actions: PluginTopBarActionInterface) => {
-    console.info('Recieved actions', actions);
-    setActions(actions);
-  }, []);
 
   useEffect(() => {
     PosBusService.subscribe(pluginLoader.id);
@@ -64,9 +53,13 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
     }
   }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
-  if (!spaceStore) {
-    return null;
-  }
+  const {content, topBar, subtitle} = plugin.usePlugin({
+    theme,
+    isSpaceAdmin: spaceStore.isAdmin,
+    spaceId: spaceStore.id,
+    pluginApi: attributesManager.pluginApi,
+    api: attributesManager.api
+  });
 
   return (
     <SpacePage dataTestId="SpacePlugin-test">
@@ -86,29 +79,13 @@ const CollaborationPluginPage: FC<PropsInterface> = ({pluginLoader}) => {
           history.push(ROUTES.base);
         }}
       >
-        <actions.main />
+        {topBar}
       </SpaceTopBar>
       <styled.Container>
         {!pluginLoader.isError ? (
-          plugin?.SpaceExtension ? (
-            <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
-              <SpaceGlobalPropsContextProvider
-                props={{
-                  theme,
-                  isSpaceAdmin: spaceStore.isAdmin,
-                  spaceId: spaceStore.id,
-                  pluginApi: attributesManager.pluginApi,
-                  api: attributesManager.api,
-                  renderTopBarActions,
-                  setSubtitle
-                }}
-              >
-                <plugin.SpaceExtension />
-              </SpaceGlobalPropsContextProvider>
-            </ErrorBoundary>
-          ) : (
-            <Text text={t('messages.loadingPlugin')} size="l" />
-          )
+          <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
+            {content}
+          </ErrorBoundary>
         ) : (
           <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
         )}

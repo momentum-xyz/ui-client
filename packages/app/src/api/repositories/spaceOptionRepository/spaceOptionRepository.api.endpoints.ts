@@ -4,8 +4,7 @@ export const spaceOptionRepositoryEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_API_URL}/spaces/:spaceId`;
 
   return {
-    effectiveOptions: `${BASE_URL}/effective-options`,
-    effectiveSubOption: `${BASE_URL}/effective-options/sub`,
+    options: `${BASE_URL}/options`,
     subOption: `${BASE_URL}/options/sub`
   };
 };
