@@ -14,7 +14,7 @@
   "dependencies": {
     "@headlessui/react": "^1.2.0",
     "@momentum-xyz/core": "^0.1.2",
-    "@momentum-xyz/sdk": "^0.1.4",
+    "@momentum-xyz/sdk": "^0.1.5",
     "@momentum-xyz/ui-kit": "^0.1.2",
     "@polkadot/api": "8.10.1",
     "@polkadot/extension-dapp": "0.44.1",
