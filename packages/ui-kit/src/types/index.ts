@@ -14,3 +14,4 @@ export * from './file.type';
 export * from './headerStyle.type';
 export * from './toggleVariant.type';
 export * from './iconName.type';
+export * from './height.type';

@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
 
-import {EventItemModelInterface} from 'core/models';
+import {EventItemInterface} from 'core/models';
 
 import * as styled from './Header.styled';
 
 interface PropsInterface {
-  event: EventItemModelInterface;
+  event: EventItemInterface;
   isWorldCalendar?: boolean;
 }
 

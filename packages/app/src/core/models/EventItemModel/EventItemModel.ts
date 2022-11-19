@@ -14,14 +14,14 @@ import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {mapper} from 'api/mapper';
 import {appVariables} from 'api/constants';
 import {api, EventItemInterface, UserAttributeInterface} from 'api';
-import {UserModelInterface} from 'core/models';
+import {AttendeesList, UserModelInterface} from 'core/models';
 
 import {EventData, EventDataInterface} from './models/EventData';
 
 const EventItemModel = types
   .model('EventItemModel', {
     data: types.maybe(EventData),
-    attendees: types.array(types.frozen<UserModelInterface>()),
+    attendeesList: types.optional(AttendeesList, {}),
     attendeesRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
@@ -47,7 +47,9 @@ const EventItemModel = types
       if (response) {
         const event = mapper.mapSubAttributeValue<EventDataInterface>(response);
         if (event?.attendees) {
-          self.attendees = cast(Object.values(event?.attendees));
+          self.attendeesList = cast({
+            attendees: Object.values(event?.attendees)
+          });
         }
       }
 
@@ -76,7 +78,9 @@ const EventItemModel = types
       if (response) {
         const event = mapper.mapSubAttributeValue<EventDataInterface>(response);
         if (event?.attendees) {
-          self.attendees = cast(Object.values(event?.attendees));
+          self.attendeesList = cast({
+            attendees: Object.values(event?.attendees)
+          });
         }
       }
 
@@ -125,7 +129,7 @@ const EventItemModel = types
       return `${appVariables.RENDER_SERVICE_URL}/get/${self.data?.image}`;
     },
     isAttending(userId: string) {
-      return self.attendees.some((attendee) => attendee.id === userId);
+      return self.attendeesList.attendees.some((attendee) => attendee.id === userId);
     },
     avatarSrc(avatar_hash: string): string | undefined {
       return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${avatar_hash}`;

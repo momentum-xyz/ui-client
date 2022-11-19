@@ -191,4 +191,14 @@ export const Button = styled.button`
   &.transform-lowercase {
     text-transform: lowercase;
   }
+
+  /* HEIGHT */
+
+  &.medium-height {
+    height: 56px;
+  }
+
+  &.short-height {
+    height: 24px;
+  }
 `;

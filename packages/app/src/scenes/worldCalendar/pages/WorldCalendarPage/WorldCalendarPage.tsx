@@ -35,7 +35,7 @@ const WorldCalendarPage: FC = () => {
   );
 
   useEffect(() => {
-    eventList.fetchEvents(worldStore.worldId, true);
+    eventList.fetchSpaceEvents(worldStore.worldId);
 
     return () => {
       eventList.resetModel();

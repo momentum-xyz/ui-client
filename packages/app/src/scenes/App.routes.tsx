@@ -22,7 +22,7 @@ const WorldBuilderCustomizePanel = lazy(
   () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
 );
 const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
-const WorldCalendar = lazy(() => import('./worldCalendar/WorldCalendar'));
+const OdysseyCalendar = lazy(() => import('./odysseyCalendar/OdysseyCalendar'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const VideoPage = lazy(() => import('./video/pages/VideoPage/VideoPage'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
@@ -181,7 +181,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.worldCalendar,
-    main: () => <WorldCalendar />,
+    main: () => <OdysseyCalendar />,
     renderBackground: true
   }
 ];

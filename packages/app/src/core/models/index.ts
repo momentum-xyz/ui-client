@@ -11,6 +11,7 @@ export * from './SpaceUser';
 export * from './TokenItem';
 export * from './TrackModel';
 export * from './UserSpaceDetails';
+export * from './AttendeesList';
 export * from './AttendeeModel';
 export * from './EventItem';
 export * from './EventItemModel';

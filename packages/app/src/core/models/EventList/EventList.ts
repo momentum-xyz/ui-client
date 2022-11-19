@@ -35,7 +35,9 @@ const EventList = types.compose(
                 start: new Date(event.start),
                 end: new Date(event.end)
               },
-              attendees: [...Object.values(event.attendees ?? {})]
+              attendeesList: {
+                attendees: Object.values(event?.attendees ?? {})
+              }
             }))
           );
         }

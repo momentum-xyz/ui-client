@@ -3,15 +3,15 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {PropsWithThemeInterface, Loader} from '@momentum-xyz/ui-kit';
 
-import {EventItem} from 'ui-kit';
 import {EventItemModelInterface, UserModelInterface} from 'core/models';
+import {Event} from 'ui-kit';
 
 import * as styled from './EventList.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   user?: UserModelInterface;
   events: EventItemModelInterface[];
-  onMagicLinkOpen: (eventId: string, spaceId?: string) => void;
+  onMagicLinkOpen?: (eventId: string, spaceId?: string) => void;
   isLoading: boolean;
   showOnWorldCalendar?: boolean;
   canManageInSpace?: boolean;
@@ -30,7 +30,7 @@ const EventList: FC<PropsInterface> = ({
   onMagicLinkOpen,
   isLoading,
   showOnWorldCalendar = false,
-  canManageInSpace = false,
+  canManageInSpace = true,
   onFlyToGathering,
   onFlyToSpace,
   onWeblinkClick
@@ -52,7 +52,7 @@ const EventList: FC<PropsInterface> = ({
   return (
     <styled.Container className="noScrollIndicator" data-testid="EventList-test">
       {events.map((event, index) => (
-        <EventItem
+        <Event
           user={user}
           zIndex={events.length - index}
           key={event.data?.eventId}
@@ -60,11 +60,7 @@ const EventList: FC<PropsInterface> = ({
           onEdit={onEventEdit}
           onRemove={onEventRemove}
           onMagicLinkOpen={onMagicLinkOpen}
-          showOnWorldCalendar={showOnWorldCalendar}
-          onFlyToGathering={onFlyToGathering}
-          onFlyToSpace={onFlyToSpace}
           onWeblinkClick={onWeblinkClick}
-          // onShowAttendeesList={event.attendeesDetails.showAttendees}
           canManageEvent={canManageInSpace}
         />
       ))}
