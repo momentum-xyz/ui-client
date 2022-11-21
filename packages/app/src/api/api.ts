@@ -16,7 +16,6 @@ import * as emojiRepository from './repositories/emojiRepository';
 import * as eventsRepository from './repositories/eventsRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
-import * as old_eventsRepository from './repositories_OLD/old_eventsRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
 import * as flyWithMeRepository from './repositories_OLD/flyWithMeRepository';
 import * as stageModeRepository from './repositories_OLD/stageModeRepository';
@@ -64,7 +63,6 @@ export const api = {
   spaceRepository,
   userRepository_OLD,
   profileRepository,
-  old_eventsRepository,
   spaceRepositoryOld,
   flyWithMeRepository,
   stageModeRepository,
@@ -127,7 +125,6 @@ export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
 export * from './repositories_OLD/flyWithMeRepository/flyWithMeRepository.api.types';
 export * from './repositories_OLD/userRepository/userRepository.api.types';
 export * from './repositories_OLD/profileRepository/profileRepository.api.types';
-export * from './repositories_OLD/old_eventsRepository/old_eventsRepository.api.types';
 export * from './repositories_OLD/validatorsRepository/validatorsRepository.api.types';
 export * from './repositories_OLD/tokenRuleRepository/tokenRuleRepository.api.types';
 export * from './repositories_OLD/favoriteRepository/favoriteRepository.api.types';

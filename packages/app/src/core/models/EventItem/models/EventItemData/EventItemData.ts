@@ -1,18 +1,21 @@
 import {types, Instance} from 'mobx-state-tree';
 
+import {UserAttributeInterface} from 'api';
+
 const EventItemData = types.model('EventItemData', {
-  id: types.string,
+  eventId: types.maybe(types.string),
+  spaceId: types.maybe(types.string),
+  spaceName: types.maybe(types.string),
   title: types.string,
   description: types.string,
   hosted_by: types.string,
-  image_hash: types.maybeNull(types.string),
+  image: types.maybe(types.string),
   web_link: types.maybeNull(types.string),
-  is_admin: types.maybe(types.boolean),
-  spaceName: types.string,
-  spaceId: types.string,
   start: types.Date,
-  end: types.Date
+  end: types.Date,
+  attendees: types.maybe(types.frozen<UserAttributeInterface>())
 });
-export interface EventItemDataInterface extends Instance<typeof EventItemData> {}
+
+export type EventItemDataInterface = Instance<typeof EventItemData>;
 
 export {EventItemData};

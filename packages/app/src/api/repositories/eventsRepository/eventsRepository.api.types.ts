@@ -1,7 +1,7 @@
 import {UserModelInterface} from 'core/models';
 
 export interface EventCreateRequest {
-  data: EventItemInterface;
+  data: EventInterface;
   spaceId: string;
   eventId: string;
 }
@@ -20,7 +20,7 @@ export interface GetEventRequest {
   eventId: string;
 }
 
-export interface EventItemInterface {
+export interface EventInterface {
   eventId?: string;
   spaceId?: string;
   spaceName?: string;

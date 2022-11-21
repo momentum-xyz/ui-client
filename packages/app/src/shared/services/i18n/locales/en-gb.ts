@@ -356,7 +356,7 @@ export const enGb = {
       create: 'create',
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
-      joinGathering: 'Gathering Event is starting now',
+      joinGathering: 'Gathering EventItem is starting now',
       updateSpace: 'update your space with some enticing content',
       goToStageMode: 'Click to go to stage-mode',
       userWantsToComeOnStage: '{{user}} wants to come on stage',

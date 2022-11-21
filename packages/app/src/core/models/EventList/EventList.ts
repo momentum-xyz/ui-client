@@ -1,8 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {EventItemModel, EventDataInterface} from 'core/models';
-import {api, FetchEventsResponse, SpaceAttributeItemResponse} from 'api';
+import {EventItem, EventItemDataInterface} from 'core/models';
+import {api, SpaceAttributeItemResponse} from 'api';
 import {mapper} from 'api/mapper';
 
 const EventList = types.compose(
@@ -11,11 +11,11 @@ const EventList = types.compose(
     .model('EventList', {
       request: types.optional(RequestModel, {}),
       attendeesRequest: types.optional(RequestModel, {}),
-      events: types.optional(types.array(EventItemModel), [])
+      events: types.optional(types.array(EventItem), [])
     })
     .actions((self) => ({
       mapEvents(response: SpaceAttributeItemResponse) {
-        const eventsArray = mapper.mapSpaceAttributeValues<EventDataInterface>(response);
+        const eventsArray = mapper.mapSpaceAttributeValues<EventItemDataInterface>(response);
         if (eventsArray) {
           self.events = cast(
             eventsArray
@@ -50,27 +50,6 @@ const EventList = types.compose(
         }
 
         return self.request.isDone;
-      }),
-      fetchEvents: flow(function* fetchEvents(spaceId: string, children?: boolean) {
-        const response: FetchEventsResponse = yield self.request.send(
-          api.old_eventsRepository.fetchEvents,
-          {
-            spaceId,
-            children
-          }
-        );
-
-        if (response) {
-          self.events = cast(
-            response.map((event) => ({
-              data: {
-                ...event,
-                start: new Date(event.start),
-                end: new Date(event.end)
-              }
-            }))
-          );
-        }
       })
     }))
     .views((self) => ({

@@ -4,7 +4,7 @@ import {NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 
-import {DashboardPage, CalendarPage, StageModePage, ScreenSharePage, LiveStreamPage} from './pages';
+import {DashboardPage, StageModePage, ScreenSharePage, LiveStreamPage} from './pages';
 
 export const COLLABORATION_ROUTES = [
   {
@@ -12,15 +12,15 @@ export const COLLABORATION_ROUTES = [
     exact: true,
     main: () => <DashboardPage />
   },
-  {
-    path: ROUTES.collaboration.calendarEvent,
-    main: () => <CalendarPage />
-  },
-  {
-    path: ROUTES.collaboration.calendar,
-    main: () => <CalendarPage />,
-    exact: true
-  },
+  // {
+  //   path: ROUTES.collaboration.calendarEvent,
+  //   main: () => <CalendarPage />
+  // },
+  // {
+  //   path: ROUTES.collaboration.calendar,
+  //   main: () => <CalendarPage />,
+  //   exact: true
+  // },
   {
     path: ROUTES.collaboration.stageMode,
     main: () => <StageModePage />
@@ -51,10 +51,10 @@ export const buildNavigationTabs = (
       path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
       iconName: 'tiles'
     },
-    {
-      path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
-      iconName: 'calendar'
-    },
+    // {
+    //   path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
+    //   iconName: 'calendar'
+    // },
     {
       path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
       iconName: 'stage',

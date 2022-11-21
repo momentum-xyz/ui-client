@@ -3,22 +3,17 @@ import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {PropsWithThemeInterface, Loader} from '@momentum-xyz/ui-kit';
 
-import {EventItemModelInterface, UserModelInterface} from 'core/models';
-import {Event} from 'ui-kit';
+import {EventItemInterface, UserModelInterface} from 'core/models';
+import {EventItem} from 'ui-kit';
 
 import * as styled from './EventList.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   user?: UserModelInterface;
-  events: EventItemModelInterface[];
-  onMagicLinkOpen?: (eventId: string, spaceId?: string) => void;
+  events: EventItemInterface[];
   isLoading: boolean;
-  showOnWorldCalendar?: boolean;
-  canManageInSpace?: boolean;
-  onEventEdit: (event: EventItemModelInterface) => void;
-  onEventRemove: (event: EventItemModelInterface) => void;
-  onFlyToGathering?: (spaceId: string) => void;
-  onFlyToSpace?: (spaceId: string) => void;
+  onEventEdit: (event: EventItemInterface) => void;
+  onEventRemove: (event: EventItemInterface) => void;
   onWeblinkClick: (weblink: string) => void;
 }
 
@@ -27,12 +22,7 @@ const EventList: FC<PropsInterface> = ({
   events,
   onEventEdit,
   onEventRemove,
-  onMagicLinkOpen,
   isLoading,
-  showOnWorldCalendar = false,
-  canManageInSpace = true,
-  onFlyToGathering,
-  onFlyToSpace,
   onWeblinkClick
 }) => {
   if (events.length === 0) {
@@ -52,16 +42,14 @@ const EventList: FC<PropsInterface> = ({
   return (
     <styled.Container className="noScrollIndicator" data-testid="EventList-test">
       {events.map((event, index) => (
-        <Event
+        <EventItem
           user={user}
           zIndex={events.length - index}
           key={event.data?.eventId}
           event={event}
           onEdit={onEventEdit}
           onRemove={onEventRemove}
-          onMagicLinkOpen={onMagicLinkOpen}
           onWeblinkClick={onWeblinkClick}
-          canManageEvent={canManageInSpace}
         />
       ))}
     </styled.Container>
