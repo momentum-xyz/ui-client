@@ -154,7 +154,7 @@ const PluginAttributesManager = types
         throw Error('Empty response');
       }
 
-      if (!(attributeItemName in response)) {
+      if (response === null || !(attributeItemName in response)) {
         return null;
       }
 
