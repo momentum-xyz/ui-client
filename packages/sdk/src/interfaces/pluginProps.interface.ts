@@ -17,5 +17,7 @@ export interface PluginTopBarActionInterface {
   main: () => JSX.Element | null;
 }
 
-export interface SpacePluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface>
-  extends CorePluginPropsInterface<C> {}
+export interface ObjectPluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface>
+  extends CorePluginPropsInterface<C> {
+  onClose?: () => void;
+}

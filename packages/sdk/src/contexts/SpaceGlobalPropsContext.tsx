@@ -2,12 +2,12 @@ import React, {FC, useContext} from 'react';
 import {createContext} from 'react';
 import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
-import {PluginConfigInterface, SpacePluginPropsInterface} from '../interfaces';
+import {PluginConfigInterface, ObjectPluginPropsInterface} from '../interfaces';
 
 import {ThemeContextProvider} from './ThemeContext';
 
 export const SpaceGlobalPropsContext = createContext<
-  SpacePluginPropsInterface<PluginConfigInterface>
+  ObjectPluginPropsInterface<PluginConfigInterface>
 >({
   theme: DefaultThemeConfig,
   isSpaceAdmin: false,
@@ -40,7 +40,7 @@ export const SpaceGlobalPropsContext = createContext<
 });
 
 export const SpaceGlobalPropsContextProvider: FC<{
-  props: SpacePluginPropsInterface<PluginConfigInterface>;
+  props: ObjectPluginPropsInterface<PluginConfigInterface>;
 }> = ({props, children}) => (
   <SpaceGlobalPropsContext.Provider value={props}>
     <ThemeContextProvider theme={props.theme}>{children}</ThemeContextProvider>

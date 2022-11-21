@@ -6,13 +6,13 @@ import {useTheme} from '../../../contexts/ThemeContext';
 import {
   AttributeValueInterface,
   CorePluginPropsInterface,
-  PluginConfigInterface,
+  ObjectPluginPropsInterface,
   PluginInterface
 } from '../../../interfaces';
 import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 
 interface PropsInterface {
-  plugin: PluginInterface<PluginConfigInterface>;
+  plugin: PluginInterface<ObjectPluginPropsInterface>;
   spaceId: string;
   setTopBar: (topBar: JSX.Element) => void;
   setSubtitle: (subtitle?: string) => void;

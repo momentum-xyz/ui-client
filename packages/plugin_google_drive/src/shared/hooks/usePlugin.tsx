@@ -1,6 +1,10 @@
-import {PluginApiInterface, UsePluginHookType} from '@momentum-xyz/sdk';
-import {SpaceGlobalPropsContextProvider} from '@momentum-xyz/sdk/dist/contexts/SpaceGlobalPropsContext';
-import {AppConfigExtendedInterface, AppConfigInterface} from 'core/interfaces';
+import {
+  PluginApiInterface,
+  UsePluginHookType,
+  SpaceGlobalPropsContextProvider,
+  ObjectPluginPropsInterface
+} from '@momentum-xyz/sdk';
+import {AppConfigInterface} from 'core/interfaces';
 import {GoogleDrivePage} from 'pages';
 import {GoogleDriveActions} from 'pages/GoogleDrivePage/components/atoms';
 import {useMemo, useEffect} from 'react';
@@ -11,23 +15,26 @@ import {ThemeProvider} from 'styled-components';
 import {useGooglePicker} from './useGooglePicker';
 import {StoreProvider} from './useStore';
 
-export const usePlugin: UsePluginHookType<AppConfigExtendedInterface> = (props) => {
+export const usePlugin: UsePluginHookType<ObjectPluginPropsInterface> = (props) => {
   const store = useMemo(
     () =>
       RootGoogleDriveStore.create({
         api: props.pluginApi as PluginApiInterface<AppConfigInterface>,
+        attributesApi: props.api,
         googleDriveStore: GoogleDriveStore.create({
           api: props.pluginApi as PluginApiInterface<AppConfigInterface>
         })
       }),
-    [props.pluginApi]
+    [props.api, props.pluginApi]
   );
   const {googleDriveStore} = store;
   const {googleDocument} = googleDriveStore;
 
   useEffect(() => {
-    store.init();
-  }, [store]);
+    if (props.spaceId) {
+      store.init(props.spaceId);
+    }
+  }, [store, props.spaceId]);
 
   const {pickDocument} = useGooglePicker(googleDriveStore.pickGoogleDocument);
 

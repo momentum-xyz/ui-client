@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 
-import {PluginConfigInterface, PluginInterface} from '../interfaces';
+import {ObjectPluginPropsInterface, PluginInterface} from '../interfaces';
 
 import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
@@ -9,7 +9,7 @@ import {MomentumRequiredPage, WorldEmulator} from './components/';
 const isDevEnv = process.env.NODE_ENV === 'development';
 
 interface PropsInterface {
-  plugin: PluginInterface<PluginConfigInterface>;
+  plugin: PluginInterface<ObjectPluginPropsInterface>;
 }
 
 /**

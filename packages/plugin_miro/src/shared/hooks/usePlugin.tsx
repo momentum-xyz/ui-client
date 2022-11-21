@@ -3,28 +3,31 @@ import {
   SpaceGlobalPropsContextProvider,
   UsePluginHookType
 } from '@momentum-xyz/sdk';
-import {AppConfigInterface} from 'core/interfaces';
+import {AppConfigInterface, MiroPluginPropsInterface} from 'core/interfaces';
 import {MiroBoardPage} from 'pages';
 import {MiroActions} from 'pages/MiroBoardPage/components';
 import {useEffect, useMemo} from 'react';
 import {StoreProvider} from 'shared/hooks/useStore';
 import {RootMiroStore} from 'stores';
 
-export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
+export const usePlugin: UsePluginHookType<MiroPluginPropsInterface> = (props) => {
   const store = useMemo(
     () =>
       RootMiroStore.create({
+        attributesApi: props.api,
         api: props.pluginApi as PluginApiInterface<AppConfigInterface>
       }),
-    [props.pluginApi]
+    [props.api, props.pluginApi]
   );
 
   const {miroBoardStore} = store;
   const {board, pickBoard, disableBoard} = miroBoardStore;
 
   useEffect(() => {
-    store.init();
-  }, [store]);
+    if (props.spaceId) {
+      store.init(props.spaceId);
+    }
+  }, [store, props.spaceId]);
 
   const content = useMemo(
     () => (

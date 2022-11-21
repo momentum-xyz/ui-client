@@ -2,15 +2,17 @@ import {observer} from 'mobx-react-lite';
 import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button, Text, SpaceTopBar, SpacePage} from '@momentum-xyz/ui-kit';
+import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
-import {ToastContent, SpaceTopBar, Stage, SpacePage} from 'ui-kit';
+import {ToastContent, Stage} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {
   StageModePopupQueue,
   StageModeStats
 } from 'scenes/collaboration/pages/StageModePage/components';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './StageModeGuest.styled';
 
@@ -66,6 +68,8 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={onLeaveMeeting}
+        adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: spaceStore.id})}
+        baseLink={generatePath(ROUTES.base, {spaceId: spaceStore.id})}
       >
         <styled.Actions>
           <styled.Spacer />

@@ -2,11 +2,11 @@ import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router';
-import {Button} from '@momentum-xyz/ui-kit';
+import {Button, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
+import {generatePath} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SpacePage, SpaceTopBar} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 
 import {ScreenChoice, ScreenVideo} from './components/templates';
@@ -19,6 +19,7 @@ const ScreenSharePage: FC = () => {
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
   const {videoTrack} = agoraScreenShareStore;
+  const {space} = spaceStore;
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -46,18 +47,18 @@ const ScreenSharePage: FC = () => {
     agoraScreenShareStore.stopScreenSharing();
   }, [agoraScreenShareStore, screenShareStore]);
 
-  if (!spaceStore) {
+  if (!space) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="ScreenSharePage-test">
       <SpaceTopBar
-        title={spaceStore.space?.name ?? ''}
+        title={space.name}
         subtitle={screenShareTitle}
         isAdmin={spaceStore.isAdmin}
-        spaceId={spaceStore.id}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
+        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChatOpen={streamChatStore.isOpen}
@@ -67,6 +68,8 @@ const ScreenSharePage: FC = () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
         }}
+        adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
+        baseLink={generatePath(ROUTES.base, {spaceId: space.id})}
       >
         {((videoTrack && spaceStore.isAdmin) ||
           screenShareStore.screenOwnerId === sessionStore.userId) && (

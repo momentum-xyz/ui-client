@@ -7,6 +7,6 @@
     "noEmit": false,
     "baseUrl": "src"
   },
-  "include": ["src"],
+  "include": ["src", "../app/src/ui-kit/templates/SpaceTopBar"],
   "exclude": ["node_modules", "dist"]
 }

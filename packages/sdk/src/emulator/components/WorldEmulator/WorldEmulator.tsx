@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {generatePath, Redirect, Route, Switch} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
-import {PluginConfigInterface, PluginInterface} from '../../../interfaces';
+import {ObjectPluginPropsInterface, PluginInterface} from '../../../interfaces';
 import {SpaceEmulator} from '../SpaceEmulator';
 import {ROUTES} from '../../constants';
 
@@ -11,7 +11,7 @@ import * as styled from './WorldEmulator.styled';
 const DUMMY_SPACE_ID = '42424242-4242-4242-4242-424242424242';
 
 interface PropsInterface {
-  plugin: PluginInterface<PluginConfigInterface>;
+  plugin: PluginInterface<ObjectPluginPropsInterface>;
 }
 
 export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {

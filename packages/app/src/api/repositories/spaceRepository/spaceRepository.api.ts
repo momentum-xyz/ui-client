@@ -1,7 +1,7 @@
 import {RequestInterface} from '@momentum-xyz/core';
+import {PluginIdEnum, AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {request} from 'api/request';
-import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
 import {GetSpaceAttributeItemRequest, SpaceAttributeItemResponse} from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 

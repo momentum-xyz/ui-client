@@ -61,7 +61,12 @@ module.exports = {
             singleton: true,
             eager: true,
             requiredVersion: "latest"
-          }
+          },
+          "@momentum-xyz/ui-kit": {
+            singleton: true,
+            eager: true,
+            requiredVersion: "^0.1.3"
+          },
         }
       })
     ],

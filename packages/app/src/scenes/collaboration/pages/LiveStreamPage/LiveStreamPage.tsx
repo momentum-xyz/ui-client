@@ -2,10 +2,11 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {useHistory} from 'react-router';
-import {Button} from '@momentum-xyz/ui-kit';
+import {Button, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
+import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
-import {SpacePage, SpaceTopBar, VideoPanel} from 'ui-kit';
+import {VideoPanel} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {ROUTES} from 'core/constants';
 
@@ -15,6 +16,7 @@ const LiveStreamPage: FC = () => {
   const {mainStore, collaborationStore, leaveMeetingSpace} = useStore();
   const {spaceStore, streamChatStore} = collaborationStore;
   const {favoriteStore, liveStreamStore} = mainStore;
+  const {space} = spaceStore;
 
   const history = useHistory();
 
@@ -25,18 +27,18 @@ const LiveStreamPage: FC = () => {
     return () => liveStreamStore.leftLiveStreamTab();
   }, [liveStreamStore]);
 
-  if (!spaceStore) {
+  if (!space) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="LiveStreamPage-test">
       <SpaceTopBar
-        title={spaceStore.space?.name ?? ''}
+        title={space.name}
         subtitle={t('liveStream.subtitle')}
         isAdmin={spaceStore.isAdmin}
-        spaceId={spaceStore.id}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id)}
+        spaceId={space.id}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         isChatOpen={streamChatStore.isOpen}
@@ -46,12 +48,14 @@ const LiveStreamPage: FC = () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
         }}
+        adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
+        baseLink={generatePath(ROUTES.base, {spaceId: space.id})}
       >
         {liveStreamStore.isStreaming && spaceStore.isAdmin && (
           <Button
             label={t('liveStream.stopStream')}
             variant="danger"
-            onClick={() => liveStreamStore.disableBroadcast(spaceStore.id)}
+            onClick={() => liveStreamStore.disableBroadcast(space.id)}
           />
         )}
       </SpaceTopBar>

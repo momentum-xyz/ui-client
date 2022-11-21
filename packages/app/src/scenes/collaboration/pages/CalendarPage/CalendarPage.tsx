@@ -4,19 +4,13 @@ import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router';
-import {Button} from '@momentum-xyz/ui-kit';
+import {Button, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 import {absoluteLink} from '@momentum-xyz/core';
+import {generatePath} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {
-  EventList,
-  LinkDialog,
-  ToastContent,
-  SpaceTopBar,
-  DeleteEventDialog,
-  SpacePage
-} from 'ui-kit';
+import {EventList, LinkDialog, ToastContent, DeleteEventDialog} from 'ui-kit';
 
 import {EventForm} from './components';
 import * as styled from './CalendarPage.styled';
@@ -26,6 +20,7 @@ const CalendarPage: FC = () => {
   const {calendarStore, spaceStore} = collaborationStore;
   const {eventList, formDialog, magicDialog, deleteConfirmationDialog, magicLink} = calendarStore;
   const {favoriteStore, unityStore} = mainStore;
+  const {space} = spaceStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -39,14 +34,14 @@ const CalendarPage: FC = () => {
   };
 
   const handleMagicLinkOpen = (eventId: string) => {
-    if (spaceStore) {
-      calendarStore.showMagicLink(spaceStore.id, eventId);
+    if (space) {
+      calendarStore.showMagicLink(space.id, eventId);
     }
   };
 
   const handleEventDelete = async () => {
-    if (spaceStore) {
-      if (await calendarStore.removeEvent(spaceStore.id)) {
+    if (space) {
+      if (await calendarStore.removeEvent(space.id)) {
         toast.info(
           <ToastContent
             headerIconName="calendar"
@@ -70,30 +65,30 @@ const CalendarPage: FC = () => {
   };
 
   useEffect(() => {
-    if (spaceStore) {
-      eventList.fetchEvents(spaceStore.id);
+    if (space) {
+      eventList.fetchEvents(space.id);
     }
 
     return () => eventList.resetModel();
-  }, [eventList, spaceStore]);
+  }, [eventList, space]);
 
   const handleFlyToSpace = (spaceId: string) => {
     unityStore.teleportToSpace(spaceId);
     history.push(ROUTES.base);
   };
 
-  if (!spaceStore) {
+  if (!space) {
     return null;
   }
 
   return (
     <SpacePage dataTestId="CalendarPage-test">
       <SpaceTopBar
-        title={spaceStore.space?.name ?? ''}
+        title={space.name}
         subtitle="calendar"
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
         showChatButton={false}
@@ -101,6 +96,8 @@ const CalendarPage: FC = () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
         }}
+        adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
+        baseLink={generatePath(ROUTES.base, {spaceId: space.id})}
       >
         {spaceStore.isAdmin && (
           <Button variant="primary" label="Add Gathering" theme={theme} onClick={handleEventForm} />
