@@ -7,24 +7,19 @@ import {
   AttributeValueInterface,
   CorePluginPropsInterface,
   PluginConfigInterface,
-  UsePluginHookType
+  PluginInterface
 } from '../../../interfaces';
 import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 
 interface PropsInterface {
-  usePlugin: UsePluginHookType<PluginConfigInterface>;
+  plugin: PluginInterface<PluginConfigInterface>;
   spaceId: string;
   setTopBar: (topBar: JSX.Element) => void;
   setSubtitle: (subtitle?: string) => void;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({
-  usePlugin,
-  spaceId,
-  setTopBar,
-  setSubtitle
-}) => {
-  console.log('RENDER SpaceTabEmulator', {usePlugin});
+export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar, setSubtitle}) => {
+  console.log('RENDER SpaceTabEmulator', {plugin});
   const theme = useTheme();
   const {
     spaceAttributes,
@@ -212,7 +207,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
     ]
   );
 
-  const {content} = usePlugin(coreProps);
+  const {content} = plugin.usePlugin(coreProps);
 
   return (
     <>

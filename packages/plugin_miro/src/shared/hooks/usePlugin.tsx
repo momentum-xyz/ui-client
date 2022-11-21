@@ -10,7 +10,7 @@ import {useEffect, useMemo} from 'react';
 import {StoreProvider} from 'shared/hooks/useStore';
 import {RootMiroStore} from 'stores';
 
-const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
+export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
   const store = useMemo(
     () =>
       RootMiroStore.create({
@@ -60,5 +60,3 @@ const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
     subtitle
   };
 };
-
-export default usePlugin;

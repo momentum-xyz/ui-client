@@ -5,13 +5,12 @@ import {useSpace} from '@momentum-xyz/sdk';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
-import {GoogleDriveActions} from './components/atoms';
 
 const GoogleDrivePage: FC = () => {
   const {api, googleDriveStore} = useStore();
   const {googleDocument} = googleDriveStore;
 
-  const {renderTopBarActions, setSubtitle, spaceId, isAdmin, pluginApi} = useSpace();
+  const {spaceId, isAdmin, pluginApi} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useStateItemChange('document', googleDriveStore.setGoogleDocument);
@@ -28,30 +27,7 @@ const GoogleDrivePage: FC = () => {
     };
   }, [api, googleDriveStore, spaceId]);
 
-  useEffect(() => {
-    setSubtitle(googleDocument?.name);
-  }, [googleDocument?.name, setSubtitle]);
-
   const {pickDocument} = useGooglePicker(googleDriveStore.pickGoogleDocument);
-
-  useEffect(() => {
-    renderTopBarActions({
-      main: () => (
-        <GoogleDriveActions
-          spaceId={spaceId}
-          isAdmin={isAdmin}
-          googleDocument={googleDocument}
-          pickDocument={pickDocument}
-          closeDocument={() => {
-            if (!spaceId) {
-              return;
-            }
-            googleDriveStore.closeDocument();
-          }}
-        />
-      )
-    });
-  }, [googleDocument, isAdmin, googleDriveStore, renderTopBarActions, spaceId, pickDocument]);
 
   if (!spaceId) {
     return null;

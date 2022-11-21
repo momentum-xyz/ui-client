@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 
-import {PluginConfigInterface, UsePluginHookType} from '../interfaces';
+import {PluginConfigInterface, PluginInterface} from '../interfaces';
 
 import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
@@ -9,7 +9,7 @@ import {MomentumRequiredPage, WorldEmulator} from './components/';
 const isDevEnv = process.env.NODE_ENV === 'development';
 
 interface PropsInterface {
-  usePlugin: UsePluginHookType<PluginConfigInterface>;
+  plugin: PluginInterface<PluginConfigInterface>;
 }
 
 /**
@@ -32,13 +32,13 @@ ReactDOM.render(
 );
 ```
  */
-export const HostEmulator: FC<PropsInterface> = ({usePlugin}) => {
-  console.log('RENDER HostEmulator', {usePlugin});
+export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
+  console.log('RENDER HostEmulator', {plugin});
   return (
     <styled.FullScreenContainer>
       {isDevEnv ? (
         <BrowserRouter>
-          <WorldEmulator usePlugin={usePlugin} />
+          <WorldEmulator plugin={plugin} />
         </BrowserRouter>
       ) : (
         <MomentumRequiredPage />
