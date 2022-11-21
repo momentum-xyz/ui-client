@@ -15,7 +15,9 @@ import {IconNameType} from '@momentum-xyz/ui-kit';
 import {PolkadotAddress, PolkadotUnlockingDuration} from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {
-  calcUnbondingAmount
+  calcUnbondingAmount,
+  fetchIpfs,
+  isIpfsHash
   // formatExistential
 } from 'core/utils';
 import {KeyringAddressType} from 'core/types';
@@ -382,25 +384,51 @@ const NftStore = types
         collectionItemIds
       );
       console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
-      const nftItems: any[] = [];
-      itemMetadatas.forEach((itemMedadata: any, index: number) => {
-        const [collectionId, itemId] = collectionItemIds[index];
-        const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
-        if (data) {
-          console.log('data', data);
-          try {
-            // TODO support IPFS variant of metadata
-            const metadata = JSON.parse(data);
-            nftItems.push({
-              collectionId,
-              itemId,
-              metadata
-            });
-          } catch (e) {
-            console.log('Unable to parse NFT metadata', data, '| Error:', e);
+      const nftItems: NftItemInterface[] = yield Promise.all(
+        itemMetadatas.map(
+          async (itemMedadata: any, index: number): Promise<NftItemInterface | null> => {
+            const [collectionId, itemId] = collectionItemIds[index];
+            const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
+            console.log('data', data);
+
+            if (!data) {
+              return null;
+            }
+
+            let metadataStr: string | null = data as string;
+            try {
+              if (isIpfsHash(data)) {
+                console.log('fetch from IPFS', data);
+                // TODO timeout
+                metadataStr = await fetchIpfs(data);
+              }
+
+              if (!metadataStr) {
+                return null;
+              }
+
+              const metadata = JSON.parse(metadataStr);
+              if (!metadata?.name || !metadata?.description || !metadata?.logoUrl) {
+                console.log('Incomplete metadata', metadata);
+                return null;
+              }
+
+              return {
+                collectionId,
+                itemId,
+                metadata
+              };
+            } catch (e) {
+              console.log('Unable to parse/fetch NFT metadata', data, '| Error:', e);
+            }
+
+            return null;
           }
-        }
-      });
+        )
+      ).then(
+        (nftItems: Array<NftItemInterface | null>) =>
+          nftItems.filter((nftItem) => !!nftItem) as NftItemInterface[]
+      );
 
       console.log('NftItems', nftItems);
 
