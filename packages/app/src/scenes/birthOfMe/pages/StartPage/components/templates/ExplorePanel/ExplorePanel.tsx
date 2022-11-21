@@ -15,7 +15,8 @@ const PANEL_WIDTH_PX = 200;
 // const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
-  const {worldExplorerStore} = useStore();
+  const {birthOfMeStore} = useStore();
+  const {startStore} = birthOfMeStore;
   const {
     items,
     filteredItems,
@@ -25,7 +26,8 @@ const ExplorePanel: FC = () => {
     isQueryValid,
     isExpanded,
     setIsExpanded
-  } = worldExplorerStore;
+  } = startStore;
+
   console.log('render explore panel', {
     items,
     itemsLength: items.length,

@@ -1,6 +1,7 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
 import {PosBusEventEnum} from 'core/enums';
+import {RootBirthOfMeStore} from 'scenes/birthOfMe/stores';
 import {RootAuthStore} from 'scenes/auth/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
@@ -13,7 +14,6 @@ import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
-import {WorldExplorerStore} from 'scenes/worldExplorer/stores/WorldExplorerStore';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 
 import {MainStore} from './MainStore';
@@ -27,6 +27,7 @@ const RootStore = types
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     /* Connect independent stores */
+    birthOfMeStore: types.optional(RootBirthOfMeStore, {}),
     authStore: types.optional(RootAuthStore, {}),
     homeStore: types.optional(HomeStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
@@ -36,7 +37,6 @@ const RootStore = types
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
-    worldExplorerStore: types.optional(WorldExplorerStore, {}),
     worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
     worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),

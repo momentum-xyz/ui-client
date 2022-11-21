@@ -1,6 +1,6 @@
 import {FC} from 'react';
 
-import {WorldInfoInterface} from '../../../../../stores/WorldExplorerStore/models';
+import {WorldInfoInterface} from '../../../../../stores/StartStore/models';
 
 import * as styled from './UniverseMap.styled';
 

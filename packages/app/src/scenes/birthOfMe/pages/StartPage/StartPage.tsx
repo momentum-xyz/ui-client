@@ -3,13 +3,19 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 
-import * as styled from './WorldExplorerPage.styled';
+import * as styled from './StartPage.styled';
 import {ExplorePanel, UniverseMap} from './components';
 
-const WorldExplorerPage: FC = () => {
-  const {worldExplorerStore} = useStore();
-  const {addresses, tokenSymbol, isLoading, isWeb3Injected, controllerAccount} =
-    worldExplorerStore.polkadotNftStore;
+const StartPage: FC = () => {
+  const {birthOfMeStore} = useStore();
+  const {nftStore, startStore} = birthOfMeStore;
+  const {addresses, tokenSymbol, isLoading, isWeb3Injected, controllerAccount} = nftStore;
+  const {items} = startStore;
+
+  useEffect(() => {
+    birthOfMeStore.init();
+  }, [birthOfMeStore]);
+
   console.log('Render WorldExplorerPage', {
     addresses,
     tokenSymbol,
@@ -17,11 +23,6 @@ const WorldExplorerPage: FC = () => {
     isWeb3Injected,
     controllerAccount
   });
-  const {items} = worldExplorerStore;
-
-  useEffect(() => {
-    worldExplorerStore.init();
-  }, [worldExplorerStore]);
 
   return (
     <styled.WorldExplorerPageContainer>
@@ -35,4 +36,4 @@ const WorldExplorerPage: FC = () => {
   );
 };
 
-export default observer(WorldExplorerPage);
+export default observer(StartPage);

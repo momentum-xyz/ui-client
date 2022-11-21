@@ -22,10 +22,10 @@ import {KeyringAddressType} from 'core/types';
 import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
-const PolkadotNftStore = types
+const NftStore = types
   .compose(
     ResetModel,
-    types.model('PolkadotProvider', {
+    types.model('NftStore', {
       addresses: types.optional(types.array(PolkadotAddress), []),
       stashAccount: types.maybeNull(PolkadotAddress),
       controllerAccount: types.maybeNull(PolkadotAddress),
@@ -434,4 +434,4 @@ const PolkadotNftStore = types
     })
   }));
 
-export {PolkadotNftStore};
+export {NftStore};

@@ -9,7 +9,9 @@ export const ROUTES = {
   callBack: '/oidc/callback',
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
-  worldExplorer: '/explore',
+  birthOfMe: {
+    start: '/birthOfMe/start'
+  },
   welcome: '/welcome',
   signUpComplete: '/profile/signUpComplete',
   system: {
