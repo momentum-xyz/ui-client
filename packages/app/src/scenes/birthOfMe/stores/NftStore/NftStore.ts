@@ -22,6 +22,17 @@ import {KeyringAddressType} from 'core/types';
 import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
+// FIXME create models for these once we figure out the structure
+interface NftItemMetadataInterface {
+  name: string;
+}
+
+interface NftItemInterface {
+  collectionId: string;
+  itemId: string;
+  metadata: NftItemMetadataInterface;
+}
+
 const NftStore = types
   .compose(
     ResetModel,
@@ -44,6 +55,7 @@ const NftStore = types
       usedStashAddress: types.maybeNull(types.string),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionEnum))),
       transactionFee: '',
+      nftItems: types.optional(types.array(types.frozen<NftItemInterface>()), []),
       isLoading: false
     })
   )
@@ -225,6 +237,9 @@ const NftStore = types
     setIsLoading(payload: boolean) {
       self.isLoading = payload;
     },
+    setNftItems(items: NftItemInterface[]) {
+      self.nftItems = cast(items);
+    },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
     },
@@ -350,6 +365,46 @@ const NftStore = types
       const injectedAddresses = SubstrateProvider.getKeyringAddresses();
       console.log('injectedAddresses', injectedAddresses);
       self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
+    }),
+    fetchNfts: flow(function* () {
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+
+      const nftsItemsInfos = yield self.channel.query.uniques.asset.keys();
+      console.log('nftsItemsInfos', nftsItemsInfos);
+      const collectionItemIds = nftsItemsInfos.map((nftItemInfo: any) => {
+        const [collectionId, itemId] = nftItemInfo.args;
+        return [collectionId.toNumber(), itemId.toNumber()];
+      });
+      console.log('collectionItemIds', collectionItemIds);
+      const itemMetadatas = yield self.channel.query.uniques.instanceMetadataOf.multi(
+        collectionItemIds
+      );
+      console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
+      const nftItems: any[] = [];
+      itemMetadatas.forEach((itemMedadata: any, index: number) => {
+        const [collectionId, itemId] = collectionItemIds[index];
+        const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
+        if (data) {
+          console.log('data', data);
+          try {
+            // TODO support IPFS variant of metadata
+            const metadata = JSON.parse(data);
+            nftItems.push({
+              collectionId,
+              itemId,
+              metadata
+            });
+          } catch (e) {
+            console.log('Unable to parse NFT metadata', data, '| Error:', e);
+          }
+        }
+      });
+
+      console.log('NftItems', nftItems);
+
+      self.setNftItems(nftItems);
     })
     // getMinNominatorBond: flow(function* () {
     //   const minNominatorBond = self.channel
@@ -409,27 +464,13 @@ const NftStore = types
       self.setIsLoading(true);
       yield self.connectToChain();
 
-      if (self.channel) {
-        const ts = yield self.channel.query.timestamp.now();
-        console.log('Blockchain timestamp:', ts?.toNumber());
-
-        const chain = yield self.channel.rpc.system.chain();
-
-        // Retrieve the latest header
-        const lastHeader = yield self.channel.rpc.chain.getHeader();
-
-        // Log the information
-        console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
-
-        yield self.channel.rpc.chain.subscribeNewHeads((lastHeader) => {
-          console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
-        });
-      }
-
       yield self.setIsWeb3Injected();
       self.getChainInformation();
       yield self.getAddresses();
       // yield self.initAccounts();
+
+      yield self.fetchNfts();
+
       self.setIsLoading(false);
     })
   }));
