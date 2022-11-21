@@ -46,7 +46,6 @@ export const Info = styled.div`
 export const Container = styled.div`
   display: flex;
   width: 100%;
-  backdrop-filter: blur(10px);
   border-radius: 10px;
   padding: 10px;
 
