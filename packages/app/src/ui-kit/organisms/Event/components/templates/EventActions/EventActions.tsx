@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {SvgButton} from '@momentum-xyz/ui-kit';
+import {observer} from 'mobx-react-lite';
 
 import {EventItemModelInterface} from 'core/models';
 
@@ -32,4 +33,4 @@ const EventActions: FC<PropsInterface> = ({event, onRemove, onEdit}) => {
   );
 };
 
-export default EventActions;
+export default observer(EventActions);

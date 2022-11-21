@@ -14,7 +14,7 @@ const TabBarButtons: FC<PropsInterface> = ({calendar}) => {
         label={calendar}
         size="normal"
         transform="capitalized"
-        variant="inverted"
+        variant="inverted-background"
         height="short-height"
       />
     </styled.Buttons>

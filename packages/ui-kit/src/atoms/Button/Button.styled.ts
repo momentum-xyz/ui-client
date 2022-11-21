@@ -133,6 +133,13 @@ export const Button = styled.button`
     }
   }
 
+  &.inverted-background {
+    color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
+    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
+    border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
+    border-radius: 5px;
+  }
+
   /* SIZES */
 
   &.normal {

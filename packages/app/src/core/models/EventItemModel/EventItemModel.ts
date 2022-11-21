@@ -25,15 +25,21 @@ const EventItemModel = types
     attendeesRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    attending: flow(function* (
-      spaceId: string,
-      user: UserModelInterface,
-      data?: EventDataInterface
-    ) {
+    attending: flow(function* (spaceId: string, eventId: string, user: UserModelInterface) {
+      const eventResponse = yield self.attendeesRequest.send(
+        api.eventsRepository.getEventAttribute,
+        {
+          spaceId,
+          eventId
+        }
+      );
+
+      const eventMapped = mapper.mapSubAttributeValue<EventDataInterface>(eventResponse);
+
       const event: EventItemInterface = {
-        ...data,
+        ...eventMapped,
         attendees: {
-          ...data?.attendees,
+          ...eventMapped?.attendees,
           [user.id]: user
         }
       };
@@ -41,7 +47,7 @@ const EventItemModel = types
       const response = yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
         spaceId,
         data: event,
-        eventId: data?.eventId ?? ''
+        eventId
       });
 
       if (response) {
@@ -55,15 +61,25 @@ const EventItemModel = types
 
       return self.attendeesRequest.isDone;
     }),
-    withdrawAttending: flow(function* (spaceId: string, userId: string, data?: EventDataInterface) {
+    withdrawAttending: flow(function* (spaceId: string, eventId: string, userId: string) {
+      const eventResponse = yield self.attendeesRequest.send(
+        api.eventsRepository.getEventAttribute,
+        {
+          spaceId,
+          eventId
+        }
+      );
+
+      const eventMapped = mapper.mapSubAttributeValue<EventDataInterface>(eventResponse);
+
       const attendees: UserAttributeInterface = {
-        ...data?.attendees
+        ...eventMapped?.attendees
       };
 
       delete attendees?.[userId];
 
       const event: EventItemInterface = {
-        ...data,
+        ...mapper.mapSubAttributeValue<EventDataInterface>(eventResponse),
         attendees: {
           ...attendees
         }
@@ -72,7 +88,7 @@ const EventItemModel = types
       const response = yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
         spaceId,
         data: event,
-        eventId: data?.eventId ?? ''
+        eventId
       });
 
       if (response) {
@@ -106,8 +122,7 @@ const EventItemModel = types
         duration: durationInHours(self.data.start, self.data.end),
         endDatetime: formattedStringFromDate(self.data.end),
         startDatetime: formattedStringFromDate(self.data.start),
-        title: self.data?.title,
-        location: 'self.magicLink'
+        title: self.data?.title
       };
     },
     get startDate() {
@@ -123,7 +138,12 @@ const EventItemModel = types
       return formatStartTime(new Date(self.data?.start ?? new Date()));
     },
     get endDateAndTime() {
-      return formatEndDate(new Date(self.data?.end ?? new Date()), true);
+      if (self.data) {
+        const showYear =
+          isOtherYearThanToday(self.data?.start) || isOtherYearThanToday(self.data?.end);
+        return formatEndDate(new Date(self.data?.end), showYear);
+      }
+      return;
     },
     get imageSrc(): string {
       return `${appVariables.RENDER_SERVICE_URL}/get/${self.data?.image}`;

@@ -23,8 +23,8 @@ export const DateRow = styled.div`
 export const AttendeesContainer = styled.div`
   display: grid;
   grid-row-gap: 20px;
-  grid-column-gap: 5px;
-  grid-template-columns: 70px 70px 70px 70px;
+  grid-column-gap: 10px;
+  grid-template-columns: 70px 70px 70px 70px 70px;
   grid-template-rows: 70px;
   grid-auto-flow: dense;
   transform: rotateY(180deg);
@@ -34,6 +34,7 @@ export const AttendeesContainer = styled.div`
 export const AttendeeAvatar = styled(Avatar)`
   width: 40px !important;
   height: 40px !important;
+  border: 2px solid ${(props) => props.theme.accent};
 `;
 
 export const AttendeeNameText = styled(Text)`
@@ -48,4 +49,29 @@ export const AttendeeContrainer = styled.div`
   overflow: hidden;
   gap: 10px;
   transform: rotateY(180deg);
+`;
+
+export const MoreAttendees = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  border: 2px solid ${(props) => props.theme.accent};
+`;
+
+export const AttendeesCount = styled(Text)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50%;
+  color: black;
+  background: ${(props) => props.theme.accent};
+`;
+
+export const EventTitle = styled(Text)`
+  margin-bottom: 10px;
 `;

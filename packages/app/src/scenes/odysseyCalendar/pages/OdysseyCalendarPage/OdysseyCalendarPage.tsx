@@ -9,15 +9,15 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {EventList, LinkDialog, DeleteEventDialog, ToastContent} from 'ui-kit';
+import {EventList, DeleteEventDialog, ToastContent} from 'ui-kit';
 
 import * as styled from './OdysseyCalendarPage.styled';
-import {TabBarButtons} from './components';
+import {EventForm, TabBarButtons} from './components';
 
 const OdysseyCalendarPage: FC = () => {
-  const {worldCalendarStore, mainStore, sessionStore} = useStore();
-  const {calendarStore} = worldCalendarStore;
-  const {magicDialog, eventList, deleteConfirmationDialog, spaceId, magicLink} = calendarStore;
+  const {calendarStore, mainStore, sessionStore} = useStore();
+  const {odysseyCalendarStore} = calendarStore;
+  const {eventList, deleteConfirmationDialog} = odysseyCalendarStore;
   const {worldStore} = mainStore;
 
   const {t} = useTranslation();
@@ -37,8 +37,8 @@ const OdysseyCalendarPage: FC = () => {
   };
 
   const handleEventDelete = async () => {
-    if (worldStore.worldId && spaceId) {
-      if (await calendarStore.removeEvent(spaceId, worldStore.worldId)) {
+    if (worldStore.worldId) {
+      if (await odysseyCalendarStore.removeEvent(worldStore.worldId)) {
         toast.info(
           <ToastContent
             headerIconName="calendar"
@@ -70,10 +70,6 @@ const OdysseyCalendarPage: FC = () => {
     }
   };
 
-  // const handleEventForm = () => {
-  //   calendarStore.formDialog.open();
-  // };
-
   return (
     <styled.Modal theme={theme} data-testid="OdysseyCalendarPage-test">
       <styled.Container className="noScrollIndicator">
@@ -91,33 +87,25 @@ const OdysseyCalendarPage: FC = () => {
         >
           <styled.InnerContainer>
             <styled.FormButton
-              label="Create new event in your odyssey"
+              label="Create new event in your Odyssey"
               variant="primary"
               height="medium-height"
+              transform="capitalized"
+              onClick={odysseyCalendarStore.formDialog.open}
             />
             <EventList
               user={sessionStore.user ?? undefined}
               events={eventList.events}
               isLoading={false}
-              onEventEdit={calendarStore.editEvent}
-              onEventRemove={calendarStore.selectEventToRemove}
+              onEventEdit={odysseyCalendarStore.editEvent}
+              onEventRemove={odysseyCalendarStore.selectEventToRemove}
               onWeblinkClick={handleWeblink}
               showOnWorldCalendar
             />
           </styled.InnerContainer>
         </PanelLayout>
 
-        {magicDialog.isOpen && (
-          <LinkDialog
-            theme={theme}
-            title={t('eventList.eventItem.magicLinkDialog.title')}
-            copyLabel={t('eventList.eventItem.magicLinkDialog.copyLabel')}
-            link={magicLink}
-            onClose={magicDialog.close}
-          />
-        )}
-
-        {/*{calendarStore.formDialog.isOpen && <EventForm />}*/}
+        {odysseyCalendarStore.formDialog.isOpen && <EventForm />}
 
         {deleteConfirmationDialog.isOpen && (
           <DeleteEventDialog

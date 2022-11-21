@@ -14,6 +14,7 @@ import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
+import {RootCalendarStore} from 'scenes/odysseyCalendar/stores';
 
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
@@ -33,6 +34,7 @@ const RootStore = types
     meetingStore: types.optional(RootMeetingStore, {}),
     flightStore: types.optional(RootFlightStore, {}),
     worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
+    calendarStore: types.optional(RootCalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
     worldBuilderStore: types.optional(RootWorldBuilderStore, {}),

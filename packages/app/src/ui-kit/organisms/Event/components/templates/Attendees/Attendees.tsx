@@ -19,6 +19,11 @@ const Attendees: FC<PropsInterface> = (props) => {
 
   const {t} = useTranslation();
 
+  const handleClose = () => {
+    attendeesList.dialog.close();
+    attendeesList.searchedAttendees = undefined;
+  };
+
   return (
     <>
       <Dialog
@@ -26,7 +31,7 @@ const Attendees: FC<PropsInterface> = (props) => {
         subtitle={`${t('labels.attendeeList')} / ${t('counts.attendees', {
           count: attendeesList.attendees.length
         })}`}
-        onClose={attendeesList.resetModel}
+        onClose={handleClose}
         headerStyle="uppercase"
         icon="profile"
         iconSize="large"
@@ -36,19 +41,25 @@ const Attendees: FC<PropsInterface> = (props) => {
         layoutSize={{width: `${DIALOG_WIDTH_PX}px;`}}
       >
         <styled.Container data-testid="AttendeesWidget-test">
-          {/*TODO: Attendees search*/}
           <SearchInput
             placeholder={t('placeholders.searchForAttendees')}
-            onChange={(query) => attendeesList.changeQuery(query)}
+            onChange={(query) => attendeesList.searchAttendees(query)}
             withBackground
           />
           <styled.List className="noScrollIndicator">
-            {attendeesList.attendees.map((attendee) => (
-              <styled.Item key={attendee.id}>
-                <Avatar avatarSrc={attendee.avatarSrc} size="small" />
-                <Text size="s" text={attendee.name} transform="capitalized" />
-              </styled.Item>
-            ))}
+            {attendeesList.searchedAttendees
+              ? attendeesList.searchedAttendees.map((attendee) => (
+                  <styled.Item key={attendee.id}>
+                    <Avatar avatarSrc={attendee.avatarSrc} size="small" />
+                    <Text size="s" text={attendee.name} transform="capitalized" />
+                  </styled.Item>
+                ))
+              : attendeesList.attendees.map((attendee) => (
+                  <styled.Item key={attendee.id}>
+                    <Avatar avatarSrc={attendee.avatarSrc} size="small" />
+                    <Text size="s" text={attendee.name} transform="capitalized" />
+                  </styled.Item>
+                ))}
           </styled.List>
         </styled.Container>
       </Dialog>

@@ -7,12 +7,17 @@ export interface EventCreateRequest {
 }
 
 export interface EventDeleteRequest {
-  key: string;
+  eventId: string;
   spaceId: string;
 }
 
 export interface FetchEventsRequest {
   spaceId: string;
+}
+
+export interface GetEventRequest {
+  spaceId: string;
+  eventId: string;
 }
 
 export interface EventItemInterface {

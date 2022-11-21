@@ -61,6 +61,42 @@ const EventForm = types.compose(
 
         return self.eventFormRequest.isDone;
       }),
+      updateEventAttribute: flow(function* (
+        data: EventFormInterface,
+        spaceId: string,
+        eventId: string,
+        file?: File
+      ) {
+        if (file) {
+          const uploadImageResponse: UploadImageResponse = yield self.uploadImageRequest.send(
+            api.mediaRepository.uploadImage,
+            {file}
+          );
+
+          if (!uploadImageResponse) {
+            console.log('Failed to upload event image');
+            return false;
+          }
+
+          self.imageHash = uploadImageResponse.hash;
+        }
+
+        const event: EventItemInterface = {
+          ...data,
+          attendees: self.currentEvent?.attendees,
+          spaceId,
+          eventId,
+          image: file ? self.imageHash : undefined
+        };
+
+        yield self.eventFormRequest.send(api.eventsRepository.setEventAttributes, {
+          spaceId,
+          data: event,
+          eventId
+        });
+
+        return self.eventFormRequest.isDone;
+      }),
       createEvent: flow(function* (data: EventFormInterface, spaceId: string, file?: File) {
         const response: CreateEventResponse = yield self.eventFormRequest.send(
           api.old_eventsRepository.createEvent,

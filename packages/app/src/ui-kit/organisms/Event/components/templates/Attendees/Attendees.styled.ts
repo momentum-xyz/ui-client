@@ -28,7 +28,6 @@ export const Item = styled.div`
 
   :hover {
     background: rgba(255, 255, 255, 5%);
-    cursor: pointer;
   }
 `;
 

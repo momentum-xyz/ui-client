@@ -22,13 +22,13 @@ const EventTools: FC<PropsInterface> = ({event, onWeblinkClick, user}) => {
     if (!user) {
       return;
     }
-    event.attending(event?.data?.spaceId ?? '', user, event.data);
+    event.attending(event?.data?.spaceId ?? '', event?.data?.eventId ?? '', user);
   };
   const handleWithdrawAttending = () => {
     if (!user) {
       return;
     }
-    event.withdrawAttending(event?.data?.spaceId ?? '', user.id, event.data);
+    event.withdrawAttending(event?.data?.spaceId ?? '', event?.data?.eventId ?? '', user.id);
   };
 
   return (

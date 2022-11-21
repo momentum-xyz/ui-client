@@ -1,9 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {v4 as uuidv4} from 'uuid';
 
 import {EventItemModel, EventDataInterface} from 'core/models';
-import {api, EventItemInterface, FetchEventsResponse, SpaceAttributeItemResponse} from 'api';
+import {api, FetchEventsResponse, SpaceAttributeItemResponse} from 'api';
 import {mapper} from 'api/mapper';
 
 const EventList = types.compose(
@@ -15,30 +14,24 @@ const EventList = types.compose(
       events: types.optional(types.array(EventItemModel), [])
     })
     .actions((self) => ({
-      mapAttendees(response: SpaceAttributeItemResponse) {
-        const eventsArray = mapper.mapSpaceAttributeValues<EventDataInterface>(response);
-        self.events = cast(
-          eventsArray.map((event) => ({
-            attendees: {
-              ...Object.values(event.attendees ?? {})
-            }
-          }))
-        );
-      },
       mapEvents(response: SpaceAttributeItemResponse) {
         const eventsArray = mapper.mapSpaceAttributeValues<EventDataInterface>(response);
         if (eventsArray) {
           self.events = cast(
-            eventsArray.map((event) => ({
-              data: {
-                ...event,
-                start: new Date(event.start),
-                end: new Date(event.end)
-              },
-              attendeesList: {
-                attendees: Object.values(event?.attendees ?? {})
-              }
-            }))
+            eventsArray
+              .filter((event) => new Date(event.end) >= new Date())
+              .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
+              .map((event) => ({
+                data: {
+                  ...event,
+                  start: new Date(event.start),
+                  end: new Date(event.end),
+                  attendees: event.attendees
+                },
+                attendeesList: {
+                  attendees: Object.values(event?.attendees ?? {})
+                }
+              }))
           );
         }
       }
@@ -78,21 +71,6 @@ const EventList = types.compose(
             }))
           );
         }
-      }),
-      updateEventAttendees: flow(function* (data: EventItemInterface, spaceId: string) {
-        const eventId = uuidv4();
-
-        const event: EventItemInterface = {
-          ...data
-        };
-
-        yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
-          spaceId,
-          data: event,
-          eventId
-        });
-
-        return self.attendeesRequest.isDone;
       })
     }))
     .views((self) => ({
