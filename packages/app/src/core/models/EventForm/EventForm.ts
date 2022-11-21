@@ -19,7 +19,7 @@ const EventForm = types.compose(
       editEvent(event: EventItemInterface) {
         self.currentEvent = cast({...event.data});
       },
-      createEventAttribute: flow(function* (
+      createEvent: flow(function* (
         data: EventFormInterface,
         spaceId: string,
         spaceName?: string,

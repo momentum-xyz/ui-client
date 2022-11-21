@@ -14,7 +14,7 @@ import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
-import {CalendarStore} from 'scenes/calendar/stores';
+import {CalendarStore} from 'scenes/calendar/stores/CalendarStore';
 
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';

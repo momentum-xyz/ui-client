@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ShowMoreText, Text} from '@momentum-xyz/ui-kit';
+import {t} from 'i18next';
 
 import {EventItemInterface} from 'core/models';
 
@@ -51,14 +52,10 @@ const EventInformation: FC<PropsInterface> = ({event}) => {
         {event.attendeesList.attendees.length > 4 && (
           <styled.AttendeeContrainer>
             <styled.MoreAttendees>
-              <styled.AttendeesCount
-                text={`+${event.attendeesList.attendees.length - 4}`}
-                size="xs"
-                weight="bold"
-              />
+              <styled.AttendeesCount text={event.attendeesCount} size="xs" weight="bold" />
             </styled.MoreAttendees>
             <styled.AttendeeNameText
-              text="More Attendees"
+              text={t('eventList.eventItem.moreAttendees')}
               size="xxs"
               align="center"
               isMultiline={false}

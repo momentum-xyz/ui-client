@@ -35,8 +35,6 @@ export const setEventAttributes: RequestInterface<
     ...restOptions
   };
 
-  console.info(attributeOptions);
-
   return setSpaceAttributeItem(attributeOptions, request);
 };
 

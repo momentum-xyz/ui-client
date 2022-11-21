@@ -4,10 +4,10 @@ import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 import {EventForm, EventItemInterface, EventList} from 'core/models';
 import {api} from 'api';
 
-const OdysseyCalendarStore = types.compose(
+const CalendarStore = types.compose(
   ResetModel,
   types
-    .model('OdysseyCalendarStore', {
+    .model('CalendarStore', {
       formDialog: types.optional(Dialog, {}),
       deleteConfirmationDialog: types.optional(Dialog, {}),
       removeEventRequest: types.optional(RequestModel, {}),
@@ -22,7 +22,6 @@ const OdysseyCalendarStore = types.compose(
         self.formDialog.open();
       },
       selectEventToRemove(event: EventItemInterface) {
-        console.info(event);
         self.eventIdToRemove = event.data?.eventId;
         self.deleteConfirmationDialog.open();
       },
@@ -47,4 +46,4 @@ const OdysseyCalendarStore = types.compose(
     }))
 );
 
-export {OdysseyCalendarStore};
+export {CalendarStore};

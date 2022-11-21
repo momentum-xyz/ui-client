@@ -64,12 +64,7 @@ const EventForm: FC = () => {
         image
       );
     } else {
-      isSuccess = await eventForm.createEventAttribute(
-        data,
-        worldStore.worldId,
-        spaceDetails?.name,
-        image
-      );
+      isSuccess = await eventForm.createEvent(data, worldStore.worldId, spaceDetails?.name, image);
     }
 
     if (isSuccess) {

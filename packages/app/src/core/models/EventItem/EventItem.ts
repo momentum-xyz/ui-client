@@ -25,7 +25,12 @@ const EventItem = types
     attendeesRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    attending: flow(function* (spaceId: string, eventId: string, user: UserModelInterface) {
+    updateAttendees: flow(function* (
+      spaceId: string,
+      eventId: string,
+      user: UserModelInterface,
+      isAttending: boolean
+    ) {
       const eventResponse = yield self.attendeesRequest.send(
         api.eventsRepository.getEventAttribute,
         {
@@ -33,57 +38,32 @@ const EventItem = types
           eventId
         }
       );
-
       const eventMapped = mapper.mapSubAttributeValue<EventItemDataInterface>(eventResponse);
 
-      const event: EventInterface = {
-        ...eventMapped,
-        attendees: {
-          ...eventMapped?.attendees,
-          [user.id]: user
-        }
-      };
+      let event: EventInterface = {};
 
-      const response = yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
-        spaceId,
-        data: event,
-        eventId
-      });
+      if (isAttending) {
+        event = {
+          ...eventMapped,
+          attendees: {
+            ...eventMapped?.attendees,
+            [user.id]: user
+          }
+        };
+      } else {
+        const attendees: UserAttributeInterface = {
+          ...eventMapped?.attendees
+        };
 
-      if (response) {
-        const event = mapper.mapSubAttributeValue<EventItemDataInterface>(response);
-        if (event?.attendees) {
-          self.attendeesList = cast({
-            attendees: Object.values(event?.attendees)
-          });
-        }
+        delete attendees?.[user.id];
+
+        event = {
+          ...mapper.mapSubAttributeValue<EventItemDataInterface>(eventResponse),
+          attendees: {
+            ...attendees
+          }
+        };
       }
-
-      return self.attendeesRequest.isDone;
-    }),
-    withdrawAttending: flow(function* (spaceId: string, eventId: string, userId: string) {
-      const eventResponse = yield self.attendeesRequest.send(
-        api.eventsRepository.getEventAttribute,
-        {
-          spaceId,
-          eventId
-        }
-      );
-
-      const eventMapped = mapper.mapSubAttributeValue<EventItemDataInterface>(eventResponse);
-
-      const attendees: UserAttributeInterface = {
-        ...eventMapped?.attendees
-      };
-
-      delete attendees?.[userId];
-
-      const event: EventInterface = {
-        ...mapper.mapSubAttributeValue<EventItemDataInterface>(eventResponse),
-        attendees: {
-          ...attendees
-        }
-      };
 
       const response = yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
         spaceId,
@@ -156,6 +136,9 @@ const EventItem = types
     },
     get isLoading(): boolean {
       return self.attendeesRequest.isPending;
+    },
+    get attendeesCount(): string {
+      return `+${self.attendeesList.attendees.length - 4}`;
     }
   }));
 export interface EventItemInterface extends Instance<typeof EventItem> {}

@@ -18,17 +18,11 @@ interface PropsInterface {
 const EventTools: FC<PropsInterface> = ({event, onWeblinkClick, user}) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
 
-  const handleAttending = () => {
+  const handleAttending = (attending: boolean) => {
     if (!user) {
       return;
     }
-    event.attending(event?.data?.spaceId ?? '', event?.data?.eventId ?? '', user);
-  };
-  const handleWithdrawAttending = () => {
-    if (!user) {
-      return;
-    }
-    event.withdrawAttending(event?.data?.spaceId ?? '', event?.data?.eventId ?? '', user.id);
+    event.updateAttendees(event?.data?.spaceId ?? '', event?.data?.eventId ?? '', user, attending);
   };
 
   return (
@@ -56,7 +50,11 @@ const EventTools: FC<PropsInterface> = ({event, onWeblinkClick, user}) => {
             disabled={event.isLoading}
             label={t('eventList.eventItem.interested')}
             transform="capitalized"
-            onClick={event.isAttending(user?.id ?? '') ? handleWithdrawAttending : handleAttending}
+            onClick={
+              event.isAttending(user?.id ?? '')
+                ? () => handleAttending(false)
+                : () => handleAttending(true)
+            }
           />
         )}
         <Button
