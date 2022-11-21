@@ -15,8 +15,9 @@ import * as styled from './CalendarPage.styled';
 import {EventForm, TabBarButtons} from './components';
 
 const CalendarPage: FC = () => {
-  const {calendarStore, mainStore, sessionStore} = useStore();
+  const {calendarStore, mainStore, sessionStore, homeStore} = useStore();
   const {eventList, deleteConfirmationDialog} = calendarStore;
+  const {exploreStore} = homeStore;
   const {worldStore} = mainStore;
 
   const {t} = useTranslation();
@@ -75,7 +76,7 @@ const CalendarPage: FC = () => {
         <PanelLayout
           componentSize={{width: '80vw'}}
           onClose={handleClose}
-          title="OdysseyName"
+          title={exploreStore?.spaceDetails?.name}
           headerStyle="uppercase"
           headerType="h2"
           headerIconName="calendar"
@@ -86,7 +87,7 @@ const CalendarPage: FC = () => {
         >
           <styled.InnerContainer>
             <styled.FormButton
-              label="Create new event in your Odyssey"
+              label={t('calendar.formButton')}
               variant="primary"
               height="medium-height"
               transform="capitalized"

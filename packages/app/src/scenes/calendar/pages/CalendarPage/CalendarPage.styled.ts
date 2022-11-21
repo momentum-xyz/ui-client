@@ -22,11 +22,10 @@ export const Container = styled.div`
 export const Modal = styled.div`
   display: flex;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 5%;
+  left: 10%;
 
   justify-content: center;
   align-items: center;
-  z-index: var(--dialog-z-index);
+  z-index: calc(var(--dialog-z-index) + 1);
 `;

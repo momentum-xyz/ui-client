@@ -44,7 +44,6 @@ const EventList: FC<PropsInterface> = ({
       {events.map((event, index) => (
         <EventItem
           user={user}
-          zIndex={events.length - index}
           key={event.data?.eventId}
           event={event}
           onEdit={onEventEdit}

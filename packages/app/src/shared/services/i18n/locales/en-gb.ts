@@ -930,6 +930,9 @@ export const enGb = {
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
     },
+    calendar: {
+      formButton: 'Create new event in your Odyssey'
+    },
     dashboard: {
       subtitle: 'dashboard',
       vibe: 'vibe',

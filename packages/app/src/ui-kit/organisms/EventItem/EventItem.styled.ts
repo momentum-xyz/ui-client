@@ -75,15 +75,3 @@ export const Container = styled.div`
     position: relative;
   }
 `;
-
-export const LiveIndicator = styled.div`
-  display: flex;
-  gap: 5px;
-  background: var(--danger-red);
-  padding: 0 10px;
-  border-radius: 5px;
-  color: var(--white);
-  font-weight: bold;
-  text-transform: uppercase;
-  align-items: center;
-`;
