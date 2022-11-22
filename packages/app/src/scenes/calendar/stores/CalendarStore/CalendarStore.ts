@@ -22,10 +22,10 @@ const CalendarStore = types.compose(
       eventList: types.optional(EventList, {})
     })
     .actions((self) => ({
-      editEvent(event: EventItemInterface) {
-        self.eventForm.editEvent(event);
+      editEvent: flow(function* (event: EventItemInterface) {
+        yield self.eventForm.editEvent(event);
         self.formDialog.open();
-      },
+      }),
       selectEventToRemove(event: EventItemInterface) {
         self.eventIdToRemove = event.data?.eventId;
         self.deleteConfirmationDialog.open();

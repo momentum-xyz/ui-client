@@ -144,7 +144,7 @@ class PosBusService {
     PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilot, message.pilotName);
   }
 
-  static handleSpaceAttributeMessaage(target: string, message: PosBusAttributeMessageType) {
+  static handleSpaceAttributeMessage(target: string, message: PosBusAttributeMessageType) {
     switch (message.type) {
       case PosBusMessageTypeEnum.ATTRIBUTE_CHANGED:
         PosBusEventEmitter.emit(
@@ -187,13 +187,13 @@ class PosBusService {
     console.log('[unity message]:', target, message);
 
     if (this.main.subscribedAttributeTypeTopics.has(target)) {
-      this.handleSpaceAttributeMessaage(target, message as PosBusAttributeMessageType);
+      this.handleSpaceAttributeMessage(target, message as PosBusAttributeMessageType);
       return;
     }
 
     // TODO: Old stuff, refactor to new controller attributes system
     switch (target) {
-      case 'event':
+      case 'notify-gathering-start':
         this.handleNotifyGathering(message as PosBusGatheringMessageType);
         break;
       case 'vibe':

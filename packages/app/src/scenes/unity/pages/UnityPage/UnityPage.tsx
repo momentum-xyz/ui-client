@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
-import {generatePath, useHistory, useLocation} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
@@ -36,7 +36,6 @@ const UnityPage: FC = () => {
   const auth = useAuth();
   const theme = useTheme();
   const history = useHistory();
-  const location = useLocation();
   const {t} = useTranslation();
 
   useUnityEvent('MomentumLoaded', () => {
@@ -149,27 +148,14 @@ const UnityPage: FC = () => {
 
   usePosBusEvent('notify-gathering-start', (message) => {
     console.info('[POSBUS EVENT] notify-gathering-start', message);
-    const {spaceId} = message;
-    const alreadyInSpace: boolean = location.pathname.includes(
-      generatePath(ROUTES.collaboration.base, {spaceId})
-    );
-
-    const handleJoinSpace = () => {
-      unityStore.teleportToSpace(spaceId);
-
-      setTimeout(() => {
-        history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
-      }, TELEPORT_DELAY_MS);
-    };
 
     toast.info(
       <ToastContent
         headerIconName="calendar"
         title={t('titles.joinGathering')}
-        text={t('messages.joinGathering', {title: message.name})}
+        text={t('messages.joinGathering', {title: message.title})}
         approveInfo={{
-          title: alreadyInSpace ? t('actions.dismiss') : t('actions.join'),
-          onClick: alreadyInSpace ? undefined : handleJoinSpace
+          title: t('actions.dismiss')
         }}
         showCloseButton
       />,

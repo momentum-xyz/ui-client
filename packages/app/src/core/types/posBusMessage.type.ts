@@ -18,8 +18,10 @@ export type PosBusMessageStatusType = {
 
 export type PosBusGatheringMessageType = {
   spaceId: string;
-  name: string;
+  eventId: string;
+  title: string;
   start: Date;
+  end: Date;
 };
 
 export type PosBusVibeMessageType = {
