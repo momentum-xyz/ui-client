@@ -31,7 +31,6 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
-  width: 100%;
   height: 60px;
   padding: 20px;
   border-radius: 10px;
