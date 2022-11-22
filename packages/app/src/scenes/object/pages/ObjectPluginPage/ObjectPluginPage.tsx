@@ -26,12 +26,12 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   const history = useHistory();
 
   useEffect(() => {
-    PosBusService.subscribe(pluginLoader.id);
+    PosBusService.subscribe(pluginLoader.pluginId);
 
     return () => {
-      PosBusService.unsubscribe(pluginLoader.id);
+      PosBusService.unsubscribe(pluginLoader.pluginId);
     };
-  }, [pluginLoader.id]);
+  }, [pluginLoader.pluginId]);
 
   useEffect(() => {
     if (pluginLoader.isErrorWhileLoadingDynamicScript) {
@@ -51,6 +51,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
     theme,
     isSpaceAdmin: true,
     spaceId: objectId,
+    spaceName: pluginLoader.name,
     pluginApi: attributesManager.pluginApi,
     api: attributesManager.api,
     onClose: () => {

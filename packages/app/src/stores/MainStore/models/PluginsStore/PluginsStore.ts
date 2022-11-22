@@ -80,6 +80,7 @@ const PluginsStore = types
         try {
           const pluginLoader = PluginLoader.create({
             ...plugin,
+            pluginId: plugin.id,
             attributesManager: PluginAttributesManager.create({
               pluginId: plugin.id,
               spaceId

@@ -3,35 +3,30 @@ import {AttributeValueInterface} from './attributeValue.interface';
 export interface ApiInterface {
   getSpaceAttributeValue: <T extends AttributeValueInterface>(
     spaceId: string,
-    attributeName: string,
-    pluginId?: string
+    attributeName: string
   ) => Promise<T>;
   setSpaceAttributeValue: <T extends AttributeValueInterface>(
     spaceId: string,
     attributeName: string,
-    value: T,
-    pluginId?: string
+    value: T
   ) => Promise<T>;
   deleteSpaceAttribute: (spaceId: string, attributeName: string) => Promise<null>;
 
   getSpaceAttributeItem: <T>(
     spaceId: string,
     attributeName: string,
-    attributeItemName: string,
-    pluginId?: string
+    attributeItemName: string
   ) => Promise<T>;
   setSpaceAttributeItem: <T>(
     spaceId: string,
     attributeName: string,
     attributeItemName: string,
-    value: T,
-    pluginId?: string
+    value: T
   ) => Promise<T>;
   deleteSpaceAttributeItem: (
     spaceId: string,
     attributeName: string,
-    attributeItemName: string,
-    pluginId?: string
+    attributeItemName: string
   ) => Promise<null>;
 
   subscribeToTopic: (topic: string) => void;
@@ -40,28 +35,20 @@ export interface ApiInterface {
   useAttributeChange: <T extends AttributeValueInterface = AttributeValueInterface>(
     topic: string,
     attributeName: string,
-    callback: (value: T) => void,
-    pluginId?: string
+    callback: (value: T) => void
   ) => void;
-  useAttributeRemove: (
-    topic: string,
-    attributeName: string,
-    callback: () => void,
-    pluginId?: string
-  ) => void;
+  useAttributeRemove: (topic: string, attributeName: string, callback: () => void) => void;
 
   useAttributeItemChange: <T = unknown>(
     topic: string,
     attributeName: string,
     attributeItemName: string,
-    callback: (value: T) => void,
-    pluginId?: string
+    callback: (value: T) => void
   ) => void;
   useAttributeItemRemove: (
     topic: string,
     attributeName: string,
     attributeItemName: string,
-    callback: () => void,
-    pluginId?: string
+    callback: () => void
   ) => void;
 }

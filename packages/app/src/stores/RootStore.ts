@@ -114,7 +114,10 @@ const RootStore = types
     }),
     openObject: flow(function* (objectId: string, assetType: AssetTypeEnum) {
       yield self.objectStore.init(objectId, assetType);
-    })
+    }),
+    closeObject() {
+      self.objectStore.deinit();
+    }
   }));
 
 export type RootStoreType = Instance<typeof RootStore>;

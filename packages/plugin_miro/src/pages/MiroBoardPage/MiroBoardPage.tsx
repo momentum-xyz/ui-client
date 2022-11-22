@@ -11,7 +11,7 @@ const MiroBoardPage: FC = () => {
   const store = useStore();
   const {api, miroBoardStore} = store;
   const {board, pickBoard, disableBoard} = miroBoardStore;
-  const {isAdmin, spaceId, pluginApi, onClose} = useSpace();
+  const {isAdmin, spaceName, spaceId, pluginApi, onClose} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const MiroBoardPage: FC = () => {
   return (
     <SpacePage>
       <SpaceTopBar
-        title={store.spaceName ?? ''}
+        title={spaceName ?? ''}
         subtitle={board?.name}
         isAdmin={isAdmin}
         spaceId={spaceId}

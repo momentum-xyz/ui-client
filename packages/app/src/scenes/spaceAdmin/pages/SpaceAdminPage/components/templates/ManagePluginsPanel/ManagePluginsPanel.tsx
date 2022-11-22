@@ -86,7 +86,8 @@ const ManagePluginsPanel: FC = () => {
         <styled.List className="noScrollIndicator">
           {pluginsStore.spacePlugins.map((plugin) => (
             <AdminListItem
-              key={plugin.subPath}
+              // key={plugin.subPath}
+              key={plugin.id}
               name={plugin.name}
               userId={plugin.id}
               type={`/${plugin.subPath}`}

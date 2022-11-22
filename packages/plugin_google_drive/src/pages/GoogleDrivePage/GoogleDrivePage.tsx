@@ -13,7 +13,7 @@ const GoogleDrivePage: FC = () => {
   const {api, googleDriveStore} = store;
   const {googleDocument} = googleDriveStore;
 
-  const {spaceId, isAdmin, pluginApi, onClose} = useSpace();
+  const {spaceId, spaceName, isAdmin, pluginApi, onClose} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useStateItemChange('document', googleDriveStore.setGoogleDocument);
@@ -39,7 +39,7 @@ const GoogleDrivePage: FC = () => {
   return (
     <SpacePage>
       <SpaceTopBar
-        title={store.spaceName ?? ''}
+        title={spaceName ?? ''}
         subtitle={googleDocument?.name}
         isAdmin={isAdmin}
         spaceId={spaceId}

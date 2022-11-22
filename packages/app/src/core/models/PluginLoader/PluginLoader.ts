@@ -11,9 +11,9 @@ const PluginLoader = types
     ResetModel,
     types.model('PluginLoader', {
       id: types.identifier,
+      pluginId: types.string,
       name: types.string,
       scopeName: types.string,
-      subPath: types.string,
       subtitle: types.maybe(types.string),
       scriptUrl: types.string,
       exact: types.maybe(types.boolean),
