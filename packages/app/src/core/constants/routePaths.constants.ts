@@ -43,7 +43,7 @@ export const ROUTES = {
   },
   magic: '/magic/:id',
   video: '/video/:spaceId',
-  worldCalendar: '/calendar',
+  calendar: '/calendar',
   help: '/help',
   storyBook: {
     base: '/storybook',

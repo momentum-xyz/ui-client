@@ -1,104 +1,109 @@
 import {types, Instance, flow, cast} from 'mobx-state-tree';
 import {EventCalendarInterface} from 'react-add-to-calendar-hoc';
 import {
-  RequestModel,
   durationInHours,
   formatEndDate,
   formatStartDate,
   formatStartTime,
   formattedStringFromDate,
-  isOtherYearThanToday
+  isOtherYearThanToday,
+  RequestModel
 } from '@momentum-xyz/core';
-import {generatePath} from 'react-router-dom';
-import {v4 as uuidv4} from 'uuid';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
-import {api, AttendeesResponseInterface} from 'api';
-import {AttendeeModel} from 'core/models/AttendeeModel';
+import {mapper} from 'api/mapper';
 import {appVariables} from 'api/constants';
-import {ROUTES} from 'core/constants';
-import {MagicTypeEnum} from 'core/enums';
+import {api, EventInterface, UserAttributeInterface} from 'api';
+import {UserModelInterface} from 'core/models';
 
-import {EventItemData, EventAttendeesList} from './models';
+import {AttendeesList, EventItemData, EventItemDataInterface} from './models';
 
 const EventItem = types
   .model('EventItem', {
     data: types.maybe(EventItemData),
-    magicRequest: types.optional(RequestModel, {}),
-    fetchAttendeesRequest: types.optional(RequestModel, {}),
-    attendees: types.optional(types.array(AttendeeModel), []),
-    attendeesDetails: types.optional(EventAttendeesList, {}),
-    numberOfAllAttendees: types.optional(types.number, 0),
-    attendRequest: types.optional(RequestModel, {}),
-    magicLinkId: ''
+    attendeesList: types.optional(AttendeesList, {}),
+    attendeesRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    fetchAttendees: flow(function* (limit?: boolean) {
-      if (!self.data) {
-        return;
+    updateAttendees: flow(function* (
+      spaceId: string,
+      eventId: string,
+      user: UserModelInterface,
+      isAttending: boolean
+    ) {
+      const eventResponse = yield self.attendeesRequest.send(
+        api.eventsRepository.getEventAttribute,
+        {
+          spaceId,
+          eventId
+        }
+      );
+      const eventMapped = mapper.mapSubAttributeValue<EventItemDataInterface>(eventResponse);
+
+      let event: EventInterface = {};
+
+      if (isAttending) {
+        event = {
+          ...eventMapped,
+          attendees: {
+            ...eventMapped?.attendees,
+            [user.id]: user
+          }
+        };
+      } else {
+        const attendees: UserAttributeInterface = {
+          ...eventMapped?.attendees
+        };
+
+        delete attendees?.[user.id];
+
+        event = {
+          ...mapper.mapSubAttributeValue<EventItemDataInterface>(eventResponse),
+          attendees: {
+            ...attendees
+          }
+        };
       }
 
-      const response: AttendeesResponseInterface = yield self.fetchAttendeesRequest.send(
-        api.attendeesRepository.fetchAttendees,
-        {eventId: self.data?.id, spaceId: self.data?.spaceId, limit}
-      );
+      const response = yield self.attendeesRequest.send(api.eventsRepository.setEventAttributes, {
+        spaceId,
+        data: event,
+        eventId
+      });
 
       if (response) {
-        self.attendees = cast(response.attendees);
-        self.numberOfAllAttendees = response.count;
-      }
-    }),
-    createMagicLink: flow(function* () {
-      self.magicLinkId = uuidv4();
-      yield self.magicRequest.send(api.magicLinkRepository.createLink, {
-        key: self.magicLinkId,
-        type: MagicTypeEnum.EVENT,
-        data: {
-          spaceId: self.data?.spaceId,
-          eventId: self.data?.id
+        const event = mapper.mapSubAttributeValue<EventItemDataInterface>(response);
+        if (event?.attendees) {
+          self.attendeesList = cast({
+            attendees: Object.values(event?.attendees)
+          });
         }
-      });
-    })
-  }))
-  .actions((self) => ({
-    init() {
-      self.createMagicLink();
-      self.fetchAttendees(true);
-    },
-    isLive(): boolean {
-      const nowDate = new Date();
-      if (self.data) {
-        return nowDate >= self.data.start && nowDate <= self.data.end;
-      }
-      return false;
-    },
-    attend: flow(function* () {
-      if (!self.data) {
-        return;
       }
 
-      yield self.attendRequest.send(api.attendeesRepository.addAttendee, {
-        eventId: self.data?.id,
-        spaceId: self.data?.spaceId
-      });
-
-      self.fetchAttendees(true);
-    }),
-    stopAttending: flow(function* () {
-      if (!self.data) {
-        return;
-      }
-
-      yield self.attendRequest.send(api.attendeesRepository.removeAttendee, {
-        eventId: self.data?.id,
-        spaceId: self.data?.spaceId
-      });
-
-      self.fetchAttendees(true);
+      return self.attendeesRequest.isDone;
     })
   }))
   .views((self) => ({
-    get toBytes() {
-      return Buffer.from(self.data?.id?.replace(/-/g, '') ?? '', 'hex');
+    get isLive(): boolean {
+      if (self.data) {
+        const nowDate = new Date();
+        if (self.data.start && self.data.end) {
+          return nowDate >= self.data.start && nowDate <= self.data.end;
+        }
+      }
+      return false;
+    },
+    get asCalendarEvent(): EventCalendarInterface | null {
+      if (!self.data) {
+        return null;
+      }
+      return {
+        description: self.data.description,
+        duration: durationInHours(self.data.start, self.data.end),
+        endDatetime: formattedStringFromDate(self.data.end),
+        startDatetime: formattedStringFromDate(self.data.start),
+        title: self.data?.title
+      };
     },
     get startDate() {
       if (self.data) {
@@ -113,32 +118,29 @@ const EventItem = types
       return formatStartTime(new Date(self.data?.start ?? new Date()));
     },
     get endDateAndTime() {
-      return formatEndDate(new Date(self.data?.end ?? new Date()), true);
-    },
-    get asCalendarEvent(): EventCalendarInterface | null {
-      if (!self.data) {
-        return null;
+      if (self.data) {
+        const showYear =
+          isOtherYearThanToday(self.data?.start) || isOtherYearThanToday(self.data?.end);
+        return formatEndDate(new Date(self.data?.end), showYear);
       }
-      return {
-        description: self.data.description,
-        duration: durationInHours(self.data.start, self.data.end),
-        endDatetime: formattedStringFromDate(self.data.end),
-        startDatetime: formattedStringFromDate(self.data.start),
-        title: self.data?.title,
-        location: this.magicLink
-      };
+      return;
     },
     get imageSrc(): string {
-      return `${appVariables.RENDER_SERVICE_URL}/get/${self.data?.image_hash}`;
+      return `${appVariables.RENDER_SERVICE_URL}/get/${self.data?.image}`;
     },
     isAttending(userId: string) {
-      return self.attendees.some((attendee) => attendee.id === userId);
+      return self.attendeesList.attendees.some((attendee) => attendee.id === userId);
     },
-    get magicLink(): string {
-      return `${document.location.origin}${generatePath(ROUTES.magic, {id: self.magicLinkId})}`;
+    avatarSrc(avatar_hash: string): string | undefined {
+      return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${avatar_hash}`;
+    },
+    get isLoading(): boolean {
+      return self.attendeesRequest.isPending;
+    },
+    get attendeesCount(): string {
+      return `+${self.attendeesList.attendees.length - 4}`;
     }
   }));
-
 export interface EventItemInterface extends Instance<typeof EventItem> {}
 
 export {EventItem};

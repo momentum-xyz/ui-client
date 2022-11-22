@@ -133,6 +133,13 @@ export const Button = styled.button`
     }
   }
 
+  &.inverted-background {
+    color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
+    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
+    border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.9)};
+    border-radius: 5px;
+  }
+
   /* SIZES */
 
   &.normal {
@@ -190,5 +197,15 @@ export const Button = styled.button`
 
   &.transform-lowercase {
     text-transform: lowercase;
+  }
+
+  /* HEIGHT */
+
+  &.medium-height {
+    height: 56px;
+  }
+
+  &.short-height {
+    height: 24px;
   }
 `;

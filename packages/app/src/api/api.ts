@@ -13,9 +13,9 @@ import * as userAttributeRepository from './repositories/userAttributeRepository
 import * as magicLinkRepository from './repositories/magicLinkRepository';
 import * as mediaRepository from './repositories/mediaRepository';
 import * as emojiRepository from './repositories/emojiRepository';
+import * as eventsRepository from './repositories/eventsRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
-import * as eventsRepository from './repositories_OLD/eventsRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
 import * as flyWithMeRepository from './repositories_OLD/flyWithMeRepository';
 import * as stageModeRepository from './repositories_OLD/stageModeRepository';
@@ -63,7 +63,6 @@ export const api = {
   spaceRepository,
   userRepository_OLD,
   profileRepository,
-  eventsRepository,
   spaceRepositoryOld,
   flyWithMeRepository,
   stageModeRepository,
@@ -95,7 +94,8 @@ export const api = {
   spaceOptionRepository,
   userAttributeRepository,
   mediaRepository,
-  emojiRepository
+  emojiRepository,
+  eventsRepository
 };
 
 /**
@@ -119,12 +119,12 @@ export * from './repositories/userAttributeRepository/userAttributeRepository.ap
 export * from './repositories/magicLinkRepository/magicLinkRepository.api.types';
 export * from './repositories/mediaRepository/mediaRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
+export * from './repositories/eventsRepository/eventsRepository.api.types';
 
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
 export * from './repositories_OLD/flyWithMeRepository/flyWithMeRepository.api.types';
 export * from './repositories_OLD/userRepository/userRepository.api.types';
 export * from './repositories_OLD/profileRepository/profileRepository.api.types';
-export * from './repositories_OLD/eventsRepository/eventsRepository.api.types';
 export * from './repositories_OLD/validatorsRepository/validatorsRepository.api.types';
 export * from './repositories_OLD/tokenRuleRepository/tokenRuleRepository.api.types';
 export * from './repositories_OLD/favoriteRepository/favoriteRepository.api.types';

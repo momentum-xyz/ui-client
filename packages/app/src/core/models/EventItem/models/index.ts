@@ -1,2 +1,2 @@
+export * from './AttendeesList';
 export * from './EventItemData';
-export * from './EventAttendeesList';

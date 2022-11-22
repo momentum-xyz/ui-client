@@ -1,6 +1,5 @@
 export * from './userRepository';
 export * from './profileRepository';
-export * from './eventsRepository';
 export * from './spaceRepository';
 export * from './stageModeRepository';
 export * from './tokenRuleRepository';

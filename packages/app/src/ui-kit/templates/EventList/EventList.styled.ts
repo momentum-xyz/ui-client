@@ -11,6 +11,7 @@ export const Container = styled.div`
   overflow-x: hidden;
   margin-top: 10px;
   position: relative;
+  border-radius: 10px;
 
   &.empty {
     justify-content: center;
