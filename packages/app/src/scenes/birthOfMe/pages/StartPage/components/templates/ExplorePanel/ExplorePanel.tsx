@@ -16,29 +16,28 @@ const PANEL_WIDTH_PX = 200;
 
 const ExplorePanel: FC = () => {
   const {birthOfMeStore} = useStore();
-  const {startStore} = birthOfMeStore;
+  const {startStore, nftStore} = birthOfMeStore;
   const {
-    items,
-    filteredItems,
-    isLoading,
+    filterItems,
+
     searchQuery,
     setSearchQuery,
     isQueryValid,
     isExpanded,
     setIsExpanded
   } = startStore;
+  const {nftItems, isLoading} = nftStore;
 
   console.log('render explore panel', {
-    items,
-    itemsLength: items.length,
-    filteredItems,
-    isLoading,
+    nftItems,
+
     searchQuery,
     setSearchQuery,
     isQueryValid,
     isExpanded,
     setIsExpanded
   });
+  const items = isQueryValid ? filterItems(nftItems) : nftItems;
 
   const {t} = useTranslation();
 
@@ -78,7 +77,7 @@ const ExplorePanel: FC = () => {
           <Heading label={t('labels.searchResults')} type="h1" align="left" transform="uppercase" />
         </styled.Heading>
         <ItemsList
-          items={isQueryValid ? filteredItems : items}
+          items={items}
           onTeleport={() => {
             console.log('teleport');
           }}
@@ -86,7 +85,7 @@ const ExplorePanel: FC = () => {
             console.log('select');
           }}
         />
-        {isQueryValid && filteredItems.length === 0 && (
+        {isQueryValid && items.length === 0 && (
           <styled.EmptyResult>
             <Text text={t('messages.noResultsFound')} size="xs" />
           </styled.EmptyResult>

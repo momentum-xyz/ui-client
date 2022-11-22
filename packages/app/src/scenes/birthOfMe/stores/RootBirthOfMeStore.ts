@@ -14,7 +14,6 @@ const RootBirthOfMeStore = types.compose(
     .actions((self) => ({
       init: flow(function* () {
         yield self.nftStore.init();
-        yield self.startStore.fetchItems();
       })
     }))
 );

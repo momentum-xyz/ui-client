@@ -24,16 +24,7 @@ import {KeyringAddressType} from 'core/types';
 import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
-// FIXME create models for these once we figure out the structure
-interface NftItemMetadataInterface {
-  name: string;
-}
-
-interface NftItemInterface {
-  collectionId: string;
-  itemId: string;
-  metadata: NftItemMetadataInterface;
-}
+import {NftItem, NftItemInterface} from './models';
 
 const NftStore = types
   .compose(
@@ -57,7 +48,7 @@ const NftStore = types
       usedStashAddress: types.maybeNull(types.string),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionEnum))),
       transactionFee: '',
-      nftItems: types.optional(types.array(types.frozen<NftItemInterface>()), []),
+      nftItems: types.optional(types.array(NftItem), []),
       isLoading: false
     })
   )
@@ -408,15 +399,15 @@ const NftStore = types
               }
 
               const metadata = JSON.parse(metadataStr);
-              if (!metadata?.name || !metadata?.description || !metadata?.logoUrl) {
+              if (!metadata?.name) {
                 console.log('Incomplete metadata', metadata);
                 return null;
               }
 
               return {
                 collectionId,
-                itemId,
-                metadata
+                id: itemId,
+                ...metadata
               };
             } catch (e) {
               console.log('Unable to parse/fetch NFT metadata', data, '| Error:', e);

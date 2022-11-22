@@ -8,9 +8,8 @@ import {ExplorePanel, UniverseMap} from './components';
 
 const StartPage: FC = () => {
   const {birthOfMeStore} = useStore();
-  const {nftStore, startStore} = birthOfMeStore;
-  const {addresses, tokenSymbol, isLoading, isWeb3Injected, controllerAccount} = nftStore;
-  const {items} = startStore;
+  const {nftStore} = birthOfMeStore;
+  const {nftItems, addresses, tokenSymbol, isLoading, isWeb3Injected, controllerAccount} = nftStore;
 
   useEffect(() => {
     birthOfMeStore.init();
@@ -27,7 +26,7 @@ const StartPage: FC = () => {
   return (
     <styled.WorldExplorerPageContainer>
       <styled.UniverseContainer>
-        <UniverseMap items={items} />
+        <UniverseMap items={nftItems} />
       </styled.UniverseContainer>
       <styled.InnerContainer>
         <ExplorePanel />
