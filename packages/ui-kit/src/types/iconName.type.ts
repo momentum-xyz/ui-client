@@ -89,6 +89,7 @@ export type IconNameType =
   | 'sort'
   | 'sortOnAsc'
   | 'sortOnDesc'
+  | 'sound'
   | 'space-bar'
   | 'stage'
   | 'star'
