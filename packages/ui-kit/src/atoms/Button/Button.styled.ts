@@ -166,6 +166,8 @@ export const Button = styled.button`
 
   &.wide {
     width: 100%;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   &.noWhitespaceWrap {
