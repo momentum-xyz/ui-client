@@ -6,6 +6,7 @@ import {RouteConfigInterface} from 'core/interfaces';
 const BirthOfMeStart = lazy(() => import('./birthOfMe/pages/StartPage/StartPage'));
 const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
 const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
+const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const LoginPage = lazy(() => import('./auth/pages/LoginPage/LoginPage'));
 const WorldBuilderLoginPage = lazy(
   () => import('./auth/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
@@ -67,6 +68,10 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.birthOfMe.startAccount,
     main: () => <StartAccountPage />
+  },
+  {
+    path: ROUTES.explore,
+    main: () => <ExplorePage />
   },
   {
     path: ROUTES.login,

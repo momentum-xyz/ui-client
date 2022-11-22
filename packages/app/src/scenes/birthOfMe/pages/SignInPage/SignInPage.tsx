@@ -4,13 +4,8 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {
-  SinusBox,
-  JourneyBox,
-  TravellerBox,
-  ChoiceWallet,
-  ChoiceName
-} from 'scenes/birthOfMe/components';
+import {SinusBox} from 'ui-kit';
+import {JourneyBox, TravellerBox, ChoiceWallet, ChoiceName} from 'scenes/birthOfMe/components';
 
 import * as styled from './SignInPage.styled';
 
@@ -34,9 +29,9 @@ const SignInPage: FC = () => {
         </styled.Boxes>
 
         <styled.Boxes>
-          <ChoiceWallet />
+          <ChoiceWallet onSelect={() => history.push(ROUTES.explore)} />
           <SinusBox />
-          <ChoiceName />
+          <ChoiceName onExplore={() => history.push(ROUTES.explore)} />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Text} from '@momentum-xyz/ui-kit';
 
-import {Box} from 'scenes/birthOfMe/components';
+import {Box} from 'ui-kit';
 
 import * as styled from './TravellerBox.styled';
 

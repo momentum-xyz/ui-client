@@ -1,12 +1,16 @@
 import React, {FC} from 'react';
 import {Button, Dropdown, Text} from '@momentum-xyz/ui-kit';
 
-import {Box} from 'scenes/birthOfMe/components';
+import {Box} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
 
 import * as styled from './ChoiceWallet.styled';
 
-const ChoiceWallet: FC = () => {
+interface PropsInterface {
+  onSelect: () => void;
+}
+
+const ChoiceWallet: FC<PropsInterface> = ({onSelect}) => {
   return (
     <Box>
       <styled.Div>
@@ -16,7 +20,7 @@ const ChoiceWallet: FC = () => {
           <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
         </styled.ImageContainer>
         <Dropdown placeholder="Select account" options={[]} onOptionSelect={() => {}} />
-        <Button label="Connect your wallet" icon="wallet" />
+        <Button label="Connect your wallet" icon="wallet" onClick={onSelect} />
       </styled.Div>
     </Box>
   );

@@ -16,6 +16,7 @@ export const ROUTES = {
   },
   welcome: '/welcome',
   signUpComplete: '/profile/signUpComplete',
+  explore: '/explore',
   system: {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',

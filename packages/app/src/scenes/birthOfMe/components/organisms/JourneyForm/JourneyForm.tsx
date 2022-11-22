@@ -1,11 +1,15 @@
 import React, {FC} from 'react';
 import {Button, FileUploader, IconSvg, InputDark, Text} from '@momentum-xyz/ui-kit';
 
-import {Box} from 'scenes/birthOfMe/components';
+import {Box} from 'ui-kit';
 
 import * as styled from './JourneyForm.styled';
 
-const JourneyForm: FC = () => {
+interface PropsInterface {
+  onCreate: () => void;
+}
+
+const JourneyForm: FC<PropsInterface> = ({onCreate}) => {
   return (
     <Box>
       <styled.Div>
@@ -34,7 +38,7 @@ const JourneyForm: FC = () => {
           text="All set, let’s go! Create an NFT with your personal journey"
           align="left"
         />
-        <Button label="Create your journey" icon="planet" />
+        <Button label="Create your journey" icon="planet" onClick={onCreate} />
       </styled.Div>
     </Box>
   );

@@ -1,11 +1,15 @@
 import React, {FC} from 'react';
 import {Button, IconSvg, InputDark, Text} from '@momentum-xyz/ui-kit';
 
-import {Box} from 'scenes/birthOfMe/components';
+import {Box} from 'ui-kit';
 
 import * as styled from './ChoiceName.styled';
 
-const ChoiceName: FC = () => {
+interface PropsInterface {
+  onExplore: () => void;
+}
+
+const ChoiceName: FC<PropsInterface> = ({onExplore}) => {
   return (
     <Box>
       <styled.Div>
@@ -20,7 +24,7 @@ const ChoiceName: FC = () => {
           text="It's great that you want to experience the journeys of other travellers."
           align="left"
         />
-        <Button label="Explore Odyssey" icon="people" />
+        <Button label="Explore Odyssey" icon="people" onClick={onExplore} />
       </styled.Div>
     </Box>
   );
