@@ -52,8 +52,8 @@ const CollaborationPluginPage: FC<PropsInterface> = ({plugin, pluginLoader}) => 
 
   const {content} = plugin.usePlugin({
     theme,
-    isSpaceAdmin: spaceStore.isAdmin,
-    spaceId: space?.id,
+    isAdmin: spaceStore.isAdmin,
+    objectId: space?.id,
     pluginApi: attributesManager.pluginApi,
     api: attributesManager.api,
     onClose: () => {

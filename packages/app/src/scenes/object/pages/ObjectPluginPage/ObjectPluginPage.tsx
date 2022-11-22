@@ -49,9 +49,9 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
 
   const {content} = plugin.usePlugin({
     theme,
-    isSpaceAdmin: true,
-    spaceId: objectId,
-    spaceName: pluginLoader.name,
+    isAdmin: true,
+    objectId,
+    pluginName: pluginLoader.name,
     pluginApi: attributesManager.pluginApi,
     api: attributesManager.api,
     onClose: () => {

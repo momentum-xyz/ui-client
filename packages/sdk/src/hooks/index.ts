@@ -1,2 +1,2 @@
-export * from './useSpace';
-export * from './useSpaceAttributesApi';
+export * from './useObject';
+export * from './useObjectAttributes';

@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useStore, useGooglePicker} from 'shared/hooks';
-import {useSpace} from '@momentum-xyz/sdk';
+import {useObject} from '@momentum-xyz/sdk';
 import {SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
@@ -13,14 +13,14 @@ const GoogleDrivePage: FC = () => {
   const {api, googleDriveStore} = store;
   const {googleDocument} = googleDriveStore;
 
-  const {spaceId, spaceName, isAdmin, pluginApi, onClose} = useSpace();
+  const {objectId, pluginName, isAdmin, pluginApi, onClose} = useObject();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useStateItemChange('document', googleDriveStore.setGoogleDocument);
   useStateItemRemove('document', googleDriveStore.removeGoogleDocument);
 
   useEffect(() => {
-    if (spaceId) {
+    if (objectId) {
       googleDriveStore.init(api);
       googleDriveStore.fetchGoogleDocument();
     }
@@ -28,33 +28,33 @@ const GoogleDrivePage: FC = () => {
     return () => {
       googleDriveStore.resetModel();
     };
-  }, [api, googleDriveStore, spaceId]);
+  }, [api, googleDriveStore, objectId]);
 
   const {pickDocument} = useGooglePicker(googleDriveStore.pickGoogleDocument);
 
-  if (!spaceId) {
+  if (!objectId) {
     return null;
   }
 
   return (
     <SpacePage>
       <SpaceTopBar
-        title={spaceName ?? ''}
+        title={pluginName ?? ''}
         subtitle={googleDocument?.name}
         isAdmin={isAdmin}
-        spaceId={spaceId}
+        spaceId={objectId}
         editSpaceHidden
         showChatButton={false}
         onLeave={() => onClose?.()}
-        baseLink={`/${spaceId}`}
+        baseLink={`/${objectId}`}
       >
         <GoogleDriveActions
-          spaceId={spaceId}
+          objectId={objectId}
           isAdmin={isAdmin}
           googleDocument={googleDocument}
           pickDocument={pickDocument}
           closeDocument={() => {
-            if (!spaceId) {
+            if (!objectId) {
               return;
             }
             googleDriveStore.closeDocument();

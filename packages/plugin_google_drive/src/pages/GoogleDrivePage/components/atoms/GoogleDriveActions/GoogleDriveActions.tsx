@@ -7,7 +7,7 @@ import {GoogleDocumentInterface} from 'core/interfaces';
 import * as styled from './GoogleDriveActions.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  spaceId?: string;
+  objectId?: string;
   isAdmin: boolean;
   googleDocument: GoogleDocumentInterface | null;
   pickDocument: () => void;
@@ -16,7 +16,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 
 const GoogleDriveActions: FC<PropsInterface> = ({
   theme,
-  spaceId,
+  objectId,
   isAdmin,
   googleDocument,
   closeDocument,
@@ -24,7 +24,7 @@ const GoogleDriveActions: FC<PropsInterface> = ({
 }) => {
   const {t} = useTranslation();
 
-  if (!isAdmin || !googleDocument?.url || !spaceId) {
+  if (!isAdmin || !googleDocument?.url || !objectId) {
     return null;
   }
 

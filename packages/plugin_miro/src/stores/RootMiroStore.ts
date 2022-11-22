@@ -12,7 +12,7 @@ const RootMiroStore = types
     types.model('RootMiroStore', {
       api: types.frozen<MiroApiInterface>(),
       attributesApi: types.frozen<ApiInterface>(),
-      spaceId: types.maybe(types.string),
+      objectId: types.maybe(types.string),
       miroBoardStore: types.optional(MiroBoardStore, {})
     })
   )
@@ -25,7 +25,7 @@ const RootMiroStore = types
         appVariables[key as keyof AppConfigInterface] = value;
       });
 
-      self.spaceId = spaceId;
+      self.objectId = spaceId;
     })
   }));
 

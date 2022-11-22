@@ -13,13 +13,13 @@ const RootGoogleDriveStore = types
       api: types.frozen<GoogleDriveApiInterface>(),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
       attributesApi: types.frozen<ApiInterface>(),
-      spaceId: types.maybe(types.string)
+      objectId: types.maybe(types.string)
     })
   )
   .actions((self) => ({
     init: flow(function* (spaceId: string) {
       const config: AppConfigInterface = yield self.api.getConfig();
-      self.spaceId = spaceId;
+      self.objectId = spaceId;
 
       Object.entries(config).forEach((entry) => {
         const [key, value] = entry;
