@@ -52,7 +52,7 @@ const ScreenSharePage: FC = () => {
   }
 
   return (
-    <SpacePage dataTestId="ScreenSharePage-test">
+    <SpacePage dataTestId="ScreenSharePage-test" withMeeting>
       <SpaceTopBar
         title={space.name}
         subtitle={screenShareTitle}

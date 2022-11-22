@@ -3,6 +3,8 @@ import React, {lazy} from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
+import Object from './object/Object';
+
 const LoginPage = lazy(() => import('./auth/pages/LoginPage/LoginPage'));
 const WorldBuilderLoginPage = lazy(
   () => import('./auth/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
@@ -15,7 +17,7 @@ const Web3ConsentPage = lazy(() => import('./auth/pages/Web3ConsentPage/Web3Cons
 const HomePage = lazy(() => import('./home/pages/HomePage/HomePage'));
 const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpCompletePage'));
 const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));
-const Collaboration = lazy(() => import('./collaboration/Collaboration'));
+// const Collaboration = lazy(() => import('./collaboration/Collaboration'));
 const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
 const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
 const WorldBuilderCustomizePanel = lazy(
@@ -142,10 +144,15 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     ),
     renderBackground: false
   },
+  // {
+  //   path: ROUTES.collaboration.base,
+  //   renderBackground: true,
+  //   main: () => <Collaboration />
+  // },
   {
-    path: ROUTES.collaboration.base,
+    path: ROUTES.object.base,
     renderBackground: true,
-    main: () => <Collaboration />
+    main: () => <Object />
   },
   {
     path: ROUTES.grabTable,

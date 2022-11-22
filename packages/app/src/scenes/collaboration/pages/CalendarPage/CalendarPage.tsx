@@ -82,7 +82,7 @@ const CalendarPage: FC = () => {
   }
 
   return (
-    <SpacePage dataTestId="CalendarPage-test">
+    <SpacePage dataTestId="CalendarPage-test" withMeeting>
       <SpaceTopBar
         title={space.name}
         subtitle="calendar"

@@ -51,7 +51,7 @@ const DashboardPage: FC = () => {
   }
 
   return (
-    <SpacePage dataTestId="DashboardPage-test">
+    <SpacePage dataTestId="DashboardPage-test" withMeeting>
       <SpaceTopBar
         title={space.name}
         subtitle={t('dashboard.subtitle')}

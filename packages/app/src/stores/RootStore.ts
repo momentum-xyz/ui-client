@@ -1,6 +1,6 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
-import {PosBusEventEnum} from 'core/enums';
+import {AssetTypeEnum, PosBusEventEnum} from 'core/enums';
 import {RootAuthStore} from 'scenes/auth/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
@@ -14,6 +14,7 @@ import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
+import {ObjectStore} from 'scenes/object/stores';
 
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
@@ -38,7 +39,8 @@ const RootStore = types
     worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
     worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),
-    videoStore: types.optional(VideoStore, {})
+    videoStore: types.optional(VideoStore, {}),
+    objectStore: types.optional(ObjectStore, {})
   })
   .actions((self) => ({
     initApplication(): void {
@@ -107,6 +109,9 @@ const RootStore = types
       }
 
       console.log('---LEFT---');
+    }),
+    openObject: flow(function* (objectId: string, assetType: AssetTypeEnum) {
+      yield self.objectStore.init(objectId, assetType);
     })
   }));
 

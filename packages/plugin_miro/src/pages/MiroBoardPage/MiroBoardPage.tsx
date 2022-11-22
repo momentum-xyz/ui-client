@@ -3,7 +3,6 @@ import {observer} from 'mobx-react-lite';
 import {useStore} from 'shared/hooks/useStore';
 import {useSpace} from '@momentum-xyz/sdk';
 import {SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
-import {useHistory} from 'react-router-dom';
 
 import {MiroActions, MiroBoard, MiroChoice} from './components';
 import * as styled from './MiroBoardPage.styled';
@@ -12,10 +11,8 @@ const MiroBoardPage: FC = () => {
   const store = useStore();
   const {api, miroBoardStore} = store;
   const {board, pickBoard, disableBoard} = miroBoardStore;
-  const {isAdmin, spaceId, pluginApi} = useSpace();
+  const {isAdmin, spaceId, pluginApi, onClose} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
-
-  const history = useHistory();
 
   useEffect(() => {
     miroBoardStore.init(api);
@@ -38,9 +35,7 @@ const MiroBoardPage: FC = () => {
         isAdmin={isAdmin}
         spaceId={spaceId}
         editSpaceHidden
-        onLeave={() => {
-          history.push('/');
-        }}
+        onLeave={() => onClose?.()}
         isSpaceFavorite={false}
         toggleIsSpaceFavorite={() => {}}
       >

@@ -30,6 +30,10 @@ export const ROUTES = {
     liveStream: '/collaboration/:spaceId/live-stream',
     table: `/collaboration/:spaceId/table`
   },
+  object: {
+    root: '/object',
+    base: '/object/:objectId/:assetType'
+  },
   spaceAdmin: {
     base: '/space/:spaceId/admin',
     broadcast: '/space/:spaceId/admin/broadcast'
