@@ -4,6 +4,7 @@ import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
 const BirthOfMeStart = lazy(() => import('./birthOfMe/pages/StartPage/StartPage'));
+const Object = lazy(() => import('./object/Object'));
 const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
 const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
 const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
@@ -19,14 +20,14 @@ const Web3ConsentPage = lazy(() => import('./auth/pages/Web3ConsentPage/Web3Cons
 const HomePage = lazy(() => import('./home/pages/HomePage/HomePage'));
 const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpCompletePage'));
 const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));
-const Collaboration = lazy(() => import('./collaboration/Collaboration'));
+// const Collaboration = lazy(() => import('./collaboration/Collaboration'));
 const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
 const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
 const WorldBuilderCustomizePanel = lazy(
   () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
 );
 const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
-const WorldCalendar = lazy(() => import('./worldCalendar/WorldCalendar'));
+const CalendarPage = lazy(() => import('./calendar/pages/CalendarPage/CalendarPage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const VideoPage = lazy(() => import('./video/pages/VideoPage/VideoPage'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
@@ -162,10 +163,15 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     ),
     renderBackground: false
   },
+  // {
+  //   path: ROUTES.collaboration.base,
+  //   renderBackground: true,
+  //   main: () => <Collaboration />
+  // },
   {
-    path: ROUTES.collaboration.base,
+    path: ROUTES.object.base,
     renderBackground: true,
-    main: () => <Collaboration />
+    main: () => <Object />
   },
   {
     path: ROUTES.grabTable,
@@ -200,8 +206,8 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     main: () => <VideoPage />
   },
   {
-    path: ROUTES.worldCalendar,
-    main: () => <WorldCalendar />,
+    path: ROUTES.calendar,
+    main: () => <CalendarPage />,
     renderBackground: true
   }
 ];

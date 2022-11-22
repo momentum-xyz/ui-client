@@ -511,6 +511,7 @@ export const enGb = {
       eventItem: {
         live: 'Live',
         websiteLink: 'Learn More',
+        moreAttendees: 'More attendees',
         magicLinkDialog: {
           title: 'Magic Link',
           copyLabel: 'Copy Link'
@@ -929,6 +930,10 @@ export const enGb = {
     },
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
+    },
+    calendar: {
+      formButton: 'Create new event in your Odyssey',
+      subTitle: 'Calendar'
     },
     dashboard: {
       subtitle: 'dashboard',

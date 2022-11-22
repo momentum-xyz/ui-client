@@ -173,13 +173,20 @@ const Collaboration: FC = () => {
       <Switch>
         {createRoutesByConfig(COLLABORATION_ROUTES)}
         {pluginsStore.spacePlugins.map((plugin) => {
+          const isDynamicScriptLoaded =
+            pluginsStore.dynamicScriptsStore.getScript(plugin.scopeName)?.isLoaded ?? false;
+
+          pluginsStore.loadPluginIfNeeded(plugin, isDynamicScriptLoaded);
+
           return (
             <Route
               key={plugin.id}
               path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >
-              <CollaborationPluginPage pluginLoader={plugin} />
+              {plugin.plugin && (
+                <CollaborationPluginPage plugin={plugin.plugin} pluginLoader={plugin} />
+              )}
             </Route>
           );
         })}

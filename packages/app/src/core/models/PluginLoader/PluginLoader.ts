@@ -58,7 +58,7 @@ const PluginLoader = types
   }))
   .views((self) => ({
     get isLoaded(): boolean {
-      return self.status === LoaderStatusEnum.LOADED && !!self.plugin;
+      return self.status === LoaderStatusEnum.LOADED && self.plugin !== undefined;
     },
     get isError(): boolean {
       return self.status === LoaderStatusEnum.ERROR;

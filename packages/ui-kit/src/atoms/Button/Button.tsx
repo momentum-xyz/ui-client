@@ -2,7 +2,7 @@ import React, {memo, MouseEventHandler, forwardRef} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType, VariantType, TextTransformType, IconNameType} from '../../types';
+import {SizeType, VariantType, TextTransformType, IconNameType, HeightType} from '../../types';
 
 import * as styled from './Button.styled';
 
@@ -19,6 +19,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   noWhitespaceWrap?: boolean;
   className?: string;
   preserveSpaces?: boolean;
+  height?: HeightType;
 }
 
 const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
@@ -35,6 +36,7 @@ const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
     icon,
     noWhitespaceWrap = false,
     preserveSpaces = false,
+    height,
     className
   } = props;
 
@@ -48,6 +50,7 @@ const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
       className={cn(
         variant,
         size,
+        height,
         `transform-${transform}`,
         wide && 'wide',
         noWhitespaceWrap && 'noWhitespaceWrap',

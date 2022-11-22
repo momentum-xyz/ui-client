@@ -1,5 +1,6 @@
-import React from 'react';
+import {CorePluginPropsInterface} from './pluginProps.interface';
+import {UsePluginHookType} from './usePluginHook.interface';
 
-export interface PluginInterface {
-  SpaceExtension?: React.FC;
+export interface PluginInterface<T extends CorePluginPropsInterface = CorePluginPropsInterface> {
+  usePlugin: UsePluginHookType<T>;
 }

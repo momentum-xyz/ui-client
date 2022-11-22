@@ -1,6 +1,6 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
-import {PosBusEventEnum} from 'core/enums';
+import {AssetTypeEnum, PosBusEventEnum} from 'core/enums';
 import {RootBirthOfMeStore} from 'scenes/birthOfMe/stores';
 import {ExploreStore} from 'scenes/explore/stores';
 import {RootAuthStore} from 'scenes/auth/stores';
@@ -10,12 +10,13 @@ import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootFlightStore} from 'scenes/flight/stores';
 import {RootWidgetStore} from 'scenes/widgets/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
-import {RootWorldCalendarStore} from 'scenes/worldCalendar/stores';
 import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
+import {CalendarStore} from 'scenes/calendar/stores/CalendarStore';
+import {ObjectStore} from 'scenes/object/stores';
 
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
@@ -36,13 +37,14 @@ const RootStore = types
     collaborationStore: types.optional(RootCollaborationStore, {}),
     meetingStore: types.optional(RootMeetingStore, {}),
     flightStore: types.optional(RootFlightStore, {}),
-    worldCalendarStore: types.optional(RootWorldCalendarStore, {}),
+    calendarStore: types.optional(CalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetStore: types.optional(RootWidgetStore, {}),
     worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
     worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),
-    videoStore: types.optional(VideoStore, {})
+    videoStore: types.optional(VideoStore, {}),
+    objectStore: types.optional(ObjectStore, {})
   })
   .actions((self) => ({
     initApplication(): void {
@@ -111,6 +113,9 @@ const RootStore = types
       }
 
       console.log('---LEFT---');
+    }),
+    openObject: flow(function* (objectId: string, assetType: AssetTypeEnum) {
+      yield self.objectStore.init(objectId, assetType);
     })
   }));
 

@@ -84,7 +84,7 @@ const Widgets: FC = () => {
     {
       title: t('labels.calendar'),
       icon: 'calendar',
-      link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.worldCalendar,
+      link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.calendar,
       disabled: flightStore.isFlightWithMe
     },
     {

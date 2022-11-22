@@ -1,5 +1,6 @@
 import {types, cast, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {SpaceSubOptionKeyEnum} from '@momentum-xyz/sdk';
 
 import {PluginInterface} from 'core/interfaces';
 import {
@@ -17,7 +18,6 @@ import {
   GetPluginsOptionsResponse,
   SpaceSubOptionResponse
 } from 'api';
-import {SpaceSubOptionKeyEnum} from 'api/enums';
 
 const PluginsStore = types
   .compose(

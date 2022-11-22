@@ -145,7 +145,7 @@ export const isOtherYearThanToday = (date: Date) => {
  * @returns {string} string represetntation of date in "iii, MMM d yyyy" if `showYear === true` or "iii, MMM d" otherwise
  */
 export const formatStartDate = (date: Date, showYear = false) => {
-  return format(date, `iii, MMM d ${showYear ? 'yyyy ' : ''}`);
+  return format(date, `iiii, MMM d ${showYear ? 'yyyy ' : ''}`);
 };
 
 /**
@@ -166,7 +166,7 @@ export const formatStartTime = (date: Date) => {
  * @returns {string} string represetntation of date in "MMM d yyyy h:mm aa zzz" if `showYear === true` or "MMM d h:mm aa zzz" otherwise
  */
 export const formatEndDate = (date: Date, showYear = false) => {
-  return format(date, `MMM d${showYear ? ' yyyy' : ''} h:mm aa zzz`);
+  return format(date, `MMM d${showYear ? ' yyyy' : ''} - h:mm aa zzz`);
 };
 
 /**
