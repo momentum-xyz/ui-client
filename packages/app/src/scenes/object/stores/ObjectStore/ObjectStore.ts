@@ -48,8 +48,6 @@ const ObjectStore = types
 
       const {options, meta} = assetResponse;
 
-      meta.scriptUrl = 'http://localhost:3001/remoteEntry.js';
-
       if (!self.dynamicScriptsStore.containsLoaderWithName(meta.scopeName)) {
         yield self.dynamicScriptsStore.addScript(meta.scopeName, meta.scriptUrl);
       }
