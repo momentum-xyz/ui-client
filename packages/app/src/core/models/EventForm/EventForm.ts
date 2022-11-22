@@ -12,6 +12,7 @@ const EventForm = types.compose(
     .model('EventForm', {
       currentEvent: types.maybe(types.frozen<EventItemDataInterface>()),
       imageHash: types.maybe(types.string),
+      eventId: types.maybe(types.string),
       eventFormRequest: types.optional(RequestModel, {}),
       uploadImageRequest: types.optional(RequestModel, {})
     })
@@ -19,7 +20,7 @@ const EventForm = types.compose(
       editEvent(event: EventItemInterface) {
         self.currentEvent = cast({...event.data});
       },
-      createEvent: flow(function* (
+      createOrUpdateEvent: flow(function* (
         data: EventFormInterface,
         spaceId: string,
         spaceName?: string,
@@ -39,56 +40,32 @@ const EventForm = types.compose(
           self.imageHash = uploadImageResponse.hash;
         }
 
-        const eventId = uuidv4();
+        let event: EventInterface = {};
 
-        const event: EventInterface = {
-          ...data,
-          spaceId,
-          spaceName,
-          eventId,
-          image: self.imageHash
-        };
+        if (self.currentEvent) {
+          event = {
+            ...data,
+            attendees: self.currentEvent?.attendees,
+            spaceId,
+            eventId: self.currentEvent?.eventId,
+            image: file ? self.imageHash : undefined
+          };
+        } else {
+          self.eventId = uuidv4();
 
-        yield self.eventFormRequest.send(api.eventsRepository.setEventAttributes, {
-          spaceId,
-          data: event,
-          eventId
-        });
-
-        return self.eventFormRequest.isDone;
-      }),
-      updateEventAttribute: flow(function* (
-        data: EventFormInterface,
-        spaceId: string,
-        eventId: string,
-        file?: File
-      ) {
-        if (file) {
-          const uploadImageResponse: UploadImageResponse = yield self.uploadImageRequest.send(
-            api.mediaRepository.uploadImage,
-            {file}
-          );
-
-          if (!uploadImageResponse) {
-            console.log('Failed to upload event image');
-            return false;
-          }
-
-          self.imageHash = uploadImageResponse.hash;
+          event = {
+            ...data,
+            spaceId,
+            spaceName,
+            eventId: self.eventId,
+            image: self.imageHash
+          };
         }
 
-        const event: EventInterface = {
-          ...data,
-          attendees: self.currentEvent?.attendees,
-          spaceId,
-          eventId,
-          image: file ? self.imageHash : undefined
-        };
-
         yield self.eventFormRequest.send(api.eventsRepository.setEventAttributes, {
           spaceId,
           data: event,
-          eventId
+          eventId: self.currentEvent ? self.currentEvent.eventId : self.eventId ?? ''
         });
 
         return self.eventFormRequest.isDone;

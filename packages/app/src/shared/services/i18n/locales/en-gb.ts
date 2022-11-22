@@ -932,7 +932,8 @@ export const enGb = {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
     },
     calendar: {
-      formButton: 'Create new event in your Odyssey'
+      formButton: 'Create new event in your Odyssey',
+      subTitle: 'Calendar'
     },
     dashboard: {
       subtitle: 'dashboard',

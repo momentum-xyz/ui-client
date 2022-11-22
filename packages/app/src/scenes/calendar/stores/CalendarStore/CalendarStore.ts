@@ -1,20 +1,25 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {EventForm, EventItemInterface, EventList} from 'core/models';
-import {api} from 'api';
+import {EventForm, EventItemInterface, EventList, Space} from 'core/models';
+import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
+import {mapper} from 'api/mapper';
 
 const CalendarStore = types.compose(
   ResetModel,
   types
     .model('CalendarStore', {
       formDialog: types.optional(Dialog, {}),
+      eventForm: types.optional(EventForm, {}),
+
+      world: types.maybeNull(Space),
+      worldRequest: types.optional(RequestModel, {}),
+
       deleteConfirmationDialog: types.optional(Dialog, {}),
       removeEventRequest: types.optional(RequestModel, {}),
       eventIdToRemove: types.maybe(types.string),
-      weblinkDialog: types.optional(Dialog, {}),
-      eventList: types.optional(EventList, {}),
-      eventForm: types.optional(EventForm, {})
+
+      eventList: types.optional(EventList, {})
     })
     .actions((self) => ({
       editEvent(event: EventItemInterface) {
@@ -42,6 +47,19 @@ const CalendarStore = types.compose(
         }
 
         return self.removeEventRequest.isDone;
+      }),
+      fetchWorld: flow(function* (spaceId: string) {
+        const response: SpaceAttributeItemResponse = yield self.worldRequest.send(
+          api.spaceRepository.fetchSpace,
+          {spaceId}
+        );
+
+        if (response) {
+          self.world = cast({
+            id: spaceId,
+            ...mapper.mapSpaceSubAttributes<SpaceInterface>(response)
+          });
+        }
       })
     }))
 );

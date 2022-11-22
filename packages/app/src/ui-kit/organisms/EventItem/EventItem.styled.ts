@@ -37,6 +37,7 @@ export const Row = styled.div`
 
 export const Info = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;

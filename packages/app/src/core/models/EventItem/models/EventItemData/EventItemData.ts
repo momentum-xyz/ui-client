@@ -3,8 +3,8 @@ import {types, Instance} from 'mobx-state-tree';
 import {UserAttributeInterface} from 'api';
 
 const EventItemData = types.model('EventItemData', {
-  eventId: types.maybe(types.string),
-  spaceId: types.maybe(types.string),
+  eventId: types.string,
+  spaceId: types.string,
   spaceName: types.maybe(types.string),
   title: types.string,
   description: types.string,

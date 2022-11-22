@@ -15,9 +15,8 @@ import * as styled from './CalendarPage.styled';
 import {EventForm, TabBarButtons} from './components';
 
 const CalendarPage: FC = () => {
-  const {calendarStore, mainStore, sessionStore, homeStore} = useStore();
+  const {calendarStore, mainStore, sessionStore} = useStore();
   const {eventList, deleteConfirmationDialog} = calendarStore;
-  const {exploreStore} = homeStore;
   const {worldStore} = mainStore;
 
   const {t} = useTranslation();
@@ -25,12 +24,13 @@ const CalendarPage: FC = () => {
   const theme = useTheme();
 
   useEffect(() => {
+    calendarStore.fetchWorld(worldStore.worldId);
     eventList.fetchSpaceEvents(worldStore.worldId);
 
     return () => {
       eventList.resetModel();
     };
-  }, [eventList, worldStore.worldId]);
+  }, [calendarStore, eventList, worldStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
@@ -62,7 +62,6 @@ const CalendarPage: FC = () => {
   };
 
   const handleClose = () => {
-    // @ts-ignore
     if (history.location.state?.canGoBack) {
       history.goBack();
     } else {
@@ -76,11 +75,11 @@ const CalendarPage: FC = () => {
         <PanelLayout
           componentSize={{width: '80vw'}}
           onClose={handleClose}
-          title={exploreStore?.spaceDetails?.name}
+          title={calendarStore?.world?.name}
           headerStyle="uppercase"
           headerType="h2"
           headerIconName="calendar"
-          subtitle="Calendar"
+          subtitle={t('calendar.subTitle')}
           iconSize="medium-large"
           closeButtonSize="large"
           tabs={<TabBarButtons calendar="odyssey" />}

@@ -17,11 +17,9 @@ import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {calendarStore, mainStore, homeStore} = useStore();
+  const {calendarStore, mainStore} = useStore();
   const {eventForm, formDialog, eventList} = calendarStore;
   const {worldStore} = mainStore;
-  const {exploreStore} = homeStore;
-  const {spaceDetails} = exploreStore;
   const {currentEvent} = eventForm;
 
   const {
@@ -54,18 +52,12 @@ const EventForm: FC = () => {
       data.web_link = null;
     }
 
-    let isSuccess = false;
-
-    if (currentEvent?.eventId) {
-      isSuccess = await eventForm.updateEventAttribute(
-        data,
-        worldStore.worldId,
-        currentEvent?.eventId,
-        image
-      );
-    } else {
-      isSuccess = await eventForm.createEvent(data, worldStore.worldId, spaceDetails?.name, image);
-    }
+    const isSuccess = await eventForm.createOrUpdateEvent(
+      data,
+      worldStore.worldId,
+      calendarStore.world?.name,
+      image
+    );
 
     if (isSuccess) {
       formDialog.close();
