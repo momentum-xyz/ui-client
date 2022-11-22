@@ -19,6 +19,7 @@ import {
   TOAST_BASE_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
+import {AssetTypeEnum} from 'core/enums';
 
 import {PathObserver} from './components';
 import * as styled from './UnityPage.styled';
@@ -58,15 +59,31 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ClickEventDashboard', (spaceId: string) => {
-    history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
+    history.push({
+      pathname: generatePath(ROUTES.object.base, {
+        objectId: spaceId,
+        assetType: AssetTypeEnum.PLUGIN
+      })
+    });
   });
 
   useUnityEvent('PlasmaClickEvent', (spaceId: string) => {
-    history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
+    history.push({
+      pathname: generatePath(ROUTES.object.base, {
+        objectId: spaceId,
+        assetType: AssetTypeEnum.PLUGIN
+      })
+    });
   });
 
   useUnityEvent('ClickEventVideo', (spaceId: string) => {
-    history.push({pathname: generatePath(ROUTES.video, {spaceId})});
+    // history.push({pathname: generatePath(ROUTES.video, {spaceId})});
+    history.push({
+      pathname: generatePath(ROUTES.object.base, {
+        objectId: spaceId,
+        assetType: AssetTypeEnum.VIDEO
+      })
+    });
   });
 
   usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {

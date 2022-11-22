@@ -1,3 +1,5 @@
+import {AttributeNameEnum, PluginIdEnum} from '@momentum-xyz/sdk';
+
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 import {
@@ -6,7 +8,6 @@ import {
   getSpaceAttributeItem,
   setSpaceAttributeItem
 } from 'api/repositories/spaceAttributeRepository';
-import {AttributeNameEnum, PluginIdEnum} from 'api/enums';
 import {
   DeleteSpaceAttributeItemRequest,
   EventDeleteRequest,

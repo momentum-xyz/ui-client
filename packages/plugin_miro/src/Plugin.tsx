@@ -1,9 +1,14 @@
 import {MiroPluginInterface} from 'core/interfaces';
 
-import MiroApp from './MiroApp';
+import {usePlugin} from './shared/hooks';
+
+import '@momentum-xyz/ui-kit/dist/themes/themes';
+
+import 'shared/services/i18n';
+import 'core/utils/boardsPicker.1.0.js';
 
 const Plugin: MiroPluginInterface = {
-  SpaceExtension: MiroApp
+  usePlugin
 };
 
 export default Plugin;

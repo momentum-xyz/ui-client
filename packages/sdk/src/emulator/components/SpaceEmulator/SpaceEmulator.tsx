@@ -2,13 +2,13 @@ import {FC, useState} from 'react';
 import {Switch, Route, useHistory, useParams, Redirect, generatePath} from 'react-router-dom';
 
 import {ROUTES} from '../../constants';
-import {PluginInterface} from '../../../interfaces';
+import {ObjectPluginPropsInterface, PluginInterface} from '../../../interfaces';
 import {SpaceTabEmulator} from '../SpaceTabEmulator';
 
 import * as styled from './SpaceEmulator.styled';
 
 interface PropsInterface {
-  plugin: PluginInterface;
+  plugin: PluginInterface<ObjectPluginPropsInterface>;
   onClose: () => void;
 }
 

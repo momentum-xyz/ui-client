@@ -1,3 +1,5 @@
 import {PluginInterface} from '@momentum-xyz/sdk';
 
-export interface GoogleDriveInterface extends PluginInterface {}
+import {GoogleDrivePropsInterface} from './pluginProps.interface';
+
+export interface GoogleDriveInterface extends PluginInterface<GoogleDrivePropsInterface> {}

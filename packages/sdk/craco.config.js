@@ -42,6 +42,10 @@ module.exports = {
             singleton: true,
             requiredVersion: "^0.1.3"
           },
+          "@momentum-xyz/ui-kit": {
+            singleton: true,
+            requiredVersion: "^0.1.3"
+          },
           "mobx-react-lite": {
             requiredVersion: "^3.3.0"
           },

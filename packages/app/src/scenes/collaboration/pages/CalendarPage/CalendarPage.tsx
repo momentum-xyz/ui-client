@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 // import {t} from 'i18next';
 // import {toast} from 'react-toastify';
 // import {useHistory} from 'react-router';
-// import {Button} from '@momentum-xyz/ui-kit';
+// import {Button, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 // import {absoluteLink} from '@momentum-xyz/core';
 //
 // import {ROUTES} from 'core/constants';
@@ -13,9 +13,7 @@ import {observer} from 'mobx-react-lite';
 //   EventList,
 //   LinkDialog,
 //   ToastContent,
-//   SpaceTopBar,
-//   DeleteEventDialog,
-//   SpacePage
+//   DeleteEventDialog
 // } from 'ui-kit';
 //
 // import {EventForm} from './components';
@@ -26,6 +24,7 @@ const CalendarPage: FC = () => {
   //   const {calendarStore, spaceStore} = collaborationStore;
   //   const {eventList, formDialog, magicDialog, deleteConfirmationDialog, magicLink} = calendarStore;
   //   const {favoriteStore, unityStore} = mainStore;
+  //   const {space} = spaceStore;
   //
   //   const theme = useTheme();
   //   const history = useHistory();
@@ -39,8 +38,8 @@ const CalendarPage: FC = () => {
   //   };
   //
   //   const handleMagicLinkOpen = (eventId: string) => {
-  //     if (spaceStore) {
-  //       calendarStore.showMagicLink(spaceStore.id, eventId);
+  //     if (space) {
+  //       calendarStore.showMagicLink(space.id, eventId);
   //     }
   //   };
   //
@@ -70,29 +69,29 @@ const CalendarPage: FC = () => {
   //   };
   //
   //   useEffect(() => {
-  //     if (spaceStore) {
-  //       eventList.fetchEvents(spaceStore.id);
+  //     if (space) {
+  //       eventList.fetchEvents(space.id);
   //     }
   //
   //     return () => eventList.resetModel();
-  //   }, [eventList, spaceStore]);
+  //   }, [eventList, space]);
   //
   //   const handleFlyToSpace = (spaceId: string) => {
   //     unityStore.teleportToSpace(spaceId);
   //     history.push(ROUTES.base);
   //   };
   //
-  //   if (!spaceStore) {
+  //   if (!space) {
   //     return null;
   //   }
   //
   //   return (
   //     <SpacePage dataTestId="CalendarPage-test">
   //       <SpaceTopBar
-  //         title={spaceStore.space?.name ?? ''}
+  //         title={space.name}
   //         subtitle="calendar"
   //         isAdmin={spaceStore.isAdmin}
-  //         spaceId={spaceStore.id}
+  //         spaceId={space.id}
   //         isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
   //         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
   //         editSpaceHidden
