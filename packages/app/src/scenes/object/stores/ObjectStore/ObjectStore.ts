@@ -10,7 +10,6 @@ import {
   PluginOptionsInterface
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
-import {AssetTypeEnum} from 'core/enums';
 
 const ObjectStore = types
   .compose(
@@ -22,7 +21,7 @@ const ObjectStore = types
       getAssetRequest: types.optional(RequestModel, {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
-      asset: types.maybe(PluginLoader)
+      pluginAsset: types.maybe(PluginLoader)
     })
   )
   .actions((self) => ({
@@ -42,48 +41,46 @@ const ObjectStore = types
         assetId: spaceInfo.asset_2d_id
       });
 
-      if (!assetResponse) {
-        return;
+      switch (spaceInfo.asset_2d_id) {
+        case '952742bd-dabf-4feb-9469-bf5e05f8467d':
+          return 'text';
+        case '0d5ce8a2-a461-4acd-96df-892708472353':
+          return 'image';
+        case '86739849-596b-4916-8b53-b554479f2f12':
+          return 'video';
+        default: {
+          if (!assetResponse) {
+            return;
+          }
+
+          const {options, meta} = assetResponse;
+
+          if (!self.dynamicScriptsStore.containsLoaderWithName(meta.scopeName)) {
+            yield self.dynamicScriptsStore.addScript(meta.scopeName, meta.scriptUrl);
+          }
+
+          self.pluginAsset = PluginLoader.create({
+            id: spaceInfo.asset_2d_id,
+            ...options,
+            ...meta,
+            attributesManager: PluginAttributesManager.create({
+              pluginId: meta.pluginId,
+              spaceId
+            })
+          });
+
+          yield self.pluginAsset.loadPlugin();
+          return 'plugin';
+        }
       }
-
-      const {options, meta} = assetResponse;
-
-      if (!self.dynamicScriptsStore.containsLoaderWithName(meta.scopeName)) {
-        yield self.dynamicScriptsStore.addScript(meta.scopeName, meta.scriptUrl);
-      }
-
-      self.asset = PluginLoader.create({
-        id: spaceInfo.asset_2d_id,
-        ...options,
-        ...meta,
-        attributesManager: PluginAttributesManager.create({
-          pluginId: meta.pluginId,
-          spaceId
-        })
-      });
-
-      yield self.asset.loadPlugin();
     })
   }))
   .actions((self) => ({
-    init: flow(function* (objectId: string, assetType: AssetTypeEnum) {
-      switch (assetType) {
-        case AssetTypeEnum.PLUGIN:
-          yield self.loadAsset2D(objectId);
-          break;
-        case AssetTypeEnum.TEXT:
-          // TODO: Open text tile
-          break;
-        case AssetTypeEnum.IMAGE:
-          // TODO: Open image tile
-          break;
-        case AssetTypeEnum.VIDEO:
-          // TODO: Open video tile
-          break;
-      }
+    init: flow(function* (objectId: string) {
+      return yield self.loadAsset2D(objectId);
     }),
     deinit() {
-      self.asset = undefined;
+      self.pluginAsset = undefined;
     }
   }));
 

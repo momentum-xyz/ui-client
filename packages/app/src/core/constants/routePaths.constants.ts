@@ -34,7 +34,7 @@ export const ROUTES = {
     table: `/collaboration/:spaceId/table`
   },
   object: {
-    root: '/object',
+    root: '/object/:objectId',
     base: '/object/:objectId/:assetType'
   },
   spaceAdmin: {

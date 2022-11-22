@@ -1,6 +1,6 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
-import {AssetTypeEnum, PosBusEventEnum} from 'core/enums';
+import {PosBusEventEnum} from 'core/enums';
 import {RootBirthOfMeStore} from 'scenes/birthOfMe/stores';
 import {RootAuthStore} from 'scenes/auth/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
@@ -112,8 +112,8 @@ const RootStore = types
 
       console.log('---LEFT---');
     }),
-    openObject: flow(function* (objectId: string, assetType: AssetTypeEnum) {
-      yield self.objectStore.init(objectId, assetType);
+    openObject: flow(function* (objectId: string) {
+      return yield self.objectStore.init(objectId);
     }),
     closeObject() {
       self.objectStore.deinit();

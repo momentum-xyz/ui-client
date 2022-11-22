@@ -59,20 +59,18 @@ const UnityPage: FC = () => {
     document.location.href = ROUTES.system.disconnected;
   });
 
-  useUnityEvent('ClickEventDashboard', (spaceId: string) => {
+  useUnityEvent('ClickEventDashboard', (objectId: string) => {
     history.push({
-      pathname: generatePath(ROUTES.object.base, {
-        objectId: spaceId,
-        assetType: AssetTypeEnum.PLUGIN
+      pathname: generatePath(ROUTES.object.root, {
+        objectId
       })
     });
   });
 
   useUnityEvent('PlasmaClickEvent', (spaceId: string) => {
     history.push({
-      pathname: generatePath(ROUTES.object.base, {
-        objectId: spaceId,
-        assetType: AssetTypeEnum.PLUGIN
+      pathname: generatePath(ROUTES.object.root, {
+        objectId: spaceId
       })
     });
   });
