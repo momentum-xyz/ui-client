@@ -209,10 +209,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     path: ROUTES.calendar,
     main: () => <CalendarPage />,
     renderBackground: true
-  }
-];
-
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
+  },
   {
     path: ROUTES.worldBuilder.base,
     main: () => <WorldBuilder />
