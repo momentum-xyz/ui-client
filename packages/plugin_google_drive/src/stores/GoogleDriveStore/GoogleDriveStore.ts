@@ -58,12 +58,10 @@ const GoogleDriveStore = types.compose(
           };
 
           yield self.enableGoogleDocument(document);
-          yield self.fetchGoogleDocument();
         }
       }),
       closeDocument: flow(function* () {
         yield self.disableGoogleDocument();
-        yield self.fetchGoogleDocument();
       })
     }))
     .views((self) => ({

@@ -2,11 +2,11 @@ import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
-import {IconSvg, Text, Button} from '@momentum-xyz/ui-kit';
+import {IconSvg, Text, Button, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
+import {generatePath} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {SpacePage, SpaceTopBar} from 'ui-kit';
 
 import {Dashboard, InviteToSpaceMenu, RemoveTileDialog, TileForm, VibeButton} from './components';
 import * as styled from './DashboardPage.styled';
@@ -17,6 +17,7 @@ const DashboardPage: FC = () => {
   const {tileDialog, tileRemoveDialog, tileList, vibeStore, inviteToSpaceDialog} = dashboardStore;
   const {flyWithMeStore} = flightStore;
   const {agoraStore, favoriteStore} = mainStore;
+  const {space} = spaceStore;
 
   const inviteRef = useRef<HTMLButtonElement>(null);
   const {t} = useTranslation();
@@ -28,35 +29,35 @@ const DashboardPage: FC = () => {
   });
 
   useEffect(() => {
-    if (spaceStore) {
-      dashboardStore.fetchDashboard(spaceStore.id);
-      vibeStore.check(spaceStore.id);
-      vibeStore.count(spaceStore.id);
+    if (space) {
+      dashboardStore.fetchDashboard(space.id);
+      vibeStore.check(space.id);
+      vibeStore.count(space.id);
     }
     return () => {
       dashboardStore.resetModel();
     };
-  }, [dashboardStore, favoriteStore, spaceStore, vibeStore]);
+  }, [dashboardStore, favoriteStore, space, vibeStore]);
 
   const handleToggleVibe = useCallback(async () => {
-    const success = await vibeStore.toggle(spaceStore?.id ?? '');
+    const success = await vibeStore.toggle(space?.id ?? '');
     if (success) {
       vibeStore.toggleVibe();
     }
-  }, [spaceStore?.id, vibeStore]);
+  }, [space?.id, vibeStore]);
 
-  if (!spaceStore) {
+  if (!space) {
     return null;
   }
 
   return (
-    <SpacePage dataTestId="DashboardPage-test">
+    <SpacePage dataTestId="DashboardPage-test" withMeeting>
       <SpaceTopBar
-        title={spaceStore.space?.name ?? ''}
+        title={space.name}
         subtitle={t('dashboard.subtitle')}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore?.id || '')}
+        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        spaceId={spaceStore.id}
+        spaceId={space.id}
         isAdmin={spaceStore.isAdmin}
         isChatOpen={streamChatStore.isOpen}
         toggleChat={streamChatStore.textChatDialog.toggle}
@@ -65,6 +66,8 @@ const DashboardPage: FC = () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
         }}
+        adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
+        baseLink={generatePath(ROUTES.base, {spaceId: space.id})}
       >
         <VibeButton
           onToggle={handleToggleVibe}
@@ -92,7 +95,7 @@ const DashboardPage: FC = () => {
             icon="fly-with-me"
             label={t('labels.flyWithMe')}
             disabled={!agoraStore.hasJoined || agoraStore.isStageMode || flightStore.isFlightWithMe}
-            onClick={() => flyWithMeStore.start(spaceStore.id)}
+            onClick={() => flyWithMeStore.start(space.id)}
           />
         )}
       </SpaceTopBar>

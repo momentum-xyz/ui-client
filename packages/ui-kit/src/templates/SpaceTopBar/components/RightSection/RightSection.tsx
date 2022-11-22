@@ -1,22 +1,22 @@
 import React, {FC} from 'react';
-import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {generatePath} from 'react-router-dom';
-import {Separator, ToolbarIcon} from '@momentum-xyz/ui-kit';
 
-import {ROUTES} from 'core/constants';
+import {ToolbarIcon} from '../../../../molecules';
+import {Separator} from '../../../../atoms';
 
 import * as styled from './RightSection.styled';
 
 interface PropsInterface {
   isAdmin?: boolean;
+  adminLink?: string;
+  baseLink?: string;
   spaceId: string;
   editSpaceHidden?: boolean;
-  isSpaceFavorite: boolean;
+  isSpaceFavorite?: boolean;
   isChatOpen?: boolean;
   showChatButton?: boolean;
   numberOfUnreadMessages?: number;
-  toggleIsSpaceFavorite: (spaceId: string) => void;
+  toggleIsSpaceFavorite?: (spaceId: string) => void;
   toggleChat?: () => void;
 }
 
@@ -24,6 +24,8 @@ const RightSection: FC<PropsInterface> = ({
   spaceId,
   editSpaceHidden,
   isAdmin,
+  adminLink,
+  baseLink,
   isSpaceFavorite,
   isChatOpen,
   showChatButton = true,
@@ -38,9 +40,9 @@ const RightSection: FC<PropsInterface> = ({
           <ToolbarIcon
             title={t('tooltipTitles.openAdmin')}
             icon="pencil"
-            link={generatePath(ROUTES.spaceAdmin.base, {spaceId})}
+            link={adminLink}
             isActive={(match, location) => {
-              return location.pathname.includes(generatePath(ROUTES.spaceAdmin.base, {spaceId}));
+              return !!adminLink && location.pathname.includes(adminLink);
             }}
             state={{canGoBack: true}}
             isWhite={false}
@@ -61,21 +63,23 @@ const RightSection: FC<PropsInterface> = ({
           )}
         </ToolbarIcon>
       )}
-      <ToolbarIcon
-        title={t('tooltipTitles.favorite')}
-        icon={isSpaceFavorite ? 'starOn' : 'star'}
-        onClick={() => toggleIsSpaceFavorite(spaceId)}
-        isWhite={false}
-      />
-      <Separator />
+      {toggleIsSpaceFavorite && (
+        <ToolbarIcon
+          title={t('tooltipTitles.favorite')}
+          icon={isSpaceFavorite ? 'starOn' : 'star'}
+          onClick={() => toggleIsSpaceFavorite(spaceId)}
+          isWhite={false}
+        />
+      )}
+      {(showChatButton || toggleIsSpaceFavorite) && <Separator />}
       <ToolbarIcon
         icon="fly-to"
         isWhite={false}
         title={t('tooltipTitles.flyAround')}
-        link={generatePath(ROUTES.base, {spaceId})}
+        link={baseLink}
       />
     </>
   );
 };
 
-export default observer(RightSection);
+export default RightSection;

@@ -1,3 +1,5 @@
 import {PluginInterface} from '@momentum-xyz/sdk';
 
-export interface MiroPluginInterface extends PluginInterface {}
+import {MiroPluginPropsInterface} from './pluginProps.interface';
+
+export interface MiroPluginInterface extends PluginInterface<MiroPluginPropsInterface> {}

@@ -2,38 +2,22 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useStore} from 'shared/hooks/useStore';
 import {useSpace} from '@momentum-xyz/sdk';
+import {SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 
-import {MiroBoard, MiroChoice, MiroActions} from './components';
+import {MiroActions, MiroBoard, MiroChoice} from './components';
 import * as styled from './MiroBoardPage.styled';
 
 const MiroBoardPage: FC = () => {
-  const {api, miroBoardStore} = useStore();
-  const {board} = miroBoardStore;
-  const {isAdmin, spaceId, renderTopBarActions, setSubtitle, pluginApi} = useSpace();
+  const store = useStore();
+  const {api, miroBoardStore} = store;
+  const {board, pickBoard, disableBoard} = miroBoardStore;
+  const {isAdmin, spaceId, pluginApi, onClose} = useSpace();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useEffect(() => {
     miroBoardStore.init(api);
     miroBoardStore.fetchBoard();
   }, [api, miroBoardStore]);
-
-  useEffect(() => {
-    renderTopBarActions({
-      main: () => (
-        <MiroActions
-          spaceId={spaceId}
-          isAdmin={isAdmin}
-          board={board}
-          pick={miroBoardStore.pickBoard}
-          disable={miroBoardStore.disableBoard}
-        />
-      )
-    });
-  }, [board, isAdmin, miroBoardStore, renderTopBarActions, spaceId]);
-
-  useEffect(() => {
-    setSubtitle(board?.name);
-  }, [board, setSubtitle]);
 
   useStateItemChange('board', miroBoardStore.handleBoardChange);
 
@@ -44,13 +28,33 @@ const MiroBoardPage: FC = () => {
   }
 
   return (
-    <styled.Container>
-      {!board?.accessLink ? (
-        <MiroChoice isAdmin={isAdmin} pickBoard={miroBoardStore.pickBoard} />
-      ) : (
-        <MiroBoard miroUrl={board.accessLink} />
-      )}
-    </styled.Container>
+    <SpacePage>
+      <SpaceTopBar
+        title={store.spaceName ?? ''}
+        subtitle={board?.name}
+        isAdmin={isAdmin}
+        spaceId={spaceId}
+        editSpaceHidden
+        onLeave={() => onClose?.()}
+        isSpaceFavorite={false}
+        toggleIsSpaceFavorite={() => {}}
+      >
+        <MiroActions
+          spaceId={spaceId}
+          isAdmin={isAdmin}
+          board={board}
+          pick={pickBoard}
+          disable={disableBoard}
+        />
+      </SpaceTopBar>
+      <styled.Container>
+        {!board?.accessLink ? (
+          <MiroChoice isAdmin={isAdmin} pickBoard={miroBoardStore.pickBoard} />
+        ) : (
+          <MiroBoard miroUrl={board.accessLink} />
+        )}
+      </styled.Container>
+    </SpacePage>
   );
 };
 

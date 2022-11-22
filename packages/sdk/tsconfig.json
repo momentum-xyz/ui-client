@@ -7,6 +7,6 @@
     "noEmit": false,
     "baseUrl": "src"
   },
-  "include": ["src"],
+  "include": ["src", "../app/src/api/enums/attributeName.enum.ts"],
   "exclude": ["node_modules", "dist"]
 }

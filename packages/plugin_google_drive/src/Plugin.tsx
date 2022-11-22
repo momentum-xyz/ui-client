@@ -1,8 +1,12 @@
 import {GoogleDriveInterface} from 'core/interfaces';
-import GoogleDriveApp from 'GoogleDriveApp';
+import {usePlugin} from 'shared/hooks';
+
+import '@momentum-xyz/ui-kit/dist/themes/themes';
+
+import 'shared/services/i18n';
 
 const Plugin: GoogleDriveInterface = {
-  SpaceExtension: GoogleDriveApp
+  usePlugin
 };
 
 export default Plugin;

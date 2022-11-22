@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
-import {observer} from 'mobx-react-lite';
-import {PropsWithThemeInterface, PageTopBar} from '@momentum-xyz/ui-kit';
+
+import {PropsWithThemeInterface} from '../../interfaces';
+import {PageTopBar} from '../../organisms';
 
 import {RightSection} from './components';
 
@@ -10,13 +11,15 @@ interface PropsInterface extends PropsWithThemeInterface {
   isAdmin?: boolean;
   spaceId?: string;
   editSpaceHidden?: boolean;
-  isSpaceFavorite: boolean;
+  isSpaceFavorite?: boolean;
   isChatOpen?: boolean;
   toggleChat?: () => void;
-  toggleIsSpaceFavorite: (spaceId: string) => void;
+  toggleIsSpaceFavorite?: (spaceId: string) => void;
   showChatButton?: boolean;
   numberOfUnreadMessages?: number;
   onLeave: () => void;
+  adminLink?: string;
+  baseLink?: string;
 }
 
 const SpaceTopBar: FC<PropsInterface> = ({
@@ -32,7 +35,9 @@ const SpaceTopBar: FC<PropsInterface> = ({
   children,
   showChatButton,
   numberOfUnreadMessages,
-  onLeave
+  onLeave,
+  adminLink,
+  baseLink
 }) => {
   return (
     <PageTopBar
@@ -52,6 +57,8 @@ const SpaceTopBar: FC<PropsInterface> = ({
               toggleIsSpaceFavorite={toggleIsSpaceFavorite}
               showChatButton={showChatButton}
               numberOfUnreadMessages={numberOfUnreadMessages}
+              adminLink={adminLink}
+              baseLink={baseLink}
             />
           )}
         </>
@@ -62,4 +69,4 @@ const SpaceTopBar: FC<PropsInterface> = ({
   );
 };
 
-export default observer(SpaceTopBar);
+export default SpaceTopBar;

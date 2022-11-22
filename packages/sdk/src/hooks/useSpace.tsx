@@ -1,14 +1,12 @@
 import {useSpaceGlobalProps} from '../contexts/SpaceGlobalPropsContext';
 
 export const useSpace = () => {
-  const {isSpaceAdmin, spaceId, renderTopBarActions, pluginApi, setSubtitle} =
-    useSpaceGlobalProps();
+  const {isSpaceAdmin, spaceId, pluginApi, onClose} = useSpaceGlobalProps();
 
   return {
     spaceId,
     isAdmin: isSpaceAdmin,
-    renderTopBarActions,
     pluginApi,
-    setSubtitle
+    onClose
   };
 };

@@ -3,9 +3,9 @@ import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
 import {generatePath, useHistory} from 'react-router-dom';
-import {Toggle, Button, Text} from '@momentum-xyz/ui-kit';
+import {Toggle, Button, Text, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 
-import {Stage, ToastContent, TOAST_GROUND_OPTIONS, SpaceTopBar, SpacePage} from 'ui-kit';
+import {Stage, ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
 import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
@@ -29,6 +29,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
   const {spaceStore, removeParticipantFromStageDialog, streamChatStore, screenShareStore} =
     collaborationStore;
+  const {space} = spaceStore;
 
   const history = useHistory();
 
@@ -83,25 +84,27 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     }
   }, [collaborationStore.isModerator, history, spaceStore?.id]);
 
-  if (!spaceStore || !collaborationStore.isModerator) {
+  if (!space || !collaborationStore.isModerator) {
     return null;
   }
 
   return (
     <>
-      <SpacePage dataTestId="StageModeModerator-test">
+      <SpacePage dataTestId="StageModeModerator-test" withMeeting>
         <SpaceTopBar
-          title={spaceStore.space?.name ?? ''}
+          title={space.name}
           subtitle={t('labels.stageMode')}
           isAdmin={spaceStore.isAdmin}
           spaceId={spaceStore.id}
-          isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
+          isSpaceFavorite={favoriteStore.isFavorite(space.id)}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
           isChatOpen={streamChatStore.isOpen}
           toggleChat={streamChatStore.textChatDialog.toggle}
           numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
           editSpaceHidden
           onLeave={onLeaveMeeting}
+          adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
+          baseLink={generatePath(ROUTES.base, {spaceId: space.id})}
         >
           <styled.ActionsContainer>
             <styled.ToggleContainer>
