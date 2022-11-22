@@ -20,10 +20,10 @@ export const usePlugin: UsePluginHookType<MiroPluginPropsInterface> = (props) =>
   );
 
   useEffect(() => {
-    if (props.spaceId) {
-      store.init(props.spaceId);
+    if (props.objectId) {
+      store.init(props.objectId);
     }
-  }, [store, props.spaceId]);
+  }, [store, props.objectId]);
 
   const content = useMemo(
     () => (

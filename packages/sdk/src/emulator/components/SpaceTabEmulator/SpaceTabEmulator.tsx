@@ -43,7 +43,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
   const coreProps: CorePluginPropsInterface = useMemo(
     () => ({
       theme: theme as ThemeInterface,
-      isSpaceAdmin: false,
+      isAdmin: false,
       spaceId,
       api: {
         getSpaceAttributeValue: <T extends AttributeValueInterface>(

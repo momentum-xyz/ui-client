@@ -6,8 +6,9 @@ import {ApiInterface} from './api.interface';
 
 export interface CorePluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface> {
   theme: ThemeInterface;
-  spaceId?: string;
-  isSpaceAdmin: boolean;
+  objectId?: string;
+  pluginName?: string;
+  isAdmin: boolean;
 
   pluginApi: PluginApiInterface<C>;
   api: ApiInterface;

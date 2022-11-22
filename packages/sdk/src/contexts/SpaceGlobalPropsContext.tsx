@@ -6,11 +6,11 @@ import {PluginConfigInterface, ObjectPluginPropsInterface} from '../interfaces';
 
 import {ThemeContextProvider} from './ThemeContext';
 
-export const SpaceGlobalPropsContext = createContext<
+export const ObjectGlobalPropsContext = createContext<
   ObjectPluginPropsInterface<PluginConfigInterface>
 >({
   theme: DefaultThemeConfig,
-  isSpaceAdmin: false,
+  isAdmin: false,
   api: {
     getSpaceAttributeValue: () => Promise.reject(),
     setSpaceAttributeValue: () => Promise.reject(),
@@ -39,12 +39,12 @@ export const SpaceGlobalPropsContext = createContext<
   }
 });
 
-export const SpaceGlobalPropsContextProvider: FC<{
+export const ObjectGlobalPropsContextProvider: FC<{
   props: ObjectPluginPropsInterface<PluginConfigInterface>;
 }> = ({props, children}) => (
-  <SpaceGlobalPropsContext.Provider value={props}>
+  <ObjectGlobalPropsContext.Provider value={props}>
     <ThemeContextProvider theme={props.theme}>{children}</ThemeContextProvider>
-  </SpaceGlobalPropsContext.Provider>
+  </ObjectGlobalPropsContext.Provider>
 );
 
-export const useSpaceGlobalProps = () => useContext(SpaceGlobalPropsContext);
+export const useObjectGlobalProps = () => useContext(ObjectGlobalPropsContext);

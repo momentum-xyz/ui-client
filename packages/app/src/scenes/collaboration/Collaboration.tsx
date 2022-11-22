@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect, useMemo} from 'react';
-import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-dom';
+import {Route, Switch, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
@@ -145,7 +145,8 @@ const Collaboration: FC = () => {
 
   const tabs = useMemo(() => {
     const pluginTabs: NavigationTabInterface[] = pluginsStore.spacePlugins.map((plugin) => ({
-      path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
+      // path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
+      path: '',
       iconName: plugin.iconName
     }));
 
@@ -181,7 +182,7 @@ const Collaboration: FC = () => {
           return (
             <Route
               key={plugin.id}
-              path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
+              // path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
               exact={plugin.exact}
             >
               {plugin.plugin && (

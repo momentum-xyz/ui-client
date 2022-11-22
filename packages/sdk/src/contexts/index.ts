@@ -1,2 +1,2 @@
-export {SpaceGlobalPropsContextProvider} from './SpaceGlobalPropsContext';
+export {ObjectGlobalPropsContextProvider as SpaceGlobalPropsContextProvider} from './SpaceGlobalPropsContext';
 export * from './ThemeContext';

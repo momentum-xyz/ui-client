@@ -7,17 +7,17 @@ import {MiroBoardInterface} from 'core/interfaces';
 import * as styled from './MiroActions.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  spaceId?: string;
+  objectId?: string;
   isAdmin: boolean;
   board: MiroBoardInterface | null;
   pick: () => void;
   disable: () => void;
 }
 
-const MiroActions: FC<PropsInterface> = ({theme, spaceId, isAdmin, board, disable, pick}) => {
+const MiroActions: FC<PropsInterface> = ({theme, objectId, isAdmin, board, disable, pick}) => {
   const {t} = useTranslation();
 
-  if (!spaceId || !isAdmin || !board?.accessLink) {
+  if (!objectId || !isAdmin || !board?.accessLink) {
     return null;
   }
 

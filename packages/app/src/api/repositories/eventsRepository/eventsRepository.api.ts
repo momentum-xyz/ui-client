@@ -1,5 +1,6 @@
-import {AttributeNameEnum, PluginIdEnum} from '@momentum-xyz/sdk';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
+import {PluginIdEnum} from 'api/enums';
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 import {

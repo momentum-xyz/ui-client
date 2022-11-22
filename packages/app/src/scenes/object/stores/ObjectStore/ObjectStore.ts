@@ -57,7 +57,7 @@ const ObjectStore = types
         ...options,
         ...meta,
         attributesManager: PluginAttributesManager.create({
-          pluginId: spaceInfo.asset_2d_id,
+          pluginId: meta.pluginId,
           spaceId
         })
       });
@@ -81,7 +81,10 @@ const ObjectStore = types
           // TODO: Open video tile
           break;
       }
-    })
+    }),
+    deinit() {
+      self.asset = undefined;
+    }
   }));
 
 export {ObjectStore};

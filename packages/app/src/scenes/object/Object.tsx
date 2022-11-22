@@ -23,8 +23,9 @@ const Object: FC = () => {
 
     return () => {
       unityStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId, 0, '');
+      objectStore.resetModel();
     };
-  }, [rootStore, objectId, assetType, unityStore]);
+  }, [rootStore, objectId, assetType, unityStore, objectStore]);
 
   return (
     <styled.Container>

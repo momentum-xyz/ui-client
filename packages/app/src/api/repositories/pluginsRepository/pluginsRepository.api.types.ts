@@ -12,10 +12,10 @@ export interface PluginMetadataInterface extends MetadataInterface {
   scriptUrl: string;
   scopeName: string;
   name: string;
+  pluginId: string;
 }
 
 export interface PluginOptionsInterface extends OptionsInterface {
-  subPath: string;
   exact?: boolean;
   iconName: IconNameType;
 }
