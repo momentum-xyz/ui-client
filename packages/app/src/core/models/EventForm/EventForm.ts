@@ -5,6 +5,7 @@ import {v4 as uuidv4} from 'uuid';
 import {EventItemInterface, EventItemDataInterface} from 'core/models';
 import {api, EventInterface, UploadImageResponse} from 'api';
 import {EventFormInterface} from 'core/interfaces';
+import {mapper} from 'api/mapper';
 
 const EventForm = types.compose(
   ResetModel,
@@ -14,12 +15,29 @@ const EventForm = types.compose(
       imageHash: types.maybe(types.string),
       eventId: types.maybe(types.string),
       eventFormRequest: types.optional(RequestModel, {}),
+      fetchEventRequest: types.optional(RequestModel, {}),
       uploadImageRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      editEvent(event: EventItemInterface) {
-        self.currentEvent = cast({...event.data});
-      },
+      editEvent: flow(function* (event: EventItemInterface) {
+        const eventResponse = yield self.fetchEventRequest.send(
+          api.eventsRepository.getEventAttribute,
+          {
+            eventId: event?.data?.eventId ?? '',
+            spaceId: event?.data?.spaceId ?? ''
+          }
+        );
+        const eventMapped = mapper.mapSubAttributeValue<EventItemDataInterface>(eventResponse);
+
+        if (eventMapped) {
+          self.currentEvent = cast({
+            ...eventMapped,
+            start: new Date(eventMapped.start),
+            end: new Date(eventMapped.end),
+            attendees: eventMapped.attendees
+          });
+        }
+      }),
       createOrUpdateEvent: flow(function* (
         data: EventFormInterface,
         spaceId: string,
