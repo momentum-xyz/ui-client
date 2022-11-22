@@ -1,8 +1,9 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {v4 as uuidv4} from 'uuid';
 
-import {EventItemDataInterface, EventItemInterface} from 'core/models';
-import {api, CreateEventResponse} from 'api';
+import {EventItemInterface, EventItemDataInterface} from 'core/models';
+import {api, EventInterface, UploadImageResponse} from 'api';
 import {EventFormInterface} from 'core/interfaces';
 
 const EventForm = types.compose(
@@ -10,59 +11,69 @@ const EventForm = types.compose(
   types
     .model('EventForm', {
       currentEvent: types.maybe(types.frozen<EventItemDataInterface>()),
-      imageSrc: types.maybeNull(types.string),
+      imageHash: types.maybe(types.string),
+      eventId: types.maybe(types.string),
       eventFormRequest: types.optional(RequestModel, {}),
       uploadImageRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       editEvent(event: EventItemInterface) {
         self.currentEvent = cast({...event.data});
-        self.imageSrc = event.imageSrc;
       },
-      createEvent: flow(function* (data: EventFormInterface, spaceId: string, file?: File) {
-        const response: CreateEventResponse = yield self.eventFormRequest.send(
-          api.eventsRepository.createEvent,
-          {
-            spaceId,
-            data
-          }
-        );
-        if (response && file) {
-          const {id} = response;
-          yield self.uploadImageRequest.send(api.eventsRepository.uploadImage, {
-            spaceId,
-            file,
-            eventId: id
-          });
-        }
-
-        return self.eventFormRequest.isDone;
-      }),
-      updateEvent: flow(function* (
+      createOrUpdateEvent: flow(function* (
         data: EventFormInterface,
         spaceId: string,
-        eventId: string,
+        spaceName?: string,
         file?: File
       ) {
-        yield self.eventFormRequest.send(api.eventsRepository.updateEvent, {
-          spaceId,
-          eventId,
-          data
-        });
         if (file) {
-          yield self.uploadImageRequest.send(api.eventsRepository.uploadImage, {
-            spaceId,
-            file,
-            eventId
-          });
+          const uploadImageResponse: UploadImageResponse = yield self.uploadImageRequest.send(
+            api.mediaRepository.uploadImage,
+            {file}
+          );
+
+          if (!uploadImageResponse) {
+            console.log('Failed to upload event image');
+            return false;
+          }
+
+          self.imageHash = uploadImageResponse.hash;
         }
+
+        let event: EventInterface = {};
+
+        if (self.currentEvent) {
+          event = {
+            ...data,
+            attendees: self.currentEvent?.attendees,
+            spaceId,
+            eventId: self.currentEvent?.eventId,
+            image: file ? self.imageHash : undefined
+          };
+        } else {
+          self.eventId = uuidv4();
+
+          event = {
+            ...data,
+            spaceId,
+            spaceName,
+            eventId: self.eventId,
+            image: self.imageHash
+          };
+        }
+
+        yield self.eventFormRequest.send(api.eventsRepository.setEventAttributes, {
+          spaceId,
+          data: event,
+          eventId: self.currentEvent ? self.currentEvent.eventId : self.eventId ?? ''
+        });
 
         return self.eventFormRequest.isDone;
       })
     }))
     .views((self) => ({
       get isPending(): boolean {
-        return self.eventFormRequest.isPending;
+        return self.eventFormRequest.isPending || self.uploadImageRequest.isPending;
       }
     }))
 );

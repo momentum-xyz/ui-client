@@ -101,7 +101,7 @@ use `git lfs install` to initialize the git hooks
     │   │   │     ├── i18n          # Init translations
     │   │   │     ├── web3          # Web3 common helpers
     │   │   │     ├── unity         # Unity intergation
-    │   │   │     ├── posBus        # Event processor
+    │   │   │     ├── posBus        # EventItem processor
     │   │   │     ├── cookie        # Cookie service
     │   │   │     ├── storage       # LocalStorage service
     │   │   └──   └── ...

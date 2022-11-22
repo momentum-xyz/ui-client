@@ -40,6 +40,8 @@ export interface PropsInterface extends PropsWithThemeInterface {
   isTruncateHeader?: boolean;
   showIcon?: boolean;
   headerHeadingAlign?: TextAlignType;
+  tabs?: React.ReactElement;
+  closeButtonSize?: SizeType;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {
@@ -63,6 +65,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isTruncateHeader = false,
     showIcon = true,
     headerHeadingAlign,
+    closeButtonSize = 'normal',
     ...restProps
   } = props;
 
@@ -131,11 +134,12 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           <styled.Spacer />
           <styled.HeaderActions>
             {props.headerActions}
+            {props.tabs}
             {(restProps.showCloseButton || restProps.onClose) && (
               <SvgButton
                 theme={restProps.theme}
                 iconName="close"
-                size="normal"
+                size={closeButtonSize}
                 onClick={restProps.onClose}
                 isDanger={isDanger}
               />

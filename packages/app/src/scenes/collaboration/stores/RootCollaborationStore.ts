@@ -5,7 +5,6 @@ import {ResetModel, Dialog} from '@momentum-xyz/core';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 
 import {SpaceStore} from './SpaceStore';
-import {CalendarStore} from './CalendarStore';
 import {DashboardStore} from './DashboardStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
@@ -23,7 +22,6 @@ const RootCollaborationStore = types
       // TODO: Removal
       textChatStore: types.optional(TextChatStore, {}),
       streamChatStore: types.optional(StreamChatStore, {}),
-      calendarStore: types.optional(CalendarStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
 

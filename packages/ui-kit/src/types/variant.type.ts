@@ -4,4 +4,5 @@ export type VariantType =
   | 'danger'
   | 'inverted'
   | 'primary-background'
-  | 'danger-background';
+  | 'danger-background'
+  | 'inverted-background';
