@@ -155,7 +155,7 @@ const UnityPage: FC = () => {
         title={t('titles.joinGathering')}
         text={t('messages.joinGathering', {title: message.title})}
         approveInfo={{
-          title: t('actions.join')
+          title: t('actions.dismiss')
         }}
         showCloseButton
       />,
