@@ -1,7 +1,8 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 
 import {ObjectPluginPropsInterface, PluginInterface} from '../interfaces';
+import {GlobalStyles} from '../App.styled';
 
 import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
@@ -36,6 +37,7 @@ export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
   return (
     <styled.FullScreenContainer>
+      <GlobalStyles />
       {isDevEnv ? (
         <BrowserRouter>
           <WorldEmulator plugin={plugin} />

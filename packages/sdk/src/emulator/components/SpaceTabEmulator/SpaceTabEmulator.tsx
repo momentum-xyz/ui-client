@@ -14,11 +14,9 @@ import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 interface PropsInterface {
   plugin: PluginInterface<ObjectPluginPropsInterface>;
   spaceId: string;
-  setTopBar: (topBar: JSX.Element) => void;
-  setSubtitle: (subtitle?: string) => void;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId, setTopBar, setSubtitle}) => {
+export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
   console.log('RENDER SpaceTabEmulator', {plugin});
   const theme = useTheme();
   const {

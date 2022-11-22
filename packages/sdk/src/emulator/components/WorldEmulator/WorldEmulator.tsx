@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {generatePath, Redirect, Route, Switch} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
@@ -24,16 +24,16 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
       <Switch>
         <Route exact path="/">
           <div>
-            <button
+            <styled.Button
               onClick={() =>
-                history.push(generatePath(ROUTES.collaboration.base, {spaceId: DUMMY_SPACE_ID}))
+                history.push(generatePath(ROUTES.collaboration.plugin, {spaceId: DUMMY_SPACE_ID}))
               }
             >
-              Join Space
-            </button>
+              Open Plugin
+            </styled.Button>
           </div>
         </Route>
-        <Route path={ROUTES.collaboration.base}>
+        <Route path={ROUTES.collaboration.plugin}>
           <SpaceEmulator plugin={plugin} onClose={() => history.push(ROUTES.base)} />
         </Route>
         <Redirect to={ROUTES.base} />

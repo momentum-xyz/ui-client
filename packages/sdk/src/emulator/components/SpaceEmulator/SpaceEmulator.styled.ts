@@ -45,6 +45,7 @@ export const SpaceTabContainer = styled.div`
 `;
 
 export const SpaceContent = styled.div`
+  display: flex;
   flex: 1 0 auto;
   border: 1px solid grey;
   margin: 10px;

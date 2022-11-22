@@ -4,6 +4,6 @@ export const ROUTES = {
     root: '/collaboration',
     base: '/collaboration/:spaceId',
     dashboard: '/collaboration/:spaceId/dashboard',
-    plugin: '/collaboration/:spaceId/plugin'
+    plugin: '/object/:spaceId/plugin'
   }
 };

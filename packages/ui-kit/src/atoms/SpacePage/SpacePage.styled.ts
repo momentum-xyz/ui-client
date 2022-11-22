@@ -7,7 +7,6 @@ export const Container = styled.div`
   overflow: hidden;
   pointer-events: auto;
   width: 100%;
-  margin: 10px;
 
   &.withMeeting {
     width: var(--space-page-width);
