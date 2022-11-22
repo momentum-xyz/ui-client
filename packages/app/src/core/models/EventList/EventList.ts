@@ -47,6 +47,8 @@ const EventList = types.compose(
 
         if (Object.keys(response).length) {
           self.mapEvents(response);
+        } else {
+          self.events.length = 0;
         }
 
         return self.request.isDone;

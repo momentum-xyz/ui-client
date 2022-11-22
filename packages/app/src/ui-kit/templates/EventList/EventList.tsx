@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {PropsWithThemeInterface, Loader} from '@momentum-xyz/ui-kit';
+import {PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {EventItemInterface, UserModelInterface} from 'core/models';
 import {EventItem} from 'ui-kit';
@@ -11,7 +11,6 @@ import * as styled from './EventList.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   user?: UserModelInterface;
   events: EventItemInterface[];
-  isLoading: boolean;
   onEventEdit: (event: EventItemInterface) => void;
   onEventRemove: (event: EventItemInterface) => void;
   onWeblinkClick: (weblink: string) => void;
@@ -22,19 +21,14 @@ const EventList: FC<PropsInterface> = ({
   events,
   onEventEdit,
   onEventRemove,
-  isLoading,
   onWeblinkClick
 }) => {
   if (events.length === 0) {
     return (
       <styled.Container className="empty noScrollIndicator">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <styled.NoGatheringsPanel>
-            <styled.NoGatheringsText text={t('eventList.noGatherings')} size="l" />
-          </styled.NoGatheringsPanel>
-        )}
+        <styled.NoGatheringsPanel>
+          <styled.NoGatheringsText text={t('eventList.noGatherings')} size="l" />
+        </styled.NoGatheringsPanel>
       </styled.Container>
     );
   }

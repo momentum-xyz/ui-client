@@ -95,7 +95,6 @@ const CalendarPage: FC = () => {
             <EventList
               user={sessionStore.user ?? undefined}
               events={eventList.events}
-              isLoading={false}
               onEventEdit={calendarStore.editEvent}
               onEventRemove={calendarStore.selectEventToRemove}
               onWeblinkClick={handleWeblink}

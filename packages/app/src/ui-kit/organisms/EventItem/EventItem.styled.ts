@@ -37,7 +37,6 @@ export const Row = styled.div`
 
 export const Info = styled.div`
   display: flex;
-  position: relative;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
@@ -46,6 +45,8 @@ export const Info = styled.div`
 
 export const Container = styled.div`
   display: flex;
+  position: relative;
+
   width: 100%;
   border-radius: 10px;
   padding: 10px;
