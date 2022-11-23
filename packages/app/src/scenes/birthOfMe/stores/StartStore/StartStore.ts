@@ -5,6 +5,7 @@ import {NftItemInterface} from '../NftStore/models';
 
 export interface WorldInfoInterface extends NftItemInterface {}
 
+//TODO:  REFACTOR
 const StartStore = types
   .compose(
     ResetModel,

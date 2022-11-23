@@ -12,10 +12,3 @@ export const UniverseContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
-
-export const InnerContainer = styled.div`
-  padding: 10px;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-`;

@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  position: absolute;
   height: 100vh;
   width: 100vw;
-  background: rgba(5, 23, 69, 0.75);
+  top: 0;
 `;
 
 export const Wrapper = styled.div`

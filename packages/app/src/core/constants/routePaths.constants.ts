@@ -10,7 +10,6 @@ export const ROUTES = {
   web3CallBack: '/oidc/web3/callback',
   guestCallBack: '/oidc/guest/callback',
   birthOfMe: {
-    start: '/birthOfMe/start',
     signIn: '/birthOfMe/signIn',
     startAccount: '/birthOfMe/startAccount'
   },

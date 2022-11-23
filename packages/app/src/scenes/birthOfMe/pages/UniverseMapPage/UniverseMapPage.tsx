@@ -1,19 +1,19 @@
-import {FC, useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 
-import * as styled from './StartPage.styled';
-import {ExplorePanel, UniverseMap} from './components';
+import * as styled from './UniverseMapPage.styled';
+import {UniverseMap} from './components';
 
-const StartPage: FC = () => {
+const UniverseMapPage: FC = () => {
   const {birthOfMeStore} = useStore();
   const {nftStore} = birthOfMeStore;
   const {nftItems, addresses, tokenSymbol, isLoading, isWeb3Injected, controllerAccount} = nftStore;
 
   useEffect(() => {
-    birthOfMeStore.init();
-  }, [birthOfMeStore]);
+    nftStore.init();
+  }, [nftStore]);
 
   console.log('Render WorldExplorerPage', {
     addresses,
@@ -28,11 +28,8 @@ const StartPage: FC = () => {
       <styled.UniverseContainer>
         <UniverseMap items={nftItems} />
       </styled.UniverseContainer>
-      <styled.InnerContainer>
-        <ExplorePanel />
-      </styled.InnerContainer>
     </styled.WorldExplorerPageContainer>
   );
 };
 
-export default observer(StartPage);
+export default observer(UniverseMapPage);
