@@ -10,13 +10,14 @@ import {
   PluginOptionsInterface
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
-import {AssetTypeEnum} from 'core/enums';
+import {AssetTypeEnum, ObjectTypeEnum} from 'core/enums';
 
 const ObjectStore = types
   .compose(
     ResetModel,
     types.model('ObjectStore', {
       name: types.maybe(types.string),
+      assetType: types.maybe(types.string),
 
       getSpaceInfoRequest: types.optional(RequestModel, {}),
       getAssetRequest: types.optional(RequestModel, {}),
@@ -42,45 +43,47 @@ const ObjectStore = types
         assetId: spaceInfo.asset_2d_id
       });
 
-      if (!assetResponse) {
-        return;
+      switch (spaceId) {
+        case ObjectTypeEnum.TEXT:
+          self.assetType = AssetTypeEnum.TEXT;
+          break;
+        case ObjectTypeEnum.IMAGE:
+          self.assetType = AssetTypeEnum.IMAGE;
+          break;
+        case ObjectTypeEnum.VIDEO:
+          self.assetType = AssetTypeEnum.VIDEO;
+          break;
+        default: {
+          if (!assetResponse) {
+            return;
+          }
+          const {options, meta} = assetResponse;
+
+          if (!self.dynamicScriptsStore.containsLoaderWithName(meta.scopeName)) {
+            yield self.dynamicScriptsStore.addScript(meta.scopeName, meta.scriptUrl);
+          }
+
+          self.asset = PluginLoader.create({
+            id: spaceInfo.asset_2d_id,
+            ...options,
+            ...meta,
+            attributesManager: PluginAttributesManager.create({
+              pluginId: meta.pluginId,
+              spaceId
+            })
+          });
+
+          yield self.asset.loadPlugin();
+          self.assetType = 'plugin';
+
+          break;
+        }
       }
-
-      const {options, meta} = assetResponse;
-
-      if (!self.dynamicScriptsStore.containsLoaderWithName(meta.scopeName)) {
-        yield self.dynamicScriptsStore.addScript(meta.scopeName, meta.scriptUrl);
-      }
-
-      self.asset = PluginLoader.create({
-        id: spaceInfo.asset_2d_id,
-        ...options,
-        ...meta,
-        attributesManager: PluginAttributesManager.create({
-          pluginId: meta.pluginId,
-          spaceId
-        })
-      });
-
-      yield self.asset.loadPlugin();
     })
   }))
   .actions((self) => ({
-    init: flow(function* (objectId: string, assetType: AssetTypeEnum) {
-      switch (assetType) {
-        case AssetTypeEnum.PLUGIN:
-          yield self.loadAsset2D(objectId);
-          break;
-        case AssetTypeEnum.TEXT:
-          // TODO: Open text tile
-          break;
-        case AssetTypeEnum.IMAGE:
-          // TODO: Open image tile
-          break;
-        case AssetTypeEnum.VIDEO:
-          // TODO: Open video tile
-          break;
-      }
+    init: flow(function* (objectId: string) {
+      yield self.loadAsset2D(objectId);
     }),
     deinit() {
       self.asset = undefined;
