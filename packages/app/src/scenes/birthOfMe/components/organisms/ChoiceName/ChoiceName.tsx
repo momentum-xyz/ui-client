@@ -24,7 +24,7 @@ const ChoiceName: FC<PropsInterface> = ({onExplore}) => {
           text="It's great that you want to experience the journeys of other travellers."
           align="left"
         />
-        <Button label="Explore Odyssey" icon="people" onClick={onExplore} />
+        <Button size="medium" label="Explore Odyssey" icon="astro" onClick={onExplore} />
       </styled.Div>
     </Box>
   );

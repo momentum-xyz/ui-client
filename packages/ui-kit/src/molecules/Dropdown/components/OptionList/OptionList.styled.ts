@@ -6,23 +6,34 @@ import {ComponentSizeInterface} from '../../../../interfaces';
 
 export const DropdownOptionsList = styled.div<{size?: ComponentSizeInterface}>`
   --borderRadius: initial;
+  --padding: initial;
+  --min-height: initial;
 
   position: absolute;
   display: block;
   width: 100%;
+  min-height: var(--min-height);
   background: black;
-  padding: 9px 11px;
+  padding: var(--padding);
   border-radius: var(--borderRadius);
   text-align: left;
   z-index: 200;
   overflow-y: scroll;
 
   &.primary {
+    --padding: 9px 11px;
     --borderRadius: 11px;
   }
 
   &.secondary {
+    --padding: 9px 11px;
     --borderRadius: 5px;
+  }
+
+  &.third {
+    --padding: 9px 11px;
+    --borderRadius: 11px;
+    --min-height: 27px;
   }
 
   &.normal {

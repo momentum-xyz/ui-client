@@ -38,7 +38,7 @@ const JourneyForm: FC<PropsInterface> = ({onCreate}) => {
           text="All set, let’s go! Create an NFT with your personal journey"
           align="left"
         />
-        <Button label="Create your journey" icon="planet" onClick={onCreate} />
+        <Button size="medium" label="Create your journey" icon="planet" onClick={onCreate} />
       </styled.Div>
     </Box>
   );

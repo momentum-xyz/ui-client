@@ -21,7 +21,7 @@ const JourneyBox: FC<PropsInterface> = ({onCreate}) => {
           text="You need a wallet to get started. If you already have one, click on 'Create your Odyssey'. Or read more about getting a wallet on discover.odyssey.org"
           align="left"
         />
-        <Button label="Create your Journey" wide onClick={onCreate} />
+        <Button size="medium" label="Create your Journey" wide onClick={onCreate} />
       </styled.Div>
     </Box>
   );

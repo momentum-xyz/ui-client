@@ -30,7 +30,7 @@ const ChoiceYourWallet: FC<PropsInterface> = ({onConnect}) => {
           text="No wallet? You can get one following the instructions here"
           align="left"
         />
-        <Button label="Connect your wallet" icon="wallet" onClick={onConnect} />
+        <Button size="medium" label="Connect your wallet" icon="wallet" onClick={onConnect} />
       </styled.Div>
     </Box>
   );

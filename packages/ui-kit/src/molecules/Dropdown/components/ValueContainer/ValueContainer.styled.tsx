@@ -34,6 +34,12 @@ export const Container = styled.div`
     --background: ${rgba(0, 1, 1, 0.2)};
   }
 
+  &.third {
+    --height: 32px;
+    --borderRadius: 10px;
+    --background: ${rgba(0, 0, 0, 0.8)};
+  }
+
   &.disabled {
     color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
     border-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};

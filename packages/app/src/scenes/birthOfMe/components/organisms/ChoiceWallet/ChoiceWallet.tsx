@@ -19,8 +19,13 @@ const ChoiceWallet: FC<PropsInterface> = ({onSelect}) => {
           <styled.Image src={polkadot} />
           <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
         </styled.ImageContainer>
-        <Dropdown placeholder="Select account" options={[]} onOptionSelect={() => {}} />
-        <Button label="Connect your wallet" icon="wallet" onClick={onSelect} />
+        <Dropdown
+          placeholder="Select account"
+          variant="third"
+          options={[]}
+          onOptionSelect={() => {}}
+        />
+        <Button size="medium" label="Connect your wallet" icon="wallet" onClick={onSelect} />
       </styled.Div>
     </Box>
   );
