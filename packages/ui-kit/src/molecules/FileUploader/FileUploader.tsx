@@ -9,6 +9,7 @@ import * as styled from './FileUploader.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   label: string;
+  buttonSize?: 'normal' | 'medium';
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
@@ -28,6 +29,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 const FileUploader: FC<PropsInterface> = ({
   label,
   dragActiveLabel,
+  buttonSize = 'normal',
   onFilesUpload,
   onError,
   theme,
@@ -71,7 +73,7 @@ const FileUploader: FC<PropsInterface> = ({
         <Button
           theme={theme}
           label={label}
-          size="normal"
+          size={buttonSize}
           onClick={onClick}
           className={buttonClassName}
         />

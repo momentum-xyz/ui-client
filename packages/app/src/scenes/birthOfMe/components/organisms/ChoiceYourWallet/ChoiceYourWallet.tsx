@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Button, Dropdown, Text} from '@momentum-xyz/ui-kit';
+import {Button, Dropdown, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
@@ -7,10 +7,15 @@ import polkadot from 'static/images/polkadot.svg';
 import * as styled from './ChoiceYourWallet.styled';
 
 interface PropsInterface {
+  addresses: OptionInterface[];
+  selectedAddress: string | null;
+  onSelectAddress: (address: string) => void;
   onConnect: () => void;
 }
 
-const ChoiceYourWallet: FC<PropsInterface> = ({onConnect}) => {
+const ChoiceYourWallet: FC<PropsInterface> = (props) => {
+  const {addresses, selectedAddress, onSelectAddress, onConnect} = props;
+
   return (
     <Box>
       <styled.Div>
@@ -24,13 +29,32 @@ const ChoiceYourWallet: FC<PropsInterface> = ({onConnect}) => {
           <styled.Image src={polkadot} />
           <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
         </styled.ImageContainer>
-        <Dropdown placeholder="Select account" options={[]} onOptionSelect={() => {}} />
-        <Text
-          size="m"
-          text="No wallet? You can get one following the instructions here"
-          align="left"
+
+        <Dropdown
+          placeholder="Select account"
+          variant="third"
+          valueType="wallet"
+          options={addresses}
+          onOptionSelect={(option) => onSelectAddress(option.value)}
         />
-        <Button label="Connect your wallet" icon="wallet" onClick={onConnect} />
+
+        <div>
+          <Text
+            size="m"
+            text="No wallet? You can get one following the instructions"
+            align="left"
+          />
+          <styled.Link target="_blank" href="#">
+            here
+          </styled.Link>
+        </div>
+        <Button
+          size="medium"
+          label="Connect your wallet"
+          icon="wallet"
+          disabled={!selectedAddress}
+          onClick={onConnect}
+        />
       </styled.Div>
     </Box>
   );

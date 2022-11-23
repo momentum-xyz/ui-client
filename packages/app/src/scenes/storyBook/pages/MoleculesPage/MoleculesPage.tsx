@@ -117,6 +117,18 @@ const MoleculesPage: FC = () => {
             ]}
           />
         </styled.SectionGrid3>
+        <styled.SectionGrid3>
+          <Dropdown
+            variant="third"
+            placeholder="Third select ..."
+            onOptionSelect={() => {}}
+            options={[
+              {label: 'option 1', value: 'option-1'},
+              {label: 'option 2', value: 'option-2'},
+              {label: 'option 3', value: 'option-3'}
+            ]}
+          />
+        </styled.SectionGrid3>
 
         <styled.Name>
           <Heading label="Component «ExpandableLayout»" type="h2" align="left" />

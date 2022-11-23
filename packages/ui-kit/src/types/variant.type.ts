@@ -1,6 +1,7 @@
 export type VariantType =
   | 'primary'
   | 'secondary'
+  | 'third'
   | 'danger'
   | 'inverted'
   | 'primary-background'

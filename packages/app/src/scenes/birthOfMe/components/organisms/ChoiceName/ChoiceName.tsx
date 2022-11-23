@@ -16,7 +16,7 @@ const ChoiceName: FC<PropsInterface> = ({onExplore}) => {
         <Text size="m" text="Or do you want look around. What should we call you?" align="left" />
         <styled.ImageContainer>
           <IconSvg name="profile" size="large" />
-          <InputDark placeholder="Choose your name" />
+          <InputDark variant="secondary" placeholder="Choose your name" />
         </styled.ImageContainer>
 
         <Text
@@ -24,7 +24,7 @@ const ChoiceName: FC<PropsInterface> = ({onExplore}) => {
           text="It's great that you want to experience the journeys of other travellers."
           align="left"
         />
-        <Button label="Explore Odyssey" icon="people" onClick={onExplore} />
+        <Button size="medium" label="Explore Odyssey" icon="astro" onClick={onExplore} />
       </styled.Div>
     </Box>
   );

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const InputContainer = styled.div`
-  --input-height: 26px;
-  --input-padding: 0 18px;
-  --input-radius: 12px;
+  --input-height: inherit;
+  --input-padding: inherit;
+  --input-radius: inherit;
 
   position: relative;
 
@@ -15,10 +15,30 @@ export const InputContainer = styled.div`
     border: 1px solid var(--black-100);
     border-radius: var(--input-radius);
     background-color: var(--black-100);
-    font-size: var(--font-size-xs);
     color: ${(props) => props.theme.text};
-    font-weight: 700;
     outline: none;
+
+    &.primary {
+      --input-padding: 0 18px;
+      --input-height: 26px;
+      --input-radius: 12px;
+
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+    }
+
+    &.secondary {
+      --input-padding: 0 10px;
+      --input-height: 32px;
+      --input-radius: 10px;
+
+      font-size: var(--font-size-xxs);
+      font-weight: 500;
+
+      &::placeholder {
+        text-transform: uppercase;
+      }
+    }
 
     &:hover,
     &:active {
