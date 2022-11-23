@@ -11,21 +11,33 @@ import * as styled from './StartAccountPage.styled';
 
 const StartAccountPage: FC = () => {
   const {birthOfMeStore} = useStore();
+  const {signInStore} = birthOfMeStore;
 
   const [isAccount, setIsAccount] = useState<boolean>(false);
 
   const history = useHistory();
 
   useEffect(() => {
-    birthOfMeStore.init();
-  }, [birthOfMeStore]);
+    signInStore.fetchAddresses();
+
+    return () => {
+      signInStore.resetModel();
+    };
+  }, [signInStore]);
 
   return (
     <styled.Container>
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          {!isAccount && <ChoiceYourWallet onConnect={() => setIsAccount(true)} />}
+          {!isAccount && (
+            <ChoiceYourWallet
+              addresses={signInStore.accountOptions}
+              selectedAddress={signInStore.selectedAddress}
+              onSelectAddress={signInStore.selectAddress}
+              onConnect={() => setIsAccount(true)}
+            />
+          )}
 
           {isAccount && (
             <>

@@ -11,12 +11,17 @@ import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
   const {birthOfMeStore} = useStore();
+  const {signInStore} = birthOfMeStore;
 
   const history = useHistory();
 
   useEffect(() => {
-    birthOfMeStore.init();
-  }, [birthOfMeStore]);
+    signInStore.fetchAddresses();
+
+    return () => {
+      signInStore.resetModel();
+    };
+  }, [signInStore]);
 
   return (
     <styled.Container>
@@ -29,7 +34,12 @@ const SignInPage: FC = () => {
         </styled.Boxes>
 
         <styled.Boxes>
-          <ChoiceWallet onSelect={() => history.push(ROUTES.explore)} />
+          <ChoiceWallet
+            addresses={signInStore.accountOptions}
+            selectedAddress={signInStore.selectedAddress}
+            onSelectAddress={signInStore.selectAddress}
+            onConnect={() => history.push(ROUTES.explore)}
+          />
           <SinusBox />
           <ChoiceName onExplore={() => history.push(ROUTES.explore)} />
         </styled.Boxes>

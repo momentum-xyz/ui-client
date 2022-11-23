@@ -3,12 +3,14 @@ import {ResetModel} from '@momentum-xyz/core';
 
 import {StartStore} from './StartStore';
 import {NftStore} from './NftStore';
+import {SignInStore} from './SignInStore';
 
 const RootBirthOfMeStore = types.compose(
   ResetModel,
   types
     .model('RootBirthOfMeStore', {
       nftStore: types.optional(NftStore, {}),
+      signInStore: types.optional(SignInStore, {}),
       startStore: types.optional(StartStore, {})
     })
     .actions((self) => ({

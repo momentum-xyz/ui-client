@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Button, Dropdown, Text} from '@momentum-xyz/ui-kit';
+import {Button, Dropdown, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
@@ -7,10 +7,15 @@ import polkadot from 'static/images/polkadot.svg';
 import * as styled from './ChoiceWallet.styled';
 
 interface PropsInterface {
-  onSelect: () => void;
+  addresses: OptionInterface[];
+  selectedAddress: string | null;
+  onSelectAddress: (address: string) => void;
+  onConnect: () => void;
 }
 
-const ChoiceWallet: FC<PropsInterface> = ({onSelect}) => {
+const ChoiceWallet: FC<PropsInterface> = (props) => {
+  const {addresses, selectedAddress, onSelectAddress, onConnect} = props;
+
   return (
     <Box>
       <styled.Div>
@@ -19,13 +24,22 @@ const ChoiceWallet: FC<PropsInterface> = ({onSelect}) => {
           <styled.Image src={polkadot} />
           <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
         </styled.ImageContainer>
+
         <Dropdown
           placeholder="Select account"
           variant="third"
-          options={[]}
-          onOptionSelect={() => {}}
+          valueType="wallet"
+          options={addresses}
+          onOptionSelect={(option) => onSelectAddress(option.value)}
         />
-        <Button size="medium" label="Connect your wallet" icon="wallet" onClick={onSelect} />
+
+        <Button
+          size="medium"
+          label="Connect your wallet"
+          icon="wallet"
+          disabled={!selectedAddress}
+          onClick={onConnect}
+        />
       </styled.Div>
     </Box>
   );
