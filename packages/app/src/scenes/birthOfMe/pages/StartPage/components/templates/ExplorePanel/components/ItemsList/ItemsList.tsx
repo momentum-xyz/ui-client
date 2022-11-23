@@ -7,7 +7,7 @@ import {SpaceListItem} from 'ui-kit';
 import * as styled from './ItemsList.styled';
 
 export interface ItemInterface {
-  id: string;
+  id: string | number;
   name: string;
   image: string;
 }
@@ -28,7 +28,7 @@ const ItemsList: FC<PropsInterface> = (props) => {
         <SpaceListItem
           key={id}
           // TODO: make reusable component
-          spaceInfo={{id, name, hasSubspaces: false}}
+          spaceInfo={{id: String(id), name, hasSubspaces: false}}
           isFavorite={false}
           onTeleportToSpace={onTeleport}
           onSelectSpace={onSelect}
