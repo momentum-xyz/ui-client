@@ -25,11 +25,16 @@ const ChoiceYourWallet: FC<PropsInterface> = ({onConnect}) => {
           <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
         </styled.ImageContainer>
         <Dropdown placeholder="Select account" options={[]} onOptionSelect={() => {}} />
-        <Text
-          size="m"
-          text="No wallet? You can get one following the instructions here"
-          align="left"
-        />
+        <div>
+          <Text
+            size="m"
+            text="No wallet? You can get one following the instructions"
+            align="left"
+          />
+          <styled.Link target="_blank" href="#">
+            here
+          </styled.Link>
+        </div>
         <Button size="medium" label="Connect your wallet" icon="wallet" onClick={onConnect} />
       </styled.Div>
     </Box>

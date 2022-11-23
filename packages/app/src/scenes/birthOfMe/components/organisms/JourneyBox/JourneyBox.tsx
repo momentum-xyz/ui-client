@@ -16,11 +16,17 @@ const JourneyBox: FC<PropsInterface> = ({onCreate}) => {
       <styled.Div>
         <Text size="m" text="Create your Journey" align="left" />
         <styled.Image src={image} />
-        <Text
-          size="m"
-          text="You need a wallet to get started. If you already have one, click on 'Create your Odyssey'. Or read more about getting a wallet on discover.odyssey.org"
-          align="left"
-        />
+        <div>
+          <Text
+            size="m"
+            text='You need a wallet to get started. If you already have one, click on "Create your Odyssey". Or read more about getting a wallet on '
+            align="left"
+          />
+          <styled.Link target="_blank" href="https://discover.odyssey.org">
+            discover.odyssey.org
+          </styled.Link>
+        </div>
+
         <Button size="medium" label="Create your Journey" wide onClick={onCreate} />
       </styled.Div>
     </Box>
