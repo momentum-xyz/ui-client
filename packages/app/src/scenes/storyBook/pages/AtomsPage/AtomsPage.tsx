@@ -219,9 +219,10 @@ const AtomsPage: FC = () => {
           <Input label="Input Name" placeholder="Input selected ..." selected />
           <Input label="Input Name" placeholder="Input disabled ..." disabled />
         </styled.SectionGrid3>
-        <styled.Section>
-          <InputDark placeholder="InputDark ..." />
-        </styled.Section>
+        <styled.SectionGrid3>
+          <InputDark placeholder="InputDark Primary ..." />
+          <InputDark variant="secondary" placeholder="InputDark secondary ..." />
+        </styled.SectionGrid3>
 
         <styled.Name>
           <Heading label="Component «Loader»" type="h2" align="left" />

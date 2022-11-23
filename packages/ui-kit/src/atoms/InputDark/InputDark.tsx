@@ -6,6 +6,7 @@ import {PropsWithThemeInterface} from '../../interfaces';
 import * as styled from './InputDark.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
+  variant?: 'primary' | 'secondary';
   isError?: boolean;
   errorMessage?: string;
   onChange?: (value: string) => void;
@@ -14,13 +15,13 @@ interface PropsInterface extends PropsWithThemeInterface {
 type PropsType = PropsInterface & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
 
 const InputDark: FC<PropsType> = (props) => {
-  const {onChange, isError, errorMessage, ...rest} = props;
+  const {variant = 'primary', onChange, isError, errorMessage, ...rest} = props;
   return (
     <styled.InputContainer data-testid="InputDark-test">
       <input
         {...rest}
         onChange={(event) => onChange?.(event.target.value)}
-        className={cn(isError && 'error')}
+        className={cn(variant, isError && 'error')}
       />
       {isError && <styled.Error>{errorMessage}</styled.Error>}
     </styled.InputContainer>
