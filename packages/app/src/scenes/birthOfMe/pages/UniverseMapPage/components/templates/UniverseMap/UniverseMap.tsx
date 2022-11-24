@@ -2,12 +2,12 @@ import {FC} from 'react';
 
 import astronaut from 'static/images/astronaut.svg';
 
-import {WorldInfoInterface} from '../../../../../stores/StartStore';
+import {NftItemInterface} from '../../../../../stores/NftStore/models';
 
 import * as styled from './UniverseMap.styled';
 
 interface PropsInterface {
-  items: WorldInfoInterface[];
+  items: NftItemInterface[];
 }
 
 export const UniverseMap: FC<PropsInterface> = ({items}) => {

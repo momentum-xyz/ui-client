@@ -1,8 +1,28 @@
 import styled from 'styled-components';
-import {ExpandableLayout} from '@momentum-xyz/ui-kit';
 
-export const CustomExpandableLayout = styled(ExpandableLayout)`
-  pointer-events: all;
+export const Heading = styled.div`
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const Message = styled.div`
+  padding: 0 20px;
+`;
+
+export const Number = styled.div`
+  font-size: 32px;
+  font-weight: 300;
+  color: ${(props) => props.theme.accent};
+`;
+
+export const Explore = styled.div`
+  padding: 18px 10px 8px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 `;
 
 export const Loader = styled.div`
@@ -15,13 +35,6 @@ export const Body = styled.div`
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-`;
-
-export const Heading = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 7px 10px;
-  gap: 5px;
 `;
 
 export const EmptyResult = styled.div`

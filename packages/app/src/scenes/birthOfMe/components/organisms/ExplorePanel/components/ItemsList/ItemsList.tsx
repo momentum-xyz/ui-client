@@ -23,7 +23,6 @@ const ItemsList: FC<PropsInterface> = (props) => {
   console.log('Render items list', items);
   return (
     <styled.Container data-testid="SpaceList-test">
-      <styled.CategoryName label="Worlds" type="h4" align="left" />
       {items.map(({id, name}) => (
         <SpaceListItem
           key={id}
