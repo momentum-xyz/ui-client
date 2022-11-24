@@ -11,7 +11,8 @@ export const ROUTES = {
   guestCallBack: '/oidc/guest/callback',
   birthOfMe: {
     signIn: '/birthOfMe/signIn',
-    startAccount: '/birthOfMe/startAccount'
+    startAccount: '/birthOfMe/startAccount',
+    birth: '/birthOfMe/birth'
   },
   welcome: '/welcome',
   signUpComplete: '/profile/signUpComplete',

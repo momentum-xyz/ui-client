@@ -5,3 +5,4 @@ export * from './ChoiceName';
 export * from './ChoiceYourWallet';
 export * from './CongratulationsBox';
 export * from './JourneyForm';
+export * from './BuildJourney';

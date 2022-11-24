@@ -43,7 +43,7 @@ const StartAccountPage: FC = () => {
             <>
               <CongratulationsBox />
               <SinusBox />
-              <JourneyForm onCreate={() => history.push(ROUTES.explore)} />
+              <JourneyForm onCreate={() => history.push(ROUTES.birthOfMe.birth)} />
             </>
           )}
         </styled.Boxes>
