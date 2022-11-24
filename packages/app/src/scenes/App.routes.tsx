@@ -190,7 +190,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   //   main: () => <Collaboration />
   // },
   {
-    path: ROUTES.object.base,
+    path: ROUTES.object.root,
     renderBackground: true,
     main: () => <Object />
   },

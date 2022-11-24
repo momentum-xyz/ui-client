@@ -12,5 +12,6 @@ export * from './magicLinkRepository';
 export * from './mediaRepository';
 export * from './emojiRepository';
 export * from './eventsRepository';
+export * from './objectRepository';
 export * from './assets3dRepository';
 export * from './assetsRepository';

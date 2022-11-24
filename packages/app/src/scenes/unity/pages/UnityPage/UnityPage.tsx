@@ -60,9 +60,8 @@ const UnityPage: FC = () => {
 
   useUnityEvent('ClickEventDashboard', (spaceId: string) => {
     history.push({
-      pathname: generatePath(ROUTES.object.base, {
-        objectId: spaceId,
-        assetType: AssetTypeEnum.PLUGIN
+      pathname: generatePath(ROUTES.object.root, {
+        objectId: spaceId
       })
     });
   });
