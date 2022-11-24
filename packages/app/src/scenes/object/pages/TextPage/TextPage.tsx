@@ -47,7 +47,6 @@ const TextPage: FC<PropsInterface> = ({content}) => {
               isWhite
               onClick={() => {
                 history.push(ROUTES.base);
-                console.info('????');
               }}
             />
           </styled.Button>
