@@ -103,7 +103,7 @@ export const api = {
   spaceInfoRepository,
   assetsRepository,
   objectRepository,
-  assets3dRepository,
+  assets3dRepository
 };
 
 /**
