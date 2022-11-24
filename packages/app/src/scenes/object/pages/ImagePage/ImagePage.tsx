@@ -4,19 +4,36 @@ import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
+import {ObjectInterface} from 'api';
 
 import * as styled from './ImagePage.styled';
 
-const ImagePage: FC = () => {
+interface PropsInterface {
+  imageSrc?: string;
+  content?: ObjectInterface;
+}
+
+const ImagePage: FC<PropsInterface> = ({imageSrc, content}) => {
   const history = useHistory();
+
+  if (!imageSrc) {
+    return null;
+  }
 
   return (
     <styled.Modal data-testid="ImagePage-test">
       <styled.Container>
-        <styled.ContentWrapper></styled.ContentWrapper>
+        <styled.ContentWrapper>
+          {imageSrc && <styled.ImageWrapper src={imageSrc} alt="" />}
+        </styled.ContentWrapper>
         <styled.HeaderElement className="left">
           <styled.Title>
-            <Text text="Image Name" transform="uppercase" weight="bold" size="xl" />
+            <Text
+              text={content?.title ? content?.title : 'Image'}
+              transform="uppercase"
+              weight="bold"
+              size="xl"
+            />
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="right">

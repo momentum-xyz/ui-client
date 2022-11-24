@@ -14,8 +14,8 @@ const Object: FC = () => {
   const rootStore = useStore();
   const {objectStore, mainStore} = rootStore;
   const {unityStore} = mainStore;
-  const {asset, assetType} = objectStore;
-
+  const {asset, tileStore} = objectStore;
+  const {assetType, content, imageSrc, youtubeUrl} = tileStore;
   const history = useHistory();
 
   const {objectId} = useParams<{objectId: string}>();
@@ -44,13 +44,13 @@ const Object: FC = () => {
           )}
         </Route>
         <Route path={generatePath(ROUTES.object.base, {objectId, assetType: 'text'})}>
-          <TextPage />
+          <TextPage content={content} />
         </Route>
         <Route path={generatePath(ROUTES.object.base, {objectId, assetType: 'image'})}>
-          <ImagePage />
+          {imageSrc && <ImagePage content={content} imageSrc={imageSrc} />}
         </Route>
         <Route path={generatePath(ROUTES.object.base, {objectId, assetType: 'video'})}>
-          <VideoPage />
+          {youtubeUrl && <VideoPage content={content} youtubeUrl={youtubeUrl} />}
         </Route>
       </Switch>
       <styled.BottomCenteredDock>

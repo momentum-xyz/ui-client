@@ -9,8 +9,9 @@ export const Container = styled.div`
   justify-content: flex-end;
   overflow: hidden;
   border-radius: 10px;
+  padding-top: 80px;
   width: 400px;
-  height: 620px;
+  max-height: 620px;
   cursor: pointer;
   background: ${(props) => props.theme.bg};
   &.notFlyAround {
@@ -40,8 +41,20 @@ export const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90%;
-  width: 90%;
+
+  width: auto;
+  height: auto;
+`;
+
+export const ImageWrapper = styled.img`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  padding: 5px;
+  border-radius: 10px;
+  width: auto;
+  height: auto;
 `;
 
 export const Title = styled.div`

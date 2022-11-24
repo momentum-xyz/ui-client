@@ -4,19 +4,33 @@ import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
+import {VideoPanel} from 'ui-kit';
+import {ObjectInterface} from 'api';
 
 import * as styled from './VideoPage.styled';
 
-const VideoPage: FC = () => {
+interface PropsInterface {
+  youtubeUrl?: string;
+  content?: ObjectInterface;
+}
+
+const VideoPage: FC<PropsInterface> = ({youtubeUrl, content}) => {
   const history = useHistory();
 
   return (
     <styled.Modal data-testid="VideoPage-test">
       <styled.Container>
-        <styled.ContentWrapper></styled.ContentWrapper>
+        <styled.ContentWrapper>
+          <VideoPanel youtubeHash={youtubeUrl} widgetMode />
+        </styled.ContentWrapper>
         <styled.HeaderElement className="left">
           <styled.Title>
-            <Text text="Video Name" transform="uppercase" weight="bold" size="xl" />
+            <Text
+              text={content?.title ? content?.title : 'Video'}
+              transform="uppercase"
+              weight="bold"
+              size="xl"
+            />
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="right">

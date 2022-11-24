@@ -2,21 +2,41 @@ import React, {FC} from 'react';
 import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
+import ReactLinkify from 'react-linkify';
 
 import {ROUTES} from 'core/constants';
+import {ObjectInterface} from 'api';
 
 import * as styled from './TextPage.styled';
 
-const TextPage: FC = () => {
+interface PropsInterface {
+  content?: ObjectInterface;
+}
+
+const TextPage: FC<PropsInterface> = ({content}) => {
   const history = useHistory();
 
   return (
     <styled.Modal data-testid="TextPage-test">
       <styled.Container>
-        <styled.ContentWrapper></styled.ContentWrapper>
+        <styled.ContentWrapper>
+          <ReactLinkify
+            componentDecorator={(decoratedHref: string, decoratedText: string, key: number) => (
+              <a href={decoratedHref} key={key} target="_blank" rel="noreferrer">
+                {decoratedText}
+              </a>
+            )}
+          >
+            <styled.TextTile>{content?.content}</styled.TextTile>
+          </ReactLinkify>
+        </styled.ContentWrapper>
         <styled.HeaderElement className="left">
           <styled.Title>
-            <Heading type="h2" label="Document Title" transform="uppercase" />
+            <Heading
+              type="h2"
+              label={content?.title ? content?.title : 'Document'}
+              transform="uppercase"
+            />
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
@@ -27,6 +47,7 @@ const TextPage: FC = () => {
               isWhite
               onClick={() => {
                 history.push(ROUTES.base);
+                console.info('????');
               }}
             />
           </styled.Button>

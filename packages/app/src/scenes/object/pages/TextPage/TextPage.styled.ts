@@ -1,22 +1,36 @@
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 export const Container = styled.div`
   display: flex;
   position: absolute;
-
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
   border-radius: 10px;
   width: 620px;
-  height: 700px;
+  padding-bottom: 40px;
+  max-height: 700px;
   cursor: pointer;
   background: ${(props) => props.theme.bg};
-  &.notFlyAround {
-    border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
-  }
   z-index: 200;
+`;
+
+export const TextTile = styled.div`
+  color: ${(props) => props.theme.text};
+  font-size: var(--font-size-s);
+  text-align: justify;
+  white-space: pre-line;
+  margin-top: 80px;
+
+  width: 80%;
+  height: 80%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  padding-top: 5px;
 `;
 
 export const HeaderElement = styled.div`
@@ -40,7 +54,8 @@ export const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90%;
+
+  height: 100%;
   width: 90%;
 `;
 

@@ -40,8 +40,10 @@ export const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90%;
-  width: 90%;
+  margin-top: 70px;
+
+  height: 100%;
+  width: 100%;
 `;
 
 export const Title = styled.div`

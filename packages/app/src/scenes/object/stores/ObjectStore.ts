@@ -7,23 +7,28 @@ import {
   Asset2DResponse,
   GetSpaceInfoResponse,
   PluginMetadataInterface,
-  PluginOptionsInterface
+  PluginOptionsInterface,
+  ObjectMetadataInterface,
+  ObjectOptionsInterface
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
-import {AssetTypeEnum, ObjectTypeEnum} from 'core/enums';
+import {ObjectTypeEnum} from 'core/enums';
+
+import {TileStore} from './TileStore';
 
 const ObjectStore = types
   .compose(
     ResetModel,
     types.model('ObjectStore', {
       name: types.maybe(types.string),
-      assetType: types.maybe(types.string),
 
       getSpaceInfoRequest: types.optional(RequestModel, {}),
       getAssetRequest: types.optional(RequestModel, {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
-      asset: types.maybe(PluginLoader)
+      asset: types.maybe(PluginLoader),
+
+      tileStore: types.optional(TileStore, {})
     })
   )
   .actions((self) => ({
@@ -37,23 +42,26 @@ const ObjectStore = types
         return;
       }
 
-      const assetResponse:
-        | Asset2DResponse<PluginMetadataInterface, PluginOptionsInterface>
-        | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2DAsset, {
-        assetId: spaceInfo.asset_2d_id
-      });
-
+      // TODO: should be check based on 2d asset id : spaceId --> spaceInfo.asset_2d_id
       switch (spaceId) {
         case ObjectTypeEnum.TEXT:
-          self.assetType = AssetTypeEnum.TEXT;
-          break;
         case ObjectTypeEnum.IMAGE:
-          self.assetType = AssetTypeEnum.IMAGE;
+        case ObjectTypeEnum.VIDEO: {
+          const objectResponse:
+            | Asset2DResponse<ObjectMetadataInterface, ObjectOptionsInterface>
+            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2DAsset, {
+            assetId: spaceInfo.asset_2d_id
+          });
+          self.tileStore.setObject(objectResponse, spaceId);
           break;
-        case ObjectTypeEnum.VIDEO:
-          self.assetType = AssetTypeEnum.VIDEO;
-          break;
+        }
         default: {
+          const assetResponse:
+            | Asset2DResponse<PluginMetadataInterface, PluginOptionsInterface>
+            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2DAsset, {
+            assetId: spaceInfo.asset_2d_id
+          });
+
           if (!assetResponse) {
             return;
           }
@@ -74,7 +82,7 @@ const ObjectStore = types
           });
 
           yield self.asset.loadPlugin();
-          self.assetType = 'plugin';
+          self.tileStore.assetType = 'plugin';
 
           break;
         }
