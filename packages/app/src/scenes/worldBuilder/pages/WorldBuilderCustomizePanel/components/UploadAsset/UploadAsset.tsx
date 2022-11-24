@@ -20,7 +20,8 @@ const MAX_ASSET_SIZE = 50_100_000;
 const UploadAsset: FC = () => {
   const {worldBuilderStore} = useStore();
   const {worldBuilderAssets3dStore} = worldBuilderStore;
-  const {uploadAsset, isUploadPending, uploadProgress} = worldBuilderAssets3dStore;
+  const {uploadAsset, isUploadPending, uploadProgress, resetUploadProgress} =
+    worldBuilderAssets3dStore;
 
   const theme = useTheme();
 
@@ -29,7 +30,7 @@ const UploadAsset: FC = () => {
   const {
     control,
     formState: {errors},
-    reset,
+    reset: resetForm,
     handleSubmit,
     setError,
     clearErrors
@@ -61,7 +62,8 @@ const UploadAsset: FC = () => {
       />,
       TOAST_COMMON_OPTIONS
     );
-    reset();
+    resetForm();
+    resetUploadProgress();
   };
 
   return (
