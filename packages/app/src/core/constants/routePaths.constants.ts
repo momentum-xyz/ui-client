@@ -65,6 +65,7 @@ export const ROUTES = {
     template: '/createWorld/template',
     generate: '/createWorld/generate',
     builder: '/worldBuilder',
+    builderUploadAsset: '/worldBuilder/upload',
     builderSkybox: '/worldBuilder/skybox'
   }
 };
