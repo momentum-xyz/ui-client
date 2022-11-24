@@ -1,9 +1,9 @@
 import {flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {StartStore} from './StartStore';
 import {NftStore} from './NftStore';
 import {SignInStore} from './SignInStore';
+import {ExploreStore} from './ExploreStore';
 
 const RootBirthOfMeStore = types.compose(
   ResetModel,
@@ -11,7 +11,7 @@ const RootBirthOfMeStore = types.compose(
     .model('RootBirthOfMeStore', {
       nftStore: types.optional(NftStore, {}),
       signInStore: types.optional(SignInStore, {}),
-      startStore: types.optional(StartStore, {})
+      exploreStore: types.optional(ExploreStore, {})
     })
     .actions((self) => ({
       init: flow(function* () {
