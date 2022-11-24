@@ -3,8 +3,8 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 
-import * as styled from './UniverseMapPage.styled';
-import {UniverseMap} from './components';
+import {UniverseMap3D} from './components';
+//import * as styled from './UniverseMapPage.styled';
 
 const UniverseMapPage: FC = () => {
   const {birthOfMeStore} = useStore();
@@ -23,12 +23,18 @@ const UniverseMapPage: FC = () => {
     controllerAccount
   });
 
-  return (
+  /*return (
     <styled.WorldExplorerPageContainer>
       <styled.UniverseContainer>
-        <UniverseMap items={nftItems} />
+        <UniverseMap3D items={nftItems} />
       </styled.UniverseContainer>
     </styled.WorldExplorerPageContainer>
+  );*/
+
+  return (
+    <>
+      <UniverseMap3D items={nftItems} />
+    </>
   );
 };
 
