@@ -2,7 +2,7 @@ import {FC} from 'react';
 
 import astronaut from 'static/images/astronaut.svg';
 
-import {NftItemInterface} from '../../../../../stores/NftStore/models';
+import {NftItemInterface} from '../../../../../../birthOfMe/stores/NftStore/models';
 
 import * as styled from './UniverseMap.styled';
 

@@ -3,7 +3,7 @@ import React, {lazy} from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-const UniverseMapPage = lazy(() => import('./birthOfMe/pages/UniverseMapPage/UniverseMapPage'));
+const Map3dPage = lazy(() => import('./map3d/pages/UniverseMapPage/Map3dPage'));
 const Object = lazy(() => import('./object/Object'));
 const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
 const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
@@ -63,7 +63,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.birthOfMe.signIn,
     main: () => (
       <>
-        <UniverseMapPage />
+        <Map3dPage />
         <SignInPage />
       </>
     )
@@ -72,7 +72,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.birthOfMe.startAccount,
     main: () => (
       <>
-        <UniverseMapPage />
+        <Map3dPage />
         <StartAccountPage />
       </>
     )
@@ -81,7 +81,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.birthOfMe.birth,
     main: () => (
       <>
-        <UniverseMapPage />
+        <Map3dPage />
         <BirthOfMePage />
       </>
     )
@@ -90,7 +90,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.birthOfMe.explore,
     main: () => (
       <>
-        <UniverseMapPage />
+        <Map3dPage />
         <ExplorePage />
       </>
     )
