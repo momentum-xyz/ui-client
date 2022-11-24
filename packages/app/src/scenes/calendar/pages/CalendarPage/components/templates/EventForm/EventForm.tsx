@@ -65,7 +65,7 @@ const EventForm: FC = () => {
         <ToastContent
           headerIconName="alert"
           title={t('titles.alert')}
-          text="EventItem created successfully"
+          text={t('eventForm.createSuccess')}
           showCloseButton
         />
       );
@@ -76,7 +76,7 @@ const EventForm: FC = () => {
           isDanger
           headerIconName="alert"
           title={t('titles.alert')}
-          text="There was a problem creating the event"
+          text={t('eventForm.createFailed')}
           showCloseButton
         />
       );

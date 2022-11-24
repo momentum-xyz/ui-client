@@ -20,7 +20,7 @@ const EventItem: FC<PropsInterface> = ({event, user, onEdit, onRemove, onWeblink
     <styled.Container data-testid="EventItem-test">
       <styled.Row>
         <styled.ImageContainer>
-          {event.data ? (
+          {event.data?.image ? (
             <img alt={event.data.image ?? ''} src={event.imageSrc} />
           ) : (
             <img alt="placeholder" src={placeholder} />
