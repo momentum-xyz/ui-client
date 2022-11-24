@@ -11,7 +11,6 @@ import {
   ObjectOptionsInterface
 } from 'api';
 import {appVariables} from 'api/constants';
-import {youtubeVideoPath} from 'core/utils';
 
 const TileStore = types
   .compose(
@@ -19,9 +18,7 @@ const TileStore = types
     types.model('VideoStore', {
       assetType: types.maybe(types.string),
       request: types.optional(RequestModel, {}),
-      content: types.maybe(types.frozen<ObjectInterface>()),
-      render_hash: types.maybe(types.string),
-      youtube_url: types.maybe(types.string)
+      content: types.maybe(types.frozen<ObjectInterface>())
     })
   )
   .actions((self) => ({
@@ -73,9 +70,6 @@ const TileStore = types
         return null;
       }
       return `${appVariables.RENDER_SERVICE_URL}/get/${self.content?.render_hash}`;
-    },
-    get youtubeUrl(): string | null {
-      return youtubeVideoPath(self.content?.youtube_url ?? '', undefined);
     }
   }));
 

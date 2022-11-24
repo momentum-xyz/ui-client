@@ -1,27 +1,34 @@
 import React, {FC} from 'react';
-import {SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {VideoPanel} from 'ui-kit';
 import {ObjectInterface} from 'api';
+import {youtubeVideoPath} from 'core/utils';
 
 import * as styled from './VideoPage.styled';
 
 interface PropsInterface {
-  youtubeUrl?: string;
   content?: ObjectInterface;
 }
 
-const VideoPage: FC<PropsInterface> = ({youtubeUrl, content}) => {
+const VideoPage: FC<PropsInterface> = ({content}) => {
   const history = useHistory();
 
   return (
     <styled.Modal data-testid="VideoPage-test">
       <styled.Container>
         <styled.ContentWrapper>
-          <VideoPanel youtubeHash={youtubeUrl} widgetMode />
+          {content?.youtube_url ? (
+            <VideoPanel
+              youtubeHash={youtubeVideoPath(content?.youtube_url ?? '', undefined)}
+              widgetMode
+            />
+          ) : (
+            <Loader />
+          )}
         </styled.ContentWrapper>
         <styled.HeaderElement className="left">
           <styled.Title>

@@ -1,13 +1,12 @@
 import React, {FC, useEffect} from 'react';
-import {generatePath, Route, Switch, useHistory, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {EmojiAnimationDock} from 'scenes/collaboration/components';
-import {PosBusEventEnum} from 'core/enums';
-import {ROUTES} from 'core/constants';
+import {AssetTypeEnum, PosBusEventEnum} from 'core/enums';
 
-import {ObjectPluginPage, TextPage, VideoPage, ImagePage} from './pages';
+import {ImagePage, ObjectPluginPage, TextPage, VideoPage} from './pages';
 import * as styled from './Object.styled';
 
 const Object: FC = () => {
@@ -15,8 +14,7 @@ const Object: FC = () => {
   const {objectStore, mainStore} = rootStore;
   const {unityStore} = mainStore;
   const {asset, tileStore} = objectStore;
-  const {assetType, content, imageSrc, youtubeUrl} = tileStore;
-  const history = useHistory();
+  const {assetType, imageSrc, content} = tileStore;
 
   const {objectId} = useParams<{objectId: string}>();
 
@@ -28,31 +26,32 @@ const Object: FC = () => {
       unityStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId, 0, '');
       objectStore.resetModel();
     };
-  }, [history, objectId, objectStore, rootStore, unityStore]);
+  }, [objectId, objectStore, rootStore, unityStore]);
 
-  useEffect(() => {
-    if (assetType) {
-      history.push(generatePath(ROUTES.object.base, {objectId, assetType}));
+  const renderObject = (assetType?: string) => {
+    switch (assetType) {
+      case AssetTypeEnum.TEXT:
+        return <TextPage content={content} />;
+      case AssetTypeEnum.IMAGE:
+        return <>{imageSrc && <ImagePage content={content} imageSrc={imageSrc} />}</>;
+      case AssetTypeEnum.VIDEO:
+        return <VideoPage content={content} />;
+      case AssetTypeEnum.PLUGIN:
+        return (
+          <>
+            {asset?.plugin && (
+              <ObjectPluginPage plugin={asset.plugin} pluginLoader={asset} objectId={objectId} />
+            )}
+          </>
+        );
+      default:
+        return null;
     }
-  }, [assetType, history, objectId]);
+  };
+
   return (
     <styled.Container>
-      <Switch>
-        <Route path={generatePath(ROUTES.object.base, {objectId, assetType: 'plugin'})}>
-          {asset?.plugin && (
-            <ObjectPluginPage plugin={asset.plugin} pluginLoader={asset} objectId={objectId} />
-          )}
-        </Route>
-        <Route path={generatePath(ROUTES.object.base, {objectId, assetType: 'text'})}>
-          <TextPage content={content} />
-        </Route>
-        <Route path={generatePath(ROUTES.object.base, {objectId, assetType: 'image'})}>
-          {imageSrc && <ImagePage content={content} imageSrc={imageSrc} />}
-        </Route>
-        <Route path={generatePath(ROUTES.object.base, {objectId, assetType: 'video'})}>
-          {youtubeUrl && <VideoPage content={content} youtubeUrl={youtubeUrl} />}
-        </Route>
-      </Switch>
+      {renderObject(assetType)}
       <styled.BottomCenteredDock>
         <EmojiAnimationDock />
       </styled.BottomCenteredDock>
