@@ -17,7 +17,7 @@ const SystemWideError: FC<PropsInterface> = ({theme, text, showRefreshButton}) =
   const texts = useMemo(() => (Array.isArray(text) ? text : [text]), [text]);
 
   const handleRefresh = () => {
-    window.location.href = '/';
+    window.location.reload();
   };
 
   return (

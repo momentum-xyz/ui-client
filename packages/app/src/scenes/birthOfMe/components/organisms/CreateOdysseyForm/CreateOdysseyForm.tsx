@@ -3,18 +3,18 @@ import {Button, FileUploader, IconSvg, InputDark, Text} from '@momentum-xyz/ui-k
 
 import {Box} from 'ui-kit';
 
-import * as styled from './JourneyForm.styled';
+import * as styled from './CreateOdysseyForm.styled';
 
 interface PropsInterface {
   onCreate: () => void;
 }
 
-const JourneyForm: FC<PropsInterface> = ({onCreate}) => {
+const CreateOdysseyForm: FC<PropsInterface> = ({onCreate}) => {
   return (
     <Box>
       <styled.Div>
         <Text size="m" text="2. Mint your Odyssey" align="left" />
-        <Text size="m" text="Choose an image for your journey" align="left" />
+        <Text size="m" text="Choose an image for your odyssey" align="left" />
         <styled.Avatar>
           <styled.AvatarImageUpload>
             <styled.AvatarImageInner>
@@ -40,13 +40,13 @@ const JourneyForm: FC<PropsInterface> = ({onCreate}) => {
 
         <Text
           size="m"
-          text="All set, let’s go! Create an NFT with your personal journey"
+          text="All set, let’s go! Create an NFT with your personal odyssey"
           align="left"
         />
-        <Button size="medium" label="Create your journey" icon="planet" onClick={onCreate} />
+        <Button size="medium" label="Create your Odyssey" icon="planet" onClick={onCreate} />
       </styled.Div>
     </Box>
   );
 };
 
-export default JourneyForm;
+export default CreateOdysseyForm;

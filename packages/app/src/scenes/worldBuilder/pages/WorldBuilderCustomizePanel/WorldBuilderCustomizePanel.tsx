@@ -3,9 +3,9 @@ import {observer} from 'mobx-react-lite';
 // import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {
-  Dialog
-  // Navigation,
-  // NavigationTabInterface
+  Dialog,
+  Navigation,
+  NavigationTabInterface
   // Loader
 } from '@momentum-xyz/ui-kit';
 import {useHistory} from 'react-router-dom';
@@ -14,15 +14,19 @@ import {useHistory} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {createSwitchByConfig} from 'core/utils';
 
-// import * as styled from './WorldBuilderCustomizePanel.styled';
+import * as styled from './WorldBuilderCustomizePanel.styled';
 import {WORLD_BUILDER_ROUTES} from './WorldBuilderCustomizePanel.routes';
 
-// const tabs: NavigationTabInterface[] = [
-//   {
-//     path: ROUTES.worldBuilder.builderSkybox,
-//     iconName: 'planet'
-//   }
-// ];
+const tabs: NavigationTabInterface[] = [
+  {
+    path: ROUTES.worldBuilder.builderSkybox,
+    iconName: 'planet'
+  },
+  {
+    path: ROUTES.worldBuilder.builderUploadAsset,
+    iconName: 'add'
+  }
+];
 
 const WorldBuilderCustomizePanel: FC = () => {
   const history = useHistory();
@@ -46,10 +50,10 @@ const WorldBuilderCustomizePanel: FC = () => {
       isBodyExtendingToEdges
       onClose={() => history.push(ROUTES.base)}
     >
-      {/* <styled.Container>
+      <styled.Container>
         <Navigation tabs={tabs} />
-      </styled.Container> */}
-      {createSwitchByConfig(WORLD_BUILDER_ROUTES, WORLD_BUILDER_ROUTES[0].path)}
+        {createSwitchByConfig(WORLD_BUILDER_ROUTES, WORLD_BUILDER_ROUTES[0].path)}
+      </styled.Container>
     </Dialog>
   );
 };

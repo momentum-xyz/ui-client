@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
-import {JourneyBox, TravellerBox, ChoiceWallet, ChoiceName} from 'scenes/birthOfMe/components';
+import {CreateOdyssey, TravellerBox, ChoiceWallet, ChoiceName} from 'scenes/birthOfMe/components';
 
 import * as styled from './SignInPage.styled';
 
@@ -30,7 +30,7 @@ const SignInPage: FC = () => {
           <SinusBox />
           <TravellerBox />
           <SinusBox />
-          <JourneyBox onCreate={() => history.push(ROUTES.birthOfMe.startAccount)} />
+          <CreateOdyssey onCreate={() => history.push(ROUTES.birthOfMe.startAccount)} />
         </styled.Boxes>
 
         <styled.Boxes>
@@ -38,10 +38,10 @@ const SignInPage: FC = () => {
             addresses={signInStore.accountOptions}
             selectedAddress={signInStore.selectedAddress}
             onSelectAddress={signInStore.selectAddress}
-            onConnect={() => history.push(ROUTES.explore)}
+            onConnect={() => history.push(ROUTES.birthOfMe.explore)}
           />
           <SinusBox />
-          <ChoiceName onExplore={() => history.push(ROUTES.explore)} />
+          <ChoiceName onExplore={() => history.push(ROUTES.birthOfMe.explore)} />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>

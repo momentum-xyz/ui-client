@@ -11,11 +11,12 @@ export const ROUTES = {
   guestCallBack: '/oidc/guest/callback',
   birthOfMe: {
     signIn: '/birthOfMe/signIn',
-    startAccount: '/birthOfMe/startAccount'
+    startAccount: '/birthOfMe/startAccount',
+    birth: '/birthOfMe/birth',
+    explore: '/birthOfMe/explore'
   },
   welcome: '/welcome',
   signUpComplete: '/profile/signUpComplete',
-  explore: '/explore',
   system: {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',
@@ -65,6 +66,7 @@ export const ROUTES = {
     template: '/createWorld/template',
     generate: '/createWorld/generate',
     builder: '/worldBuilder',
+    builderUploadAsset: '/worldBuilder/upload',
     builderSkybox: '/worldBuilder/skybox'
   }
 };

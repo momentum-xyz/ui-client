@@ -17,6 +17,7 @@ import * as eventsRepository from './repositories/eventsRepository';
 import * as spaceInfoRepository from './repositories/spaceInfoRepository';
 import * as assetsRepository from './repositories/assetsRepository';
 import * as objectRepository from './repositories/objectRepository';
+import * as assets3dRepository from './repositories/assets3dRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
@@ -101,7 +102,8 @@ export const api = {
   eventsRepository,
   spaceInfoRepository,
   assetsRepository,
-  objectRepository
+  objectRepository,
+  assets3dRepository,
 };
 
 /**
@@ -127,6 +129,7 @@ export * from './repositories/mediaRepository/mediaRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/eventsRepository/eventsRepository.api.types';
 export * from './repositories/assetsRepository/assetsRepository.api.types';
+export * from './repositories/assets3dRepository/assets3dRepository.api.types';
 export * from './repositories/spaceInfoRepository/spaceInfoRepository.api.types';
 export * from './repositories/objectRepository/objectRepository.api.types';
 
