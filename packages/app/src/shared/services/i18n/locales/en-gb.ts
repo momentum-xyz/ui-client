@@ -506,6 +506,15 @@ export const enGb = {
       changeLabel: 'Change Image',
       dragActiveLabel: 'Drop the files here...'
     },
+    assetsUploader: {
+      uploadLabel: 'Upload .glb file',
+      dragActiveLabel: 'Drop the files here...',
+      spaceName: 'Space Name',
+      successMessage: 'Asset successfully uploaded',
+      errorUnsupportedFile: 'Only .glb files are supported',
+      errorTooLargeFile: 'Max file size is 50.1MB',
+      errorSave: 'Error uploading asset'
+    },
     eventList: {
       noGatherings: 'There are no gatherings scheduled for this space.',
       eventItem: {
