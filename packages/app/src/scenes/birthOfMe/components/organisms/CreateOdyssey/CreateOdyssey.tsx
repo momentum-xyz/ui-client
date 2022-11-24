@@ -4,17 +4,17 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 import {Box} from 'ui-kit';
 import image from 'static/images/world.svg';
 
-import * as styled from './JourneyBox.styled';
+import * as styled from './CreateOdyssey.styled';
 
 interface PropsInterface {
   onCreate: () => void;
 }
 
-const JourneyBox: FC<PropsInterface> = ({onCreate}) => {
+const CreateOdyssey: FC<PropsInterface> = ({onCreate}) => {
   return (
     <Box>
       <styled.Div>
-        <Text size="m" text="Create your Journey" align="left" />
+        <Text size="m" text="Create your Odyssey" align="left" />
         <styled.Image src={image} />
         <div>
           <Text
@@ -27,10 +27,10 @@ const JourneyBox: FC<PropsInterface> = ({onCreate}) => {
           </styled.Link>
         </div>
 
-        <Button size="medium" label="Create your Journey" wide onClick={onCreate} />
+        <Button size="medium" label="Create your Odyssey" wide onClick={onCreate} />
       </styled.Div>
     </Box>
   );
 };
 
-export default JourneyBox;
+export default CreateOdyssey;

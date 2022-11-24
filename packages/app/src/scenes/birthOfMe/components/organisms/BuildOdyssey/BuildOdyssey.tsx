@@ -3,13 +3,13 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
 
-import * as styled from './BuildJourney.styled';
+import * as styled from './BuildOdyssey.styled';
 
 interface PropsInterface {
   onBuild: () => void;
 }
 
-const BuildJourney: FC<PropsInterface> = ({onBuild}) => {
+const BuildOdyssey: FC<PropsInterface> = ({onBuild}) => {
   return (
     <Box>
       <styled.Div>
@@ -22,10 +22,10 @@ const BuildJourney: FC<PropsInterface> = ({onBuild}) => {
         />
         <Text size="m" text="Enter Polkajor and start the journey" align="left" />
 
-        <Button size="medium" label="Build your Journey" onClick={onBuild} />
+        <Button size="medium" label="Build your Odyssey" onClick={onBuild} />
       </styled.Div>
     </Box>
   );
 };
 
-export default BuildJourney;
+export default BuildOdyssey;

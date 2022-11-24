@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
-import {JourneyForm, ChoiceYourWallet, CongratulationsBox} from 'scenes/birthOfMe/components';
+import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from 'scenes/birthOfMe/components';
 
 import * as styled from './StartAccountPage.styled';
 
@@ -43,7 +43,7 @@ const StartAccountPage: FC = () => {
             <>
               <CongratulationsBox />
               <SinusBox />
-              <JourneyForm onCreate={() => history.push(ROUTES.birthOfMe.birth)} />
+              <CreateOdysseyForm onCreate={() => history.push(ROUTES.birthOfMe.birth)} />
             </>
           )}
         </styled.Boxes>
