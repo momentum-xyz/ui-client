@@ -559,7 +559,9 @@ export const enGb = {
       startDateTimePlaceholder: 'Set Start Date and Time',
       endDateTimeLabel: 'End Date and Time',
       endDateTimePlaceholder: 'Set End Date and Time',
-      errorMessage: 'This field is required'
+      errorMessage: 'This field is required',
+      createSuccess: 'Event created successfully',
+      createFailed: 'There was a problem creating the event'
     },
     tokenRules: {
       tokenForm: {
