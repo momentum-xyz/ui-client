@@ -12,11 +12,11 @@ export const ROUTES = {
   birthOfMe: {
     signIn: '/birthOfMe/signIn',
     startAccount: '/birthOfMe/startAccount',
-    birth: '/birthOfMe/birth'
+    birth: '/birthOfMe/birth',
+    explore: '/birthOfMe/explore'
   },
   welcome: '/welcome',
   signUpComplete: '/profile/signUpComplete',
-  explore: '/explore',
   system: {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',

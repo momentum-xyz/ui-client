@@ -38,10 +38,10 @@ const SignInPage: FC = () => {
             addresses={signInStore.accountOptions}
             selectedAddress={signInStore.selectedAddress}
             onSelectAddress={signInStore.selectAddress}
-            onConnect={() => history.push(ROUTES.explore)}
+            onConnect={() => history.push(ROUTES.birthOfMe.explore)}
           />
           <SinusBox />
-          <ChoiceName onExplore={() => history.push(ROUTES.explore)} />
+          <ChoiceName onExplore={() => history.push(ROUTES.birthOfMe.explore)} />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>

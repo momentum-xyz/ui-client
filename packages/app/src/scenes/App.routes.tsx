@@ -8,7 +8,7 @@ const Object = lazy(() => import('./object/Object'));
 const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
 const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
 const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
-const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
+const ExplorePage = lazy(() => import('./birthOfMe/pages/ExplorePage/ExplorePage'));
 const LoginPage = lazy(() => import('./auth/pages/LoginPage/LoginPage'));
 const WorldBuilderLoginPage = lazy(
   () => import('./auth/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
@@ -87,7 +87,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     )
   },
   {
-    path: ROUTES.explore,
+    path: ROUTES.birthOfMe.explore,
     main: () => (
       <>
         <UniverseMapPage />

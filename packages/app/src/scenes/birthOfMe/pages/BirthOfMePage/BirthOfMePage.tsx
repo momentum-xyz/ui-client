@@ -4,8 +4,8 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SinusBox} from 'ui-kit';
-import {BuildJourney} from 'scenes/birthOfMe/components';
+import {Footer, SinusBox} from 'ui-kit';
+import {BuildJourney, ExplorePanel} from 'scenes/birthOfMe/components';
 
 import * as styled from './BirthOfMePage.styled';
 
@@ -28,9 +28,14 @@ const BirthOfMePage: FC = () => {
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          <BuildJourney onBuild={() => history.push(ROUTES.explore)} />
+          <BuildJourney onBuild={() => history.push(ROUTES.birthOfMe.explore)} />
+        </styled.Boxes>
+
+        <styled.Boxes>
+          <ExplorePanel />
         </styled.Boxes>
       </styled.Wrapper>
+      <Footer />
     </styled.Container>
   );
 };
