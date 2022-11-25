@@ -7,3 +7,4 @@ export * from './CongratulationsBox';
 export * from './CreateOdysseyForm';
 export * from './BuildOdyssey';
 export * from './ExplorePanel';
+export * from './SelectedOdyssey';

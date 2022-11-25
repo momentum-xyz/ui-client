@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Heading = styled.div`
   padding: 10px 20px;
@@ -30,11 +31,28 @@ export const Loader = styled.div`
   padding: 0 0 15px 0px;
 `;
 
+export const Search = styled.div`
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+
+  &.isSearch {
+    padding: 0;
+    border-bottom: none;
+  }
+`;
+
 export const Body = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+  height: calc(100% - 180px);
+  overflow: auto;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const EmptyResult = styled.div`

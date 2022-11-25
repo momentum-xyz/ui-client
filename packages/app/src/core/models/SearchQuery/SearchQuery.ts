@@ -1,4 +1,4 @@
-import {types} from 'mobx-state-tree';
+import {Instance, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum-xyz/ui-kit';
 
@@ -23,5 +23,7 @@ const SearchQuery = types
       return self.request.isPending;
     }
   }));
+
+export type SearchQueryModelModelType = Instance<typeof SearchQuery>;
 
 export {SearchQuery};
