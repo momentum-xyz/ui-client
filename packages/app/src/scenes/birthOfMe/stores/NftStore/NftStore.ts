@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {ApiPromise} from '@polkadot/api';
+import {ApiPromise, Keyring} from '@polkadot/api';
 import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@polkadot/util';
+import {web3FromAddress} from '@polkadot/extension-dapp';
 import {cloneDeep} from 'lodash-es';
 import {
   DeriveBalancesAll,
@@ -25,6 +26,10 @@ import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
 import {NftItem, NftItemInterface} from './models';
+
+const {REACT_APP_NFT_ADMIN_ADDRESS = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'} =
+  process.env;
+const NFT_MINT_FEE = 100000;
 
 const NftStore = types
   .compose(
@@ -430,6 +435,66 @@ const NftStore = types
       console.log('NftItems', nftItems);
 
       self.setNftItems(nftItems);
+    }),
+    handleMissingAccount: flow(function* () {
+      // TODO - we have a wallet and NFT but DB account is missing
+      // We need to request a challenge from BE and sign it and trigger account linking
+      // use useEager logic here
+    }),
+    mintNft: flow(function* (address: string) {
+      console.log('Mint NFT', address);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+
+      console.log('Addresses', Array(self.addresses));
+      // there's alternative way for this in useEager
+      const keyring = new Keyring({type: 'sr25519'});
+      const account = keyring.addFromAddress(address);
+      console.log('Account', account, account.address);
+
+      try {
+        const injector = yield web3FromAddress(account.address);
+
+        console.log('Create transfer funds for minting NFT', {
+          REACT_APP_NFT_ADMIN_ADDRESS,
+          NFT_MINT_FEE
+        });
+        const transfer = self.channel.tx.balances.transfer(
+          REACT_APP_NFT_ADMIN_ADDRESS,
+          NFT_MINT_FEE
+        );
+        console.log('Sign and send', transfer);
+
+        const blockHash = yield new Promise((resolve, reject) => {
+          transfer
+            .signAndSend(
+              account.address,
+              {
+                signer: injector.signer
+              },
+              ({status}) => {
+                if (status.isInBlock) {
+                  const blockHash = status.asInBlock.toString();
+                  console.log(`Completed at block hash #${blockHash}`);
+                  resolve(blockHash);
+                } else {
+                  console.log(`Current transaction status: ${status.type}`);
+                }
+              }
+            )
+            .catch(reject);
+        });
+
+        // TODO
+        console.log(
+          'TODO use blockHash',
+          blockHash,
+          'to inform the BE about the transaction and ask to mint the NFT'
+        );
+      } catch (err) {
+        console.log('err', err);
+      }
     })
     // getMinNominatorBond: flow(function* () {
     //   const minNominatorBond = self.channel
