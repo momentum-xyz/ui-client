@@ -1,2 +1,2 @@
 export * from './NewsFeed';
-export * from './ItemsList';
+export * from './OdysseyList';

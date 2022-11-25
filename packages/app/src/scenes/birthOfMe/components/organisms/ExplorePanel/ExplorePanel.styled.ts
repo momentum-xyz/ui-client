@@ -34,6 +34,11 @@ export const Loader = styled.div`
 export const Search = styled.div`
   padding: 0 0 8px 0;
   border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+
+  &.isSearch {
+    padding: 0;
+    border-bottom: none;
+  }
 `;
 
 export const Body = styled.div`

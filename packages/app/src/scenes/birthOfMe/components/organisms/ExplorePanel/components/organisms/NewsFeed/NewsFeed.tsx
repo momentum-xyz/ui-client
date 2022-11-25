@@ -59,7 +59,7 @@ const NewsFeed: FC<PropsInterface> = (props) => {
                         <Button
                           size="small"
                           label="Connect"
-                          icon="fly-to"
+                          icon="hierarchy"
                           onClick={() => onConnect(item.id.toString())}
                         />
                         <Button

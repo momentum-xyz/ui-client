@@ -26,6 +26,9 @@ const ExplorePage: FC = () => {
           <ExplorePanel
             odysseyCount={exploreStore.odysseyCount}
             newsFeed={exploreStore.newsFeed}
+            searchQuery={exploreStore.searchQuery}
+            odysseyList={exploreStore.odysseyList}
+            onSearch={exploreStore.searchOdysseys}
             onTeleport={(id) => alert(`Teleport to ${id}`)}
             onConnect={(id) => alert(`Connect to ${id}`)}
           />

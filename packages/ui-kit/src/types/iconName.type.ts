@@ -42,6 +42,7 @@ export type IconNameType =
   | 'group'
   | 'groupChat'
   | 'hand'
+  | 'hierarchy'
   | 'home'
   | 'info'
   | 'invite-user'

@@ -1,3 +1,5 @@
+import {NftItemInterface} from 'scenes/birthOfMe/stores/NftStore/models';
+
 import {OdysseyFeedInterface} from './ExploreStore';
 
 export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
@@ -189,5 +191,50 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
       date: '2022-11-25T08:05:48.447Z',
       type: 'docked'
     }
+  }
+];
+
+export const ODYSSEY_LIST: NftItemInterface[] = [
+  {
+    id: 1,
+    collectionId: 1,
+    name: 'Jeroenski',
+    description: '',
+    image: 'https://picsum.photos/100'
+  },
+  {
+    id: 2,
+    collectionId: 1,
+    name: 'Tsani',
+    description: '',
+    image: 'https://picsum.photos/100'
+  },
+  {
+    id: 3,
+    collectionId: 1,
+    name: 'Jorrit',
+    description: '',
+    image: 'https://picsum.photos/100'
+  },
+  {
+    id: 4,
+    collectionId: 1,
+    name: 'Kovi',
+    description: '',
+    image: 'https://picsum.photos/100'
+  },
+  {
+    id: 5,
+    collectionId: 1,
+    name: 'Amin',
+    description: '',
+    image: 'https://picsum.photos/100'
+  },
+  {
+    id: 6,
+    collectionId: 1,
+    name: 'Anton',
+    description: '',
+    image: 'https://picsum.photos/100'
   }
 ];
