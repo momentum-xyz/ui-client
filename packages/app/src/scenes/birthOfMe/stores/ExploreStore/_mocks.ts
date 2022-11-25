@@ -17,7 +17,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Polkajor',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/102',
     date: '2022-11-25T08:05:48.447Z',
     type: 'connected',
     connectedTo: {
@@ -25,7 +25,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
       collectionId: 1,
       name: 'Space Odyssey',
       description: '',
-      image: 'https://picsum.photos/100',
+      image: 'https://picsum.photos/104',
       date: '2022-11-25T08:05:48.447Z',
       type: 'connected'
     }
@@ -35,7 +35,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Brandskari',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/106',
     date: '2022-11-25T08:05:48.447Z',
     type: 'created'
   },
@@ -44,7 +44,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Kidachu',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/108',
     date: '2022-11-25T08:05:48.447Z',
     type: 'docked',
     dockedTo: {
@@ -52,7 +52,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
       collectionId: 1,
       name: 'Space Odyssey',
       description: '',
-      image: 'https://picsum.photos/100',
+      image: 'https://picsum.photos/110',
       date: '2022-11-25T08:05:48.447Z',
       type: 'docked'
     }
@@ -62,7 +62,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Jeroenski',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/112',
     date: '2022-11-25T08:05:48.447Z',
     type: 'created'
   },
@@ -71,7 +71,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Polkajor',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/114',
     date: '2022-11-25T08:05:48.447Z',
     type: 'connected',
     connectedTo: {
@@ -79,7 +79,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
       collectionId: 1,
       name: 'Space Odyssey',
       description: '',
-      image: 'https://picsum.photos/100',
+      image: 'https://picsum.photos/116',
       date: '2022-11-25T08:05:48.447Z',
       type: 'connected'
     }
@@ -89,7 +89,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Brandskari',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/118',
     date: '2022-11-25T08:05:48.447Z',
     type: 'created'
   },
@@ -98,7 +98,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Kidachu',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/120',
     date: '2022-11-25T08:05:48.447Z',
     type: 'docked',
     dockedTo: {
@@ -106,7 +106,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
       collectionId: 1,
       name: 'Space Odyssey',
       description: '',
-      image: 'https://picsum.photos/100',
+      image: 'https://picsum.photos/122',
       date: '2022-11-25T08:05:48.447Z',
       type: 'docked'
     }
@@ -116,7 +116,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Jeroenski',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/124',
     date: '2022-11-25T08:05:48.447Z',
     type: 'created'
   },
@@ -125,7 +125,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Polkajor',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/126',
     date: '2022-11-25T08:05:48.447Z',
     type: 'connected',
     connectedTo: {
@@ -133,7 +133,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
       collectionId: 1,
       name: 'Space Odyssey',
       description: '',
-      image: 'https://picsum.photos/100',
+      image: 'https://picsum.photos/128',
       date: '2022-11-25T08:05:48.447Z',
       type: 'connected'
     }
@@ -143,7 +143,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Brandskari',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/130',
     date: '2022-11-25T08:05:48.447Z',
     type: 'created'
   },
@@ -152,7 +152,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Kidachu 2',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/132',
     date: '2022-11-25T08:05:48.447Z',
     type: 'docked',
     dockedTo: {
@@ -170,7 +170,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Brandskari',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/102',
     date: '2022-11-25T08:05:48.447Z',
     type: 'created'
   },
@@ -179,7 +179,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     collectionId: 1,
     name: 'Kidachu 2',
     description: '',
-    image: 'https://picsum.photos/100',
+    image: 'https://picsum.photos/105',
     date: '2022-11-25T08:05:48.447Z',
     type: 'docked',
     dockedTo: {
@@ -187,7 +187,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
       collectionId: 1,
       name: 'Space Odyssey',
       description: '',
-      image: 'https://picsum.photos/100',
+      image: 'https://picsum.photos/107',
       date: '2022-11-25T08:05:48.447Z',
       type: 'docked'
     }

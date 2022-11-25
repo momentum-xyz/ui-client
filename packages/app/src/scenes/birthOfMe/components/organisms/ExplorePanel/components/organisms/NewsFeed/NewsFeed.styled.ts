@@ -36,6 +36,27 @@ export const OneAvatar = styled.img`
   border: 1px solid var(--white);
 `;
 
+export const TwoAvatarsContainer = styled.div`
+  position: relative;
+  width: 60px;
+`;
+
+export const Avatar = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--white);
+`;
+
+export const AvatarAhead = styled.img`
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--white);
+  right: 0;
+`;
+
 export const Info = styled.div`
   padding: 5px 0;
   display: flex;

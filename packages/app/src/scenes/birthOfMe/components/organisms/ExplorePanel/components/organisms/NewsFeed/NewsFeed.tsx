@@ -47,7 +47,16 @@ const NewsFeed: FC<PropsInterface> = (props) => {
               return (
                 <styled.FeedItem key={item.id}>
                   <div>
-                    <styled.OneAvatar src={item.image} />
+                    {item.type !== 'connected' ? (
+                      <styled.OneAvatar src={item.image} />
+                    ) : (
+                      <>
+                        <styled.TwoAvatarsContainer>
+                          <styled.Avatar src={item.image} />
+                          <styled.AvatarAhead src={item.connectedTo?.image} />
+                        </styled.TwoAvatarsContainer>
+                      </>
+                    )}
                   </div>
                   <styled.Info>
                     <styled.Date>{formattedDate}</styled.Date>
