@@ -1,6 +1,6 @@
 import {NftItemInterface} from 'scenes/birthOfMe/stores/NftStore/models';
 
-import {OdysseyFeedInterface} from './ExploreStore';
+import {OdysseyFeedInterface, OdysseyItemInterface} from './ExploreStore';
 
 export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
@@ -193,6 +193,18 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     }
   }
 ];
+
+export const ODYSSEY_ITEM: OdysseyItemInterface = {
+  id: 1,
+  collectionId: 1,
+  name: 'Kidachu',
+  description:
+    'Short user bio that the user fills in themselves. this can be a short bio or some funny words or what ever. Max ‘n’ amount of characters. We can Fit aprroxmiately 3 lines of text here.',
+  image: 'https://picsum.photos/100',
+  connections: 14,
+  docking: 3,
+  events: 4
+};
 
 export const ODYSSEY_LIST: NftItemInterface[] = [
   {
