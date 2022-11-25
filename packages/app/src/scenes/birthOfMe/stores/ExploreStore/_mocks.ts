@@ -4,6 +4,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 1,
     collectionId: 1,
+    owner: '',
     name: '',
     description: '',
     image: 'https://picsum.photos/100',
@@ -13,6 +14,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 2,
     collectionId: 1,
+    owner: '',
     name: '',
     description: '',
     image: 'https://picsum.photos/100',
@@ -22,6 +24,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 3,
     collectionId: 1,
+    owner: '',
     name: '',
     description: '',
     image: 'https://picsum.photos/100',
@@ -30,6 +33,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     connectedTo: {
       id: 4,
       collectionId: 1,
+      owner: '',
       name: '',
       description: '',
       image: 'https://picsum.photos/100',
@@ -40,6 +44,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 1,
     collectionId: 1,
+    owner: '',
     name: '',
     description: '',
     image: 'https://picsum.photos/100',

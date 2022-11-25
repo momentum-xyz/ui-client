@@ -371,9 +371,11 @@ const NftStore = types
         return [collectionId.toNumber(), itemId.toNumber()];
       });
       console.log('collectionItemIds', collectionItemIds);
-      const itemMetadatas = yield self.channel.query.uniques.instanceMetadataOf.multi(
-        collectionItemIds
-      );
+      const [itemMetadatas, nftItemsDetailedInfos] = yield Promise.all([
+        self.channel.query.uniques.instanceMetadataOf.multi(collectionItemIds),
+        self.channel.query.uniques.asset.multi(collectionItemIds)
+      ]);
+
       console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
       const nftItems: NftItemInterface[] = yield Promise.all(
         itemMetadatas.map(
@@ -381,6 +383,9 @@ const NftStore = types
             const [collectionId, itemId] = collectionItemIds[index];
             const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
             console.log('data', data);
+            const itemDetailedInfo = nftItemsDetailedInfos[index];
+            console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
+            const owner = itemDetailedInfo.unwrapOr(null)?.owner?.toString();
 
             if (!data) {
               return null;
@@ -407,6 +412,7 @@ const NftStore = types
               return {
                 collectionId,
                 id: itemId,
+                owner,
                 ...metadata
               };
             } catch (e) {
