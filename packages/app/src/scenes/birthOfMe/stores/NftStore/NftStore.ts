@@ -30,6 +30,17 @@ import {NftItem, NftItemInterface} from './models';
 const {REACT_APP_NFT_ADMIN_ADDRESS = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'} =
   process.env;
 const NFT_MINT_FEE = 100000;
+const DEFAULT_COLECTION_ID = 0;
+
+const prepareSignAndSend = async (address: string) => {
+  // there's alternative way for this in useEager
+  const keyring = new Keyring({type: 'sr25519'});
+  const account = keyring.addFromAddress(address);
+  console.log('Account', account, account.address);
+
+  const injector = await web3FromAddress(account.address);
+  return {account, options: {signer: injector.signer}};
+};
 
 const NftStore = types
   .compose(
@@ -447,15 +458,9 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      console.log('Addresses', Array(self.addresses));
-      // there's alternative way for this in useEager
-      const keyring = new Keyring({type: 'sr25519'});
-      const account = keyring.addFromAddress(address);
-      console.log('Account', account, account.address);
+      const {account, options} = yield prepareSignAndSend(address);
 
       try {
-        const injector = yield web3FromAddress(account.address);
-
         console.log('Create transfer funds for minting NFT', {
           REACT_APP_NFT_ADMIN_ADDRESS,
           NFT_MINT_FEE
@@ -468,21 +473,15 @@ const NftStore = types
 
         const blockHash = yield new Promise((resolve, reject) => {
           transfer
-            .signAndSend(
-              account.address,
-              {
-                signer: injector.signer
-              },
-              ({status}) => {
-                if (status.isInBlock) {
-                  const blockHash = status.asInBlock.toString();
-                  console.log(`Completed at block hash #${blockHash}`);
-                  resolve(blockHash);
-                } else {
-                  console.log(`Current transaction status: ${status.type}`);
-                }
+            .signAndSend(account.address, options, ({status}) => {
+              if (status.isInBlock) {
+                const blockHash = status.asInBlock.toString();
+                console.log(`Completed at block hash #${blockHash}`);
+                resolve(blockHash);
+              } else {
+                console.log(`Current transaction status: ${status.type}`);
               }
-            )
+            })
             .catch(reject);
         });
 
@@ -494,6 +493,66 @@ const NftStore = types
         );
       } catch (err) {
         console.log('err', err);
+      }
+    }),
+    stake: flow(function* (
+      address: string,
+      amount: number,
+      itemId: number,
+      collectionId: number = DEFAULT_COLECTION_ID
+    ) {
+      console.log('Stake', itemId, amount);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+
+      const tx = self.channel.tx.stake.stake(collectionId, itemId, amount);
+      console.log('Sign and send', tx);
+
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error staking:', err);
+      }
+    }),
+    unstake: flow(function* (
+      address: string,
+      itemId: number,
+      collectionId: number = DEFAULT_COLECTION_ID
+    ) {
+      console.log('Untake', itemId);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+
+      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
+      console.log('Sign and send', tx);
+
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error unstaking:', err);
+      }
+    }),
+    getRewards: flow(function* (address: string) {
+      console.log('Get rewards', address);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+
+      const tx = self.channel.tx.stake.getRewards();
+      console.log('Sign and send', tx);
+
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error getting rewards:', err);
       }
     })
     // getMinNominatorBond: flow(function* () {
