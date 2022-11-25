@@ -9,24 +9,32 @@ export interface OdysseyFeedInterface extends NftItemInterface {
   date: string;
   type: 'created' | 'connected' | 'docked';
   connectedTo?: OdysseyFeedInterface;
-  dockedTo?: string;
+  dockedTo?: OdysseyFeedInterface;
 }
 
 const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
-      items: types.optional(types.array(types.frozen<OdysseyFeedInterface>()), []),
+      odysseyCount: 0,
+      newsFeed: types.optional(types.array(types.frozen<OdysseyFeedInterface>()), []),
       searchedItems: types.optional(types.array(types.frozen<NftItemInterface>()), []),
 
-      searchQuery: types.optional(types.string, ''),
-
-      isExpanded: types.optional(types.boolean, true)
+      searchQuery: types.optional(types.string, '')
     })
   )
   .actions((self) => ({
     init(): void {
-      self.items = cast(ODYSSEY_FEED);
+      this.fetchNewsFeed();
+      this.fetchOdysseyCount();
+    },
+    // TODO: Implementation
+    fetchNewsFeed(): void {
+      self.newsFeed = cast(ODYSSEY_FEED);
+    },
+    // TODO: Implementation
+    fetchOdysseyCount(): void {
+      self.odysseyCount = 13095;
     }
   }))
   .views((self) => ({

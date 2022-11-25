@@ -86,6 +86,7 @@ export type IconNameType =
   | 'shieldCheck'
   | 'shift-button'
   | 'smiley-face'
+  | 'solar-system'
   | 'sort'
   | 'sortOnAsc'
   | 'sortOnDesc'

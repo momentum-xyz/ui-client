@@ -11,17 +11,18 @@ import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
   const {birthOfMeStore} = useStore();
-  const {signInStore} = birthOfMeStore;
+  const {signInStore, exploreStore} = birthOfMeStore;
 
   const history = useHistory();
 
   useEffect(() => {
     signInStore.fetchAddresses();
+    exploreStore.init();
 
     return () => {
       signInStore.resetModel();
     };
-  }, [signInStore]);
+  }, [signInStore, exploreStore]);
 
   return (
     <styled.Container>
@@ -32,7 +33,12 @@ const BirthOfMePage: FC = () => {
         </styled.Boxes>
 
         <styled.Boxes>
-          <ExplorePanel />
+          <ExplorePanel
+            odysseyCount={exploreStore.odysseyCount}
+            newsFeed={exploreStore.newsFeed}
+            onTeleport={(id) => alert(`Teleport to ${id}`)}
+            onConnect={(id) => alert(`Connect to ${id}`)}
+          />
         </styled.Boxes>
       </styled.Wrapper>
       <Footer />

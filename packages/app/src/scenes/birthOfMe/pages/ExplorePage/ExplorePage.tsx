@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
@@ -11,7 +11,9 @@ const ExplorePage: FC = () => {
   const {birthOfMeStore} = useStore();
   const {exploreStore} = birthOfMeStore;
 
-  console.log(exploreStore);
+  useEffect(() => {
+    exploreStore.init();
+  }, [exploreStore]);
 
   return (
     <styled.Container>
@@ -21,7 +23,12 @@ const ExplorePage: FC = () => {
         </styled.Boxes>
 
         <styled.Boxes>
-          <ExplorePanel />
+          <ExplorePanel
+            odysseyCount={exploreStore.odysseyCount}
+            newsFeed={exploreStore.newsFeed}
+            onTeleport={(id) => alert(`Teleport to ${id}`)}
+            onConnect={(id) => alert(`Connect to ${id}`)}
+          />
         </styled.Boxes>
       </styled.Wrapper>
 

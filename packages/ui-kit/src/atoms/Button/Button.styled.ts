@@ -151,9 +151,10 @@ export const Button = styled.button`
   }
 
   &.small {
-    font-size: var(--font-size-xxs);
+    font-size: var(--font-size-xxxxs);
     width: 100%;
-    padding: 5px;
+    gap: 5px;
+    padding: 4px 7px;
   }
 
   &.medium {
