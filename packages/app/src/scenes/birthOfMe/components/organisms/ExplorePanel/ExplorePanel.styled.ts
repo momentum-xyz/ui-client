@@ -39,7 +39,7 @@ export const Search = styled.div`
 export const Body = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100% - 180px);
   overflow: auto;
 
   -ms-overflow-style: none; /* IE and Edge */
