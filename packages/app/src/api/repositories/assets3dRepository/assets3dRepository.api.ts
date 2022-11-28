@@ -3,7 +3,11 @@ import {RequestInterface} from '@momentum-xyz/core';
 import {request} from 'api/request';
 
 import {assets3dRepositoryEndpoints} from './assets3dRepository.api.endpoints';
-import {UploadAsset3dRequest, UploadAsset3dResponse} from './assets3dRepository.api.types';
+import {
+  FetchAssets3dResponse,
+  UploadAsset3dRequest,
+  UploadAsset3dResponse
+} from './assets3dRepository.api.types';
 
 export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3dResponse> = (
   options
@@ -22,4 +26,8 @@ export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3d
   };
 
   return request.post(assets3dRepositoryEndpoints().upload, formData, requestOptions);
+};
+
+export const fetchAssets3d: RequestInterface<null, FetchAssets3dResponse> = () => {
+  return request.get(assets3dRepositoryEndpoints().get, {params: {category: 'skybox'}});
 };

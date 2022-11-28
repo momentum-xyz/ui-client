@@ -1,26 +1,10 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-// import {api, ValidationResponse} from 'api';
-import {WorldBuilderSkybox, WorldBuilderSkyboxInterface} from './models';
+import {api, FetchAssets3dResponse} from 'api';
+import {appVariables} from 'api/constants';
 
-const skyboxes: WorldBuilderSkyboxInterface[] = [
-  {
-    id: '658611b8-a86a-4bf0-a956-12129b06dbfd',
-    name: 'Alpha',
-    image: 'https://dev.odyssey.ninja/api/v3/render/get/765f5151d69276d61044a24a2867b398'
-  },
-  {
-    id: '103dc7a9-08be-4d8e-a5a7-0df9b7eff35b',
-    name: 'SNI',
-    image: 'https://dev.odyssey.ninja/api/v3/render/get/8af43f9895d7a50683818feef7bc34ab'
-  },
-  {
-    id: '221d418e-4a5f-4910-acf4-861970f2175e',
-    name: 'Kusama',
-    image: 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
-  }
-];
+import {WorldBuilderSkybox, WorldBuilderSkyboxInterface} from './models';
 
 const WorldBuilderSkyboxesStore = types
   .compose(
@@ -34,7 +18,27 @@ const WorldBuilderSkyboxesStore = types
   )
   .actions((self) => ({
     fetchItems: flow(function* () {
-      // TODO
+      const assets3d: FetchAssets3dResponse = yield self.request.send<null, FetchAssets3dResponse>(
+        api.assets3dRepository.fetchAssets3d,
+        null
+      );
+      console.log('Assets3d response:', assets3d);
+      if (!assets3d) {
+        console.log('Error loading assets3d');
+        return;
+      }
+
+      const skyboxes =
+        assets3d.map(({id, meta: {name, previewImage}}) => ({
+          id,
+          name,
+          image:
+            // FIXME - temp until proper preview images are available
+            previewImage
+              ? `${appVariables.RENDER_SERVICE_URL}/get/${previewImage}`
+              : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
+        })) || [];
+
       self.items = cast(skyboxes);
       self.selectedItemId = self.items[0].id;
       yield Promise.resolve(skyboxes);
