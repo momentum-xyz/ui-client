@@ -12,7 +12,8 @@ import * as styled from './Widgets.styled';
 import {OnlineUsersWidget} from './pages/OnlineUsersWidget';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetStore, flightStore, worldBuilderStore} = useStore();
+  const {sessionStore, widgetStore, flightStore, mainStore, worldBuilderStore} = useStore();
+  const {unityStore} = mainStore;
   const {profileMenuStore, musicPlayerStore} = widgetStore;
   const {user} = sessionStore;
   const {playlist, musicPlayer} = musicPlayerStore;
@@ -22,7 +23,8 @@ const Widgets: FC = () => {
 
   useEffect(() => {
     worldBuilderStore.fetchPermissions();
-  }, [worldBuilderStore]);
+    unityStore.hideMinimap();
+  }, [unityStore, worldBuilderStore]);
 
   const rightToolbarIcons: ToolbarIconInterface[] = [
     {
@@ -43,7 +45,7 @@ const Widgets: FC = () => {
       size: 'medium'
     },
     {
-      title: '',
+      title: t('titles.worldBuilder'),
       icon: 'planet',
       size: 'medium'
     }

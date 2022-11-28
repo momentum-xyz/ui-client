@@ -15,6 +15,8 @@ export const Footer = styled.footer`
   z-index: var(--overlay-z-index);
   width: 100%;
   padding: 0 10px 10px 20px;
+
+  background: linear-gradient(0deg, #202a44 0%, rgba(32, 42, 68, 0) 100%);
 `;
 
 export const OnlineUsers = styled.div`
