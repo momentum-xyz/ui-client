@@ -37,6 +37,11 @@ const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.worldBuilder.builder,
     main: () => <></>
+  },
+  {
+    path: ROUTES.object.root,
+    main: () => <></>,
+    exact: false
   }
 ];
 
