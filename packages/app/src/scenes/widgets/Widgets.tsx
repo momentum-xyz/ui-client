@@ -96,7 +96,7 @@ const Widgets: FC = () => {
         </styled.LeftToolbars>
         <styled.RightToolbars>
           <styled.OnlineUsers>
-            <OnlineUsersWidget />
+            <OnlineUsersWidget currentUser={sessionStore.user} />
           </styled.OnlineUsers>
           <ToolbarIconList>
             {rightToolbarIcons.map((item) => (
