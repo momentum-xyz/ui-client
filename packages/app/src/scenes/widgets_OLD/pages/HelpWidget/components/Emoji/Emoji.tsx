@@ -4,8 +4,8 @@ import {useTranslation} from 'react-i18next';
 import {Heading, IconSvg} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
-import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
+import {Section} from 'scenes/widgets_OLD/pages/HelpWidget/components/Section';
+import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 
 import * as styled from './Emoji.styled';
 

@@ -225,7 +225,9 @@ export const enGb = {
       subdomain: 'Subdomain',
       pilot: 'Pilot',
       flyWithMe: 'Fly with me',
-      search: 'Search'
+      search: 'Search',
+      worldChat: 'World Chat',
+      notifications: 'Notifications'
     },
     messages: {
       loading: 'Loading Momentum',
