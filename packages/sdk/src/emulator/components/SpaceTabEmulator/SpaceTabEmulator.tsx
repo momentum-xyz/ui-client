@@ -9,14 +9,13 @@ import {
   ObjectPluginPropsInterface,
   PluginInterface
 } from '../../../interfaces';
-import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 
 interface PropsInterface {
   plugin: PluginInterface<ObjectPluginPropsInterface>;
-  spaceId: string;
+  objectId: string;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
+export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, objectId}) => {
   console.log('RENDER SpaceTabEmulator', {plugin});
   const theme = useTheme();
   const {
@@ -44,7 +43,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
     () => ({
       theme: theme as ThemeInterface,
       isAdmin: false,
-      spaceId,
+      objectId,
       api: {
         getSpaceAttributeValue: <T extends AttributeValueInterface>(
           spaceId: string,
@@ -189,7 +188,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
     }),
     [
       theme,
-      spaceId,
+      objectId,
       subscribeToTopic,
       unsubscribeFromTopic,
       useAttributeChange,
@@ -210,15 +209,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
   return (
     <>
       {!!content && (
-        <ErrorBoundary errorMessage="Error while rendering plugin">
-          <SpaceGlobalPropsContextProvider
-            props={{
-              ...coreProps
-            }}
-          >
-            {content}
-          </SpaceGlobalPropsContextProvider>
-        </ErrorBoundary>
+        <ErrorBoundary errorMessage="Error while rendering plugin">{content}</ErrorBoundary>
       )}
     </>
   );

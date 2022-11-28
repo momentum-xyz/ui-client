@@ -12,14 +12,14 @@ interface PropsInterface {
 }
 
 export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
-  const {spaceId} = useParams<{spaceId: string}>();
-  console.log('RENDER SpaceEmulator', {plugin, spaceId});
+  const {objectId} = useParams<{objectId: string}>();
+  console.log('RENDER SpaceEmulator', {plugin, objectId});
 
   return (
     <styled.SpaceLayout>
       <styled.SpaceTabContainer>
         <styled.SpaceContent>
-          <SpaceTabEmulator plugin={plugin} spaceId={spaceId} />
+          <SpaceTabEmulator plugin={plugin} objectId={objectId} />
         </styled.SpaceContent>
       </styled.SpaceTabContainer>
     </styled.SpaceLayout>

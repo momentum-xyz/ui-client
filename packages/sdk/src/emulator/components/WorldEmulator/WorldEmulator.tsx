@@ -26,7 +26,7 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
           <div>
             <styled.Button
               onClick={() =>
-                history.push(generatePath(ROUTES.collaboration.plugin, {spaceId: DUMMY_SPACE_ID}))
+                history.push(generatePath(ROUTES.collaboration.plugin, {objectId: DUMMY_SPACE_ID}))
               }
             >
               Open Plugin
