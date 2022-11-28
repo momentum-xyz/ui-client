@@ -7,7 +7,7 @@ import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootFlightStore} from 'scenes/flight/stores';
-import {RootWidgetStore} from 'scenes/widgets/stores/RootWidgetStore';
+import {RootWidgetStore} from 'scenes/widgets_OLD/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';

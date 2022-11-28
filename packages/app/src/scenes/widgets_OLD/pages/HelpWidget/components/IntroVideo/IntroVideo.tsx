@@ -3,9 +3,9 @@ import {observer} from 'mobx-react-lite';
 import YouTube from 'react-youtube';
 
 import {appVariables} from 'api/constants';
-import {Section} from 'scenes/widgets/pages/HelpWidget/components';
+import {Section} from 'scenes/widgets_OLD/pages/HelpWidget/components';
 import {useStore} from 'shared/hooks';
-import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 
 import * as styled from './IntroVideo.styled';
 

@@ -5,9 +5,9 @@ import {t} from 'i18next';
 import {Button} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Section} from 'scenes/widgets/pages/HelpWidget/components/Section';
+import {Section} from 'scenes/widgets_OLD/pages/HelpWidget/components/Section';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
-import {HelpSectionEnum} from 'scenes/widgets/stores/HelpStore';
+import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 
 import * as styled from './Momentum.styled';
 
