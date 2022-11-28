@@ -8,7 +8,7 @@ import {observer} from 'mobx-react-lite';
 // import {useStore} from 'shared/hooks';
 // import {ROUTES} from 'core/constants';
 //
-// import {ExplorePanel, OnlineUsersPanel, UserProfilePanel} from './components';
+import {ExplorePanel} from './components';
 import * as styled from './HomePage.styled';
 
 const HomePage: FC = () => {
@@ -29,9 +29,9 @@ const HomePage: FC = () => {
 
   return (
     <styled.Container data-testid="HomePage-test">
-      {/*<styled.PanelWrapper>*/}
-      {/*  <ExplorePanel />*/}
-      {/*</styled.PanelWrapper>*/}
+      <styled.PanelWrapper>
+        <ExplorePanel />
+      </styled.PanelWrapper>
 
       {/*<styled.PanelWrapper>*/}
       {/*  {meetingStore.canRejoin && (*/}

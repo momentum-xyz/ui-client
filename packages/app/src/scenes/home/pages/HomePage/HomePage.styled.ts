@@ -15,9 +15,9 @@ export const Container = styled.div`
 //   height: 100%;
 // `;
 //
-// export const PanelWrapper = styled.div`
-//   height: 100%;
-// `;
+export const PanelWrapper = styled.div`
+  height: 100%;
+`;
 //
 // export const Rejoin = styled.div`
 //   position: absolute;
