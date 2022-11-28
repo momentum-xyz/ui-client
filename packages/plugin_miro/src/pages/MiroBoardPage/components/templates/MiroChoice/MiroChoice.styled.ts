@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
   overflow: hidden;
 `;

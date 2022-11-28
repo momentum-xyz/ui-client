@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useStore, useGooglePicker} from 'shared/hooks';
 import {useObject} from '@momentum-xyz/sdk';
-import {SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
+import {SpacePage, ObjectTopBar} from '@momentum-xyz/ui-kit';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
@@ -13,7 +13,8 @@ const GoogleDrivePage: FC = () => {
   const {api, googleDriveStore} = store;
   const {googleDocument} = googleDriveStore;
 
-  const {objectId, pluginName, isAdmin, pluginApi, onClose} = useObject();
+  const {objectId, pluginName, isAdmin, pluginApi, isExpanded, onClose, onToggleExpand} =
+    useObject();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useStateItemChange('document', googleDriveStore.setGoogleDocument);
@@ -38,15 +39,12 @@ const GoogleDrivePage: FC = () => {
 
   return (
     <SpacePage>
-      <SpaceTopBar
+      <ObjectTopBar
         title={pluginName ?? ''}
         subtitle={googleDocument?.name}
-        isAdmin={isAdmin}
-        spaceId={objectId}
-        editSpaceHidden
-        showChatButton={false}
-        onLeave={() => onClose?.()}
-        baseLink={`/${objectId}`}
+        isExpanded={isExpanded}
+        onClose={() => onClose?.()}
+        onToggleExpand={onToggleExpand}
       >
         <GoogleDriveActions
           objectId={objectId}
@@ -60,7 +58,7 @@ const GoogleDrivePage: FC = () => {
             googleDriveStore.closeDocument();
           }}
         />
-      </SpaceTopBar>
+      </ObjectTopBar>
       <styled.Container>
         {!googleDocument?.url ? (
           <GoogleChoice isAdmin={isAdmin} pickDocument={pickDocument} />
