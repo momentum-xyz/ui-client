@@ -184,7 +184,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   // },
   {
     path: ROUTES.object.root,
-    renderBackground: true,
+    renderBackground: false,
     main: () => <Object />
   },
   {
