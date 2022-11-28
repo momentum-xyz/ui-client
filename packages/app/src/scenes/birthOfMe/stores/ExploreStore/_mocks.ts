@@ -6,6 +6,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 1,
     collectionId: 1,
+    owner: '',
     name: 'Jeroenski',
     description: '',
     image: 'https://picsum.photos/100',
@@ -15,6 +16,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 3,
     collectionId: 1,
+    owner: '',
     name: 'Polkajor',
     description: '',
     image: 'https://picsum.photos/102',
@@ -23,6 +25,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     connectedTo: {
       id: 4,
       collectionId: 1,
+      owner: '',
       name: 'Space Odyssey',
       description: '',
       image: 'https://picsum.photos/104',
@@ -33,6 +36,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 2,
     collectionId: 1,
+    owner: '',
     name: 'Brandskari',
     description: '',
     image: 'https://picsum.photos/106',
@@ -42,6 +46,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 5,
     collectionId: 1,
+    owner: '',
     name: 'Kidachu',
     description: '',
     image: 'https://picsum.photos/108',
@@ -50,6 +55,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      owner: '',
       name: 'Space Odyssey',
       description: '',
       image: 'https://picsum.photos/110',
@@ -60,6 +66,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 6,
     collectionId: 1,
+    owner: '',
     name: 'Jeroenski',
     description: '',
     image: 'https://picsum.photos/112',
@@ -69,6 +76,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 7,
     collectionId: 1,
+    owner: '',
     name: 'Polkajor',
     description: '',
     image: 'https://picsum.photos/114',
@@ -77,6 +85,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     connectedTo: {
       id: 4,
       collectionId: 1,
+      owner: '',
       name: 'Space Odyssey',
       description: '',
       image: 'https://picsum.photos/116',
@@ -87,6 +96,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 8,
     collectionId: 1,
+    owner: '',
     name: 'Brandskari',
     description: '',
     image: 'https://picsum.photos/118',
@@ -96,6 +106,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 9,
     collectionId: 1,
+    owner: '',
     name: 'Kidachu',
     description: '',
     image: 'https://picsum.photos/120',
@@ -104,6 +115,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      owner: '',
       name: 'Space Odyssey',
       description: '',
       image: 'https://picsum.photos/122',
@@ -114,6 +126,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 10,
     collectionId: 1,
+    owner: '',
     name: 'Jeroenski',
     description: '',
     image: 'https://picsum.photos/124',
@@ -123,6 +136,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 11,
     collectionId: 1,
+    owner: '',
     name: 'Polkajor',
     description: '',
     image: 'https://picsum.photos/126',
@@ -131,6 +145,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     connectedTo: {
       id: 4,
       collectionId: 1,
+      owner: '',
       name: 'Space Odyssey',
       description: '',
       image: 'https://picsum.photos/128',
@@ -141,6 +156,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 12,
     collectionId: 1,
+    owner: '',
     name: 'Brandskari',
     description: '',
     image: 'https://picsum.photos/130',
@@ -150,6 +166,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 13,
     collectionId: 1,
+    owner: '',
     name: 'Kidachu 2',
     description: '',
     image: 'https://picsum.photos/132',
@@ -158,6 +175,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      owner: '',
       name: 'Space Odyssey',
       description: '',
       image: 'https://picsum.photos/100',
@@ -168,6 +186,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 14,
     collectionId: 1,
+    owner: '',
     name: 'Brandskari',
     description: '',
     image: 'https://picsum.photos/102',
@@ -177,6 +196,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 15,
     collectionId: 1,
+    owner: '',
     name: 'Kidachu 2',
     description: '',
     image: 'https://picsum.photos/105',
@@ -185,6 +205,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      owner: '',
       name: 'Space Odyssey',
       description: '',
       image: 'https://picsum.photos/107',
@@ -197,6 +218,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
 export const ODYSSEY_ITEM: OdysseyItemInterface = {
   id: 1,
   collectionId: 1,
+  owner: '',
   name: 'Kidachu',
   description:
     'Short user bio that the user fills in themselves. this can be a short bio or some funny words or what ever. Max ‘n’ amount of characters. We can Fit aprroxmiately 3 lines of text here.',
@@ -210,6 +232,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 1,
     collectionId: 1,
+    owner: '',
     name: 'Jeroenski',
     description: '',
     image: 'https://picsum.photos/100'
@@ -217,6 +240,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 2,
     collectionId: 1,
+    owner: '',
     name: 'Tsani',
     description: '',
     image: 'https://picsum.photos/100'
@@ -224,6 +248,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 3,
     collectionId: 1,
+    owner: '',
     name: 'Jorrit',
     description: '',
     image: 'https://picsum.photos/100'
@@ -231,6 +256,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 4,
     collectionId: 1,
+    owner: '',
     name: 'Kovi',
     description: '',
     image: 'https://picsum.photos/100'
@@ -238,6 +264,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 5,
     collectionId: 1,
+    owner: '',
     name: 'Amin',
     description: '',
     image: 'https://picsum.photos/100'
@@ -245,6 +272,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 6,
     collectionId: 1,
+    owner: '',
     name: 'Anton',
     description: '',
     image: 'https://picsum.photos/100'
