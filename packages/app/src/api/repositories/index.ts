@@ -15,3 +15,4 @@ export * from './eventsRepository';
 export * from './objectRepository';
 export * from './assets3dRepository';
 export * from './assetsRepository';
+export * from './flyWithMeRepository';
