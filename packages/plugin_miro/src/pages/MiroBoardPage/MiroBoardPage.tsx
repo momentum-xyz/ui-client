@@ -31,7 +31,7 @@ const MiroBoardPage: FC = () => {
   return (
     <SpacePage>
       <ObjectTopBar
-        title={pluginName}
+        title={pluginName ?? ''}
         subtitle={board?.name}
         onClose={() => onClose?.()}
         onToggleExpand={onToggleExpand}

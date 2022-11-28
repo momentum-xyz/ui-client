@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {ObjectPluginPropsInterface, PluginInterface} from '../../../interfaces';
@@ -13,13 +13,21 @@ interface PropsInterface {
 
 export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
   const {objectId} = useParams<{objectId: string}>();
+
+  const [isExpanded, setIsExpanded] = useState(false);
+
   console.log('RENDER SpaceEmulator', {plugin, objectId});
 
   return (
     <styled.SpaceLayout>
       <styled.SpaceTabContainer>
-        <styled.SpaceContent>
-          <SpaceTabEmulator plugin={plugin} objectId={objectId} />
+        <styled.SpaceContent className={isExpanded ? 'expanded' : undefined}>
+          <SpaceTabEmulator
+            plugin={plugin}
+            objectId={objectId}
+            isExpanded={isExpanded}
+            setIsExpanded={setIsExpanded}
+          />
         </styled.SpaceContent>
       </styled.SpaceTabContainer>
     </styled.SpaceLayout>

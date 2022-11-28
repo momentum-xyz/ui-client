@@ -1,6 +1,5 @@
 import {FC} from 'react';
 
-import {SvgButton} from '../../molecules';
 import {PropsWithThemeInterface} from '../../interfaces';
 
 import * as styled from './ObjectTopBar.styled';
@@ -50,13 +49,14 @@ const ObjectTopBar: FC<PropsInterface> = ({
     {children}
     <styled.Section>
       {onToggleExpand && (
-        <SvgButton
+        <styled.Button
           iconName={isExpanded ? 'minimise' : 'fullscreen'}
           onClick={onToggleExpand}
           size="medium-large"
+          isWhite
         />
       )}
-      {onClose && <SvgButton iconName="close" onClick={onClose} size="medium-large" />}
+      {onClose && <styled.Button iconName="close" onClick={onClose} size="medium-large" isWhite />}
     </styled.Section>
   </styled.Container>
 );

@@ -1,6 +1,7 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
+import {SvgButton} from '../../molecules';
 import {Text} from '../../atoms';
 
 export const Container = styled.div`
@@ -22,4 +23,14 @@ export const StyledTexts = styled.div`
 
 export const StyledText = styled(Text)`
   min-width: 0;
+`;
+
+export const Button = styled(SvgButton)`
+  svg {
+    color: ${(props) => props.theme.text};
+  }
+
+  :hover svg {
+    color: ${(props) => props.theme.accent};
+  }
 `;
