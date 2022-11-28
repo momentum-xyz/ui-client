@@ -10,7 +10,6 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   display: flex;
   flex: 1 0 auto;
-  border: 1px solid grey;
   margin: 10px;
 
   :not(&.expanded) {

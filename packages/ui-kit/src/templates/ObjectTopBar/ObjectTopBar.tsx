@@ -25,14 +25,14 @@ const ObjectTopBar: FC<PropsInterface> = ({
     <styled.Section>
       <styled.StyledTexts>
         <styled.StyledText
-          text={`${title}${subtitle ? ' /' : ''}`}
+          text={`${title}${subtitle && isExpanded ? ' /' : ''}`}
           transform="uppercase"
           weight="bold"
           theme={theme}
           size="xl"
           isMultiline={false}
         />
-        {subtitle && (
+        {subtitle && isExpanded && (
           <>
             &nbsp;
             <styled.StyledText
@@ -46,7 +46,7 @@ const ObjectTopBar: FC<PropsInterface> = ({
         )}
       </styled.StyledTexts>
     </styled.Section>
-    {children}
+    <styled.Actions>{children}</styled.Actions>
     <styled.Section>
       {onToggleExpand && (
         <styled.Button
