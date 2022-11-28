@@ -18,6 +18,7 @@ const LoginEmailPage = lazy(() => import('./auth/pages/LoginEmailPage/LoginEmail
 const Web3ChoicePage = lazy(() => import('./auth/pages/Web3ChoicePage/Web3ChoicePage'));
 const Web3ChallengePage = lazy(() => import('./auth/pages/Web3ChallengePage/Web3ChallengePage'));
 const Web3ConsentPage = lazy(() => import('./auth/pages/Web3ConsentPage/Web3ConsentPage'));
+const HomePage = lazy(() => import('./home/pages/HomePage/HomePage'));
 const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpCompletePage'));
 const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));
 // const Collaboration = lazy(() => import('./collaboration/Collaboration'));
@@ -164,6 +165,11 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
 
 export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
+    path: ROUTES.base,
+    exact: true,
+    main: () => <HomePage />
+  },
+  {
     path: ROUTES.spaceAdmin.base,
     main: () => <SpaceAdmin />,
     renderBackground: true
@@ -173,6 +179,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     main: () => (
       <>
         <WorldBuilderCustomizePanel />
+        <HomePage />
       </>
     ),
     renderBackground: false
@@ -192,6 +199,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     main: () => (
       <>
         <GrabTablePage />
+        <HomePage />
       </>
     )
   },
@@ -200,6 +208,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     main: () => (
       <>
         <FlyWithMePage />
+        <HomePage />
       </>
     ),
     exact: true

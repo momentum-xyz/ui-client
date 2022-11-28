@@ -9,19 +9,19 @@ export const Container = styled.div`
   pointer-events: none;
 `;
 
-export const UsersContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  height: 100%;
-`;
-
-export const PanelWrapper = styled.div`
-  height: 100%;
-`;
-
-export const Rejoin = styled.div`
-  position: absolute;
-  pointer-events: all;
-  right: 222px;
-  top: 12px;
-`;
+// export const UsersContainer = styled.div`
+//   display: flex;
+//   gap: 10px;
+//   height: 100%;
+// `;
+//
+// export const PanelWrapper = styled.div`
+//   height: 100%;
+// `;
+//
+// export const Rejoin = styled.div`
+//   position: absolute;
+//   pointer-events: all;
+//   right: 222px;
+//   top: 12px;
+// `;
