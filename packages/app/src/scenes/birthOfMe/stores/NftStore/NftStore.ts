@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {ApiPromise} from '@polkadot/api';
+import {ApiPromise, Keyring} from '@polkadot/api';
 import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@polkadot/util';
+import {web3FromAddress} from '@polkadot/extension-dapp';
 import {cloneDeep} from 'lodash-es';
 import {
   DeriveBalancesAll,
@@ -25,6 +26,21 @@ import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
 import {NftItem, NftItemInterface} from './models';
+
+const {REACT_APP_NFT_ADMIN_ADDRESS = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'} =
+  process.env;
+const NFT_MINT_FEE = 100000;
+const DEFAULT_COLECTION_ID = 0;
+
+const prepareSignAndSend = async (address: string) => {
+  // there's alternative way for this in useEager
+  const keyring = new Keyring({type: 'sr25519'});
+  const account = keyring.addFromAddress(address);
+  console.log('Account', account, account.address);
+
+  const injector = await web3FromAddress(account.address);
+  return {account, options: {signer: injector.signer}};
+};
 
 const NftStore = types
   .compose(
@@ -371,9 +387,11 @@ const NftStore = types
         return [collectionId.toNumber(), itemId.toNumber()];
       });
       console.log('collectionItemIds', collectionItemIds);
-      const itemMetadatas = yield self.channel.query.uniques.instanceMetadataOf.multi(
-        collectionItemIds
-      );
+      const [itemMetadatas, nftItemsDetailedInfos] = yield Promise.all([
+        self.channel.query.uniques.instanceMetadataOf.multi(collectionItemIds),
+        self.channel.query.uniques.asset.multi(collectionItemIds)
+      ]);
+
       console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
       const nftItems: NftItemInterface[] = yield Promise.all(
         itemMetadatas.map(
@@ -381,6 +399,9 @@ const NftStore = types
             const [collectionId, itemId] = collectionItemIds[index];
             const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
             console.log('data', data);
+            const itemDetailedInfo = nftItemsDetailedInfos[index];
+            console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
+            const owner = itemDetailedInfo.unwrapOr(null)?.owner?.toString();
 
             if (!data) {
               return null;
@@ -407,6 +428,7 @@ const NftStore = types
               return {
                 collectionId,
                 id: itemId,
+                owner,
                 ...metadata
               };
             } catch (e) {
@@ -424,6 +446,114 @@ const NftStore = types
       console.log('NftItems', nftItems);
 
       self.setNftItems(nftItems);
+    }),
+    handleMissingAccount: flow(function* () {
+      // TODO - we have a wallet and NFT but DB account is missing
+      // We need to request a challenge from BE and sign it and trigger account linking
+      // use useEager logic here
+    }),
+    mintNft: flow(function* (address: string) {
+      console.log('Mint NFT', address);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+
+      const {account, options} = yield prepareSignAndSend(address);
+
+      try {
+        console.log('Create transfer funds for minting NFT', {
+          REACT_APP_NFT_ADMIN_ADDRESS,
+          NFT_MINT_FEE
+        });
+        const transfer = self.channel.tx.balances.transfer(
+          REACT_APP_NFT_ADMIN_ADDRESS,
+          NFT_MINT_FEE
+        );
+        console.log('Sign and send', transfer);
+
+        const blockHash = yield new Promise((resolve, reject) => {
+          transfer
+            .signAndSend(account.address, options, ({status}) => {
+              if (status.isInBlock) {
+                const blockHash = status.asInBlock.toString();
+                console.log(`Completed at block hash #${blockHash}`);
+                resolve(blockHash);
+              } else {
+                console.log(`Current transaction status: ${status.type}`);
+              }
+            })
+            .catch(reject);
+        });
+
+        // TODO
+        console.log(
+          'TODO use blockHash',
+          blockHash,
+          'to inform the BE about the transaction and ask to mint the NFT'
+        );
+      } catch (err) {
+        console.log('err', err);
+      }
+    }),
+    stake: flow(function* (
+      address: string,
+      amount: number,
+      itemId: number,
+      collectionId: number = DEFAULT_COLECTION_ID
+    ) {
+      console.log('Stake', itemId, amount);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+
+      const tx = self.channel.tx.stake.stake(collectionId, itemId, amount);
+      console.log('Sign and send', tx);
+
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error staking:', err);
+      }
+    }),
+    unstake: flow(function* (
+      address: string,
+      itemId: number,
+      collectionId: number = DEFAULT_COLECTION_ID
+    ) {
+      console.log('Untake', itemId);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+
+      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
+      console.log('Sign and send', tx);
+
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error unstaking:', err);
+      }
+    }),
+    getRewards: flow(function* (address: string) {
+      console.log('Get rewards', address);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+
+      const tx = self.channel.tx.stake.getRewards();
+      console.log('Sign and send', tx);
+
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error getting rewards:', err);
+      }
     })
     // getMinNominatorBond: flow(function* () {
     //   const minNominatorBond = self.channel
