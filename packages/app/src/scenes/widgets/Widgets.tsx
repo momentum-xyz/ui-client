@@ -10,11 +10,14 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './Widgets.styled';
 import {OnlineUsersWidget} from './pages/OnlineUsersWidget';
+import {ScreenSharePage} from './pages';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetStore, flightStore, mainStore, worldBuilderStore} = useStore();
+  const {sessionStore, widgetStore, widgetsStore, flightStore, mainStore, worldBuilderStore} =
+    useStore();
   const {unityStore} = mainStore;
   const {profileMenuStore, musicPlayerStore} = widgetStore;
+  const {screenShareStore} = widgetsStore;
   const {user} = sessionStore;
   const {playlist, musicPlayer} = musicPlayerStore;
 
@@ -30,7 +33,11 @@ const Widgets: FC = () => {
     {
       title: t('labels.screenShare'),
       icon: 'screenshare',
-      size: 'medium'
+      size: 'medium',
+      onClick: () => {
+        console.info('here');
+        screenShareStore.widget.open();
+      }
     },
     {
       title: t('labels.calendar'),
@@ -61,6 +68,7 @@ const Widgets: FC = () => {
 
   return (
     <>
+      {screenShareStore.widget.isOpen && <ScreenSharePage />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
