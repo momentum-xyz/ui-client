@@ -7,13 +7,14 @@ import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momen
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
-import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget} from './pages';
+import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget, ScreenShareWidget} from './pages';
 import * as styled from './Widgets.styled';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore} = useStore();
-  const {profileMenuStore, flyToMeStore} = widgetsStore;
-  const {unityStore} = mainStore;
+  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} = useStore();
+  const {profileMenuStore, flyToMeStore, screenShareStore} = widgetsStore;
+  const {agoraScreenShareStore} = agoraStore;
+  const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
 
   const {t} = useTranslation();
@@ -24,11 +25,17 @@ const Widgets: FC = () => {
     unityStore.hideMinimap();
   }, [unityStore, worldBuilderStore]);
 
+  const handleOpenScreenShare = () => {
+    agoraScreenShareStore.init(worldStore.worldId);
+    screenShareStore.widget.open();
+  };
+
   const rightToolbarIcons: ToolbarIconInterface[] = [
     {
       title: t('labels.screenShare'),
       icon: 'screenshare',
-      size: 'medium'
+      size: 'medium',
+      onClick: handleOpenScreenShare
     },
     {
       title: t('labels.calendar'),
@@ -99,6 +106,7 @@ const Widgets: FC = () => {
 
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
+      {screenShareStore.widget.isOpen && <ScreenShareWidget />}
     </>
   );
 };

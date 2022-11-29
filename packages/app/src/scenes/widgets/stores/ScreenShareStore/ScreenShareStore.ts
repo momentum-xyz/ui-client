@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 
@@ -8,6 +8,8 @@ const ScreenShareStore = types.compose(
   ResetModel,
   types
     .model('ScreenShareStore', {
+      widget: types.optional(Dialog, {}),
+      isExpanded: true,
       ownerRequest: types.optional(RequestModel, {}),
       request: types.optional(RequestModel, {}),
       screenOwnerId: types.maybeNull(types.string),
@@ -31,11 +33,14 @@ const ScreenShareStore = types.compose(
           self.screenOwnerName = response.name;
         }
       }),
-      relayScreenShare: flow(function* (spaceId: string) {
-        yield self.request.send(api.agoraRepository_old.relayScreenShare, {
-          spaceId
-        });
-      })
+      // relayScreenShare: flow(function* (spaceId: string) {
+      //   yield self.request.send(api.agoraRepository.relayScreenShare, {
+      //     spaceId
+      //   });
+      // }),
+      togglePage() {
+        self.isExpanded = !self.isExpanded;
+      }
     }))
     .views((self) => ({
       get screenShareTitle(): string {
