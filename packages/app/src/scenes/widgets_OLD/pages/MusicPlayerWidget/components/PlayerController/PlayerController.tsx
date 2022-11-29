@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './PlayerController.styled';
 
 const PlayerController: FC = () => {
-  const {musicPlayerStore} = useStore().widgetStore;
+  const {musicPlayerStore} = useStore().widgetStore_OLD;
   const {musicPlayer, play, playlist, pause, nextSong, previousSong} = musicPlayerStore;
 
   return (

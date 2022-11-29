@@ -10,7 +10,7 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 import * as styled from './IntroVideo.styled';
 
 const IntroVideo: FC = () => {
-  const {helpStore} = useStore().widgetStore;
+  const {helpStore} = useStore().widgetStore_OLD;
 
   const opts = {
     playerVars: {

@@ -17,8 +17,8 @@ interface PropsInterface {
 
 const TokenRuleReview: FC<PropsInterface> = ({onClose}) => {
   const theme = useTheme();
-  const {sessionStore, widgetStore} = useStore();
-  const {profileMenuStore} = widgetStore;
+  const {sessionStore, widgetsStore} = useStore();
+  const {profileMenuStore} = widgetsStore;
   const {tokenRulesStore} = profileMenuStore;
   const {tokenRuleReviewStore} = tokenRulesStore;
   const {currentTokenRule} = tokenRuleReviewStore;

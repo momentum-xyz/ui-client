@@ -16,7 +16,7 @@ const StakingAmountValidator = () => {
   const {t} = useTranslation();
   const theme = useTheme();
   const {existentialDeposit, minNominatorBond, bondAmountValidation} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+    useStore().widgetStore_OLD.stakingStore.polkadotProviderStore;
   const [{errorMessage, errorType}, setError] = useState<StakeValidatorErrorType>({
     errorMessage: '',
     errorType: ''

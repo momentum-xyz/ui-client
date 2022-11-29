@@ -32,6 +32,7 @@ export type PosBusEventType = {
   'high-five-sent': (message: string) => void;
   emoji: (message: PosBusEmojiMessageType) => void;
   megamoji: (emojiUrl: string) => void;
+  'fly-to-me': (spaceId: string, pilotId: string, pilotName: string) => void;
   'start-fly-with-me': (spaceId: string, pilotId: string, pilotName: string) => void;
   'stop-fly-with-me': (spaceId: string, pilotId: string, pilotName: string) => void;
   'simple-notification': (message: string) => void;

@@ -6,9 +6,9 @@ import {ROUTES} from 'core/constants';
 import {useStore, useSession} from 'shared/hooks';
 
 const AppAuth: FC = ({children}) => {
-  const {sessionStore, widgetStore, mainStore} = useStore();
+  const {sessionStore, widgetStore_OLD, mainStore} = useStore();
   const {user} = sessionStore;
-  const {helpStore} = widgetStore;
+  const {helpStore} = widgetStore_OLD;
   const {unityStore} = mainStore;
 
   const history = useHistory();

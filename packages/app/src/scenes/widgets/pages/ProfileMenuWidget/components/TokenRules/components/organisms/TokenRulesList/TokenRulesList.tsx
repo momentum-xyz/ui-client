@@ -17,8 +17,8 @@ interface PropsInterface {
 }
 
 const TokenRulesList: FC<PropsInterface> = ({columnHeaders, onEventClick}) => {
-  const {widgetStore} = useStore();
-  const {profileMenuStore} = widgetStore;
+  const {widgetsStore} = useStore();
+  const {profileMenuStore} = widgetsStore;
   const {tokenRulesStore} = profileMenuStore;
 
   useEffect(() => {

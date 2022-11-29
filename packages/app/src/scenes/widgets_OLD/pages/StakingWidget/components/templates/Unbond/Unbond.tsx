@@ -16,7 +16,7 @@ interface PropsInterface {
 
 const Unbond: FC<PropsInterface> = ({nominatorTab, authorizationTab}) => {
   const {unbondAmountValidation, setTransactionType} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+    useStore().widgetStore_OLD.stakingStore.polkadotProviderStore;
   useEffect(() => {
     setTransactionType(StakingTransactionEnum.Unbond);
   }, [setTransactionType]);

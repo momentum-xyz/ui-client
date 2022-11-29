@@ -16,9 +16,9 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
-  const {mainStore, widgetStore} = useStore();
+  const {mainStore, widgetStore_OLD} = useStore();
   const {worldStore} = mainStore;
-  const {musicPlayerStore} = widgetStore;
+  const {musicPlayerStore} = widgetStore_OLD;
   const {musicPlayerWidget, playlist} = musicPlayerStore;
 
   useEffect(() => {

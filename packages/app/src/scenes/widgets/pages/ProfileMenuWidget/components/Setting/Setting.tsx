@@ -7,12 +7,12 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './Setting.styled';
 
-const SETTING_OFFSET_RIGHT = 10;
+const SETTING_OFFSET_LEFT = 10;
 const SETTING_OFFSET_BOTTOM = 60;
 
 const Setting: FC = () => {
-  const {mainStore, widgetStore} = useStore();
-  const {profileMenuStore} = widgetStore;
+  const {mainStore, widgetsStore} = useStore();
+  const {profileMenuStore} = widgetsStore;
   const {agoraStore} = mainStore;
   const {userDevicesStore} = agoraStore;
 
@@ -30,10 +30,10 @@ const Setting: FC = () => {
 
   return (
     <Dialog
-      position="rightBottom"
+      position="bottomLeft"
       title={t('labels.settings')}
       headerStyle="normal"
-      offset={{right: SETTING_OFFSET_RIGHT, bottom: SETTING_OFFSET_BOTTOM}}
+      offset={{left: SETTING_OFFSET_LEFT, bottom: SETTING_OFFSET_BOTTOM}}
       onClose={handleClose}
       isBodyExtendingToEdges
       showBackground={false}

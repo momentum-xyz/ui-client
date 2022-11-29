@@ -10,9 +10,9 @@ import {Validators, Authorization, Nominator} from './components/templates';
 import * as styled from './StakingWidget.styled';
 
 const StakingWidget: FC = () => {
-  const {mainStore, widgetStore} = useStore();
+  const {mainStore, widgetStore_OLD} = useStore();
   const {unityStore} = mainStore;
-  const {stakingStore} = widgetStore;
+  const {stakingStore} = widgetStore_OLD;
   const {stakingDialog, validatorsStore, operatorSpaceId, polkadotProviderStore} = stakingStore;
 
   const [selectedTab, setSelectedTab] = useState<TabBarTabInterface>();

@@ -2,32 +2,21 @@ import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import ReactHowler from 'react-howler';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
+import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget, ScreenShareWidget} from './pages';
 import * as styled from './Widgets.styled';
-import {OnlineUsersWidget} from './pages/OnlineUsersWidget';
-import {ScreenShareWidget} from './pages';
 
 const Widgets: FC = () => {
-  const {
-    sessionStore,
-    widgetStore,
-    widgetsStore,
-    flightStore,
-    mainStore,
-    worldBuilderStore,
-    agoraStore
-  } = useStore();
-  const {unityStore, worldStore} = mainStore;
+  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} =
+    useStore();
+  const {profileMenuStore, flyToMeStore, screenShareStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {profileMenuStore, musicPlayerStore} = widgetStore;
-  const {screenShareStore} = widgetsStore;
+  const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
-  const {playlist, musicPlayer} = musicPlayerStore;
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -62,6 +51,13 @@ const Widgets: FC = () => {
       size: 'medium'
     },
     {
+      title: 'Fly to me',
+      icon: 'fly-to',
+      size: 'medium',
+      onClick: widgetsStore.flyToMeStore.flyToMeDialog.open,
+      disabled: false // TODO: Check permissions
+    },
+    {
       title: t('titles.worldBuilder'),
       icon: 'planet',
       size: 'medium'
@@ -78,21 +74,6 @@ const Widgets: FC = () => {
 
   return (
     <>
-      {screenShareStore.widget.isOpen && <ScreenShareWidget />}
-      <ReactHowler
-        src={[playlist.currentTrackHash]}
-        onLoad={musicPlayer.startLoading}
-        format={['mp3', 'ogg', 'acc', 'webm']}
-        onPlay={musicPlayer.startedPlaying}
-        onEnd={musicPlayerStore.songEnded}
-        playing={musicPlayer.isPlaying}
-        preload={true}
-        loop={false}
-        mute={musicPlayer.muted}
-        volume={musicPlayer.volume}
-        html5={true}
-        ref={(ref) => musicPlayer.setPlayer(ref)}
-      />
       <styled.Footer data-testid="Widgets-test">
         <styled.LeftToolbars>
           <ToolbarIconList>
@@ -123,6 +104,10 @@ const Widgets: FC = () => {
           </ToolbarIconList>
         </styled.RightToolbars>
       </styled.Footer>
+
+      {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
+      {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
+      {screenShareStore.widget.isOpen && <ScreenShareWidget />}
     </>
   );
 };

@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './SeekBarController.styled';
 
 const SeekBarController: FC = () => {
-  const {musicPlayerStore} = useStore().widgetStore;
+  const {musicPlayerStore} = useStore().widgetStore_OLD;
   const {musicPlayer} = musicPlayerStore;
 
   return (

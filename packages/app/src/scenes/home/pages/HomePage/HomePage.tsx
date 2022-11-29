@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+//import {Button} from '@momentum-xyz/ui-kit';
 
 // import {generatePath, useHistory} from 'react-router-dom';
 // import {useTranslation} from 'react-i18next';
@@ -7,12 +8,13 @@ import {observer} from 'mobx-react-lite';
 //
 // import {useStore} from 'shared/hooks';
 // import {ROUTES} from 'core/constants';
-//
+
+//import {useStore} from 'shared/hooks';
+
 import {ExplorePanel} from './components';
 import * as styled from './HomePage.styled';
 
 const HomePage: FC = () => {
-  // const {meetingStore, mainStore, homeStore} = useStore();
   // const {onlineUsersStore, userProfileDialog} = homeStore;
   // const {unityStore} = mainStore;
   //
