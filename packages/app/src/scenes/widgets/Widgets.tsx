@@ -13,9 +13,17 @@ import {OnlineUsersWidget} from './pages/OnlineUsersWidget';
 import {ScreenSharePage} from './pages';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetStore, widgetsStore, flightStore, mainStore, worldBuilderStore} =
-    useStore();
-  const {unityStore} = mainStore;
+  const {
+    sessionStore,
+    widgetStore,
+    widgetsStore,
+    flightStore,
+    mainStore,
+    worldBuilderStore,
+    agoraStore
+  } = useStore();
+  const {unityStore, worldStore} = mainStore;
+  const {agoraScreenShareStore} = agoraStore;
   const {profileMenuStore, musicPlayerStore} = widgetStore;
   const {screenShareStore} = widgetsStore;
   const {user} = sessionStore;
@@ -29,15 +37,17 @@ const Widgets: FC = () => {
     unityStore.hideMinimap();
   }, [unityStore, worldBuilderStore]);
 
+  const handleOpenScreenShare = () => {
+    agoraScreenShareStore.init(worldStore.worldId);
+    screenShareStore.widget.open();
+  };
+
   const rightToolbarIcons: ToolbarIconInterface[] = [
     {
       title: t('labels.screenShare'),
       icon: 'screenshare',
       size: 'medium',
-      onClick: () => {
-        console.info('here');
-        screenShareStore.widget.open();
-      }
+      onClick: handleOpenScreenShare
     },
     {
       title: t('labels.calendar'),

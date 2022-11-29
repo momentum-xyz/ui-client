@@ -5,21 +5,15 @@ import {Portal, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-import {StreamChat} from 'scenes/collaboration/components';
 
 import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenSharePage.styled';
 
-interface PropsInterface {
-  isExpanded?: boolean;
-}
-
-const ScreenSharePage: FC<PropsInterface> = ({isExpanded = true}) => {
-  const {mainStore, sessionStore, widgetsStore, collaborationStore} = useStore();
-  const {spaceStore, screenShareStore, streamChatStore} = collaborationStore;
+const ScreenSharePage: FC = () => {
+  const {sessionStore, widgetsStore, agoraStore} = useStore();
+  const {screenShareStore} = widgetsStore;
   // const {screenShareTitle} = screenShareStore;
-  const {agoraStore} = mainStore;
-  const {agoraScreenShareStore, agoraStageModeStore} = agoraStore;
+  const {agoraScreenShareStore} = agoraStore;
   const {videoTrack} = agoraScreenShareStore;
 
   const {t} = useTranslation();
@@ -35,12 +29,9 @@ const ScreenSharePage: FC<PropsInterface> = ({isExpanded = true}) => {
     }
   }, [videoTrack, screenShareStore, sessionStore.userId]);
 
-  const startScreenSharing = useCallback(async () => {
-    const wasStarted: boolean = await agoraScreenShareStore.startScreenSharing(sessionStore.userId);
-    if (wasStarted && spaceStore.id) {
-      screenShareStore.relayScreenShare(spaceStore.id);
-    }
-  }, [agoraScreenShareStore, screenShareStore, sessionStore.userId, spaceStore.id]);
+  const startScreenSharing = useCallback(() => {
+    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
+  }, [agoraScreenShareStore, sessionStore.userId]);
 
   // const stopScreenSharing = useCallback(() => {
   //   screenShareStore.setScreenOwner(null);
@@ -53,7 +44,7 @@ const ScreenSharePage: FC<PropsInterface> = ({isExpanded = true}) => {
 
   return (
     <Portal>
-      <styled.Modal className={cn(widgetsStore.screenShareStore.isExpanded && 'expanded')}>
+      <styled.Modal className={cn(screenShareStore.isExpanded && 'expanded')}>
         <styled.HeaderElement className="left">
           <styled.Title>
             <Text
@@ -75,9 +66,9 @@ const ScreenSharePage: FC<PropsInterface> = ({isExpanded = true}) => {
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <SvgButton
-            iconName={isExpanded ? 'minimise' : 'fullscreen'}
+            iconName={screenShareStore.isExpanded ? 'minimise' : 'fullscreen'}
             size="large"
-            onClick={widgetsStore.screenShareStore.togglePage}
+            onClick={screenShareStore.togglePage}
             isWhite
           />
 
@@ -85,23 +76,18 @@ const ScreenSharePage: FC<PropsInterface> = ({isExpanded = true}) => {
             iconName="close"
             size="large"
             isWhite
-            onClick={widgetsStore.screenShareStore.widget.close}
+            onClick={screenShareStore.widget.close}
           />
         </styled.HeaderElement>
         <styled.InnerContainer>
           {!videoTrack ? (
             <ScreenChoice
               isSettingUp={agoraScreenShareStore.isSettingUp}
-              canShare={
-                (agoraStore.isStageMode && agoraStageModeStore.isOnStage) || !agoraStore.isStageMode
-              }
+              // canShare={//share permission}
               startScreenShare={startScreenSharing}
             />
           ) : (
             <ScreenVideo videoTrack={videoTrack} />
-          )}
-          {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
-            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
           )}
         </styled.InnerContainer>
       </styled.Modal>

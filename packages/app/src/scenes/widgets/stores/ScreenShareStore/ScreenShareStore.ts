@@ -33,11 +33,11 @@ const ScreenShareStore = types.compose(
           self.screenOwnerName = response.name;
         }
       }),
-      relayScreenShare: flow(function* (spaceId: string) {
-        yield self.request.send(api.agoraRepository.relayScreenShare, {
-          spaceId
-        });
-      }),
+      // relayScreenShare: flow(function* (spaceId: string) {
+      //   yield self.request.send(api.agoraRepository.relayScreenShare, {
+      //     spaceId
+      //   });
+      // }),
       togglePage() {
         self.isExpanded = !self.isExpanded;
       }

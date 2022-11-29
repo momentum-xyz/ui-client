@@ -7,12 +7,12 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 import * as styled from './ScreenChoice.styled';
 
 interface PropsInterface {
-  canShare: boolean;
+  canShare?: boolean;
   isSettingUp: boolean;
   startScreenShare: () => void;
 }
 
-const ScreenChoice: FC<PropsInterface> = ({canShare, isSettingUp, startScreenShare}) => {
+const ScreenChoice: FC<PropsInterface> = ({canShare = true, isSettingUp, startScreenShare}) => {
   const {t} = useTranslation();
   const theme = useTheme();
 
