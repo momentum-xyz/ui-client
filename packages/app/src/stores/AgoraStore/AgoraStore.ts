@@ -79,7 +79,6 @@ const AgoraStore = types
       }
 
       self.userDevicesStore.mute();
-      self.userDevicesStore.turnOffCamera();
 
       self.agoraScreenShareStore.init(self.appId, self.worldId);
     }),

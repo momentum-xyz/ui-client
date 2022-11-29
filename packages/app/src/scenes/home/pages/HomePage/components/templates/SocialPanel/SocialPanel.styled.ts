@@ -33,4 +33,5 @@ export const TabsSelector = styled.div`
 
 export const Body = styled.div`
   flex-grow: 1;
+  overflow: hidden;
 `;

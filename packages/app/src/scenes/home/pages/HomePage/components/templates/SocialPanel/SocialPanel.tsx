@@ -2,7 +2,7 @@ import {Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useMemo, useState} from 'react';
 
-import {SocialTabBar} from './components';
+import {SocialTabBar, VoicePanel} from './components';
 import * as styled from './SocialPanel.styled';
 
 interface SocialPanelTabInterface {
@@ -14,10 +14,6 @@ const Chat: FC = () => {
   return <div>Chat</div>;
 };
 
-const Voice: FC = () => {
-  return <div>Voice</div>;
-};
-
 const SocialPanel: FC = () => {
   const tabs: SocialPanelTabInterface[] = useMemo(
     () => [
@@ -27,7 +23,7 @@ const SocialPanel: FC = () => {
       },
       {
         name: 'Voice',
-        main: () => <Voice />
+        main: () => <VoicePanel />
       }
     ],
     []
