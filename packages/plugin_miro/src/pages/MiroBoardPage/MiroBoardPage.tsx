@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useStore} from 'shared/hooks/useStore';
 import {useObject} from '@momentum-xyz/sdk';
-import {SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
+import {SpacePage, ObjectTopBar} from '@momentum-xyz/ui-kit';
 
 import {MiroActions, MiroBoard, MiroChoice} from './components';
 import * as styled from './MiroBoardPage.styled';
@@ -11,7 +11,8 @@ const MiroBoardPage: FC = () => {
   const store = useStore();
   const {api, miroBoardStore} = store;
   const {board, pickBoard, disableBoard} = miroBoardStore;
-  const {isAdmin, pluginName, objectId, pluginApi, onClose} = useObject();
+  const {isAdmin, pluginName, objectId, pluginApi, isExpanded, onClose, onToggleExpand} =
+    useObject();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useEffect(() => {
@@ -29,15 +30,12 @@ const MiroBoardPage: FC = () => {
 
   return (
     <SpacePage>
-      <SpaceTopBar
+      <ObjectTopBar
         title={pluginName ?? ''}
         subtitle={board?.name}
-        isAdmin={isAdmin}
-        spaceId={objectId}
-        editSpaceHidden
-        onLeave={() => onClose?.()}
-        isSpaceFavorite={false}
-        toggleIsSpaceFavorite={() => {}}
+        onClose={() => onClose?.()}
+        onToggleExpand={onToggleExpand}
+        isExpanded={isExpanded}
       >
         <MiroActions
           objectId={objectId}
@@ -46,7 +44,7 @@ const MiroBoardPage: FC = () => {
           pick={pickBoard}
           disable={disableBoard}
         />
-      </SpaceTopBar>
+      </ObjectTopBar>
       <styled.Container>
         {!board?.accessLink ? (
           <MiroChoice isAdmin={isAdmin} pickBoard={miroBoardStore.pickBoard} />

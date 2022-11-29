@@ -6,11 +6,14 @@ import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {ObjectPluginPropsInterface, PluginInterface} from '@momentum-xyz/sdk';
 import {generatePath, useHistory} from 'react-router-dom';
+import cn from 'classnames';
 
 import {ToastContent} from 'ui-kit';
 import {PluginLoaderModelType} from 'core/models';
 import {PosBusService} from 'shared/services';
 import {ROUTES} from 'core/constants';
+
+import * as styled from './ObjectPluginPage.styled';
 
 interface PropsInterface {
   objectId: string;
@@ -50,6 +53,8 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   const {content} = plugin.usePlugin({
     theme,
     isAdmin: true,
+    isExpanded: pluginLoader.isExpanded,
+    onToggleExpand: pluginLoader.toggleIsExpanded,
     objectId,
     pluginName: pluginLoader.name,
     pluginApi: attributesManager.pluginApi,
@@ -60,7 +65,11 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   });
 
   return !pluginLoader.isError ? (
-    <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>{content}</ErrorBoundary>
+    <styled.Wrapper>
+      <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
+        <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>{content}</ErrorBoundary>
+      </styled.Container>
+    </styled.Wrapper>
   ) : (
     <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
   );

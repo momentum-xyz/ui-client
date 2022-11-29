@@ -1,7 +1,7 @@
 import {
   PluginApiInterface,
   UsePluginHookType,
-  SpaceGlobalPropsContextProvider,
+  ObjectGlobalPropsContextProvider,
   ObjectPluginPropsInterface
 } from '@momentum-xyz/sdk';
 import {AppConfigInterface} from 'core/interfaces';
@@ -34,13 +34,13 @@ export const usePlugin: UsePluginHookType<ObjectPluginPropsInterface> = (props) 
 
   const content = useMemo(() => {
     return (
-      <SpaceGlobalPropsContextProvider props={props}>
+      <ObjectGlobalPropsContextProvider props={props}>
         <ThemeProvider theme={props.theme}>
           <StoreProvider value={store}>
             <GoogleDrivePage />
           </StoreProvider>
         </ThemeProvider>
-      </SpaceGlobalPropsContextProvider>
+      </ObjectGlobalPropsContextProvider>
     );
   }, [props, store]);
 
