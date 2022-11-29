@@ -1,10 +1,13 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 
 import {useStore} from 'shared/hooks';
+import {WorldBuilderSkyboxInterface} from 'scenes/worldBuilder/stores/WorldBuilderSkyboxesStore/models';
+
+import {Carousel} from '../Carousel';
 
 import * as styled from './SkyboxSelectorWithPreview.styled';
 
@@ -20,57 +23,44 @@ const SkyboxSelectorWithPreview: FC = () => {
 
   return (
     <styled.Container>
-      <styled.SideNav>
-        <styled.SideBarTitleHolder>
-          <Heading label="Skyboxes" type="h1" align="left" transform="uppercase" />
-        </styled.SideBarTitleHolder>
-        <styled.SideBarElementHolder>
-          <Text text="Select the Skybox for your world" size="s" align="left" />
-        </styled.SideBarElementHolder>
-        {!!items &&
-          items.map((skybox) => {
-            const active = skybox === selectedItem;
-            return (
-              <styled.SideNavItem
-                className={cn({active})}
-                key={skybox.id}
-                onClick={() => {
-                  selectItem(skybox);
-                  unityStore.changeSkybox(skybox.id);
-                }}
-              >
-                <Text text={skybox.name} size="xl" align="left" />
-                <styled.SideNavItemIcons>
-                  <IconSvg name={active ? 'starOn' : 'star'} size="medium-large" />
-                  <IconSvg name="arrow" size="medium-large" />
-                </styled.SideNavItemIcons>
-              </styled.SideNavItem>
-            );
-          })}
-      </styled.SideNav>
-      <styled.PreviewContainer>
-        {!!selectedItem && (
-          <>
-            <styled.PreviewTitleHolder>
-              <Text text="Skybox Preview" size="l" transform="uppercase" weight="light" />
-            </styled.PreviewTitleHolder>
-            <styled.PreviewImg src={selectedItem.image} />
-            <styled.ActionButtonHolder>
-              <Button
-                label="Update Skybox"
-                variant="inverted"
-                transform="normal"
-                size="medium"
-                onClick={() => {
-                  saveSelectedItem().catch((err) => {
-                    toast.error(err.message);
-                  });
-                }}
-              />
-            </styled.ActionButtonHolder>
-          </>
+      <styled.ItemsGallery>
+        {!!items && !!selectedItem && (
+          <Carousel<WorldBuilderSkyboxInterface>
+            items={items}
+            activeItem={selectedItem}
+            onChange={selectItem}
+            renderItem={(item, idx) => {
+              const active = item === selectedItem;
+              return (
+                <styled.Item
+                  className={cn({active})}
+                  key={item.id + idx}
+                  onClick={() => {
+                    selectItem(item);
+                    unityStore.changeSkybox(item.id);
+                  }}
+                >
+                  <styled.PreviewImg src={item.image} />
+                  <styled.ItemTitle>{item.name}</styled.ItemTitle>
+                  <styled.ItemButtonHolder>
+                    <Button
+                      label="Select Skybox"
+                      // variant="inverted"
+                      transform="normal"
+                      size="medium"
+                      onClick={() => {
+                        saveSelectedItem().catch((err) => {
+                          toast.error(err.message);
+                        });
+                      }}
+                    />
+                  </styled.ItemButtonHolder>
+                </styled.Item>
+              );
+            }}
+          />
         )}
-      </styled.PreviewContainer>
+      </styled.ItemsGallery>
     </styled.Container>
   );
 };
