@@ -24,9 +24,8 @@ const AgoraScreenShareStore = types
     ResetModel,
     types.model('AgoraScreenShareStore', {
       request: types.optional(RequestModel, {}),
-      spaceId: types.maybe(types.string),
+      worldId: types.maybe(types.string),
       appId: '',
-      isStageMode: false,
       isSettingUp: false
     })
   )
@@ -51,10 +50,9 @@ const AgoraScreenShareStore = types
     }
   }))
   .actions((self) => ({
-    init(appId: string, isStageMode: boolean, spaceId?: string) {
+    init(appId: string, worldId?: string) {
       self.appId = appId;
-      self.spaceId = spaceId;
-      self.isStageMode = isStageMode;
+      self.worldId = worldId;
     }
   }))
   .actions((self) => ({
@@ -83,7 +81,7 @@ const AgoraScreenShareStore = types
     startScreenSharing: flow(function* (authStateSubject: string) {
       let wasStarted = false;
 
-      if (self.spaceId) {
+      if (self.worldId) {
         self.isSettingUp = true;
 
         self.client = AgoraRTC.createClient({
@@ -98,15 +96,13 @@ const AgoraScreenShareStore = types
         const response: string = yield self.request.send(
           api.agoraRepository.getAgoraScreenShareToken,
           {
-            spaceId: self.spaceId,
-            isStageMode: self.isStageMode
+            spaceId: self.worldId,
+            isStageMode: false
           }
         );
 
-        const token = self.isStageMode ? `stage-${self.spaceId}` : self.spaceId;
-
         try {
-          yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
+          yield self.client.join(self.appId, self.worldId, response, `ss|${authStateSubject}`);
           yield self.createScreenTrackAndPublish();
           wasStarted = true;
         } catch {

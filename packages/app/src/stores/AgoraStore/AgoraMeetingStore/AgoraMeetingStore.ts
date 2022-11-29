@@ -11,7 +11,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {api} from 'api';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
-import {AgoraScreenShareStoreType} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
+import {AgoraScreenShareStoreType} from 'stores/AgoraStore/AgoraScreenShareStore';
 
 const AgoraMeetingStore = types
   .compose(

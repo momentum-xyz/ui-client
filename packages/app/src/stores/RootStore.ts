@@ -57,6 +57,7 @@ const RootStore = types
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
     },
+    // TODO: To be removed, do not use in new code
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       console.log('---JOINING---');
 
@@ -78,6 +79,7 @@ const RootStore = types
 
       console.log('---JOINED---');
     }),
+    // TODO: To be removed, do not use in new code
     leaveMeetingSpace: flow(function* (isKicked = false) {
       console.log('---LEAVING---');
 
