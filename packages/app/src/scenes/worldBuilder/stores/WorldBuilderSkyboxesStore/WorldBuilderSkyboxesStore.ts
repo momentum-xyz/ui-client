@@ -24,7 +24,7 @@ const WorldBuilderSkyboxesStore = types
       );
       console.log('Assets3d response:', assets3d);
       if (!assets3d) {
-        console.log('Error loading assets3d');
+        console.error('Error loading assets3d');
         return;
       }
 

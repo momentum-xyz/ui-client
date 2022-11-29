@@ -29,5 +29,5 @@ export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3d
 };
 
 export const fetchAssets3d: RequestInterface<null, FetchAssets3dResponse> = () => {
-  return request.get(assets3dRepositoryEndpoints().get, {params: {category: 'skybox'}});
+  return request.get(assets3dRepositoryEndpoints().base, {params: {category: 'skybox'}});
 };
