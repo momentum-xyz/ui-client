@@ -61,6 +61,7 @@ export type IconNameType =
   | 'microphoneOff'
   | 'microphoneOn'
   | 'minimap'
+  | 'minimise'
   | 'miro'
   | 'mouse-pad'
   | 'music'

@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
 import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
@@ -9,15 +9,22 @@ import {
   ObjectPluginPropsInterface,
   PluginInterface
 } from '../../../interfaces';
-import {SpaceGlobalPropsContextProvider} from '../../../contexts';
 
 interface PropsInterface {
   plugin: PluginInterface<ObjectPluginPropsInterface>;
-  spaceId: string;
+  objectId: string;
+  isExpanded: boolean;
+  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
+export const SpaceTabEmulator: FC<PropsInterface> = ({
+  plugin,
+  objectId,
+  isExpanded,
+  setIsExpanded
+}) => {
   console.log('RENDER SpaceTabEmulator', {plugin});
+
   const theme = useTheme();
   const {
     spaceAttributes,
@@ -44,7 +51,9 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
     () => ({
       theme: theme as ThemeInterface,
       isAdmin: false,
-      spaceId,
+      objectId,
+      isExpanded,
+      onToggleExpand: () => setIsExpanded((oldValue) => !oldValue),
       api: {
         getSpaceAttributeValue: <T extends AttributeValueInterface>(
           spaceId: string,
@@ -189,13 +198,15 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
     }),
     [
       theme,
-      spaceId,
+      objectId,
+      isExpanded,
       subscribeToTopic,
       unsubscribeFromTopic,
       useAttributeChange,
       useAttributeRemove,
       useAttributeItemChange,
       useAttributeItemRemove,
+      setIsExpanded,
       spaceAttributes,
       changedAttribute,
       removedAttribute,
@@ -210,15 +221,7 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({plugin, spaceId}) => {
   return (
     <>
       {!!content && (
-        <ErrorBoundary errorMessage="Error while rendering plugin">
-          <SpaceGlobalPropsContextProvider
-            props={{
-              ...coreProps
-            }}
-          >
-            {content}
-          </SpaceGlobalPropsContextProvider>
-        </ErrorBoundary>
+        <ErrorBoundary errorMessage="Error while rendering plugin">{content}</ErrorBoundary>
       )}
     </>
   );

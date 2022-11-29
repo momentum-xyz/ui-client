@@ -9,13 +9,12 @@ export interface CorePluginPropsInterface<C extends PluginConfigInterface = Plug
   objectId?: string;
   pluginName?: string;
   isAdmin: boolean;
+  isExpanded?: boolean;
+
+  onToggleExpand?: () => void;
 
   pluginApi: PluginApiInterface<C>;
   api: ApiInterface;
-}
-
-export interface PluginTopBarActionInterface {
-  main: () => JSX.Element | null;
 }
 
 export interface ObjectPluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface>

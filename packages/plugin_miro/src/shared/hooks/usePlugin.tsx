@@ -1,6 +1,6 @@
 import {
   PluginApiInterface,
-  SpaceGlobalPropsContextProvider,
+  ObjectGlobalPropsContextProvider,
   UsePluginHookType
 } from '@momentum-xyz/sdk';
 import {AppConfigInterface, MiroPluginPropsInterface} from 'core/interfaces';
@@ -27,11 +27,11 @@ export const usePlugin: UsePluginHookType<MiroPluginPropsInterface> = (props) =>
 
   const content = useMemo(
     () => (
-      <SpaceGlobalPropsContextProvider props={props}>
+      <ObjectGlobalPropsContextProvider props={props}>
         <StoreProvider value={store}>
           <MiroBoardPage />
         </StoreProvider>
-      </SpaceGlobalPropsContextProvider>
+      </ObjectGlobalPropsContextProvider>
     ),
     [props, store]
   );

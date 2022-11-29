@@ -24,7 +24,8 @@ const PluginLoader = types
         LoaderStatusEnum.READY
       ),
       plugin: types.maybe(types.frozen<PluginInterface>()),
-      attributesManager: PluginAttributesManager
+      attributesManager: PluginAttributesManager,
+      isExpanded: false
     })
   )
   .actions((self) => ({
@@ -54,7 +55,10 @@ const PluginLoader = types
         console.error('[PluginLoader] An error has occured while loading plugin!', error);
         self.status = LoaderStatusEnum.ERROR;
       }
-    })
+    }),
+    toggleIsExpanded() {
+      self.isExpanded = !self.isExpanded;
+    }
   }))
   .views((self) => ({
     get isLoaded(): boolean {
