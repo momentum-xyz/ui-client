@@ -10,6 +10,7 @@ import {observer} from 'mobx-react-lite';
 //
 import {ExplorePanel} from './components';
 import * as styled from './HomePage.styled';
+import {SocialPanel} from './components';
 
 const HomePage: FC = () => {
   // const {meetingStore, mainStore, homeStore} = useStore();
@@ -31,6 +32,9 @@ const HomePage: FC = () => {
     <styled.Container data-testid="HomePage-test">
       <styled.PanelWrapper>
         <ExplorePanel />
+      </styled.PanelWrapper>
+      <styled.PanelWrapper>
+        <SocialPanel />
       </styled.PanelWrapper>
 
       {/*<styled.PanelWrapper>*/}
