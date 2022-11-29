@@ -3,7 +3,6 @@ import AgoraRTC, {
   ConnectionDisconnectedReason,
   ConnectionState,
   IAgoraRTCRemoteUser,
-  ICameraVideoTrack,
   IMicrophoneAudioTrack
 } from 'agora-rtc-sdk-ng';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
@@ -63,9 +62,6 @@ const AgoraMeetingStore = types
         if (mediaType === 'audio') {
           updatedUser.isMuted = !user.hasAudio;
           updatedUser.audioTrack = user.audioTrack;
-        } else {
-          updatedUser.cameraOff = !user.hasVideo;
-          updatedUser.videoTrack = user.videoTrack;
         }
       }
     }),
@@ -88,8 +84,6 @@ const AgoraMeetingStore = types
 
         if (mediaType === 'audio') {
           foundUser.isMuted = true;
-        } else {
-          foundUser.cameraOff = true;
         }
       }
     },
@@ -160,23 +154,6 @@ const AgoraMeetingStore = types
       self.client.enableAudioVolumeIndicator();
       self.appId = appId;
     },
-    createVideoTrackAndPublish: flow(function* (deviceId: string, isTrackEnabled: boolean) {
-      if (self.client.connectionState !== 'CONNECTED') {
-        return undefined;
-      }
-
-      const publishedCameraTrack = yield AgoraRTC.createCameraVideoTrack({
-        cameraId: deviceId,
-        facingMode: 'user',
-        // https://docs.agora.io/en/Agora%20Platform/video_profile_web_ng?platform=Web#recommended-video-profiles
-        encoderConfig: '240p_1'
-      });
-
-      yield self.client.publish(publishedCameraTrack);
-      yield publishedCameraTrack.setEnabled(isTrackEnabled);
-
-      return publishedCameraTrack;
-    }),
     createAudioTrackAndPublish: flow(function* (deviceId: string, isTrackEnabled: boolean) {
       if (self.client.connectionState !== 'CONNECTED') {
         return undefined;
@@ -216,11 +193,7 @@ const AgoraMeetingStore = types
         createAudioTrack: (
           deviceId: string,
           isTrackEnabled: boolean
-        ) => Promise<IMicrophoneAudioTrack | undefined>,
-        createVideoTrack: (
-          deviceId: string,
-          isTrackEnabled: boolean
-        ) => Promise<ICameraVideoTrack | undefined>
+        ) => Promise<IMicrophoneAudioTrack | undefined>
       ) => Promise<void>
     ) {
       const tokenResponse: string | undefined = yield self.getAgoraToken(spaceId);
@@ -230,7 +203,7 @@ const AgoraMeetingStore = types
       }
 
       self.userId = yield self.client.join(self.appId, spaceId, tokenResponse, authStateSubject);
-      yield createLocalTracks(self.createAudioTrackAndPublish, self.createVideoTrackAndPublish);
+      yield createLocalTracks(self.createAudioTrackAndPublish);
       self.spaceId = spaceId;
       self.users = self.client.remoteUsers
         .filter((user) => String(user.uid).split('|')[0] !== 'ss')
@@ -239,7 +212,7 @@ const AgoraMeetingStore = types
             uid: user.uid,
             participantInfo: user,
             isMuted: !user.hasAudio,
-            cameraOff: !user.hasVideo
+            cameraOff: true
           })
         );
     }),

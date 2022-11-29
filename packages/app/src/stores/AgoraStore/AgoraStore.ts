@@ -129,17 +129,6 @@ const AgoraStore = types
     },
     selectVideoInput(deviceId: string) {
       self.userDevicesStore.selectVideoInput(deviceId);
-
-      self.userDevicesStore.localVideoTrack?.stop();
-      self.userDevicesStore.localVideoTrack?.close();
-
-      if (self.userDevicesStore.localVideoTrack) {
-        self.agoraMeetingStore.client.unpublish(self.userDevicesStore.localVideoTrack);
-      }
-
-      self.userDevicesStore.createLocalVideoTrack(
-        self.agoraMeetingStore.createVideoTrackAndPublish
-      );
     }
   }))
   .views((self) => ({
