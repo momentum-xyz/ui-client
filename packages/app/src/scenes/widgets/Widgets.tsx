@@ -11,7 +11,8 @@ import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget, ScreenShareWidget} 
 import * as styled from './Widgets.styled';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} = useStore();
+  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} =
+    useStore();
   const {profileMenuStore, flyToMeStore, screenShareStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
