@@ -7,6 +7,7 @@ import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootFlightStore} from 'scenes/flight/stores';
+import {RootWidgetsStore} from 'scenes/widgets/stores/RootWidgetsStore';
 import {RootWidgetStore} from 'scenes/widgets_OLD/stores/RootWidgetStore';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {HomeStore} from 'scenes/home/stores';
@@ -39,6 +40,8 @@ const RootStore = types
     flightStore: types.optional(RootFlightStore, {}),
     calendarStore: types.optional(CalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
+    widgetsStore: types.optional(RootWidgetsStore, {}),
+    // TODO: Removal. Old store
     widgetStore: types.optional(RootWidgetStore, {}),
     worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
     worldChatStore: types.optional(StreamChatStore, {}),

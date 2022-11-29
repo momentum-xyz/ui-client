@@ -25,10 +25,3 @@ export const PanelWrapper = styled.div`
 //  right: 222px;
 //  top: 12px;
 // `;
-
-export const FlyToMe = styled.div`
-  position: absolute;
-  pointer-events: all;
-  left: 222px;
-  top: 12px;
-`;

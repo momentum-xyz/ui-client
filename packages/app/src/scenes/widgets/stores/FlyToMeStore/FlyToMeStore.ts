@@ -1,13 +1,13 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 
-// TODO: FlyTo. Movement after getting design
 const FlyToMeStore = types.compose(
   ResetModel,
   types
     .model('FlyToMeStore', {
+      flyToMeDialog: types.optional(Dialog, {}),
       request: types.optional(RequestModel, {})
     })
     .actions((self) => ({

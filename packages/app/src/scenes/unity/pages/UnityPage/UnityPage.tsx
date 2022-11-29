@@ -89,12 +89,12 @@ const UnityPage: FC = () => {
     if (sessionStore.userId !== userId) {
       toast.info(
         <ToastContent
-          headerIconName="fly-to"
-          title={`Fly to ${userName}.`}
-          text={`Do you want to fly to ${userName}?`}
+          headerIconName="fly-with-me"
+          title="Fly to me Request"
+          text={`${userName} has invited you to fly to them`}
           declineInfo={{title: t('actions.decline')}}
           approveInfo={{
-            title: t('actions.accept'),
+            title: t('actions.join'),
             onClick: () => unityStore.teleportToUser(userId)
           }}
         />,

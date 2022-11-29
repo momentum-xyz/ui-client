@@ -1,7 +1,7 @@
 import {types} from 'mobx-state-tree';
 import {Dialog, ResetModel} from '@momentum-xyz/core';
 
-import {ExploreStore, OnlineUsersStore, UserProfileStore, FlyToMeStore} from './models';
+import {ExploreStore, OnlineUsersStore, UserProfileStore} from './models';
 
 const HomeStore = types.compose(
   ResetModel,
@@ -9,10 +9,7 @@ const HomeStore = types.compose(
     onlineUsersStore: types.optional(OnlineUsersStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
     userProfileStore: types.optional(UserProfileStore, {}),
-    userProfileDialog: types.optional(Dialog, {}),
-
-    // TODO: FlyTo. Movement after getting design
-    flyToMeStore: types.optional(FlyToMeStore, {})
+    userProfileDialog: types.optional(Dialog, {})
   })
 );
 
