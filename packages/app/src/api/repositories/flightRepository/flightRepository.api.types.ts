@@ -9,3 +9,9 @@ export interface StartFlyWithMeRequest {
 export interface StopFlyWithMeRequest {
   spaceId: string;
 }
+
+/** Fly To Me **/
+
+export interface FlyToMeRequest {
+  spaceId: string;
+}

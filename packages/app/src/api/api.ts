@@ -18,7 +18,7 @@ import * as spaceInfoRepository from './repositories/spaceInfoRepository';
 import * as assetsRepository from './repositories/assetsRepository';
 import * as objectRepository from './repositories/objectRepository';
 import * as assets3dRepository from './repositories/assets3dRepository';
-import * as flyWithMeRepository from './repositories/flyWithMeRepository';
+import * as flightRepository from './repositories/flightRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
@@ -68,7 +68,7 @@ export const api = {
   userRepository_OLD,
   profileRepository,
   spaceRepositoryOld,
-  flyWithMeRepository,
+  flightRepository,
   stageModeRepository,
   magicLinkRepository,
   tokenRuleRepository,
@@ -132,7 +132,7 @@ export * from './repositories/assetsRepository/assetsRepository.api.types';
 export * from './repositories/assets3dRepository/assets3dRepository.api.types';
 export * from './repositories/spaceInfoRepository/spaceInfoRepository.api.types';
 export * from './repositories/objectRepository/objectRepository.api.types';
-export * from './repositories/flyWithMeRepository/flyWithMeRepository.api.types';
+export * from './repositories/flightRepository/flightRepository.api.types';
 
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
 export * from './repositories_OLD/userRepository/userRepository.api.types';
