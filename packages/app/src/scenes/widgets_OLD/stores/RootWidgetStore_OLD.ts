@@ -8,7 +8,7 @@ import {LaunchInitiativeStore} from './LaunchInitiativeStore';
 import {MusicPlayerStore} from './MusicPlayerStore';
 import {EmojiStore} from './EmojiStore';
 
-const RootWidgetStore = types.model('RootWidgetStore', {
+const RootWidgetStore_OLD = types.model('RootWidgetStore_OLD', {
   magicLinkStore: types.optional(MagicLinkStore, {}),
   stakingStore: types.optional(StakingStore, {}),
   worldStatsStore: types.optional(WorldStatsStore, {}),
@@ -17,6 +17,6 @@ const RootWidgetStore = types.model('RootWidgetStore', {
   musicPlayerStore: types.optional(MusicPlayerStore, {}),
   emojiStore: types.optional(EmojiStore, {})
 });
-export type RootMeetingSpaceStoreType = Instance<typeof RootWidgetStore>;
+export type RootMeetingSpaceStoreType = Instance<typeof RootWidgetStore_OLD>;
 
-export {RootWidgetStore};
+export {RootWidgetStore_OLD};

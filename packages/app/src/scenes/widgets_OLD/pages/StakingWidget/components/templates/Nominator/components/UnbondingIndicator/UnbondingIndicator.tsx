@@ -13,7 +13,7 @@ import * as styled from './UnbondingIndicator.styled';
 interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondingIndicator: FC<PropsInterface> = ({theme}) => {
-  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {polkadotProviderStore} = useStore().widgetStore_OLD.stakingStore;
   const {channel, stashStakingBalance, tokenSymbol, unlockingProgress} = polkadotProviderStore;
   const [mapped] = unlockingProgress;
   return (

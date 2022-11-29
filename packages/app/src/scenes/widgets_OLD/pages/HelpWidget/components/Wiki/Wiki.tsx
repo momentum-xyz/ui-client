@@ -13,7 +13,7 @@ const WIKI_URL = 'https://momentum-xyz.github.io/docs/category/learn/';
 
 const Wiki: React.FC = () => {
   const {
-    widgetStore: {helpStore}
+    widgetStore_OLD: {helpStore}
   } = useStore();
 
   const handleExpand = () => {

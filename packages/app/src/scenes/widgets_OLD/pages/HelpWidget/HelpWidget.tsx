@@ -13,8 +13,8 @@ import * as styled from './HelpWidget.styled';
 import {IntroVideo} from './components/IntroVideo';
 
 const HelpWidget: React.FC = () => {
-  const {widgetStore, mainStore} = useStore();
-  const {helpStore} = widgetStore;
+  const {widgetStore_OLD, mainStore} = useStore();
+  const {helpStore} = widgetStore_OLD;
   const {worldStore} = mainStore;
 
   const theme = useTheme();

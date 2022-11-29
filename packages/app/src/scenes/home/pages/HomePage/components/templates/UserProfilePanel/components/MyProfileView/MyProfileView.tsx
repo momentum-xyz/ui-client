@@ -11,8 +11,8 @@ import {UserSpaceList} from 'ui-kit';
 import * as styled from './MyProfileView.styled';
 
 const MyProfileView: FC = () => {
-  const {widgetStore, sessionStore, mainStore, homeStore} = useStore();
-  const {launchInitiativeStore} = widgetStore;
+  const {widgetStore_OLD, sessionStore, mainStore, homeStore} = useStore();
+  const {launchInitiativeStore} = widgetStore_OLD;
   const {unityStore} = mainStore;
   const {user} = sessionStore;
   const {exploreStore, userProfileStore} = homeStore;

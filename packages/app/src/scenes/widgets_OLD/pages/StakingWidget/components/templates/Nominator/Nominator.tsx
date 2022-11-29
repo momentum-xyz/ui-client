@@ -26,7 +26,7 @@ interface PropsInterface {
 }
 
 const Nominator: FC<PropsInterface> = ({goToAuthorization, goToValidators}) => {
-  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {polkadotProviderStore} = useStore().widgetStore_OLD.stakingStore;
   const {
     paymentDestination,
     controllerAccountValidation,

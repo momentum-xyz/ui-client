@@ -8,7 +8,7 @@ import {useStore} from 'shared/hooks/useStore';
 import * as styled from './BondDetails.styled';
 
 const BondDetails = () => {
-  const {validatorsStore, polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {validatorsStore, polkadotProviderStore} = useStore().widgetStore_OLD.stakingStore;
   const {stakingAmount, tokenSymbol, controllerAccount, stashAccount} = polkadotProviderStore;
   const {selectedValidators, selectedValidatorsOptions} = validatorsStore;
   return (

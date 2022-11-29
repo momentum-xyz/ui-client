@@ -10,8 +10,8 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 import * as styled from './Emoji.styled';
 
 const Emoji: React.FC = () => {
-  const {widgetStore} = useStore();
-  const {helpStore} = widgetStore;
+  const {widgetStore_OLD} = useStore();
+  const {helpStore} = widgetStore_OLD;
 
   const {t} = useTranslation();
 

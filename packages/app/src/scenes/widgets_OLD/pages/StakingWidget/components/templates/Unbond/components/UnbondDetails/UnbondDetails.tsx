@@ -8,7 +8,7 @@ import * as styled from './UbondDetails.styled';
 
 export const UnbondDetails = () => {
   const {stashAccount, bondedControllerAddress} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+    useStore().widgetStore_OLD.stakingStore.polkadotProviderStore;
   return (
     <>
       <styled.row>

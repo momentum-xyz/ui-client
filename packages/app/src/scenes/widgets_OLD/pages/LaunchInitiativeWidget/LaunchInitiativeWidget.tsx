@@ -17,10 +17,10 @@ interface InitiativeInterface {
 
 const LaunchInitiativeWidget: FC = () => {
   const {
-    widgetStore,
+    widgetStore_OLD,
     mainStore: {unityStore, worldStore}
   } = useStore();
-  const {launchInitiativeStore} = widgetStore;
+  const {launchInitiativeStore} = widgetStore_OLD;
   const {
     control,
     handleSubmit,

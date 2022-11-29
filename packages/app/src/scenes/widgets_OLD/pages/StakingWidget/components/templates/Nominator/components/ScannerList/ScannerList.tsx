@@ -9,8 +9,8 @@ import {ScannerItem} from '../ScannerItem/ScannerItem';
 import * as styled from './ScannerList.styled';
 
 export const ScannerList = () => {
-  const {widgetStore} = useStore();
-  const {stakingStore} = widgetStore;
+  const {widgetStore_OLD} = useStore();
+  const {stakingStore} = widgetStore_OLD;
   const {stashAccount} = stakingStore.polkadotProviderStore;
 
   return (
