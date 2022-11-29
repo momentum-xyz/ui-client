@@ -20,6 +20,7 @@ import {ObjectStore} from 'scenes/object/stores';
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
 import {SessionStore} from './SessionStore';
+import {AgoraStore} from './AgoraStore';
 
 const RootStore = types
   .model('RootStore', {
@@ -27,6 +28,7 @@ const RootStore = types
     configStore: types.optional(ConfigStore, {}),
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
+    agoraStore: types.optional(AgoraStore, {}),
     /* Connect independent stores */
     birthOfMeStore: types.optional(RootBirthOfMeStore, {}),
     authStore: types.optional(RootAuthStore, {}),
@@ -48,17 +50,19 @@ const RootStore = types
     initApplication(): void {
       self.configStore.init();
       self.mainStore.themeStore.init();
+      self.agoraStore.init();
     },
     unityLoaded(worldId: string): void {
       self.mainStore.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
     },
+    // TODO: To be removed, do not use in new code
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       console.log('---JOINING---');
 
       yield self.collaborationStore.join(spaceId, isTable);
-      yield self.mainStore.agoraStore.join(self.sessionStore.userId, spaceId);
+      yield self.agoraStore.join(self.sessionStore.userId, spaceId);
       self.meetingStore.join(spaceId, isTable);
 
       self.mainStore.unityStore.triggerInteractionMessage(
@@ -75,6 +79,7 @@ const RootStore = types
 
       console.log('---JOINED---');
     }),
+    // TODO: To be removed, do not use in new code
     leaveMeetingSpace: flow(function* (isKicked = false) {
       console.log('---LEAVING---');
 
@@ -88,7 +93,7 @@ const RootStore = types
       */
 
       try {
-        yield self.mainStore.agoraStore.leave();
+        yield self.agoraStore.leave();
       } catch (ex) {
         console.error('agoraStore.leave', ex);
       }
