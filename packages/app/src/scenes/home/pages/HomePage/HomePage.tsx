@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Button} from '@momentum-xyz/ui-kit';
 
 // import {generatePath, useHistory} from 'react-router-dom';
 // import {useTranslation} from 'react-i18next';
@@ -7,12 +8,15 @@ import {observer} from 'mobx-react-lite';
 //
 // import {useStore} from 'shared/hooks';
 // import {ROUTES} from 'core/constants';
-//
+
+import {useStore} from 'shared/hooks';
+
 import {ExplorePanel} from './components';
 import * as styled from './HomePage.styled';
 
 const HomePage: FC = () => {
-  // const {meetingStore, mainStore, homeStore} = useStore();
+  const {homeStore, mainStore} = useStore();
+  const {worldStore} = mainStore;
   // const {onlineUsersStore, userProfileDialog} = homeStore;
   // const {unityStore} = mainStore;
   //
@@ -31,6 +35,15 @@ const HomePage: FC = () => {
     <styled.Container data-testid="HomePage-test">
       <styled.PanelWrapper>
         <ExplorePanel />
+
+        {/* TODO: FlyTo. Movement */}
+        <styled.FlyToMe>
+          <Button
+            variant="primary"
+            label="Fly to me"
+            onClick={() => homeStore.flyToMeStore.flyToMe(worldStore.worldId)}
+          />
+        </styled.FlyToMe>
       </styled.PanelWrapper>
 
       {/*<styled.PanelWrapper>*/}
