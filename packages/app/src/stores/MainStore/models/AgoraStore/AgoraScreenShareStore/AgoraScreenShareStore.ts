@@ -96,7 +96,7 @@ const AgoraScreenShareStore = types
         }
 
         const response: string = yield self.request.send(
-          api.agoraRepository.getAgoraScreenShareToken,
+          api.agoraRepository_old.getAgoraScreenShareToken,
           {
             spaceId: self.spaceId,
             isStageMode: self.isStageMode
