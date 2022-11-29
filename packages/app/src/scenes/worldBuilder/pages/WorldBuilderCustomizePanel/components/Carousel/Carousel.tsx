@@ -17,12 +17,12 @@ export const Carousel = <T extends object>({
   onChange,
   renderItem
 }: PropsInterface<T>): JSX.Element => {
-  const realWindowSize = Math.min(windowSize, items.length);
-  const halfSize = Math.floor(realWindowSize / 2);
-
+  // we need a slice of items with the active item in the middle
   const longItems = [...items, ...items, ...items];
   const activeIdx = items.findIndex((item) => item === activeItem) + items.length;
 
+  const realWindowSize = Math.min(windowSize, items.length);
+  const halfSize = Math.floor(realWindowSize / 2);
   const windowItems = longItems.slice(activeIdx - halfSize, activeIdx + halfSize + 1);
 
   return (
