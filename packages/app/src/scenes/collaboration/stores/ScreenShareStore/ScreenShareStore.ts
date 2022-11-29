@@ -30,12 +30,12 @@ const ScreenShareStore = types.compose(
           self.screenOwnerId = userId;
           self.screenOwnerName = response.name;
         }
+      }),
+      relayScreenShare: flow(function* (spaceId: string) {
+        yield self.request.send(api.agoraRepository_old.relayScreenShare, {
+          spaceId
+        });
       })
-      // relayScreenShare: flow(function* (spaceId: string) {
-      //   yield self.request.send(api.agoraRepository.relayScreenShare, {
-      //     spaceId
-      //   });
-      // })
     }))
     .views((self) => ({
       get screenShareTitle(): string {

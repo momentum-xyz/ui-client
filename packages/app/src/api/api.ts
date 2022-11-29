@@ -45,6 +45,7 @@ import * as textChatRepository from './repositories_OLD/textChatRepository';
 import * as streamChatRepository from './repositories_OLD/streamChatRepository';
 import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 import * as worldBuilderRepository from './repositories_OLD/worldBuilderRepository';
+import * as agoraRepository_old from './repositories_OLD/agoraRepository_old';
 
 /**
  * This layer is responsible for:
@@ -103,7 +104,8 @@ export const api = {
   spaceInfoRepository,
   assetsRepository,
   objectRepository,
-  assets3dRepository
+  assets3dRepository,
+  agoraRepository_old
 };
 
 /**

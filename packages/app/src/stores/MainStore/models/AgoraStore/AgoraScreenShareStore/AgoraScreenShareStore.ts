@@ -8,7 +8,7 @@ import AgoraRTC, {
 } from 'agora-rtc-sdk-ng';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-// import {api} from 'api';
+import {api} from 'api';
 
 const TRACK_CONFIG: ScreenVideoTrackInitConfig = {
   encoderConfig: {
@@ -95,18 +95,18 @@ const AgoraScreenShareStore = types
           yield self.client.setClientRole('host');
         }
 
-        // const response: string = yield self.request.send(
-        //   api.agoraRepository.getAgoraScreenShareToken,
-        //   {
-        //     spaceId: self.spaceId,
-        //     isStageMode: self.isStageMode
-        //   }
-        // );
+        const response: string = yield self.request.send(
+          api.agoraRepository_old.getAgoraScreenShareToken,
+          {
+            spaceId: self.spaceId,
+            isStageMode: self.isStageMode
+          }
+        );
 
-        // const token = self.isStageMode ? `stage-${self.spaceId}` : self.spaceId;
+        const token = self.isStageMode ? `stage-${self.spaceId}` : self.spaceId;
 
         try {
-          // yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
+          yield self.client.join(self.appId, token, response, `ss|${authStateSubject}`);
           yield self.createScreenTrackAndPublish();
           wasStarted = true;
         } catch {
