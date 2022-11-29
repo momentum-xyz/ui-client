@@ -7,9 +7,9 @@ import {useTranslation} from 'react-i18next';
 import {useStore} from 'shared/hooks';
 
 import {ScreenChoice, ScreenVideo} from './components/templates';
-import * as styled from './ScreenSharePage.styled';
+import * as styled from './ScreenShareWidget.styled';
 
-const ScreenSharePage: FC = () => {
+const ScreenShareWidget: FC = () => {
   const {sessionStore, widgetsStore, agoraStore} = useStore();
   const {screenShareStore} = widgetsStore;
   // const {screenShareTitle} = screenShareStore;
@@ -43,7 +43,7 @@ const ScreenSharePage: FC = () => {
   // }
 
   return (
-    <Portal>
+    <Portal data-testid="ScreenShareWidget-test">
       <styled.Modal className={cn(screenShareStore.isExpanded && 'expanded')}>
         <styled.HeaderElement className="left">
           <styled.Title>
@@ -95,4 +95,4 @@ const ScreenSharePage: FC = () => {
   );
 };
 
-export default observer(ScreenSharePage);
+export default observer(ScreenShareWidget);

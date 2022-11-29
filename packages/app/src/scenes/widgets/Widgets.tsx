@@ -10,7 +10,7 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './Widgets.styled';
 import {OnlineUsersWidget} from './pages/OnlineUsersWidget';
-import {ScreenSharePage} from './pages';
+import {ScreenShareWidget} from './pages';
 
 const Widgets: FC = () => {
   const {
@@ -78,7 +78,7 @@ const Widgets: FC = () => {
 
   return (
     <>
-      {screenShareStore.widget.isOpen && <ScreenSharePage />}
+      {screenShareStore.widget.isOpen && <ScreenShareWidget />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}

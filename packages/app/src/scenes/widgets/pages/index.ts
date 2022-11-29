@@ -1,2 +1,2 @@
 export * from './OnlineUsersWidget';
-export * from './ScreenSharePage';
+export * from './ScreenShareWidget';
