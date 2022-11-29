@@ -7,14 +7,13 @@ import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momen
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
-import {OnlineUsersWidget, FlyToMeWidget} from './pages';
+import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget} from './pages';
 import * as styled from './Widgets.styled';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetStore, widgetsStore, flightStore, mainStore, worldBuilderStore} =
-    useStore();
+  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore} = useStore();
+  const {profileMenuStore, flyToMeStore} = widgetsStore;
   const {unityStore} = mainStore;
-  const {profileMenuStore} = widgetStore;
   const {user} = sessionStore;
 
   const {t} = useTranslation();
@@ -67,8 +66,6 @@ const Widgets: FC = () => {
 
   return (
     <>
-      {widgetsStore.flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
-
       <styled.Footer data-testid="Widgets-test">
         <styled.LeftToolbars>
           <ToolbarIconList>
@@ -99,6 +96,9 @@ const Widgets: FC = () => {
           </ToolbarIconList>
         </styled.RightToolbars>
       </styled.Footer>
+
+      {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
+      {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
     </>
   );
 };

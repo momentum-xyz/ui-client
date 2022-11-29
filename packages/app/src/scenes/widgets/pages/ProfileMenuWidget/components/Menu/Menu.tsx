@@ -17,12 +17,12 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './Menu.styled';
 
-const MENU_OFFSET_RIGHT = 175;
+const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_BOTTOM = 60;
 
 const Menu: FC = () => {
-  const {widgetStore, sessionStore, homeStore} = useStore();
-  const {profileMenuStore} = widgetStore;
+  const {widgetsStore, sessionStore, homeStore} = useStore();
+  const {profileMenuStore} = widgetsStore;
   const {user} = sessionStore;
 
   const auth = useAuth();
@@ -70,9 +70,9 @@ const Menu: FC = () => {
 
   return (
     <Dialog
-      position="rightBottom"
+      position="bottomLeft"
       title=""
-      offset={{right: MENU_OFFSET_RIGHT, bottom: MENU_OFFSET_BOTTOM}}
+      offset={{left: MENU_OFFSET_LEFT, bottom: MENU_OFFSET_BOTTOM}}
       onClose={handleCloseMenu}
       isBodyExtendingToEdges
       showBackground={false}

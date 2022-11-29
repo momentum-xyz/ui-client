@@ -13,7 +13,6 @@ import {
   LaunchInitiativeWidget,
   MagicLinkWidget,
   MusicPlayerWidget,
-  ProfileMenuWidget,
   StakingWidget,
   WorldStatsWidget,
   StageModePIPWidget,
@@ -34,7 +33,6 @@ const Widgets_OLD: FC = () => {
     magicLinkStore,
     worldStatsStore,
     helpStore,
-    profileMenuStore,
     launchInitiativeStore,
     musicPlayerStore,
     emojiStore
@@ -113,7 +111,6 @@ const Widgets_OLD: FC = () => {
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
-      {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
@@ -202,7 +199,9 @@ const Widgets_OLD: FC = () => {
           {/* Main toolbar icons */}
           <ToolbarIconList>
             {user?.profile && (
-              <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
+              <ToolbarIcon
+                title={t('titles.profile')} /*onClick={profileMenuStore.openProfileMenu}*/
+              >
                 <Avatar
                   size="extra-small"
                   status={user.status}
