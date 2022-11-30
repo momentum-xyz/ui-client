@@ -132,7 +132,7 @@ const AgoraStore = types
   }))
   .views((self) => ({
     get hasJoined(): boolean {
-      return self.spaceId !== undefined;
+      return self.worldId !== undefined;
     },
     get meetingPeopleCount(): number {
       return self.agoraMeetingStore.users.length + 1;

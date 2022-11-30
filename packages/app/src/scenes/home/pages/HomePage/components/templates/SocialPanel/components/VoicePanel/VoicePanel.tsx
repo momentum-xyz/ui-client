@@ -9,6 +9,8 @@ import * as styled from './VoicePanel.styled';
 const VoicePanel: FC = () => {
   const {agoraStore, sessionStore, mainStore} = useStore();
   const {worldStore} = mainStore;
+  const {agoraMeetingStore} = agoraStore;
+  const {user} = sessionStore;
 
   const handleToggleVoiceChat = useCallback(() => {
     if (agoraStore.hasJoined) {
@@ -21,22 +23,18 @@ const VoicePanel: FC = () => {
   return (
     <styled.Container>
       <styled.Body>
-        <styled.Attendee>
-          <Avatar size="small" />
-          <Text text="Name" size="xs" />
-        </styled.Attendee>
-        <styled.Attendee>
-          <Avatar size="small" />
-          <Text text="Name" size="xs" />
-        </styled.Attendee>
-        <styled.Attendee>
-          <Avatar size="small" />
-          <Text text="Name" size="xs" />
-        </styled.Attendee>
-        <styled.Attendee>
-          <Avatar size="small" />
-          <Text text="Name" size="xs" />
-        </styled.Attendee>
+        {agoraStore.hasJoined && user && (
+          <styled.Attendee>
+            <Avatar size="medium" avatarSrc={user.avatarSrc} />
+            <styled.AttendeeName text={user.name} size="xs" isMultiline={false} />
+          </styled.Attendee>
+        )}
+        {agoraMeetingStore.users.map((user) => (
+          <styled.Attendee key={user.uid}>
+            <Avatar size="medium" avatarSrc={user.avatarSrc} />
+            <styled.AttendeeName text={user.name} size="xs" />
+          </styled.Attendee>
+        ))}
       </styled.Body>
       <styled.Footer>
         <styled.EnterLeaveButton onClick={handleToggleVoiceChat}>

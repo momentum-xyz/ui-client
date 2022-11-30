@@ -4,4 +4,5 @@ export interface AgoraTokenRequest {
 
 export interface AgoraTokenResponse {
   token: string;
+  channel: string;
 }

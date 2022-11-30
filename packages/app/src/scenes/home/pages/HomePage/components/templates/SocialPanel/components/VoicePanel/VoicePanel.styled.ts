@@ -26,6 +26,12 @@ export const Attendee = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+`;
+
+export const AttendeeName = styled(Text)`
+  overflow: hidden;
+  width: 60px;
 `;
 
 export const Footer = styled.div`
