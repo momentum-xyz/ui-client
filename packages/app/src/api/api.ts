@@ -1,5 +1,6 @@
 import * as versionRepository from './repositories/versionRepository';
 import * as configRepository from './repositories/configRepository';
+import * as authRepository from './repositories/authRepository';
 import * as webRepository from './repositories/web3Repository';
 import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
@@ -60,11 +61,12 @@ import * as agoraRepository_old from './repositories_OLD/agoraRepository_old';
 export const api = {
   versionRepository,
   configRepository,
-  webRepository,
+  authRepository,
+  webRepository, // TODO: REMOVAL
   worldRepository,
   userRepository,
   userProfileRepository,
-  guestRepository,
+  guestRepository, // TODO: REMOVAL
   spaceRepository,
   userRepository_OLD,
   profileRepository,
@@ -116,6 +118,7 @@ export const api = {
  */
 export * from './repositories/versionRepository/versionRepository.api.types';
 export * from './repositories/configRepository/configRepository.api.types';
+export * from './repositories/authRepository/authRepository.api.types';
 export * from './repositories/web3Repository/web3Repository.api.types';
 export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';

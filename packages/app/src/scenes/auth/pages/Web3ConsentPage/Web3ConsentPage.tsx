@@ -6,7 +6,7 @@ import {useStore} from 'shared/hooks';
 import {LoginTypeEnum} from 'core/enums';
 
 const Web3ConsentPage: FC = () => {
-  const {web3ConsentStore} = useStore().authStore;
+  const {web3ConsentStore} = useStore().authStore_OLD;
   const {loginType, redirectUrl} = web3ConsentStore;
 
   const {search} = useLocation();

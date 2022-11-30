@@ -18,6 +18,7 @@ import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {CalendarStore} from 'scenes/calendar/stores/CalendarStore';
 import {ObjectStore} from 'scenes/object/stores';
 
+import {AuthStore} from './AuthStore';
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
 import {SessionStore} from './SessionStore';
@@ -27,12 +28,13 @@ const RootStore = types
   .model('RootStore', {
     /* Connect core stores */
     configStore: types.optional(ConfigStore, {}),
+    authStore: types.optional(AuthStore, {}),
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
     /* Connect independent stores */
     birthOfMeStore: types.optional(RootBirthOfMeStore, {}),
-    authStore: types.optional(RootAuthStore, {}),
+    authStore_OLD: types.optional(RootAuthStore, {}),
     homeStore: types.optional(HomeStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),

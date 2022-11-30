@@ -11,18 +11,13 @@ import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
   const {birthOfMeStore} = useStore();
-  const {signInStore, exploreStore} = birthOfMeStore;
+  const {exploreStore} = birthOfMeStore;
 
   const history = useHistory();
 
   useEffect(() => {
-    signInStore.fetchAddresses();
     exploreStore.init();
-
-    return () => {
-      signInStore.resetModel();
-    };
-  }, [signInStore, exploreStore]);
+  }, [exploreStore]);
 
   return (
     <styled.Container>

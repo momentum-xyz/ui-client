@@ -13,7 +13,7 @@ import {NetworkPicker, NetworkRemarks, WalletError} from './components';
 import * as styled from './LoginPage.styled';
 
 const LoginPage: FC = () => {
-  const {loginStore, web3ConnectorsFiltered} = useStore().authStore;
+  const {loginStore, web3ConnectorsFiltered} = useStore().authStore_OLD;
   const {isRefreshButtonShown, isSessionExpired, errorMessage} = loginStore;
   const {isWeb3LoginStarted, isGuestLoginStarted} = loginStore;
 
