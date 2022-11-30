@@ -10,12 +10,19 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   display: flex;
   flex: 1 0 auto;
-  margin: 10px;
+  align-self: flex-end;
+
+  &.expanded {
+    margin-top: 20px;
+    width: 100%;
+    height: calc(100% - 20px);
+  }
 
   :not(&.expanded) {
     width: 679px;
     height: 348px;
-    align-self: flex-end;
     flex: 0 0 auto;
   }
+
+  transition: all 0.2s ease-in-out;
 `;

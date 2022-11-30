@@ -5,8 +5,8 @@ export const Container = styled.div`
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
   border-radius: 10px;
   overflow: hidden;
-  width: 297px;
-  height: 671px;
+  width: 280px;
+  height: 584px;
 
   display: flex;
   flex-direction: column;

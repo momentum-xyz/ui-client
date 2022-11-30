@@ -1,6 +1,8 @@
 import {Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {FC, useMemo, useState} from 'react';
+import {FC, useCallback, useMemo, useState} from 'react';
+
+import {useStore} from 'shared/hooks';
 
 import {SocialTabBar, VoicePanel} from './components';
 import * as styled from './SocialPanel.styled';
@@ -29,9 +31,20 @@ const SocialPanel: FC = () => {
     []
   );
 
+  const {widgetsStore, agoraStore} = useStore();
+  const {socialStore} = widgetsStore;
+
   const [selectedTabIndex, setSelectedTabIndex] = useState(1);
 
   const selectedTab = useMemo(() => tabs[selectedTabIndex], [selectedTabIndex, tabs]);
+
+  const handleClose = useCallback(async () => {
+    if (agoraStore.hasJoined) {
+      await agoraStore.leave();
+    }
+
+    socialStore.widget.close();
+  }, [agoraStore, socialStore.widget]);
 
   return (
     <styled.Container>
@@ -40,7 +53,7 @@ const SocialPanel: FC = () => {
           <IconSvg name="chat" /> <Heading label="Social" transform="uppercase" type="h3" />
         </styled.HeaderItemsGroup>
         <styled.HeaderItemsGroup>
-          <SvgButton iconName="close" size="normal" />
+          <SvgButton iconName="close" size="normal" onClick={handleClose} />
         </styled.HeaderItemsGroup>
       </styled.Header>
       <styled.TabsSelector>

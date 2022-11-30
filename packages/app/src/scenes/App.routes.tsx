@@ -165,11 +165,6 @@ export const CORE_ROUTES: RouteConfigInterface[] = [
 
 export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
-    path: ROUTES.base,
-    exact: true,
-    main: () => <HomePage />
-  },
-  {
     path: ROUTES.spaceAdmin.base,
     main: () => <SpaceAdmin />,
     renderBackground: true

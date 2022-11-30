@@ -26,9 +26,9 @@ import {
   PUBLIC_ROUTES,
   SYSTEM_ROUTES
 } from './App.routes';
-
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
+import {HomePage} from './home';
 
 const App: FC = () => {
   const {configStore, sessionStore, mainStore, initApplication} = useStore();
@@ -205,7 +205,10 @@ const App: FC = () => {
             <GlobalStyles />
             <UnityPage />
             <Suspense fallback={false}>
-              <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}</AppLayers>
+              <AppLayers>
+                <HomePage />
+                {createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}
+              </AppLayers>
             </Suspense>
           </AppAuth>
         </AuthProvider>

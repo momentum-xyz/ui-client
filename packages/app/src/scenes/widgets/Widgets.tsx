@@ -13,7 +13,7 @@ import * as styled from './Widgets.styled';
 const Widgets: FC = () => {
   const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} =
     useStore();
-  const {profileMenuStore, flyToMeStore, screenShareStore} = widgetsStore;
+  const {profileMenuStore, flyToMeStore, screenShareStore, socialStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
@@ -48,7 +48,9 @@ const Widgets: FC = () => {
     {
       title: t('labels.worldChat'),
       icon: 'chat',
-      size: 'medium'
+      size: 'medium',
+      onClick: socialStore.widget.toggle,
+      isSelected: socialStore.widget.isOpen
     },
     {
       title: 'Fly to me',
