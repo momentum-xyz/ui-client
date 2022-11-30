@@ -22,9 +22,10 @@ const StartAccountPage: FC = () => {
 
   const signChallengeAndGetToken = useCallback(async () => {
     const token = await authStore.getTokenByWallet();
+    // TODO: axios
     setToken(token);
-
     alert(token);
+    console.log(token);
   }, [authStore]);
 
   return (
