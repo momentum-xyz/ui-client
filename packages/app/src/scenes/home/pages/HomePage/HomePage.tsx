@@ -15,11 +15,8 @@ import {useStore} from 'shared/hooks';
 
 import {ExplorePanel} from './components';
 import * as styled from './HomePage.styled';
-import {SocialPanel} from './components';
-
 const HomePage: FC = () => {
-  const {widgetsStore, objectStore} = useStore();
-  const {socialStore} = widgetsStore;
+  const {objectStore} = useStore();
   // const {onlineUsersStore, userProfileDialog} = homeStore;
   // const {unityStore} = mainStore;
   //
@@ -43,7 +40,6 @@ const HomePage: FC = () => {
       <styled.PanelWrapper>
         <ExplorePanel />
       </styled.PanelWrapper>
-      <styled.PanelWrapper>{socialStore.widget.isOpen && <SocialPanel />}</styled.PanelWrapper>
 
       {/*<styled.PanelWrapper>*/}
       {/*  {meetingStore.canRejoin && (*/}

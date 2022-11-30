@@ -7,7 +7,13 @@ import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momen
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
-import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget, ScreenShareWidget} from './pages';
+import {
+  ProfileMenuWidget,
+  OnlineUsersWidget,
+  FlyToMeWidget,
+  ScreenShareWidget,
+  SocialWidget
+} from './pages';
 import * as styled from './Widgets.styled';
 
 const Widgets: FC = () => {
@@ -110,6 +116,7 @@ const Widgets: FC = () => {
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
       {screenShareStore.widget.isOpen && <ScreenShareWidget />}
+      {socialStore.widget.isOpen && <SocialWidget />}
     </>
   );
 };
