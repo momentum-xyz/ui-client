@@ -46,11 +46,6 @@ const AgoraMeetingStore = types
     ) {
       yield self.client.subscribe(user, mediaType);
 
-      if (String(user?.uid).split('|')[0] === 'ss') {
-        screenShareStore.handleUserPublished(user, mediaType);
-        return;
-      }
-
       if (mediaType === 'audio') {
         user.audioTrack?.play();
       }
@@ -70,11 +65,6 @@ const AgoraMeetingStore = types
       user: IAgoraRTCRemoteUser,
       mediaType: 'audio' | 'video'
     ) {
-      if (String(user?.uid).split('|')[0] === 'ss') {
-        screenShareStore.handleUserUnpublished(user, mediaType);
-        return;
-      }
-
       const foundUser = self.users.find((remoteUser) => remoteUser.uid === user.uid);
 
       if (foundUser?.participantInfo) {
@@ -174,7 +164,7 @@ const AgoraMeetingStore = types
       }
 
       const tokenResponse: string = yield self.tokenRequest.send(
-        api.agoraRepository.getAgoraToken,
+        api.agoraRepository_old.getAgoraToken,
         {
           spaceId: spaceId ?? self.spaceId,
           isStageMode: false

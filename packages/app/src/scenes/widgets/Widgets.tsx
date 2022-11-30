@@ -27,7 +27,8 @@ const Widgets: FC = () => {
   }, [unityStore, worldBuilderStore]);
 
   const handleOpenScreenShare = () => {
-    agoraScreenShareStore.init(worldStore.worldId);
+    agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
+    screenShareStore.fetchWorld(worldStore.worldId);
     screenShareStore.widget.open();
   };
 

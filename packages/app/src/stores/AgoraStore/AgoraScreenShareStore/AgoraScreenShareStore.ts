@@ -30,108 +30,108 @@ const AgoraScreenShareStore = types
       isSettingUp: false
     })
   )
-  .volatile<{client?: IAgoraRTCClient; _videoTrack?: IRemoteVideoTrack}>(() => ({
-    client: undefined,
-    _videoTrack: undefined
+  .volatile<{
+    client: IAgoraRTCClient;
+    _remoteVideoTrack?: IRemoteVideoTrack;
+    _localVideoTrack?: ILocalVideoTrack;
+  }>(() => ({
+    client: AgoraRTC.createClient({
+      mode: 'rtc',
+      codec: 'h264'
+    }),
+    _remoteVideoTrack: undefined,
+    _localVideoTrack: undefined
   }))
   .views((self) => ({
-    get videoTrack(): IRemoteVideoTrack | undefined {
-      return self._videoTrack;
+    get remoteVideoTrack(): IRemoteVideoTrack | undefined {
+      return self._remoteVideoTrack;
     },
-    set videoTrack(track: IRemoteVideoTrack | undefined) {
-      self._videoTrack = track;
+    set remoteVideoTrack(track: IRemoteVideoTrack | undefined) {
+      self._remoteVideoTrack = track;
+    },
+    get localVideoTrack(): ILocalVideoTrack | undefined {
+      return self._localVideoTrack;
+    },
+    set localVideoTrack(track: ILocalVideoTrack | undefined) {
+      self._localVideoTrack = track;
     }
   }))
   .actions((self) => ({
-    handleUserPublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      self.videoTrack = user.videoTrack;
-    },
-    handleUserUnpublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
-      self.videoTrack = undefined;
+    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+      yield self.client.subscribe(user, mediaType);
+
+      self.remoteVideoTrack = user.videoTrack;
+    }),
+    handleUserUnpublished() {
+      self.remoteVideoTrack?.stop();
+      self.remoteVideoTrack = undefined;
     }
   }))
   .actions((self) => ({
-    init(worldId?: string) {
+    init(worldId: string, userId: string) {
       self.appId = appVariables.AGORA_APP_ID;
       self.worldId = worldId;
+      this.setupAgoraListeners();
+      self.openScreenShare(userId);
+    },
+    setupAgoraListeners() {
+      self.client.on('user-published', (user, mediaType) =>
+        self.handleUserPublished(user, mediaType)
+      );
+      self.client.on('user-unpublished', self.handleUserUnpublished);
+    },
+    cleanupListeners() {
+      self.client.removeAllListeners();
     }
   }))
   .actions((self) => ({
     leave() {
-      self.client?.localTracks.forEach((track) => {
-        track.close();
-      });
-      self.client?.leave();
-      self.client = undefined;
-      self.videoTrack = undefined;
+      self.client.unpublish();
+      self.localVideoTrack = undefined;
     }
   }))
   .actions((self) => ({
     createScreenTrackAndPublish: flow(function* () {
-      console.info('Client2', self.client);
       if (self.client) {
-        console.info('Client3', self.client);
         const screenTrack: ILocalVideoTrack = yield AgoraRTC.createScreenVideoTrack(
           TRACK_CONFIG,
           'disable'
         );
         yield self.client.publish(screenTrack);
+        self.localVideoTrack = screenTrack;
         screenTrack.on('track-ended', self.leave);
       }
-    })
+    }),
+    close() {
+      self.client.leave();
+      self.resetModel();
+    }
   }))
   .actions((self) => ({
-    startScreenSharing: flow(function* (authStateSubject: string) {
-      let wasStarted = false;
-
+    openScreenShare: flow(function* (authStateSubject: string) {
       if (self.worldId) {
-        self.isSettingUp = true;
-        //self.isStageMode ? 'live' :
-        self.client = AgoraRTC.createClient({
-          mode: 'rtc',
-          codec: 'h264'
-        });
-
-        console.info('first client', self.client);
-        // if (self.isStageMode) {
-        //   yield self.client.setClientRole('host');
-        // }
-
-        const {token}: AgoraTokenResponse = yield self.request.send(
+        const {token, channel}: AgoraTokenResponse = yield self.request.send(
           api.agoraRepository.getAgoraToken,
           {
-            spaceId: self.worldId
+            spaceId: self.worldId,
+            screenshare: true
           }
         );
 
-        try {
-          yield self.client.join(self.appId, self.worldId, token, `ss|${authStateSubject}`);
-          yield self.createScreenTrackAndPublish();
-          wasStarted = true;
-        } catch (e) {
-          console.info(e);
-          self.client.leave();
-        } finally {
-          self.isSettingUp = false;
-        }
+        yield self.client.join(self.appId, channel, token, authStateSubject);
       }
-
-      return wasStarted;
     }),
-    stopScreenSharing() {
-      if (!self.videoTrack) {
-        return;
+    startScreenSharing: flow(function* () {
+      self.isSettingUp = true;
+
+      try {
+        yield self.createScreenTrackAndPublish();
+      } catch (e) {
+        self.client.leave();
+      } finally {
+        self.isSettingUp = false;
       }
-
-      self.videoTrack.stop();
-      self.videoTrack = undefined;
-
-      self.client?.localTracks.forEach((track) => {
-        track.close();
-      });
-      self.client?.leave();
-      self.client = undefined;
-    }
+    })
   }));
 
 export type AgoraScreenShareStoreType = Instance<typeof AgoraScreenShareStore>;

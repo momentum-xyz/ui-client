@@ -1,8 +1,10 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
+import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
+import {mapper} from 'api/mapper';
+import {Space} from 'core/models';
 
 const ScreenShareStore = types.compose(
   ResetModel,
@@ -12,6 +14,9 @@ const ScreenShareStore = types.compose(
       isExpanded: true,
       ownerRequest: types.optional(RequestModel, {}),
       request: types.optional(RequestModel, {}),
+      world: types.maybeNull(Space),
+      worldRequest: types.optional(RequestModel, {}),
+
       screenOwnerId: types.maybeNull(types.string),
       screenOwnerName: types.maybeNull(types.string)
     })
@@ -23,24 +28,31 @@ const ScreenShareStore = types.compose(
           return;
         }
 
-        const userId = agoraUserId.replace('ss|', '');
         const response = yield self.ownerRequest.send(api.userRepository_OLD.fetchProfile, {
-          userId
+          userId: agoraUserId
         });
 
         if (response?.name) {
-          self.screenOwnerId = userId;
+          self.screenOwnerId = agoraUserId;
           self.screenOwnerName = response.name;
         }
       }),
-      // relayScreenShare: flow(function* (spaceId: string) {
-      //   yield self.request.send(api.agoraRepository.relayScreenShare, {
-      //     spaceId
-      //   });
-      // }),
       togglePage() {
         self.isExpanded = !self.isExpanded;
-      }
+      },
+      fetchWorld: flow(function* (spaceId: string) {
+        const response: SpaceAttributeItemResponse = yield self.worldRequest.send(
+          api.spaceRepository.fetchSpace,
+          {spaceId}
+        );
+
+        if (response) {
+          self.world = cast({
+            id: spaceId,
+            ...mapper.mapSpaceSubAttributes<SpaceInterface>(response)
+          });
+        }
+      })
     }))
     .views((self) => ({
       get screenShareTitle(): string {
