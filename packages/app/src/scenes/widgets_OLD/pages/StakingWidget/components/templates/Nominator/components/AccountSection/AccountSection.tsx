@@ -20,7 +20,7 @@ const AccountSection = () => {
     setControllerAccount,
     getBondedAddress,
     getUsedStashAddress
-  } = useStore().widgetStore.stakingStore.polkadotProviderStore;
+  } = useStore().widgetStore_OLD.stakingStore.polkadotProviderStore;
 
   const selectStashHandler = (option: OptionInterface) => {
     setStashAccount(option.value);

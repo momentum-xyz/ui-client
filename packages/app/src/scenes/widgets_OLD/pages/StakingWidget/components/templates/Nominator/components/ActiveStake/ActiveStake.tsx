@@ -16,7 +16,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 }
 
 const ActiveStake: FC<PropsInterface> = ({theme, goToAuthorization, goToUnbond}) => {
-  const {stakingStore} = useStore().widgetStore;
+  const {stakingStore} = useStore().widgetStore_OLD;
   const {
     stashStakingBalance,
     tokenSymbol,

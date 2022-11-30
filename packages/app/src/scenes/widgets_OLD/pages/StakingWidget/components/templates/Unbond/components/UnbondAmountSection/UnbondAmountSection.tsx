@@ -11,7 +11,7 @@ import * as styled from './UnbondAmountSection.styled';
 interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondAmountSection: FC<PropsInterface> = ({theme}) => {
-  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {polkadotProviderStore} = useStore().widgetStore_OLD.stakingStore;
   const {unbondAmount, setUnbondAmount, stashStakingBalance} = polkadotProviderStore;
 
   useEffect(() => {

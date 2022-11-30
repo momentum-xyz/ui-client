@@ -13,7 +13,6 @@ import {
   LaunchInitiativeWidget,
   MagicLinkWidget,
   MusicPlayerWidget,
-  ProfileMenuWidget,
   StakingWidget,
   WorldStatsWidget,
   StageModePIPWidget,
@@ -25,7 +24,7 @@ import * as styled from './Widgets_OLD.styled';
 import {WorldChatWidget} from './pages';
 
 const Widgets_OLD: FC = () => {
-  const {sessionStore, mainStore, widgetStore, flightStore, worldChatStore, worldBuilderStore} =
+  const {sessionStore, mainStore, widgetStore_OLD, flightStore, worldChatStore, worldBuilderStore} =
     useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
@@ -34,11 +33,10 @@ const Widgets_OLD: FC = () => {
     magicLinkStore,
     worldStatsStore,
     helpStore,
-    profileMenuStore,
     launchInitiativeStore,
     musicPlayerStore,
     emojiStore
-  } = widgetStore;
+  } = widgetStore_OLD;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
   const {user, isGuest, userId} = sessionStore;
@@ -113,7 +111,6 @@ const Widgets_OLD: FC = () => {
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
-      {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
@@ -202,7 +199,9 @@ const Widgets_OLD: FC = () => {
           {/* Main toolbar icons */}
           <ToolbarIconList>
             {user?.profile && (
-              <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
+              <ToolbarIcon
+                title={t('titles.profile')} /*onClick={profileMenuStore.openProfileMenu}*/
+              >
                 <Avatar
                   size="extra-small"
                   status={user.status}

@@ -80,7 +80,7 @@ const AgoraStore = types
 
       self.userDevicesStore.mute();
 
-      self.agoraScreenShareStore.init(self.appId, self.worldId);
+      // self.agoraScreenShareStore.init(self.appId, self.worldId);
     }),
     leave: flow(function* () {
       self.userDevicesStore.cleanupLocalTracks();
@@ -88,10 +88,10 @@ const AgoraStore = types
 
       yield self.agoraMeetingStore.leave();
 
-      self.agoraScreenShareStore.leave();
+      // self.agoraScreenShareStore.leave();
 
       self.agoraMeetingStore.resetModel();
-      self.agoraScreenShareStore.resetModel();
+      // self.agoraScreenShareStore.resetModel();
       self.resetModel();
     })
   }))

@@ -10,7 +10,7 @@ import * as styled from './RewardValidator.styled';
 
 const RewardValidator: FC<PropsWithThemeInterface> = ({theme}) => {
   const {customRewardDestinationValidation} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+    useStore().widgetStore_OLD.stakingStore.polkadotProviderStore;
 
   const [{errorMessage, errorType}, setError] = useState<StakeValidatorErrorType>({
     errorMessage: '',

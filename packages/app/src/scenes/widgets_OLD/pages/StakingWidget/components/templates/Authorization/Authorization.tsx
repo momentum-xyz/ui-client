@@ -19,7 +19,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 }
 
 const Authorization: FC<PropsInterface> = ({theme, goToValidators, goToNominator}) => {
-  const {polkadotProviderStore, validatorsStore} = useStore().widgetStore.stakingStore;
+  const {polkadotProviderStore, validatorsStore} = useStore().widgetStore_OLD.stakingStore;
   const {
     channel,
     calculateFee,

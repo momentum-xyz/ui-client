@@ -104,6 +104,12 @@ export type PosBusFlyWithMeType = {
   spaceId: string;
 };
 
+export type PosBusFlyToMeType = {
+  pilot: string;
+  pilot_name: string;
+  spaceId: string;
+};
+
 export type PosBusScreenShareMessageType = {
   spaceId: string;
 };

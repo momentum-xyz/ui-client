@@ -13,8 +13,8 @@ interface PropsInterface {
 }
 
 const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
-  const {widgetStore, sessionStore} = useStore();
-  const {emojiDetailsList, fetchAll} = widgetStore.emojiStore;
+  const {widgetStore_OLD, sessionStore} = useStore();
+  const {emojiDetailsList, fetchAll} = widgetStore_OLD.emojiStore;
   const {user} = sessionStore;
 
   const {t} = useTranslation();

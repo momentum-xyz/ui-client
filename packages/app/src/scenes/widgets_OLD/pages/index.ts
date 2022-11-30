@@ -1,7 +1,6 @@
 export * from './MagicLinkWidget';
 export * from './StakingWidget';
 export * from './HelpWidget';
-export * from './ProfileMenuWidget';
 export * from './WorldStatsWidget';
 export * from './LaunchInitiativeWidget';
 export * from './MusicPlayerWidget';

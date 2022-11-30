@@ -2,21 +2,21 @@ import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import ReactHowler from 'react-howler';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
+import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget, ScreenShareWidget} from './pages';
 import * as styled from './Widgets.styled';
-import {OnlineUsersWidget} from './pages/OnlineUsersWidget';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetStore, flightStore, mainStore, worldBuilderStore} = useStore();
-  const {unityStore} = mainStore;
-  const {profileMenuStore, musicPlayerStore} = widgetStore;
+  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} =
+    useStore();
+  const {profileMenuStore, flyToMeStore, screenShareStore} = widgetsStore;
+  const {agoraScreenShareStore} = agoraStore;
+  const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
-  const {playlist, musicPlayer} = musicPlayerStore;
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -26,11 +26,17 @@ const Widgets: FC = () => {
     unityStore.hideMinimap();
   }, [unityStore, worldBuilderStore]);
 
+  const handleOpenScreenShare = () => {
+    agoraScreenShareStore.init(worldStore.worldId);
+    screenShareStore.widget.open();
+  };
+
   const rightToolbarIcons: ToolbarIconInterface[] = [
     {
       title: t('labels.screenShare'),
       icon: 'screenshare',
-      size: 'medium'
+      size: 'medium',
+      onClick: handleOpenScreenShare
     },
     {
       title: t('labels.calendar'),
@@ -43,6 +49,13 @@ const Widgets: FC = () => {
       title: t('labels.worldChat'),
       icon: 'chat',
       size: 'medium'
+    },
+    {
+      title: 'Fly to me',
+      icon: 'fly-to',
+      size: 'medium',
+      onClick: widgetsStore.flyToMeStore.flyToMeDialog.open,
+      disabled: false // TODO: Check permissions
     },
     {
       title: t('titles.worldBuilder'),
@@ -61,20 +74,6 @@ const Widgets: FC = () => {
 
   return (
     <>
-      <ReactHowler
-        src={[playlist.currentTrackHash]}
-        onLoad={musicPlayer.startLoading}
-        format={['mp3', 'ogg', 'acc', 'webm']}
-        onPlay={musicPlayer.startedPlaying}
-        onEnd={musicPlayerStore.songEnded}
-        playing={musicPlayer.isPlaying}
-        preload={true}
-        loop={false}
-        mute={musicPlayer.muted}
-        volume={musicPlayer.volume}
-        html5={true}
-        ref={(ref) => musicPlayer.setPlayer(ref)}
-      />
       <styled.Footer data-testid="Widgets-test">
         <styled.LeftToolbars>
           <ToolbarIconList>
@@ -105,6 +104,10 @@ const Widgets: FC = () => {
           </ToolbarIconList>
         </styled.RightToolbars>
       </styled.Footer>
+
+      {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
+      {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
+      {screenShareStore.widget.isOpen && <ScreenShareWidget />}
     </>
   );
 };

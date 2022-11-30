@@ -8,7 +8,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './MusicVolumeController.styled';
 
 const MusicVolumeController: FC = () => {
-  const {musicPlayerStore} = useStore().widgetStore;
+  const {musicPlayerStore} = useStore().widgetStore_OLD;
   const {musicPlayer} = musicPlayerStore;
 
   return (

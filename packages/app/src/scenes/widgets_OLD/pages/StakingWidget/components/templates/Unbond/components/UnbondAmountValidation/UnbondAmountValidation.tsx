@@ -12,7 +12,7 @@ import * as styled from './UnbondAmountValidation.styled';
 interface PropsInterface extends PropsWithThemeInterface {}
 
 const UnbondAmountValidation: FC<PropsInterface> = ({theme}) => {
-  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {polkadotProviderStore} = useStore().widgetStore_OLD.stakingStore;
   const {unbondAmountValidation, stashStakingBalance} = polkadotProviderStore;
   const [{errorMessage, errorType}, setError] = useState<StakeValidatorErrorType>({
     errorMessage: '',

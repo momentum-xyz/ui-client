@@ -15,9 +15,9 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {
-  const {widgetStore, mainStore, collaborationStore} = useStore();
+  const {widgetStore_OLD, mainStore, collaborationStore} = useStore();
   const {spaceStore} = collaborationStore;
-  const {magicLinkStore} = widgetStore;
+  const {magicLinkStore} = widgetStore_OLD;
   const {magicLink} = magicLinkStore;
   const {copyToClipBoard, address, wasCreated, init} = magicLink;
   const {unityStore} = mainStore;

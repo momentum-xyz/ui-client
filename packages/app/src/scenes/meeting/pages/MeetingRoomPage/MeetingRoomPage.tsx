@@ -21,9 +21,9 @@ interface PropsInterface {
 }
 
 const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
-  const {mainStore, sessionStore, meetingStore, collaborationStore, widgetStore} = useStore();
+  const {mainStore, sessionStore, meetingStore, collaborationStore, widgetStore_OLD} = useStore();
   const {meetingRoomStore} = meetingStore;
-  const {musicPlayerStore} = widgetStore;
+  const {musicPlayerStore} = widgetStore_OLD;
   const {agoraStore} = mainStore;
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
 

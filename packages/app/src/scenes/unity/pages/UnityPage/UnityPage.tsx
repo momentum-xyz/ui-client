@@ -85,6 +85,24 @@ const UnityPage: FC = () => {
     });
   });
 
+  usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
+    if (sessionStore.userId !== userId) {
+      toast.info(
+        <ToastContent
+          headerIconName="fly-with-me"
+          title="Fly to me Request"
+          text={`${userName} has invited you to fly to them`}
+          declineInfo={{title: t('actions.decline')}}
+          approveInfo={{
+            title: t('actions.join'),
+            onClick: () => unityStore.teleportToUser(userId)
+          }}
+        />,
+        TOAST_NOT_AUTO_CLOSE_OPTIONS
+      );
+    }
+  });
+
   usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
     console.info('[POSBUS EVENT] space-invite', spaceId, invitorId, invitorName, uiTypeId);
     // FIXME: Temporary solution. To get space name from Unity
