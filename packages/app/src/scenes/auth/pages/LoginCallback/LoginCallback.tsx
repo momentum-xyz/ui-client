@@ -6,7 +6,7 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
 const LoginCallback: FC = () => {
-  const {loginStore} = useStore().authStore;
+  const {loginStore} = useStore().authStore_OLD;
   const {search} = useLocation();
   const history = useHistory();
   const auth = useAuth();

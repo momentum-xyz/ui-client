@@ -1,19 +1,20 @@
 /** GET CHALLENGE REQUEST **/
 
-export interface ChallengeRequest {
+export interface AuthChallengeRequest {
   wallet: string;
 }
 
-export interface ChallengeResponse {
+export interface AuthChallengeResponse {
   challenge: string;
 }
 
 /** TOKEN REQUEST **/
 
-export interface TokenRequest {
-  challenge: string;
+export interface AuthTokenRequest {
+  wallet: string;
+  signedChallenge: string;
 }
 
-export interface TokenResponse {
+export interface AuthTokenResponse {
   token: string;
 }

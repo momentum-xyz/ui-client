@@ -15,7 +15,7 @@ import {WorldBuilderWalletError} from './components';
 import * as styled from './WorldBuilderLoginPage.styled';
 
 const WorldBuilderLoginPage: FC = () => {
-  const {loginStore} = useStore().authStore;
+  const {loginStore} = useStore().authStore_OLD;
   const {isRefreshButtonShown, isSessionExpired, errorMessage} = loginStore;
   const {isWeb3LoginStarted} = loginStore;
 

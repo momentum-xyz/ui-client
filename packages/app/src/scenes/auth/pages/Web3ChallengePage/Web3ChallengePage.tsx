@@ -6,7 +6,7 @@ import {useStore} from 'shared/hooks';
 import {Web3Challenge} from './components';
 
 const Web3ChallengePage: FC = () => {
-  const {getWeb3Connector} = useStore().authStore;
+  const {getWeb3Connector} = useStore().authStore_OLD;
 
   const {search} = useLocation();
 

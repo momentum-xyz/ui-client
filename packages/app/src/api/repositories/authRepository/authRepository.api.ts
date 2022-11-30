@@ -5,13 +5,15 @@ import {RequestInterface} from 'api/interfaces';
 
 import {authRepositoryEndpoints} from './authRepository.api.endpoints';
 import {
-  ChallengeRequest,
-  ChallengeResponse,
-  TokenRequest,
-  TokenResponse
+  AuthChallengeRequest,
+  AuthChallengeResponse,
+  AuthTokenRequest,
+  AuthTokenResponse
 } from './authRepository.api.types';
 
-export const getChallenge: RequestInterface<ChallengeRequest, ChallengeResponse> = (options) => {
+export const getChallenge: RequestInterface<AuthChallengeRequest, AuthChallengeResponse> = (
+  options
+) => {
   const {wallet, ...rest} = options;
   const requestParams = {
     params: {wallet},
@@ -21,11 +23,11 @@ export const getChallenge: RequestInterface<ChallengeRequest, ChallengeResponse>
   return request.get(URL, requestParams);
 };
 
-export const getToken: RequestInterface<TokenRequest, TokenResponse> = (options) => {
-  const {challenge, ...rest} = options;
+export const getToken: RequestInterface<AuthTokenRequest, AuthTokenResponse> = (options) => {
+  const {signedChallenge, wallet, ...rest} = options;
   const requestParams = {
     method: 'post' as Method,
-    data: {challenge},
+    data: {signedChallenge, wallet},
     ...rest
   };
 

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -10,36 +10,39 @@ import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from 'scenes/bi
 import * as styled from './StartAccountPage.styled';
 
 const StartAccountPage: FC = () => {
-  const {birthOfMeStore} = useStore();
-  const {signInStore} = birthOfMeStore;
+  const {authStore} = useStore();
 
-  const [isAccount, setIsAccount] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>(null);
 
   const history = useHistory();
 
   useEffect(() => {
-    signInStore.fetchAddresses();
+    authStore.init();
+  }, [authStore]);
 
-    return () => {
-      signInStore.resetModel();
-    };
-  }, [signInStore]);
+  const signChallengeAndGetToken = useCallback(async () => {
+    const token = await authStore.getTokenByWallet();
+    setToken(token);
+
+    alert(token);
+  }, [authStore]);
 
   return (
     <styled.Container>
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          {!isAccount && (
+          {!token && (
             <ChoiceYourWallet
-              addresses={signInStore.accountOptions}
-              selectedAddress={signInStore.selectedAddress}
-              onSelectAddress={signInStore.selectAddress}
-              onConnect={() => setIsAccount(true)}
+              walletOptions={authStore.accountOptions}
+              wallet={authStore.wallet}
+              isConnectDisabled={authStore.isPending}
+              onSelectAddress={authStore.selectWallet}
+              onConnect={signChallengeAndGetToken}
             />
           )}
 
-          {isAccount && (
+          {!!token && (
             <>
               <CongratulationsBox />
               <SinusBox />
