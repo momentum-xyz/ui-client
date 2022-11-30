@@ -3,10 +3,11 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {OptionInterface} from '@momentum-xyz/ui-kit';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {web3FromSource} from '@polkadot/extension-dapp';
-import {stringToHex} from '@polkadot/util';
+import {stringToHex, u8aToHex} from '@polkadot/util';
+import {decodeAddress} from '@polkadot/util-crypto';
 
 import {DELAY_DEFAULT, wait} from 'core/utils';
-import {api, AuthChallengeRequest} from 'api';
+import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 
 const AuthStore = types.compose(
@@ -31,8 +32,17 @@ const AuthStore = types.compose(
       selectWallet(wallet: string): void {
         self.wallet = wallet;
       },
+      getGuestToken: flow(function* (name: string) {
+        const data: AuthGuestTokenRequest = {name};
+        const response = yield self.challengeRequest.send(api.authRepository.getGuestToken, data);
+
+        return response?.token;
+      }),
       getTokenByWallet: flow(function* () {
-        const data: AuthChallengeRequest = {wallet: self.wallet};
+        const publicKey = decodeAddress(self.wallet);
+        const hexPublicKey = u8aToHex(publicKey);
+
+        const data: AuthChallengeRequest = {wallet: hexPublicKey};
         const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
 
         const account = self.accounts.find((i) => i.address === self.wallet);
@@ -42,13 +52,7 @@ const AuthStore = types.compose(
           const signRaw = injector?.signer?.signRaw;
 
           if (signRaw) {
-            // FIXME: Should we have this step or not?
-            // const publicKey = decodeAddress(account.address);
-            // const hexPublicKey = u8aToHex(publicKey);
-            // const nonce = (await getChallengeForSign(login_challenge, hexPublicKey)).address_challenge;
-
             const result = yield signRaw({
-              //data: stringToHex(nonce),
               data: stringToHex(response.challenge),
               address: account.address,
               type: 'bytes'
@@ -58,7 +62,7 @@ const AuthStore = types.compose(
             });
 
             if (result?.signature) {
-              const data = {wallet: self.wallet, signedChallenge: result.signature};
+              const data = {wallet: hexPublicKey, signedChallenge: result.signature};
               const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
               return response?.token;
             }
