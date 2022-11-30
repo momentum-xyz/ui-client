@@ -2,7 +2,7 @@ import {Instance, types, flow} from 'mobx-state-tree';
 
 import {PosBusEventEnum} from 'core/enums';
 import {RootBirthOfMeStore} from 'scenes/birthOfMe/stores';
-import {RootAuthStore} from 'scenes/auth/stores';
+import {RootAuthStore} from 'scenes/auth_OLD/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';

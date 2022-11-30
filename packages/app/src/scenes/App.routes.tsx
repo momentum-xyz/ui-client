@@ -9,15 +9,17 @@ const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'))
 const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
 const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
 const ExplorePage = lazy(() => import('./birthOfMe/pages/ExplorePage/ExplorePage'));
-const LoginPage = lazy(() => import('./auth/pages/LoginPage/LoginPage'));
+const LoginPage = lazy(() => import('./auth_OLD/pages/LoginPage/LoginPage'));
 const WorldBuilderLoginPage = lazy(
-  () => import('./auth/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
+  () => import('./auth_OLD/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
 );
-const LoginCallback = lazy(() => import('./auth/pages/LoginCallback/LoginCallback'));
-const LoginEmailPage = lazy(() => import('./auth/pages/LoginEmailPage/LoginEmailPage'));
-const Web3ChoicePage = lazy(() => import('./auth/pages/Web3ChoicePage/Web3ChoicePage'));
-const Web3ChallengePage = lazy(() => import('./auth/pages/Web3ChallengePage/Web3ChallengePage'));
-const Web3ConsentPage = lazy(() => import('./auth/pages/Web3ConsentPage/Web3ConsentPage'));
+const LoginCallback = lazy(() => import('./auth_OLD/pages/LoginCallback/LoginCallback'));
+const LoginEmailPage = lazy(() => import('./auth_OLD/pages/LoginEmailPage/LoginEmailPage'));
+const Web3ChoicePage = lazy(() => import('./auth_OLD/pages/Web3ChoicePage/Web3ChoicePage'));
+const Web3ChallengePage = lazy(
+  () => import('./auth_OLD/pages/Web3ChallengePage/Web3ChallengePage')
+);
+const Web3ConsentPage = lazy(() => import('./auth_OLD/pages/Web3ConsentPage/Web3ConsentPage'));
 const HomePage = lazy(() => import('./home/pages/HomePage/HomePage'));
 const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpCompletePage'));
 const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));

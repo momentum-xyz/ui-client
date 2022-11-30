@@ -18,3 +18,13 @@ export interface AuthTokenRequest {
 export interface AuthTokenResponse {
   token: string;
 }
+
+/** GUEST TOKEN REQUEST **/
+
+export interface AuthGuestTokenRequest {
+  name: string;
+}
+
+export interface AuthGuestTokenResponse {
+  token: string;
+}
