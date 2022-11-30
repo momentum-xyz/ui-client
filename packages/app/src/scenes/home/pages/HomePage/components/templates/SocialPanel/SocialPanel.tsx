@@ -12,11 +12,15 @@ interface SocialPanelTabInterface {
   main: () => JSX.Element | null;
 }
 
+// TODO: When implementing Chat, move this to seperate tab and implemnt it in it
 const Chat: FC = () => {
   return <div>Chat</div>;
 };
 
 const SocialPanel: FC = () => {
+  const {widgetsStore, agoraStore} = useStore();
+  const {socialStore} = widgetsStore;
+
   const tabs: SocialPanelTabInterface[] = useMemo(
     () => [
       {
@@ -30,9 +34,6 @@ const SocialPanel: FC = () => {
     ],
     []
   );
-
-  const {widgetsStore, agoraStore} = useStore();
-  const {socialStore} = widgetsStore;
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(1);
 
