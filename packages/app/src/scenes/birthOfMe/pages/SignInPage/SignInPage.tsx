@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -10,18 +10,22 @@ import {CreateOdyssey, TravellerBox, ChoiceWallet, ChoiceName} from 'scenes/birt
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {birthOfMeStore} = useStore();
-  const {signInStore} = birthOfMeStore;
+  const {authStore} = useStore();
 
   const history = useHistory();
 
   useEffect(() => {
-    signInStore.fetchAddresses();
+    authStore.init();
+  }, [authStore]);
 
-    return () => {
-      signInStore.resetModel();
-    };
-  }, [signInStore]);
+  const signChallengeAndGetToken = useCallback(async () => {
+    const token = await authStore.getTokenByWallet();
+    if (token) {
+      // TODO: axios
+      console.log(token);
+      history.push(ROUTES.birthOfMe.explore);
+    }
+  }, [authStore, history]);
 
   return (
     <styled.Container>
@@ -35,10 +39,11 @@ const SignInPage: FC = () => {
 
         <styled.Boxes>
           <ChoiceWallet
-            addresses={signInStore.accountOptions}
-            selectedAddress={signInStore.selectedAddress}
-            onSelectAddress={signInStore.selectAddress}
-            onConnect={() => history.push(ROUTES.birthOfMe.explore)}
+            walletOptions={authStore.accountOptions}
+            wallet={authStore.wallet}
+            isConnectDisabled={authStore.isPending}
+            onSelectAddress={authStore.selectWallet}
+            onConnect={signChallengeAndGetToken}
           />
           <SinusBox />
           <ChoiceName onExplore={() => history.push(ROUTES.birthOfMe.explore)} />

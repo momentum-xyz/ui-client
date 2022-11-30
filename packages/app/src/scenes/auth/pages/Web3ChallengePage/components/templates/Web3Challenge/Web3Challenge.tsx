@@ -24,7 +24,7 @@ interface PropsInterface {
 const Web3Challenge: FC<PropsInterface> = (props) => {
   const {web3Connector, challenge, loginAccount, skipChoiceRedirect} = props;
 
-  const {web3ChallengeStore} = useStore().authStore;
+  const {web3ChallengeStore} = useStore().authStore_OLD;
   const {getChallengeForSign, loginAccept, getErrorMessage} = web3ChallengeStore;
 
   const {t} = useTranslation();

@@ -16,7 +16,7 @@ import {AccountPicker} from './components';
 import * as styled from './Web3ChoicePage.styled';
 
 const Web3ChoicePage: FC = () => {
-  const {web3ChoiceStore} = useStore().authStore;
+  const {web3ChoiceStore} = useStore().authStore_OLD;
   const {loginType, accountList, selectAccount, selectedAccount, guestRedirect} = web3ChoiceStore;
 
   const {search} = useLocation();
