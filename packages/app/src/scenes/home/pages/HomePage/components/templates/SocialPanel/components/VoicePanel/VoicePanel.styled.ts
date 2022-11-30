@@ -1,4 +1,4 @@
-import {Text} from '@momentum-xyz/ui-kit';
+import {Avatar, Text} from '@momentum-xyz/ui-kit';
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
@@ -27,6 +27,11 @@ export const Attendee = styled.div`
   align-items: center;
   justify-content: center;
   gap: 8px;
+`;
+
+export const AttendeeAvatar = styled(Avatar)`
+  border-color: ${(props) => props.theme.accent} !important;
+  border-width: 2px !important;
 `;
 
 export const AttendeeName = styled(Text)`
@@ -66,6 +71,10 @@ export const VoiceAction = styled.button`
   display: flex;
   gap: 10px;
   align-items: center;
+
+  :disabled {
+    opacity: 0.8;
+  }
 
   svg {
     color: white;

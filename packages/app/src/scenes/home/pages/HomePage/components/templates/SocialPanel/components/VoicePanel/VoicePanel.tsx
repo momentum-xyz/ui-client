@@ -1,4 +1,4 @@
-import {Avatar, IconSvg, Text} from '@momentum-xyz/ui-kit';
+import {IconSvg, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback} from 'react';
 
@@ -9,7 +9,7 @@ import * as styled from './VoicePanel.styled';
 const VoicePanel: FC = () => {
   const {agoraStore, sessionStore, mainStore} = useStore();
   const {worldStore} = mainStore;
-  const {agoraMeetingStore} = agoraStore;
+  const {agoraMeetingStore, userDevicesStore} = agoraStore;
   const {user} = sessionStore;
 
   const handleToggleVoiceChat = useCallback(() => {
@@ -25,13 +25,21 @@ const VoicePanel: FC = () => {
       <styled.Body>
         {agoraStore.hasJoined && user && (
           <styled.Attendee>
-            <Avatar size="medium" avatarSrc={user.avatarSrc} />
+            <styled.AttendeeAvatar
+              size="medium"
+              avatarSrc={user.avatarSrc}
+              showBorder={agoraStore.localSoundLevel > 3}
+            />
             <styled.AttendeeName text={user.name} size="xs" isMultiline={false} />
           </styled.Attendee>
         )}
         {agoraMeetingStore.users.map((user) => (
           <styled.Attendee key={user.uid}>
-            <Avatar size="medium" avatarSrc={user.avatarSrc} />
+            <styled.AttendeeAvatar
+              size="medium"
+              avatarSrc={user.avatarSrc}
+              showBorder={agoraStore.localSoundLevel > 3}
+            />
             <styled.AttendeeName text={user.name} size="xs" />
           </styled.Attendee>
         ))}
@@ -48,9 +56,12 @@ const VoicePanel: FC = () => {
             <IconSvg name="microphoneOff" />
             <Text text="Mute All" size="xs" />
           </styled.VoiceAction>
-          <styled.VoiceAction>
-            <IconSvg name="microphoneOff" />
-            <Text text="Mic Off" size="xs" />
+          <styled.VoiceAction
+            onClick={() => userDevicesStore.toggleMicrophone()}
+            disabled={userDevicesStore.isTogglingMicrophone}
+          >
+            <IconSvg name={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'} />
+            <Text text={userDevicesStore.muted ? 'Mic Off' : 'Mic On'} size="xs" />
           </styled.VoiceAction>
         </styled.VoiceActions>
       </styled.Footer>
