@@ -65,6 +65,7 @@ const NftStore = types
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionEnum))),
       transactionFee: '',
       nftItems: types.optional(types.array(NftItem), []),
+      connectToNftItemId: types.maybeNull(types.number),
       isLoading: false
     })
   )
@@ -248,6 +249,9 @@ const NftStore = types
     },
     setNftItems(items: NftItemInterface[]) {
       self.nftItems = cast(items);
+    },
+    setConnectToNftItemId(itemId: number | null) {
+      self.connectToNftItemId = itemId;
     },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
