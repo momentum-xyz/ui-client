@@ -17,6 +17,7 @@ import {
   HighFiveContent,
   InvitationContent,
   TOAST_BASE_OPTIONS,
+  TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
 import {AssetTypeEnum} from 'core/enums';
@@ -86,7 +87,17 @@ const UnityPage: FC = () => {
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
-    if (sessionStore.userId !== userId) {
+    if (sessionStore.userId === userId) {
+      toast.info(
+        <ToastContent
+          headerIconName="fly-with-me"
+          title="Fly to me Request"
+          text="Your request was sent!"
+          showCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    } else {
       toast.info(
         <ToastContent
           headerIconName="fly-with-me"
