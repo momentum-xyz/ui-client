@@ -7,6 +7,7 @@ import {stringToHex, u8aToHex} from '@polkadot/util';
 import {decodeAddress} from '@polkadot/util-crypto';
 
 import {DELAY_DEFAULT, wait} from 'core/utils';
+import {GuestLoginFormInterface} from 'core/interfaces';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 
@@ -16,6 +17,7 @@ const AuthStore = types.compose(
     .model('AuthStore', {
       wallet: '',
       accounts: types.optional(types.array(types.frozen<InjectedAccountWithMeta>()), []),
+      guestTokenRequest: types.optional(RequestModel, {}),
       challengeRequest: types.optional(RequestModel, {}),
       tokenRequest: types.optional(RequestModel, {})
     })
@@ -32,9 +34,9 @@ const AuthStore = types.compose(
       selectWallet(wallet: string): void {
         self.wallet = wallet;
       },
-      getGuestToken: flow(function* (name: string) {
-        const data: AuthGuestTokenRequest = {name};
-        const response = yield self.challengeRequest.send(api.authRepository.getGuestToken, data);
+      getGuestToken: flow(function* (form: GuestLoginFormInterface) {
+        const data: AuthGuestTokenRequest = {...form};
+        const response = yield self.guestTokenRequest.send(api.authRepository.getGuestToken, data);
 
         return response?.token;
       }),
@@ -73,6 +75,9 @@ const AuthStore = types.compose(
     .views((self) => ({
       get isPending(): boolean {
         return self.challengeRequest.isPending || self.tokenRequest.isPending;
+      },
+      get isGuestPending(): boolean {
+        return self.guestTokenRequest.isPending;
       },
       get accountOptions(): OptionInterface[] {
         return self.accounts.map((account) => ({
