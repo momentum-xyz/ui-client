@@ -9,4 +9,5 @@ export interface ToolbarIconInterface {
   isActive?: (match, location) => boolean;
   onClick?: () => void;
   disabled?: boolean;
+  isSelected?: boolean;
 }

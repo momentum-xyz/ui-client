@@ -230,7 +230,7 @@ function onClick(event) {
       if (item.object.name == 'journey') {
         // get new xyz for target and set new target for orbitcamera.
         const location = item.object.position;
-        planetLocation = new Vector3(location.x, location.y, location.z);
+        const planetLocation = new Vector3(location.x, location.y, location.z);
 
         // Prepare rotation of camera animation.
         const startOrientation = camera.quaternion.clone();

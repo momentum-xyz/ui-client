@@ -13,7 +13,6 @@ import {observer} from 'mobx-react-lite';
 
 import {ExplorePanel} from './components';
 import * as styled from './HomePage.styled';
-
 const HomePage: FC = () => {
   // const {onlineUsersStore, userProfileDialog} = homeStore;
   // const {unityStore} = mainStore;

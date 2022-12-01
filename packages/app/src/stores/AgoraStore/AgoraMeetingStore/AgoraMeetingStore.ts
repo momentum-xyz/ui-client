@@ -7,7 +7,7 @@ import AgoraRTC, {
 } from 'agora-rtc-sdk-ng';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
+import {AgoraTokenResponse, api} from 'api';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {AgoraScreenShareStoreType} from 'stores/AgoraStore/AgoraScreenShareStore';
@@ -163,11 +163,10 @@ const AgoraMeetingStore = types
         return undefined;
       }
 
-      const tokenResponse: string = yield self.tokenRequest.send(
-        api.agoraRepository_old.getAgoraToken,
+      const tokenResponse: AgoraTokenResponse = yield self.tokenRequest.send(
+        api.agoraRepository.getAgoraToken,
         {
           spaceId: spaceId ?? self.spaceId,
-          isStageMode: false
         }
       );
 
@@ -186,13 +185,18 @@ const AgoraMeetingStore = types
         ) => Promise<IMicrophoneAudioTrack | undefined>
       ) => Promise<void>
     ) {
-      const tokenResponse: string | undefined = yield self.getAgoraToken(spaceId);
+      const tokenResponse: AgoraTokenResponse = yield self.getAgoraToken(spaceId);
 
       if (!tokenResponse) {
         return;
       }
 
-      self.userId = yield self.client.join(self.appId, spaceId, tokenResponse, authStateSubject);
+      self.userId = yield self.client.join(
+        self.appId,
+        tokenResponse.channel,
+        tokenResponse.token,
+        authStateSubject
+      );
       yield createLocalTracks(self.createAudioTrackAndPublish);
       self.spaceId = spaceId;
       self.users = self.client.remoteUsers

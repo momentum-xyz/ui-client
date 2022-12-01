@@ -22,6 +22,7 @@ const WEB3_SIGN_ERROR = 'Eager: Error occurred while signing the message';
 // @ts-ignore: Fix internal error of wallet connect
 window.Buffer = window.Buffer || Buffer;
 
+// TODO: REMOVAL
 export const useEager = (
   login_challenge: string,
   web3Connector: Web3ConnectorInterface,

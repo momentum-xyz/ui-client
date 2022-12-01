@@ -16,6 +16,7 @@ export interface PropsInterface
   isDanger?: boolean;
   isWhite?: boolean;
   disabled?: boolean;
+  isSelected?: boolean;
 }
 
 const SvgButton: FC<PropsInterface> = ({
@@ -28,6 +29,7 @@ const SvgButton: FC<PropsInterface> = ({
   className,
   isWhite = false,
   disabled = false,
+  isSelected = false,
   ...rest
 }) => {
   return (
@@ -37,6 +39,7 @@ const SvgButton: FC<PropsInterface> = ({
       onClick={onClick}
       disabled={disabled}
       data-testid="SvgButton-test"
+      className={cn(isSelected && 'selected')}
     >
       <IconSvg
         name={iconName}

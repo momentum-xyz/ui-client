@@ -7,16 +7,30 @@ import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momen
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
-import {ProfileMenuWidget, OnlineUsersWidget, FlyToMeWidget, ScreenShareWidget} from './pages';
+import {
+  ProfileMenuWidget,
+  OnlineUsersWidget,
+  FlyToMeWidget,
+  ScreenShareWidget,
+  SocialWidget
+} from './pages';
 import * as styled from './Widgets.styled';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} =
-    useStore();
-  const {profileMenuStore, flyToMeStore, screenShareStore} = widgetsStore;
+  const {
+    sessionStore,
+    widgetsStore,
+    flightStore,
+    mainStore,
+    worldBuilderStore,
+    agoraStore,
+    objectStore
+  } = useStore();
+  const {profileMenuStore, flyToMeStore, screenShareStore, socialStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
+  const {asset: asset2D} = objectStore;
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -48,7 +62,9 @@ const Widgets: FC = () => {
     {
       title: t('labels.worldChat'),
       icon: 'chat',
-      size: 'medium'
+      size: 'medium',
+      onClick: socialStore.widget.toggle,
+      isSelected: asset2D?.isExpanded !== true && socialStore.widget.isOpen
     },
     {
       title: 'Fly to me',
@@ -108,6 +124,7 @@ const Widgets: FC = () => {
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
       {screenShareStore.widget.isOpen && <ScreenShareWidget />}
+      {asset2D?.isExpanded !== true && socialStore.widget.isOpen && <SocialWidget />}
     </>
   );
 };
