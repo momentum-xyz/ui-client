@@ -11,8 +11,9 @@ import {ExplorePanel, SelectedOdyssey, StakingForm} from 'scenes/birthOfMe/compo
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {birthOfMeStore} = useStore();
-  const {exploreStore, signInStore, nftStore} = birthOfMeStore;
+  const {birthOfMeStore, authStore} = useStore();
+  const {exploreStore, nftStore} = birthOfMeStore;
+  const {wallet} = authStore;
 
   const {t} = useTranslation();
 
@@ -21,13 +22,7 @@ const ExplorePage: FC = () => {
   }, [exploreStore]);
 
   const onStake = (amount: number) => {
-    console.log('onStake', signInStore.selectedAddress);
-    // FIXME
-    const wallet = sessionStorage.getItem('walletId');
-    if (!wallet) {
-      alert('Please connect wallet');
-      return;
-    }
+    console.log('onStake', wallet, exploreStore.selectedOdyssey);
 
     if (exploreStore.selectedOdyssey) {
       nftStore
@@ -78,8 +73,15 @@ const ExplorePage: FC = () => {
           )}
         </styled.Boxes>
 
-        {!!nftStore.connectToNftItemId && (
-          <Dialog title="Personal Connecting Dashboard" icon="hierarchy" showCloseButton>
+        {!!nftStore.connectToNftItemId && !!wallet && (
+          <Dialog
+            title="Personal Connecting Dashboard"
+            icon="hierarchy"
+            showCloseButton
+            onClose={() => {
+              nftStore.setConnectToNftItemId(null);
+            }}
+          >
             <StakingForm onStake={onStake} />
           </Dialog>
         )}
@@ -92,7 +94,8 @@ const ExplorePage: FC = () => {
             odysseyList={exploreStore.odysseyList}
             onSearch={exploreStore.searchOdysseys}
             onTeleport={(id) => alert(`Teleport to ${id}`)}
-            onConnect={(id) => alert(`Connect to ${id}`)}
+            // FIXME id type
+            onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
           />
         </styled.Boxes>
       </styled.Wrapper>
