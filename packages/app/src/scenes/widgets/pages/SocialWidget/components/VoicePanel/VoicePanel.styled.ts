@@ -64,12 +64,12 @@ export const VoiceActions = styled.div`
   width: 100%;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
 `;
 
 export const VoiceAction = styled.button`
   display: flex;
-  gap: 10px;
+  gap: 6px;
   align-items: center;
 
   :disabled {

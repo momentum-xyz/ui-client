@@ -166,7 +166,7 @@ const AgoraMeetingStore = types
       const tokenResponse: AgoraTokenResponse = yield self.tokenRequest.send(
         api.agoraRepository.getAgoraToken,
         {
-          spaceId: spaceId ?? self.spaceId,
+          spaceId: spaceId ?? self.spaceId
         }
       );
 

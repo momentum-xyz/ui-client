@@ -24,19 +24,20 @@ export const Container = styled.div`
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  align-items: center;
+  padding: 10px 4px;
+  margin: 0 10px;
   border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
-  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
 `;
 
 export const HeaderItemsGroup = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 14px;
+  align-items: center;
 `;
 
 export const TabsSelector = styled.div`
-  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
-  padding: 15px 20px;
+  padding: 8px 10px;
 `;
 
 export const Body = styled.div`
