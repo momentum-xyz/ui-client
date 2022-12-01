@@ -7,9 +7,9 @@ import {agoraRepositoryApiEndpoints} from './agoraRepository.api.endpoints';
 import {AgoraTokenRequest, AgoraTokenResponse} from './agoraRepository.api.types';
 
 export const getAgoraToken: RequestInterface<AgoraTokenRequest, AgoraTokenResponse> = (options) => {
-  const {spaceId, ...restOptions} = options;
+  const {spaceId, screenshare, ...restOptions} = options;
 
   const url = generatePath(agoraRepositoryApiEndpoints().token, {spaceId});
 
-  return request.post(url, restOptions);
+  return request.post(url, {screenshare}, restOptions);
 };
