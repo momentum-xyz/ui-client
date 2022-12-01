@@ -15,7 +15,8 @@ import {
   PosBusMegamojiMessageType,
   PosBusFlyWithMeType,
   PosBusScreenShareMessageType,
-  PosBusMiroStateMessageType as PosBusAttributeMessageType
+  PosBusMiroStateMessageType as PosBusAttributeMessageType,
+  PosBusFlyToMeType
 } from 'core/types';
 
 class PosBusService {
@@ -136,6 +137,10 @@ class PosBusService {
     }
   }
 
+  static handleFlyToMeMessage(message: PosBusFlyToMeType) {
+    PosBusEventEmitter.emit('fly-to-me', message.spaceId, message.pilot, message.pilot_name);
+  }
+
   static handleStartFlyWithMeMessage(message: PosBusFlyWithMeType) {
     PosBusEventEmitter.emit('start-fly-with-me', message.spaceId, message.pilot, message.pilotName);
   }
@@ -222,6 +227,9 @@ class PosBusService {
         break;
       case 'posbus':
         this.handlePosBusMessage(message as PosBusMessageStatusType);
+        break;
+      case 'fly-to-me':
+        this.handleFlyToMeMessage(message as PosBusFlyToMeType);
         break;
       case 'start-fly-with-me':
         this.handleStartFlyWithMeMessage(message as PosBusFlyWithMeType);

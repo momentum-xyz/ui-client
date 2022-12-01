@@ -10,7 +10,7 @@ interface PropsInterface {
 }
 
 const BlockTime = ({blocks}: PropsInterface) => {
-  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {polkadotProviderStore} = useStore().widgetStore_OLD.stakingStore;
   const {calculateUnlockingDuration, unlockingDuration} = polkadotProviderStore;
 
   useEffect(() => {

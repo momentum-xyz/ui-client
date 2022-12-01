@@ -13,7 +13,7 @@ import * as styled from './StakingAmountSection.styled';
 interface PropsInterface extends PropsWithThemeInterface {}
 
 const StakingAmountSection: FC<PropsInterface> = ({theme}) => {
-  const {polkadotProviderStore} = useStore().widgetStore.stakingStore;
+  const {polkadotProviderStore} = useStore().widgetStore_OLD.stakingStore;
   const {stakingAmount, setStakingAmount} = polkadotProviderStore;
 
   const stakingAmountHandler = (value: string) => {

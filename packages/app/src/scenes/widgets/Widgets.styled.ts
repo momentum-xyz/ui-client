@@ -14,7 +14,7 @@ export const Footer = styled.footer`
   bottom: 0;
   z-index: var(--overlay-z-index);
   width: 100%;
-  padding: 0 10px 10px 20px;
+  padding: 0 10px 10px 10px;
 
   background: linear-gradient(0deg, #202a44 0%, rgba(32, 42, 68, 0) 100%);
 `;

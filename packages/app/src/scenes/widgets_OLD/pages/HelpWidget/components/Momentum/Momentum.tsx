@@ -12,10 +12,10 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 import * as styled from './Momentum.styled';
 
 const Momentum: React.FC = () => {
-  const {widgetStore, mainStore, flightStore} = useStore();
+  const {widgetStore_OLD, mainStore, flightStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {worldConfig} = worldStore;
-  const {helpStore} = widgetStore;
+  const {helpStore} = widgetStore_OLD;
 
   const history = useHistory();
 

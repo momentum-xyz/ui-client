@@ -8,7 +8,8 @@ import AgoraRTC, {
 } from 'agora-rtc-sdk-ng';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
+import {AgoraTokenResponse, api} from 'api';
+import {appVariables} from 'api/constants';
 
 const TRACK_CONFIG: ScreenVideoTrackInitConfig = {
   encoderConfig: {
@@ -50,8 +51,8 @@ const AgoraScreenShareStore = types
     }
   }))
   .actions((self) => ({
-    init(appId: string, worldId?: string) {
-      self.appId = appId;
+    init(worldId?: string) {
+      self.appId = appVariables.AGORA_APP_ID;
       self.worldId = worldId;
     }
   }))
@@ -67,7 +68,9 @@ const AgoraScreenShareStore = types
   }))
   .actions((self) => ({
     createScreenTrackAndPublish: flow(function* () {
+      console.info('Client2', self.client);
       if (self.client) {
+        console.info('Client3', self.client);
         const screenTrack: ILocalVideoTrack = yield AgoraRTC.createScreenVideoTrack(
           TRACK_CONFIG,
           'disable'
@@ -83,29 +86,30 @@ const AgoraScreenShareStore = types
 
       if (self.worldId) {
         self.isSettingUp = true;
-
+        //self.isStageMode ? 'live' :
         self.client = AgoraRTC.createClient({
-          mode: self.isStageMode ? 'live' : 'rtc',
+          mode: 'rtc',
           codec: 'h264'
         });
 
-        if (self.isStageMode) {
-          yield self.client.setClientRole('host');
-        }
+        console.info('first client', self.client);
+        // if (self.isStageMode) {
+        //   yield self.client.setClientRole('host');
+        // }
 
-        const response: string = yield self.request.send(
-          api.agoraRepository.getAgoraScreenShareToken,
+        const {token}: AgoraTokenResponse = yield self.request.send(
+          api.agoraRepository.getAgoraToken,
           {
-            spaceId: self.worldId,
-            isStageMode: false
+            spaceId: self.worldId
           }
         );
 
         try {
-          yield self.client.join(self.appId, self.worldId, response, `ss|${authStateSubject}`);
+          yield self.client.join(self.appId, self.worldId, token, `ss|${authStateSubject}`);
           yield self.createScreenTrackAndPublish();
           wasStarted = true;
-        } catch {
+        } catch (e) {
+          console.info(e);
           self.client.leave();
         } finally {
           self.isSettingUp = false;

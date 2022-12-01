@@ -9,7 +9,7 @@ import * as styled from './UnbondDetails.styled';
 
 const UnbondDetails = () => {
   const {unbondAmount, tokenSymbol, transactionSigner} =
-    useStore().widgetStore.stakingStore.polkadotProviderStore;
+    useStore().widgetStore_OLD.stakingStore.polkadotProviderStore;
   return (
     <>
       <Heading type="h2" align="left" weight="bold" label={t('staking.transactionCalls')} />

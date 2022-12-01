@@ -11,7 +11,7 @@ import * as styled from './Controls.styled';
 
 const Controls: React.FC = () => {
   const {
-    widgetStore: {helpStore}
+    widgetStore_OLD: {helpStore}
   } = useStore();
 
   const handleExpand = () => {

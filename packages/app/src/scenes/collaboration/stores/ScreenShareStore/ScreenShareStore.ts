@@ -32,7 +32,7 @@ const ScreenShareStore = types.compose(
         }
       }),
       relayScreenShare: flow(function* (spaceId: string) {
-        yield self.request.send(api.agoraRepository.relayScreenShare, {
+        yield self.request.send(api.agoraRepository_old.relayScreenShare, {
           spaceId
         });
       })

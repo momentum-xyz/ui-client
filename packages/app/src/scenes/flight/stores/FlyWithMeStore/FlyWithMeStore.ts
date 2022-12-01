@@ -31,10 +31,10 @@ const FlyWithMeStore = types
       }
     }),
     start: flow(function* (spaceId: string) {
-      yield self.startRequest.send(api.flyWithMeRepository.start, {spaceId});
+      yield self.startRequest.send(api.flightRepository.startFlyWithMe, {spaceId});
     }),
     stop: flow(function* (spaceId: string) {
-      yield self.stopRequest.send(api.flyWithMeRepository.stop, {spaceId});
+      yield self.stopRequest.send(api.flightRepository.stopFlyWithMe, {spaceId});
     })
   }));
 

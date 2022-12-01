@@ -18,6 +18,8 @@ const SessionStore = types
     profileRequest: types.optional(RequestModel, {}),
     statusRequest: types.optional(RequestModel, {})
   })
+
+  // TODO: OLD. Removal
   .actions((self) => ({
     async init(idToken: string) {
       await this.checkUserProfile(idToken);
@@ -48,6 +50,7 @@ const SessionStore = types
       yield self.statusRequest.send(api.statusRepository.changeStatus, {status});
     })
   }))
+  // TODO: OLD. Removal
   .views((self) => ({
     get userId(): string {
       return self.user?.id || '';

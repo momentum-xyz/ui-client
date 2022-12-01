@@ -9,8 +9,8 @@ import {BalanceItem} from '../BalanceItem';
 import * as styled from './BalanceList.styled';
 
 const BalanceList = () => {
-  const {widgetStore} = useStore();
-  const {stashStakingBalance, tokenSymbol} = widgetStore.stakingStore.polkadotProviderStore;
+  const {widgetStore_OLD} = useStore();
+  const {stashStakingBalance, tokenSymbol} = widgetStore_OLD.stakingStore.polkadotProviderStore;
 
   const Balance = [
     {

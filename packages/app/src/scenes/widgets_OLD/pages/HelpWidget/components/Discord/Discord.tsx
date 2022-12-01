@@ -13,7 +13,7 @@ import * as styled from './Discord.styled';
 const Discord: React.FC = () => {
   const theme = useTheme();
   const {
-    widgetStore: {helpStore}
+    widgetStore_OLD: {helpStore}
   } = useStore();
 
   // TODO move to Backend in next iteration

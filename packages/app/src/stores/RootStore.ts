@@ -2,12 +2,13 @@ import {Instance, types, flow} from 'mobx-state-tree';
 
 import {PosBusEventEnum} from 'core/enums';
 import {RootBirthOfMeStore} from 'scenes/birthOfMe/stores';
-import {RootAuthStore} from 'scenes/auth/stores';
+import {RootAuthStore} from 'scenes/auth_OLD/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootFlightStore} from 'scenes/flight/stores';
-import {RootWidgetStore} from 'scenes/widgets_OLD/stores/RootWidgetStore';
+import {RootWidgetsStore} from 'scenes/widgets/stores/RootWidgetsStore';
+import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {HomeStore} from 'scenes/home/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
@@ -17,6 +18,7 @@ import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {CalendarStore} from 'scenes/calendar/stores/CalendarStore';
 import {ObjectStore} from 'scenes/object/stores';
 
+import {AuthStore} from './AuthStore';
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
 import {SessionStore} from './SessionStore';
@@ -26,12 +28,13 @@ const RootStore = types
   .model('RootStore', {
     /* Connect core stores */
     configStore: types.optional(ConfigStore, {}),
+    authStore: types.optional(AuthStore, {}),
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
     /* Connect independent stores */
     birthOfMeStore: types.optional(RootBirthOfMeStore, {}),
-    authStore: types.optional(RootAuthStore, {}),
+    authStore_OLD: types.optional(RootAuthStore, {}),
     homeStore: types.optional(HomeStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
@@ -39,7 +42,8 @@ const RootStore = types
     flightStore: types.optional(RootFlightStore, {}),
     calendarStore: types.optional(CalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
-    widgetStore: types.optional(RootWidgetStore, {}),
+    widgetsStore: types.optional(RootWidgetsStore, {}),
+    widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),
     worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
     worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),

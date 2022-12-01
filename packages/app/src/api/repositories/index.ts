@@ -1,5 +1,6 @@
 export * from './versionRepository';
 export * from './configRepository';
+export * from './authRepository';
 export * from './web3Repository';
 export * from './guestRepository';
 export * from './userRepository';
@@ -15,3 +16,5 @@ export * from './eventsRepository';
 export * from './objectRepository';
 export * from './assets3dRepository';
 export * from './assetsRepository';
+export * from './agoraRepository';
+export * from './flightRepository';

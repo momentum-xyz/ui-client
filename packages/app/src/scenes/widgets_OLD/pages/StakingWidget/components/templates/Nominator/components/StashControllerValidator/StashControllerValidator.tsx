@@ -17,7 +17,7 @@ const StashControllerValidator: FC<PropsInterface> = ({theme}) => {
     stashAccount,
     controllerAccountValidation,
     usedStashAddress
-  } = useStore().widgetStore.stakingStore.polkadotProviderStore;
+  } = useStore().widgetStore_OLD.stakingStore.polkadotProviderStore;
 
   const [{errorMessage, errorType}, setError] = useState<StakeValidatorErrorType>({
     errorMessage: '',

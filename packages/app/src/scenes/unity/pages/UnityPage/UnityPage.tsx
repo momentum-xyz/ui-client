@@ -17,6 +17,7 @@ import {
   HighFiveContent,
   InvitationContent,
   TOAST_BASE_OPTIONS,
+  TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
 import {AssetTypeEnum} from 'core/enums';
@@ -83,6 +84,34 @@ const UnityPage: FC = () => {
         assetType: AssetTypeEnum.VIDEO
       })
     });
+  });
+
+  usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
+    if (sessionStore.userId === userId) {
+      toast.info(
+        <ToastContent
+          headerIconName="fly-with-me"
+          title="Fly to me Request"
+          text="Your request was sent!"
+          showCloseButton
+        />,
+        TOAST_COMMON_OPTIONS
+      );
+    } else {
+      toast.info(
+        <ToastContent
+          headerIconName="fly-with-me"
+          title="Fly to me Request"
+          text={`${userName} has invited you to fly to them`}
+          declineInfo={{title: t('actions.decline')}}
+          approveInfo={{
+            title: t('actions.join'),
+            onClick: () => unityStore.teleportToUser(userId)
+          }}
+        />,
+        TOAST_NOT_AUTO_CLOSE_OPTIONS
+      );
+    }
   });
 
   usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
