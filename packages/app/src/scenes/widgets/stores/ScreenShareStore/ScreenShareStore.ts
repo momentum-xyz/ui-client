@@ -1,10 +1,8 @@
-import {cast, flow, types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
-import {mapper} from 'api/mapper';
-import {Space} from 'core/models';
+import {api} from 'api';
 
 const ScreenShareStore = types.compose(
   ResetModel,
@@ -14,8 +12,6 @@ const ScreenShareStore = types.compose(
       isExpanded: true,
       ownerRequest: types.optional(RequestModel, {}),
       request: types.optional(RequestModel, {}),
-      world: types.maybeNull(Space),
-      worldRequest: types.optional(RequestModel, {}),
 
       screenOwnerId: types.maybeNull(types.string),
       screenOwnerName: types.maybeNull(types.string)
@@ -27,7 +23,7 @@ const ScreenShareStore = types.compose(
           self.screenOwnerName = null;
           return;
         }
-
+        // TODO: when implemented the user repository fetchProfile
         const response = yield self.ownerRequest.send(api.userRepository_OLD.fetchProfile, {
           userId: agoraUserId
         });
@@ -39,20 +35,7 @@ const ScreenShareStore = types.compose(
       }),
       togglePage() {
         self.isExpanded = !self.isExpanded;
-      },
-      fetchWorld: flow(function* (spaceId: string) {
-        const response: SpaceAttributeItemResponse = yield self.worldRequest.send(
-          api.spaceRepository.fetchSpace,
-          {spaceId}
-        );
-
-        if (response) {
-          self.world = cast({
-            id: spaceId,
-            ...mapper.mapSpaceSubAttributes<SpaceInterface>(response)
-          });
-        }
-      })
+      }
     }))
     .views((self) => ({
       get screenShareTitle(): string {

@@ -28,7 +28,6 @@ const Widgets: FC = () => {
 
   const handleOpenScreenShare = () => {
     agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
-    screenShareStore.fetchWorld(worldStore.worldId);
     screenShareStore.widget.open();
   };
 

@@ -1,14 +1,24 @@
 import {flow, Instance, types, cast} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, WorldConfigType, WorldConfigResponse} from 'api';
+import {
+  api,
+  WorldConfigType,
+  WorldConfigResponse,
+  SpaceAttributeItemResponse,
+  SpaceInterface
+} from 'api';
+import {mapper} from 'api/mapper';
+import {Space} from 'core/models';
 
 const WorldStore = types.compose(
   ResetModel,
   types
     .model('WorldStore', {
       worldId: types.optional(types.string, ''),
+      world: types.maybeNull(Space),
       worldConfigRequest: types.optional(RequestModel, {}),
+      worldInformationRequest: types.optional(RequestModel, {}),
       worldConfig: types.maybe(types.frozen<WorldConfigType>())
     })
     .actions((self) => ({
@@ -21,12 +31,26 @@ const WorldStore = types.compose(
         if (response) {
           self.worldConfig = cast(response);
         }
+      }),
+      fetchWorldInformation: flow(function* (spaceId: string) {
+        const response: SpaceAttributeItemResponse = yield self.worldInformationRequest.send(
+          api.spaceRepository.fetchSpace,
+          {spaceId}
+        );
+
+        if (response) {
+          self.world = cast({
+            id: spaceId,
+            ...mapper.mapSpaceSubAttributes<SpaceInterface>(response)
+          });
+        }
       })
     }))
     .actions((self) => ({
       init(worldId: string) {
         self.worldId = worldId;
         self.fetchWorldConfig(worldId);
+        self.fetchWorldInformation(worldId);
       }
     }))
 );
