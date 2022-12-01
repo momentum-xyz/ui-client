@@ -17,12 +17,20 @@ import {
 import * as styled from './Widgets.styled';
 
 const Widgets: FC = () => {
-  const {sessionStore, widgetsStore, flightStore, mainStore, worldBuilderStore, agoraStore} =
-    useStore();
+  const {
+    sessionStore,
+    widgetsStore,
+    flightStore,
+    mainStore,
+    worldBuilderStore,
+    agoraStore,
+    objectStore
+  } = useStore();
   const {profileMenuStore, flyToMeStore, screenShareStore, socialStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
+  const {asset: asset2D} = objectStore;
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -56,7 +64,7 @@ const Widgets: FC = () => {
       icon: 'chat',
       size: 'medium',
       onClick: socialStore.widget.toggle,
-      isSelected: socialStore.widget.isOpen
+      isSelected: asset2D?.isExpanded !== true && socialStore.widget.isOpen
     },
     {
       title: 'Fly to me',
@@ -116,7 +124,7 @@ const Widgets: FC = () => {
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
       {screenShareStore.widget.isOpen && <ScreenShareWidget />}
-      {socialStore.widget.isOpen && <SocialWidget />}
+      {asset2D?.isExpanded !== true && socialStore.widget.isOpen && <SocialWidget />}
     </>
   );
 };

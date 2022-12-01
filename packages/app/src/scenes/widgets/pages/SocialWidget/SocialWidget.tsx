@@ -37,7 +37,7 @@ const SocialWidget: FC = () => {
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(1);
 
-  const selectedTab = useMemo(() => tabs[selectedTabIndex], [selectedTabIndex, tabs]);
+  const selectedTab = tabs[selectedTabIndex];
 
   const handleClose = useCallback(async () => {
     if (agoraStore.hasJoined) {

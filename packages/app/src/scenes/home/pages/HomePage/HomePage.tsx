@@ -11,12 +11,9 @@ import {observer} from 'mobx-react-lite';
 
 //import {useStore} from 'shared/hooks';
 
-import {useStore} from 'shared/hooks';
-
 import {ExplorePanel} from './components';
 import * as styled from './HomePage.styled';
 const HomePage: FC = () => {
-  const {objectStore} = useStore();
   // const {onlineUsersStore, userProfileDialog} = homeStore;
   // const {unityStore} = mainStore;
   //
@@ -30,10 +27,6 @@ const HomePage: FC = () => {
   //   },
   //   [unityStore, history]
   // );
-
-  if (objectStore.asset?.isExpanded === true) {
-    return null;
-  }
 
   return (
     <styled.Container data-testid="HomePage-test">
