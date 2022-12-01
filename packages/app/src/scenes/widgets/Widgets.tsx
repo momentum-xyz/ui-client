@@ -1,10 +1,8 @@
 import React, {FC, useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import {
@@ -12,7 +10,8 @@ import {
   OnlineUsersWidget,
   FlyToMeWidget,
   ScreenShareWidget,
-  SocialWidget
+  SocialWidget,
+  CalendarWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -26,14 +25,14 @@ const Widgets: FC = () => {
     agoraStore,
     objectStore
   } = useStore();
-  const {profileMenuStore, flyToMeStore, screenShareStore, socialStore} = widgetsStore;
+  const {profileMenuStore, flyToMeStore, screenShareStore, socialStore, calendarStore} =
+    widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
   const {asset: asset2D} = objectStore;
 
   const {t} = useTranslation();
-  const location = useLocation();
 
   useEffect(() => {
     worldBuilderStore.fetchPermissions();
@@ -56,7 +55,7 @@ const Widgets: FC = () => {
       title: t('labels.calendar'),
       icon: 'calendar',
       size: 'medium',
-      link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.calendar,
+      onClick: calendarStore.widget.open,
       disabled: flightStore.isFlightWithMe
     },
     {
@@ -124,6 +123,7 @@ const Widgets: FC = () => {
       {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
       {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
       {screenShareStore.widget.isOpen && <ScreenShareWidget />}
+      {calendarStore.widget.isOpen && <CalendarWidget />}
       {asset2D?.isExpanded !== true && socialStore.widget.isOpen && <SocialWidget />}
     </>
   );

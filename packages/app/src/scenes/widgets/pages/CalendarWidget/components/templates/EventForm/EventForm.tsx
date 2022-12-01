@@ -17,7 +17,8 @@ import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {calendarStore, mainStore} = useStore();
+  const {widgetsStore, mainStore} = useStore();
+  const {calendarStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
   const {worldStore} = mainStore;
   const {currentEvent} = eventForm;
@@ -249,7 +250,9 @@ const EventForm: FC = () => {
         <styled.FileUploaderItem>
           <styled.TileImageUpload>
             {(image || currentEvent?.image) && (
-              <styled.ImagePreview src={(image && URL.createObjectURL(image)) || undefined} />
+              <styled.ImagePreview
+                src={(image && URL.createObjectURL(image)) || eventForm.imageSrc || undefined}
+              />
             )}
             <styled.CustomFileUploader
               label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}

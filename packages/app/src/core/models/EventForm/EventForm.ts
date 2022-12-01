@@ -6,6 +6,7 @@ import {EventItemInterface, EventItemDataInterface} from 'core/models';
 import {api, EventInterface, UploadImageResponse} from 'api';
 import {EventFormInterface} from 'core/interfaces';
 import {mapper} from 'api/mapper';
+import {appVariables} from 'api/constants';
 
 const EventForm = types.compose(
   ResetModel,
@@ -66,7 +67,7 @@ const EventForm = types.compose(
             attendees: self.currentEvent?.attendees,
             spaceId,
             eventId: self.currentEvent?.eventId,
-            image: file ? self.imageHash : undefined
+            image: file ? self.imageHash : self.currentEvent.image
           };
         } else {
           self.eventId = uuidv4();
@@ -92,6 +93,9 @@ const EventForm = types.compose(
     .views((self) => ({
       get isPending(): boolean {
         return self.eventFormRequest.isPending || self.uploadImageRequest.isPending;
+      },
+      get imageSrc(): string {
+        return `${appVariables.RENDER_SERVICE_URL}/get/${self.currentEvent?.image}`;
       }
     }))
 );
