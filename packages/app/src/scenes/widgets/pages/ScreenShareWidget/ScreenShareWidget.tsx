@@ -65,12 +65,12 @@ const ScreenShareWidget: FC = () => {
         <styled.HeaderElement className="right">
           <SvgButton
             iconName={screenShareStore.isExpanded ? 'minimise' : 'fullscreen'}
-            size="large"
+            size="medium-large"
             onClick={screenShareStore.togglePage}
             isWhite
           />
 
-          <SvgButton iconName="close" size="large" isWhite onClick={handleClose} />
+          <SvgButton iconName="close" size="medium-large" isWhite onClick={handleClose} />
         </styled.HeaderElement>
         <styled.InnerContainer>
           {!localVideoTrack && !remoteVideoTrack ? (

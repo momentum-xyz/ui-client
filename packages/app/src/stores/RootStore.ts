@@ -15,7 +15,6 @@ import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
-import {CalendarStore} from 'scenes/calendar/stores/CalendarStore';
 import {ObjectStore} from 'scenes/object/stores';
 
 import {AuthStore} from './AuthStore';
@@ -40,7 +39,6 @@ const RootStore = types
     collaborationStore: types.optional(RootCollaborationStore, {}),
     meetingStore: types.optional(RootMeetingStore, {}),
     flightStore: types.optional(RootFlightStore, {}),
-    calendarStore: types.optional(CalendarStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetsStore: types.optional(RootWidgetsStore, {}),
     widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),

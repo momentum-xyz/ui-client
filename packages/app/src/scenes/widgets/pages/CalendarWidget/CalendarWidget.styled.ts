@@ -20,12 +20,11 @@ export const Container = styled.div`
   margin-bottom: 20px;
 `;
 export const Modal = styled.div`
-  display: flex;
-  position: fixed;
-  top: 5%;
-  left: 10%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
 
-  justify-content: center;
-  align-items: center;
-  z-index: calc(var(--dialog-z-index) + 1);
+  z-index: var(--dialog-z-index);
 `;

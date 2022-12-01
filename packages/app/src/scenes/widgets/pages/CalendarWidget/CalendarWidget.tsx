@@ -1,6 +1,5 @@
 import React, {FC, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
 import {PanelLayout} from '@momentum-xyz/ui-kit';
@@ -8,26 +7,26 @@ import {absoluteLink} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
 import {EventList, DeleteEventDialog, ToastContent} from 'ui-kit';
 
-import * as styled from './CalendarPage.styled';
+import * as styled from './CalendarWidget.styled';
 import {EventForm, TabBarButtons} from './components';
 
-const CalendarPage: FC = () => {
-  const {calendarStore, mainStore, sessionStore} = useStore();
+const CalendarWidget: FC = () => {
+  const {widgetsStore, mainStore, sessionStore} = useStore();
+  const {calendarStore} = widgetsStore;
   const {eventList, deleteConfirmationDialog} = calendarStore;
-  const {worldStore} = mainStore;
+  const {worldStore, unityStore} = mainStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
   const theme = useTheme();
 
   useEffect(() => {
-    calendarStore.fetchWorld(worldStore.worldId);
     eventList.fetchSpaceEvents(worldStore.worldId);
+    unityStore.changeKeyboardControl(false);
 
     return () => {
+      unityStore.changeKeyboardControl(true);
       eventList.resetModel();
     };
   }, [calendarStore, eventList, worldStore.worldId]);
@@ -61,27 +60,19 @@ const CalendarPage: FC = () => {
     }
   };
 
-  const handleClose = () => {
-    if (history.location.state?.canGoBack) {
-      history.goBack();
-    } else {
-      history.push(ROUTES.base);
-    }
-  };
-
   return (
-    <styled.Modal theme={theme} data-testid="CalendarPage-test">
+    <styled.Modal theme={theme} data-testid="CalendarWidget-test">
       <styled.Container className="noScrollIndicator">
         <PanelLayout
-          componentSize={{width: '80vw'}}
-          onClose={handleClose}
-          title={calendarStore?.world?.name}
+          componentSize={{width: '1063px'}}
+          onClose={calendarStore.widget.close}
+          title={worldStore.world?.name}
           headerStyle="uppercase"
           headerType="h2"
           headerIconName="calendar"
           subtitle={t('calendar.subTitle')}
           iconSize="medium-large"
-          closeButtonSize="large"
+          closeButtonSize="medium-large"
           tabs={<TabBarButtons calendar="odyssey" />}
         >
           <styled.InnerContainer>
@@ -115,4 +106,4 @@ const CalendarPage: FC = () => {
   );
 };
 
-export default observer(CalendarPage);
+export default observer(CalendarWidget);

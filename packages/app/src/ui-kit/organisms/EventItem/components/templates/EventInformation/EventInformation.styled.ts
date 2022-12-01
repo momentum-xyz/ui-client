@@ -12,6 +12,10 @@ export const TextRow = styled.div`
   margin-bottom: 10px;
 `;
 
+export const Description = styled.div`
+  max-width: 306px;
+`;
+
 export const DateRow = styled.div`
   margin: 10px 0;
   display: flex;
