@@ -519,6 +519,7 @@ const NftStore = types
         console.log('res', res);
       } catch (err) {
         console.log('Error staking:', err);
+        throw err;
       }
     }),
     unstake: flow(function* (
@@ -540,6 +541,7 @@ const NftStore = types
         console.log('res', res);
       } catch (err) {
         console.log('Error unstaking:', err);
+        throw err;
       }
     }),
     getRewards: flow(function* (address: string) {
@@ -557,6 +559,7 @@ const NftStore = types
         console.log('res', res);
       } catch (err) {
         console.log('Error getting rewards:', err);
+        throw err;
       }
     })
     // getMinNominatorBond: flow(function* () {
