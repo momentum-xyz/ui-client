@@ -11,6 +11,12 @@ export const Container = styled.button`
     }
   }
 
+  &.selected {
+    .svg-icon {
+      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)} !important;
+    }
+  }
+
   :not(:disabled) {
     .svg-icon {
       color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.7)};

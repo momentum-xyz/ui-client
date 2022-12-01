@@ -38,6 +38,11 @@ export const Container = styled.div`
     height: 26.4px;
   }
 
+  &.medium {
+    width: 40px;
+    height: 40px;
+  }
+
   &.normal {
     width: 60px;
     height: 60px;
@@ -83,6 +88,13 @@ export const IndicatorWrapper = styled.div`
   &.normal {
     width: 15px;
     height: 15px;
+    right: 6.96%;
+    bottom: 2.84%;
+  }
+
+  &.medium {
+    width: 10px;
+    height: 10px;
     right: 6.96%;
     bottom: 2.84%;
   }
