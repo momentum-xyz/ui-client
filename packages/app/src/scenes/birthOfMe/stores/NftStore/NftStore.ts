@@ -65,6 +65,7 @@ const NftStore = types
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionEnum))),
       transactionFee: '',
       nftItems: types.optional(types.array(NftItem), []),
+      connectToNftItemId: types.maybeNull(types.number),
       isLoading: false
     })
   )
@@ -248,6 +249,9 @@ const NftStore = types
     },
     setNftItems(items: NftItemInterface[]) {
       self.nftItems = cast(items);
+    },
+    setConnectToNftItemId(itemId: number | null) {
+      self.connectToNftItemId = itemId;
     },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
@@ -515,6 +519,7 @@ const NftStore = types
         console.log('res', res);
       } catch (err) {
         console.log('Error staking:', err);
+        throw err;
       }
     }),
     unstake: flow(function* (
@@ -536,6 +541,7 @@ const NftStore = types
         console.log('res', res);
       } catch (err) {
         console.log('Error unstaking:', err);
+        throw err;
       }
     }),
     getRewards: flow(function* (address: string) {
@@ -553,6 +559,7 @@ const NftStore = types
         console.log('res', res);
       } catch (err) {
         console.log('Error getting rewards:', err);
+        throw err;
       }
     })
     // getMinNominatorBond: flow(function* () {
