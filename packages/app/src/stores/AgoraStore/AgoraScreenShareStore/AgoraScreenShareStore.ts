@@ -86,6 +86,9 @@ const AgoraScreenShareStore = types
   }))
   .actions((self) => ({
     leave() {
+      self.client?.localTracks.forEach((track) => {
+        track.close();
+      });
       self.client.unpublish();
       self.localVideoTrack = undefined;
     }
@@ -103,7 +106,12 @@ const AgoraScreenShareStore = types
       }
     }),
     close() {
+      self.client?.localTracks.forEach((track) => {
+        track.close();
+      });
       self.client.leave();
+      self.localVideoTrack = undefined;
+
       self.resetModel();
     }
   }))
