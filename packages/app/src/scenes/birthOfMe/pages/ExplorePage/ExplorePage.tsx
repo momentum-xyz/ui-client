@@ -1,58 +1,20 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {toast} from 'react-toastify';
-import {useTranslation} from 'react-i18next';
 import {Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Footer, ToastContent} from 'ui-kit';
+import {Footer} from 'ui-kit';
 import {ExplorePanel, SelectedOdyssey, StakingForm} from 'scenes/birthOfMe/components';
 
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {birthOfMeStore, authStore} = useStore();
+  const {birthOfMeStore} = useStore();
   const {exploreStore, nftStore} = birthOfMeStore;
-  const {wallet} = authStore;
-
-  const {t} = useTranslation();
 
   useEffect(() => {
     exploreStore.init();
   }, [exploreStore]);
-
-  const onStake = (amount: number) => {
-    console.log('onStake', wallet, exploreStore.selectedOdyssey);
-
-    if (exploreStore.selectedOdyssey) {
-      nftStore
-        .stake(wallet, amount, exploreStore.selectedOdyssey.id, 0)
-        .then(() => {
-          console.log('stake success');
-          toast.info(
-            <ToastContent
-              headerIconName="calendar"
-              title={t('titles.alert')}
-              text={t('messages.removeEventSuccess')}
-              showCloseButton
-            />
-          );
-          nftStore.setConnectToNftItemId(null);
-        })
-        .catch((err) => {
-          console.log('stake error', err);
-          toast.error(
-            <ToastContent
-              isDanger
-              headerIconName="calendar"
-              title={t('titles.alert')}
-              text={t('errors.couldNotRemoveEvent')}
-              showCloseButton
-            />
-          );
-        });
-    }
-  };
 
   return (
     <styled.Container>
@@ -73,7 +35,7 @@ const ExplorePage: FC = () => {
           )}
         </styled.Boxes>
 
-        {!!nftStore.connectToNftItemId && !!wallet && (
+        {!!nftStore.connectToNftItemId && (
           <Dialog
             title="Personal Connecting Dashboard"
             icon="hierarchy"
@@ -82,7 +44,12 @@ const ExplorePage: FC = () => {
               nftStore.setConnectToNftItemId(null);
             }}
           >
-            <StakingForm onStake={onStake} />
+            <StakingForm
+              nftItemId={nftStore.connectToNftItemId}
+              onComplete={() => {
+                nftStore.setConnectToNftItemId(null);
+              }}
+            />
           </Dialog>
         )}
 

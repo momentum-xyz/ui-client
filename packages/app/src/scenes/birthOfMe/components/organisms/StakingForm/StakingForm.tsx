@@ -8,6 +8,12 @@ import {
   TabBarTabInterface,
   Text
 } from '@momentum-xyz/ui-kit';
+import {observer} from 'mobx-react-lite';
+import {toast} from 'react-toastify';
+import {t} from 'i18next';
+
+import {useStore} from 'shared/hooks';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './StakingForm.styled';
 
@@ -36,12 +42,48 @@ const tabBarTabs: TabBarTabInterface[] = [
 ];
 
 interface PropsInterface {
-  onStake: (amount: number) => void;
+  nftItemId: number;
+  onComplete: () => void;
 }
 
-const StakingForm: FC<PropsInterface> = ({onStake}) => {
+const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
+  const {birthOfMeStore, authStore} = useStore();
+  const {nftStore} = birthOfMeStore;
+  const {wallet} = authStore;
+
   const [amount, setAmount] = useState(1_000_000_000);
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
+
+  const onStake = (amount: number) => {
+    console.log('onStake', wallet, nftItemId);
+
+    nftStore
+      .stake(wallet, amount, nftItemId)
+      .then(() => {
+        console.log('stake success');
+        toast.info(
+          <ToastContent
+            headerIconName="calendar"
+            title={t('titles.alert')}
+            text={t('messages.removeEventSuccess')}
+            showCloseButton
+          />
+        );
+        onComplete();
+      })
+      .catch((err) => {
+        console.log('stake error', err);
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="calendar"
+            title={t('titles.alert')}
+            text={t('errors.couldNotRemoveEvent')}
+            showCloseButton
+          />
+        );
+      });
+  };
 
   return (
     <styled.Container>
@@ -112,4 +154,4 @@ const StakingForm: FC<PropsInterface> = ({onStake}) => {
   );
 };
 
-export default StakingForm;
+export default observer(StakingForm);
