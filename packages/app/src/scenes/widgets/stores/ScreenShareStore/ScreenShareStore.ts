@@ -12,6 +12,7 @@ const ScreenShareStore = types.compose(
       isExpanded: true,
       ownerRequest: types.optional(RequestModel, {}),
       request: types.optional(RequestModel, {}),
+
       screenOwnerId: types.maybeNull(types.string),
       screenOwnerName: types.maybeNull(types.string)
     })
@@ -22,22 +23,18 @@ const ScreenShareStore = types.compose(
           self.screenOwnerName = null;
           return;
         }
-
-        const userId = agoraUserId.replace('ss|', '');
+        // TODO: when implemented the user repository fetchProfile,
+        //  it will be needed to check with user session id in order to give permission for stopping screen share,
+        //  and check if needed to have this action based on new requirements
         const response = yield self.ownerRequest.send(api.userRepository_OLD.fetchProfile, {
-          userId
+          userId: agoraUserId
         });
 
         if (response?.name) {
-          self.screenOwnerId = userId;
+          self.screenOwnerId = agoraUserId;
           self.screenOwnerName = response.name;
         }
       }),
-      // relayScreenShare: flow(function* (spaceId: string) {
-      //   yield self.request.send(api.agoraRepository.relayScreenShare, {
-      //     spaceId
-      //   });
-      // }),
       togglePage() {
         self.isExpanded = !self.isExpanded;
       }
