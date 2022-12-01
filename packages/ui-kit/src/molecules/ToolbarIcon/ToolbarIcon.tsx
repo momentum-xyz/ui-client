@@ -37,6 +37,7 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
   exact = false,
   disabled,
   isActive,
+  isSelected,
   state
 }) => {
   return (
@@ -75,6 +76,7 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
             theme={theme}
             onClick={onClick}
             disabled={disabled}
+            isSelected={isSelected}
           >
             {children}
           </SvgButton>

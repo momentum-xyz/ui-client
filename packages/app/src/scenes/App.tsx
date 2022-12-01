@@ -26,7 +26,6 @@ import {
   PUBLIC_ROUTES,
   SYSTEM_ROUTES
 } from './App.routes';
-
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 

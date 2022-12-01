@@ -10,37 +10,35 @@ import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenShareWidget.styled';
 
 const ScreenShareWidget: FC = () => {
-  const {sessionStore, widgetsStore, agoraStore} = useStore();
+  const {widgetsStore, agoraStore, sessionStore, mainStore} = useStore();
+  const {worldStore} = mainStore;
   const {screenShareStore} = widgetsStore;
-  // const {screenShareTitle} = screenShareStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {videoTrack} = agoraScreenShareStore;
+  const {remoteVideoTrack, localVideoTrack} = agoraScreenShareStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    if (videoTrack) {
-      const agoraUserId = videoTrack.getUserId()?.toString();
+    if (remoteVideoTrack) {
+      const agoraUserId = remoteVideoTrack?.getUserId()?.toString();
       if (screenShareStore.screenOwnerId !== agoraUserId) {
         screenShareStore.setScreenOwner(agoraUserId);
       }
+    } else if (localVideoTrack) {
+      screenShareStore.setScreenOwner(sessionStore?.userId);
     } else {
       screenShareStore.setScreenOwner(null);
     }
-  }, [videoTrack, screenShareStore, sessionStore.userId]);
+  }, [agoraScreenShareStore, screenShareStore, remoteVideoTrack, localVideoTrack]);
 
   const startScreenSharing = useCallback(() => {
-    agoraScreenShareStore.startScreenSharing(sessionStore.userId);
-  }, [agoraScreenShareStore, sessionStore.userId]);
+    agoraScreenShareStore.startScreenSharing();
+  }, [agoraScreenShareStore]);
 
-  // const stopScreenSharing = useCallback(() => {
-  //   screenShareStore.setScreenOwner(null);
-  //   agoraScreenShareStore.stopScreenSharing();
-  // }, [agoraScreenShareStore, screenShareStore]);
-  //
-  // if (!space) {
-  //   return null;
-  // }
+  const handleClose = () => {
+    screenShareStore.widget.close();
+    agoraScreenShareStore.close();
+  };
 
   return (
     <Portal data-testid="ScreenShareWidget-test">
@@ -48,7 +46,7 @@ const ScreenShareWidget: FC = () => {
         <styled.HeaderElement className="left">
           <styled.Title>
             <Text
-              text="World Name"
+              text={worldStore.world?.name}
               transform="uppercase"
               weight="medium"
               size="xl"
@@ -72,22 +70,17 @@ const ScreenShareWidget: FC = () => {
             isWhite
           />
 
-          <SvgButton
-            iconName="close"
-            size="large"
-            isWhite
-            onClick={screenShareStore.widget.close}
-          />
+          <SvgButton iconName="close" size="large" isWhite onClick={handleClose} />
         </styled.HeaderElement>
         <styled.InnerContainer>
-          {!videoTrack ? (
+          {!localVideoTrack && !remoteVideoTrack ? (
             <ScreenChoice
               isSettingUp={agoraScreenShareStore.isSettingUp}
               // canShare={//share permission}
               startScreenShare={startScreenSharing}
             />
           ) : (
-            <ScreenVideo videoTrack={videoTrack} />
+            <ScreenVideo videoTrack={localVideoTrack ? localVideoTrack : remoteVideoTrack} />
           )}
         </styled.InnerContainer>
       </styled.Modal>
