@@ -54,9 +54,19 @@ export const InputContainer = styled.div`
 export const Error = styled.div`
   position: absolute;
   color: ${(props) => props.theme.accentDanger};
-  font-size: var(--font-size-xxs);
   text-transform: uppercase;
   font-weight: 500;
-  right: 5px;
-  top: 27px;
+
+  &.primary {
+    font-size: var(--font-size-xxs);
+    right: 5px;
+    top: 27px;
+  }
+
+  &.secondary {
+    font-size: var(--font-size-xxxxs);
+    top: 35px;
+    left: 5px;
+    right: 5px;
+  }
 `;

@@ -5,7 +5,8 @@ import {useHistory} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
-import {CreateOdyssey, TravellerBox, ChoiceWallet, ChoiceName} from 'scenes/birthOfMe/components';
+import {GuestLoginFormInterface} from 'core/interfaces';
+import {CreateOdyssey, TravellerBox, Login, LoginGuest} from 'scenes/birthOfMe/components';
 
 import * as styled from './SignInPage.styled';
 
@@ -18,7 +19,7 @@ const SignInPage: FC = () => {
     authStore.init();
   }, [authStore]);
 
-  const signChallengeAndGetToken = useCallback(async () => {
+  const handleLogin = useCallback(async () => {
     const token = await authStore.getTokenByWallet();
     if (token) {
       // TODO: axios
@@ -26,6 +27,18 @@ const SignInPage: FC = () => {
       history.push(ROUTES.birthOfMe.explore);
     }
   }, [authStore, history]);
+
+  const handleGuestLogin = useCallback(
+    async (form: GuestLoginFormInterface) => {
+      const token = await authStore.getGuestToken(form);
+      if (token) {
+        // TODO: axios
+        console.log(token);
+        history.push(ROUTES.birthOfMe.explore);
+      }
+    },
+    [authStore, history]
+  );
 
   return (
     <styled.Container>
@@ -38,15 +51,18 @@ const SignInPage: FC = () => {
         </styled.Boxes>
 
         <styled.Boxes>
-          <ChoiceWallet
+          {/* Login as a normal user */}
+          <Login
             walletOptions={authStore.accountOptions}
             wallet={authStore.wallet}
-            isConnectDisabled={authStore.isPending}
+            isPending={authStore.isPending}
             onSelectAddress={authStore.selectWallet}
-            onConnect={signChallengeAndGetToken}
+            onLogin={handleLogin}
           />
+
           <SinusBox />
-          <ChoiceName onExplore={() => history.push(ROUTES.birthOfMe.explore)} />
+          {/* Login as guest */}
+          <LoginGuest isPending={authStore.isGuestPending} onLogin={handleGuestLogin} />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>
