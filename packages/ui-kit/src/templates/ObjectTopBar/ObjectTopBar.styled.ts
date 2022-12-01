@@ -16,7 +16,7 @@ export const Container = styled.div`
 
 export const Section = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 24px;
 `;
 
 export const StyledTexts = styled.div`

@@ -12,7 +12,7 @@ export const Container = styled.div`
   position: relative;
   border-radius: 10px;
   overflow: hidden;
-  height: 41px;
+  height: 36px;
   width: 100%;
   background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
 `;

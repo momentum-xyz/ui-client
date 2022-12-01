@@ -53,10 +53,11 @@ const SocialWidget: FC = () => {
         <styled.Container>
           <styled.Header>
             <styled.HeaderItemsGroup>
-              <IconSvg name="chat" /> <Heading label="Social" transform="uppercase" type="h3" />
+              <IconSvg name="collaboration" size="large" />
+              <Heading label="Social" transform="uppercase" type="h2" />
             </styled.HeaderItemsGroup>
             <styled.HeaderItemsGroup>
-              <SvgButton iconName="close" size="normal" onClick={handleClose} />
+              <SvgButton iconName="close" size="small" onClick={handleClose} />
             </styled.HeaderItemsGroup>
           </styled.Header>
           <styled.TabsSelector>
