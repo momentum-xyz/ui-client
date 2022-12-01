@@ -4,18 +4,18 @@ import {Button, Dropdown, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 import {Box} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
 
-import * as styled from './ChoiceWallet.styled';
+import * as styled from './Login.styled';
 
 interface PropsInterface {
   walletOptions: OptionInterface[];
   wallet: string | null;
-  isConnectDisabled: boolean;
+  isPending: boolean;
   onSelectAddress: (address: string) => void;
-  onConnect: () => void;
+  onLogin: () => void;
 }
 
-const ChoiceWallet: FC<PropsInterface> = (props) => {
-  const {walletOptions, wallet, isConnectDisabled, onSelectAddress, onConnect} = props;
+const Login: FC<PropsInterface> = (props) => {
+  const {walletOptions, wallet, isPending, onSelectAddress, onLogin} = props;
 
   return (
     <Box>
@@ -38,12 +38,12 @@ const ChoiceWallet: FC<PropsInterface> = (props) => {
           size="medium"
           label="Connect your wallet"
           icon="wallet"
-          disabled={!wallet || isConnectDisabled}
-          onClick={onConnect}
+          disabled={!wallet || isPending}
+          onClick={onLogin}
         />
       </styled.Div>
     </Box>
   );
 };
 
-export default ChoiceWallet;
+export default Login;

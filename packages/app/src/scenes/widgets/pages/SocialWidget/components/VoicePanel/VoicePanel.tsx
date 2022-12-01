@@ -49,19 +49,20 @@ const VoicePanel: FC = () => {
           <styled.EnterLeaveButtonLabel
             text={agoraStore.hasJoined ? 'Leave Voice Chat' : 'Join Voice Chat'}
             size="xs"
+            weight="light"
           />
         </styled.EnterLeaveButton>
         <styled.VoiceActions>
           <styled.VoiceAction>
             <IconSvg name="microphoneOff" />
-            <Text text="Mute All" size="xs" />
+            <Text text="Mute All" size="xs" weight="light" />
           </styled.VoiceAction>
           <styled.VoiceAction
             onClick={() => userDevicesStore.toggleMicrophone()}
             disabled={userDevicesStore.isTogglingMicrophone}
           >
             <IconSvg name={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'} />
-            <Text text={userDevicesStore.muted ? 'Mic Off' : 'Mic On'} size="xs" />
+            <Text text={userDevicesStore.muted ? 'Mic Off' : 'Mic On'} size="xs" weight="light" />
           </styled.VoiceAction>
         </styled.VoiceActions>
       </styled.Footer>
