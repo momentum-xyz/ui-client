@@ -6,7 +6,7 @@ import {RequestModel} from '@momentum-xyz/core';
 import {UserStatusEnum} from '@momentum-xyz/ui-kit';
 
 import {storage} from 'shared/services';
-import {api, FetchUserResponse} from 'api';
+import {api, FetchMeResponse} from 'api';
 import {User} from 'core/models';
 import {LoginTypeEnum, StorageKeyEnum} from 'core/enums';
 import {guestProviderConfig, keycloakProviderConfig, web3ProviderConfig} from 'shared/auth';
@@ -29,7 +29,7 @@ const SessionStore = types
       yield self.request.send(api.userRepository.check, {idToken});
     }),
     loadUserProfile: flow(function* () {
-      const response: FetchUserResponse = yield self.profileRequest.send(
+      const response: FetchMeResponse = yield self.profileRequest.send(
         api.userRepository.fetchMe,
         {}
       );

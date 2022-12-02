@@ -6,14 +6,14 @@ import {api} from 'api';
 import {appVariables} from 'api/constants';
 
 import {UserDevicesStore} from './UserDevicesStore';
-import {AgoraMeetingStore} from './AgoraMeetingStore';
+import {AgoraVoiceChatStore} from './AgoraVoiceChatStore';
 import {AgoraScreenShareStore} from './AgoraScreenShareStore';
 
 const AgoraStore = types
   .compose(
     ResetModel,
     types.model('AgoraStore', {
-      agoraMeetingStore: types.optional(AgoraMeetingStore, {}),
+      agoraVoiceChatStore: types.optional(AgoraVoiceChatStore, {}),
       agoraScreenShareStore: types.optional(AgoraScreenShareStore, {}),
       userDevicesStore: types.optional(UserDevicesStore, {}),
 
@@ -36,17 +36,23 @@ const AgoraStore = types
       self.userDevicesStore.init();
       self.appId = appVariables.AGORA_APP_ID;
 
-      self.agoraMeetingStore.init(self.appId);
+      self.agoraVoiceChatStore.init(self.appId);
     }
   }))
   // Agora calls setups and chat toggle
   .actions((self) => ({
     // --- COMMON ---
     setupAgoraListeners() {
-      self.agoraMeetingStore.setupAgoraListeners(self.agoraScreenShareStore);
+      self.agoraVoiceChatStore.setupAgoraListeners(self.agoraScreenShareStore);
     },
     cleanupAgoraListeners() {
-      self.agoraMeetingStore.cleanupListeners();
+      self.agoraVoiceChatStore.cleanupListeners();
+    },
+    handleUserMuted(userId: string) {
+      console.info('[AgoraStore] User muted', userId);
+      if (userId === self.userId) {
+        self.userDevicesStore.mute();
+      }
     }
   }))
   // Meeting space managment
@@ -58,20 +64,20 @@ const AgoraStore = types
 
       if (!isToggling) {
         self.init();
-        self.agoraMeetingStore.init(self.appId);
+        self.agoraVoiceChatStore.init(self.appId);
       }
 
       self.setupAgoraListeners();
 
       if (worldId) {
-        yield self.agoraMeetingStore.join(
+        yield self.agoraVoiceChatStore.join(
           worldId,
           authStateSubject,
           self.userDevicesStore.createLocalTracks
         );
         self.worldId = worldId;
       } else if (self.worldId) {
-        yield self.agoraMeetingStore.join(
+        yield self.agoraVoiceChatStore.join(
           self.worldId,
           authStateSubject,
           self.userDevicesStore.createLocalTracks
@@ -86,11 +92,11 @@ const AgoraStore = types
       self.userDevicesStore.cleanupLocalTracks();
       self.cleanupAgoraListeners();
 
-      yield self.agoraMeetingStore.leave();
+      yield self.agoraVoiceChatStore.leave();
 
       // self.agoraScreenShareStore.leave();
 
-      self.agoraMeetingStore.resetModel();
+      self.agoraVoiceChatStore.resetModel();
       // self.agoraScreenShareStore.resetModel();
       self.resetModel();
     })
@@ -119,11 +125,11 @@ const AgoraStore = types
       self.userDevicesStore.localAudioTrack?.close();
 
       if (self.userDevicesStore.localAudioTrack) {
-        self.agoraMeetingStore.client.unpublish(self.userDevicesStore.localAudioTrack);
+        self.agoraVoiceChatStore.client.unpublish(self.userDevicesStore.localAudioTrack);
       }
 
       self.userDevicesStore.createLocalAudioTrack(
-        self.agoraMeetingStore.createAudioTrackAndPublish
+        self.agoraVoiceChatStore.createAudioTrackAndPublish
       );
     },
     selectVideoInput(deviceId: string) {
@@ -135,19 +141,19 @@ const AgoraStore = types
       return self.worldId !== undefined;
     },
     get meetingPeopleCount(): number {
-      return self.agoraMeetingStore.users.length + 1;
+      return self.agoraVoiceChatStore.agoraRemoteUsers.length + 1;
     },
     get userIds(): string[] {
-      return self.agoraMeetingStore.users.map((user) => user.uid.toString());
+      return self.agoraVoiceChatStore.agoraRemoteUsers.map((user) => user.uid.toString());
     },
     get localSoundLevel(): number {
-      return self.agoraMeetingStore.localSoundLevel;
+      return self.agoraVoiceChatStore.localSoundLevel;
     },
     get canToggleMicrophone(): boolean {
-      return !self.userDevicesStore.isTogglingMicrophone && !!self.agoraMeetingStore.spaceId;
+      return !self.userDevicesStore.isTogglingMicrophone && !!self.agoraVoiceChatStore.worldId;
     },
     get canToggleCamera(): boolean {
-      return !self.userDevicesStore.isTogglingCamera && !!self.agoraMeetingStore.spaceId;
+      return !self.userDevicesStore.isTogglingCamera && !!self.agoraVoiceChatStore.worldId;
     }
   }));
 

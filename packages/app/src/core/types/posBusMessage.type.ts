@@ -1,3 +1,4 @@
+import {VoiceChatActionAttributeInterface, VoiceChatUserAttributeInterface} from 'api/interfaces';
 import {BroadcastStatusEnum, PosBusMessageTypeEnum, PosBusStatusEnum} from 'core/enums';
 import {
   StageModeKickType,
@@ -119,4 +120,14 @@ export type PosBusScreenShareMessageType = {
 export type PosBusMiroStateMessageType = {
   type: PosBusMessageTypeEnum;
   data: PosBusAttributeMessageDataType<unknown>;
+};
+
+export type PosBusVoiceChatActionMessageType = {
+  type: PosBusMessageTypeEnum;
+  data: PosBusAttributeMessageDataType<VoiceChatActionAttributeInterface>;
+};
+
+export type PosBusVoiceChatUserMessageType = {
+  type: PosBusMessageTypeEnum;
+  data: PosBusAttributeMessageDataType<VoiceChatUserAttributeInterface>;
 };

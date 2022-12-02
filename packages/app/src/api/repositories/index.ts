@@ -18,3 +18,4 @@ export * from './assets3dRepository';
 export * from './assetsRepository';
 export * from './agoraRepository';
 export * from './flightRepository';
+export * from './spaceUserAttributeRepository';

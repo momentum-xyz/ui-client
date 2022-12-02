@@ -7,5 +7,5 @@ import {userRepositoryEndpoints} from './userProfileRepository.api.endpoints';
 export const update: RequestInterface<UpdateUserRequest, UpdateUserResponse> = (options) => {
   const {name, profile, ...rest} = options;
 
-  return request.patch(userRepositoryEndpoints().profile, {name, profile}, rest);
+  return request.patch(userRepositoryEndpoints().base, {name, profile}, rest);
 };
