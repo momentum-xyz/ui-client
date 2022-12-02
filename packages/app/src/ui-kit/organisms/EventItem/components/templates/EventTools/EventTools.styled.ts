@@ -3,15 +3,13 @@ import {Button} from '@momentum-xyz/ui-kit';
 
 export const Buttons = styled.div`
   display: flex;
-
-  &.base {
-    justify-content: space-between;
-    margin-right: 20px;
-    width: 100%;
+  gap: 10px;
+  &.left {
+    justify-content: flex-start;
   }
-
-  :not(.base) {
-    gap: 10px;
+  &.right {
+    width: 100%;
+    justify-content: flex-end;
   }
 `;
 

@@ -50,7 +50,6 @@ export const ROUTES = {
   },
   magic: '/magic/:id',
   video: '/video/:spaceId',
-  calendar: '/calendar',
   help: '/help',
   storyBook: {
     base: '/storybook',

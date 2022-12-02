@@ -26,8 +26,8 @@ const EventTools: FC<PropsInterface> = ({event, onWeblinkClick, user}) => {
   };
 
   return (
-    <styled.Buttons className="base">
-      <styled.Buttons>
+    <styled.Buttons>
+      <styled.Buttons className="left">
         {!!event.data?.web_link && (
           <styled.EventButton
             label={t('eventList.eventItem.websiteLink')}
@@ -37,7 +37,7 @@ const EventTools: FC<PropsInterface> = ({event, onWeblinkClick, user}) => {
           />
         )}
       </styled.Buttons>
-      <styled.Buttons>
+      <styled.Buttons className="right">
         {event.isLive ? (
           <styled.LiveIndicator>
             <IconSvg name="live" size="medium-large" isWhite />

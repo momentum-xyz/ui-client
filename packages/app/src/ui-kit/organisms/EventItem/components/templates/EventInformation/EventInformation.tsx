@@ -18,15 +18,15 @@ const EventInformation: FC<PropsInterface> = ({event}) => {
         <styled.DateRow>
           <Text
             text={event.startDate}
-            size="l"
+            size="m"
             weight="normal"
             align="left"
             transform="uppercase"
           />
-          <Text text={event.startTime} size="l" weight="medium" align="left" />
+          <Text text={event.startTime} size="m" weight="medium" align="left" />
           <Text
             text={`/ ${event.endDateAndTime}`}
-            size="l"
+            size="m"
             weight="normal"
             transform="uppercase"
             align="left"
@@ -39,14 +39,16 @@ const EventInformation: FC<PropsInterface> = ({event}) => {
           align="left"
           transform="uppercase"
         />
-        <ShowMoreText
-          text={event.data?.description ?? ''}
-          textProps={{
-            size: 's',
-            align: 'left',
-            firstBoldSentences: 1
-          }}
-        />
+        <styled.Description>
+          <ShowMoreText
+            text={event.data?.description ?? ''}
+            textProps={{
+              size: 's',
+              align: 'left',
+              firstBoldSentences: 1
+            }}
+          />
+        </styled.Description>
       </styled.TextRow>
       <styled.AttendeesContainer>
         {event.attendeesList.attendees.length > 4 && (
