@@ -25,7 +25,7 @@ import {KeyringAddressType} from 'core/types';
 import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 
-import {NftItem, NftItemInterface} from './models';
+import {NftItem, NftItemInterface, StakeDetail} from './models';
 
 const {REACT_APP_NFT_ADMIN_ADDRESS = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'} =
   process.env;
@@ -40,6 +40,13 @@ const prepareSignAndSend = async (address: string) => {
 
   const injector = await web3FromAddress(account.address);
   return {account, options: {signer: injector.signer}};
+};
+
+// 2 - kusama:   D5XnCra5cbgdkRszMckp9s3tQM8sujMCYJ71DB8pBSpCwtv
+// 42 - westend: 5CZv7tWhTFakt6cSDeohvCW3jp4u5EvAkATMcYuBLPEKU23e
+const formatAddress = (address: string, network = 42) => {
+  const keyring = new Keyring({type: 'sr25519'});
+  return keyring.encodeAddress(address, network);
 };
 
 const NftStore = types
@@ -66,6 +73,8 @@ const NftStore = types
       transactionFee: '',
       nftItems: types.optional(types.array(NftItem), []),
       connectToNftItemId: types.maybeNull(types.number),
+      stakingAtMe: types.optional(types.map(StakeDetail), {}),
+      stakingAtOthers: types.optional(types.map(StakeDetail), {}),
       isLoading: false
     })
   )
@@ -240,6 +249,15 @@ const NftStore = types
       },
       get isWithdrawUnbondedPermitted() {
         return !!self.stakingInfo?.redeemable?.gtn(0);
+      },
+      get mutualStakingAddresses(): string[] {
+        const mutualStakingAddresses: string[] = [];
+        self.stakingAtMe.forEach((stakingDetail) => {
+          if (self.stakingAtOthers.get(stakingDetail.sourceAddr)) {
+            mutualStakingAddresses.push(stakingDetail.sourceAddr);
+          }
+        });
+        return mutualStakingAddresses;
       }
     };
   })
@@ -498,6 +516,79 @@ const NftStore = types
       } catch (err) {
         console.log('err', err);
       }
+    }),
+    getNftByWallet: (wallet: string) => {
+      const address = formatAddress(wallet);
+      console.log('getNftByWallet', {wallet, address});
+
+      return self.nftItems.find((nftItem) => nftItem.owner === address);
+    },
+    fetchStakingInfo: flow(function* (
+      address: string,
+      userNftItemId: number,
+      collectionId = DEFAULT_COLECTION_ID
+    ) {
+      console.log('fetchStakingInfo', address, userNftItemId, collectionId);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+
+      const [stakingAt, staked] = yield Promise.all([
+        self.channel.query.stake.stakingAt(address),
+        self.channel.query.stake.staked([collectionId, userNftItemId])
+      ]);
+
+      console.log('stakingAt', stakingAt?.toHuman());
+      console.log('staked', staked?.toHuman());
+      const stakingAtArr = stakingAt?.unwrapOr(null) || [];
+      const stakedArr = staked?.unwrapOr(null) || [];
+
+      for (const stakingAtItem of stakingAtArr) {
+        const {
+          nfts: [collectionIdStr, itemIdStr],
+          value: valueAmountStr
+        } = stakingAtItem;
+        const destNftItemId = +itemIdStr;
+        const collectionId = +collectionIdStr;
+        const amount = +valueAmountStr;
+
+        const nft = self.nftItems.find(
+          (nftItem) => nftItem.id === destNftItemId && nftItem.collectionId === collectionId
+        );
+        if (!nft) {
+          console.log('NFT not found', {destNftItemId, collectionId});
+          continue;
+        }
+        console.log('NFT found', nft);
+        const destAddr = nft.owner;
+
+        self.stakingAtOthers.set(
+          destAddr,
+          cast({
+            amount,
+            // destNftItemId,
+            destAddr,
+            sourceAddr: address
+          })
+        );
+      }
+
+      for (const stakedItem of stakedArr) {
+        const {accountId: sourceAddr, value: valueAmountStr} = stakedItem;
+        const amount = +valueAmountStr;
+
+        self.stakingAtMe.set(
+          sourceAddr,
+          cast({
+            amount,
+            sourceAddr,
+            destAddr: address
+          })
+        );
+      }
+
+      console.log('stakingAtOthers', self.stakingAtOthers);
+      console.log('stakingAtMe', self.stakingAtMe);
     }),
     stake: flow(function* (
       address: string,
