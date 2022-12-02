@@ -20,8 +20,8 @@ const MyProfileView: FC<PropsInterface> = (props) => {
   const {t} = useTranslation();
 
   const renderDate = () => {
-    if (!user?.createdAt) {
-      return;
+    if (!user.createdAt) {
+      return '';
     }
     const date = new Date(user.createdAt);
     return monthAndYearString(date);
@@ -30,7 +30,7 @@ const MyProfileView: FC<PropsInterface> = (props) => {
   return (
     <div>
       <styled.AvatarContainer>
-        <Avatar avatarSrc={user?.avatarSrc} size="normal" status={user?.status} />
+        <Avatar avatarSrc={user.avatarSrc} size="normal" status={user.status} />
         <styled.NameContainer>
           <Heading
             type="h1"
@@ -45,37 +45,37 @@ const MyProfileView: FC<PropsInterface> = (props) => {
           </div>
         </styled.NameContainer>
       </styled.AvatarContainer>
-      <styled.Details>
-        {user?.profile?.bio && (
-          <Text text={user.profile.bio} size="xs" align="left" breakLongWord />
+
+      <styled.Info>
+        {user.profile?.bio && (
+          <Text text={user.profile.bio} size="xxs" align="left" breakLongWord />
         )}
-        <styled.Info>
-          {user?.profile?.location && (
-            <styled.InfoItem>
-              <IconSvg name="location" size="normal" />
-              <styled.LocationText text={user.profile.location} size="xxs" isMultiline={false} />
-            </styled.InfoItem>
-          )}
 
-          {user?.profile?.profileLink && (
-            <styled.InfoItem>
-              <IconSvg name="link" size="normal" />
-              <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
-                {withoutProtocol(user.profile.profileLink)}
-              </styled.Link>
-            </styled.InfoItem>
-          )}
-
+        {user.profile?.location && (
           <styled.InfoItem>
-            <IconSvg name="astro" size="normal" />
-            <Text
-              text={`${capitalize(t('actions.joined'))} ${renderDate() as string}`}
-              size="xxs"
-              isMultiline={false}
-            />
+            <IconSvg name="locate" size="normal" />
+            <styled.LocationText text={user.profile.location} size="xxs" isMultiline={false} />
           </styled.InfoItem>
-        </styled.Info>
-      </styled.Details>
+        )}
+
+        {user.profile?.profileLink && (
+          <styled.InfoItem>
+            <IconSvg name="link" size="normal" />
+            <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
+              {withoutProtocol(user.profile.profileLink)}
+            </styled.Link>
+          </styled.InfoItem>
+        )}
+
+        <styled.InfoItem>
+          <IconSvg name="astro" size="normal" />
+          <Text
+            size="xxs"
+            text={`${capitalize(t('actions.joined'))} ${renderDate() as string}`}
+            isMultiline={false}
+          />
+        </styled.InfoItem>
+      </styled.Info>
     </div>
   );
 };

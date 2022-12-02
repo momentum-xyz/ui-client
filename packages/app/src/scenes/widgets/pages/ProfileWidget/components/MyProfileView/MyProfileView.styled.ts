@@ -16,17 +16,11 @@ export const NameContainer = styled.div`
   gap: 6px;
 `;
 
-export const Details = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
 export const Info = styled.div`
+  padding: 12px 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 10px 0;
+  gap: 12px;
 `;
 
 export const InfoItem = styled.div`
@@ -40,6 +34,7 @@ export const Link = styled.a`
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 250px;
+  color: var(--white);
 `;
 
 export const LocationText = styled(Text)`
