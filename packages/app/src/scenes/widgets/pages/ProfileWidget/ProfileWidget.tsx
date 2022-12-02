@@ -12,12 +12,13 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = (props) => {
-  const {widgetsStore} = useStore();
+  const {widgetsStore, sessionStore} = useStore();
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   useEffect(() => {
+    // FIXME: Use user from sessionStore. After 6th
     profileStore.fetchProfile();
 
     return () => {
@@ -69,7 +70,13 @@ const ProfileWidget: FC = (props) => {
 
               <ProfileSettings
                 isEditMode={isEditMode}
-                onToggleEditMode={() => setIsEditMode(!isEditMode)}
+                onToggleEditMode={() => {
+                  if (isEditMode) {
+                    profileStore.fetchProfile();
+                    sessionStore.loadUserProfile();
+                  }
+                  setIsEditMode(!isEditMode);
+                }}
                 onLogout={handleLogout}
               />
             </styled.Container>

@@ -20,6 +20,14 @@ export const Avatar = styled.div`
   align-items: center;
 `;
 
+export const AvatarImage = styled.img`
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
 export const AvatarImageUpload = styled.div`
   position: relative;
   display: flex;

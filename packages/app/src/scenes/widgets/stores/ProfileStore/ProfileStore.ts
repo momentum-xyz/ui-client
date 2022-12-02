@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {User, UserSpaceDetails} from 'core/models';
-import {api, UserProfileInterface, UploadAvatarResponse} from 'api';
+import {api, UserProfileInterface, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 
 const ProfileStore = types.compose(
@@ -36,18 +36,6 @@ const ProfileStore = types.compose(
         }
       }),
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {
-        self.isSavingProfile = true;
-        // 1. Avatar uploading.
-        let avatarHash;
-        if (profile.image) {
-          const data = {avatar: profile.image};
-          const userResponse: UploadAvatarResponse = yield self.avatarRequest.send(
-            api.profileRepository.uploadAvatar,
-            data
-          );
-          avatarHash = userResponse?.hash;
-        }
-
         // 2. Profile updating.
         const response = yield self.editProfileRequest.send(api.userProfileRepository.update, {
           name,
@@ -55,7 +43,7 @@ const ProfileStore = types.compose(
             bio: profile.bio,
             profileLink: profile.profileLink,
             location: profile.location,
-            avatarHash: profile.image ? avatarHash : profile.avatarHash
+            avatarHash: self.userProfile?.profile.avatarHash
           }
         });
         self.isSavingProfile = false;
@@ -71,6 +59,33 @@ const ProfileStore = types.compose(
         }
         self.selectedImage = undefined;
         self.isEditingProfile = false;
+        return self.editProfileRequest.isDone;
+      }),
+      editImage: flow(function* (file: File) {
+        if (!self.userProfile?.profile) {
+          return;
+        }
+
+        // 1. Avatar uploading.
+        const data = {file: file};
+        const userResponse: UploadImageResponse = yield self.avatarRequest.send(
+          api.mediaRepository.uploadImage,
+          data
+        );
+        const avatarHash = userResponse?.hash;
+
+        // 2. Profile updating.
+        const response = yield self.editProfileRequest.send(api.userProfileRepository.update, {
+          name: self.userProfile.name,
+          profile: {
+            ...self.userProfile.profile,
+            avatarHash: avatarHash
+          }
+        });
+
+        console.log(response);
+        self.userProfile.profile.avatarHash = avatarHash;
+
         return self.editProfileRequest.isDone;
       }),
       setImage(image?: File) {

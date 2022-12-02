@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
@@ -11,7 +11,6 @@ import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
 import * as styled from './ProfileEditor.styled';
-import {MyAvatarForm} from './components';
 
 interface PropsInterface {
   user: UserModelInterface;
@@ -20,9 +19,9 @@ interface PropsInterface {
 const MyProfileEdit: React.FC<PropsInterface> = (props) => {
   const {user} = props;
 
-  const {homeStore, mainStore} = useStore();
-  const {userProfileStore} = homeStore;
-  const {formErrors} = userProfileStore;
+  const {mainStore, widgetsStore} = useStore();
+  const {profileStore} = widgetsStore;
+  const {formErrors} = profileStore;
   const {unityStore} = mainStore;
 
   useEffect(() => {
@@ -30,9 +29,8 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
 
     return () => {
       unityStore.changeKeyboardControl(true);
-      userProfileStore.setImage(undefined);
     };
-  }, [userProfileStore, unityStore]);
+  }, [unityStore]);
 
   const {
     control,
@@ -53,10 +51,6 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
   }, [formErrors, setError]);
 
   useEffect(() => {
-    setValue('profile.image', userProfileStore.selectedImage);
-  }, [userProfileStore.selectedImage, setValue]);
-
-  useEffect(() => {
     if (user?.profile) {
       setValue('name', user.name);
       setValue('profile', user.profile);
@@ -64,9 +58,9 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
   }, [user?.name, user?.profile, setValue]);
 
   const formSubmitHandler = handleSubmit(async (data: UpdateProfileInterface) => {
-    const response = await userProfileStore.editProfile(data.name, data.profile);
+    const response = await profileStore.editProfile(data.name, data.profile);
     if (response) {
-      // TODO: Reload session
+      // TODO: Removal
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -89,28 +83,27 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
     }
   });
 
+  const imageHandle = useCallback(
+    async (file: File | undefined) => {
+      if (file) {
+        await profileStore.editImage(file);
+      }
+    },
+    [profileStore]
+  );
+
   return (
     <styled.Container>
-      {/*<styled.AvatarSettings>
-        <styled.AvatarContainer onClick={editAvatarDialog.open}>
-          {userProfileStore.selectedImage ? (
-            <styled.ImagePreview src={URL.createObjectURL(userProfileStore.selectedImage)} />
-          ) : (
-            <Avatar avatarSrc={sessionStore.user?.avatarSrc} size="large" />
-          )}
-        </styled.AvatarContainer>
-      </styled.AvatarSettings>*/}
-
       <styled.Avatar>
         <styled.AvatarImageUpload>
+          {!!user.avatarSrc && <styled.AvatarImage src={user.avatarSrc} />}
           <styled.AvatarImageInner>
             <FileUploader
               label="Upload Image"
               dragActiveLabel="Drop the files here..."
               fileType="image"
               buttonSize="small"
-              onFilesUpload={(file) => console.log(file)}
-              maxSize={10 * Math.pow(2, 20)}
+              onFilesUpload={imageHandle}
               onError={(error) => console.error(error)}
               enableDragAndDrop={false}
             />
@@ -184,8 +177,6 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
           )}
         />
       </styled.InputsContainer>
-
-      {userProfileStore.editAvatarDialog.isOpen && <MyAvatarForm />}
     </styled.Container>
   );
 };
