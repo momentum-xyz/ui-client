@@ -1,6 +1,5 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
 import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -15,8 +14,6 @@ const MENU_OFFSET_TOP = 20;
 const ProfileWidget: FC = (props) => {
   const {sessionStore, widgetsStore} = useStore();
   const {profileStore} = widgetsStore;
-
-  const history = useHistory();
 
   useEffect(() => {
     profileStore.fetchProfile();
@@ -37,8 +34,8 @@ const ProfileWidget: FC = (props) => {
   }, [profileStore]);
 
   const handleLogout = useCallback(() => {
-    history.push(ROUTES.birthOfMe.signIn);
-  }, [history]);
+    document.location = ROUTES.birthOfMe.signIn;
+  }, []);
 
   return (
     <Dialog
