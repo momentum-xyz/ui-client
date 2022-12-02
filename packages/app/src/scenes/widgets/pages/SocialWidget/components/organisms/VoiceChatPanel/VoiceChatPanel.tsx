@@ -3,22 +3,22 @@ import {observer} from 'mobx-react-lite';
 import {FC, useCallback} from 'react';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
+import {VoiceChatUser} from 'scenes/widgets/pages/SocialWidget/components';
 
-import * as styled from './VoicePanel.styled';
+import * as styled from './VoiceChatPanel.styled';
 
-const VoicePanel: FC = () => {
-  const {agoraStore, sessionStore, mainStore} = useStore();
-  const {worldStore} = mainStore;
+const VoiceChatPanel: FC = () => {
+  const {agoraStore, sessionStore} = useStore();
   const {agoraVoiceChatStore, userDevicesStore} = agoraStore;
   const {user} = sessionStore;
 
   const handleToggleVoiceChat = useCallback(() => {
-    if (agoraStore.hasJoined) {
+    if (agoraVoiceChatStore.hasJoined) {
       agoraStore.leave();
     } else {
-      agoraStore.join(sessionStore.userId, worldStore.worldId);
+      agoraStore.join(sessionStore.userId);
     }
-  }, [agoraStore, sessionStore.userId, worldStore.worldId]);
+  }, [agoraVoiceChatStore, agoraStore, sessionStore.userId]);
 
   usePosBusEvent('voice-chat-mute', agoraStore.handleUserMuted);
 
@@ -31,34 +31,38 @@ const VoicePanel: FC = () => {
   return (
     <styled.Container>
       <styled.Body>
-        {agoraStore.hasJoined && user && (
-          <styled.Attendee>
-            <styled.AttendeeAvatar
-              size="medium"
-              avatarSrc={user.avatarSrc}
-              showBorder={agoraStore.localSoundLevel > 3}
-            />
-            <styled.AttendeeName text={user.name} size="xs" isMultiline={false} />
-          </styled.Attendee>
+        {agoraVoiceChatStore.hasJoined && user && (
+          <VoiceChatUser
+            key={user.id}
+            name={user.name}
+            avatarSrc={user.avatarSrc}
+            soundLevel={agoraVoiceChatStore.localSoundLevel}
+          />
         )}
         {agoraVoiceChatStore.users.map((user) => {
           const remoteUser = agoraVoiceChatStore.getAgoraRemoteUser(user.id);
           return (
-            <styled.Attendee key={user.id}>
-              <styled.AttendeeAvatar
-                size="medium"
-                avatarSrc={user.avatarSrc}
-                showBorder={(remoteUser?.soundLevel ?? 0) > 3}
-              />
-              <styled.AttendeeName text={user.name} size="xs" isMultiline={false} />
-            </styled.Attendee>
+            <VoiceChatUser
+              key={user.id}
+              name={user.name}
+              avatarSrc={user.avatarSrc}
+              soundLevel={remoteUser?.soundLevel ?? 0}
+              onUserKick={() => {
+                console.log('kicking...');
+                agoraVoiceChatStore.kickUser(user.id);
+              }}
+              onUserMute={() => {
+                agoraVoiceChatStore.muteUser(user.id);
+              }}
+              isRemote
+            />
           );
         })}
       </styled.Body>
       <styled.Footer>
         <styled.EnterLeaveButton onClick={handleToggleVoiceChat}>
           <styled.EnterLeaveButtonLabel
-            text={agoraStore.hasJoined ? 'Leave Voice Chat' : 'Join Voice Chat'}
+            text={agoraVoiceChatStore.hasJoined ? 'Leave Voice Chat' : 'Join Voice Chat'}
             size="xs"
             weight="light"
           />
@@ -81,4 +85,4 @@ const VoicePanel: FC = () => {
   );
 };
 
-export default observer(VoicePanel);
+export default observer(VoiceChatPanel);

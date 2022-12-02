@@ -52,19 +52,19 @@ const RootStore = types
     initApplication(): void {
       self.configStore.init();
       self.mainStore.themeStore.init();
-      self.agoraStore.init();
     },
     unityLoaded(worldId: string): void {
       self.mainStore.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
+      self.agoraStore.init(worldId);
     },
     // TODO: To be removed, do not use in new code
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       console.log('---JOINING---');
 
       yield self.collaborationStore.join(spaceId, isTable);
-      yield self.agoraStore.join(self.sessionStore.userId, spaceId);
+      yield self.agoraStore.join(self.sessionStore.userId);
       self.meetingStore.join(spaceId, isTable);
 
       self.mainStore.unityStore.triggerInteractionMessage(

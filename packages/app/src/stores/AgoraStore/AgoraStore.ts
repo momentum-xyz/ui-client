@@ -19,7 +19,6 @@ const AgoraStore = types
 
       // Common
       appId: '',
-      userId: types.maybe(types.string),
       worldId: types.maybe(types.string),
       isTogglingStageMode: false,
       currentUserToggledStageMode: false,
@@ -31,12 +30,13 @@ const AgoraStore = types
   )
   // Initializer
   .actions((self) => ({
-    init() {
+    init(worldId: string) {
       AgoraRTC.setLogLevel(4);
       self.userDevicesStore.init();
       self.appId = appVariables.AGORA_APP_ID;
+      self.worldId = worldId;
 
-      self.agoraVoiceChatStore.init(self.appId);
+      self.agoraVoiceChatStore.init(self.appId, worldId);
     }
   }))
   // Agora calls setups and chat toggle
@@ -49,40 +49,22 @@ const AgoraStore = types
       self.agoraVoiceChatStore.cleanupListeners();
     },
     handleUserMuted(userId: string) {
-      console.info('[AgoraStore] User muted', userId);
-      if (userId === self.userId) {
-        self.userDevicesStore.mute();
-      }
+      self.agoraVoiceChatStore.handleUserMuted(userId, self.userDevicesStore.mute);
     }
   }))
   // Meeting space managment
   .actions((self) => ({
-    join: flow(function* (authStateSubject: string, worldId?: string, isToggling = false) {
-      if (!self.worldId && !worldId) {
+    join: flow(function* (authStateSubject: string) {
+      if (!self.worldId) {
         return;
-      }
-
-      if (!isToggling) {
-        self.init();
-        self.agoraVoiceChatStore.init(self.appId);
       }
 
       self.setupAgoraListeners();
 
-      if (worldId) {
-        yield self.agoraVoiceChatStore.join(
-          worldId,
-          authStateSubject,
-          self.userDevicesStore.createLocalTracks
-        );
-        self.worldId = worldId;
-      } else if (self.worldId) {
-        yield self.agoraVoiceChatStore.join(
-          self.worldId,
-          authStateSubject,
-          self.userDevicesStore.createLocalTracks
-        );
-      }
+      yield self.agoraVoiceChatStore.join(
+        authStateSubject,
+        self.userDevicesStore.createLocalTracks
+      );
 
       self.userDevicesStore.mute();
 
@@ -93,12 +75,6 @@ const AgoraStore = types
       self.cleanupAgoraListeners();
 
       yield self.agoraVoiceChatStore.leave();
-
-      // self.agoraScreenShareStore.leave();
-
-      self.agoraVoiceChatStore.resetModel();
-      // self.agoraScreenShareStore.resetModel();
-      self.resetModel();
     })
   }))
   // Stage mode actions
@@ -137,9 +113,6 @@ const AgoraStore = types
     }
   }))
   .views((self) => ({
-    get hasJoined(): boolean {
-      return self.worldId !== undefined;
-    },
     get meetingPeopleCount(): number {
       return self.agoraVoiceChatStore.agoraRemoteUsers.length + 1;
     },

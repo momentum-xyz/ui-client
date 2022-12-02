@@ -4,7 +4,7 @@ import {FC, useCallback, useMemo, useState} from 'react';
 
 import {useStore} from 'shared/hooks';
 
-import {SocialTabBar, VoicePanel} from './components';
+import {SocialTabBar, VoiceChatPanel} from './components';
 import * as styled from './SocialWidget.styled';
 
 interface SocialPanelTabInterface {
@@ -29,7 +29,7 @@ const SocialWidget: FC = () => {
       },
       {
         name: 'Voice',
-        main: () => <VoicePanel />
+        main: () => <VoiceChatPanel />
       }
     ],
     []

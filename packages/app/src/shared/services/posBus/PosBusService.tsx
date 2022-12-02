@@ -84,17 +84,14 @@ class PosBusService {
   static handleVoiceChatUser(message: PosBusVoiceChatUserMessageType) {
     const userId = message.data.value?.userId;
 
-    if (!userId) {
+    if (!userId || message.type !== PosBusMessageTypeEnum.ATTRIBUTE_CHANGED) {
       return;
     }
 
-    switch (message.type) {
-      case PosBusMessageTypeEnum.ATTRIBUTE_CHANGED:
-        PosBusEventEmitter.emit('voice-chat-user-joined', userId);
-        break;
-      case PosBusMessageTypeEnum.ATTRIBUTE_REMOVED:
-        PosBusEventEmitter.emit('voice-chat-user-left', userId);
-        break;
+    if (message.data.value?.joined === true) {
+      PosBusEventEmitter.emit('voice-chat-user-joined', userId);
+    } else if (message.data.value?.joined === false) {
+      PosBusEventEmitter.emit('voice-chat-user-left', userId);
     }
   }
 

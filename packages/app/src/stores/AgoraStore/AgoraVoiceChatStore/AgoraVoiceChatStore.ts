@@ -12,7 +12,7 @@ import {AgoraTokenResponse, api} from 'api';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {AgoraScreenShareStoreType} from 'stores/AgoraStore/AgoraScreenShareStore';
-import {PluginIdEnum} from 'api/enums';
+import {PluginIdEnum, VoiceChatActionEnum} from 'api/enums';
 import {VoiceChatUserAttributeInterface} from 'api/interfaces';
 
 import {VoiceChatUser} from './models';
@@ -28,10 +28,13 @@ const AgoraVoiceChatStore = types
       _agoraRemoteUsers: types.optional(types.array(AgoraRemoteUser), []),
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       localSoundLevel: 0,
+      hasJoined: false,
 
       tokenRequest: types.optional(RequestModel, {}),
       joinRequest: types.optional(RequestModel, {}),
-      leaveRequest: types.optional(RequestModel, {})
+      leaveRequest: types.optional(RequestModel, {}),
+      kickRequest: types.optional(RequestModel, {}),
+      muteRequest: types.optional(RequestModel, {})
     })
   )
   .volatile(() => ({
@@ -150,9 +153,10 @@ const AgoraVoiceChatStore = types
   }))
   // Common actions
   .actions((self) => ({
-    init(appId: string) {
+    init(appId: string, worldId: string) {
       self.client.enableAudioVolumeIndicator();
       self.appId = appId;
+      self.worldId = worldId;
 
       // TODO: Get list of users
     },
@@ -188,7 +192,6 @@ const AgoraVoiceChatStore = types
   // State actions
   .actions((self) => ({
     join: flow(function* (
-      worldId: string,
       authStateSubject: string,
       createLocalTracks: (
         createAudioTrack: (
@@ -197,7 +200,11 @@ const AgoraVoiceChatStore = types
         ) => Promise<IMicrophoneAudioTrack | undefined>
       ) => Promise<void>
     ) {
-      const tokenResponse: AgoraTokenResponse = yield self.getAgoraToken(worldId);
+      if (!self.worldId) {
+        return;
+      }
+
+      const tokenResponse: AgoraTokenResponse = yield self.getAgoraToken(self.worldId);
 
       if (!tokenResponse) {
         return;
@@ -211,13 +218,15 @@ const AgoraVoiceChatStore = types
       );
 
       self.userId = userId;
+      self.hasJoined = true;
 
       const attributeValue: VoiceChatUserAttributeInterface = {
-        userId
+        userId,
+        joined: true
       };
 
       yield self.joinRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: worldId,
+        spaceId: self.worldId,
         userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOICE_CHAT_USER,
@@ -225,7 +234,6 @@ const AgoraVoiceChatStore = types
       });
 
       yield createLocalTracks(self.createAudioTrackAndPublish);
-      self.worldId = worldId;
       self.agoraRemoteUsers = self.client.remoteUsers
         .filter((user) => String(user.uid).split('|')[0] !== 'ss')
         .map((user) =>
@@ -242,22 +250,63 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      yield self.leaveRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserAttribute, {
+      const attributeValue: VoiceChatUserAttributeInterface = {
+        userId: self.userId,
+        joined: false
+      };
+
+      yield self.leaveRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: self.worldId,
         userId: self.userId,
         pluginId: PluginIdEnum.CORE,
-        attributeName: AttributeNameEnum.VOICE_CHAT_USER
+        attributeName: AttributeNameEnum.VOICE_CHAT_USER,
+        value: attributeValue
       });
 
       yield self.client.leave();
-      self.worldId = undefined;
       self.agoraRemoteUsers = [];
+      self.hasJoined = false;
+    }),
+    kickUser: flow(function* (userId: string) {
+      console.info('[AgoraVoiceChatStore] Kicking user...', userId, self.worldId);
+      if (!self.worldId) {
+        return;
+      }
+
+      yield self.kickRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: self.worldId,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
+        value: {
+          action: VoiceChatActionEnum.KICK,
+          userId: userId
+        }
+      });
+    }),
+    muteUser: flow(function* (userId: string) {
+      console.info('[AgoraVoiceChatStore] Muting user...', userId, self.worldId);
+      if (!self.worldId) {
+        return;
+      }
+
+      yield self.kickRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: self.worldId,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
+        value: {
+          action: VoiceChatActionEnum.MUTE,
+          userId: userId
+        }
+      });
     })
   }))
   .actions((self) => ({
     handleUserJoined(userId: string) {
-      console.info('[AgoraVoiceChatStore] User joined', userId);
-      if (userId === self.userId || self.users.find((user) => user.id === userId)) {
+      if (userId === self.userId) {
+        return;
+      }
+
+      if (self.users.find((user) => user.id === userId)) {
         return;
       }
 
@@ -270,14 +319,16 @@ const AgoraVoiceChatStore = types
       if (userId === self.userId) {
         return;
       }
-
-      console.info('[AgoraVoiceChatStore] User left', userId);
       self.users = cast(self.users.filter((user) => user.id !== userId));
     },
     handleUserKicked(userId: string) {
-      console.info('[AgoraVoiceChatStore] User kicked', userId);
       if (userId === self.userId) {
         self.leave();
+      }
+    },
+    handleUserMuted(userId: string, mute: () => void) {
+      if (userId === self.userId) {
+        mute();
       }
     },
     getAgoraRemoteUser(userId: string): AgoraRemoteUserInterface | undefined {
