@@ -7,16 +7,15 @@ import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum-xyz/c
 
 import {UserModelInterface} from 'core/models';
 
-import * as styled from './MyProfileView.styled';
+import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  onLogout: () => void;
   onTeleportToOdyssey: () => void;
 }
 
-const MyProfileView: FC<PropsInterface> = (props) => {
-  const {user, onLogout, onTeleportToOdyssey} = props;
+const ProfileView: FC<PropsInterface> = (props) => {
+  const {user, onTeleportToOdyssey} = props;
 
   const {t} = useTranslation();
 
@@ -29,7 +28,7 @@ const MyProfileView: FC<PropsInterface> = (props) => {
   };
 
   return (
-    <styled.Container>
+    <>
       <styled.AvatarContainer>
         <Avatar avatarSrc={user.avatarSrc} size="normal" status={user.status} />
         <styled.NameContainer>
@@ -72,35 +71,13 @@ const MyProfileView: FC<PropsInterface> = (props) => {
           <IconSvg name="astro" size="normal" />
           <Text
             size="xxs"
-            text={`${capitalize(t('actions.joined'))} ${renderDate() as string}`}
+            text={`${capitalize(t('actions.joined'))} ${renderDate()}`}
             isMultiline={false}
           />
         </styled.InfoItem>
       </styled.Info>
-
-      <styled.Settings>
-        <styled.SettingsHeader>
-          <IconSvg name="gear" size="normal" />
-          <Heading type="h2" label="Settings" align="left" weight="bold" />
-        </styled.SettingsHeader>
-
-        <styled.SettingsContainer>
-          <styled.SettingsItem>
-            <IconSvg name="edit" size="normal" />
-            <styled.SettingsValue>Edit profile</styled.SettingsValue>
-          </styled.SettingsItem>
-          <styled.SettingsItem>
-            <IconSvg name="gear" size="normal" />
-            <styled.SettingsValue>Device settings</styled.SettingsValue>
-          </styled.SettingsItem>
-          <styled.SettingsItem>
-            <IconSvg name="exit" size="normal" />
-            <styled.SettingsValue onClick={onLogout}>Logout</styled.SettingsValue>
-          </styled.SettingsItem>
-        </styled.SettingsContainer>
-      </styled.Settings>
-    </styled.Container>
+    </>
   );
 };
 
-export default observer(MyProfileView);
+export default observer(ProfileView);

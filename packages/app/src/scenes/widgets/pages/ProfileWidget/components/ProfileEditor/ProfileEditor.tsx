@@ -1,34 +1,46 @@
 import React, {useEffect} from 'react';
 import {toast} from 'react-toastify';
-import {useForm, Controller, SubmitHandler} from 'react-hook-form';
+import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {Heading, Avatar, Button, Input, Text, TextArea} from '@momentum-xyz/ui-kit';
+import {FileUploader, InputDark, TextAreaDark} from '@momentum-xyz/ui-kit';
 
+import {UserModelInterface} from 'core/models';
 import {UpdateProfileInterface} from 'api';
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
-import * as styled from './MyProfileEditor.styled';
+import * as styled from './ProfileEditor.styled';
 import {MyAvatarForm} from './components';
 
 interface PropsInterface {
-  userId: string;
+  user: UserModelInterface;
 }
 
-const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
-  const {sessionStore, worldChatStore, homeStore, mainStore} = useStore();
-  const {onlineUsersStore, userProfileStore} = homeStore;
-  const {onlineUsersList} = onlineUsersStore;
-  const {userProfile, editAvatarDialog, formErrors} = userProfileStore;
-  const {worldStore, unityStore} = mainStore;
+const MyProfileEdit: React.FC<PropsInterface> = (props) => {
+  const {user} = props;
+
+  const {homeStore, mainStore} = useStore();
+  const {userProfileStore} = homeStore;
+  const {formErrors} = userProfileStore;
+  const {unityStore} = mainStore;
+
+  useEffect(() => {
+    unityStore.changeKeyboardControl(false);
+
+    return () => {
+      unityStore.changeKeyboardControl(true);
+      userProfileStore.setImage(undefined);
+    };
+  }, [userProfileStore, unityStore]);
+
   const {
     control,
     setValue,
     handleSubmit,
     setError,
     clearErrors,
-    formState: {errors, isDirty}
+    formState: {errors}
   } = useForm<UpdateProfileInterface>();
 
   useEffect(() => {
@@ -45,36 +57,16 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
   }, [userProfileStore.selectedImage, setValue]);
 
   useEffect(() => {
-    if (!userProfile?.profile) {
-      return;
+    if (user?.profile) {
+      setValue('name', user.name);
+      setValue('profile', user.profile);
     }
+  }, [user?.name, user?.profile, setValue]);
 
-    setValue('name', userProfile.name);
-    setValue('profile', userProfile.profile);
-  }, [userProfile?.name, userProfile?.profile, setValue]);
-
-  useEffect(() => {
-    unityStore.changeKeyboardControl(false);
-
-    return () => {
-      unityStore.changeKeyboardControl(true);
-      userProfileStore.setImage(undefined);
-      userProfileStore.resetModel();
-    };
-  }, [userProfileStore, unityStore]);
-
-  const formSubmitHandler: SubmitHandler<UpdateProfileInterface> = async ({profile, name}) => {
-    const response = await userProfileStore.editProfile(name, profile);
+  const formSubmitHandler = handleSubmit(async (data: UpdateProfileInterface) => {
+    const response = await userProfileStore.editProfile(data.name, data.profile);
     if (response) {
-      // no await here! is it needed?
-      userProfileStore.fetchProfile(userId).then(() => {
-        sessionStore.loadUserProfile();
-        userProfileStore.fetchUserSpaceList(userId);
-        onlineUsersList.fetchUsers(worldStore.worldId, userId, true);
-        if (userProfileStore.userProfile) {
-          worldChatStore.updateUser(userId, userProfileStore.userProfile);
-        }
-      });
+      // TODO: Reload session
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -95,11 +87,11 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
         />
       );
     }
-  };
+  });
 
   return (
-    <styled.Container data-testid="MyProfileEdit-test">
-      <styled.AvatarSettings>
+    <styled.Container>
+      {/*<styled.AvatarSettings>
         <styled.AvatarContainer onClick={editAvatarDialog.open}>
           {userProfileStore.selectedImage ? (
             <styled.ImagePreview src={URL.createObjectURL(userProfileStore.selectedImage)} />
@@ -107,27 +99,36 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
             <Avatar avatarSrc={sessionStore.user?.avatarSrc} size="large" />
           )}
         </styled.AvatarContainer>
-        <div>
-          <Heading
-            type="h3"
-            label={t('editProfileWidget.avatar')}
-            weight="bold"
-            transform="uppercase"
-            align="left"
-          />
-          <Text text={t('editProfileWidget.avatarInstructions')} size="s" align="left" />
-        </div>
-      </styled.AvatarSettings>
+      </styled.AvatarSettings>*/}
+
+      <styled.Avatar>
+        <styled.AvatarImageUpload>
+          <styled.AvatarImageInner>
+            <FileUploader
+              label="Upload Image"
+              dragActiveLabel="Drop the files here..."
+              fileType="image"
+              buttonSize="small"
+              onFilesUpload={(file) => console.log(file)}
+              maxSize={10 * Math.pow(2, 20)}
+              onError={(error) => console.error(error)}
+              enableDragAndDrop={false}
+            />
+          </styled.AvatarImageInner>
+        </styled.AvatarImageUpload>
+      </styled.Avatar>
+
+      {/* NAME */}
       <styled.InputsContainer>
         <Controller
           control={control}
           name="name"
           rules={{required: true, maxLength: 32, minLength: 2}}
           render={({field: {value, onChange}}) => (
-            <Input
-              label={t('fields.name')}
+            <InputDark
               value={value}
               onChange={onChange}
+              placeholder="Name"
               errorMessage={
                 errors?.name?.type !== 'duplicate'
                   ? t('errors.nameConstraints')
@@ -135,39 +136,54 @@ const MyProfileEdit: React.FC<PropsInterface> = ({userId}) => {
               }
               isError={!!errors.name}
               required
+              onBlur={formSubmitHandler}
             />
           )}
         />
-        <Controller
-          control={control}
-          name="profile.location"
-          render={({field: {value, onChange}}) => (
-            <Input label={t('fields.location')} value={value} onChange={onChange} />
-          )}
-        />
-        <Controller
-          control={control}
-          name="profile.profileLink"
-          render={({field: {value, onChange}}) => (
-            <Input label={t('fields.site')} value={value} onChange={onChange} />
-          )}
-        />
+
+        {/* BIO */}
         <Controller
           control={control}
           name="profile.bio"
           render={({field: {value, onChange}}) => (
-            <TextArea name={`${t('fields.bio')}:`} value={value} onChange={onChange} />
+            <TextAreaDark
+              placeholder="Bio"
+              value={value}
+              rows={3}
+              onChange={onChange}
+              onBlur={formSubmitHandler}
+            />
+          )}
+        />
+
+        {/* LOCATION */}
+        <Controller
+          control={control}
+          name="profile.location"
+          render={({field: {value, onChange}}) => (
+            <InputDark
+              placeholder="Location"
+              value={value}
+              onChange={onChange}
+              onBlur={formSubmitHandler}
+            />
+          )}
+        />
+
+        {/* LINK */}
+        <Controller
+          control={control}
+          name="profile.profileLink"
+          render={({field: {value, onChange}}) => (
+            <InputDark
+              placeholder="Link"
+              value={value}
+              onChange={onChange}
+              onBlur={formSubmitHandler}
+            />
           )}
         />
       </styled.InputsContainer>
-      <Button
-        label={t('actions.saveChanges')}
-        onClick={(e) => {
-          handleSubmit(formSubmitHandler)(e);
-        }}
-        disabled={(!isDirty && !userProfileStore.selectedImage) || userProfileStore.isSavingProfile}
-        wide
-      />
 
       {userProfileStore.editAvatarDialog.isOpen && <MyAvatarForm />}
     </styled.Container>

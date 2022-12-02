@@ -1,19 +1,21 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
-import {MyProfileEditor, MyProfileView} from './components';
+import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
 
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = (props) => {
-  const {sessionStore, widgetsStore} = useStore();
+  const {widgetsStore} = useStore();
   const {profileStore} = widgetsStore;
+
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   useEffect(() => {
     profileStore.fetchProfile();
@@ -21,7 +23,7 @@ const ProfileWidget: FC = (props) => {
     return () => {
       profileStore.resetModel();
     };
-  }, [profileStore, sessionStore.userId]);
+  }, [profileStore]);
 
   const handleTeleportToOdyssey = useCallback(() => {
     // TODO: implementation
@@ -54,16 +56,23 @@ const ProfileWidget: FC = (props) => {
           <SvgButton iconName="close" size="normal" onClick={handleProfileClose} />
         </styled.Header>
         <styled.Body>
-          {!!profileStore.userProfile && !profileStore.isEditingProfile && (
-            <MyProfileView
-              user={profileStore.userProfile}
-              onTeleportToOdyssey={handleTeleportToOdyssey}
-              onLogout={handleLogout}
-            />
-          )}
+          {!!profileStore.userProfile && (
+            <styled.Container>
+              {!isEditMode && (
+                <ProfileView
+                  user={profileStore.userProfile}
+                  onTeleportToOdyssey={handleTeleportToOdyssey}
+                />
+              )}
 
-          {!!profileStore.userProfile && profileStore.isEditingProfile && (
-            <MyProfileEditor userId={sessionStore.userId} />
+              {isEditMode && <ProfileEditor user={profileStore.userProfile} />}
+
+              <ProfileSettings
+                isEditMode={isEditMode}
+                onToggleEditMode={() => setIsEditMode(!isEditMode)}
+                onLogout={handleLogout}
+              />
+            </styled.Container>
           )}
         </styled.Body>
       </div>

@@ -21,3 +21,7 @@ export const Body = styled.div`
   overflow: hidden;
   width: 280px;
 `;
+
+export const Container = styled.div`
+  width: 100%;
+`;
