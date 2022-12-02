@@ -41,7 +41,7 @@ const SocialWidget: FC = () => {
 
   const handleClose = useCallback(async () => {
     if (agoraStore.hasJoined) {
-      await agoraStore.leave();
+      await agoraStore.leaveVoiceChat();
     }
 
     socialStore.widget.close();

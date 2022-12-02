@@ -153,10 +153,11 @@ const AgoraVoiceChatStore = types
   }))
   // Common actions
   .actions((self) => ({
-    init(appId: string, worldId: string) {
+    init(worldId: string, userId: string) {
       self.client.enableAudioVolumeIndicator();
-      self.appId = appId;
+      self.appId = appVariables.AGORA_APP_ID;
       self.worldId = worldId;
+      self.userId = userId;
 
       // TODO: Get list of users
     },
@@ -192,7 +193,6 @@ const AgoraVoiceChatStore = types
   // State actions
   .actions((self) => ({
     join: flow(function* (
-      authStateSubject: string,
       createLocalTracks: (
         createAudioTrack: (
           deviceId: string,
@@ -200,7 +200,7 @@ const AgoraVoiceChatStore = types
         ) => Promise<IMicrophoneAudioTrack | undefined>
       ) => Promise<void>
     ) {
-      if (!self.worldId) {
+      if (!self.worldId || !self.userId) {
         return;
       }
 
@@ -210,24 +210,18 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      const userId = yield self.client.join(
-        self.appId,
-        tokenResponse.channel,
-        tokenResponse.token,
-        authStateSubject
-      );
+      yield self.client.join(self.appId, tokenResponse.channel, tokenResponse.token, self.userId);
 
-      self.userId = userId;
       self.hasJoined = true;
 
       const attributeValue: VoiceChatUserAttributeInterface = {
-        userId,
+        userId: self.userId,
         joined: true
       };
 
       yield self.joinRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: self.worldId,
-        userId,
+        userId: self.userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOICE_CHAT_USER,
         value: attributeValue

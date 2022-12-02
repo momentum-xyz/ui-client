@@ -14,11 +14,11 @@ const VoiceChatPanel: FC = () => {
 
   const handleToggleVoiceChat = useCallback(() => {
     if (agoraVoiceChatStore.hasJoined) {
-      agoraStore.leave();
+      agoraStore.leaveVoiceChat();
     } else {
-      agoraStore.join(sessionStore.userId);
+      agoraStore.joinVoiceChat();
     }
-  }, [agoraVoiceChatStore, agoraStore, sessionStore.userId]);
+  }, [agoraVoiceChatStore, agoraStore]);
 
   usePosBusEvent('voice-chat-mute', agoraStore.handleUserMuted);
 
@@ -73,8 +73,10 @@ const VoiceChatPanel: FC = () => {
             <Text text="Mute All" size="xs" weight="light" />
           </styled.VoiceAction>
           <styled.VoiceAction
-            onClick={() => userDevicesStore.toggleMicrophone()}
-            disabled={userDevicesStore.isTogglingMicrophone}
+            onClick={() => {
+              agoraStore.canToggleMicrophone && userDevicesStore.toggleMicrophone();
+            }}
+            disabled={!agoraStore.canToggleMicrophone}
           >
             <IconSvg name={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'} />
             <Text text={userDevicesStore.muted ? 'Mic Off' : 'Mic On'} size="xs" weight="light" />

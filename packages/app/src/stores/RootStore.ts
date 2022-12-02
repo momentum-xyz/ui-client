@@ -57,14 +57,14 @@ const RootStore = types
       self.mainStore.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
-      self.agoraStore.init(worldId);
+      self.agoraStore.init(worldId, self.sessionStore.userId);
     },
     // TODO: To be removed, do not use in new code
     joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
       console.log('---JOINING---');
 
       yield self.collaborationStore.join(spaceId, isTable);
-      yield self.agoraStore.join(self.sessionStore.userId);
+      yield self.agoraStore.joinVoiceChat();
       self.meetingStore.join(spaceId, isTable);
 
       self.mainStore.unityStore.triggerInteractionMessage(
@@ -95,7 +95,7 @@ const RootStore = types
       */
 
       try {
-        yield self.agoraStore.leave();
+        yield self.agoraStore.leaveVoiceChat();
       } catch (ex) {
         console.error('agoraStore.leave', ex);
       }
