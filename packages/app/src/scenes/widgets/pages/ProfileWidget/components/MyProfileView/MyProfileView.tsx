@@ -11,11 +11,12 @@ import * as styled from './MyProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  teleportToOdyssey: () => void;
+  onLogout: () => void;
+  onTeleportToOdyssey: () => void;
 }
 
 const MyProfileView: FC<PropsInterface> = (props) => {
-  const {user, teleportToOdyssey} = props;
+  const {user, onLogout, onTeleportToOdyssey} = props;
 
   const {t} = useTranslation();
 
@@ -28,7 +29,7 @@ const MyProfileView: FC<PropsInterface> = (props) => {
   };
 
   return (
-    <div>
+    <styled.Container>
       <styled.AvatarContainer>
         <Avatar avatarSrc={user.avatarSrc} size="normal" status={user.status} />
         <styled.NameContainer>
@@ -41,7 +42,7 @@ const MyProfileView: FC<PropsInterface> = (props) => {
             weight="bold"
           />
           <div>
-            <Button icon="fly-to" size="medium" label="Visit" onClick={teleportToOdyssey} />
+            <Button icon="fly-to" size="medium" label="Visit" onClick={onTeleportToOdyssey} />
           </div>
         </styled.NameContainer>
       </styled.AvatarContainer>
@@ -76,7 +77,29 @@ const MyProfileView: FC<PropsInterface> = (props) => {
           />
         </styled.InfoItem>
       </styled.Info>
-    </div>
+
+      <styled.Settings>
+        <styled.SettingsHeader>
+          <IconSvg name="gear" size="normal" />
+          <Heading type="h2" label="Settings" align="left" weight="bold" />
+        </styled.SettingsHeader>
+
+        <styled.SettingsContainer>
+          <styled.SettingsItem>
+            <IconSvg name="edit" size="normal" />
+            <styled.SettingsValue>Edit profile</styled.SettingsValue>
+          </styled.SettingsItem>
+          <styled.SettingsItem>
+            <IconSvg name="gear" size="normal" />
+            <styled.SettingsValue>Device settings</styled.SettingsValue>
+          </styled.SettingsItem>
+          <styled.SettingsItem>
+            <IconSvg name="exit" size="normal" />
+            <styled.SettingsValue onClick={onLogout}>Logout</styled.SettingsValue>
+          </styled.SettingsItem>
+        </styled.SettingsContainer>
+      </styled.Settings>
+    </styled.Container>
   );
 };
 

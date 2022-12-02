@@ -1,7 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router-dom';
 import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import {MyProfileEditor, MyProfileView} from './components';
@@ -13,7 +15,8 @@ const MENU_OFFSET_TOP = 20;
 const ProfileWidget: FC = (props) => {
   const {sessionStore, widgetsStore} = useStore();
   const {profileStore} = widgetsStore;
-  //const {userProfile} = profileStore;
+
+  const history = useHistory();
 
   useEffect(() => {
     profileStore.fetchProfile();
@@ -33,16 +36,15 @@ const ProfileWidget: FC = (props) => {
     profileStore.profileDialog.close();
   }, [profileStore]);
 
-  if (!profileStore.userProfile) {
-    return <></>;
-  }
+  const handleLogout = useCallback(() => {
+    history.push(ROUTES.birthOfMe.signIn);
+  }, [history]);
 
   return (
     <Dialog
       position="leftTop"
       title=""
       offset={{left: MENU_OFFSET_LEFT, top: MENU_OFFSET_TOP}}
-      onClose={handleProfileClose}
       isBodyExtendingToEdges
       showBackground={false}
     >
@@ -55,12 +57,15 @@ const ProfileWidget: FC = (props) => {
           <SvgButton iconName="close" size="normal" onClick={handleProfileClose} />
         </styled.Header>
         <styled.Body>
-          {!profileStore.isEditingProfile ? (
+          {!!profileStore.userProfile && !profileStore.isEditingProfile && (
             <MyProfileView
               user={profileStore.userProfile}
-              teleportToOdyssey={handleTeleportToOdyssey}
+              onTeleportToOdyssey={handleTeleportToOdyssey}
+              onLogout={handleLogout}
             />
-          ) : (
+          )}
+
+          {!!profileStore.userProfile && profileStore.isEditingProfile && (
             <MyProfileEditor userId={sessionStore.userId} />
           )}
         </styled.Body>

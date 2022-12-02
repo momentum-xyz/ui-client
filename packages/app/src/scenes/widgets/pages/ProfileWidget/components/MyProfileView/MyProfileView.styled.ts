@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import {Text} from '@momentum-xyz/ui-kit';
 
+export const Container = styled.div`
+  width: 100%;
+`;
+
 export const AvatarContainer = styled.div`
   padding: 0 12px;
   display: flex;
@@ -41,41 +45,30 @@ export const LocationText = styled(Text)`
   max-width: 250px;
 `;
 
-export const Container = styled.div``;
-
-export const HeaderItem = styled.div`
-  display: flex;
-  overflow: hidden;
-  width: 100%;
-  justify-content: left;
+export const Settings = styled.div`
+  padding: 0 12px 12px 12px;
 `;
 
-export const Spacer = styled.div`
-  flex-grow: 1;
-`;
-
-export const HeaderActions = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-export const Header = styled.div`
+export const SettingsHeader = styled.div`
+  padding: 6px 0;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 15px;
-  width: 100%;
   gap: 10px;
-
-  margin-bottom: 0;
-
-  ${HeaderItem} ~ ${HeaderItem} {
-    margin-left: 10px;
-  }
 `;
 
-export const Initiatives = styled.div`
-  padding: 8px 0 10px 0;
+export const SettingsContainer = styled.div`
+  padding: 0 8px;
+`;
+
+export const SettingsItem = styled.div`
+  padding: 10px 0;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid rgba(255, 242, 241, 0.2);
+  gap: 10px;
+`;
+
+export const SettingsValue = styled.a`
+  font-size: var(--font-size-xs);
+  font-weight: 400;
 `;
