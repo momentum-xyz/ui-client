@@ -2,35 +2,35 @@ import React, {useCallback, useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
+import {useTranslation} from 'react-i18next';
 import {FileUploader, InputDark, TextAreaDark} from '@momentum-xyz/ui-kit';
 
 import {UserModelInterface} from 'core/models';
-import {UpdateProfileInterface} from 'api';
-import {useStore} from 'shared/hooks';
+import {UpdateProfileInterface, UserProfileInterface} from 'api';
+import {FieldErrorInterface} from 'api/interfaces';
 import {ToastContent} from 'ui-kit';
 
 import * as styled from './ProfileEditor.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
+  formErrors: FieldErrorInterface[];
+  onChangeKeyboardControl: (value: boolean) => void;
+  onEditProfile: (name: string, profile: UserProfileInterface) => Promise<boolean>;
+  onEditImage: (file: File) => Promise<void>;
 }
 
 const MyProfileEdit: React.FC<PropsInterface> = (props) => {
-  const {user} = props;
+  const {user, formErrors, onEditProfile, onEditImage, onChangeKeyboardControl} = props;
 
-  const {mainStore, widgetsStore} = useStore();
-  const {profileStore} = widgetsStore;
-  const {formErrors} = profileStore;
-  const {unityStore} = mainStore;
+  const {t} = useTranslation();
 
   useEffect(() => {
-    unityStore.changeKeyboardControl(false);
-
+    onChangeKeyboardControl(false);
     return () => {
-      unityStore.changeKeyboardControl(true);
+      onChangeKeyboardControl(true);
     };
-  }, [unityStore]);
+  }, [onChangeKeyboardControl]);
 
   const {
     control,
@@ -58,19 +58,7 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
   }, [user?.name, user?.profile, setValue]);
 
   const formSubmitHandler = handleSubmit(async (data: UpdateProfileInterface) => {
-    const response = await profileStore.editProfile(data.name, data.profile);
-    if (response) {
-      // TODO: Removal
-      toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('editProfileWidget.saveSuccess')}
-          showCloseButton
-        />
-      );
-      clearErrors();
-    } else {
+    if (!(await onEditProfile(data.name, data.profile))) {
       toast.error(
         <ToastContent
           isDanger
@@ -80,16 +68,18 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
           showCloseButton
         />
       );
+    } else {
+      clearErrors();
     }
   });
 
   const imageHandle = useCallback(
     async (file: File | undefined) => {
       if (file) {
-        await profileStore.editImage(file);
+        await onEditImage(file);
       }
     },
-    [profileStore]
+    [onEditImage]
   );
 
   return (

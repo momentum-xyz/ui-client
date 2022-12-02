@@ -12,8 +12,9 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = (props) => {
-  const {widgetsStore, sessionStore} = useStore();
+  const {widgetsStore, sessionStore, mainStore} = useStore();
   const {profileStore} = widgetsStore;
+  const {unityStore} = mainStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -66,7 +67,15 @@ const ProfileWidget: FC = (props) => {
                 />
               )}
 
-              {isEditMode && <ProfileEditor user={profileStore.userProfile} />}
+              {isEditMode && (
+                <ProfileEditor
+                  user={profileStore.userProfile}
+                  formErrors={profileStore.formErrors}
+                  onChangeKeyboardControl={unityStore.changeKeyboardControl}
+                  onEditProfile={profileStore.editProfile}
+                  onEditImage={profileStore.editImage}
+                />
+              )}
 
               <ProfileSettings
                 isEditMode={isEditMode}

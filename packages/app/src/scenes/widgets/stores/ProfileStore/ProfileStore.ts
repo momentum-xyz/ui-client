@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {User, UserSpaceDetails} from 'core/models';
+import {User} from 'core/models';
 import {api, UserProfileInterface, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 
@@ -10,34 +10,22 @@ const ProfileStore = types.compose(
   types
     .model('ProfileStore', {
       profileDialog: types.optional(Dialog, {}),
-
       userProfile: types.maybe(User),
-      canCreateInitiative: types.maybe(types.boolean),
-      userSpaceList: types.optional(types.array(UserSpaceDetails), []),
-      profileFetchRequest: types.optional(RequestModel, {}),
-
-      avatarRequest: types.optional(RequestModel, {}),
-      inviteToTableRequest: types.optional(RequestModel, {}),
-      editProfileRequest: types.optional(RequestModel, {}),
-
-      editAvatarDialog: types.optional(Dialog, {}),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
-      isEditingProfile: false,
-      isSavingProfile: false
+      fetchRequest: types.optional(RequestModel, {}),
+      editAvatarRequest: types.optional(RequestModel, {}),
+      editRequest: types.optional(RequestModel, {})
     })
-    .volatile<{selectedImage: File | undefined}>(() => ({
-      selectedImage: undefined
-    }))
     .actions((self) => ({
       fetchProfile: flow(function* () {
-        const response = yield self.profileFetchRequest.send(api.userRepository.fetchMe, {});
+        const response = yield self.fetchRequest.send(api.userRepository.fetchMe, {});
         if (response) {
           self.userProfile = cast(response);
         }
       }),
       editProfile: flow(function* (name: string, profile: UserProfileInterface) {
-        // 2. Profile updating.
-        const response = yield self.editProfileRequest.send(api.userProfileRepository.update, {
+        // 1. Profile updating.
+        const response = yield self.editRequest.send(api.userProfileRepository.update, {
           name,
           profile: {
             bio: profile.bio,
@@ -46,20 +34,18 @@ const ProfileStore = types.compose(
             avatarHash: self.userProfile?.profile.avatarHash
           }
         });
-        self.isSavingProfile = false;
-        if (self.editProfileRequest.isError && response?.errors) {
+
+        if (self.editRequest.isError && response?.errors) {
           self.fieldErrors = cast(
             Object.keys(response.errors).map((key) => ({
               fieldName: key,
               errorMessage: response.errors[key]
             }))
           );
-
-          return self.editProfileRequest.isDone;
+          return false;
         }
-        self.selectedImage = undefined;
-        self.isEditingProfile = false;
-        return self.editProfileRequest.isDone;
+
+        return true;
       }),
       editImage: flow(function* (file: File) {
         if (!self.userProfile?.profile) {
@@ -68,14 +54,14 @@ const ProfileStore = types.compose(
 
         // 1. Avatar uploading.
         const data = {file: file};
-        const userResponse: UploadImageResponse = yield self.avatarRequest.send(
+        const userResponse: UploadImageResponse = yield self.editAvatarRequest.send(
           api.mediaRepository.uploadImage,
           data
         );
         const avatarHash = userResponse?.hash;
 
         // 2. Profile updating.
-        const response = yield self.editProfileRequest.send(api.userProfileRepository.update, {
+        const response = yield self.editRequest.send(api.userProfileRepository.update, {
           name: self.userProfile.name,
           profile: {
             ...self.userProfile.profile,
@@ -83,17 +69,8 @@ const ProfileStore = types.compose(
           }
         });
 
-        console.log(response);
-        self.userProfile.profile.avatarHash = avatarHash;
-
-        return self.editProfileRequest.isDone;
-      }),
-      setImage(image?: File) {
-        self.selectedImage = image;
-      },
-      openEdit() {
-        self.isEditingProfile = true;
-      }
+        self.userProfile.profile.avatarHash = response?.profile?.avatarHash;
+      })
     }))
     .views((self) => ({
       get formErrors(): FieldErrorInterface[] {
