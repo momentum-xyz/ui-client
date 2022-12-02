@@ -2,13 +2,18 @@ import styled from 'styled-components';
 import {Text} from '@momentum-xyz/ui-kit';
 
 export const AvatarContainer = styled.div`
+  padding: 0 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+`;
+
+export const NameContainer = styled.div`
+  max-width: 160px;
+  padding: 2px 0;
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
-  width: 80px;
-  height: max-content;
-  gap: 10px;
-  padding-bottom: 5px;
+  gap: 6px;
 `;
 
 export const Details = styled.div`

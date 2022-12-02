@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Header = styled.div`
-  padding: 12px;
+  padding: 14px 12px 24px 12px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -20,7 +20,4 @@ export const Body = styled.div`
   display: flex;
   overflow: hidden;
   width: 280px;
-  min-height: 150px;
-  max-height: calc(100vh - 125px);
-  margin-top: 10px;
 `;

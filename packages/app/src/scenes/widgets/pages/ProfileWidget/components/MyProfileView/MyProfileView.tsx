@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {capitalize} from 'lodash-es';
-import {Avatar, IconSvg, Text} from '@momentum-xyz/ui-kit';
+import {Avatar, Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
 import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum-xyz/core';
 
 import {UserModelInterface} from 'core/models';
@@ -11,19 +11,13 @@ import * as styled from './MyProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
+  teleportToOdyssey: () => void;
 }
 
 const MyProfileView: FC<PropsInterface> = (props) => {
-  const {user} = props;
-
-  //const {homeStore} = useStore();
-  //const {unityStore} = mainStore;
+  const {user, teleportToOdyssey} = props;
 
   const {t} = useTranslation();
-
-  /*const handleFlyToSpace = (spaceId: string) => {
-    unityStore.teleportToSpace(spaceId);
-  };*/
 
   const renderDate = () => {
     if (!user?.createdAt) {
@@ -37,7 +31,19 @@ const MyProfileView: FC<PropsInterface> = (props) => {
     <div>
       <styled.AvatarContainer>
         <Avatar avatarSrc={user?.avatarSrc} size="normal" status={user?.status} />
-        <div></div>
+        <styled.NameContainer>
+          <Heading
+            type="h1"
+            label={user.name}
+            isTruncate
+            transform="uppercase"
+            align="left"
+            weight="bold"
+          />
+          <div>
+            <Button icon="fly-to" size="medium" label="Visit" onClick={teleportToOdyssey} />
+          </div>
+        </styled.NameContainer>
       </styled.AvatarContainer>
       <styled.Details>
         {user?.profile?.bio && (

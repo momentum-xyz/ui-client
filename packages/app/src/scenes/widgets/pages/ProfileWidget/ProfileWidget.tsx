@@ -23,6 +23,11 @@ const ProfileWidget: FC = (props) => {
     };
   }, [profileStore, sessionStore.userId]);
 
+  const handleTeleportToOdyssey = useCallback(() => {
+    // TODO: implementation
+    // unityStore.teleportToSpace(spaceId);
+  }, []);
+
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();
     profileStore.profileDialog.close();
@@ -51,7 +56,10 @@ const ProfileWidget: FC = (props) => {
         </styled.Header>
         <styled.Body>
           {!profileStore.isEditingProfile ? (
-            <MyProfileView user={profileStore.userProfile} />
+            <MyProfileView
+              user={profileStore.userProfile}
+              teleportToOdyssey={handleTeleportToOdyssey}
+            />
           ) : (
             <MyProfileEditor userId={sessionStore.userId} />
           )}
