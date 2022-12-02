@@ -6,12 +6,12 @@ import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momen
 import {useStore} from 'shared/hooks';
 
 import {
-  ProfileMenuWidget,
   OnlineUsersWidget,
   FlyToMeWidget,
   ScreenShareWidget,
   SocialWidget,
-  CalendarWidget
+  CalendarWidget,
+  ProfileWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -25,8 +25,7 @@ const Widgets: FC = () => {
     agoraStore,
     objectStore
   } = useStore();
-  const {profileMenuStore, flyToMeStore, screenShareStore, socialStore, calendarStore} =
-    widgetsStore;
+  const {profileStore, flyToMeStore, screenShareStore, socialStore, calendarStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
@@ -93,7 +92,7 @@ const Widgets: FC = () => {
         <styled.LeftToolbars>
           <ToolbarIconList>
             {user?.profile && (
-              <ToolbarIcon title={t('titles.profile')} onClick={profileMenuStore.openProfileMenu}>
+              <ToolbarIcon title={t('titles.profile')} onClick={profileStore.profileDialog.open}>
                 <Avatar
                   size="extra-small"
                   status={user.status}
@@ -120,7 +119,7 @@ const Widgets: FC = () => {
         </styled.RightToolbars>
       </styled.Footer>
 
-      {profileMenuStore.profileMenuDialog.isOpen && <ProfileMenuWidget />}
+      {profileStore.profileDialog.isOpen && <ProfileWidget />}
       {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
       {screenShareStore.widget.isOpen && <ScreenShareWidget />}
       {calendarStore.widget.isOpen && <CalendarWidget />}

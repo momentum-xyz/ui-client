@@ -11,7 +11,7 @@ const ExploreStore = types
     ResetModel,
     types.model('ExploreStore', {
       worldId: '',
-      isExpanded: true,
+      isExpanded: false,
       spaceDetails: types.maybeNull(SpaceDetails),
       searchResults: types.optional(types.array(SpaceListByCategory), []),
       searchQuery: types.optional(SearchQuery, {}),

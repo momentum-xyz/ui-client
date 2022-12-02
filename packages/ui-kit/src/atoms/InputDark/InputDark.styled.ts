@@ -58,9 +58,9 @@ export const Error = styled.div`
   font-weight: 500;
 
   &.primary {
-    font-size: var(--font-size-xxs);
-    right: 5px;
-    top: 27px;
+    font-size: var(--font-size-xxxxs);
+    left: 10px;
+    top: 26px;
   }
 
   &.secondary {
