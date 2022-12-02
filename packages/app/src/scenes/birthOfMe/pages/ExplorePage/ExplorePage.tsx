@@ -1,5 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {getSnapshot} from 'mobx-state-tree';
 import {Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -9,12 +10,30 @@ import {ExplorePanel, SelectedOdyssey, StakingForm} from 'scenes/birthOfMe/compo
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {birthOfMeStore} = useStore();
+  const {birthOfMeStore, authStore} = useStore();
   const {exploreStore, nftStore} = birthOfMeStore;
+  const {wallet} = authStore;
 
   useEffect(() => {
     exploreStore.init();
   }, [exploreStore]);
+
+  useEffect(() => {
+    if (wallet) {
+      // FIXME move to more appropriate place
+      console.log('Check if user has staked', wallet);
+      const nftItem = nftStore.getNftByWallet(wallet);
+      if (nftItem) {
+        // TODO check also other user wallets??
+        nftStore.fetchStakingInfo(wallet, nftItem.id).then(() => {
+          console.log('Staking info fetched');
+          console.log('mutualStakingAddresses:', nftStore.mutualStakingAddresses);
+          console.log('stakingAtMe:', getSnapshot(nftStore.stakingAtMe));
+          console.log('stakingAtOthers:', getSnapshot(nftStore.stakingAtOthers));
+        });
+      }
+    }
+  }, [nftStore, wallet]);
 
   return (
     <styled.Container>
