@@ -10,7 +10,7 @@ import {
 } from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
-import {ResetModel} from '@momentum-xyz/core';
+import {ResetModel, Dialog} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, PolkadotUnlockingDuration} from 'core/models';
@@ -75,6 +75,7 @@ const NftStore = types
       connectToNftItemId: types.maybeNull(types.number),
       stakingAtMe: types.optional(types.map(StakeDetail), {}),
       stakingAtOthers: types.optional(types.map(StakeDetail), {}),
+      stakingDashorboardDialog: types.optional(Dialog, {}),
       isLoading: false
     })
   )
@@ -596,7 +597,8 @@ const NftStore = types
       itemId: number,
       collectionId: number = DEFAULT_COLECTION_ID
     ) {
-      console.log('Stake', itemId, amount);
+      address = formatAddress(address);
+      console.log('Stake', itemId, amount, address);
       if (!self.channel) {
         throw new Error('Channel is not initialized');
       }
@@ -618,7 +620,8 @@ const NftStore = types
       itemId: number,
       collectionId: number = DEFAULT_COLECTION_ID
     ) {
-      console.log('Untake', itemId);
+      address = formatAddress(address);
+      console.log('Unstake', itemId, address);
       if (!self.channel) {
         throw new Error('Channel is not initialized');
       }
@@ -636,6 +639,7 @@ const NftStore = types
       }
     }),
     getRewards: flow(function* (address: string) {
+      address = formatAddress(address);
       console.log('Get rewards', address);
       if (!self.channel) {
         throw new Error('Channel is not initialized');

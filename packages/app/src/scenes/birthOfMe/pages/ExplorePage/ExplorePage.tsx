@@ -1,11 +1,16 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {getSnapshot} from 'mobx-state-tree';
-import {Dialog} from '@momentum-xyz/ui-kit';
+import {Button, Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {Footer} from 'ui-kit';
-import {ExplorePanel, SelectedOdyssey, StakingForm} from 'scenes/birthOfMe/components';
+import {
+  ExplorePanel,
+  SelectedOdyssey,
+  StakingDashboard,
+  StakingForm
+} from 'scenes/birthOfMe/components';
 
 import * as styled from './ExplorePage.styled';
 
@@ -19,21 +24,31 @@ const ExplorePage: FC = () => {
   }, [exploreStore]);
 
   useEffect(() => {
-    if (wallet) {
+    (async () => {
+      // TEMP
+      await authStore.init();
+      await nftStore.init();
+      const {wallet} = authStore;
+      if (!wallet) {
+        return;
+      }
+
       // FIXME move to more appropriate place
       console.log('Check if user has staked', wallet);
       const nftItem = nftStore.getNftByWallet(wallet);
-      if (nftItem) {
-        // TODO check also other user wallets??
-        nftStore.fetchStakingInfo(wallet, nftItem.id).then(() => {
-          console.log('Staking info fetched');
-          console.log('mutualStakingAddresses:', nftStore.mutualStakingAddresses);
-          console.log('stakingAtMe:', getSnapshot(nftStore.stakingAtMe));
-          console.log('stakingAtOthers:', getSnapshot(nftStore.stakingAtOthers));
-        });
+      if (!nftItem) {
+        console.log('User has no NFT', wallet);
+        return;
       }
-    }
-  }, [nftStore, wallet]);
+      // TODO check also other user wallets??
+      await nftStore.fetchStakingInfo(wallet, nftItem.id);
+
+      console.log('Staking info fetched');
+      console.log('mutualStakingAddresses:', nftStore.mutualStakingAddresses);
+      console.log('stakingAtMe:', getSnapshot(nftStore.stakingAtMe));
+      console.log('stakingAtOthers:', getSnapshot(nftStore.stakingAtOthers));
+    })();
+  }, [authStore, nftStore, wallet]);
 
   return (
     <styled.Container>
@@ -67,6 +82,30 @@ const ExplorePage: FC = () => {
               nftItemId={nftStore.connectToNftItemId}
               onComplete={() => {
                 nftStore.setConnectToNftItemId(null);
+              }}
+            />
+          </Dialog>
+        )}
+
+        <styled.Boxes>
+          <Button
+            label="TEMP Staking Dashboard"
+            onClick={() => nftStore.stakingDashorboardDialog.open()}
+          />
+        </styled.Boxes>
+
+        {!!nftStore.stakingDashorboardDialog.isOpen && (
+          <Dialog
+            title="Personal Connecting Dashboard"
+            icon="hierarchy"
+            showCloseButton
+            onClose={() => {
+              nftStore.stakingDashorboardDialog.close();
+            }}
+          >
+            <StakingDashboard
+              onComplete={() => {
+                nftStore.stakingDashorboardDialog.close();
               }}
             />
           </Dialog>
