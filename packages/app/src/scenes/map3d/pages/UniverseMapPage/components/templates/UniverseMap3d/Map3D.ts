@@ -25,12 +25,12 @@ import {
 } from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
-import baseAtmos from 'static/images/map/baseAtmos.png';
-import temptations from 'static/images/map/temptations.png';
-import showTime from 'static/images/map/showTime.png';
-import honey01 from 'static/images/map/honey01.png';
-import iceland01 from 'static/images/map/iceland01.png';
-import BasicSkyboxHD from 'static/images/map/BasicSkyboxHD.png';
+import baseAtmos from 'static/images/map/baseAtmos.jpg';
+import temptations from 'static/images/map/temptations.jpg';
+import showTime from 'static/images/map/showTime.jpg';
+import honey01 from 'static/images/map/honey01.jpg';
+import iceland01 from 'static/images/map/iceland01.jpg';
+import BasicSkyboxHD from 'static/images/map/BasicSkyboxHD.jpg';
 import honey01HD from 'static/images/map/honey01HD.png';
 
 import corona_ft from 'static/images/map/corona_ft.png';
