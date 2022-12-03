@@ -30,7 +30,7 @@ const AuthStore = types.compose(
           yield wait(DELAY_DEFAULT);
           if (yield SubstrateProvider.isExtensionEnabled()) {
             yield self.nftStore.init();
-            const addressesList = yield SubstrateProvider.getAddresses();
+            const addressesList = yield SubstrateProvider.getAddresses(self.nftStore.ss58Format);
             self.accounts = cast(addressesList);
           }
         }
