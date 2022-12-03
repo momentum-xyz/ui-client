@@ -12,9 +12,9 @@ export const InputContainer = styled.div`
     width: 100%;
     padding: var(--input-padding);
     height: var(--input-height);
-    border: 1px solid var(--black-100);
+    border: 1px solid rgba(0, 0, 0, 0.8);
     border-radius: var(--input-radius);
-    background-color: var(--black-100);
+    background-color: rgba(0, 0, 0, 0.8);
     color: ${(props) => props.theme.text};
     outline: none;
 
