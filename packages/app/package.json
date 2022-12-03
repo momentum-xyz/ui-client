@@ -26,6 +26,7 @@
     "@sentry/react": "^5.30.0",
     "@sentry/tracing": "^5.30.0",
     "@types/animejs": "^3.1.5",
+    "@types/dat.gui": "^0.7.7",
     "@types/raf": "^3.4.0",
     "@types/react-howler": "^5.2.0",
     "@types/three": "^0.146.0",
