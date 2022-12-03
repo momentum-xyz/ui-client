@@ -97,7 +97,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
     }
 
     nftStore
-      .unstake(wallet, nft.id)
+      .unstake(wallet, amount, nft.id)
       .then(() => {
         console.log('unstake success');
         toast.info(<ToastContent title={"You've unstaked!"} showCloseButton />);

@@ -643,6 +643,7 @@ const NftStore = types
     }),
     unstake: flow(function* (
       address: string,
+      amount: number | null,
       itemId: number,
       collectionId: number = DEFAULT_COLECTION_ID
     ) {
@@ -653,7 +654,7 @@ const NftStore = types
       }
       const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
+      const tx = self.channel.tx.stake.unstake(collectionId, itemId, amount);
       console.log('Sign and send', tx);
 
       try {
