@@ -9,3 +9,4 @@ export * from './BuildOdyssey';
 export * from './ExplorePanel';
 export * from './SelectedOdyssey';
 export * from './StakingForm';
+export * from './StakingDashboard';

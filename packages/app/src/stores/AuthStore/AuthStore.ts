@@ -10,12 +10,15 @@ import {DELAY_DEFAULT, wait} from 'core/utils';
 import {GuestLoginFormInterface} from 'core/interfaces';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
+import {NftStore} from 'stores/NftStore';
 
 const AuthStore = types.compose(
   ResetModel,
   types
     .model('AuthStore', {
+      nftStore: types.optional(NftStore, {}),
       wallet: '',
+      // TODO adapt nftStore addresses for this
       accounts: types.optional(types.array(types.frozen<InjectedAccountWithMeta>()), []),
       guestTokenRequest: types.optional(RequestModel, {}),
       challengeRequest: types.optional(RequestModel, {}),
@@ -26,13 +29,17 @@ const AuthStore = types.compose(
         if (!self.accounts.length) {
           yield wait(DELAY_DEFAULT);
           if (yield SubstrateProvider.isExtensionEnabled()) {
-            const addressesList = yield SubstrateProvider.getAddresses();
+            yield self.nftStore.init();
+            const addressesList = yield SubstrateProvider.getAddresses(self.nftStore.ss58Format);
             self.accounts = cast(addressesList);
           }
         }
       }),
       selectWallet(wallet: string): void {
         self.wallet = wallet;
+
+        // here?
+        self.nftStore.subscribeToBalanseChanges(wallet);
       },
       getGuestToken: flow(function* (form: GuestLoginFormInterface) {
         const data: AuthGuestTokenRequest = {...form};

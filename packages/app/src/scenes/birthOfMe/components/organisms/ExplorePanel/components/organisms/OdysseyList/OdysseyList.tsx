@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Avatar, SvgButton, UserStatusEnum} from '@momentum-xyz/ui-kit';
 
-import {NftItemInterface} from 'scenes/birthOfMe/stores/NftStore/models';
+import {NftItemInterface} from 'stores/NftStore/models';
 
 import * as styled from './OdysseyList.styled';
 

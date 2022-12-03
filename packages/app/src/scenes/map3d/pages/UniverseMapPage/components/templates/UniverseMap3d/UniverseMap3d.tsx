@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import {NftItemInterface} from 'scenes/birthOfMe/stores/NftStore/models';
+import {NftItemInterface} from 'stores/NftStore/models';
 
 import * as styled from './UniverseMap3d.styled';
 
