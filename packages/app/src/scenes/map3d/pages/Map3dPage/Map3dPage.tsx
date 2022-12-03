@@ -12,8 +12,8 @@ interface PropsInterface {
 const Map3dPage: FC<PropsInterface> = (props) => {
   const {isClickActive} = props;
 
-  const {birthOfMeStore, map3dStore} = useStore();
-  const {nftStore} = birthOfMeStore;
+  const {authStore, map3dStore} = useStore();
+  const {nftStore} = authStore;
 
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
   const mapRef = useRef<HTMLCanvasElement | null>(null);

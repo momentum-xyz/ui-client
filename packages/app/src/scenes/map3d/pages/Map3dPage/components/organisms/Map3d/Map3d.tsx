@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {use3DMap} from 'shared/hooks';
-import {NftItemInterface} from 'scenes/birthOfMe/stores/NftStore/models';
+import {NftItemInterface} from 'stores/NftStore/models';
 
 interface PropsInterface {
   items: NftItemInterface[];
