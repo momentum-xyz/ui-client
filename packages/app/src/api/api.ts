@@ -21,6 +21,7 @@ import * as objectRepository from './repositories/objectRepository';
 import * as assets3dRepository from './repositories/assets3dRepository';
 import * as agoraRepository from './repositories/agoraRepository';
 import * as flightRepository from './repositories/flightRepository';
+import * as spaceUserAttributeRepository from './repositories/spaceUserAttributeRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as profileRepository from './repositories_OLD/profileRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
@@ -100,6 +101,7 @@ export const api = {
   spaceAttributeRepository,
   spaceOptionRepository,
   userAttributeRepository,
+  spaceUserAttributeRepository,
   mediaRepository,
   emojiRepository,
   eventsRepository,
@@ -139,6 +141,7 @@ export * from './repositories/spaceInfoRepository/spaceInfoRepository.api.types'
 export * from './repositories/objectRepository/objectRepository.api.types';
 export * from './repositories/agoraRepository/agoraRepository.api.types';
 export * from './repositories/flightRepository/flightRepository.api.types';
+export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRepository.api.types';
 
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
 export * from './repositories_OLD/userRepository/userRepository.api.types';

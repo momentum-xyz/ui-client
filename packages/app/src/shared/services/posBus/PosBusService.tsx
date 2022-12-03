@@ -1,5 +1,6 @@
 import {AttributeValueInterface} from '@momentum-xyz/sdk';
 
+import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
 import {PosBusMessageTypeEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
 import {
@@ -16,7 +17,9 @@ import {
   PosBusFlyWithMeType,
   PosBusScreenShareMessageType,
   PosBusMiroStateMessageType as PosBusAttributeMessageType,
-  PosBusFlyToMeType
+  PosBusFlyToMeType,
+  PosBusVoiceChatActionMessageType,
+  PosBusVoiceChatUserMessageType
 } from 'core/types';
 
 class PosBusService {
@@ -56,6 +59,40 @@ class PosBusService {
 
   static handleScreenShareStart(message: PosBusScreenShareMessageType) {
     PosBusEventEmitter.emit('screen-share', message);
+  }
+
+  static handleVoiceChatAction(message: PosBusVoiceChatActionMessageType) {
+    const voiceChatActionAttributeValue = message.data.value;
+
+    if (
+      message.type !== PosBusMessageTypeEnum.ATTRIBUTE_CHANGED ||
+      !voiceChatActionAttributeValue
+    ) {
+      return;
+    }
+
+    switch (voiceChatActionAttributeValue.action) {
+      case VoiceChatActionEnum.KICK:
+        PosBusEventEmitter.emit('voice-chat-kick', voiceChatActionAttributeValue.userId);
+        break;
+      case VoiceChatActionEnum.MUTE:
+        PosBusEventEmitter.emit('voice-chat-mute', voiceChatActionAttributeValue.userId);
+        break;
+    }
+  }
+
+  static handleVoiceChatUser(message: PosBusVoiceChatUserMessageType) {
+    const userId = message.data.value?.userId;
+
+    if (!userId || message.type !== PosBusMessageTypeEnum.ATTRIBUTE_CHANGED) {
+      return;
+    }
+
+    if (message.data.value?.joined === true) {
+      PosBusEventEmitter.emit('voice-chat-user-joined', userId);
+    } else if (message.data.value?.joined === false) {
+      PosBusEventEmitter.emit('voice-chat-user-left', userId);
+    }
   }
 
   static handleIncomingCommunication(message: PosBusCommunicationMessageType) {
@@ -240,7 +277,12 @@ class PosBusService {
       case 'screen-share':
         this.handleScreenShareStart(message as PosBusScreenShareMessageType);
         break;
-
+      case 'voice-chat-action':
+        this.handleVoiceChatAction(message as PosBusVoiceChatActionMessageType);
+        break;
+      case 'voice-chat-user':
+        this.handleVoiceChatUser(message as PosBusVoiceChatUserMessageType);
+        break;
       default:
         console.debug('Unknown relay message type', target);
     }

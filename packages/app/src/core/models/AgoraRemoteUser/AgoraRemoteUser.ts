@@ -3,7 +3,7 @@ import {IAgoraRTCRemoteUser, IRemoteAudioTrack, IRemoteVideoTrack} from 'agora-r
 import {flow, Instance, types} from 'mobx-state-tree';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
-import {api, ProfileResponse, UserProfileInterface} from 'api';
+import {api, FetchUserResponse, UserProfileInterface} from 'api';
 import {appVariables} from 'api/constants';
 
 const AgoraRemoteUser = types
@@ -21,12 +21,9 @@ const AgoraRemoteUser = types
     fetchUser: flow(function* () {
       const userId = self.uid.toString();
 
-      const response: ProfileResponse = yield self.request.send(
-        api.userRepository_OLD.fetchProfile,
-        {
-          userId
-        }
-      );
+      const response: FetchUserResponse = yield self.request.send(api.userRepository.fetchUser, {
+        userId
+      });
 
       if (response) {
         self.profile = response.profile;

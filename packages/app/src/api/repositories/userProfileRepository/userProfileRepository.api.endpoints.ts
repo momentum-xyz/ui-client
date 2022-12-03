@@ -1,9 +1,10 @@
 import {appVariables} from 'api/constants';
 
 export const userRepositoryEndpoints = () => {
-  const BASE_URL = `${appVariables.BACKEND_API_URL}/profile`;
+  const BASE_URL = `${appVariables.BACKEND_API_URL}/users`;
 
   return {
-    profile: BASE_URL
+    base: BASE_URL,
+    profile: `${BASE_URL}/:userId`
   };
 };
