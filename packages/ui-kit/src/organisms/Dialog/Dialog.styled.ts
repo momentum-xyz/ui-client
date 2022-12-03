@@ -65,6 +65,11 @@ export const Modal = styled.div`
     bottom: 0;
     left: 0;
   }
+
+  &.isMinimap {
+    pointer-events: none;
+    user-select: none;
+  }
 `;
 
 export const Container = styled.div<{offset: OffsetInterface}>`
@@ -89,5 +94,9 @@ export const Container = styled.div<{offset: OffsetInterface}>`
 
   &.bottomLeft {
     margin: 0 0 ${(props) => props.offset?.bottom || 0}px ${(props) => props.offset?.left || 0}px;
+  }
+
+  &.isMinimap {
+    pointer-events: none;
   }
 `;

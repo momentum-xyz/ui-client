@@ -1,4 +1,5 @@
 export * from './OnlineUsersWidget';
+export * from './MinimapWidget';
 export * from './FlyToMeWidget';
 export * from './ProfileMenuWidget_OLD';
 export * from './ProfileWidget';
