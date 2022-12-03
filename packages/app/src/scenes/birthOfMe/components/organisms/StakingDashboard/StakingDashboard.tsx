@@ -42,7 +42,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const {authStore} = useStore();
   const {wallet: authWallet, accounts, accountOptions, nftStore} = authStore;
   // TODO load staking info for all accounts
-  const {stakingAtOthers} = nftStore;
+  const {stakingAtOthers, balance} = nftStore;
 
   const [wallet = accounts[0]?.address, setWallet] = useState(authWallet);
   const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
@@ -128,7 +128,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                 }}
               />
               <Heading type="h2" label="Balance" />
-              <Text size="m" text="TODO" align="left" />
+              <Text size="m" text={JSON.stringify(balance)} align="left" />
               <Heading type="h2" label="Active Stakes" />
               {Array.from(stakingAtOthers.values()).map((stakingDetail) => (
                 <div key={stakingDetail.destAddr}>

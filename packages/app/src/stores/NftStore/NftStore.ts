@@ -49,6 +49,14 @@ const formatAddress = (address: string, network = 42) => {
   return keyring.encodeAddress(address, network);
 };
 
+// TODO change to BN
+interface AccountBalanceInterface {
+  free: number;
+  reserved: number;
+  miscFrozen: number;
+  feeFrozen: number;
+}
+
 const NftStore = types
   .compose(
     ResetModel,
@@ -77,6 +85,13 @@ const NftStore = types
       stakingAtOthers: types.optional(types.map(StakeDetail), {}),
       stakingDashorboardDialog: types.optional(Dialog, {}),
       accumulatedRewards: 0,
+      balance: types.optional(types.frozen<AccountBalanceInterface>(), {
+        free: 0,
+        reserved: 0,
+        miscFrozen: 0,
+        feeFrozen: 0
+      }),
+
       isLoading: false
     })
   )
@@ -87,13 +102,15 @@ const NftStore = types
     customRewardDestinationBalance: DeriveBalancesAll | null;
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
+    unsubscribeBalanceSubscription: (() => void) | null;
   }>(() => ({
     channel: null,
     stashBalanceAll: null,
     controllerBalanceAll: null,
     customRewardDestinationBalance: null,
     stakingInfo: null,
-    sessionProgress: null
+    sessionProgress: null,
+    unsubscribeBalanceSubscription: null
   }))
   .views((self) => {
     return {
@@ -272,6 +289,9 @@ const NftStore = types
     },
     setConnectToNftItemId(itemId: number | null) {
       self.connectToNftItemId = itemId;
+    },
+    setBalance(payload: AccountBalanceInterface) {
+      self.balance = payload;
     },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
@@ -739,7 +759,26 @@ const NftStore = types
         self.existentialDeposit
       );
       // yield self.getMinNominatorBond();
-    }
+    },
+    subscribeToBalanseChanges: flow(function* (address: string) {
+      if (!self.channel) {
+        return;
+      }
+      if (self.unsubscribeBalanceSubscription) {
+        console.log('Unsubscribe from balance subscription');
+        self.unsubscribeBalanceSubscription();
+      }
+      self.unsubscribeBalanceSubscription = yield self.channel.query.system.account(
+        address,
+        ({nonce, data: balance}: any) => {
+          console.log(
+            `free balance is ${balance.free} with ${balance.reserved} reserved and a nonce of ${nonce}`
+          );
+          console.log('balance', balance.toHuman(), balance);
+          self.setBalance(balance);
+        }
+      );
+    })
   }))
   .actions((self) => ({
     init: flow(function* () {

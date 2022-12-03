@@ -37,6 +37,9 @@ const AuthStore = types.compose(
       }),
       selectWallet(wallet: string): void {
         self.wallet = wallet;
+
+        // here?
+        self.nftStore.subscribeToBalanseChanges(wallet);
       },
       getGuestToken: flow(function* (form: GuestLoginFormInterface) {
         const data: AuthGuestTokenRequest = {...form};
