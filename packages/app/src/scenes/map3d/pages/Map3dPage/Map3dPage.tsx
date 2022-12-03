@@ -12,7 +12,7 @@ interface PropsInterface {
 const Map3dPage: FC<PropsInterface> = (props) => {
   const {isClickActive} = props;
 
-  const {birthOfMeStore} = useStore();
+  const {birthOfMeStore, map3dStore} = useStore();
   const {nftStore} = birthOfMeStore;
 
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
@@ -28,14 +28,13 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     }
   }, []);
 
-  // TODO: Push to store and open planet
   const onSelectOdyssey = useCallback(
     (id: string, name: string) => {
       if (isClickActive) {
-        console.log(`${name}:${id}`);
+        map3dStore.selectOdyssey(id, name);
       }
     },
-    [isClickActive]
+    [isClickActive, map3dStore]
   );
 
   return (
