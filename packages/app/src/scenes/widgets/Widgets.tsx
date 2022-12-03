@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 
 import {
   OnlineUsersWidget,
@@ -75,7 +76,8 @@ const Widgets: FC = () => {
     {
       title: t('titles.worldBuilder'),
       icon: 'planet',
-      size: 'medium'
+      size: 'medium',
+      link: ROUTES.worldBuilder.builder
     }
   ];
 
