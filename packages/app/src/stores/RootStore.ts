@@ -4,6 +4,7 @@ import {PosBusEventEnum} from 'core/enums';
 import {RootBirthOfMeStore} from 'scenes/birthOfMe/stores';
 import {RootAuthStore} from 'scenes/auth_OLD/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
+import {Map3dStore} from 'scenes/map3d/stores/Map3dStore';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootFlightStore} from 'scenes/flight/stores';
@@ -33,6 +34,7 @@ const RootStore = types
     agoraStore: types.optional(AgoraStore, {}),
     /* Connect independent stores */
     birthOfMeStore: types.optional(RootBirthOfMeStore, {}),
+    map3dStore: types.optional(Map3dStore, {}),
     authStore_OLD: types.optional(RootAuthStore, {}),
     homeStore: types.optional(HomeStore, {}),
     profileStore: types.optional(RootProfileStore, {}),

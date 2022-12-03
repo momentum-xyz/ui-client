@@ -14,7 +14,7 @@ import {
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {birthOfMeStore, authStore} = useStore();
+  const {birthOfMeStore, authStore, map3dStore} = useStore();
   const {exploreStore} = birthOfMeStore;
   const {wallet, nftStore} = authStore;
 
@@ -52,17 +52,17 @@ const ExplorePage: FC = () => {
     <styled.Container>
       <styled.Wrapper>
         <styled.Boxes>
-          {!!exploreStore.selectedOdyssey && (
+          {!!map3dStore.selectedOdyssey && (
             <SelectedOdyssey
-              odyssey={exploreStore.selectedOdyssey}
+              odyssey={map3dStore.selectedOdyssey}
               onTeleport={() => alert(`Teleport`)}
               onConnect={() => {
-                if (exploreStore.selectedOdyssey) {
-                  nftStore.setConnectToNftItemId(exploreStore.selectedOdyssey.id);
+                if (map3dStore.selectedOdyssey) {
+                  nftStore.setConnectToNftItemId(map3dStore.selectedOdyssey.id);
                 }
               }}
               onDock={() => alert(`Dock`)}
-              onClose={() => alert('close')}
+              onClose={map3dStore.unselectOdyssey}
             />
           )}
         </styled.Boxes>

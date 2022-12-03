@@ -4,7 +4,7 @@ import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
 const Widgets = lazy(() => import('./widgets/Widgets'));
-const Map3dPage = lazy(() => import('./map3d/pages/UniverseMapPage/Map3dPage'));
+const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
 const Object = lazy(() => import('./object/Object'));
 const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
 const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
@@ -93,7 +93,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.birthOfMe.explore,
     main: () => (
       <>
-        <Map3dPage />
+        <Map3dPage isClickActive />
         <ExplorePage />
         <Widgets isExplorePage />
       </>
