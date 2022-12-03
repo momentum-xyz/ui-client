@@ -52,15 +52,15 @@ class Odyssey extends THREE.Mesh {
   };
 }
 
-let initialized = false;
-
 export const use3DMap = (
   canvas: HTMLCanvasElement,
+  wasLoaded: boolean,
+  onLoaded: () => void,
   onOdysseyClick: (id: string, name: string) => void
 ) => {
   // FIXME: Kovi
-  if (!initialized) {
-    initialized = true;
+  if (!wasLoaded) {
+    onLoaded();
   } else {
     return;
   }

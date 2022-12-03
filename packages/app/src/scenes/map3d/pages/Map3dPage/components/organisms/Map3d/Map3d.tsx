@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {use3DMap} from 'shared/hooks';
@@ -13,10 +13,16 @@ interface PropsInterface {
 const Map3d: FC<PropsInterface> = (props) => {
   const {items, canvasElement, onOdysseyClick} = props;
 
+  const wasLoaded = useRef<boolean>(false);
+
+  const onLoaded = useCallback(() => {
+    wasLoaded.current = true;
+  }, []);
+
   // TODO: Render map using real NTF
   console.log(items);
 
-  use3DMap(canvasElement, onOdysseyClick);
+  use3DMap(canvasElement, wasLoaded.current, onLoaded, onOdysseyClick);
 
   return <></>;
 };
