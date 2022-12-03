@@ -89,7 +89,7 @@ const Widgets: FC = () => {
     },
     {
       title: t('labels.minimap'),
-      icon: 'solar-system',
+      icon: 'vector',
       size: 'medium',
       isSelected: minimapStore.minimapDialog.isOpen,
       onClick: minimapStore.minimapDialog.toggle

@@ -13,10 +13,11 @@ const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = (props) => {
   const {widgetsStore, sessionStore, mainStore} = useStore();
+  const {unityStore, agoraStore} = mainStore;
   const {profileStore} = widgetsStore;
-  const {unityStore} = mainStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
   useEffect(() => {
     // FIXME: Use user from sessionStore. After 6th
@@ -79,6 +80,13 @@ const ProfileWidget: FC = (props) => {
 
               <ProfileSettings
                 isEditMode={isEditMode}
+                isDeviceSettings={isDeviceSettings}
+                audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
+                audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
+                onSelectAudioDevice={agoraStore.selectAudioInput}
+                onToggleDeviceSettings={() => {
+                  setIsDeviceSettings(!isDeviceSettings);
+                }}
                 onToggleEditMode={() => {
                   if (isEditMode) {
                     profileStore.fetchProfile();

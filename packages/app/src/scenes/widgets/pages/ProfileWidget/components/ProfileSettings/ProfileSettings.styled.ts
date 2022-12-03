@@ -20,6 +20,7 @@ export const SettingsItem = styled.div`
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid rgba(255, 242, 241, 0.2);
+  align-items: center;
   gap: 10px;
 
   &.active {
@@ -32,4 +33,13 @@ export const SettingsItem = styled.div`
 export const SettingsValue = styled.a`
   font-size: var(--font-size-xs);
   font-weight: 400;
+`;
+
+export const DeviceItem = styled.div`
+  padding: 6px 0 6px 10px;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid rgba(255, 242, 241, 0.2);
+  align-items: center;
+  gap: 10px;
 `;
