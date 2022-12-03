@@ -76,6 +76,7 @@ const NftStore = types
       stakingAtMe: types.optional(types.map(StakeDetail), {}),
       stakingAtOthers: types.optional(types.map(StakeDetail), {}),
       stakingDashorboardDialog: types.optional(Dialog, {}),
+      accumulatedRewards: 0,
       isLoading: false
     })
   )
@@ -534,13 +535,15 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      const [stakingAt, staked] = yield Promise.all([
+      const [stakingAt, staked, rewards] = yield Promise.all([
         self.channel.query.stake.stakingAt(address),
-        self.channel.query.stake.staked([collectionId, userNftItemId])
+        self.channel.query.stake.staked([collectionId, userNftItemId]),
+        self.channel.query.stake.stakersRewards(address)
       ]);
 
       console.log('stakingAt', stakingAt?.toHuman());
       console.log('staked', staked?.toHuman());
+      console.log('rewards', rewards?.toHuman());
       const stakingAtArr = stakingAt?.unwrapOr(null) || [];
       const stakedArr = staked?.unwrapOr(null) || [];
 
@@ -588,8 +591,11 @@ const NftStore = types
         );
       }
 
+      self.accumulatedRewards = rewards?.toNumber() || 0;
+
       console.log('stakingAtOthers', self.stakingAtOthers);
       console.log('stakingAtMe', self.stakingAtMe);
+      console.log('accumulatedRewards', self.accumulatedRewards);
     }),
     stake: flow(function* (
       address: string,
