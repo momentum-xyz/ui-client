@@ -39,9 +39,8 @@ interface PropsInterface {
 }
 
 const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
-  const {birthOfMeStore, authStore} = useStore();
-  const {nftStore} = birthOfMeStore;
-  const {wallet: authWallet, accounts, accountOptions} = authStore;
+  const {authStore} = useStore();
+  const {wallet: authWallet, accounts, accountOptions, nftStore} = authStore;
   // TODO load staking info for all accounts
   const {stakingAtOthers} = nftStore;
 

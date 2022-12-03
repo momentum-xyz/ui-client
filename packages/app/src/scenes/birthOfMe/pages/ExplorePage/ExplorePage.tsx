@@ -16,8 +16,8 @@ import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
   const {birthOfMeStore, authStore} = useStore();
-  const {exploreStore, nftStore} = birthOfMeStore;
-  const {wallet} = authStore;
+  const {exploreStore} = birthOfMeStore;
+  const {wallet, nftStore} = authStore;
 
   useEffect(() => {
     exploreStore.init();
@@ -27,7 +27,6 @@ const ExplorePage: FC = () => {
     (async () => {
       // TEMP
       await authStore.init();
-      await nftStore.init();
       const {wallet} = authStore;
       if (!wallet) {
         return;

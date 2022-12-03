@@ -6,10 +6,10 @@ import {useStore} from 'shared/hooks';
 import {UniverseMap3d} from './components';
 
 const Map3dPage: FC = () => {
-  const {birthOfMeStore} = useStore();
-  const {nftStore} = birthOfMeStore;
+  const {nftStore} = useStore().authStore;
 
   useEffect(() => {
+    // we need this??
     nftStore.init();
   }, [nftStore]);
 

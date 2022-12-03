@@ -1,4 +1,4 @@
-import {NftItemInterface} from 'scenes/birthOfMe/stores/NftStore/models';
+import {NftItemInterface} from 'stores/NftStore/models';
 
 import {OdysseyFeedInterface, OdysseyItemInterface} from './ExploreStore';
 

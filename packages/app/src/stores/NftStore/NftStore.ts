@@ -396,7 +396,7 @@ const NftStore = types
         );
       });
       const injectedAddresses = SubstrateProvider.getKeyringAddresses();
-      console.log('injectedAddresses', injectedAddresses);
+      console.log('injectedAddresses', injectedAddresses, 'ss58Format', self.ss58Format);
       self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
     }),
     fetchNfts: flow(function* () {
@@ -731,6 +731,13 @@ const NftStore = types
       );
 
       self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
+      console.log(
+        'Chain Info',
+        self.tokenSymbol,
+        self.ss58Format,
+        self.chainDecimals,
+        self.existentialDeposit
+      );
       // yield self.getMinNominatorBond();
     }
   }))
