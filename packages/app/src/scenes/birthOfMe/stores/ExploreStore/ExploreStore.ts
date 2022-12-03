@@ -2,8 +2,7 @@ import {cast, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {SearchQuery} from 'core/models';
-
-import {NftItemInterface} from '../NftStore/models';
+import {NftItemInterface} from 'stores/NftStore/models';
 
 import {ODYSSEY_FEED, ODYSSEY_LIST} from './_mocks';
 
