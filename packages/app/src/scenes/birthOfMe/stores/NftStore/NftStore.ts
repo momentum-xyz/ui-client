@@ -662,6 +662,24 @@ const NftStore = types
         console.log('Error getting rewards:', err);
         throw err;
       }
+    }),
+    requestInitialFunds: flow(function* (address: string) {
+      address = formatAddress(address);
+      console.log('Request initial funds', address);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+      const tx = self.channel.tx.faucet.getTokens();
+
+      console.log('Sign and send', tx);
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error getting initial funds:', err);
+        throw err;
+      }
     })
     // getMinNominatorBond: flow(function* () {
     //   const minNominatorBond = self.channel
