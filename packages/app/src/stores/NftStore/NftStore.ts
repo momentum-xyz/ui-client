@@ -10,7 +10,7 @@ import {
 } from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
-import {ResetModel} from '@momentum-xyz/core';
+import {ResetModel, Dialog} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, PolkadotUnlockingDuration} from 'core/models';
@@ -49,6 +49,14 @@ const formatAddress = (address: string, network = 42) => {
   return keyring.encodeAddress(address, network);
 };
 
+// TODO change to BN
+interface AccountBalanceInterface {
+  free: number;
+  reserved: number;
+  miscFrozen: number;
+  feeFrozen: number;
+}
+
 const NftStore = types
   .compose(
     ResetModel,
@@ -75,6 +83,15 @@ const NftStore = types
       connectToNftItemId: types.maybeNull(types.number),
       stakingAtMe: types.optional(types.map(StakeDetail), {}),
       stakingAtOthers: types.optional(types.map(StakeDetail), {}),
+      stakingDashorboardDialog: types.optional(Dialog, {}),
+      accumulatedRewards: 0,
+      balance: types.optional(types.frozen<AccountBalanceInterface>(), {
+        free: 0,
+        reserved: 0,
+        miscFrozen: 0,
+        feeFrozen: 0
+      }),
+
       isLoading: false
     })
   )
@@ -85,13 +102,15 @@ const NftStore = types
     customRewardDestinationBalance: DeriveBalancesAll | null;
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
+    unsubscribeBalanceSubscription: (() => void) | null;
   }>(() => ({
     channel: null,
     stashBalanceAll: null,
     controllerBalanceAll: null,
     customRewardDestinationBalance: null,
     stakingInfo: null,
-    sessionProgress: null
+    sessionProgress: null,
+    unsubscribeBalanceSubscription: null
   }))
   .views((self) => {
     return {
@@ -271,6 +290,9 @@ const NftStore = types
     setConnectToNftItemId(itemId: number | null) {
       self.connectToNftItemId = itemId;
     },
+    setBalance(payload: AccountBalanceInterface) {
+      self.balance = payload;
+    },
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
     },
@@ -394,7 +416,7 @@ const NftStore = types
         );
       });
       const injectedAddresses = SubstrateProvider.getKeyringAddresses();
-      console.log('injectedAddresses', injectedAddresses);
+      console.log('injectedAddresses', injectedAddresses, 'ss58Format', self.ss58Format);
       self.setInjectAddresses(injectedAddresses as KeyringAddressType[]);
     }),
     fetchNfts: flow(function* () {
@@ -533,13 +555,15 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      const [stakingAt, staked] = yield Promise.all([
+      const [stakingAt, staked, rewards] = yield Promise.all([
         self.channel.query.stake.stakingAt(address),
-        self.channel.query.stake.staked([collectionId, userNftItemId])
+        self.channel.query.stake.staked([collectionId, userNftItemId]),
+        self.channel.query.stake.stakersRewards(address)
       ]);
 
       console.log('stakingAt', stakingAt?.toHuman());
       console.log('staked', staked?.toHuman());
+      console.log('rewards', rewards?.toHuman());
       const stakingAtArr = stakingAt?.unwrapOr(null) || [];
       const stakedArr = staked?.unwrapOr(null) || [];
 
@@ -587,8 +611,11 @@ const NftStore = types
         );
       }
 
+      self.accumulatedRewards = rewards?.toNumber() || 0;
+
       console.log('stakingAtOthers', self.stakingAtOthers);
       console.log('stakingAtMe', self.stakingAtMe);
+      console.log('accumulatedRewards', self.accumulatedRewards);
     }),
     stake: flow(function* (
       address: string,
@@ -596,7 +623,8 @@ const NftStore = types
       itemId: number,
       collectionId: number = DEFAULT_COLECTION_ID
     ) {
-      console.log('Stake', itemId, amount);
+      address = formatAddress(address);
+      console.log('Stake', itemId, amount, address);
       if (!self.channel) {
         throw new Error('Channel is not initialized');
       }
@@ -615,16 +643,18 @@ const NftStore = types
     }),
     unstake: flow(function* (
       address: string,
+      amount: number | null,
       itemId: number,
       collectionId: number = DEFAULT_COLECTION_ID
     ) {
-      console.log('Untake', itemId);
+      address = formatAddress(address);
+      console.log('Unstake', itemId, address);
       if (!self.channel) {
         throw new Error('Channel is not initialized');
       }
       const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
+      const tx = self.channel.tx.stake.unstake(collectionId, itemId, amount);
       console.log('Sign and send', tx);
 
       try {
@@ -636,6 +666,7 @@ const NftStore = types
       }
     }),
     getRewards: flow(function* (address: string) {
+      address = formatAddress(address);
       console.log('Get rewards', address);
       if (!self.channel) {
         throw new Error('Channel is not initialized');
@@ -650,6 +681,24 @@ const NftStore = types
         console.log('res', res);
       } catch (err) {
         console.log('Error getting rewards:', err);
+        throw err;
+      }
+    }),
+    requestInitialFunds: flow(function* (address: string) {
+      address = formatAddress(address);
+      console.log('Request initial funds', address);
+      if (!self.channel) {
+        throw new Error('Channel is not initialized');
+      }
+      const {account, options} = yield prepareSignAndSend(address);
+      const tx = self.channel.tx.faucet.getTokens();
+
+      console.log('Sign and send', tx);
+      try {
+        const res = yield tx.signAndSend(account.address, options);
+        console.log('res', res);
+      } catch (err) {
+        console.log('Error getting initial funds:', err);
         throw err;
       }
     })
@@ -703,8 +752,34 @@ const NftStore = types
       );
 
       self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
+      console.log(
+        'Chain Info',
+        self.tokenSymbol,
+        self.ss58Format,
+        self.chainDecimals,
+        self.existentialDeposit
+      );
       // yield self.getMinNominatorBond();
-    }
+    },
+    subscribeToBalanseChanges: flow(function* (address: string) {
+      if (!self.channel) {
+        return;
+      }
+      if (self.unsubscribeBalanceSubscription) {
+        console.log('Unsubscribe from balance subscription');
+        self.unsubscribeBalanceSubscription();
+      }
+      self.unsubscribeBalanceSubscription = yield self.channel.query.system.account(
+        address,
+        ({nonce, data: balance}: any) => {
+          console.log(
+            `free balance is ${balance.free} with ${balance.reserved} reserved and a nonce of ${nonce}`
+          );
+          console.log('balance', balance.toHuman(), balance);
+          self.setBalance(balance);
+        }
+      );
+    })
   }))
   .actions((self) => ({
     init: flow(function* () {

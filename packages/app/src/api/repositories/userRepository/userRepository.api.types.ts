@@ -25,8 +25,16 @@ export interface CheckUserRequest {
 
 export interface CheckUserResponse extends UserInterface {}
 
-/** FETCH USER **/
+/** FETCH ME **/
 
-export interface FetchUserRequest {}
+export interface FetchMeRequest {}
+
+export interface FetchMeResponse extends UserInterface {}
+
+/** FETCH User **/
+
+export interface FetchUserRequest {
+  userId: string;
+}
 
 export interface FetchUserResponse extends UserInterface {}

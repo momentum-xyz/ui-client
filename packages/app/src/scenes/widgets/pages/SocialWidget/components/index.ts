@@ -1,2 +1,2 @@
-export * from './SocialTabBar';
-export * from './VoicePanel';
+export * from './molecules';
+export * from './organisms';

@@ -1,4 +1,4 @@
-import {Avatar, Text} from '@momentum-xyz/ui-kit';
+import {Text} from '@momentum-xyz/ui-kit';
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
@@ -17,26 +17,6 @@ export const Body = styled.div`
 
   grid-template-columns: 1fr 1fr 1fr;
   grid-auto-rows: 80px;
-`;
-
-export const Attendee = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-`;
-
-export const AttendeeAvatar = styled(Avatar)`
-  border-color: ${(props) => props.theme.accent} !important;
-  border-width: 2px !important;
-`;
-
-export const AttendeeName = styled(Text)`
-  overflow: hidden;
-  width: 60px;
 `;
 
 export const Footer = styled.div`

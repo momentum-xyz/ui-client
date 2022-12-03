@@ -47,9 +47,9 @@ interface PropsInterface {
 }
 
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
-  const {birthOfMeStore, authStore} = useStore();
-  const {nftStore} = birthOfMeStore;
-  const {wallet: authWallet, accounts, accountOptions} = authStore;
+  const {authStore} = useStore();
+  const {wallet: authWallet, accounts, accountOptions, nftStore} = authStore;
+  const {balance} = nftStore;
 
   const [wallet = accounts[0]?.address, setWallet] = useState(authWallet);
 
@@ -130,7 +130,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 }}
               />
               <Heading type="h2" label="Balance" />
-              <Text size="m" text="TODO" align="left" />
+              <Text size="m" text={JSON.stringify(balance)} align="left" />
               <Heading type="h2" label="start Contributing" />
               <Input value={amount} onChange={(val) => setAmount(Number(val))} />
             </div>
