@@ -7,17 +7,23 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
 import {
-  OnlineUsersWidget,
+  ProfileWidget,
   FlyToMeWidget,
   MinimapWidget,
   ScreenShareWidget,
   SocialWidget,
   CalendarWidget,
-  ProfileWidget
+  OnlineUsersWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
-const Widgets: FC = () => {
+interface PropsInterface {
+  isExplorePage?: boolean;
+}
+
+const Widgets: FC<PropsInterface> = (props) => {
+  const {isExplorePage} = props;
+
   const {
     sessionStore,
     widgetsStore,
@@ -27,12 +33,10 @@ const Widgets: FC = () => {
     agoraStore,
     objectStore
   } = useStore();
-  const {profileStore, minimapStore, flyToMeStore, screenShareStore, socialStore, calendarStore} =
-    widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
-  const {user} = sessionStore;
   const {asset: asset2D} = objectStore;
+  const {user} = sessionStore;
 
   const {t} = useTranslation();
 
@@ -42,8 +46,16 @@ const Widgets: FC = () => {
 
   const handleOpenScreenShare = () => {
     agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
-    screenShareStore.widget.open();
+    widgetsStore.screenShareStore.widget.open();
   };
+
+  const leftToolbarIcons: ToolbarIconInterface[] = [
+    {
+      title: t('labels.notifications'),
+      icon: 'bell',
+      size: 'medium'
+    }
+  ];
 
   const rightToolbarIcons: ToolbarIconInterface[] = [
     {
@@ -56,15 +68,15 @@ const Widgets: FC = () => {
       title: t('labels.calendar'),
       icon: 'calendar',
       size: 'medium',
-      onClick: calendarStore.widget.open,
+      onClick: widgetsStore.calendarStore.widget.open,
       disabled: flightStore.isFlightWithMe
     },
     {
       title: t('labels.worldChat'),
       icon: 'chat',
       size: 'medium',
-      onClick: socialStore.widget.toggle,
-      isSelected: asset2D?.isExpanded !== true && socialStore.widget.isOpen
+      onClick: widgetsStore.socialStore.widget.toggle,
+      isSelected: asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen
     },
     {
       title: 'Fly to me',
@@ -81,60 +93,61 @@ const Widgets: FC = () => {
     }
   ];
 
-  const leftToolbarIcons: ToolbarIconInterface[] = [
-    {
-      title: t('labels.notifications'),
-      icon: 'bell',
-      size: 'medium'
-    },
-    {
-      title: t('labels.minimap'),
-      icon: 'vector',
-      size: 'medium',
-      isSelected: minimapStore.minimapDialog.isOpen,
-      onClick: minimapStore.minimapDialog.toggle
-    }
-  ];
-
   return (
     <>
       <styled.Footer data-testid="Widgets-test">
         <styled.LeftToolbars>
           <ToolbarIconList>
-            {user?.profile && (
-              <ToolbarIcon title={t('titles.profile')} onClick={profileStore.profileDialog.open}>
-                <Avatar
-                  size="extra-small"
-                  status={user.status}
-                  avatarSrc={user.avatarSrc}
-                  showBorder
-                  showHover
-                />
-              </ToolbarIcon>
-            )}
+            <ToolbarIcon
+              title={t('titles.profile')}
+              onClick={widgetsStore.profileStore.profileDialog.open}
+            >
+              <Avatar
+                size="extra-small"
+                status={user?.status}
+                avatarSrc={user?.avatarSrc}
+                showBorder
+                showHover
+              />
+            </ToolbarIcon>
+
             {leftToolbarIcons.map((item) => (
               <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />
             ))}
+
+            {!isExplorePage && (
+              <ToolbarIcon
+                title={t('labels.minimap')}
+                icon="vector"
+                size="medium"
+                isSelected={widgetsStore.minimapStore.minimapDialog.isOpen}
+                onClick={widgetsStore.minimapStore.minimapDialog.toggle}
+                state={{canGoBack: true}}
+              />
+            )}
           </ToolbarIconList>
         </styled.LeftToolbars>
-        <styled.RightToolbars>
-          <styled.OnlineUsers>
-            <OnlineUsersWidget currentUser={sessionStore.user} />
-          </styled.OnlineUsers>
-          <ToolbarIconList>
-            {rightToolbarIcons.map((item) => (
-              <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />
-            ))}
-          </ToolbarIconList>
-        </styled.RightToolbars>
+
+        {!isExplorePage && (
+          <styled.RightToolbars>
+            <styled.OnlineUsers>
+              <OnlineUsersWidget currentUser={sessionStore.user} />
+            </styled.OnlineUsers>
+            <ToolbarIconList>
+              {rightToolbarIcons.map((item) => (
+                <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />
+              ))}
+            </ToolbarIconList>
+          </styled.RightToolbars>
+        )}
       </styled.Footer>
 
-      {profileStore.profileDialog.isOpen && <ProfileWidget />}
-      {minimapStore.minimapDialog.isOpen && <MinimapWidget />}
-      {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
-      {screenShareStore.widget.isOpen && <ScreenShareWidget />}
-      {calendarStore.widget.isOpen && <CalendarWidget />}
-      {asset2D?.isExpanded !== true && socialStore.widget.isOpen && <SocialWidget />}
+      {widgetsStore.profileStore.profileDialog.isOpen && <ProfileWidget />}
+      {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}
+      {widgetsStore.flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
+      {widgetsStore.screenShareStore.widget.isOpen && <ScreenShareWidget />}
+      {widgetsStore.calendarStore.widget.isOpen && <CalendarWidget />}
+      {asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen && <SocialWidget />}
     </>
   );
 };

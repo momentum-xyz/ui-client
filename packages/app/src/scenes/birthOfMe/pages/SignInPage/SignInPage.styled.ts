@@ -9,7 +9,7 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-  padding: 20px 20px 50px 20px;
+  padding: 20px 10px 50px 10px;
   display: flex;
   justify-content: space-between;
   width: 100%;

@@ -4,7 +4,6 @@ import {getSnapshot} from 'mobx-state-tree';
 import {Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Footer} from 'ui-kit';
 import {ExplorePanel, SelectedOdyssey, StakingForm} from 'scenes/birthOfMe/components';
 
 import * as styled from './ExplorePage.styled';
@@ -85,8 +84,6 @@ const ExplorePage: FC = () => {
           />
         </styled.Boxes>
       </styled.Wrapper>
-
-      <Footer />
     </styled.Container>
   );
 };

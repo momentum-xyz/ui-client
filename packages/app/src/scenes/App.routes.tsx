@@ -3,6 +3,7 @@ import React, {lazy} from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
+const Widgets = lazy(() => import('./widgets/Widgets'));
 const Map3dPage = lazy(() => import('./map3d/pages/UniverseMapPage/Map3dPage'));
 const Object = lazy(() => import('./object/Object'));
 const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
@@ -84,6 +85,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage />
         <BirthOfMePage />
+        <Widgets isExplorePage />
       </>
     )
   },
@@ -93,6 +95,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage />
         <ExplorePage />
+        <Widgets isExplorePage />
       </>
     )
   },
