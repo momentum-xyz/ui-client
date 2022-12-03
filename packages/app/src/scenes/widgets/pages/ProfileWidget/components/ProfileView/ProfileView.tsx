@@ -53,7 +53,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
 
         {user.profile?.location && (
           <styled.InfoItem>
-            <IconSvg name="locate" size="normal" />
+            <IconSvg name="locator" size="normal" />
             <styled.LocationText text={user.profile.location} size="xxs" isMultiline={false} />
           </styled.InfoItem>
         )}

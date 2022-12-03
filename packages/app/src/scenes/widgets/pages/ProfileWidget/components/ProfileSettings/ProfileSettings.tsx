@@ -38,12 +38,12 @@ const ProfileSettings: FC<PropsInterface> = ({
 
       <styled.SettingsContainer>
         <styled.SettingsItem className={cn(isEditMode && 'active')}>
-          <IconSvg name={!isEditMode ? 'edit' : 'check'} size="normal" />
+          <IconSvg name={!isEditMode ? 'pencil' : 'check'} size="normal" />
           <styled.SettingsValue onClick={onToggleEditMode}>Edit profile</styled.SettingsValue>
         </styled.SettingsItem>
 
         <styled.SettingsItem className={cn(isDeviceSettings && 'active')}>
-          <IconSvg name="gear" size="normal" />
+          <IconSvg name={!isDeviceSettings ? 'gear' : 'check'} size="normal" />
           <styled.SettingsValue onClick={onToggleDeviceSettings}>
             Device settings
           </styled.SettingsValue>
@@ -66,7 +66,7 @@ const ProfileSettings: FC<PropsInterface> = ({
         )}
 
         <styled.SettingsItem>
-          <IconSvg name="exit" size="normal" />
+          <IconSvg name="go" size="normal" />
           <styled.SettingsValue onClick={onLogout}>Logout</styled.SettingsValue>
         </styled.SettingsItem>
       </styled.SettingsContainer>

@@ -27,7 +27,7 @@ const MinimapWidget: FC = () => {
 
   return (
     <Dialog
-      icon="solar-system"
+      icon="vector"
       theme={theme}
       position="bottomLeft"
       headerStyle="uppercase"

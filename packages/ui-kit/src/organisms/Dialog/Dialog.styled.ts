@@ -53,6 +53,7 @@ export const Modal = styled.div`
   }
 
   &.leftTop {
+    pointer-events: none;
     align-items: flex-start;
     justify-content: flex-start;
     top: 0;
