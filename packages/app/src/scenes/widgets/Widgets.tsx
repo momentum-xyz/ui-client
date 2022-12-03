@@ -8,6 +8,7 @@ import {useStore} from 'shared/hooks';
 import {
   OnlineUsersWidget,
   FlyToMeWidget,
+  MinimapWidget,
   ScreenShareWidget,
   SocialWidget,
   CalendarWidget,
@@ -25,7 +26,8 @@ const Widgets: FC = () => {
     agoraStore,
     objectStore
   } = useStore();
-  const {profileStore, flyToMeStore, screenShareStore, socialStore, calendarStore} = widgetsStore;
+  const {profileStore, minimapStore, flyToMeStore, screenShareStore, socialStore, calendarStore} =
+    widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {unityStore, worldStore} = mainStore;
   const {user} = sessionStore;
@@ -35,7 +37,6 @@ const Widgets: FC = () => {
 
   useEffect(() => {
     worldBuilderStore.fetchPermissions();
-    unityStore.hideMinimap();
   }, [unityStore, worldBuilderStore]);
 
   const handleOpenScreenShare = () => {
@@ -83,6 +84,13 @@ const Widgets: FC = () => {
       title: t('labels.notifications'),
       icon: 'bell',
       size: 'medium'
+    },
+    {
+      title: t('labels.minimap'),
+      icon: 'solar-system',
+      size: 'medium',
+      isSelected: minimapStore.minimapDialog.isOpen,
+      onClick: minimapStore.minimapDialog.toggle
     }
   ];
 
@@ -120,6 +128,7 @@ const Widgets: FC = () => {
       </styled.Footer>
 
       {profileStore.profileDialog.isOpen && <ProfileWidget />}
+      {minimapStore.minimapDialog.isOpen && <MinimapWidget />}
       {flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
       {screenShareStore.widget.isOpen && <ScreenShareWidget />}
       {calendarStore.widget.isOpen && <CalendarWidget />}

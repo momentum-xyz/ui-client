@@ -40,6 +40,7 @@ export interface PropsInterface extends PropsWithThemeInterface {
   isTruncateHeader?: boolean;
   showIcon?: boolean;
   headerHeadingAlign?: TextAlignType;
+  isMinimap?: boolean;
   tabs?: React.ReactElement;
   closeButtonSize?: SizeType;
 }
@@ -65,6 +66,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isTruncateHeader = false,
     showIcon = true,
     headerHeadingAlign,
+    isMinimap = false,
     closeButtonSize = 'normal',
     ...restProps
   } = props;
@@ -76,13 +78,19 @@ const PanelLayout: FC<PropsInterface> = (props) => {
         hasBorder && 'hasBorder',
         captureAllPointerEvents && 'allPointerEvents',
         showOverflow && 'showOverflow',
+        isMinimap && 'isMinimap',
         className
       )}
       {...componentSize}
     >
       {(headerPlaceholder || restProps.title || (restProps.headerIconName && showIcon)) && (
         <styled.Header
-          className={cn(headerStyle, !restProps.title && 'noTitle', titleHeight && 'titleHeight')}
+          className={cn(
+            headerStyle,
+            !restProps.title && 'noTitle',
+            titleHeight && 'titleHeight',
+            isMinimap && 'isMinimap'
+          )}
           theme={restProps.theme}
         >
           {restProps.headerIconName && showIcon && (
