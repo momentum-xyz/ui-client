@@ -68,6 +68,11 @@ export const Header = styled.div`
     padding-bottom: 15px;
     border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.5)};
   }
+
+  &.isMinimap {
+    padding-bottom: 15px;
+    background: ${(props) => props.theme.bg};
+  }
 `;
 
 export const Body = styled.div`
@@ -102,6 +107,13 @@ export const Container = styled.div<ComponentSizeInterface>`
 
   &.hasBorder {
     border: 1px solid ${(props) => props.theme.accent};
+  }
+
+  &.isMinimap {
+    background: initial;
+    border: 1px solid ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
+    backdrop-filter: none;
+    pointer-events: none;
   }
 
   :not(&.showOverflow) {

@@ -4,7 +4,6 @@ import {getSnapshot} from 'mobx-state-tree';
 import {Button, Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {Footer} from 'ui-kit';
 import {
   ExplorePanel,
   SelectedOdyssey,
@@ -123,8 +122,6 @@ const ExplorePage: FC = () => {
           />
         </styled.Boxes>
       </styled.Wrapper>
-
-      <Footer />
     </styled.Container>
   );
 };

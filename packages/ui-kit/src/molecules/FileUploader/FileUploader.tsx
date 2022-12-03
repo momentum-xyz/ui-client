@@ -9,7 +9,7 @@ import * as styled from './FileUploader.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   label: string;
-  buttonSize?: 'normal' | 'medium';
+  buttonSize?: 'small' | 'normal' | 'medium';
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;

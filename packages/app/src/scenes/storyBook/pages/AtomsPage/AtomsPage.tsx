@@ -134,6 +134,9 @@ const AtomsPage: FC = () => {
           <IconSvg size="large" name="sound" />
           <IconSvg size="large" name="solar-system" />
           <IconSvg size="large" name="hierarchy" />
+          <IconSvg size="large" name="vector" />
+          <IconSvg size="large" name="go" />
+          <IconSvg size="large" name="locator" />
         </styled.Section>
 
         <styled.Name>

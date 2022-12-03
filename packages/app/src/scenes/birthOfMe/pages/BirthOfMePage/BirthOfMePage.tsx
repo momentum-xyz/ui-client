@@ -4,7 +4,7 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {Footer, SinusBox} from 'ui-kit';
+import {SinusBox} from 'ui-kit';
 import {BuildOdyssey, ExplorePanel} from 'scenes/birthOfMe/components';
 
 import * as styled from './BirthOfMePage.styled';
@@ -39,7 +39,6 @@ const BirthOfMePage: FC = () => {
           />
         </styled.Boxes>
       </styled.Wrapper>
-      <Footer />
     </styled.Container>
   );
 };
