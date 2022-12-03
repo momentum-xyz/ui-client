@@ -42,7 +42,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const {authStore} = useStore();
   const {wallet: authWallet, accounts, accountOptions, nftStore} = authStore;
   // TODO load staking info for all accounts
-  const {stakingAtOthers, balance} = nftStore;
+  const {stakingAtOthers, balance, accumulatedRewards} = nftStore;
 
   const [wallet = accounts[0]?.address, setWallet] = useState(authWallet);
   const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
@@ -139,7 +139,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
               ))}
               <Text size="m" text="TODO" align="left" />
               <Heading type="h2" label="Rewards" />
-              <Text size="m" text="TODO" align="left" />
+              <Text size="m" text={`${accumulatedRewards}`} align="left" />
               <Button label="Get Rewards" onClick={() => setGetRewards(true)} />
             </div>
             {/* <styled.Buttons>
