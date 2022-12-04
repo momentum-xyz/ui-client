@@ -1,4 +1,5 @@
 import {Method} from 'axios';
+import {generatePath} from 'react-router-dom';
 
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
@@ -13,7 +14,11 @@ import {
   Web3LoginAcceptRequest,
   Web3LoginAcceptResponse,
   Web3LoginHintConsentRequest,
-  Web3LoginHintConsentResponse
+  Web3LoginHintConsentResponse,
+  MintNftRequest,
+  MintNftResponse,
+  MintNftCheckJobRequest,
+  MintNftCheckJobResponse
 } from './web3Repository.api.types';
 import {web3RepositoryEndpoints} from './web3Repository.api.endpoints';
 
@@ -81,4 +86,24 @@ export const consentAccept: RequestInterface<
 
   const URL: string = web3RepositoryEndpoints().consent;
   return request(URL, requestParams);
+};
+
+export const mintNft: RequestInterface<MintNftRequest, MintNftResponse> = (options) => {
+  const {name, image, block_hash, wallet, ...rest} = options;
+  const requestParams = {
+    method: 'post' as Method,
+    data: {block_hash, wallet, meta: {name, image}},
+    ...rest
+  };
+
+  const URL: string = web3RepositoryEndpoints().mintNft;
+  return request(URL, requestParams);
+};
+
+export const mintNftCheckJob: RequestInterface<MintNftCheckJobRequest, MintNftCheckJobResponse> = (
+  options
+) => {
+  const {job_id, ...rest} = options;
+  const URL: string = generatePath(web3RepositoryEndpoints().mintNftCheckJob, {job_id});
+  return request.get(URL, rest);
 };
