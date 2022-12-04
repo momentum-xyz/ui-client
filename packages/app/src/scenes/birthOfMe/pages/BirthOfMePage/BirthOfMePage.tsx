@@ -10,7 +10,7 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {exploreStore, authStore} = useStore();
+  const {exploreStore, authStore, map3dStore} = useStore();
   const {nftStore} = authStore;
 
   const history = useHistory();
@@ -31,9 +31,10 @@ const BirthOfMePage: FC = () => {
           <ExplorePanel
             odysseyCount={nftStore.nftItems.length}
             newsFeed={exploreStore.newsFeed}
-            searchQuery={exploreStore.searchQuery}
-            odysseyList={exploreStore.odysseyList}
-            onSearch={exploreStore.searchOdysseys}
+            searchQuery={nftStore.searchQuery}
+            odysseyList={nftStore.searchedNftItems}
+            onSearch={nftStore.searchNft}
+            onSelect={map3dStore.selectOdyssey}
             onTeleport={(id) => alert(`Teleport to ${id}`)}
             onConnect={(id) => alert(`Connect to ${id}`)}
           />

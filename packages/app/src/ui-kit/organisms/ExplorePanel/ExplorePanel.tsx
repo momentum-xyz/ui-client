@@ -17,15 +17,23 @@ interface PropsInterface {
   newsFeed: OdysseyFeedInterface[];
   odysseyList: NftItemInterface[];
   onSearch: () => void;
-  onTeleport: (id: string) => void;
-  onConnect: (id: string) => void;
+  onTeleport: (nft: NftItemInterface) => void;
+  onSelect: (nft: NftItemInterface) => void;
+  onConnect: (id: number) => void;
 }
 
 const SEARCH_DELAY_MS = 200;
 
-const ExplorePanel: FC<PropsInterface> = (props) => {
-  const {odysseyCount, newsFeed, odysseyList, searchQuery, onSearch, onTeleport, onConnect} = props;
-
+const ExplorePanel: FC<PropsInterface> = ({
+  odysseyCount,
+  newsFeed,
+  odysseyList,
+  searchQuery,
+  onSearch,
+  onTeleport,
+  onSelect,
+  onConnect
+}) => {
   const debouncedSearch = useDebouncedCallback(onSearch, SEARCH_DELAY_MS);
 
   return (
@@ -61,7 +69,7 @@ const ExplorePanel: FC<PropsInterface> = (props) => {
         )}
 
         {searchQuery.isQueryValid && (
-          <OdysseyList odysseyList={odysseyList} onTeleport={onTeleport} />
+          <OdysseyList odysseyList={odysseyList} onTeleport={onTeleport} onSelect={onSelect} />
         )}
 
         {searchQuery.isQueryValid && odysseyList.length === 0 && (

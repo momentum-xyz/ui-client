@@ -4,13 +4,14 @@ import {format} from 'date-fns-tz';
 import {Heading, Button, IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {OdysseyFeedInterface} from 'scenes/explore/stores';
+import {NftItemInterface} from 'stores/NftStore/models';
 
 import * as styled from './NewsFeed.styled';
 
 interface PropsInterface {
   newsFeed: OdysseyFeedInterface[];
-  onTeleport: (id: string) => void;
-  onConnect: (id: string) => void;
+  onTeleport: (nft: NftItemInterface) => void;
+  onConnect: (id: number) => void;
 }
 
 const NewsFeed: FC<PropsInterface> = (props) => {
@@ -69,13 +70,13 @@ const NewsFeed: FC<PropsInterface> = (props) => {
                           size="small"
                           label="Connect"
                           icon="hierarchy"
-                          onClick={() => onConnect(item.id.toString())}
+                          onClick={() => onConnect(item.id)}
                         />
                         <Button
                           size="small"
                           label=""
                           icon="fly-to"
-                          onClick={() => onTeleport(item.id.toString())}
+                          onClick={() => onTeleport(item)}
                         />
                       </styled.Actions>
                     )}

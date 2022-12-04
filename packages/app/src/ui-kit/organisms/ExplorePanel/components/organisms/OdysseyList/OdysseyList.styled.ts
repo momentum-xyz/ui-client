@@ -4,6 +4,7 @@ import {rgba} from 'polished';
 
 export const Inner = styled.div`
   padding: 0 10px;
+  pointer-events: all;
 `;
 
 export const StyledText = styled(Text)``;

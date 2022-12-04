@@ -1,10 +1,9 @@
 import {cast, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {SearchQuery} from 'core/models';
 import {NftItemInterface} from 'stores/NftStore/models';
 
-import {ODYSSEY_FEED, ODYSSEY_LIST} from './_mocks';
+import {ODYSSEY_FEED} from './_mocks';
 
 export interface OdysseyFeedInterface extends NftItemInterface {
   date: string;
@@ -23,9 +22,7 @@ const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
-      newsFeed: types.optional(types.array(types.frozen<OdysseyFeedInterface>()), []),
-      odysseyList: types.optional(types.array(types.frozen<NftItemInterface>()), []),
-      searchQuery: types.optional(SearchQuery, {})
+      newsFeed: types.optional(types.array(types.frozen<OdysseyFeedInterface>()), [])
     })
   )
   .actions((self) => ({
@@ -35,14 +32,6 @@ const ExploreStore = types
     // TODO: Implementation
     fetchNewsFeed(): void {
       self.newsFeed = cast(ODYSSEY_FEED);
-    },
-    // TODO: Implementation
-    searchOdysseys(): void {
-      self.odysseyList = cast(
-        ODYSSEY_LIST.filter((i) =>
-          i.name.toLocaleLowerCase().includes(self.searchQuery.query.toLowerCase())
-        )
-      );
     }
   }))
   .views(() => ({}));
