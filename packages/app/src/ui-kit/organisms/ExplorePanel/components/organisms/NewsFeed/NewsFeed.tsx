@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
 import {Heading, Button, IconSvg, Text} from '@momentum-xyz/ui-kit';
 
-import {OdysseyFeedInterface} from 'scenes/birthOfMe/stores/ExploreStore';
+import {OdysseyFeedInterface} from 'scenes/explore/stores';
 
 import * as styled from './NewsFeed.styled';
 

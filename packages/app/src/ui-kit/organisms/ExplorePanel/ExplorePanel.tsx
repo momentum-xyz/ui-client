@@ -5,8 +5,8 @@ import cn from 'classnames';
 
 import {Box} from 'ui-kit';
 import {SearchQueryModelModelType} from 'core/models';
-import {OdysseyFeedInterface} from 'scenes/birthOfMe/stores/ExploreStore';
 import {NftItemInterface} from 'stores/NftStore/models';
+import {OdysseyFeedInterface} from 'scenes/explore/stores';
 
 import {NewsFeed, OdysseyList} from './components';
 import * as styled from './ExplorePanel.styled';

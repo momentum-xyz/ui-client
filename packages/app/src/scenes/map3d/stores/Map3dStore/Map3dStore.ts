@@ -1,7 +1,7 @@
 import {cast, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {OdysseyItemInterface} from 'scenes/birthOfMe/stores/ExploreStore';
+import {OdysseyItemInterface} from 'scenes/explore/stores';
 
 const Map3dStore = types
   .compose(

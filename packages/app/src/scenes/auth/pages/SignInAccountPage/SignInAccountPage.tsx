@@ -1,24 +1,20 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
-import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from 'scenes/birthOfMe/components';
 
-import * as styled from './StartAccountPage.styled';
+import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './components';
+import * as styled from './SignInAccountPage.styled';
 
-const StartAccountPage: FC = () => {
+const SignInAccountPage: FC = () => {
   const {authStore} = useStore();
 
   const [token, setToken] = useState<string | null>(null);
 
   const history = useHistory();
-
-  useEffect(() => {
-    authStore.init();
-  }, [authStore]);
 
   const signChallengeAndGetToken = useCallback(async () => {
     const token = await authStore.getTokenByWallet();
@@ -47,7 +43,7 @@ const StartAccountPage: FC = () => {
             <>
               <CongratulationsBox />
               <SinusBox />
-              <CreateOdysseyForm onCreate={() => history.push(ROUTES.birthOfMe.birth)} />
+              <CreateOdysseyForm onCreate={() => history.push(ROUTES.birth)} />
             </>
           )}
         </styled.Boxes>
@@ -56,4 +52,4 @@ const StartAccountPage: FC = () => {
   );
 };
 
-export default observer(StartAccountPage);
+export default observer(SignInAccountPage);

@@ -4,12 +4,12 @@ import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
 const Widgets = lazy(() => import('./widgets/Widgets'));
+const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
+const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
+const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
+const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
 const Object = lazy(() => import('./object/Object'));
-const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
-const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
-const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
-const ExplorePage = lazy(() => import('./birthOfMe/pages/ExplorePage/ExplorePage'));
 const LoginPage = lazy(() => import('./auth_OLD/pages/LoginPage/LoginPage'));
 const WorldBuilderLoginPage = lazy(
   () => import('./auth_OLD/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
@@ -62,7 +62,7 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
-    path: ROUTES.birthOfMe.signIn,
+    path: ROUTES.signIn,
     main: () => (
       <>
         <Map3dPage />
@@ -71,16 +71,16 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     )
   },
   {
-    path: ROUTES.birthOfMe.startAccount,
+    path: ROUTES.signInAccount,
     main: () => (
       <>
         <Map3dPage />
-        <StartAccountPage />
+        <SignInAccountPage />
       </>
     )
   },
   {
-    path: ROUTES.birthOfMe.birth,
+    path: ROUTES.birth,
     main: () => (
       <>
         <Map3dPage />
@@ -90,7 +90,7 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     )
   },
   {
-    path: ROUTES.birthOfMe.explore,
+    path: ROUTES.explore,
     main: () => (
       <>
         <Map3dPage isClickActive />

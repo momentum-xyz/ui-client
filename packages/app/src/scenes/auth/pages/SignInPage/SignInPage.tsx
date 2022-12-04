@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -6,8 +6,8 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
 import {GuestLoginFormInterface} from 'core/interfaces';
-import {CreateOdyssey, TravellerBox, Login, LoginGuest} from 'scenes/birthOfMe/components';
 
+import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
@@ -15,16 +15,12 @@ const SignInPage: FC = () => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    authStore.init();
-  }, [authStore]);
-
   const handleLogin = useCallback(async () => {
     const token = await authStore.getTokenByWallet();
     if (token) {
       // TODO: axios
       console.log(token);
-      history.push(ROUTES.birthOfMe.explore);
+      history.push(ROUTES.explore);
     }
   }, [authStore, history]);
 
@@ -34,7 +30,7 @@ const SignInPage: FC = () => {
       if (token) {
         // TODO: axios
         console.log(token);
-        history.push(ROUTES.birthOfMe.explore);
+        history.push(ROUTES.explore);
       }
     },
     [authStore, history]
@@ -47,7 +43,7 @@ const SignInPage: FC = () => {
           <SinusBox />
           <TravellerBox />
           <SinusBox />
-          <CreateOdyssey onCreate={() => history.push(ROUTES.birthOfMe.startAccount)} />
+          <CreateOdyssey onCreate={() => history.push(ROUTES.signInAccount)} />
         </styled.Boxes>
 
         <styled.Boxes>

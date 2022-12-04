@@ -4,18 +4,13 @@ import {getSnapshot} from 'mobx-state-tree';
 import {Button, Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {
-  ExplorePanel,
-  SelectedOdyssey,
-  StakingDashboard,
-  StakingForm
-} from 'scenes/birthOfMe/components';
+import {ExplorePanel} from 'ui-kit';
 
+import {SelectedOdyssey, StakingDashboard, StakingForm} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {birthOfMeStore, authStore, map3dStore} = useStore();
-  const {exploreStore} = birthOfMeStore;
+  const {exploreStore, authStore, map3dStore} = useStore();
   const {wallet, nftStore} = authStore;
 
   useEffect(() => {
@@ -111,7 +106,7 @@ const ExplorePage: FC = () => {
 
         <styled.Boxes>
           <ExplorePanel
-            odysseyCount={exploreStore.odysseyCount}
+            odysseyCount={nftStore.nftItems.length}
             newsFeed={exploreStore.newsFeed}
             searchQuery={exploreStore.searchQuery}
             odysseyList={exploreStore.odysseyList}
