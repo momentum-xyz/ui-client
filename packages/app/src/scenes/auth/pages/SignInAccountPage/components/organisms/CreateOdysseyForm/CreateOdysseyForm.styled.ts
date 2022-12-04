@@ -31,6 +31,14 @@ export const AvatarImageUpload = styled.div`
   position: relative;
 `;
 
+export const ImagePreview = styled.img`
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  object-fit: cover;
+`;
+
 export const AvatarImageInner = styled.div`
   position: absolute;
   left: -4px;
