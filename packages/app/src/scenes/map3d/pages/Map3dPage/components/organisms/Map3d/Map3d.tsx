@@ -7,7 +7,7 @@ import {NftItemInterface} from 'stores/NftStore/models';
 interface PropsInterface {
   items: NftItemInterface[];
   canvasElement: HTMLCanvasElement;
-  onOdysseyClick: (id: string, name: string) => void;
+  onOdysseyClick: (nft: NftItemInterface) => void;
 }
 
 const Map3d: FC<PropsInterface> = (props) => {
@@ -15,14 +15,22 @@ const Map3d: FC<PropsInterface> = (props) => {
 
   const wasLoaded = useRef<boolean>(false);
 
+  const handleOdysseyClick = useCallback(
+    (id: number) => {
+      const selectedOdyssey = items.find((i) => i.id === id);
+      if (selectedOdyssey) {
+        onOdysseyClick(selectedOdyssey);
+      }
+    },
+    [items, onOdysseyClick]
+  );
+
   const onLoaded = useCallback(() => {
     wasLoaded.current = true;
   }, []);
 
-  // TODO: Render map using real NTF
-  console.log(items);
-
-  use3DMap(canvasElement, wasLoaded.current, onLoaded, onOdysseyClick);
+  // FIXME: Center item id
+  use3DMap(canvasElement, items, items[0].id, wasLoaded.current, onLoaded, handleOdysseyClick);
 
   return <></>;
 };

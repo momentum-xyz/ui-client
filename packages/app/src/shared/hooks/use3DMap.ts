@@ -9,6 +9,8 @@ import * as dat from 'dat.gui';
 import {MeshStandardMaterial, SphereGeometry, Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
+import {NftItemInterface} from 'stores/NftStore/models';
+
 import baseAtmos from 'static/images/map/baseAtmos.jpg';
 import temptations from 'static/images/map/temptations.jpg';
 import showTime from 'static/images/map/showTime.jpg';
@@ -54,9 +56,11 @@ class Odyssey extends THREE.Mesh {
 
 export const use3DMap = (
   canvas: HTMLCanvasElement,
+  items: NftItemInterface[],
+  centerItemId: number,
   wasLoaded: boolean,
   onLoaded: () => void,
-  onOdysseyClick: (id: string, name: string) => void
+  onOdysseyClick: (id: number) => void
 ) => {
   // FIXME: Kovi
   if (!wasLoaded) {
@@ -83,6 +87,23 @@ export const use3DMap = (
     });
 
     const odyssey = new Odyssey(geometry, material, id, wallet, name, url);
+
+    return odyssey;
+  };
+
+  // FIXME: NEW. Kovi
+  const createNewOdyssey2 = (item: NftItemInterface) => {
+    const standardTextures = [baseAtmos, temptations, showTime, honey01, iceland01];
+
+    const randNum = Math.floor(Math.random() * standardTextures.length);
+    const texture = standardTextures[randNum];
+
+    const geometry = new SphereGeometry(1, 16, 16);
+    const material = new MeshStandardMaterial({
+      map: new THREE.TextureLoader().load(item.image)
+    });
+
+    const odyssey = new Odyssey(geometry, material, item.id, item.owner, item.name, item.image);
 
     return odyssey;
   };
@@ -263,7 +284,7 @@ export const use3DMap = (
       console.log(targetPlanet);
 
       // FIXME: Extract info from planet (Kovi)
-      onOdysseyClick(targetPlanet.object.uuid, targetPlanet.object.name);
+      onOdysseyClick(targetPlanet.object.number);
 
       // Prepare fly to planets.
       const targetPlanetLocation = new Vector3(
@@ -314,7 +335,9 @@ export const use3DMap = (
     }
   }
 
-  const centerOdyssey = createNewOdyssey(122, 'Wallet Address', 'Frenkie world', 'test.com');
+  // FIXME: KOVI
+  // const centerOdyssey = createNewOdyssey(122, 'Wallet Address', 'Frenkie world', 'test.com');
+  const centerOdyssey = createNewOdyssey2(items.find((i) => i.id === centerItemId));
   scene.add(centerOdyssey);
 
   window.addEventListener('pointermove', onPointerMove);
@@ -339,7 +362,24 @@ export const use3DMap = (
     referenceListOfOdysseys = [...listOfOddyseys];
   };
 
-  ProcessOdyssey();
+  // FIXME: NEW. Kovi
+  const ProcessOdyssey2 = () => {
+    //Build an odyssey for all given entries.
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].id !== centerItemId) {
+        const odyssey = createNewOdyssey2(items[i]);
+        listOfOddyseys.push(odyssey);
+      }
+    }
+
+    referenceListOfOdysseys = [...listOfOddyseys];
+  };
+
+  // FIXME: KOVI
+  // ProcessOdyssey();
+
+  // FIXME: NEW. Kovi
+  ProcessOdyssey2();
 
   /**
    * Create Circular Universe of Odysseys
@@ -479,5 +519,5 @@ export const use3DMap = (
 
   animate();
 
-  return {onOdysseyClick};
+  return {};
 };
