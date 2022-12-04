@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -12,16 +12,10 @@ import * as styled from './SignInAccountPage.styled';
 const SignInAccountPage: FC = () => {
   const {authStore} = useStore();
 
-  const [token, setToken] = useState<string | null>(null);
-
   const history = useHistory();
 
-  const signChallengeAndGetToken = useCallback(async () => {
-    const token = await authStore.getTokenByWallet();
-    // TODO: axios
-    setToken(token);
-    alert(token);
-    console.log(token);
+  const fetchTokenByWallet = useCallback(async () => {
+    await authStore.fetchTokenByWallet();
   }, [authStore]);
 
   return (
@@ -29,17 +23,17 @@ const SignInAccountPage: FC = () => {
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          {!token && (
+          {!authStore.token && (
             <ChoiceYourWallet
               walletOptions={authStore.accountOptions}
               wallet={authStore.wallet}
               isConnectDisabled={authStore.isPending}
               onSelectAddress={authStore.selectWallet}
-              onConnect={signChallengeAndGetToken}
+              onConnect={fetchTokenByWallet}
             />
           )}
 
-          {!!token && (
+          {!!authStore.token && (
             <>
               <CongratulationsBox />
               <SinusBox />

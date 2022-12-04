@@ -6,6 +6,8 @@ import {web3FromSource} from '@polkadot/extension-dapp';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {decodeAddress} from '@polkadot/util-crypto';
 
+//import {getRootStore} from 'core/utils';
+//import {refreshAxiosToken} from 'api/request';
 import {DELAY_DEFAULT, wait} from 'core/utils';
 import {GuestLoginFormInterface} from 'core/interfaces';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
@@ -17,6 +19,8 @@ const AuthStore = types.compose(
   types
     .model('AuthStore', {
       nftStore: types.optional(NftStore, {}),
+
+      token: '',
       wallet: '',
       // TODO adapt nftStore addresses for this
       accounts: types.optional(types.array(types.frozen<InjectedAccountWithMeta>()), []),
@@ -24,6 +28,15 @@ const AuthStore = types.compose(
       challengeRequest: types.optional(RequestModel, {}),
       tokenRequest: types.optional(RequestModel, {})
     })
+    .actions((self) => ({
+      updateAxiosAndUnityTokens(): void {
+        // TODO: Uncomment. Check Unity is ready.
+        // const {unityStore} = getRootStore(self).mainStore;
+        // unityStore.setAuthToken(self.token); // TODO: change key
+        // refreshAxiosToken(self.token);
+        console.log(self.token);
+      }
+    }))
     .actions((self) => ({
       init: flow(function* () {
         if (!self.accounts.length) {
@@ -41,13 +54,15 @@ const AuthStore = types.compose(
         // here?
         self.nftStore.subscribeToBalanseChanges(wallet);
       },
-      getGuestToken: flow(function* (form: GuestLoginFormInterface) {
+      fetchGuestToken: flow(function* (form: GuestLoginFormInterface) {
         const data: AuthGuestTokenRequest = {...form};
         const response = yield self.guestTokenRequest.send(api.authRepository.getGuestToken, data);
+        self.token = response?.token || '';
+        self.updateAxiosAndUnityTokens();
 
-        return response?.token;
+        return !!response?.token;
       }),
-      getTokenByWallet: flow(function* () {
+      fetchTokenByWallet: flow(function* () {
         const publicKey = decodeAddress(self.wallet);
         const hexPublicKey = u8aToHex(publicKey);
 
@@ -73,10 +88,15 @@ const AuthStore = types.compose(
             if (result?.signature) {
               const data = {wallet: hexPublicKey, signedChallenge: result.signature};
               const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
-              return response?.token;
+              self.token = response?.token || '';
+              self.updateAxiosAndUnityTokens();
+
+              return !!response?.token;
             }
           }
         }
+
+        return false;
       })
     }))
     .views((self) => ({

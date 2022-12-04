@@ -15,21 +15,13 @@ const SignInPage: FC = () => {
 
   const history = useHistory();
 
-  const handleLogin = useCallback(async () => {
-    const token = await authStore.getTokenByWallet();
-    if (token) {
-      // TODO: axios
-      console.log(token);
-      history.push(ROUTES.explore);
-    }
-  }, [authStore, history]);
-
-  const handleGuestLogin = useCallback(
-    async (form: GuestLoginFormInterface) => {
-      const token = await authStore.getGuestToken(form);
-      if (token) {
-        // TODO: axios
-        console.log(token);
+  const handleLogin = useCallback(
+    async (isGuest: boolean, form?: GuestLoginFormInterface) => {
+      const isDone =
+        !!form && isGuest
+          ? await authStore.fetchGuestToken(form)
+          : await authStore.fetchTokenByWallet();
+      if (isDone) {
         history.push(ROUTES.explore);
       }
     },
@@ -53,12 +45,15 @@ const SignInPage: FC = () => {
             wallet={authStore.wallet}
             isPending={authStore.isPending}
             onSelectAddress={authStore.selectWallet}
-            onLogin={handleLogin}
+            onLogin={() => handleLogin(false)}
           />
 
           <SinusBox />
           {/* Login as guest */}
-          <LoginGuest isPending={authStore.isGuestPending} onLogin={handleGuestLogin} />
+          <LoginGuest
+            isPending={authStore.isGuestPending}
+            onLogin={(form) => handleLogin(true, form)}
+          />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>
