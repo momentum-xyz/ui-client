@@ -45,6 +45,7 @@ export default class SubstrateProvider {
   static FORMAT_OPTIONS = {withSi: false, forceUnit: '-'};
 
   static async initAPI() {
+    console.log('Connecting to Substrate node', appVariables.KUSAMA_WS_SERVER);
     const provider = new WsProvider(appVariables.KUSAMA_WS_SERVER);
     return ApiPromise.create({provider});
   }

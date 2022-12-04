@@ -73,14 +73,11 @@ const App: FC = () => {
   }, [initApplication, history, t]);
 
   useEffect(() => {
-    authStore.init();
-  }, [authStore]);
-
-  useEffect(() => {
     if (configStore.isConfigReady) {
+      authStore.init();
       mainStore.init();
     }
-  }, [configStore.isConfigReady, mainStore]);
+  }, [authStore, configStore.isConfigReady, mainStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
 
