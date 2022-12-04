@@ -23,7 +23,6 @@ const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
-      odysseyCount: 0,
       newsFeed: types.optional(types.array(types.frozen<OdysseyFeedInterface>()), []),
       odysseyList: types.optional(types.array(types.frozen<NftItemInterface>()), []),
       searchQuery: types.optional(SearchQuery, {})
@@ -32,15 +31,10 @@ const ExploreStore = types
   .actions((self) => ({
     init(): void {
       this.fetchNewsFeed();
-      this.fetchOdysseyCount();
     },
     // TODO: Implementation
     fetchNewsFeed(): void {
       self.newsFeed = cast(ODYSSEY_FEED);
-    },
-    // TODO: Implementation
-    fetchOdysseyCount(): void {
-      self.odysseyCount = 13095;
     },
     // TODO: Implementation
     searchOdysseys(): void {

@@ -30,7 +30,7 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, initApplication} = useStore();
+  const {configStore, authStore, sessionStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
   const {errorCode: configLoadingErrorCode} = configStore;
 
@@ -71,6 +71,10 @@ const App: FC = () => {
 
     initApplication();
   }, [initApplication, history, t]);
+
+  useEffect(() => {
+    authStore.init();
+  }, [authStore]);
 
   useEffect(() => {
     if (configStore.isConfigReady) {

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -15,10 +15,6 @@ const SignInAccountPage: FC = () => {
   const [token, setToken] = useState<string | null>(null);
 
   const history = useHistory();
-
-  useEffect(() => {
-    authStore.init();
-  }, [authStore]);
 
   const signChallengeAndGetToken = useCallback(async () => {
     const token = await authStore.getTokenByWallet();

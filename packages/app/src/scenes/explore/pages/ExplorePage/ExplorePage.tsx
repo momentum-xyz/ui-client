@@ -106,7 +106,7 @@ const ExplorePage: FC = () => {
 
         <styled.Boxes>
           <ExplorePanel
-            odysseyCount={exploreStore.odysseyCount}
+            odysseyCount={nftStore.nftItems.length}
             newsFeed={exploreStore.newsFeed}
             searchQuery={exploreStore.searchQuery}
             odysseyList={exploreStore.odysseyList}

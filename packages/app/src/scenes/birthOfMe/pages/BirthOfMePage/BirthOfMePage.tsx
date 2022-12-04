@@ -10,7 +10,8 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {exploreStore} = useStore();
+  const {exploreStore, authStore} = useStore();
+  const {nftStore} = authStore;
 
   const history = useHistory();
 
@@ -28,7 +29,7 @@ const BirthOfMePage: FC = () => {
 
         <styled.Boxes>
           <ExplorePanel
-            odysseyCount={exploreStore.odysseyCount}
+            odysseyCount={nftStore.nftItems.length}
             newsFeed={exploreStore.newsFeed}
             searchQuery={exploreStore.searchQuery}
             odysseyList={exploreStore.odysseyList}

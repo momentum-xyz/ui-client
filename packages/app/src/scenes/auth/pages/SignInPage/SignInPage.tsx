@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -14,10 +14,6 @@ const SignInPage: FC = () => {
   const {authStore} = useStore();
 
   const history = useHistory();
-
-  useEffect(() => {
-    authStore.init();
-  }, [authStore]);
 
   const handleLogin = useCallback(async () => {
     const token = await authStore.getTokenByWallet();
