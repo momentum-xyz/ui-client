@@ -15,8 +15,11 @@ const SignInAccountPage: FC = () => {
   const history = useHistory();
 
   const fetchTokenByWallet = useCallback(async () => {
-    await authStore.fetchTokenByWallet();
-  }, [authStore]);
+    const address = nftStore.getAddressByWallet(authStore.wallet);
+    if (address) {
+      await authStore.fetchTokenByWallet(address);
+    }
+  }, [authStore, nftStore]);
 
   return (
     <styled.Container>

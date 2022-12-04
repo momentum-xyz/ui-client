@@ -48,15 +48,15 @@ interface PropsInterface {
 
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {authStore, nftStore} = useStore();
-  const {wallet: authWallet, accounts} = authStore;
-  const {accountOptions} = nftStore;
+  const {wallet: authWallet} = authStore;
+  const {accountOptions, addresses} = nftStore;
 
-  const [wallet = accounts[0]?.address, setWallet] = useState(authWallet);
+  const [wallet = addresses[0]?.address, setWallet] = useState(authWallet);
 
   const [amount, setAmount] = useState(1_000_000_000);
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
 
-  console.log('StakingForm', {wallet, accounts, authWallet, amount});
+  console.log('StakingForm', {wallet, addresses, authWallet, amount});
 
   const onStake = (amount: number) => {
     console.log('onStake', wallet, nftItemId);

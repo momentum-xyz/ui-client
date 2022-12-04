@@ -11,7 +11,7 @@ import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {authStore, nftStore, sessionStore} = useStore();
+  const {authStore, nftStore} = useStore();
 
   const history = useHistory();
 
@@ -19,20 +19,24 @@ const SignInPage: FC = () => {
     localStorage.clear();
   }, [authStore]);
 
-  const handleLogin = useCallback(
-    async (isGuest: boolean, form?: GuestLoginFormInterface) => {
-      const isDone =
-        !!form && isGuest
-          ? await authStore.fetchGuestToken(form)
-          : await authStore.fetchTokenByWallet();
+  const handleLogin = useCallback(async () => {
+    const address = nftStore.getAddressByWallet(authStore.wallet);
+    if (address) {
+      const isDone = await authStore.fetchTokenByWallet(address);
       if (isDone) {
-        const success = await sessionStore.loadUserProfile();
-        if (success) {
-          history.push(ROUTES.explore);
-        }
+        history.push(ROUTES.explore);
+      }
+    }
+  }, [authStore, history, nftStore]);
+
+  const handleGuestLogin = useCallback(
+    async (form: GuestLoginFormInterface) => {
+      const isDone = await authStore.fetchGuestToken(form);
+      if (isDone) {
+        history.push(ROUTES.explore);
       }
     },
-    [authStore, sessionStore, history]
+    [authStore, history]
   );
 
   return (
@@ -52,15 +56,12 @@ const SignInPage: FC = () => {
             wallet={authStore.wallet}
             isPending={authStore.isPending}
             onSelectAddress={authStore.selectWallet}
-            onLogin={() => handleLogin(false)}
+            onLogin={handleLogin}
           />
 
           <SinusBox />
           {/* Login as guest */}
-          <LoginGuest
-            isPending={authStore.isGuestPending}
-            onLogin={(form) => handleLogin(true, form)}
-          />
+          <LoginGuest isPending={authStore.isGuestPending} onLogin={handleGuestLogin} />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>

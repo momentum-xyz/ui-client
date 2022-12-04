@@ -1,13 +1,13 @@
 import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {web3FromSource} from '@polkadot/extension-dapp';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {decodeAddress} from '@polkadot/util-crypto';
 
 import {getRootStore} from 'core/utils';
-import {getAccessToken, refreshAxiosToken} from 'api/request';
+import {PolkadotAddressInterface} from 'core/models';
 import {GuestLoginFormInterface} from 'core/interfaces';
+import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
 
 const AuthStore = types.compose(
@@ -17,8 +17,6 @@ const AuthStore = types.compose(
       isAuthenticating: true,
       token: '',
       wallet: '',
-      // TODO adapt nftStore addresses for this
-      accounts: types.optional(types.array(types.frozen<InjectedAccountWithMeta>()), []),
       guestTokenRequest: types.optional(RequestModel, {}),
       challengeRequest: types.optional(RequestModel, {}),
       tokenRequest: types.optional(RequestModel, {})
@@ -51,17 +49,17 @@ const AuthStore = types.compose(
 
         return !!response?.token;
       }),
-      fetchTokenByWallet: flow(function* () {
+      fetchTokenByWallet: flow(function* (account: PolkadotAddressInterface) {
         const publicKey = decodeAddress(self.wallet);
         const hexPublicKey = u8aToHex(publicKey);
 
         const data: AuthChallengeRequest = {wallet: hexPublicKey};
         const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
 
-        const account = self.accounts.find((i) => i.address === self.wallet);
+        //const account = self.accounts.find((i) => i.address === self.wallet);
 
         if (!!response?.challenge && !!account) {
-          const injector = yield web3FromSource(account.meta.source);
+          const injector = yield web3FromSource(account.meta?.source || '');
           const signRaw = injector?.signer?.signRaw;
 
           if (signRaw) {

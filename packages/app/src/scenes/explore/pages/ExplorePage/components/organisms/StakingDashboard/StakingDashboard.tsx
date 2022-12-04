@@ -40,11 +40,12 @@ interface PropsInterface {
 
 const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const {authStore, nftStore} = useStore();
-  const {wallet: authWallet, accounts} = authStore;
+  const {wallet: authWallet} = authStore;
+  const {addresses} = nftStore;
   // TODO load staking info for all accounts
   const {stakingAtOthers, balance, accumulatedRewards, accountOptions} = nftStore;
 
-  const [wallet = accounts[0]?.address, setWallet] = useState(authWallet);
+  const [wallet = addresses[0]?.address, setWallet] = useState(authWallet);
   const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
 
   const [getRewards, setGetRewards] = useState(false);
@@ -56,7 +57,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
 
   const activeTab = getRewards || !!unstakeFrom ? tabBarTabs[1] : tabBarTabs[0];
 
-  console.log('StakingForm', {wallet, accounts, authWallet, amount});
+  console.log('StakingForm', {wallet, addresses, authWallet, amount});
 
   const onGetRewards = () => {
     console.log('getRewards', wallet);

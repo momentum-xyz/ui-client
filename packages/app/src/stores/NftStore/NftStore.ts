@@ -573,6 +573,9 @@ const NftStore = types
         console.log('err', err);
       }
     }),
+    getAddressByWallet: (wallet: string) => {
+      return self.addresses.find((i) => i.address === wallet);
+    },
     getNftByWallet: (wallet: string) => {
       const address = formatAddress(wallet);
       console.log('getNftByWallet', {wallet, address});
