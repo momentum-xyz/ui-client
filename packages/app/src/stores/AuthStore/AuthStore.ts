@@ -7,7 +7,7 @@ import {stringToHex, u8aToHex} from '@polkadot/util';
 import {decodeAddress} from '@polkadot/util-crypto';
 
 //import {getRootStore} from 'core/utils';
-//import {refreshAxiosToken} from 'api/request';
+import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {DELAY_DEFAULT, wait} from 'core/utils';
 import {GuestLoginFormInterface} from 'core/interfaces';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
@@ -19,7 +19,7 @@ const AuthStore = types.compose(
   types
     .model('AuthStore', {
       nftStore: types.optional(NftStore, {}),
-
+      isAuthenticating: true,
       token: '',
       wallet: '',
       // TODO adapt nftStore addresses for this
@@ -33,12 +33,14 @@ const AuthStore = types.compose(
         // TODO: Uncomment. Check Unity is ready.
         // const {unityStore} = getRootStore(self).mainStore;
         // unityStore.setAuthToken(self.token); // TODO: change key
-        // refreshAxiosToken(self.token);
+        refreshAxiosToken(self.token);
         console.log(self.token);
       }
     }))
     .actions((self) => ({
       init: flow(function* () {
+        self.token = getAccessToken();
+
         if (!self.accounts.length) {
           yield wait(DELAY_DEFAULT);
           if (yield SubstrateProvider.isExtensionEnabled()) {
@@ -47,6 +49,9 @@ const AuthStore = types.compose(
             self.accounts = cast(addressesList);
           }
         }
+
+        self.updateAxiosAndUnityTokens();
+        self.isAuthenticating = false;
       }),
       selectWallet(wallet: string): void {
         self.wallet = wallet;
@@ -100,6 +105,12 @@ const AuthStore = types.compose(
       })
     }))
     .views((self) => ({
+      get hasToken(): boolean {
+        return !!self.token;
+      },
+      get isAuthenticated(): boolean {
+        return !!self.token || !self.isAuthenticating;
+      },
       get isPending(): boolean {
         return self.challengeRequest.isPending || self.tokenRequest.isPending;
       },

@@ -18,16 +18,7 @@ const SessionStore = types
     profileRequest: types.optional(RequestModel, {}),
     statusRequest: types.optional(RequestModel, {})
   })
-
-  // TODO: OLD. Removal
   .actions((self) => ({
-    async init(idToken: string) {
-      await this.checkUserProfile(idToken);
-      await this.loadUserProfile();
-    },
-    checkUserProfile: flow(function* (idToken: string) {
-      yield self.request.send(api.userRepository.check, {idToken});
-    }),
     loadUserProfile: flow(function* () {
       const response: FetchMeResponse = yield self.profileRequest.send(
         api.userRepository.fetchMe,
@@ -36,6 +27,30 @@ const SessionStore = types
       if (response) {
         self.user = cast(response);
       }
+
+      return !!response?.id;
+    })
+  }))
+  .views((self) => ({
+    get isUserReady(): boolean {
+      return !self.profileRequest.isPending && !!self.user;
+    },
+    get isGuest(): boolean {
+      return !!self.user && !!self.user.wallet;
+    },
+    get userId(): string {
+      return self.user?.id || '';
+    }
+  }))
+
+  // TODO: OLD. Removal
+  .actions((self) => ({
+    async init(idToken: string) {
+      await this.checkUserProfile(idToken);
+      await self.loadUserProfile();
+    },
+    checkUserProfile: flow(function* (idToken: string) {
+      yield self.request.send(api.userRepository.check, {idToken});
     }),
     getLibrary(provider: ExternalProvider): Web3Provider {
       const library = new Web3Provider(provider);
@@ -52,18 +67,9 @@ const SessionStore = types
   }))
   // TODO: OLD. Removal
   .views((self) => ({
-    get userId(): string {
-      return self.user?.id || '';
-    },
-    get isUserReady(): boolean {
-      return !self.request.isPending && !self.profileRequest.isPending && !!self.user;
-    },
     get loginType(): LoginTypeEnum | null {
       const loginType = storage.get<LoginTypeEnum>(StorageKeyEnum.LoginType);
       return loginType ? (loginType as LoginTypeEnum) : null;
-    },
-    get isGuest(): boolean {
-      return this.loginType === LoginTypeEnum.Guest;
     },
     get isSessionExists(): boolean {
       return !!storage.getByPrefix('oidc.user');

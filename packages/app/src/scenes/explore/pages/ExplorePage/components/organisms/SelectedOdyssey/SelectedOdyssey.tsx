@@ -19,7 +19,7 @@ const SelectedOdyssey: FC<PropsInterface> = (props) => {
   const {odyssey, onTeleport, onDock, onConnect, onClose} = props;
 
   return (
-    <Box size="small">
+    <Box size="small" data-testid="SelectedOdyssey-test">
       <styled.Header>
         <Heading type="h1" label={odyssey.name} transform="uppercase" isTruncate />
         <SvgButton iconName="close" size="normal" onClick={onClose} />

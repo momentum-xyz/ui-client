@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -11,9 +11,13 @@ import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {authStore} = useStore();
+  const {authStore, sessionStore} = useStore();
 
   const history = useHistory();
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const handleLogin = useCallback(
     async (isGuest: boolean, form?: GuestLoginFormInterface) => {
@@ -22,10 +26,13 @@ const SignInPage: FC = () => {
           ? await authStore.fetchGuestToken(form)
           : await authStore.fetchTokenByWallet();
       if (isDone) {
-        history.push(ROUTES.explore);
+        const success = await sessionStore.loadUserProfile();
+        if (success) {
+          history.push(ROUTES.explore);
+        }
       }
     },
-    [authStore, history]
+    [authStore, sessionStore, history]
   );
 
   return (

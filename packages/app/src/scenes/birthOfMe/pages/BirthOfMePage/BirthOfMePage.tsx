@@ -35,7 +35,7 @@ const BirthOfMePage: FC = () => {
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
             onSelect={map3dStore.selectOdyssey}
-            onTeleport={(id) => alert(`Teleport to ${id}`)}
+            onTeleport={(nft) => history.push(ROUTES.base)}
             onConnect={(id) => alert(`Connect to ${id}`)}
           />
         </styled.Boxes>
