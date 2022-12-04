@@ -3,7 +3,7 @@ import axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} fro
 import {httpErrorCodes} from 'api/constants';
 
 const TOKEN_TYPE = 'Bearer';
-const TOKEN_KEY = 'token.momentum';
+const TOKEN_KEY = 'odyssey.token';
 const REQUEST_TIMEOUT_MS = 10_000;
 export const REQUEST_MAX_RETRIES = 3;
 export const REQUEST_RETRY_DELAY_BASE = 1000;
@@ -48,7 +48,7 @@ const setAccessToken = (token: string): void => {
   localStorage.setItem(TOKEN_KEY, token);
 };
 
-const getAccessToken = (): string => {
+export const getAccessToken = (): string => {
   return localStorage.getItem(TOKEN_KEY) || '';
 };
 

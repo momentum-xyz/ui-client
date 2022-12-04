@@ -24,9 +24,9 @@ const WorldBuilderStartPage: FC = () => {
 
   useEffect(() => {
     if (worldBuilderStore.haveAccess === false) {
-      history.push(`${ROUTES.worldBuilderLogin}?noPermissions=true`, {
-        from: history.location.pathname
-      });
+      //history.push(`${ROUTES.worldBuilderLogin}?noPermissions=true`, {
+      //  from: history.location.pathname
+      //});
     }
   }, [history, worldBuilderStore.haveAccess]);
 
@@ -47,7 +47,7 @@ const WorldBuilderStartPage: FC = () => {
             if (sessionStore.isSessionExists) {
               history.push(ROUTES.worldBuilder.name);
             } else {
-              history.push(ROUTES.worldBuilderLogin, {from: ROUTES.worldBuilder.start});
+              //history.push(ROUTES.worldBuilderLogin, {from: ROUTES.worldBuilder.start});
             }
           }}
         />

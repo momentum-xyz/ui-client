@@ -4,17 +4,7 @@ export const ROUTES = {
   signInAccount: '/signInAccount',
   birth: '/birth',
   explore: '/explore',
-  login: '/login', // TODO: Remove
-  worldBuilderLogin: '/wbLogin', // TODO: Remove
-  loginEmail: '/loginEmail', // TODO: Remove
-  loginWeb3: '/web3/login', // TODO: Remove
-  web3: '/web3', // TODO: Remove
-  consentWeb3: '/web3/consent', // TODO: Remove
-  callBack: '/oidc/callback', // TODO: Remove
-  web3CallBack: '/oidc/web3/callback', // TODO: Remove
-  guestCallBack: '/oidc/guest/callback', // TODO: Remove
   welcome: '/welcome',
-  signUpComplete: '/profile/signUpComplete',
   system: {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',

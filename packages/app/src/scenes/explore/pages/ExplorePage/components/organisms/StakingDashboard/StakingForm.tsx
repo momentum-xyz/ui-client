@@ -47,8 +47,9 @@ interface PropsInterface {
 }
 
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
-  const {authStore} = useStore();
-  const {wallet: authWallet, accounts, accountOptions, nftStore} = authStore;
+  const {authStore, nftStore} = useStore();
+  const {wallet: authWallet, accounts} = authStore;
+  const {accountOptions} = nftStore;
 
   const [wallet = accounts[0]?.address, setWallet] = useState(authWallet);
 

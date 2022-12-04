@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -11,29 +11,28 @@ import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {authStore} = useStore();
+  const {authStore, nftStore, sessionStore} = useStore();
 
   const history = useHistory();
 
-  const handleLogin = useCallback(async () => {
-    const token = await authStore.getTokenByWallet();
-    if (token) {
-      // TODO: axios
-      console.log(token);
-      history.push(ROUTES.explore);
-    }
-  }, [authStore, history]);
+  useEffect(() => {
+    localStorage.clear();
+  }, [authStore]);
 
-  const handleGuestLogin = useCallback(
-    async (form: GuestLoginFormInterface) => {
-      const token = await authStore.getGuestToken(form);
-      if (token) {
-        // TODO: axios
-        console.log(token);
-        history.push(ROUTES.explore);
+  const handleLogin = useCallback(
+    async (isGuest: boolean, form?: GuestLoginFormInterface) => {
+      const isDone =
+        !!form && isGuest
+          ? await authStore.fetchGuestToken(form)
+          : await authStore.fetchTokenByWallet();
+      if (isDone) {
+        const success = await sessionStore.loadUserProfile();
+        if (success) {
+          history.push(ROUTES.explore);
+        }
       }
     },
-    [authStore, history]
+    [authStore, sessionStore, history]
   );
 
   return (
@@ -49,16 +48,19 @@ const SignInPage: FC = () => {
         <styled.Boxes>
           {/* Login as a normal user */}
           <Login
-            walletOptions={authStore.accountOptions}
+            walletOptions={nftStore.accountOptions}
             wallet={authStore.wallet}
             isPending={authStore.isPending}
             onSelectAddress={authStore.selectWallet}
-            onLogin={handleLogin}
+            onLogin={() => handleLogin(false)}
           />
 
           <SinusBox />
           {/* Login as guest */}
-          <LoginGuest isPending={authStore.isGuestPending} onLogin={handleGuestLogin} />
+          <LoginGuest
+            isPending={authStore.isGuestPending}
+            onLogin={(form) => handleLogin(true, form)}
+          />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>

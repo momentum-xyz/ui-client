@@ -39,7 +39,7 @@ const SignUpCompletePage: FC = () => {
   );
 
   const onCancelHandle = useCallback(() => {
-    history.push(ROUTES.login, {from: window.history.state?.state?.from || ROUTES.base});
+    history.push(ROUTES.signIn, {from: window.history.state?.state?.from || ROUTES.base});
   }, [history]);
 
   return (

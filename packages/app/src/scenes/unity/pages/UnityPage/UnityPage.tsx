@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useAuth} from 'react-oidc-context';
 import {useTheme} from 'styled-components';
 import {generatePath, useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -31,16 +30,15 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, unityLoaded, sessionStore} = useStore();
+  const {mainStore, authStore, unityLoaded, sessionStore} = useStore();
   const {unityStore} = mainStore;
 
-  const auth = useAuth();
   const theme = useTheme();
   const history = useHistory();
   const {t} = useTranslation();
 
   useUnityEvent('MomentumLoaded', () => {
-    unityStore.setAuthToken(auth.user?.access_token);
+    unityStore.setAuthToken(authStore.token);
     unityStore.setInitialVolume();
   });
 

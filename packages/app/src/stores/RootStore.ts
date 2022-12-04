@@ -1,7 +1,6 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
 import {PosBusEventEnum} from 'core/enums';
-import {RootAuthStore} from 'scenes/auth_OLD/stores';
 import {RootProfileStore} from 'scenes/profile/stores';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
 import {Map3dStore} from 'scenes/map3d/stores/Map3dStore';
@@ -18,6 +17,7 @@ import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {ObjectStore} from 'scenes/object/stores';
 
+import {NftStore} from './NftStore';
 import {AuthStore} from './AuthStore';
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
@@ -28,6 +28,7 @@ const RootStore = types
   .model('RootStore', {
     /* Connect core stores */
     configStore: types.optional(ConfigStore, {}),
+    nftStore: types.optional(NftStore, {}),
     authStore: types.optional(AuthStore, {}),
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
@@ -35,7 +36,6 @@ const RootStore = types
     /* Connect independent stores */
     map3dStore: types.optional(Map3dStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
-    authStore_OLD: types.optional(RootAuthStore, {}),
     homeStore: types.optional(HomeStore, {}),
     profileStore: types.optional(RootProfileStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
@@ -51,8 +51,9 @@ const RootStore = types
     objectStore: types.optional(ObjectStore, {})
   })
   .actions((self) => ({
-    initApplication(): void {
-      self.configStore.init();
+    async initApplication() {
+      await self.configStore.init();
+      self.nftStore.init();
       self.mainStore.themeStore.init();
     },
     unityLoaded(worldId: string): void {

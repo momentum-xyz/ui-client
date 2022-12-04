@@ -1,41 +1,21 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
-import {useStore, useSession} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 
 const AppAuth: FC = ({children}) => {
-  const {sessionStore, widgetStore_OLD, mainStore} = useStore();
-  const {user} = sessionStore;
-  const {helpStore} = widgetStore_OLD;
-  const {unityStore} = mainStore;
+  const {authStore, sessionStore} = useStore();
 
-  const history = useHistory();
-
-  const onSuccess = (token?: string) => unityStore.setAuthToken(token);
-  const onError = () => {
-    document.location.href = ROUTES.login;
-  };
-
-  const {isReady, idToken} = useSession(onSuccess, onError);
-
-  /* 1. Load user profile */
   useEffect(() => {
-    if (isReady && !user) {
-      sessionStore.init(idToken);
+    if (authStore.hasToken) {
+      sessionStore.loadUserProfile();
+    } else {
+      document.location.href = ROUTES.signIn;
     }
-  }, [idToken, isReady, user, sessionStore]);
+  }, [authStore.hasToken, sessionStore]);
 
-  /* 2. Open Complete Registration form */
-  useEffect(() => {
-    if (isReady && !!user && !user.profile?.onBoarded) {
-      history.push(ROUTES.signUpComplete, {from: history.location.pathname});
-      helpStore.helpDialog.open();
-    }
-  }, [helpStore, history, isReady, user]);
-
-  return <>{user?.profile?.onBoarded && children}</>;
+  return <>{sessionStore.isUserReady && children}</>;
 };
 
 export default observer(AppAuth);
