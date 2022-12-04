@@ -1,4 +1,4 @@
-import {cast, flow, types} from 'mobx-state-tree';
+import {cast, castToSnapshot, flow, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
 import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@polkadot/util';
 import {web3FromAddress} from '@polkadot/extension-dapp';
@@ -13,7 +13,7 @@ import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
 import {ResetModel, Dialog} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
-import {PolkadotAddress, PolkadotUnlockingDuration} from 'core/models';
+import {PolkadotAddress, PolkadotUnlockingDuration, SearchQuery} from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {
   calcUnbondingAmount,
@@ -79,7 +79,12 @@ const NftStore = types
       usedStashAddress: types.maybeNull(types.string),
       transactionType: types.maybeNull(types.enumeration(Object.values(StakingTransactionEnum))),
       transactionFee: '',
+
+      // NFT list + searching
       nftItems: types.optional(types.array(NftItem), []),
+      searchedNftItems: types.optional(types.array(types.reference(NftItem)), []),
+      searchQuery: types.optional(SearchQuery, {}),
+
       connectToNftItemId: types.maybeNull(types.number),
       stakingAtMe: types.optional(types.map(StakeDetail), {}),
       stakingAtOthers: types.optional(types.map(StakeDetail), {}),
@@ -505,6 +510,14 @@ const NftStore = types
 
       self.setNftItems(nftItems);
     }),
+    searchNft(): void {
+      self.searchedNftItems = cast([]);
+      const query = self.searchQuery.query.toLowerCase();
+
+      self.searchedNftItems = castToSnapshot(
+        self.nftItems.filter((i) => i.name.toLocaleLowerCase().includes(query))
+      );
+    },
     handleMissingAccount: flow(function* () {
       // TODO - we have a wallet and NFT but DB account is missing
       // We need to request a challenge from BE and sign it and trigger account linking

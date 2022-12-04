@@ -108,9 +108,10 @@ const ExplorePage: FC = () => {
           <ExplorePanel
             odysseyCount={nftStore.nftItems.length}
             newsFeed={exploreStore.newsFeed}
-            searchQuery={exploreStore.searchQuery}
-            odysseyList={exploreStore.odysseyList}
-            onSearch={exploreStore.searchOdysseys}
+            searchQuery={nftStore.searchQuery}
+            odysseyList={nftStore.searchedNftItems}
+            onSearch={nftStore.searchNft}
+            onSelect={map3dStore.selectOdyssey}
             onTeleport={(id) => alert(`Teleport to ${id}`)}
             // FIXME id type
             onConnect={(id) => nftStore.setConnectToNftItemId(+id)}

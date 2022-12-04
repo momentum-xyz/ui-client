@@ -1,31 +1,36 @@
 import {cast, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
+import {NftItem, NftItemInterface} from 'stores/NftStore/models';
 import {OdysseyItemInterface} from 'scenes/explore/stores';
 
 const Map3dStore = types
   .compose(
     ResetModel,
     types.model('Map3dStore', {
-      selectedOdyssey: types.maybeNull(types.frozen<OdysseyItemInterface>())
+      selectedNft: types.maybeNull(types.reference(NftItem))
     })
   )
   .actions((self) => ({
-    selectOdyssey(id: string, name: string): void {
-      self.selectedOdyssey = cast({
-        id: id,
-        name: name,
-        collectionId: 10,
-        owner: '',
-        description: '',
-        image: 'https://picsum.photos/100',
-        connections: 1,
-        docking: 2,
-        events: 3
-      });
+    selectOdyssey(item: NftItemInterface): void {
+      self.selectedNft = cast(item);
     },
     unselectOdyssey(): void {
-      self.selectedOdyssey = null;
+      self.selectedNft = null;
+    }
+  }))
+  .views((self) => ({
+    get selectedOdyssey(): OdysseyItemInterface | null {
+      if (!self.selectedNft) {
+        return null;
+      }
+
+      return {
+        ...self.selectedNft,
+        connections: 0,
+        docking: 0,
+        events: 0
+      };
     }
   }));
 

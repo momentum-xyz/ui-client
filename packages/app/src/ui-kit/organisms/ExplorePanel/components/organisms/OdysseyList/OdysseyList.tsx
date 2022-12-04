@@ -8,17 +8,18 @@ import * as styled from './OdysseyList.styled';
 
 interface PropsInterface {
   odysseyList: NftItemInterface[];
-  onTeleport: (spaceId: string) => void;
+  onTeleport: (nft: NftItemInterface) => void;
+  onSelect: (nft: NftItemInterface) => void;
 }
 
 const OdysseyList: FC<PropsInterface> = (props) => {
-  const {odysseyList, onTeleport} = props;
+  const {odysseyList, onSelect, onTeleport} = props;
 
   return (
     <styled.Inner data-testid="OdysseyList-test">
       {odysseyList.map((odyssey) => (
         <styled.Container key={odyssey.id}>
-          <styled.InfoContainer onClick={() => onTeleport(odyssey.id.toString())}>
+          <styled.InfoContainer onClick={() => onSelect(odyssey)}>
             <Avatar size="small" avatarSrc={odyssey.image} status={UserStatusEnum.ONLINE} />
             <styled.StyledText
               text={odyssey.name.trim()}
@@ -27,11 +28,7 @@ const OdysseyList: FC<PropsInterface> = (props) => {
               isMultiline={false}
             />
           </styled.InfoContainer>
-          <SvgButton
-            iconName="fly-to"
-            size="medium"
-            onClick={() => onTeleport(odyssey.id.toString())}
-          />
+          <SvgButton iconName="fly-to" size="medium" onClick={() => onTeleport(odyssey)} />
         </styled.Container>
       ))}
     </styled.Inner>
