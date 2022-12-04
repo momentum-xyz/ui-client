@@ -12,8 +12,8 @@ import {SelectedOdyssey, StakingDashboard, StakingForm} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {exploreStore, authStore, map3dStore} = useStore();
-  const {wallet, nftStore} = authStore;
+  const {exploreStore, authStore, nftStore, map3dStore} = useStore();
+  const {wallet} = authStore;
 
   const history = useHistory();
 

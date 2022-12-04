@@ -11,7 +11,7 @@ import {
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
 import {ResetModel, Dialog} from '@momentum-xyz/core';
-import {IconNameType} from '@momentum-xyz/ui-kit';
+import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, PolkadotUnlockingDuration, SearchQuery} from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
@@ -132,6 +132,13 @@ const NftStore = types
             : account.address,
           value: account.address,
           icon: 'wallet' as IconNameType
+        }));
+      },
+      get accountOptions(): OptionInterface[] {
+        return self.addresses.map((account) => ({
+          label: account.meta?.name || account.address,
+          value: account.address,
+          icon: 'polkadotprofile'
         }));
       },
       get stashStakingBalance() {

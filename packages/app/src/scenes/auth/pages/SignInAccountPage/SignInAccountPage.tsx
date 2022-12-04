@@ -10,7 +10,7 @@ import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './compone
 import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
-  const {authStore} = useStore();
+  const {authStore, nftStore} = useStore();
 
   const history = useHistory();
 
@@ -25,7 +25,7 @@ const SignInAccountPage: FC = () => {
           <SinusBox />
           {!authStore.token && (
             <ChoiceYourWallet
-              walletOptions={authStore.accountOptions}
+              walletOptions={nftStore.accountOptions}
               wallet={authStore.wallet}
               isConnectDisabled={authStore.isPending}
               onSelectAddress={authStore.selectWallet}

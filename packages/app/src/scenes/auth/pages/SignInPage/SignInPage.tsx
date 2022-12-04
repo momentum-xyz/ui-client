@@ -11,13 +11,13 @@ import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {authStore, sessionStore} = useStore();
+  const {authStore, nftStore, sessionStore} = useStore();
 
   const history = useHistory();
 
   useEffect(() => {
     localStorage.clear();
-  }, []);
+  }, [authStore]);
 
   const handleLogin = useCallback(
     async (isGuest: boolean, form?: GuestLoginFormInterface) => {
@@ -48,7 +48,7 @@ const SignInPage: FC = () => {
         <styled.Boxes>
           {/* Login as a normal user */}
           <Login
-            walletOptions={authStore.accountOptions}
+            walletOptions={nftStore.accountOptions}
             wallet={authStore.wallet}
             isPending={authStore.isPending}
             onSelectAddress={authStore.selectWallet}

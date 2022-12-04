@@ -13,15 +13,10 @@ interface PropsInterface {
 const Map3dPage: FC<PropsInterface> = (props) => {
   const {isClickActive} = props;
 
-  const {authStore, map3dStore} = useStore();
-  const {nftStore} = authStore;
+  const {nftStore, map3dStore} = useStore();
 
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
   const mapRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    nftStore.init();
-  }, [nftStore]);
 
   useEffect(() => {
     if (mapRef.current) {

@@ -10,8 +10,7 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {exploreStore, authStore, map3dStore} = useStore();
-  const {nftStore} = authStore;
+  const {exploreStore, nftStore, map3dStore} = useStore();
 
   const history = useHistory();
 

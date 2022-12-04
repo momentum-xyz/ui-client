@@ -17,6 +17,7 @@ import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {ObjectStore} from 'scenes/object/stores';
 
+import {NftStore} from './NftStore';
 import {AuthStore} from './AuthStore';
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
@@ -27,6 +28,7 @@ const RootStore = types
   .model('RootStore', {
     /* Connect core stores */
     configStore: types.optional(ConfigStore, {}),
+    nftStore: types.optional(NftStore, {}),
     authStore: types.optional(AuthStore, {}),
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
@@ -49,8 +51,9 @@ const RootStore = types
     objectStore: types.optional(ObjectStore, {})
   })
   .actions((self) => ({
-    initApplication(): void {
-      self.configStore.init();
+    async initApplication() {
+      await self.configStore.init();
+      self.nftStore.init();
       self.mainStore.themeStore.init();
     },
     unityLoaded(worldId: string): void {
