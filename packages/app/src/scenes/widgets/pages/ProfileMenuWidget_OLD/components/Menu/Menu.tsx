@@ -1,5 +1,4 @@
 import React, {FC, useRef} from 'react';
-import {useAuth} from 'react-oidc-context';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {
@@ -25,13 +24,11 @@ const Menu: FC = () => {
   const {profileMenuStore} = widgetsStore;
   const {user} = sessionStore;
 
-  const auth = useAuth();
   const {t} = useTranslation();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const signOutUser = async () => {
-    await sessionStore.logout(auth);
-    document.location.href = ROUTES.base;
+  const signOutUser = () => {
+    document.location.href = ROUTES.signIn;
   };
 
   useClickOutside(menuRef, () => {

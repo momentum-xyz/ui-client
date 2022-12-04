@@ -18,6 +18,7 @@ const AuthStore = types.compose(
   ResetModel,
   types
     .model('AuthStore', {
+      // TODO: Move to stores. Wrong mixing
       nftStore: types.optional(NftStore, {}),
       isAuthenticating: true,
       token: '',
@@ -35,7 +36,9 @@ const AuthStore = types.compose(
         // unityStore.setAuthToken(self.token); // TODO: change key
         refreshAxiosToken(self.token);
         console.log(self.token);
-      }
+      },
+      // TODO: Reset after nftStore movement
+      clear(): void {}
     }))
     .actions((self) => ({
       init: flow(function* () {
