@@ -1,14 +1,14 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, UploadAvatarResponse} from 'api';
+import {api, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {SignUpFormInterface} from 'core/interfaces';
 
-const SignUpCompleteStore = types.compose(
+const SignInAccountStore = types.compose(
   ResetModel,
   types
-    .model('SignUpCompleteStore', {
+    .model('SignInAccountStore', {
       request: types.optional(RequestModel, {}),
       avatarRequest: types.optional(RequestModel, {}),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), [])
@@ -18,11 +18,12 @@ const SignUpCompleteStore = types.compose(
         // 1. Avatar uploading.
         let avatarHash;
         if (form.avatar) {
-          const data = {avatar: form.avatar};
-          const userResponse: UploadAvatarResponse = yield self.avatarRequest.send(
-            api.profileRepository.uploadAvatar,
+          const data = {file: form.avatar};
+          const userResponse: UploadImageResponse = yield self.avatarRequest.send(
+            api.mediaRepository.uploadImage,
             data
           );
+
           avatarHash = userResponse?.hash;
         }
 
@@ -30,8 +31,6 @@ const SignUpCompleteStore = types.compose(
         const response = yield self.request.send(api.userProfileRepository.update, {
           name: form.name || '',
           profile: {
-            bio: form.bio,
-            profileLink: form.profileLink,
             avatarHash
           }
         });
@@ -46,7 +45,7 @@ const SignUpCompleteStore = types.compose(
           );
         }
 
-        return {success: true, onBoarded: response?.profile?.onBoarded || false};
+        return self.request.isDone;
       })
     }))
     .views((self) => ({
@@ -59,4 +58,4 @@ const SignUpCompleteStore = types.compose(
     }))
 );
 
-export {SignUpCompleteStore};
+export {SignInAccountStore};

@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
+import {SignUpFormInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
 
@@ -10,7 +11,7 @@ import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './compone
 import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
-  const {authStore, nftStore} = useStore();
+  const {authStore, nftStore, signInAccountStore, sessionStore} = useStore();
 
   const history = useHistory();
 
@@ -20,6 +21,17 @@ const SignInAccountPage: FC = () => {
       await authStore.fetchTokenByWallet(address);
     }
   }, [authStore, nftStore]);
+
+  const handleSubmit = useCallback(
+    async (form: SignUpFormInterface) => {
+      const isDone = await signInAccountStore.updateProfile(form);
+      if (isDone) {
+        await sessionStore.loadUserProfile();
+        history.push(ROUTES.birth);
+      }
+    },
+    [history, sessionStore, signInAccountStore]
+  );
 
   return (
     <styled.Container>
@@ -40,7 +52,11 @@ const SignInAccountPage: FC = () => {
             <>
               <CongratulationsBox />
               <SinusBox />
-              <CreateOdysseyForm onCreate={() => history.push(ROUTES.birth)} />
+              <CreateOdysseyForm
+                fieldErrors={signInAccountStore.fieldErrors}
+                isSubmitDisabled={signInAccountStore.isUpdating}
+                onSubmit={handleSubmit}
+              />
             </>
           )}
         </styled.Boxes>
