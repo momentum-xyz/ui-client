@@ -137,10 +137,13 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                   <Button label="Unstake" onClick={() => setUnstakeFrom(stakingDetail.destAddr)} />
                 </div>
               ))}
-              <Text size="m" text="TODO" align="left" />
+
               <Heading type="h2" label="Rewards" />
               <Text size="m" text={`${accumulatedRewards}`} align="left" />
               <Button label="Get Rewards" onClick={() => setGetRewards(true)} />
+
+              <Heading type="h2" label="TEMP Mint NFT" />
+              <Button label="TEMP Mint Nft" onClick={() => nftStore.mintNft(wallet)} />
             </div>
             {/* <styled.Buttons>
               <Button label="Back" onClick={() => setActiveTab(tabBarTabs[0])} />
