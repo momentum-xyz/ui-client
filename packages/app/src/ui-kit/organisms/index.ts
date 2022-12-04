@@ -6,3 +6,4 @@ export * from './Stage';
 export * from './OnlineUsersList';
 export * from './WorldBuilderFooter';
 export * from './EventItem';
+export * from './ExplorePanel';

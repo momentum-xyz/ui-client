@@ -39,7 +39,7 @@ const ProfileWidget: FC = (props) => {
   }, [profileStore]);
 
   const handleLogout = useCallback(() => {
-    document.location = ROUTES.birthOfMe.signIn;
+    document.location = ROUTES.signIn;
   }, []);
 
   return (

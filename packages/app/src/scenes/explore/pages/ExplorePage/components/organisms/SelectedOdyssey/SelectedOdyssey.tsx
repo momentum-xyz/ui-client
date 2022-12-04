@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Button, Heading, IconSvg, SvgButton, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
-import {OdysseyItemInterface} from 'scenes/birthOfMe/stores/ExploreStore';
+import {OdysseyItemInterface} from 'scenes/explore/stores';
 
 import * as styled from './SelectedOdyssey.styled';
 

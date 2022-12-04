@@ -6,8 +6,8 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
 import {GuestLoginFormInterface} from 'core/interfaces';
-import {CreateOdyssey, TravellerBox, Login, LoginGuest} from 'scenes/birthOfMe/components';
 
+import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
@@ -24,7 +24,7 @@ const SignInPage: FC = () => {
     if (token) {
       // TODO: axios
       console.log(token);
-      history.push(ROUTES.birthOfMe.explore);
+      history.push(ROUTES.explore);
     }
   }, [authStore, history]);
 
@@ -34,7 +34,7 @@ const SignInPage: FC = () => {
       if (token) {
         // TODO: axios
         console.log(token);
-        history.push(ROUTES.birthOfMe.explore);
+        history.push(ROUTES.explore);
       }
     },
     [authStore, history]
@@ -47,7 +47,7 @@ const SignInPage: FC = () => {
           <SinusBox />
           <TravellerBox />
           <SinusBox />
-          <CreateOdyssey onCreate={() => history.push(ROUTES.birthOfMe.startAccount)} />
+          <CreateOdyssey onCreate={() => history.push(ROUTES.signInAccount)} />
         </styled.Boxes>
 
         <styled.Boxes>

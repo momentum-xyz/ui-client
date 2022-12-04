@@ -4,14 +4,13 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SinusBox} from 'ui-kit';
-import {BuildOdyssey, ExplorePanel} from 'scenes/birthOfMe/components';
+import {SinusBox, ExplorePanel} from 'ui-kit';
 
+import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {birthOfMeStore} = useStore();
-  const {exploreStore} = birthOfMeStore;
+  const {exploreStore} = useStore();
 
   const history = useHistory();
 
@@ -24,7 +23,7 @@ const BirthOfMePage: FC = () => {
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          <BuildOdyssey onBuild={() => history.push(ROUTES.birthOfMe.explore)} />
+          <BuildOdyssey onBuild={() => history.push(ROUTES.explore)} />
         </styled.Boxes>
 
         <styled.Boxes>
