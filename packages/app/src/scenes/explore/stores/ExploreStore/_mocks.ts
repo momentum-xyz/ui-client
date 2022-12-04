@@ -6,6 +6,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 1,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Jeroenski',
     description: '',
@@ -16,6 +17,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 3,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Polkajor',
     description: '',
@@ -25,6 +27,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     connectedTo: {
       id: 4,
       collectionId: 1,
+      uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
       owner: '',
       name: 'Space Odyssey',
       description: '',
@@ -36,6 +39,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 2,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Brandskari',
     description: '',
@@ -46,6 +50,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 5,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Kidachu',
     description: '',
@@ -55,6 +60,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
       owner: '',
       name: 'Space Odyssey',
       description: '',
@@ -66,6 +72,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 6,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Jeroenski',
     description: '',
@@ -76,6 +83,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 7,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Polkajor',
     description: '',
@@ -85,6 +93,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     connectedTo: {
       id: 4,
       collectionId: 1,
+      uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
       owner: '',
       name: 'Space Odyssey',
       description: '',
@@ -96,6 +105,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 8,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Brandskari',
     description: '',
@@ -106,6 +116,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 9,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Kidachu',
     description: '',
@@ -115,6 +126,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
       owner: '',
       name: 'Space Odyssey',
       description: '',
@@ -126,6 +138,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 10,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Jeroenski',
     description: '',
@@ -136,6 +149,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 11,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Polkajor',
     description: '',
@@ -145,6 +159,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     connectedTo: {
       id: 4,
       collectionId: 1,
+      uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
       owner: '',
       name: 'Space Odyssey',
       description: '',
@@ -156,6 +171,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 12,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Brandskari',
     description: '',
@@ -166,6 +182,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 13,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Kidachu 2',
     description: '',
@@ -175,6 +192,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
       owner: '',
       name: 'Space Odyssey',
       description: '',
@@ -186,6 +204,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 14,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Brandskari',
     description: '',
@@ -196,6 +215,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
   {
     id: 15,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Kidachu 2',
     description: '',
@@ -205,6 +225,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
     dockedTo: {
       id: 6,
       collectionId: 1,
+      uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
       owner: '',
       name: 'Space Odyssey',
       description: '',
@@ -218,6 +239,7 @@ export const ODYSSEY_FEED: OdysseyFeedInterface[] = [
 export const ODYSSEY_ITEM: OdysseyItemInterface = {
   id: 1,
   collectionId: 1,
+  uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
   owner: '',
   name: 'Kidachu',
   description:
@@ -232,6 +254,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 1,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Jeroenski',
     description: '',
@@ -240,6 +263,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 2,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Tsani',
     description: '',
@@ -248,6 +272,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 3,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Jorrit',
     description: '',
@@ -256,6 +281,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 4,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Kovi',
     description: '',
@@ -264,6 +290,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 5,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Amin',
     description: '',
@@ -272,6 +299,7 @@ export const ODYSSEY_LIST: NftItemInterface[] = [
   {
     id: 6,
     collectionId: 1,
+    uuid: 'd83670c7-a120-47a4-892d-f9ec75604f74',
     owner: '',
     name: 'Anton',
     description: '',

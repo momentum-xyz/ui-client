@@ -463,8 +463,22 @@ const NftStore = types
                 return null;
               }
 
-              const metadata = JSON.parse(metadataStr);
-              if (!metadata?.name) {
+              let metadata = JSON.parse(metadataStr);
+              if (Array.isArray(metadata)) {
+                const [uuid, name, ipfs, image] = metadata;
+                metadata = {uuid, ipfs, name, image};
+                if (isIpfsHash(ipfs)) {
+                  console.log('fetch from IPFS', ipfs);
+                  // TODO timeout
+                  metadataStr = await fetchIpfs(ipfs);
+                  if (metadataStr) {
+                    const additionalMetadata = JSON.parse(metadataStr);
+                    metadata = {...metadata, ...additionalMetadata};
+                  }
+                }
+              }
+
+              if (!metadata?.name || !metadata?.uuid) {
                 console.log('Incomplete metadata', metadata);
                 return null;
               }
