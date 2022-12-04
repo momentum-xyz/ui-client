@@ -10,7 +10,7 @@ import {
 } from '@polkadot/api-derive/types';
 import {u64} from '@polkadot/types-codec/primitive/U64';
 import {SubmittableExtrinsic} from '@polkadot/api/promise/types';
-import {ResetModel, Dialog} from '@momentum-xyz/core';
+import {ResetModel, Dialog, RequestModel} from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, PolkadotUnlockingDuration, SearchQuery} from 'core/models';
@@ -24,6 +24,7 @@ import {
 import {KeyringAddressType} from 'core/types';
 import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
+import {mintNft, mintNftCheckJob} from 'api/repositories';
 
 import {NftItem, NftItemInterface, StakeDetail} from './models';
 
@@ -48,6 +49,8 @@ const formatAddress = (address: string, network = 42) => {
   const keyring = new Keyring({type: 'sr25519'});
   return keyring.encodeAddress(address, network);
 };
+
+const PromiseSleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // TODO change to BN
 interface AccountBalanceInterface {
@@ -84,6 +87,9 @@ const NftStore = types
       nftItems: types.optional(types.array(NftItem), []),
       searchedNftItems: types.optional(types.array(types.reference(NftItem)), []),
       searchQuery: types.optional(SearchQuery, {}),
+
+      mintNftRequest: types.optional(RequestModel, {}),
+      mintNftCheckJobRequest: types.optional(RequestModel, {}),
 
       connectToNftItemId: types.maybeNull(types.number),
       stakingAtMe: types.optional(types.map(StakeDetail), {}),
@@ -549,7 +555,7 @@ const NftStore = types
         );
         console.log('Sign and send', transfer);
 
-        const blockHash = yield new Promise((resolve, reject) => {
+        const block_hash = yield new Promise((resolve, reject) => {
           transfer
             .signAndSend(account.address, options, ({status}) => {
               if (status.isInBlock) {
@@ -563,12 +569,33 @@ const NftStore = types
             .catch(reject);
         });
 
-        // TODO
-        console.log(
-          'TODO use blockHash',
-          blockHash,
-          'to inform the BE about the transaction and ask to mint the NFT'
-        );
+        console.log('Request BE to mint the NFT', {block_hash, address});
+
+        const nftReqResult = yield self.mintNftRequest.send(mintNft, {
+          block_hash,
+          wallet: address,
+          name: 'Test NFT',
+          image: 'https://picsum.photos/102'
+        });
+        console.log('nftReqResult', nftReqResult);
+        if (!nftReqResult) {
+          throw new Error('Unable to mint NFT');
+        }
+        const {job_id} = nftReqResult;
+
+        for (let i = 0; i < 50; i++) {
+          yield PromiseSleep(3000);
+          const nftReqCheckJobResult = yield self.mintNftRequest.send(mintNftCheckJob, {
+            job_id
+          });
+          if (!nftReqCheckJobResult) {
+            throw new Error('Unable to check minting NFT status');
+          }
+          const {status} = nftReqCheckJobResult;
+          if (status === 'done') {
+            break;
+          }
+        }
       } catch (err) {
         console.log('err', err);
       }

@@ -50,3 +50,25 @@ export interface Web3ConsentAcceptRequest {
 export interface Web3ConsentAcceptResponse {
   redirect: string;
 }
+
+/** Mint NFT */
+
+export interface MintNftRequest {
+  name: string;
+  image: string;
+  block_hash: string;
+  wallet: string;
+}
+
+export interface MintNftResponse {
+  job_id: string;
+}
+
+export interface MintNftCheckJobRequest {
+  job_id: string;
+}
+
+export interface MintNftCheckJobResponse {
+  status: string;
+  nodeJSOut: string;
+}
