@@ -3,32 +3,16 @@ import React, {lazy} from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-const Map3dPage = lazy(() => import('./map3d/pages/UniverseMapPage/Map3dPage'));
-const Object = lazy(() => import('./object/Object'));
-const SignInPage = lazy(() => import('./birthOfMe/pages/SignInPage/SignInPage'));
-const StartAccountPage = lazy(() => import('./birthOfMe/pages/StartAccountPage/StartAccountPage'));
+const Widgets = lazy(() => import('./widgets/Widgets'));
+const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
+const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
 const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
-const ExplorePage = lazy(() => import('./birthOfMe/pages/ExplorePage/ExplorePage'));
-const LoginPage = lazy(() => import('./auth_OLD/pages/LoginPage/LoginPage'));
-const WorldBuilderLoginPage = lazy(
-  () => import('./auth_OLD/pages/WorldBuilderLoginPage/WorldBuilderLoginPage')
-);
-const LoginCallback = lazy(() => import('./auth_OLD/pages/LoginCallback/LoginCallback'));
-const LoginEmailPage = lazy(() => import('./auth_OLD/pages/LoginEmailPage/LoginEmailPage'));
-const Web3ChoicePage = lazy(() => import('./auth_OLD/pages/Web3ChoicePage/Web3ChoicePage'));
-const Web3ChallengePage = lazy(
-  () => import('./auth_OLD/pages/Web3ChallengePage/Web3ChallengePage')
-);
-const Web3ConsentPage = lazy(() => import('./auth_OLD/pages/Web3ConsentPage/Web3ConsentPage'));
+const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
+const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
+const Object = lazy(() => import('./object/Object'));
 const HomePage = lazy(() => import('./home/pages/HomePage/HomePage'));
-const SignUpPage = lazy(() => import('./profile/pages/SignUpCompletePage/SignUpCompletePage'));
-const WelcomePage = lazy(() => import('./welcome/pages/WelcomePage/WelcomePage'));
-// const Collaboration = lazy(() => import('./collaboration/Collaboration'));
 const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
 const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
-const WorldBuilderCustomizePanel = lazy(
-  () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
-);
 const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const VideoPage = lazy(() => import('./video/pages/VideoPage/VideoPage'));
@@ -36,9 +20,8 @@ const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/Disc
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
 const StoryBook = lazy(() => import('./storyBook/StoryBook'));
-const WorldBuilder = lazy(() => import('./worldBuilder/WorldBuilder'));
-const WorldBuilderStartPage = lazy(
-  () => import('./worldBuilder/pages/WorldBuilderStartPage/WorldBuilderStartPage')
+const WorldBuilderCustomizePanel = lazy(
+  () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
 );
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
@@ -61,7 +44,7 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
-    path: ROUTES.birthOfMe.signIn,
+    path: ROUTES.signIn,
     main: () => (
       <>
         <Map3dPage />
@@ -70,97 +53,40 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     )
   },
   {
-    path: ROUTES.birthOfMe.startAccount,
+    path: ROUTES.signInAccount,
     main: () => (
       <>
         <Map3dPage />
-        <StartAccountPage />
+        <SignInAccountPage />
       </>
     )
-  },
-  {
-    path: ROUTES.birthOfMe.birth,
-    main: () => (
-      <>
-        <Map3dPage />
-        <BirthOfMePage />
-      </>
-    )
-  },
-  {
-    path: ROUTES.birthOfMe.explore,
-    main: () => (
-      <>
-        <Map3dPage />
-        <ExplorePage />
-      </>
-    )
-  },
-  {
-    path: ROUTES.login,
-    exact: true,
-    main: () => <LoginPage />
-  },
-  {
-    path: ROUTES.worldBuilderLogin,
-    exact: true,
-    main: () => <WorldBuilderLoginPage />
-  },
-  {
-    path: ROUTES.loginEmail,
-    exact: true,
-    main: () => <LoginEmailPage />
-  },
-  {
-    path: ROUTES.web3,
-    exact: true,
-    main: () => <Web3ChoicePage />
-  },
-  {
-    path: ROUTES.loginWeb3,
-    exact: true,
-    main: () => <Web3ChallengePage />
-  },
-  {
-    path: ROUTES.consentWeb3,
-    exact: true,
-    main: () => <Web3ConsentPage />
   },
   {
     path: ROUTES.storyBook.base,
     main: () => <StoryBook />
-  },
-  {
-    path: ROUTES.worldBuilder.login,
-    main: () => <WorldBuilderStartPage />
   }
 ];
 
-export const CORE_ROUTES: RouteConfigInterface[] = [
+export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
-    path: ROUTES.signUpComplete,
-    exact: true,
-    main: () => <SignUpPage />
+    path: ROUTES.birth,
+    main: () => (
+      <>
+        <Map3dPage />
+        <BirthOfMePage />
+        <Widgets isExplorePage />
+      </>
+    )
   },
   {
-    path: ROUTES.web3CallBack,
-    exact: true,
-    main: () => <LoginCallback />
-  },
-  {
-    path: ROUTES.callBack,
-    exact: true,
-    main: () => <LoginCallback />
-  },
-  {
-    path: ROUTES.guestCallBack,
-    exact: true,
-    main: () => <LoginCallback />
-  },
-  {
-    path: ROUTES.welcome,
-    exact: true,
-    main: () => <WelcomePage />
+    path: ROUTES.explore,
+    main: () => (
+      <>
+        <Map3dPage isClickActive />
+        <ExplorePage />
+        <Widgets isExplorePage />
+      </>
+    )
   }
 ];
 
@@ -185,11 +111,6 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     ),
     renderBackground: false
   },
-  // {
-  //   path: ROUTES.collaboration.base,
-  //   renderBackground: true,
-  //   main: () => <Collaboration />
-  // },
   {
     path: ROUTES.object.root,
     renderBackground: false,
@@ -226,12 +147,5 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
     path: ROUTES.video,
     main: () => <VideoPage />
-  }
-];
-
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
-  {
-    path: ROUTES.worldBuilder.base,
-    main: () => <WorldBuilder />
   }
 ];

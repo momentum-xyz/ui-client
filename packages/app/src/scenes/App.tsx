@@ -1,8 +1,6 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
-import {AuthProvider} from 'react-oidc-context';
-import {Web3ReactProvider} from '@web3-react/core';
+import {useHistory, useLocation} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
@@ -20,17 +18,17 @@ import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {GlobalStyles} from './App.styled';
 import {
-  CORE_ROUTES,
   PRIVATE_ROUTES,
   PRIVATE_ROUTES_WITH_UNITY,
   PUBLIC_ROUTES,
   SYSTEM_ROUTES
 } from './App.routes';
+
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, sessionStore, mainStore, initApplication} = useStore();
+  const {configStore, authStore, mainStore, initApplication} = useStore();
   const {themeStore} = mainStore;
   const {errorCode: configLoadingErrorCode} = configStore;
 
@@ -74,9 +72,10 @@ const App: FC = () => {
 
   useEffect(() => {
     if (configStore.isConfigReady) {
+      authStore.init();
       mainStore.init();
     }
-  }, [configStore.isConfigReady, mainStore]);
+  }, [authStore, configStore.isConfigReady, mainStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
 
@@ -111,7 +110,7 @@ const App: FC = () => {
     );
   }
 
-  if (!configStore.isConfigReady) {
+  if (!configStore.isConfigReady || authStore.isAuthenticating) {
     return <></>;
   }
 
@@ -119,59 +118,8 @@ const App: FC = () => {
   if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-          <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
-        </Web3ReactProvider>
+        <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
       </ThemeProvider>
-    );
-  }
-
-  // NO OIDC CONFIG AND WORLD BUILDER
-  if (!sessionStore.oidcConfig && pathname === ROUTES.worldBuilder.base) {
-    return (
-      <Switch>
-        <Redirect to={{pathname: ROUTES.worldBuilder.login, state: {from: pathname}}} />
-      </Switch>
-    );
-  }
-
-  // NO OIDC CONFIG
-  if (!sessionStore.oidcConfig) {
-    return (
-      <Switch>
-        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
-      </Switch>
-    );
-  }
-
-  // CORE ROUTES
-  if (isTargetRoute(pathname, CORE_ROUTES)) {
-    return (
-      <ThemeProvider theme={themeStore.theme}>
-        <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-          <AuthProvider {...sessionStore.oidcConfig}>
-            <Suspense fallback={false}>{createSwitchByConfig(CORE_ROUTES)}</Suspense>
-          </AuthProvider>
-        </Web3ReactProvider>
-      </ThemeProvider>
-    );
-  }
-
-  // NO OIDC CONFIG AND WORLD BUILDER
-  if (!sessionStore.isSessionExists && pathname === ROUTES.worldBuilder.base) {
-    return (
-      <Switch>
-        <Redirect to={{pathname: ROUTES.worldBuilder.login, state: {from: pathname}}} />
-      </Switch>
-    );
-  }
-
-  // NO OIDC USER. To await white screen
-  if (!sessionStore.isSessionExists) {
-    return (
-      <Switch>
-        <Redirect to={{pathname: ROUTES.login, state: {from: pathname}}} />
-      </Switch>
     );
   }
 
@@ -179,18 +127,14 @@ const App: FC = () => {
   if (isTargetRoute(pathname, PRIVATE_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-          <AuthProvider {...sessionStore.oidcConfig}>
-            <Suspense fallback={false}>
-              <AppAuth>
-                <GlobalStyles />
-                <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
-                  {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.base)}
-                </AppLayers>
-              </AppAuth>
-            </Suspense>
-          </AuthProvider>
-        </Web3ReactProvider>
+        <Suspense fallback={false}>
+          <AppAuth>
+            <GlobalStyles />
+            <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
+              {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.base)}
+            </AppLayers>
+          </AppAuth>
+        </Suspense>
       </ThemeProvider>
     );
   }
@@ -198,17 +142,13 @@ const App: FC = () => {
   // PRIVATE ROUTES WITH UNITY
   return (
     <ThemeProvider theme={themeStore.theme}>
-      <Web3ReactProvider getLibrary={sessionStore.getLibrary}>
-        <AuthProvider {...sessionStore.oidcConfig}>
-          <AppAuth>
-            <GlobalStyles />
-            <UnityPage />
-            <Suspense fallback={false}>
-              <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}</AppLayers>
-            </Suspense>
-          </AppAuth>
-        </AuthProvider>
-      </Web3ReactProvider>
+      <AppAuth>
+        <GlobalStyles />
+        <UnityPage />
+        <Suspense fallback={false}>
+          <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}</AppLayers>
+        </Suspense>
+      </AppAuth>
     </ThemeProvider>
   );
 };

@@ -45,6 +45,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   headerType?: HeaderType;
   showOverflow?: boolean;
   isTruncateHeader?: boolean;
+  isMinimap?: boolean;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -72,7 +73,8 @@ const Dialog: FC<DialogPropsInterface> = ({
   layoutSize,
   headerActions,
   showOverflow,
-  isTruncateHeader = false
+  isTruncateHeader = false,
+  isMinimap
 }) => {
   const ref = useRef(null);
 
@@ -88,9 +90,17 @@ const Dialog: FC<DialogPropsInterface> = ({
       <styled.Modal
         theme={theme}
         data-testid="Dialog-test"
-        className={cn(position, {opacity: withOpacity, showBackground: showBackground})}
+        className={cn(
+          position,
+          {opacity: withOpacity, showBackground: showBackground},
+          isMinimap && 'isMinimap'
+        )}
       >
-        <styled.Container ref={ref} className={position} offset={offset}>
+        <styled.Container
+          ref={ref}
+          className={cn(position, isMinimap && 'isMinimap')}
+          offset={offset}
+        >
           <PanelLayout
             title={title}
             subtitle={subtitle}
@@ -107,6 +117,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             headerType={headerType}
             showOverflow={showOverflow}
             isTruncateHeader={isTruncateHeader}
+            isMinimap={isMinimap}
           >
             {children}
             <styled.Buttons>

@@ -4,14 +4,13 @@ import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {Footer, SinusBox} from 'ui-kit';
-import {BuildOdyssey, ExplorePanel} from 'scenes/birthOfMe/components';
+import {SinusBox, ExplorePanel} from 'ui-kit';
 
+import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {birthOfMeStore} = useStore();
-  const {exploreStore} = birthOfMeStore;
+  const {exploreStore, nftStore, map3dStore} = useStore();
 
   const history = useHistory();
 
@@ -24,22 +23,22 @@ const BirthOfMePage: FC = () => {
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          <BuildOdyssey onBuild={() => history.push(ROUTES.birthOfMe.explore)} />
+          <BuildOdyssey onBuild={() => history.push(ROUTES.explore)} />
         </styled.Boxes>
 
         <styled.Boxes>
           <ExplorePanel
-            odysseyCount={exploreStore.odysseyCount}
+            odysseyCount={nftStore.nftItems.length}
             newsFeed={exploreStore.newsFeed}
-            searchQuery={exploreStore.searchQuery}
-            odysseyList={exploreStore.odysseyList}
-            onSearch={exploreStore.searchOdysseys}
-            onTeleport={(id) => alert(`Teleport to ${id}`)}
+            searchQuery={nftStore.searchQuery}
+            odysseyList={nftStore.searchedNftItems}
+            onSearch={nftStore.searchNft}
+            onSelect={map3dStore.selectOdyssey}
+            onTeleport={(nft) => history.push(ROUTES.base)}
             onConnect={(id) => alert(`Connect to ${id}`)}
           />
         </styled.Boxes>
       </styled.Wrapper>
-      <Footer />
     </styled.Container>
   );
 };

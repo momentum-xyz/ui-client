@@ -1,7 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useAuth} from 'react-oidc-context';
 import {Avatar, ToolbarIcon, IconSvg, ToolbarIconList, Text, Dialog} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -16,10 +15,7 @@ const SimpleProfileMenu: FC = () => {
   const {profileMenuStore} = widgetsStore;
   const {user} = sessionStore;
 
-  const auth = useAuth();
-
-  const signOutUser = async () => {
-    await sessionStore.logout(auth);
+  const signOutUser = () => {
     document.location.href = ROUTES.worldBuilder.base;
   };
 

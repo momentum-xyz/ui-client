@@ -1,22 +1,10 @@
 export const ROUTES = {
   base: '/',
-  login: '/login',
-  worldBuilderLogin: '/wbLogin',
-  loginEmail: '/loginEmail',
-  loginWeb3: '/web3/login',
-  web3: '/web3',
-  consentWeb3: '/web3/consent',
-  callBack: '/oidc/callback',
-  web3CallBack: '/oidc/web3/callback',
-  guestCallBack: '/oidc/guest/callback',
-  birthOfMe: {
-    signIn: '/birthOfMe/signIn',
-    startAccount: '/birthOfMe/startAccount',
-    birth: '/birthOfMe/birth',
-    explore: '/birthOfMe/explore'
-  },
+  signIn: '/signIn',
+  signInAccount: '/signInAccount',
+  birth: '/birth',
+  explore: '/explore',
   welcome: '/welcome',
-  signUpComplete: '/profile/signUpComplete',
   system: {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',

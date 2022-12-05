@@ -30,6 +30,8 @@ const HomePage: FC = () => {
 
   return (
     <styled.Container data-testid="HomePage-test">
+      <styled.PanelWrapper />
+
       <styled.PanelWrapper>
         <ExplorePanel />
       </styled.PanelWrapper>
