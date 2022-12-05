@@ -102,6 +102,7 @@ const NftStore = types
         miscFrozen: 0,
         feeFrozen: 0
       }),
+      requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
 
       isLoading: false
     })
@@ -307,6 +308,9 @@ const NftStore = types
     },
     setConnectToNftItemId(itemId: number | null) {
       self.connectToNftItemId = itemId;
+    },
+    setRequestFundsStatus(status: 'pending' | 'success' | 'error') {
+      self.requestingFundsStatus = status;
     },
     setBalance(payload: AccountBalanceInterface) {
       self.balance = payload;
@@ -749,9 +753,10 @@ const NftStore = types
       }
     }),
     requestInitialFunds: flow(function* (address: string) {
-      address = formatAddress(address);
       console.log('Request initial funds', address);
+      self.setRequestFundsStatus('pending');
       if (!self.channel) {
+        self.setRequestFundsStatus('error');
         throw new Error('Channel is not initialized');
       }
       const {account, options} = yield prepareSignAndSend(address);
@@ -759,10 +764,23 @@ const NftStore = types
 
       console.log('Sign and send', tx);
       try {
-        const res = yield tx.signAndSend(account.address, options);
-        console.log('res', res);
+        const res = yield new Promise((resolve, reject) => {
+          tx.signAndSend(account.address, options, ({status}) => {
+            if (status.isInBlock) {
+              const blockHash = status.asInBlock.toString();
+              console.log(`Completed at block hash #${blockHash}`);
+              resolve(blockHash);
+            } else {
+              console.log(`Current transaction status: ${status.type}`);
+            }
+          }).catch(reject);
+        });
+        console.log('res', res?.toHuman());
+        self.setRequestFundsStatus('success');
+        console.log('Request initial funds success');
       } catch (err) {
         console.log('Error getting initial funds:', err);
+        self.setRequestFundsStatus('error');
         throw err;
       }
     })

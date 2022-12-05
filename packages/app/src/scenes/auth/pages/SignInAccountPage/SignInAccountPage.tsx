@@ -12,15 +12,20 @@ import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
   const {authStore, nftStore, signInAccountStore, sessionStore} = useStore();
+  const {requestInitialFunds, requestingFundsStatus} = nftStore;
 
   const history = useHistory();
 
-  const fetchTokenByWallet = useCallback(async () => {
-    const address = nftStore.getAddressByWallet(authStore.wallet);
-    if (address) {
-      await authStore.fetchTokenByWallet(address);
-    }
-  }, [authStore, nftStore]);
+  // const fetchTokenByWallet = useCallback(async () => {
+  //   const address = nftStore.getAddressByWallet(authStore.wallet);
+  //   if (address) {
+  //     await authStore.fetchTokenByWallet(address);
+  //   }
+  // }, [authStore, nftStore]);
+
+  const onConnectWallet = useCallback(() => {
+    requestInitialFunds(authStore.wallet);
+  }, [authStore, requestInitialFunds]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
@@ -42,13 +47,15 @@ const SignInAccountPage: FC = () => {
             <ChoiceYourWallet
               walletOptions={nftStore.accountOptions}
               wallet={authStore.wallet}
-              isConnectDisabled={authStore.isPending}
+              isConnectDisabled={authStore.isPending || requestingFundsStatus === 'pending'}
               onSelectAddress={authStore.selectWallet}
-              onConnect={fetchTokenByWallet}
+              onConnect={onConnectWallet}
             />
           )}
+          {requestingFundsStatus === 'pending' && <div>Loading MTM...</div>}
+          {requestingFundsStatus === 'error' && <div>Error loading MTM</div>}
 
-          {!!authStore.token && (
+          {requestingFundsStatus === 'success' && (
             <>
               <CongratulationsBox />
               <SinusBox />
