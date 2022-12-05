@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {Avatar, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -49,50 +49,6 @@ const Widgets: FC<PropsInterface> = (props) => {
     widgetsStore.screenShareStore.widget.open();
   };
 
-  const leftToolbarIcons: ToolbarIconInterface[] = [
-    {
-      title: t('labels.notifications'),
-      icon: 'bell',
-      size: 'medium'
-    }
-  ];
-
-  const rightToolbarIcons: ToolbarIconInterface[] = [
-    {
-      title: t('labels.screenShare'),
-      icon: 'screenshare',
-      size: 'medium',
-      onClick: handleOpenScreenShare
-    },
-    {
-      title: t('labels.calendar'),
-      icon: 'calendar',
-      size: 'medium',
-      onClick: widgetsStore.calendarStore.widget.open,
-      disabled: flightStore.isFlightWithMe
-    },
-    {
-      title: t('labels.worldChat'),
-      icon: 'chat',
-      size: 'medium',
-      onClick: widgetsStore.socialStore.widget.toggle,
-      isSelected: asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen
-    },
-    {
-      title: 'Fly to me',
-      icon: 'fly-to',
-      size: 'medium',
-      onClick: widgetsStore.flyToMeStore.flyToMeDialog.open,
-      disabled: false // TODO: Check permissions
-    },
-    {
-      title: t('titles.worldBuilder'),
-      icon: 'planet',
-      size: 'medium',
-      link: ROUTES.worldBuilder.builder
-    }
-  ];
-
   return (
     <>
       <styled.Footer data-testid="Widgets-test">
@@ -111,17 +67,22 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
             </ToolbarIcon>
 
-            {leftToolbarIcons.map((item) => (
-              <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />
-            ))}
+            <ToolbarIcon
+              title={t('labels.notifications')}
+              icon="bell"
+              size="medium"
+              state={{canGoBack: true}}
+            />
 
             {!isExplorePage && (
               <ToolbarIcon
-                title={t('labels.minimap')}
-                icon="vector"
+                title="Explore"
+                icon="solar-system"
                 size="medium"
-                isSelected={widgetsStore.minimapStore.minimapDialog.isOpen}
-                onClick={widgetsStore.minimapStore.minimapDialog.toggle}
+                onClick={() => {
+                  // FIXME: Hard redirect because of unity
+                  document.location = ROUTES.explore;
+                }}
                 state={{canGoBack: true}}
               />
             )}
@@ -134,9 +95,57 @@ const Widgets: FC<PropsInterface> = (props) => {
               <OnlineUsersWidget currentUser={sessionStore.user} />
             </styled.OnlineUsers>
             <ToolbarIconList>
-              {rightToolbarIcons.map((item) => (
-                <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />
-              ))}
+              <ToolbarIcon
+                title={t('labels.screenShare')}
+                icon="screenshare"
+                size="medium"
+                onClick={handleOpenScreenShare}
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIcon
+                title={t('labels.calendar')}
+                icon="calendar"
+                size="medium"
+                onClick={widgetsStore.calendarStore.widget.open}
+                disabled={flightStore.isFlightWithMe}
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIcon
+                title={t('labels.minimap')}
+                icon="vector"
+                size="medium"
+                isSelected={widgetsStore.minimapStore.minimapDialog.isOpen}
+                onClick={widgetsStore.minimapStore.minimapDialog.toggle}
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIcon
+                title={t('labels.worldChat')}
+                icon="chat"
+                size="medium"
+                onClick={widgetsStore.socialStore.widget.toggle}
+                isSelected={asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen}
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIcon
+                title="Fly to me"
+                icon="fly-to"
+                size="medium"
+                onClick={widgetsStore.flyToMeStore.flyToMeDialog.open}
+                disabled={false} // TODO: Check permissions
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIcon
+                title={t('titles.worldBuilder')}
+                icon="planet"
+                size="medium"
+                link={ROUTES.worldBuilder.builder}
+                state={{canGoBack: true}}
+              />
             </ToolbarIconList>
           </styled.RightToolbars>
         )}
