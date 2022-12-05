@@ -3,19 +3,19 @@ import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
 import {Heading, Button, IconSvg, Text} from '@momentum-xyz/ui-kit';
 
-import {OdysseyFeedInterface} from 'scenes/explore/stores';
+import {NftFeedItemInterface} from 'api';
 import {NftItemInterface} from 'stores/NftStore/models';
 
 import * as styled from './NewsFeed.styled';
 
 interface PropsInterface {
-  newsFeed: OdysseyFeedInterface[];
+  nftFeed: NftFeedItemInterface[];
   onTeleport: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
 }
 
 const NewsFeed: FC<PropsInterface> = (props) => {
-  const {newsFeed, onTeleport, onConnect} = props;
+  const {nftFeed, onTeleport, onConnect} = props;
 
   return (
     <styled.Container data-testid="NewsFeed-test">
@@ -25,9 +25,9 @@ const NewsFeed: FC<PropsInterface> = (props) => {
       </styled.Explore>
 
       <styled.Feed>
-        {!!newsFeed.length && (
+        {!!nftFeed.length && (
           <>
-            {newsFeed.map((item) => {
+            {nftFeed.map((item) => {
               const formattedDate = format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
               let message = '';
               switch (item.type) {

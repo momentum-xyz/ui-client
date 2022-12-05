@@ -29,7 +29,7 @@ const BirthOfMePage: FC = () => {
         <styled.Boxes>
           <ExplorePanel
             odysseyCount={nftStore.nftItems.length}
-            newsFeed={exploreStore.newsFeed}
+            nftFeed={exploreStore.nftFeed}
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
