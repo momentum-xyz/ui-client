@@ -13,7 +13,8 @@ import {
   ScreenShareWidget,
   SocialWidget,
   CalendarWidget,
-  OnlineUsersWidget
+  OnlineUsersWidget,
+  NotificationsWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -71,9 +72,11 @@ const Widgets: FC<PropsInterface> = (props) => {
 
             {!isExplorePage && (
               <ToolbarIcon
-                title={t('labels.notifications')}
+                title="Newsfeed"
                 icon="bell"
                 size="medium"
+                onClick={widgetsStore.notificationsStore.notificationsDialog.toggle}
+                isSelected={widgetsStore.notificationsStore.notificationsDialog.isOpen}
                 state={{canGoBack: true}}
               />
             )}
@@ -180,6 +183,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       </styled.Footer>
 
       {widgetsStore.profileStore.profileDialog.isOpen && <ProfileWidget />}
+      {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}
       {widgetsStore.flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
       {widgetsStore.screenShareStore.widget.isOpen && <ScreenShareWidget />}

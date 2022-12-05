@@ -1,17 +1,19 @@
 import {types} from 'mobx-state-tree';
 
 import {ProfileStore} from './ProfileStore';
-import {ProfileMenuStore} from './ProfileMenuStore';
+import {NotificationsStore} from './NotificationsStore';
 import {FlyToMeStore} from './FlyToMeStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {SocialStore} from './SocialStore';
 import {CalendarStore} from './CalendarStore';
 import {MinimapStore} from './MinimapStore';
 import {OnlineUsersStore} from './OnlineUsersStore';
+import {ProfileMenuStore} from './ProfileMenuStore';
 
 const RootWidgetsStore = types.model('RootWidgetsStore', {
   profileStore: types.optional(ProfileStore, {}),
-  profileMenuStore: types.optional(ProfileMenuStore, {}),
+  notificationsStore: types.optional(NotificationsStore, {}),
+  profileMenuStore: types.optional(ProfileMenuStore, {}), // TODO: OLD
   minimapStore: types.optional(MinimapStore, {}),
   flyToMeStore: types.optional(FlyToMeStore, {}),
   screenShareStore: types.optional(ScreenShareStore, {}),
