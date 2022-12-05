@@ -72,8 +72,8 @@ export const Container = styled.div`
   .str-chat__message-input {
     border-block: solid var(--str-chat__background-color);
     border-inline: solid var(--str-chat__background-color);
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     &:focus,
     &:hover {
       border-block: solid var(--str-chat__primary-color);

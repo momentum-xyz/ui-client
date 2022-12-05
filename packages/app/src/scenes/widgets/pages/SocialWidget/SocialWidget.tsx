@@ -17,6 +17,7 @@ const SocialWidget: FC = () => {
   const {worldStore} = mainStore;
   const {socialStore} = widgetsStore;
   const {streamChatStore} = socialStore;
+  const {agoraVoiceChatStore} = agoraStore;
 
   const tabs: SocialPanelTabInterface[] = useMemo(
     () => [
@@ -45,12 +46,12 @@ const SocialWidget: FC = () => {
   const selectedTab = tabs[selectedTabIndex];
 
   const handleClose = useCallback(async () => {
-    if (agoraStore.hasJoined) {
+    if (agoraVoiceChatStore.hasJoined) {
       await agoraStore.leaveVoiceChat();
     }
 
     socialStore.widget.close();
-  }, [agoraStore, socialStore.widget]);
+  }, [agoraStore, agoraVoiceChatStore.hasJoined, socialStore.widget]);
 
   return (
     <Portal>
