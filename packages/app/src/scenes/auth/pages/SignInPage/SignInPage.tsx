@@ -16,6 +16,7 @@ const SignInPage: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
+    authStore.clear();
     localStorage.clear();
   }, [authStore]);
 
