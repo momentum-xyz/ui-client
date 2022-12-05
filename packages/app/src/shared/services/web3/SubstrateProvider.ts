@@ -51,11 +51,14 @@ export default class SubstrateProvider {
   }
 
   static async isExtensionEnabled() {
+    console.log('web3Enable', appVariables.POLKADOT_CONNECTION_STRING);
     const connection = await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
+    console.log('web3Enable - done.');
     return connection.length !== 0 || isWeb3Injected;
   }
 
   static async getAddresses(ss58Format = 2) {
+    console.log('Get web3Accounts in format', ss58Format);
     return await web3Accounts({ss58Format});
   }
 
