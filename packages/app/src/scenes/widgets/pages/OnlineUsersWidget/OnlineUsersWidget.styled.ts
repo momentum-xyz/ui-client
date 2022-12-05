@@ -5,11 +5,16 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 85px;
+  gap: 20px;
 `;
 
 export const MyProfileAvatar = styled(Avatar)`
   width: 23px !important;
   height: 23px !important;
-  border: 1px solid white;
+  margin-left: -5px;
+`;
+
+export const AvatarsWrapper = styled.div`
+  display: flex;
+  width: 100%;
 `;

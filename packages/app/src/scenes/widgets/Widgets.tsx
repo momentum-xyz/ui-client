@@ -33,8 +33,9 @@ const Widgets: FC<PropsInterface> = (props) => {
     agoraStore,
     objectStore
   } = useStore();
+  const {onlineUsersStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {unityStore, worldStore} = mainStore;
+  const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
   const {user} = sessionStore;
 
@@ -42,7 +43,8 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   useEffect(() => {
     worldBuilderStore.fetchPermissions();
-  }, [unityStore, worldBuilderStore]);
+    onlineUsersStore.init();
+  }, [onlineUsersStore, worldBuilderStore]);
 
   const handleOpenScreenShare = () => {
     agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
