@@ -67,10 +67,28 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
             </ToolbarIcon>
 
+            {!isExplorePage && (
+              <ToolbarIcon
+                title={t('labels.notifications')}
+                icon="bell"
+                size="medium"
+                state={{canGoBack: true}}
+              />
+            )}
+
             <ToolbarIcon
-              title={t('labels.notifications')}
-              icon="bell"
+              title="Connections"
+              icon="user-network"
               size="medium"
+              disabled={false} // TODO: Disable for guests
+              state={{canGoBack: true}}
+            />
+
+            <ToolbarIcon
+              title="Staking"
+              icon="wallet"
+              size="medium"
+              disabled={false} // TODO: Disable for guests
               state={{canGoBack: true}}
             />
 
@@ -95,6 +113,14 @@ const Widgets: FC<PropsInterface> = (props) => {
               <OnlineUsersWidget currentUser={sessionStore.user} />
             </styled.OnlineUsers>
             <ToolbarIconList>
+              <ToolbarIcon
+                title="Bio"
+                icon="people"
+                size="medium"
+                disabled={false}
+                state={{canGoBack: true}}
+              />
+
               <ToolbarIcon
                 title={t('labels.screenShare')}
                 icon="screenshare"
