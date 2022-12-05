@@ -7,7 +7,6 @@ export const TabContent = styled.div`
   width: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 1em;
 `;
 
@@ -16,4 +15,13 @@ export const Buttons = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+`;
+
+export const Section = styled.div`
+  margin-bottom: 20px;
+`;
+
+export const SectionHeader = styled.div`
+  margin-bottom: 10px;
+  opacity: 80%;
 `;

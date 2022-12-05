@@ -96,22 +96,34 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
         {activeTab.id === 'start' && (
           <>
             <div>
-              <Heading type="h2" label="Connect to another Odyssey" />
-              <Text
-                size="m"
-                text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
-                align="left"
-              />
-              <Heading type="h2" label="Contributing" />
-              <Text
-                size="m"
-                text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
-                align="left"
-              />
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Connect to another Odyssey" />
+                </styled.SectionHeader>
+                <Text
+                  size="s"
+                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  align="left"
+                />
+              </styled.Section>
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Contributing" />
+                </styled.SectionHeader>
+                <Text
+                  size="s"
+                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  align="left"
+                />
+              </styled.Section>
             </div>
             <styled.Buttons>
               <span />
-              <Button label="Start Contributing" onClick={() => setActiveTab(tabBarTabs[1])} />
+              <Button
+                icon="wallet"
+                label="Start Contributing"
+                onClick={() => setActiveTab(tabBarTabs[1])}
+              />
             </styled.Buttons>
           </>
         )}
