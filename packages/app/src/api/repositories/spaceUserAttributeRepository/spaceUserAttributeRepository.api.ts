@@ -7,6 +7,8 @@ import {spaceUserAttributeRepositoryEndpoints} from './spaceUserAttributeReposit
 import {
   DeleteSpaceUserAttributeRequest,
   DeleteSpaceUserAttributeResponse,
+  GetAllSpaceUserAttributesForSpaceRequest,
+  GetAllSpaceUserAttributesForSpaceResponse,
   GetSpaceUserAttributeRequest,
   GetSpaceUserAttributeResponse,
   SetSpaceUserAttributeRequest,
@@ -62,4 +64,20 @@ export const deleteSpaceUserAttribute: RequestInterface<
   };
 
   return request.delete(url, restOptions);
+};
+
+export const getAllSpaceUserAttributesForSpace: RequestInterface<
+  GetAllSpaceUserAttributesForSpaceRequest,
+  GetAllSpaceUserAttributesForSpaceResponse
+> = (options) => {
+  const {spaceId, pluginId, attributeName, ...restOptions} = options;
+
+  const url = generatePath(spaceUserAttributeRepositoryEndpoints().allUsers, {spaceId});
+
+  restOptions.params = {
+    plugin_id: pluginId,
+    attribute_name: attributeName
+  };
+
+  return request.get(url, restOptions);
 };

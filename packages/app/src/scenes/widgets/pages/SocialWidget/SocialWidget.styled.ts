@@ -10,7 +10,7 @@ export const Modal = styled.div`
 `;
 
 export const Container = styled.div`
-  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
   border-radius: 10px;
   overflow: hidden;
   width: 280px;
