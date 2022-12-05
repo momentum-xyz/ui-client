@@ -18,4 +18,5 @@ export interface UnityApiInterface {
   startFlyWithMe(pilotId: string): void;
   disengageFlyWithMe(): void;
   changeSkybox(skyboxId: string): void;
+  toggleBuildMode(): void;
 }

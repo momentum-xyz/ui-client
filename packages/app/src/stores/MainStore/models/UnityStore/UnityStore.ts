@@ -128,6 +128,9 @@ const UnityStore = types
     changeSkybox(skyboxId: string) {
       UnityService.changeSkybox(skyboxId);
     },
+    toggleBuildMode() {
+      UnityService.toggleBuildMode();
+    },
     leaveSpace(spaceId: string) {
       UnityService.leaveSpace(spaceId);
     },

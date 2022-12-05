@@ -27,6 +27,11 @@ const AuthStore = types.compose(
         // const {unityStore} = getRootStore(self).mainStore;
         // unityStore.setAuthToken(self.token); // TODO: change key
         refreshAxiosToken(self.token);
+      },
+      clear(): void {
+        self.token = '';
+        self.wallet = '';
+        refreshAxiosToken(self.token);
       }
     }))
     .actions((self) => ({

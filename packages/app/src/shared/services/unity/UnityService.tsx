@@ -232,6 +232,10 @@ export class UnityService {
     this.unityApi?.changeSkybox(skyboxId);
   }
 
+  toggleBuildMode() {
+    this.unityApi?.toggleBuildMode();
+  }
+
   leaveSpace(id: string) {
     try {
       this.unityApi?.triggerInteractionMsg?.(PosBusEventEnum.LeftSpace, id, 0, '');
