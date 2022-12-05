@@ -74,16 +74,18 @@ const Widgets: FC<PropsInterface> = (props) => {
               state={{canGoBack: true}}
             />
 
-            <ToolbarIcon
-              title="Explore"
-              icon="solar-system"
-              size="medium"
-              onClick={() => {
-                // FIXME: Hard redirect because of unity
-                document.location = ROUTES.explore;
-              }}
-              state={{canGoBack: true}}
-            />
+            {!isExplorePage && (
+              <ToolbarIcon
+                title="Explore"
+                icon="solar-system"
+                size="medium"
+                onClick={() => {
+                  // FIXME: Hard redirect because of unity
+                  document.location = ROUTES.explore;
+                }}
+                state={{canGoBack: true}}
+              />
+            )}
           </ToolbarIconList>
         </styled.LeftToolbars>
 
