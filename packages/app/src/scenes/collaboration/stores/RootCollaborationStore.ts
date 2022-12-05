@@ -50,7 +50,7 @@ const RootCollaborationStore = types
         yield self.textChatStore.logOut();
         self.textChatStore.resetModel();
 
-        yield self.streamChatStore.deinit(self.spaceStore?.id);
+        self.streamChatStore.deinit(self.spaceStore?.id);
       }
     }),
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {

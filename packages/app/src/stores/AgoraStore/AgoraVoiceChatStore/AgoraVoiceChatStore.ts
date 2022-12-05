@@ -8,7 +8,7 @@ import AgoraRTC, {
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
-import {AgoraTokenResponse, api} from 'api';
+import {AgoraTokenResponse, api, GetAllSpaceUserAttributesForSpaceResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 import {AgoraScreenShareStoreType} from 'stores/AgoraStore/AgoraScreenShareStore';
@@ -34,7 +34,8 @@ const AgoraVoiceChatStore = types
       joinRequest: types.optional(RequestModel, {}),
       leaveRequest: types.optional(RequestModel, {}),
       kickRequest: types.optional(RequestModel, {}),
-      muteRequest: types.optional(RequestModel, {})
+      muteRequest: types.optional(RequestModel, {}),
+      usersRequest: types.optional(RequestModel, {})
     })
   )
   .volatile(() => ({
@@ -153,14 +154,34 @@ const AgoraVoiceChatStore = types
   }))
   // Common actions
   .actions((self) => ({
-    init(worldId: string, userId: string) {
+    init: flow(function* (worldId: string, userId: string) {
       self.client.enableAudioVolumeIndicator();
       self.appId = appVariables.AGORA_APP_ID;
       self.worldId = worldId;
       self.userId = userId;
 
-      // TODO: Get list of users
-    },
+      const response: GetAllSpaceUserAttributesForSpaceResponse | undefined =
+        yield self.usersRequest.send(
+          api.spaceUserAttributeRepository.getAllSpaceUserAttributesForSpace,
+          {
+            spaceId: worldId,
+            pluginId: PluginIdEnum.CORE,
+            attributeName: AttributeNameEnum.VOICE_CHAT_USER
+          }
+        );
+
+      if (response) {
+        self.users = cast(
+          Object.entries(response)
+            .filter(([_, user]) => user.joined)
+            .map(([userId, _]) => VoiceChatUser.create({id: userId}))
+        );
+
+        self.users.forEach((user) => {
+          user.fetchUser();
+        });
+      }
+    }),
     createAudioTrackAndPublish: flow(function* (deviceId: string, isTrackEnabled: boolean) {
       if (self.client.connectionState !== 'CONNECTED') {
         return undefined;
@@ -228,34 +249,26 @@ const AgoraVoiceChatStore = types
       });
 
       yield createLocalTracks(self.createAudioTrackAndPublish);
-      self.agoraRemoteUsers = self.client.remoteUsers
-        .filter((user) => String(user.uid).split('|')[0] !== 'ss')
-        .map((user) =>
-          cast({
-            uid: user.uid,
-            participantInfo: user,
-            isMuted: !user.hasAudio,
-            cameraOff: true
-          })
-        );
     }),
-    leave: flow(function* () {
+    leave: flow(function* (isKicked = false) {
       if (!self.userId || !self.worldId) {
         return;
       }
 
-      const attributeValue: VoiceChatUserAttributeInterface = {
-        userId: self.userId,
-        joined: false
-      };
+      if (!isKicked) {
+        const attributeValue: VoiceChatUserAttributeInterface = {
+          userId: self.userId,
+          joined: false
+        };
 
-      yield self.leaveRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: self.worldId,
-        userId: self.userId,
-        pluginId: PluginIdEnum.CORE,
-        attributeName: AttributeNameEnum.VOICE_CHAT_USER,
-        value: attributeValue
-      });
+        yield self.leaveRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
+          spaceId: self.worldId,
+          userId: self.userId,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.VOICE_CHAT_USER,
+          value: attributeValue
+        });
+      }
 
       yield self.client.leave();
       self.agoraRemoteUsers = [];
@@ -267,14 +280,17 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      yield self.kickRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      const attributeValue: VoiceChatUserAttributeInterface = {
+        userId,
+        joined: false
+      };
+
+      yield self.kickRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: self.worldId,
-        plugin_id: PluginIdEnum.CORE,
-        attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
-        value: {
-          action: VoiceChatActionEnum.KICK,
-          userId: userId
-        }
+        userId,
+        pluginId: PluginIdEnum.CORE,
+        attributeName: AttributeNameEnum.VOICE_CHAT_USER,
+        value: attributeValue
       });
     }),
     muteUser: flow(function* (userId: string) {
@@ -311,6 +327,7 @@ const AgoraVoiceChatStore = types
     },
     handleUserLeft(userId: string) {
       if (userId === self.userId) {
+        self.leave(true);
         return;
       }
       self.users = cast(self.users.filter((user) => user.id !== userId));
@@ -318,7 +335,10 @@ const AgoraVoiceChatStore = types
     handleUserKicked(userId: string) {
       if (userId === self.userId) {
         self.leave();
+        return;
       }
+
+      self.users = cast(self.users.filter((user) => user.id !== userId));
     },
     handleUserMuted(userId: string, mute: () => void) {
       if (userId === self.userId) {
@@ -330,9 +350,6 @@ const AgoraVoiceChatStore = types
     }
   }))
   .views((self) => ({
-    get joined(): boolean {
-      return self.worldId !== undefined;
-    },
     get maxVideoStreamsReached(): boolean {
       return self.agoraRemoteUsers.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT;
     }

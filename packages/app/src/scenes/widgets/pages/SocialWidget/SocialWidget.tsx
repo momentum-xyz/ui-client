@@ -1,10 +1,10 @@
 import {Heading, IconSvg, Portal, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useStore} from 'shared/hooks';
 
-import {SocialTabBar, VoiceChatPanel} from './components';
+import {SocialTabBar, TextChatPanel, VoiceChatPanel} from './components';
 import * as styled from './SocialWidget.styled';
 
 interface SocialPanelTabInterface {
@@ -12,20 +12,18 @@ interface SocialPanelTabInterface {
   main: () => JSX.Element | null;
 }
 
-// TODO: When implementing Chat, move this to seperate tab and implemnt it in it
-const Chat: FC = () => {
-  return <div>Chat</div>;
-};
-
 const SocialWidget: FC = () => {
-  const {widgetsStore, agoraStore} = useStore();
+  const {widgetsStore, agoraStore, sessionStore, mainStore} = useStore();
+  const {worldStore} = mainStore;
   const {socialStore} = widgetsStore;
+  const {streamChatStore} = socialStore;
+  const {agoraVoiceChatStore} = agoraStore;
 
   const tabs: SocialPanelTabInterface[] = useMemo(
     () => [
       {
         name: 'Chat',
-        main: () => <Chat />
+        main: () => <TextChatPanel />
       },
       {
         name: 'Voice',
@@ -35,17 +33,25 @@ const SocialWidget: FC = () => {
     []
   );
 
+  useEffect(() => {
+    streamChatStore.init(sessionStore.userId, worldStore.worldId, sessionStore.user ?? undefined);
+
+    return () => {
+      streamChatStore.deinit(worldStore.worldId);
+    };
+  }, [sessionStore.user, sessionStore.userId, streamChatStore, worldStore.worldId]);
+
   const [selectedTabIndex, setSelectedTabIndex] = useState(1);
 
   const selectedTab = tabs[selectedTabIndex];
 
   const handleClose = useCallback(async () => {
-    if (agoraStore.hasJoined) {
+    if (agoraVoiceChatStore.hasJoined) {
       await agoraStore.leaveVoiceChat();
     }
 
     socialStore.widget.close();
-  }, [agoraStore, socialStore.widget]);
+  }, [agoraStore, agoraVoiceChatStore.hasJoined, socialStore.widget]);
 
   return (
     <Portal>

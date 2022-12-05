@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 /**
  * Chat panel styling.
@@ -13,10 +12,8 @@ import {rgba} from 'polished';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
   border-radius: 6px;
   overflow: hidden;
-  backdrop-filter: blur(8px);
   height: 100%;
 
   margin-left: 10px;
@@ -31,8 +28,8 @@ export const Container = styled.div`
     font-size: var(--font-size-s);
 
     --str-chat__primary-color: ${(props) => props.theme.accent};
-    --str-chat__background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
-    --str-chat__virtual-list-background-color: rgb(26 44 85);
+    --str-chat__background-color: transparent;
+    --str-chat__virtual-list-background-color: transparent;
     --str-chat__secondary-background-color: var(--str-chat__background-color);
 
     --str-chat__primary-surface-color: rgba(1, 255, 179, 0.4);
@@ -75,12 +72,15 @@ export const Container = styled.div`
   .str-chat__message-input {
     border-block: solid var(--str-chat__background-color);
     border-inline: solid var(--str-chat__background-color);
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     &:focus,
     &:hover {
       border-block: solid var(--str-chat__primary-color);
       border-inline: solid var(--str-chat__primary-color);
+    }
+    :not(&:hover) {
+      border-top: 2px solid ${(props) => props.theme.accent};
     }
     .str-chat__send-button {
       height: calc(var(--str-chat__spacing-px) * 37);
