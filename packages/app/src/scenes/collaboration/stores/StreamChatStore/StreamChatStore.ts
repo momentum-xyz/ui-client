@@ -4,7 +4,7 @@ import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
 import {appVariables} from 'api/constants';
 import {UserModelInterface} from 'core/models';
-import {api} from 'api';
+import {api, StreamChatTokenResponse} from 'api';
 
 const StreamChatStore = types
   .compose(
@@ -24,17 +24,11 @@ const StreamChatStore = types
   )
   .actions((self) => ({
     getChannelToken: flow(function* (spaceId: string) {
-      const tokenResponse = yield self.tokenRequest.send(
+      const tokenResponse: StreamChatTokenResponse | undefined = yield self.tokenRequest.send(
         api.streamChatRepository.getStreamChatToken,
         {spaceId}
       );
       return tokenResponse;
-    }),
-    leaveChannel: flow(function* (spaceId: string) {
-      const leaveResponse = yield self.tokenRequest.send(api.streamChatRepository.leave, {
-        spaceId
-      });
-      return leaveResponse;
     }),
     setNumberOfUnreadMessages(unreadMessages: number) {
       self.numberOfUnreadMessages = unreadMessages;
@@ -79,7 +73,7 @@ const StreamChatStore = types
           refreshUnreadCount();
         });
       }),
-      deinit: flow(function* (spaceId?: string) {
+      deinit(spaceId?: string) {
         if (self.client) {
           // it breaks the app when we try to init in another space or world chat
           // this whole logic needs to be refactored and moved into Service
@@ -87,13 +81,12 @@ const StreamChatStore = types
 
           if (spaceId) {
             self.currentChannel?.stopWatching();
-            yield self.leaveChannel(spaceId);
           }
           self.client = null;
           self.currentChannel = null;
         }
         self.resetModel();
-      }),
+      },
       updateUser: flow(function* (userId: string, profile: UserModelInterface) {
         if (!self.client) {
           console.log('StreamChatStore: updateUser: client is not initialized');
