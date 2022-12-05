@@ -78,6 +78,8 @@ const ExplorePage: FC = () => {
             title="Personal Connecting Dashboard"
             icon="hierarchy"
             showCloseButton
+            layoutSize={{height: '510px'}}
+            showOverflow
             onClose={() => {
               nftStore.setConnectToNftItemId(null);
             }}
