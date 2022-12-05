@@ -347,9 +347,6 @@ const AgoraVoiceChatStore = types
     }
   }))
   .views((self) => ({
-    get joined(): boolean {
-      return self.worldId !== undefined;
-    },
     get maxVideoStreamsReached(): boolean {
       return self.agoraRemoteUsers.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT;
     }
