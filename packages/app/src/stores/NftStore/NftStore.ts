@@ -849,13 +849,12 @@ const NftStore = types
     init: flow(function* () {
       self.setIsLoading(true);
       yield self.connectToChain();
+      yield self.fetchNfts();
 
       yield self.setIsWeb3Injected();
       self.getChainInformation();
       yield self.getAddresses();
       // yield self.initAccounts();
-
-      yield self.fetchNfts();
 
       self.setIsLoading(false);
     })
