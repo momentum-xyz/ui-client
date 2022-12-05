@@ -7,6 +7,7 @@ import {ScreenShareStore} from './ScreenShareStore';
 import {SocialStore} from './SocialStore';
 import {CalendarStore} from './CalendarStore';
 import {MinimapStore} from './MinimapStore';
+import {OnlineUsersStore} from './OnlineUsersStore';
 
 const RootWidgetsStore = types.model('RootWidgetsStore', {
   profileStore: types.optional(ProfileStore, {}),
@@ -15,7 +16,8 @@ const RootWidgetsStore = types.model('RootWidgetsStore', {
   flyToMeStore: types.optional(FlyToMeStore, {}),
   screenShareStore: types.optional(ScreenShareStore, {}),
   socialStore: types.optional(SocialStore, {}),
-  calendarStore: types.optional(CalendarStore, {})
+  calendarStore: types.optional(CalendarStore, {}),
+  onlineUsersStore: types.optional(OnlineUsersStore, {})
 });
 
 export {RootWidgetsStore};
