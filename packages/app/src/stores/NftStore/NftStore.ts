@@ -103,6 +103,7 @@ const NftStore = types
         feeFrozen: 0
       }),
       requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
+      mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
 
       isLoading: false
     })
@@ -311,6 +312,9 @@ const NftStore = types
     },
     setRequestFundsStatus(status: 'pending' | 'success' | 'error') {
       self.requestingFundsStatus = status;
+    },
+    setMintingNftStatus(status: 'pending' | 'success' | 'error') {
+      self.mintingNftStatus = status;
     },
     setBalance(payload: AccountBalanceInterface) {
       self.balance = payload;
@@ -540,11 +544,13 @@ const NftStore = types
       // We need to request a challenge from BE and sign it and trigger account linking
       // use useEager logic here
     }),
-    mintNft: flow(function* (address: string) {
+    mintNft: flow(function* (address: string, name: string, image?: string) {
       console.log('Mint NFT', address);
       if (!self.channel) {
+        self.setMintingNftStatus('error');
         throw new Error('Channel is not initialized');
       }
+      self.setMintingNftStatus('pending');
 
       const {account, options} = yield prepareSignAndSend(address);
 
@@ -578,8 +584,8 @@ const NftStore = types
         const nftReqResult = yield self.mintNftRequest.send(mintNft, {
           block_hash,
           wallet: address,
-          name: 'Test NFT',
-          image: 'https://picsum.photos/102'
+          name,
+          image: image || 'https://picsum.photos/102'
         });
         console.log('nftReqResult', nftReqResult);
         if (!nftReqResult) {
@@ -600,8 +606,12 @@ const NftStore = types
             break;
           }
         }
+
+        self.setMintingNftStatus('success');
       } catch (err) {
         console.log('err', err);
+        self.setMintingNftStatus('error');
+        throw err;
       }
     }),
     getAddressByWallet: (wallet: string) => {

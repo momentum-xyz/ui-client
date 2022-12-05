@@ -1,6 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
+import {Text} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {SignUpFormInterface} from 'core/interfaces';
@@ -12,7 +13,7 @@ import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
   const {authStore, nftStore, signInAccountStore, sessionStore} = useStore();
-  const {requestInitialFunds, requestingFundsStatus} = nftStore;
+  const {balance, requestInitialFunds, requestingFundsStatus, mintingNftStatus, mintNft} = nftStore;
 
   const history = useHistory();
 
@@ -24,18 +25,35 @@ const SignInAccountPage: FC = () => {
   // }, [authStore, nftStore]);
 
   const onConnectWallet = useCallback(() => {
-    requestInitialFunds(authStore.wallet);
-  }, [authStore, requestInitialFunds]);
+    if (balance.free === 0) {
+      requestInitialFunds(authStore.wallet);
+    }
+  }, [authStore.wallet, balance.free, requestInitialFunds]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
-      const isDone = await signInAccountStore.updateProfile(form);
-      if (isDone) {
-        await sessionStore.loadUserProfile();
-        history.push(ROUTES.birth);
+      try {
+        await mintNft(authStore.wallet, form.name || '');
+
+        const address = nftStore.getAddressByWallet(authStore.wallet);
+        if (address) {
+          await authStore.fetchTokenByWallet(address);
+        }
+
+        const isDone = await signInAccountStore.updateProfile(form);
+        if (isDone) {
+          await sessionStore.loadUserProfile();
+          // .catch((err) => {
+          //   console.log('error loading profile', err, 'TEMP ignore');
+          // });
+          history.push(ROUTES.birth);
+        }
+      } catch (err) {
+        console.log('error minting nft', err);
       }
     },
-    [history, sessionStore, signInAccountStore]
+    [authStore, history, mintNft, nftStore, sessionStore, signInAccountStore]
+    // [history, sessionStore, signInAccountStore]
   );
 
   return (
@@ -52,12 +70,12 @@ const SignInAccountPage: FC = () => {
               onConnect={onConnectWallet}
             />
           )}
-          {requestingFundsStatus === 'pending' && <div>Loading MTM...</div>}
-          {requestingFundsStatus === 'error' && <div>Error loading MTM</div>}
+          {requestingFundsStatus === 'pending' && <Text text="Loading MTM..." size="m" />}
+          {requestingFundsStatus === 'error' && <Text text="Error loading MTM" size="m" />}
 
-          {requestingFundsStatus === 'success' && (
+          {(requestingFundsStatus === 'success' || balance.free > 0) && (
             <>
-              <CongratulationsBox />
+              {requestingFundsStatus === 'success' && <CongratulationsBox />}
               <SinusBox />
               <CreateOdysseyForm
                 fieldErrors={signInAccountStore.fieldErrors}
@@ -66,6 +84,8 @@ const SignInAccountPage: FC = () => {
               />
             </>
           )}
+          {mintingNftStatus === 'pending' && <Text text="Minting NFT..." size="m" />}
+          {mintingNftStatus === 'error' && <Text text="Error minting NFT" size="m" />}
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>
