@@ -28,7 +28,7 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, authStore, mainStore, initApplication} = useStore();
+  const {configStore, authStore, mainStore, nftStore, initApplication} = useStore();
   const {themeStore} = mainStore;
   const {errorCode: configLoadingErrorCode} = configStore;
 
@@ -69,6 +69,14 @@ const App: FC = () => {
 
     initApplication();
   }, [initApplication, history, t]);
+
+  useEffect(() => {
+    console.log('Add event listener for window load');
+    window.addEventListener('load', () => {
+      console.log('window load - init web3 extension');
+      nftStore.initWeb3ExtensionIfNeeded();
+    });
+  }, [nftStore]);
 
   useEffect(() => {
     if (configStore.isConfigReady) {
