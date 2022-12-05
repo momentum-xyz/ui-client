@@ -460,9 +460,9 @@ const NftStore = types
           async (itemMedadata: any, index: number): Promise<NftItemInterface | null> => {
             const [collectionId, itemId] = collectionItemIds[index];
             const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
-            console.log('data', data);
+            // console.log('data', data);
             const itemDetailedInfo = nftItemsDetailedInfos[index];
-            console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
+            // console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
             const owner = itemDetailedInfo.unwrapOr(null)?.owner?.toString();
 
             if (!data) {
@@ -819,8 +819,11 @@ const NftStore = types
       console.log(
         'Chain Info',
         self.tokenSymbol,
+        'ss58Format',
         self.ss58Format,
+        'chainDecimals',
         self.chainDecimals,
+        'existentialDeposit',
         self.existentialDeposit
       );
       // yield self.getMinNominatorBond();
