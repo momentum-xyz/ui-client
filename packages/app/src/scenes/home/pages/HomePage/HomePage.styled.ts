@@ -18,6 +18,10 @@ export const Container = styled.div`
 //
 export const PanelWrapper = styled.div`
   height: 100%;
+
+  &.voiceChatOpen {
+    transform: translateX(-300px);
+  }
 `;
 
 // export const Rejoin = styled.div`
