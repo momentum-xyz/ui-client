@@ -26,3 +26,12 @@ export interface SetSpaceUserAttributeResponse extends AttributeValueInterface {
 export interface DeleteSpaceUserAttributeRequest extends SpaceUserAttributeRequest {}
 
 export interface DeleteSpaceUserAttributeResponse extends AttributeValueInterface {}
+
+/** GET ALL SPACE-USER ATTRIBUTES FOR GIVEN SPACE **/
+
+export interface GetAllSpaceUserAttributesForSpaceRequest
+  extends Omit<SpaceUserAttributeRequest, 'userId'> {}
+
+export interface GetAllSpaceUserAttributesForSpaceResponse {
+  [userId: string]: AttributeValueInterface;
+}
