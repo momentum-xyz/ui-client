@@ -103,6 +103,7 @@ export type IconNameType =
   | 'stop'
   | 'tiles'
   | 'trash'
+  | 'user-network'
   | 'vector'
   | 'vibe'
   | 'wallet'

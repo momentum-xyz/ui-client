@@ -4,9 +4,9 @@ import {Heading, IconSvg, SearchInput, Text, useDebouncedCallback} from '@moment
 import cn from 'classnames';
 
 import {Box} from 'ui-kit';
+import {NftFeedItemInterface} from 'api';
 import {SearchQueryModelModelType} from 'core/models';
 import {NftItemInterface} from 'stores/NftStore/models';
-import {OdysseyFeedInterface} from 'scenes/explore/stores';
 
 import {NewsFeed, OdysseyList} from './components';
 import * as styled from './ExplorePanel.styled';
@@ -14,7 +14,7 @@ import * as styled from './ExplorePanel.styled';
 interface PropsInterface {
   odysseyCount: number;
   searchQuery: SearchQueryModelModelType;
-  newsFeed: OdysseyFeedInterface[];
+  nftFeed: NftFeedItemInterface[];
   odysseyList: NftItemInterface[];
   onSearch: () => void;
   onTeleport: (nft: NftItemInterface) => void;
@@ -26,7 +26,7 @@ const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC<PropsInterface> = ({
   odysseyCount,
-  newsFeed,
+  nftFeed,
   odysseyList,
   searchQuery,
   onSearch,
@@ -65,7 +65,7 @@ const ExplorePanel: FC<PropsInterface> = ({
 
       <styled.Body>
         {!searchQuery.isQueryValid && (
-          <NewsFeed newsFeed={newsFeed} onTeleport={onTeleport} onConnect={onConnect} />
+          <NewsFeed nftFeed={nftFeed} onTeleport={onTeleport} onConnect={onConnect} />
         )}
 
         {searchQuery.isQueryValid && (
