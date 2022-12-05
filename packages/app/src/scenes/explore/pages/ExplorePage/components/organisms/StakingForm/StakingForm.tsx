@@ -9,6 +9,13 @@ import {ToastContent} from 'ui-kit';
 
 import * as styled from './StakingForm.styled';
 
+// TODO: fizlin
+// - fix tab styles
+// - get answers on comments
+// - Change authorize icon
+
+// ? Will this style of lines be reused somewhere? Extract to new components?
+
 const tabBarTabs: TabBarTabInterface[] = [
   {
     id: 'start',
@@ -81,6 +88,8 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
         );
       });
   };
+
+  const initiatorWallet = useMemo(() => 'EDhjohSyRxb....', []);
 
   const balanceSections = useMemo(() => {
     // @dmitry-yudakov - default values for these, until they are added; To be removed when present in store;
@@ -164,9 +173,9 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="s" align="right" text="ACCOUNT" />
+                    <Text size="xxs" align="right" text="ACCOUNT" />
                   </styled.LabeledLineLabelContainer>
-                  <Text size="s" text="EDhjohSyRxb...." />
+                  <Text size="xxs" text={initiatorWallet} />
                 </styled.LabeledLineContainer>
               </styled.Section>
               <styled.Section>
@@ -184,7 +193,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="s" align="right" text="SET AMOUNT, MTM" />
+                    <Text size="xxs" align="right" text="SET AMOUNT, MTM" />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer>
                     <Input value={amount} onChange={(val) => setAmount(Number(val))} />
@@ -192,7 +201,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="s" align="right" text="DESTINATION" />
+                    <Text size="xxs" align="right" text="DESTINATION" />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer>
                     {/* @dmitry-yudakov -- Should this be a dropdown? */}
@@ -210,14 +219,37 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
         {activeTab.id === 'confirm' && (
           <>
             <div>
-              <Heading type="h2" label="Authorize your contribution" />
-              <Text size="m" text="TODO" align="left" />
-              <Text size="m" text={`Amount: ${amount}`} align="left" />
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Authorize your contribution" />
+                </styled.SectionHeader>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="xxs" align="right" text="AMOUNT, MTM" />
+                  </styled.LabeledLineLabelContainer>
+                  <styled.LabeledLineInputContainer className="view-only">
+                    <Input value={amount} onChange={(val) => setAmount(Number(val))} disabled />
+                  </styled.LabeledLineInputContainer>
+                </styled.LabeledLineContainer>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="xxs" align="right" text="SENDING FROM" />
+                  </styled.LabeledLineLabelContainer>
+                  <Text size="xxs" text={initiatorWallet} />
+                </styled.LabeledLineContainer>
+                <styled.ConsentContainer>
+                  <Text
+                    size="s"
+                    align="left"
+                    text="This account is also the destination for the rewards you receive from your contribution."
+                  />
+                </styled.ConsentContainer>
+              </styled.Section>
             </div>
 
             <styled.Buttons>
               <Button label="Back" onClick={() => setActiveTab(tabBarTabs[1])} />
-              <Button label="Sign & Connect" onClick={() => onStake(amount)} />
+              <Button label="Sign & Connect" icon="check" onClick={() => onStake(amount)} />
             </styled.Buttons>
           </>
         )}

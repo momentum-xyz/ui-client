@@ -42,6 +42,13 @@ export const LabeledLineLabelContainer = styled.div`
 export const LabeledLineInputContainer = styled.div`
   margin-top: -10px;
   flex: 1;
+  & input {
+    font-size: var(--font-size-xxxs);
+  }
+  &.view-only input:disabled {
+    opacity 100%;
+    background: transparent;
+  }
 `;
 
 export const BalanceContainer = styled.div`
@@ -65,4 +72,9 @@ export const Separator = styled.hr`
   margin-bottom: 20px;
   opacity: 20%;
   border-color: ${(props) => props.theme.accent};
+`;
+
+export const ConsentContainer = styled.div`
+  padding-left: 140px;
+  margin-bottom: 41px;
 `;
