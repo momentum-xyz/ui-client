@@ -12,6 +12,7 @@ export const Menu = styled.div`
   align-items: center;
   width: 165px;
   height: 60px;
+  justify-content: end;
 `;
 
 export const Body = styled.div`

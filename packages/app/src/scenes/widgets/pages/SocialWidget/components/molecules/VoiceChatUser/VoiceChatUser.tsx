@@ -3,7 +3,7 @@ import {FC, useRef} from 'react';
 
 import * as styled from './VoiceChatUser.styled';
 import {VoiceChatUserActions} from './VoiceChatUserActions';
-const OFFSET_RIGHT = 160;
+const OFFSET_RIGHT = 150;
 const OFFSET_BOTTOM = 0;
 
 interface PropsInterface {
