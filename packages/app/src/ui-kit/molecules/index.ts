@@ -7,6 +7,7 @@ export * from './WorldBuilderHeader';
 export * from './WorldBuilderTemplateItem';
 export * from './Location';
 export * from './TileMenu';
+export * from './NewsFeedItem';
 export * from './NetworkButton';
 export * from './UserSpaceList';
 export * from './SpaceListItem';

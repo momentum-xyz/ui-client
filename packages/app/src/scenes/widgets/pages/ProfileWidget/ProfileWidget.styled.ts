@@ -25,3 +25,9 @@ export const Body = styled.div`
 export const Container = styled.div`
   width: 100%;
 `;
+
+export const Loader = styled.div`
+  padding: 0;
+  width: 100%;
+  height: 150px;
+`;

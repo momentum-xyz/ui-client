@@ -73,6 +73,9 @@ const ProfileStore = types.compose(
       })
     }))
     .views((self) => ({
+      get isLoading(): boolean {
+        return self.fetchRequest.isPending;
+      },
       get formErrors(): FieldErrorInterface[] {
         return [...self.fieldErrors];
       }

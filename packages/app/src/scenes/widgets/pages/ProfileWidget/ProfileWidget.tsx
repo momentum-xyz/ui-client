@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
+import {Dialog, Heading, IconSvg, Loader, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -59,9 +59,15 @@ const ProfileWidget: FC = (props) => {
           <SvgButton iconName="close" size="normal" onClick={handleProfileClose} />
         </styled.Header>
         <styled.Body>
+          {!isEditMode && profileStore.isLoading && (
+            <styled.Loader>
+              <Loader />
+            </styled.Loader>
+          )}
+
           {!!profileStore.userProfile && (
             <styled.Container>
-              {!isEditMode && (
+              {!isEditMode && !profileStore.isLoading && (
                 <ProfileView
                   user={profileStore.userProfile}
                   onTeleportToOdyssey={handleTeleportToOdyssey}
