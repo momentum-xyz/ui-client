@@ -100,10 +100,10 @@ export const use3DMap = (
 
     const geometry = new SphereGeometry(1, 16, 16);
     const material = new MeshStandardMaterial({
-      map: new THREE.TextureLoader().load(item.image)
+      map: new THREE.TextureLoader().load(texture)
     });
 
-    const odyssey = new Odyssey(geometry, material, item.id, item.owner, item.name, item.image);
+    const odyssey = new Odyssey(geometry, material, item.id, item.owner, item.name, texture);
 
     return odyssey;
   };
