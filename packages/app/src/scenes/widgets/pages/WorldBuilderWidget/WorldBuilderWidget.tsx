@@ -14,7 +14,7 @@ const WorldBuilderWidget: FC = () => {
     title: 'World Builder',
     icon: 'planet',
     size: 'medium',
-    link: generatePath(ROUTES.odyssey.builder.spawnAsset.base, {worldId: worldStore.worldId})
+    link: generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
   };
 
   const expandedItems: ToolbarIconInterface[] = [
