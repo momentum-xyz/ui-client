@@ -20,6 +20,7 @@ const OnlineUsersAvatars: FC<PropsInterface> = ({onlineUsers}) => {
           ))}
         </>
       ) : (
+        onlineUsers.length > 0 &&
         onlineUsers.map((user) => (
           <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.avatarSrc} />
         ))
