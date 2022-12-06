@@ -79,7 +79,6 @@ const ExplorePage: FC = () => {
             icon="hierarchy"
             showCloseButton
             layoutSize={{height: '510px'}}
-            showOverflow
             onClose={() => {
               nftStore.setConnectToNftItemId(null);
             }}

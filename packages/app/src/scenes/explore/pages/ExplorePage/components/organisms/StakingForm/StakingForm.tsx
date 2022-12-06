@@ -1,5 +1,6 @@
 import React, {FC, useMemo, useState} from 'react';
 import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
+import {formatTokenAmount} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
@@ -11,10 +12,7 @@ import * as styled from './StakingForm.styled';
 
 // TODO: fizlin
 // - fix tab styles
-// - get answers on comments
 // - Change authorize icon
-
-// ? Will this style of lines be reused somewhere? Extract to new components?
 
 const tabBarTabs: TabBarTabInterface[] = [
   {
@@ -48,13 +46,19 @@ interface PropsInterface {
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {authStore, nftStore} = useStore();
   const {wallet: authWallet} = authStore;
-  const {balance, addresses} = nftStore;
+  const {balance, addresses, accountOptions, nftItems} = nftStore;
+
+  console.log(
+    accountOptions, // get initiator wallet from here
+    nftItems // get destination from here
+  );
+  const initiatorWallet = useMemo(() => 'EDhjohSyRxb....', []);
+  const [destination, setDestination] = useState('Tyrone smith -  fPZZcgHfYVonk');
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
 
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
   const [amount, setAmount] = useState(1_000_000_000);
-  const [destination, setDestination] = useState('Tyrone smith -  fPZZcgHfYVonk');
 
   console.log('StakingForm', {wallet, addresses, authWallet, amount});
 
@@ -89,41 +93,23 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
       });
   };
 
-  const initiatorWallet = useMemo(() => 'EDhjohSyRxb....', []);
-
   const balanceSections = useMemo(() => {
-    // @dmitry-yudakov - default values for these, until they are added; To be removed when present in store;
-    const extraBalanceEntities = [
-      ['Stacked', null],
-      ['Unbonding', null]
-    ] as const;
-    const allowedBalanceKeys = ['free', 'reserved', ...extraBalanceEntities.map(([v]) => v)];
+    const balanceEntities = [
+      {label: 'Account Balance', value: Number(balance.free)},
+      {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)},
+      {label: 'Stacked', value: null},
+      {label: 'Unbonding', value: null}
+    ];
 
-    // @dmitry-yudakov -- is the following mapping correct? (assuming we shouldn't use 'miscFrozen' and 'feeFrozen');
-    const balanceKeyLabelMap: {[key: string]: string} = {
-      free: 'Account Balance',
-      reserved: 'Transferable'
-    };
-    return [...Object.entries(balance || {}), ...extraBalanceEntities]
-      .filter(([key]) => allowedBalanceKeys.includes(key))
-      .map(([balanceEntity, balanceValue]) => {
-        const balanceValueText =
-          balanceValue !== null
-            ? // @dmitry-yudakov -- I was unable to find a util for formatting decimals. Do you have one?;
-              balanceValue.toLocaleString('de-DE', {
-                useGrouping: false,
-                minimumFractionDigits: 1,
-                maximumFractionDigits: 1
-              })
-            : '-';
-        const balanceEntityLabel = balanceKeyLabelMap[balanceEntity || ''] || balanceEntity;
-        return (
-          <styled.BalanceEntityContainer key={balanceEntity}>
-            <Heading type="h4" align="left" label={balanceEntityLabel} />
-            <Text size="xxs" align="left" text={`${balanceValueText} MTM`}></Text>
-          </styled.BalanceEntityContainer>
-        );
-      });
+    return balanceEntities.map(({label, value}) => {
+      const balanceValueText = value !== null ? formatTokenAmount(value) : '-';
+      return (
+        <styled.BalanceEntityContainer key={label}>
+          <Heading type="h4" align="left" label={label} />
+          <Text size="xxs" align="left" text={`${balanceValueText} MTM`}></Text>
+        </styled.BalanceEntityContainer>
+      );
+    });
   }, [balance]);
 
   return (
