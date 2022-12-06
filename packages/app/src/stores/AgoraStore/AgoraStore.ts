@@ -39,6 +39,9 @@ const AgoraStore = types
     },
     handleUserMuted(userId: string) {
       self.agoraVoiceChatStore.handleUserMuted(userId, self.userDevicesStore.mute);
+    },
+    handleAllMuted(initiatorId: string) {
+      self.agoraVoiceChatStore.handleUserMuted(initiatorId, self.userDevicesStore.mute);
     }
   }))
   // Meeting space managment
