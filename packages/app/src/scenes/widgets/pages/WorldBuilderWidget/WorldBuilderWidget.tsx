@@ -1,9 +1,11 @@
 import {FC} from 'react';
-import {ToolbarIcon, ToolbarIconInterface} from '@momentum-xyz/ui-kit';
+import {ToolbarIcon, ToolbarIconInterface, Text, IconSvg} from '@momentum-xyz/ui-kit';
 import {generatePath, useLocation} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
+
+import * as styled from './WorldBuilderWidget.styled';
 
 const WorldBuilderWidget: FC = () => {
   const {worldStore} = useStore().mainStore;
@@ -48,11 +50,20 @@ const WorldBuilderWidget: FC = () => {
 
   if (isBuilderMode) {
     return (
-      <>
+      <styled.ActiveIconsContainer>
         {expandedItems.map((item) => (
           <ToolbarIcon key={item.title} {...item} />
         ))}
-      </>
+        <styled.StandoutBuilderModeContainer>
+          <IconSvg name="planet" size="large" />
+          <Text
+            text="World Builder Mode Enabled"
+            size="xxs"
+            transform="uppercase"
+            isMultiline={false}
+          />
+        </styled.StandoutBuilderModeContainer>
+      </styled.ActiveIconsContainer>
     );
   }
 
