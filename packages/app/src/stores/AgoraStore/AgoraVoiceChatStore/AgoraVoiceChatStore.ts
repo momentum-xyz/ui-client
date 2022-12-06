@@ -154,34 +154,6 @@ const AgoraVoiceChatStore = types
   }))
   // Common actions
   .actions((self) => ({
-    init: flow(function* (worldId: string, userId: string) {
-      self.client.enableAudioVolumeIndicator();
-      self.appId = appVariables.AGORA_APP_ID;
-      self.worldId = worldId;
-      self.userId = userId;
-
-      const response: GetAllSpaceUserAttributesForSpaceResponse | undefined =
-        yield self.usersRequest.send(
-          api.spaceUserAttributeRepository.getAllSpaceUserAttributesForSpace,
-          {
-            spaceId: worldId,
-            pluginId: PluginIdEnum.CORE,
-            attributeName: AttributeNameEnum.VOICE_CHAT_USER
-          }
-        );
-
-      if (response) {
-        self.users = cast(
-          Object.entries(response)
-            .filter(([_, user]) => user.joined)
-            .map(([userId, _]) => VoiceChatUser.create({id: userId}))
-        );
-
-        self.users.forEach((user) => {
-          user.fetchUser();
-        });
-      }
-    }),
     createAudioTrackAndPublish: flow(function* (deviceId: string, isTrackEnabled: boolean) {
       if (self.client.connectionState !== 'CONNECTED') {
         return undefined;
@@ -221,7 +193,7 @@ const AgoraVoiceChatStore = types
         ) => Promise<IMicrophoneAudioTrack | undefined>
       ) => Promise<void>
     ) {
-      if (!self.worldId || !self.userId) {
+      if (!self.worldId || !self.userId || self.hasJoined) {
         return;
       }
 
@@ -270,9 +242,11 @@ const AgoraVoiceChatStore = types
         });
       }
 
-      yield self.client.leave();
-      self.agoraRemoteUsers = [];
-      self.hasJoined = false;
+      if (self.hasJoined) {
+        yield self.client.leave();
+        self.agoraRemoteUsers = [];
+        self.hasJoined = false;
+      }
     }),
     kickUser: flow(function* (userId: string) {
       console.info('[AgoraVoiceChatStore] Kicking user...', userId, self.worldId);
@@ -348,6 +322,43 @@ const AgoraVoiceChatStore = types
     getAgoraRemoteUser(userId: string): AgoraRemoteUserInterface | undefined {
       return self.agoraRemoteUsers.find((user) => user.uid === userId);
     }
+  }))
+  .actions((self) => ({
+    init: flow(function* (worldId: string, userId: string) {
+      self.client.enableAudioVolumeIndicator();
+      self.appId = appVariables.AGORA_APP_ID;
+      self.worldId = worldId;
+      self.userId = userId;
+
+      const response: GetAllSpaceUserAttributesForSpaceResponse | undefined =
+        yield self.usersRequest.send(
+          api.spaceUserAttributeRepository.getAllSpaceUserAttributesForSpace,
+          {
+            spaceId: worldId,
+            pluginId: PluginIdEnum.CORE,
+            attributeName: AttributeNameEnum.VOICE_CHAT_USER
+          }
+        );
+
+      if (response) {
+        self.users = cast(
+          Object.entries(response)
+            .filter(([_, user]) => {
+              if (user.userId === self.userId) {
+                self.leave();
+                return false;
+              }
+
+              return user.joined;
+            })
+            .map(([userId, _]) => VoiceChatUser.create({id: userId}))
+        );
+
+        self.users.forEach((user) => {
+          user.fetchUser();
+        });
+      }
+    })
   }))
   .views((self) => ({
     get maxVideoStreamsReached(): boolean {
