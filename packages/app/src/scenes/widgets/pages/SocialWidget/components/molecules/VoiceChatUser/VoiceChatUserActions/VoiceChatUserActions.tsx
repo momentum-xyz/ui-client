@@ -1,5 +1,6 @@
 import {CoordinationInterface, IconSvg, Portal, useClickOutside} from '@momentum-xyz/ui-kit';
 import {FC, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import * as styled from './VoiceChatUserActions.styled';
 
@@ -20,6 +21,8 @@ const VoiceChatUserActions: FC<PropsInterface> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
+  const {t} = useTranslation();
+
   useClickOutside(ref, () => {
     onClose();
   });
@@ -31,11 +34,15 @@ const VoiceChatUserActions: FC<PropsInterface> = ({
           <styled.Body>
             <styled.Action onClick={onUserMute}>
               <IconSvg name="microphoneOff" />
-              <styled.ActionLabel text={`Mute ${name}`} weight="light" size="xxs" />
+              <styled.ActionLabel text={t('actons.muteName', {name})} weight="light" size="xxs" />
             </styled.Action>
             <styled.Action onClick={onUserKick}>
               <IconSvg name="remove-user" />
-              <styled.ActionLabel text={`Kick ${name} from Voice`} weight="light" size="xxs" />
+              <styled.ActionLabel
+                text={t('actons.kickNameFromVoice', {name})}
+                weight="light"
+                size="xxs"
+              />
             </styled.Action>
           </styled.Body>
           <styled.Pointer />
