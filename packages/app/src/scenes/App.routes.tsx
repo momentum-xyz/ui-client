@@ -9,8 +9,8 @@ const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/Sign
 const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
 const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
+const OdysseyPage = lazy(() => import('./odyssey/pages/OdysseyPage/OdysseyPage'));
 const Object = lazy(() => import('./object/Object'));
-const HomePage = lazy(() => import('./home/pages/HomePage/HomePage'));
 const GrabTablePage = lazy(() => import('./grabTable/pages/GrabTablePage/GrabTablePage'));
 const SpaceAdmin = lazy(() => import('./spaceAdmin/SpaceAdmin'));
 const FlyWithMePage = lazy(() => import('./flight/pages/FlyWithMePage/FlyWithMePage'));
@@ -94,7 +94,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
     path: ROUTES.base,
     exact: true,
-    main: () => <HomePage />
+    main: () => <OdysseyPage />
   },
   {
     path: ROUTES.spaceAdmin.base,
@@ -106,7 +106,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     main: () => (
       <>
         <WorldBuilderCustomizePanel />
-        <HomePage />
+        <OdysseyPage />
       </>
     ),
     renderBackground: false
@@ -121,7 +121,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     main: () => (
       <>
         <GrabTablePage />
-        <HomePage />
+        <OdysseyPage />
       </>
     )
   },
@@ -130,7 +130,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     main: () => (
       <>
         <FlyWithMePage />
-        <HomePage />
+        <OdysseyPage />
       </>
     ),
     exact: true
