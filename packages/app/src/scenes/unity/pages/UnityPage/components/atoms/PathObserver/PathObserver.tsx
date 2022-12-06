@@ -35,13 +35,17 @@ const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
     main: () => <></>
   },
   {
-    path: ROUTES.worldBuilder.builder,
+    path: ROUTES.odyssey.builder.base,
     main: () => <></>
   },
   {
-    path: ROUTES.object.root,
+    path: ROUTES.odyssey.object.root,
     main: () => <></>,
     exact: false
+  },
+  {
+    path: ROUTES.spawnAsset.base,
+    main: () => <></>
   }
 ];
 

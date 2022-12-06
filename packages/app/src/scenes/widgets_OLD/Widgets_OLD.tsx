@@ -5,7 +5,6 @@ import {useTranslation} from 'react-i18next';
 import ReactHowler from 'react-howler';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {switchFullscreen} from 'core/utils';
 import {
@@ -163,7 +162,7 @@ const Widgets_OLD: FC = () => {
             <ToolbarIcon
               icon="planet"
               title={t('titles.worldBuilder')}
-              link={ROUTES.worldBuilder.builder}
+              //link={ROUTES.worldBuilder.builder}
               size="normal-large"
               isWhite={false}
             />

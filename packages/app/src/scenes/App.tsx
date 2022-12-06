@@ -1,6 +1,6 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory, useLocation} from 'react-router-dom';
+import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
@@ -114,6 +114,15 @@ const App: FC = () => {
     return <></>;
   }
 
+  // FIXME: Default url
+  if (pathname === ROUTES.base) {
+    return (
+      <Switch>
+        <Redirect to={ROUTES.explore} />
+      </Switch>
+    );
+  }
+
   // PUBLIC ROUTES
   if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
     return (
@@ -131,7 +140,7 @@ const App: FC = () => {
           <AppAuth>
             <GlobalStyles />
             <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
-              {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.base)}
+              {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}
             </AppLayers>
           </AppAuth>
         </Suspense>
@@ -146,7 +155,7 @@ const App: FC = () => {
         <GlobalStyles />
         <UnityPage />
         <Suspense fallback={false}>
-          <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY, ROUTES.base)}</AppLayers>
+          <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
         </Suspense>
       </AppAuth>
     </ThemeProvider>

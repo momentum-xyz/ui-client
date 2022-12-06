@@ -11,6 +11,7 @@ export interface UnityApiInterface {
   controlSound(isOn: boolean): any;
   pauseUnity(isPaused: boolean): any;
   setToken(token?: string): any;
+  setTargetWorldId(id?: string): any;
   getCurrentWorld(): string;
   getUserPosition(): string;
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;

@@ -1,12 +1,13 @@
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
 import {Portal, UserStatusEnum} from '@momentum-xyz/ui-kit';
 
+import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 import {appVariables} from 'api/constants';
 import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
 import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
@@ -21,7 +22,6 @@ import {
 } from 'ui-kit';
 import {AssetTypeEnum} from 'core/enums';
 
-import {PathObserver} from './components';
 import * as styled from './UnityPage.styled';
 
 const UnityContextCSS = {
@@ -31,15 +31,38 @@ const UnityContextCSS = {
 
 const UnityPage: FC = () => {
   const {mainStore, authStore, unityLoaded, sessionStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, worldStore} = mainStore;
 
   const theme = useTheme();
   const history = useHistory();
   const {t} = useTranslation();
+  const location = useLocation();
+
+  // TODO: FIXME
+  const worldId = useMemo(() => {
+    const paths: string[] = PRIVATE_ROUTES_WITH_UNITY.map((route) => route.path);
+
+    let worldId = '';
+    paths.forEach((path) => {
+      const match = matchPath<{worldId: string}>(location.pathname, {path: path});
+      if (match?.params?.worldId) {
+        worldId = match.params.worldId;
+      }
+    });
+
+    return worldId;
+  }, [location.pathname]);
 
   useUnityEvent('MomentumLoaded', () => {
-    unityStore.setAuthToken(authStore.token);
-    unityStore.setInitialVolume();
+    console.log(`Unity worldId: ${worldId}`);
+
+    if (worldId) {
+      unityStore.setTargetWorldId(worldId);
+      unityStore.setAuthToken(authStore.token);
+      unityStore.setInitialVolume();
+    } else {
+      console.error(`There is no worldId in route.`);
+    }
   });
 
   useUnityEvent('TeleportReady', () => {
@@ -59,7 +82,8 @@ const UnityPage: FC = () => {
 
   useUnityEvent('ClickEventDashboard', (spaceId: string) => {
     history.push({
-      pathname: generatePath(ROUTES.object.root, {
+      pathname: generatePath(ROUTES.odyssey.object.root, {
+        worldId: worldStore.worldId,
         objectId: spaceId
       })
     });
@@ -67,7 +91,8 @@ const UnityPage: FC = () => {
 
   useUnityEvent('PlasmaClickEvent', (spaceId: string) => {
     history.push({
-      pathname: generatePath(ROUTES.object.base, {
+      pathname: generatePath(ROUTES.odyssey.object.base, {
+        worldId: worldStore.worldId,
         objectId: spaceId,
         assetType: AssetTypeEnum.PLUGIN
       })
@@ -77,7 +102,8 @@ const UnityPage: FC = () => {
   useUnityEvent('ClickEventVideo', (spaceId: string) => {
     // history.push({pathname: generatePath(ROUTES.video, {spaceId})});
     history.push({
-      pathname: generatePath(ROUTES.object.base, {
+      pathname: generatePath(ROUTES.odyssey.object.base, {
+        worldId: worldStore.worldId,
         objectId: spaceId,
         assetType: AssetTypeEnum.VIDEO
       })
@@ -210,11 +236,11 @@ const UnityPage: FC = () => {
       <styled.Inner data-testid="UnityPage-test">
         <Unity unityContext={unityStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
-      <PathObserver
+      {/*<PathObserver
         isTeleportReady={unityStore.isTeleportReady}
         resumeUnity={unityStore.resume}
         pauseUnity={unityStore.pause}
-      />
+      />*/}
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>
   );

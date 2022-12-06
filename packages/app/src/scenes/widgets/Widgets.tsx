@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {Avatar, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -14,7 +15,8 @@ import {
   SocialWidget,
   CalendarWidget,
   OnlineUsersWidget,
-  NotificationsWidget
+  NotificationsWidget,
+  OdysseyWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -32,9 +34,10 @@ const Widgets: FC<PropsInterface> = (props) => {
     mainStore,
     worldBuilderStore,
     agoraStore,
-    objectStore
+    objectStore,
+    nftStore
   } = useStore();
-  const {onlineUsersStore} = widgetsStore;
+  const {onlineUsersStore, odysseyStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
@@ -44,6 +47,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   useEffect(() => {
     worldBuilderStore.fetchPermissions();
+    odysseyStore.init(nftStore.nftItems, worldStore.worldId);
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
   }, [onlineUsersStore, worldBuilderStore]);
 
@@ -123,6 +127,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="people"
                 size="medium"
                 disabled={false}
+                onClick={odysseyStore.widget.open}
                 state={{canGoBack: true}}
               />
 
@@ -174,7 +179,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 title={t('titles.worldBuilder')}
                 icon="planet"
                 size="medium"
-                link={ROUTES.worldBuilder.builder}
+                link={generatePath(ROUTES.spawnAsset.base, {worldId: worldStore.worldId})}
                 state={{canGoBack: true}}
               />
             </ToolbarIconList>
@@ -182,6 +187,13 @@ const Widgets: FC<PropsInterface> = (props) => {
         )}
       </styled.Footer>
 
+      {widgetsStore.odysseyStore.widget.isOpen && (
+        <OdysseyWidget
+          odyssey={odysseyStore.odyssey}
+          onClose={odysseyStore.widget.close}
+          nftId={odysseyStore.nftId}
+        />
+      )}
       {widgetsStore.profileStore.profileDialog.isOpen && <ProfileWidget />}
       {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}

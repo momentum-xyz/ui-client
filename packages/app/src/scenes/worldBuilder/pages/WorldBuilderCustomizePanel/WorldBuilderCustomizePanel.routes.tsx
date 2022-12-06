@@ -4,12 +4,12 @@ import {SkyboxSelectorWithPreview, UploadAsset} from '../../components';
 
 export const WORLD_BUILDER_ROUTES = [
   {
-    path: ROUTES.worldBuilder.builderSkybox,
+    path: ROUTES.odyssey.builder.skybox,
     main: () => <SkyboxSelectorWithPreview />,
     exact: true
   },
   {
-    path: ROUTES.worldBuilder.builderUploadAsset,
+    path: ROUTES.odyssey.builder.uploadAsset,
     main: () => <UploadAsset />,
     exact: true
   }
