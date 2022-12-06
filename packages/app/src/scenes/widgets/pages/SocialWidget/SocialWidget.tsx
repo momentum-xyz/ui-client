@@ -27,10 +27,11 @@ const SocialWidget: FC = () => {
       },
       {
         name: 'Voice',
-        main: () => <VoiceChatPanel />
+        main: () => <VoiceChatPanel />,
+        active: agoraVoiceChatStore.hasJoined
       }
     ],
-    []
+    [agoraVoiceChatStore.hasJoined]
   );
 
   useEffect(() => {

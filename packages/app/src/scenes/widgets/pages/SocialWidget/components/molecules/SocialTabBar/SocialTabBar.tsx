@@ -6,6 +6,7 @@ import * as styled from './SocialTabBar.styled';
 export interface SocialPanelTabInterface {
   name: string;
   main: React.FC;
+  active?: boolean;
 }
 
 interface PropsInterface {
@@ -37,7 +38,7 @@ const SocialTabBar: FC<PropsInterface> = ({selectedTabIndex, tabs, onSelect}) =>
               label={tab.name}
               transform="uppercase"
               type="h3"
-              className={cn(index === selectedTabIndex && 'selected')}
+              className={cn(index === selectedTabIndex && 'selected', tab.active && 'active')}
             />
           </styled.TabLabelContainer>
         ))}
