@@ -16,12 +16,12 @@ const OnlineUsersAvatars: FC<PropsInterface> = ({onlineUsers}) => {
         <>
           <styled.UsersCount text={`+${onlineUsers.length - 15}`} size="xxs" weight="bold" />
           {onlineUsers.slice(0, 15).map((user) => (
-            <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.profile.avatarHash} />
+            <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.avatarSrc} />
           ))}
         </>
       ) : (
         onlineUsers.map((user) => (
-          <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.profile.avatarHash} />
+          <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.avatarSrc} />
         ))
       )}
     </styled.Container>
