@@ -20,7 +20,7 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_BOTTOM = 60;
 
 const Menu: FC = () => {
-  const {widgetsStore, sessionStore, homeStore} = useStore();
+  const {widgetsStore, sessionStore, odysseyStore} = useStore();
   const {profileMenuStore} = widgetsStore;
   const {user} = sessionStore;
 
@@ -36,7 +36,7 @@ const Menu: FC = () => {
   });
 
   const handleProfileOpen = () => {
-    homeStore.userProfileDialog.open();
+    odysseyStore.userProfileDialog.open();
     handleCloseMenu();
   };
 

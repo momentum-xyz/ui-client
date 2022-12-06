@@ -10,7 +10,7 @@ import {RootFlightStore} from 'scenes/flight/stores';
 import {RootWidgetsStore} from 'scenes/widgets/stores/RootWidgetsStore';
 import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD';
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
-import {HomeStore} from 'scenes/home/stores';
+import {OdysseyStore} from 'scenes/odyssey/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
@@ -37,7 +37,7 @@ const RootStore = types
     signInAccountStore: types.optional(SignInAccountStore, {}),
     map3dStore: types.optional(Map3dStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
-    homeStore: types.optional(HomeStore, {}),
+    odysseyStore: types.optional(OdysseyStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
     meetingStore: types.optional(RootMeetingStore, {}),
     flightStore: types.optional(RootFlightStore, {}),

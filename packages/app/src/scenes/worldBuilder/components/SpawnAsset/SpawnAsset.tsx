@@ -21,7 +21,7 @@ const SpawnAsset: FC = () => {
           <SvgButton
             iconName="close"
             size="medium-large"
-            onClick={() => history.push(ROUTES.base)}
+            onClick={() => history.push(generatePath(ROUTES.odyssey.base, {worldId}))}
           />
         </styled.Header>
         <styled.Body>

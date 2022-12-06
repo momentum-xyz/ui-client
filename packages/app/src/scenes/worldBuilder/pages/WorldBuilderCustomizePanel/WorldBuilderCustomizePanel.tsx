@@ -8,31 +8,35 @@ import {
   NavigationTabInterface
   // Loader
 } from '@momentum-xyz/ui-kit';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 
 // import {useStore} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {createSwitchByConfig} from 'core/utils';
 
 import * as styled from './WorldBuilderCustomizePanel.styled';
 import {WORLD_BUILDER_ROUTES} from './WorldBuilderCustomizePanel.routes';
 
-const tabs: NavigationTabInterface[] = [
-  {
-    path: ROUTES.worldBuilder.builderSkybox,
-    iconName: 'planet'
-  },
-  {
-    path: ROUTES.worldBuilder.builderUploadAsset,
-    iconName: 'add'
-  }
-];
-
 const WorldBuilderCustomizePanel: FC = () => {
+  const {mainStore} = useStore();
+  const {worldStore} = mainStore;
+
   const history = useHistory();
 
   // const {t} = useTranslation();
   const theme = useTheme();
+
+  const tabs: NavigationTabInterface[] = [
+    {
+      path: generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId}),
+      iconName: 'planet'
+    },
+    {
+      path: generatePath(ROUTES.odyssey.builder.uploadAsset, {worldId: worldStore.worldId}),
+      iconName: 'add'
+    }
+  ];
 
   // const handleSearchFocus = (isFocused: boolean) => {
   //   unityStore.changeKeyboardControl(!isFocused);
@@ -48,7 +52,7 @@ const WorldBuilderCustomizePanel: FC = () => {
       // showOverflow
       // withOpacity
       isBodyExtendingToEdges
-      onClose={() => history.push(ROUTES.base)}
+      onClose={() => history.push(generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId}))}
     >
       <styled.Container>
         <Navigation tabs={tabs} />

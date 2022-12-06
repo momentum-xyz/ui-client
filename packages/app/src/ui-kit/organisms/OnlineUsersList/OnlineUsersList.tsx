@@ -8,7 +8,7 @@ import {
 } from '@momentum-xyz/ui-kit';
 
 import {OnlineUsersListInterface, UserModelInterface} from 'core/models';
-import {OnlineUsersStoreType} from 'scenes/home/stores/HomeStore/models';
+import {OnlineUsersStoreType} from 'scenes/odyssey/stores/OdysseyStore/models';
 
 import {UserItem} from './components';
 import * as styled from './OnlineUsersList.styled';
