@@ -20,7 +20,8 @@ const WorldBuilderWidget: FC = () => {
   const expandedItems: ToolbarIconInterface[] = [
     {
       title: 'Close World Builder',
-      icon: 'planet',
+      // icon: 'planet',
+      icon: 'close',
       size: 'medium',
       link: generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId})
     },
