@@ -25,10 +25,11 @@ const SignInAccountPage: FC = () => {
   // }, [authStore, nftStore]);
 
   const onConnectWallet = useCallback(() => {
+    console.log('onConnectWallet', balance, balance.free);
     if (balance.free === 0) {
       requestInitialFunds(authStore.wallet);
     }
-  }, [authStore.wallet, balance.free, requestInitialFunds]);
+  }, [authStore.wallet, balance, requestInitialFunds]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {

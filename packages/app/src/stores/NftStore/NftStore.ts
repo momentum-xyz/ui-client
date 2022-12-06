@@ -774,7 +774,7 @@ const NftStore = types
 
       console.log('Sign and send', tx);
       try {
-        const res = yield new Promise((resolve, reject) => {
+        yield new Promise((resolve, reject) => {
           tx.signAndSend(account.address, options, ({status}) => {
             if (status.isInBlock) {
               const blockHash = status.asInBlock.toString();
@@ -785,7 +785,6 @@ const NftStore = types
             }
           }).catch(reject);
         });
-        console.log('res', res?.toHuman());
         self.setRequestFundsStatus('success');
         console.log('Request initial funds success');
       } catch (err) {
@@ -868,7 +867,13 @@ const NftStore = types
             `free balance is ${balance.free} with ${balance.reserved} reserved and a nonce of ${nonce}`
           );
           console.log('balance', balance.toHuman(), balance);
-          self.setBalance(balance);
+          const {free, reserved, miscFrozen, feeFrozen} = balance;
+          self.setBalance({
+            free: free.toNumber(),
+            reserved: reserved.toNumber(),
+            miscFrozen: miscFrozen.toNumber(),
+            feeFrozen: feeFrozen.toNumber()
+          });
         }
       );
     })
