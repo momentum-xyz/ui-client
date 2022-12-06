@@ -6,12 +6,12 @@ import {NftItemInterface} from 'stores/NftStore/models';
 
 interface PropsInterface {
   items: NftItemInterface[];
-  canvasElement: HTMLCanvasElement;
+  canvas: HTMLCanvasElement;
   onOdysseyClick: (nft: NftItemInterface) => void;
 }
 
 const Map3d: FC<PropsInterface> = (props) => {
-  const {items, canvasElement, onOdysseyClick} = props;
+  const {items, canvas, onOdysseyClick} = props;
 
   const wasLoaded = useRef<boolean>(false);
 
@@ -30,8 +30,8 @@ const Map3d: FC<PropsInterface> = (props) => {
   }, []);
 
   // FIXME: Center item id
-  // use3DMap(canvasElement, items, items[0].id, wasLoaded.current, onLoaded, handleOdysseyClick);
-  use3DMap(canvasElement, items, 0, wasLoaded.current, onLoaded, handleOdysseyClick);
+  // use3DMap(canvas, items, items[0].id, wasLoaded.current, onLoaded, handleOdysseyClick);
+  use3DMap(canvas, items, 0, wasLoaded.current, onLoaded, handleOdysseyClick);
 
   return <></>;
 };
