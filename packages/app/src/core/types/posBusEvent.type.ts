@@ -37,8 +37,9 @@ export type PosBusEventType = {
   'stop-fly-with-me': (spaceId: string, pilotId: string, pilotName: string) => void;
   'simple-notification': (message: string) => void;
   'screen-share': (message: PosBusScreenShareMessageType) => void;
-  'voice-chat-kick': (userId: string) => void;
-  'voice-chat-mute': (userId: string) => void;
+  'voice-chat-kick-user': (userId: string) => void;
+  'voice-chat-mute-user': (userId: string) => void;
+  'voice-chat-mute-all': (initiatorId: string) => void;
   'voice-chat-user-joined': (userId: string) => void;
   'voice-chat-user-left': (userId: string) => void;
   'space-invite': (

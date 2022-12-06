@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Text, Avatar} from '@momentum-xyz/ui-kit';
+import {Text, Avatar, IconSvg} from '@momentum-xyz/ui-kit';
 
 export const Attendee = styled.div`
   position: relative;
@@ -20,4 +20,10 @@ export const AttendeeAvatar = styled(Avatar)`
 export const AttendeeName = styled(Text)`
   overflow: hidden;
   width: 60px;
+`;
+
+export const MutedIcon = styled(IconSvg)`
+  position: absolute;
+  transform: translateY(5px);
+  color: ${(props) => props.theme.text};
 `;

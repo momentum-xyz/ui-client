@@ -59,6 +59,15 @@ export const ROUTES = {
     start: '/createWorld/start',
     name: '/createWorld/name',
     template: '/createWorld/template',
-    generate: '/createWorld/generate'
+    generate: '/createWorld/generate',
+    builder: '/worldBuilder',
+    builderUploadAsset: '/worldBuilder/upload',
+    builderSkybox: '/worldBuilder/skybox'
+  },
+  spawnAsset: {
+    base: '/spawnAsset/:worldId',
+    basicAssets: '/spawnAsset/:worldId/basic',
+    customAssets: '/spawnAsset/:worldId/custom',
+    uploadAsset: '/spawnAsset/:worldId/upload'
   }
 };

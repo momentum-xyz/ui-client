@@ -9,6 +9,7 @@ import {CalendarStore} from './CalendarStore';
 import {MinimapStore} from './MinimapStore';
 import {OnlineUsersStore} from './OnlineUsersStore';
 import {ProfileMenuStore} from './ProfileMenuStore';
+import {OdysseyStore} from './OdysseyStore';
 
 const RootWidgetsStore = types.model('RootWidgetsStore', {
   profileStore: types.optional(ProfileStore, {}),
@@ -19,7 +20,8 @@ const RootWidgetsStore = types.model('RootWidgetsStore', {
   screenShareStore: types.optional(ScreenShareStore, {}),
   socialStore: types.optional(SocialStore, {}),
   calendarStore: types.optional(CalendarStore, {}),
-  onlineUsersStore: types.optional(OnlineUsersStore, {})
+  onlineUsersStore: types.optional(OnlineUsersStore, {}),
+  odysseyStore: types.optional(OdysseyStore, {})
 });
 
 export {RootWidgetsStore};

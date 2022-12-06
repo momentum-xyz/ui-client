@@ -1,6 +1,7 @@
 import {Heading, IconSvg, Portal, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 
@@ -19,18 +20,21 @@ const SocialWidget: FC = () => {
   const {streamChatStore} = socialStore;
   const {agoraVoiceChatStore} = agoraStore;
 
+  const {t} = useTranslation();
+
   const tabs: SocialPanelTabInterface[] = useMemo(
     () => [
       {
-        name: 'Chat',
+        name: t('labels.chat'),
         main: () => <TextChatPanel />
       },
       {
-        name: 'Voice',
-        main: () => <VoiceChatPanel />
+        name: t('labels.voice'),
+        main: () => <VoiceChatPanel />,
+        active: agoraVoiceChatStore.hasJoined
       }
     ],
-    []
+    [agoraVoiceChatStore.hasJoined, t]
   );
 
   useEffect(() => {
@@ -60,7 +64,7 @@ const SocialWidget: FC = () => {
           <styled.Header>
             <styled.HeaderItemsGroup>
               <IconSvg name="collaboration" size="large" />
-              <Heading label="Social" transform="uppercase" type="h2" />
+              <Heading label={t('titles.social')} transform="uppercase" type="h2" />
             </styled.HeaderItemsGroup>
             <styled.HeaderItemsGroup>
               <SvgButton iconName="close" size="small" onClick={handleClose} />

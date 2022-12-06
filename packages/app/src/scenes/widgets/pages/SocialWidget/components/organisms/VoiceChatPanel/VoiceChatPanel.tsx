@@ -1,6 +1,7 @@
 import {IconSvg, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {VoiceChatUser} from 'scenes/widgets/pages/SocialWidget/components';
@@ -12,6 +13,8 @@ const VoiceChatPanel: FC = () => {
   const {agoraVoiceChatStore, userDevicesStore} = agoraStore;
   const {user} = sessionStore;
 
+  const {t} = useTranslation();
+
   const handleToggleVoiceChat = useCallback(() => {
     if (agoraVoiceChatStore.hasJoined) {
       agoraStore.leaveVoiceChat();
@@ -20,9 +23,11 @@ const VoiceChatPanel: FC = () => {
     }
   }, [agoraVoiceChatStore, agoraStore]);
 
-  usePosBusEvent('voice-chat-mute', agoraStore.handleUserMuted);
+  usePosBusEvent('voice-chat-mute-user', agoraStore.handleUserMuted);
 
-  usePosBusEvent('voice-chat-kick', agoraVoiceChatStore.handleUserKicked);
+  usePosBusEvent('voice-chat-mute-all', agoraStore.handleAllMuted);
+
+  usePosBusEvent('voice-chat-kick-user', agoraVoiceChatStore.handleUserKicked);
 
   usePosBusEvent('voice-chat-user-joined', agoraVoiceChatStore.handleUserJoined);
 
@@ -37,6 +42,7 @@ const VoiceChatPanel: FC = () => {
             name={user.name}
             avatarSrc={user.avatarSrc}
             soundLevel={agoraVoiceChatStore.localSoundLevel}
+            isMuted={userDevicesStore.muted}
           />
         )}
         {agoraVoiceChatStore.users.map((user) => {
@@ -48,12 +54,12 @@ const VoiceChatPanel: FC = () => {
               avatarSrc={user.avatarSrc}
               soundLevel={remoteUser?.soundLevel ?? 0}
               onUserKick={() => {
-                console.log('kicking...');
                 agoraVoiceChatStore.kickUser(user.id);
               }}
               onUserMute={() => {
                 agoraVoiceChatStore.muteUser(user.id);
               }}
+              isMuted={remoteUser?.isMuted ?? true}
               isRemote
             />
           );
@@ -62,15 +68,22 @@ const VoiceChatPanel: FC = () => {
       <styled.Footer>
         <styled.EnterLeaveButton onClick={handleToggleVoiceChat}>
           <styled.EnterLeaveButtonLabel
-            text={agoraVoiceChatStore.hasJoined ? 'Leave Voice Chat' : 'Join Voice Chat'}
+            text={
+              agoraVoiceChatStore.hasJoined
+                ? t('actions.leaveVoiceChat')
+                : t('actions.joinVoiceChat')
+            }
             size="xs"
             weight="light"
           />
         </styled.EnterLeaveButton>
         <styled.VoiceActions>
-          <styled.VoiceAction>
+          <styled.VoiceAction
+            onClick={agoraVoiceChatStore.muteAll}
+            disabled={agoraVoiceChatStore.muteAllRequest.isPending}
+          >
             <IconSvg name="microphoneOff" />
-            <Text text="Mute All" size="xs" weight="light" />
+            <Text text={t('actions.muteAll')} size="xs" weight="light" />
           </styled.VoiceAction>
           <styled.VoiceAction
             onClick={() => {
@@ -79,7 +92,11 @@ const VoiceChatPanel: FC = () => {
             disabled={!agoraStore.canToggleMicrophone}
           >
             <IconSvg name={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'} />
-            <Text text={userDevicesStore.muted ? 'Mic Off' : 'Mic On'} size="xs" weight="light" />
+            <Text
+              text={userDevicesStore.muted ? t('labels.micOff') : t('labels.micOn')}
+              size="xs"
+              weight="light"
+            />
           </styled.VoiceAction>
         </styled.VoiceActions>
       </styled.Footer>

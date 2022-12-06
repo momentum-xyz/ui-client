@@ -72,11 +72,14 @@ class PosBusService {
     }
 
     switch (voiceChatActionAttributeValue.action) {
-      case VoiceChatActionEnum.KICK:
-        PosBusEventEmitter.emit('voice-chat-kick', voiceChatActionAttributeValue.userId);
+      case VoiceChatActionEnum.KICK_USER:
+        PosBusEventEmitter.emit('voice-chat-kick-user', voiceChatActionAttributeValue.userId);
         break;
-      case VoiceChatActionEnum.MUTE:
-        PosBusEventEmitter.emit('voice-chat-mute', voiceChatActionAttributeValue.userId);
+      case VoiceChatActionEnum.MUTE_USER:
+        PosBusEventEmitter.emit('voice-chat-mute-user', voiceChatActionAttributeValue.userId);
+        break;
+      case VoiceChatActionEnum.MUTE_ALL:
+        PosBusEventEmitter.emit('voice-chat-mute-all', voiceChatActionAttributeValue.userId);
         break;
     }
   }
