@@ -106,7 +106,8 @@ const ExplorePage: FC = () => {
             title="Personal Connecting Dashboard"
             icon="hierarchy"
             showCloseButton
-            layoutSize={{height: '510px'}}
+            // @dmitry-yudakov - here we need it to have a scroll/dynamic height; Is this the case somewhere else in the project?
+            layoutSize={{height: '610px'}}
             onClose={() => {
               // nftStore.stakingDashorboardDialog.close();
               nftStore.setConnectToNftItemId(null);

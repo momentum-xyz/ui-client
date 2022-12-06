@@ -1,9 +1,9 @@
 import React, {FC, useMemo, useState} from 'react';
 import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
+import {formatTokenAmount} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
-import {formatTokenAmount} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
@@ -48,16 +48,6 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const [_amount, setAmount] = useState<number | null>(null);
   const amount = _amount || unstakeFromDetail?.amount || 0;
 
-  // TODO: fizlin - replace with real data
-  const stakes = useMemo(
-    () =>
-      new Array(3).fill({
-        user: 'Satoshi',
-        staked: 2.5,
-        reward: 0.3
-      }) as {user: string; staked: number; reward: number}[],
-    []
-  );
   console.log(
     accountOptions // get initiator wallet from here
   );
@@ -179,33 +169,43 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                   <Heading type="h2" align="left" label="Active Stakes" />
                 </styled.SectionHeader>
                 {Array.from(stakingAtOthers.values()).map((stakingDetail) => (
-                  <div key={stakingDetail.destAddr}>
-                    <Text size="m" text={stakingDetail.sourceAddr} align="left" />
-                    <Text size="m" text={`${stakingDetail.amount}`} align="left" />
+                  <styled.ActiveStakesLineContainer key={stakingDetail.destAddr}>
+                    <Text size="s" text={stakingDetail.sourceAddr} align="left" />
+                    <Text size="s" text={`Staked ${stakingDetail.amount} MTM`} align="left" />
+
+                    {/* @dmitry-yudakov get the reward from somewhere? */}
+                    <Text
+                      size="s"
+                      text={`Rewarded ${formatTokenAmount(stakingDetail.amount)} MTM`}
+                      align="left"
+                    />
                     <Button
                       label="Unstake"
+                      transform="capitalized"
+                      icon="chevron"
                       onClick={() => setUnstakeFrom(stakingDetail.destAddr)}
                     />
-                  </div>
-                ))}
-                {stakes.map((stakingDetail) => (
-                  <div key={stakingDetail.user}>
-                    <Text size="m" text={stakingDetail.user} align="left" />
-                    <Text size="m" text={`${stakingDetail.staked}`} align="left" />
-                    <Text size="m" text={`${stakingDetail.reward}`} align="left" />
-                    <Button label="Unstake" onClick={() => setUnstakeFrom(stakingDetail.user)} />
-                  </div>
+                  </styled.ActiveStakesLineContainer>
                 ))}
               </styled.Section>
+              <styled.Separator />
               <styled.Section>
                 <styled.SectionHeader>
                   <Heading type="h2" align="left" label="Rewards" />
                 </styled.SectionHeader>
-                <Text size="m" text={`${accumulatedRewards}`} align="left" />
+                <styled.RewardData>
+                  <div>
+                    <Text size="s" align="left" text="Total rewards" className="with-padding" />
+                    <Text
+                      size="s"
+                      text={`${formatTokenAmount(accumulatedRewards)} MTM`}
+                      align="left"
+                    />
+                  </div>
+                  <Button label="Get Rewards" onClick={() => setGetRewards(true)} />
+                </styled.RewardData>
               </styled.Section>
-              <styled.Buttons className="end">
-                <Button label="Get Rewards" onClick={() => setGetRewards(true)} />
-              </styled.Buttons>
+              <styled.Separator />
 
               {/* <Heading type="h2" label="TEMP Mint NFT" />
               <Button label="TEMP Mint Nft" onClick={() => nftStore.mintNft(wallet)} /> */}
@@ -219,11 +219,29 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
         {!!unstakeFromDetail && (
           <>
             <div>
-              <Heading type="h2" label="Unstake your contribution" />
-              <Text size="m" text="Amount" align="left" />
-              <Input type="number" value={amount} onChange={(val) => setAmount(Number(val))} />
-              <Text size="m" text="Unstake From" align="left" />
-              <Text size="m" text={`TODO ${unstakeFrom}`} align="left" />
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" label="Unstake your contribution" />
+                </styled.SectionHeader>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="m" text="Amount" align="left" />
+                  </styled.LabeledLineLabelContainer>
+                  <styled.LabeledLineInputContainer className="view-only">
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(val) => setAmount(Number(val))}
+                    />
+                  </styled.LabeledLineInputContainer>
+                </styled.LabeledLineContainer>
+              </styled.Section>
+              <styled.LabeledLineContainer>
+                <styled.LabeledLineLabelContainer>
+                  <Text size="m" text="Unstake From" align="left" />
+                </styled.LabeledLineLabelContainer>
+                <Text size="m" text={`TODO ${unstakeFrom}`} align="left" />
+              </styled.LabeledLineContainer>
             </div>
 
             <styled.Buttons>

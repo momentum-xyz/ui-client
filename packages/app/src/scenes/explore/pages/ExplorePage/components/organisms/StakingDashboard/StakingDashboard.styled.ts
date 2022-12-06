@@ -4,7 +4,6 @@ import styled from 'styled-components';
 export const Container = styled.div``;
 
 export const TabContent = styled.div`
-  height: 300px;
   width: 500px;
   display: flex;
   flex-direction: column;
@@ -78,4 +77,34 @@ export const LabeledLineInputContainer = styled.div`
   }
 `;
 
-export const ActiveStakesLineContainer = styled.div``;
+export const ActiveStakesLineContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+
+  & button {
+    flex-direction: row-reverse;
+    border: none;
+    color: white !important;
+    font-size: var(--font-size-s) !important;
+    padding-right: 0 !important;
+    font-weight: 400 !important;
+    span {
+      transform: rotate(270deg);
+    }
+  }
+`;
+
+export const RewardData = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  & > div {
+    display: flex;
+  }
+  & .with-padding {
+    padding-right: 20px;
+  }
+`;
