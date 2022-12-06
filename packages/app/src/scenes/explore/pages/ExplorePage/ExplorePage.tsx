@@ -8,7 +8,8 @@ import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
-import {SelectedOdyssey, StakingDashboard, StakingForm} from './components';
+// import {SelectedOdyssey, StakingDashboard, StakingForm} from './components';
+import {SelectedOdyssey, StakingDashboard} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
@@ -73,7 +74,7 @@ const ExplorePage: FC = () => {
           )}
         </styled.Boxes>
 
-        {!!nftStore.connectToNftItemId && (
+        {/* {!!nftStore.connectToNftItemId && (
           <Dialog
             title="Personal Connecting Dashboard"
             icon="hierarchy"
@@ -90,7 +91,7 @@ const ExplorePage: FC = () => {
               }}
             />
           </Dialog>
-        )}
+        )} */}
 
         <styled.Boxes>
           <Button
@@ -99,18 +100,22 @@ const ExplorePage: FC = () => {
           />
         </styled.Boxes>
 
-        {!!nftStore.stakingDashorboardDialog.isOpen && (
+        {/* {!!nftStore.stakingDashorboardDialog.isOpen && ( */}
+        {!!nftStore.connectToNftItemId && (
           <Dialog
             title="Personal Connecting Dashboard"
             icon="hierarchy"
             showCloseButton
+            layoutSize={{height: '510px'}}
             onClose={() => {
-              nftStore.stakingDashorboardDialog.close();
+              // nftStore.stakingDashorboardDialog.close();
+              nftStore.setConnectToNftItemId(null);
             }}
           >
             <StakingDashboard
               onComplete={() => {
-                nftStore.stakingDashorboardDialog.close();
+                // nftStore.stakingDashorboardDialog.close();
+                nftStore.setConnectToNftItemId(null);
               }}
             />
           </Dialog>

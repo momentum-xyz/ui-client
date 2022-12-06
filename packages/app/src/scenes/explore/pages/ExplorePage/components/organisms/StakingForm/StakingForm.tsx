@@ -48,6 +48,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {wallet: authWallet} = authStore;
   const {balance, addresses, accountOptions, nftItems} = nftStore;
 
+  // TODO: fizlin - replace with real data
   console.log(
     accountOptions, // get initiator wallet from here
     nftItems // get destination from here
