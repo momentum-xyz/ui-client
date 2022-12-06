@@ -30,7 +30,8 @@ const Map3d: FC<PropsInterface> = (props) => {
   }, []);
 
   // FIXME: Center item id
-  use3DMap(canvasElement, items, items[0].id, wasLoaded.current, onLoaded, handleOdysseyClick);
+  // use3DMap(canvasElement, items, items[0].id, wasLoaded.current, onLoaded, handleOdysseyClick);
+  use3DMap(canvasElement, items, 0, wasLoaded.current, onLoaded, handleOdysseyClick);
 
   return <></>;
 };
