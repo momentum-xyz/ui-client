@@ -23,6 +23,7 @@ const StoryBook = lazy(() => import('./storyBook/StoryBook'));
 const WorldBuilderCustomizePanel = lazy(
   () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
 );
+const SpawnAsset = lazy(() => import('./worldBuilder/components/SpawnAsset/SpawnAsset'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
@@ -147,5 +148,10 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
     path: ROUTES.video,
     main: () => <VideoPage />
+  },
+  {
+    path: ROUTES.spawnAsset.base,
+    renderBackground: false,
+    main: () => <SpawnAsset />
   }
 ];
