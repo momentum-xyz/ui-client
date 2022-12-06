@@ -38,6 +38,8 @@ const UnityPage: FC = () => {
   const {t} = useTranslation();
 
   useUnityEvent('MomentumLoaded', () => {
+    // TODO: Comes from URL change routes
+    // unityStore.setTargetWorldId('94637a35-c7fc-4c31-8eef-863c76d6489b'); // SNI
     unityStore.setAuthToken(authStore.token);
     unityStore.setInitialVolume();
   });

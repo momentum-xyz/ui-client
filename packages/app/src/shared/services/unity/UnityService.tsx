@@ -117,6 +117,10 @@ export class UnityService {
     this.unityApi?.setToken(token);
   }
 
+  setTargetWorldId(id?: string) {
+    this.unityApi?.setTargetWorldId(id);
+  }
+
   pause() {
     document.body.classList.remove('unity-active');
     this.unityApi?.pauseUnity(true);

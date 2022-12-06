@@ -43,6 +43,9 @@ const UnityStore = types
     setAuthToken(token?: string): void {
       UnityService.setAuthToken(token);
     },
+    setTargetWorldId(id?: string): void {
+      UnityService.setTargetWorldId(id);
+    },
     getCurrentWorld(): string | null {
       return UnityService.getCurrentWorld?.() || null;
     },
