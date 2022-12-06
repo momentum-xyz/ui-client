@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -34,7 +34,12 @@ const BirthOfMePage: FC = () => {
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
             onSelect={map3dStore.selectOdyssey}
-            onTeleport={(nft) => history.push(ROUTES.base)}
+            onTeleport={(nft) => {
+              console.log(nft);
+              if (nft.uuid) {
+                history.push(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
+              }
+            }}
             onConnect={(id) => alert(`Connect to ${id}`)}
           />
         </styled.Boxes>

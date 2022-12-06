@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {getSnapshot} from 'mobx-state-tree';
 import {Button, Dialog} from '@momentum-xyz/ui-kit';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
@@ -54,7 +54,14 @@ const ExplorePage: FC = () => {
           {!!map3dStore.selectedOdyssey && (
             <SelectedOdyssey
               odyssey={map3dStore.selectedOdyssey}
-              onTeleport={() => history.push(ROUTES.base)}
+              onTeleport={() => {
+                console.log(map3dStore.selectedOdyssey);
+                if (map3dStore.selectedOdyssey?.uuid) {
+                  history.push(
+                    generatePath(ROUTES.odyssey.base, {worldId: map3dStore.selectedOdyssey?.uuid})
+                  );
+                }
+              }}
               onConnect={() => {
                 if (map3dStore.selectedOdyssey) {
                   nftStore.setConnectToNftItemId(map3dStore.selectedOdyssey.id);
@@ -116,7 +123,12 @@ const ExplorePage: FC = () => {
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
             onSelect={map3dStore.selectOdyssey}
-            onTeleport={(nft) => history.push(ROUTES.base)}
+            onTeleport={(nft) => {
+              console.log(nft);
+              if (nft.uuid) {
+                history.push(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
+              }
+            }}
             // FIXME id type
             onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
           />

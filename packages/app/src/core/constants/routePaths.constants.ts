@@ -1,9 +1,21 @@
 export const ROUTES = {
-  base: '/',
+  base: '/', // TODO: REMOVAL
   signIn: '/signIn',
   signInAccount: '/signInAccount',
   birth: '/birth',
   explore: '/explore',
+  odyssey: {
+    base: '/odyssey/:worldId',
+    builder: {
+      base: '/odyssey/:worldId/worldBuilder',
+      skybox: '/odyssey/:worldId/worldBuilder/builderSkybox',
+      uploadAsset: '/odyssey/:worldId/worldBuilder/upload'
+    },
+    object: {
+      root: '/odyssey/:worldId/object/:objectId',
+      base: '/odyssey/:worldId/object/:objectId/:assetType'
+    }
+  },
   welcome: '/welcome',
   system: {
     disconnected: '/system/disconnected',
@@ -23,10 +35,6 @@ export const ROUTES = {
     plugin: '/collaboration/:spaceId/:subPath',
     liveStream: '/collaboration/:spaceId/live-stream',
     table: `/collaboration/:spaceId/table`
-  },
-  object: {
-    root: '/object/:objectId',
-    base: '/object/:objectId/:assetType'
   },
   spaceAdmin: {
     base: '/space/:spaceId/admin',
@@ -51,9 +59,6 @@ export const ROUTES = {
     start: '/createWorld/start',
     name: '/createWorld/name',
     template: '/createWorld/template',
-    generate: '/createWorld/generate',
-    builder: '/worldBuilder',
-    builderUploadAsset: '/worldBuilder/upload',
-    builderSkybox: '/worldBuilder/skybox'
+    generate: '/createWorld/generate'
   }
 };

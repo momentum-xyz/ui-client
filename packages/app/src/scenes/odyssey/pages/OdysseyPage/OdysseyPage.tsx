@@ -36,7 +36,6 @@ const OdysseyPage: FC = () => {
     <styled.Container data-testid="HomePage-test">
       <styled.PanelWrapper />
 
-      {/* TOD: Removal */}
       <styled.PanelWrapper className={cn(socialWidget.isOpen && 'voiceChatOpen')}>
         <ExplorePanel />
       </styled.PanelWrapper>
