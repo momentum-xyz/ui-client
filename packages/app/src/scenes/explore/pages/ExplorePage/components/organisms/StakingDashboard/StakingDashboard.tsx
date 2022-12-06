@@ -143,8 +143,8 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
               <Text size="m" text={`${accumulatedRewards}`} align="left" />
               <Button label="Get Rewards" onClick={() => setGetRewards(true)} />
 
-              <Heading type="h2" label="TEMP Mint NFT" />
-              <Button label="TEMP Mint Nft" onClick={() => nftStore.mintNft(wallet)} />
+              {/* <Heading type="h2" label="TEMP Mint NFT" />
+              <Button label="TEMP Mint Nft" onClick={() => nftStore.mintNft(wallet)} /> */}
             </div>
             {/* <styled.Buttons>
               <Button label="Back" onClick={() => setActiveTab(tabBarTabs[0])} />

@@ -1,6 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
+import {Text} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {SignUpFormInterface} from 'core/interfaces';
@@ -12,25 +13,47 @@ import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
   const {authStore, nftStore, signInAccountStore, sessionStore} = useStore();
+  const {balance, requestInitialFunds, requestingFundsStatus, mintingNftStatus, mintNft} = nftStore;
 
   const history = useHistory();
 
-  const fetchTokenByWallet = useCallback(async () => {
-    const address = nftStore.getAddressByWallet(authStore.wallet);
-    if (address) {
-      await authStore.fetchTokenByWallet(address);
+  const onConnectWallet = useCallback(() => {
+    console.log('onConnectWallet', balance, balance.free);
+    if (balance.free === 0) {
+      requestInitialFunds(authStore.wallet);
+    } else {
+      // noop
+      // there are funds already
     }
-  }, [authStore, nftStore]);
+  }, [authStore.wallet, balance, requestInitialFunds]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
-      const isDone = await signInAccountStore.updateProfile(form);
-      if (isDone) {
-        await sessionStore.loadUserProfile();
-        history.push(ROUTES.birth);
+      try {
+        await mintNft(authStore.wallet, form.name || '');
+
+        const address = nftStore.getAddressByWallet(authStore.wallet);
+        if (address) {
+          await authStore.fetchTokenByWallet(address);
+        }
+
+        // NFT should be minted and accessible by now - if it doesn't happen sometimes
+        // we can put some wait here
+        await nftStore.fetchNfts();
+
+        const isDone = await signInAccountStore.updateProfile(form);
+        if (isDone) {
+          await sessionStore.loadUserProfile();
+          // .catch((err) => {
+          //   console.log('error loading profile', err, 'TEMP ignore');
+          // });
+          history.push(ROUTES.birth);
+        }
+      } catch (err) {
+        console.log('error minting nft', err);
       }
     },
-    [history, sessionStore, signInAccountStore]
+    [authStore, history, mintNft, nftStore, sessionStore, signInAccountStore]
   );
 
   return (
@@ -42,15 +65,17 @@ const SignInAccountPage: FC = () => {
             <ChoiceYourWallet
               walletOptions={nftStore.accountOptions}
               wallet={authStore.wallet}
-              isConnectDisabled={authStore.isPending}
+              isConnectDisabled={authStore.isPending || requestingFundsStatus === 'pending'}
               onSelectAddress={authStore.selectWallet}
-              onConnect={fetchTokenByWallet}
+              onConnect={onConnectWallet}
             />
           )}
+          {requestingFundsStatus === 'pending' && <Text text="Loading MTM..." size="m" />}
+          {requestingFundsStatus === 'error' && <Text text="Error loading MTM" size="m" />}
 
-          {!!authStore.token && (
+          {(requestingFundsStatus === 'success' || balance.free > 0) && (
             <>
-              <CongratulationsBox />
+              {requestingFundsStatus === 'success' && <CongratulationsBox />}
               <SinusBox />
               <CreateOdysseyForm
                 fieldErrors={signInAccountStore.fieldErrors}
@@ -59,6 +84,8 @@ const SignInAccountPage: FC = () => {
               />
             </>
           )}
+          {mintingNftStatus === 'pending' && <Text text="Minting NFT..." size="m" />}
+          {mintingNftStatus === 'error' && <Text text="Error minting NFT" size="m" />}
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>

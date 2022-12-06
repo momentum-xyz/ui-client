@@ -102,6 +102,8 @@ const NftStore = types
         miscFrozen: 0,
         feeFrozen: 0
       }),
+      requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
+      mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
 
       isLoading: false
     })
@@ -307,6 +309,12 @@ const NftStore = types
     },
     setConnectToNftItemId(itemId: number | null) {
       self.connectToNftItemId = itemId;
+    },
+    setRequestFundsStatus(status: 'pending' | 'success' | 'error') {
+      self.requestingFundsStatus = status;
+    },
+    setMintingNftStatus(status: 'pending' | 'success' | 'error') {
+      self.mintingNftStatus = status;
     },
     setBalance(payload: AccountBalanceInterface) {
       self.balance = payload;
@@ -536,11 +544,13 @@ const NftStore = types
       // We need to request a challenge from BE and sign it and trigger account linking
       // use useEager logic here
     }),
-    mintNft: flow(function* (address: string) {
+    mintNft: flow(function* (address: string, name: string, image?: string) {
       console.log('Mint NFT', address);
       if (!self.channel) {
+        self.setMintingNftStatus('error');
         throw new Error('Channel is not initialized');
       }
+      self.setMintingNftStatus('pending');
 
       const {account, options} = yield prepareSignAndSend(address);
 
@@ -574,8 +584,8 @@ const NftStore = types
         const nftReqResult = yield self.mintNftRequest.send(mintNft, {
           block_hash,
           wallet: address,
-          name: 'Test NFT',
-          image: 'https://picsum.photos/102'
+          name,
+          image: image || 'https://picsum.photos/102'
         });
         console.log('nftReqResult', nftReqResult);
         if (!nftReqResult) {
@@ -596,8 +606,12 @@ const NftStore = types
             break;
           }
         }
+
+        self.setMintingNftStatus('success');
       } catch (err) {
         console.log('err', err);
+        self.setMintingNftStatus('error');
+        throw err;
       }
     }),
     getAddressByWallet: (wallet: string) => {
@@ -749,9 +763,10 @@ const NftStore = types
       }
     }),
     requestInitialFunds: flow(function* (address: string) {
-      address = formatAddress(address);
       console.log('Request initial funds', address);
+      self.setRequestFundsStatus('pending');
       if (!self.channel) {
+        self.setRequestFundsStatus('error');
         throw new Error('Channel is not initialized');
       }
       const {account, options} = yield prepareSignAndSend(address);
@@ -759,10 +774,22 @@ const NftStore = types
 
       console.log('Sign and send', tx);
       try {
-        const res = yield tx.signAndSend(account.address, options);
-        console.log('res', res);
+        yield new Promise((resolve, reject) => {
+          tx.signAndSend(account.address, options, ({status}) => {
+            if (status.isInBlock) {
+              const blockHash = status.asInBlock.toString();
+              console.log(`Completed at block hash #${blockHash}`);
+              resolve(blockHash);
+            } else {
+              console.log(`Current transaction status: ${status.type}`);
+            }
+          }).catch(reject);
+        });
+        self.setRequestFundsStatus('success');
+        console.log('Request initial funds success');
       } catch (err) {
         console.log('Error getting initial funds:', err);
+        self.setRequestFundsStatus('error');
         throw err;
       }
     })
@@ -840,7 +867,13 @@ const NftStore = types
             `free balance is ${balance.free} with ${balance.reserved} reserved and a nonce of ${nonce}`
           );
           console.log('balance', balance.toHuman(), balance);
-          self.setBalance(balance);
+          const {free, reserved, miscFrozen, feeFrozen} = balance;
+          self.setBalance({
+            free: free.toNumber(),
+            reserved: reserved.toNumber(),
+            miscFrozen: miscFrozen.toNumber(),
+            feeFrozen: feeFrozen.toNumber()
+          });
         }
       );
     })
