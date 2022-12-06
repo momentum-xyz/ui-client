@@ -41,6 +41,10 @@ const SignInAccountPage: FC = () => {
           await authStore.fetchTokenByWallet(address);
         }
 
+        // NFT should be minted and accessible by now - if it doesn't happen sometimes
+        // we can put some wait here
+        await nftStore.fetchNfts();
+
         const isDone = await signInAccountStore.updateProfile(form);
         if (isDone) {
           await sessionStore.loadUserProfile();
