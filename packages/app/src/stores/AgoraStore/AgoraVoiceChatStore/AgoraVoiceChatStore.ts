@@ -344,7 +344,7 @@ const AgoraVoiceChatStore = types
         self.users = cast(
           Object.entries(response)
             .filter(([_, user]) => {
-              if (user.userId === self.userId) {
+              if (user.userId === self.userId && user.joined) {
                 self.leave();
                 return false;
               }
