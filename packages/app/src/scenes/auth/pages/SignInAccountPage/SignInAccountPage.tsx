@@ -17,17 +17,13 @@ const SignInAccountPage: FC = () => {
 
   const history = useHistory();
 
-  // const fetchTokenByWallet = useCallback(async () => {
-  //   const address = nftStore.getAddressByWallet(authStore.wallet);
-  //   if (address) {
-  //     await authStore.fetchTokenByWallet(address);
-  //   }
-  // }, [authStore, nftStore]);
-
   const onConnectWallet = useCallback(() => {
     console.log('onConnectWallet', balance, balance.free);
     if (balance.free === 0) {
       requestInitialFunds(authStore.wallet);
+    } else {
+      // noop
+      // there are funds already
     }
   }, [authStore.wallet, balance, requestInitialFunds]);
 
@@ -58,7 +54,6 @@ const SignInAccountPage: FC = () => {
       }
     },
     [authStore, history, mintNft, nftStore, sessionStore, signInAccountStore]
-    // [history, sessionStore, signInAccountStore]
   );
 
   return (
