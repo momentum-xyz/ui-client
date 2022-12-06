@@ -1,3 +1,5 @@
+import {UserInterface} from 'api';
+
 export interface SpaceWithSubspacesInterface {
   id: string;
   name: string;
@@ -30,3 +32,11 @@ export interface SearchSpacesRequest {
 export interface SearchSpacesResponse {
   [categoryName: string]: SpaceWithSubspacesInterface[];
 }
+
+/** Online Users **/
+
+export interface GetOnlineUsersRequest {
+  worldId: string;
+}
+
+export interface OdysseyOnlineUsersResponse extends Array<UserInterface> {}

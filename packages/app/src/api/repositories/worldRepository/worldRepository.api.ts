@@ -5,10 +5,12 @@ import {request} from 'api/request';
 
 import {worldRepositoryEndpoints} from './worldRepository.api.endpoints';
 import {
+  GetOnlineUsersRequest,
   GetSpaceWithSubSpacesRequest,
   GetSpaceWithSubSpacesResponse,
   SearchSpacesRequest,
-  SearchSpacesResponse
+  SearchSpacesResponse,
+  OdysseyOnlineUsersResponse
 } from './worldRepository.api.types';
 
 export const fetchSpaceWithSubSpaces: RequestInterface<
@@ -37,5 +39,15 @@ export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesRes
   };
 
   const url = generatePath(worldRepositoryEndpoints().searchSpaces, {worldId});
+  return request.get(url, restOptions);
+};
+
+export const fetchOnlineUsers: RequestInterface<
+  GetOnlineUsersRequest,
+  OdysseyOnlineUsersResponse
+> = (options) => {
+  const {worldId, ...restOptions} = options;
+
+  const url = generatePath(worldRepositoryEndpoints().onlineUsers, {worldId});
   return request.get(url, restOptions);
 };

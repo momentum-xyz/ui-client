@@ -5,6 +5,7 @@ export const worldRepositoryEndpoints = () => {
 
   return {
     getSpaceWithSubspaces: `${BASE_URL}/explore`,
-    searchSpaces: `${BASE_URL}/explore/search`
+    searchSpaces: `${BASE_URL}/explore/search`,
+    onlineUsers: `${BASE_URL}/online-users`
   };
 };
