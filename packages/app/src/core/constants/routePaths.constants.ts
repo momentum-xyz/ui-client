@@ -9,7 +9,12 @@ export const ROUTES = {
     builder: {
       base: '/odyssey/:worldId/worldBuilder',
       skybox: '/odyssey/:worldId/worldBuilder/builderSkybox',
-      uploadAsset: '/odyssey/:worldId/worldBuilder/upload'
+      spawnAsset: {
+        base: '/odyssey/:worldId/worldBuilder/spawnAsset',
+        basicAssets: '/odyssey/:worldId/worldBuilder/spawnAsset/basic',
+        customAssets: '/odyssey/:worldId/worldBuilder/spawnAsset/custom',
+        uploadAsset: '/odyssey/:worldId/worldBuilder/spawnAsset/upload'
+      }
     },
     object: {
       root: '/odyssey/:worldId/object/:objectId',
@@ -54,6 +59,7 @@ export const ROUTES = {
     organisms: '/storybook/organisms'
   },
   worldBuilder: {
+    // TODO - remove
     base: '/createWorld',
     login: '/createWorld/login',
     start: '/createWorld/start',
@@ -63,11 +69,5 @@ export const ROUTES = {
     builder: '/worldBuilder',
     builderUploadAsset: '/worldBuilder/upload',
     builderSkybox: '/worldBuilder/skybox'
-  },
-  spawnAsset: {
-    base: '/spawnAsset/:worldId',
-    basicAssets: '/spawnAsset/:worldId/basic',
-    customAssets: '/spawnAsset/:worldId/custom',
-    uploadAsset: '/spawnAsset/:worldId/upload'
   }
 };

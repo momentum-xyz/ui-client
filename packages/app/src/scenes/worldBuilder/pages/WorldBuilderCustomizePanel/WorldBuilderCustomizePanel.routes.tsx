@@ -1,6 +1,7 @@
 import {ROUTES} from 'core/constants';
+import {SpawnAsset} from 'scenes/worldBuilder/components/SpawnAsset';
 
-import {SkyboxSelectorWithPreview, UploadAsset} from '../../components';
+import {SkyboxSelectorWithPreview} from '../../components';
 
 export const WORLD_BUILDER_ROUTES = [
   {
@@ -9,8 +10,8 @@ export const WORLD_BUILDER_ROUTES = [
     exact: true
   },
   {
-    path: ROUTES.odyssey.builder.uploadAsset,
-    main: () => <UploadAsset />,
-    exact: true
+    path: ROUTES.odyssey.builder.spawnAsset.base,
+    main: () => <SpawnAsset />,
+    exact: false
   }
 ];

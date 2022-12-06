@@ -29,7 +29,7 @@ const SpawnAsset: FC = () => {
           <styled.PageContainer>
             {createSwitchByConfig(
               SPAWN_ASSET_ROUTES,
-              generatePath(ROUTES.spawnAsset.basicAssets, {worldId})
+              generatePath(ROUTES.odyssey.builder.spawnAsset.basicAssets, {worldId})
             )}
           </styled.PageContainer>
         </styled.Body>

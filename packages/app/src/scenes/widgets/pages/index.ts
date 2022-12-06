@@ -8,3 +8,4 @@ export * from './SocialWidget';
 export * from './NotificationsWidget';
 export * from './CalendarWidget';
 export * from './OdysseyWidget';
+export * from './WorldBuilderWidget';
