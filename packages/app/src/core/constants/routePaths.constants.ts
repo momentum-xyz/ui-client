@@ -9,6 +9,7 @@ export const ROUTES = {
     builder: {
       base: '/odyssey/:worldId/build',
       skybox: '/odyssey/:worldId/build/skybox',
+      editor: '/odyssey/:worldId/build/edit/:objectId',
       spawnAsset: {
         base: '/odyssey/:worldId/build/spawn',
         basicAssets: '/odyssey/:worldId/build/spawn/basic',

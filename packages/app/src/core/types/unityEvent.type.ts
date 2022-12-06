@@ -7,6 +7,7 @@ export type UnityEventType = {
   ExterminateUnity: (topic: string) => void;
   ClickEventDashboard: (id: string) => void;
   ClickEventVideo: (id: string) => void;
+  ClickEventEditableObject: (id: string) => void;
   PlasmaClickEvent: (id: string) => void;
   ProfileClickEvent: (id: string, position: UnityPositionInterface) => void;
   Error: (message: string) => void;

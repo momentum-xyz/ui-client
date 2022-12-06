@@ -18,5 +18,10 @@ export const WORLD_BUILDER_ROUTES = [
     path: ROUTES.odyssey.builder.spawnAsset.base,
     main: () => <SpawnAsset />,
     exact: false
+  },
+  {
+    path: ROUTES.odyssey.builder.editor,
+    main: () => <div style={{background: 'white', padding: '1em'}}>TODO EDITOR</div>,
+    exact: false
   }
 ];
