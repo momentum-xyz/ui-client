@@ -16,6 +16,7 @@ const Map3dPage: FC<PropsInterface> = (props) => {
   const {nftStore, map3dStore} = useStore();
 
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
+
   const mapRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -37,11 +38,7 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     <>
       <canvas ref={mapRef} className="webgl" />
       {isCanvasReady && mapRef.current && nftStore.nftItems.length > 0 && (
-        <Map3d
-          items={nftStore.nftItems}
-          canvasElement={mapRef.current}
-          onOdysseyClick={onSelectOdyssey}
-        />
+        <Map3d items={nftStore.nftItems} canvas={mapRef.current} onOdysseyClick={onSelectOdyssey} />
       )}
     </>
   );
