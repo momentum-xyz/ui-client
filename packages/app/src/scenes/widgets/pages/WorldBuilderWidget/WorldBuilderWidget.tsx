@@ -46,7 +46,9 @@ const WorldBuilderWidget: FC = () => {
 
   const {pathname} = useLocation();
 
-  const isBuilderMode = pathname.includes(ROUTES.worldBuilder.builder);
+  const isBuilderMode = pathname.includes(
+    generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
+  );
 
   if (isBuilderMode) {
     return (

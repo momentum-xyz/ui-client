@@ -7,13 +7,13 @@ export const ROUTES = {
   odyssey: {
     base: '/odyssey/:worldId',
     builder: {
-      base: '/odyssey/:worldId/worldBuilder',
-      skybox: '/odyssey/:worldId/worldBuilder/builderSkybox',
+      base: '/odyssey/:worldId/build',
+      skybox: '/odyssey/:worldId/build/skybox',
       spawnAsset: {
-        base: '/odyssey/:worldId/worldBuilder/spawnAsset',
-        basicAssets: '/odyssey/:worldId/worldBuilder/spawnAsset/basic',
-        customAssets: '/odyssey/:worldId/worldBuilder/spawnAsset/custom',
-        uploadAsset: '/odyssey/:worldId/worldBuilder/spawnAsset/upload'
+        base: '/odyssey/:worldId/build/spawn',
+        basicAssets: '/odyssey/:worldId/build/spawn/basic',
+        customAssets: '/odyssey/:worldId/build/spawn/custom',
+        uploadAsset: '/odyssey/:worldId/build/spawn/upload'
       }
     },
     object: {
