@@ -14,7 +14,8 @@ import {
   SocialWidget,
   CalendarWidget,
   OnlineUsersWidget,
-  NotificationsWidget
+  NotificationsWidget,
+  OdysseyWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -32,9 +33,10 @@ const Widgets: FC<PropsInterface> = (props) => {
     mainStore,
     worldBuilderStore,
     agoraStore,
-    objectStore
+    objectStore,
+    nftStore
   } = useStore();
-  const {onlineUsersStore} = widgetsStore;
+  const {onlineUsersStore, odysseyStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
@@ -45,6 +47,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   useEffect(() => {
     worldBuilderStore.fetchPermissions();
     onlineUsersStore.init();
+    odysseyStore.init(nftStore.nftItems, worldStore.worldId);
   }, [onlineUsersStore, worldBuilderStore]);
 
   const handleOpenScreenShare = () => {
@@ -123,6 +126,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="people"
                 size="medium"
                 disabled={false}
+                onClick={odysseyStore.widget.open}
                 state={{canGoBack: true}}
               />
 
@@ -182,6 +186,13 @@ const Widgets: FC<PropsInterface> = (props) => {
         )}
       </styled.Footer>
 
+      {widgetsStore.odysseyStore.widget.isOpen && (
+        <OdysseyWidget
+          odyssey={odysseyStore.odyssey}
+          onClose={odysseyStore.widget.close}
+          nftId={odysseyStore.nftId}
+        />
+      )}
       {widgetsStore.profileStore.profileDialog.isOpen && <ProfileWidget />}
       {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}
