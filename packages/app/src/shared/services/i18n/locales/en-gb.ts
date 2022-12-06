@@ -227,7 +227,11 @@ export const enGb = {
       flyWithMe: 'Fly with me',
       search: 'Search',
       worldChat: 'World Chat',
-      notifications: 'Notifications'
+      chat: 'Chat',
+      voice: 'Voice',
+      notifications: 'Notifications',
+      micOn: 'Mic On',
+      micOff: 'Mic Off'
     },
     messages: {
       loading: 'Loading Momentum',
@@ -385,7 +389,8 @@ export const enGb = {
       plugins: 'Plugins',
       addPlugin: 'Add Plugin',
       deletePluginFromSpace: 'Delete plugin from space',
-      error: 'Error'
+      error: 'Error',
+      social: 'Social'
     },
     textMessage: {
       you: 'you',
@@ -475,6 +480,7 @@ export const enGb = {
       leave: 'Leave',
       muteName: 'Mute {{name}}',
       kickName: 'Kick {{name}}',
+      kickNameFromVoice: 'Kick {{name}} from Voice',
       leaveStage: 'Leave stage',
       goOnStage: 'Go on stage',
       remove: 'Remove',
@@ -494,7 +500,9 @@ export const enGb = {
       generateWorld: 'Generate World',
       disengageReturn: 'Disengage And Return',
       join: 'join',
-      dismiss: 'dismiss'
+      dismiss: 'dismiss',
+      joinVoiceChat: 'Join Voice Chat',
+      leaveVoiceChat: 'Leave Voice Chat'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',
