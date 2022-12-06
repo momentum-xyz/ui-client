@@ -1,12 +1,12 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import {OdysseyUserInterface} from '../../../../../stores/OnlineUsersStore';
+import {UserModelInterface} from 'core/models';
 
 import * as styled from './OnlineUsersAvatars.styled';
 
 interface PropsInterface {
-  onlineUsers: OdysseyUserInterface[];
+  onlineUsers: UserModelInterface[];
 }
 
 const OnlineUsersAvatars: FC<PropsInterface> = ({onlineUsers}) => {
@@ -16,12 +16,12 @@ const OnlineUsersAvatars: FC<PropsInterface> = ({onlineUsers}) => {
         <>
           <styled.UsersCount text={`+${onlineUsers.length - 15}`} size="xxs" weight="bold" />
           {onlineUsers.slice(0, 15).map((user) => (
-            <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.avatar_hash} />
+            <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.profile.avatarHash} />
           ))}
         </>
       ) : (
         onlineUsers.map((user) => (
-          <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.avatar_hash} />
+          <styled.ProfileAvatar key={user.id} size="normal" avatarSrc={user.profile.avatarHash} />
         ))
       )}
     </styled.Container>

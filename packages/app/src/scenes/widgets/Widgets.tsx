@@ -47,8 +47,8 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   useEffect(() => {
     worldBuilderStore.fetchPermissions();
-    onlineUsersStore.init();
     odysseyStore.init(nftStore.nftItems, worldStore.worldId);
+    onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
   }, [onlineUsersStore, worldBuilderStore]);
 
   const handleOpenScreenShare = () => {
@@ -119,7 +119,7 @@ const Widgets: FC<PropsInterface> = (props) => {
         {!isExplorePage && (
           <styled.RightToolbars>
             <styled.OnlineUsers>
-              <OnlineUsersWidget currentUser={sessionStore.user} />
+              <OnlineUsersWidget currentUser={sessionStore.user} worldId={worldStore.worldId} />
             </styled.OnlineUsers>
             <ToolbarIconList>
               <ToolbarIcon
