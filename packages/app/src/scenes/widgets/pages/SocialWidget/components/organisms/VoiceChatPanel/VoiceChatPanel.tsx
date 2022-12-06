@@ -20,9 +20,11 @@ const VoiceChatPanel: FC = () => {
     }
   }, [agoraVoiceChatStore, agoraStore]);
 
-  usePosBusEvent('voice-chat-mute', agoraStore.handleUserMuted);
+  usePosBusEvent('voice-chat-mute-user', agoraStore.handleUserMuted);
 
-  usePosBusEvent('voice-chat-kick', agoraVoiceChatStore.handleUserKicked);
+  usePosBusEvent('voice-chat-mute-all', agoraStore.handleAllMuted);
+
+  usePosBusEvent('voice-chat-kick-user', agoraVoiceChatStore.handleUserKicked);
 
   usePosBusEvent('voice-chat-user-joined', agoraVoiceChatStore.handleUserJoined);
 
@@ -70,7 +72,10 @@ const VoiceChatPanel: FC = () => {
           />
         </styled.EnterLeaveButton>
         <styled.VoiceActions>
-          <styled.VoiceAction>
+          <styled.VoiceAction
+            onClick={agoraVoiceChatStore.muteAll}
+            disabled={agoraVoiceChatStore.muteAllRequest.isPending}
+          >
             <IconSvg name="microphoneOff" />
             <Text text="Mute All" size="xs" weight="light" />
           </styled.VoiceAction>
