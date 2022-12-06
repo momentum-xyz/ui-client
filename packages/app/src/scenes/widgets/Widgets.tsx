@@ -2,6 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {Avatar, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -174,7 +175,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 title={t('titles.worldBuilder')}
                 icon="planet"
                 size="medium"
-                link={ROUTES.worldBuilder.builder}
+                link={generatePath(ROUTES.spawnAsset.base, {worldId: worldStore.worldId})}
                 state={{canGoBack: true}}
               />
             </ToolbarIconList>

@@ -55,5 +55,11 @@ export const ROUTES = {
     builder: '/worldBuilder',
     builderUploadAsset: '/worldBuilder/upload',
     builderSkybox: '/worldBuilder/skybox'
+  },
+  spawnAsset: {
+    base: '/spawnAsset/:worldId',
+    basicAssets: '/spawnAsset/:worldId/basic',
+    customAssets: '/spawnAsset/:worldId/custom',
+    uploadAsset: '/spawnAsset/:worldId/upload'
   }
 };
