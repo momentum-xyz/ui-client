@@ -37,6 +37,7 @@ const VoiceChatPanel: FC = () => {
             name={user.name}
             avatarSrc={user.avatarSrc}
             soundLevel={agoraVoiceChatStore.localSoundLevel}
+            isMuted={userDevicesStore.muted}
           />
         )}
         {agoraVoiceChatStore.users.map((user) => {
@@ -54,6 +55,7 @@ const VoiceChatPanel: FC = () => {
               onUserMute={() => {
                 agoraVoiceChatStore.muteUser(user.id);
               }}
+              isMuted={remoteUser?.isMuted ?? true}
               isRemote
             />
           );

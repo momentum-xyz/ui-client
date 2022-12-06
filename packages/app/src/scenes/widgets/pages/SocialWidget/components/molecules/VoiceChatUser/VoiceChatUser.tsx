@@ -11,6 +11,7 @@ interface PropsInterface {
   avatarSrc?: string;
   soundLevel: number;
   isRemote?: boolean;
+  isMuted: boolean;
   onUserKick?: () => void;
   onUserMute?: () => void;
 }
@@ -19,6 +20,7 @@ const RemoteVoiceChatUser: FC<PropsInterface> = ({
   avatarSrc,
   soundLevel,
   name,
+  isMuted,
   onUserKick,
   onUserMute,
   isRemote = false
@@ -40,6 +42,7 @@ const RemoteVoiceChatUser: FC<PropsInterface> = ({
     <styled.Attendee ref={menuRef} onClick={handleOpenMenu}>
       <styled.AttendeeAvatar size="medium" avatarSrc={avatarSrc} showBorder={soundLevel > 3} />
       <styled.AttendeeName text={name} size="xs" isMultiline={false} />
+      {isMuted && <styled.MutedIcon name="microphoneOff" size="small" />}
       {isRemote && isShown && (
         <VoiceChatUserActions
           name={name ?? ''}
