@@ -13,7 +13,7 @@ interface PropsInterface {
 const Map3dPage: FC<PropsInterface> = (props) => {
   const {isClickActive} = props;
 
-  const {nftStore, map3dStore} = useStore();
+  const {nftStore, map3dStore, sessionStore} = useStore();
 
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
 
@@ -38,7 +38,12 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     <>
       <canvas ref={mapRef} className="webgl" />
       {isCanvasReady && mapRef.current && nftStore.nftItems.length > 0 && (
-        <Map3d items={nftStore.nftItems} canvas={mapRef.current} onOdysseyClick={onSelectOdyssey} />
+        <Map3d
+          currentUserId={sessionStore.userId}
+          items={nftStore.nftItems}
+          canvas={mapRef.current}
+          onOdysseyClick={onSelectOdyssey}
+        />
       )}
     </>
   );
