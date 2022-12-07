@@ -15,7 +15,11 @@ const BirthAnimationPage: FC = () => {
 
   useEffect(() => {
     exploreStore.init();
-  }, [exploreStore]);
+
+    setTimeout(() => {
+      history.push(ROUTES.explore);
+    }, 5 * 1000);
+  }, [exploreStore, history]);
 
   useSupernova();
 

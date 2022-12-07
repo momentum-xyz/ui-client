@@ -23,7 +23,7 @@ const BirthOfMePage: FC = () => {
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          <BuildOdyssey onBuild={() => history.push(ROUTES.explore)} />
+          <BuildOdyssey onBuild={() => history.push(ROUTES.birthAnimation)} />
         </styled.Boxes>
 
         <styled.Boxes>
