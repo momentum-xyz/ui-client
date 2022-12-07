@@ -1,4 +1,4 @@
-import {flow, Instance, types, cast} from 'mobx-state-tree';
+import {flow, types, cast} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {
@@ -10,7 +10,10 @@ import {
 } from 'api';
 import {mapper} from 'api/mapper';
 import {Space} from 'core/models';
+import {getRootStore} from 'core/utils';
 
+// TODO: Use this store a little bit more :)
+// It is a main store for current world
 const WorldStore = types.compose(
   ResetModel,
   types
@@ -22,6 +25,11 @@ const WorldStore = types.compose(
       worldConfig: types.maybe(types.frozen<WorldConfigType>())
     })
     .actions((self) => ({
+      init(worldId: string) {
+        self.worldId = worldId;
+        //self.fetchWorldConfig(worldId);
+        this.fetchWorldInformation(worldId);
+      },
       fetchWorldConfig: flow(function* (worldId: string) {
         const response: WorldConfigResponse = yield self.worldConfigRequest.send(
           api.spaceRepositoryOld.fetchWorldConfig,
@@ -46,15 +54,11 @@ const WorldStore = types.compose(
         }
       })
     }))
-    .actions((self) => ({
-      init(worldId: string) {
-        self.worldId = worldId;
-        //self.fetchWorldConfig(worldId);
-        self.fetchWorldInformation(worldId);
+    .views((self) => ({
+      get isMyWorld(): boolean {
+        return self.worldId === getRootStore(self).sessionStore.userId;
       }
     }))
 );
-
-export type WorldStoreType = Instance<typeof WorldStore>;
 
 export {WorldStore};

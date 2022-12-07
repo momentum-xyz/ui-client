@@ -77,6 +77,7 @@ const CalendarWidget: FC = () => {
         >
           <styled.InnerContainer>
             <styled.FormButton
+              disabled={!worldStore.isMyWorld}
               label={t('calendar.formButton')}
               variant="primary"
               height="medium-height"

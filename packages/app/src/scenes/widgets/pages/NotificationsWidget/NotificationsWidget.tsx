@@ -12,9 +12,10 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const NotificationsWidget: FC = () => {
-  const {widgetsStore} = useStore();
+  const {widgetsStore, mainStore, authStore} = useStore();
   const {notificationsStore} = widgetsStore;
   const {notificationsDialog, notifications} = notificationsStore;
+  const {unityStore} = mainStore;
 
   const theme = useTheme();
 
@@ -43,7 +44,14 @@ const NotificationsWidget: FC = () => {
         {!notificationsStore.isPending && notifications.length && (
           <styled.Body>
             {notifications.map((item) => (
-              <NewsFeedItem key={item.id} item={item} onTeleport={() => {}} onConnect={() => {}} />
+              <NewsFeedItem
+                key={item.id}
+                item={item}
+                onTeleport={() => {
+                  unityStore.loadWorldById(item.uuid, authStore.token);
+                }}
+                onConnect={() => {}}
+              />
             ))}
           </styled.Body>
         )}
