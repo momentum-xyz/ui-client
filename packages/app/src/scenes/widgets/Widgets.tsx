@@ -1,10 +1,11 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Avatar, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {Avatar, Dialog, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {StakingDashboard} from 'scenes/explore/pages/ExplorePage/components';
 
 import {
   ProfileWidget,
@@ -98,6 +99,8 @@ const Widgets: FC<PropsInterface> = (props) => {
               icon="wallet"
               size="medium"
               disabled={false} // TODO: Disable for guests
+              onClick={nftStore.stakingDashorboardDialog.toggle}
+              isSelected={nftStore.stakingDashorboardDialog.isOpen}
               state={{canGoBack: true}}
             />
 
@@ -195,6 +198,24 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.screenShareStore.widget.isOpen && <ScreenShareWidget />}
       {widgetsStore.calendarStore.widget.isOpen && <CalendarWidget />}
       {asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen && <SocialWidget />}
+      {/* FIXME */}
+      {!!nftStore.stakingDashorboardDialog.isOpen && (
+        <Dialog
+          title="Personal Connecting Dashboard"
+          icon="hierarchy"
+          showCloseButton
+          layoutSize={{height: '610px'}}
+          onClose={() => {
+            nftStore.stakingDashorboardDialog.close();
+          }}
+        >
+          <StakingDashboard
+            onComplete={() => {
+              nftStore.stakingDashorboardDialog.close();
+            }}
+          />
+        </Dialog>
+      )}
     </>
   );
 };

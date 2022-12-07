@@ -3,16 +3,13 @@ import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentu
 import {formatTokenAmount} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
 import * as styled from './StakingForm.styled';
 
-// TODO: fizlin
-// - fix tab styles
-// - Change authorize icon
+const DEFAULT_STAKING_AMOUNT = 1;
 
 const tabBarTabs: TabBarTabInterface[] = [
   {
@@ -46,50 +43,35 @@ interface PropsInterface {
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {authStore, nftStore} = useStore();
   const {wallet: authWallet} = authStore;
-  const {balance, addresses, accountOptions, nftItems} = nftStore;
-
-  // TODO: fizlin - replace with real data
-  console.log(
-    accountOptions, // get initiator wallet from here
-    nftItems // get destination from here
-  );
-  const initiatorWallet = useMemo(() => 'EDhjohSyRxb....', []);
-  const [destination, setDestination] = useState('Tyrone smith -  fPZZcgHfYVonk');
+  const {balance, addresses, accountOptions, nftItems, chainDecimals, tokenSymbol} = nftStore;
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
+  const initiatorAccount = accountOptions.find((account) => account.value === wallet);
+  const initiatorInfo = initiatorAccount
+    ? `${initiatorAccount.label} (${initiatorAccount.value.substring(0, 20)}...)`
+    : '';
 
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
-  const [amount, setAmount] = useState(1_000_000_000);
+  const [amount, setAmount] = useState(DEFAULT_STAKING_AMOUNT);
+  const amountAtoms = amount * Math.pow(10, chainDecimals || 12);
 
-  console.log('StakingForm', {wallet, addresses, authWallet, amount});
+  const nft = nftItems.find((nft) => nft.id === nftItemId);
+  console.log('StakingForm', {wallet, addresses, authWallet, amount, amountAtoms, nft});
 
-  const onStake = (amount: number) => {
-    console.log('onStake', wallet, nftItemId);
+  const onStake = (amountAtoms: number) => {
+    console.log('onStake', wallet, nftItemId, amountAtoms);
 
     nftStore
-      .stake(wallet, amount, nftItemId)
+      .stake(wallet, amountAtoms, nftItemId)
       .then(() => {
         console.log('stake success');
-        toast.info(
-          <ToastContent
-            headerIconName="calendar"
-            title={t('titles.alert')}
-            text={t('messages.removeEventSuccess')}
-            showCloseButton
-          />
-        );
+        toast.info(<ToastContent title="You successfully staked!" showCloseButton />);
         onComplete();
       })
       .catch((err) => {
         console.log('stake error', err);
         toast.error(
-          <ToastContent
-            isDanger
-            headerIconName="calendar"
-            title={t('titles.alert')}
-            text={t('errors.couldNotRemoveEvent')}
-            showCloseButton
-          />
+          <ToastContent isDanger title="Could not stake. Please try again later." showCloseButton />
         );
       });
   };
@@ -98,20 +80,26 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
     const balanceEntities = [
       {label: 'Account Balance', value: Number(balance.free)},
       {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)},
-      {label: 'Stacked', value: null},
-      {label: 'Unbonding', value: null}
+      {label: 'Stacked', value: Number(balance.reserved)}
+      // {label: 'Unbonding', value: null}
     ];
 
     return balanceEntities.map(({label, value}) => {
-      const balanceValueText = value !== null ? formatTokenAmount(value) : '-';
+      const balanceValueText =
+        value !== null ? formatTokenAmount(value, chainDecimals, tokenSymbol) : '-';
       return (
         <styled.BalanceEntityContainer key={label}>
           <Heading type="h4" align="left" label={label} />
-          <Text size="xxs" align="left" text={`${balanceValueText} MTM`}></Text>
+          <Text size="xxs" align="left" text={balanceValueText}></Text>
         </styled.BalanceEntityContainer>
       );
     });
   }, [balance]);
+
+  if (!nft) {
+    console.log('StakingForm - no nft found');
+    return null;
+  }
 
   return (
     <styled.Container>
@@ -162,7 +150,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                   <styled.LabeledLineLabelContainer>
                     <Text size="xxs" align="right" text="ACCOUNT" />
                   </styled.LabeledLineLabelContainer>
-                  <Text size="xxs" text={initiatorWallet} />
+                  <Text size="xxs" text={initiatorInfo} />
                 </styled.LabeledLineContainer>
               </styled.Section>
               <styled.Section>
@@ -183,17 +171,14 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                     <Text size="xxs" align="right" text="SET AMOUNT, MTM" />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer>
-                    <Input value={amount} onChange={(val) => setAmount(Number(val))} />
+                    <Input value={amount || ''} onChange={(val) => setAmount(Number(val))} />
                   </styled.LabeledLineInputContainer>
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
                     <Text size="xxs" align="right" text="DESTINATION" />
                   </styled.LabeledLineLabelContainer>
-                  <styled.LabeledLineInputContainer>
-                    {/* @dmitry-yudakov -- Should this be a dropdown? */}
-                    <Input value={destination} onChange={(val) => setDestination(val)} />
-                  </styled.LabeledLineInputContainer>
+                  <Text size="xxs" text={`${nft.name} ${nft.owner.substring(0, 20)}...`} />
                 </styled.LabeledLineContainer>
               </styled.Section>
             </div>
@@ -222,7 +207,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                   <styled.LabeledLineLabelContainer>
                     <Text size="xxs" align="right" text="SENDING FROM" />
                   </styled.LabeledLineLabelContainer>
-                  <Text size="xxs" text={initiatorWallet} />
+                  <Text size="xxs" text={initiatorInfo} />
                 </styled.LabeledLineContainer>
                 <styled.ConsentContainer>
                   <Text
@@ -236,7 +221,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
 
             <styled.Buttons>
               <Button label="Back" onClick={() => setActiveTab(tabBarTabs[1])} />
-              <Button label="Sign & Connect" icon="check" onClick={() => onStake(amount)} />
+              <Button label="Sign & Connect" icon="check" onClick={() => onStake(amountAtoms)} />
             </styled.Buttons>
           </>
         )}

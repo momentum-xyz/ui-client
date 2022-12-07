@@ -1,15 +1,14 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {getSnapshot} from 'mobx-state-tree';
-import {Button, Dialog} from '@momentum-xyz/ui-kit';
+import {Dialog} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
-// import {SelectedOdyssey, StakingDashboard, StakingForm} from './components';
-import {SelectedOdyssey, StakingDashboard} from './components';
+import {SelectedOdyssey, StakingForm} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
@@ -74,7 +73,7 @@ const ExplorePage: FC = () => {
           )}
         </styled.Boxes>
 
-        {/* {!!nftStore.connectToNftItemId && (
+        {!!nftStore.connectToNftItemId && (
           <Dialog
             title="Personal Connecting Dashboard"
             icon="hierarchy"
@@ -87,35 +86,6 @@ const ExplorePage: FC = () => {
             <StakingForm
               nftItemId={nftStore.connectToNftItemId}
               onComplete={() => {
-                nftStore.setConnectToNftItemId(null);
-              }}
-            />
-          </Dialog>
-        )} */}
-
-        <styled.Boxes>
-          <Button
-            label="TEMP Staking Dashboard"
-            onClick={() => nftStore.stakingDashorboardDialog.open()}
-          />
-        </styled.Boxes>
-
-        {/* {!!nftStore.stakingDashorboardDialog.isOpen && ( */}
-        {!!nftStore.connectToNftItemId && (
-          <Dialog
-            title="Personal Connecting Dashboard"
-            icon="hierarchy"
-            showCloseButton
-            // @dmitry-yudakov - here we need it to have a scroll/dynamic height; Is this the case somewhere else in the project?
-            layoutSize={{height: '610px'}}
-            onClose={() => {
-              // nftStore.stakingDashorboardDialog.close();
-              nftStore.setConnectToNftItemId(null);
-            }}
-          >
-            <StakingDashboard
-              onComplete={() => {
-                // nftStore.stakingDashorboardDialog.close();
                 nftStore.setConnectToNftItemId(null);
               }}
             />

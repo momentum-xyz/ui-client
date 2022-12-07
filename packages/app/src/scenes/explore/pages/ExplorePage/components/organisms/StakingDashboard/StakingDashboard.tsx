@@ -10,6 +10,8 @@ import {ToastContent} from 'ui-kit';
 
 import * as styled from './StakingDashboard.styled';
 
+const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
+
 const tabBarTabs: TabBarTabInterface[] = [
   {
     id: 'wallet',
@@ -35,46 +37,49 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const {authStore, nftStore} = useStore();
   const {wallet: authWallet} = authStore;
   const {addresses, accountOptions} = nftStore;
-  // TODO load staking info for all accounts
-  const {stakingAtOthers, balance, accumulatedRewards} = nftStore;
+  const {stakingAtOthers, balance, accumulatedRewards, chainDecimals, tokenSymbol} = nftStore;
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
   const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
+
+  const initiatorAccount = accountOptions.find((account) => account.value === wallet);
+  const initiatorInfo = initiatorAccount
+    ? `${initiatorAccount.label} (${initiatorAccount.value.substring(0, 20)}...)`
+    : '';
 
   const [getRewards, setGetRewards] = useState(false);
 
   const [unstakeFrom, setUnstakeFrom] = useState<string | null>(null);
   const unstakeFromDetail = unstakeFrom ? stakingAtOthers.get(unstakeFrom) : null;
+  const unstakeFromNft = unstakeFrom ? nftStore.getNftByWallet(unstakeFrom) : null;
+
   const [_amount, setAmount] = useState<number | null>(null);
   const amount = _amount || unstakeFromDetail?.amount || 0;
-
-  console.log(
-    accountOptions // get initiator wallet from here
-  );
-  const initiatorWallet = useMemo(() => 'EDhjohSyRxb....', []);
+  const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
   const balanceSections = useMemo(() => {
     const balanceEntities = [
       {label: 'Account Balance', value: Number(balance.free)},
       {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)},
-      {label: 'Stacked', value: null},
-      {label: 'Unbonding', value: null}
+      {label: 'Stacked', value: Number(balance.reserved)} // TODO get stacking from blockchain
+      // {label: 'Unbonding', value: null}
     ];
 
     return balanceEntities.map(({label, value}) => {
-      const balanceValueText = value !== null ? formatTokenAmount(value) : '-';
+      const balanceValueText =
+        value !== null ? formatTokenAmount(value, chainDecimals, tokenSymbol) : '-';
       return (
         <styled.BalanceEntityContainer key={label}>
           <Heading type="h4" align="left" label={label} />
-          <Text size="xxs" align="left" text={`${balanceValueText} MTM`}></Text>
+          <Text size="xxs" align="left" text={balanceValueText}></Text>
         </styled.BalanceEntityContainer>
       );
     });
-  }, [balance]);
+  }, [balance.free, balance.reserved, chainDecimals, tokenSymbol]);
 
   const activeTab = getRewards || !!unstakeFrom ? tabBarTabs[1] : tabBarTabs[0];
 
-  console.log('StakingForm', {wallet, addresses, authWallet, amount});
+  console.log('StakingForm', {wallet, addresses, authWallet, amount, amountToken});
 
   const onGetRewards = () => {
     console.log('getRewards', wallet);
@@ -83,14 +88,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
       .getRewards(wallet)
       .then(() => {
         console.log('getRewards success');
-        toast.info(
-          <ToastContent
-            // headerIconName="calendar"
-            title={"You've got rewards!"}
-            // text={t('messages.removeEventSuccess')}
-            showCloseButton
-          />
-        );
+        toast.info(<ToastContent title={"You've got rewards!"} showCloseButton />);
         onComplete();
       })
       .catch((err) => {
@@ -98,23 +96,21 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
         toast.error(
           <ToastContent
             isDanger
-            // headerIconName="calendar"
             title={t('titles.alert')}
             text="Error getting rewards"
-            // text={t('errors.couldNotRemoveEvent')}
             showCloseButton
           />
         );
       });
   };
-  const onUnstake = (address: string, amount: number) => {
+  const onUnstake = async (address: string, amount: number) => {
     console.log('onUnstake', address);
     if (!nft) {
       console.log('nft not found');
-      return;
+      throw new Error('NFT not found');
     }
 
-    nftStore
+    return nftStore
       .unstake(wallet, amount, nft.id)
       .then(() => {
         console.log('unstake success');
@@ -142,7 +138,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                   <styled.LabeledLineLabelContainer>
                     <Text size="xxs" align="right" text="ACCOUNT" />
                   </styled.LabeledLineLabelContainer>
-                  <Text size="xxs" text={initiatorWallet} />
+                  <Text size="xxs" text={initiatorInfo} />
                 </styled.LabeledLineContainer>
                 {/* <Dropdown
                   placeholder="Select account"
@@ -168,25 +164,40 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                 <styled.SectionHeader>
                   <Heading type="h2" align="left" label="Active Stakes" />
                 </styled.SectionHeader>
-                {Array.from(stakingAtOthers.values()).map((stakingDetail) => (
-                  <styled.ActiveStakesLineContainer key={stakingDetail.destAddr}>
-                    <Text size="s" text={stakingDetail.sourceAddr} align="left" />
-                    <Text size="s" text={`Staked ${stakingDetail.amount} MTM`} align="left" />
+                {Array.from(stakingAtOthers.values()).map((stakingDetail) => {
+                  const nft = nftStore.getNftByWallet(stakingDetail.destAddr);
+                  return (
+                    <styled.ActiveStakesLineContainer key={stakingDetail.destAddr}>
+                      <Text
+                        size="s"
+                        text={nft?.name || stakingDetail.sourceAddr.substring(0, 20)}
+                        align="left"
+                      />
+                      <Text
+                        size="s"
+                        text={`Staked ${formatTokenAmount(
+                          stakingDetail.amount,
+                          chainDecimals,
+                          tokenSymbol
+                        )}`}
+                        align="left"
+                      />
 
-                    {/* @dmitry-yudakov get the reward from somewhere? */}
-                    <Text
+                      {/* we don't have rewards per item yet */}
+                      {/* <Text
                       size="s"
                       text={`Rewarded ${formatTokenAmount(stakingDetail.amount)} MTM`}
                       align="left"
-                    />
-                    <Button
-                      label="Unstake"
-                      transform="capitalized"
-                      icon="chevron"
-                      onClick={() => setUnstakeFrom(stakingDetail.destAddr)}
-                    />
-                  </styled.ActiveStakesLineContainer>
-                ))}
+                    /> */}
+                      <Button
+                        label="Unstake"
+                        transform="capitalized"
+                        icon="chevron"
+                        onClick={() => setUnstakeFrom(stakingDetail.destAddr)}
+                      />
+                    </styled.ActiveStakesLineContainer>
+                  );
+                })}
               </styled.Section>
               <styled.Separator />
               <styled.Section>
@@ -198,22 +209,19 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                     <Text size="s" align="left" text="Total rewards" className="with-padding" />
                     <Text
                       size="s"
-                      text={`${formatTokenAmount(accumulatedRewards)} MTM`}
+                      text={`${formatTokenAmount(accumulatedRewards, chainDecimals, tokenSymbol)}`}
                       align="left"
                     />
                   </div>
-                  <Button label="Get Rewards" onClick={() => setGetRewards(true)} />
+                  <Button
+                    label="Get Rewards"
+                    disabled={accumulatedRewards < MIN_AMOUNT_TO_GET_REWARDS}
+                    onClick={() => setGetRewards(true)}
+                  />
                 </styled.RewardData>
               </styled.Section>
               <styled.Separator />
-
-              {/* <Heading type="h2" label="TEMP Mint NFT" />
-              <Button label="TEMP Mint Nft" onClick={() => nftStore.mintNft(wallet)} /> */}
             </div>
-            {/* <styled.Buttons>
-              <Button label="Back" onClick={() => setActiveTab(tabBarTabs[0])} />
-              <Button label="Next" onClick={() => setActiveTab(tabBarTabs[2])} />
-            </styled.Buttons> */}
           </>
         )}
         {!!unstakeFromDetail && (
@@ -225,13 +233,14 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="m" text="Amount" align="left" />
+                    <Text size="m" text={`Amount, ${tokenSymbol}`} align="left" />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer className="view-only">
                     <Input
                       type="number"
-                      value={amount}
-                      onChange={(val) => setAmount(Number(val))}
+                      value={amountToken || ''}
+                      disabled // TEMP fix comfortable working with decimals
+                      onChange={(val) => setAmount(Number(val) * Math.pow(10, chainDecimals || 12))}
                     />
                   </styled.LabeledLineInputContainer>
                 </styled.LabeledLineContainer>
@@ -240,7 +249,11 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                 <styled.LabeledLineLabelContainer>
                   <Text size="m" text="Unstake From" align="left" />
                 </styled.LabeledLineLabelContainer>
-                <Text size="m" text={`TODO ${unstakeFrom}`} align="left" />
+                <Text
+                  size="m"
+                  text={`${unstakeFromNft?.name} ${unstakeFromDetail.destAddr.substring(0, 20)}`}
+                  align="left"
+                />
               </styled.LabeledLineContainer>
             </div>
 
@@ -248,17 +261,38 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
               <Button label="Back" onClick={() => setUnstakeFrom(null)} />
               <Button
                 label="Sign & Submit"
-                onClick={() => onUnstake(unstakeFromDetail.destAddr, amount)}
+                onClick={() =>
+                  onUnstake(unstakeFromDetail.destAddr, amount).then(() => {
+                    setAmount(null);
+                  })
+                }
               />
             </styled.Buttons>
           </>
         )}
         {getRewards && (
           <>
-            <div>
-              <Heading type="h2" label="Get Rewards" />
-              <Text size="m" text="Amount TODO" align="left" />
-            </div>
+            <styled.Section>
+              <styled.SectionHeader>
+                <Heading type="h2" align="left" label="Get Rewards" />
+              </styled.SectionHeader>
+              <styled.LabeledLineContainer>
+                <styled.LabeledLineLabelContainer>
+                  <Text size="xxs" align="right" text="ACCOUNT" />
+                </styled.LabeledLineLabelContainer>
+                <Text size="xxs" text={initiatorInfo} />
+              </styled.LabeledLineContainer>
+              <styled.LabeledLineContainer>
+                <styled.LabeledLineLabelContainer>
+                  <Text size="xxs" align="right" text="AMOUNT" />
+                </styled.LabeledLineLabelContainer>
+                <Text
+                  size="s"
+                  text={`${formatTokenAmount(accumulatedRewards, chainDecimals, tokenSymbol)}`}
+                  align="left"
+                />
+              </styled.LabeledLineContainer>
+            </styled.Section>
 
             <styled.Buttons>
               <Button label="Back" onClick={() => setGetRewards(false)} />

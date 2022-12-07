@@ -43,7 +43,7 @@ export const LabeledLineInputContainer = styled.div`
   margin-top: -10px;
   flex: 1;
   & input {
-    font-size: var(--font-size-xxxs);
+    font-size: var(--font-size-xxs);
   }
   &.view-only input:disabled {
     opacity 100%;
