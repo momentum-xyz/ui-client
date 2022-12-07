@@ -109,6 +109,9 @@ const ExplorePage: FC = () => {
                 history.replace(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
               }
             }}
+            onAttend={(nft) => {
+              console.log(nft);
+            }}
             // FIXME id type
             onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
           />

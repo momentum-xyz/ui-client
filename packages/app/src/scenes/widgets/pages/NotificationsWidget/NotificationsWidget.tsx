@@ -51,6 +51,9 @@ const NotificationsWidget: FC = () => {
                   unityStore.loadWorldById(item.uuid, authStore.token);
                 }}
                 onConnect={() => {}}
+                onAttend={(nft) => {
+                  console.log(nft);
+                }}
               />
             ))}
           </styled.Body>

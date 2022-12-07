@@ -9,8 +9,14 @@ export interface NftFeedItemInterface {
   description: string | undefined;
   image: string;
 
+  type: 'created' | 'connected' | 'docked' | 'calendar_event';
   date: string;
-  type: 'created' | 'connected' | 'docked';
+
+  calendarStart: string | undefined;
+  calendarEnd: string | undefined;
+  calendarImage: string | undefined;
+  calendarTitle: string | undefined;
+
   connectedTo?: NftFeedItemInterface;
   dockedTo?: NftFeedItemInterface;
 }

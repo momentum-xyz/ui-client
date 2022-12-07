@@ -19,6 +19,7 @@ interface PropsInterface {
   onSearch: () => void;
   onTeleport: (nft: NftItemInterface) => void;
   onSelect: (nft: NftItemInterface) => void;
+  onAttend: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
 }
 
@@ -32,6 +33,7 @@ const ExplorePanel: FC<PropsInterface> = ({
   onSearch,
   onTeleport,
   onSelect,
+  onAttend,
   onConnect
 }) => {
   const debouncedSearch = useDebouncedCallback(onSearch, SEARCH_DELAY_MS);
@@ -65,7 +67,12 @@ const ExplorePanel: FC<PropsInterface> = ({
 
       <styled.Body>
         {!searchQuery.isQueryValid && (
-          <NewsFeed nftFeed={nftFeed} onTeleport={onTeleport} onConnect={onConnect} />
+          <NewsFeed
+            nftFeed={nftFeed}
+            onTeleport={onTeleport}
+            onConnect={onConnect}
+            onAttend={onAttend}
+          />
         )}
 
         {searchQuery.isQueryValid && (
