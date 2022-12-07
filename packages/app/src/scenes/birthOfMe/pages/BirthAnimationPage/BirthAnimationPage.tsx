@@ -18,7 +18,7 @@ const BirthAnimationPage: FC = () => {
 
     setTimeout(() => {
       history.push(ROUTES.explore);
-    }, 5 * 1000);
+    }, 10 * 1000);
   }, [exploreStore, history]);
 
   useSupernova();

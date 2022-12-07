@@ -336,7 +336,7 @@ export const use3DMap = (
           controls.enabled = false;
           controls.autoRotate = false;
           controls.enablePan = false;
-          highlightMesh.position.set(0, 0, 0); // remove the highlight
+          //highlightMesh.position.set(0, 0, 0); // remove the highlight
         },
         onUpdate: function () {
           camera.quaternion.copy(startOrientation).slerp(targetOrientation, this.progress());

@@ -49,8 +49,9 @@ export class Scene {
     gl.enable(gl.DEPTH_TEST);
     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE_MINUS_SRC_ALPHA);
 
+    // FIXME: Kovi
     window.addEventListener('keydown', (event) => {
-      if (event.key === ' ') this.start();
+      //if (event.key === ' ') this.start();
     });
 
     Shaders.GRADIENT.setColors(new Color('#3f2f0f'), new Color('#000000'));
