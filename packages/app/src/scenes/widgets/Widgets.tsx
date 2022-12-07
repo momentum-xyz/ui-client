@@ -37,7 +37,7 @@ const Widgets: FC<PropsInterface> = (props) => {
     objectStore,
     nftStore
   } = useStore();
-  const {onlineUsersStore, odysseyStore} = widgetsStore;
+  const {onlineUsersStore, odysseyStore, calendarStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
@@ -49,11 +49,23 @@ const Widgets: FC<PropsInterface> = (props) => {
     worldBuilderStore.fetchPermissions();
     odysseyStore.init(nftStore.nftItems, worldStore.worldId);
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
-  }, [onlineUsersStore, worldBuilderStore]);
+  }, [
+    nftStore.nftItems,
+    odysseyStore,
+    onlineUsersStore,
+    sessionStore.userId,
+    worldBuilderStore,
+    worldStore.worldId
+  ]);
 
   const handleOpenScreenShare = () => {
     agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
     widgetsStore.screenShareStore.widget.open();
+  };
+
+  const handleOpenOdysseyWidget = () => {
+    calendarStore.eventList.fetchSpaceEvents(worldStore.worldId);
+    odysseyStore.widget.open();
   };
 
   return (
@@ -127,7 +139,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="people"
                 size="medium"
                 disabled={false}
-                onClick={odysseyStore.widget.open}
+                onClick={handleOpenOdysseyWidget}
                 state={{canGoBack: true}}
               />
 
@@ -184,6 +196,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.odysseyStore.widget.isOpen && (
         <OdysseyWidget
           odyssey={odysseyStore.odyssey}
+          events={calendarStore.eventList.events.length}
           onClose={odysseyStore.widget.close}
           nftId={odysseyStore.nftId}
         />

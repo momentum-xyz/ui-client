@@ -38,3 +38,13 @@ export interface SpaceAttributeItemResponse {
 
 // DELETE SPACE SUB ATTRIBUTE
 export interface DeleteSpaceAttributeItemRequest extends GetSpaceAttributeItemRequest {}
+
+// GET EVENTS COUNT
+
+export interface GetDocksCountRequest {
+  spaceId: string;
+}
+
+export interface GetDocksCountResponse {
+  count: number;
+}
