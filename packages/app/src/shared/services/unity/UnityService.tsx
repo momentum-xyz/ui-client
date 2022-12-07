@@ -128,6 +128,10 @@ export class UnityService {
     this.unityApi?.setTargetWorldId(id);
   }
 
+  triggerTeleport(domain?: string, worldId?: string) {
+    this.unityApi?.triggerTeleport(domain, worldId);
+  }
+
   pause() {
     document.body.classList.remove('unity-active');
     this.unityApi?.pauseUnity(true);

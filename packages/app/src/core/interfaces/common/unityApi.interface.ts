@@ -12,6 +12,7 @@ export interface UnityApiInterface {
   pauseUnity(isPaused: boolean): any;
   setToken(token?: string): any;
   setTargetWorldId(id?: string): any;
+  triggerTeleport(domain?: string, worldId?: string): any;
   getCurrentWorld(): string;
   getUserPosition(): string;
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;

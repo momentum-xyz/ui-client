@@ -201,7 +201,9 @@ const Widgets: FC<PropsInterface> = (props) => {
           nftId={odysseyStore.nftId}
         />
       )}
-      {widgetsStore.profileStore.profileDialog.isOpen && <ProfileWidget />}
+      {widgetsStore.profileStore.profileDialog.isOpen && (
+        <ProfileWidget isVisitAvailable={!!isExplorePage} />
+      )}
       {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}
       {widgetsStore.flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}

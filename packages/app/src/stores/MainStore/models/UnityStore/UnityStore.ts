@@ -2,7 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
+import {api, ResolveNodeResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
@@ -16,7 +16,8 @@ const UnityStore = types
     isTeleportReady: false,
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
-    fetchRequest: types.optional(RequestModel, {})
+    fetchRequest: types.optional(RequestModel, {}),
+    nodeRequest: types.optional(RequestModel, {})
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -45,6 +46,9 @@ const UnityStore = types
     },
     setTargetWorldId(id?: string): void {
       UnityService.setTargetWorldId(id);
+    },
+    triggerTeleport(domain?: string, worldId?: string): void {
+      UnityService.triggerTeleport(domain, worldId);
     },
     getCurrentWorld(): string | null {
       return UnityService.getCurrentWorld?.() || null;
@@ -143,7 +147,19 @@ const UnityStore = types
       if (response) {
         return response.space.name;
       }
-    })
+    }),
+    resolveNode: flow(function* (object: string) {
+      return yield self.nodeRequest.send(api.webRepository.resolveNode, {object});
+    }),
+    async loadWorldById(worldId: string, token: string) {
+      const response: ResolveNodeResponse = await this.resolveNode(worldId);
+      if (response) {
+        this.setAuthToken(token);
+        this.triggerTeleport(response.domain, worldId);
+        this.setInitialVolume();
+        //unityStore.setTargetWorldId(worldId);
+      }
+    }
   }))
   .views((self) => ({
     get isPaused(): boolean {

@@ -1,5 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+//import {useHistory} from 'react-router-dom';
 import {Dialog, Heading, IconSvg, Loader, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -11,13 +12,21 @@ import * as styled from './ProfileWidget.styled';
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
-const ProfileWidget: FC = (props) => {
+interface PropsInterface {
+  isVisitAvailable: boolean;
+}
+
+const ProfileWidget: FC<PropsInterface> = (props) => {
+  const {isVisitAvailable} = props;
+
   const {widgetsStore, sessionStore, mainStore} = useStore();
   const {unityStore, agoraStore} = mainStore;
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
+
+  //const history = useHistory();
 
   useEffect(() => {
     // FIXME: Use user from sessionStore. After 6th
@@ -29,8 +38,7 @@ const ProfileWidget: FC = (props) => {
   }, [profileStore]);
 
   const handleTeleportToOdyssey = useCallback(() => {
-    // TODO: implementation
-    // unityStore.teleportToSpace(spaceId);
+    // history.push(ROUTES.odyssey.base);
   }, []);
 
   const handleProfileClose = useCallback(() => {
@@ -69,6 +77,7 @@ const ProfileWidget: FC = (props) => {
             <styled.Container>
               {!isEditMode && !profileStore.isLoading && (
                 <ProfileView
+                  isVisitAvailable={isVisitAvailable}
                   user={profileStore.userProfile}
                   onTeleportToOdyssey={handleTeleportToOdyssey}
                 />

@@ -11,11 +11,12 @@ import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
+  isVisitAvailable: boolean;
   onTeleportToOdyssey: () => void;
 }
 
 const ProfileView: FC<PropsInterface> = (props) => {
-  const {user, onTeleportToOdyssey} = props;
+  const {user, isVisitAvailable, onTeleportToOdyssey} = props;
 
   const {t} = useTranslation();
 
@@ -41,7 +42,13 @@ const ProfileView: FC<PropsInterface> = (props) => {
             weight="bold"
           />
           <div>
-            <Button icon="fly-to" size="medium" label="Visit" onClick={onTeleportToOdyssey} />
+            <Button
+              icon="fly-to"
+              size="medium"
+              label="Visit"
+              disabled={!isVisitAvailable}
+              onClick={onTeleportToOdyssey}
+            />
           </div>
         </styled.NameContainer>
       </styled.AvatarContainer>
