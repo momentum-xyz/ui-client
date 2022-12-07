@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
-import {Avatar, Dialog, SearchInput, Text} from '@momentum-xyz/ui-kit';
+import {Avatar, PanelLayout, Portal, SearchInput, Text} from '@momentum-xyz/ui-kit';
 
 import {UserModelInterface} from 'core/models';
 import {useStore} from 'shared/hooks';
@@ -33,11 +33,11 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
   useEffect(() => {
     console.info(users);
     console.info(searchedUsers);
+    console.info(onlineUsersStore?.searchedUsers);
   }, []);
 
   const handleClose = () => {
     onClose?.();
-    searchUsers('');
   };
 
   const handleUserClick = (id: string) => {
@@ -49,57 +49,56 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
   };
 
   return (
-    <>
-      <Dialog
-        title="Online"
-        onClose={handleClose}
-        headerStyle="uppercase"
-        icon="people"
-        iconSize="large"
-        showCloseButton
-        showOverflow
-        layoutSize={{width: `${DIALOG_WIDTH_PX}px;`}}
-      >
-        <styled.Container data-testid="SearchUsersWidget-test">
-          <SearchInput placeholder="Search for people" onChange={(query) => searchUsers(query)} />
-          <styled.List className="noScrollIndicator">
-            {searchedUsers && searchedUsers.length > 0
-              ? searchedUsers.map((user) => (
-                  <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
-                    <Avatar avatarSrc={user.avatarSrc} size="small" />
-                    <Text size="s" text={user.name} transform="capitalized" />
-                  </styled.Item>
-                ))
-              : users.map((user) => (
-                  <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
-                    <Avatar avatarSrc={user.avatarSrc} size="small" />
-                    <Text size="s" text={user.name} transform="capitalized" />
-                  </styled.Item>
-                ))}
-          </styled.List>
-        </styled.Container>
-      </Dialog>
-      <styled.UsersContainer>
-        {onlineUsersStore.selectedUserId && (
-          <UserProfilePanel
-            odyssey={onlineUsersStore.odyssey}
-            onClose={onlineUsersStore.unselectUser}
-            nftId={onlineUsersStore.nftId}
-          />
-        )}
-        {/*    {onlineUsersStore.selectedUserId && (*/}
-        {/*      <div>*/}
-        {/*        <UserProfilePanel*/}
-        {/*          userId={onlineUsersStore.selectedUserId}*/}
-        {/*          onClose={() => {*/}
-        {/*            onlineUsersStore.unselectUser();*/}
-        {/*            userProfileDialog.close();*/}
-        {/*          }}*/}
-        {/*        />*/}
-        {/*      </div>*/}
-        {/*    )}*/}
-      </styled.UsersContainer>
-    </>
+    <Portal>
+      <styled.Modal data-testid="SearchUsersWidget-test">
+        <styled.OuterContainer>
+          <PanelLayout
+            title="Online"
+            onClose={handleClose}
+            headerStyle="uppercase"
+            headerIconName="people"
+            iconSize="large"
+            showCloseButton
+            showOverflow
+            componentSize={{width: `${DIALOG_WIDTH_PX}px;`}}
+          >
+            <styled.Container data-testid="SearchUsersWidget-test">
+              <SearchInput
+                placeholder="Search for people"
+                onChange={(query: string) => searchUsers(query)}
+              />
+              <styled.List className="noScrollIndicator">
+                {searchedUsers && searchedUsers.length > 0
+                  ? searchedUsers.map((user) => (
+                      <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
+                        <Avatar avatarSrc={user.avatarSrc} size="small" />
+                        <Text size="s" text={user.name} transform="capitalized" />
+                      </styled.Item>
+                    ))
+                  : !onlineUsersStore.query &&
+                    users.map((user) => (
+                      <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
+                        <Avatar avatarSrc={user.avatarSrc} size="small" />
+                        <Text size="s" text={user.name} transform="capitalized" />
+                      </styled.Item>
+                    ))}
+              </styled.List>
+            </styled.Container>
+          </PanelLayout>
+          <styled.UsersContainer>
+            {onlineUsersStore.selectedUserId && (
+              <UserProfilePanel
+                odyssey={onlineUsersStore.odyssey}
+                user={onlineUsersStore.user}
+                userAvatar={onlineUsersStore.avatarSrc}
+                onClose={onlineUsersStore.unselectUser}
+                nftId={onlineUsersStore.nftId}
+              />
+            )}
+          </styled.UsersContainer>
+        </styled.OuterContainer>
+      </styled.Modal>
+    </Portal>
   );
 };
 

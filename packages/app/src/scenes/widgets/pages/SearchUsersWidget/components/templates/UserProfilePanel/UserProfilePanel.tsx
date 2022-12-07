@@ -1,13 +1,14 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, IconSvg, Text, Dialog} from '@momentum-xyz/ui-kit';
+import {Button, IconSvg, Text, PanelLayout} from '@momentum-xyz/ui-kit';
 
 import {NftItemInterface} from 'stores/NftStore/models';
+import {UserInterface} from 'api';
 
 import * as styled from './UserProfilePanel.styled';
 
-const MENU_OFFSET_LEFT = 10;
-const MENU_OFFSET_TOP = 20;
+// const MENU_OFFSET_LEFT = 10;
+// const MENU_OFFSET_TOP = 20;
 
 interface OdysseyItemInterface extends NftItemInterface {
   connections: number;
@@ -17,35 +18,47 @@ interface OdysseyItemInterface extends NftItemInterface {
 
 interface PropsInterface {
   odyssey: OdysseyItemInterface | null;
+  user?: UserInterface;
+  userAvatar?: string;
   nftId?: string;
   onConnect?: () => void;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 const UserProfilePanel: FC<PropsInterface> = (props) => {
-  const {odyssey, nftId, onConnect, onClose} = props;
+  const {odyssey, nftId, onConnect, onClose, user, userAvatar} = props;
 
-  if (!odyssey) {
-    return null;
-  }
   return (
-    <Dialog
-      position="leftTop"
-      title={odyssey.name}
-      offset={{left: MENU_OFFSET_LEFT, top: MENU_OFFSET_TOP}}
-      showBackground={false}
-      headerStyle="uppercase"
-      layoutSize={{width: '315px'}}
+    // <Dialog
+    //   // position="leftTop"
+    //   title={odyssey?.name}
+    //   // offset={{left: MENU_OFFSET_LEFT, top: MENU_OFFSET_TOP}}
+    //   showBackground={false}
+    //   headerStyle="uppercase"
+    //   layoutSize={{width: '315px'}}
+    //   onClose={onClose}
+    //   showCloseButton
+    // >
+    <PanelLayout
+      title={odyssey?.name ?? user?.name ?? 'title'}
       onClose={onClose}
+      componentSize={{width: '315px'}}
+      headerStyle="uppercase"
       showCloseButton
     >
       <styled.Container data-testid="UserProfilePanel-test">
         <styled.TopContainer>
-          <styled.Avatar src={odyssey.image} />
+          <styled.AvatarImage size="large" avatarSrc={userAvatar} />
           <styled.Actions>
-            <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
+            <Button size="small" label="Visit" disabled={!nftId} icon="fly-to" />
             <Button size="small" label="High Five" icon="high-five" onClick={() => {}} />
-            <Button size="small" label="Connect" icon="hierarchy" onClick={onConnect} />
+            <Button
+              size="small"
+              label="Connect"
+              icon="hierarchy"
+              disabled={!nftId}
+              onClick={onConnect}
+            />
             <Button
               size="small"
               label="co-create"
@@ -57,26 +70,31 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
         </styled.TopContainer>
       </styled.Container>
       <styled.Description>
-        <Text size="xxs" text={odyssey.description} align="left" />
+        <Text size="xxs" text={odyssey?.description} align="left" />
       </styled.Description>
+      {odyssey && (
+        <>
+          <styled.Statistics>Statistics</styled.Statistics>
 
-      <styled.Statistics>Statistics</styled.Statistics>
-
-      <styled.StatisticsData>
-        <styled.StatisticsItem>
-          <IconSvg name="hierarchy" size="medium" />
-          <styled.StatisticsValue>{odyssey.connections ?? 0} connections</styled.StatisticsValue>
-        </styled.StatisticsItem>
-        <styled.StatisticsItem>
-          <IconSvg name="people" size="medium" />
-          <styled.StatisticsValue>{odyssey.docking ?? 0} docking</styled.StatisticsValue>
-        </styled.StatisticsItem>
-        <styled.StatisticsItem>
-          <IconSvg name="calendar" size="medium" />
-          <styled.StatisticsValue>{odyssey.events ?? 0} events</styled.StatisticsValue>
-        </styled.StatisticsItem>
-      </styled.StatisticsData>
-    </Dialog>
+          <styled.StatisticsData>
+            <styled.StatisticsItem>
+              <IconSvg name="hierarchy" size="medium" />
+              <styled.StatisticsValue>
+                {odyssey?.connections ?? 0} connections
+              </styled.StatisticsValue>
+            </styled.StatisticsItem>
+            <styled.StatisticsItem>
+              <IconSvg name="people" size="medium" />
+              <styled.StatisticsValue>{odyssey?.docking ?? 0} docking</styled.StatisticsValue>
+            </styled.StatisticsItem>
+            <styled.StatisticsItem>
+              <IconSvg name="calendar" size="medium" />
+              <styled.StatisticsValue>{odyssey?.events ?? 0} events</styled.StatisticsValue>
+            </styled.StatisticsItem>
+          </styled.StatisticsData>
+        </>
+      )}
+    </PanelLayout>
   );
 };
 

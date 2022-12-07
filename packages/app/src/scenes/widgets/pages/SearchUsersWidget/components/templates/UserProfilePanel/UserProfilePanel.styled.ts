@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {Avatar} from '@momentum-xyz/ui-kit';
 
 export const Header = styled.div`
   padding: 10px;
@@ -26,7 +27,7 @@ export const TopContainer = styled.div`
   align-items: center;
 `;
 
-export const Avatar = styled.img`
+export const AvatarImage = styled(Avatar)`
   width: 90px;
   height: 90px;
   border-radius: 50%;
