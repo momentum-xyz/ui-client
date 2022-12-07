@@ -11,8 +11,12 @@ import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
 
 const WALLET_KEY = 'odyssey.wallet';
-const storeWallet = (wallet: string): void => {
-  localStorage.setItem(WALLET_KEY, wallet);
+const storeWallet = (wallet: string | null): void => {
+  if (wallet) {
+    localStorage.setItem(WALLET_KEY, wallet);
+  } else {
+    localStorage.removeItem(WALLET_KEY);
+  }
 };
 
 const getStoredWallet = (): string => {
@@ -40,7 +44,16 @@ const AuthStore = types.compose(
       clear(): void {
         self.token = '';
         self.wallet = '';
+        storeWallet(null);
         refreshAxiosToken(self.token);
+      },
+      activateWallet(wallet?: string): void {
+        if (wallet) {
+          self.wallet = wallet;
+        }
+        if (self.wallet) {
+          getRootStore(self).nftStore.subscribeToBalanseChanges(self.wallet);
+        }
       }
     }))
     .actions((self) => ({
@@ -50,12 +63,8 @@ const AuthStore = types.compose(
         self.isAuthenticating = false;
       },
       selectWallet(wallet: string): void {
+        // TODO separate wallet used in the dropdown and the one connected to the session
         self.wallet = wallet;
-
-        storeWallet(wallet);
-
-        // FIXME: here?
-        getRootStore(self).nftStore.subscribeToBalanseChanges(wallet);
       },
       fetchGuestToken: flow(function* (form: GuestLoginFormInterface) {
         const data: AuthGuestTokenRequest = {...form};
@@ -94,6 +103,10 @@ const AuthStore = types.compose(
               self.token = response?.token || '';
               self.updateAxiosAndUnityTokens();
 
+              // FIXME: here?
+              storeWallet(self.wallet);
+              self.activateWallet(self.wallet);
+
               return !!response?.token;
             }
           }
@@ -105,9 +118,9 @@ const AuthStore = types.compose(
     .actions((self) => ({
       tryToRestoreWallet() {
         const storedWallet = getStoredWallet();
-        if (storedWallet) {
+        if (storedWallet && self.token) {
           console.log('Restore wallet', storedWallet);
-          self.selectWallet(storedWallet);
+          self.activateWallet(storedWallet);
         }
       }
     }))

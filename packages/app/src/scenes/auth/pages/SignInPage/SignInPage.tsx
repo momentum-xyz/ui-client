@@ -17,6 +17,7 @@ const SignInPage: FC = () => {
 
   useEffect(() => {
     authStore.clear();
+    // TODO smt less brutal
     localStorage.clear();
   }, [authStore]);
 
@@ -52,17 +53,23 @@ const SignInPage: FC = () => {
 
         <styled.Boxes>
           {/* Login as a normal user */}
-          <Login
-            walletOptions={nftStore.accountOptions}
-            wallet={authStore.wallet}
-            isPending={authStore.isPending}
-            onSelectAddress={authStore.selectWallet}
-            onLogin={handleLogin}
-          />
+          {!!nftStore.accountsWithNftsOptions.length && (
+            <Login
+              walletOptions={nftStore.accountsWithNftsOptions}
+              wallet={authStore.wallet}
+              isPending={authStore.isPending}
+              onSelectAddress={authStore.selectWallet}
+              onLogin={handleLogin}
+            />
+          )}
 
           <SinusBox />
           {/* Login as guest */}
-          <LoginGuest isPending={authStore.isGuestPending} onLogin={handleGuestLogin} />
+          <LoginGuest
+            isPending={authStore.isGuestPending}
+            hasNonGuestAccount={!!nftStore.accountsWithNftsOptions.length}
+            onLogin={handleGuestLogin}
+          />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>
