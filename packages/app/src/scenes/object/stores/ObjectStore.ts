@@ -4,7 +4,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {PluginAttributesManager, PluginLoader} from 'core/models';
 import {
   api,
-  Asset2DResponse,
+  Asset2dResponse,
   GetSpaceInfoResponse,
   PluginMetadataInterface,
   PluginOptionsInterface,
@@ -48,8 +48,8 @@ const ObjectStore = types
         case ObjectTypeEnum.IMAGE:
         case ObjectTypeEnum.VIDEO: {
           const objectResponse:
-            | Asset2DResponse<ObjectMetadataInterface, ObjectOptionsInterface>
-            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2DAsset, {
+            | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
+            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
             assetId: spaceInfo.asset_2d_id
           });
           self.tileStore.setObject(objectResponse, spaceId);
@@ -57,8 +57,8 @@ const ObjectStore = types
         }
         default: {
           const assetResponse:
-            | Asset2DResponse<PluginMetadataInterface, PluginOptionsInterface>
-            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2DAsset, {
+            | Asset2dResponse<PluginMetadataInterface, PluginOptionsInterface>
+            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
             assetId: spaceInfo.asset_2d_id
           });
 

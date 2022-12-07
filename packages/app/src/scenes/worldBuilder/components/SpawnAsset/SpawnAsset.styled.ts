@@ -21,6 +21,7 @@ export const Container = styled.div`
   backdrop-filter: blur(2px);
   padding: 15px 10px;
   border-radius: 10px;
+  overflow: hidden;
 `;
 
 export const Header = styled.div`
@@ -32,8 +33,8 @@ export const Header = styled.div`
 
 export const Body = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  flex-grow: 1;
+  overflow: hidden;
 `;
 
 export const PageContainer = styled.div`

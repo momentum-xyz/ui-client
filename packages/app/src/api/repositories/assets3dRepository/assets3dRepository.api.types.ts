@@ -1,3 +1,4 @@
+import {Asset3dCategoryEnum} from 'api/enums';
 import {MetadataInterface} from 'api/interfaces/metadata.interface';
 
 export interface UploadAsset3dRequest {
@@ -12,7 +13,7 @@ export interface UploadAsset3dResponse {
 export interface Asset3dMetadataInterface {
   name: string;
   type: number;
-  category: string;
+  category: Asset3dCategoryEnum;
   previewImage?: string;
 }
 
@@ -22,4 +23,9 @@ export interface Asset3dInterface {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface FetchAssets3dRequest {
+  category: Asset3dCategoryEnum;
+}
+
 export interface FetchAssets3dResponse extends Array<Asset3dInterface> {}

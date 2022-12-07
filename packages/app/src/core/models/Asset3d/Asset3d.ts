@@ -1,7 +1,7 @@
 import {Instance, types} from 'mobx-state-tree';
 
-const WorldBuilderSkybox = types
-  .model('WorldBuilderSkybox', {
+const Asset3d = types
+  .model('Asset3d', {
     id: types.identifier,
     name: types.string,
     image: types.string
@@ -12,6 +12,6 @@ const WorldBuilderSkybox = types
     // }
   }));
 
-export interface WorldBuilderSkyboxInterface extends Instance<typeof WorldBuilderSkybox> {}
+export interface Asset3dInterface extends Instance<typeof Asset3d> {}
 
-export {WorldBuilderSkybox};
+export {Asset3d};

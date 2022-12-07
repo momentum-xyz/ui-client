@@ -15,7 +15,7 @@ export * from './emojiRepository';
 export * from './eventsRepository';
 export * from './objectRepository';
 export * from './assets3dRepository';
-export * from './assetsRepository';
+export * from './assets2dRepository';
 export * from './agoraRepository';
 export * from './flightRepository';
 export * from './spaceUserAttributeRepository';

@@ -1,4 +1,3 @@
-import {Text} from '@momentum-xyz/ui-kit';
 import {FC} from 'react';
 import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
 import cn from 'classnames';
@@ -26,7 +25,7 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
           history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.basicAssets, {worldId}))
         }
       >
-        <Text text="Basic Asset Pack" size="l" weight="light" align="left" />
+        <styled.TabText text="Basic Asset Pack" size="l" weight="light" align="left" />
       </styled.Tab>
       <styled.Tab
         className={cn(
@@ -37,7 +36,7 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
           history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.customAssets, {worldId}))
         }
       >
-        <Text text="Custom Object Library" size="l" weight="light" align="left" />
+        <styled.TabText text="Custom Object Library" size="l" weight="light" align="left" />
       </styled.Tab>
       <styled.Tab
         className={cn(
@@ -48,7 +47,7 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
           history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.uploadAsset, {worldId}))
         }
       >
-        <Text text="Upload Custom Object" size="l" weight="light" align="left" />
+        <styled.TabText text="Upload Custom Object" size="l" weight="light" align="left" />
       </styled.Tab>
     </styled.Container>
   );

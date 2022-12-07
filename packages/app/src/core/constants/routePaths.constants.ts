@@ -15,7 +15,8 @@ export const ROUTES = {
         base: '/odyssey/:worldId/build/spawn',
         basicAssets: '/odyssey/:worldId/build/spawn/basic',
         customAssets: '/odyssey/:worldId/build/spawn/custom',
-        uploadAsset: '/odyssey/:worldId/build/spawn/upload'
+        uploadAsset: '/odyssey/:worldId/build/spawn/upload',
+        selected: '/odyssey/:worldId/build/spawn/:assetCategory/selected'
       }
     },
     object: {

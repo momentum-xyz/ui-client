@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 import cn from 'classnames';
 
 import {useStore} from 'shared/hooks';
-import {WorldBuilderSkyboxInterface} from 'scenes/worldBuilder/stores/WorldBuilderSkyboxesStore/models';
+import {Asset3dInterface} from 'core/models';
 
 import {Carousel} from '../Carousel';
 
@@ -25,7 +25,7 @@ const SkyboxSelectorWithPreview: FC = () => {
     <styled.Container>
       <styled.ItemsGallery>
         {!!items && !!selectedItem && (
-          <Carousel<WorldBuilderSkyboxInterface>
+          <Carousel<Asset3dInterface>
             items={items}
             activeItem={selectedItem}
             onChange={selectItem}

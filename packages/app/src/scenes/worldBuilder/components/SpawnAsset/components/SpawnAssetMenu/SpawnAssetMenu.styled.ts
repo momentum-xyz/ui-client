@@ -1,3 +1,4 @@
+import {Text} from '@momentum-xyz/ui-kit';
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
@@ -7,11 +8,19 @@ export const Container = styled.div`
   padding: 0 5px;
 `;
 
+export const TabText = styled(Text)``;
+
 export const Tab = styled.button`
   display: flex;
   padding: 15px;
   width: 100%;
   justify-content: left;
+
+  &:not(&.selected):hover {
+    ${TabText} {
+      color: ${(props) => props.theme.accent};
+    }
+  }
 
   &.selected {
     background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
