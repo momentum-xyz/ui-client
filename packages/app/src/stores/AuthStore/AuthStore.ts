@@ -10,6 +10,15 @@ import {GuestLoginFormInterface} from 'core/interfaces';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
 
+const WALLET_KEY = 'odyssey.wallet';
+const storeWallet = (wallet: string): void => {
+  localStorage.setItem(WALLET_KEY, wallet);
+};
+
+const getStoredWallet = (): string => {
+  return localStorage.getItem(WALLET_KEY) || '';
+};
+
 const AuthStore = types.compose(
   ResetModel,
   types
@@ -42,6 +51,8 @@ const AuthStore = types.compose(
       },
       selectWallet(wallet: string): void {
         self.wallet = wallet;
+
+        storeWallet(wallet);
 
         // FIXME: here?
         getRootStore(self).nftStore.subscribeToBalanseChanges(wallet);
@@ -90,6 +101,15 @@ const AuthStore = types.compose(
 
         return false;
       })
+    }))
+    .actions((self) => ({
+      tryToRestoreWallet() {
+        const storedWallet = getStoredWallet();
+        if (storedWallet) {
+          console.log('Restore wallet', storedWallet);
+          self.selectWallet(storedWallet);
+        }
+      }
     }))
     .views((self) => ({
       get hasToken(): boolean {

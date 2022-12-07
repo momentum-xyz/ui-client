@@ -53,7 +53,8 @@ const RootStore = types
   .actions((self) => ({
     async initApplication() {
       await self.configStore.init();
-      self.nftStore.init();
+      await self.nftStore.init();
+      self.authStore.tryToRestoreWallet();
       self.mainStore.themeStore.init();
     },
     unityLoaded(worldId: string): void {
