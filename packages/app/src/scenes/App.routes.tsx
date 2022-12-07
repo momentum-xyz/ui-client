@@ -60,13 +60,6 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     )
   },
   {
-    path: ROUTES.storyBook.base,
-    main: () => <StoryBook />
-  }
-];
-
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
-  {
     path: ROUTES.birth,
     exact: true,
     main: () => (
@@ -77,6 +70,13 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
       </>
     )
   },
+  {
+    path: ROUTES.storyBook.base,
+    main: () => <StoryBook />
+  }
+];
+
+export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.birthAnimation,
     main: () => (

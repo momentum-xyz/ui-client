@@ -10,11 +10,12 @@ import * as styled from './LoginGuest.styled';
 
 interface PropsInterface {
   isPending: boolean;
+  hasNonGuestAccount: boolean;
   onLogin: (form: GuestLoginFormInterface) => void;
 }
 
 const LoginGuest: FC<PropsInterface> = (props) => {
-  const {isPending, onLogin} = props;
+  const {isPending, hasNonGuestAccount, onLogin} = props;
 
   const {t} = useTranslation();
 
@@ -31,7 +32,15 @@ const LoginGuest: FC<PropsInterface> = (props) => {
   return (
     <Box>
       <styled.Div>
-        <Text size="m" text="Or do you want look around. What should we call you?" align="left" />
+        {hasNonGuestAccount ? (
+          <Text
+            size="m"
+            text="Or do you want to look around. What should we call you?"
+            align="left"
+          />
+        ) : (
+          <Text size="m" text="Do you want to look around. What should we call you?" align="left" />
+        )}
         <styled.ImageContainer>
           <IconSvg name="profile" size="large" />
 

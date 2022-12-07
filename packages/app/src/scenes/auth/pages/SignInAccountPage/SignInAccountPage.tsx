@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 import {Text} from '@momentum-xyz/ui-kit';
@@ -12,18 +12,40 @@ import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './compone
 import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
-  const {authStore, nftStore, signInAccountStore, sessionStore} = useStore();
-  const {balance, requestInitialFunds, requestingFundsStatus, mintingNftStatus, mintNft} = nftStore;
+  const {authStore, nftStore, signInAccountStore} = useStore();
+  const {
+    balance,
+    isBalanceLoading,
+    requestInitialFunds,
+    requestingFundsStatus,
+    mintingNftStatus,
+    mintNft
+  } = nftStore;
+  const [walletWithFundsIsConnected, setWalletWithFundsIsConnected] = useState(false);
+
+  const accountSelectedAndFundsAquired =
+    walletWithFundsIsConnected || requestingFundsStatus === 'success';
+
+  useEffect(() => {
+    authStore.clear();
+  }, [authStore]);
 
   const history = useHistory();
+  console.log('SignInAccountPage', {
+    balance,
+    walletWithFundsIsConnected,
+    isBalanceLoading,
+    requestingFundsStatus,
+    mintingNftStatus
+  });
 
   const onConnectWallet = useCallback(() => {
-    console.log('onConnectWallet', balance, balance.free);
-    if (balance.free === 0) {
+    console.log('onConnectWallet', balance);
+    if (!balance.free) {
       requestInitialFunds(authStore.wallet);
     } else {
-      // noop
       // there are funds already
+      setWalletWithFundsIsConnected(true);
     }
   }, [authStore.wallet, balance, requestInitialFunds]);
 
@@ -32,54 +54,48 @@ const SignInAccountPage: FC = () => {
       try {
         await mintNft(authStore.wallet, form.name || '');
 
-        const address = nftStore.getAddressByWallet(authStore.wallet);
-        if (address) {
-          await authStore.fetchTokenByWallet(address);
-        }
-
         // NFT should be minted and accessible by now - if it doesn't happen sometimes
         // we can put some wait here
         await nftStore.fetchNfts();
 
-        const isDone = await signInAccountStore.updateProfile(form);
-        if (isDone) {
-          await sessionStore.loadUserProfile();
-          // .catch((err) => {
-          //   console.log('error loading profile', err, 'TEMP ignore');
-          // });
-          history.push(ROUTES.birth);
-        }
+        history.push(ROUTES.birth);
       } catch (err) {
         console.log('error minting nft', err);
       }
     },
-    [authStore, history, mintNft, nftStore, sessionStore, signInAccountStore]
+    [authStore, history, mintNft, nftStore]
   );
 
   return (
     <styled.Container>
       <styled.Wrapper>
         <styled.Boxes>
-          <SinusBox />
-          {!authStore.token && (
-            <ChoiceYourWallet
-              walletOptions={nftStore.accountOptions}
-              wallet={authStore.wallet}
-              isConnectDisabled={authStore.isPending || requestingFundsStatus === 'pending'}
-              onSelectAddress={authStore.selectWallet}
-              onConnect={onConnectWallet}
-            />
+          {!authStore.token && !accountSelectedAndFundsAquired && (
+            <>
+              <SinusBox />
+              <ChoiceYourWallet
+                walletOptions={nftStore.accountsWithoutNftsOptions}
+                wallet={authStore.wallet}
+                isConnectDisabled={
+                  authStore.isPending || requestingFundsStatus === 'pending' || isBalanceLoading
+                }
+                onSelectAddress={authStore.activateWallet}
+                onConnect={onConnectWallet}
+              />
+            </>
           )}
           {requestingFundsStatus === 'pending' && <Text text="Loading MTM..." size="m" />}
           {requestingFundsStatus === 'error' && <Text text="Error loading MTM" size="m" />}
 
-          {(requestingFundsStatus === 'success' || balance.free > 0) && (
+          {accountSelectedAndFundsAquired && (
             <>
-              {requestingFundsStatus === 'success' && <CongratulationsBox />}
+              {requestingFundsStatus === 'success' && (
+                <CongratulationsBox amount={nftStore.formatAmount(balance.free)} />
+              )}
               <SinusBox />
               <CreateOdysseyForm
                 fieldErrors={signInAccountStore.fieldErrors}
-                isSubmitDisabled={signInAccountStore.isUpdating}
+                isSubmitDisabled={signInAccountStore.isUpdating || mintingNftStatus === 'pending'}
                 onSubmit={handleSubmit}
               />
             </>
