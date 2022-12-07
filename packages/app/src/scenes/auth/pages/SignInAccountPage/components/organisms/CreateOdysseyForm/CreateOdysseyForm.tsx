@@ -16,7 +16,7 @@ interface PropsInterface {
 }
 
 const CreateOdysseyForm: FC<PropsInterface> = (props) => {
-  const {fieldErrors, isSubmitDisabled, onSubmit} = props;
+  const {fieldErrors, isSubmitDisabled: disabled, onSubmit} = props;
 
   const {t} = useTranslation();
 
@@ -78,6 +78,7 @@ const CreateOdysseyForm: FC<PropsInterface> = (props) => {
                 variant="secondary"
                 placeholder="Choose your name"
                 value={value || ''}
+                disabled={disabled}
                 isError={!!errors.name}
                 errorMessage={
                   errors?.name?.type !== 'duplicate'
@@ -99,7 +100,7 @@ const CreateOdysseyForm: FC<PropsInterface> = (props) => {
           size="medium"
           label="Create your Odyssey"
           icon="planet"
-          disabled={isSubmitDisabled}
+          disabled={disabled}
           onClick={onUpdateProfile}
         />
       </styled.Div>
