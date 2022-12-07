@@ -1,10 +1,10 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import {FC, useCallback, useEffect} from 'react';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {Button, Text} from '@momentum-xyz/ui-kit';
 
-import {Asset3dCategoryEnum} from 'api/enums';
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './SelectedPage.styled';
 
@@ -17,14 +17,20 @@ export const SelectedPage: FC = () => {
 
   const history = useHistory();
 
-  const {worldId, assetCategory} = useParams<{
+  const {worldId} = useParams<{
     worldId: string;
-    assetCategory: Asset3dCategoryEnum;
   }>();
+
+  useEffect(() => {
+    return () => {
+      worldBuilderAssets3dStore.resetSelectedObjectFields();
+    };
+  }, [worldBuilderAssets3dStore]);
 
   const handleSpawn = useCallback(() => {
     worldBuilderAssets3dStore.spawnObject(worldId);
-  }, [worldBuilderAssets3dStore, worldId]);
+    history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+  }, [history, worldBuilderAssets3dStore, worldId]);
 
   if (!asset) {
     return null;
@@ -33,16 +39,7 @@ export const SelectedPage: FC = () => {
   return (
     <styled.Container>
       <styled.Image src={asset.image} />
-      {assetCategory === Asset3dCategoryEnum.CUSTOM ? (
-        <styled.NameLabel text={asset.name} size="m" />
-      ) : (
-        <styled.NameInput
-          placeholder="ObjectName"
-          onFocus={() => unityStore.changeKeyboardControl(false)}
-          onBlur={() => unityStore.changeKeyboardControl(true)}
-          onChange={worldBuilderAssets3dStore.setObjectName}
-        />
-      )}
+      <styled.NameLabel text={asset.name} size="m" />
       <styled.CheckBoxLabel>
         <styled.CheckBox
           type="checkbox"
@@ -56,15 +53,10 @@ export const SelectedPage: FC = () => {
         onFocus={() => unityStore.changeKeyboardControl(false)}
         onBlur={() => unityStore.changeKeyboardControl(true)}
         onChange={worldBuilderAssets3dStore.setNavigationObjectName}
-        disabled={!worldBuilderAssets3dStore.isVisibleInNavigation}
       />
       <Button
         label="Spawn Object"
-        disabled={
-          !worldBuilderAssets3dStore.objectName ||
-          (worldBuilderAssets3dStore.isVisibleInNavigation &&
-            !worldBuilderAssets3dStore.navigationObjectName)
-        }
+        disabled={!worldBuilderAssets3dStore.navigationObjectName}
         onClick={handleSpawn}
       />
       <Button

@@ -1,7 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {SpaceSubOptionKeyEnum} from '@momentum-xyz/sdk';
 
-import {api, FetchAssets3dResponse, UploadAsset3dRequest} from 'api';
+import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
 import {Asset3dCategoryEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {Asset3d, Asset3dInterface} from 'core/models';
@@ -13,13 +14,13 @@ const WorldBuilderAssets3dStore = types
       worldId: types.optional(types.string, ''),
       uploadProgress: types.maybeNull(types.number),
       selectedAssset: types.maybe(Asset3d),
-      objectName: '',
       navigationObjectName: '',
       isVisibleInNavigation: false,
 
       uploadAssetRequest: types.optional(RequestModel, {}),
       fetchAssets3dRequest: types.optional(RequestModel, {}),
       spawnObjectRequest: types.optional(RequestModel, {}),
+      setIsVisibleRequest: types.optional(RequestModel, {}),
 
       assets3d: types.array(Asset3d)
     })
@@ -34,14 +35,15 @@ const WorldBuilderAssets3dStore = types
     resetUploadProgress: () => {
       self.uploadProgress = null;
     },
-    setObjectName(name: string) {
-      self.objectName = name;
-    },
     setNavigationObjectName(name: string) {
       self.navigationObjectName = name;
     },
     toggleIsVisibleInNavigation() {
       self.isVisibleInNavigation = !self.isVisibleInNavigation;
+    },
+    resetSelectedObjectFields() {
+      self.navigationObjectName = '';
+      self.isVisibleInNavigation = false;
     }
   }))
   .actions((self) => ({
@@ -99,12 +101,23 @@ const WorldBuilderAssets3dStore = types
       self.selectedAssset = Asset3d.create({...asset});
     },
     spawnObject: flow(function* (worldId: string) {
-      yield self.spawnObjectRequest.send(api.spaceRepository.postSpace, {
-        parent_id: worldId,
-        space_name: self.objectName,
-        space_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
-        asset_3d_id: self.selectedAssset?.id
-      });
+      const response: PostSpaceResponse | undefined = yield self.spawnObjectRequest.send(
+        api.spaceRepository.postSpace,
+        {
+          parent_id: worldId,
+          space_name: self.navigationObjectName,
+          space_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
+          asset_3d_id: self.selectedAssset?.id
+        }
+      );
+
+      if (response) {
+        yield self.setIsVisibleRequest.send(api.spaceOptionRepository.setSpaceSubOption, {
+          spaceId: response.space_id,
+          sub_option_key: SpaceSubOptionKeyEnum.VISIBLE,
+          value: self.isVisibleInNavigation ? 3 : 1
+        });
+      }
     })
   }))
   .views((self) => ({
