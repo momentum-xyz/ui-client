@@ -62,16 +62,12 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const handleOpenScreenShare = () => {
     agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
-    widgetsStore.screenShareStore.widget.open();
+    widgetsStore.screenShareStore.widget.toggle();
   };
 
   const handleOpenOdysseyWidget = () => {
     calendarStore.eventList.fetchSpaceEvents(worldStore.worldId);
-    odysseyStore.widget.open();
-  };
-
-  const handleClickOnlineUsers = () => {
-    onlineUsersStore.searchWidget.open();
+    odysseyStore.widget.toggle();
   };
 
   return (
@@ -81,7 +77,7 @@ const Widgets: FC<PropsInterface> = (props) => {
           <ToolbarIconList>
             <ToolbarIcon
               title={t('titles.profile')}
-              onClick={widgetsStore.profileStore.profileDialog.open}
+              onClick={widgetsStore.profileStore.profileDialog.toggle}
             >
               <Avatar
                 size="extra-small"
@@ -142,7 +138,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               <OnlineUsersWidget
                 currentUser={sessionStore.user}
                 worldId={worldStore.worldId}
-                onClick={handleClickOnlineUsers}
+                onClick={onlineUsersStore.searchWidget.toggle}
               />
             </styled.OnlineUsers>
             <ToolbarIconList>
@@ -151,6 +147,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="people"
                 size="medium"
                 disabled={false}
+                isSelected={odysseyStore.widget.isOpen}
                 onClick={handleOpenOdysseyWidget}
                 state={{canGoBack: true}}
               />
@@ -160,6 +157,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="screenshare"
                 size="medium"
                 onClick={handleOpenScreenShare}
+                isSelected={widgetsStore.screenShareStore.widget.isOpen}
                 state={{canGoBack: true}}
               />
 
@@ -167,7 +165,8 @@ const Widgets: FC<PropsInterface> = (props) => {
                 title={t('labels.calendar')}
                 icon="calendar"
                 size="medium"
-                onClick={widgetsStore.calendarStore.widget.open}
+                onClick={widgetsStore.calendarStore.widget.toggle}
+                isSelected={widgetsStore.calendarStore.widget.isOpen}
                 disabled={flightStore.isFlightWithMe}
                 state={{canGoBack: true}}
               />
@@ -195,7 +194,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="fly-to"
                 size="medium"
                 onClick={widgetsStore.flyToMeStore.flyToMeDialog.open}
-                disabled={false} // TODO: Check permissions
+                disabled={!worldStore.isMyWorld}
                 state={{canGoBack: true}}
               />
 

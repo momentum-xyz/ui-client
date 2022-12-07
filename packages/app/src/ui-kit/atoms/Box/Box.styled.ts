@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Div = styled.div`
-  width: 270px;
   min-height: 40px;
   border-radius: 8px;
   background: ${(props) => props.theme.bg};
@@ -9,10 +8,12 @@ export const Div = styled.div`
   overflow: hidden;
 
   &.normal {
+    width: 240px;
     padding: 20px 10px;
   }
 
   &.small {
+    width: 240px;
     padding: 10 0;
   }
 `;

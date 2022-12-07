@@ -82,6 +82,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     main: () => (
       <>
         <BirthAnimationPage />
+        <Widgets isExplorePage />
       </>
     )
   },
