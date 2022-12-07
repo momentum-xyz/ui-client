@@ -18,6 +18,7 @@ const UploadCustomAssetPage: FC = () => {
 
   const {t} = useTranslation();
 
+  // TODO: Refactor later to useForm
   const [asset, setAsset] = useState<File>();
   const [error, setError] = useState<string>();
 
@@ -25,6 +26,7 @@ const UploadCustomAssetPage: FC = () => {
     worldBuilderAssets3dStore.setUploadedAssetName('');
   }, [worldBuilderAssets3dStore]);
 
+  // TODO: refactor later to form handle submit
   const handleAddToLbrary = useCallback(async () => {
     if (asset) {
       await worldBuilderAssets3dStore.uploadAsset(asset);
@@ -63,8 +65,8 @@ const UploadCustomAssetPage: FC = () => {
       {error && <styled.Error>{error}</styled.Error>}
       {asset && (
         <>
-          <styled.Image src="https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222" />
           {/* TODO: Implement actual image selecting */}
+          <styled.Image src="https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222" />
           <styled.NameInput
             placeholder={t('placeholders.nameYourAssetForYourLibrary')}
             onFocus={() => unityStore.changeKeyboardControl(false)}
