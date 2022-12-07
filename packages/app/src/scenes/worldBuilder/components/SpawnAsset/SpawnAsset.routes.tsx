@@ -5,15 +5,15 @@ import {BasicAssetsPackPage, CustomAssetsLibraryPage, UploadCustomAssetPage} fro
 
 export const SPAWN_ASSET_ROUTES: RouteConfigInterface[] = [
   {
-    path: ROUTES.spawnAsset.basicAssets,
+    path: ROUTES.odyssey.builder.spawnAsset.basicAssets,
     main: () => <BasicAssetsPackPage />
   },
   {
-    path: ROUTES.spawnAsset.customAssets,
+    path: ROUTES.odyssey.builder.spawnAsset.customAssets,
     main: () => <CustomAssetsLibraryPage />
   },
   {
-    path: ROUTES.spawnAsset.uploadAsset,
+    path: ROUTES.odyssey.builder.spawnAsset.uploadAsset,
     main: () => <UploadCustomAssetPage />
   }
 ];

@@ -2,7 +2,6 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {Avatar, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
-import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -16,7 +15,8 @@ import {
   CalendarWidget,
   OnlineUsersWidget,
   NotificationsWidget,
-  OdysseyWidget
+  OdysseyWidget,
+  WorldBuilderWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -175,13 +175,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 state={{canGoBack: true}}
               />
 
-              <ToolbarIcon
-                title={t('titles.worldBuilder')}
-                icon="planet"
-                size="medium"
-                link={generatePath(ROUTES.spawnAsset.base, {worldId: worldStore.worldId})}
-                state={{canGoBack: true}}
-              />
+              <WorldBuilderWidget />
             </ToolbarIconList>
           </styled.RightToolbars>
         )}

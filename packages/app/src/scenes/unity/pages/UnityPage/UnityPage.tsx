@@ -110,6 +110,16 @@ const UnityPage: FC = () => {
     });
   });
 
+  useUnityEvent('ClickEventEditableObject', (spaceId: string) => {
+    console.log('ClickEventEditableObject', spaceId);
+    history.push({
+      pathname: generatePath(ROUTES.odyssey.builder.editor, {
+        worldId: worldStore.worldId,
+        objectId: spaceId
+      })
+    });
+  });
+
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
     if (sessionStore.userId === userId) {
       toast.info(
