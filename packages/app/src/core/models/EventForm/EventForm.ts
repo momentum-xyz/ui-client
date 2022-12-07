@@ -42,6 +42,7 @@ const EventForm = types.compose(
       createOrUpdateEvent: flow(function* (
         data: EventFormInterface,
         spaceId: string,
+        userId: string,
         spaceName?: string,
         file?: File
       ) {
@@ -66,6 +67,7 @@ const EventForm = types.compose(
             ...data,
             attendees: self.currentEvent?.attendees,
             spaceId,
+            ownerId: userId,
             eventId: self.currentEvent?.eventId,
             image: file ? self.imageHash : self.currentEvent.image
           };
@@ -76,6 +78,7 @@ const EventForm = types.compose(
             ...data,
             spaceId,
             spaceName,
+            ownerId: userId,
             eventId: self.eventId,
             image: self.imageHash
           };

@@ -17,7 +17,7 @@ import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {widgetsStore, mainStore} = useStore();
+  const {widgetsStore, mainStore, sessionStore} = useStore();
   const {calendarStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
   const {worldStore} = mainStore;
@@ -56,6 +56,7 @@ const EventForm: FC = () => {
     const isSuccess = await eventForm.createOrUpdateEvent(
       data,
       worldStore.worldId,
+      sessionStore.userId,
       calendarStore.world?.name,
       image
     );

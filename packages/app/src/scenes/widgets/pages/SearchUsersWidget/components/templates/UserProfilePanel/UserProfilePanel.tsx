@@ -28,7 +28,7 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
 
   return (
     <PanelLayout
-      title={odyssey?.name ?? user?.name}
+      title={odyssey?.name ?? user?.name ?? 'User Name'}
       onClose={onClose}
       componentSize={{width: '315px'}}
       headerStyle="uppercase"

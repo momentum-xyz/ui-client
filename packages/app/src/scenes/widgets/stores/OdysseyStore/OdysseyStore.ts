@@ -35,6 +35,7 @@ const OdysseyStore = types.compose(
           self.nftItem = {...nft};
           this.fetchUser(worldId);
         }
+        this.fetchUser(worldId);
         self.nftId = worldId;
       },
       fetchUser: flow(function* (userId: string) {
@@ -42,7 +43,9 @@ const OdysseyStore = types.compose(
           api.userRepository.fetchUser,
           {userId}
         );
-        self.user = {...user};
+        if (user) {
+          self.user = {...user};
+        }
       }),
       fetchDocksCount: flow(function* (spaceId: string) {
         const response: GetDocksCountResponse | undefined = yield self.request.send(
@@ -69,10 +72,14 @@ const OdysseyStore = types.compose(
         };
       },
       get avatarSrc(): string | undefined {
-        return (
-          self.user?.profile.avatarHash &&
-          `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.user.profile.avatarHash}`
-        );
+        if (!self.user) {
+          return self.nftItem?.image;
+        } else {
+          return (
+            self.user?.profile.avatarHash &&
+            `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.user.profile.avatarHash}`
+          );
+        }
       }
     }))
 );

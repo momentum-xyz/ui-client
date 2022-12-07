@@ -58,7 +58,9 @@ const OnlineUsersStore = types
         api.userRepository.fetchUser,
         {userId}
       );
-      self.user = {...user};
+      if (user) {
+        self.user = {...user};
+      }
     }),
     fetchOdysseyUsers: flow(function* (worldId: string, currentUserId: string) {
       const response: OdysseyOnlineUsersResponse = yield self.request.send(
@@ -116,6 +118,9 @@ const OnlineUsersStore = types
       };
     },
     get avatarSrc(): string | undefined {
+      if (!self.user) {
+        return '';
+      }
       return (
         self.user?.profile.avatarHash &&
         `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.user.profile.avatarHash}`
