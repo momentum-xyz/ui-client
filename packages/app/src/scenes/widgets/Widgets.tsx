@@ -47,7 +47,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    worldBuilderStore.fetchPermissions();
+    // worldBuilderStore.fetchPermissions();
     odysseyStore.init(nftStore.nftItems, worldStore.worldId);
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
   }, [
