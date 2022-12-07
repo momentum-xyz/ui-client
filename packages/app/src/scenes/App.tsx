@@ -132,32 +132,32 @@ const App: FC = () => {
     );
   }
 
-  // PRIVATE ROUTES
-  if (isTargetRoute(pathname, PRIVATE_ROUTES)) {
+  // PRIVATE ROUTES WITH UNITY
+  if (isTargetRoute(pathname, PRIVATE_ROUTES_WITH_UNITY)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <Suspense fallback={false}>
-          <AppAuth>
-            <GlobalStyles />
-            <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
-              {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}
-            </AppLayers>
-          </AppAuth>
-        </Suspense>
+        <AppAuth>
+          <GlobalStyles />
+          <UnityPage />
+          <Suspense fallback={false}>
+            <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
+          </Suspense>
+        </AppAuth>
       </ThemeProvider>
     );
   }
 
-  // PRIVATE ROUTES WITH UNITY
+  // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>
-      <AppAuth>
-        <GlobalStyles />
-        <UnityPage />
-        <Suspense fallback={false}>
-          <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
-        </Suspense>
-      </AppAuth>
+      <Suspense fallback={false}>
+        <AppAuth>
+          <GlobalStyles />
+          <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
+            {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}
+          </AppLayers>
+        </AppAuth>
+      </Suspense>
     </ThemeProvider>
   );
 };

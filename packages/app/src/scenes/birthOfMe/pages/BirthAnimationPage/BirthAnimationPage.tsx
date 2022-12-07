@@ -9,7 +9,7 @@ import {useStore, useSupernova} from 'shared/hooks';
 import * as styled from './BirthAnimationPage.styled';
 
 const BirthAnimationPage: FC = () => {
-  const {exploreStore, nftStore, map3dStore} = useStore();
+  const {exploreStore, nftStore, map3dStore, widgetsStore} = useStore();
 
   const history = useHistory();
 
@@ -35,7 +35,10 @@ const BirthAnimationPage: FC = () => {
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
-            onSelect={map3dStore.selectOdyssey}
+            onSelect={(nft) => {
+              map3dStore.selectOdyssey(nft);
+              widgetsStore.profileStore.profileDialog.close();
+            }}
             onTeleport={(nft) => {
               console.log(nft);
               if (nft.uuid) {
