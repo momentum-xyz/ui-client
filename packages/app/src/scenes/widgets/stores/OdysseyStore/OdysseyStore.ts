@@ -33,7 +33,7 @@ const OdysseyStore = types.compose(
         self.nftId = worldId;
       },
       fetchEventsCount: flow(function* (spaceId: string) {
-        const response: GetDocksCountResponse = yield self.request.send(
+        const response: GetDocksCountResponse | undefined = yield self.request.send(
           api.spaceRepository.fetchDocksCount,
           {spaceId}
         );
