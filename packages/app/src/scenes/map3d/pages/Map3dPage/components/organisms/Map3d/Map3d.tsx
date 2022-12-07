@@ -5,19 +5,20 @@ import {use3DMap} from 'shared/hooks';
 import {NftItemInterface} from 'stores/NftStore/models';
 
 interface PropsInterface {
+  currentUserId: string | undefined;
   items: NftItemInterface[];
   canvas: HTMLCanvasElement;
   onOdysseyClick: (nft: NftItemInterface) => void;
 }
 
 const Map3d: FC<PropsInterface> = (props) => {
-  const {items, canvas, onOdysseyClick} = props;
+  const {currentUserId, items, canvas, onOdysseyClick} = props;
 
   const wasLoaded = useRef<boolean>(false);
 
   const handleOdysseyClick = useCallback(
-    (id: number) => {
-      const selectedOdyssey = items.find((i) => i.id === id);
+    (uuid: string) => {
+      const selectedOdyssey = items.find((i) => i.uuid === uuid);
       if (selectedOdyssey) {
         onOdysseyClick(selectedOdyssey);
       }
@@ -29,9 +30,7 @@ const Map3d: FC<PropsInterface> = (props) => {
     wasLoaded.current = true;
   }, []);
 
-  // FIXME: Center item id
-  // use3DMap(canvas, items, items[0].id, wasLoaded.current, onLoaded, handleOdysseyClick);
-  use3DMap(canvas, items, 0, wasLoaded.current, onLoaded, handleOdysseyClick);
+  use3DMap(canvas, items, currentUserId, wasLoaded.current, onLoaded, handleOdysseyClick);
 
   return <></>;
 };

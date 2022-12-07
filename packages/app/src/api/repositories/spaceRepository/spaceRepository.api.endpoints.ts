@@ -1,9 +1,10 @@
 import {appVariables} from 'api/constants';
 
 export const spaceRepositoryEndpoints = () => {
-  const BASE_URL = `${appVariables.BACKEND_API_URL}/spaces/:spaceId`;
+  const BASE_URL = `${appVariables.BACKEND_API_URL}/spaces`;
 
   return {
-    docks: `${BASE_URL}/docking-bulbs-count`
+    base: `${BASE_URL}`,
+    docks: `${BASE_URL}/:spaceId/docking-bulbs-count`
   };
 };

@@ -5,14 +5,18 @@ import {Box} from 'ui-kit';
 
 import * as styled from './CongratulationsBox.styled';
 
-const CongratulationsBox: FC = () => {
+interface PropsInterface {
+  amount: string;
+}
+
+const CongratulationsBox: FC<PropsInterface> = ({amount}) => {
   return (
     <Box>
       <styled.Div>
         <Text size="m" text="Congratulations!" align="left" />
         <Text
           size="m"
-          text="You just received xx Drive tokens. One more step and you'll embark on your epic journey!"
+          text={`You just received ${amount} tokens. One more step and you'll embark on your epic journey!`}
           align="left"
         />
       </styled.Div>

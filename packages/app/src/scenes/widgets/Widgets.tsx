@@ -48,7 +48,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    worldBuilderStore.fetchPermissions();
+    // worldBuilderStore.fetchPermissions();
     odysseyStore.init(nftStore.nftItems, worldStore.worldId);
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
   }, [
@@ -222,7 +222,7 @@ const Widgets: FC<PropsInterface> = (props) => {
         />
       )}
       {widgetsStore.profileStore.profileDialog.isOpen && (
-        <ProfileWidget isVisitAvailable={!!isExplorePage} />
+        <ProfileWidget isExploreView={!!isExplorePage} />
       )}
       {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}

@@ -64,10 +64,10 @@ class Odyssey extends THREE.Mesh {
 export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: NftItemInterface[],
-  centerItemId: number,
+  centerUuid: string | undefined | null,
   wasLoaded: boolean,
   onLoaded: () => void,
-  onOdysseyClick: (id: number) => void
+  onOdysseyClick: (uuid: string) => void
 ) => {
   // FIXME: Kovi
   if (!wasLoaded) {
@@ -84,7 +84,10 @@ export const use3DMap = (
   const minimalDistanceToPlanetForCamera = 5;
 
   // TODO: KOVI
-  const createNewOdyssey = (item: NftItemInterface) => {
+  const createNewOdyssey = (item?: NftItemInterface) => {
+    if (!item) {
+      return;
+    }
     const standardTextures = [baseAtmos, temptations, showTime, honey01, iceland01];
 
     const randNum = Math.floor(Math.random() * standardTextures.length);
@@ -103,7 +106,7 @@ export const use3DMap = (
       color: 0xffffff
     });
 
-    const odyssey = new Odyssey(geometry, material, item.id, item.owner, item.name, texture);
+    const odyssey = new Odyssey(geometry, material, item.uuid, item.owner, item.name, texture);
 
     return odyssey;
   };
@@ -262,6 +265,7 @@ export const use3DMap = (
     if (event.button != 0) {
       return;
     }
+
     // Create Raycast
     raycaster.setFromCamera(pointer, camera);
     const castRay = raycaster.intersectObjects(referenceListOfOdysseys, true);
@@ -349,10 +353,6 @@ export const use3DMap = (
     }
   }
 
-  // TODO: Kovi
-  //const centerOdyssey = createNewOdyssey(items.find((i) => i.id === centerItemId));
-  //scene.add(centerOdyssey);
-
   window.addEventListener('pointermove', onPointerMove);
   window.addEventListener('mousedown', onMouseDown);
 
@@ -367,7 +367,7 @@ export const use3DMap = (
   const ProcessOdyssey = () => {
     //Build an odyssey for all given entries.
     for (let i = 0; i < items.length; i++) {
-      if (items[i].id !== centerItemId) {
+      if (items[i].uuid !== centerUuid) {
         const odyssey = createNewOdyssey(items[i]);
         listOfOddyseys.push(odyssey);
       }
@@ -377,6 +377,13 @@ export const use3DMap = (
   };
 
   ProcessOdyssey();
+
+  // TODO: Kovi
+  const centerOdyssey = createNewOdyssey(items.find((i) => i.uuid === centerUuid));
+  if (centerOdyssey) {
+    scene.add(centerOdyssey);
+    referenceListOfOdysseys.push(centerOdyssey);
+  }
 
   /**
    * Create Circular Universe of Odysseys
@@ -492,10 +499,11 @@ export const use3DMap = (
 
   buildUniverse();
 
+  // FIXME: Kovi
   /**
    * Highlight Mesh
    */
-  const highlightGeometry = new THREE.PlaneGeometry(3, 3);
+  /*const highlightGeometry = new THREE.PlaneGeometry(3, 3);
   const highlightMateiral = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     transparent: true,
@@ -523,7 +531,7 @@ export const use3DMap = (
     }
     // Update rotation of highlight plane to face camera.
     highlightMesh.lookAt(camera.position);
-  }
+  }*/
 
   /**
    * Handle fade out
@@ -573,8 +581,9 @@ export const use3DMap = (
 
   // Animation
   function animate() {
+    // FIXME: Kovi
     // Update Highlight
-    highlightObjects();
+    //highlightObjects();
 
     // Update controls for auto-rotate.
     if (!updateCameraRotation) {

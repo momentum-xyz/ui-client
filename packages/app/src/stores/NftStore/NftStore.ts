@@ -105,7 +105,8 @@ const NftStore = types
       requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
       mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
 
-      isLoading: false
+      isLoading: false,
+      isBalanceLoading: false
     })
   )
   .volatile<{
@@ -300,9 +301,35 @@ const NftStore = types
       }
     };
   })
+  .views((self) => ({
+    get accountsWithNftsOptions(): OptionInterface[] {
+      return self.accountOptions.filter((account) =>
+        self.nftItems.some((nft) => nft.owner === account.value)
+      );
+    },
+    get accountsWithoutNftsOptions(): OptionInterface[] {
+      return self.accountOptions.filter(
+        (account) => !self.nftItems.some((nft) => nft.owner === account.value)
+      );
+    },
+    formatAmount(amount: number): string {
+      if (!self.chainDecimals || !self.tokenSymbol) {
+        return 'n/a';
+      }
+      const amountCoin = amount / Math.pow(10, self.chainDecimals);
+      return `${amountCoin.toLocaleString('de-DE', {
+        useGrouping: false,
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 4
+      })} ${self.tokenSymbol}`;
+    }
+  }))
   .actions((self) => ({
     setIsLoading(payload: boolean) {
       self.isLoading = payload;
+    },
+    setIsBalanceLoading(payload: boolean) {
+      self.isBalanceLoading = payload;
     },
     setNftItems(items: NftItemInterface[]) {
       self.nftItems = cast(items);
@@ -623,6 +650,9 @@ const NftStore = types
 
       return self.nftItems.find((nftItem) => nftItem.owner === address);
     },
+    getNftByUuid: (uuid: string) => {
+      return self.nftItems.find((nftItem) => nftItem.uuid === uuid);
+    },
     fetchStakingInfo: flow(function* (
       address: string,
       userNftItemId: number,
@@ -860,6 +890,7 @@ const NftStore = types
         console.log('Unsubscribe from balance subscription');
         self.unsubscribeBalanceSubscription();
       }
+      self.setIsBalanceLoading(true);
       self.unsubscribeBalanceSubscription = yield self.channel.query.system.account(
         address,
         ({nonce, data: balance}: any) => {
@@ -874,6 +905,7 @@ const NftStore = types
             miscFrozen: miscFrozen.toNumber(),
             feeFrozen: feeFrozen.toNumber()
           });
+          self.setIsBalanceLoading(false);
         }
       );
     })

@@ -19,6 +19,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   pointer-events: all;
+  z-index: var(--dialog-z-index);
 `;
 
 export const Header = styled.div`

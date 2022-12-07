@@ -6,23 +6,25 @@ import {Box} from 'ui-kit';
 import * as styled from './BuildOdyssey.styled';
 
 interface PropsInterface {
+  disabled?: boolean;
+  name: string;
   onBuild: () => void;
 }
 
-const BuildOdyssey: FC<PropsInterface> = ({onBuild}) => {
+const BuildOdyssey: FC<PropsInterface> = ({name, disabled, onBuild}) => {
   return (
     <Box>
       <styled.Div>
-        <Text size="m" text="Well done, Polkajor! You just created your Odyssey" align="left" />
+        <Text size="m" text={`Well done, ${name}! You just created your Odyssey`} align="left" />
         <Text size="m" text="Start creating your personal journey and..." align="left" />
-        <Text
+        {/* <Text
           size="m"
           text="Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus."
           align="left"
-        />
-        <Text size="m" text="Enter Polkajor and start the journey" align="left" />
+        /> */}
+        {/* <Text size="m" text="Enter Polkajor and start the journey" align="left" /> */}
 
-        <Button size="medium" label="Build your Odyssey" onClick={onBuild} />
+        <Button size="medium" label="Build your Odyssey" disabled={disabled} onClick={onBuild} />
       </styled.Div>
     </Box>
   );

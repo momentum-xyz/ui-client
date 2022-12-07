@@ -64,6 +64,9 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('TeleportReady', () => {
+    // FIXME: UNITY !!!!
+    console.log('!!!! TeleportReady !!!!');
+
     const worldId = unityStore.getCurrentWorld();
     if (worldId) {
       unityLoaded(worldId);
