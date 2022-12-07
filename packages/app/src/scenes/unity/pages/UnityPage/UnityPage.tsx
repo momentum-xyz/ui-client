@@ -53,13 +53,11 @@ const UnityPage: FC = () => {
     return worldId;
   }, [location.pathname]);
 
-  useUnityEvent('MomentumLoaded', () => {
+  useUnityEvent('MomentumLoaded', async () => {
     console.log(`Unity worldId: ${worldId}`);
 
     if (worldId) {
-      unityStore.setTargetWorldId(worldId);
-      unityStore.setAuthToken(authStore.token);
-      unityStore.setInitialVolume();
+      await unityStore.loadWorldById(worldId, authStore.token);
     } else {
       console.error(`There is no worldId in route.`);
     }

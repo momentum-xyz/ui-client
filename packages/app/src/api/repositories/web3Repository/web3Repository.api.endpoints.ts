@@ -9,6 +9,7 @@ export const web3RepositoryEndpoints = () => {
     login: `${BASE_URL}/login`,
     consent: `${BASE_URL}/consent`,
     mintNft: `${BASE_URL_DRIVE}/mint-odyssey`,
-    mintNftCheckJob: `${BASE_URL_DRIVE}/mint-odyssey/check-job/:job_id`
+    mintNftCheckJob: `${BASE_URL_DRIVE}/mint-odyssey/check-job/:job_id`,
+    resolveNode: `${BASE_URL_DRIVE}/resolve-node`
   };
 };

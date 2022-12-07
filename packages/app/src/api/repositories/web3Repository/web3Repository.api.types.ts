@@ -72,3 +72,14 @@ export interface MintNftCheckJobResponse {
   status: string;
   nodeJSOut: string;
 }
+
+/** RESOLVE NODE **/
+
+export interface ResolveNodeRequest {
+  object: string;
+}
+
+export interface ResolveNodeResponse {
+  domain: string;
+  node_id: string;
+}
