@@ -32,9 +32,10 @@ const ProfileWidget: FC<PropsInterface> = (props) => {
     profileStore.fetchProfile();
 
     return () => {
+      sessionStore.loadUserProfile();
       profileStore.resetModel();
     };
-  }, [profileStore]);
+  }, [profileStore, sessionStore]);
 
   const handleTeleportToOdyssey = useCallback(() => {
     const worldId = profileStore.userProfile?.id || '';
