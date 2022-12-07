@@ -16,6 +16,7 @@ const WorldBuilderAssets3dStore = types
       selectedAssset: types.maybe(Asset3d),
       navigationObjectName: '',
       isVisibleInNavigation: false,
+      uploadedAssetName: '',
 
       uploadAssetRequest: types.optional(RequestModel, {}),
       fetchAssets3dRequest: types.optional(RequestModel, {}),
@@ -38,6 +39,9 @@ const WorldBuilderAssets3dStore = types
     setNavigationObjectName(name: string) {
       self.navigationObjectName = name;
     },
+    setUploadedAssetName(name: string) {
+      self.uploadedAssetName = name;
+    },
     toggleIsVisibleInNavigation() {
       self.isVisibleInNavigation = !self.isVisibleInNavigation;
     },
@@ -48,6 +52,10 @@ const WorldBuilderAssets3dStore = types
   }))
   .actions((self) => ({
     uploadAsset: flow(function* (asset: File) {
+      if (!self.uploadedAssetName) {
+        return;
+      }
+
       console.log('uploadAsset', asset);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,7 +71,8 @@ const WorldBuilderAssets3dStore = types
         api.assets3dRepository.upload3DAsset,
         {
           asset,
-          onUploadProgress
+          onUploadProgress,
+          name: self.uploadedAssetName
         }
       );
       console.log('uploadAsset response', response);
