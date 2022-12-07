@@ -1,7 +1,8 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {NftItem, NftItemInterface} from 'stores/NftStore/models';
+import {api, GetDocksCountResponse} from 'api';
 
 export interface OdysseyItemInterface extends NftItemInterface {
   connections: number;
@@ -16,11 +17,13 @@ const OdysseyStore = types.compose(
       widget: types.optional(Dialog, {}),
       request: types.optional(RequestModel, {}),
       nftItem: types.maybe(NftItem),
-      nftId: types.maybe(types.string)
+      nftId: types.maybe(types.string),
+      docks: types.maybe(types.number)
     })
     .actions((self) => ({
       init(items: Array<NftItemInterface>, worldId: string) {
         this.findOdyssey(items, worldId);
+        this.fetchEventsCount(worldId);
       },
       findOdyssey(items: Array<NftItemInterface>, worldId: string): void {
         const nft: NftItemInterface | undefined = items.find((nft) => nft.uuid === worldId);
@@ -29,9 +32,16 @@ const OdysseyStore = types.compose(
         }
         self.nftId = worldId;
       },
-      unselectOdyssey(): void {
-        self.nftItem = undefined;
-      }
+      fetchEventsCount: flow(function* (spaceId: string) {
+        const response: GetDocksCountResponse = yield self.request.send(
+          api.spaceRepository.fetchDocksCount,
+          {spaceId}
+        );
+
+        if (response) {
+          self.docks = response.count;
+        }
+      })
     }))
     .views((self) => ({
       get odyssey(): OdysseyItemInterface | null {
@@ -42,7 +52,7 @@ const OdysseyStore = types.compose(
         return {
           ...self.nftItem,
           connections: 0,
-          docking: 0,
+          docking: self.docks ?? 0,
           events: 0
         };
       }
