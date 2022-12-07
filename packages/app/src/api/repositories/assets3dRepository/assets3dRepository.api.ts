@@ -4,6 +4,7 @@ import {request} from 'api/request';
 
 import {assets3dRepositoryEndpoints} from './assets3dRepository.api.endpoints';
 import {
+  FetchAssets3dRequest,
   FetchAssets3dResponse,
   UploadAsset3dRequest,
   UploadAsset3dResponse
@@ -28,6 +29,14 @@ export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3d
   return request.post(assets3dRepositoryEndpoints().upload, formData, requestOptions);
 };
 
-export const fetchAssets3d: RequestInterface<null, FetchAssets3dResponse> = () => {
-  return request.get(assets3dRepositoryEndpoints().base, {params: {category: 'skybox'}});
+export const fetchAssets3d: RequestInterface<FetchAssets3dRequest, FetchAssets3dResponse> = (
+  options
+) => {
+  const {category, ...restOptions} = options;
+
+  restOptions.params = {
+    category
+  };
+
+  return request.get(assets3dRepositoryEndpoints().base, restOptions);
 };

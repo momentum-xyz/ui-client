@@ -3,6 +3,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, FetchAssets3dResponse} from 'api';
 import {appVariables} from 'api/constants';
+import {Asset3dCategoryEnum} from 'api/enums';
 
 import {WorldBuilderSkybox, WorldBuilderSkyboxInterface} from './models';
 
@@ -18,9 +19,9 @@ const WorldBuilderSkyboxesStore = types
   )
   .actions((self) => ({
     fetchItems: flow(function* () {
-      const assets3d: FetchAssets3dResponse = yield self.request.send<null, FetchAssets3dResponse>(
+      const assets3d: FetchAssets3dResponse = yield self.request.send(
         api.assets3dRepository.fetchAssets3d,
-        null
+        {category: Asset3dCategoryEnum.SKYBOX}
       );
       console.log('Assets3d response:', assets3d);
       if (!assets3d) {
