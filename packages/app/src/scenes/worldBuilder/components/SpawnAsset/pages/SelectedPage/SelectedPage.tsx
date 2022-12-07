@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useState} from 'react';
+import {FC, useCallback} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 import {Button, Text} from '@momentum-xyz/ui-kit';
 
@@ -17,13 +17,14 @@ export const SelectedPage: FC = () => {
 
   const history = useHistory();
 
-  const [, setIsVisibleInNavigation] = useState(false);
-  const [objectName, setObjectName] = useState('');
-
-  const {assetCategory} = useParams<{
+  const {worldId, assetCategory} = useParams<{
     worldId: string;
     assetCategory: Asset3dCategoryEnum;
   }>();
+
+  const handleSpawn = useCallback(() => {
+    worldBuilderAssets3dStore.spawnObject(worldId);
+  }, [worldBuilderAssets3dStore, worldId]);
 
   if (!asset) {
     return null;
@@ -39,25 +40,33 @@ export const SelectedPage: FC = () => {
           placeholder="ObjectName"
           onFocus={() => unityStore.changeKeyboardControl(false)}
           onBlur={() => unityStore.changeKeyboardControl(true)}
-          onChange={setObjectName}
+          onChange={worldBuilderAssets3dStore.setObjectName}
         />
       )}
       <styled.CheckBoxLabel>
         <styled.CheckBox
           type="checkbox"
-          onChange={(target) => setIsVisibleInNavigation(target.currentTarget.checked)}
+          checked={worldBuilderAssets3dStore.isVisibleInNavigation}
+          onChange={worldBuilderAssets3dStore.toggleIsVisibleInNavigation}
         />
         <Text text="Visible in Navigation" size="m" weight="light" />
       </styled.CheckBoxLabel>
-      {assetCategory === Asset3dCategoryEnum.CUSTOM && (
-        <styled.NameInput
-          placeholder="Name your Object (Navigation)"
-          onFocus={() => unityStore.changeKeyboardControl(false)}
-          onBlur={() => unityStore.changeKeyboardControl(true)}
-          onChange={setObjectName}
-        />
-      )}
-      <Button label="Spawn Object" disabled={!objectName} />
+      <styled.NameInput
+        placeholder="Name your Object (Navigation)"
+        onFocus={() => unityStore.changeKeyboardControl(false)}
+        onBlur={() => unityStore.changeKeyboardControl(true)}
+        onChange={worldBuilderAssets3dStore.setNavigationObjectName}
+        disabled={!worldBuilderAssets3dStore.isVisibleInNavigation}
+      />
+      <Button
+        label="Spawn Object"
+        disabled={
+          !worldBuilderAssets3dStore.objectName ||
+          (worldBuilderAssets3dStore.isVisibleInNavigation &&
+            !worldBuilderAssets3dStore.navigationObjectName)
+        }
+        onClick={handleSpawn}
+      />
       <Button
         label="Go back"
         onClick={() => {

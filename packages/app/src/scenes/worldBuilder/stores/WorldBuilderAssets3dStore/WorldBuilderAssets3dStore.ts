@@ -13,9 +13,13 @@ const WorldBuilderAssets3dStore = types
       worldId: types.optional(types.string, ''),
       uploadProgress: types.maybeNull(types.number),
       selectedAssset: types.maybe(Asset3d),
+      objectName: '',
+      navigationObjectName: '',
+      isVisibleInNavigation: false,
 
       uploadAssetRequest: types.optional(RequestModel, {}),
       fetchAssets3dRequest: types.optional(RequestModel, {}),
+      spawnObjectRequest: types.optional(RequestModel, {}),
 
       assets3d: types.array(Asset3d)
     })
@@ -29,6 +33,15 @@ const WorldBuilderAssets3dStore = types
     },
     resetUploadProgress: () => {
       self.uploadProgress = null;
+    },
+    setObjectName(name: string) {
+      self.objectName = name;
+    },
+    setNavigationObjectName(name: string) {
+      self.navigationObjectName = name;
+    },
+    toggleIsVisibleInNavigation() {
+      self.isVisibleInNavigation = !self.isVisibleInNavigation;
     }
   }))
   .actions((self) => ({
@@ -84,7 +97,15 @@ const WorldBuilderAssets3dStore = types
     },
     selectAsset(asset: Asset3dInterface) {
       self.selectedAssset = Asset3d.create({...asset});
-    }
+    },
+    spawnObject: flow(function* (worldId: string) {
+      yield self.spawnObjectRequest.send(api.spaceRepository.postSpace, {
+        parent_id: worldId,
+        space_name: self.objectName,
+        space_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
+        asset_3d_id: self.selectedAssset?.id
+      });
+    })
   }))
   .views((self) => ({
     get isUploadPending() {
