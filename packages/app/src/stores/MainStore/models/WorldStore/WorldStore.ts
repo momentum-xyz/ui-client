@@ -49,7 +49,7 @@ const WorldStore = types.compose(
     .actions((self) => ({
       init(worldId: string) {
         self.worldId = worldId;
-        self.fetchWorldConfig(worldId);
+        //self.fetchWorldConfig(worldId);
         self.fetchWorldInformation(worldId);
       }
     }))

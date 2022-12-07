@@ -623,6 +623,9 @@ const NftStore = types
 
       return self.nftItems.find((nftItem) => nftItem.owner === address);
     },
+    getNftByUuid: (uuid: string) => {
+      return self.nftItems.find((nftItem) => nftItem.uuid === uuid);
+    },
     fetchStakingInfo: flow(function* (
       address: string,
       userNftItemId: number,

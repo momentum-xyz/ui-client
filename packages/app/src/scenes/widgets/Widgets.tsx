@@ -205,7 +205,7 @@ const Widgets: FC<PropsInterface> = (props) => {
         />
       )}
       {widgetsStore.profileStore.profileDialog.isOpen && (
-        <ProfileWidget isVisitAvailable={!!isExplorePage} />
+        <ProfileWidget isExploreView={!!isExplorePage} />
       )}
       {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}

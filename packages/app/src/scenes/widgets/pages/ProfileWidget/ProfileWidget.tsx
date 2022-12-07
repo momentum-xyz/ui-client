@@ -1,6 +1,6 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-//import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 import {Dialog, Heading, IconSvg, Loader, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -13,23 +13,22 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 interface PropsInterface {
-  isVisitAvailable: boolean;
+  isExploreView: boolean;
 }
 
 const ProfileWidget: FC<PropsInterface> = (props) => {
-  const {isVisitAvailable} = props;
+  const {isExploreView} = props;
 
-  const {widgetsStore, sessionStore, mainStore} = useStore();
-  const {unityStore, agoraStore} = mainStore;
+  const {widgetsStore, sessionStore, mainStore, authStore, nftStore} = useStore();
+  const {unityStore, agoraStore, worldStore} = mainStore;
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
-  //const history = useHistory();
+  const history = useHistory();
 
   useEffect(() => {
-    // FIXME: Use user from sessionStore. After 6th
     profileStore.fetchProfile();
 
     return () => {
@@ -38,8 +37,37 @@ const ProfileWidget: FC<PropsInterface> = (props) => {
   }, [profileStore]);
 
   const handleTeleportToOdyssey = useCallback(() => {
-    // history.push(ROUTES.odyssey.base);
-  }, []);
+    const worldId = profileStore.userProfile?.id || '';
+
+    if (isExploreView) {
+      console.log('Redirect to unity');
+      console.log(`World ID ${worldId}`);
+      profileStore.profileDialog.close();
+      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+    } else {
+      console.log('Teleport in unity');
+      console.log(`World ID ${worldId}`);
+      profileStore.profileDialog.close();
+      // TODO: CHECK UNITY
+      unityStore.loadWorldById(worldId, authStore.token);
+      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+    }
+  }, [profileStore, isExploreView, history, unityStore, authStore]);
+
+  const isTeleportAvailable = useMemo(() => {
+    const {userProfile} = profileStore;
+
+    // TODO: removal after wallet will be available in profile
+    const nft = nftStore.getNftByUuid(profileStore.userProfile?.id || '');
+
+    if (isExploreView) {
+      // return !!userProfile?.wallet;
+      return !!nft;
+    } else {
+      //return !!userProfile?.wallet && worldStore.worldId !== userProfile.id;
+      return !!nft && worldStore.worldId !== userProfile?.id;
+    }
+  }, [isExploreView, nftStore, worldStore.worldId, profileStore.userProfile?.id]);
 
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();
@@ -77,7 +105,7 @@ const ProfileWidget: FC<PropsInterface> = (props) => {
             <styled.Container>
               {!isEditMode && !profileStore.isLoading && (
                 <ProfileView
-                  isVisitAvailable={isVisitAvailable}
+                  isVisitAvailable={isTeleportAvailable}
                   user={profileStore.userProfile}
                   onTeleportToOdyssey={handleTeleportToOdyssey}
                 />

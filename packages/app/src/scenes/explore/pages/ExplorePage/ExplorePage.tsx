@@ -12,7 +12,7 @@ import {SelectedOdyssey, StakingForm} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {exploreStore, authStore, nftStore, map3dStore} = useStore();
+  const {exploreStore, authStore, nftStore, map3dStore, widgetsStore} = useStore();
   const {wallet} = authStore;
 
   const history = useHistory();
@@ -99,11 +99,14 @@ const ExplorePage: FC = () => {
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
-            onSelect={map3dStore.selectOdyssey}
+            onSelect={(nft) => {
+              map3dStore.selectOdyssey(nft);
+              widgetsStore.profileStore.profileDialog.close();
+            }}
             onTeleport={(nft) => {
               console.log(nft);
               if (nft.uuid) {
-                history.push(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
+                history.replace(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
               }
             }}
             // FIXME id type
