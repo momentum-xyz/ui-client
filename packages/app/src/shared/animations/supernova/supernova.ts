@@ -52,6 +52,11 @@ export function supernova(fps = 30) {
   };
 
   requestAnimationFrame(loop);
+
+  // FIXME: Kovi
+  setTimeout(() => {
+    scene.start();
+  }, 2000);
 }
 
 // FIXME: Kovi
