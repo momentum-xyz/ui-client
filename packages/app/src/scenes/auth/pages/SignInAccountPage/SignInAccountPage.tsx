@@ -89,7 +89,7 @@ const SignInAccountPage: FC = () => {
 
           {accountSelectedAndFundsAquired && (
             <>
-              {requestingFundsStatus === 'success' && (
+              {requestingFundsStatus === 'success' && mintingNftStatus !== 'pending' && (
                 <CongratulationsBox amount={nftStore.formatAmount(balance.free)} />
               )}
               <SinusBox />
