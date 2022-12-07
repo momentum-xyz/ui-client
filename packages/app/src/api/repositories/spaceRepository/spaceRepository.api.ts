@@ -12,7 +12,7 @@ import {
 } from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 
-import {FetchSpaceRequest} from './spaceRepository.api.types';
+import {FetchSpaceRequest, PostSpaceRequest, PostSpaceResponse} from './spaceRepository.api.types';
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
 // TODO: This functionality is still in progress
@@ -39,4 +39,20 @@ export const fetchDocksCount: RequestInterface<GetDocksCountRequest, GetDocksCou
 
   const url = generatePath(spaceRepositoryEndpoints().docks, {spaceId});
   return request.get(url, restOptions);
+};
+
+export const postSpace: RequestInterface<PostSpaceRequest, PostSpaceResponse> = (options) => {
+  const {space_name, parent_id, space_type_id, asset_2d_id, asset_3d_id, ...restOptions} = options;
+
+  return request.post(
+    spaceRepositoryEndpoints().base,
+    {
+      space_name,
+      space_type_id,
+      parent_id,
+      asset_2d_id,
+      asset_3d_id
+    },
+    restOptions
+  );
 };
