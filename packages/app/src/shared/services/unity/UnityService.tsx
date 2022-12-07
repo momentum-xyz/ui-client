@@ -70,6 +70,7 @@ export class UnityService {
     });
 
     this.unityContext.on('ClickEvent', (identifier: string) => {
+      console.log('UnityService ClickEvent', identifier);
       const [type, id] = identifier.split('|');
 
       if (this.isBuildMode) {
