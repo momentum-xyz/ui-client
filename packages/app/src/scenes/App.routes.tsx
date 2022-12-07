@@ -7,6 +7,9 @@ const Widgets = lazy(() => import('./widgets/Widgets'));
 const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
 const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
 const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
+const BirthAnimationPage = lazy(
+  () => import('./birthOfMe/pages/BirthAnimationPage/BirthAnimationPage')
+);
 const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
 const OdysseyPage = lazy(() => import('./odyssey/pages/OdysseyPage/OdysseyPage'));
@@ -18,7 +21,6 @@ const StoryBook = lazy(() => import('./storyBook/StoryBook'));
 const WorldBuilderCustomizePanel = lazy(
   () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
 );
-const SpawnAsset = lazy(() => import('./worldBuilder/components/SpawnAsset/SpawnAsset'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
@@ -66,11 +68,20 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
 export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.birth,
+    exact: true,
     main: () => (
       <>
         <Map3dPage />
         <BirthOfMePage />
         <Widgets isExplorePage />
+      </>
+    )
+  },
+  {
+    path: ROUTES.birthAnimation,
+    main: () => (
+      <>
+        <BirthAnimationPage />
       </>
     )
   },
@@ -102,10 +113,5 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     path: ROUTES.odyssey.object.root,
     renderBackground: false,
     main: () => <Object />
-  },
-  {
-    path: ROUTES.spawnAsset.base,
-    renderBackground: false,
-    main: () => <SpawnAsset />
   }
 ];

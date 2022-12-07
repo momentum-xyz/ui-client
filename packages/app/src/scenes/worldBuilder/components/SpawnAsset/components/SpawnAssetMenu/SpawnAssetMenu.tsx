@@ -19,25 +19,34 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
     <styled.Container>
       <styled.Tab
         className={cn(
-          matchPath(location.pathname, {path: ROUTES.spawnAsset.basicAssets}) && 'selected'
+          matchPath(location.pathname, {path: ROUTES.odyssey.builder.spawnAsset.basicAssets}) &&
+            'selected'
         )}
-        onClick={() => history.push(generatePath(ROUTES.spawnAsset.basicAssets, {worldId}))}
+        onClick={() =>
+          history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.basicAssets, {worldId}))
+        }
       >
         <Text text="Basic Asset Pack" size="l" weight="light" align="left" />
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath(location.pathname, {path: ROUTES.spawnAsset.customAssets}) && 'selected'
+          matchPath(location.pathname, {path: ROUTES.odyssey.builder.spawnAsset.customAssets}) &&
+            'selected'
         )}
-        onClick={() => history.push(generatePath(ROUTES.spawnAsset.customAssets, {worldId}))}
+        onClick={() =>
+          history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.customAssets, {worldId}))
+        }
       >
         <Text text="Custom Object Library" size="l" weight="light" align="left" />
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath(location.pathname, {path: ROUTES.spawnAsset.uploadAsset}) && 'selected'
+          matchPath(location.pathname, {path: ROUTES.odyssey.builder.spawnAsset.uploadAsset}) &&
+            'selected'
         )}
-        onClick={() => history.push(generatePath(ROUTES.spawnAsset.uploadAsset, {worldId}))}
+        onClick={() =>
+          history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.uploadAsset, {worldId}))
+        }
       >
         <Text text="Upload Custom Object" size="l" weight="light" align="left" />
       </styled.Tab>

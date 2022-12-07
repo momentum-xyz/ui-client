@@ -21,7 +21,7 @@ const SpawnAsset: FC = () => {
           <SvgButton
             iconName="close"
             size="medium-large"
-            onClick={() => history.push(generatePath(ROUTES.odyssey.base, {worldId}))}
+            onClick={() => history.push(generatePath(ROUTES.odyssey.builder.base, {worldId}))}
           />
         </styled.Header>
         <styled.Body>
@@ -29,7 +29,7 @@ const SpawnAsset: FC = () => {
           <styled.PageContainer>
             {createSwitchByConfig(
               SPAWN_ASSET_ROUTES,
-              generatePath(ROUTES.spawnAsset.basicAssets, {worldId})
+              generatePath(ROUTES.odyssey.builder.spawnAsset.basicAssets, {worldId})
             )}
           </styled.PageContainer>
         </styled.Body>

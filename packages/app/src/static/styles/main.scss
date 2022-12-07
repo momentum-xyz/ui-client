@@ -49,3 +49,15 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.birth-of-me-active {
+  display: block !important;
+}
+
+.react-birth-of-me-active {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

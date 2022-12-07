@@ -11,6 +11,7 @@ export class UnityService {
   unityApi?: UnityApiInterface;
   unityContext?: UnityContext;
   isPaused = false;
+  isBuildMode = false;
 
   getCurrentWorld?: () => void;
   getUserPosition?: () => void;
@@ -70,6 +71,12 @@ export class UnityService {
 
     this.unityContext.on('ClickEvent', (identifier: string) => {
       const [type, id] = identifier.split('|');
+
+      if (this.isBuildMode) {
+        UnityEventEmitter.emit('ClickEventEditableObject', id);
+        return;
+      }
+
       if (type === 'video') {
         UnityEventEmitter.emit('ClickEventVideo', id);
       } else {
@@ -238,6 +245,7 @@ export class UnityService {
 
   toggleBuildMode() {
     this.unityApi?.toggleBuildMode();
+    this.isBuildMode = !this.isBuildMode;
   }
 
   leaveSpace(id: string) {
