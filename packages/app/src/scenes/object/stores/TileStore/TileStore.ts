@@ -4,7 +4,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AssetTypeEnum} from 'core/enums';
 import {
   api,
-  Asset2DResponse,
+  Asset2dResponse,
   GetObjectResponse,
   ObjectInterface,
   ObjectMetadataInterface,
@@ -38,7 +38,7 @@ const TileStore = types
   }))
   .actions((self) => ({
     setObject(
-      object: Asset2DResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
+      object: Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
       spaceId: string
     ) {
       if (!object) {

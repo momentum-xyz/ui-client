@@ -17,7 +17,7 @@ import * as mediaRepository from './repositories/mediaRepository';
 import * as emojiRepository from './repositories/emojiRepository';
 import * as eventsRepository from './repositories/eventsRepository';
 import * as spaceInfoRepository from './repositories/spaceInfoRepository';
-import * as assetsRepository from './repositories/assetsRepository';
+import * as assets2dRepository from './repositories/assets2dRepository';
 import * as objectRepository from './repositories/objectRepository';
 import * as assets3dRepository from './repositories/assets3dRepository';
 import * as agoraRepository from './repositories/agoraRepository';
@@ -108,7 +108,7 @@ export const api = {
   emojiRepository,
   eventsRepository,
   spaceInfoRepository,
-  assetsRepository,
+  assetsRepository: assets2dRepository,
   objectRepository,
   assets3dRepository,
   agoraRepository_old
@@ -138,7 +138,7 @@ export * from './repositories/magicLinkRepository/magicLinkRepository.api.types'
 export * from './repositories/mediaRepository/mediaRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/eventsRepository/eventsRepository.api.types';
-export * from './repositories/assetsRepository/assetsRepository.api.types';
+export * from './repositories/assets2dRepository/assets2dRepository.api.types';
 export * from './repositories/assets3dRepository/assets3dRepository.api.types';
 export * from './repositories/spaceInfoRepository/spaceInfoRepository.api.types';
 export * from './repositories/objectRepository/objectRepository.api.types';

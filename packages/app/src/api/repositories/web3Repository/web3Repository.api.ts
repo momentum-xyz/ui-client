@@ -18,7 +18,9 @@ import {
   MintNftRequest,
   MintNftResponse,
   MintNftCheckJobRequest,
-  MintNftCheckJobResponse
+  MintNftCheckJobResponse,
+  ResolveNodeRequest,
+  ResolveNodeResponse
 } from './web3Repository.api.types';
 import {web3RepositoryEndpoints} from './web3Repository.api.endpoints';
 
@@ -106,4 +108,14 @@ export const mintNftCheckJob: RequestInterface<MintNftCheckJobRequest, MintNftCh
   const {job_id, ...rest} = options;
   const URL: string = generatePath(web3RepositoryEndpoints().mintNftCheckJob, {job_id});
   return request.get(URL, rest);
+};
+
+export const resolveNode: RequestInterface<ResolveNodeRequest, ResolveNodeResponse> = (options) => {
+  const {object, ...restOptions} = options;
+
+  restOptions.params = {
+    object_id: object
+  };
+
+  return request.get(web3RepositoryEndpoints().resolveNode, restOptions);
 };

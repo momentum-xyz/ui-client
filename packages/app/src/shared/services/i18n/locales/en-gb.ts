@@ -164,7 +164,7 @@ export const enGb = {
       errorWhileLoadingPlugin: 'An error has occured while loading plugin'
     },
     systemMessages: {
-      loadedInAnotherTab: 'Momentum has been loaded in another browser tab',
+      loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
       switchToThatTab:
         'To continue the experience, please switch to that window/tab and close this one',
       underMaintenance: 'The server is undergoing maintenance, please try again later'
@@ -234,22 +234,22 @@ export const enGb = {
       micOff: 'Mic Off'
     },
     messages: {
-      loading: 'Loading Momentum',
+      loading: 'Loading Odyssey',
       loadingPlugin: 'Loading Plugin...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
       onlineArena: 'Online Mass Collaboration Arena',
-      loading30sec: 'If Momentum does not load within 30 seconds, please',
+      loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
       version: 'Version {{version}}',
-      welcome: "Login successful. We invite you to Momentum's intro. Hit play below!",
+      welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
       signIn: 'Sign In Or Create An Account',
       noResultsFound: 'No results found',
-      worldBuilderSignIn: 'Sign In to your Momentum Account',
+      worldBuilderSignIn: 'Sign In to your Odyssey Account',
       linkCopied: 'The link is copied to your clipboard.',
-      fullyEnjoy: 'Connect your wallet to fully enjoy Momentum!',
-      flyAround: 'Fly around and start experiencing Momentum!',
+      fullyEnjoy: 'Connect your wallet to fully enjoy Odyssey!',
+      flyAround: 'Fly around and start experiencing Odyssey!',
       extensionOpen:
         'The {{name}} extension will now open and ask you to authenticate and sign a message.',
       extensionWindow:
@@ -326,7 +326,7 @@ export const enGb = {
         '(The stage is currently full, you must first remove someone from the stage before you can accept)',
       youAreInAudience: 'You are in the audience, stage mode is on',
       newDeviceDetected:
-        'Momentum has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
+        'Odyssey has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
       inviteSuccess: 'You have successfully invited {{user}} to the space',
       inviteError: 'There was a problem inviting {{user}} to space',
       areYouSureYouWantToRemoveUserFromStage: `Are you sure you want remove {{name}} from stage?`,
@@ -337,7 +337,7 @@ export const enGb = {
       videoLimitReached: 'Video limit reached',
       stageFull: 'Stage full',
       worldBuilderDescription:
-        'This is the Momentum world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
+        'This is the Odyssey world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
       startBuilding: 'Connect your wallet\n To start Building',
       savingSpaceDetailsSuceess: 'Space details saved succesfully!',
       stageIsFullTryAgain: 'Stage is full, please try again later...',
@@ -502,7 +502,8 @@ export const enGb = {
       join: 'join',
       dismiss: 'dismiss',
       joinVoiceChat: 'Join Voice Chat',
-      leaveVoiceChat: 'Leave Voice Chat'
+      leaveVoiceChat: 'Leave Voice Chat',
+      select: 'Select'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',
@@ -811,7 +812,7 @@ export const enGb = {
     helpSection: {
       title: 'help',
       helpNote:
-        'You are about to embark on your flight in Momentum.\n\n Below we have a good dose of the essentials for you to get started.\n\n We have long term plans with Momentum, yet we are at humble beginnings with the release of this first milestone. We are so delighted you are flying with us!\n\n We invite you to help us improve Momentum, as we are at humble beginnings with the release of this first milestone. So...\n\n Something doesn’t work for you? Let us know!\n Something you are missing? Let us know!\n Something you feel should be different? Let us know!\n\nWant to help building Momentum? Let us know ;)',
+        'You are about to embark on your flight in Odyssey.\n\n Below we have a good dose of the essentials for you to get started.\n\n We have long term plans with Odyssey, yet we are at humble beginnings with the release of this first milestone. We are so delighted you are flying with us!\n\n We invite you to help us improve Odyssey, as we are at humble beginnings with the release of this first milestone. So...\n\n Something doesn’t work for you? Let us know!\n Something you are missing? Let us know!\n Something you feel should be different? Let us know!\n\nWant to help building Odyssey? Let us know ;)',
       discord: {
         iconLabel: 'discord',
         dropDownLabel: 'Join discord',
@@ -891,7 +892,7 @@ export const enGb = {
         }
       },
       momentum: {
-        title: 'Momentum Space',
+        title: 'Odyssey Space',
         paragraphs: {
           one: "You're diggin' it and you want to be more involved?",
           two: {
@@ -902,13 +903,13 @@ export const enGb = {
           },
           three: {
             partOne: 'Check out ',
-            highlightedPart: 'the Calendar on our Momentum space',
+            highlightedPart: 'the Calendar on our Odyssey space',
             partTwo:
               ' or updates on topics. Want to be a guest speaker and share your insights with the community? Do reach out to us on Discord.'
           },
           four: 'Wanna chat, or have any more questions, crazy ideas or suggestions to us? Check out our momentum space. LFG!'
         },
-        visitSpace: 'Visit the Momentum Space',
+        visitSpace: 'Visit the Odyssey Space',
         visitSpaceDisabled: 'Disabled during Fly with me'
       },
       wiki: {
