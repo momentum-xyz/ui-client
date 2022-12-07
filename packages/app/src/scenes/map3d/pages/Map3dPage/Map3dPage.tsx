@@ -37,7 +37,7 @@ const Map3dPage: FC<PropsInterface> = (props) => {
   return (
     <>
       <canvas ref={mapRef} className="webgl" />
-      {isCanvasReady && mapRef.current && nftStore.nftItems.length > 0 && (
+      {isCanvasReady && mapRef.current && !nftStore.isLoading && (
         <Map3d
           currentUserId={sessionStore.userId}
           items={nftStore.nftItems}
