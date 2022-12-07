@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
+import {observer} from 'mobx-react-lite';
 
 import {ROUTES} from 'core/constants';
 import {createSwitchByConfig} from 'core/utils';
@@ -38,4 +39,4 @@ const SpawnAsset: FC = () => {
   );
 };
 
-export default SpawnAsset;
+export default observer(SpawnAsset);

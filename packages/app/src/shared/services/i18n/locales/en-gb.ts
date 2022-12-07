@@ -502,7 +502,8 @@ export const enGb = {
       join: 'join',
       dismiss: 'dismiss',
       joinVoiceChat: 'Join Voice Chat',
-      leaveVoiceChat: 'Leave Voice Chat'
+      leaveVoiceChat: 'Leave Voice Chat',
+      select: 'Select'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',

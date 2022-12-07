@@ -1,11 +1,10 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
+import {Asset3d, Asset3dInterface} from 'core/models';
 import {api, FetchAssets3dResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {Asset3dCategoryEnum} from 'api/enums';
-
-import {WorldBuilderSkybox, WorldBuilderSkyboxInterface} from './models';
 
 const WorldBuilderSkyboxesStore = types
   .compose(
@@ -13,7 +12,7 @@ const WorldBuilderSkyboxesStore = types
     types.model('WorldBuilderSkyboxesStore', {
       request: types.optional(RequestModel, {}),
 
-      items: types.optional(types.array(WorldBuilderSkybox), []),
+      items: types.optional(types.array(Asset3d), []),
       selectedItemId: types.maybe(types.string)
     })
   )
@@ -44,7 +43,7 @@ const WorldBuilderSkyboxesStore = types
       self.selectedItemId = self.items[0].id;
       yield Promise.resolve(skyboxes);
     }),
-    selectItem(item: WorldBuilderSkyboxInterface) {
+    selectItem(item: Asset3dInterface) {
       self.selectedItemId = item.id;
     },
     saveSelectedItem() {
@@ -53,7 +52,7 @@ const WorldBuilderSkyboxesStore = types
     }
   }))
   .views((self) => ({
-    get selectedItem(): WorldBuilderSkyboxInterface | undefined {
+    get selectedItem(): Asset3dInterface | undefined {
       return self.items.find((item) => item.id === self.selectedItemId);
     }
   }));
