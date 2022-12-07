@@ -1,41 +1,35 @@
-import React, {FC, useState} from 'react';
-import {
-  Button,
-  Dropdown,
-  Heading,
-  Input,
-  TabBar,
-  TabBarTabInterface,
-  Text
-} from '@momentum-xyz/ui-kit';
+import React, {FC, useMemo, useState} from 'react';
+import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
+import {formatTokenAmount} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
 import * as styled from './StakingForm.styled';
 
+const DEFAULT_STAKING_AMOUNT = 1;
+
 const tabBarTabs: TabBarTabInterface[] = [
   {
     id: 'start',
-    title: 'Start Connecting',
-    label: 'Start Connecting',
+    title: '1. Start Connecting',
+    label: '1. Start Connecting',
     icon: 'hierarchy',
     disabled: true
   },
   {
     id: 'wallet',
-    label: 'My Wallet',
-    title: 'My Wallet',
+    label: '2. My Wallet',
+    title: '2. My Wallet',
     icon: 'wallet',
     disabled: true
   },
   {
     id: 'confirm',
-    title: 'Authorize',
-    label: 'Authorize',
+    title: '3. Authorize',
+    label: '3. Authorize',
     icon: 'check',
     disabled: true
   }
@@ -49,45 +43,63 @@ interface PropsInterface {
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {authStore, nftStore} = useStore();
   const {wallet: authWallet} = authStore;
-  const {balance, accountOptions, addresses} = nftStore;
+  const {balance, addresses, accountOptions, nftItems, chainDecimals, tokenSymbol} = nftStore;
 
-  const [wallet = addresses[0]?.address, setWallet] = useState(authWallet);
+  const [wallet = addresses[0]?.address] = useState(authWallet);
+  const initiatorAccount = accountOptions.find((account) => account.value === wallet);
+  const initiatorInfo = initiatorAccount
+    ? `${initiatorAccount.label} (${initiatorAccount.value.substring(0, 20)}...)`
+    : '';
 
-  const [amount, setAmount] = useState(1_000_000_000);
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
+  const [amount, setAmount] = useState(DEFAULT_STAKING_AMOUNT);
+  const amountAtoms = amount * Math.pow(10, chainDecimals || 12);
 
-  console.log('StakingForm', {wallet, addresses, authWallet, amount});
+  const nft = nftItems.find((nft) => nft.id === nftItemId);
+  console.log('StakingForm', {wallet, addresses, authWallet, amount, amountAtoms, nft});
 
-  const onStake = (amount: number) => {
-    console.log('onStake', wallet, nftItemId);
+  const onStake = (amountAtoms: number) => {
+    console.log('onStake', wallet, nftItemId, amountAtoms);
 
     nftStore
-      .stake(wallet, amount, nftItemId)
+      .stake(wallet, amountAtoms, nftItemId)
       .then(() => {
         console.log('stake success');
-        toast.info(
-          <ToastContent
-            headerIconName="calendar"
-            title={t('titles.alert')}
-            text={t('messages.removeEventSuccess')}
-            showCloseButton
-          />
-        );
+        toast.info(<ToastContent title="You successfully staked!" showCloseButton />);
         onComplete();
       })
       .catch((err) => {
         console.log('stake error', err);
         toast.error(
-          <ToastContent
-            isDanger
-            headerIconName="calendar"
-            title={t('titles.alert')}
-            text={t('errors.couldNotRemoveEvent')}
-            showCloseButton
-          />
+          <ToastContent isDanger title="Could not stake. Please try again later." showCloseButton />
         );
       });
   };
+
+  const balanceSections = useMemo(() => {
+    const balanceEntities = [
+      {label: 'Account Balance', value: Number(balance.free)},
+      {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)},
+      {label: 'Stacked', value: Number(balance.reserved)}
+      // {label: 'Unbonding', value: null}
+    ];
+
+    return balanceEntities.map(({label, value}) => {
+      const balanceValueText =
+        value !== null ? formatTokenAmount(value, chainDecimals, tokenSymbol) : '-';
+      return (
+        <styled.BalanceEntityContainer key={label}>
+          <Heading type="h4" align="left" label={label} />
+          <Text size="xxs" align="left" text={balanceValueText}></Text>
+        </styled.BalanceEntityContainer>
+      );
+    });
+  }, [balance]);
+
+  if (!nft) {
+    console.log('StakingForm - no nft found');
+    return null;
+  }
 
   return (
     <styled.Container>
@@ -96,43 +108,79 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
         {activeTab.id === 'start' && (
           <>
             <div>
-              <Heading type="h2" label="Connect to another Odyssey" />
-              <Text
-                size="m"
-                text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
-                align="left"
-              />
-              <Heading type="h2" label="Contributing" />
-              <Text
-                size="m"
-                text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
-                align="left"
-              />
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Connect to another Odyssey" />
+                </styled.SectionHeader>
+                <Text
+                  size="s"
+                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  align="left"
+                />
+              </styled.Section>
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Contributing" />
+                </styled.SectionHeader>
+                <Text
+                  size="s"
+                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  align="left"
+                />
+              </styled.Section>
             </div>
             <styled.Buttons>
               <span />
-              <Button label="Start Contributing" onClick={() => setActiveTab(tabBarTabs[1])} />
+              <Button
+                icon="wallet"
+                label="Start Contributing"
+                onClick={() => setActiveTab(tabBarTabs[1])}
+              />
             </styled.Buttons>
           </>
         )}
         {activeTab.id === 'wallet' && (
           <>
             <div>
-              <Heading type="h2" label="Wallet account" />
-              <Dropdown
-                placeholder="Select account"
-                variant="third"
-                valueType="wallet"
-                options={accountOptions}
-                value={wallet}
-                onOptionSelect={(option) => {
-                  setWallet(option.value);
-                }}
-              />
-              <Heading type="h2" label="Balance" />
-              <Text size="m" text={JSON.stringify(balance)} align="left" />
-              <Heading type="h2" label="start Contributing" />
-              <Input value={amount} onChange={(val) => setAmount(Number(val))} />
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Wallet account" />
+                </styled.SectionHeader>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="xxs" align="right" text="ACCOUNT" />
+                  </styled.LabeledLineLabelContainer>
+                  <Text size="xxs" text={initiatorInfo} />
+                </styled.LabeledLineContainer>
+              </styled.Section>
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Balance" />
+                </styled.SectionHeader>
+                <styled.BalanceContainer>
+                  {balanceSections.map((section) => section)}
+                </styled.BalanceContainer>
+              </styled.Section>
+              <styled.Separator />
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Start Contributing" />
+                </styled.SectionHeader>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="xxs" align="right" text="SET AMOUNT, MTM" />
+                  </styled.LabeledLineLabelContainer>
+                  <styled.LabeledLineInputContainer>
+                    <Input value={amount || ''} onChange={(val) => setAmount(Number(val))} />
+                  </styled.LabeledLineInputContainer>
+                </styled.LabeledLineContainer>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="xxs" align="right" text="DESTINATION" />
+                  </styled.LabeledLineLabelContainer>
+                  <Text size="xxs" text={`${nft.name} ${nft.owner.substring(0, 20)}...`} />
+                </styled.LabeledLineContainer>
+              </styled.Section>
             </div>
             <styled.Buttons>
               <Button label="Back" onClick={() => setActiveTab(tabBarTabs[0])} />
@@ -143,14 +191,37 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
         {activeTab.id === 'confirm' && (
           <>
             <div>
-              <Heading type="h2" label="Authorize your contribution" />
-              <Text size="m" text="TODO" align="left" />
-              <Text size="m" text={`Amount: ${amount}`} align="left" />
+              <styled.Section>
+                <styled.SectionHeader>
+                  <Heading type="h2" align="left" label="Authorize your contribution" />
+                </styled.SectionHeader>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="xxs" align="right" text="AMOUNT, MTM" />
+                  </styled.LabeledLineLabelContainer>
+                  <styled.LabeledLineInputContainer className="view-only">
+                    <Input value={amount} onChange={(val) => setAmount(Number(val))} disabled />
+                  </styled.LabeledLineInputContainer>
+                </styled.LabeledLineContainer>
+                <styled.LabeledLineContainer>
+                  <styled.LabeledLineLabelContainer>
+                    <Text size="xxs" align="right" text="SENDING FROM" />
+                  </styled.LabeledLineLabelContainer>
+                  <Text size="xxs" text={initiatorInfo} />
+                </styled.LabeledLineContainer>
+                <styled.ConsentContainer>
+                  <Text
+                    size="s"
+                    align="left"
+                    text="This account is also the destination for the rewards you receive from your contribution."
+                  />
+                </styled.ConsentContainer>
+              </styled.Section>
             </div>
 
             <styled.Buttons>
               <Button label="Back" onClick={() => setActiveTab(tabBarTabs[1])} />
-              <Button label="Sign & Connect" onClick={() => onStake(amount)} />
+              <Button label="Sign & Connect" icon="check" onClick={() => onStake(amountAtoms)} />
             </styled.Buttons>
           </>
         )}

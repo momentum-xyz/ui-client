@@ -1,18 +1,18 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {getSnapshot} from 'mobx-state-tree';
-import {Button, Dialog} from '@momentum-xyz/ui-kit';
+import {Dialog} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
-import {SelectedOdyssey, StakingDashboard, StakingForm} from './components';
+import {SelectedOdyssey, StakingForm} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {exploreStore, authStore, nftStore, map3dStore} = useStore();
+  const {exploreStore, authStore, nftStore, map3dStore, widgetsStore} = useStore();
   const {wallet} = authStore;
 
   const history = useHistory();
@@ -78,6 +78,7 @@ const ExplorePage: FC = () => {
             title="Personal Connecting Dashboard"
             icon="hierarchy"
             showCloseButton
+            layoutSize={{height: '510px'}}
             onClose={() => {
               nftStore.setConnectToNftItemId(null);
             }}
@@ -92,41 +93,20 @@ const ExplorePage: FC = () => {
         )}
 
         <styled.Boxes>
-          <Button
-            label="TEMP Staking Dashboard"
-            onClick={() => nftStore.stakingDashorboardDialog.open()}
-          />
-        </styled.Boxes>
-
-        {!!nftStore.stakingDashorboardDialog.isOpen && (
-          <Dialog
-            title="Personal Connecting Dashboard"
-            icon="hierarchy"
-            showCloseButton
-            onClose={() => {
-              nftStore.stakingDashorboardDialog.close();
-            }}
-          >
-            <StakingDashboard
-              onComplete={() => {
-                nftStore.stakingDashorboardDialog.close();
-              }}
-            />
-          </Dialog>
-        )}
-
-        <styled.Boxes>
           <ExplorePanel
             odysseyCount={nftStore.nftItems.length}
             nftFeed={exploreStore.nftFeed}
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
-            onSelect={map3dStore.selectOdyssey}
+            onSelect={(nft) => {
+              map3dStore.selectOdyssey(nft);
+              widgetsStore.profileStore.profileDialog.close();
+            }}
             onTeleport={(nft) => {
               console.log(nft);
               if (nft.uuid) {
-                history.push(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
+                history.replace(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
               }
             }}
             // FIXME id type
