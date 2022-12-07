@@ -161,7 +161,8 @@ export const enGb = {
       savingSpaceDetailsError: 'An error has occurred while saving space.',
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
       noModuleSpecified: 'No module specyfied',
-      errorWhileLoadingPlugin: 'An error has occured while loading plugin'
+      errorWhileLoadingPlugin: 'An error has occured while loading plugin',
+      onlyGLBSupported: 'Only GLB format supported'
     },
     systemMessages: {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
@@ -349,7 +350,8 @@ export const enGb = {
       deletePluginConfirmation: 'Are you sure you want to remove {{pluginName}}?',
       pluginRemovedSuccessfully: '{{pluginName}} removed succesfully!',
       errorWhileRemovingPlugin:
-        'Error has occured when removing {{pluginName}} removed succesfully!'
+        'Error has occured when removing {{pluginName}} removed succesfully!',
+      weSupportGLBModels: 'We support GLB Models'
     },
     titles: {
       alert: 'alert',
@@ -415,7 +417,8 @@ export const enGb = {
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
       worldname: 'worldname',
-      selectPlugin: 'Select Plugin'
+      selectPlugin: 'Select Plugin',
+      nameYourAssetForYourLibrary: 'Name your Asset for your library'
     },
     fields: {
       nickname: 'Nickname',
@@ -503,7 +506,10 @@ export const enGb = {
       dismiss: 'dismiss',
       joinVoiceChat: 'Join Voice Chat',
       leaveVoiceChat: 'Leave Voice Chat',
-      select: 'Select'
+      select: 'Select',
+      uploadYourAssset: 'Upload your asset',
+      addToLibrary: 'Add to library',
+      dropItHere: 'Drop it here'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',

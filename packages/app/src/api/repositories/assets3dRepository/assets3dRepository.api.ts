@@ -13,10 +13,11 @@ import {
 export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3dResponse> = (
   options
 ) => {
-  const {asset, headers, ...restOptions} = options;
+  const {asset, name, headers, ...restOptions} = options;
 
   const formData: FormData = new FormData();
   formData.append('asset', asset);
+  formData.append('name', name);
 
   const requestOptions = {
     headers: {
