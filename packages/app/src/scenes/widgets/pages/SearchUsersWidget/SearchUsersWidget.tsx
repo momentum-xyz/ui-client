@@ -19,7 +19,7 @@ const DIALOG_WIDTH_PX = 296;
 
 const SearchUsersWidget: FC<PropsInterface> = (props) => {
   const {users, onClose, searchUsers, searchedUsers} = props;
-  const {mainStore, widgetsStore, nftStore} = useStore();
+  const {mainStore, widgetsStore, nftStore, authStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
 
@@ -33,6 +33,10 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
   const handleClose = () => {
     onClose?.();
     onlineUsersStore?.unselectUser();
+  };
+
+  const handleTeleport = (worldId: string) => {
+    unityStore.loadWorldById(worldId, authStore.token);
   };
 
   const handleUserClick = (id: string) => {
@@ -92,6 +96,7 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                 odyssey={onlineUsersStore.odyssey}
                 user={onlineUsersStore.user}
                 userAvatar={onlineUsersStore.avatarSrc}
+                onTeleport={handleTeleport}
                 onClose={onlineUsersStore.unselectUser}
                 nftId={onlineUsersStore.nftId}
                 worldId={onlineUsersStore.worldId}

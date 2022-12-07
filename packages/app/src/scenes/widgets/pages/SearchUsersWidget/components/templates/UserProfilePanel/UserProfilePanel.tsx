@@ -19,12 +19,13 @@ interface PropsInterface {
   userAvatar?: string;
   worldId?: string;
   nftId?: string;
+  onTeleport: (worldId: string) => void;
   onConnect?: () => void;
   onClose: () => void;
 }
 
 const UserProfilePanel: FC<PropsInterface> = (props) => {
-  const {odyssey, nftId, onConnect, onClose, user, userAvatar, worldId} = props;
+  const {odyssey, nftId, onConnect, onTeleport, onClose, user, userAvatar, worldId} = props;
 
   return (
     <PanelLayout
@@ -42,6 +43,7 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
               size="small"
               label="Visit"
               disabled={!nftId || odyssey?.uuid === worldId}
+              onClick={() => onTeleport(user?.id || '')}
               icon="fly-to"
             />
             <Button size="small" label="High Five" icon="high-five" onClick={() => {}} />

@@ -2,7 +2,6 @@ import {flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel} from '@momentum-xyz/core';
 
-import {getRootStore} from 'core/utils';
 import {api, ResolveNodeResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {PosBusEventEnum} from 'core/enums';
@@ -153,17 +152,13 @@ const UnityStore = types
       return yield self.nodeRequest.send(api.webRepository.resolveNode, {object});
     }),
     async loadWorldById(worldId: string, token: string) {
-      //self.isTeleportReady = false;
+      self.isTeleportReady = false;
 
       const response: ResolveNodeResponse = await this.resolveNode(worldId);
       if (response) {
         this.setAuthToken(token);
         this.triggerTeleport(response.domain, worldId);
         this.setInitialVolume();
-
-        // FIXME. It is TeleportReady
-        getRootStore(self).mainStore.worldStore.init(worldId);
-        //unityStore.setTargetWorldId(worldId);
       }
     }
   }))

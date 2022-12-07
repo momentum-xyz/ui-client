@@ -40,15 +40,12 @@ const ProfileWidget: FC<PropsInterface> = (props) => {
     const worldId = profileStore.userProfile?.id || '';
 
     if (isExploreView) {
-      console.log('Redirect to unity');
-      console.log(`World ID ${worldId}`);
+      console.log(`Redirect to unity to ${worldId}`);
       profileStore.profileDialog.close();
       history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     } else {
-      console.log('Teleport in unity');
-      console.log(`World ID ${worldId}`);
+      console.log(`Teleport in unity to ${worldId}`);
       profileStore.profileDialog.close();
-      // TODO: CHECK UNITY
       unityStore.loadWorldById(worldId, authStore.token);
       history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     }
