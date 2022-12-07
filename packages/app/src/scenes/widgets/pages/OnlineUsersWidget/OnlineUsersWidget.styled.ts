@@ -6,6 +6,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  cursor: pointer;
 `;
 
 export const MyProfileAvatar = styled(Avatar)`
