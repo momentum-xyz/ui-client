@@ -11,9 +11,10 @@ import {OnlineUsersAvatars} from './components';
 interface PropsInterface {
   currentUser: UserModelInterface | null;
   worldId: string;
+  onClick: () => void;
 }
 
-const OnlineUsersWidget: FC<PropsInterface> = ({currentUser, worldId}) => {
+const OnlineUsersWidget: FC<PropsInterface> = ({currentUser, worldId, onClick}) => {
   const {widgetsStore} = useStore();
   const {onlineUsersStore} = widgetsStore;
 
@@ -29,7 +30,7 @@ const OnlineUsersWidget: FC<PropsInterface> = ({currentUser, worldId}) => {
   }, [onlineUsersStore, worldId]);
 
   return (
-    <styled.Container data-testid="OnlineUsersWidget-test">
+    <styled.Container data-testid="OnlineUsersWidget-test" onClick={onClick}>
       <styled.AvatarsWrapper>
         <OnlineUsersAvatars onlineUsers={onlineUsersStore.odysseyUsers} />
         <styled.MyProfileAvatar size="normal" avatarSrc={currentUser?.avatarSrc} />

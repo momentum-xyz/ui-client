@@ -17,7 +17,8 @@ import {
   OnlineUsersWidget,
   NotificationsWidget,
   OdysseyWidget,
-  WorldBuilderWidget
+  WorldBuilderWidget,
+  SearchUsersWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -67,6 +68,10 @@ const Widgets: FC<PropsInterface> = (props) => {
   const handleOpenOdysseyWidget = () => {
     calendarStore.eventList.fetchSpaceEvents(worldStore.worldId);
     odysseyStore.widget.open();
+  };
+
+  const handleClickOnlineUsers = () => {
+    onlineUsersStore.searchWidget.open();
   };
 
   return (
@@ -134,7 +139,11 @@ const Widgets: FC<PropsInterface> = (props) => {
         {!isExplorePage && (
           <styled.RightToolbars>
             <styled.OnlineUsers>
-              <OnlineUsersWidget currentUser={sessionStore.user} worldId={worldStore.worldId} />
+              <OnlineUsersWidget
+                currentUser={sessionStore.user}
+                worldId={worldStore.worldId}
+                onClick={handleClickOnlineUsers}
+              />
             </styled.OnlineUsers>
             <ToolbarIconList>
               <ToolbarIcon
@@ -196,10 +205,18 @@ const Widgets: FC<PropsInterface> = (props) => {
         )}
       </styled.Footer>
 
+      {onlineUsersStore.searchWidget.isOpen && (
+        <SearchUsersWidget
+          users={onlineUsersStore.allUsers}
+          searchedUsers={onlineUsersStore.searchedUsers}
+          searchUsers={onlineUsersStore.searchUsers}
+          onClose={onlineUsersStore.searchWidget.close}
+        />
+      )}
       {widgetsStore.odysseyStore.widget.isOpen && (
         <OdysseyWidget
           odyssey={odysseyStore.odyssey}
-          events={calendarStore.eventList.events.length}
+          userAvatar={odysseyStore.avatarSrc}
           onClose={odysseyStore.widget.close}
           nftId={odysseyStore.nftId}
         />

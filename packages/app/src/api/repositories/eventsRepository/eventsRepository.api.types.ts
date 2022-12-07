@@ -23,6 +23,7 @@ export interface GetEventRequest {
 export interface EventInterface {
   eventId?: string;
   spaceId?: string;
+  ownerId?: string;
   spaceName?: string;
   start?: Date;
   end?: Date;
