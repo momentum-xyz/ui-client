@@ -11,14 +11,14 @@ const MENU_OFFSET_TOP = 20;
 
 interface PropsInterface {
   odyssey: OdysseyItemInterface | null;
-  events?: number;
+  userAvatar?: string;
   nftId?: string;
   onConnect?: () => void;
   onClose?: () => void;
 }
 
 const OdysseyWidget: FC<PropsInterface> = (props) => {
-  const {odyssey, events, nftId, onConnect, onClose} = props;
+  const {odyssey, userAvatar, nftId, onConnect, onClose} = props;
 
   if (!odyssey) {
     return null;
@@ -36,7 +36,7 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
     >
       <styled.Container data-testid="SelectedOdyssey-test">
         <styled.TopContainer>
-          <styled.Avatar src={odyssey.image} />
+          <styled.Avatar src={userAvatar} />
           <styled.Actions>
             <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
             <Button size="small" label="High Five" icon="high-five" onClick={() => {}} />
@@ -68,7 +68,7 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
         </styled.StatisticsItem>
         <styled.StatisticsItem>
           <IconSvg name="calendar" size="medium" />
-          <styled.StatisticsValue>{events ?? 0} events</styled.StatisticsValue>
+          <styled.StatisticsValue>{odyssey.events ?? 0} events</styled.StatisticsValue>
         </styled.StatisticsItem>
       </styled.StatisticsData>
     </Dialog>

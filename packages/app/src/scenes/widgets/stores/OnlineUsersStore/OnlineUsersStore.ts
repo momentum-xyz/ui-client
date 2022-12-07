@@ -28,6 +28,7 @@ const OnlineUsersStore = types
       query: types.maybe(types.string),
       selectedUserId: types.maybe(types.string),
       request: types.optional(RequestModel, {}),
+      worldId: types.maybe(types.string),
       dockRequest: types.optional(RequestModel, {}),
       fetchUserRequest: types.optional(RequestModel, {}),
       nftItem: types.maybe(NftItem),
@@ -37,19 +38,20 @@ const OnlineUsersStore = types
   )
   .actions((self) => ({
     init(worldId: string, userId: string): void {
+      self.worldId = worldId;
       this.fetchOdysseyUsers(worldId, userId);
     },
     findOdyssey(items: Array<NftItemInterface>, worldId: string): void {
       const nft: NftItemInterface | undefined = items.find((nft) => nft.uuid === worldId);
       if (nft) {
         self.nftItem = {...nft};
+        self.nftId = worldId;
         this.fetchUser(worldId);
       } else {
         self.nftItem = undefined;
+        self.nftId = undefined;
         this.fetchUser(worldId);
       }
-      console.info('nft', nft);
-      self.nftId = worldId;
     },
     fetchUser: flow(function* (userId: string) {
       const user: FetchUserResponse = yield self.fetchUserRequest.send(
@@ -71,11 +73,11 @@ const OnlineUsersStore = types
     }),
     selectUser(items: Array<NftItemInterface>, userId: string) {
       self.selectedUserId = userId;
-      console.info(userId);
       this.findOdyssey(items, userId);
     },
     unselectUser() {
       self.selectedUserId = undefined;
+      self.user = undefined;
     },
     searchUsers(query: string): void {
       if (query.length > 0) {

@@ -7,9 +7,6 @@ import {UserInterface} from 'api';
 
 import * as styled from './UserProfilePanel.styled';
 
-// const MENU_OFFSET_LEFT = 10;
-// const MENU_OFFSET_TOP = 20;
-
 interface OdysseyItemInterface extends NftItemInterface {
   connections: number;
   docking: number;
@@ -20,27 +17,18 @@ interface PropsInterface {
   odyssey: OdysseyItemInterface | null;
   user?: UserInterface;
   userAvatar?: string;
+  worldId?: string;
   nftId?: string;
   onConnect?: () => void;
   onClose: () => void;
 }
 
 const UserProfilePanel: FC<PropsInterface> = (props) => {
-  const {odyssey, nftId, onConnect, onClose, user, userAvatar} = props;
+  const {odyssey, nftId, onConnect, onClose, user, userAvatar, worldId} = props;
 
   return (
-    // <Dialog
-    //   // position="leftTop"
-    //   title={odyssey?.name}
-    //   // offset={{left: MENU_OFFSET_LEFT, top: MENU_OFFSET_TOP}}
-    //   showBackground={false}
-    //   headerStyle="uppercase"
-    //   layoutSize={{width: '315px'}}
-    //   onClose={onClose}
-    //   showCloseButton
-    // >
     <PanelLayout
-      title={odyssey?.name ?? user?.name ?? 'title'}
+      title={odyssey?.name ?? user?.name}
       onClose={onClose}
       componentSize={{width: '315px'}}
       headerStyle="uppercase"
@@ -50,13 +38,18 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
         <styled.TopContainer>
           <styled.AvatarImage size="large" avatarSrc={userAvatar} />
           <styled.Actions>
-            <Button size="small" label="Visit" disabled={!nftId} icon="fly-to" />
+            <Button
+              size="small"
+              label="Visit"
+              disabled={!nftId || odyssey?.uuid === worldId}
+              icon="fly-to"
+            />
             <Button size="small" label="High Five" icon="high-five" onClick={() => {}} />
             <Button
               size="small"
               label="Connect"
               icon="hierarchy"
-              disabled={!nftId}
+              disabled={!nftId || odyssey?.uuid === worldId}
               onClick={onConnect}
             />
             <Button

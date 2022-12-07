@@ -216,7 +216,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.odysseyStore.widget.isOpen && (
         <OdysseyWidget
           odyssey={odysseyStore.odyssey}
-          events={calendarStore.eventList.events.length}
+          userAvatar={odysseyStore.avatarSrc}
           onClose={odysseyStore.widget.close}
           nftId={odysseyStore.nftId}
         />

@@ -19,6 +19,12 @@ export const List = styled.div`
   width: 100%;
 `;
 
+export const Information = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
 export const Item = styled.div`
   display: flex;
   gap: 10px;
@@ -45,46 +51,12 @@ export const Modal = styled.div`
 
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.3)};
 
-  opacity: 0.9;
+  opacity: 1;
 
   align-items: center;
   justify-content: center;
   top: 0;
   left: 0;
-
-  &.rightBottom {
-    align-items: flex-end;
-    justify-content: flex-end;
-    bottom: 0;
-    right: 0;
-  }
-
-  &.rightTop {
-    align-items: flex-start;
-    justify-content: flex-end;
-    bottom: 0;
-    right: 0;
-  }
-
-  &.leftTop {
-    pointer-events: none;
-    align-items: flex-start;
-    justify-content: flex-start;
-    top: 0;
-    left: 0;
-  }
-
-  &.bottomLeft {
-    align-items: flex-end;
-    justify-content: flex-start;
-    bottom: 0;
-    left: 0;
-  }
-
-  &.isMinimap {
-    pointer-events: none;
-    user-select: none;
-  }
 `;
 
 export const OuterContainer = styled.div`

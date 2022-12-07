@@ -20,7 +20,7 @@ const DIALOG_WIDTH_PX = 296;
 const SearchUsersWidget: FC<PropsInterface> = (props) => {
   const {users, onClose, searchUsers, searchedUsers} = props;
   const {mainStore, widgetsStore, nftStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
 
   useEffect(() => {
@@ -30,14 +30,9 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
     };
   }, [unityStore]);
 
-  useEffect(() => {
-    console.info(users);
-    console.info(searchedUsers);
-    console.info(onlineUsersStore?.searchedUsers);
-  }, []);
-
   const handleClose = () => {
     onClose?.();
+    onlineUsersStore?.unselectUser();
   };
 
   const handleUserClick = (id: string) => {
@@ -71,15 +66,21 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                 {searchedUsers && searchedUsers.length > 0
                   ? searchedUsers.map((user) => (
                       <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
-                        <Avatar avatarSrc={user.avatarSrc} size="small" />
-                        <Text size="s" text={user.name} transform="capitalized" />
+                        <styled.Information>
+                          <Avatar avatarSrc={user.avatarSrc} size="small" />
+                          <Text size="s" text={user.name} transform="capitalized" />
+                        </styled.Information>
+                        {user.id === worldStore.worldId && <Text size="s" text="Admin" />}
                       </styled.Item>
                     ))
                   : !onlineUsersStore.query &&
                     users.map((user) => (
                       <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
-                        <Avatar avatarSrc={user.avatarSrc} size="small" />
-                        <Text size="s" text={user.name} transform="capitalized" />
+                        <styled.Information>
+                          <Avatar avatarSrc={user.avatarSrc} size="small" />
+                          <Text size="s" text={user.name} transform="capitalized" />
+                        </styled.Information>
+                        {user.id === worldStore.worldId && <Text size="s" text="Admin" />}
                       </styled.Item>
                     ))}
               </styled.List>
@@ -93,6 +94,7 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                 userAvatar={onlineUsersStore.avatarSrc}
                 onClose={onlineUsersStore.unselectUser}
                 nftId={onlineUsersStore.nftId}
+                worldId={onlineUsersStore.worldId}
               />
             )}
           </styled.UsersContainer>
