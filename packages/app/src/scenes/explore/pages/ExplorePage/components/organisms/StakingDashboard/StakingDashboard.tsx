@@ -164,40 +164,42 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                 <styled.SectionHeader>
                   <Heading type="h2" align="left" label="Active Stakes" />
                 </styled.SectionHeader>
-                {Array.from(stakingAtOthers.values()).map((stakingDetail) => {
-                  const nft = nftStore.getNftByWallet(stakingDetail.destAddr);
-                  return (
-                    <styled.ActiveStakesLineContainer key={stakingDetail.destAddr}>
-                      <Text
-                        size="s"
-                        text={nft?.name || stakingDetail.sourceAddr.substring(0, 20)}
-                        align="left"
-                      />
-                      <Text
-                        size="s"
-                        text={`Staked ${formatTokenAmount(
-                          stakingDetail.amount,
-                          chainDecimals,
-                          tokenSymbol
-                        )}`}
-                        align="left"
-                      />
+                <styled.StakingSection>
+                  {Array.from(stakingAtOthers.values()).map((stakingDetail) => {
+                    const nft = nftStore.getNftByWallet(stakingDetail.destAddr);
+                    return (
+                      <styled.ActiveStakesLineContainer key={stakingDetail.destAddr}>
+                        <Text
+                          size="s"
+                          text={nft?.name || stakingDetail.sourceAddr.substring(0, 20)}
+                          align="left"
+                        />
+                        <Text
+                          size="s"
+                          text={`Staked ${formatTokenAmount(
+                            stakingDetail.amount,
+                            chainDecimals,
+                            tokenSymbol
+                          )}`}
+                          align="left"
+                        />
 
-                      {/* we don't have rewards per item yet */}
-                      {/* <Text
+                        {/* we don't have rewards per item yet */}
+                        {/* <Text
                       size="s"
                       text={`Rewarded ${formatTokenAmount(stakingDetail.amount)} MTM`}
                       align="left"
                     /> */}
-                      <Button
-                        label="Unstake"
-                        transform="capitalized"
-                        icon="chevron"
-                        onClick={() => setUnstakeFrom(stakingDetail.destAddr)}
-                      />
-                    </styled.ActiveStakesLineContainer>
-                  );
-                })}
+                        <Button
+                          label="Unstake"
+                          transform="capitalized"
+                          icon="chevron"
+                          onClick={() => setUnstakeFrom(stakingDetail.destAddr)}
+                        />
+                      </styled.ActiveStakesLineContainer>
+                    );
+                  })}
+                </styled.StakingSection>
               </styled.Section>
               <styled.Separator />
               <styled.Section>
