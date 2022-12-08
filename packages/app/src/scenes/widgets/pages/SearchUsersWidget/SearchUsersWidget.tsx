@@ -125,6 +125,11 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                 onTeleport={handleTeleport}
                 onHighFive={handleHighFive}
                 onClose={onlineUsersStore.unselectUser}
+                onConnect={() => {
+                  if (onlineUsersStore.odyssey) {
+                    nftStore.setConnectToNftItemId(onlineUsersStore.odyssey.id);
+                  }
+                }}
                 nftId={onlineUsersStore.nftId}
                 worldId={onlineUsersStore.worldId}
               />

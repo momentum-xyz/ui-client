@@ -5,7 +5,7 @@ import {Avatar, Dialog, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {StakingDashboard} from 'scenes/explore/pages/ExplorePage/components';
+import {StakingDashboard, StakingForm} from 'scenes/explore/pages/ExplorePage/components';
 
 import {
   ProfileWidget,
@@ -225,6 +225,11 @@ const Widgets: FC<PropsInterface> = (props) => {
           odyssey={odysseyStore.odyssey}
           userAvatar={odysseyStore.avatarSrc}
           onClose={odysseyStore.widget.close}
+          onConnect={() => {
+            if (odysseyStore.odyssey) {
+              nftStore.setConnectToNftItemId(odysseyStore.odyssey.id);
+            }
+          }}
           nftId={odysseyStore.nftId}
         />
       )}
@@ -251,6 +256,24 @@ const Widgets: FC<PropsInterface> = (props) => {
           <StakingDashboard
             onComplete={() => {
               nftStore.stakingDashorboardDialog.close();
+            }}
+          />
+        </Dialog>
+      )}
+      {!!nftStore.connectToNftItemId && (
+        <Dialog
+          title="Personal Connecting Dashboard"
+          icon="hierarchy"
+          showCloseButton
+          layoutSize={{height: '510px'}}
+          onClose={() => {
+            nftStore.setConnectToNftItemId(null);
+          }}
+        >
+          <StakingForm
+            nftItemId={nftStore.connectToNftItemId}
+            onComplete={() => {
+              nftStore.setConnectToNftItemId(null);
             }}
           />
         </Dialog>
