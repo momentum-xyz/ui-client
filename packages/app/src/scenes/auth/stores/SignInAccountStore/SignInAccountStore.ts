@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, UploadImageResponse} from 'api';
@@ -26,8 +26,8 @@ const SignInAccountStore = types.compose(
         );
 
         return userResponse?.hash;
-      })
-      /*updateProfile: flow(function* (form: SignUpFormInterface) {
+      }),
+      updateProfile: flow(function* (form: SignUpFormInterface) {
         // 1. Avatar uploading.
         let avatarHash;
         if (form.avatar) {
@@ -59,7 +59,7 @@ const SignInAccountStore = types.compose(
         }
 
         return self.request.isDone;
-      })*/
+      })
     }))
     .views((self) => ({
       get isUpdating(): boolean {
