@@ -20,7 +20,7 @@ interface PropsInterface {
 }
 
 const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, userId}) => {
-  const {mainStore, odysseyStore, flightStore} = useStore();
+  const {mainStore, odysseyStore, flightStore, sessionStore} = useStore();
   const {exploreStore, userProfileStore} = odysseyStore;
   const {unityStore, worldStore} = mainStore;
   const {userSpaceList, userProfile} = userProfileStore;
@@ -42,11 +42,14 @@ const UserProfileView: FC<PropsInterface> = ({showUserInteractions, onClose, use
   };
 
   const handleFlyToSpace = (spaceId: string) => {
-    unityStore.teleportToSpace(spaceId);
+    console.log(`Calling loadWorldById to ${spaceId} ...`);
+    history.replace(generatePath(ROUTES.odyssey.base, {worldId: spaceId}));
+    unityStore.loadWorldById(spaceId, sessionStore.userId);
   };
 
   const handleHighFive = () => {
     if (userProfile?.id) {
+      console.log(`Calling sendHighFive to ${userProfile.id} ...`);
       unityStore.sendHighFive(userProfile.id);
     }
   };
