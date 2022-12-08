@@ -32,6 +32,7 @@ export interface AppConfigInterface {
   MIRO_APP_ID: string;
   YOUTUBE_KEY: string;
   STREAMCHAT_KEY: string;
+  NFT_ADMIN_ADDRESS: string;
   NODE_ID: string;
 }
 

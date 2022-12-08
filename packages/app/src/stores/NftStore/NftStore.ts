@@ -25,11 +25,10 @@ import {KeyringAddressType} from 'core/types';
 import {PayeeEnum, StakingTransactionEnum} from 'core/enums';
 import {inputToBN} from 'core/utils';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
+import {appVariables} from 'api/constants';
 
 import {NftItem, NftItemInterface, StakeDetail} from './models';
 
-const {REACT_APP_NFT_ADMIN_ADDRESS = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'} =
-  process.env;
 const NFT_MINT_FEE = 100000;
 const DEFAULT_COLECTION_ID = 0;
 
@@ -582,14 +581,12 @@ const NftStore = types
       const {account, options} = yield prepareSignAndSend(address);
 
       try {
+        const {NFT_ADMIN_ADDRESS} = appVariables;
         console.log('Create transfer funds for minting NFT', {
-          REACT_APP_NFT_ADMIN_ADDRESS,
+          NFT_ADMIN_ADDRESS,
           NFT_MINT_FEE
         });
-        const transfer = self.channel.tx.balances.transfer(
-          REACT_APP_NFT_ADMIN_ADDRESS,
-          NFT_MINT_FEE
-        );
+        const transfer = self.channel.tx.balances.transfer(NFT_ADMIN_ADDRESS, NFT_MINT_FEE);
         console.log('Sign and send', transfer);
 
         const block_hash = yield new Promise((resolve, reject) => {
