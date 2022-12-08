@@ -65,6 +65,10 @@ export class UnityService {
       UnityEventEmitter.emit('TeleportReady');
     });
 
+    this.unityContext.on('HideMinimap', () => {
+      UnityEventEmitter.emit('HideMinimap');
+    });
+
     this.unityContext.on('ExterminateUnity', (topic: string) => {
       UnityEventEmitter.emit('ExterminateUnity', topic);
     });

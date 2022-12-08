@@ -1,31 +1,37 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
-import {Dialog, SvgButton} from '@momentum-xyz/ui-kit';
+//import {useTheme} from 'styled-components';
+//import {Dialog, SvgButton} from '@momentum-xyz/ui-kit';
 
-import {useStore} from 'shared/hooks';
+import {useStore, useUnityEvent} from 'shared/hooks';
 
-import * as styled from './MinimapWidget.styled';
+//import * as styled from './MinimapWidget.styled';
 
-const DIALOG_OFFSET_LEFT = 10;
-const DIALOG_OFFSET_BOTTOM = 60;
+//const DIALOG_OFFSET_LEFT = 10;
+//const DIALOG_OFFSET_BOTTOM = 60;
 
 const MinimapWidget: FC = () => {
   const {mainStore, widgetsStore} = useStore();
   const {minimapStore} = widgetsStore;
   const {unityStore} = mainStore;
 
-  const theme = useTheme();
+  //const theme = useTheme();
 
   useEffect(() => {
-    unityStore.showMinimap();
+    //unityStore.showMinimap();
 
     return () => {
-      unityStore.hideMinimap();
+      //unityStore.hideMinimap();
     };
   }, [unityStore]);
 
-  return (
+  useUnityEvent('HideMinimap', () => {
+    minimapStore.minimapDialog.close();
+  });
+
+  return <></>;
+
+  /*return (
     <Dialog
       icon="vector"
       theme={theme}
@@ -43,7 +49,7 @@ const MinimapWidget: FC = () => {
         </styled.CloseIcon>
       </styled.Container>
     </Dialog>
-  );
+  );*/
 };
 
 export default observer(MinimapWidget);

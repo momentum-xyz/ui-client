@@ -3,6 +3,7 @@ import {UnityPositionInterface} from 'core/interfaces';
 export type UnityEventType = {
   MomentumLoaded: () => void;
   TeleportReady: () => void;
+  HideMinimap: () => void;
   InvalidToken: () => void;
   ExterminateUnity: (topic: string) => void;
   ClickEventDashboard: (id: string) => void;

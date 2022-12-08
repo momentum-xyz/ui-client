@@ -14,6 +14,19 @@ const SignInAccountStore = types.compose(
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), [])
     })
     .actions((self) => ({
+      getAvatarHash: flow(function* (form: SignUpFormInterface) {
+        if (!form.avatar) {
+          return;
+        }
+
+        const data = {file: form.avatar};
+        const userResponse: UploadImageResponse = yield self.avatarRequest.send(
+          api.mediaRepository.uploadImage,
+          data
+        );
+
+        return userResponse?.hash;
+      }),
       updateProfile: flow(function* (form: SignUpFormInterface) {
         // 1. Avatar uploading.
         let avatarHash;

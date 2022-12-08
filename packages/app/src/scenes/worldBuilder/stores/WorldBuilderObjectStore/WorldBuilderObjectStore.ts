@@ -7,6 +7,7 @@ const WorldBuilderObjectStore = types
   .compose(
     ResetModel,
     types.model('WorldBuilderObjectStore', {
+      objectId: types.maybe(types.string),
       objectInfo: types.maybe(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       updateAsset2dRequest: types.optional(RequestModel, {}),
@@ -18,7 +19,9 @@ const WorldBuilderObjectStore = types
         'be0d0ca3-c50b-401a-89d9-0e59fc45c5c2': 'text',
         'a31722a6-26b7-46bc-97f9-435c380c3ca9': 'miro',
         'c601404b-61a2-47d5-a5c7-f3c704a8bf58': 'google Drive'
-      })
+      }),
+
+      currentAssetId: types.maybe(types.string)
     })
   )
   .actions((self) => ({
@@ -26,8 +29,26 @@ const WorldBuilderObjectStore = types
       self.objectInfo = yield self.getObjectInfoRequest.send(api.spaceInfoRepository.getSpaceInfo, {
         spaceId: objectId
       });
+
+      if (self.objectInfo) {
+        self.objectId = objectId;
+      }
+
+      self.currentAssetId = self.objectInfo?.asset_2d_id;
     }),
-    updateAsset2d: flow(function* (asset2dId: string) {})
+    updateObject: flow(function* () {
+      if (!self.currentAssetId || !self.objectId) {
+        return;
+      }
+
+      yield self.updateAsset2dRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
+        spaceId: self.objectId,
+        asset_2d_id: self.currentAssetId
+      });
+    }),
+    selectAsset(id: string) {
+      self.currentAssetId = id;
+    }
   }));
 
 export {WorldBuilderObjectStore};

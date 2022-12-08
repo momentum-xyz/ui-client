@@ -39,7 +39,7 @@ const ExplorePanel: FC<PropsInterface> = ({
   const debouncedSearch = useDebouncedCallback(onSearch, SEARCH_DELAY_MS);
 
   return (
-    <Box size="small">
+    <Box size="big">
       <styled.Heading>
         <IconSvg name="planet" size="large" />
         <styled.Number>{odysseyCount}</styled.Number>

@@ -52,7 +52,10 @@ const SignInAccountPage: FC = () => {
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
       try {
-        await mintNft(authStore.wallet, form.name || '');
+        const avatarHash = await signInAccountStore.getAvatarHash(form);
+
+        console.log(`Minting for ${form.name} ${avatarHash}`);
+        await mintNft(authStore.wallet, form.name || '', avatarHash);
 
         // NFT should be minted and accessible by now - if it doesn't happen sometimes
         // we can put some wait here
@@ -63,7 +66,7 @@ const SignInAccountPage: FC = () => {
         console.log('error minting nft', err);
       }
     },
-    [authStore, history, mintNft, nftStore]
+    [authStore.wallet, history, mintNft, nftStore, signInAccountStore]
   );
 
   return (
