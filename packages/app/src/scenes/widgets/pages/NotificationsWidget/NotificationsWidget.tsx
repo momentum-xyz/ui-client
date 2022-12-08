@@ -43,9 +43,9 @@ const NotificationsWidget: FC = () => {
         )}
         {!notificationsStore.isPending && notifications.length && (
           <styled.Body>
-            {notifications.map((item) => (
+            {notifications.map((item, index) => (
               <NewsFeedItem
-                key={item.id}
+                key={index}
                 item={item}
                 onTeleport={() => {
                   unityStore.loadWorldById(item.uuid, authStore.token);

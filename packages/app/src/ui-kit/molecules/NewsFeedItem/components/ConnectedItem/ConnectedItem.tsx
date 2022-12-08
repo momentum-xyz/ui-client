@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
 import {Text} from '@momentum-xyz/ui-kit';
 
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
 
 import * as styled from './ConnectedItem.styled';
@@ -22,8 +23,8 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
     <>
       <div>
         <styled.TwoAvatarsContainer>
-          <styled.Avatar src={item.image} />
-          <styled.AvatarAhead src={item.connectedTo?.image} />
+          <styled.Avatar src={getImageAbsoluteUrl(item.image) || ''} />
+          <styled.AvatarAhead src={getImageAbsoluteUrl(item.connectedTo?.image) || ''} />
         </styled.TwoAvatarsContainer>
       </div>
       <styled.Info>

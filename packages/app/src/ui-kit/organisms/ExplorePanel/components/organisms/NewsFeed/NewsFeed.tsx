@@ -28,9 +28,9 @@ const NewsFeed: FC<PropsInterface> = (props) => {
       <styled.Feed>
         {!!nftFeed.length && (
           <>
-            {nftFeed.map((item) => (
+            {nftFeed.map((item, index) => (
               <NewsFeedItem
-                key={item.id}
+                key={index}
                 item={item}
                 onTeleport={onTeleport}
                 onConnect={onConnect}

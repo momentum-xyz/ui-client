@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
 import {Text} from '@momentum-xyz/ui-kit';
 
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
 
 import * as styled from './DockedItem.styled';
@@ -21,7 +22,7 @@ const DockedItem: FC<PropsInterface> = (props) => {
   return (
     <>
       <div>
-        <styled.OneAvatar src={item.image} />
+        <styled.OneAvatar src={getImageAbsoluteUrl(item.image) || ''} />
       </div>
       <styled.Info>
         <styled.Date>{formattedDate}</styled.Date>
