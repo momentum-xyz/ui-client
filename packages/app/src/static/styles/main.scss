@@ -21,7 +21,7 @@ body {
 .main-content {
   display: flex;
   width:100%;
-  pointer-events: auto;
+  pointer-events: none;
   z-index: 1;
 }
 
