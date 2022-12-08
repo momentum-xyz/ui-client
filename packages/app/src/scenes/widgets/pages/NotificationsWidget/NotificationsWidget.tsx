@@ -2,9 +2,11 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Dialog, Loader, Text} from '@momentum-xyz/ui-kit';
+import {generatePath, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {NewsFeedItem} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './NotificationsWidget.styled';
 
@@ -18,6 +20,7 @@ const NotificationsWidget: FC = () => {
   const {unityStore} = mainStore;
 
   const theme = useTheme();
+  const history = useHistory();
 
   useEffect(() => {
     notificationsStore.init();
@@ -48,6 +51,7 @@ const NotificationsWidget: FC = () => {
                 key={index}
                 item={item}
                 onTeleport={() => {
+                  history.replace(generatePath(ROUTES.odyssey.base, {worldId: item.uuid}));
                   unityStore.loadWorldById(item.uuid, authStore.token);
                 }}
                 onConnect={() => {}}
