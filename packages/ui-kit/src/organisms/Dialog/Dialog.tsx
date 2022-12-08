@@ -46,6 +46,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   showOverflow?: boolean;
   isTruncateHeader?: boolean;
   isMinimap?: boolean;
+  tabs?: React.ReactElement;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -74,7 +75,8 @@ const Dialog: FC<DialogPropsInterface> = ({
   headerActions,
   showOverflow,
   isTruncateHeader = false,
-  isMinimap
+  isMinimap,
+  tabs
 }) => {
   const ref = useRef(null);
 
@@ -118,6 +120,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             showOverflow={showOverflow}
             isTruncateHeader={isTruncateHeader}
             isMinimap={isMinimap}
+            tabs={tabs}
           >
             {children}
             <styled.Buttons>
