@@ -1,6 +1,7 @@
 export * from './router.utils';
 export * from './uuid.utils';
 export * from './mst.utils';
+export * from './image.utils';
 export * from './fullscreen.utils';
 export * from './calcUnbondingAmount.utils';
 export * from './stakingInputRegex.utils';

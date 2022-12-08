@@ -17,6 +17,7 @@ import showTime from 'static/images/map/showTime.jpg';
 import honey01 from 'static/images/map/honey01.jpg';
 import iceland01 from 'static/images/map/iceland01.jpg';
 import BasicSkyboxHD from 'static/images/map/BasicSkyboxHD.jpg';
+import {getImageAbsoluteUrl} from '../../core/utils';
 
 class Odyssey extends THREE.Mesh {
   constructor(geometry, material, number, wallet, name, url, texture) {
@@ -67,6 +68,7 @@ export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: NftItemInterface[],
   centerUuid: string | undefined | null,
+  getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
 ) => {
   // FIXME: Kovi
@@ -98,7 +100,11 @@ export const use3DMap = (
     const standardTextures = [baseAtmos, temptations, showTime, honey01, iceland01];
 
     const randNum = Math.floor(Math.random() * standardTextures.length);
-    const randTexture = standardTextures[randNum];
+    let randTexture = standardTextures[randNum];
+
+    if (item.image) {
+      randTexture = getImageUrl(item.image);
+    }
 
     const texture = new THREE.TextureLoader().load(randTexture);
 

@@ -1,35 +1,23 @@
-import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {cast, types} from 'mobx-state-tree';
+import {ResetModel} from '@momentum-xyz/core';
 
-import {api, FetchUserResponse} from 'api';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItem, NftItemInterface} from 'stores/NftStore/models';
 import {OdysseyItemInterface} from 'scenes/explore/stores';
-import {User} from 'core/models';
 
 const Map3dStore = types
   .compose(
     ResetModel,
     types.model('Map3dStore', {
-      selectedNft: types.maybeNull(types.reference(NftItem)),
-      selectedUser: types.maybeNull(User),
-      userRequest: types.optional(RequestModel, {})
+      selectedNft: types.maybeNull(types.reference(NftItem))
     })
   )
   .actions((self) => ({
-    selectOdyssey: flow(function* (item: NftItemInterface) {
-      self.selectedUser = null;
+    selectOdyssey(item: NftItemInterface): void {
       self.selectedNft = cast(item);
-
-      const user: FetchUserResponse = yield self.userRequest.send(api.userRepository.fetchUser, {
-        userId: item.uuid
-      });
-      if (user) {
-        self.selectedUser = cast(user);
-      }
-    }),
+    },
     unselectOdyssey(): void {
       self.selectedNft = null;
-      self.selectedUser = null;
     }
   }))
   .views((self) => ({
@@ -40,7 +28,7 @@ const Map3dStore = types
 
       return {
         ...self.selectedNft,
-        image: self.selectedUser?.avatarSrc || self.selectedNft.image,
+        image: getImageAbsoluteUrl(self.selectedNft.image) || '',
         connections: 0,
         docking: 0,
         events: 0
