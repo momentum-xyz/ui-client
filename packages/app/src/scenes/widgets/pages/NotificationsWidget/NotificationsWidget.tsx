@@ -24,6 +24,14 @@ const NotificationsWidget: FC = () => {
 
   useEffect(() => {
     notificationsStore.init();
+
+    const timeInterval = setInterval(() => {
+      notificationsStore.fetchNotifications();
+    }, 15000);
+
+    return () => {
+      clearInterval(timeInterval);
+    };
   }, [notificationsStore]);
 
   return (
