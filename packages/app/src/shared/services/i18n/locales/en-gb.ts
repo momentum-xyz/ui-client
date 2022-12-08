@@ -232,7 +232,8 @@ export const enGb = {
       voice: 'Voice',
       notifications: 'Notifications',
       micOn: 'Mic On',
-      micOff: 'Mic Off'
+      micOff: 'Mic Off',
+      selectFunction: 'Select Function'
     },
     messages: {
       loading: 'Loading Odyssey',
@@ -351,7 +352,8 @@ export const enGb = {
       pluginRemovedSuccessfully: '{{pluginName}} removed succesfully!',
       errorWhileRemovingPlugin:
         'Error has occured when removing {{pluginName}} removed succesfully!',
-      weSupportGLBModels: 'We support GLB Models'
+      weSupportGLBModels: 'We support GLB Models',
+      selectOne: 'Select One'
     },
     titles: {
       alert: 'alert',
@@ -392,7 +394,8 @@ export const enGb = {
       addPlugin: 'Add Plugin',
       deletePluginFromSpace: 'Delete plugin from space',
       error: 'Error',
-      social: 'Social'
+      social: 'Social',
+      selectFunctionality: 'Select Functionality'
     },
     textMessage: {
       you: 'you',
@@ -418,7 +421,8 @@ export const enGb = {
       nameYourWorld: 'Name your world',
       worldname: 'worldname',
       selectPlugin: 'Select Plugin',
-      nameYourAssetForYourLibrary: 'Name your Asset for your library'
+      nameYourAssetForYourLibrary: 'Name your Asset for your library',
+      selectAnOption: 'Select an Option'
     },
     fields: {
       nickname: 'Nickname',
