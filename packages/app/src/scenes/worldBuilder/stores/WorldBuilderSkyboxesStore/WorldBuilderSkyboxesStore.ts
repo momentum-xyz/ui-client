@@ -13,14 +13,15 @@ const WorldBuilderSkyboxesStore = types
       request: types.optional(RequestModel, {}),
 
       items: types.optional(types.array(Asset3d), []),
-      selectedItemId: types.maybe(types.string)
+      selectedItemId: types.maybe(types.string),
+      currentItemId: types.maybe(types.string)
     })
   )
   .actions((self) => ({
-    fetchItems: flow(function* () {
+    fetchItems: flow(function* (worldId: string) {
       const assets3d: FetchAssets3dResponse = yield self.request.send(
         api.assets3dRepository.fetchAssets3d,
-        {category: Asset3dCategoryEnum.SKYBOX}
+        {category: Asset3dCategoryEnum.SKYBOX, worldId}
       );
       console.log('Assets3d response:', assets3d);
       if (!assets3d) {
@@ -28,7 +29,7 @@ const WorldBuilderSkyboxesStore = types
         return;
       }
 
-      const skyboxes =
+      let skyboxes =
         assets3d.map(({id, meta: {name, previewImage}}) => ({
           id,
           name,
@@ -39,6 +40,8 @@ const WorldBuilderSkyboxesStore = types
               : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
         })) || [];
 
+      skyboxes = [...skyboxes, ...skyboxes];
+
       self.items = cast(skyboxes);
       self.selectedItemId = self.items[0].id;
       yield Promise.resolve(skyboxes);
@@ -46,14 +49,18 @@ const WorldBuilderSkyboxesStore = types
     selectItem(item: Asset3dInterface) {
       self.selectedItemId = item.id;
     },
-    saveSelectedItem() {
+    saveItem(item: Asset3dInterface) {
       // TODO
+      self.currentItemId = item.id;
       return Promise.resolve();
     }
   }))
   .views((self) => ({
     get selectedItem(): Asset3dInterface | undefined {
       return self.items.find((item) => item.id === self.selectedItemId);
+    },
+    get currentItem(): Asset3dInterface | undefined {
+      return self.items.find((item) => item.id === self.currentItemId);
     }
   }));
 

@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Button} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
+import {useParams, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
@@ -15,18 +16,22 @@ const SkyboxSelectorWithPreview: FC = () => {
   const {worldBuilderStore, mainStore} = useStore();
   const {worldBuilderSkyboxesStore} = worldBuilderStore;
   const {unityStore} = mainStore;
-  const {items, selectedItem, selectItem, saveSelectedItem} = worldBuilderSkyboxesStore;
+  const {items, selectedItem, currentItem, selectItem, saveItem} = worldBuilderSkyboxesStore;
+
+  const {worldId} = useParams<{worldId: string}>();
+
+  const history = useHistory();
 
   useEffect(() => {
-    worldBuilderSkyboxesStore.fetchItems();
-  }, [worldBuilderSkyboxesStore]);
+    worldBuilderSkyboxesStore.fetchItems(worldId);
+  }, [worldBuilderSkyboxesStore, worldId]);
 
   return (
     <styled.Container>
       <styled.ItemsGallery>
         {!!items && !!selectedItem && (
           <Carousel<Asset3dInterface>
-            items={items}
+            items={[...items, ...items]}
             activeItem={selectedItem}
             onChange={selectItem}
             renderItem={(item, idx) => {
@@ -44,12 +49,13 @@ const SkyboxSelectorWithPreview: FC = () => {
                   <styled.ItemTitle>{item.name}</styled.ItemTitle>
                   <styled.ItemButtonHolder>
                     <Button
-                      label="Select Skybox"
+                      label={currentItem === item ? 'Selected Skybox' : 'Select Skybox'}
                       // variant="inverted"
-                      transform="normal"
+                      disabled={currentItem === item}
+                      transform="uppercase"
                       size="medium"
                       onClick={() => {
-                        saveSelectedItem().catch((err) => {
+                        saveItem(item).catch((err) => {
                           toast.error(err.message);
                         });
                       }}
@@ -61,6 +67,7 @@ const SkyboxSelectorWithPreview: FC = () => {
           />
         )}
       </styled.ItemsGallery>
+      <styled.CloseButton label="Close Panel" onClick={() => history.goBack()} />
     </styled.Container>
   );
 };

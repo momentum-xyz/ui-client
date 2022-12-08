@@ -31,11 +31,11 @@ export const Carousel = <T extends object>({
         style={{transform: 'scaleX(-1)'}}
         onClick={() => onChange(longItems[activeIdx - 1])}
       >
-        <IconSvg name="arrow" size="medium-large" />
+        <IconSvg name="arrow" size="extra-large" />
       </styled.ButtonHolder>
       {windowItems.map(renderItem)}
       <styled.ButtonHolder onClick={() => onChange(longItems[activeIdx + 1])}>
-        <IconSvg name="arrow" size="medium-large" />
+        <IconSvg name="arrow" size="extra-large" />
       </styled.ButtonHolder>
     </styled.Container>
   );

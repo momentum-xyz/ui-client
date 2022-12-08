@@ -92,6 +92,7 @@ export type IconNameType =
   | 'search'
   | 'shieldCheck'
   | 'shift-button'
+  | 'skybox'
   | 'smiley-face'
   | 'solar-system'
   | 'sort'
