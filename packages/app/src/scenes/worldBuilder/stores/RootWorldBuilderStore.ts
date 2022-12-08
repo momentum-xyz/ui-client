@@ -7,6 +7,7 @@ import {WorldBuilderNameStore} from './WorldBuilderNameStore';
 import {WorldBuilderTemplatesStore} from './WorldBuilderTemplatesStore';
 import {WorldBuilderSkyboxesStore} from './WorldBuilderSkyboxesStore';
 import {WorldBuilderAssets3dStore} from './WorldBuilderAssets3dStore';
+import {WorldBuilderObjectStore} from './WorldBuilderObjectStore';
 
 const RootWorldBuilderStore = types
   .compose(
@@ -16,6 +17,7 @@ const RootWorldBuilderStore = types
       worldBuilderTemplatesStore: types.optional(WorldBuilderTemplatesStore, {}),
       worldBuilderSkyboxesStore: types.optional(WorldBuilderSkyboxesStore, {}),
       worldBuilderAssets3dStore: types.optional(WorldBuilderAssets3dStore, {}),
+      worldBuilderObjectStore: types.optional(WorldBuilderObjectStore, {}),
       haveAccess: types.maybe(types.boolean),
 
       permissionsRequest: types.optional(RequestModel, {}),
