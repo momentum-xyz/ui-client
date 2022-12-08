@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
+import {Text} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   margin-top: 20px;
@@ -23,6 +24,16 @@ export const Information = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
+`;
+
+export const RightToolbar = styled.div`
+  display: flex;
+  gap: 5px;
+  align-items: center;
+`;
+
+export const AdminText = styled(Text)`
+  padding-right: 5px;
 `;
 
 export const Item = styled.div`

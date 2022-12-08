@@ -18,6 +18,7 @@ const User = types
     status: types.maybeNull(types.enumeration(Object.values(UserStatusEnum))),
     isNodeAdmin: false,
     profile: UserProfile,
+    isGuest: types.maybe(types.boolean),
 
     // TODO: Make separate model
     inviteRequest: types.optional(RequestModel, {}),
