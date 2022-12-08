@@ -40,7 +40,13 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
           <styled.Actions>
             <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
             <Button size="small" label="High Five" icon="high-five" onClick={() => {}} />
-            <Button size="small" label="Connect" icon="hierarchy" onClick={onConnect} />
+            <Button
+              size="small"
+              label="Connect"
+              icon="hierarchy"
+              disabled={!onConnect}
+              onClick={onConnect}
+            />
             <Button
               size="small"
               label="co-create"

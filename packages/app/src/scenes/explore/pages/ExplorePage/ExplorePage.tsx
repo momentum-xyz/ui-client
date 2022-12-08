@@ -61,11 +61,15 @@ const ExplorePage: FC = () => {
                   );
                 }
               }}
-              onConnect={() => {
-                if (map3dStore.selectedOdyssey) {
-                  nftStore.setConnectToNftItemId(map3dStore.selectedOdyssey.id);
-                }
-              }}
+              onConnect={
+                map3dStore.selectedOdyssey.owner !== authStore.wallet
+                  ? () => {
+                      if (map3dStore.selectedOdyssey) {
+                        nftStore.setConnectToNftItemId(map3dStore.selectedOdyssey.id);
+                      }
+                    }
+                  : undefined
+              }
               onDock={() => alert(`Dock`)}
               onClose={map3dStore.unselectOdyssey}
             />

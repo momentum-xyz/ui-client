@@ -225,11 +225,15 @@ const Widgets: FC<PropsInterface> = (props) => {
           odyssey={odysseyStore.odyssey}
           userAvatar={odysseyStore.avatarSrc}
           onClose={odysseyStore.widget.close}
-          onConnect={() => {
-            if (odysseyStore.odyssey) {
-              nftStore.setConnectToNftItemId(odysseyStore.odyssey.id);
-            }
-          }}
+          onConnect={
+            odysseyStore.odyssey?.owner !== user?.wallet
+              ? () => {
+                  if (odysseyStore.odyssey) {
+                    nftStore.setConnectToNftItemId(odysseyStore.odyssey.id);
+                  }
+                }
+              : undefined
+          }
           nftId={odysseyStore.nftId}
         />
       )}

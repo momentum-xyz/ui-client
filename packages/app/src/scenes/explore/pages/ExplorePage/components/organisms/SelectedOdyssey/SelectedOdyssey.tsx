@@ -10,7 +10,7 @@ import * as styled from './SelectedOdyssey.styled';
 interface PropsInterface {
   odyssey: OdysseyItemInterface;
   onTeleport: () => void;
-  onConnect: () => void;
+  onConnect: (() => void) | undefined;
   onDock: () => void;
   onClose: () => void;
 }
@@ -28,7 +28,13 @@ const SelectedOdyssey: FC<PropsInterface> = (props) => {
         <styled.Avatar src={odyssey.image} />
         <styled.Actions>
           <Button size="small" label="Visit" icon="fly-to" onClick={onTeleport} />
-          <Button size="small" label="Connect" icon="hierarchy" onClick={onConnect} />
+          <Button
+            size="small"
+            label="Connect"
+            icon="hierarchy"
+            disabled={!onConnect}
+            onClick={onConnect}
+          />
           <Button size="small" label="Dock" icon="people" onClick={onDock} />
         </styled.Actions>
       </styled.Container>
