@@ -16,14 +16,7 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {
-    // exploreStore,
-    nftStore,
-    authStore,
-    signInAccountStore,
-    sessionStore
-    // map3dStore
-  } = useStore();
+  const {exploreStore, nftStore, authStore, signInAccountStore, sessionStore} = useStore();
 
   const nft = authStore.wallet ? nftStore.getNftByWallet(authStore.wallet) : null;
 
@@ -45,6 +38,14 @@ const BirthOfMePage: FC = () => {
     });
     if (isDone) {
       await sessionStore.loadUserProfile();
+    }
+
+    if (nft) {
+      await exploreStore.createNewsFeedItem({
+        ...nft,
+        type: 'created',
+        date: new Date().toISOString()
+      });
     }
 
     history.push(ROUTES.birthAnimation);

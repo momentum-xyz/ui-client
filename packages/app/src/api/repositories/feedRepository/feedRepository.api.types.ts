@@ -12,10 +12,11 @@ export interface NftFeedItemInterface {
   type: 'created' | 'connected' | 'docked' | 'calendar_event';
   date: string;
 
-  calendarStart: string | undefined;
-  calendarEnd: string | undefined;
-  calendarImage: string | undefined;
-  calendarTitle: string | undefined;
+  calendarId?: string | undefined;
+  calendarStart?: string | undefined;
+  calendarEnd?: string | undefined;
+  calendarImage?: string | undefined;
+  calendarTitle?: string | undefined;
 
   connectedTo?: NftFeedItemInterface;
   dockedTo?: NftFeedItemInterface;
@@ -25,7 +26,17 @@ export interface NftFeedItemInterface {
 
 export interface NewsFeedRequest {}
 
-export interface NewsFeedResponse extends Array<NftFeedItemInterface> {}
+export interface NewsFeedResponse {
+  items: NftFeedItemInterface[];
+}
+
+/** CREATE NEWS FEED ITEM **/
+
+export interface CreateNewsFeedRequest {
+  item: NftFeedItemInterface;
+}
+
+export interface CreateNewsFeedResponse {}
 
 /** FETCH NOTIFICATIONS **/
 

@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, NftFeedItemInterface, NotificationResponse} from 'api';
+import {api, NewsFeedResponse, NftFeedItemInterface} from 'api';
 
 const NotificationsStore = types
   .compose(
@@ -17,12 +17,13 @@ const NotificationsStore = types
       this.fetchNotifications();
     },
     fetchNotifications: flow(function* () {
-      const response: NotificationResponse = yield self.request.send(
-        api.feedRepository.fetchNotifications,
+      const response: NewsFeedResponse = yield self.request.send(
+        // FIXME
+        api.feedRepository.fetchFeed,
         {}
       );
       if (response) {
-        self.notifications = cast(response);
+        self.notifications = cast(response.items);
       }
     })
   }))

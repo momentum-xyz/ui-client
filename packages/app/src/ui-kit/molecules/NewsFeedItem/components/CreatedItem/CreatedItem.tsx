@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
 import {Button, Text} from '@momentum-xyz/ui-kit';
 
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
 import {NftItemInterface} from 'stores/NftStore/models';
 
@@ -24,7 +25,7 @@ const CreatedItem: FC<PropsInterface> = (props) => {
   return (
     <>
       <div>
-        <styled.OneAvatar src={item.image} />
+        <styled.OneAvatar src={getImageAbsoluteUrl(item.image) || ''} />
       </div>
       <styled.Info>
         <styled.Date>{formattedDate}</styled.Date>

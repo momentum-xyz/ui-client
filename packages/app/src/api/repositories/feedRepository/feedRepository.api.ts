@@ -2,6 +2,8 @@ import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {
+  CreateNewsFeedRequest,
+  CreateNewsFeedResponse,
   NewsFeedRequest,
   NewsFeedResponse,
   NotificationRequest,
@@ -19,4 +21,12 @@ export const fetchNotifications: RequestInterface<NotificationRequest, Notificat
 ) => {
   const {...restOptions} = options;
   return request.get(feedRepositoryEndpoints().notifications, restOptions);
+};
+
+export const createFeedItem: RequestInterface<CreateNewsFeedRequest, CreateNewsFeedResponse> = (
+  options
+) => {
+  const {item, ...rest} = options;
+
+  return request.post(feedRepositoryEndpoints().feed, {items: [item]}, rest);
 };

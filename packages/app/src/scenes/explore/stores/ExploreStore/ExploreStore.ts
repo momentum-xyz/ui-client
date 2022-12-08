@@ -15,7 +15,8 @@ const ExploreStore = types
     ResetModel,
     types.model('ExploreStore', {
       nftFeed: types.optional(types.array(types.frozen<NftFeedItemInterface>()), []),
-      request: types.optional(RequestModel, {})
+      request: types.optional(RequestModel, {}),
+      createRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -25,10 +26,13 @@ const ExploreStore = types
     fetchNewsFeed: flow(function* () {
       const response: NewsFeedResponse = yield self.request.send(api.feedRepository.fetchFeed, {});
       if (response) {
-        self.nftFeed = cast(response);
+        self.nftFeed = cast(response.items);
       }
+    }),
+    createNewsFeedItem: flow(function* (item: NftFeedItemInterface) {
+      console.log(item);
+      yield self.request.send(api.feedRepository.createFeedItem, {item});
     })
-  }))
-  .views(() => ({}));
+  }));
 
 export {ExploreStore};
