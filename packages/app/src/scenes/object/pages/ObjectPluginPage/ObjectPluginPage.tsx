@@ -5,7 +5,7 @@ import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {ObjectPluginPropsInterface, PluginInterface} from '@momentum-xyz/sdk';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 import cn from 'classnames';
 
 import {ToastContent} from 'ui-kit';
@@ -27,6 +27,8 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   const theme = useTheme();
   const {t} = useTranslation();
   const history = useHistory();
+
+  const {worldId} = useParams<{worldId: string}>();
 
   useEffect(() => {
     PosBusService.subscribe(pluginLoader.pluginId);
@@ -60,7 +62,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
     pluginApi: attributesManager.pluginApi,
     api: attributesManager.api,
     onClose: () => {
-      history.push(generatePath(ROUTES.base, {spaceId: objectId}));
+      history.push(generatePath(ROUTES.odyssey.base, {worldId}));
     }
   });
 

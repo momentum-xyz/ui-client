@@ -17,5 +17,11 @@ export const PanelBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 10px;
+  padding-top: 20px;
+`;
+
+export const HeadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 `;

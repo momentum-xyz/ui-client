@@ -11,6 +11,7 @@ export type IconNameType =
   | 'bell'
   | 'bellRed'
   | 'bin'
+  | 'blocks'
   | 'calendar'
   | 'calendarMinus'
   | 'cameraOff'
