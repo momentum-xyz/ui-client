@@ -1,14 +1,13 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {getSnapshot} from 'mobx-state-tree';
-import {Dialog} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
-import {SelectedOdyssey, StakingForm} from './components';
+import {SelectedOdyssey} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
