@@ -73,25 +73,6 @@ const ExplorePage: FC = () => {
           )}
         </styled.Boxes>
 
-        {!!nftStore.connectToNftItemId && (
-          <Dialog
-            title="Personal Connecting Dashboard"
-            icon="hierarchy"
-            showCloseButton
-            layoutSize={{height: '510px'}}
-            onClose={() => {
-              nftStore.setConnectToNftItemId(null);
-            }}
-          >
-            <StakingForm
-              nftItemId={nftStore.connectToNftItemId}
-              onComplete={() => {
-                nftStore.setConnectToNftItemId(null);
-              }}
-            />
-          </Dialog>
-        )}
-
         <styled.Boxes>
           <ExplorePanel
             odysseyCount={nftStore.nftItems.length}
