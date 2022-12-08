@@ -105,7 +105,7 @@ const RootStore = types
       }
 
       try {
-        yield self.collaborationStore.leave();
+        self.collaborationStore.leave();
       } catch (ex) {
         console.error('collaborationStore.leave', ex);
       }
