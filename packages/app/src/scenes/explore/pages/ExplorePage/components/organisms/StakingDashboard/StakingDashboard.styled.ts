@@ -30,6 +30,12 @@ export const SectionHeader = styled.div`
   opacity: 80%;
 `;
 
+export const StakingSection = styled.div`
+  margin-bottom: 20px;
+  max-height: 120px;
+  overflow-y: scroll;
+`;
+
 export const BalanceContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -100,7 +106,7 @@ export const RewardData = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
+  padding: 0 10px 15px;
   & > div {
     display: flex;
   }
