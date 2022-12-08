@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {VideoPanel} from 'ui-kit';
@@ -12,9 +12,10 @@ import * as styled from './VideoPage.styled';
 
 interface PropsInterface {
   content?: ObjectInterface;
+  worldId: string;
 }
 
-const VideoPage: FC<PropsInterface> = ({content}) => {
+const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
   const history = useHistory();
 
   return (
@@ -47,7 +48,7 @@ const VideoPage: FC<PropsInterface> = ({content}) => {
               size="large"
               isWhite
               onClick={() => {
-                history.push(ROUTES.base);
+                history.push(generatePath(ROUTES.odyssey.base, {worldId}));
               }}
             />
           </styled.Button>

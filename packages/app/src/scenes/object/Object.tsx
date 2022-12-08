@@ -31,11 +31,13 @@ const Object: FC = () => {
   const renderObject = (assetType?: string) => {
     switch (assetType) {
       case AssetTypeEnum.TEXT:
-        return <TextPage content={content} />;
+        return <TextPage content={content} worldId={objectId} />;
       case AssetTypeEnum.IMAGE:
-        return <>{imageSrc && <ImagePage content={content} imageSrc={imageSrc} />}</>;
+        return (
+          <>{imageSrc && <ImagePage content={content} imageSrc={imageSrc} worldId={objectId} />}</>
+        );
       case AssetTypeEnum.VIDEO:
-        return <VideoPage content={content} />;
+        return <VideoPage content={content} worldId={objectId} />;
       case AssetTypeEnum.PLUGIN:
         return (
           <>

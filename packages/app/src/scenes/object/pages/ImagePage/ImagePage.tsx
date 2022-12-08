@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {ObjectInterface} from 'api';
@@ -11,9 +11,10 @@ import * as styled from './ImagePage.styled';
 interface PropsInterface {
   imageSrc?: string;
   content?: ObjectInterface;
+  worldId: string;
 }
 
-const ImagePage: FC<PropsInterface> = ({imageSrc, content}) => {
+const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
   const history = useHistory();
 
   if (!imageSrc) {
@@ -43,7 +44,7 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content}) => {
               size="large"
               isWhite
               onClick={() => {
-                history.push(ROUTES.base);
+                history.push(generatePath(ROUTES.odyssey.base, {worldId}));
               }}
             />
           </styled.Button>
