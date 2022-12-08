@@ -5,6 +5,7 @@ import {useStore} from 'shared/hooks';
 import {NftItemInterface} from 'stores/NftStore/models';
 
 import {Map3d} from './components';
+import * as styled from './Map3dPage.styled';
 
 interface PropsInterface {
   isClickActive?: boolean;
@@ -36,7 +37,7 @@ const Map3dPage: FC<PropsInterface> = (props) => {
 
   return (
     <>
-      <canvas ref={mapRef} className="webgl" />
+      <styled.MapCanvas ref={mapRef} className="webgl" />
       {isCanvasReady && mapRef.current && !nftStore.isLoading && (
         <Map3d
           currentUserId={sessionStore.userId}
