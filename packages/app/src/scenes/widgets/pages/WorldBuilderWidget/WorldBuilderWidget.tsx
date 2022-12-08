@@ -28,8 +28,8 @@ const WorldBuilderWidget: FC = () => {
     },
     {
       title: 'Skybox',
-      icon: 'planet',
-      size: 'medium',
+      icon: 'skybox',
+      size: 'large',
       link: generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId})
     },
     {

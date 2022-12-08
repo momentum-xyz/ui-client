@@ -1,18 +1,26 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 
 import {ROUTES} from 'core/constants';
 import {createSwitchByConfig} from 'core/utils';
+import {useStore} from 'shared/hooks';
 
 import {SpawnAssetMenu} from './components';
 import {SPAWN_ASSET_ROUTES} from './SpawnAsset.routes';
 import * as styled from './SpawnAsset.styled';
 
 const SpawnAsset: FC = () => {
+  const {worldBuilderStore} = useStore();
+  const {worldBuilderAssets3dStore} = worldBuilderStore;
+
   const {worldId} = useParams<{worldId: string}>();
   const history = useHistory();
+
+  useEffect(() => {
+    worldBuilderAssets3dStore.init(worldId);
+  }, [worldBuilderAssets3dStore, worldId]);
 
   return (
     <styled.Wrapper>
