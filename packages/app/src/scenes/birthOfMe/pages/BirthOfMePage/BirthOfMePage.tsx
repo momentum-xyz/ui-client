@@ -1,7 +1,4 @@
-import React, {
-  FC
-  // useEffect
-} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {
   // generatePath,
@@ -32,9 +29,9 @@ const BirthOfMePage: FC = () => {
 
   const history = useHistory();
 
-  // useEffect(() => {
-  //   exploreStore.init();
-  // }, [exploreStore]);
+  useEffect(() => {
+    sessionStore.loadUserProfile();
+  }, [sessionStore]);
 
   const onBuild = async () => {
     const address = nftStore.getAddressByWallet(authStore.wallet);
