@@ -41,7 +41,7 @@ interface PropsInterface {
 }
 
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
-  const {authStore, nftStore} = useStore();
+  const {authStore, nftStore, exploreStore} = useStore();
   const {wallet: authWallet} = authStore;
   const {balance, addresses, accountOptions, nftItems, chainDecimals, tokenSymbol} = nftStore;
 
@@ -56,6 +56,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const amountAtoms = amount * Math.pow(10, chainDecimals || 12);
 
   const nft = nftItems.find((nft) => nft.id === nftItemId);
+  const myNft = nftItems.find((nft) => nft.owner === wallet);
   console.log('StakingForm', {wallet, addresses, authWallet, amount, amountAtoms, nft});
 
   const onStake = (amountAtoms: number) => {
@@ -65,6 +66,20 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
       .stake(wallet, amountAtoms, nftItemId)
       .then(() => {
         console.log('stake success');
+
+        if (myNft && nft) {
+          exploreStore.createNewsFeedItem({
+            ...myNft,
+            type: 'connected',
+            date: new Date().toISOString(),
+            connectedTo: {
+              ...nft,
+              type: 'connected',
+              date: new Date().toISOString()
+            }
+          });
+        }
+
         toast.info(<ToastContent title="You successfully staked!" showCloseButton />);
         onComplete();
       })
