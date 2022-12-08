@@ -54,6 +54,7 @@ const RootStore = types
     async initApplication() {
       await self.configStore.init();
       await self.nftStore.init();
+      await self.nftStore.initWeb3ExtensionIfNeeded();
       self.authStore.tryToRestoreWallet();
       self.mainStore.themeStore.init();
     },
