@@ -73,7 +73,11 @@ export const use3DMap = (
   if (!wasLoaded) {
     wasLoaded = true;
   } else {
-    return;
+    return {
+      changeWasLoaded: () => {
+        wasLoaded = false;
+      }
+    };
   }
 
   let AmountOfGalaxyToGenereate = 200;
@@ -638,5 +642,9 @@ export const use3DMap = (
 
   animate();
 
-  return {};
+  return {
+    changeWasLoaded: () => {
+      wasLoaded = false;
+    }
+  };
 };

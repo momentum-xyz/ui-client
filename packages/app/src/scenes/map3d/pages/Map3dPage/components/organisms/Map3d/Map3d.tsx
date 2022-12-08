@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {use3DMap} from 'shared/hooks';
@@ -24,7 +24,13 @@ const Map3d: FC<PropsInterface> = (props) => {
     [items, onOdysseyClick]
   );
 
-  use3DMap(canvas, items, currentUserId, handleOdysseyClick);
+  const callbacks = use3DMap(canvas, items, currentUserId, handleOdysseyClick);
+
+  useEffect(() => {
+    return () => {
+      callbacks.changeWasLoaded();
+    };
+  }, [callbacks]);
 
   return <></>;
 };
