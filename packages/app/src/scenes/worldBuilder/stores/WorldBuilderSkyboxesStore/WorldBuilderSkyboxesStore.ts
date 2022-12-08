@@ -29,7 +29,7 @@ const WorldBuilderSkyboxesStore = types
         return;
       }
 
-      let skyboxes =
+      const skyboxes =
         assets3d.map(({id, meta: {name, previewImage}}) => ({
           id,
           name,
@@ -39,8 +39,6 @@ const WorldBuilderSkyboxesStore = types
               ? `${appVariables.RENDER_SERVICE_URL}/get/${previewImage}`
               : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
         })) || [];
-
-      skyboxes = [...skyboxes, ...skyboxes];
 
       self.items = cast(skyboxes);
       self.selectedItemId = self.items[0].id;
