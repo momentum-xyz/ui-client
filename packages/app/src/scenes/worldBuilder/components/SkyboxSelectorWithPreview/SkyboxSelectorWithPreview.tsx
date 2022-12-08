@@ -31,7 +31,7 @@ const SkyboxSelectorWithPreview: FC = () => {
       <styled.ItemsGallery>
         {!!items && !!selectedItem && (
           <Carousel<Asset3dInterface>
-            items={[...items, ...items]}
+            items={items}
             activeItem={selectedItem}
             onChange={selectItem}
             renderItem={(item, idx) => {
