@@ -87,8 +87,16 @@ const SignInAccountPage: FC = () => {
               />
             </>
           )}
-          {requestingFundsStatus === 'pending' && <Text text="Loading MTM..." size="m" />}
-          {requestingFundsStatus === 'error' && <Text text="Error loading MTM" size="m" />}
+          {requestingFundsStatus === 'pending' && (
+            <styled.MintingMessageBox>
+              <Text text="Loading MTM..." size="m" align="left" />
+            </styled.MintingMessageBox>
+          )}
+          {requestingFundsStatus === 'error' && (
+            <styled.MintingMessageBox>
+              <Text text="Error loading MTM" size="m" align="left" />
+            </styled.MintingMessageBox>
+          )}
 
           {accountSelectedAndFundsAquired && (
             <>
@@ -103,8 +111,17 @@ const SignInAccountPage: FC = () => {
               />
             </>
           )}
-          {mintingNftStatus === 'pending' && <Text text="Minting NFT..." size="m" />}
-          {mintingNftStatus === 'error' && <Text text="Error minting NFT" size="m" />}
+          {mintingNftStatus === 'pending' && (
+            <styled.MintingMessageBox>
+              <Text text="Minting your Odyssey..." size="m" align="left" />
+              <Text text="Please wait, it may take a while." size="m" align="left" />
+            </styled.MintingMessageBox>
+          )}
+          {mintingNftStatus === 'error' && (
+            <styled.MintingMessageBox>
+              <Text text="Error minting NFT" size="m" align="left" />
+            </styled.MintingMessageBox>
+          )}
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>
