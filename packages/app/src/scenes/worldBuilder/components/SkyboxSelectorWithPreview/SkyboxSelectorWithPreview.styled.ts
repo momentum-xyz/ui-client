@@ -1,11 +1,18 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
+import {Button} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   display: flex;
+  flex-direction: column;
   min-height: 500px;
   min-width: 500px;
-  width: 70%;
+  width: 100%;
+  pointer-events: none;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  padding-top: 80px;
 `;
 
 export const PreviewContainer = styled.div`
@@ -20,8 +27,8 @@ export const PreviewTitleHolder = styled.div`
 `;
 
 export const PreviewImg = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   object-fit: cover;
   border-radius: 50%;
 `;
@@ -31,18 +38,20 @@ export const ItemsGallery = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
 `;
 export const Item = styled.div`
-  min-width: 170px;
+  width: 180px;
+  height: 230px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
   padding: 10px 20px;
   border-radius: 10px;
-  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.3)};
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
+  margin: 0 15px;
+
+  box-shadow: 0px 3.369px 3.369px rgba(0, 0, 0, 0.25);
 
   &.active {
     border: 3px solid var(--accent-color);
@@ -69,4 +78,8 @@ export const ActionButtonHolder = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const CloseButton = styled(Button)`
+  pointer-events: all;
 `;

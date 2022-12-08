@@ -1,7 +1,4 @@
-import React, {
-  FC
-  // useEffect
-} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {
   // generatePath,
@@ -19,22 +16,15 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {
-    // exploreStore,
-    nftStore,
-    authStore,
-    signInAccountStore,
-    sessionStore
-    // map3dStore
-  } = useStore();
+  const {exploreStore, nftStore, authStore, signInAccountStore, sessionStore} = useStore();
 
   const nft = authStore.wallet ? nftStore.getNftByWallet(authStore.wallet) : null;
 
   const history = useHistory();
 
-  // useEffect(() => {
-  //   exploreStore.init();
-  // }, [exploreStore]);
+  useEffect(() => {
+    sessionStore.loadUserProfile();
+  }, [sessionStore]);
 
   const onBuild = async () => {
     const address = nftStore.getAddressByWallet(authStore.wallet);
@@ -48,6 +38,14 @@ const BirthOfMePage: FC = () => {
     });
     if (isDone) {
       await sessionStore.loadUserProfile();
+    }
+
+    if (nft) {
+      await exploreStore.createNewsFeedItem({
+        ...nft,
+        type: 'created',
+        date: new Date().toISOString()
+      });
     }
 
     history.push(ROUTES.birthAnimation);

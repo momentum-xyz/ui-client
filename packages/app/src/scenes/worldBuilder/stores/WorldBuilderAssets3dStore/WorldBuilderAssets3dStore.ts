@@ -72,7 +72,8 @@ const WorldBuilderAssets3dStore = types
         {
           asset,
           onUploadProgress,
-          name: self.uploadedAssetName
+          name: self.uploadedAssetName,
+          worldId: self.worldId
         }
       );
       console.log('uploadAsset response', response);
@@ -84,7 +85,8 @@ const WorldBuilderAssets3dStore = types
       const response: FetchAssets3dResponse | undefined = yield self.fetchAssets3dRequest.send(
         api.assets3dRepository.fetchAssets3d,
         {
-          category
+          category,
+          worldId: self.worldId
         }
       );
 

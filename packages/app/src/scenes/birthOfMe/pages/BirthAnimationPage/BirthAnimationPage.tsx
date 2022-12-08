@@ -8,17 +8,17 @@ import {useStore, useSupernova} from 'shared/hooks';
 import * as styled from './BirthAnimationPage.styled';
 
 const BirthAnimationPage: FC = () => {
-  const {exploreStore} = useStore();
+  const {sessionStore} = useStore();
 
   const history = useHistory();
 
   useEffect(() => {
-    exploreStore.init();
+    sessionStore.loadUserProfile();
 
     setTimeout(() => {
       history.push(ROUTES.explore);
     }, 10 * 1000);
-  }, [exploreStore, history]);
+  }, [sessionStore, history]);
 
   useSupernova();
 
