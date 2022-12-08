@@ -27,7 +27,7 @@ import {inputToBN} from 'core/utils';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
 
-import {NftItem, NftItemInterface, StakeDetail} from './models';
+import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './models';
 
 const NFT_MINT_FEE = 100000;
 const DEFAULT_COLECTION_ID = 0;
@@ -91,8 +91,8 @@ const NftStore = types
       mintNftCheckJobRequest: types.optional(RequestModel, {}),
 
       connectToNftItemId: types.maybeNull(types.number),
-      stakingAtMe: types.optional(types.map(StakeDetail), {}),
-      stakingAtOthers: types.optional(types.map(StakeDetail), {}),
+      stakingAtMe: types.map(StakeDetail),
+      stakingAtOthers: types.map(StakeDetail),
       stakingDashorboardDialog: types.optional(Dialog, {}),
       accumulatedRewards: 0,
       balance: types.optional(types.frozen<AccountBalanceInterface>(), {
@@ -116,6 +116,7 @@ const NftStore = types
     stakingInfo: DeriveStakingAccount | null;
     sessionProgress: DeriveSessionProgress | null;
     unsubscribeBalanceSubscription: (() => void) | null;
+    unsubscribeStakingSubscription: (() => void) | null;
   }>(() => ({
     channel: null,
     stashBalanceAll: null,
@@ -123,6 +124,7 @@ const NftStore = types
     customRewardDestinationBalance: null,
     stakingInfo: null,
     sessionProgress: null,
+    unsubscribeStakingSubscription: null,
     unsubscribeBalanceSubscription: null
   }))
   .views((self) => {
@@ -345,6 +347,24 @@ const NftStore = types
     setBalance(payload: AccountBalanceInterface) {
       self.balance = payload;
     },
+    setAccumulatedRewards(amount: number) {
+      self.accumulatedRewards = amount;
+    },
+    setStakingInfos(
+      stakingAtOthers: Map<string, StakeDetailInterface>,
+      stakingAtMe: Map<string, StakeDetailInterface>
+    ) {
+      console.log('setStakingInfos', stakingAtOthers, stakingAtMe);
+      self.stakingAtMe.clear();
+      stakingAtMe.forEach((v, k) => {
+        self.stakingAtMe.set(k, v);
+      });
+      self.stakingAtOthers.clear();
+      stakingAtOthers.forEach((v, k) => {
+        self.stakingAtOthers.set(k, v);
+      });
+    },
+    // TODO obsolete
     setStakingInfo(payload: DeriveStakingAccount) {
       self.stakingInfo = payload;
     },
@@ -650,7 +670,7 @@ const NftStore = types
     getNftByUuid: (uuid: string) => {
       return self.nftItems.find((nftItem) => nftItem.uuid === uuid);
     },
-    fetchStakingInfo: flow(function* (
+    subscribeToStakingInfo: flow(function* (
       address: string,
       userNftItemId: number,
       collectionId = DEFAULT_COLECTION_ID
@@ -660,67 +680,72 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      const [stakingAt, staked, rewards] = yield Promise.all([
-        self.channel.query.stake.stakingAt(address),
-        self.channel.query.stake.staked([collectionId, userNftItemId]),
-        self.channel.query.stake.stakersRewards(address)
-      ]);
+      if (self.unsubscribeStakingSubscription) {
+        console.log('Unsubscribe from Staking subscription');
+        self.unsubscribeStakingSubscription();
+      }
 
-      console.log('stakingAt', stakingAt?.toHuman());
-      console.log('staked', staked?.toHuman());
-      console.log('rewards', rewards?.toHuman());
-      const stakingAtArr = stakingAt?.unwrapOr(null) || [];
-      const stakedArr = staked?.unwrapOr(null) || [];
+      console.log('subscribe to staking info', address, userNftItemId);
+      self.unsubscribeStakingSubscription = yield self.channel.queryMulti(
+        [
+          [self.channel.query.stake.stakingAt, address],
+          [self.channel.query.stake.staked, [collectionId, userNftItemId]],
+          [self.channel.query.stake.stakersRewards, address]
+        ],
+        ([stakingAt, staked, rewards]) => {
+          console.log('stakingAt', stakingAt?.toHuman());
+          console.log('staked', staked?.toHuman());
+          console.log('rewards', rewards?.toHuman());
+          const stakingAtArr = (stakingAt as any)?.unwrapOr(null) || [];
+          const stakedArr = (staked as any)?.unwrapOr(null) || [];
 
-      for (const stakingAtItem of stakingAtArr) {
-        const {
-          nfts: [collectionIdStr, itemIdStr],
-          value: valueAmountStr
-        } = stakingAtItem;
-        const destNftItemId = +itemIdStr;
-        const collectionId = +collectionIdStr;
-        const amount = +valueAmountStr;
+          const stakingAtOthers = new Map<string, StakeDetailInterface>();
+          for (const stakingAtItem of stakingAtArr) {
+            const {
+              nfts: [collectionIdStr, itemIdStr],
+              value: valueAmountStr
+            } = stakingAtItem;
+            const destNftItemId = +itemIdStr;
+            const collectionId = +collectionIdStr;
+            const amount = +valueAmountStr;
 
-        const nft = self.nftItems.find(
-          (nftItem) => nftItem.id === destNftItemId && nftItem.collectionId === collectionId
-        );
-        if (!nft) {
-          console.log('NFT not found', {destNftItemId, collectionId});
-          continue;
+            const nft = self.nftItems.find(
+              (nftItem) => nftItem.id === destNftItemId && nftItem.collectionId === collectionId
+            );
+            if (!nft) {
+              console.log('NFT not found', {destNftItemId, collectionId});
+              continue;
+            }
+            console.log('NFT found', nft);
+            const destAddr = String(nft.owner);
+
+            stakingAtOthers.set(destAddr, {
+              amount,
+              destAddr,
+              sourceAddr: address
+            });
+          }
+
+          const stakingAtMe = new Map<string, StakeDetailInterface>();
+          for (const stakedItem of stakedArr) {
+            const {accountId: sourceAddr, value: valueAmountStr} = stakedItem;
+            const amount = +valueAmountStr;
+
+            stakingAtMe.set(String(sourceAddr), {
+              amount: amount,
+              sourceAddr: String(sourceAddr),
+              destAddr: address
+            });
+          }
+
+          self.setStakingInfos(stakingAtOthers, stakingAtMe);
+          self.setAccumulatedRewards(Number(rewards) || 0);
+
+          console.log('stakingAtOthers', self.stakingAtOthers);
+          console.log('stakingAtMe', self.stakingAtMe);
+          console.log('accumulatedRewards', self.accumulatedRewards);
         }
-        console.log('NFT found', nft);
-        const destAddr = nft.owner;
-
-        self.stakingAtOthers.set(
-          destAddr,
-          cast({
-            amount,
-            // destNftItemId,
-            destAddr,
-            sourceAddr: address
-          })
-        );
-      }
-
-      for (const stakedItem of stakedArr) {
-        const {accountId: sourceAddr, value: valueAmountStr} = stakedItem;
-        const amount = +valueAmountStr;
-
-        self.stakingAtMe.set(
-          sourceAddr,
-          cast({
-            amount,
-            sourceAddr,
-            destAddr: address
-          })
-        );
-      }
-
-      self.accumulatedRewards = rewards?.toNumber() || 0;
-
-      console.log('stakingAtOthers', self.stakingAtOthers);
-      console.log('stakingAtMe', self.stakingAtMe);
-      console.log('accumulatedRewards', self.accumulatedRewards);
+      );
     }),
     stake: flow(function* (
       address: string,

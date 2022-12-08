@@ -37,8 +37,8 @@ const ExplorePage: FC = () => {
         console.log('User has no NFT', wallet);
         return;
       }
-      // TODO check also other user wallets??
-      await nftStore.fetchStakingInfo(wallet, nftItem.id);
+
+      await nftStore.subscribeToStakingInfo(wallet, nftItem.id);
 
       console.log('Staking info fetched');
       console.log('mutualStakingAddresses:', nftStore.mutualStakingAddresses);
