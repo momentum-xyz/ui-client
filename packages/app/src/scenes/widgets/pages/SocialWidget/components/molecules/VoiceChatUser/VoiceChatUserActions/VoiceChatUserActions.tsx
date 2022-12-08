@@ -34,14 +34,20 @@ const VoiceChatUserActions: FC<PropsInterface> = ({
           <styled.Body>
             <styled.Action onClick={onUserMute}>
               <IconSvg name="microphoneOff" />
-              <styled.ActionLabel text={t('actons.muteName', {name})} weight="light" size="xxs" />
+              <styled.ActionLabel
+                text={t('actions.muteName', {name})}
+                weight="light"
+                size="xxs"
+                align="left"
+              />
             </styled.Action>
             <styled.Action onClick={onUserKick}>
               <IconSvg name="remove-user" />
               <styled.ActionLabel
-                text={t('actons.kickNameFromVoice', {name})}
+                text={t('actions.kickNameFromVoice', {name})}
                 weight="light"
                 size="xxs"
+                align="left"
               />
             </styled.Action>
           </styled.Body>

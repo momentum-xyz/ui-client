@@ -45,7 +45,10 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
             text="No wallet? You can get one following the instructions"
             align="left"
           />
-          <styled.Link target="_blank" href="#">
+          <styled.Link
+            target="_blank"
+            href="https://discover.odyssey.org/create-your-odyssey/get-a-wallet/"
+          >
             here
           </styled.Link>
         </div>
