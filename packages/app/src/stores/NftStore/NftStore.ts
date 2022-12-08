@@ -304,7 +304,7 @@ const NftStore = types
         const mutualConnections: NftItemInterface[] = [];
         self.stakingAtMe.forEach((stakingDetail) => {
           if (self.stakingAtOthers.get(stakingDetail.sourceAddr)) {
-            mutualConnections.push(self.getNftByUuid(stakingDetail.sourceAddr));
+            mutualConnections.push(self.getNftByWallet(stakingDetail.sourceAddr));
           }
         });
         return mutualConnections;
