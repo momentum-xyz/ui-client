@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 import ReactLinkify from 'react-linkify';
 
 import {ROUTES} from 'core/constants';
@@ -11,9 +11,10 @@ import * as styled from './TextPage.styled';
 
 interface PropsInterface {
   content?: ObjectInterface;
+  worldId: string;
 }
 
-const TextPage: FC<PropsInterface> = ({content}) => {
+const TextPage: FC<PropsInterface> = ({content, worldId}) => {
   const history = useHistory();
 
   return (
@@ -46,7 +47,7 @@ const TextPage: FC<PropsInterface> = ({content}) => {
               size="large"
               isWhite
               onClick={() => {
-                history.push(ROUTES.base);
+                history.push(generatePath(ROUTES.odyssey.base, {worldId}));
               }}
             />
           </styled.Button>

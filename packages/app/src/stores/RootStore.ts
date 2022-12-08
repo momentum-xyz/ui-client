@@ -54,6 +54,7 @@ const RootStore = types
     async initApplication() {
       await self.configStore.init();
       await self.nftStore.init();
+      await self.nftStore.initWeb3ExtensionIfNeeded();
       self.authStore.tryToRestoreWallet();
       self.mainStore.themeStore.init();
     },
@@ -105,7 +106,7 @@ const RootStore = types
       }
 
       try {
-        yield self.collaborationStore.leave();
+        self.collaborationStore.leave();
       } catch (ex) {
         console.error('collaborationStore.leave', ex);
       }

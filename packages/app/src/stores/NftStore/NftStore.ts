@@ -30,7 +30,7 @@ import {appVariables} from 'api/constants';
 import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './models';
 
 const NFT_MINT_FEE = 100000;
-const DEFAULT_COLECTION_ID = 0;
+const DEFAULT_COLECTION_ID = 3;
 
 const prepareSignAndSend = async (address: string) => {
   // there's alternative way for this in useEager
@@ -299,6 +299,15 @@ const NftStore = types
           }
         });
         return mutualStakingAddresses;
+      },
+      get mutualConnections(): NftItemInterface[] | undefined {
+        const mutualConnections: NftItemInterface[] = [];
+        self.stakingAtMe.forEach((stakingDetail) => {
+          if (self.stakingAtOthers.get(stakingDetail.sourceAddr)) {
+            mutualConnections.push(self.getNftByUuid(stakingDetail.sourceAddr));
+          }
+        });
+        return mutualConnections;
       }
     };
   })

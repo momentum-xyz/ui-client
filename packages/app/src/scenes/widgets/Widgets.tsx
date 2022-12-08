@@ -18,7 +18,8 @@ import {
   NotificationsWidget,
   OdysseyWidget,
   WorldBuilderWidget,
-  SearchUsersWidget
+  SearchUsersWidget,
+  MutualConnectionsWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -39,7 +40,7 @@ const Widgets: FC<PropsInterface> = (props) => {
     objectStore,
     nftStore
   } = useStore();
-  const {onlineUsersStore, odysseyStore, calendarStore} = widgetsStore;
+  const {onlineUsersStore, odysseyStore, calendarStore, mutualConnectionsStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
@@ -104,6 +105,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               icon="user-network"
               size="medium"
               disabled={false} // TODO: Disable for guests
+              onClick={mutualConnectionsStore.widget.open}
               state={{canGoBack: true}}
             />
 
@@ -204,6 +206,12 @@ const Widgets: FC<PropsInterface> = (props) => {
         )}
       </styled.Footer>
 
+      {mutualConnectionsStore.widget.isOpen && (
+        <MutualConnectionsWidget
+          mutualConnections={nftStore.mutualConnections}
+          onClose={mutualConnectionsStore.widget.close}
+        />
+      )}
       {onlineUsersStore.searchWidget.isOpen && (
         <SearchUsersWidget
           users={onlineUsersStore.allUsers}

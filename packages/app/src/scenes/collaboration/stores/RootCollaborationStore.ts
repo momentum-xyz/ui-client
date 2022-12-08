@@ -8,7 +8,7 @@ import {SpaceStore} from './SpaceStore';
 import {DashboardStore} from './DashboardStore';
 import {ScreenShareStore} from './ScreenShareStore';
 import {StageModeStore} from './StageModeStore';
-import {TextChatStore} from './TextChatStore';
+// import {TextChatStore} from './TextChatStore';
 import {StreamChatStore} from './StreamChatStore';
 
 const RootCollaborationStore = types
@@ -20,7 +20,7 @@ const RootCollaborationStore = types
 
       dashboardStore: types.optional(DashboardStore, {}),
       // TODO: Removal
-      textChatStore: types.optional(TextChatStore, {}),
+      // textChatStore: types.optional(TextChatStore, {}),
       streamChatStore: types.optional(StreamChatStore, {}),
       screenShareStore: types.optional(ScreenShareStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
@@ -42,17 +42,17 @@ const RootCollaborationStore = types
     join: flow(function* (spaceId: string, isTable = false) {
       yield self.spaceStore.init(spaceId, isTable);
     }),
-    leave: flow(function* () {
+    leave() {
       self.spaceStore.resetModel();
       if (!self.spaceStore?.isTable) {
         // TODO: Removal textChatStore
-        yield self.textChatStore.leaveChannel();
-        yield self.textChatStore.logOut();
-        self.textChatStore.resetModel();
+        // yield self.textChatStore.leaveChannel();
+        // yield self.textChatStore.logOut();
+        // self.textChatStore.resetModel();
 
         self.streamChatStore.deinit(self.spaceStore?.id);
       }
-    }),
+    },
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {
       self.participantToRemoveFromStage = cloneDeep(remoteUser);
       self.removeParticipantFromStageDialog.open();
