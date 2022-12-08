@@ -3,9 +3,12 @@ import styled from 'styled-components';
 export const RightToolbars = styled.div`
   display: flex;
   gap: 20px;
+  pointer-events: all;
 `;
 
-export const LeftToolbars = styled.div``;
+export const LeftToolbars = styled.div`
+  pointer-events: all;
+`;
 
 export const Footer = styled.footer`
   width: 100%;
