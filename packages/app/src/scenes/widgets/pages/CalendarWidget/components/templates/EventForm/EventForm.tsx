@@ -17,7 +17,7 @@ import * as styled from './EventForm.styled';
 
 const EventForm: FC = () => {
   const theme = useTheme();
-  const {widgetsStore, mainStore, sessionStore} = useStore();
+  const {widgetsStore, mainStore, sessionStore, exploreStore, nftStore} = useStore();
   const {calendarStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
   const {worldStore} = mainStore;
@@ -53,6 +53,7 @@ const EventForm: FC = () => {
       data.web_link = null;
     }
 
+    const isNewEvent = !eventForm.currentEvent;
     const isSuccess = await eventForm.createOrUpdateEvent(
       data,
       worldStore.worldId,
@@ -60,6 +61,21 @@ const EventForm: FC = () => {
       calendarStore.world?.name,
       image
     );
+
+    const nft = nftStore.getNftByUuid(worldStore.worldId);
+
+    if (isSuccess && isNewEvent && nft) {
+      await exploreStore.createNewsFeedItem({
+        ...nft,
+        type: 'calendar_event',
+        date: new Date().toISOString(),
+        calendarId: eventForm.eventId,
+        calendarImage: eventForm.imageHash,
+        calendarStart: data.start.toISOString(),
+        calendarEnd: data.end.toISOString(),
+        calendarTitle: data.title
+      });
+    }
 
     if (isSuccess) {
       formDialog.close();

@@ -1,9 +1,9 @@
 import React, {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
-import {Button, ImageSizeEnum, Text} from '@momentum-xyz/ui-kit';
+import {Button, Text} from '@momentum-xyz/ui-kit';
 
-import {appVariables} from 'api/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
 import {NftItemInterface} from 'stores/NftStore/models';
 import placeholder from 'static/images/placeholder.png';
@@ -35,18 +35,10 @@ const CalendarItem: FC<PropsInterface> = (props) => {
     }
   }, [item.calendarEnd]);
 
-  const imageUrl = useMemo(() => {
-    if (!item.calendarImage) {
-      return placeholder;
-    } else {
-      return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${item.calendarImage}`;
-    }
-  }, [item.calendarImage]);
-
   return (
     <>
       <div>
-        <styled.OneAvatar src={imageUrl} />
+        <styled.OneAvatar src={getImageAbsoluteUrl(item.calendarImage) || placeholder} />
       </div>
       <styled.Info>
         <styled.Date>
