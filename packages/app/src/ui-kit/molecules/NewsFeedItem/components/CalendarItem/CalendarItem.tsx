@@ -6,6 +6,7 @@ import {Button, ImageSizeEnum, Text} from '@momentum-xyz/ui-kit';
 import {appVariables} from 'api/constants';
 import {NftFeedItemInterface} from 'api';
 import {NftItemInterface} from 'stores/NftStore/models';
+import placeholder from 'static/images/placeholder.png';
 
 import * as styled from './CalendarItem.styled';
 
@@ -20,7 +21,7 @@ const CalendarItem: FC<PropsInterface> = (props) => {
 
   const formattedStartDate = useMemo(() => {
     if (item.calendarStart) {
-      return format(new Date(item.calendarStart), `MM/dd/yyyy - h:mm aa`);
+      return format(new Date(item.calendarStart), `MM/dd/yyyy h:mm aa`);
     } else {
       return '';
     }
@@ -28,14 +29,18 @@ const CalendarItem: FC<PropsInterface> = (props) => {
 
   const formattedEndDate = useMemo(() => {
     if (item.calendarEnd) {
-      return format(new Date(item.calendarEnd), `MM/dd/yyyy - h:mm aa`);
+      return format(new Date(item.calendarEnd), `MM/dd/yyyy h:mm aa`);
     } else {
       return '';
     }
   }, [item.calendarEnd]);
 
   const imageUrl = useMemo(() => {
-    return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${item.calendarImage}`;
+    if (!item.calendarImage) {
+      return placeholder;
+    } else {
+      return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${item.calendarImage}`;
+    }
   }, [item.calendarImage]);
 
   return (

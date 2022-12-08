@@ -176,7 +176,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="vector"
                 size="medium"
                 isSelected={widgetsStore.minimapStore.minimapDialog.isOpen}
-                onClick={widgetsStore.minimapStore.minimapDialog.toggle}
+                onClick={widgetsStore.minimapStore.toggle}
                 state={{canGoBack: true}}
               />
 
