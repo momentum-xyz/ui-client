@@ -18,6 +18,14 @@ const ExplorePage: FC = () => {
 
   useEffect(() => {
     exploreStore.init();
+
+    const timeInterval = setInterval(() => {
+      exploreStore.fetchNewsFeed();
+    }, 15000);
+
+    return () => {
+      clearInterval(timeInterval);
+    };
   }, [exploreStore]);
 
   useEffect(() => {
