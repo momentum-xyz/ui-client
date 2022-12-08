@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useRef} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {use3DMap} from 'shared/hooks';
@@ -14,8 +14,6 @@ interface PropsInterface {
 const Map3d: FC<PropsInterface> = (props) => {
   const {currentUserId, items, canvas, onOdysseyClick} = props;
 
-  const wasLoaded = useRef<boolean>(false);
-
   const handleOdysseyClick = useCallback(
     (uuid: string) => {
       const selectedOdyssey = items.find((i) => i.uuid === uuid);
@@ -26,11 +24,13 @@ const Map3d: FC<PropsInterface> = (props) => {
     [items, onOdysseyClick]
   );
 
-  const onLoaded = useCallback(() => {
-    wasLoaded.current = true;
-  }, []);
+  const callbacks = use3DMap(canvas, items, currentUserId, handleOdysseyClick);
 
-  use3DMap(canvas, items, currentUserId, wasLoaded.current, onLoaded, handleOdysseyClick);
+  useEffect(() => {
+    return () => {
+      callbacks.changeWasLoaded();
+    };
+  }, [callbacks]);
 
   return <></>;
 };

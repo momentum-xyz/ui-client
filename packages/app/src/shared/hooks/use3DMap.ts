@@ -19,7 +19,7 @@ import iceland01 from 'static/images/map/iceland01.jpg';
 import BasicSkyboxHD from 'static/images/map/BasicSkyboxHD.jpg';
 
 class Odyssey extends THREE.Mesh {
-  constructor(geometry, material, number, wallet, name, url) {
+  constructor(geometry, material, number, wallet, name, url, texture) {
     super(geometry, material);
 
     this.material = material;
@@ -61,19 +61,23 @@ class Odyssey extends THREE.Mesh {
   };
 }
 
+let wasLoaded = false;
+
 export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: NftItemInterface[],
   centerUuid: string | undefined | null,
-  wasLoaded: boolean,
-  onLoaded: () => void,
   onOdysseyClick: (uuid: string) => void
 ) => {
   // FIXME: Kovi
   if (!wasLoaded) {
-    onLoaded();
+    wasLoaded = true;
   } else {
-    return;
+    return {
+      changeWasLoaded: () => {
+        wasLoaded = false;
+      }
+    };
   }
 
   let AmountOfGalaxyToGenereate = 200;
@@ -83,34 +87,47 @@ export const use3DMap = (
   let planetsMaxVerticalSpawnHeight = 100;
   const minimalDistanceToPlanetForCamera = 5;
 
-  // TODO: KOVI
+  const odysseyAvatarGeometry = new THREE.CircleGeometry(0.8, 26);
+
+  // TODO: Kovi
   const createNewOdyssey = (item?: NftItemInterface) => {
     if (!item) {
       return;
     }
+
     const standardTextures = [baseAtmos, temptations, showTime, honey01, iceland01];
 
     const randNum = Math.floor(Math.random() * standardTextures.length);
     const randTexture = standardTextures[randNum];
 
-    const geometry = new SphereGeometry(1, 16, 16);
     const texture = new THREE.TextureLoader().load(randTexture);
+
+    let odysseyAvatarMaterial = new THREE.MeshBasicMaterial({
+      side: THREE.DoubleSide,
+      map: texture
+    });
 
     // Flip textures horizontally so text is readable.
     texture.wrapS = THREE.RepeatWrapping;
-    texture.repeat.x = -1;
+    //texture.repeat.x = - 1;
 
-    const material = new MeshBasicMaterial({
-      map: texture,
-      side: THREE.BackSide,
-      color: 0xffffff
-    });
+    const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry, odysseyAvatarMaterial);
 
-    const odyssey = new Odyssey(geometry, material, item.uuid, item.owner, item.name, texture);
+    const odyssey = new Odyssey(
+      odysseyBaseSphereGeometry,
+      odysseyBaseSphereMaterial,
+      item.uuid,
+      item.owner,
+      item.name,
+      texture
+    );
+
+    odyssey.add(avatarMesh);
 
     return odyssey;
   };
 
+  // TODO: Kovi
   let scene, renderer, controls, selectedOdyssey;
 
   const raycaster = new THREE.Raycaster();
@@ -122,7 +139,8 @@ export const use3DMap = (
 
   let meshArray = [];
 
-  // FIXME: Kovi. Scene setup
+  // TODO: Kovi
+  // Scene setup
   //canvas = document.querySelector('.webgl');
   scene = new THREE.Scene();
 
@@ -160,9 +178,27 @@ export const use3DMap = (
   /**
    * Happyship skybox
    */
+
   const backgroundImage = new THREE.TextureLoader().load(BasicSkyboxHD);
   backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = backgroundImage;
+
+  // Setup all base materials and geometries.
+
+  const odysseyBaseSphereGeometry = new THREE.SphereGeometry(1, 16, 16);
+
+  const odysseyBaseSphereMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xffffff,
+    envMap: backgroundImage,
+    transmission: 1,
+    opacity: 0.3,
+    side: THREE.BackSide,
+    ior: 1.5,
+    metalness: 0.3,
+    roughness: 0,
+    specularIntensity: 1,
+    transparentA: true
+  });
 
   /**
    * Build Galaxy
@@ -265,10 +301,9 @@ export const use3DMap = (
     if (event.button != 0) {
       return;
     }
-
     // Create Raycast
     raycaster.setFromCamera(pointer, camera);
-    const castRay = raycaster.intersectObjects(referenceListOfOdysseys, true);
+    const castRay = raycaster.intersectObjects(referenceListOfOdysseys, false);
 
     // Process the Raycast.
     if (castRay.length > 0) {
@@ -276,7 +311,9 @@ export const use3DMap = (
       if (!transitionToPlanetFinished) {
         return;
       }
+
       // Only react to first raycast hit
+
       const targetPlanet = castRay[0];
 
       // If clicked planet is same as current selected one return
@@ -286,36 +323,29 @@ export const use3DMap = (
 
       // Log information about selected Odyssey
       console.log(targetPlanet.object);
+
       selectedOdyssey = targetPlanet.object;
+
+      let targetVector = new THREE.Vector3();
+      targetPlanet.object.getWorldPosition(targetVector);
 
       // FIXME: Kovi. Extract info from planet Kovi
       onOdysseyClick(targetPlanet.object.number);
 
       // Prepare fly to planets.
-      const targetPlanetLocation = new Vector3(
-        targetPlanet.object.position.x,
-        targetPlanet.object.position.y,
-        targetPlanet.object.position.z
-      );
+      const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
 
       // Prepare rotation of camera animation.
       const startOrientation = camera.quaternion.clone();
-      const targetOrientation = camera.quaternion
-        .clone(camera.lookAt(targetPlanetLocation))
-        .normalize();
-      let targetQuaternion = targetOrientation;
+      const targetOrientation = camera.quaternion.clone(camera.lookAt(targetVector)).normalize();
 
       // Get the direction for the new location.
       let direction = new THREE.Vector3();
-      direction.subVectors(targetPlanet.object.position, camera.position).normalize();
+      direction.subVectors(targetVector, camera.position).normalize();
 
       // Get distance from raycast minus minimal distance orbit control
       // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
-      let targetVectorForDistance = new Vector3(
-        targetPlanet.object.position.x,
-        targetPlanet.object.position.y,
-        targetPlanet.object.position.z
-      );
+      let targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
       const distance =
         targetVectorForDistance.distanceTo(camera.position) - minimalDistanceToPlanetForCamera;
 
@@ -336,7 +366,6 @@ export const use3DMap = (
           controls.enabled = false;
           controls.autoRotate = false;
           controls.enablePan = false;
-          //highlightMesh.position.set(0, 0, 0); // remove the highlight
         },
         onUpdate: function () {
           camera.quaternion.copy(startOrientation).slerp(targetOrientation, this.progress());
@@ -377,6 +406,10 @@ export const use3DMap = (
   };
 
   ProcessOdyssey();
+
+  /**
+   * Create USER OWN odyssey at the center.
+   */
 
   // TODO: Kovi
   const centerOdyssey = createNewOdyssey(items.find((i) => i.uuid === centerUuid));
@@ -499,39 +532,38 @@ export const use3DMap = (
 
   buildUniverse();
 
-  // FIXME: Kovi
   /**
    * Highlight Mesh
    */
-  /*const highlightGeometry = new THREE.PlaneGeometry(3, 3);
-  const highlightMateiral = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0.2
-  });
-  const highlightMesh = new THREE.Mesh(highlightGeometry, highlightMateiral);
+
+  /*
+  const highlightGeometry = new THREE.PlaneGeometry(3,3);
+  const highlightMateiral = new THREE.MeshBasicMaterial({color: 0xFFFFFF, transparent: true, opacity: 0.2});
+  const highlightMesh = new THREE.Mesh(highlightGeometry, highlightMateiral)
   highlightMesh.lookAt(camera.position);
   scene.add(highlightMesh);
+  */
 
-  function highlightObjects() {
-    raycaster.setFromCamera(pointer, camera);
+  /*
+  function highlightObjects(){
 
-    const objectToHighlight = raycaster.intersectObjects(scene.children, true);
+      raycaster.setFromCamera(pointer, camera);
 
-    if (objectToHighlight.length > 0) {
-      objectToHighlight.forEach((item) => {
-        if (item.object.isOdyssey && item.object !== selectedOdyssey) {
-          highlightMesh.position.set(
-            item.object.position.x,
-            item.object.position.y,
-            item.object.position.z
-          );
-        }
-      });
-    }
-    // Update rotation of highlight plane to face camera.
-    highlightMesh.lookAt(camera.position);
-  }*/
+      const objectToHighlight = raycaster.intersectObjects(scene.children, true);
+
+      if(objectToHighlight.length > 0){
+
+          objectToHighlight.forEach( item => {
+              if(item.object.isOdyssey && item.object !== selectedOdyssey){
+                  highlightMesh.position .set(item.object.position.x, item.object.position.y, item.object.position.z)
+              }
+          })
+
+       }
+       // Update rotation of highlight plane to face camera.
+       highlightMesh.lookAt(camera.position);
+  }
+  */
 
   /**
    * Handle fade out
@@ -539,15 +571,11 @@ export const use3DMap = (
 
   // TEMPORAL TRIGGER FOR FADE OUT: SPACEBAR
 
-  window.addEventListener('keyup', (event) => {
-    if (event.code === 'Space') {
-      fadeOutScene();
-    }
-  });
-
-  /**
-   *   Scene fade out. Ads DIV to body and sets its opacity.
-   */
+  //window.addEventListener('keyup', event => {
+  //    if(event.code === 'Space'){
+  //        fadeOutScene();
+  //    }
+  //});
 
   function fadeOutScene() {
     // Add new DIV to the HTML for fadeOut
@@ -581,13 +609,18 @@ export const use3DMap = (
 
   // Animation
   function animate() {
-    // FIXME: Kovi
     // Update Highlight
     //highlightObjects();
 
     // Update controls for auto-rotate.
     if (!updateCameraRotation) {
       controls.update();
+    }
+
+    // Make all avatars face the camera.
+    for (let i = 0; i < referenceListOfOdysseys.length; i++) {
+      const odyssey = referenceListOfOdysseys[i].children;
+      odyssey[0].lookAt(camera.position);
     }
 
     // Render the scene
@@ -609,5 +642,9 @@ export const use3DMap = (
 
   animate();
 
-  return {};
+  return {
+    changeWasLoaded: () => {
+      wasLoaded = false;
+    }
+  };
 };
