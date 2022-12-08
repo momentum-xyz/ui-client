@@ -23,3 +23,13 @@ export const Boxes = styled.div`
   gap: 15px;
   pointer-events: all;
 `;
+
+export const MintingMessageBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  gap: 20px;
+  background: ${(props) => props.theme.bg};
+  padding: 20px 10px;
+  border-radius: 10px;
+`;
