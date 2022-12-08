@@ -114,7 +114,11 @@ const SignInAccountPage: FC = () => {
           {mintingNftStatus === 'pending' && (
             <styled.MintingMessageBox>
               <Text text="Minting your Odyssey..." size="m" align="left" />
-              <Text text="Please wait, it may take a while." size="m" align="left" />
+              <Text
+                text="Please wait and don't refresh, this may take a while."
+                size="m"
+                align="left"
+              />
             </styled.MintingMessageBox>
           )}
           {mintingNftStatus === 'error' && (
