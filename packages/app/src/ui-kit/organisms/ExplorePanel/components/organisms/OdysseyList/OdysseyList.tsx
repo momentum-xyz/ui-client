@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Avatar, SvgButton, UserStatusEnum} from '@momentum-xyz/ui-kit';
 
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItemInterface} from 'stores/NftStore/models';
 
 import * as styled from './OdysseyList.styled';
@@ -20,7 +21,11 @@ const OdysseyList: FC<PropsInterface> = (props) => {
       {odysseyList.map((odyssey) => (
         <styled.Container key={odyssey.id}>
           <styled.InfoContainer onClick={() => onSelect(odyssey)}>
-            <Avatar size="small" avatarSrc={odyssey.image} status={UserStatusEnum.ONLINE} />
+            <Avatar
+              size="small"
+              avatarSrc={getImageAbsoluteUrl(odyssey.image) || undefined}
+              status={UserStatusEnum.ONLINE}
+            />
             <styled.StyledText
               text={odyssey.name.trim()}
               size="xxs"

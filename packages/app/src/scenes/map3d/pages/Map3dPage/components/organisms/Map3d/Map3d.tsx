@@ -2,6 +2,7 @@ import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {use3DMap} from 'shared/hooks';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItemInterface} from 'stores/NftStore/models';
 
 interface PropsInterface {
@@ -24,7 +25,7 @@ const Map3d: FC<PropsInterface> = (props) => {
     [items, onOdysseyClick]
   );
 
-  const callbacks = use3DMap(canvas, items, currentUserId, handleOdysseyClick);
+  const callbacks = use3DMap(canvas, items, currentUserId, getImageAbsoluteUrl, handleOdysseyClick);
 
   useEffect(() => {
     return () => {
