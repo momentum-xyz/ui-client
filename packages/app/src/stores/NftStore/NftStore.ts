@@ -784,7 +784,7 @@ const NftStore = types
       }
       const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.unstake(collectionId, itemId, amount);
+      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null); // temp comment - amount);
       console.log('Sign and send', tx);
 
       try {

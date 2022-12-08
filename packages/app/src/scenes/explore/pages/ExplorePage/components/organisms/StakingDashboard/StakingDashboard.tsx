@@ -104,7 +104,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
       });
   };
   const onUnstake = async (address: string, amount: number) => {
-    console.log('onUnstake', address);
+    console.log('onUnstake', address, amount);
     if (!nft) {
       console.log('nft not found');
       throw new Error('NFT not found');
