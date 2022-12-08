@@ -3,6 +3,8 @@ import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentu
 import {formatTokenAmount} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {decodeAddress} from '@polkadot/util-crypto';
+import {u8aToHex} from '@polkadot/util';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
@@ -39,6 +41,11 @@ interface PropsInterface {
   nftItemId: number;
   onComplete: () => void;
 }
+const convertToHex = (address: string) => {
+  const publicKey = decodeAddress(address);
+  const hexPublicKey = u8aToHex(publicKey);
+  return hexPublicKey;
+};
 
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {authStore, nftStore, exploreStore} = useStore();
@@ -59,6 +66,8 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const myNft = nftItems.find((nft) => nft.owner === wallet);
   console.log('StakingForm', {wallet, addresses, authWallet, amount, amountAtoms, nft});
 
+  console.log('initiatorAccount', initiatorAccount, nft);
+
   const onStake = (amountAtoms: number) => {
     console.log('onStake', wallet, nftItemId, amountAtoms);
 
@@ -78,8 +87,19 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
               date: new Date().toISOString()
             }
           });
-        }
 
+          if (nft && nftStore.mutualStakingAddresses.includes(nft.owner)) {
+            console.log('MUTUAL STAKING');
+            const walletAHex = convertToHex(wallet);
+            const walletBHex = convertToHex(nft?.owner);
+            console.log({walletAHex, walletBHex});
+            exploreStore.createMutualDocks(walletAHex, walletBHex);
+          } else {
+            console.log('No mutual staking');
+          }
+        }
+      })
+      .then(() => {
         toast.info(<ToastContent title="You successfully staked!" showCloseButton />);
         onComplete();
       })

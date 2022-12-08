@@ -39,3 +39,11 @@ export interface FetchUserRequest {
 }
 
 export interface FetchUserResponse extends UserInterface {}
+
+/** Mutual docs */
+export interface MutualDocksRequest {
+  walletA: string;
+  walletB: string;
+}
+
+export interface MutualDocksResponse {}
