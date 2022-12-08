@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
-import {Avatar, PanelLayout, Portal, SearchInput, Text} from '@momentum-xyz/ui-kit';
+import {Avatar, IconSvg, PanelLayout, Portal, SearchInput, Text} from '@momentum-xyz/ui-kit';
 
 import {UserModelInterface} from 'core/models';
 import {useStore} from 'shared/hooks';
@@ -19,7 +19,7 @@ const DIALOG_WIDTH_PX = 296;
 
 const SearchUsersWidget: FC<PropsInterface> = (props) => {
   const {users, onClose, searchUsers, searchedUsers} = props;
-  const {mainStore, widgetsStore, nftStore, authStore} = useStore();
+  const {mainStore, widgetsStore, nftStore, authStore, sessionStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
 
@@ -39,7 +39,15 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
     unityStore.loadWorldById(worldId, authStore.token);
   };
 
+  // TODO: uncomment when high five works from unity and BE side
+  const handleHighFive = (worldId: string) => {
+    // unityStore.sendHighFive(worldId);
+  };
+
   const handleUserClick = (id: string) => {
+    if (id === sessionStore.userId) {
+      return;
+    }
     if (onlineUsersStore?.selectedUserId !== id) {
       onlineUsersStore?.selectUser(nftStore.nftItems, id);
     } else {
@@ -74,7 +82,16 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                           <Avatar avatarSrc={user.avatarSrc} size="small" />
                           <Text size="s" text={user.name} transform="capitalized" />
                         </styled.Information>
-                        {user.id === worldStore.worldId && <Text size="s" text="Admin" />}
+                        {/*// TODO: information will come from isGuest flag from BE when things will be stable*/}
+                        {!!nftStore.getNftByUuid(user.id) && (
+                          <styled.RightToolbar>
+                            {user.id === worldStore.worldId && (
+                              <styled.AdminText size="s" text="Admin" />
+                            )}
+                            <IconSvg name="fly-to" onClick={() => handleTeleport(user?.id || '')} />
+                            <IconSvg name="high-five" />
+                          </styled.RightToolbar>
+                        )}
                       </styled.Item>
                     ))
                   : !onlineUsersStore.query &&
@@ -84,7 +101,16 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                           <Avatar avatarSrc={user.avatarSrc} size="small" />
                           <Text size="s" text={user.name} transform="capitalized" />
                         </styled.Information>
-                        {user.id === worldStore.worldId && <Text size="s" text="Admin" />}
+                        {/*// TODO: information will come from isGuest flag from BE when things will be stable*/}
+                        {!!nftStore.getNftByUuid(user.id) && (
+                          <styled.RightToolbar>
+                            {user.id === worldStore.worldId && (
+                              <styled.AdminText size="s" text="Admin" />
+                            )}
+                            <IconSvg name="fly-to" onClick={() => handleTeleport(user?.id || '')} />
+                            <IconSvg name="high-five" />
+                          </styled.RightToolbar>
+                        )}
                       </styled.Item>
                     ))}
               </styled.List>
@@ -97,6 +123,7 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                 user={onlineUsersStore.user}
                 userAvatar={onlineUsersStore.avatarSrc}
                 onTeleport={handleTeleport}
+                onHighFive={handleHighFive}
                 onClose={onlineUsersStore.unselectUser}
                 nftId={onlineUsersStore.nftId}
                 worldId={onlineUsersStore.worldId}

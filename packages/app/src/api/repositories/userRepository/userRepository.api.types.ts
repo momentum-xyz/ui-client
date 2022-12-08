@@ -15,6 +15,7 @@ export interface UserInterface {
   isNodeAdmin: boolean;
   status: UserStatusEnum | null;
   profile: UserProfileInterface;
+  isGuest?: boolean;
 }
 
 /** CHECK USER **/
