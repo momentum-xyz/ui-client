@@ -1,5 +1,5 @@
 import {ROUTES} from 'core/constants';
-import {SpawnAsset} from 'scenes/worldBuilder/components/SpawnAsset';
+import {SpawnAsset, EditObject} from 'scenes/worldBuilder/components';
 
 import {SkyboxSelectorWithPreview} from '../../components';
 
@@ -21,7 +21,7 @@ export const WORLD_BUILDER_ROUTES = [
   },
   {
     path: ROUTES.odyssey.builder.editor,
-    main: () => <div style={{background: 'white', padding: '1em'}}>TODO EDITOR</div>,
+    main: () => <EditObject />,
     exact: false
   }
 ];
