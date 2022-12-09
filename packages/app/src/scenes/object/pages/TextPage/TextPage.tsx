@@ -43,11 +43,13 @@ const TextPage: FC<PropsInterface> = ({content, worldId}) => {
           <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setNewContent} />
           <Button
             label="Change"
-            onClick={() => {
-              objectStore.postNewContent(objectId, {
+            onClick={async () => {
+              await objectStore.postNewContent(objectId, {
                 title,
                 content: newContent
               });
+
+              setIsChangeTextOpen(false);
             }}
           />
           <Button

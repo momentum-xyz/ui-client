@@ -42,10 +42,12 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
           <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setYoutubeSrc} />
           <Button
             label="Change"
-            onClick={() => {
-              objectStore.postNewContent(objectId, {
+            onClick={async () => {
+              await objectStore.postNewContent(objectId, {
                 youtube_url: youtubeSrc
               });
+
+              setIsChangeVideoOpen(false);
             }}
           />
           <Button

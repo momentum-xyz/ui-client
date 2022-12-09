@@ -41,10 +41,11 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
           <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setImage} />
           <Button
             label="Change"
-            onClick={() => {
-              objectStore.postNewContent(objectId, {
+            onClick={async () => {
+              await objectStore.postNewContent(objectId, {
                 render_hash: image
               });
+              setIsChangeImageShown(false);
             }}
           />
           <Button
