@@ -18,6 +18,22 @@ export const Container = styled.div`
     border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
   }
   z-index: 200;
+  pointer-events: all;
+`;
+
+export const ChangeImageForm = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: ${(props) => props.theme.bg};
+  border: 1px solid ${(props) => props.theme.accent};
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 300;
+  gap: 10px;
+  pointer-events: all;
+
+  width: 300px;
 `;
 
 export const HeaderElement = styled.div`
@@ -34,6 +50,10 @@ export const HeaderElement = styled.div`
   }
   &.right {
     right: 0;
+  }
+  &.button {
+    top: 15px;
+    right: 80px;
   }
 `;
 
