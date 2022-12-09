@@ -53,6 +53,7 @@ const AuthStore = types.compose(
         }
         if (self.wallet) {
           getRootStore(self).nftStore.subscribeToBalanseChanges(self.wallet);
+          getRootStore(self).nftStore.subscribeToStakingInfo(self.wallet);
         }
       }
     }))

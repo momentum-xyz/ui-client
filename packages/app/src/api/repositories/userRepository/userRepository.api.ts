@@ -9,7 +9,9 @@ import {
   FetchMeRequest,
   FetchMeResponse,
   FetchUserRequest,
-  FetchUserResponse
+  FetchUserResponse,
+  MutualDocksRequest,
+  MutualDocksResponse
 } from './userRepository.api.types';
 import {userRepositoryEndpoints} from './userRepository.api.endpoints';
 
@@ -29,4 +31,12 @@ export const fetchUser: RequestInterface<FetchUserRequest, FetchUserResponse> = 
   const url = generatePath(userRepositoryEndpoints().profile, {userId});
 
   return request.get(url, restOptions);
+};
+
+export const createMutualDocks: RequestInterface<MutualDocksRequest, MutualDocksResponse> = (
+  options
+) => {
+  const {walletA, walletB, ...restOptions} = options;
+
+  return request.post(userRepositoryEndpoints().mutualDocks, {walletA, walletB}, restOptions);
 };

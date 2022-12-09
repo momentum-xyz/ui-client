@@ -48,7 +48,13 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
               disabled={currentUserId === odyssey.uuid}
               onClick={() => onHighFive(odyssey.uuid)}
             />
-            <Button size="small" label="Connect" icon="hierarchy" onClick={onConnect} />
+            <Button
+              size="small"
+              label="Connect"
+              icon="hierarchy"
+              disabled={currentUserId === odyssey.uuid}
+              onClick={onConnect}
+            />
             <Button
               size="small"
               label="co-create"

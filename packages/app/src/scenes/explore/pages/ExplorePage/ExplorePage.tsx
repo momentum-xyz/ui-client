@@ -1,6 +1,5 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {getSnapshot} from 'mobx-state-tree';
 import {generatePath, useHistory} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
@@ -12,7 +11,6 @@ import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
   const {exploreStore, authStore, nftStore, map3dStore, widgetsStore} = useStore();
-  const {wallet} = authStore;
 
   const history = useHistory();
 
@@ -27,32 +25,6 @@ const ExplorePage: FC = () => {
       clearInterval(timeInterval);
     };
   }, [exploreStore]);
-
-  useEffect(() => {
-    (async () => {
-      // TEMP
-      await authStore.init();
-      const {wallet} = authStore;
-      if (!wallet) {
-        return;
-      }
-
-      // FIXME move to more appropriate place
-      console.log('Check if user has staked', wallet);
-      const nftItem = nftStore.getNftByWallet(wallet);
-      if (!nftItem) {
-        console.log('User has no NFT', wallet);
-        return;
-      }
-
-      await nftStore.subscribeToStakingInfo(wallet, nftItem.id);
-
-      console.log('Staking info fetched');
-      console.log('mutualStakingAddresses:', nftStore.mutualStakingAddresses);
-      console.log('stakingAtMe:', getSnapshot(nftStore.stakingAtMe));
-      console.log('stakingAtOthers:', getSnapshot(nftStore.stakingAtOthers));
-    })();
-  }, [authStore, nftStore, wallet]);
 
   return (
     <styled.Container>
@@ -69,11 +41,15 @@ const ExplorePage: FC = () => {
                   );
                 }
               }}
-              onConnect={() => {
-                if (map3dStore.selectedOdyssey) {
-                  nftStore.setConnectToNftItemId(map3dStore.selectedOdyssey.id);
-                }
-              }}
+              onConnect={
+                map3dStore.selectedOdyssey.owner !== authStore.wallet
+                  ? () => {
+                      if (map3dStore.selectedOdyssey) {
+                        nftStore.setConnectToNftItemId(map3dStore.selectedOdyssey.id);
+                      }
+                    }
+                  : undefined
+              }
               onDock={() => alert(`Dock`)}
               onClose={map3dStore.unselectOdyssey}
             />

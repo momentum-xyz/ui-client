@@ -34,6 +34,10 @@ const ExploreStore = types
     createNewsFeedItem: flow(function* (item: NftFeedItemInterface) {
       yield self.request.send(api.feedRepository.createFeedItem, {item});
       self.fetchNewsFeed();
+    }),
+    createMutualDocks: flow(function* (walletA: string, walletB: string) {
+      console.log('create mutual-docks', walletA, walletB);
+      yield self.request.send(api.userRepository.createMutualDocks, {walletA, walletB});
     })
   }));
 

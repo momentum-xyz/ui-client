@@ -6,6 +6,7 @@ export const userRepositoryEndpoints = () => {
   return {
     me: `${BASE_URL}/me`,
     check: `${BASE_URL}/check`,
-    profile: `${BASE_URL}/:userId`
+    profile: `${BASE_URL}/:userId`,
+    mutualDocks: `${BASE_URL}/mutual-docks`
   };
 };
