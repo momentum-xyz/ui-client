@@ -3,7 +3,13 @@ import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {NftItem, NftItemInterface} from 'stores/NftStore/models';
-import {api, FetchUserResponse, GetDocksCountResponse, UserInterface} from 'api';
+import {
+  api,
+  FetchUserResponse,
+  GetDocksCountResponse,
+  SpaceAttributeItemResponse,
+  UserInterface
+} from 'api';
 import {appVariables} from 'api/constants';
 
 export interface OdysseyItemInterface extends NftItemInterface {
@@ -22,12 +28,14 @@ const OdysseyStore = types.compose(
       fetchUserRequest: types.optional(RequestModel, {}),
       nftItem: types.maybe(NftItem),
       nftId: types.maybe(types.string),
-      docks: types.maybe(types.number)
+      docks: 0,
+      events: 0
     })
     .actions((self) => ({
       init(items: Array<NftItemInterface>, worldId: string) {
         this.findOdyssey(items, worldId);
         this.fetchDocksCount(worldId);
+        this.fetchEventsCount(worldId);
       },
       findOdyssey(items: Array<NftItemInterface>, worldId: string): void {
         const nft: NftItemInterface | undefined = items.find((nft) => nft.uuid === worldId);
@@ -56,6 +64,20 @@ const OdysseyStore = types.compose(
         if (response) {
           self.docks = response.count;
         }
+      }),
+      fetchEventsCount: flow(function* (spaceId: string) {
+        const response: SpaceAttributeItemResponse = yield self.request.send(
+          api.eventsRepository.getEventAttributes,
+          {
+            spaceId
+          }
+        );
+
+        if (response && Object.keys(response).length) {
+          self.events = Object.keys(response).length;
+        } else {
+          self.events = 0;
+        }
       })
     }))
     .views((self) => ({
@@ -67,8 +89,8 @@ const OdysseyStore = types.compose(
         return {
           ...self.nftItem,
           connections: 0,
-          docking: self.docks ?? 0,
-          events: 0
+          docking: self.docks,
+          events: self.events
         };
       },
       get avatarSrc(): string | undefined {

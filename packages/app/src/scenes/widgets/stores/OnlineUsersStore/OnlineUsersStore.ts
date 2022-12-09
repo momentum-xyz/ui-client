@@ -9,6 +9,7 @@ import {
   FetchUserResponse,
   GetDocksCountResponse,
   OdysseyOnlineUsersResponse,
+  SpaceAttributeItemResponse,
   UserInterface
 } from 'api';
 import {NftItem, NftItemInterface} from 'stores/NftStore/models';
@@ -33,7 +34,8 @@ const OnlineUsersStore = types
       fetchUserRequest: types.optional(RequestModel, {}),
       nftItem: types.maybe(NftItem),
       nftId: types.maybe(types.string),
-      docks: types.maybe(types.number)
+      docks: 0,
+      events: 0
     })
   )
   .actions((self) => ({
@@ -76,6 +78,8 @@ const OnlineUsersStore = types
     selectUser(items: Array<NftItemInterface>, userId: string) {
       self.selectedUserId = userId;
       this.findOdyssey(items, userId);
+      this.fetchDocksCount(userId);
+      this.fetchEventsCount(userId);
     },
     unselectUser() {
       self.selectedUserId = undefined;
@@ -102,6 +106,20 @@ const OnlineUsersStore = types
       if (response) {
         self.docks = response.count;
       }
+    }),
+    fetchEventsCount: flow(function* (spaceId: string) {
+      const response: SpaceAttributeItemResponse = yield self.request.send(
+        api.eventsRepository.getEventAttributes,
+        {
+          spaceId
+        }
+      );
+
+      if (response && Object.keys(response).length) {
+        self.events = Object.keys(response).length;
+      } else {
+        self.events = 0;
+      }
     })
   }))
   .views((self) => ({
@@ -113,8 +131,8 @@ const OnlineUsersStore = types
       return {
         ...self.nftItem,
         connections: 0,
-        docking: self.docks ?? 0,
-        events: 0
+        docking: self.docks,
+        events: self.events
       };
     },
     get avatarSrc(): string | undefined {

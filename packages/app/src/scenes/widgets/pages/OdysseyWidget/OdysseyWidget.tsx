@@ -2,6 +2,8 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, IconSvg, Text, Dialog} from '@momentum-xyz/ui-kit';
 
+import {getImageAbsoluteUrl} from 'core/utils';
+
 import {OdysseyItemInterface} from '../../stores/OdysseyStore';
 
 import * as styled from './OdysseyWidget.styled';
@@ -14,17 +16,26 @@ interface PropsInterface {
   odyssey: OdysseyItemInterface | null;
   userAvatar?: string;
   nftId?: string;
+  isConnectedToMe: boolean;
   onConnect?: () => void;
   onHighFive: (userId: string) => void;
   onClose?: () => void;
 }
 
-const OdysseyWidget: FC<PropsInterface> = (props) => {
-  const {odyssey, userAvatar, nftId, currentUserId, onConnect, onHighFive, onClose} = props;
-
+const OdysseyWidget: FC<PropsInterface> = ({
+  odyssey,
+  userAvatar,
+  nftId,
+  currentUserId,
+  isConnectedToMe,
+  onConnect,
+  onHighFive,
+  onClose
+}) => {
   if (!odyssey) {
     return null;
   }
+
   return (
     <Dialog
       position="leftTop"
@@ -38,7 +49,7 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
     >
       <styled.Container data-testid="OdysseyWidget-test">
         <styled.TopContainer>
-          <styled.Avatar src={userAvatar} />
+          <styled.Avatar src={getImageAbsoluteUrl(userAvatar) || ''} />
           <styled.Actions>
             <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
             <Button
@@ -50,9 +61,9 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
             />
             <Button
               size="small"
-              label="Connect"
+              label={isConnectedToMe ? 'Connected' : 'Connect'}
               icon="hierarchy"
-              disabled={currentUserId === odyssey.uuid}
+              disabled={currentUserId === odyssey.uuid || isConnectedToMe}
               onClick={onConnect}
             />
             <Button

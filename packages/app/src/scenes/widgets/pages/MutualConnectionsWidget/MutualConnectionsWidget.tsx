@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
 
 import {NftItemInterface} from 'stores/NftStore/models';
 
@@ -21,7 +21,7 @@ const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose
       closeOnBackgroundClick
       onClose={onClose}
       layoutSize={{width: '437px'}}
-      tabs={<SvgButton iconName="add" size="medium-large" />}
+      //tabs={<SvgButton iconName="add" size="medium-large" />}
     >
       <styled.Container>
         {(!mutualConnections || !(mutualConnections.length > 0)) && (
@@ -43,7 +43,7 @@ const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose
                 <styled.ConnectionTypeText text="Connection" size="m" align="left" />
               </styled.InfoContainer>
               <styled.Buttons>
-                <Button label="make admin" size="small" />
+                {/*<Button label="make admin" size="small" />*/}
                 <SvgButton iconName="user-network" size="medium" />
               </styled.Buttons>
             </styled.Connection>
