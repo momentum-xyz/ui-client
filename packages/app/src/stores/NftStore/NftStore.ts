@@ -300,7 +300,7 @@ const NftStore = types
         });
         return mutualStakingAddresses;
       },
-      get mutualConnections(): NftItemInterface[] | undefined {
+      get mutualConnections(): NftItemInterface[] {
         const mutualConnections: NftItemInterface[] = [];
         self.stakingAtMe.forEach((stakingDetail) => {
           if (self.stakingAtOthers.get(stakingDetail.sourceAddr)) {
@@ -310,7 +310,7 @@ const NftStore = types
         return mutualConnections;
       },
       hasMutualConnectionToMe(uuid: string): boolean {
-        return this.mutualConnections?.some((connection) => connection.uuid === uuid) || false;
+        return this.mutualConnections.some((connection) => connection.uuid === uuid) || false;
       }
     };
   })
