@@ -154,17 +154,17 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <Text
                   size="s"
-                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  text="You can freely visit any users open Odyssey. You can explore and meet them just by clicking on their Odyssey. However, to create a portal between your Odyssey and another users Odyssey, you will need to stake in them. By staking you show your support for another Odyssey."
                   align="left"
                 />
               </styled.Section>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Contributing" />
+                  <Heading type="h2" align="left" label="Staking" />
                 </styled.SectionHeader>
                 <Text
                   size="s"
-                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  text="By staking Momentum ($MOM) in someones Odyssey you are showing support for their journey. Not only do you get rewards for staking, but it will also allow you to place a portal inside your Odyssey that will allow others to travel to the Odyssey you have staked in."
                   align="left"
                 />
               </styled.Section>
