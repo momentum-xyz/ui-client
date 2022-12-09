@@ -778,7 +778,15 @@ const NftStore = types
       console.log('Sign and send', tx);
 
       try {
-        const res = yield tx.signAndSend(account.address, options);
+        const res = yield tx.signAndSend(account.address, options, ({status}) => {
+          if (status.isInBlock) {
+            const blockHash = status.asInBlock.toString();
+            console.log(`Completed at block hash #${blockHash}`);
+            // resolve(blockHash);
+          } else {
+            console.log(`Current transaction status: ${status.type}`);
+          }
+        });
         console.log('res', res);
       } catch (err) {
         console.log('Error staking:', err);
@@ -798,11 +806,19 @@ const NftStore = types
       }
       const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null); // temp comment - amount);
+      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
       console.log('Sign and send', tx);
 
       try {
-        const res = yield tx.signAndSend(account.address, options);
+        const res = yield tx.signAndSend(account.address, options, ({status}) => {
+          if (status.isInBlock) {
+            const blockHash = status.asInBlock.toString();
+            console.log(`Completed at block hash #${blockHash}`);
+            // resolve(blockHash);
+          } else {
+            console.log(`Current transaction status: ${status.type}`);
+          }
+        });
         console.log('res', res);
       } catch (err) {
         console.log('Error unstaking:', err);
@@ -821,7 +837,15 @@ const NftStore = types
       console.log('Sign and send', tx);
 
       try {
-        const res = yield tx.signAndSend(account.address, options);
+        const res = yield tx.signAndSend(account.address, options, ({status}) => {
+          if (status.isInBlock) {
+            const blockHash = status.asInBlock.toString();
+            console.log(`Completed at block hash #${blockHash}`);
+            // resolve(blockHash);
+          } else {
+            console.log(`Current transaction status: ${status.type}`);
+          }
+        });
         console.log('res', res);
       } catch (err) {
         console.log('Error getting rewards:', err);
