@@ -33,6 +33,7 @@ const ExplorePage: FC = () => {
           {!!map3dStore.selectedOdyssey && (
             <SelectedOdyssey
               odyssey={map3dStore.selectedOdyssey}
+              alreadyConnected={nftStore.isAlreadyConnected(map3dStore.selectedOdyssey.owner)}
               onTeleport={() => {
                 console.log(map3dStore.selectedOdyssey);
                 if (map3dStore.selectedOdyssey?.uuid) {

@@ -231,7 +231,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.odysseyStore.widget.isOpen && (
         <OdysseyWidget
           currentUserId={sessionStore.userId}
-          isConnectedToMe={nftStore.hasMutualConnectionToMe(odysseyStore.odyssey?.uuid || '')}
+          alreadyConnected={nftStore.isAlreadyConnected(odysseyStore.odyssey?.owner || '')}
           odyssey={odysseyStore.odyssey}
           userAvatar={odysseyStore.avatarSrc}
           onClose={odysseyStore.widget.close}

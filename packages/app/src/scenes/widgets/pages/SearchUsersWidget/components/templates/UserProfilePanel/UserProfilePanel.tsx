@@ -19,6 +19,7 @@ interface PropsInterface {
   userAvatar?: string;
   worldId?: string;
   nftId?: string;
+  alreadyConnected: boolean;
   onTeleport: (worldId: string) => void;
   onHighFive: (userId: string) => void;
   onConnect?: () => void;
@@ -26,8 +27,18 @@ interface PropsInterface {
 }
 
 const UserProfilePanel: FC<PropsInterface> = (props) => {
-  const {odyssey, nftId, onConnect, onTeleport, onHighFive, onClose, user, userAvatar, worldId} =
-    props;
+  const {
+    odyssey,
+    nftId,
+    alreadyConnected,
+    onConnect,
+    onTeleport,
+    onHighFive,
+    onClose,
+    user,
+    userAvatar,
+    worldId
+  } = props;
 
   return (
     <PanelLayout
@@ -56,9 +67,9 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
             />
             <Button
               size="small"
-              label="Connect"
+              label={alreadyConnected ? 'Connected' : 'Connect'}
               icon="hierarchy"
-              disabled={!nftId || odyssey?.uuid === worldId}
+              disabled={!nftId || odyssey?.uuid === worldId || alreadyConnected}
               onClick={onConnect}
             />
             <Button

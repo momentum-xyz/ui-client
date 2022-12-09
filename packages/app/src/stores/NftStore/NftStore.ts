@@ -309,8 +309,8 @@ const NftStore = types
         });
         return mutualConnections;
       },
-      hasMutualConnectionToMe(uuid: string): boolean {
-        return this.mutualConnections.some((connection) => connection.uuid === uuid) || false;
+      isAlreadyConnected(address: string): boolean {
+        return self.stakingAtOthers.has(address);
       }
     };
   })

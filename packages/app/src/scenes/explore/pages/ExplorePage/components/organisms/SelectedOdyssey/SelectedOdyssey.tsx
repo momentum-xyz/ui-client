@@ -9,6 +9,7 @@ import * as styled from './SelectedOdyssey.styled';
 
 interface PropsInterface {
   odyssey: OdysseyItemInterface;
+  alreadyConnected: boolean;
   onTeleport: () => void;
   onConnect: (() => void) | undefined;
   onDock: () => void;
@@ -16,7 +17,7 @@ interface PropsInterface {
 }
 
 const SelectedOdyssey: FC<PropsInterface> = (props) => {
-  const {odyssey, onTeleport, onDock, onConnect, onClose} = props;
+  const {odyssey, alreadyConnected, onTeleport, onDock, onConnect, onClose} = props;
 
   return (
     <Box size="small" data-testid="SelectedOdyssey-test">
@@ -30,9 +31,9 @@ const SelectedOdyssey: FC<PropsInterface> = (props) => {
           <Button size="small" label="Visit" icon="fly-to" onClick={onTeleport} />
           <Button
             size="small"
-            label="Connect"
+            label={alreadyConnected ? 'Connected' : 'Connect'}
             icon="hierarchy"
-            disabled={!onConnect}
+            disabled={!onConnect || alreadyConnected}
             onClick={onConnect}
           />
           <Button size="small" label="Dock" icon="people" onClick={onDock} />
