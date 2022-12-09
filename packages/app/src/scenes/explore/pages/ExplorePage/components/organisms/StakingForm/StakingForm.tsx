@@ -88,7 +88,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
             }
           });
 
-          if (nft && nftStore.mutualStakingAddresses.includes(nft.owner)) {
+          if (nft && nftStore.stakingAtMe.get(nft.owner)) {
             console.log('MUTUAL STAKING');
             const walletAHex = convertToHex(wallet);
             const walletBHex = convertToHex(nft?.owner);
