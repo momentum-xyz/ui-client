@@ -92,6 +92,7 @@ const NftStore = types
       mintNftCheckJobRequest: types.optional(RequestModel, {}),
 
       connectToNftItemId: types.maybeNull(types.number),
+      initialStakingInfoLoaded: false,
       stakingAtMe: types.map(StakeDetail),
       stakingAtOthers: types.map(StakeDetail),
       stakingDashorboardDialog: types.optional(Dialog, {}),
@@ -371,6 +372,9 @@ const NftStore = types
     },
     setIsBalanceLoading(payload: boolean) {
       self.isBalanceLoading = payload;
+    },
+    setInitialStakingInfoLoaded(initialStakingInfoLoaded: boolean) {
+      self.initialStakingInfoLoaded = initialStakingInfoLoaded;
     },
     setNftItems(items: NftItemInterface[]) {
       self.nftItems = cast(items);
@@ -785,6 +789,7 @@ const NftStore = types
 
           self.setStakingInfos(stakingAtOthers, stakingAtMe);
           self.setAccumulatedRewards(rewards as any);
+          self.setInitialStakingInfoLoaded(true);
 
           console.log('stakingAtOthers', getSnapshot(self.stakingAtOthers));
           console.log('stakingAtMe', getSnapshot(self.stakingAtMe));
