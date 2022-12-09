@@ -208,7 +208,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="SET AMOUNT, MTM" />
+                    <Text size="xxs" align="right" text={`SET AMOUNT, ${tokenSymbol}`} />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer>
                     <Input value={amount || ''} onChange={(val) => setAmount(Number(val))} />
@@ -241,7 +241,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="AMOUNT, MTM" />
+                    <Text size="xxs" align="right" text={`AMOUNT, ${tokenSymbol}`} />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer className="view-only">
                     <Input value={amount} onChange={(val) => setAmount(Number(val))} disabled />

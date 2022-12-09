@@ -16,6 +16,7 @@ const SignInAccountPage: FC = () => {
   const {
     balance,
     isBalanceLoading,
+    tokenSymbol,
     requestInitialFunds,
     requestingFundsStatus,
     mintingNftStatus,
@@ -89,12 +90,12 @@ const SignInAccountPage: FC = () => {
           )}
           {requestingFundsStatus === 'pending' && (
             <styled.MintingMessageBox>
-              <Text text="Loading MTM..." size="m" align="left" />
+              <Text text={`Loading ${tokenSymbol}...`} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
           {requestingFundsStatus === 'error' && (
             <styled.MintingMessageBox>
-              <Text text="Error loading MTM" size="m" align="left" />
+              <Text text={`Error loading ${tokenSymbol}`} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
 
