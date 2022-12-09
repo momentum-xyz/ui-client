@@ -42,7 +42,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const {stakingAtOthers, balance, accumulatedRewards, chainDecimals, tokenSymbol} = nftStore;
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
-  const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
+  // const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
 
   const initiatorAccount = accountOptions.find((account) => account.value === wallet);
   const initiatorInfo = initiatorAccount
@@ -107,16 +107,16 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   };
   const onUnstake = async (address: string, amount: number) => {
     console.log('onUnstake', address, amount);
-    if (!nft) {
+    if (!unstakeFromNft) {
       console.log('nft not found');
       throw new Error('NFT not found');
     }
 
     return nftStore
-      .unstake(wallet, amount, nft.id)
+      .unstake(wallet, amount, unstakeFromNft.id)
       .then(() => {
         const walletAHex = convertToHex(wallet);
-        const walletBHex = convertToHex(nft?.owner);
+        const walletBHex = convertToHex(unstakeFromNft?.owner);
         console.log({walletAHex, walletBHex});
 
         return exploreStore.destroyMutualDocks(walletAHex, walletBHex);
