@@ -114,7 +114,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const balanceSections = useMemo(() => {
     const balanceEntities = [
       {label: 'Account Balance', value: Number(balance.free)},
-      {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)},
+      {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)}, // TODO highlight low balancse or transferrable
       {label: 'Stacked', value: Number(balance.reserved)}
       // {label: 'Unbonding', value: null}
     ];
@@ -130,6 +130,11 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
       );
     });
   }, [balance]);
+
+  // TODO check transaction fee and existencial deposit
+  const isBalanceTooLow = amountAtoms >= balance.free - balance.reserved;
+
+  const isStakingInSelf = nft === myNft;
 
   if (!nft) {
     console.log('StakingForm - no nft found');
@@ -219,7 +224,11 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
             </div>
             <styled.Buttons>
               <Button label="Back" onClick={() => setActiveTab(tabBarTabs[0])} />
-              <Button label="Next" onClick={() => setActiveTab(tabBarTabs[2])} />
+              <Button
+                label="Next"
+                onClick={() => setActiveTab(tabBarTabs[2])}
+                disabled={isBalanceTooLow || isStakingInSelf}
+              />
             </styled.Buttons>
           </>
         )}
