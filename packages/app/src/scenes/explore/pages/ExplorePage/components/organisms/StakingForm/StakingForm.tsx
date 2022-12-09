@@ -41,7 +41,7 @@ interface PropsInterface {
   nftItemId: number;
   onComplete: () => void;
 }
-const convertToHex = (address: string) => {
+export const convertToHex = (address: string) => {
   const publicKey = decodeAddress(address);
   const hexPublicKey = u8aToHex(publicKey);
   return hexPublicKey;
