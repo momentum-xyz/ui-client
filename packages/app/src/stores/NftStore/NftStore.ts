@@ -1,4 +1,4 @@
-import {cast, castToSnapshot, flow, types} from 'mobx-state-tree';
+import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
 import {BN, BN_THOUSAND, BN_TWO, BN_ZERO, bnMin, bnToBn, formatBalance} from '@polkadot/util';
 import {web3FromAddress} from '@polkadot/extension-dapp';
@@ -681,7 +681,7 @@ const NftStore = types
     },
     subscribeToStakingInfo: flow(function* (
       address: string,
-      userNftItemId: number,
+      userNftItemId?: number,
       collectionId = DEFAULT_COLECTION_ID
     ) {
       console.log('fetchStakingInfo', address, userNftItemId, collectionId);
@@ -689,12 +689,14 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
+      userNftItemId = userNftItemId ?? self.getNftByWallet(address)?.id;
+
       if (self.unsubscribeStakingSubscription) {
         console.log('Unsubscribe from Staking subscription');
         self.unsubscribeStakingSubscription();
       }
 
-      console.log('subscribe to staking info', address, userNftItemId);
+      console.log('subscribe to staking info', {address, userNftItemId, collectionId});
       self.unsubscribeStakingSubscription = yield self.channel.queryMulti(
         [
           [self.channel.query.stake.stakingAt, address],
@@ -722,10 +724,13 @@ const NftStore = types
               (nftItem) => nftItem.id === destNftItemId && nftItem.collectionId === collectionId
             );
             if (!nft) {
-              console.log('NFT not found', {destNftItemId, collectionId});
+              console.log("Other person's NFT not found for staking info", {
+                destNftItemId,
+                collectionId
+              });
               continue;
             }
-            console.log('NFT found', nft);
+            // console.log('NFT found',  nft);
             const destAddr = String(nft.owner);
 
             stakingAtOthers.set(destAddr, {
@@ -750,8 +755,8 @@ const NftStore = types
           self.setStakingInfos(stakingAtOthers, stakingAtMe);
           self.setAccumulatedRewards(Number(rewards) || 0);
 
-          console.log('stakingAtOthers', self.stakingAtOthers);
-          console.log('stakingAtMe', self.stakingAtMe);
+          console.log('stakingAtOthers', getSnapshot(self.stakingAtOthers));
+          console.log('stakingAtMe', getSnapshot(self.stakingAtMe));
           console.log('accumulatedRewards', self.accumulatedRewards);
         }
       );
