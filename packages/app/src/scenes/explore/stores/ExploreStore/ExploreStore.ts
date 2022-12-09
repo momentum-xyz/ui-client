@@ -38,6 +38,10 @@ const ExploreStore = types
     createMutualDocks: flow(function* (walletA: string, walletB: string) {
       console.log('create mutual-docks', walletA, walletB);
       yield self.request.send(api.userRepository.createMutualDocks, {walletA, walletB});
+    }),
+    destroyMutualDocks: flow(function* (walletA: string, walletB: string) {
+      console.log('destroy mutual-docks', walletA, walletB);
+      yield self.request.send(api.userRepository.destroyMutualDocks, {walletA, walletB});
     })
   }));
 

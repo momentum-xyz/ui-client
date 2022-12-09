@@ -8,6 +8,8 @@ import {t} from 'i18next';
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
+import {convertToHex} from '../StakingForm/StakingForm';
+
 import * as styled from './StakingDashboard.styled';
 
 const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
@@ -34,7 +36,7 @@ interface PropsInterface {
 }
 
 const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
-  const {authStore, nftStore} = useStore();
+  const {authStore, nftStore, exploreStore} = useStore();
   const {wallet: authWallet} = authStore;
   const {addresses, accountOptions} = nftStore;
   const {stakingAtOthers, balance, accumulatedRewards, chainDecimals, tokenSymbol} = nftStore;
@@ -112,6 +114,13 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
 
     return nftStore
       .unstake(wallet, amount, nft.id)
+      .then(() => {
+        const walletAHex = convertToHex(wallet);
+        const walletBHex = convertToHex(nft?.owner);
+        console.log({walletAHex, walletBHex});
+
+        return exploreStore.destroyMutualDocks(walletAHex, walletBHex);
+      })
       .then(() => {
         console.log('unstake success');
         toast.info(<ToastContent title={"You've unstaked!"} showCloseButton />);

@@ -40,3 +40,13 @@ export const createMutualDocks: RequestInterface<MutualDocksRequest, MutualDocks
 
   return request.post(userRepositoryEndpoints().mutualDocks, {walletA, walletB}, restOptions);
 };
+
+export const destroyMutualDocks: RequestInterface<MutualDocksRequest, MutualDocksResponse> = (
+  options
+) => {
+  const {walletA, walletB, ...restOptions} = options;
+
+  restOptions.data = {walletA, walletB};
+
+  return request.delete(userRepositoryEndpoints().mutualDocks, restOptions);
+};
