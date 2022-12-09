@@ -196,7 +196,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                         {/* we don't have rewards per item yet */}
                         {/* <Text
                       size="s"
-                      text={`Rewarded ${formatTokenAmount(stakingDetail.amount)} MTM`}
+                      text={`Rewarded ${formatTokenAmount(stakingDetail.amount)} ${tokenSymbol}`}
                       align="left"
                     /> */}
                         <Button

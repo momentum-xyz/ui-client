@@ -88,7 +88,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
             }
           });
 
-          if (nft && nftStore.mutualStakingAddresses.includes(nft.owner)) {
+          if (nft && nftStore.stakingAtMe.get(nft.owner)) {
             console.log('MUTUAL STAKING');
             const walletAHex = convertToHex(wallet);
             const walletBHex = convertToHex(nft?.owner);
@@ -154,17 +154,17 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <Text
                   size="s"
-                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  text="You can freely visit any users open Odyssey. You can explore and meet them just by clicking on their Odyssey. However, to create a portal between your Odyssey and another users Odyssey, you will need to stake in them. By staking you show your support for another Odyssey."
                   align="left"
                 />
               </styled.Section>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Contributing" />
+                  <Heading type="h2" align="left" label="Staking" />
                 </styled.SectionHeader>
                 <Text
                   size="s"
-                  text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
+                  text="By staking Momentum ($MOM) in someones Odyssey you are showing support for their journey. Not only do you get rewards for staking, but it will also allow you to place a portal inside your Odyssey that will allow others to travel to the Odyssey you have staked in."
                   align="left"
                 />
               </styled.Section>
@@ -208,10 +208,14 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="SET AMOUNT, MTM" />
+                    <Text size="xxs" align="right" text={`SET AMOUNT, ${tokenSymbol}`} />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer>
-                    <Input value={amount || ''} onChange={(val) => setAmount(Number(val))} />
+                    <Input
+                      autoFocus
+                      value={amount || ''}
+                      onChange={(val) => setAmount(Number(val))}
+                    />
                   </styled.LabeledLineInputContainer>
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
@@ -241,7 +245,7 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="AMOUNT, MTM" />
+                    <Text size="xxs" align="right" text={`AMOUNT, ${tokenSymbol}`} />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer className="view-only">
                     <Input value={amount} onChange={(val) => setAmount(Number(val))} disabled />

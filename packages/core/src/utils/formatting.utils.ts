@@ -2,7 +2,7 @@
 export const formatTokenAmount = (
   value: number,
   chainDecimals = 12,
-  tokenSymbol = 'MTM',
+  tokenSymbol = 'MOM',
   config = {
     useGrouping: false,
     minimumFractionDigits: 1,

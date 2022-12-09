@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {Avatar, Dialog, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
@@ -70,6 +70,14 @@ const Widgets: FC<PropsInterface> = (props) => {
     calendarStore.eventList.fetchSpaceEvents(worldStore.worldId);
     odysseyStore.widget.toggle();
   };
+
+  const handleFocus = useCallback(() => {
+    unityStore.changeKeyboardControl(false);
+  }, [unityStore]);
+
+  const handleBlur = useCallback(() => {
+    unityStore.changeKeyboardControl(true);
+  }, [unityStore]);
 
   return (
     <>
@@ -223,7 +231,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.odysseyStore.widget.isOpen && (
         <OdysseyWidget
           currentUserId={sessionStore.userId}
-          isConnectedToMe={nftStore.hasMutualConnectionToMe(odysseyStore.odyssey?.uuid || '')}
+          alreadyConnected={nftStore.isAlreadyConnected(odysseyStore.odyssey?.owner || '')}
           odyssey={odysseyStore.odyssey}
           userAvatar={odysseyStore.avatarSrc}
           onClose={odysseyStore.widget.close}
@@ -259,11 +267,13 @@ const Widgets: FC<PropsInterface> = (props) => {
             nftStore.stakingDashorboardDialog.close();
           }}
         >
-          <StakingDashboard
-            onComplete={() => {
-              nftStore.stakingDashorboardDialog.close();
-            }}
-          />
+          <styled.FullSizeWrapper onFocus={handleFocus} onBlur={handleBlur}>
+            <StakingDashboard
+              onComplete={() => {
+                nftStore.stakingDashorboardDialog.close();
+              }}
+            />
+          </styled.FullSizeWrapper>
         </Dialog>
       )}
       {!!nftStore.connectToNftItemId && (
@@ -276,12 +286,14 @@ const Widgets: FC<PropsInterface> = (props) => {
             nftStore.setConnectToNftItemId(null);
           }}
         >
-          <StakingForm
-            nftItemId={nftStore.connectToNftItemId}
-            onComplete={() => {
-              nftStore.setConnectToNftItemId(null);
-            }}
-          />
+          <styled.FullSizeWrapper onFocus={handleFocus} onBlur={handleBlur}>
+            <StakingForm
+              nftItemId={nftStore.connectToNftItemId}
+              onComplete={() => {
+                nftStore.setConnectToNftItemId(null);
+              }}
+            />
+          </styled.FullSizeWrapper>
         </Dialog>
       )}
     </>

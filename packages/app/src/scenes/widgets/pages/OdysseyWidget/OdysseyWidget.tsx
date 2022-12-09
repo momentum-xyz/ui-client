@@ -16,7 +16,7 @@ interface PropsInterface {
   odyssey: OdysseyItemInterface | null;
   userAvatar?: string;
   nftId?: string;
-  isConnectedToMe: boolean;
+  alreadyConnected: boolean;
   onConnect?: () => void;
   onHighFive: (userId: string) => void;
   onClose?: () => void;
@@ -27,7 +27,7 @@ const OdysseyWidget: FC<PropsInterface> = ({
   userAvatar,
   nftId,
   currentUserId,
-  isConnectedToMe,
+  alreadyConnected,
   onConnect,
   onHighFive,
   onClose
@@ -61,9 +61,9 @@ const OdysseyWidget: FC<PropsInterface> = ({
             />
             <Button
               size="small"
-              label={isConnectedToMe ? 'Connected' : 'Connect'}
+              label={alreadyConnected ? 'Connected' : 'Connect'}
               icon="hierarchy"
-              disabled={currentUserId === odyssey.uuid || isConnectedToMe}
+              disabled={currentUserId === odyssey.uuid || alreadyConnected}
               onClick={onConnect}
             />
             <Button
