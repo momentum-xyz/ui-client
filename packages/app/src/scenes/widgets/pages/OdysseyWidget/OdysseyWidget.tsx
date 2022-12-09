@@ -2,6 +2,8 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, IconSvg, Text, Dialog} from '@momentum-xyz/ui-kit';
 
+import {getImageAbsoluteUrl} from 'core/utils';
+
 import {OdysseyItemInterface} from '../../stores/OdysseyStore';
 
 import * as styled from './OdysseyWidget.styled';
@@ -38,7 +40,7 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
     >
       <styled.Container data-testid="OdysseyWidget-test">
         <styled.TopContainer>
-          <styled.Avatar src={userAvatar} />
+          <styled.Avatar src={getImageAbsoluteUrl(userAvatar) || ''} />
           <styled.Actions>
             <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
             <Button
