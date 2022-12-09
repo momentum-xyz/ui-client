@@ -21,17 +21,19 @@ const ExploreStore = types
   )
   .actions((self) => ({
     init(): void {
-      this.fetchNewsFeed();
+      self.fetchNewsFeed();
     },
     fetchNewsFeed: flow(function* () {
       const response: NewsFeedResponse = yield self.request.send(api.feedRepository.fetchFeed, {});
       if (response) {
         self.nftFeed = cast(response.items);
       }
-    }),
+    })
+  }))
+  .actions((self) => ({
     createNewsFeedItem: flow(function* (item: NftFeedItemInterface) {
-      console.log(item);
       yield self.request.send(api.feedRepository.createFeedItem, {item});
+      self.fetchNewsFeed();
     }),
     createMutualDocks: flow(function* (walletA: string, walletB: string) {
       console.log('create mutual-docks', walletA, walletB);

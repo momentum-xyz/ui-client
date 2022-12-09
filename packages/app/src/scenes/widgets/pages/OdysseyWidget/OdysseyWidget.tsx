@@ -10,15 +10,17 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 interface PropsInterface {
+  currentUserId: string;
   odyssey: OdysseyItemInterface | null;
   userAvatar?: string;
   nftId?: string;
   onConnect?: () => void;
+  onHighFive: (userId: string) => void;
   onClose?: () => void;
 }
 
 const OdysseyWidget: FC<PropsInterface> = (props) => {
-  const {odyssey, userAvatar, nftId, onConnect, onClose} = props;
+  const {odyssey, userAvatar, nftId, currentUserId, onConnect, onHighFive, onClose} = props;
 
   if (!odyssey) {
     return null;
@@ -34,17 +36,23 @@ const OdysseyWidget: FC<PropsInterface> = (props) => {
       onClose={onClose}
       showCloseButton
     >
-      <styled.Container data-testid="SelectedOdyssey-test">
+      <styled.Container data-testid="OdysseyWidget-test">
         <styled.TopContainer>
           <styled.Avatar src={userAvatar} />
           <styled.Actions>
             <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
-            <Button size="small" label="High Five" icon="high-five" onClick={() => {}} />
+            <Button
+              size="small"
+              label="High Five"
+              icon="high-five"
+              disabled={currentUserId === odyssey.uuid}
+              onClick={() => onHighFive(odyssey.uuid)}
+            />
             <Button
               size="small"
               label="Connect"
               icon="hierarchy"
-              disabled={!onConnect}
+              disabled={currentUserId === odyssey.uuid}
               onClick={onConnect}
             />
             <Button

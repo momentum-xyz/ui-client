@@ -1,7 +1,9 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
-import {Avatar, IconSvg, PanelLayout, Portal, SearchInput, Text} from '@momentum-xyz/ui-kit';
+import {generatePath, useHistory} from 'react-router-dom';
+import {Avatar, PanelLayout, Portal, SearchInput, SvgButton, Text} from '@momentum-xyz/ui-kit';
 
+import {ROUTES} from 'core/constants';
 import {UserModelInterface} from 'core/models';
 import {useStore} from 'shared/hooks';
 
@@ -23,6 +25,8 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
   const {unityStore, worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
 
+  const history = useHistory();
+
   useEffect(() => {
     unityStore.changeKeyboardControl(false);
     return () => {
@@ -36,12 +40,15 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
   };
 
   const handleTeleport = (worldId: string) => {
+    console.log(`Calling loadWorldById to ${worldId} ...`);
+    handleClose();
+    history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     unityStore.loadWorldById(worldId, authStore.token);
   };
 
-  // TODO: uncomment when high five works from unity and BE side
-  const handleHighFive = (worldId: string) => {
-    // unityStore.sendHighFive(worldId);
+  const handleHighFive = (userId: string) => {
+    console.log(`Calling sendHighFive to ${userId} ...`);
+    unityStore.sendHighFive(userId);
   };
 
   const handleUserClick = (id: string) => {
@@ -88,8 +95,20 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                             {user.id === worldStore.worldId && (
                               <styled.AdminText size="s" text="Admin" />
                             )}
-                            <IconSvg name="fly-to" onClick={() => handleTeleport(user?.id || '')} />
-                            <IconSvg name="high-five" />
+                            <SvgButton
+                              iconName="fly-to"
+                              size="normal"
+                              disabled={user?.id === worldStore.worldId}
+                              onClick={() => handleTeleport(user?.id || '')}
+                            />
+                            <SvgButton
+                              iconName="high-five"
+                              size="normal"
+                              disabled={user?.id === sessionStore.userId}
+                              onClick={() => {
+                                handleHighFive(user?.id || '');
+                              }}
+                            />
                           </styled.RightToolbar>
                         )}
                       </styled.Item>
@@ -107,8 +126,20 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                             {user.id === worldStore.worldId && (
                               <styled.AdminText size="s" text="Admin" />
                             )}
-                            <IconSvg name="fly-to" onClick={() => handleTeleport(user?.id || '')} />
-                            <IconSvg name="high-five" />
+                            <SvgButton
+                              iconName="fly-to"
+                              size="normal"
+                              disabled={user?.id === worldStore.worldId}
+                              onClick={() => handleTeleport(user?.id || '')}
+                            />
+                            <SvgButton
+                              iconName="high-five"
+                              size="normal"
+                              disabled={user?.id === sessionStore.userId}
+                              onClick={() => {
+                                handleHighFive(user?.id || '');
+                              }}
+                            />
                           </styled.RightToolbar>
                         )}
                       </styled.Item>

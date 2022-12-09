@@ -20,7 +20,7 @@ interface PropsInterface {
   worldId?: string;
   nftId?: string;
   onTeleport: (worldId: string) => void;
-  onHighFive: (worldId: string) => void;
+  onHighFive: (userId: string) => void;
   onConnect?: () => void;
   onClose: () => void;
 }
@@ -45,14 +45,14 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
               size="small"
               label="Visit"
               disabled={!nftId || odyssey?.uuid === worldId}
-              onClick={() => onTeleport(user?.id || '')}
+              onClick={() => onTeleport(odyssey?.uuid || '')}
               icon="fly-to"
             />
             <Button
               size="small"
               label="High Five"
               icon="high-five"
-              onClick={() => onHighFive(user?.id ?? '')}
+              onClick={() => onHighFive(odyssey?.uuid ?? '')}
             />
             <Button
               size="small"
