@@ -36,7 +36,7 @@ const SelectedOdyssey: FC<PropsInterface> = (props) => {
             disabled={!onConnect || alreadyConnected}
             onClick={onConnect}
           />
-          <Button size="small" label="Dock" icon="people" onClick={onDock} />
+          <Button size="small" label="Dock" disabled icon="people" onClick={onDock} />
         </styled.Actions>
       </styled.Container>
       <styled.Description>
