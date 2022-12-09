@@ -1,4 +1,4 @@
-import React, {FC, useMemo, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
 import {formatTokenAmount} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
@@ -11,8 +11,6 @@ import {ToastContent} from 'ui-kit';
 import {convertToHex} from '../StakingForm/StakingForm';
 
 import * as styled from './StakingDashboard.styled';
-
-const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
 
 const tabBarTabs: TabBarTabInterface[] = [
   {
@@ -39,7 +37,16 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const {authStore, nftStore, exploreStore} = useStore();
   const {wallet: authWallet} = authStore;
   const {addresses, accountOptions} = nftStore;
-  const {stakingAtOthers, balance, accumulatedRewards, chainDecimals, tokenSymbol} = nftStore;
+  const {
+    stakingAtOthers,
+    balanceTotal,
+    balanceReserved,
+    balanceTransferrable,
+    accountAccumulatedRewards,
+    canReceiveAccumulatedRewards,
+    chainDecimals,
+    tokenSymbol
+  } = nftStore;
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
   // const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
@@ -59,25 +66,17 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const amount = _amount || unstakeFromDetail?.amount || 0;
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
-  const balanceSections = useMemo(() => {
-    const balanceEntities = [
-      {label: 'Account Balance', value: Number(balance.free)},
-      {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)},
-      {label: 'Stacked', value: Number(balance.reserved)} // TODO get stacking from blockchain
-      // {label: 'Unbonding', value: null}
-    ];
-
-    return balanceEntities.map(({label, value}) => {
-      const balanceValueText =
-        value !== null ? formatTokenAmount(value, chainDecimals, tokenSymbol) : '-';
-      return (
-        <styled.BalanceEntityContainer key={label}>
-          <Heading type="h4" align="left" label={label} />
-          <Text size="xxs" align="left" text={balanceValueText}></Text>
-        </styled.BalanceEntityContainer>
-      );
-    });
-  }, [balance.free, balance.reserved, chainDecimals, tokenSymbol]);
+  const balanceSections = [
+    {label: 'Account Balance', value: balanceTotal},
+    {label: 'Transferable', value: balanceTransferrable},
+    {label: 'Stacked', value: balanceReserved} // TODO get stacking from blockchain
+    // {label: 'Unbonding', value: null}
+  ].map(({label, value}) => (
+    <styled.BalanceEntityContainer key={label}>
+      <Heading type="h4" align="left" label={label} />
+      <Text size="xxs" align="left" text={value}></Text>
+    </styled.BalanceEntityContainer>
+  ));
 
   const activeTab = getRewards || !!unstakeFrom ? tabBarTabs[1] : tabBarTabs[0];
 
@@ -218,15 +217,11 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                 <styled.RewardData>
                   <div>
                     <Text size="s" align="left" text="Total rewards" className="with-padding" />
-                    <Text
-                      size="s"
-                      text={`${formatTokenAmount(accumulatedRewards, chainDecimals, tokenSymbol)}`}
-                      align="left"
-                    />
+                    <Text size="s" text={accountAccumulatedRewards} align="left" />
                   </div>
                   <Button
                     label="Get Rewards"
-                    disabled={accumulatedRewards < MIN_AMOUNT_TO_GET_REWARDS}
+                    disabled={canReceiveAccumulatedRewards}
                     onClick={() => setGetRewards(true)}
                   />
                 </styled.RewardData>
@@ -297,11 +292,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                 <styled.LabeledLineLabelContainer>
                   <Text size="xxs" align="right" text="AMOUNT" />
                 </styled.LabeledLineLabelContainer>
-                <Text
-                  size="s"
-                  text={`${formatTokenAmount(accumulatedRewards, chainDecimals, tokenSymbol)}`}
-                  align="left"
-                />
+                <Text size="s" text={accountAccumulatedRewards} align="left" />
               </styled.LabeledLineContainer>
             </styled.Section>
 

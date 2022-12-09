@@ -14,7 +14,8 @@ import * as styled from './SignInAccountPage.styled';
 const SignInAccountPage: FC = () => {
   const {authStore, nftStore, signInAccountStore} = useStore();
   const {
-    balance,
+    balanceTotal,
+    isZeroBalance,
     isBalanceLoading,
     tokenSymbol,
     requestInitialFunds,
@@ -33,7 +34,8 @@ const SignInAccountPage: FC = () => {
 
   const history = useHistory();
   console.log('SignInAccountPage', {
-    balance,
+    balanceTotal,
+    isZeroBalance,
     walletWithFundsIsConnected,
     isBalanceLoading,
     requestingFundsStatus,
@@ -41,14 +43,14 @@ const SignInAccountPage: FC = () => {
   });
 
   const onConnectWallet = useCallback(() => {
-    console.log('onConnectWallet', balance);
-    if (!balance.free) {
+    console.log('onConnectWallet', {isZeroBalance});
+    if (isZeroBalance) {
       requestInitialFunds(authStore.wallet);
     } else {
       // there are funds already
       setWalletWithFundsIsConnected(true);
     }
-  }, [authStore.wallet, balance, requestInitialFunds]);
+  }, [authStore.wallet, isZeroBalance, requestInitialFunds]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
@@ -102,7 +104,7 @@ const SignInAccountPage: FC = () => {
           {accountSelectedAndFundsAquired && (
             <>
               {requestingFundsStatus === 'success' && mintingNftStatus !== 'pending' && (
-                <CongratulationsBox amount={nftStore.formatAmount(balance.free)} />
+                <CongratulationsBox amount={balanceTotal} />
               )}
               <SinusBox />
               <CreateOdysseyForm
