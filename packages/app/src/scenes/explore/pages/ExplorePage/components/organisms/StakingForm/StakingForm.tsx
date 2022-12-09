@@ -1,6 +1,5 @@
-import React, {FC, useMemo, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
-import {formatTokenAmount} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {decodeAddress} from '@polkadot/util-crypto';
@@ -50,7 +49,17 @@ export const convertToHex = (address: string) => {
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {authStore, nftStore, exploreStore} = useStore();
   const {wallet: authWallet} = authStore;
-  const {balance, addresses, accountOptions, nftItems, chainDecimals, tokenSymbol} = nftStore;
+  const {
+    balanceTotal,
+    balanceReserved,
+    balanceTransferrable,
+    canBeStaked,
+    addresses,
+    accountOptions,
+    nftItems,
+    chainDecimals,
+    tokenSymbol
+  } = nftStore;
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
   const initiatorAccount = accountOptions.find((account) => account.value === wallet);
@@ -111,28 +120,19 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
       });
   };
 
-  const balanceSections = useMemo(() => {
-    const balanceEntities = [
-      {label: 'Account Balance', value: Number(balance.free)},
-      {label: 'Transferable', value: Number(balance.free) - Number(balance.reserved)}, // TODO highlight low balancse or transferrable
-      {label: 'Stacked', value: Number(balance.reserved)}
-      // {label: 'Unbonding', value: null}
-    ];
+  const balanceSections = [
+    {label: 'Account Balance', value: balanceTotal},
+    {label: 'Transferable', value: balanceTransferrable},
+    {label: 'Stacked', value: balanceReserved} // TODO get stacking from blockchain
+    // {label: 'Unbonding', value: null}
+  ].map(({label, value}) => (
+    <styled.BalanceEntityContainer key={label}>
+      <Heading type="h4" align="left" label={label} />
+      <Text size="xxs" align="left" text={value}></Text>
+    </styled.BalanceEntityContainer>
+  ));
 
-    return balanceEntities.map(({label, value}) => {
-      const balanceValueText =
-        value !== null ? formatTokenAmount(value, chainDecimals, tokenSymbol) : '-';
-      return (
-        <styled.BalanceEntityContainer key={label}>
-          <Heading type="h4" align="left" label={label} />
-          <Text size="xxs" align="left" text={balanceValueText}></Text>
-        </styled.BalanceEntityContainer>
-      );
-    });
-  }, [balance]);
-
-  // TODO check transaction fee and existencial deposit
-  const isBalanceTooLow = amountAtoms >= balance.free - balance.reserved;
+  const isBalanceTooLow = !canBeStaked(amountAtoms);
 
   const isStakingInSelf = nft === myNft;
 

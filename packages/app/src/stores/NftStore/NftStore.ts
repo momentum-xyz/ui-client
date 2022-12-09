@@ -31,6 +31,7 @@ import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './mo
 
 const NFT_MINT_FEE = 100000;
 const DEFAULT_COLECTION_ID = 3;
+const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
 
 const prepareSignAndSend = async (address: string) => {
   // there's alternative way for this in useEager
@@ -53,10 +54,10 @@ const PromiseSleep = (ms: number) => new Promise((resolve) => setTimeout(resolve
 
 // TODO change to BN
 interface AccountBalanceInterface {
-  free: number;
-  reserved: number;
-  miscFrozen: number;
-  feeFrozen: number;
+  free: BN;
+  reserved: BN;
+  // miscFrozen: number;
+  // feeFrozen: number;
 }
 
 const NftStore = types
@@ -94,12 +95,12 @@ const NftStore = types
       stakingAtMe: types.map(StakeDetail),
       stakingAtOthers: types.map(StakeDetail),
       stakingDashorboardDialog: types.optional(Dialog, {}),
-      accumulatedRewards: 0,
+      accumulatedRewards: types.frozen(new BN(0)),
       balance: types.optional(types.frozen<AccountBalanceInterface>(), {
-        free: 0,
-        reserved: 0,
-        miscFrozen: 0,
-        feeFrozen: 0
+        free: new BN(0),
+        reserved: new BN(0)
+        // miscFrozen: 0,
+        // feeFrozen: 0
       }),
       requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
       mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
@@ -311,6 +312,13 @@ const NftStore = types
       },
       isAlreadyConnected(address: string): boolean {
         return self.stakingAtOthers.has(address);
+      },
+      balanseFormat(amount: BN) {
+        return formatBalance(
+          amount,
+          {withSi: true, withUnit: self.tokenSymbol},
+          self.chainDecimals
+        );
       }
     };
   })
@@ -325,16 +333,36 @@ const NftStore = types
         (account) => !self.nftItems.some((nft) => nft.owner === account.value)
       );
     },
-    formatAmount(amount: number): string {
-      if (!self.chainDecimals || !self.tokenSymbol) {
-        return 'n/a';
+    get isZeroBalance(): boolean {
+      return self.balance.free.isZero();
+    },
+    get balanceTotal(): string {
+      return self.balanseFormat(self.balance.free);
+    },
+    get balanceReserved(): string {
+      return self.balanseFormat(self.balance.reserved);
+    },
+    get balanceTransferrableBN(): BN {
+      return self.balance.free.clone().sub(self.balance.reserved).sub(self.existentialDeposit);
+    }
+  }))
+  .views((self) => ({
+    get balanceTransferrable(): string {
+      return self.balanseFormat(self.balanceTransferrableBN);
+    },
+    canBeStaked(amount: number): boolean {
+      try {
+        return self.balanceTransferrableBN.gte(new BN(amount));
+      } catch (err) {
+        console.error(err);
+        return false;
       }
-      const amountCoin = amount / Math.pow(10, self.chainDecimals);
-      return `${amountCoin.toLocaleString('de-DE', {
-        useGrouping: false,
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 4
-      })} ${self.tokenSymbol}`;
+    },
+    get accountAccumulatedRewards(): string {
+      return self.balanseFormat(self.accumulatedRewards);
+    },
+    get canReceiveAccumulatedRewards(): boolean {
+      return self.accumulatedRewards.gt(new BN(MIN_AMOUNT_TO_GET_REWARDS));
     }
   }))
   .actions((self) => ({
@@ -359,7 +387,7 @@ const NftStore = types
     setBalance(payload: AccountBalanceInterface) {
       self.balance = payload;
     },
-    setAccumulatedRewards(amount: number) {
+    setAccumulatedRewards(amount: BN) {
       self.accumulatedRewards = amount;
     },
     setStakingInfos(
@@ -756,7 +784,7 @@ const NftStore = types
           }
 
           self.setStakingInfos(stakingAtOthers, stakingAtMe);
-          self.setAccumulatedRewards(Number(rewards) || 0);
+          self.setAccumulatedRewards(rewards as any);
 
           console.log('stakingAtOthers', getSnapshot(self.stakingAtOthers));
           console.log('stakingAtMe', getSnapshot(self.stakingAtMe));
@@ -964,12 +992,14 @@ const NftStore = types
             `free balance is ${balance.free} with ${balance.reserved} reserved and a nonce of ${nonce}`
           );
           console.log('balance', balance.toHuman(), balance);
-          const {free, reserved, miscFrozen, feeFrozen} = balance;
+          const {
+            free,
+            reserved
+            //  miscFrozen, feeFrozen
+          } = balance;
           self.setBalance({
-            free: free.toNumber(),
-            reserved: reserved.toNumber(),
-            miscFrozen: miscFrozen.toNumber(),
-            feeFrozen: feeFrozen.toNumber()
+            free,
+            reserved
           });
           self.setIsBalanceLoading(false);
         }
