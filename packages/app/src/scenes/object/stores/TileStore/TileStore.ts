@@ -10,7 +10,6 @@ import {
   ObjectMetadataInterface,
   ObjectOptionsInterface
 } from 'api';
-import {appVariables} from 'api/constants';
 
 const TileStore = types
   .compose(
@@ -18,7 +17,8 @@ const TileStore = types
     types.model('VideoStore', {
       assetType: types.maybe(types.string),
       request: types.optional(RequestModel, {}),
-      content: types.maybe(types.frozen<ObjectInterface>())
+      content: types.maybe(types.frozen<ObjectInterface>()),
+      pluginId: types.maybe(types.string)
     })
   )
   .actions((self) => ({
@@ -39,12 +39,14 @@ const TileStore = types
   .actions((self) => ({
     setObject(
       object: Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
-      spaceId: string
+      spaceId: string,
+      pluginId: string
     ) {
       if (!object) {
         return;
       }
       const {meta} = object;
+      self.pluginId = pluginId;
 
       switch (meta.name) {
         case AssetTypeEnum.TEXT:
@@ -69,7 +71,10 @@ const TileStore = types
       if (!self.content?.render_hash) {
         return null;
       }
-      return `${appVariables.RENDER_SERVICE_URL}/get/${self.content?.render_hash}`;
+      //TODO: Change it to render
+      // return `${appVariables.RENDER_SERVICE_URL}/get/${self.content?.render_hash}`;
+
+      return self.content.render_hash;
     }
   }));
 

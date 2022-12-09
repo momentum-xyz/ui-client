@@ -1,12 +1,13 @@
-import React, {FC} from 'react';
-import {Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import React, {FC, useCallback, useState} from 'react';
+import {Button, Heading, Input, Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {VideoPanel} from 'ui-kit';
 import {ObjectInterface} from 'api';
 import {youtubeVideoPath} from 'core/utils';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './VideoPage.styled';
 
@@ -17,9 +18,47 @@ interface PropsInterface {
 
 const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
   const history = useHistory();
+  const {mainStore, objectStore} = useStore();
+  const {unityStore} = mainStore;
+
+  const {objectId} = useParams<{objectId: string}>();
+
+  const [isChangeVideoOpen, setIsChangeVideoOpen] = useState(false);
+  const [youtubeSrc, setYoutubeSrc] = useState('');
+
+  const handleFocus = useCallback(() => {
+    unityStore.changeKeyboardControl(false);
+  }, [unityStore]);
+
+  const handleBlur = useCallback(() => {
+    unityStore.changeKeyboardControl(true);
+  }, [unityStore]);
 
   return (
     <styled.Modal data-testid="VideoPage-test">
+      {isChangeVideoOpen && (
+        <styled.ChangeTextForm>
+          <Heading label="Change Video" type="h2" />
+          <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setYoutubeSrc} />
+          <Button
+            label="Change"
+            onClick={async () => {
+              await objectStore.postNewContent(objectId, {
+                youtube_url: youtubeSrc
+              });
+
+              setIsChangeVideoOpen(false);
+            }}
+          />
+          <Button
+            label="Cancel"
+            variant="danger"
+            onClick={() => {
+              setIsChangeVideoOpen(false);
+            }}
+          />
+        </styled.ChangeTextForm>
+      )}
       <styled.Container>
         <styled.ContentWrapper>
           {content?.youtube_url ? (
@@ -40,6 +79,9 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
               size="xl"
             />
           </styled.Title>
+        </styled.HeaderElement>
+        <styled.HeaderElement className="button">
+          <Button label="Change video" onClick={() => setIsChangeVideoOpen(true)} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>

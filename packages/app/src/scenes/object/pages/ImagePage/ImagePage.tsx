@@ -1,10 +1,11 @@
-import React, {FC} from 'react';
-import {SvgButton, Text} from '@momentum-xyz/ui-kit';
+import React, {FC, useState, useCallback} from 'react';
+import {Button, Heading, SvgButton, Text, Input} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {ObjectInterface} from 'api';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './ImagePage.styled';
 
@@ -15,14 +16,47 @@ interface PropsInterface {
 }
 
 const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
+  const {objectStore, mainStore} = useStore();
+  const {unityStore} = mainStore;
   const history = useHistory();
 
-  if (!imageSrc) {
-    return null;
-  }
+  const {objectId} = useParams<{objectId: string}>();
+
+  const [isChangeImageShown, setIsChangeImageShown] = useState(false);
+  const [image, setImage] = useState('');
+
+  const handleFocus = useCallback(() => {
+    unityStore.changeKeyboardControl(false);
+  }, [unityStore]);
+
+  const handleBlur = useCallback(() => {
+    unityStore.changeKeyboardControl(true);
+  }, [unityStore]);
 
   return (
     <styled.Modal data-testid="ImagePage-test">
+      {isChangeImageShown && (
+        <styled.ChangeImageForm>
+          <Heading label="Change Image" type="h2" />
+          <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setImage} />
+          <Button
+            label="Change"
+            onClick={async () => {
+              await objectStore.postNewContent(objectId, {
+                render_hash: image
+              });
+              setIsChangeImageShown(false);
+            }}
+          />
+          <Button
+            label="Cancel"
+            variant="danger"
+            onClick={() => {
+              setIsChangeImageShown(false);
+            }}
+          />
+        </styled.ChangeImageForm>
+      )}
       <styled.Container>
         <styled.ContentWrapper>
           {imageSrc && <styled.ImageWrapper src={imageSrc} alt="" />}
@@ -36,6 +70,9 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
               size="xl"
             />
           </styled.Title>
+        </styled.HeaderElement>
+        <styled.HeaderElement className="button">
+          <Button label="Change image" onClick={() => setIsChangeImageShown(true)} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>

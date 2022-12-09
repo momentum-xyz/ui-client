@@ -34,7 +34,9 @@ const Object: FC = () => {
         return <TextPage content={content} worldId={objectId} />;
       case AssetTypeEnum.IMAGE:
         return (
-          <>{imageSrc && <ImagePage content={content} imageSrc={imageSrc} worldId={objectId} />}</>
+          <>
+            <ImagePage content={content} imageSrc={imageSrc ?? undefined} worldId={objectId} />
+          </>
         );
       case AssetTypeEnum.VIDEO:
         return <VideoPage content={content} worldId={objectId} />;

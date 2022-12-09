@@ -1,3 +1,5 @@
+import {AttributeValueInterface} from '@momentum-xyz/sdk';
+
 import {MetadataInterface, OptionsInterface} from 'api/interfaces';
 
 export interface FetchObjectRequest {
@@ -5,7 +7,7 @@ export interface FetchObjectRequest {
   pluginId: string;
 }
 
-export interface GetObjectResponse {
+export interface GetObjectResponse extends AttributeValueInterface {
   title?: string;
   content?: string;
   render_hash?: string;
@@ -19,7 +21,7 @@ export interface ObjectMetadataInterface extends MetadataInterface {
 
 export interface ObjectOptionsInterface extends OptionsInterface {}
 
-export interface ObjectInterface {
+export interface ObjectInterface extends AttributeValueInterface {
   title?: string;
   content?: string;
   render_hash?: string;

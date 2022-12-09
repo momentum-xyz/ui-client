@@ -1,5 +1,6 @@
 import {types, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {PluginAttributesManager, PluginLoader} from 'core/models';
 import {
@@ -9,7 +10,8 @@ import {
   PluginMetadataInterface,
   PluginOptionsInterface,
   ObjectMetadataInterface,
-  ObjectOptionsInterface
+  ObjectOptionsInterface,
+  ObjectInterface
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {ObjectTypeEnum} from 'core/enums';
@@ -22,8 +24,14 @@ const ObjectStore = types
     types.model('ObjectStore', {
       name: types.maybe(types.string),
 
+      textTileContent: types.maybe(types.frozen<{title: string; content: string}>()),
+      videoTileContent: types.maybe(types.frozen<{youtubeUrl: string}>()),
+      imageTileContent: types.maybe(types.frozen<{src: string}>()),
+
       getSpaceInfoRequest: types.optional(RequestModel, {}),
       getAssetRequest: types.optional(RequestModel, {}),
+
+      setTileRequest: types.optional(RequestModel, {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
       asset: types.maybe(PluginLoader),
@@ -43,16 +51,19 @@ const ObjectStore = types
       }
 
       // TODO: should be check based on 2d asset id : spaceId --> spaceInfo.asset_2d_id
-      switch (spaceId) {
+      switch (spaceInfo.asset_2d_id) {
         case ObjectTypeEnum.TEXT:
         case ObjectTypeEnum.IMAGE:
         case ObjectTypeEnum.VIDEO: {
+          console.info('Its a tile!');
           const objectResponse:
             | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
             | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
             assetId: spaceInfo.asset_2d_id
           });
-          self.tileStore.setObject(objectResponse, spaceId);
+          if (objectResponse?.meta.pluginId) {
+            self.tileStore.setObject(objectResponse, spaceId, objectResponse.meta.pluginId);
+          }
           break;
         }
         default: {
@@ -87,6 +98,20 @@ const ObjectStore = types
           break;
         }
       }
+    }),
+    postNewContent: flow(function* (objectId: string, content: ObjectInterface) {
+      if (!self.tileStore.pluginId) {
+        return;
+      }
+
+      yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: objectId,
+        plugin_id: self.tileStore.pluginId,
+        attribute_name: AttributeNameEnum.STATE,
+        value: content
+      });
+
+      yield self.tileStore.getSpaceAttributeValue(self.tileStore.pluginId, objectId);
     })
   }))
   .actions((self) => ({
