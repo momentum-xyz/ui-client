@@ -24,3 +24,7 @@ export const Footer = styled.footer`
 export const OnlineUsers = styled.div`
   display: flex;
 `;
+
+export const FullSizeWrapper = styled.div`
+  width: 100%;
+`;
