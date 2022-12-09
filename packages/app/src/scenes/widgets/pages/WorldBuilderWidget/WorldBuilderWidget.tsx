@@ -8,8 +8,19 @@ import {useStore} from 'shared/hooks';
 import * as styled from './WorldBuilderWidget.styled';
 
 const WorldBuilderWidget: FC = () => {
-  const {worldStore} = useStore().mainStore;
+  const {mainStore, nftStore} = useStore();
+  const {worldStore} = mainStore;
 
+  const worldNft = nftStore.getNftByUuid(worldStore.worldId);
+  const isAdmin = worldNft?.owner
+    ? nftStore.mutualStakingAddresses.includes(worldNft.owner)
+    : false;
+
+  console.log('WorldBuilderWidget', {
+    isAdmin,
+    friends: nftStore.mutualStakingAddresses,
+    wallet: worldNft?.owner
+  });
   const collapsedItem: ToolbarIconInterface = {
     title: 'World Builder',
     icon: 'planet',
@@ -71,7 +82,7 @@ const WorldBuilderWidget: FC = () => {
     );
   }
 
-  return <ToolbarIcon {...collapsedItem} />;
+  return <ToolbarIcon {...collapsedItem} disabled={!isAdmin} />;
 };
 
 export default WorldBuilderWidget;

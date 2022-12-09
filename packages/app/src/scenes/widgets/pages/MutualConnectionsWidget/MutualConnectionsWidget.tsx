@@ -40,7 +40,7 @@ const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose
                   transform="uppercase"
                   weight="bold"
                 />
-                <styled.ConnectionTypeText text="Connection" size="m" align="left" />
+                <styled.ConnectionTypeText text="Admin" size="m" align="left" />
               </styled.InfoContainer>
               <styled.Buttons>
                 {/*<Button label="make admin" size="small" />*/}
