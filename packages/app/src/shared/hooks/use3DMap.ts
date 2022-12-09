@@ -20,7 +20,7 @@ import BasicSkyboxHD from 'static/images/map/BasicSkyboxHD.jpg';
 import {getImageAbsoluteUrl} from '../../core/utils';
 
 class Odyssey extends THREE.Mesh {
-  constructor(geometry, material, number, wallet, name, url, texture) {
+  constructor(geometry, material, number, wallet, name, url, texture, connections = []) {
     super(geometry, material);
 
     this.material = material;
@@ -30,9 +30,10 @@ class Odyssey extends THREE.Mesh {
     this.name = name;
     this.url = url;
     this.isOdyssey = true;
+    this.connectedOdysseys = connections;
   }
 
-  connectedOdysseys = [];
+  // connectedOdysseys = [];
 
   /**
    * Generating random Connection for vizualisation of connections.
@@ -67,6 +68,7 @@ let wasLoaded = false;
 export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: NftItemInterface[],
+  connections: Record<string, {id: string}[]>,
   centerUuid: string | undefined | null,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
@@ -125,7 +127,9 @@ export const use3DMap = (
       item.uuid,
       item.owner,
       item.name,
-      texture
+      texture, // url??
+      null,
+      connections[item.uuid] || []
     );
 
     odyssey.add(avatarMesh);
@@ -508,9 +512,7 @@ export const use3DMap = (
         vectorsForLine = []; //clean for next line.
 
         // Get positions from connected odyssey and draw line.
-        const foundOdyssey = referenceListOfOdysseys.filter(
-          (planet) => planet.number === obj.id
-        )[0];
+        const foundOdyssey = referenceListOfOdysseys.find((planet) => planet.number === obj.id);
 
         if (foundOdyssey) {
           const randomLineHeight =

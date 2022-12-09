@@ -8,12 +8,13 @@ import {NftItemInterface} from 'stores/NftStore/models';
 interface PropsInterface {
   currentUserId: string | undefined;
   items: NftItemInterface[];
+  connections: Record<string, {id: string}[]>;
   canvas: HTMLCanvasElement;
   onOdysseyClick: (nft: NftItemInterface) => void;
 }
 
 const Map3d: FC<PropsInterface> = (props) => {
-  const {currentUserId, items, canvas, onOdysseyClick} = props;
+  const {currentUserId, items, connections, canvas, onOdysseyClick} = props;
 
   const handleOdysseyClick = useCallback(
     (uuid: string) => {
@@ -25,7 +26,14 @@ const Map3d: FC<PropsInterface> = (props) => {
     [items, onOdysseyClick]
   );
 
-  const callbacks = use3DMap(canvas, items, currentUserId, getImageAbsoluteUrl, handleOdysseyClick);
+  const callbacks = use3DMap(
+    canvas,
+    items,
+    connections,
+    currentUserId,
+    getImageAbsoluteUrl,
+    handleOdysseyClick
+  );
 
   useEffect(() => {
     return () => {
