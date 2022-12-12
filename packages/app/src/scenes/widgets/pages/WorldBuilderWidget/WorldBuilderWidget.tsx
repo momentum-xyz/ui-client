@@ -12,9 +12,9 @@ const WorldBuilderWidget: FC = () => {
   const {worldStore} = mainStore;
 
   const worldNft = nftStore.getNftByUuid(worldStore.worldId);
-  const isAdmin = worldNft?.owner
-    ? nftStore.mutualStakingAddresses.includes(worldNft.owner)
-    : false;
+  const isAdmin =
+    worldStore.isMyWorld ||
+    (worldNft?.owner ? nftStore.mutualStakingAddresses.includes(worldNft.owner) : false);
 
   console.log('WorldBuilderWidget', {
     isAdmin,
