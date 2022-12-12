@@ -12,9 +12,9 @@ export const LeftToolbars = styled.div`
 
 export const Links = styled.div`
   pointer-events: all;
-  width: 260px;
+  width: calc(50% + 70px);
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 `;
 
