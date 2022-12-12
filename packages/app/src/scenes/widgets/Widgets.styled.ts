@@ -10,6 +10,14 @@ export const LeftToolbars = styled.div`
   pointer-events: all;
 `;
 
+export const Links = styled.div`
+  pointer-events: all;
+  width: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const Footer = styled.footer`
   width: 100%;
   padding: 0 10px 10px 10px;
