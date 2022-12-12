@@ -181,6 +181,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                           size="s"
                           text={nft?.name || stakingDetail.sourceAddr.substring(0, 20)}
                           align="left"
+                          className="name"
                         />
                         <Text
                           size="s"
