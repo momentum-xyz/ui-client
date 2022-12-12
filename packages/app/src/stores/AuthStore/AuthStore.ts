@@ -60,6 +60,7 @@ const AuthStore = types.compose(
     .actions((self) => ({
       init(): void {
         self.token = getAccessToken();
+        self.wallet = getStoredWallet();
         self.updateAxiosAndUnityTokens();
         self.isAuthenticating = false;
       },

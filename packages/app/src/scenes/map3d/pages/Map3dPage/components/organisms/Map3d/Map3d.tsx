@@ -14,9 +14,7 @@ interface PropsInterface {
 }
 
 const Map3d: FC<PropsInterface> = (props) => {
-  const {currentUserId, items, connections, canvas, onOdysseyClick} = props;
-
-  console.log(connections);
+  const {currentUserId, items, canvas, onOdysseyClick} = props;
 
   const handleOdysseyClick = useCallback(
     (uuid: string) => {

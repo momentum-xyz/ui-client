@@ -14,7 +14,7 @@ interface PropsInterface {
 const Map3dPage: FC<PropsInterface> = (props) => {
   const {isClickActive} = props;
 
-  const {nftStore, map3dStore, sessionStore} = useStore();
+  const {nftStore, authStore, map3dStore, sessionStore} = useStore();
 
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     if (mapRef.current) {
       setIsCanvasReady(true);
     }
-  }, []);
+  });
 
   const onSelectOdyssey = useCallback(
     (nft: NftItemInterface) => {
@@ -45,7 +45,9 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     [nft?.uuid || '']: friendsNfts.map(({uuid}: NftItemInterface) => ({id: uuid}))
   };
 
-  // (!authStore.wallet || nftStore.initialStakingInfoLoaded)
+  if (!!authStore.wallet && sessionStore.userId && !nftStore.initialStakingInfoLoaded) {
+    return <></>;
+  }
 
   return (
     <>
