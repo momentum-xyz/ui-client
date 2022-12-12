@@ -14,7 +14,7 @@ interface PropsInterface {
 }
 
 const Map3d: FC<PropsInterface> = (props) => {
-  const {currentUserId, items, canvas, onOdysseyClick} = props;
+  const {currentUserId, items, connections, canvas, onOdysseyClick} = props;
 
   const handleOdysseyClick = useCallback(
     (uuid: string) => {
@@ -29,10 +29,12 @@ const Map3d: FC<PropsInterface> = (props) => {
   const callbacks = use3DMap(canvas, items, currentUserId, getImageAbsoluteUrl, handleOdysseyClick);
 
   useEffect(() => {
+    callbacks.drawConnections(connections);
+
     return () => {
       callbacks.changeWasLoaded();
     };
-  }, [callbacks]);
+  }, [callbacks, connections]);
 
   return <></>;
 };

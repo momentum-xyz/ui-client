@@ -50,6 +50,10 @@ class Odyssey extends THREE.Mesh {
 
 let wasLoaded = false;
 
+// TODO: Kovi
+let scene, renderer, controls, selectedOdyssey;
+let referenceListOfOdysseys = [];
+
 export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: NftItemInterface[],
@@ -57,9 +61,6 @@ export const use3DMap = (
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
 ) => {
-  // TODO: Kovi
-  let scene, renderer, controls, selectedOdyssey;
-
   let AmountOfGalaxyToGenereate = 200;
   let maxOdysseyConnectionLineHeight = 20;
   let MaxOrbitCameraDistance = 200;
@@ -70,13 +71,12 @@ export const use3DMap = (
   const odysseyAvatarGeometry = new THREE.CircleGeometry(0.8, 26);
 
   let listOfOddyseys = [];
-  let referenceListOfOdysseys = [];
 
   /**
    * Draw lines between staked Odysseys.
    */
 
-  const drawConnections = () => {
+  const drawConnections = (connections: Record<string, {id: string}[]>) => {
     // setup reusable variables and material
     let vectorsForLine = [];
     const lineMat = new THREE.LineBasicMaterial({
@@ -85,34 +85,39 @@ export const use3DMap = (
       opacity: 0.15
     });
 
-    referenceListOfOdysseys.forEach((odyssey) => {
-      odyssey.connectedOdysseys.forEach((obj) => {
-        vectorsForLine = []; //clean for next line.
+    Object.entries(connections).forEach(([uuid, connectedUuids]) => {
+      const odyssey = referenceListOfOdysseys.find((item) => item.uuid === uuid);
+      if (odyssey && connectedUuids?.length > 0) {
+        connectedUuids.forEach((connectedUuid) => {
+          vectorsForLine = []; //clean for next line.
 
-        // Get positions from connected odyssey and draw line.
-        const foundOdyssey = referenceListOfOdysseys.find((planet) => planet.uuid === obj.id);
-
-        if (foundOdyssey) {
-          const randomLineHeight =
-            Math.random() * maxOdysseyConnectionLineHeight * (Math.random() > 0.5 ? 1 : -1);
-          let middlePosition = new Vector3(
-            (odyssey.position.x + foundOdyssey.position.x) / 2,
-            randomLineHeight,
-            (odyssey.position.z + foundOdyssey.position.z) / 2
+          // Get positions from connected odyssey and draw line.
+          const foundOdyssey = referenceListOfOdysseys.find(
+            (planet) => planet.uuid === connectedUuid.id
           );
 
-          const curve = new THREE.QuadraticBezierCurve3(
-            odyssey.position,
-            middlePosition,
-            foundOdyssey.position
-          );
+          if (foundOdyssey) {
+            const randomLineHeight =
+              Math.random() * maxOdysseyConnectionLineHeight * (Math.random() > 0.5 ? 1 : -1);
+            let middlePosition = new Vector3(
+              (odyssey.position.x + foundOdyssey.position.x) / 2,
+              randomLineHeight,
+              (odyssey.position.z + foundOdyssey.position.z) / 2
+            );
 
-          const curvePoints = curve.getSpacedPoints(20);
-          const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-          const curveMesh = new THREE.Line(curveGeometry, lineMat);
-          scene.add(curveMesh);
-        }
-      });
+            const curve = new THREE.QuadraticBezierCurve3(
+              odyssey.position,
+              middlePosition,
+              foundOdyssey.position
+            );
+
+            const curvePoints = curve.getSpacedPoints(20);
+            const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
+            const curveMesh = new THREE.Line(curveGeometry, lineMat);
+            scene.add(curveMesh);
+          }
+        });
+      }
     });
   };
 
