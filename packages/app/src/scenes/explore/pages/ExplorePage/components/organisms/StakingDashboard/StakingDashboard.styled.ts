@@ -89,7 +89,12 @@ export const ActiveStakesLineContainer = styled.div`
   justify-content: space-between;
   padding: 0 10px;
 
-  & button {
+  & > * {
+    flex: 1;
+  }
+
+  & > button {
+    flex: 0 95px;
     flex-direction: row-reverse;
     border: none;
     color: white !important;
