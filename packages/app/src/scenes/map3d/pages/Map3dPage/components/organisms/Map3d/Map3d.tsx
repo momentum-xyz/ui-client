@@ -26,20 +26,15 @@ const Map3d: FC<PropsInterface> = (props) => {
     [items, onOdysseyClick]
   );
 
-  const callbacks = use3DMap(
-    canvas,
-    items,
-    connections,
-    currentUserId,
-    getImageAbsoluteUrl,
-    handleOdysseyClick
-  );
+  const callbacks = use3DMap(canvas, items, currentUserId, getImageAbsoluteUrl, handleOdysseyClick);
 
   useEffect(() => {
+    callbacks.drawConnections(connections);
+
     return () => {
       callbacks.changeWasLoaded();
     };
-  }, [callbacks]);
+  }, [callbacks, connections]);
 
   return <></>;
 };

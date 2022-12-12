@@ -24,7 +24,7 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     if (mapRef.current) {
       setIsCanvasReady(true);
     }
-  }, []);
+  });
 
   const onSelectOdyssey = useCallback(
     (nft: NftItemInterface) => {
@@ -45,21 +45,22 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     [nft?.uuid || '']: friendsNfts.map(({uuid}: NftItemInterface) => ({id: uuid}))
   };
 
+  if (!!authStore.wallet && sessionStore.userId && !nftStore.initialStakingInfoLoaded) {
+    return <></>;
+  }
+
   return (
     <>
       <styled.MapCanvas ref={mapRef} className="webgl" />
-      {isCanvasReady &&
-        mapRef.current &&
-        !nftStore.isLoading &&
-        (!authStore.wallet || nftStore.initialStakingInfoLoaded) && (
-          <Map3d
-            currentUserId={sessionStore.userId}
-            items={nftStore.nftItems}
-            connections={stakes}
-            canvas={mapRef.current}
-            onOdysseyClick={onSelectOdyssey}
-          />
-        )}
+      {isCanvasReady && mapRef.current && !nftStore.isLoading && (
+        <Map3d
+          currentUserId={sessionStore.userId}
+          items={nftStore.nftItems}
+          connections={stakes}
+          canvas={mapRef.current}
+          onOdysseyClick={onSelectOdyssey}
+        />
+      )}
     </>
   );
 };
