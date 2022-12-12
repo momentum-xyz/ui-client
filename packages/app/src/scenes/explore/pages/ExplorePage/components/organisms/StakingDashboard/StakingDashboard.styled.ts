@@ -91,6 +91,7 @@ export const ActiveStakesLineContainer = styled.div`
 
   & > * {
     flex: 1;
+    padding-right: 5px;
   }
 
   & > button {
