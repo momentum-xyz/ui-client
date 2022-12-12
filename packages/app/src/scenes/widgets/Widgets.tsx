@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Avatar, Dialog, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {Avatar, Button, Dialog, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -142,7 +142,17 @@ const Widgets: FC<PropsInterface> = (props) => {
           </ToolbarIconList>
         </styled.LeftToolbars>
 
-        {!isExplorePage && (
+        {isExplorePage ? (
+          <styled.Links>
+            <Button
+              label="Discover more"
+              variant="secondary"
+              onClick={() => {
+                window.open('https://discover.odyssey.org');
+              }}
+            />
+          </styled.Links>
+        ) : (
           <styled.RightToolbars>
             <styled.OnlineUsers>
               <OnlineUsersWidget
