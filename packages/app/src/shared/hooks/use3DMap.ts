@@ -3,9 +3,9 @@
 
 // FIXME: Refactoring !!! After 6th !!!
 
-import gsap, {normalize} from 'gsap';
+import gsap from 'gsap';
 import * as THREE from 'three';
-import {MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, Vector3} from 'three';
+import {Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 
@@ -17,23 +17,21 @@ import showTime from 'static/images/map/showTime.jpg';
 import honey01 from 'static/images/map/honey01.jpg';
 import iceland01 from 'static/images/map/iceland01.jpg';
 import BasicSkyboxHD from 'static/images/map/BasicSkyboxHD.jpg';
-import {getImageAbsoluteUrl} from '../../core/utils';
 
 class Odyssey extends THREE.Mesh {
-  constructor(geometry, material, number, wallet, name, url, texture, connections = []) {
+  constructor(geometry, material, uuid, wallet, name, url) {
     super(geometry, material);
 
     this.material = material;
     this.geometry = geometry;
-    this.number = number;
+    this.uuid = uuid;
     this.wallet = wallet;
     this.name = name;
     this.url = url;
     this.isOdyssey = true;
-    this.connectedOdysseys = connections;
   }
 
-  // connectedOdysseys = [];
+  connectedOdysseys = [];
 
   /**
    * Generating random Connection for vizualisation of connections.
@@ -48,19 +46,6 @@ class Odyssey extends THREE.Mesh {
       this.connectedOdysseys.push(object);
     }
   };
-
-  log = () => {
-    console.log(
-      'ID:' +
-        this.number +
-        ' Wallet:' +
-        this.wallet +
-        ' Webaddress:' +
-        this.url +
-        ' Connected: ' +
-        this.connectedOdysseys
-    );
-  };
 }
 
 let wasLoaded = false;
@@ -68,7 +53,6 @@ let wasLoaded = false;
 export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: NftItemInterface[],
-  connections: Record<string, {id: string}[]>,
   centerUuid: string | undefined | null,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
@@ -127,9 +111,7 @@ export const use3DMap = (
       item.uuid,
       item.owner,
       item.name,
-      texture, // url??
-      null,
-      connections[item.uuid] || []
+      texture
     );
 
     odyssey.add(avatarMesh);
@@ -340,7 +322,7 @@ export const use3DMap = (
       targetPlanet.object.getWorldPosition(targetVector);
 
       // FIXME: Kovi. Extract info from planet Kovi
-      onOdysseyClick(targetPlanet.object.number);
+      onOdysseyClick(targetPlanet.object.uuid);
 
       // Prepare fly to planets.
       const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
@@ -512,7 +494,7 @@ export const use3DMap = (
         vectorsForLine = []; //clean for next line.
 
         // Get positions from connected odyssey and draw line.
-        const foundOdyssey = referenceListOfOdysseys.find((planet) => planet.number === obj.id);
+        const foundOdyssey = referenceListOfOdysseys.find((planet) => planet.uuid === obj.id);
 
         if (foundOdyssey) {
           const randomLineHeight =
