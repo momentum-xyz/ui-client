@@ -142,7 +142,7 @@ const Widgets: FC<PropsInterface> = (props) => {
           </ToolbarIconList>
         </styled.LeftToolbars>
 
-        {isExplorePage ? (
+        {isExplorePage && (
           <styled.Links>
             <Button
               label="Discover more"
@@ -152,7 +152,9 @@ const Widgets: FC<PropsInterface> = (props) => {
               }}
             />
           </styled.Links>
-        ) : (
+        )}
+
+        {!isExplorePage && (
           <styled.RightToolbars>
             <styled.OnlineUsers>
               <OnlineUsersWidget
