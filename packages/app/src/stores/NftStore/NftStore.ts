@@ -16,6 +16,7 @@ import {
 import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
+import {MintNftCheckJobResponse} from 'api';
 
 import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './models';
 
@@ -393,14 +394,18 @@ const NftStore = types
 
         for (let i = 0; i < 50; i++) {
           yield wait(3000);
-          const nftReqCheckJobResult = yield self.mintNftRequest.send(mintNftCheckJob, {
-            job_id
-          });
+          const nftReqCheckJobResult: MintNftCheckJobResponse = yield self.mintNftRequest.send(
+            mintNftCheckJob,
+            {
+              job_id
+            }
+          );
           if (!nftReqCheckJobResult) {
             throw new Error('Unable to check minting NFT status');
           }
-          const {status, userID} = nftReqCheckJobResult;
+          const {status, nodeJSOut} = nftReqCheckJobResult;
           if (status === 'done') {
+            const userID = nodeJSOut?.data?.userID;
             self.setMintingNftStatus('success');
             return userID;
           }
