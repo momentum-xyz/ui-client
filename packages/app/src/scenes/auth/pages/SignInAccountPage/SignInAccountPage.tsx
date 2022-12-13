@@ -18,7 +18,7 @@ const SignInAccountPage: FC = () => {
     isZeroBalance,
     isBalanceLoading,
     tokenSymbol,
-    requestInitialFunds,
+    requestAirdrop,
     requestingFundsStatus,
     mintingNftStatus,
     mintNft
@@ -45,12 +45,12 @@ const SignInAccountPage: FC = () => {
   const onConnectWallet = useCallback(() => {
     console.log('onConnectWallet', {isZeroBalance});
     if (isZeroBalance) {
-      requestInitialFunds(authStore.wallet);
+      requestAirdrop(authStore.wallet);
     } else {
       // there are funds already
       setWalletWithFundsIsConnected(true);
     }
-  }, [authStore.wallet, isZeroBalance, requestInitialFunds]);
+  }, [authStore.wallet, isZeroBalance, requestAirdrop]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
@@ -58,8 +58,8 @@ const SignInAccountPage: FC = () => {
         const avatarHash = await signInAccountStore.getAvatarHash(form);
 
         console.log(`Minting for ${form.name} ${avatarHash}`);
-        await mintNft(authStore.wallet, form.name || '', avatarHash);
-        console.log('Minting is successful!');
+        const userID = await mintNft(authStore.wallet, form.name || '', avatarHash);
+        console.log('Minting is successful! userID:', userID);
 
         // NFT should be minted and accessible by now - if it doesn't happen sometimes
         // we can put some wait here
