@@ -691,11 +691,12 @@ const NftStore = types
           }
           const {status} = nftReqCheckJobResult;
           if (status === 'done') {
-            break;
+            self.setMintingNftStatus('success');
+            return status;
           }
         }
 
-        self.setMintingNftStatus('success');
+        throw new Error('Timeout during minting');
       } catch (err) {
         console.log('err', err);
         self.setMintingNftStatus('error');
@@ -707,7 +708,6 @@ const NftStore = types
     },
     getNftByWallet: (wallet: string) => {
       const address = formatAddress(wallet);
-      console.log('getNftByWallet', {wallet, address});
 
       return self.nftItems.find((nftItem) => nftItem.owner === address);
     },

@@ -59,6 +59,7 @@ const SignInAccountPage: FC = () => {
 
         console.log(`Minting for ${form.name} ${avatarHash}`);
         await mintNft(authStore.wallet, form.name || '', avatarHash);
+        console.log('Minting is successful!');
 
         // NFT should be minted and accessible by now - if it doesn't happen sometimes
         // we can put some wait here
