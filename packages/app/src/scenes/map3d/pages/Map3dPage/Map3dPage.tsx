@@ -1,31 +1,17 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Map3d} from '@momentum-xyz/map3d';
+import {Map3dCanvas} from '@momentum-xyz/map3d';
 
 import {useStore} from 'shared/hooks';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItemInterface} from 'stores/NftStore/models';
 
-import * as styled from './Map3dPage.styled';
-
 interface PropsInterface {
   isClickActive?: boolean;
 }
 
-const Map3dPage: FC<PropsInterface> = (props) => {
-  const {isClickActive} = props;
-
+const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
   const {nftStore, authStore, map3dStore, sessionStore} = useStore();
-
-  const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
-
-  const mapRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      setIsCanvasReady(true);
-    }
-  });
 
   const handleSelect = useCallback(
     (uuid: string) => {
@@ -55,13 +41,11 @@ const Map3dPage: FC<PropsInterface> = (props) => {
 
   return (
     <>
-      <styled.MapCanvas ref={mapRef} className="webgl" />
-      {isCanvasReady && mapRef.current && !nftStore.isLoading && (
-        <Map3d
+      {!nftStore.isLoading && (
+        <Map3dCanvas
           currentUserId={sessionStore.userId}
           items={nftStore.nftItems}
           connections={stakes}
-          canvas={mapRef.current}
           getImageAbsoluteUrl={getImageAbsoluteUrl}
           onSelect={handleSelect}
         />

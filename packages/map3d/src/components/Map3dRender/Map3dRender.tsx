@@ -1,18 +1,13 @@
 import React, {FC, useEffect} from 'react';
 
 import {use3DMap} from '../../hooks';
-import {PlanetInterface} from '../../interfaces';
+import {Map3dPropsInterface} from '../../interfaces';
 
-interface PropsInterface {
-  currentUserId: string | undefined;
-  items: PlanetInterface[];
-  connections: Record<string, {id: string}[]>;
+interface PropsInterface extends Map3dPropsInterface {
   canvas: HTMLCanvasElement;
-  getImageAbsoluteUrl(imageUrlOrHash: string | undefined | null): string | null;
-  onSelect: (uuid: string) => void;
 }
 
-const Map3d: FC<PropsInterface> = ({
+const Map3dRender: FC<PropsInterface> = ({
   currentUserId,
   items,
   connections,
@@ -33,4 +28,4 @@ const Map3d: FC<PropsInterface> = ({
   return <></>;
 };
 
-export default Map3d;
+export default Map3dRender;
