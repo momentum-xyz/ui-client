@@ -221,7 +221,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                   </div>
                   <Button
                     label="Get Rewards"
-                    disabled={canReceiveAccumulatedRewards}
+                    disabled={!canReceiveAccumulatedRewards}
                     onClick={() => setGetRewards(true)}
                   />
                 </styled.RewardData>
