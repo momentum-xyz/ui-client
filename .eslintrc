@@ -107,6 +107,7 @@
           "packages/ui-kit/src",
           "packages/core/src",
           "packages/sdk/src",
+          "packages/map3d/src",
           "packages/plugin-miro/src"
         ]
       }

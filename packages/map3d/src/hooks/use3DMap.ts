@@ -9,14 +9,14 @@ import {Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 
-import {NftItemInterface} from 'stores/NftStore/models';
+import {PlanetInterface} from '../interfaces';
 
-import baseAtmos from 'static/images/map/baseAtmos.jpg';
-import temptations from 'static/images/map/temptations.jpg';
-import showTime from 'static/images/map/showTime.jpg';
-import honey01 from 'static/images/map/honey01.jpg';
-import iceland01 from 'static/images/map/iceland01.jpg';
-import BasicSkyboxHD from 'static/images/map/BasicSkyboxHD.jpg';
+import baseAtmos from '../static/images/baseAtmos.jpg';
+import temptations from '../static/images/temptations.jpg';
+import showTime from '../static/images/showTime.jpg';
+import honey01 from '../static/images/honey01.jpg';
+import iceland01 from '../static/images/iceland01.jpg';
+import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
 class Odyssey extends THREE.Mesh {
   constructor(geometry, material, uuid, wallet, name, url) {
@@ -56,7 +56,7 @@ let referenceListOfOdysseys = [];
 
 export const use3DMap = (
   canvas: HTMLCanvasElement,
-  items: NftItemInterface[],
+  items: PlanetInterface[],
   centerUuid: string | undefined | null,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
@@ -134,7 +134,7 @@ export const use3DMap = (
   }
 
   // TODO: Kovi
-  const createNewOdyssey = (item?: NftItemInterface) => {
+  const createNewOdyssey = (item?: PlanetInterface) => {
     if (!item) {
       return;
     }

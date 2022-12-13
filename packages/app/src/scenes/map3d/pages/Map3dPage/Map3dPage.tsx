@@ -1,10 +1,11 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Map3d} from '@momentum-xyz/map3d';
 
 import {useStore} from 'shared/hooks';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItemInterface} from 'stores/NftStore/models';
 
-import {Map3d} from './components';
 import * as styled from './Map3dPage.styled';
 
 interface PropsInterface {
@@ -26,13 +27,16 @@ const Map3dPage: FC<PropsInterface> = (props) => {
     }
   });
 
-  const onSelectOdyssey = useCallback(
-    (nft: NftItemInterface) => {
+  const handleSelect = useCallback(
+    (uuid: string) => {
       if (isClickActive) {
-        map3dStore.selectOdyssey(nft);
+        const nft = nftStore.nftItems.find((i) => i.uuid === uuid);
+        if (nft) {
+          map3dStore.selectOdyssey(nft);
+        }
       }
     },
-    [isClickActive, map3dStore]
+    [isClickActive, map3dStore, nftStore.nftItems]
   );
 
   const friendsWallets = new Set([
@@ -58,7 +62,8 @@ const Map3dPage: FC<PropsInterface> = (props) => {
           items={nftStore.nftItems}
           connections={stakes}
           canvas={mapRef.current}
-          onOdysseyClick={onSelectOdyssey}
+          getImageAbsoluteUrl={getImageAbsoluteUrl}
+          onSelect={handleSelect}
         />
       )}
     </>
