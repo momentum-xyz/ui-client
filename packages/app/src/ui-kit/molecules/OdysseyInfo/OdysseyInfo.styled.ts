@@ -18,7 +18,7 @@ export const TopContainer = styled.div`
   flex-direction: row;
   align-items: center;
 
-  & .avatar {
+  & img {
     border-radius: 50%;
   }
 `;

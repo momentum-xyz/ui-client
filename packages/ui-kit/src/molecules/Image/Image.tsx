@@ -1,4 +1,4 @@
-import React, {FC, memo} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 import cn from 'classnames';
 import defaultLoaderPlaceholder from 'static/images/spinner.svg';
 import defaultErrorPlaceholder from 'static/images/astronaut.svg';
@@ -28,6 +28,9 @@ const Image: FC<PropsInterface> = (props) => {
     loaderPlaceholder = defaultLoaderPlaceholder
   } = props;
 
+  const [error, setError] = useState(isError);
+  useEffect(() => setError(isError), [src]);
+
   return (
     <styled.Container
       data-testid="Image-test"
@@ -35,13 +38,18 @@ const Image: FC<PropsInterface> = (props) => {
       {...sizeProps}
     >
       {isLoading ? (
-        <styled.Loader src={loaderPlaceholder} />
+        <styled.Loader className={cn(`${className}-loader`)} src={loaderPlaceholder} />
       ) : (
         <>
-          {src && !isError ? (
-            <styled.Image src={src} alt={src} className={cn(className)} />
+          {src && !error ? (
+            <styled.Image
+              src={src}
+              alt={src}
+              className={cn(className)}
+              onError={() => setError(true)}
+            />
           ) : (
-            <styled.ErroredImage src={errorPlaceholder} />
+            <styled.ErroredImage className={cn(`${className}-error`)} src={errorPlaceholder} />
           )}
         </>
       )}
