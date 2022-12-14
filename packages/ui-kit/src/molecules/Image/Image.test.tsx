@@ -1,29 +1,31 @@
 import React from 'react';
+import astronaut from 'static/images/astronaut.svg';
 
 import {render} from 'utils/test.utils';
 
 import Image from './Image';
 
 describe('Image', () => {
-  test('renders', () => {
-    const imageComponent = render(<Image src="..." />);
+  const src = astronaut;
 
+  test('renders', () => {
+    const imageComponent = render(<Image src={src} />);
     expect(imageComponent.baseElement).not.toBeNull();
   });
-
-  // test('shows image', () => {
-  //   const imageComponent = render(
-  //     <Avatar size="small" status={UserStatusEnum.ONLINE} avatarSrc="someUrl" />
-  //   );
-
-  //   expect(within(imageComponent.baseElement).queryAllByRole('img')).not.toHaveLength(0);
+  // test('shows image (no error or loading)', () => {
+  //   const imageComponent = render(<Image src={src} />);
+  //   expect(within(imageComponent.baseElement).queryAllByRole('img.image')).toHaveLength(1);
   // });
-
-  // test('shows placeholder', () => {
-  //   const imageComponent = render(<Avatar size="small" status={UserStatusEnum.ONLINE} />);
-
-  //   expect(
-  //     within(imageComponent.baseElement).queryAllByTestId('Avatar-placeholder-test')
-  //   ).not.toHaveLength(0);
+  // test('shows loading when `isLoading`', () => {
+  //   const imageComponent = render(<Image src={src} isLoading />);
+  //   expect(within(imageComponent.baseElement).queryAllByRole('img.image-loading')).toHaveLength(1);
+  // });
+  // test('shows error when `isError`', () => {
+  //   const imageComponent = render(<Image src="some-broken-url" />);
+  //   expect(within(imageComponent.baseElement).queryAllByRole('img.image-error')).toHaveLength(1);
+  // });
+  // test('shows error when the url is broken', () => {
+  //   const imageComponent = render(<Image src="some-broken-url" />);
+  //   expect(within(imageComponent.baseElement).queryAllByRole('img.image-error')).toHaveLength(1);
   // });
 });

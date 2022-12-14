@@ -21,7 +21,7 @@ const Image: FC<PropsInterface> = (props) => {
   const {
     src,
     sizeProps,
-    className,
+    className = 'image',
     isLoading = false,
     isError = false,
     errorPlaceholder = defaultErrorPlaceholder,
