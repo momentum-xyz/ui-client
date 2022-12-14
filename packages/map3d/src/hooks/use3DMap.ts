@@ -1,3 +1,4 @@
+import {useRef} from 'react';
 import gsap from 'gsap';
 import * as THREE from 'three';
 import {Vector3} from 'three';
@@ -20,13 +21,6 @@ import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
 let wasLoaded = false;
 
-// TODO: Kovi
-let scene: THREE.Scene;
-let renderer: THREE.WebGLRenderer;
-let controls: OrbitControls;
-let selectedOdyssey: THREE.Object3D<THREE.Event>;
-let referenceListOfOdysseys: PlanetMesh[] = [];
-
 export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: PlanetInterface[],
@@ -34,8 +28,24 @@ export const use3DMap = (
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
 ) => {
-  const odysseyAvatarGeometry = new THREE.CircleGeometry(0.8, 26);
-  const listOfOddyseys: PlanetMesh[] = [];
+  const odysseyAvatarGeometry = useRef(new THREE.CircleGeometry(0.8, 26));
+  const listOfOdysseys = useRef<PlanetMesh[]>([]);
+  const referenceListOfOdysseys = useRef<PlanetMesh[]>([]);
+  const selectedOdyssey = useRef<THREE.Object3D<THREE.Event>>();
+  const scene = useRef<THREE.Scene>(new THREE.Scene());
+  const camera = useRef<THREE.PerspectiveCamera>(
+    new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000)
+  );
+  const renderer = useRef<THREE.WebGLRenderer>(
+    new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: 'high-performance'
+    })
+  );
+  const controls = useRef<OrbitControls>(
+    new OrbitControls(camera.current, renderer.current.domElement)
+  );
 
   /**
    * Draw lines between staked Odysseys.
@@ -50,11 +60,11 @@ export const use3DMap = (
     });
 
     Object.entries(connections).forEach(([uuid, connectedUuids]) => {
-      const odyssey = referenceListOfOdysseys.find((item) => item.uuid === uuid);
+      const odyssey = referenceListOfOdysseys.current.find((item) => item.uuid === uuid);
       if (odyssey && connectedUuids?.length > 0) {
         connectedUuids.forEach((connectedUuid) => {
           // Get positions from connected odyssey and draw line.
-          const foundOdyssey = referenceListOfOdysseys.find(
+          const foundOdyssey = referenceListOfOdysseys.current.find(
             (planet) => planet.uuid === connectedUuid.id
           );
 
@@ -76,7 +86,7 @@ export const use3DMap = (
             const curvePoints = curve.getSpacedPoints(20);
             const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
             const curveMesh = new THREE.Line(curveGeometry, lineMat);
-            scene.add(curveMesh);
+            scene.current.add(curveMesh);
           }
         });
       }
@@ -121,7 +131,7 @@ export const use3DMap = (
     texture.wrapS = THREE.RepeatWrapping;
     //texture.repeat.x = - 1;
 
-    const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry, odysseyAvatarMaterial);
+    const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry.current, odysseyAvatarMaterial);
 
     const odyssey = new PlanetMesh(
       odysseyBaseSphereGeometry,
@@ -144,40 +154,28 @@ export const use3DMap = (
   gui.hide();
   let transitionToPlanetFinished = true;
 
-  // TODO: Kovi
-  // Scene setup
-  scene = new THREE.Scene();
-
   // Camera Setup
-  const aspect = window.innerWidth / window.innerHeight;
-  const camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
-  camera.position.set(15, 20, 2);
-  camera.lookAt(0, 0, 0);
-  scene.add(camera);
+  camera.current.position.set(15, 20, 2);
+  camera.current.lookAt(0, 0, 0);
+  scene.current.add(camera.current);
 
   // Light Setup
   const ambient = new THREE.AmbientLight(0x404040, 5);
-  scene.add(ambient);
+  scene.current.add(ambient);
 
   // Renderer Setup
-  renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: true,
-    powerPreference: 'high-performance'
-  });
-  renderer.setClearColor(0x222222);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.current.setClearColor(0x222222);
+  renderer.current.setSize(window.innerWidth, window.innerHeight);
+  renderer.current.setPixelRatio(window.devicePixelRatio);
 
   // Orbit Controls setup
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = 0.3;
-  controls.enableDamping = true;
-  controls.enablePan = true;
-  controls.maxDistance = MAX_ORBIT_CAMERA_DISTANCE;
-  controls.minDistance = MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
-  controls.zoomSpeed = 1;
+  controls.current.autoRotate = true;
+  controls.current.autoRotateSpeed = 0.3;
+  controls.current.enableDamping = true;
+  controls.current.enablePan = true;
+  controls.current.maxDistance = MAX_ORBIT_CAMERA_DISTANCE;
+  controls.current.minDistance = MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
+  controls.current.zoomSpeed = 1;
 
   /**
    * Happyship skybox
@@ -185,7 +183,7 @@ export const use3DMap = (
 
   const backgroundImage = new THREE.TextureLoader().load(BasicSkyboxHD);
   backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
-  scene.background = backgroundImage;
+  scene.current.background = backgroundImage;
 
   // Setup all base materials and geometries.
   const odysseyBaseSphereGeometry = new THREE.SphereGeometry(1, 16, 16);
@@ -219,7 +217,7 @@ export const use3DMap = (
     if (points !== null && !!pointsGeometry && !!pointsMaterial) {
       pointsGeometry.dispose();
       pointsMaterial.dispose();
-      scene.remove(points);
+      scene.current.remove(points);
     }
 
     /**
@@ -267,7 +265,7 @@ export const use3DMap = (
      * Create stars in the universe.
      */
     points = new THREE.Points(pointsGeometry, pointsMaterial);
-    scene.add(points);
+    scene.current.add(points);
   };
 
   generateGalaxy();
@@ -288,14 +286,13 @@ export const use3DMap = (
   }
 
   // Onclick event
-
   function onMouseDown(event: MouseEvent) {
     if (event.button !== 0) {
       return;
     }
     // Create Raycast
-    raycaster.setFromCamera(pointer, camera);
-    const castRay = raycaster.intersectObjects(referenceListOfOdysseys, false);
+    raycaster.setFromCamera(pointer, camera.current);
+    const castRay = raycaster.intersectObjects(referenceListOfOdysseys.current, false);
 
     // Process the Raycast.
     if (castRay.length > 0) {
@@ -309,14 +306,14 @@ export const use3DMap = (
       const targetPlanet = castRay[0];
 
       // If clicked planet is same as current selected one return
-      if (targetPlanet.object === selectedOdyssey) {
+      if (targetPlanet.object === selectedOdyssey.current) {
         return;
       }
 
       // Log information about selected Odyssey
       console.log(targetPlanet.object);
 
-      selectedOdyssey = targetPlanet.object;
+      selectedOdyssey.current = targetPlanet.object;
 
       const targetVector = new THREE.Vector3();
       targetPlanet.object.getWorldPosition(targetVector);
@@ -328,27 +325,30 @@ export const use3DMap = (
       const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
 
       // Prepare rotation of camera animation.
-      const startOrientation = camera.quaternion.clone();
+      const startOrientation = camera.current.quaternion.clone();
 
-      // @ts-ignore
-      const targetOrientation = camera.quaternion.clone(camera.lookAt(targetVector)).normalize();
+      const targetOrientation = camera.current.quaternion
+        // @ts-ignore
+        .clone(camera.current.lookAt(targetVector))
+        .normalize();
 
       // Get the direction for the new location.
       const direction = new THREE.Vector3();
-      direction.subVectors(targetVector, camera.position).normalize();
+      direction.subVectors(targetVector, camera.current.position).normalize();
 
       // Get distance from raycast minus minimal distance orbit control
       // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
       const targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
       const distance =
-        targetVectorForDistance.distanceTo(camera.position) - MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
+        targetVectorForDistance.distanceTo(camera.current.position) -
+        MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
 
       // Create new target for the camera.
       const targetLocation = new THREE.Vector3();
-      targetLocation.addVectors(camera.position, direction.multiplyScalar(distance));
+      targetLocation.addVectors(camera.current.position, direction.multiplyScalar(distance));
 
       //Animate using gsap module.
-      gsap.to(camera.position, {
+      gsap.to(camera.current.position, {
         duration: 1.5,
         x: targetLocation.x,
         y: targetLocation.y,
@@ -357,19 +357,21 @@ export const use3DMap = (
         onStart: function () {
           transitionToPlanetFinished = false;
           updateCameraRotation = true;
-          controls.enabled = false;
-          controls.autoRotate = false;
-          controls.enablePan = false;
+          controls.current.enabled = false;
+          controls.current.autoRotate = false;
+          controls.current.enablePan = false;
         },
         onUpdate: function () {
-          camera.quaternion.copy(startOrientation).slerp(targetOrientation, this.progress());
+          camera.current.quaternion
+            .copy(startOrientation)
+            .slerp(targetOrientation, this.progress());
         },
         onComplete: function () {
           updateCameraRotation = false;
-          controls.enabled = true;
-          controls.enablePan = true;
-          controls.autoRotate = true;
-          controls.target = targetPlanetLocation;
+          controls.current.enabled = true;
+          controls.current.enablePan = true;
+          controls.current.autoRotate = true;
+          controls.current.target = targetPlanetLocation;
           transitionToPlanetFinished = true;
         }
       });
@@ -380,22 +382,21 @@ export const use3DMap = (
   window.addEventListener('mousedown', onMouseDown);
 
   /**
-   * Create test array for odyssey
+   * Create array for odyssey
    */
 
-  // TODO: Kovi
   const ProcessOdyssey = () => {
     //Build an odyssey for all given entries.
     for (let i = 0; i < items.length; i++) {
       if (items[i].uuid !== centerUuid) {
         const odyssey = createNewOdyssey(items[i]);
         if (odyssey) {
-          listOfOddyseys.push(odyssey);
+          listOfOdysseys.current.push(odyssey);
         }
       }
     }
 
-    referenceListOfOdysseys = [...listOfOddyseys];
+    referenceListOfOdysseys.current = [...listOfOdysseys.current];
   };
 
   ProcessOdyssey();
@@ -407,8 +408,8 @@ export const use3DMap = (
   // TODO: Kovi
   const centerOdyssey = createNewOdyssey(items.find((i) => i.uuid === centerUuid));
   if (centerOdyssey) {
-    scene.add(centerOdyssey);
-    referenceListOfOdysseys.push(centerOdyssey);
+    scene.current.add(centerOdyssey);
+    referenceListOfOdysseys.current.push(centerOdyssey);
   }
 
   /**
@@ -425,8 +426,8 @@ export const use3DMap = (
     // Build circles in groups.
     function createRing() {
       // if amount to be spawned bigger than available odyssey
-      if (listOfOddyseys.length < AmountOfOdysseyInNextRing) {
-        AmountOfOdysseyInNextRing = listOfOddyseys.length;
+      if (listOfOdysseys.current.length < AmountOfOdysseyInNextRing) {
+        AmountOfOdysseyInNextRing = listOfOdysseys.current.length;
       }
 
       const degreeBetweenOdyssey = 360 / AmountOfOdysseyInNextRing;
@@ -438,7 +439,7 @@ export const use3DMap = (
 
       // Fill circle with odysseys.
       for (let i = 0; i < AmountOfOdysseyInNextRing; i++) {
-        currentOdyssey = listOfOddyseys[i];
+        currentOdyssey = listOfOdysseys.current[i];
         const radian = offset * (Math.PI / 180);
         offset += degreeBetweenOdyssey;
 
@@ -458,7 +459,7 @@ export const use3DMap = (
         odysseyCircle.add(currentOdyssey);
       }
 
-      listOfOddyseys.splice(0, AmountOfOdysseyInNextRing);
+      listOfOdysseys.current.splice(0, AmountOfOdysseyInNextRing);
 
       radius += radiusIncreaseValue * (ringCount / 2);
       AmountOfOdysseyInNextRing = AmountOfOdysseyInNextRing * 1.5;
@@ -469,13 +470,13 @@ export const use3DMap = (
     }
 
     /** Trigger While loop posting all odyssey. */
-    while (listOfOddyseys.length > 0) {
+    while (listOfOdysseys.current.length > 0) {
       createRing();
     }
 
     // Add all odyssey rings to the scene.
     odysseyGroups.forEach((circle) => {
-      scene.add(circle);
+      scene.current.add(circle);
     });
   };
 
@@ -485,17 +486,17 @@ export const use3DMap = (
   function animate() {
     // Update controls for auto-rotate.
     if (!updateCameraRotation) {
-      controls.update();
+      controls.current.update();
     }
 
     // Make all avatars face the camera.
-    for (let i = 0; i < referenceListOfOdysseys.length; i++) {
-      const odyssey = referenceListOfOdysseys[i].children;
-      odyssey[0].lookAt(camera.position);
+    for (let i = 0; i < referenceListOfOdysseys.current.length; i++) {
+      const odyssey = referenceListOfOdysseys.current[i].children;
+      odyssey[0].lookAt(camera.current.position);
     }
 
     // Render the scene
-    renderer.render(scene, camera);
+    renderer.current.render(scene.current, camera.current);
 
     // Re-call Animation
     window.requestAnimationFrame(animate);
@@ -503,9 +504,9 @@ export const use3DMap = (
 
   // On window resize:
   function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.current.aspect = window.innerWidth / window.innerHeight;
+    camera.current.updateProjectionMatrix();
+    renderer.current.setSize(window.innerWidth, window.innerHeight);
   }
 
   // EventListeners.
