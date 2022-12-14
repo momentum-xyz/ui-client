@@ -6,6 +6,14 @@ import * as dat from 'dat.gui';
 
 import {PlanetMesh} from '../classes';
 import {PlanetInterface} from '../interfaces';
+import {
+  PARAMETERS,
+  MAX_ODYSSEY_CONNECTION_LINE_HEIGHT,
+  MAX_ORBIT_CAMERA_DISTANCE,
+  MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA,
+  PLANET_ARE_SPAWNED_HORIZONTAL,
+  PLANETS_MAX_VERTICAL_SPAWN_HEIGHT
+} from '../contants';
 // @ts-ignore
 import honey01 from '../static/images/honey01.jpg';
 // @ts-ignore
@@ -29,12 +37,6 @@ export const use3DMap = (
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
 ) => {
-  const maxOdysseyConnectionLineHeight = 20;
-  const MaxOrbitCameraDistance = 200;
-  const planetAreSpawnedHorizontal = false;
-  const planetsMaxVerticalSpawnHeight = 100;
-  const minimalDistanceToPlanetForCamera = 5;
-
   const odysseyAvatarGeometry = new THREE.CircleGeometry(0.8, 26);
 
   const listOfOddyseys: PlanetMesh[] = [];
@@ -62,7 +64,7 @@ export const use3DMap = (
 
           if (foundOdyssey) {
             const randomLineHeight =
-              Math.random() * maxOdysseyConnectionLineHeight * (Math.random() > 0.5 ? 1 : -1);
+              Math.random() * MAX_ODYSSEY_CONNECTION_LINE_HEIGHT * (Math.random() > 0.5 ? 1 : -1);
             const middlePosition = new Vector3(
               (odyssey.position.x + foundOdyssey.position.x) / 2,
               randomLineHeight,
@@ -177,8 +179,8 @@ export const use3DMap = (
   controls.autoRotateSpeed = 0.3;
   controls.enableDamping = true;
   controls.enablePan = true;
-  controls.maxDistance = MaxOrbitCameraDistance;
-  controls.minDistance = minimalDistanceToPlanetForCamera;
+  controls.maxDistance = MAX_ORBIT_CAMERA_DISTANCE;
+  controls.minDistance = MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
   controls.zoomSpeed = 1;
 
   /**
@@ -209,16 +211,6 @@ export const use3DMap = (
   /**
    * Build Galaxy
    */
-  const parameters = {
-    count: 100000,
-    size: 0.001,
-    radius: 100,
-    branches: 3,
-    spin: 1.3,
-    randomnes: 0.2,
-    randomnesPower: 3,
-    YHeight: 100
-  };
 
   let pointsGeometry: THREE.BufferGeometry | null = null;
   let pointsMaterial: THREE.PointsMaterial | null = null;
@@ -238,22 +230,22 @@ export const use3DMap = (
      * Geometry
      */
     pointsGeometry = new THREE.BufferGeometry();
-    const position = new Float32Array(parameters.count * 3);
+    const position = new Float32Array(PARAMETERS.count * 3);
 
-    for (let i = 0; i < parameters.count; i++) {
+    for (let i = 0; i < PARAMETERS.count; i++) {
       const i3 = i * 3;
 
-      const radius = Math.random() * parameters.radius;
-      const spinAngle = radius * parameters.spin;
-      const branchAngle = ((i % parameters.branches) / parameters.branches) * Math.PI * 2;
+      const radius = Math.random() * PARAMETERS.radius;
+      const spinAngle = radius * PARAMETERS.spin;
+      const branchAngle = ((i % PARAMETERS.branches) / PARAMETERS.branches) * Math.PI * 2;
 
       const randomX =
-        Math.pow(Math.random(), parameters.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
+        Math.pow(Math.random(), PARAMETERS.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
       const randomY =
-        Math.pow(Math.random(), parameters.randomnesPower) *
-        (Math.random() < 0.5 ? parameters.YHeight : -parameters.YHeight);
+        Math.pow(Math.random(), PARAMETERS.randomnesPower) *
+        (Math.random() < 0.5 ? PARAMETERS.YHeight : -PARAMETERS.YHeight);
       const randomZ =
-        Math.pow(Math.random(), parameters.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
+        Math.pow(Math.random(), PARAMETERS.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
 
       position[i3 + 0] = Math.cos(branchAngle + spinAngle) * radius + randomX;
       position[i3 + 1] = randomY;
@@ -266,7 +258,7 @@ export const use3DMap = (
      * Material
      */
     pointsMaterial = new THREE.PointsMaterial({
-      size: parameters.size,
+      size: PARAMETERS.size,
       sizeAttenuation: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
@@ -282,19 +274,16 @@ export const use3DMap = (
     scene.add(points);
   };
 
-  //const axesHelper = new THREE.AxesHelper( 5 );
-  //scene.add( axesHelper );
-
   generateGalaxy();
 
-  gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy);
-  gui.add(parameters, 'size').min(0.001).max(0.1).step(0.001).onFinishChange(generateGalaxy);
-  gui.add(parameters, 'radius').min(1).max(500).step(1).onFinishChange(generateGalaxy);
-  gui.add(parameters, 'branches').min(2).max(10).step(1).onFinishChange(generateGalaxy);
-  gui.add(parameters, 'spin').min(-3).max(3).step(0.1).onFinishChange(generateGalaxy);
-  gui.add(parameters, 'randomnes').min(0).max(2).step(0.001).onFinishChange(generateGalaxy);
-  gui.add(parameters, 'randomnesPower').min(1).max(10).step(0.001).onFinishChange(generateGalaxy);
-  gui.add(parameters, 'YHeight').min(1).max(150).step(1).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'size').min(0.001).max(0.1).step(0.001).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'radius').min(1).max(500).step(1).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'branches').min(2).max(10).step(1).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'spin').min(-3).max(3).step(0.1).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'randomnes').min(0).max(2).step(0.001).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'randomnesPower').min(1).max(10).step(0.001).onFinishChange(generateGalaxy);
+  gui.add(PARAMETERS, 'YHeight').min(1).max(150).step(1).onFinishChange(generateGalaxy);
 
   // update mouse location on screen
   function onPointerMove(event: PointerEvent) {
@@ -356,7 +345,7 @@ export const use3DMap = (
       // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
       const targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
       const distance =
-        targetVectorForDistance.distanceTo(camera.position) - minimalDistanceToPlanetForCamera;
+        targetVectorForDistance.distanceTo(camera.position) - MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
 
       // Create new target for the camera.
       const targetLocation = new THREE.Vector3();
@@ -459,10 +448,12 @@ export const use3DMap = (
 
         const newX = Math.cos(radian) * radius;
         let newY;
-        if (planetAreSpawnedHorizontal) {
+        if (PLANET_ARE_SPAWNED_HORIZONTAL) {
           newY = 0;
         } else {
-          newY = Math.random() * planetsMaxVerticalSpawnHeight - planetsMaxVerticalSpawnHeight / 2;
+          newY =
+            Math.random() * PLANETS_MAX_VERTICAL_SPAWN_HEIGHT -
+            PLANETS_MAX_VERTICAL_SPAWN_HEIGHT / 2;
         }
         const newZ = Math.sin(radian) * radius;
 
