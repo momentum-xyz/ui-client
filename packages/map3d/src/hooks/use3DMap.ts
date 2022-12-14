@@ -35,7 +35,6 @@ export const use3DMap = (
   onOdysseyClick: (uuid: string) => void
 ) => {
   const odysseyAvatarGeometry = new THREE.CircleGeometry(0.8, 26);
-
   const listOfOddyseys: PlanetMesh[] = [];
 
   /**

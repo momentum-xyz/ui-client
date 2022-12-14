@@ -1,9 +1,6 @@
 export interface PlanetInterface {
-  id: number;
-  collectionId: number;
-  owner: string;
   uuid: string;
+  owner: string;
   name: string;
-  description?: string | undefined;
   image?: string | undefined;
 }
