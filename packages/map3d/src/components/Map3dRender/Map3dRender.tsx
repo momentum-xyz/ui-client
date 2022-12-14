@@ -19,10 +19,6 @@ const Map3dRender: FC<PropsInterface> = ({
 
   useEffect(() => {
     callbacks.drawConnections(connections);
-
-    return () => {
-      callbacks.changeWasLoaded();
-    };
   }, [callbacks, connections]);
 
   return <></>;

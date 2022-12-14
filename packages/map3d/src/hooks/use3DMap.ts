@@ -1,9 +1,8 @@
-import {useRef} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import gsap from 'gsap';
 import * as THREE from 'three';
 import {Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import * as dat from 'dat.gui';
 
 import {
   PARAMETERS,
@@ -19,8 +18,6 @@ import honey01 from '../static/images/honey01.jpg';
 import iceland01 from '../static/images/iceland01.jpg';
 import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
-let wasLoaded = false;
-
 export const use3DMap = (
   canvas: HTMLCanvasElement,
   items: PlanetInterface[],
@@ -28,24 +25,39 @@ export const use3DMap = (
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
 ) => {
+  const wasLoaded = useRef(false);
+
+  /**
+   * Reusable properties of galaxy
+   */
   const odysseyAvatarGeometry = useRef(new THREE.CircleGeometry(0.8, 26));
   const listOfOdysseys = useRef<PlanetMesh[]>([]);
   const referenceListOfOdysseys = useRef<PlanetMesh[]>([]);
   const selectedOdyssey = useRef<THREE.Object3D<THREE.Event>>();
-  const scene = useRef<THREE.Scene>(new THREE.Scene());
-  const camera = useRef<THREE.PerspectiveCamera>(
-    new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000)
-  );
-  const renderer = useRef<THREE.WebGLRenderer>(
+
+  const scene = useRef(new THREE.Scene());
+  const raycaster = useRef(new THREE.Raycaster());
+  const pointer = useRef(new THREE.Vector2());
+  const backgroundImage = useRef<THREE.Texture>();
+  const odysseyBaseSphereGeometry = useRef(new THREE.SphereGeometry(1, 16, 16));
+  const odysseyBaseSphereMaterial = useRef<THREE.MeshPhysicalMaterial>();
+  const updateCameraRotation = useRef<boolean>(false);
+  const transitionToPlanetFinished = useRef<boolean>(true);
+
+  const pointsGeometry = useRef<THREE.BufferGeometry | null>(null);
+  const pointsMaterial = useRef<THREE.PointsMaterial | null>(null);
+  const points = useRef<THREE.Points | null>(null);
+
+  const aspect = window.innerWidth / window.innerHeight;
+  const camera = useRef(new THREE.PerspectiveCamera(75, aspect, 0.1, 10000));
+  const renderer = useRef(
     new THREE.WebGLRenderer({
       canvas,
       antialias: true,
       powerPreference: 'high-performance'
     })
   );
-  const controls = useRef<OrbitControls>(
-    new OrbitControls(camera.current, renderer.current.domElement)
-  );
+  const controls = useRef(new OrbitControls(camera.current, renderer.current.domElement));
 
   /**
    * Draw lines between staked Odysseys.
@@ -93,19 +105,6 @@ export const use3DMap = (
     });
   };
 
-  // FIXME: Kovi
-  if (!wasLoaded) {
-    wasLoaded = true;
-  } else {
-    return {
-      drawConnections,
-      changeWasLoaded: () => {
-        wasLoaded = false;
-      }
-    };
-  }
-
-  // TODO: Kovi
   const createNewOdyssey = (item?: PlanetInterface) => {
     if (!item) {
       return;
@@ -134,8 +133,8 @@ export const use3DMap = (
     const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry.current, odysseyAvatarMaterial);
 
     const odyssey = new PlanetMesh(
-      odysseyBaseSphereGeometry,
-      odysseyBaseSphereMaterial,
+      odysseyBaseSphereGeometry.current,
+      odysseyBaseSphereMaterial.current!,
       item.uuid,
       item.owner,
       item.name,
@@ -147,83 +146,23 @@ export const use3DMap = (
     return odyssey;
   };
 
-  const raycaster = new THREE.Raycaster();
-  const pointer = new THREE.Vector2();
-  const gui = new dat.GUI();
-  let updateCameraRotation = false;
-  gui.hide();
-  let transitionToPlanetFinished = true;
-
-  // Camera Setup
-  camera.current.position.set(15, 20, 2);
-  camera.current.lookAt(0, 0, 0);
-  scene.current.add(camera.current);
-
-  // Light Setup
-  const ambient = new THREE.AmbientLight(0x404040, 5);
-  scene.current.add(ambient);
-
-  // Renderer Setup
-  renderer.current.setClearColor(0x222222);
-  renderer.current.setSize(window.innerWidth, window.innerHeight);
-  renderer.current.setPixelRatio(window.devicePixelRatio);
-
-  // Orbit Controls setup
-  controls.current.autoRotate = true;
-  controls.current.autoRotateSpeed = 0.3;
-  controls.current.enableDamping = true;
-  controls.current.enablePan = true;
-  controls.current.maxDistance = MAX_ORBIT_CAMERA_DISTANCE;
-  controls.current.minDistance = MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
-  controls.current.zoomSpeed = 1;
-
-  /**
-   * Happyship skybox
-   */
-
-  const backgroundImage = new THREE.TextureLoader().load(BasicSkyboxHD);
-  backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
-  scene.current.background = backgroundImage;
-
-  // Setup all base materials and geometries.
-  const odysseyBaseSphereGeometry = new THREE.SphereGeometry(1, 16, 16);
-
-  const odysseyBaseSphereMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
-    envMap: backgroundImage,
-    transmission: 1,
-    opacity: 0.3,
-    side: THREE.BackSide,
-    ior: 1.5,
-    metalness: 0.3,
-    roughness: 0,
-    specularIntensity: 1,
-    // @ts-ignore
-    transparentA: true
-  });
-
   /**
    * Build Galaxy
    */
-
-  let pointsGeometry: THREE.BufferGeometry | null = null;
-  let pointsMaterial: THREE.PointsMaterial | null = null;
-  let points: THREE.Points | null = null;
-
   const generateGalaxy = () => {
     /**
      * Clean previous renders of galaxy.
      */
-    if (points !== null && !!pointsGeometry && !!pointsMaterial) {
-      pointsGeometry.dispose();
-      pointsMaterial.dispose();
-      scene.current.remove(points);
+    if (points.current !== null) {
+      pointsGeometry.current?.dispose();
+      pointsMaterial.current?.dispose();
+      scene.current.remove(points.current);
     }
 
     /**
      * Geometry
      */
-    pointsGeometry = new THREE.BufferGeometry();
+    pointsGeometry.current = new THREE.BufferGeometry();
     const position = new Float32Array(PARAMETERS.count * 3);
 
     for (let i = 0; i < PARAMETERS.count; i++) {
@@ -246,12 +185,12 @@ export const use3DMap = (
       position[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
     }
 
-    pointsGeometry.setAttribute('position', new THREE.BufferAttribute(position, 3));
+    pointsGeometry.current.setAttribute('position', new THREE.BufferAttribute(position, 3));
 
     /**
      * Material
      */
-    pointsMaterial = new THREE.PointsMaterial({
+    pointsMaterial.current = new THREE.PointsMaterial({
       size: PARAMETERS.size,
       sizeAttenuation: true,
       depthWrite: false,
@@ -264,122 +203,9 @@ export const use3DMap = (
     /**
      * Create stars in the universe.
      */
-    points = new THREE.Points(pointsGeometry, pointsMaterial);
-    scene.current.add(points);
+    points.current = new THREE.Points(pointsGeometry.current, pointsMaterial.current);
+    scene.current.add(points.current);
   };
-
-  generateGalaxy();
-
-  gui.add(PARAMETERS, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy);
-  gui.add(PARAMETERS, 'size').min(0.001).max(0.1).step(0.001).onFinishChange(generateGalaxy);
-  gui.add(PARAMETERS, 'radius').min(1).max(500).step(1).onFinishChange(generateGalaxy);
-  gui.add(PARAMETERS, 'branches').min(2).max(10).step(1).onFinishChange(generateGalaxy);
-  gui.add(PARAMETERS, 'spin').min(-3).max(3).step(0.1).onFinishChange(generateGalaxy);
-  gui.add(PARAMETERS, 'randomnes').min(0).max(2).step(0.001).onFinishChange(generateGalaxy);
-  gui.add(PARAMETERS, 'randomnesPower').min(1).max(10).step(0.001).onFinishChange(generateGalaxy);
-  gui.add(PARAMETERS, 'YHeight').min(1).max(150).step(1).onFinishChange(generateGalaxy);
-
-  // update mouse location on screen
-  function onPointerMove(event: PointerEvent) {
-    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  }
-
-  // Onclick event
-  function onMouseDown(event: MouseEvent) {
-    if (event.button !== 0) {
-      return;
-    }
-    // Create Raycast
-    raycaster.setFromCamera(pointer, camera.current);
-    const castRay = raycaster.intersectObjects(referenceListOfOdysseys.current, false);
-
-    // Process the Raycast.
-    if (castRay.length > 0) {
-      // Make sure transition to the newly clicked planet has finished.
-      if (!transitionToPlanetFinished) {
-        return;
-      }
-
-      // Only react to first raycast hit
-
-      const targetPlanet = castRay[0];
-
-      // If clicked planet is same as current selected one return
-      if (targetPlanet.object === selectedOdyssey.current) {
-        return;
-      }
-
-      // Log information about selected Odyssey
-      console.log(targetPlanet.object);
-
-      selectedOdyssey.current = targetPlanet.object;
-
-      const targetVector = new THREE.Vector3();
-      targetPlanet.object.getWorldPosition(targetVector);
-
-      // FIXME: Kovi. Extract info from planet Kovi
-      onOdysseyClick(targetPlanet.object.uuid);
-
-      // Prepare fly to planets.
-      const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
-
-      // Prepare rotation of camera animation.
-      const startOrientation = camera.current.quaternion.clone();
-
-      const targetOrientation = camera.current.quaternion
-        // @ts-ignore
-        .clone(camera.current.lookAt(targetVector))
-        .normalize();
-
-      // Get the direction for the new location.
-      const direction = new THREE.Vector3();
-      direction.subVectors(targetVector, camera.current.position).normalize();
-
-      // Get distance from raycast minus minimal distance orbit control
-      // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
-      const targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
-      const distance =
-        targetVectorForDistance.distanceTo(camera.current.position) -
-        MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
-
-      // Create new target for the camera.
-      const targetLocation = new THREE.Vector3();
-      targetLocation.addVectors(camera.current.position, direction.multiplyScalar(distance));
-
-      //Animate using gsap module.
-      gsap.to(camera.current.position, {
-        duration: 1.5,
-        x: targetLocation.x,
-        y: targetLocation.y,
-        z: targetLocation.z,
-
-        onStart: function () {
-          transitionToPlanetFinished = false;
-          updateCameraRotation = true;
-          controls.current.enabled = false;
-          controls.current.autoRotate = false;
-          controls.current.enablePan = false;
-        },
-        onUpdate: function () {
-          camera.current.quaternion
-            .copy(startOrientation)
-            .slerp(targetOrientation, this.progress());
-        },
-        onComplete: function () {
-          updateCameraRotation = false;
-          controls.current.enabled = true;
-          controls.current.enablePan = true;
-          controls.current.autoRotate = true;
-          controls.current.target = targetPlanetLocation;
-          transitionToPlanetFinished = true;
-        }
-      });
-    }
-  }
-
-  window.addEventListener('pointermove', onPointerMove);
-  window.addEventListener('mousedown', onMouseDown);
 
   /**
    * Create array for odyssey
@@ -398,19 +224,6 @@ export const use3DMap = (
 
     referenceListOfOdysseys.current = [...listOfOdysseys.current];
   };
-
-  ProcessOdyssey();
-
-  /**
-   * Create USER OWN odyssey at the center.
-   */
-
-  // TODO: Kovi
-  const centerOdyssey = createNewOdyssey(items.find((i) => i.uuid === centerUuid));
-  if (centerOdyssey) {
-    scene.current.add(centerOdyssey);
-    referenceListOfOdysseys.current.push(centerOdyssey);
-  }
 
   /**
    * Create Circular Universe of Odysseys
@@ -480,12 +293,10 @@ export const use3DMap = (
     });
   };
 
-  buildUniverse();
-
   // Animation
-  function animate() {
+  const animate = () => {
     // Update controls for auto-rotate.
-    if (!updateCameraRotation) {
+    if (!updateCameraRotation.current) {
       controls.current.update();
     }
 
@@ -500,24 +311,205 @@ export const use3DMap = (
 
     // Re-call Animation
     window.requestAnimationFrame(animate);
-  }
+  };
 
-  // On window resize:
-  function onWindowResize() {
+  /**
+   * Update mouse location on screen
+   */
+  const onPointerMove = useCallback((event: PointerEvent) => {
+    pointer.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  }, []);
+
+  /**
+   * Select planet handler
+   */
+  const onMouseDown = useCallback(
+    (event: MouseEvent) => {
+      if (event.button !== 0) {
+        return;
+      }
+
+      // Create Raycast
+      raycaster.current.setFromCamera(pointer.current, camera.current);
+      const castRay = raycaster.current.intersectObjects(referenceListOfOdysseys.current, false);
+
+      // Process the Raycast.
+      if (castRay.length > 0) {
+        // Make sure transition to the newly clicked planet has finished.
+        if (!transitionToPlanetFinished.current) {
+          return;
+        }
+
+        // Only react to first raycast hit
+
+        const targetPlanet = castRay[0];
+
+        // If clicked planet is same as current selected one return
+        if (targetPlanet.object === selectedOdyssey.current) {
+          return;
+        }
+
+        // Log information about selected Odyssey
+        console.log(targetPlanet.object);
+
+        selectedOdyssey.current = targetPlanet.object;
+
+        const targetVector = new THREE.Vector3();
+        targetPlanet.object.getWorldPosition(targetVector);
+
+        // FIXME: Kovi. Extract info from planet Kovi
+        onOdysseyClick(targetPlanet.object.uuid);
+
+        // Prepare fly to planets.
+        const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
+
+        // Prepare rotation of camera animation.
+        const startOrientation = camera.current.quaternion.clone();
+
+        const targetOrientation = camera.current.quaternion
+          // @ts-ignore
+          .clone(camera.current.lookAt(targetVector))
+          .normalize();
+
+        // Get the direction for the new location.
+        const direction = new THREE.Vector3();
+        direction.subVectors(targetVector, camera.current.position).normalize();
+
+        // Get distance from raycast minus minimal distance orbit control
+        // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
+        const targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
+        const distance =
+          targetVectorForDistance.distanceTo(camera.current.position) -
+          MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
+
+        // Create new target for the camera.
+        const targetLocation = new THREE.Vector3();
+        targetLocation.addVectors(camera.current.position, direction.multiplyScalar(distance));
+
+        //Animate using gsap module.
+        gsap.to(camera.current.position, {
+          duration: 1.5,
+          x: targetLocation.x,
+          y: targetLocation.y,
+          z: targetLocation.z,
+
+          onStart: function () {
+            transitionToPlanetFinished.current = false;
+            updateCameraRotation.current = true;
+            controls.current.enabled = false;
+            controls.current.autoRotate = false;
+            controls.current.enablePan = false;
+          },
+          onUpdate: function () {
+            camera.current.quaternion
+              .copy(startOrientation)
+              .slerp(targetOrientation, this.progress());
+          },
+          onComplete: function () {
+            updateCameraRotation.current = false;
+            controls.current.enabled = true;
+            controls.current.enablePan = true;
+            controls.current.autoRotate = true;
+            controls.current.target = targetPlanetLocation;
+            transitionToPlanetFinished.current = true;
+          }
+        });
+      }
+    },
+    [onOdysseyClick]
+  );
+
+  /**
+   * On window resize handler
+   */
+  const onWindowResize = useCallback(() => {
     camera.current.aspect = window.innerWidth / window.innerHeight;
     camera.current.updateProjectionMatrix();
     renderer.current.setSize(window.innerWidth, window.innerHeight);
-  }
+  }, []);
 
-  // EventListeners.
-  window.addEventListener('resize', onWindowResize, false);
-
-  animate();
-
-  return {
-    drawConnections,
-    changeWasLoaded: () => {
-      wasLoaded = false;
+  useEffect(() => {
+    if (wasLoaded.current) {
+      return;
     }
-  };
+
+    wasLoaded.current = true;
+
+    // Camera Setup
+    camera.current.position.set(15, 20, 2);
+    camera.current.lookAt(0, 0, 0);
+    scene.current.add(camera.current);
+
+    // Light Setup
+    const ambient = new THREE.AmbientLight(0x404040, 5);
+    scene.current.add(ambient);
+
+    // Renderer Setup
+    renderer.current.setClearColor(0x222222);
+    renderer.current.setSize(window.innerWidth, window.innerHeight);
+    renderer.current.setPixelRatio(window.devicePixelRatio);
+
+    // Orbit Controls setup
+    controls.current.autoRotate = true;
+    controls.current.autoRotateSpeed = 0.3;
+    controls.current.enableDamping = true;
+    controls.current.enablePan = true;
+    controls.current.maxDistance = MAX_ORBIT_CAMERA_DISTANCE;
+    controls.current.minDistance = MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
+    controls.current.zoomSpeed = 1;
+
+    // Happy ship skybox
+    backgroundImage.current = new THREE.TextureLoader().load(BasicSkyboxHD);
+    backgroundImage.current.mapping = THREE.EquirectangularReflectionMapping;
+    scene.current.background = backgroundImage.current;
+
+    // Setup all base materials and geometries.
+    odysseyBaseSphereMaterial.current = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      envMap: backgroundImage.current,
+      transmission: 1,
+      opacity: 0.3,
+      side: THREE.BackSide,
+      ior: 1.5,
+      metalness: 0.3,
+      roughness: 0,
+      specularIntensity: 1,
+      // @ts-ignore
+      transparentA: true
+    });
+
+    generateGalaxy();
+
+    ProcessOdyssey();
+
+    /**
+     * Create USER OWN odyssey at the center.
+     */
+
+    // TODO: Kovi
+    const centerOdyssey = createNewOdyssey(items.find((i) => i.uuid === centerUuid));
+    if (centerOdyssey) {
+      scene.current.add(centerOdyssey);
+      referenceListOfOdysseys.current.push(centerOdyssey);
+    }
+
+    buildUniverse();
+
+    animate();
+  }, [ProcessOdyssey, animate, centerUuid, createNewOdyssey, items]);
+
+  useEffect(() => {
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('resize', onWindowResize, false);
+
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('resize', onWindowResize, false);
+    };
+  }, [onMouseDown, onPointerMove, onWindowResize]);
+
+  return {drawConnections};
 };
