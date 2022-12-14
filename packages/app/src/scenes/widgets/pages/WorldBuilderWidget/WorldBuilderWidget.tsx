@@ -22,7 +22,7 @@ const WorldBuilderWidget: FC = () => {
     wallet: worldNft?.owner
   });
   const collapsedItem: ToolbarIconInterface = {
-    title: 'World Builder',
+    title: 'Odyssey Creator',
     icon: 'planet',
     size: 'medium',
     link: generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
@@ -31,7 +31,7 @@ const WorldBuilderWidget: FC = () => {
 
   const expandedItems: ToolbarIconInterface[] = [
     {
-      title: 'Close World Builder',
+      title: 'Close Odyssey Creator',
       // icon: 'planet',
       icon: 'close',
       size: 'medium',
@@ -72,7 +72,7 @@ const WorldBuilderWidget: FC = () => {
         <styled.StandoutBuilderModeContainer>
           <IconSvg name="planet" size="large" />
           <Text
-            text="World Builder Mode Enabled"
+            text="Odyssey Creator Mode Enabled"
             size="xxs"
             transform="uppercase"
             isMultiline={false}
