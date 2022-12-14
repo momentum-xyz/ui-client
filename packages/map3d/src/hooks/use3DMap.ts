@@ -9,6 +9,7 @@ import {Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 
+import {PlanetMesh} from '../classes';
 import {PlanetInterface} from '../interfaces';
 
 import baseAtmos from '../static/images/baseAtmos.jpg';
@@ -17,36 +18,6 @@ import showTime from '../static/images/showTime.jpg';
 import honey01 from '../static/images/honey01.jpg';
 import iceland01 from '../static/images/iceland01.jpg';
 import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
-
-class Odyssey extends THREE.Mesh {
-  constructor(geometry, material, uuid, wallet, name, url) {
-    super(geometry, material);
-
-    this.material = material;
-    this.geometry = geometry;
-    this.uuid = uuid;
-    this.wallet = wallet;
-    this.name = name;
-    this.url = url;
-    this.isOdyssey = true;
-  }
-
-  connectedOdysseys = [];
-
-  /**
-   * Generating random Connection for vizualisation of connections.
-   * DELETE THIS LATER.
-   */
-  randomConnection = (maxAmount) => {
-    let amountToGenerate = 1; //Math.floor(Math.random() * 1);
-    for (let i = 0; i < amountToGenerate; i++) {
-      let object = {
-        id: Math.floor(Math.random() * maxAmount)
-      };
-      this.connectedOdysseys.push(object);
-    }
-  };
-}
 
 let wasLoaded = false;
 
@@ -61,7 +32,6 @@ export const use3DMap = (
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
 ) => {
-  let AmountOfGalaxyToGenereate = 200;
   let maxOdysseyConnectionLineHeight = 20;
   let MaxOrbitCameraDistance = 200;
   let planetAreSpawnedHorizontal = false;
@@ -161,7 +131,7 @@ export const use3DMap = (
 
     const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry, odysseyAvatarMaterial);
 
-    const odyssey = new Odyssey(
+    const odyssey = new PlanetMesh(
       odysseyBaseSphereGeometry,
       odysseyBaseSphereMaterial,
       item.uuid,
@@ -182,11 +152,8 @@ export const use3DMap = (
   gui.hide();
   let transitionToPlanetFinished = true;
 
-  let meshArray = [];
-
   // TODO: Kovi
   // Scene setup
-  //canvas = document.querySelector('.webgl');
   scene = new THREE.Scene();
 
   // Camera Setup
@@ -502,8 +469,6 @@ export const use3DMap = (
 
         currentOdyssey.position.set(newX, newY, newZ);
 
-        currentOdyssey.randomConnection(AmountOfGalaxyToGenereate); // TEMP: Generate Random Connection in Class.
-
         odysseyCircle.add(currentOdyssey);
       }
 
@@ -529,39 +494,6 @@ export const use3DMap = (
   };
 
   buildUniverse();
-
-  /**
-   * Highlight Mesh
-   */
-
-  /*
-  const highlightGeometry = new THREE.PlaneGeometry(3,3);
-  const highlightMateiral = new THREE.MeshBasicMaterial({color: 0xFFFFFF, transparent: true, opacity: 0.2});
-  const highlightMesh = new THREE.Mesh(highlightGeometry, highlightMateiral)
-  highlightMesh.lookAt(camera.position);
-  scene.add(highlightMesh);
-  */
-
-  /*
-  function highlightObjects(){
-
-      raycaster.setFromCamera(pointer, camera);
-
-      const objectToHighlight = raycaster.intersectObjects(scene.children, true);
-
-      if(objectToHighlight.length > 0){
-
-          objectToHighlight.forEach( item => {
-              if(item.object.isOdyssey && item.object !== selectedOdyssey){
-                  highlightMesh.position .set(item.object.position.x, item.object.position.y, item.object.position.z)
-              }
-          })
-
-       }
-       // Update rotation of highlight plane to face camera.
-       highlightMesh.lookAt(camera.position);
-  }
-  */
 
   /**
    * Handle fade out

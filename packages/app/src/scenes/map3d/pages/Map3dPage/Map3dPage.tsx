@@ -25,6 +25,7 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
     [isClickActive, map3dStore, nftStore.nftItems]
   );
 
+  // FIXME: Make a view under the NFT store
   const friendsWallets = new Set([
     ...nftStore.stakingAtMe.keys(),
     ...nftStore.stakingAtOthers.keys()
