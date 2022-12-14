@@ -11,6 +11,7 @@ const WorldBuilderObjectStore = types
       objectInfo: types.maybe(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       updateAsset2dRequest: types.optional(RequestModel, {}),
+      removeObjectRequest: types.optional(RequestModel, {}),
       assets2D: types.optional(types.frozen<Record<string, string>>(), {
         '0d99e5aa-a627-4353-8bfa-1c0e7053db90': 'google drive Local',
         '2a879830-b79e-4c35-accc-05607c51d504': 'miro local',
@@ -48,7 +49,16 @@ const WorldBuilderObjectStore = types
     }),
     selectAsset(id: string) {
       self.currentAssetId = id;
-    }
+    },
+    deleteObject: flow(function* () {
+      if (!self.objectId) {
+        return;
+      }
+
+      yield self.removeObjectRequest.send(api.spaceRepository.deleteSpace, {
+        spaceId: self.objectId
+      });
+    })
   }));
 
 export {WorldBuilderObjectStore};

@@ -105,11 +105,11 @@ export interface EditSpaceResponse extends SpaceSettingsInterface {}
 
 /** Delete space **/
 
-export interface DeleteSpaceRequest {
+export interface OldDeleteSpaceRequest {
   spaceId: string;
 }
 
-export interface DeleteSpaceResponse {
+export interface OldDeleteSpaceResponse {
   status: number;
   message: string;
 }
