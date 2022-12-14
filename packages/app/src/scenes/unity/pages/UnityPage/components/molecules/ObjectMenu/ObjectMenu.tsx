@@ -62,9 +62,11 @@ const ObjectMenu: FC<PropsInterface> = ({
         <styled.MenuItem onClick={onObjectRemove}>
           <styled.MenuText text="Delete" size="m" />
         </styled.MenuItem>
-        <styled.MenuItem>
-          <styled.MenuText text="Copy" size="m" />
-        </styled.MenuItem>
+        <Tooltip label="comming soon!" placement="bottom">
+          <styled.MenuItem disabled>
+            <styled.MenuText text="Copy" size="m" />
+          </styled.MenuItem>
+        </Tooltip>
         <styled.MenuItem onClick={handleOnFunctionalityClick}>
           <styled.MenuText text="Functionality" size="m" />
         </styled.MenuItem>
