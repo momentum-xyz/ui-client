@@ -1,46 +1,47 @@
-import React, {FC, memo, useState} from 'react';
+import React, {FC, memo} from 'react';
 import cn from 'classnames';
+import defaultLoaderPlaceholder from 'static/images/spinner.svg';
+import defaultErrorPlaceholder from 'static/images/astronaut.svg';
 
-import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType} from '../../types';
+import {ComponentSizeInterface} from 'interfaces';
 
 import * as styled from './Image.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+interface PropsInterface {
   src?: string;
-  size: SizeType;
-  onClick?: () => void;
-  className?: string;
   isLoading?: boolean;
   isError?: boolean;
+  sizeProps?: ComponentSizeInterface;
+  className?: string;
+  errorPlaceholder?: string;
+  loaderPlaceholder?: string;
 }
 
-const Avatar: FC<PropsInterface> = ({
-  src,
-  size,
-  className,
-  onClick,
-  isLoading = false,
-  isError = false
-}) => {
-  const [error, setError] = useState(isError);
+const Image: FC<PropsInterface> = (props) => {
+  const {
+    src,
+    sizeProps,
+    className,
+    isLoading = false,
+    isError = false,
+    errorPlaceholder = defaultErrorPlaceholder,
+    loaderPlaceholder = defaultLoaderPlaceholder
+  } = props;
 
   return (
     <styled.Container
       data-testid="Image-test"
-      className={cn(size, isLoading && 'loading', isError && 'error', className)}
-      onClick={onClick}
+      className={cn(`${className}-container`)}
+      {...sizeProps}
     >
       {isLoading ? (
-        <div>(spinner)</div>
+        <styled.Loader src={loaderPlaceholder} />
       ) : (
         <>
-          {src && !error ? (
-            <styled.ImageWrapper>
-              <styled.Image src={src} alt={src} onError={() => setError(true)} />
-            </styled.ImageWrapper>
+          {src && !isError ? (
+            <styled.Image src={src} alt={src} className={cn(className)} />
           ) : (
-            <div>(error)</div>
+            <styled.ErroredImage src={errorPlaceholder} />
           )}
         </>
       )}
@@ -48,10 +49,4 @@ const Avatar: FC<PropsInterface> = ({
   );
 };
 
-export default memo(Avatar);
-
-{
-  /* <styled.ImageWrapper>
-  <styled.Image src={src} alt={src} onError={() => setError(true)} />
-</styled.ImageWrapper> */
-}
+export default memo(Image);

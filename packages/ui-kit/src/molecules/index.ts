@@ -3,6 +3,7 @@ export * from './ColorPicker';
 export * from './Dropdown';
 export * from './ExpandableLayout';
 export * from './FileUploader';
+export * from './Image';
 export * from './NavigationBarItem';
 export * from './SearchInput';
 export * from './SectionPanel';

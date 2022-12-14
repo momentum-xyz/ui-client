@@ -1,6 +1,6 @@
 import React, {FC, memo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {IconSvg, Text, Button} from '@momentum-xyz/ui-kit';
+import {IconSvg, Text, Button, Image} from '@momentum-xyz/ui-kit';
 
 import {OdysseyItemInterface} from 'scenes/explore/stores';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -44,7 +44,11 @@ const OdysseyInfo: FC<PropsInterface> = ({
     <styled.OdysseyInfoContainer data-testid="OdysseyInfo-test">
       <styled.Container>
         <styled.TopContainer>
-          <styled.Avatar src={getImageAbsoluteUrl(avatar) || ''} />
+          <Image
+            src={getImageAbsoluteUrl(avatar) || ''}
+            sizeProps={{width: '90px', height: '90px'}}
+            className="avatar"
+          />
           <styled.Actions>
             {!!onVisit && (
               <Button
