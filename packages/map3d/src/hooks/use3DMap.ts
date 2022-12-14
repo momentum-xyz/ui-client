@@ -4,8 +4,6 @@ import {Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 
-import {PlanetMesh} from '../classes';
-import {PlanetInterface} from '../interfaces';
 import {
   PARAMETERS,
   MAX_ODYSSEY_CONNECTION_LINE_HEIGHT,
@@ -14,11 +12,10 @@ import {
   PLANET_ARE_SPAWNED_HORIZONTAL,
   PLANETS_MAX_VERTICAL_SPAWN_HEIGHT
 } from '../contants';
-// @ts-ignore
+import {PlanetMesh} from '../classes';
+import {PlanetInterface} from '../interfaces';
 import honey01 from '../static/images/honey01.jpg';
-// @ts-ignore
 import iceland01 from '../static/images/iceland01.jpg';
-// @ts-ignore
 import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
 let wasLoaded = false;
