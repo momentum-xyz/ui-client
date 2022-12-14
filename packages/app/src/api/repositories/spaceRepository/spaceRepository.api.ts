@@ -12,7 +12,12 @@ import {
 } from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 
-import {FetchSpaceRequest, PostSpaceRequest, PostSpaceResponse} from './spaceRepository.api.types';
+import {
+  DeleteSpaceRequest,
+  FetchSpaceRequest,
+  PostSpaceRequest,
+  PostSpaceResponse
+} from './spaceRepository.api.types';
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
 // TODO: This functionality is still in progress
@@ -55,4 +60,10 @@ export const postSpace: RequestInterface<PostSpaceRequest, PostSpaceResponse> = 
     },
     restOptions
   );
+};
+
+export const deleteSpace: RequestInterface<DeleteSpaceRequest, DeleteSpaceRequest> = (options) => {
+  const {spaceId, ...restOptions} = options;
+
+  return request.delete(generatePath(spaceRepositoryEndpoints().space, {spaceId}), restOptions);
 };

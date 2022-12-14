@@ -23,6 +23,7 @@ import {
 import {AssetTypeEnum} from 'core/enums';
 
 import * as styled from './UnityPage.styled';
+import {ObjectMenu} from './components';
 
 const UnityContextCSS = {
   width: '100vw',
@@ -30,8 +31,9 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, authStore, unityLoaded, sessionStore} = useStore();
+  const {mainStore, authStore, unityLoaded, sessionStore, worldBuilderStore} = useStore();
   const {unityStore, worldStore} = mainStore;
+  const {worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -110,12 +112,8 @@ const UnityPage: FC = () => {
 
   useUnityEvent('ClickEventEditableObject', (spaceId: string) => {
     console.log('ClickEventEditableObject', spaceId);
-    history.push({
-      pathname: generatePath(ROUTES.odyssey.builder.editor, {
-        worldId: worldStore.worldId,
-        objectId: spaceId
-      })
-    });
+    // This even comes faster than actual click, so delay
+    setTimeout(() => unityStore.onUnityObjectClick(spaceId), 500);
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
@@ -241,7 +239,12 @@ const UnityPage: FC = () => {
 
   return (
     <Portal>
-      <styled.Inner data-testid="UnityPage-test">
+      <styled.Inner
+        data-testid="UnityPage-test"
+        onClick={(event) => {
+          unityStore.handleClick(event.clientX, event.clientY);
+        }}
+      >
         <Unity unityContext={unityStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
       {/*<PathObserver
@@ -249,6 +252,17 @@ const UnityPage: FC = () => {
         resumeUnity={unityStore.resume}
         pauseUnity={unityStore.pause}
       />*/}
+      {unityStore.objectMenu.isOpen && (
+        <ObjectMenu
+          worldId={worldStore.worldId}
+          position={unityStore.objectMenuPosition}
+          objectId={unityStore.selectedObjectId ?? ' '}
+          onObjectRemove={worldBuilderObjectStore.deleteObject}
+          fetchObject={worldBuilderObjectStore.fetchObject}
+          onUndo={unityStore.undo}
+          onRedo={unityStore.redo}
+        />
+      )}
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>
   );

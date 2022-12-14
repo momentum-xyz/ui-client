@@ -1,5 +1,6 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {matchPath, useLocation} from 'react-router-dom';
 //import cn from 'classnames';
 //import {Button} from '@momentum-xyz/ui-kit';
 
@@ -13,9 +14,16 @@ import {observer} from 'mobx-react-lite';
 //import {useStore} from 'shared/hooks';
 
 //import {ExplorePanel} from './components';
+
+import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
+
 import * as styled from './OdysseyPage.styled';
 const OdysseyPage: FC = () => {
-  //const {widgetsStore} = useStore();
+  const {mainStore} = useStore();
+  const {unityStore} = mainStore;
+
+  // const {widgetsStore} = useStore();
   //const {socialStore} = widgetsStore;
   //const {widget: socialWidget} = socialStore;
   // const {onlineUsersStore, userProfileDialog} = homeStore;
@@ -31,6 +39,14 @@ const OdysseyPage: FC = () => {
   //   },
   //   [unityStore, history]
   // );
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!matchPath(location.pathname, ROUTES.odyssey.builder.base)) {
+      unityStore.objectMenu.close();
+    }
+  }, [location.pathname, unityStore.objectMenu]);
 
   return (
     <styled.Container data-testid="HomePage-test">

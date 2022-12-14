@@ -259,6 +259,14 @@ export class UnityService {
     this.isBuildMode = !this.isBuildMode;
   }
 
+  undo() {
+    this.unityApi?.undoActionWorldBuilder();
+  }
+
+  redo() {
+    this.unityApi?.redoActionWorldBuilder();
+  }
+
   leaveSpace(id: string) {
     try {
       this.unityApi?.triggerInteractionMsg?.(PosBusEventEnum.LeftSpace, id, 0, '');

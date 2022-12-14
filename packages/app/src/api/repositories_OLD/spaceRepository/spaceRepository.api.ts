@@ -12,8 +12,8 @@ import {
   CreateInitiativeResponse,
   CreateSpaceRequest,
   CreateSpaceResponse,
-  DeleteSpaceRequest,
-  DeleteSpaceResponse,
+  OldDeleteSpaceRequest,
+  OldDeleteSpaceResponse,
   EditSpaceRequest,
   EditSpaceResponse,
   EditUserRequest,
@@ -47,7 +47,9 @@ export const editSpace: RequestInterface<EditSpaceRequest, EditSpaceResponse> = 
   return request.put(url, settings, restOptions);
 };
 
-export const deleteSpace: RequestInterface<DeleteSpaceRequest, DeleteSpaceResponse> = (options) => {
+export const deleteSpace: RequestInterface<OldDeleteSpaceRequest, OldDeleteSpaceResponse> = (
+  options
+) => {
   const {spaceId, ...restOptions} = options;
 
   const url = `${spaceRepositoryEndpoints().delete}/${spaceId}`;
