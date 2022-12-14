@@ -36,19 +36,19 @@ const WorldBuilderWidget: FC = () => {
       icon: 'close',
       size: 'medium',
       link: generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId})
-    },
-    {
-      title: 'Skybox',
-      icon: 'skybox',
-      size: 'large',
-      link: generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId})
-    },
-    {
-      title: 'Upload',
-      icon: 'add',
-      size: 'medium',
-      link: generatePath(ROUTES.odyssey.builder.spawnAsset.base, {worldId: worldStore.worldId})
     }
+    // {
+    //   title: 'Skybox',
+    //   icon: 'skybox',
+    //   size: 'large',
+    //   link: generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId})
+    // },
+    // {
+    //   title: 'Upload',
+    //   icon: 'add',
+    //   size: 'medium',
+    //   link: generatePath(ROUTES.odyssey.builder.spawnAsset.base, {worldId: worldStore.worldId})
+    // }
     // {
     //   title: 'Spawn Point',
     //   icon: 'planet',

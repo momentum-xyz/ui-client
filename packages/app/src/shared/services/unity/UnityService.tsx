@@ -4,7 +4,7 @@ import {getUnityPosition} from 'core/utils';
 import {UnityEventEmitter, UnityTargetTypeEnum} from 'core/constants';
 import {UnityApiInterface} from 'core/interfaces';
 import {PosBusService} from 'shared/services';
-import {PosBusEventEnum} from 'core/enums';
+import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {PosBusEmojiMessageType} from 'core/types';
 
 export class UnityService {
@@ -265,6 +265,10 @@ export class UnityService {
 
   redo() {
     this.unityApi?.redoActionWorldBuilder();
+  }
+
+  changeGizmoType(type: GizmoTypeEnum) {
+    this.unityApi?.changeGizmoTypeWorldBuilder(type as string);
   }
 
   leaveSpace(id: string) {
