@@ -11,7 +11,8 @@ import {
   PluginOptionsInterface,
   ObjectMetadataInterface,
   ObjectOptionsInterface,
-  ObjectInterface
+  ObjectInterface,
+  UploadImageResponse
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {ObjectTypeEnum} from 'core/enums';
@@ -31,6 +32,7 @@ const ObjectStore = types
       getSpaceInfoRequest: types.optional(RequestModel, {}),
       getAssetRequest: types.optional(RequestModel, {}),
 
+      imageUpload: types.optional(RequestModel, {}),
       setTileRequest: types.optional(RequestModel, {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
@@ -98,6 +100,26 @@ const ObjectStore = types
           break;
         }
       }
+    }),
+    postNewImage: flow(function* (objectId: string, file: File) {
+      if (!self.tileStore.pluginId) {
+        return;
+      }
+      const data = {file: file};
+      const userResponse: UploadImageResponse = yield self.imageUpload.send(
+        api.mediaRepository.uploadImage,
+        data
+      );
+      const imageHash = userResponse?.hash;
+
+      yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: objectId,
+        plugin_id: self.tileStore.pluginId,
+        attribute_name: AttributeNameEnum.STATE,
+        value: {render_hash: imageHash}
+      });
+
+      yield self.tileStore.getSpaceAttributeValue(self.tileStore.pluginId, objectId);
     }),
     postNewContent: flow(function* (objectId: string, content: ObjectInterface) {
       if (!self.tileStore.pluginId) {
