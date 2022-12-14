@@ -18,6 +18,10 @@ export const MenuItem = styled.button`
   :nth-child(7) {
     border-right: 1px solid ${(props) => props.theme.accent};
   }
+
+  :disabled {
+    opacity: 60%;
+  }
 `;
 
 export const MenuText = styled(Text)`

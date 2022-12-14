@@ -1,5 +1,5 @@
 import {FC, useCallback, useEffect} from 'react';
-import {Portal} from '@momentum-xyz/ui-kit';
+import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
@@ -62,15 +62,19 @@ const ObjectMenu: FC<PropsInterface> = ({
         <styled.MenuItem onClick={onObjectRemove}>
           <styled.MenuText text="Delete" size="m" />
         </styled.MenuItem>
-        <styled.MenuItem>
-          <styled.MenuText text="Copy" size="m" />
-        </styled.MenuItem>
+        <Tooltip label="comming soon!" placement="bottom">
+          <styled.MenuItem disabled>
+            <styled.MenuText text="Copy" size="m" />
+          </styled.MenuItem>
+        </Tooltip>
         <styled.MenuItem onClick={handleOnFunctionalityClick}>
           <styled.MenuText text="Functionality" size="m" />
         </styled.MenuItem>
-        <styled.MenuItem>
-          <styled.MenuText text="Add token gate" size="m" />
-        </styled.MenuItem>
+        <Tooltip label="comming soon!">
+          <styled.MenuItem disabled>
+            <styled.MenuText text="Add token gate" size="m" />
+          </styled.MenuItem>
+        </Tooltip>
       </styled.Container>
     </Portal>
   );
