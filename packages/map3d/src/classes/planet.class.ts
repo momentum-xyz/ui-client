@@ -6,7 +6,7 @@ export class PlanetMesh extends THREE.Mesh {
   uuid: string;
   wallet: string;
   name: string;
-  url: string;
+  url: THREE.Texture;
   isOdyssey: boolean;
 
   constructor(
@@ -15,7 +15,7 @@ export class PlanetMesh extends THREE.Mesh {
     uuid: string,
     wallet: string,
     name: string,
-    url: string
+    url: THREE.Texture
   ) {
     super(geometry, material);
 

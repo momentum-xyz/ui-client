@@ -1,8 +1,3 @@
-/* eslint-disable */
-// @ts-nocheck
-
-// FIXME: Refactoring !!! After 6th !!!
-
 import gsap from 'gsap';
 import * as THREE from 'three';
 import {Vector3} from 'three';
@@ -11,19 +6,21 @@ import * as dat from 'dat.gui';
 
 import {PlanetMesh} from '../classes';
 import {PlanetInterface} from '../interfaces';
-
-import baseAtmos from '../static/images/baseAtmos.jpg';
-import temptations from '../static/images/temptations.jpg';
-import showTime from '../static/images/showTime.jpg';
+// @ts-ignore
 import honey01 from '../static/images/honey01.jpg';
+// @ts-ignore
 import iceland01 from '../static/images/iceland01.jpg';
+// @ts-ignore
 import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
 let wasLoaded = false;
 
 // TODO: Kovi
-let scene, renderer, controls, selectedOdyssey;
-let referenceListOfOdysseys = [];
+let scene: THREE.Scene;
+let renderer: THREE.WebGLRenderer;
+let controls: OrbitControls;
+let selectedOdyssey: THREE.Object3D<THREE.Event>;
+let referenceListOfOdysseys: PlanetMesh[] = [];
 
 export const use3DMap = (
   canvas: HTMLCanvasElement,
@@ -32,15 +29,15 @@ export const use3DMap = (
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onOdysseyClick: (uuid: string) => void
 ) => {
-  let maxOdysseyConnectionLineHeight = 20;
-  let MaxOrbitCameraDistance = 200;
-  let planetAreSpawnedHorizontal = false;
-  let planetsMaxVerticalSpawnHeight = 100;
+  const maxOdysseyConnectionLineHeight = 20;
+  const MaxOrbitCameraDistance = 200;
+  const planetAreSpawnedHorizontal = false;
+  const planetsMaxVerticalSpawnHeight = 100;
   const minimalDistanceToPlanetForCamera = 5;
 
   const odysseyAvatarGeometry = new THREE.CircleGeometry(0.8, 26);
 
-  let listOfOddyseys = [];
+  const listOfOddyseys: PlanetMesh[] = [];
 
   /**
    * Draw lines between staked Odysseys.
@@ -48,7 +45,6 @@ export const use3DMap = (
 
   const drawConnections = (connections: Record<string, {id: string}[]>) => {
     // setup reusable variables and material
-    let vectorsForLine = [];
     const lineMat = new THREE.LineBasicMaterial({
       color: 0xffffff,
       transparent: true,
@@ -59,8 +55,6 @@ export const use3DMap = (
       const odyssey = referenceListOfOdysseys.find((item) => item.uuid === uuid);
       if (odyssey && connectedUuids?.length > 0) {
         connectedUuids.forEach((connectedUuid) => {
-          vectorsForLine = []; //clean for next line.
-
           // Get positions from connected odyssey and draw line.
           const foundOdyssey = referenceListOfOdysseys.find(
             (planet) => planet.uuid === connectedUuid.id
@@ -69,7 +63,7 @@ export const use3DMap = (
           if (foundOdyssey) {
             const randomLineHeight =
               Math.random() * maxOdysseyConnectionLineHeight * (Math.random() > 0.5 ? 1 : -1);
-            let middlePosition = new Vector3(
+            const middlePosition = new Vector3(
               (odyssey.position.x + foundOdyssey.position.x) / 2,
               randomLineHeight,
               (odyssey.position.z + foundOdyssey.position.z) / 2
@@ -109,7 +103,7 @@ export const use3DMap = (
       return;
     }
 
-    const standardTextures = [baseAtmos, temptations, showTime, honey01, iceland01];
+    const standardTextures = [honey01, iceland01];
 
     const randNum = Math.floor(Math.random() * standardTextures.length);
     let randTexture = standardTextures[randNum];
@@ -120,7 +114,7 @@ export const use3DMap = (
 
     const texture = new THREE.TextureLoader().load(randTexture);
 
-    let odysseyAvatarMaterial = new THREE.MeshBasicMaterial({
+    const odysseyAvatarMaterial = new THREE.MeshBasicMaterial({
       side: THREE.DoubleSide,
       map: texture
     });
@@ -196,7 +190,6 @@ export const use3DMap = (
   scene.background = backgroundImage;
 
   // Setup all base materials and geometries.
-
   const odysseyBaseSphereGeometry = new THREE.SphereGeometry(1, 16, 16);
 
   const odysseyBaseSphereMaterial = new THREE.MeshPhysicalMaterial({
@@ -209,31 +202,33 @@ export const use3DMap = (
     metalness: 0.3,
     roughness: 0,
     specularIntensity: 1,
+    // @ts-ignore
     transparentA: true
   });
 
   /**
    * Build Galaxy
    */
-  const parameters = {};
-  parameters.count = 100000;
-  parameters.size = 0.001;
-  parameters.radius = 100;
-  parameters.branches = 3;
-  parameters.spin = 1.3;
-  parameters.randomnes = 0.2;
-  parameters.randomnesPower = 3;
-  parameters.YHeight = 100;
+  const parameters = {
+    count: 100000,
+    size: 0.001,
+    radius: 100,
+    branches: 3,
+    spin: 1.3,
+    randomnes: 0.2,
+    randomnesPower: 3,
+    YHeight: 100
+  };
 
-  let pointsGeometry = null;
-  let pointsMaterial = null;
-  let points = null;
+  let pointsGeometry: THREE.BufferGeometry | null = null;
+  let pointsMaterial: THREE.PointsMaterial | null = null;
+  let points: THREE.Points | null = null;
 
   const generateGalaxy = () => {
     /**
      * Clean previous renders of galaxy.
      */
-    if (points !== null) {
+    if (points !== null && !!pointsGeometry && !!pointsMaterial) {
       pointsGeometry.dispose();
       pointsMaterial.dispose();
       scene.remove(points);
@@ -302,15 +297,15 @@ export const use3DMap = (
   gui.add(parameters, 'YHeight').min(1).max(150).step(1).onFinishChange(generateGalaxy);
 
   // update mouse location on screen
-  function onPointerMove(event) {
+  function onPointerMove(event: PointerEvent) {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
 
   // Onclick event
 
-  function onMouseDown(event) {
-    if (event.button != 0) {
+  function onMouseDown(event: MouseEvent) {
+    if (event.button !== 0) {
       return;
     }
     // Create Raycast
@@ -338,7 +333,7 @@ export const use3DMap = (
 
       selectedOdyssey = targetPlanet.object;
 
-      let targetVector = new THREE.Vector3();
+      const targetVector = new THREE.Vector3();
       targetPlanet.object.getWorldPosition(targetVector);
 
       // FIXME: Kovi. Extract info from planet Kovi
@@ -349,20 +344,22 @@ export const use3DMap = (
 
       // Prepare rotation of camera animation.
       const startOrientation = camera.quaternion.clone();
+
+      // @ts-ignore
       const targetOrientation = camera.quaternion.clone(camera.lookAt(targetVector)).normalize();
 
       // Get the direction for the new location.
-      let direction = new THREE.Vector3();
+      const direction = new THREE.Vector3();
       direction.subVectors(targetVector, camera.position).normalize();
 
       // Get distance from raycast minus minimal distance orbit control
       // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
-      let targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
+      const targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
       const distance =
         targetVectorForDistance.distanceTo(camera.position) - minimalDistanceToPlanetForCamera;
 
       // Create new target for the camera.
-      let targetLocation = new THREE.Vector3();
+      const targetLocation = new THREE.Vector3();
       targetLocation.addVectors(camera.position, direction.multiplyScalar(distance));
 
       //Animate using gsap module.
@@ -407,7 +404,9 @@ export const use3DMap = (
     for (let i = 0; i < items.length; i++) {
       if (items[i].uuid !== centerUuid) {
         const odyssey = createNewOdyssey(items[i]);
-        listOfOddyseys.push(odyssey);
+        if (odyssey) {
+          listOfOddyseys.push(odyssey);
+        }
       }
     }
 
@@ -436,7 +435,7 @@ export const use3DMap = (
     const radiusIncreaseValue = 15;
     let AmountOfOdysseyInNextRing = 10;
     let ringCount = 1;
-    let odysseyGroups = [];
+    const odysseyGroups: THREE.Group[] = [];
 
     // Build circles in groups.
     function createRing() {
@@ -445,7 +444,7 @@ export const use3DMap = (
         AmountOfOdysseyInNextRing = listOfOddyseys.length;
       }
 
-      let degreeBetweenOdyssey = 360 / AmountOfOdysseyInNextRing;
+      const degreeBetweenOdyssey = 360 / AmountOfOdysseyInNextRing;
       let offset = 0;
       let currentOdyssey;
 
@@ -495,53 +494,8 @@ export const use3DMap = (
 
   buildUniverse();
 
-  /**
-   * Handle fade out
-   */
-
-  // TEMPORAL TRIGGER FOR FADE OUT: SPACEBAR
-
-  //window.addEventListener('keyup', event => {
-  //    if(event.code === 'Space'){
-  //        fadeOutScene();
-  //    }
-  //});
-
-  function fadeOutScene() {
-    // Add new DIV to the HTML for fadeOut
-
-    const fadeOutDiv = document.createElement('div');
-    fadeOutDiv.classList.add('fadeDiv');
-
-    // Setup elemt style.
-    fadeOutDiv.style.backgroundColor = 'black';
-    fadeOutDiv.style.opacity = 0;
-    fadeOutDiv.style.position = 'absolute';
-    fadeOutDiv.style.width = '100vw';
-    fadeOutDiv.style.height = '100vh';
-    document.body.appendChild(fadeOutDiv);
-
-    //Fade out  with interval
-    const divToFade = document.querySelector('.fadeDiv');
-    let fadeTimer = 0;
-
-    // Setup interval
-    const fadeOutTimer = setInterval(() => {
-      // Check if timer is finished.
-      if (fadeTimer >= 1) {
-        clearInterval(fadeOutTimer);
-      }
-
-      fadeTimer += 0.01;
-      divToFade.style.opacity = fadeTimer;
-    }, 10);
-  }
-
   // Animation
   function animate() {
-    // Update Highlight
-    //highlightObjects();
-
     // Update controls for auto-rotate.
     if (!updateCameraRotation) {
       controls.update();
