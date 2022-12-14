@@ -257,7 +257,10 @@ const UnityPage: FC = () => {
           worldId={worldStore.worldId}
           position={unityStore.objectMenuPosition}
           objectId={unityStore.selectedObjectId ?? ' '}
-          onObjectRemove={worldBuilderObjectStore.deleteObject}
+          onObjectRemove={() => {
+            worldBuilderObjectStore.deleteObject();
+            unityStore.objectMenu.close();
+          }}
           fetchObject={worldBuilderObjectStore.fetchObject}
           onUndo={unityStore.undo}
           onRedo={unityStore.redo}

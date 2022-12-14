@@ -1,8 +1,9 @@
+import {useClickOutside} from '@momentum-xyz/ui-kit';
 import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useParams} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 
@@ -12,9 +13,17 @@ const EditObject: FC = () => {
   const {worldBuilderStore} = useStore();
   const {worldBuilderObjectStore} = worldBuilderStore;
 
+  const history = useHistory();
+
+  const ref = useRef<HTMLDivElement>(null);
+
   const {t} = useTranslation();
 
   const {objectId} = useParams<{objectId: string}>();
+
+  useClickOutside(ref, () => {
+    history.goBack();
+  });
 
   useEffect(() => {
     worldBuilderObjectStore.fetchObject(objectId);
@@ -22,7 +31,7 @@ const EditObject: FC = () => {
 
   return (
     <styled.Wrapper>
-      <styled.Container>
+      <styled.Container ref={ref}>
         <PanelLayout
           title={t('titles.selectFunctionality')}
           headerIconName="blocks"
