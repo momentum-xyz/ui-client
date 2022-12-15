@@ -23,5 +23,7 @@ export interface UnityApiInterface {
   toggleBuildMode(): void;
   undoActionWorldBuilder(): void;
   redoActionWorldBuilder(): void;
-  changeGizmoTypeWorldBuilder(type: string): void;
+  setPositionGizmoWorldBuilder(): void;
+  setRotationGizmoWorldBuilder(): void;
+  setScaleGizmoWorldBuilder(): void;
 }

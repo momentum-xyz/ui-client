@@ -268,7 +268,17 @@ export class UnityService {
   }
 
   changeGizmoType(type: GizmoTypeEnum) {
-    this.unityApi?.changeGizmoTypeWorldBuilder(type as string);
+    switch (type) {
+      case GizmoTypeEnum.POSITION:
+        this.unityApi?.setPositionGizmoWorldBuilder();
+        break;
+      case GizmoTypeEnum.ROTATION:
+        this.unityApi?.setRotationGizmoWorldBuilder();
+        break;
+      case GizmoTypeEnum.SCALE:
+        this.unityApi?.setScaleGizmoWorldBuilder();
+        break;
+    }
   }
 
   leaveSpace(id: string) {

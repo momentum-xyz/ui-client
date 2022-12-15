@@ -6,7 +6,7 @@ export const Container = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 50%;
+  top: calc(50% - 100px);
   z-index: var(--dialog-z-index);
 
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};

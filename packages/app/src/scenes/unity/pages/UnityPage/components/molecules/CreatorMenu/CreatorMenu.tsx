@@ -17,6 +17,16 @@ const CreatorMenu: FC<PropsInterface> = ({onSkyboxClick, onAddObject}) => {
             <styled.MenuText name="skybox" size="large" />
           </styled.MenuItem>
         </Tooltip>
+        <Tooltip label="Change music (comming soon)">
+          <styled.MenuItem disabled>
+            <styled.MenuText name="music" size="medium-large" />
+          </styled.MenuItem>
+        </Tooltip>
+        <Tooltip label="Token gating (comming soon)">
+          <styled.MenuItem disabled>
+            <styled.MenuText name="whitelist" size="medium-large" />
+          </styled.MenuItem>
+        </Tooltip>
         <Tooltip label="Add object">
           <styled.MenuItem onClick={onAddObject}>
             <styled.MenuText name="add" size="medium-large" />
