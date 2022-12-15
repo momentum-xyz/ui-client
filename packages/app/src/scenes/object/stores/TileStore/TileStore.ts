@@ -1,6 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
+import {appVariables} from 'api/constants';
 import {AssetTypeEnum} from 'core/enums';
 import {
   api,
@@ -71,10 +73,7 @@ const TileStore = types
       if (!self.content?.render_hash) {
         return null;
       }
-      //TODO: Change it to render
-      // return `${appVariables.RENDER_SERVICE_URL}/get/${self.content?.render_hash}`;
-
-      return self.content.render_hash;
+      return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S5}/${self.content?.render_hash}`;
     }
   }));
 

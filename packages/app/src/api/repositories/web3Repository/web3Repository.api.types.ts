@@ -70,7 +70,11 @@ export interface MintNftCheckJobRequest {
 
 export interface MintNftCheckJobResponse {
   status: string;
-  nodeJSOut: string;
+  nodeJSOut: {
+    data: {
+      userID: string;
+    };
+  };
 }
 
 /** RESOLVE NODE **/
