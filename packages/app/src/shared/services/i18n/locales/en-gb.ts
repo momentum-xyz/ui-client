@@ -339,7 +339,7 @@ export const enGb = {
       videoLimitReached: 'Video limit reached',
       stageFull: 'Stage full',
       worldBuilderDescription:
-        'This is the Odyssey world builder - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
+        'This is the Odyssey creator - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
       startBuilding: 'Connect your wallet\n To start Building',
       savingSpaceDetailsSuceess: 'Space details saved succesfully!',
       stageIsFullTryAgain: 'Stage is full, please try again later...',
@@ -385,7 +385,7 @@ export const enGb = {
       name: 'Name',
       template: 'Template',
       generate: 'Generate',
-      worldBuilder: 'World Builder',
+      worldBuilder: 'Odyssey Creator',
       worldChat: 'World Chat',
       templateNameWrapper: '{{name}} Template',
       stageIsFull: 'Stage is full',

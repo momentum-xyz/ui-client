@@ -23,7 +23,7 @@ import {
 import {AssetTypeEnum} from 'core/enums';
 
 import * as styled from './UnityPage.styled';
-import {ObjectMenu} from './components';
+import {CreatorMenu, ObjectMenu} from './components';
 
 const UnityContextCSS = {
   width: '100vw',
@@ -39,6 +39,12 @@ const UnityPage: FC = () => {
   const history = useHistory();
   const {t} = useTranslation();
   const location = useLocation();
+
+  const isBuilderMode =
+    !!worldStore.worldId &&
+    location.pathname.includes(
+      generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
+    );
 
   // TODO: FIXME
   const worldId = useMemo(() => {
@@ -254,9 +260,11 @@ const UnityPage: FC = () => {
       />*/}
       {unityStore.objectMenu.isOpen && (
         <ObjectMenu
+          gizmoType={unityStore.gizmoMode}
           worldId={worldStore.worldId}
           position={unityStore.objectMenuPosition}
           objectId={unityStore.selectedObjectId ?? ' '}
+          onGizmoTypeChange={unityStore.changeGizmoType}
           onObjectRemove={() => {
             worldBuilderObjectStore.deleteObject();
             unityStore.objectMenu.close();
@@ -264,6 +272,20 @@ const UnityPage: FC = () => {
           fetchObject={worldBuilderObjectStore.fetchObject}
           onUndo={unityStore.undo}
           onRedo={unityStore.redo}
+        />
+      )}
+      {isBuilderMode && (
+        <CreatorMenu
+          onAddObject={() => {
+            history.push(
+              generatePath(ROUTES.odyssey.builder.spawnAsset.base, {worldId: worldStore.worldId})
+            );
+          }}
+          onSkyboxClick={() => {
+            history.push(
+              generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId})
+            );
+          }}
         />
       )}
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}

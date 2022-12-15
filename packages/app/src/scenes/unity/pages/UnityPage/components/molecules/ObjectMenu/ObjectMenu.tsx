@@ -1,8 +1,10 @@
 import {FC, useCallback, useEffect} from 'react';
 import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
+import cn from 'classnames';
 
 import {ROUTES} from 'core/constants';
+import {GizmoTypeEnum} from 'core/enums';
 
 import * as styled from './ObjectMenu.styled';
 
@@ -10,7 +12,9 @@ interface PropsInterface {
   objectId: string;
   worldId: string;
   position: {x: number; y: number};
+  gizmoType: GizmoTypeEnum;
   onObjectRemove: () => void;
+  onGizmoTypeChange: (type: GizmoTypeEnum) => void;
   fetchObject: (objectId: string) => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -20,7 +24,9 @@ const ObjectMenu: FC<PropsInterface> = ({
   position,
   objectId,
   worldId,
+  gizmoType,
   onObjectRemove,
+  onGizmoTypeChange,
   fetchObject,
   onUndo,
   onRedo
@@ -44,14 +50,26 @@ const ObjectMenu: FC<PropsInterface> = ({
   return (
     <Portal>
       <styled.Container style={{left: position.x - 295, top: position.y - 100}}>
-        <styled.MenuItem>
-          <styled.MenuText text="Move" size="m" />
+        <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.POSITION)}>
+          <styled.MenuText
+            text="Move"
+            size="m"
+            className={cn(gizmoType === GizmoTypeEnum.POSITION && 'selected')}
+          />
         </styled.MenuItem>
-        <styled.MenuItem>
-          <styled.MenuText text="Rotate" size="m" />
+        <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.ROTATION)}>
+          <styled.MenuText
+            text="Rotate"
+            size="m"
+            className={cn(gizmoType === GizmoTypeEnum.ROTATION && 'selected')}
+          />
         </styled.MenuItem>
-        <styled.MenuItem>
-          <styled.MenuText text="Scale" size="m" />
+        <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.SCALE)}>
+          <styled.MenuText
+            text="Scale"
+            size="m"
+            className={cn(gizmoType === GizmoTypeEnum.SCALE && 'selected')}
+          />
         </styled.MenuItem>
         <styled.MenuItem onClick={onUndo}>
           <styled.MenuText text="Undo" size="m" />

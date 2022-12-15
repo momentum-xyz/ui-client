@@ -1,10 +1,10 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel, Dialog} from '@momentum-xyz/core';
 
 import {api, ResolveNodeResponse} from 'api';
 import {appVariables} from 'api/constants';
-import {PosBusEventEnum} from 'core/enums';
+import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
@@ -21,7 +21,12 @@ const UnityStore = types
     lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
     objectMenuPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
     objectMenu: types.optional(Dialog, {}),
-    selectedObjectId: types.maybe(types.string)
+    selectedObjectId: types.maybe(types.string),
+
+    gizmoMode: types.optional(
+      types.enumeration(Object.values(GizmoTypeEnum)),
+      GizmoTypeEnum.POSITION
+    )
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -179,6 +184,10 @@ const UnityStore = types
     },
     redo() {
       UnityService.redo();
+    },
+    changeGizmoType(mode: GizmoTypeEnum) {
+      self.gizmoMode = cast(mode);
+      UnityService.changeGizmoType(mode);
     }
   }))
   .views((self) => ({
