@@ -162,7 +162,8 @@ export const enGb = {
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
-      onlyGLBSupported: 'Only GLB format supported'
+      onlyGLBSupported: 'Only GLB format supported',
+      requiredField: 'This field is required'
     },
     systemMessages: {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',

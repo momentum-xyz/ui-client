@@ -1,6 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {appVariables} from 'api/constants';
 import {AssetTypeEnum} from 'core/enums';
@@ -10,7 +11,8 @@ import {
   GetObjectResponse,
   ObjectInterface,
   ObjectMetadataInterface,
-  ObjectOptionsInterface
+  ObjectOptionsInterface,
+  UploadImageResponse
 } from 'api';
 
 const TileStore = types
@@ -18,9 +20,14 @@ const TileStore = types
     ResetModel,
     types.model('VideoStore', {
       assetType: types.maybe(types.string),
-      request: types.optional(RequestModel, {}),
       content: types.maybe(types.frozen<ObjectInterface>()),
-      pluginId: types.maybe(types.string)
+      pluginId: types.maybe(types.string),
+
+      changeTileDialog: types.optional(Dialog, {}),
+
+      request: types.optional(RequestModel, {}),
+      imageUpload: types.optional(RequestModel, {}),
+      setTileRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -66,7 +73,41 @@ const TileStore = types
         default:
           break;
       }
-    }
+    },
+    postNewImage: flow(function* (objectId: string, file: File) {
+      if (!self.pluginId) {
+        return;
+      }
+      const data = {file: file};
+      const userResponse: UploadImageResponse = yield self.imageUpload.send(
+        api.mediaRepository.uploadImage,
+        data
+      );
+      const imageHash = userResponse?.hash;
+
+      yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: objectId,
+        plugin_id: self.pluginId,
+        attribute_name: AttributeNameEnum.STATE,
+        value: {render_hash: imageHash}
+      });
+
+      yield self.getSpaceAttributeValue(self.pluginId, objectId);
+    }),
+    postNewContent: flow(function* (objectId: string, content: ObjectInterface) {
+      if (!self.pluginId) {
+        return;
+      }
+
+      yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: objectId,
+        plugin_id: self.pluginId,
+        attribute_name: AttributeNameEnum.STATE,
+        value: content
+      });
+
+      yield self.getSpaceAttributeValue(self.pluginId, objectId);
+    })
   }))
   .views((self) => ({
     get imageSrc(): string | null {

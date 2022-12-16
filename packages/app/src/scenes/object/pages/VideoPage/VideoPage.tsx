@@ -1,7 +1,7 @@
-import React, {FC, useCallback, useState} from 'react';
-import {Button, Heading, Input, Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import React, {FC} from 'react';
+import {Button, Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
@@ -11,6 +11,7 @@ import {youtubeVideoPath} from 'core/utils';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './VideoPage.styled';
+import {ChangeVideoDialog} from './components';
 
 interface PropsInterface {
   content?: ObjectInterface;
@@ -19,49 +20,15 @@ interface PropsInterface {
 
 const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
   const history = useHistory();
-  const {mainStore, objectStore} = useStore();
-  const {unityStore} = mainStore;
+  const {objectStore} = useStore();
+  const {tileStore} = objectStore;
+  const {changeTileDialog} = tileStore;
 
   const {t} = useTranslation();
 
-  const {objectId} = useParams<{objectId: string}>();
-
-  const [isChangeVideoOpen, setIsChangeVideoOpen] = useState(false);
-  const [youtubeSrc, setYoutubeSrc] = useState('');
-
-  const handleFocus = useCallback(() => {
-    unityStore.changeKeyboardControl(false);
-  }, [unityStore]);
-
-  const handleBlur = useCallback(() => {
-    unityStore.changeKeyboardControl(true);
-  }, [unityStore]);
-
   return (
     <styled.Modal data-testid="VideoPage-test">
-      {isChangeVideoOpen && (
-        <styled.ChangeTextForm>
-          <Heading label={t('labels.changeVideo')} type="h2" />
-          <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setYoutubeSrc} />
-          <Button
-            label={t('actions.change')}
-            onClick={async () => {
-              await objectStore.postNewContent(objectId, {
-                youtube_url: youtubeSrc
-              });
-
-              setIsChangeVideoOpen(false);
-            }}
-          />
-          <Button
-            label={t('actions.cancel')}
-            variant="danger"
-            onClick={() => {
-              setIsChangeVideoOpen(false);
-            }}
-          />
-        </styled.ChangeTextForm>
-      )}
+      {changeTileDialog.isOpen && <ChangeVideoDialog />}
       <styled.Container>
         <styled.ContentWrapper>
           {content?.youtube_url ? (
@@ -84,7 +51,7 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="button">
-          <Button label={t('actions.changeVideo')} onClick={() => setIsChangeVideoOpen(true)} />
+          <Button label={t('actions.changeVideo')} onClick={changeTileDialog.open} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>
