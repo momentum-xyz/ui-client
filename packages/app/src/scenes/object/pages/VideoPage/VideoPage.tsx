@@ -2,6 +2,7 @@ import React, {FC, useCallback, useState} from 'react';
 import {Button, Heading, Input, Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {VideoPanel} from 'ui-kit';
@@ -21,6 +22,8 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
   const {mainStore, objectStore} = useStore();
   const {unityStore} = mainStore;
 
+  const {t} = useTranslation();
+
   const {objectId} = useParams<{objectId: string}>();
 
   const [isChangeVideoOpen, setIsChangeVideoOpen] = useState(false);
@@ -38,10 +41,10 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
     <styled.Modal data-testid="VideoPage-test">
       {isChangeVideoOpen && (
         <styled.ChangeTextForm>
-          <Heading label="Change Video" type="h2" />
+          <Heading label={t('labels.changeVideo')} type="h2" />
           <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setYoutubeSrc} />
           <Button
-            label="Change"
+            label={t('actions.change')}
             onClick={async () => {
               await objectStore.postNewContent(objectId, {
                 youtube_url: youtubeSrc
@@ -51,7 +54,7 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
             }}
           />
           <Button
-            label="Cancel"
+            label={t('actions.cancel')}
             variant="danger"
             onClick={() => {
               setIsChangeVideoOpen(false);
@@ -73,7 +76,7 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
         <styled.HeaderElement className="left">
           <styled.Title>
             <Text
-              text={content?.title ? content?.title : 'Video'}
+              text={content?.title ? content?.title : t('labels.video')}
               transform="uppercase"
               weight="bold"
               size="xl"
@@ -81,7 +84,7 @@ const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="button">
-          <Button label="Change video" onClick={() => setIsChangeVideoOpen(true)} />
+          <Button label={t('actions.changeVideo')} onClick={() => setIsChangeVideoOpen(true)} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>

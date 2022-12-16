@@ -32,10 +32,10 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
     <styled.Modal data-testid="ImagePage-test">
       {isChangeImageShown && (
         <styled.ChangeImageForm>
-          <Heading label="Change Image" type="h2" />
+          <Heading label={t('labels.changeImage')} type="h2" />
           {!image && (
             <FileUploader
-              label="Select Image"
+              label={t('actions.selectImage')}
               dragActiveLabel={t('actions.dropItHere')}
               fileType="image"
               buttonSize="normal"
@@ -48,7 +48,7 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
             <Button label={image.name} disabled={true} />
           )}
           <Button
-            label={isProcessing ? 'Processing...' : 'Change'}
+            label={isProcessing ? `${t('messages.processing')}...` : t('actions.change')}
             disabled={isProcessing}
             onClick={async () => {
               if (image) {
@@ -75,7 +75,7 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
         <styled.HeaderElement className="left">
           <styled.Title>
             <Text
-              text={content?.title ? content?.title : 'Image'}
+              text={content?.title ? content?.title : t('labels.image')}
               transform="uppercase"
               weight="bold"
               size="xl"
@@ -83,7 +83,7 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="button">
-          <Button label="Change image" onClick={() => setIsChangeImageShown(true)} />
+          <Button label={t('actions.changeImage')} onClick={() => setIsChangeImageShown(true)} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>

@@ -3,6 +3,7 @@ import {Button, Heading, Input, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import ReactLinkify from 'react-linkify';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {ObjectInterface} from 'api';
@@ -19,6 +20,8 @@ const TextPage: FC<PropsInterface> = ({content, worldId}) => {
   const history = useHistory();
   const {mainStore, objectStore} = useStore();
   const {unityStore} = mainStore;
+
+  const {t} = useTranslation();
 
   const {objectId} = useParams<{objectId: string}>();
 
@@ -38,11 +41,11 @@ const TextPage: FC<PropsInterface> = ({content, worldId}) => {
     <styled.Modal data-testid="TextPage-test">
       {isChangeTextOpen && (
         <styled.ChangeTextForm>
-          <Heading label="Change Text" type="h2" />
+          <Heading label={t('labels.changeText')} type="h2" />
           <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setTitle} />
           <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setNewContent} />
           <Button
-            label="Change"
+            label={t('actions.change')}
             onClick={async () => {
               await objectStore.postNewContent(objectId, {
                 title,
@@ -53,7 +56,7 @@ const TextPage: FC<PropsInterface> = ({content, worldId}) => {
             }}
           />
           <Button
-            label="Cancel"
+            label={t('actions.cancel')}
             variant="danger"
             onClick={() => {
               setIsChangeTextOpen(false);
@@ -77,13 +80,13 @@ const TextPage: FC<PropsInterface> = ({content, worldId}) => {
           <styled.Title>
             <Heading
               type="h2"
-              label={content?.title ? content?.title : 'Document'}
+              label={content?.title ? content?.title : t('labels.document')}
               transform="uppercase"
             />
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="button">
-          <Button label="Change text" onClick={() => setIsChangeTextOpen(true)} />
+          <Button label={t('actions.changeText')} onClick={() => setIsChangeTextOpen(true)} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>

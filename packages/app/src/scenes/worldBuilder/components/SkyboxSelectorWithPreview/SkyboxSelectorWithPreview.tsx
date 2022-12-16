@@ -4,6 +4,7 @@ import {Button} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useHistory} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
@@ -21,6 +22,8 @@ const SkyboxSelectorWithPreview: FC = () => {
   const {worldId} = useParams<{worldId: string}>();
 
   const history = useHistory();
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     worldBuilderSkyboxesStore.fetchItems(worldId);
@@ -49,7 +52,11 @@ const SkyboxSelectorWithPreview: FC = () => {
                   <styled.ItemTitle>{item.name}</styled.ItemTitle>
                   <styled.ItemButtonHolder>
                     <Button
-                      label={currentItem === item ? 'Selected Skybox' : 'Select Skybox'}
+                      label={
+                        currentItem === item
+                          ? t('titles.selectedSkybox')
+                          : t('actions.selectSkybox')
+                      }
                       // variant="inverted"
                       disabled={currentItem === item}
                       transform="uppercase"
@@ -67,7 +74,7 @@ const SkyboxSelectorWithPreview: FC = () => {
           />
         )}
       </styled.ItemsGallery>
-      <styled.CloseButton label="Close Panel" onClick={() => history.goBack()} />
+      <styled.CloseButton label={t('actions.closePanel')} onClick={() => history.goBack()} />
     </styled.Container>
   );
 };
