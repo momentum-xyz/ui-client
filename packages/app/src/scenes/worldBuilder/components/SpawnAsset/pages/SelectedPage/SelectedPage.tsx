@@ -5,6 +5,7 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {Asset3dCategoryEnum} from 'api/enums';
 
 import * as styled from './SelectedPage.styled';
 
@@ -17,8 +18,9 @@ export const SelectedPage: FC = () => {
 
   const history = useHistory();
 
-  const {worldId} = useParams<{
+  const {worldId, assetCategory} = useParams<{
     worldId: string;
+    assetCategory: Asset3dCategoryEnum;
   }>();
 
   useEffect(() => {
@@ -30,6 +32,11 @@ export const SelectedPage: FC = () => {
   const handleSpawn = useCallback(() => {
     worldBuilderAssets3dStore.spawnObject(worldId);
     history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+  }, [history, worldBuilderAssets3dStore, worldId]);
+
+  const handleRemove = useCallback(() => {
+    worldBuilderAssets3dStore.removeObjectFromLibrary(worldId);
+    history.goBack();
   }, [history, worldBuilderAssets3dStore, worldId]);
 
   if (!asset) {
@@ -54,11 +61,16 @@ export const SelectedPage: FC = () => {
         onBlur={() => unityStore.changeKeyboardControl(true)}
         onChange={worldBuilderAssets3dStore.setNavigationObjectName}
       />
-      <Button
-        label="Spawn Object"
-        disabled={!worldBuilderAssets3dStore.navigationObjectName}
-        onClick={handleSpawn}
-      />
+      <styled.CustobObjectActions>
+        <Button
+          label="Spawn Object"
+          disabled={!worldBuilderAssets3dStore.navigationObjectName}
+          onClick={handleSpawn}
+        />
+        {assetCategory === Asset3dCategoryEnum.CUSTOM && (
+          <Button label="Remove From Library" variant="danger" onClick={handleRemove} />
+        )}
+      </styled.CustobObjectActions>
       <Button
         label="Go back"
         onClick={() => {

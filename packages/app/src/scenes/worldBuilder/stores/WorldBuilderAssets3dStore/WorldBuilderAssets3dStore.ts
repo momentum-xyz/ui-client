@@ -19,6 +19,7 @@ const WorldBuilderAssets3dStore = types
       uploadedAssetName: '',
 
       uploadAssetRequest: types.optional(RequestModel, {}),
+      removeAssetRequest: types.optional(RequestModel, {}),
       fetchAssets3dRequest: types.optional(RequestModel, {}),
       spawnObjectRequest: types.optional(RequestModel, {}),
       setIsVisibleRequest: types.optional(RequestModel, {}),
@@ -129,6 +130,16 @@ const WorldBuilderAssets3dStore = types
           value: self.isVisibleInNavigation ? 3 : 1
         });
       }
+    }),
+    removeObjectFromLibrary: flow(function* (worldId: string) {
+      if (!self.selectedAssset) {
+        return;
+      }
+
+      yield self.removeAssetRequest.send(api.assets3dRepository.delete3DAssets, {
+        assets3dIDs: [self.selectedAssset.id],
+        worldId
+      });
     })
   }))
   .views((self) => ({

@@ -15,6 +15,12 @@ export interface UploadAsset3dResponse {
   meta: MetadataInterface;
 }
 
+export interface DeleteAssets3dRequest extends Asset3dRequest {
+  assets3dIDs: string[];
+}
+
+export interface DeleteAssets3dResponse {}
+
 export interface Asset3dMetadataInterface {
   name: string;
   type: number;

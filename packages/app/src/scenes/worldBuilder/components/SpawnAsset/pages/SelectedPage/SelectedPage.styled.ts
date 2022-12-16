@@ -54,3 +54,8 @@ export const CheckBox = styled.input`
     left: 5px;
   }
 `;
+
+export const CustobObjectActions = styled.div`
+  display: flex;
+  gap: 20px;
+`;

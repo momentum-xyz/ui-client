@@ -5,6 +5,8 @@ import {request} from 'api/request';
 
 import {assets3dRepositoryEndpoints} from './assets3dRepository.api.endpoints';
 import {
+  DeleteAssets3dRequest,
+  DeleteAssets3dResponse,
   FetchAssets3dRequest,
   FetchAssets3dResponse,
   UploadAsset3dRequest,
@@ -31,6 +33,20 @@ export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3d
   const url = generatePath(assets3dRepositoryEndpoints().upload, {worldId});
 
   return request.post(url, formData, requestOptions);
+};
+
+export const delete3DAssets: RequestInterface<DeleteAssets3dRequest, DeleteAssets3dResponse> = (
+  options
+) => {
+  const {assets3dIDs, worldId, ...restOptions} = options;
+
+  restOptions.data = {
+    assets3dIDs
+  };
+
+  const url = generatePath(assets3dRepositoryEndpoints().base, {worldId});
+
+  return request.delete(url, restOptions);
 };
 
 export const fetchAssets3d: RequestInterface<FetchAssets3dRequest, FetchAssets3dResponse> = (
