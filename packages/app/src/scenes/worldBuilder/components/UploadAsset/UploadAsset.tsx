@@ -69,7 +69,7 @@ const UploadAsset: FC = () => {
   return (
     <styled.Container>
       <styled.TitleHolder>
-        <Text text="Upload 3D asset" size="l" transform="uppercase" weight="light" />
+        <Text text={t('titles.upload3dAsset')} size="l" transform="uppercase" weight="light" />
       </styled.TitleHolder>
       <Controller
         name="asset"
@@ -125,7 +125,7 @@ const UploadAsset: FC = () => {
 
       <styled.ActionButtonHolder>
         <Button
-          label="Upload"
+          label={t('actions.upload')}
           variant="inverted"
           transform="normal"
           size="medium"

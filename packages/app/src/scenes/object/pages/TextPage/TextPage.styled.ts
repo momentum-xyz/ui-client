@@ -34,21 +34,6 @@ export const TextTile = styled.div`
   padding-top: 5px;
 `;
 
-export const ChangeTextForm = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  background: ${(props) => props.theme.bg};
-  border: 1px solid ${(props) => props.theme.accent};
-  border-radius: 10px;
-  padding: 10px;
-  z-index: 300;
-  gap: 10px;
-  pointer-events: all;
-
-  width: 300px;
-`;
-
 export const HeaderElement = styled.div`
   opacity: 0.8;
   position: absolute;

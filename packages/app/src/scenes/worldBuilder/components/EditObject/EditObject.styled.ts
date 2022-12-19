@@ -10,7 +10,7 @@ export const Container = styled.div`
   width: 300px;
   pointer-events: all;
 
-  margin: 35px 100px;
+  margin: 35px 10px;
 `;
 
 export const PanelBody = styled.div`
