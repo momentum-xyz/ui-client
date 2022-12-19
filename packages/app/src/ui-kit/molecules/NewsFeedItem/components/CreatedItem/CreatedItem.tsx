@@ -33,13 +33,18 @@ const CreatedItem: FC<PropsInterface> = (props) => {
           <Text size="xxs" text={`${item.name} was created`} align="left" />
         </div>
         <styled.Actions>
-          <Button
-            size="small"
-            label="Connect"
-            icon="hierarchy"
-            onClick={() => onConnect(item.id)}
-          />
-          <Button size="small" label="" icon="fly-to" onClick={() => onTeleport(item)} />
+          <div>
+            <Button
+              size="small"
+              label="Connect"
+              icon="hierarchy"
+              onClick={() => onConnect(item.id)}
+            />
+          </div>
+
+          <div>
+            <Button size="small" label="" icon="fly-to" onClick={() => onTeleport(item)} />
+          </div>
         </styled.Actions>
       </styled.Info>
     </>

@@ -12,6 +12,7 @@ COPY package.json yarn.lock ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/ui-kit/package.json ./packages/ui-kit/
 COPY packages/sdk/package.json ./packages/sdk/
+COPY packages/map3d/package.json ./packages/map3d/
 
 COPY packages/plugin_miro/package.json ./packages/plugin_miro/
 COPY packages/app/package.json ./packages/app/

@@ -5,5 +5,4 @@ export * from './useUnityEvent';
 export * from './usePosBusEvent';
 export * from './useGooglePicker';
 export * from './useDeviceChange';
-export * from './use3DMap';
 export * from './useSupernova';

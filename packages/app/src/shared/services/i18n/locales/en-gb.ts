@@ -81,6 +81,9 @@ export const enGb = {
       stashLabel: 'stash',
       rewardDestination: 'reward destination',
       specificDestination: 'Specific Destination',
+      dockingAmount: '{{docking}} docking',
+      connectionAmount: '{{connections}} connections',
+      eventAmount: '{{events}} events',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       setAmountSymbol: 'Set Amount, {{symbol}}',
@@ -410,7 +413,8 @@ export const enGb = {
         'Error has occured when removing {{pluginName}} removed succesfully!',
       weSupportGLBModels: 'We support GLB Models',
       selectOne: 'Select One',
-      processing: 'Processing'
+      processing: 'Processing',
+      commingSoonExclamation: 'Coming Soon!'
     },
     titles: {
       alert: 'alert',
@@ -456,7 +460,8 @@ export const enGb = {
       spawnAsset: 'Spawn Asset',
       selectedSkybox: 'Selected Skybox',
       upload3dAsset: 'Upload 3D Asset',
-      admin: 'admin'
+      admin: 'admin',
+      statistics: 'Statistics'
     },
     textMessage: {
       you: 'you',
@@ -525,6 +530,11 @@ export const enGb = {
       flyToThisSpace: 'Fly to this space',
       grabTable: 'Grab table',
       highFive: 'High five',
+      connect: 'Connect',
+      connected: 'Connected',
+      coCreate: 'co-create',
+      dock: 'Dock',
+      visit: 'Visit',
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',
@@ -584,7 +594,15 @@ export const enGb = {
       changeVideo: 'Change Video',
       changeText: 'Change Text',
       changeImage: 'Change Image',
-      selectImage: 'Select Image'
+      selectImage: 'Select Image',
+      move: 'Move',
+      rotate: 'Rotate',
+      scale: 'Scale',
+      undo: 'Undo',
+      redo: 'Redo',
+      copy: 'Copy',
+      functionality: 'Functionality',
+      addTokenGate: 'Add Token Gate'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',
