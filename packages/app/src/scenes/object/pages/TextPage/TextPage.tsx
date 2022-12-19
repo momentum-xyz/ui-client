@@ -1,69 +1,29 @@
-import React, {FC, useCallback, useState} from 'react';
-import {Button, Heading, Input, SvgButton} from '@momentum-xyz/ui-kit';
+import React, {FC} from 'react';
+import {Button, Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import ReactLinkify from 'react-linkify';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
-import {ObjectInterface} from 'api';
 import {useStore} from 'shared/hooks';
+import {ChangeTextDialog} from 'scenes/object/components';
 
 import * as styled from './TextPage.styled';
 
-interface PropsInterface {
-  content?: ObjectInterface;
-  worldId: string;
-}
-
-const TextPage: FC<PropsInterface> = ({content, worldId}) => {
+const TextPage: FC = () => {
   const history = useHistory();
-  const {mainStore, objectStore} = useStore();
-  const {unityStore} = mainStore;
+  const {objectStore} = useStore();
+  const {tileStore} = objectStore;
+  const {changeTileDialog, content} = tileStore;
+
+  const {worldId} = useParams<{worldId: string}>();
 
   const {t} = useTranslation();
 
-  const {objectId} = useParams<{objectId: string}>();
-
-  const [isChangeTextOpen, setIsChangeTextOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [newContent, setNewContent] = useState('');
-
-  const handleFocus = useCallback(() => {
-    unityStore.changeKeyboardControl(false);
-  }, [unityStore]);
-
-  const handleBlur = useCallback(() => {
-    unityStore.changeKeyboardControl(true);
-  }, [unityStore]);
-
   return (
     <styled.Modal data-testid="TextPage-test">
-      {isChangeTextOpen && (
-        <styled.ChangeTextForm>
-          <Heading label={t('labels.changeText')} type="h2" />
-          <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setTitle} />
-          <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setNewContent} />
-          <Button
-            label={t('actions.change')}
-            onClick={async () => {
-              await objectStore.postNewContent(objectId, {
-                title,
-                content: newContent
-              });
-
-              setIsChangeTextOpen(false);
-            }}
-          />
-          <Button
-            label={t('actions.cancel')}
-            variant="danger"
-            onClick={() => {
-              setIsChangeTextOpen(false);
-            }}
-          />
-        </styled.ChangeTextForm>
-      )}
+      {changeTileDialog.isOpen && <ChangeTextDialog />}
       <styled.Container>
         <styled.ContentWrapper>
           <ReactLinkify
@@ -86,7 +46,7 @@ const TextPage: FC<PropsInterface> = ({content, worldId}) => {
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="button">
-          <Button label={t('actions.changeText')} onClick={() => setIsChangeTextOpen(true)} />
+          <Button label={t('actions.changeText')} onClick={changeTileDialog.open} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>

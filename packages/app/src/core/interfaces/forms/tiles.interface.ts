@@ -10,5 +10,6 @@ export interface VideoObjectInterface extends AttributeValueInterface {
 }
 
 export interface ImageObjectInterface extends AttributeValueInterface {
-  render_hash: string;
+  image?: File;
+  render_hash?: string;
 }

@@ -14,7 +14,7 @@ const Object: FC = () => {
   const {objectStore, mainStore} = rootStore;
   const {unityStore} = mainStore;
   const {asset, tileStore} = objectStore;
-  const {assetType, imageSrc, content} = tileStore;
+  const {assetType} = tileStore;
 
   const {objectId} = useParams<{objectId: string}>();
 
@@ -31,15 +31,15 @@ const Object: FC = () => {
   const renderObject = (assetType?: string) => {
     switch (assetType) {
       case AssetTypeEnum.TEXT:
-        return <TextPage content={content} worldId={objectId} />;
+        return <TextPage />;
       case AssetTypeEnum.IMAGE:
         return (
           <>
-            <ImagePage content={content} imageSrc={imageSrc ?? undefined} worldId={objectId} />
+            <ImagePage />
           </>
         );
       case AssetTypeEnum.VIDEO:
-        return <VideoPage content={content} worldId={objectId} />;
+        return <VideoPage />;
       case AssetTypeEnum.PLUGIN:
         return (
           <>

@@ -3,13 +3,14 @@ import {Dialog, Input} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
 
-import {VideoObjectInterface} from 'core/interfaces';
+import {TextObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 
-import * as styled from './ChangeVideoDialog.styled';
+import * as styled from './ChangeTextDialog.styled';
 
-const ChangeVideoDialog: FC = () => {
+const ChangeTextDialog: FC = () => {
   const {mainStore, objectStore} = useStore();
   const {unityStore} = mainStore;
   const {tileStore} = objectStore;
@@ -23,18 +24,17 @@ const ChangeVideoDialog: FC = () => {
     handleSubmit,
     control,
     formState: {errors}
-  } = useForm<VideoObjectInterface>({
+  } = useForm<TextObjectInterface>({
     defaultValues: {
-      youtube_url: tileStore.content?.youtube_url ?? ''
+      title: tileStore.content?.title,
+      content: tileStore.content?.content
     }
   });
 
-  const formSubmitHandler: SubmitHandler<VideoObjectInterface> = async (
-    data: VideoObjectInterface
+  const formSubmitHandler: SubmitHandler<TextObjectInterface> = async (
+    data: TextObjectInterface
   ) => {
-    await tileStore.postNewContent(objectId, {
-      youtube_url: data.youtube_url
-    });
+    await tileStore.postNewContent(objectId, data);
 
     changeTileDialog.close();
   };
@@ -47,18 +47,27 @@ const ChangeVideoDialog: FC = () => {
     unityStore.changeKeyboardControl(true);
   }, [unityStore]);
 
-  const errorMessage = useMemo(() => {
-    switch (errors.youtube_url?.type) {
+  const titleErrorMessage = useMemo(() => {
+    switch (errors.title?.type) {
       case 'required':
         return t('errors.requiredField');
       default:
         return undefined;
     }
-  }, [errors.youtube_url?.type, t]);
+  }, [errors.title?.type, t]);
+
+  const contentErrorMessage = useMemo(() => {
+    switch (errors.content?.type) {
+      case 'required':
+        return t('errors.requiredField');
+      default:
+        return undefined;
+    }
+  }, [errors.content?.type, t]);
 
   return (
     <Dialog
-      title={t('labels.changeVideo')}
+      title={t('labels.changeText')}
       approveInfo={{
         title: t('actions.change'),
         onClick: handleSubmit(formSubmitHandler)
@@ -75,13 +84,28 @@ const ChangeVideoDialog: FC = () => {
       <styled.Container>
         <Controller
           control={control}
-          name="youtube_url"
+          name="title"
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <Input
               value={value}
-              isError={!!errorMessage}
-              errorMessage={errorMessage}
+              isError={!!titleErrorMessage}
+              errorMessage={titleErrorMessage}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              onChange={onChange}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="content"
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Input
+              value={value}
+              isError={!!contentErrorMessage}
+              errorMessage={contentErrorMessage}
               onFocus={handleFocus}
               onBlur={handleBlur}
               onChange={onChange}
@@ -93,4 +117,4 @@ const ChangeVideoDialog: FC = () => {
   );
 };
 
-export default ChangeVideoDialog;
+export default observer(ChangeTextDialog);

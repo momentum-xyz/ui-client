@@ -1,28 +1,24 @@
 import React, {FC} from 'react';
 import {Button, Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {VideoPanel} from 'ui-kit';
-import {ObjectInterface} from 'api';
 import {youtubeVideoPath} from 'core/utils';
 import {useStore} from 'shared/hooks';
+import {ChangeVideoDialog} from 'scenes/object/components';
 
 import * as styled from './VideoPage.styled';
-import {ChangeVideoDialog} from './components';
 
-interface PropsInterface {
-  content?: ObjectInterface;
-  worldId: string;
-}
-
-const VideoPage: FC<PropsInterface> = ({content, worldId}) => {
+const VideoPage: FC = () => {
   const history = useHistory();
   const {objectStore} = useStore();
   const {tileStore} = objectStore;
-  const {changeTileDialog} = tileStore;
+  const {changeTileDialog, content} = tileStore;
+
+  const {worldId} = useParams<{worldId: string}>();
 
   const {t} = useTranslation();
 
