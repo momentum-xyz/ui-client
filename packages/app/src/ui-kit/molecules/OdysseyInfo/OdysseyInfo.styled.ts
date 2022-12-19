@@ -67,5 +67,5 @@ export const StatisticsItem = styled.div`
 export const StatisticsValue = styled.div`
   font-size: var(--font-size-xs);
   font-weight: 400;
-  color: #fff2f1;
+  color: var(--white-100);
 `;

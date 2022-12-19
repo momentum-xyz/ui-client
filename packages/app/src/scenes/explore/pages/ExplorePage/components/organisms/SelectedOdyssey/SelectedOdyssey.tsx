@@ -28,7 +28,6 @@ const SelectedOdyssey: FC<PropsInterface> = (props) => {
       </styled.Header>
       <OdysseyInfo
         odyssey={odyssey}
-        avatar={odyssey.image}
         onVisit={onTeleport}
         onConnect={onConnect || (() => {})}
         connectDisabled={!onConnect || alreadyConnected}

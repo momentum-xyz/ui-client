@@ -9,7 +9,6 @@ import * as styled from './OdysseyInfo.styled';
 
 interface PropsInterface {
   odyssey: OdysseyItemInterface;
-  avatar: string;
   alreadyConnected?: boolean;
   onVisit?: () => void;
   onHighFive?: () => void;
@@ -25,7 +24,6 @@ interface PropsInterface {
 
 const OdysseyInfo: FC<PropsInterface> = ({
   odyssey,
-  avatar,
   alreadyConnected,
   onVisit,
   onHighFive,
@@ -45,7 +43,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
       <styled.Container>
         <styled.TopContainer>
           <Image
-            src={getImageAbsoluteUrl(avatar) || ''}
+            src={getImageAbsoluteUrl(odyssey.image) || ''}
             sizeProps={{width: '90px', height: '90px'}}
             className="avatar"
             isError
