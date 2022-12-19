@@ -44,9 +44,9 @@ const OdysseyPage: FC = () => {
 
   useEffect(() => {
     if (!matchPath(location.pathname, ROUTES.odyssey.builder.base)) {
-      unityStore.objectMenu.close();
+      unityStore.closeAndResetObjectMenu();
     }
-  }, [location.pathname, unityStore.objectMenu]);
+  }, [location.pathname, unityStore]);
 
   return (
     <styled.Container data-testid="HomePage-test">

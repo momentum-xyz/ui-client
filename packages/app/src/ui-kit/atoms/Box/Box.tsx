@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import * as styled from './Box.styled';
 
 interface PropsInterface {
-  size?: 'normal' | 'small' | 'big';
+  size?: 'normal' | 'small' | 'big' | 'wide';
 }
 
 const Box: FC<PropsInterface> = (props) => {

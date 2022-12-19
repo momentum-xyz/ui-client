@@ -1,12 +1,10 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, IconSvg, Text, Dialog} from '@momentum-xyz/ui-kit';
+import {Dialog} from '@momentum-xyz/ui-kit';
 
-import {getImageAbsoluteUrl} from 'core/utils';
+import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
 
 import {OdysseyItemInterface} from '../../stores/OdysseyStore';
-
-import * as styled from './OdysseyWidget.styled';
 
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
@@ -47,55 +45,20 @@ const OdysseyWidget: FC<PropsInterface> = ({
       onClose={onClose}
       showCloseButton
     >
-      <styled.Container data-testid="OdysseyWidget-test">
-        <styled.TopContainer>
-          <styled.Avatar src={getImageAbsoluteUrl(userAvatar) || ''} />
-          <styled.Actions>
-            <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
-            <Button
-              size="small"
-              label="High Five"
-              icon="high-five"
-              disabled={currentUserId === odyssey.uuid}
-              onClick={() => onHighFive(odyssey.uuid)}
-            />
-            <Button
-              size="small"
-              label={alreadyConnected ? 'Connected' : 'Connect'}
-              icon="hierarchy"
-              disabled={currentUserId === odyssey.uuid || alreadyConnected}
-              onClick={onConnect}
-            />
-            <Button
-              size="small"
-              label="co-create"
-              icon="cubicles"
-              onClick={() => {}}
-              disabled={true}
-            />
-          </styled.Actions>
-        </styled.TopContainer>
-      </styled.Container>
-      <styled.Description>
-        <Text size="xxs" text={odyssey.description} align="left" />
-      </styled.Description>
-
-      <styled.Statistics>Statistics</styled.Statistics>
-
-      <styled.StatisticsData>
-        <styled.StatisticsItem>
-          <IconSvg name="hierarchy" size="medium" />
-          <styled.StatisticsValue>{odyssey.connections ?? 0} connections</styled.StatisticsValue>
-        </styled.StatisticsItem>
-        <styled.StatisticsItem>
-          <IconSvg name="people" size="medium" />
-          <styled.StatisticsValue>{odyssey.docking ?? 0} docking</styled.StatisticsValue>
-        </styled.StatisticsItem>
-        <styled.StatisticsItem>
-          <IconSvg name="calendar" size="medium" />
-          <styled.StatisticsValue>{odyssey.events ?? 0} events</styled.StatisticsValue>
-        </styled.StatisticsItem>
-      </styled.StatisticsData>
+      <OdysseyInfo
+        odyssey={odyssey}
+        alreadyConnected={alreadyConnected}
+        onVisit={() => {}}
+        visitDisabled={true}
+        onHighFive={() => {
+          onHighFive(odyssey.uuid);
+        }}
+        highFiveDisabled={currentUserId === odyssey.uuid}
+        onConnect={onConnect}
+        connectDisabled={currentUserId === odyssey.uuid || alreadyConnected}
+        onCoCreate={() => {}}
+        coCreateDisabled={true}
+      />
     </Dialog>
   );
 };

@@ -76,6 +76,9 @@ export const enGb = {
       stashLabel: 'stash',
       rewardDestination: 'reward destination',
       specificDestination: 'Specific Destination',
+      dockingAmount: '{{docking}} docking',
+      connectionAmount: '{{connections}} connections',
+      eventAmount: '{{events}} events',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       nominateAndBond: 'Nominate & Bond',
@@ -412,7 +415,8 @@ export const enGb = {
       selectFunctionality: 'Select Functionality',
       spawnAsset: 'Spawn Asset',
       selectedSkybox: 'Selected Skybox',
-      upload3dAsset: 'Upload 3D Asset'
+      upload3dAsset: 'Upload 3D Asset',
+      statistics: 'Statistics'
     },
     textMessage: {
       you: 'you',
@@ -481,6 +485,11 @@ export const enGb = {
       flyToThisSpace: 'Fly to this space',
       grabTable: 'Grab table',
       highFive: 'High five',
+      connect: 'Connect',
+      connected: 'Connected',
+      coCreate: 'co-create',
+      dock: 'Dock',
+      visit: 'Visit',
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',

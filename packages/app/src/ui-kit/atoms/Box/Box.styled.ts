@@ -21,4 +21,9 @@ export const Div = styled.div`
     width: 240px;
     padding: 10 0;
   }
+
+  &.wide {
+    width: 315px;
+    padding: 0 15px;
+  }
 `;
