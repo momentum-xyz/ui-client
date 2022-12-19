@@ -23,7 +23,7 @@ export const use3DMap = (
   items: PlanetInterface[],
   centerUuid: string | undefined | null,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
-  onOdysseyClick: (uuid: string) => void
+  onSelectOdyssey: (uuid: string) => void
 ) => {
   const wasLoaded = useRef(false);
 
@@ -62,8 +62,7 @@ export const use3DMap = (
   /**
    * Draw lines between staked Odysseys.
    */
-
-  const drawConnections = (connections: Record<string, {id: string}[]>) => {
+  const drawConnections = useCallback((connections: Record<string, {id: string}[]>) => {
     // setup reusable variables and material
     const lineMat = new THREE.LineBasicMaterial({
       color: 0xffffff,
@@ -103,53 +102,12 @@ export const use3DMap = (
         });
       }
     });
-  };
-
-  const createNewOdyssey = (item?: PlanetInterface) => {
-    if (!item) {
-      return;
-    }
-
-    const standardTextures = [honey01, iceland01];
-
-    const randNum = Math.floor(Math.random() * standardTextures.length);
-    let randTexture = standardTextures[randNum];
-
-    if (item.image) {
-      randTexture = getImageUrl(item.image);
-    }
-
-    const texture = new THREE.TextureLoader().load(randTexture);
-
-    const odysseyAvatarMaterial = new THREE.MeshBasicMaterial({
-      side: THREE.DoubleSide,
-      map: texture
-    });
-
-    // Flip textures horizontally so text is readable.
-    texture.wrapS = THREE.RepeatWrapping;
-    //texture.repeat.x = - 1;
-
-    const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry.current, odysseyAvatarMaterial);
-
-    const odyssey = new PlanetMesh(
-      odysseyBaseSphereGeometry.current,
-      odysseyBaseSphereMaterial.current!,
-      item.uuid,
-      item.owner,
-      item.name,
-      texture
-    );
-
-    odyssey.add(avatarMesh);
-
-    return odyssey;
-  };
+  }, []);
 
   /**
    * Build Galaxy
    */
-  const generateGalaxy = () => {
+  const generateGalaxy = useCallback(() => {
     /**
      * Clean previous renders of galaxy.
      */
@@ -205,14 +163,54 @@ export const use3DMap = (
      */
     points.current = new THREE.Points(pointsGeometry.current, pointsMaterial.current);
     scene.current.add(points.current);
-  };
+  }, []);
+
+  /**
+   * Create a new Odyssey
+   */
+  const createNewOdyssey = useCallback(
+    (item: PlanetInterface) => {
+      const standardTextures = [honey01, iceland01];
+
+      const randNum = Math.floor(Math.random() * standardTextures.length);
+      let randTexture = standardTextures[randNum];
+
+      if (item.image) {
+        randTexture = getImageUrl(item.image);
+      }
+
+      const texture = new THREE.TextureLoader().load(randTexture);
+
+      const odysseyAvatarMaterial = new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        map: texture
+      });
+
+      // Flip textures horizontally so text is readable.
+      texture.wrapS = THREE.RepeatWrapping;
+
+      const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry.current, odysseyAvatarMaterial);
+
+      const odyssey = new PlanetMesh(
+        odysseyBaseSphereGeometry.current,
+        odysseyBaseSphereMaterial.current!,
+        item.uuid,
+        item.owner,
+        item.name,
+        texture
+      );
+
+      odyssey.add(avatarMesh);
+
+      return odyssey;
+    },
+    [getImageUrl]
+  );
 
   /**
    * Create array for odyssey
    */
-
-  const ProcessOdyssey = () => {
-    //Build an odyssey for all given entries.
+  const createOdysseys = useCallback(() => {
     for (let i = 0; i < items.length; i++) {
       if (items[i].uuid !== centerUuid) {
         const odyssey = createNewOdyssey(items[i]);
@@ -223,13 +221,27 @@ export const use3DMap = (
     }
 
     referenceListOfOdysseys.current = [...listOfOdysseys.current];
-  };
+  }, [centerUuid, createNewOdyssey, items]);
+
+  /**
+   * Create center Odyssey
+   */
+  const createCenterOdyssey = useCallback(() => {
+    const centerItem = items.find((i) => i.uuid === centerUuid);
+    if (!centerItem) {
+      return;
+    }
+
+    const centerOdyssey = createNewOdyssey(centerItem);
+    scene.current.add(centerOdyssey);
+    referenceListOfOdysseys.current.push(centerOdyssey);
+  }, [centerUuid, createNewOdyssey, items]);
 
   /**
    * Create Circular Universe of Odysseys
    */
 
-  const buildUniverse = () => {
+  const buildUniverse = useCallback(() => {
     let radius = 10;
     const radiusIncreaseValue = 15;
     let AmountOfOdysseyInNextRing = 10;
@@ -291,10 +303,10 @@ export const use3DMap = (
     odysseyGroups.forEach((circle) => {
       scene.current.add(circle);
     });
-  };
+  }, []);
 
   // Animation
-  const animate = () => {
+  const animate = useCallback(() => {
     // Update controls for auto-rotate.
     if (!updateCameraRotation.current) {
       controls.current.update();
@@ -311,7 +323,7 @@ export const use3DMap = (
 
     // Re-call Animation
     window.requestAnimationFrame(animate);
-  };
+  }, []);
 
   /**
    * Update mouse location on screen
@@ -358,8 +370,8 @@ export const use3DMap = (
         const targetVector = new THREE.Vector3();
         targetPlanet.object.getWorldPosition(targetVector);
 
-        // FIXME: Kovi. Extract info from planet Kovi
-        onOdysseyClick(targetPlanet.object.uuid);
+        // Handle selecting planet
+        onSelectOdyssey(targetPlanet.object.uuid);
 
         // Prepare fly to planets.
         const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
@@ -368,7 +380,7 @@ export const use3DMap = (
         const startOrientation = camera.current.quaternion.clone();
 
         const targetOrientation = camera.current.quaternion
-          // @ts-ignore
+          // @ts-ignore: artifacts appear without it.
           .clone(camera.current.lookAt(targetVector))
           .normalize();
 
@@ -417,7 +429,7 @@ export const use3DMap = (
         });
       }
     },
-    [onOdysseyClick]
+    [onSelectOdyssey]
   );
 
   /**
@@ -434,6 +446,7 @@ export const use3DMap = (
       return;
     }
 
+    // Prevent double rendering
     wasLoaded.current = true;
 
     // Camera Setup
@@ -481,23 +494,14 @@ export const use3DMap = (
 
     generateGalaxy();
 
-    ProcessOdyssey();
+    createOdysseys();
 
-    /**
-     * Create USER OWN odyssey at the center.
-     */
-
-    // TODO: Kovi
-    const centerOdyssey = createNewOdyssey(items.find((i) => i.uuid === centerUuid));
-    if (centerOdyssey) {
-      scene.current.add(centerOdyssey);
-      referenceListOfOdysseys.current.push(centerOdyssey);
-    }
+    createCenterOdyssey();
 
     buildUniverse();
 
     animate();
-  }, [ProcessOdyssey, animate, centerUuid, createNewOdyssey, items]);
+  }, [animate, buildUniverse, createCenterOdyssey, createOdysseys, generateGalaxy]);
 
   useEffect(() => {
     window.addEventListener('pointermove', onPointerMove);
