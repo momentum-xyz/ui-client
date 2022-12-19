@@ -5,6 +5,7 @@ import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useHistory} from 'react-router-dom';
 import {Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
@@ -23,6 +24,8 @@ const SkyboxSelectorWithPreview: FC = () => {
 
   const history = useHistory();
 
+  const {t} = useTranslation();
+
   useEffect(() => {
     worldBuilderSkyboxesStore.fetchItems(worldId);
   }, [worldBuilderSkyboxesStore, worldId]);
@@ -32,7 +35,7 @@ const SkyboxSelectorWithPreview: FC = () => {
       <styled.ItemsGallery>
         <styled.SkyboxCountContainer>
           <styled.SkyboxCount>
-            <Text text={`${items.length} Skyboxes`} size="l" align="left" />
+            <Text text={t('counts.skyboxes', {count: items.length})} size="l" align="left" />
           </styled.SkyboxCount>
         </styled.SkyboxCountContainer>
         {!!items && !!selectedItem && (
@@ -55,7 +58,11 @@ const SkyboxSelectorWithPreview: FC = () => {
                   <styled.ItemTitle>{item.name}</styled.ItemTitle>
                   <styled.ItemButtonHolder>
                     <Button
-                      label={currentItem === item ? 'Selected Skybox' : 'Select Skybox'}
+                      label={
+                        currentItem === item
+                          ? t('titles.selectedSkybox')
+                          : t('actions.selectSkybox')
+                      }
                       // variant="inverted"
                       disabled={currentItem === item}
                       transform="uppercase"
@@ -73,7 +80,7 @@ const SkyboxSelectorWithPreview: FC = () => {
           />
         )}
       </styled.ItemsGallery>
-      <styled.CloseButton label="Close Panel" onClick={() => history.goBack()} />
+      <styled.CloseButton label={t('actions.closePanel')} onClick={() => history.goBack()} />
     </styled.Container>
   );
 };

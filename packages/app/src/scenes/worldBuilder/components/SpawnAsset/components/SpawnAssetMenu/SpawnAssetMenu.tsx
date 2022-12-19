@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
 import cn from 'classnames';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 
@@ -13,6 +14,7 @@ interface PropsInterface {
 const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
   const location = useLocation();
   const history = useHistory();
+  const {t} = useTranslation();
 
   return (
     <styled.Container>
@@ -25,7 +27,7 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
           history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.basicAssets, {worldId}))
         }
       >
-        <styled.TabText text="Basic Asset Pack" size="l" weight="light" align="left" />
+        <styled.TabText text={t('labels.basicAssetPack')} size="l" weight="light" align="left" />
       </styled.Tab>
       <styled.Tab
         className={cn(
@@ -36,7 +38,12 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
           history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.customAssets, {worldId}))
         }
       >
-        <styled.TabText text="Custom Object Library" size="l" weight="light" align="left" />
+        <styled.TabText
+          text={t('labels.customObjectLibrary')}
+          size="l"
+          weight="light"
+          align="left"
+        />
       </styled.Tab>
       <styled.Tab
         className={cn(
@@ -47,7 +54,12 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
           history.push(generatePath(ROUTES.odyssey.builder.spawnAsset.uploadAsset, {worldId}))
         }
       >
-        <styled.TabText text="Upload Custom Object" size="l" weight="light" align="left" />
+        <styled.TabText
+          text={t('labels.uploadCustomObject')}
+          size="l"
+          weight="light"
+          align="left"
+        />
       </styled.Tab>
     </styled.Container>
   );

@@ -1,6 +1,5 @@
 import {types, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {PluginAttributesManager, PluginLoader} from 'core/models';
 import {
@@ -10,9 +9,7 @@ import {
   PluginMetadataInterface,
   PluginOptionsInterface,
   ObjectMetadataInterface,
-  ObjectOptionsInterface,
-  ObjectInterface,
-  UploadImageResponse
+  ObjectOptionsInterface
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {ObjectTypeEnum} from 'core/enums';
@@ -25,15 +22,8 @@ const ObjectStore = types
     types.model('ObjectStore', {
       name: types.maybe(types.string),
 
-      textTileContent: types.maybe(types.frozen<{title: string; content: string}>()),
-      videoTileContent: types.maybe(types.frozen<{youtubeUrl: string}>()),
-      imageTileContent: types.maybe(types.frozen<{src: string}>()),
-
       getSpaceInfoRequest: types.optional(RequestModel, {}),
       getAssetRequest: types.optional(RequestModel, {}),
-
-      imageUpload: types.optional(RequestModel, {}),
-      setTileRequest: types.optional(RequestModel, {}),
 
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
       asset: types.maybe(PluginLoader),
@@ -52,7 +42,6 @@ const ObjectStore = types
         return;
       }
 
-      // TODO: should be check based on 2d asset id : spaceId --> spaceInfo.asset_2d_id
       switch (spaceInfo.asset_2d_id) {
         case ObjectTypeEnum.TEXT:
         case ObjectTypeEnum.IMAGE:
@@ -100,40 +89,6 @@ const ObjectStore = types
           break;
         }
       }
-    }),
-    postNewImage: flow(function* (objectId: string, file: File) {
-      if (!self.tileStore.pluginId) {
-        return;
-      }
-      const data = {file: file};
-      const userResponse: UploadImageResponse = yield self.imageUpload.send(
-        api.mediaRepository.uploadImage,
-        data
-      );
-      const imageHash = userResponse?.hash;
-
-      yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: objectId,
-        plugin_id: self.tileStore.pluginId,
-        attribute_name: AttributeNameEnum.STATE,
-        value: {render_hash: imageHash}
-      });
-
-      yield self.tileStore.getSpaceAttributeValue(self.tileStore.pluginId, objectId);
-    }),
-    postNewContent: flow(function* (objectId: string, content: ObjectInterface) {
-      if (!self.tileStore.pluginId) {
-        return;
-      }
-
-      yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: objectId,
-        plugin_id: self.tileStore.pluginId,
-        attribute_name: AttributeNameEnum.STATE,
-        value: content
-      });
-
-      yield self.tileStore.getSpaceAttributeValue(self.tileStore.pluginId, objectId);
     })
   }))
   .actions((self) => ({

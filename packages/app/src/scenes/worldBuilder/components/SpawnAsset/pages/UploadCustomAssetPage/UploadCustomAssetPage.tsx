@@ -33,13 +33,13 @@ const UploadCustomAssetPage: FC = () => {
       toast.info(
         <ToastContent
           headerIconName="check"
-          title="success"
-          text="Asset uploaded succesfully"
+          title={t('titles.success')}
+          text={t('messages.assetUploadedSuccesfully')}
           showCloseButton
         />
       );
     }
-  }, [asset, worldBuilderAssets3dStore]);
+  }, [asset, worldBuilderAssets3dStore, t]);
 
   return (
     <styled.Container>

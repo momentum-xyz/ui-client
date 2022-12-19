@@ -162,7 +162,8 @@ export const enGb = {
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
-      onlyGLBSupported: 'Only GLB format supported'
+      onlyGLBSupported: 'Only GLB format supported',
+      requiredField: 'This field is required'
     },
     systemMessages: {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
@@ -176,7 +177,9 @@ export const enGb = {
       attendees_one: `{{count}} Attendee`,
       attendees_other: `{{count}} Attendees`,
       vibes_one: '{{count}}  vibe',
-      vibes_other: '{{count}}  vibes'
+      vibes_other: '{{count}}  vibes',
+      skyboxes_one: '{{count}} Skybox',
+      skyboxes_other: '{{count}} Skyboxes'
     },
     labels: {
       home: 'Home',
@@ -233,7 +236,17 @@ export const enGb = {
       notifications: 'Notifications',
       micOn: 'Mic On',
       micOff: 'Mic Off',
-      selectFunction: 'Select Function'
+      selectFunction: 'Select Function',
+      visibleInNavigation: 'Visible in Navigation',
+      basicAssetPack: 'Basic Asset Pack',
+      customObjectLibrary: 'Custom Object Library',
+      uploadCustomObject: 'Upload Custom Object',
+      changeVideo: 'Change Video',
+      video: 'Video',
+      changeText: 'Change Text',
+      document: 'Document',
+      changeImage: 'Change Image',
+      image: 'Image'
     },
     messages: {
       loading: 'Loading Odyssey',
@@ -353,7 +366,8 @@ export const enGb = {
       errorWhileRemovingPlugin:
         'Error has occured when removing {{pluginName}} removed succesfully!',
       weSupportGLBModels: 'We support GLB Models',
-      selectOne: 'Select One'
+      selectOne: 'Select One',
+      processing: 'Processing'
     },
     titles: {
       alert: 'alert',
@@ -395,7 +409,10 @@ export const enGb = {
       deletePluginFromSpace: 'Delete plugin from space',
       error: 'Error',
       social: 'Social',
-      selectFunctionality: 'Select Functionality'
+      selectFunctionality: 'Select Functionality',
+      spawnAsset: 'Spawn Asset',
+      selectedSkybox: 'Selected Skybox',
+      upload3dAsset: 'Upload 3D Asset'
     },
     textMessage: {
       you: 'you',
@@ -422,7 +439,8 @@ export const enGb = {
       worldname: 'worldname',
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
-      selectAnOption: 'Select an Option'
+      selectAnOption: 'Select an Option',
+      nameYourObjectNavigation: 'Name your Object (Navigation)'
     },
     fields: {
       nickname: 'Nickname',
@@ -513,7 +531,16 @@ export const enGb = {
       select: 'Select',
       uploadYourAssset: 'Upload your asset',
       addToLibrary: 'Add to library',
-      dropItHere: 'Drop it here'
+      dropItHere: 'Drop it here',
+      closePanel: 'Close Panel',
+      selectSkybox: 'Select Skybox',
+      upload: 'Upload',
+      spawnObject: 'Spawn Object',
+      change: 'Change',
+      changeVideo: 'Change Video',
+      changeText: 'Change Text',
+      changeImage: 'Change Image',
+      selectImage: 'Select Image'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',

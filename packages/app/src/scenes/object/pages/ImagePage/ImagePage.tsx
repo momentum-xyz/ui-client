@@ -1,73 +1,27 @@
-import React, {FC, useState} from 'react';
-import {Button, Heading, SvgButton, Text, FileUploader} from '@momentum-xyz/ui-kit';
+import React, {FC} from 'react';
+import {Button, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
-import {ObjectInterface} from 'api';
 import {useStore} from 'shared/hooks';
+import {ChangeImageDialog} from 'scenes/object/components';
 
 import * as styled from './ImagePage.styled';
 
-interface PropsInterface {
-  imageSrc?: string;
-  content?: ObjectInterface;
-  worldId: string;
-}
-
-const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
+const ImagePage: FC = () => {
   const {objectStore} = useStore();
-  //const {unityStore} = mainStore;
+  const {tileStore} = objectStore;
+  const {changeTileDialog, content, imageSrc} = tileStore;
   const history = useHistory();
   const {t} = useTranslation();
 
-  const {objectId} = useParams<{objectId: string}>();
-
-  const [isChangeImageShown, setIsChangeImageShown] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [image, setImage] = useState<File>();
+  const {worldId} = useParams<{worldId: string}>();
 
   return (
     <styled.Modal data-testid="ImagePage-test">
-      {isChangeImageShown && (
-        <styled.ChangeImageForm>
-          <Heading label="Change Image" type="h2" />
-          {!image && (
-            <FileUploader
-              label="Select Image"
-              dragActiveLabel={t('actions.dropItHere')}
-              fileType="image"
-              buttonSize="normal"
-              onFilesUpload={setImage}
-              onError={(error) => console.error(error)}
-              enableDragAndDrop={false}
-            />
-          )}
-          {image /* TODO: FileUploader 'selected' file state */ && (
-            <Button label={image.name} disabled={true} />
-          )}
-          <Button
-            label={isProcessing ? 'Processing...' : 'Change'}
-            disabled={isProcessing}
-            onClick={async () => {
-              if (image) {
-                setIsProcessing(true);
-                await objectStore.postNewImage(objectId, image);
-                setIsChangeImageShown(false);
-                setIsProcessing(false);
-              }
-            }}
-          />
-          <Button
-            label="Cancel"
-            variant="danger"
-            onClick={() => {
-              setIsChangeImageShown(false);
-            }}
-          />
-        </styled.ChangeImageForm>
-      )}
+      {changeTileDialog.isOpen && <ChangeImageDialog />}
       <styled.Container>
         <styled.ContentWrapper>
           {imageSrc && <styled.ImageWrapper src={imageSrc} alt="" />}
@@ -75,7 +29,7 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
         <styled.HeaderElement className="left">
           <styled.Title>
             <Text
-              text={content?.title ? content?.title : 'Image'}
+              text={content?.title ? content?.title : t('labels.image')}
               transform="uppercase"
               weight="bold"
               size="xl"
@@ -83,7 +37,7 @@ const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
           </styled.Title>
         </styled.HeaderElement>
         <styled.HeaderElement className="button">
-          <Button label="Change image" onClick={() => setIsChangeImageShown(true)} />
+          <Button label={t('actions.changeImage')} onClick={changeTileDialog.open} />
         </styled.HeaderElement>
         <styled.HeaderElement className="right">
           <styled.Button>

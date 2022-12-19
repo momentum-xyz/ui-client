@@ -2,6 +2,7 @@ import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {Button, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -16,6 +17,8 @@ export const SelectedPage: FC = () => {
   const {selectedAssset: asset} = worldBuilderAssets3dStore;
 
   const history = useHistory();
+
+  const {t} = useTranslation();
 
   const {worldId} = useParams<{
     worldId: string;
@@ -46,21 +49,21 @@ export const SelectedPage: FC = () => {
           checked={worldBuilderAssets3dStore.isVisibleInNavigation}
           onChange={worldBuilderAssets3dStore.toggleIsVisibleInNavigation}
         />
-        <Text text="Visible in Navigation" size="m" weight="light" />
+        <Text text={t('labels.visibleInNavigation')} size="m" weight="light" />
       </styled.CheckBoxLabel>
       <styled.NameInput
-        placeholder="Name your Object (Navigation)"
+        placeholder={t('placeholders.nameYourObjectNavigation')}
         onFocus={() => unityStore.changeKeyboardControl(false)}
         onBlur={() => unityStore.changeKeyboardControl(true)}
         onChange={worldBuilderAssets3dStore.setNavigationObjectName}
       />
       <Button
-        label="Spawn Object"
+        label={t('actions.spawnObject')}
         disabled={!worldBuilderAssets3dStore.navigationObjectName}
         onClick={handleSpawn}
       />
       <Button
-        label="Go back"
+        label={t('actions.goBack')}
         onClick={() => {
           history.goBack();
         }}
