@@ -24,6 +24,10 @@ export const Information = styled.div`
   display: flex;
   gap: 5px;
   align-items: center;
+  cursor: pointer;
+  &.noPointer {
+    cursor: default;
+  }
 `;
 
 export const RightToolbar = styled.div`
@@ -43,7 +47,6 @@ export const Item = styled.div`
   justify-content: space-between;
   padding: 5px;
   border-bottom: 1px solid rgba(255, 242, 241, 0.2);
-  cursor: pointer;
 `;
 export const UsersContainer = styled.div`
   display: flex;

@@ -246,7 +246,12 @@ export const enGb = {
       changeText: 'Change Text',
       document: 'Document',
       changeImage: 'Change Image',
-      image: 'Image'
+      image: 'Image',
+      coCreate: 'co-create',
+      connected: 'connected',
+      connect: 'connect',
+      highFive: 'high five',
+      visit: 'visit'
     },
     messages: {
       loading: 'Loading Odyssey',
@@ -412,7 +417,8 @@ export const enGb = {
       selectFunctionality: 'Select Functionality',
       spawnAsset: 'Spawn Asset',
       selectedSkybox: 'Selected Skybox',
-      upload3dAsset: 'Upload 3D Asset'
+      upload3dAsset: 'Upload 3D Asset',
+      admin: 'admin'
     },
     textMessage: {
       you: 'you',
@@ -1020,6 +1026,11 @@ export const enGb = {
         title: 'remove Tile from dashboard',
         message: 'Are you sure you want to remove this tile?'
       }
+    },
+    mutualConnections: {
+      noConnection: 'There are no connections yet',
+      title: 'Mutual connections list',
+      admin: 'admin'
     }
   }
 };

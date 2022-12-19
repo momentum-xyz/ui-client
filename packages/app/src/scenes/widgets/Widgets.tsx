@@ -232,14 +232,7 @@ const Widgets: FC<PropsInterface> = (props) => {
           onClose={mutualConnectionsStore.widget.close}
         />
       )}
-      {onlineUsersStore.searchWidget.isOpen && (
-        <SearchUsersWidget
-          users={onlineUsersStore.allUsers}
-          searchedUsers={onlineUsersStore.searchedUsers}
-          searchUsers={onlineUsersStore.searchUsers}
-          onClose={onlineUsersStore.searchWidget.close}
-        />
-      )}
+      {onlineUsersStore.searchWidget.isOpen && <SearchUsersWidget />}
       {widgetsStore.odysseyStore.widget.isOpen && (
         <OdysseyWidget
           currentUserId={sessionStore.userId}

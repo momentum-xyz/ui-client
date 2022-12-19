@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, IconSvg, Text, Dialog} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 
@@ -32,6 +33,8 @@ const OdysseyWidget: FC<PropsInterface> = ({
   onHighFive,
   onClose
 }) => {
+  const {t} = useTranslation();
+
   if (!odyssey) {
     return null;
   }
@@ -51,24 +54,24 @@ const OdysseyWidget: FC<PropsInterface> = ({
         <styled.TopContainer>
           <styled.Avatar src={getImageAbsoluteUrl(userAvatar) || ''} />
           <styled.Actions>
-            <Button size="small" label="Visit" disabled={!!nftId} icon="fly-to" />
+            <Button size="small" label={t('labels.visit')} disabled={!!nftId} icon="fly-to" />
             <Button
               size="small"
-              label="High Five"
+              label={t('labels.highFive')}
               icon="high-five"
               disabled={currentUserId === odyssey.uuid}
               onClick={() => onHighFive(odyssey.uuid)}
             />
             <Button
               size="small"
-              label={alreadyConnected ? 'Connected' : 'Connect'}
+              label={alreadyConnected ? t('labels.connected') : t('labels.connect')}
               icon="hierarchy"
               disabled={currentUserId === odyssey.uuid || alreadyConnected}
               onClick={onConnect}
             />
             <Button
               size="small"
-              label="co-create"
+              label={t('labels.coCreate')}
               icon="cubicles"
               onClick={() => {}}
               disabled={true}
