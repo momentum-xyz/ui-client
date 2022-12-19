@@ -2,11 +2,15 @@ import {FC, useCallback, useEffect} from 'react';
 import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
 import cn from 'classnames';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {GizmoTypeEnum} from 'core/enums';
 
 import * as styled from './ObjectMenu.styled';
+
+const OBJECT_MENU_OFFSET_X = 295;
+const OBJECT_MENU_OFFSET_Y = 100;
 
 interface PropsInterface {
   objectId: string;
@@ -33,6 +37,8 @@ const ObjectMenu: FC<PropsInterface> = ({
 }) => {
   const history = useHistory();
 
+  const {t} = useTranslation();
+
   useEffect(() => {
     fetchObject(objectId);
   }, [objectId, fetchObject]);
@@ -49,48 +55,50 @@ const ObjectMenu: FC<PropsInterface> = ({
 
   return (
     <Portal>
-      <styled.Container style={{left: position.x - 295, top: position.y - 100}}>
+      <styled.Container
+        style={{left: position.x - OBJECT_MENU_OFFSET_X, top: position.y - OBJECT_MENU_OFFSET_Y}}
+      >
         <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.POSITION)}>
           <styled.MenuText
-            text="Move"
+            text={t('actions.move')}
             size="m"
             className={cn(gizmoType === GizmoTypeEnum.POSITION && 'selected')}
           />
         </styled.MenuItem>
         <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.ROTATION)}>
           <styled.MenuText
-            text="Rotate"
+            text={t('actions.rotate')}
             size="m"
             className={cn(gizmoType === GizmoTypeEnum.ROTATION && 'selected')}
           />
         </styled.MenuItem>
         <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.SCALE)}>
           <styled.MenuText
-            text="Scale"
+            text={t('actions.scale')}
             size="m"
             className={cn(gizmoType === GizmoTypeEnum.SCALE && 'selected')}
           />
         </styled.MenuItem>
         <styled.MenuItem onClick={onUndo}>
-          <styled.MenuText text="Undo" size="m" />
+          <styled.MenuText text={t('actions.undo')} size="m" />
         </styled.MenuItem>
         <styled.MenuItem onClick={onRedo}>
-          <styled.MenuText text="Redo" size="m" />
+          <styled.MenuText text={t('actions.redo')} size="m" />
         </styled.MenuItem>
         <styled.MenuItem onClick={onObjectRemove}>
-          <styled.MenuText text="Delete" size="m" />
+          <styled.MenuText text={t('actions.delete')} size="m" />
         </styled.MenuItem>
-        <Tooltip label="comming soon!" placement="bottom">
+        <Tooltip label={t('messages.commingSoonExclamation')} placement="bottom">
           <styled.MenuItem disabled>
-            <styled.MenuText text="Copy" size="m" />
+            <styled.MenuText text={t('actions.copy')} size="m" />
           </styled.MenuItem>
         </Tooltip>
         <styled.MenuItem onClick={handleOnFunctionalityClick}>
-          <styled.MenuText text="Functionality" size="m" />
+          <styled.MenuText text={t('actions.functionality')} size="m" />
         </styled.MenuItem>
-        <Tooltip label="comming soon!">
+        <Tooltip label={t('messages.commingSoonExclamation')}>
           <styled.MenuItem disabled>
-            <styled.MenuText text="Add token gate" size="m" />
+            <styled.MenuText text={t('actions.addTokenGate')} size="m" />
           </styled.MenuItem>
         </Tooltip>
       </styled.Container>

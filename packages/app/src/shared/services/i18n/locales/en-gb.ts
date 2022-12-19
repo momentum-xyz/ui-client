@@ -370,7 +370,8 @@ export const enGb = {
         'Error has occured when removing {{pluginName}} removed succesfully!',
       weSupportGLBModels: 'We support GLB Models',
       selectOne: 'Select One',
-      processing: 'Processing'
+      processing: 'Processing',
+      commingSoonExclamation: 'Coming Soon!'
     },
     titles: {
       alert: 'alert',
@@ -549,7 +550,15 @@ export const enGb = {
       changeVideo: 'Change Video',
       changeText: 'Change Text',
       changeImage: 'Change Image',
-      selectImage: 'Select Image'
+      selectImage: 'Select Image',
+      move: 'Move',
+      rotate: 'Rotate',
+      scale: 'Scale',
+      undo: 'Undo',
+      redo: 'Redo',
+      copy: 'Copy',
+      functionality: 'Functionality',
+      addTokenGate: 'Add Token Gate'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',
