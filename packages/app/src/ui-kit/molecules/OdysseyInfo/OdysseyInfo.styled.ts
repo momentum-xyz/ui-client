@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 
-export const Header = styled.div`
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-`;
+export const OdysseyInfoContainer = styled.div``;
 
 export const Container = styled.div`
   display: flex;
@@ -70,5 +63,5 @@ export const StatisticsItem = styled.div`
 export const StatisticsValue = styled.div`
   font-size: var(--font-size-xs);
   font-weight: 400;
-  color: ${(props) => props.theme.accent};
+  color: #fff2f1;
 `;
