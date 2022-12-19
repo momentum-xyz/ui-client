@@ -8,6 +8,7 @@ export const enGb = {
     },
     staking: {
       title: 'Personal Connecting Dashboard',
+      label: 'Staking',
       rewardAccountError:
         'The selected destination account does not exist and cannot be used to receive rewards',
       customRewardDestination: 'Account Address',
@@ -18,6 +19,7 @@ export const enGb = {
       validatorsTab: 'Validators',
       account: 'Account',
       authorization: 'Authorization',
+      authorizeContribution: 'Authorize your contribution',
       stakingTab: {
         stakingDashboard: 'Stake KSM - Setup Nominator',
         validators: 'Stake KSM - Select Validators',
@@ -81,13 +83,25 @@ export const enGb = {
       specificDestination: 'Specific Destination',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
+      setAmountSymbol: 'Set Amount, {{symbol}}',
       nominateAndBond: 'Nominate & Bond',
       amount: 'Amount',
       tokenAmount: 'Amount, {{amount}}',
       stakedAmount: 'Staked {{amount}}',
       back: 'Back',
+      next: 'Next',
+      destination: 'Destination',
       signAndSubmit: 'Sign & Submit',
+      signAndConnect: 'Sign & Connect',
       unStakeContribution: 'Unstake your contribution',
+      contributionMessage:
+        'This account is also the destination for the rewards you receive from your contribution.',
+      stakingMessage:
+        'By staking Momentum ($MOM) in someones Odyssey you are showing support for their journey. Not only do you get rewards for staking, but it will also allow you to place a portal inside your Odyssey that will allow others to travel to the Odyssey you have staked in.',
+      connectMessage:
+        'You can freely visit any users open Odyssey. You can explore and meet them just by clicking on their Odyssey. However, to create a portal between your Odyssey and another users Odyssey, you will need to stake in them. By staking you show your support for another Odyssey.',
+      connectTitle: 'Connect to another Odyssey',
+      startContributing: 'Start Contributing',
       unStakeFrom: 'Unstake From',
       unStake: 'Unstake',
       errorUnstake: 'Error unstaking',
@@ -95,6 +109,8 @@ export const enGb = {
       errorGetRewards: 'Error getting rewards',
       successGetRewards: 'You have got rewards!',
       getRewards: 'Get Rewards',
+      stakeError: 'Could not stake. Please try again later.',
+      stakeSuccess: 'You successfully staked!',
       totalRewards: 'Total rewards',
       rewards: 'Rewards',
       stashController: 'Controller',
@@ -268,7 +284,12 @@ export const enGb = {
       connected: 'connected',
       connect: 'connect',
       highFive: 'high five',
-      visit: 'visit'
+      visit: 'visit',
+      flyToMe: 'Fly to me',
+      bio: 'Bio',
+      discoverMore: 'Discover more',
+      connections: 'Connections',
+      newsfeed: 'Newsfeed'
     },
     messages: {
       loading: 'Loading Odyssey',

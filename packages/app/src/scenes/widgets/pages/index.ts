@@ -12,3 +12,4 @@ export * from './WorldBuilderWidget';
 export * from './SearchUsersWidget';
 export * from './MutualConnectionsWidget';
 export * from './StakingDashboardWidget';
+export * from './ConnectingDashboardWidget';
