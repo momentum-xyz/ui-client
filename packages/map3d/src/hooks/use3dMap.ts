@@ -18,7 +18,7 @@ import honey01 from '../static/images/honey01.jpg';
 import iceland01 from '../static/images/iceland01.jpg';
 import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
-export const use3DMap = (
+export const use3dMap = (
   canvas: HTMLCanvasElement,
   items: PlanetInterface[],
   centerUuid: string | undefined | null,
@@ -108,18 +108,14 @@ export const use3DMap = (
    * Build Galaxy
    */
   const generateGalaxy = useCallback(() => {
-    /**
-     * Clean previous renders of galaxy.
-     */
+    // Clean previous renders of galaxy.
     if (points.current !== null) {
       pointsGeometry.current?.dispose();
       pointsMaterial.current?.dispose();
       scene.current.remove(points.current);
     }
 
-    /**
-     * Geometry
-     */
+    // Geometry
     pointsGeometry.current = new THREE.BufferGeometry();
     const position = new Float32Array(PARAMETERS.count * 3);
 
@@ -145,9 +141,7 @@ export const use3DMap = (
 
     pointsGeometry.current.setAttribute('position', new THREE.BufferAttribute(position, 3));
 
-    /**
-     * Material
-     */
+    // Material
     pointsMaterial.current = new THREE.PointsMaterial({
       size: PARAMETERS.size,
       sizeAttenuation: true,
@@ -158,9 +152,7 @@ export const use3DMap = (
       opacity: 0.5
     });
 
-    /**
-     * Create stars in the universe.
-     */
+    // Create stars in the universe.
     points.current = new THREE.Points(pointsGeometry.current, pointsMaterial.current);
     scene.current.add(points.current);
   }, []);
@@ -240,7 +232,6 @@ export const use3DMap = (
   /**
    * Create Circular Universe of Odysseys
    */
-
   const buildUniverse = useCallback(() => {
     let radius = 10;
     const radiusIncreaseValue = 15;
@@ -294,7 +285,7 @@ export const use3DMap = (
       odysseyGroups.push(odysseyCircle);
     }
 
-    /** Trigger While loop posting all odyssey. */
+    // Trigger While loop posting all odyssey.
     while (listOfOdysseys.current.length > 0) {
       createRing();
     }
@@ -305,7 +296,9 @@ export const use3DMap = (
     });
   }, []);
 
-  // Animation
+  /**
+   * Animation
+   */
   const animate = useCallback(() => {
     // Update controls for auto-rotate.
     if (!updateCameraRotation.current) {
@@ -399,7 +392,7 @@ export const use3DMap = (
         const targetLocation = new THREE.Vector3();
         targetLocation.addVectors(camera.current.position, direction.multiplyScalar(distance));
 
-        //Animate using gsap module.
+        // Animate using gsap module.
         gsap.to(camera.current.position, {
           duration: 1.5,
           x: targetLocation.x,

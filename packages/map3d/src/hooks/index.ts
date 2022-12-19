@@ -1,1 +1,1 @@
-export * from './use3DMap';
+export * from './use3dMap';

@@ -47,7 +47,7 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
           currentUserId={sessionStore.userId}
           items={nftStore.nftItems}
           connections={stakes}
-          getImageAbsoluteUrl={getImageAbsoluteUrl}
+          getImageUrl={getImageAbsoluteUrl}
           onSelect={handleSelect}
         />
       )}

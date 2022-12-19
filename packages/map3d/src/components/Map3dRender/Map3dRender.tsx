@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 
-import {use3DMap} from '../../hooks';
+import {use3dMap} from '../../hooks';
 import {Map3dPropsInterface} from '../../interfaces';
 
 interface PropsInterface extends Map3dPropsInterface {
@@ -12,14 +12,14 @@ const Map3dRender: FC<PropsInterface> = ({
   items,
   connections,
   canvas,
-  getImageAbsoluteUrl,
+  getImageUrl,
   onSelect
 }) => {
-  const callbacks = use3DMap(canvas, items, currentUserId, getImageAbsoluteUrl, onSelect);
+  const {drawConnections} = use3dMap(canvas, items, currentUserId, getImageUrl, onSelect);
 
   useEffect(() => {
-    callbacks.drawConnections(connections);
-  }, [callbacks, connections]);
+    drawConnections(connections);
+  }, [drawConnections, connections]);
 
   return <></>;
 };
