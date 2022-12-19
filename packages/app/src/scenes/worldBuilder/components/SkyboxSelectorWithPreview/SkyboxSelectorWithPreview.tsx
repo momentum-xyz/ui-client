@@ -35,7 +35,7 @@ const SkyboxSelectorWithPreview: FC = () => {
       <styled.ItemsGallery>
         <styled.SkyboxCountContainer>
           <styled.SkyboxCount>
-            <Text text={`${items.length} Skyboxes`} size="l" align="left" />
+            <Text text={t('counts.skyboxes', {count: items.length})} size="l" align="left" />
           </styled.SkyboxCount>
         </styled.SkyboxCountContainer>
         {!!items && !!selectedItem && (

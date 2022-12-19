@@ -177,7 +177,9 @@ export const enGb = {
       attendees_one: `{{count}} Attendee`,
       attendees_other: `{{count}} Attendees`,
       vibes_one: '{{count}}  vibe',
-      vibes_other: '{{count}}  vibes'
+      vibes_other: '{{count}}  vibes',
+      skyboxes_one: '{{count}} Skybox',
+      skyboxes_other: '{{count}} Skyboxes'
     },
     labels: {
       home: 'Home',
