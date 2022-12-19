@@ -172,7 +172,7 @@ const UnityStore = types
     },
     handleClick(x: number, y: number) {
       self.lastClickPosition = {x, y};
-      self.objectMenu.close();
+      this.closeAndResetObjectMenu();
     },
     onUnityObjectClick(objectId: string) {
       self.objectMenuPosition = self.lastClickPosition;
@@ -188,6 +188,11 @@ const UnityStore = types
     changeGizmoType(mode: GizmoTypeEnum) {
       self.gizmoMode = cast(mode);
       UnityService.changeGizmoType(mode);
+    },
+    closeAndResetObjectMenu() {
+      self.objectMenu.close();
+      self.selectedObjectId = '';
+      self.gizmoMode = GizmoTypeEnum.POSITION;
     }
   }))
   .views((self) => ({
