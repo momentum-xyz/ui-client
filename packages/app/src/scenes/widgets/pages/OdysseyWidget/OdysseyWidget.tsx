@@ -47,7 +47,6 @@ const OdysseyWidget: FC<PropsInterface> = ({
     >
       <OdysseyInfo
         odyssey={odyssey}
-        avatar={userAvatar || ''}
         alreadyConnected={alreadyConnected}
         onVisit={() => {}}
         visitDisabled={true}
