@@ -21,7 +21,7 @@ import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 export const use3dMap = (
   canvas: HTMLCanvasElement,
   items: PlanetInterface[],
-  centerUuid: string | undefined | null,
+  centerUuid: string,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onSelectOdyssey: (uuid: string) => void
 ) => {

@@ -9,9 +9,8 @@ import * as styled from './Map3dCanvas.styled';
 interface PropsInterface extends Map3dPropsInterface {}
 
 const Map3dCanvas: FC<PropsInterface> = (props) => {
-  const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
-
-  const mapRef = useRef<HTMLCanvasElement | null>(null);
+  const [isCanvasReady, setIsCanvasReady] = useState(false);
+  const mapRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (mapRef.current) {
