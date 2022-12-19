@@ -1,8 +1,8 @@
 import React, {FC, memo, useEffect, useState} from 'react';
-import defaultLoaderPlaceholder from 'static/images/spinner.svg';
-import defaultErrorPlaceholder from 'static/images/astronaut.svg';
 
-import {ComponentSizeInterface} from 'interfaces';
+import defaultLoaderPlaceholder from '../../static/images/spinner.svg';
+import defaultErrorPlaceholder from '../../static/images/astronaut.svg';
+import {ComponentSizeInterface} from '../../interfaces';
 
 import * as styled from './Image.styled';
 
