@@ -107,15 +107,21 @@ const OdysseyInfo: FC<PropsInterface> = ({
       <styled.StatisticsData>
         <styled.StatisticsItem>
           <IconSvg name="hierarchy" size="medium" />
-          <styled.StatisticsValue>{odyssey.connections} connections</styled.StatisticsValue>
+          <styled.StatisticsValue>
+            {t('staking.connectionAmount', {connections: odyssey.connections})}
+          </styled.StatisticsValue>
         </styled.StatisticsItem>
         <styled.StatisticsItem>
           <IconSvg name="people" size="medium" />
-          <styled.StatisticsValue>{odyssey.docking} docking</styled.StatisticsValue>
+          <styled.StatisticsValue>
+            {t('staking.dockingAmount', {docking: odyssey.docking})}
+          </styled.StatisticsValue>
         </styled.StatisticsItem>
         <styled.StatisticsItem>
           <IconSvg name="calendar" size="medium" />
-          <styled.StatisticsValue>{odyssey.events} events</styled.StatisticsValue>
+          <styled.StatisticsValue>
+            {t('staking.eventAmount', {events: odyssey.events})}
+          </styled.StatisticsValue>
         </styled.StatisticsItem>
       </styled.StatisticsData>
     </styled.OdysseyInfoContainer>
