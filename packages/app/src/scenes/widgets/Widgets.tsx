@@ -5,7 +5,7 @@ import {Avatar, Button, Dialog, ToolbarIcon, ToolbarIconList} from '@momentum-xy
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {StakingDashboard, StakingForm} from 'scenes/explore/pages/ExplorePage/components';
+import {StakingForm} from 'scenes/explore/pages/ExplorePage/components';
 
 import {
   ProfileWidget,
@@ -19,7 +19,8 @@ import {
   OdysseyWidget,
   WorldBuilderWidget,
   SearchUsersWidget,
-  MutualConnectionsWidget
+  MutualConnectionsWidget,
+  StakingDashboardWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -262,25 +263,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.calendarStore.widget.isOpen && <CalendarWidget />}
       {asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen && <SocialWidget />}
       {/* FIXME */}
-      {!!nftStore.stakingDashorboardDialog.isOpen && (
-        <Dialog
-          title="Personal Connecting Dashboard"
-          icon="hierarchy"
-          showCloseButton
-          layoutSize={{height: '610px'}}
-          onClose={() => {
-            nftStore.stakingDashorboardDialog.close();
-          }}
-        >
-          <styled.FullSizeWrapper onFocus={handleFocus} onBlur={handleBlur}>
-            <StakingDashboard
-              onComplete={() => {
-                nftStore.stakingDashorboardDialog.close();
-              }}
-            />
-          </styled.FullSizeWrapper>
-        </Dialog>
-      )}
+      {!!nftStore.stakingDashorboardDialog.isOpen && <StakingDashboardWidget />}
       {!!nftStore.connectToNftItemId && (
         <Dialog
           title="Personal Connecting Dashboard"

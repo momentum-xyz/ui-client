@@ -11,3 +11,4 @@ export * from './OdysseyWidget';
 export * from './WorldBuilderWidget';
 export * from './SearchUsersWidget';
 export * from './MutualConnectionsWidget';
+export * from './StakingDashboardWidget';
