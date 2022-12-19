@@ -6,5 +6,6 @@ export enum AttributeNameEnum {
   EMOJIS = 'emojis',
   EVENTS = 'events',
   VOICE_CHAT_USER = 'VoiceChatUser',
-  VOICE_CHAT_ACTION = 'VoiceChatAction'
+  VOICE_CHAT_ACTION = 'VoiceChatAction',
+  WORLD_SETTINGS = 'world_settings'
 }
