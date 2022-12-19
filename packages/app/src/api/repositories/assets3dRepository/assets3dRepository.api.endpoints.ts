@@ -4,7 +4,8 @@ export const assets3dRepositoryEndpoints = () => {
   const BASE_URL = `${appVariables.BACKEND_API_URL}/assets-3d/:worldId`;
 
   return {
-    base: BASE_URL,
-    upload: `${BASE_URL}/upload`
+    base: `${BASE_URL}`,
+    upload: `${BASE_URL}/upload`,
+    asset: `${BASE_URL}/remove/:assetId`
   };
 };

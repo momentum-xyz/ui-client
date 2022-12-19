@@ -129,6 +129,12 @@ const WorldBuilderAssets3dStore = types
           value: self.isVisibleInNavigation ? 3 : 1
         });
       }
+    }),
+    removeAsset: flow(function* (assetId: string) {
+      yield self.fetchAssets3dRequest.send(api.assets3dRepository.deleteAsset3d, {
+        assetId,
+        worldId: self.worldId
+      });
     })
   }))
   .views((self) => ({

@@ -540,7 +540,8 @@ export const enGb = {
       changeVideo: 'Change Video',
       changeText: 'Change Text',
       changeImage: 'Change Image',
-      selectImage: 'Select Image'
+      selectImage: 'Select Image',
+      removeFromLibrary: 'Remove from library'
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',

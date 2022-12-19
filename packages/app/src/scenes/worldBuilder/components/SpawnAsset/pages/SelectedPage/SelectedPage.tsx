@@ -35,6 +35,15 @@ export const SelectedPage: FC = () => {
     history.push(generatePath(ROUTES.odyssey.base, {worldId}));
   }, [history, worldBuilderAssets3dStore, worldId]);
 
+  const handleRemoveFromLibrary = useCallback(() => {
+    if (!asset) {
+      return;
+    }
+
+    worldBuilderAssets3dStore.removeAsset(asset.id);
+    history.goBack();
+  }, [asset, history, worldBuilderAssets3dStore]);
+
   if (!asset) {
     return null;
   }
@@ -57,11 +66,18 @@ export const SelectedPage: FC = () => {
         onBlur={() => unityStore.changeKeyboardControl(true)}
         onChange={worldBuilderAssets3dStore.setNavigationObjectName}
       />
-      <Button
-        label={t('actions.spawnObject')}
-        disabled={!worldBuilderAssets3dStore.navigationObjectName}
-        onClick={handleSpawn}
-      />
+      <styled.AssetActions>
+        <Button
+          label={t('actions.spawnObject')}
+          disabled={!worldBuilderAssets3dStore.navigationObjectName}
+          onClick={handleSpawn}
+        />
+        <Button
+          label={t('actions.removeFromLibrary')}
+          variant="danger"
+          onClick={handleRemoveFromLibrary}
+        />
+      </styled.AssetActions>
       <Button
         label={t('actions.goBack')}
         onClick={() => {

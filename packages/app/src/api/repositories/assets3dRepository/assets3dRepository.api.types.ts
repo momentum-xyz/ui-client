@@ -34,3 +34,7 @@ export interface FetchAssets3dRequest extends Asset3dRequest {
 }
 
 export interface FetchAssets3dResponse extends Array<Asset3dInterface> {}
+
+export interface DeleteAsset3dRequest extends Asset3dRequest {
+  assetId: string;
+}
