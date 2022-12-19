@@ -69,7 +69,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const balanceSections = [
     {label: 'Account Balance', value: balanceTotal},
     {label: 'Transferable', value: balanceTransferrable},
-    {label: 'Stacked', value: balanceReserved} // TODO get stacking from blockchain
+    {label: 'Staked', value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>
@@ -181,6 +181,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                           size="s"
                           text={nft?.name || stakingDetail.sourceAddr.substring(0, 20)}
                           align="left"
+                          className="name"
                         />
                         <Text
                           size="s"
@@ -221,7 +222,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                   </div>
                   <Button
                     label="Get Rewards"
-                    disabled={canReceiveAccumulatedRewards}
+                    disabled={!canReceiveAccumulatedRewards}
                     onClick={() => setGetRewards(true)}
                   />
                 </styled.RewardData>

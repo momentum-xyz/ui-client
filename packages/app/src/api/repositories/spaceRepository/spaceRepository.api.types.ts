@@ -20,3 +20,9 @@ export interface PostSpaceRequest {
 export interface PostSpaceResponse {
   space_id: string;
 }
+
+export interface DeleteSpaceRequest {
+  spaceId: string;
+}
+
+export interface DeleteSpaceRequest {}

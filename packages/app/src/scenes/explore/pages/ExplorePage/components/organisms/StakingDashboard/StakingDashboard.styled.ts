@@ -89,7 +89,19 @@ export const ActiveStakesLineContainer = styled.div`
   justify-content: space-between;
   padding: 0 10px;
 
-  & button {
+  & > * {
+    flex: 1;
+    padding-right: 5px;
+
+    &.name {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  & > button {
+    flex: 0 95px;
     flex-direction: row-reverse;
     border: none;
     color: white !important;

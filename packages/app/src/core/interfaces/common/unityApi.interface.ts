@@ -21,4 +21,9 @@ export interface UnityApiInterface {
   disengageFlyWithMe(): void;
   changeSkybox(skyboxId: string): void;
   toggleBuildMode(): void;
+  undoActionWorldBuilder(): void;
+  redoActionWorldBuilder(): void;
+  setPositionGizmoWorldBuilder(): void;
+  setRotationGizmoWorldBuilder(): void;
+  setScaleGizmoWorldBuilder(): void;
 }

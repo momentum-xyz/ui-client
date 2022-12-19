@@ -23,6 +23,7 @@ import {
 import {AssetTypeEnum} from 'core/enums';
 
 import * as styled from './UnityPage.styled';
+import {CreatorMenu, ObjectMenu} from './components';
 
 const UnityContextCSS = {
   width: '100vw',
@@ -30,13 +31,20 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, authStore, unityLoaded, sessionStore} = useStore();
+  const {mainStore, authStore, unityLoaded, sessionStore, worldBuilderStore} = useStore();
   const {unityStore, worldStore} = mainStore;
+  const {worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();
   const history = useHistory();
   const {t} = useTranslation();
   const location = useLocation();
+
+  const isBuilderMode =
+    !!worldStore.worldId &&
+    location.pathname.includes(
+      generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
+    );
 
   // TODO: FIXME
   const worldId = useMemo(() => {
@@ -110,12 +118,8 @@ const UnityPage: FC = () => {
 
   useUnityEvent('ClickEventEditableObject', (spaceId: string) => {
     console.log('ClickEventEditableObject', spaceId);
-    history.push({
-      pathname: generatePath(ROUTES.odyssey.builder.editor, {
-        worldId: worldStore.worldId,
-        objectId: spaceId
-      })
-    });
+    // This even comes faster than actual click, so delay
+    setTimeout(() => unityStore.onUnityObjectClick(spaceId), 500);
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
@@ -241,7 +245,12 @@ const UnityPage: FC = () => {
 
   return (
     <Portal>
-      <styled.Inner data-testid="UnityPage-test">
+      <styled.Inner
+        data-testid="UnityPage-test"
+        onClick={(event) => {
+          unityStore.handleClick(event.clientX, event.clientY);
+        }}
+      >
         <Unity unityContext={unityStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
       {/*<PathObserver
@@ -249,6 +258,36 @@ const UnityPage: FC = () => {
         resumeUnity={unityStore.resume}
         pauseUnity={unityStore.pause}
       />*/}
+      {unityStore.objectMenu.isOpen && (
+        <ObjectMenu
+          gizmoType={unityStore.gizmoMode}
+          worldId={worldStore.worldId}
+          position={unityStore.objectMenuPosition}
+          objectId={unityStore.selectedObjectId ?? ' '}
+          onGizmoTypeChange={unityStore.changeGizmoType}
+          onObjectRemove={() => {
+            worldBuilderObjectStore.deleteObject();
+            unityStore.objectMenu.close();
+          }}
+          fetchObject={worldBuilderObjectStore.fetchObject}
+          onUndo={unityStore.undo}
+          onRedo={unityStore.redo}
+        />
+      )}
+      {isBuilderMode && (
+        <CreatorMenu
+          onAddObject={() => {
+            history.push(
+              generatePath(ROUTES.odyssey.builder.spawnAsset.base, {worldId: worldStore.worldId})
+            );
+          }}
+          onSkyboxClick={() => {
+            history.push(
+              generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId})
+            );
+          }}
+        />
+      )}
       {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>
   );

@@ -1,7 +1,8 @@
-import React, {FC, useState, useCallback} from 'react';
-import {Button, Heading, SvgButton, Text, Input} from '@momentum-xyz/ui-kit';
+import React, {FC, useState} from 'react';
+import {Button, Heading, SvgButton, Text, FileUploader} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {ObjectInterface} from 'api';
@@ -16,36 +17,46 @@ interface PropsInterface {
 }
 
 const ImagePage: FC<PropsInterface> = ({imageSrc, content, worldId}) => {
-  const {objectStore, mainStore} = useStore();
-  const {unityStore} = mainStore;
+  const {objectStore} = useStore();
+  //const {unityStore} = mainStore;
   const history = useHistory();
+  const {t} = useTranslation();
 
   const {objectId} = useParams<{objectId: string}>();
 
   const [isChangeImageShown, setIsChangeImageShown] = useState(false);
-  const [image, setImage] = useState('');
-
-  const handleFocus = useCallback(() => {
-    unityStore.changeKeyboardControl(false);
-  }, [unityStore]);
-
-  const handleBlur = useCallback(() => {
-    unityStore.changeKeyboardControl(true);
-  }, [unityStore]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [image, setImage] = useState<File>();
 
   return (
     <styled.Modal data-testid="ImagePage-test">
       {isChangeImageShown && (
         <styled.ChangeImageForm>
           <Heading label="Change Image" type="h2" />
-          <Input onFocus={handleFocus} onBlur={handleBlur} onChange={setImage} />
+          {!image && (
+            <FileUploader
+              label="Select Image"
+              dragActiveLabel={t('actions.dropItHere')}
+              fileType="image"
+              buttonSize="normal"
+              onFilesUpload={setImage}
+              onError={(error) => console.error(error)}
+              enableDragAndDrop={false}
+            />
+          )}
+          {image /* TODO: FileUploader 'selected' file state */ && (
+            <Button label={image.name} disabled={true} />
+          )}
           <Button
-            label="Change"
+            label={isProcessing ? 'Processing...' : 'Change'}
+            disabled={isProcessing}
             onClick={async () => {
-              await objectStore.postNewContent(objectId, {
-                render_hash: image
-              });
-              setIsChangeImageShown(false);
+              if (image) {
+                setIsProcessing(true);
+                await objectStore.postNewImage(objectId, image);
+                setIsChangeImageShown(false);
+                setIsProcessing(false);
+              }
             }}
           />
           <Button

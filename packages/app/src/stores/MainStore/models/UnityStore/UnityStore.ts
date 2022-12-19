@@ -1,10 +1,10 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
-import {RequestModel} from '@momentum-xyz/core';
+import {RequestModel, Dialog} from '@momentum-xyz/core';
 
 import {api, ResolveNodeResponse} from 'api';
 import {appVariables} from 'api/constants';
-import {PosBusEventEnum} from 'core/enums';
+import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {UnityService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
@@ -17,7 +17,16 @@ const UnityStore = types
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
     fetchRequest: types.optional(RequestModel, {}),
-    nodeRequest: types.optional(RequestModel, {})
+    nodeRequest: types.optional(RequestModel, {}),
+    lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
+    objectMenuPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
+    objectMenu: types.optional(Dialog, {}),
+    selectedObjectId: types.maybe(types.string),
+
+    gizmoMode: types.optional(
+      types.enumeration(Object.values(GizmoTypeEnum)),
+      GizmoTypeEnum.POSITION
+    )
   })
   .volatile<{unityContext: UnityContext | null}>(() => ({
     unityContext: null
@@ -160,6 +169,25 @@ const UnityStore = types
         this.triggerTeleport(response.domain, worldId);
         this.setInitialVolume();
       }
+    },
+    handleClick(x: number, y: number) {
+      self.lastClickPosition = {x, y};
+      self.objectMenu.close();
+    },
+    onUnityObjectClick(objectId: string) {
+      self.objectMenuPosition = self.lastClickPosition;
+      self.objectMenu.open();
+      self.selectedObjectId = objectId;
+    },
+    undo() {
+      UnityService.undo();
+    },
+    redo() {
+      UnityService.redo();
+    },
+    changeGizmoType(mode: GizmoTypeEnum) {
+      self.gizmoMode = cast(mode);
+      UnityService.changeGizmoType(mode);
     }
   }))
   .views((self) => ({

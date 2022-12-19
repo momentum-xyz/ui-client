@@ -1,16 +1,19 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {Asset3d, Asset3dInterface} from 'core/models';
 import {api, FetchAssets3dResponse} from 'api';
 import {appVariables} from 'api/constants';
-import {Asset3dCategoryEnum} from 'api/enums';
+import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 
 const WorldBuilderSkyboxesStore = types
   .compose(
     ResetModel,
     types.model('WorldBuilderSkyboxesStore', {
       request: types.optional(RequestModel, {}),
+      selecteRequest: types.optional(RequestModel, {}),
+      worldSettingsRequest: types.optional(RequestModel, {}),
 
       items: types.optional(types.array(Asset3d), []),
       selectedItemId: types.maybe(types.string),
@@ -47,11 +50,24 @@ const WorldBuilderSkyboxesStore = types
     selectItem(item: Asset3dInterface) {
       self.selectedItemId = item.id;
     },
-    saveItem(item: Asset3dInterface) {
-      // TODO
+    saveItem: flow(function* (item: Asset3dInterface, worldId: string) {
       self.currentItemId = item.id;
-      return Promise.resolve();
-    }
+
+      const {spaces} = yield self.worldSettingsRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: worldId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.WORLD_SETTINGS,
+          sub_attribute_key: 'spaces'
+        }
+      );
+
+      yield self.selecteRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
+        spaceId: spaces.skybox,
+        asset_3d_id: item.id
+      });
+    })
   }))
   .views((self) => ({
     get selectedItem(): Asset3dInterface | undefined {
