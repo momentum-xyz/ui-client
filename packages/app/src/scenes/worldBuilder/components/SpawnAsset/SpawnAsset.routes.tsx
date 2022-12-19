@@ -1,22 +1,18 @@
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
+import {Asset3dCategoryEnum} from 'api/enums';
 
-import {
-  BasicAssetsPackPage,
-  CustomAssetsLibraryPage,
-  SelectedPage,
-  UploadCustomAssetPage
-} from './pages';
+import {AssetsPage, SelectedPage, UploadCustomAssetPage} from './pages';
 
 export const SPAWN_ASSET_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.builder.spawnAsset.basicAssets,
-    main: () => <BasicAssetsPackPage />,
+    main: () => <AssetsPage assetCategory={Asset3dCategoryEnum.BASIC} />,
     exact: true
   },
   {
     path: ROUTES.odyssey.builder.spawnAsset.customAssets,
-    main: () => <CustomAssetsLibraryPage />,
+    main: () => <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} />,
     exact: true
   },
   {

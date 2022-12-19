@@ -8,9 +8,13 @@ import AssetsGrid from 'scenes/worldBuilder/components/SpawnAsset/components/Ass
 import {Asset3dInterface} from 'core/models';
 import {ROUTES} from 'core/constants';
 
-import * as styled from './BasicAssetsPackPage.styled';
+import * as styled from './AssetsPage.styled';
 
-const BasicAssetsPackPage: FC = () => {
+interface PropsInterface {
+  assetCategory: Asset3dCategoryEnum;
+}
+
+const AssetsPage: FC<PropsInterface> = ({assetCategory}) => {
   const {worldBuilderStore} = useStore();
   const {worldBuilderAssets3dStore} = worldBuilderStore;
 
@@ -19,12 +23,12 @@ const BasicAssetsPackPage: FC = () => {
   const {worldId} = useParams<{worldId: string}>();
 
   useEffect(() => {
-    worldBuilderAssets3dStore.fetchAssets3d(Asset3dCategoryEnum.BASIC);
+    worldBuilderAssets3dStore.fetchAssets3d(assetCategory);
 
     return () => {
       worldBuilderAssets3dStore.clearAssets();
     };
-  }, [worldBuilderAssets3dStore]);
+  }, [worldBuilderAssets3dStore, assetCategory]);
 
   const handleSelected = useCallback(
     (asset: Asset3dInterface) => {
@@ -32,11 +36,11 @@ const BasicAssetsPackPage: FC = () => {
       history.push(
         generatePath(ROUTES.odyssey.builder.spawnAsset.selected, {
           worldId,
-          assetCategory: Asset3dCategoryEnum.BASIC
+          assetCategory
         })
       );
     },
-    [history, worldBuilderAssets3dStore, worldId]
+    [history, worldBuilderAssets3dStore, worldId, assetCategory]
   );
 
   return (
@@ -46,4 +50,4 @@ const BasicAssetsPackPage: FC = () => {
   );
 };
 
-export default observer(BasicAssetsPackPage);
+export default observer(AssetsPage);
