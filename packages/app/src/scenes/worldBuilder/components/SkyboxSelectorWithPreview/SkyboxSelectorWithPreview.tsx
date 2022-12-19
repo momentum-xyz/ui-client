@@ -4,6 +4,7 @@ import {Button} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useHistory} from 'react-router-dom';
+import {Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
@@ -32,6 +33,11 @@ const SkyboxSelectorWithPreview: FC = () => {
   return (
     <styled.Container>
       <styled.ItemsGallery>
+        <styled.SkyboxCountContainer>
+          <styled.SkyboxCount>
+            <Text text={`${items.length} Skyboxes`} size="l" align="left" />
+          </styled.SkyboxCount>
+        </styled.SkyboxCountContainer>
         {!!items && !!selectedItem && (
           <Carousel<Asset3dInterface>
             items={items}
@@ -62,7 +68,7 @@ const SkyboxSelectorWithPreview: FC = () => {
                       transform="uppercase"
                       size="medium"
                       onClick={() => {
-                        saveItem(item).catch((err) => {
+                        saveItem(item, worldId).catch((err) => {
                           toast.error(err.message);
                         });
                       }}

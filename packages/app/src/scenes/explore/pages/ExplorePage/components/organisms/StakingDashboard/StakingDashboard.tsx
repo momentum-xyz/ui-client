@@ -69,7 +69,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const balanceSections = [
     {label: 'Account Balance', value: balanceTotal},
     {label: 'Transferable', value: balanceTransferrable},
-    {label: 'Stacked', value: balanceReserved} // TODO get stacking from blockchain
+    {label: 'Staked', value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>

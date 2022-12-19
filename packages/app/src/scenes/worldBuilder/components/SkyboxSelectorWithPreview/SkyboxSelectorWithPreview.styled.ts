@@ -39,6 +39,21 @@ export const ItemsGallery = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+export const SkyboxCountContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-left: 150px;
+  margin-bottom: 10px;
+`;
+
+export const SkyboxCount = styled.div`
+  padding: 10px;
+  border-radius: 10px;
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
+`;
+
 export const Item = styled.div`
   width: 180px;
   height: 230px;
