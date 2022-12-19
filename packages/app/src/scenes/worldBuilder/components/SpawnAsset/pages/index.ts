@@ -1,4 +1,3 @@
-export * from './BasicAssetsPackPage';
-export * from './CustomAssetsLibraryPage';
+export * from './AssetsPage';
 export * from './UploadCustomAssetPage';
 export * from './SelectedPage';
