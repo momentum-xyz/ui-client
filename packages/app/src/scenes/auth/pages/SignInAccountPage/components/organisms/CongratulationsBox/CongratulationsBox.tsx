@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {Box} from 'ui-kit';
 
@@ -10,15 +11,12 @@ interface PropsInterface {
 }
 
 const CongratulationsBox: FC<PropsInterface> = ({amount}) => {
+  const {t} = useTranslation();
   return (
     <Box>
       <styled.Div>
-        <Text size="m" text="Congratulations!" align="left" />
-        <Text
-          size="m"
-          text={`You just received ${amount} tokens. One more step and you'll embark on your epic journey!`}
-          align="left"
-        />
+        <Text size="m" text={t('messages.congratulations')} align="left" />
+        <Text size="m" text={t('messages.recievedAmmountOfTokensMessage', {amount})} align="left" />
       </styled.Div>
     </Box>
   );

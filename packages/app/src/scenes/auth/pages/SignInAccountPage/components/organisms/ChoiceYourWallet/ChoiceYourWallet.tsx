@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Button, Dropdown, OptionInterface, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {Box} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
@@ -17,22 +18,20 @@ interface PropsInterface {
 const ChoiceYourWallet: FC<PropsInterface> = (props) => {
   const {walletOptions, wallet, isConnectDisabled, onSelectAddress, onConnect} = props;
 
+  const {t} = useTranslation();
+
   return (
     <Box>
       <styled.Div>
-        <Text size="m" text="1. Connect your wallet" align="left" />
-        <Text
-          size="m"
-          text="Once connected, you will be awarded some Drive tokens to get you started"
-          align="left"
-        />
+        <Text size="m" text={t('titles.oneConnectYourWaller')} align="left" />
+        <Text size="m" text={t('messages.onceConnectedTokensWillBeAwarded')} align="left" />
         <styled.ImageContainer>
           <styled.Image src={polkadot} />
           <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
         </styled.ImageContainer>
 
         <Dropdown
-          placeholder="Select account"
+          placeholder={t('placeholders.selectAccount')}
           variant="third"
           valueType="wallet"
           options={walletOptions}
@@ -40,11 +39,7 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
         />
 
         <div>
-          <Text
-            size="m"
-            text="No wallet? You can get one following the instructions"
-            align="left"
-          />
+          <Text size="m" text={t('messages.noWalletFollowInstructions')} align="left" />
           <styled.Link
             target="_blank"
             href="https://discover.odyssey.org/create-your-odyssey/get-a-wallet/"
@@ -54,7 +49,7 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
         </div>
         <Button
           size="medium"
-          label="Connect your wallet"
+          label={t('labels.connectYourWallet')}
           icon="wallet"
           disabled={!wallet || isConnectDisabled}
           onClick={onConnect}
