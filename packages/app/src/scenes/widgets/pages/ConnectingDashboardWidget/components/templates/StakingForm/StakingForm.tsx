@@ -2,11 +2,11 @@ import React, {FC, useState} from 'react';
 import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {decodeAddress} from '@polkadot/util-crypto';
-import {u8aToHex} from '@polkadot/util';
+import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
+import {convertToHex} from 'core/utils';
 
 import * as styled from './StakingForm.styled';
 
@@ -15,22 +15,22 @@ const DEFAULT_STAKING_AMOUNT = 1;
 const tabBarTabs: TabBarTabInterface[] = [
   {
     id: 'start',
-    title: '1. Start Connecting',
-    label: '1. Start Connecting',
+    title: t('staking.startLabel'),
+    label: t('staking.startLabel'),
     icon: 'hierarchy',
     disabled: true
   },
   {
     id: 'wallet',
-    label: '2. My Wallet',
-    title: '2. My Wallet',
+    label: t('staking.walletLabel'),
+    title: t('staking.walletLabel'),
     icon: 'wallet',
     disabled: true
   },
   {
     id: 'confirm',
-    title: '3. Authorize',
-    label: '3. Authorize',
+    title: t('staking.confirmLabel'),
+    label: t('staking.confirmLabel'),
     icon: 'check',
     disabled: true
   }
@@ -40,11 +40,6 @@ interface PropsInterface {
   nftItemId: number;
   onComplete: () => void;
 }
-export const convertToHex = (address: string) => {
-  const publicKey = decodeAddress(address);
-  const hexPublicKey = u8aToHex(publicKey);
-  return hexPublicKey;
-};
 
 const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   const {authStore, nftStore, exploreStore} = useStore();
@@ -109,21 +104,19 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
         }
       })
       .then(() => {
-        toast.info(<ToastContent title="You successfully staked!" showCloseButton />);
+        toast.info(<ToastContent title={t('staking.stakeSuccess')} showCloseButton />);
         onComplete();
       })
       .catch((err) => {
         console.log('stake error', err);
-        toast.error(
-          <ToastContent isDanger title="Could not stake. Please try again later." showCloseButton />
-        );
+        toast.error(<ToastContent isDanger title={t('staking.stakeError')} showCloseButton />);
       });
   };
 
   const balanceSections = [
-    {label: 'Account Balance', value: balanceTotal},
-    {label: 'Transferable', value: balanceTransferrable},
-    {label: 'Staked', value: balanceReserved}
+    {label: t('staking.balanceTypes.account'), value: balanceTotal},
+    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable},
+    {label: t('staking.balanceTypes.staked'), value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>
@@ -150,30 +143,22 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
             <div>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Connect to another Odyssey" />
+                  <Heading type="h2" align="left" label={t('staking.connectTitle')} />
                 </styled.SectionHeader>
-                <Text
-                  size="s"
-                  text="You can freely visit any users open Odyssey. You can explore and meet them just by clicking on their Odyssey. However, to create a portal between your Odyssey and another users Odyssey, you will need to stake in them. By staking you show your support for another Odyssey."
-                  align="left"
-                />
+                <Text size="s" text={t('staking.connectMessage')} align="left" />
               </styled.Section>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Staking" />
+                  <Heading type="h2" align="left" label={t('staking.label')} />
                 </styled.SectionHeader>
-                <Text
-                  size="s"
-                  text="By staking Momentum ($MOM) in someones Odyssey you are showing support for their journey. Not only do you get rewards for staking, but it will also allow you to place a portal inside your Odyssey that will allow others to travel to the Odyssey you have staked in."
-                  align="left"
-                />
+                <Text size="s" text={t('staking.stakingMessage')} align="left" />
               </styled.Section>
             </div>
             <styled.Buttons>
               <span />
               <Button
                 icon="wallet"
-                label="Start Contributing"
+                label={t('staking.startContributing')}
                 onClick={() => setActiveTab(tabBarTabs[1])}
               />
             </styled.Buttons>
@@ -184,18 +169,18 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
             <div>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Wallet account" />
+                  <Heading type="h2" align="left" label={t('staking.walletAccount')} />
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="ACCOUNT" />
+                    <Text size="xxs" align="right" text={t('staking.account')} />
                   </styled.LabeledLineLabelContainer>
                   <Text size="xxs" text={initiatorInfo} />
                 </styled.LabeledLineContainer>
               </styled.Section>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Balance" />
+                  <Heading type="h2" align="left" label={t('staking.balance')} />
                 </styled.SectionHeader>
                 <styled.BalanceContainer>
                   {balanceSections.map((section) => section)}
@@ -204,11 +189,15 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
               <styled.Separator />
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Start Contributing" />
+                  <Heading type="h2" align="left" label={t('staking.startContributing')} />
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text={`SET AMOUNT, ${tokenSymbol}`} />
+                    <Text
+                      size="xxs"
+                      align="right"
+                      text={t('staking.setAmountSymbol', {symbol: tokenSymbol})}
+                    />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer>
                     <Input
@@ -220,16 +209,16 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="DESTINATION" />
+                    <Text size="xxs" align="right" text={t('staking.destination')} />
                   </styled.LabeledLineLabelContainer>
                   <Text size="xxs" text={`${nft.name} ${nft.owner.substring(0, 20)}...`} />
                 </styled.LabeledLineContainer>
               </styled.Section>
             </div>
             <styled.Buttons>
-              <Button label="Back" onClick={() => setActiveTab(tabBarTabs[0])} />
+              <Button label={t('staking.back')} onClick={() => setActiveTab(tabBarTabs[0])} />
               <Button
-                label="Next"
+                label={t('staking.next')}
                 onClick={() => setActiveTab(tabBarTabs[2])}
                 disabled={isBalanceTooLow || isStakingInSelf}
               />
@@ -241,11 +230,15 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
             <div>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Authorize your contribution" />
+                  <Heading type="h2" align="left" label={t('staking.authorizeContribution')} />
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text={`AMOUNT, ${tokenSymbol}`} />
+                    <Text
+                      size="xxs"
+                      align="right"
+                      text={t('staking.tokenAmount', {amount: tokenSymbol})}
+                    />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer className="view-only">
                     <Input value={amount} onChange={(val) => setAmount(Number(val))} disabled />
@@ -253,23 +246,23 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="SENDING FROM" />
+                    <Text size="xxs" align="right" text={t('staking.sendingFrom')} />
                   </styled.LabeledLineLabelContainer>
                   <Text size="xxs" text={initiatorInfo} />
                 </styled.LabeledLineContainer>
                 <styled.ConsentContainer>
-                  <Text
-                    size="s"
-                    align="left"
-                    text="This account is also the destination for the rewards you receive from your contribution."
-                  />
+                  <Text size="s" align="left" text={t('staking.contributionMessage')} />
                 </styled.ConsentContainer>
               </styled.Section>
             </div>
 
             <styled.Buttons>
-              <Button label="Back" onClick={() => setActiveTab(tabBarTabs[1])} />
-              <Button label="Sign & Connect" icon="check" onClick={() => onStake(amountAtoms)} />
+              <Button label={t('staking.back')} onClick={() => setActiveTab(tabBarTabs[1])} />
+              <Button
+                label={t('staking.signAndConnect')}
+                icon="check"
+                onClick={() => onStake(amountAtoms)}
+              />
             </styled.Buttons>
           </>
         )}

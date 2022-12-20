@@ -12,3 +12,4 @@ export * from './formatExistential.utils';
 export * from './promise.utils';
 export * from './unity.utils';
 export * from './ipfs.utils';
+export * from './convertToHex.util';
