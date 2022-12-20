@@ -58,6 +58,7 @@ export const appVariables: AppConfigExtendedInterface = {
   GAT_UI_TYPE_ID: '285ba49f-fee3-40d2-ab55-256b5804c20c',
   STREAMCHAT_KEY: '',
   NFT_ADMIN_ADDRESS: '',
+  NFT_COLLECTION_ODYSSEY_ID: '',
   NODE_ID: ''
 };
 

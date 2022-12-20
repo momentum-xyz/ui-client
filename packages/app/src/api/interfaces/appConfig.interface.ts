@@ -33,6 +33,7 @@ export interface AppConfigInterface {
   YOUTUBE_KEY: string;
   STREAMCHAT_KEY: string;
   NFT_ADMIN_ADDRESS: string;
+  NFT_COLLECTION_ODYSSEY_ID: string;
   NODE_ID: string;
 }
 
