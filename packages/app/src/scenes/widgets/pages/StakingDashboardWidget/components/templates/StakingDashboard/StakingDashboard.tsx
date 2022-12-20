@@ -178,6 +178,7 @@ const StakingDashboard: FC = () => {
                           align="left"
                           className="name"
                         />
+                        {/*TODO: format using nftStore*/}
                         <Text
                           size="s"
                           text={t('staking.stakedAmount', {
