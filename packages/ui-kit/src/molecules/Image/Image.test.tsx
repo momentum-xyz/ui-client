@@ -1,7 +1,7 @@
 import React from 'react';
-import astronaut from 'static/images/astronaut.svg';
 
-import {render} from 'utils/test.utils';
+import astronaut from '../../images/astronaut.svg';
+import {render} from '../../utils/test.utils';
 
 import Image from './Image';
 

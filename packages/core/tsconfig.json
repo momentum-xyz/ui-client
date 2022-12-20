@@ -4,8 +4,7 @@
     "outDir": "dist/",
     "sourceMap": true,
     "declaration": true,
-    "noEmit": false,
-    "baseUrl": "src"
+    "noEmit": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

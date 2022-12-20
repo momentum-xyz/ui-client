@@ -2,7 +2,7 @@ import {Input} from './index';
 
 import React from 'react';
 
-import {render, within} from 'utils/test.utils';
+import {render, within} from '../../utils/test.utils';
 
 describe('Input', () => {
   test('is rendered', () => {

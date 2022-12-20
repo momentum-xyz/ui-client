@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import {ComponentSizeInterface} from 'interfaces';
+import {ComponentSizeInterface} from '../../interfaces';
 
 export const Container = styled.div<ComponentSizeInterface>`
   display: flex;
