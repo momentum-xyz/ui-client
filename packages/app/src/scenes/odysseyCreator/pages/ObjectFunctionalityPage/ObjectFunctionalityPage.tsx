@@ -11,7 +11,7 @@ import * as styled from './ObjectFunctionalityPage.styled';
 
 const ObjectFunctionalityPage: FC = () => {
   const {odysseyCreatorStore} = useStore();
-  const {odysseyCreatorObjectStore} = odysseyCreatorStore;
+  const {objectFunctionalityStore} = odysseyCreatorStore;
 
   const history = useHistory();
 
@@ -26,8 +26,8 @@ const ObjectFunctionalityPage: FC = () => {
   });
 
   useEffect(() => {
-    odysseyCreatorObjectStore.fetchObject(objectId);
-  }, [objectId, odysseyCreatorObjectStore]);
+    objectFunctionalityStore.fetchObject(objectId);
+  }, [objectId, objectFunctionalityStore]);
 
   return (
     <styled.Wrapper>
@@ -49,15 +49,15 @@ const ObjectFunctionalityPage: FC = () => {
               <Text text={t('messages.selectOne')} size="s" align="left" />
             </styled.HeadingWrapper>
             <Dropdown
-              value={odysseyCreatorObjectStore.currentAssetId}
-              options={Object.entries(odysseyCreatorObjectStore.assets2D).map(([key, value]) => ({
+              value={objectFunctionalityStore.currentAssetId}
+              options={Object.entries(objectFunctionalityStore.assets2D).map(([key, value]) => ({
                 label: value,
                 value: key
               }))}
               placeholder={t('placeholders.selectAnOption')}
               onOptionSelect={async (option) => {
-                odysseyCreatorObjectStore.selectAsset(option.value);
-                await odysseyCreatorObjectStore.updateObject();
+                objectFunctionalityStore.selectAsset(option.value);
+                await objectFunctionalityStore.updateObject();
               }}
               variant="secondary"
             />

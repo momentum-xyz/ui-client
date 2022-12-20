@@ -60,17 +60,5 @@ export const ROUTES = {
     atoms: '/storybook/atoms',
     molecules: '/storybook/molecules',
     organisms: '/storybook/organisms'
-  },
-  worldBuilder: {
-    // TODO - remove
-    base: '/createWorld',
-    login: '/createWorld/login',
-    start: '/createWorld/start',
-    name: '/createWorld/name',
-    template: '/createWorld/template',
-    generate: '/createWorld/generate',
-    builder: '/worldBuilder',
-    builderUploadAsset: '/worldBuilder/upload',
-    builderSkybox: '/worldBuilder/skybox'
   }
 };

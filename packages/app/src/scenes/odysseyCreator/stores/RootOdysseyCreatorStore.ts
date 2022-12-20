@@ -1,16 +1,16 @@
 import {types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {OdysseyCreatorSkyboxesStore} from './OdysseyCreatorSkyboxesStore';
-import {OdysseyCreatorAssets3dStore} from './OdysseyCreatorAssets3dStore';
-import {OdysseyCreatorObjectStore} from './OdysseyCreatorObjectStore';
+import {SkyboxSelectorStore} from './SkyboxSelectorStore';
+import {SpawnAssetStore} from './SpawnAssetStore';
+import {ObjectFunctionalityStore} from './ObjectFunctionalityStore';
 
 const RootOdysseyCreatorStore = types.compose(
   ResetModel,
   types.model('RootOdysseyCreatorStore', {
-    odysseyCreatorSkyboxesStore: types.optional(OdysseyCreatorSkyboxesStore, {}),
-    odysseyCreatorAssets3dStore: types.optional(OdysseyCreatorAssets3dStore, {}),
-    odysseyCreatorObjectStore: types.optional(OdysseyCreatorObjectStore, {}),
+    skyboxSelectorStore: types.optional(SkyboxSelectorStore, {}),
+    spawnAssetStore: types.optional(SpawnAssetStore, {}),
+    objectFunctionalityStore: types.optional(ObjectFunctionalityStore, {}),
     haveAccess: types.maybe(types.boolean)
   })
 );

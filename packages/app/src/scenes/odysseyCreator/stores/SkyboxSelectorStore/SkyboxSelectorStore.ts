@@ -7,10 +7,10 @@ import {api, FetchAssets3dResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 
-const OdysseyCreatorSkyboxesStore = types
+const SkyboxSelectorStore = types
   .compose(
     ResetModel,
-    types.model('OdysseyCreatorSkyboxesStore', {
+    types.model('SkyboxSelectorStore', {
       request: types.optional(RequestModel, {}),
       selecteRequest: types.optional(RequestModel, {}),
       worldSettingsRequest: types.optional(RequestModel, {}),
@@ -78,4 +78,4 @@ const OdysseyCreatorSkyboxesStore = types
     }
   }));
 
-export {OdysseyCreatorSkyboxesStore};
+export {SkyboxSelectorStore};

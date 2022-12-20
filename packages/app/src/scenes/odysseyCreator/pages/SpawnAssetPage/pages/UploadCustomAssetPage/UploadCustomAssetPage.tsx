@@ -13,7 +13,7 @@ const MAX_ASSET_SIZE = 50_100_000;
 
 const UploadCustomAssetPage: FC = () => {
   const {odysseyCreatorStore, mainStore} = useStore();
-  const {odysseyCreatorAssets3dStore} = odysseyCreatorStore;
+  const {spawnAssetStore} = odysseyCreatorStore;
   const {unityStore} = mainStore;
 
   const {t} = useTranslation();
@@ -23,13 +23,13 @@ const UploadCustomAssetPage: FC = () => {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    odysseyCreatorAssets3dStore.setUploadedAssetName('');
-  }, [odysseyCreatorAssets3dStore]);
+    spawnAssetStore.setUploadedAssetName('');
+  }, [spawnAssetStore]);
 
   // TODO: refactor later to form handle submit
   const handleAddToLbrary = useCallback(async () => {
     if (asset) {
-      await odysseyCreatorAssets3dStore.uploadAsset(asset);
+      await spawnAssetStore.uploadAsset(asset);
       toast.info(
         <ToastContent
           headerIconName="check"
@@ -39,7 +39,7 @@ const UploadCustomAssetPage: FC = () => {
         />
       );
     }
-  }, [asset, odysseyCreatorAssets3dStore, t]);
+  }, [asset, spawnAssetStore, t]);
 
   return (
     <styled.Container>
@@ -71,12 +71,12 @@ const UploadCustomAssetPage: FC = () => {
             placeholder={t('placeholders.nameYourAssetForYourLibrary')}
             onFocus={() => unityStore.changeKeyboardControl(false)}
             onBlur={() => unityStore.changeKeyboardControl(true)}
-            onChange={odysseyCreatorAssets3dStore.setUploadedAssetName}
+            onChange={spawnAssetStore.setUploadedAssetName}
           />
           <Button
             label={t('actions.addToLibrary')}
             onClick={handleAddToLbrary}
-            disabled={!odysseyCreatorAssets3dStore.uploadedAssetName}
+            disabled={!spawnAssetStore.uploadedAssetName}
           />
         </>
       )}

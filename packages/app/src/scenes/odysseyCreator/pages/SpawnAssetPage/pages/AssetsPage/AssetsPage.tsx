@@ -16,23 +16,23 @@ interface PropsInterface {
 
 const AssetsPage: FC<PropsInterface> = ({assetCategory}) => {
   const {odysseyCreatorStore} = useStore();
-  const {odysseyCreatorAssets3dStore} = odysseyCreatorStore;
+  const {spawnAssetStore} = odysseyCreatorStore;
 
   const history = useHistory();
 
   const {worldId} = useParams<{worldId: string}>();
 
   useEffect(() => {
-    odysseyCreatorAssets3dStore.fetchAssets3d(assetCategory);
+    spawnAssetStore.fetchAssets3d(assetCategory);
 
     return () => {
-      odysseyCreatorAssets3dStore.clearAssets();
+      spawnAssetStore.clearAssets();
     };
-  }, [odysseyCreatorAssets3dStore, assetCategory]);
+  }, [spawnAssetStore, assetCategory]);
 
   const handleSelected = useCallback(
     (asset: Asset3dInterface) => {
-      odysseyCreatorAssets3dStore.selectAsset(asset);
+      spawnAssetStore.selectAsset(asset);
       history.push(
         generatePath(ROUTES.odyssey.creator.spawnAsset.selected, {
           worldId,
@@ -40,12 +40,12 @@ const AssetsPage: FC<PropsInterface> = ({assetCategory}) => {
         })
       );
     },
-    [history, odysseyCreatorAssets3dStore, worldId, assetCategory]
+    [history, spawnAssetStore, worldId, assetCategory]
   );
 
   return (
     <styled.Contaier>
-      <AssetsGrid assets={odysseyCreatorAssets3dStore.assets3d} onSelected={handleSelected} />
+      <AssetsGrid assets={spawnAssetStore.assets3d} onSelected={handleSelected} />
     </styled.Contaier>
   );
 };

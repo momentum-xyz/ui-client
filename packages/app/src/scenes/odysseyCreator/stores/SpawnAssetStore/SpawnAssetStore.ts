@@ -7,10 +7,10 @@ import {Asset3dCategoryEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {Asset3d, Asset3dInterface} from 'core/models';
 
-const OdysseyCreatorAssets3dStore = types
+const SpawnAssetStore = types
   .compose(
     ResetModel,
-    types.model('OdysseyCreatorAssets3dStore', {
+    types.model('SpawnAssetStore', {
       worldId: types.optional(types.string, ''),
       uploadProgress: types.maybeNull(types.number),
       selectedAssset: types.maybe(Asset3d),
@@ -137,4 +137,4 @@ const OdysseyCreatorAssets3dStore = types
     }
   }));
 
-export {OdysseyCreatorAssets3dStore};
+export {SpawnAssetStore};

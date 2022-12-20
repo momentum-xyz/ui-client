@@ -3,10 +3,10 @@ import {flow, types} from 'mobx-state-tree';
 
 import {api, GetSpaceInfoResponse} from 'api';
 
-const OdysseyCreatorObjectStore = types
+const ObjectFunctionalityStore = types
   .compose(
     ResetModel,
-    types.model('OdysseyCreatorObjectStore', {
+    types.model('ObjectFunctionalityStore', {
       objectId: types.maybe(types.string),
       objectInfo: types.maybe(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
@@ -61,4 +61,4 @@ const OdysseyCreatorObjectStore = types
     })
   }));
 
-export {OdysseyCreatorObjectStore};
+export {ObjectFunctionalityStore};

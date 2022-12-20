@@ -39,7 +39,7 @@ const UnityPage: FC = () => {
     odysseyCreatorStore: worldBuilderStore
   } = useStore();
   const {unityStore, worldStore} = mainStore;
-  const {odysseyCreatorObjectStore: worldBuilderObjectStore} = worldBuilderStore;
+  const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();
   const history = useHistory();

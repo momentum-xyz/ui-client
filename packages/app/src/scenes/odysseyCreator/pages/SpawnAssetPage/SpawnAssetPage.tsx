@@ -14,7 +14,7 @@ import * as styled from './SpawnAssetPage.styled';
 
 const SpawnAssetPage: FC = () => {
   const {odysseyCreatorStore} = useStore();
-  const {odysseyCreatorAssets3dStore} = odysseyCreatorStore;
+  const {spawnAssetStore} = odysseyCreatorStore;
 
   const {worldId} = useParams<{worldId: string}>();
   const history = useHistory();
@@ -22,8 +22,8 @@ const SpawnAssetPage: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    odysseyCreatorAssets3dStore.init(worldId);
-  }, [odysseyCreatorAssets3dStore, worldId]);
+    spawnAssetStore.init(worldId);
+  }, [spawnAssetStore, worldId]);
 
   return (
     <styled.Wrapper>

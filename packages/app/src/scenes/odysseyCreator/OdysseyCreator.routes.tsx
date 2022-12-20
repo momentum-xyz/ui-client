@@ -1,9 +1,8 @@
 import {ROUTES} from 'core/constants';
-import {
-  SkyboxSelectorWithPreviewPage,
-  ObjectFunctionalityPage,
-  SpawnAssetPage
-} from 'scenes/odysseyCreator/pages';
+
+import {ObjectFunctionalityPage} from './pages/ObjectFunctionalityPage';
+import {SkyboxSelectorWithPreviewPage} from './pages/SkyboxSelectorWithPreviewPage';
+import {SpawnAssetPage} from './pages/SpawnAssetPage';
 
 export const ODYSSEY_CREATOR_ROUTES = [
   {

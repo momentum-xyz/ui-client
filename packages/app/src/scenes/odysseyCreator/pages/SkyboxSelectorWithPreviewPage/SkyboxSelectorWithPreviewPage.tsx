@@ -1,10 +1,9 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button} from '@momentum-xyz/ui-kit';
+import {Button, Text} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useHistory} from 'react-router-dom';
-import {Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
@@ -15,9 +14,9 @@ import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
   const {odysseyCreatorStore, mainStore} = useStore();
-  const {odysseyCreatorSkyboxesStore} = odysseyCreatorStore;
+  const {skyboxSelectorStore} = odysseyCreatorStore;
   const {unityStore} = mainStore;
-  const {items, selectedItem, currentItem, selectItem, saveItem} = odysseyCreatorSkyboxesStore;
+  const {items, selectedItem, currentItem, selectItem, saveItem} = skyboxSelectorStore;
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -26,8 +25,8 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    odysseyCreatorSkyboxesStore.fetchItems(worldId);
-  }, [odysseyCreatorSkyboxesStore, worldId]);
+    skyboxSelectorStore.fetchItems(worldId);
+  }, [skyboxSelectorStore, worldId]);
 
   return (
     <styled.Container>

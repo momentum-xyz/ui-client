@@ -11,10 +11,10 @@ import * as styled from './SelectedPage.styled';
 
 export const SelectedPage: FC = () => {
   const {odysseyCreatorStore, mainStore} = useStore();
-  const {odysseyCreatorAssets3dStore} = odysseyCreatorStore;
+  const {spawnAssetStore} = odysseyCreatorStore;
   const {unityStore} = mainStore;
 
-  const {selectedAssset: asset} = odysseyCreatorAssets3dStore;
+  const {selectedAssset: asset} = spawnAssetStore;
 
   const history = useHistory();
 
@@ -26,14 +26,14 @@ export const SelectedPage: FC = () => {
 
   useEffect(() => {
     return () => {
-      odysseyCreatorAssets3dStore.resetSelectedObjectFields();
+      spawnAssetStore.resetSelectedObjectFields();
     };
-  }, [odysseyCreatorAssets3dStore]);
+  }, [spawnAssetStore]);
 
   const handleSpawn = useCallback(() => {
-    odysseyCreatorAssets3dStore.spawnObject(worldId);
+    spawnAssetStore.spawnObject(worldId);
     history.push(generatePath(ROUTES.odyssey.base, {worldId}));
-  }, [history, odysseyCreatorAssets3dStore, worldId]);
+  }, [history, spawnAssetStore, worldId]);
 
   if (!asset) {
     return null;
@@ -46,8 +46,8 @@ export const SelectedPage: FC = () => {
       <styled.CheckBoxLabel>
         <styled.CheckBox
           type="checkbox"
-          checked={odysseyCreatorAssets3dStore.isVisibleInNavigation}
-          onChange={odysseyCreatorAssets3dStore.toggleIsVisibleInNavigation}
+          checked={spawnAssetStore.isVisibleInNavigation}
+          onChange={spawnAssetStore.toggleIsVisibleInNavigation}
         />
         <Text text={t('labels.visibleInNavigation')} size="m" weight="light" />
       </styled.CheckBoxLabel>
@@ -55,11 +55,11 @@ export const SelectedPage: FC = () => {
         placeholder={t('placeholders.nameYourObjectNavigation')}
         onFocus={() => unityStore.changeKeyboardControl(false)}
         onBlur={() => unityStore.changeKeyboardControl(true)}
-        onChange={odysseyCreatorAssets3dStore.setNavigationObjectName}
+        onChange={spawnAssetStore.setNavigationObjectName}
       />
       <Button
         label={t('actions.spawnObject')}
-        disabled={!odysseyCreatorAssets3dStore.navigationObjectName}
+        disabled={!spawnAssetStore.navigationObjectName}
         onClick={handleSpawn}
       />
       <Button
