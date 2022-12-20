@@ -51,13 +51,14 @@ export const appVariables: AppConfigExtendedInterface = {
   YOUTUBE_WELCOME_VIDEO_ID: 'UmSJIEZQAyQ',
   POLKADOT_CONNECTION_STRING: 'momentum-connections',
   WESTEND_TEST_WS_SERVER: 'wss://westend.api.onfinality.io/public-ws',
-  KUSAMA_WS_SERVER: 'wss://kusama-rpc.polkadot.io/',
+  BLOCKCHAIN_WS_SERVER: '',
   WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support',
   PARTICIPANTS_VIDEO_LIMIT: 17,
   MAX_STAGE_USERS: 12,
   GAT_UI_TYPE_ID: '285ba49f-fee3-40d2-ab55-256b5804c20c',
   STREAMCHAT_KEY: '',
   NFT_ADMIN_ADDRESS: '',
+  NFT_COLLECTION_ODYSSEY_ID: '',
   NODE_ID: ''
 };
 

@@ -21,7 +21,6 @@ import {MintNftCheckJobResponse} from 'api';
 import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './models';
 
 const NFT_MINT_FEE = 100000;
-const DEFAULT_COLECTION_ID = 3;
 const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
 
 const prepareSignAndSend = async (address: string) => {
@@ -429,11 +428,8 @@ const NftStore = types
     getNftByUuid: (uuid: string) => {
       return self.nftItems.find((nftItem) => nftItem.uuid === uuid);
     },
-    subscribeToStakingInfo: flow(function* (
-      address: string,
-      userNftItemId?: number,
-      collectionId = DEFAULT_COLECTION_ID
-    ) {
+    subscribeToStakingInfo: flow(function* (address: string, userNftItemId?: number) {
+      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       console.log('fetchStakingInfo', address, userNftItemId, collectionId);
       if (!self.channel) {
         throw new Error('Channel is not initialized');
@@ -512,12 +508,8 @@ const NftStore = types
         }
       );
     }),
-    stake: flow(function* (
-      address: string,
-      amount: number,
-      itemId: number,
-      collectionId: number = DEFAULT_COLECTION_ID
-    ) {
+    stake: flow(function* (address: string, amount: number, itemId: number) {
+      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
       console.log('Stake', itemId, amount, address);
       if (!self.channel) {
@@ -544,12 +536,8 @@ const NftStore = types
         throw err;
       }
     }),
-    unstake: flow(function* (
-      address: string,
-      amount: number | null,
-      itemId: number,
-      collectionId: number = DEFAULT_COLECTION_ID
-    ) {
+    unstake: flow(function* (address: string, amount: number | null, itemId: number) {
+      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
       console.log('Unstake', itemId, address);
       if (!self.channel) {
