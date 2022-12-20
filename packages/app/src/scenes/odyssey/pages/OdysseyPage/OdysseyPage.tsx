@@ -43,7 +43,7 @@ const OdysseyPage: FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (!matchPath(location.pathname, ROUTES.odyssey.builder.base)) {
+    if (!matchPath(location.pathname, ROUTES.odyssey.creator.base)) {
       unityStore.closeAndResetObjectMenu();
     }
   }, [location.pathname, unityStore]);

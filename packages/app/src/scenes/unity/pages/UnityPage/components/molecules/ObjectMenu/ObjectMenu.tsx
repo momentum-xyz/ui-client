@@ -46,7 +46,7 @@ const ObjectMenu: FC<PropsInterface> = ({
   const handleOnFunctionalityClick = useCallback(() => {
     console.info(worldId);
     history.push({
-      pathname: generatePath(ROUTES.odyssey.builder.editor, {
+      pathname: generatePath(ROUTES.odyssey.creator.functionality, {
         worldId,
         objectId
       })

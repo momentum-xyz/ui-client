@@ -16,7 +16,7 @@ const SimpleProfileMenu: FC = () => {
   const {user} = sessionStore;
 
   const signOutUser = () => {
-    document.location.href = ROUTES.worldBuilder.base;
+    document.location.href = ROUTES.signIn;
   };
 
   const {t} = useTranslation();

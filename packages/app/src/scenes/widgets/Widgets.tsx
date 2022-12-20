@@ -36,7 +36,7 @@ const Widgets: FC<PropsInterface> = (props) => {
     widgetsStore,
     flightStore,
     mainStore,
-    worldBuilderStore,
+    odysseyCreatorStore: worldBuilderStore,
     agoraStore,
     objectStore,
     nftStore
