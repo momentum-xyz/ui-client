@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
 import {
   formatTokenAmount,
-  canRequestAirdrop as canRequestAirdropFn,
+  checkIfCanRequestAirdrop,
   getDateOfNextAllowedAirdrop
 } from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
@@ -65,7 +65,7 @@ const StakingDashboard: FC = () => {
   const amount = _amount || unstakeFromDetail?.amount || 0;
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
-  const [canRequestAirdrop, setCanRequestAirdrop] = useState(canRequestAirdropFn());
+  const [canRequestAirdrop, setCanRequestAirdrop] = useState(checkIfCanRequestAirdrop());
   const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState(
     getDateOfNextAllowedAirdrop()
   );
@@ -146,7 +146,7 @@ const StakingDashboard: FC = () => {
       })
       .catch((err) => {
         console.log('requestAirdrop error', err);
-        setCanRequestAirdrop(canRequestAirdropFn());
+        setCanRequestAirdrop(checkIfCanRequestAirdrop());
         setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
         toast.error(
           <ToastContent

@@ -6,7 +6,7 @@ import {
   ResetModel,
   Dialog,
   RequestModel,
-  canRequestAirdrop,
+  checkIfCanRequestAirdrop,
   saveLastAirdropInfo
 } from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
@@ -605,7 +605,7 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      if (!canRequestAirdrop()) {
+      if (!checkIfCanRequestAirdrop()) {
         throw new Error('Wait at least 24 hours before requesting airdrop again');
       }
 
