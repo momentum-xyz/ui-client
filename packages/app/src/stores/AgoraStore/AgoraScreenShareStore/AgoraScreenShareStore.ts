@@ -73,15 +73,15 @@ const AgoraScreenShareStore = types
     }
   }))
   .actions((self) => ({
-    init(worldId: string, userId: string, callback: () => void) {
+    init(worldId: string, userId: string, onUserPublished: () => void) {
       self.appId = appVariables.AGORA_APP_ID;
       self.worldId = worldId;
-      this.setupAgoraListeners(callback);
+      this.setupAgoraListeners(onUserPublished);
       self.openScreenShare(userId);
     },
-    setupAgoraListeners(callback: () => void) {
+    setupAgoraListeners(onUserPublished: () => void) {
       self.client.on('user-published', (user, mediaType) =>
-        self.handleUserPublished(user, mediaType, callback)
+        self.handleUserPublished(user, mediaType, onUserPublished)
       );
       self.client.on('user-unpublished', self.handleUserUnpublished);
     },
