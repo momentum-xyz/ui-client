@@ -101,6 +101,22 @@ const App: FC = () => {
     );
   }
 
+  if (configStore.isConfigReady && !configStore.isBlockchainUrlReady) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <SystemWideError
+          text={
+            configLoadingErrorCode === httpErrorCodes.MAINTENANCE
+              ? t('systemMessages.underMaintenance')
+              : t('systemMessages.noBlockchainUrlAvailable')
+          }
+          showRefreshButton
+          theme={themeStore.theme}
+        />
+      </ThemeProvider>
+    );
+  }
+
   // SYSTEM ROUTES
   if (isTargetRoute(pathname, SYSTEM_ROUTES)) {
     return (
