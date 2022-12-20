@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {UserStatusEnum} from 'enums';
-import {render, within} from 'utils/test.utils';
+import {UserStatusEnum} from '../../enums';
+import {render, within} from '../../utils/test.utils';
 
 import Avatar from './Avatar';
 
