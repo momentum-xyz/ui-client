@@ -31,6 +31,7 @@ const SearchUsersWidget: FC = () => {
   const handleClose = () => {
     onlineUsersStore.searchWidget.close();
     onlineUsersStore?.unselectUser();
+    onlineUsersStore.searchUsers('');
   };
 
   const handleTeleport = (worldId: string) => {
@@ -74,6 +75,7 @@ const SearchUsersWidget: FC = () => {
               <SearchInput
                 placeholder={t('placeholders.searchForPeople')}
                 onChange={(query: string) => onlineUsersStore.searchUsers(query)}
+                onFocus={() => unityStore.changeKeyboardControl(false)}
               />
               <styled.List className="noScrollIndicator">
                 {onlineUsersStore.searchedUsers && onlineUsersStore.searchedUsers.length > 0
