@@ -2,7 +2,13 @@ import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
 import {BN, formatBalance} from '@polkadot/util';
 import {web3FromAddress} from '@polkadot/extension-dapp';
-import {ResetModel, Dialog, RequestModel} from '@momentum-xyz/core';
+import {
+  ResetModel,
+  Dialog,
+  RequestModel,
+  canRequestAirdrop,
+  saveLastAirdropInfo
+} from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, SearchQuery} from 'core/models';
@@ -14,7 +20,6 @@ import {
   // formatExistential
 } from 'core/utils';
 import {KeyringAddressType} from 'core/types';
-import {AIRDROP_TIMEOUT_MS, LAST_AIRDROP_KEY} from 'core/constants';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
 import {MintNftCheckJobResponse} from 'api';
@@ -600,9 +605,7 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      const now = Date.now();
-      const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
-      if (now - lastAirdropTimestamp < AIRDROP_TIMEOUT_MS) {
+      if (!canRequestAirdrop()) {
         throw new Error('Wait at least 24 hours before requesting airdrop again');
       }
 
@@ -623,8 +626,7 @@ const NftStore = types
           }).catch(reject);
         });
         self.setRequestFundsStatus('success');
-        const newLastAirdropTimestamp = Date.now();
-        localStorage.setItem(LAST_AIRDROP_KEY, newLastAirdropTimestamp.toString());
+        saveLastAirdropInfo();
         console.log('Request airdrop success');
       } catch (err) {
         console.log('Error getting airdrop:', err);

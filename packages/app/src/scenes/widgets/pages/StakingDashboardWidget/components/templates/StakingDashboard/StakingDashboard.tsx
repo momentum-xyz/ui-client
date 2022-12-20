@@ -1,12 +1,15 @@
 import React, {FC, useState} from 'react';
 import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
-import {formatTokenAmount} from '@momentum-xyz/core';
+import {
+  formatTokenAmount,
+  canRequestAirdrop as canRequestAirdropFn,
+  getDateOfNextAllowedAirdrop
+} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
-import {AIRDROP_TIMEOUT_MS, LAST_AIRDROP_KEY} from 'core/constants';
 import {ToastContent} from 'ui-kit';
 import {convertToHex} from 'core/utils';
 
@@ -61,6 +64,11 @@ const StakingDashboard: FC = () => {
   const [_amount, setAmount] = useState<number | null>(null);
   const amount = _amount || unstakeFromDetail?.amount || 0;
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
+
+  const [canRequestAirdrop, setCanRequestAirdrop] = useState(canRequestAirdropFn());
+  const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState(
+    getDateOfNextAllowedAirdrop()
+  );
 
   const balanceSections = [
     {label: t('staking.balanceTypes.account'), value: balanceTotal},
@@ -126,11 +134,30 @@ const StakingDashboard: FC = () => {
         toast.error(<ToastContent isDanger title={t('staking.errorUnstake')} showCloseButton />);
       });
   };
+  const onRequestAirdrop = () => {
+    console.log('requestAirdrop', wallet);
 
-  const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
-  const airdropTimeoutMs = AIRDROP_TIMEOUT_MS;
-  const canRequestAirdrop =
-    !lastAirdropTimestamp || Date.now() - lastAirdropTimestamp > airdropTimeoutMs;
+    nftStore
+      .requestAirdrop(wallet)
+      .then(() => {
+        console.log('requestAirdrop success');
+        toast.info(<ToastContent title={t('staking.requestAirdropSuccess')} showCloseButton />);
+        onComplete();
+      })
+      .catch((err) => {
+        console.log('requestAirdrop error', err);
+        setCanRequestAirdrop(canRequestAirdropFn());
+        setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
+        toast.error(
+          <ToastContent
+            isDanger
+            title={t('titles.alert')}
+            text={t('staking.requestAirdropFailed')}
+            showCloseButton
+          />
+        );
+      });
+  };
 
   return (
     <styled.Container>
@@ -237,12 +264,19 @@ const StakingDashboard: FC = () => {
                 </styled.RewardData>
               </styled.Section>
               <styled.Section>
-                <styled.Buttons>
+                <styled.Buttons className="start">
                   <Button
-                    label="Get tokens"
+                    label={t('staking.requestAirdrop')}
                     disabled={!canRequestAirdrop}
-                    onClick={() => nftStore.requestAirdrop(wallet)}
+                    onClick={() => onRequestAirdrop()}
                   />
+                  {!canRequestAirdrop && (
+                    <Text
+                      size="s"
+                      text={t('staking.nextAirdropAvailableOn', {date: nextAvailableAirdropTime})}
+                      align="left"
+                    />
+                  )}
                 </styled.Buttons>
               </styled.Section>
               <styled.Separator />
