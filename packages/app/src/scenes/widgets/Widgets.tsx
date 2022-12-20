@@ -43,7 +43,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   } = useStore();
   const {onlineUsersStore, odysseyStore, calendarStore, mutualConnectionsStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {worldStore, unityStore} = mainStore;
+  const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
   const {user} = sessionStore;
 
@@ -233,25 +233,7 @@ const Widgets: FC<PropsInterface> = (props) => {
         />
       )}
       {onlineUsersStore.searchWidget.isOpen && <SearchUsersWidget />}
-      {widgetsStore.odysseyStore.widget.isOpen && (
-        <OdysseyWidget
-          currentUserId={sessionStore.userId}
-          alreadyConnected={nftStore.isAlreadyConnected(odysseyStore.odyssey?.owner || '')}
-          odyssey={odysseyStore.odyssey}
-          userAvatar={odysseyStore.avatarSrc}
-          onClose={odysseyStore.widget.close}
-          onHighFive={(userId: string) => {
-            console.log(`Calling sendHighFive to ${userId} ...`);
-            unityStore.sendHighFive(userId);
-          }}
-          onConnect={() => {
-            if (odysseyStore.odyssey) {
-              nftStore.setConnectToNftItemId(odysseyStore.odyssey.id);
-            }
-          }}
-          nftId={odysseyStore.nftId}
-        />
-      )}
+      {widgetsStore.odysseyStore.widget.isOpen && <OdysseyWidget />}
       {widgetsStore.profileStore.profileDialog.isOpen && (
         <ProfileWidget isExploreView={!!isExplorePage} />
       )}
