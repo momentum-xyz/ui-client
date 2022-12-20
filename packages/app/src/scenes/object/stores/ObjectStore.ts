@@ -12,7 +12,7 @@ import {
   ObjectOptionsInterface
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
-import {ObjectTypeEnum} from 'core/enums';
+import {BasicAsset2dIdEnum} from 'core/enums';
 
 import {TileStore} from './TileStore';
 
@@ -43,10 +43,22 @@ const ObjectStore = types
       }
 
       switch (spaceInfo.asset_2d_id) {
-        case ObjectTypeEnum.TEXT:
-        case ObjectTypeEnum.IMAGE:
-        case ObjectTypeEnum.VIDEO: {
+        case BasicAsset2dIdEnum.TEXT:
+        case BasicAsset2dIdEnum.IMAGE:
+        case BasicAsset2dIdEnum.VIDEO: {
           console.info('Its a tile!');
+          const objectResponse:
+            | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
+            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
+            assetId: spaceInfo.asset_2d_id
+          });
+          if (objectResponse?.meta.pluginId) {
+            self.tileStore.setObject(objectResponse, spaceId, objectResponse.meta.pluginId);
+          }
+          break;
+        }
+        case BasicAsset2dIdEnum.DOCK: {
+          console.info('Its a dock!');
           const objectResponse:
             | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
             | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {

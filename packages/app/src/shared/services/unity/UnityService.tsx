@@ -75,18 +75,14 @@ export class UnityService {
 
     this.unityContext.on('ClickEvent', (identifier: string) => {
       console.log('UnityService ClickEvent', identifier);
-      const [type, id] = identifier.split('|');
+      const [, id] = identifier.split('|');
 
       if (this.isBuildMode) {
-        UnityEventEmitter.emit('ClickEventEditableObject', id);
+        UnityEventEmitter.emit('EditObjectEvent', id);
         return;
       }
 
-      if (type === 'video') {
-        UnityEventEmitter.emit('ClickEventVideo', id);
-      } else {
-        UnityEventEmitter.emit('ClickEventDashboard', id);
-      }
+      UnityEventEmitter.emit('ClickObjectEvent', id);
     });
 
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {

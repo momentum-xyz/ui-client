@@ -2,5 +2,6 @@ export enum AssetTypeEnum {
   PLUGIN = 'plugin',
   IMAGE = 'image',
   VIDEO = 'video',
-  TEXT = 'text'
+  TEXT = 'text',
+  DOCK = 'dock'
 }
