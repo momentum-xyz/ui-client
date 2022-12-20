@@ -65,8 +65,8 @@ const StakingDashboard: FC = () => {
   const amount = _amount || unstakeFromDetail?.amount || 0;
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
-  const [canRequestAirdrop, setCanRequestAirdrop] = useState(checkIfCanRequestAirdrop());
-  const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState(
+  const [canRequestAirdrop, setCanRequestAirdrop] = useState<boolean>(checkIfCanRequestAirdrop());
+  const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState<string>(
     getDateOfNextAllowedAirdrop()
   );
 
@@ -142,7 +142,6 @@ const StakingDashboard: FC = () => {
       .then(() => {
         console.log('requestAirdrop success');
         toast.info(<ToastContent title={t('staking.requestAirdropSuccess')} showCloseButton />);
-        onComplete();
       })
       .catch((err) => {
         console.log('requestAirdrop error', err);

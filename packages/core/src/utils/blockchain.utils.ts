@@ -32,22 +32,26 @@ export const getTimeToNextAllowedAirdrop = (): number => {
 /**
  * Returns the next allowed airdrop in date or string format
  *
- * @param {boolean} toString Boolean value indicating if the date should be returned as string
+ * @param {boolean} toDate Boolean value indicating if the date should be returned as string or Date object
  * @returns {Date|string} date or string representing the next allowed airdrop
  */
-export const getDateOfNextAllowedAirdrop = (toString = true): Date | string => {
+export const getDateOfNextAllowedAirdrop = <B extends boolean = false>(
+  toDate?: B
+): B extends true ? Date : string => {
   const now = Date.now();
-  const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
   if (checkIfCanRequestAirdrop()) {
-    return toString ? 'Now' : new Date(now);
+    return (toDate ? new Date(now) : 'Now') as B extends true ? Date : string;
   }
+  const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
   const airdropAvailableDate = new Date(lastAirdropTimestamp + AIRDROP_TIMEOUT_MS);
-  return toString
-    ? airdropAvailableDate.toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-        timeZoneName: 'short'
-      })
-    : airdropAvailableDate;
+  return (
+    toDate
+      ? airdropAvailableDate
+      : airdropAvailableDate.toLocaleString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+          timeZoneName: 'short'
+        })
+  ) as B extends true ? Date : string;
 };
