@@ -23,7 +23,7 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
   return (
     <Box>
       <styled.Div>
-        <Text size="m" text={t('titles.oneConnectYourWaller')} align="left" />
+        <Text size="m" text={t('titles.oneConnectYourWallet')} align="left" />
         <Text size="m" text={t('messages.onceConnectedTokensWillBeAwarded')} align="left" />
         <styled.ImageContainer>
           <styled.Image src={polkadot} />

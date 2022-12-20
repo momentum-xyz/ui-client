@@ -485,7 +485,7 @@ export const enGb = {
       upload3dAsset: 'Upload 3D Asset',
       admin: 'admin',
       statistics: 'Statistics',
-      oneConnectYourWaller: '1. Connect your wallet'
+      oneConnectYourWallet: '1. Connect your wallet'
     },
     textMessage: {
       you: 'you',
