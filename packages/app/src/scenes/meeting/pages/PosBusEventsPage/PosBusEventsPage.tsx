@@ -20,15 +20,15 @@ const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
   const {agoraStore, liveStreamStore, unityStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
     declinedToJoinStageDialog,
-    invitedOnStageDialog
+    invitedOnStageDialog,
+    spaceStore
   } = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
-  const {spaceStore, screenShareStore} = collaborationStore;
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -296,10 +296,6 @@ const PosBusEventsPage: FC = () => {
       await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
       await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
-
-      if (sessionStore.userId === screenShareStore.screenOwnerId) {
-        agoraScreenShareStore.stopScreenSharing();
-      }
     }
   });
 
