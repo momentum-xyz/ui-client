@@ -57,10 +57,15 @@ const AgoraScreenShareStore = types
     }
   }))
   .actions((self) => ({
-    handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
+    handleUserPublished: flow(function* (
+      user: IAgoraRTCRemoteUser,
+      mediaType: 'audio' | 'video',
+      callback: () => void
+    ) {
       yield self.client.subscribe(user, mediaType);
 
       self.remoteVideoTrack = user.videoTrack;
+      callback();
     }),
     handleUserUnpublished() {
       self.remoteVideoTrack?.stop();
@@ -68,15 +73,15 @@ const AgoraScreenShareStore = types
     }
   }))
   .actions((self) => ({
-    init(worldId: string, userId: string) {
+    init(worldId: string, userId: string, callback: () => void) {
       self.appId = appVariables.AGORA_APP_ID;
       self.worldId = worldId;
-      this.setupAgoraListeners();
+      this.setupAgoraListeners(callback);
       self.openScreenShare(userId);
     },
-    setupAgoraListeners() {
+    setupAgoraListeners(callback: () => void) {
       self.client.on('user-published', (user, mediaType) =>
-        self.handleUserPublished(user, mediaType)
+        self.handleUserPublished(user, mediaType, callback)
       );
       self.client.on('user-unpublished', self.handleUserUnpublished);
     },
@@ -109,10 +114,8 @@ const AgoraScreenShareStore = types
       self.client?.localTracks.forEach((track) => {
         track.close();
       });
-      self.client.leave();
+      self.client.unpublish();
       self.localVideoTrack = undefined;
-
-      self.resetModel();
     }
   }))
   .actions((self) => ({

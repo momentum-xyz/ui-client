@@ -37,7 +37,9 @@ const ScreenShareWidget: FC = () => {
 
   const handleClose = () => {
     screenShareStore.widget.close();
-    agoraScreenShareStore.close();
+    if (screenShareStore.screenOwnerId === sessionStore.userId) {
+      agoraScreenShareStore.close();
+    }
   };
 
   return (
