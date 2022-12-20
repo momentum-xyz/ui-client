@@ -6,6 +6,7 @@ import {toast} from 'react-toastify';
 import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
+import {AIRDROP_TIMEOUT_MS, LAST_AIRDROP_KEY} from 'core/constants';
 import {ToastContent} from 'ui-kit';
 import {convertToHex} from 'core/utils';
 
@@ -126,6 +127,11 @@ const StakingDashboard: FC = () => {
       });
   };
 
+  const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
+  const airdropTimeoutMs = AIRDROP_TIMEOUT_MS;
+  const canRequestAirdrop =
+    !lastAirdropTimestamp || Date.now() - lastAirdropTimestamp > airdropTimeoutMs;
+
   return (
     <styled.Container>
       <TabBar tabs={tabBarTabs} selectedTab={activeTab} onTabSelect={() => {}} />
@@ -229,6 +235,15 @@ const StakingDashboard: FC = () => {
                     onClick={() => setGetRewards(true)}
                   />
                 </styled.RewardData>
+              </styled.Section>
+              <styled.Section>
+                <styled.Buttons>
+                  <Button
+                    label="Get tokens"
+                    disabled={!canRequestAirdrop}
+                    onClick={() => nftStore.requestAirdrop(wallet)}
+                  />
+                </styled.Buttons>
               </styled.Section>
               <styled.Separator />
             </div>

@@ -14,6 +14,7 @@ import {
   // formatExistential
 } from 'core/utils';
 import {KeyringAddressType} from 'core/types';
+import {AIRDROP_TIMEOUT_MS, LAST_AIRDROP_KEY} from 'core/constants';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
 import {MintNftCheckJobResponse} from 'api';
@@ -598,6 +599,13 @@ const NftStore = types
         self.setRequestFundsStatus('error');
         throw new Error('Channel is not initialized');
       }
+
+      const now = Date.now();
+      const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
+      if (now - lastAirdropTimestamp < AIRDROP_TIMEOUT_MS) {
+        throw new Error('Wait at least 24 hours before requesting airdrop again');
+      }
+
       const {account, options} = yield prepareSignAndSend(address);
       const tx = self.channel.tx.faucet.getTokens();
 
@@ -615,6 +623,8 @@ const NftStore = types
           }).catch(reject);
         });
         self.setRequestFundsStatus('success');
+        const newLastAirdropTimestamp = Date.now();
+        localStorage.setItem(LAST_AIRDROP_KEY, newLastAirdropTimestamp.toString());
         console.log('Request airdrop success');
       } catch (err) {
         console.log('Error getting airdrop:', err);

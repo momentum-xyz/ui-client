@@ -5,3 +5,4 @@ export * from './dashboard.constants';
 export * from './eventEmitters.constants';
 export * from './unity.constants';
 export * from './tiles.constants';
+export * from './lastAirdrop.constants';
