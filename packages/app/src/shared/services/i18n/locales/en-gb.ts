@@ -9,6 +9,11 @@ export const enGb = {
     staking: {
       title: 'Personal Connecting Dashboard',
       label: 'Staking',
+      startLabel: '1. Start Connecting',
+      walletLabel: '2. My Wallet',
+      confirmLabel: '3. Authorize',
+      walletTitle: 'My Wallet',
+      confirmTitle: 'Authorize',
       rewardAccountError:
         'The selected destination account does not exist and cannot be used to receive rewards',
       customRewardDestination: 'Account Address',

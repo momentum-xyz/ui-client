@@ -14,15 +14,15 @@ import * as styled from './StakingDashboard.styled';
 const tabBarTabs: TabBarTabInterface[] = [
   {
     id: 'wallet',
-    label: 'My Wallet',
-    title: 'My Wallet',
+    label: t('staking.walletTitle'),
+    title: t('staking.walletTitle'),
     icon: 'wallet',
     disabled: true
   },
   {
     id: 'confirm',
-    title: 'Authorize',
-    label: 'Authorize',
+    title: t('staking.confirmTitle'),
+    label: t('staking.confirmTitle'),
     icon: 'check',
     disabled: true
   }
@@ -62,9 +62,9 @@ const StakingDashboard: FC = () => {
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
   const balanceSections = [
-    {label: 'Account Balance', value: balanceTotal},
-    {label: 'Transferable', value: balanceTransferrable},
-    {label: 'Staked', value: balanceReserved}
+    {label: t('staking.balanceTypes.account'), value: balanceTotal},
+    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable},
+    {label: t('staking.balanceTypes.staked'), value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>

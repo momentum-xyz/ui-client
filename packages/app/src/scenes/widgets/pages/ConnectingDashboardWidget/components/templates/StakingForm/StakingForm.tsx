@@ -15,22 +15,22 @@ const DEFAULT_STAKING_AMOUNT = 1;
 const tabBarTabs: TabBarTabInterface[] = [
   {
     id: 'start',
-    title: '1. Start Connecting',
-    label: '1. Start Connecting',
+    title: t('staking.startLabel'),
+    label: t('staking.startLabel'),
     icon: 'hierarchy',
     disabled: true
   },
   {
     id: 'wallet',
-    label: '2. My Wallet',
-    title: '2. My Wallet',
+    label: t('staking.walletLabel'),
+    title: t('staking.walletLabel'),
     icon: 'wallet',
     disabled: true
   },
   {
     id: 'confirm',
-    title: '3. Authorize',
-    label: '3. Authorize',
+    title: t('staking.confirmLabel'),
+    label: t('staking.confirmLabel'),
     icon: 'check',
     disabled: true
   }
@@ -114,9 +114,9 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
   };
 
   const balanceSections = [
-    {label: 'Account Balance', value: balanceTotal},
-    {label: 'Transferable', value: balanceTransferrable},
-    {label: 'Staked', value: balanceReserved}
+    {label: t('staking.balanceTypes.account'), value: balanceTotal},
+    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable},
+    {label: t('staking.balanceTypes.staked'), value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>
