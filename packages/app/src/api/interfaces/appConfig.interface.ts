@@ -50,7 +50,7 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   WEB3_PUBLIC_RPC_URL_RINKEBY: string;
   POLKADOT_CONNECTION_STRING: string;
   WESTEND_TEST_WS_SERVER: string;
-  KUSAMA_WS_SERVER: string;
+  BLOCKCHAIN_WS_SERVER: string;
   GOOGLE_SDK_URL: string;
   GOOGLE_DOCUMENT_SCOPE: string;
   YOUTUBE_API: string;
