@@ -2,29 +2,23 @@ import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
 import {Avatar, PanelLayout, Portal, SearchInput, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import cn from 'classnames';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
-import {UserModelInterface} from 'core/models';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './SearchUsersWidget.styled';
 import {UserProfilePanel} from './components';
 
-interface PropsInterface {
-  users: Array<UserModelInterface>;
-  searchedUsers?: Array<UserModelInterface>;
-  searchUsers: (userId: string) => void;
-  onClose?: () => void;
-}
-
 const DIALOG_WIDTH_PX = 296;
 
-const SearchUsersWidget: FC<PropsInterface> = (props) => {
-  const {users, onClose, searchUsers, searchedUsers} = props;
+const SearchUsersWidget: FC = () => {
   const {mainStore, widgetsStore, nftStore, authStore, sessionStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
 
+  const {t} = useTranslation();
   const history = useHistory();
 
   useEffect(() => {
@@ -35,7 +29,7 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
   }, [unityStore]);
 
   const handleClose = () => {
-    onClose?.();
+    onlineUsersStore.searchWidget.close();
     onlineUsersStore?.unselectUser();
   };
 
@@ -78,22 +72,24 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
           >
             <styled.Container data-testid="SearchUsersWidget-test">
               <SearchInput
-                placeholder="Search for people"
-                onChange={(query: string) => searchUsers(query)}
+                placeholder={t('placeholders.searchForPeople')}
+                onChange={(query: string) => onlineUsersStore.searchUsers(query)}
               />
               <styled.List className="noScrollIndicator">
-                {searchedUsers && searchedUsers.length > 0
-                  ? searchedUsers.map((user) => (
-                      <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
-                        <styled.Information>
+                {onlineUsersStore.searchedUsers && onlineUsersStore.searchedUsers.length > 0
+                  ? onlineUsersStore.searchedUsers.map((user) => (
+                      <styled.Item key={user.id}>
+                        <styled.Information
+                          className={cn(user.id === sessionStore.userId && 'noPointer')}
+                          onClick={() => handleUserClick(user.id)}
+                        >
                           <Avatar avatarSrc={user.avatarSrc} size="small" />
                           <Text size="s" text={user.name} transform="capitalized" />
                         </styled.Information>
-                        {/*// TODO: information will come from isGuest flag from BE when things will be stable*/}
-                        {!!nftStore.getNftByUuid(user.id) && (
+                        {!user.isGuest && (
                           <styled.RightToolbar>
                             {user.id === worldStore.worldId && (
-                              <styled.AdminText size="s" text="Admin" />
+                              <styled.AdminText size="s" text={t('titles.admin')} />
                             )}
                             <SvgButton
                               iconName="fly-to"
@@ -105,26 +101,26 @@ const SearchUsersWidget: FC<PropsInterface> = (props) => {
                               iconName="high-five"
                               size="normal"
                               disabled={user?.id === sessionStore.userId}
-                              onClick={() => {
-                                handleHighFive(user?.id || '');
-                              }}
+                              onClick={() => handleHighFive(user?.id || '')}
                             />
                           </styled.RightToolbar>
                         )}
                       </styled.Item>
                     ))
                   : !onlineUsersStore.query &&
-                    users.map((user) => (
-                      <styled.Item key={user.id} onClick={() => handleUserClick(user.id)}>
-                        <styled.Information>
+                    onlineUsersStore.allUsers.map((user) => (
+                      <styled.Item key={user.id}>
+                        <styled.Information
+                          className={cn(user.id === sessionStore.userId && 'noPointer')}
+                          onClick={() => handleUserClick(user.id)}
+                        >
                           <Avatar avatarSrc={user.avatarSrc} size="small" />
                           <Text size="s" text={user.name} transform="capitalized" />
                         </styled.Information>
-                        {/*// TODO: information will come from isGuest flag from BE when things will be stable*/}
-                        {!!nftStore.getNftByUuid(user.id) && (
+                        {!user.isGuest && (
                           <styled.RightToolbar>
                             {user.id === worldStore.worldId && (
-                              <styled.AdminText size="s" text="Admin" />
+                              <styled.AdminText size="s" text={t('titles.admin')} />
                             )}
                             <SvgButton
                               iconName="fly-to"

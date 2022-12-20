@@ -7,6 +7,13 @@ export const enGb = {
       seconds: '{{seconds}} seconds'
     },
     staking: {
+      title: 'Personal Connecting Dashboard',
+      label: 'Staking',
+      startLabel: '1. Start Connecting',
+      walletLabel: '2. My Wallet',
+      confirmLabel: '3. Authorize',
+      walletTitle: 'My Wallet',
+      confirmTitle: 'Authorize',
       rewardAccountError:
         'The selected destination account does not exist and cannot be used to receive rewards',
       customRewardDestination: 'Account Address',
@@ -17,6 +24,7 @@ export const enGb = {
       validatorsTab: 'Validators',
       account: 'Account',
       authorization: 'Authorization',
+      authorizeContribution: 'Authorize your contribution',
       stakingTab: {
         stakingDashboard: 'Stake KSM - Setup Nominator',
         validators: 'Stake KSM - Select Validators',
@@ -69,6 +77,8 @@ export const enGb = {
       stakingBlocks: '{{blocks}} blocks',
       erasRemaining: '{{eras}} eras remaining',
       noActiveStakes: "This Account Doesn't Have Any Active Stakes At The Moment",
+      activeStakes: 'Active Stakes',
+      balance: 'Balance',
       changeNominator: 'change nominator',
       stakingWalletAccountHeading: 'Staking Wallet Account',
       pickAccount: 'Pick a wallet account',
@@ -81,8 +91,36 @@ export const enGb = {
       eventAmount: '{{events}} events',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
+      setAmountSymbol: 'Set Amount, {{symbol}}',
       nominateAndBond: 'Nominate & Bond',
+      amount: 'Amount',
+      tokenAmount: 'Amount, {{amount}}',
+      stakedAmount: 'Staked {{amount}}',
+      back: 'Back',
+      next: 'Next',
+      destination: 'Destination',
       signAndSubmit: 'Sign & Submit',
+      signAndConnect: 'Sign & Connect',
+      unStakeContribution: 'Unstake your contribution',
+      contributionMessage:
+        'This account is also the destination for the rewards you receive from your contribution.',
+      stakingMessage:
+        'By staking Momentum ($MOM) in someones Odyssey you are showing support for their journey. Not only do you get rewards for staking, but it will also allow you to place a portal inside your Odyssey that will allow others to travel to the Odyssey you have staked in.',
+      connectMessage:
+        'You can freely visit any users open Odyssey. You can explore and meet them just by clicking on their Odyssey. However, to create a portal between your Odyssey and another users Odyssey, you will need to stake in them. By staking you show your support for another Odyssey.',
+      connectTitle: 'Connect to another Odyssey',
+      startContributing: 'Start Contributing',
+      unStakeFrom: 'Unstake From',
+      unStake: 'Unstake',
+      errorUnstake: 'Error unstaking',
+      successUnstake: 'You have unstaked!',
+      errorGetRewards: 'Error getting rewards',
+      successGetRewards: 'You have got rewards!',
+      getRewards: 'Get Rewards',
+      stakeError: 'Could not stake. Please try again later.',
+      stakeSuccess: 'You successfully staked!',
+      totalRewards: 'Total rewards',
+      rewards: 'Rewards',
       stashController: 'Controller',
       selectAmount: 'Select amount to stake',
       available: 'Available',
@@ -249,7 +287,17 @@ export const enGb = {
       changeText: 'Change Text',
       document: 'Document',
       changeImage: 'Change Image',
-      image: 'Image'
+      image: 'Image',
+      coCreate: 'co-create',
+      connected: 'connected',
+      connect: 'connect',
+      highFive: 'high five',
+      visit: 'visit',
+      flyToMe: 'Fly to me',
+      bio: 'Bio',
+      discoverMore: 'Discover more',
+      connections: 'Connections',
+      newsfeed: 'Newsfeed'
     },
     messages: {
       loading: 'Loading Odyssey',
@@ -417,6 +465,7 @@ export const enGb = {
       spawnAsset: 'Spawn Asset',
       selectedSkybox: 'Selected Skybox',
       upload3dAsset: 'Upload 3D Asset',
+      admin: 'admin',
       statistics: 'Statistics'
     },
     textMessage: {
@@ -1038,6 +1087,11 @@ export const enGb = {
         title: 'remove Tile from dashboard',
         message: 'Are you sure you want to remove this tile?'
       }
+    },
+    mutualConnections: {
+      noConnection: 'There are no connections yet',
+      title: 'Mutual connections list',
+      admin: 'admin'
     }
   }
 };

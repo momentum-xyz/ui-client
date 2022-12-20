@@ -7,33 +7,28 @@ import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
-
-import {convertToHex} from '../StakingForm/StakingForm';
+import {convertToHex} from 'core/utils';
 
 import * as styled from './StakingDashboard.styled';
 
 const tabBarTabs: TabBarTabInterface[] = [
   {
     id: 'wallet',
-    label: 'My Wallet',
-    title: 'My Wallet',
+    label: t('staking.walletTitle'),
+    title: t('staking.walletTitle'),
     icon: 'wallet',
     disabled: true
   },
   {
     id: 'confirm',
-    title: 'Authorize',
-    label: 'Authorize',
+    title: t('staking.confirmTitle'),
+    label: t('staking.confirmTitle'),
     icon: 'check',
     disabled: true
   }
 ];
 
-interface PropsInterface {
-  onComplete: () => void;
-}
-
-const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
+const StakingDashboard: FC = () => {
   const {authStore, nftStore, exploreStore} = useStore();
   const {wallet: authWallet} = authStore;
   const {addresses, accountOptions} = nftStore;
@@ -67,9 +62,9 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
   const balanceSections = [
-    {label: 'Account Balance', value: balanceTotal},
-    {label: 'Transferable', value: balanceTransferrable},
-    {label: 'Staked', value: balanceReserved}
+    {label: t('staking.balanceTypes.account'), value: balanceTotal},
+    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable},
+    {label: t('staking.balanceTypes.staked'), value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>
@@ -89,8 +84,8 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
       .getRewards(wallet)
       .then(() => {
         console.log('getRewards success');
-        toast.info(<ToastContent title={"You've got rewards!"} showCloseButton />);
-        onComplete();
+        toast.info(<ToastContent title={t('staking.successUnstake')} showCloseButton />);
+        nftStore.stakingDashorboardDialog.close();
       })
       .catch((err) => {
         console.log('stake error', err);
@@ -98,7 +93,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
           <ToastContent
             isDanger
             title={t('titles.alert')}
-            text="Error getting rewards"
+            text={t('staking.errorGetRewards')}
             showCloseButton
           />
         );
@@ -122,12 +117,12 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
       })
       .then(() => {
         console.log('unstake success');
-        toast.info(<ToastContent title={"You've unstaked!"} showCloseButton />);
-        onComplete();
+        toast.info(<ToastContent title={t('staking.successUnstake')} showCloseButton />);
+        nftStore.stakingDashorboardDialog.close();
       })
       .catch((err) => {
         console.log('unstake error', err);
-        toast.error(<ToastContent isDanger title="Error unstaking" showCloseButton />);
+        toast.error(<ToastContent isDanger title={t('staking.errorUnstake')} showCloseButton />);
       });
   };
 
@@ -140,11 +135,11 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
             <div>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Wallet account" />
+                  <Heading type="h2" align="left" label={t('staking.walletAccount')} />
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text="ACCOUNT" />
+                    <Text size="xxs" align="right" text={t('staking.account')} />
                   </styled.LabeledLineLabelContainer>
                   <Text size="xxs" text={initiatorInfo} />
                 </styled.LabeledLineContainer>
@@ -161,7 +156,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
               </styled.Section>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Balance" />
+                  <Heading type="h2" align="left" label={t('staking.balance')} />
                 </styled.SectionHeader>
                 <styled.BalanceContainer>
                   {balanceSections.map((section) => section)}
@@ -170,7 +165,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
               <styled.Separator />
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Active Stakes" />
+                  <Heading type="h2" align="left" label={t('staking.activeStakes')} />
                 </styled.SectionHeader>
                 <styled.StakingSection>
                   {Array.from(stakingAtOthers.values()).map((stakingDetail) => {
@@ -183,13 +178,16 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                           align="left"
                           className="name"
                         />
+                        {/*TODO: format using nftStore*/}
                         <Text
                           size="s"
-                          text={`Staked ${formatTokenAmount(
-                            stakingDetail.amount,
-                            chainDecimals,
-                            tokenSymbol
-                          )}`}
+                          text={t('staking.stakedAmount', {
+                            amount: formatTokenAmount(
+                              stakingDetail.amount,
+                              chainDecimals,
+                              tokenSymbol
+                            )
+                          })}
                           align="left"
                         />
 
@@ -200,7 +198,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
                       align="left"
                     /> */}
                         <Button
-                          label="Unstake"
+                          label={t('staking.unStake')}
                           transform="capitalized"
                           icon="chevron"
                           onClick={() => setUnstakeFrom(stakingDetail.destAddr)}
@@ -213,15 +211,20 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
               <styled.Separator />
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" align="left" label="Rewards" />
+                  <Heading type="h2" align="left" label={t('staking.rewards')} />
                 </styled.SectionHeader>
                 <styled.RewardData>
                   <div>
-                    <Text size="s" align="left" text="Total rewards" className="with-padding" />
+                    <Text
+                      size="s"
+                      align="left"
+                      text={t('staking.totalRewards')}
+                      className="with-padding"
+                    />
                     <Text size="s" text={accountAccumulatedRewards} align="left" />
                   </div>
                   <Button
-                    label="Get Rewards"
+                    label={t('staking.getRewards')}
                     disabled={!canReceiveAccumulatedRewards}
                     onClick={() => setGetRewards(true)}
                   />
@@ -236,11 +239,16 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
             <div>
               <styled.Section>
                 <styled.SectionHeader>
-                  <Heading type="h2" label="Unstake your contribution" />
+                  <Heading type="h2" label={t('staking.unStakeContribution')} />
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
                   <styled.LabeledLineLabelContainer>
-                    <Text size="m" text={`Amount, ${tokenSymbol}`} align="left" />
+                    {/*{t('staking.stakingBlocks', {blocks: formatNumber(blocks)})}*/}
+                    <Text
+                      size="m"
+                      text={t('staking.tokenAmount', {amount: tokenSymbol})}
+                      align="left"
+                    />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer className="view-only">
                     <Input
@@ -254,7 +262,7 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
               </styled.Section>
               <styled.LabeledLineContainer>
                 <styled.LabeledLineLabelContainer>
-                  <Text size="m" text="Unstake From" align="left" />
+                  <Text size="m" text={t('staking.unStakeFrom')} align="left" />
                 </styled.LabeledLineLabelContainer>
                 <Text
                   size="m"
@@ -265,9 +273,9 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
             </div>
 
             <styled.Buttons>
-              <Button label="Back" onClick={() => setUnstakeFrom(null)} />
+              <Button label={t('staking.back')} onClick={() => setUnstakeFrom(null)} />
               <Button
-                label="Sign & Submit"
+                label={t('staking.signAndSubmit')}
                 onClick={() =>
                   onUnstake(unstakeFromDetail.destAddr, amount).then(() => {
                     setAmount(null);
@@ -281,25 +289,25 @@ const StakingDashboard: FC<PropsInterface> = ({onComplete}) => {
           <>
             <styled.Section>
               <styled.SectionHeader>
-                <Heading type="h2" align="left" label="Get Rewards" />
+                <Heading type="h2" align="left" label={t('staking.getRewards')} />
               </styled.SectionHeader>
               <styled.LabeledLineContainer>
                 <styled.LabeledLineLabelContainer>
-                  <Text size="xxs" align="right" text="ACCOUNT" />
+                  <Text size="xxs" align="right" text={t('staking.account')} />
                 </styled.LabeledLineLabelContainer>
                 <Text size="xxs" text={initiatorInfo} />
               </styled.LabeledLineContainer>
               <styled.LabeledLineContainer>
                 <styled.LabeledLineLabelContainer>
-                  <Text size="xxs" align="right" text="AMOUNT" />
+                  <Text size="xxs" align="right" text={t('staking.amount')} />
                 </styled.LabeledLineLabelContainer>
                 <Text size="s" text={accountAccumulatedRewards} align="left" />
               </styled.LabeledLineContainer>
             </styled.Section>
 
             <styled.Buttons>
-              <Button label="Back" onClick={() => setGetRewards(false)} />
-              <Button label="Sign & Submit" onClick={() => onGetRewards()} />
+              <Button label={t('staking.back')} onClick={() => setGetRewards(false)} />
+              <Button label={t('staking.signAndSubmit')} onClick={() => onGetRewards()} />
             </styled.Buttons>
           </>
         )}

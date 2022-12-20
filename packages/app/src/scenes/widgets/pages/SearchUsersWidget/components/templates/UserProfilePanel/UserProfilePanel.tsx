@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, IconSvg, Text, PanelLayout} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {NftItemInterface} from 'stores/NftStore/models';
 import {UserInterface} from 'api';
@@ -39,10 +40,11 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
     userAvatar,
     worldId
   } = props;
+  const {t} = useTranslation();
 
   return (
     <PanelLayout
-      title={odyssey?.name ?? user?.name ?? 'User Name'}
+      title={odyssey?.name ?? user?.name}
       onClose={onClose}
       componentSize={{width: '315px'}}
       headerStyle="uppercase"
@@ -54,27 +56,27 @@ const UserProfilePanel: FC<PropsInterface> = (props) => {
           <styled.Actions>
             <Button
               size="small"
-              label="Visit"
+              label={t('labels.visit')}
               disabled={!nftId || odyssey?.uuid === worldId}
               onClick={() => onTeleport(odyssey?.uuid || '')}
               icon="fly-to"
             />
             <Button
               size="small"
-              label="High Five"
+              label={t('labels.highFive')}
               icon="high-five"
               onClick={() => onHighFive(odyssey?.uuid ?? '')}
             />
             <Button
               size="small"
-              label={alreadyConnected ? 'Connected' : 'Connect'}
+              label={alreadyConnected ? t('labels.connected') : t('labels.connect')}
               icon="hierarchy"
               disabled={!nftId || odyssey?.uuid === worldId || alreadyConnected}
               onClick={onConnect}
             />
             <Button
               size="small"
-              label="co-create"
+              label={t('labels.coCreate')}
               icon="cubicles"
               onClick={() => {}}
               disabled={true}
