@@ -23,8 +23,14 @@ import * as styled from './Widgets_OLD.styled';
 import {WorldChatWidget} from './pages';
 
 const Widgets_OLD: FC = () => {
-  const {sessionStore, mainStore, widgetStore_OLD, flightStore, worldChatStore, worldBuilderStore} =
-    useStore();
+  const {
+    sessionStore,
+    mainStore,
+    widgetStore_OLD,
+    flightStore,
+    worldChatStore,
+    odysseyCreatorStore: worldBuilderStore
+  } = useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {

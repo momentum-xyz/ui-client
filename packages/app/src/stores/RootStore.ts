@@ -13,7 +13,7 @@ import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {OdysseyStore} from 'scenes/odyssey/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
-import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
+import {RootOdysseyCreatorStore} from 'scenes/odysseyCreator/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {ObjectStore} from 'scenes/object/stores';
 
@@ -44,7 +44,7 @@ const RootStore = types
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetsStore: types.optional(RootWidgetsStore, {}),
     widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),
-    worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
+    odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
     worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),
     videoStore: types.optional(VideoStore, {}),

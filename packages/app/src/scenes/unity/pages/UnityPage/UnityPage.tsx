@@ -31,9 +31,15 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, authStore, unityLoaded, sessionStore, worldBuilderStore} = useStore();
+  const {
+    mainStore,
+    authStore,
+    unityLoaded,
+    sessionStore,
+    odysseyCreatorStore: worldBuilderStore
+  } = useStore();
   const {unityStore, worldStore} = mainStore;
-  const {worldBuilderObjectStore} = worldBuilderStore;
+  const {odysseyCreatorObjectStore: worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -43,7 +49,7 @@ const UnityPage: FC = () => {
   const isBuilderMode =
     !!worldStore.worldId &&
     location.pathname.includes(
-      generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
+      generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
     );
 
   // TODO: FIXME
@@ -278,12 +284,12 @@ const UnityPage: FC = () => {
         <CreatorMenu
           onAddObject={() => {
             history.push(
-              generatePath(ROUTES.odyssey.builder.spawnAsset.base, {worldId: worldStore.worldId})
+              generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId: worldStore.worldId})
             );
           }}
           onSkyboxClick={() => {
             history.push(
-              generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId})
+              generatePath(ROUTES.odyssey.creator.skybox, {worldId: worldStore.worldId})
             );
           }}
         />
