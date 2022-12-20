@@ -297,7 +297,11 @@ export const enGb = {
       bio: 'Bio',
       discoverMore: 'Discover more',
       connections: 'Connections',
-      newsfeed: 'Newsfeed'
+      newsfeed: 'Newsfeed',
+      changeMusic: 'Change Music (coming soon)',
+      tokenGating: 'Token Gating (coming soon)',
+      addObject: 'Add Object',
+      skybox: 'Skybox'
     },
     messages: {
       loading: 'Loading Odyssey',
@@ -419,7 +423,7 @@ export const enGb = {
       weSupportGLBModels: 'We support GLB Models',
       selectOne: 'Select One',
       processing: 'Processing',
-      commingSoonExclamation: 'Coming Soon!'
+      comingSoonExclamation: 'Coming Soon!'
     },
     titles: {
       alert: 'alert',

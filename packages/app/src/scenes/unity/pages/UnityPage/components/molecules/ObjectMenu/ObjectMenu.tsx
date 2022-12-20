@@ -88,7 +88,7 @@ const ObjectMenu: FC<PropsInterface> = ({
         <styled.MenuItem onClick={onObjectRemove}>
           <styled.MenuText text={t('actions.delete')} size="m" />
         </styled.MenuItem>
-        <Tooltip label={t('messages.commingSoonExclamation')} placement="bottom">
+        <Tooltip label={t('messages.comingSoonExclamation')} placement="bottom">
           <styled.MenuItem disabled>
             <styled.MenuText text={t('actions.copy')} size="m" />
           </styled.MenuItem>
@@ -96,7 +96,7 @@ const ObjectMenu: FC<PropsInterface> = ({
         <styled.MenuItem onClick={handleOnFunctionalityClick}>
           <styled.MenuText text={t('actions.functionality')} size="m" />
         </styled.MenuItem>
-        <Tooltip label={t('messages.commingSoonExclamation')}>
+        <Tooltip label={t('messages.comingSoonExclamation')}>
           <styled.MenuItem disabled>
             <styled.MenuText text={t('actions.addTokenGate')} size="m" />
           </styled.MenuItem>
