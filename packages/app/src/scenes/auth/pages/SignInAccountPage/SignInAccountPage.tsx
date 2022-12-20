@@ -2,6 +2,7 @@ import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 import {Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {SignUpFormInterface} from 'core/interfaces';
@@ -27,6 +28,8 @@ const SignInAccountPage: FC = () => {
 
   const accountSelectedAndFundsAquired =
     walletWithFundsIsConnected || requestingFundsStatus === 'success';
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     authStore.clear();
@@ -93,12 +96,12 @@ const SignInAccountPage: FC = () => {
           )}
           {requestingFundsStatus === 'pending' && (
             <styled.MintingMessageBox>
-              <Text text={`Loading ${tokenSymbol}...`} size="m" align="left" />
+              <Text text={t('messages.loadingToken', {tokenSymbol})} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
           {requestingFundsStatus === 'error' && (
             <styled.MintingMessageBox>
-              <Text text={`Error loading ${tokenSymbol}`} size="m" align="left" />
+              <Text text={t('errors.errorLoadingToken', {tokenSymbol})} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
 
@@ -117,17 +120,13 @@ const SignInAccountPage: FC = () => {
           )}
           {mintingNftStatus === 'pending' && (
             <styled.MintingMessageBox>
-              <Text text="Minting your Odyssey..." size="m" align="left" />
-              <Text
-                text="Please wait and don't refresh, this may take a while."
-                size="m"
-                align="left"
-              />
+              <Text text={t('messages.mintingYourOdyssey')} size="m" align="left" />
+              <Text text={t('messages.mintingYourOdysseyWarning')} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
           {mintingNftStatus === 'error' && (
             <styled.MintingMessageBox>
-              <Text text="Error minting NFT" size="m" align="left" />
+              <Text text={t('errors.errorLoadingNFT')} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
         </styled.Boxes>
