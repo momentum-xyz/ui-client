@@ -62,8 +62,15 @@ const Widgets: FC<PropsInterface> = (props) => {
     worldStore.worldId
   ]);
 
+  useEffect(() => {
+    agoraScreenShareStore.init(
+      worldStore.worldId,
+      sessionStore.userId,
+      widgetsStore.screenShareStore.widget.open
+    );
+  }, [agoraScreenShareStore, sessionStore.userId, worldStore.worldId]);
+
   const handleOpenScreenShare = () => {
-    agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
     widgetsStore.screenShareStore.widget.toggle();
   };
 

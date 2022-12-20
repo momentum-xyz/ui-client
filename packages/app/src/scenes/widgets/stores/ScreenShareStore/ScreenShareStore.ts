@@ -23,10 +23,8 @@ const ScreenShareStore = types.compose(
           self.screenOwnerName = null;
           return;
         }
-        // TODO: when implemented the user repository fetchProfile,
-        //  it will be needed to check with user session id in order to give permission for stopping screen share,
-        //  and check if needed to have this action based on new requirements
-        const response = yield self.ownerRequest.send(api.userRepository_OLD.fetchProfile, {
+
+        const response = yield self.ownerRequest.send(api.userRepository.fetchUser, {
           userId: agoraUserId
         });
 
