@@ -1,4 +1,5 @@
 export * from './browser.utils';
+export * from './blockchain.utils';
 export * from './clipboard.utils';
 export * from './date.utils';
 export * from './email.utils';
