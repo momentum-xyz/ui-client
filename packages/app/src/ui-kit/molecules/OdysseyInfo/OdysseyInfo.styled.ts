@@ -6,8 +6,9 @@ export const Container = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 18px;
   justify-content: space-between;
+  padding-bottom: 18px;
 `;
 
 export const TopContainer = styled.div`
@@ -38,19 +39,18 @@ export const Actions = styled.div`
 `;
 
 export const Description = styled.div`
-  padding: 5px 10px 10px 10px;
-  opacity: 0.9;
+  padding: 0px 6px 16px 6px;
 `;
 
 export const Statistics = styled.div`
-  padding: 6px 10px 0 10px;
+  padding: 0 6px;
   color: ${(props) => props.theme.accent};
   font-size: var(--font-size-xs);
   font-weight: 500;
 `;
 
 export const StatisticsData = styled.div`
-  padding: 0 10px 20px 10px;
+  padding: 0 6px 20.5px 6px;
   color: ${(props) => props.theme.accent};
   font-size: var(--font-size-xs);
   font-weight: 500;

@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
 import {t} from 'i18next';
@@ -12,12 +12,12 @@ const StakingDashboardWidget: FC = () => {
   const {mainStore, nftStore} = useStore();
   const {unityStore} = mainStore;
 
-  const handleFocus = useCallback(() => {
+  useEffect(() => {
     unityStore.changeKeyboardControl(false);
-  }, [unityStore]);
 
-  const handleBlur = useCallback(() => {
-    unityStore.changeKeyboardControl(true);
+    return () => {
+      unityStore.changeKeyboardControl(true);
+    };
   }, [unityStore]);
 
   return (
@@ -30,7 +30,7 @@ const StakingDashboardWidget: FC = () => {
         nftStore.stakingDashorboardDialog.close();
       }}
     >
-      <styled.FullSizeWrapper onFocus={handleFocus} onBlur={handleBlur}>
+      <styled.FullSizeWrapper>
         <StakingDashboard />
       </styled.FullSizeWrapper>
     </Dialog>

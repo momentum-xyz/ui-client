@@ -204,13 +204,17 @@ export const enGb = {
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
       onlyGLBSupported: 'Only GLB format supported',
-      requiredField: 'This field is required'
+      requiredField: 'This field is required',
+      errorLoadingToken: 'Error loading {{tokenSymbol}}',
+      errorLoadingNFT: 'Error loading NFT'
     },
     systemMessages: {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
       switchToThatTab:
         'To continue the experience, please switch to that window/tab and close this one',
-      underMaintenance: 'The server is undergoing maintenance, please try again later'
+      underMaintenance: 'The server is undergoing maintenance, please try again later',
+      noBlockchainUrlAvailable:
+        'Ooops, the blockchain server is not available at the moment. Please try again later!'
     },
     counts: {
       people_one: '{{count}} Person',
@@ -301,16 +305,18 @@ export const enGb = {
       changeMusic: 'Change Music (coming soon)',
       tokenGating: 'Token Gating (coming soon)',
       addObject: 'Add Object',
-      skybox: 'Skybox'
+      skybox: 'Skybox',
+      connectYourWallet: 'Connect your wallet'
     },
     messages: {
       loading: 'Loading Odyssey',
       loadingPlugin: 'Loading Plugin...',
+      loadingToken: 'Loading {{tokenSymbol}}...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
-      version: 'Version {{version}}',
+      version: 'Odyssey version {{version}}',
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
@@ -423,7 +429,15 @@ export const enGb = {
       weSupportGLBModels: 'We support GLB Models',
       selectOne: 'Select One',
       processing: 'Processing',
-      comingSoonExclamation: 'Coming Soon!'
+      comingSoonExclamation: 'Coming Soon!',
+      mintingYourOdyssey: 'Minting your Odyssey...',
+      mintingYourOdysseyWarning: "Please wait and don't refresh, this may take a while.",
+      congratulations: 'Congratulations!',
+      recievedAmmountOfTokensMessage:
+        "You just received {{amount}} tokens. One more step and you'll embark on your epic journey!",
+      onceConnectedTokensWillBeAwarded:
+        'Once connected, you will be awarded some Drive tokens to get you started',
+      noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
     },
     titles: {
       alert: 'alert',
@@ -470,7 +484,8 @@ export const enGb = {
       selectedSkybox: 'Selected Skybox',
       upload3dAsset: 'Upload 3D Asset',
       admin: 'admin',
-      statistics: 'Statistics'
+      statistics: 'Statistics',
+      oneConnectYourWallet: '1. Connect your wallet'
     },
     textMessage: {
       you: 'you',
@@ -498,7 +513,8 @@ export const enGb = {
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
       selectAnOption: 'Select an Option',
-      nameYourObjectNavigation: 'Name your Object (Navigation)'
+      nameYourObjectNavigation: 'Name your Object (Navigation)',
+      selectAccount: 'Select Account'
     },
     fields: {
       nickname: 'Nickname',

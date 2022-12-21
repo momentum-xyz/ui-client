@@ -24,6 +24,8 @@ import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './mo
 const NFT_MINT_FEE = 100000;
 const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
 
+const textDecoderInst = new window.TextDecoder();
+
 const prepareSignAndSend = async (address: string) => {
   // there's alternative way for this in useEager
   const keyring = new Keyring({type: 'sr25519'});
@@ -273,8 +275,10 @@ const NftStore = types
         itemMetadatas.map(
           async (itemMedadata: any, index: number): Promise<NftItemInterface | null> => {
             const [collectionId, itemId] = collectionItemIds[index];
-            const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
-            // console.log('data', data);
+            const codecData = itemMedadata?.unwrapOr(null)?.data;
+
+            // first 2 bytes must be type and length, but we don't need it here
+            const data = textDecoderInst.decode(codecData?.toU8a?.().slice(2));
             const itemDetailedInfo = nftItemsDetailedInfos[index];
             // console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
             const owner = itemDetailedInfo.unwrapOr(null)?.owner?.toString();
@@ -333,7 +337,8 @@ const NftStore = types
           nftItems.filter((nftItem) => !!nftItem) as NftItemInterface[]
       );
 
-      console.log('NftItems', nftItems);
+      console.log('NftItems');
+      console.table(nftItems);
 
       self.setNftItems(nftItems);
     }),

@@ -35,7 +35,7 @@ const UNITY_ACTIVE_ROUTES: RouteConfigInterface[] = [
     main: () => <></>
   },
   {
-    path: ROUTES.odyssey.builder.base,
+    path: ROUTES.odyssey.creator.base,
     main: () => <></>
   },
   {

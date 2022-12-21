@@ -21,10 +21,10 @@ interface PropsInterface {
 }
 
 const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
-  const {mainStore, collaborationStore, sessionStore} = useStore();
+  const {mainStore, collaborationStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
-  const {streamChatStore, spaceStore, screenShareStore} = collaborationStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore;
+  const {streamChatStore, spaceStore} = collaborationStore;
   const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
@@ -91,10 +91,6 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
                 await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
-
-                if (sessionStore.userId === screenShareStore.screenOwnerId) {
-                  agoraScreenShareStore.stopScreenSharing();
-                }
               }}
             />
           )}

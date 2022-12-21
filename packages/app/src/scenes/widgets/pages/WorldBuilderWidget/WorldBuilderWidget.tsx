@@ -25,7 +25,7 @@ const WorldBuilderWidget: FC = () => {
     title: 'Odyssey Creator',
     icon: 'planet',
     size: 'medium',
-    link: generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
+    link: generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
     // disabled: !worldStore.isMyWorld
   };
 
@@ -60,7 +60,7 @@ const WorldBuilderWidget: FC = () => {
   const {pathname} = useLocation();
 
   const isBuilderMode = pathname.includes(
-    generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
+    generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
   );
 
   if (isBuilderMode) {
