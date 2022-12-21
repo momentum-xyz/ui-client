@@ -20,13 +20,13 @@ export const checkIfCanRequestAirdrop = (): boolean => {
 /**
  * Returns time in ms to next allowed airdrop
  *
- * @returns {number} number representing time in ms to next allowed airdrop
+ * @returns {number} number representing time in ms to next allowed airdrop, 0 if airdrop is available
  */
 export const getTimeToNextAllowedAirdrop = (): number => {
   const now = Date.now();
   const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
   const timeToNextAllowedAirdrop = lastAirdropTimestamp + AIRDROP_TIMEOUT_MS - now;
-  return timeToNextAllowedAirdrop;
+  return timeToNextAllowedAirdrop > 0 ? timeToNextAllowedAirdrop : 0;
 };
 
 /**
@@ -39,11 +39,12 @@ export const getDateOfNextAllowedAirdrop = <B extends boolean = false>(
   toDate?: B
 ): B extends true ? Date : string => {
   const now = Date.now();
-  if (checkIfCanRequestAirdrop()) {
+  const timeToNextAllowedAirdrop = getTimeToNextAllowedAirdrop();
+  const canRequestAirdrop = timeToNextAllowedAirdrop <= 0;
+  if (canRequestAirdrop) {
     return (toDate ? new Date(now) : 'Now') as B extends true ? Date : string;
   }
-  const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
-  const airdropAvailableDate = new Date(lastAirdropTimestamp + AIRDROP_TIMEOUT_MS);
+  const airdropAvailableDate = new Date(timeToNextAllowedAirdrop + now);
   return (
     toDate
       ? airdropAvailableDate

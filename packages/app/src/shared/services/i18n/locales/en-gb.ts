@@ -92,7 +92,7 @@ export const enGb = {
       requestAirdrop: 'Get tokens',
       requestAirdropSuccess: 'Request for airdrop was successful',
       requestAirdropFailed: 'Request for airdrop failed',
-      nextAirdropAvailableOn: 'Next airdrop available on {{date}}',
+      nextAirdropAvailableOn: 'Next airdrop available at {{date}}',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       setAmountSymbol: 'Set Amount, {{symbol}}',

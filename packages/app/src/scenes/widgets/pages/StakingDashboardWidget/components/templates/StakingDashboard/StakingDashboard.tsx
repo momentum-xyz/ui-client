@@ -142,6 +142,8 @@ const StakingDashboard: FC = () => {
       .then(() => {
         console.log('requestAirdrop success');
         toast.info(<ToastContent title={t('staking.requestAirdropSuccess')} showCloseButton />);
+        setCanRequestAirdrop(checkIfCanRequestAirdrop());
+        setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
       })
       .catch((err) => {
         console.log('requestAirdrop error', err);
