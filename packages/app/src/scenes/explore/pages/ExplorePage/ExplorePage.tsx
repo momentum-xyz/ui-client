@@ -6,11 +6,10 @@ import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
-import {SelectedOdyssey} from './components';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {exploreStore, authStore, nftStore, map3dStore, widgetsStore} = useStore();
+  const {exploreStore, nftStore, widgetsStore} = useStore();
 
   const history = useHistory();
 
@@ -29,33 +28,7 @@ const ExplorePage: FC = () => {
   return (
     <styled.Container>
       <styled.Wrapper>
-        <styled.Boxes>
-          {!!map3dStore.selectedOdyssey && (
-            <SelectedOdyssey
-              odyssey={map3dStore.selectedOdyssey}
-              alreadyConnected={nftStore.isAlreadyConnected(map3dStore.selectedOdyssey.owner)}
-              onTeleport={() => {
-                console.log(map3dStore.selectedOdyssey);
-                if (map3dStore.selectedOdyssey?.uuid) {
-                  history.push(
-                    generatePath(ROUTES.odyssey.base, {worldId: map3dStore.selectedOdyssey?.uuid})
-                  );
-                }
-              }}
-              onConnect={
-                map3dStore.selectedOdyssey.owner !== authStore.wallet
-                  ? () => {
-                      if (map3dStore.selectedOdyssey) {
-                        nftStore.setConnectToNftItemId(map3dStore.selectedOdyssey.id);
-                      }
-                    }
-                  : undefined
-              }
-              onDock={() => alert(`Dock`)}
-              onClose={map3dStore.unselectOdyssey}
-            />
-          )}
-        </styled.Boxes>
+        <styled.Boxes />
 
         <styled.Boxes>
           <ExplorePanel
@@ -64,9 +37,8 @@ const ExplorePage: FC = () => {
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
-            onSelect={async (nft) => {
-              const statistics = await nftStore.getStatisticsByWallet(nft.owner);
-              map3dStore.selectOdyssey(nft, statistics);
+            onSelect={(nft) => {
+              widgetsStore.odysseyInfoStore.open(nft);
               widgetsStore.profileStore.profileDialog.close();
             }}
             onTeleport={(nft) => {

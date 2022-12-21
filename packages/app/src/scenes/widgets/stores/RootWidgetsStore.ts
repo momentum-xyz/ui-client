@@ -23,6 +23,7 @@ const RootWidgetsStore = types.model('RootWidgetsStore', {
   calendarStore: types.optional(CalendarStore, {}),
   onlineUsersStore: types.optional(OnlineUsersStore, {}),
   odysseyBioStore: types.optional(OdysseyBioStore, {}),
+  odysseyInfoStore: types.optional(OdysseyBioStore, {}),
   mutualConnectionsStore: types.optional(MutualConnectionsStore, {})
 });
 

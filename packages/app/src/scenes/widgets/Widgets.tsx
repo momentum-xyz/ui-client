@@ -16,6 +16,7 @@ import {
   OnlineUsersWidget,
   NotificationsWidget,
   OdysseyBioWidget,
+  OdysseyInfoWidget,
   WorldBuilderWidget,
   SearchUsersWidget,
   MutualConnectionsWidget,
@@ -31,17 +32,9 @@ interface PropsInterface {
 const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
-  const {
-    sessionStore,
-    widgetsStore,
-    flightStore,
-    mainStore,
-    odysseyCreatorStore: worldBuilderStore,
-    agoraStore,
-    objectStore,
-    nftStore
-  } = useStore();
-  const {onlineUsersStore, odysseyBioStore, calendarStore, mutualConnectionsStore} = widgetsStore;
+  const {sessionStore, widgetsStore, flightStore, mainStore, agoraStore, objectStore, nftStore} =
+    useStore();
+  const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
@@ -50,17 +43,8 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    // worldBuilderStore.fetchPermissions();
-    odysseyBioStore.init(nftStore.nftItems, worldStore.worldId);
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
-  }, [
-    nftStore.nftItems,
-    odysseyBioStore,
-    onlineUsersStore,
-    sessionStore.userId,
-    worldBuilderStore,
-    worldStore.worldId
-  ]);
+  }, [onlineUsersStore, sessionStore.userId, worldStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
@@ -75,8 +59,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   };
 
   const handleOpenOdysseyWidget = () => {
-    calendarStore.eventList.fetchSpaceEvents(worldStore.worldId);
-    odysseyBioStore.widget.toggle();
+    odysseyBioStore.open(nftStore.nftItems.find((nft) => nft.uuid === worldStore.worldId));
   };
 
   return (
@@ -234,6 +217,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       )}
       {onlineUsersStore.searchWidget.isOpen && <SearchUsersWidget />}
       {widgetsStore.odysseyBioStore.widget.isOpen && <OdysseyBioWidget />}
+      {widgetsStore.odysseyInfoStore.widget.isOpen && <OdysseyInfoWidget />}
       {widgetsStore.profileStore.profileDialog.isOpen && (
         <ProfileWidget isExploreView={!!isExplorePage} />
       )}

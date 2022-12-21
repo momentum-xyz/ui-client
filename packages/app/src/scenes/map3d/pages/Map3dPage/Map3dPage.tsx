@@ -11,19 +11,16 @@ interface PropsInterface {
 }
 
 const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
-  const {nftStore, authStore, map3dStore, sessionStore} = useStore();
+  const {nftStore, authStore, widgetsStore, sessionStore} = useStore();
+  const {odysseyInfoStore} = widgetsStore;
 
   const handleSelect = useCallback(
-    async (uuid: string) => {
+    (uuid: string) => {
       if (isClickActive) {
-        const nft = nftStore.nftItems.find((i) => i.uuid === uuid);
-        if (nft) {
-          const statistics = await nftStore.getStatisticsByWallet(nft.owner);
-          map3dStore.selectOdyssey(nft, statistics);
-        }
+        odysseyInfoStore.open(nftStore.nftItems.find((i) => i.uuid === uuid));
       }
     },
-    [isClickActive, map3dStore, nftStore]
+    [isClickActive, nftStore, odysseyInfoStore]
   );
 
   // FIXME: Make a view under the NFT store
