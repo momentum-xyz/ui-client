@@ -14,15 +14,16 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
   const {nftStore, authStore, map3dStore, sessionStore} = useStore();
 
   const handleSelect = useCallback(
-    (uuid: string) => {
+    async (uuid: string) => {
       if (isClickActive) {
         const nft = nftStore.nftItems.find((i) => i.uuid === uuid);
         if (nft) {
-          map3dStore.selectOdyssey(nft);
+          const statistics = await nftStore.getStatisticsByWallet(nft.owner);
+          map3dStore.selectOdyssey(nft, statistics);
         }
       }
     },
-    [isClickActive, map3dStore, nftStore.nftItems]
+    [isClickActive, map3dStore, nftStore]
   );
 
   // FIXME: Make a view under the NFT store

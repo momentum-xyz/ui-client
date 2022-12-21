@@ -64,8 +64,9 @@ const ExplorePage: FC = () => {
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
             onSearch={nftStore.searchNft}
-            onSelect={(nft) => {
-              map3dStore.selectOdyssey(nft);
+            onSelect={async (nft) => {
+              const statistics = await nftStore.getStatisticsByWallet(nft.owner);
+              map3dStore.selectOdyssey(nft, statistics);
               widgetsStore.profileStore.profileDialog.close();
             }}
             onTeleport={(nft) => {
