@@ -2,7 +2,13 @@ import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
 import {BN, formatBalance} from '@polkadot/util';
 import {web3FromAddress} from '@polkadot/extension-dapp';
-import {ResetModel, Dialog, RequestModel} from '@momentum-xyz/core';
+import {
+  ResetModel,
+  Dialog,
+  RequestModel,
+  checkIfCanRequestAirdrop,
+  saveLastAirdropInfo
+} from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, SearchQuery} from 'core/models';
@@ -645,6 +651,11 @@ const NftStore = types
         self.setRequestFundsStatus('error');
         throw new Error('Channel is not initialized');
       }
+
+      if (!checkIfCanRequestAirdrop()) {
+        throw new Error('Wait at least 24 hours before requesting airdrop again');
+      }
+
       const {account, options} = yield prepareSignAndSend(address);
       const tx = self.channel.tx.faucet.getTokens();
 
@@ -662,6 +673,7 @@ const NftStore = types
           }).catch(reject);
         });
         self.setRequestFundsStatus('success');
+        saveLastAirdropInfo();
         console.log('Request airdrop success');
       } catch (err) {
         console.log('Error getting airdrop:', err);

@@ -9,14 +9,9 @@ import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
 
 const OdysseyCreator: FC = () => {
   useEffect(() => {
-    const isOn = UnityService.isBuildMode;
-    if (!isOn) {
-      UnityService.toggleBuildMode();
-    }
+    UnityService.toggleBuildMode();
     return () => {
-      if (isOn) {
-        UnityService.toggleBuildMode();
-      }
+      UnityService.toggleBuildMode();
     };
   }, []);
 

@@ -5,11 +5,11 @@ import {Avatar, PanelLayout, Portal, SearchInput, SvgButton, Text} from '@moment
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
+import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './SearchUsersWidget.styled';
-import {UserProfilePanel} from './components';
 
 const DIALOG_WIDTH_PX = 296;
 
@@ -17,6 +17,8 @@ const SearchUsersWidget: FC = () => {
   const {mainStore, widgetsStore, nftStore, authStore, sessionStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
+
+  const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -40,10 +42,22 @@ const SearchUsersWidget: FC = () => {
     history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     unityStore.loadWorldById(worldId, authStore.token);
   };
+  const handleOdysseyTeleport = () => {
+    handleTeleport(onlineUsersStore.odyssey?.uuid || '');
+  };
 
   const handleHighFive = (userId: string) => {
     console.log(`Calling sendHighFive to ${userId} ...`);
     unityStore.sendHighFive(userId);
+  };
+  const handleOdysseyHighFive = () => {
+    handleHighFive(onlineUsersStore.odyssey?.uuid || '');
+  };
+
+  const handleConnect = () => {
+    if (onlineUsersStore.odyssey) {
+      nftStore.setConnectToNftItemId(onlineUsersStore.odyssey.id);
+    }
   };
 
   const handleUserClick = (id: string) => {
@@ -147,24 +161,33 @@ const SearchUsersWidget: FC = () => {
           </PanelLayout>
           <styled.UsersContainer>
             {onlineUsersStore.selectedUserId && (
-              <UserProfilePanel
-                odyssey={onlineUsersStore.odyssey}
-                user={onlineUsersStore.user}
-                userAvatar={onlineUsersStore.avatarSrc}
-                onTeleport={handleTeleport}
-                onHighFive={handleHighFive}
+              <PanelLayout
+                title={onlineUsersStore.odyssey?.name ?? onlineUsersStore.user?.name}
                 onClose={onlineUsersStore.unselectUser}
-                alreadyConnected={nftStore.isAlreadyConnected(
-                  onlineUsersStore.odyssey?.owner || ''
-                )}
-                onConnect={() => {
-                  if (onlineUsersStore.odyssey) {
-                    nftStore.setConnectToNftItemId(onlineUsersStore.odyssey.id);
+                componentSize={{width: '315px'}}
+                headerStyle="uppercase"
+                showCloseButton
+              >
+                <OdysseyInfo
+                  odyssey={onlineUsersStore.odyssey}
+                  alreadyConnected={isAlreadyConnected}
+                  onVisit={handleOdysseyTeleport}
+                  visitDisabled={
+                    !onlineUsersStore.nftId ||
+                    onlineUsersStore.odyssey?.uuid === onlineUsersStore.worldId
                   }
-                }}
-                nftId={onlineUsersStore.nftId}
-                worldId={onlineUsersStore.worldId}
-              />
+                  onHighFive={handleOdysseyHighFive}
+                  onConnect={handleConnect}
+                  connectDisabled={
+                    !onlineUsersStore.nftId ||
+                    onlineUsersStore.odyssey?.uuid === onlineUsersStore.worldId ||
+                    isAlreadyConnected
+                  }
+                  onCoCreate={() => {}}
+                  coCreateDisabled
+                  avatar={onlineUsersStore.avatarSrc}
+                />
+              </PanelLayout>
             )}
           </styled.UsersContainer>
         </styled.OuterContainer>
