@@ -42,6 +42,9 @@ const OdysseyWidget: FC<PropsInterface> = () => {
       offset={{left: MENU_OFFSET_LEFT, top: MENU_OFFSET_TOP}}
       showBackground={false}
       headerStyle="uppercase"
+      headerType="h1"
+      hasBottomPadding={false}
+      shortTopPadding
       layoutSize={{width: '315px'}}
       onClose={odysseyStore.widget.close}
       showCloseButton
