@@ -1,13 +1,12 @@
 import React, {FC, useCallback, useEffect, useMemo} from 'react';
-import {Route, Switch, useHistory, useParams} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Navigation, NavigationTabInterface} from '@momentum-xyz/ui-kit';
+import {Navigation} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {PrivateSpaceError} from 'core/errors';
-import {createRoutesByConfig} from 'core/utils';
 import {useStore, useDeviceChange} from 'shared/hooks';
 import {StageModeRequestEnum} from 'core/enums';
 import {ToastContent, TOAST_GROUND_OPTIONS, NewDeviceDialog, CountdownDialog} from 'ui-kit';
@@ -19,14 +18,13 @@ import {
   PrepareOnStageDialog
 } from './pages/StageModePage/components';
 import {EmojiAnimationDock} from './components';
-import {COLLABORATION_ROUTES, buildNavigationTabs} from './Collaboration.routes';
+import {buildNavigationTabs} from './Collaboration.routes';
 import * as styled from './Collaboration.styled';
-import {CollaborationPluginPage} from './pages';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore, liveStreamStore, pluginsStore} = mainStore;
+  const {agoraStore, liveStreamStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
   const {
     newDeviceDialog,
@@ -66,10 +64,6 @@ const Collaboration: FC = () => {
       }
     });
   }, [agoraStore, history, rootStore, spaceId, t]);
-
-  useEffect(() => {
-    pluginsStore.fetchSpacePlugins(spaceId);
-  }, [pluginsStore, spaceId]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -144,54 +138,24 @@ const Collaboration: FC = () => {
   const {device} = useDeviceChange(newDeviceDialog.open);
 
   const tabs = useMemo(() => {
-    const pluginTabs: NavigationTabInterface[] = pluginsStore.spacePlugins.map((plugin) => ({
-      // path: generatePath(ROUTES.collaboration.plugin, {spaceId, subPath: plugin.subPath}),
-      path: '',
-      iconName: plugin.iconName
-    }));
-
     return [
       ...buildNavigationTabs(
         spaceId,
         agoraStore.isStageMode,
         !!agoraScreenShareStore.videoTrack,
         liveStreamStore.isStreaming
-      ),
-      ...pluginTabs
+      )
     ];
   }, [
     agoraScreenShareStore.videoTrack,
     agoraStore.isStageMode,
     liveStreamStore.isStreaming,
-    pluginsStore.spacePlugins,
     spaceId
   ]);
 
   return (
     <styled.Container>
       <Navigation tabs={tabs} />
-
-      <Switch>
-        {createRoutesByConfig(COLLABORATION_ROUTES)}
-        {pluginsStore.spacePlugins.map((plugin) => {
-          const isDynamicScriptLoaded =
-            pluginsStore.dynamicScriptsStore.getScript(plugin.scopeName)?.isLoaded ?? false;
-
-          pluginsStore.loadPluginIfNeeded(plugin, isDynamicScriptLoaded);
-
-          return (
-            <Route
-              key={plugin.id}
-              // path={generatePath(ROUTES.collaboration.plugin, {subPath: plugin.subPath, spaceId})}
-              exact={plugin.exact}
-            >
-              {plugin.plugin && (
-                <CollaborationPluginPage plugin={plugin.plugin} pluginLoader={plugin} />
-              )}
-            </Route>
-          );
-        })}
-      </Switch>
 
       {newDeviceDialog.isOpen && (
         <NewDeviceDialog

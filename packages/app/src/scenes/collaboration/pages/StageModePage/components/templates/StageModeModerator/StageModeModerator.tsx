@@ -27,8 +27,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
-  const {spaceStore, removeParticipantFromStageDialog, streamChatStore, screenShareStore} =
-    collaborationStore;
+  const {spaceStore, removeParticipantFromStageDialog, streamChatStore} = collaborationStore;
   const {space} = spaceStore;
 
   const history = useHistory();
@@ -66,17 +65,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
     await Promise.all([userDevicesStore.mute(), userDevicesStore.turnOffCamera()]);
 
     await agoraStageModeStore.leaveStage(userDevicesStore.cleanupLocalTracks);
-
-    if (sessionStore.userId === screenShareStore.screenOwnerId) {
-      agoraScreenShareStore.stopScreenSharing();
-    }
-  }, [
-    agoraScreenShareStore,
-    agoraStageModeStore,
-    screenShareStore.screenOwnerId,
-    sessionStore.userId,
-    userDevicesStore
-  ]);
+  }, [agoraScreenShareStore, agoraStageModeStore, sessionStore.userId, userDevicesStore]);
 
   useEffect(() => {
     if (!collaborationStore.isModerator && spaceStore?.id) {
