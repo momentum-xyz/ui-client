@@ -316,7 +316,7 @@ export const enGb = {
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
-      version: 'Version {{version}}',
+      version: 'Odyssey version {{version}}',
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
