@@ -31,6 +31,9 @@ const SessionStore = types
     },
     get userId(): string {
       return self.user?.id || '';
+    },
+    get isGuest(): boolean {
+      return self.user?.isGuest ?? true;
     }
   }))
   .actions((self) => ({

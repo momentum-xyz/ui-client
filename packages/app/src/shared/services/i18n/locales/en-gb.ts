@@ -110,6 +110,9 @@ export const enGb = {
         'You can freely visit any users open Odyssey. You can explore and meet them just by clicking on their Odyssey. However, to create a portal between your Odyssey and another users Odyssey, you will need to stake in them. By staking you show your support for another Odyssey.',
       connectTitle: 'Connect to another Odyssey',
       startContributing: 'Start Contributing',
+      guestStakingMessage: 'Connecting and Staking are on-chain actions that require a wallet.',
+      guestWalletMessage:
+        'Click here to get started making a wallet and connect it to your odyssey account.',
       unStakeFrom: 'Unstake From',
       unStake: 'Unstake',
       errorUnstake: 'Error unstaking',
