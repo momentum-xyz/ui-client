@@ -18,7 +18,7 @@ export interface OdysseyItemInterface extends NftItemInterface {
   events: number;
 }
 
-const OdysseyStore = types.compose(
+const OdysseyBioStore = types.compose(
   ResetModel,
   types
     .model('OdysseyStore', {
@@ -106,4 +106,4 @@ const OdysseyStore = types.compose(
     }))
 );
 
-export {OdysseyStore};
+export {OdysseyBioStore};

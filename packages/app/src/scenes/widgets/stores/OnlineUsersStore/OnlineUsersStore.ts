@@ -15,7 +15,7 @@ import {
 import {NftItem, NftItemInterface} from 'stores/NftStore/models';
 import {appVariables} from 'api/constants';
 
-import {OdysseyItemInterface} from '../OdysseyStore';
+import {OdysseyItemInterface} from '../OdysseyBioStore';
 
 const OnlineUsersStore = types
   .compose(

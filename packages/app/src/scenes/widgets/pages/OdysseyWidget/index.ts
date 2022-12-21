@@ -1,1 +1,1 @@
-export {default as OdysseyWidget} from './OdysseyWidget';
+export {default as OdysseyBioWidget} from './OdysseyBioWidget';
