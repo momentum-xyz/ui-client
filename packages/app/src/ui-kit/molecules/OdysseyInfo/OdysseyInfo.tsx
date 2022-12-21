@@ -97,9 +97,11 @@ const OdysseyInfo: FC<PropsInterface> = ({
         </styled.TopContainer>
       </styled.Container>
 
-      <styled.Description>
-        <Text size="xxs" text={odyssey.description} align="left" />
-      </styled.Description>
+      {odyssey.description && (
+        <styled.Description>
+          <Text size="xxs" text={odyssey.description} align="left" />
+        </styled.Description>
+      )}
 
       <styled.Statistics>{t('titles.statistics')}</styled.Statistics>
 
