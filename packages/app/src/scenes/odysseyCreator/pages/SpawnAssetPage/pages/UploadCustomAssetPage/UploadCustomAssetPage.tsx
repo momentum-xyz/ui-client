@@ -67,7 +67,7 @@ const UploadCustomAssetPage: FC = () => {
       {asset && (
         <>
           <styled.PreviewContainer>
-            <Model3dPreview file={asset} />
+            <Model3dPreview filename={URL.createObjectURL(asset)} />
           </styled.PreviewContainer>
           <styled.NameInput
             placeholder={t('placeholders.nameYourAssetForYourLibrary')}

@@ -42,10 +42,10 @@ const createScene = (canvas: HTMLCanvasElement) => {
 };
 
 export interface PropsInterface {
-  file: File;
+  filename: string;
 }
 
-export const Model3dPreview: FC<PropsInterface> = ({file}) => {
+export const Model3dPreview: FC<PropsInterface> = ({filename}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [scene, setScene] = useState<Scene>();
@@ -73,7 +73,7 @@ export const Model3dPreview: FC<PropsInterface> = ({file}) => {
     }
 
     const loader = new GLTFLoader();
-    const filename = URL.createObjectURL(file);
+
     console.log('Loading 3D model', filename);
 
     let _gltf: GLTF;
@@ -112,7 +112,7 @@ export const Model3dPreview: FC<PropsInterface> = ({file}) => {
         renderRef.current = undefined;
       }
     };
-  }, [scene, file]);
+  }, [scene, filename]);
 
   return <styled.Canvas style={{width: '100%', height: '100%'}} ref={canvasRef} />;
 };
