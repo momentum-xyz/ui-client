@@ -95,7 +95,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               title={t('labels.connections')}
               icon="user-network"
               size="medium"
-              disabled={sessionStore.user?.isGuest}
+              disabled={sessionStore.isGuest}
               onClick={mutualConnectionsStore.widget.open}
               state={{canGoBack: true}}
             />
@@ -104,7 +104,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               title={t('labels.staking')}
               icon="wallet"
               size="medium"
-              disabled={sessionStore.user?.isGuest}
+              disabled={sessionStore.isGuest}
               onClick={nftStore.stakingDashorboardDialog.toggle}
               isSelected={nftStore.stakingDashorboardDialog.isOpen}
               state={{canGoBack: true}}
