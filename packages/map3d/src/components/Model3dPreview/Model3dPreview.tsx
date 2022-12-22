@@ -8,7 +8,8 @@ import * as styled from './Model3dPreview.styled';
 const createScene = (canvas: HTMLCanvasElement) => {
   const renderer = new WebGLRenderer({
     canvas,
-    antialias: true
+    antialias: true,
+    alpha: true
   });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
