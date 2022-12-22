@@ -9,7 +9,16 @@ const AppAuth: FC = ({children}) => {
 
   useEffect(() => {
     if (authStore.hasToken) {
-      sessionStore.loadUserProfile();
+      sessionStore
+        .loadUserProfile()
+        .catch((err) => {
+          console.error('Error while loading user profile', err);
+        })
+        .then((userId) => {
+          if (!userId) {
+            document.location.href = ROUTES.signIn;
+          }
+        });
     } else {
       document.location.href = ROUTES.signIn;
     }
