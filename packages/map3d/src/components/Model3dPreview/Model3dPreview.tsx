@@ -2,6 +2,7 @@ import {useEffect, FC, useState, useRef} from 'react';
 import {Scene, DirectionalLight, AmbientLight, WebGLRenderer, PerspectiveCamera} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {ProgressBar} from '@momentum-xyz/ui-kit';
 
 import * as styled from './Model3dPreview.styled';
 
@@ -48,6 +49,7 @@ export interface PropsInterface {
 export const Model3dPreview: FC<PropsInterface> = ({filename}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const [progress, setProgress] = useState<number | null>(null);
   const [scene, setScene] = useState<Scene>();
   const renderRef = useRef<() => void>();
 
@@ -88,20 +90,27 @@ export const Model3dPreview: FC<PropsInterface> = ({filename}) => {
       }
     };
 
+    setProgress(0);
     loader.load(
       filename,
       (gltf) => {
         console.log('Loaded 3D model', gltf);
         _gltf = gltf;
+        if (loadedGltfRef.current) {
+          scene.remove(loadedGltfRef.current.scene);
+        }
         scene.add(gltf.scene);
+        setProgress(null);
 
         recursiveAnimate();
       },
       (progress) => {
         console.log(progress);
+        setProgress(Math.ceil((progress.loaded / progress.total) * 100));
       },
       (err) => {
         console.log('Error loading 3D model', err);
+        setProgress(null);
       }
     );
 
@@ -114,7 +123,16 @@ export const Model3dPreview: FC<PropsInterface> = ({filename}) => {
     };
   }, [scene, filename]);
 
-  return <styled.Canvas style={{width: '100%', height: '100%'}} ref={canvasRef} />;
+  return (
+    <>
+      {progress !== null && (
+        <styled.ProgressBarHolder>
+          <ProgressBar percent={progress} />
+        </styled.ProgressBarHolder>
+      )}
+      <styled.Canvas style={{width: '100%', height: '100%'}} ref={canvasRef} />;
+    </>
+  );
 };
 
 export default Model3dPreview;
