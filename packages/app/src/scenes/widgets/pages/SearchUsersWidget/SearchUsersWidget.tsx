@@ -97,11 +97,11 @@ const SearchUsersWidget: FC = () => {
                       <OnlineUser
                         key={user.id}
                         user={user}
-                        worldId={worldStore.worldId}
-                        currentUser={sessionStore.userId}
                         onTeleportUser={handleTeleport}
                         onUserClick={handleUserClick}
                         onHighFiveUser={handleHighFive}
+                        isCurrentUser={user.id === sessionStore.userId}
+                        isCurrentWorld={user?.id === worldStore.worldId}
                       />
                     ))
                   : !onlineUsersStore.query &&
@@ -109,11 +109,11 @@ const SearchUsersWidget: FC = () => {
                       <OnlineUser
                         key={user.id}
                         user={user}
-                        worldId={worldStore.worldId}
-                        currentUser={sessionStore.userId}
                         onTeleportUser={handleTeleport}
                         onUserClick={handleUserClick}
                         onHighFiveUser={handleHighFive}
+                        isCurrentUser={user.id === sessionStore.userId}
+                        isCurrentWorld={user?.id === worldStore.worldId}
                       />
                     ))}
               </styled.List>

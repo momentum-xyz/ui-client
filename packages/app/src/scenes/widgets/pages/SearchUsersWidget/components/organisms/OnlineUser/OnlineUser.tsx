@@ -10,25 +10,25 @@ import * as styled from './OnlineUser.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  worldId: string;
-  currentUser: string;
   onUserClick: (id: string) => void;
   onTeleportUser: (id: string) => void;
   onHighFiveUser: (id: string) => void;
+  isCurrentUser: boolean;
+  isCurrentWorld: boolean;
 }
 
 const OnlineUser: FC<PropsInterface> = ({
   user,
-  worldId,
-  currentUser,
   onUserClick,
   onTeleportUser,
-  onHighFiveUser
+  onHighFiveUser,
+  isCurrentUser,
+  isCurrentWorld
 }) => {
   return (
     <styled.Container data-testid="OnlineUser-test">
       <styled.Info
-        className={cn(user.id === currentUser && 'noPointer')}
+        className={cn(isCurrentUser && 'noPointer')}
         onClick={() => onUserClick(user.id)}
       >
         <Avatar avatarSrc={user.avatarSrc} size="small" />
@@ -36,17 +36,17 @@ const OnlineUser: FC<PropsInterface> = ({
       </styled.Info>
       {!user.isGuest && (
         <styled.Toolbar>
-          {user.id === worldId && <styled.AdminText size="s" text={t('titles.admin')} />}
+          {isCurrentWorld && <styled.AdminText size="s" text={t('titles.admin')} />}
           <SvgButton
             iconName="fly-to"
             size="normal"
-            disabled={user?.id === worldId}
+            disabled={isCurrentWorld}
             onClick={() => onTeleportUser(user.id)}
           />
           <SvgButton
             iconName="high-five"
             size="normal"
-            disabled={user?.id === currentUser}
+            disabled={isCurrentUser}
             onClick={() => {
               onHighFiveUser(user.id);
             }}
