@@ -53,6 +53,9 @@ const ExplorePage: FC = () => {
             }}
             // FIXME id type
             onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
+            onOpenOdyssey={(uuid) =>
+              widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid))
+            }
           />
         </styled.Boxes>
       </styled.Wrapper>

@@ -10,6 +10,7 @@ export const Avatar = styled.img`
   height: 40px;
   border-radius: 50%;
   border: 1px solid var(--white);
+  cursor: pointer;
 `;
 
 export const AvatarAhead = styled.img`
@@ -19,6 +20,7 @@ export const AvatarAhead = styled.img`
   border-radius: 50%;
   border: 1px solid var(--white);
   right: 0;
+  cursor: pointer;
 `;
 
 export const Info = styled.div`
@@ -26,13 +28,15 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+`;
 
+export const ConnectedInfo = styled.div`
+  display: flex;
+  flex-wrap: wrap;
   & > div {
-    display: flex;
-    flex-wrap: wrap;
-
-    & > div {
-      white-space: pre;
+    white-space: pre;
+    &.username {
+      cursor: pointer;
     }
   }
 `;

@@ -12,10 +12,12 @@ import * as styled from './ConnectedItem.styled';
 interface PropsInterface {
   item: NftFeedItemInterface;
   userId?: string;
+  onOpenOdyssey?: (uuid: string) => void;
 }
 
 const ConnectedItem: FC<PropsInterface> = (props) => {
-  const {item, userId} = props;
+  const {item, userId, onOpenOdyssey} = props;
+
   const {t} = useTranslation();
 
   console.log(userId);
@@ -31,24 +33,36 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
     <>
       <div>
         <styled.TwoAvatarsContainer>
-          <styled.Avatar src={getImageAbsoluteUrl(item.image) || ''} />
-          <styled.AvatarAhead src={getImageAbsoluteUrl(item.connectedTo?.image) || ''} />
+          <styled.Avatar
+            src={getImageAbsoluteUrl(item.image) || ''}
+            onClick={() => onOpenOdyssey?.(item.uuid)}
+          />
+          <styled.AvatarAhead
+            src={getImageAbsoluteUrl(item.connectedTo?.image) || ''}
+            onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
+          />
         </styled.TwoAvatarsContainer>
       </div>
       <styled.Info>
         <styled.Date>{formattedDate}</styled.Date>
-        <div>
-          <Text
-            size="xxs"
-            text={stakingUserLabel}
-            weight={authUserIsStaking ? 'bold' : 'normal'}
-            decoration="underline"
-            align="left"
-          />
+        <styled.ConnectedInfo>
+          <div className="username" onClick={() => onOpenOdyssey?.(item.uuid)}>
+            <Text
+              size="xxs"
+              text={stakingUserLabel}
+              weight={authUserIsStaking ? 'bold' : 'normal'}
+              decoration="underline"
+              align="left"
+            />
+          </div>
           <Text size="xxs" text={t('newsfeed.stakedIn')} align="left" />
-          {/* <Text size="xxs" text="&nbsp;staked in&nbsp;" align="left" /> */}
-          <Text size="xxs" text={item.connectedTo?.name} decoration="underline" align="left" />
-        </div>
+          <div
+            className="username"
+            onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
+          >
+            <Text size="xxs" text={item.connectedTo?.name} decoration="underline" align="left" />
+          </div>
+        </styled.ConnectedInfo>
       </styled.Info>
     </>
   );

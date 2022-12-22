@@ -13,10 +13,11 @@ interface PropsInterface {
   onTeleport: (nft: NftItemInterface) => void;
   onAttend: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
+  onOpenOdyssey?: (uuid: string) => void;
 }
 
 const NewsFeedItem: FC<PropsInterface> = (props) => {
-  const {item, userId, onTeleport, onConnect, onAttend} = props;
+  const {item, userId, onTeleport, onConnect, onAttend, onOpenOdyssey} = props;
 
   console.warn(item);
   // eslint-disable-next-line no-debugger
@@ -28,7 +29,9 @@ const NewsFeedItem: FC<PropsInterface> = (props) => {
         <CreatedItem item={item} onTeleport={onTeleport} onConnect={onConnect} />
       )}
 
-      {item.type === 'connected' && <ConnectedItem item={item} userId={userId} />}
+      {item.type === 'connected' && (
+        <ConnectedItem item={item} userId={userId} onOpenOdyssey={onOpenOdyssey} />
+      )}
 
       {item.type === 'docked' && <DockedItem item={item} />}
 
