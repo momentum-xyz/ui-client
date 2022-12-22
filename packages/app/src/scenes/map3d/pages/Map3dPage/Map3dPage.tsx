@@ -17,7 +17,7 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
   const handleSelect = useCallback(
     (uuid: string) => {
       if (isClickActive) {
-        odysseyInfoStore.open(nftStore.nftItems.find((i) => i.uuid === uuid));
+        odysseyInfoStore.open(nftStore.getNftByUuid(uuid));
       }
     },
     [isClickActive, nftStore, odysseyInfoStore]

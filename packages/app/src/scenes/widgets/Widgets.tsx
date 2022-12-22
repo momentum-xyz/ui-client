@@ -59,7 +59,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   };
 
   const handleOpenOdysseyWidget = () => {
-    odysseyBioStore.open(nftStore.nftItems.find((nft) => nft.uuid === worldStore.worldId));
+    odysseyBioStore.open(nftStore.getNftByUuid(worldStore.worldId));
   };
 
   return (
