@@ -26,6 +26,15 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > div {
+      white-space: pre;
+    }
+  }
 `;
 
 export const Date = styled.div`
