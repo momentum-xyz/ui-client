@@ -112,4 +112,5 @@ export type IconNameType =
   | 'vibe'
   | 'wallet'
   | 'warning'
+  | 'warning2'
   | 'whitelist';

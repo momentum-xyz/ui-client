@@ -1,5 +1,13 @@
 import React, {FC, useState} from 'react';
-import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
+import {
+  Button,
+  Heading,
+  IconSvg,
+  Input,
+  TabBar,
+  TabBarTabInterface,
+  Text
+} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
@@ -11,6 +19,7 @@ import {convertToHex} from 'core/utils';
 import * as styled from './StakingForm.styled';
 
 const DEFAULT_STAKING_AMOUNT = 1;
+const ODYSSEY_GET_STARTED_WALLET = 'https://discover.odyssey.org/create-your-odyssey/get-a-wallet';
 
 const tabBarTabs: TabBarTabInterface[] = [
   {
@@ -37,11 +46,12 @@ const tabBarTabs: TabBarTabInterface[] = [
 ];
 
 interface PropsInterface {
+  isGuest?: boolean;
   nftItemId: number;
   onComplete: () => void;
 }
 
-const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
+const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const {authStore, nftStore, exploreStore} = useStore();
   const {wallet: authWallet} = authStore;
   const {
@@ -154,14 +164,31 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
                 <Text size="s" text={t('staking.stakingMessage')} align="left" />
               </styled.Section>
             </div>
-            <styled.Buttons>
-              <span />
-              <Button
-                icon="wallet"
-                label={t('staking.startContributing')}
-                onClick={() => setActiveTab(tabBarTabs[1])}
-              />
-            </styled.Buttons>
+            {isGuest ? (
+              <styled.NoWalletContainer>
+                <IconSvg name="warning2" size="normal-large" isDanger />
+                <styled.AlertMessage>
+                  <styled.TopText size="xs" text={t('staking.guestStakingMessage')} align="left" />
+                  <a href={ODYSSEY_GET_STARTED_WALLET} target="_blank">
+                    <styled.BottomText
+                      size="xxs"
+                      text={t('staking.guestWalletMessage')}
+                      align="left"
+                      weight="bold"
+                    />
+                  </a>
+                </styled.AlertMessage>
+              </styled.NoWalletContainer>
+            ) : (
+              <styled.Buttons>
+                <span />
+                <Button
+                  icon="wallet"
+                  label={t('staking.startContributing')}
+                  onClick={() => setActiveTab(tabBarTabs[1])}
+                />
+              </styled.Buttons>
+            )}
           </>
         )}
         {activeTab.id === 'wallet' && (

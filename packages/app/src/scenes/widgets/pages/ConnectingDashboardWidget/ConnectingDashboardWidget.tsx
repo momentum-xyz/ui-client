@@ -9,7 +9,7 @@ import * as styled from './ConnectingDashboardWidget.styled';
 import {StakingForm} from './components';
 
 const ConnectingDashboardWidget: FC = () => {
-  const {mainStore, nftStore} = useStore();
+  const {mainStore, nftStore, sessionStore} = useStore();
   const {unityStore} = mainStore;
 
   useEffect(() => {
@@ -33,6 +33,7 @@ const ConnectingDashboardWidget: FC = () => {
       <styled.FullSizeWrapper>
         {!!nftStore.connectToNftItemId && (
           <StakingForm
+            isGuest={sessionStore.isGuest}
             nftItemId={nftStore.connectToNftItemId}
             onComplete={() => {
               nftStore.setConnectToNftItemId(null);
