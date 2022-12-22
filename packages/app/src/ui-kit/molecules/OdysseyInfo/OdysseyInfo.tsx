@@ -20,7 +20,6 @@ interface PropsInterface {
   coCreateDisabled?: boolean;
   highFiveDisabled?: boolean;
   dockDisabled?: boolean;
-  avatar?: string;
 }
 
 const OdysseyInfo: FC<PropsInterface> = ({
@@ -35,18 +34,16 @@ const OdysseyInfo: FC<PropsInterface> = ({
   connectDisabled,
   coCreateDisabled,
   highFiveDisabled,
-  dockDisabled,
-  avatar = ''
+  dockDisabled
 }) => {
   const {t} = useTranslation();
-  const image = avatar || odyssey?.image;
 
   return (
     <styled.OdysseyInfoContainer data-testid="OdysseyInfo-test">
       <styled.Container>
         <styled.TopContainer>
           <Image
-            src={getImageAbsoluteUrl(image) || ''}
+            src={getImageAbsoluteUrl(odyssey?.image) || ''}
             sizeProps={{width: '90px', height: '90px'}}
             className="avatar"
           />

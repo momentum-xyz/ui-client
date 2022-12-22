@@ -64,10 +64,10 @@ const SearchUsersWidget: FC = () => {
     if (id === sessionStore.userId) {
       return;
     }
-    if (onlineUsersStore?.selectedUserId !== id) {
-      onlineUsersStore?.selectUser(nftStore.nftItems, id);
+    if (onlineUsersStore.selectedUserId !== id) {
+      onlineUsersStore.selectUser(nftStore.getNftByUuid(id));
     } else {
-      onlineUsersStore?.unselectUser();
+      onlineUsersStore.unselectUser();
     }
   };
 
@@ -133,19 +133,17 @@ const SearchUsersWidget: FC = () => {
                   alreadyConnected={isAlreadyConnected}
                   onVisit={handleOdysseyTeleport}
                   visitDisabled={
-                    !onlineUsersStore.nftId ||
-                    onlineUsersStore.odyssey?.uuid === onlineUsersStore.worldId
+                    !onlineUsersStore.nftId || onlineUsersStore.odyssey?.uuid === worldStore.worldId
                   }
                   onHighFive={handleOdysseyHighFive}
                   onConnect={handleConnect}
                   connectDisabled={
                     !onlineUsersStore.nftId ||
-                    onlineUsersStore.odyssey?.uuid === onlineUsersStore.worldId ||
+                    onlineUsersStore.odyssey?.uuid === worldStore.worldId ||
                     isAlreadyConnected
                   }
                   onCoCreate={() => {}}
                   coCreateDisabled
-                  avatar={onlineUsersStore.avatarSrc}
                 />
               </PanelLayout>
             )}
