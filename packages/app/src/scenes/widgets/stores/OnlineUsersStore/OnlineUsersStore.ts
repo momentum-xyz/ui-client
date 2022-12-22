@@ -1,21 +1,13 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {cloneDeep} from 'lodash-es';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
+import {api, OdysseyOnlineUsersResponse, SpaceAttributeItemResponse} from 'api';
+import {getRootStore} from 'core/utils';
 import {User} from 'core/models';
-import {
-  api,
-  FetchUserResponse,
-  GetDocksCountResponse,
-  OdysseyOnlineUsersResponse,
-  SpaceAttributeItemResponse,
-  UserInterface
-} from 'api';
 import {NftItem, NftItemInterface} from 'stores/NftStore/models';
-import {appVariables} from 'api/constants';
-
-import {OdysseyItemInterface} from '../OdysseyBioStore';
+import {OdysseyItemInterface} from 'scenes/explore/stores';
+import {WalletStatisticsInterface} from 'core/interfaces';
 
 const OnlineUsersStore = types
   .compose(
@@ -24,111 +16,97 @@ const OnlineUsersStore = types
       searchWidget: types.optional(Dialog, {}),
       odysseyUsers: types.optional(types.array(User), []),
       allUsers: types.array(User),
-      user: types.maybe(types.frozen<UserInterface>()),
       searchedUsers: types.maybe(types.array(User)),
       query: types.maybe(types.string),
-      selectedUserId: types.maybe(types.string),
+
       request: types.optional(RequestModel, {}),
-      worldId: types.maybe(types.string),
       dockRequest: types.optional(RequestModel, {}),
       fetchUserRequest: types.optional(RequestModel, {}),
-      nftItem: types.maybe(NftItem),
-      nftId: types.maybe(types.string),
-      docks: 0,
-      events: 0
+
+      selectedUserId: types.maybe(types.string),
+      nftItem: types.maybe(types.reference(NftItem)),
+      connections: 0,
+      events: 0,
+      docks: 0
     })
   )
-  .actions((self) => ({
-    init(worldId: string, userId: string): void {
-      self.worldId = worldId;
-      this.fetchOdysseyUsers(worldId, userId);
-    },
-    findOdyssey(items: Array<NftItemInterface>, worldId: string): void {
-      const nft: NftItemInterface | undefined = items.find((nft) => nft.uuid === worldId);
-      if (nft) {
-        self.nftItem = {...nft};
-        self.nftId = worldId;
-        this.fetchUser(worldId);
-      } else {
-        self.nftItem = undefined;
-        self.nftId = undefined;
-        this.fetchUser(worldId);
-      }
-    },
-    fetchUser: flow(function* (userId: string) {
-      const user: FetchUserResponse = yield self.fetchUserRequest.send(
-        api.userRepository.fetchUser,
-        {userId}
-      );
-      if (user) {
-        self.user = {...user};
-      }
-    }),
-    fetchOdysseyUsers: flow(function* (worldId: string, currentUserId: string) {
-      const response: OdysseyOnlineUsersResponse = yield self.request.send(
-        api.worldRepository.fetchOnlineUsers,
-        {worldId}
-      );
+  .actions((self) => {
+    const {getStatisticsByWallet} = getRootStore(self).nftStore;
 
-      if (response) {
-        const currentUser = response.find((user) => user.id === currentUserId);
-        if (currentUser) {
-          self.allUsers = cast([
-            {...currentUser},
-            ...response.filter((user) => user.id !== currentUserId)
-          ]);
-        }
-
-        self.odysseyUsers = cast([...response.filter((user) => user.id !== currentUserId)]);
-      }
-    }),
-    selectUser(items: Array<NftItemInterface>, userId: string) {
-      self.selectedUserId = userId;
-      this.findOdyssey(items, userId);
-      this.fetchDocksCount(userId);
-      this.fetchEventsCount(userId);
-    },
-    unselectUser() {
-      self.selectedUserId = undefined;
-      self.user = undefined;
-    },
-    searchUsers(query: string): void {
-      if (query.length > 0) {
-        self.query = query;
-        const users = cloneDeep(
-          self.allUsers.filter((user) => user.name.toLowerCase().includes(query))
+    return {
+      init(worldId: string, userId: string): void {
+        this.fetchOdysseyUsers(worldId, userId);
+      },
+      fetchOdysseyUsers: flow(function* (worldId: string, currentUserId: string) {
+        const response: OdysseyOnlineUsersResponse = yield self.request.send(
+          api.worldRepository.fetchOnlineUsers,
+          {worldId}
         );
-        self.searchedUsers = cast(users);
-      } else {
-        self.searchedUsers = undefined;
-        self.query = undefined;
-      }
-    },
-    fetchDocksCount: flow(function* (spaceId: string) {
-      const response: GetDocksCountResponse | undefined = yield self.request.send(
-        api.spaceRepository.fetchDocksCount,
-        {spaceId}
-      );
 
-      if (response) {
-        self.docks = response.count;
-      }
-    }),
-    fetchEventsCount: flow(function* (spaceId: string) {
-      const response: SpaceAttributeItemResponse = yield self.request.send(
-        api.eventsRepository.getEventAttributes,
-        {
-          spaceId
+        if (response) {
+          const currentUser = response.find((user) => user.id === currentUserId);
+          if (currentUser) {
+            self.allUsers = cast([
+              {...currentUser},
+              ...response.filter((user) => user.id !== currentUserId)
+            ]);
+          }
+
+          self.odysseyUsers = cast([...response.filter((user) => user.id !== currentUserId)]);
         }
-      );
+      }),
+      async selectUser(item?: NftItemInterface) {
+        if (item?.uuid) {
+          const statistics = await getStatisticsByWallet(item.owner);
 
-      if (response && Object.keys(response).length) {
-        self.events = Object.keys(response).length;
-      } else {
+          this.setNft(item);
+          this.setStatistics(statistics);
+          this.fetchEventsCount(item.uuid);
+        }
+      },
+      unselectUser() {
+        self.nftItem = undefined;
+        self.selectedUserId = undefined;
+        self.connections = 0;
         self.events = 0;
-      }
-    })
-  }))
+        self.docks = 0;
+      },
+      searchUsers(query: string): void {
+        if (query.length > 0) {
+          self.query = query;
+          const users = cloneDeep(
+            self.allUsers.filter((user) => user.name.toLowerCase().includes(query))
+          );
+          self.searchedUsers = cast(users);
+        } else {
+          self.searchedUsers = undefined;
+          self.query = undefined;
+        }
+      },
+      setNft(nft: NftItemInterface): void {
+        self.selectedUserId = nft.uuid;
+        self.nftItem = nft;
+      },
+      setStatistics(statistics: WalletStatisticsInterface): void {
+        self.connections = statistics.connectionsCount;
+        self.docks = statistics.mutualConnectionsCount;
+      },
+      fetchEventsCount: flow(function* (spaceId: string) {
+        const response: SpaceAttributeItemResponse = yield self.request.send(
+          api.eventsRepository.getEventAttributes,
+          {
+            spaceId
+          }
+        );
+
+        if (response && Object.keys(response).length) {
+          self.events = Object.keys(response).length;
+        } else {
+          self.events = 0;
+        }
+      })
+    };
+  })
   .views((self) => ({
     get odyssey(): OdysseyItemInterface | null {
       if (!self.nftItem) {
@@ -137,19 +115,10 @@ const OnlineUsersStore = types
 
       return {
         ...self.nftItem,
-        connections: 0,
+        connections: self.connections,
         docking: self.docks,
         events: self.events
       };
-    },
-    get avatarSrc(): string | undefined {
-      if (!self.user) {
-        return '';
-      }
-      return (
-        self.user?.profile.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.user.profile.avatarHash}`
-      );
     }
   }));
 
