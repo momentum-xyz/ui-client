@@ -93,16 +93,24 @@ const StakingDashboard: FC = () => {
       .getRewards(wallet)
       .then(() => {
         console.log('getRewards success');
-        toast.info(<ToastContent title={t('staking.successUnstake')} showCloseButton />);
+        toast.info(
+          <ToastContent
+            headerIconName="alert"
+            title={t('staking.rewardSuccessTitle')}
+            text={t('staking.successGetRewards')}
+            showCloseButton
+          />
+        );
         nftStore.stakingDashorboardDialog.close();
       })
       .catch((err) => {
         console.log('stake error', err);
         toast.error(
           <ToastContent
+            headerIconName="alert"
             isDanger
-            title={t('titles.alert')}
-            text={t('staking.errorGetRewards')}
+            title={t('staking.rewardErrorTitle')}
+            text={t('staking.error')}
             showCloseButton
           />
         );
@@ -126,12 +134,29 @@ const StakingDashboard: FC = () => {
       })
       .then(() => {
         console.log('unstake success');
-        toast.info(<ToastContent title={t('staking.successUnstake')} showCloseButton />);
+        toast.info(
+          <ToastContent
+            headerIconName="alert"
+            title={t('staking.unStakeSuccessTitle')}
+            text={t('staking.successUnstake', {
+              amount: formatTokenAmount(amount, chainDecimals, tokenSymbol)
+            })}
+            showCloseButton
+          />
+        );
         nftStore.stakingDashorboardDialog.close();
       })
       .catch((err) => {
         console.log('unstake error', err);
-        toast.error(<ToastContent isDanger title={t('staking.errorUnstake')} showCloseButton />);
+        toast.error(
+          <ToastContent
+            headerIconName="alert"
+            isDanger
+            title={t('staking.unStakeErrorTitle')}
+            text={t('staking.error')}
+            showCloseButton
+          />
+        );
       });
   };
   const onRequestAirdrop = () => {
@@ -141,7 +166,14 @@ const StakingDashboard: FC = () => {
       .requestAirdrop(wallet)
       .then(() => {
         console.log('requestAirdrop success');
-        toast.info(<ToastContent title={t('staking.requestAirdropSuccess')} showCloseButton />);
+        toast.info(
+          <ToastContent
+            headerIconName="alert"
+            title={t('staking.airdropSuccessTitle')}
+            text={t('staking.requestAirdropSuccess')}
+            showCloseButton
+          />
+        );
         setCanRequestAirdrop(checkIfCanRequestAirdrop());
         setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
       })
@@ -151,8 +183,9 @@ const StakingDashboard: FC = () => {
         setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
         toast.error(
           <ToastContent
+            headerIconName="alert"
             isDanger
-            title={t('titles.alert')}
+            title={t('staking.airdropErrorTitle')}
             text={t('staking.requestAirdropFailed')}
             showCloseButton
           />

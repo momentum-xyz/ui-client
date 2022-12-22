@@ -114,12 +114,27 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
         }
       })
       .then(() => {
-        toast.info(<ToastContent title={t('staking.stakeSuccess')} showCloseButton />);
+        toast.info(
+          <ToastContent
+            headerIconName="alert"
+            title={t('staking.stakeSuccessTitle')}
+            text={t('staking.stakeSuccess', {amount})}
+            showCloseButton
+          />
+        );
         onComplete();
       })
       .catch((err) => {
         console.log('stake error', err);
-        toast.error(<ToastContent isDanger title={t('staking.stakeError')} showCloseButton />);
+        toast.error(
+          <ToastContent
+            headerIconName="alert"
+            isDanger
+            title={t('staking.stakeErrorTitle')}
+            text={t('staking.error')}
+            showCloseButton
+          />
+        );
       });
   };
 
