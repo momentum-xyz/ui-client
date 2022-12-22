@@ -1,8 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
-import {Avatar, PanelLayout, Portal, SearchInput, SvgButton, Text} from '@momentum-xyz/ui-kit';
-import cn from 'classnames';
+import {PanelLayout, Portal, SearchInput} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
@@ -10,6 +9,7 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './SearchUsersWidget.styled';
+import {OnlineUser} from './components';
 
 const DIALOG_WIDTH_PX = 296;
 
@@ -94,67 +94,27 @@ const SearchUsersWidget: FC = () => {
               <styled.List className="noScrollIndicator">
                 {onlineUsersStore.searchedUsers && onlineUsersStore.searchedUsers.length > 0
                   ? onlineUsersStore.searchedUsers.map((user) => (
-                      <styled.Item key={user.id}>
-                        <styled.Information
-                          className={cn(user.id === sessionStore.userId && 'noPointer')}
-                          onClick={() => handleUserClick(user.id)}
-                        >
-                          <Avatar avatarSrc={user.avatarSrc} size="small" />
-                          <Text size="s" text={user.name} transform="capitalized" />
-                        </styled.Information>
-                        {!user.isGuest && (
-                          <styled.RightToolbar>
-                            {user.id === worldStore.worldId && (
-                              <styled.AdminText size="s" text={t('titles.admin')} />
-                            )}
-                            <SvgButton
-                              iconName="fly-to"
-                              size="normal"
-                              disabled={user?.id === worldStore.worldId}
-                              onClick={() => handleTeleport(user?.id || '')}
-                            />
-                            <SvgButton
-                              iconName="high-five"
-                              size="normal"
-                              disabled={user?.id === sessionStore.userId}
-                              onClick={() => handleHighFive(user?.id || '')}
-                            />
-                          </styled.RightToolbar>
-                        )}
-                      </styled.Item>
+                      <OnlineUser
+                        key={user.id}
+                        user={user}
+                        onTeleportUser={handleTeleport}
+                        onUserClick={handleUserClick}
+                        onHighFiveUser={handleHighFive}
+                        isCurrentUser={user.id === sessionStore.userId}
+                        isCurrentWorld={user?.id === worldStore.worldId}
+                      />
                     ))
                   : !onlineUsersStore.query &&
                     onlineUsersStore.allUsers.map((user) => (
-                      <styled.Item key={user.id}>
-                        <styled.Information
-                          className={cn(user.id === sessionStore.userId && 'noPointer')}
-                          onClick={() => handleUserClick(user.id)}
-                        >
-                          <Avatar avatarSrc={user.avatarSrc} size="small" />
-                          <Text size="s" text={user.name} transform="capitalized" />
-                        </styled.Information>
-                        {!user.isGuest && (
-                          <styled.RightToolbar>
-                            {user.id === worldStore.worldId && (
-                              <styled.AdminText size="s" text={t('titles.admin')} />
-                            )}
-                            <SvgButton
-                              iconName="fly-to"
-                              size="normal"
-                              disabled={user?.id === worldStore.worldId}
-                              onClick={() => handleTeleport(user?.id || '')}
-                            />
-                            <SvgButton
-                              iconName="high-five"
-                              size="normal"
-                              disabled={user?.id === sessionStore.userId}
-                              onClick={() => {
-                                handleHighFive(user?.id || '');
-                              }}
-                            />
-                          </styled.RightToolbar>
-                        )}
-                      </styled.Item>
+                      <OnlineUser
+                        key={user.id}
+                        user={user}
+                        onTeleportUser={handleTeleport}
+                        onUserClick={handleUserClick}
+                        onHighFiveUser={handleHighFive}
+                        isCurrentUser={user.id === sessionStore.userId}
+                        isCurrentWorld={user?.id === worldStore.worldId}
+                      />
                     ))}
               </styled.List>
             </styled.Container>

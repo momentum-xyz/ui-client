@@ -71,7 +71,14 @@ const OnlineUsersStore = types
       );
 
       if (response) {
-        self.allUsers = cast(response);
+        const currentUser = response.find((user) => user.id === currentUserId);
+        if (currentUser) {
+          self.allUsers = cast([
+            {...currentUser},
+            ...response.filter((user) => user.id !== currentUserId)
+          ]);
+        }
+
         self.odysseyUsers = cast([...response.filter((user) => user.id !== currentUserId)]);
       }
     }),
