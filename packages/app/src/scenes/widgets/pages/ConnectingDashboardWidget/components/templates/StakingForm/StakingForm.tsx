@@ -150,45 +150,42 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
       <styled.TabContent>
         {activeTab.id === 'start' && (
           <>
-            <div>
-              <styled.Section>
-                <styled.SectionHeader>
-                  <Heading type="h2" align="left" label={t('staking.connectTitle')} />
-                </styled.SectionHeader>
-                <Text size="s" text={t('staking.connectMessage')} align="left" />
-              </styled.Section>
-              <styled.Section>
-                <styled.SectionHeader>
-                  <Heading type="h2" align="left" label={t('staking.label')} />
-                </styled.SectionHeader>
-                <Text size="s" text={t('staking.stakingMessage')} align="left" />
-              </styled.Section>
-            </div>
-            {isGuest ? (
+            {isGuest && (
               <styled.NoWalletContainer>
-                <IconSvg name="warning2" size="normal-large" isDanger />
+                <IconSvg name="alert" size="medium" />
                 <styled.AlertMessage>
-                  <styled.TopText size="xs" text={t('staking.guestStakingMessage')} align="left" />
+                  <Text size="s" text={t('staking.guestStakingMessage')} align="left" />
                   <a href={ODYSSEY_GET_STARTED_WALLET} target="_blank">
                     <styled.BottomText
-                      size="xxs"
+                      size="s"
                       text={t('staking.guestWalletMessage')}
                       align="left"
-                      weight="bold"
                     />
                   </a>
                 </styled.AlertMessage>
               </styled.NoWalletContainer>
-            ) : (
-              <styled.Buttons>
-                <span />
-                <Button
-                  icon="wallet"
-                  label={t('staking.startContributing')}
-                  onClick={() => setActiveTab(tabBarTabs[1])}
-                />
-              </styled.Buttons>
             )}
+            <styled.Section>
+              <styled.SectionHeader>
+                <Heading type="h2" align="left" label={t('staking.connectTitle')} />
+              </styled.SectionHeader>
+              <Text size="s" text={t('staking.connectMessage')} align="left" />
+            </styled.Section>
+            <styled.Section>
+              <styled.SectionHeader>
+                <Heading type="h2" align="left" label={t('staking.label')} />
+              </styled.SectionHeader>
+              <Text size="s" text={t('staking.stakingMessage')} align="left" />
+            </styled.Section>
+            <styled.Buttons>
+              <span />
+              <Button
+                icon="wallet"
+                label={t('staking.startContributing')}
+                onClick={() => setActiveTab(tabBarTabs[1])}
+                disabled={isGuest}
+              />
+            </styled.Buttons>
           </>
         )}
         {activeTab.id === 'wallet' && (
