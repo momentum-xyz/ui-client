@@ -10,12 +10,12 @@ const MENU_OFFSET_TOP = 20;
 
 interface PropsInterface {}
 
-const OdysseyWidget: FC<PropsInterface> = () => {
+const OdysseyBioWidget: FC<PropsInterface> = () => {
   const {sessionStore, widgetsStore, mainStore, nftStore} = useStore();
-  const {odysseyStore} = widgetsStore;
+  const {odysseyBioStore} = widgetsStore;
   const {unityStore} = mainStore;
 
-  const {odyssey} = odysseyStore;
+  const {odyssey} = odysseyBioStore;
   const {userId} = sessionStore;
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
   const userIsOdysseyOwner = userId === odyssey?.uuid;
@@ -46,7 +46,7 @@ const OdysseyWidget: FC<PropsInterface> = () => {
       hasBottomPadding={false}
       shortTopPadding
       layoutSize={{width: '315px'}}
-      onClose={odysseyStore.widget.close}
+      onClose={odysseyBioStore.widget.close}
       showCloseButton
     >
       {odyssey && (
@@ -67,4 +67,4 @@ const OdysseyWidget: FC<PropsInterface> = () => {
   );
 };
 
-export default observer(OdysseyWidget);
+export default observer(OdysseyBioWidget);
