@@ -117,8 +117,8 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
         toast.info(
           <ToastContent
             headerIconName="alert"
-            title={t('staking.stakeSuccessTitle', {amount: amountAtoms})}
-            text={t('staking.stakeSuccess')}
+            title={t('staking.stakeSuccessTitle')}
+            text={t('staking.stakeSuccess', {amount})}
             showCloseButton
           />
         );

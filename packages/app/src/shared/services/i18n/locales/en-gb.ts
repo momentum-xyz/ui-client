@@ -119,7 +119,7 @@ export const enGb = {
       unStakeFrom: 'Unstake From',
       unStake: 'Unstake',
       errorUnstake: 'Error unstaking',
-      successUnstake: 'Congratulations, you successfully unstaked {{amount}} MOM from XYZ',
+      successUnstake: 'Congratulations, you successfully unstaked {{amount}} from XYZ',
       errorGetRewards: 'Error getting rewards',
       successGetRewards: 'Congratulations, you successfully claimed your MOM rewards!',
       getRewards: 'Get Rewards',

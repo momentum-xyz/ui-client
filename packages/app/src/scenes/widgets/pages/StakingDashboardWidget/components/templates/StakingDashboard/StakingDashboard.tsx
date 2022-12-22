@@ -109,7 +109,7 @@ const StakingDashboard: FC = () => {
           <ToastContent
             headerIconName="alert"
             isDanger
-            title={t('staking.Rewards claim failed!')}
+            title={t('staking.rewardErrorTitle')}
             text={t('staking.error')}
             showCloseButton
           />
@@ -138,7 +138,9 @@ const StakingDashboard: FC = () => {
           <ToastContent
             headerIconName="alert"
             title={t('staking.unStakeSuccessTitle')}
-            text={t('staking.successUnstake', {amount})}
+            text={t('staking.successUnstake', {
+              amount: formatTokenAmount(amount, chainDecimals, tokenSymbol)
+            })}
             showCloseButton
           />
         );
