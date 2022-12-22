@@ -9,7 +9,6 @@ export const TabContent = styled.div`
   width: 500px;
   display: flex;
   flex-direction: column;
-  padding: 1em;
 `;
 
 export const Buttons = styled.div`
@@ -17,17 +16,17 @@ export const Buttons = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-top: 30px;
 `;
 
 export const NoWalletContainer = styled.div`
   display: flex;
-  align-items: center;
   border-radius: 6px;
-  border: 1px solid ${(props) => props.theme.accentDanger};
-  background: transparent;
+  border: 1px solid ${(props) => props.theme.accent};
+  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
   padding: 10px 10px;
+  margin: 20px 0 0;
   gap: 8px;
-  margin-top: 40px;
 `;
 
 export const AlertMessage = styled.div`
@@ -36,15 +35,13 @@ export const AlertMessage = styled.div`
   justify-content: center;
 `;
 
-export const TopText = styled(Text)`
-  color: ${(props) => props.theme.accentDanger};
-`;
 export const BottomText = styled(Text)`
-  color: ${(props) => props.theme.accentDanger};
+  text-decoration-line: underline;
+  color: ${(props) => props.theme.accent};
 `;
 
 export const Section = styled.div`
-  margin-bottom: 20px;
+  margin-top: 20px;
 `;
 
 export const SectionHeader = styled.div`
