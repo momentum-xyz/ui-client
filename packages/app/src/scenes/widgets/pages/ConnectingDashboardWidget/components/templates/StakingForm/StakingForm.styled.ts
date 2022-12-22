@@ -1,5 +1,6 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
+import {Text} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div``;
 
@@ -16,6 +17,30 @@ export const Buttons = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+`;
+
+export const NoWalletContainer = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid ${(props) => props.theme.accentDanger};
+  background: transparent;
+  padding: 10px 10px;
+  gap: 8px;
+  margin-top: 40px;
+`;
+
+export const AlertMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+export const TopText = styled(Text)`
+  color: ${(props) => props.theme.accentDanger};
+`;
+export const BottomText = styled(Text)`
+  color: ${(props) => props.theme.accentDanger};
 `;
 
 export const Section = styled.div`
