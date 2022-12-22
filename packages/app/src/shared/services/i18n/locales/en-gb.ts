@@ -1130,7 +1130,8 @@ export const enGb = {
       admin: 'admin'
     },
     newsfeed: {
-      stakedIn: ' staked in '
+      stakedIn: ' staked in ',
+      you: 'You'
     }
   }
 };

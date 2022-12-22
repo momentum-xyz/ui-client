@@ -9,13 +9,14 @@ import {CalendarItem, ConnectedItem, CreatedItem, DockedItem} from './components
 
 interface PropsInterface {
   item: NftFeedItemInterface;
+  userId?: string;
   onTeleport: (nft: NftItemInterface) => void;
   onAttend: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
 }
 
 const NewsFeedItem: FC<PropsInterface> = (props) => {
-  const {item, onTeleport, onConnect, onAttend} = props;
+  const {item, userId, onTeleport, onConnect, onAttend} = props;
 
   console.warn(item);
   // eslint-disable-next-line no-debugger
@@ -27,7 +28,7 @@ const NewsFeedItem: FC<PropsInterface> = (props) => {
         <CreatedItem item={item} onTeleport={onTeleport} onConnect={onConnect} />
       )}
 
-      {item.type === 'connected' && <ConnectedItem item={item} />}
+      {item.type === 'connected' && <ConnectedItem item={item} userId={userId} />}
 
       {item.type === 'docked' && <DockedItem item={item} />}
 
