@@ -22,7 +22,12 @@ const NewsFeedItem: FC<PropsInterface> = (props) => {
   return (
     <styled.FeedItem data-testid={`NewsFeedItem-${item.type}-test`}>
       {item.type === 'created' && (
-        <CreatedItem item={item} onTeleport={onTeleport} onConnect={onConnect} />
+        <CreatedItem
+          item={item}
+          onTeleport={onTeleport}
+          onConnect={onConnect}
+          onOpenOdyssey={onOpenOdyssey}
+        />
       )}
 
       {item.type === 'connected' && (
