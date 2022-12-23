@@ -12,9 +12,9 @@ import {
   ObjectOptionsInterface
 } from 'api';
 import {DynamicScriptsStore} from 'stores/MainStore/models';
-import {ObjectTypeEnum} from 'core/enums';
+import {BasicAsset2dIdEnum} from 'core/enums';
 
-import {TileStore} from './TileStore';
+import {AssetStore} from './AssetStore';
 
 const ObjectStore = types
   .compose(
@@ -28,7 +28,7 @@ const ObjectStore = types
       dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
       asset: types.maybe(PluginLoader),
 
-      tileStore: types.optional(TileStore, {})
+      assetStore: types.optional(AssetStore, {})
     })
   )
   .actions((self) => ({
@@ -43,9 +43,9 @@ const ObjectStore = types
       }
 
       switch (spaceInfo.asset_2d_id) {
-        case ObjectTypeEnum.TEXT:
-        case ObjectTypeEnum.IMAGE:
-        case ObjectTypeEnum.VIDEO: {
+        case BasicAsset2dIdEnum.TEXT:
+        case BasicAsset2dIdEnum.IMAGE:
+        case BasicAsset2dIdEnum.VIDEO: {
           console.info('Its a tile!');
           const objectResponse:
             | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
@@ -53,7 +53,19 @@ const ObjectStore = types
             assetId: spaceInfo.asset_2d_id
           });
           if (objectResponse?.meta.pluginId) {
-            self.tileStore.setObject(objectResponse, spaceId, objectResponse.meta.pluginId);
+            self.assetStore.setObject(objectResponse, spaceId);
+          }
+          break;
+        }
+        case BasicAsset2dIdEnum.DOCK: {
+          console.info('Its a dock!');
+          const objectResponse:
+            | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
+            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
+            assetId: spaceInfo.asset_2d_id
+          });
+          if (objectResponse) {
+            self.assetStore.setObject(objectResponse, spaceId);
           }
           break;
         }
@@ -84,7 +96,7 @@ const ObjectStore = types
           });
 
           yield self.asset.loadPlugin();
-          self.tileStore.assetType = 'plugin';
+          self.assetStore.assetType = 'plugin';
 
           break;
         }

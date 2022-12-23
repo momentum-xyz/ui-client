@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, matchPath, useHistory} from 'react-router-dom';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
 import {useStore} from 'shared/hooks';
@@ -11,17 +11,35 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const OdysseyInfoWidget: FC = () => {
-  const {authStore, nftStore, widgetsStore} = useStore();
+  const {authStore, nftStore, widgetsStore, mainStore, objectStore} = useStore();
+  const {worldStore, unityStore} = mainStore;
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey} = odysseyInfoStore;
+  const {assetStore} = objectStore;
 
   const history = useHistory();
 
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
 
   const handleTeleport = useCallback(() => {
+    if (
+      assetStore.dockWorldId &&
+      matchPath(history.location.pathname, ROUTES.odyssey.object.root)
+    ) {
+      odysseyInfoStore.widget.close();
+      history.replace(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}));
+      unityStore.loadWorldById(assetStore.dockWorldId, authStore.token);
+      return;
+    }
     history.push(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
-  }, [history, odyssey]);
+  }, [
+    assetStore.dockWorldId,
+    authStore.token,
+    history,
+    odyssey?.uuid,
+    odysseyInfoStore.widget,
+    unityStore
+  ]);
 
   const handleConnect = useCallback(() => {
     if (odyssey) {
@@ -40,7 +58,16 @@ const OdysseyInfoWidget: FC = () => {
       hasBottomPadding={false}
       shortTopPadding
       layoutSize={{width: '315px'}}
-      onClose={odysseyInfoStore.widget.close}
+      onClose={() => {
+        odysseyInfoStore.widget.close();
+
+        if (
+          worldStore.worldId &&
+          matchPath(history.location.pathname, ROUTES.odyssey.object.root)
+        ) {
+          history.push(generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId}));
+        }
+      }}
       showCloseButton
     >
       <>

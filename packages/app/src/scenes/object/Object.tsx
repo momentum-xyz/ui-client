@@ -11,10 +11,11 @@ import * as styled from './Object.styled';
 
 const Object: FC = () => {
   const rootStore = useStore();
-  const {objectStore, mainStore} = rootStore;
+  const {objectStore, mainStore, nftStore, widgetsStore} = rootStore;
   const {unityStore} = mainStore;
-  const {asset, tileStore} = objectStore;
-  const {assetType} = tileStore;
+  const {asset, assetStore} = objectStore;
+  const {assetType} = assetStore;
+  const {odysseyInfoStore} = widgetsStore;
 
   const {objectId} = useParams<{objectId: string}>();
 
@@ -27,6 +28,15 @@ const Object: FC = () => {
       objectStore.resetModel();
     };
   }, [objectId, objectStore, rootStore, unityStore]);
+
+  useEffect(() => {
+    if (assetType === AssetTypeEnum.DOCK) {
+      if (assetStore.dockWorldId) {
+        const nft = nftStore.getNftByUuid(assetStore.dockWorldId);
+        odysseyInfoStore.open(nft);
+      }
+    }
+  }, [assetStore.dockWorldId, assetType, nftStore, odysseyInfoStore]);
 
   const renderObject = (assetType?: string) => {
     switch (assetType) {

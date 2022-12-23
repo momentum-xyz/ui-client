@@ -9,19 +9,22 @@ import {
   api,
   Asset2dResponse,
   GetObjectResponse,
+  GetSpaceAttributeResponse,
   ObjectInterface,
   ObjectMetadataInterface,
   ObjectOptionsInterface,
   UploadImageResponse
 } from 'api';
+import {PluginIdEnum} from 'api/enums';
 
-const TileStore = types
+const AssetStore = types
   .compose(
     ResetModel,
-    types.model('VideoStore', {
+    types.model('AssetStore', {
       assetType: types.maybe(types.string),
       content: types.maybe(types.frozen<ObjectInterface>()),
       pluginId: types.maybe(types.string),
+      dockWorldId: types.maybe(types.string),
 
       changeTileDialog: types.optional(Dialog, {}),
 
@@ -43,19 +46,32 @@ const TileStore = types
       if (response) {
         self.content = response;
       }
+    }),
+    getDockInfo: flow(function* (spaceId: string) {
+      const worldResponse: GetSpaceAttributeResponse | undefined = yield self.request.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.TELEPORT
+        }
+      );
+
+      if (worldResponse) {
+        self.dockWorldId = worldResponse['DestinationWorldID'] as string | undefined;
+      }
     })
   }))
   .actions((self) => ({
     setObject(
       object: Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
-      spaceId: string,
-      pluginId: string
+      spaceId: string
     ) {
       if (!object) {
         return;
       }
       const {meta} = object;
-      self.pluginId = pluginId;
+      self.pluginId = meta.pluginId;
 
       switch (meta.name) {
         case AssetTypeEnum.TEXT:
@@ -69,6 +85,10 @@ const TileStore = types
         case AssetTypeEnum.VIDEO:
           self.assetType = AssetTypeEnum.VIDEO;
           self.getSpaceAttributeValue(meta.pluginId, spaceId);
+          break;
+        case AssetTypeEnum.DOCK:
+          self.assetType = AssetTypeEnum.DOCK;
+          self.getDockInfo(spaceId);
           break;
         default:
           break;
@@ -118,4 +138,4 @@ const TileStore = types
     }
   }));
 
-export {TileStore};
+export {AssetStore};

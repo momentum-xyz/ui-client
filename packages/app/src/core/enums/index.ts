@@ -23,5 +23,5 @@ export * from './textMessage.enum';
 export * from './loaderStatus.enum';
 export * from './posBusMessageType.enum';
 export * from './assetType.enum';
-export * from './objectType.enum';
+export * from './basicAsset2dId.enum';
 export * from './gizmoType.enum';

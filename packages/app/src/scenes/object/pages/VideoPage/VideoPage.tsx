@@ -15,8 +15,8 @@ import * as styled from './VideoPage.styled';
 const VideoPage: FC = () => {
   const history = useHistory();
   const {objectStore} = useStore();
-  const {tileStore} = objectStore;
-  const {changeTileDialog, content} = tileStore;
+  const {assetStore} = objectStore;
+  const {changeTileDialog, content} = assetStore;
 
   const {worldId} = useParams<{worldId: string}>();
 

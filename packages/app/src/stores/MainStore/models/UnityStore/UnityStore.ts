@@ -198,6 +198,9 @@ const UnityStore = types
   .views((self) => ({
     get isPaused(): boolean {
       return UnityService.isPaused;
+    },
+    get isBuildMode(): boolean {
+      return UnityService.isBuildMode;
     }
   }));
 
