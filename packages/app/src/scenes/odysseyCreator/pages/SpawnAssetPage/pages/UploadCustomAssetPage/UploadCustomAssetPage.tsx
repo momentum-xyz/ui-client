@@ -67,7 +67,11 @@ const UploadCustomAssetPage: FC = () => {
       {asset && (
         <>
           <styled.PreviewContainer>
-            <Model3dPreview filename={URL.createObjectURL(asset)} />
+            <Model3dPreview
+              filename={URL.createObjectURL(asset)}
+              // TODO it should not be necessary, but currently cannot replace already loaded model
+              key={URL.createObjectURL(asset)}
+            />
           </styled.PreviewContainer>
           <styled.NameInput
             placeholder={t('placeholders.nameYourAssetForYourLibrary')}

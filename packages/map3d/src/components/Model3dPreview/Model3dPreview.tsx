@@ -1,10 +1,13 @@
-import {useEffect, FC, useState, useRef} from 'react';
+import {useEffect, FC, useState, useRef, useCallback} from 'react';
 import {Scene, DirectionalLight, AmbientLight, WebGLRenderer, PerspectiveCamera} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {ProgressBar} from '@momentum-xyz/ui-kit';
+import cn from 'classnames';
 
 import * as styled from './Model3dPreview.styled';
+
+const loader = new GLTFLoader();
 
 const createScene = (canvas: HTMLCanvasElement) => {
   const renderer = new WebGLRenderer({
@@ -53,6 +56,17 @@ export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}
   const [progress, setProgress] = useState<number | null>(null);
   const [scene, setScene] = useState<Scene>();
   const renderRef = useRef<() => void>();
+  const loadedGltfRef = useRef<GLTF>();
+
+  const recursiveAnimate = useCallback(() => {
+    const render = renderRef.current;
+    if (render) {
+      render();
+      requestAnimationFrame(recursiveAnimate);
+    } else {
+      console.log('Break recursive animation');
+    }
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -66,8 +80,9 @@ export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}
     const {scene: _scene, render} = createScene(canvasRef.current);
     renderRef.current = render;
     setScene(_scene);
-    renderRef.current();
-  }, [scene]);
+
+    recursiveAnimate();
+  }, [scene, recursiveAnimate]);
 
   useEffect(() => {
     if (!scene) {
@@ -75,38 +90,20 @@ export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}
       return;
     }
 
-    const loader = new GLTFLoader();
-
     console.log('Loading 3D model', filename);
-
-    let _gltf: GLTF;
-
-    const recursiveAnimate = () => {
-      const render = renderRef.current;
-      if (render) {
-        render();
-        requestAnimationFrame(recursiveAnimate);
-      } else {
-        console.log('Break recursive animation');
-      }
-    };
 
     setProgress(0);
     loader.load(
       filename,
       (gltf) => {
         console.log('Loaded 3D model', gltf);
-        _gltf = gltf;
-        if (loadedGltfRef.current) {
-          scene.remove(loadedGltfRef.current.scene);
-        }
+
+        loadedGltfRef.current = gltf;
         scene.add(gltf.scene);
         setProgress(null);
-
-        recursiveAnimate();
       },
       (progress) => {
-        console.log(progress);
+        // console.log(progress);
         setProgress(Math.ceil((progress.loaded / progress.total) * 100));
       },
       (err) => {
@@ -117,10 +114,14 @@ export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}
 
     return () => {
       console.log('Clearing scene');
-      if (_gltf) {
-        scene.remove(_gltf.scene);
-        renderRef.current = undefined;
+      // FIXME unfortunately it doesn't work - if the filename is changing for this mode, it's better be remounted
+      if (loadedGltfRef.current) {
+        // scene.remove(loadedGltfRef.current.scene);
+        console.log('Removing old model');
+        loadedGltfRef.current.scene?.removeFromParent();
+        renderRef.current?.();
       }
+      renderRef.current = undefined;
     };
   }, [scene, filename]);
 
