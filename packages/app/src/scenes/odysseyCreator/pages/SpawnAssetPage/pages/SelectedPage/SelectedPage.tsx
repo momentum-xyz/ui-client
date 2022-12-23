@@ -40,9 +40,9 @@ export const SelectedPage: FC = () => {
       return;
     }
 
-    worldBuilderAssets3dStore.removeAsset(asset.id);
+    spawnAssetStore.removeAsset(asset.id);
     history.goBack();
-  }, [asset, history, worldBuilderAssets3dStore]);
+  }, [asset, history, spawnAssetStore]);
 
   if (!asset) {
     return null;
