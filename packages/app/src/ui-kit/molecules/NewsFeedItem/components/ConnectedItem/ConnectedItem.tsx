@@ -20,14 +20,15 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
 
   const {t} = useTranslation();
 
-  console.log(userId);
-
   const formattedDate = useMemo(() => {
     return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
   }, [item.date]);
 
   const authUserIsStaking = userId && userId === item.uuid;
+  const authUserIsStaked = userId && userId === item.connectedTo?.uuid;
+
   const stakingUserLabel = authUserIsStaking ? t('newsfeed.you') : item.name;
+  const stakedUserLabel = authUserIsStaked ? t('newsfeed.you') : item.connectedTo?.name;
 
   return (
     <>
@@ -60,7 +61,13 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
             className="username"
             onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
           >
-            <Text size="xxs" text={item.connectedTo?.name} decoration="underline" align="left" />
+            <Text
+              size="xxs"
+              text={stakedUserLabel}
+              weight={authUserIsStaked ? 'bold' : 'normal'}
+              decoration="underline"
+              align="left"
+            />
           </div>
         </styled.ConnectedInfo>
       </styled.Info>

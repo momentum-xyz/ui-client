@@ -19,10 +19,6 @@ interface PropsInterface {
 const NewsFeedItem: FC<PropsInterface> = (props) => {
   const {item, userId, onTeleport, onConnect, onAttend, onOpenOdyssey} = props;
 
-  console.warn(item);
-  // eslint-disable-next-line no-debugger
-  // debugger;
-
   return (
     <styled.FeedItem data-testid={`NewsFeedItem-${item.type}-test`}>
       {item.type === 'created' && (
