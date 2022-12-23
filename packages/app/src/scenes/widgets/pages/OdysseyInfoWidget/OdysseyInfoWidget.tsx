@@ -29,6 +29,7 @@ const OdysseyInfoWidget: FC = () => {
       odysseyInfoStore.widget.close();
       history.replace(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}));
       unityStore.loadWorldById(assetStore.dockWorldId, authStore.token);
+      return;
     }
     history.push(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
   }, [
