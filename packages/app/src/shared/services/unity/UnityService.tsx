@@ -253,6 +253,7 @@ export class UnityService {
   toggleBuildMode() {
     this.unityApi?.toggleBuildMode();
     this.isBuildMode = !this.isBuildMode;
+    console.log('Toggle Build Mode to', this.isBuildMode);
   }
 
   undo() {

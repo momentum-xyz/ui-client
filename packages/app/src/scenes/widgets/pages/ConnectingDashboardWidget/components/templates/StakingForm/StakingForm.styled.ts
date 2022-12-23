@@ -1,5 +1,6 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
+import {Text} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div``;
 
@@ -8,7 +9,6 @@ export const TabContent = styled.div`
   width: 500px;
   display: flex;
   flex-direction: column;
-  padding: 1em;
 `;
 
 export const Buttons = styled.div`
@@ -16,10 +16,32 @@ export const Buttons = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-top: 30px;
+`;
+
+export const NoWalletContainer = styled.div`
+  display: flex;
+  border-radius: 6px;
+  border: 1px solid ${(props) => props.theme.accent};
+  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  padding: 10px 10px;
+  margin: 20px 0 0;
+  gap: 8px;
+`;
+
+export const AlertMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+export const BottomText = styled(Text)`
+  text-decoration-line: underline;
+  color: ${(props) => props.theme.accent};
 `;
 
 export const Section = styled.div`
-  margin-bottom: 20px;
+  margin-top: 20px;
 `;
 
 export const SectionHeader = styled.div`

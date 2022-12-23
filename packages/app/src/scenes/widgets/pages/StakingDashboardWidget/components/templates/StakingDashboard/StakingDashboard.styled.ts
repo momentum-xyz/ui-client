@@ -19,6 +19,12 @@ export const Buttons = styled.div`
   &.end {
     justify-content: flex-end;
   }
+  &.start {
+    justify-content: flex-start;
+    & > * {
+      margin-right: 10px;
+    }
+  }
 `;
 
 export const Section = styled.div`

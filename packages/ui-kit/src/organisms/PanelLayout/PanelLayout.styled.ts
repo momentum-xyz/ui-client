@@ -73,6 +73,10 @@ export const Header = styled.div`
     padding-bottom: 15px;
     background: ${(props) => props.theme.bg};
   }
+
+  &.shortTopPadding {
+    padding-top: 10px;
+  }
 `;
 
 export const Body = styled.div`
@@ -89,6 +93,9 @@ export const Body = styled.div`
   }
   &.extendToEdges {
     padding: 0;
+  }
+  &.noBottomPadding {
+    padding-bottom: 0;
   }
 `;
 

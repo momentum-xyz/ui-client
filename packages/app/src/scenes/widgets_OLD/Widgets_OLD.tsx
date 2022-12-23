@@ -44,7 +44,7 @@ const Widgets_OLD: FC = () => {
   } = widgetStore_OLD;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
-  const {user, isGuest, userId} = sessionStore;
+  const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
@@ -216,7 +216,7 @@ const Widgets_OLD: FC = () => {
                 />
               </ToolbarIcon>
             )}
-            {!isGuest && (
+            {!sessionStore.user?.isGuest && (
               <ToolbarIcon
                 title={t('labels.staking')}
                 icon="wallet"

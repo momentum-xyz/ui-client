@@ -2,7 +2,13 @@ import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
 import {BN, formatBalance} from '@polkadot/util';
 import {web3FromAddress} from '@polkadot/extension-dapp';
-import {ResetModel, Dialog, RequestModel} from '@momentum-xyz/core';
+import {
+  ResetModel,
+  Dialog,
+  RequestModel,
+  checkIfCanRequestAirdrop,
+  saveLastAirdropInfo
+} from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, SearchQuery} from 'core/models';
@@ -17,11 +23,14 @@ import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
 import {MintNftCheckJobResponse} from 'api';
+import {WalletConnectionsInterface} from 'core/interfaces';
 
 import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './models';
 
 const NFT_MINT_FEE = 100000;
 const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
+
+const textDecoderInst = new window.TextDecoder();
 
 const prepareSignAndSend = async (address: string) => {
   // there's alternative way for this in useEager
@@ -272,8 +281,10 @@ const NftStore = types
         itemMetadatas.map(
           async (itemMedadata: any, index: number): Promise<NftItemInterface | null> => {
             const [collectionId, itemId] = collectionItemIds[index];
-            const data = itemMedadata?.unwrapOr(null)?.data?.toHuman();
-            // console.log('data', data);
+            const codecData = itemMedadata?.unwrapOr(null)?.data;
+
+            // first 2 bytes must be type and length, but we don't need it here
+            const data = textDecoderInst.decode(codecData?.toU8a?.().slice(2));
             const itemDetailedInfo = nftItemsDetailedInfos[index];
             // console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
             const owner = itemDetailedInfo.unwrapOr(null)?.owner?.toString();
@@ -332,7 +343,8 @@ const NftStore = types
           nftItems.filter((nftItem) => !!nftItem) as NftItemInterface[]
       );
 
-      console.log('NftItems', nftItems);
+      console.log('NftItems');
+      console.table(nftItems);
 
       self.setNftItems(nftItems);
     }),
@@ -508,6 +520,47 @@ const NftStore = types
         }
       );
     }),
+    getStakesInfo: flow(function* (wallet: string) {
+      if (!self.channel) {
+        console.error('Channel is not initialized');
+        return {stakedAtWallet: 0, stakedAtOthers: 0};
+      }
+
+      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
+      const userNftItemId = self.getNftByWallet(wallet)?.id;
+
+      const [stakingAt, staked] = yield self.channel.queryMulti([
+        [self.channel.query.stake.stakingAt, wallet],
+        [self.channel.query.stake.staked, [collectionId, userNftItemId]]
+      ]);
+
+      const stakedAtMeArr = staked?.unwrapOr(null) || [];
+      const stakedAtOthersArr = stakingAt?.unwrapOr(null) || [];
+
+      const stakedAtMeAddresses: string[] = stakedAtMeArr.map((item: any) =>
+        String(item.accountId)
+      );
+
+      const stakedAtOthersAddresses: string[] = [];
+      stakedAtOthersArr.forEach((item: any) => {
+        const [collectionId, id] = item.nfts;
+        const nft = self.nftItems.find(
+          (nftItem) => nftItem.id === Number(id) && nftItem.collectionId === Number(collectionId)
+        );
+
+        if (nft) {
+          stakedAtOthersAddresses.push(nft.owner);
+        }
+      });
+
+      console.log(stakedAtOthersAddresses);
+      console.log(stakedAtMeAddresses);
+
+      return {
+        stakedAtWallet: stakedAtMeAddresses,
+        stakedAtOthers: stakedAtOthersAddresses
+      };
+    }),
     stake: flow(function* (address: string, amount: number, itemId: number) {
       const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
@@ -598,6 +651,11 @@ const NftStore = types
         self.setRequestFundsStatus('error');
         throw new Error('Channel is not initialized');
       }
+
+      if (!checkIfCanRequestAirdrop()) {
+        throw new Error('Wait at least 24 hours before requesting airdrop again');
+      }
+
       const {account, options} = yield prepareSignAndSend(address);
       const tx = self.channel.tx.faucet.getTokens();
 
@@ -615,6 +673,7 @@ const NftStore = types
           }).catch(reject);
         });
         self.setRequestFundsStatus('success');
+        saveLastAirdropInfo();
         console.log('Request airdrop success');
       } catch (err) {
         console.log('Error getting airdrop:', err);
@@ -655,6 +714,19 @@ const NftStore = types
         self.existentialDeposit
       );
     },
+    getStatisticsByWallet: flow(function* (wallet: string) {
+      const walletConnections: WalletConnectionsInterface = yield self.getStakesInfo(wallet);
+      const {stakedAtWallet, stakedAtOthers} = walletConnections;
+
+      const mutualConnectionsCount = stakedAtWallet.reduce((count, address) => {
+        return stakedAtOthers.includes(address) ? count + 1 : count;
+      }, 0);
+
+      return {
+        connectionsCount: walletConnections.stakedAtOthers.length,
+        mutualConnectionsCount: mutualConnectionsCount
+      };
+    }),
     subscribeToBalanseChanges: flow(function* (address: string) {
       if (!self.channel) {
         return;
