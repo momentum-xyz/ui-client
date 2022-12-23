@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef} from 'react';
 import gsap from 'gsap';
 import * as THREE from 'three';
-import {Vector3} from 'three';
+import {Vector3, RepeatWrapping} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 import {
@@ -43,6 +43,9 @@ export const use3dMap = (
   const odysseyBaseSphereMaterial = useRef<THREE.MeshPhysicalMaterial>();
   const updateCameraRotation = useRef<boolean>(false);
   const transitionToPlanetFinished = useRef<boolean>(true);
+
+  const nameRingGeometry = useRef(new THREE.CylinderGeometry(1.2, 1.2, 0.5, 22, 1, true));
+  const nameRingOffset = useRef(0);
 
   const pointsGeometry = useRef<THREE.BufferGeometry | null>(null);
   const pointsMaterial = useRef<THREE.PointsMaterial | null>(null);
@@ -183,16 +186,52 @@ export const use3dMap = (
 
       const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry.current, odysseyAvatarMaterial);
 
+      // Create custom material for name ring.
+      const nameRingMaterial = new THREE.MeshBasicMaterial({
+        transparent: true,
+        side: THREE.DoubleSide
+      });
+
+      // Construct odyssey ring mesh.
+      const nameRingMesh = new THREE.Mesh(nameRingGeometry.current, nameRingMaterial);
+
+      /**
+       * Build text texture for around the odyssey
+       */
+      const drawCanvas = document.createElement('canvas');
+      const drawContent = drawCanvas.getContext('2d');
+      drawCanvas.width = 1000;
+      drawCanvas.height = 100;
+      if (drawContent) {
+        drawContent.font = 'Bold 40px IBM Plex Sans';
+
+        drawContent.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        drawContent.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
+
+        drawContent.fillStyle = 'rgba(245, 199, 255, 0.9)';
+        drawContent.fillText(`Visit ${item.name}`, 0, 60);
+        drawContent.strokeStyle = 'rgba(124, 86, 133)';
+        drawContent.strokeText(`Visit ${item.name}`, 0, 60);
+      }
+
+      const nameTexture = new THREE.Texture(drawCanvas);
+      nameTexture.needsUpdate = true;
+
+      nameRingMesh.material.map = nameTexture;
+      nameRingMesh.material.map.wrapS = RepeatWrapping;
+
       const odyssey = new PlanetMesh(
         odysseyBaseSphereGeometry.current,
         odysseyBaseSphereMaterial.current!,
         item.uuid,
         item.owner,
         item.name,
-        texture
+        texture,
+        nameRingMaterial
       );
 
       odyssey.add(avatarMesh);
+      odyssey.add(nameRingMesh);
 
       return odyssey;
     },
@@ -300,6 +339,15 @@ export const use3dMap = (
    * Animation
    */
   const animate = useCallback(() => {
+    // Animate the textures of all ringNameMaterials.
+    nameRingOffset.current += Math.sin(0.001);
+    for (let i = 0; i < referenceListOfOdysseys.current.length; i++) {
+      const material = referenceListOfOdysseys.current[i].nameRingMaterial;
+      if (material.map?.offset) {
+        material.map.offset.x = nameRingOffset.current;
+      }
+    }
+
     // Update controls for auto-rotate.
     if (!updateCameraRotation.current) {
       controls.current.update();
@@ -347,8 +395,10 @@ export const use3dMap = (
         }
 
         // Only react to first raycast hit
-
         const targetPlanet = castRay[0];
+
+        // Handle selecting planet
+        onSelectOdyssey(targetPlanet.object.uuid);
 
         // If clicked planet is same as current selected one return
         if (targetPlanet.object === selectedOdyssey.current) {
@@ -362,9 +412,6 @@ export const use3dMap = (
 
         const targetVector = new THREE.Vector3();
         targetPlanet.object.getWorldPosition(targetVector);
-
-        // Handle selecting planet
-        onSelectOdyssey(targetPlanet.object.uuid);
 
         // Prepare fly to planets.
         const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
@@ -481,8 +528,7 @@ export const use3dMap = (
       metalness: 0.3,
       roughness: 0,
       specularIntensity: 1,
-      // @ts-ignore
-      transparentA: true
+      transparent: true
     });
 
     generateGalaxy();
