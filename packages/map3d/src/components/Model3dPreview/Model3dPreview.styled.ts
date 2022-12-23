@@ -5,6 +5,10 @@ export const Canvas = styled.canvas`
   width: 100%;
   height: 100%;
   border-radius: 4px;
+
+  &.background {
+    background: linear-gradient(to bottom, #b5bdc8 0%, #828c95 36%, #28343b 100%);
+  }
 `;
 
 export const ProgressBarHolder = styled.div`

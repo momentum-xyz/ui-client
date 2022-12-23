@@ -44,9 +44,10 @@ const createScene = (canvas: HTMLCanvasElement) => {
 
 export interface PropsInterface {
   filename: string;
+  background?: boolean;
 }
 
-export const Model3dPreview: FC<PropsInterface> = ({filename}) => {
+export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [progress, setProgress] = useState<number | null>(null);
@@ -130,7 +131,12 @@ export const Model3dPreview: FC<PropsInterface> = ({filename}) => {
           <ProgressBar percent={progress} />
         </styled.ProgressBarHolder>
       )}
-      <styled.Canvas style={{width: '100%', height: '100%'}} ref={canvasRef} />;
+      <styled.Canvas
+        className={cn({background})}
+        style={{width: '100%', height: '100%'}}
+        ref={canvasRef}
+      />
+      ;
     </>
   );
 };
