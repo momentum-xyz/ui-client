@@ -1,5 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {SpaceSubOptionKeyEnum} from '@momentum-xyz/sdk';
 
 import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
@@ -92,13 +93,13 @@ const SpawnAssetStore = types
 
       if (response) {
         const assets =
-          response.map(({id, meta: {name, previewImage}}) => ({
+          response.map(({id, meta: {name, preview_hash}}) => ({
             id,
             name,
             image:
               // FIXME - temp until proper preview images are available
-              previewImage
-                ? `${appVariables.RENDER_SERVICE_URL}/get/${previewImage}`
+              preview_hash
+                ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${preview_hash}`
                 : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
           })) || [];
 
