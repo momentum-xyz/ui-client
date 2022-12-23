@@ -9,7 +9,7 @@ import * as styled from './WorldBuilderWidget.styled';
 
 const WorldBuilderWidget: FC = () => {
   const {mainStore, nftStore} = useStore();
-  const {worldStore, unityStore} = mainStore;
+  const {worldStore} = mainStore;
 
   const worldNft = nftStore.getNftByUuid(worldStore.worldId);
   const isAdmin =
@@ -25,12 +25,7 @@ const WorldBuilderWidget: FC = () => {
     title: 'Odyssey Creator',
     icon: 'planet',
     size: 'medium',
-    link: generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId}),
-    onClick: () => {
-      if (!unityStore.isBuildMode) {
-        unityStore.toggleBuildMode();
-      }
-    }
+    link: generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
     // disabled: !worldStore.isMyWorld
   };
 
@@ -40,12 +35,7 @@ const WorldBuilderWidget: FC = () => {
       // icon: 'planet',
       icon: 'close',
       size: 'medium',
-      link: generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId}),
-      onClick: () => {
-        if (unityStore.isBuildMode) {
-          unityStore.toggleBuildMode();
-        }
-      }
+      link: generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId})
     }
     // {
     //   title: 'Skybox',
