@@ -34,7 +34,9 @@ const NewsFeedItem: FC<PropsInterface> = (props) => {
         <ConnectedItem item={item} userId={userId} onOpenOdyssey={onOpenOdyssey} />
       )}
 
-      {item.type === 'docked' && <DockedItem item={item} />}
+      {item.type === 'docked' && (
+        <DockedItem item={item} userId={userId} onOpenOdyssey={onOpenOdyssey} />
+      )}
 
       {item.type === 'calendar_event' && (
         <CalendarItem item={item} onTeleport={onTeleport} onAttend={onAttend} />

@@ -1131,7 +1131,9 @@ export const enGb = {
     },
     newsfeed: {
       stakedIn: ' staked in ',
-      you: 'You'
+      you: 'You',
+      and: ' and ',
+      docked: ' docked'
     }
   }
 };
