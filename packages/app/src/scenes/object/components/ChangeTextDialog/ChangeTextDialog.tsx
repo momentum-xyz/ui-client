@@ -13,8 +13,8 @@ import * as styled from './ChangeTextDialog.styled';
 const ChangeTextDialog: FC = () => {
   const {mainStore, objectStore} = useStore();
   const {unityStore} = mainStore;
-  const {tileStore} = objectStore;
-  const {changeTileDialog} = tileStore;
+  const {assetStore} = objectStore;
+  const {changeTileDialog} = assetStore;
 
   const {t} = useTranslation();
 
@@ -26,15 +26,15 @@ const ChangeTextDialog: FC = () => {
     formState: {errors}
   } = useForm<TextObjectInterface>({
     defaultValues: {
-      title: tileStore.content?.title,
-      content: tileStore.content?.content
+      title: assetStore.content?.title,
+      content: assetStore.content?.content
     }
   });
 
   const formSubmitHandler: SubmitHandler<TextObjectInterface> = async (
     data: TextObjectInterface
   ) => {
-    await tileStore.postNewContent(objectId, data);
+    await assetStore.postNewContent(objectId, data);
 
     changeTileDialog.close();
   };

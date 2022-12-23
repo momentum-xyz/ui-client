@@ -12,8 +12,8 @@ import * as styled from './ChangeImageDialog.styled';
 
 const ChangeVideoDialog: FC = () => {
   const {objectStore} = useStore();
-  const {tileStore} = objectStore;
-  const {changeTileDialog} = tileStore;
+  const {assetStore} = objectStore;
+  const {changeTileDialog} = assetStore;
 
   const {t} = useTranslation();
 
@@ -28,7 +28,7 @@ const ChangeVideoDialog: FC = () => {
       return;
     }
 
-    await tileStore.postNewImage(objectId, data.image);
+    await assetStore.postNewImage(objectId, data.image);
 
     changeTileDialog.close();
   };
@@ -59,7 +59,9 @@ const ChangeVideoDialog: FC = () => {
               {value ? (
                 <styled.imagePreview src={URL.createObjectURL(value)} />
               ) : (
-                tileStore.imageSrc && <styled.imagePreview src={tileStore.imageSrc ?? undefined} />
+                assetStore.imageSrc && (
+                  <styled.imagePreview src={assetStore.imageSrc ?? undefined} />
+                )
               )}
               <FileUploader
                 label={t('actions.selectImage')}

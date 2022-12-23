@@ -13,8 +13,8 @@ import * as styled from './ChangeVideoDialog.styled';
 const ChangeVideoDialog: FC = () => {
   const {mainStore, objectStore} = useStore();
   const {unityStore} = mainStore;
-  const {tileStore} = objectStore;
-  const {changeTileDialog} = tileStore;
+  const {assetStore} = objectStore;
+  const {changeTileDialog} = assetStore;
 
   const {t} = useTranslation();
 
@@ -26,14 +26,14 @@ const ChangeVideoDialog: FC = () => {
     formState: {errors}
   } = useForm<VideoObjectInterface>({
     defaultValues: {
-      youtube_url: tileStore.content?.youtube_url ?? ''
+      youtube_url: assetStore.content?.youtube_url ?? ''
     }
   });
 
   const formSubmitHandler: SubmitHandler<VideoObjectInterface> = async (
     data: VideoObjectInterface
   ) => {
-    await tileStore.postNewContent(objectId, data);
+    await assetStore.postNewContent(objectId, data);
 
     changeTileDialog.close();
   };

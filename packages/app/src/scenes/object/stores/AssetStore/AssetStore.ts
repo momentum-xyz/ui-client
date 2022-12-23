@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {flow, types, cast} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
@@ -8,20 +8,26 @@ import {AssetTypeEnum} from 'core/enums';
 import {
   api,
   Asset2dResponse,
+  FetchUserResponse,
   GetObjectResponse,
+  GetSpaceAttributeResponse,
   ObjectInterface,
   ObjectMetadataInterface,
   ObjectOptionsInterface,
   UploadImageResponse
 } from 'api';
+import {PluginIdEnum} from 'api/enums';
 
-const TileStore = types
+import {DockContent} from './models';
+
+const AssetStore = types
   .compose(
     ResetModel,
-    types.model('VideoStore', {
+    types.model('AssetStore', {
       assetType: types.maybe(types.string),
       content: types.maybe(types.frozen<ObjectInterface>()),
       pluginId: types.maybe(types.string),
+      dockContent: types.maybe(DockContent),
 
       changeTileDialog: types.optional(Dialog, {}),
 
@@ -43,19 +49,46 @@ const TileStore = types
       if (response) {
         self.content = response;
       }
+    }),
+    getWorldAndUserInfo: flow(function* (spaceId: string) {
+      const worldResponse: GetSpaceAttributeResponse | undefined = yield self.request.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.TELEPORT
+        }
+      );
+
+      if (worldResponse) {
+        const response: FetchUserResponse | undefined = yield self.request.send(
+          api.userRepository.fetchUser,
+          {
+            userId: worldResponse['DestinationWorldID'] as string
+          }
+        );
+
+        if (response) {
+          self.dockContent = cast({
+            id: worldResponse['DestinationWorldID'] as string,
+            name: response.name,
+            createdAt: response.createdAt,
+            avatarHash: response.profile.avatarHash
+          });
+        }
+      }
     })
   }))
   .actions((self) => ({
     setObject(
       object: Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
-      spaceId: string,
-      pluginId: string
+      spaceId: string
     ) {
       if (!object) {
         return;
       }
       const {meta} = object;
-      self.pluginId = pluginId;
+      self.pluginId = meta.pluginId;
 
       switch (meta.name) {
         case AssetTypeEnum.TEXT:
@@ -69,6 +102,10 @@ const TileStore = types
         case AssetTypeEnum.VIDEO:
           self.assetType = AssetTypeEnum.VIDEO;
           self.getSpaceAttributeValue(meta.pluginId, spaceId);
+          break;
+        case AssetTypeEnum.DOCK:
+          self.assetType = AssetTypeEnum.DOCK;
+          self.getWorldAndUserInfo(spaceId);
           break;
         default:
           break;
@@ -118,4 +155,4 @@ const TileStore = types
     }
   }));
 
-export {TileStore};
+export {AssetStore};

@@ -8,13 +8,14 @@ import {AssetTypeEnum, PosBusEventEnum} from 'core/enums';
 
 import {ImagePage, ObjectPluginPage, TextPage, VideoPage} from './pages';
 import * as styled from './Object.styled';
+import {ProfilePage} from './pages/ProfilePage';
 
 const Object: FC = () => {
   const rootStore = useStore();
   const {objectStore, mainStore} = rootStore;
   const {unityStore} = mainStore;
-  const {asset, tileStore} = objectStore;
-  const {assetType} = tileStore;
+  const {asset, assetStore} = objectStore;
+  const {assetType} = assetStore;
 
   const {objectId} = useParams<{objectId: string}>();
 
@@ -48,6 +49,8 @@ const Object: FC = () => {
             )}
           </>
         );
+      case AssetTypeEnum.DOCK:
+        return <ProfilePage />;
       default:
         return null;
     }
