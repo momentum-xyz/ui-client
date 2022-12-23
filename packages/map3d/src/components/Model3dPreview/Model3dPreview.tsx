@@ -125,7 +125,7 @@ export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}
   }, [scene, filename]);
 
   return (
-    <>
+    <styled.Container>
       {progress !== null && (
         <styled.ProgressBarHolder>
           <ProgressBar percent={progress} />
@@ -137,7 +137,7 @@ export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}
         ref={canvasRef}
       />
       ;
-    </>
+    </styled.Container>
   );
 };
 

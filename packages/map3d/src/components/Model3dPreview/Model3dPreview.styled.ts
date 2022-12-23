@@ -12,10 +12,19 @@ export const Canvas = styled.canvas`
 `;
 
 export const ProgressBarHolder = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   padding: 20%;
+`;
+
+export const Container = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
