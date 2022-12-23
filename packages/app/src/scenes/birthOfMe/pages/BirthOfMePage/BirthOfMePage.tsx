@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {
   // generatePath,
@@ -7,10 +7,7 @@ import {
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {
-  SinusBox
-  //  ExplorePanel
-} from 'ui-kit';
+import {SinusBox} from 'ui-kit';
 
 import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
@@ -21,10 +18,6 @@ const BirthOfMePage: FC = () => {
   const nft = authStore.wallet ? nftStore.getNftByWallet(authStore.wallet) : null;
 
   const history = useHistory();
-
-  useEffect(() => {
-    sessionStore.loadUserProfile();
-  }, [sessionStore]);
 
   const onBuild = async () => {
     const address = nftStore.getAddressByWallet(authStore.wallet);
@@ -61,24 +54,6 @@ const BirthOfMePage: FC = () => {
           <SinusBox />
           <BuildOdyssey name={nft.name} onBuild={onBuild} disabled={!nft || !authStore.wallet} />
         </styled.Boxes>
-
-        {/* <styled.Boxes>
-          <ExplorePanel
-            odysseyCount={nftStore.nftItems.length}
-            nftFeed={exploreStore.nftFeed}
-            searchQuery={nftStore.searchQuery}
-            odysseyList={nftStore.searchedNftItems}
-            onSearch={nftStore.searchNft}
-            onSelect={map3dStore.selectOdyssey}
-            onTeleport={(nft) => {
-              console.log(nft);
-              if (nft.uuid) {
-                history.push(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
-              }
-            }}
-            onConnect={(id) => alert(`Connect to ${id}`)}
-          />
-        </styled.Boxes> */}
       </styled.Wrapper>
     </styled.Container>
   );

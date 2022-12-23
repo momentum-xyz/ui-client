@@ -14,8 +14,8 @@ import * as styled from './TextPage.styled';
 const TextPage: FC = () => {
   const history = useHistory();
   const {objectStore} = useStore();
-  const {tileStore} = objectStore;
-  const {changeTileDialog, content} = tileStore;
+  const {assetStore} = objectStore;
+  const {changeTileDialog, content} = assetStore;
 
   const {worldId} = useParams<{worldId: string}>();
 

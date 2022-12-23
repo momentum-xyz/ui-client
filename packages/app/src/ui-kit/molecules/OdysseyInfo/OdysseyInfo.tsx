@@ -8,7 +8,7 @@ import {getImageAbsoluteUrl} from 'core/utils';
 import * as styled from './OdysseyInfo.styled';
 
 interface PropsInterface {
-  odyssey: OdysseyItemInterface;
+  odyssey: OdysseyItemInterface | null;
   alreadyConnected?: boolean;
   onVisit?: () => void;
   onHighFive?: () => void;
@@ -43,7 +43,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
       <styled.Container>
         <styled.TopContainer>
           <Image
-            src={getImageAbsoluteUrl(odyssey.image) || ''}
+            src={getImageAbsoluteUrl(odyssey?.image) || ''}
             sizeProps={{width: '90px', height: '90px'}}
             className="avatar"
           />
@@ -97,34 +97,38 @@ const OdysseyInfo: FC<PropsInterface> = ({
         </styled.TopContainer>
       </styled.Container>
 
-      {odyssey.description && (
-        <styled.Description>
-          <Text size="xxs" text={odyssey.description} align="left" />
-        </styled.Description>
+      {odyssey && (
+        <>
+          {odyssey.description && (
+            <styled.Description>
+              <Text size="xxs" text={odyssey.description} align="left" />
+            </styled.Description>
+          )}
+
+          <styled.Statistics>{t('titles.statistics')}</styled.Statistics>
+
+          <styled.StatisticsData>
+            <styled.StatisticsItem>
+              <IconSvg name="hierarchy" size="medium" />
+              <styled.StatisticsValue>
+                {t('staking.connectionAmount', {connections: odyssey.connections})}
+              </styled.StatisticsValue>
+            </styled.StatisticsItem>
+            <styled.StatisticsItem>
+              <IconSvg name="people" size="medium" />
+              <styled.StatisticsValue>
+                {t('staking.dockingAmount', {docking: odyssey.docking})}
+              </styled.StatisticsValue>
+            </styled.StatisticsItem>
+            <styled.StatisticsItem>
+              <IconSvg name="calendar" size="medium" />
+              <styled.StatisticsValue>
+                {t('staking.eventAmount', {events: odyssey.events})}
+              </styled.StatisticsValue>
+            </styled.StatisticsItem>
+          </styled.StatisticsData>
+        </>
       )}
-
-      <styled.Statistics>{t('titles.statistics')}</styled.Statistics>
-
-      <styled.StatisticsData>
-        <styled.StatisticsItem>
-          <IconSvg name="hierarchy" size="medium" />
-          <styled.StatisticsValue>
-            {t('staking.connectionAmount', {connections: odyssey.connections})}
-          </styled.StatisticsValue>
-        </styled.StatisticsItem>
-        <styled.StatisticsItem>
-          <IconSvg name="people" size="medium" />
-          <styled.StatisticsValue>
-            {t('staking.dockingAmount', {docking: odyssey.docking})}
-          </styled.StatisticsValue>
-        </styled.StatisticsItem>
-        <styled.StatisticsItem>
-          <IconSvg name="calendar" size="medium" />
-          <styled.StatisticsValue>
-            {t('staking.eventAmount', {events: odyssey.events})}
-          </styled.StatisticsValue>
-        </styled.StatisticsItem>
-      </styled.StatisticsData>
     </styled.OdysseyInfoContainer>
   );
 };

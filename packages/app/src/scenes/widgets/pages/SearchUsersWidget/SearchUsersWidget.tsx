@@ -1,15 +1,15 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {generatePath, useHistory} from 'react-router-dom';
-import {Avatar, PanelLayout, Portal, SearchInput, SvgButton, Text} from '@momentum-xyz/ui-kit';
-import cn from 'classnames';
+import {PanelLayout, Portal, SearchInput} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
+import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './SearchUsersWidget.styled';
-import {UserProfilePanel} from './components';
+import {OnlineUser} from './components';
 
 const DIALOG_WIDTH_PX = 296;
 
@@ -17,6 +17,8 @@ const SearchUsersWidget: FC = () => {
   const {mainStore, widgetsStore, nftStore, authStore, sessionStore} = useStore();
   const {unityStore, worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
+
+  const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
 
   const {t} = useTranslation();
   const history = useHistory();
@@ -40,20 +42,32 @@ const SearchUsersWidget: FC = () => {
     history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     unityStore.loadWorldById(worldId, authStore.token);
   };
+  const handleOdysseyTeleport = () => {
+    handleTeleport(onlineUsersStore.odyssey?.uuid || '');
+  };
 
   const handleHighFive = (userId: string) => {
     console.log(`Calling sendHighFive to ${userId} ...`);
     unityStore.sendHighFive(userId);
+  };
+  const handleOdysseyHighFive = () => {
+    handleHighFive(onlineUsersStore.odyssey?.uuid || '');
+  };
+
+  const handleConnect = () => {
+    if (onlineUsersStore.odyssey) {
+      nftStore.setConnectToNftItemId(onlineUsersStore.odyssey.id);
+    }
   };
 
   const handleUserClick = (id: string) => {
     if (id === sessionStore.userId) {
       return;
     }
-    if (onlineUsersStore?.selectedUserId !== id) {
-      onlineUsersStore?.selectUser(nftStore.nftItems, id);
+    if (onlineUsersStore.selectedUserId !== id) {
+      onlineUsersStore.selectUser(nftStore.getNftByUuid(id));
     } else {
-      onlineUsersStore?.unselectUser();
+      onlineUsersStore.unselectUser();
     }
   };
 
@@ -80,91 +94,58 @@ const SearchUsersWidget: FC = () => {
               <styled.List className="noScrollIndicator">
                 {onlineUsersStore.searchedUsers && onlineUsersStore.searchedUsers.length > 0
                   ? onlineUsersStore.searchedUsers.map((user) => (
-                      <styled.Item key={user.id}>
-                        <styled.Information
-                          className={cn(user.id === sessionStore.userId && 'noPointer')}
-                          onClick={() => handleUserClick(user.id)}
-                        >
-                          <Avatar avatarSrc={user.avatarSrc} size="small" />
-                          <Text size="s" text={user.name} transform="capitalized" />
-                        </styled.Information>
-                        {!user.isGuest && (
-                          <styled.RightToolbar>
-                            {user.id === worldStore.worldId && (
-                              <styled.AdminText size="s" text={t('titles.admin')} />
-                            )}
-                            <SvgButton
-                              iconName="fly-to"
-                              size="normal"
-                              disabled={user?.id === worldStore.worldId}
-                              onClick={() => handleTeleport(user?.id || '')}
-                            />
-                            <SvgButton
-                              iconName="high-five"
-                              size="normal"
-                              disabled={user?.id === sessionStore.userId}
-                              onClick={() => handleHighFive(user?.id || '')}
-                            />
-                          </styled.RightToolbar>
-                        )}
-                      </styled.Item>
+                      <OnlineUser
+                        key={user.id}
+                        user={user}
+                        onTeleportUser={handleTeleport}
+                        onUserClick={handleUserClick}
+                        onHighFiveUser={handleHighFive}
+                        isCurrentUser={user.id === sessionStore.userId}
+                        isCurrentWorld={user?.id === worldStore.worldId}
+                      />
                     ))
                   : !onlineUsersStore.query &&
                     onlineUsersStore.allUsers.map((user) => (
-                      <styled.Item key={user.id}>
-                        <styled.Information
-                          className={cn(user.id === sessionStore.userId && 'noPointer')}
-                          onClick={() => handleUserClick(user.id)}
-                        >
-                          <Avatar avatarSrc={user.avatarSrc} size="small" />
-                          <Text size="s" text={user.name} transform="capitalized" />
-                        </styled.Information>
-                        {!user.isGuest && (
-                          <styled.RightToolbar>
-                            {user.id === worldStore.worldId && (
-                              <styled.AdminText size="s" text={t('titles.admin')} />
-                            )}
-                            <SvgButton
-                              iconName="fly-to"
-                              size="normal"
-                              disabled={user?.id === worldStore.worldId}
-                              onClick={() => handleTeleport(user?.id || '')}
-                            />
-                            <SvgButton
-                              iconName="high-five"
-                              size="normal"
-                              disabled={user?.id === sessionStore.userId}
-                              onClick={() => {
-                                handleHighFive(user?.id || '');
-                              }}
-                            />
-                          </styled.RightToolbar>
-                        )}
-                      </styled.Item>
+                      <OnlineUser
+                        key={user.id}
+                        user={user}
+                        onTeleportUser={handleTeleport}
+                        onUserClick={handleUserClick}
+                        onHighFiveUser={handleHighFive}
+                        isCurrentUser={user.id === sessionStore.userId}
+                        isCurrentWorld={user?.id === worldStore.worldId}
+                      />
                     ))}
               </styled.List>
             </styled.Container>
           </PanelLayout>
           <styled.UsersContainer>
             {onlineUsersStore.selectedUserId && (
-              <UserProfilePanel
-                odyssey={onlineUsersStore.odyssey}
-                user={onlineUsersStore.user}
-                userAvatar={onlineUsersStore.avatarSrc}
-                onTeleport={handleTeleport}
-                onHighFive={handleHighFive}
+              <PanelLayout
+                title={onlineUsersStore.odyssey?.name ?? onlineUsersStore.user?.name}
                 onClose={onlineUsersStore.unselectUser}
-                alreadyConnected={nftStore.isAlreadyConnected(
-                  onlineUsersStore.odyssey?.owner || ''
-                )}
-                onConnect={() => {
-                  if (onlineUsersStore.odyssey) {
-                    nftStore.setConnectToNftItemId(onlineUsersStore.odyssey.id);
+                componentSize={{width: '315px'}}
+                headerStyle="uppercase"
+                showCloseButton
+              >
+                <OdysseyInfo
+                  odyssey={onlineUsersStore.odyssey}
+                  alreadyConnected={isAlreadyConnected}
+                  onVisit={handleOdysseyTeleport}
+                  visitDisabled={
+                    !onlineUsersStore.nftId || onlineUsersStore.odyssey?.uuid === worldStore.worldId
                   }
-                }}
-                nftId={onlineUsersStore.nftId}
-                worldId={onlineUsersStore.worldId}
-              />
+                  onHighFive={handleOdysseyHighFive}
+                  onConnect={handleConnect}
+                  connectDisabled={
+                    !onlineUsersStore.nftId ||
+                    onlineUsersStore.odyssey?.uuid === worldStore.worldId ||
+                    isAlreadyConnected
+                  }
+                  onCoCreate={() => {}}
+                  coCreateDisabled
+                />
+              </PanelLayout>
             )}
           </styled.UsersContainer>
         </styled.OuterContainer>

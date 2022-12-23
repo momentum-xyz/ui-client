@@ -1,5 +1,13 @@
 import React, {FC, useState} from 'react';
-import {Button, Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
+import {
+  Button,
+  Heading,
+  IconSvg,
+  Input,
+  TabBar,
+  TabBarTabInterface,
+  Text
+} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
@@ -11,6 +19,7 @@ import {convertToHex} from 'core/utils';
 import * as styled from './StakingForm.styled';
 
 const DEFAULT_STAKING_AMOUNT = 1;
+const ODYSSEY_GET_STARTED_WALLET = 'https://discover.odyssey.org/create-your-odyssey/get-a-wallet';
 
 const tabBarTabs: TabBarTabInterface[] = [
   {
@@ -37,11 +46,12 @@ const tabBarTabs: TabBarTabInterface[] = [
 ];
 
 interface PropsInterface {
+  isGuest?: boolean;
   nftItemId: number;
   onComplete: () => void;
 }
 
-const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
+const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const {authStore, nftStore, exploreStore} = useStore();
   const {wallet: authWallet} = authStore;
   const {
@@ -104,12 +114,27 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
         }
       })
       .then(() => {
-        toast.info(<ToastContent title={t('staking.stakeSuccess')} showCloseButton />);
+        toast.info(
+          <ToastContent
+            headerIconName="alert"
+            title={t('staking.stakeSuccessTitle')}
+            text={t('staking.stakeSuccess', {amount})}
+            showCloseButton
+          />
+        );
         onComplete();
       })
       .catch((err) => {
         console.log('stake error', err);
-        toast.error(<ToastContent isDanger title={t('staking.stakeError')} showCloseButton />);
+        toast.error(
+          <ToastContent
+            headerIconName="alert"
+            isDanger
+            title={t('staking.stakeErrorTitle')}
+            text={t('staking.error')}
+            showCloseButton
+          />
+        );
       });
   };
 
@@ -140,26 +165,40 @@ const StakingForm: FC<PropsInterface> = ({nftItemId, onComplete}) => {
       <styled.TabContent>
         {activeTab.id === 'start' && (
           <>
-            <div>
-              <styled.Section>
-                <styled.SectionHeader>
-                  <Heading type="h2" align="left" label={t('staking.connectTitle')} />
-                </styled.SectionHeader>
-                <Text size="s" text={t('staking.connectMessage')} align="left" />
-              </styled.Section>
-              <styled.Section>
-                <styled.SectionHeader>
-                  <Heading type="h2" align="left" label={t('staking.label')} />
-                </styled.SectionHeader>
-                <Text size="s" text={t('staking.stakingMessage')} align="left" />
-              </styled.Section>
-            </div>
+            {isGuest && (
+              <styled.NoWalletContainer>
+                <IconSvg name="alert" size="medium" />
+                <styled.AlertMessage>
+                  <Text size="s" text={t('staking.guestStakingMessage')} align="left" />
+                  <a href={ODYSSEY_GET_STARTED_WALLET} target="_blank">
+                    <styled.BottomText
+                      size="s"
+                      text={t('staking.guestWalletMessage')}
+                      align="left"
+                    />
+                  </a>
+                </styled.AlertMessage>
+              </styled.NoWalletContainer>
+            )}
+            <styled.Section>
+              <styled.SectionHeader>
+                <Heading type="h2" align="left" label={t('staking.connectTitle')} />
+              </styled.SectionHeader>
+              <Text size="s" text={t('staking.connectMessage')} align="left" />
+            </styled.Section>
+            <styled.Section>
+              <styled.SectionHeader>
+                <Heading type="h2" align="left" label={t('staking.label')} />
+              </styled.SectionHeader>
+              <Text size="s" text={t('staking.stakingMessage')} align="left" />
+            </styled.Section>
             <styled.Buttons>
               <span />
               <Button
                 icon="wallet"
                 label={t('staking.startContributing')}
                 onClick={() => setActiveTab(tabBarTabs[1])}
+                disabled={isGuest}
               />
             </styled.Buttons>
           </>

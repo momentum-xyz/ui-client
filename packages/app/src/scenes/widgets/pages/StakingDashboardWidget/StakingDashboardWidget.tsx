@@ -25,7 +25,7 @@ const StakingDashboardWidget: FC = () => {
       title={t('staking.title')}
       icon="hierarchy"
       showCloseButton
-      layoutSize={{height: '610px'}}
+      layoutSize={{height: '640px'}}
       onClose={() => {
         nftStore.stakingDashorboardDialog.close();
       }}
