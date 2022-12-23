@@ -63,6 +63,10 @@ const App: FC = () => {
             />
           );
         }
+
+        if (status === httpErrorCodes.UNAUTHORIZED) {
+          document.location = ROUTES.signIn;
+        }
         throw error;
       }
     });
