@@ -3,10 +3,12 @@ import gsap from 'gsap';
 import * as THREE from 'three';
 import {Vector3, RepeatWrapping} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {Line2} from 'three/examples/jsm/lines/Line2.js';
+import {LineGeometry} from 'three/examples/jsm/lines/LineGeometry.js';
+import {LineMaterial} from 'three/examples/jsm/lines/LineMaterial.js';
 
 import {
   PARAMETERS,
-  MAX_ODYSSEY_CONNECTION_LINE_HEIGHT,
   MAX_ORBIT_CAMERA_DISTANCE,
   MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA,
   PLANET_ARE_SPAWNED_HORIZONTAL,
@@ -60,13 +62,91 @@ export const use3dMap = (
       powerPreference: 'high-performance'
     })
   );
+
   const controls = useRef(new OrbitControls(camera.current, renderer.current.domElement));
+  const activeLinesArray = useRef<Line2[]>([]);
 
   /**
    * Draw lines between staked Odysseys.
    */
-  const drawConnections = useCallback((connections: Record<string, {id: string}[]>) => {
-    // setup reusable variables and material
+  const drawConnections = useCallback((sourceUuid: string, targetUuids: string[]) => {
+    // Delete current connections
+    if (activeLinesArray.current.length) {
+      for (let i = 0; i < activeLinesArray.current.length; i++) {
+        scene.current.remove(activeLinesArray.current[i]);
+      }
+
+      activeLinesArray.current = [];
+    }
+
+    const sourceOdyssey = referenceListOfOdysseys.current.find(
+      (odyssey) => odyssey.uuid === sourceUuid
+    );
+
+    // Draw new connections
+    targetUuids.forEach((targetUuid) => {
+      // Get the connected Odysseys from global reference
+      const targetOdyssey = referenceListOfOdysseys.current.find(
+        (odyssey) => odyssey.uuid === targetUuid
+      );
+
+      if (targetOdyssey && sourceOdyssey) {
+        // Create random line height and calculate middle position
+        const randomLineHeight = -20;
+        const middlePosition = new THREE.Vector3(
+          (sourceOdyssey.position.x + targetOdyssey.position.x) / 2,
+          randomLineHeight,
+          (sourceOdyssey.position.z + targetOdyssey.position.z) / 2
+        );
+
+        const direction = new THREE.Vector3();
+        direction.subVectors(sourceOdyssey.position, targetOdyssey.position).normalize();
+        const startVector = new THREE.Vector3();
+        startVector.addVectors(sourceOdyssey.position, direction.multiplyScalar(-0.7));
+
+        const newY = sourceOdyssey.position.y - 0.8;
+        startVector.y = newY;
+        const secondVector = new THREE.Vector3(startVector.x, newY - 1, startVector.z);
+
+        // Create the curve
+        const curve = new THREE.CubicBezierCurve3(
+          startVector,
+          secondVector,
+          middlePosition,
+          targetOdyssey.position
+        );
+
+        // Get XYZ along the curve.
+        const curvePoints = curve.getSpacedPoints(50);
+
+        // Prepare array of numbers for line geometry (doesn't accept vectors)
+        const linePoints = [];
+
+        // Build the array for Line from curve Points.
+        for (let i = 0; i < curvePoints.length; i++) {
+          linePoints.push(curvePoints[i].x, curvePoints[i].y, curvePoints[i].z);
+        }
+
+        const lineGeometry = new LineGeometry();
+        const lineMaterial = new LineMaterial({
+          color: 0xdda4de,
+          linewidth: 2,
+          transparent: true,
+          opacity: 0.5
+        });
+
+        lineGeometry.setPositions(linePoints);
+        lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
+
+        const drawLine = new Line2(lineGeometry, lineMaterial);
+
+        // Add line to the scene.
+        activeLinesArray.current.push(drawLine);
+        scene.current.add(drawLine);
+      }
+    });
+
+    /* setup reusable variables and material
     const lineMat = new THREE.LineBasicMaterial({
       color: 0xffffff,
       transparent: true,
@@ -104,7 +184,7 @@ export const use3dMap = (
           }
         });
       }
-    });
+    });*/
   }, []);
 
   /**

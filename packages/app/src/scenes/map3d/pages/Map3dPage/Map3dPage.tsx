@@ -38,6 +38,8 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
     return <></>;
   }
 
+  console.log(stakes);
+
   return (
     <>
       {!nftStore.isLoading && (
