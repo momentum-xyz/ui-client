@@ -1,4 +1,4 @@
-import {flow, types, cast} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
@@ -8,7 +8,6 @@ import {AssetTypeEnum} from 'core/enums';
 import {
   api,
   Asset2dResponse,
-  FetchUserResponse,
   GetObjectResponse,
   GetSpaceAttributeResponse,
   ObjectInterface,
@@ -18,8 +17,6 @@ import {
 } from 'api';
 import {PluginIdEnum} from 'api/enums';
 
-import {DockContent} from './models';
-
 const AssetStore = types
   .compose(
     ResetModel,
@@ -27,7 +24,7 @@ const AssetStore = types
       assetType: types.maybe(types.string),
       content: types.maybe(types.frozen<ObjectInterface>()),
       pluginId: types.maybe(types.string),
-      dockContent: types.maybe(DockContent),
+      dockWorldId: types.maybe(types.string),
 
       changeTileDialog: types.optional(Dialog, {}),
 
@@ -50,7 +47,7 @@ const AssetStore = types
         self.content = response;
       }
     }),
-    getWorldAndUserInfo: flow(function* (spaceId: string) {
+    getDockInfo: flow(function* (spaceId: string) {
       const worldResponse: GetSpaceAttributeResponse | undefined = yield self.request.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
@@ -61,21 +58,7 @@ const AssetStore = types
       );
 
       if (worldResponse) {
-        const response: FetchUserResponse | undefined = yield self.request.send(
-          api.userRepository.fetchUser,
-          {
-            userId: worldResponse['DestinationWorldID'] as string
-          }
-        );
-
-        if (response) {
-          self.dockContent = cast({
-            id: worldResponse['DestinationWorldID'] as string,
-            name: response.name,
-            createdAt: response.createdAt,
-            avatarHash: response.profile.avatarHash
-          });
-        }
+        self.dockWorldId = worldResponse['DestinationWorldID'] as string | undefined;
       }
     })
   }))
@@ -105,7 +88,7 @@ const AssetStore = types
           break;
         case AssetTypeEnum.DOCK:
           self.assetType = AssetTypeEnum.DOCK;
-          self.getWorldAndUserInfo(spaceId);
+          self.getDockInfo(spaceId);
           break;
         default:
           break;
