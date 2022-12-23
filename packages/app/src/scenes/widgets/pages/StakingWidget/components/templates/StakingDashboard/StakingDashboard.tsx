@@ -66,6 +66,7 @@ const StakingDashboard: FC = () => {
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
   const [canRequestAirdrop, setCanRequestAirdrop] = useState<boolean>(checkIfCanRequestAirdrop());
+  const [airdropRequestLive, setAirdropRequestLive] = useState<boolean>(false);
   const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState<string>(
     getDateOfNextAllowedAirdrop()
   );
@@ -161,6 +162,7 @@ const StakingDashboard: FC = () => {
   };
   const onRequestAirdrop = () => {
     console.log('requestAirdrop', wallet);
+    setAirdropRequestLive(true); // TODO move this to actual request tracking?
 
     nftStore
       .requestAirdrop(wallet)
@@ -176,11 +178,13 @@ const StakingDashboard: FC = () => {
         );
         setCanRequestAirdrop(checkIfCanRequestAirdrop());
         setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
+        setAirdropRequestLive(false);
       })
       .catch((err) => {
         console.log('requestAirdrop error', err);
         setCanRequestAirdrop(checkIfCanRequestAirdrop());
         setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
+        setAirdropRequestLive(false);
         toast.error(
           <ToastContent
             headerIconName="alert"
@@ -301,7 +305,7 @@ const StakingDashboard: FC = () => {
                 <styled.Buttons className="start">
                   <Button
                     label={t('staking.requestAirdrop')}
-                    disabled={!canRequestAirdrop}
+                    disabled={!canRequestAirdrop || airdropRequestLive}
                     onClick={() => onRequestAirdrop()}
                   />
                   {!canRequestAirdrop && (
@@ -310,6 +314,9 @@ const StakingDashboard: FC = () => {
                       text={t('staking.nextAirdropAvailableOn', {date: nextAvailableAirdropTime})}
                       align="left"
                     />
+                  )}
+                  {airdropRequestLive && (
+                    <Text size="s" text={t('staking.processingAirdropRequest')} align="left" />
                   )}
                 </styled.Buttons>
               </styled.Section>
