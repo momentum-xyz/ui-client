@@ -11,3 +11,4 @@ export * from './coordination.interface';
 export * from './tokenRulesColumnHeader.interface';
 export * from './emoji.interface';
 export * from './plugin.interface';
+export * from './wallet.interface';

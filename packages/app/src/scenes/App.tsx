@@ -63,6 +63,10 @@ const App: FC = () => {
             />
           );
         }
+
+        if (status === httpErrorCodes.UNAUTHORIZED) {
+          document.location = ROUTES.signIn;
+        }
         throw error;
       }
     });
@@ -93,6 +97,22 @@ const App: FC = () => {
             configLoadingErrorCode === httpErrorCodes.MAINTENANCE
               ? t('systemMessages.underMaintenance')
               : t('errors.somethingWentWrongTryAgain')
+          }
+          showRefreshButton
+          theme={themeStore.theme}
+        />
+      </ThemeProvider>
+    );
+  }
+
+  if (configStore.isConfigReady && !configStore.isBlockchainUrlReady) {
+    return (
+      <ThemeProvider theme={themeStore.theme}>
+        <SystemWideError
+          text={
+            configLoadingErrorCode === httpErrorCodes.MAINTENANCE
+              ? t('systemMessages.underMaintenance')
+              : t('systemMessages.noBlockchainUrlAvailable')
           }
           showRefreshButton
           theme={themeStore.theme}

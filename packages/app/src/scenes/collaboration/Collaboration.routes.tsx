@@ -1,42 +1,19 @@
 import React from 'react';
-import {generatePath, Redirect} from 'react-router-dom';
+import {generatePath} from 'react-router-dom';
 import {NavigationTabInterface} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 
-import {DashboardPage, StageModePage, ScreenSharePage, LiveStreamPage} from './pages';
+import {StageModePage, LiveStreamPage} from './pages';
 
 export const COLLABORATION_ROUTES = [
-  {
-    path: ROUTES.collaboration.dashboard,
-    exact: true,
-    main: () => <DashboardPage />
-  },
-  // {
-  //   path: ROUTES.collaboration.calendarEvent,
-  //   main: () => <CalendarPage />
-  // },
-  // {
-  //   path: ROUTES.collaboration.calendar,
-  //   main: () => <CalendarPage />,
-  //   exact: true
-  // },
   {
     path: ROUTES.collaboration.stageMode,
     main: () => <StageModePage />
   },
   {
-    path: ROUTES.collaboration.screenShare,
-    main: () => <ScreenSharePage />
-  },
-  {
     path: ROUTES.collaboration.liveStream,
     main: () => <LiveStreamPage />
-  },
-  {
-    path: ROUTES.collaboration.base,
-    exact: true,
-    main: () => <Redirect to={ROUTES.collaboration.dashboard} />
   }
 ];
 
@@ -47,14 +24,6 @@ export const buildNavigationTabs = (
   isLiveStreaming?: boolean
 ): NavigationTabInterface[] => {
   const tabs: NavigationTabInterface[] = [
-    {
-      path: generatePath(ROUTES.collaboration.dashboard, {spaceId}),
-      iconName: 'tiles'
-    },
-    // {
-    //   path: generatePath(ROUTES.collaboration.calendar, {spaceId}),
-    //   iconName: 'calendar'
-    // },
     {
       path: generatePath(ROUTES.collaboration.stageMode, {spaceId}),
       iconName: 'stage',

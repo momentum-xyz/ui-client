@@ -19,7 +19,7 @@ export interface Asset3dMetadataInterface {
   name: string;
   type: number;
   category: Asset3dCategoryEnum;
-  previewImage?: string;
+  preview_hash?: string;
 }
 
 export interface Asset3dInterface {

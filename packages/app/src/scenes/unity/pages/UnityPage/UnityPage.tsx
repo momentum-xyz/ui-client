@@ -20,7 +20,6 @@ import {
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
-import {AssetTypeEnum} from 'core/enums';
 
 import * as styled from './UnityPage.styled';
 import {CreatorMenu, ObjectMenu} from './components';
@@ -31,9 +30,15 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {mainStore, authStore, unityLoaded, sessionStore, worldBuilderStore} = useStore();
+  const {
+    mainStore,
+    authStore,
+    unityLoaded,
+    sessionStore,
+    odysseyCreatorStore: worldBuilderStore
+  } = useStore();
   const {unityStore, worldStore} = mainStore;
-  const {worldBuilderObjectStore} = worldBuilderStore;
+  const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -43,7 +48,7 @@ const UnityPage: FC = () => {
   const isBuilderMode =
     !!worldStore.worldId &&
     location.pathname.includes(
-      generatePath(ROUTES.odyssey.builder.base, {worldId: worldStore.worldId})
+      generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
     );
 
   // TODO: FIXME
@@ -86,7 +91,7 @@ const UnityPage: FC = () => {
     document.location.href = ROUTES.system.disconnected;
   });
 
-  useUnityEvent('ClickEventDashboard', (spaceId: string) => {
+  useUnityEvent('ClickObjectEvent', (spaceId: string) => {
     history.push({
       pathname: generatePath(ROUTES.odyssey.object.root, {
         worldId: worldStore.worldId,
@@ -95,29 +100,8 @@ const UnityPage: FC = () => {
     });
   });
 
-  useUnityEvent('PlasmaClickEvent', (spaceId: string) => {
-    history.push({
-      pathname: generatePath(ROUTES.odyssey.object.base, {
-        worldId: worldStore.worldId,
-        objectId: spaceId,
-        assetType: AssetTypeEnum.PLUGIN
-      })
-    });
-  });
-
-  useUnityEvent('ClickEventVideo', (spaceId: string) => {
-    // history.push({pathname: generatePath(ROUTES.video, {spaceId})});
-    history.push({
-      pathname: generatePath(ROUTES.odyssey.object.base, {
-        worldId: worldStore.worldId,
-        objectId: spaceId,
-        assetType: AssetTypeEnum.VIDEO
-      })
-    });
-  });
-
-  useUnityEvent('ClickEventEditableObject', (spaceId: string) => {
-    console.log('ClickEventEditableObject', spaceId);
+  useUnityEvent('EditObjectEvent', (spaceId: string) => {
+    console.log('EditObjectEvent', spaceId);
     // This even comes faster than actual click, so delay
     setTimeout(() => unityStore.onUnityObjectClick(spaceId), 500);
   });
@@ -278,12 +262,12 @@ const UnityPage: FC = () => {
         <CreatorMenu
           onAddObject={() => {
             history.push(
-              generatePath(ROUTES.odyssey.builder.spawnAsset.base, {worldId: worldStore.worldId})
+              generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId: worldStore.worldId})
             );
           }}
           onSkyboxClick={() => {
             history.push(
-              generatePath(ROUTES.odyssey.builder.skybox, {worldId: worldStore.worldId})
+              generatePath(ROUTES.odyssey.creator.skybox, {worldId: worldStore.worldId})
             );
           }}
         />

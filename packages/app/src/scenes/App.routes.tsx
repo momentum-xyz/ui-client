@@ -18,9 +18,7 @@ const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/Disc
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
 const StoryBook = lazy(() => import('./storyBook/StoryBook'));
-const WorldBuilderCustomizePanel = lazy(
-  () => import('./worldBuilder/pages/WorldBuilderCustomizePanel/WorldBuilderCustomizePanel')
-);
+const OdysseyCreator = lazy(() => import('./odysseyCreator/OdysseyCreator'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
@@ -106,8 +104,8 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
     exact: true
   },
   {
-    path: ROUTES.odyssey.builder.base,
-    main: () => <WorldBuilderCustomizePanel />,
+    path: ROUTES.odyssey.creator.base,
+    main: () => <OdysseyCreator />,
     renderBackground: false
   },
   {

@@ -1,5 +1,6 @@
-import {AttributeValueInterface} from 'interfaces';
 import {useCallback, useRef, useState} from 'react';
+
+import {AttributeValueInterface} from '../../interfaces';
 
 export const useAttributesEmulator = () => {
   const spaceAttributes = useRef<

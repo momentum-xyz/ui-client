@@ -12,8 +12,8 @@ import * as styled from './ImagePage.styled';
 
 const ImagePage: FC = () => {
   const {objectStore} = useStore();
-  const {tileStore} = objectStore;
-  const {changeTileDialog, content, imageSrc} = tileStore;
+  const {assetStore} = objectStore;
+  const {changeTileDialog, content, imageSrc} = assetStore;
   const history = useHistory();
   const {t} = useTranslation();
 

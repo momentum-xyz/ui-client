@@ -3,7 +3,6 @@ import {Instance, types, flow} from 'mobx-state-tree';
 import {PosBusEventEnum} from 'core/enums';
 import {SignInAccountStore} from 'scenes/auth/stores/SignInAccountStore';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
-import {Map3dStore} from 'scenes/map3d/stores/Map3dStore';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
 import {RootFlightStore} from 'scenes/flight/stores';
@@ -13,7 +12,7 @@ import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {OdysseyStore} from 'scenes/odyssey/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
-import {RootWorldBuilderStore} from 'scenes/worldBuilder/stores';
+import {RootOdysseyCreatorStore} from 'scenes/odysseyCreator/stores';
 import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {ObjectStore} from 'scenes/object/stores';
 
@@ -35,7 +34,6 @@ const RootStore = types
     agoraStore: types.optional(AgoraStore, {}),
     /* Connect independent stores */
     signInAccountStore: types.optional(SignInAccountStore, {}),
-    map3dStore: types.optional(Map3dStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
     odysseyStore: types.optional(OdysseyStore, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
@@ -44,7 +42,7 @@ const RootStore = types
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
     widgetsStore: types.optional(RootWidgetsStore, {}),
     widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),
-    worldBuilderStore: types.optional(RootWorldBuilderStore, {}),
+    odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
     worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),
     videoStore: types.optional(VideoStore, {}),

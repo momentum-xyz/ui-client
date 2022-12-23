@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter} from 'react-router-dom';
 
-import {render} from 'utils/test.utils';
+import {render} from '../../utils/test.utils';
 
 import NavigationBarItem from './NavigationBarItem';
 

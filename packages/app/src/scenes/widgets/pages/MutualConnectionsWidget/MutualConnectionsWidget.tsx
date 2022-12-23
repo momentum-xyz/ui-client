@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {t} from 'i18next';
 
 import {NftItemInterface} from 'stores/NftStore/models';
 
@@ -14,7 +15,7 @@ interface PropsInterface {
 const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose}) => {
   return (
     <Dialog
-      title="Mutual connections list"
+      title={t('mutualConnections.title')}
       headerStyle="divider-uppercase"
       icon="user-network"
       iconSize="medium-large"
@@ -26,7 +27,7 @@ const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose
       <styled.Container>
         {(!mutualConnections || !(mutualConnections.length > 0)) && (
           <styled.NoConnectionPanel>
-            <styled.NoConnectionText text="There are no connections yet" size="l" />
+            <styled.NoConnectionText text={t('mutualConnections.noConnection')} size="l" />
           </styled.NoConnectionPanel>
         )}
         {mutualConnections &&
@@ -40,7 +41,11 @@ const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose
                   transform="uppercase"
                   weight="bold"
                 />
-                <styled.ConnectionTypeText text="Admin" size="m" align="left" />
+                <styled.ConnectionTypeText
+                  text={t('mutualConnections.admin')}
+                  size="m"
+                  align="left"
+                />
               </styled.InfoContainer>
               <styled.Buttons>
                 {/*<Button label="make admin" size="small" />*/}

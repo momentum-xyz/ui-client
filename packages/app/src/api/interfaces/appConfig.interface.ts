@@ -33,6 +33,7 @@ export interface AppConfigInterface {
   YOUTUBE_KEY: string;
   STREAMCHAT_KEY: string;
   NFT_ADMIN_ADDRESS: string;
+  NFT_COLLECTION_ODYSSEY_ID: string;
   NODE_ID: string;
 }
 
@@ -50,7 +51,7 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   WEB3_PUBLIC_RPC_URL_RINKEBY: string;
   POLKADOT_CONNECTION_STRING: string;
   WESTEND_TEST_WS_SERVER: string;
-  KUSAMA_WS_SERVER: string;
+  BLOCKCHAIN_WS_SERVER: string;
   GOOGLE_SDK_URL: string;
   GOOGLE_DOCUMENT_SCOPE: string;
   YOUTUBE_API: string;

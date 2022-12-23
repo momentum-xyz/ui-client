@@ -1,11 +1,10 @@
-import React, {FC, useEffect, useCallback} from 'react';
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Avatar, Button, Dialog, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {Avatar, Button, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {StakingDashboard, StakingForm} from 'scenes/explore/pages/ExplorePage/components';
 
 import {
   ProfileWidget,
@@ -16,10 +15,13 @@ import {
   CalendarWidget,
   OnlineUsersWidget,
   NotificationsWidget,
-  OdysseyWidget,
+  OdysseyBioWidget,
+  OdysseyInfoWidget,
   WorldBuilderWidget,
   SearchUsersWidget,
-  MutualConnectionsWidget
+  MutualConnectionsWidget,
+  StakingDashboardWidget,
+  ConnectingDashboardWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -30,54 +32,35 @@ interface PropsInterface {
 const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
-  const {
-    sessionStore,
-    widgetsStore,
-    flightStore,
-    mainStore,
-    worldBuilderStore,
-    agoraStore,
-    objectStore,
-    nftStore
-  } = useStore();
-  const {onlineUsersStore, odysseyStore, calendarStore, mutualConnectionsStore} = widgetsStore;
+  const {sessionStore, widgetsStore, flightStore, mainStore, agoraStore, objectStore, nftStore} =
+    useStore();
+  const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {worldStore, unityStore} = mainStore;
+  const {worldStore} = mainStore;
   const {asset: asset2D} = objectStore;
   const {user} = sessionStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    // worldBuilderStore.fetchPermissions();
-    odysseyStore.init(nftStore.nftItems, worldStore.worldId);
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
-  }, [
-    nftStore.nftItems,
-    odysseyStore,
-    onlineUsersStore,
-    sessionStore.userId,
-    worldBuilderStore,
-    worldStore.worldId
-  ]);
+  }, [onlineUsersStore, sessionStore.userId, worldStore.worldId]);
+
+  useEffect(() => {
+    agoraScreenShareStore.init(
+      worldStore.worldId,
+      sessionStore.userId,
+      widgetsStore.screenShareStore.widget.open
+    );
+  }, [agoraScreenShareStore, sessionStore.userId, worldStore.worldId]);
 
   const handleOpenScreenShare = () => {
-    agoraScreenShareStore.init(worldStore.worldId, sessionStore.userId);
     widgetsStore.screenShareStore.widget.toggle();
   };
 
   const handleOpenOdysseyWidget = () => {
-    calendarStore.eventList.fetchSpaceEvents(worldStore.worldId);
-    odysseyStore.widget.toggle();
+    odysseyBioStore.open(nftStore.getNftByUuid(worldStore.worldId));
   };
-
-  const handleFocus = useCallback(() => {
-    unityStore.changeKeyboardControl(false);
-  }, [unityStore]);
-
-  const handleBlur = useCallback(() => {
-    unityStore.changeKeyboardControl(true);
-  }, [unityStore]);
 
   return (
     <>
@@ -99,7 +82,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
             {!isExplorePage && (
               <ToolbarIcon
-                title="Newsfeed"
+                title={t('labels.newsfeed')}
                 icon="bell"
                 size="medium"
                 onClick={widgetsStore.notificationsStore.notificationsDialog.toggle}
@@ -109,19 +92,19 @@ const Widgets: FC<PropsInterface> = (props) => {
             )}
 
             <ToolbarIcon
-              title="Connections"
+              title={t('labels.connections')}
               icon="user-network"
               size="medium"
-              disabled={false} // TODO: Disable for guests
+              disabled={sessionStore.isGuest}
               onClick={mutualConnectionsStore.widget.open}
               state={{canGoBack: true}}
             />
 
             <ToolbarIcon
-              title="Staking"
+              title={t('labels.staking')}
               icon="wallet"
               size="medium"
-              disabled={false} // TODO: Disable for guests
+              disabled={sessionStore.isGuest}
               onClick={nftStore.stakingDashorboardDialog.toggle}
               isSelected={nftStore.stakingDashorboardDialog.isOpen}
               state={{canGoBack: true}}
@@ -129,7 +112,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
             {!isExplorePage && (
               <ToolbarIcon
-                title="Explore"
+                title={t('labels.explore')}
                 icon="solar-system"
                 size="medium"
                 onClick={() => {
@@ -145,7 +128,7 @@ const Widgets: FC<PropsInterface> = (props) => {
         {isExplorePage && (
           <styled.Links>
             <Button
-              label="Discover more"
+              label={t('labels.discoverMore')}
               variant="secondary"
               onClick={() => {
                 window.open('https://discover.odyssey.org');
@@ -165,11 +148,11 @@ const Widgets: FC<PropsInterface> = (props) => {
             </styled.OnlineUsers>
             <ToolbarIconList>
               <ToolbarIcon
-                title="Bio"
+                title={t('labels.bio')}
                 icon="people"
                 size="medium"
                 disabled={false}
-                isSelected={odysseyStore.widget.isOpen}
+                isSelected={odysseyBioStore.widget.isOpen}
                 onClick={handleOpenOdysseyWidget}
                 state={{canGoBack: true}}
               />
@@ -212,7 +195,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
 
               <ToolbarIcon
-                title="Fly to me"
+                title={t('labels.flyToMe')}
                 icon="fly-to"
                 size="medium"
                 onClick={widgetsStore.flyToMeStore.flyToMeDialog.open}
@@ -232,33 +215,9 @@ const Widgets: FC<PropsInterface> = (props) => {
           onClose={mutualConnectionsStore.widget.close}
         />
       )}
-      {onlineUsersStore.searchWidget.isOpen && (
-        <SearchUsersWidget
-          users={onlineUsersStore.allUsers}
-          searchedUsers={onlineUsersStore.searchedUsers}
-          searchUsers={onlineUsersStore.searchUsers}
-          onClose={onlineUsersStore.searchWidget.close}
-        />
-      )}
-      {widgetsStore.odysseyStore.widget.isOpen && (
-        <OdysseyWidget
-          currentUserId={sessionStore.userId}
-          alreadyConnected={nftStore.isAlreadyConnected(odysseyStore.odyssey?.owner || '')}
-          odyssey={odysseyStore.odyssey}
-          userAvatar={odysseyStore.avatarSrc}
-          onClose={odysseyStore.widget.close}
-          onHighFive={(userId: string) => {
-            console.log(`Calling sendHighFive to ${userId} ...`);
-            unityStore.sendHighFive(userId);
-          }}
-          onConnect={() => {
-            if (odysseyStore.odyssey) {
-              nftStore.setConnectToNftItemId(odysseyStore.odyssey.id);
-            }
-          }}
-          nftId={odysseyStore.nftId}
-        />
-      )}
+      {onlineUsersStore.searchWidget.isOpen && <SearchUsersWidget />}
+      {widgetsStore.odysseyBioStore.widget.isOpen && <OdysseyBioWidget />}
+      {widgetsStore.odysseyInfoStore.widget.isOpen && <OdysseyInfoWidget />}
       {widgetsStore.profileStore.profileDialog.isOpen && (
         <ProfileWidget isExploreView={!!isExplorePage} />
       )}
@@ -268,46 +227,8 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.screenShareStore.widget.isOpen && <ScreenShareWidget />}
       {widgetsStore.calendarStore.widget.isOpen && <CalendarWidget />}
       {asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen && <SocialWidget />}
-      {/* FIXME */}
-      {!!nftStore.stakingDashorboardDialog.isOpen && (
-        <Dialog
-          title="Personal Connecting Dashboard"
-          icon="hierarchy"
-          showCloseButton
-          layoutSize={{height: '610px'}}
-          onClose={() => {
-            nftStore.stakingDashorboardDialog.close();
-          }}
-        >
-          <styled.FullSizeWrapper onFocus={handleFocus} onBlur={handleBlur}>
-            <StakingDashboard
-              onComplete={() => {
-                nftStore.stakingDashorboardDialog.close();
-              }}
-            />
-          </styled.FullSizeWrapper>
-        </Dialog>
-      )}
-      {!!nftStore.connectToNftItemId && (
-        <Dialog
-          title="Personal Connecting Dashboard"
-          icon="hierarchy"
-          showCloseButton
-          layoutSize={{height: '510px'}}
-          onClose={() => {
-            nftStore.setConnectToNftItemId(null);
-          }}
-        >
-          <styled.FullSizeWrapper onFocus={handleFocus} onBlur={handleBlur}>
-            <StakingForm
-              nftItemId={nftStore.connectToNftItemId}
-              onComplete={() => {
-                nftStore.setConnectToNftItemId(null);
-              }}
-            />
-          </styled.FullSizeWrapper>
-        </Dialog>
-      )}
+      {nftStore.stakingDashorboardDialog.isOpen && <StakingDashboardWidget />}
+      {!!nftStore.connectToNftItemId && <ConnectingDashboardWidget />}
     </>
   );
 };

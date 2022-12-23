@@ -6,10 +6,8 @@ export type UnityEventType = {
   HideMinimap: () => void;
   InvalidToken: () => void;
   ExterminateUnity: (topic: string) => void;
-  ClickEventDashboard: (id: string) => void;
-  ClickEventVideo: (id: string) => void;
-  ClickEventEditableObject: (id: string) => void;
-  PlasmaClickEvent: (id: string) => void;
+  ClickObjectEvent: (id: string) => void;
+  EditObjectEvent: (id: string) => void;
   ProfileClickEvent: (id: string, position: UnityPositionInterface) => void;
   Error: (message: string) => void;
 };

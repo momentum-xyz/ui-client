@@ -4,9 +4,8 @@
     "outDir": "dist/",
     "sourceMap": true,
     "declaration": true,
-    "noEmit": false,
-    "baseUrl": "src"
+    "noEmit": false
   },
-  "include": ["src", "../app/src/ui-kit/templates/SpaceTopBar"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

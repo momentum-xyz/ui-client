@@ -1,40 +1,29 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Map3dCanvas} from '@momentum-xyz/map3d';
 
 import {useStore} from 'shared/hooks';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItemInterface} from 'stores/NftStore/models';
-
-import {Map3d} from './components';
-import * as styled from './Map3dPage.styled';
 
 interface PropsInterface {
   isClickActive?: boolean;
 }
 
-const Map3dPage: FC<PropsInterface> = (props) => {
-  const {isClickActive} = props;
+const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
+  const {nftStore, authStore, widgetsStore, sessionStore} = useStore();
+  const {odysseyInfoStore} = widgetsStore;
 
-  const {nftStore, authStore, map3dStore, sessionStore} = useStore();
-
-  const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
-
-  const mapRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      setIsCanvasReady(true);
-    }
-  });
-
-  const onSelectOdyssey = useCallback(
-    (nft: NftItemInterface) => {
+  const handleSelect = useCallback(
+    (uuid: string) => {
       if (isClickActive) {
-        map3dStore.selectOdyssey(nft);
+        odysseyInfoStore.open(nftStore.getNftByUuid(uuid));
       }
     },
-    [isClickActive, map3dStore]
+    [isClickActive, nftStore, odysseyInfoStore]
   );
 
+  // FIXME: Make a view under the NFT store
   const friendsWallets = new Set([
     ...nftStore.stakingAtMe.keys(),
     ...nftStore.stakingAtOthers.keys()
@@ -51,14 +40,13 @@ const Map3dPage: FC<PropsInterface> = (props) => {
 
   return (
     <>
-      <styled.MapCanvas ref={mapRef} className="webgl" />
-      {isCanvasReady && mapRef.current && !nftStore.isLoading && (
-        <Map3d
+      {!nftStore.isLoading && (
+        <Map3dCanvas
           currentUserId={sessionStore.userId}
           items={nftStore.nftItems}
           connections={stakes}
-          canvas={mapRef.current}
-          onOdysseyClick={onSelectOdyssey}
+          getImageUrl={getImageAbsoluteUrl}
+          onSelect={handleSelect}
         />
       )}
     </>

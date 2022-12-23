@@ -59,6 +59,7 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
             activeClassName="active"
             exact={exact}
             isActive={isActive}
+            onClick={onClick}
           >
             {icon ? (
               <styled.ActiveSvgButton iconName={icon} size={size} isWhite={isWhite} theme={theme}>

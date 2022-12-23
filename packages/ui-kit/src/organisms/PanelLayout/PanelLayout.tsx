@@ -26,6 +26,8 @@ export interface PropsInterface extends PropsWithThemeInterface {
   showCloseButton?: boolean;
   iconSize?: SizeType;
   hasBorder?: boolean;
+  hasBottomPadding?: boolean;
+  shortTopPadding?: boolean;
   headerActions?: ReactNode;
   captureAllPointerEvents?: boolean;
   componentSize?: ComponentSizeInterface;
@@ -52,6 +54,8 @@ const PanelLayout: FC<PropsInterface> = (props) => {
     isBodyExtendingToEdges = false,
     isDanger = false,
     hasBorder = false,
+    hasBottomPadding = true,
+    shortTopPadding = false,
     noPadding = false,
     iconSize = 'small',
     headerItem = 'left',
@@ -88,6 +92,7 @@ const PanelLayout: FC<PropsInterface> = (props) => {
           className={cn(
             headerStyle,
             !restProps.title && 'noTitle',
+            shortTopPadding && 'shortTopPadding',
             titleHeight && 'titleHeight',
             isMinimap && 'isMinimap'
           )}
@@ -156,7 +161,11 @@ const PanelLayout: FC<PropsInterface> = (props) => {
         </styled.Header>
       )}
       <styled.Body
-        className={cn(isBodyExtendingToEdges && 'extendToEdges', noPadding && 'noPadding')}
+        className={cn(
+          isBodyExtendingToEdges && 'extendToEdges',
+          noPadding && 'noPadding',
+          !hasBottomPadding && 'noBottomPadding'
+        )}
       >
         {children}
       </styled.Body>

@@ -7,6 +7,13 @@ export const enGb = {
       seconds: '{{seconds}} seconds'
     },
     staking: {
+      title: 'Personal Connecting Dashboard',
+      label: 'Staking',
+      startLabel: '1. Start Connecting',
+      walletLabel: '2. My Wallet',
+      confirmLabel: '3. Authorize',
+      walletTitle: 'My Wallet',
+      confirmTitle: 'Authorize',
       rewardAccountError:
         'The selected destination account does not exist and cannot be used to receive rewards',
       customRewardDestination: 'Account Address',
@@ -17,6 +24,7 @@ export const enGb = {
       validatorsTab: 'Validators',
       account: 'Account',
       authorization: 'Authorization',
+      authorizeContribution: 'Authorize your contribution',
       stakingTab: {
         stakingDashboard: 'Stake KSM - Setup Nominator',
         validators: 'Stake KSM - Select Validators',
@@ -69,6 +77,8 @@ export const enGb = {
       stakingBlocks: '{{blocks}} blocks',
       erasRemaining: '{{eras}} eras remaining',
       noActiveStakes: "This Account Doesn't Have Any Active Stakes At The Moment",
+      activeStakes: 'Active Stakes',
+      balance: 'Balance',
       changeNominator: 'change nominator',
       stakingWalletAccountHeading: 'Staking Wallet Account',
       pickAccount: 'Pick a wallet account',
@@ -76,10 +86,55 @@ export const enGb = {
       stashLabel: 'stash',
       rewardDestination: 'reward destination',
       specificDestination: 'Specific Destination',
+      dockingAmount: '{{docking}} docking',
+      connectionAmount: '{{connections}} connections',
+      eventAmount: '{{events}} events',
+      requestAirdrop: 'Get tokens',
+      requestAirdropSuccess: 'Request for airdrop was successful',
+      requestAirdropFailed: 'Request for airdrop failed',
+      nextAirdropAvailableOn: 'Next airdrop available at {{date}}',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
+      setAmountSymbol: 'Set Amount, {{symbol}}',
       nominateAndBond: 'Nominate & Bond',
+      amount: 'Amount',
+      tokenAmount: 'Amount, {{amount}}',
+      stakedAmount: 'Staked {{amount}}',
+      back: 'Back',
+      next: 'Next',
+      destination: 'Destination',
       signAndSubmit: 'Sign & Submit',
+      signAndConnect: 'Sign & Connect',
+      unStakeContribution: 'Unstake your contribution',
+      contributionMessage:
+        'This account is also the destination for the rewards you receive from your contribution.',
+      stakingMessage:
+        'By staking Momentum ($MOM) in someones Odyssey you are showing support for their journey. Not only do you get rewards for staking, but it will also allow you to place a portal inside your Odyssey that will allow others to travel to the Odyssey you have staked in.',
+      connectMessage:
+        'You can freely visit any users open Odyssey. You can explore and meet them just by clicking on their Odyssey. However, to create a portal between your Odyssey and another users Odyssey, you will need to stake in them. By staking you show your support for another Odyssey.',
+      connectTitle: 'Connect to another Odyssey',
+      startContributing: 'Start Contributing',
+      guestStakingMessage: 'Connecting and Staking are on-chain actions that require a wallet',
+      guestWalletMessage: 'Here is how to create and connect your wallet to Odyssey',
+      unStakeFrom: 'Unstake From',
+      unStake: 'Unstake',
+      errorUnstake: 'Error unstaking',
+      successUnstake: 'Congratulations, you successfully unstaked {{amount}} from XYZ',
+      errorGetRewards: 'Error getting rewards',
+      successGetRewards: 'Congratulations, you successfully claimed your MOM rewards!',
+      getRewards: 'Get Rewards',
+      error: 'Oops! Your request failed, please try again!',
+      stakeSuccess: 'Congratulations, you successfully staked {{amount}} MOM in XYZ',
+      stakeSuccessTitle: 'Staking successful!',
+      stakeErrorTitle: 'Staking failed!',
+      unStakeSuccessTitle: 'Unstaking successful! ',
+      unStakeErrorTitle: 'Unstaking failed!',
+      rewardSuccessTitle: 'Rewards claim successful!',
+      rewardErrorTitle: 'Rewards claim failed!',
+      airdropSuccessTitle: 'Airdrop successful!',
+      airdropErrorTitle: 'Airdrop failed!',
+      totalRewards: 'Total rewards',
+      rewards: 'Rewards',
       stashController: 'Controller',
       selectAmount: 'Select amount to stake',
       available: 'Available',
@@ -163,13 +218,17 @@ export const enGb = {
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
       onlyGLBSupported: 'Only GLB format supported',
-      requiredField: 'This field is required'
+      requiredField: 'This field is required',
+      errorLoadingToken: 'Error loading {{tokenSymbol}}',
+      errorLoadingNFT: 'Error loading NFT'
     },
     systemMessages: {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
       switchToThatTab:
         'To continue the experience, please switch to that window/tab and close this one',
-      underMaintenance: 'The server is undergoing maintenance, please try again later'
+      underMaintenance: 'The server is undergoing maintenance, please try again later',
+      noBlockchainUrlAvailable:
+        'Ooops, the blockchain server is not available at the moment. Please try again later!'
     },
     counts: {
       people_one: '{{count}} Person',
@@ -246,16 +305,32 @@ export const enGb = {
       changeText: 'Change Text',
       document: 'Document',
       changeImage: 'Change Image',
-      image: 'Image'
+      image: 'Image',
+      coCreate: 'co-create',
+      connected: 'connected',
+      connect: 'connect',
+      highFive: 'high five',
+      visit: 'visit',
+      flyToMe: 'Fly to me',
+      bio: 'Bio',
+      discoverMore: 'Discover more',
+      connections: 'Connections',
+      newsfeed: 'Newsfeed',
+      changeMusic: 'Change Music (coming soon)',
+      tokenGating: 'Token Gating (coming soon)',
+      addObject: 'Add Object',
+      skybox: 'Skybox',
+      connectYourWallet: 'Connect your wallet'
     },
     messages: {
       loading: 'Loading Odyssey',
       loadingPlugin: 'Loading Plugin...',
+      loadingToken: 'Loading {{tokenSymbol}}...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
-      version: 'Version {{version}}',
+      version: 'Odyssey version {{version}}',
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
@@ -367,7 +442,16 @@ export const enGb = {
         'Error has occured when removing {{pluginName}} removed succesfully!',
       weSupportGLBModels: 'We support GLB Models',
       selectOne: 'Select One',
-      processing: 'Processing'
+      processing: 'Processing',
+      comingSoonExclamation: 'Coming Soon!',
+      mintingYourOdyssey: 'Minting your Odyssey...',
+      mintingYourOdysseyWarning: "Please wait and don't refresh, this may take a while.",
+      congratulations: 'Congratulations!',
+      recievedAmmountOfTokensMessage:
+        "You just received {{amount}} tokens. One more step and you'll embark on your epic journey!",
+      onceConnectedTokensWillBeAwarded:
+        'Once connected, you will be awarded some Drive tokens to get you started',
+      noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
     },
     titles: {
       alert: 'alert',
@@ -412,7 +496,10 @@ export const enGb = {
       selectFunctionality: 'Select Functionality',
       spawnAsset: 'Spawn Asset',
       selectedSkybox: 'Selected Skybox',
-      upload3dAsset: 'Upload 3D Asset'
+      upload3dAsset: 'Upload 3D Asset',
+      admin: 'admin',
+      statistics: 'Statistics',
+      oneConnectYourWallet: '1. Connect your wallet'
     },
     textMessage: {
       you: 'you',
@@ -440,7 +527,8 @@ export const enGb = {
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
       selectAnOption: 'Select an Option',
-      nameYourObjectNavigation: 'Name your Object (Navigation)'
+      nameYourObjectNavigation: 'Name your Object (Navigation)',
+      selectAccount: 'Select Account'
     },
     fields: {
       nickname: 'Nickname',
@@ -481,6 +569,11 @@ export const enGb = {
       flyToThisSpace: 'Fly to this space',
       grabTable: 'Grab table',
       highFive: 'High five',
+      connect: 'Connect',
+      connected: 'Connected',
+      coCreate: 'co-create',
+      dock: 'Dock',
+      visit: 'Visit',
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',
@@ -541,6 +634,14 @@ export const enGb = {
       changeText: 'Change Text',
       changeImage: 'Change Image',
       selectImage: 'Select Image',
+      move: 'Move',
+      rotate: 'Rotate',
+      scale: 'Scale',
+      undo: 'Undo',
+      redo: 'Redo',
+      copy: 'Copy',
+      functionality: 'Functionality',
+      addTokenGate: 'Add Token Gate',
       removeFromLibrary: 'Remove from library'
     },
     descriptions: {
@@ -1021,6 +1122,11 @@ export const enGb = {
         title: 'remove Tile from dashboard',
         message: 'Are you sure you want to remove this tile?'
       }
+    },
+    mutualConnections: {
+      noConnection: 'There are no connections yet',
+      title: 'Mutual connections list',
+      admin: 'admin'
     }
   }
 };

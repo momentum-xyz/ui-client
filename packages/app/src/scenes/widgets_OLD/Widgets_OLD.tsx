@@ -23,8 +23,14 @@ import * as styled from './Widgets_OLD.styled';
 import {WorldChatWidget} from './pages';
 
 const Widgets_OLD: FC = () => {
-  const {sessionStore, mainStore, widgetStore_OLD, flightStore, worldChatStore, worldBuilderStore} =
-    useStore();
+  const {
+    sessionStore,
+    mainStore,
+    widgetStore_OLD,
+    flightStore,
+    worldChatStore,
+    odysseyCreatorStore: worldBuilderStore
+  } = useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore;
   const {
@@ -38,7 +44,7 @@ const Widgets_OLD: FC = () => {
   } = widgetStore_OLD;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
-  const {user, isGuest, userId} = sessionStore;
+  const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
   const {userDevicesStore} = agoraStore;
 
@@ -210,7 +216,7 @@ const Widgets_OLD: FC = () => {
                 />
               </ToolbarIcon>
             )}
-            {!isGuest && (
+            {!sessionStore.user?.isGuest && (
               <ToolbarIcon
                 title={t('labels.staking')}
                 icon="wallet"
