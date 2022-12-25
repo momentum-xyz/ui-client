@@ -9,6 +9,8 @@ import * as styled from './Model3dPreview.styled';
 
 const loader = new GLTFLoader();
 
+const promiseWait = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec));
+
 const createScene = (canvas: HTMLCanvasElement) => {
   const renderer = new WebGLRenderer({
     canvas,
@@ -47,10 +49,15 @@ const createScene = (canvas: HTMLCanvasElement) => {
 
 export interface PropsInterface {
   filename: string;
+  delayLoadingMsec?: number;
   background?: boolean;
 }
 
-export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}) => {
+export const Model3dPreview: FC<PropsInterface> = ({
+  filename,
+  background = true,
+  delayLoadingMsec
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [progress, setProgress] = useState<number | null>(null);
@@ -76,13 +83,25 @@ export const Model3dPreview: FC<PropsInterface> = ({filename, background = true}
       return;
     }
 
-    console.log('Creating scene');
-    const {scene: _scene, render} = createScene(canvasRef.current);
-    renderRef.current = render;
-    setScene(_scene);
+    const init = async () => {
+      if (delayLoadingMsec) {
+        await promiseWait(delayLoadingMsec);
+      }
+      if (!canvasRef.current) {
+        console.log('Canvas was unmounted');
+        return;
+      }
 
-    recursiveAnimate();
-  }, [scene, recursiveAnimate]);
+      console.log('Creating scene');
+      const {scene: _scene, render} = createScene(canvasRef.current);
+      renderRef.current = render;
+      setScene(_scene);
+
+      recursiveAnimate();
+    };
+
+    init();
+  }, [scene, recursiveAnimate, delayLoadingMsec]);
 
   useEffect(() => {
     if (!scene) {

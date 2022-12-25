@@ -35,7 +35,10 @@ const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
             <styled.GridItemImage src={asset.image} />
           ) : (
             <styled.GridItemPreview>
-              <Model3dPreview filename={hoveringAsset.thumbnailAssetDownloadUrl} />
+              <Model3dPreview
+                delayLoadingMsec={500}
+                filename={hoveringAsset.thumbnailAssetDownloadUrl}
+              />
             </styled.GridItemPreview>
           )}
           <Text text={asset.name} size="m" />
