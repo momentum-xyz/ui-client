@@ -68,6 +68,19 @@ const Widgets: FC<PropsInterface> = (props) => {
       <styled.Footer data-testid="Widgets-test">
         <styled.LeftToolbars>
           <ToolbarIconList>
+            {!isExplorePage && (
+              <ToolbarIcon
+                title={t('labels.explore')}
+                icon="leave-left"
+                size="medium"
+                onClick={() => {
+                  // FIXME: Hard redirect because of unity
+                  document.location = ROUTES.explore;
+                }}
+                state={{canGoBack: true}}
+              />
+            )}
+
             <ToolbarIcon
               title={t('titles.profile')}
               onClick={widgetsStore.profileStore.profileDialog.toggle}
@@ -84,8 +97,8 @@ const Widgets: FC<PropsInterface> = (props) => {
             {!isExplorePage && (
               <ToolbarIcon
                 title={t('labels.newsfeed')}
-                icon="bell"
-                size="medium"
+                icon="clock-two"
+                size="medium-large"
                 onClick={widgetsStore.notificationsStore.notificationsDialog.toggle}
                 isSelected={widgetsStore.notificationsStore.notificationsDialog.isOpen}
                 state={{canGoBack: true}}
@@ -110,19 +123,6 @@ const Widgets: FC<PropsInterface> = (props) => {
               isSelected={nftStore.stakingDashorboardDialog.isOpen}
               state={{canGoBack: true}}
             />
-
-            {!isExplorePage && (
-              <ToolbarIcon
-                title={t('labels.explore')}
-                icon="solar-system"
-                size="medium"
-                onClick={() => {
-                  // FIXME: Hard redirect because of unity
-                  document.location = ROUTES.explore;
-                }}
-                state={{canGoBack: true}}
-              />
-            )}
           </ToolbarIconList>
         </styled.LeftToolbars>
 
