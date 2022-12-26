@@ -29,6 +29,7 @@ export const use3dMap = (
   onSelectOdyssey: (uuid: string) => void
 ) => {
   const wasLoaded = useRef(false);
+  const connectionsForWallet = useRef<string>('');
 
   /**
    * Reusable properties of galaxy
@@ -70,85 +71,97 @@ export const use3dMap = (
   /**
    * Draw lines between staked Odysseys.
    */
-  const drawConnections = useCallback(async (sourceWallet: string) => {
-    // Delete current connections
-    if (activeLinesArray.current.length) {
-      for (let i = 0; i < activeLinesArray.current.length; i++) {
-        scene.current.remove(activeLinesArray.current[i]);
+  const drawConnections = useCallback(
+    async (sourceWallet: string) => {
+      const targetWallets = await getConnections(sourceWallet);
+
+      const isSameOdyssey = connectionsForWallet.current === sourceWallet;
+      const areSameConnections = activeLinesArray.current.length === targetWallets.length;
+
+      if (isSameOdyssey && areSameConnections) {
+        return;
       }
 
-      activeLinesArray.current = [];
-    }
-
-    const sourceOdyssey = referenceListOfOdysseys.current.find(
-      (odyssey) => odyssey.owner === sourceWallet
-    );
-
-    const targetWallets = await getConnections(sourceWallet);
-
-    // Draw new connections
-    targetWallets.forEach((targetWallet) => {
-      // Get the connected Odysseys from global reference
-      const targetOdyssey = referenceListOfOdysseys.current.find(
-        (odyssey) => odyssey.owner === targetWallet
-      );
-
-      if (targetOdyssey && sourceOdyssey) {
-        // Create random line height and calculate middle position
-        const randomLineHeight = -20;
-        const middlePosition = new THREE.Vector3(
-          (sourceOdyssey.position.x + targetOdyssey.position.x) / 2,
-          randomLineHeight,
-          (sourceOdyssey.position.z + targetOdyssey.position.z) / 2
-        );
-
-        const direction = new THREE.Vector3();
-        direction.subVectors(sourceOdyssey.position, targetOdyssey.position).normalize();
-        const startVector = new THREE.Vector3();
-        startVector.addVectors(sourceOdyssey.position, direction.multiplyScalar(-0.7));
-
-        const newY = sourceOdyssey.position.y - 0.8;
-        startVector.y = newY;
-        const secondVector = new THREE.Vector3(startVector.x, newY - 1, startVector.z);
-
-        // Create the curve
-        const curve = new THREE.CubicBezierCurve3(
-          startVector,
-          secondVector,
-          middlePosition,
-          targetOdyssey.position
-        );
-
-        // Get XYZ along the curve.
-        const curvePoints = curve.getSpacedPoints(50);
-
-        // Prepare array of numbers for line geometry (doesn't accept vectors)
-        const linePoints = [];
-
-        // Build the array for Line from curve Points.
-        for (let i = 0; i < curvePoints.length; i++) {
-          linePoints.push(curvePoints[i].x, curvePoints[i].y, curvePoints[i].z);
+      // Delete current connections
+      if (activeLinesArray.current.length) {
+        for (let i = 0; i < activeLinesArray.current.length; i++) {
+          scene.current.remove(activeLinesArray.current[i]);
         }
 
-        const lineGeometry = new LineGeometry();
-        const lineMaterial = new LineMaterial({
-          color: 0xdda4de,
-          linewidth: 2,
-          transparent: true,
-          opacity: 0.5
-        });
-
-        lineGeometry.setPositions(linePoints);
-        lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
-
-        const drawLine = new Line2(lineGeometry, lineMaterial);
-
-        // Add line to the scene.
-        activeLinesArray.current.push(drawLine);
-        scene.current.add(drawLine);
+        activeLinesArray.current = [];
       }
-    });
-  }, []);
+
+      const sourceOdyssey = referenceListOfOdysseys.current.find(
+        (odyssey) => odyssey.owner === sourceWallet
+      );
+
+      connectionsForWallet.current = sourceWallet;
+
+      // Draw new connections
+      targetWallets.forEach((targetWallet) => {
+        // Get the connected Odysseys from global reference
+        const targetOdyssey = referenceListOfOdysseys.current.find(
+          (odyssey) => odyssey.owner === targetWallet
+        );
+
+        if (targetOdyssey && sourceOdyssey) {
+          // Create random line height and calculate middle position
+          const randomLineHeight = -20;
+          const middlePosition = new THREE.Vector3(
+            (sourceOdyssey.position.x + targetOdyssey.position.x) / 2,
+            randomLineHeight,
+            (sourceOdyssey.position.z + targetOdyssey.position.z) / 2
+          );
+
+          const direction = new THREE.Vector3();
+          direction.subVectors(sourceOdyssey.position, targetOdyssey.position).normalize();
+          const startVector = new THREE.Vector3();
+          startVector.addVectors(sourceOdyssey.position, direction.multiplyScalar(-0.7));
+
+          const newY = sourceOdyssey.position.y - 0.8;
+          startVector.y = newY;
+          const secondVector = new THREE.Vector3(startVector.x, newY - 1, startVector.z);
+
+          // Create the curve
+          const curve = new THREE.CubicBezierCurve3(
+            startVector,
+            secondVector,
+            middlePosition,
+            targetOdyssey.position
+          );
+
+          // Get XYZ along the curve.
+          const curvePoints = curve.getSpacedPoints(50);
+
+          // Prepare array of numbers for line geometry (doesn't accept vectors)
+          const linePoints = [];
+
+          // Build the array for Line from curve Points.
+          for (let i = 0; i < curvePoints.length; i++) {
+            linePoints.push(curvePoints[i].x, curvePoints[i].y, curvePoints[i].z);
+          }
+
+          const lineGeometry = new LineGeometry();
+          const lineMaterial = new LineMaterial({
+            color: 0xdda4de,
+            linewidth: 2,
+            transparent: true,
+            opacity: 0.5
+          });
+
+          lineGeometry.setPositions(linePoints);
+          lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
+
+          const drawLine = new Line2(lineGeometry, lineMaterial);
+
+          // Add line to the scene.
+          activeLinesArray.current.push(drawLine);
+          scene.current.add(drawLine);
+        }
+      });
+    },
+    [getConnections]
+  );
 
   /**
    * Build Galaxy
@@ -423,7 +436,7 @@ export const use3dMap = (
    * Select planet handler
    */
   const onMouseDown = useCallback(
-    (event: MouseEvent) => {
+    async (event: MouseEvent) => {
       if (event.button !== 0) {
         return;
       }
@@ -442,6 +455,9 @@ export const use3dMap = (
         // Only react to first raycast hit
         const targetPlanet = castRay[0];
 
+        // @ts-ignore: object has this prop
+        await drawConnections(targetPlanet.object.owner);
+
         // If clicked planet is same as current selected one return
         if (targetPlanet.object === selectedOdyssey.current) {
           // Handle selecting planet again
@@ -449,9 +465,6 @@ export const use3dMap = (
 
           return;
         }
-
-        // Log information about selected Odyssey
-        console.log(targetPlanet.object);
 
         selectedOdyssey.current = targetPlanet.object;
 
@@ -517,7 +530,7 @@ export const use3dMap = (
         });
       }
     },
-    [onSelectOdyssey]
+    [drawConnections, onSelectOdyssey]
   );
 
   /**
