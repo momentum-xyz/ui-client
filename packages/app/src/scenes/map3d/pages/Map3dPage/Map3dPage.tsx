@@ -10,7 +10,7 @@ interface PropsInterface {
 }
 
 const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
-  const {nftStore, authStore, widgetsStore, sessionStore} = useStore();
+  const {nftStore, widgetsStore, sessionStore} = useStore();
   const {odysseyInfoStore} = widgetsStore;
 
   const handleSelect = useCallback(
@@ -22,24 +22,18 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
     [isClickActive, nftStore, odysseyInfoStore]
   );
 
-  if (!!authStore.wallet && sessionStore.userId && !nftStore.initialStakingInfoLoaded) {
+  if (nftStore.isLoading) {
     return <></>;
   }
 
-  // TODO: Add function load connection
-
   return (
-    <>
-      {!nftStore.isLoading && (
-        <Map3dCanvas
-          centerWallet={sessionStore.wallet}
-          items={nftStore.nftItems}
-          getConnections={nftStore.getStakedAtOthersByWallet}
-          getImageUrl={getImageAbsoluteUrl}
-          onSelect={handleSelect}
-        />
-      )}
-    </>
+    <Map3dCanvas
+      centerWallet={sessionStore.wallet}
+      items={nftStore.nftItems}
+      getConnections={nftStore.getStakedAtOthersByWallet}
+      getImageUrl={getImageAbsoluteUrl}
+      onSelect={handleSelect}
+    />
   );
 };
 
