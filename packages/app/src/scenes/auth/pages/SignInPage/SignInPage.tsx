@@ -15,6 +15,8 @@ const SignInPage: FC = () => {
 
   const history = useHistory();
 
+  const targetRoute = window.history.state?.state?.from || ROUTES.explore;
+
   useEffect(() => {
     authStore.clear();
     // TODO smt less brutal
@@ -26,7 +28,7 @@ const SignInPage: FC = () => {
     if (address) {
       const isDone = await authStore.fetchTokenByWallet(address);
       if (isDone) {
-        history.push(ROUTES.explore);
+        history.push(targetRoute);
       }
     }
   }, [authStore, history, nftStore]);
@@ -35,7 +37,7 @@ const SignInPage: FC = () => {
     async (form: GuestLoginFormInterface) => {
       const isDone = await authStore.fetchGuestToken(form);
       if (isDone) {
-        history.push(ROUTES.explore);
+        history.push(targetRoute);
       }
     },
     [authStore, history]
@@ -48,7 +50,7 @@ const SignInPage: FC = () => {
           <SinusBox />
           <TravellerBox />
           <SinusBox />
-          <CreateOdyssey onCreate={() => history.push(ROUTES.signInAccount)} />
+          <CreateOdyssey onCreate={() => history.push(ROUTES.signInAccount, {from: targetRoute})} />
         </styled.Boxes>
 
         <styled.Boxes>

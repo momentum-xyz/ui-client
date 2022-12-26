@@ -68,7 +68,8 @@ const SignInAccountPage: FC = () => {
         // we can put some wait here
         await nftStore.fetchNfts();
 
-        history.push(ROUTES.birth);
+        const from = window.history.state?.state?.from;
+        history.push(ROUTES.birth, {from: from || ROUTES.explore});
       } catch (err) {
         console.log('error minting nft', err);
       }
