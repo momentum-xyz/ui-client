@@ -10,7 +10,6 @@ import {switchFullscreen} from 'core/utils';
 import {
   HelpWidget,
   LaunchInitiativeWidget,
-  MagicLinkWidget,
   MusicPlayerWidget,
   StakingWidget,
   WorldStatsWidget,
@@ -35,7 +34,6 @@ const Widgets_OLD: FC = () => {
   const {agoraStageModeStore} = agoraStore;
   const {
     stakingStore,
-    magicLinkStore,
     worldStatsStore,
     helpStore,
     launchInitiativeStore,
@@ -101,11 +99,6 @@ const Widgets_OLD: FC = () => {
       icon: 'music',
       onClick: musicPlayerWidget.toggle
     },
-    {
-      title: t('labels.shareLocation'),
-      icon: 'location',
-      onClick: magicLinkStore.magicLinkDialog.open
-    },
     {title: t('labels.help'), icon: 'question', onClick: helpStore.helpDialog.open},
     {title: t('labels.fullscreen'), icon: 'fullscreen', onClick: switchFullscreen}
   ];
@@ -114,7 +107,6 @@ const Widgets_OLD: FC = () => {
     <>
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
-      {magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}

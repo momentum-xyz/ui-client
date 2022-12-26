@@ -21,7 +21,8 @@ import {
   SearchUsersWidget,
   MutualConnectionsWidget,
   StakingDashboardWidget,
-  ConnectingDashboardWidget
+  ConnectingDashboardWidget,
+  MagicLinkWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -195,6 +196,15 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
 
               <ToolbarIcon
+                title={t('labels.shareLink')}
+                icon="link"
+                size="medium"
+                onClick={widgetsStore.magicLinkStore.magicLinkDialog.open}
+                isSelected={widgetsStore.magicLinkStore.magicLinkDialog.isOpen}
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIcon
                 title={t('labels.flyToMe')}
                 icon="fly-to"
                 size="medium"
@@ -224,6 +234,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}
       {widgetsStore.flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}
+      {widgetsStore.magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
       {widgetsStore.screenShareStore.widget.isOpen && <ScreenShareWidget />}
       {widgetsStore.calendarStore.widget.isOpen && <CalendarWidget />}
       {asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen && <SocialWidget />}

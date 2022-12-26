@@ -15,24 +15,28 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const MagicLinkWidget: FC = () => {
-  const {widgetStore_OLD, mainStore, collaborationStore} = useStore();
-  const {spaceStore} = collaborationStore;
-  const {magicLinkStore} = widgetStore_OLD;
-  const {magicLink} = magicLinkStore;
-  const {copyToClipBoard, address, wasCreated, init} = magicLink;
-  const {unityStore} = mainStore;
+  const {widgetsStore, mainStore} = useStore();
+  const {magicLinkStore} = widgetsStore;
+  const {address, copyToClipBoard} = magicLinkStore;
+  const {worldStore} = mainStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
 
   useEffect(() => {
-    init();
+    magicLinkStore.init();
+
     return () => {
       magicLinkStore.resetModel();
     };
   }, [magicLinkStore]);
-  useEffect(() => {
-    if (wasCreated) {
+
+  const handleGenerateLink = useCallback(async () => {
+    const isDone = await copyToClipBoard(MagicTypeEnum.ODYSSEY, worldStore.worldId);
+
+    if (isDone) {
+      magicLinkStore.magicLinkDialog.close();
+
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -42,27 +46,19 @@ const MagicLinkWidget: FC = () => {
         />,
         TOAST_COMMON_OPTIONS
       );
-      magicLinkStore.magicLinkDialog.close();
     }
-  }, [wasCreated]);
-
-  const handleGenerateLink = useCallback(async () => {
-    if (spaceStore.space && !spaceStore.isTable) {
-      await copyToClipBoard(MagicTypeEnum.OPEN_SPACE, spaceStore.id);
-    } else if (spaceStore.space && spaceStore.isTable) {
-      await copyToClipBoard(MagicTypeEnum.JOIN_MEETING, spaceStore.id);
-    } else {
-      await copyToClipBoard(MagicTypeEnum.FLY, undefined, unityStore.getUserPosition());
-    }
-  }, [copyToClipBoard, spaceStore, unityStore]);
+  }, [copyToClipBoard, magicLinkStore.magicLinkDialog, t, worldStore.worldId]);
 
   return (
     <Dialog
       theme={theme}
+      icon="link"
+      iconSize="medium"
       position="rightBottom"
-      headerStyle="uppercase"
+      headerStyle="normal"
+      headerType="h2"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
-      title={t('labels.shareLocation')}
+      title={t('labels.shareLinkOfOdyssey')}
       onClose={magicLinkStore.magicLinkDialog.close}
       showBackground={false}
       showCloseButton
