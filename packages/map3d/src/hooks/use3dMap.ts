@@ -23,7 +23,8 @@ import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 export const use3dMap = (
   canvas: HTMLCanvasElement,
   items: PlanetInterface[],
-  centerUuid: string,
+  centerWallet: string,
+  getConnections: (wallet: string) => Promise<string[]>,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onSelectOdyssey: (uuid: string) => void
 ) => {
@@ -69,7 +70,7 @@ export const use3dMap = (
   /**
    * Draw lines between staked Odysseys.
    */
-  const drawConnections = useCallback((sourceUuid: string, targetUuids: string[]) => {
+  const drawConnections = useCallback(async (sourceWallet: string) => {
     // Delete current connections
     if (activeLinesArray.current.length) {
       for (let i = 0; i < activeLinesArray.current.length; i++) {
@@ -80,14 +81,16 @@ export const use3dMap = (
     }
 
     const sourceOdyssey = referenceListOfOdysseys.current.find(
-      (odyssey) => odyssey.uuid === sourceUuid
+      (odyssey) => odyssey.owner === sourceWallet
     );
 
+    const targetWallets = await getConnections(sourceWallet);
+
     // Draw new connections
-    targetUuids.forEach((targetUuid) => {
+    targetWallets.forEach((targetWallet) => {
       // Get the connected Odysseys from global reference
       const targetOdyssey = referenceListOfOdysseys.current.find(
-        (odyssey) => odyssey.uuid === targetUuid
+        (odyssey) => odyssey.owner === targetWallet
       );
 
       if (targetOdyssey && sourceOdyssey) {
@@ -145,46 +148,6 @@ export const use3dMap = (
         scene.current.add(drawLine);
       }
     });
-
-    /* setup reusable variables and material
-    const lineMat = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.15
-    });
-
-    Object.entries(connections).forEach(([uuid, connectedUuids]) => {
-      const odyssey = referenceListOfOdysseys.current.find((item) => item.uuid === uuid);
-      if (odyssey && connectedUuids?.length > 0) {
-        connectedUuids.forEach((connectedUuid) => {
-          // Get positions from connected odyssey and draw line.
-          const foundOdyssey = referenceListOfOdysseys.current.find(
-            (planet) => planet.uuid === connectedUuid.id
-          );
-
-          if (foundOdyssey) {
-            const randomLineHeight =
-              Math.random() * MAX_ODYSSEY_CONNECTION_LINE_HEIGHT * (Math.random() > 0.5 ? 1 : -1);
-            const middlePosition = new Vector3(
-              (odyssey.position.x + foundOdyssey.position.x) / 2,
-              randomLineHeight,
-              (odyssey.position.z + foundOdyssey.position.z) / 2
-            );
-
-            const curve = new THREE.QuadraticBezierCurve3(
-              odyssey.position,
-              middlePosition,
-              foundOdyssey.position
-            );
-
-            const curvePoints = curve.getSpacedPoints(20);
-            const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-            const curveMesh = new THREE.Line(curveGeometry, lineMat);
-            scene.current.add(curveMesh);
-          }
-        });
-      }
-    });*/
   }, []);
 
   /**
@@ -323,7 +286,7 @@ export const use3dMap = (
    */
   const createOdysseys = useCallback(() => {
     for (let i = 0; i < items.length; i++) {
-      if (items[i].uuid !== centerUuid) {
+      if (items[i].owner !== centerWallet) {
         const odyssey = createNewOdyssey(items[i]);
         if (odyssey) {
           listOfOdysseys.current.push(odyssey);
@@ -332,13 +295,13 @@ export const use3dMap = (
     }
 
     referenceListOfOdysseys.current = [...listOfOdysseys.current];
-  }, [centerUuid, createNewOdyssey, items]);
+  }, [centerWallet, createNewOdyssey, items]);
 
   /**
    * Create center Odyssey
    */
   const createCenterOdyssey = useCallback(() => {
-    const centerItem = items.find((i) => i.uuid === centerUuid);
+    const centerItem = items.find((i) => i.owner === centerWallet);
     if (!centerItem) {
       return;
     }
@@ -346,7 +309,9 @@ export const use3dMap = (
     const centerOdyssey = createNewOdyssey(centerItem);
     scene.current.add(centerOdyssey);
     referenceListOfOdysseys.current.push(centerOdyssey);
-  }, [centerUuid, createNewOdyssey, items]);
+
+    drawConnections(centerWallet);
+  }, [drawConnections, centerWallet, createNewOdyssey, items]);
 
   /**
    * Create Circular Universe of Odysseys
@@ -477,11 +442,11 @@ export const use3dMap = (
         // Only react to first raycast hit
         const targetPlanet = castRay[0];
 
-        // Handle selecting planet
-        onSelectOdyssey(targetPlanet.object.uuid);
-
         // If clicked planet is same as current selected one return
         if (targetPlanet.object === selectedOdyssey.current) {
+          // Handle selecting planet again
+          onSelectOdyssey(targetPlanet.object.uuid);
+
           return;
         }
 
@@ -545,6 +510,9 @@ export const use3dMap = (
             controls.current.autoRotate = true;
             controls.current.target = targetPlanetLocation;
             transitionToPlanetFinished.current = true;
+
+            // Handle selecting planet
+            onSelectOdyssey(targetPlanet.object.uuid);
           }
         });
       }

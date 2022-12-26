@@ -16,7 +16,6 @@ const User = types
     updatedAt: types.maybeNull(types.string),
     wallet: types.maybeNull(types.string),
     status: types.maybeNull(types.enumeration(Object.values(UserStatusEnum))),
-    isNodeAdmin: false,
     profile: UserProfile,
     isGuest: types.maybe(types.boolean),
 

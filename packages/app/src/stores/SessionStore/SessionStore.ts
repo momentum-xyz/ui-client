@@ -29,11 +29,14 @@ const SessionStore = types
     get isUserReady(): boolean {
       return !!self.user;
     },
+    get isGuest(): boolean {
+      return self.user?.isGuest ?? true;
+    },
     get userId(): string {
       return self.user?.id || '';
     },
-    get isGuest(): boolean {
-      return self.user?.isGuest ?? true;
+    get wallet(): string {
+      return self.user?.wallet || '';
     }
   }))
   .actions((self) => ({

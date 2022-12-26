@@ -91,14 +91,12 @@ const Menu: FC = () => {
             />
             <Text text={user.status ? t(`labels.${user.status}`) : ''} size="xxs" />
           </styled.Option>
-          {user.isNodeAdmin && (
-            <styled.Option onClick={handleTokenRulesOpen}>
-              <styled.IconContainer>
-                <IconSvg name="whitelist" size="medium-large" isWhite />
-              </styled.IconContainer>
-              <Text text={t('labels.tokenRules')} size="xxs" />
-            </styled.Option>
-          )}
+          <styled.Option onClick={handleTokenRulesOpen}>
+            <styled.IconContainer>
+              <IconSvg name="whitelist" size="medium-large" isWhite />
+            </styled.IconContainer>
+            <Text text={t('labels.tokenRules')} size="xxs" />
+          </styled.Option>
           <styled.Option onClick={handleOpenSettings}>
             <styled.IconContainer>
               <IconSvg name="gear" size="medium-large" isWhite />
