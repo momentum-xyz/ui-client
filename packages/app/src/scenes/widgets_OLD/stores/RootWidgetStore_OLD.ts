@@ -2,14 +2,12 @@ import {Instance, types} from 'mobx-state-tree';
 
 import StakingStore from './StakingStore/StakingStore';
 import {WorldStatsStore} from './WorldStatsStore';
-import {MagicLinkStore} from './MagicLinkStore';
 import {HelpStore} from './HelpStore';
 import {LaunchInitiativeStore} from './LaunchInitiativeStore';
 import {MusicPlayerStore} from './MusicPlayerStore';
 import {EmojiStore} from './EmojiStore';
 
 const RootWidgetStore_OLD = types.model('RootWidgetStore_OLD', {
-  magicLinkStore: types.optional(MagicLinkStore, {}),
   stakingStore: types.optional(StakingStore, {}),
   worldStatsStore: types.optional(WorldStatsStore, {}),
   helpStore: types.optional(HelpStore, {}),

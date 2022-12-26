@@ -41,7 +41,8 @@ const BirthOfMePage: FC = () => {
       });
     }
 
-    history.push(ROUTES.birthAnimation);
+    const from = window.history.state?.state?.from;
+    history.push(ROUTES.birthAnimation, {from: from || ROUTES.explore});
   };
   if (!nft) {
     return null;

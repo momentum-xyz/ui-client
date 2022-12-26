@@ -36,10 +36,12 @@ const NotificationsWidget: FC = () => {
 
   return (
     <Dialog
-      icon="bell"
       theme={theme}
+      icon="bell"
+      iconSize="medium"
       position="rightBottom"
-      headerStyle="uppercase"
+      headerStyle="normal"
+      headerType="h2"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       title="Newsfeed"
       onClose={notificationsDialog.close}

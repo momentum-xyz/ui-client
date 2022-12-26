@@ -1,4 +1,3 @@
-export * from './MagicLinkWidget';
 export * from './StakingWidget';
 export * from './HelpWidget';
 export * from './WorldStatsWidget';

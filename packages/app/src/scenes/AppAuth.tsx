@@ -1,5 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -7,13 +8,15 @@ import {useStore} from 'shared/hooks';
 const AppAuth: FC = ({children}) => {
   const {authStore, sessionStore} = useStore();
 
+  const history = useHistory();
+
   useEffect(() => {
     if (authStore.hasToken) {
       sessionStore.loadUserProfile();
     } else {
-      document.location.href = ROUTES.signIn;
+      history.push(ROUTES.signIn, {from: history.location.pathname});
     }
-  }, [authStore.hasToken, sessionStore]);
+  }, [authStore.hasToken, history, sessionStore]);
 
   return <>{sessionStore.isUserReady && children}</>;
 };
