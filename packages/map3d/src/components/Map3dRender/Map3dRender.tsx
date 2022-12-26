@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 
 import {use3dMap} from '../../hooks';
 import {Map3dPropsInterface} from '../../interfaces';
@@ -8,18 +8,14 @@ interface PropsInterface extends Map3dPropsInterface {
 }
 
 const Map3dRender: FC<PropsInterface> = ({
-  currentUserId,
+  centerWallet,
   items,
-  connections,
   canvas,
+  getConnections,
   getImageUrl,
   onSelect
 }) => {
-  const {drawConnections} = use3dMap(canvas, items, currentUserId, getImageUrl, onSelect);
-
-  useEffect(() => {
-    drawConnections(connections);
-  }, [drawConnections, connections]);
+  use3dMap(canvas, items, centerWallet, getConnections, getImageUrl, onSelect);
 
   return <></>;
 };

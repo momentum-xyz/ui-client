@@ -1,12 +1,14 @@
 import {useCallback, useEffect, useRef} from 'react';
 import gsap from 'gsap';
 import * as THREE from 'three';
-import {Vector3} from 'three';
+import {Vector3, RepeatWrapping} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {Line2} from 'three/examples/jsm/lines/Line2.js';
+import {LineGeometry} from 'three/examples/jsm/lines/LineGeometry.js';
+import {LineMaterial} from 'three/examples/jsm/lines/LineMaterial.js';
 
 import {
   PARAMETERS,
-  MAX_ODYSSEY_CONNECTION_LINE_HEIGHT,
   MAX_ORBIT_CAMERA_DISTANCE,
   MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA,
   PLANET_ARE_SPAWNED_HORIZONTAL,
@@ -21,11 +23,13 @@ import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 export const use3dMap = (
   canvas: HTMLCanvasElement,
   items: PlanetInterface[],
-  centerUuid: string,
+  centerWallet: string,
+  getConnections: (wallet: string) => Promise<string[]>,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onSelectOdyssey: (uuid: string) => void
 ) => {
   const wasLoaded = useRef(false);
+  const connectionsForWallet = useRef<string>('');
 
   /**
    * Reusable properties of galaxy
@@ -44,6 +48,9 @@ export const use3dMap = (
   const updateCameraRotation = useRef<boolean>(false);
   const transitionToPlanetFinished = useRef<boolean>(true);
 
+  const nameRingGeometry = useRef(new THREE.CylinderGeometry(1.2, 1.2, 0.5, 22, 1, true));
+  const nameRingOffset = useRef(0);
+
   const pointsGeometry = useRef<THREE.BufferGeometry | null>(null);
   const pointsMaterial = useRef<THREE.PointsMaterial | null>(null);
   const points = useRef<THREE.Points | null>(null);
@@ -57,52 +64,104 @@ export const use3dMap = (
       powerPreference: 'high-performance'
     })
   );
+
   const controls = useRef(new OrbitControls(camera.current, renderer.current.domElement));
+  const activeLinesArray = useRef<Line2[]>([]);
 
   /**
    * Draw lines between staked Odysseys.
    */
-  const drawConnections = useCallback((connections: Record<string, {id: string}[]>) => {
-    // setup reusable variables and material
-    const lineMat = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.15
-    });
+  const drawConnections = useCallback(
+    async (sourceWallet: string) => {
+      const targetWallets = await getConnections(sourceWallet);
 
-    Object.entries(connections).forEach(([uuid, connectedUuids]) => {
-      const odyssey = referenceListOfOdysseys.current.find((item) => item.uuid === uuid);
-      if (odyssey && connectedUuids?.length > 0) {
-        connectedUuids.forEach((connectedUuid) => {
-          // Get positions from connected odyssey and draw line.
-          const foundOdyssey = referenceListOfOdysseys.current.find(
-            (planet) => planet.uuid === connectedUuid.id
+      const isSameOdyssey = connectionsForWallet.current === sourceWallet;
+      const areSameConnections = activeLinesArray.current.length === targetWallets.length;
+
+      if (isSameOdyssey && areSameConnections) {
+        return;
+      }
+
+      // Delete current connections
+      if (activeLinesArray.current.length) {
+        for (let i = 0; i < activeLinesArray.current.length; i++) {
+          scene.current.remove(activeLinesArray.current[i]);
+        }
+
+        activeLinesArray.current = [];
+      }
+
+      const sourceOdyssey = referenceListOfOdysseys.current.find(
+        (odyssey) => odyssey.owner === sourceWallet
+      );
+
+      connectionsForWallet.current = sourceWallet;
+
+      // Draw new connections
+      targetWallets.forEach((targetWallet) => {
+        // Get the connected Odysseys from global reference
+        const targetOdyssey = referenceListOfOdysseys.current.find(
+          (odyssey) => odyssey.owner === targetWallet
+        );
+
+        if (targetOdyssey && sourceOdyssey) {
+          // Create random line height and calculate middle position
+          const randomLineHeight = -20;
+          const middlePosition = new THREE.Vector3(
+            (sourceOdyssey.position.x + targetOdyssey.position.x) / 2,
+            randomLineHeight,
+            (sourceOdyssey.position.z + targetOdyssey.position.z) / 2
           );
 
-          if (foundOdyssey) {
-            const randomLineHeight =
-              Math.random() * MAX_ODYSSEY_CONNECTION_LINE_HEIGHT * (Math.random() > 0.5 ? 1 : -1);
-            const middlePosition = new Vector3(
-              (odyssey.position.x + foundOdyssey.position.x) / 2,
-              randomLineHeight,
-              (odyssey.position.z + foundOdyssey.position.z) / 2
-            );
+          const direction = new THREE.Vector3();
+          direction.subVectors(sourceOdyssey.position, targetOdyssey.position).normalize();
+          const startVector = new THREE.Vector3();
+          startVector.addVectors(sourceOdyssey.position, direction.multiplyScalar(-0.7));
 
-            const curve = new THREE.QuadraticBezierCurve3(
-              odyssey.position,
-              middlePosition,
-              foundOdyssey.position
-            );
+          const newY = sourceOdyssey.position.y - 0.8;
+          startVector.y = newY;
+          const secondVector = new THREE.Vector3(startVector.x, newY - 1, startVector.z);
 
-            const curvePoints = curve.getSpacedPoints(20);
-            const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-            const curveMesh = new THREE.Line(curveGeometry, lineMat);
-            scene.current.add(curveMesh);
+          // Create the curve
+          const curve = new THREE.CubicBezierCurve3(
+            startVector,
+            secondVector,
+            middlePosition,
+            targetOdyssey.position
+          );
+
+          // Get XYZ along the curve.
+          const curvePoints = curve.getSpacedPoints(50);
+
+          // Prepare array of numbers for line geometry (doesn't accept vectors)
+          const linePoints = [];
+
+          // Build the array for Line from curve Points.
+          for (let i = 0; i < curvePoints.length; i++) {
+            linePoints.push(curvePoints[i].x, curvePoints[i].y, curvePoints[i].z);
           }
-        });
-      }
-    });
-  }, []);
+
+          const lineGeometry = new LineGeometry();
+          const lineMaterial = new LineMaterial({
+            color: 0xdda4de,
+            linewidth: 2,
+            transparent: true,
+            opacity: 0.5
+          });
+
+          lineGeometry.setPositions(linePoints);
+          lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
+
+          const drawLine = new Line2(lineGeometry, lineMaterial);
+
+          // Add line to the scene.
+          activeLinesArray.current.push(drawLine);
+          scene.current.add(drawLine);
+        }
+      });
+    },
+    [getConnections]
+  );
 
   /**
    * Build Galaxy
@@ -183,16 +242,52 @@ export const use3dMap = (
 
       const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry.current, odysseyAvatarMaterial);
 
+      // Create custom material for name ring.
+      const nameRingMaterial = new THREE.MeshBasicMaterial({
+        transparent: true,
+        side: THREE.DoubleSide
+      });
+
+      // Construct odyssey ring mesh.
+      const nameRingMesh = new THREE.Mesh(nameRingGeometry.current, nameRingMaterial);
+
+      /**
+       * Build text texture for around the odyssey
+       */
+      const drawCanvas = document.createElement('canvas');
+      const drawContent = drawCanvas.getContext('2d');
+      drawCanvas.width = 1000;
+      drawCanvas.height = 100;
+      if (drawContent) {
+        drawContent.font = 'Bold 40px IBM Plex Sans';
+
+        drawContent.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        drawContent.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
+
+        drawContent.fillStyle = 'rgba(245, 199, 255, 0.9)';
+        drawContent.fillText(`Visit ${item.name}`, 0, 60);
+        drawContent.strokeStyle = 'rgba(124, 86, 133)';
+        drawContent.strokeText(`Visit ${item.name}`, 0, 60);
+      }
+
+      const nameTexture = new THREE.Texture(drawCanvas);
+      nameTexture.needsUpdate = true;
+
+      nameRingMesh.material.map = nameTexture;
+      nameRingMesh.material.map.wrapS = RepeatWrapping;
+
       const odyssey = new PlanetMesh(
         odysseyBaseSphereGeometry.current,
         odysseyBaseSphereMaterial.current!,
         item.uuid,
         item.owner,
         item.name,
-        texture
+        texture,
+        nameRingMaterial
       );
 
       odyssey.add(avatarMesh);
+      odyssey.add(nameRingMesh);
 
       return odyssey;
     },
@@ -204,7 +299,7 @@ export const use3dMap = (
    */
   const createOdysseys = useCallback(() => {
     for (let i = 0; i < items.length; i++) {
-      if (items[i].uuid !== centerUuid) {
+      if (items[i].owner !== centerWallet) {
         const odyssey = createNewOdyssey(items[i]);
         if (odyssey) {
           listOfOdysseys.current.push(odyssey);
@@ -213,13 +308,13 @@ export const use3dMap = (
     }
 
     referenceListOfOdysseys.current = [...listOfOdysseys.current];
-  }, [centerUuid, createNewOdyssey, items]);
+  }, [centerWallet, createNewOdyssey, items]);
 
   /**
    * Create center Odyssey
    */
   const createCenterOdyssey = useCallback(() => {
-    const centerItem = items.find((i) => i.uuid === centerUuid);
+    const centerItem = items.find((i) => i.owner === centerWallet);
     if (!centerItem) {
       return;
     }
@@ -227,7 +322,9 @@ export const use3dMap = (
     const centerOdyssey = createNewOdyssey(centerItem);
     scene.current.add(centerOdyssey);
     referenceListOfOdysseys.current.push(centerOdyssey);
-  }, [centerUuid, createNewOdyssey, items]);
+
+    drawConnections(centerWallet);
+  }, [drawConnections, centerWallet, createNewOdyssey, items]);
 
   /**
    * Create Circular Universe of Odysseys
@@ -300,6 +397,15 @@ export const use3dMap = (
    * Animation
    */
   const animate = useCallback(() => {
+    // Animate the textures of all ringNameMaterials.
+    nameRingOffset.current += Math.sin(0.001);
+    for (let i = 0; i < referenceListOfOdysseys.current.length; i++) {
+      const material = referenceListOfOdysseys.current[i].nameRingMaterial;
+      if (material.map?.offset) {
+        material.map.offset.x = nameRingOffset.current;
+      }
+    }
+
     // Update controls for auto-rotate.
     if (!updateCameraRotation.current) {
       controls.current.update();
@@ -330,7 +436,7 @@ export const use3dMap = (
    * Select planet handler
    */
   const onMouseDown = useCallback(
-    (event: MouseEvent) => {
+    async (event: MouseEvent) => {
       if (event.button !== 0) {
         return;
       }
@@ -347,24 +453,23 @@ export const use3dMap = (
         }
 
         // Only react to first raycast hit
-
         const targetPlanet = castRay[0];
+
+        // @ts-ignore: object has this prop
+        await drawConnections(targetPlanet.object.owner);
 
         // If clicked planet is same as current selected one return
         if (targetPlanet.object === selectedOdyssey.current) {
+          // Handle selecting planet again
+          onSelectOdyssey(targetPlanet.object.uuid);
+
           return;
         }
-
-        // Log information about selected Odyssey
-        console.log(targetPlanet.object);
 
         selectedOdyssey.current = targetPlanet.object;
 
         const targetVector = new THREE.Vector3();
         targetPlanet.object.getWorldPosition(targetVector);
-
-        // Handle selecting planet
-        onSelectOdyssey(targetPlanet.object.uuid);
 
         // Prepare fly to planets.
         const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
@@ -418,11 +523,14 @@ export const use3dMap = (
             controls.current.autoRotate = true;
             controls.current.target = targetPlanetLocation;
             transitionToPlanetFinished.current = true;
+
+            // Handle selecting planet
+            onSelectOdyssey(targetPlanet.object.uuid);
           }
         });
       }
     },
-    [onSelectOdyssey]
+    [drawConnections, onSelectOdyssey]
   );
 
   /**
@@ -481,8 +589,7 @@ export const use3dMap = (
       metalness: 0.3,
       roughness: 0,
       specularIntensity: 1,
-      // @ts-ignore
-      transparentA: true
+      transparent: true
     });
 
     generateGalaxy();
