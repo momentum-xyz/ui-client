@@ -259,7 +259,7 @@ export const use3dMap = (
       drawCanvas.width = 1000;
       drawCanvas.height = 100;
       if (drawContent) {
-        drawContent.font = 'Bold 40px IBM Plex Sans';
+        drawContent.font = 'Bold 40px Trebuchet MS';
 
         drawContent.fillStyle = 'rgba(0, 0, 0, 0.1)';
         drawContent.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
