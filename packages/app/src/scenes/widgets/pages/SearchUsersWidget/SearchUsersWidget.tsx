@@ -25,6 +25,7 @@ const SearchUsersWidget: FC = () => {
 
   useEffect(() => {
     unityStore.changeKeyboardControl(false);
+
     return () => {
       unityStore.changeKeyboardControl(true);
     };
@@ -36,20 +37,22 @@ const SearchUsersWidget: FC = () => {
     onlineUsersStore.searchUsers('');
   };
 
-  const handleTeleport = (worldId: string) => {
-    console.log(`Calling loadWorldById to ${worldId} ...`);
+  const handleTeleport = (userId: string) => {
+    unityStore.teleportToUser(userId);
+  };
+
+  const handleOdysseyTeleport = () => {
+    const worldId = onlineUsersStore.odyssey?.uuid || '';
     handleClose();
+
     history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     unityStore.loadWorldById(worldId, authStore.token);
   };
-  const handleOdysseyTeleport = () => {
-    handleTeleport(onlineUsersStore.odyssey?.uuid || '');
-  };
 
   const handleHighFive = (userId: string) => {
-    console.log(`Calling sendHighFive to ${userId} ...`);
     unityStore.sendHighFive(userId);
   };
+
   const handleOdysseyHighFive = () => {
     handleHighFive(onlineUsersStore.odyssey?.uuid || '');
   };
@@ -80,7 +83,7 @@ const SearchUsersWidget: FC = () => {
             onClose={handleClose}
             headerStyle="uppercase"
             headerIconName="people"
-            iconSize="large"
+            iconSize="medium"
             showCloseButton
             showOverflow
             componentSize={{width: `${DIALOG_WIDTH_PX}px;`}}

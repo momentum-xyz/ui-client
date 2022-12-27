@@ -32,27 +32,26 @@ const OnlineUser: FC<PropsInterface> = ({
         onClick={() => onUserClick(user.id)}
       >
         <Avatar avatarSrc={user.avatarSrc} size="small" />
-        <Text size="s" text={user.name} transform="capitalized" />
+        <Text size="s" text={user.name} />
       </styled.Info>
-      {!user.isGuest && (
-        <styled.Toolbar>
-          {isCurrentWorld && <styled.AdminText size="s" text={t('titles.admin')} />}
-          <SvgButton
-            iconName="fly-to"
-            size="normal"
-            disabled={isCurrentWorld}
-            onClick={() => onTeleportUser(user.id)}
-          />
-          <SvgButton
-            iconName="high-five"
-            size="normal"
-            disabled={isCurrentUser}
-            onClick={() => {
-              onHighFiveUser(user.id);
-            }}
-          />
-        </styled.Toolbar>
-      )}
+
+      <styled.Toolbar>
+        {isCurrentWorld && <styled.AdminText size="s" text={t('titles.admin')} />}
+        <SvgButton
+          iconName="high-five"
+          size="normal"
+          disabled={isCurrentUser}
+          onClick={() => {
+            onHighFiveUser(user.id);
+          }}
+        />
+        <SvgButton
+          iconName="fly-to"
+          size="normal"
+          disabled={isCurrentUser}
+          onClick={() => onTeleportUser(user.id)}
+        />
+      </styled.Toolbar>
     </styled.Container>
   );
 };
