@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
 
@@ -46,13 +46,14 @@ const OdysseyBioWidget: FC<PropsInterface> = () => {
       hasBottomPadding={false}
       shortTopPadding
       layoutSize={{width: '285px'}}
-      onClose={odysseyBioStore.widget.close}
+      onClose={odysseyBioStore.resetModel}
       showCloseButton
     >
       <div data-testid="OdysseyBioWidget-test">
         {odyssey && (
           <OdysseyInfo
-            odyssey={odyssey}
+            user={odysseyBioStore.nftUser}
+            odyssey={odysseyBioStore.odyssey}
             alreadyConnected={alreadyConnected}
             onVisit={() => {}}
             visitDisabled={true}

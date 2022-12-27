@@ -132,6 +132,7 @@ const SearchUsersWidget: FC = () => {
                 showCloseButton
               >
                 <OdysseyInfo
+                  user={onlineUsersStore.nftUser}
                   odyssey={onlineUsersStore.odyssey}
                   alreadyConnected={isAlreadyConnected}
                   onVisit={handleOdysseyTeleport}

@@ -190,3 +190,13 @@ export const formatDurationTime = (seconds: number) => {
 export const dateToTime = (date: Date) => {
   return format(date, `HH:mm`);
 };
+
+/**
+ * Constructs locale string containing only month and year
+ *
+ * @param {string} dateISO is ISO string or empty
+ * @returns {string} String containing month and the year in "MM YYYY" format
+ */
+export const registrationDateString = (dateISO: string | undefined | null) => {
+  return dateISO ? monthAndYearString(new Date(dateISO)) : '';
+};

@@ -37,8 +37,25 @@ export const Actions = styled.div`
   row-gap: 10px;
 `;
 
-export const Description = styled.div`
-  padding: 0px 6px 16px 6px;
+export const Info = styled.div`
+  padding: 6px 0px 20px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const InfoItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export const Link = styled.a`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 250px;
+  color: var(--white);
 `;
 
 export const Statistics = styled.div`

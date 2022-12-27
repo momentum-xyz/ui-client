@@ -1,9 +1,8 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {capitalize} from 'lodash-es';
 import {Avatar, Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
-import {absoluteLink, monthAndYearString, withoutProtocol} from '@momentum-xyz/core';
+import {absoluteLink, registrationDateString, withoutProtocol} from '@momentum-xyz/core';
 
 import {UserModelInterface} from 'core/models';
 
@@ -19,14 +18,6 @@ const ProfileView: FC<PropsInterface> = (props) => {
   const {user, isVisitAvailable, onTeleportToOdyssey} = props;
 
   const {t} = useTranslation();
-
-  const renderDate = () => {
-    if (!user.createdAt) {
-      return '';
-    }
-    const date = new Date(user.createdAt);
-    return monthAndYearString(date);
-  };
 
   return (
     <>
@@ -71,7 +62,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
           <IconSvg name="astro" size="normal" />
           <Text
             size="xxs"
-            text={`${capitalize(t('actions.joined'))} ${renderDate()}`}
+            text={`${t('actions.joined')} ${registrationDateString(user.createdAt)}`}
             isMultiline={false}
           />
         </styled.InfoItem>

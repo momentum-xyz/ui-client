@@ -583,7 +583,7 @@ export const enGb = {
       declining: 'declining',
       removed: 'removed',
       removing: 'removing',
-      joined: 'joined',
+      joined: 'Joined',
       refresh: 'Refresh',
       launch: 'Launch',
       confirmRemove: 'yes, remove',

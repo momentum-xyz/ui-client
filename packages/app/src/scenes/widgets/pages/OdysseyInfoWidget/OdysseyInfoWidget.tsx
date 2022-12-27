@@ -59,7 +59,7 @@ const OdysseyInfoWidget: FC = () => {
       shortTopPadding
       layoutSize={{width: '285px'}}
       onClose={() => {
-        odysseyInfoStore.widget.close();
+        odysseyInfoStore.resetModel();
 
         if (
           worldStore.worldId &&
@@ -73,7 +73,8 @@ const OdysseyInfoWidget: FC = () => {
       <div data-testid="OdysseyInfoWidget-test">
         {odyssey && (
           <OdysseyInfo
-            odyssey={odyssey}
+            user={odysseyInfoStore.nftUser}
+            odyssey={odysseyInfoStore.odyssey}
             onVisit={handleTeleport}
             onConnect={handleConnect}
             connectDisabled={odyssey?.owner === authStore.wallet || alreadyConnected}
