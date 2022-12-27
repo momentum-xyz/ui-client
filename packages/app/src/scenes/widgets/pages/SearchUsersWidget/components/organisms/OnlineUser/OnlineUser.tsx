@@ -14,7 +14,7 @@ interface PropsInterface {
   onTeleportUser: (id: string) => void;
   onHighFiveUser: (id: string) => void;
   isCurrentUser: boolean;
-  isCurrentWorld: boolean;
+  isOwner: boolean;
 }
 
 const OnlineUser: FC<PropsInterface> = ({
@@ -23,7 +23,7 @@ const OnlineUser: FC<PropsInterface> = ({
   onTeleportUser,
   onHighFiveUser,
   isCurrentUser,
-  isCurrentWorld
+  isOwner
 }) => {
   return (
     <styled.Container data-testid="OnlineUser-test">
@@ -36,7 +36,7 @@ const OnlineUser: FC<PropsInterface> = ({
       </styled.Info>
 
       <styled.Toolbar>
-        {isCurrentWorld && <styled.AdminText size="s" text={t('titles.admin')} />}
+        {isOwner && <styled.AdminText size="s" text={t('titles.owner')} />}
         <SvgButton
           iconName="high-five"
           size="normal"

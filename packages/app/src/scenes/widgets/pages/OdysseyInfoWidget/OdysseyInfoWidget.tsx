@@ -26,11 +26,12 @@ const OdysseyInfoWidget: FC = () => {
       assetStore.dockWorldId &&
       matchPath(history.location.pathname, ROUTES.odyssey.object.root)
     ) {
-      odysseyInfoStore.widget.close();
       history.replace(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}));
       unityStore.loadWorldById(assetStore.dockWorldId, authStore.token);
       return;
     }
+
+    odysseyInfoStore.widget.close();
     history.push(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
   }, [
     assetStore.dockWorldId,

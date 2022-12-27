@@ -105,7 +105,7 @@ const SearchUsersWidget: FC = () => {
                         onUserClick={handleUserClick}
                         onHighFiveUser={handleHighFive}
                         isCurrentUser={user.id === sessionStore.userId}
-                        isCurrentWorld={user?.id === worldStore.worldId}
+                        isOwner={user?.id === worldStore.worldId}
                       />
                     ))
                   : !onlineUsersStore.query &&
@@ -117,7 +117,7 @@ const SearchUsersWidget: FC = () => {
                         onUserClick={handleUserClick}
                         onHighFiveUser={handleHighFive}
                         isCurrentUser={user.id === sessionStore.userId}
-                        isCurrentWorld={user?.id === worldStore.worldId}
+                        isOwner={user?.id === worldStore.worldId}
                       />
                     ))}
               </styled.List>

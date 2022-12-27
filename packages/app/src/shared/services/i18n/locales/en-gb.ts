@@ -498,7 +498,8 @@ export const enGb = {
       spawnAsset: 'Spawn Asset',
       selectedSkybox: 'Selected Skybox',
       upload3dAsset: 'Upload 3D Asset',
-      admin: 'admin',
+      admin: 'Admin',
+      owner: 'Owner',
       statistics: 'Statistics',
       oneConnectYourWallet: '1. Connect your wallet'
     },
