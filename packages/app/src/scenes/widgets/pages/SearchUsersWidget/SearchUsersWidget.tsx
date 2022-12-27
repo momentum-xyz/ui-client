@@ -38,6 +38,7 @@ const SearchUsersWidget: FC = () => {
   };
 
   const handleTeleport = (userId: string) => {
+    handleClose();
     unityStore.teleportToUser(userId);
   };
 
