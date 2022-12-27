@@ -45,7 +45,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
             <Button
               icon="fly-to"
               size="medium"
-              label="Visit"
+              label={t('labels.visit')}
               disabled={!isVisitAvailable}
               onClick={onTeleportToOdyssey}
             />
@@ -56,13 +56,6 @@ const ProfileView: FC<PropsInterface> = (props) => {
       <styled.Info>
         {user.profile?.bio && (
           <Text text={user.profile.bio} size="xxs" align="left" breakLongWord />
-        )}
-
-        {user.profile?.location && (
-          <styled.InfoItem>
-            <IconSvg name="locator" size="normal" />
-            <styled.LocationText text={user.profile.location} size="xxs" isMultiline={false} />
-          </styled.InfoItem>
         )}
 
         {user.profile?.profileLink && (

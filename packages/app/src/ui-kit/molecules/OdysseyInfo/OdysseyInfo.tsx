@@ -44,7 +44,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
         <styled.TopContainer>
           <Image
             src={getImageAbsoluteUrl(odyssey?.image) || ''}
-            sizeProps={{width: '90px', height: '90px'}}
+            sizeProps={{width: '80px', height: '80px'}}
             className="avatar"
           />
           <styled.Actions>
@@ -53,6 +53,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.visit')}
                 icon="fly-to"
+                noWhitespaceWrap
                 disabled={!!visitDisabled}
                 onClick={onVisit}
               />
@@ -62,6 +63,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.highFive')}
                 icon="high-five"
+                noWhitespaceWrap
                 disabled={!!highFiveDisabled}
                 onClick={onHighFive}
               />
@@ -71,6 +73,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t(`actions.${alreadyConnected ? 'connected' : 'connect'}`)}
                 icon="hierarchy"
+                noWhitespaceWrap
                 disabled={!!connectDisabled}
                 onClick={onConnect}
               />
@@ -80,6 +83,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.coCreate')}
                 icon="cubicles"
+                noWhitespaceWrap
                 disabled={!!coCreateDisabled}
                 onClick={onCoCreate}
               />
@@ -89,6 +93,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.dock')}
                 icon="people"
+                noWhitespaceWrap
                 disabled={!!dockDisabled}
                 onClick={onDock}
               />

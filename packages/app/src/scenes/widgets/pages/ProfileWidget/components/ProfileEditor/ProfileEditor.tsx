@@ -139,20 +139,6 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
           )}
         />
 
-        {/* LOCATION */}
-        <Controller
-          control={control}
-          name="profile.location"
-          render={({field: {value, onChange}}) => (
-            <InputDark
-              placeholder="Location"
-              value={value}
-              onChange={onChange}
-              onBlur={formSubmitHandler}
-            />
-          )}
-        />
-
         {/* LINK */}
         <Controller
           control={control}

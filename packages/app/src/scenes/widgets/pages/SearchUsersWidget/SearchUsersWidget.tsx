@@ -127,7 +127,7 @@ const SearchUsersWidget: FC = () => {
               <PanelLayout
                 title={onlineUsersStore.odyssey?.name ?? onlineUsersStore.user?.name}
                 onClose={onlineUsersStore.unselectUser}
-                componentSize={{width: '315px'}}
+                componentSize={{width: '285px'}}
                 headerStyle="uppercase"
                 showCloseButton
               >

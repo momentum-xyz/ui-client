@@ -45,24 +45,26 @@ const OdysseyBioWidget: FC<PropsInterface> = () => {
       headerType="h1"
       hasBottomPadding={false}
       shortTopPadding
-      layoutSize={{width: '315px'}}
+      layoutSize={{width: '285px'}}
       onClose={odysseyBioStore.widget.close}
       showCloseButton
     >
-      {odyssey && (
-        <OdysseyInfo
-          odyssey={odyssey}
-          alreadyConnected={alreadyConnected}
-          onVisit={() => {}}
-          visitDisabled={true}
-          onHighFive={handleHighFive}
-          highFiveDisabled={userIsOdysseyOwner}
-          onConnect={handleConnect}
-          connectDisabled={userIsOdysseyOwner || alreadyConnected}
-          onCoCreate={() => {}}
-          coCreateDisabled={true}
-        />
-      )}
+      <div data-testid="OdysseyBioWidget-test">
+        {odyssey && (
+          <OdysseyInfo
+            odyssey={odyssey}
+            alreadyConnected={alreadyConnected}
+            onVisit={() => {}}
+            visitDisabled={true}
+            onHighFive={handleHighFive}
+            highFiveDisabled={userIsOdysseyOwner}
+            onConnect={handleConnect}
+            connectDisabled={userIsOdysseyOwner || alreadyConnected}
+            onCoCreate={() => {}}
+            coCreateDisabled={true}
+          />
+        )}
+      </div>
     </Dialog>
   );
 };

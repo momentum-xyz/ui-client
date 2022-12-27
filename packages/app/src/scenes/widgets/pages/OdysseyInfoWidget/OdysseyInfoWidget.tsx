@@ -57,7 +57,7 @@ const OdysseyInfoWidget: FC = () => {
       headerType="h1"
       hasBottomPadding={false}
       shortTopPadding
-      layoutSize={{width: '315px'}}
+      layoutSize={{width: '285px'}}
       onClose={() => {
         odysseyInfoStore.widget.close();
 
@@ -70,7 +70,7 @@ const OdysseyInfoWidget: FC = () => {
       }}
       showCloseButton
     >
-      <>
+      <div data-testid="OdysseyInfoWidget-test">
         {odyssey && (
           <OdysseyInfo
             odyssey={odyssey}
@@ -81,7 +81,7 @@ const OdysseyInfoWidget: FC = () => {
             dockDisabled={true}
           />
         )}
-      </>
+      </div>
     </Dialog>
   );
 };

@@ -25,15 +25,14 @@ export const TopContainer = styled.div`
 `;
 
 export const Avatar = styled.img`
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
 `;
 
 export const Actions = styled.div`
   display: grid;
-  grid-template-columns: 90px 90px;
-  grid-template-rows: 30px 30px;
+  grid-template-columns: 80px 80px;
   column-gap: 5px;
   row-gap: 10px;
 `;
