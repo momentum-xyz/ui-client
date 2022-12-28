@@ -7,8 +7,8 @@ import {useStore} from 'shared/hooks';
 const TextChatPanel: FC = () => {
   const {widgetsStore, mainStore} = useStore();
   const {unityStore} = mainStore;
-  const {socialStore} = widgetsStore;
-  const {streamChatStore} = socialStore;
+  const {textChatStore} = widgetsStore;
+  const {streamChatStore} = textChatStore;
 
   return (
     streamChatStore.client &&

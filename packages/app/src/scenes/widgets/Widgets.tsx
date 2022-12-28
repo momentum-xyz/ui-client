@@ -17,7 +17,8 @@ import {
   FlyToMeWidget,
   MinimapWidget,
   ScreenShareWidget,
-  SocialWidget,
+  TextChatWidget,
+  VoiceChatWidget,
   CalendarWidget,
   OnlineUsersWidget,
   NotificationsWidget,
@@ -39,12 +40,10 @@ interface PropsInterface {
 const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
-  const {sessionStore, widgetsStore, flightStore, mainStore, agoraStore, objectStore, nftStore} =
-    useStore();
+  const {sessionStore, widgetsStore, flightStore, mainStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {worldStore} = mainStore;
-  const {asset: asset2D} = objectStore;
   const {user} = sessionStore;
 
   const {t} = useTranslation();
@@ -59,15 +58,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       sessionStore.userId,
       widgetsStore.screenShareStore.widget.open
     );
-  }, [agoraScreenShareStore, sessionStore.userId, worldStore.worldId]);
-
-  const handleOpenScreenShare = () => {
-    widgetsStore.screenShareStore.widget.toggle();
-  };
-
-  const handleOpenOdysseyWidget = () => {
-    odysseyBioStore.open(nftStore.getNftByUuid(worldStore.worldId));
-  };
+  }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, worldStore.worldId]);
 
   return (
     <>
@@ -158,9 +149,8 @@ const Widgets: FC<PropsInterface> = (props) => {
                 title={t('labels.bio')}
                 icon="people"
                 size="medium"
-                disabled={false}
                 isSelected={odysseyBioStore.widget.isOpen}
-                onClick={handleOpenOdysseyWidget}
+                onClick={() => odysseyBioStore.open(nftStore.getNftByUuid(worldStore.worldId))}
                 state={{canGoBack: true}}
               />
 
@@ -171,15 +161,6 @@ const Widgets: FC<PropsInterface> = (props) => {
                 onClick={widgetsStore.calendarStore.widget.toggle}
                 isSelected={widgetsStore.calendarStore.widget.isOpen}
                 disabled={flightStore.isFlightWithMe}
-                state={{canGoBack: true}}
-              />
-
-              {/* TODO: Implementation */}
-              <ToolbarIcon
-                title={t('messages.comingSoonExclamation')}
-                icon="square-light"
-                size="medium"
-                disabled
                 state={{canGoBack: true}}
               />
 
@@ -196,8 +177,8 @@ const Widgets: FC<PropsInterface> = (props) => {
                 title={t('labels.voiceChat')}
                 icon="microphoneOn"
                 size="medium"
-                onClick={widgetsStore.socialStore.widget.toggle}
-                isSelected={asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen}
+                onClick={widgetsStore.voiceChatStore.widget.toggle}
+                isSelected={widgetsStore.voiceChatStore.widget.isOpen}
                 state={{canGoBack: true}}
               />
 
@@ -205,8 +186,8 @@ const Widgets: FC<PropsInterface> = (props) => {
                 title={t('labels.chat')}
                 icon="groupChat"
                 size="medium"
-                onClick={widgetsStore.socialStore.widget.toggle}
-                isSelected={asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen}
+                onClick={widgetsStore.textChatStore.widget.toggle}
+                isSelected={widgetsStore.textChatStore.widget.isOpen}
                 state={{canGoBack: true}}
               />
 
@@ -225,7 +206,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 title={t('labels.screenShare')}
                 icon="screenshare"
                 size="medium"
-                onClick={handleOpenScreenShare}
+                onClick={widgetsStore.screenShareStore.widget.toggle}
                 isSelected={widgetsStore.screenShareStore.widget.isOpen}
                 state={{canGoBack: true}}
               />
@@ -256,7 +237,8 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.magicLinkStore.magicLinkDialog.isOpen && <MagicLinkWidget />}
       {widgetsStore.screenShareStore.widget.isOpen && <ScreenShareWidget />}
       {widgetsStore.calendarStore.widget.isOpen && <CalendarWidget />}
-      {asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen && <SocialWidget />}
+      {widgetsStore.textChatStore.widget.isOpen && <TextChatWidget />}
+      {widgetsStore.voiceChatStore.widget.isOpen && <VoiceChatWidget />}
       {nftStore.stakingDashorboardDialog.isOpen && <StakingDashboardWidget />}
       {!!nftStore.connectToNftItemId && <ConnectingDashboardWidget />}
     </>

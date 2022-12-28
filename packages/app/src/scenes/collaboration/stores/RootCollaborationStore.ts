@@ -6,7 +6,6 @@ import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 
 import {SpaceStore} from './SpaceStore';
 import {StageModeStore} from './StageModeStore';
-// import {TextChatStore} from './TextChatStore';
 import {StreamChatStore} from './StreamChatStore';
 
 const RootCollaborationStore = types
@@ -17,7 +16,6 @@ const RootCollaborationStore = types
       spaceStore: types.optional(SpaceStore, {}),
 
       // TODO: Removal
-      // textChatStore: types.optional(TextChatStore, {}),
       streamChatStore: types.optional(StreamChatStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
 

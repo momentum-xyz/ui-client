@@ -37,10 +37,6 @@ export const HeaderItemsGroup = styled.div`
   align-items: center;
 `;
 
-export const TabsSelector = styled.div`
-  padding: 8px 10px;
-`;
-
 export const Body = styled.div`
   flex-grow: 1;
   overflow: hidden;

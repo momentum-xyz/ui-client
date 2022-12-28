@@ -1,10 +1,10 @@
-import {IconSvg, Text} from '@momentum-xyz/ui-kit';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
+import {IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {VoiceChatUser} from 'scenes/widgets/pages/SocialWidget/components';
+import {VoiceChatUser} from 'scenes/widgets/pages/VoiceChatWidget/components';
 
 import * as styled from './VoiceChatPanel.styled';
 
@@ -53,12 +53,8 @@ const VoiceChatPanel: FC = () => {
               name={user.name}
               avatarSrc={user.avatarSrc}
               soundLevel={remoteUser?.soundLevel ?? 0}
-              onUserKick={() => {
-                agoraVoiceChatStore.kickUser(user.id);
-              }}
-              onUserMute={() => {
-                agoraVoiceChatStore.muteUser(user.id);
-              }}
+              onUserKick={() => agoraVoiceChatStore.kickUser(user.id)}
+              onUserMute={() => agoraVoiceChatStore.muteUser(user.id)}
               isMuted={remoteUser?.isMuted ?? true}
               isRemote
             />
