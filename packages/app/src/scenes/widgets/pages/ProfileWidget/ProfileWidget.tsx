@@ -12,15 +12,10 @@ import * as styled from './ProfileWidget.styled';
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
-interface PropsInterface {
-  isExploreView: boolean;
-}
-
-const ProfileWidget: FC<PropsInterface> = (props) => {
-  const {isExploreView} = props;
-
-  const {widgetsStore, sessionStore, mainStore, authStore, nftStore} = useStore();
+const ProfileWidget: FC = (props) => {
+  const {widgetsStore, sessionStore, mainStore, authStore} = useStore();
   const {unityStore, agoraStore, worldStore} = mainStore;
+  const {isUnityAvailable} = unityStore;
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -39,33 +34,23 @@ const ProfileWidget: FC<PropsInterface> = (props) => {
 
   const handleTeleportToOdyssey = useCallback(() => {
     const worldId = profileStore.userProfile?.id || '';
+    profileStore.profileDialog.close();
 
-    if (isExploreView) {
-      console.log(`Redirect to unity to ${worldId}`);
-      profileStore.profileDialog.close();
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-    } else {
+    if (isUnityAvailable) {
       console.log(`Teleport in unity to ${worldId}`);
-      profileStore.profileDialog.close();
       history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
       unityStore.loadWorldById(worldId, authStore.token);
+    } else {
+      console.log(`Redirect to unity to ${worldId}`);
+      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     }
-  }, [profileStore, isExploreView, history, unityStore, authStore]);
+  }, [profileStore, isUnityAvailable, history, unityStore, authStore]);
 
   const isTeleportAvailable = useMemo(() => {
-    const {userProfile} = profileStore;
-
-    // TODO: removal after wallet will be available in profile
-    const nft = nftStore.getNftByUuid(profileStore.userProfile?.id || '');
-
-    if (isExploreView) {
-      // return !!userProfile?.wallet;
-      return !!nft;
-    } else {
-      //return !!userProfile?.wallet && worldStore.worldId !== userProfile.id;
-      return !!nft && worldStore.worldId !== userProfile?.id;
-    }
-  }, [isExploreView, nftStore, worldStore.worldId, profileStore.userProfile?.id]);
+    return isUnityAvailable
+      ? !sessionStore.isGuest && worldStore.worldId !== profileStore.userProfile?.id
+      : !sessionStore.isGuest;
+  }, [isUnityAvailable, profileStore.userProfile?.id, sessionStore.isGuest, worldStore.worldId]);
 
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();
@@ -78,8 +63,8 @@ const ProfileWidget: FC<PropsInterface> = (props) => {
 
   return (
     <Dialog
-      position="leftTop"
       title=""
+      position="leftTop"
       offset={{left: MENU_OFFSET_LEFT, top: MENU_OFFSET_TOP}}
       isBodyExtendingToEdges
       showBackground={false}

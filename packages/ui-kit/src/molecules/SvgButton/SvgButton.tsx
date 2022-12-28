@@ -36,7 +36,10 @@ const SvgButton: FC<PropsInterface> = ({
     <styled.Container
       {...rest}
       name={iconName}
-      onClick={onClick}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick?.();
+      }}
       disabled={disabled}
       data-testid="SvgButton-test"
       className={cn(isSelected && 'selected')}

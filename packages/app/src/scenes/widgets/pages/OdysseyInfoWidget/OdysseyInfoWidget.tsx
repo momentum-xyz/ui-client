@@ -26,11 +26,12 @@ const OdysseyInfoWidget: FC = () => {
       assetStore.dockWorldId &&
       matchPath(history.location.pathname, ROUTES.odyssey.object.root)
     ) {
-      odysseyInfoStore.widget.close();
       history.replace(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}));
       unityStore.loadWorldById(assetStore.dockWorldId, authStore.token);
       return;
     }
+
+    odysseyInfoStore.widget.close();
     history.push(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
   }, [
     assetStore.dockWorldId,
@@ -57,9 +58,9 @@ const OdysseyInfoWidget: FC = () => {
       headerType="h1"
       hasBottomPadding={false}
       shortTopPadding
-      layoutSize={{width: '315px'}}
+      layoutSize={{width: '285px'}}
       onClose={() => {
-        odysseyInfoStore.widget.close();
+        odysseyInfoStore.resetModel();
 
         if (
           worldStore.worldId &&
@@ -70,10 +71,11 @@ const OdysseyInfoWidget: FC = () => {
       }}
       showCloseButton
     >
-      <>
+      <div data-testid="OdysseyInfoWidget-test">
         {odyssey && (
           <OdysseyInfo
-            odyssey={odyssey}
+            user={odysseyInfoStore.nftUser}
+            odyssey={odysseyInfoStore.odyssey}
             onVisit={handleTeleport}
             onConnect={handleConnect}
             connectDisabled={odyssey?.owner === authStore.wallet || alreadyConnected}
@@ -81,7 +83,7 @@ const OdysseyInfoWidget: FC = () => {
             dockDisabled={true}
           />
         )}
-      </>
+      </div>
     </Dialog>
   );
 };

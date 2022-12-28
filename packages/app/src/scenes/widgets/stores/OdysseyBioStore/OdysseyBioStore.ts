@@ -1,9 +1,10 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
+import {User} from 'core/models';
 import {WalletStatisticsInterface} from 'core/interfaces';
-import {api, SpaceAttributeItemResponse} from 'api';
+import {api, SpaceAttributeItemResponse, UserInterface} from 'api';
 import {NftItem, NftItemInterface} from 'stores/NftStore/models';
 
 export interface OdysseyItemInterface extends NftItemInterface {
@@ -18,8 +19,10 @@ const OdysseyBioStore = types.compose(
     .model('OdysseyBioStore', {
       widget: types.optional(Dialog, {}),
       request: types.optional(RequestModel, {}),
+      userRequest: types.optional(RequestModel, {}),
       nftId: types.maybe(types.string),
       nftItem: types.maybe(types.reference(NftItem)),
+      nftUser: types.maybeNull(User),
       connections: 0,
       events: 0,
       docks: 0
@@ -33,6 +36,7 @@ const OdysseyBioStore = types.compose(
             const statistics = await getStatisticsByWallet(item.owner);
 
             this.setNft(item);
+            this.fetchUser(item.uuid);
             this.setStatistics(statistics);
             this.fetchEventsCount(item.uuid);
 
@@ -47,6 +51,16 @@ const OdysseyBioStore = types.compose(
           self.connections = statistics.connectionsCount;
           self.docks = statistics.mutualConnectionsCount;
         },
+        fetchUser: flow(function* (userId: string) {
+          const response: UserInterface = yield self.userRequest.send(
+            api.userRepository.fetchUser,
+            {userId}
+          );
+
+          if (response) {
+            self.nftUser = cast(response);
+          }
+        }),
         fetchEventsCount: flow(function* (spaceId: string) {
           const response: SpaceAttributeItemResponse = yield self.request.send(
             api.eventsRepository.getEventAttributes,

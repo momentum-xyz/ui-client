@@ -25,21 +25,37 @@ export const TopContainer = styled.div`
 `;
 
 export const Avatar = styled.img`
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
 `;
 
 export const Actions = styled.div`
   display: grid;
-  grid-template-columns: 90px 90px;
-  grid-template-rows: 30px 30px;
+  grid-template-columns: 80px 80px;
   column-gap: 5px;
-  row-gap: 10px;
+  row-gap: 8px;
 `;
 
-export const Description = styled.div`
-  padding: 0px 6px 16px 6px;
+export const Info = styled.div`
+  padding: 6px 0px 20px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const InfoItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export const Link = styled.a`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 250px;
+  color: var(--white);
 `;
 
 export const Statistics = styled.div`

@@ -21,7 +21,7 @@ export const Buttons = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 `;
 
 export const Container = styled.div`
