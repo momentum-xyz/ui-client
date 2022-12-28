@@ -19,6 +19,11 @@ const MutualConnectionsWidget: FC = () => {
   const {t} = useTranslation();
   const history = useHistory();
 
+  const handleUnstake = useCallback(() => {
+    mutualConnectionsStore.widget.close();
+    nftStore.stakingDashorboardDialog.open();
+  }, [mutualConnectionsStore, nftStore]);
+
   const handleTeleportToOdyssey = useCallback(
     (worldId: string) => {
       mutualConnectionsStore.widget.close();
@@ -70,7 +75,12 @@ const MutualConnectionsWidget: FC = () => {
                 />
               </styled.InfoContainer>
               <styled.Buttons>
-                <Button label={t('staking.unStake')} size="medium" transform="normal" />
+                <Button
+                  label={t('staking.unStake')}
+                  size="medium"
+                  transform="normal"
+                  onClick={handleUnstake}
+                />
                 <SvgButton
                   iconName="fly-portal"
                   size="medium"
