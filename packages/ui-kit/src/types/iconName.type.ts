@@ -38,6 +38,7 @@ export type IconNameType =
   | 'email'
   | 'exit'
   | 'explore'
+  | 'fly-portal'
   | 'fly-to'
   | 'fly-with-me'
   | 'fullscreen'

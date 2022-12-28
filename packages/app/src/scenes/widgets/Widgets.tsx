@@ -219,18 +219,11 @@ const Widgets: FC<PropsInterface> = (props) => {
         )}
       </styled.Footer>
 
-      {mutualConnectionsStore.widget.isOpen && (
-        <MutualConnectionsWidget
-          mutualConnections={nftStore.mutualConnections}
-          onClose={mutualConnectionsStore.widget.close}
-        />
-      )}
+      {mutualConnectionsStore.widget.isOpen && <MutualConnectionsWidget />}
       {onlineUsersStore.searchWidget.isOpen && <SearchUsersWidget />}
       {widgetsStore.odysseyBioStore.widget.isOpen && <OdysseyBioWidget />}
       {widgetsStore.odysseyInfoStore.widget.isOpen && <OdysseyInfoWidget />}
-      {widgetsStore.profileStore.profileDialog.isOpen && (
-        <ProfileWidget isExploreView={!!isExplorePage} />
-      )}
+      {widgetsStore.profileStore.profileDialog.isOpen && <ProfileWidget />}
       {widgetsStore.notificationsStore.notificationsDialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.minimapDialog.isOpen && <MinimapWidget />}
       {widgetsStore.flyToMeStore.flyToMeDialog.isOpen && <FlyToMeWidget />}

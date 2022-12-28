@@ -196,6 +196,9 @@ const UnityStore = types
     }
   }))
   .views((self) => ({
+    get isUnityAvailable(): boolean {
+      return self.isTeleportReady;
+    },
     get isPaused(): boolean {
       return UnityService.isPaused;
     },

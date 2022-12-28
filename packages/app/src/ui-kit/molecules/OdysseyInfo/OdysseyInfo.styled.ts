@@ -34,7 +34,7 @@ export const Actions = styled.div`
   display: grid;
   grid-template-columns: 80px 80px;
   column-gap: 5px;
-  row-gap: 10px;
+  row-gap: 8px;
 `;
 
 export const Info = styled.div`
