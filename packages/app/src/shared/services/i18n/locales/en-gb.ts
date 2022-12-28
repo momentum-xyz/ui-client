@@ -290,7 +290,7 @@ export const enGb = {
       pilot: 'Pilot',
       flyWithMe: 'Fly with me',
       search: 'Search',
-      worldChat: 'World Chat',
+      voiceChat: 'Voice chat',
       chat: 'Chat',
       voice: 'Voice',
       notifications: 'Notifications',

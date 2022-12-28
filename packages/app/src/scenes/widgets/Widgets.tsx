@@ -1,7 +1,13 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Avatar, Button, ToolbarIcon, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {
+  Avatar,
+  Button,
+  ToolbarIcon,
+  ToolbarIconList,
+  ToolbarIconSeparator
+} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -159,21 +165,21 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
 
               <ToolbarIcon
-                title={t('labels.screenShare')}
-                icon="screenshare"
-                size="medium"
-                onClick={handleOpenScreenShare}
-                isSelected={widgetsStore.screenShareStore.widget.isOpen}
-                state={{canGoBack: true}}
-              />
-
-              <ToolbarIcon
                 title={t('labels.calendar')}
                 icon="calendar"
                 size="medium"
                 onClick={widgetsStore.calendarStore.widget.toggle}
                 isSelected={widgetsStore.calendarStore.widget.isOpen}
                 disabled={flightStore.isFlightWithMe}
+                state={{canGoBack: true}}
+              />
+
+              {/* TODO: Implementation */}
+              <ToolbarIcon
+                title={t('messages.comingSoonExclamation')}
+                icon="square-light"
+                size="medium"
+                disabled
                 state={{canGoBack: true}}
               />
 
@@ -187,8 +193,17 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
 
               <ToolbarIcon
-                title={t('labels.worldChat')}
-                icon="chat"
+                title={t('labels.voiceChat')}
+                icon="microphoneOn"
+                size="medium"
+                onClick={widgetsStore.socialStore.widget.toggle}
+                isSelected={asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen}
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIcon
+                title={t('labels.chat')}
+                icon="groupChat"
                 size="medium"
                 onClick={widgetsStore.socialStore.widget.toggle}
                 isSelected={asset2D?.isExpanded !== true && widgetsStore.socialStore.widget.isOpen}
@@ -201,6 +216,17 @@ const Widgets: FC<PropsInterface> = (props) => {
                 size="medium"
                 onClick={widgetsStore.magicLinkStore.magicLinkDialog.open}
                 isSelected={widgetsStore.magicLinkStore.magicLinkDialog.isOpen}
+                state={{canGoBack: true}}
+              />
+
+              <ToolbarIconSeparator />
+
+              <ToolbarIcon
+                title={t('labels.screenShare')}
+                icon="screenshare"
+                size="medium"
+                onClick={handleOpenScreenShare}
+                isSelected={widgetsStore.screenShareStore.widget.isOpen}
                 state={{canGoBack: true}}
               />
 

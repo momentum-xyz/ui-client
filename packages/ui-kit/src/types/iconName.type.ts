@@ -103,6 +103,7 @@ export type IconNameType =
   | 'sortOnDesc'
   | 'sound'
   | 'space-bar'
+  | 'square-light'
   | 'stage'
   | 'star'
   | 'starOn'

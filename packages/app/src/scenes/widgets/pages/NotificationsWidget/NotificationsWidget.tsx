@@ -37,7 +37,7 @@ const NotificationsWidget: FC = () => {
   return (
     <Dialog
       theme={theme}
-      icon="bell"
+      icon="clock-two"
       iconSize="medium"
       position="rightBottom"
       headerStyle="normal"
