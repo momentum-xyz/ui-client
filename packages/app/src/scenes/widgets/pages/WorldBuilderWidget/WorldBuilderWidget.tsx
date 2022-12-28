@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {ToolbarIcon, ToolbarIconInterface, Text, IconSvg} from '@momentum-xyz/ui-kit';
-import {generatePath, useLocation} from 'react-router-dom';
+import {generatePath, useHistory, useLocation} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -10,8 +10,11 @@ import * as styled from './WorldBuilderWidget.styled';
 const WorldBuilderWidget: FC = () => {
   const {mainStore, nftStore} = useStore();
   const {worldStore} = mainStore;
+  const {worldId} = worldStore;
 
-  const worldNft = nftStore.getNftByUuid(worldStore.worldId);
+  const history = useHistory();
+
+  const worldNft = nftStore.getNftByUuid(worldId);
   const isAdmin =
     worldStore.isMyWorld ||
     (worldNft?.owner ? nftStore.mutualStakingAddresses.includes(worldNft.owner) : false);
@@ -25,7 +28,7 @@ const WorldBuilderWidget: FC = () => {
     title: 'Odyssey Creator',
     icon: 'planet',
     size: 'medium',
-    link: generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
+    onClick: () => history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}))
     // disabled: !worldStore.isMyWorld
   };
 
@@ -35,7 +38,7 @@ const WorldBuilderWidget: FC = () => {
       // icon: 'planet',
       icon: 'close',
       size: 'medium',
-      link: generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId})
+      onClick: () => history.push(generatePath(ROUTES.odyssey.base, {worldId}))
     }
     // {
     //   title: 'Skybox',
@@ -59,9 +62,7 @@ const WorldBuilderWidget: FC = () => {
 
   const {pathname} = useLocation();
 
-  const isBuilderMode = pathname.includes(
-    generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
-  );
+  const isBuilderMode = pathname.includes(generatePath(ROUTES.odyssey.creator.base, {worldId}));
 
   if (isBuilderMode) {
     return (
