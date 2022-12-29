@@ -12,7 +12,7 @@ const FlyToMeWidget: FC = () => {
 
   useEffect(() => {
     flyToMeStore.flyToMe(worldStore.worldId);
-    flyToMeStore.flyToMeDialog.close();
+    flyToMeStore.dialog.close();
   }, [flyToMeStore, worldStore.worldId]);
 
   return <styled.Container data-testid="HomePage-test" />;

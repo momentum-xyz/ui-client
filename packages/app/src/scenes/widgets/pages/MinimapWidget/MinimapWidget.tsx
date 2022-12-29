@@ -26,7 +26,7 @@ const MinimapWidget: FC = () => {
   }, [unityStore]);
 
   useUnityEvent('HideMinimap', () => {
-    minimapStore.minimapDialog.close();
+    minimapStore.dialog.close();
   });
 
   return <></>;

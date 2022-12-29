@@ -13,7 +13,7 @@ const OnlineUsersStore = types
   .compose(
     ResetModel,
     types.model('OnlineUsersStore', {
-      searchWidget: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       odysseyUsers: types.optional(types.array(User), []),
       allUsers: types.array(User),
       searchedUsers: types.maybe(types.array(User)),

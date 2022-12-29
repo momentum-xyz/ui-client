@@ -34,7 +34,7 @@ const ProfileWidget: FC = (props) => {
 
   const handleTeleportToOdyssey = useCallback(() => {
     const worldId = profileStore.userProfile?.id || '';
-    profileStore.profileDialog.close();
+    profileStore.dialog.close();
 
     if (isUnityAvailable) {
       console.log(`Teleport in unity to ${worldId}`);
@@ -54,7 +54,7 @@ const ProfileWidget: FC = (props) => {
 
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();
-    profileStore.profileDialog.close();
+    profileStore.dialog.close();
   }, [profileStore]);
 
   const handleLogout = useCallback(() => {

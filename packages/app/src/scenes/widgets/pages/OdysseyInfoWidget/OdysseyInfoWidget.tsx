@@ -31,7 +31,7 @@ const OdysseyInfoWidget: FC = () => {
       return;
     }
 
-    odysseyInfoStore.widget.close();
+    odysseyInfoStore.dialog.close();
     history.push(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
   }, [
     assetStore.dockWorldId,

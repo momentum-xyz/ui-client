@@ -27,7 +27,7 @@ const TextChatWidget: FC = () => {
   return (
     <Portal>
       {/* FIXME: Design discussion in order to avoid relation to VoiceChatStore */}
-      <styled.Modal style={{marginRight: voiceChatStore.widget.isOpen ? '310px' : '20px'}}>
+      <styled.Modal style={{marginRight: voiceChatStore.dialog.isOpen ? '310px' : '20px'}}>
         <styled.Container>
           <styled.Header>
             <styled.HeaderItemsGroup>
@@ -35,7 +35,7 @@ const TextChatWidget: FC = () => {
               <Heading label={t('labels.chat')} transform="uppercase" type="h2" />
             </styled.HeaderItemsGroup>
             <styled.HeaderItemsGroup>
-              <SvgButton iconName="close" size="medium" onClick={textChatStore.widget.close} />
+              <SvgButton iconName="close" size="medium" onClick={textChatStore.dialog.close} />
             </styled.HeaderItemsGroup>
           </styled.Header>
 

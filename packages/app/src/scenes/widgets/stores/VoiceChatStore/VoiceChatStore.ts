@@ -4,7 +4,7 @@ import {types} from 'mobx-state-tree';
 const VoiceChatStore = types.compose(
   ResetModel,
   types.model('VoiceChatStore', {
-    widget: types.optional(Dialog, {})
+    dialog: types.optional(Dialog, {})
   })
 );
 

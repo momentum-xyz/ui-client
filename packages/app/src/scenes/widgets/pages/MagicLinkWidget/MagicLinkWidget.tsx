@@ -35,7 +35,7 @@ const MagicLinkWidget: FC = () => {
     const isDone = await copyToClipBoard(MagicTypeEnum.ODYSSEY, worldStore.worldId);
 
     if (isDone) {
-      magicLinkStore.magicLinkDialog.close();
+      magicLinkStore.dialog.close();
 
       toast.info(
         <ToastContent
@@ -47,7 +47,7 @@ const MagicLinkWidget: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, [copyToClipBoard, magicLinkStore.magicLinkDialog, t, worldStore.worldId]);
+  }, [copyToClipBoard, magicLinkStore.dialog, t, worldStore.worldId]);
 
   return (
     <Dialog
@@ -59,7 +59,7 @@ const MagicLinkWidget: FC = () => {
       headerType="h2"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       title={t('labels.shareLinkOfOdyssey')}
-      onClose={magicLinkStore.magicLinkDialog.close}
+      onClose={magicLinkStore.dialog.close}
       showBackground={false}
       showCloseButton
     >

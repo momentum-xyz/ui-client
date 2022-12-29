@@ -4,7 +4,7 @@ import {Dialog, ResetModel} from '@momentum-xyz/core';
 const MutualConnectionsStore = types.compose(
   ResetModel,
   types.model('MutualConnectionsStore', {
-    widget: types.optional(Dialog, {})
+    dialog: types.optional(Dialog, {})
   })
 );
 

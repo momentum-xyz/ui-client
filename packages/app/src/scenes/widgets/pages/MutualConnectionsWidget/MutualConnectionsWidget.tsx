@@ -20,13 +20,13 @@ const MutualConnectionsWidget: FC = () => {
   const history = useHistory();
 
   const handleUnstake = useCallback(() => {
-    mutualConnectionsStore.widget.close();
+    mutualConnectionsStore.dialog.close();
     nftStore.stakingDashorboardDialog.open();
   }, [mutualConnectionsStore, nftStore]);
 
   const handleTeleportToOdyssey = useCallback(
     (worldId: string) => {
-      mutualConnectionsStore.widget.close();
+      mutualConnectionsStore.dialog.close();
 
       if (isUnityAvailable) {
         console.log(`Teleport in unity to ${worldId}`);
@@ -47,7 +47,7 @@ const MutualConnectionsWidget: FC = () => {
       icon="user-network"
       iconSize="medium-large"
       closeOnBackgroundClick
-      onClose={mutualConnectionsStore.widget.close}
+      onClose={mutualConnectionsStore.dialog.close}
       layoutSize={{width: '437px'}}
       //tabs={<SvgButton iconName="add" size="medium-large" />}
     >

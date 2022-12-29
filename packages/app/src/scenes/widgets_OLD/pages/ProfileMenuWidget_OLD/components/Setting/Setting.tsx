@@ -11,8 +11,8 @@ const SETTING_OFFSET_LEFT = 10;
 const SETTING_OFFSET_BOTTOM = 60;
 
 const Setting: FC = () => {
-  const {mainStore, widgetsStore} = useStore();
-  const {profileMenuStore} = widgetsStore;
+  const {mainStore, widgetStore_OLD} = useStore();
+  const {profileMenuStore} = widgetStore_OLD;
   const {agoraStore} = mainStore;
   const {userDevicesStore} = agoraStore;
 

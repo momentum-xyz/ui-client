@@ -6,7 +6,7 @@ import {TextChat} from './models';
 const TextChatStore = types.compose(
   ResetModel,
   types.model('TextChatStore', {
-    widget: types.optional(Dialog, {}),
+    dialog: types.optional(Dialog, {}),
     streamChat: types.optional(TextChat, {})
   })
 );

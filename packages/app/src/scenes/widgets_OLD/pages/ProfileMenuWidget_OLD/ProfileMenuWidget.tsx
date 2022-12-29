@@ -6,8 +6,8 @@ import {useStore} from 'shared/hooks';
 import {Menu, Setting, TokenRuleReview, TokenRules} from './components';
 
 const ProfileMenuWidget: FC = () => {
-  const {widgetsStore} = useStore();
-  const {profileMenuStore} = widgetsStore;
+  const {widgetStore_OLD} = useStore();
+  const {profileMenuStore} = widgetStore_OLD;
   const {tokenRulesStore} = profileMenuStore;
 
   const handleCloseTokenRuleReview = () => {

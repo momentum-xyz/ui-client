@@ -11,8 +11,8 @@ import * as styled from './TokenRules.styled';
 import {TokenRulesList} from './components';
 
 const TokenRules: FC = () => {
-  const {widgetsStore} = useStore();
-  const {profileMenuStore} = widgetsStore;
+  const {widgetStore_OLD} = useStore();
+  const {profileMenuStore} = widgetStore_OLD;
   const {tokenRulesStore} = profileMenuStore;
   const [query, setQuery] = useState('');
 

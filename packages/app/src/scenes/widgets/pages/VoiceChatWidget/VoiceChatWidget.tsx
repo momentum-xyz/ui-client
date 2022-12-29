@@ -20,8 +20,8 @@ const VoiceChatWidget: FC = () => {
       await agoraStore.leaveVoiceChat();
     }
 
-    voiceChatStore.widget.close();
-  }, [agoraStore, agoraVoiceChatStore.hasJoined, voiceChatStore.widget]);
+    voiceChatStore.dialog.close();
+  }, [agoraStore, agoraVoiceChatStore.hasJoined, voiceChatStore.dialog]);
 
   return (
     <Portal>

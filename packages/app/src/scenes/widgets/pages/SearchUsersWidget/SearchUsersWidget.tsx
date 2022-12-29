@@ -32,7 +32,7 @@ const SearchUsersWidget: FC = () => {
   }, [unityStore]);
 
   const handleClose = () => {
-    onlineUsersStore.searchWidget.close();
+    onlineUsersStore.dialog.close();
     onlineUsersStore?.unselectUser();
     onlineUsersStore.searchUsers('');
   };

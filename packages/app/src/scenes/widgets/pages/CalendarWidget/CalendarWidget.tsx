@@ -65,7 +65,7 @@ const CalendarWidget: FC = () => {
       <styled.Container className="noScrollIndicator">
         <PanelLayout
           componentSize={{width: '1063px'}}
-          onClose={calendarStore.widget.close}
+          onClose={calendarStore.dialog.close}
           title={worldStore.world?.name}
           headerStyle="uppercase"
           headerType="h2"

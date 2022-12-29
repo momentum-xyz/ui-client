@@ -11,7 +11,7 @@ const MagicLinkStore = types.compose(
   ResetModel,
   types
     .model('MagicLinkStore', {
-      magicLinkDialog: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       magicLinkRequest: types.optional(RequestModel, {}),
       magicLinkId: ''
     })

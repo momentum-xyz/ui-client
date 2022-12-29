@@ -8,7 +8,7 @@ const ScreenShareStore = types.compose(
   ResetModel,
   types
     .model('ScreenShareStore', {
-      widget: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       isExpanded: true,
       ownerRequest: types.optional(RequestModel, {}),
       request: types.optional(RequestModel, {}),

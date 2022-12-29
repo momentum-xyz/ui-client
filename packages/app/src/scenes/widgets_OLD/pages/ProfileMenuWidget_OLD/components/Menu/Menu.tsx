@@ -20,8 +20,8 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_BOTTOM = 60;
 
 const Menu: FC = () => {
-  const {widgetsStore, sessionStore, odysseyStore} = useStore();
-  const {profileMenuStore} = widgetsStore;
+  const {widgetStore_OLD, sessionStore, odysseyStore} = useStore();
+  const {profileMenuStore} = widgetStore_OLD;
   const {user} = sessionStore;
 
   const {t} = useTranslation();
