@@ -13,5 +13,5 @@ export * from './WorldBuilderWidget';
 export * from './SearchUsersWidget';
 export * from './MagicLinkWidget';
 export * from './MutualConnectionsWidget';
-export * from './StakingDashboardWidget';
-export * from './ConnectingDashboardWidget';
+export * from './StakingWidget';
+export * from './ConnectWidget';

@@ -27,8 +27,8 @@ import {
   WorldBuilderWidget,
   SearchUsersWidget,
   MutualConnectionsWidget,
-  StakingDashboardWidget,
-  ConnectingDashboardWidget,
+  StakingWidget,
+  ConnectWidget,
   MagicLinkWidget
 } from './pages';
 import * as styled from './Widgets.styled';
@@ -239,8 +239,8 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.calendarStore.widget.isOpen && <CalendarWidget />}
       {widgetsStore.textChatStore.widget.isOpen && <TextChatWidget />}
       {widgetsStore.voiceChatStore.widget.isOpen && <VoiceChatWidget />}
-      {nftStore.stakingDashorboardDialog.isOpen && <StakingDashboardWidget />}
-      {!!nftStore.connectToNftItemId && <ConnectingDashboardWidget />}
+      {nftStore.stakingDashorboardDialog.isOpen && <StakingWidget />}
+      {!!nftStore.connectToNftItemId && <ConnectWidget />}
     </>
   );
 };

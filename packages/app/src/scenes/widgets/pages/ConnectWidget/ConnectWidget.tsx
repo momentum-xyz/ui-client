@@ -5,11 +5,11 @@ import {t} from 'i18next';
 
 import {useStore} from 'shared/hooks';
 
-import * as styled from './StakingDashboardWidget.styled';
-import {StakingDashboard} from './components';
+import * as styled from './ConnectWidget.styled';
+import {StakingForm} from './components';
 
-const StakingDashboardWidget: FC = () => {
-  const {mainStore, nftStore} = useStore();
+const ConnectWidget: FC = () => {
+  const {mainStore, nftStore, sessionStore} = useStore();
   const {unityStore} = mainStore;
 
   useEffect(() => {
@@ -25,16 +25,24 @@ const StakingDashboardWidget: FC = () => {
       title={t('staking.title')}
       icon="hierarchy"
       showCloseButton
-      layoutSize={{height: '640px'}}
+      layoutSize={{height: '510px'}}
       onClose={() => {
-        nftStore.stakingDashorboardDialog.close();
+        nftStore.setConnectToNftItemId(null);
       }}
     >
       <styled.FullSizeWrapper>
-        <StakingDashboard />
+        {!!nftStore.connectToNftItemId && (
+          <StakingForm
+            isGuest={sessionStore.isGuest}
+            nftItemId={nftStore.connectToNftItemId}
+            onComplete={() => {
+              nftStore.setConnectToNftItemId(null);
+            }}
+          />
+        )}
       </styled.FullSizeWrapper>
     </Dialog>
   );
 };
 
-export default observer(StakingDashboardWidget);
+export default observer(ConnectWidget);
