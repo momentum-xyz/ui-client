@@ -7,7 +7,6 @@ import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent, Stage} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components';
 import {
   StageModePopupQueue,
   StageModeStats
@@ -24,7 +23,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {streamChatStore, spaceStore} = collaborationStore;
+  const {spaceStore} = collaborationStore;
   const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
@@ -63,10 +62,10 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
-        isChatOpen={streamChatStore.isOpen}
-        toggleChat={streamChatStore.textChatDialog.toggle}
+        isChatOpen={false}
+        toggleChat={() => {}}
+        numberOfUnreadMessages={0}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={onLeaveMeeting}
         adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: spaceStore.id})}
         baseLink={generatePath(ROUTES.base, {spaceId: spaceStore.id})}
@@ -121,9 +120,6 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
-          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
-        )}
       </styled.Body>
     </SpacePage>
   );

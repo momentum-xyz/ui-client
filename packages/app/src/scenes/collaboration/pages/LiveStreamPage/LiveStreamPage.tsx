@@ -7,14 +7,13 @@ import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {VideoPanel} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './LiveStreamPage.styled';
 
 const LiveStreamPage: FC = () => {
   const {mainStore, collaborationStore, leaveMeetingSpace} = useStore();
-  const {spaceStore, streamChatStore} = collaborationStore;
+  const {spaceStore} = collaborationStore;
   const {favoriteStore, liveStreamStore} = mainStore;
   const {space} = spaceStore;
 
@@ -41,9 +40,9 @@ const LiveStreamPage: FC = () => {
         isSpaceFavorite={favoriteStore.isFavorite(space.id)}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         editSpaceHidden
-        isChatOpen={streamChatStore.isOpen}
-        toggleChat={streamChatStore.textChatDialog.toggle}
-        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
+        isChatOpen={false}
+        toggleChat={() => {}}
+        numberOfUnreadMessages={0}
         onLeave={async () => {
           await leaveMeetingSpace();
           history.push(ROUTES.base);
@@ -61,9 +60,6 @@ const LiveStreamPage: FC = () => {
       </SpaceTopBar>
       <styled.Container>
         <VideoPanel youtubeHash={liveStreamStore.broadcast.url} />
-        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
-          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
-        )}
       </styled.Container>
     </SpacePage>
   );

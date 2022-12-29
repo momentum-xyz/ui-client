@@ -13,7 +13,6 @@ import {OdysseyStore} from 'scenes/odyssey/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootOdysseyCreatorStore} from 'scenes/odysseyCreator/stores';
-import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {ObjectStore} from 'scenes/object/stores';
 
 import {NftStore} from './NftStore';
@@ -43,7 +42,6 @@ const RootStore = types
     widgetsStore: types.optional(RootWidgetsStore, {}),
     widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),
     odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
-    worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),
     videoStore: types.optional(VideoStore, {}),
     objectStore: types.optional(ObjectStore, {})
@@ -76,11 +74,6 @@ const RootStore = types
         0,
         ''
       );
-
-      if (!self.collaborationStore.streamChatStore.isLoggedOn) {
-        const {userId, user} = self.sessionStore;
-        yield self.collaborationStore.streamChatStore.init(userId, spaceId, user ?? undefined);
-      }
 
       console.log('---JOINED---');
     }),

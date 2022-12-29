@@ -6,7 +6,6 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {Toggle, Button, Text, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 
 import {Stage, ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';
@@ -27,7 +26,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
   const {agoraStore, favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
-  const {spaceStore, removeParticipantFromStageDialog, streamChatStore} = collaborationStore;
+  const {spaceStore, removeParticipantFromStageDialog} = collaborationStore;
   const {space} = spaceStore;
 
   const history = useHistory();
@@ -87,9 +86,9 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           spaceId={spaceStore.id}
           isSpaceFavorite={favoriteStore.isFavorite(space.id)}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-          isChatOpen={streamChatStore.isOpen}
-          toggleChat={streamChatStore.textChatDialog.toggle}
-          numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
+          isChatOpen={false}
+          toggleChat={() => {}}
+          numberOfUnreadMessages={0}
           editSpaceHidden
           onLeave={onLeaveMeeting}
           adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
@@ -154,9 +153,6 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
-            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
-          )}
         </styled.Body>
       </SpacePage>
       {removeParticipantFromStageDialog.isOpen &&

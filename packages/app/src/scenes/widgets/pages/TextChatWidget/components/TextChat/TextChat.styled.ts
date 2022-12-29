@@ -17,11 +17,8 @@ export const Container = styled.div`
   height: 100%;
 
   margin-left: 10px;
-  width: 30%;
-  &.full-width {
-    width: 100%;
-    margin: 0;
-  }
+  width: 100%;
+  margin: 0;
 
   .str-chat {
     --str-chat__font-family: IBM Plex Sans, sans-serif;

@@ -1,13 +1,13 @@
 import {Dialog, ResetModel} from '@momentum-xyz/core';
 import {types} from 'mobx-state-tree';
 
-import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
+import {TextChat} from './models';
 
 const TextChatStore = types.compose(
   ResetModel,
   types.model('TextChatStore', {
     widget: types.optional(Dialog, {}),
-    streamChatStore: types.optional(StreamChatStore, {})
+    streamChat: types.optional(TextChat, {})
   })
 );
 

@@ -1,32 +1,28 @@
+import React, {FC, useEffect} from 'react';
 import {Heading, IconSvg, Portal, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 
-import {TextChatPanel} from './components';
+import {TextChat} from './components';
 import * as styled from './TextChatWidget.styled';
 
 const TextChatWidget: FC = () => {
   const {widgetsStore, sessionStore, mainStore} = useStore();
-  const {worldStore} = mainStore;
+  const {worldStore, unityStore} = mainStore;
   const {textChatStore, voiceChatStore} = widgetsStore;
-  const {streamChatStore} = textChatStore;
+  const {streamChat} = textChatStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    streamChatStore.init(sessionStore.userId, worldStore.worldId, sessionStore.user ?? undefined);
+    streamChat.init(sessionStore.userId, worldStore.worldId, sessionStore.user);
 
     return () => {
-      streamChatStore.deinit(worldStore.worldId);
+      streamChat.deinit(worldStore.worldId);
     };
-  }, [sessionStore.user, sessionStore.userId, streamChatStore, worldStore.worldId]);
-
-  const handleClose = useCallback(() => {
-    textChatStore.widget.close();
-  }, [textChatStore]);
+  }, [sessionStore.user, sessionStore.userId, streamChat, worldStore.worldId]);
 
   return (
     <Portal>
@@ -39,11 +35,19 @@ const TextChatWidget: FC = () => {
               <Heading label={t('labels.chat')} transform="uppercase" type="h2" />
             </styled.HeaderItemsGroup>
             <styled.HeaderItemsGroup>
-              <SvgButton iconName="close" size="medium" onClick={handleClose} />
+              <SvgButton iconName="close" size="medium" onClick={textChatStore.widget.close} />
             </styled.HeaderItemsGroup>
           </styled.Header>
+
           <styled.Body>
-            <TextChatPanel />
+            {streamChat.client && streamChat.currentChannel && (
+              <TextChat
+                client={streamChat.client}
+                channel={streamChat.currentChannel}
+                onFocus={() => unityStore.changeKeyboardControl(false)}
+                onBlur={() => unityStore.changeKeyboardControl(true)}
+              />
+            )}
           </styled.Body>
         </styled.Container>
       </styled.Modal>

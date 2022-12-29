@@ -1,19 +1,18 @@
 import {flow, types} from 'mobx-state-tree';
 import {StreamChat, Channel, Event} from 'stream-chat';
-import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {appVariables} from 'api/constants';
 import {UserModelInterface} from 'core/models';
 import {api, StreamChatTokenResponse} from 'api';
 
-const StreamChatStore = types
+const TextChat = types
   .compose(
     ResetModel,
     types
-      .model('StreamChatStore', {
+      .model('TextChat', {
         numberOfUnreadMessages: 0,
-        tokenRequest: types.optional(RequestModel, {}),
-        textChatDialog: types.optional(Dialog, {})
+        tokenRequest: types.optional(RequestModel, {})
       })
       .volatile<{client: StreamChat | null}>(() => ({
         client: null
@@ -37,7 +36,7 @@ const StreamChatStore = types
   .actions((self) => {
     const timeNow = new Date();
     return {
-      init: flow(function* (userId: string, spaceId: string, profile?: UserModelInterface) {
+      init: flow(function* (userId: string, spaceId: string, profile: UserModelInterface | null) {
         self.client = StreamChat.getInstance(appVariables.STREAMCHAT_KEY);
         const response = yield self.getChannelToken(spaceId);
 
@@ -112,9 +111,6 @@ const StreamChatStore = types
   .views((self) => ({
     get isLoggedOn(): boolean {
       return !!self.client && !!self.currentChannel;
-    },
-    get isOpen(): boolean {
-      return self.textChatDialog.isOpen;
     }
   }));
-export {StreamChatStore};
+export {TextChat};

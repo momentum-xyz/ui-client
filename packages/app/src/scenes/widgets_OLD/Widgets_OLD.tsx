@@ -19,7 +19,6 @@ import {
 } from 'scenes/widgets_OLD/pages';
 
 import * as styled from './Widgets_OLD.styled';
-import {WorldChatWidget} from './pages';
 
 const Widgets_OLD: FC = () => {
   const {
@@ -27,7 +26,6 @@ const Widgets_OLD: FC = () => {
     mainStore,
     widgetStore_OLD,
     flightStore,
-    worldChatStore,
     odysseyCreatorStore: worldBuilderStore
   } = useStore();
   const {worldStore, agoraStore, unityStore} = mainStore;
@@ -52,17 +50,8 @@ const Widgets_OLD: FC = () => {
   useEffect(() => {
     musicPlayerStore.init(worldStore.worldId);
     emojiStore.init(worldStore.worldId);
-    worldChatStore.init(userId, worldStore.worldId, user ?? undefined);
     worldBuilderStore.fetchPermissions();
-  }, [
-    userId,
-    user,
-    worldStore.worldId,
-    musicPlayerStore,
-    emojiStore,
-    worldChatStore,
-    worldBuilderStore
-  ]);
+  }, [userId, user, worldStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
 
   const toggleMute = () => {
     if (!agoraStore.canToggleMicrophone) {
@@ -117,7 +106,6 @@ const Widgets_OLD: FC = () => {
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
         </styled.EmojiBar>
       )}
-      {worldChatStore.isOpen && <WorldChatWidget onClose={worldChatStore.textChatDialog.close} />}
       <ReactHowler
         src={[playlist.currentTrackHash]}
         onLoad={musicPlayer.startLoading}
@@ -141,21 +129,7 @@ const Widgets_OLD: FC = () => {
             size="normal-large"
             isWhite={false}
           />
-          <styled.ChatIconWrapper>
-            <ToolbarIcon
-              icon="chat"
-              title={
-                worldChatStore.isOpen ? t('tooltipTitles.closeChat') : t('tooltipTitles.openChat')
-              }
-              onClick={worldChatStore.textChatDialog.toggle}
-              size="normal-large"
-              isWhite={false}
-            >
-              {worldChatStore.numberOfUnreadMessages > 0 && (
-                <styled.MessageCount>{worldChatStore.numberOfUnreadMessages}</styled.MessageCount>
-              )}
-            </ToolbarIcon>
-          </styled.ChatIconWrapper>
+
           {(worldBuilderStore.haveAccess || true) && ( // TODO: remove this line when we have permissions
             <ToolbarIcon
               icon="planet"
