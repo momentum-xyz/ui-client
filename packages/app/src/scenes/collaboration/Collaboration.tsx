@@ -5,8 +5,6 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Navigation} from '@momentum-xyz/ui-kit';
 
-import {ROUTES} from 'core/constants';
-import {PrivateSpaceError} from 'core/errors';
 import {useStore, useDeviceChange} from 'shared/hooks';
 import {StageModeRequestEnum} from 'core/enums';
 import {ToastContent, TOAST_GROUND_OPTIONS, NewDeviceDialog, CountdownDialog} from 'ui-kit';
@@ -46,10 +44,10 @@ const Collaboration: FC = () => {
     }
 
     if (agoraStore.hasJoined && agoraStore.spaceId !== spaceId) {
-      await rootStore.leaveMeetingSpace();
+      //await rootStore.leaveMeetingSpace();
     }
 
-    rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
+    /*rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
       if (e instanceof PrivateSpaceError) {
         history.push(ROUTES.base);
         toast.error(
@@ -62,7 +60,7 @@ const Collaboration: FC = () => {
           />
         );
       }
-    });
+    });*/
   }, [agoraStore, history, rootStore, spaceId, t]);
 
   useEffect(() => {

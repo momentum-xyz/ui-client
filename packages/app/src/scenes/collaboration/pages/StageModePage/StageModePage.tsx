@@ -10,16 +10,16 @@ import {StageModeGuest, StageModeModerator} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
-  const {collaborationStore, leaveMeetingSpace} = useStore();
+  const {collaborationStore} = useStore();
 
   const {spaceId} = useParams<{spaceId: string}>();
 
   const history = useHistory();
 
   const onLeaveMeeting = useCallback(async () => {
-    await leaveMeetingSpace();
+    //await leaveMeetingSpace();
     history.push(ROUTES.base);
-  }, [history, leaveMeetingSpace]);
+  }, [history]);
 
   // FIXME: Make view "rightLoaded" under "collaborationStore"
   if (collaborationStore.spaceStore.moderationRequest.isPending) {

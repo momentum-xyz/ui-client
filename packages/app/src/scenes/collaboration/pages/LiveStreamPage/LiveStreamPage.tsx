@@ -12,7 +12,7 @@ import {ROUTES} from 'core/constants';
 import * as styled from './LiveStreamPage.styled';
 
 const LiveStreamPage: FC = () => {
-  const {mainStore, collaborationStore, leaveMeetingSpace} = useStore();
+  const {mainStore, collaborationStore} = useStore();
   const {spaceStore} = collaborationStore;
   const {favoriteStore, liveStreamStore} = mainStore;
   const {space} = spaceStore;
@@ -44,7 +44,7 @@ const LiveStreamPage: FC = () => {
         toggleChat={() => {}}
         numberOfUnreadMessages={0}
         onLeave={async () => {
-          await leaveMeetingSpace();
+          //await leaveMeetingSpace();
           history.push(ROUTES.base);
         }}
         adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}

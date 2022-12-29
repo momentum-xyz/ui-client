@@ -198,7 +198,7 @@ const PosBusEventsPage: FC = () => {
 
   usePosBusEvent('meeting-kick', async () => {
     console.info('[POSBUS EVENT] meeting-kick');
-    await rootStore.leaveMeetingSpace(true);
+    //await rootStore.leaveMeetingSpace(true);
     history.push(ROUTES.base);
 
     toast.info(

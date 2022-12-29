@@ -23,7 +23,7 @@ const Meeting: FC = () => {
 
   const onLeaveMeeting = useCallback(
     async (isKicked = false) => {
-      await rootStore.leaveMeetingSpace(isKicked);
+      //await rootStore.leaveMeetingSpace(isKicked);
       history.push(ROUTES.base);
     },
     [history, rootStore]

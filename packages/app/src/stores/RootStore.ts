@@ -1,6 +1,5 @@
 import {Instance, types, flow} from 'mobx-state-tree';
 
-import {PosBusEventEnum} from 'core/enums';
 import {SignInAccountStore} from 'scenes/auth/stores/SignInAccountStore';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
@@ -55,66 +54,10 @@ const RootStore = types
       self.mainStore.themeStore.init();
     },
     unityLoaded(worldId: string): void {
-      self.mainStore.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
       self.agoraStore.init(worldId, self.sessionStore.userId);
     },
-    // TODO: To be removed, do not use in new code
-    joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
-      console.log('---JOINING---');
-
-      yield self.collaborationStore.join(spaceId, isTable);
-      yield self.agoraStore.joinVoiceChat();
-      self.meetingStore.join(spaceId, isTable);
-
-      self.mainStore.unityStore.triggerInteractionMessage(
-        PosBusEventEnum.EnteredSpace,
-        spaceId,
-        0,
-        ''
-      );
-
-      console.log('---JOINED---');
-    }),
-    // TODO: To be removed, do not use in new code
-    leaveMeetingSpace: flow(function* (isKicked = false) {
-      console.log('---LEAVING---');
-
-      const spaceId = self.collaborationStore.spaceStore?.id || '';
-      self.meetingStore.leave(isKicked);
-      self.collaborationStore.stageModeStore.removeAllPopups();
-
-      /*
-         FIXME: Sometimes Agora loses connection.
-         Non-reproducible issue. Leave this for now. We will remove Agora later.
-      */
-
-      try {
-        yield self.agoraStore.leaveVoiceChat();
-      } catch (ex) {
-        console.error('agoraStore.leave', ex);
-      }
-
-      try {
-        self.collaborationStore.leave();
-      } catch (ex) {
-        console.error('collaborationStore.leave', ex);
-      }
-
-      try {
-        self.mainStore.unityStore.triggerInteractionMessage(
-          PosBusEventEnum.LeftSpace,
-          spaceId,
-          0,
-          ''
-        );
-      } catch (ex) {
-        console.error('collaborationStore.leave', ex);
-      }
-
-      console.log('---LEFT---');
-    }),
     openObject: flow(function* (objectId: string) {
       yield self.objectStore.init(objectId);
     }),
