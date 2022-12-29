@@ -19,8 +19,8 @@ import {PosBusScreenShareMessageType} from 'core/types';
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
-  const {agoraStore, liveStreamStore, unityStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore} = agoraStore;
+  const {agoraStore_OLD, liveStreamStore, unityStore} = mainStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
@@ -121,14 +121,14 @@ const PosBusEventsPage: FC = () => {
 
     // NOTE: This message should not be recieved at all when accepting invite! BE issue
     if (
-      (agoraStore.isStageMode && stageModeStatus === StageModeStatusEnum.INITIATED) ||
-      (!agoraStore.isStageMode && stageModeStatus === StageModeStatusEnum.STOPPED)
+      (agoraStore_OLD.isStageMode && stageModeStatus === StageModeStatusEnum.INITIATED) ||
+      (!agoraStore_OLD.isStageMode && stageModeStatus === StageModeStatusEnum.STOPPED)
     ) {
       console.info('[POSBUS EVENT] Ignoring stage-mode-toggled...');
       return;
     }
 
-    const showStageIsFull = await agoraStore.toggledStageMode(
+    const showStageIsFull = await agoraStore_OLD.toggledStageMode(
       sessionStore.userId,
       collaborationStore.isModerator
     );
@@ -145,7 +145,7 @@ const PosBusEventsPage: FC = () => {
       );
     }
 
-    if (agoraStore.isStageMode) {
+    if (agoraStore_OLD.isStageMode) {
       toast.info(
         <ToastContent
           headerIconName="alert"

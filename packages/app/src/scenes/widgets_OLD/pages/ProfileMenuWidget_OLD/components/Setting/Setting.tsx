@@ -13,8 +13,8 @@ const SETTING_OFFSET_BOTTOM = 60;
 const Setting: FC = () => {
   const {mainStore, widgetStore_OLD} = useStore();
   const {profileMenuStore} = widgetStore_OLD;
-  const {agoraStore} = mainStore;
-  const {userDevicesStore} = agoraStore;
+  const {agoraStore_OLD} = mainStore;
+  const {userDevicesStore} = agoraStore_OLD;
 
   const settingRef = useRef<HTMLDivElement>(null);
 
@@ -60,7 +60,7 @@ const Setting: FC = () => {
               value={userDevicesStore.currentVideoInput?.deviceId}
               options={userDevicesStore.videoInputsOption}
               onOptionSelect={(option) => {
-                agoraStore.selectVideoInput(option.value);
+                agoraStore_OLD.selectVideoInput(option.value);
               }}
               dropdownSize="small"
             />
@@ -81,7 +81,7 @@ const Setting: FC = () => {
               value={userDevicesStore.currentAudioInput?.deviceId}
               options={userDevicesStore.audioInputOptions}
               onOptionSelect={(option) => {
-                agoraStore.selectAudioInput(option.value);
+                agoraStore_OLD.selectAudioInput(option.value);
               }}
               dropdownSize="small"
             />

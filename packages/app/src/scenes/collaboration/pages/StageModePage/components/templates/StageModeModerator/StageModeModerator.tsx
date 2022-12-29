@@ -24,8 +24,8 @@ interface PropsInterface {
 
 const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
-  const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
+  const {agoraStore_OLD, favoriteStore} = mainStore;
+  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore_OLD;
   const {spaceStore, removeParticipantFromStageDialog} = collaborationStore;
   const {space} = spaceStore;
 
@@ -36,10 +36,10 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
       if (event === StageModeModerationEventEnum.REMOVE) {
         collaborationStore.selectUserToRemoveAndOpenDialog(remoteUser);
       } else if (event === StageModeModerationEventEnum.MUTE) {
-        await agoraStore.agoraStageModeStore.muteRemoteUser(remoteUser.uid as string);
+        await agoraStore_OLD.agoraStageModeStore.muteRemoteUser(remoteUser.uid as string);
       }
     },
-    [agoraStore, collaborationStore]
+    [agoraStore_OLD, collaborationStore]
   );
 
   const handleEnterStage = useCallback(async () => {
@@ -97,15 +97,15 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           <styled.ActionsContainer>
             <styled.ToggleContainer>
               <Toggle
-                checked={agoraStore.isStageMode}
-                disabled={agoraStore.isTogglingStageMode || flightStore.isFlightWithMe}
+                checked={agoraStore_OLD.isStageMode}
+                disabled={agoraStore_OLD.isTogglingStageMode || flightStore.isFlightWithMe}
                 onChange={() => {
-                  agoraStore.toggleStageMode(sessionStore.userId);
+                  agoraStore_OLD.toggleStageMode(sessionStore.userId);
                 }}
               />
               <Text
                 text={
-                  agoraStore.isStageMode
+                  agoraStore_OLD.isStageMode
                     ? t('messages.stageIsActive')
                     : t('messages.stageIsInactiveToggleToActivate')
                 }
@@ -113,8 +113,8 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 isMultiline={false}
               />
             </styled.ToggleContainer>
-            {agoraStore.isStageMode && <StageModeStats />}
-            {agoraStore.isStageMode && agoraStageModeStore.canEnterStage && (
+            {agoraStore_OLD.isStageMode && <StageModeStats />}
+            {agoraStore_OLD.isStageMode && agoraStageModeStore.canEnterStage && (
               <Button
                 label={`${t('actions.goOnStage')}?`}
                 variant="primary"
@@ -122,7 +122,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 disabled={agoraStageModeStore.isTogglingIsOnStage}
               />
             )}
-            {agoraStore.isStageMode && agoraStageModeStore.isOnStage && (
+            {agoraStore_OLD.isStageMode && agoraStageModeStore.isOnStage && (
               <Button
                 label={`${t('actions.leaveStage')}?`}
                 variant="danger"
@@ -130,7 +130,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 disabled={agoraStageModeStore.isTogglingIsOnStage}
               />
             )}
-            {agoraStore.isStageMode && agoraStageModeStore.isStageFull && (
+            {agoraStore_OLD.isStageMode && agoraStageModeStore.isStageFull && (
               <Text text={t('messages.stageIsFull')} size="s" isMultiline={false} />
             )}
           </styled.ActionsContainer>
@@ -141,7 +141,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               <StageModePopupQueue />
             </styled.PopupQueueContainer>
             <styled.StageContainer>
-              {agoraStore.isStageMode ? (
+              {agoraStore_OLD.isStageMode ? (
                 <Stage onRemoteUserClick={remoteUserClicked} />
               ) : (
                 <styled.StageModeNotActiveText

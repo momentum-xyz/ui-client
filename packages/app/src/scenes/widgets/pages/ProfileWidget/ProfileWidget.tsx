@@ -13,8 +13,8 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = (props) => {
-  const {widgetsStore, sessionStore, mainStore, authStore} = useStore();
-  const {unityStore, agoraStore, worldStore} = mainStore;
+  const {widgetsStore, sessionStore, mainStore, authStore, agoraStore} = useStore();
+  const {unityStore, worldStore} = mainStore;
   const {isUnityAvailable} = unityStore;
   const {profileStore} = widgetsStore;
 

@@ -28,8 +28,8 @@ const Widgets_OLD: FC = () => {
     flightStore,
     odysseyCreatorStore: worldBuilderStore
   } = useStore();
-  const {worldStore, agoraStore, unityStore} = mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {worldStore, agoraStore_OLD, unityStore} = mainStore;
+  const {agoraStageModeStore} = agoraStore_OLD;
   const {
     stakingStore,
     worldStatsStore,
@@ -42,7 +42,7 @@ const Widgets_OLD: FC = () => {
   const {statsDialog} = worldStatsStore;
   const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
-  const {userDevicesStore} = agoraStore;
+  const {userDevicesStore} = agoraStore_OLD;
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -54,7 +54,7 @@ const Widgets_OLD: FC = () => {
   }, [userId, user, worldStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
 
   const toggleMute = () => {
-    if (!agoraStore.canToggleMicrophone) {
+    if (!agoraStore_OLD.canToggleMicrophone) {
       return;
     }
 
@@ -62,7 +62,7 @@ const Widgets_OLD: FC = () => {
   };
 
   const toggleCameraOn = () => {
-    if (!agoraStore.canToggleCamera) {
+    if (!agoraStore_OLD.canToggleCamera) {
       return;
     }
 
@@ -144,7 +144,7 @@ const Widgets_OLD: FC = () => {
           <ToolbarIconList>
             <ToolbarIcon
               title={
-                agoraStore.isStageMode && !agoraStageModeStore.isOnStage
+                agoraStore_OLD.isStageMode && !agoraStageModeStore.isOnStage
                   ? t('messages.youAreInAudience')
                   : userDevicesStore.cameraOff
                   ? t('labels.cameraOn')
@@ -152,11 +152,11 @@ const Widgets_OLD: FC = () => {
               }
               icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
               onClick={toggleCameraOn}
-              disabled={!agoraStore.canToggleCamera}
+              disabled={!agoraStore_OLD.canToggleCamera}
             />
             <ToolbarIcon
               title={
-                agoraStore.isStageMode && !agoraStageModeStore.isOnStage
+                agoraStore_OLD.isStageMode && !agoraStageModeStore.isOnStage
                   ? t('messages.youAreInAudience')
                   : userDevicesStore.muted
                   ? t('actions.unmute')
@@ -164,7 +164,7 @@ const Widgets_OLD: FC = () => {
               }
               icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
               onClick={toggleMute}
-              disabled={!agoraStore.canToggleMicrophone}
+              disabled={!agoraStore_OLD.canToggleMicrophone}
             />
           </ToolbarIconList>
           {/* Main toolbar icons */}

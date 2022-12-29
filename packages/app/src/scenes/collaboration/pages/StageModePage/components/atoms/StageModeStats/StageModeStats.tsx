@@ -9,8 +9,8 @@ import * as styled from './StageModeStats.styled';
 
 const StageModeStats: React.FC = () => {
   const {t} = useTranslation();
-  const {agoraStore} = useStore().mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {agoraStore_OLD} = useStore().mainStore;
+  const {agoraStageModeStore} = agoraStore_OLD;
 
   return (
     <styled.Container data-testid="StageModeStats-test">

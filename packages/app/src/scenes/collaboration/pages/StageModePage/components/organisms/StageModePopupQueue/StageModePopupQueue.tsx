@@ -9,7 +9,7 @@ import * as styled from './StageModePopupQueue.styled';
 const StageModePopupQueue: React.FC = () => {
   const {mainStore, collaborationStore} = useStore();
   const {stageModeStore} = collaborationStore;
-  const {agoraStageModeStore} = mainStore.agoraStore;
+  const {agoraStageModeStore} = mainStore.agoraStore_OLD;
 
   return (
     <styled.Container data-testid="StageModePopupQueue-test">

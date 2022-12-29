@@ -2,9 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {UserDevicesStore} from './UserDevicesStore';
-import {AgoraVoiceChatStore} from './AgoraVoiceChatStore';
-import {AgoraScreenShareStore} from './AgoraScreenShareStore';
+import {UserDevicesStore, AgoraVoiceChatStore, AgoraScreenShareStore} from './models';
 
 const AgoraStore = types
   .compose(

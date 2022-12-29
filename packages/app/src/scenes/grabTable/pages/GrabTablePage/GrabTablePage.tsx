@@ -7,16 +7,16 @@ import {useStore} from 'shared/hooks';
 const GrabTablePage: FC = () => {
   const rootStore = useStore();
   const {mainStore} = rootStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore_OLD} = mainStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
 
   const reJoinMeeting = useCallback(async () => {
-    if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
+    if (agoraStore_OLD.hasJoined && agoraStore_OLD.spaceId === spaceId) {
       return;
     }
 
-    if (agoraStore.hasJoined && agoraStore.spaceId !== spaceId) {
+    if (agoraStore_OLD.hasJoined && agoraStore_OLD.spaceId !== spaceId) {
       //await rootStore.leaveMeetingSpace();
     }
 
@@ -33,7 +33,7 @@ const GrabTablePage: FC = () => {
         );
       }
     });*/
-  }, [agoraStore, rootStore, spaceId]);
+  }, [agoraStore_OLD, rootStore, spaceId]);
 
   useEffect(() => {
     reJoinMeeting().then();

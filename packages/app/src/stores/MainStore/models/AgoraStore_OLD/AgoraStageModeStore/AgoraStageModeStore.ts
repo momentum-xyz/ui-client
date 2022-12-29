@@ -17,7 +17,7 @@ import {
 import {api} from 'api';
 import {ModerationEnum, ParticipantRoleEnum, StageModeRequestEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {AgoraScreenShareStoreType} from 'stores/MainStore/models/AgoraStore/AgoraScreenShareStore';
+import {AgoraScreenShareStoreType} from 'stores/MainStore/models/AgoraStore_OLD/AgoraScreenShareStore';
 import {StageModeGetUsersResponse} from 'api';
 
 const AgoraStageModeStore = types

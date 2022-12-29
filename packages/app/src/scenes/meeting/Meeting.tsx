@@ -14,8 +14,8 @@ import * as styled from './Meeting.styled';
 const Meeting: FC = () => {
   const rootStore = useStore();
   const {mainStore, collaborationStore} = rootStore;
-  const {agoraStore} = mainStore;
-  const {agoraMeetingStore} = agoraStore;
+  const {agoraStore_OLD} = mainStore;
+  const {agoraMeetingStore} = agoraStore_OLD;
   const {spaceStore} = collaborationStore;
 
   const history = useHistory();

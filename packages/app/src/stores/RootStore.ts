@@ -53,6 +53,7 @@ const RootStore = types
       await self.nftStore.initWeb3ExtensionIfNeeded();
       self.authStore.tryToRestoreWallet();
       self.mainStore.themeStore.init();
+      self.agoraStore.userDevicesStore.init();
     },
     unityLoaded(worldId: string): void {
       self.mainStore.unityStore.teleportIsReady();

@@ -11,7 +11,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {AgoraTokenResponse, api, GetAllSpaceUserAttributesForSpaceResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
-import {AgoraScreenShareStoreType} from 'stores/AgoraStore/AgoraScreenShareStore';
+import {AgoraScreenShareStoreType} from 'stores/AgoraStore/models/AgoraScreenShareStore';
 import {PluginIdEnum, VoiceChatActionEnum} from 'api/enums';
 import {VoiceChatUserAttributeInterface} from 'api/interfaces';
 
