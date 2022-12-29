@@ -7,7 +7,7 @@ const NotificationsStore = types
   .compose(
     ResetModel,
     types.model('NotificationsStore', {
-      notificationsDialog: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       notifications: types.optional(types.array(types.frozen<NftFeedItemInterface>()), []),
       request: types.optional(RequestModel, {})
     })

@@ -7,12 +7,12 @@ const MinimapStore = types.compose(
   ResetModel,
   types
     .model('MinimapStore', {
-      minimapDialog: types.optional(Dialog, {})
+      dialog: types.optional(Dialog, {})
     })
     .actions((self) => ({
       toggle() {
         UnityService.toggleMiniMap();
-        self.minimapDialog.toggle();
+        self.dialog.toggle();
       }
     }))
 );

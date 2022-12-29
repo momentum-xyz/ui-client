@@ -16,7 +16,7 @@ const DIALOG_OFFSET_BOTTOM = 60;
 const NotificationsWidget: FC = () => {
   const {widgetsStore, mainStore, authStore} = useStore();
   const {notificationsStore} = widgetsStore;
-  const {notificationsDialog, notifications} = notificationsStore;
+  const {dialog, notifications} = notificationsStore;
   const {unityStore} = mainStore;
 
   const theme = useTheme();
@@ -37,14 +37,14 @@ const NotificationsWidget: FC = () => {
   return (
     <Dialog
       theme={theme}
-      icon="bell"
+      icon="clock-two"
       iconSize="medium"
       position="rightBottom"
       headerStyle="normal"
       headerType="h2"
       offset={{right: DIALOG_OFFSET_RIGHT, bottom: DIALOG_OFFSET_BOTTOM}}
       title="Newsfeed"
-      onClose={notificationsDialog.close}
+      onClose={dialog.close}
       showBackground={false}
       showCloseButton
     >

@@ -29,8 +29,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
   const {configStore, authStore, mainStore, initApplication} = useStore();
-  const {themeStore} = mainStore;
   const {errorCode: configLoadingErrorCode} = configStore;
+  const {themeStore} = mainStore;
 
   const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();

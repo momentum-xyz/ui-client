@@ -1,31 +1,26 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-import {toast} from 'react-toastify';
 
-import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {PrivateSpaceError} from 'core/errors';
 
 const GrabTablePage: FC = () => {
   const rootStore = useStore();
   const {mainStore} = rootStore;
-  const {agoraStore} = mainStore;
+  const {agoraStore_OLD} = mainStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
-  const {t} = useTranslation();
 
   const reJoinMeeting = useCallback(async () => {
-    if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
+    if (agoraStore_OLD.hasJoined && agoraStore_OLD.spaceId === spaceId) {
       return;
     }
 
-    if (agoraStore.hasJoined && agoraStore.spaceId !== spaceId) {
-      await rootStore.leaveMeetingSpace();
+    if (agoraStore_OLD.hasJoined && agoraStore_OLD.spaceId !== spaceId) {
+      //await rootStore.leaveMeetingSpace();
     }
 
-    rootStore.joinMeetingSpace(spaceId, true).catch((e) => {
+    /*rootStore.joinMeetingSpace(spaceId, true).catch((e) => {
       if (e instanceof PrivateSpaceError) {
         toast.error(
           <ToastContent
@@ -37,8 +32,8 @@ const GrabTablePage: FC = () => {
           />
         );
       }
-    });
-  }, [agoraStore, rootStore, spaceId, t]);
+    });*/
+  }, [agoraStore_OLD, rootStore, spaceId]);
 
   useEffect(() => {
     reJoinMeeting().then();

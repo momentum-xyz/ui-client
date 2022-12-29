@@ -12,6 +12,7 @@ export * from './Separator';
 export * from './Text';
 export * from './TextArea';
 export * from './TextAreaDark';
+export * from './ToolbarIconSeparator';
 export * from './ToolbarIconList';
 export * from './Tooltip';
 export * from './ErrorBoundary';

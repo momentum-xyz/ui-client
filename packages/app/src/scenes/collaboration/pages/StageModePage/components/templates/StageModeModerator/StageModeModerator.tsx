@@ -6,7 +6,6 @@ import {generatePath, useHistory} from 'react-router-dom';
 import {Toggle, Button, Text, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 
 import {Stage, ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components';
 import {useStore} from 'shared/hooks';
 import {StageModeModerationEventEnum} from 'core/enums';
 import {AgoraRemoteUserInterface} from 'core/models';
@@ -25,9 +24,9 @@ interface PropsInterface {
 
 const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
-  const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore;
-  const {spaceStore, removeParticipantFromStageDialog, streamChatStore} = collaborationStore;
+  const {agoraStore_OLD, favoriteStore} = mainStore;
+  const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore_OLD;
+  const {spaceStore, removeParticipantFromStageDialog} = collaborationStore;
   const {space} = spaceStore;
 
   const history = useHistory();
@@ -37,10 +36,10 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
       if (event === StageModeModerationEventEnum.REMOVE) {
         collaborationStore.selectUserToRemoveAndOpenDialog(remoteUser);
       } else if (event === StageModeModerationEventEnum.MUTE) {
-        await agoraStore.agoraStageModeStore.muteRemoteUser(remoteUser.uid as string);
+        await agoraStore_OLD.agoraStageModeStore.muteRemoteUser(remoteUser.uid as string);
       }
     },
-    [agoraStore, collaborationStore]
+    [agoraStore_OLD, collaborationStore]
   );
 
   const handleEnterStage = useCallback(async () => {
@@ -87,9 +86,9 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           spaceId={spaceStore.id}
           isSpaceFavorite={favoriteStore.isFavorite(space.id)}
           toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-          isChatOpen={streamChatStore.isOpen}
-          toggleChat={streamChatStore.textChatDialog.toggle}
-          numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
+          isChatOpen={false}
+          toggleChat={() => {}}
+          numberOfUnreadMessages={0}
           editSpaceHidden
           onLeave={onLeaveMeeting}
           adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
@@ -98,15 +97,15 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           <styled.ActionsContainer>
             <styled.ToggleContainer>
               <Toggle
-                checked={agoraStore.isStageMode}
-                disabled={agoraStore.isTogglingStageMode || flightStore.isFlightWithMe}
+                checked={agoraStore_OLD.isStageMode}
+                disabled={agoraStore_OLD.isTogglingStageMode || flightStore.isFlightWithMe}
                 onChange={() => {
-                  agoraStore.toggleStageMode(sessionStore.userId);
+                  agoraStore_OLD.toggleStageMode(sessionStore.userId);
                 }}
               />
               <Text
                 text={
-                  agoraStore.isStageMode
+                  agoraStore_OLD.isStageMode
                     ? t('messages.stageIsActive')
                     : t('messages.stageIsInactiveToggleToActivate')
                 }
@@ -114,8 +113,8 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 isMultiline={false}
               />
             </styled.ToggleContainer>
-            {agoraStore.isStageMode && <StageModeStats />}
-            {agoraStore.isStageMode && agoraStageModeStore.canEnterStage && (
+            {agoraStore_OLD.isStageMode && <StageModeStats />}
+            {agoraStore_OLD.isStageMode && agoraStageModeStore.canEnterStage && (
               <Button
                 label={`${t('actions.goOnStage')}?`}
                 variant="primary"
@@ -123,7 +122,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 disabled={agoraStageModeStore.isTogglingIsOnStage}
               />
             )}
-            {agoraStore.isStageMode && agoraStageModeStore.isOnStage && (
+            {agoraStore_OLD.isStageMode && agoraStageModeStore.isOnStage && (
               <Button
                 label={`${t('actions.leaveStage')}?`}
                 variant="danger"
@@ -131,7 +130,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 disabled={agoraStageModeStore.isTogglingIsOnStage}
               />
             )}
-            {agoraStore.isStageMode && agoraStageModeStore.isStageFull && (
+            {agoraStore_OLD.isStageMode && agoraStageModeStore.isStageFull && (
               <Text text={t('messages.stageIsFull')} size="s" isMultiline={false} />
             )}
           </styled.ActionsContainer>
@@ -142,7 +141,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               <StageModePopupQueue />
             </styled.PopupQueueContainer>
             <styled.StageContainer>
-              {agoraStore.isStageMode ? (
+              {agoraStore_OLD.isStageMode ? (
                 <Stage onRemoteUserClick={remoteUserClicked} />
               ) : (
                 <styled.StageModeNotActiveText
@@ -154,9 +153,6 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               )}
             </styled.StageContainer>
           </styled.InnerBody>
-          {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
-            <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
-          )}
         </styled.Body>
       </SpacePage>
       {removeParticipantFromStageDialog.isOpen &&

@@ -13,8 +13,8 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = (props) => {
-  const {widgetsStore, sessionStore, mainStore, authStore} = useStore();
-  const {unityStore, agoraStore, worldStore} = mainStore;
+  const {widgetsStore, sessionStore, mainStore, authStore, agoraStore} = useStore();
+  const {unityStore, worldStore} = mainStore;
   const {isUnityAvailable} = unityStore;
   const {profileStore} = widgetsStore;
 
@@ -34,7 +34,7 @@ const ProfileWidget: FC = (props) => {
 
   const handleTeleportToOdyssey = useCallback(() => {
     const worldId = profileStore.userProfile?.id || '';
-    profileStore.profileDialog.close();
+    profileStore.dialog.close();
 
     if (isUnityAvailable) {
       console.log(`Teleport in unity to ${worldId}`);
@@ -54,7 +54,7 @@ const ProfileWidget: FC = (props) => {
 
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();
-    profileStore.profileDialog.close();
+    profileStore.dialog.close();
   }, [profileStore]);
 
   const handleLogout = useCallback(() => {

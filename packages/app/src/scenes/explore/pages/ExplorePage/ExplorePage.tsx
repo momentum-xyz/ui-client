@@ -39,7 +39,7 @@ const ExplorePage: FC = () => {
             onSearch={nftStore.searchNft}
             onSelect={(nft) => {
               widgetsStore.odysseyInfoStore.open(nft);
-              widgetsStore.profileStore.profileDialog.close();
+              widgetsStore.profileStore.dialog.close();
             }}
             onTeleport={(nft) => {
               console.log(nft);

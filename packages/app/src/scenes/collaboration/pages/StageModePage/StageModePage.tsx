@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback} from 'react';
 import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router';
@@ -10,28 +10,16 @@ import {StageModeGuest, StageModeModerator} from './components';
 
 // TODO: Refactor
 const StageModePage: FC = () => {
-  const {collaborationStore, leaveMeetingSpace} = useStore();
-  const {streamChatStore} = collaborationStore;
+  const {collaborationStore} = useStore();
 
   const {spaceId} = useParams<{spaceId: string}>();
 
   const history = useHistory();
 
-  useEffect(() => {
-    const chatWasOpen = streamChatStore.isOpen;
-    streamChatStore.textChatDialog.open();
-
-    return () => {
-      if (!chatWasOpen) {
-        streamChatStore.textChatDialog.close();
-      }
-    };
-  }, [streamChatStore]);
-
   const onLeaveMeeting = useCallback(async () => {
-    await leaveMeetingSpace();
+    //await leaveMeetingSpace();
     history.push(ROUTES.base);
-  }, [history, leaveMeetingSpace]);
+  }, [history]);
 
   // FIXME: Make view "rightLoaded" under "collaborationStore"
   if (collaborationStore.spaceStore.moderationRequest.isPending) {

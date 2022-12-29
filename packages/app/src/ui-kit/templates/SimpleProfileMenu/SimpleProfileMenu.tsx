@@ -11,8 +11,8 @@ import * as styled from './SimpleProfileMenu.styled';
 const MENU_OFFSET_BOTTOM = 60;
 
 const SimpleProfileMenu: FC = () => {
-  const {widgetsStore, sessionStore} = useStore();
-  const {profileMenuStore} = widgetsStore;
+  const {widgetStore_OLD, sessionStore} = useStore();
+  const {profileMenuStore} = widgetStore_OLD;
   const {user} = sessionStore;
 
   const signOutUser = () => {

@@ -17,7 +17,7 @@ const OdysseyBioStore = types.compose(
   ResetModel,
   types
     .model('OdysseyBioStore', {
-      widget: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       request: types.optional(RequestModel, {}),
       userRequest: types.optional(RequestModel, {}),
       nftId: types.maybe(types.string),
@@ -40,7 +40,7 @@ const OdysseyBioStore = types.compose(
             this.setStatistics(statistics);
             this.fetchEventsCount(item.uuid);
 
-            self.widget.open();
+            self.dialog.open();
           }
         },
         setNft(nft: NftItemInterface): void {

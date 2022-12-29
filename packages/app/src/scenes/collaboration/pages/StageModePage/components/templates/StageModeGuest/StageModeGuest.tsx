@@ -7,7 +7,6 @@ import {generatePath} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent, Stage} from 'ui-kit';
-import {StreamChat} from 'scenes/collaboration/components';
 import {
   StageModePopupQueue,
   StageModeStats
@@ -22,9 +21,9 @@ interface PropsInterface {
 
 const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {mainStore, collaborationStore} = useStore();
-  const {agoraStore, favoriteStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore} = agoraStore;
-  const {streamChatStore, spaceStore} = collaborationStore;
+  const {agoraStore_OLD, favoriteStore} = mainStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
+  const {spaceStore} = collaborationStore;
   const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;
 
   const {t} = useTranslation();
@@ -63,18 +62,18 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
         isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
-        isChatOpen={streamChatStore.isOpen}
-        toggleChat={streamChatStore.textChatDialog.toggle}
+        isChatOpen={false}
+        toggleChat={() => {}}
+        numberOfUnreadMessages={0}
         toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
-        numberOfUnreadMessages={streamChatStore.numberOfUnreadMessages}
         onLeave={onLeaveMeeting}
         adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: spaceStore.id})}
         baseLink={generatePath(ROUTES.base, {spaceId: spaceStore.id})}
       >
         <styled.Actions>
           <styled.Spacer />
-          {agoraStore.isStageMode && <StageModeStats />}
-          {agoraStore.isStageMode &&
+          {agoraStore_OLD.isStageMode && <StageModeStats />}
+          {agoraStore_OLD.isStageMode &&
             agoraStageModeStore.canEnterStage &&
             !agoraStageModeStore.requestWasMadeToGoOnStage && (
               <Button
@@ -83,7 +82,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
                 onClick={handleUserRequest}
               />
             )}
-          {agoraStore.isStageMode && agoraStageModeStore.isOnStage && (
+          {agoraStore_OLD.isStageMode && agoraStageModeStore.isOnStage && (
             <Button
               label={t('actions.leaveStage')}
               variant="danger"
@@ -94,10 +93,10 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
               }}
             />
           )}
-          {agoraStore.isStageMode && agoraStageModeStore.requestWasMadeToGoOnStage && (
+          {agoraStore_OLD.isStageMode && agoraStageModeStore.requestWasMadeToGoOnStage && (
             <Text text={t('messages.pendingRequestToGoOnStage')} size="m" />
           )}
-          {agoraStore.isStageMode && agoraStageModeStore.isStageFull && (
+          {agoraStore_OLD.isStageMode && agoraStageModeStore.isStageFull && (
             <Text text={t('messages.stageIsFull')} size="m" />
           )}
         </styled.Actions>
@@ -108,7 +107,7 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
             <StageModePopupQueue />
           </styled.PopupQueueWrapper>
           <styled.StageModeContainer>
-            {agoraStore.isStageMode ? (
+            {agoraStore_OLD.isStageMode ? (
               <Stage />
             ) : (
               <styled.StageModeMessageText
@@ -121,9 +120,6 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
             )}
           </styled.StageModeContainer>
         </styled.InnerBody>
-        {streamChatStore.isOpen && streamChatStore.client && streamChatStore.currentChannel && (
-          <StreamChat client={streamChatStore.client} channel={streamChatStore.currentChannel} />
-        )}
       </styled.Body>
     </SpacePage>
   );

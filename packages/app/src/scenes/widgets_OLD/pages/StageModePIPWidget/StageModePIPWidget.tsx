@@ -16,11 +16,11 @@ const Draggable: any = DraggableContent;
 
 const StageModePIPWidget: React.FC = () => {
   const {mainStore} = useStore();
-  const {agoraStore} = mainStore;
+  const {agoraStore_OLD} = mainStore;
   const history = useHistory();
   const {t} = useTranslation();
 
-  if (!agoraStore.isStageMode) {
+  if (!agoraStore_OLD.isStageMode) {
     return null;
   }
 
@@ -36,7 +36,7 @@ const StageModePIPWidget: React.FC = () => {
             className="right"
             onClick={() => {
               history.push(
-                generatePath(ROUTES.collaboration.stageMode, {spaceId: agoraStore.spaceId})
+                generatePath(ROUTES.collaboration.stageMode, {spaceId: agoraStore_OLD.spaceId})
               );
             }}
           >

@@ -18,8 +18,8 @@ interface PropsInterface {
 
 const RemoveParticipantFromStageDialog: FC<PropsInterface> = ({participant}) => {
   const {collaborationStore, mainStore} = useStore();
-  const {agoraStore} = mainStore;
-  const {agoraStageModeStore} = agoraStore;
+  const {agoraStore_OLD} = mainStore;
+  const {agoraStageModeStore} = agoraStore_OLD;
 
   const {t} = useTranslation();
 

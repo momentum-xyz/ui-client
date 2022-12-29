@@ -10,8 +10,7 @@ import {ImagePage, ObjectPluginPage, TextPage, VideoPage} from './pages';
 import * as styled from './Object.styled';
 
 const Object: FC = () => {
-  const rootStore = useStore();
-  const {objectStore, mainStore, nftStore, widgetsStore} = rootStore;
+  const {objectStore, mainStore, nftStore, widgetsStore} = useStore();
   const {unityStore} = mainStore;
   const {asset, assetStore} = objectStore;
   const {assetType} = assetStore;
@@ -20,14 +19,14 @@ const Object: FC = () => {
   const {objectId} = useParams<{objectId: string}>();
 
   useEffect(() => {
-    rootStore.openObject(objectId);
+    objectStore.init(objectId);
     unityStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId, 0, '');
 
     return () => {
       unityStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId, 0, '');
       objectStore.resetModel();
     };
-  }, [objectId, objectStore, rootStore, unityStore]);
+  }, [objectId, objectStore, unityStore]);
 
   useEffect(() => {
     if (assetType === AssetTypeEnum.DOCK) {
@@ -43,11 +42,7 @@ const Object: FC = () => {
       case AssetTypeEnum.TEXT:
         return <TextPage />;
       case AssetTypeEnum.IMAGE:
-        return (
-          <>
-            <ImagePage />
-          </>
-        );
+        return <ImagePage />;
       case AssetTypeEnum.VIDEO:
         return <VideoPage />;
       case AssetTypeEnum.PLUGIN:

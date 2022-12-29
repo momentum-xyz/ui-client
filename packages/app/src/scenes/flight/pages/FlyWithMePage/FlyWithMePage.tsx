@@ -14,7 +14,7 @@ import * as styled from './FlyWithMePage.styled';
 
 const FlyWithMePage: FC = () => {
   const {mainStore, sessionStore, flightStore} = useStore();
-  const {agoraStore, unityStore} = mainStore;
+  const {agoraStore_OLD, unityStore} = mainStore;
   const {flyWithMeStore} = flightStore;
   const {pilot} = flyWithMeStore;
 
@@ -23,10 +23,10 @@ const FlyWithMePage: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!agoraStore.hasJoined) {
+    if (!agoraStore_OLD.hasJoined) {
       history.push(ROUTES.base);
     }
-  }, [agoraStore, history]);
+  }, [agoraStore_OLD, history]);
 
   const isPilot = useMemo(() => {
     return sessionStore.userId === pilotId;
