@@ -30,7 +30,6 @@ const MainStore = types.compose(
       init(): void {
         self.sentryStore.init();
         self.unityStore.init();
-        self.agoraStore.init();
       },
       initBroadcast(spaceId: string): void {
         self.liveStreamStore.fetchBroadcast(spaceId);

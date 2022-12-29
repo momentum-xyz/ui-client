@@ -11,6 +11,7 @@ import {AgoraMeetingStore} from './AgoraMeetingStore';
 import {AgoraStageModeStore} from './AgoraStageModeStore';
 import {AgoraScreenShareStore} from './AgoraScreenShareStore';
 
+// TODO: Removal. It is old store.
 const AgoraStore = types
   .compose(
     ResetModel,

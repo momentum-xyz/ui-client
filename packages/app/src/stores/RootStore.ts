@@ -1,4 +1,4 @@
-import {Instance, types, flow} from 'mobx-state-tree';
+import {Instance, types} from 'mobx-state-tree';
 
 import {SignInAccountStore} from 'scenes/auth/stores/SignInAccountStore';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
@@ -30,6 +30,7 @@ const RootStore = types
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
+
     /* Connect independent stores */
     signInAccountStore: types.optional(SignInAccountStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
@@ -56,13 +57,6 @@ const RootStore = types
     unityLoaded(worldId: string): void {
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
-      self.agoraStore.init(worldId, self.sessionStore.userId);
-    },
-    openObject: flow(function* (objectId: string) {
-      yield self.objectStore.init(objectId);
-    }),
-    closeObject() {
-      self.objectStore.deinit();
     }
   }));
 

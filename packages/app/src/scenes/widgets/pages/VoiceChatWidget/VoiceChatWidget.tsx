@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {Heading, IconSvg, Portal, SvgButton} from '@momentum-xyz/ui-kit';
@@ -9,11 +9,16 @@ import {VoiceChatPanel} from './components';
 import * as styled from './VoiceChatWidget.styled';
 
 const VoiceChatWidget: FC = () => {
-  const {widgetsStore, agoraStore} = useStore();
+  const {widgetsStore, agoraStore, sessionStore, mainStore} = useStore();
   const {voiceChatStore} = widgetsStore;
   const {agoraVoiceChatStore} = agoraStore;
+  const {worldStore} = mainStore;
 
   const {t} = useTranslation();
+
+  useEffect(() => {
+    agoraStore.init(worldStore.worldId, sessionStore.userId);
+  }, [agoraStore, worldStore.worldId, sessionStore]);
 
   const handleClose = useCallback(async () => {
     if (agoraVoiceChatStore.hasJoined) {

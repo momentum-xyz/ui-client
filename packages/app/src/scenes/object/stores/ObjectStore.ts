@@ -106,10 +106,7 @@ const ObjectStore = types
   .actions((self) => ({
     init: flow(function* (objectId: string) {
       yield self.loadAsset2D(objectId);
-    }),
-    deinit() {
-      self.asset = undefined;
-    }
+    })
   }));
 
 export {ObjectStore};

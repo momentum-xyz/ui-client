@@ -19,8 +19,8 @@ const AgoraStore = types
   .actions((self) => ({
     init(worldId: string, userId: string) {
       AgoraRTC.setLogLevel(4);
-      self.userDevicesStore.init();
 
+      self.userDevicesStore.init();
       self.agoraVoiceChatStore.init(worldId, userId);
     }
   }))
