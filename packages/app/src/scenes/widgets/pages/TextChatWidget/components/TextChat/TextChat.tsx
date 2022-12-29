@@ -37,12 +37,21 @@ const TextChat: FC<PropsInterface> = (props) => {
 
   return (
     <ErrorBoundary errorMessage={t('errors.somethingWentWrong')}>
-      <styled.Container onFocus={onFocus} onBlur={onBlur}>
+      <styled.Container>
         <Chat client={client} theme="str-chat__theme-dark" i18nInstance={i18nInstance}>
           <ChannelComponent channel={channel} Input={CustomMessageInput}>
             <Window>
               <VirtualizedMessageList disableDateSeparator shouldGroupByUser />
-              <MessageInput disableMentions grow maxRows={5} />
+              <MessageInput
+                grow
+                maxRows={5}
+                disableMentions
+                additionalTextareaProps={{
+                  placeholder: `${t('textMessage.placeholder')}...`,
+                  onFocus: onFocus,
+                  onBlur: onBlur
+                }}
+              />
             </Window>
           </ChannelComponent>
         </Chat>

@@ -4,8 +4,8 @@ import {useTranslation} from 'react-i18next';
 import {IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {VoiceChatUser} from 'scenes/widgets/pages/VoiceChatWidget/components';
 
+import {VoiceChatUser} from './components';
 import * as styled from './VoiceChatPanel.styled';
 
 const VoiceChatPanel: FC = () => {

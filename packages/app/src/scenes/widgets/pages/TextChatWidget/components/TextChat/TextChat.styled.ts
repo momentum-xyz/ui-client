@@ -71,13 +71,15 @@ export const Container = styled.div`
     border-inline: solid var(--str-chat__background-color);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+    background: var(--black);
+
     &:focus,
     &:hover {
       border-block: solid var(--str-chat__primary-color);
       border-inline: solid var(--str-chat__primary-color);
     }
     :not(&:hover) {
-      border-top: 2px solid ${(props) => props.theme.accent};
+      border-top: 1px solid ${(props) => props.theme.accent};
     }
     .str-chat__send-button {
       height: calc(var(--str-chat__spacing-px) * 37);
@@ -94,6 +96,17 @@ export const Container = styled.div`
       }
     }
   }
+
+  .str-chat__message-input .str-chat__send-button {
+    width: initial;
+    min-width: initial;
+  }
+
+  .str-chat__message-input .str-chat__send-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
   .str-chat__avatar .str-chat__avatar-fallback {
     border-block: 1px solid var(--str-chat__primary-color);
     border-inline: 1px solid var(--str-chat__primary-color);
