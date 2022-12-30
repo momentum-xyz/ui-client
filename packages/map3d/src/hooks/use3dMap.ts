@@ -434,15 +434,15 @@ export const use3dMap = (
         return;
       }
 
-      // @ts-ignore: object has this prop
-      await drawConnections(targetPlanet.owner);
-
       // If clicked planet is same as current selected one return
       if (targetPlanet.uuid === selectedOdyssey.current?.uuid) {
         // Handle selecting planet again
         onSelectOdyssey(uuid);
         return;
       }
+
+      // @ts-ignore: object has this prop
+      await drawConnections(targetPlanet.owner);
 
       selectedOdyssey.current = targetPlanet;
 
