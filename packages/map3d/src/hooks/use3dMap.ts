@@ -441,7 +441,7 @@ export const use3dMap = (
         return;
       }
 
-      // @ts-ignore: object has this prop
+      // Draw connections for target odyssey
       await drawConnections(targetPlanet.owner);
 
       selectedOdyssey.current = targetPlanet;
