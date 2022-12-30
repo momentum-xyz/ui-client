@@ -455,10 +455,9 @@ export const use3dMap = (
       // Prepare rotation of camera animation.
       const startOrientation = camera.current.quaternion.clone();
 
-      const targetOrientation = camera.current.quaternion
-        // @ts-ignore: artifacts appear without it.
-        .clone(camera.current.lookAt(targetVector))
-        .normalize();
+      camera.current.lookAt(targetVector);
+
+      const targetOrientation = camera.current.quaternion.clone().normalize();
 
       // Get the direction for the new location.
       const direction = new THREE.Vector3();
