@@ -579,7 +579,7 @@ export const enGb = {
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',
-      delete: 'delete',
+      delete: 'Delete',
       declined: 'declined',
       declining: 'declining',
       removed: 'removed',
