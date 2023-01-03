@@ -1,5 +1,5 @@
-import {FC, useCallback, useEffect} from 'react';
-import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
+import {FC, useCallback, useEffect, useState} from 'react';
+import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
@@ -53,6 +53,8 @@ const ObjectMenu: FC<PropsInterface> = ({
     });
   }, [history, objectId, worldId]);
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   return (
     <Portal>
       <styled.Container
@@ -85,7 +87,7 @@ const ObjectMenu: FC<PropsInterface> = ({
         <styled.MenuItem onClick={onRedo}>
           <styled.MenuText text={t('actions.redo')} size="m" />
         </styled.MenuItem>
-        <styled.MenuItem onClick={onObjectRemove}>
+        <styled.MenuItem onClick={() => setShowDeleteDialog(true)}>
           <styled.MenuText text={t('actions.delete')} size="m" />
         </styled.MenuItem>
         <Tooltip label={t('messages.comingSoonExclamation')} placement="bottom">
@@ -101,6 +103,23 @@ const ObjectMenu: FC<PropsInterface> = ({
             <styled.MenuText text={t('actions.addTokenGate')} size="m" />
           </styled.MenuItem>
         </Tooltip>
+        {showDeleteDialog && (
+          <Dialog
+            title={t('messages.delete')}
+            approveInfo={{
+              title: t('actions.delete'),
+              onClick: onObjectRemove,
+              variant: 'danger'
+            }}
+            declineInfo={{
+              title: t('actions.cancel'),
+              onClick: () => setShowDeleteDialog(false),
+              variant: 'primary'
+            }}
+            onClose={() => setShowDeleteDialog(false)}
+            showCloseButton
+          />
+        )}
       </styled.Container>
     </Portal>
   );
