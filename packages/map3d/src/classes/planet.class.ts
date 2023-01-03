@@ -9,6 +9,7 @@ export class PlanetMesh extends THREE.Mesh {
   owner: string;
   name: string;
   texture: THREE.Texture;
+  nameRingMaterial: THREE.MeshBasicMaterial;
   isOdyssey: boolean;
 
   constructor(
@@ -17,7 +18,8 @@ export class PlanetMesh extends THREE.Mesh {
     uuid: string,
     owner: string,
     name: string,
-    texture: THREE.Texture
+    texture: THREE.Texture,
+    nameRingMaterial: THREE.MeshBasicMaterial
   ) {
     super(geometry, material);
 
@@ -27,6 +29,7 @@ export class PlanetMesh extends THREE.Mesh {
     this.owner = owner;
     this.name = name;
     this.texture = texture;
+    this.nameRingMaterial = nameRingMaterial;
     this.isOdyssey = true;
   }
 }

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
 
@@ -45,24 +45,27 @@ const OdysseyBioWidget: FC<PropsInterface> = () => {
       headerType="h1"
       hasBottomPadding={false}
       shortTopPadding
-      layoutSize={{width: '315px'}}
-      onClose={odysseyBioStore.widget.close}
+      layoutSize={{width: '285px'}}
+      onClose={odysseyBioStore.resetModel}
       showCloseButton
     >
-      {odyssey && (
-        <OdysseyInfo
-          odyssey={odyssey}
-          alreadyConnected={alreadyConnected}
-          onVisit={() => {}}
-          visitDisabled={true}
-          onHighFive={handleHighFive}
-          highFiveDisabled={userIsOdysseyOwner}
-          onConnect={handleConnect}
-          connectDisabled={userIsOdysseyOwner || alreadyConnected}
-          onCoCreate={() => {}}
-          coCreateDisabled={true}
-        />
-      )}
+      <div data-testid="OdysseyBioWidget-test">
+        {odyssey && (
+          <OdysseyInfo
+            user={odysseyBioStore.nftUser}
+            odyssey={odysseyBioStore.odyssey}
+            alreadyConnected={alreadyConnected}
+            onVisit={() => {}}
+            visitDisabled={true}
+            onHighFive={handleHighFive}
+            highFiveDisabled={userIsOdysseyOwner}
+            onConnect={handleConnect}
+            connectDisabled={userIsOdysseyOwner || alreadyConnected}
+            onCoCreate={() => {}}
+            coCreateDisabled={true}
+          />
+        )}
+      </div>
     </Dialog>
   );
 };

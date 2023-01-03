@@ -9,7 +9,7 @@ const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
-      profileDialog: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       userProfile: types.maybe(User),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
       fetchRequest: types.optional(RequestModel, {}),

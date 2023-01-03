@@ -5,8 +5,6 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Navigation} from '@momentum-xyz/ui-kit';
 
-import {ROUTES} from 'core/constants';
-import {PrivateSpaceError} from 'core/errors';
 import {useStore, useDeviceChange} from 'shared/hooks';
 import {StageModeRequestEnum} from 'core/enums';
 import {ToastContent, TOAST_GROUND_OPTIONS, NewDeviceDialog, CountdownDialog} from 'ui-kit';
@@ -24,8 +22,8 @@ import * as styled from './Collaboration.styled';
 const Collaboration: FC = () => {
   const rootStore = useStore();
   const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore, liveStreamStore} = mainStore;
-  const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore;
+  const {agoraStore_OLD, liveStreamStore} = mainStore;
+  const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {
     newDeviceDialog,
     acceptedToJoinStageDialog,
@@ -41,15 +39,15 @@ const Collaboration: FC = () => {
   const history = useHistory();
 
   const reJoinMeeting = useCallback(async () => {
-    if (agoraStore.hasJoined && agoraStore.spaceId === spaceId) {
+    if (agoraStore_OLD.hasJoined && agoraStore_OLD.spaceId === spaceId) {
       return;
     }
 
-    if (agoraStore.hasJoined && agoraStore.spaceId !== spaceId) {
-      await rootStore.leaveMeetingSpace();
+    if (agoraStore_OLD.hasJoined && agoraStore_OLD.spaceId !== spaceId) {
+      //await rootStore.leaveMeetingSpace();
     }
 
-    rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
+    /*rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
       if (e instanceof PrivateSpaceError) {
         history.push(ROUTES.base);
         toast.error(
@@ -62,8 +60,8 @@ const Collaboration: FC = () => {
           />
         );
       }
-    });
-  }, [agoraStore, history, rootStore, spaceId, t]);
+    });*/
+  }, [agoraStore_OLD, history, rootStore, spaceId, t]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -141,14 +139,14 @@ const Collaboration: FC = () => {
     return [
       ...buildNavigationTabs(
         spaceId,
-        agoraStore.isStageMode,
+        agoraStore_OLD.isStageMode,
         !!agoraScreenShareStore.videoTrack,
         liveStreamStore.isStreaming
       )
     ];
   }, [
     agoraScreenShareStore.videoTrack,
-    agoraStore.isStageMode,
+    agoraStore_OLD.isStageMode,
     liveStreamStore.isStreaming,
     spaceId
   ]);

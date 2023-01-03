@@ -16,7 +16,8 @@ const BirthAnimationPage: FC = () => {
     sessionStore.loadUserProfile();
 
     setTimeout(() => {
-      history.push(ROUTES.explore);
+      const from = window.history.state?.state?.from;
+      history.push(from || ROUTES.explore);
     }, 10 * 1000);
   }, [sessionStore, history]);
 

@@ -7,7 +7,7 @@ const FlyToMeStore = types.compose(
   ResetModel,
   types
     .model('FlyToMeStore', {
-      flyToMeDialog: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       request: types.optional(RequestModel, {})
     })
     .actions((self) => ({

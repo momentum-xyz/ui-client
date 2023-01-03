@@ -21,6 +21,7 @@ const MagicStore = types
           key
         }
       );
+
       if (response) {
         const magicLinkData = mapper.mapSubAttributeValue<MagicLinkInterface>(response);
         if (magicLinkData) {

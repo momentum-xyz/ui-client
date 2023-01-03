@@ -8,7 +8,7 @@ const CalendarStore = types.compose(
   ResetModel,
   types
     .model('CalendarStore', {
-      widget: types.optional(Dialog, {}),
+      dialog: types.optional(Dialog, {}),
       formDialog: types.optional(Dialog, {}),
       eventForm: types.optional(EventForm, {}),
 

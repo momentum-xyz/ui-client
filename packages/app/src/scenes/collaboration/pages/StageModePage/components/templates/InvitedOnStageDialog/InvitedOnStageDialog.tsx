@@ -17,8 +17,8 @@ interface PropsInterface {
 
 const InvitedOnStageDialog: React.FC<PropsInterface> = ({onDecline, onClose, onGetReady}) => {
   const {collaborationStore, mainStore} = useStore();
-  const {agoraStore} = mainStore;
-  const {agoraStageModeStore, userDevicesStore} = agoraStore;
+  const {agoraStore_OLD} = mainStore;
+  const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
 
   const {t} = useTranslation();
 

@@ -1,6 +1,5 @@
-import {Instance, types, flow} from 'mobx-state-tree';
+import {Instance, types} from 'mobx-state-tree';
 
-import {PosBusEventEnum} from 'core/enums';
 import {SignInAccountStore} from 'scenes/auth/stores/SignInAccountStore';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
@@ -13,7 +12,6 @@ import {OdysseyStore} from 'scenes/odyssey/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {VideoStore} from 'scenes/video/stores';
 import {RootOdysseyCreatorStore} from 'scenes/odysseyCreator/stores';
-import {StreamChatStore} from 'scenes/collaboration/stores/StreamChatStore';
 import {ObjectStore} from 'scenes/object/stores';
 
 import {NftStore} from './NftStore';
@@ -32,6 +30,7 @@ const RootStore = types
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
+
     /* Connect independent stores */
     signInAccountStore: types.optional(SignInAccountStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
@@ -43,7 +42,6 @@ const RootStore = types
     widgetsStore: types.optional(RootWidgetsStore, {}),
     widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),
     odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
-    worldChatStore: types.optional(StreamChatStore, {}),
     magicStore: types.optional(MagicStore, {}),
     videoStore: types.optional(VideoStore, {}),
     objectStore: types.optional(ObjectStore, {})
@@ -55,78 +53,11 @@ const RootStore = types
       await self.nftStore.initWeb3ExtensionIfNeeded();
       self.authStore.tryToRestoreWallet();
       self.mainStore.themeStore.init();
+      self.agoraStore.userDevicesStore.init();
     },
     unityLoaded(worldId: string): void {
-      self.mainStore.favoriteStore.init();
       self.mainStore.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
-      self.agoraStore.init(worldId, self.sessionStore.userId);
-    },
-    // TODO: To be removed, do not use in new code
-    joinMeetingSpace: flow(function* (spaceId: string, isTable = false) {
-      console.log('---JOINING---');
-
-      yield self.collaborationStore.join(spaceId, isTable);
-      yield self.agoraStore.joinVoiceChat();
-      self.meetingStore.join(spaceId, isTable);
-
-      self.mainStore.unityStore.triggerInteractionMessage(
-        PosBusEventEnum.EnteredSpace,
-        spaceId,
-        0,
-        ''
-      );
-
-      if (!self.collaborationStore.streamChatStore.isLoggedOn) {
-        const {userId, user} = self.sessionStore;
-        yield self.collaborationStore.streamChatStore.init(userId, spaceId, user ?? undefined);
-      }
-
-      console.log('---JOINED---');
-    }),
-    // TODO: To be removed, do not use in new code
-    leaveMeetingSpace: flow(function* (isKicked = false) {
-      console.log('---LEAVING---');
-
-      const spaceId = self.collaborationStore.spaceStore?.id || '';
-      self.meetingStore.leave(isKicked);
-      self.collaborationStore.stageModeStore.removeAllPopups();
-
-      /*
-         FIXME: Sometimes Agora loses connection.
-         Non-reproducible issue. Leave this for now. We will remove Agora later.
-      */
-
-      try {
-        yield self.agoraStore.leaveVoiceChat();
-      } catch (ex) {
-        console.error('agoraStore.leave', ex);
-      }
-
-      try {
-        self.collaborationStore.leave();
-      } catch (ex) {
-        console.error('collaborationStore.leave', ex);
-      }
-
-      try {
-        self.mainStore.unityStore.triggerInteractionMessage(
-          PosBusEventEnum.LeftSpace,
-          spaceId,
-          0,
-          ''
-        );
-      } catch (ex) {
-        console.error('collaborationStore.leave', ex);
-      }
-
-      console.log('---LEFT---');
-    }),
-    openObject: flow(function* (objectId: string) {
-      yield self.objectStore.init(objectId);
-    }),
-    closeObject() {
-      self.objectStore.deinit();
     }
   }));
 

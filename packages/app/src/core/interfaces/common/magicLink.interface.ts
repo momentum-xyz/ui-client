@@ -3,8 +3,7 @@ import {MagicTypeEnum} from 'core/enums';
 export interface MagicLinkInterface {
   type: MagicTypeEnum;
   data: {
-    spaceId: string;
-    eventId?: string;
+    odysseyId: string;
     position?: any;
   };
 }

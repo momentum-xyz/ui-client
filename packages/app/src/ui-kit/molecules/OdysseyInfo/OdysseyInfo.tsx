@@ -1,13 +1,16 @@
 import React, {FC, memo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {IconSvg, Text, Button, Image} from '@momentum-xyz/ui-kit';
+import {absoluteLink, registrationDateString, withoutProtocol} from '@momentum-xyz/core';
 
+import {UserModelInterface} from 'core/models';
 import {OdysseyItemInterface} from 'scenes/explore/stores';
 import {getImageAbsoluteUrl} from 'core/utils';
 
 import * as styled from './OdysseyInfo.styled';
 
 interface PropsInterface {
+  user: UserModelInterface | null;
   odyssey: OdysseyItemInterface | null;
   alreadyConnected?: boolean;
   onVisit?: () => void;
@@ -23,6 +26,7 @@ interface PropsInterface {
 }
 
 const OdysseyInfo: FC<PropsInterface> = ({
+  user,
   odyssey,
   alreadyConnected,
   onVisit,
@@ -44,7 +48,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
         <styled.TopContainer>
           <Image
             src={getImageAbsoluteUrl(odyssey?.image) || ''}
-            sizeProps={{width: '90px', height: '90px'}}
+            sizeProps={{width: '80px', height: '80px'}}
             className="avatar"
           />
           <styled.Actions>
@@ -53,6 +57,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.visit')}
                 icon="fly-to"
+                noWhitespaceWrap
                 disabled={!!visitDisabled}
                 onClick={onVisit}
               />
@@ -62,6 +67,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.highFive')}
                 icon="high-five"
+                noWhitespaceWrap
                 disabled={!!highFiveDisabled}
                 onClick={onHighFive}
               />
@@ -71,6 +77,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t(`actions.${alreadyConnected ? 'connected' : 'connect'}`)}
                 icon="hierarchy"
+                noWhitespaceWrap
                 disabled={!!connectDisabled}
                 onClick={onConnect}
               />
@@ -80,6 +87,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.coCreate')}
                 icon="cubicles"
+                noWhitespaceWrap
                 disabled={!!coCreateDisabled}
                 onClick={onCoCreate}
               />
@@ -89,6 +97,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
                 size="small"
                 label={t('actions.dock')}
                 icon="people"
+                noWhitespaceWrap
                 disabled={!!dockDisabled}
                 onClick={onDock}
               />
@@ -99,10 +108,30 @@ const OdysseyInfo: FC<PropsInterface> = ({
 
       {odyssey && (
         <>
-          {odyssey.description && (
-            <styled.Description>
-              <Text size="xxs" text={odyssey.description} align="left" />
-            </styled.Description>
+          {user && (
+            <styled.Info>
+              {user.profile?.bio && (
+                <Text text={user.profile.bio} size="xxs" align="left" breakLongWord />
+              )}
+
+              {user.profile?.profileLink && (
+                <styled.InfoItem>
+                  <IconSvg name="link" size="normal" />
+                  <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
+                    {withoutProtocol(user.profile.profileLink)}
+                  </styled.Link>
+                </styled.InfoItem>
+              )}
+
+              <styled.InfoItem>
+                <IconSvg name="astro" size="normal" />
+                <Text
+                  size="xxs"
+                  text={`${t('actions.joined')} ${registrationDateString(user.createdAt)}`}
+                  isMultiline={false}
+                />
+              </styled.InfoItem>
+            </styled.Info>
           )}
 
           <styled.Statistics>{t('titles.statistics')}</styled.Statistics>

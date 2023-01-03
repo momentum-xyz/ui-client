@@ -1,9 +1,9 @@
 import {PlanetInterface} from './planet.interface';
 
 export interface Map3dPropsInterface {
-  currentUserId: string;
+  centerWallet: string;
   items: PlanetInterface[];
-  connections: Record<string, {id: string}[]>;
   getImageUrl(imageUrlOrHash: string | undefined | null): string | null;
+  getConnections(wallet: string): Promise<string[]>;
   onSelect: (uuid: string) => void;
 }

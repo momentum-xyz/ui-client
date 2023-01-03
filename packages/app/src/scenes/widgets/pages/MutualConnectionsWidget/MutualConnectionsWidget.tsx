@@ -1,18 +1,45 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
-import {t} from 'i18next';
+import {Button, Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {generatePath, useHistory} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
-import {NftItemInterface} from 'stores/NftStore/models';
+import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './MutualConnectionsWidget.styled';
 
-interface PropsInterface {
-  mutualConnections?: Array<NftItemInterface>;
-  onClose: () => void;
-}
+const MutualConnectionsWidget: FC = () => {
+  const {nftStore, widgetsStore, mainStore, authStore} = useStore();
+  const {mutualConnectionsStore} = widgetsStore;
+  const {worldStore, unityStore} = mainStore;
+  const {isUnityAvailable} = unityStore;
+  const {mutualConnections} = nftStore;
 
-const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose}) => {
+  const {t} = useTranslation();
+  const history = useHistory();
+
+  const handleUnstake = useCallback(() => {
+    mutualConnectionsStore.dialog.close();
+    nftStore.stakingDashorboardDialog.open();
+  }, [mutualConnectionsStore, nftStore]);
+
+  const handleTeleportToOdyssey = useCallback(
+    (worldId: string) => {
+      mutualConnectionsStore.dialog.close();
+
+      if (isUnityAvailable) {
+        console.log(`Teleport in unity to ${worldId}`);
+        history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+        unityStore.loadWorldById(worldId, authStore.token);
+      } else {
+        console.log(`Redirect to unity to ${worldId}`);
+        history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+      }
+    },
+    [authStore, history, isUnityAvailable, mutualConnectionsStore, unityStore]
+  );
+
   return (
     <Dialog
       title={t('mutualConnections.title')}
@@ -20,7 +47,7 @@ const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose
       icon="user-network"
       iconSize="medium-large"
       closeOnBackgroundClick
-      onClose={onClose}
+      onClose={mutualConnectionsStore.dialog.close}
       layoutSize={{width: '437px'}}
       //tabs={<SvgButton iconName="add" size="medium-large" />}
     >
@@ -48,8 +75,18 @@ const MutualConnectionsWidget: FC<PropsInterface> = ({mutualConnections, onClose
                 />
               </styled.InfoContainer>
               <styled.Buttons>
-                {/*<Button label="make admin" size="small" />*/}
-                <SvgButton iconName="user-network" size="medium" />
+                <Button
+                  label={t('staking.unStake')}
+                  size="medium"
+                  transform="normal"
+                  onClick={handleUnstake}
+                />
+                <SvgButton
+                  iconName="fly-portal"
+                  size="medium"
+                  onClick={() => handleTeleportToOdyssey(connection.uuid)}
+                  disabled={worldStore.worldId === connection.uuid}
+                />
               </styled.Buttons>
             </styled.Connection>
           ))}

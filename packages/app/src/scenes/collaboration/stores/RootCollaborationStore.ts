@@ -6,8 +6,6 @@ import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
 
 import {SpaceStore} from './SpaceStore';
 import {StageModeStore} from './StageModeStore';
-// import {TextChatStore} from './TextChatStore';
-import {StreamChatStore} from './StreamChatStore';
 
 const RootCollaborationStore = types
   .compose(
@@ -17,8 +15,6 @@ const RootCollaborationStore = types
       spaceStore: types.optional(SpaceStore, {}),
 
       // TODO: Removal
-      // textChatStore: types.optional(TextChatStore, {}),
-      streamChatStore: types.optional(StreamChatStore, {}),
       stageModeStore: types.optional(StageModeStore, {}),
 
       participantToRemoveFromStage: types.maybe(AgoraRemoteUser),
@@ -45,8 +41,7 @@ const RootCollaborationStore = types
         // yield self.textChatStore.leaveChannel();
         // yield self.textChatStore.logOut();
         // self.textChatStore.resetModel();
-
-        self.streamChatStore.deinit(self.spaceStore?.id);
+        //self.streamChatStore.deinit(self.spaceStore?.id);
       }
     },
     selectUserToRemoveAndOpenDialog(remoteUser: AgoraRemoteUserInterface) {

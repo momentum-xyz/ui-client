@@ -14,7 +14,7 @@ interface PropsInterface {
   onTeleportUser: (id: string) => void;
   onHighFiveUser: (id: string) => void;
   isCurrentUser: boolean;
-  isCurrentWorld: boolean;
+  isOwner: boolean;
 }
 
 const OnlineUser: FC<PropsInterface> = ({
@@ -23,7 +23,7 @@ const OnlineUser: FC<PropsInterface> = ({
   onTeleportUser,
   onHighFiveUser,
   isCurrentUser,
-  isCurrentWorld
+  isOwner
 }) => {
   return (
     <styled.Container data-testid="OnlineUser-test">
@@ -32,27 +32,26 @@ const OnlineUser: FC<PropsInterface> = ({
         onClick={() => onUserClick(user.id)}
       >
         <Avatar avatarSrc={user.avatarSrc} size="small" />
-        <Text size="s" text={user.name} transform="capitalized" />
+        <Text size="s" text={user.name} />
       </styled.Info>
-      {!user.isGuest && (
-        <styled.Toolbar>
-          {isCurrentWorld && <styled.AdminText size="s" text={t('titles.admin')} />}
-          <SvgButton
-            iconName="fly-to"
-            size="normal"
-            disabled={isCurrentWorld}
-            onClick={() => onTeleportUser(user.id)}
-          />
-          <SvgButton
-            iconName="high-five"
-            size="normal"
-            disabled={isCurrentUser}
-            onClick={() => {
-              onHighFiveUser(user.id);
-            }}
-          />
-        </styled.Toolbar>
-      )}
+
+      <styled.Toolbar>
+        {isOwner && <styled.AdminText size="s" text={t('titles.owner')} />}
+        <SvgButton
+          iconName="high-five"
+          size="normal"
+          disabled={isCurrentUser}
+          onClick={() => {
+            onHighFiveUser(user.id);
+          }}
+        />
+        <SvgButton
+          iconName="fly-to"
+          size="normal"
+          disabled={isCurrentUser}
+          onClick={() => onTeleportUser(user.id)}
+        />
+      </styled.Toolbar>
     </styled.Container>
   );
 };

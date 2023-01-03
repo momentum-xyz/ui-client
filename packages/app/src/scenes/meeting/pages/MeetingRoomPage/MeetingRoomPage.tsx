@@ -24,14 +24,14 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
   const {mainStore, sessionStore, meetingStore, collaborationStore, widgetStore_OLD} = useStore();
   const {meetingRoomStore} = meetingStore;
   const {musicPlayerStore} = widgetStore_OLD;
-  const {agoraStore} = mainStore;
-  const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore;
+  const {agoraStore_OLD} = mainStore;
+  const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
 
   const location = useLocation();
 
   useEffect(() => {
     const wasPlayingBeforeJoining: boolean = musicPlayerStore.musicPlayer.isPlaying;
-    if (wasPlayingBeforeJoining && agoraStore.hasJoined) {
+    if (wasPlayingBeforeJoining && agoraStore_OLD.hasJoined) {
       musicPlayerStore.pause();
     }
 
@@ -39,12 +39,12 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
       if (
         !musicPlayerStore.musicPlayer.isPlaying &&
         wasPlayingBeforeJoining &&
-        !agoraStore.hasJoined
+        !agoraStore_OLD.hasJoined
       ) {
         musicPlayerStore.play();
       }
     };
-  }, [agoraStore.hasJoined, musicPlayerStore]);
+  }, [agoraStore_OLD.hasJoined, musicPlayerStore]);
 
   const isButtonsAvailable = useMemo(() => {
     return (
@@ -54,7 +54,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
     );
   }, [location.pathname]);
 
-  if (!agoraStore.hasJoined) {
+  if (!agoraStore_OLD.hasJoined) {
     return <></>;
   }
 
@@ -63,39 +63,39 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
       <styled.Inner>
         {isButtonsAvailable && (
           <JoinLeaveButtons
-            spaceId={agoraStore.spaceId || ''}
+            spaceId={agoraStore_OLD.spaceId || ''}
             isJoinButtonShown={!collaborationStore.spaceStore?.isTable}
             onLeave={onLeave}
           />
         )}
 
         <styled.Content className="noScrollIndicator">
-          <PeopleCount count={agoraStore.meetingPeopleCount} />
+          <PeopleCount count={agoraStore_OLD.meetingPeopleCount} />
 
           <ul>
             {/* MUTE ALL */}
             <MuteAllButton
-              spaceId={agoraStore.spaceId || ''}
-              isShown={!agoraStore.isStageMode && collaborationStore.spaceStore?.isAdmin}
-              peopleCount={agoraStore.meetingPeopleCount}
+              spaceId={agoraStore_OLD.spaceId || ''}
+              isShown={!agoraStore_OLD.isStageMode && collaborationStore.spaceStore?.isAdmin}
+              peopleCount={agoraStore_OLD.meetingPeopleCount}
               onMuteAll={meetingRoomStore.muteAllUsers}
             />
 
             {/* CURRENT USER */}
             <LocalUser
-              isShown={!agoraStore.isStageMode || !agoraStageModeStore.isOnStage}
-              isStageMode={agoraStore.isStageMode}
+              isShown={!agoraStore_OLD.isStageMode || !agoraStageModeStore.isOnStage}
+              isStageMode={agoraStore_OLD.isStageMode}
               avatarSrc={sessionStore.user?.avatarSrc}
               videoTrack={userDevicesStore.localVideoTrack}
-              microphoneOff={agoraStore.isStageMode || userDevicesStore.muted}
-              cameraOff={agoraStore.isStageMode || userDevicesStore.cameraOff}
-              soundLevel={agoraStore.localSoundLevel}
+              microphoneOff={agoraStore_OLD.isStageMode || userDevicesStore.muted}
+              cameraOff={agoraStore_OLD.isStageMode || userDevicesStore.cameraOff}
+              soundLevel={agoraStore_OLD.localSoundLevel}
             />
 
             <MaxVideoStreams isShown={agoraMeetingStore.maxVideoStreamsReached} />
 
             {/* STAGE MODE USERS OR MEETING USERS */}
-            {agoraStore.isStageMode
+            {agoraStore_OLD.isStageMode
               ? agoraStageModeStore.audience.map((user) => (
                   <StageModeUser
                     key={user.uid}
@@ -109,7 +109,7 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
                   <MeetingUser
                     key={user.uid}
                     user={user}
-                    spaceId={agoraStore.spaceId || ''}
+                    spaceId={agoraStore_OLD.spaceId || ''}
                     isModerator={collaborationStore.isModerator}
                     maxVideoStreams={agoraMeetingStore.maxVideoStreamsReached}
                     onMuteUser={meetingRoomStore.muteUser}

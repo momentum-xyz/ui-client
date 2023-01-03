@@ -14,7 +14,7 @@ import * as styled from './LiveStreamPIPWidget.styled';
 
 const LiveStreamPIPWidget: React.FC = () => {
   const {mainStore, flightStore} = useStore();
-  const {agoraStore, liveStreamStore} = mainStore;
+  const {agoraStore_OLD, liveStreamStore} = mainStore;
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -24,7 +24,7 @@ const LiveStreamPIPWidget: React.FC = () => {
     return !location.pathname.includes(ROUTES.collaboration.root);
   }, [location.pathname]);
 
-  if (!liveStreamStore.isLiveStreamShown || !agoraStore.spaceId) {
+  if (!liveStreamStore.isLiveStreamShown || !agoraStore_OLD.spaceId) {
     return null;
   }
 
@@ -64,7 +64,7 @@ const LiveStreamPIPWidget: React.FC = () => {
               disabled={flightStore.isFlightWithMe}
               onClick={() => {
                 history.push(
-                  generatePath(ROUTES.collaboration.liveStream, {spaceId: agoraStore.spaceId})
+                  generatePath(ROUTES.collaboration.liveStream, {spaceId: agoraStore_OLD.spaceId})
                 );
               }}
               isWhite
@@ -76,7 +76,7 @@ const LiveStreamPIPWidget: React.FC = () => {
                 disabled={flightStore.isFlightWithMe}
                 onClick={() => {
                   history.push(
-                    generatePath(ROUTES.collaboration.dashboard, {spaceId: agoraStore.spaceId})
+                    generatePath(ROUTES.collaboration.dashboard, {spaceId: agoraStore_OLD.spaceId})
                   );
                 }}
                 isWhite

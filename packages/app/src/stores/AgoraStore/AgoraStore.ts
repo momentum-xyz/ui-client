@@ -1,10 +1,8 @@
 import {flow, types} from 'mobx-state-tree';
 import AgoraRTC from 'agora-rtc-sdk-ng';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {ResetModel} from '@momentum-xyz/core';
 
-import {UserDevicesStore} from './UserDevicesStore';
-import {AgoraVoiceChatStore} from './AgoraVoiceChatStore';
-import {AgoraScreenShareStore} from './AgoraScreenShareStore';
+import {UserDevicesStore, AgoraVoiceChatStore, AgoraScreenShareStore} from './models';
 
 const AgoraStore = types
   .compose(
@@ -12,19 +10,15 @@ const AgoraStore = types
     types.model('AgoraStore', {
       agoraVoiceChatStore: types.optional(AgoraVoiceChatStore, {}),
       agoraScreenShareStore: types.optional(AgoraScreenShareStore, {}),
-      userDevicesStore: types.optional(UserDevicesStore, {}),
-
-      // Requests
-      spaceIntegrationsRequest: types.optional(RequestModel, {}),
-      toggleStageModeRequest: types.optional(RequestModel, {})
+      userDevicesStore: types.optional(UserDevicesStore, {})
     })
   )
   // Initializer
   .actions((self) => ({
     init(worldId: string, userId: string) {
       AgoraRTC.setLogLevel(4);
-      self.userDevicesStore.init();
 
+      self.userDevicesStore.init();
       self.agoraVoiceChatStore.init(worldId, userId);
     }
   }))

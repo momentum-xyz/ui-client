@@ -727,6 +727,10 @@ const NftStore = types
         mutualConnectionsCount: mutualConnectionsCount
       };
     }),
+    getStakedAtOthersByWallet: flow(function* (wallet: string) {
+      const connections: WalletConnectionsInterface = yield self.getStakesInfo(wallet);
+      return connections.stakedAtOthers;
+    }),
     subscribeToBalanseChanges: flow(function* (address: string) {
       if (!self.channel) {
         return;

@@ -20,8 +20,8 @@ interface StagePropsInterface {
 
 const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
   const {mainStore, sessionStore} = useStore();
-  const {agoraStore} = mainStore;
-  const {userDevicesStore, agoraStageModeStore} = agoraStore;
+  const {agoraStore_OLD} = mainStore;
+  const {userDevicesStore, agoraStageModeStore} = agoraStore_OLD;
 
   const [cols, setCols] = useState<string>('cols-1');
 
@@ -73,7 +73,7 @@ const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
           </styled.MediaPlayerContainer>
         )}
 
-        {agoraStore.agoraStageModeStore.speakers.map((user) => (
+        {agoraStore_OLD.agoraStageModeStore.speakers.map((user) => (
           <styled.MediaPlayerContainer
             className={cn('relative', onRemoteUserClick && 'showActionsOnHover')}
             key={`stageuser-${user.uid}`}
