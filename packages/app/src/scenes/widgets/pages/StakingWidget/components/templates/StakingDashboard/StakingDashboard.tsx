@@ -44,7 +44,8 @@ const StakingDashboard: FC = () => {
     accountAccumulatedRewards,
     canReceiveAccumulatedRewards,
     chainDecimals,
-    tokenSymbol
+    tokenSymbol,
+    requestingFundsStatus
   } = nftStore;
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
@@ -66,7 +67,7 @@ const StakingDashboard: FC = () => {
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
   const [canRequestAirdrop, setCanRequestAirdrop] = useState<boolean>(checkIfCanRequestAirdrop());
-  const [airdropRequestLive, setAirdropRequestLive] = useState<boolean>(false);
+  const airdropRequestIsLive = requestingFundsStatus === 'pending';
   const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState<string>(
     getDateOfNextAllowedAirdrop()
   );
@@ -162,7 +163,6 @@ const StakingDashboard: FC = () => {
   };
   const onRequestAirdrop = () => {
     console.log('requestAirdrop', wallet);
-    setAirdropRequestLive(true); // TODO move this to actual request tracking?
 
     nftStore
       .requestAirdrop(wallet)
@@ -178,13 +178,9 @@ const StakingDashboard: FC = () => {
         );
         setCanRequestAirdrop(checkIfCanRequestAirdrop());
         setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
-        setAirdropRequestLive(false);
       })
       .catch((err) => {
         console.log('requestAirdrop error', err);
-        setCanRequestAirdrop(checkIfCanRequestAirdrop());
-        setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
-        setAirdropRequestLive(false);
         toast.error(
           <ToastContent
             headerIconName="alert"
@@ -305,7 +301,7 @@ const StakingDashboard: FC = () => {
                 <styled.Buttons className="start">
                   <Button
                     label={t('staking.requestAirdrop')}
-                    disabled={!canRequestAirdrop || airdropRequestLive}
+                    disabled={!canRequestAirdrop || airdropRequestIsLive}
                     onClick={() => onRequestAirdrop()}
                   />
                   {!canRequestAirdrop && (
@@ -315,7 +311,7 @@ const StakingDashboard: FC = () => {
                       align="left"
                     />
                   )}
-                  {airdropRequestLive && (
+                  {airdropRequestIsLive && (
                     <Text size="s" text={t('staking.processingAirdropRequest')} align="left" />
                   )}
                 </styled.Buttons>
