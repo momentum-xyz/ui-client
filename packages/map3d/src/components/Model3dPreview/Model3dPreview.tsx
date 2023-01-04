@@ -47,6 +47,8 @@ const createScene = (canvas: HTMLCanvasElement) => {
   controls.autoRotateSpeed = 1;
   controls.screenSpacePanning = true;
 
+  controls.addEventListener('change', () => light.position.copy(camera.position));
+
   return {
     scene,
     autoPositionCamera: (gltf: GLTF) => {
@@ -71,6 +73,7 @@ const createScene = (canvas: HTMLCanvasElement) => {
     },
     render: () => {
       controls.update();
+      light.position.copy(camera.position);
       renderer.render(scene, camera);
     },
     dispose: () => {
