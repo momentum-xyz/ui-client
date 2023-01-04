@@ -25,10 +25,10 @@ const DockedItem: FC<PropsInterface> = (props) => {
   }, [item.date]);
 
   const authUserIsStaking = currentUserId && currentUserId === item.uuid;
-  const authUserIsStaked = currentUserId && currentUserId === item.dockedTo?.uuid;
+  const authUserIsStaked = currentUserId && currentUserId === item.connectedTo?.uuid;
 
   const dockingUserLabel = authUserIsStaking ? t('newsfeed.you') : item.name;
-  const dockedUserLabel = authUserIsStaked ? t('newsfeed.you') : item.dockedTo?.name;
+  const dockedUserLabel = authUserIsStaked ? t('newsfeed.you') : item.connectedTo?.name;
 
   return (
     <>
@@ -39,8 +39,8 @@ const DockedItem: FC<PropsInterface> = (props) => {
             onClick={() => onOpenOdyssey?.(item.uuid)}
           />
           <styled.AvatarAhead
-            src={getImageAbsoluteUrl(item.dockedTo?.image) || ''}
-            onClick={() => item.dockedTo?.uuid && onOpenOdyssey?.(item.dockedTo?.uuid)}
+            src={getImageAbsoluteUrl(item.connectedTo?.image) || ''}
+            onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
           />
         </styled.TwoAvatarsContainer>
       </div>
@@ -59,7 +59,7 @@ const DockedItem: FC<PropsInterface> = (props) => {
           <Text size="xxs" text={t('newsfeed.and')} align="left" />
           <div
             className="username"
-            onClick={() => item.dockedTo?.uuid && onOpenOdyssey?.(item.dockedTo?.uuid)}
+            onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
           >
             <Text
               size="xxs"

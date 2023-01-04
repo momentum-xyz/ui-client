@@ -99,7 +99,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
             type: 'connected',
             mutual: isMutual,
             date: new Date().toISOString(),
-            dockedTo: {
+            connectedTo: {
               ...nft,
               type: 'connected',
               date: new Date().toISOString()
