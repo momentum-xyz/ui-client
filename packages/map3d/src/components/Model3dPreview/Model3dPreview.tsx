@@ -36,12 +36,13 @@ const createScene = (canvas: HTMLCanvasElement) => {
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.autoRotate = true;
-  controls.autoRotateSpeed = 10;
+  controls.autoRotateSpeed = 1;
   controls.screenSpacePanning = true;
 
   return {
     scene,
     render: () => {
+      controls.update();
       renderer.render(scene, camera);
     },
     dispose: () => {
