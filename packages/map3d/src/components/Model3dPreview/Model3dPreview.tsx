@@ -1,5 +1,13 @@
 import {useEffect, FC, useState, useRef, useCallback} from 'react';
-import {Scene, DirectionalLight, AmbientLight, WebGLRenderer, PerspectiveCamera} from 'three';
+import {
+  Scene,
+  DirectionalLight,
+  AmbientLight,
+  WebGLRenderer,
+  PerspectiveCamera,
+  Box3,
+  Vector3
+} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {ProgressBar} from '@momentum-xyz/ui-kit';
@@ -41,6 +49,26 @@ const createScene = (canvas: HTMLCanvasElement) => {
 
   return {
     scene,
+    autoPositionCamera: (gltf: GLTF) => {
+      const object = gltf.scene;
+      const box = new Box3().setFromObject(object);
+      const size = box.getSize(new Vector3()).length();
+      const center = box.getCenter(new Vector3());
+
+      object.position.x += object.position.x - center.x;
+      object.position.y += object.position.y - center.y;
+      object.position.z += object.position.z - center.z;
+      controls.maxDistance = size * 10;
+      camera.near = size / 100;
+      camera.far = size * 100;
+      camera.updateProjectionMatrix();
+
+      camera.position.copy(center);
+      camera.position.x += size / 2.0;
+      camera.position.y += size / 5.0;
+      camera.position.z += size / 2.0;
+      camera.lookAt(center);
+    },
     render: () => {
       controls.update();
       renderer.render(scene, camera);
@@ -71,6 +99,7 @@ export const Model3dPreview: FC<PropsInterface> = ({
   const [scene, setScene] = useState<Scene>();
   const renderRef = useRef<() => void>();
   const disposeRef = useRef<() => void>();
+  const autoPosRef = useRef<(gltf: GLTF) => void>();
   const loadedGltfRef = useRef<GLTF>();
 
   const recursiveAnimate = useCallback(() => {
@@ -101,9 +130,11 @@ export const Model3dPreview: FC<PropsInterface> = ({
       }
 
       console.log('Creating scene');
-      const {scene: _scene, render, dispose} = createScene(canvasRef.current);
+      const {scene: _scene, render, dispose, autoPositionCamera} = createScene(canvasRef.current);
       renderRef.current = render;
       disposeRef.current = dispose;
+      autoPosRef.current = autoPositionCamera;
+
       setScene(_scene);
 
       recursiveAnimate();
@@ -127,7 +158,14 @@ export const Model3dPreview: FC<PropsInterface> = ({
         console.log('Loaded 3D model', gltf);
 
         loadedGltfRef.current = gltf;
+
+        const autoPositionCamera = autoPosRef.current;
+        if (autoPositionCamera) {
+          autoPositionCamera(gltf);
+        }
+
         scene.add(gltf.scene);
+
         setProgress(null);
       },
       (progress) => {
