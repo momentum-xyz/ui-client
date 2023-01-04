@@ -52,6 +52,14 @@ export const Text = styled.div`
     text-transform: lowercase;
   }
 
+  &.decoration-none {
+    text-decoration: none;
+  }
+
+  &.decoration-underline {
+    text-decoration: underline;
+  }
+
   &.singleLine {
     text-overflow: ellipsis;
     overflow: hidden;

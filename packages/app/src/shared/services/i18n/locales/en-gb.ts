@@ -1128,6 +1128,12 @@ export const enGb = {
       noConnection: 'There are no connections yet',
       title: 'Mutual connections list',
       admin: 'admin'
+    },
+    newsfeed: {
+      stakedIn: ' staked in ',
+      you: 'You',
+      and: ' and ',
+      docked: ' docked'
     }
   }
 };

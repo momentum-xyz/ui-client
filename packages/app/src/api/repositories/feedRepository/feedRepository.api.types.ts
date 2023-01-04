@@ -11,6 +11,7 @@ export interface NftFeedItemInterface {
 
   type: 'created' | 'connected' | 'docked' | 'calendar_event';
   date: string;
+  mutual?: boolean;
 
   calendarId?: string | undefined;
   calendarStart?: string | undefined;

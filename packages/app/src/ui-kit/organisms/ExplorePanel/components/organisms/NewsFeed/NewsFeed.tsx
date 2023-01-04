@@ -10,13 +10,15 @@ import * as styled from './NewsFeed.styled';
 
 interface PropsInterface {
   nftFeed: NftFeedItemInterface[];
+  currentUserId: string;
   onTeleport: (nft: NftItemInterface) => void;
   onAttend: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
+  onOpenOdyssey?: (uuid: string) => void;
 }
 
 const NewsFeed: FC<PropsInterface> = (props) => {
-  const {nftFeed, onTeleport, onAttend, onConnect} = props;
+  const {nftFeed, currentUserId, onTeleport, onAttend, onConnect, onOpenOdyssey} = props;
 
   return (
     <styled.Container data-testid="NewsFeed-test">
@@ -32,9 +34,11 @@ const NewsFeed: FC<PropsInterface> = (props) => {
               <NewsFeedItem
                 key={index}
                 item={item}
+                currentUserId={currentUserId}
                 onTeleport={onTeleport}
                 onConnect={onConnect}
                 onAttend={onAttend}
+                onOpenOdyssey={onOpenOdyssey}
               />
             ))}
           </>

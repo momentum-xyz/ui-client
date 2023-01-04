@@ -9,7 +9,7 @@ import {ROUTES} from 'core/constants';
 import * as styled from './ExplorePage.styled';
 
 const ExplorePage: FC = () => {
-  const {exploreStore, nftStore, widgetsStore} = useStore();
+  const {exploreStore, nftStore, widgetsStore, sessionStore} = useStore();
 
   const history = useHistory();
 
@@ -36,6 +36,7 @@ const ExplorePage: FC = () => {
             nftFeed={exploreStore.nftFeed}
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
+            currentUserId={sessionStore.userId}
             onSearch={nftStore.searchNft}
             onSelect={(nft) => {
               widgetsStore.odysseyInfoStore.open(nft);
@@ -52,6 +53,9 @@ const ExplorePage: FC = () => {
             }}
             // FIXME id type
             onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
+            onOpenOdyssey={(uuid) =>
+              widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid))
+            }
           />
         </styled.Boxes>
       </styled.Wrapper>

@@ -5,6 +5,7 @@ export const OneAvatar = styled.img`
   height: 60px;
   border-radius: 50%;
   border: 1px solid var(--white);
+  cursor: pointer;
 `;
 
 export const Info = styled.div`
