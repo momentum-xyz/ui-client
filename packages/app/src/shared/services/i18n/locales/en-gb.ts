@@ -93,6 +93,7 @@ export const enGb = {
       requestAirdropSuccess: 'Request for airdrop was successful',
       requestAirdropFailed: 'Request for airdrop failed',
       nextAirdropAvailableOn: 'Next airdrop available at {{date}}',
+      processingAirdropRequest: 'Please wait 10-15 seconds for the transaction',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       setAmountSymbol: 'Set Amount, {{symbol}}',
