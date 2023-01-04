@@ -14,7 +14,7 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const NotificationsWidget: FC = () => {
-  const {widgetsStore, mainStore, authStore} = useStore();
+  const {widgetsStore, mainStore, nftStore, authStore} = useStore();
   const {notificationsStore} = widgetsStore;
   const {dialog, notifications} = notificationsStore;
   const {unityStore} = mainStore;
@@ -67,6 +67,9 @@ const NotificationsWidget: FC = () => {
                 onConnect={() => {}}
                 onAttend={(nft) => {
                   console.log(nft);
+                }}
+                onOpenOdyssey={(uuid) => {
+                  widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid));
                 }}
               />
             ))}

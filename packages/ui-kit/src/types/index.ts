@@ -1,5 +1,6 @@
 export * from './heading.type';
 export * from './textTransform.type';
+export * from './textDecoration.type';
 export * from './textAlign.type';
 export * from './textWeight.type';
 export * from './size.type';

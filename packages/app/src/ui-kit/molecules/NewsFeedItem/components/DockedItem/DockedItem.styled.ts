@@ -1,10 +1,26 @@
 import styled from 'styled-components';
 
-export const OneAvatar = styled.img`
+export const TwoAvatarsContainer = styled.div`
+  position: relative;
   width: 60px;
-  height: 60px;
+`;
+
+export const Avatar = styled.img`
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid var(--white);
+  cursor: pointer;
+`;
+
+export const AvatarAhead = styled.img`
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--white);
+  right: 0;
+  cursor: pointer;
 `;
 
 export const Info = styled.div`
@@ -12,6 +28,17 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+`;
+
+export const DockedInfo = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  & > div {
+    white-space: pre;
+  }
+`;
+export const DockedInfoUsername = styled.div`
+  cursor: pointer;
 `;
 
 export const Date = styled.div`

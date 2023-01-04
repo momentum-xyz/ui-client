@@ -13,10 +13,11 @@ interface PropsInterface {
   item: NftFeedItemInterface;
   onTeleport: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
+  onOpenOdyssey?: (uuid: string) => void;
 }
 
 const CreatedItem: FC<PropsInterface> = (props) => {
-  const {item, onTeleport, onConnect} = props;
+  const {item, onTeleport, onConnect, onOpenOdyssey} = props;
 
   const formattedDate = useMemo(() => {
     return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
@@ -25,7 +26,10 @@ const CreatedItem: FC<PropsInterface> = (props) => {
   return (
     <>
       <div>
-        <styled.OneAvatar src={getImageAbsoluteUrl(item.image) || ''} />
+        <styled.OneAvatar
+          src={getImageAbsoluteUrl(item.image) || ''}
+          onClick={() => onOpenOdyssey?.(item.uuid)}
+        />
       </div>
       <styled.Info>
         <styled.Date>{formattedDate}</styled.Date>

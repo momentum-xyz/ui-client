@@ -93,6 +93,7 @@ export const enGb = {
       requestAirdropSuccess: 'Request for airdrop was successful',
       requestAirdropFailed: 'Request for airdrop failed',
       nextAirdropAvailableOn: 'Next airdrop available at {{date}}',
+      processingAirdropRequest: 'Please wait 10-15 seconds for the transaction',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       setAmountSymbol: 'Set Amount, {{symbol}}',
@@ -579,7 +580,7 @@ export const enGb = {
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',
-      delete: 'delete',
+      delete: 'Delete',
       declined: 'declined',
       declining: 'declining',
       removed: 'removed',
@@ -1128,6 +1129,12 @@ export const enGb = {
       noConnection: 'There are no connections yet',
       title: 'Mutual connections list',
       admin: 'admin'
+    },
+    newsfeed: {
+      stakedIn: ' staked in ',
+      you: 'You',
+      and: ' and ',
+      docked: ' docked'
     }
   }
 };

@@ -2,7 +2,13 @@ import React, {FC, memo} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
-import {TextAlignType, TextTransformType, TextWeightType, TextSizeType} from '../../types';
+import {
+  TextAlignType,
+  TextTransformType,
+  TextWeightType,
+  TextSizeType,
+  TextDecorationType
+} from '../../types';
 import {splitIntoFirstNSentencesAndRest} from '../../utils';
 
 import * as styled from './Text.styled';
@@ -11,6 +17,7 @@ export interface TextPropsInterface extends PropsWithThemeInterface {
   text?: string | null;
   size: TextSizeType;
   transform?: TextTransformType;
+  decoration?: TextDecorationType;
   isMultiline?: boolean;
   align?: TextAlignType;
   weight?: TextWeightType;
@@ -26,6 +33,7 @@ const Text: FC<TextPropsInterface> = ({
   size,
   align = 'center',
   transform = 'normal',
+  decoration = 'none',
   isMultiline = true,
   weight = 'normal',
   noWrap = false,
@@ -57,6 +65,7 @@ const Text: FC<TextPropsInterface> = ({
       className={cn(
         size,
         `transform-${transform}`,
+        `decoration-${decoration}`,
         !isMultiline && 'singleLine',
         align,
         noWrap && 'noWrap',
