@@ -43,6 +43,12 @@ const createScene = (canvas: HTMLCanvasElement) => {
     scene,
     render: () => {
       renderer.render(scene, camera);
+    },
+    dispose: () => {
+      console.log('Disposing renderer');
+      controls.dispose();
+      renderer.dispose();
+      renderer.forceContextLoss();
     }
   };
 };
@@ -63,6 +69,7 @@ export const Model3dPreview: FC<PropsInterface> = ({
   const [progress, setProgress] = useState<number | null>(null);
   const [scene, setScene] = useState<Scene>();
   const renderRef = useRef<() => void>();
+  const disposeRef = useRef<() => void>();
   const loadedGltfRef = useRef<GLTF>();
 
   const recursiveAnimate = useCallback(() => {
@@ -93,8 +100,9 @@ export const Model3dPreview: FC<PropsInterface> = ({
       }
 
       console.log('Creating scene');
-      const {scene: _scene, render} = createScene(canvasRef.current);
+      const {scene: _scene, render, dispose} = createScene(canvasRef.current);
       renderRef.current = render;
+      disposeRef.current = dispose;
       setScene(_scene);
 
       recursiveAnimate();
@@ -143,6 +151,12 @@ export const Model3dPreview: FC<PropsInterface> = ({
       renderRef.current = undefined;
     };
   }, [scene, filename]);
+
+  useEffect(() => {
+    return () => {
+      disposeRef.current?.();
+    };
+  }, []);
 
   return (
     <styled.Container>
