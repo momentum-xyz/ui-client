@@ -12,9 +12,10 @@ import * as styled from './AssetsPage.styled';
 
 interface PropsInterface {
   assetCategory: Asset3dCategoryEnum;
+  setFunctionalityAfterCreation?: boolean;
 }
 
-const AssetsPage: FC<PropsInterface> = ({assetCategory}) => {
+const AssetsPage: FC<PropsInterface> = ({assetCategory, setFunctionalityAfterCreation = false}) => {
   const {odysseyCreatorStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
 
@@ -37,10 +38,11 @@ const AssetsPage: FC<PropsInterface> = ({assetCategory}) => {
         generatePath(ROUTES.odyssey.creator.spawnAsset.selected, {
           worldId,
           assetCategory
-        })
+        }),
+        {setFunctionalityAfterCreation}
       );
     },
-    [history, spawnAssetStore, worldId, assetCategory]
+    [history, spawnAssetStore, worldId, assetCategory, setFunctionalityAfterCreation]
   );
 
   return (

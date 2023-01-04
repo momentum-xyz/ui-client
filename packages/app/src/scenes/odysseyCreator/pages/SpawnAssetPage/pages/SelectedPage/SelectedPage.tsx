@@ -31,8 +31,15 @@ export const SelectedPage: FC = () => {
   }, [spawnAssetStore]);
 
   const handleSpawn = useCallback(() => {
-    spawnAssetStore.spawnObject(worldId);
-    history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+    spawnAssetStore.spawnObject(worldId).then((objectId) => {
+      if (objectId) {
+        if (window.history.state?.state?.setFunctionalityAfterCreation) {
+          history.push(generatePath(ROUTES.odyssey.creator.functionality, {worldId, objectId}));
+        } else {
+          history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+        }
+      }
+    });
   }, [history, spawnAssetStore, worldId]);
 
   if (!asset) {
