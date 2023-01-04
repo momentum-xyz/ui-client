@@ -67,7 +67,7 @@ const StakingDashboard: FC = () => {
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
   const [canRequestAirdrop, setCanRequestAirdrop] = useState<boolean>(checkIfCanRequestAirdrop());
-  const airdropRequestIsLive = requestingFundsStatus === 'pending';
+  const airdropRequestIsInProgress = requestingFundsStatus === 'pending';
   const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState<string>(
     getDateOfNextAllowedAirdrop()
   );
@@ -301,7 +301,7 @@ const StakingDashboard: FC = () => {
                 <styled.Buttons className="start">
                   <Button
                     label={t('staking.requestAirdrop')}
-                    disabled={!canRequestAirdrop || airdropRequestIsLive}
+                    disabled={!canRequestAirdrop || airdropRequestIsInProgress}
                     onClick={() => onRequestAirdrop()}
                   />
                   {!canRequestAirdrop && (
@@ -311,7 +311,7 @@ const StakingDashboard: FC = () => {
                       align="left"
                     />
                   )}
-                  {airdropRequestIsLive && (
+                  {airdropRequestIsInProgress && (
                     <Text size="s" text={t('staking.processingAirdropRequest')} align="left" />
                   )}
                 </styled.Buttons>
