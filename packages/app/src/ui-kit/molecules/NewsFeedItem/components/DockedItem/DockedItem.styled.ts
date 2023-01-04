@@ -35,10 +35,10 @@ export const DockedInfo = styled.div`
   flex-wrap: wrap;
   & > div {
     white-space: pre;
-    &.username {
-      cursor: pointer;
-    }
   }
+`;
+export const DockedInfoUsername = styled.div`
+  cursor: pointer;
 `;
 
 export const Date = styled.div`

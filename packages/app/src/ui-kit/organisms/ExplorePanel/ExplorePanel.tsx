@@ -16,7 +16,7 @@ interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
   nftFeed: NftFeedItemInterface[];
   odysseyList: NftItemInterface[];
-  userId: string;
+  currentUserId: string;
   onSearch: () => void;
   onTeleport: (nft: NftItemInterface) => void;
   onSelect: (nft: NftItemInterface) => void;
@@ -32,7 +32,7 @@ const ExplorePanel: FC<PropsInterface> = ({
   nftFeed,
   odysseyList,
   searchQuery,
-  userId,
+  currentUserId,
   onSearch,
   onTeleport,
   onSelect,
@@ -73,7 +73,7 @@ const ExplorePanel: FC<PropsInterface> = ({
         {!searchQuery.isQueryValid && (
           <NewsFeed
             nftFeed={nftFeed}
-            userId={userId}
+            currentUserId={currentUserId}
             onTeleport={onTeleport}
             onConnect={onConnect}
             onAttend={onAttend}

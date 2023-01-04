@@ -11,12 +11,12 @@ import * as styled from './ConnectedItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
-  userId?: string;
+  currentUserId?: string;
   onOpenOdyssey?: (uuid: string) => void;
 }
 
 const ConnectedItem: FC<PropsInterface> = (props) => {
-  const {item, userId, onOpenOdyssey} = props;
+  const {item, currentUserId, onOpenOdyssey} = props;
 
   const {t} = useTranslation();
 
@@ -24,8 +24,8 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
     return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
   }, [item.date]);
 
-  const authUserIsStaking = userId && userId === item.uuid;
-  const authUserIsStaked = userId && userId === item.connectedTo?.uuid;
+  const authUserIsStaking = currentUserId && currentUserId === item.uuid;
+  const authUserIsStaked = currentUserId && currentUserId === item.connectedTo?.uuid;
 
   const stakingUserLabel = authUserIsStaking ? t('newsfeed.you') : item.name;
   const stakedUserLabel = authUserIsStaked ? t('newsfeed.you') : item.connectedTo?.name;

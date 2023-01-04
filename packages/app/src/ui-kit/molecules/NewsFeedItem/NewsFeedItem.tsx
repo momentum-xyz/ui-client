@@ -9,7 +9,7 @@ import {CalendarItem, ConnectedItem, CreatedItem, DockedItem} from './components
 
 interface PropsInterface {
   item: NftFeedItemInterface;
-  userId?: string;
+  currentUserId?: string;
   onTeleport: (nft: NftItemInterface) => void;
   onAttend: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
@@ -17,7 +17,7 @@ interface PropsInterface {
 }
 
 const NewsFeedItem: FC<PropsInterface> = (props) => {
-  const {item, userId, onTeleport, onConnect, onAttend, onOpenOdyssey} = props;
+  const {item, currentUserId, onTeleport, onConnect, onAttend, onOpenOdyssey} = props;
 
   return (
     <styled.FeedItem data-testid={`NewsFeedItem-${item.type}-test`}>
@@ -30,12 +30,12 @@ const NewsFeedItem: FC<PropsInterface> = (props) => {
         />
       )}
 
-      {item.type === 'connected' && (
-        <ConnectedItem item={item} userId={userId} onOpenOdyssey={onOpenOdyssey} />
+      {item.type === 'connected' && !item.mutual && (
+        <ConnectedItem item={item} currentUserId={currentUserId} onOpenOdyssey={onOpenOdyssey} />
       )}
 
-      {item.type === 'docked' && (
-        <DockedItem item={item} userId={userId} onOpenOdyssey={onOpenOdyssey} />
+      {item.type === 'connected' && item.mutual && (
+        <DockedItem item={item} currentUserId={currentUserId} onOpenOdyssey={onOpenOdyssey} />
       )}
 
       {item.type === 'calendar_event' && (

@@ -91,36 +91,26 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
         console.log('stake success');
 
         if (myNft && nft) {
-          if (nft && nftStore.stakingAtMe.has(nft.owner)) {
-            console.log('MUTUAL STAKING');
+          const isMutual = nftStore.stakingAtMe.has(nft.owner);
+          console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
 
-            exploreStore.createNewsFeedItem({
-              ...myNft,
-              type: 'docked',
-              date: new Date().toISOString(),
-              dockedTo: {
-                ...nft,
-                type: 'docked',
-                date: new Date().toISOString()
-              }
-            });
+          exploreStore.createNewsFeedItem({
+            ...myNft,
+            type: 'connected',
+            mutual: isMutual,
+            date: new Date().toISOString(),
+            dockedTo: {
+              ...nft,
+              type: 'connected',
+              date: new Date().toISOString()
+            }
+          });
 
+          if (isMutual) {
             const walletAHex = convertToHex(wallet);
             const walletBHex = convertToHex(nft?.owner);
             console.log({walletAHex, walletBHex});
             exploreStore.createMutualDocks(walletAHex, walletBHex);
-          } else {
-            console.log('No mutual staking');
-            exploreStore.createNewsFeedItem({
-              ...myNft,
-              type: 'connected',
-              date: new Date().toISOString(),
-              connectedTo: {
-                ...nft,
-                type: 'connected',
-                date: new Date().toISOString()
-              }
-            });
           }
         }
       })

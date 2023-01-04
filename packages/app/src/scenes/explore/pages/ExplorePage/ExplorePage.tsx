@@ -36,7 +36,7 @@ const ExplorePage: FC = () => {
             nftFeed={exploreStore.nftFeed}
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
-            userId={sessionStore.userId}
+            currentUserId={sessionStore.userId}
             onSearch={nftStore.searchNft}
             onSelect={(nft) => {
               widgetsStore.odysseyInfoStore.open(nft);

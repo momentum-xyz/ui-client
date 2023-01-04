@@ -11,12 +11,12 @@ import * as styled from './DockedItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
-  userId?: string;
+  currentUserId?: string;
   onOpenOdyssey?: (uuid: string) => void;
 }
 
 const DockedItem: FC<PropsInterface> = (props) => {
-  const {item, userId, onOpenOdyssey} = props;
+  const {item, currentUserId, onOpenOdyssey} = props;
 
   const {t} = useTranslation();
 
@@ -24,8 +24,8 @@ const DockedItem: FC<PropsInterface> = (props) => {
     return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
   }, [item.date]);
 
-  const authUserIsStaking = userId && userId === item.uuid;
-  const authUserIsStaked = userId && userId === item.dockedTo?.uuid;
+  const authUserIsStaking = currentUserId && currentUserId === item.uuid;
+  const authUserIsStaked = currentUserId && currentUserId === item.dockedTo?.uuid;
 
   const dockingUserLabel = authUserIsStaking ? t('newsfeed.you') : item.name;
   const dockedUserLabel = authUserIsStaked ? t('newsfeed.you') : item.dockedTo?.name;
@@ -47,7 +47,7 @@ const DockedItem: FC<PropsInterface> = (props) => {
       <styled.Info>
         <styled.Date>{formattedDate}</styled.Date>
         <styled.DockedInfo>
-          <div className="username" onClick={() => onOpenOdyssey?.(item.uuid)}>
+          <styled.DockedInfoUsername onClick={() => onOpenOdyssey?.(item.uuid)}>
             <Text
               size="xxs"
               text={dockingUserLabel}
@@ -55,7 +55,7 @@ const DockedItem: FC<PropsInterface> = (props) => {
               decoration="underline"
               align="left"
             />
-          </div>
+          </styled.DockedInfoUsername>
           <Text size="xxs" text={t('newsfeed.and')} align="left" />
           <div
             className="username"
