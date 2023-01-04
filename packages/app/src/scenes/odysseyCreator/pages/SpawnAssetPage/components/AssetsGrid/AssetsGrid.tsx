@@ -22,11 +22,11 @@ const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
       {assets.map((asset) => (
         <styled.GridItem
           key={asset.id}
-          onMouseEnter={() => {
+          onPointerOver={() => {
             console.log('enter');
             setHoveringAsset(asset);
           }}
-          onMouseLeave={() => {
+          onPointerLeave={() => {
             console.log('leave');
             setHoveringAsset(null);
           }}
