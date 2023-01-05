@@ -7,7 +7,9 @@ import {AssetsPage, SelectedPage, UploadCustomAssetPage} from './pages';
 export const SPAWN_ASSET_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.creator.spawnAsset.basicAssets,
-    main: () => <AssetsPage assetCategory={Asset3dCategoryEnum.BASIC} />,
+    main: () => (
+      <AssetsPage assetCategory={Asset3dCategoryEnum.BASIC} setFunctionalityAfterCreation />
+    ),
     exact: true
   },
   {
