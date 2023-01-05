@@ -1,4 +1,5 @@
 import {Button, FileType, FileUploader, Text} from '@momentum-xyz/ui-kit';
+import {Model3dPreview} from '@momentum-xyz/map3d';
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -65,8 +66,13 @@ const UploadCustomAssetPage: FC = () => {
       {error && <styled.Error>{error}</styled.Error>}
       {asset && (
         <>
-          {/* TODO: Implement actual image selecting */}
-          <styled.Image src="https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222" />
+          <styled.PreviewContainer>
+            <Model3dPreview
+              filename={URL.createObjectURL(asset)}
+              // TODO it should not be necessary, but currently cannot replace already loaded model
+              key={URL.createObjectURL(asset)}
+            />
+          </styled.PreviewContainer>
           <styled.NameInput
             placeholder={t('placeholders.nameYourAssetForYourLibrary')}
             onFocus={() => unityStore.changeKeyboardControl(false)}

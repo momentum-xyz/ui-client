@@ -3,6 +3,7 @@ import {FC, useCallback, useEffect} from 'react';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {Button, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
+import {Model3dPreview} from '@momentum-xyz/map3d';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -41,7 +42,9 @@ export const SelectedPage: FC = () => {
 
   return (
     <styled.Container>
-      <styled.Image src={asset.image} />
+      <styled.PreviewContainer>
+        <Model3dPreview filename={asset.thumbnailAssetDownloadUrl} />
+      </styled.PreviewContainer>
       <styled.NameLabel text={asset.name} size="m" />
       <styled.CheckBoxLabel>
         <styled.CheckBox

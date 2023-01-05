@@ -1,5 +1,7 @@
 import {Instance, types} from 'mobx-state-tree';
 
+import {appVariables} from 'api/constants';
+
 const Asset3d = types
   .model('Asset3d', {
     id: types.identifier,
@@ -7,9 +9,9 @@ const Asset3d = types
     image: types.string
   })
   .views((self) => ({
-    // get imageSrc(): string {
-    //   return `${appVariables.RENDER_SERVICE_URL}/get/${self.image}`;
-    // }
+    get thumbnailAssetDownloadUrl(): string {
+      return `${appVariables.RENDER_SERVICE_URL}/asset/${self.id.replace(/-/g, '')}`;
+    }
   }));
 
 export interface Asset3dInterface extends Instance<typeof Asset3d> {}
