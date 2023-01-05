@@ -1,11 +1,13 @@
-import {FC, useCallback, useEffect, useState} from 'react';
-import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
+import {FC, useCallback, useState} from 'react';
+import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
+import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {GizmoTypeEnum} from 'core/enums';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectMenu.styled';
 
@@ -19,7 +21,6 @@ interface PropsInterface {
   gizmoType: GizmoTypeEnum;
   onObjectRemove: () => void;
   onGizmoTypeChange: (type: GizmoTypeEnum) => void;
-  fetchObject: (objectId: string) => void;
   onUndo: () => void;
   onRedo: () => void;
 }
@@ -31,7 +32,6 @@ const ObjectMenu: FC<PropsInterface> = ({
   gizmoType,
   onObjectRemove,
   onGizmoTypeChange,
-  fetchObject,
   onUndo,
   onRedo
 }) => {
@@ -39,9 +39,10 @@ const ObjectMenu: FC<PropsInterface> = ({
 
   const {t} = useTranslation();
 
-  useEffect(() => {
-    fetchObject(objectId);
-  }, [objectId, fetchObject]);
+  const {odysseyCreatorStore: worldBuilderStore} = useStore();
+  const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
+
+  worldBuilderObjectStore.fetchObjectName(objectId);
 
   const handleOnFunctionalityClick = useCallback(() => {
     console.info(worldId);
@@ -105,7 +106,11 @@ const ObjectMenu: FC<PropsInterface> = ({
         </Tooltip>
         {showDeleteDialog && (
           <Dialog
-            title={t('messages.delete')}
+            title={
+              worldBuilderObjectStore.objectName
+                ? t('messages.deleteNamedObject', {name: worldBuilderObjectStore.objectName})
+                : t('messages.delete')
+            }
             approveInfo={{
               title: t('actions.delete'),
               onClick: onObjectRemove,
@@ -125,4 +130,4 @@ const ObjectMenu: FC<PropsInterface> = ({
   );
 };
 
-export default ObjectMenu;
+export default observer(ObjectMenu);

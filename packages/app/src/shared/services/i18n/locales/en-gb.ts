@@ -352,6 +352,7 @@ export const enGb = {
       requestFailure: 'An error has occurred while {{action}}.',
       pleaseConfirm: 'Please confirm',
       delete: 'Are you sure you want to delete this?',
+      deleteNamedObject: 'Are you sure you want to delete {{name}}?',
       removeEventSuccess: 'Removed event successfully.',
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',

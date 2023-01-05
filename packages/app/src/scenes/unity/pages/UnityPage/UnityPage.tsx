@@ -253,7 +253,6 @@ const UnityPage: FC = () => {
             worldBuilderObjectStore.deleteObject();
             unityStore.objectMenu.close();
           }}
-          fetchObject={worldBuilderObjectStore.fetchObject}
           onUndo={unityStore.undo}
           onRedo={unityStore.redo}
         />
