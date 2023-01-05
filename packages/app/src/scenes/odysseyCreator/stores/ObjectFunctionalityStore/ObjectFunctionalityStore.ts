@@ -1,13 +1,16 @@
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {flow, types} from 'mobx-state-tree';
 
 import {api, GetSpaceInfoResponse} from 'api';
+import {PluginIdEnum} from 'api/enums';
 
 const ObjectFunctionalityStore = types
   .compose(
     ResetModel,
     types.model('ObjectFunctionalityStore', {
       objectId: types.maybe(types.string),
+      objectName: types.maybe(types.string),
       objectInfo: types.maybe(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       updateAsset2dRequest: types.optional(RequestModel, {}),
@@ -23,6 +26,7 @@ const ObjectFunctionalityStore = types
         '140c0f2e-2056-443f-b5a7-4a3c2e6b05da': 'dock (temporary)'
       }),
 
+      getAttributeItemRequest: types.optional(RequestModel, {}),
       currentAssetId: types.maybe(types.string)
     })
   )
@@ -31,6 +35,8 @@ const ObjectFunctionalityStore = types
       self.objectInfo = yield self.getObjectInfoRequest.send(api.spaceInfoRepository.getSpaceInfo, {
         spaceId: objectId
       });
+
+      yield self.fetchObjectName(objectId);
 
       if (self.objectInfo) {
         self.objectId = objectId;
@@ -59,6 +65,24 @@ const ObjectFunctionalityStore = types
       yield self.removeObjectRequest.send(api.spaceRepository.deleteSpace, {
         spaceId: self.objectId
       });
+    }),
+    fetchObjectName: flow(function* (spaceId: string) {
+      const attributeName = AttributeNameEnum.NAME;
+      const response = yield self.getAttributeItemRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: spaceId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: attributeName,
+          sub_attribute_key: attributeName
+        }
+      );
+
+      if (response === undefined || !(attributeName in response)) {
+        return;
+      }
+
+      self.objectName = response[attributeName];
     })
   }));
 
