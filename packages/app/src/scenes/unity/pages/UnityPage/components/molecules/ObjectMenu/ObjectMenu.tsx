@@ -43,7 +43,7 @@ const ObjectMenu: FC<PropsInterface> = ({
   const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
 
   useEffect(() => {
-    worldBuilderObjectStore.fetchObjectName(objectId);
+    worldBuilderObjectStore.fetchObject(objectId);
   }, [objectId, worldBuilderObjectStore]);
 
   const handleOnFunctionalityClick = useCallback(() => {

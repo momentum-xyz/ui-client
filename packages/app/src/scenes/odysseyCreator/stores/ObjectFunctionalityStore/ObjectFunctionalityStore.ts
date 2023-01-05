@@ -36,6 +36,8 @@ const ObjectFunctionalityStore = types
         spaceId: objectId
       });
 
+      yield self.fetchObjectName(objectId);
+
       if (self.objectInfo) {
         self.objectId = objectId;
       }
