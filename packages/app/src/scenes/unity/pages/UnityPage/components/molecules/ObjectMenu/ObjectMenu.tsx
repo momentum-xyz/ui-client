@@ -1,4 +1,4 @@
-import {FC, useCallback, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
 import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
@@ -42,7 +42,9 @@ const ObjectMenu: FC<PropsInterface> = ({
   const {odysseyCreatorStore: worldBuilderStore} = useStore();
   const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
 
-  worldBuilderObjectStore.fetchObjectName(objectId);
+  useEffect(() => {
+    worldBuilderObjectStore.fetchObjectName(objectId);
+  }, [objectId, worldBuilderObjectStore]);
 
   const handleOnFunctionalityClick = useCallback(() => {
     console.info(worldId);
