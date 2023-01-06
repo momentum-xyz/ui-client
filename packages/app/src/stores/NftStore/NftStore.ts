@@ -1,6 +1,6 @@
 import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
-import {BN, formatBalance} from '@polkadot/util';
+import {BN, compactStripLength, formatBalance, u8aToString} from '@polkadot/util';
 import {web3FromAddress} from '@polkadot/extension-dapp';
 import {
   ResetModel,
@@ -30,8 +30,6 @@ import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './mo
 const NFT_MINT_FEE = 100000;
 const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
 
-const textDecoderInst = new window.TextDecoder();
-
 const prepareSignAndSend = async (address: string) => {
   // there's alternative way for this in useEager
   const keyring = new Keyring({type: 'sr25519'});
@@ -47,6 +45,22 @@ const prepareSignAndSend = async (address: string) => {
 const formatAddress = (address: string, network = 42) => {
   const keyring = new Keyring({type: 'sr25519'});
   return keyring.encodeAddress(address, network);
+};
+
+const itemMetadataToString = (itemMetadata: any): string | null => {
+  const codecData = itemMetadata?.unwrapOr(null)?.data;
+  if (!codecData) {
+    return null;
+  }
+  // it seems to be Parity SCALE codec with some "compact" length prefix
+  // we need to remove it to get raw data
+  const [, rawData] = compactStripLength(codecData?.toU8a?.());
+  // console.log('rawData', rawData);
+
+  const data = u8aToString(rawData);
+  // console.log('data', data);
+
+  return data;
 };
 
 interface AccountBalanceInterface {
@@ -279,31 +293,29 @@ const NftStore = types
       console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
       const nftItems: NftItemInterface[] = yield Promise.all(
         itemMetadatas.map(
-          async (itemMedadata: any, index: number): Promise<NftItemInterface | null> => {
+          async (itemMetadata: any, index: number): Promise<NftItemInterface | null> => {
             const [collectionId, itemId] = collectionItemIds[index];
-            const codecData = itemMedadata?.unwrapOr(null)?.data;
 
-            // first 2 bytes must be type and length, but we don't need it here
-            const data = textDecoderInst.decode(codecData?.toU8a?.().slice(2));
-            const itemDetailedInfo = nftItemsDetailedInfos[index];
-            // console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
-            const owner = itemDetailedInfo.unwrapOr(null)?.owner?.toString();
-
-            if (!data) {
-              return null;
-            }
-
-            let metadataStr: string | null = data as string;
             try {
-              if (isIpfsHash(data)) {
-                console.log('fetch from IPFS', data);
-                // TODO timeout
-                metadataStr = await fetchIpfs(data);
-              }
+              const data = itemMetadataToString(itemMetadata);
 
-              if (!metadataStr) {
+              const itemDetailedInfo = nftItemsDetailedInfos[index];
+              // console.log('itemDetailedInfo', itemDetailedInfo.toHuman());
+              const owner = itemDetailedInfo.unwrapOr(null)?.owner?.toString();
+
+              if (!data) {
                 return null;
               }
+
+              let metadataStr: string | null = data as string;
+              // if (isIpfsHash(data)) {
+              //   console.log('fetch from IPFS', data);
+              //   // TODO timeout
+              //   metadataStr = await fetchIpfs(data);
+              // }
+              // if (!metadataStr) {
+              //   return null;
+              // }
 
               let metadata = JSON.parse(metadataStr);
               if (Array.isArray(metadata)) {
@@ -332,7 +344,14 @@ const NftStore = types
                 ...metadata
               };
             } catch (e) {
-              console.log('Unable to parse/fetch NFT metadata', data, '| Error:', e);
+              console.log(
+                'Unable to parse/fetch NFT metadata',
+                itemMetadata,
+                itemMetadata?.toHuman(),
+                itemMetadata?.unwrapOr(null)?.data,
+                '| Error:',
+                e
+              );
             }
 
             return null;
