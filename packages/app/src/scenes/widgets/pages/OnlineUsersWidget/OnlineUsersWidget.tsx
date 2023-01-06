@@ -31,11 +31,11 @@ const OnlineUsersWidget: FC<PropsInterface> = ({currentUser, worldId, onClick}) 
 
   return (
     <styled.Container data-testid="OnlineUsersWidget-test" onClick={onClick}>
+      <Text size="m" text="Online" transform="uppercase" weight="bold" />
       <styled.AvatarsWrapper>
         <OnlineUsersAvatars onlineUsers={onlineUsersStore.odysseyUsers} />
         <styled.MyProfileAvatar size="normal" avatarSrc={currentUser?.avatarSrc} />
       </styled.AvatarsWrapper>
-      <Text size="m" text="Online" transform="uppercase" weight="bold" />
     </styled.Container>
   );
 };

@@ -34,6 +34,15 @@ export const OnlineUsers = styled.div`
   display: flex;
 `;
 
+export const CurrentOdyssey = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  & .odyssey-name {
+    margin-right: 10px;
+  }
+`;
+
 export const FullSizeWrapper = styled.div`
   width: 100%;
 `;
