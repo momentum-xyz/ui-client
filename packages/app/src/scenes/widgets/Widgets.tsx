@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {
   Avatar,
   Button,
+  Tooltip,
   Text,
   ToolbarIcon,
   ToolbarIconList,
@@ -46,6 +47,17 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {agoraScreenShareStore} = agoraStore;
   const {worldStore} = mainStore;
   const {user} = sessionStore;
+
+  const worldOwner = nftStore.getNftByUuid(worldStore.worldId);
+
+  useEffect(() => {
+    if (!worldOwner) {
+      return;
+    }
+    odysseyBioStore.fetchUser(worldOwner.uuid);
+  }, [odysseyBioStore, worldOwner]);
+
+  console.log(odysseyBioStore.nftUser);
 
   const {t} = useTranslation();
 
@@ -145,18 +157,35 @@ const Widgets: FC<PropsInterface> = (props) => {
                 onClick={onlineUsersStore.dialog.toggle}
               />
             </styled.OnlineUsers>
-            <styled.CurrentOdyssey>
-              <Text size="m" text={worldStore?.world?.name} transform="uppercase" weight="bold" />
-            </styled.CurrentOdyssey>
             <ToolbarIconList>
-              <ToolbarIcon
-                title={t('labels.bio')}
-                icon="people"
-                size="medium"
-                isSelected={odysseyBioStore.dialog.isOpen}
-                onClick={() => odysseyBioStore.open(nftStore.getNftByUuid(worldStore.worldId))}
-                state={{canGoBack: true}}
-              />
+              <Tooltip label={t('labels.bio')} placement="top">
+                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
+                  <Text
+                    className="odyssey-name"
+                    size="m"
+                    text={worldStore?.world?.name}
+                    transform="uppercase"
+                    weight="bold"
+                  />
+                  {/* title={t('labels.bio')}
+                  isSelected={odysseyBioStore.dialog.isOpen} */}
+                  <ToolbarIcon
+                    title=""
+                    state={{canGoBack: true}}
+                    icon={odysseyBioStore.nftUser?.avatarSrc ? undefined : 'people'}
+                    size="medium"
+                  >
+                    {odysseyBioStore.nftUser?.avatarSrc && (
+                      <Avatar
+                        size="extra-small"
+                        avatarSrc={odysseyBioStore.nftUser?.avatarSrc}
+                        showBorder
+                        showHover
+                      />
+                    )}
+                  </ToolbarIcon>
+                </styled.CurrentOdyssey>
+              </Tooltip>
 
               <ToolbarIcon
                 title={t('labels.calendar')}

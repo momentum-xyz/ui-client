@@ -37,7 +37,10 @@ export const OnlineUsers = styled.div`
 export const CurrentOdyssey = styled.div`
   display: flex;
   align-items: center;
-  margin: 0 20px;
+  cursor: pointer;
+  & .odyssey-name {
+    margin-right: 10px;
+  }
 `;
 
 export const FullSizeWrapper = styled.div`
