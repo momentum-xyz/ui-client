@@ -50,19 +50,11 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const worldOwner = nftStore.getNftByUuid(worldStore.worldId);
 
-  useEffect(() => {
-    if (!worldOwner) {
-      return;
-    }
-    odysseyBioStore.fetchUser(worldOwner.uuid);
-  }, [odysseyBioStore, worldOwner]);
-
-  console.log(odysseyBioStore.nftUser);
-
   const {t} = useTranslation();
 
   useEffect(() => {
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
+    onlineUsersStore.fetchUser(worldStore.worldId);
   }, [onlineUsersStore, sessionStore.userId, worldStore.worldId]);
 
   useEffect(() => {
@@ -167,18 +159,16 @@ const Widgets: FC<PropsInterface> = (props) => {
                     transform="uppercase"
                     weight="bold"
                   />
-                  {/* title={t('labels.bio')}
-                  isSelected={odysseyBioStore.dialog.isOpen} */}
                   <ToolbarIcon
                     title=""
                     state={{canGoBack: true}}
-                    icon={odysseyBioStore.nftUser?.avatarSrc ? undefined : 'people'}
+                    icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
                     size="medium"
                   >
-                    {odysseyBioStore.nftUser?.avatarSrc && (
+                    {onlineUsersStore.nftUser?.avatarSrc && (
                       <Avatar
                         size="extra-small"
-                        avatarSrc={odysseyBioStore.nftUser?.avatarSrc}
+                        avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
                         showBorder
                         showHover
                       />
