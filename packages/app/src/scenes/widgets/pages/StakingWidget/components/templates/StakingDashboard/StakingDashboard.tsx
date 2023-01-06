@@ -141,7 +141,8 @@ const StakingDashboard: FC = () => {
             headerIconName="alert"
             title={t('staking.unStakeSuccessTitle')}
             text={t('staking.successUnstake', {
-              amount: formatTokenAmount(amount, chainDecimals, tokenSymbol)
+              amount: formatTokenAmount(amount, chainDecimals, tokenSymbol),
+              name: unstakeFromNft.name
             })}
             showCloseButton
           />
