@@ -34,6 +34,12 @@ export const OnlineUsers = styled.div`
   display: flex;
 `;
 
+export const CurrentOdyssey = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+`;
+
 export const FullSizeWrapper = styled.div`
   width: 100%;
 `;

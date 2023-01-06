@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {
   Avatar,
   Button,
+  Text,
   ToolbarIcon,
   ToolbarIconList,
   ToolbarIconSeparator
@@ -144,6 +145,9 @@ const Widgets: FC<PropsInterface> = (props) => {
                 onClick={onlineUsersStore.dialog.toggle}
               />
             </styled.OnlineUsers>
+            <styled.CurrentOdyssey>
+              <Text size="m" text={worldStore?.world?.name} transform="uppercase" weight="bold" />
+            </styled.CurrentOdyssey>
             <ToolbarIconList>
               <ToolbarIcon
                 title={t('labels.bio')}
