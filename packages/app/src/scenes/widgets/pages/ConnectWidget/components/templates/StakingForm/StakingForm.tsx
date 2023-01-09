@@ -73,8 +73,8 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     : '';
 
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
-  const [amount, setAmount] = useState(DEFAULT_STAKING_AMOUNT);
-  const amountAtoms = amount * Math.pow(10, chainDecimals || 12);
+  const [amount, setAmount] = useState(DEFAULT_STAKING_AMOUNT.toString());
+  const amountAtoms = Number(amount) * Math.pow(10, chainDecimals || 12);
 
   const nft = nftItems.find((nft) => nft.id === nftItemId);
   const myNft = nftItems.find((nft) => nft.owner === wallet);
@@ -156,6 +156,10 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const isBalanceTooLow = !canBeStaked(amountAtoms);
 
   const isStakingInSelf = nft === myNft;
+  const validStringCheck = (val: string): boolean => {
+    const regex = /^\d+(\.|,)?\d*$/;
+    return regex.test(val);
+  };
 
   if (!nft) {
     console.log('StakingForm - no nft found');
@@ -245,7 +249,13 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                     <Input
                       autoFocus
                       value={amount || ''}
-                      onChange={(val) => setAmount(Number(val))}
+                      onChange={(val: string) => {
+                        if (!validStringCheck(val)) {
+                          return;
+                        }
+
+                        setAmount(val);
+                      }}
                     />
                   </styled.LabeledLineInputContainer>
                 </styled.LabeledLineContainer>
@@ -283,7 +293,17 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                     />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer className="view-only">
-                    <Input value={amount} onChange={(val) => setAmount(Number(val))} disabled />
+                    <Input
+                      value={amount}
+                      onChange={(val: string) => {
+                        if (!validStringCheck(val)) {
+                          return;
+                        }
+
+                        setAmount(val);
+                      }}
+                      disabled
+                    />
                   </styled.LabeledLineInputContainer>
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
