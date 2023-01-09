@@ -13,8 +13,7 @@ const GoogleDrivePage: FC = () => {
   const {api, googleDriveStore} = store;
   const {googleDocument} = googleDriveStore;
 
-  const {objectId, pluginName, isAdmin, pluginApi, isExpanded, onClose, onToggleExpand} =
-    useObject();
+  const {objectId, isAdmin, pluginApi, isExpanded, onClose, onToggleExpand} = useObject();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useStateItemChange('document', googleDriveStore.setGoogleDocument);
@@ -40,7 +39,7 @@ const GoogleDrivePage: FC = () => {
   return (
     <SpacePage>
       <ObjectTopBar
-        title={pluginName ?? ''}
+        title="Google Drive"
         subtitle={googleDocument?.name}
         isExpanded={isExpanded}
         onClose={() => onClose?.()}

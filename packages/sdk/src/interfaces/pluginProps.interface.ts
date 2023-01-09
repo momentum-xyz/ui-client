@@ -7,7 +7,6 @@ import {ApiInterface} from './api.interface';
 export interface CorePluginPropsInterface<C extends PluginConfigInterface = PluginConfigInterface> {
   theme: ThemeInterface;
   objectId?: string;
-  pluginName?: string;
   isAdmin: boolean;
   isExpanded?: boolean;
 

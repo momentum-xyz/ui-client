@@ -58,7 +58,6 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
     isExpanded: pluginLoader.isExpanded,
     onToggleExpand: pluginLoader.toggleIsExpanded,
     objectId,
-    pluginName: pluginLoader.name,
     pluginApi: attributesManager.pluginApi,
     api: attributesManager.api,
     onClose: () => {
