@@ -21,9 +21,9 @@ export const Error = styled.p`
   color: red;
 `;
 
-export const Image = styled.img`
-  width: 196px;
-  height: 197px;
+export const PreviewContainer = styled.div`
+  width: 300px;
+  height: 300px;
 
   border-radius: 10px;
 `;

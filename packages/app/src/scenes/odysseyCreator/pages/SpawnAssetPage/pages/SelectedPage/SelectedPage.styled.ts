@@ -11,9 +11,9 @@ export const Container = styled.div`
   gap: 20px;
 `;
 
-export const Image = styled.img`
-  width: 196px;
-  height: 197px;
+export const PreviewContainer = styled.div`
+  width: 300px;
+  height: 300px;
 
   border-radius: 10px;
 `;

@@ -44,7 +44,8 @@ const StakingDashboard: FC = () => {
     accountAccumulatedRewards,
     canReceiveAccumulatedRewards,
     chainDecimals,
-    tokenSymbol
+    tokenSymbol,
+    requestingFundsStatus
   } = nftStore;
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
@@ -66,6 +67,7 @@ const StakingDashboard: FC = () => {
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
   const [canRequestAirdrop, setCanRequestAirdrop] = useState<boolean>(checkIfCanRequestAirdrop());
+  const airdropRequestIsInProgress = requestingFundsStatus === 'pending';
   const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState<string>(
     getDateOfNextAllowedAirdrop()
   );
@@ -139,7 +141,8 @@ const StakingDashboard: FC = () => {
             headerIconName="alert"
             title={t('staking.unStakeSuccessTitle')}
             text={t('staking.successUnstake', {
-              amount: formatTokenAmount(amount, chainDecimals, tokenSymbol)
+              amount: formatTokenAmount(amount, chainDecimals, tokenSymbol),
+              name: unstakeFromNft.name
             })}
             showCloseButton
           />
@@ -179,8 +182,6 @@ const StakingDashboard: FC = () => {
       })
       .catch((err) => {
         console.log('requestAirdrop error', err);
-        setCanRequestAirdrop(checkIfCanRequestAirdrop());
-        setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
         toast.error(
           <ToastContent
             headerIconName="alert"
@@ -301,7 +302,7 @@ const StakingDashboard: FC = () => {
                 <styled.Buttons className="start">
                   <Button
                     label={t('staking.requestAirdrop')}
-                    disabled={!canRequestAirdrop}
+                    disabled={!canRequestAirdrop || airdropRequestIsInProgress}
                     onClick={() => onRequestAirdrop()}
                   />
                   {!canRequestAirdrop && (
@@ -310,6 +311,9 @@ const StakingDashboard: FC = () => {
                       text={t('staking.nextAirdropAvailableOn', {date: nextAvailableAirdropTime})}
                       align="left"
                     />
+                  )}
+                  {airdropRequestIsInProgress && (
+                    <Text size="s" text={t('staking.processingAirdropRequest')} align="left" />
                   )}
                 </styled.Buttons>
               </styled.Section>

@@ -93,6 +93,7 @@ export const enGb = {
       requestAirdropSuccess: 'Request for airdrop was successful',
       requestAirdropFailed: 'Request for airdrop failed',
       nextAirdropAvailableOn: 'Next airdrop available at {{date}}',
+      processingAirdropRequest: 'Please wait 10-15 seconds for the transaction',
       unbondAmount: 'Unbond Amount',
       setAmount: 'Set Amount',
       setAmountSymbol: 'Set Amount, {{symbol}}',
@@ -119,12 +120,12 @@ export const enGb = {
       unStakeFrom: 'Unstake From',
       unStake: 'Unstake',
       errorUnstake: 'Error unstaking',
-      successUnstake: 'Congratulations, you successfully unstaked {{amount}} from XYZ',
+      successUnstake: 'Congratulations, you successfully unstaked {{amount}} from {{name}}',
       errorGetRewards: 'Error getting rewards',
       successGetRewards: 'Congratulations, you successfully claimed your MOM rewards!',
       getRewards: 'Get Rewards',
       error: 'Oops! Your request failed, please try again!',
-      stakeSuccess: 'Congratulations, you successfully staked {{amount}} MOM in XYZ',
+      stakeSuccess: 'Congratulations, you successfully staked {{amount}} MOM in {{name}}',
       stakeSuccessTitle: 'Staking successful!',
       stakeErrorTitle: 'Staking failed!',
       unStakeSuccessTitle: 'Unstaking successful! ',
@@ -352,6 +353,7 @@ export const enGb = {
       requestFailure: 'An error has occurred while {{action}}.',
       pleaseConfirm: 'Please confirm',
       delete: 'Are you sure you want to delete this?',
+      deleteNamedObject: 'Are you sure you want to delete "{{name}}"?',
       removeEventSuccess: 'Removed event successfully.',
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',
@@ -579,7 +581,7 @@ export const enGb = {
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',
-      delete: 'delete',
+      delete: 'Delete',
       declined: 'declined',
       declining: 'declining',
       removed: 'removed',
@@ -1128,6 +1130,12 @@ export const enGb = {
       noConnection: 'There are no connections yet',
       title: 'Mutual connections list',
       admin: 'admin'
+    },
+    newsfeed: {
+      stakedIn: ' staked in ',
+      you: 'You',
+      and: ' and ',
+      docked: ' docked'
     }
   }
 };

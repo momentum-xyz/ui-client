@@ -32,7 +32,7 @@ const Tooltip: FC<PropsInterface> = ({
   const getTooltipContainer = () => divRef.current;
   return (
     <>
-      {visible ? (
+      {label && visible ? (
         <styled.Div
           data-testid="Tooltip-test"
           ref={divRef}

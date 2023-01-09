@@ -16,11 +16,13 @@ interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
   nftFeed: NftFeedItemInterface[];
   odysseyList: NftItemInterface[];
+  currentUserId: string;
   onSearch: () => void;
   onTeleport: (nft: NftItemInterface) => void;
   onSelect: (nft: NftItemInterface) => void;
   onAttend: (nft: NftItemInterface) => void;
   onConnect: (id: number) => void;
+  onOpenOdyssey?: (uuid: string) => void;
 }
 
 const SEARCH_DELAY_MS = 200;
@@ -30,11 +32,13 @@ const ExplorePanel: FC<PropsInterface> = ({
   nftFeed,
   odysseyList,
   searchQuery,
+  currentUserId,
   onSearch,
   onTeleport,
   onSelect,
   onAttend,
-  onConnect
+  onConnect,
+  onOpenOdyssey
 }) => {
   const debouncedSearch = useDebouncedCallback(onSearch, SEARCH_DELAY_MS);
 
@@ -69,9 +73,11 @@ const ExplorePanel: FC<PropsInterface> = ({
         {!searchQuery.isQueryValid && (
           <NewsFeed
             nftFeed={nftFeed}
+            currentUserId={currentUserId}
             onTeleport={onTeleport}
             onConnect={onConnect}
             onAttend={onAttend}
+            onOpenOdyssey={onOpenOdyssey}
           />
         )}
 

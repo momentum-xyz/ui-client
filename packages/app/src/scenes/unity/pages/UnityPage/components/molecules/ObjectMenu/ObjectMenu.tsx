@@ -1,11 +1,13 @@
-import {FC, useCallback, useEffect} from 'react';
-import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
+import {FC, useCallback, useEffect, useState} from 'react';
+import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
+import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {GizmoTypeEnum} from 'core/enums';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectMenu.styled';
 
@@ -19,7 +21,6 @@ interface PropsInterface {
   gizmoType: GizmoTypeEnum;
   onObjectRemove: () => void;
   onGizmoTypeChange: (type: GizmoTypeEnum) => void;
-  fetchObject: (objectId: string) => void;
   onUndo: () => void;
   onRedo: () => void;
 }
@@ -31,7 +32,6 @@ const ObjectMenu: FC<PropsInterface> = ({
   gizmoType,
   onObjectRemove,
   onGizmoTypeChange,
-  fetchObject,
   onUndo,
   onRedo
 }) => {
@@ -39,9 +39,12 @@ const ObjectMenu: FC<PropsInterface> = ({
 
   const {t} = useTranslation();
 
+  const {odysseyCreatorStore: worldBuilderStore} = useStore();
+  const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
+
   useEffect(() => {
-    fetchObject(objectId);
-  }, [objectId, fetchObject]);
+    worldBuilderObjectStore.fetchObject(objectId);
+  }, [objectId, worldBuilderObjectStore]);
 
   const handleOnFunctionalityClick = useCallback(() => {
     console.info(worldId);
@@ -52,6 +55,8 @@ const ObjectMenu: FC<PropsInterface> = ({
       })
     });
   }, [history, objectId, worldId]);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
     <Portal>
@@ -85,7 +90,7 @@ const ObjectMenu: FC<PropsInterface> = ({
         <styled.MenuItem onClick={onRedo}>
           <styled.MenuText text={t('actions.redo')} size="m" />
         </styled.MenuItem>
-        <styled.MenuItem onClick={onObjectRemove}>
+        <styled.MenuItem onClick={() => setShowDeleteDialog(true)}>
           <styled.MenuText text={t('actions.delete')} size="m" />
         </styled.MenuItem>
         <Tooltip label={t('messages.comingSoonExclamation')} placement="bottom">
@@ -101,9 +106,30 @@ const ObjectMenu: FC<PropsInterface> = ({
             <styled.MenuText text={t('actions.addTokenGate')} size="m" />
           </styled.MenuItem>
         </Tooltip>
+        {showDeleteDialog && (
+          <Dialog
+            title={
+              worldBuilderObjectStore.objectName
+                ? t('messages.deleteNamedObject', {name: worldBuilderObjectStore.objectName})
+                : t('messages.delete')
+            }
+            approveInfo={{
+              title: t('actions.delete'),
+              onClick: onObjectRemove,
+              variant: 'danger'
+            }}
+            declineInfo={{
+              title: t('actions.cancel'),
+              onClick: () => setShowDeleteDialog(false),
+              variant: 'primary'
+            }}
+            onClose={() => setShowDeleteDialog(false)}
+            showCloseButton
+          />
+        )}
       </styled.Container>
     </Portal>
   );
 };
 
-export default ObjectMenu;
+export default observer(ObjectMenu);

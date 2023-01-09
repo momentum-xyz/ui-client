@@ -4,6 +4,8 @@ import {useTranslation} from 'react-i18next';
 import {
   Avatar,
   Button,
+  Tooltip,
+  Text,
   ToolbarIcon,
   ToolbarIconList,
   ToolbarIconSeparator
@@ -46,10 +48,13 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {worldStore} = mainStore;
   const {user} = sessionStore;
 
+  const worldOwner = nftStore.getNftByUuid(worldStore.worldId);
+
   const {t} = useTranslation();
 
   useEffect(() => {
     onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
+    onlineUsersStore.fetchUser(worldStore.worldId);
   }, [onlineUsersStore, sessionStore.userId, worldStore.worldId]);
 
   useEffect(() => {
@@ -145,14 +150,32 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
             </styled.OnlineUsers>
             <ToolbarIconList>
-              <ToolbarIcon
-                title={t('labels.bio')}
-                icon="people"
-                size="medium"
-                isSelected={odysseyBioStore.dialog.isOpen}
-                onClick={() => odysseyBioStore.open(nftStore.getNftByUuid(worldStore.worldId))}
-                state={{canGoBack: true}}
-              />
+              <Tooltip label={t('labels.bio')} placement="top">
+                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
+                  <Text
+                    className="odyssey-name"
+                    size="m"
+                    text={worldStore?.world?.name}
+                    transform="uppercase"
+                    weight="bold"
+                  />
+                  <ToolbarIcon
+                    title=""
+                    state={{canGoBack: true}}
+                    icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
+                    size="medium"
+                  >
+                    {onlineUsersStore.nftUser?.avatarSrc && (
+                      <Avatar
+                        size="extra-small"
+                        avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
+                        showBorder
+                        showHover
+                      />
+                    )}
+                  </ToolbarIcon>
+                </styled.CurrentOdyssey>
+              </Tooltip>
 
               <ToolbarIcon
                 title={t('labels.calendar')}

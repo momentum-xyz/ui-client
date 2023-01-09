@@ -91,9 +91,13 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
         console.log('stake success');
 
         if (myNft && nft) {
+          const isMutual = nftStore.stakingAtMe.has(nft.owner);
+          console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
+
           exploreStore.createNewsFeedItem({
             ...myNft,
             type: 'connected',
+            mutual: isMutual,
             date: new Date().toISOString(),
             connectedTo: {
               ...nft,
@@ -102,26 +106,25 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
             }
           });
 
-          if (nft && nftStore.stakingAtMe.get(nft.owner)) {
-            console.log('MUTUAL STAKING');
+          if (isMutual) {
             const walletAHex = convertToHex(wallet);
             const walletBHex = convertToHex(nft?.owner);
             console.log({walletAHex, walletBHex});
             exploreStore.createMutualDocks(walletAHex, walletBHex);
-          } else {
-            console.log('No mutual staking');
           }
         }
       })
       .then(() => {
-        toast.info(
-          <ToastContent
-            headerIconName="alert"
-            title={t('staking.stakeSuccessTitle')}
-            text={t('staking.stakeSuccess', {amount})}
-            showCloseButton
-          />
-        );
+        if (nft) {
+          toast.info(
+            <ToastContent
+              headerIconName="alert"
+              title={t('staking.stakeSuccessTitle')}
+              text={t('staking.stakeSuccess', {amount, name: nft?.name})}
+              showCloseButton
+            />
+          );
+        }
         onComplete();
       })
       .catch((err) => {

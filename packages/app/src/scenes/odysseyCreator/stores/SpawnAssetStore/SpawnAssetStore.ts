@@ -130,6 +130,8 @@ const SpawnAssetStore = types
           value: self.isVisibleInNavigation ? 3 : 1
         });
       }
+
+      return response?.space_id;
     })
   }))
   .views((self) => ({
