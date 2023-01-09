@@ -37,7 +37,7 @@ export const use3dMap = (
   const odysseyAvatarGeometry = useRef(new THREE.CircleGeometry(0.8, 26));
   const listOfOdysseys = useRef<PlanetMesh[]>([]);
   const referenceListOfOdysseys = useRef<PlanetMesh[]>([]);
-  const selectedOdyssey = useRef<PlanetMesh>();
+  const lastSelectedOdyssey = useRef<string>();
 
   const scene = useRef(new THREE.Scene());
   const raycaster = useRef(new THREE.Raycaster());
@@ -429,22 +429,27 @@ export const use3dMap = (
    */
   const flyToPlanet = useCallback(
     async (uuid: string) => {
-      const targetPlanet = referenceListOfOdysseys.current.find((item) => item.uuid === uuid);
-      if (!targetPlanet) {
+      // Make sure transition to the newly clicked planet has finished.
+      if (!transitionToPlanetFinished.current) {
         return;
       }
 
       // If clicked planet is same as current selected one return
-      if (targetPlanet.uuid === selectedOdyssey.current?.uuid) {
+      if (uuid === lastSelectedOdyssey.current) {
         // Handle selecting planet again
         onSelectOdyssey(uuid);
         return;
       }
 
+      const targetPlanet = referenceListOfOdysseys.current.find((item) => item.uuid === uuid);
+      if (!targetPlanet) {
+        return;
+      }
+
+      lastSelectedOdyssey.current = uuid;
+
       // Draw connections for target odyssey
       await drawConnections(targetPlanet.owner);
-
-      selectedOdyssey.current = targetPlanet;
 
       const targetVector = new THREE.Vector3();
       targetPlanet.getWorldPosition(targetVector);
@@ -532,11 +537,6 @@ export const use3dMap = (
 
       // Process the Raycast.
       if (castRay.length > 0) {
-        // Make sure transition to the newly clicked planet has finished.
-        if (!transitionToPlanetFinished.current) {
-          return;
-        }
-
         // Only react to first raycast hit
         const targetPlanet = castRay[0];
 
