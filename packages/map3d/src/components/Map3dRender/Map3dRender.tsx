@@ -27,7 +27,7 @@ const Map3dRender: FC<PropsInterface> = ({
 
   useEffect(() => {
     if (selectedUuid) {
-      flyToPlanet(selectedUuid).then();
+      flyToPlanet(selectedUuid);
     }
   }, [flyToPlanet, selectedUuid]);
 

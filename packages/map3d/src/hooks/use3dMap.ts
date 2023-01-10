@@ -29,7 +29,6 @@ export const use3dMap = (
   onSelectOdyssey: (uuid: string) => void
 ) => {
   const wasLoaded = useRef(false);
-  const connectionsForWallet = useRef<string>('');
 
   /**
    * Reusable properties of galaxy
@@ -37,7 +36,6 @@ export const use3dMap = (
   const odysseyAvatarGeometry = useRef(new THREE.CircleGeometry(0.8, 26));
   const listOfOdysseys = useRef<PlanetMesh[]>([]);
   const referenceListOfOdysseys = useRef<PlanetMesh[]>([]);
-  const lastSelectedOdyssey = useRef<string>();
 
   const scene = useRef(new THREE.Scene());
   const raycaster = useRef(new THREE.Raycaster());
@@ -60,7 +58,9 @@ export const use3dMap = (
   const camera = useRef(new THREE.PerspectiveCamera(75, aspect, 0.1, 10000));
   const renderer = useRef<THREE.WebGLRenderer>();
 
-  const activeLinesArray = useRef<Line2[]>([]);
+  const lastSelectedOdyssey = useRef<string>();
+  const activeLinesOwner = useRef<string>();
+  const activeLines = useRef<Line2[]>([]);
 
   /**
    * Draw lines between staked Odysseys.
@@ -69,27 +69,27 @@ export const use3dMap = (
     async (sourceWallet: string) => {
       const targetWallets = await getConnections(sourceWallet);
 
-      const isSameOdyssey = connectionsForWallet.current === sourceWallet;
-      const areSameConnections = activeLinesArray.current.length === targetWallets.length;
+      const isSameOdyssey = activeLinesOwner.current === sourceWallet;
+      const areSameConnections = activeLines.current.length === targetWallets.length;
 
       if (isSameOdyssey && areSameConnections) {
         return;
       }
 
       // Delete current connections
-      if (activeLinesArray.current.length) {
-        for (let i = 0; i < activeLinesArray.current.length; i++) {
-          scene.current.remove(activeLinesArray.current[i]);
+      if (activeLines.current.length) {
+        for (let i = 0; i < activeLines.current.length; i++) {
+          scene.current.remove(activeLines.current[i]);
         }
 
-        activeLinesArray.current = [];
+        activeLines.current = [];
       }
 
       const sourceOdyssey = referenceListOfOdysseys.current.find(
         (odyssey) => odyssey.owner === sourceWallet
       );
 
-      connectionsForWallet.current = sourceWallet;
+      activeLinesOwner.current = sourceWallet;
 
       // Draw new connections
       targetWallets.forEach((targetWallet) => {
@@ -149,7 +149,7 @@ export const use3dMap = (
           const drawLine = new Line2(lineGeometry, lineMaterial);
 
           // Add line to the scene.
-          activeLinesArray.current.push(drawLine);
+          activeLines.current.push(drawLine);
           scene.current.add(drawLine);
         }
       });
