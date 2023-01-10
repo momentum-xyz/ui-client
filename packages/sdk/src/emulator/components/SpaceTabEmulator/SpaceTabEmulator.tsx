@@ -1,5 +1,11 @@
 import React, {FC, useMemo} from 'react';
-import {ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
+import {
+  ErrorBoundary,
+  // ObjectTopBar,
+  // SpacePage,
+  ThemeInterface,
+  WindowPanel
+} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
@@ -13,15 +19,17 @@ import {
 interface PropsInterface {
   plugin: PluginInterface<ObjectPluginPropsInterface>;
   objectId: string;
-  isExpanded: boolean;
-  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  // isExpanded: boolean;
+  // setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
 }
 
 export const SpaceTabEmulator: FC<PropsInterface> = ({
   plugin,
   objectId,
-  isExpanded,
-  setIsExpanded
+  // isExpanded,
+  // setIsExpanded,
+  onClose
 }) => {
   console.log('RENDER SpaceTabEmulator', {plugin});
 
@@ -52,8 +60,8 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
       theme: theme as ThemeInterface,
       isAdmin: false,
       objectId,
-      isExpanded,
-      onToggleExpand: () => setIsExpanded((oldValue) => !oldValue),
+      // isExpanded,
+      // onToggleExpand: () => setIsExpanded((oldValue) => !oldValue),
       api: {
         getSpaceAttributeValue: <T extends AttributeValueInterface>(
           spaceId: string,
@@ -199,14 +207,14 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
     [
       theme,
       objectId,
-      isExpanded,
+      // isExpanded,
       subscribeToTopic,
       unsubscribeFromTopic,
       useAttributeChange,
       useAttributeRemove,
       useAttributeItemChange,
       useAttributeItemRemove,
-      setIsExpanded,
+      // setIsExpanded,
       spaceAttributes,
       changedAttribute,
       removedAttribute,
@@ -216,13 +224,34 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
     ]
   );
 
-  const {content} = plugin.usePlugin(coreProps);
+  const {content, objectView} = plugin.usePlugin(coreProps);
 
   return (
-    <>
-      {!!content && (
-        <ErrorBoundary errorMessage="Error while rendering plugin">{content}</ErrorBoundary>
-      )}
-    </>
+    <ErrorBoundary errorMessage="Error while rendering plugin">
+      {content ||
+        (objectView && (
+          <WindowPanel
+            title={objectView.title || ''}
+            subtitle={objectView.subtitle}
+            actions={objectView.actions}
+            onClose={onClose}
+          >
+            {objectView.content}
+          </WindowPanel>
+        )) || <div>usePlugin doesn't return the expected values. Please check the docs</div>}
+    </ErrorBoundary>
   );
 };
+
+// <SpacePage>
+//   <ObjectTopBar
+//     title={objectView.title || ''}
+//     subtitle={objectView.subtitle || ''}
+//     isExpanded={isExpanded}
+//     onClose={onClose}
+//     onToggleExpand={() => setIsExpanded((oldValue) => !oldValue)}
+//   >
+//     {objectView.actions}
+//   </ObjectTopBar>
+//   {objectView.content}
+// </SpacePage>

@@ -218,6 +218,7 @@ export const enGb = {
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
+      errorPluginContactDev: 'An error has occured in the plugin. Contact the developer.',
       onlyGLBSupported: 'Only GLB format supported',
       requiredField: 'This field is required',
       errorLoadingToken: 'Error loading {{tokenSymbol}}',

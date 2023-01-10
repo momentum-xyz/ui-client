@@ -50,11 +50,13 @@ export const SpaceContent = styled.div`
   flex: 1 0 auto;
   border: 1px solid grey;
   margin: 10px;
+  justify-content: end;
+  align-items: end;
 
-  :not(&.expanded) {
-    width: 679px;
-    height: 348px;
-    align-self: flex-end;
-    flex: 0 0 auto;
-  }
+  // :not(&.expanded) {
+  //   width: 679px;
+  //   height: 348px;
+  //   align-self: flex-end;
+  //   flex: 0 0 auto;
+  // }
 `;

@@ -1,7 +1,12 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
+import {
+  ErrorBoundary,
+  // ObjectTopBar, SpacePage,
+  Text,
+  WindowPanel
+} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {ObjectPluginPropsInterface, PluginInterface} from '@momentum-xyz/sdk';
@@ -52,7 +57,11 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
     }
   }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
-  const {content} = plugin.usePlugin({
+  const onClose = () => {
+    history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+  };
+
+  const {content, objectView} = plugin.usePlugin({
     theme,
     isAdmin: true,
     isExpanded: pluginLoader.isExpanded,
@@ -60,16 +69,29 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
     objectId,
     pluginApi: attributesManager.pluginApi,
     api: attributesManager.api,
-    onClose: () => {
-      history.push(generatePath(ROUTES.odyssey.base, {worldId}));
-    }
+    onClose
   });
 
   return !pluginLoader.isError ? (
     <styled.Wrapper>
-      <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
-        <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>{content}</ErrorBoundary>
-      </styled.Container>
+      <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
+        {content ? (
+          <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
+            {content}
+          </styled.Container>
+        ) : objectView ? (
+          <WindowPanel
+            title={objectView.title || ''}
+            subtitle={objectView.subtitle}
+            actions={objectView.actions}
+            onClose={onClose}
+          >
+            {objectView.content}
+          </WindowPanel>
+        ) : (
+          <Text text={t('errors.errorPluginContactDev')} size="l" />
+        )}
+      </ErrorBoundary>
     </styled.Wrapper>
   ) : (
     <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
