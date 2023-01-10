@@ -16,6 +16,9 @@ import {BasicAsset2dIdEnum} from 'core/enums';
 
 import {AssetStore} from './AssetStore';
 
+const {REACT_APP_LOCAL_PLUGINS = '{}'} = process.env;
+const localPlugins = JSON.parse(REACT_APP_LOCAL_PLUGINS);
+
 const ObjectStore = types
   .compose(
     ResetModel,
@@ -70,16 +73,22 @@ const ObjectStore = types
           break;
         }
         default: {
-          const assetResponse:
+          let assetData:
             | Asset2dResponse<PluginMetadataInterface, PluginOptionsInterface>
-            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
-            assetId: spaceInfo.asset_2d_id
-          });
+            | undefined = localPlugins[spaceId];
 
-          if (!assetResponse) {
+          if (!assetData) {
+            assetData = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
+              assetId: spaceInfo.asset_2d_id
+            });
+          } else {
+            console.log('Use local PLUGIN assetData for object', spaceId, ':', assetData);
+          }
+
+          if (!assetData) {
             return;
           }
-          const {options, meta} = assetResponse;
+          const {options, meta} = assetData;
 
           if (!self.dynamicScriptsStore.containsLoaderWithName(meta.scopeName)) {
             yield self.dynamicScriptsStore.addScript(meta.scopeName, meta.scriptUrl);
