@@ -56,16 +56,10 @@ export const use3dMap = (
   const points = useRef<THREE.Points | null>(null);
 
   const aspect = window.innerWidth / window.innerHeight;
+  const controls = useRef<OrbitControls>();
   const camera = useRef(new THREE.PerspectiveCamera(75, aspect, 0.1, 10000));
-  const renderer = useRef(
-    new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      powerPreference: 'high-performance'
-    })
-  );
+  const renderer = useRef<THREE.WebGLRenderer>();
 
-  const controls = useRef(new OrbitControls(camera.current, renderer.current.domElement));
   const activeLinesArray = useRef<Line2[]>([]);
 
   /**
@@ -193,7 +187,7 @@ export const use3dMap = (
       const randomZ =
         Math.pow(Math.random(), PARAMETERS.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
 
-      position[i3 + 0] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+      position[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
       position[i3 + 1] = randomY;
       position[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
     }
@@ -407,7 +401,7 @@ export const use3dMap = (
     }
 
     // Update controls for auto-rotate.
-    if (!updateCameraRotation.current) {
+    if (!updateCameraRotation.current && controls.current) {
       controls.current.update();
     }
 
@@ -418,7 +412,9 @@ export const use3dMap = (
     }
 
     // Render the scene
-    renderer.current.render(scene.current, camera.current);
+    if (renderer.current) {
+      renderer.current.render(scene.current, camera.current);
+    }
 
     // Re-call Animation
     window.requestAnimationFrame(animate);
@@ -459,10 +455,8 @@ export const use3dMap = (
 
       // Prepare rotation of camera animation.
       const startOrientation = camera.current.quaternion.clone();
-      const targetOrientation = camera.current.quaternion
-        // @ts-ignore: hmm...
-        .clone(camera.current.lookAt(targetVector))
-        .normalize();
+      camera.current.lookAt(targetVector);
+      const targetOrientation = camera.current.quaternion.clone().normalize();
 
       // Get the direction for the new location.
       const direction = new THREE.Vector3();
@@ -487,11 +481,13 @@ export const use3dMap = (
         z: targetLocation.z,
 
         onStart: function () {
-          transitionToPlanetFinished.current = false;
-          updateCameraRotation.current = true;
-          controls.current.enabled = false;
-          controls.current.autoRotate = false;
-          controls.current.enablePan = false;
+          if (controls.current) {
+            transitionToPlanetFinished.current = false;
+            updateCameraRotation.current = true;
+            controls.current.enabled = false;
+            controls.current.autoRotate = false;
+            controls.current.enablePan = false;
+          }
         },
         onUpdate: function () {
           camera.current.quaternion
@@ -499,15 +495,17 @@ export const use3dMap = (
             .slerp(targetOrientation, this.progress());
         },
         onComplete: function () {
-          updateCameraRotation.current = false;
-          controls.current.enabled = true;
-          controls.current.enablePan = true;
-          controls.current.autoRotate = true;
-          controls.current.target = targetPlanetLocation;
-          transitionToPlanetFinished.current = true;
+          if (controls.current) {
+            updateCameraRotation.current = false;
+            controls.current.enabled = true;
+            controls.current.enablePan = true;
+            controls.current.autoRotate = true;
+            controls.current.target = targetPlanetLocation;
+            transitionToPlanetFinished.current = true;
 
-          // Handle selecting planet
-          onSelectOdyssey(uuid);
+            // Handle selecting planet
+            onSelectOdyssey(uuid);
+          }
         }
       });
     },
@@ -551,9 +549,11 @@ export const use3dMap = (
    * On window resize handler
    */
   const onWindowResize = useCallback(() => {
-    camera.current.aspect = window.innerWidth / window.innerHeight;
-    camera.current.updateProjectionMatrix();
-    renderer.current.setSize(window.innerWidth, window.innerHeight);
+    if (camera.current && renderer.current) {
+      camera.current.aspect = window.innerWidth / window.innerHeight;
+      camera.current.updateProjectionMatrix();
+      renderer.current.setSize(window.innerWidth, window.innerHeight);
+    }
   }, []);
 
   useEffect(() => {
@@ -574,11 +574,17 @@ export const use3dMap = (
     scene.current.add(ambient);
 
     // Renderer Setup
+    renderer.current = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: 'high-performance'
+    });
     renderer.current.setClearColor(0x222222);
     renderer.current.setSize(window.innerWidth, window.innerHeight);
     renderer.current.setPixelRatio(window.devicePixelRatio);
 
     // Orbit Controls setup
+    controls.current = new OrbitControls(camera.current, renderer.current.domElement);
     controls.current.autoRotate = true;
     controls.current.autoRotateSpeed = 0.3;
     controls.current.enableDamping = true;
@@ -615,7 +621,7 @@ export const use3dMap = (
     buildUniverse();
 
     animate();
-  }, [animate, buildUniverse, createCenterOdyssey, createOdysseys, generateGalaxy]);
+  }, [animate, buildUniverse, canvas, createCenterOdyssey, createOdysseys, generateGalaxy]);
 
   useEffect(() => {
     window.addEventListener('pointermove', onPointerMove);
@@ -629,5 +635,5 @@ export const use3dMap = (
     };
   }, [onMouseDown, onPointerMove, onWindowResize]);
 
-  return {drawConnections, flyToPlanet};
+  return {flyToPlanet};
 };

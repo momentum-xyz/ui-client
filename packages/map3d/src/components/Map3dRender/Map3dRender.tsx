@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, memo, useEffect} from 'react';
 
 import {use3dMap} from '../../hooks';
 import {Map3dPropsInterface} from '../../interfaces';
@@ -27,11 +27,11 @@ const Map3dRender: FC<PropsInterface> = ({
 
   useEffect(() => {
     if (selectedUuid) {
-      flyToPlanet(selectedUuid);
+      flyToPlanet(selectedUuid).then();
     }
   }, [flyToPlanet, selectedUuid]);
 
   return <></>;
 };
 
-export default Map3dRender;
+export default memo(Map3dRender);
