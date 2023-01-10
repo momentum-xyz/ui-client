@@ -29,6 +29,7 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
   return (
     <Map3dCanvas
       centerWallet={sessionStore.wallet}
+      selectedUuid={odysseyInfoStore.nftId}
       items={nftStore.nftItems}
       getConnections={nftStore.getStakedAtOthersByWallet}
       getImageUrl={getImageAbsoluteUrl}

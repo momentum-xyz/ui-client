@@ -1,7 +1,6 @@
 import React, {FC, memo, useEffect, useState} from 'react';
 
 import defaultLoaderPlaceholder from '../../static/images/spinner.svg';
-import defaultErrorPlaceholder from '../../static/images/astronaut.svg';
 import {ComponentSizeInterface} from '../../interfaces';
 
 import * as styled from './Image.styled';
@@ -12,7 +11,6 @@ interface PropsInterface {
   isError?: boolean;
   sizeProps?: ComponentSizeInterface;
   className?: string;
-  errorPlaceholder?: string;
   loaderPlaceholder?: string;
 }
 
@@ -22,7 +20,6 @@ const Image: FC<PropsInterface> = (props) => {
     sizeProps,
     isLoading = false,
     isError = false,
-    errorPlaceholder = defaultErrorPlaceholder,
     loaderPlaceholder = defaultLoaderPlaceholder
   } = props;
 
@@ -38,7 +35,7 @@ const Image: FC<PropsInterface> = (props) => {
           {src && !error ? (
             <styled.Image src={src} alt={src} className="image" onError={() => setError(true)} />
           ) : (
-            <styled.ErroredImage className="image-error" src={errorPlaceholder} />
+            <styled.ErroredImage className="image-error" />
           )}
         </>
       )}
