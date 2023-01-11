@@ -49,6 +49,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {user} = sessionStore;
 
   const worldOwner = nftStore.getNftByUuid(worldStore.worldId);
+  const isSessionUserWorld = worldOwner?.uuid === user?.id;
 
   const {t} = useTranslation();
 
@@ -150,32 +151,34 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
             </styled.OnlineUsers>
             <ToolbarIconList>
-              <Tooltip label={t('labels.bio')} placement="top">
-                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
-                  <Text
-                    className="odyssey-name"
-                    size="m"
-                    text={worldStore?.world?.name}
-                    transform="uppercase"
-                    weight="bold"
-                  />
-                  <ToolbarIcon
-                    title=""
-                    state={{canGoBack: true}}
-                    icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
-                    size="medium"
-                  >
-                    {onlineUsersStore.nftUser?.avatarSrc && (
-                      <Avatar
-                        size="extra-small"
-                        avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
-                        showBorder
-                        showHover
-                      />
-                    )}
-                  </ToolbarIcon>
-                </styled.CurrentOdyssey>
-              </Tooltip>
+              {!isSessionUserWorld && (
+                <Tooltip label={t('labels.bio')} placement="top">
+                  <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
+                    <Text
+                      className="odyssey-name"
+                      size="m"
+                      text={worldStore?.world?.name}
+                      transform="uppercase"
+                      weight="bold"
+                    />
+                    <ToolbarIcon
+                      title=""
+                      state={{canGoBack: true}}
+                      icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
+                      size="medium"
+                    >
+                      {onlineUsersStore.nftUser?.avatarSrc && (
+                        <Avatar
+                          size="extra-small"
+                          avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
+                          showBorder
+                          showHover
+                        />
+                      )}
+                    </ToolbarIcon>
+                  </styled.CurrentOdyssey>
+                </Tooltip>
+              )}
 
               <ToolbarIcon
                 title={t('labels.calendar')}
