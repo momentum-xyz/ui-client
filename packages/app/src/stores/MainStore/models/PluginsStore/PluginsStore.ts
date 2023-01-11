@@ -3,14 +3,15 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {SpaceSubOptionKeyEnum} from '@momentum-xyz/sdk';
 
 import {PluginInterface} from 'core/interfaces';
+import {DynamicScriptsStore} from 'stores/MainStore/models';
 import {
   DynamicScriptLoaderType,
   PluginAttributesManager,
   PluginLoader,
   PluginLoaderModelType,
-  SearchQuery
+  SearchQuery,
+  PluginQueryResult
 } from 'core/models';
-import {DynamicScriptsStore, PluginQueryResult} from 'stores/MainStore/models';
 import {
   api,
   GetPluginsListResponse,

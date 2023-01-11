@@ -26,4 +26,5 @@ export * from './PluginLoader';
 export * from './DynamicScriptLoader';
 export * from './SearchQuery';
 export * from './PluginAttributesManager';
+export * from './PluginQueryResult';
 export * from './Asset3d';

@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-import {PluginQueryResultType} from 'stores/MainStore/models';
+import {PluginQueryResultType} from 'core/models';
 
 import * as styled from './AddPluginDialog.styled';
 
