@@ -199,15 +199,7 @@ const NftStore = types
     get balanceTransferrable(): string {
       return self.balanseFormat(self.balanceTransferrableBN);
     },
-    canBeStaked(amount: number): boolean {
-      try {
-        return self.balanceTransferrableBN.gte(new BN(amount));
-      } catch (err) {
-        console.error(err);
-        return false;
-      }
-    },
-    canBeStakedBN(amount: BN): boolean {
+    canBeStaked(amount: BN): boolean {
       try {
         return self.balanceTransferrableBN.gte(amount);
       } catch (err) {

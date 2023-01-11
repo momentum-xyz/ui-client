@@ -59,7 +59,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     balanceTotal,
     balanceReserved,
     balanceTransferrable,
-    canBeStakedBN,
+    canBeStaked,
     addresses,
     accountOptions,
     nftItems,
@@ -165,7 +165,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     </styled.BalanceEntityContainer>
   ));
 
-  const isBalanceTooLow = !canBeStakedBN(amountAtoms);
+  const isBalanceTooLow = !canBeStaked(amountAtoms);
 
   const isStakingInSelf = nft === myNft;
   const validStringCheck = (val: string): boolean => !val || amountStringValueCheckRegex.test(val);
