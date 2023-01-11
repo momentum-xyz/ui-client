@@ -199,9 +199,9 @@ const NftStore = types
     get balanceTransferrable(): string {
       return self.balanseFormat(self.balanceTransferrableBN);
     },
-    canBeStaked(amount: number): boolean {
+    canBeStaked(amount: BN): boolean {
       try {
-        return self.balanceTransferrableBN.gte(new BN(amount));
+        return self.balanceTransferrableBN.gte(amount);
       } catch (err) {
         console.error(err);
         return false;
@@ -580,7 +580,7 @@ const NftStore = types
         stakedAtOthers: stakedAtOthersAddresses
       };
     }),
-    stake: flow(function* (address: string, amount: number, itemId: number) {
+    stake: flow(function* (address: string, amount: BN, itemId: number) {
       const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
       console.log('Stake', itemId, amount, address);
