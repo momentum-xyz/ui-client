@@ -588,10 +588,7 @@ const NftStore = types
         stakedAtOthers: stakedAtOthersAddresses
       };
     }),
-    stakeBN: flow(function* (address: string, amount: BN, itemId: number) {
-      yield self.stake(address, amount.toNumber(), itemId);
-    }),
-    stake: flow(function* (address: string, amount: number, itemId: number) {
+    stake: flow(function* (address: string, amount: BN, itemId: number) {
       const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
       console.log('Stake', itemId, amount, address);

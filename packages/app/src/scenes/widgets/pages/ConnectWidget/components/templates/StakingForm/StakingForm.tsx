@@ -92,7 +92,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     console.log('onStake', wallet, nftItemId, amountAtoms);
 
     nftStore
-      .stakeBN(wallet, amountAtoms, nftItemId)
+      .stake(wallet, amountAtoms, nftItemId)
       .then(() => {
         console.log('stake success');
 
