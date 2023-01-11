@@ -207,6 +207,14 @@ const NftStore = types
         return false;
       }
     },
+    canBeStakedBN(amount: BN): boolean {
+      try {
+        return self.balanceTransferrableBN.gte(amount);
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
+    },
     get accountAccumulatedRewards(): string {
       return self.balanseFormat(self.accumulatedRewards);
     },
@@ -579,6 +587,9 @@ const NftStore = types
         stakedAtWallet: stakedAtMeAddresses,
         stakedAtOthers: stakedAtOthersAddresses
       };
+    }),
+    stakeBN: flow(function* (address: string, amount: BN, itemId: number) {
+      yield self.stake(address, amount.toNumber(), itemId);
     }),
     stake: flow(function* (address: string, amount: number, itemId: number) {
       const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
