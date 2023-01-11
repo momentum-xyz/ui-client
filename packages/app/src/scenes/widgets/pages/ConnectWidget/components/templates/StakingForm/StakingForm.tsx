@@ -63,7 +63,6 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     addresses,
     accountOptions,
     nftItems,
-    chainDecimals,
     tokenSymbol
   } = nftStore;
 
@@ -75,12 +74,9 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
 
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
   const [amountString, setAmountString] = useState(DEFAULT_STAKING_AMOUNT.toString());
-  const [amountBN, setAmountBN] = useState(new BN(DEFAULT_STAKING_AMOUNT));
-  const [decimalAmount, setDecimalAmount] = useState(0);
-  const amountStringValueCheckRegex = /^\d+(\.|,)?\d*$/;
+  const amountStringValueCheckRegex = /^\d{1,12}((\.|,)\d{0,4})?$/;
 
-  const multiplier = Math.pow(10, chainDecimals || 12);
-  const amountAtoms = amountBN.mul(new BN(multiplier)).add(new BN(decimalAmount * multiplier));
+  const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, 9)));
 
   const nft = nftItems.find((nft) => nft.id === nftItemId);
   const myNft = nftItems.find((nft) => nft.owner === wallet);
@@ -127,7 +123,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
               headerIconName="alert"
               title={t('staking.stakeSuccessTitle')}
               text={t('staking.stakeSuccess', {
-                amount: `${amountBN.toString()}${decimalAmount ? `.${decimalAmount}` : ''}`,
+                amount: amountString,
                 name: nft?.name
               })}
               showCloseButton
@@ -154,9 +150,6 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     if (!validStringCheck(val)) {
       return;
     }
-    const [whole, decimal] = val.split(/[,.]/);
-    setDecimalAmount(decimal && +decimal ? Number(`0.${decimal}`) : 0);
-    setAmountBN(new BN(whole));
     setAmountString(val);
   };
 
