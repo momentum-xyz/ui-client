@@ -59,6 +59,17 @@ const WorldStore = types.compose(
         return self.worldId === getRootStore(self).sessionStore.userId;
       }
     }))
+    .views((self) => ({
+      get isCurrentUserWorldAdmin(): boolean {
+        if (self.isMyWorld) {
+          return true;
+        }
+        const worldNft = getRootStore(self).nftStore.getNftByUuid(self.worldId);
+        return worldNft?.owner
+          ? getRootStore(self).nftStore.mutualStakingAddresses.includes(worldNft.owner)
+          : false;
+      }
+    }))
 );
 
 export {WorldStore};

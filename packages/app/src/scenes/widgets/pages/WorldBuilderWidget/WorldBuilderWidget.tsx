@@ -8,22 +8,14 @@ import {useStore} from 'shared/hooks';
 import * as styled from './WorldBuilderWidget.styled';
 
 const WorldBuilderWidget: FC = () => {
-  const {mainStore, nftStore} = useStore();
+  const {mainStore} = useStore();
   const {worldStore} = mainStore;
   const {worldId} = worldStore;
 
   const history = useHistory();
 
-  const worldNft = nftStore.getNftByUuid(worldId);
-  const isAdmin =
-    worldStore.isMyWorld ||
-    (worldNft?.owner ? nftStore.mutualStakingAddresses.includes(worldNft.owner) : false);
+  const isAdmin = worldStore.isCurrentUserWorldAdmin;
 
-  console.log('WorldBuilderWidget', {
-    isAdmin,
-    friends: nftStore.mutualStakingAddresses,
-    wallet: worldNft?.owner
-  });
   const collapsedItem: ToolbarIconInterface = {
     title: 'Odyssey Creator',
     icon: 'planet',
