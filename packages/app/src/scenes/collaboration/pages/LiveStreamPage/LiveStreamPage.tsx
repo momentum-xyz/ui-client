@@ -14,7 +14,7 @@ import * as styled from './LiveStreamPage.styled';
 const LiveStreamPage: FC = () => {
   const {mainStore, collaborationStore} = useStore();
   const {spaceStore} = collaborationStore;
-  const {favoriteStore, liveStreamStore} = mainStore;
+  const {liveStreamStore} = mainStore;
   const {space} = spaceStore;
 
   const history = useHistory();
@@ -37,8 +37,8 @@ const LiveStreamPage: FC = () => {
         subtitle={t('liveStream.subtitle')}
         isAdmin={spaceStore.isAdmin}
         spaceId={space.id}
-        isSpaceFavorite={favoriteStore.isFavorite(space.id)}
-        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+        isSpaceFavorite={false}
+        toggleIsSpaceFavorite={() => {}}
         editSpaceHidden
         isChatOpen={false}
         toggleChat={() => {}}

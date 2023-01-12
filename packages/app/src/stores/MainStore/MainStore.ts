@@ -3,14 +3,7 @@ import {ResetModel} from '@momentum-xyz/core';
 
 import {PluginsStore} from 'stores/MainStore/models/PluginsStore';
 
-import {
-  ThemeStore,
-  SentryStore,
-  UnityStore,
-  WorldStore,
-  FavoriteStore,
-  LiveStreamStore
-} from './models';
+import {ThemeStore, SentryStore, UnityStore, WorldStore, LiveStreamStore} from './models';
 
 const MainStore = types.compose(
   ResetModel,
@@ -20,7 +13,6 @@ const MainStore = types.compose(
       sentryStore: types.optional(SentryStore, {}),
       unityStore: types.optional(UnityStore, {}),
       worldStore: types.optional(WorldStore, {}),
-      favoriteStore: types.optional(FavoriteStore, {}),
       liveStreamStore: types.optional(LiveStreamStore, {}),
       pluginsStore: types.optional(PluginsStore, {})
     })
