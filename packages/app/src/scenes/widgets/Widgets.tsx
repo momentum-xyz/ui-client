@@ -49,7 +49,6 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {user} = sessionStore;
 
   const worldOwner = nftStore.getNftByUuid(worldStore.worldId);
-  const isSessionUserWorld = worldOwner?.uuid === user?.id;
 
   const {t} = useTranslation();
 
@@ -151,7 +150,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
             </styled.OnlineUsers>
             <ToolbarIconList>
-              {!isSessionUserWorld && (
+              {!worldStore.isMyWorld && (
                 <Tooltip label={t('labels.bio')} placement="top">
                   <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
                     <Text
