@@ -15,8 +15,8 @@ import * as styled from './StageModePIPWidget.styled';
 const Draggable: any = DraggableContent;
 
 const StageModePIPWidget: React.FC = () => {
-  const {mainStore} = useStore();
-  const {agoraStore_OLD} = mainStore;
+  const {agoraStore_OLD} = useStore();
+
   const history = useHistory();
   const {t} = useTranslation();
 

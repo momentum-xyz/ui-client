@@ -20,6 +20,7 @@ import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
 import {SessionStore} from './SessionStore';
 import {AgoraStore} from './AgoraStore';
+import {AgoraStore_OLD} from './AgoraStore_OLD';
 
 const RootStore = types
   .model('RootStore', {
@@ -30,6 +31,7 @@ const RootStore = types
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
+    agoraStore_OLD: types.optional(AgoraStore_OLD, {}),
 
     /* Connect independent stores */
     signInAccountStore: types.optional(SignInAccountStore, {}),

@@ -9,7 +9,6 @@ import {
   UnityStore,
   WorldStore,
   FavoriteStore,
-  AgoraStore,
   LiveStreamStore
 } from './models';
 
@@ -17,7 +16,6 @@ const MainStore = types.compose(
   ResetModel,
   types
     .model('MainStore', {
-      agoraStore_OLD: types.optional(AgoraStore, {}),
       themeStore: types.optional(ThemeStore, {}),
       sentryStore: types.optional(SentryStore, {}),
       unityStore: types.optional(UnityStore, {}),

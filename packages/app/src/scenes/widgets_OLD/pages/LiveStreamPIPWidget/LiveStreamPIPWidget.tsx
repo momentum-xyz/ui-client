@@ -13,8 +13,8 @@ import {VideoPanel} from 'ui-kit';
 import * as styled from './LiveStreamPIPWidget.styled';
 
 const LiveStreamPIPWidget: React.FC = () => {
-  const {mainStore, flightStore} = useStore();
-  const {agoraStore_OLD, liveStreamStore} = mainStore;
+  const {mainStore, flightStore, agoraStore_OLD} = useStore();
+  const {liveStreamStore} = mainStore;
 
   const history = useHistory();
   const {t} = useTranslation();

@@ -12,10 +12,10 @@ import {AgoraStageModeStore} from './AgoraStageModeStore';
 import {AgoraScreenShareStore} from './AgoraScreenShareStore';
 
 // TODO: Removal. It is old store.
-const AgoraStore = types
+const AgoraStore_OLD = types
   .compose(
     ResetModel,
-    types.model('AgoraStore', {
+    types.model('AgoraStore_OLD', {
       agoraMeetingStore: types.optional(AgoraMeetingStore, {}),
       agoraStageModeStore: types.optional(AgoraStageModeStore, {}),
       agoraScreenShareStore: types.optional(AgoraScreenShareStore, {}),
@@ -271,4 +271,4 @@ const AgoraStore = types
     }
   }));
 
-export {AgoraStore};
+export {AgoraStore_OLD};

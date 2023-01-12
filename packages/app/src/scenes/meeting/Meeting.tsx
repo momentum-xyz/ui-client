@@ -13,8 +13,7 @@ import * as styled from './Meeting.styled';
 
 const Meeting: FC = () => {
   const rootStore = useStore();
-  const {mainStore, collaborationStore} = rootStore;
-  const {agoraStore_OLD} = mainStore;
+  const {collaborationStore, agoraStore_OLD} = rootStore;
   const {agoraMeetingStore} = agoraStore_OLD;
   const {spaceStore} = collaborationStore;
 

@@ -20,8 +20,8 @@ interface PropsInterface {
 }
 
 const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
-  const {mainStore, collaborationStore} = useStore();
-  const {agoraStore_OLD, favoriteStore} = mainStore;
+  const {mainStore, collaborationStore, agoraStore_OLD} = useStore();
+  const {favoriteStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {spaceStore} = collaborationStore;
   const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;

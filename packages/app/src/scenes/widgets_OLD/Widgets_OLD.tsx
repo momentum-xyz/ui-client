@@ -26,9 +26,10 @@ const Widgets_OLD: FC = () => {
     mainStore,
     widgetStore_OLD,
     flightStore,
-    odysseyCreatorStore: worldBuilderStore
+    odysseyCreatorStore: worldBuilderStore,
+    agoraStore_OLD
   } = useStore();
-  const {worldStore, agoraStore_OLD, unityStore} = mainStore;
+  const {worldStore, unityStore} = mainStore;
   const {agoraStageModeStore} = agoraStore_OLD;
   const {
     stakingStore,

@@ -21,8 +21,8 @@ import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
-  const {collaborationStore, mainStore} = rootStore;
-  const {agoraStore_OLD, liveStreamStore} = mainStore;
+  const {collaborationStore, mainStore, agoraStore_OLD} = rootStore;
+  const {liveStreamStore} = mainStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {
     newDeviceDialog,

@@ -6,8 +6,7 @@ import {useStore} from 'shared/hooks';
 
 const GrabTablePage: FC = () => {
   const rootStore = useStore();
-  const {mainStore} = rootStore;
-  const {agoraStore_OLD} = mainStore;
+  const {agoraStore_OLD} = rootStore;
 
   const {spaceId} = useParams<{spaceId: string}>();
 

@@ -13,8 +13,8 @@ import {FlightPilot, PassengerAlert} from './components';
 import * as styled from './FlyWithMePage.styled';
 
 const FlyWithMePage: FC = () => {
-  const {mainStore, sessionStore, flightStore} = useStore();
-  const {agoraStore_OLD, unityStore} = mainStore;
+  const {mainStore, sessionStore, flightStore, agoraStore_OLD} = useStore();
+  const {unityStore} = mainStore;
   const {flyWithMeStore} = flightStore;
   const {pilot} = flyWithMeStore;
 
