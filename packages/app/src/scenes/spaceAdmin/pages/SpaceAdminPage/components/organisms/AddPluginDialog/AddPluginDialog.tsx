@@ -14,30 +14,30 @@ interface PropsInterface {
 }
 
 const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
-  const {mainStore} = useStore();
-  const {pluginsStore} = mainStore;
-  const {searchedPlugins} = pluginsStore;
+  const {spaceAdminStore} = useStore();
+  const {managePluginsStore} = spaceAdminStore;
+  const {searchedPlugins} = managePluginsStore;
 
   const {t} = useTranslation();
 
   const [selectedPlugin, setSelectedPlugin] = useState<PluginQueryResultType>();
 
-  const search = useDebouncedCallback(pluginsStore.searchPlugins, 500, []);
+  const search = useDebouncedCallback(managePluginsStore.searchPlugins, 500, []);
 
   useEffect(() => {
     return () => {
-      pluginsStore.searchQuery.resetModel();
+      managePluginsStore.searchQuery.resetModel();
       search();
     };
-  }, [pluginsStore, search]);
+  }, [managePluginsStore, search]);
 
   const onInputChange = useCallback(
     (value: string) => {
       setSelectedPlugin(undefined);
-      pluginsStore.searchQuery.setQuery(value);
+      managePluginsStore.searchQuery.setQuery(value);
       search();
     },
-    [pluginsStore, search]
+    [managePluginsStore, search]
   );
 
   return (
@@ -51,7 +51,7 @@ const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
             return;
           }
 
-          await pluginsStore.addPluginToSpace(spaceId, selectedPlugin.plugin_uuid);
+          await managePluginsStore.addPluginToSpace(spaceId, selectedPlugin.plugin_uuid);
           onClose();
         }
       }}
@@ -65,11 +65,11 @@ const AddPluginDialog: FC<PropsInterface> = ({spaceId, onClose}) => {
       <styled.Container>
         <Input
           label={t('labels.search')}
-          defaultValue={pluginsStore.searchQuery.query}
+          defaultValue={managePluginsStore.searchQuery.query}
           onChange={onInputChange}
           autoFocus
         />
-        {pluginsStore.searchedPlugins.length > 0 && (
+        {managePluginsStore.searchedPlugins.length > 0 && (
           <Dropdown
             placeholder={t('placeholders.selectPlugin')}
             variant="secondary"

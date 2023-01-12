@@ -20,10 +20,10 @@ import {
   SpaceSubOptionResponse
 } from 'api';
 
-const PluginsStore = types
+const ManagePluginsStore = types
   .compose(
     ResetModel,
-    types.model('PluginsStore', {
+    types.model('ManagePluginsStore', {
       spacePluginLoaders: types.array(PluginLoader),
       searchedPlugins: types.array(PluginQueryResult),
       searchQuery: types.optional(SearchQuery, {}),
@@ -170,4 +170,4 @@ const PluginsStore = types
     }
   }));
 
-export {PluginsStore};
+export {ManagePluginsStore};
