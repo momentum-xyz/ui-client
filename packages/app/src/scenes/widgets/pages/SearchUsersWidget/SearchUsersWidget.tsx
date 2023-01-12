@@ -137,15 +137,11 @@ const SearchUsersWidget: FC = () => {
                   odyssey={onlineUsersStore.odyssey}
                   alreadyConnected={isAlreadyConnected}
                   onVisit={handleOdysseyTeleport}
-                  visitDisabled={
-                    !onlineUsersStore.nftId || onlineUsersStore.odyssey?.uuid === unityStore.worldId
-                  }
+                  visitDisabled={onlineUsersStore.odyssey?.uuid === unityStore.worldId}
                   onHighFive={handleOdysseyHighFive}
                   onConnect={handleConnect}
                   connectDisabled={
-                    !onlineUsersStore.nftId ||
-                    onlineUsersStore.odyssey?.uuid === unityStore.worldId ||
-                    isAlreadyConnected
+                    onlineUsersStore.odyssey?.uuid === unityStore.worldId || isAlreadyConnected
                   }
                   onCoCreate={() => {}}
                   coCreateDisabled
