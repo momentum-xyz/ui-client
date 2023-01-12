@@ -37,13 +37,8 @@ const SearchUsersWidget: FC = () => {
     onlineUsersStore.searchUsers('');
   };
 
-  const handleTeleport = (userId: string) => {
-    handleClose();
-    unityInstanceStore.teleportToUser(userId);
-  };
-
-  const handleOdysseyTeleport = () => {
-    const worldId = onlineUsersStore.odyssey?.uuid || '';
+  const handleOdysseyTeleport = (id?: string) => {
+    const worldId = id || onlineUsersStore.odyssey?.uuid || '';
     handleClose();
 
     history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
@@ -75,6 +70,13 @@ const SearchUsersWidget: FC = () => {
     }
   };
 
+  const listedUsers =
+    onlineUsersStore.searchedUsers && onlineUsersStore.searchedUsers.length
+      ? onlineUsersStore.searchedUsers
+      : !onlineUsersStore.query
+      ? onlineUsersStore.allUsers
+      : [];
+
   return (
     <Portal>
       <styled.Modal data-testid="SearchUsersWidget-test">
@@ -96,30 +98,17 @@ const SearchUsersWidget: FC = () => {
                 onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
               />
               <styled.List className="noScrollIndicator">
-                {onlineUsersStore.searchedUsers && onlineUsersStore.searchedUsers.length > 0
-                  ? onlineUsersStore.searchedUsers.map((user) => (
-                      <OnlineUser
-                        key={user.id}
-                        user={user}
-                        onTeleportUser={handleTeleport}
-                        onUserClick={handleUserClick}
-                        onHighFiveUser={handleHighFive}
-                        isCurrentUser={user.id === sessionStore.userId}
-                        isOwner={user?.id === unityStore.worldId}
-                      />
-                    ))
-                  : !onlineUsersStore.query &&
-                    onlineUsersStore.allUsers.map((user) => (
-                      <OnlineUser
-                        key={user.id}
-                        user={user}
-                        onTeleportUser={handleTeleport}
-                        onUserClick={handleUserClick}
-                        onHighFiveUser={handleHighFive}
-                        isCurrentUser={user.id === sessionStore.userId}
-                        isOwner={user?.id === unityStore.worldId}
-                      />
-                    ))}
+                {listedUsers.map((user) => (
+                  <OnlineUser
+                    key={user.id}
+                    user={user}
+                    onTeleportUser={() => handleOdysseyTeleport(user.id)}
+                    onUserClick={handleUserClick}
+                    onHighFiveUser={handleHighFive}
+                    isCurrentUser={user.id === sessionStore.userId}
+                    isOwner={user?.id === unityStore.worldId}
+                  />
+                ))}
               </styled.List>
             </styled.Container>
           </PanelLayout>
