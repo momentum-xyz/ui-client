@@ -24,6 +24,7 @@ import {SessionStore} from './SessionStore';
 import {AgoraStore} from './AgoraStore';
 import {AgoraStore_OLD} from './AgoraStore_OLD';
 import {LiveStreamStore_OLD} from './LiveStreamStore_OLD';
+import {SentryStore} from './SentryStore';
 
 const RootStore = types
   .model('RootStore', {
@@ -35,24 +36,27 @@ const RootStore = types
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
-    agoraStore_OLD: types.optional(AgoraStore_OLD, {}),
-    liveStreamStore_OLD: types.optional(LiveStreamStore_OLD, {}),
+    sentryStore: types.optional(SentryStore, {}),
 
     /* Connect independent stores */
     unityStore: types.optional(UnityStore, {}),
     signInAccountStore: types.optional(SignInAccountStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
     odysseyStore: types.optional(OdysseyStore, {}),
+    objectStore: types.optional(ObjectStore, {}),
+    widgetsStore: types.optional(RootWidgetsStore, {}),
+    odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
+    magicStore: types.optional(MagicStore, {}),
+
+    /* TODO: Removal or refactoring.  */
+    agoraStore_OLD: types.optional(AgoraStore_OLD, {}),
+    widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),
+    liveStreamStore_OLD: types.optional(LiveStreamStore_OLD, {}),
     collaborationStore: types.optional(RootCollaborationStore, {}),
     meetingStore: types.optional(RootMeetingStore, {}),
     flightStore: types.optional(RootFlightStore, {}),
     spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
-    widgetsStore: types.optional(RootWidgetsStore, {}),
-    widgetStore_OLD: types.optional(RootWidgetStore_OLD, {}),
-    odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
-    magicStore: types.optional(MagicStore, {}),
-    videoStore: types.optional(VideoStore, {}),
-    objectStore: types.optional(ObjectStore, {})
+    videoStore: types.optional(VideoStore, {})
   })
   .actions((self) => ({
     async initApplication() {
