@@ -11,9 +11,13 @@ import {ChangeImageDialog} from 'scenes/object/components';
 import * as styled from './ImagePage.styled';
 
 const ImagePage: FC = () => {
-  const {objectStore} = useStore();
+  const {objectStore, mainStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content, imageSrc} = assetStore;
+  const {worldStore} = mainStore;
+
+  const isAdmin = worldStore.isCurrentUserWorldAdmin;
+
   const history = useHistory();
   const {t} = useTranslation();
 
@@ -36,9 +40,11 @@ const ImagePage: FC = () => {
             />
           </styled.Title>
         </styled.HeaderElement>
-        <styled.HeaderElement className="button">
-          <Button label={t('actions.changeImage')} onClick={changeTileDialog.open} />
-        </styled.HeaderElement>
+        {isAdmin && (
+          <styled.HeaderElement className="button">
+            <Button label={t('actions.changeImage')} onClick={changeTileDialog.open} />
+          </styled.HeaderElement>
+        )}
         <styled.HeaderElement className="right">
           <styled.Button>
             <SvgButton
