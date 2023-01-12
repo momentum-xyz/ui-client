@@ -21,6 +21,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './OdysseyPage.styled';
 const OdysseyPage: FC = () => {
   const {unityStore} = useStore();
+  const {unityInstanceStore} = unityStore;
 
   // const {widgetsStore} = useStore();
   //const {socialStore} = widgetsStore;
@@ -43,7 +44,7 @@ const OdysseyPage: FC = () => {
 
   useEffect(() => {
     if (!matchPath(location.pathname, ROUTES.odyssey.creator.base)) {
-      unityStore.closeAndResetObjectMenu();
+      unityInstanceStore.closeAndResetObjectMenu();
     }
   }, [location.pathname, unityStore]);
 

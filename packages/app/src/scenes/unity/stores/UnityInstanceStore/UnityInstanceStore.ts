@@ -10,8 +10,8 @@ import {UnityService} from 'shared/services';
 const DEFAULT_UNITY_VOLUME = 0.75;
 const UNITY_VOLUME_STEP = 0.1;
 
-const UnityStore = types
-  .model('UnityStore', {
+const UnityInstanceStore = types
+  .model('UnityInstanceStore', {
     isInitialized: false,
     isTeleportReady: false,
     muted: false,
@@ -194,17 +194,6 @@ const UnityStore = types
       self.selectedObjectId = '';
       self.gizmoMode = GizmoTypeEnum.POSITION;
     }
-  }))
-  .views((self) => ({
-    get isUnityAvailable(): boolean {
-      return self.isTeleportReady;
-    },
-    get isPaused(): boolean {
-      return UnityService.isPaused;
-    },
-    get isBuildMode(): boolean {
-      return UnityService.isBuildMode;
-    }
   }));
 
-export {UnityStore};
+export {UnityInstanceStore};

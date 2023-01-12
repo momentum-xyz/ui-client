@@ -13,31 +13,31 @@ import * as styled from './CalendarWidget.styled';
 import {EventForm, TabBarButtons} from './components';
 
 const CalendarWidget: FC = () => {
-  const {widgetsStore, mainStore, unityStore, sessionStore} = useStore();
+  const {widgetsStore, unityStore, sessionStore} = useStore();
+  const {unityInstanceStore, unityWorldStore} = unityStore;
   const {calendarStore} = widgetsStore;
   const {eventList, deleteConfirmationDialog} = calendarStore;
-  const {worldStore} = mainStore;
 
   const {t} = useTranslation();
   const theme = useTheme();
 
   useEffect(() => {
-    eventList.fetchSpaceEvents(worldStore.worldId);
-    unityStore.changeKeyboardControl(false);
+    eventList.fetchSpaceEvents(unityWorldStore.worldId);
+    unityInstanceStore.changeKeyboardControl(false);
 
     return () => {
-      unityStore.changeKeyboardControl(true);
+      unityInstanceStore.changeKeyboardControl(true);
       eventList.resetModel();
     };
-  }, [calendarStore, eventList, worldStore.worldId]);
+  }, [calendarStore, eventList, unityInstanceStore, unityWorldStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
   };
 
   const handleEventDelete = async () => {
-    if (worldStore.worldId) {
-      if (await calendarStore.removeEvent(worldStore.worldId)) {
+    if (unityWorldStore.worldId) {
+      if (await calendarStore.removeEvent(unityWorldStore.worldId)) {
         toast.info(
           <ToastContent
             headerIconName="calendar"
@@ -66,7 +66,7 @@ const CalendarWidget: FC = () => {
         <PanelLayout
           componentSize={{width: '1063px'}}
           onClose={calendarStore.dialog.close}
-          title={worldStore.world?.name}
+          title={unityWorldStore.world?.name}
           headerStyle="uppercase"
           headerType="h2"
           headerIconName="calendar"
@@ -77,7 +77,7 @@ const CalendarWidget: FC = () => {
         >
           <styled.InnerContainer>
             <styled.FormButton
-              disabled={!worldStore.isMyWorld}
+              disabled={!unityWorldStore.isMyWorld}
               label={t('calendar.formButton')}
               variant="primary"
               height="medium-height"

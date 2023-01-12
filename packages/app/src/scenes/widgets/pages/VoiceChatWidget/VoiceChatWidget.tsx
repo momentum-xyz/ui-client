@@ -9,16 +9,16 @@ import {VoiceChatPanel} from './components';
 import * as styled from './VoiceChatWidget.styled';
 
 const VoiceChatWidget: FC = () => {
-  const {widgetsStore, agoraStore, sessionStore, mainStore} = useStore();
+  const {widgetsStore, agoraStore, sessionStore, unityStore} = useStore();
   const {voiceChatStore} = widgetsStore;
   const {agoraVoiceChatStore} = agoraStore;
-  const {worldStore} = mainStore;
+  const {unityWorldStore} = unityStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    agoraStore.init(worldStore.worldId, sessionStore.userId);
-  }, [agoraStore, worldStore.worldId, sessionStore]);
+    agoraStore.init(unityWorldStore.worldId, sessionStore.userId);
+  }, [agoraStore, unityWorldStore.worldId, sessionStore]);
 
   const handleClose = useCallback(async () => {
     if (agoraVoiceChatStore.hasJoined) {

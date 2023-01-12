@@ -25,7 +25,7 @@ const AppLayers: FC<PropsInterface> = ({
 
   const theme = useTheme();
 
-  if (withUnity && !unityStore.isTeleportReady) {
+  if (withUnity && !unityStore.isUnityAvailable) {
     return <></>;
   }
 

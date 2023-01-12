@@ -30,6 +30,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const App: FC = () => {
   const {configStore, authStore, themeStore, initApplication, unityStore, sentryStore} = useStore();
   const {errorCode: configLoadingErrorCode} = configStore;
+  const {unityInstanceStore} = unityStore;
 
   const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
@@ -77,9 +78,9 @@ const App: FC = () => {
     if (configStore.isConfigReady) {
       authStore.init();
       sentryStore.init();
-      unityStore.init();
+      unityInstanceStore.init();
     }
-  }, [authStore, configStore.isConfigReady, unityStore, sentryStore]);
+  }, [authStore, configStore.isConfigReady, unityInstanceStore, sentryStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
 

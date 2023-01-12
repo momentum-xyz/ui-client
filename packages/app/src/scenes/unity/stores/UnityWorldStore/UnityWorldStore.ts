@@ -13,11 +13,10 @@ import {Space} from 'core/models';
 import {getRootStore} from 'core/utils';
 
 // TODO: Use this store a little bit more :)
-// It is a main store for current world
-const WorldStore = types.compose(
+const UnityWorldStore = types.compose(
   ResetModel,
   types
-    .model('WorldStore', {
+    .model('UnityWorldStore', {
       worldId: types.optional(types.string, ''),
       world: types.maybeNull(Space),
       worldConfigRequest: types.optional(RequestModel, {}),
@@ -61,4 +60,4 @@ const WorldStore = types.compose(
     }))
 );
 
-export {WorldStore};
+export {UnityWorldStore};

@@ -17,6 +17,7 @@ const NotificationsWidget: FC = () => {
   const {widgetsStore, unityStore, nftStore, authStore} = useStore();
   const {notificationsStore} = widgetsStore;
   const {dialog, notifications} = notificationsStore;
+  const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -61,7 +62,7 @@ const NotificationsWidget: FC = () => {
                 item={item}
                 onTeleport={() => {
                   history.replace(generatePath(ROUTES.odyssey.base, {worldId: item.uuid}));
-                  unityStore.loadWorldById(item.uuid, authStore.token);
+                  unityInstanceStore.loadWorldById(item.uuid, authStore.token);
                 }}
                 onConnect={() => {}}
                 onAttend={(nft) => {

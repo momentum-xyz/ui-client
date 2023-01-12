@@ -8,15 +8,15 @@ import {useStore} from 'shared/hooks';
 import * as styled from './WorldBuilderWidget.styled';
 
 const WorldBuilderWidget: FC = () => {
-  const {mainStore, nftStore} = useStore();
-  const {worldStore} = mainStore;
-  const {worldId} = worldStore;
+  const {unityStore, nftStore} = useStore();
+  const {unityWorldStore} = unityStore;
+  const {worldId} = unityWorldStore;
 
   const history = useHistory();
 
   const worldNft = nftStore.getNftByUuid(worldId);
   const isAdmin =
-    worldStore.isMyWorld ||
+    unityWorldStore.isMyWorld ||
     (worldNft?.owner ? nftStore.mutualStakingAddresses.includes(worldNft.owner) : false);
 
   console.log('WorldBuilderWidget', {

@@ -6,14 +6,14 @@ import {useStore} from 'shared/hooks';
 import * as styled from './FlyToMeWidget.styled';
 
 const FlyToMeWidget: FC = () => {
-  const {mainStore, widgetsStore} = useStore();
+  const {unityStore, widgetsStore} = useStore();
+  const {unityWorldStore} = unityStore;
   const {flyToMeStore} = widgetsStore;
-  const {worldStore} = mainStore;
 
   useEffect(() => {
-    flyToMeStore.flyToMe(worldStore.worldId);
+    flyToMeStore.flyToMe(unityWorldStore.worldId);
     flyToMeStore.dialog.close();
-  }, [flyToMeStore, worldStore.worldId]);
+  }, [flyToMeStore, unityWorldStore.worldId]);
 
   return <styled.Container data-testid="HomePage-test" />;
 };

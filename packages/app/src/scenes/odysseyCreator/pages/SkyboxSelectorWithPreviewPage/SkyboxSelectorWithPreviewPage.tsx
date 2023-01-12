@@ -16,6 +16,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {items, selectedItem, currentItem, selectItem, saveItem} = skyboxSelectorStore;
+  const {unityInstanceStore} = unityStore;
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -48,7 +49,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   key={item.id + idx}
                   onClick={() => {
                     selectItem(item);
-                    unityStore.changeSkybox(item.id);
+                    unityInstanceStore.changeSkybox(item.id);
                   }}
                 >
                   <styled.PreviewImg src={item.image} />

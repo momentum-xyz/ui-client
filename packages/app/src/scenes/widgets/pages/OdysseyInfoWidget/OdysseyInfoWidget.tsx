@@ -11,8 +11,8 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const OdysseyInfoWidget: FC = () => {
-  const {authStore, nftStore, widgetsStore, mainStore, objectStore, unityStore} = useStore();
-  const {worldStore} = mainStore;
+  const {authStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
+  const {unityInstanceStore, unityWorldStore} = unityStore;
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey} = odysseyInfoStore;
   const {assetStore} = objectStore;
@@ -27,7 +27,7 @@ const OdysseyInfoWidget: FC = () => {
       matchPath(history.location.pathname, ROUTES.odyssey.object.root)
     ) {
       history.replace(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}));
-      unityStore.loadWorldById(assetStore.dockWorldId, authStore.token);
+      unityInstanceStore.loadWorldById(assetStore.dockWorldId, authStore.token);
       return;
     }
 
@@ -39,7 +39,7 @@ const OdysseyInfoWidget: FC = () => {
     history,
     odyssey?.uuid,
     odysseyInfoStore.widget,
-    unityStore
+    unityInstanceStore
   ]);
 
   const handleConnect = useCallback(() => {
@@ -63,10 +63,10 @@ const OdysseyInfoWidget: FC = () => {
         odysseyInfoStore.resetModel();
 
         if (
-          worldStore.worldId &&
+          unityWorldStore.worldId &&
           matchPath(history.location.pathname, ROUTES.odyssey.object.root)
         ) {
-          history.push(generatePath(ROUTES.odyssey.base, {worldId: worldStore.worldId}));
+          history.push(generatePath(ROUTES.odyssey.base, {worldId: unityWorldStore.worldId}));
         }
       }}
       showCloseButton

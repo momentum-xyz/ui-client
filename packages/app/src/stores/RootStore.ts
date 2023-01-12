@@ -1,6 +1,6 @@
 import {Instance, types} from 'mobx-state-tree';
 
-import {UnityStore} from 'scenes/unity/stores/UnityStore';
+import {UnityStore} from 'scenes/unity/stores';
 import {SignInAccountStore} from 'scenes/auth/stores/SignInAccountStore';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
@@ -17,7 +17,6 @@ import {ObjectStore} from 'scenes/object/stores';
 
 import {NftStore} from './NftStore';
 import {AuthStore} from './AuthStore';
-import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
 import {ThemeStore} from './ThemeStore';
 import {SessionStore} from './SessionStore';
@@ -33,7 +32,6 @@ const RootStore = types
     nftStore: types.optional(NftStore, {}),
     themeStore: types.optional(ThemeStore, {}),
     authStore: types.optional(AuthStore, {}),
-    mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
     sentryStore: types.optional(SentryStore, {}),
@@ -69,8 +67,8 @@ const RootStore = types
       self.themeStore.init();
     },
     unityLoaded(worldId: string): void {
-      self.unityStore.teleportIsReady();
-      self.mainStore.worldStore.init(worldId);
+      self.unityStore.unityInstanceStore.teleportIsReady();
+      self.unityStore.unityWorldStore.init(worldId);
     }
   }));
 

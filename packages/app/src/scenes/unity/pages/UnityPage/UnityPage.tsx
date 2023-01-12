@@ -32,13 +32,12 @@ const UnityContextCSS = {
 const UnityPage: FC = () => {
   const {
     unityStore,
-    mainStore,
     authStore,
     unityLoaded,
     sessionStore,
     odysseyCreatorStore: worldBuilderStore
   } = useStore();
-  const {worldStore} = mainStore;
+  const {unityWorldStore, unityInstanceStore} = unityStore;
   const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();
@@ -47,9 +46,9 @@ const UnityPage: FC = () => {
   const location = useLocation();
 
   const isBuilderMode =
-    !!worldStore.worldId &&
+    !!unityWorldStore.worldId &&
     location.pathname.includes(
-      generatePath(ROUTES.odyssey.creator.base, {worldId: worldStore.worldId})
+      generatePath(ROUTES.odyssey.creator.base, {worldId: unityWorldStore.worldId})
     );
 
   // TODO: FIXME
@@ -71,14 +70,14 @@ const UnityPage: FC = () => {
     console.log(`Unity worldId: ${worldId}`);
 
     if (worldId) {
-      await unityStore.loadWorldById(worldId, authStore.token);
+      await unityInstanceStore.loadWorldById(worldId, authStore.token);
     } else {
       console.error(`There is no worldId in route.`);
     }
   });
 
   useUnityEvent('TeleportReady', () => {
-    const worldId = unityStore.getCurrentWorld();
+    const worldId = unityInstanceStore.getCurrentWorld();
     if (worldId) {
       unityLoaded(worldId);
     }
@@ -95,7 +94,7 @@ const UnityPage: FC = () => {
   useUnityEvent('ClickObjectEvent', (spaceId: string) => {
     history.push({
       pathname: generatePath(ROUTES.odyssey.object.root, {
-        worldId: worldStore.worldId,
+        worldId: unityWorldStore.worldId,
         objectId: spaceId
       })
     });
@@ -104,7 +103,7 @@ const UnityPage: FC = () => {
   useUnityEvent('EditObjectEvent', (spaceId: string) => {
     console.log('EditObjectEvent', spaceId);
     // This even comes faster than actual click, so delay
-    setTimeout(() => unityStore.onUnityObjectClick(spaceId), 500);
+    setTimeout(() => unityInstanceStore.onUnityObjectClick(spaceId), 500);
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
@@ -127,7 +126,7 @@ const UnityPage: FC = () => {
           declineInfo={{title: t('actions.decline')}}
           approveInfo={{
             title: t('actions.join'),
-            onClick: () => unityStore.teleportToUser(userId)
+            onClick: () => unityInstanceStore.teleportToUser(userId)
           }}
         />,
         TOAST_NOT_AUTO_CLOSE_OPTIONS
@@ -138,7 +137,7 @@ const UnityPage: FC = () => {
   usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
     console.info('[POSBUS EVENT] space-invite', spaceId, invitorId, invitorName, uiTypeId);
     // FIXME: Temporary solution. To get space name from Unity
-    const spaceName = await unityStore.fetchSpaceName(spaceId);
+    const spaceName = await unityInstanceStore.fetchSpaceName(spaceId);
 
     // TODO: Remove this after UserController will send profile changes
     const isTable = uiTypeId === appVariables.GAT_UI_TYPE_ID;
@@ -147,7 +146,7 @@ const UnityPage: FC = () => {
     }
 
     const handleJoinSpace = () => {
-      unityStore.teleportToSpace(spaceId);
+      unityInstanceStore.teleportToSpace(spaceId);
 
       setTimeout(() => {
         history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
@@ -175,7 +174,7 @@ const UnityPage: FC = () => {
       <HighFiveContent
         message={message}
         sendBack={() => {
-          unityStore.sendHighFiveBack(senderId);
+          unityInstanceStore.sendHighFiveBack(senderId);
         }}
         showCloseButton
       />,
@@ -224,7 +223,7 @@ const UnityPage: FC = () => {
     );
   });
 
-  if (!unityStore.unityContext) {
+  if (!unityInstanceStore.unityContext) {
     return <></>;
   }
 
@@ -233,46 +232,48 @@ const UnityPage: FC = () => {
       <styled.Inner
         data-testid="UnityPage-test"
         onClick={(event) => {
-          unityStore.handleClick(event.clientX, event.clientY);
+          unityInstanceStore.handleClick(event.clientX, event.clientY);
         }}
       >
-        <Unity unityContext={unityStore.unityContext} style={UnityContextCSS} />
+        <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
       {/*<PathObserver
         isTeleportReady={unityStore.isTeleportReady}
         resumeUnity={unityStore.resume}
         pauseUnity={unityStore.pause}
       />*/}
-      {unityStore.objectMenu.isOpen && (
+      {unityInstanceStore.objectMenu.isOpen && (
         <ObjectMenu
-          gizmoType={unityStore.gizmoMode}
-          worldId={worldStore.worldId}
-          position={unityStore.objectMenuPosition}
-          objectId={unityStore.selectedObjectId ?? ' '}
-          onGizmoTypeChange={unityStore.changeGizmoType}
+          gizmoType={unityInstanceStore.gizmoMode}
+          worldId={unityWorldStore.worldId}
+          position={unityInstanceStore.objectMenuPosition}
+          objectId={unityInstanceStore.selectedObjectId ?? ' '}
+          onGizmoTypeChange={unityInstanceStore.changeGizmoType}
           onObjectRemove={() => {
             worldBuilderObjectStore.deleteObject();
-            unityStore.objectMenu.close();
+            unityInstanceStore.objectMenu.close();
           }}
-          onUndo={unityStore.undo}
-          onRedo={unityStore.redo}
+          onUndo={unityInstanceStore.undo}
+          onRedo={unityInstanceStore.redo}
         />
       )}
       {isBuilderMode && (
         <CreatorMenu
           onAddObject={() => {
             history.push(
-              generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId: worldStore.worldId})
+              generatePath(ROUTES.odyssey.creator.spawnAsset.base, {
+                worldId: unityWorldStore.worldId
+              })
             );
           }}
           onSkyboxClick={() => {
             history.push(
-              generatePath(ROUTES.odyssey.creator.skybox, {worldId: worldStore.worldId})
+              generatePath(ROUTES.odyssey.creator.skybox, {worldId: unityWorldStore.worldId})
             );
           }}
         />
       )}
-      {!unityStore.isTeleportReady && <UnityLoader theme={theme} />}
+      {!unityInstanceStore.isTeleportReady && <UnityLoader theme={theme} />}
     </Portal>
   );
 };

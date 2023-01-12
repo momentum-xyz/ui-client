@@ -11,6 +11,7 @@ import * as styled from './StakingWidget.styled';
 
 const StakingWidget: FC = () => {
   const {unityStore, widgetStore_OLD} = useStore();
+  const {unityInstanceStore} = unityStore;
   const {stakingStore} = widgetStore_OLD;
   const {stakingDialog, validatorsStore, operatorSpaceId, polkadotProviderStore} = stakingStore;
 
@@ -43,14 +44,14 @@ const StakingWidget: FC = () => {
   ];
 
   useEffect(() => {
-    unityStore.pause();
+    unityInstanceStore.pause();
 
     return () => {
       if (!operatorSpaceId) {
-        unityStore.resume();
+        unityInstanceStore.resume();
       }
     };
-  }, [operatorSpaceId, unityStore]);
+  }, [operatorSpaceId, unityInstanceStore]);
 
   useEffect(() => {
     stakingStore.fetchValidators();

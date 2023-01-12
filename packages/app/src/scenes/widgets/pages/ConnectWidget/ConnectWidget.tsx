@@ -10,14 +10,15 @@ import {StakingForm} from './components';
 
 const ConnectWidget: FC = () => {
   const {unityStore, nftStore, sessionStore} = useStore();
+  const {unityInstanceStore} = unityStore;
 
   useEffect(() => {
-    unityStore.changeKeyboardControl(false);
+    unityInstanceStore.changeKeyboardControl(false);
 
     return () => {
-      unityStore.changeKeyboardControl(true);
+      unityInstanceStore.changeKeyboardControl(true);
     };
-  }, [unityStore]);
+  }, [unityInstanceStore]);
 
   return (
     <Dialog

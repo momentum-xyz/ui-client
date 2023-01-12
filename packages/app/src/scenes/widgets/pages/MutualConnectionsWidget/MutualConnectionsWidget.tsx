@@ -10,10 +10,9 @@ import {useStore} from 'shared/hooks';
 import * as styled from './MutualConnectionsWidget.styled';
 
 const MutualConnectionsWidget: FC = () => {
-  const {nftStore, widgetsStore, mainStore, authStore, unityStore} = useStore();
+  const {nftStore, widgetsStore, authStore, unityStore} = useStore();
+  const {unityInstanceStore, unityWorldStore, isUnityAvailable} = unityStore;
   const {mutualConnectionsStore} = widgetsStore;
-  const {worldStore} = mainStore;
-  const {isUnityAvailable} = unityStore;
   const {mutualConnections} = nftStore;
 
   const {t} = useTranslation();
@@ -31,13 +30,13 @@ const MutualConnectionsWidget: FC = () => {
       if (isUnityAvailable) {
         console.log(`Teleport in unity to ${worldId}`);
         history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-        unityStore.loadWorldById(worldId, authStore.token);
+        unityInstanceStore.loadWorldById(worldId, authStore.token);
       } else {
         console.log(`Redirect to unity to ${worldId}`);
         history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
       }
     },
-    [authStore, history, isUnityAvailable, mutualConnectionsStore, unityStore]
+    [authStore, history, isUnityAvailable, mutualConnectionsStore, unityInstanceStore]
   );
 
   return (
@@ -85,7 +84,7 @@ const MutualConnectionsWidget: FC = () => {
                   iconName="fly-portal"
                   size="medium"
                   onClick={() => handleTeleportToOdyssey(connection.uuid)}
-                  disabled={worldStore.worldId === connection.uuid}
+                  disabled={unityWorldStore.worldId === connection.uuid}
                 />
               </styled.Buttons>
             </styled.Connection>

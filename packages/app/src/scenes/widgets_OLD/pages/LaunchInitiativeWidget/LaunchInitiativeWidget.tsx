@@ -16,12 +16,10 @@ interface InitiativeInterface {
 }
 
 const LaunchInitiativeWidget: FC = () => {
-  const {
-    unityStore,
-    widgetStore_OLD,
-    mainStore: {worldStore}
-  } = useStore();
+  const {unityStore, widgetStore_OLD} = useStore();
   const {launchInitiativeStore} = widgetStore_OLD;
+  const {unityWorldStore, unityInstanceStore} = unityStore;
+
   const {
     control,
     handleSubmit,
@@ -38,7 +36,7 @@ const LaunchInitiativeWidget: FC = () => {
       .create({
         name,
         description,
-        currentWorldId: worldStore.worldId,
+        currentWorldId: unityWorldStore.worldId,
         spaceType: SpaceTypeEnum.CHALLENGE
       })
       .then(({isSuccess, spaceId}) => {
@@ -71,7 +69,7 @@ const LaunchInitiativeWidget: FC = () => {
       .then((spaceId) => {
         launchInitiativeStore.dialog.close();
         setTimeout(() => {
-          unityStore.teleportToSpace(spaceId);
+          unityInstanceStore.teleportToSpace(spaceId);
         }, 700);
       });
   };

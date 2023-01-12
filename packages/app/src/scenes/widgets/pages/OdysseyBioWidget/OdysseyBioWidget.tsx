@@ -12,6 +12,7 @@ interface PropsInterface {}
 
 const OdysseyBioWidget: FC<PropsInterface> = () => {
   const {sessionStore, widgetsStore, nftStore, unityStore} = useStore();
+  const {unityInstanceStore} = unityStore;
   const {odysseyBioStore} = widgetsStore;
 
   const {odyssey} = odysseyBioStore;
@@ -31,7 +32,7 @@ const OdysseyBioWidget: FC<PropsInterface> = () => {
       return;
     }
     console.log(`Calling sendHighFive to ${userId} ...`);
-    unityStore.sendHighFive(userId);
+    unityInstanceStore.sendHighFive(userId);
   };
 
   return (

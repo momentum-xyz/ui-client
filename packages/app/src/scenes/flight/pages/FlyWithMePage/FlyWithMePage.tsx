@@ -14,6 +14,7 @@ import * as styled from './FlyWithMePage.styled';
 
 const FlyWithMePage: FC = () => {
   const {unityStore, sessionStore, flightStore, agoraStore_OLD} = useStore();
+  const {unityInstanceStore} = unityStore;
   const {flyWithMeStore} = flightStore;
   const {pilot} = flyWithMeStore;
 
@@ -33,18 +34,18 @@ const FlyWithMePage: FC = () => {
 
   useEffect(() => {
     flyWithMeStore.init(pilotId);
-    unityStore.hideMinimap();
+    unityInstanceStore.hideMinimap();
 
     return () => {
-      unityStore.showMinimap();
-      unityStore.disengageFlyWithMe();
+      unityInstanceStore.showMinimap();
+      unityInstanceStore.disengageFlyWithMe();
       flyWithMeStore.resetModel();
 
       if (isPilot) {
         flyWithMeStore.stop(spaceId);
       }
     };
-  }, [pilotId, unityStore, flyWithMeStore, isPilot, spaceId]);
+  }, [pilotId, unityInstanceStore, flyWithMeStore, isPilot, spaceId]);
 
   useEffect(() => {
     const previousStatus = sessionStore.user?.status || UserStatusEnum.ONLINE;

@@ -11,9 +11,9 @@ import * as styled from './OnlineUsersPanel.styled';
 const LAYOUT_WIDTH = '200px';
 
 const OnlineUsersPanel: FC = () => {
-  const {sessionStore, mainStore, odysseyStore, unityStore, collaborationStore} = useStore();
+  const {sessionStore, odysseyStore, unityStore, collaborationStore} = useStore();
+  const {unityWorldStore, unityInstanceStore} = unityStore;
   const {spaceStore} = collaborationStore;
-  const {worldStore} = mainStore;
   const {onlineUsersStore, userProfileDialog} = odysseyStore;
   const {user} = sessionStore;
 
@@ -49,10 +49,10 @@ const OnlineUsersPanel: FC = () => {
       <OnlineUsersList
         onlineUsersStore={onlineUsersStore}
         onlineUsersList={onlineUsersStore.onlineUsersList}
-        changeKeyboardControl={unityStore.changeKeyboardControl}
-        worldId={worldStore.worldId}
+        changeKeyboardControl={unityInstanceStore.changeKeyboardControl}
+        worldId={unityWorldStore.worldId}
         user={user ?? undefined}
-        teleportToUser={unityStore.teleportToUser}
+        teleportToUser={unityInstanceStore.teleportToUser}
         spaceId={spaceStore?.id ?? ''}
       />
     </styled.CustomExpandableLayout>

@@ -12,10 +12,9 @@ import * as styled from './ProfileWidget.styled';
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
-const ProfileWidget: FC = (props) => {
-  const {widgetsStore, sessionStore, mainStore, authStore, agoraStore, unityStore} = useStore();
-  const {worldStore} = mainStore;
-  const {isUnityAvailable} = unityStore;
+const ProfileWidget: FC = () => {
+  const {widgetsStore, sessionStore, authStore, agoraStore, unityStore} = useStore();
+  const {isUnityAvailable, unityWorldStore, unityInstanceStore} = unityStore;
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -39,18 +38,23 @@ const ProfileWidget: FC = (props) => {
     if (isUnityAvailable) {
       console.log(`Teleport in unity to ${worldId}`);
       history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-      unityStore.loadWorldById(worldId, authStore.token);
+      unityInstanceStore.loadWorldById(worldId, authStore.token);
     } else {
       console.log(`Redirect to unity to ${worldId}`);
       history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     }
-  }, [profileStore, isUnityAvailable, history, unityStore, authStore]);
+  }, [profileStore, isUnityAvailable, history, unityInstanceStore, authStore]);
 
   const isTeleportAvailable = useMemo(() => {
     return isUnityAvailable
-      ? !sessionStore.isGuest && worldStore.worldId !== profileStore.userProfile?.id
+      ? !sessionStore.isGuest && unityWorldStore.worldId !== profileStore.userProfile?.id
       : !sessionStore.isGuest;
-  }, [isUnityAvailable, profileStore.userProfile?.id, sessionStore.isGuest, worldStore.worldId]);
+  }, [
+    isUnityAvailable,
+    profileStore.userProfile?.id,
+    sessionStore.isGuest,
+    unityWorldStore.worldId
+  ]);
 
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();
@@ -98,7 +102,7 @@ const ProfileWidget: FC = (props) => {
                 <ProfileEditor
                   user={profileStore.userProfile}
                   formErrors={profileStore.formErrors}
-                  onChangeKeyboardControl={unityStore.changeKeyboardControl}
+                  onChangeKeyboardControl={unityInstanceStore.changeKeyboardControl}
                   onEditProfile={profileStore.editProfile}
                   onEditImage={profileStore.editImage}
                 />

@@ -12,8 +12,8 @@ const PANEL_WIDTH_PX = 200;
 const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
-  const {odysseyStore, mainStore, unityStore} = useStore();
-  const {worldStore} = mainStore;
+  const {odysseyStore, unityStore} = useStore();
+  const {unityWorldStore, unityInstanceStore} = unityStore;
   const {exploreStore} = odysseyStore;
   const {searchQuery, spaceDetails, history} = exploreStore;
 
@@ -21,9 +21,9 @@ const ExplorePanel: FC = () => {
 
   useEffect(() => {
     if (!exploreStore.worldId) {
-      exploreStore.init(worldStore.worldId);
+      exploreStore.init(unityWorldStore.worldId);
     }
-  }, [exploreStore, worldStore.worldId]);
+  }, [exploreStore, unityWorldStore.worldId]);
 
   const debouncedSearch = useDebouncedCallback(exploreStore.search, SEARCH_DELAY_MS);
 
@@ -38,8 +38,8 @@ const ExplorePanel: FC = () => {
       <SearchInput
         value={searchQuery.query}
         placeholder={t(`placeholders.searchForSpaces`)}
-        onFocus={() => unityStore.changeKeyboardControl(false)}
-        onBlur={() => unityStore.changeKeyboardControl(true)}
+        onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
+        onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
         onChange={(query) => {
           searchQuery.setQuery(query);
           debouncedSearch();
@@ -51,8 +51,8 @@ const ExplorePanel: FC = () => {
           <SpaceDetails
             space={spaceDetails}
             previousSpace={history.previousSpace}
-            isWorld={spaceDetails.id === worldStore.worldId}
-            onTeleportToSpace={unityStore.teleportToSpace}
+            isWorld={spaceDetails.id === unityWorldStore.worldId}
+            onTeleportToSpace={unityInstanceStore.teleportToSpace}
             onSelectSpace={exploreStore.selectSpace}
             onGoBack={exploreStore.goBackToPreviousSpace}
           />
@@ -71,7 +71,7 @@ const ExplorePanel: FC = () => {
           </styled.Heading>
           <SpaceList
             spaceListByCategory={exploreStore.searchResults}
-            onTeleportToSpace={unityStore.teleportToSpace}
+            onTeleportToSpace={unityInstanceStore.teleportToSpace}
             onSelectSpace={exploreStore.selectSpace}
           />
           {exploreStore.searchResults.length === 0 && !exploreStore.isLoading && (

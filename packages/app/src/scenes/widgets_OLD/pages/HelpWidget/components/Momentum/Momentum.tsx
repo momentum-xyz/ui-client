@@ -12,9 +12,9 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 import * as styled from './Momentum.styled';
 
 const Momentum: React.FC = () => {
-  const {widgetStore_OLD, mainStore, unityStore, flightStore} = useStore();
-  const {worldStore} = mainStore;
-  const {worldConfig} = worldStore;
+  const {widgetStore_OLD, unityStore, flightStore} = useStore();
+  const {unityInstanceStore, unityWorldStore} = unityStore;
+  const {worldConfig} = unityWorldStore;
   const {helpStore} = widgetStore_OLD;
 
   const history = useHistory();
@@ -26,7 +26,7 @@ const Momentum: React.FC = () => {
   const handleFlyToSpace = (openCalendar = false) => {
     if (worldConfig?.community_space_id) {
       helpStore.helpDialog.close();
-      unityStore.teleportToSpace(worldConfig.community_space_id);
+      unityInstanceStore.teleportToSpace(worldConfig.community_space_id);
       setTimeout(() => {
         const params = {spaceId: worldConfig.community_space_id};
         history.push(

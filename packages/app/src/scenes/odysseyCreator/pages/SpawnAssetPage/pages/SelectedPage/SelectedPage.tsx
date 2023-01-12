@@ -13,6 +13,7 @@ import * as styled from './SelectedPage.styled';
 export const SelectedPage: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
+  const {unityInstanceStore} = unityStore;
 
   const {selectedAssset: asset} = spawnAssetStore;
 
@@ -62,8 +63,8 @@ export const SelectedPage: FC = () => {
       </styled.CheckBoxLabel>
       <styled.NameInput
         placeholder={t('placeholders.nameYourObjectNavigation')}
-        onFocus={() => unityStore.changeKeyboardControl(false)}
-        onBlur={() => unityStore.changeKeyboardControl(true)}
+        onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
+        onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
         onChange={spawnAssetStore.setNavigationObjectName}
       />
       <Button
