@@ -4,4 +4,3 @@ export * from './SentryStore';
 export * from './WorldStore';
 export * from './FavoriteStore';
 export * from './LiveStreamStore';
-export * from './DynamicScriptsStore';

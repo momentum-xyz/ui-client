@@ -1,7 +1,8 @@
 import {types, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {PluginAttributesManager, PluginLoader} from 'core/models';
+import {BasicAsset2dIdEnum} from 'core/enums';
+import {PluginAttributesManager, PluginLoader, DynamicScriptList} from 'core/models';
 import {
   api,
   Asset2dResponse,
@@ -11,8 +12,6 @@ import {
   ObjectMetadataInterface,
   ObjectOptionsInterface
 } from 'api';
-import {DynamicScriptsStore} from 'stores/MainStore/models';
-import {BasicAsset2dIdEnum} from 'core/enums';
 
 import {AssetStore} from './AssetStore';
 
@@ -25,7 +24,7 @@ const ObjectStore = types
       getSpaceInfoRequest: types.optional(RequestModel, {}),
       getAssetRequest: types.optional(RequestModel, {}),
 
-      dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
+      dynamicScriptList: types.optional(DynamicScriptList, {}),
       asset: types.maybe(PluginLoader),
 
       assetStore: types.optional(AssetStore, {})
@@ -81,8 +80,8 @@ const ObjectStore = types
           }
           const {options, meta} = assetResponse;
 
-          if (!self.dynamicScriptsStore.containsLoaderWithName(meta.scopeName)) {
-            yield self.dynamicScriptsStore.addScript(meta.scopeName, meta.scriptUrl);
+          if (!self.dynamicScriptList.containsLoaderWithName(meta.scopeName)) {
+            yield self.dynamicScriptList.addScript(meta.scopeName, meta.scriptUrl);
           }
 
           self.asset = PluginLoader.create({
