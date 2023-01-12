@@ -12,19 +12,18 @@ import {ROUTES} from 'core/constants';
 import * as styled from './LiveStreamPage.styled';
 
 const LiveStreamPage: FC = () => {
-  const {mainStore, collaborationStore} = useStore();
+  const {liveStreamStore_OLD, collaborationStore} = useStore();
   const {spaceStore} = collaborationStore;
-  const {liveStreamStore} = mainStore;
   const {space} = spaceStore;
 
   const history = useHistory();
 
   useEffect(() => {
-    liveStreamStore.showWidget();
-    liveStreamStore.enteredLiveStreamTab();
+    liveStreamStore_OLD.showWidget();
+    liveStreamStore_OLD.enteredLiveStreamTab();
 
-    return () => liveStreamStore.leftLiveStreamTab();
-  }, [liveStreamStore]);
+    return () => liveStreamStore_OLD.leftLiveStreamTab();
+  }, [liveStreamStore_OLD]);
 
   if (!space) {
     return null;
@@ -50,16 +49,16 @@ const LiveStreamPage: FC = () => {
         adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
         baseLink={generatePath(ROUTES.base, {spaceId: space.id})}
       >
-        {liveStreamStore.isStreaming && spaceStore.isAdmin && (
+        {liveStreamStore_OLD.isStreaming && spaceStore.isAdmin && (
           <Button
             label={t('liveStream.stopStream')}
             variant="danger"
-            onClick={() => liveStreamStore.disableBroadcast(space.id)}
+            onClick={() => liveStreamStore_OLD.disableBroadcast(space.id)}
           />
         )}
       </SpaceTopBar>
       <styled.Container>
-        <VideoPanel youtubeHash={liveStreamStore.broadcast.url} />
+        <VideoPanel youtubeHash={liveStreamStore_OLD.broadcast.url} />
       </styled.Container>
     </SpacePage>
   );

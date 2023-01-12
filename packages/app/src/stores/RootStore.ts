@@ -21,6 +21,7 @@ import {ConfigStore} from './ConfigStore';
 import {SessionStore} from './SessionStore';
 import {AgoraStore} from './AgoraStore';
 import {AgoraStore_OLD} from './AgoraStore_OLD';
+import {LiveStreamStore_OLD} from './LiveStreamStore_OLD';
 
 const RootStore = types
   .model('RootStore', {
@@ -32,6 +33,7 @@ const RootStore = types
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
     agoraStore_OLD: types.optional(AgoraStore_OLD, {}),
+    liveStreamStore_OLD: types.optional(LiveStreamStore_OLD, {}),
 
     /* Connect independent stores */
     signInAccountStore: types.optional(SignInAccountStore, {}),

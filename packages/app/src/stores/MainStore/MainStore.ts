@@ -3,7 +3,7 @@ import {ResetModel} from '@momentum-xyz/core';
 
 import {PluginsStore} from 'stores/MainStore/models/PluginsStore';
 
-import {ThemeStore, SentryStore, UnityStore, WorldStore, LiveStreamStore} from './models';
+import {ThemeStore, SentryStore, UnityStore, WorldStore} from './models';
 
 const MainStore = types.compose(
   ResetModel,
@@ -13,16 +13,12 @@ const MainStore = types.compose(
       sentryStore: types.optional(SentryStore, {}),
       unityStore: types.optional(UnityStore, {}),
       worldStore: types.optional(WorldStore, {}),
-      liveStreamStore: types.optional(LiveStreamStore, {}),
       pluginsStore: types.optional(PluginsStore, {})
     })
     .actions((self) => ({
       init(): void {
         self.sentryStore.init();
         self.unityStore.init();
-      },
-      initBroadcast(spaceId: string): void {
-        self.liveStreamStore.fetchBroadcast(spaceId);
       }
     }))
 );

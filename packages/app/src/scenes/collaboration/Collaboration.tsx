@@ -21,8 +21,7 @@ import * as styled from './Collaboration.styled';
 
 const Collaboration: FC = () => {
   const rootStore = useStore();
-  const {collaborationStore, mainStore, agoraStore_OLD} = rootStore;
-  const {liveStreamStore} = mainStore;
+  const {collaborationStore, liveStreamStore_OLD, agoraStore_OLD} = rootStore;
   const {agoraScreenShareStore, agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {
     newDeviceDialog,
@@ -67,9 +66,9 @@ const Collaboration: FC = () => {
     reJoinMeeting().then();
   }, [reJoinMeeting, spaceId]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     mainStore.initBroadcast(spaceId);
-  }, [mainStore, spaceId]);
+  }, [mainStore, spaceId]);*/
 
   const handleCountdownEnded = useCallback(async () => {
     if (agoraStageModeStore.isStageFull) {
@@ -141,13 +140,13 @@ const Collaboration: FC = () => {
         spaceId,
         agoraStore_OLD.isStageMode,
         !!agoraScreenShareStore.videoTrack,
-        liveStreamStore.isStreaming
+        liveStreamStore_OLD.isStreaming
       )
     ];
   }, [
     agoraScreenShareStore.videoTrack,
     agoraStore_OLD.isStageMode,
-    liveStreamStore.isStreaming,
+    liveStreamStore_OLD.isStreaming,
     spaceId
   ]);
 

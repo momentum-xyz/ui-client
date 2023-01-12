@@ -18,8 +18,8 @@ import {PosBusScreenShareMessageType} from 'core/types';
 
 const PosBusEventsPage: FC = () => {
   const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore, spaceAdminStore, agoraStore_OLD} = rootStore;
-  const {liveStreamStore, unityStore} = mainStore;
+  const {collaborationStore, mainStore, sessionStore, agoraStore_OLD} = rootStore;
+  const {unityStore} = mainStore;
   const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {
     stageModeStore,
@@ -28,21 +28,20 @@ const PosBusEventsPage: FC = () => {
     invitedOnStageDialog,
     spaceStore
   } = collaborationStore;
-  const {broadcastStore} = spaceAdminStore;
 
   const history = useHistory();
   const {t} = useTranslation();
 
   usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
     console.info('[POSBUS EVENT] broadcast', broadcast);
-    broadcastStore.setBroadcast(broadcast);
-    liveStreamStore.setBroadcast(broadcast);
+    /*broadcastStore.setBroadcast(broadcast);
+    liveStreamStore_OLD.setBroadcast(broadcast);
 
-    if (liveStreamStore.isStreaming) {
+    if (liveStreamStore_OLD.isStreaming) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: spaceStore?.id}));
-    } else if (liveStreamStore.isLiveStreamTab) {
+    } else if (liveStreamStore_OLD.isLiveStreamTab) {
       history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: spaceStore?.id}));
-    }
+    }*/
   });
 
   usePosBusEvent('stage-mode-invite', () => {

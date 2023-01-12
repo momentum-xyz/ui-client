@@ -13,8 +13,7 @@ import {VideoPanel} from 'ui-kit';
 import * as styled from './LiveStreamPIPWidget.styled';
 
 const LiveStreamPIPWidget: React.FC = () => {
-  const {mainStore, flightStore, agoraStore_OLD} = useStore();
-  const {liveStreamStore} = mainStore;
+  const {liveStreamStore_OLD, flightStore, agoraStore_OLD} = useStore();
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -24,7 +23,7 @@ const LiveStreamPIPWidget: React.FC = () => {
     return !location.pathname.includes(ROUTES.collaboration.root);
   }, [location.pathname]);
 
-  if (!liveStreamStore.isLiveStreamShown || !agoraStore_OLD.spaceId) {
+  if (!liveStreamStore_OLD.isLiveStreamShown || !agoraStore_OLD.spaceId) {
     return null;
   }
 
@@ -36,12 +35,12 @@ const LiveStreamPIPWidget: React.FC = () => {
           className={cn(!isFlightAround && 'notFlyAround')}
         >
           <styled.VideoWrapper>
-            <VideoPanel youtubeHash={liveStreamStore.broadcast.url} widgetMode />
+            <VideoPanel youtubeHash={liveStreamStore_OLD.broadcast.url} widgetMode />
           </styled.VideoWrapper>
           <styled.HeaderElement className="left">
             <styled.Title>
               <Text
-                text={liveStreamStore.spaceName}
+                text={liveStreamStore_OLD.spaceName}
                 transform="uppercase"
                 weight="bold"
                 size="l"
@@ -86,7 +85,7 @@ const LiveStreamPIPWidget: React.FC = () => {
               iconName="close"
               size="medium"
               isWhite
-              onClick={liveStreamStore.hideWidget}
+              onClick={liveStreamStore_OLD.hideWidget}
             />
           </styled.HeaderElement>
         </styled.Container>

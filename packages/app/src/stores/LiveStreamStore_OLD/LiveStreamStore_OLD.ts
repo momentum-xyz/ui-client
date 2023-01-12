@@ -4,10 +4,10 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {api, BroadcastInterface, LiveStreamInterface} from 'api';
 import {BroadcastStatusEnum, IntegrationTypeEnum} from 'core/enums';
 
-const LiveStreamStore = types.compose(
+const LiveStreamStore_OLD = types.compose(
   ResetModel,
   types
-    .model('LiveStreamStore', {
+    .model('LiveStreamStore_OLD', {
       disableRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {}),
       broadcast: types.optional(types.frozen<BroadcastInterface>(), {}),
@@ -66,4 +66,4 @@ const LiveStreamStore = types.compose(
     }))
 );
 
-export {LiveStreamStore};
+export {LiveStreamStore_OLD};
