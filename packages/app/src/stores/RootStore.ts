@@ -18,6 +18,7 @@ import {NftStore} from './NftStore';
 import {AuthStore} from './AuthStore';
 import {MainStore} from './MainStore';
 import {ConfigStore} from './ConfigStore';
+import {ThemeStore} from './ThemeStore';
 import {SessionStore} from './SessionStore';
 import {AgoraStore} from './AgoraStore';
 import {AgoraStore_OLD} from './AgoraStore_OLD';
@@ -28,6 +29,7 @@ const RootStore = types
     /* Connect core stores */
     configStore: types.optional(ConfigStore, {}),
     nftStore: types.optional(NftStore, {}),
+    themeStore: types.optional(ThemeStore, {}),
     authStore: types.optional(AuthStore, {}),
     mainStore: types.optional(MainStore, {}),
     sessionStore: types.optional(SessionStore, {}),
@@ -55,9 +57,10 @@ const RootStore = types
       await self.configStore.init();
       await self.nftStore.init();
       await self.nftStore.initWeb3ExtensionIfNeeded();
+
       self.authStore.tryToRestoreWallet();
-      self.mainStore.themeStore.init();
       self.agoraStore.userDevicesStore.init();
+      self.themeStore.init();
     },
     unityLoaded(worldId: string): void {
       self.mainStore.unityStore.teleportIsReady();

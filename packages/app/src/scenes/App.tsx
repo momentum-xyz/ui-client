@@ -28,9 +28,8 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, authStore, mainStore, initApplication} = useStore();
+  const {configStore, authStore, themeStore, initApplication, mainStore} = useStore();
   const {errorCode: configLoadingErrorCode} = configStore;
-  const {themeStore} = mainStore;
 
   const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
