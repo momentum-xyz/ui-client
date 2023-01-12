@@ -150,34 +150,32 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
             </styled.OnlineUsers>
             <ToolbarIconList>
-              {!worldStore.isMyWorld && (
-                <Tooltip label={t('labels.bio')} placement="top">
-                  <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
-                    <Text
-                      className="odyssey-name"
-                      size="m"
-                      text={worldStore?.world?.name}
-                      transform="uppercase"
-                      weight="bold"
-                    />
-                    <ToolbarIcon
-                      title=""
-                      state={{canGoBack: true}}
-                      icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
-                      size="medium"
-                    >
-                      {onlineUsersStore.nftUser?.avatarSrc && (
-                        <Avatar
-                          size="extra-small"
-                          avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
-                          showBorder
-                          showHover
-                        />
-                      )}
-                    </ToolbarIcon>
-                  </styled.CurrentOdyssey>
-                </Tooltip>
-              )}
+              <Tooltip label={t('labels.bio')} placement="top">
+                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
+                  <Text
+                    className="odyssey-name"
+                    size="m"
+                    text={worldStore?.world?.name}
+                    transform="uppercase"
+                    weight="bold"
+                  />
+                  <ToolbarIcon
+                    title=""
+                    state={{canGoBack: true}}
+                    icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
+                    size="medium"
+                  >
+                    {onlineUsersStore.nftUser?.avatarSrc && (
+                      <Avatar
+                        size="extra-small"
+                        avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
+                        showBorder
+                        showHover
+                      />
+                    )}
+                  </ToolbarIcon>
+                </styled.CurrentOdyssey>
+              </Tooltip>
 
               <ToolbarIcon
                 title={t('labels.calendar')}
