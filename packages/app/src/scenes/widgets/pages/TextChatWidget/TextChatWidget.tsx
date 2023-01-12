@@ -9,8 +9,8 @@ import {TextChat} from './components';
 import * as styled from './TextChatWidget.styled';
 
 const TextChatWidget: FC = () => {
-  const {widgetsStore, sessionStore, mainStore} = useStore();
-  const {worldStore, unityStore} = mainStore;
+  const {widgetsStore, sessionStore, mainStore, unityStore} = useStore();
+  const {worldStore} = mainStore;
   const {textChatStore, voiceChatStore} = widgetsStore;
   const {streamChat} = textChatStore;
 

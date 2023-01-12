@@ -20,8 +20,7 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './OdysseyPage.styled';
 const OdysseyPage: FC = () => {
-  const {mainStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore} = useStore();
 
   // const {widgetsStore} = useStore();
   //const {socialStore} = widgetsStore;

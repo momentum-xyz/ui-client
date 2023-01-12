@@ -10,8 +10,7 @@ import {Validators, Authorization, Nominator} from './components/templates';
 import * as styled from './StakingWidget.styled';
 
 const StakingWidget: FC = () => {
-  const {mainStore, widgetStore_OLD} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, widgetStore_OLD} = useStore();
   const {stakingStore} = widgetStore_OLD;
   const {stakingDialog, validatorsStore, operatorSpaceId, polkadotProviderStore} = stakingStore;
 

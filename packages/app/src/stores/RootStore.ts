@@ -1,5 +1,6 @@
 import {Instance, types} from 'mobx-state-tree';
 
+import {UnityStore} from 'scenes/unity/stores/UnityStore';
 import {SignInAccountStore} from 'scenes/auth/stores/SignInAccountStore';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
@@ -38,6 +39,7 @@ const RootStore = types
     liveStreamStore_OLD: types.optional(LiveStreamStore_OLD, {}),
 
     /* Connect independent stores */
+    unityStore: types.optional(UnityStore, {}),
     signInAccountStore: types.optional(SignInAccountStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
     odysseyStore: types.optional(OdysseyStore, {}),
@@ -63,7 +65,7 @@ const RootStore = types
       self.themeStore.init();
     },
     unityLoaded(worldId: string): void {
-      self.mainStore.unityStore.teleportIsReady();
+      self.unityStore.teleportIsReady();
       self.mainStore.worldStore.init(worldId);
     }
   }));

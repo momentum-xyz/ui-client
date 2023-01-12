@@ -13,9 +13,8 @@ import * as styled from './UploadCustomAssetPage.styled';
 const MAX_ASSET_SIZE = 50_100_000;
 
 const UploadCustomAssetPage: FC = () => {
-  const {odysseyCreatorStore, mainStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-  const {unityStore} = mainStore;
 
   const {t} = useTranslation();
 

@@ -17,9 +17,7 @@ import {
 import {PosBusScreenShareMessageType} from 'core/types';
 
 const PosBusEventsPage: FC = () => {
-  const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore, agoraStore_OLD} = rootStore;
-  const {unityStore} = mainStore;
+  const {collaborationStore, unityStore, sessionStore, agoraStore_OLD} = useStore();
   const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {
     stageModeStore,

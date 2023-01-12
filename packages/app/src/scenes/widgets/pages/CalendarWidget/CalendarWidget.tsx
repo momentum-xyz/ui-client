@@ -13,10 +13,10 @@ import * as styled from './CalendarWidget.styled';
 import {EventForm, TabBarButtons} from './components';
 
 const CalendarWidget: FC = () => {
-  const {widgetsStore, mainStore, sessionStore} = useStore();
+  const {widgetsStore, mainStore, unityStore, sessionStore} = useStore();
   const {calendarStore} = widgetsStore;
   const {eventList, deleteConfirmationDialog} = calendarStore;
-  const {worldStore, unityStore} = mainStore;
+  const {worldStore} = mainStore;
 
   const {t} = useTranslation();
   const theme = useTheme();

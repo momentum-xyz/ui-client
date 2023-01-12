@@ -31,13 +31,14 @@ const UnityContextCSS = {
 
 const UnityPage: FC = () => {
   const {
+    unityStore,
     mainStore,
     authStore,
     unityLoaded,
     sessionStore,
     odysseyCreatorStore: worldBuilderStore
   } = useStore();
-  const {unityStore, worldStore} = mainStore;
+  const {worldStore} = mainStore;
   const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();

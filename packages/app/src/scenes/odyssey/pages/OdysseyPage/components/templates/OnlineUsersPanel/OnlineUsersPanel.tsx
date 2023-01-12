@@ -11,9 +11,9 @@ import * as styled from './OnlineUsersPanel.styled';
 const LAYOUT_WIDTH = '200px';
 
 const OnlineUsersPanel: FC = () => {
-  const {sessionStore, mainStore, odysseyStore, collaborationStore} = useStore();
+  const {sessionStore, mainStore, odysseyStore, unityStore, collaborationStore} = useStore();
   const {spaceStore} = collaborationStore;
-  const {worldStore, unityStore} = mainStore;
+  const {worldStore} = mainStore;
   const {onlineUsersStore, userProfileDialog} = odysseyStore;
   const {user} = sessionStore;
 

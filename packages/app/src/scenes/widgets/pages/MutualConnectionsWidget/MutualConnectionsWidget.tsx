@@ -10,9 +10,9 @@ import {useStore} from 'shared/hooks';
 import * as styled from './MutualConnectionsWidget.styled';
 
 const MutualConnectionsWidget: FC = () => {
-  const {nftStore, widgetsStore, mainStore, authStore} = useStore();
+  const {nftStore, widgetsStore, mainStore, authStore, unityStore} = useStore();
   const {mutualConnectionsStore} = widgetsStore;
-  const {worldStore, unityStore} = mainStore;
+  const {worldStore} = mainStore;
   const {isUnityAvailable} = unityStore;
   const {mutualConnections} = nftStore;
 

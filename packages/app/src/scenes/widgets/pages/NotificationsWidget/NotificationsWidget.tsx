@@ -14,10 +14,9 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const NotificationsWidget: FC = () => {
-  const {widgetsStore, mainStore, nftStore, authStore} = useStore();
+  const {widgetsStore, unityStore, nftStore, authStore} = useStore();
   const {notificationsStore} = widgetsStore;
   const {dialog, notifications} = notificationsStore;
-  const {unityStore} = mainStore;
 
   const theme = useTheme();
   const history = useHistory();

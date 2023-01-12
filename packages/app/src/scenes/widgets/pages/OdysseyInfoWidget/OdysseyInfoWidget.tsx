@@ -11,8 +11,8 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const OdysseyInfoWidget: FC = () => {
-  const {authStore, nftStore, widgetsStore, mainStore, objectStore} = useStore();
-  const {worldStore, unityStore} = mainStore;
+  const {authStore, nftStore, widgetsStore, mainStore, objectStore, unityStore} = useStore();
+  const {worldStore} = mainStore;
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey} = odysseyInfoStore;
   const {assetStore} = objectStore;

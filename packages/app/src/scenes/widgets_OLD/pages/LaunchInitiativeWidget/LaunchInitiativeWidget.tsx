@@ -17,8 +17,9 @@ interface InitiativeInterface {
 
 const LaunchInitiativeWidget: FC = () => {
   const {
+    unityStore,
     widgetStore_OLD,
-    mainStore: {unityStore, worldStore}
+    mainStore: {worldStore}
   } = useStore();
   const {launchInitiativeStore} = widgetStore_OLD;
   const {

@@ -12,8 +12,8 @@ const PANEL_WIDTH_PX = 200;
 const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
-  const {odysseyStore, mainStore} = useStore();
-  const {unityStore, worldStore} = mainStore;
+  const {odysseyStore, mainStore, unityStore} = useStore();
+  const {worldStore} = mainStore;
   const {exploreStore} = odysseyStore;
   const {searchQuery, spaceDetails, history} = exploreStore;
 

@@ -11,8 +11,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './ChangeVideoDialog.styled';
 
 const ChangeVideoDialog: FC = () => {
-  const {mainStore, objectStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, objectStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
 

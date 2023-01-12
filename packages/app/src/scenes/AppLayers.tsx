@@ -21,7 +21,7 @@ const AppLayers: FC<PropsInterface> = ({
   withMeeting = true,
   withWidgets = true
 }) => {
-  const {unityStore} = useStore().mainStore;
+  const {unityStore} = useStore();
 
   const theme = useTheme();
 

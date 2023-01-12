@@ -28,7 +28,7 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, authStore, themeStore, initApplication, mainStore} = useStore();
+  const {configStore, authStore, themeStore, initApplication, mainStore, unityStore} = useStore();
   const {errorCode: configLoadingErrorCode} = configStore;
 
   const {pathname} = useLocation<{pathname: string}>();
@@ -77,6 +77,7 @@ const App: FC = () => {
     if (configStore.isConfigReady) {
       authStore.init();
       mainStore.init();
+      unityStore.init();
     }
   }, [authStore, configStore.isConfigReady, mainStore]);
 

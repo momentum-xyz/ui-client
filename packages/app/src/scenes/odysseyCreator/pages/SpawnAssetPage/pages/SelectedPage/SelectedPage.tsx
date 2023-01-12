@@ -11,9 +11,8 @@ import {ROUTES} from 'core/constants';
 import * as styled from './SelectedPage.styled';
 
 export const SelectedPage: FC = () => {
-  const {odysseyCreatorStore, mainStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-  const {unityStore} = mainStore;
 
   const {selectedAssset: asset} = spawnAssetStore;
 

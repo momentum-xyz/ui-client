@@ -10,8 +10,7 @@ import {ImagePage, ObjectPluginPage, TextPage, VideoPage} from './pages';
 import * as styled from './Object.styled';
 
 const Object: FC = () => {
-  const {objectStore, mainStore, nftStore, widgetsStore} = useStore();
-  const {unityStore} = mainStore;
+  const {objectStore, unityStore, nftStore, widgetsStore} = useStore();
   const {asset, assetStore} = objectStore;
   const {assetType} = assetStore;
   const {odysseyInfoStore} = widgetsStore;

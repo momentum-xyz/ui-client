@@ -9,8 +9,7 @@ import * as styled from './ConnectWidget.styled';
 import {StakingForm} from './components';
 
 const ConnectWidget: FC = () => {
-  const {mainStore, nftStore, sessionStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, nftStore, sessionStore} = useStore();
 
   useEffect(() => {
     unityStore.changeKeyboardControl(false);

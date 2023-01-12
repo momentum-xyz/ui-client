@@ -13,9 +13,8 @@ import {Carousel} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
-  const {odysseyCreatorStore, mainStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
-  const {unityStore} = mainStore;
   const {items, selectedItem, currentItem, selectItem, saveItem} = skyboxSelectorStore;
 
   const {worldId} = useParams<{worldId: string}>();

@@ -14,8 +14,8 @@ import {OnlineUser} from './components';
 const DIALOG_WIDTH_PX = 296;
 
 const SearchUsersWidget: FC = () => {
-  const {mainStore, widgetsStore, nftStore, authStore, sessionStore} = useStore();
-  const {unityStore, worldStore} = mainStore;
+  const {mainStore, widgetsStore, nftStore, authStore, sessionStore, unityStore} = useStore();
+  const {worldStore} = mainStore;
   const {onlineUsersStore} = widgetsStore;
 
   const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');

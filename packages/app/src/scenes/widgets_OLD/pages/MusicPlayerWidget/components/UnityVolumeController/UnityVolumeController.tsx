@@ -8,7 +8,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './UnityVolumeController.styled';
 
 const UnityVolumeController: FC = () => {
-  const {unityStore} = useStore().mainStore;
+  const {unityStore} = useStore();
 
   return (
     <styled.Container data-testid="UnityVolumeController-test">
