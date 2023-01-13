@@ -6,7 +6,7 @@ import cn from 'classnames';
 import {Box} from 'ui-kit';
 import {NftFeedItemInterface} from 'api';
 import {SearchQueryModelModelType} from 'core/models';
-import {NftItemInterface} from 'stores/NftStore/models';
+import {NftItemModelInterface} from 'core/models';
 
 import {NewsFeed, OdysseyList} from './components';
 import * as styled from './ExplorePanel.styled';
@@ -15,12 +15,12 @@ interface PropsInterface {
   odysseyCount: number;
   searchQuery: SearchQueryModelModelType;
   nftFeed: NftFeedItemInterface[];
-  odysseyList: NftItemInterface[];
+  odysseyList: NftItemModelInterface[];
   currentUserId: string;
   onSearch: () => void;
-  onTeleport: (nft: NftItemInterface) => void;
-  onSelect: (nft: NftItemInterface) => void;
-  onAttend: (nft: NftItemInterface) => void;
+  onTeleport: (nft: NftItemModelInterface) => void;
+  onSelect: (nft: NftItemModelInterface) => void;
+  onAttend: (nft: NftItemModelInterface) => void;
   onConnect: (id: number) => void;
   onOpenOdyssey?: (uuid: string) => void;
 }

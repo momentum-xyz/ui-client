@@ -3,14 +3,14 @@ import {observer} from 'mobx-react-lite';
 import {Avatar, SvgButton, UserStatusEnum} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
-import {NftItemInterface} from 'stores/NftStore/models';
+import {NftItemModelInterface} from 'core/models';
 
 import * as styled from './OdysseyList.styled';
 
 interface PropsInterface {
-  odysseyList: NftItemInterface[];
-  onTeleport: (nft: NftItemInterface) => void;
-  onSelect: (nft: NftItemInterface) => void;
+  odysseyList: NftItemModelInterface[];
+  onTeleport: (nft: NftItemModelInterface) => void;
+  onSelect: (nft: NftItemModelInterface) => void;
 }
 
 const OdysseyList: FC<PropsInterface> = (props) => {

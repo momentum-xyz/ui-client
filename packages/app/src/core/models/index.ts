@@ -28,4 +28,6 @@ export * from './DynamicScriptList';
 export * from './SearchQuery';
 export * from './PluginAttributesManager';
 export * from './PluginQueryResult';
+export * from './NftItem';
+export * from './NftItemStats';
 export * from './Asset3d';

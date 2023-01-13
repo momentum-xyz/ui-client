@@ -7,36 +7,28 @@ import {useStore} from 'shared/hooks';
 import {ToastMessage} from 'ui-kit';
 
 const Widgets = lazy(() => import('./widgets/Widgets'));
-const Meeting = lazy(() => import('./meeting/Meeting'));
 
 interface PropsInterface {
-  withUnity?: boolean;
-  withMeeting?: boolean;
-  withWidgets?: boolean;
+  renderUnity?: boolean;
 }
 
-const AppLayers: FC<PropsInterface> = ({
-  children,
-  withUnity = true,
-  withMeeting = true,
-  withWidgets = true
-}) => {
-  const {unityStore} = useStore();
+const AppLayers: FC<PropsInterface> = (props) => {
+  const {children, renderUnity = false} = props;
 
+  const {unityStore} = useStore();
   const theme = useTheme();
 
-  if (withUnity && !unityStore.isUnityAvailable) {
+  if (renderUnity && !unityStore.isUnityAvailable) {
     return <></>;
   }
 
   return (
     <div data-testid="AppLayers-test">
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
+      {renderUnity && <Widgets />}
       <main id="main">
         <div className="main-content">{children}</div>
-        {withMeeting && <Meeting />}
       </main>
-      {withWidgets && <Widgets />}
     </div>
   );
 };

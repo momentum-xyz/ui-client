@@ -5,15 +5,15 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
-import {NftItemInterface} from 'stores/NftStore/models';
+import {NftItemModelInterface} from 'core/models';
 import placeholder from 'static/images/placeholder.png';
 
 import * as styled from './CalendarItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
-  onTeleport: (nft: NftItemInterface) => void;
-  onAttend: (nft: NftItemInterface) => void;
+  onTeleport: (nft: NftItemModelInterface) => void;
+  onAttend: (nft: NftItemModelInterface) => void;
 }
 
 const CalendarItem: FC<PropsInterface> = (props) => {

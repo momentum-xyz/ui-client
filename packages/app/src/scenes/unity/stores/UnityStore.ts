@@ -10,6 +10,12 @@ const UnityStore = types
     unityInstanceStore: types.optional(UnityInstanceStore, {}),
     unityWorldStore: types.optional(UnityWorldStore, {})
   })
+  .actions((self) => ({
+    initTeleport(worldId: string): void {
+      self.unityInstanceStore.teleportIsReady();
+      self.unityWorldStore.init(worldId);
+    }
+  }))
   .views((self) => ({
     get worldId(): string {
       return self.unityWorldStore.worldId;

@@ -30,15 +30,9 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {
-    unityStore,
-    authStore,
-    unityLoaded,
-    sessionStore,
-    odysseyCreatorStore: worldBuilderStore
-  } = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {unityStore, authStore, sessionStore, odysseyCreatorStore: worldBuilderStore} = useStore();
   const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
+  const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -79,7 +73,7 @@ const UnityPage: FC = () => {
   useUnityEvent('TeleportReady', () => {
     const worldId = unityInstanceStore.getCurrentWorld();
     if (worldId) {
-      unityLoaded(worldId);
+      unityStore.initTeleport(worldId);
     }
   });
 
@@ -273,7 +267,8 @@ const UnityPage: FC = () => {
           }}
         />
       )}
-      {!unityInstanceStore.isTeleportReady && <UnityLoader theme={theme} />}
+
+      {!unityStore.isUnityAvailable && <UnityLoader theme={theme} />}
     </Portal>
   );
 };
