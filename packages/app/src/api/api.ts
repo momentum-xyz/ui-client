@@ -29,7 +29,6 @@ import * as stageModeRepository from './repositories_OLD/stageModeRepository';
 import * as tokenRuleRepository from './repositories_OLD/tokenRuleRepository';
 import * as validatorsRepository from './repositories_OLD/validatorsRepository';
 import * as tokenRepository from './repositories_OLD/tokenRepository';
-import * as favoriteRepository from './repositories_OLD/favoriteRepository';
 import * as spaceTypeRepository from './repositories_OLD/spaceTypeRepository';
 import * as tablesRepository from './repositories_OLD/tablesRepository';
 import * as spaceInviteRepository from './repositories_OLD/spaceInviteRepository';
@@ -38,7 +37,6 @@ import * as statusRepository from './repositories_OLD/statusRepository';
 import * as playlistRepository from './repositories_OLD/playlistRepository';
 import * as meetingRepository from './repositories_OLD/meetingRepository';
 import * as attendeesRepository from './repositories_OLD/attendeesRepository';
-import * as dashboardRepository from './repositories_OLD/dashboardRepository';
 import * as integrationRepository from './repositories_OLD/integrationRepository';
 import * as resourcesRepository from './repositories_OLD/resourcesRepository';
 import * as spaceIntegrationsRepository from './repositories_OLD/spaceIntegrationsRepository';
@@ -77,7 +75,6 @@ export const api = {
   magicLinkRepository,
   tokenRuleRepository,
   tokenRepository,
-  favoriteRepository,
   validatorsRepository,
   spaceTypeRepository,
   tablesRepository,
@@ -87,7 +84,6 @@ export const api = {
   playlistRepository,
   meetingRepository,
   attendeesRepository,
-  dashboardRepository,
   agoraRepository,
   spaceIntegrationsRepository,
   integrationRepository,
@@ -148,12 +144,10 @@ export * from './repositories_OLD/userRepository/userRepository.api.types';
 export * from './repositories_OLD/profileRepository/profileRepository.api.types';
 export * from './repositories_OLD/validatorsRepository/validatorsRepository.api.types';
 export * from './repositories_OLD/tokenRuleRepository/tokenRuleRepository.api.types';
-export * from './repositories_OLD/favoriteRepository/favoriteRepository.api.types';
 export * from './repositories_OLD/tokenRepository/tokenRepository.api.types';
 export * from './repositories_OLD/statsRepository/statsRepository.api.types';
 export * from './repositories_OLD/playlistRepository/playlistRepository.api.types';
 export * from './repositories_OLD/meetingRepository/meetingRepository.api.types';
-export * from './repositories_OLD/dashboardRepository/dashboardRepository.api.types';
 export * from './repositories_OLD/integrationRepository/integrationRepository.api.types';
 export * from './repositories_OLD/resourcesRepository/resourcesRepository.types';
 export * from './repositories_OLD/spaceTypeRepository/spaceTypeRepository.api.types';

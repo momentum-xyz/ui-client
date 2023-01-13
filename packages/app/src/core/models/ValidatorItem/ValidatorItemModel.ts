@@ -1,8 +1,6 @@
 import {types, Instance, flow} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 
-import {api, BaseFavoritesResponse} from 'api';
-
 const ValidatorItemModel = types
   .model('ValidatorItemModel', {
     id: types.string,
@@ -26,7 +24,7 @@ const ValidatorItemModel = types
       self.selected = !self.selected;
     },
     unBookmark: flow(function* unBookmark(spaceId: string) {
-      const response: BaseFavoritesResponse = yield self.request.send(
+      /*const response: BaseFavoritesResponse = yield self.request.send(
         api.favoriteRepository.deleteFavorite,
         {
           spaceId
@@ -34,10 +32,10 @@ const ValidatorItemModel = types
       );
       if (response) {
         self.isBookmarked = false;
-      }
+      }*/
     }),
     bookmark: flow(function* bookmark(spaceId: string) {
-      const response: BaseFavoritesResponse = yield self.request.send(
+      /*const response: BaseFavoritesResponse = yield self.request.send(
         api.favoriteRepository.postFavorite,
         {
           spaceId: spaceId
@@ -45,7 +43,7 @@ const ValidatorItemModel = types
       );
       if (response) {
         self.isBookmarked = true;
-      }
+      }*/
     })
   }))
   .views(() => ({}));
