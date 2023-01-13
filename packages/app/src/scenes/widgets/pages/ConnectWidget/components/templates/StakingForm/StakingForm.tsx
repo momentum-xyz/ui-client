@@ -11,6 +11,7 @@ import {
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {t} from 'i18next';
+import {BN} from '@polkadot/util';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
@@ -62,7 +63,6 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     addresses,
     accountOptions,
     nftItems,
-    chainDecimals,
     tokenSymbol
   } = nftStore;
 
@@ -73,16 +73,18 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     : '';
 
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
-  const [amount, setAmount] = useState(DEFAULT_STAKING_AMOUNT);
-  const amountAtoms = amount * Math.pow(10, chainDecimals || 12);
+  const [amountString, setAmountString] = useState(DEFAULT_STAKING_AMOUNT.toString());
+  const amountStringValueCheckRegex = /^\d{1,12}((\.|,)\d{0,4})?$/;
+
+  const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, 9)));
 
   const nft = nftItems.find((nft) => nft.id === nftItemId);
   const myNft = nftItems.find((nft) => nft.owner === wallet);
-  console.log('StakingForm', {wallet, addresses, authWallet, amount, amountAtoms, nft});
+  console.log('StakingForm', {wallet, addresses, authWallet, amountString, amountAtoms, nft});
 
   console.log('initiatorAccount', initiatorAccount, nft);
 
-  const onStake = (amountAtoms: number) => {
+  const onStake = (amountAtoms: BN) => {
     console.log('onStake', wallet, nftItemId, amountAtoms);
 
     nftStore
@@ -120,7 +122,10 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
             <ToastContent
               headerIconName="alert"
               title={t('staking.stakeSuccessTitle')}
-              text={t('staking.stakeSuccess', {amount, name: nft?.name})}
+              text={t('staking.stakeSuccess', {
+                amount: amountString,
+                name: nft?.name
+              })}
               showCloseButton
             />
           );
@@ -141,6 +146,13 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
       });
   };
 
+  const onStakeAmountInput = (val: string) => {
+    if (!validStringCheck(val)) {
+      return;
+    }
+    setAmountString(val);
+  };
+
   const balanceSections = [
     {label: t('staking.balanceTypes.account'), value: balanceTotal},
     {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable},
@@ -156,6 +168,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const isBalanceTooLow = !canBeStaked(amountAtoms);
 
   const isStakingInSelf = nft === myNft;
+  const validStringCheck = (val: string): boolean => !val || amountStringValueCheckRegex.test(val);
 
   if (!nft) {
     console.log('StakingForm - no nft found');
@@ -242,11 +255,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                     />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer>
-                    <Input
-                      autoFocus
-                      value={amount || ''}
-                      onChange={(val) => setAmount(Number(val))}
-                    />
+                    <Input autoFocus value={amountString || ''} onChange={onStakeAmountInput} />
                   </styled.LabeledLineInputContainer>
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
@@ -262,7 +271,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
               <Button
                 label={t('staking.next')}
                 onClick={() => setActiveTab(tabBarTabs[2])}
-                disabled={isBalanceTooLow || isStakingInSelf}
+                disabled={!amountString || isBalanceTooLow || isStakingInSelf}
               />
             </styled.Buttons>
           </>
@@ -283,7 +292,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                     />
                   </styled.LabeledLineLabelContainer>
                   <styled.LabeledLineInputContainer className="view-only">
-                    <Input value={amount} onChange={(val) => setAmount(Number(val))} disabled />
+                    <Input value={amountString} onChange={onStakeAmountInput} disabled />
                   </styled.LabeledLineInputContainer>
                 </styled.LabeledLineContainer>
                 <styled.LabeledLineContainer>
