@@ -24,7 +24,6 @@ import {
 } from '@momentum-xyz/ui-kit';
 
 import {
-  TileMenu,
   Location,
   ToastContent,
   TOAST_COMMON_OPTIONS,
@@ -255,13 +254,6 @@ const MoleculesPage: FC = () => {
             onTabSelect={() => {}}
           />
         </styled.SectionGrid2>
-
-        <styled.Name>
-          <Heading label="Component «TileMenu»" type="h2" align="left" />
-        </styled.Name>
-        <styled.Section>
-          <TileMenu onEdit={() => {}} onDelete={() => {}} isDelete />
-        </styled.Section>
 
         <styled.Name>
           <Heading label="Component «ToastContent»" type="h2" align="left" />
