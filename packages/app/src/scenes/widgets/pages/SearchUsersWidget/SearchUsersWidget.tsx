@@ -118,7 +118,7 @@ const SearchUsersWidget: FC = () => {
                   user={onlineUsersStore.nftUser}
                   odyssey={onlineUsersStore.odyssey}
                   alreadyConnected={isAlreadyConnected}
-                  onVisit={handleOdysseyTeleport}
+                  onVisit={() => handleOdysseyTeleport()}
                   visitDisabled={onlineUsersStore.odyssey?.uuid === unityStore.worldId}
                   onHighFive={handleOdysseyHighFive}
                   onConnect={handleConnect}
