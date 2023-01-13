@@ -1,8 +1,6 @@
 export * from './UserProfile';
 export * from './User';
 export * from './UserInfo';
-export * from './PolkadotAddress';
-export * from './PolkadotAddressMeta';
 export * from './Space';
 export * from './SpaceInfo';
 export * from './TokenRuleItem';
@@ -30,4 +28,6 @@ export * from './PluginAttributesManager';
 export * from './PluginQueryResult';
 export * from './NftItem';
 export * from './NftItemStats';
+export * from './PolkadotAddressMeta';
+export * from './PolkadotAddress';
 export * from './Asset3d';
