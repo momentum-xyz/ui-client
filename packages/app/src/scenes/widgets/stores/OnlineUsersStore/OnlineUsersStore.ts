@@ -78,7 +78,7 @@ const OnlineUsersStore = types
         if (query.length > 0) {
           self.query = query;
           const users = cloneDeep(
-            self.allUsers.filter((user) => user.name.toLowerCase().includes(query))
+            self.allUsers.filter((user) => user.name.toLowerCase().includes(query.toLowerCase()))
           );
           self.searchedUsers = cast(users);
         } else {
