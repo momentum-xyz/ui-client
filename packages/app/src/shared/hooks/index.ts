@@ -6,3 +6,4 @@ export * from './usePosBusEvent';
 export * from './useGooglePicker';
 export * from './useDeviceChange';
 export * from './useSupernova';
+export * from './useApiHandlers';

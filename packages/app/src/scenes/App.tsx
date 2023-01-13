@@ -3,76 +3,42 @@ import {observer} from 'mobx-react-lite';
 import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
-import {toast} from 'react-toastify';
 import {isBrowserSupported} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useApiHandlers, useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
-import {REQUEST_MAX_RETRIES, REQUEST_RETRY_DELAY_BASE, setApiResponseHandlers} from 'api/request';
-import {SystemWideError, ToastContent} from 'ui-kit';
+import {SystemWideError} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
 
-import AppAuth from './AppAuth';
-import AppLayers from './AppLayers';
-import {GlobalStyles} from './App.styled';
 import {
   PRIVATE_ROUTES,
   PRIVATE_ROUTES_WITH_UNITY,
   PUBLIC_ROUTES,
   SYSTEM_ROUTES
 } from './App.routes';
+import AppAuth from './AppAuth';
+import AppLayers from './AppLayers';
+import {GlobalStyles} from './App.styled';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
   const {configStore, authStore, themeStore, initApplication, unityStore, sentryStore} = useStore();
-  const {errorCode: configLoadingErrorCode} = configStore;
+  const {configLoadingErrorCode} = configStore;
   const {unityInstanceStore} = unityStore;
 
   const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
   const {t} = useTranslation();
 
+  useApiHandlers();
+
   useEffect(() => {
-    setApiResponseHandlers({
-      maxRetries: REQUEST_MAX_RETRIES,
-      retryDelayBase: REQUEST_RETRY_DELAY_BASE,
-      retryCodes: [httpErrorCodes.MAINTENANCE],
-      // this is called after retrying failed request if the error code matches retryCodes or if it doesn't match
-      onError: (error) => {
-        const status = error.response?.status;
-
-        console.error('API Error:', {error, status, config: error.config});
-        if (
-          status &&
-          [httpErrorCodes.INTERNAL_SYSTEM_ERROR, httpErrorCodes.MAINTENANCE].includes(status)
-        ) {
-          toast.info(
-            <ToastContent
-              headerIconName="check"
-              title={String(error.response?.status || '')}
-              text={
-                status === httpErrorCodes.MAINTENANCE
-                  ? t('systemMessages.underMaintenance')
-                  : t('errors.somethingWentWrong')
-              }
-              showCloseButton
-            />
-          );
-        }
-
-        if (status === httpErrorCodes.UNAUTHORIZED) {
-          document.location = ROUTES.signIn;
-        }
-        throw error;
-      }
-    });
-
     initApplication();
-  }, [initApplication, history, t]);
+  }, [initApplication]);
 
   useEffect(() => {
     if (configStore.isConfigReady) {
