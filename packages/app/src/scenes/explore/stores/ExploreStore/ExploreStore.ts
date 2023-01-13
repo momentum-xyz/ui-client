@@ -1,15 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {NftItemInterface} from 'stores/NftStore/models';
 import {api, NewsFeedResponse, NftFeedItemInterface} from 'api';
-
-// FIXME: make interface under app/core/interfaces
-export interface OdysseyItemInterface extends NftItemInterface {
-  connections: number;
-  docking: number;
-  events: number;
-}
 
 const ExploreStore = types
   .compose(

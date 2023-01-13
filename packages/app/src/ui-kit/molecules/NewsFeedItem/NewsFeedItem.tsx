@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {NftFeedItemInterface} from 'api';
-import {NftItemInterface} from 'stores/NftStore/models';
+import {NftItemModelInterface} from 'core/models';
 
 import * as styled from './NewsFeedItem.styled';
 import {CalendarItem, ConnectedItem, CreatedItem, DockedItem} from './components';
@@ -10,8 +10,8 @@ import {CalendarItem, ConnectedItem, CreatedItem, DockedItem} from './components
 interface PropsInterface {
   item: NftFeedItemInterface;
   currentUserId?: string;
-  onTeleport: (nft: NftItemInterface) => void;
-  onAttend: (nft: NftItemInterface) => void;
+  onTeleport: (nft: NftItemModelInterface) => void;
+  onAttend: (nft: NftItemModelInterface) => void;
   onConnect: (id: number) => void;
   onOpenOdyssey?: (uuid: string) => void;
 }

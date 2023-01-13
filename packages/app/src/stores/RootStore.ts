@@ -65,10 +65,6 @@ const RootStore = types
       self.authStore.tryToRestoreWallet();
       self.agoraStore.userDevicesStore.init();
       self.themeStore.init();
-    },
-    unityLoaded(worldId: string): void {
-      self.unityStore.unityInstanceStore.teleportIsReady();
-      self.unityStore.unityWorldStore.init(worldId);
     }
   }));
 
