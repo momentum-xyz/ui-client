@@ -1,4 +1,3 @@
-export * from './StakingWidget';
 export * from './HelpWidget';
 export * from './WorldStatsWidget';
 export * from './MusicPlayerWidget';

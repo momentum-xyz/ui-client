@@ -1,1 +1,0 @@
-export {ScannerItem} from './ScannerItem';

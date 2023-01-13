@@ -10,7 +10,6 @@ import {switchFullscreen} from 'core/utils';
 import {
   HelpWidget,
   MusicPlayerWidget,
-  StakingWidget,
   WorldStatsWidget,
   StageModePIPWidget,
   EmojiWidget,
@@ -30,8 +29,7 @@ const Widgets_OLD: FC = () => {
   } = useStore();
   const {unityInstanceStore} = unityStore;
   const {agoraStageModeStore} = agoraStore_OLD;
-  const {stakingStore, worldStatsStore, helpStore, musicPlayerStore, emojiStore} = widgetStore_OLD;
-  const {stakingDialog} = stakingStore;
+  const {worldStatsStore, helpStore, musicPlayerStore, emojiStore} = widgetStore_OLD;
   const {statsDialog} = worldStatsStore;
   const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
@@ -88,7 +86,6 @@ const Widgets_OLD: FC = () => {
   return (
     <>
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
-      {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
@@ -173,17 +170,6 @@ const Widgets_OLD: FC = () => {
                   showHover
                 />
               </ToolbarIcon>
-            )}
-            {!sessionStore.user?.isGuest && (
-              <ToolbarIcon
-                title={t('labels.staking')}
-                icon="wallet"
-                disabled={flightStore.isFlightWithMe}
-                onClick={() => {
-                  stakingStore.setOperatorSpaceId('');
-                  stakingDialog.open();
-                }}
-              />
             )}
             {mainToolbarIcons.map((item) => (
               <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />

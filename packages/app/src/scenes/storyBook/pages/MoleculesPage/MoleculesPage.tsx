@@ -25,16 +25,12 @@ import {
 
 import {
   TileMenu,
-  NetworkButton,
   Location,
   ToastContent,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
   ToastMessage
 } from 'ui-kit';
-import walletConnect from 'static/images/walletConnect.svg';
-import polkadot from 'static/images/polkadot.svg';
-import metamask from 'static/images/metamask.svg';
 
 import * as styled from './MoleculesPage.styled';
 
@@ -189,16 +185,6 @@ const MoleculesPage: FC = () => {
           <NavigationBarItem iconName="tiles" path="" />
           <NavigationBarItem iconName="miro" path="" />
           <NavigationBarItem iconName="drive" path="" />
-        </styled.Section>
-
-        <styled.Name>
-          <Heading label="Component «NetworkButton»" type="h2" align="left" />
-        </styled.Name>
-        <styled.Section>
-          <NetworkButton imageSrc={metamask} label="Metamask" onClick={() => {}} />
-          <NetworkButton imageSrc={polkadot} label="Polkadot" onClick={() => {}} />
-          <NetworkButton imageSrc={walletConnect} label="Wallet" onClick={() => {}} />
-          <NetworkButton iconName="profile" label="Guest" onClick={() => {}} />
         </styled.Section>
 
         <styled.Name>
