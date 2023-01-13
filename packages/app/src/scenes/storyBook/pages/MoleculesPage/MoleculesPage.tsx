@@ -24,17 +24,12 @@ import {
 } from '@momentum-xyz/ui-kit';
 
 import {
-  TileMenu,
-  NetworkButton,
   Location,
   ToastContent,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
   ToastMessage
 } from 'ui-kit';
-import walletConnect from 'static/images/walletConnect.svg';
-import polkadot from 'static/images/polkadot.svg';
-import metamask from 'static/images/metamask.svg';
 
 import * as styled from './MoleculesPage.styled';
 
@@ -192,16 +187,6 @@ const MoleculesPage: FC = () => {
         </styled.Section>
 
         <styled.Name>
-          <Heading label="Component «NetworkButton»" type="h2" align="left" />
-        </styled.Name>
-        <styled.Section>
-          <NetworkButton imageSrc={metamask} label="Metamask" onClick={() => {}} />
-          <NetworkButton imageSrc={polkadot} label="Polkadot" onClick={() => {}} />
-          <NetworkButton imageSrc={walletConnect} label="Wallet" onClick={() => {}} />
-          <NetworkButton iconName="profile" label="Guest" onClick={() => {}} />
-        </styled.Section>
-
-        <styled.Name>
           <Heading label="Component «SearchInput»" type="h2" align="left" />
         </styled.Name>
         <styled.Section>
@@ -269,13 +254,6 @@ const MoleculesPage: FC = () => {
             onTabSelect={() => {}}
           />
         </styled.SectionGrid2>
-
-        <styled.Name>
-          <Heading label="Component «TileMenu»" type="h2" align="left" />
-        </styled.Name>
-        <styled.Section>
-          <TileMenu onEdit={() => {}} onDelete={() => {}} isDelete />
-        </styled.Section>
 
         <styled.Name>
           <Heading label="Component «ToastContent»" type="h2" align="left" />

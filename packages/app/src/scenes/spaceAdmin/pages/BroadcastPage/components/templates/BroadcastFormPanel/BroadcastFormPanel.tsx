@@ -5,10 +5,11 @@ import {useTranslation} from 'react-i18next';
 import {Button, Heading, Input, SectionPanel, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {YOUTUBE_URL_PLACEHOLDER} from 'core/constants';
 import {BroadcastInterface} from 'api';
 
 import * as styled from './BroadcastFormPanel.styled';
+
+const YOUTUBE_URL_PLACEHOLDER = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 
 const BroadcastFormPanel: FC = () => {
   const {spaceAdminStore} = useStore();

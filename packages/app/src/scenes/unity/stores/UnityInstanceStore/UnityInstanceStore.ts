@@ -158,7 +158,7 @@ const UnityInstanceStore = types
       }
     }),
     resolveNode: flow(function* (object: string) {
-      return yield self.nodeRequest.send(api.webRepository.resolveNode, {object});
+      return yield self.nodeRequest.send(api.web3Repository.resolveNode, {object});
     }),
     async loadWorldById(worldId: string, token: string) {
       self.isTeleportReady = false;

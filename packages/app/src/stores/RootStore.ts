@@ -11,7 +11,6 @@ import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD
 import {RootSpaceAdminStore} from 'scenes/spaceAdmin/stores';
 import {OdysseyStore} from 'scenes/odyssey/stores';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
-import {VideoStore} from 'scenes/video/stores';
 import {RootOdysseyCreatorStore} from 'scenes/odysseyCreator/stores';
 import {ObjectStore} from 'scenes/object/stores';
 
@@ -53,8 +52,7 @@ const RootStore = types
     collaborationStore: types.optional(RootCollaborationStore, {}),
     meetingStore: types.optional(RootMeetingStore, {}),
     flightStore: types.optional(RootFlightStore, {}),
-    spaceAdminStore: types.optional(RootSpaceAdminStore, {}),
-    videoStore: types.optional(VideoStore, {})
+    spaceAdminStore: types.optional(RootSpaceAdminStore, {})
   })
   .actions((self) => ({
     async initApplication() {
