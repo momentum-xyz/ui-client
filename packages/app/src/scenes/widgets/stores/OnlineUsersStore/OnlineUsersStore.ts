@@ -131,6 +131,13 @@ const OnlineUsersStore = types
         docking: self.docks,
         events: self.events
       };
+    },
+    get listedUsers() {
+      return self.searchedUsers && self.searchedUsers.length
+        ? self.searchedUsers
+        : !self.query
+        ? self.allUsers
+        : [];
     }
   }));
 
