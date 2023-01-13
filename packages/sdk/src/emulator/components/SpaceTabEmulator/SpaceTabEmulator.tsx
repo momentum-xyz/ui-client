@@ -9,15 +9,10 @@ import {
 
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
-import {
-  AttributeValueInterface,
-  CorePluginPropsInterface,
-  ObjectPluginPropsInterface,
-  PluginInterface
-} from '../../../interfaces';
+import {AttributeValueInterface, PluginPropsInterface, PluginInterface} from '../../../interfaces';
 
 interface PropsInterface {
-  plugin: PluginInterface<ObjectPluginPropsInterface>;
+  plugin: PluginInterface;
   objectId: string;
   // isExpanded: boolean;
   // setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,13 +44,14 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
   } = useAttributesEmulator();
 
   const config = useMemo(
-    () => ({
-      APP_ID: ''
-    }),
+    () =>
+      ({
+        APP_ID: ''
+      } as any),
     []
   );
 
-  const coreProps: CorePluginPropsInterface = useMemo(
+  const coreProps: PluginPropsInterface = useMemo(
     () => ({
       theme: theme as ThemeInterface,
       isAdmin: false,
@@ -202,7 +198,8 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
 
         useStateItemChange: (key, callback) => useAttributeItemChange('', 'state', key, callback),
         useStateItemRemove: (key, callback) => useAttributeItemRemove('', 'state', key, callback)
-      }
+      },
+      onClose
     }),
     [
       theme,
@@ -220,7 +217,8 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
       removedAttribute,
       changedAttributeItem,
       removedAttributeItem,
-      config
+      config,
+      onClose
     ]
   );
 

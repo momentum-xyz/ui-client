@@ -4,13 +4,13 @@ import React, {
 } from 'react';
 import {useParams} from 'react-router-dom';
 
-import {ObjectPluginPropsInterface, PluginInterface} from '../../../interfaces';
+import {PluginInterface} from '../../../interfaces';
 import {SpaceTabEmulator} from '../SpaceTabEmulator';
 
 import * as styled from './SpaceEmulator.styled';
 
 interface PropsInterface {
-  plugin: PluginInterface<ObjectPluginPropsInterface>;
+  plugin: PluginInterface;
   onClose: () => void;
 }
 

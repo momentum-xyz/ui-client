@@ -3,13 +3,13 @@ import {
   ObjectGlobalPropsContextProvider,
   UsePluginHookType
 } from '@momentum-xyz/sdk';
-import {AppConfigInterface, MiroPluginPropsInterface} from 'core/interfaces';
+import {AppConfigInterface} from 'core/interfaces';
 import {MiroBoardPage} from 'pages';
 import {useEffect, useMemo} from 'react';
 import {StoreProvider} from 'shared/hooks/useStore';
 import {RootMiroStore} from 'stores';
 
-export const usePlugin: UsePluginHookType<MiroPluginPropsInterface> = (props) => {
+export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
   const store = useMemo(
     () =>
       RootMiroStore.create({

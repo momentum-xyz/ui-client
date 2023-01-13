@@ -1,8 +1,8 @@
 import {flow, Instance, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
-import {AppConfigInterface, GoogleDriveApiInterface} from 'core/interfaces';
+import {AppConfigInterface} from 'core/interfaces';
 import {appVariables} from 'api/constants';
-import {ApiInterface, AttributeNameEnum} from '@momentum-xyz/sdk';
+import {ApiInterface, AttributeNameEnum, PluginApiInterface} from '@momentum-xyz/sdk';
 
 import {GoogleDriveStore} from './GoogleDriveStore';
 
@@ -10,7 +10,7 @@ const RootGoogleDriveStore = types
   .compose(
     ResetModel,
     types.model('RootGoogleDriveStore', {
-      api: types.frozen<GoogleDriveApiInterface>(),
+      api: types.frozen<PluginApiInterface<AppConfigInterface>>(),
       googleDriveStore: types.optional(GoogleDriveStore, {}),
       attributesApi: types.frozen<ApiInterface>(),
       objectId: types.maybe(types.string)
@@ -18,7 +18,7 @@ const RootGoogleDriveStore = types
   )
   .actions((self) => ({
     init: flow(function* (spaceId: string) {
-      const config: AppConfigInterface = yield self.api.getConfig();
+      const config = yield self.api.getConfig();
       self.objectId = spaceId;
 
       Object.entries(config).forEach((entry) => {

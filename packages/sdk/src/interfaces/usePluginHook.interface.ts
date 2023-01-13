@@ -1,4 +1,4 @@
-import {CorePluginPropsInterface} from './pluginProps.interface';
+import {PluginPropsInterface} from './pluginProps.interface';
 
 interface UsePluginHookReturnInterface {
   content?: JSX.Element | null;
@@ -10,6 +10,6 @@ interface UsePluginHookReturnInterface {
   };
 }
 
-export type UsePluginHookType<T extends CorePluginPropsInterface = CorePluginPropsInterface> = (
-  props: T
+export type UsePluginHookType<C = unknown> = (
+  props: PluginPropsInterface<C>
 ) => UsePluginHookReturnInterface;

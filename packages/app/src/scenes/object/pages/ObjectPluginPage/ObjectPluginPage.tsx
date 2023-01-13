@@ -9,7 +9,7 @@ import {
 } from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
-import {ObjectPluginPropsInterface, PluginInterface} from '@momentum-xyz/sdk';
+import {PluginInterface} from '@momentum-xyz/sdk';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
 import cn from 'classnames';
 
@@ -22,7 +22,7 @@ import * as styled from './ObjectPluginPage.styled';
 
 interface PropsInterface {
   objectId: string;
-  plugin: PluginInterface<ObjectPluginPropsInterface>;
+  plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
 }
 
