@@ -9,7 +9,6 @@ import {useStore} from 'shared/hooks';
 import {switchFullscreen} from 'core/utils';
 import {
   HelpWidget,
-  LaunchInitiativeWidget,
   MusicPlayerWidget,
   StakingWidget,
   WorldStatsWidget,
@@ -31,14 +30,7 @@ const Widgets_OLD: FC = () => {
   } = useStore();
   const {unityInstanceStore} = unityStore;
   const {agoraStageModeStore} = agoraStore_OLD;
-  const {
-    stakingStore,
-    worldStatsStore,
-    helpStore,
-    launchInitiativeStore,
-    musicPlayerStore,
-    emojiStore
-  } = widgetStore_OLD;
+  const {stakingStore, worldStatsStore, helpStore, musicPlayerStore, emojiStore} = widgetStore_OLD;
   const {stakingDialog} = stakingStore;
   const {statsDialog} = worldStatsStore;
   const {user, userId} = sessionStore;
@@ -99,7 +91,6 @@ const Widgets_OLD: FC = () => {
       {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
-      {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (
