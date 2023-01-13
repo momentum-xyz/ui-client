@@ -70,13 +70,6 @@ const SearchUsersWidget: FC = () => {
     }
   };
 
-  const listedUsers =
-    onlineUsersStore.searchedUsers && onlineUsersStore.searchedUsers.length
-      ? onlineUsersStore.searchedUsers
-      : !onlineUsersStore.query
-      ? onlineUsersStore.allUsers
-      : [];
-
   return (
     <Portal>
       <styled.Modal data-testid="SearchUsersWidget-test">
@@ -98,7 +91,7 @@ const SearchUsersWidget: FC = () => {
                 onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
               />
               <styled.List className="noScrollIndicator">
-                {listedUsers.map((user) => (
+                {onlineUsersStore.listedUsers.map((user) => (
                   <OnlineUser
                     key={user.id}
                     user={user}

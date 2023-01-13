@@ -35,7 +35,18 @@ const OnlineUsersStore = types
     endEditingUser() {
       self.editedUserId = undefined;
     }
-  }));
+  }))
+  .views((self) => {
+    return {
+      get listedUsers() {
+        return self.searchedUsers && self.searchedUsers.length
+          ? self.searchedUsers
+          : !self.query
+          ? self.allUsers
+          : [];
+      }
+    };
+  });
 
 export type OnlineUsersStoreType = Instance<typeof OnlineUsersStore>;
 
