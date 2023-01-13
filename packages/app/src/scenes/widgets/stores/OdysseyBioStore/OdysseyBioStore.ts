@@ -5,13 +5,7 @@ import {getRootStore} from 'core/utils';
 import {User} from 'core/models';
 import {WalletStatisticsInterface} from 'core/interfaces';
 import {api, SpaceAttributeItemResponse, UserInterface} from 'api';
-import {NftItem, NftItemModelInterface} from 'core/models';
-
-export interface OdysseyItemInterface extends NftItemModelInterface {
-  connections: number;
-  docking: number;
-  events: number;
-}
+import {NftItem, NftItemModelInterface, NftItemStatsModelInterface} from 'core/models';
 
 const OdysseyBioStore = types.compose(
   ResetModel,
@@ -78,7 +72,7 @@ const OdysseyBioStore = types.compose(
       };
     })
     .views((self) => ({
-      get odyssey(): OdysseyItemInterface | null {
+      get odyssey(): NftItemStatsModelInterface | null {
         if (!self.nftItem) {
           return null;
         }

@@ -5,8 +5,7 @@ import {cloneDeep} from 'lodash-es';
 import {api, OdysseyOnlineUsersResponse, SpaceAttributeItemResponse, UserInterface} from 'api';
 import {getRootStore} from 'core/utils';
 import {User} from 'core/models';
-import {NftItem, NftItemModelInterface} from 'core/models';
-import {OdysseyItemInterface} from 'scenes/explore/stores';
+import {NftItem, NftItemModelInterface, NftItemStatsModelInterface} from 'core/models';
 import {WalletStatisticsInterface} from 'core/interfaces';
 
 const OnlineUsersStore = types
@@ -120,7 +119,7 @@ const OnlineUsersStore = types
     };
   })
   .views((self) => ({
-    get odyssey(): OdysseyItemInterface | null {
+    get odyssey(): NftItemStatsModelInterface | null {
       if (!self.nftItem) {
         return null;
       }
