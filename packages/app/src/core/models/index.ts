@@ -10,8 +10,6 @@ export * from './TokenItem';
 export * from './TrackModel';
 export * from './UserSpaceDetails';
 export * from './EventItem';
-export * from './TileList';
-export * from './Tile';
 export * from './Content';
 export * from './Integration';
 export * from './AgoraRemoteUser';
