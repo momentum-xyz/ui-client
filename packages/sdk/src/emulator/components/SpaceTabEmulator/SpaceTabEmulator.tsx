@@ -10,6 +10,7 @@ import {
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
 import {AttributeValueInterface, PluginPropsInterface, PluginInterface} from '../../../interfaces';
+import {ObjectGlobalPropsContextProvider} from '../../../contexts';
 
 interface PropsInterface {
   plugin: PluginInterface;
@@ -222,22 +223,38 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
     ]
   );
 
-  const {content, objectView} = plugin.usePlugin(coreProps);
-
   return (
     <ErrorBoundary errorMessage="Error while rendering plugin">
-      {content ||
-        (objectView && (
-          <WindowPanel
-            title={objectView.title || ''}
-            subtitle={objectView.subtitle}
-            actions={objectView.actions}
-            onClose={onClose}
-          >
-            {objectView.content}
-          </WindowPanel>
-        )) || <div>usePlugin doesn't return the expected values. Please check the docs</div>}
+      <ObjectGlobalPropsContextProvider props={coreProps}>
+        <PluginInnerWrapper pluginProps={coreProps} plugin={plugin} />
+      </ObjectGlobalPropsContextProvider>
     </ErrorBoundary>
+  );
+};
+
+const PluginInnerWrapper = ({
+  pluginProps,
+  plugin
+}: {
+  pluginProps: PluginPropsInterface;
+  plugin: PluginInterface;
+}) => {
+  // const {t} = useTranslation();
+
+  const {content, objectView} = plugin.usePlugin(pluginProps);
+
+  return (
+    content ||
+    (objectView && (
+      <WindowPanel
+        title={objectView.title || ''}
+        subtitle={objectView.subtitle}
+        actions={objectView.actions}
+        onClose={pluginProps.onClose}
+      >
+        {objectView.content}
+      </WindowPanel>
+    )) || <div>usePlugin doesn't return the expected values. Please check the docs</div>
   );
 };
 

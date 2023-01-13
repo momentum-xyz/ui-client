@@ -1,4 +1,4 @@
-import {UsePluginHookType, ObjectGlobalPropsContextProvider} from '@momentum-xyz/sdk';
+import {UsePluginHookType} from '@momentum-xyz/sdk';
 import {AppConfigInterface} from 'core/interfaces';
 import {GoogleDrivePage} from 'pages';
 import {useMemo, useEffect} from 'react';
@@ -27,17 +27,13 @@ export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
     }
   }, [store, props.objectId]);
 
-  const content = useMemo(() => {
-    return (
-      <ObjectGlobalPropsContextProvider props={props}>
-        <ThemeProvider theme={props.theme}>
-          <StoreProvider value={store}>
-            <GoogleDrivePage />
-          </StoreProvider>
-        </ThemeProvider>
-      </ObjectGlobalPropsContextProvider>
-    );
-  }, [props, store]);
+  const content = (
+    <ThemeProvider theme={props.theme}>
+      <StoreProvider value={store}>
+        <GoogleDrivePage />
+      </StoreProvider>
+    </ThemeProvider>
+  );
 
   return {content};
 };
