@@ -7,13 +7,12 @@ import * as styled from './FlyToMeWidget.styled';
 
 const FlyToMeWidget: FC = () => {
   const {unityStore, widgetsStore} = useStore();
-  const {unityWorldStore} = unityStore;
   const {flyToMeStore} = widgetsStore;
 
   useEffect(() => {
-    flyToMeStore.flyToMe(unityWorldStore.worldId);
+    flyToMeStore.flyToMe(unityStore.worldId);
     flyToMeStore.dialog.close();
-  }, [flyToMeStore, unityWorldStore.worldId]);
+  }, [flyToMeStore, unityStore.worldId]);
 
   return <styled.Container data-testid="HomePage-test" />;
 };

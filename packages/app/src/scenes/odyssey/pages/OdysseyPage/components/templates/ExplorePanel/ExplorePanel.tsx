@@ -13,7 +13,7 @@ const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC = () => {
   const {odysseyStore, unityStore} = useStore();
-  const {unityWorldStore, unityInstanceStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
   const {exploreStore} = odysseyStore;
   const {searchQuery, spaceDetails, history} = exploreStore;
 
@@ -21,9 +21,9 @@ const ExplorePanel: FC = () => {
 
   useEffect(() => {
     if (!exploreStore.worldId) {
-      exploreStore.init(unityWorldStore.worldId);
+      exploreStore.init(unityStore.worldId);
     }
-  }, [exploreStore, unityWorldStore.worldId]);
+  }, [exploreStore, unityStore.worldId]);
 
   const debouncedSearch = useDebouncedCallback(exploreStore.search, SEARCH_DELAY_MS);
 
@@ -51,7 +51,7 @@ const ExplorePanel: FC = () => {
           <SpaceDetails
             space={spaceDetails}
             previousSpace={history.previousSpace}
-            isWorld={spaceDetails.id === unityWorldStore.worldId}
+            isWorld={spaceDetails.id === unityStore.worldId}
             onTeleportToSpace={unityInstanceStore.teleportToSpace}
             onSelectSpace={exploreStore.selectSpace}
             onGoBack={exploreStore.goBackToPreviousSpace}

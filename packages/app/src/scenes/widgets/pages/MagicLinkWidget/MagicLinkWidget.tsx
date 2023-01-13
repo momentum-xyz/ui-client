@@ -18,7 +18,6 @@ const MagicLinkWidget: FC = () => {
   const {widgetsStore, unityStore} = useStore();
   const {magicLinkStore} = widgetsStore;
   const {address, copyToClipBoard} = magicLinkStore;
-  const {unityWorldStore} = unityStore;
 
   const theme = useTheme();
   const {t} = useTranslation();
@@ -32,7 +31,7 @@ const MagicLinkWidget: FC = () => {
   }, [magicLinkStore]);
 
   const handleGenerateLink = useCallback(async () => {
-    const isDone = await copyToClipBoard(MagicTypeEnum.ODYSSEY, unityWorldStore.worldId);
+    const isDone = await copyToClipBoard(MagicTypeEnum.ODYSSEY, unityStore.worldId);
 
     if (isDone) {
       magicLinkStore.dialog.close();
@@ -47,7 +46,7 @@ const MagicLinkWidget: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, [copyToClipBoard, magicLinkStore.dialog, t, unityWorldStore.worldId]);
+  }, [copyToClipBoard, magicLinkStore.dialog, t, unityStore.worldId]);
 
   return (
     <Dialog

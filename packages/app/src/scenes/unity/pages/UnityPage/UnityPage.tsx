@@ -37,7 +37,7 @@ const UnityPage: FC = () => {
     sessionStore,
     odysseyCreatorStore: worldBuilderStore
   } = useStore();
-  const {unityWorldStore, unityInstanceStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
   const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
 
   const theme = useTheme();
@@ -46,9 +46,9 @@ const UnityPage: FC = () => {
   const location = useLocation();
 
   const isBuilderMode =
-    !!unityWorldStore.worldId &&
+    !!unityStore.worldId &&
     location.pathname.includes(
-      generatePath(ROUTES.odyssey.creator.base, {worldId: unityWorldStore.worldId})
+      generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId})
     );
 
   // TODO: FIXME
@@ -94,7 +94,7 @@ const UnityPage: FC = () => {
   useUnityEvent('ClickObjectEvent', (spaceId: string) => {
     history.push({
       pathname: generatePath(ROUTES.odyssey.object.root, {
-        worldId: unityWorldStore.worldId,
+        worldId: unityStore.worldId,
         objectId: spaceId
       })
     });
@@ -245,7 +245,7 @@ const UnityPage: FC = () => {
       {unityInstanceStore.objectMenu.isOpen && (
         <ObjectMenu
           gizmoType={unityInstanceStore.gizmoMode}
-          worldId={unityWorldStore.worldId}
+          worldId={unityStore.worldId}
           position={unityInstanceStore.objectMenuPosition}
           objectId={unityInstanceStore.selectedObjectId ?? ' '}
           onGizmoTypeChange={unityInstanceStore.changeGizmoType}
@@ -262,13 +262,13 @@ const UnityPage: FC = () => {
           onAddObject={() => {
             history.push(
               generatePath(ROUTES.odyssey.creator.spawnAsset.base, {
-                worldId: unityWorldStore.worldId
+                worldId: unityStore.worldId
               })
             );
           }}
           onSkyboxClick={() => {
             history.push(
-              generatePath(ROUTES.odyssey.creator.skybox, {worldId: unityWorldStore.worldId})
+              generatePath(ROUTES.odyssey.creator.skybox, {worldId: unityStore.worldId})
             );
           }}
         />

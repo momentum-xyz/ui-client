@@ -9,12 +9,11 @@ import * as styled from './WorldBuilderWidget.styled';
 
 const WorldBuilderWidget: FC = () => {
   const {unityStore} = useStore();
-  const {unityWorldStore} = unityStore;
-  const {worldId} = unityWorldStore;
+  const {worldId} = unityStore;
 
   const history = useHistory();
 
-  const isAdmin = unityWorldStore.isCurrentUserWorldAdmin;
+  const isAdmin = unityStore.isCurrentUserWorldAdmin;
 
   const collapsedItem: ToolbarIconInterface = {
     title: 'Odyssey Creator',

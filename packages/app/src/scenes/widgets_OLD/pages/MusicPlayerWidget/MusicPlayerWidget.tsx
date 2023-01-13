@@ -17,13 +17,12 @@ const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
   const {unityStore, widgetStore_OLD} = useStore();
-  const {unityWorldStore} = unityStore;
   const {musicPlayerStore} = widgetStore_OLD;
   const {musicPlayerWidget, playlist} = musicPlayerStore;
 
   useEffect(() => {
-    playlist.fetchPlaylist(unityWorldStore.worldId);
-  }, [musicPlayerWidget.isOpen, playlist, unityWorldStore.worldId]);
+    playlist.fetchPlaylist(unityStore.worldId);
+  }, [musicPlayerWidget.isOpen, playlist, unityStore.worldId]);
 
   return (
     <Dialog

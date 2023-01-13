@@ -15,17 +15,16 @@ import {IntroVideo} from './components/IntroVideo';
 const HelpWidget: React.FC = () => {
   const {widgetStore_OLD, unityStore} = useStore();
   const {helpStore} = widgetStore_OLD;
-  const {unityWorldStore} = unityStore;
 
   const theme = useTheme();
 
   useEffect(() => {
-    helpStore.init(unityWorldStore.worldId);
+    helpStore.init(unityStore.worldId);
 
     return () => {
       helpStore.resetModel();
     };
-  }, [helpStore, unityWorldStore.worldId]);
+  }, [helpStore, unityStore.worldId]);
 
   return (
     <Dialog

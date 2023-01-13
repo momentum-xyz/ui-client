@@ -12,7 +12,7 @@ const MENU_OFFSET_TOP = 20;
 
 const OdysseyInfoWidget: FC = () => {
   const {authStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
-  const {unityInstanceStore, unityWorldStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey} = odysseyInfoStore;
   const {assetStore} = objectStore;
@@ -63,10 +63,10 @@ const OdysseyInfoWidget: FC = () => {
         odysseyInfoStore.resetModel();
 
         if (
-          unityWorldStore.worldId &&
+          unityStore.worldId &&
           matchPath(history.location.pathname, ROUTES.odyssey.object.root)
         ) {
-          history.push(generatePath(ROUTES.odyssey.base, {worldId: unityWorldStore.worldId}));
+          history.push(generatePath(ROUTES.odyssey.base, {worldId: unityStore.worldId}));
         }
       }}
       showCloseButton

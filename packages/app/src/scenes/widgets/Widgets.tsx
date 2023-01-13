@@ -48,22 +48,22 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {unityWorldStore} = unityStore;
   const {user} = sessionStore;
 
-  const worldOwner = nftStore.getNftByUuid(unityWorldStore.worldId);
+  const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    onlineUsersStore.init(unityWorldStore.worldId, sessionStore.userId);
-    onlineUsersStore.fetchUser(unityWorldStore.worldId);
-  }, [onlineUsersStore, sessionStore.userId, unityWorldStore.worldId]);
+    onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
+    onlineUsersStore.fetchUser(unityStore.worldId);
+  }, [onlineUsersStore, sessionStore.userId, unityStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
-      unityWorldStore.worldId,
+      unityStore.worldId,
       sessionStore.userId,
       widgetsStore.screenShareStore.dialog.open
     );
-  }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, unityWorldStore.worldId]);
+  }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, unityStore.worldId]);
 
   return (
     <>
@@ -145,7 +145,7 @@ const Widgets: FC<PropsInterface> = (props) => {
             <styled.OnlineUsers>
               <OnlineUsersWidget
                 currentUser={sessionStore.user}
-                worldId={unityWorldStore.worldId}
+                worldId={unityStore.worldId}
                 onClick={onlineUsersStore.dialog.toggle}
               />
             </styled.OnlineUsers>

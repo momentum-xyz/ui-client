@@ -23,7 +23,6 @@ interface AddMemberFormInterface {
 
 const AddMemberDialog: FC<PropsInterface> = (props) => {
   const {unityStore, spaceAdminStore} = useStore();
-  const {unityWorldStore} = unityStore;
   const {spaceManagerStore} = spaceAdminStore;
   const {space, searchUsersStore} = spaceManagerStore;
 
@@ -89,7 +88,7 @@ const AddMemberDialog: FC<PropsInterface> = (props) => {
   };
 
   const debounceSearch = useDebouncedCallback((query: string) => {
-    searchUsersStore.search(query, unityWorldStore.worldId);
+    searchUsersStore.search(query, unityStore.worldId);
   }, 500);
 
   const handleSearch = (value: string) => {

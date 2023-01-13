@@ -13,12 +13,11 @@ import * as styled from './TextPage.styled';
 
 const TextPage: FC = () => {
   const history = useHistory();
-  const {objectStore, mainStore} = useStore();
+  const {objectStore, unityStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content} = assetStore;
-  const {worldStore} = mainStore;
 
-  const isAdmin = worldStore.isCurrentUserWorldAdmin;
+  const isAdmin = unityStore.isCurrentUserWorldAdmin;
 
   const {worldId} = useParams<{worldId: string}>();
 

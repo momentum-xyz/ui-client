@@ -29,7 +29,7 @@ const Widgets_OLD: FC = () => {
     agoraStore_OLD,
     unityStore
   } = useStore();
-  const {unityInstanceStore, unityWorldStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
   const {agoraStageModeStore} = agoraStore_OLD;
   const {
     stakingStore,
@@ -49,10 +49,10 @@ const Widgets_OLD: FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    musicPlayerStore.init(unityWorldStore.worldId);
-    emojiStore.init(unityWorldStore.worldId);
+    musicPlayerStore.init(unityStore.worldId);
+    emojiStore.init(unityStore.worldId);
     worldBuilderStore.fetchPermissions();
-  }, [userId, user, unityWorldStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
+  }, [userId, user, unityStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
 
   const toggleMute = () => {
     if (!agoraStore_OLD.canToggleMicrophone) {

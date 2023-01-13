@@ -11,7 +11,7 @@ import * as styled from './MutualConnectionsWidget.styled';
 
 const MutualConnectionsWidget: FC = () => {
   const {nftStore, widgetsStore, authStore, unityStore} = useStore();
-  const {unityInstanceStore, unityWorldStore, isUnityAvailable} = unityStore;
+  const {unityInstanceStore, isUnityAvailable} = unityStore;
   const {mutualConnectionsStore} = widgetsStore;
   const {mutualConnections} = nftStore;
 
@@ -84,7 +84,7 @@ const MutualConnectionsWidget: FC = () => {
                   iconName="fly-portal"
                   size="medium"
                   onClick={() => handleTeleportToOdyssey(connection.uuid)}
-                  disabled={unityWorldStore.worldId === connection.uuid}
+                  disabled={unityStore.worldId === connection.uuid}
                 />
               </styled.Buttons>
             </styled.Connection>

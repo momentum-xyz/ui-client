@@ -14,7 +14,7 @@ const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = () => {
   const {widgetsStore, sessionStore, authStore, agoraStore, unityStore} = useStore();
-  const {isUnityAvailable, unityWorldStore, unityInstanceStore} = unityStore;
+  const {isUnityAvailable, unityInstanceStore} = unityStore;
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -47,14 +47,9 @@ const ProfileWidget: FC = () => {
 
   const isTeleportAvailable = useMemo(() => {
     return isUnityAvailable
-      ? !sessionStore.isGuest && unityWorldStore.worldId !== profileStore.userProfile?.id
+      ? !sessionStore.isGuest && unityStore.worldId !== profileStore.userProfile?.id
       : !sessionStore.isGuest;
-  }, [
-    isUnityAvailable,
-    profileStore.userProfile?.id,
-    sessionStore.isGuest,
-    unityWorldStore.worldId
-  ]);
+  }, [isUnityAvailable, profileStore.userProfile?.id, sessionStore.isGuest, unityStore.worldId]);
 
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();

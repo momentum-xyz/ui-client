@@ -11,6 +11,9 @@ const UnityStore = types
     unityWorldStore: types.optional(UnityWorldStore, {})
   })
   .views((self) => ({
+    get worldId(): string {
+      return self.unityWorldStore.worldId;
+    },
     get isUnityAvailable(): boolean {
       return self.unityInstanceStore.isTeleportReady;
     },
@@ -19,6 +22,12 @@ const UnityStore = types
     },
     get isBuildMode(): boolean {
       return UnityService.isBuildMode;
+    },
+    get isMyWorld(): boolean {
+      return self.unityWorldStore.isMyWorld;
+    },
+    get isCurrentUserWorldAdmin(): boolean {
+      return self.unityWorldStore.isCurrentUserWorldAdmin;
     }
   }));
 

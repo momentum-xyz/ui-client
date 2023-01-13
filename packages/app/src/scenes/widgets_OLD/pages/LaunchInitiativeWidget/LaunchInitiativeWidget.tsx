@@ -18,7 +18,7 @@ interface InitiativeInterface {
 const LaunchInitiativeWidget: FC = () => {
   const {unityStore, widgetStore_OLD} = useStore();
   const {launchInitiativeStore} = widgetStore_OLD;
-  const {unityWorldStore, unityInstanceStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
 
   const {
     control,
@@ -36,7 +36,7 @@ const LaunchInitiativeWidget: FC = () => {
       .create({
         name,
         description,
-        currentWorldId: unityWorldStore.worldId,
+        currentWorldId: unityStore.worldId,
         spaceType: SpaceTypeEnum.CHALLENGE
       })
       .then(({isSuccess, spaceId}) => {

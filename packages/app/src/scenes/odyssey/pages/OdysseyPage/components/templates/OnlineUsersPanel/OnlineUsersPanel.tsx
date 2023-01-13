@@ -12,7 +12,7 @@ const LAYOUT_WIDTH = '200px';
 
 const OnlineUsersPanel: FC = () => {
   const {sessionStore, odysseyStore, unityStore, collaborationStore} = useStore();
-  const {unityWorldStore, unityInstanceStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
   const {spaceStore} = collaborationStore;
   const {onlineUsersStore, userProfileDialog} = odysseyStore;
   const {user} = sessionStore;
@@ -50,7 +50,7 @@ const OnlineUsersPanel: FC = () => {
         onlineUsersStore={onlineUsersStore}
         onlineUsersList={onlineUsersStore.onlineUsersList}
         changeKeyboardControl={unityInstanceStore.changeKeyboardControl}
-        worldId={unityWorldStore.worldId}
+        worldId={unityStore.worldId}
         user={user ?? undefined}
         teleportToUser={unityInstanceStore.teleportToUser}
         spaceId={spaceStore?.id ?? ''}

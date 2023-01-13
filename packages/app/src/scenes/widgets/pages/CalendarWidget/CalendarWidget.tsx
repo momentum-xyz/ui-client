@@ -22,22 +22,22 @@ const CalendarWidget: FC = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    eventList.fetchSpaceEvents(unityWorldStore.worldId);
+    eventList.fetchSpaceEvents(unityStore.worldId);
     unityInstanceStore.changeKeyboardControl(false);
 
     return () => {
       unityInstanceStore.changeKeyboardControl(true);
       eventList.resetModel();
     };
-  }, [calendarStore, eventList, unityInstanceStore, unityWorldStore.worldId]);
+  }, [calendarStore, eventList, unityInstanceStore, unityStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
   };
 
   const handleEventDelete = async () => {
-    if (unityWorldStore.worldId) {
-      if (await calendarStore.removeEvent(unityWorldStore.worldId)) {
+    if (unityStore.worldId) {
+      if (await calendarStore.removeEvent(unityStore.worldId)) {
         toast.info(
           <ToastContent
             headerIconName="calendar"

@@ -12,13 +12,12 @@ const VoiceChatWidget: FC = () => {
   const {widgetsStore, agoraStore, sessionStore, unityStore} = useStore();
   const {voiceChatStore} = widgetsStore;
   const {agoraVoiceChatStore} = agoraStore;
-  const {unityWorldStore} = unityStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    agoraStore.init(unityWorldStore.worldId, sessionStore.userId);
-  }, [agoraStore, unityWorldStore.worldId, sessionStore]);
+    agoraStore.init(unityStore.worldId, sessionStore.userId);
+  }, [agoraStore, unityStore.worldId, sessionStore]);
 
   const handleClose = useCallback(async () => {
     if (agoraVoiceChatStore.hasJoined) {

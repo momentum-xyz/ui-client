@@ -10,19 +10,19 @@ import * as styled from './TextChatWidget.styled';
 
 const TextChatWidget: FC = () => {
   const {widgetsStore, sessionStore, unityStore} = useStore();
-  const {unityInstanceStore, unityWorldStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
   const {textChatStore, voiceChatStore} = widgetsStore;
   const {streamChat} = textChatStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    streamChat.init(sessionStore.userId, unityWorldStore.worldId, sessionStore.user);
+    streamChat.init(sessionStore.userId, unityStore.worldId, sessionStore.user);
 
     return () => {
-      streamChat.deinit(unityWorldStore.worldId);
+      streamChat.deinit(unityStore.worldId);
     };
-  }, [sessionStore.user, sessionStore.userId, streamChat, unityWorldStore.worldId]);
+  }, [sessionStore.user, sessionStore.userId, streamChat, unityStore.worldId]);
 
   return (
     <Portal>

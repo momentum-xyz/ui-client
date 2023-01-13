@@ -20,7 +20,6 @@ const EventForm: FC = () => {
   const {widgetsStore, unityStore, sessionStore, exploreStore, nftStore} = useStore();
   const {calendarStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
-  const {unityWorldStore} = unityStore;
   const {currentEvent} = eventForm;
 
   const {
@@ -56,13 +55,13 @@ const EventForm: FC = () => {
     const isNewEvent = !eventForm.currentEvent;
     const isSuccess = await eventForm.createOrUpdateEvent(
       data,
-      unityWorldStore.worldId,
+      unityStore.worldId,
       sessionStore.userId,
       calendarStore.world?.name,
       image
     );
 
-    const nft = nftStore.getNftByUuid(unityWorldStore.worldId);
+    const nft = nftStore.getNftByUuid(unityStore.worldId);
 
     if (isSuccess && isNewEvent && nft) {
       await exploreStore.createNewsFeedItem({
@@ -87,7 +86,7 @@ const EventForm: FC = () => {
           showCloseButton
         />
       );
-      await eventList.fetchSpaceEvents(unityWorldStore.worldId);
+      await eventList.fetchSpaceEvents(unityStore.worldId);
     } else {
       toast.error(
         <ToastContent

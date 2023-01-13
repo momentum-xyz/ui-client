@@ -15,7 +15,7 @@ const DIALOG_WIDTH_PX = 296;
 
 const SearchUsersWidget: FC = () => {
   const {widgetsStore, nftStore, authStore, sessionStore, unityStore} = useStore();
-  const {unityInstanceStore, unityWorldStore} = unityStore;
+  const {unityInstanceStore} = unityStore;
   const {onlineUsersStore} = widgetsStore;
 
   const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
@@ -105,7 +105,7 @@ const SearchUsersWidget: FC = () => {
                         onUserClick={handleUserClick}
                         onHighFiveUser={handleHighFive}
                         isCurrentUser={user.id === sessionStore.userId}
-                        isOwner={user?.id === unityWorldStore.worldId}
+                        isOwner={user?.id === unityStore.worldId}
                       />
                     ))
                   : !onlineUsersStore.query &&
@@ -117,7 +117,7 @@ const SearchUsersWidget: FC = () => {
                         onUserClick={handleUserClick}
                         onHighFiveUser={handleHighFive}
                         isCurrentUser={user.id === sessionStore.userId}
-                        isOwner={user?.id === unityWorldStore.worldId}
+                        isOwner={user?.id === unityStore.worldId}
                       />
                     ))}
               </styled.List>
@@ -138,14 +138,13 @@ const SearchUsersWidget: FC = () => {
                   alreadyConnected={isAlreadyConnected}
                   onVisit={handleOdysseyTeleport}
                   visitDisabled={
-                    !onlineUsersStore.nftId ||
-                    onlineUsersStore.odyssey?.uuid === unityWorldStore.worldId
+                    !onlineUsersStore.nftId || onlineUsersStore.odyssey?.uuid === unityStore.worldId
                   }
                   onHighFive={handleOdysseyHighFive}
                   onConnect={handleConnect}
                   connectDisabled={
                     !onlineUsersStore.nftId ||
-                    onlineUsersStore.odyssey?.uuid === unityWorldStore.worldId ||
+                    onlineUsersStore.odyssey?.uuid === unityStore.worldId ||
                     isAlreadyConnected
                   }
                   onCoCreate={() => {}}
