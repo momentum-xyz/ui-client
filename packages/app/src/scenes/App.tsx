@@ -114,6 +114,7 @@ const App: FC = () => {
   if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
+        <GlobalStyles />
         <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
       </ThemeProvider>
     );
@@ -127,7 +128,7 @@ const App: FC = () => {
           <GlobalStyles />
           <UnityPage />
           <Suspense fallback={false}>
-            <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
+            <AppLayers renderUnity>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
           </Suspense>
         </AppAuth>
       </ThemeProvider>
@@ -140,9 +141,7 @@ const App: FC = () => {
       <Suspense fallback={false}>
         <AppAuth>
           <GlobalStyles />
-          <AppLayers withUnity={false} withMeeting={false} withWidgets={false}>
-            {createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}
-          </AppLayers>
+          <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}</AppLayers>
         </AppAuth>
       </Suspense>
     </ThemeProvider>
