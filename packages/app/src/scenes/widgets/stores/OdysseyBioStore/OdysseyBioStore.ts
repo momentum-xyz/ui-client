@@ -5,9 +5,9 @@ import {getRootStore} from 'core/utils';
 import {User} from 'core/models';
 import {WalletStatisticsInterface} from 'core/interfaces';
 import {api, SpaceAttributeItemResponse, UserInterface} from 'api';
-import {NftItem, NftItemInterface} from 'stores/NftStore/models';
+import {NftItem, NftItemModelInterface} from 'core/models';
 
-export interface OdysseyItemInterface extends NftItemInterface {
+export interface OdysseyItemInterface extends NftItemModelInterface {
   connections: number;
   docking: number;
   events: number;
@@ -31,7 +31,7 @@ const OdysseyBioStore = types.compose(
       const {getStatisticsByWallet} = getRootStore(self).nftStore;
 
       return {
-        async open(item?: NftItemInterface) {
+        async open(item?: NftItemModelInterface) {
           if (item?.uuid) {
             const statistics = await getStatisticsByWallet(item.owner);
 
@@ -43,7 +43,7 @@ const OdysseyBioStore = types.compose(
             self.dialog.open();
           }
         },
-        setNft(nft: NftItemInterface): void {
+        setNft(nft: NftItemModelInterface): void {
           self.nftId = nft.uuid;
           self.nftItem = nft;
         },

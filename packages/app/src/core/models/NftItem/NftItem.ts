@@ -10,4 +10,4 @@ export const NftItem = types.model('NftItem', {
   image: types.optional(types.string, '')
 });
 
-export interface NftItemInterface extends Instance<typeof NftItem> {}
+export interface NftItemModelInterface extends Instance<typeof NftItem> {}

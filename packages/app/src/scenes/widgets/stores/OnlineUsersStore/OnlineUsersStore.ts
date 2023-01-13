@@ -5,7 +5,7 @@ import {cloneDeep} from 'lodash-es';
 import {api, OdysseyOnlineUsersResponse, SpaceAttributeItemResponse, UserInterface} from 'api';
 import {getRootStore} from 'core/utils';
 import {User} from 'core/models';
-import {NftItem, NftItemInterface} from 'stores/NftStore/models';
+import {NftItem, NftItemModelInterface} from 'core/models';
 import {OdysseyItemInterface} from 'scenes/explore/stores';
 import {WalletStatisticsInterface} from 'core/interfaces';
 
@@ -56,7 +56,7 @@ const OnlineUsersStore = types
           self.odysseyUsers = cast([...response.filter((user) => user.id !== currentUserId)]);
         }
       }),
-      async selectUser(item?: NftItemInterface) {
+      async selectUser(item?: NftItemModelInterface) {
         if (item?.uuid) {
           const statistics = await getStatisticsByWallet(item.owner);
 
@@ -86,7 +86,7 @@ const OnlineUsersStore = types
           self.query = undefined;
         }
       },
-      setNft(nft: NftItemInterface): void {
+      setNft(nft: NftItemModelInterface): void {
         self.selectedUserId = nft.uuid;
         self.nftItem = nft;
       },
