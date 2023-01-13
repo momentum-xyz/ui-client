@@ -2,7 +2,6 @@ import * as versionRepository from './repositories/versionRepository';
 import * as configRepository from './repositories/configRepository';
 import * as authRepository from './repositories/authRepository';
 import * as webRepository from './repositories/web3Repository';
-import * as guestRepository from './repositories/guestRepository';
 import * as userRepository from './repositories/userRepository';
 import * as feedRepository from './repositories/feedRepository';
 import * as worldRepository from './repositories/worldRepository';
@@ -68,7 +67,6 @@ export const api = {
   worldRepository,
   userRepository,
   userProfileRepository,
-  guestRepository, // TODO: REMOVAL
   feedRepository,
   spaceRepository,
   userRepository_OLD,
@@ -124,7 +122,6 @@ export * from './repositories/versionRepository/versionRepository.api.types';
 export * from './repositories/configRepository/configRepository.api.types';
 export * from './repositories/authRepository/authRepository.api.types';
 export * from './repositories/web3Repository/web3Repository.api.types';
-export * from './repositories/guestRepository/guestRepository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/feedRepository/feedRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
