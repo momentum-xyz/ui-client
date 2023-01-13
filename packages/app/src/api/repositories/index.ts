@@ -17,4 +17,5 @@ export * from './assets3dRepository';
 export * from './assets2dRepository';
 export * from './agoraRepository';
 export * from './flightRepository';
+export * from './streamChatRepository';
 export * from './spaceUserAttributeRepository';
