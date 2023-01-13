@@ -13,7 +13,7 @@ import {STORYBOOK_ROUTES} from './StoryBook.routes';
 import * as styled from './StoryBook.styled';
 
 const StoryBook: FC = () => {
-  const {themeStore} = useStore().mainStore;
+  const {themeStore} = useStore();
 
   const theme = useTheme();
 

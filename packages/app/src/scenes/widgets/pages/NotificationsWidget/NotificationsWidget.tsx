@@ -14,10 +14,10 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const NotificationsWidget: FC = () => {
-  const {widgetsStore, mainStore, nftStore, authStore} = useStore();
+  const {widgetsStore, unityStore, nftStore, authStore} = useStore();
   const {notificationsStore} = widgetsStore;
   const {dialog, notifications} = notificationsStore;
-  const {unityStore} = mainStore;
+  const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
   const history = useHistory();
@@ -62,7 +62,7 @@ const NotificationsWidget: FC = () => {
                 item={item}
                 onTeleport={() => {
                   history.replace(generatePath(ROUTES.odyssey.base, {worldId: item.uuid}));
-                  unityStore.loadWorldById(item.uuid, authStore.token);
+                  unityInstanceStore.loadWorldById(item.uuid, authStore.token);
                 }}
                 onConnect={() => {}}
                 onAttend={(nft) => {

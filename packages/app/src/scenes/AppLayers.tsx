@@ -21,11 +21,11 @@ const AppLayers: FC<PropsInterface> = ({
   withMeeting = true,
   withWidgets = true
 }) => {
-  const {unityStore} = useStore().mainStore;
+  const {unityStore} = useStore();
 
   const theme = useTheme();
 
-  if (withUnity && !unityStore.isTeleportReady) {
+  if (withUnity && !unityStore.isUnityAvailable) {
     return <></>;
   }
 

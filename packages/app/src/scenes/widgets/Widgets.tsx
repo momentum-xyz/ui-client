@@ -42,28 +42,28 @@ interface PropsInterface {
 const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
-  const {sessionStore, widgetsStore, flightStore, mainStore, agoraStore, nftStore} = useStore();
+  const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {worldStore} = mainStore;
+  const {unityWorldStore} = unityStore;
   const {user} = sessionStore;
 
-  const worldOwner = nftStore.getNftByUuid(worldStore.worldId);
+  const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    onlineUsersStore.init(worldStore.worldId, sessionStore.userId);
-    onlineUsersStore.fetchUser(worldStore.worldId);
-  }, [onlineUsersStore, sessionStore.userId, worldStore.worldId]);
+    onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
+    onlineUsersStore.fetchUser(unityStore.worldId);
+  }, [onlineUsersStore, sessionStore.userId, unityStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
-      worldStore.worldId,
+      unityStore.worldId,
       sessionStore.userId,
       widgetsStore.screenShareStore.dialog.open
     );
-  }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, worldStore.worldId]);
+  }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, unityStore.worldId]);
 
   return (
     <>
@@ -145,7 +145,7 @@ const Widgets: FC<PropsInterface> = (props) => {
             <styled.OnlineUsers>
               <OnlineUsersWidget
                 currentUser={sessionStore.user}
-                worldId={worldStore.worldId}
+                worldId={unityStore.worldId}
                 onClick={onlineUsersStore.dialog.toggle}
               />
             </styled.OnlineUsers>
@@ -155,7 +155,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <Text
                     className="odyssey-name"
                     size="m"
-                    text={worldStore?.world?.name}
+                    text={unityWorldStore?.world?.name}
                     transform="uppercase"
                     weight="bold"
                   />
@@ -239,7 +239,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="fly-to"
                 size="medium"
                 onClick={widgetsStore.flyToMeStore.dialog.open}
-                disabled={!worldStore.isMyWorld}
+                disabled={!unityWorldStore.isMyWorld}
                 state={{canGoBack: true}}
               />
 

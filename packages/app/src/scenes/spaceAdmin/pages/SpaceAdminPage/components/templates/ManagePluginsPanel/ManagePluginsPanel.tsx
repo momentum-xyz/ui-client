@@ -15,25 +15,22 @@ import {ToastContent} from 'ui-kit';
 import * as styled from './ManagePluginsPanel.styled';
 
 const ManagePluginsPanel: FC = () => {
-  const {spaceAdminStore, mainStore} = useStore();
-  const {spaceManagerStore} = spaceAdminStore;
+  const {spaceAdminStore} = useStore();
+  const {spaceManagerStore, managePluginsStore} = spaceAdminStore;
   const {space, addPluginDialog, deletePluginConfirmationDialog} = spaceManagerStore;
-  const {pluginsStore} = mainStore;
 
   const [pluginIdToRemove, setPluginIdToRemove] = useState<string>();
 
   const pluginToRemove = useMemo(() => {
-    const plugin = pluginsStore.spacePlugins.find((plugin) => plugin.id === pluginIdToRemove);
-
-    return plugin;
-  }, [pluginsStore.spacePlugins, pluginIdToRemove]);
+    return managePluginsStore.spacePlugins.find((plugin) => plugin.id === pluginIdToRemove);
+  }, [managePluginsStore.spacePlugins, pluginIdToRemove]);
 
   const handleRemovePlugin = useCallback(
     async (spaceId: string, pluginId: string, pluginName: string) => {
-      const isSuccess = await pluginsStore.removePluginFromSpace(spaceId, pluginId);
+      const isSuccess = await managePluginsStore.removePluginFromSpace(spaceId, pluginId);
 
       if (isSuccess) {
-        await pluginsStore.removePluginFromSpace(spaceId, pluginId);
+        await managePluginsStore.removePluginFromSpace(spaceId, pluginId);
 
         toast.info(
           <ToastContent
@@ -57,7 +54,7 @@ const ManagePluginsPanel: FC = () => {
         );
       }
     },
-    [deletePluginConfirmationDialog, pluginsStore]
+    [deletePluginConfirmationDialog, managePluginsStore]
   );
 
   if (!space) {
@@ -75,7 +72,7 @@ const ManagePluginsPanel: FC = () => {
             spaceId={space.id}
             pluginId={pluginToRemove.id}
             pluginName={pluginToRemove.name}
-            isPluginRemovalPending={pluginsStore.isRemovePluginPeding}
+            isPluginRemovalPending={managePluginsStore.isRemovePluginPeding}
             onConfirm={handleRemovePlugin}
             onCancel={() => {
               deletePluginConfirmationDialog.close();
@@ -84,9 +81,8 @@ const ManagePluginsPanel: FC = () => {
           />
         )}
         <styled.List className="noScrollIndicator">
-          {pluginsStore.spacePlugins.map((plugin) => (
+          {managePluginsStore.spacePlugins.map((plugin) => (
             <AdminListItem
-              // key={plugin.subPath}
               key={plugin.id}
               name={plugin.name}
               userId={plugin.id}

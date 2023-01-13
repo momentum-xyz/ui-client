@@ -9,20 +9,20 @@ import {TextChat} from './components';
 import * as styled from './TextChatWidget.styled';
 
 const TextChatWidget: FC = () => {
-  const {widgetsStore, sessionStore, mainStore} = useStore();
-  const {worldStore, unityStore} = mainStore;
+  const {widgetsStore, sessionStore, unityStore} = useStore();
+  const {unityInstanceStore} = unityStore;
   const {textChatStore, voiceChatStore} = widgetsStore;
   const {streamChat} = textChatStore;
 
   const {t} = useTranslation();
 
   useEffect(() => {
-    streamChat.init(sessionStore.userId, worldStore.worldId, sessionStore.user);
+    streamChat.init(sessionStore.userId, unityStore.worldId, sessionStore.user);
 
     return () => {
-      streamChat.deinit(worldStore.worldId);
+      streamChat.deinit(unityStore.worldId);
     };
-  }, [sessionStore.user, sessionStore.userId, streamChat, worldStore.worldId]);
+  }, [sessionStore.user, sessionStore.userId, streamChat, unityStore.worldId]);
 
   return (
     <Portal>
@@ -44,8 +44,8 @@ const TextChatWidget: FC = () => {
               <TextChat
                 client={streamChat.client}
                 channel={streamChat.currentChannel}
-                onFocus={() => unityStore.changeKeyboardControl(false)}
-                onBlur={() => unityStore.changeKeyboardControl(true)}
+                onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
+                onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
               />
             )}
           </styled.Body>

@@ -1,15 +1,15 @@
-import {cast, flow, Instance, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 
 import {DynamicScriptLoader, DynamicScriptLoaderType} from 'core/models/DynamicScriptLoader';
 
-const DynamicScriptsStore = types
-  .model('DynamicScriptsStore', {
+const DynamicScriptList = types
+  .model('DynamicScriptList', {
     loaders: types.array(DynamicScriptLoader)
   })
   .actions((self) => ({
     addScript: flow(function* (name: string, url: string) {
       if (self.loaders.find((loader) => loader.name === name)) {
-        console.warn(`[DynamicScriptsStore] Script '${name}' has already been loaded.`);
+        console.warn(`Script '${name}' has already been loaded.`);
         return;
       }
 
@@ -26,6 +26,4 @@ const DynamicScriptsStore = types
     }
   }));
 
-export type DynamicScriptsStoreType = Instance<typeof DynamicScriptsStore>;
-
-export {DynamicScriptsStore};
+export {DynamicScriptList};

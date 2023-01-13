@@ -1,15 +1,15 @@
-import {Instance, types} from 'mobx-state-tree';
+import {types} from 'mobx-state-tree';
 
 import {SpaceManagerStore} from './SpaceManagerStore';
 import {BroadcastStore} from './BroadcastStore';
 import {ManageEmojiStore} from './ManageEmojiStore';
+import {ManagePluginsStore} from './ManagePluginsStore';
 
 const RootSpaceAdminStore = types.model('RootSpaceAdminStore', {
   spaceManagerStore: types.optional(SpaceManagerStore, {}),
   broadcastStore: types.optional(BroadcastStore, {}),
-  manageEmojiStore: types.optional(ManageEmojiStore, {})
+  manageEmojiStore: types.optional(ManageEmojiStore, {}),
+  managePluginsStore: types.optional(ManagePluginsStore, {})
 });
-
-export type RootMeetingSpaceStoreType = Instance<typeof RootSpaceAdminStore>;
 
 export {RootSpaceAdminStore};

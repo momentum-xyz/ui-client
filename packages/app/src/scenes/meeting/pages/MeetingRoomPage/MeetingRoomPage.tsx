@@ -21,10 +21,10 @@ interface PropsInterface {
 }
 
 const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
-  const {mainStore, sessionStore, meetingStore, collaborationStore, widgetStore_OLD} = useStore();
+  const {sessionStore, meetingStore, agoraStore_OLD, collaborationStore, widgetStore_OLD} =
+    useStore();
   const {meetingRoomStore} = meetingStore;
   const {musicPlayerStore} = widgetStore_OLD;
-  const {agoraStore_OLD} = mainStore;
   const {agoraMeetingStore, agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
 
   const location = useLocation();

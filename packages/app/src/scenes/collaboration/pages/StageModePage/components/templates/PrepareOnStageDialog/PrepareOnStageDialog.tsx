@@ -17,8 +17,7 @@ const DIALOG_WIDTH = '360px';
 
 const PrepareOnStageDialog: React.FC<PropsInterface> = ({onClose, onReady}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const {sessionStore, mainStore} = useStore();
-  const {agoraStore_OLD} = mainStore;
+  const {sessionStore, agoraStore_OLD} = useStore();
   const {userDevicesStore} = agoraStore_OLD;
 
   const {t} = useTranslation();

@@ -17,10 +17,9 @@ import {
 import {PosBusScreenShareMessageType} from 'core/types';
 
 const PosBusEventsPage: FC = () => {
-  const rootStore = useStore();
-  const {collaborationStore, mainStore, sessionStore, spaceAdminStore} = rootStore;
-  const {agoraStore_OLD, liveStreamStore, unityStore} = mainStore;
+  const {collaborationStore, unityStore, sessionStore, agoraStore_OLD} = useStore();
   const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
+  const {unityInstanceStore} = unityStore;
   const {
     stageModeStore,
     acceptedToJoinStageDialog,
@@ -28,21 +27,20 @@ const PosBusEventsPage: FC = () => {
     invitedOnStageDialog,
     spaceStore
   } = collaborationStore;
-  const {broadcastStore} = spaceAdminStore;
 
   const history = useHistory();
   const {t} = useTranslation();
 
   usePosBusEvent('broadcast', (broadcast: LiveStreamInterface) => {
     console.info('[POSBUS EVENT] broadcast', broadcast);
-    broadcastStore.setBroadcast(broadcast);
-    liveStreamStore.setBroadcast(broadcast);
+    /*broadcastStore.setBroadcast(broadcast);
+    liveStreamStore_OLD.setBroadcast(broadcast);
 
-    if (liveStreamStore.isStreaming) {
+    if (liveStreamStore_OLD.isStreaming) {
       history.push(generatePath(ROUTES.collaboration.liveStream, {spaceId: spaceStore?.id}));
-    } else if (liveStreamStore.isLiveStreamTab) {
+    } else if (liveStreamStore_OLD.isLiveStreamTab) {
       history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId: spaceStore?.id}));
-    }
+    }*/
   });
 
   usePosBusEvent('stage-mode-invite', () => {
@@ -73,7 +71,7 @@ const PosBusEventsPage: FC = () => {
   usePosBusEvent('posbus-connected', () => {
     console.info('[POSBUS EVENT] posbus-connected');
     if (collaborationStore.spaceStore) {
-      unityStore.triggerInteractionMessage(
+      unityInstanceStore.triggerInteractionMessage(
         PosBusEventEnum.EnteredSpace,
         collaborationStore.spaceStore.id,
         0,
@@ -216,7 +214,7 @@ const PosBusEventsPage: FC = () => {
     console.info('[POSBUS EVENT] start-fly-with-me');
 
     if (sessionStore.userId === pilotId) {
-      unityStore.startFlyWithMe(pilotId);
+      unityInstanceStore.startFlyWithMe(pilotId);
       history.push(generatePath(ROUTES.flyWithMe.pilot, {spaceId, pilotId}));
     } else {
       toast.info(
@@ -228,7 +226,7 @@ const PosBusEventsPage: FC = () => {
           approveInfo={{
             title: t('actions.join'),
             onClick: () => {
-              unityStore.startFlyWithMe(pilotId);
+              unityInstanceStore.startFlyWithMe(pilotId);
               history.push(generatePath(ROUTES.flyWithMe.passenger, {spaceId, pilotId}));
             }
           }}
@@ -241,7 +239,7 @@ const PosBusEventsPage: FC = () => {
   usePosBusEvent('stop-fly-with-me', (spaceId, pilotId, pilotName) => {
     console.info('[POSBUS EVENT] stop-fly-with-me');
 
-    unityStore.disengageFlyWithMe();
+    unityInstanceStore.disengageFlyWithMe();
     history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
 
     toast.info(

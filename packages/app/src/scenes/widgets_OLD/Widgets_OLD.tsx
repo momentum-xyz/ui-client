@@ -23,12 +23,13 @@ import * as styled from './Widgets_OLD.styled';
 const Widgets_OLD: FC = () => {
   const {
     sessionStore,
-    mainStore,
     widgetStore_OLD,
     flightStore,
-    odysseyCreatorStore: worldBuilderStore
+    odysseyCreatorStore: worldBuilderStore,
+    agoraStore_OLD,
+    unityStore
   } = useStore();
-  const {worldStore, agoraStore_OLD, unityStore} = mainStore;
+  const {unityInstanceStore} = unityStore;
   const {agoraStageModeStore} = agoraStore_OLD;
   const {
     stakingStore,
@@ -48,10 +49,10 @@ const Widgets_OLD: FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    musicPlayerStore.init(worldStore.worldId);
-    emojiStore.init(worldStore.worldId);
+    musicPlayerStore.init(unityStore.worldId);
+    emojiStore.init(unityStore.worldId);
     worldBuilderStore.fetchPermissions();
-  }, [userId, user, worldStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
+  }, [userId, user, unityStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
 
   const toggleMute = () => {
     if (!agoraStore_OLD.canToggleMicrophone) {
@@ -80,7 +81,7 @@ const Widgets_OLD: FC = () => {
     {
       title: t('labels.minimap'),
       icon: 'minimap',
-      onClick: () => unityStore.toggleMiniMap(),
+      onClick: () => unityInstanceStore.toggleMiniMap(),
       disabled: flightStore.isFlightWithMe
     },
     {

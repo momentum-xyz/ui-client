@@ -8,13 +8,12 @@ import {useStore} from 'shared/hooks';
 import * as styled from './WorldBuilderWidget.styled';
 
 const WorldBuilderWidget: FC = () => {
-  const {mainStore} = useStore();
-  const {worldStore} = mainStore;
-  const {worldId} = worldStore;
+  const {unityStore} = useStore();
+  const {worldId} = unityStore;
 
   const history = useHistory();
 
-  const isAdmin = worldStore.isCurrentUserWorldAdmin;
+  const isAdmin = unityStore.isCurrentUserWorldAdmin;
 
   const collapsedItem: ToolbarIconInterface = {
     title: 'Odyssey Creator',

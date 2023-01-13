@@ -24,6 +24,8 @@ export * from './EventForm';
 export * from './EventList';
 export * from './PluginLoader';
 export * from './DynamicScriptLoader';
+export * from './DynamicScriptList';
 export * from './SearchQuery';
 export * from './PluginAttributesManager';
+export * from './PluginQueryResult';
 export * from './Asset3d';

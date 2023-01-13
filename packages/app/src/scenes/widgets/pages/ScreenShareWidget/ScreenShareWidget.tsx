@@ -10,8 +10,8 @@ import {ScreenChoice, ScreenVideo} from './components/templates';
 import * as styled from './ScreenShareWidget.styled';
 
 const ScreenShareWidget: FC = () => {
-  const {widgetsStore, agoraStore, sessionStore, mainStore} = useStore();
-  const {worldStore} = mainStore;
+  const {widgetsStore, agoraStore, sessionStore, unityStore} = useStore();
+  const {unityWorldStore} = unityStore;
   const {screenShareStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {remoteVideoTrack, localVideoTrack} = agoraScreenShareStore;
@@ -48,7 +48,7 @@ const ScreenShareWidget: FC = () => {
         <styled.HeaderElement className="left">
           <styled.Title>
             <Text
-              text={worldStore.world?.name}
+              text={unityWorldStore.world?.name}
               transform="uppercase"
               weight="medium"
               size="xl"

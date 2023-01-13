@@ -20,7 +20,7 @@ import * as styled from './OrganismsPage.styled';
 const emojiSizeUI = 's1';
 
 const OrganismsPage: FC = () => {
-  const {themeStore} = useStore().mainStore;
+  const {themeStore} = useStore();
 
   const theme = useTheme();
 

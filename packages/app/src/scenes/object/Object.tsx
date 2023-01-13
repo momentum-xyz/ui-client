@@ -10,8 +10,8 @@ import {ImagePage, ObjectPluginPage, TextPage, VideoPage} from './pages';
 import * as styled from './Object.styled';
 
 const Object: FC = () => {
-  const {objectStore, mainStore, nftStore, widgetsStore} = useStore();
-  const {unityStore} = mainStore;
+  const {objectStore, unityStore, nftStore, widgetsStore} = useStore();
+  const {unityInstanceStore} = unityStore;
   const {asset, assetStore} = objectStore;
   const {assetType} = assetStore;
   const {odysseyInfoStore} = widgetsStore;
@@ -20,13 +20,13 @@ const Object: FC = () => {
 
   useEffect(() => {
     objectStore.init(objectId);
-    unityStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId, 0, '');
+    unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId, 0, '');
 
     return () => {
-      unityStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId, 0, '');
+      unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId, 0, '');
       objectStore.resetModel();
     };
-  }, [objectId, objectStore, unityStore]);
+  }, [objectId, objectStore, unityInstanceStore]);
 
   useEffect(() => {
     if (assetType === AssetTypeEnum.DOCK) {

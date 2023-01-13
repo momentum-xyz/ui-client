@@ -13,9 +13,9 @@ import * as styled from './UploadCustomAssetPage.styled';
 const MAX_ASSET_SIZE = 50_100_000;
 
 const UploadCustomAssetPage: FC = () => {
-  const {odysseyCreatorStore, mainStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-  const {unityStore} = mainStore;
+  const {unityInstanceStore} = unityStore;
 
   const {t} = useTranslation();
 
@@ -75,8 +75,8 @@ const UploadCustomAssetPage: FC = () => {
           </styled.PreviewContainer>
           <styled.NameInput
             placeholder={t('placeholders.nameYourAssetForYourLibrary')}
-            onFocus={() => unityStore.changeKeyboardControl(false)}
-            onBlur={() => unityStore.changeKeyboardControl(true)}
+            onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
+            onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
             onChange={spawnAssetStore.setUploadedAssetName}
           />
           <Button

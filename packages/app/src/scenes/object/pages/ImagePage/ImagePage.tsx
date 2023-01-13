@@ -11,12 +11,11 @@ import {ChangeImageDialog} from 'scenes/object/components';
 import * as styled from './ImagePage.styled';
 
 const ImagePage: FC = () => {
-  const {objectStore, mainStore} = useStore();
+  const {objectStore, unityStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content, imageSrc} = assetStore;
-  const {worldStore} = mainStore;
 
-  const isAdmin = worldStore.isCurrentUserWorldAdmin;
+  const isAdmin = unityStore.isCurrentUserWorldAdmin;
 
   const history = useHistory();
   const {t} = useTranslation();

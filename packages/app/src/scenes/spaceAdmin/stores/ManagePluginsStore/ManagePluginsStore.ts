@@ -6,11 +6,12 @@ import {PluginInterface} from 'core/interfaces';
 import {
   DynamicScriptLoaderType,
   PluginAttributesManager,
+  DynamicScriptList,
   PluginLoader,
   PluginLoaderModelType,
-  SearchQuery
+  SearchQuery,
+  PluginQueryResult
 } from 'core/models';
-import {DynamicScriptsStore, PluginQueryResult} from 'stores/MainStore/models';
 import {
   api,
   GetPluginsListResponse,
@@ -19,15 +20,14 @@ import {
   SpaceSubOptionResponse
 } from 'api';
 
-const PluginsStore = types
+const ManagePluginsStore = types
   .compose(
     ResetModel,
-    types.model('PluginsStore', {
+    types.model('ManagePluginsStore', {
       spacePluginLoaders: types.array(PluginLoader),
       searchedPlugins: types.array(PluginQueryResult),
       searchQuery: types.optional(SearchQuery, {}),
-
-      dynamicScriptsStore: types.optional(DynamicScriptsStore, {}),
+      dynamicScriptList: types.optional(DynamicScriptList, {}),
 
       pluginsListRequest: types.optional(RequestModel, {}),
       pluginMetadataRequest: types.optional(RequestModel, {}),
@@ -94,8 +94,8 @@ const PluginsStore = types
       }
 
       plugins.forEach((plugin) => {
-        if (!self.dynamicScriptsStore.containsLoaderWithName(plugin.scopeName)) {
-          self.dynamicScriptsStore.addScript(plugin.scopeName, plugin.scriptUrl);
+        if (!self.dynamicScriptList.containsLoaderWithName(plugin.scopeName)) {
+          self.dynamicScriptList.addScript(plugin.scopeName, plugin.scriptUrl);
         }
       });
 
@@ -158,18 +158,16 @@ const PluginsStore = types
   }))
   .views((self) => ({
     get spacePlugins(): PluginLoaderModelType[] {
-      const plugins = self.spacePluginLoaders.filter((pluginLoader) =>
-        self.dynamicScriptsStore.containsLoaderWithName(pluginLoader.scopeName)
+      return self.spacePluginLoaders.filter((pluginLoader) =>
+        self.dynamicScriptList.containsLoaderWithName(pluginLoader.scopeName)
       );
-
-      return plugins;
     },
     get scripts(): DynamicScriptLoaderType[] {
-      return self.dynamicScriptsStore.loaders;
+      return self.dynamicScriptList.loaders;
     },
     get isRemovePluginPeding(): boolean {
       return self.removePluginRequest.isPending;
     }
   }));
 
-export {PluginsStore};
+export {ManagePluginsStore};

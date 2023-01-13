@@ -7,9 +7,9 @@ import {StageModePopup} from 'scenes/collaboration/pages/StageModePage/component
 import * as styled from './StageModePopupQueue.styled';
 
 const StageModePopupQueue: React.FC = () => {
-  const {mainStore, collaborationStore} = useStore();
+  const {agoraStore_OLD, collaborationStore} = useStore();
   const {stageModeStore} = collaborationStore;
-  const {agoraStageModeStore} = mainStore.agoraStore_OLD;
+  const {agoraStageModeStore} = agoraStore_OLD;
 
   return (
     <styled.Container data-testid="StageModePopupQueue-test">

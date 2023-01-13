@@ -31,9 +31,8 @@ const Validators: FC<PropsInterface> = ({
   operatorSpaceId,
   goToNominator
 }) => {
-  const {widgetStore_OLD, mainStore} = useStore();
+  const {widgetStore_OLD} = useStore();
   const {stakingStore} = widgetStore_OLD;
-  const {favoriteStore} = mainStore;
   const {validatorsStore} = stakingStore;
 
   const handleSearch = (value: string) => {
@@ -61,7 +60,6 @@ const Validators: FC<PropsInterface> = ({
       } else {
         await item.bookmark(item.id);
       }
-      favoriteStore.fetchFavorites();
       stakingStore.fetchValidators();
     } else if (eventName === 'link') {
       stakingStore.stakingDialog.close();

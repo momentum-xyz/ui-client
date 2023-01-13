@@ -28,9 +28,9 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, authStore, mainStore, initApplication} = useStore();
+  const {configStore, authStore, themeStore, initApplication, unityStore, sentryStore} = useStore();
   const {errorCode: configLoadingErrorCode} = configStore;
-  const {themeStore} = mainStore;
+  const {unityInstanceStore} = unityStore;
 
   const {pathname} = useLocation<{pathname: string}>();
   const history = useHistory();
@@ -77,9 +77,10 @@ const App: FC = () => {
   useEffect(() => {
     if (configStore.isConfigReady) {
       authStore.init();
-      mainStore.init();
+      sentryStore.init();
+      unityInstanceStore.init();
     }
-  }, [authStore, configStore.isConfigReady, mainStore]);
+  }, [authStore, configStore.isConfigReady, unityInstanceStore, sentryStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
 

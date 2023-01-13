@@ -11,8 +11,8 @@ import {useStore} from 'shared/hooks';
 import * as styled from './ChangeTextDialog.styled';
 
 const ChangeTextDialog: FC = () => {
-  const {mainStore, objectStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, objectStore} = useStore();
+  const {unityInstanceStore} = unityStore;
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
 
@@ -40,12 +40,12 @@ const ChangeTextDialog: FC = () => {
   };
 
   const handleFocus = useCallback(() => {
-    unityStore.changeKeyboardControl(false);
-  }, [unityStore]);
+    unityInstanceStore.changeKeyboardControl(false);
+  }, [unityInstanceStore]);
 
   const handleBlur = useCallback(() => {
-    unityStore.changeKeyboardControl(true);
-  }, [unityStore]);
+    unityInstanceStore.changeKeyboardControl(true);
+  }, [unityInstanceStore]);
 
   const titleErrorMessage = useMemo(() => {
     switch (errors.title?.type) {
