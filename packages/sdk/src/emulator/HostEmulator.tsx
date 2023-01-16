@@ -3,9 +3,11 @@ import {BrowserRouter} from 'react-router-dom';
 
 import {PluginInterface} from '../interfaces';
 import {GlobalStyles} from '../App.styled';
+import {UnityControlContextProvider} from '../contexts';
 
 import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
+import {dummyUnityControl} from './dummyUnityControl';
 
 const isDevEnv = process.env.NODE_ENV === 'development';
 
@@ -37,14 +39,16 @@ export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
   return (
     <styled.FullScreenContainer>
-      <GlobalStyles />
-      {isDevEnv ? (
-        <BrowserRouter>
-          <WorldEmulator plugin={plugin} />
-        </BrowserRouter>
-      ) : (
-        <MomentumRequiredPage />
-      )}
+      <UnityControlContextProvider value={dummyUnityControl}>
+        <GlobalStyles />
+        {isDevEnv ? (
+          <BrowserRouter>
+            <WorldEmulator plugin={plugin} />
+          </BrowserRouter>
+        ) : (
+          <MomentumRequiredPage />
+        )}
+      </UnityControlContextProvider>
     </styled.FullScreenContainer>
   );
 };

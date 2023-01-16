@@ -1,6 +1,8 @@
+import {useEffect} from 'react';
 import {cast, flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel, Dialog} from '@momentum-xyz/core';
+import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 import {api, ResolveNodeResponse} from 'api';
 import {appVariables} from 'api/constants';
@@ -89,6 +91,9 @@ const UnityInstanceStore = types
     },
     resume(): void {
       UnityService.resume();
+    },
+    isPaused(): boolean {
+      return UnityService.isPaused;
     },
     setInitialVolume() {
       UnityService.setSoundEffectVolume(self.volume.toString());
@@ -193,6 +198,49 @@ const UnityInstanceStore = types
       self.objectMenu.close();
       self.selectedObjectId = '';
       self.gizmoMode = GizmoTypeEnum.POSITION;
+    }
+  }))
+  .views((self) => ({
+    get unityControlInst(): UnityControlInterface {
+      const base = {
+        takeKeyboardControl: () => {
+          self.changeKeyboardControl(false);
+        },
+        releaseKeyboardControl: () => {
+          self.changeKeyboardControl(true);
+        },
+        pause: () => {
+          self.pause();
+        },
+        resume: () => {
+          self.resume();
+        },
+        isPaused: () => {
+          return self.isPaused();
+        }
+      };
+
+      return {
+        ...base,
+        AutoTakeKeyboardControl: () => {
+          useEffect(() => {
+            base.takeKeyboardControl();
+            return () => {
+              base.releaseKeyboardControl();
+            };
+          }, []);
+          return null;
+        },
+        AutoPauseUnity: () => {
+          useEffect(() => {
+            base.pause();
+            return () => {
+              base.resume();
+            };
+          }, []);
+          return null;
+        }
+      };
     }
   }));
 
