@@ -1,9 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {
-  // generatePath,
-  useHistory
-} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -13,19 +10,19 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {exploreStore, nftStore, authStore, signInAccountStore, sessionStore} = useStore();
+  const {exploreStore, nftStore, authStore, signInStore, sessionStore} = useStore();
 
-  const nft = authStore.wallet ? nftStore.getNftByWallet(authStore.wallet) : null;
+  const nft = signInStore.wallet ? nftStore.getNftByWallet(signInStore.wallet) : null;
 
   const history = useHistory();
 
   const onBuild = async () => {
-    const address = nftStore.getAddressByWallet(authStore.wallet);
+    const address = nftStore.getAddressByWallet(signInStore.wallet);
     if (address) {
       await authStore.fetchTokenByWallet(address);
     }
 
-    const isDone = await signInAccountStore.updateProfile({
+    const isDone = await signInStore.updateProfile({
       name: nft?.name,
       avatarHash: nft?.image
     });
@@ -53,7 +50,7 @@ const BirthOfMePage: FC = () => {
       <styled.Wrapper>
         <styled.Boxes>
           <SinusBox />
-          <BuildOdyssey name={nft.name} onBuild={onBuild} disabled={!nft || !authStore.wallet} />
+          <BuildOdyssey name={nft.name} onBuild={onBuild} disabled={!nft || !signInStore.wallet} />
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>

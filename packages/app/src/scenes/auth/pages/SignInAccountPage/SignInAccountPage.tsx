@@ -13,7 +13,7 @@ import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './compone
 import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
-  const {authStore, nftStore, signInAccountStore} = useStore();
+  const {authStore, nftStore, signInStore} = useStore();
   const {
     balanceTotal,
     isZeroBalance,
@@ -48,20 +48,20 @@ const SignInAccountPage: FC = () => {
   const onConnectWallet = useCallback(() => {
     console.log('onConnectWallet', {isZeroBalance});
     if (isZeroBalance) {
-      requestAirdrop(authStore.wallet);
+      requestAirdrop(signInStore.wallet);
     } else {
       // there are funds already
       setWalletWithFundsIsConnected(true);
     }
-  }, [authStore.wallet, isZeroBalance, requestAirdrop]);
+  }, [signInStore.wallet, isZeroBalance, requestAirdrop]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
       try {
-        const avatarHash = await signInAccountStore.getAvatarHash(form);
+        const avatarHash = await signInStore.getAvatarHash(form);
 
         console.log(`Minting for ${form.name} ${avatarHash}`);
-        const userID = await mintNft(authStore.wallet, form.name || '', avatarHash);
+        const userID = await mintNft(signInStore.wallet, form.name || '', avatarHash);
         console.log('Minting is successful! userID:', userID);
 
         // NFT should be minted and accessible by now - if it doesn't happen sometimes
@@ -74,7 +74,7 @@ const SignInAccountPage: FC = () => {
         console.log('error minting nft', err);
       }
     },
-    [authStore.wallet, history, mintNft, nftStore, signInAccountStore]
+    [history, mintNft, nftStore, signInStore]
   );
 
   return (
@@ -86,11 +86,11 @@ const SignInAccountPage: FC = () => {
               <SinusBox />
               <ChoiceYourWallet
                 walletOptions={nftStore.accountsWithoutNftsOptions}
-                wallet={authStore.wallet}
+                wallet={signInStore.wallet}
                 isConnectDisabled={
                   authStore.isPending || requestingFundsStatus === 'pending' || isBalanceLoading
                 }
-                onSelectAddress={authStore.activateWallet}
+                onSelectAddress={signInStore.selectWallet}
                 onConnect={onConnectWallet}
               />
             </>
@@ -113,8 +113,8 @@ const SignInAccountPage: FC = () => {
               )}
               <SinusBox />
               <CreateOdysseyForm
-                fieldErrors={signInAccountStore.fieldErrors}
-                isSubmitDisabled={signInAccountStore.isUpdating || mintingNftStatus === 'pending'}
+                fieldErrors={signInStore.fieldErrors}
+                isSubmitDisabled={signInStore.isUpdating || mintingNftStatus === 'pending'}
                 onSubmit={handleSubmit}
               />
             </>

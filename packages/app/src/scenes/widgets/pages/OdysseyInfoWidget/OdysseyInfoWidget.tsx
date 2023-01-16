@@ -11,7 +11,7 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const OdysseyInfoWidget: FC = () => {
-  const {authStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
+  const {authStore, sessionStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
   const {unityInstanceStore} = unityStore;
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey} = odysseyInfoStore;
@@ -78,7 +78,7 @@ const OdysseyInfoWidget: FC = () => {
             odyssey={odysseyInfoStore.odyssey}
             onVisit={handleTeleport}
             onConnect={handleConnect}
-            connectDisabled={odyssey?.owner === authStore.wallet || alreadyConnected}
+            connectDisabled={odyssey?.owner === sessionStore.wallet || alreadyConnected}
             onDock={() => {}}
             dockDisabled={true}
           />

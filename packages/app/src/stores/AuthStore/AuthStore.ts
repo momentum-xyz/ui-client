@@ -4,24 +4,10 @@ import {web3FromSource} from '@polkadot/extension-dapp';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {decodeAddress} from '@polkadot/util-crypto';
 
-import {getRootStore} from 'core/utils';
 import {PolkadotAddressInterface} from 'core/models';
 import {GuestLoginFormInterface} from 'core/interfaces';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest} from 'api';
-
-const WALLET_KEY = 'odyssey.wallet';
-const storeWallet = (wallet: string | null): void => {
-  if (wallet) {
-    localStorage.setItem(WALLET_KEY, wallet);
-  } else {
-    localStorage.removeItem(WALLET_KEY);
-  }
-};
-
-const getStoredWallet = (): string => {
-  return localStorage.getItem(WALLET_KEY) || '';
-};
 
 const AuthStore = types.compose(
   ResetModel,
@@ -29,7 +15,6 @@ const AuthStore = types.compose(
     .model('AuthStore', {
       isAuthenticating: true,
       token: '',
-      wallet: '',
       guestTokenRequest: types.optional(RequestModel, {}),
       challengeRequest: types.optional(RequestModel, {}),
       tokenRequest: types.optional(RequestModel, {})
@@ -43,30 +28,14 @@ const AuthStore = types.compose(
       },
       clear(): void {
         self.token = '';
-        self.wallet = '';
-        storeWallet(null);
         refreshAxiosToken(self.token);
-      },
-      activateWallet(wallet?: string): void {
-        if (wallet) {
-          self.wallet = wallet;
-        }
-        if (self.wallet) {
-          getRootStore(self).nftStore.subscribeToBalanseChanges(self.wallet);
-          getRootStore(self).nftStore.subscribeToStakingInfo(self.wallet);
-        }
       }
     }))
     .actions((self) => ({
       init(): void {
         self.token = getAccessToken();
-        self.wallet = getStoredWallet();
         self.updateAxiosAndUnityTokens();
         self.isAuthenticating = false;
-      },
-      selectWallet(wallet: string): void {
-        // TODO separate wallet used in the dropdown and the one connected to the session
-        self.wallet = wallet;
       },
       fetchGuestToken: flow(function* (form: GuestLoginFormInterface) {
         const data: AuthGuestTokenRequest = {...form};
@@ -77,13 +46,11 @@ const AuthStore = types.compose(
         return !!response?.token;
       }),
       fetchTokenByWallet: flow(function* (account: PolkadotAddressInterface) {
-        const publicKey = decodeAddress(self.wallet);
+        const publicKey = decodeAddress(account.address);
         const hexPublicKey = u8aToHex(publicKey);
 
         const data: AuthChallengeRequest = {wallet: hexPublicKey};
         const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
-
-        //const account = self.accounts.find((i) => i.address === self.wallet);
 
         if (!!response?.challenge && !!account) {
           const injector = yield web3FromSource(account.meta?.source || '');
@@ -105,10 +72,6 @@ const AuthStore = types.compose(
               self.token = response?.token || '';
               self.updateAxiosAndUnityTokens();
 
-              // FIXME: here?
-              storeWallet(self.wallet);
-              self.activateWallet(self.wallet);
-
               return !!response?.token;
             }
           }
@@ -116,15 +79,6 @@ const AuthStore = types.compose(
 
         return false;
       })
-    }))
-    .actions((self) => ({
-      tryToRestoreWallet() {
-        const storedWallet = getStoredWallet();
-        if (storedWallet && self.token) {
-          console.log('Restore wallet', storedWallet);
-          self.activateWallet(storedWallet);
-        }
-      }
     }))
     .views((self) => ({
       get hasToken(): boolean {

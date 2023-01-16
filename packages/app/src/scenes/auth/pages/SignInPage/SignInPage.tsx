@@ -11,7 +11,7 @@ import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {authStore, nftStore} = useStore();
+  const {authStore, signInStore, nftStore} = useStore();
 
   const history = useHistory();
 
@@ -24,14 +24,14 @@ const SignInPage: FC = () => {
   }, [authStore]);
 
   const handleLogin = useCallback(async () => {
-    const address = nftStore.getAddressByWallet(authStore.wallet);
+    const address = nftStore.getAddressByWallet(signInStore.wallet);
     if (address) {
       const isDone = await authStore.fetchTokenByWallet(address);
       if (isDone) {
         history.push(targetRoute);
       }
     }
-  }, [authStore, history, nftStore]);
+  }, [authStore, history, nftStore, signInStore.wallet, targetRoute]);
 
   const handleGuestLogin = useCallback(
     async (form: GuestLoginFormInterface) => {
@@ -40,7 +40,7 @@ const SignInPage: FC = () => {
         history.push(targetRoute);
       }
     },
-    [authStore, history]
+    [authStore, history, targetRoute]
   );
 
   return (
@@ -58,9 +58,9 @@ const SignInPage: FC = () => {
           {!!nftStore.accountsWithNftsOptions.length && (
             <Login
               walletOptions={nftStore.accountsWithNftsOptions}
-              wallet={authStore.wallet}
+              wallet={signInStore.wallet}
               isPending={authStore.isPending}
-              onSelectAddress={authStore.selectWallet}
+              onSelectAddress={signInStore.selectWallet}
               onLogin={handleLogin}
             />
           )}

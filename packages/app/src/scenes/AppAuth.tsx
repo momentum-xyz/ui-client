@@ -6,7 +6,7 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 const AppAuth: FC = ({children}) => {
-  const {authStore, sessionStore} = useStore();
+  const {authStore, sessionStore, nftStore} = useStore();
 
   const history = useHistory();
 
@@ -17,6 +17,12 @@ const AppAuth: FC = ({children}) => {
       history.push(ROUTES.signIn, {from: history.location.pathname});
     }
   }, [authStore.hasToken, history, sessionStore]);
+
+  useEffect(() => {
+    if (sessionStore.wallet && !nftStore.isLoading) {
+      nftStore.activateWallet(sessionStore.wallet);
+    }
+  }, [nftStore, nftStore.isLoading, sessionStore.wallet]);
 
   return <>{sessionStore.isUserReady && children}</>;
 };

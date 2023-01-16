@@ -1,7 +1,7 @@
 import {Instance, types} from 'mobx-state-tree';
 
+import {SignInStore} from 'scenes/auth/stores';
 import {UnityStore} from 'scenes/unity/stores';
-import {SignInAccountStore} from 'scenes/auth/stores/SignInAccountStore';
 import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
 import {RootCollaborationStore} from 'scenes/collaboration/stores';
 import {RootMeetingStore} from 'scenes/meeting/stores';
@@ -37,7 +37,7 @@ const RootStore = types
 
     /* Connect independent stores */
     unityStore: types.optional(UnityStore, {}),
-    signInAccountStore: types.optional(SignInAccountStore, {}),
+    signInStore: types.optional(SignInStore, {}),
     exploreStore: types.optional(ExploreStore, {}),
     odysseyStore: types.optional(OdysseyStore, {}),
     objectStore: types.optional(ObjectStore, {}),
@@ -60,7 +60,6 @@ const RootStore = types
       await self.nftStore.init();
       await self.nftStore.initWeb3ExtensionIfNeeded();
 
-      self.authStore.tryToRestoreWallet();
       self.agoraStore.userDevicesStore.init();
       self.themeStore.init();
     }
