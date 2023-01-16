@@ -13,12 +13,7 @@ import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
 import {PolkadotAddress, SearchQuery, NftItem, NftItemModelInterface} from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {
-  fetchIpfs,
-  isIpfsHash,
-  wait
-  // formatExistential
-} from 'core/utils';
+import {fetchIpfs, isIpfsHash, wait} from 'core/utils';
 import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
@@ -778,7 +773,12 @@ const NftStore = types
           self.setIsBalanceLoading(false);
         }
       );
-    })
+    }),
+    activateWallet(wallet: string): void {
+      console.log(`Activate wallet ${wallet}`);
+      self.subscribeToBalanseChanges(wallet);
+      self.subscribeToStakingInfo(wallet);
+    }
   }))
   .actions((self) => ({
     init: flow(function* () {

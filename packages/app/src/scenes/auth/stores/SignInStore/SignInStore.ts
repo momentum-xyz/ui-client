@@ -5,15 +5,19 @@ import {api, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {SignUpFormInterface} from 'core/interfaces';
 
-const SignInAccountStore = types.compose(
+const SignInStore = types.compose(
   ResetModel,
   types
-    .model('SignInAccountStore', {
-      request: types.optional(RequestModel, {}),
+    .model('SignInStore', {
+      wallet: '',
       avatarRequest: types.optional(RequestModel, {}),
+      profileRequest: types.optional(RequestModel, {}),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), [])
     })
     .actions((self) => ({
+      selectWallet(wallet: string): void {
+        self.wallet = wallet;
+      },
       getAvatarHash: flow(function* (form: SignUpFormInterface) {
         if (!form.avatar) {
           return;
@@ -41,14 +45,14 @@ const SignInAccountStore = types.compose(
         }
 
         // 2. Profile updating.
-        const response = yield self.request.send(api.userProfileRepository.update, {
+        const response = yield self.profileRequest.send(api.userProfileRepository.update, {
           name: form.name || '',
           profile: {
             avatarHash
           }
         });
 
-        if (self.request.isError && response?.errors) {
+        if (self.profileRequest.isError && response?.errors) {
           self.fieldErrors = cast(
             // eslint-disable-next-line
             Object.keys(response.errors).map((key) => ({
@@ -58,12 +62,12 @@ const SignInAccountStore = types.compose(
           );
         }
 
-        return self.request.isDone;
+        return self.profileRequest.isDone;
       })
     }))
     .views((self) => ({
       get isUpdating(): boolean {
-        return self.request.isPending || self.avatarRequest.isPending;
+        return self.profileRequest.isPending || self.avatarRequest.isPending;
       },
       get errors(): FieldErrorInterface[] {
         return [...self.fieldErrors];
@@ -71,4 +75,4 @@ const SignInAccountStore = types.compose(
     }))
 );
 
-export {SignInAccountStore};
+export {SignInStore};

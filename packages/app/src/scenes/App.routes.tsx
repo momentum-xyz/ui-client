@@ -6,10 +6,8 @@ import {RouteConfigInterface} from 'core/interfaces';
 const Widgets = lazy(() => import('./widgets/Widgets'));
 const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
 const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
-const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
-const BirthAnimationPage = lazy(
-  () => import('./birthOfMe/pages/BirthAnimationPage/BirthAnimationPage')
-);
+const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
+const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/BirthAnimationPage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
