@@ -23,8 +23,7 @@ interface PropsInterface {
 }
 
 const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
-  const {mainStore, collaborationStore, sessionStore, flightStore} = useStore();
-  const {agoraStore_OLD, favoriteStore} = mainStore;
+  const {collaborationStore, sessionStore, flightStore, agoraStore_OLD} = useStore();
   const {agoraStageModeStore, userDevicesStore, agoraScreenShareStore} = agoraStore_OLD;
   const {spaceStore, removeParticipantFromStageDialog} = collaborationStore;
   const {space} = spaceStore;
@@ -84,8 +83,8 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
           subtitle={t('labels.stageMode')}
           isAdmin={spaceStore.isAdmin}
           spaceId={spaceStore.id}
-          isSpaceFavorite={favoriteStore.isFavorite(space.id)}
-          toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
+          isSpaceFavorite={false}
+          toggleIsSpaceFavorite={() => {}}
           isChatOpen={false}
           toggleChat={() => {}}
           numberOfUnreadMessages={0}

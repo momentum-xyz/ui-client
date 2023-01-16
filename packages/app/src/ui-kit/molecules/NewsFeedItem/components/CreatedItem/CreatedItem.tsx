@@ -5,13 +5,13 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
-import {NftItemInterface} from 'stores/NftStore/models';
+import {NftItemModelInterface} from 'core/models';
 
 import * as styled from './CreatedItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
-  onTeleport: (nft: NftItemInterface) => void;
+  onTeleport: (nft: NftItemModelInterface) => void;
   onConnect: (id: number) => void;
   onOpenOdyssey?: (uuid: string) => void;
 }

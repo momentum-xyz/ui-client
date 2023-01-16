@@ -9,9 +9,7 @@ import {useStore} from 'shared/hooks';
 import {switchFullscreen} from 'core/utils';
 import {
   HelpWidget,
-  LaunchInitiativeWidget,
   MusicPlayerWidget,
-  StakingWidget,
   WorldStatsWidget,
   StageModePIPWidget,
   EmojiWidget,
@@ -23,22 +21,15 @@ import * as styled from './Widgets_OLD.styled';
 const Widgets_OLD: FC = () => {
   const {
     sessionStore,
-    mainStore,
     widgetStore_OLD,
     flightStore,
-    odysseyCreatorStore: worldBuilderStore
+    odysseyCreatorStore: worldBuilderStore,
+    agoraStore_OLD,
+    unityStore
   } = useStore();
-  const {worldStore, agoraStore_OLD, unityStore} = mainStore;
+  const {unityInstanceStore} = unityStore;
   const {agoraStageModeStore} = agoraStore_OLD;
-  const {
-    stakingStore,
-    worldStatsStore,
-    helpStore,
-    launchInitiativeStore,
-    musicPlayerStore,
-    emojiStore
-  } = widgetStore_OLD;
-  const {stakingDialog} = stakingStore;
+  const {worldStatsStore, helpStore, musicPlayerStore, emojiStore} = widgetStore_OLD;
   const {statsDialog} = worldStatsStore;
   const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
@@ -48,10 +39,10 @@ const Widgets_OLD: FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    musicPlayerStore.init(worldStore.worldId);
-    emojiStore.init(worldStore.worldId);
+    musicPlayerStore.init(unityStore.worldId);
+    emojiStore.init(unityStore.worldId);
     worldBuilderStore.fetchPermissions();
-  }, [userId, user, worldStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
+  }, [userId, user, unityStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
 
   const toggleMute = () => {
     if (!agoraStore_OLD.canToggleMicrophone) {
@@ -80,7 +71,7 @@ const Widgets_OLD: FC = () => {
     {
       title: t('labels.minimap'),
       icon: 'minimap',
-      onClick: () => unityStore.toggleMiniMap(),
+      onClick: () => unityInstanceStore.toggleMiniMap(),
       disabled: flightStore.isFlightWithMe
     },
     {
@@ -95,10 +86,8 @@ const Widgets_OLD: FC = () => {
   return (
     <>
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
-      {stakingStore.stakingDialog.isOpen && <StakingWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
-      {launchInitiativeStore.dialog.isOpen && <LaunchInitiativeWidget />}
       {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
       {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (
@@ -181,17 +170,6 @@ const Widgets_OLD: FC = () => {
                   showHover
                 />
               </ToolbarIcon>
-            )}
-            {!sessionStore.user?.isGuest && (
-              <ToolbarIcon
-                title={t('labels.staking')}
-                icon="wallet"
-                disabled={flightStore.isFlightWithMe}
-                onClick={() => {
-                  stakingStore.setOperatorSpaceId('');
-                  stakingDialog.open();
-                }}
-              />
             )}
             {mainToolbarIcons.map((item) => (
               <ToolbarIcon key={item.title} {...item} state={{canGoBack: true}} />

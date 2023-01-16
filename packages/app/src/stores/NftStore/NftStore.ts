@@ -11,7 +11,7 @@ import {
 } from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
-import {PolkadotAddress, SearchQuery} from 'core/models';
+import {PolkadotAddress, SearchQuery, NftItem, NftItemModelInterface} from 'core/models';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {
   fetchIpfs,
@@ -25,7 +25,7 @@ import {appVariables} from 'api/constants';
 import {MintNftCheckJobResponse} from 'api';
 import {WalletConnectionsInterface} from 'core/interfaces';
 
-import {NftItem, NftItemInterface, StakeDetail, StakeDetailInterface} from './models';
+import {StakeDetail, StakeDetailInterface} from './models';
 
 const NFT_MINT_FEE = 100000;
 const MIN_AMOUNT_TO_GET_REWARDS = 100_000_000;
@@ -150,8 +150,8 @@ const NftStore = types
         });
         return mutualStakingAddresses;
       },
-      get mutualConnections(): NftItemInterface[] {
-        const mutualConnections: NftItemInterface[] = [];
+      get mutualConnections(): NftItemModelInterface[] {
+        const mutualConnections: NftItemModelInterface[] = [];
         self.stakingAtMe.forEach((stakingDetail) => {
           if (self.stakingAtOthers.get(stakingDetail.sourceAddr)) {
             mutualConnections.push(self.getNftByWallet(stakingDetail.sourceAddr));
@@ -199,9 +199,9 @@ const NftStore = types
     get balanceTransferrable(): string {
       return self.balanseFormat(self.balanceTransferrableBN);
     },
-    canBeStaked(amount: number): boolean {
+    canBeStaked(amount: BN): boolean {
       try {
-        return self.balanceTransferrableBN.gte(new BN(amount));
+        return self.balanceTransferrableBN.gte(amount);
       } catch (err) {
         console.error(err);
         return false;
@@ -224,7 +224,7 @@ const NftStore = types
     setInitialStakingInfoLoaded(initialStakingInfoLoaded: boolean) {
       self.initialStakingInfoLoaded = initialStakingInfoLoaded;
     },
-    setNftItems(items: NftItemInterface[]) {
+    setNftItems(items: NftItemModelInterface[]) {
       self.nftItems = cast(items);
     },
     setConnectToNftItemId(itemId: number | null) {
@@ -291,9 +291,9 @@ const NftStore = types
       ]);
 
       console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
-      const nftItems: NftItemInterface[] = yield Promise.all(
+      const nftItems: NftItemModelInterface[] = yield Promise.all(
         itemMetadatas.map(
-          async (itemMetadata: any, index: number): Promise<NftItemInterface | null> => {
+          async (itemMetadata: any, index: number): Promise<NftItemModelInterface | null> => {
             const [collectionId, itemId] = collectionItemIds[index];
 
             try {
@@ -358,8 +358,8 @@ const NftStore = types
           }
         )
       ).then(
-        (nftItems: Array<NftItemInterface | null>) =>
-          nftItems.filter((nftItem) => !!nftItem) as NftItemInterface[]
+        (nftItems: Array<NftItemModelInterface | null>) =>
+          nftItems.filter((nftItem) => !!nftItem) as NftItemModelInterface[]
       );
 
       console.log('NftItems');
@@ -580,7 +580,7 @@ const NftStore = types
         stakedAtOthers: stakedAtOthersAddresses
       };
     }),
-    stake: flow(function* (address: string, amount: number, itemId: number) {
+    stake: flow(function* (address: string, amount: BN, itemId: number) {
       const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
       console.log('Stake', itemId, amount, address);

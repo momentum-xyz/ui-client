@@ -12,12 +12,12 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const WorldStatsWidget: FC = () => {
-  const {widgetStore_OLD, mainStore} = useStore();
-  const {worldStore} = mainStore;
+  const {widgetStore_OLD, unityStore} = useStore();
+  const {unityWorldStore} = unityStore;
   const {worldStatsStore} = widgetStore_OLD;
   const {statsDialog, worldStats} = worldStatsStore;
   const {statistics, isLoading} = worldStats;
-  const {worldId} = worldStore;
+  const {worldId} = unityWorldStore;
 
   const theme = useTheme();
 

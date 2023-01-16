@@ -27,8 +27,11 @@ RUN yarn build:deps
 
 
 # App builder
+ARG BUILD_VERSION
 FROM base-build as app-build
+ARG BUILD_VERSION
 RUN yarn workspace @momentum-xyz/ui-client install --check-files
+ENV REACT_APP_VERSION=${BUILD_VERSION}
 RUN yarn workspace @momentum-xyz/ui-client build
 
 
@@ -56,5 +59,7 @@ COPY --from=plugin-build --link /src/packages/plugin_${PLUGIN}/build /opt/srv
 
 # App runtime, keep it last as the default image
 FROM base-runtime as app-runtime
-
 COPY --from=app-build --link /src/packages/app/build /opt/srv
+ARG BUILD_VERSION
+LABEL maintainer="Odyssey Maintainers"
+LABEL version="$BUILD_VERSION"

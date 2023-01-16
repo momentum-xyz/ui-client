@@ -19,8 +19,7 @@ interface StagePropsInterface {
 }
 
 const Stage: React.FC<StagePropsInterface> = ({onRemoteUserClick}) => {
-  const {mainStore, sessionStore} = useStore();
-  const {agoraStore_OLD} = mainStore;
+  const {agoraStore_OLD, sessionStore} = useStore();
   const {userDevicesStore, agoraStageModeStore} = agoraStore_OLD;
 
   const [cols, setCols] = useState<string>('cols-1');

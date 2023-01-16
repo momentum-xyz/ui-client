@@ -44,7 +44,7 @@ const ConfigStore = types
     get isError(): boolean {
       return self.versionRequest.isError || self.configRequest.isError;
     },
-    get errorCode(): number | null {
+    get configLoadingErrorCode(): number | null {
       return self.versionRequest.errorCode || self.configRequest.errorCode;
     },
     get isBlockchainUrlReady(): boolean {

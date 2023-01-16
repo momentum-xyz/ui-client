@@ -29,7 +29,6 @@ export const use3dMap = (
   onSelectOdyssey: (uuid: string) => void
 ) => {
   const wasLoaded = useRef(false);
-  const connectionsForWallet = useRef<string>('');
 
   /**
    * Reusable properties of galaxy
@@ -37,7 +36,6 @@ export const use3dMap = (
   const odysseyAvatarGeometry = useRef(new THREE.CircleGeometry(0.8, 26));
   const listOfOdysseys = useRef<PlanetMesh[]>([]);
   const referenceListOfOdysseys = useRef<PlanetMesh[]>([]);
-  const selectedOdyssey = useRef<THREE.Object3D<THREE.Event>>();
 
   const scene = useRef(new THREE.Scene());
   const raycaster = useRef(new THREE.Raycaster());
@@ -56,17 +54,13 @@ export const use3dMap = (
   const points = useRef<THREE.Points | null>(null);
 
   const aspect = window.innerWidth / window.innerHeight;
+  const controls = useRef<OrbitControls>();
   const camera = useRef(new THREE.PerspectiveCamera(75, aspect, 0.1, 10000));
-  const renderer = useRef(
-    new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      powerPreference: 'high-performance'
-    })
-  );
+  const renderer = useRef<THREE.WebGLRenderer>();
 
-  const controls = useRef(new OrbitControls(camera.current, renderer.current.domElement));
-  const activeLinesArray = useRef<Line2[]>([]);
+  const lastSelectedOdyssey = useRef<string>();
+  const activeLinesOwner = useRef<string>();
+  const activeLines = useRef<Line2[]>([]);
 
   /**
    * Draw lines between staked Odysseys.
@@ -75,27 +69,27 @@ export const use3dMap = (
     async (sourceWallet: string) => {
       const targetWallets = await getConnections(sourceWallet);
 
-      const isSameOdyssey = connectionsForWallet.current === sourceWallet;
-      const areSameConnections = activeLinesArray.current.length === targetWallets.length;
+      const isSameOdyssey = activeLinesOwner.current === sourceWallet;
+      const areSameConnections = activeLines.current.length === targetWallets.length;
 
       if (isSameOdyssey && areSameConnections) {
         return;
       }
 
       // Delete current connections
-      if (activeLinesArray.current.length) {
-        for (let i = 0; i < activeLinesArray.current.length; i++) {
-          scene.current.remove(activeLinesArray.current[i]);
+      if (activeLines.current.length) {
+        for (let i = 0; i < activeLines.current.length; i++) {
+          scene.current.remove(activeLines.current[i]);
         }
 
-        activeLinesArray.current = [];
+        activeLines.current = [];
       }
 
       const sourceOdyssey = referenceListOfOdysseys.current.find(
         (odyssey) => odyssey.owner === sourceWallet
       );
 
-      connectionsForWallet.current = sourceWallet;
+      activeLinesOwner.current = sourceWallet;
 
       // Draw new connections
       targetWallets.forEach((targetWallet) => {
@@ -155,7 +149,7 @@ export const use3dMap = (
           const drawLine = new Line2(lineGeometry, lineMaterial);
 
           // Add line to the scene.
-          activeLinesArray.current.push(drawLine);
+          activeLines.current.push(drawLine);
           scene.current.add(drawLine);
         }
       });
@@ -193,7 +187,7 @@ export const use3dMap = (
       const randomZ =
         Math.pow(Math.random(), PARAMETERS.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
 
-      position[i3 + 0] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+      position[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
       position[i3 + 1] = randomY;
       position[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
     }
@@ -407,7 +401,7 @@ export const use3dMap = (
     }
 
     // Update controls for auto-rotate.
-    if (!updateCameraRotation.current) {
+    if (!updateCameraRotation.current && controls.current) {
       controls.current.update();
     }
 
@@ -418,11 +412,105 @@ export const use3dMap = (
     }
 
     // Render the scene
-    renderer.current.render(scene.current, camera.current);
+    if (renderer.current) {
+      renderer.current.render(scene.current, camera.current);
+    }
 
     // Re-call Animation
     window.requestAnimationFrame(animate);
   }, []);
+
+  /**
+   * Fly to particular planet
+   */
+  const flyToPlanet = useCallback(
+    async (uuid: string) => {
+      // Make sure transition to the newly clicked planet has finished.
+      if (!transitionToPlanetFinished.current) {
+        return;
+      }
+
+      // If clicked planet is same as current selected one return
+      if (uuid === lastSelectedOdyssey.current) {
+        // Handle selecting planet again
+        onSelectOdyssey(uuid);
+        return;
+      }
+
+      const targetPlanet = referenceListOfOdysseys.current.find((item) => item.uuid === uuid);
+      if (!targetPlanet) {
+        return;
+      }
+
+      lastSelectedOdyssey.current = uuid;
+
+      // Draw connections for target odyssey
+      await drawConnections(targetPlanet.owner);
+
+      const targetVector = new THREE.Vector3();
+      targetPlanet.getWorldPosition(targetVector);
+
+      // Prepare fly to planets.
+      const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
+
+      // Prepare rotation of camera animation.
+      const startOrientation = camera.current.quaternion.clone();
+      camera.current.lookAt(targetVector);
+      const targetOrientation = camera.current.quaternion.clone().normalize();
+
+      // Get the direction for the new location.
+      const direction = new THREE.Vector3();
+      direction.subVectors(targetVector, camera.current.position).normalize();
+
+      // Get distance from raycast minus minimal distance orbit control
+      // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
+      const targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
+      const distance =
+        targetVectorForDistance.distanceTo(camera.current.position) -
+        MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
+
+      // Create new target for the camera.
+      const targetLocation = new THREE.Vector3();
+      targetLocation.addVectors(camera.current.position, direction.multiplyScalar(distance));
+
+      // Animate using gsap module.
+      gsap.to(camera.current.position, {
+        duration: 1.5,
+        x: targetLocation.x,
+        y: targetLocation.y,
+        z: targetLocation.z,
+
+        onStart: function () {
+          if (controls.current) {
+            transitionToPlanetFinished.current = false;
+            updateCameraRotation.current = true;
+            controls.current.enabled = false;
+            controls.current.autoRotate = false;
+            controls.current.enablePan = false;
+          }
+        },
+        onUpdate: function () {
+          camera.current.quaternion
+            .copy(startOrientation)
+            .slerp(targetOrientation, this.progress());
+        },
+        onComplete: function () {
+          if (controls.current) {
+            updateCameraRotation.current = false;
+            controls.current.enabled = true;
+            controls.current.enablePan = true;
+            controls.current.autoRotate = true;
+            controls.current.target = targetPlanetLocation;
+            transitionToPlanetFinished.current = true;
+
+            // Handle selecting planet
+            onSelectOdyssey(uuid);
+          }
+        }
+      });
+    },
+    [drawConnections, onSelectOdyssey]
+  );
 
   /**
    * Update mouse location on screen
@@ -447,99 +535,25 @@ export const use3dMap = (
 
       // Process the Raycast.
       if (castRay.length > 0) {
-        // Make sure transition to the newly clicked planet has finished.
-        if (!transitionToPlanetFinished.current) {
-          return;
-        }
-
         // Only react to first raycast hit
         const targetPlanet = castRay[0];
 
-        // @ts-ignore: object has this prop
-        await drawConnections(targetPlanet.object.owner);
-
-        // If clicked planet is same as current selected one return
-        if (targetPlanet.object === selectedOdyssey.current) {
-          // Handle selecting planet again
-          onSelectOdyssey(targetPlanet.object.uuid);
-
-          return;
-        }
-
-        selectedOdyssey.current = targetPlanet.object;
-
-        const targetVector = new THREE.Vector3();
-        targetPlanet.object.getWorldPosition(targetVector);
-
-        // Prepare fly to planets.
-        const targetPlanetLocation = new Vector3(targetVector.x, targetVector.y, targetVector.z);
-
-        // Prepare rotation of camera animation.
-        const startOrientation = camera.current.quaternion.clone();
-
-        const targetOrientation = camera.current.quaternion
-          // @ts-ignore: artifacts appear without it.
-          .clone(camera.current.lookAt(targetVector))
-          .normalize();
-
-        // Get the direction for the new location.
-        const direction = new THREE.Vector3();
-        direction.subVectors(targetVector, camera.current.position).normalize();
-
-        // Get distance from raycast minus minimal distance orbit control
-        // const distance = targetPlanet.distance - minimalDistanceToPlanetForCamera;
-        const targetVectorForDistance = new Vector3(targetVector.x, targetVector.y, targetVector.z);
-        const distance =
-          targetVectorForDistance.distanceTo(camera.current.position) -
-          MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA;
-
-        // Create new target for the camera.
-        const targetLocation = new THREE.Vector3();
-        targetLocation.addVectors(camera.current.position, direction.multiplyScalar(distance));
-
-        // Animate using gsap module.
-        gsap.to(camera.current.position, {
-          duration: 1.5,
-          x: targetLocation.x,
-          y: targetLocation.y,
-          z: targetLocation.z,
-
-          onStart: function () {
-            transitionToPlanetFinished.current = false;
-            updateCameraRotation.current = true;
-            controls.current.enabled = false;
-            controls.current.autoRotate = false;
-            controls.current.enablePan = false;
-          },
-          onUpdate: function () {
-            camera.current.quaternion
-              .copy(startOrientation)
-              .slerp(targetOrientation, this.progress());
-          },
-          onComplete: function () {
-            updateCameraRotation.current = false;
-            controls.current.enabled = true;
-            controls.current.enablePan = true;
-            controls.current.autoRotate = true;
-            controls.current.target = targetPlanetLocation;
-            transitionToPlanetFinished.current = true;
-
-            // Handle selecting planet
-            onSelectOdyssey(targetPlanet.object.uuid);
-          }
-        });
+        // Fly to founded planet
+        await flyToPlanet(targetPlanet.object.uuid);
       }
     },
-    [drawConnections, onSelectOdyssey]
+    [flyToPlanet]
   );
 
   /**
    * On window resize handler
    */
   const onWindowResize = useCallback(() => {
-    camera.current.aspect = window.innerWidth / window.innerHeight;
-    camera.current.updateProjectionMatrix();
-    renderer.current.setSize(window.innerWidth, window.innerHeight);
+    if (camera.current && renderer.current) {
+      camera.current.aspect = window.innerWidth / window.innerHeight;
+      camera.current.updateProjectionMatrix();
+      renderer.current.setSize(window.innerWidth, window.innerHeight);
+    }
   }, []);
 
   useEffect(() => {
@@ -560,11 +574,17 @@ export const use3dMap = (
     scene.current.add(ambient);
 
     // Renderer Setup
+    renderer.current = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: 'high-performance'
+    });
     renderer.current.setClearColor(0x222222);
     renderer.current.setSize(window.innerWidth, window.innerHeight);
     renderer.current.setPixelRatio(window.devicePixelRatio);
 
     // Orbit Controls setup
+    controls.current = new OrbitControls(camera.current, renderer.current.domElement);
     controls.current.autoRotate = true;
     controls.current.autoRotateSpeed = 0.3;
     controls.current.enableDamping = true;
@@ -601,7 +621,7 @@ export const use3dMap = (
     buildUniverse();
 
     animate();
-  }, [animate, buildUniverse, createCenterOdyssey, createOdysseys, generateGalaxy]);
+  }, [animate, buildUniverse, canvas, createCenterOdyssey, createOdysseys, generateGalaxy]);
 
   useEffect(() => {
     window.addEventListener('pointermove', onPointerMove);
@@ -615,5 +635,5 @@ export const use3dMap = (
     };
   }, [onMouseDown, onPointerMove, onWindowResize]);
 
-  return {drawConnections};
+  return {flyToPlanet};
 };

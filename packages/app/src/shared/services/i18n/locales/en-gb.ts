@@ -1075,13 +1075,6 @@ export const enGb = {
       upload: 'upload',
       avatar: 'avatar'
     },
-    launchInitiativeWidget: {
-      title: 'LAUNCH YOUR INITIATIVE (FREE)',
-      description:
-        'Fantastic! You are about to launch your initiative. A free space will be created for you that you can use to organise your efforts and to collaborate with others.',
-      requiredFieldError: '{{field}} is required',
-      minimumCharactersError: 'Minimum {{length}} characters required'
-    },
     devices: {
       device: 'device',
       camera: 'camera',

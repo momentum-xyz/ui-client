@@ -3,15 +3,14 @@ import {useTranslation} from 'react-i18next';
 import {IconSvg, Text, Button, Image} from '@momentum-xyz/ui-kit';
 import {absoluteLink, registrationDateString, withoutProtocol} from '@momentum-xyz/core';
 
-import {UserModelInterface} from 'core/models';
-import {OdysseyItemInterface} from 'scenes/explore/stores';
 import {getImageAbsoluteUrl} from 'core/utils';
+import {UserModelInterface, NftItemStatsModelInterface} from 'core/models';
 
 import * as styled from './OdysseyInfo.styled';
 
 interface PropsInterface {
   user: UserModelInterface | null;
-  odyssey: OdysseyItemInterface | null;
+  odyssey: NftItemStatsModelInterface | null;
   alreadyConnected?: boolean;
   onVisit?: () => void;
   onHighFive?: () => void;

@@ -5,8 +5,7 @@ import {cloneDeep} from 'lodash-es';
 import {api, OdysseyOnlineUsersResponse, SpaceAttributeItemResponse, UserInterface} from 'api';
 import {getRootStore} from 'core/utils';
 import {User} from 'core/models';
-import {NftItem, NftItemInterface} from 'stores/NftStore/models';
-import {OdysseyItemInterface} from 'scenes/explore/stores';
+import {NftItem, NftItemModelInterface, NftItemStatsModelInterface} from 'core/models';
 import {WalletStatisticsInterface} from 'core/interfaces';
 
 const OnlineUsersStore = types
@@ -56,7 +55,7 @@ const OnlineUsersStore = types
           self.odysseyUsers = cast([...response.filter((user) => user.id !== currentUserId)]);
         }
       }),
-      async selectUser(item?: NftItemInterface) {
+      async selectUser(item?: NftItemModelInterface) {
         if (item?.uuid) {
           const statistics = await getStatisticsByWallet(item.owner);
 
@@ -78,7 +77,7 @@ const OnlineUsersStore = types
         if (query.length > 0) {
           self.query = query;
           const users = cloneDeep(
-            self.allUsers.filter((user) => user.name.toLowerCase().includes(query))
+            self.allUsers.filter((user) => user.name.toLowerCase().includes(query.toLowerCase()))
           );
           self.searchedUsers = cast(users);
         } else {
@@ -86,7 +85,7 @@ const OnlineUsersStore = types
           self.query = undefined;
         }
       },
-      setNft(nft: NftItemInterface): void {
+      setNft(nft: NftItemModelInterface): void {
         self.selectedUserId = nft.uuid;
         self.nftItem = nft;
       },
@@ -120,7 +119,7 @@ const OnlineUsersStore = types
     };
   })
   .views((self) => ({
-    get odyssey(): OdysseyItemInterface | null {
+    get odyssey(): NftItemStatsModelInterface | null {
       if (!self.nftItem) {
         return null;
       }
@@ -131,6 +130,13 @@ const OnlineUsersStore = types
         docking: self.docks,
         events: self.events
       };
+    },
+    get listedUsers() {
+      return self.searchedUsers && self.searchedUsers.length
+        ? self.searchedUsers
+        : !self.query
+        ? self.allUsers
+        : [];
     }
   }));
 

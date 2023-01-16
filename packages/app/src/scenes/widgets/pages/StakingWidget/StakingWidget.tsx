@@ -9,16 +9,16 @@ import * as styled from './StakingWidget.styled';
 import {StakingDashboard} from './components';
 
 const StakingWidget: FC = () => {
-  const {mainStore, nftStore} = useStore();
-  const {unityStore} = mainStore;
+  const {unityStore, nftStore} = useStore();
+  const {unityInstanceStore} = unityStore;
 
   useEffect(() => {
-    unityStore.changeKeyboardControl(false);
+    unityInstanceStore.changeKeyboardControl(false);
 
     return () => {
-      unityStore.changeKeyboardControl(true);
+      unityInstanceStore.changeKeyboardControl(true);
     };
-  }, [unityStore]);
+  }, [unityInstanceStore]);
 
   return (
     <Dialog

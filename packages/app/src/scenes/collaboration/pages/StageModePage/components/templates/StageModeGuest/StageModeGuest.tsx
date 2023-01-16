@@ -20,8 +20,7 @@ interface PropsInterface {
 }
 
 const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
-  const {mainStore, collaborationStore} = useStore();
-  const {agoraStore_OLD, favoriteStore} = mainStore;
+  const {collaborationStore, agoraStore_OLD} = useStore();
   const {agoraStageModeStore, userDevicesStore} = agoraStore_OLD;
   const {spaceStore} = collaborationStore;
   const {addAwaitingPermissionPopup} = collaborationStore.stageModeStore;
@@ -59,13 +58,13 @@ const StageModeGuest: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
       <SpaceTopBar
         title={spaceStore.space?.name ?? ''}
         subtitle={t('labels.stageMode')}
-        isSpaceFavorite={favoriteStore.isFavorite(spaceStore.id || '')}
+        isSpaceFavorite={false}
+        toggleIsSpaceFavorite={() => {}}
         isAdmin={spaceStore.isAdmin}
         spaceId={spaceStore.id}
         isChatOpen={false}
         toggleChat={() => {}}
         numberOfUnreadMessages={0}
-        toggleIsSpaceFavorite={favoriteStore.toggleFavorite}
         onLeave={onLeaveMeeting}
         adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: spaceStore.id})}
         baseLink={generatePath(ROUTES.base, {spaceId: spaceStore.id})}

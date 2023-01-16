@@ -13,10 +13,10 @@ import {Carousel} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
-  const {odysseyCreatorStore, mainStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
-  const {unityStore} = mainStore;
   const {items, selectedItem, currentItem, selectItem, saveItem} = skyboxSelectorStore;
+  const {unityInstanceStore} = unityStore;
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -49,7 +49,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   key={item.id + idx}
                   onClick={() => {
                     selectItem(item);
-                    unityStore.changeSkybox(item.id);
+                    unityInstanceStore.changeSkybox(item.id);
                   }}
                 >
                   <styled.PreviewImg src={item.image} />

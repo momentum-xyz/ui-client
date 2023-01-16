@@ -13,9 +13,11 @@ import * as styled from './TextPage.styled';
 
 const TextPage: FC = () => {
   const history = useHistory();
-  const {objectStore} = useStore();
+  const {objectStore, unityStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content} = assetStore;
+
+  const isAdmin = unityStore.isCurrentUserWorldAdmin;
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -45,9 +47,11 @@ const TextPage: FC = () => {
             />
           </styled.Title>
         </styled.HeaderElement>
-        <styled.HeaderElement className="button">
-          <Button label={t('actions.changeText')} onClick={changeTileDialog.open} />
-        </styled.HeaderElement>
+        {isAdmin && (
+          <styled.HeaderElement className="button">
+            <Button label={t('actions.changeText')} onClick={changeTileDialog.open} />
+          </styled.HeaderElement>
+        )}
         <styled.HeaderElement className="right">
           <styled.Button>
             <SvgButton

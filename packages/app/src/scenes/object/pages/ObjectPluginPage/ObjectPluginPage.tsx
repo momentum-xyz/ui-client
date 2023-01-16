@@ -21,6 +21,7 @@ import {ToastContent} from 'ui-kit';
 import {PluginLoaderModelType} from 'core/models';
 import {PosBusService} from 'shared/services';
 import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectPluginPage.styled';
 
@@ -31,6 +32,7 @@ interface PropsInterface {
 }
 
 const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) => {
+  const {unityStore} = useStore();
   const {attributesManager} = pluginLoader;
 
   const theme = useTheme();
@@ -38,6 +40,8 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   const history = useHistory();
 
   const {worldId} = useParams<{worldId: string}>();
+
+  const isAdmin = unityStore.isCurrentUserWorldAdmin;
 
   useEffect(() => {
     PosBusService.subscribe(pluginLoader.pluginId);
@@ -67,7 +71,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
 
   const pluginProps: PluginPropsInterface = {
     theme,
-    isAdmin: true,
+    isAdmin,
     isExpanded: pluginLoader.isExpanded,
     onToggleExpand: pluginLoader.toggleIsExpanded,
     objectId,

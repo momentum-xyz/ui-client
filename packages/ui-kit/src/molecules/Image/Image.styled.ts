@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import {ComponentSizeInterface} from '../../interfaces';
+import astronautIcon from '../../static/images/astronaut.svg';
 
 export const Container = styled.div<ComponentSizeInterface>`
   display: flex;
@@ -19,4 +20,10 @@ export const Image = styled.img`
 `;
 
 export const Loader = styled.img``;
-export const ErroredImage = styled.img``;
+
+export const ErroredImage = styled.div`
+  width: 85%;
+  height: 85%;
+  background-color: ${(props) => props.theme.accent};
+  ${`mask: url(${astronautIcon}) no-repeat center;`};
+`;
