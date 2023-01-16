@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - develop-plugins
       - master
       - release/*
 
@@ -24,21 +23,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       version: ${{ steps.build.outputs.version }}
-  dev-deploy:
-    runs-on: self-hosted
-    needs: build-app
-    if: github.ref == 'refs/heads/develop'
-    concurrency: dev-deploy-${{ github.ref }}
-    steps:
-      - id: deploy-dev
-        uses: momentum-xyz/deploy-action@v1
-        with:
-          version: ${{ env.VERSION }}
-          k8s-credentials: ${{ secrets[secrets.REF_K8S_DEV] }}
   dev2-deploy:
     runs-on: self-hosted
     needs: build-app
-    if: github.ref == 'refs/heads/develop-plugins'
+    if: github.ref == 'refs/heads/develop'
     concurrency: dev-deploy-${{ github.ref }}
     steps:
       - id: deploy-dev
