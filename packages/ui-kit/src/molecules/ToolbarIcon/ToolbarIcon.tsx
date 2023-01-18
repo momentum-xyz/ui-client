@@ -1,8 +1,7 @@
 import React, {FC} from 'react';
-import {NavLink} from 'react-router-dom';
+import {NavLink, match} from 'react-router-dom';
 import cn from 'classnames';
 import * as H from 'history';
-import {match} from 'react-router';
 
 import {PropsWithThemeInterface, ToolbarIconInterface} from '../../interfaces';
 import {PlacementType, SizeType} from '../../types';
