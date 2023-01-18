@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
-import {generatePath, matchPath, useHistory} from 'react-router-dom';
+import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
 import {useStore} from 'shared/hooks';
@@ -17,26 +17,30 @@ const OdysseyInfoWidget: FC = () => {
   const {odyssey} = odysseyInfoStore;
   const {assetStore} = objectStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
 
   const handleTeleport = useCallback(() => {
     if (
       assetStore.dockWorldId &&
-      matchPath(history.location.pathname, ROUTES.odyssey.object.root)
+      matchPath(location.pathname, ROUTES.odyssey.object.root)
     ) {
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}));
+      navigate(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}), {
+        replace: true
+      });
       unityInstanceStore.loadWorldById(assetStore.dockWorldId, sessionStore.token);
       return;
     }
 
     odysseyInfoStore.dialog.close();
-    history.push(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
+    navigate(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
   }, [
     assetStore.dockWorldId,
     sessionStore.token,
-    history,
+    navigate,
+    location.pathname,
     odyssey?.uuid,
     odysseyInfoStore.widget,
     unityInstanceStore
@@ -62,11 +66,8 @@ const OdysseyInfoWidget: FC = () => {
       onClose={() => {
         odysseyInfoStore.resetModel();
 
-        if (
-          unityStore.worldId &&
-          matchPath(history.location.pathname, ROUTES.odyssey.object.root)
-        ) {
-          history.push(generatePath(ROUTES.odyssey.base, {worldId: unityStore.worldId}));
+        if (unityStore.worldId && matchPath(location.pathname, ROUTES.odyssey.object.root)) {
+          navigate(generatePath(ROUTES.odyssey.base, {worldId: unityStore.worldId}));
         }
       }}
       showCloseButton

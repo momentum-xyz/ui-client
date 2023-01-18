@@ -3,7 +3,7 @@ import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useHistory, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 
@@ -13,7 +13,7 @@ const ObjectFunctionalityPage: FC = () => {
   const {odysseyCreatorStore} = useStore();
   const {objectFunctionalityStore} = odysseyCreatorStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -22,7 +22,7 @@ const ObjectFunctionalityPage: FC = () => {
   const {objectId} = useParams<{objectId: string}>();
 
   useClickOutside(ref, () => {
-    history.goBack();
+    navigate(-1);
   });
 
   useEffect(() => {

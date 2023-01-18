@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Toggle, Button, Text, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 
 import {Stage, ToastContent, TOAST_GROUND_OPTIONS} from 'ui-kit';
@@ -28,7 +28,7 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
   const {spaceStore, removeParticipantFromStageDialog} = collaborationStore;
   const {space} = spaceStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const remoteUserClicked = useCallback(
     async (remoteUser: AgoraRemoteUserInterface, event = StageModeModerationEventEnum.REMOVE) => {
@@ -67,9 +67,9 @@ const StageModeModerator: React.FC<PropsInterface> = ({onLeaveMeeting}) => {
 
   useEffect(() => {
     if (!collaborationStore.isModerator && spaceStore?.id) {
-      history.push(generatePath(ROUTES.collaboration.stageMode, {spaceId: spaceStore.id}));
+      navigate(generatePath(ROUTES.collaboration.stageMode, {spaceId: spaceStore.id}));
     }
-  }, [collaborationStore.isModerator, history, spaceStore?.id]);
+  }, [collaborationStore.isModerator, navigate, spaceStore?.id]);
 
   if (!space || !collaborationStore.isModerator) {
     return null;

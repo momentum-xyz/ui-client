@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {ToolbarIcon, ToolbarIconInterface, Text, IconSvg} from '@momentum-xyz/ui-kit';
-import {generatePath, useHistory, useLocation} from 'react-router-dom';
+import {generatePath, useNavigate, useLocation} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -11,7 +11,7 @@ const WorldBuilderWidget: FC = () => {
   const {unityStore} = useStore();
   const {worldId} = unityStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const isAdmin = unityStore.isCurrentUserWorldAdmin;
 
@@ -19,7 +19,7 @@ const WorldBuilderWidget: FC = () => {
     title: 'Odyssey Creator',
     icon: 'planet',
     size: 'medium',
-    onClick: () => history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}))
+    onClick: () => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))
     // disabled: !worldStore.isMyWorld
   };
 
@@ -29,7 +29,7 @@ const WorldBuilderWidget: FC = () => {
       // icon: 'planet',
       icon: 'close',
       size: 'medium',
-      onClick: () => history.push(generatePath(ROUTES.odyssey.base, {worldId}))
+      onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId}))
     }
     // {
     //   title: 'Skybox',

@@ -48,9 +48,9 @@ const MeetingRoomPage: FC<PropsInterface> = ({onLeave}) => {
 
   const isButtonsAvailable = useMemo(() => {
     return (
-      !matchPath(location.pathname, {path: ROUTES.collaboration.base}) &&
-      !matchPath(location.pathname, {path: ROUTES.flyWithMe.passenger}) &&
-      !matchPath(location.pathname, {path: ROUTES.flyWithMe.pilot})
+      !matchPath({path: ROUTES.collaboration.base}, location.pathname) &&
+      !matchPath({path: ROUTES.flyWithMe.passenger}, location.pathname) &&
+      !matchPath({path: ROUTES.flyWithMe.pilot}, location.pathname)
     );
   }, [location.pathname]);
 

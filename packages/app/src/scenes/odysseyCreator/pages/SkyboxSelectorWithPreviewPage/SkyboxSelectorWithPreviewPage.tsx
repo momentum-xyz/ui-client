@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Button, Text} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
-import {useParams, useHistory} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
@@ -20,7 +20,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
   const {worldId} = useParams<{worldId: string}>();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {t} = useTranslation();
 
@@ -78,7 +78,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
           />
         )}
       </styled.ItemsGallery>
-      <styled.CloseButton label={t('actions.closePanel')} onClick={() => history.goBack()} />
+      <styled.CloseButton label={t('actions.closePanel')} onClick={() => navigate(-1)} />
     </styled.Container>
   );
 };

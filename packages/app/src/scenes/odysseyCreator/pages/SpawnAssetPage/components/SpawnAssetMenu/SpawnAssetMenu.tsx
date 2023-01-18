@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
+import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
 
@@ -13,29 +13,29 @@ interface PropsInterface {
 
 const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   return (
     <styled.Container>
       <styled.Tab
         className={cn(
-          matchPath(location.pathname, {path: ROUTES.odyssey.creator.spawnAsset.basicAssets}) &&
+          matchPath({path: ROUTES.odyssey.creator.spawnAsset.basicAssets}, location.pathname) &&
             'selected'
         )}
         onClick={() =>
-          history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.basicAssets, {worldId}))
+          navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.basicAssets, {worldId}))
         }
       >
         <styled.TabText text={t('labels.basicAssetPack')} size="l" weight="light" align="left" />
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath(location.pathname, {path: ROUTES.odyssey.creator.spawnAsset.customAssets}) &&
+          matchPath({path: ROUTES.odyssey.creator.spawnAsset.customAssets}, location.pathname) &&
             'selected'
         )}
         onClick={() =>
-          history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.customAssets, {worldId}))
+          navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.customAssets, {worldId}))
         }
       >
         <styled.TabText
@@ -47,11 +47,11 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath(location.pathname, {path: ROUTES.odyssey.creator.spawnAsset.uploadAsset}) &&
+          matchPath({path: ROUTES.odyssey.creator.spawnAsset.uploadAsset}, location.pathname) &&
             'selected'
         )}
         onClick={() =>
-          history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.uploadAsset, {worldId}))
+          navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.uploadAsset, {worldId}))
         }
       >
         <styled.TabText

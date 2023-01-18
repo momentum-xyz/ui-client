@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {generatePath, useHistory, useLocation} from 'react-router-dom';
+import {generatePath, useNavigate, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import DraggableContent from 'react-draggable';
 import {useTranslation} from 'react-i18next';
@@ -15,7 +15,7 @@ import * as styled from './LiveStreamPIPWidget.styled';
 const LiveStreamPIPWidget: React.FC = () => {
   const {liveStreamStore_OLD, flightStore, agoraStore_OLD} = useStore();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
   const location = useLocation();
 
@@ -62,7 +62,7 @@ const LiveStreamPIPWidget: React.FC = () => {
               size="medium"
               disabled={flightStore.isFlightWithMe}
               onClick={() => {
-                history.push(
+                navigate(
                   generatePath(ROUTES.collaboration.liveStream, {spaceId: agoraStore_OLD.spaceId})
                 );
               }}
@@ -74,7 +74,7 @@ const LiveStreamPIPWidget: React.FC = () => {
                 size="medium-large"
                 disabled={flightStore.isFlightWithMe}
                 onClick={() => {
-                  history.push(
+                  navigate(
                     generatePath(ROUTES.collaboration.dashboard, {spaceId: agoraStore_OLD.spaceId})
                   );
                 }}

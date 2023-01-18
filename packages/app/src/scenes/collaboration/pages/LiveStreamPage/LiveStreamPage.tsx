@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {t} from 'i18next';
-import {useHistory} from 'react-router';
+import {useNavigate} from 'react-router';
 import {Button, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 import {generatePath} from 'react-router-dom';
 
@@ -16,7 +16,7 @@ const LiveStreamPage: FC = () => {
   const {spaceStore} = collaborationStore;
   const {space} = spaceStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     liveStreamStore_OLD.showWidget();
@@ -44,7 +44,7 @@ const LiveStreamPage: FC = () => {
         numberOfUnreadMessages={0}
         onLeave={async () => {
           //await leaveMeetingSpace();
-          history.push(ROUTES.base);
+          navigate(ROUTES.base);
         }}
         adminLink={generatePath(ROUTES.spaceAdmin.base, {spaceId: space.id})}
         baseLink={generatePath(ROUTES.base, {spaceId: space.id})}

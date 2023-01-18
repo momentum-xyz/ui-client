@@ -1,6 +1,6 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {isBrowserSupported} from '@momentum-xyz/core';
@@ -27,8 +27,8 @@ const App: FC = () => {
   const {configLoadingErrorCode} = configStore;
   const {unityInstanceStore} = unityStore;
 
-  const {pathname} = useLocation<{pathname: string}>();
-  const history = useHistory();
+  const {pathname} = useLocation();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   useApiHandlers();
@@ -49,9 +49,9 @@ const App: FC = () => {
 
   useEffect(() => {
     if (isBrowserUnsupported) {
-      history.push({pathname: ROUTES.system.wrongBrowser});
+      navigate({pathname: ROUTES.system.wrongBrowser});
     }
-  }, [isBrowserUnsupported, history]);
+  }, [isBrowserUnsupported, navigate]);
 
   if (configStore.isError && !configStore.isConfigReady) {
     return (
@@ -98,6 +98,26 @@ const App: FC = () => {
   if (!configStore.isConfigReady || sessionStore.isAuthenticating) {
     return <></>;
   }
+
+  // // FIXME: Default url
+  // if (pathname === ROUTES.base) {
+  //   return (
+  //     <Routes>
+  //       <Route path="*" element={<Navigate to={ROUTES.explore} replace />} />
+  //     </Routes>
+  //   );
+  // }
+
+  // // PUBLIC ROUTES
+  // if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
+  //   return (
+  //     <ThemeProvider theme={themeStore.theme}>
+  //       <GlobalStyles />
+  //       <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
+  //       <TestnetMarkWidget />
+  //     </ThemeProvider>
+  //   );
+  // }
 
   // PRIVATE ROUTES WITH UNITY
   if (isTargetRoute(pathname, PRIVATE_ROUTES_WITH_UNITY)) {

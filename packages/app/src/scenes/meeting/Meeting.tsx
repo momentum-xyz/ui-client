@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useTranslation} from 'react-i18next';
 
@@ -17,15 +17,15 @@ const Meeting: FC = () => {
   const {agoraMeetingStore} = agoraStore_OLD;
   const {spaceStore} = collaborationStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   const onLeaveMeeting = useCallback(
     async (isKicked = false) => {
       //await rootStore.leaveMeetingSpace(isKicked);
-      history.push(ROUTES.base);
+      navigate(ROUTES.base);
     },
-    [history, rootStore]
+    [navigate, rootStore]
   );
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Button, Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import ReactLinkify from 'react-linkify';
 import {useTranslation} from 'react-i18next';
 
@@ -12,7 +12,7 @@ import {ChangeTextDialog} from 'scenes/object/components';
 import * as styled from './TextPage.styled';
 
 const TextPage: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const {objectStore, unityStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content} = assetStore;
@@ -59,7 +59,7 @@ const TextPage: FC = () => {
               size="large"
               isWhite
               onClick={() => {
-                history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+                navigate(generatePath(ROUTES.odyssey.base, {worldId}));
               }}
             />
           </styled.Button>

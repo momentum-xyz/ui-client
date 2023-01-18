@@ -4,7 +4,7 @@ import {matchPath, useLocation} from 'react-router-dom';
 //import cn from 'classnames';
 //import {Button} from '@momentum-xyz/ui-kit';
 
-// import {generatePath, useHistory} from 'react-router-dom';
+// import {generatePath, useNavigate} from 'react-router-dom';
 // import {useTranslation} from 'react-i18next';
 // import {Button} from '@momentum-xyz/ui-kit';
 //
@@ -30,14 +30,14 @@ const OdysseyPage: FC = () => {
   // const {unityStore} = mainStore;
   //
   // const {t} = useTranslation();
-  // const history = useHistory();
+  // const navigate = useNavigate();
   //
   // const rejoinMeeting = useCallback(
   //   (spaceId) => {
   //     unityStore.teleportToSpace(spaceId);
-  //     history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+  //     navigate(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
   //   },
-  //   [unityStore, history]
+  //   [unityStore, navigate]
   // );
 
   const location = useLocation();

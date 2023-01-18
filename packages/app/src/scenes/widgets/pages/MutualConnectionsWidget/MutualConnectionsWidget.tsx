@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
@@ -16,7 +16,7 @@ const MutualConnectionsWidget: FC = () => {
   const {mutualConnections} = nftStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleUnstake = useCallback(() => {
     mutualConnectionsStore.dialog.close();
@@ -29,14 +29,14 @@ const MutualConnectionsWidget: FC = () => {
 
       if (isUnityAvailable) {
         console.log(`Teleport in unity to ${worldId}`);
-        history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+        navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
         unityInstanceStore.loadWorldById(worldId, sessionStore.token);
       } else {
         console.log(`Redirect to unity to ${worldId}`);
-        history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+        navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
       }
     },
-    [sessionStore, history, isUnityAvailable, mutualConnectionsStore, unityInstanceStore]
+    [sessionStore, navigate, isUnityAvailable, mutualConnectionsStore, unityInstanceStore]
   );
 
   return (

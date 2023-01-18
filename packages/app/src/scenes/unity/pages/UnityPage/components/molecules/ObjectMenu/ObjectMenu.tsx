@@ -1,6 +1,6 @@
 import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
@@ -35,7 +35,7 @@ const ObjectMenu: FC<PropsInterface> = ({
   onUndo,
   onRedo
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {t} = useTranslation();
 
@@ -48,13 +48,13 @@ const ObjectMenu: FC<PropsInterface> = ({
 
   const handleOnFunctionalityClick = useCallback(() => {
     console.info(worldId);
-    history.push({
+    navigate({
       pathname: generatePath(ROUTES.odyssey.creator.functionality, {
         worldId,
         objectId
       })
     });
-  }, [history, objectId, worldId]);
+  }, [navigate, objectId, worldId]);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 

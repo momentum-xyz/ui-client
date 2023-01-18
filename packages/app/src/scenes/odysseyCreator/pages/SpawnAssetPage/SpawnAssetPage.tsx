@@ -1,5 +1,5 @@
 import {FC, useEffect} from 'react';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
@@ -17,7 +17,7 @@ const SpawnAssetPage: FC = () => {
   const {spawnAssetStore} = odysseyCreatorStore;
 
   const {worldId} = useParams<{worldId: string}>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {t} = useTranslation();
 
@@ -33,7 +33,7 @@ const SpawnAssetPage: FC = () => {
           <SvgButton
             iconName="close"
             size="medium-large"
-            onClick={() => history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
+            onClick={() => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
           />
         </styled.Header>
         <styled.Body>

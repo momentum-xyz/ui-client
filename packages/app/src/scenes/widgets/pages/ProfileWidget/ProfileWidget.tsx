@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Dialog, Heading, IconSvg, Loader, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -20,7 +20,7 @@ const ProfileWidget: FC = () => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     profileStore.fetchProfile();
@@ -37,13 +37,13 @@ const ProfileWidget: FC = () => {
 
     if (isUnityAvailable) {
       console.log(`Teleport in unity to ${worldId}`);
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+      navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
       unityInstanceStore.loadWorldById(worldId, sessionStore.token);
     } else {
       console.log(`Redirect to unity to ${worldId}`);
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+      navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
     }
-  }, [profileStore, isUnityAvailable, history, unityInstanceStore, sessionStore]);
+  }, [profileStore, isUnityAvailable, navigate, unityInstanceStore, sessionStore]);
 
   const isTeleportAvailable = useMemo(() => {
     return isUnityAvailable

@@ -1,12 +1,12 @@
 import React, {ReactElement} from 'react';
-import {matchPath, Redirect, Route, Switch} from 'react-router-dom';
+import {matchPath, Navigate, Route, Routes} from 'react-router-dom';
 import {SwitchProps} from 'react-router';
 
 import {RouteConfigInterface} from 'core/interfaces';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
-    return !!matchPath(currentPath, {path: route.path, exact: route.exact});
+    return !!matchPath({path: route.path, exact: route.exact}, currentPath);
   });
 };
 
@@ -24,8 +24,8 @@ export const createSwitchByConfig = (
   routes: RouteConfigInterface[],
   defaultRedirect?: string
 ): ReactElement<SwitchProps, any> => (
-  <Switch>
+  <Routes>
     {createRoutesByConfig(routes)}
-    {defaultRedirect && <Redirect to={defaultRedirect} />}
-  </Switch>
+    {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
+  </Routes>
 );

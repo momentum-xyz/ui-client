@@ -1,6 +1,6 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 
 import AssetsGrid from 'scenes/odysseyCreator/pages/SpawnAssetPage/components/AssetsGrid/AssetsGrid';
 import {Asset3dCategoryEnum} from 'api/enums';
@@ -19,7 +19,7 @@ const AssetsPage: FC<PropsInterface> = ({assetCategory, setFunctionalityAfterCre
   const {odysseyCreatorStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -34,15 +34,15 @@ const AssetsPage: FC<PropsInterface> = ({assetCategory, setFunctionalityAfterCre
   const handleSelected = useCallback(
     (asset: Asset3dInterface) => {
       spawnAssetStore.selectAsset(asset);
-      history.push(
+      navigate(
         generatePath(ROUTES.odyssey.creator.spawnAsset.selected, {
           worldId,
           assetCategory
         }),
-        {setFunctionalityAfterCreation}
+        {state: {setFunctionalityAfterCreation}}
       );
     },
-    [history, spawnAssetStore, worldId, assetCategory, setFunctionalityAfterCreation]
+    [navigate, spawnAssetStore, worldId, assetCategory, setFunctionalityAfterCreation]
   );
 
   return (

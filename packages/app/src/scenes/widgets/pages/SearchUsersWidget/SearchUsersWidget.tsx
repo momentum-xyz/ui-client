@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {PanelLayout, Portal, SearchInput} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
@@ -21,7 +21,7 @@ const SearchUsersWidget: FC = () => {
   const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
 
   const {t} = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     unityInstanceStore.changeKeyboardControl(false);
@@ -41,7 +41,7 @@ const SearchUsersWidget: FC = () => {
     const worldId = id || onlineUsersStore.odyssey?.uuid || '';
     handleClose();
 
-    history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
     unityInstanceStore.loadWorldById(worldId, sessionStore.token);
   };
 

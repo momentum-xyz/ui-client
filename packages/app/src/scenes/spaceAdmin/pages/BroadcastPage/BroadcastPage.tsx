@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {t} from 'i18next';
-import {useHistory} from 'react-router';
+import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {PageTopBar} from '@momentum-xyz/ui-kit';
@@ -13,7 +13,7 @@ import * as styled from './BroadcastPage.styled';
 import {BroadcastFormPanel, BroadcastPreviewPanel, StopBroadcastingDialog} from './components';
 
 const BroadcastPage: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const {collaborationStore, spaceAdminStore} = useStore();
   const {spaceStore} = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
@@ -30,10 +30,10 @@ const BroadcastPage: FC = () => {
 
   const handleClose = () => {
     // @ts-ignore
-    if (history.location.state?.canGoBack) {
-      history.goBack();
+    if (navigate.location.state?.canGoBack) {
+      navigate(-1);
     } else {
-      history.push(ROUTES.base);
+      navigate(ROUTES.base);
     }
   };
 

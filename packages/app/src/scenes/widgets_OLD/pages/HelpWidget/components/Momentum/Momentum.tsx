@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {t} from 'i18next';
 import {Button} from '@momentum-xyz/ui-kit';
 
@@ -17,7 +17,7 @@ const Momentum: React.FC = () => {
   const {worldConfig} = unityWorldStore;
   const {helpStore} = widgetStore_OLD;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleExpand = () => {
     helpStore.toggleSection(HelpSectionEnum.Momentum);
@@ -29,7 +29,7 @@ const Momentum: React.FC = () => {
       unityInstanceStore.teleportToSpace(worldConfig.community_space_id);
       setTimeout(() => {
         const params = {spaceId: worldConfig.community_space_id};
-        history.push(
+        navigate(
           openCalendar
             ? generatePath(ROUTES.collaboration.calendar, params)
             : generatePath(ROUTES.collaboration.dashboard, params)

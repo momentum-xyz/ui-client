@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import {createBrowserHistory} from 'history';
 import {BrowserRouter} from 'react-router-dom';
 
@@ -20,13 +20,15 @@ const rootStore = RootStore.create({}, {history});
 
 console.info(`*** FE ${appVariables.APP_VERSION} ***`);
 
-ReactDOM.render(
+const container = document.getElementById('reactContainer');
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
     <StoreProvider value={rootStore}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </StoreProvider>
-  </React.StrictMode>,
-  document.getElementById('reactContainer')
+  </React.StrictMode>
 );

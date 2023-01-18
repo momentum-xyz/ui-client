@@ -1,7 +1,7 @@
 import React, {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
+import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
@@ -35,7 +35,7 @@ const UnityPage: FC = () => {
   const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
   const location = useLocation();
 
@@ -51,7 +51,8 @@ const UnityPage: FC = () => {
 
     let worldId = '';
     paths.forEach((path) => {
-      const match = matchPath<{worldId: string}>(location.pathname, {path: path});
+      const match = matchPath({path: path}, location.pathname);
+      // const match = matchPath<{worldId: string}>({path: path}, location.pathname);
       if (match?.params?.worldId) {
         worldId = match.params.worldId;
       }
@@ -86,7 +87,7 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ClickObjectEvent', (spaceId: string) => {
-    history.push({
+    navigate({
       pathname: generatePath(ROUTES.odyssey.object.root, {
         worldId: unityStore.worldId,
         objectId: spaceId
@@ -143,12 +144,12 @@ const UnityPage: FC = () => {
       unityInstanceStore.teleportToSpace(spaceId);
 
       setTimeout(() => {
-        history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
+        navigate({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
       }, TELEPORT_DELAY_MS);
     };
 
     const handleJoinTable = () => {
-      history.push({pathname: generatePath(ROUTES.grabTable, {spaceId})});
+      navigate({pathname: generatePath(ROUTES.grabTable, {spaceId})});
     };
 
     toast.info(
@@ -254,16 +255,14 @@ const UnityPage: FC = () => {
       {isBuilderMode && (
         <CreatorMenu
           onAddObject={() => {
-            history.push(
+            navigate(
               generatePath(ROUTES.odyssey.creator.spawnAsset.base, {
                 worldId: unityStore.worldId
               })
             );
           }}
           onSkyboxClick={() => {
-            history.push(
-              generatePath(ROUTES.odyssey.creator.skybox, {worldId: unityStore.worldId})
-            );
+            navigate(generatePath(ROUTES.odyssey.creator.skybox, {worldId: unityStore.worldId}));
           }}
         />
       )}

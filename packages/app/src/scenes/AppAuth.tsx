@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -8,15 +8,15 @@ import {ROUTES} from 'core/constants';
 const AppAuth: FC = ({children}) => {
   const {sessionStore, nftStore} = useStore();
 
-  const history = useHistory();
-  const {pathname} = useLocation<{pathname: string}>();
+const navigate = useNavigate();
+  const {pathname} = useLocation();
 
   if (pathname === ROUTES.signIn && !sessionStore.isGuest) {
-    history.push(ROUTES.explore);
+    navigate(ROUTES.explore);
   }
 
   if (pathname === ROUTES.explore && sessionStore.isGuest) {
-    history.push(ROUTES.signIn);
+    navigate(ROUTES.signIn);
   }
 
   useEffect(() => {

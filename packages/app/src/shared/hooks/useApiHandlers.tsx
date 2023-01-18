@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {AxiosError} from 'axios';
@@ -12,7 +12,7 @@ import {REQUEST_MAX_RETRIES, REQUEST_RETRY_DELAY_BASE, setApiResponseHandlers} f
 export const useApiHandlers = () => {
   const {sessionStore} = useStore();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   const onErrorHandler = useCallback(
@@ -65,5 +65,5 @@ export const useApiHandlers = () => {
       // if the error code matches retryCodes or if it doesn't match
       onError: onErrorHandler
     });
-  }, [history, onErrorHandler, t]);
+  }, [navigate, onErrorHandler, t]);
 };
