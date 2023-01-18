@@ -33,15 +33,21 @@ const usePlugin: UsePluginHookType = (props) => {
 
   const [editMode, setEditMode] = useState(false);
   const [modifiedState, setModifiedState] = useState<PluginStateInterface | null>(null);
+  const [error, setError] = useState<string>();
 
   const [sharedState, setSharedState] = useSharedObjectState<PluginStateInterface>();
 
   const handleConfigSave = async () => {
-    if (modifiedState) {
-      await setSharedState(modifiedState);
-      setModifiedState(null);
+    try {
+      if (modifiedState) {
+        await setSharedState(modifiedState);
+        setModifiedState(null);
+      }
+      setEditMode(false);
+    } catch (e: any) {
+      console.error(e);
+      setError(`Unable to save. ${e.message}`);
     }
-    setEditMode(false);
   };
   const handleCancel = () => {
     setModifiedState(null);
@@ -68,8 +74,11 @@ const usePlugin: UsePluginHookType = (props) => {
       <Input
         type="text"
         label="Channel"
+        autoFocus
         value={modifiedState?.channel || sharedState?.channel || ''}
         onChange={(value) => setModifiedState({channel: value})}
+        isError={!!error}
+        errorMessage={error}
       />
     </div>
   ) : contentUriParam ? (

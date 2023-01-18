@@ -30,7 +30,8 @@ const usePlugin: UsePluginHookType = (props) => {
       }
       setEditMode(false);
     } catch (e: any) {
-      setError(e.message);
+      console.error(e);
+      setError(`Unable to save. ${e.message}`);
     }
   };
   const handleCancel = () => {
@@ -58,8 +59,10 @@ const usePlugin: UsePluginHookType = (props) => {
       <Input
         type="text"
         label="Channel"
+        autoFocus
         value={modifiedState?.video || sharedState?.video || ''}
         onChange={(value) => setModifiedState({video: value})}
+        isError={!!error}
         errorMessage={error}
       />
     </div>

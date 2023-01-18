@@ -64,8 +64,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.setAttributeRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       return response as T;
@@ -80,8 +80,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.deleteAttributeRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       return response;
@@ -127,8 +127,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.setAttributeItemRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       if (!(attributeItemName in response)) {
@@ -154,8 +154,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.deleteAttributeItemRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       if (response === null || !(attributeItemName in response)) {
