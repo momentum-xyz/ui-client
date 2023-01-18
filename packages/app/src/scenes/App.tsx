@@ -12,12 +12,7 @@ import {SystemWideError} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
 
-import {
-  PRIVATE_ROUTES,
-  PRIVATE_ROUTES_WITH_UNITY,
-  PUBLIC_ROUTES,
-  SYSTEM_ROUTES
-} from './App.routes';
+import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {GlobalStyles} from './App.styled';
@@ -26,8 +21,8 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, sessionStore, themeStore, initApplication, unityStore, sentryStore} =
-    useStore();
+  const rootStore = useStore();
+  const {configStore, sessionStore, themeStore, unityStore, sentryStore} = rootStore;
   const {configLoadingErrorCode} = configStore;
   const {unityInstanceStore} = unityStore;
 
@@ -38,8 +33,8 @@ const App: FC = () => {
   useApiHandlers();
 
   useEffect(() => {
-    initApplication();
-  }, [initApplication]);
+    rootStore.initApplication();
+  }, [rootStore]);
 
   useEffect(() => {
     if (configStore.isConfigReady) {
@@ -108,16 +103,6 @@ const App: FC = () => {
       <Switch>
         <Redirect to={ROUTES.explore} />
       </Switch>
-    );
-  }
-
-  // PUBLIC ROUTES
-  if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
-    return (
-      <ThemeProvider theme={themeStore.theme}>
-        <GlobalStyles />
-        <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
-      </ThemeProvider>
     );
   }
 

@@ -4,7 +4,7 @@ import {stringToHex, u8aToHex} from '@polkadot/util';
 import {web3FromSource} from '@polkadot/extension-dapp';
 import {RequestModel} from '@momentum-xyz/core';
 
-import {GuestLoginFormInterface} from 'core/interfaces';
+import {ROUTES} from 'core/constants';
 import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, AuthGuestTokenRequest, FetchMeResponse} from 'api';
@@ -17,32 +17,23 @@ const SessionStore = types
     guestTokenRequest: types.optional(RequestModel, {}),
     challengeRequest: types.optional(RequestModel, {}),
     tokenRequest: types.optional(RequestModel, {}),
-    profileRequest: types.optional(RequestModel, {}),
-    statusRequest: types.optional(RequestModel, {})
+    profileRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    updateAxiosAndUnityTokens(): void {
+    updateAxiosAndUnityTokens(token: string): void {
+      self.token = token;
       // TODO: Uncomment. Check Unity is ready.
       // const {unityStore} = getRootStore(self).mainStore;
       // unityStore.setAuthToken(self.token); // TODO: change key
       refreshAxiosToken(self.token);
-    },
-    clear(): void {
-      self.token = '';
-      refreshAxiosToken(self.token);
     }
   }))
   .actions((self) => ({
-    init(): void {
-      self.token = getAccessToken();
-      self.updateAxiosAndUnityTokens();
-      self.isAuthenticating = false;
-    },
-    fetchGuestToken: flow(function* (form: GuestLoginFormInterface) {
-      const data: AuthGuestTokenRequest = {...form};
+    fetchGuestToken: flow(function* () {
+      // FIXME: BE should generate a name
+      const data: AuthGuestTokenRequest = {name: `Visitor_${Math.floor(Math.random() * 100)}`};
       const response = yield self.guestTokenRequest.send(api.authRepository.getGuestToken, data);
-      self.token = response?.token || '';
-      self.updateAxiosAndUnityTokens();
+      self.updateAxiosAndUnityTokens(response?.token || '');
 
       return !!response?.token;
     }),
@@ -70,8 +61,7 @@ const SessionStore = types
           if (result?.signature) {
             const data = {wallet: hexPublicKey, signedChallenge: result.signature};
             const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
-            self.token = response?.token || '';
-            self.updateAxiosAndUnityTokens();
+            self.updateAxiosAndUnityTokens(response?.token || '');
 
             return !!response?.token;
           }
@@ -90,6 +80,23 @@ const SessionStore = types
       }
 
       return !!response?.id;
+    }),
+    logout(): void {
+      self.updateAxiosAndUnityTokens('');
+      document.location = ROUTES.signIn;
+    }
+  }))
+  .actions((self) => ({
+    init: flow(function* () {
+      const token = getAccessToken();
+      if (token) {
+        self.updateAxiosAndUnityTokens(token);
+      } else {
+        yield self.fetchGuestToken();
+      }
+
+      yield self.loadUserProfile();
+      self.isAuthenticating = false;
     })
   }))
   .views((self) => ({
@@ -99,10 +106,10 @@ const SessionStore = types
     get isAuthenticated(): boolean {
       return !!self.token || !self.isAuthenticating;
     },
-    get isPending(): boolean {
+    get isTokenPending(): boolean {
       return self.challengeRequest.isPending || self.tokenRequest.isPending;
     },
-    get isGuestPending(): boolean {
+    get isGuestTokenPending(): boolean {
       return self.guestTokenRequest.isPending;
     },
     get isUserReady(): boolean {

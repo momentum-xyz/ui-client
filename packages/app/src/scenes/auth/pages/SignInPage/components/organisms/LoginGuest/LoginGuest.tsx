@@ -14,6 +14,7 @@ interface PropsInterface {
   onLogin: (form: GuestLoginFormInterface) => void;
 }
 
+// TODO: Removal.
 const LoginGuest: FC<PropsInterface> = (props) => {
   const {isPending, hasNonGuestAccount, onLogin} = props;
 

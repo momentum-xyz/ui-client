@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 import {Text} from '@momentum-xyz/ui-kit';
@@ -30,10 +30,6 @@ const SignInAccountPage: FC = () => {
     walletWithFundsIsConnected || requestingFundsStatus === 'success';
 
   const {t} = useTranslation();
-
-  useEffect(() => {
-    sessionStore.clear();
-  }, [sessionStore]);
 
   const history = useHistory();
   console.log('SignInAccountPage', {
@@ -88,7 +84,9 @@ const SignInAccountPage: FC = () => {
                 walletOptions={nftStore.accountsWithoutNftsOptions}
                 wallet={signInStore.wallet}
                 isConnectDisabled={
-                  sessionStore.isPending || requestingFundsStatus === 'pending' || isBalanceLoading
+                  sessionStore.isTokenPending ||
+                  requestingFundsStatus === 'pending' ||
+                  isBalanceLoading
                 }
                 onSelectAddress={signInStore.selectWallet}
                 onConnect={onConnectWallet}

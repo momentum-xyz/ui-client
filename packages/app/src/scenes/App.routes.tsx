@@ -37,7 +37,7 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   }
 ];
 
-export const PUBLIC_ROUTES: RouteConfigInterface[] = [
+export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.signIn,
     main: () => (
@@ -46,6 +46,10 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
         <SignInPage />
       </>
     )
+  },
+  {
+    path: ROUTES.storyBook.base,
+    main: () => <StoryBook />
   },
   {
     path: ROUTES.signInAccount,
@@ -67,13 +71,6 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
       </>
     )
   },
-  {
-    path: ROUTES.storyBook.base,
-    main: () => <StoryBook />
-  }
-];
-
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.birthAnimation,
     main: () => (

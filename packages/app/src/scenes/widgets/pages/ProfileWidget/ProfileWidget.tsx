@@ -56,10 +56,6 @@ const ProfileWidget: FC = () => {
     profileStore.dialog.close();
   }, [profileStore]);
 
-  const handleLogout = useCallback(() => {
-    document.location = ROUTES.signIn;
-  }, []);
-
   return (
     <Dialog
       title=""
@@ -119,7 +115,7 @@ const ProfileWidget: FC = () => {
                   }
                   setIsEditMode(!isEditMode);
                 }}
-                onLogout={handleLogout}
+                onLogout={sessionStore.logout}
               />
             </styled.Container>
           )}

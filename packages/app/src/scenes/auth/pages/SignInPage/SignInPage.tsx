@@ -1,13 +1,12 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
-import {GuestLoginFormInterface} from 'core/interfaces';
 
-import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
+import {CreateOdyssey, TravellerBox, Login} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
@@ -15,24 +14,18 @@ const SignInPage: FC = () => {
 
   const history = useHistory();
 
+  // TODO: CHECK
   const targetRoute = window.history.state?.state?.from || ROUTES.explore;
-
-  useEffect(() => {
-    sessionStore.clear();
-    // TODO smt less brutal
-    localStorage.clear();
-  }, [sessionStore]);
 
   const handleLogin = useCallback(async () => {
     const address = nftStore.getAddressByWallet(signInStore.wallet);
     if (address) {
-      const isDone = await sessionStore.fetchTokenByWallet(address);
-      if (isDone) {
-        history.push(targetRoute);
-      }
+      await sessionStore.fetchTokenByWallet(address);
+      await sessionStore.loadUserProfile();
     }
-  }, [sessionStore, history, nftStore, signInStore.wallet, targetRoute]);
+  }, [nftStore, sessionStore, signInStore.wallet]);
 
+  /*
   const handleGuestLogin = useCallback(
     async (form: GuestLoginFormInterface) => {
       const isDone = await sessionStore.fetchGuestToken(form);
@@ -42,6 +35,7 @@ const SignInPage: FC = () => {
     },
     [sessionStore, history, targetRoute]
   );
+  */
 
   return (
     <styled.Container>
@@ -59,19 +53,18 @@ const SignInPage: FC = () => {
             <Login
               walletOptions={nftStore.accountsWithNftsOptions}
               wallet={signInStore.wallet}
-              isPending={sessionStore.isPending}
+              isPending={sessionStore.isTokenPending}
               onSelectAddress={signInStore.selectWallet}
               onLogin={handleLogin}
             />
           )}
 
-          <SinusBox />
-          {/* Login as guest */}
+          {/*<SinusBox />
           <LoginGuest
-            isPending={sessionStore.isGuestPending}
+            isPending={sessionStore.isGuestTokenPending}
             hasNonGuestAccount={!!nftStore.accountsWithNftsOptions.length}
             onLogin={handleGuestLogin}
-          />
+          />*/}
         </styled.Boxes>
       </styled.Wrapper>
     </styled.Container>
