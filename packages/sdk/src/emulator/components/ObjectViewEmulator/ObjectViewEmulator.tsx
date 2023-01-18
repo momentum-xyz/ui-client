@@ -1,33 +1,22 @@
 import React, {FC, useMemo} from 'react';
-import {
-  ErrorBoundary,
-  // ObjectTopBar,
-  // SpacePage,
-  ThemeInterface,
-  WindowPanel
-} from '@momentum-xyz/ui-kit';
+import {useParams} from 'react-router-dom';
+import {ErrorBoundary, ThemeInterface, WindowPanel} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
 import {AttributeValueInterface, PluginPropsInterface, PluginInterface} from '../../../interfaces';
 import {ObjectGlobalPropsContextProvider} from '../../../contexts';
 
+import * as styled from './ObjectViewEmulator.styled';
+
 interface PropsInterface {
   plugin: PluginInterface;
-  objectId: string;
-  // isExpanded: boolean;
-  // setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   onClose: () => void;
 }
 
-export const SpaceTabEmulator: FC<PropsInterface> = ({
-  plugin,
-  objectId,
-  // isExpanded,
-  // setIsExpanded,
-  onClose
-}) => {
-  console.log('RENDER SpaceTabEmulator', {plugin});
+export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
+  const {objectId} = useParams<{objectId: string}>();
+  console.log('RENDER ObjectViewEmulator', {plugin, objectId});
 
   const theme = useTheme();
   const {
@@ -55,10 +44,8 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
   const coreProps: PluginPropsInterface = useMemo(
     () => ({
       theme: theme as ThemeInterface,
-      isAdmin: false,
+      isAdmin: true,
       objectId,
-      // isExpanded,
-      // onToggleExpand: () => setIsExpanded((oldValue) => !oldValue),
       api: {
         getSpaceAttributeValue: <T extends AttributeValueInterface>(
           spaceId: string,
@@ -205,14 +192,12 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
     [
       theme,
       objectId,
-      // isExpanded,
       subscribeToTopic,
       unsubscribeFromTopic,
       useAttributeChange,
       useAttributeRemove,
       useAttributeItemChange,
       useAttributeItemRemove,
-      // setIsExpanded,
       spaceAttributes,
       changedAttribute,
       removedAttribute,
@@ -226,7 +211,9 @@ export const SpaceTabEmulator: FC<PropsInterface> = ({
   return (
     <ErrorBoundary errorMessage="Error while rendering plugin">
       <ObjectGlobalPropsContextProvider props={coreProps}>
-        <PluginInnerWrapper pluginProps={coreProps} plugin={plugin} />
+        <styled.Container>
+          <PluginInnerWrapper pluginProps={coreProps} plugin={plugin} />
+        </styled.Container>
       </ObjectGlobalPropsContextProvider>
     </ErrorBoundary>
   );
@@ -239,8 +226,6 @@ const PluginInnerWrapper = ({
   pluginProps: PluginPropsInterface;
   plugin: PluginInterface;
 }) => {
-  // const {t} = useTranslation();
-
   const {content, objectView} = plugin.usePlugin(pluginProps);
 
   return (
@@ -257,16 +242,3 @@ const PluginInnerWrapper = ({
     )) || <div>usePlugin doesn't return the expected values. Please check the docs</div>
   );
 };
-
-// <SpacePage>
-//   <ObjectTopBar
-//     title={objectView.title || ''}
-//     subtitle={objectView.subtitle || ''}
-//     isExpanded={isExpanded}
-//     onClose={onClose}
-//     onToggleExpand={() => setIsExpanded((oldValue) => !oldValue)}
-//   >
-//     {objectView.actions}
-//   </ObjectTopBar>
-//   {objectView.content}
-// </SpacePage>

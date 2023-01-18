@@ -3,7 +3,7 @@ import {generatePath, Redirect, Route, Switch} from 'react-router-dom';
 import {useHistory} from 'react-router';
 
 import {PluginInterface} from '../../../interfaces';
-import {SpaceEmulator} from '../SpaceEmulator';
+import {ObjectViewEmulator} from '../ObjectViewEmulator';
 import {ROUTES} from '../../constants';
 
 import * as styled from './WorldEmulator.styled';
@@ -26,16 +26,14 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
         <Route exact path="/">
           <div>
             <styled.Button
-              onClick={() =>
-                history.push(generatePath(ROUTES.collaboration.plugin, {objectId: DUMMY_SPACE_ID}))
-              }
+              onClick={() => history.push(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
             >
               Open Plugin
             </styled.Button>
           </div>
         </Route>
-        <Route path={ROUTES.collaboration.plugin}>
-          <SpaceEmulator plugin={plugin} onClose={onClose} />
+        <Route path={ROUTES.plugin}>
+          <ObjectViewEmulator plugin={plugin} onClose={onClose} />
         </Route>
         <Redirect to={ROUTES.base} />
       </Switch>

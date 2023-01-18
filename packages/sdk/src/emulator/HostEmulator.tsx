@@ -1,5 +1,7 @@
 import React, {FC} from 'react';
 import {BrowserRouter} from 'react-router-dom';
+import {ThemeProvider} from 'styled-components';
+import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../interfaces';
 import {GlobalStyles} from '../App.styled';
@@ -27,9 +29,7 @@ const root = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={DefaultThemeConfig}>
-      <HostEmulator plugin={plugin} />
-    </ThemeProvider>
+    <HostEmulator plugin={plugin} />
   </React.StrictMode>,
   root
 );
@@ -38,17 +38,19 @@ ReactDOM.render(
 export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
   return (
-    <styled.FullScreenContainer>
-      <UnityControlContextProvider value={dummyUnityControl}>
-        <GlobalStyles />
-        {isDevEnv ? (
-          <BrowserRouter>
-            <WorldEmulator plugin={plugin} />
-          </BrowserRouter>
-        ) : (
-          <MomentumRequiredPage />
-        )}
-      </UnityControlContextProvider>
-    </styled.FullScreenContainer>
+    <ThemeProvider theme={DefaultThemeConfig}>
+      <styled.FullScreenContainer>
+        <UnityControlContextProvider value={dummyUnityControl}>
+          <GlobalStyles />
+          {isDevEnv ? (
+            <BrowserRouter>
+              <WorldEmulator plugin={plugin} />
+            </BrowserRouter>
+          ) : (
+            <MomentumRequiredPage />
+          )}
+        </UnityControlContextProvider>
+      </styled.FullScreenContainer>
+    </ThemeProvider>
   );
 };
