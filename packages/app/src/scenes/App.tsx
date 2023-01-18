@@ -1,6 +1,6 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {isBrowserSupported} from '@momentum-xyz/core';
@@ -97,26 +97,17 @@ const App: FC = () => {
     return <></>;
   }
 
-  // FIXME: Default url
-  if (pathname === ROUTES.base) {
-    return (
-      <Switch>
-        <Redirect to={ROUTES.explore} />
-      </Switch>
-    );
-  }
-
   // PRIVATE ROUTES WITH UNITY
   if (isTargetRoute(pathname, PRIVATE_ROUTES_WITH_UNITY)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <AppAuth>
-          <GlobalStyles />
-          <UnityPage />
-          <Suspense fallback={false}>
+        <Suspense fallback={false}>
+          <AppAuth>
+            <GlobalStyles />
+            <UnityPage />
             <AppLayers renderUnity>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
-          </Suspense>
-        </AppAuth>
+          </AppAuth>
+        </Suspense>
       </ThemeProvider>
     );
   }

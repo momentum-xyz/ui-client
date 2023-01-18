@@ -13,9 +13,8 @@ export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[
 export const createRoutesByConfig = (
   routes: RouteConfigInterface[]
 ): ReactElement<string, any>[] => {
-  return routes.map(({path, exact, renderBackground, ...rest}) => (
+  return routes.map(({path, exact, ...rest}) => (
     <Route key={path} path={path} exact={exact}>
-      {renderBackground && <div className="scene-bg" />}
       <rest.main />
     </Route>
   ));

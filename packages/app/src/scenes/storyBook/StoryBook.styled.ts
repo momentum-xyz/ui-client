@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const StoryBook = styled.div<{background: string}>`
+  pointer-events: all;
   padding: 20px;
   display: flex;
   height: 100vh;
@@ -25,11 +26,11 @@ export const Settings = styled.div`
 `;
 
 export const Content = styled.div`
-  position: initial;
   padding: 0 0 10px 0;
   display: flex;
   width: 100%;
   border-radius: 10px;
+  background-color: rgba(32, 42, 68, 0.7);
   flex-direction: row;
   gap: 10px;
 `;
