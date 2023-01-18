@@ -26,7 +26,8 @@ import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, authStore, themeStore, initApplication, unityStore, sentryStore} = useStore();
+  const {configStore, sessionStore, themeStore, initApplication, unityStore, sentryStore} =
+    useStore();
   const {configLoadingErrorCode} = configStore;
   const {unityInstanceStore} = unityStore;
 
@@ -42,11 +43,11 @@ const App: FC = () => {
 
   useEffect(() => {
     if (configStore.isConfigReady) {
-      authStore.init();
+      sessionStore.init();
       sentryStore.init();
       unityInstanceStore.init();
     }
-  }, [authStore, configStore.isConfigReady, unityInstanceStore, sentryStore]);
+  }, [sessionStore, configStore.isConfigReady, unityInstanceStore, sentryStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
 
@@ -97,7 +98,7 @@ const App: FC = () => {
     );
   }
 
-  if (!configStore.isConfigReady || authStore.isAuthenticating) {
+  if (!configStore.isConfigReady || sessionStore.isAuthenticating) {
     return <></>;
   }
 

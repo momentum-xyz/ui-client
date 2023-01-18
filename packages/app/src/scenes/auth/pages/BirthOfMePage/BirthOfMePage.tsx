@@ -10,7 +10,7 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {exploreStore, nftStore, authStore, signInStore, sessionStore} = useStore();
+  const {exploreStore, nftStore, signInStore, sessionStore} = useStore();
 
   const nft = signInStore.wallet ? nftStore.getNftByWallet(signInStore.wallet) : null;
 
@@ -19,7 +19,7 @@ const BirthOfMePage: FC = () => {
   const onBuild = async () => {
     const address = nftStore.getAddressByWallet(signInStore.wallet);
     if (address) {
-      await authStore.fetchTokenByWallet(address);
+      await sessionStore.fetchTokenByWallet(address);
     }
 
     const isDone = await signInStore.updateProfile({

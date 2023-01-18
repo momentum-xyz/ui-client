@@ -13,7 +13,7 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = () => {
-  const {widgetsStore, sessionStore, authStore, agoraStore, unityStore} = useStore();
+  const {widgetsStore, sessionStore, agoraStore, unityStore} = useStore();
   const {isUnityAvailable, unityInstanceStore} = unityStore;
   const {profileStore} = widgetsStore;
 
@@ -38,12 +38,12 @@ const ProfileWidget: FC = () => {
     if (isUnityAvailable) {
       console.log(`Teleport in unity to ${worldId}`);
       history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-      unityInstanceStore.loadWorldById(worldId, authStore.token);
+      unityInstanceStore.loadWorldById(worldId, sessionStore.token);
     } else {
       console.log(`Redirect to unity to ${worldId}`);
       history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
     }
-  }, [profileStore, isUnityAvailable, history, unityInstanceStore, authStore]);
+  }, [profileStore, isUnityAvailable, history, unityInstanceStore, sessionStore]);
 
   const isTeleportAvailable = useMemo(() => {
     return isUnityAvailable

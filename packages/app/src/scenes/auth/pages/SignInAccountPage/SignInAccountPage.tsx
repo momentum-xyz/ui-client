@@ -13,7 +13,7 @@ import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './compone
 import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
-  const {authStore, nftStore, signInStore} = useStore();
+  const {sessionStore, nftStore, signInStore} = useStore();
   const {
     balanceTotal,
     isZeroBalance,
@@ -32,8 +32,8 @@ const SignInAccountPage: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    authStore.clear();
-  }, [authStore]);
+    sessionStore.clear();
+  }, [sessionStore]);
 
   const history = useHistory();
   console.log('SignInAccountPage', {
@@ -81,14 +81,14 @@ const SignInAccountPage: FC = () => {
     <styled.Container>
       <styled.Wrapper>
         <styled.Boxes>
-          {!authStore.token && !accountSelectedAndFundsAquired && (
+          {!sessionStore.token && !accountSelectedAndFundsAquired && (
             <>
               <SinusBox />
               <ChoiceYourWallet
                 walletOptions={nftStore.accountsWithoutNftsOptions}
                 wallet={signInStore.wallet}
                 isConnectDisabled={
-                  authStore.isPending || requestingFundsStatus === 'pending' || isBalanceLoading
+                  sessionStore.isPending || requestingFundsStatus === 'pending' || isBalanceLoading
                 }
                 onSelectAddress={signInStore.selectWallet}
                 onConnect={onConnectWallet}

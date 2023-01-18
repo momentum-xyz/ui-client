@@ -10,7 +10,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './MutualConnectionsWidget.styled';
 
 const MutualConnectionsWidget: FC = () => {
-  const {nftStore, widgetsStore, authStore, unityStore} = useStore();
+  const {nftStore, widgetsStore, sessionStore, unityStore} = useStore();
   const {unityInstanceStore, isUnityAvailable} = unityStore;
   const {mutualConnectionsStore} = widgetsStore;
   const {mutualConnections} = nftStore;
@@ -30,13 +30,13 @@ const MutualConnectionsWidget: FC = () => {
       if (isUnityAvailable) {
         console.log(`Teleport in unity to ${worldId}`);
         history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-        unityInstanceStore.loadWorldById(worldId, authStore.token);
+        unityInstanceStore.loadWorldById(worldId, sessionStore.token);
       } else {
         console.log(`Redirect to unity to ${worldId}`);
         history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
       }
     },
-    [authStore, history, isUnityAvailable, mutualConnectionsStore, unityInstanceStore]
+    [sessionStore, history, isUnityAvailable, mutualConnectionsStore, unityInstanceStore]
   );
 
   return (

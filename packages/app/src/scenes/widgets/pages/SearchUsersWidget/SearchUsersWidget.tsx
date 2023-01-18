@@ -14,7 +14,7 @@ import {OnlineUser} from './components';
 const DIALOG_WIDTH_PX = 296;
 
 const SearchUsersWidget: FC = () => {
-  const {widgetsStore, nftStore, authStore, sessionStore, unityStore} = useStore();
+  const {widgetsStore, nftStore, sessionStore, unityStore} = useStore();
   const {unityInstanceStore} = unityStore;
   const {onlineUsersStore} = widgetsStore;
 
@@ -42,7 +42,7 @@ const SearchUsersWidget: FC = () => {
     handleClose();
 
     history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-    unityInstanceStore.loadWorldById(worldId, authStore.token);
+    unityInstanceStore.loadWorldById(worldId, sessionStore.token);
   };
 
   const handleHighFive = (userId: string) => {

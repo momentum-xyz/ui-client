@@ -11,36 +11,36 @@ import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {authStore, signInStore, nftStore} = useStore();
+  const {sessionStore, signInStore, nftStore} = useStore();
 
   const history = useHistory();
 
   const targetRoute = window.history.state?.state?.from || ROUTES.explore;
 
   useEffect(() => {
-    authStore.clear();
+    sessionStore.clear();
     // TODO smt less brutal
     localStorage.clear();
-  }, [authStore]);
+  }, [sessionStore]);
 
   const handleLogin = useCallback(async () => {
     const address = nftStore.getAddressByWallet(signInStore.wallet);
     if (address) {
-      const isDone = await authStore.fetchTokenByWallet(address);
+      const isDone = await sessionStore.fetchTokenByWallet(address);
       if (isDone) {
         history.push(targetRoute);
       }
     }
-  }, [authStore, history, nftStore, signInStore.wallet, targetRoute]);
+  }, [sessionStore, history, nftStore, signInStore.wallet, targetRoute]);
 
   const handleGuestLogin = useCallback(
     async (form: GuestLoginFormInterface) => {
-      const isDone = await authStore.fetchGuestToken(form);
+      const isDone = await sessionStore.fetchGuestToken(form);
       if (isDone) {
         history.push(targetRoute);
       }
     },
-    [authStore, history, targetRoute]
+    [sessionStore, history, targetRoute]
   );
 
   return (
@@ -59,7 +59,7 @@ const SignInPage: FC = () => {
             <Login
               walletOptions={nftStore.accountsWithNftsOptions}
               wallet={signInStore.wallet}
-              isPending={authStore.isPending}
+              isPending={sessionStore.isPending}
               onSelectAddress={signInStore.selectWallet}
               onLogin={handleLogin}
             />
@@ -68,7 +68,7 @@ const SignInPage: FC = () => {
           <SinusBox />
           {/* Login as guest */}
           <LoginGuest
-            isPending={authStore.isGuestPending}
+            isPending={sessionStore.isGuestPending}
             hasNonGuestAccount={!!nftStore.accountsWithNftsOptions.length}
             onLogin={handleGuestLogin}
           />
