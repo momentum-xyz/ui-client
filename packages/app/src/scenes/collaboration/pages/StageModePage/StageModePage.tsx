@@ -28,7 +28,7 @@ const StageModePage: FC = () => {
 
   return (
     <Routes>
-      <Route exact path={generatePath(ROUTES.collaboration.stageMode, {spaceId})}>
+      <Route path={generatePath(ROUTES.collaboration.stageMode, {spaceId})}>
         {collaborationStore.isModerator ? (
           <Route
             path="*"
@@ -43,7 +43,7 @@ const StageModePage: FC = () => {
           <StageModeGuest onLeaveMeeting={onLeaveMeeting} />
         )}
       </Route>
-      <Route exact path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>
+      <Route path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>
         <StageModeModerator onLeaveMeeting={onLeaveMeeting} />
       </Route>
     </Routes>
