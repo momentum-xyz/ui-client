@@ -11,10 +11,11 @@ import * as styled from './ObjectViewEmulator.styled';
 
 interface PropsInterface {
   plugin: PluginInterface;
+  isAdmin: boolean;
   onClose: () => void;
 }
 
-export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
+export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, isAdmin, onClose}) => {
   const {objectId} = useParams<{objectId: string}>();
   console.log('RENDER ObjectViewEmulator', {plugin, objectId});
 
@@ -44,7 +45,7 @@ export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
   const coreProps: PluginPropsInterface = useMemo(
     () => ({
       theme: theme as ThemeInterface,
-      isAdmin: true,
+      isAdmin,
       objectId,
       api: {
         getSpaceAttributeValue: <T extends AttributeValueInterface>(
@@ -204,7 +205,8 @@ export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
       changedAttributeItem,
       removedAttributeItem,
       config,
-      onClose
+      onClose,
+      isAdmin
     ]
   );
 
