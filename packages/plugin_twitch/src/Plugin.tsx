@@ -1,4 +1,8 @@
-import {UsePluginHookType, useSharedObjectState, useUnityControl} from '@momentum-xyz/sdk';
+import {
+  UnityAutoTakeKeyboardControl,
+  UsePluginHookType,
+  useSharedObjectState
+} from '@momentum-xyz/sdk';
 import {Button, Input, Text} from '@momentum-xyz/ui-kit';
 import '@momentum-xyz/ui-kit/dist/themes/themes';
 import {useState} from 'react';
@@ -32,8 +36,6 @@ const usePlugin: UsePluginHookType = (props) => {
 
   const [sharedState, setSharedState] = useSharedObjectState<PluginStateInterface>();
 
-  const {AutoTakeKeyboardControl} = useUnityControl();
-
   const handleConfigSave = async () => {
     if (modifiedState) {
       await setSharedState(modifiedState);
@@ -62,7 +64,7 @@ const usePlugin: UsePluginHookType = (props) => {
 
   const content = editMode ? (
     <div style={{padding: '1em'}}>
-      <AutoTakeKeyboardControl />
+      <UnityAutoTakeKeyboardControl />
       <Input
         type="text"
         label="Channel"

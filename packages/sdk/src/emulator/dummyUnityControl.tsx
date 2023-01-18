@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {UnityControlInterface} from '../interfaces';
 
 export const dummyUnityControl: UnityControlInterface & {_isPaused: boolean} = {
@@ -9,17 +7,6 @@ export const dummyUnityControl: UnityControlInterface & {_isPaused: boolean} = {
   },
   releaseKeyboardControl() {
     console.log('DummyUnityControl.releaseKeyboardControl');
-  },
-  AutoTakeKeyboardControl() {
-    useEffect(() => {
-      console.log('DummyUnityControl.AutoTakeKeyboardControl');
-      dummyUnityControl.takeKeyboardControl();
-      return () => {
-        console.log('DummyUnityControl.AutoTakeKeyboardControl - release');
-        dummyUnityControl.releaseKeyboardControl();
-      };
-    }, []);
-    return null;
   },
   pause() {
     console.log('DummyUnityControl.pause');
@@ -31,16 +18,5 @@ export const dummyUnityControl: UnityControlInterface & {_isPaused: boolean} = {
   },
   isPaused() {
     return this._isPaused;
-  },
-  AutoPauseUnity() {
-    useEffect(() => {
-      console.log('DummyUnityControl.AutoPauseUnity');
-      dummyUnityControl.pause();
-      return () => {
-        console.log('DummyUnityControl.AutoPauseUnity - resume');
-        dummyUnityControl.resume();
-      };
-    }, []);
-    return null;
   }
 };

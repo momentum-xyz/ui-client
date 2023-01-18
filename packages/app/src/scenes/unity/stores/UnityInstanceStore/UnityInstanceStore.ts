@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {cast, flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel, Dialog} from '@momentum-xyz/core';
@@ -202,7 +201,7 @@ const UnityInstanceStore = types
   }))
   .views((self) => ({
     get unityControlInst(): UnityControlInterface {
-      const base = {
+      return {
         takeKeyboardControl: () => {
           self.changeKeyboardControl(false);
         },
@@ -217,28 +216,6 @@ const UnityInstanceStore = types
         },
         isPaused: () => {
           return self.isPaused();
-        }
-      };
-
-      return {
-        ...base,
-        AutoTakeKeyboardControl: () => {
-          useEffect(() => {
-            base.takeKeyboardControl();
-            return () => {
-              base.releaseKeyboardControl();
-            };
-          }, []);
-          return null;
-        },
-        AutoPauseUnity: () => {
-          useEffect(() => {
-            base.pause();
-            return () => {
-              base.resume();
-            };
-          }, []);
-          return null;
         }
       };
     }

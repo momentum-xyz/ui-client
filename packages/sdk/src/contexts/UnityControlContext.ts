@@ -9,10 +9,6 @@ export const UnityControlContext = createContext<UnityControlInterface>({
   releaseKeyboardControl: () => {
     console.warn('releaseKeyboardControl: UnityControlContext not provided');
   },
-  AutoTakeKeyboardControl: () => {
-    console.warn('AutoTakeKeyboardControl: UnityControlContext not provided');
-    return null;
-  },
 
   pause: () => {
     console.warn('pause: UnityControlContext not provided');
@@ -23,10 +19,6 @@ export const UnityControlContext = createContext<UnityControlInterface>({
   isPaused: () => {
     console.warn('isPaused: UnityControlContext not provided');
     return false;
-  },
-  AutoPauseUnity: () => {
-    console.warn('AutoPauseUnity: UnityControlContext not provided');
-    return null;
   }
 });
 
