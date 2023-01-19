@@ -53,6 +53,9 @@ const UnityInstanceStore = types
     setAuthToken(token?: string): void {
       UnityService.setAuthToken(token);
     },
+    setAddressablesURL(url?: string): void {
+      UnityService.setAddressablesURL(url);
+    },
     setTargetWorldId(id?: string): void {
       UnityService.setTargetWorldId(id);
     },
@@ -165,6 +168,9 @@ const UnityInstanceStore = types
 
       const response: ResolveNodeResponse = await this.resolveNode(worldId);
       if (response) {
+        if (appVariables.UNITY_CLIENT_ADDRESSABLES_URL) {
+          this.setAddressablesURL(appVariables.UNITY_CLIENT_ADDRESSABLES_URL);
+        }
         this.setAuthToken(token);
         this.triggerTeleport(response.domain, worldId);
         this.setInitialVolume();
