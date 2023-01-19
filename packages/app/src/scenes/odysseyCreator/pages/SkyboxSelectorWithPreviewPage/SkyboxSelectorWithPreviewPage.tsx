@@ -25,7 +25,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    skyboxSelectorStore.fetchItems(worldId);
+    skyboxSelectorStore.fetchItems(worldId!);
   }, [skyboxSelectorStore, worldId]);
 
   return (
@@ -66,7 +66,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                       transform="uppercase"
                       size="medium"
                       onClick={() => {
-                        saveItem(item, worldId).catch((err) => {
+                        saveItem(item, worldId!).catch((err) => {
                           toast.error(err.message);
                         });
                       }}

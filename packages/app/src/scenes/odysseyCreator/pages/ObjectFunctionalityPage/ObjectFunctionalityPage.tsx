@@ -26,7 +26,7 @@ const ObjectFunctionalityPage: FC = () => {
   });
 
   useEffect(() => {
-    objectFunctionalityStore.fetchObject(objectId);
+    objectFunctionalityStore.fetchObject(objectId!);
   }, [objectId, objectFunctionalityStore]);
 
   return (

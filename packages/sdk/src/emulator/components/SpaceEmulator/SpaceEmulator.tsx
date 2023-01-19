@@ -24,7 +24,7 @@ export const SpaceEmulator: FC<PropsInterface> = ({plugin, onClose}) => {
         <styled.SpaceContent className={isExpanded ? 'expanded' : undefined}>
           <SpaceTabEmulator
             plugin={plugin}
-            objectId={objectId}
+            objectId={objectId!}
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}
           />

@@ -15,7 +15,7 @@ const SpaceAdmin: FC = () => {
   const {spaceId} = useParams<{spaceId: string}>();
 
   useEffect(() => {
-    spaceManagerStore.init(spaceId);
+    spaceManagerStore.init(spaceId!);
 
     return () => {
       spaceManagerStore.resetModel();
@@ -24,7 +24,7 @@ const SpaceAdmin: FC = () => {
 
   return (
     <>
-      <Navigation tabs={buildAdminNavigationTabs(spaceId)} />
+      <Navigation tabs={buildAdminNavigationTabs(spaceId!)} />
       {createSwitchByConfig(ADMIN_ROUTES)}
     </>
   );

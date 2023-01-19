@@ -32,7 +32,7 @@ export const SelectedPage: FC = () => {
   }, [spawnAssetStore]);
 
   const handleSpawn = useCallback(() => {
-    spawnAssetStore.spawnObject(worldId).then((objectId) => {
+    spawnAssetStore.spawnObject(worldId!).then((objectId) => {
       if (objectId) {
         if (window.history.state?.state?.setFunctionalityAfterCreation) {
           navigate(generatePath(ROUTES.odyssey.creator.functionality, {worldId, objectId}));

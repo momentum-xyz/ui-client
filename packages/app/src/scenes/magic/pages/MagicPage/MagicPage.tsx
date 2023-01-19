@@ -14,7 +14,7 @@ const MagicPage: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    magicStore.fetchMagicLink(id);
+    magicStore.fetchMagicLink(id!);
 
     return () => {
       magicStore.resetModel();

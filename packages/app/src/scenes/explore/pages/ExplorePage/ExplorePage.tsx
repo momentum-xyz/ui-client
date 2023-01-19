@@ -45,7 +45,7 @@ const ExplorePage: FC = () => {
             onTeleport={(nft) => {
               console.log(nft);
               if (nft.uuid) {
-                navigate.replace(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
+                navigate(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}), {replace: true});
               }
             }}
             onAttend={(nft) => {

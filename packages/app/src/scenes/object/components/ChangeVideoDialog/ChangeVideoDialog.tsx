@@ -33,7 +33,7 @@ const ChangeVideoDialog: FC = () => {
   const formSubmitHandler: SubmitHandler<VideoObjectInterface> = async (
     data: VideoObjectInterface
   ) => {
-    await assetStore.postNewContent(objectId, data);
+    await assetStore.postNewContent(objectId!, data);
 
     changeTileDialog.close();
   };

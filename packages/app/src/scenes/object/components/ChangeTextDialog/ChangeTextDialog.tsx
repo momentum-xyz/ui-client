@@ -34,7 +34,7 @@ const ChangeTextDialog: FC = () => {
   const formSubmitHandler: SubmitHandler<TextObjectInterface> = async (
     data: TextObjectInterface
   ) => {
-    await assetStore.postNewContent(objectId, data);
+    await assetStore.postNewContent(objectId!, data);
 
     changeTileDialog.close();
   };

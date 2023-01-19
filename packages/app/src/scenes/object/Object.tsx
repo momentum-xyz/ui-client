@@ -19,11 +19,11 @@ const Object: FC = () => {
   const {objectId} = useParams<{objectId: string}>();
 
   useEffect(() => {
-    objectStore.init(objectId);
-    unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId, 0, '');
+    objectStore.init(objectId!);
+    unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId!, 0, '');
 
     return () => {
-      unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId, 0, '');
+      unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId!, 0, '');
       objectStore.resetModel();
     };
   }, [objectId, objectStore, unityInstanceStore]);
@@ -49,7 +49,7 @@ const Object: FC = () => {
         return (
           <>
             {asset?.plugin && (
-              <ObjectPluginPage plugin={asset.plugin} pluginLoader={asset} objectId={objectId} />
+              <ObjectPluginPage plugin={asset.plugin} pluginLoader={asset} objectId={objectId!} />
             )}
           </>
         );

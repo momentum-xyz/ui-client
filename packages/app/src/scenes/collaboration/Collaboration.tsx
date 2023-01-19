@@ -137,7 +137,7 @@ const Collaboration: FC = () => {
   const tabs = useMemo(() => {
     return [
       ...buildNavigationTabs(
-        spaceId,
+        spaceId!,
         agoraStore_OLD.isStageMode,
         !!agoraScreenShareStore.videoTrack,
         liveStreamStore_OLD.isStreaming

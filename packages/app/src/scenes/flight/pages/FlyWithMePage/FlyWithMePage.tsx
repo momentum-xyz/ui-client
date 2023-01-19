@@ -33,7 +33,7 @@ const FlyWithMePage: FC = () => {
   }, [pilotId, sessionStore.userId]);
 
   useEffect(() => {
-    flyWithMeStore.init(pilotId);
+    flyWithMeStore.init(pilotId!);
     unityInstanceStore.hideMinimap();
 
     return () => {
@@ -42,7 +42,7 @@ const FlyWithMePage: FC = () => {
       flyWithMeStore.resetModel();
 
       if (isPilot) {
-        flyWithMeStore.stop(spaceId);
+        flyWithMeStore.stop(spaceId!);
       }
     };
   }, [pilotId, unityInstanceStore, flyWithMeStore, isPilot, spaceId]);

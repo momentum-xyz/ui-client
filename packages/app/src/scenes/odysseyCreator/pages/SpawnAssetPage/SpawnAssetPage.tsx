@@ -22,7 +22,7 @@ const SpawnAssetPage: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    spawnAssetStore.init(worldId);
+    spawnAssetStore.init(worldId!);
   }, [spawnAssetStore, worldId]);
 
   return (
@@ -37,7 +37,7 @@ const SpawnAssetPage: FC = () => {
           />
         </styled.Header>
         <styled.Body>
-          <SpawnAssetMenu worldId={worldId} />
+          <SpawnAssetMenu worldId={worldId!} />
           <styled.PageContainer>
             {createSwitchByConfig(
               SPAWN_ASSET_ROUTES,

@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
-import {generatePath, Redirect, Route, Switch} from 'react-router-dom';
-import {useHistory} from 'react-router';
+import {generatePath, Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 
 import {ObjectPluginPropsInterface, PluginInterface} from '../../../interfaces';
 import {SpaceEmulator} from '../SpaceEmulator';
@@ -17,16 +16,16 @@ interface PropsInterface {
 export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER WorldEmulator', {plugin});
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <styled.Container>
-      <Switch>
-        <Route exact path="/">
+      <Routes>
+        <Route path="/">
           <div>
             <styled.Button
               onClick={() =>
-                history.push(generatePath(ROUTES.collaboration.plugin, {objectId: DUMMY_SPACE_ID}))
+                navigate(generatePath(ROUTES.collaboration.plugin, {objectId: DUMMY_SPACE_ID}))
               }
             >
               Open Plugin
@@ -34,10 +33,10 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
           </div>
         </Route>
         <Route path={ROUTES.collaboration.plugin}>
-          <SpaceEmulator plugin={plugin} onClose={() => history.push(ROUTES.base)} />
+          <SpaceEmulator plugin={plugin} onClose={() => navigate(ROUTES.base)} />
         </Route>
-        <Redirect to={ROUTES.base} />
-      </Switch>
+        <Route path="*" element={<Navigate to={ROUTES.base} replace />} />
+      </Routes>
     </styled.Container>
   );
 };
