@@ -1,7 +1,5 @@
-import {appVariables} from 'api/constants';
-
 export const pluginsRepositoryEndpoints = () => {
-  const BASE_URL = `${appVariables.BACKEND_API_URL}/plugins`;
+  const BASE_URL = '/plugins';
 
   return {
     list: `${BASE_URL}`,

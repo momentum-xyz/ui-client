@@ -1,7 +1,5 @@
-import {appVariables} from 'api/constants';
-
 export const web3RepositoryEndpoints = () => {
-  const BASE_URL = `${appVariables.BACKEND_API_URL}/drive`;
+  const BASE_URL = '/drive';
 
   return {
     mintNft: `${BASE_URL}/mint-odyssey`,
