@@ -13,11 +13,14 @@ export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[
 export const createRoutesByConfig = (
   routes: RouteConfigInterface[]
 ): ReactElement<string, any>[] => {
-  return routes.map(({path, exact, ...rest}) => (
-    <Route key={path} path={path}>
-      <rest.main />
-    </Route>
-  ));
+  return routes.map(({path, exact, ...rest}) => {
+    const element = (
+      <>
+        <rest.main />
+      </>
+    );
+    return <Route key={path} path={path} element={element} />;
+  });
 };
 
 export const createSwitchByConfig = (

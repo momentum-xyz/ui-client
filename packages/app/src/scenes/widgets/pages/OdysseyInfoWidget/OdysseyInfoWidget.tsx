@@ -23,10 +23,7 @@ const OdysseyInfoWidget: FC = () => {
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
 
   const handleTeleport = useCallback(() => {
-    if (
-      assetStore.dockWorldId &&
-      matchPath(location.pathname, ROUTES.odyssey.object.root)
-    ) {
+    if (assetStore.dockWorldId && matchPath(location.pathname, ROUTES.odyssey.object.root)) {
       navigate(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}), {
         replace: true
       });

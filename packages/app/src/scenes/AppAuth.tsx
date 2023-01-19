@@ -8,7 +8,7 @@ import {ROUTES} from 'core/constants';
 const AppAuth: FC = ({children}) => {
   const {sessionStore, nftStore} = useStore();
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const {pathname} = useLocation();
 
   if (pathname === ROUTES.signIn && !sessionStore.isGuest) {
