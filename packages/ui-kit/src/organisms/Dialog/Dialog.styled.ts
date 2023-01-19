@@ -77,6 +77,10 @@ export const Container = styled.div<{offset: OffsetInterface}>`
   border-radius: 10px;
   pointer-events: all;
 
+  &.center {
+    margin: 0 0 ${(props) => props.offset?.bottom || 0}px 0;
+  }
+
   &.rightBottom {
     margin: 0 ${(props) => props.offset?.right || 0}px ${(props) => props.offset?.bottom || 0}px 0;
   }

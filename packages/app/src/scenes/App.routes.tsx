@@ -42,7 +42,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.signIn,
     main: () => (
       <>
-        <Map3dPage />
+        <Map3dPage isClickActive />
         <SignInPage />
       </>
     )

@@ -48,7 +48,6 @@ const OdysseyInfo: FC<PropsInterface> = ({
           <Image
             src={getImageAbsoluteUrl(odyssey?.image) || ''}
             sizeProps={{width: '80px', height: '80px'}}
-            className="avatar"
           />
           <styled.Actions>
             {!!onVisit && (

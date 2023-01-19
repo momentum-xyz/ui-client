@@ -1,6 +1,7 @@
 import {types} from 'mobx-state-tree';
 
 import {ProfileStore} from './ProfileStore';
+import {PreviewOdysseyStore} from './PreviewOdysseyStore';
 import {NotificationsStore} from './NotificationsStore';
 import {FlyToMeStore} from './FlyToMeStore';
 import {ScreenShareStore} from './ScreenShareStore';
@@ -14,6 +15,7 @@ import {MutualConnectionsStore} from './MutualConnectionsStore';
 import {MagicLinkStore} from './MagicLinkStore';
 
 const RootWidgetsStore = types.model('RootWidgetsStore', {
+  previewOdysseyStore: types.optional(PreviewOdysseyStore, {}),
   profileStore: types.optional(ProfileStore, {}),
   notificationsStore: types.optional(NotificationsStore, {}),
   minimapStore: types.optional(MinimapStore, {}),

@@ -9,6 +9,7 @@ export * from './NotificationsWidget';
 export * from './CalendarWidget';
 export * from './OdysseyBioWidget';
 export * from './OdysseyInfoWidget';
+export * from './PreviewOdysseyWidget';
 export * from './WorldBuilderWidget';
 export * from './SearchUsersWidget';
 export * from './MagicLinkWidget';
