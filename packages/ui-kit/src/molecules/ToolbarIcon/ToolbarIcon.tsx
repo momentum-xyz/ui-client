@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {NavLink, match} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import cn from 'classnames';
 import * as H from 'history';
 
@@ -15,7 +15,8 @@ interface ToolbarIconPropsInterface extends PropsWithThemeInterface, ToolbarIcon
   visible?: boolean;
   size?: SizeType;
   exact?: boolean;
-  isActive?: (match: match | null, location: H.Location) => boolean;
+  isActive?: (match: any | null, location: H.Location) => boolean; // TODO AK Fix this
+  // isActive?: (match: match | null, location: H.Location) => boolean;
   state?: object;
   isWhite?: boolean;
   toolTipPlacement?: PlacementType;
@@ -54,10 +55,11 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
       <Tooltip label={title} placement={toolTipPlacement}>
         {link && !disabled ? (
           <NavLink
-            to={{pathname: link, state}}
-            activeClassName="active"
-            exact={exact}
-            isActive={isActive}
+            to={link}
+            state={state}
+            className={(p) => (p.isActive ? 'active' : undefined)}
+            end={exact}
+            // isActive={isActive} TODO AK Find solution for this
             onClick={onClick}
           >
             {icon ? (

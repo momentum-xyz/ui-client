@@ -1,5 +1,5 @@
 import React, {FC, useCallback} from 'react';
-import {useDropzone} from 'react-dropzone';
+import {useDropzone, Accept} from 'react-dropzone';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 import {FileType} from '../../types';
@@ -7,7 +7,6 @@ import {Button} from '../../atoms';
 import {ErrorsEnum} from '../../enums';
 
 import * as styled from './FileUploader.styled';
-
 interface PropsInterface extends PropsWithThemeInterface {
   label: string;
   buttonSize?: 'small' | 'normal' | 'medium';
@@ -59,7 +58,7 @@ const FileUploader: FC<PropsInterface> = ({
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
-    accept: `${fileType as string}/*`,
+    accept: fileType ? {[`${fileType as string}/*`]: []} : undefined, // TODO AK Test if this works as intended
     multiple: false
   });
   const {onClick, ...restRootProps} = getRootProps();
