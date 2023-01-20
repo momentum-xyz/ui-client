@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Button, Dropdown, OptionInterface, Text} from '@momentum-xyz/ui-kit';
+import {Button, Dropdown, Heading, IconSvg, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {Box} from 'ui-kit';
@@ -15,19 +15,25 @@ interface PropsInterface {
   onConnect: () => void;
 }
 
+const DISCOVER_URL = 'https://discover.odyssey.org/create-your-odyssey/get-a-wallet/';
+
 const ChoiceYourWallet: FC<PropsInterface> = (props) => {
   const {walletOptions, wallet, isConnectDisabled, onSelectAddress, onConnect} = props;
 
   const {t} = useTranslation();
 
   return (
-    <Box>
+    <Box size="small">
       <styled.Div>
-        <Text size="m" text={t('titles.oneConnectYourWallet')} align="left" />
+        <styled.Header>
+          <IconSvg name="add" size="normal" />
+          <Heading type="h3" label={t('actions.createOdyssey')} align="left" />
+        </styled.Header>
+
         <Text size="m" text={t('messages.onceConnectedTokensWillBeAwarded')} align="left" />
         <styled.ImageContainer>
           <styled.Image src={polkadot} />
-          <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
+          <Text size="xs" text={t('networks.polkadot')} align="left" transform="uppercase" />
         </styled.ImageContainer>
 
         <Dropdown
@@ -40,13 +46,11 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
 
         <div>
           <Text size="m" text={t('messages.noWalletFollowInstructions')} align="left" />
-          <styled.Link
-            target="_blank"
-            href="https://discover.odyssey.org/create-your-odyssey/get-a-wallet/"
-          >
-            here
+          <styled.Link target="_blank" href={DISCOVER_URL}>
+            {t('labels.here')}
           </styled.Link>
         </div>
+
         <Button
           size="medium"
           label={t('labels.connectYourWallet')}

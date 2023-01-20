@@ -6,6 +6,13 @@ export const Div = styled.div`
   gap: 20px;
 `;
 
+export const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+`;
+
 export const ImageContainer = styled.div`
   display: flex;
   align-items: center;

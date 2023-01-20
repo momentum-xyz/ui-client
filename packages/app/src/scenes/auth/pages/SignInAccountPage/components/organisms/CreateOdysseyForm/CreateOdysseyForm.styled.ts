@@ -3,12 +3,19 @@ import styled from 'styled-components';
 export const Div = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 `;
 
-export const ImageContainer = styled.div`
-  padding: 0 2px;
+export const Header = styled.div`
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const InputContainer = styled.div`
+  display: grid;
+  grid-template-columns: 24px 1fr;
   align-items: center;
   gap: 12px;
 `;

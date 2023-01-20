@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import {Button, FileUploader, IconSvg, InputDark, Text} from '@momentum-xyz/ui-kit';
+import {Button, FileUploader, Heading, IconSvg, InputDark, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {Controller, useForm} from 'react-hook-form';
 
@@ -38,36 +38,19 @@ const CreateOdysseyForm: FC<PropsInterface> = (props) => {
   }, [fieldErrors, setError]);
 
   return (
-    <Box>
+    <Box size="small">
       <styled.Div>
-        <Text size="m" text="2. Mint your Odyssey" align="left" />
-        <Text size="m" text="Choose an image for your odyssey" align="left" />
+        <styled.Header>
+          <IconSvg name="add" size="normal" />
+          <Heading type="h3" label={t('actions.createOdyssey')} align="left" />
+        </styled.Header>
 
-        <Controller
-          name="avatar"
-          control={control}
-          render={({field: {value, onChange}}) => (
-            <styled.Avatar>
-              <styled.AvatarImageUpload>
-                {value && <styled.ImagePreview src={URL.createObjectURL(value)} />}
-                <styled.AvatarImageInner>
-                  <FileUploader
-                    label="Upload Image"
-                    dragActiveLabel="Drop the files here..."
-                    fileType="image"
-                    buttonSize="medium"
-                    onFilesUpload={onChange}
-                    onError={(error) => console.error(error)}
-                    enableDragAndDrop={false}
-                  />
-                </styled.AvatarImageInner>
-              </styled.AvatarImageUpload>
-            </styled.Avatar>
-          )}
-        />
+        <Text size="s" text={t('labels.createProfile')} align="left" weight="bold" />
+        <Text size="s" text={t('messages.createProfileDesc')} align="left" />
 
-        <Text size="m" text="What should we call you?" align="left" />
-        <styled.ImageContainer>
+        {/* USERNAME */}
+        <Text size="s" text={t('messages.yourName')} align="left" />
+        <styled.InputContainer>
           <IconSvg name="profile" size="large" />
           <Controller
             name="name"
@@ -76,7 +59,7 @@ const CreateOdysseyForm: FC<PropsInterface> = (props) => {
             render={({field: {onChange, value}}) => (
               <InputDark
                 variant="secondary"
-                placeholder="Choose your name"
+                placeholder={t('actions.chooseName')}
                 value={value || ''}
                 disabled={disabled}
                 isError={!!errors.name}
@@ -89,17 +72,39 @@ const CreateOdysseyForm: FC<PropsInterface> = (props) => {
               />
             )}
           />
-        </styled.ImageContainer>
+        </styled.InputContainer>
 
-        <Text
-          size="m"
-          text="All set, let’s go! Create an NFT with your personal odyssey"
-          align="left"
+        {/* AVATAR */}
+        <Text size="s" text={t('messages.chooseImage')} align="left" />
+        <Controller
+          name="avatar"
+          control={control}
+          render={({field: {value, onChange}}) => (
+            <styled.Avatar>
+              <styled.AvatarImageUpload>
+                {value && <styled.ImagePreview src={URL.createObjectURL(value)} />}
+                <styled.AvatarImageInner>
+                  <FileUploader
+                    label={t('fileUploader.uploadLabel')}
+                    dragActiveLabel={t('fileUploader.dragActiveLabel')}
+                    fileType="image"
+                    buttonSize="medium"
+                    onFilesUpload={onChange}
+                    onError={(error) => console.error(error)}
+                    enableDragAndDrop={false}
+                  />
+                </styled.AvatarImageInner>
+              </styled.AvatarImageUpload>
+            </styled.Avatar>
+          )}
         />
+
+        <Text size="m" text={t('messages.startCounting')} align="left" />
+
         <Button
+          icon="astro"
           size="medium"
-          label="Create your Odyssey"
-          icon="planet"
+          label={t('actions.startJourney')}
           disabled={disabled}
           onClick={onUpdateProfile}
         />

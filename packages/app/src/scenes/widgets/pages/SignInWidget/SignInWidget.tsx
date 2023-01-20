@@ -38,7 +38,7 @@ const SignInWidget: FC = () => {
       <styled.Container>
         <Text size="m" text={t('messages.howSignUp')} align="left" />
         <styled.Image src={image} />
-        <Text size="s" text={t('messages.signUp_two')} align="left" />
+        <Text size="s" text={t('messages.signUp')} align="left" />
 
         <Button
           wide

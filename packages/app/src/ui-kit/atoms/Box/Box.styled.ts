@@ -9,7 +9,7 @@ export const Div = styled.div`
 
   &.big {
     width: 255px;
-    padding: 10 0;
+    padding: 10px 0;
   }
 
   &.normal {
@@ -19,7 +19,7 @@ export const Div = styled.div`
 
   &.small {
     width: 240px;
-    padding: 10 0;
+    padding: 12px;
   }
 
   &.wide {

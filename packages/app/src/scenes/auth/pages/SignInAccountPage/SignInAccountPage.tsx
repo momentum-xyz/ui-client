@@ -9,7 +9,7 @@ import {SignUpFormInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
 
-import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './components';
+import {CreateOdysseyForm, ChoiceYourWallet} from './components';
 import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
@@ -96,9 +96,6 @@ const SignInAccountPage: FC = () => {
 
           {accountSelectedAndFundsAquired && (
             <>
-              {requestingFundsStatus === 'success' && mintingNftStatus !== 'pending' && (
-                <CongratulationsBox amount={balanceTotal} />
-              )}
               <SinusBox />
               <CreateOdysseyForm
                 fieldErrors={signInStore.fieldErrors}
