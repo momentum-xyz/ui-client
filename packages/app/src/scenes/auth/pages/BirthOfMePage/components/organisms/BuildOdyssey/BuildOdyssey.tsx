@@ -17,13 +17,6 @@ const BuildOdyssey: FC<PropsInterface> = ({name, disabled, onBuild}) => {
       <styled.Div>
         <Text size="m" text={`Well done, ${name}! You just created your Odyssey`} align="left" />
         <Text size="m" text="Start creating your personal journey and..." align="left" />
-        {/* <Text
-          size="m"
-          text="Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus."
-          align="left"
-        /> */}
-        {/* <Text size="m" text="Enter Polkajor and start the journey" align="left" /> */}
-
         <Button size="medium" label="Build your Odyssey" disabled={disabled} onClick={onBuild} />
       </styled.Div>
     </Box>

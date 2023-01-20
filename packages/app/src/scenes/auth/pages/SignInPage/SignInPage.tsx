@@ -24,10 +24,8 @@ const SignInPage: FC = () => {
     }
   }, [nftStore, sessionStore, signInStore.wallet]);
 
-  // TODO: CHECK
   const handleSignUp = useCallback(() => {
-    const targetRoute = window.history.state?.state?.from || ROUTES.explore;
-    history.push(ROUTES.signInAccount, {from: targetRoute});
+    history.push(ROUTES.signInAccount);
   }, [history]);
 
   return (

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
@@ -12,20 +12,18 @@ import * as styled from './BirthOfMePage.styled';
 const BirthOfMePage: FC = () => {
   const {exploreStore, nftStore, signInStore, sessionStore} = useStore();
 
-  const nft = signInStore.wallet ? nftStore.getNftByWallet(signInStore.wallet) : null;
-
   const history = useHistory();
 
-  const onBuild = async () => {
+  const nft = signInStore.wallet ? nftStore.getNftByWallet(signInStore.wallet) : null;
+
+  const onBuild = useCallback(async () => {
     const address = nftStore.getAddressByWallet(signInStore.wallet);
     if (address) {
       await sessionStore.fetchTokenByWallet(address);
     }
 
-    const isDone = await signInStore.updateProfile({
-      name: nft?.name,
-      avatarHash: nft?.image
-    });
+    const form = {name: nft?.name, avatarHash: nft?.image};
+    const isDone = await signInStore.updateProfile(form);
     if (isDone) {
       await sessionStore.loadUserProfile();
     }
@@ -38,9 +36,9 @@ const BirthOfMePage: FC = () => {
       });
     }
 
-    const from = window.history.state?.state?.from;
-    history.push(ROUTES.birthAnimation, {from: from || ROUTES.explore});
-  };
+    history.push(ROUTES.birthAnimation);
+  }, [exploreStore, history, nft, nftStore, sessionStore, signInStore]);
+
   if (!nft) {
     return null;
   }

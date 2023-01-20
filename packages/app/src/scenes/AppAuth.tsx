@@ -19,14 +19,6 @@ const AppAuth: FC = ({children}) => {
     history.push(ROUTES.signIn);
   }
 
-  /* useEffect(() => {
-    if (sessionStore.hasToken) {
-      sessionStore.loadUserProfile();
-    } else {
-      history.push(ROUTES.signIn, {from: history.location.pathname});
-    }
-  }, [sessionStore.hasToken, history, sessionStore]);*/
-
   useEffect(() => {
     if (sessionStore.wallet && !nftStore.isLoading) {
       nftStore.activateWallet(sessionStore.wallet);

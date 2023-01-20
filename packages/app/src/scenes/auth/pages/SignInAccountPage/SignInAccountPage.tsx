@@ -13,17 +13,10 @@ import {CreateOdysseyForm, ChoiceYourWallet, CongratulationsBox} from './compone
 import * as styled from './SignInAccountPage.styled';
 
 const SignInAccountPage: FC = () => {
-  const {sessionStore, nftStore, signInStore} = useStore();
-  const {
-    balanceTotal,
-    isZeroBalance,
-    isBalanceLoading,
-    tokenSymbol,
-    requestAirdrop,
-    requestingFundsStatus,
-    mintingNftStatus,
-    mintNft
-  } = nftStore;
+  const {nftStore, signInStore} = useStore();
+  const {balanceTotal, isZeroBalance, isBalanceLoading, tokenSymbol} = nftStore;
+  const {requestingFundsStatus, mintingNftStatus} = nftStore;
+
   const [walletWithFundsIsConnected, setWalletWithFundsIsConnected] = useState(false);
 
   const accountSelectedAndFundsAquired =
@@ -32,6 +25,7 @@ const SignInAccountPage: FC = () => {
   const {t} = useTranslation();
 
   const history = useHistory();
+
   console.log('SignInAccountPage', {
     balanceTotal,
     isZeroBalance,
@@ -44,12 +38,12 @@ const SignInAccountPage: FC = () => {
   const onConnectWallet = useCallback(() => {
     console.log('onConnectWallet', {isZeroBalance});
     if (isZeroBalance) {
-      requestAirdrop(signInStore.wallet);
+      nftStore.requestAirdrop(signInStore.wallet);
     } else {
       // there are funds already
       setWalletWithFundsIsConnected(true);
     }
-  }, [signInStore.wallet, isZeroBalance, requestAirdrop]);
+  }, [signInStore.wallet, isZeroBalance, nftStore]);
 
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
@@ -57,47 +51,43 @@ const SignInAccountPage: FC = () => {
         const avatarHash = await signInStore.getAvatarHash(form);
 
         console.log(`Minting for ${form.name} ${avatarHash}`);
-        const userID = await mintNft(signInStore.wallet, form.name || '', avatarHash);
+        const userID = await nftStore.mintNft(signInStore.wallet, form.name || '', avatarHash);
         console.log('Minting is successful! userID:', userID);
 
         // NFT should be minted and accessible by now - if it doesn't happen sometimes
         // we can put some wait here
         await nftStore.fetchNfts();
-
-        const from = window.history.state?.state?.from;
-        history.push(ROUTES.birth, {from: from || ROUTES.explore});
+        history.push(ROUTES.birth);
       } catch (err) {
         console.log('error minting nft', err);
       }
     },
-    [history, mintNft, nftStore, signInStore]
+    [history, nftStore, signInStore]
   );
 
   return (
     <styled.Container>
       <styled.Wrapper>
         <styled.Boxes>
-          {!sessionStore.token && !accountSelectedAndFundsAquired && (
+          {!accountSelectedAndFundsAquired && (
             <>
               <SinusBox />
               <ChoiceYourWallet
                 walletOptions={nftStore.accountsWithoutNftsOptions}
                 wallet={signInStore.wallet}
-                isConnectDisabled={
-                  sessionStore.isTokenPending ||
-                  requestingFundsStatus === 'pending' ||
-                  isBalanceLoading
-                }
+                isConnectDisabled={requestingFundsStatus === 'pending' || isBalanceLoading}
                 onSelectAddress={signInStore.selectWallet}
                 onConnect={onConnectWallet}
               />
             </>
           )}
+
           {requestingFundsStatus === 'pending' && (
             <styled.MintingMessageBox>
               <Text text={t('messages.loadingToken', {tokenSymbol})} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
+
           {requestingFundsStatus === 'error' && (
             <styled.MintingMessageBox>
               <Text text={t('errors.errorLoadingToken', {tokenSymbol})} size="m" align="left" />
@@ -117,12 +107,14 @@ const SignInAccountPage: FC = () => {
               />
             </>
           )}
+
           {mintingNftStatus === 'pending' && (
             <styled.MintingMessageBox>
               <Text text={t('messages.mintingYourOdyssey')} size="m" align="left" />
               <Text text={t('messages.mintingYourOdysseyWarning')} size="m" align="left" />
             </styled.MintingMessageBox>
           )}
+
           {mintingNftStatus === 'error' && (
             <styled.MintingMessageBox>
               <Text text={t('errors.errorLoadingNFT')} size="m" align="left" />

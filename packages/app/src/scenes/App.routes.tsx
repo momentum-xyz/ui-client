@@ -67,7 +67,6 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage />
         <BirthOfMePage />
-        <Widgets isExplorePage />
       </>
     )
   },
