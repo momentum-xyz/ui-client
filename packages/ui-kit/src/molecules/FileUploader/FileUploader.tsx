@@ -1,5 +1,5 @@
 import React, {FC, useCallback} from 'react';
-import {useDropzone, Accept} from 'react-dropzone';
+import {useDropzone} from 'react-dropzone';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 import {FileType} from '../../types';
