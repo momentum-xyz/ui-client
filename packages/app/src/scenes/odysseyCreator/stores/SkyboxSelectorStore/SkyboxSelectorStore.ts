@@ -1,10 +1,10 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {Asset3d, Asset3dInterface} from 'core/models';
-import {api, FetchAssets3dResponse} from 'api';
+import {api, FetchAssets3dResponse, UploadImageResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 
@@ -18,7 +18,10 @@ const SkyboxSelectorStore = types
 
       items: types.optional(types.array(Asset3d), []),
       selectedItemId: types.maybe(types.string),
-      currentItemId: types.maybe(types.string)
+      currentItemId: types.maybe(types.string),
+
+      uploadDialog: types.optional(Dialog, {}),
+      createSkyboxRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -68,6 +71,46 @@ const SkyboxSelectorStore = types
         spaceId: spaces.skybox,
         asset_3d_id: item.id
       });
+    }),
+    uploadSkybox: flow(function* (worldId: string, file: File, name: string) {
+      const uploadImageResponse: UploadImageResponse = yield self.createSkyboxRequest.send(
+        api.mediaRepository.uploadImage,
+        {file}
+      );
+
+      if (!uploadImageResponse) {
+        console.log('Failed to upload image');
+        return false;
+      }
+
+      const {hash} = uploadImageResponse;
+      console.log('Upload image response:', uploadImageResponse, hash);
+
+      const {spaces} = yield self.createSkyboxRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: worldId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.WORLD_SETTINGS,
+          sub_attribute_key: 'spaces'
+        }
+      );
+
+      // TODO we need this? it doesn't work in the backend
+      // yield self.selecteRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
+      //   spaceId: spaces.skybox,
+      //   asset_3d_id: null
+      // });
+
+      yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: spaces.skybox,
+        // spaceId: worldId,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.SKYBOX_CUSTOM,
+        value: {render_hash: hash}
+      });
+
+      return self.createSkyboxRequest.isDone;
     })
   }))
   .views((self) => ({
@@ -76,6 +119,9 @@ const SkyboxSelectorStore = types
     },
     get currentItem(): Asset3dInterface | undefined {
       return self.items.find((item) => item.id === self.currentItemId);
+    },
+    get isUploadPending(): boolean {
+      return self.createSkyboxRequest.isPending;
     }
   }));
 

@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {Carousel} from './components';
+import {Carousel, UploadSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
@@ -78,7 +78,11 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
           />
         )}
       </styled.ItemsGallery>
-      <styled.CloseButton label={t('actions.closePanel')} onClick={() => history.goBack()} />
+      <styled.ButtonsHolder>
+        <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
+        <Button label={t('actions.closePanel')} onClick={() => history.goBack()} />
+      </styled.ButtonsHolder>
+      {skyboxSelectorStore.uploadDialog.isOpen && <UploadSkyboxDialog />}
     </styled.Container>
   );
 };

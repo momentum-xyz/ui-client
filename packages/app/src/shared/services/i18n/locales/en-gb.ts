@@ -322,6 +322,7 @@ export const enGb = {
       tokenGating: 'Token Gating (coming soon)',
       addObject: 'Add Object',
       skybox: 'Skybox',
+      addCustomSkybox: 'Add Custom Skybox',
       connectYourWallet: 'Connect your wallet'
     },
     messages: {
@@ -631,6 +632,7 @@ export const enGb = {
       dropItHere: 'Drop it here',
       closePanel: 'Close Panel',
       selectSkybox: 'Select Skybox',
+      addSkybox: 'Add Skybox',
       upload: 'Upload',
       spawnObject: 'Spawn Object',
       change: 'Change',

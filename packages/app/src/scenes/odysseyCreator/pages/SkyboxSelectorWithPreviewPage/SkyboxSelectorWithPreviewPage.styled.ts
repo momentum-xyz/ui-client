@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
-import {Button} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   display: flex;
@@ -85,16 +84,14 @@ export const ItemButtonHolder = styled.div`
   align-items: center;
 `;
 
-export const ActionButtonHolder = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 20px;
+export const ButtonsHolder = styled.div`
+  pointer-events: all;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
-
-export const CloseButton = styled(Button)`
-  pointer-events: all;
+  gap: 10px;
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
+  padding: 10px;
+  border-radius: 10px;
 `;

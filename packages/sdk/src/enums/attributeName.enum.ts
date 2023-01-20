@@ -2,6 +2,7 @@ export enum AttributeNameEnum {
   NAME = 'name',
   STATE = 'state',
   CONFIG = 'config',
+  SKYBOX_CUSTOM = 'skybox_custom',
   MAGIC_LINKS = 'magic_links',
   EMOJIS = 'emojis',
   EVENTS = 'events',
