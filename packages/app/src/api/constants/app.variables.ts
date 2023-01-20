@@ -11,7 +11,7 @@ const BASE_URL =
     : document.location.origin;
 
 export const appVariables: AppConfigExtendedInterface = {
-  APP_VERSION: process.env.REACT_APP_VERSION || 'v0.21.0',
+  APP_VERSION: process.env.REACT_APP_VERSION || 'v0.0.0',
   BACKEND_API_URL: '',
   BACKEND_ENDPOINT_URL: '',
   BACKEND_V4_ENDPOINT_URL: `${BASE_URL}/api/v4`,
@@ -52,6 +52,8 @@ export const appVariables: AppConfigExtendedInterface = {
   POLKADOT_CONNECTION_STRING: 'momentum-connections',
   WESTEND_TEST_WS_SERVER: 'wss://westend.api.onfinality.io/public-ws',
   BLOCKCHAIN_WS_SERVER: '',
+  DISCOVER_URL_PROTOCOL: 'https',
+  DISCOVER_URL_DOMAIN: 'discover.odyssey.org',
   WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support',
   PARTICIPANTS_VIDEO_LIMIT: 17,
   MAX_STAGE_USERS: 12,

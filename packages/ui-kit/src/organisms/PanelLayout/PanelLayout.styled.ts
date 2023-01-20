@@ -100,13 +100,17 @@ export const Body = styled.div`
 `;
 
 export const Container = styled.div<ComponentSizeInterface>`
-  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.9)};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
   backdrop-filter: blur(10px);
   border-radius: 10px;
+
+  &.noOpacity {
+    background: ${(props) => props.theme.bg};
+  }
 
   &.allPointerEvents {
     pointer-events: all;

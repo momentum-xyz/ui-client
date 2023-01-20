@@ -81,9 +81,12 @@ const SessionStore = types
 
       return !!response?.id;
     }),
-    logout(): void {
+    signOutRedirect(): void {
       self.updateAxiosAndUnityTokens('');
       document.location = ROUTES.signIn;
+    },
+    signInRedirect(isNewAccount?: boolean): void {
+      document.location = isNewAccount ? ROUTES.signInAccount : ROUTES.signIn;
     }
   }))
   .actions((self) => ({

@@ -329,6 +329,12 @@ export const enGb = {
       loadingPlugin: 'Loading Plugin...',
       loadingToken: 'Loading {{tokenSymbol}}...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
+      signUp_one:
+        'You need a wallet to get started. If you already have one, click on "Create your Odyssey". Or read more about getting a wallet on ',
+      signUp_two:
+        'You need a wallet to create your own Odyssey. If you already have one, you will see a pop-up asking for the address you would like to use or create. If you do not have a wallet, please install a browser plugins and refresh the page',
+      orSignIn: 'Or if you already have an account please sign in',
+      howSignUp: 'How to create an Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
@@ -336,7 +342,6 @@ export const enGb = {
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
-      signIn: 'Sign In Or Create An Account',
       noResultsFound: 'No results found',
       worldBuilderSignIn: 'Sign In to your Odyssey Account',
       linkCopied: 'The link is copied to your clipboard.',
@@ -552,6 +557,10 @@ export const enGb = {
     actions: {
       ok: 'OK',
       add: 'Add',
+      signIn: 'Sign In',
+      signOut: 'Sign Out',
+      createOdyssey: 'Create your Odyssey',
+      createOrSignIn: 'Create an account or sign in',
       approve: 'Approve',
       joinStage: 'Join Stage',
       decline: 'Decline',

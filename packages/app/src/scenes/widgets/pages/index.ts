@@ -1,3 +1,4 @@
+export * from './SignInWidget';
 export * from './OnlineUsersWidget';
 export * from './MinimapWidget';
 export * from './FlyToMeWidget';

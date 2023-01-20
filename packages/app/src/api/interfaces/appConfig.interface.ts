@@ -56,6 +56,8 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   GOOGLE_DOCUMENT_SCOPE: string;
   YOUTUBE_API: string;
   YOUTUBE_WELCOME_VIDEO_ID: string;
+  DISCOVER_URL_PROTOCOL: string;
+  DISCOVER_URL_DOMAIN: string;
   WIKI_URL: string;
   PARTICIPANTS_VIDEO_LIMIT: number;
   MAX_STAGE_USERS: number;

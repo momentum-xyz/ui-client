@@ -115,7 +115,8 @@ const ProfileWidget: FC = () => {
                   }
                   setIsEditMode(!isEditMode);
                 }}
-                onLogout={sessionStore.logout}
+                {...(!sessionStore.isGuest && {onSignOut: sessionStore.signOutRedirect})}
+                {...(sessionStore.isGuest && {onSignIn: sessionStore.signInRedirect})}
               />
             </styled.Container>
           )}
