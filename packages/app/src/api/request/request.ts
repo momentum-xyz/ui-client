@@ -1,6 +1,6 @@
 import axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios';
 
-import {httpErrorCodes} from 'api/constants';
+import {appVariables, httpErrorCodes} from 'api/constants';
 
 const TOKEN_TYPE = 'Bearer';
 const TOKEN_KEY = 'odyssey.token';
@@ -16,7 +16,6 @@ const defaultHeaders: Record<string, string> = {
  * Create a new Axios instance with a custom config.
  */
 const request: AxiosInstance = axios.create({
-  baseURL: '',
   responseType: 'json',
   headers: defaultHeaders,
   timeout: REQUEST_TIMEOUT_MS
@@ -26,6 +25,7 @@ const request: AxiosInstance = axios.create({
  * Create request, response & error handlers
  */
 const requestHandler = (requestConfig: AxiosRequestConfig & {authToken?: string}) => {
+  requestConfig.baseURL = `${appVariables.BACKEND_API_URL}`;
   if (requestConfig.authToken && requestConfig.headers) {
     /** set authToken provided by the app */
     requestConfig.headers.Authorization = `${TOKEN_TYPE} ${requestConfig.authToken}`;

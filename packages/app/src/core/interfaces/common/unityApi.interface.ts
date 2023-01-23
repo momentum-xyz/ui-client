@@ -11,6 +11,7 @@ export interface UnityApiInterface {
   controlSound(isOn: boolean): any;
   pauseUnity(isPaused: boolean): any;
   setToken(token?: string): any;
+  setAddressablesURL(url?: string): void;
   setTargetWorldId(id?: string): any;
   triggerTeleport(domain?: string, worldId?: string): any;
   getCurrentWorld(): string;

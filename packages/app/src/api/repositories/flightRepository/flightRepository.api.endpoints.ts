@@ -1,7 +1,5 @@
-import {appVariables} from 'api/constants';
-
 export const flightRepositoryEndpoints = () => {
-  const BASE_URL = `${appVariables.BACKEND_API_URL}/worlds/:spaceId`;
+  const BASE_URL = '/worlds/:spaceId';
 
   return {
     startFlyWithMe: `${BASE_URL}/fly-with-me/start`,

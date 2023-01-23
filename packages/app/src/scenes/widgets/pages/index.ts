@@ -17,3 +17,4 @@ export * from './MagicLinkWidget';
 export * from './MutualConnectionsWidget';
 export * from './StakingWidget';
 export * from './ConnectWidget';
+export * from './TestnetMarkWidget';
