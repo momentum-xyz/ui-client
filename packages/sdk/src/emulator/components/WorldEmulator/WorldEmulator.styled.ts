@@ -17,10 +17,11 @@ export const ControlPanel = styled.div`
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #999;
+  background-color: #888;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 0 0 5px 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 10px;
 `;
