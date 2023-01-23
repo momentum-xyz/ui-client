@@ -58,9 +58,10 @@ const UserProfileStore = types.compose(
         return self.userInitiativesRequest.isDone;
       }),
       grabATable: flow(function* (worldId: string, userId: string) {
+        const grabTableLabel = t('labels.grabTable');
         const space: NewSpaceDetailsInterface = {
-          name: t('labels.grabTable'),
-          description: t('labels.grabTable'),
+          name: grabTableLabel,
+          description: grabTableLabel,
           spaceType: SpaceTypeEnum.GRAB_A_TABLE,
           visibility: true,
           root: false,

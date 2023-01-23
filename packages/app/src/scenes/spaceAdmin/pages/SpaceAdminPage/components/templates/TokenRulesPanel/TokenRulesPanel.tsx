@@ -1,8 +1,8 @@
 import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {toast} from 'react-toastify';
 import {SectionPanel} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -13,6 +13,7 @@ import * as styled from './TokenRulesPanel.styled';
 interface PropsInterface {}
 
 const TokenRulesPanel: FC<PropsInterface> = () => {
+  const {t} = useTranslation();
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {
     applyTokenRuleFormDialog,

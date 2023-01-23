@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {useNavigate} from 'react-router';
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {PageTopBar} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -21,6 +21,7 @@ import {
 } from './components';
 
 const SpaceAdminPage: FC = () => {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const {spaceAdminStore} = useStore();
   const {spaceManagerStore} = spaceAdminStore;

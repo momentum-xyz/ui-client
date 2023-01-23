@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
-import {t} from 'i18next';
 import {Dialog, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import * as styled from './DeleteEventDialog.styled';
 
@@ -10,6 +10,7 @@ interface PropsInterface {
 }
 
 const DeleteEventDialog: FC<PropsInterface> = ({onConfirmation, onClose}) => {
+  const {t} = useTranslation();
   return (
     <Dialog
       title={t('messages.pleaseConfirm')}

@@ -10,8 +10,8 @@ import {
 } from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {t} from 'i18next';
 import {BN} from '@polkadot/util';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
@@ -21,30 +21,6 @@ import * as styled from './StakingForm.styled';
 
 const DEFAULT_STAKING_AMOUNT = 1;
 const ODYSSEY_GET_STARTED_WALLET = 'https://discover.odyssey.org/create-your-odyssey/get-a-wallet';
-
-const tabBarTabs: TabBarTabInterface[] = [
-  {
-    id: 'start',
-    title: t('staking.startLabel'),
-    label: t('staking.startLabel'),
-    icon: 'hierarchy',
-    disabled: true
-  },
-  {
-    id: 'wallet',
-    label: t('staking.walletLabel'),
-    title: t('staking.walletLabel'),
-    icon: 'wallet',
-    disabled: true
-  },
-  {
-    id: 'confirm',
-    title: t('staking.confirmLabel'),
-    label: t('staking.confirmLabel'),
-    icon: 'check',
-    disabled: true
-  }
-];
 
 interface PropsInterface {
   isGuest?: boolean;
@@ -66,11 +42,37 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     tokenSymbol
   } = nftStore;
 
+  const {t} = useTranslation();
+
   const [wallet = addresses[0]?.address] = useState(authWallet);
   const initiatorAccount = accountOptions.find((account) => account.value === wallet);
   const initiatorInfo = initiatorAccount
     ? `${initiatorAccount.label} (${initiatorAccount.value.substring(0, 20)}...)`
     : '';
+
+  const tabBarTabs: TabBarTabInterface[] = [
+    {
+      id: 'start',
+      title: t('staking.startLabel'),
+      label: t('staking.startLabel'),
+      icon: 'hierarchy',
+      disabled: true
+    },
+    {
+      id: 'wallet',
+      label: t('staking.walletLabel'),
+      title: t('staking.walletLabel'),
+      icon: 'wallet',
+      disabled: true
+    },
+    {
+      id: 'confirm',
+      title: t('staking.confirmLabel'),
+      label: t('staking.confirmLabel'),
+      icon: 'check',
+      disabled: true
+    }
+  ];
 
   const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
   const [amountString, setAmountString] = useState(DEFAULT_STAKING_AMOUNT.toString());
@@ -186,7 +188,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                 <IconSvg name="alert" size="medium" />
                 <styled.AlertMessage>
                   <Text size="s" text={t('staking.guestStakingMessage')} align="left" />
-                  <a href={ODYSSEY_GET_STARTED_WALLET} target="_blank">
+                  <a href={ODYSSEY_GET_STARTED_WALLET} target="_blank" rel="noreferrer">
                     <styled.BottomText
                       size="s"
                       text={t('staking.guestWalletMessage')}

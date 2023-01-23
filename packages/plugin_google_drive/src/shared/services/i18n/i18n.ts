@@ -9,6 +9,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    returnNull: false,
     debug: false,
     fallbackLng: LanguageEnum.En,
     interpolation: {

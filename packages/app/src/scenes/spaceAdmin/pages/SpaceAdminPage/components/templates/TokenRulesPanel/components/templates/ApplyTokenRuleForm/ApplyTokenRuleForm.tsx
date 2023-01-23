@@ -2,7 +2,6 @@ import {useTheme} from 'styled-components';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {
   Heading,
   Dialog,
@@ -12,6 +11,7 @@ import {
   Text,
   useDebouncedCallback
 } from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {ApplyTokenRuleInterface} from 'api';
 import {useStore} from 'shared/hooks';
@@ -23,6 +23,7 @@ import * as styled from './ApplyTokenRuleForm.styled';
 interface PropsInterface {}
 
 const ApplyTokenRuleForm: FC<PropsInterface> = () => {
+  const {t} = useTranslation();
   const theme = useTheme();
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {applyTokenRuleFormDialog, tokenRuleFormDialog, space, tokenRulesStore} = spaceManagerStore;

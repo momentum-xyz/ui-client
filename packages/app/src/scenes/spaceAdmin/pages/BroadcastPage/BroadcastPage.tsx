@@ -1,9 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
-import {t} from 'i18next';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
 import {observer} from 'mobx-react-lite';
 import {PageTopBar} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {CountdownDialog, TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
@@ -17,6 +17,8 @@ const BroadcastPage: FC = () => {
   const {collaborationStore, spaceAdminStore} = useStore();
   const {spaceStore} = collaborationStore;
   const {broadcastStore} = spaceAdminStore;
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (spaceStore) {

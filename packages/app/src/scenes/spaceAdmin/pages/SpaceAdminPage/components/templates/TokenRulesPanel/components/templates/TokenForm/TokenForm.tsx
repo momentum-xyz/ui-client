@@ -1,9 +1,9 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect, useState} from 'react';
-import {t} from 'i18next';
 import {useTheme} from 'styled-components';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Heading, Dialog, Dropdown, Input, Loader, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {TokenFormInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
@@ -13,6 +13,7 @@ import * as styled from './TokenForm.styled';
 interface PropsInterface {}
 
 const TokenForm: FC<PropsInterface> = () => {
+  const {t} = useTranslation();
   const theme = useTheme();
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {space, tokenFormDialog, tokenRulesStore} = spaceManagerStore;

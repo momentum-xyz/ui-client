@@ -1,8 +1,8 @@
 import React, {FC, useCallback, useMemo, useState} from 'react';
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {SectionPanel} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {
@@ -15,6 +15,7 @@ import {ToastContent} from 'ui-kit';
 import * as styled from './ManagePluginsPanel.styled';
 
 const ManagePluginsPanel: FC = () => {
+  const {t} = useTranslation();
   const {spaceAdminStore} = useStore();
   const {spaceManagerStore, managePluginsStore} = spaceAdminStore;
   const {space, addPluginDialog, deletePluginConfirmationDialog} = spaceManagerStore;

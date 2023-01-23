@@ -1,7 +1,7 @@
-import React, {useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
 import {generatePath, useNavigate, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import DraggableContent from 'react-draggable';
+import DraggableContentOG from 'react-draggable';
 import {useTranslation} from 'react-i18next';
 import {Portal, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
@@ -11,6 +11,8 @@ import {useStore} from 'shared/hooks';
 import {VideoPanel} from 'ui-kit';
 
 import * as styled from './LiveStreamPIPWidget.styled';
+
+const DraggableContent = DraggableContentOG as unknown as FC<any>;
 
 const LiveStreamPIPWidget: React.FC = () => {
   const {liveStreamStore_OLD, flightStore, agoraStore_OLD} = useStore();

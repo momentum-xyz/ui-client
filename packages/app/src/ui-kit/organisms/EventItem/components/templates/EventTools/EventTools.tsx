@@ -16,7 +16,7 @@ interface PropsInterface {
 }
 
 const EventTools: FC<PropsInterface> = ({event, onWeblinkClick, user}) => {
-  const AddToCalendarComponent = AddToCalendarHOC(Button, AddToCalendarDropdown);
+  const AddToCalendarComponent = AddToCalendarHOC(Button as any, AddToCalendarDropdown as any);
 
   const handleAttending = (attending: boolean) => {
     if (!user) {

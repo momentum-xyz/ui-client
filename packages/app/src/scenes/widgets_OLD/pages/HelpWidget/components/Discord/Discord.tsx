@@ -1,8 +1,8 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {t} from 'i18next';
 import {Button} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets_OLD/pages/HelpWidget/components/Section';
@@ -11,6 +11,7 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 import * as styled from './Discord.styled';
 
 const Discord: React.FC = () => {
+  const {t} = useTranslation();
   const theme = useTheme();
   const {
     widgetStore_OLD: {helpStore}

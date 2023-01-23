@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
-import {t} from 'i18next';
 import {Dialog, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import * as styled from './RemoveTokenRuleDialog.styled';
 interface PropsInterface {
@@ -16,6 +16,8 @@ const RemoveTokenRuleDialog: FC<PropsInterface> = ({
   userName,
   tokenRuleId
 }) => {
+  const {t} = useTranslation();
+
   const confirm = () => {
     onConfirmation(tokenRuleId);
   };

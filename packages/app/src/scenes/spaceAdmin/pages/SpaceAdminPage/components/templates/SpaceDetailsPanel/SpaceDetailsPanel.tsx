@@ -1,10 +1,10 @@
 import React, {FC, useEffect} from 'react';
-import {t} from 'i18next';
 import {observer} from 'mobx-react-lite';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
 import {Heading, Button, Input, SectionPanel, Text, Toggle} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -15,6 +15,7 @@ import {ROUTES} from 'core/constants';
 import * as styled from './SpaceDetailsPanel.styled';
 
 const SpaceDetailsPanel: FC = () => {
+  const {t} = useTranslation();
   const {spaceAdminStore} = useStore();
   const {spaceManagerStore} = spaceAdminStore;
   const {space, spaceDetailsFormStore, deleteSpaceConfirmationDialog} = spaceManagerStore;

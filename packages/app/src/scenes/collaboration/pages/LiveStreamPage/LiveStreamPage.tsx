@@ -1,9 +1,9 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {useNavigate} from 'react-router';
 import {Button, SpacePage, SpaceTopBar} from '@momentum-xyz/ui-kit';
 import {generatePath} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {VideoPanel} from 'ui-kit';
@@ -17,6 +17,8 @@ const LiveStreamPage: FC = () => {
   const {space} = spaceStore;
 
   const navigate = useNavigate();
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     liveStreamStore_OLD.showWidget();

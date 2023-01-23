@@ -1,7 +1,7 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, KeyboardEventHandler, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {RtmChannel, RtmTextMessage} from 'agora-rtm-sdk';
-import {t} from 'i18next';
+import {useTranslation} from 'react-i18next';
 import {PropsWithThemeInterface, Loader, Text, TextArea} from '@momentum-xyz/ui-kit';
 import {dateToTime} from '@momentum-xyz/core';
 
@@ -28,6 +28,8 @@ const TextChat: FC<PropsInterface> = ({
   const messageListRef = useRef<HTMLUListElement>(null);
   const [message, setMessage] = useState<string>('');
 
+  const {t} = useTranslation();
+
   useEffect(() => {
     if (messageListRef) {
       const list: HTMLUListElement | null = messageListRef.current;
@@ -44,7 +46,7 @@ const TextChat: FC<PropsInterface> = ({
     }
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent) => {
+  const handleKeyUp: KeyboardEventHandler<HTMLTextAreaElement> = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (message.trim().length !== 0) {
         if (currentChannel) {
