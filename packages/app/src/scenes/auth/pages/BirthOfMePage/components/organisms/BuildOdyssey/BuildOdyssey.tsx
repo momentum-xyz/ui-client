@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
@@ -6,18 +7,27 @@ import {Box} from 'ui-kit';
 import * as styled from './BuildOdyssey.styled';
 
 interface PropsInterface {
-  disabled?: boolean;
   name: string;
+  disabled?: boolean;
   onBuild: () => void;
 }
 
-const BuildOdyssey: FC<PropsInterface> = ({name, disabled, onBuild}) => {
+const BuildOdyssey: FC<PropsInterface> = (props) => {
+  const {name, disabled, onBuild} = props;
+
+  const {t} = useTranslation();
+
   return (
     <Box>
       <styled.Div>
-        <Text size="m" text={`Well done, ${name}! You just created your Odyssey`} align="left" />
-        <Text size="m" text="Start creating your personal journey and..." align="left" />
-        <Button size="medium" label="Build your Odyssey" disabled={disabled} onClick={onBuild} />
+        <Text size="s" text={t('messages.hello_nickname', {nickname: name})} align="left" />
+        <Text size="s" text={t('messages.startCreating')} align="left" />
+        <Button
+          size="medium"
+          label={t('actions.buildOdyssey')}
+          disabled={disabled}
+          onClick={onBuild}
+        />
       </styled.Div>
     </Box>
   );
