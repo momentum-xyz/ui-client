@@ -57,6 +57,14 @@ const UploadCustomAssetPage: FC = () => {
 
             setAsset(file);
           }}
+          onError={(err) => {
+            console.log('File upload error:', err, err.message);
+            if (err.message === 'FileSizeTooLarge') {
+              setError(t('assetsUploader.errorTooLargeFile'));
+            } else {
+              setError(t('assetsUploader.errorSave'));
+            }
+          }}
           label={t('actions.uploadYourAssset')}
           dragActiveLabel={t('actions.dropItHere')}
           fileType={'' as FileType}
@@ -82,7 +90,7 @@ const UploadCustomAssetPage: FC = () => {
           <Button
             label={t('actions.addToLibrary')}
             onClick={handleAddToLbrary}
-            disabled={!spawnAssetStore.uploadedAssetName}
+            disabled={!spawnAssetStore.uploadedAssetName || !!error}
           />
         </>
       )}
