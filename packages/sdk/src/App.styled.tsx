@@ -15,4 +15,14 @@ export const GlobalStyles = createGlobalStyle`
   *::after {
     box-sizing: border-box;
   }
+
+  // TEMPORARY, should become part of ui-kit
+  :root {
+    --online: #01ffb3;
+    --dnd: #f25d05;
+  
+    --white: #ffffff;
+    --black: #000000;
+    --white-30: #fff2f14d;
+  }
 `;
