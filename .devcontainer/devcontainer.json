@@ -1,0 +1,24 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "hostRequirements": {
+    "cpus": 2
+  },
+  "waitFor": "onCreateCommand",
+  "updateContentCommand": "yarn install && yarn build:deps",
+  "postCreateCommand": "",
+  "postAttachCommand": {
+    "server": "yarn start:codespaces"
+  },
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["packages/app/src/scenes/App.tsx"]
+    }
+  },
+  "portsAttributes": {
+    "3000": {
+      "label": "Application",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "forwardPorts": [3000]
+}
