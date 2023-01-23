@@ -40,13 +40,6 @@ export const getToken: RequestInterface<AuthTokenRequest, AuthTokenResponse> = (
 export const getGuestToken: RequestInterface<AuthGuestTokenRequest, AuthGuestTokenResponse> = (
   options
 ) => {
-  const {name, ...rest} = options;
-  const requestParams = {
-    method: 'post' as Method,
-    data: {name},
-    ...rest
-  };
-
   const URL: string = authRepositoryEndpoints().guestToken;
-  return request(URL, requestParams);
+  return request.post(URL, {}, options);
 };

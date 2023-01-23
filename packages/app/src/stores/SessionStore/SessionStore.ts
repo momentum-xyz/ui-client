@@ -7,7 +7,7 @@ import {LAST_AIRDROP_KEY, RequestModel} from '@momentum-xyz/core';
 import {ROUTES} from 'core/constants';
 import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
-import {api, AuthChallengeRequest, AuthGuestTokenRequest, FetchMeResponse} from 'api';
+import {api, AuthChallengeRequest, FetchMeResponse} from 'api';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -30,9 +30,7 @@ const SessionStore = types
   }))
   .actions((self) => ({
     fetchGuestToken: flow(function* () {
-      // FIXME: BE should generate a name
-      const data: AuthGuestTokenRequest = {name: `Visitor_${Math.floor(Math.random() * 100)}`};
-      const response = yield self.guestTokenRequest.send(api.authRepository.getGuestToken, data);
+      const response = yield self.guestTokenRequest.send(api.authRepository.getGuestToken, {});
       self.updateAxiosAndUnityTokens(response?.token || '');
 
       return !!response?.token;
