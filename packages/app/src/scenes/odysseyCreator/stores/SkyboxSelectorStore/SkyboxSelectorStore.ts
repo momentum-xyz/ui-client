@@ -8,6 +8,8 @@ import {api, FetchAssets3dResponse, UploadImageResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 
+const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
+
 const SkyboxSelectorStore = types
   .compose(
     ResetModel,
@@ -96,11 +98,12 @@ const SkyboxSelectorStore = types
         }
       );
 
-      // TODO we need this? it doesn't work in the backend
-      // yield self.selecteRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
-      //   spaceId: spaces.skybox,
-      //   asset_3d_id: null
-      // });
+      // TODO we might no need this if this asset_3d_id is already set for all worlds
+      // but for now let's set it
+      yield self.selecteRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
+        spaceId: spaces.skybox,
+        asset_3d_id: UNITY_SKYBOX_ASSET_ID
+      });
 
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: spaces.skybox,
