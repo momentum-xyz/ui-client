@@ -11,6 +11,7 @@ import {ToastContent} from 'ui-kit';
 import * as styled from './UploadCustomAssetPage.styled';
 
 const MAX_ASSET_SIZE = 50_100_000;
+const MAX_ASSET_SIZE_MB = `${(MAX_ASSET_SIZE / 1_000_000).toFixed(1)}MB`;
 
 const UploadCustomAssetPage: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
@@ -45,6 +46,7 @@ const UploadCustomAssetPage: FC = () => {
   return (
     <styled.Container>
       <Text text={t('messages.weSupportGLBModels')} size="m" />
+      <Text text={t('messages.glbModelsMaxSize', {size: MAX_ASSET_SIZE_MB})} size="m" />
       <styled.FileUploaderContainer>
         <FileUploader
           onFilesUpload={(file) => {
@@ -60,7 +62,7 @@ const UploadCustomAssetPage: FC = () => {
           onError={(err) => {
             console.log('File upload error:', err, err.message);
             if (err.message === 'FileSizeTooLarge') {
-              setError(t('assetsUploader.errorTooLargeFile'));
+              setError(t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB}));
             } else {
               setError(t('assetsUploader.errorSave'));
             }
