@@ -33,7 +33,11 @@ const RootWidgetsStore = types
   })
   .views((self) => ({
     get signInDialogAvailable(): boolean {
-      return !self.odysseyBioStore.dialog.isOpen && !self.profileStore.dialog.isOpen;
+      return (
+        !self.odysseyBioStore.dialog.isOpen &&
+        !self.profileStore.dialog.isOpen &&
+        !self.calendarStore.dialog.isOpen
+      );
     }
   }));
 

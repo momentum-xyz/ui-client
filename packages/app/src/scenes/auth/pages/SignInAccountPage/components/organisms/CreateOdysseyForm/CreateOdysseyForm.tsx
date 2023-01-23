@@ -3,7 +3,7 @@ import {Button, FileUploader, Heading, IconSvg, InputDark, Text} from '@momentum
 import {useTranslation} from 'react-i18next';
 import {Controller, useForm} from 'react-hook-form';
 
-import {Box} from 'ui-kit';
+import {Box, CycleNumbered} from 'ui-kit';
 import {SignUpFormInterface} from 'core/interfaces';
 import {FieldErrorInterface} from 'api/interfaces';
 
@@ -108,6 +108,11 @@ const CreateOdysseyForm: FC<PropsInterface> = (props) => {
           disabled={disabled}
           onClick={onUpdateProfile}
         />
+
+        <styled.Numbers>
+          <CycleNumbered number={1} />
+          <CycleNumbered number={2} isActive />
+        </styled.Numbers>
       </styled.Div>
     </Box>
   );

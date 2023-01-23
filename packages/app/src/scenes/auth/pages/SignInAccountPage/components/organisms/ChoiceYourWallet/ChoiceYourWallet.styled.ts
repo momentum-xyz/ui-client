@@ -26,9 +26,15 @@ export const Image = styled.img`
 
 export const Link = styled.a`
   font-size: var(--font-size-m);
-  color: #ffffff;
+  color: var(--white);
 
   &:hover {
     color: ${(props) => props.theme.accent};
   }
+`;
+
+export const Numbers = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 `;

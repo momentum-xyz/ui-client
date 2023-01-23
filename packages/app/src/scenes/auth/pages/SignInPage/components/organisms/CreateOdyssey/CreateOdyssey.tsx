@@ -30,9 +30,9 @@ const CreateOdyssey: FC<PropsInterface> = ({onCreate}) => {
 
         <Button
           wide
-          icon="wallet"
+          icon="planet"
           size="medium"
-          label={t('actions.installWallet')}
+          label={t('actions.createOdyssey')}
           onClick={onCreate}
         />
       </styled.Div>

@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Button, Dropdown, Heading, IconSvg, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
-import {Box} from 'ui-kit';
+import {Box, CycleNumbered} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
 
 import * as styled from './ChoiceYourWallet.styled';
@@ -58,6 +58,11 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
           disabled={!wallet || isConnectDisabled}
           onClick={onConnect}
         />
+
+        <styled.Numbers>
+          <CycleNumbered number={1} isActive />
+          <CycleNumbered number={2} />
+        </styled.Numbers>
       </styled.Div>
     </Box>
   );

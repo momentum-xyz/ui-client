@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {web3FromSource} from '@polkadot/extension-dapp';
-import {RequestModel} from '@momentum-xyz/core';
+import {LAST_AIRDROP_KEY, RequestModel} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {PolkadotAddressInterface, User} from 'core/models';
@@ -83,6 +83,7 @@ const SessionStore = types
     }),
     signOutRedirect(): void {
       self.updateAxiosAndUnityTokens('');
+      localStorage.removeItem(LAST_AIRDROP_KEY);
       document.location = ROUTES.signIn;
     },
     signInRedirect(isNewAccount?: boolean): void {

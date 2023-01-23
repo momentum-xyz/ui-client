@@ -51,3 +51,9 @@ export const AvatarImageInner = styled.div`
   left: -4px;
   right: -4px;
 `;
+
+export const Numbers = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+`;

@@ -26,5 +26,5 @@ export const Modal = styled.div`
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-  z-index: calc(var(--dialog-z-index) + 1);
+  z-index: var(--dialog-z-index);
 `;
