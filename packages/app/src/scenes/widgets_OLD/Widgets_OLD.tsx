@@ -109,7 +109,7 @@ const Widgets_OLD: FC = () => {
         mute={musicPlayer.muted}
         volume={musicPlayer.volume}
         html5={true}
-        {...{ref: (ref: ReactHowlerOG) => musicPlayer.setPlayer(ref)}}
+        {...{ref: (ref: ReactHowlerOriginal) => musicPlayer.setPlayer(ref)}}
       />
       <styled.Footer data-testid="Widgets_OLD-test">
         <styled.MainLinks>
