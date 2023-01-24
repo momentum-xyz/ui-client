@@ -26,7 +26,7 @@ export const Image = styled.img`
 
 export const Link = styled.a`
   font-size: var(--font-size-m);
-  color: var(--white);
+  color: ${(props) => props.theme.text};
 
   &:hover {
     color: ${(props) => props.theme.accent};
