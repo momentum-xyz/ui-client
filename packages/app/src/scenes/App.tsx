@@ -16,6 +16,7 @@ import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.ro
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {GlobalStyles} from './App.styled';
+import {TestnetMarkWidget} from './widgets/pages';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -89,6 +90,7 @@ const App: FC = () => {
     return (
       <ThemeProvider theme={themeStore.theme}>
         <Suspense fallback={false}>{createSwitchByConfig(SYSTEM_ROUTES)}</Suspense>
+        <TestnetMarkWidget withOffset />
       </ThemeProvider>
     );
   }
@@ -106,6 +108,7 @@ const App: FC = () => {
             <GlobalStyles />
             <UnityPage />
             <AppLayers renderUnity>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
+            <TestnetMarkWidget withOffset />
           </AppAuth>
         </Suspense>
       </ThemeProvider>
@@ -119,6 +122,7 @@ const App: FC = () => {
         <AppAuth>
           <GlobalStyles />
           <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}</AppLayers>
+          <TestnetMarkWidget />
         </AppAuth>
       </Suspense>
     </ThemeProvider>
