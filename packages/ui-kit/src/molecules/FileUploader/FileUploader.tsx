@@ -4,6 +4,7 @@ import {useDropzone} from 'react-dropzone';
 import {PropsWithThemeInterface} from '../../interfaces';
 import {FileType} from '../../types';
 import {Button} from '../../atoms';
+import {ErrorsEnum} from '../../enums';
 
 import * as styled from './FileUploader.styled';
 
@@ -45,7 +46,7 @@ const FileUploader: FC<PropsInterface> = ({
         const file = acceptedFiles[0];
 
         if (file.size > maxSize) {
-          onError?.(new Error('FileSizeTooLarge'));
+          onError?.(new Error(ErrorsEnum.FileSizeTooLarge));
         } else {
           onFilesUpload(acceptedFiles[0]);
         }
