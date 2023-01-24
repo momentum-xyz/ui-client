@@ -1,4 +1,4 @@
-import {Button, FileType, FileUploader, Text} from '@momentum-xyz/ui-kit';
+import {Button, ErrorsEnum, FileType, FileUploader, Text} from '@momentum-xyz/ui-kit';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useState, useEffect} from 'react';
@@ -61,7 +61,7 @@ const UploadCustomAssetPage: FC = () => {
           }}
           onError={(err) => {
             console.log('File upload error:', err, err.message);
-            if (err.message === 'FileSizeTooLarge') {
+            if (err.message === ErrorsEnum.FileSizeTooLarge) {
               setError(t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB}));
             } else {
               setError(t('assetsUploader.errorSave'));
