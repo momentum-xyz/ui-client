@@ -181,13 +181,14 @@ const NftStore = types
       return self.balance.free.isZero();
     },
     get balanceTotal(): string {
-      return self.balanseFormat(self.balance.free);
+      const total = self.balance.free.clone().add(self.balance.reserved);
+      return self.balanseFormat(total);
     },
     get balanceReserved(): string {
       return self.balanseFormat(self.balance.reserved);
     },
     get balanceTransferrableBN(): BN {
-      return self.balance.free.clone().sub(self.balance.reserved).sub(self.existentialDeposit);
+      return self.balance.free.clone().sub(self.existentialDeposit);
     }
   }))
   .views((self) => ({
