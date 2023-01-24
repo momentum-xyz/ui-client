@@ -181,16 +181,26 @@ const NftStore = types
       return self.balance.free.isZero();
     },
     get balanceTotal(): string {
-      const total = self.balance.free.clone().add(self.balance.reserved);
-      return self.balanseFormat(total);
+      try {
+        const total = self.balance.free.clone().add(self.balance.reserved);
+        return self.balanseFormat(total);
+      } catch (err) {
+        console.error(err);
+        return '0';
+      }
     },
     get balanceReserved(): string {
       return self.balanseFormat(self.balance.reserved);
     },
     get balanceTransferrableBN(): BN {
-      const transferrable = self.balance.free.clone().sub(self.existentialDeposit);
-      const zero = new BN(0);
-      return transferrable.gt(zero) ? transferrable : zero;
+      try {
+        const transferrable = self.balance.free.clone().sub(self.existentialDeposit);
+        const zero = new BN(0);
+        return transferrable.gt(zero) ? transferrable : zero;
+      } catch (err) {
+        console.error(err);
+        return new BN(0);
+      }
     }
   }))
   .views((self) => ({
