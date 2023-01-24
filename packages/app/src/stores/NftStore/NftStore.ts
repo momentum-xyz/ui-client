@@ -188,7 +188,9 @@ const NftStore = types
       return self.balanseFormat(self.balance.reserved);
     },
     get balanceTransferrableBN(): BN {
-      return self.balance.free.clone().sub(self.existentialDeposit);
+      const transferrable = self.balance.free.clone().sub(self.existentialDeposit);
+      const zero = new BN(0);
+      return transferrable.gt(zero) ? transferrable : zero;
     }
   }))
   .views((self) => ({
