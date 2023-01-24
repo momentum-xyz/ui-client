@@ -444,7 +444,7 @@ export const enGb = {
       errorWhileRemovingPlugin:
         'Error has occured when removing {{pluginName}} removed succesfully!',
       weSupportGLBModels: 'We support GLB Models',
-      glbModelsMaxSize: '(max file size {{size}})',
+      glbModelsMaxSize: '(max file size {{size}}MB)',
       selectOne: 'Select One',
       processing: 'Processing',
       comingSoonExclamation: 'Coming Soon!',
@@ -666,7 +666,7 @@ export const enGb = {
       spaceName: 'Space Name',
       successMessage: 'Asset successfully uploaded',
       errorUnsupportedFile: 'Only .glb files are supported',
-      errorTooLargeFile: 'Max file size is {{size}}',
+      errorTooLargeFile: 'Max file size is {{size}}MB',
       errorSave: 'Error uploading asset'
     },
     eventList: {

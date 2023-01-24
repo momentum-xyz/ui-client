@@ -11,7 +11,7 @@ import {ToastContent} from 'ui-kit';
 import * as styled from './UploadCustomAssetPage.styled';
 
 const MAX_ASSET_SIZE = 50_100_000;
-const MAX_ASSET_SIZE_MB = `${(MAX_ASSET_SIZE / 1_000_000).toFixed(1)}MB`;
+const MAX_ASSET_SIZE_MB = `${(MAX_ASSET_SIZE / 1_000_000).toFixed(1)}`;
 
 const UploadCustomAssetPage: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
