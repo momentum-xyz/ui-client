@@ -1,4 +1,4 @@
-import React, {FC, lazy} from 'react';
+import React, {FC, lazy, ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
@@ -10,6 +10,7 @@ const Widgets = lazy(() => import('./widgets/Widgets'));
 
 interface PropsInterface {
   renderUnity?: boolean;
+  children: ReactNode;
 }
 
 const AppLayers: FC<PropsInterface> = (props) => {

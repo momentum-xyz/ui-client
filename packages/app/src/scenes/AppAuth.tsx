@@ -1,11 +1,11 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, ReactNode, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
-const AppAuth: FC = ({children}) => {
+const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   const {sessionStore, nftStore} = useStore();
 
   const navigate = useNavigate();

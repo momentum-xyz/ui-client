@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Button, Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate, useParams} from 'react-router-dom';
-import ReactLinkify from 'react-linkify';
+import ReactLinkifyOG, {Props as ReactLinkifyProps} from 'react-linkify';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
@@ -10,6 +10,8 @@ import {useStore} from 'shared/hooks';
 import {ChangeTextDialog} from 'scenes/object/components';
 
 import * as styled from './TextPage.styled';
+
+const ReactLinkify = ReactLinkifyOG as unknown as FC<ReactLinkifyProps>;
 
 const TextPage: FC = () => {
   const navigate = useNavigate();

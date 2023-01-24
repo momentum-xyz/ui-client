@@ -1,10 +1,12 @@
-import React, {FC, useRef} from 'react';
+import React, {FC, ReactNode, useRef} from 'react';
 import {AddToCalendarPropsInterface} from 'react-add-to-calendar-hoc';
 import {useClickOutside} from '@momentum-xyz/ui-kit';
 
 import * as styled from './AddToCalendarDropdown.styled';
 
-interface PropsInterface extends AddToCalendarPropsInterface {}
+interface PropsInterface extends AddToCalendarPropsInterface {
+  children: ReactNode;
+}
 
 const AddToCalendarDropdown: FC<PropsInterface> = (props) => {
   const {children, onRequestClose = () => {}} = props;

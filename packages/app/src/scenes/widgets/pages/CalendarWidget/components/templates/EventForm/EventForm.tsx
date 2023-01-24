@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {t} from 'i18next';
 import {SubmitHandler, Controller, useForm} from 'react-hook-form';
-import DatePicker from 'react-datepicker';
+import DatePickerOG, {ReactDatePickerProps} from 'react-datepicker';
 import cn from 'classnames';
 import {Input, Dialog, TextArea} from '@momentum-xyz/ui-kit';
 import {DATE_TIME_FORMAT, timeFromNow} from '@momentum-xyz/core';
@@ -14,6 +14,8 @@ import {EventFormInterface} from 'core/interfaces';
 import {ToastContent} from 'ui-kit';
 
 import * as styled from './EventForm.styled';
+
+const DatePicker = DatePickerOG as unknown as FC<ReactDatePickerProps>;
 
 const EventForm: FC = () => {
   const theme = useTheme();

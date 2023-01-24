@@ -1,7 +1,7 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {ThemeProvider} from 'styled-components';
+import {ThemeProvider as ThemeProviderOG, ThemeProviderProps} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {isBrowserSupported} from '@momentum-xyz/core';
 
@@ -15,11 +15,14 @@ import {UnityPage} from 'scenes/unity';
 import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
-import {GlobalStyles} from './App.styled';
+import {GlobalStyles as GlobalStylesOG} from './App.styled';
 import {TestnetMarkWidget} from './widgets/pages';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
+
+const ThemeProvider = ThemeProviderOG as unknown as FC<ThemeProviderProps<any, any>>;
+const GlobalStyles = GlobalStylesOG as unknown as FC<any>;
 
 const App: FC = () => {
   const rootStore = useStore();
@@ -55,17 +58,19 @@ const App: FC = () => {
 
   if (configStore.isError && !configStore.isConfigReady) {
     return (
-      <ThemeProvider theme={themeStore.theme}>
-        <SystemWideError
-          text={
-            configLoadingErrorCode === httpErrorCodes.MAINTENANCE
-              ? t('systemMessages.underMaintenance')
-              : t('errors.somethingWentWrongTryAgain')
-          }
-          showRefreshButton
-          theme={themeStore.theme}
-        />
-      </ThemeProvider>
+      <>
+        <ThemeProvider theme={themeStore.theme}>
+          <SystemWideError
+            text={
+              configLoadingErrorCode === httpErrorCodes.MAINTENANCE
+                ? t('systemMessages.underMaintenance')
+                : t('errors.somethingWentWrongTryAgain')
+            }
+            showRefreshButton
+            theme={themeStore.theme}
+          />
+        </ThemeProvider>
+      </>
     );
   }
 
