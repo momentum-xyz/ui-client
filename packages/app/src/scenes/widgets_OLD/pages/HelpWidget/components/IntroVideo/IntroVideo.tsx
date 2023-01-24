@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import YouTubeOG, {YouTubeProps} from 'react-youtube';
+import YouTubeOriginal, {YouTubeProps} from 'react-youtube';
 
 import {appVariables} from 'api/constants';
 import {Section} from 'scenes/widgets_OLD/pages/HelpWidget/components';
@@ -9,7 +9,7 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 
 import * as styled from './IntroVideo.styled';
 
-const YouTube = YouTubeOG as unknown as FC<YouTubeProps>;
+const YouTube = YouTubeOriginal as unknown as FC<YouTubeProps>;
 
 const IntroVideo: FC = () => {
   const {helpStore} = useStore().widgetStore_OLD;

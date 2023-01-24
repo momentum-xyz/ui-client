@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {SubmitHandler, Controller, useForm} from 'react-hook-form';
-import DatePickerOG, {ReactDatePickerProps} from 'react-datepicker';
+import DatePickerOriginal, {ReactDatePickerProps} from 'react-datepicker';
 import cn from 'classnames';
 import {Input, Dialog, TextArea} from '@momentum-xyz/ui-kit';
 import {DATE_TIME_FORMAT, timeFromNow} from '@momentum-xyz/core';
@@ -15,7 +15,7 @@ import {ToastContent} from 'ui-kit';
 
 import * as styled from './EventForm.styled';
 
-const DatePicker = DatePickerOG as unknown as FC<ReactDatePickerProps>;
+const DatePicker = DatePickerOriginal as unknown as FC<ReactDatePickerProps>;
 
 const EventForm: FC = () => {
   const {t} = useTranslation();

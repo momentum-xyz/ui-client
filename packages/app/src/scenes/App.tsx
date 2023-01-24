@@ -1,7 +1,7 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {ThemeProvider as ThemeProviderOG, ThemeProviderProps} from 'styled-components';
+import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {isBrowserSupported} from '@momentum-xyz/core';
 
@@ -15,14 +15,14 @@ import {UnityPage} from 'scenes/unity';
 import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
-import {GlobalStyles as GlobalStylesOG} from './App.styled';
+import {GlobalStyles as GlobalStylesOriginal} from './App.styled';
 import {TestnetMarkWidget} from './widgets/pages';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ThemeProvider = ThemeProviderOG as unknown as FC<ThemeProviderProps<any, any>>;
-const GlobalStyles = GlobalStylesOG as unknown as FC<any>;
+const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
+const GlobalStyles = GlobalStylesOriginal as unknown as FC<any>;
 
 const App: FC = () => {
   const rootStore = useStore();

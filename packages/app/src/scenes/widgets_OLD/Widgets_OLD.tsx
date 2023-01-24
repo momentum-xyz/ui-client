@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import ReactHowlerOG, {PropTypes as ReactHowlerProps} from 'react-howler';
+import ReactHowlerOriginal, {PropTypes as ReactHowlerProps} from 'react-howler';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -18,7 +18,7 @@ import {
 
 import * as styled from './Widgets_OLD.styled';
 
-const ReactHowler = ReactHowlerOG as unknown as FC<ReactHowlerProps>;
+const ReactHowler = ReactHowlerOriginal as unknown as FC<ReactHowlerProps>;
 
 const Widgets_OLD: FC = () => {
   const {

@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import YouTubeOG, {YouTubeProps} from 'react-youtube';
+import YouTubeOriginal, {YouTubeProps} from 'react-youtube';
 import {useTranslation} from 'react-i18next';
 import {Button, SectionPanel} from '@momentum-xyz/ui-kit';
 
@@ -8,7 +8,7 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './BroadcastPreviewPanel.styled';
 
-const YouTube = YouTubeOG as unknown as FC<YouTubeProps>;
+const YouTube = YouTubeOriginal as unknown as FC<YouTubeProps>;
 
 const BroadcastPreviewPanel: FC = () => {
   const {spaceAdminStore} = useStore();
