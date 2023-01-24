@@ -27,10 +27,6 @@ export const Modal = styled.div`
     background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.3)};
   }
 
-  &.opacity {
-    opacity: 0.9;
-  }
-
   &.center {
     align-items: center;
     justify-content: center;
@@ -76,6 +72,10 @@ export const Modal = styled.div`
 export const Container = styled.div<{offset: OffsetInterface}>`
   border-radius: 10px;
   pointer-events: all;
+
+  &.center {
+    margin: 0 0 ${(props) => props.offset?.bottom || 0}px 0;
+  }
 
   &.rightBottom {
     margin: 0 ${(props) => props.offset?.right || 0}px ${(props) => props.offset?.bottom || 0}px 0;

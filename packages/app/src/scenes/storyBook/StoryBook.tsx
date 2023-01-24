@@ -48,7 +48,7 @@ const StoryBook: FC = () => {
         </styled.Settings>
       </styled.SettingsContainer>
 
-      <styled.Content className="scene-bg">
+      <styled.Content>
         <Navigation tabs={tabs} />
 
         <styled.Components>

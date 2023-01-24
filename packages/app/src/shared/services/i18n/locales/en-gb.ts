@@ -322,6 +322,8 @@ export const enGb = {
       tokenGating: 'Token Gating (coming soon)',
       addObject: 'Add Object',
       skybox: 'Skybox',
+      here: 'here',
+      createProfile: 'Create a profile',
       connectYourWallet: 'Connect your wallet'
     },
     messages: {
@@ -329,6 +331,17 @@ export const enGb = {
       loadingPlugin: 'Loading Plugin...',
       loadingToken: 'Loading {{tokenSymbol}}...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
+      signUp:
+        'You need a wallet to create your own Odyssey. If you already have one, you will see a pop-up asking for the address you would like to use or create. If you do not have a wallet, please install a browser plugins and refresh the page',
+      orSignIn: 'Or if you already have an account please sign in',
+      howSignUp: 'How to create an Odyssey',
+      hello_title: 'Hello traveller',
+      hello_one: 'Want to go on a journey?',
+      hello_two: 'Click on any of the spheres in the space and see what’s inside.',
+      hello_three: 'Or create your own Odyssey.',
+      startCounting: 'Are you ready? Start counting. Go!',
+      startCreating: 'Start creating your personal journey and...',
+      hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
@@ -336,7 +349,6 @@ export const enGb = {
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
-      signIn: 'Sign In Or Create An Account',
       noResultsFound: 'No results found',
       worldBuilderSignIn: 'Sign In to your Odyssey Account',
       linkCopied: 'The link is copied to your clipboard.',
@@ -450,11 +462,12 @@ export const enGb = {
       comingSoonExclamation: 'Coming Soon!',
       mintingYourOdyssey: 'Minting your Odyssey...',
       mintingYourOdysseyWarning: "Please wait and don't refresh, this may take a while.",
-      congratulations: 'Congratulations!',
-      recievedAmmountOfTokensMessage:
-        "You just received {{amount}} tokens. One more step and you'll embark on your epic journey!",
+      createProfileDesc:
+        'Get discovered by providing a name and picture for your Odyssey. The picture will make the outside of your Odyssey shine. The name you provided will be shown for others to search and connect to your Odyssey.',
+      yourName: 'What should we call you?',
+      chooseImage: 'Choose an image for your odyssey',
       onceConnectedTokensWillBeAwarded:
-        'Once connected, you will be awarded some Drive tokens to get you started',
+        'Once connected, you will be awarded some MOM tokens to get you started',
       noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
     },
     titles: {
@@ -503,8 +516,7 @@ export const enGb = {
       upload3dAsset: 'Upload 3D Asset',
       admin: 'Admin',
       owner: 'Owner',
-      statistics: 'Statistics',
-      oneConnectYourWallet: '1. Connect your wallet'
+      statistics: 'Statistics'
     },
     textMessage: {
       you: 'you',
@@ -553,6 +565,14 @@ export const enGb = {
     actions: {
       ok: 'OK',
       add: 'Add',
+      signIn: 'Sign In',
+      signOut: 'Sign Out',
+      createOdyssey: 'Create your Odyssey',
+      installWallet: 'Install your wallet',
+      connectWallet: 'Connect your wallet',
+      startJourney: 'Start your journey',
+      buildOdyssey: 'Build your Odyssey',
+      createOrSignIn: 'Create an account or sign in',
       approve: 'Approve',
       joinStage: 'Join Stage',
       decline: 'Decline',
@@ -646,6 +666,7 @@ export const enGb = {
       redo: 'Redo',
       copy: 'Copy',
       functionality: 'Functionality',
+      chooseName: 'Choose your name',
       addTokenGate: 'Add Token Gate'
     },
     descriptions: {

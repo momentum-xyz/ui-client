@@ -37,15 +37,19 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   }
 ];
 
-export const PUBLIC_ROUTES: RouteConfigInterface[] = [
+export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.signIn,
     main: () => (
       <>
-        <Map3dPage />
+        <Map3dPage isClickActive />
         <SignInPage />
       </>
     )
+  },
+  {
+    path: ROUTES.storyBook.base,
+    main: () => <StoryBook />
   },
   {
     path: ROUTES.signInAccount,
@@ -63,17 +67,9 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage />
         <BirthOfMePage />
-        <Widgets isExplorePage />
       </>
     )
   },
-  {
-    path: ROUTES.storyBook.base,
-    main: () => <StoryBook />
-  }
-];
-
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.birthAnimation,
     main: () => (
@@ -108,12 +104,10 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.odyssey.creator.base,
-    main: () => <OdysseyCreator />,
-    renderBackground: false
+    main: () => <OdysseyCreator />
   },
   {
     path: ROUTES.odyssey.object.root,
-    renderBackground: false,
     main: () => <Object />
   }
 ];

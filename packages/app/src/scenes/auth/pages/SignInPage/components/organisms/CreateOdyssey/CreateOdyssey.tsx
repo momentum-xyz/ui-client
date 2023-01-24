@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
+import {Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
 import image from 'static/images/world.svg';
@@ -11,23 +12,29 @@ interface PropsInterface {
 }
 
 const CreateOdyssey: FC<PropsInterface> = ({onCreate}) => {
+  const {t} = useTranslation();
+
   return (
-    <Box>
+    <Box size="small">
       <styled.Div>
-        <Text size="m" text="Create your Odyssey" align="left" />
+        <styled.Header>
+          <IconSvg name="add" size="normal" />
+          <Heading type="h3" label={t('actions.createOdyssey')} align="left" />
+        </styled.Header>
+
+        <Text size="s" text={t('messages.howSignUp')} align="left" />
         <styled.Image src={image} />
         <div>
-          <Text
-            size="m"
-            text='You need a wallet to get started. If you already have one, click on "Create your Odyssey". Or read more about getting a wallet on '
-            align="left"
-          />
-          <styled.Link target="_blank" href="https://discover.odyssey.org">
-            discover.odyssey.org
-          </styled.Link>
+          <Text size="s" text={t('messages.signUp')} align="left" />
         </div>
 
-        <Button size="medium" label="Create your Odyssey" wide onClick={onCreate} />
+        <Button
+          wide
+          icon="planet"
+          size="medium"
+          label={t('actions.createOdyssey')}
+          onClick={onCreate}
+        />
       </styled.Div>
     </Box>
   );

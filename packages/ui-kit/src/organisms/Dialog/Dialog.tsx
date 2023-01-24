@@ -31,7 +31,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   onClose?: (event?: Event) => void;
   closeOnBackgroundClick?: boolean;
   showCloseButton?: boolean;
-  withOpacity?: boolean;
+  withoutOpacity?: boolean;
   headerStyle?: HeaderStyleType;
   icon?: IconNameType;
   iconSize?: SizeType;
@@ -49,6 +49,8 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   isTruncateHeader?: boolean;
   isMinimap?: boolean;
   tabs?: React.ReactElement;
+  topComponent?: React.ReactNode;
+  bottomComponent?: React.ReactNode;
 }
 
 const Dialog: FC<DialogPropsInterface> = ({
@@ -64,7 +66,7 @@ const Dialog: FC<DialogPropsInterface> = ({
   titleWidth,
   closeOnBackgroundClick = true,
   showCloseButton = false,
-  withOpacity = false,
+  withoutOpacity = false,
   headerStyle = 'divider-uppercase',
   hasBorder = false,
   shortTopPadding = false,
@@ -80,7 +82,9 @@ const Dialog: FC<DialogPropsInterface> = ({
   showOverflow,
   isTruncateHeader = false,
   isMinimap,
-  tabs
+  tabs,
+  topComponent,
+  bottomComponent
 }) => {
   const ref = useRef(null);
 
@@ -96,17 +100,15 @@ const Dialog: FC<DialogPropsInterface> = ({
       <styled.Modal
         theme={theme}
         data-testid="Dialog-test"
-        className={cn(
-          position,
-          {opacity: withOpacity, showBackground: showBackground},
-          isMinimap && 'isMinimap'
-        )}
+        className={cn(position, showBackground && 'showBackground', isMinimap && 'isMinimap')}
       >
         <styled.Container
           ref={ref}
           className={cn(position, isMinimap && 'isMinimap')}
           offset={offset}
         >
+          {topComponent}
+
           <PanelLayout
             title={title}
             subtitle={subtitle}
@@ -124,6 +126,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             shortTopPadding={shortTopPadding}
             headerType={headerType}
             showOverflow={showOverflow}
+            withoutOpacity={withoutOpacity}
             isTruncateHeader={isTruncateHeader}
             isMinimap={isMinimap}
             tabs={tabs}
@@ -156,6 +159,8 @@ const Dialog: FC<DialogPropsInterface> = ({
               )}
             </styled.Buttons>
           </PanelLayout>
+
+          {bottomComponent}
         </styled.Container>
       </styled.Modal>
     </Portal>

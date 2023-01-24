@@ -6,6 +6,13 @@ export const Div = styled.div`
   gap: 20px;
 `;
 
+export const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+`;
+
 export const ImageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -19,9 +26,15 @@ export const Image = styled.img`
 
 export const Link = styled.a`
   font-size: var(--font-size-m);
-  color: #ffffff;
+  color: ${(props) => props.theme.text};
 
   &:hover {
     color: ${(props) => props.theme.accent};
   }
+`;
+
+export const Numbers = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 `;

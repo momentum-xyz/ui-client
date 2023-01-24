@@ -1,47 +1,32 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useHistory} from 'react-router-dom';
 
+import {SinusBox} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {SinusBox} from 'ui-kit';
-import {GuestLoginFormInterface} from 'core/interfaces';
+import {PreviewOdysseyWidget} from 'scenes/widgets/pages';
 
-import {CreateOdyssey, TravellerBox, Login, LoginGuest} from './components';
+import {CreateOdyssey, TravellerBox, Login} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
-  const {authStore, signInStore, nftStore} = useStore();
+  const {sessionStore, signInStore, nftStore, widgetsStore} = useStore();
+  const {previewOdysseyStore} = widgetsStore;
 
   const history = useHistory();
 
-  const targetRoute = window.history.state?.state?.from || ROUTES.explore;
-
-  useEffect(() => {
-    authStore.clear();
-    // TODO smt less brutal
-    localStorage.clear();
-  }, [authStore]);
-
-  const handleLogin = useCallback(async () => {
+  const handleSignIn = useCallback(async () => {
     const address = nftStore.getAddressByWallet(signInStore.wallet);
     if (address) {
-      const isDone = await authStore.fetchTokenByWallet(address);
-      if (isDone) {
-        history.push(targetRoute);
-      }
+      await sessionStore.fetchTokenByWallet(address);
+      await sessionStore.loadUserProfile();
     }
-  }, [authStore, history, nftStore, signInStore.wallet, targetRoute]);
+  }, [nftStore, sessionStore, signInStore.wallet]);
 
-  const handleGuestLogin = useCallback(
-    async (form: GuestLoginFormInterface) => {
-      const isDone = await authStore.fetchGuestToken(form);
-      if (isDone) {
-        history.push(targetRoute);
-      }
-    },
-    [authStore, history, targetRoute]
-  );
+  const handleSignUp = useCallback(() => {
+    history.push(ROUTES.signInAccount);
+  }, [history]);
 
   return (
     <styled.Container>
@@ -50,7 +35,7 @@ const SignInPage: FC = () => {
           <SinusBox />
           <TravellerBox />
           <SinusBox />
-          <CreateOdyssey onCreate={() => history.push(ROUTES.signInAccount, {from: targetRoute})} />
+          <CreateOdyssey onCreate={handleSignUp} />
         </styled.Boxes>
 
         <styled.Boxes>
@@ -59,21 +44,15 @@ const SignInPage: FC = () => {
             <Login
               walletOptions={nftStore.accountsWithNftsOptions}
               wallet={signInStore.wallet}
-              isPending={authStore.isPending}
+              isPending={sessionStore.isTokenPending}
               onSelectAddress={signInStore.selectWallet}
-              onLogin={handleLogin}
+              onLogin={handleSignIn}
             />
           )}
-
-          <SinusBox />
-          {/* Login as guest */}
-          <LoginGuest
-            isPending={authStore.isGuestPending}
-            hasNonGuestAccount={!!nftStore.accountsWithNftsOptions.length}
-            onLogin={handleGuestLogin}
-          />
         </styled.Boxes>
       </styled.Wrapper>
+
+      {previewOdysseyStore.dialog.isOpen && <PreviewOdysseyWidget />}
     </styled.Container>
   );
 };

@@ -4,12 +4,14 @@ import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {AxiosError} from 'axios';
 
+import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
-import {ROUTES} from 'core/constants';
 import {httpErrorCodes} from 'api/constants';
 import {REQUEST_MAX_RETRIES, REQUEST_RETRY_DELAY_BASE, setApiResponseHandlers} from 'api/request';
 
 export const useApiHandlers = () => {
+  const {sessionStore} = useStore();
+
   const history = useHistory();
   const {t} = useTranslation();
 
@@ -44,13 +46,13 @@ export const useApiHandlers = () => {
           break;
 
         case httpErrorCodes.UNAUTHORIZED:
-          document.location = ROUTES.signIn;
+          sessionStore.signOutRedirect();
           break;
       }
 
       throw error;
     },
-    [t]
+    [sessionStore, t]
   );
 
   useEffect(() => {

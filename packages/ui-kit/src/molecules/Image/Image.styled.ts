@@ -17,6 +17,7 @@ export const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 `;
 
 export const Loader = styled.img``;
@@ -26,4 +27,5 @@ export const ErroredImage = styled.div`
   height: 85%;
   background-color: ${(props) => props.theme.accent};
   ${`mask: url(${astronautIcon}) no-repeat center;`};
+  border-radius: 50%;
 `;
