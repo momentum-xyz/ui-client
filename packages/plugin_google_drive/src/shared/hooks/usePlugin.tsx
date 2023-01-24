@@ -9,9 +9,11 @@ import {GoogleDrivePage} from 'pages';
 import {useMemo, useEffect} from 'react';
 import {RootGoogleDriveStore} from 'stores';
 import {GoogleDriveStore} from 'stores/GoogleDriveStore';
-import {ThemeProvider} from 'styled-components';
+import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
 
 import {StoreProvider} from './useStore';
+
+const ThemeProvider = ThemeProviderOriginal as unknown as React.FC<ThemeProviderProps<any>>;
 
 export const usePlugin: UsePluginHookType<ObjectPluginPropsInterface> = (props) => {
   const store = useMemo(
