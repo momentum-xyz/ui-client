@@ -516,6 +516,7 @@ export const enGb = {
       upload3dAsset: 'Upload 3D Asset',
       admin: 'Admin',
       owner: 'Owner',
+      colourPicker: 'Colour Picker',
       statistics: 'Statistics'
     },
     textMessage: {

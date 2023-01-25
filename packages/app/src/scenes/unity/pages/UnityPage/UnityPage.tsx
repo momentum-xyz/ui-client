@@ -231,11 +231,7 @@ const UnityPage: FC = () => {
       >
         <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
-      {/*<PathObserver
-        isTeleportReady={unityStore.isTeleportReady}
-        resumeUnity={unityStore.resume}
-        pauseUnity={unityStore.pause}
-      />*/}
+
       {unityInstanceStore.objectMenu.isOpen && (
         <ObjectMenu
           gizmoType={unityInstanceStore.gizmoMode}

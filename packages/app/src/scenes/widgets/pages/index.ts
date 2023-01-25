@@ -18,3 +18,4 @@ export * from './MutualConnectionsWidget';
 export * from './StakingWidget';
 export * from './ConnectWidget';
 export * from './TestnetMarkWidget';
+export * from './ObjectColorPickerWidget';
