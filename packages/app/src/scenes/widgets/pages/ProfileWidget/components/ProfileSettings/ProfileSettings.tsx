@@ -7,6 +7,7 @@ import cn from 'classnames';
 import * as styled from './ProfileSettings.styled';
 
 interface PropsInterface {
+  isGuest: boolean;
   isEditMode: boolean;
   isDeviceSettings: boolean;
   audioDeviceId?: string;
@@ -19,6 +20,7 @@ interface PropsInterface {
 }
 
 const ProfileSettings: FC<PropsInterface> = ({
+  isGuest,
   isEditMode,
   isDeviceSettings,
   audioDeviceId,
@@ -39,10 +41,12 @@ const ProfileSettings: FC<PropsInterface> = ({
       </styled.SettingsHeader>
 
       <styled.SettingsContainer>
-        <styled.SettingsItem className={cn(isEditMode && 'active')}>
-          <IconSvg name={!isEditMode ? 'pencil' : 'check'} size="normal" />
-          <styled.SettingsValue onClick={onToggleEditMode}>Edit profile</styled.SettingsValue>
-        </styled.SettingsItem>
+        {!isGuest && (
+          <styled.SettingsItem className={cn(isEditMode && 'active')}>
+            <IconSvg name={!isEditMode ? 'pencil' : 'check'} size="normal" />
+            <styled.SettingsValue onClick={onToggleEditMode}>Edit profile</styled.SettingsValue>
+          </styled.SettingsItem>
+        )}
 
         <styled.SettingsItem className={cn(isDeviceSettings && 'active')}>
           <IconSvg name={!isDeviceSettings ? 'gear' : 'check'} size="normal" />

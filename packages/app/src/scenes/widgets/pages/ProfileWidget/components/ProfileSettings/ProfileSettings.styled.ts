@@ -33,6 +33,10 @@ export const SettingsItem = styled.div`
 export const SettingsValue = styled.a`
   font-size: var(--font-size-xs);
   font-weight: 400;
+  
+  &.disabled {
+    op
+  }
 `;
 
 export const DeviceItem = styled.div`
