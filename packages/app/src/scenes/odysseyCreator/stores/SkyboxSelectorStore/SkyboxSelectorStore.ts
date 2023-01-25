@@ -71,10 +71,11 @@ const SkyboxSelectorStore = types
           attribute_name: AttributeNameEnum.SKYBOX_LIST
         }
       );
-      const skyboxes =
+      const skyboxes: Asset3dInterface[] =
         ((response as any)?.skyboxes || []).map(({name, hash}: any) => ({
-          name,
           id: hash,
+          isUserAttribute: true,
+          name,
           image: hash
             ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
             : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
@@ -148,17 +149,22 @@ const SkyboxSelectorStore = types
         value: {render_hash: hash}
       });
 
+      // TODO: Need a way to get the actual `id` for the asset
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SKYBOX_LIST,
         value: {
           skyboxes: [
-            ...self.userSkyboxes.filter((d: any) => d.hash !== hash),
+            ...self.userSkyboxes
+              .filter((d: any) => d.hash !== hash)
+              .map((d: any) => ({hash: d.id, name: d.name})),
             {hash, name: name || '-'}
           ]
         }
       });
+
+      self.fetchUserSkyboxes(worldId);
 
       return self.createSkyboxRequest.isDone;
     }),
