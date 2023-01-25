@@ -18,6 +18,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Boxes = styled.div`
+  padding: 0 0 32px 0;
   display: flex;
   flex-direction: column;
   gap: 15px;

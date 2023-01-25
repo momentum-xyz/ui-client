@@ -60,6 +60,7 @@ const ObjectMenu: FC<PropsInterface> = ({
   return (
     <Portal>
       <styled.Container
+        data-testid="ObjectMenu-test"
         style={{left: position.x - OBJECT_MENU_OFFSET_X, top: position.y - OBJECT_MENU_OFFSET_Y}}
       >
         <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.POSITION)}>
@@ -69,6 +70,7 @@ const ObjectMenu: FC<PropsInterface> = ({
             className={cn(gizmoType === GizmoTypeEnum.POSITION && 'selected')}
           />
         </styled.MenuItem>
+
         <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.ROTATION)}>
           <styled.MenuText
             text={t('actions.rotate')}
@@ -76,6 +78,7 @@ const ObjectMenu: FC<PropsInterface> = ({
             className={cn(gizmoType === GizmoTypeEnum.ROTATION && 'selected')}
           />
         </styled.MenuItem>
+
         <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.SCALE)}>
           <styled.MenuText
             text={t('actions.scale')}
@@ -83,28 +86,35 @@ const ObjectMenu: FC<PropsInterface> = ({
             className={cn(gizmoType === GizmoTypeEnum.SCALE && 'selected')}
           />
         </styled.MenuItem>
+
         <styled.MenuItem onClick={onUndo}>
           <styled.MenuText text={t('actions.undo')} size="m" />
         </styled.MenuItem>
+
         <styled.MenuItem onClick={onRedo}>
           <styled.MenuText text={t('actions.redo')} size="m" />
         </styled.MenuItem>
+
         <styled.MenuItem onClick={() => setShowDeleteDialog(true)}>
           <styled.MenuText text={t('actions.delete')} size="m" />
         </styled.MenuItem>
+
         <Tooltip label={t('messages.comingSoonExclamation')} placement="bottom">
           <styled.MenuItem disabled>
             <styled.MenuText text={t('actions.copy')} size="m" />
           </styled.MenuItem>
         </Tooltip>
+
         <styled.MenuItem onClick={handleOnFunctionalityClick}>
           <styled.MenuText text={t('actions.functionality')} size="m" />
         </styled.MenuItem>
+
         <Tooltip label={t('messages.comingSoonExclamation')}>
           <styled.MenuItem disabled>
             <styled.MenuText text={t('actions.addTokenGate')} size="m" />
           </styled.MenuItem>
         </Tooltip>
+
         {showDeleteDialog && (
           <Dialog
             title={
