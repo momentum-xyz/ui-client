@@ -30,7 +30,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {unityStore, authStore, sessionStore, odysseyCreatorStore: worldBuilderStore} = useStore();
+  const {unityStore, sessionStore, odysseyCreatorStore: worldBuilderStore} = useStore();
   const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
   const {unityInstanceStore} = unityStore;
 
@@ -64,7 +64,7 @@ const UnityPage: FC = () => {
     console.log(`Unity worldId: ${worldId}`);
 
     if (worldId) {
-      await unityInstanceStore.loadWorldById(worldId, authStore.token);
+      await unityInstanceStore.loadWorldById(worldId, sessionStore.token);
     } else {
       console.error(`There is no worldId in route.`);
     }

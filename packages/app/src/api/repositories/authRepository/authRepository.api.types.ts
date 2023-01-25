@@ -21,9 +21,7 @@ export interface AuthTokenResponse {
 
 /** GUEST TOKEN REQUEST **/
 
-export interface AuthGuestTokenRequest {
-  name: string;
-}
+export interface AuthGuestTokenRequest {}
 
 export interface AuthGuestTokenResponse {
   token: string;

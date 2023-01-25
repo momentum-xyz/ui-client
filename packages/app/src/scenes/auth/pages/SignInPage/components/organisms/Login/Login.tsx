@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
-import {Button, Dropdown, OptionInterface, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
+import {Button, Dropdown, Heading, IconSvg, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
@@ -17,27 +18,39 @@ interface PropsInterface {
 const Login: FC<PropsInterface> = (props) => {
   const {walletOptions, wallet, isPending, onSelectAddress, onLogin} = props;
 
+  const {t} = useTranslation();
+
   return (
-    <Box>
+    <Box size="small">
       <styled.Div>
-        <Text size="m" text="Connect wallet and log in" align="left" />
+        <styled.Header>
+          <IconSvg name="shield-open" size="normal" />
+          <Heading type="h3" label={t('actions.signIn')} align="left" />
+        </styled.Header>
+
         <styled.ImageContainer>
           <styled.Image src={polkadot} />
-          <Text size="xs" text="Polkadot.js" align="left" transform="uppercase" />
+          <Text
+            size="xxs"
+            text={t('networks.polkadot')}
+            align="left"
+            transform="uppercase"
+            weight="bold"
+          />
         </styled.ImageContainer>
 
         <Dropdown
-          placeholder="Select account"
           variant="third"
           valueType="wallet"
           options={walletOptions}
+          placeholder={t('actions.selectAccount')}
           onOptionSelect={(option) => onSelectAddress(option.value)}
         />
 
         <Button
-          size="medium"
-          label="Connect your wallet"
           icon="wallet"
+          size="medium"
+          label={t('actions.connectWallet')}
           disabled={!wallet || isPending}
           onClick={onLogin}
         />

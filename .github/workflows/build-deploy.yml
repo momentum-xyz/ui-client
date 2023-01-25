@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - develop-plugins
       - master
       - release/*
 
@@ -16,7 +15,7 @@ jobs:
     runs-on: self-hosted  # ubuntu-latest
     steps:
       - id: build
-        uses: momentum-xyz/docker-build-action@v6.3.0
+        uses: momentum-xyz/docker-build-action@v6.3.1
         with:
           registry-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           registry-user: ${{ secrets.REGISTRY_USERNAME }}
@@ -24,7 +23,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       version: ${{ steps.build.outputs.version }}
-  dev-deploy:
+  dev2-deploy:
     runs-on: self-hosted
     needs: build-app
     if: github.ref == 'refs/heads/develop'
@@ -34,29 +33,7 @@ jobs:
         uses: momentum-xyz/deploy-action@v1
         with:
           version: ${{ env.VERSION }}
-          k8s-credentials: ${{ secrets[secrets.REF_K8S_DEV] }}
-  dev2-deploy:
-    runs-on: self-hosted
-    needs: build-app
-    if: github.ref == 'refs/heads/develop-plugins'
-    concurrency: dev-deploy-${{ github.ref }}
-    steps:
-      - id: deploy-dev
-        uses: momentum-xyz/deploy-action@v1
-        with:
-          version: ${{ env.VERSION }}
           k8s-credentials: ${{ secrets[secrets.REF_K8S_DEV2] }}
-  dev-release-deploy:
-    runs-on: self-hosted
-    needs: build-app
-    if: ${{ startsWith(github.ref, 'refs/heads/release/v') }}
-    concurrency: dev-deploy-${{ github.ref }}
-    steps:
-      - id: deploy-dev
-        uses: momentum-xyz/deploy-action@v1
-        with:
-          version: ${{ env.VERSION }}
-          k8s-credentials: ${{ secrets[secrets.REF_K8S_DEV_REL] }}
   build-miro:
     runs-on: self-hosted  # ubuntu-latest
     needs: build-app

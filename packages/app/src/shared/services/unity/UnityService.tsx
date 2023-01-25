@@ -125,6 +125,10 @@ export class UnityService {
     this.unityApi?.setToken(token);
   }
 
+  setAddressablesURL(url?: string) {
+    this.unityApi?.setAddressablesURL(url);
+  }
+
   setTargetWorldId(id?: string) {
     this.unityApi?.setTargetWorldId(id);
   }

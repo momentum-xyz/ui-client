@@ -18,10 +18,6 @@ export const TopContainer = styled.div`
   width: 100%;
   flex-direction: row;
   align-items: center;
-
-  & img {
-    border-radius: 50%;
-  }
 `;
 
 export const Avatar = styled.img`

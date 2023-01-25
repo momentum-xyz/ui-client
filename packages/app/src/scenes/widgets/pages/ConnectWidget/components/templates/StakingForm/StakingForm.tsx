@@ -53,8 +53,8 @@ interface PropsInterface {
 }
 
 const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
-  const {authStore, nftStore, exploreStore} = useStore();
-  const {wallet: authWallet} = authStore;
+  const {sessionStore, nftStore, exploreStore} = useStore();
+  const {wallet: authWallet} = sessionStore;
   const {
     balanceTotal,
     balanceReserved,

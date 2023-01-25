@@ -14,7 +14,8 @@ interface PropsInterface {
   onSelectAudioDevice: (id: string) => void;
   onToggleEditMode: () => void;
   onToggleDeviceSettings: () => void;
-  onLogout: () => void;
+  onSignIn?: () => void;
+  onSignOut?: () => void;
 }
 
 const ProfileSettings: FC<PropsInterface> = ({
@@ -25,7 +26,8 @@ const ProfileSettings: FC<PropsInterface> = ({
   onSelectAudioDevice,
   onToggleDeviceSettings,
   onToggleEditMode,
-  onLogout
+  onSignIn,
+  onSignOut
 }) => {
   const {t} = useTranslation();
 
@@ -66,8 +68,22 @@ const ProfileSettings: FC<PropsInterface> = ({
         )}
 
         <styled.SettingsItem>
-          <IconSvg name="go" size="normal" />
-          <styled.SettingsValue onClick={onLogout}>Logout</styled.SettingsValue>
+          {onSignOut && (
+            <>
+              <IconSvg name="go" size="normal" />
+              <styled.SettingsValue onClick={() => onSignOut()}>
+                {t('actions.signOut')}
+              </styled.SettingsValue>
+            </>
+          )}
+          {onSignIn && (
+            <>
+              <IconSvg name="shield-open" size="normal" />
+              <styled.SettingsValue onClick={() => onSignIn()}>
+                {t('actions.signIn')}
+              </styled.SettingsValue>
+            </>
+          )}
         </styled.SettingsItem>
       </styled.SettingsContainer>
     </styled.Settings>

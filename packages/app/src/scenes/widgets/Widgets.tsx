@@ -15,6 +15,7 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
 import {
+  SignInWidget,
   ProfileWidget,
   FlyToMeWidget,
   MinimapWidget,
@@ -248,6 +249,10 @@ const Widgets: FC<PropsInterface> = (props) => {
           </styled.RightToolbars>
         )}
       </styled.Footer>
+
+      {!isExplorePage && sessionStore.isGuest && widgetsStore.signInDialogAvailable && (
+        <SignInWidget />
+      )}
 
       {mutualConnectionsStore.dialog.isOpen && <MutualConnectionsWidget />}
       {onlineUsersStore.dialog.isOpen && <SearchUsersWidget />}

@@ -6,10 +6,8 @@ import {RouteConfigInterface} from 'core/interfaces';
 const Widgets = lazy(() => import('./widgets/Widgets'));
 const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
 const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
-const BirthOfMePage = lazy(() => import('./birthOfMe/pages/BirthOfMePage/BirthOfMePage'));
-const BirthAnimationPage = lazy(
-  () => import('./birthOfMe/pages/BirthAnimationPage/BirthAnimationPage')
-);
+const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
+const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/BirthAnimationPage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
@@ -39,15 +37,19 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   }
 ];
 
-export const PUBLIC_ROUTES: RouteConfigInterface[] = [
+export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.signIn,
     main: () => (
       <>
-        <Map3dPage />
+        <Map3dPage isClickActive />
         <SignInPage />
       </>
     )
+  },
+  {
+    path: ROUTES.storyBook.base,
+    main: () => <StoryBook />
   },
   {
     path: ROUTES.signInAccount,
@@ -65,17 +67,9 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage />
         <BirthOfMePage />
-        <Widgets isExplorePage />
       </>
     )
   },
-  {
-    path: ROUTES.storyBook.base,
-    main: () => <StoryBook />
-  }
-];
-
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.birthAnimation,
     main: () => (
@@ -110,12 +104,10 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.odyssey.creator.base,
-    main: () => <OdysseyCreator />,
-    renderBackground: false
+    main: () => <OdysseyCreator />
   },
   {
     path: ROUTES.odyssey.object.root,
-    renderBackground: false,
     main: () => <Object />
   }
 ];

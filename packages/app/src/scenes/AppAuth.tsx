@@ -1,22 +1,29 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 
 const AppAuth: FC = ({children}) => {
-  const {authStore, sessionStore} = useStore();
+  const {sessionStore, nftStore} = useStore();
 
   const history = useHistory();
+  const {pathname} = useLocation<{pathname: string}>();
+
+  if (pathname === ROUTES.signIn && !sessionStore.isGuest) {
+    history.push(ROUTES.explore);
+  }
+
+  if (pathname === ROUTES.explore && sessionStore.isGuest) {
+    history.push(ROUTES.signIn);
+  }
 
   useEffect(() => {
-    if (authStore.hasToken) {
-      sessionStore.loadUserProfile();
-    } else {
-      history.push(ROUTES.signIn, {from: history.location.pathname});
+    if (sessionStore.wallet && !nftStore.isLoading) {
+      nftStore.activateWallet(sessionStore.wallet);
     }
-  }, [authStore.hasToken, history, sessionStore]);
+  }, [nftStore, nftStore.isLoading, sessionStore.wallet]);
 
   return <>{sessionStore.isUserReady && children}</>;
 };

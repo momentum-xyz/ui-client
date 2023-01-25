@@ -11,7 +11,7 @@ const BASE_URL =
     : document.location.origin;
 
 export const appVariables: AppConfigExtendedInterface = {
-  APP_VERSION: process.env.REACT_APP_VERSION || 'v0.21.0',
+  APP_VERSION: process.env.REACT_APP_VERSION || 'v0.0.0',
   BACKEND_API_URL: '',
   BACKEND_ENDPOINT_URL: '',
   BACKEND_V4_ENDPOINT_URL: `${BASE_URL}/api/v4`,
@@ -24,6 +24,7 @@ export const appVariables: AppConfigExtendedInterface = {
   UNITY_CLIENT_COMPANY_NAME: '',
   UNITY_CLIENT_PRODUCT_NAME: '',
   UNITY_CLIENT_PRODUCT_VERSION: '',
+  UNITY_CLIENT_ADDRESSABLES_URL: '',
   RENDER_SERVICE_URL: '',
   KEYCLOAK_OPENID_CONNECT_URL: '',
   KEYCLOAK_OPENID_CLIENT_ID: '',
