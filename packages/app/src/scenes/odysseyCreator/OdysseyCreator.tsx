@@ -8,11 +8,12 @@ import {UnityService} from 'shared/services';
 import {createSwitchByConfig} from 'core/utils';
 
 import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
-import {CreatorMenu} from './components';
+import {CreatorMenu, ObjectMenu} from './components';
 
 const OdysseyCreator: FC = () => {
-  const {unityStore} = useStore();
-  const {worldId} = unityStore;
+  const {unityStore, odysseyCreatorStore} = useStore();
+  const {objectFunctionalityStore} = odysseyCreatorStore;
+  const {worldId, unityInstanceStore} = unityStore;
 
   const history = useHistory();
 
@@ -33,6 +34,23 @@ const OdysseyCreator: FC = () => {
           history.push(generatePath(ROUTES.odyssey.creator.skybox, {worldId}));
         }}
       />
+
+      {unityInstanceStore.objectMenu.isOpen && (
+        <ObjectMenu
+          gizmoType={unityInstanceStore.gizmoMode}
+          worldId={unityStore.worldId}
+          position={unityInstanceStore.objectMenuPosition}
+          objectId={unityInstanceStore.selectedObjectId ?? ' '}
+          onGizmoTypeChange={unityInstanceStore.changeGizmoType}
+          onObjectRemove={() => {
+            objectFunctionalityStore.deleteObject();
+            unityInstanceStore.objectMenu.close();
+          }}
+          onUndo={unityInstanceStore.undo}
+          onRedo={unityInstanceStore.redo}
+        />
+      )}
+
       {createSwitchByConfig(ODYSSEY_CREATOR_ROUTES, ROUTES.odyssey.creator.base)}
     </>
   );

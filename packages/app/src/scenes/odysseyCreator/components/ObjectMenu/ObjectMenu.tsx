@@ -36,7 +36,6 @@ const ObjectMenu: FC<PropsInterface> = ({
   onRedo
 }) => {
   const history = useHistory();
-
   const {t} = useTranslation();
 
   const {odysseyCreatorStore: worldBuilderStore} = useStore();

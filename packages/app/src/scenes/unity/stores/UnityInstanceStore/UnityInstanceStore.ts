@@ -176,7 +176,7 @@ const UnityInstanceStore = types
         this.setInitialVolume();
       }
     },
-    handleClick(x: number, y: number) {
+    setLastClickPosition(x: number, y: number) {
       self.lastClickPosition = {x, y};
       this.closeAndResetObjectMenu();
     },

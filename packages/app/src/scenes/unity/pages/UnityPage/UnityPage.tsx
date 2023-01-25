@@ -22,7 +22,6 @@ import {
 } from 'ui-kit';
 
 import * as styled from './UnityPage.styled';
-import {ObjectMenu} from './components';
 
 const UnityContextCSS = {
   width: '100vw',
@@ -30,8 +29,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {unityStore, sessionStore, odysseyCreatorStore: worldBuilderStore} = useStore();
-  const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
+  const {unityStore, sessionStore} = useStore();
   const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
@@ -220,27 +218,11 @@ const UnityPage: FC = () => {
       <styled.Inner
         data-testid="UnityPage-test"
         onClick={(event) => {
-          unityInstanceStore.handleClick(event.clientX, event.clientY);
+          unityInstanceStore.setLastClickPosition(event.clientX, event.clientY);
         }}
       >
         <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
-
-      {unityInstanceStore.objectMenu.isOpen && (
-        <ObjectMenu
-          gizmoType={unityInstanceStore.gizmoMode}
-          worldId={unityStore.worldId}
-          position={unityInstanceStore.objectMenuPosition}
-          objectId={unityInstanceStore.selectedObjectId ?? ' '}
-          onGizmoTypeChange={unityInstanceStore.changeGizmoType}
-          onObjectRemove={() => {
-            worldBuilderObjectStore.deleteObject();
-            unityInstanceStore.objectMenu.close();
-          }}
-          onUndo={unityInstanceStore.undo}
-          onRedo={unityInstanceStore.redo}
-        />
-      )}
 
       {!unityStore.isUnityAvailable && <UnityLoader theme={theme} />}
     </Portal>
