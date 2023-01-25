@@ -20,6 +20,12 @@ export const PreviewContainer = styled.div`
   position: relative;
 `;
 
+export const DeleteButton = styled.div`
+  position: absolute;
+  top: 9px;
+  right: 9px;
+`;
+
 export const PreviewTitleHolder = styled.div`
   padding: 20px;
   width: 100%;
@@ -64,6 +70,7 @@ export const Item = styled.div`
   border-radius: 10px;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
   margin: 0 15px;
+  position: relative;
 
   box-shadow: 0px 3.369px 3.369px rgba(0, 0, 0, 0.25);
 

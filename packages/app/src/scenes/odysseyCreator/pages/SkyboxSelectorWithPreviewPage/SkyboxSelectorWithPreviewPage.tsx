@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button, Text, IconSvg} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useHistory} from 'react-router-dom';
@@ -15,7 +15,8 @@ import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 const SkyboxSelectorWithPreviewPage: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
-  const {items, selectedItem, currentItem, selectItem, saveItem} = skyboxSelectorStore;
+  const {selectedItem, currentItem, selectItem, saveItem, allSkyboxes, removeUserSkybox} =
+    skyboxSelectorStore;
   const {unityInstanceStore} = unityStore;
 
   const {worldId} = useParams<{worldId: string}>();
@@ -33,12 +34,12 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
       <styled.ItemsGallery>
         <styled.SkyboxCountContainer>
           <styled.SkyboxCount>
-            <Text text={t('counts.skyboxes', {count: items.length})} size="l" align="left" />
+            <Text text={t('counts.skyboxes', {count: allSkyboxes.length})} size="l" align="left" />
           </styled.SkyboxCount>
         </styled.SkyboxCountContainer>
-        {!!items && !!selectedItem && (
+        {!!allSkyboxes && !!selectedItem && (
           <Carousel<Asset3dInterface>
-            items={items}
+            items={allSkyboxes}
             activeItem={selectedItem}
             onChange={selectItem}
             renderItem={(item, idx) => {
@@ -52,6 +53,17 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                     unityInstanceStore.changeSkybox(item.id);
                   }}
                 >
+                  {item.isUserAttribute && (
+                    <styled.DeleteButton
+                      onClick={() => {
+                        removeUserSkybox(worldId, item.id).catch((err) => {
+                          toast.error(err.message);
+                        });
+                      }}
+                    >
+                      <IconSvg name="bin" size="normal" isWhite />
+                    </styled.DeleteButton>
+                  )}
                   <styled.PreviewImg src={item.image} />
                   <styled.ItemTitle>{item.name}</styled.ItemTitle>
                   <styled.ItemButtonHolder>
