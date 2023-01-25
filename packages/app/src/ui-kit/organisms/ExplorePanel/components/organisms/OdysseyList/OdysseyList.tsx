@@ -33,7 +33,7 @@ const OdysseyList: FC<PropsInterface> = (props) => {
               isMultiline={false}
             />
           </styled.InfoContainer>
-          <SvgButton iconName="fly-to" size="medium" onClick={() => onTeleport(odyssey)} />
+          <SvgButton iconName="fly-portal" size="medium" onClick={() => onTeleport(odyssey)} />
         </styled.Container>
       ))}
     </styled.Inner>
