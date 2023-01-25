@@ -19,6 +19,7 @@ if (!packageJSON?.name) {
 
 switch (script) {
   case 'start:plugin':
+  case 'start':
   case 'build':
   case 'test': {
     const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
@@ -28,19 +29,12 @@ switch (script) {
 
     const env = {
       ...process.env,
+      PLUGIN_EMULATOR: script === 'start' ? '1' : '',
       PLUGIN_NAME: packageJSON.name,
-      PLUGIN_PORT: process.env.PORT ?? packageJSON.port ?? 3001
+      PORT: process.env.PORT ?? packageJSON.port ?? 3001
     };
 
     return spawnProcess('craco', processArgs, env);
-  }
-  case 'start': {
-    const env = {
-      PORT: packageJSON.port ?? 3001,
-      ...process.env
-    };
-
-    return spawnProcess('react-scripts', ['start'], env);
   }
   default:
     console.log(`Unknown script "${script}".`);
