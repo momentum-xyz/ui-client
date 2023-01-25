@@ -4,6 +4,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {isBrowserSupported} from '@momentum-xyz/core';
+import {LoaderFallback} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useApiHandlers, useStore} from 'shared/hooks';
@@ -89,7 +90,9 @@ const App: FC = () => {
   if (isTargetRoute(pathname, SYSTEM_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <Suspense fallback={false}>{createSwitchByConfig(SYSTEM_ROUTES)}</Suspense>
+        <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
+          {createSwitchByConfig(SYSTEM_ROUTES)}
+        </Suspense>
         <TestnetMarkWidget withOffset />
       </ThemeProvider>
     );
@@ -103,14 +106,14 @@ const App: FC = () => {
   if (isTargetRoute(pathname, PRIVATE_ROUTES_WITH_UNITY)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <Suspense fallback={false}>
-          <AppAuth>
-            <GlobalStyles />
-            <UnityPage />
+        <AppAuth>
+          <GlobalStyles />
+          <UnityPage />
+          <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
             <AppLayers renderUnity>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
-            <TestnetMarkWidget withOffset />
-          </AppAuth>
-        </Suspense>
+          </Suspense>
+          <TestnetMarkWidget withOffset />
+        </AppAuth>
       </ThemeProvider>
     );
   }
@@ -118,7 +121,7 @@ const App: FC = () => {
   // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>
-      <Suspense fallback={false}>
+      <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
         <AppAuth>
           <GlobalStyles />
           <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}</AppLayers>
