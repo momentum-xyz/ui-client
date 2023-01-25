@@ -22,7 +22,7 @@ import {
 } from 'ui-kit';
 
 import * as styled from './UnityPage.styled';
-import {CreatorMenu, ObjectMenu} from './components';
+import {ObjectMenu} from './components';
 
 const UnityContextCSS = {
   width: '100vw',
@@ -38,12 +38,6 @@ const UnityPage: FC = () => {
   const history = useHistory();
   const {t} = useTranslation();
   const location = useLocation();
-
-  const isBuilderMode =
-    !!unityStore.worldId &&
-    location.pathname.includes(
-      generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId})
-    );
 
   // TODO: FIXME
   const worldId = useMemo(() => {
@@ -245,22 +239,6 @@ const UnityPage: FC = () => {
           }}
           onUndo={unityInstanceStore.undo}
           onRedo={unityInstanceStore.redo}
-        />
-      )}
-      {isBuilderMode && (
-        <CreatorMenu
-          onAddObject={() => {
-            history.push(
-              generatePath(ROUTES.odyssey.creator.spawnAsset.base, {
-                worldId: unityStore.worldId
-              })
-            );
-          }}
-          onSkyboxClick={() => {
-            history.push(
-              generatePath(ROUTES.odyssey.creator.skybox, {worldId: unityStore.worldId})
-            );
-          }}
         />
       )}
 

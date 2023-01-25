@@ -1,13 +1,21 @@
+import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {FC, useEffect} from 'react';
+import {generatePath, useHistory} from 'react-router-dom';
 
-import {createSwitchByConfig} from 'core/utils';
 import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
 import {UnityService} from 'shared/services';
+import {createSwitchByConfig} from 'core/utils';
 
 import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
+import {CreatorMenu} from './components';
 
 const OdysseyCreator: FC = () => {
+  const {unityStore} = useStore();
+  const {worldId} = unityStore;
+
+  const history = useHistory();
+
   useEffect(() => {
     UnityService.toggleBuildMode();
     return () => {
@@ -15,7 +23,19 @@ const OdysseyCreator: FC = () => {
     };
   }, []);
 
-  return <>{createSwitchByConfig(ODYSSEY_CREATOR_ROUTES, ROUTES.odyssey.creator.base)}</>;
+  return (
+    <>
+      <CreatorMenu
+        onAddObject={() => {
+          history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId}));
+        }}
+        onSkyboxClick={() => {
+          history.push(generatePath(ROUTES.odyssey.creator.skybox, {worldId}));
+        }}
+      />
+      {createSwitchByConfig(ODYSSEY_CREATOR_ROUTES, ROUTES.odyssey.creator.base)}
+    </>
+  );
 };
 
 export default observer(OdysseyCreator);
