@@ -1,6 +1,22 @@
 {
   "name": "plugin_twitch",
+  "description": "Twitch plugin for Odyssey",
   "version": "0.1.0",
+  "repository": "https://github.com/momentum-xyz/ui-client",
+  "license": "GPL-3.0",
+  "homepage": "https://odyssey.org",
+  "author": "info@odyssey.org",
+  "attribute_types": [
+    {
+      "name": "state",
+      "description": "Plugin shared state",
+      "sync": "object"
+    },
+    {
+      "name": "config",
+      "description": "Plugin configuration"
+    }
+  ],
   "private": true,
   "dependencies": {
     "@momentum-xyz/ui-kit": "^0.1.2",
