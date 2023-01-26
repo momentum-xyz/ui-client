@@ -670,6 +670,7 @@ export const enGb = {
       redo: 'Redo',
       copy: 'Copy',
       functionality: 'Functionality',
+      colour: 'Colour',
       chooseName: 'Choose your name',
       addTokenGate: 'Add Token Gate'
     },

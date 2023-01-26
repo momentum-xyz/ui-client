@@ -3,26 +3,25 @@ import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useHistory, useParams} from 'react-router-dom';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const ObjectFunctionalityPage: FC = () => {
-  const {odysseyCreatorStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {objectFunctionalityStore} = odysseyCreatorStore;
 
-  const history = useHistory();
-
   const ref = useRef<HTMLDivElement>(null);
-
-  const {t} = useTranslation();
-
   const {objectId} = useParams<{objectId: string}>();
 
+  const history = useHistory();
+  const {t} = useTranslation();
+
   useClickOutside(ref, () => {
-    history.goBack();
+    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
   });
 
   useEffect(() => {

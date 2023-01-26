@@ -39,6 +39,15 @@ const ObjectMenu: FC = () => {
     });
   }, [history, objectId, worldId]);
 
+  const handleOnColorClick = useCallback(() => {
+    history.push({
+      pathname: generatePath(ROUTES.odyssey.creator.objectColor, {
+        worldId,
+        objectId
+      })
+    });
+  }, [history, objectId, worldId]);
+
   return (
     <Portal>
       <styled.Container
@@ -92,6 +101,10 @@ const ObjectMenu: FC = () => {
 
         <styled.MenuItem onClick={handleOnFunctionalityClick}>
           <styled.MenuText text={t('actions.functionality')} size="m" />
+        </styled.MenuItem>
+
+        <styled.MenuItem onClick={handleOnColorClick}>
+          <styled.MenuText text={t('actions.colour')} size="m" />
         </styled.MenuItem>
 
         <Tooltip label={t('messages.comingSoonExclamation')}>

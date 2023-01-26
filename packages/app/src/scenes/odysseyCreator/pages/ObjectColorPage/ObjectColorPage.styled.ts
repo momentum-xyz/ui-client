@@ -1,5 +1,17 @@
 import styled from 'styled-components';
 
+export const Wrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+`;
+
+export const WrapperInner = styled.div`
+  width: 300px;
+  pointer-events: all;
+  margin: 35px 10px;
+`;
+
 export const Container = styled.div`
   padding: 10px 0 0 0;
 
@@ -35,7 +47,7 @@ export const Container = styled.div`
 export const ColorContainer = styled.div`
   padding: 0 15px 15px 15px;
   display: grid;
-  grid-template-columns: 70px 1fr;
+  grid-template-columns: 40px 1fr 1fr 1fr;
   gap: 8px;
 `;
 
@@ -46,11 +58,10 @@ export const SelectedColor = styled.div<{background: string}>`
 `;
 
 export const SelectedHex = styled.div`
-  padding: 0 8px 0 0;
   display: flex;
   height: 28px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   border-radius: 4px;
   background-color: var(--blue);
   color: ${(props) => props.theme.text};

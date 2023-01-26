@@ -3,6 +3,7 @@ import {ROUTES} from 'core/constants';
 import {ObjectFunctionalityPage} from './pages/ObjectFunctionalityPage';
 import {SkyboxSelectorWithPreviewPage} from './pages/SkyboxSelectorWithPreviewPage';
 import {SpawnAssetPage} from './pages/SpawnAssetPage';
+import {ObjectColorPage} from './pages/ObjectColorPage';
 
 export const ODYSSEY_CREATOR_ROUTES = [
   {
@@ -23,6 +24,11 @@ export const ODYSSEY_CREATOR_ROUTES = [
   {
     path: ROUTES.odyssey.creator.functionality,
     main: () => <ObjectFunctionalityPage />,
+    exact: false
+  },
+  {
+    path: ROUTES.odyssey.creator.objectColor,
+    main: () => <ObjectColorPage />,
     exact: false
   }
 ];
