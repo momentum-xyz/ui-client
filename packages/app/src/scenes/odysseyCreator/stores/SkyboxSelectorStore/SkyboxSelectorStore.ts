@@ -83,9 +83,6 @@ const SkyboxSelectorStore = types
       self.userSkyboxes = cast(skyboxes);
     }),
     selectItem(item: Asset3dInterface) {
-      if (item.isUserAttribute) {
-        return;
-      }
       self.selectedItemId = item.id;
     },
     saveItem: flow(function* (item: Asset3dInterface, worldId: string) {

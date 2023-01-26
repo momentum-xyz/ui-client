@@ -13,11 +13,12 @@ import {Carousel, UploadSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
-  const {odysseyCreatorStore, unityStore} = useStore();
+  const {odysseyCreatorStore, unityStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {selectedItem, currentItem, selectItem, saveItem, allSkyboxes, removeUserSkybox} =
     skyboxSelectorStore;
   const {unityInstanceStore} = unityStore;
+  const {user} = sessionStore;
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -47,7 +48,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
               return (
                 <styled.Item
                   className={cn({active})}
-                  key={item.id + idx}
+                  key={item.id + `-${idx}`}
                   onClick={() => {
                     selectItem(item);
                     unityInstanceStore.changeSkybox(item.id);
@@ -66,6 +67,9 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   )}
                   <styled.PreviewImg src={item.image} />
                   <styled.ItemTitle>{item.name}</styled.ItemTitle>
+                  <styled.ItemCreatedBy>
+                    By <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
+                  </styled.ItemCreatedBy>
                   <styled.ItemButtonHolder>
                     <Button
                       label={

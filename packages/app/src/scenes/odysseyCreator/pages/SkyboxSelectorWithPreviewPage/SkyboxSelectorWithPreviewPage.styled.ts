@@ -61,7 +61,7 @@ export const SkyboxCount = styled.div`
 
 export const Item = styled.div`
   width: 180px;
-  height: 230px;
+  height: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,6 +83,16 @@ export const ItemTitle = styled.div`
   color: var(--accent-color);
   text-transform: uppercase;
   font-size: var(--font-size-l);
+`;
+
+export const ItemCreatedBy = styled.div`
+  color: var(--white);
+  font-size: var(--font-size-l);
+
+  & span {
+    text-transform: uppercase;
+    color: var(--accent-color);
+  }
 `;
 
 export const ItemButtonHolder = styled.div`
