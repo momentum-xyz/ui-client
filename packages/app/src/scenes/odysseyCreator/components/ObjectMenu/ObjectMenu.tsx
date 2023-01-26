@@ -16,10 +16,11 @@ const OBJECT_MENU_OFFSET_Y = 100;
 
 const ObjectMenu: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
-  const {objectFunctionalityStore} = odysseyCreatorStore;
+  const {objectFunctionalityStore, objectColorStore} = odysseyCreatorStore;
   const {worldId, unityInstanceStore} = unityStore;
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isObjectColor, setIsObjectColor] = useState(false);
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -28,7 +29,10 @@ const ObjectMenu: FC = () => {
 
   useEffect(() => {
     objectFunctionalityStore.fetchObject(objectId);
-  }, [objectId, objectFunctionalityStore]);
+    objectColorStore.isColorPickerAvailable(worldId, objectId).then((isAvailable) => {
+      setIsObjectColor(isAvailable);
+    });
+  }, [objectId, objectFunctionalityStore, objectColorStore, worldId]);
 
   const handleOnFunctionalityClick = useCallback(() => {
     history.push({
@@ -103,9 +107,11 @@ const ObjectMenu: FC = () => {
           <styled.MenuText text={t('actions.functionality')} size="m" />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={handleOnColorClick}>
-          <styled.MenuText text={t('actions.colour')} size="m" />
-        </styled.MenuItem>
+        {isObjectColor && (
+          <styled.MenuItem onClick={handleOnColorClick}>
+            <styled.MenuText text={t('actions.colour')} size="m" />
+          </styled.MenuItem>
+        )}
 
         <Tooltip label={t('messages.comingSoonExclamation')}>
           <styled.MenuItem disabled>

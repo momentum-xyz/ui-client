@@ -2,8 +2,8 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {flow, types} from 'mobx-state-tree';
 
-import {api} from 'api';
-import {PluginIdEnum} from 'api/enums';
+import {api, FetchAssets3dResponse, GetSpaceInfoResponse} from 'api';
+import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 import {ObjectColorAttributeInterface} from 'api/interfaces';
 
 const ObjectColorStore = types
@@ -13,7 +13,9 @@ const ObjectColorStore = types
       objectId: types.maybe(types.string),
       objectColor: types.maybe(types.string),
       fetchRequest: types.optional(RequestModel, {}),
-      updateRequest: types.optional(RequestModel, {})
+      updateRequest: types.optional(RequestModel, {}),
+      objectInfoRequest: types.optional(RequestModel, {}),
+      assets3dRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -44,6 +46,29 @@ const ObjectColorStore = types
         attribute_name: AttributeNameEnum.OBJECT_COLOR,
         value
       });
+    }),
+    isColorPickerAvailable: flow(function* (worldId: string, objectId: string) {
+      const objectInfo: GetSpaceInfoResponse = yield self.objectInfoRequest.send(
+        api.spaceInfoRepository.getSpaceInfo,
+        {spaceId: objectId}
+      );
+
+      const assets3dList: FetchAssets3dResponse = yield self.assets3dRequest.send(
+        api.assets3dRepository.fetchAssets3d,
+        {category: Asset3dCategoryEnum.BASIC, worldId}
+      );
+
+      if (assets3dList && objectInfo?.asset_3d_id) {
+        const asset3dIds = assets3dList.map(({id}) => id);
+
+        const isBaseObject = asset3dIds.includes(objectInfo.asset_3d_id);
+        // FIXME: Enum
+        const isNotImage = objectInfo.asset_2d_id !== '7be0964f-df73-4880-91f5-22eef9967999';
+
+        return isBaseObject && isNotImage;
+      }
+
+      return false;
     })
   }));
 
