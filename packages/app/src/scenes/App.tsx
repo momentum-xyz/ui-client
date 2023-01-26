@@ -104,26 +104,6 @@ const App: FC = () => {
     return <></>;
   }
 
-  // // FIXME: Default url
-  // if (pathname === ROUTES.base) {
-  //   return (
-  //     <Routes>
-  //       <Route path="*" element={<Navigate to={ROUTES.explore} replace />} />
-  //     </Routes>
-  //   );
-  // }
-
-  // // PUBLIC ROUTES
-  // if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
-  //   return (
-  //     <ThemeProvider theme={themeStore.theme}>
-  //       <GlobalStyles />
-  //       <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
-  //       <TestnetMarkWidget />
-  //     </ThemeProvider>
-  //   );
-  // }
-
   // PRIVATE ROUTES WITH UNITY
   if (isTargetRoute(pathname, PRIVATE_ROUTES_WITH_UNITY)) {
     return (
