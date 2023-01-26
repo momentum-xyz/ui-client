@@ -1,4 +1,4 @@
-import React, {FC, HTMLProps, ReactNode} from 'react';
+import React, {FC, HTMLProps, PropsWithChildren} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
@@ -17,10 +17,9 @@ export interface PropsInterface
   isWhite?: boolean;
   disabled?: boolean;
   isSelected?: boolean;
-  children?: ReactNode;
 }
 
-const SvgButton: FC<PropsInterface> = ({
+const SvgButton: FC<PropsWithChildren<PropsInterface>> = ({
   children,
   theme,
   onClick,
