@@ -1,6 +1,6 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {Button, Dialog, Image} from '@momentum-xyz/ui-kit';
 
@@ -17,14 +17,14 @@ const PreviewOdysseyWidget: FC = () => {
   const {previewOdysseyStore} = widgetsStore;
   const {nft} = previewOdysseyStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   const handleTeleport = useCallback(() => {
     const worldId = nft?.uuid || '';
-    history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
     previewOdysseyStore.dialog.close();
-  }, [history, nft, previewOdysseyStore]);
+  }, [navigate, nft, previewOdysseyStore]);
 
   if (!nft) {
     return <></>;
