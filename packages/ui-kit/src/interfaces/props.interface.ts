@@ -1,4 +1,4 @@
-import { ThemeInterface } from './theme.interface';
+import {ThemeInterface} from './theme.interface';
 
 export interface PropsWithThemeInterface {
   theme?: ThemeInterface;
