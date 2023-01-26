@@ -88,8 +88,11 @@ const UnityPage: FC = () => {
 
   useUnityEvent('EditObjectEvent', (spaceId: string) => {
     console.log('EditObjectEvent', spaceId);
-    // This even comes faster than actual click, so delay
-    setTimeout(() => unityInstanceStore.onUnityObjectClick(spaceId), 500);
+    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    setTimeout(() => {
+      // This even comes faster than actual click, so delay
+      unityInstanceStore.onUnityObjectClick(spaceId);
+    }, 500);
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {

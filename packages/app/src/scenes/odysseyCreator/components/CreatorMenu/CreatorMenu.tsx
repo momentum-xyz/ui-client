@@ -1,16 +1,28 @@
-import {FC} from 'react';
-import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
+import {FC, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
+import {generatePath, useHistory} from 'react-router-dom';
+import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
+
+import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './CreatorMenu.styled';
 
-interface PropsInterface {
-  onSkyboxClick: () => void;
-  onAddObject: () => void;
-}
+const CreatorMenu: FC = () => {
+  const {unityStore} = useStore();
+  const {worldId} = unityStore;
 
-const CreatorMenu: FC<PropsInterface> = ({onSkyboxClick, onAddObject}) => {
+  const history = useHistory();
+
   const {t} = useTranslation();
+
+  const onAddObjectClick = useCallback(() => {
+    history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId}));
+  }, [history, worldId]);
+
+  const onSkyboxClick = useCallback(() => {
+    history.push(generatePath(ROUTES.odyssey.creator.skybox, {worldId}));
+  }, [history, worldId]);
 
   return (
     <Portal>
@@ -34,7 +46,7 @@ const CreatorMenu: FC<PropsInterface> = ({onSkyboxClick, onAddObject}) => {
         </Tooltip>
 
         <Tooltip label={t('labels.addObject')}>
-          <styled.MenuItem onClick={onAddObject}>
+          <styled.MenuItem onClick={onAddObjectClick}>
             <styled.MenuText name="add" size="medium-large" />
           </styled.MenuItem>
         </Tooltip>

@@ -1,6 +1,5 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -11,14 +10,12 @@ import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
 import {CreatorMenu, ObjectMenu} from './components';
 
 const OdysseyCreator: FC = () => {
-  const {unityStore, odysseyCreatorStore} = useStore();
-  const {objectFunctionalityStore} = odysseyCreatorStore;
-  const {worldId, unityInstanceStore} = unityStore;
-
-  const history = useHistory();
+  const {unityStore} = useStore();
+  const {unityInstanceStore} = unityStore;
 
   useEffect(() => {
     UnityService.toggleBuildMode();
+
     return () => {
       UnityService.toggleBuildMode();
     };
@@ -26,32 +23,9 @@ const OdysseyCreator: FC = () => {
 
   return (
     <>
-      <CreatorMenu
-        onAddObject={() => {
-          history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId}));
-        }}
-        onSkyboxClick={() => {
-          history.push(generatePath(ROUTES.odyssey.creator.skybox, {worldId}));
-        }}
-      />
-
-      {unityInstanceStore.objectMenu.isOpen && (
-        <ObjectMenu
-          gizmoType={unityInstanceStore.gizmoMode}
-          worldId={unityStore.worldId}
-          position={unityInstanceStore.objectMenuPosition}
-          objectId={unityInstanceStore.selectedObjectId ?? ' '}
-          onGizmoTypeChange={unityInstanceStore.changeGizmoType}
-          onObjectRemove={() => {
-            objectFunctionalityStore.deleteObject();
-            unityInstanceStore.objectMenu.close();
-          }}
-          onUndo={unityInstanceStore.undo}
-          onRedo={unityInstanceStore.redo}
-        />
-      )}
-
+      <CreatorMenu />
       {createSwitchByConfig(ODYSSEY_CREATOR_ROUTES, ROUTES.odyssey.creator.base)}
+      {unityInstanceStore.objectMenu.isOpen && <ObjectMenu />}
     </>
   );
 };

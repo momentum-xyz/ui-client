@@ -1,4 +1,4 @@
-import {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
 import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
@@ -14,39 +14,23 @@ import * as styled from './ObjectMenu.styled';
 const OBJECT_MENU_OFFSET_X = 295;
 const OBJECT_MENU_OFFSET_Y = 100;
 
-interface PropsInterface {
-  objectId: string;
-  worldId: string;
-  position: {x: number; y: number};
-  gizmoType: GizmoTypeEnum;
-  onObjectRemove: () => void;
-  onGizmoTypeChange: (type: GizmoTypeEnum) => void;
-  onUndo: () => void;
-  onRedo: () => void;
-}
+const ObjectMenu: FC = () => {
+  const {odysseyCreatorStore, unityStore} = useStore();
+  const {objectFunctionalityStore} = odysseyCreatorStore;
+  const {worldId, unityInstanceStore} = unityStore;
 
-const ObjectMenu: FC<PropsInterface> = ({
-  position,
-  objectId,
-  worldId,
-  gizmoType,
-  onObjectRemove,
-  onGizmoTypeChange,
-  onUndo,
-  onRedo
-}) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const history = useHistory();
   const {t} = useTranslation();
 
-  const {odysseyCreatorStore: worldBuilderStore} = useStore();
-  const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
+  const objectId = unityInstanceStore.selectedObjectId ?? ' ';
 
   useEffect(() => {
-    worldBuilderObjectStore.fetchObject(objectId);
-  }, [objectId, worldBuilderObjectStore]);
+    objectFunctionalityStore.fetchObject(objectId);
+  }, [objectId, objectFunctionalityStore]);
 
   const handleOnFunctionalityClick = useCallback(() => {
-    console.info(worldId);
     history.push({
       pathname: generatePath(ROUTES.odyssey.creator.functionality, {
         worldId,
@@ -55,43 +39,44 @@ const ObjectMenu: FC<PropsInterface> = ({
     });
   }, [history, objectId, worldId]);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
   return (
     <Portal>
       <styled.Container
         data-testid="ObjectMenu-test"
-        style={{left: position.x - OBJECT_MENU_OFFSET_X, top: position.y - OBJECT_MENU_OFFSET_Y}}
+        style={{
+          left: unityInstanceStore.objectMenuPosition.x - OBJECT_MENU_OFFSET_X,
+          top: unityInstanceStore.objectMenuPosition.y - OBJECT_MENU_OFFSET_Y
+        }}
       >
-        <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.POSITION)}>
+        <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.POSITION)}>
           <styled.MenuText
             text={t('actions.move')}
             size="m"
-            className={cn(gizmoType === GizmoTypeEnum.POSITION && 'selected')}
+            className={cn(unityInstanceStore.gizmoMode === GizmoTypeEnum.POSITION && 'selected')}
           />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.ROTATION)}>
+        <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.ROTATION)}>
           <styled.MenuText
             text={t('actions.rotate')}
             size="m"
-            className={cn(gizmoType === GizmoTypeEnum.ROTATION && 'selected')}
+            className={cn(unityInstanceStore.gizmoMode === GizmoTypeEnum.ROTATION && 'selected')}
           />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={() => onGizmoTypeChange(GizmoTypeEnum.SCALE)}>
+        <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.SCALE)}>
           <styled.MenuText
             text={t('actions.scale')}
             size="m"
-            className={cn(gizmoType === GizmoTypeEnum.SCALE && 'selected')}
+            className={cn(unityInstanceStore.gizmoMode === GizmoTypeEnum.SCALE && 'selected')}
           />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={onUndo}>
+        <styled.MenuItem onClick={unityInstanceStore.undo}>
           <styled.MenuText text={t('actions.undo')} size="m" />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={onRedo}>
+        <styled.MenuItem onClick={unityInstanceStore.redo}>
           <styled.MenuText text={t('actions.redo')} size="m" />
         </styled.MenuItem>
 
@@ -118,21 +103,28 @@ const ObjectMenu: FC<PropsInterface> = ({
         {showDeleteDialog && (
           <Dialog
             title={
-              worldBuilderObjectStore.objectName
-                ? t('messages.deleteNamedObject', {name: worldBuilderObjectStore.objectName})
+              objectFunctionalityStore.objectName
+                ? t('messages.deleteNamedObject', {name: objectFunctionalityStore.objectName})
                 : t('messages.delete')
             }
             approveInfo={{
               title: t('actions.delete'),
-              onClick: onObjectRemove,
+              onClick: () => {
+                objectFunctionalityStore.deleteObject();
+                unityInstanceStore.objectMenu.close();
+              },
               variant: 'danger'
             }}
             declineInfo={{
               title: t('actions.cancel'),
-              onClick: () => setShowDeleteDialog(false),
+              onClick: () => {
+                setShowDeleteDialog(false);
+              },
               variant: 'primary'
             }}
-            onClose={() => setShowDeleteDialog(false)}
+            onClose={() => {
+              setShowDeleteDialog(false);
+            }}
             showCloseButton
           />
         )}
