@@ -7,7 +7,7 @@ import {UnityService} from 'shared/services';
 import {createSwitchByConfig} from 'core/utils';
 
 import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
-import {CreatorMenu, ObjectMenu} from './components';
+import {CreatorMenu, ObjectColorPicker, ObjectMenu} from './components';
 
 const OdysseyCreator: FC = () => {
   const {unityStore} = useStore();
@@ -26,6 +26,8 @@ const OdysseyCreator: FC = () => {
       <CreatorMenu />
       {createSwitchByConfig(ODYSSEY_CREATOR_ROUTES, ROUTES.odyssey.creator.base)}
       {unityInstanceStore.objectMenu.isOpen && <ObjectMenu />}
+      {/* FIXME: Render only for base assets */}
+      {unityInstanceStore.objectMenu.isOpen && <ObjectColorPicker />}
     </>
   );
 };

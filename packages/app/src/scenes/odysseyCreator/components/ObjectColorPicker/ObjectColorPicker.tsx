@@ -6,12 +6,12 @@ import {Dialog} from '@momentum-xyz/ui-kit';
 
 import 'react-color-palette/lib/css/styles.css';
 
-import * as styled from './ObjectColorPickerWidget.styled';
+import * as styled from './ObjectColorPicker.styled';
 
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
-const ObjectColorPickerWidget: FC = () => {
+const ObjectColorPicker: FC = () => {
   // FIXME: Get color
   const [color, setColor] = useColor('hex', '#FFFFFF');
 
@@ -53,4 +53,4 @@ const ObjectColorPickerWidget: FC = () => {
   );
 };
 
-export default observer(ObjectColorPickerWidget);
+export default observer(ObjectColorPicker);
