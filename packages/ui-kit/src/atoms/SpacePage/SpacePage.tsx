@@ -1,10 +1,11 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 
 import * as styled from './SpacePage.styled';
 
 interface PropsInterface {
   dataTestId?: string;
   withMeeting?: boolean;
+  children?: ReactNode;
 }
 
 const SpacePage: FC<PropsInterface> = ({dataTestId, children, withMeeting = false}) => (

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 import cn from 'classnames';
 
 import {IconSvg, Heading} from '../../atoms';
@@ -14,6 +14,7 @@ interface ExpandableLayoutPropsInterface extends PropsWithThemeInterface {
   isExpanded: boolean;
   setExpand: (isExpanded: boolean) => void;
   size?: ComponentSizeInterface;
+  children?: ReactNode;
 }
 
 const ExpandableLayout: FC<ExpandableLayoutPropsInterface> = ({

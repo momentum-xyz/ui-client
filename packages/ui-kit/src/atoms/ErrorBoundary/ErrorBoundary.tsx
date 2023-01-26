@@ -1,7 +1,8 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 import {useErrorBoundary, withErrorBoundary} from 'react-use-error-boundary';
 
 interface PropsInterface {
+  children?: ReactNode;
   errorMessage: string;
 }
 

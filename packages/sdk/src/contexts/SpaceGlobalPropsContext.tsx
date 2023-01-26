@@ -41,6 +41,7 @@ export const ObjectGlobalPropsContext = createContext<
 
 export const ObjectGlobalPropsContextProvider: FC<{
   props: ObjectPluginPropsInterface<PluginConfigInterface>;
+  children?: React.ReactNode;
 }> = ({props, children}) => (
   <ObjectGlobalPropsContext.Provider value={props}>
     <ThemeContextProvider theme={props.theme}>{children}</ThemeContextProvider>
