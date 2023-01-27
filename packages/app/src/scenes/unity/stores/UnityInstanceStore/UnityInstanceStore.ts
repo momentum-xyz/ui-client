@@ -199,6 +199,9 @@ const UnityInstanceStore = types
       self.objectMenu.close();
       self.selectedObjectId = '';
       self.gizmoMode = GizmoTypeEnum.POSITION;
+    },
+    colorPickedPreview(objectId: string, colorHex: string) {
+      UnityService.colorPickedPreview(objectId, colorHex);
     }
   }));
 

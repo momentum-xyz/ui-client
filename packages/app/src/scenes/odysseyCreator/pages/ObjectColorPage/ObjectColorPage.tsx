@@ -1,4 +1,4 @@
-import {Button, Dialog, useClickOutside} from '@momentum-xyz/ui-kit';
+import {Button, Dialog, useClickOutside, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -12,25 +12,32 @@ import * as styled from './ObjectColorPage.styled';
 
 import 'react-color-palette/lib/css/styles.css';
 
-const DEFAULT_COLOR = '#FFFFFF';
+const COLOR_PICKER_DEFAULT_COLOR = '#FFFFFF';
+const COLOR_PICKER_HEIGHT_PX = 150;
+const COLOR_PICKER_WIDTH_PX = 300;
+const UNITY_DELAY_MS = 300;
 const OFFSET_LEFT = 10;
 const OFFSET_TOP = 20;
 
 const ObjectColorPage: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
   const {objectColorStore} = odysseyCreatorStore;
+  const {unityInstanceStore} = unityStore;
 
-  const [color, setColor] = useColor('hex', DEFAULT_COLOR);
+  const ref = useRef<HTMLDivElement>(null);
+  const [color, setColor] = useColor('hex', COLOR_PICKER_DEFAULT_COLOR);
 
   const {objectId} = useParams<{objectId: string}>();
-
   const history = useHistory();
-  const ref = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
 
   useClickOutside(ref, () => {
     history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
   });
+
+  const changeUnityObjectColor = useDebouncedCallback((colorHex: string) => {
+    unityInstanceStore.colorPickedPreview(objectId, colorHex);
+  }, UNITY_DELAY_MS);
 
   useEffect(() => {
     objectColorStore.init(objectId);
@@ -46,9 +53,17 @@ const ObjectColorPage: FC = () => {
     }
   }, [objectColorStore.objectColor, setColor]);
 
-  const onClose = useCallback(() => {
+  const onSaveHandler = useCallback(async () => {
+    await objectColorStore.updateObjectColor(objectId, color.hex);
+    unityInstanceStore.colorPickedPreview(objectId, color.hex);
     history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
-  }, [history, unityStore.worldId]);
+  }, [color.hex, history, objectColorStore, objectId, unityStore, unityInstanceStore]);
+
+  const onCancelHandler = useCallback(() => {
+    const initialColor = objectColorStore.objectColor || COLOR_PICKER_DEFAULT_COLOR;
+    unityInstanceStore.colorPickedPreview(objectId, initialColor);
+    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+  }, [history, objectColorStore.objectColor, objectId, unityInstanceStore, unityStore.worldId]);
 
   return (
     <styled.Wrapper>
@@ -59,24 +74,27 @@ const ObjectColorPage: FC = () => {
           position="leftTop"
           title={t('titles.colourPicker')}
           offset={{left: OFFSET_LEFT, top: OFFSET_TOP}}
+          layoutSize={{width: `${COLOR_PICKER_WIDTH_PX}px`}}
           showBackground={false}
           headerStyle="normal"
           headerType="h3"
+          showCloseButton
           noPadding
           shortTopPadding
-          layoutSize={{width: '300px'}}
-          onClose={onClose}
-          showCloseButton
+          onClose={onCancelHandler}
         >
           <styled.Container ref={ref} data-testid="ObjectColorPage-test">
             <ColorPicker
-              width={300}
-              height={150}
+              width={COLOR_PICKER_WIDTH_PX}
+              height={COLOR_PICKER_HEIGHT_PX}
               color={color}
-              onChange={setColor}
               hideHSV
               hideHEX
               hideRGB
+              onChange={(color) => {
+                setColor(color);
+                changeUnityObjectColor(color.hex);
+              }}
             />
 
             <styled.ColorContainer>
@@ -86,16 +104,9 @@ const ObjectColorPage: FC = () => {
                 size="medium"
                 variant="danger"
                 label={t('actions.cancel')}
-                onClick={onClose}
+                onClick={onCancelHandler}
               />
-              <Button
-                size="medium"
-                label={t('actions.save')}
-                onClick={() => {
-                  objectColorStore.updateObjectColor(objectId, color.hex);
-                  onClose();
-                }}
-              />
+              <Button size="medium" label={t('actions.save')} onClick={onSaveHandler} />
             </styled.ColorContainer>
           </styled.Container>
         </Dialog>

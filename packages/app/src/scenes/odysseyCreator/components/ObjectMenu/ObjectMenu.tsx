@@ -25,10 +25,12 @@ const ObjectMenu: FC = () => {
   const history = useHistory();
   const {t} = useTranslation();
 
+  const topOffset = unityInstanceStore.objectMenuPosition.y - OBJECT_MENU_OFFSET_Y;
+  const leftOffset = unityInstanceStore.objectMenuPosition.x - OBJECT_MENU_OFFSET_X;
   const objectId = unityInstanceStore.selectedObjectId ?? ' ';
 
   useEffect(() => {
-    objectFunctionalityStore.fetchObject(objectId);
+    objectFunctionalityStore.init(objectId);
     objectColorStore.isColorPickerAvailable(worldId, objectId).then((isAvailable) => {
       setIsObjectColor(isAvailable);
     });
@@ -54,13 +56,7 @@ const ObjectMenu: FC = () => {
 
   return (
     <Portal>
-      <styled.Container
-        data-testid="ObjectMenu-test"
-        style={{
-          left: unityInstanceStore.objectMenuPosition.x - OBJECT_MENU_OFFSET_X,
-          top: unityInstanceStore.objectMenuPosition.y - OBJECT_MENU_OFFSET_Y
-        }}
-      >
+      <styled.Container data-testid="ObjectMenu-test" style={{left: leftOffset, top: topOffset}}>
         <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.POSITION)}>
           <styled.MenuText
             text={t('actions.move')}
