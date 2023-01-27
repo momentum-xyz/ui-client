@@ -6,7 +6,7 @@ import {RouteConfigInterface} from 'core/interfaces';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
-    return !!matchPath({path: route.path}, currentPath);
+    return !!matchPath({path: route.path, end: true}, currentPath);
   });
 };
 
