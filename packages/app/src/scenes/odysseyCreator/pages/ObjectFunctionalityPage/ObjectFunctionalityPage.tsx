@@ -1,9 +1,9 @@
-import {useClickOutside} from '@momentum-xyz/ui-kit';
-import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
-import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef} from 'react';
+import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {useClickOutside} from '@momentum-xyz/ui-kit';
+import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -25,7 +25,11 @@ const ObjectFunctionalityPage: FC = () => {
   });
 
   useEffect(() => {
-    objectFunctionalityStore.fetchObject(objectId);
+    objectFunctionalityStore.init(objectId);
+
+    return () => {
+      objectFunctionalityStore.resetModel();
+    };
   }, [objectId, objectFunctionalityStore]);
 
   return (
@@ -48,17 +52,14 @@ const ObjectFunctionalityPage: FC = () => {
               <Text text={t('messages.selectOne')} size="s" align="left" />
             </styled.HeadingWrapper>
             <Dropdown
+              variant="secondary"
               value={objectFunctionalityStore.currentAssetId}
-              options={Object.entries(objectFunctionalityStore.assets2D).map(([key, value]) => ({
-                label: value,
-                value: key
-              }))}
+              options={objectFunctionalityStore.asset2dOptions}
               placeholder={t('placeholders.selectAnOption')}
               onOptionSelect={async (option) => {
                 objectFunctionalityStore.selectAsset(option.value);
                 await objectFunctionalityStore.updateObject();
               }}
-              variant="secondary"
             />
           </styled.PanelBody>
         </PanelLayout>

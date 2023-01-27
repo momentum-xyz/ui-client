@@ -9,11 +9,9 @@ import {useStore} from 'shared/hooks';
 import * as styled from './CreatorMenu.styled';
 
 const CreatorMenu: FC = () => {
-  const {unityStore} = useStore();
-  const {worldId} = unityStore;
+  const {worldId} = useStore().unityStore;
 
   const history = useHistory();
-
   const {t} = useTranslation();
 
   const onAddObjectClick = useCallback(() => {

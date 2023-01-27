@@ -674,6 +674,18 @@ export const enGb = {
       chooseName: 'Choose your name',
       addTokenGate: 'Add Token Gate'
     },
+    enums: {
+      basicAsset2dId: {
+        TEXT: 'Text',
+        IMAGE: 'Image',
+        VIDEO: 'Video',
+        DOCK: 'Dock station',
+        MIRO: 'Miro',
+        MIRO_LOCAL: 'Miro (local)',
+        GOOGLE_DRIVE: 'Google drive',
+        GOOGLE_DRIVE_LOCAL: 'Google drive (local)'
+      }
+    },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',
       worldSubdomain:
