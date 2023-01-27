@@ -21,6 +21,10 @@ export const ToastContainerStyled = styled(ToastContainer)`
     padding: 0;
   }
 
+  .Toastify__toast-icon {
+    display: none;
+  }
+
   .Toastify__close-button {
     margin: auto;
     color: ${(props) => props.theme.text} !important;
