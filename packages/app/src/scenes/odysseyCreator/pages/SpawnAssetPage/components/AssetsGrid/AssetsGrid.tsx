@@ -3,6 +3,7 @@ import {FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
+import {InView} from 'react-intersection-observer';
 
 import {Asset3dInterface} from 'core/models';
 
@@ -15,32 +16,45 @@ interface PropsInterface {
 
 const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
   const {t} = useTranslation();
-  const [hoveringAsset, setHoveringAsset] = useState<Asset3dInterface | null>(null);
+  const [
+    ,// hoveringAsset
+    // setHoveringAsset
+  ] = useState<Asset3dInterface | null>(null);
 
   return (
     <styled.Grid>
       {assets.map((asset) => (
         <styled.GridItem
           key={asset.id}
-          onPointerOver={() => {
-            console.log('enter');
-            setHoveringAsset(asset);
-          }}
-          onPointerLeave={() => {
-            console.log('leave');
-            setHoveringAsset(null);
-          }}
+          // onPointerOver={() => {
+          //   console.log('enter');
+          //   setHoveringAsset(asset);
+          // }}
+          // onPointerLeave={() => {
+          //   console.log('leave');
+          //   setHoveringAsset(null);
+          // }}
         >
-          {hoveringAsset !== asset ? (
+          {/* {hoveringAsset !== asset ? (
             <styled.GridItemImage src={asset.image} />
-          ) : (
-            <styled.GridItemPreview>
-              <Model3dPreview
-                delayLoadingMsec={500}
-                filename={hoveringAsset.thumbnailAssetDownloadUrl}
-              />
-            </styled.GridItemPreview>
-          )}
+          ) : ( */}
+          <InView>
+            {({ref, inView}) => {
+              // console.log('inView', inView, asset);
+              return (
+                <styled.GridItemPreview ref={ref}>
+                  {inView && (
+                    <Model3dPreview
+                      // delayLoadingMsec={500}
+                      // filename={hoveringAsset.thumbnailAssetDownloadUrl}
+                      filename={asset.thumbnailAssetDownloadUrl}
+                    />
+                  )}
+                </styled.GridItemPreview>
+              );
+            }}
+          </InView>
+          {/* )} */}
           <Text text={asset.name} size="m" />
           <Button
             label={t('actions.select')}
