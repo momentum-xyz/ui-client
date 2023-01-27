@@ -551,6 +551,7 @@ export const enGb = {
       nickname: 'Nickname',
       description: 'Description',
       name: 'Name',
+      title: 'Title',
       social: 'Social',
       bio: 'Bio',
       location: 'Location',
