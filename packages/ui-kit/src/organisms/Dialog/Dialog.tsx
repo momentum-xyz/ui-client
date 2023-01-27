@@ -41,6 +41,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   headerActions?: React.ReactNode;
   hasBorder?: boolean;
   hasBottomPadding?: boolean;
+  noPadding?: boolean;
   shortTopPadding?: boolean;
   headerItem?: HeaderItemType;
   titleWidth?: string;
@@ -71,6 +72,7 @@ const Dialog: FC<DialogPropsInterface> = ({
   hasBorder = false,
   shortTopPadding = false,
   hasBottomPadding = true,
+  noPadding,
   onClose,
   headerType,
   icon,
@@ -123,6 +125,7 @@ const Dialog: FC<DialogPropsInterface> = ({
             headerActions={headerActions}
             hasBorder={hasBorder}
             hasBottomPadding={hasBottomPadding}
+            noPadding={noPadding}
             shortTopPadding={shortTopPadding}
             headerType={headerType}
             showOverflow={showOverflow}
