@@ -58,19 +58,17 @@ const App: FC = () => {
 
   if (configStore.isError && !configStore.isConfigReady) {
     return (
-      <>
-        <ThemeProvider theme={themeStore.theme}>
-          <SystemWideError
-            text={
-              configLoadingErrorCode === httpErrorCodes.MAINTENANCE
-                ? t('systemMessages.underMaintenance')
-                : t('errors.somethingWentWrongTryAgain')
-            }
-            showRefreshButton
-            theme={themeStore.theme}
-          />
-        </ThemeProvider>
-      </>
+      <ThemeProvider theme={themeStore.theme}>
+        <SystemWideError
+          text={
+            configLoadingErrorCode === httpErrorCodes.MAINTENANCE
+              ? t('systemMessages.underMaintenance')
+              : t('errors.somethingWentWrongTryAgain')
+          }
+          showRefreshButton
+          theme={themeStore.theme}
+        />
+      </ThemeProvider>
     );
   }
 
