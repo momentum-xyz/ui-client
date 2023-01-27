@@ -19,16 +19,19 @@ export const createRoutesByConfig = (
         <rest.main />
       </>
     );
-    return <Route key={path} path={path} element={element} />;
+    return <Route key={`${path}${exact ? '' : '/*'}`} path={path} element={element} />;
   });
 };
 
 export const createSwitchByConfig = (
   routes: RouteConfigInterface[],
   defaultRedirect?: string
-): ReactElement<RoutesProps, any> => (
-  <Routes>
-    {createRoutesByConfig(routes)}
-    {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
-  </Routes>
-);
+): ReactElement<RoutesProps, any> => {
+  const renderRoutes = createRoutesByConfig(routes);
+  return (
+    <Routes>
+      {renderRoutes}
+      {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
+    </Routes>
+  );
+};
