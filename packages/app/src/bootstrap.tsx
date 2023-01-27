@@ -1,4 +1,3 @@
-import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {createBrowserHistory} from 'history';
 import {BrowserRouter} from 'react-router-dom';
@@ -24,11 +23,9 @@ const container = document.getElementById('reactContainer');
 const root = createRoot(container!);
 
 root.render(
-  <React.StrictMode>
-    <StoreProvider value={rootStore}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </StoreProvider>
-  </React.StrictMode>
+  <StoreProvider value={rootStore}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StoreProvider>
 );
