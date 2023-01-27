@@ -5,6 +5,6 @@ export const Container = styled.div`
   flex-direction: column;
   padding: 0 10px 20px 10px;
   pointer-events: all;
-
-  width: 300px;
+  width: 400px;
+  gap: 16px;
 `;
