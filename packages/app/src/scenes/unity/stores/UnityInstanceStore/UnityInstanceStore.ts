@@ -180,7 +180,7 @@ const UnityInstanceStore = types
         this.setInitialVolume();
       }
     },
-    handleClick(x: number, y: number) {
+    setLastClickPosition(x: number, y: number) {
       self.lastClickPosition = {x, y};
       this.closeAndResetObjectMenu();
     },
@@ -203,6 +203,9 @@ const UnityInstanceStore = types
       self.objectMenu.close();
       self.selectedObjectId = '';
       self.gizmoMode = GizmoTypeEnum.POSITION;
+    },
+    colorPickedPreview(objectId: string, colorHex: string) {
+      UnityService.colorPickedPreview(objectId, colorHex);
     }
   }))
   .views((self) => ({

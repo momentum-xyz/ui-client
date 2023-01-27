@@ -1,32 +1,35 @@
+import {FC, useEffect, useRef} from 'react';
+import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
+import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useClickOutside} from '@momentum-xyz/ui-kit';
 import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
-import {observer} from 'mobx-react-lite';
-import {FC, useEffect, useRef} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useHistory, useParams} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const ObjectFunctionalityPage: FC = () => {
-  const {odysseyCreatorStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {objectFunctionalityStore} = odysseyCreatorStore;
 
-  const history = useHistory();
-
   const ref = useRef<HTMLDivElement>(null);
-
-  const {t} = useTranslation();
-
   const {objectId} = useParams<{objectId: string}>();
 
+  const history = useHistory();
+  const {t} = useTranslation();
+
   useClickOutside(ref, () => {
-    history.goBack();
+    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
   });
 
   useEffect(() => {
-    objectFunctionalityStore.fetchObject(objectId);
+    objectFunctionalityStore.init(objectId);
+
+    return () => {
+      objectFunctionalityStore.resetModel();
+    };
   }, [objectId, objectFunctionalityStore]);
 
   return (
@@ -49,17 +52,14 @@ const ObjectFunctionalityPage: FC = () => {
               <Text text={t('messages.selectOne')} size="s" align="left" />
             </styled.HeadingWrapper>
             <Dropdown
+              variant="secondary"
               value={objectFunctionalityStore.currentAssetId}
-              options={Object.entries(objectFunctionalityStore.assets2D).map(([key, value]) => ({
-                label: value,
-                value: key
-              }))}
+              options={objectFunctionalityStore.asset2dOptions}
               placeholder={t('placeholders.selectAnOption')}
               onOptionSelect={async (option) => {
                 objectFunctionalityStore.selectAsset(option.value);
                 await objectFunctionalityStore.updateObject();
               }}
-              variant="secondary"
             />
           </styled.PanelBody>
         </PanelLayout>

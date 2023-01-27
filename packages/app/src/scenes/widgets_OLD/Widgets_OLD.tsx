@@ -118,16 +118,14 @@ const Widgets_OLD: FC = () => {
             size="normal-large"
             isWhite={false}
           />
-
-          {(worldBuilderStore.haveAccess || true) && ( // TODO: remove this line when we have permissions
-            <ToolbarIcon
-              icon="planet"
-              title={t('titles.worldBuilder')}
-              //link={ROUTES.worldBuilder.builder}
-              size="normal-large"
-              isWhite={false}
-            />
-          )}
+          <ToolbarIcon
+            icon="planet"
+            title={t('titles.worldBuilder')}
+            //link={ROUTES.worldBuilder.builder}
+            size="normal-large"
+            isWhite={false}
+          />
+          )
         </styled.MainLinks>
         <styled.Toolbars>
           <ToolbarIconList>

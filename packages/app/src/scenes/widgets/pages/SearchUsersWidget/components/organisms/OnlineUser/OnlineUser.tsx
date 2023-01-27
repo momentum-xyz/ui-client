@@ -46,9 +46,9 @@ const OnlineUser: FC<PropsInterface> = ({
           }}
         />
         <SvgButton
-          iconName="fly-to"
+          iconName="fly-portal"
           size="normal"
-          disabled={isCurrentUser}
+          disabled={isCurrentUser || user.isGuest}
           onClick={() => onTeleportUser(user.id)}
         />
       </styled.Toolbar>

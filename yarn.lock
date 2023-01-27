@@ -3327,9 +3327,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^16", "@types/react@^16.0.0", "@types/react@^16.14.26":
-  version "16.14.34"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.34.tgz#d129324ffda312044e1c47aab18696e4ed493282"
-  integrity sha512-b99nWeGGReLh6aKBppghVqp93dFJtgtDOzc8NXM6hewD8PQ2zZG5kBLgbx+VJr7Q7WBMjHxaIl3dwpwwPIUgyA==
+  version "16.14.35"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.35.tgz#9d3cf047d85aca8006c4776693124a5be90ee429"
+  integrity sha512-NUEiwmSS1XXtmBcsm1NyRRPYjoZF2YTE89/5QiLt5mlGffYK9FQqOKuOLuXNrjPQV04oQgaZG+Yq02ZfHoFyyg==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -11538,6 +11538,11 @@ react-beautiful-dnd@^13.0.0:
     react-redux "^7.2.0"
     redux "^4.0.4"
     use-memo-one "^1.1.1"
+
+react-color-palette@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/react-color-palette/-/react-color-palette-6.2.0.tgz#aa3be88f6953d57502c00f4433692129ffbad3e7"
+  integrity sha512-9rIboaRJNoeF8aCI2f3J8wgMyhl74SnGmZLDjor3bKf0iDBhP2EBv0/jGmm0hrj6OackGCqtWl5ZvM89XUc3sg==
 
 react-datepicker@^4.7.0:
   version "4.7.0"

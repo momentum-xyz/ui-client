@@ -5,10 +5,7 @@ import {AppConfigExtendedInterface} from 'api/interfaces';
  * @readonly
  */
 
-const BASE_URL =
-  process.env.NODE_ENV === 'development'
-    ? process.env.REACT_APP_CONFIG_URL || ''
-    : document.location.origin;
+const BASE_URL = process.env.REACT_APP_CONFIG_URL || document.location.origin;
 
 export const appVariables: AppConfigExtendedInterface = {
   APP_VERSION: process.env.REACT_APP_VERSION || 'v0.0.0',

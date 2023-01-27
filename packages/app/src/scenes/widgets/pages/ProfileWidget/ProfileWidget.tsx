@@ -100,6 +100,7 @@ const ProfileWidget: FC = () => {
               )}
 
               <ProfileSettings
+                isGuest={sessionStore.isGuest}
                 isEditMode={isEditMode}
                 isDeviceSettings={isDeviceSettings}
                 audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}

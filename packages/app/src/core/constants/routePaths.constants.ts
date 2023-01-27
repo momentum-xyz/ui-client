@@ -11,6 +11,7 @@ export const ROUTES = {
       base: '/odyssey/:worldId/create',
       skybox: '/odyssey/:worldId/create/skybox',
       functionality: '/odyssey/:worldId/create/functionality/:objectId',
+      objectColor: '/odyssey/:worldId/create/objectColor/:objectId',
       spawnAsset: {
         base: '/odyssey/:worldId/create/spawn',
         basicAssets: '/odyssey/:worldId/create/spawn/basic',

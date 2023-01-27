@@ -34,7 +34,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
           />
           <div>
             <Button
-              icon="fly-to"
+              icon="fly-portal"
               size="medium"
               label={t('labels.visit')}
               disabled={!isVisitAvailable}
