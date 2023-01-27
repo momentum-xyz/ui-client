@@ -35,11 +35,11 @@ const ObjectColorStore = types
       );
 
       if (response) {
-        self.objectColor = response.color;
+        self.objectColor = response.value;
       }
     }),
     updateObjectColor: flow(function* (objectId: string, colorHex: string) {
-      const value: ObjectColorAttributeInterface = {color: colorHex};
+      const value: ObjectColorAttributeInterface = {value: colorHex};
 
       yield self.updateRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: objectId,
