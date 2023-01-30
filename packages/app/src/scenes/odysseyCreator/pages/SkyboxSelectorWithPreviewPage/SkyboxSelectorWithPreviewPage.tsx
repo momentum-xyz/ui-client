@@ -56,7 +56,10 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                 >
                   {item.isUserAttribute && (
                     <styled.DeleteButton
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
                         removeUserSkybox(worldId, item.id).catch((err) => {
                           toast.error(err.message);
                         });

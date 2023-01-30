@@ -166,12 +166,12 @@ const SkyboxSelectorStore = types
       return self.createSkyboxRequest.isDone;
     }),
     removeUserSkybox: flow(function* (worldId: string, hash: string) {
-      const userSkyboxes = self.userSkyboxes.filter((d: any) => d.hash !== hash);
+      const userSkyboxes = self.userSkyboxes.filter((d: any) => d.id !== hash);
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SKYBOX_LIST,
-        value: {skyboxes: userSkyboxes}
+        value: {skyboxes: userSkyboxes.map((d) => ({hash: d.id, name: d.name}))}
       });
 
       self.userSkyboxes = cast(userSkyboxes);
@@ -189,10 +189,7 @@ const SkyboxSelectorStore = types
       return self.createSkyboxRequest.isPending;
     },
     get allSkyboxes(): Asset3dInterface[] {
-      return [
-        ...self.items,
-        ...self.userSkyboxes.map((d: any) => ({...d, id: d.hash, isUserAttribute: true}))
-      ];
+      return [...self.items, ...self.userSkyboxes.map((d: any) => ({...d, isUserAttribute: true}))];
     }
   }));
 
