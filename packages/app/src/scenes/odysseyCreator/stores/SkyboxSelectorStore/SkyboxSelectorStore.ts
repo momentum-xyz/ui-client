@@ -146,7 +146,6 @@ const SkyboxSelectorStore = types
         value: {render_hash: hash}
       });
 
-      // TODO: Need a way to get the actual `id` for the asset
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
@@ -180,10 +179,10 @@ const SkyboxSelectorStore = types
   }))
   .views((self) => ({
     get selectedItem(): Asset3dInterface | undefined {
-      return self.items.find((item) => item.id === self.selectedItemId);
+      return this.allSkyboxes.find((item) => item.id === self.selectedItemId);
     },
     get currentItem(): Asset3dInterface | undefined {
-      return self.items.find((item) => item.id === self.currentItemId);
+      return this.allSkyboxes.find((item) => item.id === self.currentItemId);
     },
     get isUploadPending(): boolean {
       return self.createSkyboxRequest.isPending;

@@ -17,6 +17,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {selectedItem, currentItem, selectItem, saveItem, allSkyboxes, removeUserSkybox} =
     skyboxSelectorStore;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {unityInstanceStore} = unityStore;
   const {user} = sessionStore;
 
@@ -29,6 +30,8 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   useEffect(() => {
     skyboxSelectorStore.fetchItems(worldId);
   }, [skyboxSelectorStore, worldId]);
+
+  console.log(!!allSkyboxes && !!selectedItem, allSkyboxes, selectedItem);
 
   return (
     <styled.Container>
