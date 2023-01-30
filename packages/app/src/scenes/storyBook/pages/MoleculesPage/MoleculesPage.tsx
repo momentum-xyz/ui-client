@@ -189,9 +189,10 @@ const MoleculesPage: FC = () => {
         <styled.Name>
           <Heading label="Component «SearchInput»" type="h2" align="left" />
         </styled.Name>
-        <styled.Section>
+        <styled.SectionGrid2>
           <SearchInput placeholder="Search for..." onChange={(value) => {}} />
-        </styled.Section>
+          <SearchInput variant="secondary" placeholder="Search for..." onChange={(value) => {}} />
+        </styled.SectionGrid2>
 
         <styled.Name>
           <Heading label="Component «SectionPanel»" type="h2" align="left" />
