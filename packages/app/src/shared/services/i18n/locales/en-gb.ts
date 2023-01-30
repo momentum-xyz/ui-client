@@ -300,6 +300,7 @@ export const enGb = {
       selectFunction: 'Select Function',
       visibleInNavigation: 'Visible in Navigation',
       basicAssetPack: 'Basic Asset Pack',
+      standardAssetPack: 'Standard Asset Pack',
       customObjectLibrary: 'Custom Object Library',
       uploadCustomObject: 'Upload Custom Object',
       changeVideo: 'Change Video',
