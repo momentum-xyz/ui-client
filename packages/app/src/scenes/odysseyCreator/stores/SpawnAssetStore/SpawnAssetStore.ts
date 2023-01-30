@@ -109,6 +109,7 @@ const SpawnAssetStore = types
     }),
     clearAssets() {
       self.assets3d = cast([]);
+      self.searchQuery.resetModel();
     },
     selectAsset(asset: Asset3dInterface) {
       self.selectedAssset = Asset3d.create({...asset});

@@ -28,7 +28,6 @@ const AssetsPage: FC<PropsInterface> = ({assetCategory, setFunctionalityAfterCre
 
     return () => {
       spawnAssetStore.clearAssets();
-      spawnAssetStore.searchQuery.resetModel();
     };
   }, [spawnAssetStore, assetCategory]);
 
