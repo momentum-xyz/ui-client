@@ -1,64 +1,82 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-import {Heading, IconSvg} from '../../atoms';
-
 export const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: 6px;
-`;
-
-export const InputHeading = styled(Heading)`
-  margin-left: 10px;
-  margin-bottom: 5px;
-`;
-
-export const InputIcon = styled(IconSvg)``;
-
-export const InputContainer = styled.div`
-  --input-height: 37px;
-
-  display: flex;
-  align-items: center;
-  padding-right: 10px;
-  width: 100%;
-
-  height: var(--input-height);
-  &.withBackground {
-    background: ${rgba(0, 1, 1, 0.2)};
-    border-radius: 6px;
-  }
-  &.noBorder {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-  &.focused,
-  :hover {
-    background: ${(props) => props.theme.text && rgba(props.theme.text, 0.05)};
-    ${InputIcon} {
-      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
-      stroke: currentColor;
-    }
-  }
-  ${InputIcon} {
-    color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
-  }
 `;
 
 export const Input = styled.input`
+  --input-height: initial;
+  --input-height-primary: 37px;
+  --input-height-secondary: 37px;
+
+  --input-padding: initial;
+  --input-padding-primary: 0 30px 0 10px;
+  --input-padding-secondary: 0 30px 0 10px;
+
+  padding: var(--input-padding);
+  height: var(--input-height);
+  width: 100%;
+  outline: none;
   background: transparent;
   color: ${(props) => props.theme.text};
-  outline: none;
-  height: 100%;
-  width: 100%;
-
-  margin: 10px 0;
-  padding: 0 10px;
 
   ::placeholder {
-    color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
-    font-size: var(--font-size-s);
     margin: auto;
+    color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
+  }
+
+  &.withBackground {
+    background: ${rgba(0, 1, 1, 0.2)};
+  }
+
+  &.primary {
+    --input-height: var(--input-height-primary);
+    --input-padding: var(--input-padding-primary);
+
+    ::placeholder {
+      font-size: var(--font-size-s);
+    }
+  }
+
+  &.secondary {
+    --input-height: var(--input-height-secondary);
+    --input-padding: var(--input-padding-secondary);
+
+    ::placeholder {
+      font-size: var(--font-size-s);
+    }
+  }
+
+  &:hover,
+  &:focus {
+    background: ${(props) => props.theme.text && rgba(props.theme.text, 0.05)};
+  }
+`;
+
+export const Icon = styled.div`
+  --icon-top: initial;
+  --icon-top-primary: 10px;
+  --icon-top-secondary: 10px;
+
+  --icon-right: initial;
+  --icon-right-primary: 8px;
+  --icon-right-secondary: 8px;
+
+  position: absolute;
+  right: var(--icon-right);
+  top: var(--icon-top);
+  opacity: 0.5;
+
+  &.primary {
+    --icon-top: var(--icon-top-primary);
+    --icon-right: var(--icon-right-primary);
+  }
+
+  &.secondary {
+    --icon-top: var(--icon-top-secondary);
+    --icon-right: var(--icon-right-secondary);
   }
 `;

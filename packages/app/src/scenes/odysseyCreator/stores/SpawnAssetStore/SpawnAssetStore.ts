@@ -6,7 +6,7 @@ import {SpaceSubOptionKeyEnum} from '@momentum-xyz/sdk';
 import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
 import {Asset3dCategoryEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
-import {Asset3d, Asset3dInterface} from 'core/models';
+import {Asset3d, Asset3dInterface, SearchQuery} from 'core/models';
 
 const SpawnAssetStore = types
   .compose(
@@ -18,6 +18,7 @@ const SpawnAssetStore = types
       navigationObjectName: '',
       isVisibleInNavigation: false,
       uploadedAssetName: '',
+      searchQuery: types.optional(SearchQuery, {}),
 
       uploadAssetRequest: types.optional(RequestModel, {}),
       fetchAssets3dRequest: types.optional(RequestModel, {}),

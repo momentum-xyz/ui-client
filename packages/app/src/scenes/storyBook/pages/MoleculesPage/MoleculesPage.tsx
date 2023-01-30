@@ -190,7 +190,7 @@ const MoleculesPage: FC = () => {
           <Heading label="Component «SearchInput»" type="h2" align="left" />
         </styled.Name>
         <styled.Section>
-          <SearchInput placeholder="Search for..." onChange={(value) => {}} delay={300} />
+          <SearchInput placeholder="Search for..." onChange={(value) => {}} />
         </styled.Section>
 
         <styled.Name>
