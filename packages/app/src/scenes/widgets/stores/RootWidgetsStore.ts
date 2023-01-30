@@ -36,7 +36,8 @@ const RootWidgetsStore = types
       return (
         !self.odysseyBioStore.dialog.isOpen &&
         !self.profileStore.dialog.isOpen &&
-        !self.calendarStore.dialog.isOpen
+        !self.calendarStore.dialog.isOpen &&
+        !self.minimapStore.dialog.isOpen
       );
     }
   }));

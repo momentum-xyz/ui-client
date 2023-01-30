@@ -66,6 +66,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
+    "react-color-palette": "^6.2.0",
     "react-draggable": "^4.4.5",
     "react-dropzone": "^14.2.3",
     "react-easy-crop": "^4.6.3",

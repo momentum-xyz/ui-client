@@ -54,7 +54,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
               <Button
                 size="small"
                 label={t('actions.visit')}
-                icon="fly-to"
+                icon="fly-portal"
                 noWhitespaceWrap
                 disabled={!!visitDisabled}
                 onClick={onVisit}

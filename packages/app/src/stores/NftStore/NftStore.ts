@@ -157,7 +157,7 @@ const NftStore = types
       isAlreadyConnected(address: string): boolean {
         return self.stakingAtOthers.has(address);
       },
-      balanseFormat(amount: BN) {
+      balanceFormat(amount: BN) {
         return formatBalance(
           amount,
           {withSi: true, withUnit: self.tokenSymbol},
@@ -181,18 +181,31 @@ const NftStore = types
       return self.balance.free.isZero();
     },
     get balanceTotal(): string {
-      return self.balanseFormat(self.balance.free);
+      try {
+        const total = self.balance.free.clone().add(self.balance.reserved);
+        return self.balanceFormat(total);
+      } catch (err) {
+        console.error(err);
+        return '0';
+      }
     },
     get balanceReserved(): string {
-      return self.balanseFormat(self.balance.reserved);
+      return self.balanceFormat(self.balance.reserved);
     },
     get balanceTransferrableBN(): BN {
-      return self.balance.free.clone().sub(self.balance.reserved).sub(self.existentialDeposit);
+      try {
+        const transferrable = self.balance.free.clone().sub(self.existentialDeposit);
+        const zero = new BN(0);
+        return transferrable.gt(zero) ? transferrable : zero;
+      } catch (err) {
+        console.error(err);
+        return new BN(0);
+      }
     }
   }))
   .views((self) => ({
     get balanceTransferrable(): string {
-      return self.balanseFormat(self.balanceTransferrableBN);
+      return self.balanceFormat(self.balanceTransferrableBN);
     },
     canBeStaked(amount: BN): boolean {
       try {
@@ -203,7 +216,7 @@ const NftStore = types
       }
     },
     get accountAccumulatedRewards(): string {
-      return self.balanseFormat(self.accumulatedRewards);
+      return self.balanceFormat(self.accumulatedRewards);
     },
     get canReceiveAccumulatedRewards(): boolean {
       return self.accumulatedRewards.gt(new BN(MIN_AMOUNT_TO_GET_REWARDS));
@@ -745,7 +758,7 @@ const NftStore = types
       const connections: WalletConnectionsInterface = yield self.getStakesInfo(wallet);
       return connections.stakedAtOthers;
     }),
-    subscribeToBalanseChanges: flow(function* (address: string) {
+    subscribeToBalanceChanges: flow(function* (address: string) {
       if (!self.channel) {
         return;
       }
@@ -776,7 +789,7 @@ const NftStore = types
     }),
     activateWallet(wallet: string): void {
       console.log(`Activate wallet ${wallet}`);
-      self.subscribeToBalanseChanges(wallet);
+      self.subscribeToBalanceChanges(wallet);
       self.subscribeToStakingInfo(wallet);
     }
   }))

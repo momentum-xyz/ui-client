@@ -6,3 +6,4 @@ export * from './attribute.interface';
 export * from './metadata.interface';
 export * from './voiceChatAttribute.interface';
 export * from './voiceChatUserAttribute.interface';
+export * from './objectColor.interface';

@@ -1,4 +1,3 @@
-import {generatePath} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect} from 'react';
 
@@ -8,10 +7,12 @@ import {UnityService} from 'shared/services';
 import {useStore} from 'shared/hooks';
 
 import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
+import {CreatorMenu, ObjectMenu} from './components';
 
 const OdysseyCreator: FC = () => {
   const {unityStore} = useStore();
-  const {worldId} = unityStore;
+  const {unityInstanceStore} = unityStore;
+
   useEffect(() => {
     UnityService.toggleBuildMode();
     return () => {
@@ -21,10 +22,9 @@ const OdysseyCreator: FC = () => {
 
   return (
     <>
-      {createSwitchByConfig(
-        ODYSSEY_CREATOR_ROUTES,
-        generatePath(ROUTES.odyssey.creator.base, {worldId})
-      )}
+      <CreatorMenu />
+      {createSwitchByConfig(ODYSSEY_CREATOR_ROUTES, ROUTES.odyssey.creator.base)}
+      {unityInstanceStore.objectMenu.isOpen && <ObjectMenu />}
     </>
   );
 };

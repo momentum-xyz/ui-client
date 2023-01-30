@@ -53,7 +53,7 @@ const CalendarItem: FC<PropsInterface> = (props) => {
             <Button size="small" label="Attend" icon="add" onClick={() => onAttend(item)} />
           </div>
           <div>
-            <Button size="small" label="" icon="fly-to" onClick={() => onTeleport(item)} />
+            <Button size="small" label="" icon="fly-portal" onClick={() => onTeleport(item)} />
           </div>
         </styled.Actions>
       </styled.Info>

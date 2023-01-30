@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useMemo} from 'react';
-import {Dialog, Input} from '@momentum-xyz/ui-kit';
+import {Dialog, Input, TextArea} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
@@ -89,6 +89,7 @@ const ChangeTextDialog: FC = () => {
           render={({field: {value, onChange}}) => (
             <Input
               value={value}
+              label={t('fields.title')}
               isError={!!titleErrorMessage}
               errorMessage={titleErrorMessage}
               onFocus={handleFocus}
@@ -102,13 +103,16 @@ const ChangeTextDialog: FC = () => {
           name="content"
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
-            <Input
+            <TextArea
               value={value}
+              name={t('fields.description')}
+              isResizable
               isError={!!contentErrorMessage}
               errorMessage={contentErrorMessage}
               onFocus={handleFocus}
               onBlur={handleBlur}
               onChange={onChange}
+              rows={10}
             />
           )}
         />

@@ -480,6 +480,7 @@ export const enGb = {
       later: 'later',
       create: 'create',
       stage: 'Stage mode',
+      creatorEnabled: 'Odyssey Creator Mode Enabled',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
       updateSpace: 'update your space with some enticing content',
@@ -516,6 +517,7 @@ export const enGb = {
       upload3dAsset: 'Upload 3D Asset',
       admin: 'Admin',
       owner: 'Owner',
+      colourPicker: 'Colour Picker',
       statistics: 'Statistics'
     },
     textMessage: {
@@ -551,6 +553,7 @@ export const enGb = {
       nickname: 'Nickname',
       description: 'Description',
       name: 'Name',
+      title: 'Title',
       social: 'Social',
       bio: 'Bio',
       location: 'Location',
@@ -599,6 +602,8 @@ export const enGb = {
       coCreate: 'co-create',
       dock: 'Dock',
       visit: 'Visit',
+      creatorOpen: 'Odyssey Creator',
+      creatorClose: 'Close Odyssey Creator',
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',
@@ -666,8 +671,21 @@ export const enGb = {
       redo: 'Redo',
       copy: 'Copy',
       functionality: 'Functionality',
+      colour: 'Colour',
       chooseName: 'Choose your name',
       addTokenGate: 'Add Token Gate'
+    },
+    enums: {
+      basicAsset2dId: {
+        TEXT: 'Text',
+        IMAGE: 'Image',
+        VIDEO: 'Video',
+        DOCK: 'Dock station',
+        MIRO: 'Miro',
+        MIRO_LOCAL: 'Miro (local)',
+        GOOGLE_DRIVE: 'Google drive',
+        GOOGLE_DRIVE_LOCAL: 'Google drive (local)'
+      }
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',

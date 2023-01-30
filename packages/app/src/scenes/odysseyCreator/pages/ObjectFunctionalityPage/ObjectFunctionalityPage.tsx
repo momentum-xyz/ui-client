@@ -3,14 +3,15 @@ import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const ObjectFunctionalityPage: FC = () => {
-  const {odysseyCreatorStore} = useStore();
+  const {odysseyCreatorStore, unityStore} = useStore();
   const {objectFunctionalityStore} = odysseyCreatorStore;
 
   const navigate = useNavigate();
@@ -22,11 +23,16 @@ const ObjectFunctionalityPage: FC = () => {
   const {objectId} = useParams<{objectId: string}>();
 
   useClickOutside(ref, () => {
-    navigate(-1);
+    // navigate(-1);
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
   });
 
   useEffect(() => {
-    objectFunctionalityStore.fetchObject(objectId!);
+    objectFunctionalityStore.init(objectId);
+
+    return () => {
+      objectFunctionalityStore.resetModel();
+    };
   }, [objectId, objectFunctionalityStore]);
 
   return (
@@ -50,10 +56,7 @@ const ObjectFunctionalityPage: FC = () => {
             </styled.HeadingWrapper>
             <Dropdown
               value={objectFunctionalityStore.currentAssetId}
-              options={Object.entries(objectFunctionalityStore.assets2D).map(([key, value]) => ({
-                label: value,
-                value: key
-              }))}
+              options={objectFunctionalityStore.asset2dOptions}
               placeholder={t('placeholders.selectAnOption')}
               onOptionSelect={async (option) => {
                 objectFunctionalityStore.selectAsset(option.value);
