@@ -15,6 +15,9 @@ COPY packages/sdk/package.json ./packages/sdk/
 COPY packages/map3d/package.json ./packages/map3d/
 
 COPY packages/plugin_miro/package.json ./packages/plugin_miro/
+COPY packages/plugin_google_drive/package.json ./packages/plugin_google_drive/
+COPY packages/plugin_twitch/package.json ./packages/plugin_twitch/
+COPY packages/plugin_vimeo/package.json ./packages/plugin_vimeo/
 COPY packages/app/package.json ./packages/app/
 
 RUN yarn install --immutable --immutable-cache --check-cache
