@@ -100,7 +100,7 @@ const SpawnAssetStore = types
               // FIXME - temp until proper preview images are available
               preview_hash
                 ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${preview_hash}`
-                : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
+                : `https://dev.odyssey.ninja/api/v3/render/texture/${ImageSizeEnum.S4}/03ce359d18bfc0fe977bd66ab471d222`
           })) || [];
 
         self.assets3d = cast(assets);
