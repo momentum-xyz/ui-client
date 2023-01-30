@@ -119,6 +119,7 @@ const SpawnAssetStore = types
         {
           parent_id: worldId,
           space_name: self.navigationObjectName,
+          // TODO: What is it for? Discussion !!!
           space_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
           asset_3d_id: self.selectedAssset?.id
         }

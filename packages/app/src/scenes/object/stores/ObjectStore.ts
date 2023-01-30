@@ -51,6 +51,8 @@ const ObjectStore = types
             | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
             assetId: spaceInfo.asset_2d_id
           });
+          // FIXME: It is incorrect (by Nikita).
+          // FIXME: It should be objectResponse?.pluginId
           if (objectResponse?.meta.pluginId) {
             self.assetStore.setObject(objectResponse, spaceId);
           }
