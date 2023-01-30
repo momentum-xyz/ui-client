@@ -88,9 +88,7 @@ const SkyboxSelectorStore = types
     saveItem: flow(function* (item: Asset3dInterface, worldId: string) {
       self.currentItemId = item.id;
 
-      if (item.isUserAttribute) {
-        return;
-      }
+      const {isUserAttribute} = item;
 
       const {spaces} = yield self.worldSettingsRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
@@ -104,8 +102,16 @@ const SkyboxSelectorStore = types
 
       yield self.selectRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
         spaceId: spaces.skybox,
-        asset_3d_id: item.id
+        asset_3d_id: isUserAttribute ? UNITY_SKYBOX_ASSET_ID : item.id
       });
+      if (isUserAttribute) {
+        yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+          spaceId: spaces.skybox,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.SKYBOX_CUSTOM,
+          value: {render_hash: item.id}
+        });
+      }
     }),
     uploadSkybox: flow(function* (worldId: string, file: File, name: string) {
       const uploadImageResponse: UploadImageResponse = yield self.createSkyboxRequest.send(
