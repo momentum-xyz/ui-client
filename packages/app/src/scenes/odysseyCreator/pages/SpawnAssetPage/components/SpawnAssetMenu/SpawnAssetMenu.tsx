@@ -26,16 +26,16 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
 
   return (
     <styled.Container>
-      <SearchInput
-        value={searchQuery.query}
-        placeholder={t(`placeholders.searchForAssets`)}
-        onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
-        onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
-        onChange={(query) => {
-          searchQuery.setQuery(query);
-          //debouncedSearch();
-        }}
-      />
+      <styled.Search>
+        <SearchInput
+          variant="secondary"
+          value={searchQuery.query}
+          placeholder={t(`placeholders.searchForAssets`)}
+          onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
+          onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
+          onChange={searchQuery.setQuery}
+        />
+      </styled.Search>
 
       <styled.Tab
         className={cn(

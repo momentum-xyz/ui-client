@@ -137,8 +137,15 @@ const SpawnAssetStore = types
     })
   }))
   .views((self) => ({
-    get isUploadPending() {
+    get isUploadPending(): boolean {
       return self.uploadAssetRequest.isPending;
+    },
+    get filteredAsset3dList(): Asset3dInterface[] {
+      return self.searchQuery.isQueryValid
+        ? self.assets3d.filter((asset) =>
+            asset.name.toLocaleLowerCase().includes(self.searchQuery.queryLowerCased)
+          )
+        : self.assets3d;
     }
   }));
 

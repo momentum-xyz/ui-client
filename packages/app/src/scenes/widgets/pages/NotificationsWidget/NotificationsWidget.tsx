@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Dialog, Loader, Text} from '@momentum-xyz/ui-kit';
 import {generatePath, useHistory} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {NewsFeedItem} from 'ui-kit';
@@ -21,6 +22,7 @@ const NotificationsWidget: FC = () => {
 
   const theme = useTheme();
   const history = useHistory();
+  const {t} = useTranslation();
 
   useEffect(() => {
     notificationsStore.init();
@@ -78,7 +80,7 @@ const NotificationsWidget: FC = () => {
 
         {!notificationsStore.isPending && !notifications.length && (
           <styled.EmptyResult>
-            <Text text="No results found" size="xs" />
+            <Text text={t('messages.noResultsFound')} size="xs" />
           </styled.EmptyResult>
         )}
       </styled.Container>
