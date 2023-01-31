@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
-import {Button} from '@momentum-xyz/ui-kit';
 
 export const Container = styled.div`
   display: flex;
@@ -13,12 +12,22 @@ export const Container = styled.div`
   justify-content: center;
   gap: 50px;
   padding-top: 80px;
+
+  &.blur {
+    filter: blur(5px);
+  }
 `;
 
 export const PreviewContainer = styled.div`
   width: 700px;
   height: 600px;
   position: relative;
+`;
+
+export const DeleteButton = styled.div`
+  position: absolute;
+  top: 9px;
+  right: 9px;
 `;
 
 export const PreviewTitleHolder = styled.div`
@@ -56,7 +65,7 @@ export const SkyboxCount = styled.div`
 
 export const Item = styled.div`
   width: 180px;
-  height: 230px;
+  height: 270px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,6 +74,7 @@ export const Item = styled.div`
   border-radius: 10px;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
   margin: 0 15px;
+  position: relative;
 
   box-shadow: 0px 3.369px 3.369px rgba(0, 0, 0, 0.25);
 
@@ -79,22 +89,30 @@ export const ItemTitle = styled.div`
   font-size: var(--font-size-l);
 `;
 
+export const ItemCreatedBy = styled.div`
+  color: var(--white);
+  font-size: var(--font-size-l);
+
+  & span {
+    text-transform: uppercase;
+    color: var(--accent-color);
+  }
+`;
+
 export const ItemButtonHolder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export const ActionButtonHolder = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 20px;
+export const ButtonsHolder = styled.div`
+  pointer-events: all;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
-
-export const CloseButton = styled(Button)`
-  pointer-events: all;
+  gap: 10px;
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
+  padding: 10px;
+  border-radius: 10px;
 `;

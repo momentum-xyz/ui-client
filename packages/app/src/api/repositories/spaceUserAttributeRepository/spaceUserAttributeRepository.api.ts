@@ -24,8 +24,8 @@ export const getSpaceUserAttribute: RequestInterface<
   const url = generatePath(spaceUserAttributeRepositoryEndpoints().attribute, {spaceId, userId});
 
   restOptions.params = {
-    pluginId,
-    attributeName
+    plugin_id: pluginId,
+    attribute_name: attributeName
   };
 
   return request.get(url, restOptions);
