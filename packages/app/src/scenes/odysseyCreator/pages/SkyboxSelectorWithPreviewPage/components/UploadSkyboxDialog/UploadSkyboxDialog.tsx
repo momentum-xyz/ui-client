@@ -151,7 +151,7 @@ const UploadSkyboxDialog: FC = () => {
         <Controller
           name="name"
           control={control}
-          // rules={{required: true}}
+          rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <Input
               placeholder={t('labels.skyboxName')}

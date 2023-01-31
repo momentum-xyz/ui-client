@@ -40,16 +40,33 @@ const SkyboxSelectorStore = types
     fetchItems: flow(function* (worldId: string, userId: string) {
       console.log('Fetching skyboxes for world:', worldId, 'and user:', userId);
 
-      yield self.fetchUserSkyboxes(worldId, userId);
       yield self.fetchDefaultSkyboxes(worldId);
+      yield self.fetchUserSkyboxes(worldId, userId);
 
-      if (self.userSkyboxes.length) {
-        self.selectedItemId = self.userSkyboxes[0].id;
-      } else if (self.defaultSkyboxes.length) {
-        self.selectedItemId = self.defaultSkyboxes[0].id;
-      }
+      const {spaces} = yield self.worldSettingsRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: worldId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.WORLD_SETTINGS,
+          sub_attribute_key: 'spaces'
+        }
+      );
 
-      yield Promise.resolve([...self.defaultSkyboxes, ...self.userSkyboxes]);
+      const customSkyboxData = yield self.createSkyboxRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: spaces.skybox,
+          // spaceId: worldId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.SKYBOX_CUSTOM
+        }
+      );
+
+      const allSkyboxes = [...self.defaultSkyboxes, ...self.userSkyboxes];
+      self.selectedItemId = customSkyboxData?.render_hash || (allSkyboxes[0] || {id: undefined}).id;
+
+      yield Promise.resolve(allSkyboxes);
     }),
     fetchDefaultSkyboxes: flow(function* (spaceId: string) {
       const response: GetSpaceAttributeResponse | undefined = yield self.fetchSkyboxRequest.send(

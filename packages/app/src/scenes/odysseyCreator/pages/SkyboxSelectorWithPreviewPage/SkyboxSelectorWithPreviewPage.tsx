@@ -69,10 +69,6 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                           e.stopPropagation();
 
                           skyboxSelectorStore.openSkyboxDeletion(item.id);
-
-                          // removeUserSkybox(worldId, item.id).catch((err) => {
-                          //   toast.error(err.message);
-                          // });
                         }}
                       >
                         <IconSvg name="bin" size="normal" isWhite />
