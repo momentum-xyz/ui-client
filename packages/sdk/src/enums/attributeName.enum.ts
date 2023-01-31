@@ -9,5 +9,6 @@ export enum AttributeNameEnum {
   VOICE_CHAT_ACTION = 'VoiceChatAction',
   WORLD_SETTINGS = 'world_settings',
   TELEPORT = 'teleport',
-  OBJECT_COLOR = 'object_color'
+  OBJECT_COLOR = 'object_color',
+  SPAWN_POINT = 'spawn_point'
 }

@@ -15,6 +15,7 @@ export class UnityService {
 
   getCurrentWorld?: () => void;
   getUserPosition?: () => void;
+  getUserRotation?: () => void;
   getIntState?: (spaceId: string, key: string) => number;
   setIntState?: (spaceId: string, key: string, value: number) => void;
   getStrState?: (spaceId: string, key: string) => string;
@@ -26,6 +27,7 @@ export class UnityService {
     this.unityApi = undefined;
     this.getCurrentWorld = undefined;
     this.getUserPosition = undefined;
+    this.getUserRotation = undefined;
     this.getIntState = undefined;
     this.setIntState = undefined;
     this.getStrState = undefined;
@@ -47,6 +49,10 @@ export class UnityService {
 
       this.getUserPosition = function () {
         return this.unityApi?.getUserPosition();
+      };
+
+      this.getUserRotation = function () {
+        return this.unityApi?.getUserRotation();
       };
 
       this.triggerInteractionMsg = function (

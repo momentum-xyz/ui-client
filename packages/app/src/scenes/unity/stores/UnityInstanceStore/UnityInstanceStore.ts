@@ -5,6 +5,7 @@ import {RequestModel, Dialog} from '@momentum-xyz/core';
 import {api, ResolveNodeResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
+import {UnityPositionInterface} from 'core/interfaces';
 import {UnityService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
@@ -65,8 +66,31 @@ const UnityInstanceStore = types
     getCurrentWorld(): string | null {
       return UnityService.getCurrentWorld?.() || null;
     },
-    getUserPosition() {
-      return UnityService.getUserPosition?.();
+    getUserPosition(): UnityPositionInterface | null {
+      let position: UnityPositionInterface | null = null;
+      try {
+        const positionAsString = UnityService.getUserPosition?.() || null;
+        if (positionAsString) {
+          position = JSON.parse(positionAsString);
+        }
+      } catch (ex) {
+        console.error('getUserPosition', ex);
+      }
+
+      return position;
+    },
+    getUserRotation(): UnityPositionInterface | null {
+      let rotation: UnityPositionInterface | null = null;
+      try {
+        const rotationAsString = UnityService.getUserRotation?.() || null;
+        if (rotationAsString) {
+          rotation = JSON.parse(rotationAsString);
+        }
+      } catch (ex) {
+        console.error('getUserRotation', ex);
+      }
+
+      return rotation;
     },
     teleportToUser(userId: string): void {
       UnityService.teleportToUser(userId);
