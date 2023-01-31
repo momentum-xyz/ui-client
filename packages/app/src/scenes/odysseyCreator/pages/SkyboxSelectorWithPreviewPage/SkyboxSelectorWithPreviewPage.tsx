@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button, Text, IconSvg} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useHistory} from 'react-router-dom';
@@ -9,14 +9,14 @@ import {useTranslation} from 'react-i18next';
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {Carousel} from './components';
+import {Carousel, UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
-  const {odysseyCreatorStore, unityStore} = useStore();
+  const {odysseyCreatorStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
-  const {items, selectedItem, currentItem, selectItem, saveItem} = skyboxSelectorStore;
-  const {unityInstanceStore} = unityStore;
+  const {selectedItem, currentItem, selectItem, saveItem, allSkyboxes} = skyboxSelectorStore;
+  const {user} = sessionStore;
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -25,61 +25,93 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    skyboxSelectorStore.fetchItems(worldId);
-  }, [skyboxSelectorStore, worldId]);
+    if (!user) {
+      return;
+    }
+    skyboxSelectorStore.fetchItems(worldId, user.id);
+  }, [skyboxSelectorStore, user, worldId]);
+
+  const hasDialogOpen =
+    skyboxSelectorStore.uploadDialog.isOpen || skyboxSelectorStore.deleteDialog.isOpen;
 
   return (
-    <styled.Container>
-      <styled.ItemsGallery>
-        <styled.SkyboxCountContainer>
-          <styled.SkyboxCount>
-            <Text text={t('counts.skyboxes', {count: items.length})} size="l" align="left" />
-          </styled.SkyboxCount>
-        </styled.SkyboxCountContainer>
-        {!!items && !!selectedItem && (
-          <Carousel<Asset3dInterface>
-            items={items}
-            activeItem={selectedItem}
-            onChange={selectItem}
-            renderItem={(item, idx) => {
-              const active = item === selectedItem;
-              return (
-                <styled.Item
-                  className={cn({active})}
-                  key={item.id + idx}
-                  onClick={() => {
-                    selectItem(item);
-                    unityInstanceStore.changeSkybox(item.id);
-                  }}
-                >
-                  <styled.PreviewImg src={item.image} />
-                  <styled.ItemTitle>{item.name}</styled.ItemTitle>
-                  <styled.ItemButtonHolder>
-                    <Button
-                      label={
-                        currentItem === item
-                          ? t('titles.selectedSkybox')
-                          : t('actions.selectSkybox')
-                      }
-                      // variant="inverted"
-                      disabled={currentItem === item}
-                      transform="uppercase"
-                      size="medium"
-                      onClick={() => {
-                        saveItem(item, worldId).catch((err) => {
-                          toast.error(err.message);
-                        });
-                      }}
-                    />
-                  </styled.ItemButtonHolder>
-                </styled.Item>
-              );
-            }}
-          />
-        )}
-      </styled.ItemsGallery>
-      <styled.CloseButton label={t('actions.closePanel')} onClick={() => history.goBack()} />
-    </styled.Container>
+    <>
+      <styled.Container className={hasDialogOpen ? 'blur' : ''}>
+        <styled.ItemsGallery>
+          <styled.SkyboxCountContainer>
+            <styled.SkyboxCount>
+              <Text
+                text={t('counts.skyboxes', {count: allSkyboxes.length})}
+                size="l"
+                align="left"
+              />
+            </styled.SkyboxCount>
+          </styled.SkyboxCountContainer>
+          {!!allSkyboxes && !!selectedItem && (
+            <Carousel<Asset3dInterface>
+              items={allSkyboxes}
+              activeItem={selectedItem}
+              onChange={selectItem}
+              renderItem={(item, idx) => {
+                const active = item === selectedItem;
+                return (
+                  <styled.Item
+                    className={cn({active})}
+                    key={item.id + `-${idx}`}
+                    onClick={() => {
+                      selectItem(item);
+                    }}
+                  >
+                    {item.isUserAttribute && (
+                      <styled.DeleteButton
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          skyboxSelectorStore.openSkyboxDeletion(item.id);
+                        }}
+                      >
+                        <IconSvg name="bin" size="normal" isWhite />
+                      </styled.DeleteButton>
+                    )}
+                    <styled.PreviewImg src={item.image} />
+                    <styled.ItemTitle>{item.name}</styled.ItemTitle>
+                    <styled.ItemCreatedBy>
+                      {t('titles.by')} <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
+                    </styled.ItemCreatedBy>
+                    <styled.ItemButtonHolder>
+                      <Button
+                        label={
+                          currentItem === item
+                            ? t('titles.selectedSkybox')
+                            : t('actions.selectSkybox')
+                        }
+                        // variant="inverted"
+                        disabled={currentItem === item}
+                        transform="uppercase"
+                        size="medium"
+                        onClick={() => {
+                          // saveItem(item, worldId).catch((err) => {
+                          saveItem(item.id, item.isUserAttribute, worldId).catch((err) => {
+                            toast.error(err.message);
+                          });
+                        }}
+                      />
+                    </styled.ItemButtonHolder>
+                  </styled.Item>
+                );
+              }}
+            />
+          )}
+        </styled.ItemsGallery>
+        <styled.ButtonsHolder>
+          <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
+          <Button label={t('actions.closePanel')} onClick={() => history.goBack()} />
+        </styled.ButtonsHolder>
+      </styled.Container>
+      {skyboxSelectorStore.uploadDialog.isOpen && <UploadSkyboxDialog />}
+      {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />}
+    </>
   );
 };
 

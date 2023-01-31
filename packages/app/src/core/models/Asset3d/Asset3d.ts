@@ -6,7 +6,8 @@ const Asset3d = types
   .model('Asset3d', {
     id: types.identifier,
     name: types.string,
-    image: types.string
+    image: types.string,
+    isUserAttribute: types.optional(types.boolean, false)
   })
   .views((self) => ({
     get thumbnailAssetDownloadUrl(): string {
