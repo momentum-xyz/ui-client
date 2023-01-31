@@ -481,8 +481,7 @@ export const enGb = {
       uploadCustomSkyboxInfoLine1:
         'To ensure that your skybox looks its best, we have a few specifications to keep in mind when uploading your image.',
       uploadCustomSkyboxInfoLine2:
-        'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.',
-      noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
+        'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.'
     },
     titles: {
       alert: 'alert',
