@@ -13,12 +13,10 @@ import {Carousel, UploadSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
-  const {odysseyCreatorStore, unityStore, sessionStore} = useStore();
+  const {odysseyCreatorStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {selectedItem, currentItem, selectItem, saveItem, allSkyboxes, removeUserSkybox} =
     skyboxSelectorStore;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {unityInstanceStore} = unityStore;
   const {user} = sessionStore;
 
   const {worldId} = useParams<{worldId: string}>();
@@ -54,7 +52,6 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   key={item.id + `-${idx}`}
                   onClick={() => {
                     selectItem(item);
-                    unityInstanceStore.changeSkybox(item.id);
                   }}
                 >
                   {item.isUserAttribute && (

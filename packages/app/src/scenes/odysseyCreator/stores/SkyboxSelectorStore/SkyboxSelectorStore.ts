@@ -28,7 +28,7 @@ const SkyboxSelectorStore = types
     })
   )
   .actions((self) => ({
-    _fetchItems: flow(function* (worldId: string) {
+    fetchItems: flow(function* (worldId: string) {
       const assets3d: FetchAssets3dResponse = yield self.request.send(
         api.assets3dRepository.fetchAssets3d,
         {category: Asset3dCategoryEnum.SKYBOX, worldId}
@@ -56,12 +56,6 @@ const SkyboxSelectorStore = types
       self.selectedItemId = self.items[0].id;
       yield Promise.resolve(skyboxes);
     }),
-    get fetchItems() {
-      return this._fetchItems;
-    },
-    set fetchItems(value) {
-      this._fetchItems = value;
-    },
     fetchUserSkyboxes: flow(function* (spaceId: string) {
       const response: GetSpaceAttributeResponse | undefined = yield self.createSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
