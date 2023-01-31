@@ -29,3 +29,11 @@ export const GridItemPreview = styled.div`
   height: 130px;
   border-radius: 10px;
 `;
+
+export const EmptyResult = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

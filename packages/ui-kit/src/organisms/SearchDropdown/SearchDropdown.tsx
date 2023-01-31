@@ -67,9 +67,7 @@ const SearchDropdown: FC<PropsInterface> = ({
             setIsFocused(!isFocused);
             handleChangeInput(value);
           }}
-          delay={300}
           withBackground
-          focused={isFocused}
           value={value}
         />
         {isFocused && (

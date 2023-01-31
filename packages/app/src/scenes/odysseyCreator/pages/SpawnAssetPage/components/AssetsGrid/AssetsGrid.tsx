@@ -1,5 +1,5 @@
 import {Button, Text} from '@momentum-xyz/ui-kit';
-import {FC, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
@@ -14,8 +14,17 @@ interface PropsInterface {
 }
 
 const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
-  const {t} = useTranslation();
   const [hoveringAsset, setHoveringAsset] = useState<Asset3dInterface | null>(null);
+
+  const {t} = useTranslation();
+
+  if (assets.length === 0) {
+    return (
+      <styled.EmptyResult>
+        <Text text={t('messages.noResultsFound')} size="xs" />
+      </styled.EmptyResult>
+    );
+  }
 
   return (
     <styled.Grid>

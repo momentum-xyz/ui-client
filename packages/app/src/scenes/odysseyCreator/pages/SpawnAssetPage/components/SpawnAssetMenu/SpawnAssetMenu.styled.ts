@@ -8,6 +8,10 @@ export const Container = styled.div`
   padding: 0 5px;
 `;
 
+export const Search = styled.div`
+  padding: 10px 0;
+`;
+
 export const TabText = styled(Text)``;
 
 export const Tab = styled.button`

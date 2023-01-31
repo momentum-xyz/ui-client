@@ -541,6 +541,7 @@ export const enGb = {
       search: 'Search',
       searchForPeople: 'Search for people...',
       searchForSpaces: 'Search for spaces...',
+      searchForAssets: 'Search for assets...',
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
       worldname: 'worldname',
