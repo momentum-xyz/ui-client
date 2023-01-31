@@ -22,7 +22,6 @@ import {
 } from 'ui-kit';
 
 import * as styled from './UnityPage.styled';
-import {CreatorMenu, ObjectMenu} from './components';
 
 const UnityContextCSS = {
   width: '100vw',
@@ -30,20 +29,13 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {unityStore, authStore, sessionStore, odysseyCreatorStore: worldBuilderStore} = useStore();
-  const {objectFunctionalityStore: worldBuilderObjectStore} = worldBuilderStore;
+  const {unityStore, sessionStore} = useStore();
   const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
   const history = useHistory();
   const {t} = useTranslation();
   const location = useLocation();
-
-  const isBuilderMode =
-    !!unityStore.worldId &&
-    location.pathname.includes(
-      generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId})
-    );
 
   // TODO: FIXME
   const worldId = useMemo(() => {
@@ -64,7 +56,7 @@ const UnityPage: FC = () => {
     console.log(`Unity worldId: ${worldId}`);
 
     if (worldId) {
-      await unityInstanceStore.loadWorldById(worldId, authStore.token);
+      await unityInstanceStore.loadWorldById(worldId, sessionStore.token);
     } else {
       console.error(`There is no worldId in route.`);
     }
@@ -96,8 +88,11 @@ const UnityPage: FC = () => {
 
   useUnityEvent('EditObjectEvent', (spaceId: string) => {
     console.log('EditObjectEvent', spaceId);
-    // This even comes faster than actual click, so delay
-    setTimeout(() => unityInstanceStore.onUnityObjectClick(spaceId), 500);
+    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    setTimeout(() => {
+      // This even comes faster than actual click, so delay
+      unityInstanceStore.onUnityObjectClick(spaceId);
+    }, 500);
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
@@ -226,47 +221,11 @@ const UnityPage: FC = () => {
       <styled.Inner
         data-testid="UnityPage-test"
         onClick={(event) => {
-          unityInstanceStore.handleClick(event.clientX, event.clientY);
+          unityInstanceStore.setLastClickPosition(event.clientX, event.clientY);
         }}
       >
         <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} />
       </styled.Inner>
-      {/*<PathObserver
-        isTeleportReady={unityStore.isTeleportReady}
-        resumeUnity={unityStore.resume}
-        pauseUnity={unityStore.pause}
-      />*/}
-      {unityInstanceStore.objectMenu.isOpen && (
-        <ObjectMenu
-          gizmoType={unityInstanceStore.gizmoMode}
-          worldId={unityStore.worldId}
-          position={unityInstanceStore.objectMenuPosition}
-          objectId={unityInstanceStore.selectedObjectId ?? ' '}
-          onGizmoTypeChange={unityInstanceStore.changeGizmoType}
-          onObjectRemove={() => {
-            worldBuilderObjectStore.deleteObject();
-            unityInstanceStore.objectMenu.close();
-          }}
-          onUndo={unityInstanceStore.undo}
-          onRedo={unityInstanceStore.redo}
-        />
-      )}
-      {isBuilderMode && (
-        <CreatorMenu
-          onAddObject={() => {
-            history.push(
-              generatePath(ROUTES.odyssey.creator.spawnAsset.base, {
-                worldId: unityStore.worldId
-              })
-            );
-          }}
-          onSkyboxClick={() => {
-            history.push(
-              generatePath(ROUTES.odyssey.creator.skybox, {worldId: unityStore.worldId})
-            );
-          }}
-        />
-      )}
 
       {!unityStore.isUnityAvailable && <UnityLoader theme={theme} />}
     </Portal>

@@ -25,6 +25,7 @@ const AppLayers: FC<PropsInterface> = (props) => {
   return (
     <div data-testid="AppLayers-test">
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
+
       {renderUnity && <Widgets />}
       <main id="main">
         <div className="main-content">{children}</div>

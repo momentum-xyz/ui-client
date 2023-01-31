@@ -1,9 +1,10 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Redirect, Switch, useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {isBrowserSupported} from '@momentum-xyz/core';
+import {LoaderFallback} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useApiHandlers, useStore} from 'shared/hooks';
@@ -12,21 +13,18 @@ import {SystemWideError} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
 
-import {
-  PRIVATE_ROUTES,
-  PRIVATE_ROUTES_WITH_UNITY,
-  PUBLIC_ROUTES,
-  SYSTEM_ROUTES
-} from './App.routes';
+import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {GlobalStyles} from './App.styled';
+import {TestnetMarkWidget} from './widgets/pages';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
-  const {configStore, authStore, themeStore, initApplication, unityStore, sentryStore} = useStore();
+  const rootStore = useStore();
+  const {configStore, sessionStore, themeStore, unityStore, sentryStore} = rootStore;
   const {configLoadingErrorCode} = configStore;
   const {unityInstanceStore} = unityStore;
 
@@ -37,16 +35,16 @@ const App: FC = () => {
   useApiHandlers();
 
   useEffect(() => {
-    initApplication();
-  }, [initApplication]);
+    rootStore.initApplication();
+  }, [rootStore]);
 
   useEffect(() => {
     if (configStore.isConfigReady) {
-      authStore.init();
+      sessionStore.init();
       sentryStore.init();
       unityInstanceStore.init();
     }
-  }, [authStore, configStore.isConfigReady, unityInstanceStore, sentryStore]);
+  }, [sessionStore, configStore.isConfigReady, unityInstanceStore, sentryStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
 
@@ -92,32 +90,16 @@ const App: FC = () => {
   if (isTargetRoute(pathname, SYSTEM_ROUTES)) {
     return (
       <ThemeProvider theme={themeStore.theme}>
-        <Suspense fallback={false}>{createSwitchByConfig(SYSTEM_ROUTES)}</Suspense>
+        <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
+          {createSwitchByConfig(SYSTEM_ROUTES)}
+        </Suspense>
+        <TestnetMarkWidget withOffset />
       </ThemeProvider>
     );
   }
 
-  if (!configStore.isConfigReady || authStore.isAuthenticating) {
+  if (!configStore.isConfigReady || sessionStore.isAuthenticating) {
     return <></>;
-  }
-
-  // FIXME: Default url
-  if (pathname === ROUTES.base) {
-    return (
-      <Switch>
-        <Redirect to={ROUTES.explore} />
-      </Switch>
-    );
-  }
-
-  // PUBLIC ROUTES
-  if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
-    return (
-      <ThemeProvider theme={themeStore.theme}>
-        <GlobalStyles />
-        <Suspense fallback={false}>{createSwitchByConfig(PUBLIC_ROUTES)}</Suspense>
-      </ThemeProvider>
-    );
   }
 
   // PRIVATE ROUTES WITH UNITY
@@ -127,9 +109,10 @@ const App: FC = () => {
         <AppAuth>
           <GlobalStyles />
           <UnityPage />
-          <Suspense fallback={false}>
+          <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
             <AppLayers renderUnity>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
           </Suspense>
+          <TestnetMarkWidget withOffset />
         </AppAuth>
       </ThemeProvider>
     );
@@ -138,10 +121,11 @@ const App: FC = () => {
   // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>
-      <Suspense fallback={false}>
+      <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
         <AppAuth>
           <GlobalStyles />
           <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}</AppLayers>
+          <TestnetMarkWidget />
         </AppAuth>
       </Suspense>
     </ThemeProvider>

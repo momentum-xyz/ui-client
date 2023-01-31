@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Heading = styled.div`
-  padding: 10px 20px;
+  padding: 0 20px 6px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,6 +42,7 @@ export const Search = styled.div`
 `;
 
 export const Body = styled.div`
+  padding: 0 0 12px 0;
   display: flex;
   flex-direction: column;
   height: calc(100% - 180px);

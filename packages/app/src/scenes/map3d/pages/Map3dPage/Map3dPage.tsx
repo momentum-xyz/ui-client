@@ -11,15 +11,21 @@ interface PropsInterface {
 
 const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
   const {nftStore, widgetsStore, sessionStore} = useStore();
-  const {odysseyInfoStore} = widgetsStore;
+  const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
 
   const handleSelect = useCallback(
     (uuid: string) => {
-      if (isClickActive) {
-        odysseyInfoStore.open(nftStore.getNftByUuid(uuid));
+      const nft = nftStore.getNftByUuid(uuid);
+
+      if (isClickActive && nft && sessionStore.isGuest) {
+        previewOdysseyStore.open(nft);
+      }
+
+      if (isClickActive && nft && !sessionStore.isGuest) {
+        odysseyInfoStore.open(nft);
       }
     },
-    [isClickActive, nftStore, odysseyInfoStore]
+    [isClickActive, nftStore, odysseyInfoStore, previewOdysseyStore, sessionStore]
   );
 
   if (nftStore.isLoading) {

@@ -15,7 +15,6 @@ import {RootOdysseyCreatorStore} from 'scenes/odysseyCreator/stores';
 import {ObjectStore} from 'scenes/object/stores';
 
 import {NftStore} from './NftStore';
-import {AuthStore} from './AuthStore';
 import {ConfigStore} from './ConfigStore';
 import {ThemeStore} from './ThemeStore';
 import {SessionStore} from './SessionStore';
@@ -30,7 +29,6 @@ const RootStore = types
     configStore: types.optional(ConfigStore, {}),
     nftStore: types.optional(NftStore, {}),
     themeStore: types.optional(ThemeStore, {}),
-    authStore: types.optional(AuthStore, {}),
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
     sentryStore: types.optional(SentryStore, {}),

@@ -1,6 +1,8 @@
 :root {
   /** Primary colors **/
   --danger: #ffae63;
+  --blue: #000C29;
+  --blue-light: #004373;
   --blue-dark: #051745;
   --online: #01ffb3;
   --dnd: #f25d05;

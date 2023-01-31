@@ -268,6 +268,10 @@ export class UnityService {
     this.unityApi?.redoActionWorldBuilder();
   }
 
+  colorPickedPreview(objectId: string, colorHex: string) {
+    this.unityApi?.colorPickedPreview(objectId, colorHex);
+  }
+
   changeGizmoType(type: GizmoTypeEnum) {
     switch (type) {
       case GizmoTypeEnum.POSITION:

@@ -60,7 +60,7 @@ const OdysseyBioWidget: FC<PropsInterface> = () => {
             onHighFive={handleHighFive}
             highFiveDisabled={userIsOdysseyOwner}
             onConnect={handleConnect}
-            connectDisabled={userIsOdysseyOwner || alreadyConnected}
+            connectDisabled={userIsOdysseyOwner || alreadyConnected || sessionStore.isGuest}
             onCoCreate={() => {}}
             coCreateDisabled={true}
           />

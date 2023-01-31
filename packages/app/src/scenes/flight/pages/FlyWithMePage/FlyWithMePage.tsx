@@ -49,11 +49,11 @@ const FlyWithMePage: FC = () => {
 
   useEffect(() => {
     const previousStatus = sessionStore.user?.status || UserStatusEnum.ONLINE;
-    sessionStore.changeStatus(UserStatusEnum.DO_NOT_DISTURB);
+    //sessionStore.changeStatus(UserStatusEnum.DO_NOT_DISTURB);
 
     return () => {
       if (previousStatus !== UserStatusEnum.DO_NOT_DISTURB) {
-        sessionStore.changeStatus(previousStatus);
+        //sessionStore.changeStatus(previousStatus);
       }
     };
   }, [sessionStore]);

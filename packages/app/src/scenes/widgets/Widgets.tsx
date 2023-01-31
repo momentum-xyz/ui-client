@@ -1,6 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {generatePath, useLocation} from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -13,8 +14,10 @@ import {
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {ToolbarCreatorIcon} from 'ui-kit';
 
 import {
+  SignInWidget,
   ProfileWidget,
   FlyToMeWidget,
   MinimapWidget,
@@ -26,7 +29,6 @@ import {
   NotificationsWidget,
   OdysseyBioWidget,
   OdysseyInfoWidget,
-  WorldBuilderWidget,
   SearchUsersWidget,
   MutualConnectionsWidget,
   StakingWidget,
@@ -51,6 +53,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
 
   const {t} = useTranslation();
+  const {pathname} = useLocation();
 
   useEffect(() => {
     onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
@@ -243,11 +246,21 @@ const Widgets: FC<PropsInterface> = (props) => {
                 state={{canGoBack: true}}
               />
 
-              <WorldBuilderWidget />
+              <ToolbarCreatorIcon
+                worldId={unityStore.worldId}
+                isAdmin={unityStore.isCurrentUserWorldAdmin}
+                isBuilderMode={pathname.includes(
+                  generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId})
+                )}
+              />
             </ToolbarIconList>
           </styled.RightToolbars>
         )}
       </styled.Footer>
+
+      {!isExplorePage && sessionStore.isGuest && widgetsStore.signInDialogAvailable && (
+        <SignInWidget />
+      )}
 
       {mutualConnectionsStore.dialog.isOpen && <MutualConnectionsWidget />}
       {onlineUsersStore.dialog.isOpen && <SearchUsersWidget />}

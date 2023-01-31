@@ -24,7 +24,7 @@ export const NameInput = styled(Input)`
   width: 280px;
 
   input {
-    background-color: #000c29;
+    background-color: var(--blue);
   }
 
   input::placeholder {

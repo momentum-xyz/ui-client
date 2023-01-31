@@ -19,12 +19,12 @@ export const Container = styled.div`
   pointer-events: all;
   margin-bottom: 20px;
 `;
+
 export const Modal = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-
   z-index: var(--dialog-z-index);
 `;

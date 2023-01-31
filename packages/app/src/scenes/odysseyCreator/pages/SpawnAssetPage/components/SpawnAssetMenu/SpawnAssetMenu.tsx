@@ -1,8 +1,11 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
-import cn from 'classnames';
+import {SearchInput} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
+import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
 
+import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
 import * as styled from './SpawnAssetMenu.styled';
@@ -12,12 +15,28 @@ interface PropsInterface {
 }
 
 const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
+  const {odysseyCreatorStore, unityStore} = useStore();
+  const {unityInstanceStore} = unityStore;
+  const {spawnAssetStore} = odysseyCreatorStore;
+  const {searchQuery} = spawnAssetStore;
+
   const location = useLocation();
   const history = useHistory();
   const {t} = useTranslation();
 
   return (
     <styled.Container>
+      <styled.Search>
+        <SearchInput
+          variant="secondary"
+          value={searchQuery.query}
+          placeholder={t(`placeholders.searchForAssets`)}
+          onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
+          onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
+          onChange={searchQuery.setQuery}
+        />
+      </styled.Search>
+
       <styled.Tab
         className={cn(
           matchPath(location.pathname, {path: ROUTES.odyssey.creator.spawnAsset.basicAssets}) &&
@@ -28,6 +47,17 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
         }
       >
         <styled.TabText text={t('labels.basicAssetPack')} size="l" weight="light" align="left" />
+      </styled.Tab>
+      <styled.Tab
+        className={cn(
+          matchPath(location.pathname, {path: ROUTES.odyssey.creator.spawnAsset.standardAssets}) &&
+            'selected'
+        )}
+        onClick={() =>
+          history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.standardAssets, {worldId}))
+        }
+      >
+        <styled.TabText text={t('labels.standardAssetPack')} size="l" weight="light" align="left" />
       </styled.Tab>
       <styled.Tab
         className={cn(
@@ -65,4 +95,4 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
   );
 };
 
-export default SpawnAssetMenu;
+export default observer(SpawnAssetMenu);

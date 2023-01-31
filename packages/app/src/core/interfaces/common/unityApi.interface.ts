@@ -27,4 +27,5 @@ export interface UnityApiInterface {
   setPositionGizmoWorldBuilder(): void;
   setRotationGizmoWorldBuilder(): void;
   setScaleGizmoWorldBuilder(): void;
+  colorPickedPreview(id: string, hex: string): void;
 }

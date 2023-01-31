@@ -7,6 +7,7 @@ import cn from 'classnames';
 import * as styled from './ProfileSettings.styled';
 
 interface PropsInterface {
+  isGuest: boolean;
   isEditMode: boolean;
   isDeviceSettings: boolean;
   audioDeviceId?: string;
@@ -14,10 +15,12 @@ interface PropsInterface {
   onSelectAudioDevice: (id: string) => void;
   onToggleEditMode: () => void;
   onToggleDeviceSettings: () => void;
-  onLogout: () => void;
+  onSignIn?: () => void;
+  onSignOut?: () => void;
 }
 
 const ProfileSettings: FC<PropsInterface> = ({
+  isGuest,
   isEditMode,
   isDeviceSettings,
   audioDeviceId,
@@ -25,7 +28,8 @@ const ProfileSettings: FC<PropsInterface> = ({
   onSelectAudioDevice,
   onToggleDeviceSettings,
   onToggleEditMode,
-  onLogout
+  onSignIn,
+  onSignOut
 }) => {
   const {t} = useTranslation();
 
@@ -37,10 +41,12 @@ const ProfileSettings: FC<PropsInterface> = ({
       </styled.SettingsHeader>
 
       <styled.SettingsContainer>
-        <styled.SettingsItem className={cn(isEditMode && 'active')}>
-          <IconSvg name={!isEditMode ? 'pencil' : 'check'} size="normal" />
-          <styled.SettingsValue onClick={onToggleEditMode}>Edit profile</styled.SettingsValue>
-        </styled.SettingsItem>
+        {!isGuest && (
+          <styled.SettingsItem className={cn(isEditMode && 'active')}>
+            <IconSvg name={!isEditMode ? 'pencil' : 'check'} size="normal" />
+            <styled.SettingsValue onClick={onToggleEditMode}>Edit profile</styled.SettingsValue>
+          </styled.SettingsItem>
+        )}
 
         <styled.SettingsItem className={cn(isDeviceSettings && 'active')}>
           <IconSvg name={!isDeviceSettings ? 'gear' : 'check'} size="normal" />
@@ -66,8 +72,22 @@ const ProfileSettings: FC<PropsInterface> = ({
         )}
 
         <styled.SettingsItem>
-          <IconSvg name="go" size="normal" />
-          <styled.SettingsValue onClick={onLogout}>Logout</styled.SettingsValue>
+          {onSignOut && (
+            <>
+              <IconSvg name="go" size="normal" />
+              <styled.SettingsValue onClick={() => onSignOut()}>
+                {t('actions.signOut')}
+              </styled.SettingsValue>
+            </>
+          )}
+          {onSignIn && (
+            <>
+              <IconSvg name="shield-open" size="normal" />
+              <styled.SettingsValue onClick={() => onSignIn()}>
+                {t('actions.signIn')}
+              </styled.SettingsValue>
+            </>
+          )}
         </styled.SettingsItem>
       </styled.SettingsContainer>
     </styled.Settings>

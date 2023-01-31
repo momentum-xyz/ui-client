@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Heading, IconSvg, SearchInput, Text, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {Box} from 'ui-kit';
@@ -40,6 +41,8 @@ const ExplorePanel: FC<PropsInterface> = ({
   onConnect,
   onOpenOdyssey
 }) => {
+  const {t} = useTranslation();
+
   const debouncedSearch = useDebouncedCallback(onSearch, SEARCH_DELAY_MS);
 
   return (
@@ -87,16 +90,10 @@ const ExplorePanel: FC<PropsInterface> = ({
 
         {searchQuery.isQueryValid && odysseyList.length === 0 && (
           <styled.EmptyResult>
-            <Text text="No results found" size="xs" />
+            <Text text={t('messages.noResultsFound')} size="xs" />
           </styled.EmptyResult>
         )}
       </styled.Body>
-
-      {/*isLoading && (
-        <styled.Loader>
-          <Loader />
-        </styled.Loader>
-      )*/}
     </Box>
   );
 };

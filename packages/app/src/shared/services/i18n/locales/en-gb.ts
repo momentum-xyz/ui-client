@@ -301,6 +301,7 @@ export const enGb = {
       selectFunction: 'Select Function',
       visibleInNavigation: 'Visible in Navigation',
       basicAssetPack: 'Basic Asset Pack',
+      standardAssetPack: 'Standard Asset Pack',
       customObjectLibrary: 'Custom Object Library',
       uploadCustomObject: 'Upload Custom Object',
       changeVideo: 'Change Video',
@@ -325,6 +326,8 @@ export const enGb = {
       skybox: 'Skybox',
       addCustomSkybox: 'Add Custom Skybox',
       removeCustomSkybox: 'Remove Skybox',
+      here: 'here',
+      createProfile: 'Create a profile',
       connectYourWallet: 'Connect your wallet'
     },
     messages: {
@@ -332,6 +335,17 @@ export const enGb = {
       loadingPlugin: 'Loading Plugin...',
       loadingToken: 'Loading {{tokenSymbol}}...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
+      signUp:
+        'You need a wallet to create your own Odyssey. If you already have one, you will see a pop-up asking for the address you would like to use or create. If you do not have a wallet, please install a browser plugins and refresh the page',
+      orSignIn: 'Or if you already have an account please sign in',
+      howSignUp: 'How to create an Odyssey',
+      hello_title: 'Hello traveller',
+      hello_one: 'Want to go on a journey?',
+      hello_two: 'Click on any of the spheres in the space and see what’s inside.',
+      hello_three: 'Or create your own Odyssey.',
+      startCounting: 'Are you ready? Start counting. Go!',
+      startCreating: 'Start creating your personal journey and...',
+      hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
       loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
@@ -339,7 +353,6 @@ export const enGb = {
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
-      signIn: 'Sign In Or Create An Account',
       noResultsFound: 'No results found',
       worldBuilderSignIn: 'Sign In to your Odyssey Account',
       linkCopied: 'The link is copied to your clipboard.',
@@ -447,16 +460,18 @@ export const enGb = {
       errorWhileRemovingPlugin:
         'Error has occured when removing {{pluginName}} removed succesfully!',
       weSupportGLBModels: 'We support GLB Models',
+      glbModelsMaxSize: '(max file size {{size}}MB)',
       selectOne: 'Select One',
       processing: 'Processing',
       comingSoonExclamation: 'Coming Soon!',
       mintingYourOdyssey: 'Minting your Odyssey...',
       mintingYourOdysseyWarning: "Please wait and don't refresh, this may take a while.",
-      congratulations: 'Congratulations!',
-      recievedAmmountOfTokensMessage:
-        "You just received {{amount}} tokens. One more step and you'll embark on your epic journey!",
+      createProfileDesc:
+        'Get discovered by providing a name and picture for your Odyssey. The picture will make the outside of your Odyssey shine. The name you provided will be shown for others to search and connect to your Odyssey.',
+      yourName: 'What should we call you?',
+      chooseImage: 'Choose an image for your odyssey',
       onceConnectedTokensWillBeAwarded:
-        'Once connected, you will be awarded some Drive tokens to get you started',
+        'Once connected, you will be awarded some MOM tokens to get you started',
       noWalletFollowInstructions: 'No wallet? You can get one following the instructions',
       removeSkyboxConfirmation: 'You are about to remove the custom skybox',
       removeSkyboxCurrentConfirmation:
@@ -467,6 +482,7 @@ export const enGb = {
         'To ensure that your skybox looks its best, we have a few specifications to keep in mind when uploading your image.',
       uploadCustomSkyboxInfoLine2:
         'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.'
+      noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
     },
     titles: {
       alert: 'alert',
@@ -479,6 +495,7 @@ export const enGb = {
       create: 'create',
       by: 'By',
       stage: 'Stage mode',
+      creatorEnabled: 'Odyssey Creator Mode Enabled',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
       updateSpace: 'update your space with some enticing content',
@@ -515,8 +532,8 @@ export const enGb = {
       upload3dAsset: 'Upload 3D Asset',
       admin: 'Admin',
       owner: 'Owner',
-      statistics: 'Statistics',
-      oneConnectYourWallet: '1. Connect your wallet'
+      colourPicker: 'Colour Picker',
+      statistics: 'Statistics'
     },
     textMessage: {
       you: 'you',
@@ -538,6 +555,7 @@ export const enGb = {
       search: 'Search',
       searchForPeople: 'Search for people...',
       searchForSpaces: 'Search for spaces...',
+      searchForAssets: 'Search for assets...',
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
       worldname: 'worldname',
@@ -551,6 +569,7 @@ export const enGb = {
       nickname: 'Nickname',
       description: 'Description',
       name: 'Name',
+      title: 'Title',
       social: 'Social',
       bio: 'Bio',
       location: 'Location',
@@ -565,6 +584,14 @@ export const enGb = {
     actions: {
       ok: 'OK',
       add: 'Add',
+      signIn: 'Sign In',
+      signOut: 'Sign Out',
+      createOdyssey: 'Create your Odyssey',
+      installWallet: 'Install your wallet',
+      connectWallet: 'Connect your wallet',
+      startJourney: 'Start your journey',
+      buildOdyssey: 'Build your Odyssey',
+      createOrSignIn: 'Create an account or sign in',
       approve: 'Approve',
       joinStage: 'Join Stage',
       decline: 'Decline',
@@ -591,6 +618,8 @@ export const enGb = {
       coCreate: 'co-create',
       dock: 'Dock',
       visit: 'Visit',
+      creatorOpen: 'Odyssey Creator',
+      creatorClose: 'Close Odyssey Creator',
       saveChanges: 'Save changes',
       approving: 'approving',
       approved: 'approved',
@@ -660,7 +689,21 @@ export const enGb = {
       redo: 'Redo',
       copy: 'Copy',
       functionality: 'Functionality',
+      colour: 'Colour',
+      chooseName: 'Choose your name',
       addTokenGate: 'Add Token Gate'
+    },
+    enums: {
+      basicAsset2dId: {
+        TEXT: 'Text',
+        IMAGE: 'Image',
+        VIDEO: 'Video',
+        DOCK: 'Dock station',
+        MIRO: 'Miro',
+        MIRO_LOCAL: 'Miro (local)',
+        GOOGLE_DRIVE: 'Google drive',
+        GOOGLE_DRIVE_LOCAL: 'Google drive (local)'
+      }
     },
     descriptions: {
       worldName: 'This is the name of the metaverse you will be creating',
@@ -680,7 +723,7 @@ export const enGb = {
       spaceName: 'Space Name',
       successMessage: 'Asset successfully uploaded',
       errorUnsupportedFile: 'Only .glb files are supported',
-      errorTooLargeFile: 'Max file size is 50.1MB',
+      errorTooLargeFile: 'Max file size is {{size}}MB',
       errorSave: 'Error uploading asset'
     },
     eventList: {

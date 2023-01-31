@@ -6,3 +6,4 @@ export * from './NewDeviceDialog';
 export * from './Location';
 export * from './NewsFeedItem';
 export * from './SpaceListItem';
+export * from './ToolbarCreatorIcon';

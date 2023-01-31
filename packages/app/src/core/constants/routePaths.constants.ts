@@ -11,9 +11,11 @@ export const ROUTES = {
       base: '/odyssey/:worldId/create',
       skybox: '/odyssey/:worldId/create/skybox',
       functionality: '/odyssey/:worldId/create/functionality/:objectId',
+      objectColor: '/odyssey/:worldId/create/objectColor/:objectId',
       spawnAsset: {
         base: '/odyssey/:worldId/create/spawn',
         basicAssets: '/odyssey/:worldId/create/spawn/basic',
+        standardAssets: '/odyssey/:worldId/create/spawn/standard',
         customAssets: '/odyssey/:worldId/create/spawn/custom',
         uploadAsset: '/odyssey/:worldId/create/spawn/upload',
         selected: '/odyssey/:worldId/create/spawn/:assetCategory/selected'

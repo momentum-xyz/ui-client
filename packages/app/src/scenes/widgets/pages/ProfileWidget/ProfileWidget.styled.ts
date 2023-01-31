@@ -19,7 +19,7 @@ export const Name = styled.div`
 export const Body = styled.div`
   display: flex;
   overflow: hidden;
-  width: 280px;
+  width: 285px;
 `;
 
 export const Container = styled.div`

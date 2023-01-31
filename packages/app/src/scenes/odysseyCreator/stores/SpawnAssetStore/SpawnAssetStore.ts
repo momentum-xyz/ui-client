@@ -6,7 +6,7 @@ import {SpaceSubOptionKeyEnum} from '@momentum-xyz/sdk';
 import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
 import {Asset3dCategoryEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
-import {Asset3d, Asset3dInterface} from 'core/models';
+import {Asset3d, Asset3dInterface, SearchQuery} from 'core/models';
 
 const SpawnAssetStore = types
   .compose(
@@ -18,6 +18,7 @@ const SpawnAssetStore = types
       navigationObjectName: '',
       isVisibleInNavigation: false,
       uploadedAssetName: '',
+      searchQuery: types.optional(SearchQuery, {}),
 
       uploadAssetRequest: types.optional(RequestModel, {}),
       fetchAssets3dRequest: types.optional(RequestModel, {}),
@@ -100,7 +101,7 @@ const SpawnAssetStore = types
               // FIXME - temp until proper preview images are available
               preview_hash
                 ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${preview_hash}`
-                : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
+                : `https://dev.odyssey.ninja/api/v3/render/texture/${ImageSizeEnum.S4}/03ce359d18bfc0fe977bd66ab471d222`
           })) || [];
 
         self.assets3d = cast(assets);
@@ -108,6 +109,7 @@ const SpawnAssetStore = types
     }),
     clearAssets() {
       self.assets3d = cast([]);
+      self.searchQuery.resetModel();
     },
     selectAsset(asset: Asset3dInterface) {
       self.selectedAssset = Asset3d.create({...asset});
@@ -118,6 +120,7 @@ const SpawnAssetStore = types
         {
           parent_id: worldId,
           space_name: self.navigationObjectName,
+          // TODO: What is it for? Discussion !!!
           space_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
           asset_3d_id: self.selectedAssset?.id
         }
@@ -135,8 +138,15 @@ const SpawnAssetStore = types
     })
   }))
   .views((self) => ({
-    get isUploadPending() {
+    get isUploadPending(): boolean {
       return self.uploadAssetRequest.isPending;
+    },
+    get filteredAsset3dList(): Asset3dInterface[] {
+      return self.searchQuery.isQueryValid
+        ? self.assets3d.filter((asset) =>
+            asset.name.toLocaleLowerCase().includes(self.searchQuery.queryLowerCased)
+          )
+        : self.assets3d;
     }
   }));
 

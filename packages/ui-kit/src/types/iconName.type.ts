@@ -93,6 +93,7 @@ export type IconNameType =
   | 'rocket'
   | 'screenshare'
   | 'search'
+  | 'shield-open'
   | 'shieldCheck'
   | 'shift-button'
   | 'skybox'
