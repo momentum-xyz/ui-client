@@ -1,4 +1,4 @@
-import {useObjectGlobalProps} from '../contexts/SpaceGlobalPropsContext';
+import {useObjectGlobalProps} from '../contexts/ObjectGlobalPropsContext';
 
 export const useObject = () => {
   const {isAdmin, objectId, pluginApi, isExpanded, onClose, onToggleExpand} =

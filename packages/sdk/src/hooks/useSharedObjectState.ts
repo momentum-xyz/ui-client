@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 
-import {useObjectGlobalProps} from '../contexts/SpaceGlobalPropsContext';
+import {useObjectGlobalProps} from '../contexts/ObjectGlobalPropsContext';
 import {AttributeNameEnum} from '../enums';
 
 type ReturnType<T> = [T | null | undefined, (value: T | null) => Promise<T | null>];
