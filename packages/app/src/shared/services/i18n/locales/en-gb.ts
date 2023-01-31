@@ -247,6 +247,7 @@ export const enGb = {
       stageMode: 'Stage Mode',
       calendar: 'World Calendar',
       emoji: 'EMOJI',
+      skyboxName: 'Skybox Name',
       staking: 'Staking',
       minimap: 'Minimap',
       musicPlayer: 'Music Player',
@@ -323,6 +324,7 @@ export const enGb = {
       addObject: 'Add Object',
       skybox: 'Skybox',
       addCustomSkybox: 'Add Custom Skybox',
+      removeCustomSkybox: 'Remove Skybox',
       connectYourWallet: 'Connect your wallet'
     },
     messages: {
@@ -455,7 +457,16 @@ export const enGb = {
         "You just received {{amount}} tokens. One more step and you'll embark on your epic journey!",
       onceConnectedTokensWillBeAwarded:
         'Once connected, you will be awarded some Drive tokens to get you started',
-      noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
+      noWalletFollowInstructions: 'No wallet? You can get one following the instructions',
+      removeSkyboxConfirmation: 'You are about to remove the custom skybox',
+      removeSkyboxCurrentConfirmation:
+        'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
+      removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
+      uploadCustomSkyboxInfoTitle: 'Uploading a Custom Skybox',
+      uploadCustomSkyboxInfoLine1:
+        'To ensure that your skybox looks its best, we have a few specifications to keep in mind when uploading your image.',
+      uploadCustomSkyboxInfoLine2:
+        'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.'
     },
     titles: {
       alert: 'alert',
@@ -466,6 +477,7 @@ export const enGb = {
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       later: 'later',
       create: 'create',
+      by: 'By',
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
@@ -633,6 +645,7 @@ export const enGb = {
       closePanel: 'Close Panel',
       selectSkybox: 'Select Skybox',
       addSkybox: 'Add Skybox',
+      removeSkybox: 'Remove Skybox',
       upload: 'Upload',
       spawnObject: 'Spawn Object',
       change: 'Change',
