@@ -33,7 +33,7 @@ const SkyboxSelectorStore = types
 
       skyboxToDeleteId: types.maybe(types.string),
       uploadDialog: types.optional(Dialog, {}),
-      deleteDialog: types.optional(Dialog, {}),
+      deleteDialog: types.optional(Dialog, {})
     })
   )
   .actions((self) => ({
@@ -174,7 +174,7 @@ const SkyboxSelectorStore = types
         skyboxes: [
           ...self.userSkyboxes
             .filter((d: any) => d.id !== hash)
-            .map((d: any) => ({hash: d.id, name: d.name})),
+            .map((d: any) => ({hash: d.id, name: d.name}))
         ]
       };
 
@@ -190,11 +190,11 @@ const SkyboxSelectorStore = types
       self.closeSkyboxDeletion();
       return self.createSkyboxRequest.isDone;
     }),
-    openSkyboxDeletion: function(skyboxToDeleteId: string) {
+    openSkyboxDeletion: function (skyboxToDeleteId: string) {
       self.skyboxToDeleteId = skyboxToDeleteId;
       self.deleteDialog.open();
     },
-    closeSkyboxDeletion: function() {
+    closeSkyboxDeletion: function () {
       self.skyboxToDeleteId = undefined;
       self.deleteDialog.close();
     }

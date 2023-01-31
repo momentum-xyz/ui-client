@@ -1,9 +1,5 @@
 import {FC, useEffect} from 'react';
-import {
-  Dialog,
-  FileUploader
-  // Input
-} from '@momentum-xyz/ui-kit';
+import {Dialog, FileUploader, Input, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
@@ -99,30 +95,38 @@ const UploadSkyboxDialog: FC = () => {
       }}
     >
       <styled.Container>
-        {/* <Controller
-          name="name"
-          control={control}
-          // rules={{required: true}}
-          render={({field: {value, onChange}}) => (
-            <Input
-              label={t('titles.name')}
-              type="text"
-              value={value}
-              onChange={(value) => {
-                onChange(value);
-              }}
-              errorMessage={t('errors.requiredField')}
-              isError={!!errors.name}
-              disabled={isUploadPending}
-            />
-          )}
-        /> */}
         <Controller
           name="file"
           control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
-            <styled.ImageUploadContainer className={cn(!!errors.file && 'error')}>
+            <styled.ImageUploadContainer
+              className={cn(!!errors.file && 'error', value && 'has-image')}
+            >
+              {!value && (
+                <styled.SkyboxInformation>
+                  <Text
+                    size="m"
+                    weight="bold"
+                    text={t('messages.uploadCustomSkyboxInfoTitle')}
+                    className="text"
+                    transform="uppercase"
+                    align="left"
+                  />
+                  <Text
+                    size="xs"
+                    text={t('messages.uploadCustomSkyboxInfoLine1')}
+                    className="text"
+                    align="left"
+                  />
+                  <Text
+                    size="xs"
+                    text={t('messages.uploadCustomSkyboxInfoLine2')}
+                    className="text"
+                    align="left"
+                  />
+                </styled.SkyboxInformation>
+              )}
               {!!value && (
                 <styled.PreviewImageHolder>
                   <styled.Image src={URL.createObjectURL(value)} alt="Preview image" />
@@ -142,6 +146,24 @@ const UploadSkyboxDialog: FC = () => {
                 fileType="image"
               />
             </styled.ImageUploadContainer>
+          )}
+        />
+        <Controller
+          name="name"
+          control={control}
+          // rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Input
+              placeholder={t('labels.skyboxName')}
+              type="text"
+              value={value}
+              onChange={(value) => {
+                onChange(value);
+              }}
+              errorMessage={t('errors.requiredField')}
+              isError={!!errors.name}
+              disabled={isUploadPending}
+            />
           )}
         />
       </styled.Container>

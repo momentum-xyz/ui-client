@@ -65,9 +65,7 @@ const DeleteSkyboxDialog: FC = () => {
           <styled.SkyboxName> "{skyboxToDelete.name}"</styled.SkyboxName>.
         </styled.Text>
         {deletingCurrentSkybox && (
-          <styled.Text>
-            {t('messages.removeSkyboxCurrentConfirmation')}
-          </styled.Text>
+          <styled.Text>{t('messages.removeSkyboxCurrentConfirmation')}</styled.Text>
         )}
         <styled.Text>{t('messages.removeSkyboxFinalConfirmation')}</styled.Text>
       </styled.Container>

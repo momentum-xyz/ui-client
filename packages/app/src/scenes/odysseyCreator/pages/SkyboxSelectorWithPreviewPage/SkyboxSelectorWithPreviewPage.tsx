@@ -31,82 +31,91 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     skyboxSelectorStore.fetchItems(worldId, user.id);
   }, [skyboxSelectorStore, user, worldId]);
 
+  const hasDialogOpen =
+    skyboxSelectorStore.uploadDialog.isOpen || skyboxSelectorStore.deleteDialog.isOpen;
+
   return (
-    <styled.Container>
-      <styled.ItemsGallery>
-        <styled.SkyboxCountContainer>
-          <styled.SkyboxCount>
-            <Text text={t('counts.skyboxes', {count: allSkyboxes.length})} size="l" align="left" />
-          </styled.SkyboxCount>
-        </styled.SkyboxCountContainer>
-        {!!allSkyboxes && !!selectedItem && (
-          <Carousel<Asset3dInterface>
-            items={allSkyboxes}
-            activeItem={selectedItem}
-            onChange={selectItem}
-            renderItem={(item, idx) => {
-              const active = item === selectedItem;
-              return (
-                <styled.Item
-                  className={cn({active})}
-                  key={item.id + `-${idx}`}
-                  onClick={() => {
-                    selectItem(item);
-                  }}
-                >
-                  {item.isUserAttribute && (
-                    <styled.DeleteButton
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
+    <>
+      <styled.Container className={hasDialogOpen ? 'blur' : ''}>
+        <styled.ItemsGallery>
+          <styled.SkyboxCountContainer>
+            <styled.SkyboxCount>
+              <Text
+                text={t('counts.skyboxes', {count: allSkyboxes.length})}
+                size="l"
+                align="left"
+              />
+            </styled.SkyboxCount>
+          </styled.SkyboxCountContainer>
+          {!!allSkyboxes && !!selectedItem && (
+            <Carousel<Asset3dInterface>
+              items={allSkyboxes}
+              activeItem={selectedItem}
+              onChange={selectItem}
+              renderItem={(item, idx) => {
+                const active = item === selectedItem;
+                return (
+                  <styled.Item
+                    className={cn({active})}
+                    key={item.id + `-${idx}`}
+                    onClick={() => {
+                      selectItem(item);
+                    }}
+                  >
+                    {item.isUserAttribute && (
+                      <styled.DeleteButton
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
 
-                        skyboxSelectorStore.openSkyboxDeletion(item.id);
+                          skyboxSelectorStore.openSkyboxDeletion(item.id);
 
-                        // removeUserSkybox(worldId, item.id).catch((err) => {
-                        //   toast.error(err.message);
-                        // });
-                      }}
-                    >
-                      <IconSvg name="bin" size="normal" isWhite />
-                    </styled.DeleteButton>
-                  )}
-                  <styled.PreviewImg src={item.image} />
-                  <styled.ItemTitle>{item.name}</styled.ItemTitle>
-                  <styled.ItemCreatedBy>
-                    {t('titles.by')} <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
-                  </styled.ItemCreatedBy>
-                  <styled.ItemButtonHolder>
-                    <Button
-                      label={
-                        currentItem === item
-                          ? t('titles.selectedSkybox')
-                          : t('actions.selectSkybox')
-                      }
-                      // variant="inverted"
-                      disabled={currentItem === item}
-                      transform="uppercase"
-                      size="medium"
-                      onClick={() => {
-                        // saveItem(item, worldId).catch((err) => {
-                        saveItem(item.id, item.isUserAttribute, worldId).catch((err) => {
-                          toast.error(err.message);
-                        });
-                      }}
-                    />
-                  </styled.ItemButtonHolder>
-                </styled.Item>
-              );
-            }}
-          />
-        )}
-      </styled.ItemsGallery>
-      <styled.ButtonsHolder>
-        <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
-        <Button label={t('actions.closePanel')} onClick={() => history.goBack()} />
-      </styled.ButtonsHolder>
+                          // removeUserSkybox(worldId, item.id).catch((err) => {
+                          //   toast.error(err.message);
+                          // });
+                        }}
+                      >
+                        <IconSvg name="bin" size="normal" isWhite />
+                      </styled.DeleteButton>
+                    )}
+                    <styled.PreviewImg src={item.image} />
+                    <styled.ItemTitle>{item.name}</styled.ItemTitle>
+                    <styled.ItemCreatedBy>
+                      {t('titles.by')} <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
+                    </styled.ItemCreatedBy>
+                    <styled.ItemButtonHolder>
+                      <Button
+                        label={
+                          currentItem === item
+                            ? t('titles.selectedSkybox')
+                            : t('actions.selectSkybox')
+                        }
+                        // variant="inverted"
+                        disabled={currentItem === item}
+                        transform="uppercase"
+                        size="medium"
+                        onClick={() => {
+                          // saveItem(item, worldId).catch((err) => {
+                          saveItem(item.id, item.isUserAttribute, worldId).catch((err) => {
+                            toast.error(err.message);
+                          });
+                        }}
+                      />
+                    </styled.ItemButtonHolder>
+                  </styled.Item>
+                );
+              }}
+            />
+          )}
+        </styled.ItemsGallery>
+        <styled.ButtonsHolder>
+          <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
+          <Button label={t('actions.closePanel')} onClick={() => history.goBack()} />
+        </styled.ButtonsHolder>
+      </styled.Container>
       {skyboxSelectorStore.uploadDialog.isOpen && <UploadSkyboxDialog />}
       {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />}
-    </styled.Container>
+    </>
   );
 };
 

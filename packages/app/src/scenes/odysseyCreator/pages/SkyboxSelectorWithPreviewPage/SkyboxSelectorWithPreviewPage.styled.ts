@@ -12,6 +12,10 @@ export const Container = styled.div`
   justify-content: center;
   gap: 50px;
   padding-top: 80px;
+
+  &.blur {
+    filter: blur(5px);
+  }
 `;
 
 export const PreviewContainer = styled.div`
@@ -61,7 +65,7 @@ export const SkyboxCount = styled.div`
 
 export const Item = styled.div`
   width: 180px;
-  height: 260px;
+  height: 270px;
   display: flex;
   flex-direction: column;
   align-items: center;
