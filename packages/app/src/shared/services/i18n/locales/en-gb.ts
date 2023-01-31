@@ -323,6 +323,7 @@ export const enGb = {
       addObject: 'Add Object',
       skybox: 'Skybox',
       addCustomSkybox: 'Add Custom Skybox',
+      removeCustomSkybox: 'Remove Skybox',
       connectYourWallet: 'Connect your wallet'
     },
     messages: {
@@ -455,7 +456,10 @@ export const enGb = {
         "You just received {{amount}} tokens. One more step and you'll embark on your epic journey!",
       onceConnectedTokensWillBeAwarded:
         'Once connected, you will be awarded some Drive tokens to get you started',
-      noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
+      noWalletFollowInstructions: 'No wallet? You can get one following the instructions',
+      removeSkyboxConfirmation: "You are about to remove the custom skybox",
+      removeSkyboxCurrentConfirmation: "This Skybox is your Current skybox; removing this will change your skybox to the default one.",
+      removeSkyboxFinalConfirmation: "Are you sure you want to do this?"
     },
     titles: {
       alert: 'alert',
@@ -466,6 +470,7 @@ export const enGb = {
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       later: 'later',
       create: 'create',
+      by: 'By',
       stage: 'Stage mode',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
@@ -633,6 +638,7 @@ export const enGb = {
       closePanel: 'Close Panel',
       selectSkybox: 'Select Skybox',
       addSkybox: 'Add Skybox',
+      removeSkybox: 'Remove Skybox',
       upload: 'Upload',
       spawnObject: 'Spawn Object',
       change: 'Change',

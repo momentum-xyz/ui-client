@@ -22,10 +22,11 @@ interface SkyboxInfoInterface {
 }
 
 const UploadSkyboxDialog: FC = () => {
-  const {odysseyCreatorStore, unityStore} = useStore();
+  const {odysseyCreatorStore, unityStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {uploadDialog, uploadSkybox, isUploadPending} = skyboxSelectorStore;
   const {unityInstanceStore} = unityStore;
+  const {user} = sessionStore;
   const worldId = unityStore.worldId;
 
   const {t} = useTranslation();
@@ -50,7 +51,10 @@ const UploadSkyboxDialog: FC = () => {
   });
 
   const formSubmitHandler: SubmitHandler<SkyboxInfoInterface> = async ({file, name}) => {
-    const isUploadOK = await uploadSkybox(worldId, file, name);
+    if (!user) {
+      return;
+    }
+    const isUploadOK = await uploadSkybox(worldId, user.id, file, name);
     if (!isUploadOK) {
       setError('file', {
         type: 'submit'

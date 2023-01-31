@@ -9,14 +9,13 @@ import {useTranslation} from 'react-i18next';
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {Carousel, UploadSkyboxDialog} from './components';
+import {Carousel, UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
   const {odysseyCreatorStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
-  const {selectedItem, currentItem, selectItem, saveItem, allSkyboxes, removeUserSkybox} =
-    skyboxSelectorStore;
+  const {selectedItem, currentItem, selectItem, saveItem, allSkyboxes} = skyboxSelectorStore;
   const {user} = sessionStore;
 
   const {worldId} = useParams<{worldId: string}>();
@@ -26,8 +25,11 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    skyboxSelectorStore.fetchItems(worldId);
-  }, [skyboxSelectorStore, worldId]);
+    if (!user) {
+      return;
+    }
+    skyboxSelectorStore.fetchItems(worldId, user.id);
+  }, [skyboxSelectorStore, user, worldId]);
 
   return (
     <styled.Container>
@@ -58,9 +60,11 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                         e.preventDefault();
                         e.stopPropagation();
 
-                        removeUserSkybox(worldId, item.id).catch((err) => {
-                          toast.error(err.message);
-                        });
+                        skyboxSelectorStore.openSkyboxDeletion(item.id);
+
+                        // removeUserSkybox(worldId, item.id).catch((err) => {
+                        //   toast.error(err.message);
+                        // });
                       }}
                     >
                       <IconSvg name="bin" size="normal" isWhite />
@@ -69,7 +73,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   <styled.PreviewImg src={item.image} />
                   <styled.ItemTitle>{item.name}</styled.ItemTitle>
                   <styled.ItemCreatedBy>
-                    By <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
+                    {t('titles.by')} <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
                   </styled.ItemCreatedBy>
                   <styled.ItemButtonHolder>
                     <Button
@@ -83,7 +87,8 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                       transform="uppercase"
                       size="medium"
                       onClick={() => {
-                        saveItem(item, worldId).catch((err) => {
+                        // saveItem(item, worldId).catch((err) => {
+                        saveItem(item.id, item.isUserAttribute, worldId).catch((err) => {
                           toast.error(err.message);
                         });
                       }}
@@ -100,6 +105,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
         <Button label={t('actions.closePanel')} onClick={() => history.goBack()} />
       </styled.ButtonsHolder>
       {skyboxSelectorStore.uploadDialog.isOpen && <UploadSkyboxDialog />}
+      {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />}
     </styled.Container>
   );
 };
