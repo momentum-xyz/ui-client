@@ -323,6 +323,7 @@ export const enGb = {
       changeMusic: 'Change Music (coming soon)',
       tokenGating: 'Token Gating (coming soon)',
       addObject: 'Add Object',
+      spawnPoint: 'Spawn Point',
       skybox: 'Skybox',
       addCustomSkybox: 'Add Custom Skybox',
       removeCustomSkybox: 'Remove Skybox',
@@ -532,6 +533,7 @@ export const enGb = {
       admin: 'Admin',
       owner: 'Owner',
       colourPicker: 'Colour Picker',
+      setSpawnPoint: 'Set Spawn Point',
       statistics: 'Statistics'
     },
     textMessage: {
@@ -540,7 +542,8 @@ export const enGb = {
       joinText: '{{name}} has joined the collaboration space',
       leftText: '{{name}} has left the collaboration space',
       flyWithMeInvite: '{{name}} has invited you to join them in fly with me',
-      flyWithMeDisabled: '{{name}} has disabled fly with me'
+      flyWithMeDisabled: '{{name}} has disabled fly with me',
+      setSpawnPoint: 'Set your current location and orientation as the spawn point.'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',

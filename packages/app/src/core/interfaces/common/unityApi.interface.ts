@@ -16,6 +16,7 @@ export interface UnityApiInterface {
   triggerTeleport(domain?: string, worldId?: string): any;
   getCurrentWorld(): string;
   getUserPosition(): string;
+  getUserRotation(): string;
   triggerInteractionMsg(kind: number, guid: string, flag: number, message: string): any;
   relayMessage(topic: string, json: string): any;
   startFlyWithMe(pilotId: string): void;
