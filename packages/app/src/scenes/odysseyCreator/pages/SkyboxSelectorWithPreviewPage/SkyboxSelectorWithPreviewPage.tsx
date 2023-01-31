@@ -29,8 +29,6 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     skyboxSelectorStore.fetchItems(worldId);
   }, [skyboxSelectorStore, worldId]);
 
-  console.log(!!allSkyboxes && !!selectedItem, allSkyboxes, selectedItem);
-
   return (
     <styled.Container>
       <styled.ItemsGallery>
