@@ -1,4 +1,5 @@
 export const ROUTES = {
   base: '/',
-  plugin: '/object/:objectId'
+  plugin: '/object/:objectId',
+  config: '/config'
 };

@@ -5,7 +5,9 @@ import {Toggle, Text} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../../../interfaces';
 import {ObjectViewEmulator} from '../ObjectViewEmulator';
+import {ConfigEmulator} from '../ConfigEmulator';
 import {ROUTES} from '../../constants';
+import {useConfigEmulatorStorage} from '../../../hooks';
 
 import * as styled from './WorldEmulator.styled';
 
@@ -23,6 +25,16 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
 
   const history = useHistory();
   const onClose = useCallback(() => history.push(ROUTES.base), [history]);
+
+  // TODO get plugin type here
+  const {data: storedConfig, onSave: _onSaveConfig} = useConfigEmulatorStorage(
+    window.location.origin
+  );
+  // TODO pass config to plugin
+  const onSaveConfig = (data: unknown) => {
+    _onSaveConfig(data);
+    onClose();
+  };
 
   const [isAdmin, _setIsAdmin] = useState(initialIsAdmin);
   const setIsAdmin = () => {
@@ -43,12 +55,28 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
             <styled.Button
               onClick={() => history.push(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
             >
-              Open Plugin
+              Open Object
             </styled.Button>
+            &nbsp;
+            {isAdmin && (
+              <styled.Button onClick={() => history.push(ROUTES.config)}>Open Config</styled.Button>
+            )}
           </div>
         </Route>
         <Route path={ROUTES.plugin}>
           <ObjectViewEmulator plugin={plugin} isAdmin={isAdmin} onClose={onClose} />
+        </Route>
+        <Route path={ROUTES.config}>
+          {isAdmin ? (
+            <ConfigEmulator
+              config={storedConfig}
+              plugin={plugin}
+              onSave={onSaveConfig}
+              onClose={onClose}
+            />
+          ) : (
+            <div>No permission for this page</div>
+          )}
         </Route>
         <Redirect to={ROUTES.base} />
       </Switch>
