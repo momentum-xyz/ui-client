@@ -49,6 +49,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {agoraScreenShareStore} = agoraStore;
   const {unityWorldStore} = unityStore;
   const {user} = sessionStore;
+  const {nftUser} = odysseyBioStore;
 
   const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
 
@@ -58,7 +59,8 @@ const Widgets: FC<PropsInterface> = (props) => {
   useEffect(() => {
     onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
     onlineUsersStore.fetchUser(unityStore.worldId);
-  }, [onlineUsersStore, sessionStore.userId, unityStore.worldId]);
+    odysseyBioStore.fetchUser(unityStore.worldId);
+  }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, unityStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
@@ -165,13 +167,14 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <ToolbarIcon
                     title=""
                     state={{canGoBack: true}}
-                    icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
+                    icon={nftUser?.avatarSrc ? undefined : 'people'}
                     size="medium"
                   >
-                    {onlineUsersStore.nftUser?.avatarSrc && (
+                    {nftUser?.avatarSrc && (
                       <Avatar
                         size="extra-small"
-                        avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
+                        status={nftUser?.status}
+                        avatarSrc={nftUser?.avatarSrc}
                         showBorder
                         showHover
                       />
