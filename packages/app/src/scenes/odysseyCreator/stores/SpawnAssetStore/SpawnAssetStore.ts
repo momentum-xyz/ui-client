@@ -81,6 +81,14 @@ const SpawnAssetStore = types
       console.log('uploadAsset response', response);
       return !!response;
     }),
+    devUploadImage: flow(function* (file: File) {
+      const data = {file: file};
+      const userResponse = yield self.uploadAssetRequest.send(
+        api.mediaRepository.uploadImage,
+        data
+      );
+      return userResponse?.hash;
+    }),
     fetchAssets3d: flow(function* (category: Asset3dCategoryEnum) {
       self.assets3d = cast([]);
 

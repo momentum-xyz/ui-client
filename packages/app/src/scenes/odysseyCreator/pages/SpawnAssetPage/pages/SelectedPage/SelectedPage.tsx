@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button, FileUploader, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 
@@ -43,6 +43,22 @@ export const SelectedPage: FC = () => {
     });
   }, [history, spawnAssetStore, worldId]);
 
+  const handleDevUpload = (file: File | undefined) => {
+    console.log({file, asset});
+    if (asset && file) {
+      spawnAssetStore
+        .devUploadImage(file)
+        .then((imageHash) => {
+          alert(
+            `UPDATE asset_3d SET meta = jsonb_set(meta, '{preview_hash}', '"${imageHash}"', TRUE) WHERE asset_3d_id = '${asset.id}';`
+          );
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
+
   if (!asset) {
     return null;
   }
@@ -78,6 +94,17 @@ export const SelectedPage: FC = () => {
           history.goBack();
         }}
       />
+      {process.env.NODE_ENV === 'development' && (
+        <FileUploader
+          label="DEV - Upload PREVIEW Image"
+          dragActiveLabel="Drop the files here..."
+          fileType="image"
+          buttonSize="small"
+          onFilesUpload={handleDevUpload}
+          onError={(error) => console.error(error)}
+          enableDragAndDrop={false}
+        />
+      )}
     </styled.Container>
   );
 };
