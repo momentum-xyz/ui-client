@@ -422,7 +422,7 @@ const NftStore = types
           block_hash,
           wallet: address,
           name,
-          image: image || 'https://picsum.photos/102'
+          image: image || ''
         });
         console.log('nftReqResult', nftReqResult);
         if (!nftReqResult) {
