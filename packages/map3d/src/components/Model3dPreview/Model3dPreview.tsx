@@ -154,7 +154,9 @@ export const Model3dPreview: FC<PropsInterface> = ({
 
     console.log('Loading 3D model', filename);
 
-    setProgress(0);
+    // TODO uncomment this when all models can be loaded - for now the unity ones fail to load
+    // and it leads to annoying blinking
+    // setProgress(0);
     loader.load(
       filename,
       (gltf) => {
