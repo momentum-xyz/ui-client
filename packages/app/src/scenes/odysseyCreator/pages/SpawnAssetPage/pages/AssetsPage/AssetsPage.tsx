@@ -12,10 +12,15 @@ import * as styled from './AssetsPage.styled';
 
 interface PropsInterface {
   assetCategory: Asset3dCategoryEnum;
+  showPreview?: boolean;
   setFunctionalityAfterCreation?: boolean;
 }
 
-const AssetsPage: FC<PropsInterface> = ({assetCategory, setFunctionalityAfterCreation = false}) => {
+const AssetsPage: FC<PropsInterface> = ({
+  assetCategory,
+  setFunctionalityAfterCreation = false,
+  showPreview
+}) => {
   const {odysseyCreatorStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
 
@@ -47,7 +52,11 @@ const AssetsPage: FC<PropsInterface> = ({assetCategory, setFunctionalityAfterCre
 
   return (
     <styled.Contaier>
-      <AssetsGrid assets={spawnAssetStore.filteredAsset3dList} onSelected={handleSelected} />
+      <AssetsGrid
+        assets={spawnAssetStore.filteredAsset3dList}
+        showPreview={showPreview}
+        onSelected={handleSelected}
+      />
     </styled.Contaier>
   );
 };

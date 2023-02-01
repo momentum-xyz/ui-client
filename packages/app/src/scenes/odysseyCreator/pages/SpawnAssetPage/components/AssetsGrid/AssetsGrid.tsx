@@ -10,10 +10,11 @@ import * as styled from './AssetsGrid.styled';
 
 interface PropsInterface {
   assets: Asset3dInterface[];
+  showPreview?: boolean;
   onSelected: (asset: Asset3dInterface) => void;
 }
 
-const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
+const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
   const [hoveringAsset, setHoveringAsset] = useState<Asset3dInterface | null>(null);
 
   const {t} = useTranslation();
@@ -40,7 +41,7 @@ const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
             setHoveringAsset(null);
           }}
         >
-          {hoveringAsset !== asset ? (
+          {hoveringAsset !== asset || !showPreview ? (
             <styled.GridItemImage src={asset.image} />
           ) : (
             <styled.GridItemPreview>
