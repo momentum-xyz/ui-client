@@ -351,6 +351,8 @@ export const enGb = {
       loading30sec: 'If Odyssey does not load within 30 seconds, please',
       clearCache: 'Clear your cache',
       version: 'Odyssey version {{version}}',
+      spawnPointUpdated: 'Spawning point was updated.',
+      spawnPointNotUpdated: 'Spawning point was not updated.',
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
