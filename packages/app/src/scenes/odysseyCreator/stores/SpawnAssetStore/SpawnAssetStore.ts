@@ -94,15 +94,17 @@ const SpawnAssetStore = types
 
       if (response) {
         const assets =
-          response.map(({id, meta: {name, preview_hash}}) => ({
-            id,
-            name,
-            image:
-              // FIXME - temp until proper preview images are available
-              preview_hash
-                ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${preview_hash}`
-                : `https://dev.odyssey.ninja/api/v3/render/texture/${ImageSizeEnum.S4}/03ce359d18bfc0fe977bd66ab471d222`
-          })) || [];
+          response
+            .map(({id, meta: {name, preview_hash}}) => ({
+              id,
+              name,
+              image:
+                // FIXME - temp until proper preview images are available
+                preview_hash
+                  ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${preview_hash}`
+                  : `https://dev.odyssey.ninja/api/v3/render/texture/${ImageSizeEnum.S4}/03ce359d18bfc0fe977bd66ab471d222`
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name)) || [];
 
         self.assets3d = cast(assets);
       }
