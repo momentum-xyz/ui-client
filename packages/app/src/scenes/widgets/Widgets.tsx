@@ -49,7 +49,6 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {agoraScreenShareStore} = agoraStore;
   const {unityWorldStore} = unityStore;
   const {user} = sessionStore;
-  const {nftUser} = odysseyBioStore;
 
   const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
 
@@ -59,7 +58,6 @@ const Widgets: FC<PropsInterface> = (props) => {
   useEffect(() => {
     onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
     onlineUsersStore.fetchUser(unityStore.worldId);
-    odysseyBioStore.fetchUser(unityStore.worldId);
   }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, unityStore.worldId]);
 
   useEffect(() => {
@@ -92,13 +90,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               title={t('titles.profile')}
               onClick={widgetsStore.profileStore.dialog.toggle}
             >
-              <Avatar
-                size="extra-small"
-                status={user?.status}
-                avatarSrc={user?.avatarSrc}
-                showBorder
-                showHover
-              />
+              <Avatar size="extra-small" avatarSrc={user?.avatarSrc} showBorder showHover />
             </ToolbarIcon>
 
             {!isExplorePage && (
@@ -167,14 +159,13 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <ToolbarIcon
                     title=""
                     state={{canGoBack: true}}
-                    icon={nftUser?.avatarSrc ? undefined : 'people'}
+                    icon={unityWorldStore.worldImageSrc ? undefined : 'people'}
                     size="medium"
                   >
-                    {nftUser?.avatarSrc && (
+                    {unityWorldStore.worldImageSrc && (
                       <Avatar
                         size="extra-small"
-                        status={nftUser?.status}
-                        avatarSrc={nftUser?.avatarSrc}
+                        avatarSrc={unityWorldStore.worldImageSrc}
                         showBorder
                         showHover
                       />
