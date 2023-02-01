@@ -10,7 +10,7 @@ import {
 } from 'api';
 import {mapper} from 'api/mapper';
 import {Space} from 'core/models';
-import {getRootStore} from 'core/utils';
+import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 // TODO: Use this store a little bit more :)
 const UnityWorldStore = types.compose(
@@ -67,6 +67,11 @@ const UnityWorldStore = types.compose(
         return worldNft?.owner
           ? getRootStore(self).nftStore.mutualStakingAddresses.includes(worldNft.owner)
           : false;
+      },
+      get worldImageSrc(): string {
+        const worldNft = getRootStore(self).nftStore.getNftByUuid(self.worldId);
+        const imageSrc = worldNft?.image ? getImageAbsoluteUrl(worldNft.image) || '' : '';
+        return imageSrc;
       }
     }))
 );

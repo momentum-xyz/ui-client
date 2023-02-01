@@ -58,7 +58,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   useEffect(() => {
     onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
     onlineUsersStore.fetchUser(unityStore.worldId);
-  }, [onlineUsersStore, sessionStore.userId, unityStore.worldId]);
+  }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, unityStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
@@ -90,13 +90,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               title={t('titles.profile')}
               onClick={widgetsStore.profileStore.dialog.toggle}
             >
-              <Avatar
-                size="extra-small"
-                status={user?.status}
-                avatarSrc={user?.avatarSrc}
-                showBorder
-                showHover
-              />
+              <Avatar size="extra-small" avatarSrc={user?.avatarSrc} showBorder showHover />
             </ToolbarIcon>
 
             {!isExplorePage && (
@@ -165,13 +159,13 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <ToolbarIcon
                     title=""
                     state={{canGoBack: true}}
-                    icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
+                    icon={unityWorldStore.worldImageSrc ? undefined : 'people'}
                     size="medium"
                   >
-                    {onlineUsersStore.nftUser?.avatarSrc && (
+                    {unityWorldStore.worldImageSrc && (
                       <Avatar
                         size="extra-small"
-                        avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
+                        avatarSrc={unityWorldStore.worldImageSrc}
                         showBorder
                         showHover
                       />
