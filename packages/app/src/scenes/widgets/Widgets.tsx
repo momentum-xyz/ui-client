@@ -46,8 +46,8 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
+  const {unityWorldStore, unityInstanceStore} = unityStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {unityWorldStore} = unityStore;
   const {user} = sessionStore;
 
   const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
@@ -243,6 +243,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               <ToolbarCreatorIcon
                 worldId={unityStore.worldId}
                 isAdmin={unityStore.isCurrentUserWorldAdmin}
+                onCloseAndReset={unityInstanceStore.closeAndResetObjectMenu}
                 isBuilderMode={pathname.includes(
                   generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId})
                 )}

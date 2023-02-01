@@ -1,37 +1,43 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
 
-import {User} from 'core/models';
-import {api, UserProfileInterface, UploadImageResponse} from 'api';
+import {api, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
+import {ProfileFormInterface} from 'core/interfaces';
 
 const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
       dialog: types.optional(Dialog, {}),
-      userProfile: types.maybe(User),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
-      fetchRequest: types.optional(RequestModel, {}),
-      editAvatarRequest: types.optional(RequestModel, {}),
-      editRequest: types.optional(RequestModel, {})
+      editRequest: types.optional(RequestModel, {}),
+      editAvatarRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      fetchProfile: flow(function* () {
-        const response = yield self.fetchRequest.send(api.userRepository.fetchMe, {});
-        if (response) {
-          self.userProfile = cast(response);
+      editProfile: flow(function* (form: ProfileFormInterface, previousImageHash?: string) {
+        let avatarHash = previousImageHash;
+
+        // 1. Avatar uploading.
+        if (form.avatarFile) {
+          const userResponse: UploadImageResponse = yield self.editAvatarRequest.send(
+            api.mediaRepository.uploadImage,
+            {file: form.avatarFile}
+          );
+
+          if (userResponse?.hash) {
+            avatarHash = userResponse?.hash;
+          }
         }
-      }),
-      editProfile: flow(function* (name: string, profile: UserProfileInterface) {
-        // 1. Profile updating.
+
+        // 2. Profile updating.
         const response = yield self.editRequest.send(api.userProfileRepository.update, {
-          name,
+          name: form.name,
           profile: {
-            bio: profile.bio,
-            profileLink: profile.profileLink,
-            location: profile.location,
-            avatarHash: self.userProfile?.profile.avatarHash
+            bio: form.bio,
+            profileLink: form.profileLink,
+            location: form.location,
+            avatarHash
           }
         });
 
@@ -46,35 +52,11 @@ const ProfileStore = types.compose(
         }
 
         return true;
-      }),
-      editImage: flow(function* (file: File) {
-        if (!self.userProfile?.profile) {
-          return;
-        }
-
-        // 1. Avatar uploading.
-        const data = {file: file};
-        const userResponse: UploadImageResponse = yield self.editAvatarRequest.send(
-          api.mediaRepository.uploadImage,
-          data
-        );
-        const avatarHash = userResponse?.hash;
-
-        // 2. Profile updating.
-        const response = yield self.editRequest.send(api.userProfileRepository.update, {
-          name: self.userProfile.name,
-          profile: {
-            ...self.userProfile.profile,
-            avatarHash: avatarHash
-          }
-        });
-
-        self.userProfile.profile.avatarHash = response?.profile?.avatarHash;
       })
     }))
     .views((self) => ({
-      get isLoading(): boolean {
-        return self.fetchRequest.isPending;
+      get isUpdating(): boolean {
+        return self.editRequest.isPending || self.editAvatarRequest.isPending;
       },
       get formErrors(): FieldErrorInterface[] {
         return [...self.fieldErrors];

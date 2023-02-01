@@ -45,3 +45,10 @@ export const AvatarImageInner = styled.div`
   left: -11px;
   right: -11px;
 `;
+
+export const Actions = styled.div`
+  padding: 0 0 10px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+`;

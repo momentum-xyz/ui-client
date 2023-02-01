@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {FileUploader, InputDark, TextAreaDark} from '@momentum-xyz/ui-kit';
+import {Button, FileUploader, InputDark, TextAreaDark} from '@momentum-xyz/ui-kit';
 
+import {ProfileFormInterface} from 'core/interfaces';
 import {UserModelInterface} from 'core/models';
-import {UpdateProfileInterface, UserProfileInterface} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {ToastContent} from 'ui-kit';
 
@@ -15,13 +15,14 @@ import * as styled from './ProfileEditor.styled';
 interface PropsInterface {
   user: UserModelInterface;
   formErrors: FieldErrorInterface[];
+  isUpdating: boolean;
   onChangeKeyboardControl: (value: boolean) => void;
-  onEditProfile: (name: string, profile: UserProfileInterface) => Promise<boolean>;
-  onEditImage: (file: File) => Promise<void>;
+  onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => Promise<boolean>;
+  onCancel: () => void;
 }
 
-const MyProfileEdit: React.FC<PropsInterface> = (props) => {
-  const {user, formErrors, onEditProfile, onEditImage, onChangeKeyboardControl} = props;
+const ProfileEditor: React.FC<PropsInterface> = (props) => {
+  const {user, formErrors, isUpdating, onUpdate, onCancel, onChangeKeyboardControl} = props;
 
   const {t} = useTranslation();
 
@@ -39,11 +40,11 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
     setError,
     clearErrors,
     formState: {errors}
-  } = useForm<UpdateProfileInterface>();
+  } = useForm<ProfileFormInterface>();
 
   useEffect(() => {
     formErrors.forEach(({fieldName, errorMessage}) => {
-      setError(fieldName as keyof UpdateProfileInterface, {
+      setError(fieldName as keyof ProfileFormInterface, {
         type: 'duplicate',
         message: errorMessage
       });
@@ -53,12 +54,13 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
   useEffect(() => {
     if (user?.profile) {
       setValue('name', user.name);
-      setValue('profile', user.profile);
+      setValue('bio', user.profile.bio);
+      setValue('profileLink', user.profile.bio);
     }
   }, [user?.name, user?.profile, setValue]);
 
-  const formSubmitHandler = handleSubmit(async (data: UpdateProfileInterface) => {
-    if (!(await onEditProfile(data.name, data.profile))) {
+  const formSubmitHandler = handleSubmit(async (form: ProfileFormInterface) => {
+    if (!(await onUpdate(form, user.profile.avatarHash))) {
       toast.error(
         <ToastContent
           isDanger
@@ -73,33 +75,32 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
     }
   });
 
-  const imageHandle = useCallback(
-    async (file: File | undefined) => {
-      if (file) {
-        await onEditImage(file);
-      }
-    },
-    [onEditImage]
-  );
-
   return (
-    <styled.Container>
-      <styled.Avatar>
-        <styled.AvatarImageUpload>
-          {!!user.avatarSrc && <styled.AvatarImage src={user.avatarSrc} />}
-          <styled.AvatarImageInner>
-            <FileUploader
-              label="Upload Image"
-              dragActiveLabel="Drop the files here..."
-              fileType="image"
-              buttonSize="small"
-              onFilesUpload={imageHandle}
-              onError={(error) => console.error(error)}
-              enableDragAndDrop={false}
-            />
-          </styled.AvatarImageInner>
-        </styled.AvatarImageUpload>
-      </styled.Avatar>
+    <styled.Container data-testid="ProfileEditor-test">
+      {/* AVATAR */}
+      <Controller
+        name="avatarFile"
+        control={control}
+        render={({field: {value, onChange}}) => (
+          <styled.Avatar>
+            <styled.AvatarImageUpload>
+              {value && <styled.AvatarImage src={URL.createObjectURL(value)} />}
+              {!value && !!user.avatarSrc && <styled.AvatarImage src={user.avatarSrc} />}
+              <styled.AvatarImageInner>
+                <FileUploader
+                  label={t('fileUploader.uploadLabel')}
+                  dragActiveLabel={t('fileUploader.dragActiveLabel')}
+                  fileType="image"
+                  buttonSize="small"
+                  onFilesUpload={onChange}
+                  onError={(error) => console.error(error)}
+                  enableDragAndDrop={false}
+                />
+              </styled.AvatarImageInner>
+            </styled.AvatarImageUpload>
+          </styled.Avatar>
+        )}
+      />
 
       {/* NAME */}
       <styled.InputsContainer>
@@ -119,7 +120,6 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
               }
               isError={!!errors.name}
               required
-              onBlur={formSubmitHandler}
             />
           )}
         />
@@ -127,34 +127,28 @@ const MyProfileEdit: React.FC<PropsInterface> = (props) => {
         {/* BIO */}
         <Controller
           control={control}
-          name="profile.bio"
+          name="bio"
           render={({field: {value, onChange}}) => (
-            <TextAreaDark
-              placeholder="Bio"
-              value={value}
-              rows={3}
-              onChange={onChange}
-              onBlur={formSubmitHandler}
-            />
+            <TextAreaDark placeholder="Bio" value={value} rows={3} onChange={onChange} />
           )}
         />
 
         {/* LINK */}
         <Controller
           control={control}
-          name="profile.profileLink"
+          name="profileLink"
           render={({field: {value, onChange}}) => (
-            <InputDark
-              placeholder="Link"
-              value={value}
-              onChange={onChange}
-              onBlur={formSubmitHandler}
-            />
+            <InputDark placeholder="Link" value={value} onChange={onChange} />
           )}
         />
       </styled.InputsContainer>
+
+      <styled.Actions>
+        <Button variant="danger" label={t('actions.cancel')} onClick={onCancel} />
+        <Button label={t('actions.save')} disabled={isUpdating} onClick={formSubmitHandler} />
+      </styled.Actions>
     </styled.Container>
   );
 };
 
-export default observer(MyProfileEdit);
+export default observer(ProfileEditor);

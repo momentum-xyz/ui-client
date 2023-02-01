@@ -1,8 +1,9 @@
 import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useHistory} from 'react-router-dom';
-import {Dialog, Heading, IconSvg, Loader, SvgButton} from '@momentum-xyz/ui-kit';
+import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 
+import {ProfileFormInterface} from 'core/interfaces';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
@@ -23,16 +24,13 @@ const ProfileWidget: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    profileStore.fetchProfile();
-
     return () => {
-      sessionStore.loadUserProfile();
       profileStore.resetModel();
     };
   }, [profileStore, sessionStore]);
 
   const handleTeleportToOdyssey = useCallback(() => {
-    const worldId = profileStore.userProfile?.id || '';
+    const worldId = sessionStore.userId;
     profileStore.dialog.close();
 
     if (isUnityAvailable) {
@@ -47,9 +45,21 @@ const ProfileWidget: FC = () => {
 
   const isTeleportAvailable = useMemo(() => {
     return isUnityAvailable
-      ? !sessionStore.isGuest && unityStore.worldId !== profileStore.userProfile?.id
+      ? !sessionStore.isGuest && unityStore.worldId !== sessionStore.userId
       : !sessionStore.isGuest;
-  }, [isUnityAvailable, profileStore.userProfile?.id, sessionStore.isGuest, unityStore.worldId]);
+  }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, unityStore.worldId]);
+
+  const handleProfileUpdate = useCallback(
+    async (form: ProfileFormInterface, previousImageHash?: string) => {
+      if (await profileStore.editProfile(form, previousImageHash)) {
+        await sessionStore.loadUserProfile();
+        setIsEditMode(false);
+        return true;
+      }
+      return false;
+    },
+    [profileStore, sessionStore]
+  );
 
   const handleProfileClose = useCallback(() => {
     profileStore.resetModel();
@@ -73,29 +83,24 @@ const ProfileWidget: FC = () => {
           <SvgButton iconName="close" size="normal" onClick={handleProfileClose} />
         </styled.Header>
         <styled.Body>
-          {!isEditMode && profileStore.isLoading && (
-            <styled.Loader>
-              <Loader />
-            </styled.Loader>
-          )}
-
-          {!!profileStore.userProfile && (
+          {!!sessionStore.user && (
             <styled.Container>
-              {!isEditMode && !profileStore.isLoading && (
+              {!isEditMode && (
                 <ProfileView
                   isVisitAvailable={isTeleportAvailable}
-                  user={profileStore.userProfile}
+                  user={sessionStore.user}
                   onTeleportToOdyssey={handleTeleportToOdyssey}
                 />
               )}
 
               {isEditMode && (
                 <ProfileEditor
-                  user={profileStore.userProfile}
+                  user={sessionStore.user}
                   formErrors={profileStore.formErrors}
+                  isUpdating={profileStore.isUpdating}
                   onChangeKeyboardControl={unityInstanceStore.changeKeyboardControl}
-                  onEditProfile={profileStore.editProfile}
-                  onEditImage={profileStore.editImage}
+                  onUpdate={handleProfileUpdate}
+                  onCancel={() => setIsEditMode(!isEditMode)}
                 />
               )}
 
@@ -106,16 +111,8 @@ const ProfileWidget: FC = () => {
                 audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
                 audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
                 onSelectAudioDevice={agoraStore.selectAudioInput}
-                onToggleDeviceSettings={() => {
-                  setIsDeviceSettings(!isDeviceSettings);
-                }}
-                onToggleEditMode={() => {
-                  if (isEditMode) {
-                    profileStore.fetchProfile();
-                    sessionStore.loadUserProfile();
-                  }
-                  setIsEditMode(!isEditMode);
-                }}
+                onToggleDeviceSettings={() => setIsDeviceSettings(!isDeviceSettings)}
+                onToggleEditMode={() => setIsEditMode(!isEditMode)}
                 {...(!sessionStore.isGuest && {onSignOut: sessionStore.signOutRedirect})}
                 {...(sessionStore.isGuest && {onSignIn: sessionStore.signInRedirect})}
               />
