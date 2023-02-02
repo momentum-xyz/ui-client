@@ -3,10 +3,12 @@ import styled from 'styled-components';
 
 export const Modal = styled.div`
   display: flex;
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 20px;
+  margin: 10px;
+  box-sizing: border-box;
+  // position: absolute;
+  // right: 0;
+  // top: 0;
+  // margin: 20px;
 `;
 
 export const Container = styled.div`

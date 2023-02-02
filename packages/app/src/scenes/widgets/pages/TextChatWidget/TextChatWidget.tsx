@@ -11,7 +11,10 @@ import * as styled from './TextChatWidget.styled';
 const TextChatWidget: FC = () => {
   const {widgetsStore, sessionStore, unityStore} = useStore();
   const {unityInstanceStore} = unityStore;
-  const {textChatStore, voiceChatStore} = widgetsStore;
+  const {
+    textChatStore
+    //  voiceChatStore
+  } = widgetsStore;
   const {streamChat} = textChatStore;
 
   const {t} = useTranslation();
@@ -25,9 +28,11 @@ const TextChatWidget: FC = () => {
   }, [sessionStore.user, sessionStore.userId, streamChat, unityStore.worldId]);
 
   return (
-    <Portal>
+    <Portal parentId="right-top">
       {/* FIXME: Design discussion in order to avoid relation to VoiceChatStore */}
-      <styled.Modal style={{marginRight: voiceChatStore.dialog.isOpen ? '310px' : '20px'}}>
+      <styled.Modal
+      // style={{marginRight: voiceChatStore.dialog.isOpen ? '310px' : '20px'}}
+      >
         <styled.Container>
           <styled.Header>
             <styled.HeaderItemsGroup>

@@ -28,7 +28,7 @@ const VoiceChatWidget: FC = () => {
   }, [agoraStore, agoraVoiceChatStore.hasJoined, voiceChatStore.dialog]);
 
   return (
-    <Portal>
+    <Portal parentId="right-top">
       <styled.Modal>
         <styled.Container>
           <styled.Header>

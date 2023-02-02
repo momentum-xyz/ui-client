@@ -43,8 +43,12 @@ const ScreenShareWidget: FC = () => {
   };
 
   return (
-    <Portal data-testid="ScreenShareWidget-test">
-      <styled.Modal className={cn(screenShareStore.isExpanded && 'expanded')}>
+    <Portal
+      data-testid="ScreenShareWidget-test"
+      parentId={screenShareStore.isExpanded ? 'left-top' : 'right-bottom'}
+      maximized={screenShareStore.isExpanded}
+    >
+      <styled.Container className={cn(screenShareStore.isExpanded && 'expanded')} id="gaga-screen">
         <styled.HeaderElement className="left">
           <styled.Title>
             <Text
@@ -85,7 +89,7 @@ const ScreenShareWidget: FC = () => {
             <ScreenVideo videoTrack={localVideoTrack ? localVideoTrack : remoteVideoTrack} />
           )}
         </styled.InnerContainer>
-      </styled.Modal>
+      </styled.Container>
     </Portal>
   );
 };

@@ -1,18 +1,29 @@
 import {FC, useRef, useEffect} from 'react';
 import {createPortal} from 'react-dom';
 
-const Portal: FC = ({children}) => {
-  const domBody: HTMLElement = document.body;
+interface PropsInterface {
+  parentId?: string;
+  maximized?: boolean;
+}
+
+const Portal: FC<PropsInterface> = ({children, parentId, maximized}) => {
+  const domParent: HTMLElement = (parentId && document.getElementById(parentId)) || document.body;
+
   const domContainer = useRef<HTMLDivElement>(document.createElement('div'));
   domContainer.current.setAttribute('data-testid', 'Portal-test');
 
+  if (maximized) {
+    // set flex-grow to 1 to make it fill the parent
+    domContainer.current.style.flexGrow = '1';
+  }
+
   useEffect(() => {
     const element = domContainer.current;
-    domBody.appendChild(element);
+    domParent.appendChild(element);
     return () => {
-      domBody.removeChild(element);
+      domParent.removeChild(element);
     };
-  }, [domContainer, domBody]);
+  }, [domContainer, domParent]);
 
   return createPortal(children, domContainer.current);
 };
