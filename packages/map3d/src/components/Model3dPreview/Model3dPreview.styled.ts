@@ -1,13 +1,20 @@
 import styled from 'styled-components';
 
-export const Canvas = styled.canvas`
+export const Canvas = styled.canvas<{previewUrl?: string}>`
   pointer-events: all;
   width: 100%;
   height: 100%;
   border-radius: 4px;
 
   &.background {
-    background: linear-gradient(to bottom, #b5bdc8 0%, #828c95 36%, #28343b 100%);
+    background: ${(props) =>
+      !props.previewUrl
+        ? 'linear-gradient(to bottom, #b5bdc8 0%, #828c95 36%, #28343b 100%)'
+        : 'none'};
+    background-image: ${(props) => (props.previewUrl ? `url(${props.previewUrl})` : 'none')};
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
   }
 `;
 

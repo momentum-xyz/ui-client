@@ -8,11 +8,18 @@ interface Asset3dRequest {
 export interface UploadAsset3dRequest extends Asset3dRequest {
   asset: File;
   name: string;
+  preview_hash?: string;
 }
 
 export interface UploadAsset3dResponse {
   id: string;
   meta: MetadataInterface;
+}
+
+export interface PatchAsset3dRequest extends Asset3dRequest {
+  assetId: string;
+  name?: string;
+  preview_hash?: string;
 }
 
 export interface Asset3dMetadataInterface {

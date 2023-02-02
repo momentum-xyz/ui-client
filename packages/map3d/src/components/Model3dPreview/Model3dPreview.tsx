@@ -10,7 +10,7 @@ import {
 } from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
-import {IconSvg, ProgressBar} from '@momentum-xyz/ui-kit';
+import {ProgressBar} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 
 import * as styled from './Model3dPreview.styled';
@@ -90,6 +90,7 @@ export interface PropsInterface {
   filename: string;
   delayLoadingMsec?: number;
   background?: boolean;
+  previewUrl?: string;
   onSnapshot?: (dataUrl: string, initial: boolean) => void;
 }
 
@@ -97,12 +98,14 @@ export const Model3dPreview: FC<PropsInterface> = ({
   filename,
   background = true,
   delayLoadingMsec,
+  previewUrl,
   onSnapshot
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [progress, setProgress] = useState<number | null>(null);
   const [scene, setScene] = useState<Scene>();
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
   const renderRef = useRef<() => void>();
   const disposeRef = useRef<() => void>();
   const autoPosRef = useRef<(gltf: GLTF) => void>();
@@ -182,6 +185,7 @@ export const Model3dPreview: FC<PropsInterface> = ({
           }
         }, 100);
 
+        setIsModelLoaded(true);
         setProgress(null);
       },
       (progress) => {
@@ -222,16 +226,17 @@ export const Model3dPreview: FC<PropsInterface> = ({
       )}
       <styled.Canvas
         className={cn({background})}
+        previewUrl={!isModelLoaded ? previewUrl : undefined}
         style={{width: '100%', height: '100%'}}
         ref={canvasRef}
       />
-      {onSnapshot && (
-        <styled.SnapshotButtonHolder>
+      {/* TEMP disable it - we also need to remember orientation for the snapshot so it wouldn't be ugly moving from preview to model */}
+      {/* {onSnapshot && (
+        <styled.SnapshotButtonHolder title="Take snapshot">
           <IconSvg
             isWhite
             size="large"
             name="fullscreen"
-            // title="Take snapshot"
             onClick={() => {
               // also possible to use toBlob
               const snapshot = canvasRef.current?.toDataURL();
@@ -241,7 +246,7 @@ export const Model3dPreview: FC<PropsInterface> = ({
             }}
           />
         </styled.SnapshotButtonHolder>
-      )}
+      )} */}
     </styled.Container>
   );
 };

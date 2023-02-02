@@ -1,7 +1,7 @@
 import {Button, ErrorsEnum, FileType, FileUploader, Text} from '@momentum-xyz/ui-kit';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback, useState, useEffect} from 'react';
+import {FC, useCallback, useState, useEffect, useRef, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 
@@ -24,14 +24,32 @@ const UploadCustomAssetPage: FC = () => {
   const [asset, setAsset] = useState<File>();
   const [error, setError] = useState<string>();
 
+  // createObjectURL returns different URL for the same file each time it's called
+  const filename = useMemo(() => (asset ? URL.createObjectURL(asset) : null), [asset]);
+
   useEffect(() => {
     spawnAssetStore.setUploadedAssetName('');
   }, [spawnAssetStore]);
 
+  const refSnapshotPreview = useRef<string | undefined>();
+
   // TODO: refactor later to form handle submit
   const handleAddToLbrary = useCallback(async () => {
     if (asset) {
-      await spawnAssetStore.uploadAsset(asset);
+      let preview_hash: string | undefined;
+      if (refSnapshotPreview.current) {
+        try {
+          const blob = await (await fetch(refSnapshotPreview.current)).blob();
+          console.log('Snapshot blob:', blob);
+          preview_hash = await spawnAssetStore.uploadImageToMediaManager(blob as File); // TODO fix type
+          console.log('Snapshot uploaded, hash:', preview_hash);
+        } catch (err) {
+          console.log('Snapshot upload error:', err, '. Ignore and continue');
+        }
+      }
+
+      await spawnAssetStore.uploadAsset(asset, preview_hash);
+
       toast.info(
         <ToastContent
           headerIconName="check"
@@ -74,15 +92,17 @@ const UploadCustomAssetPage: FC = () => {
         />
       </styled.FileUploaderContainer>
       {error && <styled.Error>{error}</styled.Error>}
-      {asset && (
+      {asset && filename && (
         <>
           <styled.PreviewContainer>
             <Model3dPreview
-              filename={URL.createObjectURL(asset)}
+              filename={filename}
               // TODO it should not be necessary, but currently cannot replace already loaded model
-              key={URL.createObjectURL(asset)}
-              // TODO handle snapshot creation and set it to state
-              // then upload it to media manager and attach its hash to asset upload
+              key={filename}
+              onSnapshot={(dataURL) => {
+                console.log('Snapshot:', dataURL);
+                refSnapshotPreview.current = dataURL;
+              }}
             />
           </styled.PreviewContainer>
           <styled.NameInput

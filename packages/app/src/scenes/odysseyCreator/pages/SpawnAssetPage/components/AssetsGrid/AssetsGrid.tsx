@@ -40,10 +40,11 @@ const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
           }}
         >
           {hoveringAsset !== asset || !showPreview ? (
-            <styled.GridItemImage src={asset.image} />
+            <styled.GridItemImage src={asset.previewUrl} />
           ) : (
             <styled.GridItemPreview>
               <Model3dPreview
+                previewUrl={asset.previewUrl}
                 delayLoadingMsec={500}
                 filename={hoveringAsset.thumbnailAssetDownloadUrl}
               />

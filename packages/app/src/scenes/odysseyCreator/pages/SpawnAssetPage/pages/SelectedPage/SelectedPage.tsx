@@ -43,11 +43,27 @@ export const SelectedPage: FC = () => {
     });
   }, [history, spawnAssetStore, worldId]);
 
+  const handleSnapshot = async (dataURL: string, initialSnapshot: boolean) => {
+    if (!asset || !!asset.preview_hash || !initialSnapshot) {
+      return;
+    }
+
+    try {
+      const blob = await (await fetch(dataURL)).blob();
+      const preview_hash = await spawnAssetStore.uploadImageToMediaManager(blob as File); // TODO fix type
+      console.log('preview_hash', preview_hash);
+      await spawnAssetStore.patchAssetMetadata(asset.id, {preview_hash});
+      console.log('Silently set model preview_hash for', asset);
+    } catch (err) {
+      console.log('Error silently setting preview_hash', err, {asset, dataURL, initialSnapshot});
+    }
+  };
+
   const handleDevUpload = (file: File | undefined) => {
     console.log({file, asset});
     if (asset && file) {
       spawnAssetStore
-        .devUploadImage(file)
+        .uploadImageToMediaManager(file)
         .then((imageHash) => {
           alert(
             `UPDATE asset_3d SET meta = jsonb_set(meta, '{preview_hash}', '"${imageHash}"', TRUE) WHERE asset_3d_id = '${asset.id}';`
@@ -68,6 +84,8 @@ export const SelectedPage: FC = () => {
       <styled.PreviewContainer>
         <Model3dPreview
           filename={asset.thumbnailAssetDownloadUrl}
+          previewUrl={asset.previewUrl}
+          onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
           // TODO take snapshow, ask confirmation to replace original
           // check asset type "custom" to determine whether to do it
         />
