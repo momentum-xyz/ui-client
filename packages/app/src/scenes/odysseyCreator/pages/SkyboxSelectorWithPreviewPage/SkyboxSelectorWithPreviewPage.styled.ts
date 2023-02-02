@@ -65,7 +65,7 @@ export const SkyboxCount = styled.div`
 
 export const Item = styled.div`
   width: 180px;
-  height: 270px;
+  height: 290px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,6 +87,20 @@ export const ItemTitle = styled.div`
   color: var(--accent-color);
   text-transform: uppercase;
   font-size: var(--font-size-l);
+
+  height: 40px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  @supports (-webkit-line-clamp: 2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 `;
 
 export const ItemCreatedBy = styled.div`

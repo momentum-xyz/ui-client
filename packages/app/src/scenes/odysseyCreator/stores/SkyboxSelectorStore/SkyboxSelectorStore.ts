@@ -1,21 +1,18 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
-import {Asset3d, Asset3dInterface} from 'core/models';
-import {api, GetSpaceAttributeResponse, UploadImageResponse} from 'api';
-import {appVariables} from 'api/constants';
+import {Asset3dInterface} from 'core/models';
+import {api, UploadImageResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
+import {appVariables} from 'api/constants';
 
 const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
 
-const generateImageFromHash = (hash: string | undefined) => {
-  // FIXME - temp until proper preview images are available
-  return hash
-    ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
-    : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
-};
+const SkyboxDatabaseModel = types.model({
+  name: types.string
+});
 
 const SkyboxSelectorStore = types
   .compose(
@@ -28,14 +25,50 @@ const SkyboxSelectorStore = types
 
       selectedItemId: types.maybe(types.string),
       currentItemId: types.maybe(types.string),
-      defaultSkyboxes: types.optional(types.array(Asset3d), []),
-      userSkyboxes: types.optional(types.array(Asset3d), []),
+      defaultSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
+      userSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
 
       skyboxToDeleteId: types.maybe(types.string),
       uploadDialog: types.optional(Dialog, {}),
       deleteDialog: types.optional(Dialog, {})
     })
   )
+  .views((self) => ({
+    get selectedItem(): Asset3dInterface | undefined {
+      return this.allSkyboxes.find((item) => item.id === self.selectedItemId);
+    },
+    get skyboxToDelete(): Asset3dInterface | undefined {
+      return this.allSkyboxes.find((item) => item.id === self.skyboxToDeleteId);
+    },
+    get currentItem(): Asset3dInterface | undefined {
+      return this.allSkyboxes.find((item) => item.id === self.currentItemId);
+    },
+    get isUploadPending(): boolean {
+      return self.createSkyboxRequest.isPending;
+    },
+    get allSkyboxes(): Asset3dInterface[] {
+      return [
+        ...Object.entries(self.userSkyboxes.toJSON()).map(
+          ([id, d]) =>
+            ({
+              id,
+              ...d,
+              isUserAttribute: true,
+              image: self.generateImageFromHash(id)
+            } as Asset3dInterface)
+        ),
+        ...Object.entries(self.defaultSkyboxes.toJSON()).map(
+          ([id, d]) =>
+            ({
+              id,
+              ...d,
+              isUserAttribute: false,
+              image: self.generateImageFromHash(id)
+            } as Asset3dInterface)
+        )
+      ];
+    }
+  }))
   .actions((self) => ({
     fetchItems: flow(function* (worldId: string, userId: string) {
       console.log('Fetching skyboxes for world:', worldId, 'and user:', userId);
@@ -57,19 +90,16 @@ const SkyboxSelectorStore = types
         api.spaceAttributeRepository.getSpaceAttribute,
         {
           spaceId: spaces.skybox,
-          // spaceId: worldId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.SKYBOX_CUSTOM
         }
       );
 
-      const allSkyboxes = [...self.defaultSkyboxes, ...self.userSkyboxes];
-      self.selectedItemId = customSkyboxData?.render_hash || (allSkyboxes[0] || {id: undefined}).id;
-
-      yield Promise.resolve(allSkyboxes);
+      self.selectedItemId =
+        customSkyboxData?.render_hash || (self.allSkyboxes[0] || {id: undefined}).id;
     }),
     fetchDefaultSkyboxes: flow(function* (spaceId: string) {
-      const response: GetSpaceAttributeResponse | undefined = yield self.fetchSkyboxRequest.send(
+      const response = yield self.fetchSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
           spaceId,
@@ -77,17 +107,11 @@ const SkyboxSelectorStore = types
           attribute_name: AttributeNameEnum.SKYBOX_LIST
         }
       );
-      const skyboxes: Asset3dInterface[] =
-        ((response as any)?.skyboxes || []).map(({name, hash}: any) => ({
-          id: hash,
-          isUserAttribute: false,
-          name,
-          image: generateImageFromHash(hash)
-        })) || [];
-      self.defaultSkyboxes = cast(skyboxes);
+
+      self.defaultSkyboxes = cast(response || {});
     }),
     fetchUserSkyboxes: flow(function* (spaceId: string, userId: string) {
-      const response: GetSpaceAttributeResponse | undefined = yield self.fetchSkyboxRequest.send(
+      const response = yield self.fetchSkyboxRequest.send(
         api.spaceUserAttributeRepository.getSpaceUserAttribute,
         {
           spaceId,
@@ -97,21 +121,7 @@ const SkyboxSelectorStore = types
         }
       );
 
-      if (!response?.skyboxes) {
-        self.userSkyboxes = cast([]);
-        return;
-      }
-
-      const skyboxes: Asset3dInterface[] =
-        ((response as any)?.skyboxes || []).map(({name, hash}: any) => ({
-          id: hash,
-          isUserAttribute: true,
-          name,
-          image: hash
-            ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
-            : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222'
-        })) || [];
-      self.userSkyboxes = cast(skyboxes);
+      self.userSkyboxes = cast(response || {});
     }),
     selectItem(item: Asset3dInterface) {
       self.selectedItemId = item.id;
@@ -158,21 +168,10 @@ const SkyboxSelectorStore = types
       const {hash} = uploadImageResponse;
       console.log('Upload image response:', uploadImageResponse, hash);
 
-      // save skybox to user attribute
       const value = {
-        skyboxes: [
-          ...self.userSkyboxes
-            .filter((d: any) => d.id !== hash)
-            .map((d: any) => ({hash: d.id, name: d.name})),
-          {hash, name: name || '-'}
-        ]
-        // TODO
-        // image_hash: {
-        //   ...self.userSkyboxes.reduce((d: any, acc) => ({...acc, [d.name]: d.hash}), {}),
-        //   [name || '-']: hash
-        // }
+        ...self.userSkyboxes.toJSON(),
+        [hash]: {name}
       };
-
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: worldId,
         userId,
@@ -187,14 +186,8 @@ const SkyboxSelectorStore = types
       return self.createSkyboxRequest.isDone;
     }),
     removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
-      const value = {
-        skyboxes: [
-          ...self.userSkyboxes
-            .filter((d: any) => d.id !== hash)
-            .map((d: any) => ({hash: d.id, name: d.name}))
-        ]
-      };
-
+      const value = {...self.userSkyboxes.toJSON()};
+      delete value[hash];
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: worldId,
         userId,
@@ -204,6 +197,10 @@ const SkyboxSelectorStore = types
       });
 
       yield self.fetchUserSkyboxes(worldId, userId);
+      if (hash === self.selectedItemId) {
+        self.selectedItemId = [...self.defaultSkyboxes.keys(), ...self.userSkyboxes.keys()][0];
+      }
+
       self.closeSkyboxDeletion();
       return self.createSkyboxRequest.isDone;
     }),
@@ -214,23 +211,12 @@ const SkyboxSelectorStore = types
     closeSkyboxDeletion: function () {
       self.skyboxToDeleteId = undefined;
       self.deleteDialog.close();
-    }
-  }))
-  .views((self) => ({
-    get selectedItem(): Asset3dInterface | undefined {
-      return this.allSkyboxes.find((item) => item.id === self.selectedItemId);
     },
-    get skyboxToDelete(): Asset3dInterface | undefined {
-      return this.allSkyboxes.find((item) => item.id === self.skyboxToDeleteId);
-    },
-    get currentItem(): Asset3dInterface | undefined {
-      return this.allSkyboxes.find((item) => item.id === self.currentItemId);
-    },
-    get isUploadPending(): boolean {
-      return self.createSkyboxRequest.isPending;
-    },
-    get allSkyboxes(): Asset3dInterface[] {
-      return [...self.defaultSkyboxes, ...self.userSkyboxes];
+    generateImageFromHash: function (hash: string | undefined) {
+      // FIXME - temp until proper preview images are available
+      return hash
+        ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
+        : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
     }
   }));
 
