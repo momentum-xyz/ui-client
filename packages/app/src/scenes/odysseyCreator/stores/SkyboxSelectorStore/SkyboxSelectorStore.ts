@@ -161,11 +161,9 @@ const SkyboxSelectorStore = types
     }),
     removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
       const value = {
-        skyboxes: [
-          ...self.userSkyboxes
-            .filter((d: any) => d.id !== hash)
-            .map((d: any) => ({hash: d.id, name: d.name}))
-        ]
+        ...self.userSkyboxes
+          .filter((d: any) => d.id !== hash)
+          .reduce((acc, {id, name}) => ({...acc, [id]: {name}}), {})
       };
 
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
