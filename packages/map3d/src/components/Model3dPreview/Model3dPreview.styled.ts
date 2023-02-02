@@ -28,3 +28,15 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+export const SnapshotButtonHolder = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+`;

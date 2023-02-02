@@ -81,6 +81,8 @@ const UploadCustomAssetPage: FC = () => {
               filename={URL.createObjectURL(asset)}
               // TODO it should not be necessary, but currently cannot replace already loaded model
               key={URL.createObjectURL(asset)}
+              // TODO handle snapshot creation and set it to state
+              // then upload it to media manager and attach its hash to asset upload
             />
           </styled.PreviewContainer>
           <styled.NameInput

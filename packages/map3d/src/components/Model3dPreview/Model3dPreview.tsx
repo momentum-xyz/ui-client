@@ -10,7 +10,7 @@ import {
 } from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
-import {ProgressBar} from '@momentum-xyz/ui-kit';
+import {IconSvg, ProgressBar} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 
 import * as styled from './Model3dPreview.styled';
@@ -22,6 +22,7 @@ const promiseWait = (msec: number) => new Promise((resolve) => setTimeout(resolv
 const createScene = (canvas: HTMLCanvasElement) => {
   const renderer = new WebGLRenderer({
     canvas,
+    preserveDrawingBuffer: true,
     antialias: true,
     alpha: true
   });
@@ -89,12 +90,14 @@ export interface PropsInterface {
   filename: string;
   delayLoadingMsec?: number;
   background?: boolean;
+  onSnapshot?: (dataUrl: string, initial: boolean) => void;
 }
 
 export const Model3dPreview: FC<PropsInterface> = ({
   filename,
   background = true,
-  delayLoadingMsec
+  delayLoadingMsec,
+  onSnapshot
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -104,6 +107,8 @@ export const Model3dPreview: FC<PropsInterface> = ({
   const disposeRef = useRef<() => void>();
   const autoPosRef = useRef<(gltf: GLTF) => void>();
   const loadedGltfRef = useRef<GLTF>();
+  const onSnapshotRef = useRef(onSnapshot);
+  onSnapshotRef.current = onSnapshot;
 
   const recursiveAnimate = useCallback(() => {
     const render = renderRef.current;
@@ -171,6 +176,12 @@ export const Model3dPreview: FC<PropsInterface> = ({
 
         scene.add(gltf.scene);
 
+        setTimeout(() => {
+          if (onSnapshotRef.current) {
+            onSnapshotRef.current(canvasRef.current?.toDataURL('image/png') || '', true);
+          }
+        }, 100);
+
         setProgress(null);
       },
       (progress) => {
@@ -214,7 +225,23 @@ export const Model3dPreview: FC<PropsInterface> = ({
         style={{width: '100%', height: '100%'}}
         ref={canvasRef}
       />
-      ;
+      {onSnapshot && (
+        <styled.SnapshotButtonHolder>
+          <IconSvg
+            isWhite
+            size="large"
+            name="fullscreen"
+            // title="Take snapshot"
+            onClick={() => {
+              // also possible to use toBlob
+              const snapshot = canvasRef.current?.toDataURL();
+              if (snapshot) {
+                onSnapshot(snapshot, false);
+              }
+            }}
+          />
+        </styled.SnapshotButtonHolder>
+      )}
     </styled.Container>
   );
 };

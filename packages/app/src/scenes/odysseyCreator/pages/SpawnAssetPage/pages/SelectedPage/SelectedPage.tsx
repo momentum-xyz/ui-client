@@ -66,7 +66,11 @@ export const SelectedPage: FC = () => {
   return (
     <styled.Container>
       <styled.PreviewContainer>
-        <Model3dPreview filename={asset.thumbnailAssetDownloadUrl} />
+        <Model3dPreview
+          filename={asset.thumbnailAssetDownloadUrl}
+          // TODO take snapshow, ask confirmation to replace original
+          // check asset type "custom" to determine whether to do it
+        />
       </styled.PreviewContainer>
       <styled.NameLabel text={asset.name} size="m" />
       <styled.CheckBoxLabel>
