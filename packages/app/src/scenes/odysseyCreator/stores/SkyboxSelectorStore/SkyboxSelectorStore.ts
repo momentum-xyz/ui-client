@@ -3,12 +3,16 @@ import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
-import {Asset3d, Asset3dInterface} from 'core/models';
+import {Asset3dInterface} from 'core/models';
 import {api, UploadImageResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 
 const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
+
+const SkyboxDatabaseModel = types.model({
+  name: types.string
+});
 
 const SkyboxSelectorStore = types
   .compose(
@@ -21,8 +25,8 @@ const SkyboxSelectorStore = types
 
       selectedItemId: types.maybe(types.string),
       currentItemId: types.maybe(types.string),
-      defaultSkyboxes: types.optional(types.array(Asset3d), []),
-      userSkyboxes: types.optional(types.array(Asset3d), []),
+      defaultSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
+      userSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
 
       skyboxToDeleteId: types.maybe(types.string),
       uploadDialog: types.optional(Dialog, {}),
@@ -55,10 +59,8 @@ const SkyboxSelectorStore = types
         }
       );
 
-      const allSkyboxes = [...self.defaultSkyboxes, ...self.userSkyboxes];
-      self.selectedItemId = customSkyboxData?.render_hash || (allSkyboxes[0] || {id: undefined}).id;
-
-      yield Promise.resolve(allSkyboxes);
+      const allSkyboxKeys = [...self.defaultSkyboxes.keys(), ...self.userSkyboxes.keys()];
+      self.selectedItemId = customSkyboxData?.render_hash || allSkyboxKeys[0];
     }),
     fetchDefaultSkyboxes: flow(function* (spaceId: string) {
       const response = yield self.fetchSkyboxRequest.send(
@@ -70,13 +72,7 @@ const SkyboxSelectorStore = types
         }
       );
 
-      if (!response) {
-        self.defaultSkyboxes = cast([]);
-        return;
-      }
-
-      const skyboxes = self.extractSkyboxAsset3dArrayFromImageHash(response);
-      self.defaultSkyboxes = cast(skyboxes);
+      self.defaultSkyboxes = cast(response || {});
     }),
     fetchUserSkyboxes: flow(function* (spaceId: string, userId: string) {
       const response = yield self.fetchSkyboxRequest.send(
@@ -89,13 +85,7 @@ const SkyboxSelectorStore = types
         }
       );
 
-      if (!response) {
-        self.userSkyboxes = cast([]);
-        return;
-      }
-
-      const skyboxes = self.extractSkyboxAsset3dArrayFromImageHash(response, true);
-      self.userSkyboxes = cast(skyboxes);
+      self.userSkyboxes = cast(response || {});
     }),
     selectItem(item: Asset3dInterface) {
       self.selectedItemId = item.id;
@@ -142,16 +132,13 @@ const SkyboxSelectorStore = types
       const {hash} = uploadImageResponse;
       console.log('Upload image response:', uploadImageResponse, hash);
 
-      const value = {
-        ...self.userSkyboxes.reduce((acc, {id, name}) => ({...acc, [id]: {name}}), {}),
-        [hash]: name
-      };
+      self.userSkyboxes.set(hash, {name});
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: worldId,
         userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.SKYBOX_LIST,
-        value
+        value: self.userSkyboxes.toJSON()
       });
 
       yield self.saveItem(hash, true, worldId);
@@ -160,21 +147,20 @@ const SkyboxSelectorStore = types
       return self.createSkyboxRequest.isDone;
     }),
     removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
-      const value = {
-        ...self.userSkyboxes
-          .filter((d: any) => d.id !== hash)
-          .reduce((acc, {id, name}) => ({...acc, [id]: {name}}), {})
-      };
-
+      self.userSkyboxes.delete(hash);
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: worldId,
         userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.SKYBOX_LIST,
-        value
+        value: self.userSkyboxes.toJSON()
       });
 
       yield self.fetchUserSkyboxes(worldId, userId);
+      if (hash === self.selectedItemId) {
+        self.selectedItemId = [...self.defaultSkyboxes.keys(), ...self.userSkyboxes.keys()][0];
+      }
+
       self.closeSkyboxDeletion();
       return self.createSkyboxRequest.isDone;
     }),
@@ -191,27 +177,6 @@ const SkyboxSelectorStore = types
       return hash
         ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
         : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
-    },
-    extractSkyboxAsset3dArrayFromImageHash: function (
-      imageHash: {[key: string]: string},
-      isUserAttribute = false
-    ): Asset3dInterface[] {
-      if (!imageHash) {
-        return [];
-      }
-      const skyboxes: Asset3dInterface[] = Object.keys(imageHash)
-        .map((hash) => {
-          const name = imageHash[hash];
-          return {
-            name,
-            id: hash,
-            isUserAttribute,
-            image: self.generateImageFromHash(hash)
-          } as Asset3dInterface;
-        })
-        .filter((d) => !!d);
-
-      return skyboxes;
     }
   }))
   .views((self) => ({
@@ -228,7 +193,26 @@ const SkyboxSelectorStore = types
       return self.createSkyboxRequest.isPending;
     },
     get allSkyboxes(): Asset3dInterface[] {
-      return [...self.defaultSkyboxes, ...self.userSkyboxes];
+      return [
+        ...Object.entries(self.userSkyboxes.toJSON()).map(
+          ([id, d]) =>
+            ({
+              id,
+              ...d,
+              isUserAttribute: true,
+              image: self.generateImageFromHash(id)
+            } as Asset3dInterface)
+        ),
+        ...Object.entries(self.defaultSkyboxes.toJSON()).map(
+          ([id, d]) =>
+            ({
+              id,
+              ...d,
+              isUserAttribute: false,
+              image: self.generateImageFromHash(id)
+            } as Asset3dInterface)
+        )
+      ];
     }
   }));
 
