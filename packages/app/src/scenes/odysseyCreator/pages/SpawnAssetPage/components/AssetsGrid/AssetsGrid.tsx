@@ -33,11 +33,9 @@ const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
         <styled.GridItem
           key={asset.id}
           onPointerOver={() => {
-            console.log('enter');
             setHoveringAsset(asset);
           }}
           onPointerLeave={() => {
-            console.log('leave');
             setHoveringAsset(null);
           }}
         >
