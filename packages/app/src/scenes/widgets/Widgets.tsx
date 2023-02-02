@@ -12,7 +12,7 @@ import {
   ToolbarIconSeparator
 } from '@momentum-xyz/ui-kit';
 
-import {useStore} from 'shared/hooks';
+import {useStore, useUnityEvent} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {ToolbarCreatorIcon} from 'ui-kit';
 
@@ -28,6 +28,7 @@ import {
   OnlineUsersWidget,
   NotificationsWidget,
   OdysseyBioWidget,
+  OdysseyPortalWidget,
   OdysseyInfoWidget,
   SearchUsersWidget,
   MutualConnectionsWidget,
@@ -45,8 +46,8 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
   const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
-  const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
-  const {unityWorldStore, unityInstanceStore} = unityStore;
+  const {onlineUsersStore, odysseyBioStore, odysseyPortalStore, mutualConnectionsStore} =
+    widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {user} = sessionStore;
 
@@ -67,6 +68,14 @@ const Widgets: FC<PropsInterface> = (props) => {
       widgetsStore.screenShareStore.dialog.open
     );
   }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, unityStore.worldId]);
+
+  useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
+    console.log(`${label}|${spaceId}`);
+    // if (label !== 'portal_odyssey') {
+    //   return;
+    // }
+    odysseyPortalStore.open();
+  });
 
   return (
     <>
@@ -260,6 +269,7 @@ const Widgets: FC<PropsInterface> = (props) => {
       {mutualConnectionsStore.dialog.isOpen && <MutualConnectionsWidget />}
       {onlineUsersStore.dialog.isOpen && <SearchUsersWidget />}
       {widgetsStore.odysseyBioStore.dialog.isOpen && <OdysseyBioWidget />}
+      {widgetsStore.odysseyPortalStore.dialog.isOpen && <OdysseyPortalWidget />}
       {widgetsStore.odysseyInfoStore.dialog.isOpen && <OdysseyInfoWidget />}
       {widgetsStore.profileStore.dialog.isOpen && <ProfileWidget />}
       {widgetsStore.notificationsStore.dialog.isOpen && <NotificationsWidget />}
