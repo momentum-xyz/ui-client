@@ -75,7 +75,7 @@ const SkyboxSelectorStore = types
         return;
       }
 
-      const skyboxes = self.extractSkyboxAsset3dArrayFromImageHash(response.image_hash);
+      const skyboxes = self.extractSkyboxAsset3dArrayFromImageHash(response);
       self.defaultSkyboxes = cast(skyboxes);
     }),
     fetchUserSkyboxes: flow(function* (spaceId: string, userId: string) {
@@ -94,7 +94,7 @@ const SkyboxSelectorStore = types
         return;
       }
 
-      const skyboxes = self.extractSkyboxAsset3dArrayFromImageHash(response.image_hash);
+      const skyboxes = self.extractSkyboxAsset3dArrayFromImageHash(response, true);
       self.userSkyboxes = cast(skyboxes);
     }),
     selectItem(item: Asset3dInterface) {
@@ -143,10 +143,8 @@ const SkyboxSelectorStore = types
       console.log('Upload image response:', uploadImageResponse, hash);
 
       const value = {
-        image_hash: {
-          ...self.userSkyboxes.reduce((acc, {id, name}) => ({...acc, [id]: {name}}), {}),
-          [hash]: name
-        }
+        ...self.userSkyboxes.reduce((acc, {id, name}) => ({...acc, [id]: {name}}), {}),
+        [hash]: name
       };
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: worldId,
@@ -196,9 +194,10 @@ const SkyboxSelectorStore = types
         ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
         : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
     },
-    extractSkyboxAsset3dArrayFromImageHash: function (imageHash: {
-      [key: string]: string;
-    }): Asset3dInterface[] {
+    extractSkyboxAsset3dArrayFromImageHash: function (
+      imageHash: {[key: string]: string},
+      isUserAttribute = false
+    ): Asset3dInterface[] {
       if (!imageHash) {
         return [];
       }
@@ -208,7 +207,7 @@ const SkyboxSelectorStore = types
           return {
             name,
             id: hash,
-            isUserAttribute: true,
+            isUserAttribute,
             image: self.generateImageFromHash(hash)
           } as Asset3dInterface;
         })
