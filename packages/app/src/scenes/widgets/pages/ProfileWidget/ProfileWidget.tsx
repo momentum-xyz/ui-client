@@ -1,8 +1,10 @@
 import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
+import {toast} from 'react-toastify';
 import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 
+import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {ProfileFormInterface} from 'core/interfaces';
 import {useNavigation, useStore} from 'shared/hooks';
 
@@ -41,15 +43,51 @@ const ProfileWidget: FC = () => {
   }, [goToOdysseyHome, profileStore, sessionStore.userId]);
 
   const handleProfileUpdate = useCallback(
-    async (form: ProfileFormInterface, previousImageHash?: string) => {
-      if (await profileStore.editProfile(form, previousImageHash)) {
+    async (form: ProfileFormInterface, previousHash?: string) => {
+      const {jobId, isDone} = await profileStore.editProfile(form, previousHash);
+      if (isDone && !jobId) {
         await sessionStore.loadUserProfile();
         setIsEditMode(false);
-        return true;
+
+        toast.info(
+          <ToastContent
+            headerIconName="people"
+            title={t('titles.alert')}
+            text={t('editProfileWidget.saveSuccess')}
+            showCloseButton
+          />,
+          TOAST_GROUND_OPTIONS
+        );
       }
-      return false;
+
+      if (isDone && jobId) {
+        sessionStore.updateJobId(jobId);
+        setIsEditMode(false);
+
+        toast.info(
+          <ToastContent
+            headerIconName="people"
+            title={t('titles.alert')}
+            text={t('editProfileWidget.saveInProgress')}
+            showCloseButton
+          />,
+          TOAST_GROUND_OPTIONS
+        );
+      }
+
+      if (!isDone) {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="people"
+            title={t('titles.alert')}
+            text={t('editProfileWidget.saveFailure')}
+            showCloseButton
+          />
+        );
+      }
     },
-    [profileStore, sessionStore]
+    [profileStore, sessionStore, t]
   );
 
   return (
@@ -64,7 +102,7 @@ const ProfileWidget: FC = () => {
         <styled.Header>
           <styled.Name>
             <IconSvg name="people" size="medium" />
-            <Heading type="h2" label={t('titles.profiles')} isTruncate />
+            <Heading type="h2" label={t('titles.profile')} isTruncate />
           </styled.Name>
           <SvgButton iconName="close" size="normal" onClick={profileStore.resetModel} />
         </styled.Header>
@@ -83,7 +121,7 @@ const ProfileWidget: FC = () => {
                 <ProfileEditor
                   user={sessionStore.user}
                   formErrors={profileStore.formErrors}
-                  isUpdating={profileStore.isUpdating}
+                  isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
                   onChangeKeyboardControl={unityInstanceStore.changeKeyboardControl}
                   onUpdate={handleProfileUpdate}
                   onCancel={() => setIsEditMode(!isEditMode)}

@@ -14,6 +14,7 @@ const SessionStore = types
     token: '',
     isAuthenticating: true,
     user: types.maybeNull(User),
+    profileJobId: types.maybeNull(types.string),
     guestTokenRequest: types.optional(RequestModel, {}),
     challengeRequest: types.optional(RequestModel, {}),
     tokenRequest: types.optional(RequestModel, {}),
@@ -26,6 +27,10 @@ const SessionStore = types
       // const {unityStore} = getRootStore(self).mainStore;
       // unityStore.setAuthToken(self.token); // TODO: change key
       refreshAxiosToken(self.token);
+    },
+    // TODO: implementation
+    updateJobId(jobId: string | null) {
+      self.profileJobId = jobId;
     }
   }))
   .actions((self) => ({
@@ -110,6 +115,9 @@ const SessionStore = types
     },
     get isTokenPending(): boolean {
       return self.challengeRequest.isPending || self.tokenRequest.isPending;
+    },
+    get isUpdatingInBlockchain(): boolean {
+      return !!self.profileJobId;
     },
     get isGuestTokenPending(): boolean {
       return self.guestTokenRequest.isPending;

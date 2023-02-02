@@ -577,7 +577,7 @@ export const enGb = {
       social: 'Social',
       bio: 'Bio',
       location: 'Location',
-      site: 'Site'
+      link: 'Link'
     },
     networks: {
       polkadot: 'Polkadot.js',
@@ -1130,8 +1130,10 @@ export const enGb = {
     editProfileWidget: {
       title: 'Edit my bio',
       avatarInstructions: 'Choose an avatar that will be shown when your camera is disabled',
-      saveSuccess: 'Saved profile',
-      saveFailure: 'Could not save Profile.',
+      saveInProgress: 'Your profile is updating.',
+      saveSuccess: 'Your profile was updated.',
+      saveFailure: 'Your profile was not updated.',
+      isUpdating: 'Profile is updating...',
       changeAvatar: 'Change your avatar',
       upload: 'upload',
       avatar: 'avatar'

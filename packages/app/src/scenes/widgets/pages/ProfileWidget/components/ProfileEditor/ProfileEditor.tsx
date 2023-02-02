@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react';
-import {toast} from 'react-toastify';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Button, FileUploader, InputDark, TextAreaDark} from '@momentum-xyz/ui-kit';
+import {Button, FileUploader, InputDark, Text, TextAreaDark} from '@momentum-xyz/ui-kit';
 
 import {ProfileFormInterface} from 'core/interfaces';
 import {UserModelInterface} from 'core/models';
 import {FieldErrorInterface} from 'api/interfaces';
-import {ToastContent} from 'ui-kit';
 
 import * as styled from './ProfileEditor.styled';
 
@@ -17,7 +15,7 @@ interface PropsInterface {
   formErrors: FieldErrorInterface[];
   isUpdating: boolean;
   onChangeKeyboardControl: (value: boolean) => void;
-  onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => Promise<boolean>;
+  onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => void;
   onCancel: () => void;
 }
 
@@ -38,7 +36,6 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
     setValue,
     handleSubmit,
     setError,
-    clearErrors,
     formState: {errors}
   } = useForm<ProfileFormInterface>();
 
@@ -55,24 +52,12 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
     if (user?.profile) {
       setValue('name', user.name);
       setValue('bio', user.profile.bio);
-      setValue('profileLink', user.profile.bio);
+      setValue('profileLink', user.profile.profileLink);
     }
   }, [user?.name, user?.profile, setValue]);
 
   const formSubmitHandler = handleSubmit(async (form: ProfileFormInterface) => {
-    if (!(await onUpdate(form, user.profile.avatarHash))) {
-      toast.error(
-        <ToastContent
-          isDanger
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('editProfileWidget.saveFailure')}
-          showCloseButton
-        />
-      );
-    } else {
-      clearErrors();
-    }
+    await onUpdate(form, user.profile.avatarHash);
   });
 
   return (
@@ -95,6 +80,7 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
                   onFilesUpload={onChange}
                   onError={(error) => console.error(error)}
                   enableDragAndDrop={false}
+                  disabled={isUpdating}
                 />
               </styled.AvatarImageInner>
             </styled.AvatarImageUpload>
@@ -112,13 +98,14 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
             <InputDark
               value={value}
               onChange={onChange}
-              placeholder="Name"
+              placeholder={t('fields.name')}
               errorMessage={
                 errors?.name?.type !== 'duplicate'
                   ? t('errors.nameConstraints')
                   : errors.name.message
               }
               isError={!!errors.name}
+              disabled={isUpdating}
               required
             />
           )}
@@ -129,7 +116,13 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
           control={control}
           name="bio"
           render={({field: {value, onChange}}) => (
-            <TextAreaDark placeholder="Bio" value={value} rows={3} onChange={onChange} />
+            <TextAreaDark
+              rows={3}
+              placeholder={t('fields.bio')}
+              value={value}
+              disabled={isUpdating}
+              onChange={onChange}
+            />
           )}
         />
 
@@ -138,7 +131,12 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
           control={control}
           name="profileLink"
           render={({field: {value, onChange}}) => (
-            <InputDark placeholder="Link" value={value} onChange={onChange} />
+            <InputDark
+              placeholder={t('fields.link')}
+              value={value}
+              disabled={isUpdating}
+              onChange={onChange}
+            />
           )}
         />
       </styled.InputsContainer>
@@ -147,6 +145,12 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
         <Button variant="danger" label={t('actions.cancel')} onClick={onCancel} />
         <Button label={t('actions.save')} disabled={isUpdating} onClick={formSubmitHandler} />
       </styled.Actions>
+
+      {isUpdating && (
+        <styled.IsUpdating>
+          <Text size="xs" text={t('editProfileWidget.isUpdating')} align="center" />
+        </styled.IsUpdating>
+      )}
     </styled.Container>
   );
 };

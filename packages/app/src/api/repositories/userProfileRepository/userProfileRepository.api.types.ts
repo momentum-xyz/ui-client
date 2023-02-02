@@ -1,5 +1,3 @@
-import {UserInterface} from 'api';
-
 /** COMMON **/
 
 export interface UserProfileInterface {
@@ -16,4 +14,7 @@ export interface UpdateUserRequest {
   profile: UserProfileInterface;
 }
 
-export interface UpdateUserResponse extends UserInterface {}
+export interface UpdateUserResponse {
+  job_id: string | null;
+  user_id: string;
+}

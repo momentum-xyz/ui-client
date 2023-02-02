@@ -16,6 +16,8 @@ const ProfileStore = types.compose(
     })
     .actions((self) => ({
       editProfile: flow(function* (form: ProfileFormInterface, previousImageHash?: string) {
+        self.fieldErrors = cast([]);
+
         let avatarHash = previousImageHash;
 
         // 1. Avatar uploading.
@@ -48,10 +50,9 @@ const ProfileStore = types.compose(
               errorMessage: response.errors[key]
             }))
           );
-          return false;
         }
 
-        return true;
+        return {jobId: response?.job_id, isDone: self.editRequest.isDone};
       })
     }))
     .views((self) => ({

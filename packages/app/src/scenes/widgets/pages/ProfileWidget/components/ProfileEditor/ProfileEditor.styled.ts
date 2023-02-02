@@ -52,3 +52,7 @@ export const Actions = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 `;
+
+export const IsUpdating = styled.div`
+  padding: 0 0 2px 0;
+`;
