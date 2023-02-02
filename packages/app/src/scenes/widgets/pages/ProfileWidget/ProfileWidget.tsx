@@ -61,7 +61,7 @@ const ProfileWidget: FC = () => {
       }
 
       if (isDone && jobId) {
-        sessionStore.updateJobId(jobId);
+        sessionStore.setupJobId(jobId);
         setIsEditMode(false);
 
         toast.info(
