@@ -1,11 +1,10 @@
 import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {ProfileFormInterface} from 'core/interfaces';
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 
 import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
@@ -21,7 +20,8 @@ const ProfileWidget: FC = () => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
-  const history = useHistory();
+  const {t} = useTranslation();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
     return () => {
@@ -29,25 +29,16 @@ const ProfileWidget: FC = () => {
     };
   }, [profileStore, sessionStore]);
 
-  const handleTeleportToOdyssey = useCallback(() => {
-    const worldId = sessionStore.userId;
-    profileStore.dialog.close();
-
-    if (isUnityAvailable) {
-      console.log(`Teleport in unity to ${worldId}`);
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-      unityInstanceStore.loadWorldById(worldId, sessionStore.token);
-    } else {
-      console.log(`Redirect to unity to ${worldId}`);
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-    }
-  }, [profileStore, isUnityAvailable, history, unityInstanceStore, sessionStore]);
-
   const isTeleportAvailable = useMemo(() => {
     return isUnityAvailable
       ? !sessionStore.isGuest && unityStore.worldId !== sessionStore.userId
       : !sessionStore.isGuest;
   }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, unityStore.worldId]);
+
+  const handleTeleport = useCallback(() => {
+    goToOdysseyHome(sessionStore.userId);
+    profileStore.resetModel();
+  }, [goToOdysseyHome, profileStore, sessionStore.userId]);
 
   const handleProfileUpdate = useCallback(
     async (form: ProfileFormInterface, previousImageHash?: string) => {
@@ -61,11 +52,6 @@ const ProfileWidget: FC = () => {
     [profileStore, sessionStore]
   );
 
-  const handleProfileClose = useCallback(() => {
-    profileStore.resetModel();
-    profileStore.dialog.close();
-  }, [profileStore]);
-
   return (
     <Dialog
       title=""
@@ -78,9 +64,9 @@ const ProfileWidget: FC = () => {
         <styled.Header>
           <styled.Name>
             <IconSvg name="people" size="medium" />
-            <Heading type="h2" label="Profile" isTruncate />
+            <Heading type="h2" label={t('titles.profiles')} isTruncate />
           </styled.Name>
-          <SvgButton iconName="close" size="normal" onClick={handleProfileClose} />
+          <SvgButton iconName="close" size="normal" onClick={profileStore.resetModel} />
         </styled.Header>
         <styled.Body>
           {!!sessionStore.user && (
@@ -89,7 +75,7 @@ const ProfileWidget: FC = () => {
                 <ProfileView
                   isVisitAvailable={isTeleportAvailable}
                   user={sessionStore.user}
-                  onTeleportToOdyssey={handleTeleportToOdyssey}
+                  onTeleportToOdyssey={handleTeleport}
                 />
               )}
 
