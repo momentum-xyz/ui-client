@@ -82,10 +82,10 @@ const AssetStore = types
           self.assetType = AssetTypeEnum.IMAGE;
           self.getSpaceAttributeValue(meta.pluginId, spaceId);
           break;
-        case AssetTypeEnum.VIDEO:
-          self.assetType = AssetTypeEnum.VIDEO;
-          self.getSpaceAttributeValue(meta.pluginId, spaceId);
-          break;
+        // case AssetTypeEnum.VIDEO:
+        //   self.assetType = AssetTypeEnum.VIDEO;
+        //   self.getSpaceAttributeValue(meta.pluginId, spaceId);
+        // break;
         case AssetTypeEnum.DOCK:
           self.assetType = AssetTypeEnum.DOCK;
           self.getDockInfo(spaceId);

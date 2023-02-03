@@ -45,9 +45,9 @@ const ObjectStore = types
       }
 
       switch (spaceInfo.asset_2d_id) {
+        // case BasicAsset2dIdEnum.VIDEO:
         case BasicAsset2dIdEnum.TEXT:
-        case BasicAsset2dIdEnum.IMAGE:
-        case BasicAsset2dIdEnum.VIDEO: {
+        case BasicAsset2dIdEnum.IMAGE: {
           console.info('Its a tile!');
           const objectResponse:
             | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
