@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
 import {generatePath, useHistory, useParams} from 'react-router-dom';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button, FileUploader, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 
@@ -43,6 +43,38 @@ export const SelectedPage: FC = () => {
     });
   }, [history, spawnAssetStore, worldId]);
 
+  const handleSnapshot = async (dataURL: string, initialSnapshot: boolean) => {
+    if (!asset || !!asset.preview_hash || !initialSnapshot) {
+      return;
+    }
+
+    try {
+      const blob = await (await fetch(dataURL)).blob();
+      const preview_hash = await spawnAssetStore.uploadImageToMediaManager(blob as File); // TODO fix type
+      console.log('preview_hash', preview_hash);
+      await spawnAssetStore.patchAssetMetadata(asset.id, {preview_hash});
+      console.log('Silently set model preview_hash for', asset);
+    } catch (err) {
+      console.log('Error silently setting preview_hash', err, {asset, dataURL, initialSnapshot});
+    }
+  };
+
+  const handleDevUpload = (file: File | undefined) => {
+    console.log({file, asset});
+    if (asset && file) {
+      spawnAssetStore
+        .uploadImageToMediaManager(file)
+        .then((imageHash) => {
+          alert(
+            `UPDATE asset_3d SET meta = jsonb_set(meta, '{preview_hash}', '"${imageHash}"', TRUE) WHERE asset_3d_id = '${asset.id}';`
+          );
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
+
   if (!asset) {
     return null;
   }
@@ -50,7 +82,11 @@ export const SelectedPage: FC = () => {
   return (
     <styled.Container>
       <styled.PreviewContainer>
-        <Model3dPreview filename={asset.thumbnailAssetDownloadUrl} />
+        <Model3dPreview
+          filename={asset.thumbnailAssetDownloadUrl}
+          previewUrl={asset.previewUrl}
+          onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
+        />
       </styled.PreviewContainer>
       <styled.NameLabel text={asset.name} size="m" />
       <styled.CheckBoxLabel>
@@ -78,6 +114,17 @@ export const SelectedPage: FC = () => {
           history.goBack();
         }}
       />
+      {process.env.NODE_ENV === 'development' && (
+        <FileUploader
+          label="DEV - Upload PREVIEW Image"
+          dragActiveLabel="Drop the files here..."
+          fileType="image"
+          buttonSize="small"
+          onFilesUpload={handleDevUpload}
+          onError={(error) => console.error(error)}
+          enableDragAndDrop={false}
+        />
+      )}
     </styled.Container>
   );
 };
