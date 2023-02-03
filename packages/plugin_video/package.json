@@ -1,6 +1,6 @@
 {
-  "name": "plugin_twitch",
-  "description": "Twitch plugin for Odyssey",
+  "name": "plugin_video",
+  "description": "Video plugin for Odyssey - YouTube, Twitch, Vimeo",
   "version": "0.1.0",
   "repository": "https://github.com/momentum-xyz/ui-client",
   "license": "GPL-3.0",

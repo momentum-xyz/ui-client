@@ -7,29 +7,43 @@ import {Button, Input, Text} from '@momentum-xyz/ui-kit';
 import '@momentum-xyz/ui-kit/dist/themes/themes';
 import {useState} from 'react';
 
-// Use react-twitch-embed if more functionality is needed
+// Use react-twitch-embed if more functionality is needed for twitch
 
 interface PluginStateInterface {
-  channel?: string;
-  video?: string;
-  collection?: string;
+  video_url?: string;
+  youtube_url?: string; // for backward compatibility
 }
 
 const stateToQuery = (state: PluginStateInterface): string | null => {
-  const {channel, video, collection} = state;
-  if (channel) {
-    return `channel=${channel}`;
-  } else if (video) {
-    return `video=${video}`;
-  } else if (collection) {
-    return `collection=${collection}`;
+  const {video_url, youtube_url} = state;
+  const url = video_url || youtube_url;
+  // parse shared url and create embed url for youtube, twitch, vimeo
+  if (url) {
+    if (url.includes('youtube.com')) {
+      const videoId = url.split('v=')[1].split('&')[0];
+      return `https://www.youtube.com/embed/${videoId}`;
+    } else if (url.includes('youtu.be')) {
+      const videoId = url.split('/')[3];
+      return `https://www.youtube.com/embed/${videoId}`;
+    } else if (url.includes('twitch.tv')) {
+      const videoId = url.split('/')[3];
+      if (/^\d+$/.test(videoId)) {
+        return `https://player.twitch.tv/?video=${videoId}&parent=${window.location.hostname}`;
+      } else {
+        return `https://player.twitch.tv/?channel=${videoId}&parent=${window.location.hostname}`;
+      }
+    } else if (url.includes('vimeo.com')) {
+      const videoId = url.split('/')[3];
+      return `https://player.vimeo.com/video/${videoId}`;
+    }
   }
+
   return null;
 };
 
 const usePlugin: UsePluginHookType = (props) => {
   const {isAdmin} = props;
-  console.log('PLUGIN TWITCH', props);
+  console.log('PLUGIN VIDEO', props);
 
   const [editMode, setEditMode] = useState(false);
   const [modifiedState, setModifiedState] = useState<PluginStateInterface | null>(null);
@@ -54,7 +68,7 @@ const usePlugin: UsePluginHookType = (props) => {
     setEditMode(false);
   };
 
-  const contentUriParam = sharedState ? stateToQuery(sharedState) : null;
+  const embedUrl = sharedState ? stateToQuery(sharedState) : null;
 
   const actions = !isAdmin ? (
     <span />
@@ -73,23 +87,17 @@ const usePlugin: UsePluginHookType = (props) => {
       <UnityAutoTakeKeyboardControl />
       <Input
         type="text"
-        label="Channel"
+        label="Video URL"
+        placeholder="Paste a YouTube, Twitch, or Vimeo Share URL here."
         autoFocus
-        value={modifiedState?.channel || sharedState?.channel || ''}
-        onChange={(value) => setModifiedState({channel: value})}
+        value={modifiedState?.video_url || sharedState?.video_url || sharedState?.youtube_url || ''}
+        onChange={(value) => setModifiedState({video_url: value})}
         isError={!!error}
         errorMessage={error}
       />
     </div>
-  ) : contentUriParam ? (
-    <iframe
-      title="Twitch"
-      // src={`https://player.twitch.tv/?channel=yejuniverse&parent=${window.location.hostname}`}
-      src={`https://player.twitch.tv/?${contentUriParam}&parent=${window.location.hostname}`}
-      height="100%"
-      width="100%"
-      allowFullScreen
-    ></iframe>
+  ) : embedUrl ? (
+    <iframe title="Video" src={embedUrl} height="100%" width="100%" allowFullScreen></iframe>
   ) : (
     <div
       style={{
@@ -100,13 +108,13 @@ const usePlugin: UsePluginHookType = (props) => {
         justifyContent: 'center'
       }}
     >
-      <Text text="Channel not yet set" size="m" />
+      <Text text="Video not yet set" size="m" />
     </div>
   );
 
   return {
     objectView: {
-      title: 'Twitch',
+      title: 'Video',
       actions,
       content
     }
