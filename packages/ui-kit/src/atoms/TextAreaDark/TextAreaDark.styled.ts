@@ -24,5 +24,10 @@ export const TextAreaContainer = styled.div`
     &:active {
       border: 1px solid ${(props) => props.theme.accent};
     }
+
+    &:disabled {
+      opacity: 0.5;
+      border: 1px solid rgba(0, 0, 0, 0.8);
+    }
   }
 `;

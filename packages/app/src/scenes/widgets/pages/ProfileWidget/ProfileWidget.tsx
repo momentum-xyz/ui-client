@@ -1,10 +1,12 @@
 import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
-import {Dialog, Heading, IconSvg, Loader, SvgButton} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
+import {toast} from 'react-toastify';
+import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
+import {ProfileFormInterface} from 'core/interfaces';
+import {useNavigation, useStore} from 'shared/hooks';
 
 import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
@@ -20,41 +22,73 @@ const ProfileWidget: FC = () => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
-  const history = useHistory();
+  const {t} = useTranslation();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
-    profileStore.fetchProfile();
-
     return () => {
-      sessionStore.loadUserProfile();
       profileStore.resetModel();
     };
   }, [profileStore, sessionStore]);
 
-  const handleTeleportToOdyssey = useCallback(() => {
-    const worldId = profileStore.userProfile?.id || '';
-    profileStore.dialog.close();
-
-    if (isUnityAvailable) {
-      console.log(`Teleport in unity to ${worldId}`);
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-      unityInstanceStore.loadWorldById(worldId, sessionStore.token);
-    } else {
-      console.log(`Redirect to unity to ${worldId}`);
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-    }
-  }, [profileStore, isUnityAvailable, history, unityInstanceStore, sessionStore]);
-
   const isTeleportAvailable = useMemo(() => {
     return isUnityAvailable
-      ? !sessionStore.isGuest && unityStore.worldId !== profileStore.userProfile?.id
+      ? !sessionStore.isGuest && unityStore.worldId !== sessionStore.userId
       : !sessionStore.isGuest;
-  }, [isUnityAvailable, profileStore.userProfile?.id, sessionStore.isGuest, unityStore.worldId]);
+  }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, unityStore.worldId]);
 
-  const handleProfileClose = useCallback(() => {
+  const handleTeleport = useCallback(() => {
+    goToOdysseyHome(sessionStore.userId);
     profileStore.resetModel();
-    profileStore.dialog.close();
-  }, [profileStore]);
+  }, [goToOdysseyHome, profileStore, sessionStore.userId]);
+
+  const handleProfileUpdate = useCallback(
+    async (form: ProfileFormInterface, previousHash?: string) => {
+      const {jobId, isDone} = await profileStore.editProfile(form, previousHash);
+      if (isDone && !jobId) {
+        await sessionStore.loadUserProfile();
+        setIsEditMode(false);
+
+        toast.info(
+          <ToastContent
+            headerIconName="people"
+            title={t('titles.alert')}
+            text={t('editProfileWidget.saveSuccess')}
+            showCloseButton
+          />,
+          TOAST_GROUND_OPTIONS
+        );
+      }
+
+      if (isDone && jobId) {
+        sessionStore.setupJobId(jobId);
+        setIsEditMode(false);
+
+        toast.info(
+          <ToastContent
+            headerIconName="people"
+            title={t('titles.alert')}
+            text={t('editProfileWidget.saveInProgress')}
+            showCloseButton
+          />,
+          TOAST_GROUND_OPTIONS
+        );
+      }
+
+      if (!isDone) {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="people"
+            title={t('titles.alert')}
+            text={t('editProfileWidget.saveFailure')}
+            showCloseButton
+          />
+        );
+      }
+    },
+    [profileStore, sessionStore, t]
+  );
 
   return (
     <Dialog
@@ -68,34 +102,29 @@ const ProfileWidget: FC = () => {
         <styled.Header>
           <styled.Name>
             <IconSvg name="people" size="medium" />
-            <Heading type="h2" label="Profile" isTruncate />
+            <Heading type="h2" label={t('titles.profile')} isTruncate />
           </styled.Name>
-          <SvgButton iconName="close" size="normal" onClick={handleProfileClose} />
+          <SvgButton iconName="close" size="normal" onClick={profileStore.resetModel} />
         </styled.Header>
         <styled.Body>
-          {!isEditMode && profileStore.isLoading && (
-            <styled.Loader>
-              <Loader />
-            </styled.Loader>
-          )}
-
-          {!!profileStore.userProfile && (
+          {!!sessionStore.user && (
             <styled.Container>
-              {!isEditMode && !profileStore.isLoading && (
+              {!isEditMode && (
                 <ProfileView
                   isVisitAvailable={isTeleportAvailable}
-                  user={profileStore.userProfile}
-                  onTeleportToOdyssey={handleTeleportToOdyssey}
+                  user={sessionStore.user}
+                  onTeleportToOdyssey={handleTeleport}
                 />
               )}
 
               {isEditMode && (
                 <ProfileEditor
-                  user={profileStore.userProfile}
+                  user={sessionStore.user}
                   formErrors={profileStore.formErrors}
+                  isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
                   onChangeKeyboardControl={unityInstanceStore.changeKeyboardControl}
-                  onEditProfile={profileStore.editProfile}
-                  onEditImage={profileStore.editImage}
+                  onUpdate={handleProfileUpdate}
+                  onCancel={() => setIsEditMode(!isEditMode)}
                 />
               )}
 
@@ -106,16 +135,8 @@ const ProfileWidget: FC = () => {
                 audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
                 audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
                 onSelectAudioDevice={agoraStore.selectAudioInput}
-                onToggleDeviceSettings={() => {
-                  setIsDeviceSettings(!isDeviceSettings);
-                }}
-                onToggleEditMode={() => {
-                  if (isEditMode) {
-                    profileStore.fetchProfile();
-                    sessionStore.loadUserProfile();
-                  }
-                  setIsEditMode(!isEditMode);
-                }}
+                onToggleDeviceSettings={() => setIsDeviceSettings(!isDeviceSettings)}
+                onToggleEditMode={() => setIsEditMode(!isEditMode)}
                 {...(!sessionStore.isGuest && {onSignOut: sessionStore.signOutRedirect})}
                 {...(sessionStore.isGuest && {onSignIn: sessionStore.signInRedirect})}
               />
