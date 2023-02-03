@@ -9,14 +9,19 @@ import {useState} from 'react';
 
 // Use react-twitch-embed if more functionality is needed for twitch
 
-interface PluginStateInterface {
+// TODO remove the need of this extend
+interface PluginStateInterface extends Record<string, unknown> {
   video_url?: string;
   youtube_url?: string; // for backward compatibility
+  state?: {
+    // for backward compatibility
+    video_url: string;
+  };
 }
 
 const stateToQuery = (state: PluginStateInterface): string | null => {
-  const {video_url, youtube_url} = state;
-  const url = video_url || youtube_url;
+  const {video_url, youtube_url, state: nestedState} = state;
+  const url = video_url || youtube_url || nestedState?.video_url;
   // parse shared url and create embed url for youtube, twitch, vimeo
   if (url) {
     if (url.includes('youtube.com')) {
@@ -50,6 +55,7 @@ const usePlugin: UsePluginHookType = (props) => {
   const [error, setError] = useState<string>();
 
   const [sharedState, setSharedState] = useSharedObjectState<PluginStateInterface>();
+  console.log('sharedState', sharedState);
 
   const handleConfigSave = async () => {
     try {
@@ -69,6 +75,7 @@ const usePlugin: UsePluginHookType = (props) => {
   };
 
   const embedUrl = sharedState ? stateToQuery(sharedState) : null;
+  console.log('embedUrl', embedUrl);
 
   const actions = !isAdmin ? (
     <span />
@@ -91,7 +98,11 @@ const usePlugin: UsePluginHookType = (props) => {
         placeholder="Paste a YouTube, Twitch, or Vimeo Share URL here."
         autoFocus
         value={
-          modifiedState?.video_url ?? (sharedState?.video_url || sharedState?.youtube_url || '')
+          modifiedState?.video_url ??
+          (sharedState?.video_url ||
+            sharedState?.youtube_url ||
+            sharedState?.state?.video_url ||
+            '')
         }
         onChange={(value) => setModifiedState({video_url: value})}
         isError={!!error}
