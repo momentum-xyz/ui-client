@@ -3,3 +3,4 @@ export * from './interfaces';
 export * from './enums';
 export * from './emulator';
 export * from './hooks';
+export * from './utils';

@@ -1,16 +1,20 @@
 import React, {FC} from 'react';
 import {BrowserRouter} from 'react-router-dom';
+import {ThemeProvider} from 'styled-components';
+import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
-import {ObjectPluginPropsInterface, PluginInterface} from '../interfaces';
+import {PluginInterface} from '../interfaces';
 import {GlobalStyles} from '../App.styled';
+import {UnityControlContextProvider} from '../contexts';
 
 import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
+import {dummyUnityControl} from './dummyUnityControl';
 
 const isDevEnv = process.env.NODE_ENV === 'development';
 
 interface PropsInterface {
-  plugin: PluginInterface<ObjectPluginPropsInterface>;
+  plugin: PluginInterface;
 }
 
 /**
@@ -25,9 +29,7 @@ const root = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={DefaultThemeConfig}>
-      <HostEmulator plugin={plugin} />
-    </ThemeProvider>
+    <HostEmulator plugin={plugin} />
   </React.StrictMode>,
   root
 );
@@ -36,15 +38,19 @@ ReactDOM.render(
 export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER HostEmulator', {plugin});
   return (
-    <styled.FullScreenContainer>
-      <GlobalStyles />
-      {isDevEnv ? (
-        <BrowserRouter>
-          <WorldEmulator plugin={plugin} />
-        </BrowserRouter>
-      ) : (
-        <MomentumRequiredPage />
-      )}
-    </styled.FullScreenContainer>
+    <ThemeProvider theme={DefaultThemeConfig}>
+      <styled.FullScreenContainer>
+        <UnityControlContextProvider value={dummyUnityControl}>
+          <GlobalStyles />
+          {isDevEnv ? (
+            <BrowserRouter>
+              <WorldEmulator plugin={plugin} />
+            </BrowserRouter>
+          ) : (
+            <MomentumRequiredPage />
+          )}
+        </UnityControlContextProvider>
+      </styled.FullScreenContainer>
+    </ThemeProvider>
   );
 };

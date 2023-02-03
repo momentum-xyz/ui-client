@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel, Dialog} from '@momentum-xyz/core';
+import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 import {api, ResolveNodeResponse} from 'api';
 import {appVariables} from 'api/constants';
@@ -117,6 +118,9 @@ const UnityInstanceStore = types
     resume(): void {
       UnityService.resume();
     },
+    isPaused(): boolean {
+      return UnityService.isPaused;
+    },
     setInitialVolume() {
       UnityService.setSoundEffectVolume(self.volume.toString());
     },
@@ -226,6 +230,27 @@ const UnityInstanceStore = types
     },
     colorPickedPreview(objectId: string, colorHex: string) {
       UnityService.colorPickedPreview(objectId, colorHex);
+    }
+  }))
+  .views((self) => ({
+    get unityControlInst(): UnityControlInterface {
+      return {
+        takeKeyboardControl: () => {
+          self.changeKeyboardControl(false);
+        },
+        releaseKeyboardControl: () => {
+          self.changeKeyboardControl(true);
+        },
+        pause: () => {
+          self.pause();
+        },
+        resume: () => {
+          self.resume();
+        },
+        isPaused: () => {
+          return self.isPaused();
+        }
+      };
     }
   }));
 

@@ -2,6 +2,10 @@
 
 const spawn = require('cross-spawn');
 const fs = require('fs');
+const path = require('path');
+
+const BUILD_DIR = './build';
+const DEFAULT_PORT = 3001;
 
 const args = process.argv.slice(2);
 const scriptIndex = args.findIndex(
@@ -19,6 +23,7 @@ if (!packageJSON?.name) {
 
 switch (script) {
   case 'start:plugin':
+  case 'start':
   case 'build':
   case 'test': {
     const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
@@ -28,23 +33,25 @@ switch (script) {
 
     const env = {
       ...process.env,
+      PLUGIN_EMULATOR: script === 'start' ? '1' : '',
       PLUGIN_NAME: packageJSON.name,
-      PLUGIN_PORT: process.env.PORT ?? packageJSON.port ?? 3001
+      PORT: process.env.PORT ?? packageJSON.port ?? DEFAULT_PORT
     };
 
-    return spawnProcess('craco', processArgs, env);
-  }
-  case 'start': {
-    const env = {
-      PORT: packageJSON.port ?? 3001,
-      ...process.env
-    };
-
-    return spawnProcess('react-scripts', ['start'], env);
+    spawnProcess('craco', processArgs, env);
+    break;
   }
   default:
     console.log(`Unknown script "${script}".`);
     console.log('Perhaps you need to update @momentum-xyz/sdk?');
+    break;
+}
+
+switch (script) {
+  case 'build':
+    generateAndStoreMetadata();
+    break;
+  default:
     break;
 }
 
@@ -68,5 +75,23 @@ function spawnProcess(command, args, env) {
     process.exit(1);
   }
 
-  process.exit(child.status);
+  // process.exit(child.status);
+}
+
+function generateAndStoreMetadata() {
+  const {name, version, description, author, repository, homepage, license, attribute_types} =
+    packageJSON;
+  const metadata = {
+    name,
+    version,
+    description,
+    author,
+    repository,
+    homepage,
+    license,
+    attribute_types: attribute_types ?? []
+  };
+  const filename = path.resolve(BUILD_DIR, 'metadata.json');
+  fs.writeFileSync(filename, JSON.stringify(metadata, null, 2));
+  console.log('[momentum-plugin] Metadata generated and stored in', filename);
 }
