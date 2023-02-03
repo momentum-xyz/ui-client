@@ -78,8 +78,11 @@ const OdysseyInfoWidget: FC = () => {
             odyssey={odysseyInfoStore.odyssey}
             onVisit={handleTeleport}
             onConnect={handleConnect}
-            connectDisabled={odyssey?.owner === sessionStore.wallet || alreadyConnected}
             onDock={() => {}}
+            visitDisabled={unityStore.worldId === sessionStore.userId}
+            connectDisabled={
+              odyssey?.owner === sessionStore.wallet || alreadyConnected || sessionStore.isGuest
+            }
             dockDisabled={true}
           />
         )}
