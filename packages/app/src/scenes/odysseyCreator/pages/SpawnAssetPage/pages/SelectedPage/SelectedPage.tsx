@@ -86,8 +86,6 @@ export const SelectedPage: FC = () => {
           filename={asset.thumbnailAssetDownloadUrl}
           previewUrl={asset.previewUrl}
           onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
-          // TODO take snapshow, ask confirmation to replace original
-          // check asset type "custom" to determine whether to do it
         />
       </styled.PreviewContainer>
       <styled.NameLabel text={asset.name} size="m" />
