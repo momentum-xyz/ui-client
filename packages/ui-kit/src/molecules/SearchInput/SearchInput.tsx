@@ -1,68 +1,47 @@
-import React, {FC, FormEvent, InputHTMLAttributes, useState} from 'react';
+import React, {FC, FormEvent, InputHTMLAttributes} from 'react';
 import cn from 'classnames';
 
+import {IconSvg} from '../../atoms';
 import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType} from '../../types';
 
 import * as styled from './SearchInput.styled';
 
-interface SearchPropsInterface
+interface BaseInterface
   extends PropsWithThemeInterface,
-    Omit<InputHTMLAttributes<any>, 'onChange'> {
-  variantSize?: SizeType;
-  delay?: number;
-  onChange?: (value: string) => void;
-  label?: string;
-  withBackground?: boolean;
-  focused?: boolean;
+    Omit<InputHTMLAttributes<any>, 'onChange'> {}
+
+interface SearchPropsInterface extends BaseInterface {
   placeholder?: string;
-  className?: string;
+  variant?: 'primary' | 'secondary';
+  withBackground?: boolean;
+  onChange?: (value: string) => void;
 }
 
 const SearchInput: FC<SearchPropsInterface> = ({
-  variantSize = 'normal',
-  delay,
-  label,
+  variant = 'primary',
   withBackground = false,
-  focused = false,
   onChange,
   onFocus,
   onBlur,
   placeholder,
-  className,
   ...restProps
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleChange = (event: FormEvent<HTMLInputElement>) => {
-    onChange?.(event.currentTarget.value);
-  };
-
   return (
-    <styled.Container
-      data-testid="SearchInput-test"
-      className={cn(isFocused && 'focused', `variant-${variantSize}`, className)}
-    >
-      {label && <styled.InputHeading type="h4" align="left" label={label} transform="uppercase" />}
-      <styled.InputContainer
-        className={cn(withBackground && 'withBackground', focused && 'noBorder')}
-      >
-        <styled.Input
-          className={cn(`variant-${variantSize}`)}
-          placeholder={placeholder}
-          onChange={handleChange}
-          onFocus={(event) => {
-            onFocus?.(event);
-            setIsFocused(true);
-          }}
-          onBlur={(event) => {
-            onBlur?.(event);
-            setIsFocused(false);
-          }}
-          {...restProps}
-        />
-        <styled.InputIcon name="search" size="medium" />
-      </styled.InputContainer>
+    <styled.Container data-testid="SearchInput-test">
+      <styled.Input
+        placeholder={placeholder}
+        onChange={(event: FormEvent<HTMLInputElement>) => {
+          onChange?.(event.currentTarget.value);
+        }}
+        onFocus={(event) => onFocus?.(event)}
+        onBlur={(event) => onBlur?.(event)}
+        className={cn(variant, withBackground && 'withBackground')}
+        {...restProps}
+      />
+
+      <styled.Icon className={cn(variant)}>
+        <IconSvg name="search" size="medium" />
+      </styled.Icon>
     </styled.Container>
   );
 };

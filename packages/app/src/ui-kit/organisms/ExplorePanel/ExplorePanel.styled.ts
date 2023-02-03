@@ -42,6 +42,7 @@ export const Search = styled.div`
 `;
 
 export const Body = styled.div`
+  padding: 0 0 12px 0;
   display: flex;
   flex-direction: column;
   height: calc(100% - 180px);

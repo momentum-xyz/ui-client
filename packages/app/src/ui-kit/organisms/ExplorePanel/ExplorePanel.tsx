@@ -1,11 +1,12 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Heading, IconSvg, SearchInput, Text, useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {Box} from 'ui-kit';
 import {NftFeedItemInterface} from 'api';
-import {SearchQueryModelModelType} from 'core/models';
+import {SearchQueryModelModelType, UserModelInterface} from 'core/models';
 import {NftItemModelInterface} from 'core/models';
 
 import {NewsFeed, OdysseyList} from './components';
@@ -16,7 +17,7 @@ interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
   nftFeed: NftFeedItemInterface[];
   odysseyList: NftItemModelInterface[];
-  currentUserId: string;
+  currentUser: UserModelInterface | null;
   onSearch: () => void;
   onTeleport: (nft: NftItemModelInterface) => void;
   onSelect: (nft: NftItemModelInterface) => void;
@@ -32,7 +33,7 @@ const ExplorePanel: FC<PropsInterface> = ({
   nftFeed,
   odysseyList,
   searchQuery,
-  currentUserId,
+  currentUser,
   onSearch,
   onTeleport,
   onSelect,
@@ -40,6 +41,8 @@ const ExplorePanel: FC<PropsInterface> = ({
   onConnect,
   onOpenOdyssey
 }) => {
+  const {t} = useTranslation();
+
   const debouncedSearch = useDebouncedCallback(onSearch, SEARCH_DELAY_MS);
 
   return (
@@ -73,7 +76,7 @@ const ExplorePanel: FC<PropsInterface> = ({
         {!searchQuery.isQueryValid && (
           <NewsFeed
             nftFeed={nftFeed}
-            currentUserId={currentUserId}
+            currentUser={currentUser}
             onTeleport={onTeleport}
             onConnect={onConnect}
             onAttend={onAttend}
@@ -87,16 +90,10 @@ const ExplorePanel: FC<PropsInterface> = ({
 
         {searchQuery.isQueryValid && odysseyList.length === 0 && (
           <styled.EmptyResult>
-            <Text text="No results found" size="xs" />
+            <Text text={t('messages.noResultsFound')} size="xs" />
           </styled.EmptyResult>
         )}
       </styled.Body>
-
-      {/*isLoading && (
-        <styled.Loader>
-          <Loader />
-        </styled.Loader>
-      )*/}
     </Box>
   );
 };

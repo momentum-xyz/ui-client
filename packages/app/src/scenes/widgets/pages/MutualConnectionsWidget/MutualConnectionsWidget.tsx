@@ -1,22 +1,19 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
-import {generatePath, useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 
 import * as styled from './MutualConnectionsWidget.styled';
 
 const MutualConnectionsWidget: FC = () => {
-  const {nftStore, widgetsStore, sessionStore, unityStore} = useStore();
-  const {unityInstanceStore, isUnityAvailable} = unityStore;
+  const {nftStore, widgetsStore, unityStore} = useStore();
   const {mutualConnectionsStore} = widgetsStore;
   const {mutualConnections} = nftStore;
 
   const {t} = useTranslation();
-  const history = useHistory();
+  const {goToOdysseyHome} = useNavigation();
 
   const handleUnstake = useCallback(() => {
     mutualConnectionsStore.dialog.close();
@@ -26,17 +23,9 @@ const MutualConnectionsWidget: FC = () => {
   const handleTeleportToOdyssey = useCallback(
     (worldId: string) => {
       mutualConnectionsStore.dialog.close();
-
-      if (isUnityAvailable) {
-        console.log(`Teleport in unity to ${worldId}`);
-        history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-        unityInstanceStore.loadWorldById(worldId, sessionStore.token);
-      } else {
-        console.log(`Redirect to unity to ${worldId}`);
-        history.replace(generatePath(ROUTES.odyssey.base, {worldId}));
-      }
+      goToOdysseyHome(worldId);
     },
-    [sessionStore, history, isUnityAvailable, mutualConnectionsStore, unityInstanceStore]
+    [goToOdysseyHome, mutualConnectionsStore]
   );
 
   return (

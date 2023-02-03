@@ -7,3 +7,4 @@ export * from './metadata.interface';
 export * from './voiceChatAttribute.interface';
 export * from './voiceChatUserAttribute.interface';
 export * from './objectColor.interface';
+export * from './spawnPoint.interface';

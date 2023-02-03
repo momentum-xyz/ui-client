@@ -18,6 +18,11 @@ const CreatorMenu: FC = () => {
     history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId}));
   }, [history, worldId]);
 
+  /* FIXME: Uncomment when the BE will be ready
+  const onSpawnPointClick = useCallback(() => {
+    history.push(generatePath(ROUTES.odyssey.creator.spawnPoint, {worldId}));
+  }, [history, worldId]);*/
+
   const onSkyboxClick = useCallback(() => {
     history.push(generatePath(ROUTES.odyssey.creator.skybox, {worldId}));
   }, [history, worldId]);
@@ -42,6 +47,12 @@ const CreatorMenu: FC = () => {
             <styled.MenuText name="whitelist" size="medium-large" />
           </styled.MenuItem>
         </Tooltip>
+
+        {/*<Tooltip label={t('labels.spawnPoint')}>
+          <styled.MenuItem onClick={onSpawnPointClick}>
+            <styled.MenuText name="locator" size="medium-large" />
+          </styled.MenuItem>
+        </Tooltip>*/}
 
         <Tooltip label={t('labels.addObject')}>
           <styled.MenuItem onClick={onAddObjectClick}>

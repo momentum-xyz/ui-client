@@ -4,7 +4,7 @@ import {Dialog} from '@momentum-xyz/ui-kit';
 import {generatePath, matchPath, useHistory} from 'react-router-dom';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 
 const MENU_OFFSET_LEFT = 10;
@@ -12,35 +12,23 @@ const MENU_OFFSET_TOP = 20;
 
 const OdysseyInfoWidget: FC = () => {
   const {sessionStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey} = odysseyInfoStore;
   const {assetStore} = objectStore;
 
   const history = useHistory();
+  const {goToOdysseyHome} = useNavigation();
 
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
 
   const handleTeleport = useCallback(() => {
-    if (
-      assetStore.dockWorldId &&
-      matchPath(history.location.pathname, ROUTES.odyssey.object.root)
-    ) {
-      history.replace(generatePath(ROUTES.odyssey.base, {worldId: assetStore.dockWorldId}));
-      unityInstanceStore.loadWorldById(assetStore.dockWorldId, sessionStore.token);
-      return;
+    if (assetStore.dockWorldId) {
+      goToOdysseyHome(assetStore.dockWorldId);
+    } else {
+      goToOdysseyHome(odyssey?.uuid || '');
+      odysseyInfoStore.resetModel();
     }
-
-    odysseyInfoStore.dialog.close();
-    history.push(generatePath(ROUTES.odyssey.base, {worldId: odyssey?.uuid || ''}));
-  }, [
-    assetStore.dockWorldId,
-    sessionStore.token,
-    history,
-    odyssey?.uuid,
-    odysseyInfoStore.widget,
-    unityInstanceStore
-  ]);
+  }, [assetStore, goToOdysseyHome, odyssey, odysseyInfoStore]);
 
   const handleConnect = useCallback(() => {
     if (odyssey) {
@@ -78,8 +66,11 @@ const OdysseyInfoWidget: FC = () => {
             odyssey={odysseyInfoStore.odyssey}
             onVisit={handleTeleport}
             onConnect={handleConnect}
-            connectDisabled={odyssey?.owner === sessionStore.wallet || alreadyConnected}
             onDock={() => {}}
+            visitDisabled={unityStore.worldId === odyssey.uuid}
+            connectDisabled={
+              odyssey?.owner === sessionStore.wallet || alreadyConnected || sessionStore.isGuest
+            }
             dockDisabled={true}
           />
         )}

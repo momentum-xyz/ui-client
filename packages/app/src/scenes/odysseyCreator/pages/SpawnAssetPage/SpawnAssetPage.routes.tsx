@@ -13,8 +13,15 @@ export const SPAWN_ASSET_ROUTES: RouteConfigInterface[] = [
     exact: true
   },
   {
+    path: ROUTES.odyssey.creator.spawnAsset.standardAssets,
+    main: () => (
+      <AssetsPage assetCategory={Asset3dCategoryEnum.STANDARD} setFunctionalityAfterCreation />
+    ),
+    exact: true
+  },
+  {
     path: ROUTES.odyssey.creator.spawnAsset.customAssets,
-    main: () => <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} />,
+    main: () => <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} showPreview />,
     exact: true
   },
   {

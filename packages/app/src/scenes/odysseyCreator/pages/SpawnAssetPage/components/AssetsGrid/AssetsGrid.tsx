@@ -1,5 +1,5 @@
 import {Button, Text} from '@momentum-xyz/ui-kit';
-import {FC, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
@@ -10,12 +10,22 @@ import * as styled from './AssetsGrid.styled';
 
 interface PropsInterface {
   assets: Asset3dInterface[];
+  showPreview?: boolean;
   onSelected: (asset: Asset3dInterface) => void;
 }
 
-const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
-  const {t} = useTranslation();
+const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
   const [hoveringAsset, setHoveringAsset] = useState<Asset3dInterface | null>(null);
+
+  const {t} = useTranslation();
+
+  if (assets.length === 0) {
+    return (
+      <styled.EmptyResult>
+        <Text text={t('messages.noResultsFound')} size="xs" />
+      </styled.EmptyResult>
+    );
+  }
 
   return (
     <styled.Grid>
@@ -23,19 +33,18 @@ const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
         <styled.GridItem
           key={asset.id}
           onPointerOver={() => {
-            console.log('enter');
             setHoveringAsset(asset);
           }}
           onPointerLeave={() => {
-            console.log('leave');
             setHoveringAsset(null);
           }}
         >
-          {hoveringAsset !== asset ? (
-            <styled.GridItemImage src={asset.image} />
+          {hoveringAsset !== asset || !showPreview ? (
+            <styled.GridItemImage src={asset.previewUrl} />
           ) : (
             <styled.GridItemPreview>
               <Model3dPreview
+                previewUrl={asset.previewUrl}
                 delayLoadingMsec={500}
                 filename={hoveringAsset.thumbnailAssetDownloadUrl}
               />

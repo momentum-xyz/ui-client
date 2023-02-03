@@ -21,6 +21,9 @@ const SearchQuery = types
     },
     get isPending(): boolean {
       return self.request.isPending;
+    },
+    get queryLowerCased(): string {
+      return self.query ? self.query.toLowerCase() : '';
     }
   }));
 

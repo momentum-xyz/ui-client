@@ -5,19 +5,22 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
-import {NftItemModelInterface} from 'core/models';
+import {NftItemModelInterface, UserModelInterface} from 'core/models';
 import placeholder from 'static/images/placeholder.png';
 
 import * as styled from './CalendarItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
+  currentUser: UserModelInterface;
   onTeleport: (nft: NftItemModelInterface) => void;
   onAttend: (nft: NftItemModelInterface) => void;
 }
 
 const CalendarItem: FC<PropsInterface> = (props) => {
-  const {item, onTeleport, onAttend} = props;
+  const {item, onTeleport, currentUser, onAttend} = props;
+
+  const name = item.uuid === currentUser.id ? currentUser.name : item.name;
 
   const formattedStartDate = useMemo(() => {
     if (item.calendarStart) {
@@ -46,7 +49,7 @@ const CalendarItem: FC<PropsInterface> = (props) => {
         </styled.Date>
         <div>
           <Text size="xxs" text={`${item.calendarTitle}`} align="left" />
-          <Text size="xxs" text={`${item.name}`} align="left" />
+          <Text size="xxs" text={`${name}`} align="left" />
         </div>
         <styled.Actions>
           <div>

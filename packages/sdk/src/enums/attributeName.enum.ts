@@ -2,6 +2,8 @@ export enum AttributeNameEnum {
   NAME = 'name',
   STATE = 'state',
   CONFIG = 'config',
+  SKYBOX_CUSTOM = 'skybox_custom',
+  SKYBOX_LIST = 'skybox_list',
   MAGIC_LINKS = 'magic_links',
   EMOJIS = 'emojis',
   EVENTS = 'events',
@@ -9,5 +11,6 @@ export enum AttributeNameEnum {
   VOICE_CHAT_ACTION = 'VoiceChatAction',
   WORLD_SETTINGS = 'world_settings',
   TELEPORT = 'teleport',
-  OBJECT_COLOR = 'object_color'
+  OBJECT_COLOR = 'object_color',
+  SPAWN_POINT = 'spawn_point'
 }
