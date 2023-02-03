@@ -9,6 +9,7 @@ import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 
 const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
+const PAGE_SIZE = 5;
 
 const SkyboxDatabaseModel = types.model({
   name: types.string
@@ -27,6 +28,9 @@ const SkyboxSelectorStore = types
       currentItemId: types.maybe(types.string),
       defaultSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
       userSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
+
+      skyboxPageCnt: types.optional(types.number, 0),
+      skyboxCurrentPage: types.optional(types.number, 0),
 
       skyboxToDeleteId: types.maybe(types.string),
       uploadDialog: types.optional(Dialog, {}),
@@ -67,6 +71,15 @@ const SkyboxSelectorStore = types
             } as Asset3dInterface)
         )
       ];
+    },
+    get currPageSkyboxes(): Asset3dInterface[] {
+      const start = self.skyboxCurrentPage * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+
+      return this.allSkyboxes.slice(start, end);
+    },
+    get pages(): number[] {
+      return Array.from(Array(self.skyboxPageCnt).keys());
     }
   }))
   .actions((self) => ({
@@ -97,6 +110,9 @@ const SkyboxSelectorStore = types
 
       self.selectedItemId =
         customSkyboxData?.render_hash || (self.allSkyboxes[0] || {id: undefined}).id;
+
+      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
+      self.skyboxCurrentPage = 0;
     }),
     fetchDefaultSkyboxes: flow(function* (spaceId: string) {
       const response = yield self.fetchSkyboxRequest.send(
@@ -217,6 +233,21 @@ const SkyboxSelectorStore = types
       return hash
         ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
         : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
+    },
+    changePage: function (page: number) {
+      self.skyboxCurrentPage = page;
+    },
+    nextPage: function () {
+      self.skyboxCurrentPage += 1;
+      if (self.skyboxCurrentPage >= self.skyboxPageCnt) {
+        self.skyboxCurrentPage = 0;
+      }
+    },
+    prevPage: function () {
+      self.skyboxCurrentPage -= 1;
+      if (self.skyboxCurrentPage < 0) {
+        self.skyboxCurrentPage = self.skyboxPageCnt - 1;
+      }
     }
   }));
 
