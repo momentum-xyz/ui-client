@@ -671,7 +671,7 @@ const NftStore = types
         throw err;
       }
     }),
-    requestAirdrop: flow(function* (address: string, authWallet: string) {
+    requestAirdrop: flow(function* (address: string) {
       console.log('Request airdrop', address);
       self.setRequestFundsStatus('pending');
       if (!self.channel) {
@@ -679,7 +679,7 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      if (!checkIfCanRequestAirdrop(authWallet)) {
+      if (!checkIfCanRequestAirdrop(address)) {
         throw new Error('Wait at least 24 hours before requesting airdrop again');
       }
 
@@ -700,7 +700,7 @@ const NftStore = types
           }).catch(reject);
         });
         self.setRequestFundsStatus('success');
-        saveLastAirdropInfo(authWallet);
+        saveLastAirdropInfo(address);
         console.log('Request airdrop success');
       } catch (err) {
         console.log('Error getting airdrop:', err);

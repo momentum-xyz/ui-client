@@ -168,7 +168,7 @@ const StakingDashboard: FC = () => {
     console.log('requestAirdrop', wallet);
 
     nftStore
-      .requestAirdrop(wallet, authWallet)
+      .requestAirdrop(wallet)
       .then(() => {
         console.log('requestAirdrop success');
         toast.info(
