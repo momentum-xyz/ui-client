@@ -3,6 +3,7 @@ export const assets3dRepositoryEndpoints = () => {
 
   return {
     base: BASE_URL,
-    upload: `${BASE_URL}/upload`
+    upload: `${BASE_URL}/upload`,
+    patchMeta: `${BASE_URL}/:assetId`
   };
 };
