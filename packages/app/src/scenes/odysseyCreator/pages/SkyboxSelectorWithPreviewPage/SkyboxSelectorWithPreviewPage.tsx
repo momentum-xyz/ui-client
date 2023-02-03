@@ -25,6 +25,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     currPageSkyboxes,
     pages,
     skyboxPageCnt,
+    allSkyboxes,
     skyboxCurrentPage
   } = skyboxSelectorStore;
   const {user} = sessionStore;
@@ -52,7 +53,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
           <styled.SkyboxCountContainer>
             <styled.SkyboxCount>
               <Text
-                text={t('counts.skyboxes', {count: currPageSkyboxes.length})}
+                text={t('counts.skyboxes', {count: allSkyboxes.length})}
                 size="l"
                 align="left"
               />
