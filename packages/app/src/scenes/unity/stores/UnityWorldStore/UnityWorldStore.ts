@@ -9,7 +9,7 @@ import {
   SpaceInterface
 } from 'api';
 import {mapper} from 'api/mapper';
-import {Space} from 'core/models';
+import {NftItemModelInterface, Space} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 // TODO: Use this store a little bit more :)
@@ -70,8 +70,10 @@ const UnityWorldStore = types.compose(
       },
       get worldImageSrc(): string {
         const worldNft = getRootStore(self).nftStore.getNftByUuid(self.worldId);
-        const imageSrc = worldNft?.image ? getImageAbsoluteUrl(worldNft.image) || '' : '';
-        return imageSrc;
+        return worldNft?.image ? getImageAbsoluteUrl(worldNft.image) || '' : '';
+      },
+      get nftOfWorld(): NftItemModelInterface | undefined {
+        return getRootStore(self).nftStore.getNftByUuid(self.worldId);
       }
     }))
 );

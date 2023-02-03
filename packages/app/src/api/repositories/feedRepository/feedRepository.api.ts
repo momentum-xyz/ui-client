@@ -11,11 +11,15 @@ import {
 } from './feedRepository.api.types';
 import {feedRepositoryEndpoints} from './feedRepository.api.endpoints';
 
+// FIXME: Data should have only ids on NFT.
+// Don't need to store fields like name, image. These data should come from NFT
 export const fetchFeed: RequestInterface<NewsFeedRequest, NewsFeedResponse> = (options) => {
   const {...restOptions} = options;
   return request.get(feedRepositoryEndpoints().feed, restOptions);
 };
 
+// FIXME: Data should have only ids on NFT.
+// Don't need to store fields like name, image. These data should come from NFT
 export const fetchNotifications: RequestInterface<NotificationRequest, NotificationResponse> = (
   options
 ) => {

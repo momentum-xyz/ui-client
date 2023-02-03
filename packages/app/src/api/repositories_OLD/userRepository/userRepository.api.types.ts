@@ -63,8 +63,3 @@ export interface FetchUserInitiativesRequest {
 }
 
 export interface FetchUserInitiativesResponse extends Array<UserSpaceInterface> {}
-
-export interface UpdateProfileInterface {
-  name: string;
-  profile: UserProfileInterface;
-}

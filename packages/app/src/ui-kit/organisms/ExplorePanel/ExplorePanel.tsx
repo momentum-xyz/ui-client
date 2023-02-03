@@ -6,7 +6,7 @@ import cn from 'classnames';
 
 import {Box} from 'ui-kit';
 import {NftFeedItemInterface} from 'api';
-import {SearchQueryModelModelType} from 'core/models';
+import {SearchQueryModelModelType, UserModelInterface} from 'core/models';
 import {NftItemModelInterface} from 'core/models';
 
 import {NewsFeed, OdysseyList} from './components';
@@ -17,7 +17,7 @@ interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
   nftFeed: NftFeedItemInterface[];
   odysseyList: NftItemModelInterface[];
-  currentUserId: string;
+  currentUser: UserModelInterface | null;
   onSearch: () => void;
   onTeleport: (nft: NftItemModelInterface) => void;
   onSelect: (nft: NftItemModelInterface) => void;
@@ -33,7 +33,7 @@ const ExplorePanel: FC<PropsInterface> = ({
   nftFeed,
   odysseyList,
   searchQuery,
-  currentUserId,
+  currentUser,
   onSearch,
   onTeleport,
   onSelect,
@@ -76,7 +76,7 @@ const ExplorePanel: FC<PropsInterface> = ({
         {!searchQuery.isQueryValid && (
           <NewsFeed
             nftFeed={nftFeed}
-            currentUserId={currentUserId}
+            currentUser={currentUser}
             onTeleport={onTeleport}
             onConnect={onConnect}
             onAttend={onAttend}
