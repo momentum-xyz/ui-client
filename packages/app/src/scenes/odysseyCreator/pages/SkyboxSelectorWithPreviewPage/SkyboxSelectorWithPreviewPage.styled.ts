@@ -53,7 +53,7 @@ export const SkyboxCountContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  margin-left: 150px;
+  margin-left: 15px;
   margin-bottom: 10px;
 `;
 
@@ -61,6 +61,16 @@ export const SkyboxCount = styled.div`
   padding: 10px;
   border-radius: 10px;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
+`;
+
+export const SkyboxesContainer = styled.div`
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+export const ItemsPage = styled.div`
+  display: flex;
 `;
 
 export const Item = styled.div`
@@ -129,4 +139,39 @@ export const ButtonsHolder = styled.div`
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
   padding: 10px;
   border-radius: 10px;
+`;
+
+export const Pager = styled.div`
+  padding: 0 10px;
+  border-radius: 10px;
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
+  margin-top: 40px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex: 0;
+  width: fit-content;
+`;
+export const PageDot = styled.div`
+  width: 17px;
+  height: 17px;
+  border-radius: 100%;
+  background: var(--accent-color);
+  opacity: 0.3;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.75;
+  }
+  &.active-page {
+    opacity: 1;
+  }
+`;
+
+export const PagerArrowHolder = styled.div`
+  padding: 10px 0px;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  }
 `;
