@@ -26,7 +26,8 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     pages,
     skyboxPageCnt,
     allSkyboxes,
-    skyboxCurrentPage
+    skyboxCurrentPage,
+    currentItemId
   } = skyboxSelectorStore;
   const {user} = sessionStore;
 
@@ -59,7 +60,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
               />
             </styled.SkyboxCount>
           </styled.SkyboxCountContainer>
-          {!!currPageSkyboxes && !!selectedItem && (
+          {!!currPageSkyboxes && (
             // TODO: Move pager to component
             <styled.SkyboxesContainer>
               <styled.ItemsPage>
@@ -73,7 +74,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                         selectItem(item);
                       }}
                     >
-                      {item.isUserAttribute && (
+                      {item.isUserAttribute && item.id !== currentItemId && (
                         <styled.DeleteButton
                           onClick={(e) => {
                             e.preventDefault();

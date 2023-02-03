@@ -110,6 +110,7 @@ const SkyboxSelectorStore = types
 
       self.selectedItemId =
         customSkyboxData?.render_hash || (self.allSkyboxes[0] || {id: undefined}).id;
+      self.currentItemId = self.selectedItemId;
 
       self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
       self.skyboxCurrentPage = 0;
@@ -198,10 +199,15 @@ const SkyboxSelectorStore = types
 
       yield self.saveItem(hash, true, worldId);
       yield self.fetchUserSkyboxes(worldId, userId);
+      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
 
       return self.createSkyboxRequest.isDone;
     }),
     removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
+      if (hash === self.currentItemId) {
+        return;
+      }
+
       const value = {...self.userSkyboxes.toJSON()};
       delete value[hash];
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
@@ -213,8 +219,9 @@ const SkyboxSelectorStore = types
       });
 
       yield self.fetchUserSkyboxes(worldId, userId);
-      if (hash === self.selectedItemId) {
-        self.selectedItemId = [...self.defaultSkyboxes.keys(), ...self.userSkyboxes.keys()][0];
+      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
+      if (self.skyboxCurrentPage >= self.skyboxPageCnt) {
+        self.skyboxCurrentPage = self.skyboxPageCnt - 1;
       }
 
       self.closeSkyboxDeletion();
