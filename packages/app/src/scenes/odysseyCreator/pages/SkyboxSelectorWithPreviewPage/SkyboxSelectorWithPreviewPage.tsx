@@ -15,7 +15,6 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {odysseyCreatorStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {
-    selectedItem,
     currentItem,
     selectItem,
     saveItem,
@@ -65,7 +64,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
             <styled.SkyboxesContainer>
               <styled.ItemsPage>
                 {currPageSkyboxes.map((item, idx) => {
-                  const active = item === selectedItem;
+                  const active = item === currentItem;
                   return (
                     <styled.Item
                       className={cn({active})}
