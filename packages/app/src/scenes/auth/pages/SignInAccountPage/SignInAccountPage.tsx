@@ -38,7 +38,7 @@ const SignInAccountPage: FC = () => {
   const onConnectWallet = useCallback(() => {
     console.log('onConnectWallet', {isZeroBalance});
     if (isZeroBalance) {
-      nftStore.requestAirdrop(signInStore.wallet);
+      nftStore.requestAirdrop(signInStore.wallet, signInStore.wallet);
     } else {
       // there are funds already
       setWalletWithFundsIsConnected(true);
