@@ -89,7 +89,7 @@ const SearchUsersWidget: FC = () => {
                 {onlineUsersStore.listedUsers.map((user) => (
                   <OnlineUser
                     key={user.id}
-                    user={user}
+                    user={sessionStore.user?.id === user.id ? sessionStore.user : user}
                     onTeleportUser={() => handleOdysseyTeleport(user.id)}
                     onUserClick={handleUserClick}
                     onHighFiveUser={handleHighFive}

@@ -9,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
-const PROFILE_JOB_CHECKER_MS = 5 * 1000;
+const PROFILE_JOB_CHECKER_MS = 3 * 1000;
 
 const AppAuth: FC = ({children}) => {
   const {sessionStore, nftStore} = useStore();
@@ -29,8 +29,6 @@ const AppAuth: FC = ({children}) => {
   // FIXME: It should be removed. Profile changes should come from a new PosBus
   useEffect(() => {
     let jobInterval: NodeJS.Timer | undefined;
-    console.log('!!!!!!!!!!!!!!!! PROFILE !!!!!!!!!!!!!!!!');
-    console.log(sessionStore.profileJobId);
 
     if (sessionStore.profileJobId) {
       jobInterval = setInterval(() => {
@@ -39,6 +37,8 @@ const AppAuth: FC = ({children}) => {
             sessionStore.clearJobId();
 
             // TODO: Update data
+            sessionStore.loadUserProfile();
+            nftStore.fetchNfts();
 
             toast.info(
               <ToastContent
@@ -69,7 +69,7 @@ const AppAuth: FC = ({children}) => {
     return () => {
       clearInterval(jobInterval);
     };
-  }, [sessionStore.profileJobId, sessionStore, t]);
+  }, [sessionStore.profileJobId, sessionStore, nftStore, t]);
 
   useEffect(() => {
     if (sessionStore.wallet && !nftStore.isLoading) {

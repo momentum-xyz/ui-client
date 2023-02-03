@@ -4,6 +4,7 @@ import {format} from 'date-fns-tz';
 import {Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
+import {UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
 
@@ -11,12 +12,12 @@ import * as styled from './DockedItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
-  currentUserId?: string;
+  currentUser: UserModelInterface;
   onOpenOdyssey?: (uuid: string) => void;
 }
 
 const DockedItem: FC<PropsInterface> = (props) => {
-  const {item, currentUserId, onOpenOdyssey} = props;
+  const {item, currentUser, onOpenOdyssey} = props;
 
   const {t} = useTranslation();
 
@@ -24,22 +25,25 @@ const DockedItem: FC<PropsInterface> = (props) => {
     return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
   }, [item.date]);
 
-  const authUserIsStaking = currentUserId && currentUserId === item.uuid;
-  const authUserIsStaked = currentUserId && currentUserId === item.connectedTo?.uuid;
+  const userIsStaking = currentUser.id === item.uuid;
+  const userIsStaked = currentUser.id === item.connectedTo?.uuid;
 
-  const dockingUserLabel = authUserIsStaking ? t('newsfeed.you') : item.name;
-  const dockedUserLabel = authUserIsStaked ? t('newsfeed.you') : item.connectedTo?.name;
+  const dockingImage = userIsStaking ? currentUser.profile.avatarHash : item.image;
+  const dockedImage = userIsStaked ? currentUser.profile.avatarHash : item.connectedTo?.image;
+
+  const dockingUserLabel = userIsStaking ? t('newsfeed.you') : item.name;
+  const dockedUserLabel = userIsStaked ? t('newsfeed.you') : item.connectedTo?.name;
 
   return (
     <>
       <div>
         <styled.TwoAvatarsContainer>
           <styled.Avatar
-            src={getImageAbsoluteUrl(item.image) || ''}
+            src={getImageAbsoluteUrl(dockingImage) || ''}
             onClick={() => onOpenOdyssey?.(item.uuid)}
           />
           <styled.AvatarAhead
-            src={getImageAbsoluteUrl(item.connectedTo?.image) || ''}
+            src={getImageAbsoluteUrl(dockedImage) || ''}
             onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
           />
         </styled.TwoAvatarsContainer>
@@ -51,7 +55,7 @@ const DockedItem: FC<PropsInterface> = (props) => {
             <Text
               size="xxs"
               text={dockingUserLabel}
-              weight={authUserIsStaking ? 'bold' : 'normal'}
+              weight={userIsStaking ? 'bold' : 'normal'}
               decoration="underline"
               align="left"
             />
@@ -64,7 +68,7 @@ const DockedItem: FC<PropsInterface> = (props) => {
             <Text
               size="xxs"
               text={dockedUserLabel}
-              weight={authUserIsStaked ? 'bold' : 'normal'}
+              weight={userIsStaked ? 'bold' : 'normal'}
               decoration="underline"
               align="left"
             />

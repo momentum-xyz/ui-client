@@ -152,7 +152,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <Text
                     className="odyssey-name"
                     size="m"
-                    text={unityWorldStore?.world?.name}
+                    text={unityWorldStore?.nftOfWorld?.name || null}
                     transform="uppercase"
                     weight="bold"
                   />
