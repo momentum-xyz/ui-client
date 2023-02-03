@@ -90,14 +90,23 @@ const usePlugin: UsePluginHookType = (props) => {
         label="Video URL"
         placeholder="Paste a YouTube, Twitch, or Vimeo Share URL here."
         autoFocus
-        value={modifiedState?.video_url || sharedState?.video_url || sharedState?.youtube_url || ''}
+        value={
+          modifiedState?.video_url ?? (sharedState?.video_url || sharedState?.youtube_url || '')
+        }
         onChange={(value) => setModifiedState({video_url: value})}
         isError={!!error}
         errorMessage={error}
       />
     </div>
   ) : embedUrl ? (
-    <iframe title="Video" src={embedUrl} height="100%" width="100%" allowFullScreen></iframe>
+    <iframe
+      key={embedUrl}
+      title="Video"
+      src={embedUrl}
+      height="100%"
+      width="100%"
+      allowFullScreen
+    ></iframe>
   ) : (
     <div
       style={{
