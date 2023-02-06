@@ -130,7 +130,7 @@ const SkyboxSelectorStore = types
       const response = yield self.fetchSkyboxRequest.send(
         api.spaceUserAttributeRepository.getSpaceUserAttribute,
         {
-          spaceId,
+          spaceId: appVariables.NODE_ID,
           userId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.SKYBOX_LIST
@@ -188,7 +188,7 @@ const SkyboxSelectorStore = types
         [hash]: {name}
       };
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: worldId,
+        spaceId: appVariables.NODE_ID,
         userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.SKYBOX_LIST,
@@ -209,7 +209,7 @@ const SkyboxSelectorStore = types
       const value = {...self.userSkyboxes.toJSON()};
       delete value[hash];
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: worldId,
+        spaceId: appVariables.NODE_ID,
         userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.SKYBOX_LIST,
