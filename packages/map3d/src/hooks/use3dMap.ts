@@ -62,6 +62,26 @@ export const use3dMap = (
   const activeLines = useRef<Line2[]>([]);
   const defaultOdysseyTexture = useRef(new THREE.TextureLoader().load(astronaut));
 
+  const createTextCanvas = useCallback((name: string) => {
+    const drawCanvas = document.createElement('canvas');
+    const drawContent = drawCanvas.getContext('2d');
+    drawCanvas.width = 1000;
+    drawCanvas.height = 100;
+    if (drawContent) {
+      drawContent.font = 'Bold 40px Trebuchet MS';
+
+      drawContent.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      drawContent.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
+
+      drawContent.fillStyle = 'rgba(245, 199, 255, 0.9)';
+      drawContent.fillText(`Visit ${name}`, 0, 60);
+      drawContent.strokeStyle = 'rgba(124, 86, 133)';
+      drawContent.strokeText(`Visit ${name}`, 0, 60);
+    }
+
+    return drawCanvas;
+  }, []);
+
   /**
    * Draw lines between staked Odysseys.
    */
@@ -179,6 +199,26 @@ export const use3dMap = (
   }, []);
 
   /**
+   * Change a name of existing odyssey
+   */
+  const changeOdysseyName = useCallback(
+    (uuid: string, name: string) => {
+      const targetOdyssey = referenceListOfOdysseys.current.find((i) => i.uuid === uuid);
+      if (targetOdyssey && targetOdyssey.children[1] instanceof THREE.Mesh) {
+        const drawCanvas = createTextCanvas(name);
+
+        const nameTexture = new THREE.Texture(drawCanvas);
+        nameTexture.needsUpdate = true;
+
+        targetOdyssey.children[1].material.map = nameTexture;
+        targetOdyssey.children[1].material.map.wrapS = RepeatWrapping;
+        targetOdyssey.children[1].material.needsUpdate = true;
+      }
+    },
+    [createTextCanvas]
+  );
+
+  /**
    * Build Galaxy
    */
   const generateGalaxy = useCallback(() => {
@@ -265,22 +305,8 @@ export const use3dMap = (
       /**
        * Build text texture for around the odyssey
        */
-      const drawCanvas = document.createElement('canvas');
-      const drawContent = drawCanvas.getContext('2d');
-      drawCanvas.width = 1000;
-      drawCanvas.height = 100;
-      if (drawContent) {
-        drawContent.font = 'Bold 40px Trebuchet MS';
 
-        drawContent.fillStyle = 'rgba(0, 0, 0, 0.1)';
-        drawContent.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
-
-        drawContent.fillStyle = 'rgba(245, 199, 255, 0.9)';
-        drawContent.fillText(`Visit ${item.name}`, 0, 60);
-        drawContent.strokeStyle = 'rgba(124, 86, 133)';
-        drawContent.strokeText(`Visit ${item.name}`, 0, 60);
-      }
-
+      const drawCanvas = createTextCanvas(item.name);
       const nameTexture = new THREE.Texture(drawCanvas);
       nameTexture.needsUpdate = true;
 
@@ -302,7 +328,7 @@ export const use3dMap = (
 
       return odyssey;
     },
-    [getImageUrl]
+    [createTextCanvas, getImageUrl]
   );
 
   /**
@@ -650,5 +676,5 @@ export const use3dMap = (
     };
   }, [onMouseDown, onPointerMove, onWindowResize]);
 
-  return {flyToOdyssey, changeOdysseyImage};
+  return {flyToOdyssey, changeOdysseyImage, changeOdysseyName};
 };
