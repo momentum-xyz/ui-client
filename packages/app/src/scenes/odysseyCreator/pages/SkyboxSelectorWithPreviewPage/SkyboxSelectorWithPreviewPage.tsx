@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Text, IconSvg} from '@momentum-xyz/ui-kit';
+import {Button, Text, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useHistory, generatePath} from 'react-router-dom';
@@ -75,16 +75,16 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                       }}
                     >
                       {item.isUserAttribute && item.id !== currentItemId && (
-                        <styled.DeleteButton
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-
-                            skyboxSelectorStore.openSkyboxDeletion(item.id);
-                          }}
-                        >
-                          <IconSvg name="bin" size="normal" isWhite />
-                        </styled.DeleteButton>
+                        <styled.DeleteButtonHolder>
+                          <SvgButton
+                            iconName="bin"
+                            size="normal"
+                            isWhite
+                            onClick={() => {
+                              skyboxSelectorStore.openSkyboxDeletion(item.id);
+                            }}
+                          />
+                        </styled.DeleteButtonHolder>
                       )}
                       <styled.PreviewImg src={item.image} />
                       <styled.ItemTitle>{item.name}</styled.ItemTitle>
