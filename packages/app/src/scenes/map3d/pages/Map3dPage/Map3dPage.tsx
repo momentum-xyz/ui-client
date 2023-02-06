@@ -28,13 +28,13 @@ const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
     [isClickActive, nftStore, odysseyInfoStore, previewOdysseyStore, sessionStore]
   );
 
-  if (nftStore.isLoading) {
+  if (nftStore.isLoading || !sessionStore.map3dUser) {
     return <></>;
   }
 
   return (
     <Map3dCanvas
-      centerWallet={sessionStore.wallet}
+      currentUser={sessionStore.map3dUser}
       selectedUuid={odysseyInfoStore.nftId}
       items={nftStore.nftItems}
       getConnections={nftStore.getStakedAtOthersByWallet}

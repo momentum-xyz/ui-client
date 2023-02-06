@@ -6,6 +6,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {Line2} from 'three/examples/jsm/lines/Line2.js';
 import {LineGeometry} from 'three/examples/jsm/lines/LineGeometry.js';
 import {LineMaterial} from 'three/examples/jsm/lines/LineMaterial.js';
+import {Map3dUserInterface} from '@momentum-xyz/core';
 
 import {
   PARAMETERS,
@@ -15,14 +16,13 @@ import {
   PLANETS_MAX_VERTICAL_SPAWN_HEIGHT
 } from '../contants';
 import {PlanetMesh} from '../classes';
-import {PlanetInterface} from '../interfaces';
 import astronaut from '../static/images/astronaut.png';
 import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
 export const use3dMap = (
   canvas: HTMLCanvasElement,
-  items: PlanetInterface[],
-  centerWallet: string,
+  items: Map3dUserInterface[],
+  currentUser: Map3dUserInterface,
   getConnections: (wallet: string) => Promise<string[]>,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onSelectOdyssey: (uuid: string) => void
@@ -66,9 +66,12 @@ export const use3dMap = (
    * Draw lines between staked Odysseys.
    */
   const drawConnections = useCallback(
-    async (sourceWallet: string) => {
-      const targetWallets = await getConnections(sourceWallet);
+    async (sourceWallet?: string | null) => {
+      if (!sourceWallet) {
+        return;
+      }
 
+      const targetWallets = await getConnections(sourceWallet);
       const isSameOdyssey = activeLinesOwner.current === sourceWallet;
       const areSameConnections = activeLines.current.length === targetWallets.length;
 
@@ -158,6 +161,24 @@ export const use3dMap = (
   );
 
   /**
+   * Change an image of existing odyssey
+   */
+  const changeOdysseyImage = useCallback((uuid: string, imageUrl: string) => {
+    const targetOdyssey = referenceListOfOdysseys.current.find((i) => i.uuid === uuid);
+    if (targetOdyssey) {
+      const texture = new THREE.TextureLoader().load(imageUrl, undefined, undefined, () => {
+        texture.image = defaultOdysseyTexture.current.image;
+        texture.needsUpdate = true;
+      });
+
+      if (targetOdyssey.children[0] instanceof THREE.Mesh) {
+        targetOdyssey.children[0].material.map = texture;
+        targetOdyssey.children[0].material.needsUpdate = true;
+      }
+    }
+  }, []);
+
+  /**
    * Build Galaxy
    */
   const generateGalaxy = useCallback(() => {
@@ -214,7 +235,7 @@ export const use3dMap = (
    * Create a new Odyssey
    */
   const createNewOdyssey = useCallback(
-    (item: PlanetInterface) => {
+    (item: Map3dUserInterface) => {
       const imageUrl = getImageUrl(item.image) || astronaut;
       const texture = new THREE.TextureLoader().load(imageUrl, undefined, undefined, () => {
         // Using default image of odyssey if an image was not loaded
@@ -288,22 +309,21 @@ export const use3dMap = (
    * Create center Odyssey
    */
   const createCenterOdyssey = useCallback(() => {
-    const centerItem = items.find((i) => i.owner === centerWallet);
-    if (!centerItem) {
-      return;
-    }
+    const centerItem = items.find((i) => i.owner === currentUser.owner);
+    if (centerItem) {
+      const centerOdyssey = createNewOdyssey(centerItem);
 
-    const centerOdyssey = createNewOdyssey(centerItem);
-    scene.current.add(centerOdyssey);
-    referenceListOfOdysseys.current.push(centerOdyssey);
-  }, [centerWallet, createNewOdyssey, items]);
+      referenceListOfOdysseys.current.push(centerOdyssey);
+      scene.current.add(centerOdyssey);
+    }
+  }, [currentUser, createNewOdyssey, items]);
 
   /**
    * Create array for odyssey
    */
   const createOdysseys = useCallback(() => {
     for (let i = 0; i < items.length; i++) {
-      if (items[i].owner !== centerWallet) {
+      if (items[i].owner !== currentUser.owner) {
         const odyssey = createNewOdyssey(items[i]);
         if (odyssey) {
           listOfOdysseys.current.push(odyssey);
@@ -311,7 +331,7 @@ export const use3dMap = (
         }
       }
     }
-  }, [centerWallet, createNewOdyssey, items]);
+  }, [currentUser, createNewOdyssey, items]);
 
   /**
    * Create Circular Universe of Odysseys
@@ -416,7 +436,7 @@ export const use3dMap = (
   /**
    * Fly to particular planet
    */
-  const flyToPlanet = useCallback(
+  const flyToOdyssey = useCallback(
     async (uuid: string) => {
       // Make sure transition to the newly clicked planet has finished.
       if (!transitionToPlanetFinished.current) {
@@ -532,10 +552,10 @@ export const use3dMap = (
         const targetPlanet = castRay[0];
 
         // Fly to founded planet
-        await flyToPlanet(targetPlanet.object.uuid);
+        await flyToOdyssey(targetPlanet.object.uuid);
       }
     },
-    [flyToPlanet]
+    [flyToOdyssey]
   );
 
   /**
@@ -611,7 +631,7 @@ export const use3dMap = (
 
     createCenterOdyssey();
 
-    drawConnections(centerWallet);
+    drawConnections(currentUser.owner);
 
     buildUniverse();
 
@@ -630,5 +650,5 @@ export const use3dMap = (
     };
   }, [onMouseDown, onPointerMove, onWindowResize]);
 
-  return {flyToPlanet};
+  return {flyToOdyssey, changeOdysseyImage};
 };

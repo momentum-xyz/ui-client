@@ -1,2 +1,1 @@
-export * from './planet.interface';
-export * from './props.interface';
+export * from './map3dProps.interface';
