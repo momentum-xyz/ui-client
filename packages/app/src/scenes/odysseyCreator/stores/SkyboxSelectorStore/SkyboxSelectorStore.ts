@@ -99,17 +99,17 @@ const SkyboxSelectorStore = types
         }
       );
 
-      const customSkyboxData = yield self.createSkyboxRequest.send(
+      const activeSkyboxData = yield self.createSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
           spaceId: spaces.skybox,
           plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.SKYBOX_CUSTOM
+          attribute_name: AttributeNameEnum.ACTIVE_SKYBOX
         }
       );
 
       self.selectedItemId =
-        customSkyboxData?.render_hash || (self.allSkyboxes[0] || {id: undefined}).id;
+        activeSkyboxData?.render_hash || (self.allSkyboxes[0] || {id: undefined}).id;
       self.currentItemId = self.selectedItemId;
 
       self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
@@ -164,7 +164,7 @@ const SkyboxSelectorStore = types
         yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
           spaceId: spaces.skybox,
           plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.SKYBOX_CUSTOM,
+          attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,
           value: {render_hash: id}
         });
       }
