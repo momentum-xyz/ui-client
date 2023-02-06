@@ -3,10 +3,11 @@ import {observer} from 'mobx-react-lite';
 import {Button, Text, IconSvg} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
-import {useParams, useHistory} from 'react-router-dom';
+import {useParams, useHistory, generatePath} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 
 import {UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
@@ -141,7 +142,10 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
         </styled.ItemsGallery>
         <styled.ButtonsHolder>
           <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
-          <Button label={t('actions.closePanel')} onClick={() => history.goBack()} />
+          <Button
+            label={t('actions.closePanel')}
+            onClick={() => history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
+          />
         </styled.ButtonsHolder>
       </styled.Container>
       {skyboxSelectorStore.uploadDialog.isOpen && <UploadSkyboxDialog />}
