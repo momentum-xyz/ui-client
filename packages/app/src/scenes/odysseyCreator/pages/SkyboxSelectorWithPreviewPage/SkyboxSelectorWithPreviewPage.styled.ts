@@ -24,7 +24,7 @@ export const PreviewContainer = styled.div`
   position: relative;
 `;
 
-export const DeleteButton = styled.div`
+export const DeleteButtonHolder = styled.div`
   position: absolute;
   top: 9px;
   right: 9px;
