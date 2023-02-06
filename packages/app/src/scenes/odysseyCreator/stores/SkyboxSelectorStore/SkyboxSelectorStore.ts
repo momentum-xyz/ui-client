@@ -108,8 +108,7 @@ const SkyboxSelectorStore = types
         }
       );
 
-      self.selectedItemId =
-        activeSkyboxData?.render_hash || (self.allSkyboxes[0] || {id: undefined}).id;
+      self.selectedItemId = activeSkyboxData?.render_hash || self.allSkyboxes?.[0]?.id;
       self.currentItemId = self.selectedItemId;
 
       self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
@@ -143,7 +142,7 @@ const SkyboxSelectorStore = types
     selectItem(item: Asset3dInterface) {
       self.selectedItemId = item.id;
     },
-    saveItem: flow(function* (id: string, isUserAttribute: boolean, worldId: string) {
+    saveItem: flow(function* (id: string, worldId: string) {
       self.currentItemId = id;
 
       const {spaces} = yield self.worldSettingsRequest.send(
@@ -158,16 +157,15 @@ const SkyboxSelectorStore = types
 
       yield self.worldSettingsRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
         spaceId: spaces.skybox,
-        asset_3d_id: isUserAttribute ? UNITY_SKYBOX_ASSET_ID : id
+        asset_3d_id: UNITY_SKYBOX_ASSET_ID
       });
-      if (isUserAttribute) {
-        yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-          spaceId: spaces.skybox,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,
-          value: {render_hash: id}
-        });
-      }
+
+      yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: spaces.skybox,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,
+        value: {render_hash: id}
+      });
 
       return self.worldSettingsRequest.isDone;
     }),
@@ -197,7 +195,7 @@ const SkyboxSelectorStore = types
         value
       });
 
-      yield self.saveItem(hash, true, worldId);
+      yield self.saveItem(hash, worldId);
       yield self.fetchUserSkyboxes(worldId, userId);
       self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
 

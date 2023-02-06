@@ -103,8 +103,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                           transform="uppercase"
                           size="medium"
                           onClick={() => {
-                            // saveItem(item, worldId).catch((err) => {
-                            saveItem(item.id, item.isUserAttribute, worldId).catch((err) => {
+                            saveItem(item.id, worldId).catch((err) => {
                               toast.error(err.message);
                             });
                           }}
