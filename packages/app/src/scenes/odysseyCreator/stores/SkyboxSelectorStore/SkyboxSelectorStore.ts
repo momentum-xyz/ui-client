@@ -86,7 +86,7 @@ const SkyboxSelectorStore = types
     fetchItems: flow(function* (worldId: string, userId: string) {
       console.log('Fetching skyboxes for world:', worldId, 'and user:', userId);
 
-      yield self.fetchDefaultSkyboxes(worldId);
+      yield self.fetchDefaultSkyboxes();
       yield self.fetchUserSkyboxes(worldId, userId);
 
       const {spaces} = yield self.worldSettingsRequest.send(
@@ -115,11 +115,11 @@ const SkyboxSelectorStore = types
       self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
       self.skyboxCurrentPage = 0;
     }),
-    fetchDefaultSkyboxes: flow(function* (spaceId: string) {
+    fetchDefaultSkyboxes: flow(function* () {
       const response = yield self.fetchSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
-          spaceId,
+          spaceId: appVariables.NODE_ID,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.SKYBOX_LIST
         }
