@@ -16,8 +16,7 @@ import {
 } from '../contants';
 import {PlanetMesh} from '../classes';
 import {PlanetInterface} from '../interfaces';
-import honey01 from '../static/images/honey01.jpg';
-import iceland01 from '../static/images/iceland01.jpg';
+import astronaut from '../static/images/astronaut.png';
 import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
 
 export const use3dMap = (
@@ -61,6 +60,7 @@ export const use3dMap = (
   const lastSelectedOdyssey = useRef<string>();
   const activeLinesOwner = useRef<string>();
   const activeLines = useRef<Line2[]>([]);
+  const defaultOdysseyTexture = useRef(new THREE.TextureLoader().load(astronaut));
 
   /**
    * Draw lines between staked Odysseys.
@@ -215,16 +215,12 @@ export const use3dMap = (
    */
   const createNewOdyssey = useCallback(
     (item: PlanetInterface) => {
-      const standardTextures = [honey01, iceland01];
-
-      const randNum = Math.floor(Math.random() * standardTextures.length);
-      let randTexture = standardTextures[randNum];
-
-      if (item.image) {
-        randTexture = getImageUrl(item.image);
-      }
-
-      const texture = new THREE.TextureLoader().load(randTexture);
+      const imageUrl = getImageUrl(item.image) || astronaut;
+      const texture = new THREE.TextureLoader().load(imageUrl, undefined, undefined, () => {
+        // Using default image of odyssey if an image was not loaded
+        texture.image = defaultOdysseyTexture.current.image;
+        texture.needsUpdate = true;
+      });
 
       const odysseyAvatarMaterial = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
@@ -289,22 +285,6 @@ export const use3dMap = (
   );
 
   /**
-   * Create array for odyssey
-   */
-  const createOdysseys = useCallback(() => {
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].owner !== centerWallet) {
-        const odyssey = createNewOdyssey(items[i]);
-        if (odyssey) {
-          listOfOdysseys.current.push(odyssey);
-        }
-      }
-    }
-
-    referenceListOfOdysseys.current = [...listOfOdysseys.current];
-  }, [centerWallet, createNewOdyssey, items]);
-
-  /**
    * Create center Odyssey
    */
   const createCenterOdyssey = useCallback(() => {
@@ -316,9 +296,22 @@ export const use3dMap = (
     const centerOdyssey = createNewOdyssey(centerItem);
     scene.current.add(centerOdyssey);
     referenceListOfOdysseys.current.push(centerOdyssey);
+  }, [centerWallet, createNewOdyssey, items]);
 
-    drawConnections(centerWallet);
-  }, [drawConnections, centerWallet, createNewOdyssey, items]);
+  /**
+   * Create array for odyssey
+   */
+  const createOdysseys = useCallback(() => {
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].owner !== centerWallet) {
+        const odyssey = createNewOdyssey(items[i]);
+        if (odyssey) {
+          listOfOdysseys.current.push(odyssey);
+          referenceListOfOdysseys.current.push(odyssey);
+        }
+      }
+    }
+  }, [centerWallet, createNewOdyssey, items]);
 
   /**
    * Create Circular Universe of Odysseys
@@ -618,10 +611,12 @@ export const use3dMap = (
 
     createCenterOdyssey();
 
+    drawConnections(centerWallet);
+
     buildUniverse();
 
     animate();
-  }, [animate, buildUniverse, canvas, createCenterOdyssey, createOdysseys, generateGalaxy]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('pointermove', onPointerMove);
