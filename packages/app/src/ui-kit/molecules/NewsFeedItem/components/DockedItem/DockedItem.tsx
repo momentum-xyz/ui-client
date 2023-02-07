@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
+import astronautIcon from 'static/images/astronaut-green.svg';
 
 import * as styled from './DockedItem.styled';
 
@@ -39,11 +40,11 @@ const DockedItem: FC<PropsInterface> = (props) => {
       <div>
         <styled.TwoAvatarsContainer>
           <styled.Avatar
-            src={getImageAbsoluteUrl(dockingImage) || ''}
+            src={getImageAbsoluteUrl(dockingImage) || astronautIcon}
             onClick={() => onOpenOdyssey?.(item.uuid)}
           />
           <styled.AvatarAhead
-            src={getImageAbsoluteUrl(dockedImage) || ''}
+            src={getImageAbsoluteUrl(dockedImage) || astronautIcon}
             onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
           />
         </styled.TwoAvatarsContainer>
