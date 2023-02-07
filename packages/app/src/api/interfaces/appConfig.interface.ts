@@ -58,6 +58,7 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   YOUTUBE_API: string;
   YOUTUBE_WELCOME_VIDEO_ID: string;
   WIKI_URL: string;
+  DISCORD_URL: string;
   PARTICIPANTS_VIDEO_LIMIT: number;
   MAX_STAGE_USERS: number;
   GAT_UI_TYPE_ID: string;

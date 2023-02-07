@@ -34,6 +34,7 @@ const RootWidgetsStore = types
   .views((self) => ({
     get signInDialogAvailable(): boolean {
       return (
+        !self.odysseyInfoStore.dialog.isOpen &&
         !self.odysseyBioStore.dialog.isOpen &&
         !self.profileStore.dialog.isOpen &&
         !self.calendarStore.dialog.isOpen &&

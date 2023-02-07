@@ -218,6 +218,7 @@ export const enGb = {
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
+      errorPluginContactDev: 'An error has occured in the plugin. Contact the developer.',
       onlyGLBSupported: 'Only GLB format supported',
       requiredField: 'This field is required',
       errorLoadingToken: 'Error loading {{tokenSymbol}}',
@@ -348,7 +349,9 @@ export const enGb = {
       startCreating: 'Start creating your personal journey and...',
       hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
-      loading30sec: 'If Odyssey does not load within 30 seconds, please',
+      loading30sec:
+        'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',
+      joinUsOnDiscord: 'join us on Discord',
       clearCache: 'Clear your cache',
       version: 'Odyssey version {{version}}',
       spawnPointUpdated: 'Spawning point was updated.',
@@ -577,7 +580,7 @@ export const enGb = {
       social: 'Social',
       bio: 'Bio',
       location: 'Location',
-      site: 'Site'
+      link: 'Link'
     },
     networks: {
       polkadot: 'Polkadot.js',
@@ -1130,8 +1133,10 @@ export const enGb = {
     editProfileWidget: {
       title: 'Edit my bio',
       avatarInstructions: 'Choose an avatar that will be shown when your camera is disabled',
-      saveSuccess: 'Saved profile',
-      saveFailure: 'Could not save Profile.',
+      saveInProgress: 'Your profile is updating.',
+      saveSuccess: 'Your profile was updated.',
+      saveFailure: 'Your profile was not updated.',
+      isUpdating: 'Profile is updating...',
       changeAvatar: 'Change your avatar',
       upload: 'upload',
       avatar: 'avatar'

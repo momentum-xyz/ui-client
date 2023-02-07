@@ -3,14 +3,14 @@ import {observer} from 'mobx-react-lite';
 import {Heading, IconSvg} from '@momentum-xyz/ui-kit';
 
 import {NftFeedItemInterface} from 'api';
-import {NftItemModelInterface} from 'core/models';
+import {NftItemModelInterface, UserModelInterface} from 'core/models';
 import {NewsFeedItem} from 'ui-kit';
 
 import * as styled from './NewsFeed.styled';
 
 interface PropsInterface {
   nftFeed: NftFeedItemInterface[];
-  currentUserId: string;
+  currentUser: UserModelInterface | null;
   onTeleport: (nft: NftItemModelInterface) => void;
   onAttend: (nft: NftItemModelInterface) => void;
   onConnect: (id: number) => void;
@@ -18,7 +18,7 @@ interface PropsInterface {
 }
 
 const NewsFeed: FC<PropsInterface> = (props) => {
-  const {nftFeed, currentUserId, onTeleport, onAttend, onConnect, onOpenOdyssey} = props;
+  const {nftFeed, currentUser, onTeleport, onAttend, onConnect, onOpenOdyssey} = props;
 
   return (
     <styled.Container data-testid="NewsFeed-test">
@@ -34,7 +34,7 @@ const NewsFeed: FC<PropsInterface> = (props) => {
               <NewsFeedItem
                 key={index}
                 item={item}
-                currentUserId={currentUserId}
+                currentUser={currentUser}
                 onTeleport={onTeleport}
                 onConnect={onConnect}
                 onAttend={onAttend}

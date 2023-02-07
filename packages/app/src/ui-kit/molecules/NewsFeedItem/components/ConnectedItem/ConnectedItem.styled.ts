@@ -11,6 +11,7 @@ export const Avatar = styled.img`
   border-radius: 50%;
   border: 1px solid var(--white);
   cursor: pointer;
+  background-color: ${(props) => props.theme.bg};
 `;
 
 export const AvatarAhead = styled.img`
@@ -21,6 +22,7 @@ export const AvatarAhead = styled.img`
   border: 1px solid var(--white);
   right: 0;
   cursor: pointer;
+  background-color: ${(props) => props.theme.bg};
 `;
 
 export const Info = styled.div`

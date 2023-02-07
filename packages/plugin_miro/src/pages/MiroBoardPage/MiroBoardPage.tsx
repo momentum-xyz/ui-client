@@ -11,8 +11,7 @@ const MiroBoardPage: FC = () => {
   const store = useStore();
   const {api, miroBoardStore} = store;
   const {board, pickBoard, disableBoard} = miroBoardStore;
-  const {isAdmin, pluginName, objectId, pluginApi, isExpanded, onClose, onToggleExpand} =
-    useObject();
+  const {isAdmin, objectId, pluginApi, isExpanded, onClose, onToggleExpand} = useObject();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const MiroBoardPage: FC = () => {
   return (
     <SpacePage>
       <ObjectTopBar
-        title={pluginName ?? ''}
+        title="Miro"
         subtitle={board?.name}
         onClose={() => onClose?.()}
         onToggleExpand={onToggleExpand}

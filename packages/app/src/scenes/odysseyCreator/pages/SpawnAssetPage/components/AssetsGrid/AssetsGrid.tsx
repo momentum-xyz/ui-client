@@ -10,10 +10,11 @@ import * as styled from './AssetsGrid.styled';
 
 interface PropsInterface {
   assets: Asset3dInterface[];
+  showPreview?: boolean;
   onSelected: (asset: Asset3dInterface) => void;
 }
 
-const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
+const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
   const [hoveringAsset, setHoveringAsset] = useState<Asset3dInterface | null>(null);
 
   const {t} = useTranslation();
@@ -32,19 +33,18 @@ const AssetGrid: FC<PropsInterface> = ({assets, onSelected}) => {
         <styled.GridItem
           key={asset.id}
           onPointerOver={() => {
-            console.log('enter');
             setHoveringAsset(asset);
           }}
           onPointerLeave={() => {
-            console.log('leave');
             setHoveringAsset(null);
           }}
         >
-          {hoveringAsset !== asset ? (
-            <styled.GridItemImage src={asset.image} />
+          {hoveringAsset !== asset || !showPreview ? (
+            <styled.GridItemImage src={asset.previewUrl} />
           ) : (
             <styled.GridItemPreview>
               <Model3dPreview
+                previewUrl={asset.previewUrl}
                 delayLoadingMsec={500}
                 filename={hoveringAsset.thumbnailAssetDownloadUrl}
               />

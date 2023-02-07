@@ -2,18 +2,18 @@ import {flow, types} from 'mobx-state-tree';
 import {t} from 'i18next';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {GoogleDocumentInterface} from 'core/interfaces';
-import {GoogleDriveApiInterface} from 'core/interfaces';
+import {PluginApiInterface} from '@momentum-xyz/sdk';
 
 const GoogleDriveStore = types.compose(
   ResetModel,
   types
     .model('GoogleDriveStore', {
-      api: types.maybe(types.frozen<GoogleDriveApiInterface>()),
+      api: types.maybe(types.frozen<PluginApiInterface>()),
       request: types.optional(RequestModel, {}),
       googleDocument: types.maybeNull(types.frozen<GoogleDocumentInterface>())
     })
     .actions((self) => ({
-      init(api: GoogleDriveApiInterface) {
+      init(api: PluginApiInterface) {
         self.api = api;
       },
       fetchGoogleDocument: flow(function* () {

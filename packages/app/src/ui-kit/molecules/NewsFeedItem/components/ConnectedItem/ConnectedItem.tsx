@@ -4,19 +4,21 @@ import {format} from 'date-fns-tz';
 import {Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
+import {UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
+import astronautIcon from 'static/images/astronaut-green.svg';
 
 import * as styled from './ConnectedItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
-  currentUserId?: string;
+  currentUser: UserModelInterface;
   onOpenOdyssey?: (uuid: string) => void;
 }
 
 const ConnectedItem: FC<PropsInterface> = (props) => {
-  const {item, currentUserId, onOpenOdyssey} = props;
+  const {item, currentUser, onOpenOdyssey} = props;
 
   const {t} = useTranslation();
 
@@ -24,22 +26,25 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
     return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
   }, [item.date]);
 
-  const authUserIsStaking = currentUserId && currentUserId === item.uuid;
-  const authUserIsStaked = currentUserId && currentUserId === item.connectedTo?.uuid;
+  const userIsStaking = currentUser.id === item.uuid;
+  const userIsStaked = currentUser.id === item.connectedTo?.uuid;
 
-  const stakingUserLabel = authUserIsStaking ? t('newsfeed.you') : item.name;
-  const stakedUserLabel = authUserIsStaked ? t('newsfeed.you') : item.connectedTo?.name;
+  const stakingUserImage = userIsStaking ? currentUser.profile.avatarHash : item.image;
+  const stakedUserImage = userIsStaked ? currentUser.profile.avatarHash : item.connectedTo?.image;
+
+  const stakingUserLabel = userIsStaking ? t('newsfeed.you') : item.name;
+  const stakedUserLabel = userIsStaked ? t('newsfeed.you') : item.connectedTo?.name;
 
   return (
     <>
       <div>
         <styled.TwoAvatarsContainer>
           <styled.Avatar
-            src={getImageAbsoluteUrl(item.image) || ''}
+            src={getImageAbsoluteUrl(stakingUserImage) || astronautIcon}
             onClick={() => onOpenOdyssey?.(item.uuid)}
           />
           <styled.AvatarAhead
-            src={getImageAbsoluteUrl(item.connectedTo?.image) || ''}
+            src={getImageAbsoluteUrl(stakedUserImage) || astronautIcon}
             onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
           />
         </styled.TwoAvatarsContainer>
@@ -51,7 +56,7 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
             <Text
               size="xxs"
               text={stakingUserLabel}
-              weight={authUserIsStaking ? 'bold' : 'normal'}
+              weight={userIsStaking ? 'bold' : 'normal'}
               decoration="underline"
               align="left"
             />
@@ -64,7 +69,7 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
             <Text
               size="xxs"
               text={stakedUserLabel}
-              weight={authUserIsStaked ? 'bold' : 'normal'}
+              weight={userIsStaked ? 'bold' : 'normal'}
               decoration="underline"
               align="left"
             />

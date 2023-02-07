@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 350px;
-  height: 295px;
+  height: 305px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,7 @@ export const Container = styled.div`
 
 export const ImageUploadContainer = styled.div`
   position: relative;
-  margin: 20px 0px;
+  margin: 20px 0px 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,15 +29,19 @@ export const ImageUploadContainer = styled.div`
 `;
 
 export const SkyboxInformation = styled.div`
+  margin-bottom: 10px;
   & > .text {
-    margin-bottom: 1em;
+    margin-bottom: 20px;
   }
 `;
 
 export const PreviewImageHolder = styled.div`
-  height: 150px;
-  width: 150px;
-  margin: 10px;
+  min-height: 180px;
+  width: 180px;
+  margin-bottom: 20px;
+  border-radius: 100%;
+  background-position: center center;
+  background-size: cover;
 `;
 
 export const Image = styled.img`

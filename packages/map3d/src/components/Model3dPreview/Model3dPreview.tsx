@@ -22,6 +22,7 @@ const promiseWait = (msec: number) => new Promise((resolve) => setTimeout(resolv
 const createScene = (canvas: HTMLCanvasElement) => {
   const renderer = new WebGLRenderer({
     canvas,
+    preserveDrawingBuffer: true,
     antialias: true,
     alpha: true
   });
@@ -89,21 +90,28 @@ export interface PropsInterface {
   filename: string;
   delayLoadingMsec?: number;
   background?: boolean;
+  previewUrl?: string;
+  onSnapshot?: (dataUrl: string, initial: boolean) => void;
 }
 
 export const Model3dPreview: FC<PropsInterface> = ({
   filename,
   background = true,
-  delayLoadingMsec
+  delayLoadingMsec,
+  previewUrl,
+  onSnapshot
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [progress, setProgress] = useState<number | null>(null);
   const [scene, setScene] = useState<Scene>();
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
   const renderRef = useRef<() => void>();
   const disposeRef = useRef<() => void>();
   const autoPosRef = useRef<(gltf: GLTF) => void>();
   const loadedGltfRef = useRef<GLTF>();
+  const onSnapshotRef = useRef(onSnapshot);
+  onSnapshotRef.current = onSnapshot;
 
   const recursiveAnimate = useCallback(() => {
     const render = renderRef.current;
@@ -154,7 +162,9 @@ export const Model3dPreview: FC<PropsInterface> = ({
 
     console.log('Loading 3D model', filename);
 
-    setProgress(0);
+    // TODO uncomment this when all models can be loaded - for now the unity ones fail to load
+    // and it leads to annoying blinking
+    // setProgress(0);
     loader.load(
       filename,
       (gltf) => {
@@ -169,6 +179,13 @@ export const Model3dPreview: FC<PropsInterface> = ({
 
         scene.add(gltf.scene);
 
+        setTimeout(() => {
+          if (onSnapshotRef.current) {
+            onSnapshotRef.current(canvasRef.current?.toDataURL('image/png') || '', true);
+          }
+        }, 100);
+
+        setIsModelLoaded(true);
         setProgress(null);
       },
       (progress) => {
@@ -209,10 +226,27 @@ export const Model3dPreview: FC<PropsInterface> = ({
       )}
       <styled.Canvas
         className={cn({background})}
+        previewUrl={!isModelLoaded ? previewUrl : undefined}
         style={{width: '100%', height: '100%'}}
         ref={canvasRef}
       />
-      ;
+      {/* TEMP disable it - we also need to remember orientation for the snapshot so it wouldn't be ugly moving from preview to model */}
+      {/* {onSnapshot && (
+        <styled.SnapshotButtonHolder title="Take snapshot">
+          <IconSvg
+            isWhite
+            size="large"
+            name="fullscreen"
+            onClick={() => {
+              // also possible to use toBlob
+              const snapshot = canvasRef.current?.toDataURL();
+              if (snapshot) {
+                onSnapshot(snapshot, false);
+              }
+            }}
+          />
+        </styled.SnapshotButtonHolder>
+      )} */}
     </styled.Container>
   );
 };

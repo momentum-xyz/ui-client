@@ -108,8 +108,8 @@ const UnityLoader: React.FC<PropsWithThemeInterface> = ({theme}) => {
         <styled.MessageWrapper>
           <styled.Message>
             <span>{t('messages.loading30sec')}</span>
-            <styled.Link target="_blank" href={appVariables.WIKI_URL}>
-              {t('messages.clearCache')}
+            <styled.Link target="_blank" href={appVariables.DISCORD_URL}>
+              {t('messages.joinUsOnDiscord')}
             </styled.Link>
             .
           </styled.Message>

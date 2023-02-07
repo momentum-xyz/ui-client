@@ -11,7 +11,7 @@ const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/Bi
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
-const OdysseyPage = lazy(() => import('./odyssey/pages/OdysseyPage/OdysseyPage'));
+const OdysseyHomePage = lazy(() => import('./odysseyHome/pages/OdysseyHomePage/OdysseyHomePage'));
 const Object = lazy(() => import('./object/Object'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
@@ -99,7 +99,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
 export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.base,
-    main: () => <OdysseyPage />,
+    main: () => <OdysseyHomePage />,
     exact: true
   },
   {

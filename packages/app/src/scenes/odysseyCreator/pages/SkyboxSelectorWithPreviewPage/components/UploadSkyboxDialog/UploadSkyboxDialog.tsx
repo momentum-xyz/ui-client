@@ -1,5 +1,5 @@
 import {FC, useEffect} from 'react';
-import {Dialog, FileUploader, Input, Text} from '@momentum-xyz/ui-kit';
+import {Dialog, FileUploader, Input, Text, ErrorsEnum} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
@@ -16,6 +16,9 @@ interface SkyboxInfoInterface {
   name: string;
   file: File;
 }
+
+const MAX_ASSET_SIZE_MB = 8;
+const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
 const UploadSkyboxDialog: FC = () => {
   const {odysseyCreatorStore, unityStore, sessionStore} = useStore();
@@ -60,6 +63,7 @@ const UploadSkyboxDialog: FC = () => {
           isDanger
           showCloseButton
           headerIconName="alert"
+          title={t('labels.addCustomSkybox')}
           text={t('assetsUploader.errorSave')}
         />
       );
@@ -69,12 +73,32 @@ const UploadSkyboxDialog: FC = () => {
         <ToastContent
           showCloseButton
           headerIconName="alert"
+          title={t('labels.addCustomSkybox')}
           text={t('assetsUploader.successMessage')}
         />
       );
     }
 
     uploadDialog.close();
+  };
+
+  const handleUploadError = (err: Error): void => {
+    console.log('File upload error:', err);
+    const message =
+      err.message === ErrorsEnum.FileSizeTooLarge
+        ? t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB})
+        : t('assetsUploader.errorSave');
+
+    toast.error(
+      <ToastContent
+        isDanger
+        showCloseButton
+        headerIconName="alert"
+        title={t('labels.addCustomSkybox')}
+        text={message}
+      />
+    );
+    setError('file', {message: 'upload'});
   };
 
   return (
@@ -128,21 +152,19 @@ const UploadSkyboxDialog: FC = () => {
                 </styled.SkyboxInformation>
               )}
               {!!value && (
-                <styled.PreviewImageHolder>
-                  <styled.Image src={URL.createObjectURL(value)} alt="Preview image" />
-                </styled.PreviewImageHolder>
+                <styled.PreviewImageHolder
+                  style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
+                />
               )}
               <FileUploader
                 theme={theme}
                 label={value ? t('actions.changeImage') : t('actions.selectImage')}
                 dragActiveLabel={t('fileUploader.dragActiveLabel')}
+                maxSize={MAX_ASSET_SIZE_B}
                 onFilesUpload={(file) => {
                   onChange(file || null);
                 }}
-                onError={(err) => {
-                  console.log('File upload error:', err);
-                  setError('file', {message: 'upload'});
-                }}
+                onError={handleUploadError}
                 fileType="image"
               />
             </styled.ImageUploadContainer>

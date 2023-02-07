@@ -13,3 +13,4 @@ export * from './SvgButton';
 export * from './TabBar';
 export * from './Toggle';
 export * from './ToolbarIcon';
+export * from './WindowPanel';
