@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
+import astronautIcon from 'static/images/astronaut-green.svg';
 
 import * as styled from './ConnectedItem.styled';
 
@@ -39,11 +40,11 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
       <div>
         <styled.TwoAvatarsContainer>
           <styled.Avatar
-            src={getImageAbsoluteUrl(stakingUserImage) || ''}
+            src={getImageAbsoluteUrl(stakingUserImage) || astronautIcon}
             onClick={() => onOpenOdyssey?.(item.uuid)}
           />
           <styled.AvatarAhead
-            src={getImageAbsoluteUrl(stakedUserImage) || ''}
+            src={getImageAbsoluteUrl(stakedUserImage) || astronautIcon}
             onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
           />
         </styled.TwoAvatarsContainer>

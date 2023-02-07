@@ -6,6 +6,7 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
 import {NftItemModelInterface, UserModelInterface} from 'core/models';
+import astronautIcon from 'static/images/astronaut-green.svg';
 
 import * as styled from './CreatedItem.styled';
 
@@ -31,7 +32,7 @@ const CreatedItem: FC<PropsInterface> = (props) => {
     <>
       <div>
         <styled.OneAvatar
-          src={getImageAbsoluteUrl(image) || ''}
+          src={getImageAbsoluteUrl(image) || astronautIcon}
           onClick={() => onOpenOdyssey?.(item.uuid)}
         />
       </div>
