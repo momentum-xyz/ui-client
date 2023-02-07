@@ -24,7 +24,7 @@ export const PreviewContainer = styled.div`
   position: relative;
 `;
 
-export const DeleteButton = styled.div`
+export const DeleteButtonHolder = styled.div`
   position: absolute;
   top: 9px;
   right: 9px;
@@ -53,7 +53,7 @@ export const SkyboxCountContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  margin-left: 15px;
+  margin-left: 30px;
   margin-bottom: 10px;
 `;
 
@@ -88,6 +88,7 @@ export const Item = styled.div`
 
   box-shadow: 0px 3.369px 3.369px rgba(0, 0, 0, 0.25);
 
+  border: 3px solid transparent;
   &.active {
     border: 3px solid var(--accent-color);
   }

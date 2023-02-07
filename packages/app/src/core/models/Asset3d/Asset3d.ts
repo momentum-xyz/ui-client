@@ -19,7 +19,7 @@ const Asset3d = types
     },
     get previewUrl(): string {
       return self.preview_hash
-        ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.preview_hash}`
+        ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S4}/${self.preview_hash}`
         : `https://dev.odyssey.ninja/api/v3/render/texture/${ImageSizeEnum.S4}/03ce359d18bfc0fe977bd66ab471d222`;
     }
   }));

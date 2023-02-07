@@ -66,10 +66,12 @@ const StakingDashboard: FC = () => {
   const amount = _amount || unstakeFromDetail?.amount || 0;
   const amountToken = amount / Math.pow(10, chainDecimals || 12);
 
-  const [canRequestAirdrop, setCanRequestAirdrop] = useState<boolean>(checkIfCanRequestAirdrop());
+  const [canRequestAirdrop, setCanRequestAirdrop] = useState<boolean>(
+    checkIfCanRequestAirdrop(authWallet)
+  );
   const airdropRequestIsInProgress = requestingFundsStatus === 'pending';
   const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState<string>(
-    getDateOfNextAllowedAirdrop()
+    getDateOfNextAllowedAirdrop(authWallet)
   );
 
   const balanceSections = [
@@ -177,8 +179,8 @@ const StakingDashboard: FC = () => {
             showCloseButton
           />
         );
-        setCanRequestAirdrop(checkIfCanRequestAirdrop());
-        setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop());
+        setCanRequestAirdrop(checkIfCanRequestAirdrop(authWallet));
+        setNextAvailableAirdropTime(getDateOfNextAllowedAirdrop(authWallet));
       })
       .catch((err) => {
         console.log('requestAirdrop error', err);

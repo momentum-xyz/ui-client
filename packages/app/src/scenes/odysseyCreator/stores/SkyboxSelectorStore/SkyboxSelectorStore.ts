@@ -86,7 +86,7 @@ const SkyboxSelectorStore = types
     fetchItems: flow(function* (worldId: string, userId: string) {
       console.log('Fetching skyboxes for world:', worldId, 'and user:', userId);
 
-      yield self.fetchDefaultSkyboxes(worldId);
+      yield self.fetchDefaultSkyboxes();
       yield self.fetchUserSkyboxes(worldId, userId);
 
       const {spaces} = yield self.worldSettingsRequest.send(
@@ -99,26 +99,26 @@ const SkyboxSelectorStore = types
         }
       );
 
-      const customSkyboxData = yield self.createSkyboxRequest.send(
+      const activeSkyboxData = yield self.createSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
           spaceId: spaces.skybox,
           plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.SKYBOX_CUSTOM
+          attribute_name: AttributeNameEnum.ACTIVE_SKYBOX
         }
       );
 
-      self.selectedItemId =
-        customSkyboxData?.render_hash || (self.allSkyboxes[0] || {id: undefined}).id;
+      self.selectedItemId = activeSkyboxData?.render_hash || self.allSkyboxes?.[0]?.id;
+      self.currentItemId = self.selectedItemId;
 
       self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
       self.skyboxCurrentPage = 0;
     }),
-    fetchDefaultSkyboxes: flow(function* (spaceId: string) {
+    fetchDefaultSkyboxes: flow(function* () {
       const response = yield self.fetchSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
-          spaceId,
+          spaceId: appVariables.NODE_ID,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.SKYBOX_LIST
         }
@@ -130,7 +130,7 @@ const SkyboxSelectorStore = types
       const response = yield self.fetchSkyboxRequest.send(
         api.spaceUserAttributeRepository.getSpaceUserAttribute,
         {
-          spaceId,
+          spaceId: appVariables.NODE_ID,
           userId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.SKYBOX_LIST
@@ -142,7 +142,7 @@ const SkyboxSelectorStore = types
     selectItem(item: Asset3dInterface) {
       self.selectedItemId = item.id;
     },
-    saveItem: flow(function* (id: string, isUserAttribute: boolean, worldId: string) {
+    saveItem: flow(function* (id: string, worldId: string) {
       self.currentItemId = id;
 
       const {spaces} = yield self.worldSettingsRequest.send(
@@ -157,16 +157,15 @@ const SkyboxSelectorStore = types
 
       yield self.worldSettingsRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
         spaceId: spaces.skybox,
-        asset_3d_id: isUserAttribute ? UNITY_SKYBOX_ASSET_ID : id
+        asset_3d_id: UNITY_SKYBOX_ASSET_ID
       });
-      if (isUserAttribute) {
-        yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-          spaceId: spaces.skybox,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.SKYBOX_CUSTOM,
-          value: {render_hash: id}
-        });
-      }
+
+      yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: spaces.skybox,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,
+        value: {render_hash: id}
+      });
 
       return self.worldSettingsRequest.isDone;
     }),
@@ -189,23 +188,28 @@ const SkyboxSelectorStore = types
         [hash]: {name}
       };
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: worldId,
+        spaceId: appVariables.NODE_ID,
         userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.SKYBOX_LIST,
         value
       });
 
-      yield self.saveItem(hash, true, worldId);
+      yield self.saveItem(hash, worldId);
       yield self.fetchUserSkyboxes(worldId, userId);
+      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
 
       return self.createSkyboxRequest.isDone;
     }),
     removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
+      if (hash === self.currentItemId) {
+        return;
+      }
+
       const value = {...self.userSkyboxes.toJSON()};
       delete value[hash];
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: worldId,
+        spaceId: appVariables.NODE_ID,
         userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.SKYBOX_LIST,
@@ -213,8 +217,9 @@ const SkyboxSelectorStore = types
       });
 
       yield self.fetchUserSkyboxes(worldId, userId);
-      if (hash === self.selectedItemId) {
-        self.selectedItemId = [...self.defaultSkyboxes.keys(), ...self.userSkyboxes.keys()][0];
+      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
+      if (self.skyboxCurrentPage >= self.skyboxPageCnt) {
+        self.skyboxCurrentPage = self.skyboxPageCnt - 1;
       }
 
       self.closeSkyboxDeletion();
