@@ -332,6 +332,17 @@ export const use3dMap = (
   );
 
   /**
+   * Update an existing Odyssey
+   */
+  const updateOdyssey = useCallback(
+    (item: Map3dUserInterface) => {
+      changeOdysseyName(item.uuid, item.name);
+      changeOdysseyImage(item.uuid, getImageUrl(item.image) || '');
+    },
+    [changeOdysseyImage, changeOdysseyName, getImageUrl]
+  );
+
+  /**
    * Create center Odyssey
    */
   const createCenterOdyssey = useCallback(() => {
@@ -676,5 +687,5 @@ export const use3dMap = (
     };
   }, [onMouseDown, onPointerMove, onWindowResize]);
 
-  return {flyToOdyssey, changeOdysseyImage, changeOdysseyName};
+  return {flyToOdyssey, updateOdyssey};
 };
