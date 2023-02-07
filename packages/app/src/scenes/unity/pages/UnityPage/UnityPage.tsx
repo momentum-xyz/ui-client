@@ -80,10 +80,12 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
-    // if (label === 'portal_odyssey') {
-    const nft = nftStore.getNftByUuid(ODYSSEY_WORLD_ID);
-    if (nft) { widgetsStore.odysseyInfoStore.open(nft, true); }
-    // }
+    if (label === 'portal_odyssey') {
+      const nft = nftStore.getNftByUuid(ODYSSEY_WORLD_ID);
+      if (nft) {
+        widgetsStore.odysseyInfoStore.open(nft, true);
+      }
+    }
     history.push({
       pathname: generatePath(ROUTES.odyssey.object.root, {
         worldId: unityStore.worldId,

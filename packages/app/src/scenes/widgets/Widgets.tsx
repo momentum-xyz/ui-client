@@ -45,8 +45,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
   const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
-  const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} =
-    widgetsStore;
+  const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
   const {unityWorldStore, unityInstanceStore} = unityStore;
   const {agoraScreenShareStore} = agoraStore;
   const {user} = sessionStore;

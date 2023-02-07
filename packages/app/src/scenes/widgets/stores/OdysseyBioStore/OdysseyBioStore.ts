@@ -20,7 +20,7 @@ const OdysseyBioStore = types.compose(
       onOdysseyWorld: types.optional(types.boolean, false),
       connections: 0,
       events: 0,
-      docks: 0,
+      docks: 0
     })
     .actions((self) => {
       const {getStatisticsByWallet} = getRootStore(self).nftStore;
