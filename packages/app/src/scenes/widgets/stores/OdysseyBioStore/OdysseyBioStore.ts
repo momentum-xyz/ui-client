@@ -17,7 +17,7 @@ const OdysseyBioStore = types.compose(
       nftId: types.maybe(types.string),
       nftItem: types.maybe(types.reference(NftItem)),
       nftUser: types.maybeNull(User),
-      onOdysseyWorld: types.optional(types.boolean, false),
+      onOdysseyWorld: false,
       connections: 0,
       events: 0,
       docks: 0
