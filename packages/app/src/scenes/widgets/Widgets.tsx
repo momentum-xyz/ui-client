@@ -12,7 +12,7 @@ import {
   ToolbarIconSeparator
 } from '@momentum-xyz/ui-kit';
 
-import {useStore, useUnityEvent} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {ToolbarCreatorIcon} from 'ui-kit';
 
@@ -28,7 +28,6 @@ import {
   OnlineUsersWidget,
   NotificationsWidget,
   OdysseyBioWidget,
-  OdysseyPortalWidget,
   OdysseyInfoWidget,
   SearchUsersWidget,
   MutualConnectionsWidget,
@@ -46,7 +45,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
   const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
-  const {onlineUsersStore, odysseyBioStore, odysseyPortalStore, mutualConnectionsStore} =
+  const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} =
     widgetsStore;
   const {unityWorldStore, unityInstanceStore} = unityStore;
   const {agoraScreenShareStore} = agoraStore;
@@ -69,23 +68,6 @@ const Widgets: FC<PropsInterface> = (props) => {
       widgetsStore.screenShareStore.dialog.open
     );
   }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, unityStore.worldId]);
-
-  useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
-    if (label !== 'portal_odyssey') {
-      return;
-    }
-    if (odysseyBioStore.dialog.isOpen) {
-      odysseyBioStore.resetModel();
-    }
-    odysseyPortalStore.open();
-  });
-
-  const handleBioOpen = (): void => {
-    if (odysseyPortalStore.dialog.isOpen) {
-      odysseyPortalStore.resetModel();
-    }
-    odysseyBioStore.open(worldOwner);
-  };
 
   return (
     <>
@@ -167,7 +149,7 @@ const Widgets: FC<PropsInterface> = (props) => {
             </styled.OnlineUsers>
             <ToolbarIconList>
               <Tooltip label={t('labels.bio')} placement="top">
-                <styled.CurrentOdyssey onClick={handleBioOpen}>
+                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
                   <Text
                     className="odyssey-name"
                     size="m"
@@ -279,7 +261,6 @@ const Widgets: FC<PropsInterface> = (props) => {
       {mutualConnectionsStore.dialog.isOpen && <MutualConnectionsWidget />}
       {onlineUsersStore.dialog.isOpen && <SearchUsersWidget />}
       {widgetsStore.odysseyBioStore.dialog.isOpen && <OdysseyBioWidget />}
-      {widgetsStore.odysseyPortalStore.dialog.isOpen && <OdysseyPortalWidget />}
       {widgetsStore.odysseyInfoStore.dialog.isOpen && <OdysseyInfoWidget />}
       {widgetsStore.profileStore.dialog.isOpen && <ProfileWidget />}
       {widgetsStore.notificationsStore.dialog.isOpen && <NotificationsWidget />}

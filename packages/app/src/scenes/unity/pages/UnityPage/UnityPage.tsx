@@ -28,6 +28,8 @@ const UnityContextCSS = {
   height: '100vh'
 };
 
+const ODYSSEY_WORLD_ID = 'b8b104c4-b375-4933-8de8-29e0a1c67860';
+
 const UnityPage: FC = () => {
   const {unityStore, sessionStore, nftStore, widgetsStore} = useStore();
   const {unityInstanceStore} = unityStore;
@@ -77,7 +79,11 @@ const UnityPage: FC = () => {
     document.location.href = ROUTES.system.disconnected;
   });
 
-  useUnityEvent('ClickObjectEvent', (spaceId: string) => {
+  useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
+    // if (label === 'portal_odyssey') {
+    const nft = nftStore.getNftByUuid(ODYSSEY_WORLD_ID);
+    if (nft) { widgetsStore.odysseyInfoStore.open(nft, true); }
+    // }
     history.push({
       pathname: generatePath(ROUTES.odyssey.object.root, {
         worldId: unityStore.worldId,

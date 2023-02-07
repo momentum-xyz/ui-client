@@ -17,25 +17,31 @@ const OdysseyBioStore = types.compose(
       nftId: types.maybe(types.string),
       nftItem: types.maybe(types.reference(NftItem)),
       nftUser: types.maybeNull(User),
+      onOdysseyWorld: types.optional(types.boolean, false),
       connections: 0,
       events: 0,
-      docks: 0
+      docks: 0,
     })
     .actions((self) => {
       const {getStatisticsByWallet} = getRootStore(self).nftStore;
 
       return {
-        async open(item?: NftItemModelInterface) {
-          if (item?.uuid) {
-            const statistics = await getStatisticsByWallet(item.owner);
-
-            this.setNft(item);
-            this.fetchUser(item.uuid);
-            this.setStatistics(statistics);
-            this.fetchEventsCount(item.uuid);
-
-            self.dialog.open();
+        async open(item?: NftItemModelInterface, openingOdysseyWorld = false) {
+          if (!item?.uuid) {
+            return;
           }
+          const statistics = await getStatisticsByWallet(item.owner);
+
+          this.setNft(item);
+          this.fetchUser(item.uuid);
+          this.setStatistics(statistics);
+          this.fetchEventsCount(item.uuid);
+          this.setOnOdysseyWorld(openingOdysseyWorld);
+
+          self.dialog.open();
+        },
+        setOnOdysseyWorld(openingOdysseyWorld: boolean): void {
+          self.onOdysseyWorld = openingOdysseyWorld;
         },
         setNft(nft: NftItemModelInterface): void {
           self.nftId = nft.uuid;

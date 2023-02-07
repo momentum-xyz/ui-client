@@ -9,7 +9,6 @@ export * from './VoiceChatWidget';
 export * from './NotificationsWidget';
 export * from './CalendarWidget';
 export * from './OdysseyBioWidget';
-export * from './OdysseyPortalWidget';
 export * from './OdysseyInfoWidget';
 export * from './PreviewOdysseyWidget';
 export * from './SearchUsersWidget';

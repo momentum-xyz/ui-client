@@ -13,7 +13,6 @@ import {OnlineUsersStore} from './OnlineUsersStore';
 import {OdysseyBioStore} from './OdysseyBioStore';
 import {MutualConnectionsStore} from './MutualConnectionsStore';
 import {MagicLinkStore} from './MagicLinkStore';
-import {OdysseyPortalStore} from './OdysseyPortalStore';
 
 const RootWidgetsStore = types
   .model('RootWidgetsStore', {
@@ -29,7 +28,6 @@ const RootWidgetsStore = types
     onlineUsersStore: types.optional(OnlineUsersStore, {}),
     magicLinkStore: types.optional(MagicLinkStore, {}),
     odysseyBioStore: types.optional(OdysseyBioStore, {}),
-    odysseyPortalStore: types.optional(OdysseyPortalStore, {}),
     odysseyInfoStore: types.optional(OdysseyBioStore, {}),
     mutualConnectionsStore: types.optional(MutualConnectionsStore, {})
   })
@@ -38,7 +36,6 @@ const RootWidgetsStore = types
       return (
         !self.odysseyInfoStore.dialog.isOpen &&
         !self.odysseyBioStore.dialog.isOpen &&
-        !self.odysseyPortalStore.dialog.isOpen &&
         !self.profileStore.dialog.isOpen &&
         !self.calendarStore.dialog.isOpen &&
         !self.minimapStore.dialog.isOpen

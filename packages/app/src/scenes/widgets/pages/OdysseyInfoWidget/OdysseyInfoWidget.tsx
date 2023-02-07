@@ -13,13 +13,14 @@ const MENU_OFFSET_TOP = 20;
 const OdysseyInfoWidget: FC = () => {
   const {sessionStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
   const {odysseyInfoStore} = widgetsStore;
-  const {odyssey} = odysseyInfoStore;
+  const {odyssey, onOdysseyWorld} = odysseyInfoStore;
   const {assetStore} = objectStore;
 
   const history = useHistory();
   const {goToOdysseyHome} = useNavigation();
 
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
+  const userIsOdysseyOwner = odyssey?.owner === sessionStore.wallet;
 
   const handleTeleport = useCallback(() => {
     if (assetStore.dockWorldId) {
@@ -65,12 +66,10 @@ const OdysseyInfoWidget: FC = () => {
             user={odysseyInfoStore.nftUser}
             odyssey={odysseyInfoStore.odyssey}
             onVisit={handleTeleport}
-            onConnect={handleConnect}
-            onDock={() => {}}
             visitDisabled={unityStore.worldId === odyssey.uuid}
-            connectDisabled={
-              odyssey?.owner === sessionStore.wallet || alreadyConnected || sessionStore.isGuest
-            }
+            onConnect={handleConnect}
+            connectDisabled={userIsOdysseyOwner || alreadyConnected || sessionStore.isGuest}
+            onDock={onOdysseyWorld ? undefined : () => {}}
             dockDisabled={true}
           />
         )}
