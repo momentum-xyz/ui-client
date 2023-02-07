@@ -3,7 +3,8 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 232px;
+  width: 200px;
+  min-width: 200px;
   height: 100%;
   padding: 0 5px;
 `;
