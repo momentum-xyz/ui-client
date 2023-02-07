@@ -349,7 +349,9 @@ export const enGb = {
       startCreating: 'Start creating your personal journey and...',
       hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
-      loading30sec: 'If Odyssey does not load within 30 seconds, please',
+      loading30sec:
+        'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',
+      joinUsOnDiscord: 'join us on Discord',
       clearCache: 'Clear your cache',
       version: 'Odyssey version {{version}}',
       spawnPointUpdated: 'Spawning point was updated.',

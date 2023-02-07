@@ -231,5 +231,4 @@ export const Link = styled.a`
   padding: 0 0 0 5px;
   color: ${(props) => props.theme.accent};
   font-size: var(--font-size-xs);
-  text-transform: lowercase;
 `;
