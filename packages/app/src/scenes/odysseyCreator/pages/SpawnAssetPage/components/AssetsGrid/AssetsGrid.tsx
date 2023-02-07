@@ -50,7 +50,7 @@ const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
               />
             </styled.GridItemPreview>
           )}
-          <Text text={asset.name} size="m" />
+          <Text text={asset.name} size="m" breakLongWord />
           <Button
             label={t('actions.select')}
             size="medium"
