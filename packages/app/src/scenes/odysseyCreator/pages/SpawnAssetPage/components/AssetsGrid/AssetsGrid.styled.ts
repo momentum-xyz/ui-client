@@ -14,6 +14,7 @@ export const GridItem = styled.div`
   padding: 10px;
   gap: 15px;
   align-items: center;
+  min-width: 0;
 `;
 
 export const GridItemImage = styled.img`
