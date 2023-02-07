@@ -7,7 +7,7 @@ import {WalletStatisticsInterface} from 'core/interfaces';
 import {api, SpaceAttributeItemResponse, UserInterface} from 'api';
 import {NftItem, NftItemModelInterface, NftItemStatsModelInterface} from 'core/models';
 
-const ODYSSEY_WORLD_ID = '8bc650f1-0867-4c65-93c0-849490e48b07';
+const ODYSSEY_WORLD_ID = 'b8b104c4-b375-4933-8de8-29e0a1c67860';
 
 const OdysseyPortalStore = types.compose(
   ResetModel,
@@ -24,23 +24,21 @@ const OdysseyPortalStore = types.compose(
       docks: 0
     })
     .actions((self) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const {getStatisticsByWallet} = getRootStore(self).nftStore;
 
       return {
-        async open(item?: NftItemModelInterface) {
-          // eslint-disable-next-line no-debugger
-          debugger;
-          // if (item?.uuid) {
-          // const statistics = await getStatisticsByWallet(item.owner);
+        async open() {
+          const odysseyWorldNft = getRootStore(self).nftStore.getNftByUuid(ODYSSEY_WORLD_ID);
+          if (odysseyWorldNft?.uuid) {
+            const statistics = await getStatisticsByWallet(odysseyWorldNft.owner);
 
-          // this.setNft(item);
-          this.fetchUser();
-          // this.setStatistics(statistics);
-          // this.fetchEventsCount(item.uuid);
+            this.setNft(odysseyWorldNft);
+            this.fetchUser();
+            this.setStatistics(statistics);
+            this.fetchEventsCount(odysseyWorldNft.uuid);
 
-          self.dialog.open();
-          // }
+            self.dialog.open();
+          }
         },
         setNft(nft: NftItemModelInterface): void {
           self.nftId = nft.uuid;
@@ -88,6 +86,9 @@ const OdysseyPortalStore = types.compose(
           docking: self.docks,
           events: self.events
         };
+      },
+      get odysseyId(): string {
+        return ODYSSEY_WORLD_ID;
       }
     }))
 );

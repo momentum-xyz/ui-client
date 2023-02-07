@@ -1,9 +1,9 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
@@ -11,14 +11,13 @@ const MENU_OFFSET_TOP = 20;
 interface PropsInterface {}
 
 const OdysseyPortalWidget: FC<PropsInterface> = () => {
-  const {sessionStore, widgetsStore, nftStore, unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {sessionStore, widgetsStore, nftStore} = useStore();
   const {odysseyPortalStore} = widgetsStore;
 
   const {odyssey} = odysseyPortalStore;
-  const {userId} = sessionStore;
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
-  const userIsOdysseyOwner = userId === odyssey?.uuid;
+
+  const {goToOdysseyHome} = useNavigation();
 
   const handleConnect = () => {
     if (odyssey) {
@@ -26,14 +25,9 @@ const OdysseyPortalWidget: FC<PropsInterface> = () => {
     }
   };
 
-  const handleHighFive = () => {
-    const userId = odyssey?.uuid;
-    if (!userId) {
-      return;
-    }
-    console.log(`Calling sendHighFive to ${userId} ...`);
-    unityInstanceStore.sendHighFive(userId);
-  };
+  const handleTeleport = useCallback(() => {
+    goToOdysseyHome(odyssey?.uuid || '');
+  }, [goToOdysseyHome, odyssey?.uuid]);
 
   return (
     <Dialog
@@ -55,14 +49,9 @@ const OdysseyPortalWidget: FC<PropsInterface> = () => {
             user={odysseyPortalStore.nftUser}
             odyssey={odysseyPortalStore.odyssey}
             alreadyConnected={alreadyConnected}
-            onVisit={() => {}}
-            visitDisabled={true}
-            onHighFive={handleHighFive}
-            highFiveDisabled={userIsOdysseyOwner}
+            onVisit={handleTeleport}
             onConnect={handleConnect}
-            connectDisabled={userIsOdysseyOwner || alreadyConnected || sessionStore.isGuest}
-            onCoCreate={() => {}}
-            coCreateDisabled={true}
+            connectDisabled={alreadyConnected || sessionStore.isGuest}
           />
         )}
       </div>

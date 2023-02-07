@@ -48,6 +48,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, odysseyPortalStore, mutualConnectionsStore} =
     widgetsStore;
+  const {unityWorldStore, unityInstanceStore} = unityStore;
   const {agoraScreenShareStore} = agoraStore;
   const {user} = sessionStore;
 
@@ -70,12 +71,21 @@ const Widgets: FC<PropsInterface> = (props) => {
   }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, unityStore.worldId]);
 
   useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
-    console.log(`${label}|${spaceId}`);
-    // if (label !== 'portal_odyssey') {
-    //   return;
-    // }
+    if (label !== 'portal_odyssey') {
+      return;
+    }
+    if (odysseyBioStore.dialog.isOpen) {
+      odysseyBioStore.resetModel();
+    }
     odysseyPortalStore.open();
   });
+
+  const handleBioOpen = (): void => {
+    if (odysseyPortalStore.dialog.isOpen) {
+      odysseyPortalStore.resetModel();
+    }
+    odysseyBioStore.open(worldOwner);
+  };
 
   return (
     <>
@@ -157,7 +167,7 @@ const Widgets: FC<PropsInterface> = (props) => {
             </styled.OnlineUsers>
             <ToolbarIconList>
               <Tooltip label={t('labels.bio')} placement="top">
-                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
+                <styled.CurrentOdyssey onClick={handleBioOpen}>
                   <Text
                     className="odyssey-name"
                     size="m"
