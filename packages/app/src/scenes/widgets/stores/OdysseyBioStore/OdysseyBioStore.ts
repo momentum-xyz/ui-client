@@ -17,7 +17,7 @@ const OdysseyBioStore = types.compose(
       nftId: types.maybe(types.string),
       nftItem: types.maybe(types.reference(NftItem)),
       nftUser: types.maybeNull(User),
-      onOdysseyWorld: false,
+      isOnOdysseyWorld: false,
       connections: 0,
       events: 0,
       docks: 0
@@ -36,12 +36,12 @@ const OdysseyBioStore = types.compose(
           this.fetchUser(item.uuid);
           this.setStatistics(statistics);
           this.fetchEventsCount(item.uuid);
-          this.setOnOdysseyWorld(openingOdysseyWorld);
+          this.setIsOnOdysseyWorld(openingOdysseyWorld);
 
           self.dialog.open();
         },
-        setOnOdysseyWorld(openingOdysseyWorld: boolean): void {
-          self.onOdysseyWorld = openingOdysseyWorld;
+        setIsOnOdysseyWorld(openingOdysseyWorld: boolean): void {
+          self.isOnOdysseyWorld = openingOdysseyWorld;
         },
         setNft(nft: NftItemModelInterface): void {
           self.nftId = nft.uuid;

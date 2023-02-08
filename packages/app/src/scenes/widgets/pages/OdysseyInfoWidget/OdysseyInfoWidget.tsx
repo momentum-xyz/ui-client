@@ -13,7 +13,7 @@ const MENU_OFFSET_TOP = 20;
 const OdysseyInfoWidget: FC = () => {
   const {sessionStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
   const {odysseyInfoStore} = widgetsStore;
-  const {odyssey, onOdysseyWorld} = odysseyInfoStore;
+  const {odyssey, isOnOdysseyWorld} = odysseyInfoStore;
   const {assetStore} = objectStore;
 
   const history = useHistory();
@@ -69,7 +69,7 @@ const OdysseyInfoWidget: FC = () => {
             visitDisabled={unityStore.worldId === odyssey.uuid}
             onConnect={handleConnect}
             connectDisabled={userIsOdysseyOwner || alreadyConnected || sessionStore.isGuest}
-            onDock={onOdysseyWorld ? undefined : () => {}}
+            onDock={isOnOdysseyWorld ? undefined : () => {}}
             dockDisabled={true}
           />
         )}
