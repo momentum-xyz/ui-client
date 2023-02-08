@@ -84,6 +84,7 @@ const UnityPage: FC = () => {
       const nft = nftStore.getNftByUuid(ODYSSEY_WORLD_ID);
       if (nft) {
         widgetsStore.odysseyInfoStore.open(nft, true);
+        return;
       }
     }
     history.push({
