@@ -200,3 +200,15 @@ export const dateToTime = (date: Date) => {
 export const registrationDateString = (dateISO: string | undefined | null) => {
   return dateISO ? monthAndYearString(new Date(dateISO)) : '';
 };
+
+/**
+ * Constructs locale string for newsfeed
+ *
+ * @param {string} dateISO is ISO string or empty
+ * @param {string} hasDash is used as separator between date and time parts
+ * @returns {string} String in "31/01/2023 - 2:31 PM" format
+ */
+export const newsfeedDateString = (dateISO: string | undefined | null, hasDash: boolean) => {
+  const targetFormat = hasDash ? 'MM/dd/yyyy - h:mm aa' : 'MM/dd/yyyy h:mm aa';
+  return dateISO ? format(new Date(dateISO), targetFormat) : '';
+};
