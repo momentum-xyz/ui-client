@@ -6,7 +6,7 @@ export class PlanetMesh extends THREE.Mesh {
   geometry: SphereGeometry;
   material: MeshPhysicalMaterial;
   uuid: string;
-  owner: string;
+  owner: string | null | undefined;
   name: string;
   texture: THREE.Texture;
   nameRingMaterial: THREE.MeshBasicMaterial;
@@ -16,7 +16,7 @@ export class PlanetMesh extends THREE.Mesh {
     geometry: SphereGeometry,
     material: MeshPhysicalMaterial,
     uuid: string,
-    owner: string,
+    owner: string | null | undefined,
     name: string,
     texture: THREE.Texture,
     nameRingMaterial: THREE.MeshBasicMaterial

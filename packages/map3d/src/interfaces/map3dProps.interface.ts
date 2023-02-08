@@ -1,8 +1,8 @@
-import {PlanetInterface} from './planet.interface';
+import {Map3dUserInterface} from '@momentum-xyz/core';
 
 export interface Map3dPropsInterface {
-  centerWallet: string;
-  items: PlanetInterface[];
+  currentUser: Map3dUserInterface;
+  items: Map3dUserInterface[];
   selectedUuid?: string;
   getImageUrl(imageUrlOrHash: string | undefined | null): string | null;
   getConnections(wallet: string): Promise<string[]>;
