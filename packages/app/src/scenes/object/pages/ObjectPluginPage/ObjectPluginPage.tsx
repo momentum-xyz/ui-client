@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {
   ErrorBoundary,
+  Portal,
   // ObjectTopBar, SpacePage,
   Text,
   WindowPanel
@@ -103,7 +104,11 @@ const PluginInnerWrapper = ({
   const {content, objectView} = plugin.usePlugin(pluginProps);
 
   return !pluginLoader.isError ? (
-    <styled.Wrapper>
+    <Portal
+      data-testid="ScreenShareWidget-test"
+      parentId={pluginLoader.isExpanded ? 'left-top' : 'right-bottom'}
+      maximized={pluginLoader.isExpanded}
+    >
       {content ? (
         <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
           {content}
@@ -113,6 +118,8 @@ const PluginInnerWrapper = ({
           title={objectView.title || ''}
           subtitle={objectView.subtitle}
           actions={objectView.actions}
+          initialIsExpanded={pluginLoader.isExpanded}
+          onToggleExpand={pluginProps.onToggleExpand}
           onClose={pluginProps.onClose}
         >
           {objectView.content}
@@ -120,7 +127,7 @@ const PluginInnerWrapper = ({
       ) : (
         <Text text={t('errors.errorPluginContactDev')} size="l" />
       )}
-    </styled.Wrapper>
+    </Portal>
   ) : (
     <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
   );

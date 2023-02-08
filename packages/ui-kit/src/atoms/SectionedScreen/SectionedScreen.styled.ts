@@ -11,16 +11,19 @@ export const Container = styled.div`
   top: 0;
   left: 0;
   z-index: 1;
+  pointer-events: none;
 `;
 
 export const InnerContainer = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
 `;
 
 export const Section = styled.div`
   display: flex;
   // flex: 1 0 auto;
   position: relative;
+  padding: 10px;
+  gap: 10px;
 `;

@@ -13,9 +13,10 @@ export const Container = styled.div`
   border-radius: 10px 10px 0px 0px;
 
   &.expanded {
-    margin-top: 20px;
+    // margin-top: 20px;
     width: 100%;
-    height: calc(100% - 20px);
+    height: 100%;
+    // height: calc(100% - 20px);
   }
 
   transition: all 0.2s ease-in-out;

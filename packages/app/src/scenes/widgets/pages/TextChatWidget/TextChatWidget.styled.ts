@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 export const Modal = styled.div`
   display: flex;
-  margin: 10px;
-  box-sizing: border-box;
+  // margin: 10px;
+  // box-sizing: border-box;
   // position: absolute;
   // right: 0;
   // top: 0;
