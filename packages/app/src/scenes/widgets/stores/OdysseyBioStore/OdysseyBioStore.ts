@@ -6,6 +6,7 @@ import {User} from 'core/models';
 import {WalletStatisticsInterface} from 'core/interfaces';
 import {api, SpaceAttributeItemResponse, UserInterface} from 'api';
 import {NftItem, NftItemModelInterface, NftItemStatsModelInterface} from 'core/models';
+import {appVariables} from 'api/constants';
 
 const OdysseyBioStore = types.compose(
   ResetModel,
@@ -17,7 +18,6 @@ const OdysseyBioStore = types.compose(
       nftId: types.maybe(types.string),
       nftItem: types.maybe(types.reference(NftItem)),
       nftUser: types.maybeNull(User),
-      isOnOdysseyWorld: false,
       connections: 0,
       events: 0,
       docks: 0
@@ -26,7 +26,7 @@ const OdysseyBioStore = types.compose(
       const {getStatisticsByWallet} = getRootStore(self).nftStore;
 
       return {
-        async open(item?: NftItemModelInterface, openingOdysseyWorld = false) {
+        async open(item?: NftItemModelInterface) {
           if (!item?.uuid) {
             return;
           }
@@ -36,12 +36,8 @@ const OdysseyBioStore = types.compose(
           this.fetchUser(item.uuid);
           this.setStatistics(statistics);
           this.fetchEventsCount(item.uuid);
-          this.setIsOnOdysseyWorld(openingOdysseyWorld);
 
           self.dialog.open();
-        },
-        setIsOnOdysseyWorld(openingOdysseyWorld: boolean): void {
-          self.isOnOdysseyWorld = openingOdysseyWorld;
         },
         setNft(nft: NftItemModelInterface): void {
           self.nftId = nft.uuid;
@@ -89,6 +85,9 @@ const OdysseyBioStore = types.compose(
           docking: self.docks,
           events: self.events
         };
+      },
+      get isOnOdysseyWorld(): boolean {
+        return self.nftId === appVariables.ODYSSEY_WORLD_ID;
       }
     }))
 );
