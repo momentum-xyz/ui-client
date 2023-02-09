@@ -107,7 +107,10 @@ const ObjectMenu: FC = () => {
           </styled.MenuItem>
         </Tooltip>
 
-        <styled.MenuItem onClick={handleOnFunctionalityClick}>
+        <styled.MenuItem
+          disabled={objectFunctionalityStore.isObjectPortal}
+          onClick={handleOnFunctionalityClick}
+        >
           <styled.MenuText text={t('actions.functionality')} size="m" />
         </styled.MenuItem>
 

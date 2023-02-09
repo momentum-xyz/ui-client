@@ -77,7 +77,14 @@ const UnityPage: FC = () => {
     document.location.href = ROUTES.system.disconnected;
   });
 
-  useUnityEvent('ClickObjectEvent', (spaceId: string) => {
+  useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
+    if (label === 'portal_odyssey') {
+      const nft = nftStore.getNftByUuid(appVariables.ODYSSEY_WORLD_ID);
+      if (nft) {
+        widgetsStore.odysseyInfoStore.open(nft);
+        return;
+      }
+    }
     history.push({
       pathname: generatePath(ROUTES.odyssey.object.root, {
         worldId: unityStore.worldId,
