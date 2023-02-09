@@ -61,7 +61,7 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath(location.pathname, {path: ROUTES.odyssey.creator.spawnAsset.customAssets}) &&
+          matchPath({path: ROUTES.odyssey.creator.spawnAsset.customAssets}, location.pathname) &&
             'selected'
         )}
         onClick={() =>

@@ -75,7 +75,7 @@ export const PluginConfigRenderer: React.FC<PropsInterface> = ({
                             value={value || ''}
                             type={item.type === 'number' ? 'number' : 'text'}
                             isError={!!error}
-                            errorMessage={error?.message}
+                            errorMessage={error?.message as any}
                             onChange={onChange}
                           />
                         )}
