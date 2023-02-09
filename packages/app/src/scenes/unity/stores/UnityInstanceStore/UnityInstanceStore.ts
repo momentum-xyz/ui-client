@@ -61,8 +61,8 @@ const UnityInstanceStore = types
     setTargetWorldId(id?: string): void {
       UnityService.setTargetWorldId(id);
     },
-    triggerTeleport(domain?: string, worldId?: string): void {
-      UnityService.triggerTeleport(domain, worldId);
+    triggerTeleport(url?: string, worldId?: string): void {
+      UnityService.triggerTeleport(url, worldId);
     },
     getCurrentWorld(): string | null {
       return UnityService.getCurrentWorld?.() || null;
@@ -200,7 +200,7 @@ const UnityInstanceStore = types
           this.setAddressablesURL(appVariables.UNITY_CLIENT_ADDRESSABLES_URL);
         }
         this.setAuthToken(token);
-        this.triggerTeleport(response.domain, worldId);
+        this.triggerTeleport(response.url, worldId);
         this.setInitialVolume();
       }
     },

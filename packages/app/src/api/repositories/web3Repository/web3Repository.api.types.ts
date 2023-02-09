@@ -31,6 +31,6 @@ export interface ResolveNodeRequest {
 }
 
 export interface ResolveNodeResponse {
-  domain: string;
+  url: string;
   node_id: string;
 }

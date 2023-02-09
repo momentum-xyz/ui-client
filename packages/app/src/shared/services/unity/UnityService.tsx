@@ -139,10 +139,8 @@ export class UnityService {
     this.unityApi?.setTargetWorldId(id);
   }
 
-  triggerTeleport(domain?: string, worldId?: string) {
-    console.log(domain);
-    console.log(worldId);
-    this.unityApi?.triggerTeleport(domain, worldId);
+  triggerTeleport(url?: string, worldId?: string) {
+    this.unityApi?.triggerTeleport(url, worldId);
   }
 
   pause() {
