@@ -7,7 +7,7 @@ import {Button, Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {MagicTypeEnum} from 'core/enums';
-import {Location, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
+import {MagicLink, ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 
 import * as styled from './MagicLinkWidget.styled';
 
@@ -65,7 +65,7 @@ const MagicLinkWidget: FC = () => {
       <styled.Container data-testid="MagicLinkWidget-test">
         <Text theme={theme} text={t('messages.magicLink')} align="left" size="xxs" />
         <styled.Content>
-          <Location icon="locate" theme={theme} value={address} />
+          <MagicLink icon="locate" theme={theme} value={address} />
         </styled.Content>
         <styled.Actions>
           <Button

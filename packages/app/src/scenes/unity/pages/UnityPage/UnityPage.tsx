@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
@@ -36,6 +36,10 @@ const UnityPage: FC = () => {
   const history = useHistory();
   const {t} = useTranslation();
   const location = useLocation();
+
+  useEffect(() => {
+    unityInstanceStore.init();
+  }, [unityInstanceStore]);
 
   // TODO: FIXME
   const worldId = useMemo(() => {

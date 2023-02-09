@@ -1,4 +1,4 @@
-export * from './ViusalSettingsPanel';
+export * from './VisualSettingsPanel';
 export * from './HighFiveContent';
 export * from './InvitationContent';
 export * from './Stage';
