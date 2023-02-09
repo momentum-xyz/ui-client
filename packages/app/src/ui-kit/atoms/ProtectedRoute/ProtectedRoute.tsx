@@ -11,11 +11,7 @@ const ProtectedRoute: FC<PropsInterface> = (props) => {
     <Route
       {...rest}
       render={() => {
-        return !hasRights || (hasRights && hasRights()) ? (
-          children
-        ) : (
-          <Redirect to={defaultRedirect} />
-        );
+        return !hasRights || hasRights() ? children : <Redirect to={defaultRedirect} />;
       }}
     />
   );
