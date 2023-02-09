@@ -24,7 +24,7 @@ import {
 } from '@momentum-xyz/ui-kit';
 
 import {
-  Location,
+  MagicLink,
   ToastContent,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS,
@@ -174,7 +174,7 @@ const MoleculesPage: FC = () => {
           <Heading label="Component «Location»" type="h2" align="left" />
         </styled.Name>
         <styled.SectionGrid3>
-          <Location icon="locate" value={avatarSrc} />
+          <MagicLink icon="locate" value={avatarSrc} />
         </styled.SectionGrid3>
 
         <styled.Name>

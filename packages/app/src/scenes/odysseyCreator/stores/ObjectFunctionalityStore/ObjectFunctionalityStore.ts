@@ -8,6 +8,8 @@ import {api, GetSpaceInfoResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {BasicAsset2dIdEnum} from 'core/enums';
 
+const PORTAL_ASSET_3D_ID = 'de240de6-d911-4d84-9406-8b81550dfea8';
+
 const ObjectFunctionalityStore = types
   .compose(
     ResetModel,
@@ -19,7 +21,8 @@ const ObjectFunctionalityStore = types
       updateAsset2dRequest: types.optional(RequestModel, {}),
       removeObjectRequest: types.optional(RequestModel, {}),
       getAttributeItemRequest: types.optional(RequestModel, {}),
-      currentAssetId: types.maybe(types.string)
+      currentAssetId: types.maybe(types.string),
+      isObjectPortal: types.optional(types.boolean, false)
     })
   )
   .actions((self) => ({
@@ -36,6 +39,7 @@ const ObjectFunctionalityStore = types
         self.objectId = objectId;
         self.objectInfo = response;
         self.currentAssetId = response.asset_2d_id;
+        self.isObjectPortal = response.asset_3d_id === PORTAL_ASSET_3D_ID;
       }
     }),
     updateObject: flow(function* () {

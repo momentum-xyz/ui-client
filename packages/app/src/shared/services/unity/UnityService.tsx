@@ -81,14 +81,14 @@ export class UnityService {
 
     this.unityContext.on('ClickEvent', (identifier: string) => {
       console.log('UnityService ClickEvent', identifier);
-      const [, id] = identifier.split('|');
+      const [label, id] = identifier.split('|');
 
       if (this.isBuildMode) {
         UnityEventEmitter.emit('EditObjectEvent', id);
         return;
       }
 
-      UnityEventEmitter.emit('ClickObjectEvent', id);
+      UnityEventEmitter.emit('ClickObjectEvent', id, label);
     });
 
     this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
@@ -139,10 +139,8 @@ export class UnityService {
     this.unityApi?.setTargetWorldId(id);
   }
 
-  triggerTeleport(domain?: string, worldId?: string) {
-    console.log(domain);
-    console.log(worldId);
-    this.unityApi?.triggerTeleport(domain, worldId);
+  triggerTeleport(url?: string, worldId?: string) {
+    this.unityApi?.triggerTeleport(url, worldId);
   }
 
   pause() {

@@ -4,7 +4,7 @@ import {Button, Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
-import image from 'static/images/world.svg';
+import image from 'static/images/world.jpg';
 
 import * as styled from './SignInWidget.styled';
 

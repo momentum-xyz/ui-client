@@ -27,9 +27,8 @@ const GlobalStyles = GlobalStylesOriginal as unknown as FC<any>;
 
 const App: FC = () => {
   const rootStore = useStore();
-  const {configStore, sessionStore, themeStore, unityStore, sentryStore} = rootStore;
+  const {configStore, sessionStore, themeStore, sentryStore} = rootStore;
   const {configLoadingErrorCode} = configStore;
-  const {unityInstanceStore} = unityStore;
 
   const {pathname} = useLocation();
   const navigate = useNavigate();
@@ -45,9 +44,8 @@ const App: FC = () => {
     if (configStore.isConfigReady) {
       sessionStore.init();
       sentryStore.init();
-      unityInstanceStore.init();
     }
-  }, [sessionStore, configStore.isConfigReady, unityInstanceStore, sentryStore]);
+  }, [sessionStore, configStore.isConfigReady, sentryStore]);
 
   const isBrowserUnsupported = !isBrowserSupported();
 

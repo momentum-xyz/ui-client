@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
@@ -36,6 +36,10 @@ const UnityPage: FC = () => {
   const navigate = useNavigate();
   const {t} = useTranslation();
   const location = useLocation();
+
+  useEffect(() => {
+    unityInstanceStore.init();
+  }, [unityInstanceStore]);
 
   // TODO: FIXME
   const worldId = useMemo(() => {
@@ -78,7 +82,14 @@ const UnityPage: FC = () => {
     document.location.href = ROUTES.system.disconnected;
   });
 
-  useUnityEvent('ClickObjectEvent', (spaceId: string) => {
+  useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
+    if (label === 'portal_odyssey') {
+      const nft = nftStore.getNftByUuid(appVariables.ODYSSEY_WORLD_ID);
+      if (nft) {
+        widgetsStore.odysseyInfoStore.open(nft);
+        return;
+      }
+    }
     navigate({
       pathname: generatePath(ROUTES.odyssey.object.root, {
         worldId: unityStore.worldId,
