@@ -6,7 +6,7 @@ import {PluginInterface} from '../../../interfaces';
 import {ObjectViewEmulator} from '../ObjectViewEmulator';
 import {ConfigEmulator} from '../ConfigEmulator';
 import {useConfigEmulatorStorage} from '../../../hooks';
-import { ROUTES } from '../../constants';
+import {ROUTES} from '../../constants';
 
 import * as styled from './WorldEmulator.styled';
 
@@ -52,9 +52,7 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
         <Route path="/">
           <div>
             <styled.Button
-              onClick={() =>
-                navigate(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))
-              }
+              onClick={() => navigate(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
             >
               Open Object
             </styled.Button>

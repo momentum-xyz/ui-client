@@ -38,9 +38,11 @@ export const ObjectGlobalPropsContext = createContext<PluginPropsInterface>({
   onClose: () => {}
 });
 
-export const ObjectGlobalPropsContextProvider: FC<PropsWithChildren<{
-  props: PluginPropsInterface;
-}>> = ({props, children}) => (
+export const ObjectGlobalPropsContextProvider: FC<
+  PropsWithChildren<{
+    props: PluginPropsInterface;
+  }>
+> = ({props, children}) => (
   <ObjectGlobalPropsContext.Provider value={props}>
     <ThemeContextProvider theme={props.theme}>{children}</ThemeContextProvider>
   </ObjectGlobalPropsContext.Provider>

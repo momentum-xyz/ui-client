@@ -15,11 +15,11 @@ export const useNavigation = () => {
     (worldId: string) => {
       if (isUnityAvailable) {
         console.log(`Teleport inside unity to ${worldId}`);
-        navigate(generatePath(ROUTES.odyssey.base, {worldId}), { replace: true });
+        navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
         unityInstanceStore.loadWorldById(worldId, sessionStore.token);
       } else {
         console.log(`Redirect to unity to ${worldId}`);
-        navigate(generatePath(ROUTES.odyssey.base, {worldId}), { replace: true });
+        navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
       }
     },
     [navigate, isUnityAvailable, sessionStore.token, unityInstanceStore]

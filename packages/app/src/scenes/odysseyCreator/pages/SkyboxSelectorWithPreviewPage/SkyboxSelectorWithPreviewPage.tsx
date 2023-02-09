@@ -7,7 +7,7 @@ import {useParams, useNavigate, generatePath} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
-
+import {ROUTES} from 'core/constants';
 
 import {UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
@@ -17,7 +17,6 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {
     currentItem,
-    selectItem,
     saveItem,
     changePage,
     prevPage,
