@@ -1,7 +1,7 @@
 import React, {ReactElement} from 'react';
 import {matchPath, Navigate, Route, Routes, RoutesProps} from 'react-router-dom';
 
-import {ProtectedRoute} from 'ui-kit';
+import {createProtectedRouteElement} from 'ui-kit/utils/create-protected-route-element';
 import {ProtectedRouteListInterface, RouteConfigInterface} from 'core/interfaces';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
@@ -15,16 +15,20 @@ export const createRoutesByConfig = (
 ): ReactElement<string, any>[] => {
   const {routes, defaultRedirect, hasRights} = config;
 
-  return routes.map((route) => (
-    <ProtectedRoute
-      key={route.path}
-      {...route}
-      hasRights={hasRights}
-      defaultRedirect={defaultRedirect}
-    >
-      <route.main />
-    </ProtectedRoute>
-  ));
+  return routes.map((route) => {
+    const protectedRouteElement = createProtectedRouteElement(
+      route.main,
+      hasRights,
+      defaultRedirect
+    );
+    return (
+      <Route
+        key={`${route.path}${route.exact ? '' : '/*'}`}
+        path={route.path}
+        element={protectedRouteElement}
+      ></Route>
+    );
+  });
 };
 
 export const createSwitchByConfig = (
