@@ -54,6 +54,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const {t} = useTranslation();
   const {pathname} = useLocation();
+  //const history = useHistory();
 
   useEffect(() => {
     onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
@@ -79,6 +80,7 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="leave-left"
                 size="medium"
                 onClick={() => {
+                  //history.push(ROUTES.explore);
                   // FIXME: Hard redirect because of unity
                   document.location = ROUTES.explore;
                 }}
