@@ -45,6 +45,11 @@ export const InputContainer = styled.div`
       border: 1px solid ${(props) => props.theme.accent};
     }
 
+    &:disabled {
+      opacity: 0.5;
+      border: 1px solid rgba(0, 0, 0, 0.8);
+    }
+
     &.error {
       border: 1px solid ${(props) => props.theme.accentDanger};
     }

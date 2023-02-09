@@ -422,7 +422,7 @@ const NftStore = types
           block_hash,
           wallet: address,
           name,
-          image: image || 'https://picsum.photos/102'
+          image: image || ''
         });
         console.log('nftReqResult', nftReqResult);
         if (!nftReqResult) {
@@ -679,7 +679,7 @@ const NftStore = types
         throw new Error('Channel is not initialized');
       }
 
-      if (!checkIfCanRequestAirdrop()) {
+      if (!checkIfCanRequestAirdrop(address)) {
         throw new Error('Wait at least 24 hours before requesting airdrop again');
       }
 
@@ -700,7 +700,7 @@ const NftStore = types
           }).catch(reject);
         });
         self.setRequestFundsStatus('success');
-        saveLastAirdropInfo();
+        saveLastAirdropInfo(address);
         console.log('Request airdrop success');
       } catch (err) {
         console.log('Error getting airdrop:', err);

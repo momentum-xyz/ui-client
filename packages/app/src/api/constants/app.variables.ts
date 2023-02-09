@@ -51,6 +51,7 @@ export const appVariables: AppConfigExtendedInterface = {
   WESTEND_TEST_WS_SERVER: 'wss://westend.api.onfinality.io/public-ws',
   BLOCKCHAIN_WS_SERVER: '',
   WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support',
+  DISCORD_URL: 'https://discord.gg/6PH9nSu7UP',
   PARTICIPANTS_VIDEO_LIMIT: 17,
   MAX_STAGE_USERS: 12,
   GAT_UI_TYPE_ID: '285ba49f-fee3-40d2-ab55-256b5804c20c',

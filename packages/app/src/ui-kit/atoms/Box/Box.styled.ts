@@ -8,7 +8,7 @@ export const Div = styled.div`
   overflow: hidden;
 
   &.big {
-    width: 255px;
+    width: 260px;
     padding: 10px 0;
   }
 

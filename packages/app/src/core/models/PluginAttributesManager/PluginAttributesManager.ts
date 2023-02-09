@@ -64,8 +64,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.setAttributeRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       return response as T;
@@ -80,8 +80,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.deleteAttributeRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       return response;
@@ -127,8 +127,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.setAttributeItemRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       if (!(attributeItemName in response)) {
@@ -154,8 +154,8 @@ const PluginAttributesManager = types
         }
       );
 
-      if (response === undefined) {
-        throw Error('Empty response');
+      if (self.deleteAttributeItemRequest.isError) {
+        throw Error(response?.error?.message || 'Unknown error');
       }
 
       if (response === null || !(attributeItemName in response)) {
@@ -169,7 +169,7 @@ const PluginAttributesManager = types
     getItem: flow(function* <T extends AttributeValueInterface>(spaceId: string, key: string) {
       return yield self.getSpaceAttributeItem<T>(spaceId, AttributeNameEnum.STATE, key);
     }),
-    set: flow(function* <T>(spaceId: string, key: string, value: T extends undefined ? never : T) {
+    set: flow(function* <T>(spaceId: string, key: string, value: T) {
       return yield self.setSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key, value);
     }),
     deleteItem: flow(function* (spaceId: string, key: string) {
@@ -188,7 +188,7 @@ const PluginAttributesManager = types
           const result = await self.getItem(self.spaceId, key);
           return result as T;
         },
-        setStateItem: async <T>(key: string, value: T extends undefined ? never : T) => {
+        setStateItem: async <T>(key: string, value: T) => {
           return await self.set(self.spaceId, key, value);
         },
         deleteStateItem: (key: string) => self.deleteItem(self.spaceId, key),

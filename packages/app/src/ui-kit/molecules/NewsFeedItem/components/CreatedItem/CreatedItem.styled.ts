@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const OneAvatar = styled.img`
+export const OneAvatar = styled.div`
   width: 60px;
   height: 60px;
   border-radius: 50%;

@@ -1,9 +1,4 @@
-import {
-  PluginApiInterface,
-  UsePluginHookType,
-  ObjectGlobalPropsContextProvider,
-  ObjectPluginPropsInterface
-} from '@momentum-xyz/sdk';
+import {UsePluginHookType} from '@momentum-xyz/sdk';
 import {AppConfigInterface} from 'core/interfaces';
 import {GoogleDrivePage} from 'pages';
 import {useMemo, useEffect} from 'react';
@@ -15,14 +10,14 @@ import {StoreProvider} from './useStore';
 
 const ThemeProvider = ThemeProviderOriginal as unknown as React.FC<ThemeProviderProps<any>>;
 
-export const usePlugin: UsePluginHookType<ObjectPluginPropsInterface> = (props) => {
+export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
   const store = useMemo(
     () =>
       RootGoogleDriveStore.create({
-        api: props.pluginApi as PluginApiInterface<AppConfigInterface>,
+        api: props.pluginApi,
         attributesApi: props.api,
         googleDriveStore: GoogleDriveStore.create({
-          api: props.pluginApi as PluginApiInterface<AppConfigInterface>
+          api: props.pluginApi
         })
       }),
     [props.api, props.pluginApi]
@@ -34,17 +29,13 @@ export const usePlugin: UsePluginHookType<ObjectPluginPropsInterface> = (props) 
     }
   }, [store, props.objectId]);
 
-  const content = useMemo(() => {
-    return (
-      <ObjectGlobalPropsContextProvider props={props}>
-        <ThemeProvider theme={props.theme}>
-          <StoreProvider value={store}>
-            <GoogleDrivePage />
-          </StoreProvider>
-        </ThemeProvider>
-      </ObjectGlobalPropsContextProvider>
-    );
-  }, [props, store]);
+  const content = (
+    <ThemeProvider theme={props.theme}>
+      <StoreProvider value={store}>
+        <GoogleDrivePage />
+      </StoreProvider>
+    </ThemeProvider>
+  );
 
   return {content};
 };

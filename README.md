@@ -155,21 +155,29 @@ REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT
 
 ### How to run a plugin
 
-In order to run a plugin you can use the follwoing command (from `packages/plugin-[name]` directory):
+In order to run a plugin you can use the following command (from `packages/plugin-[name]` directory):
 
 ```
 yarn start
 ```
 
-or
+for local development using the Emulator or
 
 ```
-yarn --cwd=packages/plugin-[name] start
+yarn start:plugin
 ```
 
-from root directory.
+that also allows using the plugin from the actual UI-Client.
 
-NOTE: You have to build dependencies first by using `yarn build:deps` from root directory.
+It's possible to assign a locally running plugin to some object in 3D for testing using by putting `REACT_APP_LOCAL_PLUGINS` env to `.env.development.local`. The plugin should be run with `yarn start:plugin` command or `PORT=3002 yarn start:plugin`.
+
+Example:
+
+```json
+REACT_APP_LOCAL_PLUGINS='{"ba5ae691-7ad7-4508-b83d-759529b82a19":{"meta":{"id":"1234","name":"plugin_twitch","pluginId":"123","scopeName":"plugin_twitch","scriptUrl":"http://localhost:3001/remoteEntry.js"}},"84f93e15-f064-4f79-aa74-e60f21c07ba9":{"meta":{"id":"22222","name":"plugin_video","pluginId":"222","scopeName":"plugin_video","scriptUrl":"http://localhost:3002/remoteEntry.js"}}}'
+```
+
+Here `ba5ae691-7ad7-4508-b83d-759529b82a19` is the objectId of some spawned 3D object in my local world.
 
 ### How to build a plugin
 

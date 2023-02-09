@@ -1,6 +1,16 @@
-import {CorePluginPropsInterface} from './pluginProps.interface';
-import {UsePluginHookType} from './usePluginHook.interface';
+import {ReactElement} from 'react';
 
-export interface PluginInterface<T extends CorePluginPropsInterface = CorePluginPropsInterface> {
-  usePlugin: UsePluginHookType<T>;
+import {UsePluginHookType} from './usePluginHook.interface';
+import {PluginConfigDescriptionInterface} from './pluginConfig.interface';
+
+export interface PluginInterface<C = unknown> {
+  usePlugin: UsePluginHookType<C>;
+
+  configuration?:
+    | PluginConfigDescriptionInterface
+    | ((props: {
+        data: C | undefined;
+        onSave: (config: C) => void;
+        onCancel: () => void;
+      }) => ReactElement);
 }

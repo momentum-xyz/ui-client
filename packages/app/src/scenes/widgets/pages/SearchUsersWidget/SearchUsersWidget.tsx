@@ -1,12 +1,10 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
-import {generatePath, useNavigate} from 'react-router-dom';
 import {PanelLayout, Portal, SearchInput} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 
 import * as styled from './SearchUsersWidget.styled';
 import {OnlineUser} from './components';
@@ -21,7 +19,7 @@ const SearchUsersWidget: FC = () => {
   const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
 
   const {t} = useTranslation();
-  const navigate = useNavigate();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
     unityInstanceStore.changeKeyboardControl(false);
@@ -38,11 +36,8 @@ const SearchUsersWidget: FC = () => {
   };
 
   const handleOdysseyTeleport = (id?: string) => {
-    const worldId = id || onlineUsersStore.odyssey?.uuid || '';
+    goToOdysseyHome(id || onlineUsersStore.odyssey?.uuid || '');
     handleClose();
-
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}), {replace: true});
-    unityInstanceStore.loadWorldById(worldId, sessionStore.token);
   };
 
   const handleHighFive = (userId: string) => {
@@ -94,7 +89,7 @@ const SearchUsersWidget: FC = () => {
                 {onlineUsersStore.listedUsers.map((user) => (
                   <OnlineUser
                     key={user.id}
-                    user={user}
+                    user={sessionStore.user?.id === user.id ? sessionStore.user : user}
                     onTeleportUser={() => handleOdysseyTeleport(user.id)}
                     onUserClick={handleUserClick}
                     onHighFiveUser={handleHighFive}

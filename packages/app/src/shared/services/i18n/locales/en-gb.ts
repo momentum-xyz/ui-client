@@ -218,6 +218,7 @@ export const enGb = {
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
+      errorPluginContactDev: 'An error has occured in the plugin. Contact the developer.',
       onlyGLBSupported: 'Only GLB format supported',
       requiredField: 'This field is required',
       errorLoadingToken: 'Error loading {{tokenSymbol}}',
@@ -247,6 +248,7 @@ export const enGb = {
       stageMode: 'Stage Mode',
       calendar: 'World Calendar',
       emoji: 'EMOJI',
+      skyboxName: 'Skybox Name',
       staking: 'Staking',
       minimap: 'Minimap',
       musicPlayer: 'Music Player',
@@ -322,7 +324,10 @@ export const enGb = {
       changeMusic: 'Change Music (coming soon)',
       tokenGating: 'Token Gating (coming soon)',
       addObject: 'Add Object',
+      spawnPoint: 'Spawn Point',
       skybox: 'Skybox',
+      addCustomSkybox: 'Add Custom Skybox',
+      removeCustomSkybox: 'Remove Skybox',
       here: 'here',
       createProfile: 'Create a profile',
       connectYourWallet: 'Connect your wallet'
@@ -344,9 +349,13 @@ export const enGb = {
       startCreating: 'Start creating your personal journey and...',
       hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
-      loading30sec: 'If Odyssey does not load within 30 seconds, please',
+      loading30sec:
+        'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',
+      joinUsOnDiscord: 'join us on Discord',
       clearCache: 'Clear your cache',
       version: 'Odyssey version {{version}}',
+      spawnPointUpdated: 'Spawning point was updated.',
+      spawnPointNotUpdated: 'Spawning point was not updated.',
       welcome: "Login successful. We invite you to Odyssey's intro. Hit play below!",
       loginSuccessful: 'Login Successful',
       playFriggin: 'Play the Friggin’ Intro',
@@ -469,7 +478,16 @@ export const enGb = {
       chooseImage: 'Choose an image for your odyssey',
       onceConnectedTokensWillBeAwarded:
         'Once connected, you will be awarded some MOM tokens to get you started',
-      noWalletFollowInstructions: 'No wallet? You can get one following the instructions'
+      noWalletFollowInstructions: 'No wallet? You can get one following the instructions',
+      removeSkyboxConfirmation: 'You are about to remove the custom skybox',
+      removeSkyboxCurrentConfirmation:
+        'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
+      removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
+      uploadCustomSkyboxInfoTitle: 'Uploading a Custom Skybox',
+      uploadCustomSkyboxInfoLine1:
+        'To ensure that your skybox looks its best, we have a few specifications to keep in mind when uploading your image.',
+      uploadCustomSkyboxInfoLine2:
+        'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.'
     },
     titles: {
       alert: 'alert',
@@ -480,6 +498,7 @@ export const enGb = {
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       later: 'later',
       create: 'create',
+      by: 'By',
       stage: 'Stage mode',
       creatorEnabled: 'Odyssey Creator Mode Enabled',
       kickedFromMeeting: 'You have been kicked from a space',
@@ -519,6 +538,7 @@ export const enGb = {
       admin: 'Admin',
       owner: 'Owner',
       colourPicker: 'Colour Picker',
+      setSpawnPoint: 'Set Spawn Point',
       statistics: 'Statistics'
     },
     textMessage: {
@@ -527,7 +547,8 @@ export const enGb = {
       joinText: '{{name}} has joined the collaboration space',
       leftText: '{{name}} has left the collaboration space',
       flyWithMeInvite: '{{name}} has invited you to join them in fly with me',
-      flyWithMeDisabled: '{{name}} has disabled fly with me'
+      flyWithMeDisabled: '{{name}} has disabled fly with me',
+      setSpawnPoint: 'Set your current location and orientation as the spawn point.'
     },
     tooltipTitles: {
       openAdmin: 'Open Admin',
@@ -541,6 +562,7 @@ export const enGb = {
       search: 'Search',
       searchForPeople: 'Search for people...',
       searchForSpaces: 'Search for spaces...',
+      searchForAssets: 'Search for assets...',
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
       worldname: 'worldname',
@@ -558,7 +580,7 @@ export const enGb = {
       social: 'Social',
       bio: 'Bio',
       location: 'Location',
-      site: 'Site'
+      link: 'Link'
     },
     networks: {
       polkadot: 'Polkadot.js',
@@ -658,6 +680,8 @@ export const enGb = {
       dropItHere: 'Drop it here',
       closePanel: 'Close Panel',
       selectSkybox: 'Select Skybox',
+      addSkybox: 'Add Skybox',
+      removeSkybox: 'Remove Skybox',
       upload: 'Upload',
       spawnObject: 'Spawn Object',
       change: 'Change',
@@ -1109,8 +1133,10 @@ export const enGb = {
     editProfileWidget: {
       title: 'Edit my bio',
       avatarInstructions: 'Choose an avatar that will be shown when your camera is disabled',
-      saveSuccess: 'Saved profile',
-      saveFailure: 'Could not save Profile.',
+      saveInProgress: 'Your profile is updating.',
+      saveSuccess: 'Your profile was updated.',
+      saveFailure: 'Your profile was not updated.',
+      isUpdating: 'Profile is updating...',
       changeAvatar: 'Change your avatar',
       upload: 'upload',
       avatar: 'avatar'

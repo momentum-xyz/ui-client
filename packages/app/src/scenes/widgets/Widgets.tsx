@@ -46,8 +46,8 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
+  const {unityWorldStore, unityInstanceStore} = unityStore;
   const {agoraScreenShareStore} = agoraStore;
-  const {unityWorldStore} = unityStore;
   const {user} = sessionStore;
 
   const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
@@ -58,7 +58,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   useEffect(() => {
     onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
     onlineUsersStore.fetchUser(unityStore.worldId);
-  }, [onlineUsersStore, sessionStore.userId, unityStore.worldId]);
+  }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, unityStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
@@ -90,13 +90,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               title={t('titles.profile')}
               onClick={widgetsStore.profileStore.dialog.toggle}
             >
-              <Avatar
-                size="extra-small"
-                status={user?.status}
-                avatarSrc={user?.avatarSrc}
-                showBorder
-                showHover
-              />
+              <Avatar size="extra-small" avatarSrc={user?.avatarSrc} showBorder showHover />
             </ToolbarIcon>
 
             {!isExplorePage && (
@@ -158,20 +152,20 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <Text
                     className="odyssey-name"
                     size="m"
-                    text={unityWorldStore?.world?.name}
+                    text={unityWorldStore?.nftOfWorld?.name || null}
                     transform="uppercase"
                     weight="bold"
                   />
                   <ToolbarIcon
                     title=""
                     state={{canGoBack: true}}
-                    icon={onlineUsersStore.nftUser?.avatarSrc ? undefined : 'people'}
+                    icon={unityWorldStore.worldImageSrc ? undefined : 'people'}
                     size="medium"
                   >
-                    {onlineUsersStore.nftUser?.avatarSrc && (
+                    {unityWorldStore.worldImageSrc && (
                       <Avatar
                         size="extra-small"
-                        avatarSrc={onlineUsersStore.nftUser?.avatarSrc}
+                        avatarSrc={unityWorldStore.worldImageSrc}
                         showBorder
                         showHover
                       />
@@ -249,6 +243,7 @@ const Widgets: FC<PropsInterface> = (props) => {
               <ToolbarCreatorIcon
                 worldId={unityStore.worldId}
                 isAdmin={unityStore.isCurrentUserWorldAdmin}
+                onCloseAndReset={unityInstanceStore.closeAndResetObjectMenu}
                 isBuilderMode={pathname.includes(
                   generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId})
                 )}

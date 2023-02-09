@@ -1,10 +1,19 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
+import {
+  ErrorBoundary,
+  // ObjectTopBar, SpacePage,
+  Text,
+  WindowPanel
+} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
-import {ObjectPluginPropsInterface, PluginInterface} from '@momentum-xyz/sdk';
+import {
+  PluginInterface,
+  PluginPropsInterface,
+  ObjectGlobalPropsContextProvider
+} from '@momentum-xyz/sdk';
 import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import cn from 'classnames';
 
@@ -18,7 +27,7 @@ import * as styled from './ObjectPluginPage.styled';
 
 interface PropsInterface {
   objectId: string;
-  plugin: PluginInterface<ObjectPluginPropsInterface>;
+  plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
 }
 
@@ -56,25 +65,61 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
     }
   }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
-  const {content} = plugin.usePlugin({
+  const onClose = () => {
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  };
+
+  const pluginProps: PluginPropsInterface = {
     theme,
     isAdmin,
     isExpanded: pluginLoader.isExpanded,
     onToggleExpand: pluginLoader.toggleIsExpanded,
     objectId,
-    pluginName: pluginLoader.name,
     pluginApi: attributesManager.pluginApi,
     api: attributesManager.api,
-    onClose: () => {
-      navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-    }
-  });
+    onClose
+  };
+
+  return (
+    <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
+      <ObjectGlobalPropsContextProvider props={pluginProps}>
+        <PluginInnerWrapper pluginProps={pluginProps} plugin={plugin} pluginLoader={pluginLoader} />
+      </ObjectGlobalPropsContextProvider>
+    </ErrorBoundary>
+  );
+};
+
+const PluginInnerWrapper = ({
+  pluginProps,
+  plugin,
+  pluginLoader
+}: {
+  pluginProps: PluginPropsInterface;
+  plugin: PluginInterface;
+  pluginLoader: PluginLoaderModelType;
+}) => {
+  const {t} = useTranslation();
+
+  const {content, objectView} = plugin.usePlugin(pluginProps);
 
   return !pluginLoader.isError ? (
     <styled.Wrapper>
-      <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
-        <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>{content}</ErrorBoundary>
-      </styled.Container>
+      {content ? (
+        <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
+          {content}
+        </styled.Container>
+      ) : objectView ? (
+        <WindowPanel
+          title={objectView.title || ''}
+          subtitle={objectView.subtitle}
+          actions={objectView.actions}
+          onClose={pluginProps.onClose}
+        >
+          {objectView.content}
+        </WindowPanel>
+      ) : (
+        <Text text={t('errors.errorPluginContactDev')} size="l" />
+      )}
     </styled.Wrapper>
   ) : (
     <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />

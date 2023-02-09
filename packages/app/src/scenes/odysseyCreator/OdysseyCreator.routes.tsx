@@ -4,6 +4,7 @@ import {ObjectFunctionalityPage} from './pages/ObjectFunctionalityPage';
 import {SkyboxSelectorWithPreviewPage} from './pages/SkyboxSelectorWithPreviewPage';
 import {SpawnAssetPage} from './pages/SpawnAssetPage';
 import {ObjectColorPage} from './pages/ObjectColorPage';
+import {SpawnPointPage} from './pages/SpawnPointPage';
 
 export const ODYSSEY_CREATOR_ROUTES = [
   {
@@ -14,6 +15,11 @@ export const ODYSSEY_CREATOR_ROUTES = [
   {
     path: ROUTES.odyssey.creator.skybox,
     main: () => <SkyboxSelectorWithPreviewPage />,
+    exact: true
+  },
+  {
+    path: ROUTES.odyssey.creator.spawnPoint,
+    main: () => <SpawnPointPage />,
     exact: true
   },
   {

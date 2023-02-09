@@ -6,7 +6,12 @@ import {useStore} from 'shared/hooks';
 import {EmojiAnimationDock} from 'scenes/collaboration/components';
 import {AssetTypeEnum, PosBusEventEnum} from 'core/enums';
 
-import {ImagePage, ObjectPluginPage, TextPage, VideoPage} from './pages';
+import {
+  ImagePage,
+  ObjectPluginPage,
+  TextPage
+  // VideoPage
+} from './pages';
 import * as styled from './Object.styled';
 
 const Object: FC = () => {
@@ -43,8 +48,8 @@ const Object: FC = () => {
         return <TextPage />;
       case AssetTypeEnum.IMAGE:
         return <ImagePage />;
-      case AssetTypeEnum.VIDEO:
-        return <VideoPage />;
+      //   return <VideoPage />;
+      // case AssetTypeEnum.VIDEO:
       case AssetTypeEnum.PLUGIN:
         return (
           <>

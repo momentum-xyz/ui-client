@@ -5,22 +5,25 @@ export const TwoAvatarsContainer = styled.div`
   width: 60px;
 `;
 
-export const Avatar = styled.img`
+export const Avatar = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
   border: 1px solid var(--white);
   cursor: pointer;
+  background-color: ${(props) => props.theme.bg};
 `;
 
-export const AvatarAhead = styled.img`
+export const AvatarAhead = styled.div`
   position: absolute;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   border: 1px solid var(--white);
-  right: 0;
   cursor: pointer;
+  background-color: ${(props) => props.theme.bg};
+  right: 0;
+  top: 0;
 `;
 
 export const Info = styled.div`

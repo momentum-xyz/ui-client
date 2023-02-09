@@ -57,6 +57,14 @@ const ObjectMenu: FC = () => {
   return (
     <Portal>
       <styled.Container data-testid="ObjectMenu-test" style={{left: leftOffset, top: topOffset}}>
+        <styled.TitleBar>
+          <styled.Title
+            type="h3"
+            transform="uppercase"
+            label={objectFunctionalityStore.objectName || ''}
+          />
+        </styled.TitleBar>
+
         <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.POSITION)}>
           <styled.MenuText
             text={t('actions.move')}

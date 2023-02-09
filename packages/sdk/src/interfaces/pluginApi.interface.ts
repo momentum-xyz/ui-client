@@ -1,8 +1,6 @@
-import {PluginConfigInterface} from './pluginConfig.interface';
-
-export interface PluginApiInterface<C extends PluginConfigInterface = PluginConfigInterface> {
+export interface PluginApiInterface<C = unknown> {
   getStateItem: <T>(key: string) => Promise<T>;
-  setStateItem: <T>(key: string, value: T extends undefined ? never : T) => Promise<T>;
+  setStateItem: <T>(key: string, value: T) => Promise<T>;
   deleteStateItem: (key: string) => Promise<null>;
   getConfig: () => Promise<C>;
 

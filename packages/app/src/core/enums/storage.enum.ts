@@ -3,5 +3,6 @@ export enum StorageKeyEnum {
   LoginType = 'loginType',
   NoCameraInfo = 'no-camera-info',
   PreferredAudioInput = 'audio-input',
-  PreferredVideoInput = 'video-input'
+  PreferredVideoInput = 'video-input',
+  ProfileJobId = 'profile-job-id'
 }

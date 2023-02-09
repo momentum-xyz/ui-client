@@ -11,10 +11,11 @@ interface PropsInterface {
   worldId: string;
   isAdmin: boolean;
   isBuilderMode: boolean;
+  onCloseAndReset: () => void;
 }
 
 const ToolbarCreatorIcon: FC<PropsInterface> = (props) => {
-  const {worldId, isAdmin, isBuilderMode} = props;
+  const {worldId, isAdmin, isBuilderMode, onCloseAndReset} = props;
 
   const navigate = useNavigate();
   const {t} = useTranslation();
@@ -31,7 +32,10 @@ const ToolbarCreatorIcon: FC<PropsInterface> = (props) => {
       icon: 'close',
       size: 'medium',
       title: t('actions.creatorClose'),
-      onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId}))
+      onClick: () => {
+        onCloseAndReset();
+        navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+      }
     }
   ];
 

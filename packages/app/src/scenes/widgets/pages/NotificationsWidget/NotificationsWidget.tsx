@@ -2,11 +2,10 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Dialog, Loader, Text} from '@momentum-xyz/ui-kit';
-import {generatePath, useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {NewsFeedItem} from 'ui-kit';
-import {ROUTES} from 'core/constants';
 
 import * as styled from './NotificationsWidget.styled';
 
@@ -14,13 +13,13 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const NotificationsWidget: FC = () => {
-  const {widgetsStore, unityStore, nftStore, sessionStore} = useStore();
+  const {widgetsStore, nftStore, sessionStore} = useStore();
   const {notificationsStore} = widgetsStore;
   const {dialog, notifications} = notificationsStore;
-  const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
-  const navigate = useNavigate();
+  const {t} = useTranslation();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
     notificationsStore.init();
@@ -60,12 +59,8 @@ const NotificationsWidget: FC = () => {
               <NewsFeedItem
                 key={index}
                 item={item}
-                onTeleport={() => {
-                  navigate(generatePath(ROUTES.odyssey.base, {worldId: item.uuid}), {
-                    replace: true
-                  });
-                  unityInstanceStore.loadWorldById(item.uuid, sessionStore.token);
-                }}
+                currentUser={sessionStore.user}
+                onTeleport={() => goToOdysseyHome(item.uuid)}
                 onConnect={() => {}}
                 onAttend={(nft) => {
                   console.log(nft);
@@ -80,7 +75,7 @@ const NotificationsWidget: FC = () => {
 
         {!notificationsStore.isPending && !notifications.length && (
           <styled.EmptyResult>
-            <Text text="No results found" size="xs" />
+            <Text text={t('messages.noResultsFound')} size="xs" />
           </styled.EmptyResult>
         )}
       </styled.Container>

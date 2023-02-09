@@ -29,7 +29,7 @@ const UnityContextCSS = {
 };
 
 const UnityPage: FC = () => {
-  const {unityStore, sessionStore} = useStore();
+  const {unityStore, sessionStore, nftStore, widgetsStore} = useStore();
   const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
@@ -94,6 +94,13 @@ const UnityPage: FC = () => {
       // This even comes faster than actual click, so delay
       unityInstanceStore.onUnityObjectClick(spaceId);
     }, 500);
+  });
+
+  useUnityEvent('ProfileClickEvent', (id: string) => {
+    const nft = nftStore.getNftByUuid(id);
+    if (nft) {
+      widgetsStore.odysseyInfoStore.open(nft);
+    }
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {

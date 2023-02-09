@@ -3,8 +3,8 @@ import {LAST_AIRDROP_KEY, AIRDROP_TIMEOUT_MS} from '../constants';
 /**
  * Saves the last airdrop info in local storage
  */
-export const saveLastAirdropInfo = (): void => {
-  localStorage.setItem(LAST_AIRDROP_KEY, new Date().getTime().toString());
+export const saveLastAirdropInfo = (wallet: string): void => {
+  localStorage.setItem(`${LAST_AIRDROP_KEY}_${wallet}`, new Date().getTime().toString());
 };
 
 /**
@@ -12,8 +12,8 @@ export const saveLastAirdropInfo = (): void => {
  *
  * @returns {boolean} boolean value indicating if airdrop is available
  */
-export const checkIfCanRequestAirdrop = (): boolean => {
-  const timeToNextAllowedAirdrop = getTimeToNextAllowedAirdrop();
+export const checkIfCanRequestAirdrop = (wallet: string): boolean => {
+  const timeToNextAllowedAirdrop = getTimeToNextAllowedAirdrop(wallet);
   return timeToNextAllowedAirdrop > 0 ? false : true;
 };
 
@@ -22,9 +22,9 @@ export const checkIfCanRequestAirdrop = (): boolean => {
  *
  * @returns {number} number representing time in ms to next allowed airdrop, 0 if airdrop is available
  */
-export const getTimeToNextAllowedAirdrop = (): number => {
+export const getTimeToNextAllowedAirdrop = (wallet: string): number => {
   const now = Date.now();
-  const lastAirdropTimestamp = +(localStorage.getItem(LAST_AIRDROP_KEY) || 0);
+  const lastAirdropTimestamp = +(localStorage.getItem(`${LAST_AIRDROP_KEY}_${wallet}`) || 0);
   const timeToNextAllowedAirdrop = lastAirdropTimestamp + AIRDROP_TIMEOUT_MS - now;
   return timeToNextAllowedAirdrop > 0 ? timeToNextAllowedAirdrop : 0;
 };
@@ -36,10 +36,11 @@ export const getTimeToNextAllowedAirdrop = (): number => {
  * @returns {Date|string} date or string representing the next allowed airdrop
  */
 export const getDateOfNextAllowedAirdrop = <B extends boolean = false>(
+  wallet: string,
   toDate?: B
 ): B extends true ? Date : string => {
   const now = Date.now();
-  const timeToNextAllowedAirdrop = getTimeToNextAllowedAirdrop();
+  const timeToNextAllowedAirdrop = getTimeToNextAllowedAirdrop(wallet);
   const canRequestAirdrop = timeToNextAllowedAirdrop <= 0;
   if (canRequestAirdrop) {
     return (toDate ? new Date(now) : 'Now') as B extends true ? Date : string;

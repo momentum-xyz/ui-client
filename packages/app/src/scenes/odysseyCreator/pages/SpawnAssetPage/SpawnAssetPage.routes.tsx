@@ -21,7 +21,7 @@ export const SPAWN_ASSET_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.odyssey.creator.spawnAsset.customAssets,
-    main: () => <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} />,
+    main: () => <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} showPreview />,
     exact: true
   },
   {

@@ -41,4 +41,6 @@ export const Button = styled(SvgButton)`
 export const Actions = styled.div`
   flex-grow: 1;
   padding: 0 20px;
+  display: flex;
+  gap: 10px;
 `;

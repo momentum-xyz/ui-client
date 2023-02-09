@@ -1,52 +1,45 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {format} from 'date-fns-tz';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button, Image, Text} from '@momentum-xyz/ui-kit';
+import {newsfeedDateString} from '@momentum-xyz/core';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
-import {NftItemModelInterface} from 'core/models';
+import {NftItemModelInterface, UserModelInterface} from 'core/models';
 import placeholder from 'static/images/placeholder.png';
 
 import * as styled from './CalendarItem.styled';
 
 interface PropsInterface {
   item: NftFeedItemInterface;
+  currentUser: UserModelInterface;
   onTeleport: (nft: NftItemModelInterface) => void;
   onAttend: (nft: NftItemModelInterface) => void;
 }
 
 const CalendarItem: FC<PropsInterface> = (props) => {
-  const {item, onTeleport, onAttend} = props;
+  const {item, onTeleport, currentUser, onAttend} = props;
 
-  const formattedStartDate = useMemo(() => {
-    if (item.calendarStart) {
-      return format(new Date(item.calendarStart), `MM/dd/yyyy h:mm aa`);
-    } else {
-      return '';
-    }
-  }, [item.calendarStart]);
-
-  const formattedEndDate = useMemo(() => {
-    if (item.calendarEnd) {
-      return format(new Date(item.calendarEnd), `MM/dd/yyyy h:mm aa`);
-    } else {
-      return '';
-    }
-  }, [item.calendarEnd]);
+  const name = item.uuid === currentUser.id ? currentUser.name : item.name;
 
   return (
     <>
-      <div>
-        <styled.OneAvatar src={getImageAbsoluteUrl(item.calendarImage) || placeholder} />
-      </div>
+      <styled.OneAvatar>
+        <Image
+          src={getImageAbsoluteUrl(item.calendarImage) || placeholder}
+          sizeProps={{width: '58px', height: '58px'}}
+        />
+      </styled.OneAvatar>
+
       <styled.Info>
         <styled.Date>
-          {formattedStartDate} - {formattedEndDate}
+          {newsfeedDateString(item.calendarStart, false)}
+          {' - '}
+          {newsfeedDateString(item.calendarEnd, false)}
         </styled.Date>
         <div>
           <Text size="xxs" text={`${item.calendarTitle}`} align="left" />
-          <Text size="xxs" text={`${item.name}`} align="left" />
+          <Text size="xxs" text={`${name}`} align="left" />
         </div>
         <styled.Actions>
           <div>

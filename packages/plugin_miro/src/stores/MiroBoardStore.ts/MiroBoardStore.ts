@@ -1,18 +1,19 @@
 import {ResetModel} from '@momentum-xyz/core';
+import {PluginApiInterface} from '@momentum-xyz/sdk';
 import {appVariables} from 'api/constants';
-import {MiroApiInterface, MiroBoardInterface} from 'core/interfaces';
+import {MiroBoardInterface} from 'core/interfaces';
 import {flow, types} from 'mobx-state-tree';
 
 const MiroBoardStore = types
   .compose(
     ResetModel,
     types.model('MiroBoardStore', {
-      api: types.maybe(types.frozen<MiroApiInterface>()),
+      api: types.maybe(types.frozen<PluginApiInterface>()),
       board: types.maybeNull(types.frozen<MiroBoardInterface>())
     })
   )
   .actions((self) => ({
-    init(api: MiroApiInterface) {
+    init(api: PluginApiInterface) {
       self.api = api;
     },
     fetchBoard: flow(function* () {
