@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Portal, WindowPanel} from '@momentum-xyz/ui-kit';
+import {SectionPortal, WindowPanel} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
@@ -41,9 +41,9 @@ const ScreenShareWidget: FC = () => {
   };
 
   return (
-    <Portal
+    <SectionPortal
       data-testid="ScreenShareWidget-test"
-      parentId={screenShareStore.isExpanded ? 'left-top' : 'right-bottom'}
+      section={screenShareStore.isExpanded ? 'left-top' : 'right-bottom'}
       maximized={screenShareStore.isExpanded}
     >
       <WindowPanel
@@ -63,7 +63,7 @@ const ScreenShareWidget: FC = () => {
           <ScreenVideo videoTrack={localVideoTrack ? localVideoTrack : remoteVideoTrack} />
         )}
       </WindowPanel>
-    </Portal>
+    </SectionPortal>
   );
 };
 

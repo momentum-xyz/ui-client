@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import {Heading, IconSvg, Portal, SvgButton} from '@momentum-xyz/ui-kit';
+import {Heading, IconSvg, SectionPortal, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
@@ -28,7 +28,7 @@ const TextChatWidget: FC = () => {
   }, [sessionStore.user, sessionStore.userId, streamChat, unityStore.worldId]);
 
   return (
-    <Portal parentId="right-top">
+    <SectionPortal section="right-top">
       {/* FIXME: Design discussion in order to avoid relation to VoiceChatStore */}
       <styled.Modal
       // style={{marginRight: voiceChatStore.dialog.isOpen ? '310px' : '20px'}}
@@ -56,7 +56,7 @@ const TextChatWidget: FC = () => {
           </styled.Body>
         </styled.Container>
       </styled.Modal>
-    </Portal>
+    </SectionPortal>
   );
 };
 

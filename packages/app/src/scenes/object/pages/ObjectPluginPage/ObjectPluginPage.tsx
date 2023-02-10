@@ -1,13 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {
-  ErrorBoundary,
-  Portal,
-  // ObjectTopBar, SpacePage,
-  Text,
-  WindowPanel
-} from '@momentum-xyz/ui-kit';
+import {ErrorBoundary, SectionPortal, Text, WindowPanel} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {
@@ -104,9 +98,9 @@ const PluginInnerWrapper = ({
   const {content, objectView} = plugin.usePlugin(pluginProps);
 
   return !pluginLoader.isError ? (
-    <Portal
+    <SectionPortal
       data-testid="ScreenShareWidget-test"
-      parentId={pluginLoader.isExpanded ? 'left-top' : 'right-bottom'}
+      section={pluginLoader.isExpanded ? 'left-top' : 'right-bottom'}
       maximized={pluginLoader.isExpanded}
     >
       {content ? (
@@ -127,7 +121,7 @@ const PluginInnerWrapper = ({
       ) : (
         <Text text={t('errors.errorPluginContactDev')} size="l" />
       )}
-    </Portal>
+    </SectionPortal>
   ) : (
     <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
   );

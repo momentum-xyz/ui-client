@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {Heading, IconSvg, Portal, SvgButton} from '@momentum-xyz/ui-kit';
+import {Heading, IconSvg, SectionPortal, SvgButton} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
@@ -28,7 +28,7 @@ const VoiceChatWidget: FC = () => {
   }, [agoraStore, agoraVoiceChatStore.hasJoined, voiceChatStore.dialog]);
 
   return (
-    <Portal parentId="right-top">
+    <SectionPortal section="right-top">
       <styled.Modal>
         <styled.Container>
           <styled.Header>
@@ -45,7 +45,7 @@ const VoiceChatWidget: FC = () => {
           </styled.Body>
         </styled.Container>
       </styled.Modal>
-    </Portal>
+    </SectionPortal>
   );
 };
 
