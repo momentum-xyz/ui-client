@@ -1,0 +1,50 @@
+name: 'Odyssey UI plugin build action'
+description: 'Composite action to build Odyssey UI plugin from monorepo.'
+inputs:
+  plugin-name:
+    description: "Name of the plugin (the part after packages/plugin_)"
+    required: true
+  version:
+    description: "The version being build"
+    required: true
+  registry-server:
+    description: "Docker registry server"
+    required: true
+  registry-user:
+    description: "Docker registry authentication username"
+    required: true
+  registry-pass:
+    description: "Docker registry authentication password"
+    required: true
+  github-token:
+    description: "Github authentication token"
+    required: true
+  k8s-credentials:
+    description: "K8s credentials"
+    required: true
+  plugin-dir:
+    description: "Optional directory, if it is not the same as the plugin-name"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - id: build-plugin
+      name: Build ${{ inputs.plugin-name }}
+      uses: momentum-xyz/docker-build-action@v6.3.2
+      with:
+        registry-server: ${{ inputs.registry-server }}
+        registry-user: ${{ inputs.registry-user }}
+        registry-pass: ${{ inputs.registry-pass }}
+        github-token: ${{ inputs.github-token }}
+        image-name: plugin-${{ inputs.plugin-name }}
+        multistage-target: plugin-runtime
+        extra-args: --build-arg PLUGIN=${{ inputs.plugin-dir || inputs.plugin-name }}
+    - id: deploy-dev
+      name: Deploy to development environment
+      if: github.ref == 'refs/heads/develop'
+      uses: momentum-xyz/deploy-action@v1
+      with:
+        project: plugin-${{ inputs.plugin-name }}
+        version: ${{ inputs.version }}
+        k8s-credentials: ${{ inputs.k8s-credentials }}
+
