@@ -9,7 +9,7 @@ export interface NewsfeedItemInterface {
 
   connectedTo?: {
     uuid: string;
-    mutual: boolean;
+    isMutual: boolean;
   };
 
   calendar?: {

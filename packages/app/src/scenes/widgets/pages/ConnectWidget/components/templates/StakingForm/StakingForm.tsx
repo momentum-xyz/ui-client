@@ -103,7 +103,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
             date: new Date().toISOString(),
             connectedTo: {
               uuid: nft.uuid,
-              mutual: isMutual
+              isMutual
             }
           });
 

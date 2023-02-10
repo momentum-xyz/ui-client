@@ -17,7 +17,7 @@ const ExplorePage: FC = () => {
     exploreStore.init();
 
     const timeInterval = setInterval(() => {
-      exploreStore.fetchNewsFeed();
+      exploreStore.fetchNewsfeed();
     }, 15000);
 
     return () => {

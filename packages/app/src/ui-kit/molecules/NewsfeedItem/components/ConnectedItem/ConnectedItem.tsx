@@ -56,7 +56,7 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
               align="left"
             />
           </div>
-          {item.connectedTo?.mutual ? (
+          {item.connectedTo?.isMutual ? (
             <Text size="xxs" text={t('newsfeed.and')} align="left" />
           ) : (
             <Text size="xxs" text={t('newsfeed.stakedIn')} align="left" />
@@ -73,7 +73,9 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
               align="left"
             />
           </div>
-          {item.connectedTo?.mutual && <Text size="xxs" text={t('newsfeed.docked')} align="left" />}
+          {item.connectedTo?.isMutual && (
+            <Text size="xxs" text={t('newsfeed.docked')} align="left" />
+          )}
         </styled.ConnectedInfo>
       </styled.Info>
     </>
