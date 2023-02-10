@@ -1,8 +1,8 @@
-export const feedRepositoryEndpoints = () => {
+export const newsfeedRepositoryEndpoints = () => {
   const BASE_URL = '';
 
   return {
-    feed: `${BASE_URL}/newsfeed`,
+    newsfeed: `${BASE_URL}/newsfeed`,
     notifications: `${BASE_URL}/notifications`
   };
 };

@@ -17,7 +17,7 @@ const ExploreStore = types
       self.fetchNewsFeed();
     },
     fetchNewsFeed: flow(function* () {
-      const response: NewsFeedResponse = yield self.request.send(api.feedRepository.fetchFeed, {});
+      const response: NewsFeedResponse = yield self.request.send(api.newsfeedRepository.fetch, {});
       if (response) {
         self.nftFeed = cast(response.items);
       }
@@ -25,7 +25,7 @@ const ExploreStore = types
   }))
   .actions((self) => ({
     createNewsFeedItem: flow(function* (item: NftFeedItemInterface) {
-      yield self.request.send(api.feedRepository.createFeedItem, {item});
+      yield self.request.send(api.newsfeedRepository.create, {item});
       self.fetchNewsFeed();
     }),
     createMutualDocks: flow(function* (walletA: string, walletB: string) {

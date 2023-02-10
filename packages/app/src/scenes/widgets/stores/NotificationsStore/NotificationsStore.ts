@@ -19,7 +19,7 @@ const NotificationsStore = types
     fetchNotifications: flow(function* () {
       const response: NewsFeedResponse = yield self.request.send(
         // FIXME
-        api.feedRepository.fetchFeed,
+        api.newsfeedRepository.fetch,
         {}
       );
       if (response) {
