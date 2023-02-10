@@ -82,7 +82,7 @@ export const api = {
   emojiRepository,
   eventsRepository,
   spaceInfoRepository,
-  assetsRepository: assets2dRepository,
+  assets2dRepository,
   objectRepository,
   assets3dRepository,
   agoraRepository_old
