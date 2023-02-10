@@ -33,7 +33,6 @@ export const ROUTES = {
     maintenance: '/system/maintenance',
     wrongBrowser: '/system/wrongBrowser'
   },
-  grabTable: '/:spaceId/table',
   collaboration: {
     root: '/collaboration',
     base: '/collaboration/:spaceId',

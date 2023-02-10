@@ -18,7 +18,6 @@ const UnityInstanceStore = types
     isTeleportReady: false,
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
-    fetchRequest: types.optional(RequestModel, {}),
     nodeRequest: types.optional(RequestModel, {}),
     lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
     objectMenuPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
@@ -181,13 +180,6 @@ const UnityInstanceStore = types
     leaveSpace(spaceId: string) {
       UnityService.leaveSpace(spaceId);
     },
-    // FIXME: Temporary solution. To get space name from Unity
-    fetchSpaceName: flow(function* (spaceId: string) {
-      const response = yield self.fetchRequest.send(api.spaceRepositoryOld.fetchSpace, {spaceId});
-      if (response) {
-        return response.space.name;
-      }
-    }),
     resolveNode: flow(function* (object: string) {
       return yield self.nodeRequest.send(api.web3Repository.resolveNode, {object});
     }),
