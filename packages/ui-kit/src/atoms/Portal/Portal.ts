@@ -17,6 +17,9 @@ const Portal: FC<PropsInterface> = ({children, className, parentId, maximized}) 
   if (maximized) {
     // set flex-grow to 1 to make it fill the parent
     domContainer.current.style.flexGrow = '1';
+  } else {
+    // set flex-grow to 0 to make it not fill the parent
+    domContainer.current.style.flexGrow = '0';
   }
 
   useEffect(() => {

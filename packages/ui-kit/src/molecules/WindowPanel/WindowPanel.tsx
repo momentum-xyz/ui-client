@@ -25,13 +25,6 @@ const WindowPanel: FC<PropsInterface> = ({
   onClose
 }) => {
   const [isExpanded, setIsExpanded] = useState(initialIsExpanded);
-  React.useEffect(() => {
-    console.log('WindowPanelMOUNTED');
-    return () => {
-      console.log('WindowPanel UNMOUNTED');
-    };
-  }, []);
-  console.log('WindowPanel render', {isExpanded, initialIsExpanded});
 
   return (
     <styled.Container data-testid={dataTestId} className={isExpanded ? 'expanded' : undefined}>

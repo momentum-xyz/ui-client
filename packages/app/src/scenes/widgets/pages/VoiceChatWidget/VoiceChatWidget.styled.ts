@@ -1,22 +1,13 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-export const Modal = styled.div`
-  display: flex;
-  // margin: 10px;
-  // box-sizing: border-box;
-  // position: absolute;
-  // right: 0;
-  // top: 0;
-  // margin: 20px;
-`;
-
 export const Container = styled.div`
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.75)};
   border-radius: 10px;
   overflow: hidden;
   width: 280px;
-  height: 584px;
+  max-height: 584px;
+  height: 100%;
 
   display: flex;
   flex-direction: column;

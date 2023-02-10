@@ -28,7 +28,9 @@ const AppLayers: FC<PropsInterface> = (props) => {
     <div data-testid="AppLayers-test">
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
       <UnityControlContextProvider value={unityStore.unityInstanceStore.unityControlInst}>
-        <SectionedScreen />
+        <div id="sectioned-screen-container">
+          <SectionedScreen />
+        </div>
         {renderUnity && <Widgets />}
         <main id="main">
           <div className="main-content">{children}</div>

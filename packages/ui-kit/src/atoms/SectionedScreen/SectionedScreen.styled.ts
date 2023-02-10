@@ -1,113 +1,71 @@
 import styled from 'styled-components';
 
-// TODO try css masonry layout
+// this should allow debugging the layout even on prod - just set DEBUG=1 in sessionStorage and refresh
+const DEBUG = sessionStorage.getItem('DEBUG') !== null;
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: calc(100% - 50px);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
   pointer-events: none;
-`;
 
-export const InnerContainer = styled.div`
   display: flex;
-  // width: 100%;
-  // height: 100%;
-`;
-
-export const Section = styled.div`
-  display: flex;
-  // flex: 1 0 auto;
-  position: relative;
-  padding: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-start;
   gap: 10px;
-`;
-
-export const ContainerG = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, auto));
-  grid-template-rows: minmax(0, auto) minmax(0, auto);
-  grid-gap: 10px;
-  grid-template-areas:
-    'left-top left-top left-top right-top right-top right-top'
-    'left-bottom left-bottom left-bottom right-bottom right-bottom right-bottom';
+  padding: 10px;
 
   width: 100%;
-  height: calc(100% - 50px);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  pointer-events: none;
+  height: 100%;
 
-  .section-screen-item {
-    display: flex;
+  .sectioned-screen-top-left {
+    flex-grow: 1;
+    order: 1;
+  }
+  .sectioned-screen-top-right {
+    order: 2;
     justify-content: end;
   }
-
-  .left-top:nth-child(1),
-  .left-bottom:nth-child(1) {
-    grid-column: 1 / 2;
-  }
-  .left-top:nth-child(2),
-  .left-bottom:nth-child(2) {
-    grid-column: 2 / 3;
-  }
-  .left-top:nth-child(3),
-  .left-bottom:nth-child(3) {
-    grid-column: 3 / 4;
+  .sectioned-screen-bottom-right {
+    display: flex;
+    justify-content: end;
+    order: 10;
+    align-self: flex-end;
   }
 
-  .right-top:nth-child(1),
-  .right-bottom:nth-child(1) {
-    grid-column: 6 / 7;
+  .sectioned-screen-top-left,
+  .sectioned-screen-top-right {
+    height: 60%;
   }
-  .right-top:nth-child(2),
-  .right-bottom:nth-child(2) {
-    grid-column: 5 / 6;
-  }
-  .right-top:nth-child(3),
-  .right-bottom:nth-child(3) {
-    grid-column: 4 / 5;
+  .sectioned-screen-bottom-right {
+    height: 38%;
   }
 
-  .left-top {
-    grid-area: left-top;
-    flex-grow: 1;
+  .sectioned-screen-section-break {
+    flex-basis: 100%;
+    height: ${() => (DEBUG ? '2px' : '0')};
+    background: ${() => (DEBUG ? 'red' : 'transparent')};
+    margin: -5px 0;
+    order: 5;
   }
-  .right-top {
-    grid-area: right-top;
-  }
-  .left-bottom {
-    grid-area: left-bottom;
-  }
-  .right-bottom {
-    // grid-column: 2 / 3;
-    // grid-row: 2 / 3;
-    grid-area: right-bottom;
-  }
-`;
 
-export const SectionG = styled.div`
-  // &.top-left {
-  //   grid-column: 1 / 2;
-  //   grid-row: 1 / 2;
-  // }
-  // &.top-right {
-  //   grid-column: 2 / 3;
-  //   grid-row: 1 / 2;
-  // }
-  // &.bottom-left {
-  //   grid-column: 1 / 2;
-  //   grid-row: 2 / 3;
-  // }
-  // &.bottom-right {
-  //   grid-column: 2 / 3;
-  //   grid-row: 2 / 3;
-  // }
+  @supports (selector(:has(div))) {
+    .sectioned-screen-section-break {
+      display: none;
+    }
+    .sectioned-screen-top-left,
+    .sectioned-screen-top-right {
+      height: 100%;
+    }
+  }
+
+  // right now we're ok with having top-left and bottom-right sections on the same row but alighed differently
+  // if we have top-right and bottom-right, then we need to split them into two rows and limit the top row height
+  &:has(.sectioned-screen-bottom-right):has(.sectioned-screen-top-right) {
+    .sectioned-screen-section-break {
+      display: block;
+    }
+    .sectioned-screen-top-left,
+    .sectioned-screen-top-right {
+      height: 60%;
+    }
+  }
 `;

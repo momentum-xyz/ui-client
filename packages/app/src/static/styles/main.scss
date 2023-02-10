@@ -25,6 +25,16 @@ body {
   z-index: 1;
 }
 
+#sectioned-screen-container {
+  width: 100%;
+  height: calc(100% - 50px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: var(--base-z-index);
+  pointer-events: none;
+}
+
 .noScrollIndicator {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
