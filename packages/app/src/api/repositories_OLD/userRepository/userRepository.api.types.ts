@@ -2,7 +2,7 @@
 
 import {UserStatusEnum} from '@momentum-xyz/ui-kit';
 
-import {UserInterface, UserProfileInterface, UserSpaceInterface} from 'api';
+import {UserInterface, UserProfileInterface} from 'api';
 
 export interface OnlineUserInterface {
   id: string;
@@ -49,17 +49,3 @@ export interface ProfileRequest {
 }
 
 export interface ProfileResponse extends UserInterface {}
-
-/* Online users */
-
-export interface OnlineUsersRequest {
-  worldId: string;
-}
-
-export interface OnlineUsersResponse extends Array<UserInterface> {}
-
-export interface FetchUserInitiativesRequest {
-  userId: string;
-}
-
-export interface FetchUserInitiativesResponse extends Array<UserSpaceInterface> {}

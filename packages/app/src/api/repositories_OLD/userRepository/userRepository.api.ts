@@ -1,15 +1,9 @@
-import {generatePath} from 'react-router-dom';
-
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {
-  FetchUserInitiativesRequest,
-  FetchUserInitiativesResponse,
   InviteToSpaceRequest,
   InviteToSpaceResponse,
-  OnlineUsersRequest,
-  OnlineUsersResponse,
   ProfileRequest,
   ProfileResponse,
   UserSearchRequest,
@@ -42,24 +36,4 @@ export const fetchProfile: RequestInterface<ProfileRequest, ProfileResponse> = (
   const URL = `${userRepositoryEndpoints().profile}/${userId}`;
 
   return request.get(URL, restOptions);
-};
-
-export const fetchOnlineUsers: RequestInterface<OnlineUsersRequest, OnlineUsersResponse> = (
-  options
-) => {
-  const {worldId, ...restOptions} = options;
-  const URL = `${userRepositoryEndpoints().online}/${worldId}`;
-
-  return request.get(URL, restOptions);
-};
-
-export const fetchUserInitiatives: RequestInterface<
-  FetchUserInitiativesRequest,
-  FetchUserInitiativesResponse
-> = (options) => {
-  const {userId, ...restOptions} = options;
-
-  const url = generatePath(userRepositoryEndpoints().initiatives, {userId});
-
-  return request.get(url, restOptions);
 };

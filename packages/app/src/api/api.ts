@@ -24,19 +24,15 @@ import * as flightRepository from './repositories/flightRepository';
 import * as streamChatRepository from './repositories/streamChatRepository';
 import * as spaceUserAttributeRepository from './repositories/spaceUserAttributeRepository';
 import * as userRepository_OLD from './repositories_OLD/userRepository';
-import * as profileRepository from './repositories_OLD/profileRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
 import * as stageModeRepository from './repositories_OLD/stageModeRepository';
 import * as tokenRuleRepository from './repositories_OLD/tokenRuleRepository';
 import * as tokenRepository from './repositories_OLD/tokenRepository';
 import * as spaceTypeRepository from './repositories_OLD/spaceTypeRepository';
-import * as spaceInviteRepository from './repositories_OLD/spaceInviteRepository';
 import * as statsRepository from './repositories_OLD/statsRepository';
-import * as statusRepository from './repositories_OLD/statusRepository';
 import * as playlistRepository from './repositories_OLD/playlistRepository';
 import * as meetingRepository from './repositories_OLD/meetingRepository';
 import * as integrationRepository from './repositories_OLD/integrationRepository';
-import * as resourcesRepository from './repositories_OLD/resourcesRepository';
 import * as spaceIntegrationsRepository from './repositories_OLD/spaceIntegrationsRepository';
 import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 import * as agoraRepository_old from './repositories_OLD/agoraRepository_old';
@@ -62,7 +58,6 @@ export const api = {
   newsfeedRepository,
   spaceRepository,
   userRepository_OLD,
-  profileRepository,
   spaceRepositoryOld,
   flightRepository,
   stageModeRepository,
@@ -70,15 +65,12 @@ export const api = {
   tokenRuleRepository,
   tokenRepository,
   spaceTypeRepository,
-  spaceInviteRepository,
   statsRepository,
-  statusRepository,
   playlistRepository,
   meetingRepository,
   agoraRepository,
   spaceIntegrationsRepository,
   integrationRepository,
-  resourcesRepository,
   streamChatRepository,
   spaceEmojiRepository,
   pluginsRepository,
@@ -130,14 +122,12 @@ export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRep
 
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
 export * from './repositories_OLD/userRepository/userRepository.api.types';
-export * from './repositories_OLD/profileRepository/profileRepository.api.types';
 export * from './repositories_OLD/tokenRuleRepository/tokenRuleRepository.api.types';
 export * from './repositories_OLD/tokenRepository/tokenRepository.api.types';
 export * from './repositories_OLD/statsRepository/statsRepository.api.types';
 export * from './repositories_OLD/playlistRepository/playlistRepository.api.types';
 export * from './repositories_OLD/meetingRepository/meetingRepository.api.types';
 export * from './repositories_OLD/integrationRepository/integrationRepository.api.types';
-export * from './repositories_OLD/resourcesRepository/resourcesRepository.types';
 export * from './repositories_OLD/spaceTypeRepository/spaceTypeRepository.api.types';
 export * from './repositories_OLD/spaceEmojiRepository/spaceEmojiRepository.api.types';
 export * from './repositories_OLD/stageModeRepository/stageModeRepository.api.types';
