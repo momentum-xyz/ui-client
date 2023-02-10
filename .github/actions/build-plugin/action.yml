@@ -23,7 +23,10 @@ inputs:
     description: "K8s credentials"
     required: true
   plugin-dir:
-    description: "Optional directory, if it is not the same as the plugin-name"
+    description: "Optional directory, if it is not the same as plugin-name"
+    required: false
+  deploy-name:
+    description: "Optional naming used for deployment, if it is not the same as plugin-name"
     required: false
 runs:
   using: "composite"
@@ -44,7 +47,7 @@ runs:
       if: github.ref == 'refs/heads/develop'
       uses: momentum-xyz/deploy-action@v1
       with:
-        project: plugin-${{ inputs.plugin-name }}
+        project: plugin-${{ inputs.deploy-name || inputs.plugin-name }}
         version: ${{ inputs.version }}
         k8s-credentials: ${{ inputs.k8s-credentials }}
 
