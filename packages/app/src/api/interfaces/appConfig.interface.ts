@@ -62,4 +62,5 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   PARTICIPANTS_VIDEO_LIMIT: number;
   MAX_STAGE_USERS: number;
   GAT_UI_TYPE_ID: string;
+  ODYSSEY_WORLD_ID: string;
 }

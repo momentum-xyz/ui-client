@@ -8,7 +8,7 @@ interface PropsInterface extends Map3dPropsInterface {
 }
 
 const Map3dRender: FC<PropsInterface> = ({
-  centerWallet,
+  currentUser,
   selectedUuid,
   items,
   canvas,
@@ -16,20 +16,24 @@ const Map3dRender: FC<PropsInterface> = ({
   getImageUrl,
   onSelect
 }) => {
-  const {flyToPlanet} = use3dMap(
+  const {flyToOdyssey, updateOdyssey} = use3dMap(
     canvas,
     items,
-    centerWallet,
+    currentUser,
     getConnections,
     getImageUrl,
     onSelect
   );
 
   useEffect(() => {
+    updateOdyssey(currentUser);
+  }, [currentUser, updateOdyssey]);
+
+  useEffect(() => {
     if (selectedUuid) {
-      flyToPlanet(selectedUuid);
+      flyToOdyssey(selectedUuid);
     }
-  }, [flyToPlanet, selectedUuid]);
+  }, [flyToOdyssey, selectedUuid]);
 
   return <></>;
 };

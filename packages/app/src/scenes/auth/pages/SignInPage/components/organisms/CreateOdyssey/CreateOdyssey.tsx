@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
-import image from 'static/images/world.svg';
+import image from 'static/images/world.jpg';
 
 import * as styled from './CreateOdyssey.styled';
 

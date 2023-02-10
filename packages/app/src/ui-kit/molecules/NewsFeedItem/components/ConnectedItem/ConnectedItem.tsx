@@ -1,13 +1,12 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {format} from 'date-fns-tz';
-import {Text} from '@momentum-xyz/ui-kit';
+import {Image, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
+import {newsfeedDateString} from '@momentum-xyz/core';
 
 import {UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
-import astronautIcon from 'static/images/astronaut-green.svg';
 
 import * as styled from './ConnectedItem.styled';
 
@@ -22,10 +21,6 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
 
   const {t} = useTranslation();
 
-  const formattedDate = useMemo(() => {
-    return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
-  }, [item.date]);
-
   const userIsStaking = currentUser.id === item.uuid;
   const userIsStaked = currentUser.id === item.connectedTo?.uuid;
 
@@ -37,20 +32,24 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
 
   return (
     <>
-      <div>
-        <styled.TwoAvatarsContainer>
-          <styled.Avatar
-            src={getImageAbsoluteUrl(stakingUserImage) || astronautIcon}
-            onClick={() => onOpenOdyssey?.(item.uuid)}
+      <styled.TwoAvatarsContainer>
+        <styled.Avatar onClick={() => onOpenOdyssey?.(item.uuid)}>
+          <Image
+            src={getImageAbsoluteUrl(stakingUserImage)}
+            sizeProps={{width: '38px', height: '38px'}}
           />
-          <styled.AvatarAhead
-            src={getImageAbsoluteUrl(stakedUserImage) || astronautIcon}
-            onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
+        </styled.Avatar>
+
+        <styled.AvatarAhead onClick={() => onOpenOdyssey?.(item.connectedTo?.uuid || '')}>
+          <Image
+            src={getImageAbsoluteUrl(stakedUserImage)}
+            sizeProps={{width: '38px', height: '38px'}}
           />
-        </styled.TwoAvatarsContainer>
-      </div>
+        </styled.AvatarAhead>
+      </styled.TwoAvatarsContainer>
+
       <styled.Info>
-        <styled.Date>{formattedDate}</styled.Date>
+        <styled.Date>{newsfeedDateString(item.date, true)}</styled.Date>
         <styled.ConnectedInfo>
           <div className="username" onClick={() => onOpenOdyssey?.(item.uuid)}>
             <Text

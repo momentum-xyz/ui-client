@@ -6,7 +6,7 @@ import {ComponentSizeInterface} from '../../interfaces';
 import * as styled from './Image.styled';
 
 interface PropsInterface {
-  src?: string;
+  src?: string | null;
   isLoading?: boolean;
   isError?: boolean;
   sizeProps?: ComponentSizeInterface;

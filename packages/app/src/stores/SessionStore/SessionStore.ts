@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {web3FromSource} from '@polkadot/extension-dapp';
-import {LAST_AIRDROP_KEY, RequestModel} from '@momentum-xyz/core';
+import {LAST_AIRDROP_KEY, Map3dUserInterface, RequestModel} from '@momentum-xyz/core';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
@@ -164,6 +164,16 @@ const SessionStore = types
     },
     get wallet(): string {
       return self.user?.wallet || '';
+    },
+    get map3dUser(): Map3dUserInterface | null {
+      return self.user
+        ? {
+            uuid: self.user.id,
+            name: self.user.name,
+            owner: self.user.wallet,
+            image: self.user.profile.avatarHash
+          }
+        : null;
     }
   }));
 

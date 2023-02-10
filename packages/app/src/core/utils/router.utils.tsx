@@ -1,8 +1,9 @@
 import React, {ReactElement} from 'react';
-import {matchPath, Redirect, Route, Switch} from 'react-router-dom';
+import {matchPath, Redirect, Switch} from 'react-router-dom';
 import {SwitchProps} from 'react-router';
 
-import {RouteConfigInterface} from 'core/interfaces';
+import {ProtectedRoute} from 'ui-kit';
+import {ProtectedRouteListInterface, RouteConfigInterface} from 'core/interfaces';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
@@ -11,21 +12,31 @@ export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[
 };
 
 export const createRoutesByConfig = (
-  routes: RouteConfigInterface[]
+  config: ProtectedRouteListInterface
 ): ReactElement<string, any>[] => {
-  return routes.map(({path, exact, ...rest}) => (
-    <Route key={path} path={path} exact={exact}>
-      <rest.main />
-    </Route>
+  const {routes, defaultRedirect, hasRights} = config;
+
+  return routes.map((route) => (
+    <ProtectedRoute
+      key={route.path}
+      {...route}
+      hasRights={hasRights}
+      defaultRedirect={defaultRedirect}
+    >
+      <route.main />
+    </ProtectedRoute>
   ));
 };
 
 export const createSwitchByConfig = (
   routes: RouteConfigInterface[],
-  defaultRedirect?: string
-): ReactElement<SwitchProps, any> => (
-  <Switch>
-    {createRoutesByConfig(routes)}
-    {defaultRedirect && <Redirect to={defaultRedirect} />}
-  </Switch>
-);
+  defaultRedirect?: string,
+  hasRights?: () => boolean
+): ReactElement<SwitchProps, any> => {
+  return (
+    <Switch>
+      {createRoutesByConfig({routes, defaultRedirect, hasRights})}
+      {defaultRedirect && <Redirect to={defaultRedirect} />}
+    </Switch>
+  );
+};

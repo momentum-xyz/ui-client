@@ -1,13 +1,12 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {format} from 'date-fns-tz';
-import {Text} from '@momentum-xyz/ui-kit';
+import {Image, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
+import {newsfeedDateString} from '@momentum-xyz/core';
 
 import {UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
-import astronautIcon from 'static/images/astronaut-green.svg';
 
 import * as styled from './DockedItem.styled';
 
@@ -22,35 +21,35 @@ const DockedItem: FC<PropsInterface> = (props) => {
 
   const {t} = useTranslation();
 
-  const formattedDate = useMemo(() => {
-    return format(new Date(item.date), `MM/dd/yyyy - h:mm aa`);
-  }, [item.date]);
-
   const userIsStaking = currentUser.id === item.uuid;
-  const userIsStaked = currentUser.id === item.connectedTo?.uuid;
+  const userIsStaked = currentUser.id === item.dockedTo?.uuid;
 
   const dockingImage = userIsStaking ? currentUser.profile.avatarHash : item.image;
-  const dockedImage = userIsStaked ? currentUser.profile.avatarHash : item.connectedTo?.image;
+  const dockedImage = userIsStaked ? currentUser.profile.avatarHash : item.dockedTo?.image;
 
   const dockingUserLabel = userIsStaking ? t('newsfeed.you') : item.name;
-  const dockedUserLabel = userIsStaked ? t('newsfeed.you') : item.connectedTo?.name;
+  const dockedUserLabel = userIsStaked ? t('newsfeed.you') : item.dockedTo?.name;
 
   return (
     <>
-      <div>
-        <styled.TwoAvatarsContainer>
-          <styled.Avatar
-            src={getImageAbsoluteUrl(dockingImage) || astronautIcon}
-            onClick={() => onOpenOdyssey?.(item.uuid)}
+      <styled.TwoAvatarsContainer>
+        <styled.Avatar onClick={() => onOpenOdyssey?.(item.uuid)}>
+          <Image
+            src={getImageAbsoluteUrl(dockingImage)}
+            sizeProps={{width: '38px', height: '38px'}}
           />
-          <styled.AvatarAhead
-            src={getImageAbsoluteUrl(dockedImage) || astronautIcon}
-            onClick={() => item.connectedTo?.uuid && onOpenOdyssey?.(item.connectedTo?.uuid)}
+        </styled.Avatar>
+
+        <styled.AvatarAhead onClick={() => onOpenOdyssey?.(item.dockedTo?.uuid || '')}>
+          <Image
+            src={getImageAbsoluteUrl(dockedImage)}
+            sizeProps={{width: '38px', height: '38px'}}
           />
-        </styled.TwoAvatarsContainer>
-      </div>
+        </styled.AvatarAhead>
+      </styled.TwoAvatarsContainer>
+
       <styled.Info>
-        <styled.Date>{formattedDate}</styled.Date>
+        <styled.Date>{newsfeedDateString(item.date, true)}</styled.Date>
         <styled.DockedInfo>
           <styled.DockedInfoUsername onClick={() => onOpenOdyssey?.(item.uuid)}>
             <Text

@@ -58,7 +58,8 @@ export const appVariables: AppConfigExtendedInterface = {
   STREAMCHAT_KEY: '',
   NFT_ADMIN_ADDRESS: '',
   NFT_COLLECTION_ODYSSEY_ID: '',
-  NODE_ID: ''
+  NODE_ID: '',
+  ODYSSEY_WORLD_ID: 'b8b104c4-b375-4933-8de8-29e0a1c67860'
 };
 
 const {REACT_APP_OVERRIDE_CONFIG_VARIABLES = '{}'} = process.env;

@@ -1,7 +1,7 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {format} from 'date-fns-tz';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button, Image, Text} from '@momentum-xyz/ui-kit';
+import {newsfeedDateString} from '@momentum-xyz/core';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {NftFeedItemInterface} from 'api';
@@ -22,30 +22,20 @@ const CalendarItem: FC<PropsInterface> = (props) => {
 
   const name = item.uuid === currentUser.id ? currentUser.name : item.name;
 
-  const formattedStartDate = useMemo(() => {
-    if (item.calendarStart) {
-      return format(new Date(item.calendarStart), `MM/dd/yyyy h:mm aa`);
-    } else {
-      return '';
-    }
-  }, [item.calendarStart]);
-
-  const formattedEndDate = useMemo(() => {
-    if (item.calendarEnd) {
-      return format(new Date(item.calendarEnd), `MM/dd/yyyy h:mm aa`);
-    } else {
-      return '';
-    }
-  }, [item.calendarEnd]);
-
   return (
     <>
-      <div>
-        <styled.OneAvatar src={getImageAbsoluteUrl(item.calendarImage) || placeholder} />
-      </div>
+      <styled.OneAvatar>
+        <Image
+          src={getImageAbsoluteUrl(item.calendarImage) || placeholder}
+          sizeProps={{width: '58px', height: '58px'}}
+        />
+      </styled.OneAvatar>
+
       <styled.Info>
         <styled.Date>
-          {formattedStartDate} - {formattedEndDate}
+          {newsfeedDateString(item.calendarStart, false)}
+          {' - '}
+          {newsfeedDateString(item.calendarEnd, false)}
         </styled.Date>
         <div>
           <Text size="xxs" text={`${item.calendarTitle}`} align="left" />
