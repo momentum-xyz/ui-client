@@ -51,7 +51,7 @@ const ObjectStore = types
           console.info('Its a tile!');
           const objectResponse:
             | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
-            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
+            | undefined = yield self.getAssetRequest.send(api.assets2dRepository.get2dAsset, {
             assetId: spaceInfo.asset_2d_id
           });
           // FIXME: It is incorrect (by Nikita).
@@ -65,7 +65,7 @@ const ObjectStore = types
           console.info('Its a dock!');
           const objectResponse:
             | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
-            | undefined = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
+            | undefined = yield self.getAssetRequest.send(api.assets2dRepository.get2dAsset, {
             assetId: spaceInfo.asset_2d_id
           });
           if (objectResponse) {
@@ -79,7 +79,7 @@ const ObjectStore = types
             | undefined = localPlugins[spaceId];
 
           if (!assetData) {
-            assetData = yield self.getAssetRequest.send(api.assetsRepository.get2dAsset, {
+            assetData = yield self.getAssetRequest.send(api.assets2dRepository.get2dAsset, {
               assetId: spaceInfo.asset_2d_id
             });
           } else {

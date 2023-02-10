@@ -5,7 +5,7 @@ import {Dialog, Loader, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {useNavigation, useStore} from 'shared/hooks';
-import {NewsFeedItem} from 'ui-kit';
+import {NewsfeedItem} from 'ui-kit';
 
 import * as styled from './NotificationsWidget.styled';
 
@@ -56,15 +56,14 @@ const NotificationsWidget: FC = () => {
         {!notificationsStore.isPending && notifications.length && (
           <styled.Body>
             {notifications.map((item, index) => (
-              <NewsFeedItem
+              <NewsfeedItem
                 key={index}
                 item={item}
+                nftItems={nftStore.nftItems}
                 currentUser={sessionStore.user}
                 onTeleport={() => goToOdysseyHome(item.uuid)}
                 onConnect={() => {}}
-                onAttend={(nft) => {
-                  console.log(nft);
-                }}
+                onAttend={() => {}}
                 onOpenOdyssey={(uuid) => {
                   widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid));
                 }}

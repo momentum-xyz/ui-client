@@ -1,7 +1,5 @@
 import {SpaceTypeEnum} from '@momentum-xyz/core';
 
-import {MetadataFieldType} from 'core/types';
-
 interface AuxProjectInterface {
   problem: string;
   solution: string;
@@ -114,27 +112,6 @@ export interface OldDeleteSpaceResponse {
   message: string;
 }
 
-/** User Space List **/
-
-export interface UserSpaceListRequest {
-  userId: string;
-}
-
-export interface UserSpaceListItemResponse {
-  id: string;
-  name: string;
-  ownedById: string;
-  name_hash: string;
-  created_at: string;
-  updated_at: string;
-  uiTypeId: string;
-  parentId: string;
-  minimap: number;
-  visible: number;
-  isAdmin: number;
-  spaceTypeName: string;
-}
-
 /** Remove user from space **/
 
 export interface RemoveUserRequest {
@@ -183,51 +160,3 @@ export interface CreateSpaceResponse {
   status: any;
   message: string;
 }
-
-/** User owned spaces **/
-
-export interface UserOwnedSpacesRequest {
-  worldId: string;
-}
-
-export interface UserOwnedSpacesResponse {
-  canCreate: boolean;
-}
-
-/** Create initiative **/
-
-export interface CreateInitiativeRequest {
-  initiative: Omit<NewSpaceDetailsInterface, 'worldId'>;
-}
-
-export interface CreateInitiativeResponse {
-  id: string;
-}
-
-/** Serach **/
-
-export interface OldSearchSpacesRequest {
-  q: string;
-  worldId: string;
-}
-
-export interface OldSearchSpacesResponse {
-  results: OldSpaceInterface[];
-  itemCount: number;
-  totalItems: number;
-  itemsPerPage: number;
-  totalPages: number;
-  currentPage: number;
-}
-
-/** World Config **/
-
-export interface WorldConfigRequest {
-  worldId: string;
-}
-
-export type WorldConfigType = {
-  [field in MetadataFieldType]: string;
-};
-
-export interface WorldConfigResponse extends WorldConfigType {}

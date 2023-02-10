@@ -1,13 +1,7 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {
-  api,
-  WorldConfigType,
-  WorldConfigResponse,
-  SpaceAttributeItemResponse,
-  SpaceInterface
-} from 'api';
+import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
 import {mapper} from 'api/mapper';
 import {NftItemModelInterface, Space} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
@@ -19,28 +13,15 @@ const UnityWorldStore = types.compose(
     .model('UnityWorldStore', {
       worldId: types.optional(types.string, ''),
       world: types.maybeNull(Space),
-      worldConfigRequest: types.optional(RequestModel, {}),
-      worldInformationRequest: types.optional(RequestModel, {}),
-      worldConfig: types.maybe(types.frozen<WorldConfigType>())
+      request: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       init(worldId: string) {
         self.worldId = worldId;
-        //self.fetchWorldConfig(worldId);
         this.fetchWorldInformation(worldId);
       },
-      fetchWorldConfig: flow(function* (worldId: string) {
-        const response: WorldConfigResponse = yield self.worldConfigRequest.send(
-          api.spaceRepositoryOld.fetchWorldConfig,
-          {worldId}
-        );
-
-        if (response) {
-          self.worldConfig = cast(response);
-        }
-      }),
       fetchWorldInformation: flow(function* (spaceId: string) {
-        const response: SpaceAttributeItemResponse = yield self.worldInformationRequest.send(
+        const response: SpaceAttributeItemResponse = yield self.request.send(
           api.spaceRepository.fetchSpace,
           {spaceId}
         );
