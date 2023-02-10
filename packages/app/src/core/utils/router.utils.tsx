@@ -15,7 +15,7 @@ export const createRoutesByConfig = (
 ): ReactElement<string, any>[] => {
   const {routes, defaultRedirect, hasRights} = config;
 
-  return routes.map((route) => {
+  return routes.map((route, idx) => {
     const protectedRouteElement = createProtectedRouteElement(
       route.main,
       hasRights,
@@ -23,8 +23,8 @@ export const createRoutesByConfig = (
     );
     return (
       <Route
-        key={`${route.path}${route.exact ? '' : '/*'}`}
-        path={route.path}
+        key={idx}
+        path={`${route.path}${route.exact ? '' : '/*'}`}
         element={protectedRouteElement}
       ></Route>
     );
