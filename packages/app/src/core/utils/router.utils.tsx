@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import {ReactElement} from 'react';
 import {matchPath, Navigate, Route, Routes, RoutesProps} from 'react-router-dom';
 
 import {createProtectedRouteElement} from 'ui-kit/utils/create-protected-route-element';
@@ -38,8 +38,10 @@ export const createSwitchByConfig = (
 ): ReactElement<RoutesProps, any> => {
   return (
     <Routes>
-      {createRoutesByConfig({routes, defaultRedirect, hasRights})}
-      {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
+      <Route path="/">
+        {createRoutesByConfig({routes, defaultRedirect, hasRights})}
+        {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
+      </Route>
     </Routes>
   );
 };
