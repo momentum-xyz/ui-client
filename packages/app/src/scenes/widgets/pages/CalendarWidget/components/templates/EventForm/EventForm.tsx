@@ -10,6 +10,7 @@ import {DATE_TIME_FORMAT, timeFromNow} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
+import {NewsfeedTypeEnum} from 'core/enums';
 import {EventFormInterface} from 'core/interfaces';
 import {ToastContent} from 'ui-kit';
 
@@ -64,15 +65,17 @@ const EventForm: FC = () => {
     const nft = nftStore.getNftByUuid(unityStore.worldId);
 
     if (isSuccess && isNewEvent && nft) {
-      await exploreStore.createNewsFeedItem({
-        ...nft,
-        type: 'calendar_event',
+      await exploreStore.createNewsfeedItem({
+        uuid: nft.uuid,
+        type: NewsfeedTypeEnum.CALENDAR,
         date: new Date().toISOString(),
-        calendarId: eventForm.eventId,
-        calendarImage: eventForm.imageHash,
-        calendarStart: data.start.toISOString(),
-        calendarEnd: data.end.toISOString(),
-        calendarTitle: data.title
+        calendar: {
+          id: eventForm.eventId || '',
+          image: eventForm.imageHash || '',
+          start: data.start.toISOString(),
+          end: data.end.toISOString(),
+          title: data.title
+        }
       });
     }
 

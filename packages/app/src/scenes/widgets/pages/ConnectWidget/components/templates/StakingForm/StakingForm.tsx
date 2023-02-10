@@ -16,6 +16,7 @@ import {BN} from '@polkadot/util';
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 import {convertToHex} from 'core/utils';
+import {NewsfeedTypeEnum} from 'core/enums';
 
 import * as styled from './StakingForm.styled';
 
@@ -96,15 +97,13 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
           const isMutual = nftStore.stakingAtMe.has(nft.owner);
           console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
 
-          exploreStore.createNewsFeedItem({
-            ...myNft,
-            type: 'connected',
-            mutual: isMutual,
+          exploreStore.createNewsfeedItem({
+            uuid: myNft.uuid,
+            type: NewsfeedTypeEnum.CONNECTED,
             date: new Date().toISOString(),
             connectedTo: {
-              ...nft,
-              type: 'connected',
-              date: new Date().toISOString()
+              uuid: nft.uuid,
+              mutual: isMutual
             }
           });
 

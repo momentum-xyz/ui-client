@@ -2,27 +2,24 @@ import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {
-  CreateNewsFeedRequest,
-  CreateNewsFeedResponse,
-  NewsFeedRequest,
-  NewsFeedResponse,
+  CreateNewsfeedRequest,
+  CreateNewsfeedResponse,
+  NewsfeedRequest,
+  NewsfeedResponse,
   NotificationRequest,
   NotificationResponse
 } from './newsfeedRepository.api.types';
 import {newsfeedRepositoryEndpoints} from './newsfeedRepository.api.endpoints';
 
-// FIXME: Data should have only ids on NFT.
-// Don't need to store fields like name, image. These data should come from NFT
-export const fetch: RequestInterface<NewsFeedRequest, NewsFeedResponse> = (options) => {
+export const fetch: RequestInterface<NewsfeedRequest, NewsfeedResponse> = (options) => {
   const {...restOptions} = options;
   return request.get(newsfeedRepositoryEndpoints().newsfeed, restOptions);
 };
 
-export const create: RequestInterface<CreateNewsFeedRequest, CreateNewsFeedResponse> = (
+export const create: RequestInterface<CreateNewsfeedRequest, CreateNewsfeedResponse> = (
   options
 ) => {
   const {item, ...rest} = options;
-
   return request.post(newsfeedRepositoryEndpoints().newsfeed, {items: [item]}, rest);
 };
 

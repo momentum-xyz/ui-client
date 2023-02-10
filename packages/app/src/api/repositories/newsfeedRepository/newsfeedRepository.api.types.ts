@@ -1,46 +1,44 @@
+import {NewsfeedTypeEnum} from 'core/enums';
+
 /** COMMON **/
 
-export interface NftFeedItemInterface {
-  id: number;
-  collectionId: number;
-  owner: string;
+export interface NewsfeedItemInterface {
   uuid: string;
-  name: string;
-  description: string | undefined;
-  image: string;
-
-  type: 'created' | 'connected' | 'docked' | 'calendar_event';
   date: string;
-  mutual?: boolean;
+  type: NewsfeedTypeEnum;
 
-  calendarId?: string | undefined;
-  calendarStart?: string | undefined;
-  calendarEnd?: string | undefined;
-  calendarImage?: string | undefined;
-  calendarTitle?: string | undefined;
+  connectedTo?: {
+    uuid: string;
+    mutual: boolean;
+  };
 
-  connectedTo?: NftFeedItemInterface;
-  dockedTo?: NftFeedItemInterface;
+  calendar?: {
+    id: string;
+    title: string;
+    start: string;
+    end: string;
+    image: string;
+  };
 }
 
 /** FETCH NEWS FEED **/
 
-export interface NewsFeedRequest {}
+export interface NewsfeedRequest {}
 
-export interface NewsFeedResponse {
-  items: NftFeedItemInterface[];
+export interface NewsfeedResponse {
+  items: NewsfeedItemInterface[];
 }
 
 /** CREATE NEWS FEED ITEM **/
 
-export interface CreateNewsFeedRequest {
-  item: NftFeedItemInterface;
+export interface CreateNewsfeedRequest {
+  item: NewsfeedItemInterface;
 }
 
-export interface CreateNewsFeedResponse {}
+export interface CreateNewsfeedResponse {}
 
 /** FETCH NOTIFICATIONS **/
 
 export interface NotificationRequest {}
 
-export interface NotificationResponse extends Array<NftFeedItemInterface> {}
+export interface NotificationResponse extends Array<NewsfeedItemInterface> {}

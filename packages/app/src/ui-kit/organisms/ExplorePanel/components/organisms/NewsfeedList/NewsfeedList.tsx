@@ -2,14 +2,15 @@ import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Heading, IconSvg} from '@momentum-xyz/ui-kit';
 
-import {NftFeedItemInterface} from 'api';
+import {NewsfeedItemInterface} from 'api';
 import {NftItemModelInterface, UserModelInterface} from 'core/models';
-import {NewsFeedItem} from 'ui-kit';
+import {NewsfeedItem} from 'ui-kit';
 
-import * as styled from './NewsFeed.styled';
+import * as styled from './NewsfeedList.styled';
 
 interface PropsInterface {
-  nftFeed: NftFeedItemInterface[];
+  nftFeed: NewsfeedItemInterface[];
+  nftItems: NftItemModelInterface[];
   currentUser: UserModelInterface | null;
   onTeleport: (nft: NftItemModelInterface) => void;
   onAttend: (nft: NftItemModelInterface) => void;
@@ -17,8 +18,8 @@ interface PropsInterface {
   onOpenOdyssey?: (uuid: string) => void;
 }
 
-const NewsFeed: FC<PropsInterface> = (props) => {
-  const {nftFeed, currentUser, onTeleport, onAttend, onConnect, onOpenOdyssey} = props;
+const NewsfeedList: FC<PropsInterface> = (props) => {
+  const {nftFeed, nftItems, currentUser, onTeleport, onAttend, onConnect, onOpenOdyssey} = props;
 
   return (
     <styled.Container data-testid="NewsFeed-test">
@@ -31,9 +32,10 @@ const NewsFeed: FC<PropsInterface> = (props) => {
         {!!nftFeed.length && (
           <>
             {nftFeed.map((item, index) => (
-              <NewsFeedItem
+              <NewsfeedItem
                 key={index}
                 item={item}
+                nftItems={nftItems}
                 currentUser={currentUser}
                 onTeleport={onTeleport}
                 onConnect={onConnect}
@@ -48,4 +50,4 @@ const NewsFeed: FC<PropsInterface> = (props) => {
   );
 };
 
-export default observer(NewsFeed);
+export default observer(NewsfeedList);

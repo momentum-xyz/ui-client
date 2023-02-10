@@ -32,8 +32,8 @@ const ExplorePage: FC = () => {
 
         <styled.Boxes>
           <ExplorePanel
-            odysseyCount={nftStore.nftItems.length}
-            nftFeed={exploreStore.nftFeed}
+            newsfeed={exploreStore.newsfeed}
+            nftItems={nftStore.nftItems}
             searchQuery={nftStore.searchQuery}
             odysseyList={nftStore.searchedNftItems}
             currentUser={sessionStore.user}
