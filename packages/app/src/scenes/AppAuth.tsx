@@ -35,8 +35,6 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
         sessionStore.fetchProfileJobStatus().then((status) => {
           if (status === CheckJobStatusEnum.StatusDone) {
             sessionStore.clearJobId();
-
-            // TODO: Update data
             sessionStore.loadUserProfile();
             nftStore.fetchNfts();
 

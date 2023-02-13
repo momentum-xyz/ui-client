@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {SinusBox} from 'ui-kit';
+import {NewsfeedTypeEnum} from 'core/enums';
 
 import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
@@ -29,9 +30,9 @@ const BirthOfMePage: FC = () => {
     }
 
     if (nft) {
-      await exploreStore.createNewsFeedItem({
-        ...nft,
-        type: 'created',
+      await exploreStore.createNewsfeedItem({
+        uuid: nft.uuid,
+        type: NewsfeedTypeEnum.CREATED,
         date: new Date().toISOString()
       });
     }

@@ -1,8 +1,6 @@
-import {types, Instance, flow} from 'mobx-state-tree';
-import {RequestModel} from '@momentum-xyz/core';
+import {types, Instance} from 'mobx-state-tree';
 import {ImageSizeEnum, UserStatusEnum} from '@momentum-xyz/ui-kit';
 
-import {api} from 'api';
 import {UserProfile} from 'core/models';
 import {appVariables} from 'api/constants';
 
@@ -17,11 +15,7 @@ const User = types
     wallet: types.maybeNull(types.string),
     status: types.maybeNull(types.enumeration(Object.values(UserStatusEnum))),
     profile: UserProfile,
-    isGuest: types.maybe(types.boolean),
-
-    // TODO: Make separate model
-    inviteRequest: types.optional(RequestModel, {}),
-    invited: false
+    isGuest: types.maybe(types.boolean)
   })
   .views((self) => ({
     get avatarSrc(): string | undefined {
@@ -29,24 +23,6 @@ const User = types
         self.profile.avatarHash &&
         `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.profile.avatarHash}`
       );
-    }
-  }))
-  .actions((self) => ({
-    // TODO: Move to another model
-    invite: flow(function* (spaceId: string) {
-      yield self.inviteRequest.send(api.spaceInviteRepository.inviteToSpaceOrTable, {
-        spaceId,
-        userId: self.id,
-        isTable: false
-      });
-
-      self.invited = true;
-
-      return self.inviteRequest.isDone;
-    }),
-    // TODO: Move to another model
-    setInvited(invited: boolean) {
-      self.invited = invited;
     }
   }));
 

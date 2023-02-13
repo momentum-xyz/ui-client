@@ -5,17 +5,17 @@ import {useTranslation} from 'react-i18next';
 import cn from 'classnames';
 
 import {Box} from 'ui-kit';
-import {NftFeedItemInterface} from 'api';
+import {NewsfeedItemInterface} from 'api';
 import {SearchQueryModelModelType, UserModelInterface} from 'core/models';
 import {NftItemModelInterface} from 'core/models';
 
-import {NewsFeed, OdysseyList} from './components';
+import {NewsfeedList, OdysseyList} from './components';
 import * as styled from './ExplorePanel.styled';
 
 interface PropsInterface {
-  odysseyCount: number;
   searchQuery: SearchQueryModelModelType;
-  nftFeed: NftFeedItemInterface[];
+  newsfeed: NewsfeedItemInterface[];
+  nftItems: NftItemModelInterface[];
   odysseyList: NftItemModelInterface[];
   currentUser: UserModelInterface | null;
   onSearch: () => void;
@@ -29,8 +29,8 @@ interface PropsInterface {
 const SEARCH_DELAY_MS = 200;
 
 const ExplorePanel: FC<PropsInterface> = ({
-  odysseyCount,
-  nftFeed,
+  newsfeed,
+  nftItems,
   odysseyList,
   searchQuery,
   currentUser,
@@ -49,7 +49,7 @@ const ExplorePanel: FC<PropsInterface> = ({
     <Box size="big">
       <styled.Heading>
         <IconSvg name="planet" size="large" />
-        <styled.Number>{odysseyCount}</styled.Number>
+        <styled.Number>{nftItems.length}</styled.Number>
       </styled.Heading>
       <styled.Message>
         <Text size="xxs" text="People have minted their" align="right" />
@@ -74,8 +74,9 @@ const ExplorePanel: FC<PropsInterface> = ({
 
       <styled.Body>
         {!searchQuery.isQueryValid && (
-          <NewsFeed
-            nftFeed={nftFeed}
+          <NewsfeedList
+            nftFeed={newsfeed}
+            nftItems={nftItems}
             currentUser={currentUser}
             onTeleport={onTeleport}
             onConnect={onConnect}
