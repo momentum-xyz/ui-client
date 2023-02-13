@@ -1,7 +1,6 @@
-import {flow, types, cast} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, UserSearchResponse} from 'api';
 import {SpaceUserModel, UserInfo} from 'core/models';
 
 const SearchUsersStore = types.compose(
@@ -16,18 +15,7 @@ const SearchUsersStore = types.compose(
     })
     .actions((self) => ({
       search: flow(function* (query: string, worldId: string) {
-        const response: UserSearchResponse = yield self.searchRequest.send(
-          api.userRepository_OLD.search,
-          {
-            q: query,
-            worldId
-          }
-        );
-
-        if (response) {
-          self.results = cast(response.results);
-          self.showResults = response.results.length > 0;
-        }
+        yield Promise.resolve();
       }),
       hideResults() {
         self.showResults = false;

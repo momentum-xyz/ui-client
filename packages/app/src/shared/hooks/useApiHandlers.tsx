@@ -24,9 +24,10 @@ export const useApiHandlers = () => {
 
       switch (status) {
         case httpErrorCodes.MAINTENANCE:
-          toast.info(
+          toast.error(
             <ToastContent
-              headerIconName="check"
+              isDanger
+              headerIconName="alert"
               title={statusString}
               text={t('systemMessages.underMaintenance')}
               showCloseButton
@@ -35,11 +36,24 @@ export const useApiHandlers = () => {
           break;
 
         case httpErrorCodes.INTERNAL_SYSTEM_ERROR:
-          toast.info(
+          toast.error(
             <ToastContent
-              headerIconName="check"
+              isDanger
+              headerIconName="alert"
               title={statusString}
               text={t('errors.somethingWentWrong')}
+              showCloseButton
+            />
+          );
+          break;
+
+        case httpErrorCodes.FORBIDDEN:
+          toast.error(
+            <ToastContent
+              isDanger
+              headerIconName="alert"
+              title={t('errors.permissionsMissing')}
+              text={t('errors.permissionsWrong')}
               showCloseButton
             />
           );

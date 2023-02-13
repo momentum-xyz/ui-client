@@ -16,6 +16,7 @@ import {BN} from '@polkadot/util';
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 import {convertToHex} from 'core/utils';
+import {NewsfeedTypeEnum} from 'core/enums';
 
 import * as styled from './StakingForm.styled';
 
@@ -80,70 +81,63 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
 
   const nft = nftItems.find((nft) => nft.id === nftItemId);
   const myNft = nftItems.find((nft) => nft.owner === wallet);
-  console.log('StakingForm', {wallet, addresses, authWallet, amountString, amountAtoms, nft});
 
+  console.log('StakingForm', {wallet, addresses, authWallet, amountString, amountAtoms, nft});
   console.log('initiatorAccount', initiatorAccount, nft);
 
-  const onStake = (amountAtoms: BN) => {
-    console.log('onStake', wallet, nftItemId, amountAtoms);
+  const onStake = async (amountAtoms: BN) => {
+    try {
+      console.log('onStake', wallet, nftItemId, amountAtoms);
+      await nftStore.stake(wallet, amountAtoms, nftItemId);
 
-    nftStore
-      .stake(wallet, amountAtoms, nftItemId)
-      .then(() => {
-        console.log('stake success');
+      if (myNft && nft) {
+        const isMutual = nftStore.stakingAtMe.has(nft.owner);
+        console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
 
-        if (myNft && nft) {
-          const isMutual = nftStore.stakingAtMe.has(nft.owner);
-          console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
-
-          exploreStore.createNewsFeedItem({
-            ...myNft,
-            type: 'connected',
-            mutual: isMutual,
-            date: new Date().toISOString(),
-            connectedTo: {
-              ...nft,
-              type: 'connected',
-              date: new Date().toISOString()
-            }
-          });
-
-          if (isMutual) {
-            const walletAHex = convertToHex(wallet);
-            const walletBHex = convertToHex(nft?.owner);
-            console.log({walletAHex, walletBHex});
-            exploreStore.createMutualDocks(walletAHex, walletBHex);
+        await exploreStore.createNewsfeedItem({
+          uuid: myNft.uuid,
+          type: NewsfeedTypeEnum.CONNECTED,
+          date: new Date().toISOString(),
+          connectedTo: {
+            uuid: nft.uuid,
+            isMutual
           }
+        });
+
+        if (isMutual) {
+          const walletAHex = convertToHex(wallet);
+          const walletBHex = convertToHex(nft?.owner);
+          console.log({walletAHex, walletBHex});
+          await exploreStore.createMutualDocks(walletAHex, walletBHex);
         }
-      })
-      .then(() => {
-        if (nft) {
-          toast.info(
-            <ToastContent
-              headerIconName="alert"
-              title={t('staking.stakeSuccessTitle')}
-              text={t('staking.stakeSuccess', {
-                amount: amountString,
-                name: nft?.name
-              })}
-              showCloseButton
-            />
-          );
-        }
-        onComplete();
-      })
-      .catch((err) => {
-        console.log('stake error', err);
-        toast.error(
+
+        console.log('stake success');
+        toast.info(
           <ToastContent
             headerIconName="alert"
-            isDanger
-            title={t('staking.stakeErrorTitle')}
-            text={t('staking.error')}
+            title={t('staking.stakeSuccessTitle')}
+            text={t('staking.stakeSuccess', {
+              amount: amountString,
+              name: nft?.name
+            })}
             showCloseButton
           />
         );
-      });
+      }
+    } catch (err) {
+      console.log('stake error', err);
+      toast.error(
+        <ToastContent
+          headerIconName="alert"
+          isDanger
+          title={t('staking.stakeErrorTitle')}
+          text={t('staking.error')}
+          showCloseButton
+        />
+      );
+    } finally {
+      onComplete();
+    }
   };
 
   const onStakeAmountInput = (val: string) => {

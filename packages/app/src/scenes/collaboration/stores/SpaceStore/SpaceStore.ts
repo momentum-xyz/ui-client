@@ -178,13 +178,14 @@ const SpaceStore = types
         return;
       }
 
-      yield self.inviteUserRequest.send(api.userRepository_OLD.inviteToSpace, {
+      yield Promise.resolve();
+      /*yield self.inviteUserRequest.send(api.userRepository_OLD.inviteToSpace, {
         invitedUser: {
           email,
           spaceId: self.space?.id || '',
           isAdmin
         }
-      });
+      });*/
     }),
     // TODO: Move to SpaceAdminStore Model
     removeUser: flow(function* (userId: string) {

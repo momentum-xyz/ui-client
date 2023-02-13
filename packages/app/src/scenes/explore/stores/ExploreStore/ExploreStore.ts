@@ -1,32 +1,32 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, NewsFeedResponse, NftFeedItemInterface} from 'api';
+import {api, NewsfeedResponse, NewsfeedItemInterface} from 'api';
 
 const ExploreStore = types
   .compose(
     ResetModel,
     types.model('ExploreStore', {
-      nftFeed: types.optional(types.array(types.frozen<NftFeedItemInterface>()), []),
+      newsfeed: types.optional(types.array(types.frozen<NewsfeedItemInterface>()), []),
       request: types.optional(RequestModel, {}),
       createRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
     init(): void {
-      self.fetchNewsFeed();
+      self.fetchNewsfeed();
     },
-    fetchNewsFeed: flow(function* () {
-      const response: NewsFeedResponse = yield self.request.send(api.feedRepository.fetchFeed, {});
+    fetchNewsfeed: flow(function* () {
+      const response: NewsfeedResponse = yield self.request.send(api.newsfeedRepository.fetch, {});
       if (response) {
-        self.nftFeed = cast(response.items);
+        self.newsfeed = cast(response.items);
       }
     })
   }))
   .actions((self) => ({
-    createNewsFeedItem: flow(function* (item: NftFeedItemInterface) {
-      yield self.request.send(api.feedRepository.createFeedItem, {item});
-      self.fetchNewsFeed();
+    createNewsfeedItem: flow(function* (item: NewsfeedItemInterface) {
+      yield self.request.send(api.newsfeedRepository.create, {item});
+      self.fetchNewsfeed();
     }),
     createMutualDocks: flow(function* (walletA: string, walletB: string) {
       console.log('create mutual-docks', walletA, walletB);
