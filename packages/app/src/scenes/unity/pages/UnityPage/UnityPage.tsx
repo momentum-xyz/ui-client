@@ -5,17 +5,16 @@ import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-do
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
-import {Portal, UserStatusEnum} from '@momentum-xyz/ui-kit';
+import {Portal} from '@momentum-xyz/ui-kit';
 
 import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 import {appVariables} from 'api/constants';
-import {ROUTES, TELEPORT_DELAY_MS} from 'core/constants';
+import {ROUTES} from 'core/constants';
 import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
 import {
   UnityLoader,
   ToastContent,
   HighFiveContent,
-  InvitationContent,
   TOAST_BASE_OPTIONS,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
@@ -142,38 +141,9 @@ const UnityPage: FC = () => {
     }
   });
 
+  // FIXME: FYI: It is not used anymore
   usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
     console.info('[POSBUS EVENT] space-invite', spaceId, invitorId, invitorName, uiTypeId);
-    // FIXME: Temporary solution. To get space name from Unity
-    const spaceName = await unityInstanceStore.fetchSpaceName(spaceId);
-
-    // TODO: Remove this after UserController will send profile changes
-    const isTable = uiTypeId === appVariables.GAT_UI_TYPE_ID;
-    if (isTable && sessionStore.user?.status === UserStatusEnum.DO_NOT_DISTURB) {
-      return;
-    }
-
-    const handleJoinSpace = () => {
-      unityInstanceStore.teleportToSpace(spaceId);
-
-      setTimeout(() => {
-        navigate({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
-      }, TELEPORT_DELAY_MS);
-    };
-
-    const handleJoinTable = () => {
-      navigate({pathname: generatePath(ROUTES.grabTable, {spaceId})});
-    };
-
-    toast.info(
-      <InvitationContent
-        invitorName={invitorName}
-        spaceName={spaceName}
-        join={isTable ? handleJoinTable : handleJoinSpace}
-        isTable={isTable}
-      />,
-      TOAST_NOT_AUTO_CLOSE_OPTIONS
-    );
   });
 
   usePosBusEvent('high-five', (senderId, message) => {

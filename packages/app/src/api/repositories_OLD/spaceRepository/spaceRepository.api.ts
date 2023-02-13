@@ -1,6 +1,3 @@
-import {AxiosRequestConfig} from 'axios';
-import {generatePath} from 'react-router-dom';
-
 import {RequestInterface} from 'api/interfaces';
 import {request} from 'api/request';
 
@@ -8,8 +5,6 @@ import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 import {
   AddUserRequest,
   AddUserResponse,
-  CreateInitiativeRequest,
-  CreateInitiativeResponse,
   CreateSpaceRequest,
   CreateSpaceResponse,
   OldDeleteSpaceRequest,
@@ -20,16 +15,8 @@ import {
   EditUserResponse,
   RemoveUserRequest,
   RemoveUserResponse,
-  OldSearchSpacesRequest,
-  OldSearchSpacesResponse,
   OldSpaceRequest,
-  SpaceResponse,
-  UserOwnedSpacesRequest,
-  UserOwnedSpacesResponse,
-  UserSpaceListItemResponse,
-  UserSpaceListRequest,
-  WorldConfigRequest,
-  WorldConfigResponse
+  SpaceResponse
 } from './spaceRepository.api.types';
 
 export const fetchSpace: RequestInterface<OldSpaceRequest, SpaceResponse> = (options) => {
@@ -79,60 +66,4 @@ export const create: RequestInterface<CreateSpaceRequest, CreateSpaceResponse> =
   const {space, ...restOptions} = options;
 
   return request.post(spaceRepositoryEndpoints().create, space, restOptions);
-};
-
-export const fetchUserOwnedSpaces: RequestInterface<
-  UserOwnedSpacesRequest,
-  UserOwnedSpacesResponse
-> = (options) => {
-  const {worldId, ...restOptions} = options;
-
-  const config: AxiosRequestConfig = {
-    ...restOptions,
-    params: {
-      world: worldId
-    }
-  };
-
-  return request.get(spaceRepositoryEndpoints().ownedSpaces, config);
-};
-
-export const fetchUserSpaceList: RequestInterface<
-  UserSpaceListRequest,
-  UserSpaceListItemResponse[]
-> = (options) => {
-  const {userId, ...restOptions} = options;
-  const url = generatePath(spaceRepositoryEndpoints().userSpaceList, {userId});
-  return request.get(url, restOptions);
-};
-
-export const createInitiative: RequestInterface<
-  CreateInitiativeRequest,
-  CreateInitiativeResponse
-> = (options) => {
-  const {initiative, ...restOptions} = options;
-  return request.post(spaceRepositoryEndpoints().createInitiative, initiative, restOptions);
-};
-
-export const searchSpaces: RequestInterface<OldSearchSpacesRequest, OldSearchSpacesResponse> = (
-  options
-) => {
-  const {q, worldId, ...restOptions} = options;
-
-  restOptions.params = {
-    q,
-    worldId
-  };
-
-  return request.get(spaceRepositoryEndpoints().search, restOptions);
-};
-
-export const fetchWorldConfig: RequestInterface<WorldConfigRequest, WorldConfigResponse> = (
-  options
-) => {
-  const {worldId, ...restOptions} = options;
-
-  const url = generatePath(spaceRepositoryEndpoints().worldConfig, {worldId});
-
-  return request.get(url, restOptions);
 };
