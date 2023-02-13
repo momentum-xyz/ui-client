@@ -79,8 +79,9 @@ const SpawnAssetStore = types
           preview_hash
         }
       );
+
       console.log('uploadAsset response', response);
-      return !!response;
+      return self.uploadAssetRequest.isDone;
     }),
     uploadImageToMediaManager: flow(function* (file: File) {
       const data = {file: file};

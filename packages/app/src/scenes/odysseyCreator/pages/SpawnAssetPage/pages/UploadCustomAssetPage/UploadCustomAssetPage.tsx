@@ -48,16 +48,26 @@ const UploadCustomAssetPage: FC = () => {
         }
       }
 
-      await spawnAssetStore.uploadAsset(asset, preview_hash);
-
-      toast.info(
-        <ToastContent
-          headerIconName="check"
-          title={t('titles.success')}
-          text={t('messages.assetUploadedSuccesfully')}
-          showCloseButton
-        />
-      );
+      if (await spawnAssetStore.uploadAsset(asset, preview_hash)) {
+        toast.info(
+          <ToastContent
+            headerIconName="check"
+            title={t('titles.success')}
+            text={t('messages.assetUploaded')}
+            showCloseButton
+          />
+        );
+      } else {
+        toast.error(
+          <ToastContent
+            isDanger
+            headerIconName="alert"
+            title={t('titles.failedToUpload')}
+            text={t('messages.assetNotUploaded')}
+            showCloseButton
+          />
+        );
+      }
     }
   }, [asset, spawnAssetStore, t]);
 
@@ -114,7 +124,9 @@ const UploadCustomAssetPage: FC = () => {
           <Button
             label={t('actions.addToLibrary')}
             onClick={handleAddToLbrary}
-            disabled={!spawnAssetStore.uploadedAssetName || !!error}
+            disabled={
+              !spawnAssetStore.uploadedAssetName || !!error || spawnAssetStore.isUploadPending
+            }
           />
         </>
       )}
