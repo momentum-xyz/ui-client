@@ -211,6 +211,8 @@ export const enGb = {
       endDateGraterThanStartDate: 'End date has to be grater than start date',
       nameConstraints: 'Please enter a name with 2-32 characters',
       somethingWentWrong: 'Something went wrong',
+      permissionsMissing: 'Missing permissions',
+      permissionsWrong: "Oops, looks like you don't have permissions for this action!",
       somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
       noWorldBuilderPermissions:
         'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account',
