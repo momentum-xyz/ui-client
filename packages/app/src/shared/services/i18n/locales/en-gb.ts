@@ -713,9 +713,7 @@ export const enGb = {
         VIDEO: 'Video',
         DOCK: 'Dock station',
         MIRO: 'Miro',
-        MIRO_LOCAL: 'Miro (local)',
-        GOOGLE_DRIVE: 'Google drive',
-        GOOGLE_DRIVE_LOCAL: 'Google drive (local)'
+        GOOGLE_DRIVE: 'Google Drive'
       }
     },
     descriptions: {
