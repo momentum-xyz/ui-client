@@ -22,28 +22,54 @@ interface PluginStateInterface extends Record<string, unknown> {
 const stateToQuery = (state: PluginStateInterface): string | null => {
   const {video_url, youtube_url, state: nestedState} = state;
   const url = video_url || youtube_url || nestedState?.video_url;
+
   // parse shared url and create embed url for youtube, twitch, vimeo
   if (url) {
-    if (url.includes('youtube.com')) {
-      const videoId = url.split('v=')[1].split('&')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    } else if (url.includes('youtu.be')) {
-      const videoId = url.split('/')[3];
-      return `https://www.youtube.com/embed/${videoId}`;
-    } else if (url.includes('twitch.tv')) {
-      const videoId = url.split('/')[3];
-      if (/^\d+$/.test(videoId)) {
-        return `https://player.twitch.tv/?video=${videoId}&parent=${window.location.hostname}`;
-      } else {
-        return `https://player.twitch.tv/?channel=${videoId}&parent=${window.location.hostname}`;
+    try {
+      const [urlBase, paramsString] = url.split('?');
+      const searchParams = new URLSearchParams(paramsString);
+
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        const videoId = url.includes('youtube.com') ? searchParams.get('v') : urlBase.split('/')[3];
+        assert(videoId);
+
+        searchParams.delete('v');
+
+        if (searchParams.has('t')) {
+          searchParams.set('start', String(parseInt(searchParams.get('t') || '')));
+          searchParams.delete('t');
+        }
+
+        return `https://www.youtube.com/embed/${videoId}?${searchParams.toString()}`;
+      } else if (url.includes('twitch.tv')) {
+        const videoId = url.split('/')[3];
+        assert(videoId);
+        searchParams.set('parent', window.location.hostname);
+        if (/^\d+$/.test(videoId)) {
+          searchParams.set('video', videoId);
+          return `https://player.twitch.tv/?${searchParams.toString()}`;
+        } else {
+          searchParams.set('channel', videoId);
+          return `https://player.twitch.tv/?${searchParams.toString()}`;
+        }
+      } else if (url.includes('vimeo.com')) {
+        const videoId = url.split('/')[3];
+        assert(videoId);
+        return `https://player.vimeo.com/video/${videoId}?${searchParams.toString()}`;
       }
-    } else if (url.includes('vimeo.com')) {
-      const videoId = url.split('/')[3];
-      return `https://player.vimeo.com/video/${videoId}`;
+    } catch (e) {
+      console.log('Error parsing url:', e);
+      return null;
     }
   }
 
   return null;
+};
+
+const assert = (value: string | null) => {
+  if (!value) {
+    throw new Error('Missing required field');
+  }
 };
 
 const usePlugin: UsePluginHookType = (props) => {
@@ -53,6 +79,7 @@ const usePlugin: UsePluginHookType = (props) => {
   const [editMode, setEditMode] = useState(false);
   const [modifiedState, setModifiedState] = useState<PluginStateInterface | null>(null);
   const [error, setError] = useState<string>();
+  const isModifiedStateError = modifiedState?.video_url ? !stateToQuery(modifiedState) : false;
 
   const [sharedState, setSharedState] = useSharedObjectState<PluginStateInterface>();
   console.log('sharedState', sharedState);
@@ -81,7 +108,7 @@ const usePlugin: UsePluginHookType = (props) => {
     <span />
   ) : editMode ? (
     <>
-      <Button onClick={handleConfigSave} label="Save" />
+      <Button onClick={handleConfigSave} label="Save" disabled={isModifiedStateError} />
       &nbsp;
       <Button onClick={handleCancel} label="Cancel" />
     </>
@@ -105,8 +132,8 @@ const usePlugin: UsePluginHookType = (props) => {
             '')
         }
         onChange={(value) => setModifiedState({video_url: value})}
-        isError={!!error}
-        errorMessage={error}
+        isError={!!error || isModifiedStateError}
+        errorMessage={error || 'Invalid or unsupported URL'}
       />
     </div>
   ) : embedUrl ? (
