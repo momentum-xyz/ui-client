@@ -37,6 +37,7 @@ const Map3dRender: FC<PropsInterface> = ({
 
   useEffect(() => {
     return () => {
+      console.log('clear3dScene');
       clear3dScene();
     };
   }, [clear3dScene]);
