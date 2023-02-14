@@ -86,7 +86,7 @@ const ObjectFunctionalityStore = types
   .views(() => ({
     get asset2dOptions(): OptionInterface[] {
       return Object.entries(BasicAsset2dIdEnum)
-        .filter(([key]) => key !== BasicAsset2dIdEnum.DOCK)
+        .filter(([, value]) => value !== BasicAsset2dIdEnum.DOCK)
         .map(([key, value]) => {
           return {
             label: t(`enums.basicAsset2dId.${key}`),
