@@ -1,13 +1,11 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import cn from 'classnames';
-import {Portal, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {ScreenSectionsEnum, SectionedScreenPortal, WindowPanel} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 
 import {ScreenChoice, ScreenVideo} from './components/templates';
-import * as styled from './ScreenShareWidget.styled';
 
 const ScreenShareWidget: FC = () => {
   const {widgetsStore, agoraStore, sessionStore, unityStore} = useStore();
@@ -43,50 +41,31 @@ const ScreenShareWidget: FC = () => {
   };
 
   return (
-    <Portal data-testid="ScreenShareWidget-test">
-      <styled.Modal className={cn(screenShareStore.isExpanded && 'expanded')}>
-        <styled.HeaderElement className="left">
-          <styled.Title>
-            <Text
-              text={unityWorldStore.world?.name}
-              transform="uppercase"
-              weight="medium"
-              size="xl"
-              isMultiline={false}
-            />
-          </styled.Title>
-          <styled.SubTitle>
-            <Text
-              text={`/ ${t('labels.screenShare')}`}
-              transform="uppercase"
-              size="xl"
-              isMultiline={false}
-            />
-          </styled.SubTitle>
-        </styled.HeaderElement>
-        <styled.HeaderElement className="right">
-          <SvgButton
-            iconName={screenShareStore.isExpanded ? 'minimise' : 'fullscreen'}
-            size="medium-large"
-            onClick={screenShareStore.togglePage}
-            isWhite
+    <SectionedScreenPortal
+      data-testid="ScreenShareWidget-test"
+      section={
+        screenShareStore.isExpanded ? ScreenSectionsEnum.TOP_LEFT : ScreenSectionsEnum.BOTTOM_RIGHT
+      }
+      maximized={screenShareStore.isExpanded}
+    >
+      <WindowPanel
+        title={unityWorldStore.world?.name || ''}
+        subtitle={t('labels.screenShare')}
+        initialIsExpanded={screenShareStore.isExpanded}
+        onToggleExpand={screenShareStore.togglePage}
+        onClose={handleClose}
+      >
+        {!localVideoTrack && !remoteVideoTrack ? (
+          <ScreenChoice
+            isSettingUp={agoraScreenShareStore.isSettingUp}
+            // canShare={//share permission}
+            startScreenShare={startScreenSharing}
           />
-
-          <SvgButton iconName="close" size="medium-large" isWhite onClick={handleClose} />
-        </styled.HeaderElement>
-        <styled.InnerContainer>
-          {!localVideoTrack && !remoteVideoTrack ? (
-            <ScreenChoice
-              isSettingUp={agoraScreenShareStore.isSettingUp}
-              // canShare={//share permission}
-              startScreenShare={startScreenSharing}
-            />
-          ) : (
-            <ScreenVideo videoTrack={localVideoTrack ? localVideoTrack : remoteVideoTrack} />
-          )}
-        </styled.InnerContainer>
-      </styled.Modal>
-    </Portal>
+        ) : (
+          <ScreenVideo videoTrack={localVideoTrack ? localVideoTrack : remoteVideoTrack} />
+        )}
+      </WindowPanel>
+    </SectionedScreenPortal>
   );
 };
 

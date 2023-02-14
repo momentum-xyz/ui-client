@@ -3,7 +3,8 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {
   ErrorBoundary,
-  // ObjectTopBar, SpacePage,
+  ScreenSectionsEnum,
+  SectionedScreenPortal,
   Text,
   WindowPanel
 } from '@momentum-xyz/ui-kit';
@@ -103,7 +104,13 @@ const PluginInnerWrapper = ({
   const {content, objectView} = plugin.usePlugin(pluginProps);
 
   return !pluginLoader.isError ? (
-    <styled.Wrapper>
+    <SectionedScreenPortal
+      data-testid="ObjectPluginPage-test"
+      section={
+        pluginLoader.isExpanded ? ScreenSectionsEnum.TOP_LEFT : ScreenSectionsEnum.BOTTOM_RIGHT
+      }
+      maximized={pluginLoader.isExpanded}
+    >
       {content ? (
         <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
           {content}
@@ -113,6 +120,8 @@ const PluginInnerWrapper = ({
           title={objectView.title || ''}
           subtitle={objectView.subtitle}
           actions={objectView.actions}
+          initialIsExpanded={pluginLoader.isExpanded}
+          onToggleExpand={pluginProps.onToggleExpand}
           onClose={pluginProps.onClose}
         >
           {objectView.content}
@@ -120,7 +129,7 @@ const PluginInnerWrapper = ({
       ) : (
         <Text text={t('errors.errorPluginContactDev')} size="l" />
       )}
-    </styled.Wrapper>
+    </SectionedScreenPortal>
   ) : (
     <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
   );

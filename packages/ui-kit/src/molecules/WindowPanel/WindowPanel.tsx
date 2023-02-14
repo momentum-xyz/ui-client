@@ -10,6 +10,8 @@ interface PropsInterface {
   subtitle?: string;
   actions?: React.ReactNode;
   onClose?: () => void;
+  initialIsExpanded?: boolean;
+  onToggleExpand?: (isExpanded: boolean) => void;
 }
 
 const WindowPanel: FC<PropsInterface> = ({
@@ -18,9 +20,11 @@ const WindowPanel: FC<PropsInterface> = ({
   title,
   subtitle,
   actions,
+  initialIsExpanded = false,
+  onToggleExpand,
   onClose
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(initialIsExpanded);
 
   return (
     <styled.Container data-testid={dataTestId} className={isExpanded ? 'expanded' : undefined}>
@@ -28,7 +32,11 @@ const WindowPanel: FC<PropsInterface> = ({
         title={title}
         subtitle={subtitle}
         isExpanded={isExpanded}
-        onToggleExpand={() => setIsExpanded((isExpanded) => !isExpanded)}
+        onToggleExpand={() => {
+          const newVal = !isExpanded;
+          setIsExpanded(newVal);
+          onToggleExpand?.(newVal);
+        }}
         onClose={onClose}
       >
         {actions}

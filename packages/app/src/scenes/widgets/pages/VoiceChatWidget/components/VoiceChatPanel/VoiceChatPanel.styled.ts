@@ -40,7 +40,7 @@ export const EnterLeaveButton = styled.button`
 
 export const VoiceActions = styled.div`
   display: flex;
-  height: 55px;
+  height: 48px;
   width: 100%;
   align-items: center;
   justify-content: center;
