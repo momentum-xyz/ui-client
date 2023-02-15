@@ -47,7 +47,8 @@ export const fetchDocksCount: RequestInterface<GetDocksCountRequest, GetDocksCou
 };
 
 export const postSpace: RequestInterface<PostSpaceRequest, PostSpaceResponse> = (options) => {
-  const {space_name, parent_id, space_type_id, asset_2d_id, asset_3d_id, ...restOptions} = options;
+  const {space_name, parent_id, space_type_id, asset_2d_id, asset_3d_id, minimap, ...restOptions} =
+    options;
 
   return request.post(
     spaceRepositoryEndpoints().base,
@@ -56,7 +57,8 @@ export const postSpace: RequestInterface<PostSpaceRequest, PostSpaceResponse> = 
       space_type_id,
       parent_id,
       asset_2d_id,
-      asset_3d_id
+      asset_3d_id,
+      minimap
     },
     restOptions
   );
