@@ -46,7 +46,7 @@ const UnityPage: FC = () => {
 
     let worldId = '';
     paths.forEach((path) => {
-      const match = matchPath({path: path}, location.pathname);
+      const match = matchPath({path: path, end: false}, location.pathname);
       // const match = matchPath<{worldId: string}>({path: path}, location.pathname);
       if (match?.params?.worldId) {
         worldId = match.params.worldId;

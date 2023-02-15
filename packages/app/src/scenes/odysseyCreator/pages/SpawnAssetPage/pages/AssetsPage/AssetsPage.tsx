@@ -40,7 +40,9 @@ const AssetsPage: FC<PropsInterface> = ({
     (asset: Asset3dInterface) => {
       spawnAssetStore.selectAsset(asset);
       navigate(
-        generatePath(ROUTES.odyssey.creator.spawnAsset.selected, {
+        // FIXME - remove ../
+        generatePath('../' + ROUTES.odyssey.creator.spawnAsset.selected, {
+          // not needed anymore
           worldId,
           assetCategory
         }),

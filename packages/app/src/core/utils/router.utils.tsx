@@ -6,7 +6,7 @@ import {ProtectedRouteListInterface, RouteConfigInterface} from 'core/interfaces
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
-    return !!matchPath({path: route.path, end: true}, currentPath);
+    return !!matchPath({path: route.path, end: route.exact}, currentPath);
   });
 };
 
@@ -38,10 +38,8 @@ export const createSwitchByConfig = (
 ): ReactElement<RoutesProps, any> => {
   return (
     <Routes>
-      <Route path="/">
-        {createRoutesByConfig({routes, defaultRedirect, hasRights})}
-        {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
-      </Route>
+      {createRoutesByConfig({routes, defaultRedirect, hasRights})}
+      {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
     </Routes>
   );
 };
