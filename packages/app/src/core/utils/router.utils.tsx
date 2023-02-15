@@ -1,8 +1,10 @@
 import {ReactElement} from 'react';
-import {matchPath, Navigate, Route, Routes, RoutesProps} from 'react-router-dom';
+import {Link, matchPath, Navigate, Route, Routes, RoutesProps} from 'react-router-dom';
 
 import {createProtectedRouteElement} from 'ui-kit/utils/create-protected-route-element';
 import {ProtectedRouteListInterface, RouteConfigInterface} from 'core/interfaces';
+
+const isDevEnv = process.env.NODE_ENV === 'development';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
@@ -39,7 +41,22 @@ export const createSwitchByConfig = (
   return (
     <Routes>
       {createRoutesByConfig({routes, defaultRedirect, hasRights})}
-      {defaultRedirect && <Route path="*" element={<Navigate to={defaultRedirect} replace />} />}
+      {defaultRedirect && (
+        <Route
+          path="*"
+          element={
+            isDevEnv ? (
+              <div style={{color: '#a9a9a9'}}>
+                <div>Route not found</div>
+                <pre>{JSON.stringify(routes, null, 2)}</pre>
+                <Link to={defaultRedirect}>Go to defaultRedirect route: "{defaultRedirect}"</Link>
+              </div>
+            ) : (
+              <Navigate to={defaultRedirect} replace />
+            )
+          }
+        />
+      )}
     </Routes>
   );
 };
