@@ -3,13 +3,12 @@ import cn from 'classnames';
 
 import {UserStatusEnum} from '../../enums';
 import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType} from '../../types';
 
 import * as styled from './Avatar.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+export interface AvatarPropsInterface extends PropsWithThemeInterface {
   avatarSrc?: string;
-  size: SizeType;
+  size: 'large' | 'normal' | 'medium' | 'small' | 'extra-small';
   status?: UserStatusEnum | null;
   onClick?: () => void;
   showBorder?: boolean;
@@ -17,7 +16,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   className?: string;
 }
 
-const Avatar: FC<PropsInterface> = ({
+const Avatar: FC<AvatarPropsInterface> = ({
   avatarSrc,
   size,
   className,

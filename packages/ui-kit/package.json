@@ -14,7 +14,9 @@
     "start": "yarn copy-files && tsc -w",
     "copy-files": "copyfiles -u 1 src/**/*.svg dist/",
     "svg-sprite:build": "node scripts/buildSvgSprite.js",
-    "svg-sprite:type": "node scripts/generateIconsType.js"
+    "svg-sprite:type": "node scripts/generateIconsType.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@headlessui/react": "^1.2.0",
@@ -32,6 +34,17 @@
     "svg-sprite": "^1.5.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@react-theming/storybook-addon": "^1.1.10",
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-interactions": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/builder-webpack5": "^6.5.16",
+    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/react": "^6.5.16",
+    "@storybook/testing-library": "^0.0.13",
+    "babel-loader": "^8.3.0",
     "copyfiles": "^2.4.1",
     "require-context": "^1.1.0",
     "rimraf": "^3.0.2"

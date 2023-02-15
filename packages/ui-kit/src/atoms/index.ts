@@ -20,3 +20,4 @@ export * from './SpacePage';
 export * from './LoaderFallback';
 export * from './SectionedScreen';
 export * from './SectionedScreenPortal';
+export * from './GridViewer';

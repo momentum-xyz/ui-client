@@ -4,9 +4,9 @@ import {PropsWithThemeInterface} from '../../interfaces';
 
 import * as styled from './Loader.styled';
 
-const Loader: FC<PropsWithThemeInterface> = () => {
+const Loader: FC<PropsWithThemeInterface> = (props) => {
   return (
-    <styled.Container data-testid="Loader-test">
+    <styled.Container data-testid="Loader-test" theme={props.theme}>
       <styled.Item />
       <styled.Item />
       <styled.Item />
