@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Image, Text} from '@momentum-xyz/ui-kit';
+import {Avatar, Button, Text} from '@momentum-xyz/ui-kit';
 import {newsfeedDateString} from '@momentum-xyz/core';
 
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -22,12 +22,13 @@ const CreatedItem: FC<PropsInterface> = (props) => {
 
   return (
     <>
-      <styled.OneAvatar onClick={() => onOpenOdyssey?.(item.uuid)}>
-        <Image
-          src={getImageAbsoluteUrl(nftItem.image)}
-          sizeProps={{width: '58px', height: '58px'}}
-        />
-      </styled.OneAvatar>
+      <Avatar
+        size="normal"
+        showBorder
+        showHover
+        avatarSrc={getImageAbsoluteUrl(nftItem.image) || ''}
+        onClick={() => onOpenOdyssey?.(item.uuid)}
+      />
 
       <styled.Info>
         <styled.Date>{newsfeedDateString(item.date, true)}</styled.Date>

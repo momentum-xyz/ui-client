@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Image, Text} from '@momentum-xyz/ui-kit';
+import {Avatar, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {newsfeedDateString} from '@momentum-xyz/core';
 
@@ -29,17 +29,21 @@ const ConnectedItem: FC<PropsInterface> = (props) => {
   return (
     <>
       <styled.TwoAvatarsContainer>
-        <styled.Avatar onClick={() => onOpenOdyssey?.(item.uuid)}>
-          <Image
-            src={getImageAbsoluteUrl(nftItem.image)}
-            sizeProps={{width: '38px', height: '38px'}}
-          />
-        </styled.Avatar>
+        <Avatar
+          size="medium"
+          showBorder
+          showHover
+          avatarSrc={getImageAbsoluteUrl(nftItem.image) || ''}
+          onClick={() => onOpenOdyssey?.(item.uuid)}
+        />
 
-        <styled.AvatarAhead onClick={() => onOpenOdyssey?.(item.connectedTo?.uuid || '')}>
-          <Image
-            src={getImageAbsoluteUrl(connectedNftItem.image)}
-            sizeProps={{width: '38px', height: '38px'}}
+        <styled.AvatarAhead>
+          <Avatar
+            size="medium"
+            showBorder
+            showHover
+            avatarSrc={getImageAbsoluteUrl(connectedNftItem.image) || ''}
+            onClick={() => onOpenOdyssey?.(item.connectedTo?.uuid || '')}
           />
         </styled.AvatarAhead>
       </styled.TwoAvatarsContainer>

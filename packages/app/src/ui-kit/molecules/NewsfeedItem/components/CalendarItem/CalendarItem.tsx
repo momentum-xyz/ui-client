@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Image, Text} from '@momentum-xyz/ui-kit';
+import {Avatar, Button, Text} from '@momentum-xyz/ui-kit';
 import {newsfeedDateString} from '@momentum-xyz/core';
 
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -26,12 +26,11 @@ const CalendarItem: FC<PropsInterface> = (props) => {
 
   return (
     <>
-      <styled.OneAvatar>
-        <Image
-          src={getImageAbsoluteUrl(item.calendar.image) || placeholder}
-          sizeProps={{width: '58px', height: '58px'}}
-        />
-      </styled.OneAvatar>
+      <Avatar
+        size="normal"
+        showBorder
+        avatarSrc={getImageAbsoluteUrl(item.calendar.image) || placeholder}
+      />
 
       <styled.Info>
         <styled.Date>
