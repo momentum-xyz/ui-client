@@ -5,6 +5,7 @@ import {Portal} from '../Portal';
 import {SECTIONED_SCREEN_ID} from '../SectionedScreen/SectionedScreen';
 
 interface SectionedScreenPortalPropsInterface {
+  children: React.ReactNode;
   section: ScreenSectionsEnum;
   maximized?: boolean;
 }
