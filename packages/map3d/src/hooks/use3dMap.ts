@@ -28,6 +28,7 @@ export const use3dMap = (
   onSelectOdyssey: (uuid: string) => void
 ) => {
   const wasLoaded = useRef(false);
+  const animationFrame = useRef(0);
 
   /**
    * Reusable properties of galaxy
@@ -467,7 +468,7 @@ export const use3dMap = (
     }
 
     // Re-call Animation
-    window.requestAnimationFrame(animate);
+    animationFrame.current = window.requestAnimationFrame(animate);
   }, []);
 
   /**
@@ -606,6 +607,14 @@ export const use3dMap = (
     }
   }, []);
 
+  const clear3dScene = useCallback(() => {
+    window.cancelAnimationFrame(animationFrame.current);
+
+    while (scene.current.children.length > 0) {
+      scene.current.remove(scene.current.children[0]);
+    }
+  }, []);
+
   useEffect(() => {
     if (wasLoaded.current) {
       return;
@@ -687,5 +696,5 @@ export const use3dMap = (
     };
   }, [onMouseDown, onPointerMove, onWindowResize]);
 
-  return {flyToOdyssey, updateOdyssey};
+  return {flyToOdyssey, updateOdyssey, clear3dScene};
 };

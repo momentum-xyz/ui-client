@@ -85,13 +85,14 @@ const ObjectFunctionalityStore = types
   }))
   .views(() => ({
     get asset2dOptions(): OptionInterface[] {
-      const values = Object.values(BasicAsset2dIdEnum);
-      return Object.keys(BasicAsset2dIdEnum).map((key, index) => {
-        return {
-          label: t(`enums.basicAsset2dId.${key}`),
-          value: values[index]
-        };
-      });
+      return Object.entries(BasicAsset2dIdEnum)
+        .filter(([, value]) => value !== BasicAsset2dIdEnum.DOCK)
+        .map(([key, value]) => {
+          return {
+            label: t(`enums.basicAsset2dId.${key}`),
+            value
+          };
+        });
     }
   }));
 

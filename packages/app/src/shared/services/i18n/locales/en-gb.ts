@@ -211,6 +211,8 @@ export const enGb = {
       endDateGraterThanStartDate: 'End date has to be grater than start date',
       nameConstraints: 'Please enter a name with 2-32 characters',
       somethingWentWrong: 'Something went wrong',
+      permissionsMissing: 'Missing permissions',
+      permissionsWrong: "Oops, looks like you don't have permissions for this action!",
       somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
       noWorldBuilderPermissions:
         'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account',
@@ -476,6 +478,9 @@ export const enGb = {
         'Get discovered by providing a name and picture for your Odyssey. The picture will make the outside of your Odyssey shine. The name you provided will be shown for others to search and connect to your Odyssey.',
       yourName: 'What should we call you?',
       chooseImage: 'Choose an image for your odyssey',
+      assetUploaded:
+        'Congratulations, your custom asset has been added to the Custom Object Library.',
+      assetNotUploaded: "Oops, something went wrong your object can't be added to the library.",
       onceConnectedTokensWillBeAwarded:
         'Once connected, you will be awarded some MOM tokens to get you started',
       noWalletFollowInstructions: 'No wallet? You can get one following the instructions',
@@ -526,6 +531,7 @@ export const enGb = {
       templateNameWrapper: '{{name}} Template',
       stageIsFull: 'Stage is full',
       success: 'Success',
+      failedToUpload: 'Failed to upload',
       plugins: 'Plugins',
       addPlugin: 'Add Plugin',
       deletePluginFromSpace: 'Delete plugin from space',
@@ -707,9 +713,7 @@ export const enGb = {
         VIDEO: 'Video',
         DOCK: 'Dock station',
         MIRO: 'Miro',
-        MIRO_LOCAL: 'Miro (local)',
-        GOOGLE_DRIVE: 'Google drive',
-        GOOGLE_DRIVE_LOCAL: 'Google drive (local)'
+        GOOGLE_DRIVE: 'Google Drive'
       }
     },
     descriptions: {

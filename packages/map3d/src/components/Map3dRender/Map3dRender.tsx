@@ -16,7 +16,7 @@ const Map3dRender: FC<PropsInterface> = ({
   getImageUrl,
   onSelect
 }) => {
-  const {flyToOdyssey, updateOdyssey} = use3dMap(
+  const {flyToOdyssey, updateOdyssey, clear3dScene} = use3dMap(
     canvas,
     items,
     currentUser,
@@ -34,6 +34,13 @@ const Map3dRender: FC<PropsInterface> = ({
       flyToOdyssey(selectedUuid);
     }
   }, [flyToOdyssey, selectedUuid]);
+
+  useEffect(() => {
+    return () => {
+      console.log('clear3dScene');
+      clear3dScene();
+    };
+  }, [clear3dScene]);
 
   return <></>;
 };

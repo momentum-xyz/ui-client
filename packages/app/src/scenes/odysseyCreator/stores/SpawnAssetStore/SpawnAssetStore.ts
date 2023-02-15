@@ -1,7 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
-import {SpaceSubOptionKeyEnum} from '@momentum-xyz/sdk';
 
 import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
 import {Asset3dCategoryEnum} from 'api/enums';
@@ -79,8 +78,9 @@ const SpawnAssetStore = types
           preview_hash
         }
       );
+
       console.log('uploadAsset response', response);
-      return !!response;
+      return self.uploadAssetRequest.isDone;
     }),
     uploadImageToMediaManager: flow(function* (file: File) {
       const data = {file: file};
@@ -150,17 +150,10 @@ const SpawnAssetStore = types
           space_name: self.navigationObjectName,
           // TODO: What is it for? Discussion !!!
           space_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
-          asset_3d_id: self.selectedAssset?.id
+          asset_3d_id: self.selectedAssset?.id,
+          minimap: self.isVisibleInNavigation
         }
       );
-
-      if (response) {
-        yield self.setIsVisibleRequest.send(api.spaceOptionRepository.setSpaceSubOption, {
-          spaceId: response.space_id,
-          sub_option_key: SpaceSubOptionKeyEnum.VISIBLE,
-          value: self.isVisibleInNavigation ? 3 : 1
-        });
-      }
 
       return response?.space_id;
     })

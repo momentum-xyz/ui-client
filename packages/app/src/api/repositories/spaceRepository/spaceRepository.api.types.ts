@@ -15,6 +15,8 @@ export interface PostSpaceRequest {
 
   asset_2d_id?: string;
   asset_3d_id?: string;
+
+  minimap?: boolean;
 }
 
 export interface PostSpaceResponse {

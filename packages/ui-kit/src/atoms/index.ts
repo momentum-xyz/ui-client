@@ -18,3 +18,5 @@ export * from './Tooltip';
 export * from './ErrorBoundary';
 export * from './SpacePage';
 export * from './LoaderFallback';
+export * from './SectionedScreen';
+export * from './SectionedScreenPortal';
