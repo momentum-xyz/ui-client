@@ -27,7 +27,7 @@ const TemplateList: Story<AvatarPropsInterface[]> = (args) => {
 export const General = TemplateOne.bind({});
 General.args = {
   size: 'large',
-  avatarSrc: 'https://picsum.photos/100',
+  avatarSrc: 'https://picsum.photos/300',
   showBorder: true,
   showHover: true,
   status: UserStatusEnum.ONLINE
@@ -37,27 +37,27 @@ export const ListOfSizes = TemplateList.bind({});
 ListOfSizes.args = [
   {
     size: 'extra-large',
-    avatarSrc: 'https://picsum.photos/100'
+    avatarSrc: 'https://picsum.photos/300'
   },
   {
     size: 'large',
-    avatarSrc: 'https://picsum.photos/100'
+    avatarSrc: 'https://picsum.photos/300'
   },
   {
     size: 'normal',
-    avatarSrc: 'https://picsum.photos/100'
+    avatarSrc: 'https://picsum.photos/300'
   },
   {
     size: 'medium',
-    avatarSrc: 'https://picsum.photos/100'
+    avatarSrc: 'https://picsum.photos/300'
   },
   {
     size: 'small',
-    avatarSrc: 'https://picsum.photos/100'
+    avatarSrc: 'https://picsum.photos/300'
   },
   {
     size: 'extra-small',
-    avatarSrc: 'https://picsum.photos/100'
+    avatarSrc: 'https://picsum.photos/300'
   }
 ];
 
@@ -65,18 +65,18 @@ export const ListOfStates = TemplateList.bind({});
 ListOfStates.args = [
   {
     size: 'large',
-    avatarSrc: 'https://picsum.photos/100',
+    avatarSrc: 'https://picsum.photos/300',
     showBorder: true
   },
   {
     size: 'large',
-    avatarSrc: 'https://picsum.photos/100',
+    avatarSrc: 'https://picsum.photos/300',
     showBorder: true,
     showHover: true
   },
   {
     size: 'large',
-    avatarSrc: 'https://picsum.photos/100'
+    avatarSrc: 'https://picsum.photos/300'
   },
   {
     size: 'large'
@@ -87,19 +87,19 @@ export const ListOfStatuses = TemplateList.bind({});
 ListOfStatuses.args = [
   {
     size: 'large',
-    avatarSrc: 'https://picsum.photos/100',
+    avatarSrc: 'https://picsum.photos/300',
     status: UserStatusEnum.ONLINE,
     showBorder: true
   },
   {
     size: 'large',
-    avatarSrc: 'https://picsum.photos/100',
+    avatarSrc: 'https://picsum.photos/300',
     status: UserStatusEnum.DO_NOT_DISTURB,
     showBorder: true
   },
   {
     size: 'large',
-    avatarSrc: 'https://picsum.photos/100',
+    avatarSrc: 'https://picsum.photos/300',
     showBorder: true
   }
 ];

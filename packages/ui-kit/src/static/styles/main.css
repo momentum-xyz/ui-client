@@ -3,17 +3,16 @@
 @import "fonts.css";
 
 .noScrollIndicator {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 .noScrollIndicator::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .text-truncate {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

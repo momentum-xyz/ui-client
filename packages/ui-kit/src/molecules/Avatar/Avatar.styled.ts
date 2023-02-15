@@ -1,7 +1,7 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-//import {ReactComponent as AstronautIcon} from '../../assets/images/common/astronaut.svg';
+import astronautIcon from '../../static/images/astronaut.svg';
 
 export const Container = styled.div`
   border-radius: 100%;
@@ -63,6 +63,8 @@ export const Container = styled.div`
 export const AvatarPlaceholder = styled.div`
   width: 50%;
   height: 50%;
+  background-color: ${(props) => props.theme.accent};
+  ${`mask: url(${astronautIcon}) no-repeat center;`};
 `;
 
 export const Image = styled.img`
