@@ -1,0 +1,19 @@
+@import "variables.css";
+@import "reset.css";
+@import "fonts.css";
+
+.noScrollIndicator {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.noScrollIndicator::-webkit-scrollbar {
+    display: none;
+}
+
+.text-truncate {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

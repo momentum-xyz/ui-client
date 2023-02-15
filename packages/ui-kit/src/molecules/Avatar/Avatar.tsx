@@ -8,18 +8,16 @@ import * as styled from './Avatar.styled';
 
 export interface AvatarPropsInterface extends PropsWithThemeInterface {
   avatarSrc?: string;
-  size: 'large' | 'normal' | 'medium' | 'small' | 'extra-small';
+  size: 'extra-large' | 'large' | 'normal' | 'medium' | 'small' | 'extra-small';
   status?: UserStatusEnum | null;
-  onClick?: () => void;
   showBorder?: boolean;
   showHover?: boolean;
-  className?: string;
+  onClick?: () => void;
 }
 
 const Avatar: FC<AvatarPropsInterface> = ({
   avatarSrc,
   size,
-  className,
   status = 'none',
   onClick,
   showBorder = false,
@@ -30,7 +28,7 @@ const Avatar: FC<AvatarPropsInterface> = ({
   return (
     <styled.Container
       data-testid="Avatar-test"
-      className={cn(size, showBorder && 'showBorder', showHover && 'showHover', className)}
+      className={cn(size, showBorder && 'showBorder', showHover && 'showHover')}
       onClick={onClick}
     >
       {avatarSrc && !error ? (

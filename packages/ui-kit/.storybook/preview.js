@@ -16,7 +16,7 @@ export const parameters = {
 const themes = [
   {
     name: 'Default theme',
-    previewBg: '#8F94A1',
+    previewBg: '#004373',
     ...DefaultThemeConfig
   },
   {

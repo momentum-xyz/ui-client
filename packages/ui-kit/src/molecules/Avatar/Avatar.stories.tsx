@@ -24,21 +24,21 @@ const TemplateList: Story<AvatarPropsInterface[]> = (args) => {
   );
 };
 
-export const Primary = TemplateOne.bind({});
-Primary.args = {
+export const General = TemplateOne.bind({});
+General.args = {
   size: 'large',
   avatarSrc: 'https://picsum.photos/100',
   showBorder: true,
+  showHover: true,
   status: UserStatusEnum.ONLINE
 };
 
-export const Placeholder = TemplateOne.bind({});
-Placeholder.args = {
-  size: 'large'
-};
-
-export const Sizes = TemplateList.bind({});
-Sizes.args = [
+export const ListOfSizes = TemplateList.bind({});
+ListOfSizes.args = [
+  {
+    size: 'extra-large',
+    avatarSrc: 'https://picsum.photos/100'
+  },
   {
     size: 'large',
     avatarSrc: 'https://picsum.photos/100'
@@ -58,5 +58,48 @@ Sizes.args = [
   {
     size: 'extra-small',
     avatarSrc: 'https://picsum.photos/100'
+  }
+];
+
+export const ListOfStates = TemplateList.bind({});
+ListOfStates.args = [
+  {
+    size: 'large',
+    avatarSrc: 'https://picsum.photos/100',
+    showBorder: true
+  },
+  {
+    size: 'large',
+    avatarSrc: 'https://picsum.photos/100',
+    showBorder: true,
+    showHover: true
+  },
+  {
+    size: 'large',
+    avatarSrc: 'https://picsum.photos/100'
+  },
+  {
+    size: 'large'
+  }
+];
+
+export const ListOfStatuses = TemplateList.bind({});
+ListOfStatuses.args = [
+  {
+    size: 'large',
+    avatarSrc: 'https://picsum.photos/100',
+    status: UserStatusEnum.ONLINE,
+    showBorder: true
+  },
+  {
+    size: 'large',
+    avatarSrc: 'https://picsum.photos/100',
+    status: UserStatusEnum.DO_NOT_DISTURB,
+    showBorder: true
+  },
+  {
+    size: 'large',
+    avatarSrc: 'https://picsum.photos/100',
+    showBorder: true
   }
 ];

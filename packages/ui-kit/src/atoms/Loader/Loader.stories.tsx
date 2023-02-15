@@ -11,5 +11,5 @@ export default {
 
 const Template: Story<PropsWithThemeInterface> = (args) => <Loader {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = {};
+export const General = Template.bind({});
+General.args = {};

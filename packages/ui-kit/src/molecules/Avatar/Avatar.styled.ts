@@ -19,6 +19,7 @@ export const Container = styled.div`
     &.showHover {
       &:hover {
         border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1.0)};
+        cursor: pointer;
       }
     }
   }
