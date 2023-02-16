@@ -104,8 +104,7 @@ export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.odyssey.creator.base,
-    main: () => <OdysseyCreator />,
-    exact: false
+    main: () => <OdysseyCreator />
   },
   {
     path: ROUTES.odyssey.object.root,

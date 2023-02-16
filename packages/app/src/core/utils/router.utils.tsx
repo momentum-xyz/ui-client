@@ -8,7 +8,8 @@ const isDevEnv = process.env.NODE_ENV === 'development';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
-    return !!matchPath({path: route.path, end: route.exact}, currentPath);
+    const {path, exact = false} = route;
+    return !!matchPath({path, end: exact}, currentPath);
   });
 };
 
