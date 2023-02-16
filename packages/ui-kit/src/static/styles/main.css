@@ -16,3 +16,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.storybook-grid {
+  display: flex;
+  gap: 15px;
+}

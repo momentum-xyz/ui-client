@@ -57,7 +57,7 @@ export const DefaultThemeConfig: ThemeInterface = {
 };
 
 export const CustomThemeConfig: ThemeInterface = {
-  accent: AccentColorList[1],
+  accent: AccentColorList[4],
   bg: BackgroundColorList[2],
   text: TextColorList[1],
   accentDanger: AccentDangerColorList[0],

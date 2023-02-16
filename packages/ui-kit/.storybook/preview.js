@@ -15,13 +15,13 @@ export const parameters = {
 
 const themes = [
   {
-    name: 'Base theme',
-    viewportBg: '#4F5C7C',
+    name: 'Light theme',
+    viewportBg: '#DDE0E2',
     ...DefaultThemeConfig
   },
   {
-    name: 'Custom theme',
-    viewportBg: '#28335F',
+    name: 'Dark theme',
+    viewportBg: '#333333',
     ...CustomThemeConfig
   }
 ];
