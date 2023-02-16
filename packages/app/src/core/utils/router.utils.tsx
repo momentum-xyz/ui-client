@@ -60,3 +60,8 @@ export const createSwitchByConfig = (
     </Routes>
   );
 };
+
+export const constructTargetTabUrl = (tabParam: string, url: string): string => {
+  const baseUrl = url.split('/').slice(0, -1).join('/');
+  return `${baseUrl}/${tabParam}`;
+};

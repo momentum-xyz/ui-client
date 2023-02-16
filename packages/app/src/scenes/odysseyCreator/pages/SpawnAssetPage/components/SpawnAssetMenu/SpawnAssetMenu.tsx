@@ -7,6 +7,7 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
+import {constructTargetTabUrl} from 'core/utils';
 
 import * as styled from './SpawnAssetMenu.styled';
 
@@ -39,8 +40,15 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
 
       <styled.Tab
         className={cn(
-          matchPath({path: ROUTES.odyssey.creator.spawnAsset.basicAssets}, location.pathname) &&
-            'selected'
+          matchPath(
+            {
+              path: constructTargetTabUrl(
+                ROUTES.odyssey.creator.spawnAsset.basicAssets,
+                location.pathname
+              )
+            },
+            location.pathname
+          ) && 'selected'
         )}
         onClick={() =>
           navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.basicAssets, {worldId}))
@@ -50,8 +58,15 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath({path: ROUTES.odyssey.creator.spawnAsset.standardAssets}, location.pathname) &&
-            'selected'
+          matchPath(
+            {
+              path: constructTargetTabUrl(
+                ROUTES.odyssey.creator.spawnAsset.standardAssets,
+                location.pathname
+              )
+            },
+            location.pathname
+          ) && 'selected'
         )}
         onClick={() =>
           navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.standardAssets, {worldId}))
@@ -61,8 +76,15 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath({path: ROUTES.odyssey.creator.spawnAsset.customAssets}, location.pathname) &&
-            'selected'
+          matchPath(
+            {
+              path: constructTargetTabUrl(
+                ROUTES.odyssey.creator.spawnAsset.customAssets,
+                location.pathname
+              )
+            },
+            location.pathname
+          ) && 'selected'
         )}
         onClick={() =>
           navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.customAssets, {worldId}))
@@ -77,8 +99,15 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
       </styled.Tab>
       <styled.Tab
         className={cn(
-          matchPath({path: ROUTES.odyssey.creator.spawnAsset.uploadAsset}, location.pathname) &&
-            'selected'
+          matchPath(
+            {
+              path: constructTargetTabUrl(
+                ROUTES.odyssey.creator.spawnAsset.uploadAsset,
+                location.pathname
+              )
+            },
+            location.pathname
+          ) && 'selected'
         )}
         onClick={() =>
           navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.uploadAsset, {worldId}))
