@@ -33,11 +33,13 @@ export const getAgoraScreenShareToken: RequestInterface<AgoraTokenRequest, Agora
   return request.get(url, restOptions);
 };
 
-export const relayScreenShare: RequestInterface<RelayScreenShareRequest, RelayScreenShareResponse> =
-  (options) => {
-    const {spaceId, ...restOptions} = options;
+export const relayScreenShare: RequestInterface<
+  RelayScreenShareRequest,
+  RelayScreenShareResponse
+> = (options) => {
+  const {spaceId, ...restOptions} = options;
 
-    const url = generatePath(agoraRepositoryApiEndpoints_old().relayScreenShare, {spaceId});
+  const url = generatePath(agoraRepositoryApiEndpoints_old().relayScreenShare, {spaceId});
 
-    return request.post(url, restOptions);
-  };
+  return request.post(url, restOptions);
+};

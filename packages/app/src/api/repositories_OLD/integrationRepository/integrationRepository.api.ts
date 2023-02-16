@@ -22,14 +22,16 @@ import {
   DisableBroadcastIntegrationResponse
 } from './integrationRepository.api.types';
 
-export const fetchIntegration: RequestInterface<FetchIntegrationRequest, FetchIntegrationResponse> =
-  (options) => {
-    const {spaceId, integrationType, ...rest} = options;
+export const fetchIntegration: RequestInterface<
+  FetchIntegrationRequest,
+  FetchIntegrationResponse
+> = (options) => {
+  const {spaceId, integrationType, ...rest} = options;
 
-    const fetchUrl = integrationRepositoryEndpoints().fetch;
-    const URL: string = generatePath(fetchUrl, {spaceId, integrationType});
-    return request.get(URL, rest);
-  };
+  const fetchUrl = integrationRepositoryEndpoints().fetch;
+  const URL: string = generatePath(fetchUrl, {spaceId, integrationType});
+  return request.get(URL, rest);
+};
 
 export const enableMiroIntegration: RequestInterface<
   EnableMiroIntegrationRequest,

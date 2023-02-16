@@ -22,12 +22,11 @@ const TokenRulesPanel: FC<PropsInterface> = () => {
     space
   } = spaceManagerStore;
 
-  const [selectedTokenRule, setSelectedTokenRule] =
-    useState<{
-      id: string;
-      isAdmin?: boolean;
-      name?: string;
-    }>();
+  const [selectedTokenRule, setSelectedTokenRule] = useState<{
+    id: string;
+    isAdmin?: boolean;
+    name?: string;
+  }>();
 
   const handleAddTokenRule = () => {
     applyTokenRuleFormDialog.open();
