@@ -44,7 +44,13 @@ ListOfSizes.decorators = [
   () => {
     return (
       <div className="storybook-grid">
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="huge" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="super-large" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="extra-large" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="normal-large" />
         <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="large" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="medium-large" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="medium" />
         <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="normal" />
         <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="small" />
       </div>
