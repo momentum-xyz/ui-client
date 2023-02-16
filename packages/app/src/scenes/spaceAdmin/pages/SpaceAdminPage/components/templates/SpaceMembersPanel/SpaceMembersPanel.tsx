@@ -15,11 +15,12 @@ const SpaceMembersPanel: FC = () => {
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {removeUserConfirmationDialog, editUserDialog, addUserDialog, space} = spaceManagerStore;
 
-  const [selectedUser, setSelectedUser] = useState<{
-    id: string;
-    name?: string;
-    isAdmin?: boolean;
-  }>();
+  const [selectedUser, setSelectedUser] =
+    useState<{
+      id: string;
+      name?: string;
+      isAdmin?: boolean;
+    }>();
 
   const handleUserEdit = (userId: string, type?: string) => {
     setSelectedUser({id: userId, isAdmin: type === 'admin'});

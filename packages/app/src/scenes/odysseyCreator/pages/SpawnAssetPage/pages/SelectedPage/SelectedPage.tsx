@@ -21,9 +21,10 @@ export const SelectedPage: FC = () => {
 
   const {t} = useTranslation();
 
-  const {worldId} = useParams<{
-    worldId: string;
-  }>();
+  const {worldId} =
+    useParams<{
+      worldId: string;
+    }>();
 
   useEffect(() => {
     return () => {

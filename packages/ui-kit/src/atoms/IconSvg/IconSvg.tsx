@@ -6,7 +6,6 @@ import {SizeType, IconNameType} from '../../types';
 
 import * as styled from './IconSvg.styled';
 
-// FIXME: Relative path doesn't work in the test file.
 const svgModules = require.context('../../assets/svg-sprite', false, /\.svg$/);
 const svgSpritePath: string = svgModules(svgModules.keys()[0]);
 

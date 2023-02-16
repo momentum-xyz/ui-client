@@ -37,6 +37,7 @@
     "@babel/core": "^7.20.12",
     "@react-theming/storybook-addon": "^1.1.10",
     "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-backgrounds": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-interactions": "^6.5.16",
     "@storybook/addon-links": "^6.5.16",

@@ -55,16 +55,14 @@ export const createTokenRule: RequestInterface<CreateTokenRuleRequest, CreateTok
   return request.post(url, payload, restOptions);
 };
 
-export const processTokenRule: RequestInterface<
-  ProcessTokenRuleRequest,
-  ProcessTokenRuleResponse
-> = (options) => {
-  const {tokenRuleId, status, ...restOptions} = options;
+export const processTokenRule: RequestInterface<ProcessTokenRuleRequest, ProcessTokenRuleResponse> =
+  (options) => {
+    const {tokenRuleId, status, ...restOptions} = options;
 
-  const URL = `${tokenRuleRepositoryEndpoints().process}/${tokenRuleId}`;
+    const URL = `${tokenRuleRepositoryEndpoints().process}/${tokenRuleId}`;
 
-  return request.post(URL, {status}, restOptions);
-};
+    return request.post(URL, {status}, restOptions);
+  };
 
 export const fetchOptions: RequestInterface<TokenRulesOptionRequest, TokenRulesOptionResponse> = (
   options

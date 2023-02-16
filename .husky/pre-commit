@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn run lint:errors --cache
-yarn run prettier:fix --cache
+yarn run lint:errors
+yarn run prettier:fix

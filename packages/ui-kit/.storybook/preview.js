@@ -15,23 +15,22 @@ export const parameters = {
 
 const themes = [
   {
-    name: 'Default theme',
-    previewBg: '#004373',
+    name: 'Base theme',
+    viewportBg: '#4F5C7C',
     ...DefaultThemeConfig
   },
   {
     name: 'Custom theme',
-    previewBg: '#D0E5E5',
+    viewportBg: '#28335F',
     ...CustomThemeConfig
   }
 ];
 
 export const onThemeSwitch = (context) => {
-  const {theme} = context;
   return {
     parameters: {
       backgrounds: {
-        default: theme.previewBg
+        default: context.theme.viewportBg
       }
     }
   };
