@@ -55,3 +55,11 @@ export const DefaultThemeConfig: ThemeInterface = {
   accentDanger: AccentDangerColorList[0],
   accentWarning: AccentWarningColorList[0]
 };
+
+export const CustomThemeConfig: ThemeInterface = {
+  accent: AccentColorList[4],
+  bg: BackgroundColorList[2],
+  text: TextColorList[1],
+  accentDanger: AccentDangerColorList[0],
+  accentWarning: AccentWarningColorList[0]
+};
