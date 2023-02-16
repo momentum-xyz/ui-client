@@ -8,7 +8,8 @@ const isDevEnv = process.env.NODE_ENV === 'development';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
-    return !!matchPath({path: route.path, end: route.exact}, currentPath);
+    const {path, exact = false} = route;
+    return !!matchPath({path, end: exact}, currentPath);
   });
 };
 
@@ -46,7 +47,7 @@ export const createSwitchByConfig = (
           path="*"
           element={
             isDevEnv ? (
-              <div style={{color: '#a9a9a9'}}>
+              <div style={{color: '#a9a9a9', pointerEvents: 'all'}}>
                 <div>Route not found</div>
                 <pre>{JSON.stringify(routes, null, 2)}</pre>
                 <Link to={defaultRedirect}>Go to defaultRedirect route: "{defaultRedirect}"</Link>
