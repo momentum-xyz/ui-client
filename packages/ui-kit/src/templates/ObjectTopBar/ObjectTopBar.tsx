@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 
@@ -12,7 +12,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   onToggleExpand?: () => void;
 }
 
-const ObjectTopBar: FC<PropsInterface> = ({
+const ObjectTopBar: FC<PropsWithChildren<PropsInterface>> = ({
   theme,
   title,
   subtitle,

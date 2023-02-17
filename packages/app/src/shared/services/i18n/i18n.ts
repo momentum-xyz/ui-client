@@ -10,6 +10,7 @@ i18n
   .use(initReactI18next)
   .init({
     debug: false,
+    returnNull: false,
     fallbackLng: LanguageEnum.En,
     interpolation: {
       escapeValue: false

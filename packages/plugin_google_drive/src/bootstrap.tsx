@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import 'static/styles/index.css';
-import {ThemeProvider} from 'styled-components';
+import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
 import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 import {HostEmulator, PluginInterface} from '@momentum-xyz/sdk';
 
@@ -10,13 +10,15 @@ import 'shared/services/i18n';
 
 import plugin from './Plugin';
 
-const root = document.getElementById('root') as HTMLElement;
+const ThemeProvider = ThemeProviderOriginal as unknown as React.FC<ThemeProviderProps<any>>;
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
     <ThemeProvider theme={DefaultThemeConfig}>
       <HostEmulator plugin={plugin as PluginInterface} />
     </ThemeProvider>
-  </React.StrictMode>,
-  root
+  </React.StrictMode>
 );

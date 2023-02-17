@@ -1,13 +1,12 @@
-import React, {FC, useCallback, useState} from 'react';
-import {generatePath, Redirect, Route, Switch} from 'react-router-dom';
-import {useHistory} from 'react-router';
-import {Toggle, Text} from '@momentum-xyz/ui-kit';
+import {FC, useCallback, useState} from 'react';
+import {generatePath, Navigate, Route, Routes, useNavigate} from 'react-router-dom';
+import * as uiKit from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../../../interfaces';
 import {ObjectViewEmulator} from '../ObjectViewEmulator';
 import {ConfigEmulator} from '../ConfigEmulator';
-import {ROUTES} from '../../constants';
 import {useConfigEmulatorStorage} from '../../../hooks';
+import {ROUTES} from '../../constants';
 
 import * as styled from './WorldEmulator.styled';
 
@@ -23,8 +22,8 @@ interface PropsInterface {
 export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER WorldEmulator', {plugin});
 
-  const history = useHistory();
-  const onClose = useCallback(() => history.push(ROUTES.base), [history]);
+  const navigate = useNavigate();
+  const onClose = useCallback(() => navigate(ROUTES.base), [navigate]);
 
   // TODO get plugin type here
   const {data: storedConfig, onSave: _onSaveConfig} = useConfigEmulatorStorage(
@@ -46,20 +45,20 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
   return (
     <styled.Container>
       <styled.ControlPanel>
-        <Toggle size="normal" variant="normal" checked={isAdmin} onChange={setIsAdmin} />
-        <Text text="Is User Admin" size="m" />
+        <uiKit.Toggle size="normal" variant="normal" checked={isAdmin} onChange={setIsAdmin} />
+        <uiKit.Text text="Is User Admin" size="m" />
       </styled.ControlPanel>
-      <Switch>
-        <Route exact path="/">
+      <Routes>
+        <Route path="/">
           <div>
             <styled.Button
-              onClick={() => history.push(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
+              onClick={() => navigate(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
             >
               Open Object
             </styled.Button>
             &nbsp;
             {isAdmin && (
-              <styled.Button onClick={() => history.push(ROUTES.config)}>Open Config</styled.Button>
+              <styled.Button onClick={() => navigate(ROUTES.config)}>Open Config</styled.Button>
             )}
           </div>
         </Route>
@@ -78,8 +77,8 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
             <div>No permission for this page</div>
           )}
         </Route>
-        <Redirect to={ROUTES.base} />
-      </Switch>
+        <Route path="*" element={<Navigate to={ROUTES.base} replace />} />
+      </Routes>
     </styled.Container>
   );
 };

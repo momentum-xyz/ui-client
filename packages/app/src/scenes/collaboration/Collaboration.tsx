@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect, useMemo} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
@@ -35,7 +35,7 @@ const Collaboration: FC = () => {
 
   const {spaceId} = useParams<{spaceId: string}>();
   const {t} = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const reJoinMeeting = useCallback(async () => {
     if (agoraStore_OLD.hasJoined && agoraStore_OLD.spaceId === spaceId) {
@@ -48,7 +48,7 @@ const Collaboration: FC = () => {
 
     /*rootStore.joinMeetingSpace(spaceId, false).catch((e) => {
       if (e instanceof PrivateSpaceError) {
-        history.push(ROUTES.base);
+        navigate(ROUTES.base);
         toast.error(
           <ToastContent
             isDanger
@@ -60,7 +60,7 @@ const Collaboration: FC = () => {
         );
       }
     });*/
-  }, [agoraStore_OLD, history, rootStore, spaceId, t]);
+  }, [agoraStore_OLD, navigate, rootStore, spaceId, t]);
 
   useEffect(() => {
     reJoinMeeting().then();
@@ -137,7 +137,7 @@ const Collaboration: FC = () => {
   const tabs = useMemo(() => {
     return [
       ...buildNavigationTabs(
-        spaceId,
+        spaceId!,
         agoraStore_OLD.isStageMode,
         !!agoraScreenShareStore.videoTrack,
         liveStreamStore_OLD.isStreaming

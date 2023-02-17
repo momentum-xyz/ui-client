@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import ReactHowler from 'react-howler';
+import ReactHowlerOriginal, {PropTypes as ReactHowlerProps} from 'react-howler';
 import {Avatar, ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -17,6 +17,8 @@ import {
 } from 'scenes/widgets_OLD/pages';
 
 import * as styled from './Widgets_OLD.styled';
+
+const ReactHowler = ReactHowlerOriginal as unknown as FC<ReactHowlerProps>;
 
 const Widgets_OLD: FC = () => {
   const {
@@ -107,7 +109,7 @@ const Widgets_OLD: FC = () => {
         mute={musicPlayer.muted}
         volume={musicPlayer.volume}
         html5={true}
-        ref={(ref) => musicPlayer.setPlayer(ref)}
+        {...{ref: (ref: ReactHowlerOriginal) => musicPlayer.setPlayer(ref)}}
       />
       <styled.Footer data-testid="Widgets_OLD-test">
         <styled.MainLinks>

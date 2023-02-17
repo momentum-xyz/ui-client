@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, PropsWithChildren} from 'react';
 
 import {Heading} from '../../atoms';
 import {SvgButton} from '../../molecules';
@@ -12,7 +12,12 @@ interface PropsInterface extends PropsWithThemeInterface {
   className?: string;
 }
 
-const SectionPanel: FC<PropsInterface> = ({title, children, className, onAdd}) => {
+const SectionPanel: FC<PropsWithChildren<PropsInterface>> = ({
+  title,
+  children,
+  className,
+  onAdd
+}) => {
   return (
     <styled.Container className={className} data-testid="SectionPanel-test">
       <styled.Section>

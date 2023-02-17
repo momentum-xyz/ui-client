@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {Button, Dialog, Text, useClickOutside} from '@momentum-xyz/ui-kit';
 
@@ -22,11 +22,11 @@ const SpawnPointPage: FC = () => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   useClickOutside(ref, () => {
-    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}));
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}));
   });
 
   const onSetHandler = useCallback(async () => {
@@ -34,7 +34,7 @@ const SpawnPointPage: FC = () => {
     const rotation: UnityPositionInterface | null = unityInstanceStore.getUserRotation();
 
     if (position && rotation && (await setSpawnPoint(worldId, position, rotation))) {
-      history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}));
+      navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}));
       toast.info(
         <ToastContent
           headerIconName="locator"
@@ -55,11 +55,11 @@ const SpawnPointPage: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, [unityInstanceStore, setSpawnPoint, worldId, history, t]);
+  }, [unityInstanceStore, setSpawnPoint, worldId, navigate, t]);
 
   const onCancelHandler = useCallback(() => {
-    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}));
-  }, [history, worldId]);
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}));
+  }, [navigate, worldId]);
 
   return (
     <Dialog

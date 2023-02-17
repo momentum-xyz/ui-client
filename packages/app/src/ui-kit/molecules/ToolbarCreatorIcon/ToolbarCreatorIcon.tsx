@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {ToolbarIcon, ToolbarIconInterface, Text, IconSvg} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -17,14 +17,14 @@ interface PropsInterface {
 const ToolbarCreatorIcon: FC<PropsInterface> = (props) => {
   const {worldId, isAdmin, isBuilderMode, onCloseAndReset} = props;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   const collapsedItem: ToolbarIconInterface = {
     icon: 'planet',
     size: 'medium',
     title: t('actions.creatorOpen'),
-    onClick: () => history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}))
+    onClick: () => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))
   };
 
   const expandedItems: ToolbarIconInterface[] = [
@@ -34,7 +34,7 @@ const ToolbarCreatorIcon: FC<PropsInterface> = (props) => {
       title: t('actions.creatorClose'),
       onClick: () => {
         onCloseAndReset();
-        history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+        navigate(generatePath(ROUTES.odyssey.base, {worldId}));
       }
     }
   ];

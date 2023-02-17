@@ -1,6 +1,6 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {SinusBox} from 'ui-kit';
 import {ROUTES} from 'core/constants';
@@ -14,7 +14,7 @@ const SignInPage: FC = () => {
   const {sessionStore, signInStore, nftStore, widgetsStore} = useStore();
   const {previewOdysseyStore} = widgetsStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSignIn = useCallback(async () => {
     const address = nftStore.getAddressByWallet(signInStore.wallet);
@@ -25,8 +25,8 @@ const SignInPage: FC = () => {
   }, [nftStore, sessionStore, signInStore.wallet]);
 
   const handleSignUp = useCallback(() => {
-    history.push(ROUTES.signInAccount);
-  }, [history]);
+    navigate(ROUTES.signInAccount);
+  }, [navigate]);
 
   return (
     <styled.Container>

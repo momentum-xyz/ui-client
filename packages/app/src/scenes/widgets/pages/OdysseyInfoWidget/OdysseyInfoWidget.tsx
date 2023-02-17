@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
-import {generatePath, matchPath, useHistory} from 'react-router-dom';
+import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
 import {useNavigation, useStore} from 'shared/hooks';
@@ -16,8 +16,9 @@ const OdysseyInfoWidget: FC = () => {
   const {odyssey, isOnOdysseyWorld} = odysseyInfoStore;
   const {assetStore} = objectStore;
 
-  const history = useHistory();
   const {goToOdysseyHome} = useNavigation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const alreadyConnected = nftStore.isAlreadyConnected(odyssey?.owner || '');
   const userIsOdysseyOwner = odyssey?.owner === sessionStore.wallet;
@@ -51,11 +52,8 @@ const OdysseyInfoWidget: FC = () => {
       onClose={() => {
         odysseyInfoStore.resetModel();
 
-        if (
-          unityStore.worldId &&
-          matchPath(history.location.pathname, ROUTES.odyssey.object.root)
-        ) {
-          history.push(generatePath(ROUTES.odyssey.base, {worldId: unityStore.worldId}));
+        if (unityStore.worldId && matchPath(location.pathname, ROUTES.odyssey.object.root)) {
+          navigate(generatePath(ROUTES.odyssey.base, {worldId: unityStore.worldId}));
         }
       }}
       showCloseButton

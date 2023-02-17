@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Dialog} from '@momentum-xyz/ui-kit';
-import {t} from 'i18next';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 
@@ -11,6 +11,8 @@ import {StakingDashboard} from './components';
 const StakingWidget: FC = () => {
   const {unityStore, nftStore} = useStore();
   const {unityInstanceStore} = unityStore;
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     unityInstanceStore.changeKeyboardControl(false);

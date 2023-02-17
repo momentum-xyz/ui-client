@@ -12,6 +12,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   subtitle?: string;
   onClose?: () => void;
   actions?: React.ReactElement;
+  children?: React.ReactNode;
 }
 
 const PageTopBar: FC<PropsInterface> = (props) => {

@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Button, Text, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
-import {useParams, useHistory, generatePath} from 'react-router-dom';
+import {useParams, useNavigate, generatePath} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
@@ -17,7 +17,6 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {
     currentItem,
-    selectItem,
     saveItem,
     changePage,
     prevPage,
@@ -33,7 +32,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
   const {worldId} = useParams<{worldId: string}>();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {t} = useTranslation();
 
@@ -71,7 +70,9 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                       className={cn({active})}
                       key={item.id + `-${idx}`}
                       onClick={() => {
-                        selectItem(item);
+                        saveItem(item.id, worldId!).catch((err) => {
+                          toast.error(err.message);
+                        });
                       }}
                     >
                       {item.isUserAttribute && item.id !== currentItemId && (
@@ -144,7 +145,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
           <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
           <Button
             label={t('actions.closePanel')}
-            onClick={() => history.push(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
+            onClick={() => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
           />
         </styled.ButtonsHolder>
       </styled.Container>

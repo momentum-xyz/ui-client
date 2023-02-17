@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, PropsWithChildren} from 'react';
 
 import * as styled from './SpacePage.styled';
 
@@ -7,7 +7,11 @@ interface PropsInterface {
   withMeeting?: boolean;
 }
 
-const SpacePage: FC<PropsInterface> = ({dataTestId, children, withMeeting = false}) => (
+const SpacePage: FC<PropsWithChildren<PropsInterface>> = ({
+  dataTestId,
+  children,
+  withMeeting = false
+}) => (
   <styled.Container data-testid={dataTestId} className={withMeeting ? 'withMeeting' : undefined}>
     {children}
   </styled.Container>

@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
@@ -11,7 +11,7 @@ import * as styled from './ExplorePage.styled';
 const ExplorePage: FC = () => {
   const {exploreStore, nftStore, widgetsStore, sessionStore} = useStore();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     exploreStore.init();
@@ -45,7 +45,7 @@ const ExplorePage: FC = () => {
             onTeleport={(nft) => {
               console.log(nft);
               if (nft.uuid) {
-                history.replace(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}));
+                navigate(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}), {replace: true});
               }
             }}
             onAttend={(nft) => {

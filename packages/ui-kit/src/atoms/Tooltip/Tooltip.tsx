@@ -1,6 +1,6 @@
 import RcTooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
-import React, {FC, ReactNode} from 'react';
+import React, {FC, PropsWithChildren, ReactNode} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface, ComponentSizeInterface} from '../../interfaces';
@@ -19,7 +19,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 const ENTER_DELAY_DEFAULT = 0.1;
 const LEAVE_DELAY_DEFAULT = 0.1;
 
-const Tooltip: FC<PropsInterface> = ({
+const Tooltip: FC<PropsWithChildren<PropsInterface>> = ({
   label,
   placement,
   visible = true,

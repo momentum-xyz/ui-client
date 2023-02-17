@@ -1,13 +1,13 @@
-import React, {ReactElement} from 'react';
-import {matchPath, Redirect, Switch} from 'react-router-dom';
-import {SwitchProps} from 'react-router';
+import {FC, ReactElement} from 'react';
+import {matchPath, Navigate, Route, Routes, RoutesProps, useLocation} from 'react-router-dom';
 
-import {ProtectedRoute} from 'ui-kit';
+import {createProtectedRouteElement} from 'ui-kit/utils/create-protected-route-element';
 import {ProtectedRouteListInterface, RouteConfigInterface} from 'core/interfaces';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
-    return !!matchPath(currentPath, {path: route.path, exact: route.exact});
+    const {path, exact = false} = route;
+    return !!matchPath({path, end: exact}, currentPath);
   });
 };
 
@@ -16,27 +16,52 @@ export const createRoutesByConfig = (
 ): ReactElement<string, any>[] => {
   const {routes, defaultRedirect, hasRights} = config;
 
-  return routes.map((route) => (
-    <ProtectedRoute
-      key={route.path}
-      {...route}
-      hasRights={hasRights}
-      defaultRedirect={defaultRedirect}
-    >
-      <route.main />
-    </ProtectedRoute>
-  ));
+  return routes.map((route, idx) => {
+    const protectedRouteElement = createProtectedRouteElement(
+      route.main,
+      hasRights,
+      defaultRedirect
+    );
+    return (
+      <Route
+        key={idx}
+        path={`${route.path}${route.exact ? '' : '/*'}`}
+        element={protectedRouteElement}
+      ></Route>
+    );
+  });
+};
+
+const NavigateFallback: FC<{url: string; debugInfo: string}> = ({url, debugInfo}) => {
+  const location = useLocation();
+
+  const isAlreadyMatched = location.pathname === url;
+  if (isAlreadyMatched) {
+    console.log('Route already matched', {url, location, debugInfo});
+    return (
+      <div>Something went wrong! Bad routing on {location.pathname}. Contact the development!</div>
+    );
+  }
+
+  return <Navigate to={url} replace />;
 };
 
 export const createSwitchByConfig = (
   routes: RouteConfigInterface[],
   defaultRedirect?: string,
   hasRights?: () => boolean
-): ReactElement<SwitchProps, any> => {
+): ReactElement<RoutesProps, any> => {
   return (
-    <Switch>
+    <Routes>
       {createRoutesByConfig({routes, defaultRedirect, hasRights})}
-      {defaultRedirect && <Redirect to={defaultRedirect} />}
-    </Switch>
+      {defaultRedirect && (
+        <Route
+          path="*"
+          element={
+            <NavigateFallback url={defaultRedirect} debugInfo={JSON.stringify(routes, null, 2)} />
+          }
+        />
+      )}
+    </Routes>
   );
 };

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Button, Loader, SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
@@ -13,7 +13,7 @@ import {ChangeVideoDialog} from 'scenes/object/components';
 import * as styled from './VideoPage.styled';
 
 const VideoPage: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const {objectStore, unityStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content} = assetStore;
@@ -60,7 +60,7 @@ const VideoPage: FC = () => {
               size="large"
               isWhite
               onClick={() => {
-                history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+                navigate(generatePath(ROUTES.odyssey.base, {worldId}));
               }}
             />
           </styled.Button>

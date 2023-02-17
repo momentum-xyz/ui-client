@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import YouTube from 'react-youtube';
+import YouTubeOriginal, {YouTubeProps} from 'react-youtube';
 import cn from 'classnames';
 
 import * as styled from './VideoPanel.styled';
@@ -9,6 +9,8 @@ interface PropsInterface {
   youtubeHash?: string;
   widgetMode?: boolean;
 }
+
+const YouTube = YouTubeOriginal as unknown as FC<YouTubeProps>;
 
 const VideoPanel: FC<PropsInterface> = ({youtubeHash, widgetMode}) => {
   const youtubeOptions = {

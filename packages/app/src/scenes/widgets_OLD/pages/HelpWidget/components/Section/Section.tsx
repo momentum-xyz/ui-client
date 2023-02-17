@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {t} from 'i18next';
@@ -12,6 +12,7 @@ export interface SectionPropsInterface {
   expanded: boolean;
   onExpandToggle: () => void;
   withBorder?: boolean;
+  children: ReactNode;
 }
 
 const Section: React.FC<SectionPropsInterface> = ({

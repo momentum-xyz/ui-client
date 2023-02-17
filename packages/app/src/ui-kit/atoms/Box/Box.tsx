@@ -1,9 +1,10 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 
 import * as styled from './Box.styled';
 
 interface PropsInterface {
   size?: 'normal' | 'small' | 'big' | 'wide';
+  children: ReactNode;
 }
 
 const Box: FC<PropsInterface> = (props) => {

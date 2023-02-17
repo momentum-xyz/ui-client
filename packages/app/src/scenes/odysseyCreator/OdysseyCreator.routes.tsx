@@ -8,7 +8,7 @@ import {SpawnPointPage} from './pages/SpawnPointPage';
 
 export const ODYSSEY_CREATOR_ROUTES = [
   {
-    path: ROUTES.odyssey.creator.base,
+    path: ROUTES.odyssey.creator.index,
     main: () => <></>,
     exact: true
   },
@@ -30,11 +30,11 @@ export const ODYSSEY_CREATOR_ROUTES = [
   {
     path: ROUTES.odyssey.creator.functionality,
     main: () => <ObjectFunctionalityPage />,
-    exact: false
+    exact: true
   },
   {
     path: ROUTES.odyssey.creator.objectColor,
     main: () => <ObjectColorPage />,
-    exact: false
+    exact: true
   }
 ];

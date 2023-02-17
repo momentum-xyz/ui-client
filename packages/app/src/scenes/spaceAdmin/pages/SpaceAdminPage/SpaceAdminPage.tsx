@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
-import {useHistory} from 'react-router';
-import {t} from 'i18next';
+import {useNavigate} from 'react-router';
 import {observer} from 'mobx-react-lite';
 import {PageTopBar} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -21,17 +21,18 @@ import {
 } from './components';
 
 const SpaceAdminPage: FC = () => {
-  const history = useHistory();
+  const {t} = useTranslation();
+  const navigate = useNavigate();
   const {spaceAdminStore} = useStore();
   const {spaceManagerStore} = spaceAdminStore;
   const {space, tokenRuleFormDialog, tokenFormDialog, applyTokenRuleFormDialog} = spaceManagerStore;
 
   const handleClose = () => {
     // @ts-ignore
-    if (history.location.state?.canGoBack) {
-      history.goBack();
+    if (navigate.location.state?.canGoBack) {
+      navigate(-1);
     } else {
-      history.push(ROUTES.base);
+      navigate(ROUTES.base);
     }
   };
 

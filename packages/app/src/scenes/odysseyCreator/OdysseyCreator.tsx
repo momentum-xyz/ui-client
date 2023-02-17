@@ -1,11 +1,11 @@
-import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {FC, useEffect} from 'react';
 import {generatePath} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
-import {UnityService} from 'shared/services';
 import {createSwitchByConfig} from 'core/utils';
+import {ROUTES} from 'core/constants';
+import {UnityService} from 'shared/services';
+import {useStore} from 'shared/hooks';
 
 import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
 import {CreatorMenu, ObjectMenu} from './components';
@@ -17,7 +17,6 @@ const OdysseyCreator: FC = () => {
 
   useEffect(() => {
     UnityService.toggleBuildMode();
-
     return () => {
       UnityService.toggleBuildMode();
     };

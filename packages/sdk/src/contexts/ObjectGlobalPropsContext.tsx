@@ -1,4 +1,4 @@
-import React, {FC, useContext} from 'react';
+import {FC, useContext, PropsWithChildren} from 'react';
 import {createContext} from 'react';
 import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
@@ -38,9 +38,11 @@ export const ObjectGlobalPropsContext = createContext<PluginPropsInterface>({
   onClose: () => {}
 });
 
-export const ObjectGlobalPropsContextProvider: FC<{
-  props: PluginPropsInterface;
-}> = ({props, children}) => (
+export const ObjectGlobalPropsContextProvider: FC<
+  PropsWithChildren<{
+    props: PluginPropsInterface;
+  }>
+> = ({props, children}) => (
   <ObjectGlobalPropsContext.Provider value={props}>
     <ThemeContextProvider theme={props.theme}>{children}</ThemeContextProvider>
   </ObjectGlobalPropsContext.Provider>

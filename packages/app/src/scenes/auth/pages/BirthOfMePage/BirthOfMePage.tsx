@@ -1,6 +1,6 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -13,7 +13,7 @@ import * as styled from './BirthOfMePage.styled';
 const BirthOfMePage: FC = () => {
   const {exploreStore, nftStore, signInStore, sessionStore} = useStore();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const nft = signInStore.wallet ? nftStore.getNftByWallet(signInStore.wallet) : null;
 
@@ -37,8 +37,8 @@ const BirthOfMePage: FC = () => {
       });
     }
 
-    history.push(ROUTES.birthAnimation);
-  }, [exploreStore, history, nft, nftStore, sessionStore, signInStore]);
+    navigate(ROUTES.birthAnimation);
+  }, [exploreStore, navigate, nft, nftStore, sessionStore, signInStore]);
 
   if (!nft) {
     return null;

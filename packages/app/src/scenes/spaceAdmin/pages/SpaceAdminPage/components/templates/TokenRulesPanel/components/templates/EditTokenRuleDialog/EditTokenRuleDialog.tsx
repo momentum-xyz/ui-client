@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
-import {t} from 'i18next';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Dialog, Dropdown} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -20,6 +20,7 @@ interface PropsInterface {
 const EditTokenRuleDialog: FC<PropsInterface> = (props) => {
   const {isAdmin, tokenGroupUserId} = props;
 
+  const {t} = useTranslation();
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {space} = spaceManagerStore;
 

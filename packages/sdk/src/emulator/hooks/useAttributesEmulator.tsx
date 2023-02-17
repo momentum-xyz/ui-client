@@ -25,7 +25,11 @@ export const useAttributesEmulator = () => {
   }>();
 
   const useAttributeChange = useCallback(
-    (topic, attributeName: string, callback) => {
+    (
+      _topic: string,
+      attributeName: string,
+      callback: (name: any, value: AttributeValueInterface) => void
+    ) => {
       setInterval(() => {
         if (attributeChanged?.attributeName === attributeName && subscribed) {
           callback(attributeChanged.attributeName, attributeChanged.value);
@@ -37,7 +41,7 @@ export const useAttributesEmulator = () => {
   );
 
   const useAttributeRemove = useCallback(
-    (topic, attributeName: string, callback) => {
+    (_topic: string, attributeName: string, callback: () => void) => {
       setInterval(() => {
         if (attributeRemoved?.attributeName === attributeName && subscribed) {
           callback();
@@ -49,7 +53,12 @@ export const useAttributesEmulator = () => {
   );
 
   const useAttributeItemChange = useCallback(
-    (topic, attributeName: string, attributeItemName: string, callback) => {
+    (
+      _topic: string,
+      attributeName: string,
+      attributeItemName: string,
+      callback: (value: any) => void
+    ) => {
       setInterval(() => {
         if (
           attributeItemChanged?.attributeName === attributeName &&
@@ -65,7 +74,7 @@ export const useAttributesEmulator = () => {
   );
 
   const useAttributeItemRemove = useCallback(
-    (topic, attributeName: string, attributeItemName: string, callback) => {
+    (_topic: string, attributeName: string, attributeItemName: string, callback: () => void) => {
       setInterval(() => {
         if (
           attributeItemRemoved?.attributeName === attributeName &&

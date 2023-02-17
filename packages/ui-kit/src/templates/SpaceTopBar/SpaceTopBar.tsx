@@ -20,6 +20,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   onLeave: () => void;
   adminLink?: string;
   baseLink?: string;
+  children?: React.ReactNode;
 }
 
 const SpaceTopBar: FC<PropsInterface> = ({

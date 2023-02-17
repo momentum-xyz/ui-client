@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import {FC, PropsWithChildren, ReactNode, useState} from 'react';
 
 import {ObjectTopBar} from '../../templates';
 
@@ -8,13 +8,13 @@ interface PropsInterface {
   dataTestId?: string;
   title: string;
   subtitle?: string;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
   onClose?: () => void;
   initialIsExpanded?: boolean;
   onToggleExpand?: (isExpanded: boolean) => void;
 }
 
-const WindowPanel: FC<PropsInterface> = ({
+const WindowPanel: FC<PropsWithChildren<PropsInterface>> = ({
   dataTestId,
   children,
   title,

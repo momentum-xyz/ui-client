@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
-import {generatePath, Redirect, Route, Switch, useParams} from 'react-router-dom';
+import {generatePath, Navigate, Route, Routes, useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router';
+import {useNavigate} from 'react-router';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -14,12 +14,12 @@ const StageModePage: FC = () => {
 
   const {spaceId} = useParams<{spaceId: string}>();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onLeaveMeeting = useCallback(async () => {
     //await leaveMeetingSpace();
-    history.push(ROUTES.base);
-  }, [history]);
+    navigate(ROUTES.base);
+  }, [navigate]);
 
   // FIXME: Make view "rightLoaded" under "collaborationStore"
   if (collaborationStore.spaceStore.moderationRequest.isPending) {
@@ -27,18 +27,26 @@ const StageModePage: FC = () => {
   }
 
   return (
-    <Switch>
-      <Route exact path={generatePath(ROUTES.collaboration.stageMode, {spaceId})}>
+    <Routes>
+      <Route path={generatePath(ROUTES.collaboration.stageMode, {spaceId})}>
         {collaborationStore.isModerator ? (
-          <Redirect to={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})} />
+          <Route
+            path="*"
+            element={
+              <Navigate
+                to={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}
+                replace
+              />
+            }
+          />
         ) : (
           <StageModeGuest onLeaveMeeting={onLeaveMeeting} />
         )}
       </Route>
-      <Route exact path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>
+      <Route path={generatePath(ROUTES.collaboration.stageModeControl, {spaceId})}>
         <StageModeModerator onLeaveMeeting={onLeaveMeeting} />
       </Route>
-    </Switch>
+    </Routes>
   );
 };
 

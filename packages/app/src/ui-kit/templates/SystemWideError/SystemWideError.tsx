@@ -9,6 +9,7 @@ import * as styled from './SystemWideError.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   text: string | string[];
   showRefreshButton?: boolean;
+  theme: any; // TODO Add proper
 }
 
 const SystemWideError: FC<PropsInterface> = ({theme, text, showRefreshButton}) => {
