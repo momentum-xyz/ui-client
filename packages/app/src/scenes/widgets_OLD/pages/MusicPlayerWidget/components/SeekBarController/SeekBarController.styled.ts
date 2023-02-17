@@ -7,7 +7,7 @@ export const Container = styled.div`
   gap: 5px;
   font-size: var(--font-size-xxs);
   width: 170px;
-  padding-top: 15px; ;
+  padding-top: 15px;
 `;
 
 export const SeekBar = styled.input`
