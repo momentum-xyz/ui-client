@@ -48,7 +48,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
   }
 
   .Toastify__toast--info {
-    background: var(--new-blue-10);
+    background: #0517451a;
     padding: 0;
     border: none;
     .Toastify__progress-bar {
@@ -60,7 +60,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
   }
 
   .Toastify__toast--error {
-    background: var(--new-blue-10);
+    background: #0517451a;
     padding: 0;
     border: none;
     .Toastify__progress-bar {

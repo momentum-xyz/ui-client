@@ -12,7 +12,7 @@
     "clean": "rimraf dist/",
     "build": "yarn clean && tsc --listEmittedFiles && yarn copy-files",
     "start": "yarn copy-files && tsc -w",
-    "copy-files": "copyfiles -u 1 src/**/*.svg dist/",
+    "copy-files": "copyfiles -u 1 src/**/*.svg dist/ && copyfiles -u 1 src/**/*.css dist/",
     "svg-sprite:build": "node scripts/buildSvgSprite.js",
     "svg-sprite:type": "node scripts/generateIconsType.js"
   },

@@ -1,6 +1,3 @@
-@import './fonts';
-@import './reset';
-@import './variables.css';
 @import './unity';
 @import './google';
 @import './range';
@@ -33,22 +30,6 @@ body {
   left: 0;
   z-index: var(--base-z-index);
   pointer-events: none;
-}
-
-.noScrollIndicator {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.noScrollIndicator::-webkit-scrollbar {
-  display: none;
-}
-
-.text-truncate {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .birth-of-me-active {
