@@ -28,7 +28,7 @@ const ChangeVideoDialog: FC = () => {
       return;
     }
 
-    await assetStore.postNewImage(objectId, data.image);
+    await assetStore.postNewImage(objectId!, data.image);
 
     changeTileDialog.close();
   };

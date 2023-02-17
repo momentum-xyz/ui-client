@@ -1,8 +1,8 @@
 import React, {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {toast} from 'react-toastify';
 import {SectionPanel} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import {ToastContent, TOAST_COMMON_OPTIONS} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -12,6 +12,7 @@ import {RemoveUserConfirmationDialog, EditMemberDialog, AddMemberDialog} from '.
 import * as styled from './SpaceMembersPanel.styled';
 
 const SpaceMembersPanel: FC = () => {
+  const {t} = useTranslation();
   const {spaceManagerStore} = useStore().spaceAdminStore;
   const {removeUserConfirmationDialog, editUserDialog, addUserDialog, space} = spaceManagerStore;
 

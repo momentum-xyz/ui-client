@@ -1,6 +1,6 @@
 import {FC, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -11,12 +11,12 @@ import * as styled from './CreatorMenu.styled';
 const CreatorMenu: FC = () => {
   const {worldId} = useStore().unityStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   const onAddObjectClick = useCallback(() => {
-    history.push(generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId}));
-  }, [history, worldId]);
+    navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId}));
+  }, [navigate, worldId]);
 
   /* FIXME: Uncomment when the BE will be ready
   const onSpawnPointClick = useCallback(() => {
@@ -24,8 +24,8 @@ const CreatorMenu: FC = () => {
   }, [history, worldId]);*/
 
   const onSkyboxClick = useCallback(() => {
-    history.push(generatePath(ROUTES.odyssey.creator.skybox, {worldId}));
-  }, [history, worldId]);
+    navigate(generatePath(ROUTES.odyssey.creator.skybox, {worldId}));
+  }, [navigate, worldId]);
 
   return (
     <Portal>

@@ -1,13 +1,13 @@
 import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {t} from 'i18next';
 import {SubmitHandler, Controller, useForm} from 'react-hook-form';
-import DatePicker from 'react-datepicker';
+import DatePickerOriginal, {ReactDatePickerProps} from 'react-datepicker';
 import cn from 'classnames';
 import {Input, Dialog, TextArea} from '@momentum-xyz/ui-kit';
 import {DATE_TIME_FORMAT, timeFromNow} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {NewsfeedTypeEnum} from 'core/enums';
@@ -16,7 +16,10 @@ import {ToastContent} from 'ui-kit';
 
 import * as styled from './EventForm.styled';
 
+const DatePicker = DatePickerOriginal as unknown as FC<ReactDatePickerProps>;
+
 const EventForm: FC = () => {
+  const {t} = useTranslation();
   const theme = useTheme();
   const {widgetsStore, unityStore, sessionStore, exploreStore, nftStore} = useStore();
   const {calendarStore} = widgetsStore;

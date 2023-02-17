@@ -1,7 +1,8 @@
-import {FC, useRef, useEffect} from 'react';
+import {FC, useRef, useEffect, ReactNode} from 'react';
 import {createPortal} from 'react-dom';
 
 interface PropsInterface {
+  children: ReactNode;
   parentId?: string;
   maximized?: boolean;
   className?: string;

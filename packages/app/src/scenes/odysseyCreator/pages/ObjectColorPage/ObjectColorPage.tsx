@@ -2,7 +2,7 @@ import {Button, Dialog, useClickOutside, useDebouncedCallback} from '@momentum-x
 import {observer} from 'mobx-react-lite';
 import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {ColorPicker, useColor, toColor} from 'react-color-palette';
 
 import {ROUTES} from 'core/constants';
@@ -28,11 +28,11 @@ const ObjectColorPage: FC = () => {
   const [color, setColor] = useColor('hex', COLOR_PICKER_DEFAULT_COLOR);
 
   const {objectId} = useParams<{objectId: string}>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   useClickOutside(ref, () => {
-    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
   });
 
   const changeUnityObjectColor = useDebouncedCallback((colorHex: string) => {
@@ -56,14 +56,14 @@ const ObjectColorPage: FC = () => {
   const onSaveHandler = useCallback(async () => {
     await objectColorStore.updateObjectColor(objectId, color.hex);
     unityInstanceStore.colorPickedPreview(objectId, color.hex);
-    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
-  }, [color.hex, history, objectColorStore, objectId, unityStore, unityInstanceStore]);
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+  }, [color.hex, navigate, objectColorStore, objectId, unityStore, unityInstanceStore]);
 
   const onCancelHandler = useCallback(() => {
     const initialColor = objectColorStore.objectColor || COLOR_PICKER_DEFAULT_COLOR;
     unityInstanceStore.colorPickedPreview(objectId, initialColor);
-    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
-  }, [history, objectColorStore.objectColor, objectId, unityInstanceStore, unityStore.worldId]);
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+  }, [navigate, objectColorStore.objectColor, objectId, unityInstanceStore, unityStore.worldId]);
 
   return (
     <styled.Wrapper>

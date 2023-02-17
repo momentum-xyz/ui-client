@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {UserStatusEnum} from '@momentum-xyz/ui-kit';
@@ -20,20 +20,20 @@ const FlyWithMePage: FC = () => {
 
   const {spaceId, pilotId} = useParams<{spaceId: string; pilotId: string}>();
   const {t} = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!agoraStore_OLD.hasJoined) {
-      history.push(ROUTES.base);
+      navigate(ROUTES.base);
     }
-  }, [agoraStore_OLD, history]);
+  }, [agoraStore_OLD, navigate]);
 
   const isPilot = useMemo(() => {
     return sessionStore.userId === pilotId;
   }, [pilotId, sessionStore.userId]);
 
   useEffect(() => {
-    flyWithMeStore.init(pilotId);
+    flyWithMeStore.init(pilotId!);
     unityInstanceStore.hideMinimap();
 
     return () => {
@@ -42,7 +42,7 @@ const FlyWithMePage: FC = () => {
       flyWithMeStore.resetModel();
 
       if (isPilot) {
-        flyWithMeStore.stop(spaceId);
+        flyWithMeStore.stop(spaceId!);
       }
     };
   }, [pilotId, unityInstanceStore, flyWithMeStore, isPilot, spaceId]);
@@ -81,7 +81,7 @@ const FlyWithMePage: FC = () => {
             pilotStatus={pilot.status}
             pilotAvatarSrc={pilot.avatarSrc}
             onCloseOrDisengage={() => {
-              history.push(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
+              navigate(generatePath(ROUTES.collaboration.dashboard, {spaceId}));
             }}
           />
           {!isPilot && <PassengerAlert />}

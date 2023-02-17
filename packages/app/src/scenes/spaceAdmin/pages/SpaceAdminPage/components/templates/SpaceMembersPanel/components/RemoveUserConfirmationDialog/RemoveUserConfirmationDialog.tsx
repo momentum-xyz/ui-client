@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
-import {t} from 'i18next';
 import {Dialog, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import * as styled from './RemoveUserConfirmationDialog.styled';
 
@@ -11,6 +11,7 @@ interface PropsInterface {
 }
 
 const RemoveUserConfirmationDialog: FC<PropsInterface> = ({onConfirmation, onClose, userName}) => {
+  const {t} = useTranslation();
   return (
     <Dialog
       title={t('spaceAdmin.users.removeConfirmation.title')}

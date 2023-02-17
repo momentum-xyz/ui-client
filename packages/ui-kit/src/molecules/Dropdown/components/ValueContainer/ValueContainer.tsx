@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, PropsWithChildren} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../../../interfaces';
@@ -12,7 +12,7 @@ interface PropsInterface extends PropsWithThemeInterface {
   isDisabled?: boolean;
 }
 
-const ValueContainer: FC<PropsInterface> = (props) => {
+const ValueContainer: FC<PropsWithChildren<PropsInterface>> = (props) => {
   const {theme, variant, isDisabled, onClick, children} = props;
   return (
     <styled.Container

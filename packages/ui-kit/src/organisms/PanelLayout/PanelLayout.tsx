@@ -46,6 +46,7 @@ export interface PropsInterface extends PropsWithThemeInterface {
   isMinimap?: boolean;
   tabs?: React.ReactElement;
   closeButtonSize?: SizeType;
+  children?: React.ReactNode;
 }
 
 const PanelLayout: FC<PropsInterface> = (props) => {

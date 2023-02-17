@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
-import {t} from 'i18next';
 import {Dialog, Text} from '@momentum-xyz/ui-kit';
+import {useTranslation} from 'react-i18next';
 
 import * as styled from './StopBroadcastingDialog.styled';
 interface PropsInterface {
@@ -12,6 +12,8 @@ const StopBroadcastingDialog: FC<PropsInterface> = ({onConfirmation, onClose}) =
   const confirm = () => {
     onConfirmation();
   };
+
+  const {t} = useTranslation();
 
   return (
     <Dialog

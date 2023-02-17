@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 import {useTranslation} from 'react-i18next';
@@ -22,7 +22,7 @@ const ObjectMenu: FC = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isObjectColor, setIsObjectColor] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   const topOffset = unityInstanceStore.objectMenuPosition.y - OBJECT_MENU_OFFSET_Y;
@@ -37,22 +37,22 @@ const ObjectMenu: FC = () => {
   }, [objectId, objectFunctionalityStore, objectColorStore, worldId]);
 
   const handleOnFunctionalityClick = useCallback(() => {
-    history.push({
+    navigate({
       pathname: generatePath(ROUTES.odyssey.creator.functionality, {
         worldId,
         objectId
       })
     });
-  }, [history, objectId, worldId]);
+  }, [navigate, objectId, worldId]);
 
   const handleOnColorClick = useCallback(() => {
-    history.push({
+    navigate({
       pathname: generatePath(ROUTES.odyssey.creator.objectColor, {
         worldId,
         objectId
       })
     });
-  }, [history, objectId, worldId]);
+  }, [navigate, objectId, worldId]);
 
   return (
     <Portal>

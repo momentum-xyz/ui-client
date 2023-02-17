@@ -1,9 +1,9 @@
-import {FC, useEffect, useRef} from 'react';
-import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
 import {useClickOutside} from '@momentum-xyz/ui-kit';
 import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
+import {observer} from 'mobx-react-lite';
+import {FC, useEffect, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -14,14 +14,17 @@ const ObjectFunctionalityPage: FC = () => {
   const {odysseyCreatorStore, unityStore} = useStore();
   const {objectFunctionalityStore} = odysseyCreatorStore;
 
-  const ref = useRef<HTMLDivElement>(null);
-  const {objectId} = useParams<{objectId: string}>();
+  const navigate = useNavigate();
 
-  const history = useHistory();
+  const ref = useRef<HTMLDivElement>(null);
+
   const {t} = useTranslation();
 
+  const {objectId} = useParams<{objectId: string}>();
+
   useClickOutside(ref, () => {
-    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    // navigate(-1);
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
   });
 
   useEffect(() => {
@@ -52,7 +55,6 @@ const ObjectFunctionalityPage: FC = () => {
               <Text text={t('messages.selectOne')} size="s" align="left" />
             </styled.HeadingWrapper>
             <Dropdown
-              variant="secondary"
               value={objectFunctionalityStore.currentAssetId}
               options={objectFunctionalityStore.asset2dOptions}
               placeholder={t('placeholders.selectAnOption')}
@@ -60,6 +62,7 @@ const ObjectFunctionalityPage: FC = () => {
                 objectFunctionalityStore.selectAsset(option.value);
                 await objectFunctionalityStore.updateObject();
               }}
+              variant="secondary"
             />
           </styled.PanelBody>
         </PanelLayout>

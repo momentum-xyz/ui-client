@@ -15,7 +15,7 @@ import {
   PluginPropsInterface,
   ObjectGlobalPropsContextProvider
 } from '@momentum-xyz/sdk';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import cn from 'classnames';
 
 import {ToastContent} from 'ui-kit';
@@ -38,7 +38,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
 
   const theme = useTheme();
   const {t} = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {worldId} = useParams<{worldId: string}>();
 
@@ -67,7 +67,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
   const onClose = () => {
-    history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
   };
 
   const pluginProps: PluginPropsInterface = {

@@ -1,7 +1,7 @@
 import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory, useLocation} from 'react-router-dom';
-import {ThemeProvider} from 'styled-components';
+import {useNavigate, useLocation} from 'react-router-dom';
+import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
 import {useTranslation} from 'react-i18next';
 import {isBrowserSupported} from '@momentum-xyz/core';
 import {LoaderFallback} from '@momentum-xyz/ui-kit';
@@ -16,19 +16,22 @@ import {UnityPage} from 'scenes/unity';
 import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
-import {GlobalStyles} from './App.styled';
+import {GlobalStyles as GlobalStylesOriginal} from './App.styled';
 import {TestnetMarkWidget} from './widgets/pages';
 
 import 'react-notifications/lib/notifications.css';
 import 'react-toastify/dist/ReactToastify.css';
+
+const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
+const GlobalStyles = GlobalStylesOriginal as unknown as FC<any>;
 
 const App: FC = () => {
   const rootStore = useStore();
   const {configStore, sessionStore, themeStore, sentryStore} = rootStore;
   const {configLoadingErrorCode} = configStore;
 
-  const {pathname} = useLocation<{pathname: string}>();
-  const history = useHistory();
+  const {pathname} = useLocation();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   useApiHandlers();
@@ -48,9 +51,9 @@ const App: FC = () => {
 
   useEffect(() => {
     if (isBrowserUnsupported) {
-      history.push({pathname: ROUTES.system.wrongBrowser});
+      navigate({pathname: ROUTES.system.wrongBrowser});
     }
-  }, [isBrowserUnsupported, history]);
+  }, [isBrowserUnsupported, navigate]);
 
   if (configStore.isError && !configStore.isConfigReady) {
     return (

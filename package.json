@@ -29,8 +29,8 @@
   },
   "resolutions": {
     "styled-components": "^5",
-    "@types/react": "^16.0.0",
-    "@types/react-dom": "^16.0.0"
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10"
   },
   "workspaces": {
     "packages": [

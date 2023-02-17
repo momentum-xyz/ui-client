@@ -1,9 +1,12 @@
 import {DefaultThemeConfig, ThemeInterface} from '@momentum-xyz/ui-kit';
-import {createContext, useContext} from 'react';
+import {createContext, ReactNode, useContext} from 'react';
 
 export const ThemeContext = createContext<ThemeInterface>(DefaultThemeConfig);
 
-export const ThemeContextProvider: React.FC<{theme: ThemeInterface}> = ({theme, children}) => {
+export const ThemeContextProvider: React.FC<{theme: ThemeInterface; children?: ReactNode}> = ({
+  theme,
+  children
+}) => {
   return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import DraggableContent from 'react-draggable';
@@ -17,7 +17,7 @@ const Draggable: any = DraggableContent;
 const StageModePIPWidget: React.FC = () => {
   const {agoraStore_OLD} = useStore();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
 
   if (!agoraStore_OLD.isStageMode) {
@@ -35,7 +35,7 @@ const StageModePIPWidget: React.FC = () => {
           <styled.HeaderElement
             className="right"
             onClick={() => {
-              history.push(
+              navigate(
                 generatePath(ROUTES.collaboration.stageMode, {spaceId: agoraStore_OLD.spaceId})
               );
             }}

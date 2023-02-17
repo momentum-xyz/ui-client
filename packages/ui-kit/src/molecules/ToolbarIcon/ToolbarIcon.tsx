@@ -1,8 +1,7 @@
-import React, {FC} from 'react';
+import React, {FC, PropsWithChildren} from 'react';
 import {NavLink} from 'react-router-dom';
 import cn from 'classnames';
 import * as H from 'history';
-import {match} from 'react-router';
 
 import {PropsWithThemeInterface, ToolbarIconInterface} from '../../interfaces';
 import {PlacementType, SizeType} from '../../types';
@@ -16,13 +15,14 @@ interface ToolbarIconPropsInterface extends PropsWithThemeInterface, ToolbarIcon
   visible?: boolean;
   size?: SizeType;
   exact?: boolean;
-  isActive?: (match: match | null, location: H.Location) => boolean;
+  isActive?: (match: any | null, location: H.Location) => boolean; // TODO AK Fix this
+  // isActive?: (match: match | null, location: H.Location) => boolean;
   state?: object;
   isWhite?: boolean;
   toolTipPlacement?: PlacementType;
 }
 
-const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
+const ToolbarIcon: FC<PropsWithChildren<ToolbarIconPropsInterface>> = ({
   link,
   title,
   icon,
@@ -55,10 +55,11 @@ const ToolbarIcon: FC<ToolbarIconPropsInterface> = ({
       <Tooltip label={title} placement={toolTipPlacement}>
         {link && !disabled ? (
           <NavLink
-            to={{pathname: link, state}}
-            activeClassName="active"
-            exact={exact}
-            isActive={isActive}
+            to={link}
+            state={state}
+            className={(p) => (p.isActive ? 'active' : undefined)}
+            end={exact}
+            // isActive={isActive} TODO AK Find solution for this
             onClick={onClick}
           >
             {icon ? (

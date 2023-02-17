@@ -7,30 +7,13 @@ import {
 } from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {t} from 'i18next';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 import {convertToHex} from 'core/utils';
 
 import * as styled from './StakingDashboard.styled';
-
-const tabBarTabs: TabBarTabInterface[] = [
-  {
-    id: 'wallet',
-    label: t('staking.walletTitle'),
-    title: t('staking.walletTitle'),
-    icon: 'wallet',
-    disabled: true
-  },
-  {
-    id: 'confirm',
-    title: t('staking.confirmTitle'),
-    label: t('staking.confirmTitle'),
-    icon: 'check',
-    disabled: true
-  }
-];
 
 const StakingDashboard: FC = () => {
   const {sessionStore, nftStore, exploreStore} = useStore();
@@ -47,6 +30,8 @@ const StakingDashboard: FC = () => {
     tokenSymbol,
     requestingFundsStatus
   } = nftStore;
+
+  const {t} = useTranslation();
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
   // const nft = wallet ? nftStore.getNftByWallet(wallet) : null;
@@ -73,6 +58,23 @@ const StakingDashboard: FC = () => {
   const [nextAvailableAirdropTime, setNextAvailableAirdropTime] = useState<string>(
     getDateOfNextAllowedAirdrop(authWallet)
   );
+
+  const tabBarTabs: TabBarTabInterface[] = [
+    {
+      id: 'wallet',
+      label: t('staking.walletTitle'),
+      title: t('staking.walletTitle'),
+      icon: 'wallet',
+      disabled: true
+    },
+    {
+      id: 'confirm',
+      title: t('staking.confirmTitle'),
+      label: t('staking.confirmTitle'),
+      icon: 'check',
+      disabled: true
+    }
+  ];
 
   const balanceSections = [
     {label: t('staking.balanceTypes.account'), value: balanceTotal},

@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 
@@ -24,7 +24,7 @@ const SignInAccountPage: FC = () => {
 
   const {t} = useTranslation();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   console.log('SignInAccountPage', {
     balanceTotal,
@@ -57,12 +57,12 @@ const SignInAccountPage: FC = () => {
         // NFT should be minted and accessible by now - if it doesn't happen sometimes
         // we can put some wait here
         await nftStore.fetchNfts();
-        history.push(ROUTES.birth);
+        navigate(ROUTES.birth);
       } catch (err) {
         console.log('error minting nft', err);
       }
     },
-    [history, nftStore, signInStore]
+    [navigate, nftStore, signInStore]
   );
 
   return (

@@ -38,10 +38,11 @@ const NavigationBarItem: FC<PropsInterface> = ({
       data-testid="NavigationBarItem-test"
     >
       <styled.StyledNavLink
-        exact={exact}
-        to={{pathname: path, state}}
+        end={exact}
+        to={path}
+        state={state}
         key={path}
-        activeClassName="active"
+        className={({isActive}) => (isActive ? 'active' : undefined)}
         replace={replace}
       >
         <div className={cn('icon', isActive && 'isActive', hovered && 'hovered')}>

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, PropsWithChildren} from 'react';
 import cn from 'classnames';
 
 import {IconSvg, Heading} from '../../atoms';
@@ -16,7 +16,7 @@ interface ExpandableLayoutPropsInterface extends PropsWithThemeInterface {
   size?: ComponentSizeInterface;
 }
 
-const ExpandableLayout: FC<ExpandableLayoutPropsInterface> = ({
+const ExpandableLayout: FC<PropsWithChildren<ExpandableLayoutPropsInterface>> = ({
   iconName,
   name,
   fullHeight = false,

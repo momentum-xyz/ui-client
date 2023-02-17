@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
-import {generatePath, useHistory, useParams} from 'react-router-dom';
+import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {Button, FileUploader, Text} from '@momentum-xyz/ui-kit';
 import {useTranslation} from 'react-i18next';
 import {Model3dPreview} from '@momentum-xyz/map3d';
@@ -17,7 +17,7 @@ export const SelectedPage: FC = () => {
 
   const {selectedAssset: asset} = spawnAssetStore;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const {t} = useTranslation();
 
@@ -32,16 +32,16 @@ export const SelectedPage: FC = () => {
   }, [spawnAssetStore]);
 
   const handleSpawn = useCallback(() => {
-    spawnAssetStore.spawnObject(worldId).then((objectId) => {
+    spawnAssetStore.spawnObject(worldId!).then((objectId) => {
       if (objectId) {
         if (window.history.state?.state?.setFunctionalityAfterCreation) {
-          history.push(generatePath(ROUTES.odyssey.creator.functionality, {worldId, objectId}));
+          navigate(generatePath(ROUTES.odyssey.creator.functionality, {worldId, objectId}));
         } else {
-          history.push(generatePath(ROUTES.odyssey.base, {worldId}));
+          navigate(generatePath(ROUTES.odyssey.base, {worldId}));
         }
       }
     });
-  }, [history, spawnAssetStore, worldId]);
+  }, [navigate, spawnAssetStore, worldId]);
 
   const handleSnapshot = async (dataURL: string, initialSnapshot: boolean) => {
     if (!asset || !!asset.preview_hash || !initialSnapshot) {
@@ -111,7 +111,7 @@ export const SelectedPage: FC = () => {
       <Button
         label={t('actions.goBack')}
         onClick={() => {
-          history.goBack();
+          navigate(-1);
         }}
       />
       {process.env.NODE_ENV === 'development' && (

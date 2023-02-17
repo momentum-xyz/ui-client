@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {generatePath, useHistory} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 
@@ -17,7 +17,7 @@ const JoinLeaveButtons: FC<PropsInterface> = (props) => {
   const {spaceId, isJoinButtonShown, onLeave} = props;
 
   const {t} = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <styled.Container data-testid="JoinLeaveButtons-test">
@@ -27,7 +27,7 @@ const JoinLeaveButtons: FC<PropsInterface> = (props) => {
           label={t('actions.return')}
           icon="collaboration"
           onClick={() => {
-            history.push({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
+            navigate({pathname: generatePath(ROUTES.collaboration.dashboard, {spaceId})});
           }}
         />
       )}

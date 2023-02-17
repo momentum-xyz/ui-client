@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {generatePath, matchPath, useHistory, useLocation} from 'react-router-dom';
+import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import Unity from 'react-unity-webgl';
@@ -32,7 +32,7 @@ const UnityPage: FC = () => {
   const {unityInstanceStore} = unityStore;
 
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {t} = useTranslation();
   const location = useLocation();
 
@@ -46,7 +46,8 @@ const UnityPage: FC = () => {
 
     let worldId = '';
     paths.forEach((path) => {
-      const match = matchPath<{worldId: string}>(location.pathname, {path: path});
+      const match = matchPath({path: path, end: false}, location.pathname);
+      // const match = matchPath<{worldId: string}>({path: path}, location.pathname);
       if (match?.params?.worldId) {
         worldId = match.params.worldId;
       }
@@ -88,7 +89,7 @@ const UnityPage: FC = () => {
         return;
       }
     }
-    history.push({
+    navigate({
       pathname: generatePath(ROUTES.odyssey.object.root, {
         worldId: unityStore.worldId,
         objectId: spaceId
@@ -98,7 +99,7 @@ const UnityPage: FC = () => {
 
   useUnityEvent('EditObjectEvent', (spaceId: string) => {
     console.log('EditObjectEvent', spaceId);
-    history.push(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
     setTimeout(() => {
       // This even comes faster than actual click, so delay
       unityInstanceStore.onUnityObjectClick(spaceId);

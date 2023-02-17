@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
 import {useSupernova} from 'shared/hooks';
@@ -8,13 +8,13 @@ import {useSupernova} from 'shared/hooks';
 const DELAY_MS = 10 * 1000;
 
 const BirthAnimationPage: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
-      history.push(ROUTES.explore);
+      navigate(ROUTES.explore);
     }, DELAY_MS);
-  }, [history]);
+  }, [navigate]);
 
   useSupernova();
 
