@@ -27,11 +27,6 @@
     "postpack": "pinst --enable",
     "clean": "rimraf packages/**/build packages/**/dist packages/**/node_modules node_modules"
   },
-  "resolutions": {
-    "styled-components": "^5",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10"
-  },
   "workspaces": {
     "packages": [
       "packages/*"
