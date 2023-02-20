@@ -17,7 +17,7 @@ import {
 } from '../contants';
 import {PlanetMesh} from '../classes';
 import astronaut from '../static/images/astronaut.png';
-import BasicSkyboxHD from '../static/images/BasicSkyboxHD.jpg';
+import BasicSkyboxHD from '../static/images/galaxy.jpg';
 
 export const use3dMap = (
   canvas: HTMLCanvasElement,
