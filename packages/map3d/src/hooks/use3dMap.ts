@@ -19,6 +19,8 @@ import {PlanetMesh} from '../classes';
 import astronaut from '../static/images/astronaut.png';
 import BasicSkyboxHD from '../static/images/galaxy.jpg';
 
+import {useOdyssey} from './useOdyssey';
+
 export const use3dMap = (
   canvas: HTMLCanvasElement,
   items: Map3dUserInterface[],
@@ -33,7 +35,6 @@ export const use3dMap = (
   /**
    * Reusable properties of galaxy
    */
-  const odysseyAvatarGeometry = useRef(new THREE.CircleGeometry(0.8, 26));
   const listOfOdysseys = useRef<PlanetMesh[]>([]);
   const referenceListOfOdysseys = useRef<PlanetMesh[]>([]);
 
@@ -41,12 +42,10 @@ export const use3dMap = (
   const raycaster = useRef(new THREE.Raycaster());
   const pointer = useRef(new THREE.Vector2());
   const backgroundImage = useRef<THREE.Texture>();
-  const odysseyBaseSphereGeometry = useRef(new THREE.SphereGeometry(1, 16, 16));
-  const odysseyBaseSphereMaterial = useRef<THREE.MeshPhysicalMaterial>();
+
   const updateCameraRotation = useRef<boolean>(false);
   const transitionToPlanetFinished = useRef<boolean>(true);
 
-  const nameRingGeometry = useRef(new THREE.CylinderGeometry(1.2, 1.2, 0.5, 22, 1, true));
   const nameRingOffset = useRef(0);
 
   const pointsGeometry = useRef<THREE.BufferGeometry | null>(null);
@@ -62,6 +61,8 @@ export const use3dMap = (
   const activeLinesOwner = useRef<string>();
   const activeLines = useRef<Line2[]>([]);
   const defaultOdysseyTexture = useRef(new THREE.TextureLoader().load(astronaut));
+
+  const {createOdyssey} = useOdyssey(getImageUrl);
 
   const createTextCanvas = useCallback((name: string) => {
     const drawCanvas = document.createElement('canvas');
@@ -273,66 +274,6 @@ export const use3dMap = (
   }, []);
 
   /**
-   * Create a new Odyssey
-   */
-  const createNewOdyssey = useCallback(
-    (item: Map3dUserInterface) => {
-      const imageUrl = getImageUrl(item.image) || astronaut;
-      const texture = new THREE.TextureLoader().load(imageUrl, undefined, undefined, () => {
-        // Using default image of odyssey if an image was not loaded
-        texture.image = defaultOdysseyTexture.current.image;
-        texture.needsUpdate = true;
-      });
-
-      const odysseyAvatarMaterial = new THREE.MeshBasicMaterial({
-        side: THREE.DoubleSide,
-        map: texture
-      });
-
-      // Flip textures horizontally so text is readable.
-      texture.wrapS = THREE.RepeatWrapping;
-
-      const avatarMesh = new THREE.Mesh(odysseyAvatarGeometry.current, odysseyAvatarMaterial);
-
-      // Create custom material for name ring.
-      const nameRingMaterial = new THREE.MeshBasicMaterial({
-        transparent: true,
-        side: THREE.DoubleSide
-      });
-
-      // Construct odyssey ring mesh.
-      const nameRingMesh = new THREE.Mesh(nameRingGeometry.current, nameRingMaterial);
-
-      /**
-       * Build text texture for around the odyssey
-       */
-
-      const drawCanvas = createTextCanvas(item.name);
-      const nameTexture = new THREE.Texture(drawCanvas);
-      nameTexture.needsUpdate = true;
-
-      nameRingMesh.material.map = nameTexture;
-      nameRingMesh.material.map.wrapS = RepeatWrapping;
-
-      const odyssey = new PlanetMesh(
-        odysseyBaseSphereGeometry.current,
-        odysseyBaseSphereMaterial.current!,
-        item.uuid,
-        item.owner,
-        item.name,
-        texture,
-        nameRingMaterial
-      );
-
-      odyssey.add(avatarMesh);
-      odyssey.add(nameRingMesh);
-
-      return odyssey;
-    },
-    [createTextCanvas, getImageUrl]
-  );
-
-  /**
    * Update an existing Odyssey
    */
   const updateOdyssey = useCallback(
@@ -349,12 +290,12 @@ export const use3dMap = (
   const createCenterOdyssey = useCallback(() => {
     const centerItem = items.find((i) => i.owner === currentUser.owner);
     if (centerItem) {
-      const centerOdyssey = createNewOdyssey(centerItem);
+      const centerOdyssey = createOdyssey(centerItem);
 
       referenceListOfOdysseys.current.push(centerOdyssey);
       scene.current.add(centerOdyssey);
     }
-  }, [currentUser, createNewOdyssey, items]);
+  }, [currentUser, createOdyssey, items]);
 
   /**
    * Create array for odyssey
@@ -362,14 +303,14 @@ export const use3dMap = (
   const createOdysseys = useCallback(() => {
     for (let i = 0; i < items.length; i++) {
       if (items[i].owner !== currentUser.owner) {
-        const odyssey = createNewOdyssey(items[i]);
+        const odyssey = createOdyssey(items[i]);
         if (odyssey) {
           listOfOdysseys.current.push(odyssey);
           referenceListOfOdysseys.current.push(odyssey);
         }
       }
     }
-  }, [currentUser, createNewOdyssey, items]);
+  }, [currentUser, createOdyssey, items]);
 
   /**
    * Create Circular Universe of Odysseys
@@ -656,20 +597,6 @@ export const use3dMap = (
     backgroundImage.current = new THREE.TextureLoader().load(BasicSkyboxHD);
     backgroundImage.current.mapping = THREE.EquirectangularReflectionMapping;
     scene.current.background = backgroundImage.current;
-
-    // Setup all base materials and geometries.
-    odysseyBaseSphereMaterial.current = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      envMap: backgroundImage.current,
-      transmission: 1,
-      opacity: 0.3,
-      side: THREE.BackSide,
-      ior: 1.5,
-      metalness: 0.3,
-      roughness: 0,
-      specularIntensity: 1,
-      transparent: true
-    });
 
     generateGalaxy();
 
