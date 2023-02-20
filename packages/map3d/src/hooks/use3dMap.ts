@@ -24,7 +24,7 @@ import {useOdyssey} from './useOdyssey';
 export const use3dMap = (
   canvas: HTMLCanvasElement,
   items: Map3dUserInterface[],
-  currentUser: Map3dUserInterface,
+  user: Map3dUserInterface,
   getConnections: (wallet: string) => Promise<string[]>,
   getImageUrl: (urlOrHash: string | undefined | null) => string | null,
   onSelectOdyssey: (uuid: string) => void
@@ -285,32 +285,25 @@ export const use3dMap = (
   );
 
   /**
-   * Create center Odyssey
-   */
-  const createCenterOdyssey = useCallback(() => {
-    const centerItem = items.find((i) => i.owner === currentUser.owner);
-    if (centerItem) {
-      const centerOdyssey = createOdyssey(centerItem);
-
-      referenceListOfOdysseys.current.push(centerOdyssey);
-      scene.current.add(centerOdyssey);
-    }
-  }, [currentUser, createOdyssey, items]);
-
-  /**
    * Create array for odyssey
    */
-  const createOdysseys = useCallback(() => {
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].owner !== currentUser.owner) {
-        const odyssey = createOdyssey(items[i]);
-        if (odyssey) {
-          listOfOdysseys.current.push(odyssey);
-          referenceListOfOdysseys.current.push(odyssey);
-        }
-      }
+  const generateOdysseys = useCallback(() => {
+    // Other Odyssey List
+    const otherOdysseys = items.filter((o) => o.owner !== user.owner);
+    otherOdysseys.forEach((item) => {
+      const odyssey = createOdyssey(item);
+      listOfOdysseys.current.push(odyssey);
+      referenceListOfOdysseys.current.push(odyssey);
+    });
+
+    // My odyssey at center
+    const myOdyssey = items.find((o) => o.owner === user.owner);
+    if (myOdyssey) {
+      const odyssey = createOdyssey(myOdyssey);
+      referenceListOfOdysseys.current.push(odyssey);
+      scene.current.add(odyssey);
     }
-  }, [currentUser, createOdyssey, items]);
+  }, [createOdyssey, items, user.owner]);
 
   /**
    * Create Circular Universe of Odysseys
@@ -600,11 +593,9 @@ export const use3dMap = (
 
     generateGalaxy();
 
-    createOdysseys();
+    generateOdysseys();
 
-    createCenterOdyssey();
-
-    drawConnections(currentUser.owner);
+    drawConnections(user.owner);
 
     buildUniverse();
 
