@@ -10,7 +10,7 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 import * as styled from './Momentum.styled';
 
 const Momentum: React.FC = () => {
-  const {widgetStore_OLD, flightStore} = useStore();
+  const {widgetStore_OLD} = useStore();
   const {helpStore} = widgetStore_OLD;
 
   const handleExpand = () => {
@@ -27,32 +27,22 @@ const Momentum: React.FC = () => {
       <styled.TextItem>{t('helpSection.momentum.paragraphs.one')}</styled.TextItem>
       <styled.TextItem>
         {t('helpSection.momentum.paragraphs.two.partOne')}
-        <styled.HighlightedSpan {...(!flightStore.isFlightWithMe && {onClick: () => {}})}>
+        <styled.HighlightedSpan>
           {t('helpSection.momentum.paragraphs.two.highlightedPart')}
         </styled.HighlightedSpan>
         {t('helpSection.momentum.paragraphs.two.partTwo')}
       </styled.TextItem>
       <styled.TextItem>
         {t('helpSection.momentum.paragraphs.three.partOne')}
-        <styled.HighlightedSpan {...(!flightStore.isFlightWithMe && {onClick: () => {}})}>
+        <styled.HighlightedSpan>
           {t('helpSection.momentum.paragraphs.three.highlightedPart')}
         </styled.HighlightedSpan>
         {t('helpSection.momentum.paragraphs.three.partTwo')}
       </styled.TextItem>
       <styled.TextItem>{t('helpSection.momentum.paragraphs.four')}</styled.TextItem>
       <styled.Buttons>
-        <Button
-          icon="fly-to"
-          label={t('helpSection.momentum.visitSpace')}
-          disabled={flightStore.isFlightWithMe}
-          onClick={() => {}}
-        />
+        <Button icon="fly-to" label={t('helpSection.momentum.visitSpace')} onClick={() => {}} />
       </styled.Buttons>
-      {flightStore.isFlightWithMe && (
-        <styled.FlightWithMeTextItem>
-          {t('helpSection.momentum.visitSpaceDisabled')}
-        </styled.FlightWithMeTextItem>
-      )}
     </Section>
   );
 };
