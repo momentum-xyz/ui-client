@@ -36,11 +36,11 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
       </styled.Search>
 
       <NavLink
-        to={generatePath(ROUTES.odyssey.creator.spawnAsset.standardAssets, {worldId})}
+        to={generatePath(ROUTES.odyssey.creator.spawnAsset.basicAssets, {worldId})}
         children={({isActive}) => (
           <styled.Tab className={cn(isActive && 'selected')}>
             <styled.TabText
-              text={t('labels.standardAssetPack')}
+              text={t('labels.basicAssetPack')}
               size="l"
               weight="light"
               align="left"
@@ -50,11 +50,11 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
       />
 
       <NavLink
-        to={generatePath(ROUTES.odyssey.creator.spawnAsset.basicAssets, {worldId})}
+        to={generatePath(ROUTES.odyssey.creator.spawnAsset.standardAssets, {worldId})}
         children={({isActive}) => (
           <styled.Tab className={cn(isActive && 'selected')}>
             <styled.TabText
-              text={t('labels.basicAssetPack')}
+              text={t('labels.standardAssetPack')}
               size="l"
               weight="light"
               align="left"
