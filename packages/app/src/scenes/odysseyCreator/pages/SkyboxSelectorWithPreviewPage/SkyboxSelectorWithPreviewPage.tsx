@@ -66,15 +66,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                 {currPageSkyboxes.map((item, idx) => {
                   const active = item === currentItem;
                   return (
-                    <styled.Item
-                      className={cn({active})}
-                      key={item.id + `-${idx}`}
-                      onClick={() => {
-                        saveItem(item.id, worldId!).catch((err) => {
-                          toast.error(err.message);
-                        });
-                      }}
-                    >
+                    <styled.Item className={cn({active})} key={item.id + `-${idx}`}>
                       {item.isUserAttribute && item.id !== currentItemId && (
                         <styled.DeleteButtonHolder>
                           <SvgButton
