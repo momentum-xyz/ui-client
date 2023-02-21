@@ -1,5 +1,4 @@
 import React, {FC, useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import ReactHowlerOriginal, {PropTypes as ReactHowlerProps} from 'react-howler';
@@ -11,9 +10,7 @@ import {
   HelpWidget,
   MusicPlayerWidget,
   WorldStatsWidget,
-  StageModePIPWidget,
-  EmojiWidget,
-  LiveStreamPIPWidget
+  EmojiWidget
 } from 'scenes/widgets_OLD/pages';
 
 import * as styled from './Widgets_OLD.styled';
@@ -21,60 +18,32 @@ import * as styled from './Widgets_OLD.styled';
 const ReactHowler = ReactHowlerOriginal as unknown as FC<ReactHowlerProps>;
 
 const Widgets_OLD: FC = () => {
-  const {
-    sessionStore,
-    widgetStore_OLD,
-    flightStore,
-    odysseyCreatorStore: worldBuilderStore,
-    agoraStore_OLD,
-    unityStore
-  } = useStore();
+  const {sessionStore, widgetStore_OLD, odysseyCreatorStore, unityStore} = useStore();
   const {unityInstanceStore} = unityStore;
-  const {agoraStageModeStore} = agoraStore_OLD;
   const {worldStatsStore, helpStore, musicPlayerStore, emojiStore} = widgetStore_OLD;
   const {statsDialog} = worldStatsStore;
   const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
-  const {userDevicesStore} = agoraStore_OLD;
 
   const {t} = useTranslation();
-  const location = useLocation();
 
   useEffect(() => {
     musicPlayerStore.init(unityStore.worldId);
     emojiStore.init(unityStore.worldId);
-    worldBuilderStore.fetchPermissions();
-  }, [userId, user, unityStore.worldId, musicPlayerStore, emojiStore, worldBuilderStore]);
-
-  const toggleMute = () => {
-    if (!agoraStore_OLD.canToggleMicrophone) {
-      return;
-    }
-
-    userDevicesStore.toggleMicrophone();
-  };
-
-  const toggleCameraOn = () => {
-    if (!agoraStore_OLD.canToggleCamera) {
-      return;
-    }
-
-    userDevicesStore.toggleCamera();
-  };
+    odysseyCreatorStore.fetchPermissions();
+  }, [userId, user, unityStore.worldId, musicPlayerStore, emojiStore, odysseyCreatorStore]);
 
   const mainToolbarIcons: ToolbarIconInterface[] = [
     {title: t('labels.worldStats'), icon: 'stats', onClick: statsDialog.open},
     {
       title: t('labels.calendar'),
-      icon: 'calendar',
+      icon: 'calendar'
       // link: location.pathname === '/calendar' ? ROUTES.base : ROUTES.calendar,
-      disabled: flightStore.isFlightWithMe
     },
     {
       title: t('labels.minimap'),
       icon: 'minimap',
-      onClick: () => unityInstanceStore.toggleMiniMap(),
-      disabled: flightStore.isFlightWithMe
+      onClick: () => unityInstanceStore.toggleMiniMap()
     },
     {
       title: t('labels.musicPlayer'),
@@ -90,8 +59,6 @@ const Widgets_OLD: FC = () => {
       {worldStatsStore.statsDialog.isOpen && <WorldStatsWidget />}
       {helpStore.helpDialog.isOpen && <HelpWidget />}
       {musicPlayerStore.musicPlayerWidget.isOpen && <MusicPlayerWidget />}
-      {!location.pathname.includes('stage-mode') && <StageModePIPWidget />}
-      {!location.pathname.includes('live-stream') && <LiveStreamPIPWidget />}
       {emojiStore.selectionDialog.isOpen && (
         <styled.EmojiBar>
           <EmojiWidget onClose={emojiStore.selectionDialog.close} />
@@ -130,32 +97,6 @@ const Widgets_OLD: FC = () => {
           )
         </styled.MainLinks>
         <styled.Toolbars>
-          <ToolbarIconList>
-            <ToolbarIcon
-              title={
-                agoraStore_OLD.isStageMode && !agoraStageModeStore.isOnStage
-                  ? t('messages.youAreInAudience')
-                  : userDevicesStore.cameraOff
-                  ? t('labels.cameraOn')
-                  : t('labels.cameraOff')
-              }
-              icon={userDevicesStore.cameraOff ? 'cameraOff' : 'cameraOn'}
-              onClick={toggleCameraOn}
-              disabled={!agoraStore_OLD.canToggleCamera}
-            />
-            <ToolbarIcon
-              title={
-                agoraStore_OLD.isStageMode && !agoraStageModeStore.isOnStage
-                  ? t('messages.youAreInAudience')
-                  : userDevicesStore.muted
-                  ? t('actions.unmute')
-                  : t('actions.mute')
-              }
-              icon={userDevicesStore.muted ? 'microphoneOff' : 'microphoneOn'}
-              onClick={toggleMute}
-              disabled={!agoraStore_OLD.canToggleMicrophone}
-            />
-          </ToolbarIconList>
           {/* Main toolbar icons */}
           <ToolbarIconList>
             {user?.profile && (
