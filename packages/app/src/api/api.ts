@@ -23,19 +23,10 @@ import * as agoraRepository from './repositories/agoraRepository';
 import * as flightRepository from './repositories/flightRepository';
 import * as streamChatRepository from './repositories/streamChatRepository';
 import * as spaceUserAttributeRepository from './repositories/spaceUserAttributeRepository';
-import * as userRepository_OLD from './repositories_OLD/userRepository';
 import * as spaceRepositoryOld from './repositories_OLD/spaceRepository';
-import * as stageModeRepository from './repositories_OLD/stageModeRepository';
-import * as tokenRuleRepository from './repositories_OLD/tokenRuleRepository';
-import * as tokenRepository from './repositories_OLD/tokenRepository';
-import * as spaceTypeRepository from './repositories_OLD/spaceTypeRepository';
 import * as statsRepository from './repositories_OLD/statsRepository';
 import * as playlistRepository from './repositories_OLD/playlistRepository';
-import * as meetingRepository from './repositories_OLD/meetingRepository';
-import * as integrationRepository from './repositories_OLD/integrationRepository';
-import * as spaceIntegrationsRepository from './repositories_OLD/spaceIntegrationsRepository';
 import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
-import * as agoraRepository_old from './repositories_OLD/agoraRepository_old';
 
 /**
  * This layer is responsible for:
@@ -57,20 +48,12 @@ export const api = {
   userProfileRepository,
   newsfeedRepository,
   spaceRepository,
-  userRepository_OLD,
   spaceRepositoryOld,
   flightRepository,
-  stageModeRepository,
   magicLinkRepository,
-  tokenRuleRepository,
-  tokenRepository,
-  spaceTypeRepository,
   statsRepository,
   playlistRepository,
-  meetingRepository,
   agoraRepository,
-  spaceIntegrationsRepository,
-  integrationRepository,
   streamChatRepository,
   spaceEmojiRepository,
   pluginsRepository,
@@ -84,8 +67,7 @@ export const api = {
   spaceInfoRepository,
   assets2dRepository,
   objectRepository,
-  assets3dRepository,
-  agoraRepository_old
+  assets3dRepository
 };
 
 /**
@@ -121,13 +103,6 @@ export * from './repositories/streamChatRepository/streamChatRepository.api.type
 export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRepository.api.types';
 
 export * from './repositories_OLD/spaceRepository/spaceRepository.api.types';
-export * from './repositories_OLD/userRepository/userRepository.api.types';
-export * from './repositories_OLD/tokenRuleRepository/tokenRuleRepository.api.types';
-export * from './repositories_OLD/tokenRepository/tokenRepository.api.types';
 export * from './repositories_OLD/statsRepository/statsRepository.api.types';
 export * from './repositories_OLD/playlistRepository/playlistRepository.api.types';
-export * from './repositories_OLD/meetingRepository/meetingRepository.api.types';
-export * from './repositories_OLD/integrationRepository/integrationRepository.api.types';
-export * from './repositories_OLD/spaceTypeRepository/spaceTypeRepository.api.types';
 export * from './repositories_OLD/spaceEmojiRepository/spaceEmojiRepository.api.types';
-export * from './repositories_OLD/stageModeRepository/stageModeRepository.api.types';
