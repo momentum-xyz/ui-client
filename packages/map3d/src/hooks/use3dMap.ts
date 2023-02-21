@@ -8,18 +8,11 @@ import {LineGeometry} from 'three/examples/jsm/lines/LineGeometry.js';
 import {LineMaterial} from 'three/examples/jsm/lines/LineMaterial.js';
 import {Map3dUserInterface} from '@momentum-xyz/core';
 
-import {
-  PARAMETERS,
-  MAX_ORBIT_CAMERA_DISTANCE,
-  MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA,
-  PLANET_ARE_SPAWNED_HORIZONTAL,
-  PLANETS_MAX_VERTICAL_SPAWN_HEIGHT
-} from '../contants';
+import {MAX_ORBIT_CAMERA_DISTANCE, MINIMUM_DISTANCE_TO_PLANET_FOR_CAMERA} from '../contants';
+import {useOdyssey, useUniverse} from '../hooks';
 import {PlanetMesh} from '../classes';
 import astronaut from '../static/images/astronaut.png';
 import BasicSkyboxHD from '../static/images/galaxy.jpg';
-
-import {useOdyssey} from './useOdyssey';
 
 export const use3dMap = (
   canvas: HTMLCanvasElement,
@@ -48,10 +41,6 @@ export const use3dMap = (
 
   const nameRingOffset = useRef(0);
 
-  const pointsGeometry = useRef<THREE.BufferGeometry | null>(null);
-  const pointsMaterial = useRef<THREE.PointsMaterial | null>(null);
-  const points = useRef<THREE.Points | null>(null);
-
   const aspect = window.innerWidth / window.innerHeight;
   const controls = useRef<OrbitControls>();
   const camera = useRef(new THREE.PerspectiveCamera(75, aspect, 0.1, 10000));
@@ -63,6 +52,7 @@ export const use3dMap = (
   const defaultOdysseyTexture = useRef(new THREE.TextureLoader().load(astronaut));
 
   const {createOdyssey} = useOdyssey(getImageUrl);
+  const {placeOdysseyInUniverse} = useUniverse();
 
   const createTextCanvas = useCallback((name: string) => {
     const drawCanvas = document.createElement('canvas');
@@ -221,59 +211,6 @@ export const use3dMap = (
   );
 
   /**
-   * Build Galaxy
-   */
-  const generateGalaxy = useCallback(() => {
-    // Clean previous renders of galaxy.
-    if (points.current !== null) {
-      pointsGeometry.current?.dispose();
-      pointsMaterial.current?.dispose();
-      scene.current.remove(points.current);
-    }
-
-    // Geometry
-    pointsGeometry.current = new THREE.BufferGeometry();
-    const position = new Float32Array(PARAMETERS.count * 3);
-
-    for (let i = 0; i < PARAMETERS.count; i++) {
-      const i3 = i * 3;
-
-      const radius = Math.random() * PARAMETERS.radius;
-      const spinAngle = radius * PARAMETERS.spin;
-      const branchAngle = ((i % PARAMETERS.branches) / PARAMETERS.branches) * Math.PI * 2;
-
-      const randomX =
-        Math.pow(Math.random(), PARAMETERS.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
-      const randomY =
-        Math.pow(Math.random(), PARAMETERS.randomnesPower) *
-        (Math.random() < 0.5 ? PARAMETERS.YHeight : -PARAMETERS.YHeight);
-      const randomZ =
-        Math.pow(Math.random(), PARAMETERS.randomnesPower) * (Math.random() < 0.5 ? 1 : -1);
-
-      position[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-      position[i3 + 1] = randomY;
-      position[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
-    }
-
-    pointsGeometry.current.setAttribute('position', new THREE.BufferAttribute(position, 3));
-
-    // Material
-    pointsMaterial.current = new THREE.PointsMaterial({
-      size: PARAMETERS.size,
-      sizeAttenuation: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      color: 0xff5588,
-      transparent: true,
-      opacity: 0.5
-    });
-
-    // Create stars in the universe.
-    points.current = new THREE.Points(pointsGeometry.current, pointsMaterial.current);
-    scene.current.add(points.current);
-  }, []);
-
-  /**
    * Update an existing Odyssey
    */
   const updateOdyssey = useCallback(
@@ -301,76 +238,10 @@ export const use3dMap = (
     if (myOdyssey) {
       const odyssey = createOdyssey(myOdyssey);
       referenceListOfOdysseys.current.push(odyssey);
+      odyssey.scale.set(3, 3, 3);
       scene.current.add(odyssey);
     }
   }, [createOdyssey, items, user.owner]);
-
-  /**
-   * Create Circular Universe of Odysseys
-   */
-  const buildUniverse = useCallback(() => {
-    let radius = 10;
-    const radiusIncreaseValue = 15;
-    let AmountOfOdysseyInNextRing = 10;
-    let ringCount = 1;
-    const odysseyGroups: THREE.Group[] = [];
-
-    // Build circles in groups.
-    function createRing() {
-      // if amount to be spawned bigger than available odyssey
-      if (listOfOdysseys.current.length < AmountOfOdysseyInNextRing) {
-        AmountOfOdysseyInNextRing = listOfOdysseys.current.length;
-      }
-
-      const degreeBetweenOdyssey = 360 / AmountOfOdysseyInNextRing;
-      let offset = 0;
-      let currentOdyssey;
-
-      const odysseyCircle = new THREE.Group();
-      odysseyCircle.name = 'circle' + ringCount;
-
-      // Fill circle with odysseys.
-      for (let i = 0; i < AmountOfOdysseyInNextRing; i++) {
-        currentOdyssey = listOfOdysseys.current[i];
-        const radian = offset * (Math.PI / 180);
-        offset += degreeBetweenOdyssey;
-
-        const newX = Math.cos(radian) * radius;
-        let newY;
-        if (PLANET_ARE_SPAWNED_HORIZONTAL) {
-          newY = 0;
-        } else {
-          newY =
-            Math.random() * PLANETS_MAX_VERTICAL_SPAWN_HEIGHT -
-            PLANETS_MAX_VERTICAL_SPAWN_HEIGHT / 2;
-        }
-        const newZ = Math.sin(radian) * radius;
-
-        currentOdyssey.position.set(newX, newY, newZ);
-
-        odysseyCircle.add(currentOdyssey);
-      }
-
-      listOfOdysseys.current.splice(0, AmountOfOdysseyInNextRing);
-
-      radius += radiusIncreaseValue * (ringCount / 2);
-      AmountOfOdysseyInNextRing = AmountOfOdysseyInNextRing * 1.5;
-      ringCount++;
-
-      // Add newly created ring of odysseys to the array.
-      odysseyGroups.push(odysseyCircle);
-    }
-
-    // Trigger While loop posting all odyssey.
-    while (listOfOdysseys.current.length > 0) {
-      createRing();
-    }
-
-    // Add all odyssey rings to the scene.
-    odysseyGroups.forEach((circle) => {
-      scene.current.add(circle);
-    });
-  }, []);
 
   /**
    * Animation
@@ -591,13 +462,12 @@ export const use3dMap = (
     backgroundImage.current.mapping = THREE.EquirectangularReflectionMapping;
     scene.current.background = backgroundImage.current;
 
-    generateGalaxy();
-
     generateOdysseys();
 
     drawConnections(user.owner);
 
-    buildUniverse();
+    const theUniverse = placeOdysseyInUniverse(listOfOdysseys.current, user);
+    scene.current.add(theUniverse);
 
     animate();
   }, []);
