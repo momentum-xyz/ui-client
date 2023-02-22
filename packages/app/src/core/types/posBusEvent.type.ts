@@ -5,7 +5,7 @@ import {
   PosBusGatheringMessageType,
   PosBusScreenShareMessageType
 } from 'core/types';
-import {PosBusCollaborationEnum, PosBusMessageStatusEnum, StageModeStatusEnum} from 'core/enums';
+import {PosBusCollaborationEnum, PosBusMessageStatusEnum} from 'core/enums';
 
 export type PosBusEventType = {
   'posbus-connected': () => void;
@@ -17,7 +17,7 @@ export type PosBusEventType = {
   'meeting-kick': (spaceId: string) => void;
   'meeting-mute': () => void;
   'meeting-mute-all': (moderatorId: string) => void;
-  'stage-mode-toggled': (stageModeStatus: StageModeStatusEnum) => void;
+  'stage-mode-toggled': (stageModeStatus: any) => void;
   'stage-mode-request': (userId: string) => void;
   'stage-mode-invite': () => void;
   'stage-mode-kick': (userId: string) => void;

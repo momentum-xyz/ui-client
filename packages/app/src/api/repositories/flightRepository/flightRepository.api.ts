@@ -4,25 +4,7 @@ import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {flightRepositoryEndpoints} from './flightRepository.api.endpoints';
-import {
-  FlyToMeRequest,
-  StartFlyWithMeRequest,
-  StopFlyWithMeRequest
-} from './flightRepository.api.types';
-
-export const startFlyWithMe: RequestInterface<StartFlyWithMeRequest, void> = (options) => {
-  const {spaceId, ...restOptions} = options;
-
-  const url = generatePath(flightRepositoryEndpoints().startFlyWithMe, {spaceId});
-  return request.post(url, {}, restOptions);
-};
-
-export const stopFlyWithMe: RequestInterface<StopFlyWithMeRequest, void> = (options) => {
-  const {spaceId, ...restOptions} = options;
-
-  const url = generatePath(flightRepositoryEndpoints().stopFlyWithMe, {spaceId});
-  return request.post(url, {}, restOptions);
-};
+import {FlyToMeRequest} from './flightRepository.api.types';
 
 export const flyToMe: RequestInterface<FlyToMeRequest, void> = (options) => {
   const {spaceId, ...restOptions} = options;

@@ -4,12 +4,7 @@ import {generatePath} from 'react-router-dom';
 
 import {PluginIdEnum} from 'api/enums';
 import {request} from 'api/request';
-import {
-  GetDocksCountRequest,
-  GetDocksCountResponse,
-  GetSpaceAttributeItemRequest,
-  SpaceAttributeItemResponse
-} from 'api';
+import {GetSpaceAttributeItemRequest, SpaceAttributeItemResponse} from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 
 import {
@@ -35,15 +30,6 @@ export const fetchSpace: RequestInterface<FetchSpaceRequest, SpaceAttributeItemR
   };
 
   return getSpaceAttributeItem(attributeOptions, request);
-};
-
-export const fetchDocksCount: RequestInterface<GetDocksCountRequest, GetDocksCountResponse> = (
-  options
-) => {
-  const {spaceId, ...restOptions} = options;
-
-  const url = generatePath(spaceRepositoryEndpoints().docks, {spaceId});
-  return request.get(url, restOptions);
 };
 
 export const postSpace: RequestInterface<PostSpaceRequest, PostSpaceResponse> = (options) => {
