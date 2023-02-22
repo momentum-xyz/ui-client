@@ -23,8 +23,8 @@ export const Hexagon = styled.div`
   --border-hexagon-small-width: 42px;
   --border-hexagon-small-height: 47px;
 
-  --hexagon-border-color: white;
-  --hexagon-border-blue-color: #004373;
+  --hexagon-border-color: var(--white);
+  --hexagon-border-blue-color: var(--blue-light);
 
   clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
   width: var(--hexagon-width);
