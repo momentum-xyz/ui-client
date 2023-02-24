@@ -24,9 +24,9 @@ export const getSpaceInfo: RequestInterface<GetSpaceInfoRequest, GetSpaceInfoRes
 export const patchSpaceInfo: RequestInterface<PatchSpaceInfoRequest, PatchSpaceInfoResponse> = (
   options
 ) => {
-  const {spaceId, asset_2d_id, asset_3d_id, space_type_id, ...restOptions} = options;
+  const {spaceId, asset_2d_id, asset_3d_id, object_type_id, ...restOptions} = options;
 
   const url = generatePath(spaceInfoRepository().spaceInfo, {spaceId});
 
-  return request.patch(url, {asset_2d_id, asset_3d_id, space_type_id}, restOptions);
+  return request.patch(url, {asset_2d_id, asset_3d_id, object_type_id}, restOptions);
 };
