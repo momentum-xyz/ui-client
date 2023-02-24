@@ -44,7 +44,7 @@ interface PropsInterface {
 const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
-  const {sessionStore, widgetsStore, flightStore, unityStore, agoraStore, nftStore} = useStore();
+  const {sessionStore, widgetsStore, unityStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
   const {unityWorldStore, unityInstanceStore} = unityStore;
   const {agoraScreenShareStore} = agoraStore;
@@ -180,7 +180,6 @@ const Widgets: FC<PropsInterface> = (props) => {
                 size="medium"
                 onClick={widgetsStore.calendarStore.dialog.toggle}
                 isSelected={widgetsStore.calendarStore.dialog.isOpen}
-                disabled={flightStore.isFlightWithMe}
                 state={{canGoBack: true}}
               />
 

@@ -34,27 +34,6 @@ export const ROUTES = {
     maintenance: '/system/maintenance',
     wrongBrowser: '/system/wrongBrowser'
   },
-  collaboration: {
-    root: '/collaboration',
-    base: '/collaboration/:spaceId',
-    stageMode: `/collaboration/:spaceId/stage-mode`,
-    stageModeControl: `/collaboration/:spaceId/stage-mode/control`,
-    dashboard: '/collaboration/:spaceId/dashboard',
-    calendar: '/collaboration/:spaceId/calendar',
-    calendarEvent: '/collaboration/:spaceId/calendar/:eventId',
-    screenShare: '/collaboration/:spaceId/screenShare',
-    plugin: '/collaboration/:spaceId/:subPath',
-    liveStream: '/collaboration/:spaceId/live-stream',
-    table: `/collaboration/:spaceId/table`
-  },
-  spaceAdmin: {
-    base: '/space/:spaceId/admin',
-    broadcast: '/space/:spaceId/admin/broadcast'
-  },
-  flyWithMe: {
-    pilot: '/flyWithMePilot/:spaceId/:pilotId',
-    passenger: '/flyWithMePassenger/:spaceId/:pilotId'
-  },
   magic: '/magic/:id',
   video: '/video/:spaceId',
   help: '/help',
