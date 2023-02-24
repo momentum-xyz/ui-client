@@ -1,5 +1,5 @@
 export const spaceOptionRepositoryEndpoints = () => {
-  const BASE_URL = '/spaces/:spaceId';
+  const BASE_URL = '/objects/:spaceId';
 
   return {
     options: `${BASE_URL}/options`,

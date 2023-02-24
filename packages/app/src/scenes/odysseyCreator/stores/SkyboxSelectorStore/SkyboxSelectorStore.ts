@@ -89,20 +89,20 @@ const SkyboxSelectorStore = types
       yield self.fetchDefaultSkyboxes();
       yield self.fetchUserSkyboxes(worldId, userId);
 
-      const {spaces} = yield self.worldSettingsRequest.send(
+      const {objects} = yield self.worldSettingsRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
           spaceId: worldId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.WORLD_SETTINGS,
-          sub_attribute_key: 'spaces'
+          sub_attribute_key: 'objects'
         }
       );
 
       const activeSkyboxData = yield self.createSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
-          spaceId: spaces.skybox,
+          spaceId: objects.skybox,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.ACTIVE_SKYBOX
         }
@@ -145,23 +145,23 @@ const SkyboxSelectorStore = types
     saveItem: flow(function* (id: string, worldId: string) {
       self.currentItemId = id;
 
-      const {spaces} = yield self.worldSettingsRequest.send(
+      const {objects} = yield self.worldSettingsRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
           spaceId: worldId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.WORLD_SETTINGS,
-          sub_attribute_key: 'spaces'
+          sub_attribute_key: 'objects'
         }
       );
 
       yield self.worldSettingsRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
-        spaceId: spaces.skybox,
+        spaceId: objects.skybox,
         asset_3d_id: UNITY_SKYBOX_ASSET_ID
       });
 
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: spaces.skybox,
+        spaceId: objects.skybox,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,
         value: {render_hash: id}
