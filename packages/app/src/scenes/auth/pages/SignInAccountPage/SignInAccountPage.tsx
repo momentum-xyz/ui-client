@@ -45,6 +45,14 @@ const SignInAccountPage: FC = () => {
     }
   }, [signInStore.wallet, isZeroBalance, nftStore]);
 
+  const onSelectWallet = useCallback(
+    (wallet: string) => {
+      signInStore.selectWallet(wallet);
+      nftStore.subscribeToBalanceChanges(wallet);
+    },
+    [nftStore, signInStore]
+  );
+
   const handleSubmit = useCallback(
     async (form: SignUpFormInterface) => {
       try {
@@ -76,7 +84,7 @@ const SignInAccountPage: FC = () => {
                 walletOptions={nftStore.accountsWithoutNftsOptions}
                 wallet={signInStore.wallet}
                 isConnectDisabled={requestingFundsStatus === 'pending' || isBalanceLoading}
-                onSelectAddress={signInStore.selectWallet}
+                onSelectAddress={onSelectWallet}
                 onConnect={onConnectWallet}
               />
             </>
