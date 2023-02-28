@@ -8,13 +8,13 @@ interface PropsInterface extends Odyssey3dPropsInterface {
   canvas: HTMLCanvasElement;
 }
 
-const Odyssey3dRender: FC<PropsInterface> = ({canvas}) => {
+const Odyssey3dRender: FC<PropsInterface> = ({canvas, objects}) => {
   const engine = useRef(new BABYLON.Engine(canvas, true));
-  const scene = useRef<BABYLON.Scene>(new BABYLON.Scene(engine.current));
+  const scene = useRef(new BABYLON.Scene(engine.current));
 
   useSceneCamera(canvas, scene.current);
   useSceneLight(scene.current);
-  useObjects(scene.current);
+  useObjects(scene.current, objects);
 
   const onResizeHandler = useCallback(() => {
     engine.current.resize();
