@@ -1,10 +1,10 @@
 import {FC} from 'react';
 
-import {BabylonPage} from './scenes';
+import {BabylonScene} from './scenes';
 
 /** DEFINE MOCKS HERE **/
 const Emulator: FC = () => {
-  return <BabylonPage />;
+  return <BabylonScene />;
 };
 
 export default Emulator;

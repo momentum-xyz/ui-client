@@ -1,1 +1,1 @@
-export * from './babylon';
+export * from './BabylonScene';
