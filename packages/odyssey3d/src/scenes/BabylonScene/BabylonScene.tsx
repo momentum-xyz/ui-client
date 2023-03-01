@@ -1,24 +1,44 @@
-import {FC, useEffect, useRef, useState} from 'react';
+import {FC} from 'react';
+import {Scene} from '@babylonjs/core';
+import {Event3dEmitter} from '@momentum-xyz/core';
+import SceneComponent from 'babylonjs-hook';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
-
-import {Odyssey3dRender} from './components';
+import {CameraHelper, LightHelper, ObjectHelper} from '../../babylon';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
-  const [isCanvasReady, setIsCanvasReady] = useState(false);
-  const ref = useRef<HTMLCanvasElement>(null);
+  /* Will run one time. */
+  const onSceneReady = (scene: Scene) => {
+    const view = scene.getEngine().getRenderingCanvas();
+    if (view?.id) {
+      CameraHelper.initialize(scene, view);
+      LightHelper.initialize(scene);
+      ObjectHelper.initialize(scene, props.objects);
 
-  useEffect(() => {
-    if (ref.current) {
-      setIsCanvasReady(true);
+      Event3dEmitter.on('ObjectCreated', (data) => {
+        // FIXME: ObjectHelper.spawnObject(..);
+        console.log(data);
+      });
+    } else {
+      console.error('There is no canvas for Babylon.');
     }
-  }, []);
+  };
+
+  /* Will run on every frame render. */
+  const onRender = (scene: Scene) => {
+    // console.log(scene.getEngine().getDeltaTime());
+  };
 
   return (
-    <>
-      <canvas ref={ref} className="webgl" style={{width: '100vw', height: '100vh'}} />
-      {isCanvasReady && ref.current && <Odyssey3dRender canvas={ref.current} {...props} />}
-    </>
+    <div data-testid="Babylon-scene">
+      <SceneComponent
+        id="babylon-canvas"
+        antialias
+        onSceneReady={onSceneReady}
+        onRender={onRender}
+        style={{width: '100vw', height: '100vh'}}
+      />
+    </div>
   );
 };
 

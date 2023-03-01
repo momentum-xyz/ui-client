@@ -1,10 +1,17 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
+import {Event3dEmitter} from '@momentum-xyz/core';
 
 import {BabylonScene} from './scenes';
 import {Object3dInterface} from './core/interfaces';
 
 /** DEFINE MOCKS HERE **/
 const Emulator: FC = () => {
+  useEffect(() => {
+    setInterval(() => {
+      Event3dEmitter.emit('ObjectCreated', '2');
+    }, 1000);
+  }, []);
+
   const object_3d_mocks: Object3dInterface[] = [
     {
       id: '1',
