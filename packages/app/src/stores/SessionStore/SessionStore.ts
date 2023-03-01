@@ -1,7 +1,4 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {decodeAddress} from '@polkadot/util-crypto';
-import {stringToHex, u8aToHex} from '@polkadot/util';
-import {web3FromSource} from '@polkadot/extension-dapp';
 import {LAST_AIRDROP_KEY, Map3dUserInterface, RequestModel} from '@momentum-xyz/core';
 
 import {storage} from 'shared/services';
@@ -10,6 +7,7 @@ import {ROUTES} from 'core/constants';
 import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, CheckProfileUpdatingJobResponse, FetchMeResponse} from 'api';
+import PolkadotImplementation from 'shared/services/web3/polkadot.class';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -55,33 +53,25 @@ const SessionStore = types
       return !!response?.token;
     }),
     fetchTokenByWallet: flow(function* (account: PolkadotAddressInterface) {
-      const publicKey = decodeAddress(account.address);
-      const hexPublicKey = u8aToHex(publicKey);
+      const publicKey = PolkadotImplementation.getPublicKeyFromAddress(account.address);
+      const hexPublicKey = PolkadotImplementation.convertU8AToHex(publicKey);
 
       const data: AuthChallengeRequest = {wallet: hexPublicKey};
       const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
 
       if (!!response?.challenge && !!account) {
-        const injector = yield web3FromSource(account.meta?.source || '');
-        const signRaw = injector?.signer?.signRaw;
+        PolkadotImplementation.getAddresses();
+        const result = yield PolkadotImplementation.signRaw(
+          account.meta?.source || '',
+          PolkadotImplementation.convertStringToHex(response.challenge),
+          account.address
+        );
+        if (result?.signature) {
+          const data = {wallet: hexPublicKey, signedChallenge: result.signature};
+          const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
+          self.updateAxiosAndUnityTokens(response?.token || '');
 
-        if (signRaw) {
-          const result = yield signRaw({
-            data: stringToHex(response.challenge),
-            address: account.address,
-            type: 'bytes'
-          }).catch((error: unknown) => {
-            // TODO: Show some error
-            console.log(error);
-          });
-
-          if (result?.signature) {
-            const data = {wallet: hexPublicKey, signedChallenge: result.signature};
-            const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
-            self.updateAxiosAndUnityTokens(response?.token || '');
-
-            return !!response?.token;
-          }
+          return !!response?.token;
         }
       }
 

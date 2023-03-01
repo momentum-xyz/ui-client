@@ -10,7 +10,7 @@ import {
 } from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {BN} from '@polkadot/util';
+import BN from 'bn.js';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';

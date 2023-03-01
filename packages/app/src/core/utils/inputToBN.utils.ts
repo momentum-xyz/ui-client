@@ -1,5 +1,8 @@
-import {BN, BN_TEN, BN_ZERO, formatBalance, isUndefined} from '@polkadot/util';
+import {formatBalance, isUndefined} from '@polkadot/util';
 import {SiDef} from '@polkadot/util/types';
+import BN from 'bn.js';
+
+import {BN_TEN, BN_ZERO} from 'core/constants';
 
 const getSiPowers = (si: SiDef | null, decimals?: number): [BN, number, number] => {
   if (!si) {
