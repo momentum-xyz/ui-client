@@ -1,5 +1,7 @@
 import EventEmitter from 'eventemitter3';
 
+import {Object3dInterface, Texture3dInterface} from '../interfaces';
+
 // TODO: Define proper types
 export type Event2dType = {
   WorldChanged: (value: string) => void;
@@ -8,8 +10,9 @@ export type Event2dType = {
 
 // TODO: Define proper types
 export type Event3dType = {
-  ObjectCreated: (value: string) => void;
-  ObjectChanged: (value: string) => void;
+  ObjectCreated: (object: Object3dInterface) => void;
+  ObjectChanged: (object: Object3dInterface) => void;
+  ObjectTextureChanged: (texture: Texture3dInterface) => void;
   UserEntered: (value: string) => void;
   UserLeft: (value: string) => void;
 };

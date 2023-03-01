@@ -15,16 +15,19 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       LightHelper.initialize(scene);
       ObjectHelper.initialize(scene, props.objects);
 
-      Event3dEmitter.on('ObjectCreated', (data) => {
-        // FIXME: ObjectHelper.spawnObject(..);
-        console.log(data);
+      Event3dEmitter.on('ObjectCreated', (object) => {
+        ObjectHelper.spawnObject(scene, object);
+      });
+
+      Event3dEmitter.on('ObjectTextureChanged', (object) => {
+        ObjectHelper.setObjectTexture(scene, object);
       });
     } else {
       console.error('There is no canvas for Babylon.');
     }
   };
 
-  /* Will run on every frame render. */
+  /* Will run on every frame render. It is useful for animations */
   const onRender = (scene: Scene) => {
     // console.log(scene.getEngine().getDeltaTime());
   };
