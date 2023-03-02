@@ -14,6 +14,7 @@ COPY packages/ui-kit/package.json ./packages/ui-kit/
 COPY packages/ui-kit-storybook/package.json ./packages/ui-kit-storybook/
 COPY packages/sdk/package.json ./packages/sdk/
 COPY packages/map3d/package.json ./packages/map3d/
+COPY packages/odyssey3d/package.json ./packages/odyssey3d/
 
 COPY packages/plugin_miro/package.json ./packages/plugin_miro/
 COPY packages/plugin_google_drive/package.json ./packages/plugin_google_drive/

@@ -1,17 +1,6 @@
 import {VoiceChatActionAttributeInterface, VoiceChatUserAttributeInterface} from 'api/interfaces';
 import {BroadcastStatusEnum, PosBusMessageTypeEnum, PosBusStatusEnum} from 'core/enums';
-import {
-  StageModeKickType,
-  StageModeLeftType,
-  StageModeMuteType,
-  StageModeAdmitType,
-  StageModeInviteType,
-  StageModeJoinedType,
-  StageModeRequestType,
-  StageModeStateMessageType,
-  StageModeDeclineInviteType,
-  PosBusAttributeMessageDataType
-} from 'core/types';
+import {PosBusAttributeMessageDataType} from 'core/types';
 
 export type PosBusMessageStatusType = {
   status: PosBusStatusEnum;
@@ -87,17 +76,6 @@ export type PosBusCommunicationMessageType =
   | PosBusCommunicationKickType
   | PosBusCommunicationMuteType
   | PosBusCommunicationMuteAllType;
-
-export type PosBusStageModeMessageType =
-  | StageModeStateMessageType
-  | StageModeRequestType
-  | StageModeAdmitType
-  | StageModeInviteType
-  | StageModeDeclineInviteType
-  | StageModeJoinedType
-  | StageModeLeftType
-  | StageModeKickType
-  | StageModeMuteType;
 
 export type PosBusFlyWithMeType = {
   pilot: string;

@@ -1181,6 +1181,21 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@babylonjs/core@^5.48.0":
+  version "5.48.0"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.48.0.tgz#79e7b7595620ffde86e0d064ccbc1ca50d93f656"
+  integrity sha512-97d+stKdMGGXmmCuYEo9xhz0v0q5DbWSg2GI6mfa+P1qH9YPmWN+YNxwBs0A2H3HrhBrC/PQOTHUibfA867CoQ==
+
+"@babylonjs/gui@^5.48.0":
+  version "5.48.0"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-5.48.0.tgz#b6fab49d4afd0f10c9205a6f288795bc90fa1827"
+  integrity sha512-1LiUQpGXNA3nPHH3vezZY9bdZpALTxAgxvQig2aDts2N7m4QB71U0piqzxn6dTIzhDFSLwQWpJHSSczbxWNgzQ==
+
+"@babylonjs/loaders@^5.48.0":
+  version "5.48.0"
+  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-5.48.0.tgz#a16f69d03770fa8132b5df1dea51667072ad5e0e"
+  integrity sha512-BbZoceGDsUYis86OeAkFq9CQN1yJ59IOL0O0AtogOt8KQ5E8b0sH4MVdOwuV6h07yLVjo9Ir5RZsWKdGyuWHOw==
+
 "@base2/pretty-print-object@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@base2/pretty-print-object/-/pretty-print-object-1.0.1.tgz#371ba8be66d556812dc7fb169ebc3c08378f69d4"
@@ -7052,6 +7067,11 @@ babel-preset-react-app@^10.0.1:
     "@babel/runtime" "^7.16.3"
     babel-plugin-macros "^3.1.0"
     babel-plugin-transform-react-remove-prop-types "^0.4.24"
+
+babylonjs-hook@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/babylonjs-hook/-/babylonjs-hook-0.1.1.tgz#9c1acc0fbe346b51f2c0a24cf5dbaf42aeb4e5a0"
+  integrity sha512-uLcaX08NJy/1DeI+3GNQWQ2lQazhCR4U4jC6V+xy9rEvCCeFml3EWlwEwZv+8+oSHnMMV761jeQGjn9dVzgfMQ==
 
 bail@^1.0.0:
   version "1.0.5"

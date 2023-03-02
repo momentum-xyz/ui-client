@@ -2,7 +2,7 @@ import {AttributeValueInterface} from '@momentum-xyz/sdk';
 
 import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
-import {PosBusMessageTypeEnum, PosBusNotificationEnum, StageModeStatusEnum} from 'core/enums';
+import {PosBusMessageTypeEnum, PosBusNotificationEnum} from 'core/enums';
 import {
   PosBusVibeMessageType,
   PosBusHigh5MessageType,
@@ -10,7 +10,6 @@ import {
   PosBusInviteMessageType,
   PosBusBroadcastMessageType,
   PosBusGatheringMessageType,
-  PosBusStageModeMessageType,
   PosBusCommunicationMessageType,
   PosBusEmojiMessageType,
   PosBusMegamojiMessageType,
@@ -113,39 +112,8 @@ class PosBusService {
     }
   }
 
-  static handleIncomingStageMode(message: PosBusStageModeMessageType) {
-    switch (message.action) {
-      case 'state':
-        PosBusEventEmitter.emit(
-          'stage-mode-toggled',
-          message.value === '0' ? StageModeStatusEnum.STOPPED : StageModeStatusEnum.INITIATED
-        );
-        break;
-      case 'request':
-        PosBusEventEmitter.emit('stage-mode-request', message.userId);
-        break;
-      case 'accept-request':
-        PosBusEventEmitter.emit(
-          message.value === 1 ? 'stage-mode-accepted' : 'stage-mode-declined',
-          message.userId
-        );
-        break;
-      case 'invite':
-        PosBusEventEmitter.emit('stage-mode-invite');
-        break;
-      case 'joined-stage':
-        PosBusEventEmitter.emit('stage-mode-user-joined', message.userId);
-        break;
-      case 'left-stage':
-        PosBusEventEmitter.emit('stage-mode-user-left', message.userId);
-        break;
-      case 'kick':
-        PosBusEventEmitter.emit('stage-mode-kick', message.userId);
-        break;
-      case 'mute':
-        PosBusEventEmitter.emit('stage-mode-mute');
-        break;
-    }
+  static handleIncomingStageMode(message: any) {
+    console.log(message);
   }
 
   static handleIncomingHigh5(message: PosBusHigh5MessageType) {
@@ -254,7 +222,7 @@ class PosBusService {
         this.handleIncomingBroadcast(message as PosBusBroadcastMessageType);
         break;
       case 'stage':
-        this.handleIncomingStageMode(message as PosBusStageModeMessageType);
+        this.handleIncomingStageMode(message);
         break;
       case 'high5':
         this.handleIncomingHigh5(message as PosBusHigh5MessageType);
