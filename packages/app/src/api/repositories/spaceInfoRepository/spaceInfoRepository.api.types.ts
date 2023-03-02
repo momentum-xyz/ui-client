@@ -11,7 +11,7 @@ export interface GetSpaceInfoRequest {
 export interface GetSpaceInfoResponse {
   owner_id: string;
   parent_id: string;
-  space_type_id: string;
+  object_type_id: string;
   asset_2d_id: string;
   asset_3d_id: string;
   position: PositionInterface;
@@ -19,7 +19,7 @@ export interface GetSpaceInfoResponse {
 
 export interface PatchSpaceInfoRequest {
   spaceId: string;
-  space_type_id?: string;
+  object_type_id?: string;
   asset_2d_id?: string;
   asset_3d_id?: string;
 }

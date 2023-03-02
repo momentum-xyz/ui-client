@@ -1,5 +1,5 @@
 export const spaceRepositoryEndpoints = () => {
-  const BASE_URL = '/spaces';
+  const BASE_URL = '/objects';
 
   return {
     base: `${BASE_URL}`,
