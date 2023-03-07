@@ -1,23 +1,63 @@
 [![Master Status](https://github.com/OdysseyMomentumExperience/ui-client/workflows/Deploy/badge.svg?branch=master)](https://github.com/OdysseyMomentumExperience/PositionEngine/actions)
 [![Develop Status](https://github.com/OdysseyMomentumExperience/ui-client/workflows/Deploy/badge.svg?branch=develop)](https://github.com/OdysseyMomentumExperience/PositionEngine/actions)
 
-# Odyssey ui-client
+# Odyssey UI-Client
+
+The UI-Client is currently a web application allowing to explore Odyssey 3D Worlds with 3D and 2D user interfaces.
+
+It is built with React and Typescript, using Web3 style sign-in, Mobx State Tree for the app state management and flow and websocket-based communication layer called posbus-client.
+
+```mermaid
+flowchart LR
+    subgraph UI-Client
+        A[APP state]
+        3D[3D UI]
+        2D[2D UI]
+        A -.- 3D
+        A -.- 2D
+    end
+    A --> B(Blockchain)
+    C --> B
+    A -- REST + Websocket --> C(Backend Controller) --> DB[(DB)]
+```
 
 ## Project packages
+
+It is a monorepo that contains the main application and several common libraries, the plugin SDK and several the plugins that we maintain. In future the plugins may be moved to their own repositories.
+
     .
-    ├── packages                    
+    ├── packages
     │   ├── app                     # Main application
-    │   ├── core                    # Common reusable stuff
-    │   ├── map3d                   # Explorer based on three.js 
-    │   ├── odyssey3d               # User odyssey based on babylon.js 
-    │   ├── sdk                     # Stuff for plugins
-    │   ├── ui-kit                  # Out of date base components
-    │   ├── ui-kit-storybook        # Storybook based on base components
+    │   ├── core                    # Common reusable logic
+    │   ├── map3d                   # 3D Worlds Explorer based on three.js
+    │   ├── odyssey3d               # 3D World Interface based on babylon.js
+    │   ├── sdk                     # Plugins SDK
+    │   ├── ui-kit                  # Framework of base components
+    │   ├── ui-kit-storybook        # Upcoming version of UI-Kit with Storybook
     │   │
-    │   ├── plugin_google_drive     # Google-drive plugin
+    │   ├── plugin_google_drive     # Google Drive plugin
     │   ├── plugin_miro             # Miro plugin
     │   └── plugin_video            # Video plugin
     └── ...
+
+### Packages connection schema
+
+```mermaid
+flowchart LR
+    A --> MAP(map3d)
+    MAP --> T{{three.js - legacy}}
+    A --> 3D(odyssey3d)
+    3D --> B{{babylon.js}}
+    A --> S(sdk)
+    A[APP] --> C(core)
+    A --> K(ui-kit)
+    P --> K
+    S --> K
+    3D --> C
+    A o--o |Module Federation|P(PLUGINS)
+    P --> S
+    P --> C
+```
 
 ## How to run locally
 
@@ -92,15 +132,15 @@ yarn build
 
 ### Code quality
 
-* Enable `prettier` using IDE preferences. Apple rules in `.prettierrc`.
-* Enable `eslint` using IDE preferences.
-* Enable `husky` using `yarn run postinstall`.
+- Enable `prettier` using IDE preferences. Apple rules in `.prettierrc`.
+- Enable `eslint` using IDE preferences.
+- Enable `husky` using `yarn run postinstall`.
 
 ### How to add an icon
 
-* Copy an icon to `ui-kit-storybook/src/assets/icons` folder
-* Change value of `fill` tag to `currentColor`
-* Run following scripts:
+- Copy an icon to `ui-kit-storybook/src/assets/icons` folder
+- Change value of `fill` tag to `currentColor`
+- Run following scripts:
 
 ```
 cd packages/ui-kit-storybook
@@ -117,8 +157,8 @@ yarn build
 
 It's possible to override variables of AppConfig received from the dev server.
 
-* Create file `.env.development.local`
-* Add `REACT_APP_OVERRIDE_CONFIG_VARIABLES`
+- Create file `.env.development.local`
+- Add `REACT_APP_OVERRIDE_CONFIG_VARIABLES`
 
 ```json
 REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT_URL": "https://dev.odyssey.ninja/api/v3/backend"}'
@@ -128,13 +168,12 @@ REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT
 
 It's possible to assign a locally running plugin to some object in 3D for testing.
 
-* Create file `.env.development.local`
-* Add `REACT_APP_LOCAL_PLUGINS`
-* Use `yarn start:plugin` command
+- Create file `.env.development.local`
+- Add `REACT_APP_LOCAL_PLUGINS`
+- Use `yarn start:plugin` command
 
 ```json
 REACT_APP_LOCAL_PLUGINS='{"ba5ae691-7ad7-4508-b83d-759529b82a19":{"meta":{"id":"1234","name":"plugin_twitch","pluginId":"123","scopeName":"plugin_twitch","scriptUrl":"http://localhost:3001/remoteEntry.js"}},"84f93e15-f064-4f79-aa74-e60f21c07ba9":{"meta":{"id":"22222","name":"plugin_video","pluginId":"222","scopeName":"plugin_video","scriptUrl":"http://localhost:3002/remoteEntry.js"}}}'
 ```
 
 Here `ba5ae691-7ad7-4508-b83d-759529b82a19` is the objectId of some spawned 3D object in my local world.
-
