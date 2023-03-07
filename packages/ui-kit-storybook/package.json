@@ -18,7 +18,7 @@
     "svg-sprite:build": "node scripts/buildSvgSprite.js",
     "svg-sprite:type": "node scripts/generateIconsType.js",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook --output-dir=dist"
   },
   "dependencies": {
     "@headlessui/react": "^1.2.0",
