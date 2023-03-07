@@ -1,7 +1,8 @@
 export interface ThemeInterface {
-  accent: string;
-  accentDanger: string;
-  accentWarning: string;
+  accentBg: string;
+  accentText: string;
   text: string;
   bg: string;
+  danger: string;
+  success: string;
 }

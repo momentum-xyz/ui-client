@@ -13,10 +13,10 @@ export const Wrapper = styled.span`
 
   display: block;
   flex-shrink: 0;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentBg};
 
   &.danger {
-    color: ${(props) => props.theme.accentDanger};
+    color: ${(props) => props.theme.danger};
   }
 
   /* VARIANTS */

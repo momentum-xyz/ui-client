@@ -8,21 +8,24 @@ export const useAttributesEmulator = () => {
   >([{attributeName: 'state', attributeValue: {}}]);
 
   const [subscribed, setSubscribed] = useState(false);
-  const [attributeChanged, setAttributeChanged] = useState<{
-    attributeName: string;
-    value: AttributeValueInterface;
-  }>();
+  const [attributeChanged, setAttributeChanged] =
+    useState<{
+      attributeName: string;
+      value: AttributeValueInterface;
+    }>();
   const [attributeRemoved, setAttributeRemoved] = useState<{attributeName: string}>();
 
-  const [attributeItemChanged, setAttributeItemChanged] = useState<{
-    attributeName: string;
-    attributeItemName: string;
-    value: unknown;
-  }>();
-  const [attributeItemRemoved, setAttributeItemRemoved] = useState<{
-    attributeName: string;
-    attributeItemName: string;
-  }>();
+  const [attributeItemChanged, setAttributeItemChanged] =
+    useState<{
+      attributeName: string;
+      attributeItemName: string;
+      value: unknown;
+    }>();
+  const [attributeItemRemoved, setAttributeItemRemoved] =
+    useState<{
+      attributeName: string;
+      attributeItemName: string;
+    }>();
 
   const useAttributeChange = useCallback(
     (

@@ -1,65 +1,37 @@
 import {ThemeInterface} from '../interfaces';
 
 /*
-    IMPORTANT: Do NOT change the order, it will break things!
+    IMPORTANT:
+    Do NOT change the order, it will break things!
     To add a new color, append at the end.
 */
-export const AccentColorList: string[] = [
-  '#000000',
-  '#0071FF',
-  '#9CFF8B',
-  '#01FFB3',
-  '#01F0FF',
-  '#B2F1FF',
-  '#88CCD6',
-  '#6FB6DD',
-  '#6FDBC1'
-];
 
-/*
-    IMPORTANT: Do NOT change the order, it will break things!
-    To add a new color, append at the end.
-*/
-export const BackgroundColorList: string[] = [
-  '#FFFFFF',
-  '#252931',
-  '#14284E',
-  '#051745',
-  '#151C2E',
-  '#171638',
-  '#1C2635'
-];
+export const AccentColorList: string[] = ['#004373'];
 
-/*
-    IMPORTANT: Do NOT change the order, it will break things!
-    To add a new color, append at the end.
-*/
-export const TextColorList: string[] = ['#000000', '#FFFFFF'];
+export const AccentTextColorList: string[] = ['#9EEEFF'];
 
-/*
-    IMPORTANT: Do NOT change the order, it will break things!
-    To add a new color, append at the end.
-*/
-export const AccentWarningColorList: string[] = ['#A19C23'];
+export const BackgroundColorList: string[] = ['#E7C5EC'];
 
-/*
-    IMPORTANT: Do NOT change the order, it will break things!
-    To add a new color, append at the end.
-*/
-export const AccentDangerColorList: string[] = ['#FFAE63'];
+export const TextColorList: string[] = ['#FFFFFF'];
+
+export const DangerColorList: string[] = ['#EA0000'];
+
+export const SuccessColorList: string[] = ['#00CC50'];
 
 export const DefaultThemeConfig: ThemeInterface = {
-  accent: AccentColorList[3],
-  bg: BackgroundColorList[3],
-  text: TextColorList[1],
-  accentDanger: AccentDangerColorList[0],
-  accentWarning: AccentWarningColorList[0]
+  accentBg: AccentColorList[0],
+  accentText: AccentTextColorList[0],
+  bg: BackgroundColorList[0],
+  text: TextColorList[0],
+  danger: DangerColorList[0],
+  success: SuccessColorList[0]
 };
 
 export const CustomThemeConfig: ThemeInterface = {
-  accent: AccentColorList[4],
-  bg: BackgroundColorList[2],
-  text: TextColorList[1],
-  accentDanger: AccentDangerColorList[0],
-  accentWarning: AccentWarningColorList[0]
+  accentBg: AccentColorList[0],
+  accentText: AccentTextColorList[0],
+  bg: BackgroundColorList[0],
+  text: TextColorList[0],
+  danger: DangerColorList[0],
+  success: SuccessColorList[0]
 };
