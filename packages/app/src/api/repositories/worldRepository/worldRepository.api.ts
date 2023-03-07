@@ -42,10 +42,12 @@ export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesRes
   return request.get(url, restOptions);
 };
 
-export const fetchOnlineUsers: RequestInterface<GetOnlineUsersRequest, OdysseyOnlineUsersResponse> =
-  (options) => {
-    const {worldId, ...restOptions} = options;
+export const fetchOnlineUsers: RequestInterface<
+  GetOnlineUsersRequest,
+  OdysseyOnlineUsersResponse
+> = (options) => {
+  const {worldId, ...restOptions} = options;
 
-    const url = generatePath(worldRepositoryEndpoints().onlineUsers, {worldId});
-    return request.get(url, restOptions);
-  };
+  const url = generatePath(worldRepositoryEndpoints().onlineUsers, {worldId});
+  return request.get(url, restOptions);
+};

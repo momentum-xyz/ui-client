@@ -15,30 +15,32 @@ import {
   SpaceEmojiesResponse
 } from './spaceEmojiRepository.api.types';
 
-export const fetchWorldEmojies: RequestInterface<WorldEmojiesRequest, WorldEmojiesResponse> =
-  async (options) => {
-    const {worldId, ...restOptions} = options;
+export const fetchWorldEmojies: RequestInterface<
+  WorldEmojiesRequest,
+  WorldEmojiesResponse
+> = async (options) => {
+  const {worldId, ...restOptions} = options;
 
-    const url = generatePath(spaceEmojiRepositoryEndpoints().worldEmojiList, {worldId});
+  const url = generatePath(spaceEmojiRepositoryEndpoints().worldEmojiList, {worldId});
 
-    const resp = await request.get(url, {...restOptions, params: {children: true}});
+  const resp = await request.get(url, {...restOptions, params: {children: true}});
 
-    // temp support for legacy format
-    // FIXME remove after October 2022
-    const testSample = (resp.data as WorldEmojiesLegacyResponse)[0];
-    if (typeof testSample?.emoji === 'object') {
-      resp.data = (resp.data as WorldEmojiesLegacyResponse).map(
-        ({emoji, emojiId, order, spaceId}) => ({
-          ...emoji,
-          id: bytesToUuid(emojiId.data),
-          order,
-          spaceId: bytesToUuid(spaceId.data)
-        })
-      );
-    }
+  // temp support for legacy format
+  // FIXME remove after October 2022
+  const testSample = (resp.data as WorldEmojiesLegacyResponse)[0];
+  if (typeof testSample?.emoji === 'object') {
+    resp.data = (resp.data as WorldEmojiesLegacyResponse).map(
+      ({emoji, emojiId, order, spaceId}) => ({
+        ...emoji,
+        id: bytesToUuid(emojiId.data),
+        order,
+        spaceId: bytesToUuid(spaceId.data)
+      })
+    );
+  }
 
-    return resp;
-  };
+  return resp;
+};
 
 export const fetchSpaceEmoji: RequestInterface<SpaceEmojiesRequest, SpaceEmojiesResponse> = async (
   options

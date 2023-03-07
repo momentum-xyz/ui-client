@@ -22,35 +22,39 @@ export const getSpaceOptions: RequestInterface<GetSpaceOptionsRequest, GetSpaceO
   return request.get(url, restOptions);
 };
 
-export const getSpaceSubOption: RequestInterface<GetSpaceSubOptionRequest, SpaceSubOptionResponse> =
-  (options) => {
-    const {spaceId, sub_option_key, ...restOptions} = options;
+export const getSpaceSubOption: RequestInterface<
+  GetSpaceSubOptionRequest,
+  SpaceSubOptionResponse
+> = (options) => {
+  const {spaceId, sub_option_key, ...restOptions} = options;
 
-    restOptions.params = {
-      sub_option_key
-    };
-
-    const url = generatePath(spaceOptionRepositoryEndpoints().subOption, {spaceId});
-
-    return request.get(url, restOptions);
+  restOptions.params = {
+    sub_option_key
   };
 
-export const setSpaceSubOption: RequestInterface<SetSpaceSubOptionRequest, SpaceSubOptionResponse> =
-  (options) => {
-    const {spaceId, sub_option_key, value, ...restOptions} = options;
+  const url = generatePath(spaceOptionRepositoryEndpoints().subOption, {spaceId});
 
-    restOptions.params = {
-      effective: false
-    };
+  return request.get(url, restOptions);
+};
 
-    const url = generatePath(spaceOptionRepositoryEndpoints().subOption, {spaceId});
+export const setSpaceSubOption: RequestInterface<
+  SetSpaceSubOptionRequest,
+  SpaceSubOptionResponse
+> = (options) => {
+  const {spaceId, sub_option_key, value, ...restOptions} = options;
 
-    return request.post(
-      url,
-      {
-        sub_option_key,
-        sub_option_value: value
-      },
-      restOptions
-    );
+  restOptions.params = {
+    effective: false
   };
+
+  const url = generatePath(spaceOptionRepositoryEndpoints().subOption, {spaceId});
+
+  return request.post(
+    url,
+    {
+      sub_option_key,
+      sub_option_value: value
+    },
+    restOptions
+  );
+};
