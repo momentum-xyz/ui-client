@@ -14,6 +14,9 @@ export const Hexagon = styled.div`
   --hexagon-small-width: 30px;
   --hexagon-small-height: 35px;
 
+  --hexagon-blank-width: 36px;
+  --hexagon-blank-height: 42px;
+
   --border-hexagon-large-width: 60px;
   --border-hexagon-large-height: 70px;
 
@@ -24,7 +27,7 @@ export const Hexagon = styled.div`
   --border-hexagon-small-height: 47px;
 
   --hexagon-border-color: var(--white);
-  --hexagon-border-blue-color: var(--blue-light);
+  --hexagon-accent-color: ${(props) => props.theme.accentBg};
 
   clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
   width: var(--hexagon-width);
@@ -35,10 +38,10 @@ export const Hexagon = styled.div`
   align-items: center;
   justify-content: center;
 
+  overflow: hidden;
+
   border-left: 1px solid var(--hexagon-border-color);
   border-right: 1px solid var(--hexagon-border-color);
-
-  overflow: hidden;
 
   &:after {
     content: '';
@@ -59,30 +62,53 @@ export const Hexagon = styled.div`
     border-bottom: 1px solid var(--hexagon-border-color);
   }
 
-  &.blank {
-    opacity: 0.2;
-  }
-
-  &.blue-border {
-    border-color: var(--hexagon-border-blue-color);
+  &.borderless:not(.outer-border) {
+    border-left: none;
+    border-right: none;
     &:after {
-      border-color: var(--hexagon-border-blue-color);
+      content: none;
     }
     &:before {
-      border-color: var(--hexagon-border-blue-color);
+      content: none;
+    }
+  }
+
+  &:not(.no-hover):not(.blank) {
+    &:hover {
+      border-color: var(--hexagon-accent-color);
+      &:after {
+        border-color: var(--hexagon-accent-color);
+      }
+      &:before {
+        border-color: var(--hexagon-accent-color);
+      }
+
+      &.outer-border {
+        & div.hexagon {
+          border-color: var(--hexagon-accent-color);
+          &:after {
+            border-color: var(--hexagon-accent-color);
+          }
+          &:before {
+            border-color: var(--hexagon-accent-color);
+          }
+        }
+      }
     }
   }
 
   &.small {
     width: var(--hexagon-small-width);
     height: var(--hexagon-small-height);
-    &:after {
-      width: var(--hexagon-small-width);
-      height: var(--hexagon-small-height);
-    }
-    &:before {
-      width: var(--hexagon-small-width);
-      height: var(--hexagon-small-height);
+    &:not(.borderless) {
+      &:after {
+        width: var(--hexagon-small-width);
+        height: var(--hexagon-small-height);
+      }
+      &:before {
+        width: var(--hexagon-small-width);
+        height: var(--hexagon-small-height);
+      }
     }
   }
   &.large {
@@ -97,40 +123,41 @@ export const Hexagon = styled.div`
       height: var(--hexagon-large-height);
     }
   }
-  &.border {
-    width: var(--border-hexagon-width);
-    height: var(--border-hexagon-height);
+
+  &.blank {
+    opacity: 0.2;
+    background-color: var(--hexagon-accent-color);
+    width: var(--hexagon-blank-width);
+    height: var(--hexagon-blank-height);
+
     &:after {
-      width: var(--border-hexagon-width);
-      height: var(--border-hexagon-height);
+      width: var(--hexagon-blank-width);
+      height: var(--hexagon-blank-height);
     }
     &:before {
-      width: var(--border-hexagon-width);
-      height: var(--border-hexagon-height);
-    }
-    &.small {
-      width: var(--border-hexagon-small-width);
-      height: var(--border-hexagon-small-height);
-      &:after {
-        width: var(--border-hexagon-small-width);
-        height: var(--border-hexagon-small-height);
-      }
-      &:before {
-        width: var(--border-hexagon-small-width);
-        height: var(--border-hexagon-small-height);
-      }
-    }
-    &.large {
-      width: var(--border-hexagon-large-width);
-      height: var(--border-hexagon-large-height);
-      &:after {
-        width: var(--border-hexagon-large-width);
-        height: var(--border-hexagon-large-height);
-      }
-      &:before {
-        width: var(--border-hexagon-large-width);
-        height: var(--border-hexagon-large-height);
-      }
+      width: var(--hexagon-blank-width);
+      height: var(--hexagon-blank-height);
     }
   }
+
+  &.outer-border {
+    width: var(--border-hexagon-large-width);
+    height: var(--border-hexagon-large-height);
+    &:after {
+      width: var(--border-hexagon-large-width);
+      height: var(--border-hexagon-large-height);
+    }
+    &:before {
+      width: var(--border-hexagon-large-width);
+      height: var(--border-hexagon-large-height);
+    }
+  }
+`;
+
+export const Sparkle = styled.svg`
+  position: absolute;
+  z-index: 10;
+  top: -44%;
+  left: -3%;
+  width: 62.1%;
 `;
