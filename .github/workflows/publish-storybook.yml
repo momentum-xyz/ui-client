@@ -1,0 +1,61 @@
+name: Build and deploy storybook
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+    paths:
+      - packages/ui-kit/**
+      - packages/ui-kit-storybook/**
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: packages/ui-kit-storybook
+
+jobs:
+  build:
+    runs-on: self-hosted  # ubuntu-latest
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c  # v3.3.0
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c  # v3.6.0
+        with:
+          node-version: '18'
+      - name: Enable Corepack
+        run: corepack enable
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c  # v3.6.0
+        with:
+          node-version: '18'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@momentum-xyz'
+          cache: 'yarn'
+      - id: yarn-deps
+        name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - id: build
+        name: Yarn build
+        run: yarn run build-storybook
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@253fd476ed429e83b7aae64a92a75b4ceb1a17cf  # v1.0.7
+        with:
+          path: ./packages/ui-kit-storybook/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@0243b6c10d06cb8e95ed8ee471231877621202c0  # v1.2.4
