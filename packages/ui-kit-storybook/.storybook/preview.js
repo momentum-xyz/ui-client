@@ -16,7 +16,7 @@ export const parameters = {
 const themes = [
   {
     name: 'Light theme',
-    viewportBg: '#DDE0E2',
+    viewportBg: '#EAD6E5',
     ...DefaultThemeConfig
   },
   {

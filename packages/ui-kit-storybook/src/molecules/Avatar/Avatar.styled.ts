@@ -6,7 +6,7 @@ import astronautIcon from '../../static/images/astronaut.svg';
 export const Container = styled.div`
   border-radius: 100%;
   background: ${(props) => props.theme.bg};
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentBg};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +18,7 @@ export const Container = styled.div`
 
     &.showHover {
       &:hover {
-        border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1.0)};
+        border: 1px solid ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 1.0)};
         cursor: pointer;
       }
     }
@@ -63,7 +63,7 @@ export const Container = styled.div`
 export const AvatarPlaceholder = styled.div`
   width: 50%;
   height: 50%;
-  background-color: ${(props) => props.theme.accent};
+  background-color: ${(props) => props.theme.accentBg};
   ${`mask: url(${astronautIcon}) no-repeat center;`};
 `;
 

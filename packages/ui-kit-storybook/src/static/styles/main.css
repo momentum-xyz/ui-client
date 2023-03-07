@@ -28,3 +28,9 @@ body {
   display: flex;
   gap: 15px;
 }
+
+.storybook-grid-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
