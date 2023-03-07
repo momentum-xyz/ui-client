@@ -3,10 +3,11 @@ import {IMaskInput} from 'react-imask';
 import cn from 'classnames';
 import IMask from 'imask';
 
+import {stringInputMask} from './Input.masks';
 import * as styled from './Input.styled';
 
 export interface InputPropsInterface {
-  opts: IMask.AnyMaskedOptions;
+  opts?: IMask.AnyMaskedOptions;
   value?: string | number | null;
   placeholder?: string;
   size?: 'normal' | 'small';
@@ -17,7 +18,7 @@ export interface InputPropsInterface {
 }
 
 const Input: FC<InputPropsInterface> = ({
-  opts,
+  opts = stringInputMask,
   value,
   placeholder,
   disabled,
@@ -35,9 +36,9 @@ const Input: FC<InputPropsInterface> = ({
         ref={ref}
         inputRef={inputRef}
         {...opts}
-        value={value || value === 0 ? `${value}` : null}
         lazy={!(value || value === 0)} // for postfix
-        // @ts-ignore
+        value={value || value === 0 ? `${value}` : null}
+        // @ts-ignore: Typescript issues in library
         placeholder={placeholder}
         disabled={disabled}
         className={cn(size, danger && 'danger', wide && 'wide')}

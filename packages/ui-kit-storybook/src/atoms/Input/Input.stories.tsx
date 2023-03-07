@@ -19,18 +19,41 @@ const Template: Story<InputPropsInterface> = (args) => {
   return <Input {...args} value={value} onChange={setValue} />;
 };
 
-export const Normal = Template.bind({});
-Normal.args = {
+export const Text = Template.bind({});
+Text.args = {
   size: 'normal',
   placeholder: 'Enter text...',
   opts: stringInputMask
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
-  placeholder: 'Enter text...',
-  opts: stringInputMask
+export const Number = Template.bind({});
+Number.args = {
+  placeholder: 'Enter positive number...',
+  opts: numberInputMask()
+};
+
+export const Negative = Template.bind({});
+Negative.args = {
+  placeholder: 'Enter negative number...',
+  opts: numberInputMask(0, true)
+};
+
+export const Decimal = Template.bind({});
+Decimal.args = {
+  placeholder: 'Enter positive decimal...',
+  opts: numberInputMask(5)
+};
+
+export const Prefix = Template.bind({});
+Prefix.args = {
+  placeholder: 'Enter positive decimal...',
+  opts: numberInputPrefixMask('$', 5)
+};
+
+export const Suffix = Template.bind({});
+Suffix.args = {
+  placeholder: 'Enter positive decimal...',
+  opts: numberInputSuffixMask('MOM', 5)
 };
 
 export const Danger = Template.bind({});
@@ -47,32 +70,18 @@ Disabled.args = {
   opts: stringInputMask
 };
 
-export const Number = Template.bind({});
-Number.args = {
-  placeholder: 'Enter positive number...',
-  opts: numberInputMask()
+export const ListOfSizes = Template.bind({});
+ListOfSizes.args = {
+  placeholder: 'Enter text...',
+  opts: stringInputMask
 };
-
-export const NegativeNumber = Template.bind({});
-NegativeNumber.args = {
-  placeholder: 'Enter negative number...',
-  opts: numberInputMask(0, true)
-};
-
-export const Decimal = Template.bind({});
-Decimal.args = {
-  placeholder: 'Enter positive decimal...',
-  opts: numberInputMask(5)
-};
-
-export const DecimalWithPrefix = Template.bind({});
-DecimalWithPrefix.args = {
-  placeholder: 'Enter positive decimal...',
-  opts: numberInputPrefixMask('$', 5)
-};
-
-export const DecimalWithSuffix = Template.bind({});
-DecimalWithSuffix.args = {
-  placeholder: 'Enter positive decimal...',
-  opts: numberInputSuffixMask('MOM', 5)
-};
+ListOfSizes.decorators = [
+  () => {
+    return (
+      <div className="storybook-grid-rows">
+        <Input {...(ListOfSizes.args as InputPropsInterface)} size="normal" />
+        <Input {...(ListOfSizes.args as InputPropsInterface)} size="small" />
+      </div>
+    );
+  }
+];
