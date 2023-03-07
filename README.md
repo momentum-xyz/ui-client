@@ -5,7 +5,7 @@
 
 The UI-Client is currently a web application allowing to explore Odyssey 3D Worlds with 3D and 2D user interfaces.
 
-It is built with React and Typescript, using Web3 style sign-in, Mobx State Tree for the app state management and flow and websocket-based communication layer called posbus-client.
+It is built with React and Typescript, using Web3 style sign-in, [Mobx State Tree](https://mobx-state-tree.js.org/) for the app state management and flow and websocket-based communication layer called [posbus-client](https://github.com/momentum-xyz/posbus-client). The App and the plugins are using [Module Federation](https://webpack.js.org/concepts/module-federation/) (MF) in order to create more optimised builds and on-demand plugging in runtime.
 
 ```mermaid
 flowchart LR
@@ -43,20 +43,21 @@ It is a monorepo that contains the main application and several common libraries
 ### Packages connection schema
 
 ```mermaid
-flowchart LR
+flowchart TD
     A --> MAP(map3d)
     MAP --> T{{three.js - legacy}}
+    MAP --> C
     A --> 3D(odyssey3d)
     3D --> B{{babylon.js}}
     A --> S(sdk)
     A[APP] --> C(core)
     A --> K(ui-kit)
-    P --> K
     S --> K
-    3D --> C
-    A o--o |Module Federation|P(PLUGINS)
     P --> S
+    P --> K
+    3D --> C
     P --> C
+    A o--o |MF| P(PLUGINS)
 ```
 
 ## How to run locally
