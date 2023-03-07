@@ -40,7 +40,6 @@ export const numberInputSuffixMask = (
 ): IMask.AnyMaskedOptions => {
   return IMask.createMask({
     mask: `unit ${suffix}`,
-    lazy: false, // For suffix
     blocks: {
       unit: {
         mask: Number,

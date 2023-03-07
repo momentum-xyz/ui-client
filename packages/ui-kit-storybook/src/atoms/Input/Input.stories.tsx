@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {ComponentMeta, Story} from '@storybook/react';
 
 import {
@@ -13,11 +14,13 @@ export default {
   component: Input
 } as ComponentMeta<typeof Input>;
 
-const Template: Story<InputPropsInterface> = (args) => <Input {...args} />;
+const Template: Story<InputPropsInterface> = (args) => {
+  const [value, setValue] = useState('');
+  return <Input {...args} value={value} onChange={setValue} />;
+};
 
 export const Normal = Template.bind({});
 Normal.args = {
-  defaultValue: 'Your input',
   size: 'normal',
   placeholder: 'Enter text...',
   opts: stringInputMask
@@ -39,7 +42,7 @@ Danger.args = {
 
 export const Disabled = Template.bind({});
 Disabled.args = {
-  defaultValue: 'Lorem ipsum',
+  placeholder: 'Enter text...',
   disabled: true,
   opts: stringInputMask
 };

@@ -1,5 +1,5 @@
-import {FC, memo, useEffect} from 'react';
-import {useIMask} from 'react-imask';
+import {FC, memo, useRef} from 'react';
+import {IMaskInput} from 'react-imask';
 import cn from 'classnames';
 import IMask from 'imask';
 
@@ -7,7 +7,7 @@ import * as styled from './Input.styled';
 
 export interface InputPropsInterface {
   opts: IMask.AnyMaskedOptions;
-  defaultValue?: string | number | null;
+  value?: string | number | null;
   placeholder?: string;
   size?: 'normal' | 'small';
   disabled?: boolean;
@@ -18,7 +18,7 @@ export interface InputPropsInterface {
 
 const Input: FC<InputPropsInterface> = ({
   opts,
-  defaultValue,
+  value,
   placeholder,
   disabled,
   danger,
@@ -26,28 +26,25 @@ const Input: FC<InputPropsInterface> = ({
   size = 'normal',
   onChange
 }) => {
-  const {ref, maskRef, setUnmaskedValue} = useIMask(opts, {
-    onAccept: (value, mask) => {
-      console.log(mask.unmaskedValue);
-      onChange(mask.unmaskedValue);
-    }
-  });
-
-  // @ts-ignore
-  console.log(maskRef.current?.masked?.lazy);
-
-  useEffect(() => {
-    setUnmaskedValue(defaultValue || defaultValue === 0 ? `${defaultValue}` : '');
-  }, [defaultValue, setUnmaskedValue]);
+  const ref = useRef(null);
+  const inputRef = useRef(null);
 
   return (
     <styled.Container data-testid="Input-test">
-      <input
+      <IMaskInput
         ref={ref}
-        defaultValue={defaultValue || undefined}
+        inputRef={inputRef}
+        {...opts}
+        value={value || value === 0 ? `${value}` : null}
+        lazy={!(value || value === 0)} // for postfix
+        // @ts-ignore
         placeholder={placeholder}
         disabled={disabled}
         className={cn(size, danger && 'danger', wide && 'wide')}
+        onAccept={(_, {unmaskedValue}) => {
+          console.log(unmaskedValue);
+          onChange(unmaskedValue);
+        }}
       />
     </styled.Container>
   );
