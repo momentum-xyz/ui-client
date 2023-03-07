@@ -1,12 +1,12 @@
-import {Scene, FreeCamera} from '@babylonjs/core';
+import {Scene, ArcRotateCamera} from '@babylonjs/core';
 import * as BABYLON from '@babylonjs/core';
 
 export class CameraHelper {
-  static camera: FreeCamera | null = null;
+  static camera: ArcRotateCamera | null = null;
 
   static initialize(scene: Scene, canvas: HTMLCanvasElement): void {
     // Creates and positions a free camera
-    this.camera = new FreeCamera('odyssey-camera', new BABYLON.Vector3(0, 5, -10), scene);
+    this.camera = new ArcRotateCamera('odyssey-camera', 0, 0.8, 100, BABYLON.Vector3.Zero(), scene);
     // Targets the camera to scene origin
     this.camera.setTarget(BABYLON.Vector3.Zero());
     // Attaches the camera to the canvas
