@@ -10,11 +10,11 @@ It is built with React and Typescript, using Web3 style sign-in, [Mobx State Tre
 ```mermaid
 flowchart LR
     subgraph UI-Client
+        3D -.- A
+        2D -.- A
         A[APP state]
         3D[3D UI]
         2D[2D UI]
-        A -.- 3D
-        A -.- 2D
     end
     A --> B(Blockchain)
     C --> B
