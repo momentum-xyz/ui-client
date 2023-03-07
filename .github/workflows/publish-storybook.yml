@@ -37,7 +37,6 @@ jobs:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@momentum-xyz'
-          cache: 'yarn'
       - id: yarn-deps
         name: Install dependencies
         run: yarn install --frozen-lockfile
