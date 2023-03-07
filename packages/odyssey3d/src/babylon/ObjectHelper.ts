@@ -76,10 +76,9 @@ export class ObjectHelper {
   }
 }
 
-function advancedLoading(){
-
-    // Register for loader 
-    /*SceneLoader.OnPluginActivatedObservable.addOnce((loader: GLTFLoader) => {
+function advancedLoading() {
+  // Register for loader
+  /*SceneLoader.OnPluginActivatedObservable.addOnce((loader: GLTFLoader) => {
       // This is just a precaution as this isn't strictly necessary since
       // the only loader in use is the glTF one.
 
@@ -125,40 +124,58 @@ function importMeshTest(scene: Scene) {
     'BoomBox.glb',
     scene,
     function (newMeshes) {
-      newMeshes[0].scaling = new Vector3(100,100,100);
-      newMeshes[0].position = new Vector3(1,0,0);
+      newMeshes[0].scaling = new Vector3(100, 100, 100);
+      newMeshes[0].position = new Vector3(1, 0, 0);
     }
   );
 }
 
 function appendTest(scene: Scene) {
-  SceneLoader.Append("https://playground.babylonjs.com/scenes/", "BoomBox.glb", scene, function (scene) {
-    // do something with the scene
-  });
+  SceneLoader.Append(
+    'https://playground.babylonjs.com/scenes/',
+    'BoomBox.glb',
+    scene,
+    function (scene) {
+      // do something with the scene
+    }
+  );
 }
 
-
 function loadTest(engine: Engine) {
-  SceneLoader.Load("https://playground.babylonjs.com/scenes/", "BoomBox.glb", engine, function (scene) {
-    // do something with the scene
-  });
+  SceneLoader.Load(
+    'https://playground.babylonjs.com/scenes/',
+    'BoomBox.glb',
+    engine,
+    function (scene) {
+      // do something with the scene
+    }
+  );
 }
 
 function importMeshAsyncTest(scene: Scene) {
-    // The first parameter can be used to specify which mesh to import. Here we import all meshes
-    const resultPromise = SceneLoader.ImportMeshAsync("", "https://playground.babylonjs.com/scenes/", "BoomBox.glb", scene);
-    
-    // Result has meshes, particleSystems, skeletons, animationGroups and transformNodes
-    resultPromise.then((result) => {
-      result.meshes[0].scaling = new Vector3(100,100,100);
-      result.meshes[0].position = new Vector3(2,0,0);
-    })
+  // The first parameter can be used to specify which mesh to import. Here we import all meshes
+  const resultPromise = SceneLoader.ImportMeshAsync(
+    '',
+    'https://playground.babylonjs.com/scenes/',
+    'BoomBox.glb',
+    scene
+  );
+
+  // Result has meshes, particleSystems, skeletons, animationGroups and transformNodes
+  resultPromise.then((result) => {
+    result.meshes[0].scaling = new Vector3(100, 100, 100);
+    result.meshes[0].position = new Vector3(2, 0, 0);
+  });
 }
 
 async function importMeshAsyncPromiseTest(scene: Scene) {
   // The first parameter can be used to specify which mesh to import. Here we import all meshes
-  const result = await SceneLoader.ImportMeshAsync("", "https://playground.babylonjs.com/scenes/", "BoomBox.glb", scene);
-  result.meshes[0].scaling = new Vector3(100,100,100);
-  result.meshes[0].position = new Vector3(3,0,0);  
+  const result = await SceneLoader.ImportMeshAsync(
+    '',
+    'https://playground.babylonjs.com/scenes/',
+    'BoomBox.glb',
+    scene
+  );
+  result.meshes[0].scaling = new Vector3(100, 100, 100);
+  result.meshes[0].position = new Vector3(3, 0, 0);
 }
-
