@@ -8,11 +8,15 @@ import {
   Color3,
   SceneLoader,
   Vector3,
-  Engine
+  Engine,
+  ISceneLoaderPlugin,
+  EventState,
+  ISceneLoaderPluginAsync
   //Tools
 } from '@babylonjs/core';
 //import { GLTFLoader } from '@babylonjs/loaders/glTF/2.0/glTFLoader';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
+import {GLTFFileLoader} from '@babylonjs/loaders';
 
 //import cave from '../static/models/hyperbolic_cave.glb'
 
@@ -40,7 +44,8 @@ export class ObjectHelper {
     loadTest(engine);
     importMeshAsyncTest(scene);
     importMeshAsyncPromiseTest(scene);
-    advancedLoading();
+
+    this.advancedLoading();
 
     initialObjects.forEach((initialObject) => {
       this.spawnObject(scene, initialObject);
@@ -74,46 +79,38 @@ export class ObjectHelper {
       mesh.material = material;
     }
   }
-}
 
-function advancedLoading() {
-  // Register for loader
-  /*SceneLoader.OnPluginActivatedObservable.addOnce((loader: GLTFLoader) => {
-      // This is just a precaution as this isn't strictly necessary since
-      // the only loader in use is the glTF one.
+  static advancedLoading(): void {
+    SceneLoader.OnPluginActivatedObservable.addOnce(
+      (loader: ISceneLoaderPlugin | ISceneLoaderPluginAsync, eventState: EventState) => {
+        // This is just a precaution as this isn't strictly necessary since
+        // the only loader in use is the glTF one.
 
-      if (loader.name !== "gltf") 
-      {
-        return;
-      }
+        if (loader.name !== 'gltf') {
+          return;
+        }
 
-      // Use HTTP range requests to load the glTF binary (GLB) in parts.
-      loader.useRangeRequests = true;
+        const gltf = loader as GLTFFileLoader;
 
-      // Register for when extension are loaded.
-      loader.onExtensionLoadedObservable.add(function (extension) {
+        gltf.loggingEnabled = true;
+
+        // Use HTTP range requests to load the glTF binary (GLB) in parts.
+        gltf.useRangeRequests = true;
+
+        // Register for when extension are loaded.
+        gltf.onExtensionLoadedObservable.add(function (extension) {
           // Ignore extensions except MSFT_lod.
-          if (extension.name !== "MSFT_lod") 
-          {
+          if (extension.name !== 'MSFT_lod') {
             return;
           }
+        });
 
-          // Update the status text and next LOD index when each set
-          // of LODs are loaded.
-          extension.onMaterialLODsLoadedObservable.add(function (index) {
-
-          });
-
-          // Uncomment the following line to stop at the specified LOD.
-          //extension.maxLODsToLoad = 1;
-      });
-
-      // Update the status text when loading is complete, i.e. when
-      // all the LODs are loaded.
-      loader.onCompleteObservable.add(function () {
-
-      });
-  });*/
+        // Update the status text when loading is complete, i.e. when
+        // all the LODs are loaded.
+        gltf.onCompleteObservable.add(function () {});
+      }
+    );
+  }
 }
 
 function importMeshTest(scene: Scene) {
