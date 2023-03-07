@@ -13,15 +13,15 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
   /* Will run one time. */
   const onSceneReady = (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
+    const engine = scene.getEngine();
     if (view?.id) {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
-      ObjectHelper.initialize(scene, props.objects);
-
+      ObjectHelper.initialize(scene, engine, props.objects);
       scene.debugLayer.show({overlay: true});
 
       Event3dEmitter.on('ObjectCreated', (object) => {
-        ObjectHelper.spawnObject(scene, object);
+        //ObjectHelper.spawnObject(scene, object);
       });
 
       Event3dEmitter.on('ObjectTextureChanged', (object) => {
