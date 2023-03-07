@@ -45,10 +45,10 @@ It is a monorepo that contains the main application and several common libraries
 ```mermaid
 flowchart TD
     A --> MAP(map3d)
-    MAP --> T{{three.js - legacy}}
+    MAP --> B
     MAP --> C
     A --> 3D(odyssey3d)
-    3D --> B{{babylon.js}}
+    3D --> B{{babylon.js / legacy three.js}}
     A --> S(sdk)
     A[APP] --> C(core)
     A --> K(ui-kit)
