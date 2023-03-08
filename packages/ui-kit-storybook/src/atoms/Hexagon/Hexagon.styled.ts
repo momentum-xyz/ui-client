@@ -1,37 +1,66 @@
 import styled from 'styled-components';
 
+const hexagonSizeVariables = {
+  'hexagon-large-width': '48px',
+  'hexagon-large-height': '56px',
+
+  'hexagon-width': '42px',
+  'hexagon-height': '49px',
+
+  'hexagon-small-width': '30px',
+  'hexagon-small-height': '35px',
+
+  'hexagon-blank-width': '36px',
+  'hexagon-blank-height': '42px',
+
+  'border-hexagon-large-width': '60px',
+  'border-hexagon-large-height': '70px'
+};
+
 export const Wrapper = styled.div`
   position: relative;
+
+  width: ${hexagonSizeVariables['hexagon-width']};
+  height: ${hexagonSizeVariables['hexagon-height']};
+
+  &.small {
+    width: ${hexagonSizeVariables['hexagon-small-width']};
+    height: ${hexagonSizeVariables['hexagon-small-height']};
+    &:not(.borderless) {
+      &:after {
+        width: ${hexagonSizeVariables['hexagon-small-width']};
+        height: ${hexagonSizeVariables['hexagon-small-height']};
+      }
+      &:before {
+        width: ${hexagonSizeVariables['hexagon-small-width']};
+        height: ${hexagonSizeVariables['hexagon-small-height']};
+      }
+    }
+  }
+  &.large {
+    width: ${hexagonSizeVariables['hexagon-large-width']};
+    height: ${hexagonSizeVariables['hexagon-large-height']};
+  }
+
+  &.blank {
+    width: ${hexagonSizeVariables['hexagon-blank-width']};
+    height: ${hexagonSizeVariables['hexagon-blank-height']};
+  }
+
+  &.outer-border {
+    width: ${hexagonSizeVariables['border-hexagon-large-width']};
+    height: ${hexagonSizeVariables['border-hexagon-large-height']};
+  }
 `;
 
 export const Hexagon = styled.div`
-  --hexagon-large-width: 48px;
-  --hexagon-large-height: 56px;
-
-  --hexagon-width: 42px;
-  --hexagon-height: 49px;
-
-  --hexagon-small-width: 30px;
-  --hexagon-small-height: 35px;
-
-  --hexagon-blank-width: 36px;
-  --hexagon-blank-height: 42px;
-
-  --border-hexagon-large-width: 60px;
-  --border-hexagon-large-height: 70px;
-
-  --border-hexagon-width: 54px;
-  --border-hexagon-height: 63px;
-
-  --border-hexagon-small-width: 42px;
-  --border-hexagon-small-height: 47px;
-
-  --hexagon-border-color: var(--white);
+  --hexagon-border-color: ${(props) => props.theme.text};
   --hexagon-accent-color: ${(props) => props.theme.accentBg};
 
   clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
-  width: var(--hexagon-width);
-  height: var(--hexagon-height);
+
+  width: 100%;
+  height: 100%;
 
   position: relative;
   display: flex;
@@ -45,8 +74,8 @@ export const Hexagon = styled.div`
 
   &:after {
     content: '';
-    width: var(--hexagon-width);
-    height: var(--hexagon-height);
+    width: ${hexagonSizeVariables['hexagon-width']};
+    height: ${hexagonSizeVariables['hexagon-height']};
     position: absolute;
     transform: skewY(-30deg);
     border-top: 1px solid var(--hexagon-border-color);
@@ -54,8 +83,8 @@ export const Hexagon = styled.div`
   }
   &:before {
     content: '';
-    width: var(--hexagon-width);
-    height: var(--hexagon-height);
+    width: ${hexagonSizeVariables['hexagon-width']};
+    height: ${hexagonSizeVariables['hexagon-height']};
     position: absolute;
     transform: skewY(30deg);
     border-top: 1px solid var(--hexagon-border-color);
@@ -98,58 +127,50 @@ export const Hexagon = styled.div`
   }
 
   &.small {
-    width: var(--hexagon-small-width);
-    height: var(--hexagon-small-height);
     &:not(.borderless) {
       &:after {
-        width: var(--hexagon-small-width);
-        height: var(--hexagon-small-height);
+        width: ${hexagonSizeVariables['hexagon-small-width']};
+        height: ${hexagonSizeVariables['hexagon-small-height']};
       }
       &:before {
-        width: var(--hexagon-small-width);
-        height: var(--hexagon-small-height);
+        width: ${hexagonSizeVariables['hexagon-small-width']};
+        height: ${hexagonSizeVariables['hexagon-small-height']};
       }
     }
   }
   &.large {
-    width: var(--hexagon-large-width);
-    height: var(--hexagon-large-height);
     &:after {
-      width: var(--hexagon-large-width);
-      height: var(--hexagon-large-height);
+      width: ${hexagonSizeVariables['hexagon-large-width']};
+      height: ${hexagonSizeVariables['hexagon-large-height']};
     }
     &:before {
-      width: var(--hexagon-large-width);
-      height: var(--hexagon-large-height);
+      width: ${hexagonSizeVariables['hexagon-large-width']};
+      height: ${hexagonSizeVariables['hexagon-large-height']};
     }
   }
 
   &.blank {
     opacity: 0.2;
     background-color: var(--hexagon-accent-color);
-    width: var(--hexagon-blank-width);
-    height: var(--hexagon-blank-height);
 
     &:after {
-      width: var(--hexagon-blank-width);
-      height: var(--hexagon-blank-height);
+      width: ${hexagonSizeVariables['hexagon-blank-width']};
+      height: ${hexagonSizeVariables['hexagon-blank-height']};
     }
     &:before {
-      width: var(--hexagon-blank-width);
-      height: var(--hexagon-blank-height);
+      width: ${hexagonSizeVariables['hexagon-blank-width']};
+      height: ${hexagonSizeVariables['hexagon-blank-height']};
     }
   }
 
   &.outer-border {
-    width: var(--border-hexagon-large-width);
-    height: var(--border-hexagon-large-height);
     &:after {
-      width: var(--border-hexagon-large-width);
-      height: var(--border-hexagon-large-height);
+      width: ${hexagonSizeVariables['border-hexagon-large-width']};
+      height: ${hexagonSizeVariables['border-hexagon-large-height']};
     }
     &:before {
-      width: var(--border-hexagon-large-width);
-      height: var(--border-hexagon-large-height);
+      width: ${hexagonSizeVariables['border-hexagon-large-width']};
+      height: ${hexagonSizeVariables['border-hexagon-large-height']};
     }
   }
 `;
@@ -157,7 +178,7 @@ export const Hexagon = styled.div`
 export const Sparkle = styled.svg`
   position: absolute;
   z-index: 10;
-  top: -44%;
-  left: -3%;
+  top: -25%;
+  left: 0;
   width: 62.1%;
 `;

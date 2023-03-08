@@ -4,7 +4,7 @@ import cn from 'classnames';
 import * as styled from './Hexagon.styled';
 
 type HexagonSizeType = 'small' | 'normal' | 'large';
-type HexagonType = 'primary' | 'secondary-large' | 'secondary' | 'secondary-small' | 'blank';
+type HexagonType = 'primary' | 'secondary' | 'third' | 'fourth' | 'blank';
 
 export interface HexagonPropsInterface {
   type: HexagonType;
@@ -25,11 +25,12 @@ const Hexagon: FC<PropsWithChildren<HexagonPropsInterface>> = (props) => {
     skipOuterBorder,
     onClick,
     children,
+    margin,
     ...rest
   } = props;
-  const size: HexagonSizeType = ['primary', 'secondary-large'].includes(type)
+  const size: HexagonSizeType = ['primary', 'secondary'].includes(type)
     ? 'large'
-    : type === 'secondary-small'
+    : type === 'third'
     ? 'small'
     : 'normal';
 
@@ -38,8 +39,12 @@ const Hexagon: FC<PropsWithChildren<HexagonPropsInterface>> = (props) => {
   const isBlank = type === 'blank';
 
   return (
-    <styled.Wrapper data-testid="Hexagon-test" {...rest}>
-      {/* WIP */}
+    <styled.Wrapper
+      data-testid="Hexagon-test"
+      className={cn('hexagon-wrapper', size, isBlank && 'blank', isOuterBorder && 'outer-border')}
+      style={margin ? {margin: `${margin}px`} : {}}
+      {...rest}
+    >
       {showSparkle && (
         <styled.Sparkle
           width="32"
@@ -67,7 +72,6 @@ const Hexagon: FC<PropsWithChildren<HexagonPropsInterface>> = (props) => {
           </defs>
         </styled.Sparkle>
       )}
-      {/* /WIP */}
 
       <styled.Hexagon
         className={cn(
@@ -81,16 +85,18 @@ const Hexagon: FC<PropsWithChildren<HexagonPropsInterface>> = (props) => {
         )}
       >
         {isOuterBorder ? (
-          <Hexagon
-            type={type}
-            skipOuterBorder={true}
-            noBorder={noBorder}
-            noHover={noHover}
-            isActive={isActive}
-            onClick={onClick}
-          >
-            {children}
-          </Hexagon>
+          <>
+            <Hexagon
+              type={type}
+              skipOuterBorder={true}
+              noBorder={noBorder}
+              noHover={noHover}
+              isActive={isActive}
+              onClick={onClick}
+            >
+              {children}
+            </Hexagon>
+          </>
         ) : (
           <>{!isBlank && children}</>
         )}
