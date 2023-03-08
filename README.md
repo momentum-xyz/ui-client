@@ -1,5 +1,4 @@
-[![Master Status](https://github.com/OdysseyMomentumExperience/ui-client/workflows/Deploy/badge.svg?branch=master)](https://github.com/OdysseyMomentumExperience/PositionEngine/actions)
-[![Develop Status](https://github.com/OdysseyMomentumExperience/ui-client/workflows/Deploy/badge.svg?branch=develop)](https://github.com/OdysseyMomentumExperience/PositionEngine/actions)
+[![Develop Status](https://github.com/momentum-xyz/ui-client/workflows/build-deploy/badge.svg?branch=develop)](https://github.com/momentum-xyz/ui-client/actions/workflows/build-deploy.yml?query=branch%3Adevelop)
 
 # Odyssey UI-Client
 
