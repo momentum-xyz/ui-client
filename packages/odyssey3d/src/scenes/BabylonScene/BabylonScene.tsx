@@ -21,7 +21,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       scene.debugLayer.show({overlay: true});
 
       Event3dEmitter.on('ObjectCreated', (object) => {
-        //ObjectHelper.spawnObject(scene, object);
+        ObjectHelper.spawnObject(scene, object);
       });
 
       Event3dEmitter.on('ObjectTextureChanged', (object) => {
