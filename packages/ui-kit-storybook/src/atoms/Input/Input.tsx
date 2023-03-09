@@ -36,16 +36,16 @@ const Input: FC<InputPropsInterface> = ({
         ref={ref}
         inputRef={inputRef}
         {...opts}
-        lazy={!(value || value === 0)} // for postfix
+        // show prefix / suffix only if value exist
+        lazy={!(value || value === 0)}
         value={value || value === 0 ? `${value}` : null}
+        onAccept={(_, {unmaskedValue}) => {
+          onChange(unmaskedValue);
+        }}
         // @ts-ignore: Typescript issues in library
         placeholder={placeholder}
         disabled={disabled}
         className={cn(size, danger && 'danger', wide && 'wide')}
-        onAccept={(_, {unmaskedValue}) => {
-          console.log(unmaskedValue);
-          onChange(unmaskedValue);
-        }}
       />
     </styled.Container>
   );

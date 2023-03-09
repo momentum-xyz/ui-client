@@ -11,7 +11,14 @@ import Input, {InputPropsInterface} from './Input';
 
 export default {
   title: 'Atoms/Input',
-  component: Input
+  component: Input,
+  argTypes: {
+    opts: {
+      table: {
+        disable: true
+      }
+    }
+  }
 } as ComponentMeta<typeof Input>;
 
 const Template: Story<InputPropsInterface> = (args) => {
@@ -44,18 +51,6 @@ Decimal.args = {
   opts: numberInputMask(5)
 };
 
-export const Prefix = Template.bind({});
-Prefix.args = {
-  placeholder: 'Enter positive decimal...',
-  opts: numberInputPrefixMask('$', 5)
-};
-
-export const Suffix = Template.bind({});
-Suffix.args = {
-  placeholder: 'Enter positive decimal...',
-  opts: numberInputSuffixMask('MOM', 5)
-};
-
 export const Danger = Template.bind({});
 Danger.args = {
   placeholder: 'Enter text...',
@@ -68,6 +63,18 @@ Disabled.args = {
   placeholder: 'Enter text...',
   disabled: true,
   opts: stringInputMask
+};
+
+export const WithPrefix = Template.bind({});
+WithPrefix.args = {
+  placeholder: 'Enter positive decimal...',
+  opts: numberInputPrefixMask('$', 5)
+};
+
+export const WithSuffix = Template.bind({});
+WithSuffix.args = {
+  placeholder: 'Enter positive decimal...',
+  opts: numberInputSuffixMask('MOM', 5)
 };
 
 export const ListOfSizes = Template.bind({});
