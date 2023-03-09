@@ -26,12 +26,3 @@ export const DefaultThemeConfig: ThemeInterface = {
   danger: DangerColorList[0],
   success: SuccessColorList[0]
 };
-
-export const CustomThemeConfig: ThemeInterface = {
-  accentBg: AccentColorList[0],
-  accentText: AccentTextColorList[0],
-  bg: BackgroundColorList[0],
-  text: TextColorList[0],
-  danger: DangerColorList[0],
-  success: SuccessColorList[0]
-};

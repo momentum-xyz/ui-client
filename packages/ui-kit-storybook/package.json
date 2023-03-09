@@ -32,6 +32,7 @@
     "react-dropzone": "^14.2.3",
     "react-imask": "^6.4.3",
     "react-router-dom": "^6.7.0",
+    "react-select": "^5.7.0",
     "react-use-error-boundary": "^3.0.0",
     "styled-components": "^5.3.6",
     "svg-sprite": "^1.5.4"
@@ -50,6 +51,7 @@
     "@storybook/react": "^6.5.16",
     "@storybook/testing-library": "^0.0.13",
     "@storybook/theming": "^6.5.16",
+    "@types/react-select": "^5.0.1",
     "babel-loader": "^8.3.0",
     "copyfiles": "^2.4.1",
     "require-context": "^1.1.0",
