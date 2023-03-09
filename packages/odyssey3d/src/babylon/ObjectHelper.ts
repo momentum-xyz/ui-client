@@ -12,7 +12,8 @@ import {
   ISceneLoaderPluginAsync,
   AssetContainer,
   float,
-  Matrix
+  Matrix,
+  GizmoManager
 } from '@babylonjs/core';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 import {GLTFFileLoader} from '@babylonjs/loaders';
@@ -22,12 +23,14 @@ import {CameraHelper} from './CameraHelper';
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
   static assetRootUrl = 'https://odyssey.org/api/v3/render/asset/';
+  static gizmoManager: GizmoManager;
 
   static initialize(scene: Scene, engine: Engine, initialObjects: Object3dInterface[]): void {
     /*initialObjects.forEach((initialObject) => {
       this.spawnObject(scene, initialObject);
     });*/
 
+    // Mouse Click Listener
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
         scene.pointerX,
@@ -50,6 +53,13 @@ export class ObjectHelper {
         }
       }
     };
+
+    // Gizmo
+    this.gizmoManager = new GizmoManager(scene);
+    this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
+    //this.gizmoManager.positionGizmoEnabled = true;
+    //this.gizmoManager.rotationGizmoEnabled = true;
+    //this.gizmoManager.scaleGizmoEnabled = true;
   }
 
   static spawnObject(scene: Scene, object: Object3dInterface): void {
@@ -101,12 +111,15 @@ export class ObjectHelper {
   ) {
     const entries = container.instantiateModelsToScene();
 
+    // Change this to get only the first root node
     for (const node of entries.rootNodes) {
       node.name = name;
       node.position.x = x;
       node.position.y = y;
       node.position.z = z;
       node.metadata = id;
+      //this.gizmoManager.attachToNode(node);
+      this.gizmoManager.attachableNodes?.push(node);
     }
 
     for (const group of entries.animationGroups) {
