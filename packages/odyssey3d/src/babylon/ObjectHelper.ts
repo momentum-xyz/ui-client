@@ -11,10 +11,13 @@ import {
   EventState,
   ISceneLoaderPluginAsync,
   AssetContainer,
-  float
+  float,
+  Matrix
 } from '@babylonjs/core';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 import {GLTFFileLoader} from '@babylonjs/loaders';
+
+import {CameraHelper} from './CameraHelper';
 
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
@@ -24,6 +27,29 @@ export class ObjectHelper {
     /*initialObjects.forEach((initialObject) => {
       this.spawnObject(scene, initialObject);
     });*/
+
+    scene.onPointerDown = function castRay() {
+      const ray = scene.createPickingRay(
+        scene.pointerX,
+        scene.pointerY,
+        Matrix.Identity(),
+        // Is this legal?
+        CameraHelper.camera
+      );
+
+      const hit = scene.pickWithRay(ray);
+
+      if (hit) {
+        if (hit.pickedMesh) {
+          // get the root parent of the picked mesh
+          let parent = hit.pickedMesh;
+          while (parent.parent) {
+            parent = parent.parent as AbstractMesh;
+          }
+          console.log(parent.metadata);
+        }
+      }
+    };
   }
 
   static spawnObject(scene: Scene, object: Object3dInterface): void {
@@ -39,16 +65,17 @@ export class ObjectHelper {
           object.transform.position.x,
           object.transform.position.y,
           object.transform.position.z,
-          object.name
+          object.name,
+          object.id
         );
       },
       (event) => {
         // On progress callback
-        console.log(`Loading ${event.loaded}/${event.total}`);
+        console.log(`Loading progress ${event.loaded}/${event.total}`);
       },
       (scene, message) => {
         // On error callback
-        console.log(object.name + ' failed loading, because: ' + message);
+        console.log(object.name + ' failed loading!: ' + message);
       },
       '.glb'
     );
@@ -64,7 +91,14 @@ export class ObjectHelper {
     }
   }
 
-  static instantiate(container: AssetContainer, x: float, y: float, z: float, name: string) {
+  static instantiate(
+    container: AssetContainer,
+    x: float,
+    y: float,
+    z: float,
+    name: string,
+    id: string
+  ) {
     const entries = container.instantiateModelsToScene();
 
     for (const node of entries.rootNodes) {
@@ -72,6 +106,7 @@ export class ObjectHelper {
       node.position.x = x;
       node.position.y = y;
       node.position.z = z;
+      node.metadata = id;
     }
 
     for (const group of entries.animationGroups) {

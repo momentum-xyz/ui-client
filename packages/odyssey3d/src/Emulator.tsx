@@ -44,11 +44,11 @@ const Emulator: FC = () => {
           //charizard: 8eb299aa-bed7-8de6-fbc2-54716723f2e0
           //egg: 9626f409-7a47-6536-7b24-8ebffc5fffac
           //phoenix: 4751d666-147c-dfc8-6d4b-ed4edb9cc940
-          //hypno: 3093e1f9-fa4c-da4d-4df6-73fa22a60ad1
+          //hypno: 3093e1f9-fa4c-da4d-4df6-73fa22a60ad1     //ERR 400
           //phone: df60d077-608a-3992-bbac-8357466c8646
           //pillman: 0d5b35b9-33c0-d917-c095-7ba3670755da
 
-          asset_3d_id: '8eb299aa-bed7-8de6-fbc2-54716723f2e0'
+          asset_3d_id: '0d5b35b9-33c0-d917-c095-7ba3670755da'
         });
       }
     }, 1000);
