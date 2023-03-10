@@ -17,13 +17,13 @@ export const parameters = {
 const THEMES = [
   {
     ...DefaultThemeConfig,
-    name: 'Light theme',
-    bg: '#FFF',
-    text: '#000'
+    name: 'Odyssey theme'
   },
   {
     ...DefaultThemeConfig,
-    name: 'Odyssey theme'
+    name: 'Light theme',
+    bg: '#FFF',
+    text: '#000'
   },
   {
     ...DefaultThemeConfig,

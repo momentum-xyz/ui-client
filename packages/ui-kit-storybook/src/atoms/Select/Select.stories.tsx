@@ -38,15 +38,24 @@ const TemplateMulti: Story<SelectPropsInterface> = (args) => {
   return <Select {...args} isMulti value={value} onMultiChange={setValue} />;
 };
 
-export const SingleValue = TemplateSingle.bind({});
-SingleValue.args = {
+export const Single = TemplateSingle.bind({});
+Single.args = {
   placeholder: 'Choose wallet',
   options: OPTIONS
 };
 
-export const MultiValue = TemplateMulti.bind({});
-MultiValue.args = {
+export const Multi = TemplateMulti.bind({});
+Multi.args = {
   placeholder: 'Choose wallets',
+  multiSuffix: 'selected',
+  options: OPTIONS
+};
+
+export const MultiOpened = TemplateMulti.bind({});
+MultiOpened.args = {
+  placeholder: 'Choose wallets',
+  multiSuffix: 'selected',
+  closeMenuOnSelect: false,
   options: OPTIONS
 };
 

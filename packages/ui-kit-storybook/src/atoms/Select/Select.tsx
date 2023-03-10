@@ -16,10 +16,12 @@ export interface SelectPropsInterface {
   options: SelectOptionInterface[];
   placeholder?: string;
   hideSelectedOptions: boolean;
+  closeMenuOnSelect?: boolean;
   isSearchable?: boolean;
   isMulti?: boolean;
   isDisabled?: boolean;
   wide?: boolean;
+  multiSuffix?: string;
   onSingleChange?: (value: string | null) => void;
   onMultiChange?: (value: string[]) => void;
 }
@@ -30,6 +32,9 @@ const Select: FC<SelectPropsInterface> = ({
   options,
   isMulti,
   isSearchable = false,
+  hideSelectedOptions = false,
+  closeMenuOnSelect = true,
+  multiSuffix,
   onSingleChange,
   onMultiChange,
   ...rest
@@ -38,8 +43,10 @@ const Select: FC<SelectPropsInterface> = ({
     <styled.Container data-testid="Select-test" className={cn(wide && 'wide')}>
       <ReactSelect
         options={options}
-        isSearchable={isSearchable}
         isMulti={isMulti}
+        isSearchable={isSearchable}
+        closeMenuOnSelect={closeMenuOnSelect}
+        hideSelectedOptions={hideSelectedOptions}
         value={
           value && Array.isArray(value)
             ? value.map((i) => options.find((opt) => opt.value === i))
@@ -58,6 +65,14 @@ const Select: FC<SelectPropsInterface> = ({
               <IconSvg name="chevron" size="m" />
             </components.DropdownIndicator>
           ),
+          MultiValueContainer: (props) => {
+            const {value} = props.selectProps;
+            return (
+              <components.MultiValueContainer {...props}>
+                {Array.isArray(value) && `${value.length} ${multiSuffix}`}
+              </components.MultiValueContainer>
+            );
+          },
           IndicatorSeparator: () => null,
           ClearIndicator: () => null
         }}
