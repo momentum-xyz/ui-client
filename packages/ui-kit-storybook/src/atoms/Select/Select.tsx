@@ -39,6 +39,7 @@ const Select: FC<SelectPropsInterface> = ({
       <ReactSelect
         options={options}
         isSearchable={isSearchable}
+        isMulti={isMulti}
         value={
           value && Array.isArray(value)
             ? value.map((i) => options.find((opt) => opt.value === i))
