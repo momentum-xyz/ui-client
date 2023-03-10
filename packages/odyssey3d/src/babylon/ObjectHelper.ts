@@ -11,19 +11,29 @@ import {
   EventState,
   ISceneLoaderPluginAsync,
   AssetContainer,
-  float,
   Matrix,
-  GizmoManager
+  GizmoManager,
+  //Mesh,
+  ActionManager,
+  ExecuteCodeAction,
+  InstantiatedEntries
 } from '@babylonjs/core';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 import {GLTFFileLoader} from '@babylonjs/loaders';
 
 import {CameraHelper} from './CameraHelper';
 
+interface BabylonObjectInterface {
+  container: AssetContainer;
+  objectDefinition: Object3dInterface;
+  objectInstance: InstantiatedEntries;
+}
+
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
   static assetRootUrl = 'https://odyssey.org/api/v3/render/asset/';
   static gizmoManager: GizmoManager;
+  static objects: BabylonObjectInterface[] = [];
 
   static initialize(scene: Scene, engine: Engine, initialObjects: Object3dInterface[]): void {
     /*initialObjects.forEach((initialObject) => {
@@ -54,6 +64,21 @@ export class ObjectHelper {
       }
     };
 
+    // Keyboard Input Listener
+    scene.actionManager = new ActionManager(scene);
+    scene.actionManager.registerAction(
+      new ExecuteCodeAction(
+        {
+          trigger: ActionManager.OnKeyUpTrigger,
+          parameter: 'q'
+        },
+        () => {
+          this.disposeAllObjects();
+          console.log('q button was pressed');
+        }
+      )
+    );
+
     // Gizmo
     this.gizmoManager = new GizmoManager(scene);
     this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
@@ -70,14 +95,7 @@ export class ObjectHelper {
       assetUrl,
       scene,
       (container) => {
-        this.instantiate(
-          container,
-          object.transform.position.x,
-          object.transform.position.y,
-          object.transform.position.z,
-          object.name,
-          object.id
-        );
+        this.instantiate(container, object);
       },
       (event) => {
         // On progress callback
@@ -101,29 +119,33 @@ export class ObjectHelper {
     }
   }
 
-  static instantiate(
-    container: AssetContainer,
-    x: float,
-    y: float,
-    z: float,
-    name: string,
-    id: string
-  ) {
-    const entries = container.instantiateModelsToScene();
+  static instantiate(container: AssetContainer, object: Object3dInterface) {
+    const entry = container.instantiateModelsToScene();
 
     // Change this to get only the first root node
-    for (const node of entries.rootNodes) {
-      node.name = name;
-      node.position.x = x;
-      node.position.y = y;
-      node.position.z = z;
-      node.metadata = id;
+    for (const node of entry.rootNodes) {
+      node.name = object.name;
+      node.position.x = object.transform.position.x;
+      node.position.y = object.transform.position.y;
+      node.position.z = object.transform.position.z;
+      node.metadata = object.id;
       //this.gizmoManager.attachToNode(node);
+
       this.gizmoManager.attachableNodes?.push(node);
+
+      const babylonObject = {container: container, objectDefinition: object, objectInstance: entry};
+      this.objects.push(babylonObject);
     }
 
-    for (const group of entries.animationGroups) {
+    for (const group of entry.animationGroups) {
       group.play(true);
+    }
+  }
+
+  static disposeAllObjects() {
+    for (const obj of this.objects) {
+      obj.objectInstance.dispose();
+      obj.container.removeAllFromScene();
     }
   }
 
