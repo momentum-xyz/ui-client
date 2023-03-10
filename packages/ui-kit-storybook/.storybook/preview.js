@@ -18,7 +18,8 @@ const THEMES = [
   {
     ...DefaultThemeConfig,
     name: 'Light theme',
-    bg: '#FFF'
+    bg: '#FFF',
+    text: '#000'
   },
   {
     ...DefaultThemeConfig,
@@ -27,7 +28,8 @@ const THEMES = [
   {
     ...DefaultThemeConfig,
     name: 'Dark theme',
-    bg: '#000'
+    bg: '#000',
+    text: '#FFF'
   }
 ];
 

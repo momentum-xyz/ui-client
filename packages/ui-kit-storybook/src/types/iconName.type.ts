@@ -36,6 +36,7 @@ export type IconNameType =
   | 'discord'
   | 'drive'
   | 'edit'
+  | 'ellipse'
   | 'email'
   | 'exit'
   | 'explore'
