@@ -32,6 +32,7 @@
     "@web3-react/metamask": "^8.0.0-beta.0",
     "@web3-react/network": "^8.0.0-beta.0",
     "@web3-react/walletconnect-connector": "^6.2.8",
+    "@web3-react/walletlink-connector": "^6.2.14",
     "agora-rtc-sdk-ng": "4.13.0",
     "agora-rtm-sdk": "1.5.0",
     "axios": "^0.22.0",

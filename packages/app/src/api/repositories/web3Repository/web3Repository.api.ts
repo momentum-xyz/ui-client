@@ -1,5 +1,6 @@
 import {Method} from 'axios';
 import {generatePath} from 'react-router-dom';
+import {ExternalProvider, Web3Provider} from '@ethersproject/providers';
 
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
@@ -42,4 +43,10 @@ export const resolveNode: RequestInterface<ResolveNodeRequest, ResolveNodeRespon
   };
 
   return request.get(web3RepositoryEndpoints().resolveNode, restOptions);
+};
+
+export const web3GetLibrary = (provider: ExternalProvider): Web3Provider => {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 10000; // need this??
+  return library;
 };

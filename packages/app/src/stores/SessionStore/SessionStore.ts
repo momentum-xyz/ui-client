@@ -77,6 +77,32 @@ const SessionStore = types
 
       return false;
     }),
+    fetchTokenByWallet2: flow(function* (
+      account: string,
+      signChallenge: (challenge: string) => Promise<string>
+    ) {
+      const data: AuthChallengeRequest = {wallet: account};
+      const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
+
+      if (response?.challenge) {
+        const signature = yield signChallenge(response.challenge);
+        if (signature) {
+          const data = {
+            wallet: account,
+            signedChallenge: signature,
+            // network: 'ethereum'
+            network: account.length > 42 ? 'polkadot' : 'ethereum'
+          };
+          const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
+
+          self.updateAxiosAndUnityTokens(response?.token || '');
+
+          return !!response?.token;
+        }
+      }
+      throw new Error('Error fetching token');
+      // return false;
+    }),
     fetchProfileJobStatus: flow(function* () {
       if (self.profileJobId) {
         const response: CheckProfileUpdatingJobResponse = yield self.profileJobRequest.send(
