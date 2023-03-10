@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+import checked from '../../assets/icons/checked.svg';
+
 export const Container = styled.div`
   width: 320px;
 
@@ -100,6 +102,21 @@ export const Container = styled.div`
     letter-spacing: 0.5px;
   }
 
+  .Select__value-container--is-multi {
+    > div:not(:first-child) {
+      display: none;
+    }
+  }
+
+  .Select__multi-value {
+    margin: 0 0 0 12px;
+    background-color: transparent;
+    color: ${(props) => props.theme.text};
+    font-size: var(--font-size-m);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
   .Select__menu {
     margin: 0;
     box-shadow: none;
@@ -118,6 +135,25 @@ export const Container = styled.div`
     border-bottom-right-radius: 4px;
   }
 
+  .Select__menu-list--is-multi {
+    .Select__option--is-selected {
+      position: relative;
+
+      &::before {
+        position: absolute;
+        display: block;
+        content: '';
+        width: 16px;
+        height: 16px;
+        background-color: ${(props) => props.theme.text};
+        mask: url(${checked}) no-repeat center;
+        mask-size: 14px;
+        right: 18px;
+        top: 12px;
+      }
+    }
+  }
+
   .Select__menu-notice--no-options {
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
     color: ${(props) => props.theme.text};
@@ -127,7 +163,7 @@ export const Container = styled.div`
   }
 
   .Select__option {
-    padding: 10px 20px;
+    padding: 10px 40px 10px 20px;
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
     color: ${(props) => props.theme.text};
     font-size: var(--font-size-m);
@@ -136,6 +172,14 @@ export const Container = styled.div`
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+
+    &:hover {
+      color: ${(props) => props.theme.accentText};
+    }
+
+    &:active {
+      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+    }
   }
 
   .Select__option:nth-child(odd) {
@@ -143,7 +187,7 @@ export const Container = styled.div`
   }
 
   .Select__option--is-focused {
-    color: ${(props) => props.theme.accentText};
+    color: ${(props) => props.theme.text};
     cursor: pointer;
   }
 `;
