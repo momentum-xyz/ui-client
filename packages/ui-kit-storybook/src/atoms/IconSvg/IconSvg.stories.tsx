@@ -11,27 +11,27 @@ const Template: Story<IconSvgPropsInterface> = (args) => <IconSvg {...args} />;
 
 export const General = Template.bind({});
 General.args = {
-  size: 'large',
+  size: 'xl',
   name: 'fly-portal'
 };
 
 export const IsWhite = Template.bind({});
 IsWhite.args = {
-  size: 'large',
+  size: 'xl',
   name: 'fly-portal',
   isWhite: true
 };
 
 export const IsDanger = Template.bind({});
 IsDanger.args = {
-  size: 'large',
+  size: 'xl',
   name: 'fly-portal',
   isDanger: true
 };
 
 export const IsDisabled = Template.bind({});
 IsDisabled.args = {
-  size: 'large',
+  size: 'xl',
   name: 'fly-portal',
   isDisabled: true
 };
@@ -44,15 +44,11 @@ ListOfSizes.decorators = [
   () => {
     return (
       <div className="storybook-grid">
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="huge" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="super-large" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="extra-large" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="normal-large" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="large" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="medium-large" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="medium" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="normal" />
-        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="small" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="xl" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="l" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="m" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="s" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="xs" />
       </div>
     );
   }

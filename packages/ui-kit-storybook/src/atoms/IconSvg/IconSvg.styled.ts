@@ -1,15 +1,11 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.span`
-  --icon-size-small: 12px;
-  --icon-size-normal: 14px;
-  --icon-size-medium: 16px;
-  --icon-size-medium-large: 20px;
-  --icon-size-large: 24px;
-  --icon-size-normal-large: 32px;
-  --icon-size-extra-large: 40px;
-  --icon-size-super-large: 87px;
-  --icon-size-huge: 140px;
+  --icon-size-xl: 20px;
+  --icon-size-l: 18px;
+  --icon-size-m: 16px;
+  --icon-size-s: 14px;
+  --icon-size-xs: 12px;
 
   display: block;
   flex-shrink: 0;
@@ -27,48 +23,29 @@ export const Wrapper = styled.span`
 
   /* SIZES */
 
-  &.small {
-    width: var(--icon-size-small);
-    height: var(--icon-size-small);
+  &.xs {
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
   }
 
-  &.extra-large {
-    width: var(--icon-size-extra-large);
-    height: var(--icon-size-extra-large);
+  &.s {
+    width: var(--icon-size-s);
+    height: var(--icon-size-s);
   }
 
-  &.large {
-    width: var(--icon-size-large);
-    height: var(--icon-size-large);
+  &.m {
+    width: var(--icon-size-m);
+    height: var(--icon-size-m);
   }
 
-  &.normal {
-    width: var(--icon-size-normal);
-    height: var(--icon-size-normal);
+  &.l {
+    width: var(--icon-size-l);
+    height: var(--icon-size-l);
   }
 
-  &.medium {
-    width: var(--icon-size-medium);
-    height: var(--icon-size-medium);
-  }
-
-  &.medium-large {
-    width: var(--icon-size-medium-large);
-    height: var(--icon-size-medium-large);
-  }
-
-  &.normal-large {
-    width: var(--icon-size-normal-large);
-    height: var(--icon-size-normal-large);
-  }
-
-  &.super-large {
-    width: var(--icon-size-super-large);
-    height: var(--icon-size-super-large);
-  }
-
-  &.huge {
-    width: var(--icon-size-huge);
+  &.xl {
+    width: var(--icon-size-xl);
+    height: var(--icon-size-xl);
   }
 
   /* STATES */
