@@ -19,7 +19,7 @@ const Checkbox: FC<CheckboxPropsInterface> = ({
   onChange
 }) => {
   return (
-    <styled.Label htmlFor={name}>
+    <styled.Label htmlFor={name} data-testid="Checkbox-test">
       <input
         id={name}
         type="checkbox"
