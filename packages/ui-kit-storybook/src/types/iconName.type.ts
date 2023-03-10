@@ -20,6 +20,7 @@ export type IconNameType =
   | 'chat'
   | 'check-on'
   | 'check'
+  | 'checked'
   | 'checkmark'
   | 'chevron'
   | 'clock-two'
