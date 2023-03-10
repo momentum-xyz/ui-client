@@ -4,48 +4,45 @@ import {rgba} from 'polished';
 import checked from '../../assets/icons/checked.svg';
 
 export const Label = styled.label`
-  --checkbox-size: 18px;
-  --checkbox-checked-size: 18px;
-  --checkbox-bg: var(--white);
-  --box-size: 13px;
-  --margin-right: 7px;
+  --size: 18px;
+  --mark-size: 12px;
+  --radius: 4px;
+  --offset: 8px;
 
   position: relative;
   display: flex;
+  color: ${(props) => props.theme.text};
+  line-height: var(--size);
   align-items: center;
-  color: var(--white);
   cursor: pointer;
-  line-height: var(--checkbox-size);
 
-  > * + * {
-    margin-right: var(--margin-right);
+  .label {
+    padding: 0 var(--offset);
   }
 
   .inputView {
     position: relative;
-    width: var(--checkbox-size);
-    height: var(--checkbox-size);
-    flex-shrink: 0;
+    width: var(--size);
+    height: var(--size);
     border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
     background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
-    border-radius: 4px;
+    border-radius: var(--radius);
+    flex-shrink: 0;
     opacity: 1;
 
     &::before {
       position: absolute;
       display: block;
-      background: url('${checked}') no-repeat center center;
-      background-size: 12px;
       content: '';
+      width: calc(var(--size) - 2px);
+      height: calc(var(--size) - 2px);
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
+      mask: url(${checked}) no-repeat center;
+      mask-size: var(--mark-size);
       opacity: 0;
-      width: var(--checkbox-checked-size);
-      height: var(--checkbox-checked-size);
-      transform: translateZ(0) scale(0.5);
     }
-  }
-
-  .disabled {
-    color: red;
   }
 
   /* CHECKED */
@@ -59,36 +56,39 @@ export const Label = styled.label`
     opacity: 0;
   }
 
+  .input:hover + .inputView {
+    background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+    transition: background-color var(--tr-100-ei);
+  }
+
   .input:checked + .inputView {
-    border: none;
-    background-color: transparent;
+    background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+    border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
 
     &::before {
-      border-radius: 4px;
-      border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
-      background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
       opacity: 1;
-      transform: scale(1);
     }
   }
 
   /* DISABLED */
 
   .input:disabled + .inputView {
-    opacity: 0.5;
+    background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
   }
 
-  .input:checked:disabled + .inputView {
-    &::before {
-      background-image: url('${checked}');
-      opacity: 1;
-      transform: scale(1);
+  .input:disabled:hover + .inputView {
+    cursor: not-allowed;
+  }
+
+  .input:disabled + .inputView + span {
+    color: ${(props) => props.theme.text && rgba(props.theme.text, 0.4)};
+
+    &:hover {
+      cursor: not-allowed;
     }
   }
 
-  .input:checked:disabled + .inputView + span {
-    color: var(--grey);
-  }
+  /* FOCUS */
 
   .input:focus + .inputView {
     outline: none;

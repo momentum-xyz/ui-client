@@ -10,7 +10,7 @@ export default {
 
 const Template: Story<CheckboxPropsInterface> = (args) => {
   const [value, setValue] = useState<boolean>();
-  return <Checkbox {...args} value={value} onChange={setValue} />;
+  return <Checkbox value={value} {...args} onChange={setValue} />;
 };
 
 export const General = Template.bind({});
@@ -23,6 +23,13 @@ NoLabel.args = {};
 
 export const Disabled = Template.bind({});
 Disabled.args = {
+  label: 'Lorem ipsum text',
+  disabled: true
+};
+
+export const DisabledChecked = Template.bind({});
+DisabledChecked.args = {
+  value: true,
   label: 'Lorem ipsum text',
   disabled: true
 };
