@@ -1,4 +1,5 @@
 import {FC, memo} from 'react';
+import cn from 'classnames';
 
 import * as styled from './Switch.styled';
 
@@ -21,7 +22,11 @@ const Switch: FC<SwitchPropsInterface> = ({name, value = false, disabled, onChan
         disabled={disabled}
         className="input"
       />
-      <span className="inputView" />
+      <div className="wrapper">
+        <div className={cn('inner', value && 'checked', disabled && 'disabled')}>
+          <div className="inputView" />
+        </div>
+      </div>
     </styled.Label>
   );
 };
