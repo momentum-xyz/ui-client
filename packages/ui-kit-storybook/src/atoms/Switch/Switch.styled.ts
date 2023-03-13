@@ -30,10 +30,18 @@ export const Label = styled.label`
 
     &.checked {
       background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+
+      &:hover {
+        background: ${(props) => props.theme.accentBg};
+      }
     }
 
     &.disabled {
       background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+
+      &:hover {
+        background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+      }
     }
   }
 
@@ -84,10 +92,15 @@ export const Label = styled.label`
     }
   }
 
+  .input:checked:hover + .wrapper .inputView {
+    background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+  }
+
   /* DISABLED */
 
   .input:disabled + .wrapper .inputView {
     background: transparent;
+    cursor: not-allowed;
 
     &::before {
       opacity: 0;
@@ -100,10 +113,6 @@ export const Label = styled.label`
     &::before {
       opacity: 1;
     }
-  }
-
-  .input:disabled:hover + .wrapper .inputView {
-    cursor: not-allowed;
   }
 
   /* FOCUS */

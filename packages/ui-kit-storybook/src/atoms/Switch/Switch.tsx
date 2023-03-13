@@ -12,7 +12,7 @@ export interface SwitchPropsInterface {
 
 const Switch: FC<SwitchPropsInterface> = ({name, value = false, disabled, onChange}) => {
   return (
-    <styled.Label htmlFor={name}>
+    <styled.Label htmlFor={name} data-testid="Switch-test">
       <input
         id={name}
         type="checkbox"
