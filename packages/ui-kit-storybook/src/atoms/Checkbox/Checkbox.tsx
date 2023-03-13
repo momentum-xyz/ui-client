@@ -1,5 +1,5 @@
-import cn from 'classnames';
 import {FC, memo} from 'react';
+import cn from 'classnames';
 
 import * as styled from './Checkbox.styled';
 
