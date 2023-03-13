@@ -4,7 +4,7 @@ import {Event3dEmitter} from '@momentum-xyz/core';
 import SceneComponent from 'babylonjs-hook';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
-import {CameraHelper, LightHelper, ObjectHelper} from '../../babylon';
+import {/*CameraHelper, */ CameraHelper, LightHelper, ObjectHelper} from '../../babylon';
 
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
@@ -17,7 +17,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
     if (view?.id) {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
-      ObjectHelper.initialize(scene, engine, props.objects);
+      ObjectHelper.initialize(scene, engine, props.objects, view);
       scene.debugLayer.show({overlay: true});
 
       Event3dEmitter.on('ObjectCreated', (object) => {
@@ -26,6 +26,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
 
       Event3dEmitter.on('ObjectTextureChanged', (object) => {
         ObjectHelper.setObjectTexture(scene, object);
+      });
+
+      Event3dEmitter.on('SetWorld', (assetID) => {
+        CameraHelper.spawnPlayer(scene, assetID);
       });
     } else {
       console.error('There is no canvas for Babylon.');

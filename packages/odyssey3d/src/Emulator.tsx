@@ -29,8 +29,10 @@ const Emulator: FC = () => {
   };
 
   useEffect(() => {
+    Event3dEmitter.emit('SetWorld', '0d5b35b9-33c0-d917-c095-7ba3670755da');
+
     setInterval(() => {
-      if (i < 10) {
+      if (i < 3) {
         i = i + 1;
         Event3dEmitter.emit('ObjectCreated', {
           id: uuidv4(),
@@ -48,7 +50,7 @@ const Emulator: FC = () => {
           //phone: df60d077-608a-3992-bbac-8357466c8646
           //pillman: 0d5b35b9-33c0-d917-c095-7ba3670755da
 
-          asset_3d_id: '0d5b35b9-33c0-d917-c095-7ba3670755da'
+          asset_3d_id: '8eb299aa-bed7-8de6-fbc2-54716723f2e0'
         });
       }
     }, 1000);

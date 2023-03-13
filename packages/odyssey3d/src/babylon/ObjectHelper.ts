@@ -16,7 +16,10 @@ import {
   //Mesh,
   ActionManager,
   ExecuteCodeAction,
-  InstantiatedEntries
+  InstantiatedEntries,
+  Behavior,
+  TransformNode
+  //UniversalCamera
 } from '@babylonjs/core';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 import {GLTFFileLoader} from '@babylonjs/loaders';
@@ -34,8 +37,17 @@ export class ObjectHelper {
   static assetRootUrl = 'https://odyssey.org/api/v3/render/asset/';
   static gizmoManager: GizmoManager;
   static objects: BabylonObjectInterface[] = [];
+  static followObjectBehaviour: Behavior<InstantiatedEntries>;
+  static _camRoot: TransformNode;
+  static _yTilt: TransformNode;
+  static player: TransformNode;
 
-  static initialize(scene: Scene, engine: Engine, initialObjects: Object3dInterface[]): void {
+  static initialize(
+    scene: Scene,
+    engine: Engine,
+    initialObjects: Object3dInterface[],
+    view: HTMLCanvasElement
+  ): void {
     /*initialObjects.forEach((initialObject) => {
       this.spawnObject(scene, initialObject);
     });*/
@@ -74,7 +86,7 @@ export class ObjectHelper {
         },
         () => {
           this.disposeAllObjects();
-          console.log('q button was pressed');
+          console.log('q button was pressed. all objects disposed!');
         }
       )
     );
@@ -82,14 +94,18 @@ export class ObjectHelper {
     // Gizmo
     this.gizmoManager = new GizmoManager(scene);
     this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-    //this.gizmoManager.positionGizmoEnabled = true;
+    this.gizmoManager.positionGizmoEnabled = true;
     //this.gizmoManager.rotationGizmoEnabled = true;
     //this.gizmoManager.scaleGizmoEnabled = true;
   }
 
+  static setWorld(assetID: string) {
+    const assetUrl = this.getAssetFileName(assetID);
+    console.log('assetID is: ' + assetUrl);
+  }
+
   static spawnObject(scene: Scene, object: Object3dInterface): void {
-    const assetUrl = object.asset_3d_id.replace(/-/g, '');
-    //de99ac0e0ba06446926346d3f6c854e5
+    const assetUrl = this.getAssetFileName(object.asset_3d_id);
     SceneLoader.LoadAssetContainer(
       this.assetRootUrl,
       assetUrl,
@@ -120,24 +136,39 @@ export class ObjectHelper {
   }
 
   static instantiate(container: AssetContainer, object: Object3dInterface) {
-    const entry = container.instantiateModelsToScene();
+    const instance = container.instantiateModelsToScene();
 
-    // Change this to get only the first root node
-    for (const node of entry.rootNodes) {
-      node.name = object.name;
-      node.position.x = object.transform.position.x;
-      node.position.y = object.transform.position.y;
-      node.position.z = object.transform.position.z;
-      node.metadata = object.id;
-      //this.gizmoManager.attachToNode(node);
-
-      this.gizmoManager.attachableNodes?.push(node);
-
-      const babylonObject = {container: container, objectDefinition: object, objectInstance: entry};
-      this.objects.push(babylonObject);
+    if (instance.rootNodes.length === 0) {
+      console.log(
+        'instance.rootNodes.length === 0. Something went wrong with loading ' + object.asset_3d_id
+      );
+      return;
     }
 
-    for (const group of entry.animationGroups) {
+    if (instance.rootNodes.length > 1) {
+      console.log(
+        'instance.rootNodes.length > 1. Using only the first one from ' + object.asset_3d_id
+      );
+    }
+
+    const node = instance.rootNodes[0];
+    node.name = object.name;
+    node.position.x = object.transform.position.x;
+    node.position.y = object.transform.position.y;
+    node.position.z = object.transform.position.z;
+    node.metadata = object.id;
+
+    const babylonObject = {
+      container: container,
+      objectDefinition: object,
+      objectInstance: instance
+    };
+    this.objects.push(babylonObject);
+
+    //this.gizmoManager.attachToNode(node);
+    this.gizmoManager.attachableNodes?.push(node);
+
+    for (const group of instance.animationGroups) {
       group.play(true);
     }
   }
@@ -181,5 +212,9 @@ export class ObjectHelper {
         });
       }
     );
+  }
+
+  static getAssetFileName(id: string): string {
+    return id.replace(/-/g, '');
   }
 }
