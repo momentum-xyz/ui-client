@@ -4,4 +4,7 @@ export * from './Input';
 export * from './Select';
 export * from './Switch';
 export * from './Checkbox';
+export * from './Button';
+export * from './ButtonRound';
+export * from './ButtonEllipse';
 export * from './Radio';
