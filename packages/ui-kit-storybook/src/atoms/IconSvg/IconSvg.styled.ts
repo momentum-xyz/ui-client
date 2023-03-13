@@ -6,6 +6,7 @@ export const Wrapper = styled.span`
   --icon-size-m: 16px;
   --icon-size-s: 14px;
   --icon-size-xs: 12px;
+  --icon-size-xxs: 11px;
 
   display: block;
   flex-shrink: 0;
@@ -22,6 +23,11 @@ export const Wrapper = styled.span`
   }
 
   /* SIZES */
+
+  &.xxs {
+    width: var(--icon-size-xxs);
+    height: var(--icon-size-xxs);
+  }
 
   &.xs {
     width: var(--icon-size-xs);

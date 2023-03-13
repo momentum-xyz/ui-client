@@ -33,3 +33,12 @@
     url('../fonts/poppins/Poppins-Regular.woff2') format('woff2'),
     url('../fonts/poppins/Poppins-Regular.woff') format('woff');
 }
+
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 300;
+  src:
+    url('../fonts/poppins/Poppins-Light.ttf') format('truetype'),
+    url('../fonts/poppins/Poppins-Light.woff2') format('woff2'),
+    url('../fonts/poppins/Poppins-Light.woff') format('woff');
+}
