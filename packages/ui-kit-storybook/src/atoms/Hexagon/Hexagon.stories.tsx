@@ -7,8 +7,7 @@ export default {
   component: Hexagon
 } as Meta;
 
-const IMAGE_SRC =
-  'https://global-uploads.webflow.com/600af1368b0b4075be07c984/632ad6edc4c62f89d965aca6_Jetsons-60th-Anniversary.jpg';
+const IMAGE_SRC = 'https://picsum.photos/300';
 
 const Template: Story<HexagonPropsInterface> = (args) => (
   <Hexagon {...args}>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.button`
   --hexagon-border-color: ${(props) => props.theme.text};
   --hexagon-accent-color: ${(props) => props.theme.accentBg};
 
@@ -51,6 +51,10 @@ export const Wrapper = styled.div`
   &.outer-border {
     width: var(--border-hexagon-large-width);
     height: var(--border-hexagon-large-height);
+  }
+
+  &.no-hover {
+    cursor: default;
   }
 `;
 

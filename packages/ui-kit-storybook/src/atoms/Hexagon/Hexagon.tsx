@@ -67,10 +67,19 @@ const Hexagon: FC<PropsWithChildren<HexagonPropsInterface>> = (props) => {
   const showSparkle = isOuterBorder && isActive;
   const isBlank = type === 'blank';
 
+  const clickHandler = onClick || (() => {});
+
   return (
     <styled.Wrapper
       data-testid="Hexagon-test"
-      className={cn('hexagon-wrapper', size, isBlank && 'blank', isOuterBorder && 'outer-border')}
+      className={cn(
+        'hexagon-wrapper',
+        size,
+        isBlank && 'blank',
+        noHover && 'no-hover',
+        isOuterBorder && 'outer-border'
+      )}
+      onClick={clickHandler}
       style={margin ? {margin: `${margin}px`} : {}}
       {...rest}
     >
@@ -89,13 +98,7 @@ const Hexagon: FC<PropsWithChildren<HexagonPropsInterface>> = (props) => {
       >
         {isOuterBorder ? (
           <>
-            <Hexagon
-              type={type}
-              skipOuterBorder={true}
-              noHover={noHover}
-              isActive={isActive}
-              onClick={onClick}
-            >
+            <Hexagon type={type} skipOuterBorder={true} noHover={noHover} isActive={isActive}>
               {children}
             </Hexagon>
           </>
