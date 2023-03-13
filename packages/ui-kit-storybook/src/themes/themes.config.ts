@@ -10,7 +10,7 @@ export const AccentColorList: string[] = ['#004373'];
 
 export const AccentTextColorList: string[] = ['#9EEEFF'];
 
-export const BackgroundColorList: string[] = ['#E7C5EC'];
+export const BackgroundColorList: string[] = ['#EAD6E5'];
 
 export const TextColorList: string[] = ['#FFFFFF'];
 

@@ -8,3 +8,4 @@ export * from './Button';
 export * from './ButtonRound';
 export * from './ButtonEllipse';
 export * from './Radio';
+export * from './Warning';
