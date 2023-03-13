@@ -160,6 +160,12 @@ const SessionStore = types
     get isAuthenticated(): boolean {
       return !!self.token || !self.isAuthenticating;
     },
+    get errorFetchingProfile(): boolean {
+      // const {errorCode} = self.profileRequest;
+      // TODO check why sometimes the error code is undefined, perhaps CORS issues
+      // console.log('errorFetchingProfile', errorCode, self.profileRequest);
+      return !!self.token && !self.isAuthenticating && !self.user;
+    },
     get isTokenPending(): boolean {
       return self.challengeRequest.isPending || self.tokenRequest.isPending;
     },
