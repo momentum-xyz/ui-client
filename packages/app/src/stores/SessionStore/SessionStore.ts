@@ -60,7 +60,7 @@ const SessionStore = types
       const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
 
       if (!!response?.challenge && !!account) {
-        PolkadotImplementation.getAddresses();
+        // PolkadotImplementation.getAddresses();
         const result = yield PolkadotImplementation.signRaw(
           account.meta?.source || '',
           PolkadotImplementation.convertStringToHex(response.challenge),
