@@ -31,18 +31,7 @@ PrimaryActive.args = {
 
 export const PrimaryBorderless = Template.bind({});
 PrimaryBorderless.args = {
-  noBorder: true
-};
-
-export const LargeSecondary = Template.bind({});
-LargeSecondary.args = {
-  type: 'secondary-large'
-};
-
-export const LargeSecondaryBorderless = Template.bind({});
-LargeSecondaryBorderless.args = {
-  noBorder: true,
-  type: 'secondary-large'
+  type: 'primary-borderless'
 };
 
 export const Secondary = Template.bind({});
@@ -50,27 +39,35 @@ Secondary.args = {
   type: 'secondary'
 };
 
-export const SecondaryNoHover = Template.bind({});
-SecondaryNoHover.args = {
-  noHover: true,
-  type: 'secondary'
-};
-
 export const SecondaryBorderless = Template.bind({});
 SecondaryBorderless.args = {
-  noBorder: true,
-  type: 'secondary'
+  type: 'secondary-borderless'
 };
 
-export const SecondarySmall = Template.bind({});
-SecondarySmall.args = {
-  type: 'secondary-small'
+export const Third = Template.bind({});
+Third.args = {
+  type: 'third'
 };
 
-export const SecondarySmallBorderless = Template.bind({});
-SecondarySmallBorderless.args = {
-  noBorder: true,
-  type: 'secondary-small'
+export const ThirdNoHover = Template.bind({});
+ThirdNoHover.args = {
+  noHover: true,
+  type: 'third'
+};
+
+export const ThirdBorderless = Template.bind({});
+ThirdBorderless.args = {
+  type: 'third-borderless'
+};
+
+export const Fourth = Template.bind({});
+Fourth.args = {
+  type: 'fourth'
+};
+
+export const FourthBorderless = Template.bind({});
+FourthBorderless.args = {
+  type: 'fourth-borderless'
 };
 
 export const Blank = Template.bind({});
@@ -81,8 +78,7 @@ Blank.args = {
 
 export const BlankBorderless = Template.bind({});
 BlankBorderless.args = {
-  noBorder: true,
-  type: 'blank',
+  type: 'blank-borderless',
   margin: 12
 };
 
