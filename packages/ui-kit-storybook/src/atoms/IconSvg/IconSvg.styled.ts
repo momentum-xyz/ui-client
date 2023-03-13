@@ -1,22 +1,19 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.span`
-  --icon-size-small: 12px;
-  --icon-size-normal: 14px;
-  --icon-size-medium: 16px;
-  --icon-size-medium-large: 20px;
-  --icon-size-large: 24px;
-  --icon-size-normal-large: 32px;
-  --icon-size-extra-large: 40px;
-  --icon-size-super-large: 87px;
-  --icon-size-huge: 140px;
+  --icon-size-xl: 20px;
+  --icon-size-l: 18px;
+  --icon-size-m: 16px;
+  --icon-size-s: 14px;
+  --icon-size-xs: 12px;
+  --icon-size-xxs: 11px;
 
   display: block;
   flex-shrink: 0;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentBg};
 
   &.danger {
-    color: ${(props) => props.theme.accentDanger};
+    color: ${(props) => props.theme.danger};
   }
 
   /* VARIANTS */
@@ -27,48 +24,34 @@ export const Wrapper = styled.span`
 
   /* SIZES */
 
-  &.small {
-    width: var(--icon-size-small);
-    height: var(--icon-size-small);
+  &.xxs {
+    width: var(--icon-size-xxs);
+    height: var(--icon-size-xxs);
   }
 
-  &.extra-large {
-    width: var(--icon-size-extra-large);
-    height: var(--icon-size-extra-large);
+  &.xs {
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
   }
 
-  &.large {
-    width: var(--icon-size-large);
-    height: var(--icon-size-large);
+  &.s {
+    width: var(--icon-size-s);
+    height: var(--icon-size-s);
   }
 
-  &.normal {
-    width: var(--icon-size-normal);
-    height: var(--icon-size-normal);
+  &.m {
+    width: var(--icon-size-m);
+    height: var(--icon-size-m);
   }
 
-  &.medium {
-    width: var(--icon-size-medium);
-    height: var(--icon-size-medium);
+  &.l {
+    width: var(--icon-size-l);
+    height: var(--icon-size-l);
   }
 
-  &.medium-large {
-    width: var(--icon-size-medium-large);
-    height: var(--icon-size-medium-large);
-  }
-
-  &.normal-large {
-    width: var(--icon-size-normal-large);
-    height: var(--icon-size-normal-large);
-  }
-
-  &.super-large {
-    width: var(--icon-size-super-large);
-    height: var(--icon-size-super-large);
-  }
-
-  &.huge {
-    width: var(--icon-size-huge);
+  &.xl {
+    width: var(--icon-size-xl);
+    height: var(--icon-size-xl);
   }
 
   /* STATES */

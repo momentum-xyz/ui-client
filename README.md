@@ -1,184 +1,179 @@
-[![Master Status](https://github.com/OdysseyMomentumExperience/ui-client/workflows/Deploy/badge.svg?branch=master)](https://github.com/OdysseyMomentumExperience/PositionEngine/actions)
-[![Develop Status](https://github.com/OdysseyMomentumExperience/ui-client/workflows/Deploy/badge.svg?branch=develop)](https://github.com/OdysseyMomentumExperience/PositionEngine/actions)
+[![Develop Status](https://github.com/momentum-xyz/ui-client/workflows/build-deploy/badge.svg?branch=develop)](https://github.com/momentum-xyz/ui-client/actions/workflows/build-deploy.yml?query=branch%3Adevelop)
 
-## Available Scripts
+# Odyssey UI-Client
 
-In the project directory, you can run:
+The UI-Client is currently a web application allowing to explore Odyssey 3D Worlds with 3D and 2D user interfaces.
 
-### `yarn build:deps`
+It is built with React and Typescript, using Web3 style sign-in, [Mobx State Tree](https://mobx-state-tree.js.org/) for the app state management and flow and websocket-based communication layer called [posbus-client](https://github.com/momentum-xyz/posbus-client). The App and the plugins are using [Module Federation](https://webpack.js.org/concepts/module-federation/) (MF) in order to create more optimised builds and on-demand plugging in runtime.
 
-If it's the first time you run the project, you will need to run `yarn build:deps` first.
-
-If you're working on UI-KIT then:
-
+```mermaid
+flowchart LR
+    subgraph UI-Client
+        3D -.- A
+        2D -.- A
+        A[APP state]
+        3D[3D UI]
+        2D[2D UI]
+    end
+    A --> B(Blockchain)
+    C --> B
+    A -- REST + Websocket --> C(Backend Controller) --> DB[(DB)]
 ```
-cd packages/ui-kit
-yarn start
-```
 
-It will build it and watch for changes.
+## Project packages
 
-### `yarn start`
-
-Runs the app in the development mode.<br />
-It also runs `yarn build:deps` before starting the app. <br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It also runs `yarn build:deps` before starting the app.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.<br />
-Your app is ready to be deployed!
-
-## Code quality
-
-1. Enable `prettier` using IDE preferences. Apple rules in `.prettierrc`.
-2. Enable `eslint` using IDE preferences.
-3. Enable `husky` using `yarn run postinstall`.
-
-## Local development
-
-#### GIT lfs
-
-To develop locally there are a few steps that need to be taken.<br />
-Firstly the project uses `git-lfs` to load large files.<br />
-use `git lfs install` to initialize the git hooks
-
-#### How to add a new icon to the svg-sprite?
-
-1. Copy a new svg-icon to the `ui-kit/assets/icons` folder<br />
-2. Change value of `fill` tag to `currentColor`<br />
-3. Run `$ yarn run svg-sprite:build`<br />
-4. Run `$ yarn run svg-sprite:type`<br />
-5. Add the icon to the StoryBook page
-
-## Project structure
+It is a monorepo that contains the main application and several common libraries, the plugin SDK and several the plugins that we maintain. In future the plugins may be moved to their own repositories.
 
     .
-    ├── public                      # Static public content
-    │   └── ...
-    │
-    ├── scripts                     # Scripts for development
-    │   ├── buildSvgSprite.js       # Svg-sprite builder
-    │   └── generateIconsType.js.   # The IconName type builder. Type is based on svg-sprite
-    │
-    ├── src
-    │   ├── api                     # BackEnd integration
-    │   │   ├── constants           # Api constants
-    │   │   ├── interfaces          # Common API interfaces
-    │   │   ├── repositoris         # Api calls
-    │   │   ├── request             # Define axios request
-    │   │   └── api.ts              # Whole avaliable api
+    ├── packages
+    │   ├── app                     # Main application
+    │   ├── core                    # Common reusable logic
+    │   ├── map3d                   # 3D Worlds Explorer based on three.js
+    │   ├── odyssey3d               # 3D World Interface based on babylon.js
+    │   ├── sdk                     # Plugins SDK
+    │   ├── ui-kit                  # Framework of base components
+    │   ├── ui-kit-storybook        # Upcoming version of UI-Kit with Storybook
     │   │
-    │   ├── ui-kit                  # Reusable components. It can be converted to package
-    │   │   ├── atoms               # Small components
-    │   │   ├── molecules           # Components without BL. Bigger that atoms
-    │   │   ├── organismes          # Components without BL. Bigger that molecules
-    │   │   ├── templates           # Components without BL. Bigger that organismes
-    │   │   ├── hooks               # DOM-hooks (like useClickOutside, etc.)
-    │   │   ├── types               # Types for atoms
-    │   │   ├── themes              # Theming via styled-components
-    │   │   ├── assets
-    │   │   ├── assets
-    │   │   │   ├── icons           # Icons for svg-sprite
-    │   │   │   ├── images          # Images for ui-kit
-    │   │   │   └── svg-sprite      # Folder contains ready to use svg-sprite
-    │   │   └── ...
-    │   │
-    │   ├── core                    # Core stuff. It can be converted to package
-    │   │   ├── enums               # Application enums
-    │   │   ├── constants           # Application contants
-    │   │   ├── insterfaces         # Application insterfaces
-    │   │   ├── models              # Common MST-models (e.g. Request, ...)
-    │   │   ├── utils               # Bussiness logic utils
-    │   │   └── ...
-    │   │
-    │   ├── shared                  # General stuff which won't be converted to separate package
-    │   │   ├── auth                # Configs for web3, guests, keycloak sessions
-    │   │   ├── hooks               # Special hooks for mst-store & user
-    │   │   ├── services            #
-    │   │   │     ├── i18n          # Init translations
-    │   │   │     ├── web3          # Web3 common helpers
-    │   │   │     ├── unity         # Unity intergation
-    │   │   │     ├── posBus        # EventItem processor
-    │   │   │     ├── cookie        # Cookie service
-    │   │   │     ├── storage       # LocalStorage service
-    │   │   └──   └── ...
-    │   │
-    │   ├── static                  # Static content
-    │   │   ├── images              # Images for scenes
-    │   │   └── styles              # Core css-styles
-    │   │
-    │   ├── scenes                  # General scenes
-    │   │   ├── default             # Default pages. Just for sample.
-    │   │   │   ├── pages           # General pages connected only to own stores
-    │   │   │   ├── stores          # Own MST-stores
-    │   │   │   └── index.ts        #
-    │   │   ├── auth
-    │   │   │   └── ...             # Structure like "default"
-    │   │   ├── collaboration
-    │   │   │   └── ...             # Structure like "default"
-    │   │   ├── communication
-    │   │   │   └── ...             # Structure like "default"
-    │   │   ├── ...                 # Another scenes (e.g. userProfile, dashboard, ...)
-    │   │   ├── App.tsx
-    │   │   └── AppRoutes.tsx       # List of routes
-    │   │
-    │   ├── stores                  # General store & links to substores
-    │   │   ├── ConfigStore         # Init app variables / constants
-    │   │   ├── SessionStore        # Store for current user
-    │   │   ├── MainStore           # Main stores which affect all UI
-    │   │   │   ├── UnityStore      # Unity integration
-    │   │   │   ├── SentryStore     # Sentry integration
-    │   │   │   ├── ThemeStore      # Theme functionality
-    │   │   │   ├── WorldStore      # Current world store
-    │   │   │   └── ...             #
-    │   │   ├── RootStore.ts        # Connecting all stores of application
-    │   │   └── ...
-    │   ├── index.tsx               # Entry point of react
-    │   └── ...
-    │
-    ├── LICENSE.txt
-    ├── README.md
+    │   ├── plugin_google_drive     # Google Drive plugin
+    │   ├── plugin_miro             # Miro plugin
+    │   └── plugin_video            # Video plugin
     └── ...
 
-### Local config
+### Packages connection schema
 
-It's possible to override some of App Config variables received from the dev server.
+```mermaid
+flowchart TD
+    A --> MAP(map3d)
+    MAP --> B
+    MAP --> C
+    A --> 3D(odyssey3d)
+    3D --> B{{babylon.js / legacy three.js}}
+    A --> S(sdk)
+    A[APP] --> C(core)
+    A --> K(ui-kit)
+    S --> K
+    P --> S
+    P --> K
+    3D --> C
+    P --> C
+    A o--o |MF| P(PLUGINS)
+```
 
-Create file `.env.development.local` with `REACT_APP_OVERRIDE_CONFIG_VARIABLES` variable having JSON encoded variables that need to be overwritten and place it in root directory of the project. Sample:
+## How to run locally
+
+#### Installation:
 
 ```
-REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT_URL": "https://dev.odyssey.ninja/api/v3/backend"}'
+git lfs install
+yarn install
+yarn build
 ```
 
-### How to run a plugin
-
-In order to run a plugin you can use the following command (from `packages/plugin-[name]` directory):
+#### 1. How to run main app:
 
 ```
 yarn start
 ```
 
-for local development using the Emulator or
+#### 2. How to run storybook:
 
 ```
+yarn start:storybook
+```
+
+#### 3. How to run odyssey 3d app:
+
+```
+yarn start:odyssey3d
+```
+
+#### 4. How to run plugin:
+
+```
+cd packages/plugin_[name]
+yarn start
+```
+
+or for using an emulator:
+
+```
+cd packages/plugin_[name]
 yarn start:plugin
 ```
 
-that also allows using the plugin from the actual UI-Client.
+## How to build
 
-It's possible to assign a locally running plugin to some object in 3D for testing using by putting `REACT_APP_LOCAL_PLUGINS` env to `.env.development.local`. The plugin should be run with `yarn start:plugin` command or `PORT=3002 yarn start:plugin`.
+#### 1. How to build main app:
 
-Example:
+```
+yarn build
+```
+
+#### 2. How to build storybook:
+
+```
+yarn build:storybook
+```
+
+#### 3. How to build odyssey 3d app:
+
+```
+yarn build:odyssey3d
+```
+
+#### 4. How to build plugin:
+
+```
+cd packages/plugin_[name]
+yarn build
+```
+
+## Tips
+
+### Code quality
+
+- Enable `prettier` using IDE preferences. Apple rules in `.prettierrc`.
+- Enable `eslint` using IDE preferences.
+- Enable `husky` using `yarn run postinstall`.
+
+### How to add an icon
+
+- Copy an icon to `ui-kit-storybook/src/assets/icons` folder
+- Change value of `fill` tag to `currentColor`
+- Run following scripts:
+
+```
+cd packages/ui-kit-storybook
+yarn svg-sprite:build
+yarn svg-sprite:type
+yarn build
+```
+
+4. Add this icon to the StoryBook
+
+## Local config
+
+### For the app
+
+It's possible to override variables of AppConfig received from the dev server.
+
+- Create file `.env.development.local`
+- Add `REACT_APP_OVERRIDE_CONFIG_VARIABLES`
+
+```json
+REACT_APP_OVERRIDE_CONFIG_VARIABLES='{"APP_VERSION":"42.42.42","BACKEND_ENDPOINT_URL": "https://dev.odyssey.ninja/api/v3/backend"}'
+```
+
+### For a plugin
+
+It's possible to assign a locally running plugin to some object in 3D for testing.
+
+- Create file `.env.development.local`
+- Add `REACT_APP_LOCAL_PLUGINS`
+- Use `yarn start:plugin` command
 
 ```json
 REACT_APP_LOCAL_PLUGINS='{"ba5ae691-7ad7-4508-b83d-759529b82a19":{"meta":{"id":"1234","name":"plugin_twitch","pluginId":"123","scopeName":"plugin_twitch","scriptUrl":"http://localhost:3001/remoteEntry.js"}},"84f93e15-f064-4f79-aa74-e60f21c07ba9":{"meta":{"id":"22222","name":"plugin_video","pluginId":"222","scopeName":"plugin_video","scriptUrl":"http://localhost:3002/remoteEntry.js"}}}'
 ```
 
 Here `ba5ae691-7ad7-4508-b83d-759529b82a19` is the objectId of some spawned 3D object in my local world.
-
-### How to build a plugin
-
-Same procedure as with run, but instead of `start` use `build`.

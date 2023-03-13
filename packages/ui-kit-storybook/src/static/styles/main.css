@@ -2,6 +2,13 @@
 @import "reset.css";
 @import "fonts.css";
 
+body {
+  font-family: Poppins, sans-serif;
+  font-size: var(--font-size-m);
+  letter-spacing: 0.25px;
+  font-weight: 400;
+}
+
 .noScrollIndicator {
   scrollbar-width: none;
 }
@@ -19,5 +26,11 @@
 
 .storybook-grid {
   display: flex;
+  gap: 15px;
+}
+
+.storybook-grid-rows {
+  display: flex;
+  flex-direction: column;
   gap: 15px;
 }

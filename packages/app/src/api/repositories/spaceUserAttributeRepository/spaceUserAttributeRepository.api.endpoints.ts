@@ -1,5 +1,5 @@
 export const spaceUserAttributeRepositoryEndpoints = () => {
-  const BASE_URL = '/spaces';
+  const BASE_URL = '/objects';
 
   return {
     attribute: `${BASE_URL}/:spaceId/:userId/attributes`,

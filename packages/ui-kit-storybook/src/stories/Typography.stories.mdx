@@ -1,0 +1,104 @@
+import {Meta, Typeset} from '@storybook/addon-docs/blocks';
+
+<Meta title="General/Typography" />
+
+export const typography = {
+  type: {
+    primary: 'Poppins, sans-serif',
+  },
+  weight: {
+    bold: '700',
+    semiBold: '600',
+    medium: '500',
+    regular: '400',
+    light: '300'
+  },
+  size: {
+    xxl: 18,
+    xl: 16,
+    l: 15,
+    m: 14,
+    s: 13
+  },
+};
+
+export const SampleText = 'Get discovered by Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+
+# Typography
+
+**Font:** Poppins.
+
+**Weight:** 700 (Bold):
+
+<Typeset
+  fontSizes={[
+    Number(typography.size.xxl),
+    Number(typography.size.xl),
+    Number(typography.size.l),
+    Number(typography.size.m),
+    Number(typography.size.s)
+  ]}
+  fontWeight={typography.weight.bold}
+  sampleText={SampleText}
+  fontFamily={typography.type.primary}
+/>
+
+**Weight:** 600 (SemiBold):
+
+<Typeset
+  fontSizes={[
+    Number(typography.size.xxl),
+    Number(typography.size.xl),
+    Number(typography.size.l),
+    Number(typography.size.m),
+    Number(typography.size.s)
+  ]}
+  fontWeight={typography.weight.semiBold}
+  sampleText={SampleText}
+  fontFamily={typography.type.primary}
+/>
+
+**Weight:** 500 (Medium):
+
+<Typeset
+  fontSizes={[
+    Number(typography.size.xxl),
+    Number(typography.size.xl),
+    Number(typography.size.l),
+    Number(typography.size.m),
+    Number(typography.size.s)
+  ]}
+  fontWeight={typography.weight.medium}
+  sampleText={SampleText}
+  fontFamily={typography.type.primary}
+/>
+
+**Weight:** 400 (Regular):
+
+<Typeset
+  fontSizes={[
+    Number(typography.size.xxl),
+    Number(typography.size.xl),
+    Number(typography.size.l),
+    Number(typography.size.m),
+    Number(typography.size.s)
+  ]}
+  fontWeight={typography.weight.regular}
+  sampleText={SampleText}
+  fontFamily={typography.type.primary}
+/>
+
+**Weight:** 300 (Light):
+
+<Typeset
+  fontSizes={[
+    Number(typography.size.xxl),
+    Number(typography.size.xl),
+    Number(typography.size.l),
+    Number(typography.size.m),
+    Number(typography.size.s)
+  ]}
+  fontWeight={typography.weight.light}
+  sampleText={SampleText}
+  fontFamily={typography.type.primary}
+/>

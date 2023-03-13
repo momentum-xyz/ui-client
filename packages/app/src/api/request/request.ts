@@ -4,7 +4,7 @@ import {appVariables, httpErrorCodes} from 'api/constants';
 
 const TOKEN_TYPE = 'Bearer';
 const TOKEN_KEY = 'odyssey.token';
-const REQUEST_TIMEOUT_MS = 60_000;
+const REQUEST_TIMEOUT_MS = 120_000;
 export const REQUEST_MAX_RETRIES = 3;
 export const REQUEST_RETRY_DELAY_BASE = 1000;
 
