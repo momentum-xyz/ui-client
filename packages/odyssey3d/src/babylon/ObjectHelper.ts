@@ -41,6 +41,7 @@ export class ObjectHelper {
   static _camRoot: TransformNode;
   static _yTilt: TransformNode;
   static player: TransformNode;
+  static idToDelete: string;
 
   static initialize(
     scene: Scene,
@@ -52,6 +53,7 @@ export class ObjectHelper {
       this.spawnObject(scene, initialObject);
     });*/
 
+    this.idToDelete = '';
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
@@ -94,9 +96,25 @@ export class ObjectHelper {
     // Gizmo
     this.gizmoManager = new GizmoManager(scene);
     this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-    this.gizmoManager.positionGizmoEnabled = true;
+    //this.gizmoManager.positionGizmoEnabled = true;
     //this.gizmoManager.rotationGizmoEnabled = true;
     //this.gizmoManager.scaleGizmoEnabled = true;
+
+    // Testing
+    document.onkeydown = (e) => {
+      if (e.key === 'e') {
+        this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled;
+      }
+      if (e.key === 'r') {
+        this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled;
+      }
+      if (e.key === 't') {
+        this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled;
+      }
+      if (e.key === 'y') {
+        this.deleteObject(this.idToDelete);
+      }
+    };
   }
 
   static setWorld(assetID: string) {
@@ -115,7 +133,7 @@ export class ObjectHelper {
       },
       (event) => {
         // On progress callback
-        console.log(`Loading progress ${event.loaded}/${event.total}`);
+        //console.log(`Loading progress ${event.loaded}/${event.total}`);
       },
       (scene, message) => {
         // On error callback
@@ -157,6 +175,13 @@ export class ObjectHelper {
     node.position.y = object.transform.position.y;
     node.position.z = object.transform.position.z;
     node.metadata = object.id;
+    if (this.idToDelete === '') {
+      this.idToDelete = object.id;
+    }
+    /*const meshes = node.getChildMeshes();
+    for (const mesh of meshes) {
+      console.log(mesh.name);
+    }*/
 
     const babylonObject = {
       container: container,
@@ -180,12 +205,24 @@ export class ObjectHelper {
     }
   }
 
+  static deleteObject(id: string) {
+    for (const obj of this.objects) {
+      if (obj.objectDefinition.id === id) {
+        obj.objectInstance.dispose();
+        obj.container.removeAllFromScene();
+        const index = this.objects.indexOf(obj);
+        this.objects.splice(index, 1);
+
+        console.log('object with id: ' + id + ', deleted successfully');
+      }
+    }
+  }
+
   static advancedLoading(): void {
     SceneLoader.OnPluginActivatedObservable.addOnce(
       (loader: ISceneLoaderPlugin | ISceneLoaderPluginAsync, eventState: EventState) => {
         // This is just a precaution as this isn't strictly necessary since
         // the only loader in use is the glTF one.
-
         if (loader.name !== 'gltf') {
           return;
         }
