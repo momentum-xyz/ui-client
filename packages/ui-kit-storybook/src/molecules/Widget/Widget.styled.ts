@@ -59,7 +59,12 @@ export const Header = styled.div`
   }
 `;
 
-export const Hexagon = styled.div``;
+export const Hexagon = styled.div`
+  > * {
+    position: absolute;
+    top: -14px;
+  }
+`;
 
 export const TitleContainer = styled.div`
   min-width: 0;

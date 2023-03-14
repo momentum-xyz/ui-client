@@ -1,6 +1,10 @@
 import {ComponentMeta, Story} from '@storybook/react';
 
+import {Hexagon} from '../../atoms';
+
 import Widget, {WidgetPropsInterface} from './Widget';
+
+const IMAGE_SRC = 'https://picsum.photos/300';
 
 export default {
   title: 'Molecules/Widget',
@@ -22,7 +26,11 @@ export const Primary = Template.bind({});
 Primary.args = {
   title: 'Long title of sidebar',
   variant: 'primary',
-  hexagon: <div />
+  hexagon: (
+    <Hexagon type="secondary-borderless">
+      <img src={IMAGE_SRC} alt="jetsons" style={{height: '100%'}} />
+    </Hexagon>
+  )
 };
 
 export const Secondary = Template.bind({});
@@ -37,6 +45,10 @@ export const Wide = Template.bind({});
 Wide.args = {
   variant: 'primary',
   title: 'Title of sidebar',
-  hexagon: <div />,
+  hexagon: (
+    <Hexagon type="secondary-borderless">
+      <img src={IMAGE_SRC} alt="jetsons" style={{height: '100%'}} />
+    </Hexagon>
+  ),
   wide: true
 };
