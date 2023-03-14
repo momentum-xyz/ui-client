@@ -119,6 +119,7 @@ export const Hexagon = styled.div`
 
   &:not(.no-hover):not(.blank) {
     &:hover {
+      background: ${(props) => props.theme.accentBg};
       border-color: var(--hexagon-accent-color);
       &:after {
         border-color: var(--hexagon-accent-color);
