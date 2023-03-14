@@ -79,12 +79,21 @@ export const Hexagon = styled.div`
   border-left: 1px solid var(--hexagon-border-color);
   border-right: 1px solid var(--hexagon-border-color);
 
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  background: ${(props) => props.theme.accentBg};
+  &.transparent-background {
+    background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  }
   &.success-color {
-    background: ${(props) => props.theme.success && rgba(props.theme.success, 0.6)};
+    background: ${(props) => props.theme.success};
+    &.transparent-background {
+      background: ${(props) => props.theme.success && rgba(props.theme.success, 0.6)};
+    }
   }
   &.danger-color {
-    background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
+    background: ${(props) => props.theme.danger};
+    &.transparent-background {
+      background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
+    }
   }
 
   &:after {
@@ -120,6 +129,14 @@ export const Hexagon = styled.div`
   &:not(.no-hover):not(.blank) {
     &:hover {
       background: ${(props) => props.theme.accentBg};
+
+      &.success-color {
+        background: ${(props) => props.theme.success};
+      }
+      &.danger-color {
+        background: ${(props) => props.theme.danger};
+      }
+
       border-color: var(--hexagon-accent-color);
       &:after {
         border-color: var(--hexagon-accent-color);
