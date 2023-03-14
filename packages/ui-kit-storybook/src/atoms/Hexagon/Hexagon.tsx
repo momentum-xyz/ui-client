@@ -1,7 +1,7 @@
 import {FC, memo, PropsWithChildren} from 'react';
 import cn from 'classnames';
 
-import Sparkle from '../../assets/icons/sparkle.svg';
+import Sparkle from '../../static/images/sparkle.svg';
 
 import * as styled from './Hexagon.styled';
 
