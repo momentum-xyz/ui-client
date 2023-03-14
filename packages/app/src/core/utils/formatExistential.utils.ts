@@ -1,4 +1,7 @@
-import {BN, BN_TEN, BN_THOUSAND, formatBalance} from '@polkadot/util';
+import {formatBalance} from '@polkadot/util';
+import BN from 'bn.js';
+
+import {BN_THOUSAND, BN_TEN} from 'core/constants';
 
 export const formatExistential = (value: BN): string => {
   let fmt = (
