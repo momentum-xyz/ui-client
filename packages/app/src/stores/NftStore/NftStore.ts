@@ -1,7 +1,7 @@
 import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
-import {BN, compactStripLength, formatBalance, u8aToString} from '@polkadot/util';
-import {web3FromAddress} from '@polkadot/extension-dapp';
+import {compactStripLength, formatBalance} from '@polkadot/util';
+import BN from 'bn.js';
 import {
   ResetModel,
   Dialog,
@@ -19,6 +19,7 @@ import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
 import {MintNftCheckJobResponse} from 'api';
 import {WalletConnectionsInterface} from 'core/interfaces';
+import PolkadotImplementation from 'shared/services/web3/polkadot.class';
 
 import {StakeDetail, StakeDetailInterface} from './models';
 
@@ -31,7 +32,7 @@ const prepareSignAndSend = async (address: string) => {
   const account = keyring.addFromAddress(address);
   console.log('Account', account, account.address);
 
-  const injector = await web3FromAddress(account.address);
+  const injector = await PolkadotImplementation.getInjectorFromAddress(account.address);
   return {account, options: {signer: injector.signer}};
 };
 
@@ -52,7 +53,7 @@ const itemMetadataToString = (itemMetadata: any): string | null => {
   const [, rawData] = compactStripLength(codecData?.toU8a?.());
   // console.log('rawData', rawData);
 
-  const data = u8aToString(rawData);
+  const data = PolkadotImplementation.convertU8AToString(rawData);
   // console.log('data', data);
 
   return data;

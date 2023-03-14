@@ -13,6 +13,7 @@ export interface AuthChallengeResponse {
 export interface AuthTokenRequest {
   wallet: string;
   signedChallenge: string;
+  network?: string;
 }
 
 export interface AuthTokenResponse {

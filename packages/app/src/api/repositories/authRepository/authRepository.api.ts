@@ -26,10 +26,10 @@ export const getChallenge: RequestInterface<AuthChallengeRequest, AuthChallengeR
 };
 
 export const getToken: RequestInterface<AuthTokenRequest, AuthTokenResponse> = (options) => {
-  const {signedChallenge, wallet, ...rest} = options;
+  const {signedChallenge, wallet, network, ...rest} = options;
   const requestParams = {
     method: 'post' as Method,
-    data: {signedChallenge, wallet},
+    data: {signedChallenge, wallet, network},
     ...rest
   };
 
