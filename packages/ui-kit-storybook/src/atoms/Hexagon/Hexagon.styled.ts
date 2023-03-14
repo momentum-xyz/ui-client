@@ -1,3 +1,4 @@
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Wrapper = styled.button`
@@ -10,11 +11,11 @@ export const Wrapper = styled.button`
   --hexagon-width: 42px;
   --hexagon-height: 49px;
 
+  --hexagon-medium-width: 36px;
+  --hexagon-medium-height: 42px;
+
   --hexagon-small-width: 30px;
   --hexagon-small-height: 35px;
-
-  --hexagon-blank-width: 36px;
-  --hexagon-blank-height: 42px;
 
   --border-hexagon-large-width: 60px;
   --border-hexagon-large-height: 70px;
@@ -38,14 +39,18 @@ export const Wrapper = styled.button`
       }
     }
   }
+  &.medium {
+    width: var(--hexagon-medium-width);
+    height: var(--hexagon-medium-height);
+  }
   &.large {
     width: var(--hexagon-large-width);
     height: var(--hexagon-large-height);
   }
 
   &.blank {
-    width: var(--hexagon-blank-width);
-    height: var(--hexagon-blank-height);
+    width: var(--hexagon-medium-width);
+    height: var(--hexagon-medium-height);
   }
 
   &.outer-border {
@@ -73,6 +78,14 @@ export const Hexagon = styled.div`
 
   border-left: 1px solid var(--hexagon-border-color);
   border-right: 1px solid var(--hexagon-border-color);
+
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  &.success-color {
+    background: ${(props) => props.theme.success && rgba(props.theme.success, 0.6)};
+  }
+  &.danger-color {
+    background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
+  }
 
   &:after {
     content: '';
@@ -106,6 +119,7 @@ export const Hexagon = styled.div`
 
   &:not(.no-hover):not(.blank) {
     &:hover {
+      background: ${(props) => props.theme.accentBg};
       border-color: var(--hexagon-accent-color);
       &:after {
         border-color: var(--hexagon-accent-color);
@@ -140,6 +154,16 @@ export const Hexagon = styled.div`
       }
     }
   }
+  &.medium {
+    &:after {
+      width: var(--hexagon-medium-width);
+      height: var(--hexagon-medium-height);
+    }
+    &:before {
+      width: var(--hexagon-medium-width);
+      height: var(--hexagon-medium-height);
+    }
+  }
   &.large {
     &:after {
       width: var(--hexagon-large-width);
@@ -156,16 +180,17 @@ export const Hexagon = styled.div`
     background-color: var(--hexagon-accent-color);
 
     &:after {
-      width: var(--hexagon-blank-width);
-      height: var(--hexagon-blank-height);
+      width: var(--hexagon-medium-width);
+      height: var(--hexagon-medium-height);
     }
     &:before {
-      width: var(--hexagon-blank-width);
-      height: var(--hexagon-blank-height);
+      width: var(--hexagon-medium-width);
+      height: var(--hexagon-medium-height);
     }
   }
 
   &.outer-border {
+    background: transparent;
     &:after {
       width: var(--border-hexagon-large-width);
       height: var(--border-hexagon-large-height);

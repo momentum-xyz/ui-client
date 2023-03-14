@@ -9,14 +9,19 @@ export default {
 
 const IMAGE_SRC = 'https://picsum.photos/300';
 
-const Template: Story<HexagonPropsInterface> = (args) => (
-  <Hexagon {...args}>
-    <img src={IMAGE_SRC} alt="jetsons" style={{height: '100%'}} />
-  </Hexagon>
-);
+const Template: Story<HexagonPropsInterface> = (args) => {
+  const allArgs = {...args};
+  if (!allArgs.iconName) {
+    allArgs.imageSrc = IMAGE_SRC;
+  }
+  return <Hexagon {...allArgs} />;
+};
 
 export const Primary = Template.bind({});
 Primary.args = {};
+
+export const PrimaryWithIcon = Template.bind({});
+PrimaryWithIcon.args = {iconName: 'fly-portal'};
 
 export const PrimaryNoHover = Template.bind({});
 PrimaryNoHover.args = {
@@ -37,6 +42,14 @@ export const Secondary = Template.bind({});
 Secondary.args = {
   type: 'secondary'
 };
+export const SecondaryWithIcon = Template.bind({});
+SecondaryWithIcon.args = {type: 'secondary', iconName: 'fly-portal'};
+
+export const SecondaryWithIconSuccess = Template.bind({});
+SecondaryWithIconSuccess.args = {type: 'secondary', iconName: 'fly-portal', color: 'success'};
+
+export const SecondaryWithIconDanger = Template.bind({});
+SecondaryWithIconDanger.args = {type: 'secondary', iconName: 'fly-portal', color: 'danger'};
 
 export const SecondaryBorderless = Template.bind({});
 SecondaryBorderless.args = {
@@ -47,6 +60,8 @@ export const Third = Template.bind({});
 Third.args = {
   type: 'third'
 };
+export const ThirdWithIcon = Template.bind({});
+ThirdWithIcon.args = {type: 'third', iconName: 'fly-portal'};
 
 export const ThirdNoHover = Template.bind({});
 ThirdNoHover.args = {
@@ -63,6 +78,9 @@ export const Fourth = Template.bind({});
 Fourth.args = {
   type: 'fourth'
 };
+
+export const FourthWithIcon = Template.bind({});
+FourthWithIcon.args = {type: 'fourth', iconName: 'fly-portal'};
 
 export const FourthBorderless = Template.bind({});
 FourthBorderless.args = {
