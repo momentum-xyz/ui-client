@@ -26,11 +26,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   title: 'Long title of sidebar',
   variant: 'primary',
-  hexagon: (
-    <Hexagon type="secondary-borderless">
-      <img src={IMAGE_SRC} alt="jetsons" style={{height: '100%'}} />
-    </Hexagon>
-  )
+  hexagon: <Hexagon type="secondary-borderless" iconName="clock" />
 };
 
 export const Secondary = Template.bind({});
@@ -38,17 +34,13 @@ Secondary.args = {
   title: 'Long odyssey name',
   label: 'Connected',
   variant: 'secondary',
-  hexagon: <div />
+  hexagon: <Hexagon type="fourth-borderless" imageSrc={IMAGE_SRC} />
 };
 
 export const Wide = Template.bind({});
 Wide.args = {
   variant: 'primary',
   title: 'Title of sidebar',
-  hexagon: (
-    <Hexagon type="secondary-borderless">
-      <img src={IMAGE_SRC} alt="jetsons" style={{height: '100%'}} />
-    </Hexagon>
-  ),
+  hexagon: <Hexagon type="secondary-borderless" iconName="clock" />,
   wide: true
 };

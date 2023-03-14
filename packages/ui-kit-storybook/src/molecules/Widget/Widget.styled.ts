@@ -60,9 +60,18 @@ export const Header = styled.div`
 `;
 
 export const Hexagon = styled.div`
-  > * {
-    position: absolute;
-    top: -14px;
+  &.primary {
+    > * {
+      position: absolute;
+      top: -14px;
+    }
+  }
+
+  &.secondary {
+    > * {
+      position: absolute;
+      top: -6px;
+    }
   }
 `;
 

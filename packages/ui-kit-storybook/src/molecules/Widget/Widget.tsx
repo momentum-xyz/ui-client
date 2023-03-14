@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, memo, ReactNode} from 'react';
 import cn from 'classnames';
 
-import {IconSvg} from '../../atoms';
+import {IconButton} from '../../atoms';
 
 import * as styled from './Widget.styled';
 
@@ -26,13 +26,13 @@ const Widget: FC<PropsWithChildren<WidgetPropsInterface>> = ({
   return (
     <styled.Container data-testid="Widget-test" className={cn(variant, wide && 'wide')}>
       <styled.Header className={cn(variant)}>
-        <styled.Hexagon>{hexagon}</styled.Hexagon>
+        <styled.Hexagon className={cn(variant)}>{hexagon}</styled.Hexagon>
         <styled.TitleContainer>
           <styled.Title>{title}</styled.Title>
           <styled.Label>{label}</styled.Label>
         </styled.TitleContainer>
         <styled.Actions className={cn(variant)}>
-          <IconSvg name="close" size="s" />
+          <IconButton name="close" size="s" onClick={onClose} />
         </styled.Actions>
       </styled.Header>
 
