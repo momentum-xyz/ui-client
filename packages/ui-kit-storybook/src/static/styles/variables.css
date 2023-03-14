@@ -11,6 +11,7 @@
   --font-size-l: 15px;
   --font-size-m: 14px;
   --font-size-s: 13px;
+  --font-size-xs: 12px;
 
   /* Transition */
   --tr-100-ei: 100ms ease-in;
