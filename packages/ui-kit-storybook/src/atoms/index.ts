@@ -1,3 +1,4 @@
+export * from './Hexagon';
 export * from './IconSvg';
 export * from './Loader';
 export * from './Input';
