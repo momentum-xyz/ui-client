@@ -58,6 +58,7 @@ export interface HexagonPropsInterface {
   isActive?: boolean;
   noHover?: boolean;
   skipOuterBorder?: boolean;
+  transparentBackground?: boolean;
   margin?: number;
   imageSrc?: string;
   iconName?: IconNameType;
@@ -71,6 +72,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     isActive,
     noHover,
     skipOuterBorder,
+    transparentBackground = false,
     iconName,
     imageSrc,
     onClick,
@@ -126,6 +128,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
           'hexagon',
           size,
           `${color}-color`,
+          transparentBackground && 'transparent-background',
           (noHover || (isBorderless && !isOuterBorder)) && 'no-hover',
           isBorderless && 'borderless',
           isOuterBorder && 'outer-border',

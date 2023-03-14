@@ -51,6 +51,29 @@ SecondaryWithIconSuccess.args = {type: 'secondary', iconName: 'fly-portal', colo
 export const SecondaryWithIconDanger = Template.bind({});
 SecondaryWithIconDanger.args = {type: 'secondary', iconName: 'fly-portal', color: 'danger'};
 
+export const TransparentSecondaryWithIcon = Template.bind({});
+TransparentSecondaryWithIcon.args = {
+  type: 'secondary',
+  transparentBackground: true,
+  iconName: 'fly-portal'
+};
+
+export const TransparentSecondaryWithIconSuccess = Template.bind({});
+TransparentSecondaryWithIconSuccess.args = {
+  type: 'secondary',
+  transparentBackground: true,
+  iconName: 'fly-portal',
+  color: 'success'
+};
+
+export const TransparentSecondaryWithIconDanger = Template.bind({});
+TransparentSecondaryWithIconDanger.args = {
+  type: 'secondary',
+  transparentBackground: true,
+  iconName: 'fly-portal',
+  color: 'danger'
+};
+
 export const SecondaryBorderless = Template.bind({});
 SecondaryBorderless.args = {
   type: 'secondary-borderless'
