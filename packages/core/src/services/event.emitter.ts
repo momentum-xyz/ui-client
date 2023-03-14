@@ -12,6 +12,7 @@ export type Event2dType = {
 export type Event3dType = {
   ObjectCreated: (object: Object3dInterface) => void;
   ObjectChanged: (object: Object3dInterface) => void;
+  SetWorld: (value: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
   UserEntered: (value: string) => void;
   UserLeft: (value: string) => void;
