@@ -55,6 +55,15 @@ const App: FC = () => {
     }
   }, [isBrowserUnsupported, navigate]);
 
+  useEffect(() => {
+    if (sessionStore.errorFetchingProfile) {
+      console.log('Error fetching profile. Wait couple of seconds and sign out and redirect.');
+      setTimeout(() => {
+        sessionStore.signOutRedirect();
+      }, 5000);
+    }
+  }, [sessionStore, sessionStore.errorFetchingProfile]);
+
   if (configStore.isError && !configStore.isConfigReady) {
     return (
       <ThemeProvider theme={themeStore.theme}>

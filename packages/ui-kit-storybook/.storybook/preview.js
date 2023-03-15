@@ -1,7 +1,8 @@
 import {ThemeProvider} from 'styled-components';
 import {addDecorator} from '@storybook/react';
 import {withThemes} from '@react-theming/storybook-addon';
-import {DefaultThemeConfig, CustomThemeConfig} from '../src';
+
+import {DefaultThemeConfig} from '../src';
 
 export const parameters = {
   actions: {argTypesRegex: '^on[A-Z].*'},
@@ -13,16 +14,22 @@ export const parameters = {
   }
 };
 
-const themes = [
+const THEMES = [
   {
-    name: 'Light theme',
-    viewportBg: '#DDE0E2',
-    ...DefaultThemeConfig
+    ...DefaultThemeConfig,
+    name: 'Odyssey theme'
   },
   {
+    ...DefaultThemeConfig,
+    name: 'Light theme',
+    bg: '#FFF',
+    text: '#000'
+  },
+  {
+    ...DefaultThemeConfig,
     name: 'Dark theme',
-    viewportBg: '#333333',
-    ...CustomThemeConfig
+    bg: '#000',
+    text: '#FFF'
   }
 ];
 
@@ -30,10 +37,10 @@ export const onThemeSwitch = (context) => {
   return {
     parameters: {
       backgrounds: {
-        default: context.theme.viewportBg
+        default: context.theme.bg
       }
     }
   };
 };
 
-addDecorator(withThemes(ThemeProvider, themes, {onThemeSwitch}));
+addDecorator(withThemes(ThemeProvider, THEMES, {onThemeSwitch}));

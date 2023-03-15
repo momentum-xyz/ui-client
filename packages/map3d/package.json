@@ -15,6 +15,7 @@
     "copy-files": "copyfiles -u 1 src/static/**/*.* dist/"
   },
   "dependencies": {
+    "@momentum-xyz/core": "^0.1.2",
     "classnames": "^2.3.2",
     "dat.gui": "^0.7.9",
     "gsap": "^3.11.3",

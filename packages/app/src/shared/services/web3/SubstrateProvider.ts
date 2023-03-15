@@ -1,18 +1,7 @@
-import {isWeb3Injected, web3Accounts, web3Enable} from '@polkadot/extension-dapp';
 import {ApiPromise, WsProvider} from '@polkadot/api';
-import {decodeAddress, encodeAddress} from '@polkadot/util-crypto';
-import {
-  BN,
-  BN_ZERO,
-  BN_ONE,
-  hexToU8a,
-  isHex,
-  bnMin,
-  BN_MAX_INTEGER,
-  extractTime,
-  formatBalance
-} from '@polkadot/util';
+import {bnMin, extractTime, formatBalance} from '@polkadot/util';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
+import BN from 'bn.js';
 import {t} from 'i18next';
 import {keyring} from '@polkadot/ui-keyring';
 import {KeyringJson$Meta} from '@polkadot/ui-keyring/types';
@@ -20,6 +9,9 @@ import {KeypairType} from '@polkadot/util-crypto/types';
 import {IU8a} from '@polkadot/types-codec/types/interfaces';
 
 import {appVariables} from 'api/constants';
+import {BN_MAX_INTEGER, BN_ONE, BN_ZERO} from 'core/constants';
+
+import PolkadotImplementation from './polkadot.class';
 
 type UnlockingType = {
   remainingEras: BN;
@@ -50,16 +42,14 @@ export default class SubstrateProvider {
     return ApiPromise.create({provider});
   }
 
-  static async isExtensionEnabled() {
-    console.log('web3Enable', appVariables.POLKADOT_CONNECTION_STRING);
-    const connection = await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
-    console.log('web3Enable - done.');
-    return connection.length !== 0 || isWeb3Injected;
+  static async isExtensionEnabled(): Promise<boolean> {
+    const result = await PolkadotImplementation.isExtensionEnabled();
+    return result;
   }
 
   static async getAddresses(ss58Format = 2) {
     console.log('Get web3Accounts in format', ss58Format);
-    return await web3Accounts({ss58Format});
+    return await PolkadotImplementation.getAddresses(ss58Format);
   }
 
   static isKeyringLoaded() {
@@ -154,7 +144,7 @@ export default class SubstrateProvider {
 
   static isValidSubstrateAddress(address: string) {
     try {
-      encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
+      PolkadotImplementation.encodeAddress(address);
       return true;
     } catch (error) {
       return false;

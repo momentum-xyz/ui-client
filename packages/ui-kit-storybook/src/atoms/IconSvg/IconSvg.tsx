@@ -1,4 +1,4 @@
-import React, {FC, memo} from 'react';
+import {FC, memo} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
@@ -9,19 +9,7 @@ import * as styled from './IconSvg.styled';
 const svgModules = require.context('../../assets/svg-sprite', false, /\.svg$/);
 const svgSpritePath: string = svgModules(svgModules.keys()[0]);
 
-// FIXME: Proper names
-type IconSizeType =
-  | 'super-small'
-  | 'extra-small'
-  | 'small'
-  | 'normal'
-  | 'medium'
-  | 'medium-large'
-  | 'large'
-  | 'normal-large'
-  | 'extra-large'
-  | 'super-large'
-  | 'huge';
+export type IconSizeType = 'xl' | 'l' | 'm' | 's' | 'xs' | 'xxs';
 
 export interface IconSvgPropsInterface extends PropsWithThemeInterface {
   name: IconNameType;
@@ -30,22 +18,15 @@ export interface IconSvgPropsInterface extends PropsWithThemeInterface {
   onClick?: () => void;
   isDanger?: boolean;
   isDisabled?: boolean;
-  className?: string;
 }
 
 const IconSvg: FC<IconSvgPropsInterface> = (props) => {
-  const {name, size = 'normal', isWhite, isDanger, isDisabled, className, ...rest} = props;
+  const {name, size = 'm', isWhite, isDanger, isDisabled, ...rest} = props;
   return (
     <styled.Wrapper
       data-testid="IconSvg-test"
       {...rest}
-      className={cn(
-        size,
-        isWhite && 'white',
-        isDanger && 'danger',
-        isDisabled && 'disabled',
-        className
-      )}
+      className={cn(size, isWhite && 'white', isDanger && 'danger', isDisabled && 'disabled')}
     >
       <styled.Svg>
         <use xlinkHref={`${svgSpritePath}#${name as string}`} />

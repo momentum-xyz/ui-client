@@ -28,3 +28,13 @@ body {
   display: flex;
   gap: 15px;
 }
+
+.storybook-block {
+  width: 380px;
+}
+
+.storybook-grid-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

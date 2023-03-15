@@ -1,7 +1,9 @@
 import {createRoot} from 'react-dom/client';
 import {createBrowserHistory} from 'history';
 import {BrowserRouter} from 'react-router-dom';
+import {Web3ReactProvider} from '@web3-react/core';
 
+import {web3GetLibrary} from 'api/repositories';
 import {appVariables} from 'api/constants';
 import {StoreProvider} from 'shared/hooks';
 
@@ -24,8 +26,10 @@ const root = createRoot(container!);
 
 root.render(
   <StoreProvider value={rootStore}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Web3ReactProvider getLibrary={web3GetLibrary}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Web3ReactProvider>
   </StoreProvider>
 );
