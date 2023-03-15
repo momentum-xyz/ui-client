@@ -11,17 +11,19 @@ export interface WidgetStepsPropsInterface {
 const WidgetSteps: FC<PropsWithChildren<WidgetStepsPropsInterface>> = ({stepList, children}) => {
   return (
     <styled.Container data-testid="WidgetSteps-test">
-      <styled.Steps>
-        {stepList.map((stepItem, index) => (
-          <Step
-            key={index}
-            icon={stepItem.icon}
-            label={stepItem.label}
-            variant={stepItem.variant}
-          />
-        ))}
-      </styled.Steps>
-      {children}
+      <styled.Inner>
+        <styled.Steps>
+          {stepList.map((stepItem, index) => (
+            <Step
+              key={index}
+              icon={stepItem.icon}
+              label={stepItem.label}
+              variant={stepItem.variant}
+            />
+          ))}
+        </styled.Steps>
+        {children}
+      </styled.Inner>
     </styled.Container>
   );
 };

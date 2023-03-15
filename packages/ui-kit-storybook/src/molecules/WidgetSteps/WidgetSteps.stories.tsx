@@ -5,9 +5,6 @@ import WidgetSteps, {WidgetStepsPropsInterface} from './WidgetSteps';
 export default {
   title: 'Molecules/WidgetSteps',
   component: WidgetSteps,
-  parameters: {
-    layout: 'centered'
-  },
   decorators: [
     (Story) => (
       <div className="storybook-block">
