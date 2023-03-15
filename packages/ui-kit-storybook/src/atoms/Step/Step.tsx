@@ -6,6 +6,12 @@ import {IconNameType} from '../../types';
 
 import * as styled from './Step.styled';
 
+export interface StepInterface {
+  icon?: IconNameType;
+  label?: string;
+  variant?: 'active' | 'next' | 'prev';
+}
+
 export interface StepPropsInterface {
   icon?: IconNameType;
   label?: string;
