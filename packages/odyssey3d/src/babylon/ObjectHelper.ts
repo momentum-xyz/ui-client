@@ -5,7 +5,8 @@ import {
   Nullable,
   AbstractMesh,
   StandardMaterial,
-  Color3
+  Color3,
+  SceneLoader
 } from '@babylonjs/core';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 
@@ -16,6 +17,27 @@ export class ObjectHelper {
     initialObjects.forEach((initialObject) => {
       this.spawnObject(scene, initialObject);
     });
+  }
+
+  static addObjects(scene: Scene, objects: any) {
+    //TODO: type objects
+    for (const obj of objects) {
+      console.log(obj);
+      if (obj.asset_format === 1) {
+        //gltf
+        const assetId = obj.asset_type.replaceAll('-', '');
+        // TODO: inject backendUrl
+        const mmUrl = 'https://dev2.odyssey.ninja/api/v3/render/asset/';
+        SceneLoader.AppendAsync(mmUrl, assetId, scene, () => {}, '.glb')
+          .then((scene) => {
+            console.log('Loaded object ', obj.id, obj.name);
+            console.log(scene);
+          })
+          .catch((err) => {
+            console.error('Could not load ', obj.id, obj.name);
+          });
+      }
+    }
   }
 
   static spawnObject(scene: Scene, object: Object3dInterface): void {

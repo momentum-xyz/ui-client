@@ -16,7 +16,8 @@
     "strict": true,
     "target": "es2020",
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext"
+    "module": "esnext",
+    "skipLibCheck": true
   },
   "exclude": ["node_modules"]
 }
