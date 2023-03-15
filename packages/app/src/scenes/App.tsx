@@ -12,6 +12,7 @@ import {httpErrorCodes} from 'api/constants';
 import {SystemWideError} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
+import {PosBusService} from 'shared/services';
 
 import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
@@ -63,6 +64,12 @@ const App: FC = () => {
       }, 5000);
     }
   }, [sessionStore, sessionStore.errorFetchingProfile]);
+
+  useEffect(() => {
+    if (sessionStore.token && sessionStore.user) {
+      PosBusService.init(sessionStore.token, sessionStore.user.id);
+    }
+  }, [sessionStore.token, sessionStore.user]);
 
   if (configStore.isError && !configStore.isConfigReady) {
     return (
