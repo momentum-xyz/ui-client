@@ -96,7 +96,7 @@ export class ObjectHelper {
     // Gizmo
     this.gizmoManager = new GizmoManager(scene);
     this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-    //this.gizmoManager.positionGizmoEnabled = true;
+    this.gizmoManager.positionGizmoEnabled = true;
     //this.gizmoManager.rotationGizmoEnabled = true;
     //this.gizmoManager.scaleGizmoEnabled = true;
 
@@ -122,25 +122,21 @@ export class ObjectHelper {
     console.log('assetID is: ' + assetUrl);
   }
 
-  static spawnObject(scene: Scene, object: Object3dInterface): void {
+  static async spawnObjectAsync(scene: Scene, object: Object3dInterface) {
     const assetUrl = this.getAssetFileName(object.asset_3d_id);
-    SceneLoader.LoadAssetContainer(
+
+    await SceneLoader.LoadAssetContainerAsync(
       this.assetRootUrl,
       assetUrl,
       scene,
-      (container) => {
-        this.instantiate(container, object);
-      },
       (event) => {
         // On progress callback
         //console.log(`Loading progress ${event.loaded}/${event.total}`);
       },
-      (scene, message) => {
-        // On error callback
-        console.log(object.name + ' failed loading!: ' + message);
-      },
       '.glb'
-    );
+    ).then((container) => {
+      this.instantiate(container, object);
+    });
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {

@@ -18,15 +18,16 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(scene, engine, props.objects, view);
-      SkyboxHelper.setSkybox(scene);
+      SkyboxHelper.setCubemapSkybox(scene);
+
       scene.debugLayer.show({overlay: true});
 
       Event3dEmitter.on('SetWorld', (assetID) => {
         CameraHelper.spawnPlayer(scene, assetID);
       });
 
-      Event3dEmitter.on('ObjectCreated', (object) => {
-        ObjectHelper.spawnObject(scene, object);
+      Event3dEmitter.on('ObjectCreated', async (object) => {
+        await ObjectHelper.spawnObjectAsync(scene, object);
       });
 
       Event3dEmitter.on('ObjectTextureChanged', (object) => {
