@@ -4,7 +4,7 @@ import {Event3dEmitter} from '@momentum-xyz/core';
 import SceneComponent from 'babylonjs-hook';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
-import {CameraHelper, LightHelper, ObjectHelper} from '../../babylon';
+import {CameraHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
@@ -13,12 +13,17 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
   /* Will run one time. */
   const onSceneReady = (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
+    const engine = scene.getEngine();
     if (view?.id) {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
-      ObjectHelper.initialize(scene, props.objects);
-
+      ObjectHelper.initialize(scene, engine, props.objects, view);
+      SkyboxHelper.setSkybox(scene);
       scene.debugLayer.show({overlay: true});
+
+      Event3dEmitter.on('SetWorld', (assetID) => {
+        CameraHelper.spawnPlayer(scene, assetID);
+      });
 
       Event3dEmitter.on('ObjectCreated', (object) => {
         ObjectHelper.spawnObject(scene, object);
