@@ -10,7 +10,7 @@ export interface FrameStepsPropsInterface {
 
 const FrameSteps: FC<PropsWithChildren<FrameStepsPropsInterface>> = ({stepList, children}) => {
   return (
-    <styled.Container data-testid="WidgetSteps-test">
+    <styled.Container data-testid="FrameSteps-test">
       <styled.Inner>
         <styled.Steps>
           {stepList.map((stepItem, index) => (

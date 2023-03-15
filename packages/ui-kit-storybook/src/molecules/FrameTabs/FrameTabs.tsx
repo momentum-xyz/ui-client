@@ -10,7 +10,7 @@ export interface FrameTabsPropsInterface {
 
 const FrameTabs: FC<PropsWithChildren<FrameTabsPropsInterface>> = ({stepList, children}) => {
   return (
-    <styled.Container data-testid="WidgetSteps-test">
+    <styled.Container data-testid="FrameTabs-test">
       <styled.Inner>
         <styled.Steps>
           {stepList.map((stepItem, index) => (

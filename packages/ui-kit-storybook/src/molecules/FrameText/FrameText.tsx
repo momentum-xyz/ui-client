@@ -11,7 +11,7 @@ export interface FrameTextPropsInterface {
 
 const FrameText: FC<FrameTextPropsInterface> = ({title, line1, line2, imageSrc}) => {
   return (
-    <styled.Container data-testid="TextFrame-test">
+    <styled.Container data-testid="FrameText-test">
       <styled.Title>{title}</styled.Title>
       {line1 && <styled.Line>{line1}</styled.Line>}
       {imageSrc && <styled.Image src={imageSrc} />}
