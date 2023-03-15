@@ -1,5 +1,6 @@
 export * from './Hexagon';
 export * from './IconSvg';
+export * from './IconButton';
 export * from './Loader';
 export * from './Input';
 export * from './Select';

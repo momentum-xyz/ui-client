@@ -49,6 +49,7 @@ ListOfSizes.decorators = [
         <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="m" />
         <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="s" />
         <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="xs" />
+        <IconSvg {...(ListOfSizes.args as IconSvgPropsInterface)} size="xxs" />
       </div>
     );
   }
