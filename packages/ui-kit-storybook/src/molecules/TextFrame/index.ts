@@ -1,1 +1,1 @@
-export {default as TextFrame} from './TextFrame';
+export {default as FrameText} from './FrameText';

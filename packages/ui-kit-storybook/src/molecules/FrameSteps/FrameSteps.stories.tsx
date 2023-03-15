@@ -1,10 +1,10 @@
 import {ComponentMeta, Story} from '@storybook/react';
 
-import WidgetSteps, {WidgetStepsPropsInterface} from './WidgetSteps';
+import FrameSteps, {FrameStepsPropsInterface} from './FrameSteps';
 
 export default {
-  title: 'Molecules/WidgetSteps',
-  component: WidgetSteps,
+  title: 'Molecules/FrameSteps',
+  component: FrameSteps,
   decorators: [
     (Story) => (
       <div className="storybook-block">
@@ -12,10 +12,10 @@ export default {
       </div>
     )
   ]
-} as ComponentMeta<typeof WidgetSteps>;
+} as ComponentMeta<typeof FrameSteps>;
 
-const Template: Story<WidgetStepsPropsInterface> = (args) => {
-  return <WidgetSteps {...args} />;
+const Template: Story<FrameStepsPropsInterface> = (args) => {
+  return <FrameSteps {...args} />;
 };
 
 export const Primary = Template.bind({});

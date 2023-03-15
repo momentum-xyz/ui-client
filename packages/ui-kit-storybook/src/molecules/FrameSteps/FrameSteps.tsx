@@ -2,13 +2,13 @@ import {FC, PropsWithChildren} from 'react';
 
 import {Step, StepInterface} from '../../atoms';
 
-import * as styled from './WidgetSteps.styled';
+import * as styled from './FrameSteps.styled';
 
-export interface WidgetStepsPropsInterface {
+export interface FrameStepsPropsInterface {
   stepList: StepInterface[];
 }
 
-const WidgetSteps: FC<PropsWithChildren<WidgetStepsPropsInterface>> = ({stepList, children}) => {
+const FrameSteps: FC<PropsWithChildren<FrameStepsPropsInterface>> = ({stepList, children}) => {
   return (
     <styled.Container data-testid="WidgetSteps-test">
       <styled.Inner>
@@ -28,4 +28,4 @@ const WidgetSteps: FC<PropsWithChildren<WidgetStepsPropsInterface>> = ({stepList
   );
 };
 
-export default WidgetSteps;
+export default FrameSteps;
