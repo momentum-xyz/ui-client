@@ -9,25 +9,25 @@ export const Container = styled.div`
 
   --radius: 4px;
 
-  --width: initial;
-  --primary-width: 400px;
-  --secondary-width: 280px;
+  --color: initial;
+  --primary-color: ${(props) => props.theme.accentText};
+  --secondary-color: ${(props) => props.theme.text};
 
-  width: var(--width);
+  --offset: 0;
+  --primary-offset: 14px;
+  --secondary-offset: 6px;
+
+  margin: var(--offset) 0 0 0;
   background: linear-gradient(180deg, var(--lg-from) 0%, var(--lg-to) 100%);
   box-shadow: -1px -1px 6px rgba(255, 255, 255, 0.2);
   border-radius: var(--radius);
 
   &.primary {
-    --width: var(--primary-width);
+    --offset: var(--primary-offset);
   }
 
   &.secondary {
-    --width: var(--secondary-width);
-  }
-
-  &.wide {
-    --width: 100%;
+    --offset: var(--secondary-offset);
   }
 `;
 
@@ -38,11 +38,13 @@ export const Header = styled.div`
   background: linear-gradient(180deg, var(--lg-header-from) 0%, var(--lg-header-to) 100%);
   border-radius: var(--radius) var(--radius) 0 0;
   text-transform: uppercase;
+  color: var(--color);
 
   &.primary {
+    --color: var(--primary-color);
+
     height: 46px;
     grid-template-columns: 48px 1fr 26px;
-    color: ${(props) => props.theme.accentText};
     font-size: var(--font-size-xxl);
     letter-spacing: 0.3em;
     font-weight: 500;
@@ -50,9 +52,10 @@ export const Header = styled.div`
   }
 
   &.secondary {
+    --color: var(--secondary-color);
+
     height: 56px;
     grid-template-columns: 36px 1fr 16px;
-    color: ${(props) => props.theme.text};
     font-size: var(--font-size-xl);
     letter-spacing: 0.2em;
     gap: 14px;
@@ -60,18 +63,13 @@ export const Header = styled.div`
 `;
 
 export const Hexagon = styled.div`
-  &.primary {
-    > * {
-      position: absolute;
-      top: -14px;
-    }
+  > * {
+    top: calc(-1 * var(--offset));
+    position: absolute;
   }
 
-  &.secondary {
-    > * {
-      position: absolute;
-      top: -6px;
-    }
+  svg {
+    color: var(--color);
   }
 `;
 
@@ -97,10 +95,10 @@ export const Label = styled.div`
 
 export const Actions = styled.div`
   display: flex;
+  justify-content: center;
 
   &.primary {
     align-items: center;
-    justify-content: center;
 
     svg {
       color: ${(props) => props.theme.accentText};
@@ -108,7 +106,8 @@ export const Actions = styled.div`
   }
 
   &.secondary {
-    padding: 10px 0 0 0;
+    padding: 12px 0 0 0;
+    align-items: start;
 
     svg {
       color: ${(props) => props.theme.text};
@@ -117,5 +116,5 @@ export const Actions = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 10px 10px 40px 10px;
+  padding: 10px 10px 30px 10px;
 `;

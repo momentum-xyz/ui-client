@@ -18,7 +18,7 @@ export default {
 } as ComponentMeta<typeof FrameText>;
 
 const Template: Story<FrameTextPropsInterface> = (args) => {
-  return <FrameText {...args} />;
+  return <FrameText {...args} title="Title" />;
 };
 
 export const General = Template.bind({});

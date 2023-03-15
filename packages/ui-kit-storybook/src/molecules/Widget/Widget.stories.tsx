@@ -18,7 +18,14 @@ export default {
         disable: true
       }
     }
-  }
+  },
+  decorators: [
+    (Story) => (
+      <div className="storybook-block">
+        <Story />
+      </div>
+    )
+  ]
 } as ComponentMeta<typeof Widget>;
 
 const Template: Story<WidgetPropsInterface> = (args) => {
@@ -29,13 +36,13 @@ export const Primary = Template.bind({});
 Primary.args = {
   title: 'Long title of sidebar',
   variant: 'primary',
-  hexagon: <Hexagon type="secondary-borderless" iconName="clock" />
+  hexagon: <Hexagon type="secondary-borderless" iconName="planet" />
 };
 
 export const PrimaryTextFrame = Template.bind({});
 PrimaryTextFrame.args = {
   ...Primary.args,
-  children: <FrameTextStories.General title="Title" {...FrameTextStories.General.args} />
+  children: <FrameTextStories.General {...FrameTextStories.General.args} />
 };
 
 export const PrimaryTabsFrame = Template.bind({});
@@ -56,12 +63,4 @@ Secondary.args = {
   label: 'Connected',
   variant: 'secondary',
   hexagon: <Hexagon type="fourth-borderless" imageSrc={IMAGE_SRC} />
-};
-
-export const Wide = Template.bind({});
-Wide.args = {
-  variant: 'primary',
-  title: 'Title of sidebar',
-  hexagon: <Hexagon type="secondary-borderless" iconName="clock" />,
-  wide: true
 };
