@@ -128,13 +128,14 @@ export const Hexagon = styled.div`
 
   &:not(.no-hover):not(.blank) {
     &:hover {
-      background: ${(props) => props.theme.accentBg};
-
-      &.success-color {
-        background: ${(props) => props.theme.success};
-      }
-      &.danger-color {
-        background: ${(props) => props.theme.danger};
+      &:not(.outer-border) {
+        background: ${(props) => props.theme.accentBg};
+        &.success-color {
+          background: ${(props) => props.theme.success};
+        }
+        &.danger-color {
+          background: ${(props) => props.theme.danger};
+        }
       }
 
       border-color: var(--hexagon-accent-color);

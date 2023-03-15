@@ -5,12 +5,11 @@ import {IconButton} from '../../atoms';
 
 import * as styled from './Widget.styled';
 
-export interface WidgetPropsInterface {
+export interface WidgetPropsInterface extends PropsWithChildren {
   variant: 'primary' | 'secondary';
   hexagon: ReactNode;
   title: string;
   label?: string;
-  wide?: boolean;
   onClose?: () => void;
 }
 
@@ -19,14 +18,13 @@ const Widget: FC<PropsWithChildren<WidgetPropsInterface>> = ({
   hexagon,
   title,
   label,
-  wide,
   children,
   onClose
 }) => {
   return (
-    <styled.Container data-testid="Widget-test" className={cn(variant, wide && 'wide')}>
+    <styled.Container data-testid="Widget-test" className={cn(variant)}>
       <styled.Header className={cn(variant)}>
-        <styled.Hexagon className={cn(variant)}>{hexagon}</styled.Hexagon>
+        <styled.Hexagon>{hexagon}</styled.Hexagon>
         <styled.TitleContainer>
           <styled.Title>{title}</styled.Title>
           <styled.Label>{label}</styled.Label>
