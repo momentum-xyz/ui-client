@@ -64,6 +64,7 @@ export const Button = styled.button`
       }
     }
 
+    &.active,
     &:active {
       --border-color: var(--primary-border-color-active);
       --bg-color: var(--primary-bg-color-active);

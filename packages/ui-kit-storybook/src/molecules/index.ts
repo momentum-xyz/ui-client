@@ -1,3 +1,5 @@
 export * from './Avatar';
 export * from './Widget';
-export * from './TextFrame';
+export * from './FrameSteps';
+export * from './FrameTabs';
+export * from './FrameText';
