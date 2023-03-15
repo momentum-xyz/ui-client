@@ -1,20 +1,40 @@
 import {FC, PropsWithChildren} from 'react';
 
-import {ButtonEllipse, StepInterface} from '../../atoms';
+import {IconNameType} from '../../types';
+import {ButtonEllipse} from '../../atoms';
 
 import * as styled from './FrameTabs.styled';
 
-export interface FrameTabsPropsInterface {
-  stepList: StepInterface[];
+export interface FrameTabInterface {
+  id: string;
+  icon: IconNameType;
+  label: string;
 }
 
-const FrameTabs: FC<PropsWithChildren<FrameTabsPropsInterface>> = ({stepList, children}) => {
+export interface FrameTabsPropsInterface {
+  selectedId?: string;
+  tabList: FrameTabInterface[];
+  onSelect: (id: string) => void;
+}
+
+const FrameTabs: FC<PropsWithChildren<FrameTabsPropsInterface>> = ({
+  tabList,
+  selectedId,
+  children,
+  onSelect
+}) => {
   return (
     <styled.Container data-testid="FrameTabs-test">
       <styled.Inner>
         <styled.Steps>
-          {stepList.map((stepItem, index) => (
-            <ButtonEllipse key={index} icon="planet" label="Latest" />
+          {tabList.map((tab) => (
+            <ButtonEllipse
+              key={tab.id}
+              icon={tab.icon}
+              label={tab.label}
+              isActive={tab.id === selectedId}
+              onClick={() => onSelect(tab.id)}
+            />
           ))}
         </styled.Steps>
         {children}

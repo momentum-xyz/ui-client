@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {ComponentMeta, Story} from '@storybook/react';
 
 import FrameTabs, {FrameTabsPropsInterface} from './FrameTabs';
@@ -15,13 +16,19 @@ export default {
 } as ComponentMeta<typeof FrameTabs>;
 
 const Template: Story<FrameTabsPropsInterface> = (args) => {
-  return <FrameTabs {...args} />;
+  const [selectedId, setSelectedId] = useState<string>();
+
+  return (
+    <FrameTabs {...args} selectedId={selectedId} onSelect={setSelectedId}>
+      {selectedId && <>Tab id is {selectedId}</>}
+    </FrameTabs>
+  );
 };
 
 export const Primary = Template.bind({});
 Primary.args = {
-  stepList: [
-    {label: '1', variant: 'prev'},
-    {label: '2', variant: 'active'}
+  tabList: [
+    {id: '1', label: 'Latest', icon: 'planet'},
+    {id: '2', label: 'Connections', icon: 'planet'}
   ]
 };

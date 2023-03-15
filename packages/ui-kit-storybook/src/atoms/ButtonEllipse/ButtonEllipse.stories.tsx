@@ -16,6 +16,12 @@ Primary.args = {
   variant: 'primary'
 };
 
+export const IsActive = Template.bind({});
+IsActive.args = {
+  variant: 'primary',
+  isActive: true
+};
+
 export const PrimaryDisabled = Template.bind({});
 PrimaryDisabled.args = {
   variant: 'primary',

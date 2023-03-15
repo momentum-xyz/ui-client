@@ -10,13 +10,17 @@ export interface ButtonEllipsePropsInterface {
   label: string;
   icon: IconNameType;
   size?: 'normal';
+  isActive?: boolean;
   variant?: 'primary';
   disabled?: boolean;
   onClick?: () => void;
 }
 
 const ButtonEllipse = forwardRef<HTMLButtonElement, ButtonEllipsePropsInterface>(
-  ({icon, label, variant = 'primary', size = 'normal', disabled, onClick}, ref) => {
+  (
+    {icon, label, variant = 'primary', isActive = false, size = 'normal', disabled, onClick},
+    ref
+  ) => {
     return (
       <styled.Button
         data-testid="ButtonEllipse-test"
@@ -24,7 +28,7 @@ const ButtonEllipse = forwardRef<HTMLButtonElement, ButtonEllipsePropsInterface>
         type="button"
         disabled={disabled}
         onClick={onClick}
-        className={cn(variant, size)}
+        className={cn(variant, size, isActive && 'active')}
       >
         <IconSvg name={icon} size="xxs" />
         <span>{label}</span>
