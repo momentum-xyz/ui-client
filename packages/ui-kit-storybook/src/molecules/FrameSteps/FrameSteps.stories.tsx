@@ -18,8 +18,8 @@ const Template: Story<FrameStepsPropsInterface> = (args) => {
   return <FrameSteps {...args} />;
 };
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const General = Template.bind({});
+General.args = {
   stepList: [
     {label: '1', variant: 'prev'},
     {label: '2', variant: 'active'},

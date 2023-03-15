@@ -25,8 +25,8 @@ const Template: Story<FrameTabsPropsInterface> = (args) => {
   );
 };
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const General = Template.bind({});
+General.args = {
   tabList: [
     {id: '1', label: 'Latest', icon: 'planet'},
     {id: '2', label: 'Connections', icon: 'planet'}

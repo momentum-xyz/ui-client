@@ -1,6 +1,9 @@
 import {ComponentMeta, Story} from '@storybook/react';
 
 import {Hexagon} from '../../atoms';
+import * as FrameTextStories from '../FrameText/FrameText.stories';
+import * as FrameTabsStories from '../FrameTabs/FrameTabs.stories';
+import * as FrameStepsStories from '../FrameSteps/FrameSteps.stories';
 
 import Widget, {WidgetPropsInterface} from './Widget';
 
@@ -27,6 +30,24 @@ Primary.args = {
   title: 'Long title of sidebar',
   variant: 'primary',
   hexagon: <Hexagon type="secondary-borderless" iconName="clock" />
+};
+
+export const PrimaryTextFrame = Template.bind({});
+PrimaryTextFrame.args = {
+  ...Primary.args,
+  children: <FrameTextStories.General title="Title" {...FrameTextStories.General.args} />
+};
+
+export const PrimaryTabsFrame = Template.bind({});
+PrimaryTabsFrame.args = {
+  ...Primary.args,
+  children: <FrameTabsStories.General tabList={[]} {...FrameTabsStories.General.args} />
+};
+
+export const PrimaryStepsFrame = Template.bind({});
+PrimaryStepsFrame.args = {
+  ...Primary.args,
+  children: <FrameStepsStories.General stepList={[]} {...FrameStepsStories.General.args} />
 };
 
 export const Secondary = Template.bind({});

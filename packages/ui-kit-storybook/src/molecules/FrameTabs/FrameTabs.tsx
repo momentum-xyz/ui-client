@@ -14,7 +14,7 @@ export interface FrameTabInterface {
 export interface FrameTabsPropsInterface {
   selectedId?: string;
   tabList: FrameTabInterface[];
-  onSelect: (id: string) => void;
+  onSelect?: (id: string) => void;
 }
 
 const FrameTabs: FC<PropsWithChildren<FrameTabsPropsInterface>> = ({
@@ -33,7 +33,7 @@ const FrameTabs: FC<PropsWithChildren<FrameTabsPropsInterface>> = ({
               icon={tab.icon}
               label={tab.label}
               isActive={tab.id === selectedId}
-              onClick={() => onSelect(tab.id)}
+              onClick={() => onSelect?.(tab.id)}
             />
           ))}
         </styled.Steps>

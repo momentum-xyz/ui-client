@@ -5,7 +5,7 @@ import {IconButton} from '../../atoms';
 
 import * as styled from './Widget.styled';
 
-export interface WidgetPropsInterface {
+export interface WidgetPropsInterface extends PropsWithChildren {
   variant: 'primary' | 'secondary';
   hexagon: ReactNode;
   title: string;
