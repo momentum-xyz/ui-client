@@ -212,3 +212,14 @@ export const newsfeedDateString = (dateISO: string | undefined | null, hasDash: 
   const targetFormat = hasDash ? 'MM/dd/yyyy - h:mm aa' : 'MM/dd/yyyy h:mm aa';
   return dateISO ? format(new Date(dateISO), targetFormat) : '';
 };
+
+/**
+ * Constructs locale string for timeline
+ *
+ * @param {string} dateISO is ISO string or empty
+ * @returns {string} String in "2023 - 01 - 16 / 09:00 PM" format
+ */
+export const timelineDate = (dateISO: string | undefined | null) => {
+  const targetFormat = 'yyyy - MM - dd / hh:mm aa';
+  return dateISO ? format(new Date(dateISO), targetFormat) : '';
+};
