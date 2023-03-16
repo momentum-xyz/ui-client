@@ -3,15 +3,15 @@ import {timelineDate} from '@momentum-xyz/core';
 
 import {Hexagon} from '../../atoms';
 
-import * as styled from './TimelineItem.styled';
+import * as styled from './TimelineCap.styled';
 
-export interface TimelineItemPropsInterface {
+export interface TimelineCapPropsInterface {
   title: string;
   dateISO?: string;
   imageSrc?: string;
 }
 
-const TimelineItem: FC<TimelineItemPropsInterface> = ({title, dateISO, imageSrc}) => {
+const TimelineCap: FC<TimelineCapPropsInterface> = ({title, dateISO, imageSrc}) => {
   return (
     <styled.Container data-testid="TimelineHead-test">
       <Hexagon imageSrc={imageSrc} type="third-borderless" />
@@ -23,4 +23,4 @@ const TimelineItem: FC<TimelineItemPropsInterface> = ({title, dateISO, imageSrc}
   );
 };
 
-export default memo(TimelineItem);
+export default memo(TimelineCap);

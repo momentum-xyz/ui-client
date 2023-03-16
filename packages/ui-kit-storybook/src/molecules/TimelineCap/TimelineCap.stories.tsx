@@ -1,10 +1,10 @@
 import {ComponentMeta, Story} from '@storybook/react';
 
-import TimelineItem, {TimelineItemPropsInterface} from './TimelineItem';
+import TimelineCap, {TimelineCapPropsInterface} from './TimelineCap';
 
 export default {
-  title: 'Molecules/TimelineItem',
-  component: TimelineItem,
+  title: 'Molecules/TimelineCap',
+  component: TimelineCap,
   decorators: [
     (Story) => (
       <div className="storybook-block">
@@ -12,10 +12,10 @@ export default {
       </div>
     )
   ]
-} as ComponentMeta<typeof TimelineItem>;
+} as ComponentMeta<typeof TimelineCap>;
 
-const Template: Story<TimelineItemPropsInterface> = (args) => {
-  return <TimelineItem {...args} />;
+const Template: Story<TimelineCapPropsInterface> = (args) => {
+  return <TimelineCap {...args} />;
 };
 
 export const General = Template.bind({});
