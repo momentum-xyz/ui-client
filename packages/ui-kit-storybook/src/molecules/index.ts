@@ -4,3 +4,4 @@ export * from './FrameSteps';
 export * from './FrameTabs';
 export * from './FrameText';
 export * from './TimelineItem';
+export * from './TimelineStars';

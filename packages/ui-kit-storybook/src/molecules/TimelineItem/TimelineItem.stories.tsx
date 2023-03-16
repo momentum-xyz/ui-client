@@ -22,12 +22,12 @@ export const General = Template.bind({});
 General.args = {
   title: 'Name of Odyssey',
   dateISO: '2023-03-16T11:11:27.690Z',
-  imageSrc: 'https://picsum.photos/300/200'
+  imageSrc: 'https://picsum.photos/300'
 };
 
 export const LongName = Template.bind({});
 LongName.args = {
   title: 'Loooooooooooooong name of Odyssey',
   dateISO: '2023-03-16T11:11:27.690Z',
-  imageSrc: 'https://picsum.photos/300/200'
+  imageSrc: 'https://picsum.photos/300'
 };
