@@ -7,13 +7,9 @@ export default {
   component: MenuLabel
 } as Meta;
 
-const Template: Story<MenuLabelPropsInterface> = (args) => {
-  const allArgs = {...args};
-  if (!allArgs.text) {
-    allArgs.text = 'Lorem ipsum';
-  }
-  return <MenuLabel {...allArgs} />;
-};
+const Template: Story<MenuLabelPropsInterface> = (args) => (
+  <MenuLabel {...args} text="Lorem ipsum" />
+);
 
 export const Right = Template.bind({});
 Right.args = {
