@@ -21,5 +21,5 @@ const Template: Story<CalendarCapPropsInterface> = (args) => {
 export const General = Template.bind({});
 General.args = {
   name: 'Name of Odyssey',
-  dateISO: '2023-03-16T11:11:27.690Z'
+  dateISO: new Date().toISOString()
 };
