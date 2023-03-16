@@ -13,7 +13,7 @@ export interface TimelineCapPropsInterface {
 
 const TimelineCap: FC<TimelineCapPropsInterface> = ({title, dateISO, imageSrc}) => {
   return (
-    <styled.Container data-testid="TimelineHead-test">
+    <styled.Container data-testid="TimelineCap-test">
       <Hexagon imageSrc={imageSrc} type="third-borderless" />
       <styled.TitleContainer>
         <styled.Title>{title}</styled.Title>

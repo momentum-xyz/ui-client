@@ -6,3 +6,4 @@ export * from './FrameText';
 export * from './TimelineCap';
 export * from './TimelineStars';
 export * from './TimelineReaction';
+export * from './CalendarCap';
