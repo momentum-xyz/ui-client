@@ -3,23 +3,19 @@ import cn from 'classnames';
 
 import * as styled from './MenuLabel.styled';
 
-type MenuLabelType = 'left' | 'bold-left' | 'right' | 'bold-right';
-const leftFacingMenuLabelTypes: MenuLabelType[] = ['left', 'bold-left'];
-const boldMenuLabelTypes: MenuLabelType[] = ['bold-left', 'bold-right'];
+type MenuLabelType = 'left' | 'right';
 
 export interface MenuLabelPropsInterface {
   type?: MenuLabelType;
+  isActive?: boolean;
   text: string;
 }
 
 const MenuLabel: FC<MenuLabelPropsInterface> = (props) => {
-  const {type = 'right', text, ...rest} = props;
-
-  const direction = leftFacingMenuLabelTypes.includes(type) ? 'left' : 'right';
-  const isBold = boldMenuLabelTypes.includes(type);
+  const {type = 'right', isActive = false, text, ...rest} = props;
 
   return (
-    <styled.MenuLabel className={cn(direction, isBold && 'bold')} {...rest}>
+    <styled.MenuLabel className={cn(type, isActive && 'bold')} {...rest}>
       {text}
     </styled.MenuLabel>
   );

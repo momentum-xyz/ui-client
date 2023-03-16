@@ -18,7 +18,8 @@ Right.args = {
 
 export const RightBold = Template.bind({});
 RightBold.args = {
-  type: 'bold-right'
+  type: 'right',
+  isActive: true
 };
 
 export const Left = Template.bind({});
@@ -28,5 +29,6 @@ Left.args = {
 
 export const LeftBold = Template.bind({});
 LeftBold.args = {
-  type: 'bold-left'
+  type: 'left',
+  isActive: true
 };
