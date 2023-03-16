@@ -9,10 +9,11 @@ export const Container = styled.div`
   --height-small: 30px;
 
   position: relative;
+  width: var(--width-default);
 
   input {
     padding: 0 20px;
-    width: var(--width-default);
+    width: 100%;
     height: var(--height);
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
     border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
@@ -58,9 +59,9 @@ export const Container = styled.div`
     &.small {
       --height: var(--height-small);
     }
+  }
 
-    &.wide {
-      width: 100%;
-    }
+  &.wide {
+    width: 100%;
   }
 `;

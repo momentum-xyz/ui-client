@@ -5,3 +5,4 @@ export * from './FrameTabs';
 export * from './FrameText';
 export * from './TimelineItem';
 export * from './TimelineStars';
+export * from './TimelineReaction';
