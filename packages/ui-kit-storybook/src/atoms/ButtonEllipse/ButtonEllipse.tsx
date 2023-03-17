@@ -7,8 +7,8 @@ import {IconNameType} from '../../types';
 import * as styled from './ButtonEllipse.styled';
 
 export interface ButtonEllipsePropsInterface {
-  label: string;
-  icon: IconNameType;
+  label?: string;
+  icon?: IconNameType;
   size?: 'normal';
   isActive?: boolean;
   variant?: 'primary';
@@ -28,10 +28,10 @@ const ButtonEllipse = forwardRef<HTMLButtonElement, ButtonEllipsePropsInterface>
         type="button"
         disabled={disabled}
         onClick={onClick}
-        className={cn(variant, size, isActive && 'active')}
+        className={cn(variant, size, !!icon && !label && 'only-icon', isActive && 'active')}
       >
-        <IconSvg name={icon} size="xxs" />
-        <span>{label}</span>
+        {icon && <IconSvg name={icon} size="xxs" />}
+        {label && <span>{label}</span>}
       </styled.Button>
     );
   }

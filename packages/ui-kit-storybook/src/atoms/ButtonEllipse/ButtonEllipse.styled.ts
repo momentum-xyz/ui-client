@@ -29,6 +29,7 @@ export const Button = styled.button`
   --normal-height: 26px;
   --normal-radius: 14px;
   --normal-padding: 0 10px;
+  --normal-padding-only-icon: 0 7px;
   --normal-gap: 10px;
 
   padding: var(--padding);
@@ -102,5 +103,9 @@ export const Button = styled.button`
 
     letter-spacing: 0.08em;
     text-transform: uppercase;
+
+    &.only-icon {
+      --padding: var(--normal-padding-only-icon);
+    }
   }
 `;
