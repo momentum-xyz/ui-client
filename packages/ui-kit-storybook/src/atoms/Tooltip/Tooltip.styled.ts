@@ -14,9 +14,11 @@ export const Tooltip = styled.span`
   text-transform: uppercase;
   width: max-content;
 
-  display: none;
+  // display: none;
+  visibility: hidden;
   &.visible {
-    display: initial;
+    // display: initial;
+    visibility: visible;
   }
 
   position: absolute;
@@ -53,3 +55,4 @@ export const Tooltip = styled.span`
     }
   }
 `;
+export const TooltipTrigger = styled.div``;

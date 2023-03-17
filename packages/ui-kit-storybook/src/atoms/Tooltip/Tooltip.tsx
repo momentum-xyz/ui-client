@@ -1,5 +1,5 @@
+import {createRef, FC, memo, PropsWithChildren, useState} from 'react';
 import cn from 'classnames';
-import {FC, memo, PropsWithChildren, useState} from 'react';
 
 import * as styled from './Tooltip.styled';
 
@@ -7,7 +7,7 @@ type TooltipPlacementType = 'left' | 'right';
 
 export interface TooltipPropsInterface {
   text?: string;
-  placement: TooltipPlacementType;
+  placement?: TooltipPlacementType;
 }
 
 const Tooltip: FC<PropsWithChildren<TooltipPropsInterface>> = ({
@@ -15,12 +15,53 @@ const Tooltip: FC<PropsWithChildren<TooltipPropsInterface>> = ({
   placement = 'right',
   children
 }) => {
-  const [show, setShow] = useState(false);
+  const [isShown, setIsShown] = useState(false);
+  const [innerPlacement, setInnerPlacement] = useState<TooltipPlacementType>(placement);
+
+  const divRef = createRef<HTMLDivElement>();
+  const tooltipRef = createRef<HTMLDivElement>();
+
+  const show = () => {
+    const div = divRef.current;
+    const tooltip = tooltipRef.current;
+    if (!div || !tooltip) {
+      return;
+    }
+
+    const divBoundingRect = div.getBoundingClientRect();
+
+    const tooltipStartX = div.clientWidth + divBoundingRect.x;
+    const tooltipLength = tooltip.clientWidth;
+
+    if (placement === 'right') {
+      const tooltipEnd = tooltipStartX + tooltipLength;
+      const overflows = tooltipEnd > window.innerWidth;
+      if (overflows) {
+        setInnerPlacement('left');
+      }
+    } else {
+      const tooltipEnd = tooltipStartX - tooltipLength;
+      const overflows = tooltipEnd < 0;
+      if (overflows) {
+        setInnerPlacement('right');
+      }
+    }
+
+    setIsShown(true);
+  };
 
   return (
     <styled.Wrapper>
-      <styled.Tooltip className={cn(text && show && 'visible', placement)}>{text}</styled.Tooltip>
-      <div onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      <styled.Tooltip ref={tooltipRef} className={cn(text && isShown && 'visible', innerPlacement)}>
+        {text}
+      </styled.Tooltip>
+      <div
+        ref={divRef}
+        onMouseEnter={() => show()}
+        onMouseLeave={() => {
+          setIsShown(false);
+        }}
+      >
         {children}
       </div>
     </styled.Wrapper>
