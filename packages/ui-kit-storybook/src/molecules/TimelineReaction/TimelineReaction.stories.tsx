@@ -30,11 +30,13 @@ const Template: Story<TimelineReactionPropsInterface> = (args) => {
 
   return (
     <TimelineReaction
-      list={list}
-      onCreate={(value) =>
-        setList([{id: new Date().toISOString(), imageSrc: IMAGE_SRC, value}, ...list])
-      }
       {...args}
+      list={list}
+      onCreate={(value) => {
+        if (value) {
+          setList([{id: new Date().toISOString(), imageSrc: IMAGE_SRC, value}, ...list]);
+        }
+      }}
     />
   );
 };
@@ -47,10 +49,4 @@ General.args = {
 export const Readonly = Template.bind({});
 Readonly.args = {
   isReadonly: true
-};
-
-export const NoList = Template.bind({});
-NoList.args = {
-  userImageSrc: IMAGE_SRC,
-  list: []
 };

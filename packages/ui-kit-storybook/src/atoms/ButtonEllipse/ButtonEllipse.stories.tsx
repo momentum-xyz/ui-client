@@ -8,7 +8,7 @@ export default {
 } as ComponentMeta<typeof ButtonEllipse>;
 
 const Template: Story<ButtonEllipsePropsInterface> = (args) => {
-  return <ButtonEllipse {...args} icon="close" label="Close" />;
+  return <ButtonEllipse {...args} icon="close_large" label="Close" />;
 };
 
 export const Primary = Template.bind({});

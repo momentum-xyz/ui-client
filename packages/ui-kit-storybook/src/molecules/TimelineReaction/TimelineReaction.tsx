@@ -11,7 +11,7 @@ export interface ReactionInterface {
 }
 
 export interface TimelineReactionPropsInterface {
-  list?: ReactionInterface[];
+  list: ReactionInterface[];
   userImageSrc?: string;
   placeholder?: string;
   isReadonly?: boolean;
@@ -20,7 +20,7 @@ export interface TimelineReactionPropsInterface {
 
 const TimelineReaction: FC<TimelineReactionPropsInterface> = ({
   userImageSrc,
-  list = [],
+  list,
   placeholder,
   isReadonly,
   onCreate
@@ -46,16 +46,14 @@ const TimelineReaction: FC<TimelineReactionPropsInterface> = ({
         </styled.NewItem>
       )}
 
-      {list.length > 0 && (
-        <styled.List>
-          {list.map((item) => (
-            <styled.ListItem key={item.id}>
-              <Hexagon imageSrc={item.imageSrc} type="fifth-borderless" />
-              <styled.ListItemValue>{item.value}</styled.ListItemValue>
-            </styled.ListItem>
-          ))}
-        </styled.List>
-      )}
+      <styled.List>
+        {list.map((item) => (
+          <styled.ListItem key={item.id}>
+            <Hexagon imageSrc={item.imageSrc} type="fifth-borderless" />
+            <styled.ListItemValue>{item.value}</styled.ListItemValue>
+          </styled.ListItem>
+        ))}
+      </styled.List>
     </styled.Container>
   );
 };
