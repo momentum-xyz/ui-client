@@ -13,14 +13,7 @@ export interface WidgetPropsInterface extends PropsWithChildren {
   onClose?: () => void;
 }
 
-const Widget: FC<PropsWithChildren<WidgetPropsInterface>> = ({
-  variant,
-  hexagon,
-  title,
-  label,
-  children,
-  onClose
-}) => {
+const Widget: FC<WidgetPropsInterface> = ({variant, hexagon, title, label, children, onClose}) => {
   return (
     <styled.Container data-testid="Widget-test" className={cn(variant)}>
       <styled.Header className={cn(variant)}>
@@ -30,7 +23,7 @@ const Widget: FC<PropsWithChildren<WidgetPropsInterface>> = ({
           <styled.Label>{label}</styled.Label>
         </styled.TitleContainer>
         <styled.Actions className={cn(variant)}>
-          <IconButton name="close" size="s" onClick={onClose} />
+          <IconButton name="close_large" size="s" onClick={onClose} />
         </styled.Actions>
       </styled.Header>
 

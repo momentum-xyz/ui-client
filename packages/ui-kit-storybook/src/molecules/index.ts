@@ -8,3 +8,4 @@ export * from './TimelineStars';
 export * from './TimelineReaction';
 export * from './CalendarCap';
 export * from './CalendarButtons';
+export * from './VoiceUser';
