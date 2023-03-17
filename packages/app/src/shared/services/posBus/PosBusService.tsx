@@ -1,5 +1,6 @@
 import {AttributeValueInterface} from '@momentum-xyz/sdk';
-import {Client, loadClientWorker} from '@momentum-xyz/posbus-client';
+import {Client, loadClientWorker, MsgType, PosbusEvent} from '@momentum-xyz/posbus-client';
+import {Event3dEmitter} from '@momentum-xyz/core';
 
 import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -51,9 +52,10 @@ class PosBusService {
         this.main.client = client;
         return client.connect(`${appVariables.BE_URL}/posbus`, token, userId).then((port) => {
           this.main.port = port;
-          port.onmessage = (event) => {
-            console.log('PosBus message', event.data);
-          };
+          port.onmessage = PosBusService.handleIncomingMessage;
+          // port.onmessage = (event) => {
+          //   console.log('PosBus message', event.data);
+          // };
         });
       })
       .catch((err) => {
@@ -68,6 +70,50 @@ class PosBusService {
   static setWorld(worldId: string) {
     if (this.main.client && this.main.port) {
       this.main.client.teleport(worldId);
+    }
+  }
+
+  static handleIncomingMessage(message: PosbusEvent) {
+    if (!Array.isArray(message.data)) {
+      console.error('WTF: PosBus message data is not an array', message);
+      return;
+    }
+    const [type, data] = message.data;
+    const typeStr = type as string;
+    switch (typeStr) {
+      case MsgType.SIGNAL:
+        console.log('PosBus signal', data);
+        break;
+      case MsgType.SET_USER_TRANSFORM:
+        // todo
+        break;
+      case 'set_object_data':
+        console.log('PosBus set_object_data', data);
+        break;
+      case 'set_world': {
+        console.log('Handle posbus set_world', data);
+        const {
+          // avatar_3d_asset_id,
+          id
+        } = data as any;
+        // TODO what should be this id?
+        Event3dEmitter.emit('SetWorld', id);
+        break;
+      }
+
+      case MsgType.ADD_OBJECTS: {
+        console.log('Handle posbus message add_object', message.data);
+
+        const {objects} = data as any;
+        for (const object of objects) {
+          console.log('Add object', object);
+          // TODO how to get asset_3d_id from object?
+          // Event3dEmitter.emit('ObjectCreated', {...object, asset_3d_id: object.id});
+        }
+        break;
+      }
+      default:
+        console.log('Handle posbus message', message.data);
     }
   }
 

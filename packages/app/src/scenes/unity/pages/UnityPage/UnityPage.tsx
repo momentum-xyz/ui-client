@@ -68,7 +68,7 @@ const UnityPage: FC = () => {
           }, 1000);
           return;
         }
-        console.log(`Set worldId: ${worldId}`);
+        console.log(`Posbus - Set worldId: ${worldId}`);
         PosBusService.setWorld(worldId);
       };
       setWorld();
