@@ -33,7 +33,7 @@ runs:
   steps:
     - id: build-plugin
       name: Build ${{ inputs.plugin-name }}
-      uses: momentum-xyz/docker-build-action@df4ed71381a1f76b0b4f87c4679b45948e0af318
+      uses: momentum-xyz/docker-build-action@de24be6bf0ba0bc9e928e6f738fc4611cf6dc847
       with:
         registry-server: ${{ inputs.registry-server }}
         registry-user: ${{ inputs.registry-user }}
