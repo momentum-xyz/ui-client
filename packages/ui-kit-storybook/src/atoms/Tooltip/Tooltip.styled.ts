@@ -14,10 +14,8 @@ export const Tooltip = styled.span`
   text-transform: uppercase;
   width: max-content;
 
-  // display: none;
   visibility: hidden;
   &.visible {
-    // display: initial;
     visibility: visible;
   }
 

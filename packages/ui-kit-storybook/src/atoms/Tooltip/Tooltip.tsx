@@ -7,16 +7,11 @@ type TooltipPlacementType = 'left' | 'right';
 
 export interface TooltipPropsInterface {
   text?: string;
-  placement?: TooltipPlacementType;
 }
 
-const Tooltip: FC<PropsWithChildren<TooltipPropsInterface>> = ({
-  text,
-  placement = 'right',
-  children
-}) => {
+const Tooltip: FC<PropsWithChildren<TooltipPropsInterface>> = ({text, children}) => {
   const [isShown, setIsShown] = useState(false);
-  const [innerPlacement, setInnerPlacement] = useState<TooltipPlacementType>(placement);
+  const [innerPlacement, setInnerPlacement] = useState<TooltipPlacementType>('right');
 
   const divRef = createRef<HTMLDivElement>();
   const tooltipRef = createRef<HTMLDivElement>();
@@ -33,7 +28,7 @@ const Tooltip: FC<PropsWithChildren<TooltipPropsInterface>> = ({
     const tooltipStartX = div.clientWidth + divBoundingRect.x;
     const tooltipLength = tooltip.clientWidth;
 
-    if (placement === 'right') {
+    if (innerPlacement === 'right') {
       const tooltipEnd = tooltipStartX + tooltipLength;
       const overflows = tooltipEnd > window.innerWidth;
       if (overflows) {
