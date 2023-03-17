@@ -10,7 +10,7 @@
     "build:app": "yarn build:deps && yarn workspace @momentum-xyz/ui-client build",
     "build:plugin_miro": "yarn build:deps && yarn workspace plugin_miro build",
     "build:plugin_google_drive": "yarn build:deps && yarn workspace plugin_google_drive build",
-    "build:storybook": "yarn --cwd=packages/ui-kit-storybook build-storybook",
+    "build:storybook": "yarn build:deps && yarn --cwd=packages/ui-kit-storybook build-storybook",
     "build:odyssey3d": "yarn --cwd=packages/odyssey3d build",
     "start": "yarn build:deps && yarn --cwd=packages/app start",
     "start:storybook": "yarn --cwd=packages/ui-kit-storybook storybook",
