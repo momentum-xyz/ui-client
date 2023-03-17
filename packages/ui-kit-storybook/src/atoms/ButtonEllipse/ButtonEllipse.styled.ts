@@ -93,6 +93,11 @@ export const Button = styled.button`
     box-shadow: none;
   }
 
+  &.label {
+    pointer-events: none;
+    box-shadow: none;
+  }
+
   /* SIZES */
 
   &.normal {

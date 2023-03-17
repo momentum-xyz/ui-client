@@ -26,6 +26,14 @@ IsActive.args = {
   isActive: true
 };
 
+export const IsLabel = Template.bind({});
+IsLabel.args = {
+  variant: 'primary',
+  icon: 'calendar',
+  label: 'Calendar',
+  isLabel: true
+};
+
 export const OnlyLabel = Template.bind({});
 OnlyLabel.args = {
   variant: 'primary',
