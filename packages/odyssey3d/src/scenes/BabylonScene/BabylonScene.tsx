@@ -6,8 +6,8 @@ import SceneComponent from 'babylonjs-hook';
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {CameraHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 
-import '@babylonjs/core/Debug/debugLayer';
-import '@babylonjs/inspector';
+// import '@babylonjs/core/Debug/debugLayer';
+// import '@babylonjs/inspector';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
   /* Will run one time. */
