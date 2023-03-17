@@ -15,6 +15,7 @@ export interface InputPropsInterface {
   danger?: boolean;
   wide?: boolean;
   onChange: (value: string) => void;
+  onEnter?: () => void;
 }
 
 const Input: FC<InputPropsInterface> = ({
@@ -25,13 +26,14 @@ const Input: FC<InputPropsInterface> = ({
   danger,
   wide,
   size = 'normal',
-  onChange
+  onChange,
+  onEnter
 }) => {
   const ref = useRef(null);
   const inputRef = useRef(null);
 
   return (
-    <styled.Container data-testid="Input-test">
+    <styled.Container data-testid="Input-test" className={cn(wide && 'wide')}>
       <IMaskInput
         ref={ref}
         inputRef={inputRef}
@@ -45,7 +47,12 @@ const Input: FC<InputPropsInterface> = ({
         // @ts-ignore: Typescript issues in library
         placeholder={placeholder}
         disabled={disabled}
-        className={cn(size, danger && 'danger', wide && 'wide')}
+        className={cn(size, danger && 'danger')}
+        onKeyPress={(event: KeyboardEvent) => {
+          if (event.key === 'Enter') {
+            onEnter?.();
+          }
+        }}
       />
     </styled.Container>
   );
