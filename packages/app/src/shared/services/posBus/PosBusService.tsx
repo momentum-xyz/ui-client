@@ -79,8 +79,8 @@ class PosBusService {
       return;
     }
     const [type, data] = message.data;
-    const typeStr = type as string;
-    switch (typeStr) {
+
+    switch (type) {
       case MsgType.SIGNAL:
         console.log('PosBus signal', data);
         break;
@@ -90,7 +90,7 @@ class PosBusService {
         break;
 
       // TODO add to MsgType
-      case 'set_object_data': {
+      case 'set_object_data' as MsgType: {
         console.log('PosBus set_object_data', data);
 
         const {id, entries} = data as any;
@@ -107,7 +107,7 @@ class PosBusService {
       case MsgType.SET_WORLD: {
         console.log('Handle posbus set_world', data);
 
-        const {id} = data as any;
+        const {id} = data;
         Event3dEmitter.emit('SetWorld', id);
         break;
       }
@@ -115,10 +115,19 @@ class PosBusService {
       case MsgType.ADD_OBJECTS: {
         console.log('Handle posbus message add_object', message.data);
 
-        const {objects} = data as any;
+        const {objects} = data;
         for (const object of objects) {
           console.log('Add object', object);
-          Event3dEmitter.emit('ObjectCreated', {...object, asset_3d_id: object.asset_type});
+          // TODO we should equalise these
+          Event3dEmitter.emit('ObjectCreated', {
+            ...object,
+            asset_3d_id: object.asset_type,
+            transform: {
+              ...object.transform,
+              position: object.transform.location,
+              scale: object.transform.scale.x // TODO check if this is correct
+            }
+          });
         }
         break;
       }
