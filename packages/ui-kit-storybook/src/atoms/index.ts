@@ -12,3 +12,4 @@ export * from './ButtonEllipse';
 export * from './Radio';
 export * from './Warning';
 export * from './Step';
+export * from './MenuLabel';

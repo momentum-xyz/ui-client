@@ -33,6 +33,12 @@ PrimaryActive.args = {
   isActive: true
 };
 
+export const PrimaryWithIconActive = Template.bind({});
+PrimaryWithIconActive.args = {
+  iconName: 'fly-portal',
+  isActive: true
+};
+
 export const PrimaryBorderless = Template.bind({});
 PrimaryBorderless.args = {
   type: 'primary-borderless'
