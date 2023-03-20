@@ -129,6 +129,7 @@ export class ObjectHelper {
       assetUrl,
       scene,
       (container) => {
+        console.log('Object Loaded ', object.name);
         this.instantiate(container, object);
       },
       (event) => {
@@ -137,7 +138,7 @@ export class ObjectHelper {
       },
       (scene, message) => {
         // On error callback
-        console.log(object.name + ' failed loading!: ' + message);
+        console.log(object.name, 'failed loading!:', message);
       },
       '.glb'
     );

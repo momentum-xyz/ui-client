@@ -108,7 +108,7 @@ class PosBusService {
         for (const object of objects) {
           console.log('Add object', object);
           // TODO how to get asset_3d_id from object?
-          // Event3dEmitter.emit('ObjectCreated', {...object, asset_3d_id: object.id});
+          Event3dEmitter.emit('ObjectCreated', {...object, asset_3d_id: object.asset_type});
         }
         break;
       }
