@@ -13,19 +13,19 @@ export interface StakingAmountPropsInterface {
   onUnstakeClick?: () => void;
 }
 
+const FORMATTING: NumericFormatProps = {
+  displayType: 'text',
+  decimalSeparator: '.',
+  thousandSeparator: ' ',
+  decimalScale: 3
+};
+
 const StakingAmount: FC<StakingAmountPropsInterface> = ({
   username,
   amount,
   rewardsAmount,
   onUnstakeClick
 }) => {
-  const formatting: NumericFormatProps = {
-    displayType: 'text',
-    decimalSeparator: '.',
-    thousandSeparator: ' ',
-    decimalScale: 3
-  };
-
   return (
     <styled.Container data-testid="StakingAmount-test">
       <styled.Header>
@@ -39,14 +39,14 @@ const StakingAmount: FC<StakingAmountPropsInterface> = ({
         <styled.Item>
           <styled.ItemLabel>Staked:</styled.ItemLabel>
           <styled.ItemValue>
-            <NumericFormat {...formatting} value={amount} />
+            <NumericFormat {...FORMATTING} value={amount} />
             <styled.ItemSuffix>MOM</styled.ItemSuffix>
           </styled.ItemValue>
         </styled.Item>
         <styled.Item>
           <styled.ItemLabel>Rewards:</styled.ItemLabel>
           <styled.ItemValue>
-            <NumericFormat {...formatting} value={rewardsAmount} />
+            <NumericFormat {...FORMATTING} value={rewardsAmount} />
             <styled.ItemSuffix>MOM</styled.ItemSuffix>
           </styled.ItemValue>
         </styled.Item>
