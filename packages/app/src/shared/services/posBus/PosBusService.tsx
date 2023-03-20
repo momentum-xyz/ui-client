@@ -84,19 +84,30 @@ class PosBusService {
       case MsgType.SIGNAL:
         console.log('PosBus signal', data);
         break;
+
       case MsgType.SET_USER_TRANSFORM:
         // todo
         break;
-      case 'set_object_data':
+
+      // TODO add to MsgType
+      case 'set_object_data': {
         console.log('PosBus set_object_data', data);
+
+        const {id, entries} = data as any;
+        if (entries?.texture?.name) {
+          Event3dEmitter.emit('ObjectTextureChanged', {
+            id,
+            objectId: entries.texture.name
+            // textureColor
+          });
+        }
         break;
-      case 'set_world': {
+      }
+
+      case MsgType.SET_WORLD: {
         console.log('Handle posbus set_world', data);
-        const {
-          // avatar_3d_asset_id,
-          id
-        } = data as any;
-        // TODO what should be this id?
+
+        const {id} = data as any;
         Event3dEmitter.emit('SetWorld', id);
         break;
       }
@@ -107,11 +118,11 @@ class PosBusService {
         const {objects} = data as any;
         for (const object of objects) {
           console.log('Add object', object);
-          // TODO how to get asset_3d_id from object?
           Event3dEmitter.emit('ObjectCreated', {...object, asset_3d_id: object.asset_type});
         }
         break;
       }
+
       default:
         console.log('Handle posbus message', message.data);
     }
