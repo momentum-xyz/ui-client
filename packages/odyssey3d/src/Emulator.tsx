@@ -36,7 +36,7 @@ const Emulator: FC = () => {
     Event3dEmitter.emit('SetWorld', '0d5b35b9-33c0-d917-c095-7ba3670755da');
     console.log(assetIDs.length);
     setInterval(() => {
-      if (i < 3) {
+      if (i < 10) {
         i = i + 1;
         const randomIndex = Math.floor(Math.random() * assetIDs.length);
 
@@ -55,20 +55,20 @@ const Emulator: FC = () => {
           //hypno: 3093e1f9-fa4c-da4d-4df6-73fa22a60ad1     //ERR 400
           //phone: df60d077-608a-3992-bbac-8357466c8646
           //pillman: 0d5b35b9-33c0-d917-c095-7ba3670755da
-          
+
           asset_3d_id: assetIDs[randomIndex]
-          //asset_3d_id: '4751d666-147c-dfc8-6d4b-ed4edb9cc940'
         });
       }
     }, 1000);
 
     setInterval(() => {
+      //360 town: a7169a999da8ec5935a14a0b2669fdfc
       Event3dEmitter.emit('ObjectTextureChanged', {
-        id: '4f81d1d3-3196-4018-aaad-f3c29c3b0a59',
         objectId: 'e227af0c-cb47-41d2-a93c-565000abad3e',
-        textureColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`
+        hash: 'a7169a999da8ec5935a14a0b2669fdfc',
+        label: `name`
       });
-    }, 1500);
+    }, 3500);
   }, []);
 
   return <BabylonScene objects={object_3d_mocks} />;

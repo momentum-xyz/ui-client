@@ -1,28 +1,27 @@
 import {
   Scene,
   HemisphericLight,
-  Nullable,
   AbstractMesh,
   StandardMaterial,
-  Color3,
   SceneLoader,
   Engine,
-  ISceneLoaderPlugin,
-  EventState,
-  ISceneLoaderPluginAsync,
   AssetContainer,
   Matrix,
   GizmoManager,
-  //Mesh,
+  Mesh,
   ActionManager,
   ExecuteCodeAction,
   InstantiatedEntries,
   Behavior,
-  TransformNode
-  //UniversalCamera
+  TransformNode,
+  Vector3,
+  Observable,
+  MeshBuilder,
+  Texture,
+  PBRMaterial
 } from '@babylonjs/core';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
-import {GLTFFileLoader} from '@babylonjs/loaders';
+//import {GLTFFileLoader} from '@babylonjs/loaders';
 
 import {CameraHelper} from './CameraHelper';
 
@@ -32,16 +31,26 @@ interface BabylonObjectInterface {
   objectInstance: InstantiatedEntries;
 }
 
+class CustomNode extends TransformNode {
+  public onSomeChange = new Observable();
+}
+
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
   static assetRootUrl = 'https://odyssey.org/api/v3/render/asset/';
+  static textureRootUrl = 'https://odyssey.org/api/v3/render/texture/'
+  static textureDefaultSize = 's3/'
   static gizmoManager: GizmoManager;
+  // switch from Array to Map
   static objects: BabylonObjectInterface[] = [];
   static followObjectBehaviour: Behavior<InstantiatedEntries>;
   static _camRoot: TransformNode;
   static _yTilt: TransformNode;
   static player: TransformNode;
   static idToDelete: string;
+  static scene: Scene;
+  static myDistance: Vector3;
+  static mySphere: Mesh;
 
   static initialize(
     scene: Scene,
@@ -52,7 +61,7 @@ export class ObjectHelper {
     /*initialObjects.forEach((initialObject) => {
       this.spawnObject(scene, initialObject);
     });*/
-
+    this.scene = scene;
     this.idToDelete = '';
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
@@ -60,7 +69,6 @@ export class ObjectHelper {
         scene.pointerX,
         scene.pointerY,
         Matrix.Identity(),
-        // Is this legal?
         CameraHelper.camera
       );
 
@@ -73,6 +81,11 @@ export class ObjectHelper {
           while (parent.parent) {
             parent = parent.parent as AbstractMesh;
           }
+
+          console.log("position: " + parent.position);
+          console.log("rotation: " + parent.rotation);
+
+          ObjectHelper.myDistance = parent.position;
           console.log(parent.metadata);
         }
       }
@@ -112,9 +125,16 @@ export class ObjectHelper {
         this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled;
       }
       if (e.key === 'y') {
-        this.deleteObject(this.idToDelete);
+        //this.deleteObject(this.idToDelete);
+        this.gizmoManager.boundingBoxGizmoEnabled = !this.gizmoManager.boundingBoxGizmoEnabled;
       }
     };
+
+    this.mySphere = MeshBuilder.CreateSphere("mySphere");
+
+    const groundMat = new StandardMaterial("groundMat", scene);
+    groundMat.diffuseTexture = new Texture(this.textureRootUrl + this.textureDefaultSize + 'a7169a999da8ec5935a14a0b2669fdfc' , scene);
+    this.mySphere.material = groundMat;
   }
 
   static setWorld(assetID: string) {
@@ -140,12 +160,15 @@ export class ObjectHelper {
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
-    const mesh: Nullable<AbstractMesh> = scene.getMeshById(texture.objectId);
-    if (mesh && texture.textureColor) {
-      const material = new StandardMaterial('color', scene);
-      material.alpha = 1;
-      material.diffuseColor = Color3.FromHexString(texture.textureColor).toLinearSpace();
-      mesh.material = material;
+    // TODO: Get the mesh from a proper map lookup, instead of like this
+    const meshes = this.objects[0].objectInstance.rootNodes[0].getChildMeshes();
+    for (const mesh of meshes) {
+      console.log(mesh.material?.name);
+      const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+      const newTexture = new Texture(textureUrl, scene);
+      // TODO: check if material can be casted as PBRMaterial
+      const meshMater = mesh.material as PBRMaterial;
+      meshMater.albedoTexture = newTexture;
     }
   }
 
@@ -165,8 +188,14 @@ export class ObjectHelper {
       );
     }
 
-    const node = instance.rootNodes[0];
+    const node = instance.rootNodes[0] as CustomNode;
     node.name = object.name;
+    
+    node.onSomeChange = new Observable();
+    node.onSomeChange.add((data) => {
+      console.log(`onSomeChange notified with data: ${data}`);
+    });
+
     node.position.x = object.transform.position.x;
     node.position.y = object.transform.position.y;
     node.position.z = object.transform.position.z;
@@ -186,12 +215,15 @@ export class ObjectHelper {
     };
     this.objects.push(babylonObject);
 
-    //this.gizmoManager.attachToNode(node);
+    // Attach gizmo to object when clicked
     this.gizmoManager.attachableNodes?.push(node);
 
+    // Play animations
     for (const group of instance.animationGroups) {
       group.play(true);
     }
+
+    node.onSomeChange.notifyObservers('onSomeChange');
   }
 
   static disposeAllObjects() {
@@ -215,7 +247,7 @@ export class ObjectHelper {
   }
 
   static advancedLoading(): void {
-    SceneLoader.OnPluginActivatedObservable.addOnce(
+    /*SceneLoader.OnPluginActivatedObservable.addOnce(
       (loader: ISceneLoaderPlugin | ISceneLoaderPluginAsync, eventState: EventState) => {
         // This is just a precaution as this isn't strictly necessary since
         // the only loader in use is the glTF one.
@@ -244,7 +276,7 @@ export class ObjectHelper {
           console.log('asset loaded');
         });
       }
-    );
+    );*/
   }
 
   static getAssetFileName(id: string): string {
