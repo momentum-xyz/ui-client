@@ -38,8 +38,8 @@ class CustomNode extends TransformNode {
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
   static assetRootUrl = 'https://odyssey.org/api/v3/render/asset/';
-  static textureRootUrl = 'https://odyssey.org/api/v3/render/texture/'
-  static textureDefaultSize = 's3/'
+  static textureRootUrl = 'https://odyssey.org/api/v3/render/texture/';
+  static textureDefaultSize = 's3/';
   static gizmoManager: GizmoManager;
   // switch from Array to Map
   static objects: BabylonObjectInterface[] = [];
@@ -82,8 +82,8 @@ export class ObjectHelper {
             parent = parent.parent as AbstractMesh;
           }
 
-          console.log("position: " + parent.position);
-          console.log("rotation: " + parent.rotation);
+          console.log('position: ' + parent.position);
+          console.log('rotation: ' + parent.rotation);
 
           ObjectHelper.myDistance = parent.position;
           console.log(parent.metadata);
@@ -130,10 +130,13 @@ export class ObjectHelper {
       }
     };
 
-    this.mySphere = MeshBuilder.CreateSphere("mySphere");
+    this.mySphere = MeshBuilder.CreateSphere('mySphere');
 
-    const groundMat = new StandardMaterial("groundMat", scene);
-    groundMat.diffuseTexture = new Texture(this.textureRootUrl + this.textureDefaultSize + 'a7169a999da8ec5935a14a0b2669fdfc' , scene);
+    const groundMat = new StandardMaterial('groundMat', scene);
+    groundMat.diffuseTexture = new Texture(
+      this.textureRootUrl + this.textureDefaultSize + 'a7169a999da8ec5935a14a0b2669fdfc',
+      scene
+    );
     this.mySphere.material = groundMat;
   }
 
@@ -190,7 +193,7 @@ export class ObjectHelper {
 
     const node = instance.rootNodes[0] as CustomNode;
     node.name = object.name;
-    
+
     node.onSomeChange = new Observable();
     node.onSomeChange.add((data) => {
       console.log(`onSomeChange notified with data: ${data}`);
