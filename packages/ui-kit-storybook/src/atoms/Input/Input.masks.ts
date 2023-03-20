@@ -9,7 +9,7 @@ export const numberInputMask = (scale = 0, signed = false): IMask.MaskedNumberOp
     mask: Number,
     scale: scale, // digits after point
     signed: signed, // allow or disallow negative
-    radix: ',', // fractional delimiter
+    radix: '.', // fractional delimiter
     thousandsSeparator: ' '
   });
 };
@@ -26,7 +26,7 @@ export const numberInputPrefixMask = (
         mask: Number,
         scale: scale,
         signed: signed,
-        radix: ',',
+        radix: '.',
         thousandsSeparator: ' '
       }
     }
@@ -45,7 +45,7 @@ export const numberInputSuffixMask = (
         mask: Number,
         scale: scale,
         signed: signed,
-        radix: ',',
+        radix: '.',
         thousandsSeparator: ' '
       }
     }
