@@ -22,5 +22,6 @@ export const General = Template.bind({});
 General.args = {
   username: 'Name of Odyssey',
   amount: 10.563,
-  rewardsAmount: 1.01
+  rewardsAmount: 1.01,
+  tokenSymbol: 'MOM'
 };

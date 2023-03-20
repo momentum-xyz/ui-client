@@ -10,6 +10,7 @@ export interface StakingAmountPropsInterface {
   username: string;
   amount: number;
   rewardsAmount: number;
+  tokenSymbol: string;
   onUnstakeClick?: () => void;
 }
 
@@ -24,6 +25,7 @@ const StakingAmount: FC<StakingAmountPropsInterface> = ({
   username,
   amount,
   rewardsAmount,
+  tokenSymbol,
   onUnstakeClick
 }) => {
   return (
@@ -40,14 +42,14 @@ const StakingAmount: FC<StakingAmountPropsInterface> = ({
           <styled.ItemLabel>Staked:</styled.ItemLabel>
           <styled.ItemValue>
             <NumericFormat {...FORMATTING} value={amount} />
-            <styled.ItemSuffix>MOM</styled.ItemSuffix>
+            <styled.ItemSuffix>{tokenSymbol}</styled.ItemSuffix>
           </styled.ItemValue>
         </styled.Item>
         <styled.Item>
           <styled.ItemLabel>Rewards:</styled.ItemLabel>
           <styled.ItemValue>
             <NumericFormat {...FORMATTING} value={rewardsAmount} />
-            <styled.ItemSuffix>MOM</styled.ItemSuffix>
+            <styled.ItemSuffix>{tokenSymbol}</styled.ItemSuffix>
           </styled.ItemValue>
         </styled.Item>
       </styled.Content>
