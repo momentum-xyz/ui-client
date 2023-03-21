@@ -2,7 +2,6 @@ import {
   Scene,
   HemisphericLight,
   AbstractMesh,
-  StandardMaterial,
   SceneLoader,
   Engine,
   AssetContainer,
@@ -15,7 +14,6 @@ import {
   Behavior,
   TransformNode,
   Observable,
-  MeshBuilder,
   Texture,
   PBRMaterial
 } from '@babylonjs/core';
@@ -32,6 +30,13 @@ interface BabylonObjectInterface {
 
 class CustomNode extends TransformNode {
   public onSomeChange = new Observable();
+}
+
+export enum GizmoTypesEnum {
+  Position,
+  Rotation,
+  Scale,
+  BoundingBox
 }
 
 export class ObjectHelper {
@@ -96,38 +101,12 @@ export class ObjectHelper {
       )
     );
 
-    // Gizmo
+    // Gizmo setup
     this.gizmoManager = new GizmoManager(scene);
     this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-    this.gizmoManager.positionGizmoEnabled = true;
-    //this.gizmoManager.rotationGizmoEnabled = true;
-    //this.gizmoManager.scaleGizmoEnabled = true;
 
-    // Testing
-    document.onkeydown = (e) => {
-      if (e.key === 'e') {
-        this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled;
-      }
-      if (e.key === 'r') {
-        this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled;
-      }
-      if (e.key === 't') {
-        this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled;
-      }
-      if (e.key === 'y') {
-        //this.deleteObject(this.idToDelete);
-        this.gizmoManager.boundingBoxGizmoEnabled = !this.gizmoManager.boundingBoxGizmoEnabled;
-      }
-    };
-
-    this.mySphere = MeshBuilder.CreateSphere('mySphere');
-
-    const groundMat = new StandardMaterial('groundMat', scene);
-    groundMat.diffuseTexture = new Texture(
-      this.textureRootUrl + this.textureDefaultSize + 'a7169a999da8ec5935a14a0b2669fdfc',
-      scene
-    );
-    this.mySphere.material = groundMat;
+    // Enable position gizmo by default
+    this.setGizmoType(GizmoTypesEnum.Position);
   }
 
   static setWorld(assetID: string) {
@@ -239,6 +218,36 @@ export class ObjectHelper {
       this.objectsMap.delete(id);
     } else {
       console.log("unable to delete object, as the id doesn't exist in the map, " + id);
+    }
+  }
+
+  static setGizmoType(type: GizmoTypesEnum) {
+    this.disableAllGizmos();
+    switch (type) {
+      case GizmoTypesEnum.Position:
+        this.gizmoManager.positionGizmoEnabled = true;
+        break;
+      case GizmoTypesEnum.Rotation:
+        this.gizmoManager.rotationGizmoEnabled = true;
+        break;
+      case GizmoTypesEnum.Scale:
+        this.gizmoManager.scaleGizmoEnabled = true;
+        break;
+      case GizmoTypesEnum.BoundingBox:
+        this.gizmoManager.boundingBoxGizmoEnabled = true;
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  static disableAllGizmos() {
+    if (this.gizmoManager) {
+      this.gizmoManager.positionGizmoEnabled = false;
+      this.gizmoManager.rotationGizmoEnabled = false;
+      this.gizmoManager.scaleGizmoEnabled = false;
+      this.gizmoManager.boundingBoxGizmoEnabled = false;
     }
   }
 
