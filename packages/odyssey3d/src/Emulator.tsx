@@ -5,6 +5,9 @@ import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
 
 import {BabylonScene} from './scenes';
+
+window.sessionStorage.setItem('babylon_debug', 'true');
+
 const assetIDs: string[] = [
   'de99ac0e-0ba0-6446-9263-46d3f6c854e5',
   '8eb299aa-bed7-8de6-fbc2-54716723f2e0',

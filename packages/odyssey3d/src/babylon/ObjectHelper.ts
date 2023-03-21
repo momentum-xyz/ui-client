@@ -21,6 +21,7 @@ import {
   TransformNode
   //UniversalCamera
 } from '@babylonjs/core';
+import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 import {GLTFFileLoader} from '@babylonjs/loaders';
 
