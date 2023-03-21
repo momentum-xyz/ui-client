@@ -1,8 +1,8 @@
 import React, {ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
-import {t} from 'i18next';
 import {Heading, IconSvg, Text, IconNameType} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import * as styled from './Section.styled';
 
@@ -23,6 +23,8 @@ const Section: React.FC<SectionPropsInterface> = ({
   withBorder = true,
   children
 }) => {
+  const {t} = useI18n();
+
   return (
     <styled.Container data-testid="Section-test">
       <styled.TopContainer onClick={onExpandToggle}>

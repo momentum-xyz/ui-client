@@ -1,9 +1,8 @@
 import React, {FC, useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {useTheme} from 'styled-components';
 import {PanelLayout} from '@momentum-xyz/ui-kit';
-import {absoluteLink} from '@momentum-xyz/core';
+import {absoluteLink, useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
@@ -18,7 +17,7 @@ const CalendarWidget: FC = () => {
   const {calendarStore} = widgetsStore;
   const {eventList, deleteConfirmationDialog} = calendarStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const theme = useTheme();
 
   useEffect(() => {

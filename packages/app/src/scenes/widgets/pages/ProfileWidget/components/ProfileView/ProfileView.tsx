@@ -1,8 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {Avatar, Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
-import {absoluteLink, registrationDateString, withoutProtocol} from '@momentum-xyz/core';
+import {absoluteLink, registrationDateString, withoutProtocol, useI18n} from '@momentum-xyz/core';
 
 import {UserModelInterface} from 'core/models';
 
@@ -17,7 +16,7 @@ interface PropsInterface {
 const ProfileView: FC<PropsInterface> = (props) => {
   const {user, isVisitAvailable, onTeleportToOdyssey} = props;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <>

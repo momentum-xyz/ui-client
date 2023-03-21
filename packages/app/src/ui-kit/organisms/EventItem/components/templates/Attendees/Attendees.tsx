@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {Avatar, Dialog, SearchInput, Text} from '@momentum-xyz/ui-kit';
 
 import {AttendeesListModelType, EventItemInterface} from 'core/models';
@@ -17,7 +17,7 @@ const DIALOG_WIDTH_PX = 520;
 const Attendees: FC<PropsInterface> = (props) => {
   const {attendeesList, event} = props;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const handleClose = () => {
     attendeesList.dialog.close();
@@ -42,7 +42,7 @@ const Attendees: FC<PropsInterface> = (props) => {
       >
         <styled.Container data-testid="AttendeesWidget-test">
           <SearchInput
-            placeholder={t('placeholders.searchForAttendees')}
+            placeholder={t('placeholders.searchForAttendees') || ''}
             onChange={(query) => attendeesList.searchAttendees(query)}
             withBackground
           />

@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import cn from 'classnames';
 import {Avatar, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 
 import {UserModelInterface} from 'core/models';
 
@@ -25,6 +25,8 @@ const OnlineUser: FC<PropsInterface> = ({
   isCurrentUser,
   isOwner
 }) => {
+  const {t} = useI18n();
+
   return (
     <styled.Container data-testid="OnlineUser-test">
       <styled.Info

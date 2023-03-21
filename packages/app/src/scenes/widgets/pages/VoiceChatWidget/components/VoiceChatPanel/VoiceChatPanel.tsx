@@ -1,6 +1,6 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
@@ -13,7 +13,7 @@ const VoiceChatPanel: FC = () => {
   const {agoraVoiceChatStore, userDevicesStore} = agoraStore;
   const {user} = sessionStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const handleToggleVoiceChat = useCallback(() => {
     if (agoraVoiceChatStore.hasJoined) {

@@ -1,9 +1,9 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 import {Button, Dialog, Text} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {MagicTypeEnum} from 'core/enums';
@@ -20,7 +20,7 @@ const MagicLinkWidget: FC = () => {
   const {address, copyToClipBoard} = magicLinkStore;
 
   const theme = useTheme();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     magicLinkStore.init();

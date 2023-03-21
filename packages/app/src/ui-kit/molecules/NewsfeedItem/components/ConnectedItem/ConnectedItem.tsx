@@ -1,8 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Avatar, Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
-import {newsfeedDateString} from '@momentum-xyz/core';
+import {newsfeedDateString, useI18n} from '@momentum-xyz/core';
 
 import {NftItemModelInterface, UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -21,7 +20,7 @@ interface PropsInterface {
 const ConnectedItem: FC<PropsInterface> = (props) => {
   const {item, nftItem, connectedNftItem, currentUser, onOpenOdyssey} = props;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const isMyNft = currentUser.id === item.uuid;
   const isMyStakedNft = currentUser.id === item.connectedTo?.uuid;

@@ -1,9 +1,8 @@
 import React, {FC, ReactNode, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
-import {CheckJobStatusEnum} from '@momentum-xyz/core';
+import {CheckJobStatusEnum, useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -16,7 +15,7 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
 
   const navigate = useNavigate();
   const {pathname} = useLocation();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   if (pathname === ROUTES.signIn && !sessionStore.isGuest) {
     navigate(ROUTES.explore);

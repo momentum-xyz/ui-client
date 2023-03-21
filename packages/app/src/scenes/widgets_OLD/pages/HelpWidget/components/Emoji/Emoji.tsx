@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {Heading, IconSvg} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -13,7 +13,7 @@ const Emoji: React.FC = () => {
   const {widgetStore_OLD} = useStore();
   const {helpStore} = widgetStore_OLD;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const handleExpand = () => {
     helpStore.toggleSection(HelpSectionEnum.Emoji);

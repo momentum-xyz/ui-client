@@ -4,7 +4,7 @@ import {Button, Text, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useParams, useNavigate, generatePath} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -34,7 +34,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
   const navigate = useNavigate();
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     if (!user) {

@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
@@ -12,7 +12,7 @@ interface PropsInterface {
 }
 
 const CreateOdyssey: FC<PropsInterface> = ({onCreate}) => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <Box size="small">

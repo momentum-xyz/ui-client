@@ -7,7 +7,7 @@ import {
   SvgButton
 } from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 
@@ -20,7 +20,7 @@ const TextChatWidget: FC = () => {
   const {textChatStore} = widgetsStore;
   const {streamChat} = textChatStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     streamChat.init(sessionStore.userId, unityStore.worldId, sessionStore.user);

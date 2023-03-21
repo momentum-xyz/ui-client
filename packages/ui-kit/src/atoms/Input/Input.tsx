@@ -1,25 +1,25 @@
-import React, {FC, HTMLProps, memo} from 'react';
+import React, {FC, InputHTMLAttributes, memo} from 'react';
 import cn from 'classnames';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 
 import * as styled from './Input.styled';
 
-interface PropsInterface
-  extends PropsWithThemeInterface,
-    Omit<HTMLProps<HTMLInputElement>, 'onChange'> {
-  label?: string;
+interface PropsInterface extends PropsWithThemeInterface {
+  label?: string | null;
   name?: string;
-  placeholder?: string;
+  placeholder?: string | null;
   selected?: boolean;
   disabled?: boolean;
   onChange?: (text: string) => void;
   isError?: boolean;
-  errorMessage?: string;
+  errorMessage?: string | null;
   className?: string;
 }
 
-const Input: FC<PropsInterface> = (props) => {
+type PropsType = PropsInterface & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
+
+const Input: FC<PropsType> = (props) => {
   const {
     theme,
     placeholder,

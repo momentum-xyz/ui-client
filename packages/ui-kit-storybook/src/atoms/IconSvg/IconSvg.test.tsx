@@ -6,7 +6,7 @@ import IconSvg from './IconSvg';
 
 describe('IconSvg', () => {
   it('is rendered', () => {
-    const rendered = render(<IconSvg name="close" />);
+    const rendered = render(<IconSvg name="close_large" />);
 
     expect(within(rendered.baseElement).getByTestId('IconSvg-test')).not.toBeNull();
   });

@@ -1,7 +1,6 @@
 import React, {FC, memo} from 'react';
-import {useTranslation} from 'react-i18next';
 import {IconSvg, Text, Button, Image} from '@momentum-xyz/ui-kit';
-import {absoluteLink, registrationDateString, withoutProtocol} from '@momentum-xyz/core';
+import {absoluteLink, registrationDateString, withoutProtocol, useI18n} from '@momentum-xyz/core';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {UserModelInterface, NftItemStatsModelInterface} from 'core/models';
@@ -39,7 +38,7 @@ const OdysseyInfo: FC<PropsInterface> = ({
   highFiveDisabled,
   dockDisabled
 }) => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <styled.OdysseyInfoContainer data-testid="OdysseyInfo-test">
