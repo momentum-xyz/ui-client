@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
 import {Button, Text} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import * as styled from './GoogleChoice.styled';
 
@@ -12,24 +12,24 @@ interface PropsInterface {
 }
 
 const GoogleChoice: FC<PropsInterface> = ({isAdmin, pickDocument}) => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const theme = useTheme();
 
   return (
     <styled.Wrapper data-testid="GoogleChoice-test">
       {isAdmin ? (
         <styled.Actions>
-          <Text text={t('messages.noTeamDocument')} theme={theme} size="s" />
+          <Text text={t('plugin_gd.messages.noTeamDocument')} theme={theme} size="s" />
           <Button
             theme={theme}
             variant="primary"
-            label={t('actions.chooseDocument')}
+            label={t('plugin_gd.actions.chooseDocument')}
             onClick={pickDocument}
           />
         </styled.Actions>
       ) : (
         <styled.Actions>
-          <Text text={t('messages.noDocument')} theme={theme} size="s" />
+          <Text text={t('plugin_gd.messages.noDocument')} theme={theme} size="s" />
         </styled.Actions>
       )}
     </styled.Wrapper>

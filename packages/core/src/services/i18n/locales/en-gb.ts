@@ -1200,6 +1200,50 @@ export const enGb = {
       you: 'You',
       and: ' and ',
       docked: ' docked'
+    },
+    plugin_gd: {
+      labels: {
+        googleDrive: 'Google Drive'
+      },
+      messages: {
+        noDocument: 'This team does not have a Google Drive Document open yet',
+        noTeamDocument: 'Your team does not have a Google Drive Document open yet'
+      },
+      actions: {
+        chooseDocument: 'Choose a document',
+        changeDocument: 'Change document',
+        close: 'Close'
+      }
+    },
+    plugin_miro: {
+      labels: {
+        miro: 'Miro'
+      },
+      messages: {
+        noTeamMiroBoard: 'Your team does not have a Miro board yet',
+        noMiroBoard: 'This team does not have a Miro board yet'
+      },
+      actions: {
+        changeBoard: 'Change board',
+        closeBoard: 'Close board',
+        chooseBoard: 'Choose a Miro board'
+      }
+    },
+    plugin_video: {
+      labels: {
+        video: 'Video',
+        videoUrl: 'Video URL'
+      },
+      messages: {
+        pasteUrl: 'Paste a YouTube, Twitch, or Vimeo Share URL here.',
+        invalidUrl: 'Invalid or unsupported URL',
+        noUrl: 'Video not yet set'
+      },
+      actions: {
+        save: 'Save',
+        cancel: 'Cancel',
+        change: 'Change'
+      }
     }
   }
 };

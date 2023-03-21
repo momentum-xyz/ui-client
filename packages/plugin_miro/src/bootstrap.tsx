@@ -5,7 +5,6 @@ import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled
 import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 import {HostEmulator, PluginInterface} from '@momentum-xyz/sdk';
 import '@momentum-xyz/ui-kit/dist/themes/themes';
-import 'shared/services/i18n';
 
 import plugin from './Plugin';
 
