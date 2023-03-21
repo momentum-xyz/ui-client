@@ -11,8 +11,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
   id-token: write
+  packages: read
+  pages: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
