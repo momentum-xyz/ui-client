@@ -8,8 +8,6 @@ import {
   Matrix,
   GizmoManager,
   Mesh,
-  ActionManager,
-  ExecuteCodeAction,
   InstantiatedEntries,
   Behavior,
   TransformNode,
@@ -85,21 +83,6 @@ export class ObjectHelper {
         }
       }
     };
-
-    // Keyboard Input Listener
-    scene.actionManager = new ActionManager(scene);
-    scene.actionManager.registerAction(
-      new ExecuteCodeAction(
-        {
-          trigger: ActionManager.OnKeyUpTrigger,
-          parameter: 'q'
-        },
-        () => {
-          this.disposeAllObjects();
-          console.log('q button was pressed. all objects disposed!');
-        }
-      )
-    );
 
     // Gizmo setup
     this.gizmoManager = new GizmoManager(scene);
