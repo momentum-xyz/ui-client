@@ -14,7 +14,6 @@ import {
   InstantiatedEntries,
   Behavior,
   TransformNode,
-  Vector3,
   Observable,
   MeshBuilder,
   Texture,
@@ -41,15 +40,11 @@ export class ObjectHelper {
   static textureRootUrl = 'https://odyssey.org/api/v3/render/texture/';
   static textureDefaultSize = 's3/';
   static gizmoManager: GizmoManager;
-  // switch from Array to Map
-  static objects: BabylonObjectInterface[] = [];
+  static objectsMap = new Map<string, BabylonObjectInterface>();
   static followObjectBehaviour: Behavior<InstantiatedEntries>;
-  static _camRoot: TransformNode;
-  static _yTilt: TransformNode;
   static player: TransformNode;
-  static idToDelete: string;
+  static firstID: string;
   static scene: Scene;
-  static myDistance: Vector3;
   static mySphere: Mesh;
 
   static initialize(
@@ -62,7 +57,7 @@ export class ObjectHelper {
       this.spawnObject(scene, initialObject);
     });*/
     this.scene = scene;
-    this.idToDelete = '';
+    this.firstID = '';
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
@@ -81,11 +76,6 @@ export class ObjectHelper {
           while (parent.parent) {
             parent = parent.parent as AbstractMesh;
           }
-
-          console.log('position: ' + parent.position);
-          console.log('rotation: ' + parent.rotation);
-
-          ObjectHelper.myDistance = parent.position;
           console.log(parent.metadata);
         }
       }
@@ -163,15 +153,19 @@ export class ObjectHelper {
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
-    // TODO: Get the mesh from a proper map lookup, instead of like this
-    const meshes = this.objects[0].objectInstance.rootNodes[0].getChildMeshes();
-    for (const mesh of meshes) {
-      console.log(mesh.material?.name);
-      const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
-      const newTexture = new Texture(textureUrl, scene);
-      // TODO: check if material can be casted as PBRMaterial
-      const meshMater = mesh.material as PBRMaterial;
-      meshMater.albedoTexture = newTexture;
+    const meshes = this.objectsMap.get(this.firstID)?.objectInstance.rootNodes[0].getChildMeshes();
+
+    if (meshes) {
+      for (const mesh of meshes) {
+        console.log(mesh.material?.name);
+        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+        const newTexture = new Texture(textureUrl, scene);
+        // TODO: check if material can be casted as PBRMaterial
+        const meshMater = mesh.material as PBRMaterial;
+        meshMater.albedoTexture = newTexture;
+      }
+    } else {
+      console.log("unable to set object texture, as the id didn't return a value from the map");
     }
   }
 
@@ -203,8 +197,8 @@ export class ObjectHelper {
     node.position.y = object.transform.position.y;
     node.position.z = object.transform.position.z;
     node.metadata = object.id;
-    if (this.idToDelete === '') {
-      this.idToDelete = object.id;
+    if (this.firstID === '') {
+      this.firstID = object.id;
     }
     /*const meshes = node.getChildMeshes();
     for (const mesh of meshes) {
@@ -216,7 +210,7 @@ export class ObjectHelper {
       objectDefinition: object,
       objectInstance: instance
     };
-    this.objects.push(babylonObject);
+    this.objectsMap.set(object.id, babylonObject);
 
     // Attach gizmo to object when clicked
     this.gizmoManager.attachableNodes?.push(node);
@@ -230,22 +224,21 @@ export class ObjectHelper {
   }
 
   static disposeAllObjects() {
-    for (const obj of this.objects) {
-      obj.objectInstance.dispose();
-      obj.container.removeAllFromScene();
+    for (const mapObj of this.objectsMap) {
+      mapObj[1].objectInstance.dispose();
+      mapObj[1].container.removeFromScene();
     }
+    this.objectsMap.clear();
   }
 
   static deleteObject(id: string) {
-    for (const obj of this.objects) {
-      if (obj.objectDefinition.id === id) {
-        obj.objectInstance.dispose();
-        obj.container.removeAllFromScene();
-        const index = this.objects.indexOf(obj);
-        this.objects.splice(index, 1);
-
-        console.log('object with id: ' + id + ', deleted successfully');
-      }
+    const objToDelete = this.objectsMap.get(id);
+    if (objToDelete) {
+      objToDelete.objectInstance.dispose();
+      objToDelete.container.removeAllFromScene();
+      this.objectsMap.delete(id);
+    } else {
+      console.log("unable to delete object, as the id doesn't exist in the map, " + id);
     }
   }
 
