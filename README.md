@@ -63,6 +63,17 @@ flowchart TD
 
 #### Installation:
 
+We use [Github Packages](https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages) for storing some of the dependencies requiring Github Personal Access Token.
+
+If you don't have one, create it on https://github.com/settings/tokens by pressing **Generate new token (classic)** with `read:packages` scope.
+Edit (or create if missing) `~/.npmrc` on you local machine and add the following line there:
+
+```
+//npm.pkg.github.com/:\_authToken=TOKEN
+```
+
+Now you should be able to install the dependencies and build the project.
+
 ```
 git lfs install
 yarn install
