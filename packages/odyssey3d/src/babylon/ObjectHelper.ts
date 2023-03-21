@@ -21,6 +21,7 @@ import {
   TransformNode
   //UniversalCamera
 } from '@babylonjs/core';
+import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 import {GLTFFileLoader} from '@babylonjs/loaders';
 
@@ -129,6 +130,7 @@ export class ObjectHelper {
       assetUrl,
       scene,
       (container) => {
+        console.log('Object Loaded ', object.name);
         this.instantiate(container, object);
       },
       (event) => {
@@ -137,7 +139,7 @@ export class ObjectHelper {
       },
       (scene, message) => {
         // On error callback
-        console.log(object.name + ' failed loading!: ' + message);
+        console.log(object.name, 'failed loading!:', message);
       },
       '.glb'
     );

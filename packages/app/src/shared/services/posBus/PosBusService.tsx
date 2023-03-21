@@ -1,4 +1,6 @@
 import {AttributeValueInterface} from '@momentum-xyz/sdk';
+import {Client, loadClientWorker, MsgType, PosbusEvent} from '@momentum-xyz/posbus-client';
+import {Event3dEmitter} from '@momentum-xyz/core';
 
 import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -20,11 +22,120 @@ import {
   PosBusVoiceChatActionMessageType,
   PosBusVoiceChatUserMessageType
 } from 'core/types';
+import {appVariables} from 'api/constants';
 
 class PosBusService {
   private static main = new PosBusService();
 
   private _subscribedAttributeTypeTopics: Set<string>;
+
+  private client: Client | null = null;
+  private port: MessagePort | null = null;
+
+  public static init(token: string, userId: string) {
+    console.log('PosBusService init', token, userId);
+
+    console.log('import.meta.url', import.meta.url);
+    // TODO: nicer way to import these? some webpack and/or package.json export magic?
+    const workerUrl = new URL(
+      '../../../../../../node_modules/@momentum-xyz/posbus-client/dist/worker.mjs',
+      import.meta.url
+    );
+    const wasmUrl = new URL(
+      '../../../../../../node_modules/@momentum-xyz/posbus-client/dist/pbc.wasm',
+      import.meta.url
+    );
+
+    loadClientWorker(workerUrl, wasmUrl)
+      .then((client) => {
+        console.log('PosBus client loaded', client);
+        this.main.client = client;
+        return client.connect(`${appVariables.BE_URL}/posbus`, token, userId).then((port) => {
+          this.main.port = port;
+          port.onmessage = PosBusService.handleIncomingMessage;
+          // port.onmessage = (event) => {
+          //   console.log('PosBus message', event.data);
+          // };
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  static isConnected() {
+    return !!(this.main.client && this.main.port);
+  }
+
+  static setWorld(worldId: string) {
+    if (this.main.client && this.main.port) {
+      this.main.client.teleport(worldId);
+    }
+  }
+
+  static handleIncomingMessage(message: PosbusEvent) {
+    if (!Array.isArray(message.data)) {
+      console.error('WTF: PosBus message data is not an array', message);
+      return;
+    }
+    const [type, data] = message.data;
+
+    switch (type) {
+      case MsgType.SIGNAL:
+        console.log('PosBus signal', data);
+        break;
+
+      case MsgType.SET_USER_TRANSFORM:
+        // todo
+        break;
+
+      // TODO add to MsgType
+      case 'set_object_data' as MsgType: {
+        console.log('PosBus set_object_data', data);
+
+        const {id, entries} = data as any;
+        if (entries?.texture?.name) {
+          Event3dEmitter.emit('ObjectTextureChanged', {
+            id,
+            objectId: entries.texture.name
+            // textureColor
+          });
+        }
+        break;
+      }
+
+      case MsgType.SET_WORLD: {
+        console.log('Handle posbus set_world', data);
+
+        const {id} = data;
+        Event3dEmitter.emit('SetWorld', id);
+        break;
+      }
+
+      case MsgType.ADD_OBJECTS: {
+        console.log('Handle posbus message add_object', message.data);
+
+        const {objects} = data;
+        for (const object of objects) {
+          console.log('Add object', object);
+          // TODO we should equalise these
+          Event3dEmitter.emit('ObjectCreated', {
+            ...object,
+            asset_3d_id: object.asset_type,
+            transform: {
+              ...object.transform,
+              position: object.transform.location,
+              scale: object.transform.scale.x // TODO check if this is correct
+            }
+          });
+        }
+        break;
+      }
+
+      default:
+        console.log('Handle posbus message', message.data);
+    }
+  }
 
   public get subscribedAttributeTypeTopics(): Set<string> {
     return this._subscribedAttributeTypeTopics;
