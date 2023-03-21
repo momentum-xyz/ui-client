@@ -2890,6 +2890,11 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
+"@momentum-xyz/posbus-client@^0.0.1-alpha.1":
+  version "0.0.1-alpha.1"
+  resolved "https://npm.pkg.github.com/download/@momentum-xyz/posbus-client/0.0.1-alpha.1/7898ceba51895570534465f9a6b16ccc8f8c2cd6#7898ceba51895570534465f9a6b16ccc8f8c2cd6"
+  integrity sha512-8hM3vzUqcln93KeCqgBQJZNIK9OHH3RXelqc3ZqgdzslpF29o/uZpv9qB4jpiVFmc4zAVu9cbOHZae8i0OSAJw==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

@@ -133,7 +133,8 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
           isBorderless && 'borderless',
           isOuterBorder && 'outer-border',
           isBlank && 'blank',
-          isActive && !skipOuterBorder && 'active'
+          isActive && !isOuterBorder && 'active',
+          iconName && 'icon-hexagon'
         )}
       >
         {isOuterBorder ? (

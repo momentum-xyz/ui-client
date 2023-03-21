@@ -1,44 +1,46 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
+// import {useTheme} from 'styled-components';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
-import Unity from 'react-unity-webgl';
+// import Unity from 'react-unity-webgl';
 import {Portal} from '@momentum-xyz/ui-kit';
-import {useI18n} from '@momentum-xyz/core';
+import {BabylonScene} from '@momentum-xyz/odyssey3d';
 
 import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 import {appVariables} from 'api/constants';
 import {ROUTES} from 'core/constants';
 import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
 import {
-  UnityLoader,
+  // UnityLoader,
   ToastContent,
   HighFiveContent,
   TOAST_BASE_OPTIONS,
   TOAST_COMMON_OPTIONS,
   TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
+import {PosBusService} from 'shared/services';
 
 import * as styled from './UnityPage.styled';
 
-const UnityContextCSS = {
-  width: '100vw',
-  height: '100vh'
-};
+// const UnityContextCSS = {
+//   width: '100vw',
+//   height: '100vh'
+// };
 
 const UnityPage: FC = () => {
   const {unityStore, sessionStore, nftStore, widgetsStore} = useStore();
   const {unityInstanceStore} = unityStore;
 
-  const theme = useTheme();
+  // const theme = useTheme();
   const navigate = useNavigate();
-  const {t} = useI18n();
+  const {t} = useTranslation();
   const location = useLocation();
 
-  useEffect(() => {
-    unityInstanceStore.init();
-  }, [unityInstanceStore]);
+  // useEffect(() => {
+  //   unityInstanceStore.init();
+  // }, [unityInstanceStore]);
 
   // TODO: FIXME
   const worldId = useMemo(() => {
@@ -55,6 +57,23 @@ const UnityPage: FC = () => {
 
     return worldId;
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (worldId) {
+      const setWorld = () => {
+        if (!PosBusService.isConnected()) {
+          console.log(`PosBusService is not connected.`);
+          setTimeout(() => {
+            setWorld();
+          }, 1000);
+          return;
+        }
+        console.log(`Posbus - Set worldId: ${worldId}`);
+        PosBusService.setWorld(worldId);
+      };
+      setWorld();
+    }
+  }, [worldId]);
 
   useUnityEvent('MomentumLoaded', async () => {
     console.log(`Unity worldId: ${worldId}`);
@@ -201,9 +220,11 @@ const UnityPage: FC = () => {
     );
   });
 
-  if (!unityInstanceStore.unityContext) {
-    return <></>;
-  }
+  // if (!unityInstanceStore.unityContext) {
+  //   return <></>;
+  // }
+
+  console.log('UnityPage render');
 
   return (
     <Portal>
@@ -213,10 +234,11 @@ const UnityPage: FC = () => {
           unityInstanceStore.setLastClickPosition(event.clientX, event.clientY);
         }}
       >
-        <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} />
+        <BabylonScene objects={[]} />
+        {/* <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} /> */}
       </styled.Inner>
 
-      {!unityStore.isUnityAvailable && <UnityLoader theme={theme} />}
+      {/* {!unityStore.isUnityAvailable && <UnityLoader theme={theme} />} */}
     </Portal>
   );
 };
