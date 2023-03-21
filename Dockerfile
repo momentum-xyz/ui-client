@@ -21,9 +21,6 @@ COPY packages/plugin_google_drive/package.json ./packages/plugin_google_drive/
 COPY packages/plugin_video/package.json ./packages/plugin_video/
 COPY packages/app/package.json ./packages/app/
 
-
-RUN --mount=type=secret,id=npm,target=/root/.npmrc,required=true \
-    npm config list
 RUN --mount=type=secret,id=npm,target=/root/.npmrc,required=true \
     yarn install --immutable --immutable-cache --check-cache
 
