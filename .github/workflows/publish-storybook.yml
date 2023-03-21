@@ -33,13 +33,8 @@ jobs:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@momentum-xyz'
-      - name: Setup .yarnrc.yml
         env:
           NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          yarn config set npmScopes.momentum-xyz.npmRegistryServer "https://npm.pkg.github.com"
-          yarn config set npmScopes.momentum-xyz.npmAlwaysAuth true
-          yarn config set npmScopes.momentum-xyz.npmAuthToken $NPM_AUTH_TOKEN
       - id: yarn-deps
         name: Install dependencies
         run: yarn install --frozen-lockfile
