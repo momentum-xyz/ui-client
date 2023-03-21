@@ -1,6 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import {t} from 'i18next';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {RequestModel, ResetModel, i18n} from '@momentum-xyz/core';
 import {GoogleDocumentInterface} from 'core/interfaces';
 import {PluginApiInterface} from '@momentum-xyz/sdk';
 
@@ -67,8 +66,8 @@ const GoogleDriveStore = types.compose(
     .views((self) => ({
       get documentTitle(): string {
         return self.googleDocument?.name
-          ? `${t('labels.googleDrive')} / ${self.googleDocument.name}`
-          : t('labels.googleDrive');
+          ? `${i18n.t('plugin_gd.labels.googleDrive')} / ${self.googleDocument.name}`
+          : i18n.t('plugin_gd.labels.googleDrive');
       }
     }))
 );

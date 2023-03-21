@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {createSwitchByConfig} from 'core/utils';
@@ -19,7 +19,7 @@ const SpawnAssetPage: FC = () => {
   const {worldId} = useParams<{worldId: string}>();
   const navigate = useNavigate();
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     spawnAssetStore.init(worldId!);

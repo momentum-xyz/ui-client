@@ -1,5 +1,5 @@
 import {FC, useCallback} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {Portal, Tooltip} from '@momentum-xyz/ui-kit';
 
@@ -12,7 +12,7 @@ const CreatorMenu: FC = () => {
   const {worldId} = useStore().unityStore;
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const onAddObjectClick = useCallback(() => {
     navigate(generatePath(ROUTES.odyssey.creator.spawnAsset.base, {worldId}));

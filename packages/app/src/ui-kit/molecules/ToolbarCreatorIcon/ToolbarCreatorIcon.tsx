@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
-import {useTranslation} from 'react-i18next';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {ToolbarIcon, ToolbarIconInterface, Text, IconSvg} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 
@@ -18,7 +18,7 @@ const ToolbarCreatorIcon: FC<PropsInterface> = (props) => {
   const {worldId, isAdmin, isBuilderMode, onCloseAndReset} = props;
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const collapsedItem: ToolbarIconInterface = {
     icon: 'planet',

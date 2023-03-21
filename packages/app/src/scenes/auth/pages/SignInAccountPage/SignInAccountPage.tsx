@@ -2,7 +2,7 @@ import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate} from 'react-router-dom';
 import {Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {SignUpFormInterface} from 'core/interfaces';
@@ -22,7 +22,7 @@ const SignInAccountPage: FC = () => {
   const accountSelectedAndFundsAquired =
     walletWithFundsIsConnected || requestingFundsStatus === 'success';
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const navigate = useNavigate();
 

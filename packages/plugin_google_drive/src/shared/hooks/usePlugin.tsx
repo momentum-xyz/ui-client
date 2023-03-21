@@ -1,14 +1,15 @@
-import {UsePluginHookType} from '@momentum-xyz/sdk';
 import {AppConfigInterface} from 'core/interfaces';
-import {GoogleDrivePage} from 'pages';
-import {useMemo, useEffect} from 'react';
+import {FC, useMemo, useEffect} from 'react';
 import {RootGoogleDriveStore} from 'stores';
-import {GoogleDriveStore} from 'stores/GoogleDriveStore';
 import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
+import {UsePluginHookType} from '@momentum-xyz/sdk';
+
+import {GoogleDriveStore} from 'stores/GoogleDriveStore';
+import {GoogleDrivePage} from 'pages';
 
 import {StoreProvider} from './useStore';
 
-const ThemeProvider = ThemeProviderOriginal as unknown as React.FC<ThemeProviderProps<any>>;
+const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any>>;
 
 export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
   const store = useMemo(

@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {generatePath, NavLink} from 'react-router-dom';
 import {SearchInput} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
@@ -20,7 +20,7 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
   const {spawnAssetStore} = odysseyCreatorStore;
   const {searchQuery} = spawnAssetStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <styled.Container>
@@ -28,7 +28,7 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
         <SearchInput
           variant="secondary"
           value={searchQuery.query}
-          placeholder={t(`placeholders.searchForAssets`)}
+          placeholder={t(`placeholders.searchForAssets`) || ''}
           onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
           onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
           onChange={searchQuery.setQuery}

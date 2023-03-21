@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {Button, PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
 import {GoogleDocumentInterface} from 'core/interfaces';
+import {useI18n} from '@momentum-xyz/core';
 
 import * as styled from './GoogleDriveActions.styled';
 
@@ -22,7 +22,7 @@ const GoogleDriveActions: FC<PropsInterface> = ({
   closeDocument,
   pickDocument
 }) => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   if (!isAdmin || !googleDocument?.url || !objectId) {
     return null;
@@ -30,8 +30,12 @@ const GoogleDriveActions: FC<PropsInterface> = ({
 
   return (
     <styled.Container theme={theme}>
-      <Button label={t('actions.changeDocument')} variant="primary" onClick={pickDocument} />
-      <Button label={t('actions.close')} variant="danger" onClick={closeDocument} />
+      <Button
+        label={t('plugin_gd.actions.changeDocument')}
+        variant="primary"
+        onClick={pickDocument}
+      />
+      <Button label={t('plugin_gd.actions.close')} variant="danger" onClick={closeDocument} />
     </styled.Container>
   );
 };

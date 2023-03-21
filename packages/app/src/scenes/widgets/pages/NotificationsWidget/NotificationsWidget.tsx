@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Dialog, Loader, Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {NewsfeedItem} from 'ui-kit';
@@ -18,7 +18,7 @@ const NotificationsWidget: FC = () => {
   const {dialog, notifications} = notificationsStore;
 
   const theme = useTheme();
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {

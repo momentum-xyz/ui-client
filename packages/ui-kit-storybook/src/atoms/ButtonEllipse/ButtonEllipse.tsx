@@ -7,7 +7,7 @@ import {IconNameType} from '../../types';
 import * as styled from './ButtonEllipse.styled';
 
 export interface ButtonEllipsePropsInterface {
-  label?: string;
+  label?: string | null;
   icon?: IconNameType;
   size?: 'normal';
   isActive?: boolean;

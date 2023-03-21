@@ -2,8 +2,8 @@ import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';
-import {useTranslation} from 'react-i18next';
 
 import {ROUTES} from 'core/constants';
 import {GizmoTypeEnum} from 'core/enums';
@@ -23,7 +23,7 @@ const ObjectMenu: FC = () => {
   const [isObjectColor, setIsObjectColor] = useState(false);
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const topOffset = unityInstanceStore.objectMenuPosition.y - OBJECT_MENU_OFFSET_Y;
   const leftOffset = unityInstanceStore.objectMenuPosition.x - OBJECT_MENU_OFFSET_X;

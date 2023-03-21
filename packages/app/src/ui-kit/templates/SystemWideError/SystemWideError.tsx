@@ -1,5 +1,5 @@
 import {FC, useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {PropsWithThemeInterface, Button, IconSvg, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 
 import background from 'static/images/bg.png';
@@ -7,13 +7,13 @@ import background from 'static/images/bg.png';
 import * as styled from './SystemWideError.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  text: string | string[];
+  text: string | string[] | null;
   showRefreshButton?: boolean;
   theme: any; // TODO Add proper
 }
 
 const SystemWideError: FC<PropsInterface> = ({theme, text, showRefreshButton}) => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const texts = useMemo(() => (Array.isArray(text) ? text : [text]), [text]);
 

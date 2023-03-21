@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
-import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
+import {useI18n} from '@momentum-xyz/core';
 
 import {SystemWideError} from 'ui-kit';
 
 const WrongBrowserPage: FC = () => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const theme = useTheme();
   return (
     <SystemWideError

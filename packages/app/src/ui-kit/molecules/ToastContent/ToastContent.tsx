@@ -13,9 +13,9 @@ import {ToastButtonInfoInterface} from 'ui-kit/interfaces';
 import * as styled from './ToastContent.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
-  title?: string;
+  title?: string | null;
   headerIconName?: IconNameType;
-  text?: string;
+  text?: string | null;
   isDanger?: boolean;
   showCloseButton?: boolean;
   approveInfo?: ToastButtonInfoInterface;
@@ -39,7 +39,7 @@ const ToastContent: FC<PropsInterface> = (props) => {
     <styled.ToastContainer data-testid="ToastContent-test">
       <PanelLayout
         isDanger={isDanger}
-        title={title}
+        title={title || ''}
         headerIconName={headerIconName}
         headerStyle="uppercase"
         showCloseButton={showCloseButton}

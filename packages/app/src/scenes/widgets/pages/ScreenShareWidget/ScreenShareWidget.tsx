@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ScreenSectionsEnum, SectionedScreenPortal, WindowPanel} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 
@@ -14,7 +14,7 @@ const ScreenShareWidget: FC = () => {
   const {agoraScreenShareStore} = agoraStore;
   const {remoteVideoTrack, localVideoTrack} = agoraScreenShareStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     if (remoteVideoTrack) {
@@ -50,7 +50,7 @@ const ScreenShareWidget: FC = () => {
     >
       <WindowPanel
         title={unityWorldStore.world?.name || ''}
-        subtitle={t('labels.screenShare')}
+        subtitle={t('labels.screenShare') || ''}
         initialIsExpanded={screenShareStore.isExpanded}
         onToggleExpand={screenShareStore.togglePage}
         onClose={handleClose}

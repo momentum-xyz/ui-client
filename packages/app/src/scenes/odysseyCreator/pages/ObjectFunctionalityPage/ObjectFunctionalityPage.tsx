@@ -2,7 +2,7 @@ import {useClickOutside} from '@momentum-xyz/ui-kit';
 import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {generatePath, useNavigate, useParams} from 'react-router-dom';
 
 import {ROUTES} from 'core/constants';
@@ -18,7 +18,7 @@ const ObjectFunctionalityPage: FC = () => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const {objectId} = useParams<{objectId: string}>();
 

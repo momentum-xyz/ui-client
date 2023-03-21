@@ -2,7 +2,7 @@ import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
 import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {Button, FileUploader, Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 
 import {useStore} from 'shared/hooks';
@@ -19,7 +19,7 @@ export const SelectedPage: FC = () => {
 
   const navigate = useNavigate();
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const {worldId} = useParams<{
     worldId: string;
@@ -98,7 +98,7 @@ export const SelectedPage: FC = () => {
         <Text text={t('labels.visibleInNavigation')} size="m" weight="light" />
       </styled.CheckBoxLabel>
       <styled.NameInput
-        placeholder={t('placeholders.nameYourObjectNavigation')}
+        placeholder={t('placeholders.nameYourObjectNavigation') || ''}
         onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
         onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
         onChange={spawnAssetStore.setNavigationObjectName}

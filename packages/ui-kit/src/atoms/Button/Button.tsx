@@ -8,7 +8,7 @@ import * as styled from './Button.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
   label: string;
-  icon?: IconNameType;
+  icon?: IconNameType | null;
   size?: SizeType;
   variant?: VariantType;
   transform?: TextTransformType;

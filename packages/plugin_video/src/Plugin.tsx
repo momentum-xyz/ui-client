@@ -1,11 +1,13 @@
+import {useState} from 'react';
 import {
   UnityAutoTakeKeyboardControl,
   UsePluginHookType,
   useSharedObjectState
 } from '@momentum-xyz/sdk';
 import {Button, Input, Text} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
+
 import '@momentum-xyz/ui-kit/dist/themes/themes';
-import {useState} from 'react';
 
 // Use react-twitch-embed if more functionality is needed for twitch
 
@@ -84,6 +86,8 @@ const usePlugin: UsePluginHookType = (props) => {
   const [sharedState, setSharedState] = useSharedObjectState<PluginStateInterface>();
   console.log('sharedState', sharedState);
 
+  const {t} = useI18n();
+
   const handleConfigSave = async () => {
     try {
       if (modifiedState) {
@@ -108,12 +112,16 @@ const usePlugin: UsePluginHookType = (props) => {
     <span />
   ) : editMode ? (
     <>
-      <Button onClick={handleConfigSave} label="Save" disabled={isModifiedStateError} />
+      <Button
+        onClick={handleConfigSave}
+        label={t('plugin_video.actions.save')}
+        disabled={isModifiedStateError}
+      />
       &nbsp;
-      <Button onClick={handleCancel} label="Cancel" />
+      <Button onClick={handleCancel} label={t('plugin_video.actions.cancel')} />
     </>
   ) : (
-    <Button onClick={() => setEditMode(true)} label="Change" />
+    <Button onClick={() => setEditMode(true)} label={t('plugin_video.actions.change')} />
   );
 
   const content = editMode ? (
@@ -121,8 +129,8 @@ const usePlugin: UsePluginHookType = (props) => {
       <UnityAutoTakeKeyboardControl />
       <Input
         type="text"
-        label="Video URL"
-        placeholder="Paste a YouTube, Twitch, or Vimeo Share URL here."
+        label={t('plugin_video.labels.videoUrl')}
+        placeholder={t('plugin_video.messages.pasteUrl')}
         autoFocus
         value={
           modifiedState?.video_url ??
@@ -133,13 +141,13 @@ const usePlugin: UsePluginHookType = (props) => {
         }
         onChange={(value) => setModifiedState({video_url: value})}
         isError={!!error || isModifiedStateError}
-        errorMessage={error || 'Invalid or unsupported URL'}
+        errorMessage={error || t('plugin_video.messages.invalidUrl') || ''}
       />
     </div>
   ) : embedUrl ? (
     <iframe
       key={embedUrl}
-      title="Video"
+      title={t('plugin_video.labels.video') || ''}
       src={embedUrl}
       height="100%"
       width="100%"
@@ -155,13 +163,13 @@ const usePlugin: UsePluginHookType = (props) => {
         justifyContent: 'center'
       }}
     >
-      <Text text="Video not yet set" size="m" />
+      <Text text={t('plugin_video.messages.noUrl')} size="m" />
     </div>
   );
 
   return {
     objectView: {
-      title: 'Video',
+      title: t('plugin_video.labels.video') || '',
       actions,
       content
     }

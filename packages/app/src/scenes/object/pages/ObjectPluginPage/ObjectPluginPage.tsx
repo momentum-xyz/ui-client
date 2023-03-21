@@ -8,7 +8,7 @@ import {
   Text,
   WindowPanel
 } from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 import {
   PluginInterface,
@@ -37,7 +37,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   const {attributesManager} = pluginLoader;
 
   const theme = useTheme();
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const navigate = useNavigate();
 
   const {worldId} = useParams<{worldId: string}>();
@@ -99,7 +99,7 @@ const PluginInnerWrapper = ({
   plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
 }) => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const {content, objectView} = plugin.usePlugin(pluginProps);
 

@@ -2,7 +2,7 @@ import {Button, ErrorsEnum, FileType, FileUploader, Text} from '@momentum-xyz/ui
 import {Model3dPreview} from '@momentum-xyz/map3d';
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useState, useEffect, useRef, useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
@@ -18,7 +18,7 @@ const UploadCustomAssetPage: FC = () => {
   const {spawnAssetStore} = odysseyCreatorStore;
   const {unityInstanceStore} = unityStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   // TODO: Refactor later to useForm
   const [asset, setAsset] = useState<File>();
@@ -81,7 +81,7 @@ const UploadCustomAssetPage: FC = () => {
             setError(undefined);
             console.log(file);
             if (!file || !/\.glb$/i.test(file.name)) {
-              setError(t('errors.onlyGLBSupported'));
+              setError(t('errors.onlyGLBSupported') || '');
               return;
             }
 
@@ -90,9 +90,9 @@ const UploadCustomAssetPage: FC = () => {
           onError={(err) => {
             console.log('File upload error:', err, err.message);
             if (err.message === ErrorsEnum.FileSizeTooLarge) {
-              setError(t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB}));
+              setError(t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB}) || '');
             } else {
-              setError(t('assetsUploader.errorSave'));
+              setError(t('assetsUploader.errorSave') || '');
             }
           }}
           label={t('actions.uploadYourAssset')}
@@ -116,7 +116,7 @@ const UploadCustomAssetPage: FC = () => {
             />
           </styled.PreviewContainer>
           <styled.NameInput
-            placeholder={t('placeholders.nameYourAssetForYourLibrary')}
+            placeholder={t('placeholders.nameYourAssetForYourLibrary') || ''}
             onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
             onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
             onChange={spawnAssetStore.setUploadedAssetName}

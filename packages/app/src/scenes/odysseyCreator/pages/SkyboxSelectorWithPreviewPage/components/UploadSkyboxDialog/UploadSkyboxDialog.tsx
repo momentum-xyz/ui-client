@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Dialog, FileUploader, Input, Text, ErrorsEnum} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useTheme} from 'styled-components';
@@ -28,7 +28,7 @@ const UploadSkyboxDialog: FC = () => {
   const {user} = sessionStore;
   const worldId = unityStore.worldId;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const theme = useTheme();
 
   useEffect(() => {
@@ -176,7 +176,7 @@ const UploadSkyboxDialog: FC = () => {
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <Input
-              placeholder={t('labels.skyboxName')}
+              placeholder={t('labels.skyboxName') || ''}
               type="text"
               value={value}
               onChange={(value) => {
