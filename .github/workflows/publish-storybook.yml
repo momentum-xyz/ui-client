@@ -37,9 +37,9 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn config set npmScopes.my-org.npmRegistryServer "https://npm.pkg.github.com"
-          yarn config set npmScopes.my-org.npmAlwaysAuth true
-          yarn config set npmScopes.my-org.npmAuthToken $NPM_AUTH_TOKEN
+          yarn config set npmScopes.momentum-xyz.npmRegistryServer "https://npm.pkg.github.com"
+          yarn config set npmScopes.momentum-xyz.npmAlwaysAuth true
+          yarn config set npmScopes.momentum-xyz.npmAuthToken $NPM_AUTH_TOKEN
       - id: yarn-deps
         name: Install dependencies
         run: yarn install --frozen-lockfile
