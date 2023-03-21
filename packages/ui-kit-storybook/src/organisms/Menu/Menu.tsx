@@ -8,7 +8,7 @@ import * as styled from './Menu.styled';
 
 const MENU_ITEM_WIDTH = 60;
 
-interface MenuItemInterface {
+export interface MenuItemInterface {
   id: number; // Maybe change this
 
   imageSrc?: string;
@@ -32,9 +32,9 @@ const Menu: FC<MenuPropsInterface> = ({
   activeMenuItemId,
   onMenuItemSelection
 }) => {
-  const [sidePadding, setSidePadding] = useState<number | null>(null);
-  const [leftBlankCount, setLeftBlankCount] = useState<number | null>(null);
-  const [rightBlankCount, setRightBlankCount] = useState<number | null>(null);
+  const [sidePadding, setSidePadding] = useState<number>(0);
+  const [leftBlankCount, setLeftBlankCount] = useState<number>(1);
+  const [rightBlankCount, setRightBlankCount] = useState<number>(1);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -42,46 +42,21 @@ const Menu: FC<MenuPropsInterface> = ({
   useResize(ref, () => setWindowWidth(window.innerWidth));
 
   useEffect(() => {
-    // // const windowWidth = window.innerWidth
+    const totalPossibleHexagons = Math.floor(windowWidth / MENU_ITEM_WIDTH);
+    const tmp_sidePadding = windowWidth - totalPossibleHexagons * MENU_ITEM_WIDTH;
 
-    // const sideActionCnt = leftActions.length + rightActions.length;
-    // const allActionCnt = sideActionCnt + centerActions.length;
-    // const allActionsWidth = allActionCnt * MENU_ITEM_WIDTH;
+    const nonCentralHexagons = totalPossibleHexagons - centerActions.length;
 
-    // const blankSpace = windowWidth - allActionsWidth;
-    // const blankCount = Math.floor(blankSpace / MENU_ITEM_WIDTH);
-    // const tmp_sidePadding = blankSpace - blankCount * MENU_ITEM_WIDTH;
-
-    // console.log(
-    //   `We need to add ${blankCount} blanks, the side padding should be ${tmp_sidePadding / 2}px`
-    // );
-
-    // const leftBlankPercent = leftActions.length / (sideActionCnt / 100);
-    // const rightBlankPercent = rightActions.length / (sideActionCnt / 100);
-
-    // const tmp_leftBlankCount = Math.round((blankCount / 100) * rightBlankPercent);
-    // const tmp_rightBlankCount = Math.round((blankCount / 100) * leftBlankPercent);
-
-    // console.log(
-    //   `Blank spread - left: ${tmp_leftBlankCount} (${leftBlankPercent}%), right: ${tmp_rightBlankCount} (${rightBlankPercent}%)`
-    // );
-
-    const leftActionsSize = leftActions.length * MENU_ITEM_WIDTH;
-    const rightActionsSize = rightActions.length * MENU_ITEM_WIDTH;
-    const centerActionsSize = centerActions.length * MENU_ITEM_WIDTH;
-    const leftSideSpace = windowWidth / 2 - leftActionsSize - centerActionsSize / 2;
-    const rightSideSpace = windowWidth / 2 - rightActionsSize - centerActionsSize / 2;
-
-    let tmp_leftBlankCount = Math.floor(leftSideSpace / MENU_ITEM_WIDTH);
-    let tmp_rightBlankCount = Math.floor(rightSideSpace / MENU_ITEM_WIDTH);
+    let tmp_leftBlankCount = nonCentralHexagons / 2 - leftActions.length;
+    let tmp_rightBlankCount = nonCentralHexagons / 2 - rightActions.length;
 
     tmp_leftBlankCount = tmp_leftBlankCount > 0 ? tmp_leftBlankCount : 1;
     tmp_rightBlankCount = tmp_rightBlankCount > 0 ? tmp_rightBlankCount : 1;
 
-    const tmp_sidePadding =
-      leftSideSpace -
-      tmp_leftBlankCount * MENU_ITEM_WIDTH +
-      (rightSideSpace - tmp_rightBlankCount * MENU_ITEM_WIDTH);
+    if (tmp_leftBlankCount % 1 !== 0) {
+      tmp_leftBlankCount = Math.floor(tmp_leftBlankCount);
+      tmp_rightBlankCount = Math.ceil(tmp_rightBlankCount);
+    }
 
     if (tmp_sidePadding !== sidePadding) {
       setSidePadding(tmp_sidePadding);

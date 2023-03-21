@@ -6,7 +6,7 @@ import Hexagon from './Hexagon';
 
 describe('Hexagon', () => {
   it('is rendered', () => {
-    const rendered = render(<Hexagon />);
+    const rendered = render(<Hexagon type="primary" />);
 
     expect(within(rendered.baseElement).getByTestId('Hexagon-test')).not.toBeNull();
   });

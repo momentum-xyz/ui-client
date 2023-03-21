@@ -93,6 +93,8 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   const isOuterBorder = !skipOuterBorder && type === 'primary';
   const showSparkle = isOuterBorder && isActive;
   const isBlank = blankHexagonTypes.includes(type);
+  const shouldHaveButton =
+    type !== 'blank' && type !== 'blank-borderless' && !(type === 'primary' && skipOuterBorder);
 
   const clickHandler = onClick || (() => {});
 
@@ -105,7 +107,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     <></>
   );
 
-  return (
+  const hexElement = (
     <styled.Wrapper
       data-testid="Hexagon-test"
       className={cn(
@@ -151,6 +153,10 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
         )}
       </styled.Hexagon>
     </styled.Wrapper>
+  );
+
+  return (
+    <>{shouldHaveButton ? <styled.WrapperButton>{hexElement}</styled.WrapperButton> : hexElement}</>
   );
 };
 

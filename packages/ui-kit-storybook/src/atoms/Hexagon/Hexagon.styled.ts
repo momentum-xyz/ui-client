@@ -1,7 +1,9 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-export const Wrapper = styled.button`
+export const WrapperButton = styled.button``;
+
+export const Wrapper = styled.div`
   --hexagon-border-color: ${(props) => props.theme.text};
   --hexagon-accent-color: ${(props) => props.theme.accentBg};
 
