@@ -82,8 +82,6 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
 
   const isBorderless = borderlessHexagonTypes.includes(type);
 
-  console.log(hexagonSizeIconSizeMap);
-
   const size: HexagonSizeType = largeSizeHexagonTypes.includes(type)
     ? 'large'
     : mediumSizeHexagonTypes.includes(type)

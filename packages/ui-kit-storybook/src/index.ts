@@ -5,5 +5,6 @@ export * from './enums';
 export * from './hooks';
 export * from './interfaces';
 export * from './molecules';
+export * from './organisms';
 export * from './types';
 export * from './themes';
