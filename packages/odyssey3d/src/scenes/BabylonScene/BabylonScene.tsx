@@ -6,9 +6,6 @@ import SceneComponent from 'babylonjs-hook';
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {CameraHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 
-import '@babylonjs/core/Debug/debugLayer';
-import '@babylonjs/inspector';
-
 const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
   /* Will run one time. */
   const onSceneReady = (scene: Scene) => {
@@ -18,9 +15,16 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(scene, engine, props.objects, view);
-      SkyboxHelper.setCubemapSkybox(scene);
+      SkyboxHelper.setSkybox(scene);
 
-      scene.debugLayer.show({overlay: true});
+      if (window.sessionStorage.getItem('babylon_debug')) {
+        Promise.all([
+          import('@babylonjs/core/Debug/debugLayer'),
+          import('@babylonjs/inspector')
+        ]).then(() => {
+          scene.debugLayer.show({overlay: true});
+        });
+      }
 
       Event3dEmitter.on('SetWorld', (assetID) => {
         CameraHelper.spawnPlayer(scene, assetID);

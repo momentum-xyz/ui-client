@@ -51,6 +51,7 @@ export const Wrapper = styled.button`
   &.blank {
     width: var(--hexagon-medium-width);
     height: var(--hexagon-medium-height);
+    cursor: default;
   }
 
   &.outer-border {
@@ -158,6 +159,11 @@ export const Hexagon = styled.div`
         }
       }
     }
+  }
+
+  &.active.icon-hexagon:not(.outer-border) {
+    background: ${(props) =>
+      `linear-gradient(151.04deg, ${props.theme.accentText} 17.94%, ${props.theme.accentBg} 74.56%)`};
   }
 
   &.small {

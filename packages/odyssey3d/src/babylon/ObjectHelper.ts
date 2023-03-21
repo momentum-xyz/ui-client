@@ -15,6 +15,7 @@ import {
   Texture,
   PBRMaterial
 } from '@babylonjs/core';
+import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 //import {GLTFFileLoader} from '@babylonjs/loaders';
 
@@ -104,9 +105,17 @@ export class ObjectHelper {
       this.assetRootUrl,
       assetUrl,
       scene,
+      (container) => {
+        console.log('Object Loaded ', object.name);
+        this.instantiate(container, object);
+      },
       (event) => {
         // On progress callback
         //console.log(`Loading progress ${event.loaded}/${event.total}`);
+      },
+      (scene, message) => {
+        // On error callback
+        console.log(object.name, 'failed loading!:', message);
       },
       '.glb'
     ).then((container) => {

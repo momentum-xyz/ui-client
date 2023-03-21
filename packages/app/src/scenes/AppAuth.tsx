@@ -6,6 +6,7 @@ import {toast} from 'react-toastify';
 import {CheckJobStatusEnum} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
+import {PosBusService} from 'shared/services';
 import {ROUTES} from 'core/constants';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
@@ -74,6 +75,12 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
       nftStore.activateWallet(sessionStore.wallet);
     }
   }, [nftStore, nftStore.isLoading, sessionStore.wallet]);
+
+  useEffect(() => {
+    if (sessionStore.token && sessionStore.user) {
+      PosBusService.init(sessionStore.token, sessionStore.user.id);
+    }
+  }, [sessionStore.token, sessionStore.user]);
 
   return <>{sessionStore.isUserReady && children}</>;
 };
