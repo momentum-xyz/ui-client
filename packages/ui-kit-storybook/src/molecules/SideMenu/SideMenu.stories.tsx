@@ -1,4 +1,5 @@
 import {ComponentMeta, Story} from '@storybook/react';
+import {useState} from 'react';
 
 import SideMenu, {SideMenuPropsInterface} from './SideMenu';
 
@@ -7,7 +8,10 @@ export default {
   component: SideMenu
 } as ComponentMeta<typeof SideMenu>;
 
-const Template: Story<SideMenuPropsInterface> = (args) => <SideMenu {...args} />;
+const Template: Story<SideMenuPropsInterface> = (args) => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  return <SideMenu {...args} activeIdx={activeIdx} onMenuItemSelection={setActiveIdx} />;
+};
 
 export const General = Template.bind({});
 General.args = {
