@@ -1,14 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import {HostEmulator, PluginInterface} from '@momentum-xyz/sdk';
 
 import plugin from './Plugin';
 
-const root = document.getElementById('root') as HTMLElement;
+const container = document.getElementById('root');
+const root = createRoot(container!);
 
-ReactDOM.render(
-  <React.StrictMode>
-    <HostEmulator plugin={plugin as PluginInterface} />
-  </React.StrictMode>,
-  root
-);
+root.render(<HostEmulator plugin={plugin as PluginInterface} />);

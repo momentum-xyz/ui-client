@@ -4,12 +4,13 @@ import {ThemeProvider} from 'styled-components';
 import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../interfaces';
-import {GlobalStyles} from '../App.styled';
 import {UnityControlContextProvider} from '../contexts';
 
-import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
 import {dummyUnityControl} from './dummyUnityControl';
+import * as styled from './HostEmulator.styled';
+
+import '@momentum-xyz/ui-kit/dist/static/styles/main.css';
 
 const isDevEnv = process.env.NODE_ENV === 'development';
 
@@ -25,14 +26,10 @@ interface PropsInterface {
 ```tsx
 import plugin from './Plugin';
 
-const root = document.getElementById('root') as HTMLElement;
+const container = document.getElementById('root');
+const root = createRoot(container!);
 
-ReactDOM.render(
-  <React.StrictMode>
-    <HostEmulator plugin={plugin} />
-  </React.StrictMode>,
-  root
-);
+root.render(<HostEmulator plugin={plugin as PluginInterface} />);
 ```
  */
 export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
@@ -41,7 +38,6 @@ export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
     <ThemeProvider theme={DefaultThemeConfig}>
       <styled.FullScreenContainer>
         <UnityControlContextProvider value={dummyUnityControl}>
-          <GlobalStyles />
           {isDevEnv ? (
             <BrowserRouter>
               <WorldEmulator plugin={plugin} />

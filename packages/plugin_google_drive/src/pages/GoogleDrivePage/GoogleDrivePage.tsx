@@ -1,13 +1,13 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useStore, useGooglePicker} from 'shared/hooks';
 import {useObject} from '@momentum-xyz/sdk';
 import {SpacePage, ObjectTopBar} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
+import {useStore, useGooglePicker} from 'shared/hooks';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
-import * as styled from './GoogleDrivePage.styled';
 import {GoogleDriveActions} from './components/atoms';
+import * as styled from './GoogleDrivePage.styled';
 
 const GoogleDrivePage: FC = () => {
   const store = useStore();
