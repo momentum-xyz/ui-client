@@ -20,6 +20,7 @@ import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 //import {GLTFFileLoader} from '@babylonjs/loaders';
 
 import {CameraHelper} from './CameraHelper';
+import {SkyboxHelper} from './SkyboxHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -40,8 +41,8 @@ export enum GizmoTypesEnum {
 
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
-  static assetRootUrl = 'https://odyssey.org/api/v3/render/asset/';
-  static textureRootUrl = 'https://odyssey.org/api/v3/render/texture/';
+  static assetRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/asset/';
+  static textureRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/texture/';
   static textureDefaultSize = 's3/';
   static gizmoManager: GizmoManager;
   static objectsMap = new Map<string, BabylonObjectInterface>();
@@ -116,11 +117,18 @@ export class ObjectHelper {
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
+    if (texture.label === 'skybox_custom') {
+      SkyboxHelper.set360Skybox(
+        scene,
+        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + texture.hash
+      );
+      return;
+    }
+
     const meshes = this.objectsMap.get(this.firstID)?.objectInstance.rootNodes[0].getChildMeshes();
 
     if (meshes) {
       for (const mesh of meshes) {
-        console.log(mesh.material?.name);
         const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
         const newTexture = new Texture(textureUrl, scene);
         // TODO: check if material can be casted as PBRMaterial

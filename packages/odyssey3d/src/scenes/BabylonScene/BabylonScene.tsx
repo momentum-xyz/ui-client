@@ -15,7 +15,11 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(scene, engine, props.objects, view);
-      SkyboxHelper.setCubemapSkybox(scene);
+      //SkyboxHelper.setCubemapSkybox(scene);
+      SkyboxHelper.set360Skybox(
+        scene,
+        'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+      );
 
       if (window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([

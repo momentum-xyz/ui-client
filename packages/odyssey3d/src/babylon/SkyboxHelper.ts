@@ -9,12 +9,16 @@ import {
 } from '@babylonjs/core';
 
 export class SkyboxHelper {
-  static setCubemapSkybox(scene: Scene): void {
+  static defaultSkyboxTextureSize = 's8';
+
+  static setCubemapSkybox(scene: Scene, url: string): void {
     const skybox = MeshBuilder.CreateBox('skyBox', {size: 1000.0}, scene);
     const skyboxMaterial = new StandardMaterial('skyBox', scene);
     skyboxMaterial.backFaceCulling = false;
     skyboxMaterial.reflectionTexture = new CubeTexture(
-      '//www.babylonjs.com/assets/skybox/TropicalSunnyDay',
+      //'//www.babylonjs.com/assets/skybox/TropicalSunnyDay',
+      //26485e74acb29223ba7a9fa600d36c7f
+      url,
       scene
     );
     skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
@@ -24,10 +28,11 @@ export class SkyboxHelper {
     skybox.isPickable = false;
   }
 
-  static set360Skybox(scene: Scene): void {
+  static set360Skybox(scene: Scene, url: string): void {
     const dome = new PhotoDome(
       'testdome',
-      'https://cdn.eso.org/images/thumb300y/ESO_Paranal_360_Marcio_Cabral_Chile_07-CC.jpg',
+      //'https://cdn.eso.org/images/thumb300y/ESO_Paranal_360_Marcio_Cabral_Chile_07-CC.jpg',
+      url,
       {
         resolution: 32,
         size: 1000
