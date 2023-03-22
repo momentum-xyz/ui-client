@@ -85,7 +85,7 @@ class PosBusService {
         console.log('PosBus signal', data);
         break;
 
-      case MsgType.SET_USER_TRANSFORM:
+      case MsgType.USERS_TRANSFORM_LIST:
         // todo
         break;
 
