@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {PanelLayout, Portal, SearchInput} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {OdysseyInfo} from 'ui-kit/molecules/OdysseyInfo';
 import {useNavigation, useStore} from 'shared/hooks';
@@ -18,7 +18,7 @@ const SearchUsersWidget: FC = () => {
 
   const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const SearchUsersWidget: FC = () => {
           >
             <styled.Container data-testid="SearchUsersWidget-test">
               <SearchInput
-                placeholder={t('placeholders.searchForPeople')}
+                placeholder={t('placeholders.searchForPeople') || ''}
                 onChange={(query: string) => onlineUsersStore.searchUsers(query)}
                 onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
               />

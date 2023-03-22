@@ -1,8 +1,8 @@
 import {Button, Text} from '@momentum-xyz/ui-kit';
 import React, {FC, useState} from 'react';
-import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
+import {useI18n} from '@momentum-xyz/core';
 
 import {Asset3dInterface} from 'core/models';
 
@@ -17,7 +17,7 @@ interface PropsInterface {
 const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
   const [hoveringAsset, setHoveringAsset] = useState<Asset3dInterface | null>(null);
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   if (assets.length === 0) {
     return (

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {PropsWithThemeInterface, Text} from '@momentum-xyz/ui-kit';
 import cn from 'classnames';
 
@@ -24,7 +24,7 @@ const UnityLoader: React.FC<PropsWithThemeInterface> = ({theme}) => {
   const [fifthAnimation, setFifthAnimation] = useState(false);
   const [sixthAnimation, setSixthAnimation] = useState(false);
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     const timeout = setTimeout(() => {

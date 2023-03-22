@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {Button, FileUploader, InputDark, Text, TextAreaDark} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ProfileFormInterface} from 'core/interfaces';
 import {UserModelInterface} from 'core/models';
@@ -22,7 +22,7 @@ interface PropsInterface {
 const ProfileEditor: React.FC<PropsInterface> = (props) => {
   const {user, formErrors, isUpdating, onUpdate, onCancel, onChangeKeyboardControl} = props;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     onChangeKeyboardControl(false);
@@ -98,7 +98,7 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
             <InputDark
               value={value}
               onChange={onChange}
-              placeholder={t('fields.name')}
+              placeholder={t('fields.name') || ''}
               errorMessage={
                 errors?.name?.type !== 'duplicate'
                   ? t('errors.nameConstraints')
@@ -118,7 +118,7 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
           render={({field: {value, onChange}}) => (
             <TextAreaDark
               rows={3}
-              placeholder={t('fields.bio')}
+              placeholder={t('fields.bio') || ''}
               value={value}
               disabled={isUpdating}
               onChange={onChange}
@@ -132,7 +132,7 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
           name="profileLink"
           render={({field: {value, onChange}}) => (
             <InputDark
-              placeholder={t('fields.link')}
+              placeholder={t('fields.link') || ''}
               value={value}
               disabled={isUpdating}
               onChange={onChange}

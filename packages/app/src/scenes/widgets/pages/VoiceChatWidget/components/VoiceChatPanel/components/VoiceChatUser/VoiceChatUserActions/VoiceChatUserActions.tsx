@@ -1,6 +1,6 @@
 import {CoordinationInterface, IconSvg, Portal, useClickOutside} from '@momentum-xyz/ui-kit';
 import {FC, useRef} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import * as styled from './VoiceChatUserActions.styled';
 
@@ -21,7 +21,7 @@ const VoiceChatUserActions: FC<PropsInterface> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useClickOutside(ref, () => {
     onClose();

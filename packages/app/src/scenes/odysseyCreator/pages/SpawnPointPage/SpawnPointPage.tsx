@@ -1,9 +1,9 @@
 import React, {FC, useCallback, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {Button, Dialog, Text, useClickOutside} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -23,7 +23,7 @@ const SpawnPointPage: FC = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useClickOutside(ref, () => {
     navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}));

@@ -2,8 +2,7 @@ import React, {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
-import {useTranslation} from 'react-i18next';
-import {isBrowserSupported} from '@momentum-xyz/core';
+import {isBrowserSupported, useI18n} from '@momentum-xyz/core';
 import {LoaderFallback} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
@@ -32,7 +31,7 @@ const App: FC = () => {
 
   const {pathname} = useLocation();
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useApiHandlers();
 

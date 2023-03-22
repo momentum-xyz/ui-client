@@ -16,8 +16,8 @@ import {
 import * as styled from './PanelLayout.styled';
 
 export interface PropsInterface extends PropsWithThemeInterface {
-  title?: string;
-  subtitle?: string;
+  title?: string | null;
+  subtitle?: string | null;
   headerIconName?: IconNameType;
   onClose?: () => void;
   headerStyle?: HeaderStyleType;

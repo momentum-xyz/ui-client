@@ -1,12 +1,12 @@
 import {FC} from 'react';
 import {useTheme} from 'styled-components';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {SystemWideError} from 'ui-kit';
 
 const MaintenancePage: FC = () => {
   const theme = useTheme();
-  const {t} = useTranslation();
+  const {t} = useI18n();
   return (
     <SystemWideError text={t('systemMessages.underMaintenance')} showRefreshButton theme={theme} />
   );

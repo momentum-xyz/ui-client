@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {Button, FileUploader, Heading, IconSvg, InputDark, Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {Controller, useForm} from 'react-hook-form';
 
 import {Box, CycleNumbered} from 'ui-kit';
@@ -18,7 +18,7 @@ interface PropsInterface {
 const CreateOdysseyForm: FC<PropsInterface> = (props) => {
   const {fieldErrors, isSubmitDisabled: disabled, onSubmit} = props;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const {
     control,
@@ -59,7 +59,7 @@ const CreateOdysseyForm: FC<PropsInterface> = (props) => {
             render={({field: {onChange, value}}) => (
               <InputDark
                 variant="secondary"
-                placeholder={t('actions.chooseName')}
+                placeholder={t('actions.chooseName') || ''}
                 value={value || ''}
                 disabled={disabled}
                 isError={!!errors.name}

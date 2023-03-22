@@ -2,11 +2,11 @@ import React, {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 // import {useTheme} from 'styled-components';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
 import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
+import {useI18n} from '@momentum-xyz/core';
 
 import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 import {appVariables} from 'api/constants';
@@ -35,7 +35,7 @@ const UnityPage: FC = () => {
 
   // const theme = useTheme();
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const location = useLocation();
 
   // useEffect(() => {

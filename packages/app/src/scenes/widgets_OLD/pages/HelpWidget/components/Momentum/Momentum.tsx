@@ -1,7 +1,7 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {Button} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets_OLD/pages/HelpWidget/components/Section';
@@ -12,6 +12,8 @@ import * as styled from './Momentum.styled';
 const Momentum: React.FC = () => {
   const {widgetStore_OLD} = useStore();
   const {helpStore} = widgetStore_OLD;
+
+  const {t} = useI18n();
 
   const handleExpand = () => {
     helpStore.toggleSection(HelpSectionEnum.Momentum);

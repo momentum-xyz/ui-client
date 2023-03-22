@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Dialog, SvgButton, Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useNavigation, useStore} from 'shared/hooks';
 
@@ -12,7 +12,7 @@ const MutualConnectionsWidget: FC = () => {
   const {mutualConnectionsStore} = widgetsStore;
   const {mutualConnections} = nftStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
   const handleUnstake = useCallback(() => {

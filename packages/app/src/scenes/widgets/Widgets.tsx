@@ -1,6 +1,5 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {generatePath, useLocation} from 'react-router-dom';
 import {
   Avatar,
@@ -11,6 +10,7 @@ import {
   ToolbarIconList,
   ToolbarIconSeparator
 } from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -52,7 +52,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const {pathname} = useLocation();
 
   useEffect(() => {

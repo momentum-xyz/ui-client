@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Dialog, Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import momentum from 'static/images/momentum.svg';
 import flamingo from 'static/images/pink-flamingo.svg';
@@ -13,7 +13,7 @@ import * as styled from './HelpWidget.styled';
 import {IntroVideo} from './components/IntroVideo';
 
 const HelpWidget: React.FC = () => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const {widgetStore_OLD, unityStore} = useStore();
   const {helpStore} = widgetStore_OLD;
 

@@ -1,11 +1,11 @@
 import {FC, memo} from 'react';
 import {NumericFormat, NumericFormatProps} from 'react-number-format';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ButtonEllipse} from '../../atoms';
 
 import * as styled from './StakingAmount.styled';
 
-// FIXME: Translations
 export interface StakingAmountPropsInterface {
   username: string;
   amount: number;
@@ -28,25 +28,27 @@ const StakingAmount: FC<StakingAmountPropsInterface> = ({
   tokenSymbol,
   onUnstakeClick
 }) => {
+  const {t} = useI18n();
+
   return (
     <styled.Container data-testid="StakingAmount-test">
       <styled.Header>
         <styled.NameContainer>
           <styled.Name>{username}</styled.Name>
         </styled.NameContainer>
-        <ButtonEllipse icon="close_large" label="Unstake" onClick={onUnstakeClick} />
+        <ButtonEllipse icon="close_large" label={t('staking.unStake')} onClick={onUnstakeClick} />
       </styled.Header>
 
       <styled.Content>
         <styled.Item>
-          <styled.ItemLabel>Staked:</styled.ItemLabel>
+          <styled.ItemLabel>{t('staking.balanceTypes.staked')}:</styled.ItemLabel>
           <styled.ItemValue>
             <NumericFormat {...FORMATTING} value={amount} />
             <styled.ItemSuffix>{tokenSymbol}</styled.ItemSuffix>
           </styled.ItemValue>
         </styled.Item>
         <styled.Item>
-          <styled.ItemLabel>Rewards:</styled.ItemLabel>
+          <styled.ItemLabel>{t('staking.rewards')}:</styled.ItemLabel>
           <styled.ItemValue>
             <NumericFormat {...FORMATTING} value={rewardsAmount} />
             <styled.ItemSuffix>{tokenSymbol}</styled.ItemSuffix>

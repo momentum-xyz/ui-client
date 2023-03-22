@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
-import {t} from 'i18next';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {i18n} from '@momentum-xyz/core';
 
 import {api} from 'api';
 
@@ -40,8 +40,8 @@ const ScreenShareStore = types.compose(
     .views((self) => ({
       get screenShareTitle(): string {
         return self.screenOwnerName
-          ? `${t('labels.screenShare')} / ${self.screenOwnerName}`
-          : t('labels.screenShare');
+          ? `${i18n.t('labels.screenShare')} / ${self.screenOwnerName}`
+          : i18n.t('labels.screenShare');
       }
     }))
 );

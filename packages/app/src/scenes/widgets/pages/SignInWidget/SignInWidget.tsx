@@ -1,5 +1,5 @@
 import React, {FC, memo} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {Button, Dialog, Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -14,7 +14,7 @@ const MENU_OFFSET_TOP = 20;
 const SignInWidget: FC = () => {
   const {sessionStore} = useStore();
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <Dialog

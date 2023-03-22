@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {Button, IconSvg} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 import AddToCalendarHOC, {SHARE_SITES} from 'react-add-to-calendar-hoc';
 
 import {AddToCalendarDropdown} from 'ui-kit';
@@ -17,6 +17,8 @@ interface PropsInterface {
 
 const EventTools: FC<PropsInterface> = ({event, onWeblinkClick, user}) => {
   const AddToCalendarComponent = AddToCalendarHOC(Button as any, AddToCalendarDropdown as any);
+
+  const {t} = useI18n();
 
   const handleAttending = (attending: boolean) => {
     if (!user) {

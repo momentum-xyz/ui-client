@@ -1,4 +1,4 @@
-import React, {FC, HTMLProps, useRef} from 'react';
+import React, {FC, PropsWithChildren, useRef} from 'react';
 import cn from 'classnames';
 
 import {useClickOutside} from '../../hooks';
@@ -21,8 +21,8 @@ import {
 
 import * as styled from './Dialog.styled';
 
-export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps<HTMLDivElement> {
-  title?: string;
+export interface DialogPropsInterface extends PropsWithThemeInterface {
+  title?: string | null;
   subtitle?: string;
   position?: PlacementType;
   offset?: OffsetInterface;
@@ -54,7 +54,7 @@ export interface DialogPropsInterface extends PropsWithThemeInterface, HTMLProps
   bottomComponent?: React.ReactNode;
 }
 
-const Dialog: FC<DialogPropsInterface> = ({
+const Dialog: FC<PropsWithChildren<DialogPropsInterface>> = ({
   title,
   subtitle,
   position = 'center',

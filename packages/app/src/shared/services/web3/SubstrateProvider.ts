@@ -2,11 +2,11 @@ import {ApiPromise, WsProvider} from '@polkadot/api';
 import {bnMin, extractTime, formatBalance} from '@polkadot/util';
 import {DeriveSessionProgress, DeriveStakingAccount} from '@polkadot/api-derive/types';
 import BN from 'bn.js';
-import {t} from 'i18next';
 import {keyring} from '@polkadot/ui-keyring';
 import {KeyringJson$Meta} from '@polkadot/ui-keyring/types';
 import {KeypairType} from '@polkadot/util-crypto/types';
 import {IU8a} from '@polkadot/types-codec/types/interfaces';
+import {i18n} from '@momentum-xyz/core';
 
 import {appVariables} from 'api/constants';
 import {BN_MAX_INTEGER, BN_ONE, BN_ZERO} from 'core/constants';
@@ -116,21 +116,25 @@ export default class SubstrateProvider {
     return result < 0
       ? null
       : {
-          days: days ? (days > 1 ? t('time.days', {days}) : t('time.days', {days: 1})) : null,
+          days: days
+            ? days > 1
+              ? i18n.t('time.days', {days})
+              : i18n.t('time.days', {days: 1})
+            : null,
           hours: hours
             ? hours > 1
-              ? t('time.hours', {hours})
-              : t('time.hours', {hours: 1})
+              ? i18n.t('time.hours', {hours})
+              : i18n.t('time.hours', {hours: 1})
             : null,
           minutes: minutes
             ? minutes > 1
-              ? t('time.minutes', {minutes})
-              : t('time.minutes', {minutes: 1})
+              ? i18n.t('time.minutes', {minutes})
+              : i18n.t('time.minutes', {minutes: 1})
             : null,
           seconds: seconds
             ? seconds > 1
-              ? t('time.seconds', {seconds})
-              : t('time.seconds', {seconds: 1})
+              ? i18n.t('time.seconds', {seconds})
+              : i18n.t('time.seconds', {seconds: 1})
             : null
         };
   }

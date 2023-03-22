@@ -2,7 +2,7 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {Button} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {Section} from 'scenes/widgets_OLD/pages/HelpWidget/components/Section';
@@ -11,7 +11,7 @@ import {HelpSectionEnum} from 'scenes/widgets_OLD/stores/HelpStore';
 import * as styled from './Discord.styled';
 
 const Discord: React.FC = () => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const theme = useTheme();
   const {
     widgetStore_OLD: {helpStore}
@@ -56,13 +56,11 @@ const Discord: React.FC = () => {
         <Button
           theme={theme}
           label={t('helpSection.discord.serverButtonLabel')}
-          icon={t('helpSection.discord.iconLabel')}
           onClick={handleServerClick}
         />
         <Button
           theme={theme}
           label={t('helpSection.discord.supportButtonLabel')}
-          icon={t('helpSection.discord.iconLabel')}
           onClick={handleSupportChannelClick}
         />
       </styled.Buttons>

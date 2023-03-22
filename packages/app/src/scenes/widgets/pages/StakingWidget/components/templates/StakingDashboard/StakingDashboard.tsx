@@ -7,7 +7,7 @@ import {
 } from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
@@ -31,7 +31,7 @@ const StakingDashboard: FC = () => {
     requestingFundsStatus
   } = nftStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
   // const nft = wallet ? nftStore.getNftByWallet(wallet) : null;

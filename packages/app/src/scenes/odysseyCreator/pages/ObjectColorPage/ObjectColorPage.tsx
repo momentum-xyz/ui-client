@@ -1,7 +1,7 @@
 import {Button, Dialog, useClickOutside, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import React, {FC, useCallback, useEffect, useRef} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {ColorPicker, useColor, toColor} from 'react-color-palette';
 
@@ -29,7 +29,7 @@ const ObjectColorPage: FC = () => {
 
   const {objectId} = useParams<{objectId: string}>();
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useClickOutside(ref, () => {
     navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));

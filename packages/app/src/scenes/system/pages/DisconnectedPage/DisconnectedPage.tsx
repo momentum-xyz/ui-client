@@ -1,12 +1,12 @@
 import {FC} from 'react';
-import {useTranslation} from 'react-i18next';
 import {useTheme} from 'styled-components';
+import {useI18n} from '@momentum-xyz/core';
 
 import {SystemWideError} from 'ui-kit';
 
 const DisconnectedPage: FC = () => {
   const theme = useTheme();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <SystemWideError

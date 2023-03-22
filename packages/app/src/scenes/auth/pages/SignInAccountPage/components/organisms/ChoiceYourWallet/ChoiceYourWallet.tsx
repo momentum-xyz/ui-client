@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Button, Dropdown, Heading, IconSvg, OptionInterface, Text} from '@momentum-xyz/ui-kit';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {Box, CycleNumbered} from 'ui-kit';
 import polkadot from 'static/images/polkadot.svg';
@@ -20,7 +20,7 @@ const DISCOVER_URL = 'https://discover.odyssey.org/create-your-odyssey/get-a-wal
 const ChoiceYourWallet: FC<PropsInterface> = (props) => {
   const {walletOptions, wallet, isConnectDisabled, onSelectAddress, onConnect} = props;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <Box size="small">

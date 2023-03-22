@@ -11,8 +11,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
   id-token: write
+  packages: read
+  pages: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -33,6 +34,8 @@ jobs:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@momentum-xyz'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: yarn-deps
         name: Install dependencies
         run: yarn install --frozen-lockfile

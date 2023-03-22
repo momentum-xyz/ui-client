@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {t} from 'i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 import {Text, Tooltip} from '../../atoms';
@@ -16,6 +16,8 @@ interface PropsInterface extends PropsWithThemeInterface {
 }
 
 const PageTopBar: FC<PropsInterface> = (props) => {
+  const {t} = useI18n();
+
   return (
     <styled.Container data-testid="PageTopBar-test">
       <styled.Titles>
